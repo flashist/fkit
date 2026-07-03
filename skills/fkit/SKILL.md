@@ -1,6 +1,6 @@
 ---
 name: fkit
-description: Set up or update fkit in the CURRENT project — one skill, auto-detects which. First run (no ai-agents/ai-agents.yml yet) interactively installs: interviews you for project name, description, default model, and per-skill model routing; writes ai-agents/ai-agents.yml + a PROJECT.md brief; then builds (compiles the Claude + Codex skills, generates CLAUDE.md/AGENTS.md/config). Later runs re-sync the compiled skills + routing to the latest fkit, never touching your origin:project files. Makes no commits.
+description: "Set up or update fkit in the CURRENT project — one skill, auto-detects which. First run (no ai-agents/ai-agents.yml yet) interactively installs — interviews you for project name, description, default model, and per-skill model routing; writes ai-agents/ai-agents.yml + a PROJECT.md brief; then builds (compiles the Claude + Codex skills, generates CLAUDE.md/AGENTS.md/config). Later runs re-sync the compiled skills + routing to the latest fkit, never touching your origin:project files. Makes no commits."
 ---
 
 # fkit
