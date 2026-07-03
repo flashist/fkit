@@ -16,9 +16,17 @@ project:
   overview: A sample project used to exercise the fkit bootstrap and sync tooling.
 
 # Concrete model ids live here — one place to bump versions.
+# `exec` is how each model is called NON-interactively, used by `owned` skills
+# (below) so the non-owner side can delegate the task to the owner headlessly.
 models:
-  claude: { cli: claude, id: claude-opus-4-8 }
-  codex:  { cli: codex,  id: gpt-5.5 }
+  claude:
+    cli: claude
+    id: claude-opus-4-8
+    exec: "claude -p --permission-mode acceptEdits"
+  codex:
+    cli: codex
+    id: gpt-5.5
+    exec: "codex exec --sandbox workspace-write"
 
 # The "agents" = your terminal-tab personas. Each names the model it runs on and,
 # optionally, an entry_skill that boots it into character and a knowledge file.
@@ -48,4 +56,8 @@ routing:
 skills:
   shared:      [process-review, plan-task, wiki-query, fkit-architect-inspect]
   claude_only: [task-done, task-cancelled, stateful-review]
-  codex_only:  [wiki-ingest, wiki-lint, wiki-sync]
+  codex_only:  [wiki-ingest, wiki-lint]
+  # `owned` = present on EVERY side, but the real work runs on the owner model;
+  # other models get a stub that delegates to the owner via its `exec` command.
+  owned:
+    wiki-sync: codex

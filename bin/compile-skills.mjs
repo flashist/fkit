@@ -72,6 +72,14 @@ for (const n of sk.shared || []) placement[n] = "shared";
 for (const n of sk.claude_only || []) placement[n] = "claude";
 for (const n of sk.codex_only || []) placement[n] = "codex";
 
+// Skills OWNED by one model but present on EVERY side: the owner side gets the
+// real skill; every other side gets a delegation stub that calls the owner model
+// non-interactively (models.<owner>.exec) to do the work.
+const ownedBy = {};
+for (const [n, m] of Object.entries(sk.owned || {})) {
+  ownedBy[n] = m === "claude" ? "claude" : "codex";
+}
+
 // ---------------------------------------------------------------------------
 // Discover skill sources
 // ---------------------------------------------------------------------------
@@ -108,6 +116,47 @@ function writeEnsured(fp, content) {
   writeFileSync(fp, content);
 }
 
+const OWNER_LABEL = { claude: "Claude", codex: "Codex" };
+const INVOKE_FOR = { claude: "/", codex: "$" };
+
+// The body for the NON-owner side of an `owned` skill. It calls the owner model
+// non-interactively (models.<owner>.exec) to run the real skill, and falls back
+// to a manual tab hand-off if that CLI is missing.
+function delegationStub(name, ownerModel) {
+  const label = OWNER_LABEL[ownerModel];
+  const inv = INVOKE_FOR[ownerModel];
+  const cli = (models[ownerModel] && models[ownerModel].cli) || ownerModel;
+  const exec = (models[ownerModel] && models[ownerModel].exec) || "";
+  const out = [
+    `# ${name} (delegated to ${label})`,
+    "",
+    `This skill is **owned by ${label}** in this project — its real implementation lives on the ${label} side. **Do not do the work yourself.** Hand it to ${label} and relay the result.`,
+    "",
+  ];
+  if (exec) {
+    out.push(
+      "## Delegate",
+      "",
+      `Run ${label} non-interactively from the project root, telling it to run its own \`${inv}${name}\` skill with whatever argument the user passed:`,
+      "",
+      "```bash",
+      `${exec} "Run the ${name} skill (${inv}${name}). Argument from the user: <ARGS>. Do the task fully and report exactly what changed. Do not delegate further."`,
+      "```",
+      "",
+      `Replace \`<ARGS>\` with the user's argument to \`${inv}${name}\` (use \`(none)\` if there was none). Wait for it to finish, then relay ${label}'s output to the user.`,
+      "",
+      `**Fallback:** if the \`${cli}\` command is missing, unauthenticated, or errors, do **not** attempt the task yourself — tell the user to run \`${inv}${name}\` in their ${label} tab instead.`,
+    );
+  } else {
+    out.push(
+      "## Hand off",
+      "",
+      `Tell the user to run \`${inv}${name}\` in their ${label} tab. Do **not** attempt the task yourself.`,
+    );
+  }
+  return out.join("\n") + "\n";
+}
+
 let claudeCount = 0;
 let codexCount = 0;
 
@@ -119,7 +168,9 @@ for (const s of found) {
   const meta = existsSync(metaPath) ? parseYaml(readFileSync(metaPath, "utf8")) : {};
 
   const name = fm.name || s.name;
-  const place = placement[name] || s.tier;
+  const owner = ownedBy[name]; // undefined | "claude" | "codex"
+  const place = owner ? "shared" : placement[name] || s.tier;
+  const markerTier = owner ? s.tier : place; // marker points at the real source dir
   const targets =
     place === "shared" ? ["claude", "codex"] : place === "claude" ? ["claude"] : ["codex"];
 
@@ -142,19 +193,22 @@ for (const s of found) {
       (meta.claude.user_invocable === false || meta.claude.user_invocable === "false")
         ? false
         : true;
-    const fmLines = ["---", `name: ${name}`, `description: ${r.description}`];
+    const fmLines = ["---", `name: ${name}`, `description: ${JSON.stringify(r.description)}`];
     if (ui) fmLines.push("user-invocable: true");
     fmLines.push("---");
-    const content = fmLines.join("\n") + "\n" + marker(place, name) + "\n\n" + r.body;
+    const bodyOut = owner && owner !== "claude" ? delegationStub(name, owner) : r.body;
+    const content = fmLines.join("\n") + "\n" + marker(markerTier, name) + "\n\n" + bodyOut;
     writeEnsured(join(outDir, ".claude", "skills", name, "SKILL.md"), content);
     claudeCount++;
-    console.log(`  claude → .claude/skills/${name}/SKILL.md`);
+    const via = owner && owner !== "claude" ? ` (delegates to ${OWNER_LABEL[owner]})` : "";
+    console.log(`  claude → .claude/skills/${name}/SKILL.md${via}`);
   }
 
   if (targets.includes("codex")) {
     const r = render("codex");
-    const fmLines = ["---", `name: ${name}`, `description: ${r.description}`, "---"];
-    const content = fmLines.join("\n") + "\n" + marker(place, name) + "\n\n" + r.body;
+    const fmLines = ["---", `name: ${name}`, `description: ${JSON.stringify(r.description)}`, "---"];
+    const bodyOut = owner && owner !== "codex" ? delegationStub(name, owner) : r.body;
+    const content = fmLines.join("\n") + "\n" + marker(markerTier, name) + "\n\n" + bodyOut;
     writeEnsured(join(outDir, ".codex", "skills", name, "SKILL.md"), content);
 
     const iface = (meta.codex && meta.codex.interface) || {};
@@ -167,7 +221,8 @@ for (const s of found) {
       ].join("\n") + "\n";
     writeEnsured(join(outDir, ".codex", "skills", name, "agents", "openai.yaml"), yaml);
     codexCount++;
-    console.log(`  codex  → .codex/skills/${name}/SKILL.md (+ agents/openai.yaml)`);
+    const via = owner && owner !== "codex" ? ` (delegates to ${OWNER_LABEL[owner]})` : "";
+    console.log(`  codex  → .codex/skills/${name}/SKILL.md (+ agents/openai.yaml)${via}`);
   }
 }
 
