@@ -46,6 +46,6 @@ routing:
 # (shared/ claude-only/ codex-only/); listed here to make placement explicit
 # and overridable per project.
 skills:
-  shared:      [process-review, plan-task, wiki-query]
+  shared:      [process-review, plan-task, wiki-query, fkit-architect-inspect]
   claude_only: [task-done, task-cancelled, stateful-review]
   codex_only:  [wiki-ingest, wiki-lint, wiki-sync]
