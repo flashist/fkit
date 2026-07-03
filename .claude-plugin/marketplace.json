@@ -1,0 +1,11 @@
+{
+  "name": "fkit",
+  "owner": { "name": "flashist" },
+  "plugins": [
+    {
+      "name": "fkit",
+      "source": ".",
+      "description": "fkit CLI skills: fkit-install (interactive project setup) and fkit-update (re-sync a project to the latest kit)."
+    }
+  ]
+}

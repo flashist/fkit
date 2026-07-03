@@ -1,4 +1,0 @@
-codex:
-  interface:
-    short_description: "Install fkit into the current project (one-time setup)."
-    default_prompt: "Install fkit into the current project."

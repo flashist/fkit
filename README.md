@@ -8,48 +8,69 @@ machinery** (this kit) and **per-project content** (a project's manifest + docs)
 
 > Status: **v0.1.0 — functionally complete.** Bootstrap + sync verified end-to-end.
 
-## Quick start — stand up a new project
+## Install
+
+fkit ships two entry skills — **`fkit-install`** (interactive one-time project setup) and
+**`fkit-update`** (re-sync a project to the latest kit). Install them into your agent(s) via any
+channel below; all are equivalent.
+
+**Any agent (recommended)** — via the universal [`skills`](https://github.com/vercel-labs/skills) tool:
 
 ```bash
-node bin/bootstrap.mjs --out /path/to/new-project
-#   → writes a starter ai-agents/ai-agents.yml; edit it for your project, then:
-node bin/bootstrap.mjs --out /path/to/new-project --manifest /path/to/new-project/ai-agents/ai-agents.yml
+npx skills add flashist/fkit -g     # -g installs globally; choose your agent(s) when prompted
 ```
 
-Produces: the `ai-agents/` skeleton, compiled `.claude` + `.codex` skills, scaffolded
-roles, and generated `CLAUDE.md` / `AGENTS.md` / `.codex/config.toml`. Makes no commits.
+**Claude Code plugin:**
 
-## Update a project after editing the kit or its manifest
+```
+/plugin marketplace add flashist/fkit
+/plugin install fkit@fkit
+```
+
+**Clone (no npx):**
 
 ```bash
-node bin/sync.mjs --project /path/to/project
+git clone https://github.com/flashist/fkit && cd fkit
+node bin/install-cli-skills.mjs     # → ~/.claude/skills + ~/.codex/skills (copies skills/ verbatim)
 ```
 
-Recompiles generated skills, regenerates the routing block in `CLAUDE.md`/`AGENTS.md`,
-and updates the `.codex/config.toml` model. **Never touches `origin:project` files**
-(scaffolded roles, project-authored skills).
+Then, in any project, run **`fkit-install`** once and **`fkit-update`** whenever you want the latest
+skills. The skills call the kit's machinery on demand via `npx github:flashist/fkit …`, so no clone is
+needed — all three channels install the same self-contained skills.
 
-## Run fkit from any project (`/fkit-install`, `/fkit-update`)
+## Direct script use
 
-Prefer slash-commands over remembering the `node bin/…` invocations? fkit ships two
-**global** skills that wrap the scripts above:
-
-| Skill | Wraps | When |
-|---|---|---|
-| `/fkit-install` | `bootstrap.mjs` | once, when you start using fkit in a project |
-| `/fkit-update`  | `git pull` + `sync.mjs` | anytime you want the latest kit skills |
-
-Install them once into your global skill dirs — this bakes the current clone's path into the
-skills so they always know where to find `bin/`:
+The skills are thin wrappers — you can drive the kit directly, cloned or via npx with no clone:
 
 ```bash
-node bin/install-cli-skills.mjs            # → ~/.claude/skills + ~/.codex/skills
-node bin/install-cli-skills.mjs --dry-run  # preview; --target claude|codex to pick one side
+# stand up a project (two passes: starter manifest → edit → build)
+npx github:flashist/fkit bootstrap --out /path/to/project
+npx github:flashist/fkit bootstrap --out /path/to/project --manifest /path/to/project/ai-agents/ai-agents.yml
+
+# re-sync an existing project to the latest kit
+npx github:flashist/fkit sync --project /path/to/project
 ```
 
-Re-run it after moving this clone or editing `cli-skills/`. Because `/fkit-install` must work
-in a project *before* fkit is set up there, these two are **global** — unlike the per-project
-workflow skills, which are compiled into each project by `sync`.
+`bootstrap` produces the `ai-agents/` skeleton, compiled `.claude` + `.codex` skills, scaffolded roles,
+and generated `CLAUDE.md` / `AGENTS.md` / `.codex/config.toml`. `sync` recompiles the generated skills
+and routing block and **never touches `origin:project` files** (scaffolded roles, project-authored
+skills). Both make no commits. (Swap `npx github:flashist/fkit` for `node bin/…` if you're in a clone.)
+
+## Releasing
+
+Cutting a new version is one command — it stages everything, commits, pushes the branch,
+and creates + pushes an annotated `v<VERSION>` tag:
+
+```bash
+npm run release:dry                 # preview the plan — touches nothing
+npm run release                     # commit + push + tag the current VERSION
+npm run release -- --version 0.2.0  # bump VERSION + package.json first, then release
+```
+
+`VERSION` is the single source of truth for the version number; the tag is always `v<VERSION>`.
+The command is idempotent (an existing tag or already-committed tree is skipped) and makes **no
+npm-registry publish** — fkit is consumed via `npx github:flashist/fkit`, so a pushed tag *is* the
+release. Verify with `npx github:flashist/fkit#v0.2.0 --version`.
 
 ## How it works
 
@@ -71,7 +92,8 @@ generic/skills/{shared,claude-only,codex-only}/<name>/{skill.md, meta.yml}
 generic/ai-agents/            the ai-agents/ skeleton (copied into each project)
 generic/templates/            role-agent + CLAUDE.md/AGENTS.md templates
 generic/roles/                role presets (producer.preset.md)
-cli-skills/                   fkit-install / fkit-update — global CLI skills (source)
+skills/                       fkit-install / fkit-update — the SINGLE skill source, installed by every channel
+.claude-plugin/               plugin.json + marketplace.json (Claude plugin channel)
 manifest/ai-agents.schema.yml documented manifest schema
 examples/                     a sample project manifest
 bin/lib.mjs                   shared YAML / substitution / routing utilities
@@ -79,7 +101,10 @@ bin/compile-skills.mjs        single-source → per-CLI skills
 bin/scaffold-role.mjs         skeleton + preset → a project role
 bin/bootstrap.mjs             stand up a new project
 bin/sync.mjs                  re-pull kit updates into an existing project
-bin/install-cli-skills.mjs    install the /fkit-install + /fkit-update skills globally
+bin/fkit.mjs                  CLI dispatcher — `npx github:flashist/fkit <cmd>` (no clone)
+bin/install-cli-skills.mjs    copy skills/ into your global agent dirs (clone channel)
+bin/release.mjs               cut a release — commit + push + tag (npm run release)
+package.json                  makes `npx github:flashist/fkit` / `npx skills add` work
 ```
 
 ## License

@@ -1,0 +1,41 @@
+{
+  "name": "fkit",
+  "version": "0.1.0",
+  "description": "A transferable, two-model (Claude + Codex) operating system for a software project: the ai-agents/ working structure, single-sourced skills, and project-level editable model routing.",
+  "type": "module",
+  "bin": {
+    "fkit": "./bin/fkit.mjs"
+  },
+  "scripts": {
+    "release": "node bin/release.mjs",
+    "release:dry": "node bin/release.mjs --dry-run"
+  },
+  "files": [
+    "bin/",
+    "generic/",
+    "skills/",
+    "manifest/",
+    "examples/",
+    "VERSION",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "author": "flashist",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flashist/fkit.git"
+  },
+  "homepage": "https://github.com/flashist/fkit#readme",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "codex",
+    "ai-agents",
+    "skills",
+    "agent-workflow"
+  ]
+}

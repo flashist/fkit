@@ -1,0 +1,7 @@
+{
+  "name": "fkit",
+  "description": "Two-model (Claude + Codex) agent workflow kit — installs the fkit-install (interactive project setup) and fkit-update skills. The skills run the kit's machinery via `npx github:flashist/fkit`, so no local clone is needed.",
+  "version": "0.1.0",
+  "author": { "name": "flashist" },
+  "homepage": "https://github.com/flashist/fkit"
+}
