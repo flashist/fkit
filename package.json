@@ -8,6 +8,8 @@
   },
   "scripts": {
     "release": "node bin/release.mjs",
+    "release:minor": "node bin/release.mjs --minor",
+    "release:major": "node bin/release.mjs --major",
     "release:dry": "node bin/release.mjs --dry-run"
   },
   "files": [

@@ -58,19 +58,24 @@ skills). Both make no commits. (Swap `npx github:flashist/fkit` for `node bin/�
 
 ## Releasing
 
-Cutting a new version is one command — it stages everything, commits, pushes the branch,
-and creates + pushes an annotated `v<VERSION>` tag:
+Cutting a new version is one command — it **bumps the version**, stages everything, commits, pushes
+the branch, and creates + pushes an annotated `v<VERSION>` tag. **Every `npm run release` bumps the
+patch** (`0.1.0 → 0.1.1 → 0.1.2 …`):
 
 ```bash
-npm run release:dry                 # preview the plan — touches nothing
-npm run release                     # commit + push + tag the current VERSION
-npm run release -- --version 0.2.0  # bump VERSION + package.json first, then release
+npm run release:dry                 # preview the plan (incl. the next version) — touches nothing
+npm run release                     # bump patch, then commit + push + tag
+npm run release:minor               # bump minor instead (0.1.3 → 0.2.0)
+npm run release:major               # bump major instead (0.2.1 → 1.0.0)
+npm run release -- --version 1.2.3  # set an explicit version
+npm run release -- --no-bump        # re-release the current version as-is (e.g. to finish a failed run)
 ```
 
-`VERSION` is the single source of truth for the version number; the tag is always `v<VERSION>`.
-The command is idempotent (an existing tag or already-committed tree is skipped) and makes **no
-npm-registry publish** — fkit is consumed via `npx github:flashist/fkit`, so a pushed tag *is* the
-release. Verify with `npx github:flashist/fkit#v0.2.0 --version`.
+`VERSION` is the single source of truth (package.json is kept in sync); the tag is always
+`v<VERSION>`. A default run always cuts a **new** version; `--no-bump` is the idempotent form (an
+existing tag or already-committed tree is skipped). Makes **no npm-registry publish** — fkit is
+consumed via `npx github:flashist/fkit`, so a pushed tag *is* the release. Verify with
+`npx github:flashist/fkit#v<VERSION> --version`.
 
 ## How it works
 

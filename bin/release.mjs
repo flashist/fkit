@@ -1,22 +1,27 @@
 #!/usr/bin/env node
 // fkit — release.mjs
 //
-// One command to cut a release: stage everything, commit, push the branch,
-// create an annotated tag from VERSION, and push the tag. Driven by
+// One command to cut a release: bump the version, stage everything, commit,
+// push the branch, create an annotated v<version> tag, and push it. Driven by
 // `npm run release` (see package.json scripts).
 //
-// VERSION is the single source of truth for the version number; the tag is
-// always `v<VERSION>`. Pass --version to bump VERSION + package.json first.
+// VERSION is the single source of truth (package.json is kept in sync). By
+// default EVERY run bumps the patch (0.1.0 → 0.1.1 → 0.1.2 …). Override with
+// --minor / --major / --version, or keep the current version with --no-bump.
 //
-// Idempotent: safe to re-run after a partial failure — an existing tag or an
-// already-clean tree is skipped, not re-created.
+// Re-run safety: a --no-bump run is idempotent (an existing tag or an already-
+// committed tree is skipped). A default (bumping) run always cuts a NEW version,
+// so after a partial failure re-run with --no-bump to finish the same one.
 //
 // Zero dependencies. Usage:
 //   node bin/release.mjs [options]
 //   npm run release -- [options]
 //
 // Options:
-//   --version <x.y.z>   Bump VERSION + package.json to this version first
+//   (default)           Bump the patch version
+//   --minor / --major   Bump minor / major instead
+//   --version <x.y.z>   Set an explicit version (VERSION + package.json)
+//   --no-bump           Release the current version as-is (no bump)
 //   -m, --message <s>   Commit message (default: "Release v<version>")
 //   --branch <name>     Branch to push (default: current branch)
 //   --dry-run           Print the plan; touch nothing
@@ -40,12 +45,16 @@ const getArg = (n, d) => {
 };
 
 if (has("-h") || has("--help")) {
-  console.log(`fkit release — cut a release (commit, push, tag, push tag)
+  console.log(`fkit release — cut a release (bump, commit, push, tag)
 
 Usage: npm run release -- [options]   (or: node bin/release.mjs [options])
 
+By default every run bumps the PATCH version (0.1.0 → 0.1.1 → …).
+
 Options:
-  --version <x.y.z>   Bump VERSION + package.json to this version first
+  --minor / --major   Bump minor / major instead of patch
+  --version <x.y.z>   Set an explicit version (VERSION + package.json)
+  --no-bump           Release the current version as-is (no bump)
   -m, --message <s>   Commit message (default: "Release v<version>")
   --branch <name>     Branch to push (default: current branch)
   --dry-run           Print the plan; touch nothing
@@ -53,8 +62,8 @@ Options:
   --no-push           Commit + tag locally, but don't push anything
   -h, --help          Show this help
 
-VERSION is the single source of truth; the tag is always v<VERSION>.
-Idempotent: an existing tag or already-committed tree is skipped. Makes no npm-registry publish.`);
+VERSION is the single source of truth (package.json kept in sync); the tag is v<VERSION>.
+Makes no npm-registry publish.`);
   process.exit(0);
 }
 
@@ -96,24 +105,54 @@ const versionPath = join(KIT, "VERSION");
 const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
 let version = readFileSync(versionPath, "utf8").trim();
 
-// --- optional version bump --------------------------------------------------
+// --- resolve target version -------------------------------------------------
+// Default: bump the patch every run. Override with --version / --minor / --major,
+// or keep the current version with --no-bump.
+function bumpPart(v, part) {
+  const m = /^(\d+)\.(\d+)\.(\d+)/.exec(v);
+  if (!m) {
+    fail(`current version "${v}" is not plain x.y.z — can't auto-bump; pass --version <x.y.z>`);
+  }
+  const [maj, min, pat] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  if (part === "major") return `${maj + 1}.0.0`;
+  if (part === "minor") return `${maj}.${min + 1}.0`;
+  return `${maj}.${min}.${pat + 1}`;
+}
+
+const originalVersion = version;
+let target;
 if (bumpTo !== null) {
+  // Explicit version — sets both files, no need to reconcile first.
   if (!/^\d+\.\d+\.\d+([-+.][0-9A-Za-z-.]+)?$/.test(bumpTo)) {
     fail(`--version "${bumpTo}" is not a valid semver (expected x.y.z)`);
   }
-  step(`bump version ${version} → ${bumpTo} (VERSION + package.json)`);
-  version = bumpTo;
+  target = bumpTo;
+} else {
+  // Deriving from the current version — VERSION and package.json must agree.
+  if (pkg.version !== version) {
+    fail(
+      `version mismatch: VERSION=${version} but package.json=${pkg.version}\n` +
+        `  reconcile them, or pass --version <x.y.z> to set both.`,
+    );
+  }
+  if (has("--no-bump")) target = version;
+  else if (has("--major")) target = bumpPart(version, "major");
+  else if (has("--minor")) target = bumpPart(version, "minor");
+  else target = bumpPart(version, "patch"); // default: bump patch every run
+}
+
+if (target !== version) {
+  step(`bump version ${version} → ${target} (VERSION + package.json)`);
+  version = target;
   if (!dryRun) {
     writeFileSync(versionPath, `${version}\n`);
     pkg.version = version;
     writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
   }
-} else if (pkg.version !== version) {
-  fail(
-    `version mismatch: VERSION=${version} but package.json=${pkg.version}\n` +
-      `  reconcile them, or run with --version <x.y.z> to set both.`,
-  );
+} else {
+  step(`release current version ${version} (no bump)`);
 }
+const versionChanged = version !== originalVersion;
 
 const tag = `v${version}`;
 const branch = branchArg ?? git(["rev-parse", "--abbrev-ref", "HEAD"], { quiet: true }).out;
@@ -137,7 +176,9 @@ if (doTag && (localTagExists || remoteTagExists)) {
 // 1. stage + commit (only if there is something to commit)
 let willCommit;
 if (dryRun) {
-  willCommit = status.length > 0; // would `git add -A` stage anything?
+  // Would `git add -A` stage anything? In dry-run the bump isn't written yet,
+  // so fold in the pending version change explicitly.
+  willCommit = status.length > 0 || versionChanged;
 } else {
   git(["add", "-A"], { quiet: true });
   willCommit = git(["diff", "--cached", "--quiet"], { check: false, quiet: true }).status === 1;
