@@ -17,13 +17,31 @@
 import { spawnSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const KIT = resolve(__dirname, "..");
 const VERSION = existsSync(join(KIT, "VERSION"))
   ? readFileSync(join(KIT, "VERSION"), "utf8").trim()
   : "0.0.0";
+
+// The fkit version a project was last compiled with: prefer the explicit stamp
+// written by compile-skills, else fall back to any generated skill marker.
+function readProjectVersion(projectDir) {
+  const stamp = join(projectDir, "ai-agents", ".fkit-version");
+  if (existsSync(stamp)) return readFileSync(stamp, "utf8").trim();
+  for (const side of [".claude", ".codex"]) {
+    const skillsDir = join(projectDir, side, "skills");
+    if (!existsSync(skillsDir)) continue;
+    for (const name of readdirSync(skillsDir)) {
+      const f = join(skillsDir, name, "SKILL.md");
+      if (!existsSync(f)) continue;
+      const m = readFileSync(f, "utf8").match(/fkit:generated[^>]*version=([0-9][0-9.]*)/);
+      if (m) return m[1];
+    }
+  }
+  return null;
+}
 
 // subcommand → script in bin/
 const COMMANDS = {
@@ -39,6 +57,7 @@ function help() {
 Usage: fkit <command> [options]   (or: npx github:flashist/fkit <command> [options])
 
 Commands:
+  version          Print the kit version (add --project <dir> for the project's installed version)
   bootstrap        Stand up fkit in a project (scaffold + compile + generate config)
   sync             Re-pull kit updates into an existing project
   compile          Compile skills from a manifest
@@ -56,6 +75,23 @@ if (!cmd || cmd === "help" || cmd === "--help" || cmd === "-h") {
 }
 if (cmd === "--version" || cmd === "-v") {
   console.log(VERSION);
+  process.exit(0);
+}
+if (cmd === "version") {
+  // `kit` = the version this npx run pulled (i.e. the latest available).
+  console.log(`kit:     ${VERSION}`);
+  const pIdx = rest.indexOf("--project");
+  if (pIdx >= 0) {
+    const projectDir = resolve(rest[pIdx + 1] || ".");
+    const installed = readProjectVersion(projectDir);
+    if (installed === VERSION) {
+      console.log(`project: ${installed} (up to date)`);
+    } else if (installed) {
+      console.log(`project: ${installed}  →  update available: ${VERSION} (run the fkit skill)`);
+    } else {
+      console.log("project: unknown (no fkit stamp — run the fkit skill to sync)");
+    }
+  }
   process.exit(0);
 }
 

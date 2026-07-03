@@ -226,6 +226,13 @@ for (const s of found) {
   }
 }
 
+// Stamp the project with the kit version it was last compiled against, so
+// `fkit version --project <dir>` and the fkit skill can report it.
+const stampDir = join(outDir, "ai-agents");
+mkdirSync(stampDir, { recursive: true });
+writeFileSync(join(stampDir, ".fkit-version"), `${VERSION}\n`);
+console.log(`  stamped ai-agents/.fkit-version = ${VERSION}`);
+
 console.log(
   `\nCompiled ${claudeCount} Claude + ${codexCount} Codex skill file(s) → ${outDir}`,
 );

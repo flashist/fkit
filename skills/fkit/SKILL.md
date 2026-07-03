@@ -14,7 +14,16 @@ swap that prefix for `npx --yes fkit@latest …`.)
 
 ## 0. Detect mode
 
-Look for **`ai-agents/ai-agents.yml`** in the current working directory:
+**Version check (fast path).** If the user only wants the fkit version — they invoked this skill with
+`version` as the argument (e.g. `/fkit version` in Claude, `$fkit version` in Codex) or asked what
+fkit version this project is on — run:
+```bash
+npx --yes github:flashist/fkit version --project .
+```
+Report the `kit:` line (latest available) and the `project:` line (what this project is installed
+with, and whether an update is available), then **stop**. Do not install or update.
+
+Otherwise, look for **`ai-agents/ai-agents.yml`** in the current working directory:
 
 - **Not present → INSTALL** (first-time setup). Do Part A below.
 - **Already present → UPDATE** (re-sync to the latest fkit). Skip to Part B.
@@ -77,7 +86,8 @@ it from the interview (or the file from A2b): flesh out **Domain & context**, **
 ### A6. Report & stop
 Summarize: project identity, default model, per-skill overrides, and the files created
 (`ai-agents/ai-agents.yml`, `ai-agents/knowledge-base/PROJECT.md`, compiled skills, CLAUDE.md /
-AGENTS.md / config). Mention that **re-running this skill later updates instead of installs**. fkit
+AGENTS.md / config). **State the fkit version** installed — the `stamped ai-agents/.fkit-version = …`
+line the build printed. Mention that **re-running this skill later updates instead of installs**. fkit
 **makes no commits** — everything is working-tree only.
 
 ---
@@ -97,5 +107,6 @@ fetch; if you need to force the very latest, clear the npx cache first — `npx 
 for pinned releases, use a published npm version.)
 
 ### B2. Report & stop
-Summarize which skills recompiled and whether the routing block / `.codex` model changed. fkit
-**makes no commits** — the updated files are working-tree only.
+Summarize which skills recompiled and whether the routing block / `.codex` model changed, and **state
+the fkit version** the project is now on — the `stamped ai-agents/.fkit-version = …` line the build
+printed. fkit **makes no commits** — the updated files are working-tree only.
