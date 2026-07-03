@@ -10,14 +10,14 @@ machinery** (this kit) and **per-project content** (a project's manifest + docs)
 
 ## Install
 
-fkit ships two entry skills — **`fkit-install`** (interactive one-time project setup) and
-**`fkit-update`** (re-sync a project to the latest kit). Install them into your agent(s) via any
-channel below; all are equivalent.
+fkit ships a single entry skill — **`fkit`** — that sets up the current project on first run and
+re-syncs it to the latest kit on later runs (it auto-detects which). Install it into your agent(s)
+via any channel below; all are equivalent.
 
 **Any agent (recommended)** — via the universal [`skills`](https://github.com/vercel-labs/skills) tool:
 
 ```bash
-npx skills add flashist/fkit -g     # -g installs globally; choose your agent(s) when prompted
+npx skills add flashist/fkit -g -y     # -g global, -y skips all prompts (installs to your detected agents)
 ```
 
 **Claude Code plugin:**
@@ -34,9 +34,9 @@ git clone https://github.com/flashist/fkit && cd fkit
 node bin/install-cli-skills.mjs     # → ~/.claude/skills + ~/.codex/skills (copies skills/ verbatim)
 ```
 
-Then, in any project, run **`fkit-install`** once and **`fkit-update`** whenever you want the latest
-skills. The skills call the kit's machinery on demand via `npx github:flashist/fkit …`, so no clone is
-needed — all three channels install the same self-contained skills.
+Then, in any project, just run **`fkit`** — it installs on the first run and updates on every run
+after. The skill calls the kit's machinery on demand via `npx github:flashist/fkit …`, so no clone is
+needed — all three channels install the same self-contained skill.
 
 ## Direct script use
 
@@ -92,7 +92,7 @@ generic/skills/{shared,claude-only,codex-only}/<name>/{skill.md, meta.yml}
 generic/ai-agents/            the ai-agents/ skeleton (copied into each project)
 generic/templates/            role-agent + CLAUDE.md/AGENTS.md templates
 generic/roles/                role presets (producer.preset.md)
-skills/                       fkit-install / fkit-update — the SINGLE skill source, installed by every channel
+skills/                       fkit — the single entry skill (install + update), installed by every channel
 .claude-plugin/               plugin.json + marketplace.json (Claude plugin channel)
 manifest/ai-agents.schema.yml documented manifest schema
 examples/                     a sample project manifest

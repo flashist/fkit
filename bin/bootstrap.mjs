@@ -89,7 +89,7 @@ for (const [tmpl, outfile] of [["CLAUDE.md.tmpl", "CLAUDE.md"], ["AGENTS.md.tmpl
   console.log(`  generated ${outfile}`);
 }
 // Project brief → knowledge-base: a stub with name + overview filled. The
-// fkit-install interview enriches the Domain/Architecture/Conventions sections.
+// `fkit` skill's install interview enriches the Domain/Architecture/Conventions sections.
 const projectMdPath = join(out, "ai-agents", "knowledge-base", "PROJECT.md");
 mkdirSync(dirname(projectMdPath), { recursive: true });
 writeFileSync(

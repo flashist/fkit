@@ -5,7 +5,7 @@
     {
       "name": "fkit",
       "source": ".",
-      "description": "fkit CLI skills: fkit-install (interactive project setup) and fkit-update (re-sync a project to the latest kit)."
+      "description": "fkit CLI skill: sets up the current project on first run (interactive) and re-syncs it to the latest kit on later runs."
     }
   ]
 }

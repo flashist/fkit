@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 // fkit — install-cli-skills.mjs
 //
-// Clone-channel installer: copies the fkit entry skills (skills/) into the user's
-// GLOBAL agent skill dirs so `fkit-install` / `fkit-update` work in any project.
-// This is the same result as `npx skills add flashist/fkit -g`, just a plain copy
-// that doesn't depend on the `skills` tool — for people who cloned the repo.
+// Clone-channel installer: copies the fkit entry skill (skills/) into the user's
+// GLOBAL agent skill dirs so the `fkit` skill works in any project. This is the
+// same result as `npx skills add flashist/fkit -g`, just a plain copy that
+// doesn't depend on the `skills` tool — for people who cloned the repo.
 //
-// The skills in skills/ are self-contained (they run the kit via
+// The skill in skills/ is self-contained (it runs the kit via
 // `npx github:flashist/fkit …`), so there is nothing to substitute and no path to
 // bake — the installed files are byte-identical to the source.
 //

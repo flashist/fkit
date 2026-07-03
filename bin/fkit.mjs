@@ -2,9 +2,9 @@
 // fkit — CLI dispatcher.
 //
 // Lets `npx github:flashist/fkit <command> [args]` run the kit's machinery
-// WITHOUT a local clone — this is what the fkit-install / fkit-update skills
-// call so they stay self-contained (no baked path). Subcommands forward to the
-// existing scripts in bin/.
+// WITHOUT a local clone — this is what the `fkit` skill calls so it stays
+// self-contained (no baked path). Subcommands forward to the existing scripts
+// in bin/.
 //
 // NOTE: the clone-channel global installer (install-cli-skills) is intentionally
 // NOT exposed here — for a clone-free global install use
@@ -45,7 +45,7 @@ Commands:
   scaffold-role    Scaffold a role-agent from a preset
 
 Each command forwards to its script and prints its own detailed usage.
-Normally driven by the fkit-install / fkit-update skills. Makes no commits.`);
+Normally driven by the fkit skill. Makes no commits.`);
 }
 
 const [cmd, ...rest] = process.argv.slice(2);
