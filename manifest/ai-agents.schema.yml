@@ -1,0 +1,39 @@
+# ai-agents.yml — SCHEMA / REFERENCE
+# ===================================
+# Every project that uses fkit has ONE of these at `ai-agents/ai-agents.yml`.
+# It is the single source of truth for project identity, the agent roster, and model
+# routing. Editing it + running `sync` regenerates the derived config (per-CLI skills,
+# .codex/config.toml model, the routing blocks in CLAUDE.md / AGENTS.md).
+#
+# The parser (bin/compile-skills.mjs) supports: comments, `key: value`, nested maps by
+# 2-space indentation, inline flow maps `{ a: b }`, and inline flow lists `[a, b]`.
+# Avoid block lists (`- item`) and block scalars (`>` / `|`) — keep values single-line.
+
+kit_version: string     # semver of the kit this project was bootstrapped from; sync checks it
+
+project:
+  name: string          # display name → {{project_name}}
+  slug: string          # lowercase id → {{project_slug}}
+  owner: string         # replaces the hardcoded owner in task/role skills → {{owner}}
+  primary_language: string   # → {{primary_language}}
+  wiki_path: string     # location of the wiki-vault → {{wiki_path}} (default ai-agents/wiki-vault)
+  overview: string      # one-line summary (single line — long form stays in CLAUDE.md/AGENTS.md)
+
+models:                 # concrete model ids → {{claude_id}}, {{codex_id}}
+  claude: { cli: string, id: string }
+  codex:  { cli: string, id: string }
+
+roles:                  # the terminal-tab personas; each binds a role → default model
+  <role-name>:
+    model: claude | codex | both
+    entry_skill: string   # optional — the skill that puts the tab into this role
+    knowledge: string     # optional — path to this role's project knowledge doc
+
+routing:                # task-type → owning model (the editable routing table)
+  <task-type>: claude | codex | both
+  # `default` is the fallback when a task type is not listed.
+
+skills:                 # placement override (else the kit source dir decides)
+  shared:      [names...]   # compiled to BOTH .claude and .codex
+  claude_only: [names...]   # compiled to .claude only
+  codex_only:  [names...]   # compiled to .codex only

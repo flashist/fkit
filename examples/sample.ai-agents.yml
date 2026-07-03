@@ -1,0 +1,51 @@
+# Example project manifest for a fictional project ("Nimbus").
+#
+# In a real project this file lives at `ai-agents/ai-agents.yml`. It is the single
+# place that declares the project's identity, its agent roster, and which model owns
+# which kind of task. Edit it and run `sync` to change identity, roles, or model
+# routing across the whole kit. Also used to exercise bootstrap/sync end-to-end.
+
+kit_version: 0.1.0
+
+project:
+  name: Nimbus
+  slug: nimbus
+  owner: Alex
+  primary_language: TypeScript
+  wiki_path: ai-agents/wiki-vault
+  overview: A sample project used to exercise the fkit bootstrap and sync tooling.
+
+# Concrete model ids live here — one place to bump versions.
+models:
+  claude: { cli: claude, id: claude-opus-4-8 }
+  codex:  { cli: codex,  id: gpt-5.5 }
+
+# The "agents" = your terminal-tab personas. Each names the model it runs on and,
+# optionally, an entry_skill that boots it into character and a knowledge file.
+roles:
+  producer:
+    model: claude
+    entry_skill: producer
+    knowledge: ai-agents/knowledge-base/producer-knowledge-base.md
+  coder:
+    model: claude
+  reviewer:
+    model: both
+    entry_skill: stateful-review
+
+# task-type → owning model. Edit this block (then run `sync`) to re-route work.
+routing:
+  wiki: codex
+  planning: claude
+  review: both
+  routine-fix: codex
+  complex-feature: claude
+  default: claude
+
+# Which skills compile to which side. Usually derived from the kit dirs
+# (shared/ claude-only/ codex-only/); listed here to make placement explicit
+# and overridable per project.
+skills:
+  shared:      [process-review, plan-task, wiki-query]
+  claude_only: [task-done, task-cancelled, stateful-review]
+  codex_only:  [wiki-ingest, wiki-lint, wiki-sync]

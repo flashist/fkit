@@ -1,0 +1,7 @@
+# Per-CLI packaging for the `wiki-sync` codex-only skill.
+
+codex:
+  interface:
+    display_name: "Wiki Sync"
+    short_description: "Sync the {{project_slug}} wiki from ai-agents/ changes"
+    default_prompt: "Run the wiki-sync skill: detect what changed in non-wiki ai-agents/ sources since the last sync and ingest the delta into {{wiki_path}}/."

@@ -1,0 +1,7 @@
+# Per-CLI packaging for the `wiki-lint` codex-only skill.
+
+codex:
+  interface:
+    display_name: "Wiki Lint"
+    short_description: "Health-check the {{project_slug}} wiki and fix issues"
+    default_prompt: "Run the wiki-lint skill: health-check {{wiki_path}}/ and fix any structural, content, or cross-reference issues found."
