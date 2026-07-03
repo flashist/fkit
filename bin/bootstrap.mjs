@@ -51,8 +51,14 @@ const manifest = parseYaml(readFileSync(manifestArg, "utf8"));
 const project = manifest.project || {};
 
 // 1. Copy the ai-agents/ skeleton, then drop the manifest in place.
+//    Skip the manifest copy when it is already at the destination (the common
+//    "edit ai-agents/ai-agents.yml in place, then build" flow) — cpSync throws
+//    ERR_FS_CP_EINVAL on a same-path copy.
 cpSync(join(KIT, "generic", "ai-agents"), join(out, "ai-agents"), { recursive: true });
-cpSync(manifestArg, join(out, "ai-agents", "ai-agents.yml"));
+const destManifest = join(out, "ai-agents", "ai-agents.yml");
+if (resolve(manifestArg) !== destManifest) {
+  cpSync(manifestArg, destManifest);
+}
 console.log("  copied ai-agents/ skeleton + manifest");
 
 // 2. Compile the kit skills into the project.
@@ -82,6 +88,15 @@ for (const [tmpl, outfile] of [["CLAUDE.md.tmpl", "CLAUDE.md"], ["AGENTS.md.tmpl
   writeFileSync(join(out, outfile), subVars(readFileSync(join(KIT, "generic", "templates", tmpl), "utf8"), vars));
   console.log(`  generated ${outfile}`);
 }
+// Project brief → knowledge-base: a stub with name + overview filled. The
+// fkit-install interview enriches the Domain/Architecture/Conventions sections.
+const projectMdPath = join(out, "ai-agents", "knowledge-base", "PROJECT.md");
+mkdirSync(dirname(projectMdPath), { recursive: true });
+writeFileSync(
+  projectMdPath,
+  subVars(readFileSync(join(KIT, "generic", "templates", "PROJECT.md.tmpl"), "utf8"), vars),
+);
+console.log("  generated ai-agents/knowledge-base/PROJECT.md");
 const codexId = (manifest.models && manifest.models.codex && manifest.models.codex.id) || "";
 mkdirSync(join(out, ".codex"), { recursive: true });
 writeFileSync(
@@ -93,4 +108,4 @@ writeFileSync(
 console.log("  generated .codex/config.toml");
 
 console.log(`\nBootstrapped ${project.name || "project"} → ${out}  (no commits made)`);
-console.log("Next: fill the Architecture section in CLAUDE.md/AGENTS.md; add any project-specific rules to scaffolded roles.");
+console.log("Next: flesh out ai-agents/knowledge-base/PROJECT.md + the Architecture section in CLAUDE.md/AGENTS.md; add any project-specific rules to scaffolded roles.");

@@ -1,0 +1,4 @@
+codex:
+  interface:
+    short_description: "Pull latest fkit and re-sync this project's skills + routing."
+    default_prompt: "Update this project's fkit skills to the latest."
