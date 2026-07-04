@@ -17,11 +17,12 @@ npx --yes github:flashist/fkit config show --project . --json
 ```
 
 This single command is **authoritative** — it returns the full current picture: `defaultModel`, every
-known skill with its resolved model, whether that value came from an explicit **override** or is
-**inherited from the default**, and that skill's own one-line description; plus the project's
-task-type routing table (from `ai-agents.yml`'s `routing:` block — a separate, untouched system,
-included only so the status picture is complete). Parse its JSON. Never hand-summarize or re-derive
-this data from memory — always relay or paraphrase directly from what it actually returned.
+known skill with its resolved model, and whether that value came from an explicit **override** or is
+**inherited from the default**, plus that skill's own one-line description. Parse its JSON. Never
+hand-summarize or re-derive this data from memory — always relay or paraphrase directly from what it
+actually returned. There is no task-type routing table anymore — don't look for one in this output,
+and don't read `ai-agents.yml`'s (possibly still-present, now-inert) `routing:` block to reconstruct
+one; this skill only edits `config.json`'s `defaultModel` + per-skill overrides.
 
 ## 2. Present it as a settings list — as plain text, in the chat
 
@@ -35,9 +36,6 @@ attempt to fake one; this text response IS the equivalent here. Distinguish thre
   never truncate or bucket some as "and others").
 - **Interactive rows** — `defaultModel`, and each individual skill, each showing its current value (and
   for skills, whether that value is an override or inherited from the default).
-
-Also surface the task-type routing table from `config show`'s output, noting plainly that it is a
-separate system (`ai-agents.yml`'s `routing:` block) this skill does not edit.
 
 ## 3. Ask which setting to change
 

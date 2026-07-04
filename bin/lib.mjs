@@ -293,14 +293,14 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
     config.skills = skills;
     if (legacyBoth.length) {
       dirty = true;
-      console.log(
+      console.error(
         `  migrated legacy "both" skill override(s) → plain default (both is no longer a valid model): ${legacyBoth.join(", ")}`,
       );
     }
     if (config.defaultModel === "both") {
       config.defaultModel = "claude";
       dirty = true;
-      console.log('  migrated legacy defaultModel "both" → "claude" (both is no longer a valid model)');
+      console.error('  migrated legacy defaultModel "both" → "claude" (both is no longer a valid model)');
     }
 
     validateConfig(config);
@@ -313,7 +313,7 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
       (sk.codex_only && sk.codex_only.length) ||
       (manifest.routing && manifest.routing.default);
     if (hasLegacy) {
-      console.log(
+      console.error(
         "  note: ai-agents/config.json exists — ai-agents.yml's skills:/routing.default are now ignored",
       );
     }
@@ -327,7 +327,7 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
     config = migrateConfigFromManifest(manifest, kitVersion);
     migrated = true;
     dirty = true;
-    console.log(
+    console.error(
       `  migrated ai-agents/config.json from legacy ai-agents.yml fields (defaultModel=${config.defaultModel}, ${Object.keys(config.skills).length} skill override(s))`,
     );
   }

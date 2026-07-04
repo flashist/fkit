@@ -7,6 +7,7 @@
     "fkit": "./bin/fkit.mjs"
   },
   "scripts": {
+    "test": "node --test tests/*.test.mjs",
     "release": "node bin/release.mjs",
     "release:minor": "node bin/release.mjs --minor",
     "release:major": "node bin/release.mjs --major",
