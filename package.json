@@ -1,6 +1,6 @@
 {
   "name": "fkit",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A transferable, two-model (Claude + Codex) operating system for a software project: the ai-agents/ working structure, single-sourced skills, and project-level editable model routing.",
   "type": "module",
   "bin": {
