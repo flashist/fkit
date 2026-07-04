@@ -23,44 +23,50 @@ task-type routing table (from `ai-agents.yml`'s `routing:` block — a separate,
 included only so the status picture is complete). Parse its JSON. Never hand-summarize or re-derive
 this data from memory — always relay or paraphrase directly from what it actually returned.
 
-## 2. Present it as a settings list
+## 2. Present it as a settings list — as plain text, in the chat
 
-Lay out what `config show` returned the way a settings screen would, distinguishing three kinds of row:
+Render the FULL list **as your own text response** (a table or a clearly-labeled list) — never through
+`AskUserQuestion` or any other tool. Neither that tool nor a plain chat has a real list-browser widget
+(a search box, live filtering, a scrollable view) like Claude Code's native `/skills` picker — don't
+attempt to fake one; this text response IS the equivalent here. Distinguish three kinds of row:
 
 - **Display-only** — the config `version`. Mention it in passing; it is not a choice.
-- **Group header** — "Skills" as a category label. Not itself selectable; it just introduces the rows
-  listed under it.
-- **Interactive rows** — `defaultModel` itself, and each individual skill, each showing its current
-  value (and for skills, whether that value is an override or inherited from the default).
-
-This should read like browsing a settings list where some rows are just labels and others are
-selectable — the same distinction Claude Code's own skill/plugin listings draw between group headers
-and actual selectable entries.
+- **Group header** — a "Skills" heading in your text, introducing every skill below it (ALL of them —
+  never truncate or bucket some as "and others").
+- **Interactive rows** — `defaultModel`, and each individual skill, each showing its current value (and
+  for skills, whether that value is an override or inherited from the default).
 
 Also surface the task-type routing table from `config show`'s output, noting plainly that it is a
 separate system (`ai-agents.yml`'s `routing:` block) this skill does not edit.
 
 ## 3. Ask which setting to change
 
-Read `ai-agents/config-schema.json` directly and use its own `description` field for whichever setting
-you're asking about — never invent your own wording for it.
+**Never enumerate skills as individual `AskUserQuestion` options.** That tool hard-caps at **4 options
+per question** (and 4 questions per call) — with more than a couple of skills this silently degrades
+into an incoherent "pick a bucket, or type something" experience instead of a real choice. The table
+you already rendered in step 2 is the full list; use it, don't re-list it as options.
 
-- **If you have an interactive choice tool available** (e.g. Claude Code's `AskUserQuestion`), use it:
-  one option per changeable setting (`Default model`, plus one per skill), each option's label showing
-  its current value, and its description field carrying the schema's `description` text for that field.
-- **If you don't** (e.g. running as Codex), present the same choices as a numbered list conversationally
-  — the default model plus every skill, each annotated with its current value — and read back the
-  user's typed choice.
+Ask ONE small, bounded question instead — exactly 3 options, comfortably inside the limit:
+- **"Default model"**
+- **"A specific skill"**
+- **"Nothing — I'm done"**
+
+Use `AskUserQuestion` for this on Claude (a plain numbered 1/2/3 list conversationally on Codex). If the
+user picks "A specific skill", ask **conversationally** (plain chat, not a tool call) which one — they
+can just name it from the table you already showed. This scales to any number of skills with no cap and
+no lossy bucketing.
 
 ## 4. Ask for the new value
 
-Options are exactly the schema's enum values for that field — read them from
+Now that exactly one field is chosen (`defaultModel`, or one named skill), its possible values are
+small and bounded — this is where `AskUserQuestion` fits cleanly. Read them from
 `ai-agents/config-schema.json`'s `values` map (`defaultModel`'s own `values`, or the `skills` group's
-`memberSchema.values` for a specific skill): `claude`, `codex`, `both`. When changing one specific skill
-(not the project default), also offer **`default`** as an extra choice, meaning "clear this skill's
-override and let it inherit the project default."
+`memberSchema.values`): `claude`, `codex`, `both`, each with the schema's own `description` text as the
+option's description — never invent your own wording for it. When changing one specific skill (not the
+project default), also offer **`default`** as a fourth choice, meaning "clear this skill's override and
+let it inherit the project default."
 
-Ask this the same way as step 3 — `AskUserQuestion` if you have it, otherwise a numbered list.
+Use `AskUserQuestion` on Claude, or a numbered list on Codex — same as step 3.
 
 ## 5. Apply the change
 
