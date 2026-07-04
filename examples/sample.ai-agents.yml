@@ -16,8 +16,8 @@ project:
   overview: A sample project used to exercise the fkit bootstrap and sync tooling.
 
 # Concrete model ids live here — one place to bump versions.
-# `exec` is how each model is called NON-interactively, used by `owned` skills
-# (below) so the non-owner side can delegate the task to the owner headlessly.
+# `exec` is how each model is called NON-interactively when a stub delegates to it.
+# It's OPTIONAL — fkit has sensible built-in defaults; set it only to override them.
 models:
   claude:
     cli: claude
@@ -53,11 +53,17 @@ routing:
 # Which skills compile to which side. Usually derived from the kit dirs
 # (shared/ claude-only/ codex-only/); listed here to make placement explicit
 # and overridable per project.
+# Each skill is either `shared` (real on every model — for read-only lookups and
+# anything where delegation is pointless) or `owned` by one model (real on the
+# owner; every OTHER model gets a stub that routes the task to the owner via its
+# `exec` command). There is no "hidden from the other model" — every skill is
+# available everywhere; non-owners just delegate.
 skills:
-  shared:      [process-review, plan-task, wiki-query, fkit-architect-inspect]
-  claude_only: [task-done, task-cancelled, stateful-review]
-  codex_only:  [wiki-ingest, wiki-lint]
-  # `owned` = present on EVERY side, but the real work runs on the owner model;
-  # other models get a stub that delegates to the owner via its `exec` command.
+  shared: [process-review, plan-task, wiki-query, fkit-architect-inspect]
   owned:
-    wiki-sync: codex
+    task-done:       claude
+    task-cancelled:  claude
+    stateful-review: claude
+    wiki-ingest:     codex
+    wiki-lint:       codex
+    wiki-sync:       codex

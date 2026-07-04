@@ -55,9 +55,12 @@ conversationally. Offer the suggested default for each so the user can just acce
   spec) — read it and summarise. Capture a one-line `overview` **and** enough for the brief (A5).
 - **c. Default model.** Suggest the model **you are running as**. Confirm or switch. → `routing.default`.
 - **d. Per-skill model.** Read the `skills:` block in the freshly-written `ai-agents/ai-agents.yml`
-  to list every skill and its default side (`shared` → **Both**, `claude_only` → **Claude**,
-  `codex_only` → **Codex**). Present them; let the user set any to **Claude / Codex / Both**.
-  (Common case: move the `wiki-*` skills to Codex.)
+  and list every skill with its current assignment (`shared` → **Both**, or an `owned:` entry →
+  that **owner**). Let the user set each to **Both / Claude / Codex**. Explain what the choice means:
+  **Both** = each model runs it natively; **Claude** or **Codex** = that model owns it and every
+  *other* model gets a stub that **routes the task to the owner** (the skill is still available
+  everywhere — nothing is hidden). Read-only lookups (e.g. `wiki-query`) are best left **Both**.
+  (Common case: assign the `wiki-*` write skills to **Codex**.)
 - **(owner)** Capture an `owner` for task attribution — default to `git config user.name` (confirm).
 
 ### A3. Write the manifest (edit `ai-agents/ai-agents.yml` in place)
@@ -67,8 +70,10 @@ Edit the starter to reflect the interview. Match the file's YAML style — fkit'
 - `project.name` / `slug` / `owner` / `overview` (the one-liner).
 - `routing.default` = the chosen default model; adjust the other routing rows to match the per-skill
   choices (e.g. if `wiki-*` went to Codex, keep `wiki: codex`).
-- `skills.shared` / `claude_only` / `codex_only` = the per-skill assignments (**Both** → `shared`,
-  **Claude** → `claude_only`, **Codex** → `codex_only`). Every skill appears in exactly one list.
+- `skills.shared` (a list) = the **Both** skills; `skills.owned` (a `skill: model` map) = the skills
+  assigned to a single owner. Every skill appears in exactly one of the two (**Both** → add to
+  `shared`; **Claude**/**Codex** → add to `owned` as `skill: claude`/`skill: codex`). There is no
+  `claude_only`/`codex_only` — an owned skill is still compiled to every model as a routing stub.
 - Leave `models.*.id` at the starter's defaults unless the user asks to change them.
 
 ### A4. Build

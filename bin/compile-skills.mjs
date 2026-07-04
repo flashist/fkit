@@ -65,25 +65,34 @@ const vars = {
   kit_version: VERSION,
 };
 
-// Optional placement overrides from manifest.skills (else the kit dir decides)
-const placement = {};
+// Skill assignment: each skill is either "shared" (real on every model) or OWNED
+// by one model (real on the owner, a delegating stub on every other model). Every
+// skill is therefore available on every model — non-owners route to the owner.
+//
+// Legacy `claude_only` / `codex_only` lists are read AS ownership, so existing
+// manifests upgrade to the delegating-stub behaviour on the next sync with no
+// hand-editing.
+const assigned = {};
 const sk = manifest.skills || {};
-for (const n of sk.shared || []) placement[n] = "shared";
-for (const n of sk.claude_only || []) placement[n] = "claude";
-for (const n of sk.codex_only || []) placement[n] = "codex";
-
-// Skills OWNED by one model but present on EVERY side: the owner side gets the
-// real skill; every other side gets a delegation stub that calls the owner model
-// non-interactively (models.<owner>.exec) to do the work.
-const ownedBy = {};
+for (const n of sk.shared || []) assigned[n] = "shared";
+for (const n of sk.claude_only || []) assigned[n] = "claude";
+for (const n of sk.codex_only || []) assigned[n] = "codex";
 for (const [n, m] of Object.entries(sk.owned || {})) {
-  ownedBy[n] = m === "claude" ? "claude" : "codex";
+  assigned[n] = m === "claude" ? "claude" : "codex";
 }
 
 // ---------------------------------------------------------------------------
 // Discover skill sources
 // ---------------------------------------------------------------------------
-const TIER_DIRS = { shared: "shared", "claude-only": "claude", "codex-only": "codex" };
+// Source dirs → default assignment. Both the legacy `*-only` names and the plain
+// model names map to that model's ownership.
+const TIER_DIRS = {
+  shared: "shared",
+  claude: "claude",
+  "claude-only": "claude",
+  codex: "codex",
+  "codex-only": "codex",
+};
 const skillsRoot = join(kitRoot, "generic", "skills");
 const found = [];
 for (const [dir, tier] of Object.entries(TIER_DIRS)) {
@@ -99,12 +108,9 @@ for (const [dir, tier] of Object.entries(TIER_DIRS)) {
 // ---------------------------------------------------------------------------
 // Emit
 // ---------------------------------------------------------------------------
-const tierLabelFor = (place) =>
-  place === "shared" ? "shared" : place === "claude" ? "claude-only" : "codex-only";
-
-const marker = (place, name) =>
+const marker = (tier, name) =>
   "<!-- fkit:generated source=" +
-  tierLabelFor(place) +
+  tier +
   "/" +
   name +
   " version=" +
@@ -118,6 +124,12 @@ function writeEnsured(fp, content) {
 
 const OWNER_LABEL = { claude: "Claude", codex: "Codex" };
 const INVOKE_FOR = { claude: "/", codex: "$" };
+// How to call each model non-interactively when a stub delegates. Overridable per
+// project via models.<m>.exec; these defaults make delegation work out of the box.
+const DEFAULT_EXEC = {
+  claude: "claude -p --permission-mode acceptEdits",
+  codex: "codex exec --sandbox workspace-write",
+};
 
 // The body for the NON-owner side of an `owned` skill. It calls the owner model
 // non-interactively (models.<owner>.exec) to run the real skill, and falls back
@@ -126,7 +138,7 @@ function delegationStub(name, ownerModel) {
   const label = OWNER_LABEL[ownerModel];
   const inv = INVOKE_FOR[ownerModel];
   const cli = (models[ownerModel] && models[ownerModel].cli) || ownerModel;
-  const exec = (models[ownerModel] && models[ownerModel].exec) || "";
+  const exec = (models[ownerModel] && models[ownerModel].exec) || DEFAULT_EXEC[ownerModel] || "";
   const out = [
     `# ${name} (delegated to ${label})`,
     "",
@@ -168,11 +180,13 @@ for (const s of found) {
   const meta = existsSync(metaPath) ? parseYaml(readFileSync(metaPath, "utf8")) : {};
 
   const name = fm.name || s.name;
-  const owner = ownedBy[name]; // undefined | "claude" | "codex"
-  const place = owner ? "shared" : placement[name] || s.tier;
-  const markerTier = owner ? s.tier : place; // marker points at the real source dir
-  const targets =
-    place === "shared" ? ["claude", "codex"] : place === "claude" ? ["claude"] : ["codex"];
+  // "shared" → real on both; a model name → real on that owner, stub elsewhere.
+  const assignment = assigned[name] || s.tier;
+  const markerTier = s.tier;
+  const stubFor = (model) =>
+    assignment !== "shared" && assignment !== model ? delegationStub(name, assignment) : null;
+  // Every skill compiles to BOTH models (real skill or delegating stub).
+  const targets = ["claude", "codex"];
 
   // Per-target substitution: global manifest vars + this skill's per-model vars
   // (meta.<model>.vars), plus an optional per-model description override.
@@ -196,19 +210,19 @@ for (const s of found) {
     const fmLines = ["---", `name: ${name}`, `description: ${JSON.stringify(r.description)}`];
     if (ui) fmLines.push("user-invocable: true");
     fmLines.push("---");
-    const bodyOut = owner && owner !== "claude" ? delegationStub(name, owner) : r.body;
-    const content = fmLines.join("\n") + "\n" + marker(markerTier, name) + "\n\n" + bodyOut;
+    const stub = stubFor("claude");
+    const content = fmLines.join("\n") + "\n" + marker(markerTier, name) + "\n\n" + (stub || r.body);
     writeEnsured(join(outDir, ".claude", "skills", name, "SKILL.md"), content);
     claudeCount++;
-    const via = owner && owner !== "claude" ? ` (delegates to ${OWNER_LABEL[owner]})` : "";
+    const via = stub ? ` (delegates to ${OWNER_LABEL[assignment]})` : "";
     console.log(`  claude → .claude/skills/${name}/SKILL.md${via}`);
   }
 
   if (targets.includes("codex")) {
     const r = render("codex");
     const fmLines = ["---", `name: ${name}`, `description: ${JSON.stringify(r.description)}`, "---"];
-    const bodyOut = owner && owner !== "codex" ? delegationStub(name, owner) : r.body;
-    const content = fmLines.join("\n") + "\n" + marker(markerTier, name) + "\n\n" + bodyOut;
+    const stub = stubFor("codex");
+    const content = fmLines.join("\n") + "\n" + marker(markerTier, name) + "\n\n" + (stub || r.body);
     writeEnsured(join(outDir, ".codex", "skills", name, "SKILL.md"), content);
 
     const iface = (meta.codex && meta.codex.interface) || {};
@@ -221,7 +235,7 @@ for (const s of found) {
       ].join("\n") + "\n";
     writeEnsured(join(outDir, ".codex", "skills", name, "agents", "openai.yaml"), yaml);
     codexCount++;
-    const via = owner && owner !== "codex" ? ` (delegates to ${OWNER_LABEL[owner]})` : "";
+    const via = stub ? ` (delegates to ${OWNER_LABEL[assignment]})` : "";
     console.log(`  codex  → .codex/skills/${name}/SKILL.md (+ agents/openai.yaml)${via}`);
   }
 }

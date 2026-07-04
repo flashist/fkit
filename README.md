@@ -84,6 +84,11 @@ consumed via `npx github:flashist/fkit`, so a pushed tag *is* the release. Verif
   Three kinds of per-model variation, all from one source: manifest placeholders,
   per-model vars (`meta.<model>.vars`, e.g. `{{invoke}}` = `/` vs `$`), and per-model
   description overrides.
+- **Every skill is available on every model.** A skill is either `shared` (a real skill on
+  each model) or `owned` by one model (real on the owner; every other model gets a stub that
+  **routes the task to the owner** — headlessly via the owner's `exec` command, or a tab
+  hand-off if that CLI isn't set up). Nothing is ever hidden from a model — assigning an owner
+  just changes *who does the work*. Set it per skill in the manifest's `skills:` block.
 - **The project manifest** (`ai-agents/ai-agents.yml`; schema in `manifest/`) declares
   identity, the agent roster, and the routing table — filling placeholders and generating
   the derived config. Change routing by editing one file + running `sync`.

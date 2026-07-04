@@ -20,8 +20,8 @@ project:
   overview: string      # one-line summary (single line — long form stays in CLAUDE.md/AGENTS.md)
 
 models:                 # concrete model ids → {{claude_id}}, {{codex_id}}
-  claude: { cli: string, id: string }
-  codex:  { cli: string, id: string }
+  claude: { cli: string, id: string, exec: string }  # exec optional — how to call this
+  codex:  { cli: string, id: string, exec: string }  # model non-interactively (has a default)
 
 roles:                  # the terminal-tab personas; each binds a role → default model
   <role-name>:
@@ -33,7 +33,9 @@ routing:                # task-type → owning model (the editable routing table
   <task-type>: claude | codex | both
   # `default` is the fallback when a task type is not listed.
 
-skills:                 # placement override (else the kit source dir decides)
-  shared:      [names...]   # compiled to BOTH .claude and .codex
-  claude_only: [names...]   # compiled to .claude only
-  codex_only:  [names...]   # compiled to .codex only
+skills:                 # per-skill assignment (else the kit source dir decides)
+  shared: [names...]        # real skill on EVERY model (each runs it natively)
+  owned:                    # real on the owner; a routing STUB on every other model
+    <skill-name>: claude | codex   # the skill is still available everywhere — non-owners delegate
+  # (legacy `claude_only` / `codex_only` lists are still accepted and read as
+  #  ownership, so old manifests upgrade to stubs on the next sync.)
