@@ -1,0 +1,22 @@
+# Per-CLI packaging for the `fkit-config` shared skill.
+# fkit-config edits ai-agents/config.json and re-syncs — safe and fast natively
+# on either model, so it never delegates (shared tier). The step 3/4 choice-tool
+# branch ("use AskUserQuestion if you have it, else a numbered list") lives once
+# in skill.md's body and reads correctly on both models, so it needs no var.
+# Only the invocation prefix shown in the Usage example differs, expressed via
+# the `invoke` var (same convention as wiki-query / plan-task).
+
+claude:
+  user_invocable: true
+  description: "Browse and change the project's fkit model-routing config — the project-wide default model (Claude / Codex / both) and any per-skill overrides — then re-sync the compiled skills so the change takes effect. Use to review or edit which model owns a given fkit skill, or to change the project default model. Makes no commits."
+  vars:
+    invoke: "/"
+
+codex:
+  description: "Use when the user wants Codex to review or change fkit's model-routing config — the project-wide default model or a specific skill's model override — then re-sync the compiled skills. Trigger for requests like $fkit-config, checking which model owns a fkit skill, or changing the project default model. Makes no commits."
+  vars:
+    invoke: "$"
+  interface:
+    display_name: "fkit Config"
+    short_description: "Browse/edit fkit model routing config"
+    default_prompt: "Use $fkit-config to review or change which model owns a fkit skill, or the project's default model."

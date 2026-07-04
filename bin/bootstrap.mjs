@@ -13,7 +13,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, cpSync } from "node
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
-import { parseYaml, subVars, renderRoutingBlock } from "./lib.mjs";
+import { parseYaml, subVars, renderRoutingBlock, loadOrMigrateConfig, loadConfig } from "./lib.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const KIT = resolve(__dirname, "..");
@@ -43,6 +43,17 @@ if (!manifestArg) {
   mkdirSync(dirname(starter), { recursive: true });
   cpSync(join(KIT, "examples", "sample.ai-agents.yml"), starter);
   console.log(`Wrote a starter manifest → ${starter}`);
+  // Seed ai-agents/config.json + config-schema.json from the starter's own
+  // routing.default + skills: fields, so an interview reading `config show`
+  // has real data before the full build ever runs.
+  const starterManifest = parseYaml(readFileSync(starter, "utf8"));
+  try {
+    loadOrMigrateConfig(join(out, "ai-agents"), starterManifest, KIT);
+  } catch (e) {
+    console.error(e.message);
+    process.exit(1);
+  }
+  console.log(`Wrote a starter config → ${join(out, "ai-agents", "config.json")} (+ config-schema.json)`);
   console.log(`Edit it for your project, then re-run: node bin/bootstrap.mjs --out ${out} --manifest ${starter}`);
   process.exit(0);
 }
@@ -76,13 +87,22 @@ for (const role of Object.keys(manifest.roles || {})) {
 }
 
 // 4. Generate CLAUDE.md / AGENTS.md (with the routing block) and .codex/config.toml.
+// config.json is guaranteed to exist by now (step 2 ran compile-skills.mjs, which
+// calls loadOrMigrateConfig) — its defaultModel is authoritative for the "(default)" row.
+let defaultModel;
+try {
+  ({ defaultModel } = loadConfig(join(out, "ai-agents")));
+} catch (e) {
+  console.error(e.message);
+  process.exit(1);
+}
 const vars = {
   project_name: project.name ?? "",
   project_slug: project.slug ?? "",
   owner: project.owner ?? "",
   overview: project.overview ?? "",
   wiki_path: project.wiki_path ?? "ai-agents/wiki-vault",
-  routing_block: renderRoutingBlock(manifest),
+  routing_block: renderRoutingBlock(manifest, defaultModel),
 };
 for (const [tmpl, outfile] of [["CLAUDE.md.tmpl", "CLAUDE.md"], ["AGENTS.md.tmpl", "AGENTS.md"]]) {
   writeFileSync(join(out, outfile), subVars(readFileSync(join(KIT, "generic", "templates", tmpl), "utf8"), vars));

@@ -49,12 +49,20 @@ npx github:flashist/fkit bootstrap --out /path/to/project --manifest /path/to/pr
 
 # re-sync an existing project to the latest kit
 npx github:flashist/fkit sync --project /path/to/project
+
+# inspect or change the per-skill/default model config of a bootstrapped project
+npx github:flashist/fkit config show --project /path/to/project
+npx github:flashist/fkit config set --project /path/to/project --default-model codex
+npx github:flashist/fkit config set --project /path/to/project --skill fkit-config --model both
 ```
 
 `bootstrap` produces the `ai-agents/` skeleton, compiled `.claude` + `.codex` skills, scaffolded roles,
 and generated `CLAUDE.md` / `AGENTS.md` / `.codex/config.toml`. `sync` recompiles the generated skills
 and routing block and **never touches `origin:project` files** (scaffolded roles, project-authored
-skills). Both make no commits. (Swap `npx github:flashist/fkit` for `node bin/…` if you're in a clone.)
+skills). `config show` prints the full resolved state (read-only); `config set` only edits
+`ai-agents/config.json` — it does not recompile anything, so run `sync` afterward for the change to
+take effect. None of these make commits. (Swap `npx github:flashist/fkit` for `node bin/…` if you're
+in a clone.)
 
 ## Releasing
 
@@ -84,11 +92,17 @@ consumed via `npx github:flashist/fkit`, so a pushed tag *is* the release. Verif
   Three kinds of per-model variation, all from one source: manifest placeholders,
   per-model vars (`meta.<model>.vars`, e.g. `{{invoke}}` = `/` vs `$`), and per-model
   description overrides.
-- **Every skill is available on every model.** A skill is either `shared` (a real skill on
-  each model) or `owned` by one model (real on the owner; every other model gets a stub that
-  **routes the task to the owner** — headlessly via the owner's `exec` command, or a tab
-  hand-off if that CLI isn't set up). Nothing is ever hidden from a model — assigning an owner
-  just changes *who does the work*. Set it per skill in the manifest's `skills:` block.
+- **Every skill is available on every model.** A skill's assignment is either `both` (a real
+  skill on every model) or a single owner, `claude` or `codex` (real on the owner; every other
+  model gets a stub that **routes the task to the owner** — headlessly via the owner's `exec`
+  command, or a tab hand-off if that CLI isn't set up). Nothing is ever hidden from a model —
+  assigning an owner just changes *who does the work*. Per-skill assignment lives in
+  `ai-agents/config.json` (project-owned, alongside `ai-agents.yml`) — set it directly, via
+  `fkit config set --skill <name> --model <claude|codex|both>`, or through the `fkit-config`
+  skill. Its sibling `ai-agents/config-schema.json` is regenerated fresh on every `sync` and
+  documents exactly what each value means, so nothing needs guessing. (The manifest's
+  `skills:` block still exists but is now only a one-time migration seed, read once to create
+  `config.json`.)
 - **The project manifest** (`ai-agents/ai-agents.yml`; schema in `manifest/`) declares
   identity, the agent roster, and the routing table — filling placeholders and generating
   the derived config. Change routing by editing one file + running `sync`.
@@ -111,6 +125,7 @@ bin/compile-skills.mjs        single-source → per-CLI skills
 bin/scaffold-role.mjs         skeleton + preset → a project role
 bin/bootstrap.mjs             stand up a new project
 bin/sync.mjs                  re-pull kit updates into an existing project
+bin/config.mjs                show/set a project's ai-agents/config.json (`fkit config show|set`)
 bin/fkit.mjs                  CLI dispatcher — `npx github:flashist/fkit <cmd>` (no clone)
 bin/install-cli-skills.mjs    copy skills/ into your global agent dirs (clone channel)
 bin/release.mjs               cut a release — commit + push + tag (npm run release)

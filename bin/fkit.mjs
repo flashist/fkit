@@ -18,12 +18,11 @@ import { spawnSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
+import { readKitVersion } from "./lib.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const KIT = resolve(__dirname, "..");
-const VERSION = existsSync(join(KIT, "VERSION"))
-  ? readFileSync(join(KIT, "VERSION"), "utf8").trim()
-  : "0.0.0";
+const VERSION = readKitVersion(KIT);
 
 // The fkit version a project was last compiled with: prefer the explicit stamp
 // written by compile-skills, else fall back to any generated skill marker.
@@ -48,6 +47,7 @@ const COMMANDS = {
   bootstrap: "bootstrap.mjs",
   sync: "sync.mjs",
   compile: "compile-skills.mjs",
+  config: "config.mjs",
   "scaffold-role": "scaffold-role.mjs",
 };
 
@@ -61,6 +61,7 @@ Commands:
   bootstrap        Stand up fkit in a project (scaffold + compile + generate config)
   sync             Re-pull kit updates into an existing project
   compile          Compile skills from a manifest
+  config           Show or change ai-agents/config.json (default model + per-skill overrides)
   scaffold-role    Scaffold a role-agent from a preset
 
 Each command forwards to its script and prints its own detailed usage.

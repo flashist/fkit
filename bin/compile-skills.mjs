@@ -18,10 +18,18 @@
 // Zero dependencies (no npm install). Usage:
 //   node bin/compile-skills.mjs --manifest <ai-agents.yml> --out <dir> [--only <name>] [--kit <dir>]
 
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { parseYaml, splitFrontmatter, subVars } from "./lib.mjs";
+import {
+  parseYaml,
+  splitFrontmatter,
+  subVars,
+  discoverSkills,
+  loadOrMigrateConfig,
+  resolveSkillModel,
+  readKitVersion,
+} from "./lib.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const KIT_ROOT_DEFAULT = resolve(__dirname, "..");
@@ -46,9 +54,7 @@ if (!manifestPath || !outDir) {
   process.exit(1);
 }
 
-const VERSION = existsSync(join(kitRoot, "VERSION"))
-  ? readFileSync(join(kitRoot, "VERSION"), "utf8").trim()
-  : "0.0.0";
+const VERSION = readKitVersion(kitRoot);
 
 const manifest = parseYaml(readFileSync(manifestPath, "utf8"));
 const project = manifest.project || {};
@@ -65,43 +71,35 @@ const vars = {
   kit_version: VERSION,
 };
 
-// Skill assignment: each skill is either "shared" (real on every model) or OWNED
-// by one model (real on the owner, a delegating stub on every other model). Every
-// skill is therefore available on every model — non-owners route to the owner.
-//
-// Legacy `claude_only` / `codex_only` lists are read AS ownership, so existing
-// manifests upgrade to the delegating-stub behaviour on the next sync with no
-// hand-editing.
-const assigned = {};
-const sk = manifest.skills || {};
-for (const n of sk.shared || []) assigned[n] = "shared";
-for (const n of sk.claude_only || []) assigned[n] = "claude";
-for (const n of sk.codex_only || []) assigned[n] = "codex";
-for (const [n, m] of Object.entries(sk.owned || {})) {
-  assigned[n] = m === "claude" ? "claude" : "codex";
+// Skill assignment now lives in ai-agents/config.json (defaultModel + a sparse
+// per-skill `skills` override map), not in the manifest. loadOrMigrateConfig
+// synthesizes it once from the manifest's legacy routing.default + skills: fields
+// if it doesn't exist yet — existing projects upgrade to the delegating-stub
+// behaviour on the next sync with no hand-editing.
+const aiAgentsDir = join(outDir, "ai-agents");
+let config, migrated;
+try {
+  ({ config, migrated } = loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot));
+} catch (e) {
+  // config.json is a hand-editable file — a bad edit must print a clear one-line
+  // message, never a raw stack trace.
+  console.error(e.message);
+  process.exit(1);
 }
 
 // ---------------------------------------------------------------------------
 // Discover skill sources
 // ---------------------------------------------------------------------------
-// Source dirs → default assignment. Both the legacy `*-only` names and the plain
-// model names map to that model's ownership.
-const TIER_DIRS = {
-  shared: "shared",
-  claude: "claude",
-  "claude-only": "claude",
-  codex: "codex",
-  "codex-only": "codex",
-};
-const skillsRoot = join(kitRoot, "generic", "skills");
-const found = [];
-for (const [dir, tier] of Object.entries(TIER_DIRS)) {
-  const base = join(skillsRoot, dir);
-  if (!existsSync(base)) continue;
-  for (const name of readdirSync(base)) {
-    if (existsSync(join(base, name, "skill.md"))) {
-      found.push({ name, tier, dir: join(base, name) });
-    }
+const found = discoverSkills(kitRoot);
+if (!migrated) {
+  const unlisted = found.filter(
+    (s) => !(config.skills && Object.prototype.hasOwnProperty.call(config.skills, s.name)),
+  );
+  if (unlisted.length) {
+    const summary = unlisted
+      .map((s) => `${s.name}=${resolveSkillModel(config, s.name, s.tier).model}`)
+      .join(", ");
+    console.log(`  note: not in config.json, inheriting default (${summary})`);
   }
 }
 
@@ -180,11 +178,11 @@ for (const s of found) {
   const meta = existsSync(metaPath) ? parseYaml(readFileSync(metaPath, "utf8")) : {};
 
   const name = fm.name || s.name;
-  // "shared" → real on both; a model name → real on that owner, stub elsewhere.
-  const assignment = assigned[name] || s.tier;
+  // "both" → real on both; a model name → real on that owner, stub elsewhere.
+  const { model: assignment } = resolveSkillModel(config, name, s.tier);
   const markerTier = s.tier;
   const stubFor = (model) =>
-    assignment !== "shared" && assignment !== model ? delegationStub(name, assignment) : null;
+    assignment !== "both" && assignment !== model ? delegationStub(name, assignment) : null;
   // Every skill compiles to BOTH models (real skill or delegating stub).
   const targets = ["claude", "codex"];
 

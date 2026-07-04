@@ -31,11 +31,36 @@ roles:                  # the terminal-tab personas; each binds a role → defau
 
 routing:                # task-type → owning model (the editable routing table)
   <task-type>: claude | codex | both
-  # `default` is the fallback when a task type is not listed.
+  # Still live/hand-edited here for every task-type — EXCEPT `default`, which is now
+  # only a one-time migration seed: read into ai-agents/config.json's `defaultModel`
+  # the first time that file doesn't exist yet, then ignored forever after (edit
+  # config.json, or `fkit config set --default-model <claude|codex|both>`, instead).
 
-skills:                 # per-skill assignment (else the kit source dir decides)
+skills:                 # LEGACY — one-time migration seed only, see config.json below
   shared: [names...]        # real skill on EVERY model (each runs it natively)
   owned:                    # real on the owner; a routing STUB on every other model
     <skill-name>: claude | codex   # the skill is still available everywhere — non-owners delegate
-  # (legacy `claude_only` / `codex_only` lists are still accepted and read as
-  #  ownership, so old manifests upgrade to stubs on the next sync.)
+  # (legacy `claude_only` / `codex_only` lists are still accepted and read the same way.)
+  # All of shared/owned/claude_only/codex_only above is read ONLY the first time
+  # ai-agents/config.json doesn't exist yet, to seed its defaultModel + skills. Once
+  # config.json exists this block is ignored entirely — per-skill assignment lives
+  # there instead: edit directly, via `fkit config set --skill <name> --model …`, or
+  # via the `fkit-config` skill.
+
+# ai-agents/config.json — PROJECT-OWNED (JSON, sibling of ai-agents.yml). Auto-created
+# once — migrated from routing.default + skills: above. defaultModel/skills (the actual
+# user decisions) are never overwritten again once set; `version` is a live bookkeeping
+# stamp (like ai-agents/.fkit-version) auto-updated on every bootstrap/sync — not a user
+# decision. Authoritative for:
+#   version: string                            # fkit VERSION (matches package.json); auto-updated
+#   defaultModel: claude | codex | both        # fallback for any skill without an override
+#   skills: { <skill-name>: { model: claude | codex | both } }
+#     # sparse overrides; a skill not listed inherits defaultModel. `both` = real,
+#     # native skill on every model, no delegation (what `skills.shared` used to mean).
+# Edit defaultModel/skills via `fkit config set --project <dir> …` or the `fkit-config`
+# skill; `fkit sync --project <dir>` must run afterward for changes to take effect.
+
+# ai-agents/config-schema.json — KIT-OWNED. Regenerated on every bootstrap/sync, never
+# hand-edited. Mirrors every config.json field and, for enum fields, a human-readable
+# description of each value (claude/codex/both) — the mechanical reference so the
+# config's meaning is never guessed/interpreted by an LLM.

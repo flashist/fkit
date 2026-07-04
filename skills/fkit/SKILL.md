@@ -36,15 +36,20 @@ If it's ambiguous which repo root the user means, confirm before touching anythi
 
 Interactive one-time setup: interview the user, write the project's **manifest**
 (`ai-agents/ai-agents.yml`) and **brief** (`ai-agents/knowledge-base/PROJECT.md`), then build.
-Everything the interview collects is saved to the **manifest** — the single source of truth the
-compiler reads. Do not create a separate settings file.
+Everything the interview collects is saved to the **manifest** (project identity, task-type routing)
+or — for default-model / per-skill-model routing — to **`ai-agents/config.json`** (A5). Together
+those two are the source of truth the compiler reads. Do not create a separate settings file.
 
 ### A1. Scaffold the starter manifest
 ```bash
 npx --yes github:flashist/fkit bootstrap --out .
 ```
-This drops a starter `ai-agents/ai-agents.yml` (a copy of the sample) and stops. You will edit it in
-place during the interview. (First run downloads fkit via npx; it's cached afterward.)
+This drops a starter `ai-agents/ai-agents.yml` (a copy of the sample) and stops. It also seeds a
+starter `ai-agents/config.json` (default model only, nothing pinned yet) and the reference
+`ai-agents/config-schema.json` (documents every field/enum value; kit-owned, always regenerated,
+never hand-edited) — so `config show` (A2d) already has real, if default-only, data to display. You
+will edit the yml in place during the interview. (First run downloads fkit via npx; it's cached
+afterward.)
 
 ### A2. Interview the user
 Ask these in order. Prefer an interactive selection UI when your CLI offers one; otherwise ask
@@ -52,15 +57,22 @@ conversationally. Offer the suggested default for each so the user can just acce
 
 - **a. Project name.** → derive a `slug` (lowercase-kebab-case).
 - **b. Description.** Either (i) a sentence or two, **or** (ii) point to an existing file (README,
-  spec) — read it and summarise. Capture a one-line `overview` **and** enough for the brief (A5).
-- **c. Default model.** Suggest the model **you are running as**. Confirm or switch. → `routing.default`.
-- **d. Per-skill model.** Read the `skills:` block in the freshly-written `ai-agents/ai-agents.yml`
-  and list every skill with its current assignment (`shared` → **Both**, or an `owned:` entry →
-  that **owner**). Let the user set each to **Both / Claude / Codex**. Explain what the choice means:
-  **Both** = each model runs it natively; **Claude** or **Codex** = that model owns it and every
-  *other* model gets a stub that **routes the task to the owner** (the skill is still available
-  everywhere — nothing is hidden). Read-only lookups (e.g. `wiki-query`) are best left **Both**.
-  (Common case: assign the `wiki-*` write skills to **Codex**.)
+  spec) — read it and summarise. Capture a one-line `overview` **and** enough for the brief (A6).
+- **c. Default model.** Suggest the model **you are running as**. Confirm or switch. This choice
+  becomes the project-wide `defaultModel`, applied via `config set` in A5 — it is not written into
+  the yml.
+- **d. Per-skill model.** Run:
+  ```bash
+  npx --yes github:flashist/fkit config show --project .
+  ```
+  and relay its output as-is (don't re-derive or hand-summarize it) to show the user every skill's
+  current assignment — at this point everything will show as **inheriting** the just-picked default
+  model, since nothing's been overridden yet. Ask the user which skills (if any) should be pinned to
+  a specific model instead of following the default. Explain what the choice means: **Both** = each
+  model runs it natively; **Claude** or **Codex** = that model owns it and every *other* model gets a
+  stub that **routes the task to the owner** (the skill is still available everywhere — nothing is
+  hidden). Read-only lookups (e.g. `wiki-query`) are best left **Both**. (Common case: assign the
+  `wiki-*` write skills to **Codex**.)
 - **(owner)** Capture an `owner` for task attribution — default to `git config user.name` (confirm).
 
 ### A3. Write the manifest (edit `ai-agents/ai-agents.yml` in place)
@@ -68,32 +80,56 @@ Edit the starter to reflect the interview. Match the file's YAML style — fkit'
 **subset**: inline flow maps `{ a: b }` / inline flow lists `[a, b]`, nested maps by indent, full-line
 `#` comments. **No block lists, no block scalars, no trailing inline comments.**
 - `project.name` / `slug` / `owner` / `overview` (the one-liner).
-- `routing.default` = the chosen default model; adjust the other routing rows to match the per-skill
-  choices (e.g. if `wiki-*` went to Codex, keep `wiki: codex`).
-- `skills.shared` (a list) = the **Both** skills; `skills.owned` (a `skill: model` map) = the skills
-  assigned to a single owner. Every skill appears in exactly one of the two (**Both** → add to
-  `shared`; **Claude**/**Codex** → add to `owned` as `skill: claude`/`skill: codex`). There is no
-  `claude_only`/`codex_only` — an owned skill is still compiled to every model as a routing stub.
+- `routing:` block's task-type rows (`wiki`, `planning`, `review`, `routine-fix`, `complex-feature`,
+  …) — this table maps *task types* to an owner and is unrelated to the default-model / per-skill
+  config described below; it's still hand-edited here, exactly as before. Adjust rows per the
+  project's needs.
 - Leave `models.*.id` at the starter's defaults unless the user asks to change them.
+
+The default-model and per-skill-model choices from A2c/A2d are **not** written here anymore —
+`routing.default` and `skills:` are no longer edited by this skill. Those are applied through
+`config set` in A5, once `ai-agents/config.json` exists.
 
 ### A4. Build
 ```bash
 npx --yes github:flashist/fkit bootstrap --out . --manifest ai-agents/ai-agents.yml --force
 ```
-Regenerates the `ai-agents/` skeleton, compiles the skills per the manifest into `.claude/` +
-`.codex/`, scaffolds roles, and generates `CLAUDE.md` / `AGENTS.md` / `.codex/config.toml`.
+Regenerates the `ai-agents/` skeleton (including `ai-agents/config.json` +
+`ai-agents/config-schema.json`), compiles the skills per the manifest into `.claude/` + `.codex/`,
+scaffolds roles, and generates `CLAUDE.md` / `AGENTS.md` / `.codex/config.toml`.
 
-### A5. Enrich the project brief (after the build, so nothing clobbers it)
+### A5. Apply the interview's model routing (`config set`, then `sync`)
+`ai-agents/config.json` exists now, seeded with defaults, after A4's build. Apply the default model
+from A2c — only if it differs from what's currently seeded:
+```bash
+npx --yes github:flashist/fkit config set --project . --default-model <claude|codex|both>
+```
+Then pin each skill the user chose to override in A2d, once per skill:
+```bash
+npx --yes github:flashist/fkit config set --project . --skill <name> --model <claude|codex|both|default>
+```
+`config set` only updates `ai-agents/config.json` — it doesn't recompile anything. Re-sync so the
+compiled skills (`.claude/` + `.codex/`) actually pick up the change:
+```bash
+npx --yes github:flashist/fkit sync --project .
+```
+
+### A6. Enrich the project brief (after the build, so nothing clobbers it)
 The build generated **`ai-agents/knowledge-base/PROJECT.md`** with the name + overview filled. Enrich
 it from the interview (or the file from A2b): flesh out **Domain & context**, **Architecture**, and
 **Conventions**. Leave any section you have no answer for as its `<!-- prompt -->`.
 
-### A6. Report & stop
-Summarize: project identity, default model, per-skill overrides, and the files created
-(`ai-agents/ai-agents.yml`, `ai-agents/knowledge-base/PROJECT.md`, compiled skills, CLAUDE.md /
+### A7. Report & stop
+Run `npx --yes github:flashist/fkit config show --project .` one more time and relay its **exact
+output** for the default-model / per-skill-assignment / task-type-routing part of the summary — never
+restate those from memory or by re-deriving them from the yml. Alongside that, summarize: project
+identity and the files created (`ai-agents/ai-agents.yml`, `ai-agents/config.json`,
+`ai-agents/config-schema.json`, `ai-agents/knowledge-base/PROJECT.md`, compiled skills, CLAUDE.md /
 AGENTS.md / config). **State the fkit version** installed — the `stamped ai-agents/.fkit-version = …`
-line the build printed. Mention that **re-running this skill later updates instead of installs**. fkit
-**makes no commits** — everything is working-tree only.
+line the build printed. Mention that **re-running this skill later updates instead of installs**, and
+that the new **`fkit-config`** skill can be used any time afterward for ad-hoc routing changes
+(default model or per-skill pins) without re-running this whole install flow. fkit **makes no
+commits** — everything is working-tree only.
 
 ---
 
@@ -112,6 +148,9 @@ fetch; if you need to force the very latest, clear the npx cache first — `npx 
 for pinned releases, use a published npm version.)
 
 ### B2. Report & stop
-Summarize which skills recompiled and whether the routing block / `.codex` model changed, and **state
+Run `npx --yes github:flashist/fkit config show --project .` and relay its **exact output** for the
+routing / skill-assignment part of the summary — never hand-summarize or re-derive it from the yml.
+Alongside that, summarize which skills recompiled and whether the `.codex` model changed, and **state
 the fkit version** the project is now on — the `stamped ai-agents/.fkit-version = …` line the build
-printed. fkit **makes no commits** — the updated files are working-tree only.
+printed. Mention the **`fkit-config`** skill for later ad-hoc routing changes without re-running this
+flow. fkit **makes no commits** — the updated files are working-tree only.
