@@ -137,11 +137,13 @@ export function updateCodexModel(toml, id) {
 // the machine-readable description of every field/value below.
 // ---------------------------------------------------------------------------
 
-export const MODEL_ENUM = ["claude", "codex", "both"];
+// Exactly two states for any skill's model: unlisted (follows defaultModel) or an
+// explicit pin to ONE of these. There is no "both" — a skill always has exactly one
+// real, live implementation; the other model always gets a delegating stub.
+export const MODEL_ENUM = ["claude", "codex"];
 const MODEL_VALUE_DESCRIPTIONS = {
   claude: "Runs natively on Claude; every other model gets a stub that delegates to Claude.",
   codex: "Runs natively on Codex; every other model gets a stub that delegates to Codex.",
-  both: "Runs natively on every model — no delegation.",
 };
 
 // Source dirs → kit-intended tier. Both the legacy `*-only` names and the plain
@@ -222,7 +224,9 @@ export function migrateConfigFromManifest(manifest, version) {
   const routing = manifest.routing || {};
   const sk = manifest.skills || {};
   const skills = {};
-  for (const n of sk.shared || []) skills[n] = { model: "both" };
+  // Legacy `skills.shared` meant "real on every model, no delegation" — there's no
+  // equivalent under the current claude|codex-only model, so these are simply
+  // omitted (they fall through to the plain default instead of a stale "both" pin).
   for (const n of sk.claude_only || []) skills[n] = { model: "claude" };
   for (const n of sk.codex_only || []) skills[n] = { model: "codex" };
   for (const [n, m] of Object.entries(sk.owned || {})) {
@@ -230,7 +234,7 @@ export function migrateConfigFromManifest(manifest, version) {
   }
   return {
     version,
-    defaultModel: routing.default || "claude",
+    defaultModel: routing.default && routing.default !== "both" ? routing.default : "claude",
     skills,
   };
 }
@@ -294,7 +298,54 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
   let migrated = false;
   let dirty = false;
   if (existsSync(configPath)) {
-    config = loadConfig(aiAgentsDir);
+    // Read raw + parse here rather than the strict loadConfig(): a project's
+    // config.json may still carry legacy "both" values (from before `both` was
+    // removed as a valid model — including ones this kit itself wrote via the
+    // old self-heal step), and those must be migrated away BEFORE validating
+    // against the current, stricter enum, or every such project would fail to
+    // load with a validation error instead of auto-migrating.
+    let raw;
+    try {
+      raw = readFileSync(configPath, "utf8");
+    } catch {
+      throw new Error(`no ai-agents/config.json at ${configPath}`);
+    }
+    try {
+      config = JSON.parse(raw);
+    } catch (e) {
+      throw new Error(
+        `ai-agents/config.json is not valid JSON: ${e.message}. Fix it by hand, or delete it to re-migrate from ai-agents.yml.`,
+      );
+    }
+
+    // Legacy migration: "both" is no longer a valid model. It used to mean "real,
+    // native on every model, no delegation" — dropped because forcing an
+    // interactive skill onto a single owner and delegating the other side (a
+    // one-shot, non-interactive CLI call) is safer to reason about with exactly
+    // two states (an explicit pin, or the plain project default) than a third,
+    // implicit "runs everywhere" exception. Convert any leftover "both" to the
+    // plain default (skills) or "claude" (defaultModel) so this happens for free,
+    // with no hand-editing required.
+    const skills = config.skills || {};
+    const legacyBoth = Object.entries(skills)
+      .filter(([, e]) => e && e.model === "both")
+      .map(([n]) => n);
+    for (const n of legacyBoth) delete skills[n];
+    config.skills = skills;
+    if (legacyBoth.length) {
+      dirty = true;
+      console.log(
+        `  migrated legacy "both" skill override(s) → plain default (both is no longer a valid model): ${legacyBoth.join(", ")}`,
+      );
+    }
+    if (config.defaultModel === "both") {
+      config.defaultModel = "claude";
+      dirty = true;
+      console.log('  migrated legacy defaultModel "both" → "claude" (both is no longer a valid model)');
+    }
+
+    validateConfig(config);
+
     const sk = manifest.skills || {};
     const hasLegacy =
       (sk.shared && sk.shared.length) ||
@@ -322,27 +373,6 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
     );
   }
 
-  // Self-heal, once: a kit-shipped `shared`-tier skill (the kit author's assertion
-  // that it has no single sensible owner — interactive/back-and-forth skills that a
-  // one-shot delegating stub would break) gets pinned to an EXPLICIT {model:"both"}
-  // override the first time the project's config.json has never heard of it. This
-  // keeps resolution down to exactly two states, always — override, or the plain
-  // project default, with nothing hidden — instead of a third, invisible resolver
-  // exception. After this runs once per skill, config.json is fully self-describing.
-  const added = [];
-  for (const s of discoverSkills(kitRoot)) {
-    if (s.tier === "shared" && !config.skills[s.name]) {
-      config.skills[s.name] = { model: "both" };
-      added.push(s.name);
-      dirty = true;
-    }
-  }
-  if (added.length) {
-    console.log(
-      `  added new shared-tier skill override(s) to ai-agents/config.json: ${added.map((n) => `${n}=both`).join(", ")}`,
-    );
-  }
-
   if (dirty) writeConfig(aiAgentsDir, config);
   writeFileSync(
     join(aiAgentsDir, "config-schema.json"),
@@ -352,9 +382,8 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
 }
 
 // Exactly two states, always: an explicit per-skill override, or the project's
-// plain defaultModel. No hidden third state — see the self-heal step above, which
-// guarantees any skill the kit itself asserts has no single owner is always an
-// explicit override by the time this runs.
+// plain defaultModel. No exceptions of any kind (not even for interactive skills —
+// see loadOrMigrateConfig's header comment on the "both" removal).
 export function resolveSkillModel(config, name) {
   const override = config.skills && config.skills[name];
   if (override) return { model: override.model, source: "override" };

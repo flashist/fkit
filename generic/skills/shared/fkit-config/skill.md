@@ -1,6 +1,6 @@
 ---
 name: fkit-config
-description: "Browse and change the project's fkit model-routing config — which model (Claude, Codex, or both) owns each fkit skill, and the project-wide default model — then re-sync the compiled skills so the change takes effect. Use when reviewing or editing fkit's model routing, checking which model a skill is assigned to, or changing the project default model. Makes no commits."
+description: "Browse and change the project's fkit model-routing config — which model (Claude or Codex) owns each fkit skill, and the project-wide default model — then re-sync the compiled skills so the change takes effect. Use when reviewing or editing fkit's model routing, checking which model a skill is assigned to, or changing the project default model. Makes no commits."
 ---
 
 # fkit Config
@@ -61,10 +61,10 @@ no lossy bucketing.
 Now that exactly one field is chosen (`defaultModel`, or one named skill), its possible values are
 small and bounded — this is where `AskUserQuestion` fits cleanly. Read them from
 `ai-agents/config-schema.json`'s `values` map (`defaultModel`'s own `values`, or the `skills` group's
-`memberSchema.values`): `claude`, `codex`, `both`, each with the schema's own `description` text as the
-option's description — never invent your own wording for it. When changing one specific skill (not the
-project default), also offer **`default`** as a fourth choice, meaning "clear this skill's override and
-let it inherit the project default."
+`memberSchema.values`): `claude`, `codex` — the only two real values — each with the schema's own
+`description` text as the option's description — never invent your own wording for it. When changing one
+specific skill (not the project default), also offer **`default`** as a third choice, meaning "clear
+this skill's override and let it inherit the project default."
 
 Use `AskUserQuestion` on Claude, or a numbered list on Codex — same as step 3.
 
@@ -72,10 +72,10 @@ Use `AskUserQuestion` on Claude, or a numbered list on Codex — same as step 3.
 
 ```bash
 # project-wide default
-npx --yes github:flashist/fkit config set --project . --default-model <claude|codex|both>
+npx --yes github:flashist/fkit config set --project . --default-model <claude|codex>
 
 # one skill's override (or `default` to clear it)
-npx --yes github:flashist/fkit config set --project . --skill <name> --model <claude|codex|both|default>
+npx --yes github:flashist/fkit config set --project . --skill <name> --model <claude|codex|default>
 ```
 
 ## 6. Sync — required

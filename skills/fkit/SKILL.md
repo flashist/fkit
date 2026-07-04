@@ -68,11 +68,11 @@ conversationally. Offer the suggested default for each so the user can just acce
   and relay its output as-is (don't re-derive or hand-summarize it) to show the user every skill's
   current assignment — at this point everything will show as **inheriting** the just-picked default
   model, since nothing's been overridden yet. Ask the user which skills (if any) should be pinned to
-  a specific model instead of following the default. Explain what the choice means: **Both** = each
-  model runs it natively; **Claude** or **Codex** = that model owns it and every *other* model gets a
-  stub that **routes the task to the owner** (the skill is still available everywhere — nothing is
-  hidden). Read-only lookups (e.g. `wiki-query`) are best left **Both**. (Common case: assign the
-  `wiki-*` write skills to **Codex**.)
+  a specific model instead of following the default. Explain what the choice means: left **unlisted**,
+  a skill just follows whatever the project's default model is; pinned to **Claude** or **Codex**,
+  that model owns it and the *other* model gets a delegating stub that **routes the task to the
+  owner** (the skill is still invocable everywhere — nothing is hidden, it just delegates on the
+  non-owner side). (Common case: assign the `wiki-*` write skills to **Codex**.)
 - **(owner)** Capture an `owner` for task attribution — default to `git config user.name` (confirm).
 
 ### A3. Write the manifest (edit `ai-agents/ai-agents.yml` in place)
@@ -102,11 +102,11 @@ scaffolds roles, and generates `CLAUDE.md` / `AGENTS.md` / `.codex/config.toml`.
 `ai-agents/config.json` exists now, seeded with defaults, after A4's build. Apply the default model
 from A2c — only if it differs from what's currently seeded:
 ```bash
-npx --yes github:flashist/fkit config set --project . --default-model <claude|codex|both>
+npx --yes github:flashist/fkit config set --project . --default-model <claude|codex>
 ```
 Then pin each skill the user chose to override in A2d, once per skill:
 ```bash
-npx --yes github:flashist/fkit config set --project . --skill <name> --model <claude|codex|both|default>
+npx --yes github:flashist/fkit config set --project . --skill <name> --model <claude|codex|default>
 ```
 `config set` only updates `ai-agents/config.json` — it doesn't recompile anything. Re-sync so the
 compiled skills (`.claude/` + `.codex/`) actually pick up the change:

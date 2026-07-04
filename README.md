@@ -53,7 +53,7 @@ npx github:flashist/fkit sync --project /path/to/project
 # inspect or change the per-skill/default model config of a bootstrapped project
 npx github:flashist/fkit config show --project /path/to/project
 npx github:flashist/fkit config set --project /path/to/project --default-model codex
-npx github:flashist/fkit config set --project /path/to/project --skill fkit-config --model both
+npx github:flashist/fkit config set --project /path/to/project --skill fkit-config --model claude
 ```
 
 `bootstrap` produces the `ai-agents/` skeleton, compiled `.claude` + `.codex` skills, scaffolded roles,
@@ -92,17 +92,20 @@ consumed via `npx github:flashist/fkit`, so a pushed tag *is* the release. Verif
   Three kinds of per-model variation, all from one source: manifest placeholders,
   per-model vars (`meta.<model>.vars`, e.g. `{{invoke}}` = `/` vs `$`), and per-model
   description overrides.
-- **Every skill is available on every model.** A skill's assignment is either `both` (a real
-  skill on every model) or a single owner, `claude` or `codex` (real on the owner; every other
-  model gets a stub that **routes the task to the owner** — headlessly via the owner's `exec`
-  command, or a tab hand-off if that CLI isn't set up). Nothing is ever hidden from a model —
-  assigning an owner just changes *who does the work*. Per-skill assignment lives in
-  `ai-agents/config.json` (project-owned, alongside `ai-agents.yml`) — set it directly, via
-  `fkit config set --skill <name> --model <claude|codex|both>`, or through the `fkit-config`
-  skill. Its sibling `ai-agents/config-schema.json` is regenerated fresh on every `sync` and
-  documents exactly what each value means, so nothing needs guessing. (The manifest's
-  `skills:` block still exists but is now only a one-time migration seed, read once to create
-  `config.json`.)
+- **Every skill is available on every model.** A skill either has no override — in which case
+  it simply follows the project's `defaultModel` — or is explicitly pinned to `claude` or
+  `codex` in `ai-agents/config.json`, in which case that model owns it and every other model
+  gets a stub that **routes the task to the owner** — headlessly via the owner's `exec` command,
+  or a tab hand-off if that CLI isn't set up. Nothing is ever hidden from a model — pinning an
+  owner just changes *who does the work*. Per-skill assignment lives in `ai-agents/config.json`
+  (project-owned, alongside `ai-agents.yml`) — set it directly, via `fkit config set --skill
+  <name> --model <claude|codex|default>` (`default` clears the override so the skill goes back
+  to following `defaultModel`), or through the `fkit-config` skill. Its sibling
+  `ai-agents/config-schema.json` is regenerated fresh on every `sync` and documents exactly what
+  each value means, so nothing needs guessing. (The manifest's `skills:` block still exists but
+  is now only a one-time migration seed, read once to create `config.json`; a skill previously
+  listed under `skills.shared` has no equivalent anymore and is simply dropped during migration,
+  falling through to `defaultModel` instead.)
 - **The project manifest** (`ai-agents/ai-agents.yml`; schema in `manifest/`) declares
   identity, the agent roster, and the routing table — filling placeholders and generating
   the derived config. Change routing by editing one file + running `sync`.

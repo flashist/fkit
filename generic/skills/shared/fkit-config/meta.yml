@@ -8,7 +8,7 @@
 
 claude:
   user_invocable: true
-  description: "Browse and change the project's fkit model-routing config — the project-wide default model (Claude / Codex / both) and any per-skill overrides — then re-sync the compiled skills so the change takes effect. Use to review or edit which model owns a given fkit skill, or to change the project default model. Makes no commits."
+  description: "Browse and change the project's fkit model-routing config — the project-wide default model (Claude or Codex) and any per-skill overrides — then re-sync the compiled skills so the change takes effect. Use to review or edit which model owns a given fkit skill, or to change the project default model. Makes no commits."
   vars:
     invoke: "/"
 

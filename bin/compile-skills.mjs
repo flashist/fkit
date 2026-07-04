@@ -91,9 +91,7 @@ try {
 // Discover skill sources
 // ---------------------------------------------------------------------------
 const found = discoverSkills(kitRoot);
-// Shared-tier skills are always self-healed into an explicit override by
-// loadOrMigrateConfig above, so anything still unlisted here is a plain
-// claude/codex-tier skill quietly following the project's defaultModel.
+// Any skill unlisted in config.json — no exceptions — just follows defaultModel.
 if (!migrated) {
   const unlisted = found.filter(
     (s) => !(config.skills && Object.prototype.hasOwnProperty.call(config.skills, s.name)),
@@ -181,11 +179,11 @@ for (const s of found) {
   const meta = existsSync(metaPath) ? parseYaml(readFileSync(metaPath, "utf8")) : {};
 
   const name = fm.name || s.name;
-  // "both" → real on both; a model name → real on that owner, stub elsewhere.
+  // assignment is always exactly one model (claude|codex) — real on that owner,
+  // a delegating stub on every other model.
   const { model: assignment } = resolveSkillModel(config, name);
   const markerTier = s.tier;
-  const stubFor = (model) =>
-    assignment !== "both" && assignment !== model ? delegationStub(name, assignment) : null;
+  const stubFor = (model) => (assignment !== model ? delegationStub(name, assignment) : null);
   // Every skill compiles to BOTH models (real skill or delegating stub).
   const targets = ["claude", "codex"];
 

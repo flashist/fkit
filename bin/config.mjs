@@ -8,8 +8,8 @@
 // Makes NO commits. A `set` alone does not recompile anything — run `sync`
 // afterward for the change to take effect in the compiled skills. Usage:
 //   node bin/config.mjs show --project <dir> [--json] [--kit <dir>]
-//   node bin/config.mjs set --project <dir> --default-model <claude|codex|both> [--kit <dir>]
-//   node bin/config.mjs set --project <dir> --skill <name> --model <claude|codex|both|default> [--kit <dir>]
+//   node bin/config.mjs set --project <dir> --default-model <claude|codex> [--kit <dir>]
+//   node bin/config.mjs set --project <dir> --skill <name> --model <claude|codex|default> [--kit <dir>]
 
 import { readFileSync, existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -39,8 +39,8 @@ function usage() {
     [
       "usage:",
       "  node bin/config.mjs show --project <dir> [--json] [--kit <dir>]",
-      "  node bin/config.mjs set --project <dir> --default-model <claude|codex|both> [--kit <dir>]",
-      "  node bin/config.mjs set --project <dir> --skill <name> --model <claude|codex|both|default> [--kit <dir>]",
+      "  node bin/config.mjs set --project <dir> --default-model <claude|codex> [--kit <dir>]",
+      "  node bin/config.mjs set --project <dir> --skill <name> --model <claude|codex|default> [--kit <dir>]",
     ].join("\n"),
   );
 }
@@ -146,7 +146,7 @@ if (sub === "show") {
       process.exit(1);
     }
     if (!skillModel) {
-      console.error('--skill requires --model <claude|codex|both|default>');
+      console.error('--skill requires --model <claude|codex|default>');
       process.exit(1);
     }
     if (skillModel === "default") {
