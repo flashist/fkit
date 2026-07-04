@@ -242,9 +242,10 @@ describe("loadOrMigrateConfig", () => {
     try {
       const aiAgentsDir = join(dir, "ai-agents");
       const manifest = { routing: { default: "codex" }, skills: { claude_only: ["task-done"] } };
-      const { config, migrated } = loadOrMigrateConfig(aiAgentsDir, manifest, KIT_ROOT);
+      const { config, migrated, previousVersion } = loadOrMigrateConfig(aiAgentsDir, manifest, KIT_ROOT);
 
       assert.equal(migrated, true);
+      assert.equal(previousVersion, null);
       assert.equal(config.defaultModel, "codex");
       assert.deepEqual(config.skills, { "task-done": { model: "claude" } });
       assert.equal(config.version, readKitVersion(KIT_ROOT));
@@ -318,8 +319,9 @@ describe("loadOrMigrateConfig", () => {
       mkdirSync(aiAgentsDir, { recursive: true });
       writeConfig(aiAgentsDir, { version: "0.0.1", defaultModel: "codex", skills: { "task-done": { model: "claude" } } });
 
-      const { config } = loadOrMigrateConfig(aiAgentsDir, {}, KIT_ROOT);
+      const { config, previousVersion } = loadOrMigrateConfig(aiAgentsDir, {}, KIT_ROOT);
 
+      assert.equal(previousVersion, "0.0.1");
       assert.equal(config.version, readKitVersion(KIT_ROOT));
       assert.equal(config.defaultModel, "codex");
       assert.deepEqual(config.skills, { "task-done": { model: "claude" } });

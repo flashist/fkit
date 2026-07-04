@@ -79,8 +79,10 @@ describe("bootstrap (two-pass) + sync — end to end", () => {
     assert.ok(["claude", "codex"].includes(config.defaultModel));
 
     const fkitVersion = readFileSync(join(KIT_ROOT, "VERSION"), "utf8").trim();
-    assert.equal(readFileSync(join(dir, "ai-agents", ".fkit-version"), "utf8").trim(), fkitVersion);
     assert.equal(config.version, fkitVersion);
+    // No separate ai-agents/.fkit-version stamp file anymore — config.json's own
+    // `version` field is the only record of what this project was compiled against.
+    assert.equal(existsSync(join(dir, "ai-agents", ".fkit-version")), false);
   });
 
   test("compiled fkit-config skill no longer instructs the agent to fetch/surface a task-type routing table", () => {

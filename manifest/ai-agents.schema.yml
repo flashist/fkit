@@ -51,8 +51,9 @@ skills:                 # LEGACY — one-time migration seed only, see config.js
 # ai-agents/config.json — PROJECT-OWNED (JSON, sibling of ai-agents.yml). Auto-created
 # once — migrated from routing.default + skills: above. defaultModel/skills (the actual
 # user decisions) are never overwritten again once set; `version` is a live bookkeeping
-# stamp (like ai-agents/.fkit-version) auto-updated on every bootstrap/sync — not a user
-# decision. Authoritative for:
+# stamp auto-updated on every bootstrap/sync — not a user decision, and the ONLY place
+# this project's compiled-against kit version is recorded (no separate stamp file).
+# Authoritative for:
 #   version: string                       # fkit VERSION (matches package.json); auto-updated
 #   defaultModel: claude | codex          # fallback for any skill without an override
 #   skills: { <skill-name>: { model: claude | codex } }

@@ -123,7 +123,7 @@ output** for the default-model / per-skill-assignment part of the summary — ne
 memory or by re-deriving them from the yml. Alongside that, summarize: project
 identity and the files created (`ai-agents/ai-agents.yml`, `ai-agents/config.json`,
 `ai-agents/config-schema.json`, `ai-agents/knowledge-base/PROJECT.md`, compiled skills, CLAUDE.md /
-AGENTS.md / config). **State the fkit version** installed — the `stamped ai-agents/.fkit-version = …`
+AGENTS.md / config). **State the fkit version** installed — the `kit version → … (ai-agents/config.json)`
 line the build printed. Mention that **re-running this skill later updates instead of installs**, and
 that the new **`fkit-config`** skill can be used any time afterward for ad-hoc routing changes
 (default model or per-skill pins) without re-running this whole install flow. fkit **makes no
@@ -171,7 +171,7 @@ top of your report, before anything else.
 Run `npx --yes github:flashist/fkit config show --project .` and relay its **exact output** for the
 routing / skill-assignment part of the summary — never hand-summarize or re-derive it from the yml.
 Alongside that, summarize which skills recompiled and whether the `.codex` model changed, and **state
-the fkit version** the project is now on — the `stamped ai-agents/.fkit-version = …` line the build
+the fkit version** the project is now on — the `kit version → … (ai-agents/config.json)` line the build
 printed. Mention the **`fkit-config`** skill for later ad-hoc routing changes without re-running this
 flow. fkit **makes no commits** — the updated files are working-tree only.
 

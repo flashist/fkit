@@ -249,6 +249,10 @@ export function writeConfig(aiAgentsDir, config) {
 // skills: fields the first time it's missing (one-time — after that config.json is
 // authoritative with NO reconciliation back to the yml, ever). Always (re)writes
 // ai-agents/config-schema.json — that file is kit-owned and always regenerated.
+// Returns `previousVersion` — the kit version this project was compiled against
+// BEFORE this call (null if there was no config.json yet) — straight from
+// config.json's own `version` field, so callers needing "did the kit version
+// change" (e.g. the restart-required check) don't need a separate stamp file.
 export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
   mkdirSync(aiAgentsDir, { recursive: true });
   const configPath = join(aiAgentsDir, "config.json");
@@ -256,6 +260,10 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
   let config;
   let migrated = false;
   let dirty = false;
+  // Captured BEFORE config.version gets bumped below — the kit version this
+  // project was PREVIOUSLY compiled against, straight from config.json itself
+  // (no separate stamp file needed). null if there was no config.json yet.
+  let previousVersion = null;
   if (existsSync(configPath)) {
     // Read raw + parse here rather than the strict loadConfig(): a project's
     // config.json may still carry legacy "both" values (from before `both` was
@@ -276,6 +284,7 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
         `ai-agents/config.json is not valid JSON: ${e.message}. Fix it by hand, or delete it to re-migrate from ai-agents.yml.`,
       );
     }
+    previousVersion = config.version ?? null;
 
     // Legacy migration: "both" is no longer a valid model. It used to mean "real,
     // native on every model, no delegation" — dropped because forcing an
@@ -317,8 +326,8 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
         "  note: ai-agents/config.json exists — ai-agents.yml's skills:/routing.default are now ignored",
       );
     }
-    // `version` is a live bookkeeping stamp (like ai-agents/.fkit-version), not a
-    // user decision — keep it current on every load, unlike defaultModel/skills.
+    // `version` is a live bookkeeping stamp, not a user decision — keep it
+    // current on every load, unlike defaultModel/skills.
     if (config.version !== kitVersion) {
       config.version = kitVersion;
       dirty = true;
@@ -337,7 +346,7 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
     join(aiAgentsDir, "config-schema.json"),
     JSON.stringify(buildConfigSchema(kitVersion), null, 2) + "\n",
   );
-  return { config, migrated };
+  return { config, migrated, previousVersion };
 }
 
 // Exactly two states, always: an explicit per-skill override, or the project's

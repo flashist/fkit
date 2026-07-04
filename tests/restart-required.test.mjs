@@ -2,12 +2,12 @@
 // `fkit` skill uses to warn the user that THIS session needs a restart to pick up
 // an update (a running session keeps whatever SKILL.md content it already
 // loaded). Purely a comparison of the project's previously-compiled kit version
-// (ai-agents/.fkit-version) against the version just compiled against — not a
-// per-skill content diff.
+// (ai-agents/config.json's own `version` field — no separate stamp file) against
+// the version just compiled against — not a per-skill content diff.
 
 import { test, describe, before, after } from "node:test";
 import assert from "node:assert/strict";
-import { mkdirSync, cpSync, writeFileSync, readFileSync } from "node:fs";
+import { mkdirSync, cpSync, writeFileSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
 
@@ -30,9 +30,11 @@ function restartRequired(output) {
 
 describe("restart-required signal", () => {
   let dir;
+  let configPath;
 
   before(() => {
     dir = mkTmpDir("fkit-restart-");
+    configPath = join(dir, "ai-agents", "config.json");
     mkdirSync(join(dir, "ai-agents"), { recursive: true });
     cpSync(SAMPLE_MANIFEST, join(dir, "ai-agents", "ai-agents.yml"));
   });
@@ -41,7 +43,7 @@ describe("restart-required signal", () => {
     rmTmpDir(dir);
   });
 
-  test("a fresh build (no prior ai-agents/.fkit-version) requires a restart", () => {
+  test("a fresh build (no prior config.json) requires a restart", () => {
     const out = run(BOOTSTRAP_MJS, [
       "--out",
       dir,
@@ -69,23 +71,28 @@ describe("restart-required signal", () => {
     assert.equal(restartRequired(out), false);
   });
 
-  test("a stamped kit version older than the current kit requires a restart", () => {
-    const stampPath = join(dir, "ai-agents", ".fkit-version");
-    const realVersion = readFileSync(stampPath, "utf8");
-    writeFileSync(stampPath, "0.0.1\n");
+  test("a config.json version older than the current kit requires a restart", () => {
+    const before = JSON.parse(readFileSync(configPath, "utf8"));
+    const realVersion = before.version;
+    writeFileSync(configPath, JSON.stringify({ ...before, version: "0.0.1" }, null, 2) + "\n");
 
     const out = run(SYNC_MJS, ["--project", dir]);
     assert.equal(restartRequired(out), true);
     assert.match(out, /0\.0\.1 →/);
 
-    // sync re-stamps the project to the real current kit version — not a no-op,
-    // since we just forced the stamp back to a stale value.
-    assert.notEqual(readFileSync(stampPath, "utf8"), "0.0.1\n");
-    assert.equal(readFileSync(stampPath, "utf8"), realVersion);
+    // sync re-stamps config.json's version to the real current kit version — not a
+    // no-op, since we just forced it back to a stale value.
+    const after = JSON.parse(readFileSync(configPath, "utf8"));
+    assert.notEqual(after.version, "0.0.1");
+    assert.equal(after.version, realVersion);
   });
 
   test("the next sync afterward is back to no restart needed", () => {
     const out = run(SYNC_MJS, ["--project", dir]);
     assert.equal(restartRequired(out), false);
+  });
+
+  test("no separate ai-agents/.fkit-version stamp file is ever created", () => {
+    assert.equal(existsSync(join(dir, "ai-agents", ".fkit-version")), false);
   });
 });

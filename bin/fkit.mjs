@@ -24,11 +24,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const KIT = resolve(__dirname, "..");
 const VERSION = readKitVersion(KIT);
 
-// The fkit version a project was last compiled with: prefer the explicit stamp
-// written by compile-skills, else fall back to any generated skill marker.
+// The fkit version a project was last compiled with: prefer ai-agents/config.json's
+// own `version` field (kept current by loadOrMigrateConfig on every bootstrap/sync
+// — the single record of this, no separate stamp file), else fall back to any
+// generated skill marker (covers a pre-config.json project, or a corrupted file).
 function readProjectVersion(projectDir) {
-  const stamp = join(projectDir, "ai-agents", ".fkit-version");
-  if (existsSync(stamp)) return readFileSync(stamp, "utf8").trim();
+  const configPath = join(projectDir, "ai-agents", "config.json");
+  if (existsSync(configPath)) {
+    try {
+      const version = JSON.parse(readFileSync(configPath, "utf8")).version;
+      if (version) return version;
+    } catch {
+      // fall through to the marker scan below
+    }
+  }
   for (const side of [".claude", ".codex"]) {
     const skillsDir = join(projectDir, side, "skills");
     if (!existsSync(skillsDir)) continue;

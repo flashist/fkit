@@ -16,10 +16,11 @@
 // safely regenerate it without ever touching hand-authored (project-origin) files.
 //
 // Also prints a `restart-required: yes|no` line — whether this run's kit version
-// differs from what the project was last compiled against (ai-agents/.fkit-version)
-// — which the `fkit` skill uses to warn the user when THIS session needs to
-// restart to pick up the change (a running session keeps whatever skill
-// instructions it already loaded).
+// differs from what the project was last compiled against (ai-agents/config.json's
+// own `version` field — see loadOrMigrateConfig's `previousVersion`) — which the
+// `fkit` skill uses to warn the user when THIS session needs to restart to pick
+// up the change (a running session keeps whatever skill instructions it already
+// loaded).
 //
 // Zero dependencies (no npm install). Usage:
 //   node bin/compile-skills.mjs --manifest <ai-agents.yml> --out <dir> [--only <name>] [--kit <dir>]
@@ -62,11 +63,6 @@ if (!manifestPath || !outDir) {
 
 const VERSION = readKitVersion(kitRoot);
 
-// Read BEFORE it gets overwritten below — the project's previous kit version, so
-// we can tell whether this run actually changed anything worth a restart for.
-const fkitVersionStamp = join(outDir, "ai-agents", ".fkit-version");
-const previousVersion = existsSync(fkitVersionStamp) ? readFileSync(fkitVersionStamp, "utf8").trim() : null;
-
 const manifest = parseYaml(readFileSync(manifestPath, "utf8"));
 const project = manifest.project || {};
 const models = manifest.models || {};
@@ -88,9 +84,9 @@ const vars = {
 // if it doesn't exist yet — existing projects upgrade to the delegating-stub
 // behaviour on the next sync with no hand-editing.
 const aiAgentsDir = join(outDir, "ai-agents");
-let config, migrated;
+let config, migrated, previousVersion;
 try {
-  ({ config, migrated } = loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot));
+  ({ config, migrated, previousVersion } = loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot));
 } catch (e) {
   // config.json is a hand-editable file — a bad edit must print a clear one-line
   // message, never a raw stack trace.
@@ -250,12 +246,11 @@ for (const s of found) {
   }
 }
 
-// Stamp the project with the kit version it was last compiled against, so
-// `fkit version --project <dir>` and the fkit skill can report it.
-const stampDir = join(outDir, "ai-agents");
-mkdirSync(stampDir, { recursive: true });
-writeFileSync(join(stampDir, ".fkit-version"), `${VERSION}\n`);
-console.log(`  stamped ai-agents/.fkit-version = ${VERSION}`);
+// loadOrMigrateConfig already stamped ai-agents/config.json's own `version` field
+// with VERSION above — that's the single record of what this project was last
+// compiled against; `fkit version --project <dir>` and the fkit skill read it
+// from there (no separate stamp file).
+console.log(`  kit version → ${VERSION} (ai-agents/config.json)`);
 
 console.log(
   `\nCompiled ${claudeCount} Claude + ${codexCount} Codex skill file(s) → ${outDir}`,
