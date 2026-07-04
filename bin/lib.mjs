@@ -83,47 +83,6 @@ export function subVars(text, vars) {
   });
 }
 
-// Render the generated model-routing block (WITH its fenced markers) from a manifest.
-// bootstrap inserts it via the {{routing_block}} placeholder; sync replaces the region
-// between the markers in place.
-export function renderRoutingBlock(manifest, defaultModel) {
-  const routing = manifest.routing || {};
-  const roles = manifest.roles || {};
-  const effectiveDefault = defaultModel || routing.default;
-  const cap = (s) =>
-    s === "both" ? "both" : String(s).charAt(0).toUpperCase() + String(s).slice(1);
-  const rows = Object.entries(routing)
-    .filter(([k]) => k !== "default")
-    .map(([k, v]) => `| ${k} | **${cap(v)}** |`);
-  if (effectiveDefault) rows.push(`| _(default)_ | **${cap(effectiveDefault)}** |`);
-  const roleList = Object.entries(roles)
-    .map(([r, cfg]) => `${r} → ${cap((cfg && cfg.model) || "claude")}`)
-    .join(", ");
-  return [
-    "<!-- fkit:routing:start -->",
-    "### Model routing (generated from ai-agents/ai-agents.yml — edit there, then run sync)",
-    "",
-    "| Task type | Owner |",
-    "|---|---|",
-    ...rows,
-    "",
-    roleList ? `Agents (terminal-tab roles): ${roleList}.` : "",
-    "When a task type is owned by a model you are not, hand it to that model's tab (or delegate via the companion).",
-    "<!-- fkit:routing:end -->",
-  ].join("\n");
-}
-
-// Replace the text between (and including) two markers. Absent markers → unchanged.
-export function replaceFenced(text, startMarker, endMarker, replacement) {
-  const s = text.indexOf(startMarker);
-  const e = text.indexOf(endMarker);
-  if (s === -1 || e === -1 || e < s) return { text, replaced: false };
-  return {
-    text: text.slice(0, s) + replacement + text.slice(e + endMarker.length),
-    replaced: true,
-  };
-}
-
 // Update the model / review_model lines in a Codex config.toml, leaving the rest intact.
 export function updateCodexModel(toml, id) {
   return toml

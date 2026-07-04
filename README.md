@@ -4,7 +4,7 @@ A transferable, two-model (Claude + Codex) "operating system" for a software pro
 the `ai-agents/` working structure (sprints, tasks, reviews, knowledge-base, wiki) plus
 the skills, configs, and role-agents around it — with a clean split between the **generic
 machinery** (this kit) and **per-project content** (a project's manifest + docs), and
-**project-level, editable model routing** (e.g. "wiki tasks → Codex").
+**project-level, editable per-skill model routing** (e.g. "wiki skills → Codex").
 
 > Status: **v0.1.0 — functionally complete.** Bootstrap + sync verified end-to-end.
 
@@ -58,8 +58,8 @@ npx github:flashist/fkit config set --project /path/to/project --skill fkit-conf
 
 `bootstrap` produces the `ai-agents/` skeleton, compiled `.claude` + `.codex` skills, scaffolded roles,
 and generated `CLAUDE.md` / `AGENTS.md` / `.codex/config.toml`. `sync` recompiles the generated skills
-and routing block and **never touches `origin:project` files** (scaffolded roles, project-authored
-skills). `config show` prints the full resolved state (read-only); `config set` only edits
+and **never touches `origin:project` files** (scaffolded roles, project-authored skills). `config show`
+prints the full resolved state (read-only); `config set` only edits
 `ai-agents/config.json` — it does not recompile anything, so run `sync` afterward for the change to
 take effect. None of these make commits. (Swap `npx github:flashist/fkit` for `node bin/…` if you're
 in a clone.)
@@ -107,8 +107,8 @@ consumed via `npx github:flashist/fkit`, so a pushed tag *is* the release. Verif
   listed under `skills.shared` has no equivalent anymore and is simply dropped during migration,
   falling through to `defaultModel` instead.)
 - **The project manifest** (`ai-agents/ai-agents.yml`; schema in `manifest/`) declares
-  identity, the agent roster, and the routing table — filling placeholders and generating
-  the derived config. Change routing by editing one file + running `sync`.
+  identity and the agent roster — filling placeholders and generating the derived config.
+  Per-skill model routing lives in `ai-agents/config.json` instead (see above).
 - **Role-agents** (producer, …) are scaffolded from a skeleton template + a reusable
   preset, written `origin: project` so `sync` never overwrites your tuning.
 
@@ -123,7 +123,7 @@ skills/                       fkit — the single entry skill (install + update)
 .claude-plugin/               plugin.json + marketplace.json (Claude plugin channel)
 manifest/ai-agents.schema.yml documented manifest schema
 examples/                     a sample project manifest
-bin/lib.mjs                   shared YAML / substitution / routing utilities
+bin/lib.mjs                   shared YAML / substitution / config utilities
 bin/compile-skills.mjs        single-source → per-CLI skills
 bin/scaffold-role.mjs         skeleton + preset → a project role
 bin/bootstrap.mjs             stand up a new project

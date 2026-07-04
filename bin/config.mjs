@@ -88,12 +88,10 @@ function resolvedSkills(config) {
 if (sub === "show") {
   const { config } = safeLoadOrMigrateConfig();
   const skills = resolvedSkills(config);
-  const routing = manifest.routing || {};
   const data = {
     version: config.version,
     defaultModel: config.defaultModel,
     skills,
-    routing,
   };
 
   if (argv.includes("--json")) {
@@ -101,7 +99,7 @@ if (sub === "show") {
     process.exit(0);
   }
 
-  const cap = (s) => (s === "both" ? "Both" : s.charAt(0).toUpperCase() + s.slice(1));
+  const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   console.log(`fkit config — ai-agents/config.json (v${config.version})\n`);
   console.log(`Default model: ${cap(config.defaultModel)}\n`);
   console.log("Skill                          Routing        Source");
@@ -110,11 +108,6 @@ if (sub === "show") {
     console.log(
       `${s.name.padEnd(30)} ${cap(s.model).padEnd(14)} ${s.source === "override" ? "override" : "default"}`,
     );
-  }
-  const taskRows = Object.entries(routing).filter(([k]) => k !== "default");
-  if (taskRows.length) {
-    console.log("\nTask-type routing (ai-agents.yml routing: block, unrelated to config.json):");
-    for (const [k, v] of taskRows) console.log(`  ${k.padEnd(20)} ${cap(v)}`);
   }
   process.exit(0);
 }

@@ -1,6 +1,6 @@
 ---
 name: fkit
-description: "Set up or update fkit in the CURRENT project — one skill, auto-detects which. First run (no ai-agents/ai-agents.yml yet) interactively installs — interviews you for project name, description, default model, and per-skill model routing; writes ai-agents/ai-agents.yml + a PROJECT.md brief; then builds (compiles the Claude + Codex skills, generates CLAUDE.md/AGENTS.md/config). Later runs re-sync the compiled skills + routing to the latest fkit, never touching your origin:project files. Makes no commits."
+description: "Set up or update fkit in the CURRENT project — one skill, auto-detects which. First run (no ai-agents/ai-agents.yml yet) interactively installs — interviews you for project name, description, default model, and per-skill model routing; writes ai-agents/ai-agents.yml + a PROJECT.md brief; then builds (compiles the Claude + Codex skills, generates CLAUDE.md/AGENTS.md/config). Later runs re-sync the compiled skills to the latest fkit, never touching your origin:project files. Makes no commits."
 ---
 
 # fkit
@@ -36,9 +36,9 @@ If it's ambiguous which repo root the user means, confirm before touching anythi
 
 Interactive one-time setup: interview the user, write the project's **manifest**
 (`ai-agents/ai-agents.yml`) and **brief** (`ai-agents/knowledge-base/PROJECT.md`), then build.
-Everything the interview collects is saved to the **manifest** (project identity, task-type routing)
-or — for default-model / per-skill-model routing — to **`ai-agents/config.json`** (A5). Together
-those two are the source of truth the compiler reads. Do not create a separate settings file.
+Everything the interview collects is saved to the **manifest** (project identity) or — for
+default-model / per-skill-model routing — to **`ai-agents/config.json`** (A5). Together those two
+are the source of truth the compiler reads. Do not create a separate settings file.
 
 ### A1. Scaffold the starter manifest
 ```bash
@@ -80,15 +80,10 @@ Edit the starter to reflect the interview. Match the file's YAML style — fkit'
 **subset**: inline flow maps `{ a: b }` / inline flow lists `[a, b]`, nested maps by indent, full-line
 `#` comments. **No block lists, no block scalars, no trailing inline comments.**
 - `project.name` / `slug` / `owner` / `overview` (the one-liner).
-- `routing:` block's task-type rows (`wiki`, `planning`, `review`, `routine-fix`, `complex-feature`,
-  …) — this table maps *task types* to an owner and is unrelated to the default-model / per-skill
-  config described below; it's still hand-edited here, exactly as before. Adjust rows per the
-  project's needs.
 - Leave `models.*.id` at the starter's defaults unless the user asks to change them.
 
-The default-model and per-skill-model choices from A2c/A2d are **not** written here anymore —
-`routing.default` and `skills:` are no longer edited by this skill. Those are applied through
-`config set` in A5, once `ai-agents/config.json` exists.
+The default-model and per-skill-model choices from A2c/A2d are **not** written into the yml at all —
+those are applied through `config set` in A5, once `ai-agents/config.json` exists.
 
 ### A4. Build
 ```bash
@@ -121,8 +116,8 @@ it from the interview (or the file from A2b): flesh out **Domain & context**, **
 
 ### A7. Report & stop
 Run `npx --yes github:flashist/fkit config show --project .` one more time and relay its **exact
-output** for the default-model / per-skill-assignment / task-type-routing part of the summary — never
-restate those from memory or by re-deriving them from the yml. Alongside that, summarize: project
+output** for the default-model / per-skill-assignment part of the summary — never restate those from
+memory or by re-deriving them from the yml. Alongside that, summarize: project
 identity and the files created (`ai-agents/ai-agents.yml`, `ai-agents/config.json`,
 `ai-agents/config-schema.json`, `ai-agents/knowledge-base/PROJECT.md`, compiled skills, CLAUDE.md /
 AGENTS.md / config). **State the fkit version** installed — the `stamped ai-agents/.fkit-version = …`
@@ -135,9 +130,9 @@ commits** — everything is working-tree only.
 
 ## Part B — Update (project already set up)
 
-Re-sync **this project's** compiled skills and routing to the latest fkit. Safe anytime: it recompiles
-the generated skills and regenerates the routing block, and **never touches your `origin:project`
-files** (scaffolded roles, project-authored skills).
+Re-sync **this project's** compiled skills to the latest fkit. Safe anytime: it recompiles the
+generated skills, and **never touches your `origin:project` files** (scaffolded roles, project-authored
+skills).
 
 ### B1. Sync
 ```bash

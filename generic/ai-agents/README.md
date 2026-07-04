@@ -12,7 +12,7 @@ its *contents* are project-specific.
 | `knowledge-base/` | Investigation findings, decisions, reports, and research — generic project knowledge not easily derived from the code. |
 | `wiki-vault/` | A structured wiki (Karpathy LLM-wiki pattern). `schema.md` = conventions/templates, `index.md` = catalog, `log.md` = activity log, `wiki/` = the pages. Maintained by the `wiki-*` skills. |
 
-**Model routing** (which model owns which task type) and the **agent roster** are
-declared in `ai-agents.yml` at the project root of `ai-agents/`. Edit that file and run
-the kit's `sync` to change routing; it regenerates the routing blocks in `CLAUDE.md` /
-`AGENTS.md` and the `.codex/config.toml` model.
+The **agent roster** is declared in `ai-agents.yml` at the project root of `ai-agents/`.
+**Per-skill model routing** (which model owns which fkit skill) lives in the sibling
+`config.json` — edit via `fkit config set` or the `fkit-config` skill, then run the
+kit's `sync` for the change to take effect and to sync the `.codex/config.toml` model.

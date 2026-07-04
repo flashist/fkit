@@ -1,9 +1,10 @@
 # ai-agents.yml — SCHEMA / REFERENCE
 # ===================================
 # Every project that uses fkit has ONE of these at `ai-agents/ai-agents.yml`.
-# It is the single source of truth for project identity, the agent roster, and model
-# routing. Editing it + running `sync` regenerates the derived config (per-CLI skills,
-# .codex/config.toml model, the routing blocks in CLAUDE.md / AGENTS.md).
+# It is the single source of truth for project identity and the agent roster.
+# Editing it + running `sync` regenerates the derived config (per-CLI skills,
+# .codex/config.toml model). Per-skill model routing lives in the sibling
+# ai-agents/config.json instead (see below).
 #
 # The parser (bin/compile-skills.mjs) supports: comments, `key: value`, nested maps by
 # 2-space indentation, inline flow maps `{ a: b }`, and inline flow lists `[a, b]`.
@@ -29,12 +30,12 @@ roles:                  # the terminal-tab personas; each binds a role → defau
     entry_skill: string   # optional — the skill that puts the tab into this role
     knowledge: string     # optional — path to this role's project knowledge doc
 
-routing:                # task-type → owning model (the editable routing table)
-  <task-type>: claude | codex | both
-  # Still live/hand-edited here for every task-type — EXCEPT `default`, which is now
-  # only a one-time migration seed: read into ai-agents/config.json's `defaultModel`
-  # the first time that file doesn't exist yet, then ignored forever after (edit
-  # config.json, or `fkit config set --default-model <claude|codex>`, instead).
+# There is no `routing:` block anymore (task-type → model). It used to render a
+# "Model routing" table into CLAUDE.md/AGENTS.md; that generated section is gone
+# entirely. An OLD manifest may still have one — only its `routing.default` is
+# still read, once, as a migration seed for ai-agents/config.json's `defaultModel`
+# (see `skills:` below for the parallel treatment of the rest of that old shape);
+# every other row in an old `routing:` block does nothing at all anymore.
 
 skills:                 # LEGACY — one-time migration seed only, see config.json below
   shared: [names...]        # real skill on EVERY model (each runs it natively)
