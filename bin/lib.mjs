@@ -90,6 +90,20 @@ export function updateCodexModel(toml, id) {
     .replace(/^review_model\s*=.*$/m, `review_model = "${id}"`);
 }
 
+// A running Claude/Codex session keeps whatever skill instructions it already
+// loaded — a recompiled SKILL.md only takes effect after a session restart.
+// compile-skills.mjs uses this to tell whether a run actually changed a skill's
+// real content (vs. just being rewritten — every skill is always rewritten) so
+// the `fkit` skill can warn the user when a restart is actually needed. The
+// `fkit:generated ... version=X ...` marker line embeds the kit version, which
+// bumps on every kit release even when a given skill's own source is untouched —
+// strip it out of both sides before comparing, so a bare kit-version bump alone
+// never falsely claims a restart is needed.
+const GENERATED_MARKER_RE = /^<!-- fkit:generated .*-->$/m;
+export function normalizeGeneratedMarker(content) {
+  return content.replace(GENERATED_MARKER_RE, "<!-- fkit:generated -->");
+}
+
 // ---------------------------------------------------------------------------
 // ai-agents/config.json — single source of truth for model routing settings.
 // See ai-agents/config-schema.json (always regenerated, never hand-edited) for

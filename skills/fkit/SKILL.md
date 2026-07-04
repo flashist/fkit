@@ -115,6 +115,9 @@ it from the interview (or the file from A2b): flesh out **Domain & context**, **
 **Conventions**. Leave any section you have no answer for as its `<!-- prompt -->`.
 
 ### A7. Report & stop
+First, check whether **this session** needs a restart (see box below) — if so, that goes at the very
+top of your report, before anything else.
+
 Run `npx --yes github:flashist/fkit config show --project .` one more time and relay its **exact
 output** for the default-model / per-skill-assignment part of the summary — never restate those from
 memory or by re-deriving them from the yml. Alongside that, summarize: project
@@ -125,6 +128,26 @@ line the build printed. Mention that **re-running this skill later updates inste
 that the new **`fkit-config`** skill can be used any time afterward for ad-hoc routing changes
 (default model or per-skill pins) without re-running this whole install flow. fkit **makes no
 commits** — everything is working-tree only.
+
+**Restart check:** A4's build (and A5's sync, if it ran) each printed a line like
+`restart-required: claude=<yes|no> codex=<yes|no>` — use whichever of those two you ran **last**. A
+running session keeps whatever skill instructions it already loaded in memory; a newly-compiled
+`SKILL.md` only takes effect after the session restarts. Check the value for **your own model** (the
+one you're running as right now, Claude or Codex) — ignore the other one, it's not about this session.
+If it's `yes`, render this verbatim as the very first thing in your reply, before any other text:
+
+> ---
+> ## RESTART REQUIRED
+>
+> fkit just changed skill(s) that run on **this** model. This session is still running the **old**
+> version(s) from memory — the change has no effect here until you start a **new** Claude Code / Codex
+> session.
+>
+> **Start a new session now.** Nothing else needs fixing — the files on disk are already correct.
+>
+> ---
+
+If it's `no`, skip this box entirely — say nothing about restarting.
 
 ---
 
@@ -143,9 +166,32 @@ fetch; if you need to force the very latest, clear the npx cache first — `npx 
 for pinned releases, use a published npm version.)
 
 ### B2. Report & stop
+First, check whether **this session** needs a restart (see box below) — if so, that goes at the very
+top of your report, before anything else.
+
 Run `npx --yes github:flashist/fkit config show --project .` and relay its **exact output** for the
 routing / skill-assignment part of the summary — never hand-summarize or re-derive it from the yml.
 Alongside that, summarize which skills recompiled and whether the `.codex` model changed, and **state
 the fkit version** the project is now on — the `stamped ai-agents/.fkit-version = …` line the build
 printed. Mention the **`fkit-config`** skill for later ad-hoc routing changes without re-running this
 flow. fkit **makes no commits** — the updated files are working-tree only.
+
+**Restart check:** B1's sync printed a line like `restart-required: claude=<yes|no> codex=<yes|no>`. A
+running session keeps whatever skill instructions it already loaded in memory; a newly-compiled
+`SKILL.md` only takes effect after the session restarts. Check the value for **your own model** (the
+one you're running as right now, Claude or Codex) — ignore the other one, it's not about this session.
+If it's `yes`, render this verbatim as the very first thing in your reply, before any other text:
+
+> ---
+> ## RESTART REQUIRED
+>
+> fkit just changed skill(s) that run on **this** model. This session is still running the **old**
+> version(s) from memory — the change has no effect here until you start a **new** Claude Code / Codex
+> session.
+>
+> **Start a new session now.** Nothing else needs fixing — the files on disk are already correct.
+>
+> ---
+
+If it's `no` (e.g. this sync only bumped the kit version with no actual skill-content change, or you
+were already up to date), skip this box entirely — say nothing about restarting.

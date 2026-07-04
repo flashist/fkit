@@ -15,6 +15,12 @@
 // Every emitted file carries a `fkit:generated` marker so `sync` can
 // safely regenerate it without ever touching hand-authored (project-origin) files.
 //
+// Also prints a `restart-required: claude=<yes|no> codex=<yes|no>` line — whether
+// this run actually changed a skill's real content (ignoring a bare kit-version
+// bump in the marker), which the `fkit` skill uses to warn the user when THIS
+// session needs to restart to pick up the change (a running session keeps
+// whatever instructions it already loaded).
+//
 // Zero dependencies (no npm install). Usage:
 //   node bin/compile-skills.mjs --manifest <ai-agents.yml> --out <dir> [--only <name>] [--kit <dir>]
 
@@ -29,6 +35,7 @@ import {
   loadOrMigrateConfig,
   resolveSkillModel,
   readKitVersion,
+  normalizeGeneratedMarker,
 } from "./lib.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -121,6 +128,17 @@ function writeEnsured(fp, content) {
   writeFileSync(fp, content);
 }
 
+// Writes `content` to `fp` and reports whether it's a MEANINGFUL change — see
+// normalizeGeneratedMarker's comment in lib.mjs for why a bare version bump alone
+// doesn't count.
+function writeEnsuredTracked(fp, content) {
+  const changed =
+    !existsSync(fp) ||
+    normalizeGeneratedMarker(readFileSync(fp, "utf8")) !== normalizeGeneratedMarker(content);
+  writeEnsured(fp, content);
+  return changed;
+}
+
 const OWNER_LABEL = { claude: "Claude", codex: "Codex" };
 const INVOKE_FOR = { claude: "/", codex: "$" };
 // How to call each model non-interactively when a stub delegates. Overridable per
@@ -170,6 +188,8 @@ function delegationStub(name, ownerModel) {
 
 let claudeCount = 0;
 let codexCount = 0;
+const claudeChanged = [];
+const codexChanged = [];
 
 for (const s of found) {
   if (only && s.name !== only) continue;
@@ -211,7 +231,9 @@ for (const s of found) {
     fmLines.push("---");
     const stub = stubFor("claude");
     const content = fmLines.join("\n") + "\n" + marker(markerTier, name) + "\n\n" + (stub || r.body);
-    writeEnsured(join(outDir, ".claude", "skills", name, "SKILL.md"), content);
+    if (writeEnsuredTracked(join(outDir, ".claude", "skills", name, "SKILL.md"), content)) {
+      claudeChanged.push(name);
+    }
     claudeCount++;
     const via = stub ? ` (delegates to ${OWNER_LABEL[assignment]})` : "";
     console.log(`  claude → .claude/skills/${name}/SKILL.md${via}`);
@@ -222,7 +244,9 @@ for (const s of found) {
     const fmLines = ["---", `name: ${name}`, `description: ${JSON.stringify(r.description)}`, "---"];
     const stub = stubFor("codex");
     const content = fmLines.join("\n") + "\n" + marker(markerTier, name) + "\n\n" + (stub || r.body);
-    writeEnsured(join(outDir, ".codex", "skills", name, "SKILL.md"), content);
+    if (writeEnsuredTracked(join(outDir, ".codex", "skills", name, "SKILL.md"), content)) {
+      codexChanged.push(name);
+    }
 
     const iface = (meta.codex && meta.codex.interface) || {};
     const yaml =
@@ -249,3 +273,14 @@ console.log(`  stamped ai-agents/.fkit-version = ${VERSION}`);
 console.log(
   `\nCompiled ${claudeCount} Claude + ${codexCount} Codex skill file(s) → ${outDir}`,
 );
+
+// A fixed, greppable line the `fkit` skill's report step checks to decide whether
+// to warn the user that THIS session needs a restart to pick up what just changed
+// (a running session keeps whatever skill instructions it already loaded — see
+// writeEnsuredTracked above). Printed every run, changed or not, so its absence is
+// never mistaken for "no changes".
+console.log(
+  `restart-required: claude=${claudeChanged.length ? "yes" : "no"} codex=${codexChanged.length ? "yes" : "no"}`,
+);
+if (claudeChanged.length) console.log(`  claude skill(s) changed: ${claudeChanged.join(", ")}`);
+if (codexChanged.length) console.log(`  codex skill(s) changed: ${codexChanged.join(", ")}`);
