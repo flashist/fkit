@@ -91,13 +91,16 @@ try {
 // Discover skill sources
 // ---------------------------------------------------------------------------
 const found = discoverSkills(kitRoot);
+// Shared-tier skills are always self-healed into an explicit override by
+// loadOrMigrateConfig above, so anything still unlisted here is a plain
+// claude/codex-tier skill quietly following the project's defaultModel.
 if (!migrated) {
   const unlisted = found.filter(
     (s) => !(config.skills && Object.prototype.hasOwnProperty.call(config.skills, s.name)),
   );
   if (unlisted.length) {
     const summary = unlisted
-      .map((s) => `${s.name}=${resolveSkillModel(config, s.name, s.tier).model}`)
+      .map((s) => `${s.name}=${resolveSkillModel(config, s.name).model}`)
       .join(", ");
     console.log(`  note: not in config.json, inheriting default (${summary})`);
   }
@@ -179,7 +182,7 @@ for (const s of found) {
 
   const name = fm.name || s.name;
   // "both" → real on both; a model name → real on that owner, stub elsewhere.
-  const { model: assignment } = resolveSkillModel(config, name, s.tier);
+  const { model: assignment } = resolveSkillModel(config, name);
   const markerTier = s.tier;
   const stubFor = (model) =>
     assignment !== "both" && assignment !== model ? delegationStub(name, assignment) : null;

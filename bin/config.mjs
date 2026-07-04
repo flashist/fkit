@@ -79,7 +79,7 @@ function resolvedSkills(config) {
     .map((s) => {
       const { fm } = splitFrontmatter(readFileSync(join(s.dir, "skill.md"), "utf8"));
       const name = fm.name || s.name;
-      const { model, source } = resolveSkillModel(config, name, s.tier);
+      const { model, source } = resolveSkillModel(config, name);
       return { name, model, source, description: fm.description || "" };
     })
     .sort((a, b) => a.name.localeCompare(b.name));

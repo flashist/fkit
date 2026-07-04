@@ -292,6 +292,7 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
   const kitVersion = readKitVersion(kitRoot);
   let config;
   let migrated = false;
+  let dirty = false;
   if (existsSync(configPath)) {
     config = loadConfig(aiAgentsDir);
     const sk = manifest.skills || {};
@@ -307,20 +308,42 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
       );
     }
     // `version` is a live bookkeeping stamp (like ai-agents/.fkit-version), not a
-    // user decision — keep it current on every load, unlike defaultModel/skills,
-    // which are never touched here.
+    // user decision — keep it current on every load, unlike defaultModel/skills.
     if (config.version !== kitVersion) {
       config.version = kitVersion;
-      writeConfig(aiAgentsDir, config);
+      dirty = true;
     }
   } else {
     config = migrateConfigFromManifest(manifest, kitVersion);
-    writeConfig(aiAgentsDir, config);
     migrated = true;
+    dirty = true;
     console.log(
       `  migrated ai-agents/config.json from legacy ai-agents.yml fields (defaultModel=${config.defaultModel}, ${Object.keys(config.skills).length} skill override(s))`,
     );
   }
+
+  // Self-heal, once: a kit-shipped `shared`-tier skill (the kit author's assertion
+  // that it has no single sensible owner — interactive/back-and-forth skills that a
+  // one-shot delegating stub would break) gets pinned to an EXPLICIT {model:"both"}
+  // override the first time the project's config.json has never heard of it. This
+  // keeps resolution down to exactly two states, always — override, or the plain
+  // project default, with nothing hidden — instead of a third, invisible resolver
+  // exception. After this runs once per skill, config.json is fully self-describing.
+  const added = [];
+  for (const s of discoverSkills(kitRoot)) {
+    if (s.tier === "shared" && !config.skills[s.name]) {
+      config.skills[s.name] = { model: "both" };
+      added.push(s.name);
+      dirty = true;
+    }
+  }
+  if (added.length) {
+    console.log(
+      `  added new shared-tier skill override(s) to ai-agents/config.json: ${added.map((n) => `${n}=both`).join(", ")}`,
+    );
+  }
+
+  if (dirty) writeConfig(aiAgentsDir, config);
   writeFileSync(
     join(aiAgentsDir, "config-schema.json"),
     JSON.stringify(buildConfigSchema(kitVersion), null, 2) + "\n",
@@ -328,15 +351,12 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
   return { config, migrated };
 }
 
-// The resolution rule: an explicit per-skill override always wins; otherwise a
-// kit-source `shared`-tier skill is a safety net (interactive/read-only-everywhere
-// skills must never silently become a broken one-shot delegation stub just because
-// a project's defaultModel isn't "both" — this is a kit assertion, not a
-// project-editable default, and never touches config.json itself); otherwise the
-// project's defaultModel applies.
-export function resolveSkillModel(config, name, tier) {
+// Exactly two states, always: an explicit per-skill override, or the project's
+// plain defaultModel. No hidden third state — see the self-heal step above, which
+// guarantees any skill the kit itself asserts has no single owner is always an
+// explicit override by the time this runs.
+export function resolveSkillModel(config, name) {
   const override = config.skills && config.skills[name];
   if (override) return { model: override.model, source: "override" };
-  if (tier === "shared") return { model: "both", source: "shared-default" };
   return { model: config.defaultModel, source: "default" };
 }
