@@ -1,11 +1,13 @@
-// Tests for compile-skills.mjs's `restart-required: claude=<yes|no> codex=<yes|no>`
-// line — the signal the `fkit` skill uses to warn the user that THIS session needs
-// a restart to pick up a skill change (a running session keeps whatever SKILL.md
-// content it already loaded; a recompile alone has no effect on it).
+// Tests for compile-skills.mjs's `restart-required: yes|no` line — the signal the
+// `fkit` skill uses to warn the user that THIS session needs a restart to pick up
+// an update (a running session keeps whatever SKILL.md content it already
+// loaded). Purely a comparison of the project's previously-compiled kit version
+// (ai-agents/.fkit-version) against the version just compiled against — not a
+// per-skill content diff.
 
 import { test, describe, before, after } from "node:test";
 import assert from "node:assert/strict";
-import { mkdirSync, cpSync } from "node:fs";
+import { mkdirSync, cpSync, writeFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
 
@@ -20,13 +22,10 @@ function run(script, args) {
   return execFileSync("node", [script, ...args], { encoding: "utf8" });
 }
 
-function restartLine(output) {
+function restartRequired(output) {
   const line = output.split("\n").find((l) => l.startsWith("restart-required:"));
   assert.ok(line, `no restart-required line in output:\n${output}`);
-  return {
-    claude: /claude=yes/.test(line),
-    codex: /codex=yes/.test(line),
-  };
+  return /restart-required: yes/.test(line);
 }
 
 describe("restart-required signal", () => {
@@ -42,7 +41,7 @@ describe("restart-required signal", () => {
     rmTmpDir(dir);
   });
 
-  test("a fresh build reports both sides changed (every file is new)", () => {
+  test("a fresh build (no prior ai-agents/.fkit-version) requires a restart", () => {
     const out = run(BOOTSTRAP_MJS, [
       "--out",
       dir,
@@ -50,38 +49,43 @@ describe("restart-required signal", () => {
       join(dir, "ai-agents", "ai-agents.yml"),
       "--force",
     ]);
-    const { claude, codex } = restartLine(out);
-    assert.equal(claude, true);
-    assert.equal(codex, true);
+    assert.equal(restartRequired(out), true);
   });
 
-  test("an immediate re-sync with nothing changed reports neither side", () => {
+  test("an immediate re-sync at the same kit version does not require a restart", () => {
     const out = run(SYNC_MJS, ["--project", dir]);
-    const { claude, codex } = restartLine(out);
-    assert.equal(claude, false);
-    assert.equal(codex, false);
+    assert.equal(restartRequired(out), false);
   });
 
-  // The "a bare kit-version bump alone doesn't count as a change" case is covered
-  // by lib.config.test.mjs's normalizeGeneratedMarker unit tests instead of here:
-  // this file's tests share the real repo checkout across concurrently-running
-  // test files, so mutating the shared VERSION file on disk would race with any
-  // other test file invoking these same CLIs at the same time.
-
-  test("pinning one skill to a different model reports exactly that skill, both sides", () => {
+  test("a project-only config.json change (no kit version change) does NOT require a restart", () => {
+    // This is the deliberate trade-off of comparing kit versions rather than
+    // per-skill file content: reassigning a skill's owner via `config set`
+    // genuinely does change what gets compiled, but since the kit version itself
+    // hasn't moved, this signal stays "no". The `fkit-config` skill's own flow
+    // already tells the user to run `sync` right after `config set`, so the new
+    // compiled files are in place regardless of what this flag says.
     run(CONFIG_MJS, ["set", "--project", dir, "--skill", "wiki-query", "--model", "codex"]);
     const out = run(SYNC_MJS, ["--project", dir]);
-    const { claude, codex } = restartLine(out);
-    assert.equal(claude, true);
-    assert.equal(codex, true);
-    assert.match(out, /claude skill\(s\) changed: wiki-query/);
-    assert.match(out, /codex skill\(s\) changed: wiki-query/);
+    assert.equal(restartRequired(out), false);
   });
 
-  test("a subsequent no-op sync goes back to neither side", () => {
+  test("a stamped kit version older than the current kit requires a restart", () => {
+    const stampPath = join(dir, "ai-agents", ".fkit-version");
+    const realVersion = readFileSync(stampPath, "utf8");
+    writeFileSync(stampPath, "0.0.1\n");
+
     const out = run(SYNC_MJS, ["--project", dir]);
-    const { claude, codex } = restartLine(out);
-    assert.equal(claude, false);
-    assert.equal(codex, false);
+    assert.equal(restartRequired(out), true);
+    assert.match(out, /0\.0\.1 →/);
+
+    // sync re-stamps the project to the real current kit version — not a no-op,
+    // since we just forced the stamp back to a stale value.
+    assert.notEqual(readFileSync(stampPath, "utf8"), "0.0.1\n");
+    assert.equal(readFileSync(stampPath, "utf8"), realVersion);
+  });
+
+  test("the next sync afterward is back to no restart needed", () => {
+    const out = run(SYNC_MJS, ["--project", dir]);
+    assert.equal(restartRequired(out), false);
   });
 });

@@ -19,7 +19,6 @@ import {
   loadOrMigrateConfig,
   resolveSkillModel,
   updateCodexModel,
-  normalizeGeneratedMarker,
 } from "../bin/lib.mjs";
 import { KIT_ROOT, mkTmpDir, rmTmpDir } from "./helpers.mjs";
 
@@ -184,23 +183,6 @@ describe("discoverSkills", () => {
     assert.ok(names.includes("fkit-config"), "fkit-config should be discovered");
     const fkitConfig = found.find((s) => s.name === "fkit-config");
     assert.equal(fkitConfig.tier, "shared");
-  });
-});
-
-describe("normalizeGeneratedMarker", () => {
-  const line = (version) =>
-    `<!-- fkit:generated source=shared/fkit-config version=${version} — do NOT hand-edit; run \`sync\` to regenerate. Edit the kit source instead. -->`;
-
-  test("two files differing only in the marker's kit version normalize to the same thing", () => {
-    const a = `---\nname: x\n---\n${line("0.1.11")}\n\nbody text\n`;
-    const b = `---\nname: x\n---\n${line("9.9.9")}\n\nbody text\n`;
-    assert.equal(normalizeGeneratedMarker(a), normalizeGeneratedMarker(b));
-  });
-
-  test("a real body difference still differs after normalizing", () => {
-    const a = `---\nname: x\n---\n${line("0.1.11")}\n\nold body\n`;
-    const b = `---\nname: x\n---\n${line("0.1.11")}\n\nnew body\n`;
-    assert.notEqual(normalizeGeneratedMarker(a), normalizeGeneratedMarker(b));
   });
 });
 
