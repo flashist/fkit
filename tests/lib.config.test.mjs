@@ -61,10 +61,10 @@ describe("validateConfig", () => {
     const config = validateConfig({
       version: "1.2.3",
       defaultModel: "codex",
-      skills: { "wiki-ingest": { model: "codex" }, "task-done": { model: "claude" } },
+      skills: { "fkit-wiki-ingest": { model: "codex" }, "task-done": { model: "claude" } },
     });
     assert.equal(config.defaultModel, "codex");
-    assert.equal(config.skills["wiki-ingest"].model, "codex");
+    assert.equal(config.skills["fkit-wiki-ingest"].model, "codex");
   });
 });
 
@@ -86,7 +86,7 @@ describe("migrateConfigFromManifest", () => {
 
   test("skills.shared has no equivalent anymore — entries are simply omitted", () => {
     const config = migrateConfigFromManifest(
-      { skills: { shared: ["wiki-query", "plan-task"] } },
+      { skills: { shared: ["fkit-wiki-query", "plan-task"] } },
       "0.1.11",
     );
     assert.deepEqual(config.skills, {});
@@ -94,24 +94,24 @@ describe("migrateConfigFromManifest", () => {
 
   test("skills.claude_only / codex_only map to explicit pins", () => {
     const config = migrateConfigFromManifest(
-      { skills: { claude_only: ["task-done"], codex_only: ["wiki-lint"] } },
+      { skills: { claude_only: ["task-done"], codex_only: ["fkit-wiki-lint"] } },
       "0.1.11",
     );
     assert.deepEqual(config.skills, {
       "task-done": { model: "claude" },
-      "wiki-lint": { model: "codex" },
+      "fkit-wiki-lint": { model: "codex" },
     });
   });
 
   test("skills.owned maps claude → claude, anything else → codex", () => {
     const config = migrateConfigFromManifest(
-      { skills: { owned: { "task-done": "claude", "wiki-ingest": "codex", "wiki-sync": "something-else" } } },
+      { skills: { owned: { "task-done": "claude", "fkit-wiki-ingest": "codex", "fkit-wiki-sync": "something-else" } } },
       "0.1.11",
     );
     assert.deepEqual(config.skills, {
       "task-done": { model: "claude" },
-      "wiki-ingest": { model: "codex" },
-      "wiki-sync": { model: "codex" },
+      "fkit-wiki-ingest": { model: "codex" },
+      "fkit-wiki-sync": { model: "codex" },
     });
   });
 
@@ -125,7 +125,7 @@ describe("resolveSkillModel", () => {
   const config = { defaultModel: "codex", skills: { "task-done": { model: "claude" } } };
 
   test("an unlisted skill inherits defaultModel", () => {
-    assert.deepEqual(resolveSkillModel(config, "wiki-query"), { model: "codex", source: "default" });
+    assert.deepEqual(resolveSkillModel(config, "fkit-wiki-query"), { model: "codex", source: "default" });
   });
 
   test("a pinned skill returns its override", () => {
@@ -288,7 +288,7 @@ describe("loadOrMigrateConfig", () => {
         version: "0.0.1",
         defaultModel: "both",
         skills: {
-          "wiki-query": { model: "both" },
+          "fkit-wiki-query": { model: "both" },
           "plan-task": { model: "both" },
           "task-done": { model: "claude" },
         },
@@ -298,7 +298,7 @@ describe("loadOrMigrateConfig", () => {
 
       assert.equal(config.defaultModel, "claude");
       // the legacy "both" skill overrides are dropped entirely (fall through to default)...
-      assert.equal(config.skills["wiki-query"], undefined);
+      assert.equal(config.skills["fkit-wiki-query"], undefined);
       assert.equal(config.skills["plan-task"], undefined);
       // ...but a real, non-"both" override survives untouched.
       assert.deepEqual(config.skills["task-done"], { model: "claude" });
@@ -306,7 +306,7 @@ describe("loadOrMigrateConfig", () => {
       // and the migration is persisted, not just returned in-memory.
       const onDisk = JSON.parse(readFileSync(join(aiAgentsDir, "config.json"), "utf8"));
       assert.equal(onDisk.defaultModel, "claude");
-      assert.equal(onDisk.skills["wiki-query"], undefined);
+      assert.equal(onDisk.skills["fkit-wiki-query"], undefined);
     } finally {
       rmTmpDir(dir);
     }

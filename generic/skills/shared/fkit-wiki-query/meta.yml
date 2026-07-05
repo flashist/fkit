@@ -1,0 +1,18 @@
+# Per-CLI packaging for the `fkit-wiki-query` shared skill.
+# fkit-wiki-query is the read/context tool used by BOTH models — e.g. the Claude producer
+# and plan-task call it — so it compiles to both sides. Only the invocation prefix for
+# its cross-skill reference (to fkit-wiki-ingest) differs (/ vs $). Wiki *maintenance*
+# (ingest / lint / sync) stays codex-only.
+
+claude:
+  user_invocable: true
+  vars:
+    invoke: "/"
+
+codex:
+  vars:
+    invoke: "$"
+  interface:
+    display_name: "Wiki Query"
+    short_description: "Answer a question using the {{project_slug}} wiki"
+    default_prompt: "Run the fkit-wiki-query skill: answer the following question using {{wiki_path}}/: "

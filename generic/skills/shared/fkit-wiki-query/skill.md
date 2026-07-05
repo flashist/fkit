@@ -1,5 +1,5 @@
 ---
-name: "wiki-query"
+name: "fkit-wiki-query"
 description: "Answer a question about the {{project_slug}} project using the wiki at {{wiki_path}}/. Use when asked to look something up in the wiki, find information about a feature or system, or answer a project question."
 ---
 
@@ -18,6 +18,6 @@ The question is whatever the user passed as the argument when invoking this skil
 5. Compose a clear, cited answer:
    - Reference wiki pages as [[wiki/path]]
    - Reference source files as `src/...`
-6. If the wiki is missing information needed to answer well, note the gap explicitly and suggest running `{{invoke}}wiki-ingest` on the relevant source.
+6. If the wiki is missing information needed to answer well, note the gap explicitly and suggest running `{{invoke}}fkit-wiki-ingest` on the relevant source.
 
-> **Read-only**: Do not create wiki pages, update `index.md`, or append to `log.md` during a query. If the answer reveals something worth persisting, tell the user and suggest running `{{invoke}}wiki-ingest` explicitly.
+> **Read-only**: Do not create wiki pages, update `index.md`, or append to `log.md` during a query. If the answer reveals something worth persisting, tell the user and suggest running `{{invoke}}fkit-wiki-ingest` explicitly.

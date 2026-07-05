@@ -1,5 +1,5 @@
 ---
-name: "wiki-sync"
+name: "fkit-wiki-sync"
 description: "Sync the {{project_slug}} wiki at {{wiki_path}}/ by detecting what changed in non-wiki ai-agents/ sources since the last ingest and ingesting only the delta. Use when asked to sync or update the wiki. Optional argument: a date (YYYY-MM-DD) to override the auto-detected since-date, or 'force' to re-ingest all non-wiki ai-agents sources."
 ---
 

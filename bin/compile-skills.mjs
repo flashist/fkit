@@ -14,6 +14,10 @@
 //
 // Every emitted file carries a `fkit:generated` marker so `sync` can
 // safely regenerate it without ever touching hand-authored (project-origin) files.
+// On a full compile (not `--only`) it also PRUNES orphaned generated skills — dirs
+// carrying that marker whose source the kit no longer ships (e.g. a renamed skill),
+// so a rename leaves no stale `.claude`/`.codex` skill behind. Marker-less dirs
+// (scaffolded roles, project-authored skills) are never touched.
 //
 // Also prints a `restart-required: yes|no` line — whether this run's kit version
 // differs from what the project was last compiled against (ai-agents/config.json's
@@ -25,7 +29,7 @@
 // Zero dependencies (no npm install). Usage:
 //   node bin/compile-skills.mjs --manifest <ai-agents.yml> --out <dir> [--only <name>] [--kit <dir>]
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -177,6 +181,9 @@ function delegationStub(name, ownerModel) {
 
 let claudeCount = 0;
 let codexCount = 0;
+// The resolved frontmatter name of every skill emitted this run — the authoritative
+// set of skills the kit currently ships, used below to prune orphaned output dirs.
+const compiledNames = new Set();
 
 for (const s of found) {
   if (only && s.name !== only) continue;
@@ -186,6 +193,7 @@ for (const s of found) {
   const meta = existsSync(metaPath) ? parseYaml(readFileSync(metaPath, "utf8")) : {};
 
   const name = fm.name || s.name;
+  compiledNames.add(name);
   // assignment is always exactly one model (claude|codex) — real on that owner,
   // a delegating stub on every other model.
   const { model: assignment } = resolveSkillModel(config, name);
@@ -243,6 +251,30 @@ for (const s of found) {
     codexCount++;
     const via = stub ? ` (delegates to ${OWNER_LABEL[assignment]})` : "";
     console.log(`  codex  → .codex/skills/${name}/SKILL.md (+ agents/openai.yaml)${via}`);
+  }
+}
+
+// Prune orphaned generated skills — dirs the kit no longer produces (a skill that
+// was renamed or removed at the source). Only on a FULL compile: an `--only` run
+// deliberately emits a single skill, so its `compiledNames` is not the full set and
+// must never drive deletion. The `fkit:generated` marker is the safety gate — only
+// kit-generated files carry it, so scaffolded roles and project-authored skills
+// (no marker) are never touched, exactly like `sync` never overwrites them.
+if (!only) {
+  for (const [side, label] of [
+    [".claude", "claude"],
+    [".codex", "codex"],
+  ]) {
+    const skillsDir = join(outDir, side, "skills");
+    if (!existsSync(skillsDir)) continue;
+    for (const dirName of readdirSync(skillsDir)) {
+      if (compiledNames.has(dirName)) continue;
+      const skillMd = join(skillsDir, dirName, "SKILL.md");
+      if (!existsSync(skillMd)) continue; // not a skill dir we recognize — leave it
+      if (!/fkit:generated/.test(readFileSync(skillMd, "utf8"))) continue; // origin:project — never touch
+      rmSync(join(skillsDir, dirName), { recursive: true, force: true });
+      console.log(`  ${label}  ✗ pruned orphaned generated skill ${side}/skills/${dirName}/`);
+    }
   }
 }
 

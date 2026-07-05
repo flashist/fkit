@@ -1,5 +1,5 @@
 ---
-name: "wiki-lint"
+name: "fkit-wiki-lint"
 description: "Health-check the {{project_slug}} wiki at {{wiki_path}}/ and fix issues found. Use when asked to lint, validate, or health-check the wiki."
 ---
 

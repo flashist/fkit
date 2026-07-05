@@ -8,7 +8,7 @@ claude:
   description: "Enter plan mode to plan the implementation of a task described in the file passed as the argument (e.g. `/plan-task ai-agents/tasks/backlog/my-task.md`). The plan should account for realistic edge cases, including non-obvious but plausible failure modes, where they could materially affect implementation, correctness, or testing."
   vars:
     invoke: "/"
-    wiki_query: "/wiki-query"
+    wiki_query: "/fkit-wiki-query"
     plan_mode_enter: "Use the EnterPlanMode tool to switch into plan mode and state clearly that this run is planning-only and that no code will be written yet."
     plan_mode_exit: "Use ExitPlanMode to present the plan to the user and stop for approval before making any code changes."
 
@@ -16,7 +16,7 @@ codex:
   description: "Use when the user wants Codex to read a task file and produce an implementation plan before writing code. Trigger for requests like `$plan-task ai-agents/tasks/backlog/my-task.md`, planning a task from a markdown file, reviewing a backlog task, breaking a task into implementation steps, or gathering context and proposing an execution plan that must be approved before any edits are made. The plan should account for realistic edge cases, including non-obvious but plausible failure modes, where they could materially affect implementation, correctness, or testing."
   vars:
     invoke: "$"
-    wiki_query: "$wiki-query"
+    wiki_query: "$fkit-wiki-query"
     plan_mode_enter: "State clearly that this run is planning-only and that no code will be written yet."
     plan_mode_exit: "Present the plan to the user and stop for approval before making any code changes."
   interface:

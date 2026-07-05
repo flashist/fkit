@@ -72,7 +72,7 @@ conversationally. Offer the suggested default for each so the user can just acce
   a skill just follows whatever the project's default model is; pinned to **Claude** or **Codex**,
   that model owns it and the *other* model gets a delegating stub that **routes the task to the
   owner** (the skill is still invocable everywhere — nothing is hidden, it just delegates on the
-  non-owner side). (Common case: assign the `wiki-*` write skills to **Codex**.)
+  non-owner side). (Common case: assign the `fkit-wiki-*` write skills to **Codex**.)
 - **(owner)** Capture an `owner` for task attribution — default to `git config user.name` (confirm).
 
 ### A3. Write the manifest (edit `ai-agents/ai-agents.yml` in place)

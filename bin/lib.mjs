@@ -105,6 +105,40 @@ const MODEL_VALUE_DESCRIPTIONS = {
   codex: "Runs natively on Codex; every other model gets a stub that delegates to Codex.",
 };
 
+// Skills that have been renamed in the kit, old name → new name. A project's
+// config.json `skills` map is keyed by skill name, so a rename would orphan the
+// user's saved pin (the old key resolves to nothing; the new skill silently falls
+// back to defaultModel). applySkillRenames migrates those keys on every config
+// load. This is a cumulative, append-only ledger of every skill rename ever — it
+// needs no version gating because the transform is idempotent (see below).
+export const SKILL_RENAMES = {
+  "wiki-query": "fkit-wiki-query",
+  "wiki-ingest": "fkit-wiki-ingest",
+  "wiki-lint": "fkit-wiki-lint",
+  "wiki-sync": "fkit-wiki-sync",
+};
+
+// Move any config.skills override stored under an old skill name to its new name,
+// preserving its model. Idempotent: once renamed the old key is gone, so re-running
+// is a no-op — which is why this can run unconditionally on every load with no
+// version tracking. Never clobbers an existing new-name override (a real pin the
+// user already set under the new name wins; the stale old key is just dropped).
+// Returns true if it changed anything (so the caller can persist).
+export function applySkillRenames(config) {
+  const skills = config.skills || {};
+  let changed = false;
+  for (const [oldName, newName] of Object.entries(SKILL_RENAMES)) {
+    if (!Object.prototype.hasOwnProperty.call(skills, oldName)) continue;
+    if (!Object.prototype.hasOwnProperty.call(skills, newName)) {
+      skills[newName] = skills[oldName];
+    }
+    delete skills[oldName];
+    changed = true;
+  }
+  config.skills = skills;
+  return changed;
+}
+
 // Source dirs → kit-intended tier. Both the legacy `*-only` names and the plain
 // model names map to that model's tier. Mirrors the dirs compile-skills.mjs reads.
 const TIER_DIRS = {
@@ -340,6 +374,12 @@ export function loadOrMigrateConfig(aiAgentsDir, manifest, kitRoot) {
       `  migrated ai-agents/config.json from legacy ai-agents.yml fields (defaultModel=${config.defaultModel}, ${Object.keys(config.skills).length} skill override(s))`,
     );
   }
+
+  // Migrate any per-skill pins stored under a renamed skill's old name. Runs for
+  // both branches above (existing config.json AND a freshly-seeded one — an old
+  // project's manifest still uses the pre-rename names). Renaming preserves each
+  // pin's model, so the config stays valid (validateConfig already passed above).
+  if (applySkillRenames(config)) dirty = true;
 
   if (dirty) writeConfig(aiAgentsDir, config);
   writeFileSync(

@@ -48,7 +48,7 @@ const baseVars = {
   wiki_path: project.wiki_path ?? "ai-agents/wiki-vault",
   role,
   invoke,
-  wiki_query: invoke + "wiki-query",
+  wiki_query: invoke + "fkit-wiki-query",
 };
 
 // Load the preset and split it into <!-- key --> blocks

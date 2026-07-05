@@ -1,7 +1,0 @@
-# Per-CLI packaging for the `wiki-ingest` codex-only skill.
-
-codex:
-  interface:
-    display_name: "Wiki Ingest"
-    short_description: "Ingest sources into the {{project_slug}} wiki"
-    default_prompt: "Run the wiki-ingest skill: ingest the following source(s) into {{wiki_path}}/: "

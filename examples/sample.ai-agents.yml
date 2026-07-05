@@ -51,11 +51,11 @@ roles:
 # `exec` command). There is no "hidden from the other model" — every skill is
 # available everywhere; non-owners just delegate.
 skills:
-  shared: [process-review, plan-task, wiki-query, fkit-architect-inspect]
+  shared: [process-review, plan-task, fkit-wiki-query, fkit-architect-inspect]
   owned:
     task-done:       claude
     task-cancelled:  claude
     stateful-review: claude
-    wiki-ingest:     codex
-    wiki-lint:       codex
-    wiki-sync:       codex
+    fkit-wiki-ingest:     codex
+    fkit-wiki-lint:       codex
+    fkit-wiki-sync:       codex

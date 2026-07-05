@@ -10,7 +10,7 @@ its *contents* are project-specific.
 | `tasks/` | Task briefs (`.md`), moved between `backlog/`, `done/`, and `cancelled/` — manually, after review (see the `task-done` / `task-cancelled` skills). |
 | `reviews/` | Per-task **review ledgers** that carry decision state across review rounds so settled tradeoffs are not re-litigated. See `reviews/README.md`. |
 | `knowledge-base/` | Investigation findings, decisions, reports, and research — generic project knowledge not easily derived from the code. |
-| `wiki-vault/` | A structured wiki (Karpathy LLM-wiki pattern). `schema.md` = conventions/templates, `index.md` = catalog, `log.md` = activity log, `wiki/` = the pages. Maintained by the `wiki-*` skills. |
+| `wiki-vault/` | A structured wiki (Karpathy LLM-wiki pattern). `schema.md` = conventions/templates, `index.md` = catalog, `log.md` = activity log, `wiki/` = the pages. Maintained by the `fkit-wiki-*` skills. |
 
 The **agent roster** is declared in `ai-agents.yml` at the project root of `ai-agents/`.
 **Per-skill model routing** (which model owns which fkit skill) lives in the sibling

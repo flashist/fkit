@@ -66,7 +66,7 @@ describe("restart-required signal", () => {
     // hasn't moved, this signal stays "no". The `fkit-config` skill's own flow
     // already tells the user to run `sync` right after `config set`, so the new
     // compiled files are in place regardless of what this flag says.
-    run(CONFIG_MJS, ["set", "--project", dir, "--skill", "wiki-query", "--model", "codex"]);
+    run(CONFIG_MJS, ["set", "--project", dir, "--skill", "fkit-wiki-query", "--model", "codex"]);
     const out = run(SYNC_MJS, ["--project", dir]);
     assert.equal(restartRequired(out), false);
   });

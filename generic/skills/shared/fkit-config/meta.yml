@@ -4,7 +4,7 @@
 # branch ("use AskUserQuestion if you have it, else a numbered list") lives once
 # in skill.md's body and reads correctly on both models, so it needs no var.
 # Only the invocation prefix shown in the Usage example differs, expressed via
-# the `invoke` var (same convention as wiki-query / plan-task).
+# the `invoke` var (same convention as fkit-wiki-query / plan-task).
 
 claude:
   user_invocable: true

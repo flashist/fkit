@@ -1,5 +1,5 @@
 ---
-name: "wiki-ingest"
+name: "fkit-wiki-ingest"
 description: "Ingest one or more sources into the {{project_slug}} wiki at {{wiki_path}}/. Use when asked to add, update, or sync wiki pages from source files, tasks, or knowledge-base documents. Accepts a file path, directory path, or keyword: 'all tasks', 'knowledge-base', 'architecture'."
 ---
 
