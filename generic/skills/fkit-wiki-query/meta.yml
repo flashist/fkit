@@ -1,0 +1,18 @@
+# Per-CLI packaging for the `fkit-wiki-query` skill (unpinned by default — follows
+# whichever model owns it, e.g. the Claude producer and plan-task both call it).
+# Only the invocation prefix for its cross-skill reference (to fkit-wiki-ingest)
+# differs (/ vs $). Wiki *maintenance* (ingest / lint / sync) is owned by Codex by
+# default (see ai-agents/config.json).
+
+claude:
+  user_invocable: true
+  vars:
+    invoke: "/"
+
+codex:
+  vars:
+    invoke: "$"
+  interface:
+    display_name: "Wiki Query"
+    short_description: "Answer a question using the {{project_slug}} wiki"
+    default_prompt: "Run the fkit-wiki-query skill: answer the following question using {{wiki_path}}/: "

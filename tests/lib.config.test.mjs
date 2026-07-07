@@ -18,6 +18,7 @@ import {
   writeConfig,
   loadOrMigrateConfig,
   resolveSkillModel,
+  parseSkillModelInput,
   updateCodexModel,
 } from "../bin/lib.mjs";
 import { KIT_ROOT, mkTmpDir, rmTmpDir } from "./helpers.mjs";
@@ -25,6 +26,23 @@ import { KIT_ROOT, mkTmpDir, rmTmpDir } from "./helpers.mjs";
 describe("MODEL_ENUM", () => {
   test("is exactly claude and codex — no 'both'", () => {
     assert.deepEqual(MODEL_ENUM, ["claude", "codex"]);
+  });
+});
+
+describe("parseSkillModelInput", () => {
+  test("'default' clears the override (returns null)", () => {
+    assert.equal(parseSkillModelInput("default"), null);
+  });
+
+  test("a valid model name is returned as-is", () => {
+    assert.equal(parseSkillModelInput("claude"), "claude");
+    assert.equal(parseSkillModelInput("codex"), "codex");
+  });
+
+  test("rejects anything else — including the legacy 'both' — with a clear message", () => {
+    assert.throws(() => parseSkillModelInput("both"), /invalid model "both" — must be one of claude\|codex, or "default"/);
+    assert.throws(() => parseSkillModelInput("shared"), /invalid model "shared"/);
+    assert.throws(() => parseSkillModelInput(""), /invalid model ""/);
   });
 });
 
@@ -172,17 +190,15 @@ describe("readKitVersion", () => {
 });
 
 describe("discoverSkills", () => {
-  test("finds real skill sources under generic/skills/{shared,claude,codex}", () => {
+  test("finds real skill sources under the flat generic/skills/<name>/", () => {
     const found = discoverSkills(KIT_ROOT);
     assert.ok(found.length > 0);
     for (const s of found) {
-      assert.ok(["shared", "claude", "codex"].includes(s.tier), `unexpected tier "${s.tier}" for ${s.name}`);
       assert.ok(existsSync(join(s.dir, "skill.md")));
+      assert.equal(s.dir, join(KIT_ROOT, "generic", "skills", s.name));
     }
     const names = found.map((s) => s.name);
     assert.ok(names.includes("fkit-config"), "fkit-config should be discovered");
-    const fkitConfig = found.find((s) => s.name === "fkit-config");
-    assert.equal(fkitConfig.tier, "shared");
   });
 });
 

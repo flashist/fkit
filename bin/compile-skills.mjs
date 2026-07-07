@@ -2,8 +2,8 @@
 // fkit — compile-skills.mjs
 //
 // Single-source skill compiler. Reads model-agnostic skill sources
-// (generic/skills/{shared,claude-only,codex-only}/<name>/skill.md + meta.yml)
-// plus a project manifest (ai-agents.yml), and emits per-CLI skill files:
+// (generic/skills/<name>/skill.md + meta.yml) plus a project manifest
+// (ai-agents.yml), and emits per-CLI skill files:
 //   - Claude → <out>/.claude/skills/<name>/SKILL.md
 //   - Codex  → <out>/.codex/skills/<name>/SKILL.md  (+ agents/openai.yaml)
 //
@@ -118,10 +118,8 @@ if (!migrated) {
 // ---------------------------------------------------------------------------
 // Emit
 // ---------------------------------------------------------------------------
-const marker = (tier, name) =>
+const marker = (name) =>
   "<!-- fkit:generated source=" +
-  tier +
-  "/" +
   name +
   " version=" +
   VERSION +
@@ -197,7 +195,6 @@ for (const s of found) {
   // assignment is always exactly one model (claude|codex) — real on that owner,
   // a delegating stub on every other model.
   const { model: assignment } = resolveSkillModel(config, name);
-  const markerTier = s.tier;
   const stubFor = (model) => (assignment !== model ? delegationStub(name, assignment) : null);
   // Every skill compiles to BOTH models (real skill or delegating stub).
   const targets = ["claude", "codex"];
@@ -225,7 +222,7 @@ for (const s of found) {
     if (ui) fmLines.push("user-invocable: true");
     fmLines.push("---");
     const stub = stubFor("claude");
-    const content = fmLines.join("\n") + "\n" + marker(markerTier, name) + "\n\n" + (stub || r.body);
+    const content = fmLines.join("\n") + "\n" + marker(name) + "\n\n" + (stub || r.body);
     writeEnsured(join(outDir, ".claude", "skills", name, "SKILL.md"), content);
     claudeCount++;
     const via = stub ? ` (delegates to ${OWNER_LABEL[assignment]})` : "";
@@ -236,7 +233,7 @@ for (const s of found) {
     const r = render("codex");
     const fmLines = ["---", `name: ${name}`, `description: ${JSON.stringify(r.description)}`, "---"];
     const stub = stubFor("codex");
-    const content = fmLines.join("\n") + "\n" + marker(markerTier, name) + "\n\n" + (stub || r.body);
+    const content = fmLines.join("\n") + "\n" + marker(name) + "\n\n" + (stub || r.body);
     writeEnsured(join(outDir, ".codex", "skills", name, "SKILL.md"), content);
 
     const iface = (meta.codex && meta.codex.interface) || {};

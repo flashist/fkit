@@ -33,7 +33,7 @@ function run(script, args) {
 // The generated-skill marker (any version) — a planted orphan must carry it to be
 // eligible for pruning; a marker-less dir models a scaffolded role / project skill.
 function generatedSkill(name) {
-  return `---\nname: ${name}\n---\n<!-- fkit:generated source=shared/${name} version=0.0.1 — do NOT hand-edit -->\n\n# ${name}\n`;
+  return `---\nname: ${name}\n---\n<!-- fkit:generated source=${name} version=0.0.1 — do NOT hand-edit -->\n\n# ${name}\n`;
 }
 function projectSkill(name) {
   return `---\nname: ${name}\n---\n\n# ${name} (hand-authored, no marker)\n`;

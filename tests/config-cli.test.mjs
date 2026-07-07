@@ -115,6 +115,11 @@ describe("bin/config.mjs", () => {
     assert.match(err.stderr, /invalid --default-model/);
   });
 
+  test("set --skill --model rejects an out-of-enum value (e.g. legacy 'both') — only 'default' or a model name are accepted", () => {
+    const err = runExpectFailure(["set", "--project", projectDir, "--skill", "fkit-config", "--model", "both"]);
+    assert.match(err.stderr, /invalid model "both" — must be one of claude\|codex, or "default"/);
+  });
+
   test("set --skill rejects an unknown skill name", () => {
     const err = runExpectFailure(["set", "--project", projectDir, "--skill", "no-such-skill", "--model", "claude"]);
     assert.match(err.stderr, /unknown skill/);

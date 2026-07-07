@@ -1,4 +1,4 @@
-# Per-CLI packaging for the `fkit-wiki-sync` codex-only skill.
+# Per-CLI packaging for the `fkit-wiki-sync` skill (owned by Codex by default; see ai-agents/config.json).
 
 codex:
   interface:

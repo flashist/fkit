@@ -38,7 +38,7 @@ roles:                  # the terminal-tab personas; each binds a role → defau
 # every other row in an old `routing:` block does nothing at all anymore.
 
 skills:                 # LEGACY — one-time migration seed only, see config.json below
-  shared: [names...]        # real skill on EVERY model (each runs it natively)
+  shared: [names...]        # no override — falls through to defaultModel (see config.json below)
   owned:                    # real on the owner; a routing STUB on every other model
     <skill-name>: claude | codex   # the skill is still available everywhere — non-owners delegate
   # (legacy `claude_only` / `codex_only` lists are still accepted and read the same way.)

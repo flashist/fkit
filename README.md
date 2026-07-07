@@ -87,8 +87,9 @@ consumed via `npx github:flashist/fkit`, so a pushed tag *is* the release. Verif
 
 ## How it works
 
-- **Skills are single-sourced** under `generic/skills/{shared,claude-only,codex-only}/<name>/`.
-  The compiler emits per-CLI variants, each with an `fkit:generated` marker.
+- **Skills are single-sourced** under `generic/skills/<name>/`. Source placement carries no
+  meaning — which model owns a skill is decided entirely by `ai-agents/config.json` (see below),
+  never by directory. The compiler emits per-CLI variants, each with an `fkit:generated` marker.
   Three kinds of per-model variation, all from one source: manifest placeholders,
   per-model vars (`meta.<model>.vars`, e.g. `{{invoke}}` = `/` vs `$`), and per-model
   description overrides.
@@ -115,7 +116,7 @@ consumed via `npx github:flashist/fkit`, so a pushed tag *is* the release. Verif
 ## Layout
 
 ```
-generic/skills/{shared,claude-only,codex-only}/<name>/{skill.md, meta.yml}
+generic/skills/<name>/{skill.md, meta.yml}
 generic/ai-agents/            the ai-agents/ skeleton (copied into each project)
 generic/templates/            role-agent + CLAUDE.md/AGENTS.md templates
 generic/roles/                role presets (producer.preset.md)

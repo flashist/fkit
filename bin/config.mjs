@@ -23,6 +23,7 @@ import {
   validateConfig,
   writeConfig,
   MODEL_ENUM,
+  parseSkillModelInput,
 } from "./lib.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -142,16 +143,19 @@ if (sub === "show") {
       console.error('--skill requires --model <claude|codex|default>');
       process.exit(1);
     }
-    if (skillModel === "default") {
+    let parsed;
+    try {
+      parsed = parseSkillModelInput(skillModel);
+    } catch (e) {
+      console.error(e.message);
+      process.exit(1);
+    }
+    if (parsed === null) {
       delete config.skills[skillName];
       console.log(`${skillName}: override cleared — now follows defaultModel`);
     } else {
-      if (!MODEL_ENUM.includes(skillModel)) {
-        console.error(`invalid --model "${skillModel}" — must be one of ${MODEL_ENUM.join("|")}, or "default"`);
-        process.exit(1);
-      }
-      config.skills[skillName] = { model: skillModel };
-      console.log(`${skillName}.model = ${skillModel}`);
+      config.skills[skillName] = { model: parsed };
+      console.log(`${skillName}.model = ${parsed}`);
     }
     validateConfig(config);
     writeConfig(aiAgentsDir, config);

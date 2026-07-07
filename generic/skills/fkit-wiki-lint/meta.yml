@@ -1,4 +1,4 @@
-# Per-CLI packaging for the `fkit-wiki-lint` codex-only skill.
+# Per-CLI packaging for the `fkit-wiki-lint` skill (owned by Codex by default; see ai-agents/config.json).
 
 codex:
   interface:

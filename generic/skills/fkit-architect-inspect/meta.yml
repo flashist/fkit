@@ -1,7 +1,7 @@
-# Per-CLI packaging for the `fkit-architect-inspect` shared skill.
+# Per-CLI packaging for the `fkit-architect-inspect` skill (unpinned by default).
 # The research + interview flow is identical on both models; only the invocation
 # syntax and the name of the sub-agent mechanism differ, expressed via per-model
-# `vars` substituted into the shared skill.md.
+# `vars` substituted into the one source skill.md.
 
 claude:
   user_invocable: true

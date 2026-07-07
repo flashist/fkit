@@ -1,10 +1,9 @@
-# Per-CLI packaging for the `fkit-config` shared skill.
-# fkit-config edits ai-agents/config.json and re-syncs — safe and fast natively
-# on either model, so it never delegates (shared tier). The step 3/4 choice-tool
-# branch ("use AskUserQuestion if you have it, else a numbered list") lives once
-# in skill.md's body and reads correctly on both models, so it needs no var.
-# Only the invocation prefix shown in the Usage example differs, expressed via
-# the `invoke` var (same convention as fkit-wiki-query / plan-task).
+# Per-CLI packaging for the `fkit-config` skill (unpinned by default). Its body
+# branches per-model inline ("use AskUserQuestion if you have it, else a numbered
+# list") rather than needing per-model vars, so whichever model ends up owning it
+# (default or pinned) gets correct guidance with no extra packaging. Only the
+# invocation prefix shown in the Usage example differs, expressed via the
+# `invoke` var (same convention as fkit-wiki-query / plan-task).
 
 claude:
   user_invocable: true

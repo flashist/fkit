@@ -139,27 +139,16 @@ export function applySkillRenames(config) {
   return changed;
 }
 
-// Source dirs → kit-intended tier. Both the legacy `*-only` names and the plain
-// model names map to that model's tier. Mirrors the dirs compile-skills.mjs reads.
-const TIER_DIRS = {
-  shared: "shared",
-  claude: "claude",
-  "claude-only": "claude",
-  codex: "codex",
-  "codex-only": "codex",
-};
-
-// Every skill source the kit ships, with its dir-implied tier ("shared" | "claude" | "codex").
+// Every skill source the kit ships. Source placement carries no meaning — which
+// model owns a skill is decided entirely by ai-agents/config.json (defaultModel +
+// per-skill overrides), never by where its source lives. See resolveSkillModel.
 export function discoverSkills(kitRoot) {
   const skillsRoot = join(kitRoot, "generic", "skills");
   const found = [];
-  for (const [dir, tier] of Object.entries(TIER_DIRS)) {
-    const base = join(skillsRoot, dir);
-    if (!existsSync(base)) continue;
-    for (const name of readdirSync(base)) {
-      if (existsSync(join(base, name, "skill.md"))) {
-        found.push({ name, tier, dir: join(base, name) });
-      }
+  if (!existsSync(skillsRoot)) return found;
+  for (const name of readdirSync(skillsRoot)) {
+    if (existsSync(join(skillsRoot, name, "skill.md"))) {
+      found.push({ name, dir: join(skillsRoot, name) });
     }
   }
   return found;
@@ -230,6 +219,20 @@ export function migrateConfigFromManifest(manifest, version) {
     defaultModel: routing.default && routing.default !== "both" ? routing.default : "claude",
     skills,
   };
+}
+
+// The single place a per-skill --model input is parsed, so every call site (the
+// `config set` CLI today, any future one tomorrow) accepts exactly the same two
+// forms and rejects everything else the same way: the literal "default" (clear
+// the override, fall back to defaultModel — returned as null), or one of
+// MODEL_ENUM (returned as-is). Throws a clear, actionable message otherwise —
+// this is user-supplied input, never a raw stack trace.
+export function parseSkillModelInput(value) {
+  if (value === "default") return null;
+  if (!MODEL_ENUM.includes(value)) {
+    throw new Error(`invalid model "${value}" — must be one of ${MODEL_ENUM.join("|")}, or "default"`);
+  }
+  return value;
 }
 
 // Throws a clear, actionable message (never a raw stack trace) — config.json is

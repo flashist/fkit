@@ -1,7 +1,7 @@
-# Per-CLI packaging for the `plan-task` shared skill.
+# Per-CLI packaging for the `plan-task` skill (unpinned by default).
 # plan-task differs per model in the BODY (Claude has a plan-mode tool; Codex does
 # not) and in invocation syntax (/ vs $) — expressed via per-model `vars` below,
-# which the compiler substitutes into the shared skill.md for each target.
+# which the compiler substitutes into the one source skill.md for each target.
 
 claude:
   user_invocable: true
