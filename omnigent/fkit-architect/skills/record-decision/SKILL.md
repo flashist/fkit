@@ -1,9 +1,9 @@
 ---
-name: adr
+name: record-decision
 description: Record an architecture decision as an ADR (Architecture Decision Record) — context, the decision, the options weighed and why the others were rejected, and the consequences. Saved to ai-agents/knowledge-base/decisions/ — never the wiki (fkit-wiki ingests it later). Makes no commits.
 ---
 
-# ADR — Architecture Decision Record
+# Record Decision — Architecture Decision Record (ADR)
 
 Capture a settled architecture decision durably, so the *why* survives and future reviewers (and
 reviewers' reviewers) start from the decision instead of re-litigating it.

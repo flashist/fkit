@@ -114,7 +114,7 @@ prompt: |
      fkit-wiki agent** rather than opening `ai-agents/wiki-vault/` yourself.
   2. **Understand the request.** Is the owner asking you to *understand* something (→ `inspect`),
      *design* a feature (→ `design-spec`), *choose between approaches* (→ `evaluate-approach`), or
-     *record a decision* (→ `adr`)? Restate the goal in a sentence.
+     *record a decision* (→ `record-decision`)? Restate the goal in a sentence.
   3. **Investigate before you design.** For any design or evaluation, first read the relevant code —
      trace the real call paths, read the tests as the behavior spec, check git blame/log for the *why*.
      A design not grounded in the actual codebase is a guess.
@@ -132,9 +132,9 @@ prompt: |
   - **design-spec** — produce a technical design spec for a feature (components, interfaces, data flow,
     trade-offs, optional stubs) — the design the coder implements from. Saved to knowledge-base.
   - **evaluate-approach** — compare 2–3 candidate approaches with explicit trade-offs and a
-    recommendation. Saved to knowledge-base; often feeds an `adr`.
-  - **adr** — record an architecture decision (context, decision, options weighed, consequences) as a
-    decision record under `ai-agents/knowledge-base/decisions/`. Use once a decision is settled.
+    recommendation. Saved to knowledge-base; often feeds the `record-decision` skill.
+  - **record-decision** — record a settled architecture decision (context, decision, options weighed,
+    consequences) as an ADR under `ai-agents/knowledge-base/decisions/`. Use once a decision is settled.
 
   ## Behavioral rules
   - **Evidence first, cited.** Ground every claim in a `path:line` reference or an explicit owner

@@ -1,6 +1,6 @@
 ---
 name: stateful-review
-description: The reviewer's side of a stateful, loop-resistant review. Runs two independent reviewers on the diff (native Claude-side pass plus a Codex second opinion via shell), dedupes their findings against the shared review ledger so settled tradeoffs aren't re-litigated, verifies each against the code, and writes the Reviewer findings section of the shared two-party document at ai-agents/reviews/<task-id>.md that fkit-coder's process-stateful-review reads. REVIEW-ONLY — writes documents, never source code. Use when a review is tracked in that shared file.
+description: The reviewer's side of a stateful, loop-resistant review. Runs two independent reviewers on the diff (native Claude-side pass plus a Codex second opinion from the adversarial-reviewer sidekick), dedupes their findings against the shared review ledger so settled tradeoffs aren't re-litigated, verifies each against the code, and writes the Reviewer findings section of the shared two-party document at ai-agents/reviews/<task-id>.md that fkit-coder's process-stateful-review reads. REVIEW-ONLY — writes documents, never source code. Use when a review is tracked in that shared file.
 ---
 
 # Stateful Review (reviewer side)
@@ -76,17 +76,18 @@ Status: in-review | closed-out
 Same as the `review` skill's Step 1:
 - **A) Claude-side (native):** your own thorough pass over the diff/scope — read the changed code and
   enough surrounding context to trace the full flow.
-- **B) Codex-side (via shell, best-effort):** an independent second opinion, read-only, e.g.
-  `codex exec --sandbox read-only "Adversarially review the current diff (<scope>). Findings only:
-  file:line, problem, severity. Modify nothing."` — expect several minutes; capture verbatim findings.
+- **B) Adversarial second opinion (delegate to your sidekick, best-effort):** call your
+  **adversarial-reviewer** tool — the fkit-adversarial-reviewer sub-agent (an independent Codex-based
+  reviewer) — on the same scope; it returns findings only (`file:line`, problem, severity) and never
+  edits. Expect several minutes; capture its findings.
 
 **Priming (best-effort):** include the *Accepted residuals* as context to each reviewer ("these
 tradeoffs are already settled — don't re-raise unless `<re-raise condition>`"). Reviewers may ignore
 it; the Step 2 output-side dedup is the real guarantee.
 
-**Graceful degradation (mandatory):** if Codex is unavailable/unauthed/errors, record "Codex reviewer
-unavailable: `<reason>`" and continue Claude-only — flag the partial coverage loudly and carry it into
-the verdict line. Never present a one-reviewer run as complete.
+**Graceful degradation (mandatory):** if the adversarial-reviewer sidekick is unavailable/unauthed/errors,
+record "Codex reviewer unavailable: `<reason>`" and continue Claude-only — flag the partial coverage
+loudly and carry it into the verdict line. Never present a one-reviewer run as complete.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: review
-description: A one-shot, loop-agnostic code review. Runs two independent reviewers on the diff (a native Claude-side pass plus a Codex second opinion via shell), dedupes their findings, verifies each against the actual code, classifies defect vs frontier-move, and produces a report that leads with a one-line decision verdict. Ephemeral and REVIEW-ONLY — writes no persistent file and never edits code. Use for a quick second opinion on a diff.
+description: A one-shot, loop-agnostic code review. Runs two independent reviewers on the diff (a native Claude-side pass plus a Codex second opinion from the adversarial-reviewer sidekick), dedupes their findings, verifies each against the actual code, classifies defect vs frontier-move, and produces a report that leads with a one-line decision verdict. Ephemeral and REVIEW-ONLY — writes no persistent file and never edits code. Use for a quick second opinion on a diff.
 ---
 
 # Review (ephemeral)
@@ -28,18 +28,15 @@ changed code *and enough surrounding context to understand the full flow*. Produ
 each with a location (`file:line`), a claim, a recommended change, and your severity. This is the
 default, always-available reviewer.
 
-**B) Codex-side adversarial review (via shell, best-effort).** Get an independent second opinion by
-running Codex non-interactively, read-only, over the same scope — e.g.:
+**B) Adversarial second opinion (delegate to your sidekick, best-effort).** Call your
+**adversarial-reviewer** tool — the fkit-adversarial-reviewer sub-agent, an independent Codex-based
+reviewer — on the same scope. Pass it the diff/scope (and any focus area). It returns findings only
+(`file:line`, the problem, and severity) and never edits anything. Expect it to take **several
+minutes** on a non-trivial diff. Capture its findings.
 
-```bash
-codex exec --sandbox read-only "Adversarially review the current diff (<scope>). Return findings only: file:line, the problem, and severity. Do not modify anything."
-```
-
-Adapt the exact invocation to whatever Codex tooling your environment provides. Expect it to take
-**several minutes** on a non-trivial diff. Capture its verbatim findings.
-
-**Graceful degradation (mandatory):** if the Codex call is missing, unauthenticated, or errors, do
-**not** fail the review. Record "Codex reviewer unavailable: `<reason>`" and continue Claude-only — but
+**Graceful degradation (mandatory):** if the adversarial-reviewer sidekick is unavailable,
+unauthenticated, or errors, do **not** fail the review. Record "Codex reviewer unavailable:
+`<reason>`" and continue Claude-only — but
 flag the partial coverage **loudly**, and let it drive the verdict line (Step 4). Never present a
 one-reviewer run as a full review.
 

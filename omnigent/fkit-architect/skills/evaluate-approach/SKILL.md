@@ -1,6 +1,6 @@
 ---
 name: evaluate-approach
-description: Compare 2–3 candidate technical approaches for a problem with explicit trade-offs and a clear recommendation, grounded in the existing codebase and the owner's priorities. A decision aid that often feeds an adr. Saved to ai-agents/knowledge-base/ — never the wiki. Makes no commits and writes no implementation.
+description: Compare 2–3 candidate technical approaches for a problem with explicit trade-offs and a clear recommendation, grounded in the existing codebase and the owner's priorities. A decision aid that often feeds the record-decision skill. Saved to ai-agents/knowledge-base/ — never the wiki. Makes no commits and writes no implementation.
 ---
 
 # Evaluate Approach
@@ -13,7 +13,7 @@ candidate approaches).
 
 > **Boundaries.** Output goes to `ai-agents/knowledge-base/` — **never the wiki**. This is analysis, not
 > implementation: you write no code and change nothing under review. A settled decision should then be
-> recorded via the `adr` skill.
+> recorded via the `record-decision` skill.
 
 ## Step 1 — Frame the problem and gather constraints
 
@@ -52,5 +52,5 @@ For each candidate, cover:
 Write the evaluation to `ai-agents/knowledge-base/eval-<topic-slug>.md` (for a quick, throwaway
 comparison you may present it inline and skip the file — ask if unsure). Summarize the recommendation
 and the main tradeoff. **Make no commits.** If the decision is now settled, recommend recording it with
-the **adr** skill; if it belongs in the wiki, note that **fkit-wiki** should ingest it — you do not
+the **record-decision** skill; if it belongs in the wiki, note that **fkit-wiki** should ingest it — you do not
 write the wiki.

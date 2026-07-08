@@ -41,7 +41,7 @@ Save to `ai-agents/knowledge-base/design-<feature-slug>.md`. Adapt these section
 - **Data & state** — new/changed data models, where state lives, migration concerns.
 - **Control & data flow** — the main flow(s) end to end, including error/edge paths.
 - **Alternatives considered** — brief: what else was weighed and why this was chosen (if the decision
-  is significant, recommend recording it via the `adr` skill).
+  is significant, recommend recording it via the `record-decision` skill).
 - **Impact & risks** — blast radius, backward-compat, performance, security, technical debt.
 - **Testing strategy** — how the implementer should prove it works; key cases and harness caveats.
 - **Open questions** — anything unresolved, flagged rather than guessed.

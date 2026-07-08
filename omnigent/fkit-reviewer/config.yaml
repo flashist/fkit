@@ -3,7 +3,8 @@
 # Ported from the fkit `reviewer` role (roles.reviewer in ai-agents/ai-agents.yml — model: both,
 # entry_skill: stateful-review) and its two review skills. An independent, adversarial-minded
 # reviewer: it gets two perspectives on a diff (a native Claude-side pass + a Codex second opinion
-# via shell), verifies every finding against the actual code, classifies defect vs frontier-move,
+# from the fkit-adversarial-reviewer sidekick), verifies every finding against the actual code,
+# classifies defect vs frontier-move,
 # and reports — but it is REVIEW-ONLY and never edits source code. Applying fixes is the coder's
 # job (see the fkit-coder agent).
 #
@@ -20,7 +21,8 @@
 #
 # NOTE (alpha): schema mirrors omnigent-ai/omnigent examples verbatim. `harness: claude-sdk` gives
 # the native Claude-side review; the fkit reviewer role is `both`, so the second (Codex) opinion is
-# obtained by shelling out — best-effort, with graceful degradation if Codex is unavailable. No
+# obtained by delegating to the fkit-adversarial-reviewer sidekick (a `type: agent` sub-agent tool) —
+# best-effort, with graceful degradation if the sidekick is unavailable. No
 # model is pinned. The blast_radius/gate_pushes guardrail backstops "never commit"; REVIEW-ONLY
 # (never edit source) is a behavioral hard rule enforced in the prompt + skills, not the sandbox.
 
@@ -38,7 +40,7 @@ executor:
     harness: claude-sdk
 
 # Filesystem + shell tools (sys_os_read / sys_os_write / sys_os_edit / sys_os_shell) so the
-# reviewer can read the codebase + diff, run git and a Codex review via shell, and write its
+# reviewer can read the codebase + diff, run git, delegate a Codex adversarial review to the sidekick, and write its
 # review documents (the consolidated report, the shared ledger under ai-agents/reviews/, an
 # optional handoff spec). It writes ONLY those documents — never the code under review.
 # Unsandboxed, in the caller's working directory.
@@ -82,6 +84,22 @@ tools:
     pass_history: false
     max_sessions: 1
 
+  # The adversarial-reviewer sidekick: an independent Codex-based reviewer this agent delegates to
+  # for a second, different-model perspective on a diff (findings-only; never edits). Replaces the
+  # old inline `codex exec` shell step in the review / stateful-review skills. Reviewer-only.
+  adversarial-reviewer:
+    type: agent
+    description: >-
+      Delegate an independent adversarial review to the fkit-adversarial-reviewer sidekick — a
+      different-model (Codex) reviewer that aggressively hunts for bugs, edge cases, security holes,
+      race conditions, regressions, and missing tests in the diff/scope you pass it. Returns findings
+      only (file:line, problem, severity); it never edits code. Call it for your second, independent
+      perspective, then dedupe/merge/verify its findings with your own Claude-side pass. If it's
+      unavailable, degrade gracefully and flag partial coverage.
+    config: ../fkit-adversarial-reviewer/config.yaml
+    pass_history: false
+    max_sessions: 1
+
 prompt: |
   You are the **fkit-reviewer** — an independent, adversarial-minded code reviewer for this project.
   Hold this role for the entire session. Your entire output is **evaluation and documents**: you find
@@ -91,9 +109,10 @@ prompt: |
   ## Role
   Review a diff from **two independent perspectives** and give an evidence-backed verdict:
   - a **Claude-side** pass — your own thorough review (you are a capable reviewing agent), and
-  - a **Codex-side** adversarial second opinion, obtained by running Codex non-interactively via the
-    shell (read-only). If Codex is unavailable, degrade gracefully to a Claude-only review and flag
-    the partial coverage loudly — never present a one-reviewer run as a full review.
+  - a **Codex-side** adversarial second opinion from your **adversarial-reviewer** sidekick (the
+    fkit-adversarial-reviewer sub-agent — a Codex-based reviewer you call as a tool). If the sidekick
+    is unavailable, degrade gracefully to a Claude-only review and flag the partial coverage loudly —
+    never present a one-reviewer run as a full review.
 
   You then **dedupe** the two reviewers' findings, **verify each against the actual code** (reviewers
   can be wrong — missing context, misreading the diff, symptom-not-root-cause), classify **defect vs
