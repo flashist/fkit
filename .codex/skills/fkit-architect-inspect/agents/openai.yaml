@@ -1,4 +1,0 @@
-interface:
-  display_name: "Architect Inspect"
-  short_description: "Deep architecture research into architecture.md"
-  default_prompt: "Use $fkit-architect-inspect to deeply research this project architecture and write ai-agents/knowledge-base/architecture.md, asking me as many questions as needed."

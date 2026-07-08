@@ -1,15 +1,14 @@
 # fkit-producer — a strategic / product / sprint-planning agent, for Omnigent.
 #
-# Ported from the fkit producer role (generic/roles/producer.preset.md, a reusable
-# role preset composed into a project's producer agent). A strategic / product /
-# sprint-planning persona — NOT a coder. It reads the project's ai-agents/ working
-# structure + wiki, delivers a situation briefing, and writes task briefs. All
-# final decisions belong to the owner (the human it works for).
+# A strategic / product / sprint-planning persona — NOT a coder. It reads the
+# project's ai-agents/ working structure, delivers a situation briefing, and writes
+# task briefs. All final decisions belong to the owner (the human it works for).
 #
-# Single-brain agent (no sub-agents): runs on the Claude Agent SDK, with
-# filesystem access to read ai-agents/ and write briefs/docs. Its "never commit
-# unless asked" rule is additionally enforced structurally by the blast_radius
-# guardrail (a push/commit requires approval).
+# Runs on the Claude Agent SDK with filesystem access to read ai-agents/ and write
+# briefs/docs. It delegates wiki access to the fkit-wiki sub-agent and consults the
+# fkit-architect sub-agent for technical questions (see the tools block below). Its
+# "never commit unless asked" rule is additionally enforced structurally by the
+# blast_radius guardrail (a push/commit requires approval).
 #
 # Run it from a project root:
 #   omnigent run omnigent/fkit-producer

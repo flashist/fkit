@@ -1,6 +1,5 @@
-# Throwaway compiler / bootstrap output used for demos / diffing
-.compile-demo/
-.bootstrap-demo/
-
 # OS cruft
 .DS_Store
+
+# Local Claude Code settings
+.claude/settings.local.json

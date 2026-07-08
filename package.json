@@ -1,31 +1,7 @@
 {
   "name": "fkit",
   "version": "0.1.18",
-  "description": "Agents and skills for Omnigent (primary runtime), plus a legacy standalone two-model (Claude + Codex) kit: the ai-agents/ working structure, single-sourced skills, and per-skill model routing.",
-  "type": "module",
-  "bin": {
-    "fkit": "./bin/fkit.mjs"
-  },
-  "scripts": {
-    "test": "node --test tests/*.test.mjs",
-    "release": "node bin/release.mjs",
-    "release:minor": "node bin/release.mjs --minor",
-    "release:major": "node bin/release.mjs --major",
-    "release:dry": "node bin/release.mjs --dry-run"
-  },
-  "files": [
-    "bin/",
-    "generic/",
-    "skills/",
-    "manifest/",
-    "examples/",
-    "VERSION",
-    "LICENSE",
-    "README.md"
-  ],
-  "engines": {
-    "node": ">=18"
-  },
+  "description": "An Omnigent agent team for software projects: producer, coder, reviewer, architect, adversarial-reviewer, and wiki agents with per-agent scoped skills, plus a project scaffold.",
   "license": "MIT",
   "author": "flashist",
   "repository": {
@@ -34,11 +10,12 @@
   },
   "homepage": "https://github.com/flashist/fkit#readme",
   "keywords": [
+    "omnigent",
     "claude",
     "claude-code",
     "codex",
     "ai-agents",
-    "skills",
-    "agent-workflow"
+    "agents",
+    "skills"
   ]
 }

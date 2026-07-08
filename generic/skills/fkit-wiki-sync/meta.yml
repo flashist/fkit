@@ -1,7 +1,0 @@
-# Per-CLI packaging for the `fkit-wiki-sync` skill (owned by Codex by default; see ai-agents/config.json).
-
-codex:
-  interface:
-    display_name: "Wiki Sync"
-    short_description: "Sync the {{project_slug}} wiki from ai-agents/ changes"
-    default_prompt: "Run the fkit-wiki-sync skill: detect what changed in non-wiki ai-agents/ sources since the last sync and ingest the delta into {{wiki_path}}/."

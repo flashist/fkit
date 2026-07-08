@@ -1,7 +1,0 @@
-{
-  "name": "fkit",
-  "description": "Two-model (Claude + Codex) agent workflow kit — installs the `fkit` skill, which sets up the current project on first run and re-syncs it to the latest kit afterwards. It runs the kit's machinery via `npx github:flashist/fkit`, so no local clone is needed.",
-  "version": "0.1.0",
-  "author": { "name": "flashist" },
-  "homepage": "https://github.com/flashist/fkit"
-}

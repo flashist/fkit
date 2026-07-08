@@ -1,4 +1,0 @@
-interface:
-  display_name: "Wiki Ingest"
-  short_description: "Ingest sources into the nimbus wiki"
-  default_prompt: "Run the fkit-wiki-ingest skill: ingest the following source(s) into ai-agents/wiki-vault/: "

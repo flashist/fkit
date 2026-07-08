@@ -1,10 +1,8 @@
 # fkit on Omnigent — the agent team
 
-This directory is **fkit's primary form: a team of agents and skills built for
-[Omnigent](https://omnigent.ai)** (Databricks' open-source agent meta-harness). Omnigent is the
-**main dependency** — these agents are authored to run on it, and new fkit work targets it. The
-standalone two-model (Claude + Codex) kit in the repo root still runs on its own, but it is now
-legacy; this is where active development happens.
+This directory **is** fkit: a team of agents and skills built for
+[Omnigent](https://omnigent.ai) (Databricks' open-source agent meta-harness). Omnigent is the
+runtime these agents run on — fkit is authored for it.
 
 Each agent is an Omnigent **bundle directory** (`<agent>/config.yaml` + a per-agent `skills/` dir).
 Skills are auto-discovered and **scoped to their agent** — they exist in a session only while that
@@ -49,14 +47,24 @@ omnigent run omnigent/fkit-adversarial-reviewer -p "adversarially review the cur
 Agents use `os_env: caller_process, cwd: .`, so run them from the project root you want them to operate
 on.
 
+## Scaffold — standing up a new project
+
+[`scaffold/`](./scaffold/) is a starter the agents operate on: an empty `ai-agents/` working
+structure (`wiki-vault/` incl. the wiki `schema.md` the fkit-wiki agent reads at runtime, plus
+`knowledge-base/`, `tasks/`, `sprints/`, `reviews/`) and fill-in `CLAUDE.md` / `AGENTS.md` /
+`ai-agents/knowledge-base/PROJECT.md`. To set up a fresh project, copy `scaffold/ai-agents/` and the
+two context files into its root, then fill in the placeholders. A project that already has an
+`ai-agents/` tree + context files needs nothing from here.
+
 ## Shared, cross-agent rules
 
 Rules that apply to *all* agents (e.g. "never commit unless asked", secrets hygiene) belong in the
 project-root **`CLAUDE.md`** (read by the claude-sdk agents) and **`AGENTS.md`** (read by the codex
-agents) — the harness injects them automatically alongside each agent's own prompt (verified). fkit
-generates both files from one template, so such rules are authored once. Omnigent has **no** native
-"shared config across agents" mechanism (no `extends`/`base`; `instructions:` *replaces* the prompt),
-so CLAUDE.md/AGENTS.md is the DRY home for shared instructions.
+agents) — the harness injects them automatically alongside each agent's own prompt (verified). Starter
+versions of both ship in [`scaffold/`](./scaffold/) (see above); copy them to your project root and
+edit. Omnigent has **no** native "shared config across agents" mechanism (no `extends`/`base`;
+`instructions:` *replaces* the prompt), so CLAUDE.md/AGENTS.md is the DRY home for shared instructions —
+keep the two in sync by hand.
 
 ## Status & caveats (alpha)
 

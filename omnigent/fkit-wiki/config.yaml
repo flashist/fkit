@@ -1,8 +1,6 @@
 # fkit-wiki — a wiki-maintenance agent, for Omnigent.
 #
-# Ported from the fkit wiki skills (generic/skills/fkit-wiki-{query,ingest,lint,sync}/).
-# In fkit those maintenance skills are Codex-owned — the model-routing table maps
-# `wiki → Codex` (see CLAUDE.md). A single-brain librarian agent whose whole job is the
+# A single-brain librarian agent whose whole job is the
 # project's structured wiki at ai-agents/wiki-vault/: answering questions from it,
 # ingesting sources into it, linting it, and syncing it against changed ai-agents/
 # sources. It reads and writes wiki files but NEVER commits.
