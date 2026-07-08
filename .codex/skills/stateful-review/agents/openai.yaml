@@ -1,0 +1,4 @@
+interface:
+  display_name: "stateful-review"
+  short_description: ""
+  default_prompt: ""

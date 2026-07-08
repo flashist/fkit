@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wiki Lint"
+  short_description: "Health-check the nimbus wiki and fix issues"
+  default_prompt: "Run the fkit-wiki-lint skill: health-check ai-agents/wiki-vault/ and fix any structural, content, or cross-reference issues found."

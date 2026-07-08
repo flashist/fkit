@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Task"
+  short_description: "Plan a task from a file before coding"
+  default_prompt: "Use $plan-task to read a task file and produce an implementation plan before coding."

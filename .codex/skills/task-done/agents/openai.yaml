@@ -1,0 +1,4 @@
+interface:
+  display_name: "task-done"
+  short_description: ""
+  default_prompt: ""

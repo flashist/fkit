@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wiki Query"
+  short_description: "Answer a question using the nimbus wiki"
+  default_prompt: "Run the fkit-wiki-query skill: answer the following question using ai-agents/wiki-vault/: "

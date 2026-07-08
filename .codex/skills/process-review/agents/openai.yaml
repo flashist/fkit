@@ -1,0 +1,4 @@
+interface:
+  display_name: "Process Review"
+  short_description: "Evaluate external PR review feedback"
+  default_prompt: "Use $process-review to evaluate this external PR review before making changes."

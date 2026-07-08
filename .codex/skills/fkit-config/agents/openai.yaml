@@ -1,0 +1,4 @@
+interface:
+  display_name: "fkit Config"
+  short_description: "Browse/edit fkit model routing config"
+  default_prompt: "Use $fkit-config to review or change which model owns a fkit skill, or the project's default model."
