@@ -1,5 +1,5 @@
 ---
-name: fkit-wiki-lint
+name: lint
 description: Health-check the project wiki at ai-agents/wiki-vault/ and fix issues found. Use when asked to lint, validate, or health-check the wiki.
 ---
 

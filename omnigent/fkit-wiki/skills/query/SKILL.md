@@ -1,5 +1,5 @@
 ---
-name: fkit-wiki-query
+name: query
 description: Answer a question about the project using the wiki at ai-agents/wiki-vault/. Use when asked to look something up in the wiki, find information about a feature or system, or answer a project question. Read-only — never creates or edits wiki pages.
 ---
 
@@ -18,6 +18,6 @@ Answer a question about the project using the wiki at `ai-agents/wiki-vault/`.
 5. Compose a clear, cited answer:
    - Reference wiki pages as `[[wiki/path]]`
    - Reference source files as `src/...`
-6. If the wiki is missing information needed to answer well, note the gap explicitly and suggest running the **fkit-wiki-ingest** skill on the relevant source.
+6. If the wiki is missing information needed to answer well, note the gap explicitly and suggest running the **ingest** skill on the relevant source.
 
-> **Read-only**: Do not create wiki pages, update `index.md`, or append to `log.md` during a query. If the answer reveals something worth persisting, tell the owner and suggest running **fkit-wiki-ingest** explicitly.
+> **Read-only**: Do not create wiki pages, update `index.md`, or append to `log.md` during a query. If the answer reveals something worth persisting, tell the owner and suggest running **ingest** explicitly.

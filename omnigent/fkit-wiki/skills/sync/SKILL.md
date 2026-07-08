@@ -1,5 +1,5 @@
 ---
-name: fkit-wiki-sync
+name: sync
 description: Sync the project wiki at ai-agents/wiki-vault/ by detecting what changed in non-wiki ai-agents/ sources since the last ingest and ingesting only the delta. Use when asked to sync or update the wiki. Optional argument: a date (YYYY-MM-DD) to override the auto-detected since-date, or 'force' to re-ingest all non-wiki ai-agents sources.
 ---
 
