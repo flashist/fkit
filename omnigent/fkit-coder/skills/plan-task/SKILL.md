@@ -19,10 +19,10 @@ step-by-step plan for approval before implementation begins.
 1. **Declare planning-only.** State clearly, up front, that this run is planning-only — no code will
    be written yet, and no files will be edited until the plan is approved.
 2. Read the task file at `$ARGUMENTS`.
-3. **Gather wiki context.** If a wiki exists at `ai-agents/wiki-vault/`, ground yourself in it before
-   proceeding: read `ai-agents/wiki-vault/index.md`, identify the pages relevant to this task, read
-   them, and follow any `[[wikilinks]]` up to 2 hops. Treat the wiki as ground truth for existing
-   decisions and constraints.
+3. **Gather wiki context — via fkit-wiki.** Do not read `ai-agents/wiki-vault/` directly. If the task
+   touches areas the wiki may cover, **delegate a lookup to the fkit-wiki agent** (it owns the `query`
+   skill): describe what you need and use its answer as ground truth for existing decisions and
+   constraints.
 4. Read any files referenced by the task, including specs, related tasks, and knowledge-base documents.
 5. Identify the implementation scope, constraints, dependencies, risks, and likely validation steps.
 6. Produce a concrete step-by-step plan.

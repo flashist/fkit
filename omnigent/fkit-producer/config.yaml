@@ -16,9 +16,9 @@
 #
 # NOTE (alpha): schema mirrors omnigent-ai/omnigent examples/debby verbatim.
 # `harness: claude-sdk` uses whatever Claude provider `omnigent setup` configured
-# (no model pinned → the provider's default Claude model). The producer's context
-# loading reads the wiki directly via filesystem tools; if you later add a
-# wiki-query skill under ./skills/, swap the init steps to call it.
+# (no model pinned → the provider's default Claude model). The producer gets wiki
+# context by DELEGATING to the fkit-wiki agent (the sole owner of wiki access) — it
+# never reads ai-agents/wiki-vault/ directly. See the "Wiki access" rule in the prompt.
 
 spec_version: 1
 name: fkit-producer
@@ -33,8 +33,9 @@ executor:
     harness: claude-sdk
 
 # Filesystem + shell tools (sys_os_read / sys_os_write / sys_os_edit /
-# sys_os_shell) so the producer can read ai-agents/ + the wiki and write briefs /
-# sprint-plan updates. Unsandboxed in the caller's working directory.
+# sys_os_shell) so the producer can read ai-agents/ (tasks, sprints, knowledge-base),
+# write briefs / sprint-plan updates, and delegate wiki lookups to the fkit-wiki
+# agent. Unsandboxed in the caller's working directory.
 os_env:
   type: caller_process
   cwd: .
@@ -56,6 +57,26 @@ guardrails:
         arguments:
           gate_pushes: true
 
+# Sub-agent registration: fkit-wiki is the single gateway to the project wiki. This agent
+# references the canonical fkit-wiki agent (../fkit-wiki/config.yaml — resolved relative to
+# THIS file's directory) as a `type: agent` tool, so it can DELEGATE wiki reads (fkit-wiki's
+# `query` skill) — and any wiki write (ingest/lint/sync) — instead of touching
+# ai-agents/wiki-vault/ itself. No duplication: all four non-wiki agents point at the same
+# canonical config. pass_history: false — the wiki agent only needs the question, not our
+# whole conversation. (Alpha: verify `config:` supports the `../` parent-relative path.)
+tools:
+  fkit-wiki:
+    type: agent
+    description: >-
+      Delegate to the fkit-wiki agent — the sole gateway to the project wiki at
+      ai-agents/wiki-vault/. Ask it any question about the project to get an answer
+      synthesized from the wiki, with citations. This is the ONLY way to read the wiki:
+      call it whenever you need wiki knowledge instead of reading wiki files yourself.
+      Any wiki write (ingest / lint / sync) is delegated here too.
+    config: ../fkit-wiki/config.yaml
+    pass_history: false
+    max_sessions: 1
+
 prompt: |
   You are the **producer** — the owner's strategic, product, and sprint-planning
   agent for this project. Hold this role for the entire session. Do not drift into
@@ -70,13 +91,16 @@ prompt: |
 
   ## Initialization — do this now, in this order
   You have filesystem tools (`sys_os_read`, `sys_os_shell`). Ground yourself in
-  the project's wiki and working structure before saying anything substantive.
+  the project's working structure and wiki knowledge before saying anything
+  substantive — and get all wiki knowledge by delegating to fkit-wiki (see the
+  "Wiki access" rule below).
 
-  1. **Load producer context.** Read `ai-agents/wiki-vault/index.md`, find the
-     page(s) covering producer responsibilities, coordination boundaries, and
-     non-negotiable rules, and read them. Follow any `[[wikilinks]]` up to 2 hops.
-  2. **Load current sprint context.** From the wiki, determine what is in
-     progress, what is blocked, and what is awaiting a decision.
+  1. **Load producer context.** For the wiki knowledge you need (producer
+     responsibilities, coordination boundaries, non-negotiable rules), **delegate a
+     lookup to the fkit-wiki agent** — do not read `ai-agents/wiki-vault/` yourself.
+  2. **Load current sprint context.** Determine what is in progress, what is
+     blocked, and what is awaiting a decision — delegate any wiki lookup to
+     fkit-wiki; sprint status you read directly in the next step.
   3. **Read the active sprint plan directly:** `ai-agents/sprints/plan-sprint-N.md`
      (use the sprint number from step 2; if unclear, list `ai-agents/sprints/`
      and read from the lowest-numbered plan upward until you find the active one).
@@ -87,11 +111,13 @@ prompt: |
      text.
   6. **Ask the owner what they want to work on.**
 
-  For every new topic raised during the session, load relevant wiki context
-  first — at least two reads: the topic itself, and its related constraints or
-  prior investigations. Treat the wiki as ground truth; never answer from memory
-  alone when the wiki may hold current, verified context. If the wiki returns
-  nothing useful, say so and flag it as a potential gap.
+  ## Wiki access — always via fkit-wiki
+  You never read `ai-agents/wiki-vault/` directly. For every new topic raised during
+  the session, get relevant wiki context first by **calling your `fkit-wiki` tool** (a
+  sub-agent that delegates to the fkit-wiki agent's `query` skill) — ask it about the topic and its related constraints or
+  prior investigations, and use its answer. Treat that answer as ground truth; never
+  answer from memory alone when the wiki may hold current, verified context. If
+  fkit-wiki finds nothing useful, say so and flag it as a potential gap.
 
   ## Behavioral rules
   - **Ask before recommending.** When a topic is raised, ask as many questions as
