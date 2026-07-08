@@ -1,70 +1,82 @@
 # Reviews
 
-Per-task review ledgers. One file per task under review, named after the task ID
-(e.g. `my-task.md` for `ai-agents/tasks/.../my-task-*.md`).
+Per-task **review ledgers** — one shared file per task under review, at
+`ai-agents/reviews/<task-id>.md`. The file is a **two-party document**: the reviewer
+(`fkit-reviewer`) and the coder (`fkit-coder`) each own a section and round-trip in place.
 
 ## Why this exists
 
-External reviewers (Codex, GitHub, CI) are **stateless** — each pass re-examines the
-current code with no memory of which tradeoffs were already weighed and deliberately
-accepted. That causes review *loops*: a fix for finding N introduces the cost that
-finding N+2 then flags, and round after round just relocates a cost around an
-unavoidable tradeoff (a Pareto frontier) instead of fixing a defect.
+External reviewers (Codex, GitHub, CI) are **stateless** — each pass re-examines the current code
+with no memory of which tradeoffs were already weighed and deliberately accepted. That causes review
+*loops*: a fix for finding N introduces the cost that finding N+2 then flags, and round after round
+just relocates a cost around an unavoidable tradeoff (a Pareto frontier) instead of fixing a defect.
 
-A review ledger gives every round — and every reviewer — the decision state, so
-settled tradeoffs are not re-litigated.
+The ledger gives every round — and every reviewer — the decision state, so settled tradeoffs are not
+re-litigated. `fkit-reviewer`'s `stateful-review` writes the findings; `fkit-coder`'s
+`process-stateful-review` writes the verdicts/actions; the shared *Accepted residuals* are the
+loop-prevention memory both read first.
 
-## How it's used
+## The task-id — one rule, both agents (or the ledger forks)
 
-- `process-review` **loads** the task's ledger at the start, **checks** each new
-  finding against the Accepted residuals, **flags re-litigation loudly** instead of
-  silently re-fixing, and **appends** its verdicts + decisions at the end.
-- When handing a diff to an external reviewer, **point them at this file** so they
-  start from the decision state instead of re-deriving it blind.
+Both agents MUST derive `<task-id>` the same way; if they don't, they write to two different files and
+the loop-prevention memory splits. Canonical rule:
+
+1. Explicit task-id in the invocation → use it verbatim.
+2. Else the task file's **basename without extension** (`ai-agents/tasks/**/<task-id>.md` → `<task-id>`).
+3. Else the current **git branch name**, slugified.
+4. If none resolves unambiguously → **stop and ask the owner.** Never invent one.
+
+The ledger is created only once the id is resolved by 1–3 or confirmed by the owner — never
+auto-created from a guess.
 
 ## Classifying a finding (before acting)
 
 - **Defect** — wrong behavior or a real regression → fix it, in any round.
-- **Frontier-move** — the current point on an unavoidable tradeoff has a downside →
-  it's a *decision*, made once, not a re-fix. Tell-tale: if "fixing" finding N would
-  recreate a condition a prior finding flagged, it's oscillation, not progress.
+- **Frontier-move** — the current point on an unavoidable tradeoff has a downside → it's a *decision*,
+  made once, not a re-fix. Tell-tale: if "fixing" finding N would recreate a condition a prior finding
+  flagged, it's oscillation, not progress.
 
-A round budget (e.g. "max 2 rounds") is a proxy, not the rule. Act on genuine new
-defects in any round; stop when findings re-raise accepted residuals.
+A round budget (e.g. "max 2 rounds") is a proxy, not the rule. Act on genuine new defects in any
+round; stop when findings re-raise accepted residuals.
 
 ## File structure
 
-Each `<task-id>.md` has three sections:
+Each `<task-id>.md` has three sections with **explicit ownership**:
 
-1. **Accepted residuals (do-not-re-litigate)** — tradeoffs weighed and deliberately
-   accepted. Each entry states **What** (the chosen behavior), **Why (structural)**
-   (the reason, and which alternatives were rejected), and **Re-raise only if** (the
-   new condition that would justify reopening it). A finding matching an accepted
-   residual is **closeout**, not a new defect — unless its "Re-raise only if" is met.
-2. **Decision log** — chronological, one row per round: finding → verdict → action,
-   **including reversals and why**. Makes oscillation visible at a glance.
-3. **Open / actionable** — genuine defects still to fix. Empty = nothing blocking.
+1. **Reviewer findings** — *reviewer-owned*. One row per finding: id (`R1`, `R2`, …), round, severity,
+   `file:line`, claim. The coder reads these and never edits them.
+2. **Coder response** — *coder-owned*. One row per finding (same id): verdict, defect/frontier, action,
+   status. The reviewer reads these for context and never writes them.
+3. **Accepted residuals (shared, do-not-re-litigate)** — either party may add (with owner approval).
+   Each entry: **What** (chosen behavior), **Why (structural)** (reason + rejected alternatives),
+   **Re-raise only if** (the condition that reopens it). A finding matching an accepted residual is
+   **closeout**, not a new defect — unless its "Re-raise only if" is met.
+
+Settled **ADRs** under `ai-agents/knowledge-base/decisions/` are a second source of do-not-re-litigate
+decisions: both agents treat an ADR's "Re-raise only if" exactly like an accepted residual.
 
 ## Template
 
 ```
-# Review ledger — <task-id>
+# Review — <task-id>
 
 Task: <path to task file>
 File(s) under review: <paths>
-Status: <in-review | closed-out>
+Status: in-review | closed-out
 
-## Accepted residuals (do-not-re-litigate)
+## Reviewer findings        ← reviewer-owned
+| #  | Round | Sev  | file:line | Claim |
+|----|-------|------|-----------|-------|
+| R1 | 1     | high | a.ts:12   | …     |
 
-- **<short name>** — What: … Why (structural): … Re-raise only if: …
+## Coder response           ← coder-owned
+| #  | Verdict | Defect / Frontier | Action | Status |
+|----|---------|-------------------|--------|--------|
+| R1 | CORRECT | Defect            | fix X  | ✅ done |
 
-## Decision log
-
-| Round | Finding | Verdict | Action |
-|-------|---------|---------|--------|
-| 1 | … | CORRECT / PARTIALLY CORRECT / INCORRECT / INCOMPLETE | … |
-
-## Open / actionable
-
-- (none)
+## Accepted residuals (shared, do-not-re-litigate)
+- <short name> — What: <chosen behavior> · Why (structural): <reason + rejected alternatives> · Re-raise only if: <condition>
 ```
+
+Coder-response Status vocabulary: `pending approval` · `✅ done` · `won't fix (frontier)` ·
+`disproven` · `closeout (re-litigation)` · `blocked`.

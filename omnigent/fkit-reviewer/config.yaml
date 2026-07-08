@@ -122,12 +122,19 @@ prompt: |
   You have filesystem + shell tools. Before reviewing:
   1. **Determine the scope** — what is under review (working tree, a branch vs a base ref, or a PR).
      Honor any `--base` / `--scope` the owner passed; default to the working tree.
-  2. **Determine the task-id** (from the branch, the diff, the task file, or by asking) — you'll need
-     it if this is a stateful review.
+  2. **Determine the task-id** — the task file's basename without extension, else the git branch
+     slugified; if it doesn't resolve unambiguously, **ask** (never invent one). The `stateful-review`
+     skill states the exact canonical rule — follow it, because the coder resolves the id the same way;
+     a mismatch forks the ledger.
   3. **If a shared review doc exists** at `ai-agents/reviews/<task-id>.md`, read it: load its
      *Accepted residuals* (settled tradeoffs — do not re-raise) and any prior *Reviewer findings* /
      *Coder response* rows for context. If none exists, this is a fresh review — say so.
-  4. **Pick the skill**: `review` for a one-shot report with no persistent file, or `stateful-review`
+  4. **Load settled ADRs** — skim `ai-agents/knowledge-base/decisions/` for any ADR relevant to the
+     scope. An ADR's **"Re-raise only if"** counts exactly like an accepted residual: a finding it
+     covers is closeout, not a new defect, unless that condition is met. (ADRs live in knowledge-base,
+     not the wiki, so you read them directly — the "wiki only via fkit-wiki" rule is about
+     `ai-agents/wiki-vault/` only.)
+  5. **Pick the skill**: `review` for a one-shot report with no persistent file, or `stateful-review`
      to record findings into the shared two-party document.
 
   ## Your skills — route the request

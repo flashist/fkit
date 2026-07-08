@@ -18,9 +18,19 @@ review start from the decision state instead of re-deriving it blind, round afte
 > residuals** it writes to the ledger, and an **optional handoff spec**. Applying a fix is a separate,
 > coder-initiated step (the fkit-coder agent) — never a consequence of running this skill.
 
-**Argument:** `$ARGUMENTS` — optional. May include the **task-id** (else infer from the branch, diff,
-or task file) and scope flags `--base <ref>`, `--scope <auto|working-tree|branch>`. Default: working
-tree / `auto`.
+**Argument:** `$ARGUMENTS` — optional. May include the **task-id** (resolved by the canonical rule
+below) and scope flags `--base <ref>`, `--scope <auto|working-tree|branch>`. Default: working tree /
+`auto`.
+
+**Task-id — resolve it the same way every time (the reviewer and coder MUST agree, or the ledger
+forks and the loop-prevention memory is silently defeated):**
+1. Explicit `$ARGUMENTS` task-id → use it verbatim.
+2. Else the task file's **basename without extension** (`ai-agents/tasks/**/<task-id>.md` → `<task-id>`).
+3. Else the current **git branch name**, slugified.
+4. If none of these resolves **unambiguously** → **STOP and ask the owner.** Never invent one.
+
+Create `ai-agents/reviews/<task-id>.md` only once the id is resolved by rule 1–3 or confirmed by the
+owner — never auto-create a ledger from a guessed id.
 
 ---
 
@@ -63,10 +73,16 @@ Status: in-review | closed-out
 
 ## Step 0 — Open (or create) the shared document
 
-- Resolve the **task-id** and the review **scope** (honor `--base` / `--scope`; default working tree).
-- Read `ai-agents/reviews/<task-id>.md`. **If it doesn't exist, create it** with the schema above (fill
-  the header; leave the tables ready). Load the **Accepted residuals** and any existing *Reviewer
-  findings* / *Coder response* rows into working memory.
+- Resolve the **task-id** by the canonical rule above (stop and ask if it doesn't resolve
+  unambiguously) and the review **scope** (honor `--base` / `--scope`; default working tree).
+- Read `ai-agents/reviews/<task-id>.md`. **If it doesn't exist — and only once the task-id is
+  resolved, not guessed — create it** with the schema above (fill the header; leave the tables ready).
+  Load the **Accepted residuals** and any existing *Reviewer findings* / *Coder response* rows into
+  working memory.
+- **Also load settled ADRs:** skim `ai-agents/knowledge-base/decisions/` for any ADR relevant to the
+  scope. An ADR's **"Re-raise only if"** counts exactly like an accepted residual (ADRs live in
+  knowledge-base, not the wiki, so you read them directly — the wiki-only-via-fkit-wiki rule is about
+  `ai-agents/wiki-vault/`).
 - The **Round** for this pass = (highest Round already in *Reviewer findings*) + 1, or `1` if fresh.
 
 ---
@@ -97,10 +113,10 @@ loudly and carry it into the verdict line. Never present a one-reviewer run as c
   the stronger articulation; mark "raised by both" (higher signal).
 - **Against prior rounds:** drop findings already recorded in *Reviewer findings* from an earlier round
   unless materially new.
-- **Against the ledger:** for each finding, check *Accepted residuals*. If it matches one whose
-  **"Re-raise only if"** condition is **not** met → move it to a visible **"Re-litigates settled
-  decisions (suppressed)"** list with a pointer to the residual. Do **not** drop it silently — show
-  what was suppressed and why.
+- **Against settled decisions:** for each finding, check *Accepted residuals* **and the ADRs loaded in
+  Step 0**. If it matches one whose **"Re-raise only if"** condition is **not** met → move it to a
+  visible **"Re-litigates settled decisions (suppressed)"** list with a pointer to the residual or ADR.
+  Do **not** drop it silently — show what was suppressed and why.
 - Output: the list of **novel** findings + the visible suppressed list.
 
 ---

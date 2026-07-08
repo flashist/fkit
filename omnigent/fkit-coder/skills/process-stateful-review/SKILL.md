@@ -13,8 +13,18 @@ lets a multi-round review start from the decision state instead of re-deriving i
 > For a one-shot review of pasted text with **no** persistent file, use **process-review**
 > instead. This skill's whole point is the shared file — it reads and writes it every run.
 
-**Argument:** `$ARGUMENTS` — optional. May include the **task-id** (else infer it from the branch, the
-diff, or the task file). The shared review doc lives at `ai-agents/reviews/<task-id>.md`.
+**Argument:** `$ARGUMENTS` — optional. May include the **task-id** (resolved by the canonical rule
+below). The shared review doc lives at `ai-agents/reviews/<task-id>.md`.
+
+**Task-id — resolve it the same way every time (the coder and reviewer MUST agree, or the ledger
+forks and the loop-prevention memory is silently defeated):**
+1. Explicit `$ARGUMENTS` task-id → use it verbatim.
+2. Else the task file's **basename without extension** (`ai-agents/tasks/**/<task-id>.md` → `<task-id>`).
+3. Else the current **git branch name**, slugified.
+4. If none of these resolves **unambiguously** → **STOP and ask the owner.** Never invent one.
+
+Create `ai-agents/reviews/<task-id>.md` only once the id is resolved by rule 1–3 or confirmed by the
+owner — never auto-create a ledger from a guessed id.
 
 ---
 
@@ -67,11 +77,16 @@ conclude gets recorded in the shared file so the next round doesn't re-derive it
 
 ## Step 0 — Open (or create) the shared document
 
-- Resolve the **task-id** (from `$ARGUMENTS`, the branch, or the task file; ask if genuinely unclear).
-- Read `ai-agents/reviews/<task-id>.md`. **If it doesn't exist, create it** with the schema above:
-  fill the header, seed *Reviewer findings* from whatever findings you were handed (or leave a note that
-  the reviewer will populate it), and leave *Coder response* / *Accepted residuals* ready to fill.
+- Resolve the **task-id** by the canonical rule above (stop and ask if it doesn't resolve
+  unambiguously — never auto-create a ledger from a guessed id).
+- Read `ai-agents/reviews/<task-id>.md`. **If it doesn't exist — and only once the task-id is
+  resolved — create it** with the schema above: fill the header, seed *Reviewer findings* from
+  whatever findings you were handed (or leave a note that the reviewer will populate it), and leave
+  *Coder response* / *Accepted residuals* ready to fill.
 - Load the **Accepted residuals** into working memory — these are settled; do not re-litigate them.
+- **Also load settled ADRs:** skim `ai-agents/knowledge-base/decisions/` for any ADR relevant to the
+  scope. Treat an ADR's **"Re-raise only if"** exactly like an accepted residual — a finding it covers
+  is closeout unless that condition is met.
 
 ---
 
@@ -86,15 +101,14 @@ If findings arrived as pasted text rather than already in the file, first append
 
 ---
 
-## Step 2 — Loop check against Accepted residuals (do this first, loudly)
+## Step 2 — Loop check against settled decisions (do this first, loudly)
 
-For each novel finding, check the *Accepted residuals*:
-- If it **matches** a residual whose **"Re-raise only if"** condition is **not** met → this is
-  **closeout, not a new defect.** Write a *Coder response* row with Verdict `closeout` /
-  Status `closeout (re-litigation)`, pointing at the residual by name. Say so **clearly and loudly** in
-  your reply. Do **not** re-fix it.
-- If the condition **is** met, or there's no matching residual → it's genuinely novel; continue to
-  Step 3.
+For each novel finding, check it against the *Accepted residuals* **and the ADRs you loaded in Step 0**:
+- If it **matches** a residual — or an ADR — whose **"Re-raise only if"** condition is **not** met →
+  this is **closeout, not a new defect.** Write a *Coder response* row with Verdict `closeout` /
+  Status `closeout (re-litigation)`, pointing at the residual or ADR by name. Say so **clearly and
+  loudly** in your reply. Do **not** re-fix it.
+- If the condition **is** met, or nothing settled matches → it's genuinely novel; continue to Step 3.
 
 ---
 

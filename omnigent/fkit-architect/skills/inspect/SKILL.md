@@ -51,9 +51,12 @@ Go past the surface: **trace the real call path** for each main flow rather than
 non-obvious decisions. Prefer reading the code over assuming; where the code cannot answer, note it
 for Step 2.
 
-For a large codebase you may **fan out read-only research sub-agents** (Omnigent sub-agents), one per
-subsystem, each gathering evidence only — they must **not** ask the owner anything. Keep every owner
-question in this main session and synthesize the sub-agents' findings yourself.
+For a large codebase, read broadly yourself. **If — and only if — your agent config declares read-only
+research sub-agents** (`type: agent` tools), you may delegate per-subsystem evidence-gathering to them,
+one per subsystem, each gathering evidence only and **never** asking the owner anything. This is an
+optional accelerant, not a required step, and it is unavailable unless such a tool is actually declared
+— do not assume it exists. Either way, keep every owner question in this main session and synthesize all
+findings yourself.
 
 ## Step 2 — Interview the owner to fill every gap
 
