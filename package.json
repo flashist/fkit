@@ -1,7 +1,7 @@
 {
   "name": "fkit",
   "version": "0.1.18",
-  "description": "A transferable, two-model (Claude + Codex) operating system for a software project: the ai-agents/ working structure, single-sourced skills, and project-level editable model routing.",
+  "description": "Agents and skills for Omnigent (primary runtime), plus a legacy standalone two-model (Claude + Codex) kit: the ai-agents/ working structure, single-sourced skills, and per-skill model routing.",
   "type": "module",
   "bin": {
     "fkit": "./bin/fkit.mjs"

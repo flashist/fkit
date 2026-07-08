@@ -56,6 +56,25 @@ guardrails:
         arguments:
           gate_pushes: true
 
+# Sub-agent registration: fkit-wiki is the single gateway to the project wiki and the single source of
+# truth for anything about the project. Like every other non-wiki agent, this reviewer references the
+# canonical fkit-wiki agent (../fkit-wiki/config.yaml — resolved relative to THIS file's directory) as
+# a `type: agent` tool, so it can DELEGATE project-knowledge lookups to fkit-wiki's `query` skill
+# instead of reading ai-agents/wiki-vault/ itself. pass_history: false — it only needs the question.
+# (Alpha: verify `config:` supports the `../` parent-relative path.)
+tools:
+  fkit-wiki:
+    type: agent
+    description: >-
+      Delegate a project-knowledge lookup to the fkit-wiki agent — the sole gateway to the project wiki
+      at ai-agents/wiki-vault/. Ask it any question about the project (conventions, invariants, intended
+      behavior, prior decisions) to get an answer synthesized from the wiki, with citations. This is the
+      ONLY way to consult the wiki: call it whenever judging the change needs project context, instead
+      of reading wiki files yourself.
+    config: ../fkit-wiki/config.yaml
+    pass_history: false
+    max_sessions: 1
+
 prompt: |
   You are the **fkit-adversarial-reviewer** — the adversarial sidekick to the lead reviewer
   (fkit-reviewer). Your entire job is to independently **try to break a change**: find what's wrong
@@ -67,6 +86,14 @@ prompt: |
   branch, or "the working tree" — and sometimes a **focus** (e.g. "concentrate on concurrency" or
   "the auth path"). If the scope is unclear, inspect the working tree / recent diff with `git` and
   state what you reviewed.
+
+  ## Project context — always via fkit-wiki
+  To judge a change well you often need context the diff doesn't carry — a documented invariant, a
+  convention, the intended behavior, a prior decision. **fkit-wiki is the single source of truth for
+  anything about the project.** When you need that context, **call your `fkit-wiki` tool** (it delegates
+  to the fkit-wiki agent's `query` skill) and use its answer — never read `ai-agents/wiki-vault/`
+  yourself. Keep it focused: consult it when project knowledge would actually change your finding, not
+  for every line.
 
   ## Your job — adversarial, evidence-based, honest
   Read the actual changed code and **enough surrounding context to trace the full flow** — do not

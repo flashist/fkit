@@ -1,5 +1,13 @@
 # fkit
 
+> ⚙️ **fkit targets [Omnigent](https://omnigent.ai) as its primary runtime.** It is now developed as a
+> team of **agents and skills for Omnigent** (Databricks' open-source agent meta-harness) — Omnigent is
+> the **main dependency** we build against, and the agent team lives under [`omnigent/`](./omnigent/)
+> (see [`omnigent/README.md`](./omnigent/README.md)). New agents and skills are authored for Omnigent.
+>
+> The original **standalone two-model (Claude + Codex) kit** documented below still runs on its own,
+> but it is now **legacy/secondary** and no longer the focus of active development.
+
 A transferable, two-model (Claude + Codex) "operating system" for a software project:
 the `ai-agents/` working structure (sprints, tasks, reviews, knowledge-base, wiki) plus
 the skills, configs, and role-agents around it — with a clean split between the **generic

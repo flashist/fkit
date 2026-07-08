@@ -63,7 +63,7 @@ guardrails:
 # references the canonical fkit-wiki agent (../fkit-wiki/config.yaml — resolved relative to
 # THIS file's directory) as a `type: agent` tool, so it can DELEGATE wiki reads (fkit-wiki's
 # `query` skill) — and any wiki write (ingest/lint/sync) — instead of touching
-# ai-agents/wiki-vault/ itself. No duplication: all four non-wiki agents point at the same
+# ai-agents/wiki-vault/ itself. No duplication: every non-wiki agent points at the same
 # canonical config. pass_history: false — the wiki agent only needs the question, not our
 # whole conversation. (Alpha: verify `config:` supports the `../` parent-relative path.)
 tools:
