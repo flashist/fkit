@@ -54,6 +54,15 @@ curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh 
 cd /path/to/project && fkit                                                        # per project
 ```
 
+You run that one-liner **once**. After that `fkit` keeps itself current:
+
+- **`fkit update`** reinstalls from GitHub on demand (alias: `fkit upgrade`).
+- A normal **`fkit`** does a throttled check (default every 12h) and, when a newer commit is published,
+  auto-updates and continues on the fresh code. It's silent when already current and skips cleanly
+  offline. Toggles: `FKIT_NO_AUTO_UPDATE=1` (check + notify only), `FKIT_NO_UPDATE_CHECK=1` (no network),
+  `FKIT_UPDATE_INTERVAL_MIN` (throttle window; `0` = check every launch). A source checkout is never
+  auto-updated — update it with `git`.
+
 `install.sh` puts the agent bundles + scaffold under `~/.local/share/fkit/` and a `fkit` launcher in
 `~/.local/bin/`. Running **`fkit`** in a folder self-decides:
 
