@@ -166,6 +166,17 @@ if [ "${FKIT_NO_BROWSER:-0}" != 1 ]; then
   echo "fkit — opening the Omnigent web UI at $ui_url (use it if this terminal looks blank; FKIT_NO_BROWSER=1 to skip)"
 fi
 
+# Omnigent's REPL watches its stdin with kqueue, which rejects the /dev/tty clone device on macOS.
+# If our stdin is not already a real terminal (e.g. we were launched from `curl | sh`, where it's the
+# pipe), resolve the controlling terminal's REAL pts and feed omnigent that. `ps -o tty=` yields
+# ttysNNN (macOS) or pts/N (Linux) — both real char devices; /dev/tty is not. No controlling
+# terminal (ps prints "??") → just run as-is.
+if ! [ -t 0 ]; then
+  tt="$(ps -o tty= -p $$ 2>/dev/null | tr -d ' ')"
+  if [ -n "$tt" ] && [ -c "/dev/$tt" ]; then
+    exec omnigent "$@" < "/dev/$tt"
+  fi
+fi
 exec omnigent "$@"
 RUN
 chmod +x "$dest/.fkit/run"
@@ -199,10 +210,10 @@ if [ -f "$dest/omnigent/vendor-agents.sh" ]; then
 fi
 
 # ---------- optional interactive launch (only when a terminal is reachable) ----------
-# Omnigent's REPL watches its stdin with macOS kqueue, which rejects the /dev/tty clone
-# device (EINVAL). So: when stdin is already a real terminal, hand it straight through;
-# under `curl | sh` (stdin is the pipe) resolve /dev/tty to its underlying pts and feed
-# THAT — never /dev/tty itself. If we can't get a real terminal fd, just print how to start.
+# On "Yes" we simply hand off to .fkit/run, which self-heals its stdin (it resolves the real
+# controlling-terminal pts for the `curl | sh` case — Omnigent's REPL can't use the /dev/tty clone
+# device). So there's no tty juggling here: read the answer (from stdin, or /dev/tty when piped) and,
+# if yes, exec the launcher — the same thing the user would run by hand.
 if [ "$omni_ok" = 1 ] && [ -t 1 ] && { [ -t 0 ] || [ -r /dev/tty ]; }; then
   printf '\n  Start the producer now? [Y/n] '
   reply=y
@@ -211,19 +222,9 @@ if [ "$omni_ok" = 1 ] && [ -t 1 ] && { [ -t 0 ] || [ -r /dev/tty ]; }; then
   fi
   case "$reply" in
     ''|y|Y|yes|YES)
+      printf '\n  launching the producer...\n\n'
       cd "$dest"
-      if [ -t 0 ]; then
-        printf '\n  launching the producer...\n\n'
-        exec "$dest/.fkit/run" producer                     # inherit the real terminal
-      else
-        real_tty="$(tty < /dev/tty 2>/dev/null || true)"    # pts behind /dev/tty
-        if [ -n "$real_tty" ] && [ "$real_tty" != /dev/tty ] && [ -c "$real_tty" ]; then
-          printf '\n  launching the producer...\n\n'
-          exec "$dest/.fkit/run" producer < "$real_tty"
-        else
-          printf '\n  Ok — start it with:  .fkit/run\n'
-        fi
-      fi
+      exec "$dest/.fkit/run" producer
       ;;
     *)
       printf '  Ok — start any time with:  .fkit/run\n'
