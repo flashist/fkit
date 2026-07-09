@@ -70,33 +70,29 @@ You run that one-liner **once**. After that `fkit` keeps itself current:
 `install.sh` puts the agent bundles + scaffold under `~/.local/share/fkit/` and a `fkit` launcher in
 `~/.local/bin/`. Running **`fkit`** in a folder self-decides:
 
-- **Fresh folder** → scaffolds `ai-agents/`, vendors the six agents into `.fkit/agents/`, runs a quick
-  terminal **intake** (writes `.fkit/intake.md`), then summons the team.
-- **Already set up** → just summons the team.
+- **Fresh folder** → scaffolds `ai-agents/`, vendors the agents into `.fkit/agents/`, runs a quick
+  terminal **intake** (writes `.fkit/intake.md`), then launches the team.
+- **Already set up** → resumes the same team session (or creates it the first time).
 
-"Summon" = it starts every agent as an **idle session** (no task) and opens the web UI
-(`http://127.0.0.1:6767`), so all six appear in the sidebar and you pick one to chat with. It opens
-**exactly one tab** — setup writes `auto_open_conversation: false` to the project's `.omnigent/config.yaml`
-so the six `omnigent run` summons don't each pop their own conversation tab. The producer, when opened on
-a fresh project, offers full initiation (see below). `FKIT_NO_BROWSER=1` skips the browser.
+### One durable, resumable team session
 
-### `fkit team` — one durable, resumable workspace (prototype)
-
-The default `fkit` starts the six as **separate top-level sessions**, which the web UI can't name (they
-all read "New session") and which accumulate every run. **`fkit team`** is the alternative: it launches a
-single **`fkit-team`** root agent that stands up the six as **named children in the Subagents panel** —
-`producer`, `coder`, `reviewer`, … — each directly chattable (click it, or "take over"). One entry in the
-sidebar, not six.
+`fkit` opens a **single** `fkit-team` root session that stands up the six agents (`producer`, `coder`,
+`reviewer`, `architect`, `wiki`, `adversarial-reviewer`) as **named children in the web UI's Subagents
+panel** — each directly chattable (click one, or "take over"). One entry in the sidebar, not six, and it
+never proliferates.
 
 It's **durable and resumable**: the root's conversation id is cached in `.fkit/team-session`, and every
-later `fkit team` **resumes that same session** (via `omnigent run --resume`, recreating only if the id is
+later `fkit` **resumes that same session** (via `omnigent run --resume`, recreating only if the id is
 gone). Start today, close Omnigent, come back tomorrow — same workspace, same teammates, nothing piled up.
 The root is idempotent: on resume it re-checks the roster and stays quiet rather than duplicating anyone.
 
-Consults are unchanged — a teammate that needs a peer (e.g. coder→architect) still spawns it as a
-grandchild under itself, off the root panel, so the panel always shows the clean six. `FKIT_NO_BROWSER=1`
-skips the browser. This is a prototype; once proven it becomes the default `fkit` (with the classic
-summon behind `FKIT_CLASSIC=1`).
+It opens **exactly one browser tab**, at the server's real URL — `fkit` asks `omnigent host status` for
+the actual `server_url` rather than assuming `6767` (Omnigent picks a free port when 6767 is taken).
+`FKIT_NO_BROWSER=1` skips the browser. The producer, when you open it on a fresh project, offers full
+initiation (see below).
+
+Consults are unchanged — a teammate that needs a peer (e.g. coder→architect) spawns it as a grandchild
+under itself, off the root panel, so the panel always shows the clean six.
 
 **One agent in your terminal instead** (the agents spawn each other by relative `config_path`, which
 Omnigent requires to stay inside the working directory — hence the vendored `.fkit/agents/`):

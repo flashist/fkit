@@ -3,16 +3,15 @@
 #
 # Installed globally as `fkit` (~/.local/bin/fkit) by install.sh, with resources under
 # ~/.local/share/fkit/. It decides for itself whether the current folder is a fresh project or an
-# already-set-up one, then summons the whole agent team as idle sessions and opens the web UI so you
-# can pick any agent to chat with.
+# already-set-up one, sets it up if needed, then opens ONE durable, resumable team session.
 #
-#   - Fresh folder  → scaffold ai-agents/, vendor the six agents, run a quick terminal intake, summon all.
-#   - Set-up folder → just summon all + open the web UI.
+#   - Fresh folder  → scaffold ai-agents/, vendor the agents, run a quick terminal intake, launch the team.
+#   - Set-up folder → resume the same team session (or create it the first time).
 #
-# `fkit team` (prototype) opens ONE durable, resumable session instead: a fkit-team root stands up the
-# six agents as named children in the web UI's Subagents panel (each directly chattable), caches its
-# conversation id in .fkit/team-session, and resumes THAT same session every run — so nothing piles up
-# and you return to the same workspace across days.
+# The team session: a fkit-team root agent stands up the six agents (producer, coder, reviewer,
+# architect, wiki, adversarial-reviewer) as named children in the web UI's Subagents panel — each
+# directly chattable — caches its conversation id in .fkit/team-session, and resumes THAT same session
+# every run. So nothing piles up and you return to the same workspace across days.
 #
 # It also keeps itself current: `fkit update` reinstalls from GitHub now, and a normal `fkit` does a
 # throttled check and auto-updates when a newer commit is published (then continues on the fresh code).
@@ -108,14 +107,6 @@ case "${1:-}" in
     ;;
 esac
 
-# Launch mode: `fkit team` opens ONE durable, resumable session with the whole team as named children
-# in the web UI's Subagents panel (resume-or-create, so it never proliferates). Anything else uses the
-# classic six-top-level-session summon. (Once the team model is proven, this becomes the default.)
-mode=summon
-case "${1:-}" in
-  team|--team) mode=team ;;
-esac
-
 # Automatic: throttled check on a normal launch. Silent when already current; skips cleanly offline.
 if [ "${FKIT_SKIP_UPDATE:-0}" != 1 ] && [ "${FKIT_NO_UPDATE_CHECK:-0}" != 1 ] \
    && ! _fkit_is_source_checkout && command -v curl >/dev/null 2>&1; then
@@ -153,8 +144,7 @@ fi
 _fkit_banner
 
 proj="$(pwd)"
-ui_url="http://127.0.0.1:6767"
-agents="producer coder reviewer architect wiki adversarial-reviewer"
+ui_url="http://127.0.0.1:6767"   # default web-UI URL; the real one is discovered via `omnigent host status`
 
 # 1. Fresh vs. already set up: the presence of vendored agents is the signal.
 fresh=0
@@ -179,157 +169,107 @@ if ! command -v omnigent >/dev/null 2>&1; then
 fi
 
 # ---------------------------------------------------------------------------
-# `fkit team` — ONE durable, resumable session. A fkit-team root agent stands up the six teammates as
-# named standby children in the Subagents panel (each directly chattable). We cache the root's
-# conversation id in .fkit/team-session and resume THAT exact session every run, so it never
-# proliferates and survives across days. The id isn't printed at launch, so we discover it via the
-# local REST API; PATCH names the root in the sidebar.
+# Launch the team — ONE durable, resumable session (this is what `fkit` does). A fkit-team root agent
+# stands up the six teammates as named standby children in the Subagents panel (each directly
+# chattable). We cache the root's conversation id in .fkit/team-session and resume THAT exact session
+# every run, so it never proliferates and survives across days. The id isn't printed at launch, so we
+# discover it via the local REST API; PATCH names the root in the sidebar.
 #
 # The server is NOT always on 6767 — omnigent's pick_local_port falls back to a free port when 6767 is
 # taken. So we ASK omnigent where its web UI actually is (`omnigent host status --json` → server_url)
 # instead of assuming 6767, and use that URL for the existence check, id capture, title PATCH, and the
 # single tab we open. (The port shown in omnigent's own TUI is the internal runner, a different thing.)
 # ---------------------------------------------------------------------------
-if [ "$mode" = team ]; then
-  [ -d ".fkit/agents/fkit-team" ] || {
-    echo "fkit: the fkit-team bundle is missing (.fkit/agents/fkit-team). Re-run 'fkit' to re-vendor." >&2
-    exit 1
-  }
-  teamfile=".fkit/team-session"
-  seed="Stand up the fkit team now: create each teammate as a named standby session per your instructions, then end your turn."
+[ -d ".fkit/agents/fkit-team" ] || {
+  echo "fkit: the fkit-team bundle is missing (.fkit/agents/fkit-team). Re-run 'fkit' to re-vendor." >&2
+  exit 1
+}
+teamfile=".fkit/team-session"
+seed="Stand up the fkit team now: create each teammate as a named standby session per your instructions, then end your turn."
 
-  _team_server_url() {  # the running omnigent web-UI URL (host status server_url), or empty if none up
-    command -v omnigent >/dev/null 2>&1 || return 0
-    omnigent host status --json 2>/dev/null \
-      | sed -n 's/.*"server_url"[[:space:]]*:[[:space:]]*"\(http[^"]*\)".*/\1/p' | head -1
-  }
-  _team_open() {  # open $1 in a browser (respects FKIT_NO_BROWSER)
-    [ "${FKIT_NO_BROWSER:-0}" = 1 ] && return 0
-    if command -v open >/dev/null 2>&1; then open "$1" >/dev/null 2>&1 || true
-    elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$1" >/dev/null 2>&1 || true
-    fi
-  }
-
-  # Where is the web UI? If a server is already up, use its real URL; otherwise fall back to the default
-  # for the pre-launch existence check and learn the actual URL in the background after launch.
-  base="$(_team_server_url)"; server_up=0; [ -n "$base" ] && server_up=1; [ -n "$base" ] || base="$ui_url"
-
-  # Decide resume vs. create. A cached id is trusted when no server is up (omnigent validates it on
-  # launch and errors loudly on 404); when the server is already up we verify it and drop a stale id.
-  id=""; [ -f "$teamfile" ] && id="$(head -1 "$teamfile" 2>/dev/null | tr -d '[:space:]')"
-  team_mode=create
-  if [ -n "$id" ]; then
-    if [ "$server_up" = 1 ] && command -v curl >/dev/null 2>&1; then
-      code="$(curl -s -o /dev/null -w '%{http_code}' "$base/v1/sessions/$id" 2>/dev/null || echo 000)"
-      case "$code" in
-        2*) team_mode=resume ;;
-        *)  team_mode=create; id=""; : > "$teamfile" 2>/dev/null || true ;;   # stale/deleted → recreate
-      esac
-    else
-      team_mode=resume
-    fi
+_team_server_url() {  # the running omnigent web-UI URL (host status server_url), or empty if none up
+  command -v omnigent >/dev/null 2>&1 || return 0
+  omnigent host status --json 2>/dev/null \
+    | sed -n 's/.*"server_url"[[:space:]]*:[[:space:]]*"\(http[^"]*\)".*/\1/p' | head -1
+}
+_team_open() {  # open $1 in a browser (respects FKIT_NO_BROWSER)
+  [ "${FKIT_NO_BROWSER:-0}" = 1 ] && return 0
+  if command -v open >/dev/null 2>&1; then open "$1" >/dev/null 2>&1 || true
+  elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$1" >/dev/null 2>&1 || true
   fi
+}
 
-  # Background worker: for a cold start, wait for the server and learn its REAL url (a fresh server may
-  # pick a new port); on create, capture + cache the new conversation id and name the root; then open
-  # the single web-UI tab at the correct URL.
-  (
-    url="$base"
-    if [ "$server_up" != 1 ]; then
-      n=0
-      while [ "$n" -lt 40 ]; do
-        u="$(_team_server_url)"
-        if [ -n "$u" ] && command -v curl >/dev/null 2>&1 && curl -s -o /dev/null "$u/" 2>/dev/null; then url="$u"; break; fi
-        n=$((n + 1)); sleep 1
-      done
-    fi
-    if [ "$team_mode" = create ] && command -v curl >/dev/null 2>&1; then
-      newid=""; m=0
-      while [ "$m" -lt 20 ] && [ -z "$newid" ]; do
-        newid="$(curl -s "$url/v1/sessions?agent_name=fkit-team&limit=1&order=desc&sort_by=updated_at" 2>/dev/null \
-                  | grep -o 'conv_[A-Za-z0-9]*' | head -1)"
-        [ -z "$newid" ] && { m=$((m + 1)); sleep 1; }
-      done
-      if [ -n "$newid" ]; then
-        printf '%s\n' "$newid" > "$teamfile"
-        curl -s -o /dev/null -X PATCH "$url/v1/sessions/$newid" \
-          -H 'Content-Type: application/json' \
-          --data "{\"title\":\"fkit · $(basename "$proj")\"}" 2>/dev/null || true
-      fi
-    fi
-    _team_open "$url"
-  ) &
+# Where is the web UI? If a server is already up, use its real URL; otherwise fall back to the default
+# for the pre-launch existence check and learn the actual URL in the background after launch.
+base="$(_team_server_url)"; server_up=0; [ -n "$base" ] && server_up=1; [ -n "$base" ] || base="$ui_url"
 
-  if [ "$team_mode" = resume ]; then
-    printf '\n  fkit: resuming your team session (%s)...\n' "$(printf %s "$id" | cut -c1-16)"
-    set -- run --resume "$id" ".fkit/agents/fkit-team"
+# Decide resume vs. create. A cached id is trusted when no server is up (omnigent validates it on
+# launch and errors loudly on 404); when the server is already up we verify it and drop a stale id.
+id=""; [ -f "$teamfile" ] && id="$(head -1 "$teamfile" 2>/dev/null | tr -d '[:space:]')"
+team_mode=create
+if [ -n "$id" ]; then
+  if [ "$server_up" = 1 ] && command -v curl >/dev/null 2>&1; then
+    code="$(curl -s -o /dev/null -w '%{http_code}' "$base/v1/sessions/$id" 2>/dev/null || echo 000)"
+    case "$code" in
+      2*) team_mode=resume ;;
+      *)  team_mode=create; id=""; : > "$teamfile" 2>/dev/null || true ;;   # stale/deleted → recreate
+    esac
   else
-    printf '\n  fkit: creating your team session (one durable workspace)...\n'
-    set -- run ".fkit/agents/fkit-team" -p "$seed"
+    team_mode=resume
   fi
-
-  # Tell the user where to look. If a server is already up we know the exact URL now; otherwise a tab
-  # opens once the server is ready (its port isn't known until then).
-  if [ "$server_up" = 1 ]; then
-    printf '  Opening the web UI — your teammates are in the Subagents panel:\n    %s\n\n' "$base"
-  else
-    printf '  A browser tab (the Subagents panel) will open once the server is ready...\n\n'
-  fi
-
-  # Foreground REPL (reliable bootstrap). Omnigent's REPL watches stdin with kqueue, which rejects the
-  # /dev/tty clone on macOS; if our stdin is not a real terminal (e.g. `curl | sh`), feed it the real
-  # controlling-terminal pts (ps -o tty= yields ttysNNN / pts/N — real char devices; /dev/tty is not).
-  if ! [ -t 0 ]; then
-    tt="$(ps -o tty= -p $$ 2>/dev/null | tr -d ' ')"
-    if [ -n "$tt" ] && [ -c "/dev/$tt" ]; then exec omnigent "$@" < "/dev/$tt"; fi
-  fi
-  exec omnigent "$@"
 fi
 
-# 4. Summon all agents as IDLE sessions (no prompt, no task) so each is available to chat with in the
-#    web UI. Each `omnigent run` registers its agent + creates a session on the server, then exits on
-#    EOF (stdin is /dev/null) — the session persists on the server regardless of the client. The
-#    producer is started first and we wait for the shared server to answer, so the other five reuse it
-#    instead of each racing to spawn their own server.
-#    NB: these summons do NOT each open a browser tab — fkit-init.sh wrote `auto_open_conversation:
-#    false` to the project's .omnigent/config.yaml, so per-conversation auto-open is off. We open ONE
-#    web-UI tab (the sidebar with all sessions) at step 5.
-# nohup so the client outlives this script and can finish creating its session on the server even
-# after fkit returns (the session persists server-side; the client exits on EOF once it's created).
-summon() { nohup omnigent run ".fkit/agents/fkit-$1" </dev/null >/dev/null 2>&1 & }
-
-printf '\n  fkit: summoning the team (idle — pick one to start a chat)...\n'
-first=1
-for a in $agents; do
-  [ -d ".fkit/agents/fkit-$a" ] || continue
-  summon "$a"
-  if [ "$first" = 1 ]; then
-    first=0
+# Background worker: for a cold start, wait for the server and learn its REAL url (a fresh server may
+# pick a new port); on create, capture + cache the new conversation id and name the root; then open
+# the single web-UI tab at the correct URL.
+(
+  url="$base"
+  if [ "$server_up" != 1 ]; then
     n=0
-    while [ "$n" -lt 20 ]; do
-      if command -v curl >/dev/null 2>&1 && curl -s -o /dev/null "$ui_url"; then break; fi
+    while [ "$n" -lt 40 ]; do
+      u="$(_team_server_url)"
+      if [ -n "$u" ] && command -v curl >/dev/null 2>&1 && curl -s -o /dev/null "$u/" 2>/dev/null; then url="$u"; break; fi
       n=$((n + 1)); sleep 1
     done
   fi
-done
-
-# give the remaining sessions a moment to register on the server before we point the browser at them
-sleep 3
-
-# 5. Open the web UI — the reliable surface where all summoned agents appear in the sidebar.
-if [ "${FKIT_NO_BROWSER:-0}" != 1 ]; then
-  if command -v open >/dev/null 2>&1; then open "$ui_url" >/dev/null 2>&1 || true
-  elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$ui_url" >/dev/null 2>&1 || true
+  if [ "$team_mode" = create ] && command -v curl >/dev/null 2>&1; then
+    newid=""; m=0
+    while [ "$m" -lt 20 ] && [ -z "$newid" ]; do
+      newid="$(curl -s "$url/v1/sessions?agent_name=fkit-team&limit=1&order=desc&sort_by=updated_at" 2>/dev/null \
+                | grep -o 'conv_[A-Za-z0-9]*' | head -1)"
+      [ -z "$newid" ] && { m=$((m + 1)); sleep 1; }
+    done
+    if [ -n "$newid" ]; then
+      printf '%s\n' "$newid" > "$teamfile"
+      curl -s -o /dev/null -X PATCH "$url/v1/sessions/$newid" \
+        -H 'Content-Type: application/json' \
+        --data "{\"title\":\"fkit · $(basename "$proj")\"}" 2>/dev/null || true
+    fi
   fi
+  _team_open "$url"
+) &
+
+if [ "$team_mode" = resume ]; then
+  printf '\n  fkit: resuming your team session (%s)...\n' "$(printf %s "$id" | cut -c1-16)"
+  set -- run --resume "$id" ".fkit/agents/fkit-team"
+else
+  printf '\n  fkit: creating your team session (one durable workspace)...\n'
+  set -- run ".fkit/agents/fkit-team" -p "$seed"
 fi
 
-printf '\n  fkit is ready in %s\n\n' "$proj"
-printf '  All agents are summoned and idle — open the web UI and pick one from the sidebar:\n'
-printf '    %s\n\n' "$ui_url"
-printf '    producer   plan sprints, write task briefs   (on a fresh project it offers to initialize)\n'
-printf '    coder      implement a task: plan -> code -> test\n'
-printf '    reviewer   review a diff (adversarial 2nd opinion)\n'
-printf '    architect  design specs, ADRs, evaluate approaches\n'
-printf '    wiki       the project knowledge base\n'
-printf '    adversarial-reviewer   codex second opinion\n\n'
-printf '  (A single agent in your terminal instead:  .fkit/run <agent>)\n\n'
+# Tell the user where to look. If a server is already up we know the exact URL now; otherwise a tab
+# opens once the server is ready (its port isn't known until then).
+if [ "$server_up" = 1 ]; then
+  printf '  Opening the web UI — your teammates are in the Subagents panel:\n    %s\n\n' "$base"
+else
+  printf '  A browser tab (the Subagents panel) will open once the server is ready...\n\n'
+fi
+
+# Foreground REPL (reliable bootstrap). Omnigent's REPL watches stdin with kqueue, which rejects the
+# /dev/tty clone on macOS; if our stdin is not a real terminal (e.g. `curl | sh`), feed it the real
+# controlling-terminal pts (ps -o tty= yields ttysNNN / pts/N — real char devices; /dev/tty is not).
+if ! [ -t 0 ]; then
+  tt="$(ps -o tty= -p $$ 2>/dev/null | tr -d ' ')"
+  if [ -n "$tt" ] && [ -c "/dev/$tt" ]; then exec omnigent "$@" < "/dev/$tt"; fi
+fi
+exec omnigent "$@"
