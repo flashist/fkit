@@ -1,276 +1,361 @@
 # fkit — Architecture
 
-> **Initiation survey.** This is a first-pass, evidence-first pass written by the fkit-architect
-> during project initiation (non-interactive — see `survey-project`). It should be **deepened later**
-> via the `inspect` skill (which can interview the owner) as the project develops. Every claim below
-> is grounded in a `path:line` reference; anything the code couldn't answer is listed as an open
-> question at the end instead of guessed.
+> **Second pass, via `inspect`** (2026-07-09), extending the initiation-time `survey-project` output.
+> The first pass documented the six agent bundles and the `.fkit/run`-launches-producer-directly
+> flow. Since then a real install/update/orchestration layer landed (`fkit-team`, the global `fkit`
+> command, self-update, the `bin/release.mjs` release pipeline) that the first pass never saw. This
+> revision folds that in and corrects everything it made stale. Every claim is grounded in a
+> `path:line` reference or an explicit owner answer (this session); anything the code couldn't answer
+> is listed as an open question instead of guessed.
 
 ## Overview and purpose
 
-fkit is **not an application** — it is a distributable, Omnigent-based **team of AI agents for
-software development**: a producer, a coder, a reviewer (with an adversarial second opinion), an
-architect, and a wiki librarian. This repository (`github.com/flashist/fkit`) **is the framework
-itself** — its "source code" is agent bundles (YAML config + markdown skill playbooks), shell
-scaffolding scripts, and documentation, not a running service. A consuming project installs fkit into
-its own repo root and runs the agents against that project's code (`README.md:1-6`,
-`omnigent/README.md:1-6`).
+fkit is **not an application** — it is a distributable, [Omnigent](https://omnigent.ai)-based **team
+of AI agents for software development**: a producer, a coder, a reviewer (with an adversarial second
+opinion), an architect, and a wiki librarian, plus (new since the first survey) a thin **team root**
+that stands the other six up as one durable workspace. This repository (`github.com/flashist/fkit`)
+**is the framework itself** — its "source code" is agent bundles (YAML config + markdown skill
+playbooks), POSIX shell install/orchestration scripts, a small Node release script, and documentation
+— not a running service. A consuming project installs `fkit` once as a global command and runs it
+against that project's own repo (`omnigent/README.md:39-49`, `install.sh:1-13`).
 
-The project is in **prototype stage** (per the owner's intake, `.fkit/intake.md:8`), aimed at a
-user-friendly startup sequence and a first working set of agents with dedicated skills. Six agent
-bundles already exist and are wired together (`omnigent/fkit-*/config.yaml`).
+The project is in **prototype stage**, aimed at a user-friendly startup sequence and a first working
+set of agents with dedicated skills (`.fkit/intake.md:8`, `ai-agents/knowledge-base/PROJECT.md`
+"Conventions & constraints"). Per the owner (this session): the near-term goal is now substantially
+delivered — **`fkit-team` is the primary entry point** (superseding the older
+`.fkit/run`-launches-producer-directly path, which still exists as a secondary/direct single-agent
+path, not the recommended one).
 
 ## System context and external dependencies
 
-- **Runtime: [Omnigent](https://omnigent.ai)** — an external, separately-installed "meta-harness" CLI
-  that loads a bundle (`config.yaml` + `skills/`) and runs it on a declared harness/model
-  (`omnigent/fkit-producer/config.yaml:26-29` — `executor.type: omnigent`, `harness: claude-sdk`).
-  fkit has **zero application dependencies of its own** — `package.json:1-19` declares only npm
-  metadata (name/version/description/keywords/repo) with **no `scripts` or `dependencies` block** —
-  confirmed by `grep '"scripts"' package.json` returning nothing. There is no build step; `npm` here
-  is packaging metadata only (presumably for future `npx`-style distribution — see open questions).
-- **Model providers**: Claude (for `harness: claude-sdk` agents) and OpenAI/Codex (for `harness: codex`
-  agents), each configured once via `omnigent setup` (`README.md:34-36`).
-- **Git** — the working substrate every agent operates on (`ai-agents/` lives in a git repo); agents
-  run `git` read-only in normal operation (blame/log/diff) and are barred from committing/pushing
-  without explicit ask (see Cross-cutting concerns).
-- **No network calls, no database, no ports, no user-facing API.** Distribution is via
-  `install.sh` → GitHub tarball download (`install.sh:1-27`, hitting `codeload.github.com`).
+- **Runtime: [Omnigent](https://omnigent.ai)** — the external "meta-harness" CLI that loads a bundle
+  (`config.yaml` + `skills/`) and runs it on a declared harness/model
+  (`omnigent/fkit-producer/config.yaml:32` — `executor.type: omnigent`, `harness: claude-sdk`). fkit
+  itself has no application dependencies — `package.json:1-24` is still npm metadata plus a small
+  `scripts` block for *maintaining fkit*, not for consumers (see Build/run/release below).
+- **Model providers**: Claude (`harness: claude-sdk`, five of the seven bundles including `fkit-team`)
+  and OpenAI/Codex (`harness: codex`, `fkit-wiki` and `fkit-adversarial-reviewer`), each configured
+  once via `omnigent setup`.
+- **Git** — the working substrate every agent operates on; agents run `git` read-only in normal
+  operation and are barred from committing/pushing without explicit ask (prompt rule, not sandboxed).
+- **GitHub, over the network — corrected from the first survey.** The first pass claimed "no network
+  calls" for the whole system; that's no longer true. Three distinct things now hit the network:
+  1. **Install**: `install.sh` fetches a tarball from `codeload.github.com/<repo>/tar.gz/<ref>`
+     (`install.sh:24-25`).
+  2. **Self-update**: every normal `fkit` invocation does a *throttled* (default hourly) check against
+     `github.com/<repo>` via `git ls-remote` (preferred) or the GitHub commits API
+     (`omnigent/fkit.sh:34-40`), and — unless `FKIT_NO_AUTO_UPDATE=1` — **silently re-runs
+     `install.sh` and re-execs itself** on a newer commit (`omnigent/fkit.sh:133-145`). This is a
+     real, if throttleable, auto-update-from-a-remote-branch mechanism with **no signature/checksum
+     verification** beyond plain HTTPS — flagged as an open question below.
+  3. **Version banner**: fetches the raw `VERSION` file from GitHub to show a human version number in
+     the "newer available" hint (`omnigent/fkit.sh:47-49`).
+  `FKIT_NO_UPDATE_CHECK=1` disables all network use for (2)/(3); a **source checkout** (this repo
+  itself — detected by `.git` or root `package.json` present, `omnigent/fkit.sh:52`) is never
+  auto-updated, only updated via `git`.
+- **No database, no ports opened by fkit itself, no user-facing API.** Omnigent runs its own local web
+  UI server (a separate concern — `fkit` just discovers its URL via `omnigent host status --json` and
+  opens a tab, `omnigent/fkit.sh:145-183`).
 
 ## High-level architecture — components and responsibilities
 
 ```
 fkit repo root
-├── omnigent/                     canonical agent bundles ("the framework")
-│   ├── fkit-producer/            config.yaml + skills/  (task-done, task-cancelled, initiate-project)
+├── omnigent/                     canonical agent bundles + orchestration scripts ("the framework")
+│   ├── fkit-producer/            config.yaml + skills/  (initiate-project, task-done, task-cancelled)
 │   ├── fkit-coder/                config.yaml + skills/  (plan-task, process-review, process-stateful-review)
 │   ├── fkit-reviewer/             config.yaml + skills/  (review, stateful-review)
 │   ├── fkit-adversarial-reviewer/ config.yaml only (prompt-only, no skills/)
 │   ├── fkit-architect/            config.yaml + skills/  (inspect, design-spec, evaluate-approach,
 │   │                                                       record-decision, survey-project)
 │   ├── fkit-wiki/                 config.yaml + skills/  (query, ingest, lint, sync)
+│   ├── fkit-team/                 config.yaml only — NEW: thin root orchestrator, no skills of its own
 │   ├── scaffold/                  starter ai-agents/ tree + CLAUDE.md/AGENTS.md/PROJECT.md for a NEW project
-│   ├── fkit-init.sh               one-shot project setup (scaffold + vendor + launcher)
-│   ├── vendor-agents.sh           copies omnigent/fkit-* → <project>/.fkit/agents/
+│   ├── fkit.sh                    NEW: the installed global `fkit` command's real logic (self-update + team launch)
+│   ├── fkit-init.sh               idempotent project setup (scaffold + context files + vendor); called BY fkit.sh
+│   ├── vendor-agents.sh           copies omnigent/fkit-* (all seven, glob-matched) → <project>/.fkit/agents/
 │   └── validate-bundles.sh        pre-flight bundle validation (YAML + omnigent.spec.load)
-├── install.sh                     curl|sh entry point → fetches repo, runs fkit-init.sh
-├── ai-agents/                      fkit's OWN working structure (this repo dogfoods itself)
-├── CLAUDE.md / AGENTS.md          root context files the claude-sdk / codex harnesses inject
-└── .fkit/                         (gitignored) vendored copy of omnigent/fkit-* for THIS repo + run scripts
+├── bin/release.mjs                NEW: zero-dependency release script (bump/commit/tag/push), run via `npm run release`
+├── VERSION                        NEW: single source of truth for fkit's own version, kept in sync with package.json
+├── install.sh                     curl|sh entry point → installs ~/.local/share/fkit + ~/.local/bin/fkit
+├── ai-agents/                     fkit's OWN working structure (this repo dogfoods itself)
+├── CLAUDE.md / AGENTS.md          root context files the claude-sdk / codex harnesses inject (still generic scaffold text — see Risks)
+├── README.md                      public quickstart — STALE relative to omnigent/README.md (see Risks, high priority)
+└── .fkit/                         (gitignored) vendored copy of omnigent/fkit-* for THIS repo + .fkit/run, .fkit/team-session, .fkit/intake.md
 ```
 
-Each agent is a self-contained **bundle**: `config.yaml` (executor/harness, os_env, guardrails, spawn
-capability, and the full system prompt) plus a `skills/` directory of Omnigent-native skills
-(`SKILL.md` with YAML frontmatter, auto-discovered and **scoped to that agent only**
-(`omnigent/README.md:8-9`)). No shared/base config exists — Omnigent has no `extends`; each
-`config.yaml` fully duplicates its guardrail block (verified identical `blast_radius` stanza across
-all six configs, e.g. `omnigent/fkit-producer/config.yaml:40-49` vs
-`omnigent/fkit-coder/config.yaml:39-48`).
+Each of the **seven** bundles (`fkit-producer/coder/reviewer/adversarial-reviewer/architect/wiki` plus
+the new `fkit-team`) is self-contained: `config.yaml` (executor/harness, `os_env`, guardrails, spawn
+capability, full system prompt) plus, for six of them, a `skills/` directory of Omnigent-native skills.
+`fkit-team` and `fkit-adversarial-reviewer` are prompt-only (no `skills/`). No shared/base config
+exists (Omnigent has no `extends`); each `config.yaml` duplicates its guardrail block, though
+`fkit-team`'s guardrails differ deliberately (see Cross-cutting concerns).
 
 | Agent | Harness | Skills | Role |
 |---|---|---|---|
-| fkit-producer | claude-sdk | task-done, task-cancelled, initiate-project | product/sprint planning, task lifecycle (`omnigent/fkit-producer/config.yaml:1-30`) |
-| fkit-coder | claude-sdk | plan-task, process-review, process-stateful-review | sole source-write authority (`omnigent/fkit-coder/config.yaml:1-24`) |
-| fkit-reviewer | claude-sdk | review, stateful-review | lead code review, REVIEW-ONLY (`omnigent/fkit-reviewer/config.yaml:1-38`) |
-| fkit-adversarial-reviewer | **codex** | *(none — prompt-only)* | independent second-opinion review, deliberately a different model (`omnigent/fkit-adversarial-reviewer/config.yaml:1-30`) |
-| fkit-architect | claude-sdk | inspect, design-spec, evaluate-approach, record-decision, survey-project | architecture/design/ADRs, no implementation (`omnigent/fkit-architect/config.yaml:1-40`) |
-| fkit-wiki | **codex** | query, ingest, lint, sync | sole gateway to `ai-agents/wiki-vault/` (`omnigent/fkit-wiki/config.yaml:1-40`) |
+| fkit-team | claude-sdk | *(none — prompt-only)* | **NEW.** Root orchestrator: stands up the other six as named, durable child sessions; never itself plans/codes/reviews (`omnigent/fkit-team/config.yaml`) |
+| fkit-producer | claude-sdk | initiate-project, task-done, task-cancelled | product/sprint planning, task lifecycle (`omnigent/fkit-producer/skills/`) |
+| fkit-coder | claude-sdk | plan-task, process-review, process-stateful-review | sole source-write authority |
+| fkit-reviewer | claude-sdk | review, stateful-review | lead code review, REVIEW-ONLY |
+| fkit-adversarial-reviewer | **codex** | *(none — prompt-only)* | independent second-opinion review, deliberately a different model |
+| fkit-architect | claude-sdk | inspect, design-spec, evaluate-approach, record-decision, survey-project | architecture/design/ADRs, no implementation |
+| fkit-wiki | **codex** | query, ingest, lint, sync | sole gateway to `ai-agents/wiki-vault/` |
 
-Per-agent harness is deliberate for the reviewer/adversarial-reviewer pair: Claude lead +
-Codex sidekick for genuine perspective diversity (`omnigent/README.md:19-20`).
+(Corrects the first survey's skills table: `fkit-producer` does carry `initiate-project` as a real
+skill directory — `omnigent/fkit-producer/skills/initiate-project` — the first pass's component table
+omitted it even though its own "Key flows" section described it correctly.)
 
 ## Runtime topology
 
-There is no long-running service. Each `omnigent run <bundle>` invocation is a single agent session,
-launched from the target project's root (`os_env: caller_process, cwd: .`, unsandboxed —
-`omnigent/fkit-producer/config.yaml:32-37`). Sessions are **stateless between runs** except for
-whatever they read/write in the target project's `ai-agents/` tree and the git history.
+There is still no long-running fkit-owned service, but the **entrypoint and session model changed
+materially**:
 
-**Inter-agent consultation is by spawning a sibling session, not native sub-agent tool wiring**:
-Omnigent 0.4.0 has no way to reference an external agent bundle from a `tools:` block
-(`omnigent/README.md:16-18`), so every consulting agent instead:
-1. `sys_session_create(config_path=".fkit/agents/<name>", ...)`
-2. `sys_session_send(session_id=..., args="<question>")`
-3. Ends its turn; wakes on inbox delivery, `sys_read_inbox()` once, uses the final answer.
+### The new primary path: `fkit` → one durable team session
 
-This requires the six bundles to be **vendored** under the calling project's root at
-`.fkit/agents/` (`omnigent/vendor-agents.sh:1-20`) because `sys_session_create`'s `config_path` must
-stay inside the caller's working directory. In this repo, `.fkit/agents/*` is byte-for-byte identical
-to the canonical `omnigent/fkit-*` (verified via `diff -rq`), i.e. fkit's own vendored copy is
-currently in sync.
+```
+install.sh (curl|sh, once)
+  → ~/.local/share/fkit/omnigent/*  (resources: bundles, scaffold, scripts)
+  → ~/.local/bin/fkit               (thin launcher, execs the installed fkit.sh)
+
+fkit  (run inside any project directory, every time)
+  → throttled self-update check (network, unless disabled) → maybe re-exec fresh code
+  → FKIT_SETUP_ONLY=1 fkit-init.sh <project>   (idempotent: scaffold + CLAUDE.md/AGENTS.md + vendor .fkit/agents/)
+  → fresh project only: .fkit/interview (terminal intake) → .fkit/intake.md
+  → resume-or-create ONE fkit-team session, cached in .fkit/team-session
+       (discovers the real web-UI URL via `omnigent host status --json`, since 6767 is only a default)
+  → omnigent run [--resume <id>] .fkit/agents/fkit-team [-p <bootstrap seed>]
+```
+
+`fkit-team`'s own first turn then spawns the six workers as **named standby children** (`sys_session_create`
+per agent, `title` = short role name, idempotent — checked via `sys_session_list` first) so they show
+up individually and directly-chattable in the web UI's Subagents panel
+(`omnigent/fkit-team/config.yaml` prompt, "First-turn standby bootstrap"). On resume it re-checks the
+roster and does nothing if all six are present — it never re-bootstraps or duplicates
+(`omnigent/fkit-team/config.yaml` "On resume — stay quiet"). This is confirmed **live** in this repo:
+`.fkit/team-session` exists and holds a real conversation id.
+
+### The secondary path: single-agent direct launch
+
+`.fkit/run [producer|coder|reviewer|architect|wiki|adversarial-reviewer]` (default `producer`,
+written by `fkit-init.sh`) still launches exactly one agent directly, with no team root
+(`omnigent/fkit-init.sh:141-186`). It still carries its own fresh-project detection (uninitialized
+`PROJECT.md` → run `.fkit/interview` → seed the producer into `initiate-project`) — **duplicated**
+logic now that `fkit.sh` does the equivalent intake-and-seed step itself (`omnigent/fkit.sh:155-158`
+vs `omnigent/fkit-init.sh:167-181`); the two don't currently share code (open question below on
+whether that duplication is deliberate or drift).
+
+### Inter-agent consultation — spawn + inbox, now confirmed at two hops
+
+Unchanged mechanism: `sys_session_create(config_path=".fkit/agents/fkit-<name>", ...)` →
+`sys_session_send` → end turn → wake on inbox → `sys_read_inbox()` once
+(`omnigent/README.md:16-24`). Requires the bundles vendored under the caller's `.fkit/agents/`
+(verified byte-identical to canonical `omnigent/fkit-*` via `diff -rq`, including `fkit-team`, which
+`vendor-agents.sh`'s `fkit-*` glob picks up automatically even though its own comments/echoed output
+still say "six" — minor, harmless doc/behavior drift, noted as an open item, not fixed here).
+
+**Materially updated from the first survey**: `omnigent/README.md`'s "Status & caveats" section now
+states the core collaboration is **verified live on Omnigent 0.4.0**, explicitly including **one-hop
+and two-hop consults**, not just one-hop (`omnigent/README.md:143-146`). The narrower, still-open
+caveat is specifically **deep chains under a fully *headless* `-p` run** — a spawned consultant that
+itself consults another agent completes fine interactively but "may not finish under headless `-p`"
+(`omnigent/README.md:147-149`), with the recommendation to drive headless/CI work via the Omnigent
+server REST API instead, or keep consults one-hop. **This directly updates the scope of the
+in-flight Sprint 1 task "Document the consult-chain envelope"** — the envelope is now: one-hop ✅,
+two-hop interactive ✅, deep-chain-headless ❓ (unverified) — see Risks.
 
 ```mermaid
-flowchart LR
-  subgraph Consultation topology
-    P[fkit-producer] -- product<->technical --> A[fkit-architect]
-    A -- product<->technical --> P
-    C[fkit-coder] -- design consistency --> A
-    R[fkit-reviewer] -- adversarial pass --> AR[fkit-adversarial-reviewer]
-    P -- wiki lookups --> W[fkit-wiki]
-    C -- wiki lookups --> W
-    R -- wiki lookups --> W
-    AR -- wiki lookups --> W
-    A -- wiki lookups --> W
+flowchart TB
+  subgraph Install & update
+    I[install.sh] -->|writes| SH["~/.local/share/fkit"]
+    I -->|writes| BN["~/.local/bin/fkit"]
+    BN -->|throttled check + auto-update| GH[(GitHub)]
+  end
+  subgraph Per-project session
+    F[fkit command] --> T[fkit-team root]
+    T -->|sys_session_create x6, named, idempotent| P[producer]
+    T --> C[coder]
+    T --> R[reviewer]
+    T --> AR[adversarial-reviewer]
+    T --> A[architect]
+    T --> W[wiki]
+  end
+  subgraph Consultation (spawn+inbox, one- and two-hop verified interactively)
+    P <-->|product<->technical| A
+    C -->|design consistency| A
+    R -->|adversarial pass| AR
+    P -->|wiki lookups| W
+    C --> W
+    R --> W
+    AR --> W
+    A --> W
   end
 ```
 
-(topology described in `omnigent/README.md:12-24`; every non-wiki agent's prompt repeats the
-spawn+inbox mechanics verbatim, e.g. `omnigent/fkit-producer/config.yaml:66-73`,
-`omnigent/fkit-adversarial-reviewer/config.yaml` "Consulting other agents" section).
-
-**Corrected framing (owner, post-initiation):** the onboarding/startup sequence itself is
-**interactive**, not headless — `-p` only seeds the *first* message; the session then stays live for
-the owner to answer questions — and project initiation uses only **one-hop** consults
-(producer→architect, producer→wiki), which are verified working end-to-end (this survey is itself a
-live instance of that). The unverified caveat documented upstream
-(`omnigent/README.md:70-73`) — that a spawned consultant which itself consults another agent may not
-finish under a **fully headless** `-p` run beyond one hop — is real but narrower than originally
-stated here: it matters for CI/automation-style chains (e.g. reviewer→adversarial-reviewer nested
-inside a longer headless flow), not for onboarding or for the producer↔architect/wiki consults this
-repo currently relies on. Treat it as a separate, lower-priority follow-up, not a blocker for the
-startup sequence.
-
 ## Data model and state
 
-There is no database; "state" is entirely **files in the consuming project's `ai-agents/` tree**
-(scaffold in `omnigent/scaffold/ai-agents/`, this repo's own copy at `ai-agents/`):
+Everything below the previous survey's table is unchanged; additions since:
 
 | Path | Owner | Purpose |
 |---|---|---|
-| `ai-agents/knowledge-base/PROJECT.md` | producer (writes once, at initiation) | prose project brief; placeholder title `# <Project name>` or marker `fkit:uninitialized` signals "not yet initiated" (`omnigent/fkit-init.sh:132-137`, `omnigent/fkit-producer/config.yaml:93-96`) |
-| `ai-agents/knowledge-base/*` | architect (+ others) | design specs, ADRs (`decisions/`), architecture docs, research |
-| `ai-agents/sprints/plan-sprint-N.md`, `sprints/done/` | producer | sprint plans |
-| `ai-agents/tasks/{backlog,done,cancelled}/*.md` | producer (writes); moved to `done`/`cancelled` **only** by the owner or via producer's `task-done`/`task-cancelled` skills, never on the producer's own initiative | task briefs |
-| `ai-agents/reviews/<task-id>.md` | **shared, two-party**: reviewer owns "Reviewer findings", coder owns "Coder response", both may append "Accepted residuals" | stateful review ledger — the loop-prevention mechanism (`ai-agents/reviews/README.md:1-60`) |
-| `ai-agents/wiki-vault/{index.md,log.md,schema.md,wiki/{decisions,features,systems,tasks}/}` | **fkit-wiki exclusively** | synthesized project knowledge (Karpathy LLM-wiki pattern); every other agent reaches it only by consulting fkit-wiki (`omnigent/README.md:12-14`) |
+| `~/.local/share/fkit/omnigent/*` | installer | global install of resources (bundles, scaffold, scripts) — **outside any project**, shared across every project you run `fkit` in |
+| `~/.local/share/fkit/.version` | installer / self-update | installed `version`/`sha`/`repo`/`ref` — self-update compares against this |
+| `~/.local/share/fkit/.latest`, `.update-check` | self-update (fkit.sh) | cached "newer version seen" + throttle timestamp — avoids a network call on every launch |
+| `~/.local/bin/fkit` | installer | thin global launcher, execs the installed `fkit.sh` |
+| `.fkit/team-session` (gitignored, per-project) | fkit.sh | cached conversation id of the durable `fkit-team` root session — the mechanism that makes `fkit` resumable instead of proliferating sessions |
+| `.fkit/intake.md` (gitignored, per-project) | `.fkit/interview` (terminal script), read by producer's `initiate-project` | fresh-project terminal intake answers |
+| `.omnigent/config.yaml` (gitignored, per-project) | `fkit-init.sh` | sets `auto_open_conversation: false` so summoning 6-7 agents doesn't open 6-7 browser tabs (`omnigent/fkit-init.sh:60-73`) |
+| `VERSION` (repo root, **tracked**) | `bin/release.mjs` | single source of truth for fkit's own version; kept in sync with `package.json.version` |
 
-This repo's own `ai-agents/knowledge-base/PROJECT.md` is currently the **unfilled scaffold
-placeholder** (title `# <Project name>`, all sections `_fill in_`) — by the project's own
-"uninitialized" test this repo counts as not-yet-initiated, which is exactly why this survey is
-running now, spawned by the producer's `initiate-project` skill.
+`ai-agents/knowledge-base/PROJECT.md` is now filled in (this repo passed initiation); the
+`fkit:uninitialized` / placeholder-title tests no longer trip for this repo.
 
 ## Key flows
 
-**1. Fresh-project onboarding** (`omnigent/README.md:60-66`, `omnigent/fkit-init.sh` end-to-end):
-`install.sh` (curl|sh) → downloads the repo tarball → runs `omnigent/fkit-init.sh <project-root>` →
-scaffolds `ai-agents/` (skip if present) → drops `CLAUDE.md`/`AGENTS.md` (skip if present) → vendors
-the six bundles to `.fkit/agents/` → adds `.fkit/` to `.gitignore` → writes a `.fkit/interview`
-(terminal intake script) and `.fkit/run` launcher. `.fkit/run` (default agent = producer) detects an
-uninitialized `PROJECT.md`, runs the terminal intake (`.fkit/intake.md`), then launches the producer
-seeded with a message that triggers its `initiate-project` skill.
+**1. Fresh-project onboarding (current, primary path)**: `curl install.sh | sh` (once, global) → `fkit`
+(per project) → throttled self-update → `FKIT_SETUP_ONLY=1 fkit-init.sh` (scaffold, context files,
+vendor all seven bundles) → fresh-project terminal intake (`.fkit/interview` → `.fkit/intake.md`) →
+resume-or-create the one `fkit-team` session → team root bootstraps the six named children → owner
+picks a teammate in the Subagents panel (typically the producer on a fresh project, which self-detects
+the uninitialized `PROJECT.md` and runs `initiate-project`) (`omnigent/fkit.sh` end-to-end,
+`omnigent/README.md:39-99`).
 
-**2. Project initiation** (producer's `initiate-project` skill, invoked here): producer reads
-`.fkit/intake.md` if present, interviews the owner only on gaps, **spawns fkit-architect to run
-`survey-project`** (this document is that output), then writes `PROJECT.md` from both, ending with a
-readiness summary (`omnigent/README.md:60-66`).
+**2. Project initiation** (producer's `initiate-project` skill): unchanged from the first survey —
+interview the owner on gaps not already answered by `.fkit/intake.md`, spawn `fkit-architect` to run
+`survey-project`, write `PROJECT.md` from both, end with a readiness summary.
 
-**3. Normal task flow** (implied by agent roles + skills, not yet exercised in this repo since it's
-still uninitialized): producer writes a task brief in `ai-agents/tasks/backlog/` → coder runs
-`plan-task` → coder implements → reviewer runs `review`/`stateful-review` (delegating an adversarial
-pass to fkit-adversarial-reviewer) → findings land in `ai-agents/reviews/<task-id>.md` → coder's
-`process-stateful-review` verifies/applies fixes → producer's `task-done` moves the brief once the
-owner signs off.
+**3. Self-update** (new): every non-source-checkout `fkit` launch does a throttled `git ls-remote`
+(or GitHub API) check; on a newer commit, unless `FKIT_NO_AUTO_UPDATE=1`, it silently re-runs
+`install.sh` and re-execs itself with `FKIT_SKIP_UPDATE=1` to avoid a double-check
+(`omnigent/fkit.sh:120-166`). `fkit update`/`fkit upgrade` does this on demand, unconditionally, and
+refuses on a source checkout (told to `git pull` instead) (`omnigent/fkit.sh:88-98`).
 
-**4. Wiki access**: every agent's prompt has a "Wiki access — always via fkit-wiki" rule; they never
-open `ai-agents/wiki-vault/` themselves, only spawn fkit-wiki and consult its `query` skill (e.g.
-`omnigent/fkit-producer/config.yaml` "Wiki access" section; `omnigent/fkit-wiki/skills/query/SKILL.md:1-20`).
+**4. Release** (new): `npm run release` (→ `node bin/release.mjs`) bumps `VERSION` + `package.json`
+(patch by default; `--minor`/`--major`/`--version`/`--no-bump`), commits, pushes the current branch,
+creates + pushes an annotated `v<version>` tag — **no npm-registry publish** (`bin/release.mjs:1-30`,
+confirmed no `npm publish` call anywhere in the script). This is the mechanism behind the `Release
+vX.Y.Z` commits visible in `git log`. **Owner-confirmed this session**: bumping `VERSION`/
+`package.json.version` via this pipeline, ahead of any real npm-registry publish, is deliberate and
+fine — the trap ADR-001 warned about (a stale-but-versioned *npm listing*) doesn't apply here because
+nothing is actually published to the registry; the version bump only drives the GitHub-tag-based
+self-update/version-banner mechanism, not `npx`. ADR-001 itself is not contradicted by this — worth a
+short ADR addendum/supersession if the owner wants it written down formally (recommended, not done
+here — see Report below).
+
+**5. Normal task flow**: unchanged from the first survey (still not yet exercised in this repo) —
+producer writes a task brief → coder `plan-task` → implements → reviewer `review`/`stateful-review`
+(delegating to `fkit-adversarial-reviewer`) → `ai-agents/reviews/<task-id>.md` → coder's
+`process-stateful-review` → producer's `task-done` moves the brief only on owner sign-off.
+
+**6. Wiki access**: unchanged — every agent reaches `ai-agents/wiki-vault/` only via `fkit-wiki`.
 
 ## Build / run / test
 
-There is **no build and no automated test suite** — the "codebase" is YAML + Markdown + POSIX shell.
-The closest things to build/test steps:
+Still **no build, no automated test suite**. Updated inventory:
 
-- **Validate bundles** (pre-flight, not CI-wired): `omnigent/validate-bundles.sh` — YAML-parses every
-  `SKILL.md` frontmatter and runs `omnigent.spec.load` per bundle if a local Omnigent Python install is
-  found (`omnigent/validate-bundles.sh:1-40`).
-- **Vendor agents into a project**: `omnigent/vendor-agents.sh <project-root>`.
-- **Set up a new project**: `omnigent/fkit-init.sh <project-root>` (or the public `install.sh`).
-- **Run an agent**: `omnigent run omnigent/fkit-<name>` (canonical) or `omnigent run .fkit/agents/fkit-<name>`
-  (vendored, required for spawn-based consultation) — `README.md:27-33`.
-- **Confirmed no CI**: no `.github/workflows` directory exists in this repo (checked directly).
+- **Validate bundles**: `omnigent/validate-bundles.sh` — unchanged, still not CI-wired (confirmed:
+  `.github/workflows/` does not exist; ADR-003 approved this but the implementation task
+  (`ai-agents/tasks/backlog/add-ci-validate-bundles.md`) is still in the backlog, not built).
+- **Vendor agents**: `omnigent/vendor-agents.sh <project-root>` — now copies all seven `fkit-*` dirs.
+- **Set up a project**: `omnigent/fkit-init.sh <project-root>` (idempotent; also called internally by
+  `fkit.sh` with `FKIT_SETUP_ONLY=1`).
+- **Run the team (recommended)**: `fkit` (global command) in any project root.
+- **Run one agent directly**: `.fkit/run <name>` (vendored) or `omnigent run omnigent/fkit-<name>`
+  (canonical, source checkout only).
+- **Release fkit itself (new)**: `npm run release[:minor|:major|:dry]` → `node bin/release.mjs`.
+  Zero npm dependencies (`bin/release.mjs:1-27` — uses only `node:child_process`, `node:fs`,
+  `node:path`, `node:url`). Requires a git `origin` remote; fails fast otherwise.
 
 ## Cross-cutting concerns
 
-- **Guardrails**: every agent has an identical `blast_radius` function-policy on `tool_call`
-  (`omnigent.inner.nessie.policies.blast_radius`, `gate_pushes: false`) — denies catastrophic ops
-  (force-push, `rm -rf /`, hard-reset to a remote ref) outright; ordinary push/commit is **not**
-  gated (chosen so headless runs don't hang on an unanswerable approval prompt) — "never commit/push
-  unprompted" is instead a **prompt-level hard rule** repeated in every config
-  (`omnigent/fkit-producer/config.yaml:40-49` and identically in the other five).
-- **Role boundaries are prompt-enforced, not sandboxed** — all six agents run `sandbox: none`; e.g.
-  the reviewer's REVIEW-ONLY constraint and the architect's "docs/stubs, not full implementations"
-  are behavioral rules, not filesystem restrictions (`omnigent/README.md:75-77`). This is a named,
-  accepted risk with a planned follow-up (`sandbox.write_paths`).
-- **Shared config DRY problem**: Omnigent has no `extends`/base-config mechanism, so cross-agent rules
-  (secrets hygiene, "never commit unprompted") live in the target project's root `CLAUDE.md` /
-  `AGENTS.md`, injected automatically per harness, and must be **kept in sync by hand** across the two
-  files (`omnigent/README.md:79-83`).
-- **Consultation loop-safety**: consults are framed as one focused question with an async
-  end-turn/wake pattern to avoid tight polling; the reviewer/coder review loop additionally uses the
-  shared ledger (`ai-agents/reviews/<task-id>.md`) to distinguish genuine defects from "frontier-move"
-  oscillation across rounds (`ai-agents/reviews/README.md:1-40`).
-- **Secrets hygiene**: repeated explicit rule across agents — never expose DSNs/credentials/secrets in
-  any artifact.
+- **Guardrails, per bundle.** The six workers share an identical `blast_radius` policy (unchanged from
+  the first survey). **`fkit-team`'s guardrails differ deliberately**: it adds `spawn_bounds`
+  (`max_dispatches_per_turn: 7`, capping both `sys_session_create`/`sys_session_send` so the
+  six-way standby bootstrap can't be exceeded or bypassed) and a day-long `ask_timeout: 86400` (so an
+  ASK survives the human stepping away), and — deliberately — **no**
+  `headless_subagent_purpose_guard`, because that would deny fkit-team's purpose-less standby/chat
+  dispatches (`omnigent/fkit-team/config.yaml` guardrails block + inline comments).
+- **Role boundaries are still prompt-enforced, not sandboxed** — all seven agents run `sandbox: none`.
+  Unchanged, named, accepted risk (see Risks).
+- **Self-update is a new trust surface.** A normal `fkit` invocation can silently fetch and execute
+  code from `github.com/flashist/fkit@main` (re-running `install.sh` piped through `sh`) with no
+  signature or checksum verification beyond HTTPS/TLS — see Risks.
+- **Shared config DRY problem**: unchanged — `CLAUDE.md`/`AGENTS.md` still hand-synced; both are
+  **still the generic scaffold placeholder text** at this repo's root (`CLAUDE.md:5-8`,
+  `AGENTS.md:5-8`, `CLAUDE.md:27-29`) even though `PROJECT.md` and this doc are filled in — see Risks
+  (owner should confirm whether this is intentional: `PROJECT.md` says "don't duplicate
+  [architecture.md], read it for anything below product-brief altitude," which is a coherent reason to
+  leave `CLAUDE.md` thin, but the literal placeholder text — "_fill in_" — reads as unfinished rather
+  than deliberately thin).
+- **Consultation loop-safety**: unchanged; reinforced by the newly-confirmed two-hop-interactive
+  verification.
+- **Secrets hygiene**: unchanged repeated rule across agents.
 
 ## Notable conventions and deliberate decisions
 
-- **Bundle = config.yaml + skills/**, one directory per agent, no code — this is the single unit of
-  distribution and versioning.
-- **Vendoring over path-escape**: the `.fkit/agents/` copy exists purely because Omnigent's
-  `config_path` can't reference outside the caller's cwd; `vendor-agents.sh` is the re-sync mechanism,
-  and it is explicitly **not** meant to be hand-edited (edit `omnigent/fkit-*`, then re-vendor).
-- **`fkit:uninitialized` marker convention**: a scaffolded `PROJECT.md` starts with that marker (only
-  present in `omnigent/scaffold/ai-agents/knowledge-base/PROJECT.md:1`, not in this repo's real
-  `PROJECT.md`, which instead trips the *other* test — the still-placeholder `# <Project name>` title);
-  either signal tells the producer/launcher a project needs initiation.
-- **Two historical design-research documents live at the repo root** (`fkit-omnigent-research-brief.md`,
-  `omnigent-research-report.md`, `fkit-external-review-brief.md`, `fkit-external-review-report.md`).
-  Git history (`git log --oneline`: "Reserach brief" → "External research report about omnigent" →
-  "Porting to omnigent" → "Omnigent" → several "Omnigent update"/"first start" commits) shows these
-  documents **preceded and motivated a full rewrite**: the external review report explicitly
-  describes an *older* fkit architecture (`bin/`, `generic/skills/`, `manifest/`, `examples/`, a
-  compile-skills.mjs pipeline) that **no longer exists in this repo** — confirmed absent from the root
-  listing. Treat those four documents as **historical decision inputs**, not current architecture.
+- **Bundle = config.yaml (+ optional skills/)**, one directory per agent — now seven, not six;
+  `fkit-team` is deliberately skill-less (it only orchestrates, never "does").
+- **`fkit-team` is additive, not a rewrite** — it reaches the six existing bundles via the exact same
+  `spawn: true` / `config_path` mechanism they already use to consult each other, so the six workers
+  and their consult logic are untouched by its introduction (`omnigent/fkit-team/config.yaml`
+  header comment).
+- **One global install, resumable per-project sessions.** Deliberate move from "launch an agent" to
+  "open your project's durable team workspace" — `.fkit/team-session` is the resumability anchor, a
+  new durable-state convention not present in the first survey.
+- **Self-update is opt-out, not opt-in**, on the theory that a CLI tool should stay current by default;
+  mitigated by throttling, a source-checkout carve-out, and explicit env toggles
+  (`FKIT_NO_AUTO_UPDATE`, `FKIT_NO_UPDATE_CHECK`).
+- **Release without registry publish**: `bin/release.mjs` manages git tags/commits/version files only;
+  it deliberately does not touch the npm registry, keeping ADR-001's "no npx installer yet" decision
+  intact while still giving the project real, tagged releases (owner-confirmed this session).
+- Vendoring / `fkit:uninitialized` marker / historical-docs-archived conventions: unchanged from the
+  first survey.
 
 ## Risks, technical debt, and open questions
 
 **Top risks:**
-1. **No structural enforcement of agent boundaries.** Every "never commit", "review-only",
-   "wiki-writes-only" rule is prompt-level only (`sandbox: none` everywhere). A prompt-injection or a
-   model deviation has no sandbox backstop beyond the blast_radius DENY list. Documented as a known,
-   accepted risk with a named follow-up (`omnigent/README.md:75-77`) — worth tracking as a real ADR
-   once `sandbox.write_paths` is evaluated.
-2. **Deep multi-hop consult chains under fully headless `-p` runs remain unverified** (narrower than
-   first framed here). The startup sequence (`.fkit/run`, `install.sh`) is **interactive** — `-p` only
-   seeds the opening message, the session stays live — and project initiation uses only **one-hop**
-   consults (producer→architect, producer→wiki), which are verified working; this survey is itself a
-   live example. The open caveat (`omnigent/README.md:70-73`) is about a spawned consultant that
-   itself consults *another* agent finishing inside a **fully headless** run — relevant to
-   CI/automation-style chains (e.g. reviewer→adversarial-reviewer nested in a longer headless flow),
-   not to onboarding. Lower priority; not a blocker for the startup sequence.
-3. ~~This repo (fkit-on-fkit) is itself uninitialized~~ — **resolved during this initiation run**:
-   `PROJECT.md` is now filled in (see `ai-agents/knowledge-base/PROJECT.md`).
 
-**Resolved during initiation (owner decisions — see ADRs under `ai-agents/knowledge-base/decisions/`):**
-- `.codex-tmp/` → gitignored (`.gitignore` updated). No ADR needed for this one (housekeeping, not an
-  architecture decision).
-- `package.json` stays metadata-only for now; a future `npx fkit` installer (a `bin` wrapping
-  `fkit-init.sh`) is a deliberate, deferred feature — see
-  [ADR-001](./decisions/adr-001-package-json-stays-metadata-only.md).
-- The four historical pre-Omnigent research/review documents are archived to
-  `ai-agents/knowledge-base/history/` (with a banner README) — see
-  [ADR-002](./decisions/adr-002-archive-pre-omnigent-design-docs.md).
-- CI: a lightweight GitHub Actions workflow running `omnigent/validate-bundles.sh` is planned (task
-  brief to follow from the producer) — see
-  [ADR-003](./decisions/adr-003-ci-runs-validate-bundles.md).
+1. **Self-update has no integrity verification beyond HTTPS.** A default `fkit` launch can silently
+   pull and execute `install.sh` from `github.com/flashist/fkit@main` on a throttle. This is a
+   reasonable default for solo/early use but is worth an explicit owner decision once fkit has
+   external users: is plain-HTTPS-from-a-fixed-repo/ref an accepted trust model long-term, or does it
+   need a checksum/signature step before wider distribution? Not urgent at prototype stage; flagging
+   as a forward-looking open question, not a defect.
+2. **No structural enforcement of agent boundaries** (`sandbox.write_paths` not adopted) — unchanged
+   from the first survey, still no timeline. Now sharpened: `omnigent/README.md:150-152` explicitly
+   names `sandbox.write_paths` as the mechanism and flags "verify it doesn't break model/git access on
+   your platform first" as a prerequisite investigation step, which hasn't been done.
+3. **Deep multi-hop consult chains under fully headless `-p` runs remain the one genuinely unverified
+   case** — narrowed further this pass. One-hop and two-hop consults are now confirmed **live** in
+   interactive sessions (`omnigent/README.md:143-146`); only chains beyond that, run fully headless,
+   are unverified, with a documented workaround (drive via the Omnigent server REST API instead).
+   **This should directly inform Sprint 1's "Document the consult-chain envelope" task** — its scope
+   is narrower and more resolved than when that task brief was written.
+4. **Two small, low-stakes pieces of doc/behavior drift**, noted for completeness, not worth their own
+   task: (a) `vendor-agents.sh`/`fkit-init.sh` comments and echoed output still say "six agent
+   bundles"/"6 agents" though the `fkit-*` glob already vendors seven, including `fkit-team`
+   (`omnigent/vendor-agents.sh:9`, `omnigent/fkit-init.sh:11`, `:150`); (b) `.fkit/run`'s fresh-project
+   detection duplicates logic `fkit.sh` now also does itself (see Runtime topology) — likely harmless
+   since `.fkit/run` is the secondary path, but worth a maintainer's eye if the two ever diverge in
+   behavior.
+5. Root `CLAUDE.md`/`AGENTS.md` still carry literal scaffold placeholder text in "Project Overview" and
+   "Architecture" despite `PROJECT.md` being filled — see Cross-cutting concerns. Possibly intentional
+   (avoid duplicating `PROJECT.md`/`architecture.md`), possibly an oversight; worth a one-line owner
+   confirmation.
 
-**Still open:**
-1. For the stated near-term goal ("user-friendly startup sequence and a few agents with dedicated
-   skills") — is the priority to (a) harden the existing six-agent consultation topology, or (b)
-   expand/polish the skill set of the existing agents, or (c) something else? This determines whether
-   the first real sprint should target reliability or feature breadth. (Not addressed by the owner's
-   latest answers — still worth resolving before sprint planning.)
-2. `sandbox.write_paths` (or an equivalent structural enforcement of role boundaries) is flagged as a
-   planned follow-up upstream (`omnigent/README.md:75-77`) but has no committed timeline or owner yet
-   — worth a explicit decision (accept prompt-only enforcement for the prototype stage vs. schedule
-   the sandboxing work) once the near-term priority above is settled.
+**Resolved this pass:**
+- ~~Priority: harden consultation topology vs. expand skill set~~ — resolved by `plan-sprint-1.md`
+  (owner-ranked: onboarding verification → consult-envelope doc → CI; skill-set expansion explicitly
+  deferred).
+- ~~Is `fkit-team`/`fkit.sh` deliberate and primary?~~ — owner-confirmed this session: yes, `fkit-team`
+  is now the primary entry point.
+- ~~Does the release-version-bump practice contradict ADR-001?~~ — owner-confirmed this session: no;
+  ADR-001's concern was a stale *published npm listing*, and `release.mjs` never publishes to the
+  registry. Recommend (not performed here) a short ADR addendum recording this explicitly, since a
+  future reader of ADR-001 alone would reasonably wonder the same thing.
+
+- ~~Root `README.md` was stale relative to the real install flow~~ — rewritten this session (owner
+  request) to describe the `install.sh` → global `fkit` → `fkit-team` flow correctly; the six-agent
+  table, direct `.fkit/run` path, and layout diagram now match `omnigent/README.md` and this doc.
+
+**Carried over, unchanged:**
+- `sandbox.write_paths` timeline (risk #2 above).
