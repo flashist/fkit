@@ -17,8 +17,30 @@ CI tail task.
 | 🔲 Backlog | 2 | Document the consult-chain envelope | [`document-consult-chain-envelope.md`](../tasks/backlog/document-consult-chain-envelope.md) |
 | 🔲 Backlog | 3 | Add CI: run validate-bundles.sh | [`add-ci-validate-bundles.md`](../tasks/backlog/add-ci-validate-bundles.md) |
 | ✅ Done | 4 | Replace leftover placeholder text in CLAUDE.md / AGENTS.md | [`fix-claude-agents-md-placeholder-text.md`](../tasks/done/fix-claude-agents-md-placeholder-text.md) |
+| 🔲 Backlog | 5 | Remove eager auto-spawn of fkit-adversarial-reviewer at session start | [`remove-adversarial-reviewer-eager-spawn.md`](../tasks/backlog/remove-adversarial-reviewer-eager-spawn.md) |
+| 🔲 Backlog | 6 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../tasks/backlog/extend-initiate-project-fill-overview.md) |
+| 🔲 Backlog | 7 | Bake Architecture pointer into scaffold CLAUDE.md/AGENTS.md templates | [`bake-architecture-pointer-into-scaffold-templates.md`](../tasks/backlog/bake-architecture-pointer-into-scaffold-templates.md) |
+| 🔲 Backlog | 8 (optional) | Fix stale agent-count docs + fresh-detection duplication | [`fix-agent-count-doc-drift-and-fresh-detection-dup.md`](../tasks/backlog/fix-agent-count-doc-drift-and-fresh-detection-dup.md) |
 
 ## Context
+
+- **2026-07-10 addendum:** fkit-architect relayed six findings from a follow-up inspection +
+  owner conversation. Three warranted new task briefs (priorities 6–8, appended after the owner's
+  original 1–3 ranking, not inserted into it — flag for owner confirmation before treating as
+  locked): tasks 6–7 close the *systemic* version of the recurrence behind task 4 (task 6 edits
+  `initiate-project` itself so CLAUDE.md/AGENTS.md's Project Overview never goes stale again on
+  future projects; task 7 bakes the Architecture pointer directly into the scaffold template, closing
+  that half permanently with no process step needed at all). Task 8 is explicitly optional/cosmetic
+  per the architect. The remaining three findings needed no new task: the consult-chain-envelope
+  scope got sharper (no change to task 2's brief needed), `sandbox.write_paths` is already an explicit
+  sprint deferral below, and `fkit.sh`'s self-update integrity gap is a forward-looking note only
+  (already in `architecture.md`, revisit once fkit has real external users).
+- **Note on task 5 / task 8 interaction:** task 5 (landed concurrently with this addendum, from a
+  separate conversation) drops `adversarial-reviewer` from `fkit-team`'s standing roster, reducing the
+  eagerly-spawned bootstrap set from six to five. If/when task 5 ships, the "six teammates" wording in
+  `omnigent/fkit.sh` and `omnigent/README.md` (currently accurate) will need the same five/six update
+  task 5's brief already applies to `fkit-team/config.yaml`. Not folded into task 8 now since task 5
+  hasn't shipped yet — flagging so whoever picks up task 8 checks task 5's status first.
 
 - This repo dogfoods fkit on itself; this producer session is the *first* run of
   `initiate-project`, which is now complete — `PROJECT.md` and `architecture.md` are written,

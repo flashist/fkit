@@ -309,6 +309,11 @@ Still **no build, no automated test suite**. Updated inventory:
   intact while still giving the project real, tagged releases (owner-confirmed this session).
 - Vendoring / `fkit:uninitialized` marker / historical-docs-archived conventions: unchanged from the
   first survey.
+- **Citation hygiene note**: this doc's first cut of the doc-drift finding above misattributed a
+  "still says six" citation to `omnigent/vendor-agents.sh:9`, which doesn't actually contain that text
+  — caught by fkit-producer verifying the claim before writing the resulting task brief, not by a
+  re-read here. Left in as a reminder that every citation in this doc should be independently
+  spot-checked before being relied on, this one included.
 
 ## Risks, technical debt, and open questions
 
@@ -330,13 +335,19 @@ Still **no build, no automated test suite**. Updated inventory:
    are unverified, with a documented workaround (drive via the Omnigent server REST API instead).
    **This should directly inform Sprint 1's "Document the consult-chain envelope" task** — its scope
    is narrower and more resolved than when that task brief was written.
-4. **Two small, low-stakes pieces of doc/behavior drift**, noted for completeness, not worth their own
-   task: (a) `vendor-agents.sh`/`fkit-init.sh` comments and echoed output still say "six agent
-   bundles"/"6 agents" though the `fkit-*` glob already vendors seven, including `fkit-team`
-   (`omnigent/vendor-agents.sh:9`, `omnigent/fkit-init.sh:11`, `:150`); (b) `.fkit/run`'s fresh-project
-   detection duplicates logic `fkit.sh` now also does itself (see Runtime topology) — likely harmless
-   since `.fkit/run` is the secondary path, but worth a maintainer's eye if the two ever diverge in
-   behavior.
+4. **Two small, low-stakes pieces of doc/behavior drift** — now ticketed as
+   `ai-agents/tasks/backlog/fix-agent-count-doc-drift-and-fresh-detection-dup.md` (owner: fkit-coder):
+   (a) `fkit-init.sh`'s comment, echo, and `printf` summary block still say "six agent bundles"/"6
+   agents" though `.fkit/agents/` now vendors seven (including `fkit-team`) — and the summary block is
+   worse than a stale count, it lists only 5 of the 7 real bundles (`omnigent/fkit-init.sh:9`, `:209-214`).
+   **Correction from this doc's first cut of this finding**: `vendor-agents.sh` does *not* carry a
+   stale count — it enumerates the vendored destination directory via `ls` rather than asserting a
+   number; the earlier `omnigent/vendor-agents.sh:9` citation here was wrong and has been removed
+   (caught during task triage — see Notable conventions note below on citation hygiene). (b)
+   `.fkit/run`'s fresh-project detection duplicates logic `fkit.sh` now also does itself, via a
+   **different signal** (`PROJECT.md` state vs. `.fkit/agents` presence) — likely harmless today, but
+   exactly the kind of thing that silently diverges later; the ticket asks for either consolidation or
+   an explicit cross-reference comment in both files.
 5. Root `CLAUDE.md`/`AGENTS.md` still carry literal scaffold placeholder text in "Project Overview" and
    "Architecture" despite `PROJECT.md` being filled — see Cross-cutting concerns. Possibly intentional
    (avoid duplicating `PROJECT.md`/`architecture.md`), possibly an oversight; worth a one-line owner
