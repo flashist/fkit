@@ -48,13 +48,72 @@ else
   echo "• added .fkit/ to .gitignore"
 fi
 
-# 5. convenience launcher (lives in the gitignored .fkit/, so no repo clutter)
+# 5. convenience launcher + first-run intake (both live in the gitignored .fkit/, so no repo clutter)
+
+# 5a. first-run intake — a quick TERMINAL questionnaire asked before any LLM starts. It writes the
+#     owner's answers to .fkit/intake.md, which the producer's initiate-project skill reads, so the
+#     basics are captured deterministically (one question at a time, actually waiting on each answer)
+#     instead of over chat. tty-safe: reads the controlling terminal so it works under `curl | sh`.
+cat > "$dest/.fkit/interview" <<'INTERVIEW'
+#!/bin/sh
+# fkit first-run intake. Asks a few project questions on the controlling terminal and writes
+# .fkit/intake.md. Exits cleanly (no file) when there is no terminal, so the LLM interviews instead.
+set -eu
+root="$(cd "$(dirname "$0")/.." && pwd)"
+out="$root/.fkit/intake.md"
+# Need a usable controlling terminal. `[ -r /dev/tty ]` is unreliable (the device node carries rw bits
+# even with no tty), so actually try to OPEN it; if that fails (headless/CI), skip cleanly and let the
+# LLM interview instead. `exec 3<file` would exit the shell on failure before any `|| exit`, so probe
+# with a subshell first, THEN open it ONCE — fd 3 to read answers, fd 4 to print prompts. Re-opening
+# /dev/tty per question can drop a line when all the input arrives at once.
+( : < /dev/tty ) 2>/dev/null || exit 0
+( : > /dev/tty ) 2>/dev/null || exit 0
+exec 3</dev/tty
+exec 4>/dev/tty
+
+ask() {  # ask "<question>" "<hint>"  → prints the question to the terminal, echoes the typed answer
+  printf '\n%s\n' "$1" >&4
+  if [ -n "${2:-}" ]; then printf '  (%s)\n' "$2" >&4; fi
+  printf '> ' >&4
+  IFS= read -r ans <&3 || ans=""
+  printf '%s' "$ans"
+}
+
+printf '\n──────────────────────────────────────────────\n' >&4
+printf ' fkit — quick project intake\n' >&4
+printf ' A few questions so the agents start with context. Press Enter to skip any.\n' >&4
+printf '──────────────────────────────────────────────\n' >&4
+
+name=$(ask "1. Project name?")
+what=$(ask "2. What is it, in a sentence or two?" "what you're building")
+who=$(ask "3. Who is it for, and what problem does it solve for them?")
+stage=$(ask "4. What stage is it?" "greenfield / prototype / live / rewrite")
+goal=$(ask "5. Near-term goal — what should exist first?")
+cons=$(ask "6. Key constraints, deadlines, or non-goals?" "optional")
+
+{
+  printf '# fkit intake\n\n'
+  printf 'The owner answered these on the terminal before launch. Use them as the product brief and\n'
+  printf 'do NOT re-ask what is answered here. A dash (—) means the owner skipped it.\n\n'
+  printf -- '- **Project name:** %s\n' "${name:-—}"
+  printf -- '- **What it is:** %s\n' "${what:-—}"
+  printf -- '- **Who / problem:** %s\n' "${who:-—}"
+  printf -- '- **Stage:** %s\n' "${stage:-—}"
+  printf -- '- **Near-term goal:** %s\n' "${goal:-—}"
+  printf -- '- **Constraints / non-goals:** %s\n' "${cons:-—}"
+} > "$out"
+
+printf '\nThanks — captured to .fkit/intake.md. Starting the producer...\n' >&4
+INTERVIEW
+chmod +x "$dest/.fkit/interview"
+
+# 5b. launcher
 cat > "$dest/.fkit/run" <<'RUN'
 #!/bin/sh
 # fkit launcher — start an agent by short name (default: producer).
 # Usage:  .fkit/run [producer|coder|reviewer|architect|wiki|adversarial-reviewer]
-# On a brand-new project, launching the producer drops you straight into guided
-# project initiation (product interview + codebase survey) instead of a blank prompt.
+# On a brand-new project, launching the producer first runs a quick terminal intake, then opens the
+# producer already primed with your answers (instead of a blank prompt).
 set -eu
 root="$(cd "$(dirname "$0")/.." && pwd)"
 agent="${1:-producer}"
@@ -64,10 +123,30 @@ if [ ! -d "$root/.fkit/agents/fkit-$agent" ]; then
   exit 1
 fi
 cd "$root"
-# Open Omnigent's web UI in the browser once the server answers, so there is ALWAYS a visual view
-# of the session. The terminal TUI can render poorly or look frozen (notably when the project was
-# set up via `curl | sh`); the web UI is the reliable surface. Backgrounded so it can never block
-# the TUI; opt out with FKIT_NO_BROWSER=1.
+
+# Build the launch command; default is just to run the requested agent.
+set -- run ".fkit/agents/fkit-$agent"
+
+# First run: if the producer is launched before the project has been initiated, capture a quick
+# terminal intake (before any LLM), then seed the opening message so the producer uses those answers
+# and lands straight in initiation. "Uninitialized" matches the producer prompt's own test:
+# PROJECT.md missing, still carrying the fkit:uninitialized marker, or the placeholder title.
+proj="ai-agents/knowledge-base/PROJECT.md"
+if [ "$agent" = producer ] && { [ ! -f "$proj" ] \
+     || grep -q 'fkit:uninitialized' "$proj" 2>/dev/null \
+     || grep -qF '# <Project name>' "$proj" 2>/dev/null; }; then
+  if [ -x "$root/.fkit/interview" ]; then "$root/.fkit/interview" || true; fi
+  if [ -f "$root/.fkit/intake.md" ]; then
+    seed="This is a fresh fkit project. The owner just completed the intake questionnaire in .fkit/intake.md — READ THAT FILE FIRST and use it as the product brief. Then run your initiate-project skill: do NOT re-ask what the intake already answers; only follow up on blank (—) or genuinely ambiguous items, then have the fkit-architect survey the codebase and write PROJECT.md plus the architecture doc."
+  else
+    seed="This is a fresh fkit project — run project initiation now with your initiate-project skill: interview me about the product, have the fkit-architect survey the codebase, then write PROJECT.md and the architecture doc so we're ready to work."
+  fi
+  set -- run ".fkit/agents/fkit-producer" -p "$seed"
+fi
+
+# Open the web UI shortly after the server answers, so there is always a visual view of the session
+# (the terminal TUI can render poorly, notably under `curl | sh`). Backgrounded; FKIT_NO_BROWSER=1 skips.
+# Started here — after the intake — so its readiness poll doesn't expire while you're still answering.
 ui_url="http://127.0.0.1:6767"
 if [ "${FKIT_NO_BROWSER:-0}" != 1 ]; then
   (
@@ -86,21 +165,11 @@ if [ "${FKIT_NO_BROWSER:-0}" != 1 ]; then
   ) &
   echo "fkit — opening the Omnigent web UI at $ui_url (use it if this terminal looks blank; FKIT_NO_BROWSER=1 to skip)"
 fi
-# First run: if the producer is launched before the project has been initiated, seed the opening
-# message so the session lands directly in the initiate-project onboarding rather than at an empty
-# prompt. "Uninitialized" matches the producer prompt's own test: PROJECT.md missing, still carrying
-# the fkit:uninitialized marker, or still holding the placeholder title `# <Project name>`.
-proj="ai-agents/knowledge-base/PROJECT.md"
-if [ "$agent" = producer ] && { [ ! -f "$proj" ] \
-     || grep -q 'fkit:uninitialized' "$proj" 2>/dev/null \
-     || grep -qF '# <Project name>' "$proj" 2>/dev/null; }; then
-  exec omnigent run ".fkit/agents/fkit-producer" \
-    -p "This is a fresh fkit project — run project initiation now with your initiate-project skill: interview me about the product, have the fkit-architect survey the codebase, then write PROJECT.md and the architecture doc so we're ready to work."
-fi
-exec omnigent run ".fkit/agents/fkit-$agent"
+
+exec omnigent "$@"
 RUN
 chmod +x "$dest/.fkit/run"
-echo "• created launcher .fkit/run"
+echo "• created launcher .fkit/run + intake .fkit/interview"
 
 # ---------- summary ----------
 printf '\n'

@@ -29,10 +29,18 @@ Ground yourself so your questions are informed, not lazy. With your read/shell t
 Then **greet the owner**: say you're setting the project up, that it takes a short product interview plus
 an automated codebase survey, and that they can say **"skip setup"** at any point to go straight to work.
 
-## Step 1 — Interview the owner about the product
+## Step 1 — Get the product picture
 
-Ask **conversationally, a few questions at a time** — not a wall of twenty. Adapt to what Step 0 already
-told you (don't ask what the README answers; confirm it instead). Cover, over as many rounds as it takes:
+**First, check for `.fkit/intake.md`.** On first run the launcher asks the owner a short intake
+questionnaire *on the terminal, before you start*, and writes the answers there. If that file exists,
+**read it and treat it as the product brief** — do **not** re-ask what it already answers. Briefly
+confirm you've got it, then follow up **only** on fields left blank (shown as `—`) or genuinely
+ambiguous answers, in one short round. Then go to Step 2. (The intake covers: project name, what it is,
+who it's for, stage, near-term goal, constraints/non-goals.)
+
+**Only if there is no intake file**, run the interview yourself. Ask **conversationally, a few questions
+at a time** — not a wall of twenty. Adapt to what Step 0 already told you (don't ask what the README
+answers; confirm it instead). Cover, over as many rounds as it takes:
 
 - **What is this project?** One or two sentences in the owner's words.
 - **Who is it for?** Primary users / audience, and the problem it solves for them.
