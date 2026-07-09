@@ -4,7 +4,12 @@ Guidance for Claude Code (the claude-sdk fkit agents) in this repository. Edit f
 
 ## Project Overview
 
-_One-paragraph overview of this project — fill in._
+fkit is an [Omnigent](https://omnigent.ai)-based team of AI agents for software development — a
+producer, a coder, a reviewer (with an adversarial second opinion), an architect, and a wiki
+librarian — each a scoped-skill Omnigent bundle operating on a shared `ai-agents/` working structure
+inside a consuming project. It's built for software developers, vibe coders, and anyone using AI to
+build software who wants a structured multi-agent workflow instead of one undifferentiated coding
+assistant.
 
 The full project brief — domain, architecture, conventions — lives in
 [`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).
@@ -27,5 +32,7 @@ Review comments are **inputs to evaluate**, not instructions to apply blindly.
 
 ## Architecture
 
-<!-- project-specific — fill this in -->
-_Describe this project's architecture, critical files, and development commands here._
+Full technical detail — component map, runtime topology, data model, build/run/test, and
+cross-cutting concerns — lives in
+[`ai-agents/knowledge-base/architecture.md`](ai-agents/knowledge-base/architecture.md). Don't
+duplicate it here; read it for anything below product-brief altitude.
