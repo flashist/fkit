@@ -9,6 +9,11 @@
 #   - Fresh folder  → scaffold ai-agents/, vendor the six agents, run a quick terminal intake, summon all.
 #   - Set-up folder → just summon all + open the web UI.
 #
+# `fkit team` (prototype) opens ONE durable, resumable session instead: a fkit-team root stands up the
+# six agents as named children in the web UI's Subagents panel (each directly chattable), caches its
+# conversation id in .fkit/team-session, and resumes THAT same session every run — so nothing piles up
+# and you return to the same workspace across days.
+#
 # It also keeps itself current: `fkit update` reinstalls from GitHub now, and a normal `fkit` does a
 # throttled check and auto-updates when a newer commit is published (then continues on the fresh code).
 #
@@ -71,6 +76,14 @@ case "${1:-}" in
     ;;
 esac
 
+# Launch mode: `fkit team` opens ONE durable, resumable session with the whole team as named children
+# in the web UI's Subagents panel (resume-or-create, so it never proliferates). Anything else uses the
+# classic six-top-level-session summon. (Once the team model is proven, this becomes the default.)
+mode=summon
+case "${1:-}" in
+  team|--team) mode=team ;;
+esac
+
 # Automatic: throttled check on a normal launch. Silent when already current; skips cleanly offline.
 if [ "${FKIT_SKIP_UPDATE:-0}" != 1 ] && [ "${FKIT_NO_UPDATE_CHECK:-0}" != 1 ] \
    && ! _fkit_is_source_checkout && command -v curl >/dev/null 2>&1; then
@@ -126,6 +139,91 @@ if ! command -v omnigent >/dev/null 2>&1; then
   echo "fkit: 'omnigent' is not on your PATH — install it (https://omnigent.ai) and run 'omnigent setup'," >&2
   echo "      then re-run 'fkit'. The project is set up; only the agent launch is pending." >&2
   exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# `fkit team` — ONE durable, resumable session. A fkit-team root agent stands up the six teammates as
+# named standby children in the Subagents panel (each directly chattable). We cache the root's
+# conversation id in .fkit/team-session and resume THAT exact session every run, so it never
+# proliferates and survives across days. The id isn't printed at launch, so we discover it via the
+# local REST API; PATCH names the root in the sidebar. Foreground REPL drives the first-run bootstrap
+# reliably; a background poller opens the single web-UI tab.
+# ---------------------------------------------------------------------------
+if [ "$mode" = team ]; then
+  [ -d ".fkit/agents/fkit-team" ] || {
+    echo "fkit: the fkit-team bundle is missing (.fkit/agents/fkit-team). Re-run 'fkit' to re-vendor." >&2
+    exit 1
+  }
+  teamfile=".fkit/team-session"
+  base="$ui_url"
+  seed="Stand up the fkit team now: create each teammate as a named standby session per your instructions, then end your turn."
+
+  _team_open_ui() {
+    [ "${FKIT_NO_BROWSER:-0}" = 1 ] && return 0
+    if command -v open >/dev/null 2>&1; then open "$base" >/dev/null 2>&1 || true
+    elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$base" >/dev/null 2>&1 || true
+    fi
+  }
+  _team_wait_server() {  # poll the local server until it answers (bounded); returns anyway
+    n=0
+    while [ "$n" -lt 30 ]; do
+      command -v curl >/dev/null 2>&1 && curl -s -o /dev/null "$base/" 2>/dev/null && return 0
+      n=$((n + 1)); sleep 1
+    done
+    return 0
+  }
+
+  # Decide resume vs. create. A cached id is trusted when the server is down (omnigent validates it on
+  # launch and errors loudly on 404); when the server is already up we verify it and drop a stale id.
+  id=""; [ -f "$teamfile" ] && id="$(head -1 "$teamfile" 2>/dev/null | tr -d '[:space:]')"
+  team_mode=create
+  if [ -n "$id" ]; then
+    if command -v curl >/dev/null 2>&1 && curl -s -o /dev/null "$base/" 2>/dev/null; then
+      code="$(curl -s -o /dev/null -w '%{http_code}' "$base/v1/sessions/$id" 2>/dev/null || echo 000)"
+      case "$code" in
+        2*) team_mode=resume ;;
+        *)  team_mode=create; id=""; : > "$teamfile" 2>/dev/null || true ;;   # stale/deleted → recreate
+      esac
+    else
+      team_mode=resume
+    fi
+  fi
+
+  if [ "$team_mode" = resume ]; then
+    printf '\n  fkit: resuming your team session (%s)...\n' "$(printf %s "$id" | cut -c1-16)"
+    ( _team_wait_server; _team_open_ui ) &
+    set -- run --resume "$id" ".fkit/agents/fkit-team"
+  else
+    printf '\n  fkit: creating your team session (one durable workspace)...\n'
+    ( # capture the new conversation id → cache it → name the root → open the single web-UI tab
+      _team_wait_server
+      newid=""; m=0
+      while [ "$m" -lt 30 ] && [ -z "$newid" ]; do
+        newid="$(curl -s "$base/v1/sessions?agent_name=fkit-team&limit=1&order=desc&sort_by=updated_at" 2>/dev/null \
+                  | grep -o 'conv_[A-Za-z0-9]*' | head -1)"
+        [ -z "$newid" ] && { m=$((m + 1)); sleep 1; }
+      done
+      if [ -n "$newid" ]; then
+        printf '%s\n' "$newid" > "$teamfile"
+        curl -s -o /dev/null -X PATCH "$base/v1/sessions/$newid" \
+          -H 'Content-Type: application/json' \
+          --data "{\"title\":\"fkit · $(basename "$proj")\"}" 2>/dev/null || true
+      fi
+      _team_open_ui
+    ) &
+    set -- run ".fkit/agents/fkit-team" -p "$seed"
+  fi
+
+  printf '  Your six teammates appear in the Subagents panel — click any one to chat: %s\n\n' "$base"
+
+  # Foreground REPL (reliable bootstrap). Omnigent's REPL watches stdin with kqueue, which rejects the
+  # /dev/tty clone on macOS; if our stdin is not a real terminal (e.g. `curl | sh`), feed it the real
+  # controlling-terminal pts (ps -o tty= yields ttysNNN / pts/N — real char devices; /dev/tty is not).
+  if ! [ -t 0 ]; then
+    tt="$(ps -o tty= -p $$ 2>/dev/null | tr -d ' ')"
+    if [ -n "$tt" ] && [ -c "/dev/$tt" ]; then exec omnigent "$@" < "/dev/$tt"; fi
+  fi
+  exec omnigent "$@"
 fi
 
 # 4. Summon all agents as IDLE sessions (no prompt, no task) so each is available to chat with in the

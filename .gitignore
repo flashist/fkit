@@ -9,3 +9,6 @@
 
 # Per-run Codex home dir (transient, machine-specific)
 .codex-tmp/
+
+# Local Omnigent project config (fkit-managed runtime preferences)
+.omnigent/
