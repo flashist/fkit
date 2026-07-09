@@ -34,8 +34,8 @@ INIT="$here/fkit-init.sh"
 #   - `fkit update`  → reinstall from GitHub now (explicit; also `upgrade`).
 #   - normal `fkit`  → throttled check; if a newer commit is published, auto-update and re-exec the
 #                      freshly installed launcher so the rest of the run uses the new code.
-# A source checkout (has .git, or the canonical omnigent/vendor-agents.sh) is never auto-updated —
-# update it with git. The installed version is recorded in <install-root>/.version by install.sh.
+# A source checkout (the fkit repo — its root has .git / package.json) is never auto-updated — update
+# it with git. The installed version is recorded in <install-root>/.version by install.sh.
 # ---------------------------------------------------------------------------
 _fkit_verfield() {  # _fkit_verfield <key> → its value from the installed .version (empty if none)
   [ -f "$share/.version" ] || return 0
@@ -57,7 +57,11 @@ _fkit_reinstall() {  # run the canonical installer for $repo@$ref (refreshes res
   FKIT_REPO="$repo" FKIT_REF="$ref" \
     curl -fsSL "https://raw.githubusercontent.com/$repo/$ref/install.sh" | sh
 }
-_fkit_is_source_checkout() { [ -d "$share/.git" ] || [ -f "$here/vendor-agents.sh" ]; }
+# A source checkout is the fkit repo itself (its root has .git and package.json). We must NOT key this on
+# anything inside omnigent/ (e.g. vendor-agents.sh) — install.sh copies that whole dir into the install,
+# so such a marker is present in installs too and would wrongly disable their self-update. .git and the
+# repo-root package.json are never copied into an install (install.sh only copies omnigent/ + writes .version).
+_fkit_is_source_checkout() { [ -d "$share/.git" ] || [ -f "$share/package.json" ]; }
 
 _fkit_remote_version() {  # → the human version string at $repo@$ref (from the repo-root VERSION), or empty
   command -v curl >/dev/null 2>&1 || return 0
