@@ -87,7 +87,12 @@ fi
 printf '  Start an agent (from this directory):\n'
 printf '    .fkit/run              # producer (default)\n'
 printf '    .fkit/run reviewer     # or coder / architect / wiki / adversarial-reviewer\n\n'
-printf '  After editing an agent in omnigent/fkit-*, re-sync:  omnigent/vendor-agents.sh .\n'
+# Only relevant when this project holds the canonical source (i.e. the fkit repo itself,
+# dogfooding). An end user installing into their own project has no omnigent/ dir — they'd
+# re-run the installer to refresh .fkit/agents/, so don't show them a path that isn't there.
+if [ -f "$dest/omnigent/vendor-agents.sh" ]; then
+  printf '  After editing an agent in omnigent/fkit-*, re-sync:  omnigent/vendor-agents.sh .\n'
+fi
 
 # ---------- optional interactive launch (only when a terminal is reachable) ----------
 # Omnigent's REPL watches its stdin with macOS kqueue, which rejects the /dev/tty clone
