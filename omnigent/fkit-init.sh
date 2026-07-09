@@ -64,6 +64,28 @@ if [ ! -d "$root/.fkit/agents/fkit-$agent" ]; then
   exit 1
 fi
 cd "$root"
+# Open Omnigent's web UI in the browser once the server answers, so there is ALWAYS a visual view
+# of the session. The terminal TUI can render poorly or look frozen (notably when the project was
+# set up via `curl | sh`); the web UI is the reliable surface. Backgrounded so it can never block
+# the TUI; opt out with FKIT_NO_BROWSER=1.
+ui_url="http://127.0.0.1:6767"
+if [ "${FKIT_NO_BROWSER:-0}" != 1 ]; then
+  (
+    n=0
+    while [ "$n" -lt 15 ]; do
+      if command -v curl >/dev/null 2>&1; then
+        if curl -s -o /dev/null "$ui_url"; then break; fi
+        n=$((n + 1)); sleep 1
+      else
+        sleep 3; break
+      fi
+    done
+    if command -v open >/dev/null 2>&1; then open "$ui_url" >/dev/null 2>&1 || true
+    elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$ui_url" >/dev/null 2>&1 || true
+    fi
+  ) &
+  echo "fkit — opening the Omnigent web UI at $ui_url (use it if this terminal looks blank; FKIT_NO_BROWSER=1 to skip)"
+fi
 # First run: if the producer is launched before the project has been initiated, seed the opening
 # message so the session lands directly in the initiate-project onboarding rather than at an empty
 # prompt. "Uninitialized" matches the producer prompt's own test: PROJECT.md missing, still carrying
