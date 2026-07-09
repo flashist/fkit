@@ -18,7 +18,12 @@ dest="${1:?usage: vendor-agents.sh <project-root>}"
 [ -d "$dest" ] || { echo "error: not a directory: $dest" >&2; exit 1; }
 
 mkdir -p "$dest/.fkit/agents"
-cp -R "$here"/fkit-* "$dest/.fkit/agents/"
+# Copy only the agent bundle DIRECTORIES (fkit-*/) — not sibling files like fkit-init.sh.
+for d in "$here"/fkit-*; do
+  [ -d "$d" ] || continue
+  rm -rf "$dest/.fkit/agents/$(basename "$d")"
+  cp -R "$d" "$dest/.fkit/agents/"
+done
 
 echo "Vendored fkit agents into $dest/.fkit/agents/:"
 ls -1 "$dest/.fkit/agents/"
