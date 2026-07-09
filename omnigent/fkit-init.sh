@@ -64,11 +64,14 @@ if [ ! -d "$root/.fkit/agents/fkit-$agent" ]; then
   exit 1
 fi
 cd "$root"
-# First run: if the producer is launched before the project has been initiated (PROJECT.md
-# missing or still carrying the fkit:uninitialized marker), seed the opening message so the
-# session lands directly in the initiate-project onboarding rather than at an empty prompt.
+# First run: if the producer is launched before the project has been initiated, seed the opening
+# message so the session lands directly in the initiate-project onboarding rather than at an empty
+# prompt. "Uninitialized" matches the producer prompt's own test: PROJECT.md missing, still carrying
+# the fkit:uninitialized marker, or still holding the placeholder title `# <Project name>`.
 proj="ai-agents/knowledge-base/PROJECT.md"
-if [ "$agent" = producer ] && { [ ! -f "$proj" ] || grep -q 'fkit:uninitialized' "$proj" 2>/dev/null; }; then
+if [ "$agent" = producer ] && { [ ! -f "$proj" ] \
+     || grep -q 'fkit:uninitialized' "$proj" 2>/dev/null \
+     || grep -qF '# <Project name>' "$proj" 2>/dev/null; }; then
   exec omnigent run ".fkit/agents/fkit-producer" \
     -p "This is a fresh fkit project — run project initiation now with your initiate-project skill: interview me about the product, have the fkit-architect survey the codebase, then write PROJECT.md and the architecture doc so we're ready to work."
 fi
