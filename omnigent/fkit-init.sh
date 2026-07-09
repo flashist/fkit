@@ -210,11 +210,13 @@ if [ -f "$dest/omnigent/vendor-agents.sh" ]; then
 fi
 
 # ---------- optional interactive launch (only when a terminal is reachable) ----------
+# Skipped entirely under FKIT_SETUP_ONLY=1 — the global `fkit` command sets that so it can drive the
+# launch/summon itself (this script then just scaffolds + vendors + prints the summary).
 # On "Yes" we simply hand off to .fkit/run, which self-heals its stdin (it resolves the real
 # controlling-terminal pts for the `curl | sh` case — Omnigent's REPL can't use the /dev/tty clone
 # device). So there's no tty juggling here: read the answer (from stdin, or /dev/tty when piped) and,
 # if yes, exec the launcher — the same thing the user would run by hand.
-if [ "$omni_ok" = 1 ] && [ -t 1 ] && { [ -t 0 ] || [ -r /dev/tty ]; }; then
+if [ "${FKIT_SETUP_ONLY:-0}" != 1 ] && [ "$omni_ok" = 1 ] && [ -t 1 ] && { [ -t 0 ] || [ -r /dev/tty ]; }; then
   printf '\n  Start the producer now? [Y/n] '
   reply=y
   if [ -t 0 ]; then read reply || reply=n

@@ -45,16 +45,31 @@ verified working; deeper chains (a spawned consultant that itself consults anoth
 interactive sessions but are unreliable under headless `-p` — for headless automation drive via the
 Omnigent server REST API, or keep consults one-hop.
 
-## Running an agent
+## Install & run — the `fkit` command
 
-The agents spawn each other by relative `config_path`, which Omnigent requires to stay inside the
-working directory — so first **vendor** the bundles under your project root, then run from there:
+One line installs `fkit` as a global command (like `omnigent`), then you run it in any project:
 
 ```bash
-omnigent/vendor-agents.sh /path/to/project   # copies the six bundles to <project>/.fkit/agents/
-cd /path/to/project
-omnigent run .fkit/agents/fkit-producer       # or fkit-coder / fkit-reviewer / fkit-architect / fkit-wiki
-omnigent run .fkit/agents/fkit-adversarial-reviewer -p "adversarially review the current diff"
+curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh   # once
+cd /path/to/project && fkit                                                        # per project
+```
+
+`install.sh` puts the agent bundles + scaffold under `~/.local/share/fkit/` and a `fkit` launcher in
+`~/.local/bin/`. Running **`fkit`** in a folder self-decides:
+
+- **Fresh folder** → scaffolds `ai-agents/`, vendors the six agents into `.fkit/agents/`, runs a quick
+  terminal **intake** (writes `.fkit/intake.md`), then summons the team.
+- **Already set up** → just summons the team.
+
+"Summon" = it starts every agent as an **idle session** (no task) and opens the web UI
+(`http://127.0.0.1:6767`), so all six appear in the sidebar and you pick one to chat with. The producer,
+when opened on a fresh project, offers full initiation (see below). `FKIT_NO_BROWSER=1` skips the browser.
+
+**One agent in your terminal instead** (the agents spawn each other by relative `config_path`, which
+Omnigent requires to stay inside the working directory — hence the vendored `.fkit/agents/`):
+
+```bash
+.fkit/run coder        # or producer / reviewer / architect / wiki / adversarial
 ```
 
 Agents use `os_env: caller_process, cwd: .`, so they operate on the project root you launch them from.

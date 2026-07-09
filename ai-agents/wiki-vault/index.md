@@ -14,3 +14,4 @@ Add an entry here whenever a page is created (see `schema.md`).
 - [[decisions/adr-003-ci-runs-validate-bundles]] — Add CI to run `omnigent/validate-bundles.sh`
 
 ## Tasks
+- [[tasks/sprint-1-ship-the-onboarding-sequence]] — Sprint 1 plan for onboarding verification, consult-envelope documentation, and CI validation
