@@ -43,8 +43,10 @@ for s in fkit.sh fkit-init.sh vendor-agents.sh validate-bundles.sh; do
   [ -f "$SHARE/omnigent/$s" ] && chmod +x "$SHARE/omnigent/$s"
 done
 
-# 1b. record the installed version so `fkit` can tell when a newer commit is published (its self-update
-#     compares this sha against $REPO@$REF's head). Prefer git; fall back to the GitHub API via curl.
+# 1b. record the installed version so `fkit` can show it at startup and tell when a newer one is
+#     published (self-update compares this sha against $REPO@$REF's head). Prefer git; fall back to the
+#     GitHub API via curl. The human-readable version is the repo-root VERSION file (single source of
+#     truth, kept in sync with package.json by bin/release.mjs).
 resolve_sha() {
   if command -v git >/dev/null 2>&1; then
     git ls-remote "https://github.com/$REPO.git" "$REF" 2>/dev/null | awk 'NR==1{print $1}'
@@ -54,12 +56,15 @@ resolve_sha() {
   fi
 }
 sha="$(resolve_sha || true)"
+ver="$(head -1 "$TMP/src/VERSION" 2>/dev/null | tr -d '[:space:]')"
 {
+  printf 'version=%s\n' "${ver:-unknown}"
   printf 'sha=%s\n' "${sha:-unknown}"
   printf 'repo=%s\n' "$REPO"
   printf 'ref=%s\n' "$REF"
 } > "$SHARE/.version"
-rm -f "$SHARE/.update-check" 2>/dev/null || true   # force a fresh throttle window after (re)install
+rm -f "$SHARE/.update-check" "$SHARE/.latest" 2>/dev/null || true   # fresh throttle + clear stale "newer" cache
+echo "✓ Installed fkit v${ver:-?} ($(printf %s "${sha:-unknown}" | cut -c1-7))"
 
 # 2. install the global `fkit` launcher (a thin wrapper that execs the installed fkit.sh)
 mkdir -p "$BIN"

@@ -20,7 +20,7 @@
 # Env: FKIT_NO_BROWSER=1        skip opening the browser.
 #      FKIT_NO_AUTO_UPDATE=1    check + notify about updates, but don't auto-apply them.
 #      FKIT_NO_UPDATE_CHECK=1   never touch the network for update checks.
-#      FKIT_UPDATE_INTERVAL_MIN throttle window in minutes (default 720 = 12h; 0 = check every launch).
+#      FKIT_UPDATE_INTERVAL_MIN throttle window in minutes (default 60 = 1h; 0 = check every launch).
 #      FKIT_REPO / FKIT_REF     update source (default flashist/fkit@main).
 set -eu
 
@@ -59,6 +59,34 @@ _fkit_reinstall() {  # run the canonical installer for $repo@$ref (refreshes res
 }
 _fkit_is_source_checkout() { [ -d "$share/.git" ] || [ -f "$here/vendor-agents.sh" ]; }
 
+_fkit_remote_version() {  # → the human version string at $repo@$ref (from the repo-root VERSION), or empty
+  command -v curl >/dev/null 2>&1 || return 0
+  curl -fsSL "https://raw.githubusercontent.com/$repo/$ref/VERSION" 2>/dev/null | head -1 | tr -d '[:space:]'
+}
+_fkit_banner() {  # print "fkit vX (sha)" + a cached "newer available" hint — no network
+  v="$(_fkit_verfield version)"
+  [ -n "$v" ] || v="$(head -1 "$share/VERSION" 2>/dev/null | tr -d '[:space:]')"   # root VERSION (source checkout)
+  [ -n "$v" ] || v="dev"
+  s="$(_fkit_verfield sha)"
+  if [ -z "$s" ] && [ -d "$share/.git" ] && command -v git >/dev/null 2>&1; then
+    s="$(git -C "$share" rev-parse HEAD 2>/dev/null)"
+  fi
+  s7="$(printf %s "${s:-unknown}" | cut -c1-7)"
+  if _fkit_is_source_checkout; then
+    printf '  fkit v%s (%s · source checkout)\n' "$v" "$s7"
+    return 0
+  fi
+  printf '  fkit v%s (%s)\n' "$v" "$s7"
+  # freshness hint from the last throttled check (cached in .latest) — no network on this path
+  if [ -f "$share/.latest" ]; then
+    lsha="$(sed -n 's/^sha=//p' "$share/.latest" | head -1)"
+    lver="$(sed -n 's/^version=//p' "$share/.latest" | head -1)"
+    if [ -n "$lsha" ] && [ "$lsha" != "$(_fkit_verfield sha)" ]; then
+      printf '  ↑ v%s available — run: fkit update\n' "${lver:-$(printf %s "$lsha" | cut -c1-7)}"
+    fi
+  fi
+}
+
 # Explicit: `fkit update` / `fkit upgrade`.
 case "${1:-}" in
   update|--update|upgrade|--upgrade|self-update)
@@ -69,7 +97,7 @@ case "${1:-}" in
     fi
     printf '  fkit: updating from %s@%s...\n' "$repo" "$ref"
     if _fkit_reinstall; then
-      printf '  fkit: now at %s\n' "$(_fkit_verfield sha | cut -c1-7)"
+      printf '  fkit: now at v%s (%s)\n' "$(_fkit_verfield version)" "$(_fkit_verfield sha | cut -c1-7)"
       exit 0
     fi
     echo "fkit: update failed." >&2; exit 1
@@ -88,7 +116,7 @@ esac
 if [ "${FKIT_SKIP_UPDATE:-0}" != 1 ] && [ "${FKIT_NO_UPDATE_CHECK:-0}" != 1 ] \
    && ! _fkit_is_source_checkout && command -v curl >/dev/null 2>&1; then
   stamp="$share/.update-check"
-  interval="${FKIT_UPDATE_INTERVAL_MIN:-720}"
+  interval="${FKIT_UPDATE_INTERVAL_MIN:-60}"
   due=1
   if [ "$interval" -gt 0 ] 2>/dev/null && [ -f "$stamp" ] \
      && [ -z "$(find "$stamp" -mmin +"$interval" 2>/dev/null)" ]; then
@@ -99,12 +127,14 @@ if [ "${FKIT_SKIP_UPDATE:-0}" != 1 ] && [ "${FKIT_NO_UPDATE_CHECK:-0}" != 1 ] \
     remote="$(_fkit_remote_sha)"
     installed="$(_fkit_verfield sha)"
     if [ -n "$remote" ] && [ "$remote" != "$installed" ]; then
+      rver="$(_fkit_remote_version)"; curver="$(_fkit_verfield version)"
+      # cache the newest-known version so the startup banner can show it without a network call
+      { printf 'version=%s\n' "${rver:-unknown}"; printf 'sha=%s\n' "$remote"; } > "$share/.latest" 2>/dev/null || true
       if [ "${FKIT_NO_AUTO_UPDATE:-0}" = 1 ]; then
-        printf '  fkit: a newer version is available (%s). Run: fkit update\n' \
-          "$(printf %s "$remote" | cut -c1-7)"
+        printf '  fkit: a newer version is available (v%s → v%s). Run: fkit update\n' \
+          "${curver:-?}" "${rver:-?}"
       else
-        printf '  fkit: newer version available (%s → %s) — updating...\n' \
-          "$(printf %s "${installed:-unknown}" | cut -c1-7)" "$(printf %s "$remote" | cut -c1-7)"
+        printf '  fkit: updating v%s → v%s...\n' "${curver:-?}" "${rver:-?}"
         if _fkit_reinstall; then
           FKIT_SKIP_UPDATE=1 exec "$0" "$@"              # continue on the freshly installed launcher
         else
@@ -114,6 +144,9 @@ if [ "${FKIT_SKIP_UPDATE:-0}" != 1 ] && [ "${FKIT_NO_UPDATE_CHECK:-0}" != 1 ] \
     fi
   fi
 fi
+
+# Show which fkit this is (and, if the last check saw a newer one, a one-line upgrade hint).
+_fkit_banner
 
 proj="$(pwd)"
 ui_url="http://127.0.0.1:6767"

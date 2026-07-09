@@ -56,8 +56,12 @@ cd /path/to/project && fkit                                                     
 
 You run that one-liner **once**. After that `fkit` keeps itself current:
 
+- Every launch prints its **version** first — e.g. `fkit v0.4.0 (a1b2c3d)` — so you always know what
+  you're running. If the last update check saw a newer one, it adds `↑ v0.5.0 available — run: fkit update`
+  (from cache, no network on that line). The version lives in the repo-root `VERSION` file — the single
+  source of truth, bumped and tagged by `npm run release` (kept in sync with `package.json`).
 - **`fkit update`** reinstalls from GitHub on demand (alias: `fkit upgrade`).
-- A normal **`fkit`** does a throttled check (default every 12h) and, when a newer commit is published,
+- A normal **`fkit`** does a throttled check (default every hour) and, when a newer version is published,
   auto-updates and continues on the fresh code. It's silent when already current and skips cleanly
   offline. Toggles: `FKIT_NO_AUTO_UPDATE=1` (check + notify only), `FKIT_NO_UPDATE_CHECK=1` (no network),
   `FKIT_UPDATE_INTERVAL_MIN` (throttle window; `0` = check every launch). A source checkout is never
