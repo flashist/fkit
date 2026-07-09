@@ -6,3 +6,6 @@
 
 # Vendored fkit agent bundles (re-create with omnigent/vendor-agents.sh)
 .fkit/
+
+# Per-run Codex home dir (transient, machine-specific)
+.codex-tmp/
