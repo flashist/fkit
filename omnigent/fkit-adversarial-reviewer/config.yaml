@@ -10,9 +10,9 @@
 # different blind spots (that's why fkit's original adversarial pass was Codex). A Claude lead + a
 # Codex sidekick gives genuine perspective diversity — "raised by both" is the high-signal case.
 #
-# Registered as a `type: agent` tool on fkit-reviewer (tools.adversarial-reviewer →
-# ../fkit-adversarial-reviewer/config.yaml). Single-purpose, so it has no skills/ dir — the whole
-# agent IS the adversarial reviewer; its behavior lives in the prompt below.
+# Spawned by the fkit-reviewer lead (config_path .fkit/agents/fkit-adversarial-reviewer).
+# Single-purpose, so it has no skills/ dir — the whole agent IS the adversarial reviewer; its
+# behavior lives in the prompt below.
 #
 # Run it directly for a standalone adversarial pass:
 #   omnigent run omnigent/fkit-adversarial-reviewer
@@ -44,8 +44,11 @@ os_env:
   sandbox:
     type: none
 
-# Belt-and-suspenders: this agent never writes or commits, but gate_pushes: true denies any
-# push/commit/merge outright regardless. Mirrors the other agents' guardrail block.
+# The adversarial reviewer only reads and reports — it never writes, commits, or pushes. blast_radius
+# still DENIES the catastrophic set outright (force-push, rm -rf /, hard-reset to a remote ref).
+# gate_pushes: false — a headless agent can't answer an approval prompt, so an ASK-gated push would
+# hang until timeout, and this agent never commits anyway. Flip to true for an interactive hard gate
+# on push / pr-merge / deploy.
 guardrails:
   policies:
     blast_radius:
@@ -54,26 +57,16 @@ guardrails:
       function:
         path: omnigent.inner.nessie.policies.blast_radius
         arguments:
-          gate_pushes: true
+          gate_pushes: false
 
-# Sub-agent registration: fkit-wiki is the single gateway to the project wiki and the single source of
-# truth for anything about the project. Like every other non-wiki agent, this reviewer references the
-# canonical fkit-wiki agent (../fkit-wiki/config.yaml — resolved relative to THIS file's directory) as
-# a `type: agent` tool, so it can DELEGATE project-knowledge lookups to fkit-wiki's `query` skill
-# instead of reading ai-agents/wiki-vault/ itself. pass_history: false — it only needs the question.
-# (Alpha: verify `config:` supports the `../` parent-relative path.)
-tools:
-  fkit-wiki:
-    type: agent
-    description: >-
-      Delegate a project-knowledge lookup to the fkit-wiki agent — the sole gateway to the project wiki
-      at ai-agents/wiki-vault/. Ask it any question about the project (conventions, invariants, intended
-      behavior, prior decisions) to get an answer synthesized from the wiki, with citations. This is the
-      ONLY way to consult the wiki: call it whenever judging the change needs project context, instead
-      of reading wiki files yourself.
-    config: ../fkit-wiki/config.yaml
-    pass_history: false
-    max_sessions: 1
+# Consultation is via SPAWN, not sub-agent tools. Omnigent 0.4.0 cannot reference an external agent
+# bundle by path from a `tools:` block (a `type: agent` tool has no `config:` field — the path is
+# silently ignored). Instead this agent SPAWNS the canonical fkit-wiki bundle by relative config_path;
+# it is vendored under the project root at .fkit/agents/. `spawn: true` registers sys_session_create;
+# `async: true` enables the inbox dispatch the spawn model uses. The wiki gateway is described in the
+# prompt (see "Consulting other agents — how").
+spawn: true
+async: true
 
 prompt: |
   You are the **fkit-adversarial-reviewer** — the adversarial sidekick to the lead reviewer
@@ -87,11 +80,23 @@ prompt: |
   "the auth path"). If the scope is unclear, inspect the working tree / recent diff with `git` and
   state what you reviewed.
 
+  ## Consulting other agents — how (spawn + inbox)
+  You do NOT have a tool literally named `fkit-wiki`. You reach it by **spawning** it and reading its
+  reply from your inbox:
+  1. `sys_session_create(config_path=".fkit/agents/fkit-wiki", title="<short topic>")` — `fkit-wiki`
+     is the project-knowledge gateway (the wiki). The bundle is vendored under the project root at
+     `.fkit/agents/`.
+  2. `sys_session_send(session_id=<the id returned in step 1>, args="<your question>")`.
+  3. **End your turn.** When your inbox wakes you, `sys_read_inbox()` once and use the answer. If the
+     reply is only an intermediate status (the other agent is still working or waiting on something of
+     its own), end your turn again and keep waiting for its FINAL answer — do not poll in a tight loop
+     or use timers.
+
   ## Project context — always via fkit-wiki
   To judge a change well you often need context the diff doesn't carry — a documented invariant, a
   convention, the intended behavior, a prior decision. **fkit-wiki is the single source of truth for
-  anything about the project.** When you need that context, **call your `fkit-wiki` tool** (it delegates
-  to the fkit-wiki agent's `query` skill) and use its answer — never read `ai-agents/wiki-vault/`
+  anything about the project.** When you need that context, **consult the fkit-wiki agent** (spawn it —
+  see *Consulting other agents — how*; it runs the fkit-wiki `query` skill) and use its answer — never read `ai-agents/wiki-vault/`
   yourself. Keep it focused: consult it when project knowledge would actually change your finding, not
   for every line.
 

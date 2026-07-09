@@ -24,7 +24,11 @@ on a *different* model from the Claude lead for genuine perspective diversity.
 
 ## Consultation topology
 
-Agents delegate/consult each other via `type: agent` sub-agent tools (`config: ../<agent>/config.yaml`):
+Agents consult each other by **spawning** the target bundle and reading its reply from the inbox —
+`sys_session_create(config_path=".fkit/agents/fkit-<name>", …)` → `sys_session_send` → `sys_read_inbox`
+(each consulting agent declares `spawn: true`). Omnigent 0.4.0 has no way to reference an external agent
+bundle from a `tools:` block, so this spawn model is the supported mechanism — and it requires the
+bundles to be **vendored under the project root** (see *Running an agent*).
 
 - **Every non-wiki agent → fkit-wiki.** All wiki access (read *and* write) goes through fkit-wiki's
   `query`/`ingest`/… — no agent reads `ai-agents/wiki-vault/` directly. fkit-wiki is the single source
@@ -35,17 +39,27 @@ Agents delegate/consult each other via `type: agent` sub-agent tools (`config: .
   asker's domain.
 - **fkit-reviewer → fkit-adversarial-reviewer** — independent adversarial pass, merged into the review.
 
-Consults are framed as focused, loop-safe questions (answer concisely, don't counter-consult).
+Consults are framed as focused, loop-safe questions (answer concisely, don't counter-consult). Dispatch
+is **async**: the consulting agent ends its turn and is woken when the answer lands. One-hop consults are
+verified working; deeper chains (a spawned consultant that itself consults another) complete in
+interactive sessions but are unreliable under headless `-p` — for headless automation drive via the
+Omnigent server REST API, or keep consults one-hop.
 
 ## Running an agent
 
+The agents spawn each other by relative `config_path`, which Omnigent requires to stay inside the
+working directory — so first **vendor** the bundles under your project root, then run from there:
+
 ```bash
-omnigent run omnigent/fkit-producer          # or fkit-coder / fkit-reviewer / fkit-architect / fkit-wiki
-omnigent run omnigent/fkit-adversarial-reviewer -p "adversarially review the current diff"
+omnigent/vendor-agents.sh /path/to/project   # copies the six bundles to <project>/.fkit/agents/
+cd /path/to/project
+omnigent run .fkit/agents/fkit-producer       # or fkit-coder / fkit-reviewer / fkit-architect / fkit-wiki
+omnigent run .fkit/agents/fkit-adversarial-reviewer -p "adversarially review the current diff"
 ```
 
-Agents use `os_env: caller_process, cwd: .`, so run them from the project root you want them to operate
-on.
+Agents use `os_env: caller_process, cwd: .`, so they operate on the project root you launch them from.
+`omnigent run` auto-spawns the local server the spawn model needs — no separate `omnigent server` step.
+Validate the bundles first with `omnigent/validate-bundles.sh` (Omnigent has no `validate` CLI).
 
 ## Scaffold — standing up a new project
 
@@ -68,15 +82,19 @@ keep the two in sync by hand.
 
 ## Status & caveats (alpha)
 
-These agents mirror the Omnigent spec but several runtime mechanics are **not yet verified end-to-end**
-against a live Omnigent version — treat this as a working prototype, not a hardened release:
+The core collaboration is **verified live** on Omnigent 0.4.0 — spawn-by-`config_path`, the vendoring
+model, one-hop and two-hop consults, codex-under-claude harness mixing, and the wiki's delegated-query
+init all confirmed end-to-end. Remaining caveats:
 
-- Sub-agent references use an **upward** relative path (`config: ../<agent>/config.yaml`); confirm your
-  Omnigent build resolves `../` before relying on the topology.
-- The `guardrails.policies.blast_radius` / `gate_pushes` guardrail is referenced but its exact semantics
-  should be confirmed against Omnigent's policy docs. All agents run `sandbox: none`; role boundaries
-  (e.g. reviewers are REVIEW-ONLY) are enforced **behaviorally in prompts**, not by the sandbox.
-- The review ledger schema used here (`ai-agents/reviews/<task-id>.md`, two-party) differs from the
-  standalone kit's ledger schema at the same path — don't run both against one project until unified.
+- **Deep consult chains under headless `-p`.** A spawned consultant that itself consults another agent
+  completes in an interactive session but may not finish under headless `-p` (the run can exit
+  mid-chain). For headless/CI, drive via the Omnigent server REST API, or keep consults one-hop.
+- **Role boundaries are prompt-enforced, not sandboxed.** All agents run `sandbox: none`, so
+  "REVIEW-ONLY" / "wiki-writes-only" live in the prompts (and the blast_radius DENY set), not the
+  sandbox. Omnigent supports `sandbox.write_paths` to enforce these structurally — adopting it is a
+  planned follow-up (verify it doesn't break model/git access on your platform first).
+- **`gate_pushes: false`.** Chosen so headless runs don't hang on an unanswerable approval prompt; the
+  catastrophic DENY set (force-push, `rm -rf /`, hard-reset to a remote) still applies, and "never
+  commit/push unprompted" is a prompt hard-rule. Flip to `true` for an interactive hard push-gate.
 
-Smoke-test before treating any topology edge as guaranteed.
+Run `omnigent/validate-bundles.sh` before relying on any change.

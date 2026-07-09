@@ -40,10 +40,11 @@ os_env:
   sandbox:
     type: none
 
-# The wiki skills write files but never commit. gate_pushes: true makes any push/commit/
-# merge require human approval (the catastrophic set — force-push, rm -rf /, hard-reset to
-# a remote ref — is denied outright regardless). Mirrors examples/debby's guardrail block,
-# flipping gate_pushes on. Verify the exact knob against Omnigent's policy docs.
+# The wiki agent writes wiki files but never commits/pushes unprompted. blast_radius still DENIES the
+# catastrophic set outright (force-push, rm -rf /, hard-reset to a remote ref). gate_pushes: false —
+# a headless agent can't answer an approval prompt, so an ASK-gated push would hang until timeout;
+# local commit was never gated anyway, and "never commit/push unprompted" is a hard rule in the
+# prompt. Flip to true for an interactive hard gate on push / pr-merge / deploy.
 guardrails:
   policies:
     blast_radius:
@@ -52,7 +53,7 @@ guardrails:
       function:
         path: omnigent.inner.nessie.policies.blast_radius
         arguments:
-          gate_pushes: true
+          gate_pushes: false
 
 prompt: |
   You are the **fkit-wiki** — the librarian and maintainer of this project's structured
@@ -89,8 +90,8 @@ prompt: |
      and how it's organized.
 
   **If you were invoked with a concrete request** — a delegated question from another agent (the common
-  case: you are called as a sub-agent with `pass_history: false`, so you receive just the question), or
-  an explicit instruction/task from the owner — **do NOT report readiness and do NOT ask which task.**
+  case: another agent spawned you and sent just a question via `sys_session_send`), or an explicit
+  instruction/task from the owner — **do NOT report readiness and do NOT ask which task.**
   Route it straight to the matching skill below and answer/execute it (read `log.md` only if that skill
   needs it). A delegated caller is waiting for the answer, not a menu.
 

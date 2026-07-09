@@ -21,7 +21,7 @@
 #
 # NOTE (alpha): schema mirrors omnigent-ai/omnigent examples verbatim. `harness: claude-sdk` gives
 # the native Claude-side review; the fkit reviewer role is `both`, so the second (Codex) opinion is
-# obtained by delegating to the fkit-adversarial-reviewer sidekick (a `type: agent` sub-agent tool) —
+# obtained by consulting the fkit-adversarial-reviewer sidekick (by spawning it) —
 # best-effort, with graceful degradation if the sidekick is unavailable. No
 # model is pinned. The blast_radius/gate_pushes guardrail backstops "never commit"; REVIEW-ONLY
 # (never edit source) is a behavioral hard rule enforced in the prompt + skills, not the sandbox.
@@ -50,10 +50,11 @@ os_env:
   sandbox:
     type: none
 
-# The reviewer writes only review documents and never commits. gate_pushes: true makes any
-# push/commit/merge require human approval (the catastrophic set — force-push, rm -rf /,
-# hard-reset to a remote ref — is denied outright regardless). Mirrors examples/debby's guardrail
-# block, flipping gate_pushes on. Verify the exact knob against Omnigent's policy docs.
+# The reviewer writes only review documents and never commits/pushes unprompted. blast_radius still
+# DENIES the catastrophic set outright (force-push, rm -rf /, hard-reset to a remote ref).
+# gate_pushes: false — a headless agent can't answer an approval prompt, so an ASK-gated push would
+# hang until timeout; local commit was never gated anyway, and "never commit/push unprompted" is a
+# hard rule in the prompt. Flip to true for an interactive hard gate on push / pr-merge / deploy.
 guardrails:
   policies:
     blast_radius:
@@ -62,43 +63,16 @@ guardrails:
       function:
         path: omnigent.inner.nessie.policies.blast_radius
         arguments:
-          gate_pushes: true
+          gate_pushes: false
 
-# Sub-agent registration: fkit-wiki is the single gateway to the project wiki. This agent
-# references the canonical fkit-wiki agent (../fkit-wiki/config.yaml — resolved relative to
-# THIS file's directory) as a `type: agent` tool, so it can DELEGATE wiki reads (fkit-wiki's
-# `query` skill) — and any wiki write (ingest/lint/sync) — instead of touching
-# ai-agents/wiki-vault/ itself. No duplication: every non-wiki agent points at the same
-# canonical config. pass_history: false — the wiki agent only needs the question, not our
-# whole conversation. (Alpha: verify `config:` supports the `../` parent-relative path.)
-tools:
-  fkit-wiki:
-    type: agent
-    description: >-
-      Delegate to the fkit-wiki agent — the sole gateway to the project wiki at
-      ai-agents/wiki-vault/. Ask it any question about the project to get an answer
-      synthesized from the wiki, with citations. This is the ONLY way to read the wiki:
-      call it whenever you need wiki knowledge instead of reading wiki files yourself.
-      Any wiki write (ingest / lint / sync) is delegated here too.
-    config: ../fkit-wiki/config.yaml
-    pass_history: false
-    max_sessions: 1
-
-  # The adversarial-reviewer sidekick: an independent Codex-based reviewer this agent delegates to
-  # for a second, different-model perspective on a diff (findings-only; never edits). Replaces the
-  # old inline `codex exec` shell step in the review / stateful-review skills. Reviewer-only.
-  adversarial-reviewer:
-    type: agent
-    description: >-
-      Delegate an independent adversarial review to the fkit-adversarial-reviewer sidekick — a
-      different-model (Codex) reviewer that aggressively hunts for bugs, edge cases, security holes,
-      race conditions, regressions, and missing tests in the diff/scope you pass it. Returns findings
-      only (file:line, problem, severity); it never edits code. Call it for your second, independent
-      perspective, then dedupe/merge/verify its findings with your own Claude-side pass. If it's
-      unavailable, degrade gracefully and flag partial coverage.
-    config: ../fkit-adversarial-reviewer/config.yaml
-    pass_history: false
-    max_sessions: 1
+# Consultation is via SPAWN, not sub-agent tools. Omnigent 0.4.0 cannot reference an external agent
+# bundle by path from a `tools:` block (a `type: agent` tool has no `config:` field — the path is
+# silently ignored). Instead this agent SPAWNS the canonical bundles by relative config_path; they
+# are vendored under the project root at .fkit/agents/. `spawn: true` registers sys_session_create;
+# `async: true` enables the inbox dispatch the spawn model uses. The wiki gateway and the
+# adversarial-reviewer sidekick are described in the prompt (see "Consulting other agents — how").
+spawn: true
+async: true
 
 prompt: |
   You are the **fkit-reviewer** — an independent, adversarial-minded code reviewer for this project.
@@ -110,13 +84,27 @@ prompt: |
   Review a diff from **two independent perspectives** and give an evidence-backed verdict:
   - a **Claude-side** pass — your own thorough review (you are a capable reviewing agent), and
   - a **Codex-side** adversarial second opinion from your **adversarial-reviewer** sidekick (the
-    fkit-adversarial-reviewer sub-agent — a Codex-based reviewer you call as a tool). If the sidekick
+    fkit-adversarial-reviewer agent — a Codex-based reviewer you consult by spawning it; see
+    *Consulting other agents — how*). If the sidekick
     is unavailable, degrade gracefully to a Claude-only review and flag the partial coverage loudly —
     never present a one-reviewer run as a full review.
 
   You then **dedupe** the two reviewers' findings, **verify each against the actual code** (reviewers
   can be wrong — missing context, misreading the diff, symptom-not-root-cause), classify **defect vs
   frontier-move**, and produce a report that **leads with a one-line decision verdict**.
+
+  ## Consulting other agents — how (spawn + inbox)
+  You do NOT have a tool literally named `fkit-wiki` or `fkit-adversarial-reviewer`. You reach another
+  agent by **spawning** it and reading its reply from your inbox:
+  1. `sys_session_create(config_path=".fkit/agents/<name>", title="<short topic>")` — `<name>` is
+     `fkit-wiki` (project knowledge / the wiki) or `fkit-adversarial-reviewer` (an independent Codex
+     adversarial second opinion on a diff). The bundles are vendored under the project root at
+     `.fkit/agents/`.
+  2. `sys_session_send(session_id=<the id returned in step 1>, args="<your question>")`.
+  3. **End your turn.** When your inbox wakes you, `sys_read_inbox()` once and use the answer. If the
+     reply is only an intermediate status (the other agent is still working or waiting on something of
+     its own), end your turn again and keep waiting for its FINAL answer — do not poll in a tight loop
+     or use timers.
 
   ## Initialization — do this now
   You have filesystem + shell tools. Before reviewing:
@@ -181,5 +169,5 @@ prompt: |
   - A findings table (id · reviewer · reviewer-severity · verified-verdict · defect/frontier ·
     one-liner), then the suppressed-as-settled list and the convergence call.
   - Cite wiki pages (if referenced) as `[[wiki/path]]` and code as `file:line`. Get any wiki context by
-    calling your `fkit-wiki` tool (a sub-agent that delegates to the fkit-wiki agent) — never read
+    consulting the fkit-wiki agent (spawn it — see *Consulting other agents — how*) — never read
     `ai-agents/wiki-vault/` directly.

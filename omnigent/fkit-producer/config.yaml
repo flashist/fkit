@@ -5,8 +5,8 @@
 # task briefs. All final decisions belong to the owner (the human it works for).
 #
 # Runs on the Claude Agent SDK with filesystem access to read ai-agents/ and write
-# briefs/docs. It delegates wiki access to the fkit-wiki sub-agent and consults the
-# fkit-architect sub-agent for technical questions (see the tools block below). Its
+# briefs/docs. It consults the fkit-wiki agent for wiki access and the fkit-architect
+# agent for technical questions (both by spawning them — see the prompt). Its
 # "never commit unless asked" rule is additionally enforced structurally by the
 # blast_radius guardrail (a push/commit requires approval).
 #
@@ -41,11 +41,11 @@ os_env:
   sandbox:
     type: none
 
-# Structural enforcement of the producer's "never commit/push unless explicitly
-# asked" rule: gate_pushes: true makes any push/commit/merge require human
-# approval (the catastrophic set — force-push, rm -rf /, hard-reset to a remote
-# ref — is denied outright regardless). Mirrors examples/debby's guardrail block,
-# flipping gate_pushes on. Verify the exact knob against Omnigent's policy docs.
+# The producer writes briefs and docs but never commits/pushes unprompted. blast_radius still
+# DENIES the catastrophic set outright (force-push, rm -rf /, hard-reset to a remote ref).
+# gate_pushes: false — a headless agent can't answer an approval prompt, so an ASK-gated push would
+# hang until timeout; local commit was never gated anyway, and "never commit/push unprompted" is a
+# hard rule in the prompt. Flip to true for an interactive hard gate on push / pr-merge / deploy.
 guardrails:
   policies:
     blast_radius:
@@ -54,43 +54,16 @@ guardrails:
       function:
         path: omnigent.inner.nessie.policies.blast_radius
         arguments:
-          gate_pushes: true
+          gate_pushes: false
 
-# Sub-agent registration: fkit-wiki is the single gateway to the project wiki. This agent
-# references the canonical fkit-wiki agent (../fkit-wiki/config.yaml — resolved relative to
-# THIS file's directory) as a `type: agent` tool, so it can DELEGATE wiki reads (fkit-wiki's
-# `query` skill) — and any wiki write (ingest/lint/sync) — instead of touching
-# ai-agents/wiki-vault/ itself. No duplication: every non-wiki agent points at the same
-# canonical config. pass_history: false — the wiki agent only needs the question, not our
-# whole conversation. (Alpha: verify `config:` supports the `../` parent-relative path.)
-tools:
-  fkit-wiki:
-    type: agent
-    description: >-
-      Delegate to the fkit-wiki agent — the sole gateway to the project wiki at
-      ai-agents/wiki-vault/. Ask it any question about the project to get an answer
-      synthesized from the wiki, with citations. This is the ONLY way to read the wiki:
-      call it whenever you need wiki knowledge instead of reading wiki files yourself.
-      Any wiki write (ingest / lint / sync) is delegated here too.
-    config: ../fkit-wiki/config.yaml
-    pass_history: false
-    max_sessions: 1
-
-  # The fkit-architect consult tool: when a PRODUCT decision hinges on a technical question —
-  # feasibility, rough cost/complexity, technical risk/dependencies — ask the architect a focused
-  # question and use the answer to inform YOUR product decision. The decision stays yours; the
-  # architect only clarifies the technical picture. (Loop-safe: focused consult, no counter-consult.)
-  fkit-architect:
-    type: agent
-    description: >-
-      Consult the fkit-architect agent when a product/scoping decision depends on a TECHNICAL question
-      you can't answer yourself — is approach X feasible? rough cost/complexity? what are the technical
-      risks or dependencies? Ask a specific question and use the answer to inform your decision. The
-      product decision stays YOURS — the architect only clarifies feasibility/cost/risk; it does not
-      decide product direction.
-    config: ../fkit-architect/config.yaml
-    pass_history: false
-    max_sessions: 1
+# Consultation is via SPAWN, not sub-agent tools. Omnigent 0.4.0 cannot reference an external agent
+# bundle by path from a `tools:` block (a `type: agent` tool has no `config:` field — the path is
+# silently ignored). Instead this agent SPAWNS the canonical bundles by relative config_path; they
+# are vendored under the project root at .fkit/agents/. `spawn: true` registers sys_session_create;
+# `async: true` enables the inbox dispatch the spawn model uses. The wiki gateway and the architect
+# consult are described in the prompt (see "Consulting other agents — how").
+spawn: true
+async: true
 
 prompt: |
   You are the **producer** — the owner's strategic, product, and sprint-planning
@@ -103,6 +76,18 @@ prompt: |
   task status, and maintain project documentation. **You do not write code.** You
   do not make product decisions unilaterally — all final decisions belong to the
   **owner** (the human you work for).
+
+  ## Consulting other agents — how (spawn + inbox)
+  You do NOT have a tool literally named `fkit-wiki` or `fkit-architect`. You reach another agent by
+  **spawning** it and reading its reply from your inbox:
+  1. `sys_session_create(config_path=".fkit/agents/<name>", title="<short topic>")` — `<name>` is
+     `fkit-wiki` (project knowledge / the wiki) or `fkit-architect` (technical feasibility / cost /
+     risk). The bundles are vendored under the project root at `.fkit/agents/`.
+  2. `sys_session_send(session_id=<the id returned in step 1>, args="<your question>")`.
+  3. **End your turn.** When your inbox wakes you, `sys_read_inbox()` once and use the answer. If the
+     reply is only an intermediate status (the other agent is still working or waiting on something of
+     its own), end your turn again and keep waiting for its FINAL answer — do not poll in a tight loop
+     or use timers.
 
   ## Initialization — do this now, in this order
   You have filesystem tools (`sys_os_read`, `sys_os_shell`). Ground yourself in
@@ -128,16 +113,16 @@ prompt: |
 
   ## Wiki access — always via fkit-wiki
   You never read `ai-agents/wiki-vault/` directly. For every new topic raised during
-  the session, get relevant wiki context first by **calling your `fkit-wiki` tool** (a
-  sub-agent that delegates to the fkit-wiki agent's `query` skill) — ask it about the topic and its related constraints or
+  the session, get relevant wiki context first by **consulting the fkit-wiki agent**
+  (spawn it — see *Consulting other agents — how*; it runs the fkit-wiki `query` skill) — ask it about the topic and its related constraints or
   prior investigations, and use its answer. Treat that answer as ground truth; never
   answer from memory alone when the wiki may hold current, verified context. If
   fkit-wiki finds nothing useful, say so and flag it as a potential gap.
 
   ## Consulting the architect
-  You have a **fkit-architect** consult tool for TECHNICAL questions — and the architect may consult
-  you back for product context. Keep the roles clean:
-  - **A product decision that hinges on a technical question → call your `fkit-architect` tool.** When
+  You can consult the **fkit-architect** agent (spawn it — see *Consulting other agents — how*) for
+  TECHNICAL questions — and the architect may consult you back for product context. Keep the roles clean:
+  - **A product decision that hinges on a technical question → consult the fkit-architect agent.** When
     you can't judge feasibility, rough cost/complexity, or technical risk yourself, ask a specific
     question and use its answer to inform your decision. The product decision stays **yours** — the
     architect only clarifies the technical picture, it doesn't decide product.

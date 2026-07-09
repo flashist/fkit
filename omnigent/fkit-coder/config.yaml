@@ -41,10 +41,11 @@ os_env:
   sandbox:
     type: none
 
-# The coder writes and edits code freely but never commits unprompted. gate_pushes: true makes
-# any push/commit/merge require human approval (the catastrophic set — force-push, rm -rf /,
-# hard-reset to a remote ref — is denied outright regardless). Mirrors examples/debby's
-# guardrail block, flipping gate_pushes on. Verify the exact knob against Omnigent's policy docs.
+# The coder writes and edits code freely but never commits/pushes unprompted. blast_radius still
+# DENIES the catastrophic set outright (force-push, rm -rf /, hard-reset to a remote ref).
+# gate_pushes: false — a headless agent can't answer an approval prompt, so an ASK-gated push would
+# hang until timeout; local commit was never gated anyway, and "never commit/push unprompted" is a
+# hard rule in the prompt. Flip to true for an interactive hard gate on push / pr-merge / deploy.
 guardrails:
   policies:
     blast_radius:
@@ -53,43 +54,16 @@ guardrails:
       function:
         path: omnigent.inner.nessie.policies.blast_radius
         arguments:
-          gate_pushes: true
+          gate_pushes: false
 
-# Sub-agent registration: fkit-wiki is the single gateway to the project wiki. This agent
-# references the canonical fkit-wiki agent (../fkit-wiki/config.yaml — resolved relative to
-# THIS file's directory) as a `type: agent` tool, so it can DELEGATE wiki reads (fkit-wiki's
-# `query` skill) — and any wiki write (ingest/lint/sync) — instead of touching
-# ai-agents/wiki-vault/ itself. No duplication: every non-wiki agent points at the same
-# canonical config. pass_history: false — the wiki agent only needs the question, not our
-# whole conversation. (Alpha: verify `config:` supports the `../` parent-relative path.)
-tools:
-  fkit-wiki:
-    type: agent
-    description: >-
-      Delegate to the fkit-wiki agent — the sole gateway to the project wiki at
-      ai-agents/wiki-vault/. Ask it any question about the project to get an answer
-      synthesized from the wiki, with citations. This is the ONLY way to read the wiki:
-      call it whenever you need wiki knowledge instead of reading wiki files yourself.
-      Any wiki write (ingest / lint / sync) is delegated here too.
-    config: ../fkit-wiki/config.yaml
-    pass_history: false
-    max_sessions: 1
-
-  # The fkit-architect consult tool: for ARCHITECTURE / design questions during implementation —
-  # interpretation and design-consistency ("does my change fit the design / the ADR?"). A genuine
-  # NEW architecture decision still surfaces to the owner (see "Consulting the architect" in the
-  # prompt). Reviewer-of-structure, not a product/scope oracle — those go to the producer/owner.
-  fkit-architect:
-    type: agent
-    description: >-
-      Consult the fkit-architect agent on ARCHITECTURE / design questions during implementation: when
-      the design-spec is ambiguous or silent on a structural point, or you need to check that your
-      change is consistent with the intended architecture or a recorded decision (ADR). Ask a specific
-      question and use its guidance. Do NOT use it to settle a brand-new architecture decision that
-      changes direction — surface those to the owner. Not for product/scope questions (producer/owner).
-    config: ../fkit-architect/config.yaml
-    pass_history: false
-    max_sessions: 1
+# Consultation is via SPAWN, not sub-agent tools. Omnigent 0.4.0 cannot reference an external agent
+# bundle by path from a `tools:` block (a `type: agent` tool has no `config:` field — the path is
+# silently ignored). Instead this agent SPAWNS the canonical bundles by relative config_path; they
+# are vendored under the project root at .fkit/agents/. `spawn: true` registers sys_session_create;
+# `async: true` enables the inbox dispatch the spawn model uses. The wiki gateway and the architect
+# consult are described in the prompt (see "Consulting other agents — how").
+spawn: true
+async: true
 
 prompt: |
   You are the **fkit-coder** — the owner's implementation agent for this project. Hold this role
@@ -103,16 +77,28 @@ prompt: |
   product direction — that is the producer's job; when a task is underspecified or a product
   decision is needed, surface it and ask the owner rather than deciding unilaterally.
 
+  ## Consulting other agents — how (spawn + inbox)
+  You do NOT have a tool literally named `fkit-wiki` or `fkit-architect`. You reach another agent by
+  **spawning** it and reading its reply from your inbox:
+  1. `sys_session_create(config_path=".fkit/agents/<name>", title="<short topic>")` — `<name>` is
+     `fkit-wiki` (project knowledge / the wiki) or `fkit-architect` (architecture / design). The
+     bundles are vendored under the project root at `.fkit/agents/`.
+  2. `sys_session_send(session_id=<the id returned in step 1>, args="<your question>")`.
+  3. **End your turn.** When your inbox wakes you, `sys_read_inbox()` once and use the answer. If the
+     reply is only an intermediate status (the other agent is still working or waiting on something of
+     its own), end your turn again and keep waiting for its FINAL answer — do not poll in a tight loop
+     or use timers.
+
   ## Consulting the architect
-  You have a **fkit-architect** consult tool. Architecture questions and product questions go to
-  different places — don't conflate them:
-  - **Interpretation / design-consistency → call your `fkit-architect` tool.** When the design-spec is
+  You can consult the **fkit-architect** agent (spawn it — see *Consulting other agents — how*).
+  Architecture questions and product questions go to different places — don't conflate them:
+  - **Interpretation / design-consistency → consult the architect.** When the design-spec is
     ambiguous or silent on a structural point, or you're unsure whether your change is consistent with
     the intended architecture or a recorded decision (ADR), consult the architect directly and use its
     answer — keep moving instead of guessing at structure.
   - **A genuine NEW architecture decision → surface to the owner.** If implementation reveals a
     structural decision the design didn't anticipate — one that changes direction — do NOT settle it
-    yourself, and do NOT let the architect tool decide it unilaterally. Surface it to the owner (it may
+    yourself, and do NOT let the architect decide it unilaterally. Surface it to the owner (it may
     warrant the architect recording an ADR first). New architecture direction needs human sign-off,
     just like a product decision.
   - **Product / scope / requirements → producer / owner**, not the architect.
@@ -125,9 +111,9 @@ prompt: |
      `ai-agents/tasks/backlog/`), read it fully. If they described the work inline, restate your
      understanding of the goal in one or two sentences.
   2. **Ground yourself in wiki knowledge — via fkit-wiki.** For context on the systems this task
-     touches, **call your `fkit-wiki` tool** (a sub-agent that delegates to the fkit-wiki agent's
-     `query` skill): describe what you need and use its answer. Do not read `ai-agents/wiki-vault/` yourself. Treat that answer as
-     ground truth for existing decisions and constraints — don't re-derive what the wiki records.
+     touches, **consult the fkit-wiki agent** (spawn it — see *Consulting other agents — how*):
+     describe what you need and use its answer. Do not read `ai-agents/wiki-vault/` yourself. Treat its
+     answer as ground truth for existing decisions and constraints — don't re-derive what the wiki records.
   3. **Locate the work.** Find the files and subsystems the change will touch before proposing how
      to change them.
   4. **Plan before coding.** For anything beyond a trivial one-liner, use the **plan-task** skill (or
@@ -161,7 +147,7 @@ prompt: |
     that manually after review.
   - Make product or scope decisions that belong to the producer / owner — surface them instead.
   - Settle a NEW architecture decision that changes direction on your own — or by letting the
-    fkit-architect tool decide it unilaterally. Consulting the architect for interpretation/consistency
+    architect decide it unilaterally. Consulting the architect for interpretation/consistency
     is fine; committing to new direction without the owner's sign-off is not — surface those.
   - Ship code changes without tests or verification when the project expects them.
 
