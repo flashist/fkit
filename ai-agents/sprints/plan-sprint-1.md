@@ -16,7 +16,7 @@ CI tail task.
 | 🔲 Backlog | 1 | Verify onboarding flow end-to-end | [`verify-onboarding-flow-end-to-end.md`](../tasks/backlog/verify-onboarding-flow-end-to-end.md) |
 | 🔲 Backlog | 2 | Document the consult-chain envelope | [`document-consult-chain-envelope.md`](../tasks/backlog/document-consult-chain-envelope.md) |
 | 🔲 Backlog | 3 | Add CI: run validate-bundles.sh | [`add-ci-validate-bundles.md`](../tasks/backlog/add-ci-validate-bundles.md) |
-| 🔲 Backlog | 4 | Replace leftover placeholder text in CLAUDE.md / AGENTS.md | [`fix-claude-agents-md-placeholder-text.md`](../tasks/backlog/fix-claude-agents-md-placeholder-text.md) |
+| ✅ Done | 4 | Replace leftover placeholder text in CLAUDE.md / AGENTS.md | [`fix-claude-agents-md-placeholder-text.md`](../tasks/done/fix-claude-agents-md-placeholder-text.md) |
 
 ## Context
 
