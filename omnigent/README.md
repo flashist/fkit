@@ -61,6 +61,19 @@ Agents use `os_env: caller_process, cwd: .`, so they operate on the project root
 `omnigent run` auto-spawns the local server the spawn model needs — no separate `omnigent server` step.
 Validate the bundles first with `omnigent/validate-bundles.sh` (Omnigent has no `validate` CLI).
 
+## First run — project initiation
+
+A brand-new project has an empty `ai-agents/` and a placeholder `PROJECT.md`, so launching an agent
+into it would drop the owner at a blank prompt with no context. The **producer** closes that gap: on a
+fresh project (its `PROJECT.md` still carries the `fkit:uninitialized` marker) the launcher seeds the
+producer's first message — `omnigent run … -p "run project initiation"` — so the session opens directly
+into the **`initiate-project`** skill. That skill (1) interviews the owner about the product, (2) spawns
+the **fkit-architect** to run its **`survey-project`** skill (a non-interactive, evidence-first codebase
+survey that writes `ai-agents/knowledge-base/architecture.md`), (3) writes `PROJECT.md` from both, and
+(4) ends with a readiness summary and concrete next steps. Writing real content removes the marker, so
+subsequent launches give the normal situation briefing instead. The producer also self-detects an
+uninitialized project from its prompt, so initiation still triggers even without the seeded message.
+
 ## Scaffold — standing up a new project
 
 [`scaffold/`](./scaffold/) is a starter the agents operate on: an empty `ai-agents/` working

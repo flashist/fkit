@@ -32,7 +32,7 @@ import sys
 from pathlib import Path
 from omnigent.spec import load
 bad = 0
-for d in sorted(Path("omnigent").glob("fkit-*")):
+for d in sorted(p for p in Path("omnigent").glob("fkit-*") if p.is_dir()):
     try:
         load(d); print("  ok  ", d)
     except Exception as e:

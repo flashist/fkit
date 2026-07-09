@@ -1,3 +1,6 @@
+<!-- fkit:uninitialized — placeholder brief. The fkit producer replaces this file during project
+     initiation (its initiate-project skill). Delete this marker line once real content is here;
+     its presence is how the agent team knows the project hasn't been set up yet. -->
 # <Project name>
 
 > The prose project brief for AI agents. Agents read this to understand what this project
