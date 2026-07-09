@@ -62,8 +62,10 @@ cd /path/to/project && fkit                                                     
 - **Already set up** → just summons the team.
 
 "Summon" = it starts every agent as an **idle session** (no task) and opens the web UI
-(`http://127.0.0.1:6767`), so all six appear in the sidebar and you pick one to chat with. The producer,
-when opened on a fresh project, offers full initiation (see below). `FKIT_NO_BROWSER=1` skips the browser.
+(`http://127.0.0.1:6767`), so all six appear in the sidebar and you pick one to chat with. It opens
+**exactly one tab** — setup writes `auto_open_conversation: false` to the project's `.omnigent/config.yaml`
+so the six `omnigent run` summons don't each pop their own conversation tab. The producer, when opened on
+a fresh project, offers full initiation (see below). `FKIT_NO_BROWSER=1` skips the browser.
 
 **One agent in your terminal instead** (the agents spawn each other by relative `config_path`, which
 Omnigent requires to stay inside the working directory — hence the vendored `.fkit/agents/`):

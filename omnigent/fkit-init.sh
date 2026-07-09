@@ -39,13 +39,34 @@ done
 "$here/vendor-agents.sh" "$dest" >/dev/null
 echo "• vendored the 6 agent bundles → .fkit/agents/"
 
-# 4. gitignore the vendored copy (it is a copy of omnigent/fkit-*)
+# 4. gitignore the vendored copy + local omnigent config (both are fkit-managed, re-created on setup)
 gi="$dest/.gitignore"
 if [ -f "$gi" ] && grep -qxF '.fkit/' "$gi"; then
   echo "• .gitignore already ignores .fkit/"
 else
   printf '\n# Vendored fkit agent bundles (re-create with omnigent/vendor-agents.sh)\n.fkit/\n' >> "$gi"
   echo "• added .fkit/ to .gitignore"
+fi
+if [ -f "$gi" ] && grep -qxF '.omnigent/' "$gi"; then
+  : # already ignored
+else
+  printf '\n# Local Omnigent project config (fkit-managed runtime preferences)\n.omnigent/\n' >> "$gi"
+  echo "• added .omnigent/ to .gitignore"
+fi
+
+# 4b. Suppress the browser tab that `omnigent run` opens per conversation. By default an interactive
+#     `omnigent run` (no -p) auto-opens the live conversation, so summoning the whole team would open
+#     one tab PER agent (6-7 tabs). fkit instead opens a single web-UI tab from the launcher. The lever
+#     is the effective config's `auto_open_conversation`; project-level .omnigent/config.yaml (cwd)
+#     overrides the user config. Add the key only when absent, so an explicit user choice is respected.
+oc_dir="$dest/.omnigent"
+oc="$oc_dir/config.yaml"
+mkdir -p "$oc_dir"
+if [ -f "$oc" ] && grep -q '^auto_open_conversation:' "$oc"; then
+  echo "• .omnigent/config.yaml already sets auto_open_conversation — left as-is"
+else
+  printf 'auto_open_conversation: false\n' >> "$oc"
+  echo "• set auto_open_conversation: false — one web-UI tab, not one per agent"
 fi
 
 # 5. convenience launcher + first-run intake (both live in the gitignored .fkit/, so no repo clutter)

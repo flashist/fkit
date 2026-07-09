@@ -47,6 +47,9 @@ fi
 #    EOF (stdin is /dev/null) — the session persists on the server regardless of the client. The
 #    producer is started first and we wait for the shared server to answer, so the other five reuse it
 #    instead of each racing to spawn their own server.
+#    NB: these summons do NOT each open a browser tab — fkit-init.sh wrote `auto_open_conversation:
+#    false` to the project's .omnigent/config.yaml, so per-conversation auto-open is off. We open ONE
+#    web-UI tab (the sidebar with all sessions) at step 5.
 # nohup so the client outlives this script and can finish creating its session on the server even
 # after fkit returns (the session persists server-side; the client exits on EOF once it's created).
 summon() { nohup omnigent run ".fkit/agents/fkit-$1" </dev/null >/dev/null 2>&1 & }
