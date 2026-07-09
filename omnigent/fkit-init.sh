@@ -89,18 +89,32 @@ printf '    .fkit/run              # producer (default)\n'
 printf '    .fkit/run reviewer     # or coder / architect / wiki / adversarial-reviewer\n\n'
 printf '  After editing an agent in omnigent/fkit-*, re-sync:  omnigent/vendor-agents.sh .\n'
 
-# ---------- optional interactive launch (only at a real terminal) ----------
-if [ "$omni_ok" = 1 ] && [ -e /dev/tty ] && [ -t 1 ]; then
+# ---------- optional interactive launch (only when a terminal is reachable) ----------
+# Omnigent's REPL watches its stdin with macOS kqueue, which rejects the /dev/tty clone
+# device (EINVAL). So: when stdin is already a real terminal, hand it straight through;
+# under `curl | sh` (stdin is the pipe) resolve /dev/tty to its underlying pts and feed
+# THAT — never /dev/tty itself. If we can't get a real terminal fd, just print how to start.
+if [ "$omni_ok" = 1 ] && [ -t 1 ] && { [ -t 0 ] || [ -r /dev/tty ]; }; then
   printf '\n  Start the producer now? [Y/n] '
   reply=y
-  read reply < /dev/tty || reply=n
+  if [ -t 0 ]; then read reply || reply=n
+  else             read reply < /dev/tty || reply=n
+  fi
   case "$reply" in
     ''|y|Y|yes|YES)
-      printf '\n  launching the producer...\n\n'
       cd "$dest"
-      # Connect the agent's stdin to the terminal — under `curl | sh` our stdin is the
-      # pipe, so without this the interactive REPL would get EOF and exit immediately.
-      exec "$dest/.fkit/run" producer < /dev/tty
+      if [ -t 0 ]; then
+        printf '\n  launching the producer...\n\n'
+        exec "$dest/.fkit/run" producer                     # inherit the real terminal
+      else
+        real_tty="$(tty < /dev/tty 2>/dev/null || true)"    # pts behind /dev/tty
+        if [ -n "$real_tty" ] && [ "$real_tty" != /dev/tty ] && [ -c "$real_tty" ]; then
+          printf '\n  launching the producer...\n\n'
+          exec "$dest/.fkit/run" producer < "$real_tty"
+        else
+          printf '\n  Ok — start it with:  .fkit/run\n'
+        fi
+      fi
       ;;
     *)
       printf '  Ok — start any time with:  .fkit/run\n'
