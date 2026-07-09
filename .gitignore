@@ -3,3 +3,6 @@
 
 # Local Claude Code settings
 .claude/settings.local.json
+
+# Vendored fkit agent bundles (re-create with omnigent/vendor-agents.sh)
+.fkit/

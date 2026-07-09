@@ -48,9 +48,62 @@ else
   echo "• added .fkit/ to .gitignore"
 fi
 
-echo
-echo "Done. Next:"
-echo "  cd \"$dest\""
-echo "  omnigent run .fkit/agents/fkit-producer      # start here (interactive)"
-echo
-echo "When you change an agent in omnigent/fkit-*, re-run this (or vendor-agents.sh) to refresh .fkit/agents/."
+# 5. convenience launcher (lives in the gitignored .fkit/, so no repo clutter)
+cat > "$dest/.fkit/run" <<'RUN'
+#!/bin/sh
+# fkit launcher — start an agent by short name (default: producer).
+# Usage:  .fkit/run [producer|coder|reviewer|architect|wiki|adversarial-reviewer]
+set -eu
+root="$(cd "$(dirname "$0")/.." && pwd)"
+agent="${1:-producer}"
+case "$agent" in adv|adversarial) agent="adversarial-reviewer" ;; esac
+if [ ! -d "$root/.fkit/agents/fkit-$agent" ]; then
+  echo "unknown agent 'fkit-$agent'. try: producer coder reviewer architect wiki adversarial-reviewer" >&2
+  exit 1
+fi
+cd "$root"
+exec omnigent run ".fkit/agents/fkit-$agent"
+RUN
+chmod +x "$dest/.fkit/run"
+echo "• created launcher .fkit/run"
+
+# ---------- summary ----------
+printf '\n'
+printf '  fkit is ready in %s\n\n' "$dest"
+printf '  6 agents (.fkit/agents/):\n'
+printf '    • producer    plan sprints, write task briefs, track status\n'
+printf '    • coder       implement a task: plan -> code -> test\n'
+printf '    • reviewer    review a diff, with an adversarial 2nd opinion\n'
+printf '    • architect   design specs, ADRs, evaluate approaches\n'
+printf '    • wiki        the project knowledge base (query / ingest / lint / sync)\n\n'
+
+if command -v omnigent >/dev/null 2>&1; then
+  omni_ok=1
+else
+  omni_ok=0
+  printf '  ! Omnigent is not installed. Get it at https://omnigent.ai, then run: omnigent setup\n\n'
+fi
+
+printf '  Start an agent (from this directory):\n'
+printf '    .fkit/run              # producer (default)\n'
+printf '    .fkit/run reviewer     # or coder / architect / wiki / adversarial-reviewer\n\n'
+printf '  After editing an agent in omnigent/fkit-*, re-sync:  omnigent/vendor-agents.sh .\n'
+
+# ---------- optional interactive launch (only at a real terminal) ----------
+if [ "$omni_ok" = 1 ] && [ -e /dev/tty ] && [ -t 1 ]; then
+  printf '\n  Start the producer now? [Y/n] '
+  reply=y
+  read reply < /dev/tty || reply=n
+  case "$reply" in
+    ''|y|Y|yes|YES)
+      printf '\n  launching the producer...\n\n'
+      cd "$dest"
+      # Connect the agent's stdin to the terminal — under `curl | sh` our stdin is the
+      # pipe, so without this the interactive REPL would get EOF and exit immediately.
+      exec "$dest/.fkit/run" producer < /dev/tty
+      ;;
+    *)
+      printf '  Ok — start any time with:  .fkit/run\n'
+      ;;
+  esac
+fi
