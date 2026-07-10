@@ -61,6 +61,13 @@ You run that one-liner **once**. After that `fkit` keeps itself current:
   (from cache, no network on that line). The version lives in the repo-root `VERSION` file — the single
   source of truth, bumped and tagged by `npm run release` (kept in sync with `package.json`).
 - **`fkit update`** reinstalls from GitHub on demand (alias: `fkit upgrade`).
+- **`fkit reconnect`** finds every session in the team tree whose runner has disconnected
+  (`runner_online: false`) — root, teammates, and any ad hoc consult grandchildren — and
+  reconnects each one, the client-side recovery recipe from
+  [the 2026-07-10 disconnected-runners incident](../ai-agents/knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md)
+  codified as a script. `fkit reconnect --help` documents its caveats (internal endpoints, the
+  `omnigent.closed` label filter). A stopgap — retire it once the platform ships a first-class
+  reconnect + tree-visibility tool.
 - A normal **`fkit`** does a throttled check (default every hour) and, when a newer version is published,
   auto-updates and continues on the fresh code. It's silent when already current and skips cleanly
   offline. Toggles: `FKIT_NO_AUTO_UPDATE=1` (check + notify only), `FKIT_NO_UPDATE_CHECK=1` (no network),

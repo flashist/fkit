@@ -90,7 +90,7 @@ _fkit_banner() {  # print "fkit vX (sha)" + a cached "newer available" hint — 
   fi
 }
 
-# Explicit: `fkit update` / `fkit upgrade`.
+# Explicit: `fkit update` / `fkit upgrade` / `fkit reconnect`.
 case "${1:-}" in
   update|--update|upgrade|--upgrade|self-update)
     if _fkit_is_source_checkout; then
@@ -104,6 +104,12 @@ case "${1:-}" in
       exit 0
     fi
     echo "fkit: update failed." >&2; exit 1
+    ;;
+  reconnect|--reconnect)
+    RECONNECT="$here/fkit-reconnect.sh"
+    [ -x "$RECONNECT" ] || { echo "fkit: reconnect script not found at $RECONNECT" >&2; exit 1; }
+    shift
+    exec "$RECONNECT" "$@"
     ;;
 esac
 

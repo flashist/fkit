@@ -39,7 +39,7 @@ echo "Installing fkit resources → $SHARE/omnigent"
 mkdir -p "$SHARE"
 rm -rf "$SHARE/omnigent"
 cp -R "$TMP/src/omnigent" "$SHARE/omnigent"
-for s in fkit.sh fkit-init.sh vendor-agents.sh validate-bundles.sh; do
+for s in fkit.sh fkit-init.sh fkit-reconnect.sh vendor-agents.sh validate-bundles.sh; do
   [ -f "$SHARE/omnigent/$s" ] && chmod +x "$SHARE/omnigent/$s"
 done
 
