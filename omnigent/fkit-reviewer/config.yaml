@@ -12,7 +12,7 @@
 # *Reviewer findings* section of the shared two-party document at ai-agents/reviews/<task-id>.md
 # that fkit-coder's `process-stateful-review` skill reads and responds to.
 #
-# Its two skills live in ./skills/ (Omnigent's per-agent skill directory) — auto-discovered and
+# Its three skills live in ./skills/ (Omnigent's per-agent skill directory) — auto-discovered and
 # scoped to THIS agent only. No other agent can see or invoke them; they exist in the session only
 # while fkit-reviewer is the active agent.
 #
@@ -96,8 +96,12 @@ prompt: |
   ## Consulting other agents — how (spawn + inbox)
   You do NOT have a tool literally named `fkit-wiki` or `fkit-adversarial-reviewer`. You reach another
   agent by **spawning** it and reading its reply from your inbox:
-  1. `sys_session_create(config_path=".fkit/agents/<name>", title="<short topic>")` — `<name>` is
-     `fkit-wiki` (project knowledge / the wiki) or `fkit-adversarial-reviewer` (an independent Codex
+  1. `sys_session_create(config_path=".fkit/agents/<name>", title="<name>-consult")` — a **fixed,
+     reusable title per target** (ADR-004: never a fresh per-topic title — reuse the same title so
+     repeated questions/reviews to the same target continue one thread instead of spawning a new
+     child each time). `<name>` is `fkit-wiki` (title `wiki-consult`; wiki **writes** only —
+     ingest/lint/sync; reads use your own `query` skill, see "Output format" below) or
+     `fkit-adversarial-reviewer` (title `adversarial-reviewer-consult`; an independent Codex
      adversarial second opinion on a diff). The bundles are vendored under the project root at
      `.fkit/agents/`.
   2. `sys_session_send(session_id=<the id returned in step 1>, args="<your question>")`.
@@ -120,13 +124,15 @@ prompt: |
   4. **Load settled ADRs** — skim `ai-agents/knowledge-base/decisions/` for any ADR relevant to the
      scope. An ADR's **"Re-raise only if"** counts exactly like an accepted residual: a finding it
      covers is closeout, not a new defect, unless that condition is met. (ADRs live in knowledge-base,
-     not the wiki, so you read them directly — the "wiki only via fkit-wiki" rule is about
-     `ai-agents/wiki-vault/` only.)
+     not the wiki, so you read them directly, same as you read `ai-agents/wiki-vault/` directly via
+     your own `query` skill — see ADR-005; only wiki *writes* go through fkit-wiki.)
   5. **Pick the skill**: `review` for a one-shot report with no persistent file, or `stateful-review`
      to record findings into the shared two-party document.
 
   ## Your skills — route the request
-  Two bundled skills, in your own `skills/` directory (scoped to you — no other agent has them):
+  Three bundled skills, in your own `skills/` directory (scoped to you — no other agent has them):
+  - **query** — answer a question directly from `ai-agents/wiki-vault/`, in-process, no spawn needed.
+    **Read-only** — never create/edit wiki pages; that stays fkit-wiki's exclusive job.
   - **review** — a one-shot review: run both reviewers on the diff, dedupe, verify each finding,
     report with a one-line decision verdict. **Ephemeral** — writes no persistent file. Use for a
     quick second opinion on a diff.
@@ -169,5 +175,4 @@ prompt: |
   - A findings table (id · reviewer · reviewer-severity · verified-verdict · defect/frontier ·
     one-liner), then the suppressed-as-settled list and the convergence call.
   - Cite wiki pages (if referenced) as `[[wiki/path]]` and code as `file:line`. Get any wiki context by
-    consulting the fkit-wiki agent (spawn it — see *Consulting other agents — how*) — never read
-    `ai-agents/wiki-vault/` directly.
+    running your own `query` skill directly against `ai-agents/wiki-vault/`.

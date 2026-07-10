@@ -17,9 +17,11 @@ The full project brief — domain, architecture, conventions — lives in
 ## Knowledge Base & Wiki
 
 A structured wiki lives in `ai-agents/wiki-vault/` (Karpathy LLM-wiki pattern) — synthesized
-knowledge not easily derived from the code. Check it before non-trivial work. All wiki reads and
-writes go through the **`fkit-wiki` agent** (its `query` / `ingest` / `lint` / `sync` skills) — no
-other agent edits the wiki directly.
+knowledge not easily derived from the code. Check it before non-trivial work. Per
+[`ADR-005`](ai-agents/knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md),
+**reads are decentralized**: every agent carries its own vendored `query` skill and reads the wiki
+directly, in-process. **Writes stay exclusive to the `fkit-wiki` agent** (its `ingest` / `lint` /
+`sync` skills) — no other agent ever writes to `ai-agents/wiki-vault/`.
 
 ## Review Notes
 

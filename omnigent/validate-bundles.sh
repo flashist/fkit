@@ -43,4 +43,21 @@ else
   echo "  (omnigent python not found at $PY — set OMNIGENT_PYTHON to enable; skipping spec.load)"
 fi
 
+echo "== vendored query skill drift (ADR-007) =="
+ruby -e '
+src = File.read("omnigent/fkit-wiki/skills/query/SKILL.md")
+targets = %w[fkit-producer fkit-coder fkit-reviewer fkit-architect fkit-adversarial-reviewer]
+bad = 0
+targets.each do |b|
+  f = "omnigent/#{b}/skills/query/SKILL.md"
+  if !File.exist?(f)
+    bad += 1; puts "  FAIL #{f}: missing"
+  elsif File.read(f) != src
+    bad += 1; puts "  FAIL #{f}: content differs from omnigent/fkit-wiki/skills/query/SKILL.md (run omnigent/sync-vendored-skills.sh)"
+  end
+end
+puts "  all vendored copies match the canonical source" if bad == 0
+exit(bad)
+' || fail=1
+
 if [ "$fail" = 0 ]; then echo "ALL BUNDLES VALID"; else echo "VALIDATION FAILED"; exit 1; fi

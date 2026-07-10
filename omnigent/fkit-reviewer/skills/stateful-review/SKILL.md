@@ -81,8 +81,8 @@ Status: in-review | closed-out
   working memory.
 - **Also load settled ADRs:** skim `ai-agents/knowledge-base/decisions/` for any ADR relevant to the
   scope. An ADR's **"Re-raise only if"** counts exactly like an accepted residual (ADRs live in
-  knowledge-base, not the wiki, so you read them directly — the wiki-only-via-fkit-wiki rule is about
-  `ai-agents/wiki-vault/`).
+  knowledge-base, not the wiki, so you read them directly, same as you read `ai-agents/wiki-vault/`
+  directly via your own `query` skill — per ADR-005 only wiki *writes* go through fkit-wiki).
 - The **Round** for this pass = (highest Round already in *Reviewer findings*) + 1, or `1` if fresh.
 
 ---
@@ -92,10 +92,17 @@ Status: in-review | closed-out
 Same as the `review` skill's Step 1:
 - **A) Claude-side (native):** your own thorough pass over the diff/scope — read the changed code and
   enough surrounding context to trace the full flow.
-- **B) Adversarial second opinion (delegate to your sidekick, best-effort):** call your
-  **adversarial-reviewer** tool — the fkit-adversarial-reviewer sub-agent (an independent Codex-based
-  reviewer) — on the same scope; it returns findings only (`file:line`, problem, severity) and never
-  edits. Expect several minutes; capture its findings.
+- **B) Adversarial second opinion (delegate to your sidekick, best-effort):** follow the exact
+  **spawn + inbox** protocol from "Consulting other agents — how" — do not shortcut it by folding the
+  question into `sys_session_create`'s optional `message` field; use the separate `sys_session_send`
+  call, since that is what registers the wait/wake:
+  1. `sys_session_create(config_path=".fkit/agents/fkit-adversarial-reviewer",
+     title="adversarial-reviewer-consult")` — the **fixed** title (ADR-004): reuse it across every
+     review in this session rather than a fresh per-diff title.
+  2. `sys_session_send(session_id=<the id from step 1>, args="<the diff/scope, and any focus area>")`.
+  3. **End your turn.** Expect several minutes. When your inbox wakes you, `sys_read_inbox()` once and
+     capture its findings — findings only (`file:line`, problem, severity) and never edits. If the
+     wake is only an intermediate status, end your turn again and keep waiting for its FINAL findings.
 
 **Priming (best-effort):** include the *Accepted residuals* as context to each reviewer ("these
 tradeoffs are already settled — don't re-raise unless `<re-raise condition>`"). Reviewers may ignore

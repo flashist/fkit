@@ -28,11 +28,18 @@ changed code *and enough surrounding context to understand the full flow*. Produ
 each with a location (`file:line`), a claim, a recommended change, and your severity. This is the
 default, always-available reviewer.
 
-**B) Adversarial second opinion (delegate to your sidekick, best-effort).** Call your
-**adversarial-reviewer** tool — the fkit-adversarial-reviewer sub-agent, an independent Codex-based
-reviewer — on the same scope. Pass it the diff/scope (and any focus area). It returns findings only
-(`file:line`, the problem, and severity) and never edits anything. Expect it to take **several
-minutes** on a non-trivial diff. Capture its findings.
+**B) Adversarial second opinion (delegate to your sidekick, best-effort).** Follow the exact
+**spawn + inbox** protocol from "Consulting other agents — how" — do not shortcut it by folding the
+question into `sys_session_create`'s optional `message` field; use the separate `sys_session_send`
+call, since that is what registers the wait/wake:
+1. `sys_session_create(config_path=".fkit/agents/fkit-adversarial-reviewer",
+   title="adversarial-reviewer-consult")` — the **fixed** title (ADR-004): reuse it across every
+   review in this session rather than a fresh per-diff title.
+2. `sys_session_send(session_id=<the id from step 1>, args="<the diff/scope, and any focus area>")`.
+3. **End your turn.** Expect it to take **several minutes** on a non-trivial diff. When your inbox
+   wakes you, `sys_read_inbox()` once and capture its findings — findings only (`file:line`, the
+   problem, and severity); it never edits anything. If the wake is only an intermediate status, end
+   your turn again and keep waiting for its FINAL findings.
 
 **Graceful degradation (mandatory):** if the adversarial-reviewer sidekick is unavailable,
 unauthenticated, or errors, do **not** fail the review. Record "Codex reviewer unavailable:

@@ -111,6 +111,12 @@ case "${1:-}" in
     shift
     exec "$RECONNECT" "$@"
     ;;
+  restart-team|--restart-team)
+    RESTART_TEAM="$here/fkit-team-restart.sh"
+    [ -x "$RESTART_TEAM" ] || { echo "fkit: restart-team script not found at $RESTART_TEAM" >&2; exit 1; }
+    shift
+    exec "$RESTART_TEAM" "$@"
+    ;;
 esac
 
 # Automatic: throttled check on a normal launch. Silent when already current; skips cleanly offline.

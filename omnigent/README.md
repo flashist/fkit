@@ -12,12 +12,12 @@ agent is active.
 
 | Agent | Harness | Skills | Role |
 |---|---|---|---|
-| **fkit-producer** | claude-sdk | task-done, task-cancelled | product / sprint planning, task lifecycle |
-| **fkit-coder** | claude-sdk | plan-task, process-review, process-stateful-review | implementation (sole source-write authority) |
-| **fkit-reviewer** | claude-sdk | review, stateful-review | code review (lead) |
-| **fkit-adversarial-reviewer** | **codex** | _(prompt-only)_ | adversarial second-opinion sidekick — a *different model* on purpose |
-| **fkit-architect** | claude-sdk | inspect, design-spec, evaluate-approach, record-decision | architecture, design specs, ADRs |
-| **fkit-wiki** | **codex** | query, ingest, lint, sync | the wiki — **sole gateway** to `ai-agents/wiki-vault/` |
+| **fkit-producer** | claude-sdk | query, task-done, task-cancelled | product / sprint planning, task lifecycle |
+| **fkit-coder** | claude-sdk | query, plan-task, process-review, process-stateful-review | implementation (sole source-write authority) |
+| **fkit-reviewer** | claude-sdk | query, review, stateful-review | code review (lead) |
+| **fkit-adversarial-reviewer** | **codex** | query | adversarial second-opinion sidekick — a *different model* on purpose |
+| **fkit-architect** | claude-sdk | query, inspect, design-spec, evaluate-approach, record-decision | architecture, design specs, ADRs |
+| **fkit-wiki** | **codex** | query, ingest, lint, sync | the wiki — exclusive gateway for **writes**; `query` is vendored to every other agent for direct reads (ADR-005) |
 
 Per-agent harness is intentional (Omnigent's per-agent model feature): the adversarial reviewer runs
 on a *different* model from the Claude lead for genuine perspective diversity.
@@ -30,9 +30,11 @@ Agents consult each other by **spawning** the target bundle and reading its repl
 bundle from a `tools:` block, so this spawn model is the supported mechanism — and it requires the
 bundles to be **vendored under the project root** (see *Running an agent*).
 
-- **Every non-wiki agent → fkit-wiki.** All wiki access (read *and* write) goes through fkit-wiki's
-  `query`/`ingest`/… — no agent reads `ai-agents/wiki-vault/` directly. fkit-wiki is the single source
-  of truth for anything about the project.
+- **Every non-wiki agent → fkit-wiki, writes only (ADR-005).** Reads are decentralized: every agent
+  carries its own vendored copy of fkit-wiki's `query` skill and reads `ai-agents/wiki-vault/`
+  directly, in-process — no spawn needed. Agents spawn fkit-wiki only for a **write**
+  (`ingest`/`lint`/`sync`) or a lookup that genuinely needs its own deeper multi-step research beyond
+  a simple query. The wiki remains the single source of truth for anything about the project.
 - **fkit-coder → fkit-architect** — design interpretation / consistency (a *new* architecture decision
   is surfaced to the owner instead).
 - **fkit-producer ⇄ fkit-architect** — product ⇄ technical clarifications; the decision stays in the
@@ -147,8 +149,9 @@ keep the two in sync by hand.
 ## Status & caveats (alpha)
 
 The core collaboration is **verified live** on Omnigent 0.4.0 — spawn-by-`config_path`, the vendoring
-model, one-hop and two-hop consults, codex-under-claude harness mixing, and the wiki's delegated-query
-init all confirmed end-to-end. Remaining caveats:
+model, one-hop and two-hop consults, codex-under-claude harness mixing, and (as of ADR-005) an
+agent's own vendored `query` skill answering a wiki lookup in-process with no spawn, all confirmed
+end-to-end. Remaining caveats:
 
 - **Deep consult chains under headless `-p`.** A spawned consultant that itself consults another agent
   completes in an interactive session but may not finish under headless `-p` (the run can exit
