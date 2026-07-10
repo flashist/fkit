@@ -20,12 +20,17 @@ Collaboration between agents uses spawn plus inbox reads. The producer consults 
 - `fkit` performs a throttled self-update check against GitHub unless disabled.
 - `package.json` is intentionally metadata-only for now, so `npx fkit` is not a working installer yet.
 - The startup consult chain is verified for the interactive one-hop and two-hop paths, but deeper fully headless multi-hop chains remain an open runtime caveat.
+- Ad hoc consult spawns now use fixed role-based titles via [[decisions/adr-004-fixed-role-based-titles-for-consult-spawns]]; the old per-topic pattern is still documented in the sprint material for context.
+- Disconnected subagent runners have a stopgap recovery path in [[systems/subagent-runner-connectivity]]; the underlying child-visibility and non-TTY crash bugs remain upstream.
 - There is no application build step or broad automated test suite; the main pre-flight check is `omnigent/validate-bundles.sh`.
 - The historical pre-Omnigent design documents are archived under `ai-agents/knowledge-base/history/` and should not be read as current architecture.
 
 ## Related
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
 - [[tasks/fix-claude-agents-md-placeholder-text]]
+- [[tasks/build-fkit-reconnect-tooling]]
 - [[decisions/adr-001-package-json-stays-metadata-only]]
 - [[decisions/adr-002-archive-pre-omnigent-design-docs]]
 - [[decisions/adr-003-ci-runs-validate-bundles]]
+- [[decisions/adr-004-fixed-role-based-titles-for-consult-spawns]]
+- [[systems/subagent-runner-connectivity]]
