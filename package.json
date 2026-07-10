@@ -1,6 +1,6 @@
 {
   "name": "fkit",
-  "version": "0.1.24",
+  "version": "0.1.25",
   "scripts": {
     "release": "node bin/release.mjs",
     "release:minor": "node bin/release.mjs --minor",
