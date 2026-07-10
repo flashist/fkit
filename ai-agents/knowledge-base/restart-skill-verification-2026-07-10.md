@@ -203,6 +203,38 @@ signaled by **process group** (`kill -TERM -- -<pid>`), not just its own pid. Co
 shot — consistent with B's finding that the runtime's own internal cascade uses `killpg` for the
 same reason. `fkit-team-restart.sh` now signals the `claude` child's group, not just its pid.
 
+## Addendum 2 (coder, same day) — owner-reported gaps after first synthetic verification pass
+
+Owner testing of the shipped `restart` skill (SKILL.md + `fkit-team-restart.sh` from Addendum 1)
+found two real gaps, both fixed:
+
+1. **No confirmation gate.** The skill went straight from being invoked to killing the live
+   session and its process tree — no explicit human yes/no before anything irreversible-feeling
+   happened. Fixed by adding a new Step 1 to `SKILL.md` ("Ask for explicit confirmation before
+   doing anything") that ends the turn on an explicit question and only proceeds once the human
+   replies with a clear affirmative in a later turn; the original request that triggered the skill
+   (e.g. "restart yourself") is explicitly called out as *not* itself sufficient confirmation.
+   Also added as its own line under "Hard rules".
+2. **Old session never removed from the session list.** The script only killed the old process
+   tree and abandoned the old conversation server-side — it stayed visible in `GET /v1/sessions`
+   indefinitely. The client SDK's `SessionsNamespace.set_archived` (`omnigent_client/_sessions.py`)
+   confirms `PATCH /v1/sessions/{id}` with `{"archived": true}` is exactly the intended mechanism:
+   archived sessions are hidden from the default `list` (only returned with
+   `include_archived=True`), and archiving neither deletes the session/history nor stops it (it
+   only flips a visibility flag — the process kill already handles "stopped"). Fixed by having
+   `fkit-team-restart.sh` PATCH-archive the OLD root session, but **only in the branch where the
+   new session was successfully discovered** — if discovery fails, `.fkit/team-session` is left
+   pointing at the old id for manual recovery, so that id must stay unarchived (still listed,
+   still reachable) rather than being hidden right when it might be needed. Scoped to the old ROOT
+   session only; the six orphaned teammate children are unchanged (still orphaned, still
+   unarchived) — that trade-off was already accepted in Addendum 1 and is unrelated to this fix.
+
+Verified: `bash -n` on the script, `omnigent/validate-bundles.sh` (frontmatter + spec-load +
+vendored-skill-drift checks) all pass after re-running `omnigent/vendor-agents.sh .` to sync
+`.fkit/agents/fkit-team/skills/restart/SKILL.md` from the edited canonical source. Not exercised
+against a live session — doing so would require actually killing a running fkit-team session,
+which is exactly the destructive action this fix adds a confirmation gate in front of.
+
 ## Bottom line for the coder
 
 - Steps 1, 3, 4, 5 of your mechanism are correct as designed (A, C, D above confirm them; D adds

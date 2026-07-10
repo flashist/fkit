@@ -31,6 +31,12 @@
 #   3. Discovers the new session's conversation id and overwrites `.fkit/team-session` with it —
 #      mirroring exactly what `fkit.sh`'s own "create" branch already does on a first-ever launch,
 #      so the next `fkit` launch (or web-UI reload) lands on the new session automatically.
+#   4. Archives the OLD fkit-team session (PATCH /v1/sessions/{old_id} with {"archived": true})
+#      once the new session id is confirmed — the part that actually removes it from the default
+#      session list. Archiving only flips a visibility flag: it does not delete the session or its
+#      history, and it does not stop anything (the kill in step 1 already did that). Scoped to the
+#      OLD ROOT session only — its six teammate child sessions stay orphaned-but-unarchived, same
+#      as before (see next paragraph).
 #
 # Deliberately scoped to fkit-team's OWN root process only — it does NOT touch, discover, or kill
 # any child teammate session (producer/coder/reviewer/architect/wiki/adversarial-reviewer). Those
@@ -193,9 +199,19 @@ if [ -n "$newid" ]; then
   curl -s -o /dev/null -X PATCH "$server_url/v1/sessions/$newid" \
     -H 'Content-Type: application/json' \
     --data "{\"title\":\"fkit · $(basename "$proj")\"}" 2>/dev/null || true
+  # Archive the OLD root session so it drops out of the default session list. This only flips a
+  # visibility flag server-side (does not delete the session/history, does not stop anything —
+  # its process is already dead from the kill step above) and is deliberately scoped to the old
+  # ROOT session only: its six teammate children are intentionally left unarchived (see header).
+  # Only done here, in the success branch, so a failed new-session discovery (below) never leaves
+  # .fkit/team-session pointing at a session that's both dead AND hidden from the list.
+  curl -s -o /dev/null -X PATCH "$server_url/v1/sessions/$old_conv_id" \
+    -H 'Content-Type: application/json' \
+    --data '{"archived": true}' 2>/dev/null || true
   echo "$(date): fkit-team restart complete. new_conv=$newid .fkit/team-session updated." \
-       "old_conv=$old_conv_id abandoned (still exists server-side, disconnected;" \
-       "its six teammates are NOT killed — also orphaned, unreferenced)."
+       "old_conv=$old_conv_id archived (hidden from the default session list, still exists" \
+       "server-side, not deleted); its six teammates are NOT killed or archived — also" \
+       "orphaned, unreferenced."
 else
   echo "$(date): WARNING — could not discover the new session id after ${n}s." \
        ".fkit/team-session NOT updated (still points at the now-dead $old_conv_id)." \
