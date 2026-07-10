@@ -29,6 +29,7 @@ CI tail task.
 | 🔲 Backlog | 11 | Formalize knowledge-base folder structure, including `incidents/` | [`formalize-knowledge-base-incidents-folder.md`](../tasks/backlog/formalize-knowledge-base-incidents-folder.md) |
 | 🔲 Backlog | 12 | Roll out ADR-004: fixed, role-based titles for consult spawns | [`rollout-adr-004-fixed-consult-titles.md`](../tasks/backlog/rollout-adr-004-fixed-consult-titles.md) |
 | 🔲 Backlog | 13 | Give every fkit agent direct wiki-query access | [`give-every-agent-direct-wiki-query-access.md`](../tasks/backlog/give-every-agent-direct-wiki-query-access.md) |
+| 🔲 Backlog | 14 | Add a `task-plan` skill to fkit-producer | [`add-task-plan-skill-to-producer.md`](../tasks/backlog/add-task-plan-skill-to-producer.md) |
 
 ## Context
 
@@ -41,6 +42,20 @@ CI tail task.
   task briefs exist yet; the owner has not yet specified which skills to add for which agents, so none
   are added to the Status table in this pass. Next step once the owner scopes specific
   skill-expansion work: write task briefs and slot them into the Status table above.
+- **2026-07-10 first skill-expansion brief addendum:** owner scoped the first concrete
+  skill-expansion item — a `task-plan` skill for fkit-producer itself, formalizing (into a
+  `task-done`/`task-cancelled`-style skill) the create leg of the task lifecycle: take a task
+  description, plan it into a properly-formatted brief, file it to `ai-agents/tasks/backlog/`, and
+  slot it into a named sprint's Status table if one is mentioned, or leave it unsprinted
+  (`Backlog (unsprinted)`) if not. Landed as priority 14 (appended after the owner's original 1–13
+  ranking, flag for owner confirmation before treating as locked, same convention as priorities
+  6–13). fkit-wiki confirmed this is genuinely greenfield — no prior ADR/wiki page named a
+  `task-plan` skill or formalized producer skill-authoring beyond the three existing skills' own
+  source precedent — and surfaced that `Backlog (unsprinted)` is already a `## Sprint` value the
+  mover skills recognize but no live brief has ever used; this task will be the first to exercise
+  that path. See [`add-task-plan-skill-to-producer.md`](../tasks/backlog/add-task-plan-skill-to-producer.md)
+  for full scope, including one open question flagged for the owner before fkit-coder starts (does
+  "plan the task" mean one brief in/one brief out, or something richer like sub-task breakdown).
 - **2026-07-10 Agents-panel-noise addendum:** owner flagged Web UI panel clutter from ad hoc
   consult children (8+ one-off topic-titled sessions from a single producer↔architect
   conversation). Investigation (source-grounded against installed Omnigent 0.4.0) found neither
