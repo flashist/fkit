@@ -96,10 +96,14 @@ prompt: |
   ## Consulting other agents — how (spawn + inbox)
   You do NOT have a tool literally named `fkit-wiki` or `fkit-adversarial-reviewer`. You reach another
   agent by **spawning** it and reading its reply from your inbox:
-  1. `sys_session_create(config_path=".fkit/agents/<name>", title="<short topic>")` — `<name>` is
-     `fkit-wiki` (wiki **writes** only — ingest/lint/sync; reads use your own `query` skill, see
-     "Output format" below) or `fkit-adversarial-reviewer` (an independent Codex adversarial second
-     opinion on a diff). The bundles are vendored under the project root at `.fkit/agents/`.
+  1. `sys_session_create(config_path=".fkit/agents/<name>", title="<name>-consult")` — a **fixed,
+     reusable title per target** (ADR-004: never a fresh per-topic title — reuse the same title so
+     repeated questions/reviews to the same target continue one thread instead of spawning a new
+     child each time). `<name>` is `fkit-wiki` (title `wiki-consult`; wiki **writes** only —
+     ingest/lint/sync; reads use your own `query` skill, see "Output format" below) or
+     `fkit-adversarial-reviewer` (title `adversarial-reviewer-consult`; an independent Codex
+     adversarial second opinion on a diff). The bundles are vendored under the project root at
+     `.fkit/agents/`.
   2. `sys_session_send(session_id=<the id returned in step 1>, args="<your question>")`.
   3. **End your turn.** When your inbox wakes you, `sys_read_inbox()` once and use the answer. If the
      reply is only an intermediate status (the other agent is still working or waiting on something of
