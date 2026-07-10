@@ -21,9 +21,27 @@ CI tail task.
 | 🔲 Backlog | 6 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../tasks/backlog/extend-initiate-project-fill-overview.md) |
 | 🔲 Backlog | 7 | Bake Architecture pointer into scaffold CLAUDE.md/AGENTS.md templates | [`bake-architecture-pointer-into-scaffold-templates.md`](../tasks/backlog/bake-architecture-pointer-into-scaffold-templates.md) |
 | 🔲 Backlog | 8 (optional) | Fix stale agent-count docs + fresh-detection duplication | [`fix-agent-count-doc-drift-and-fresh-detection-dup.md`](../tasks/backlog/fix-agent-count-doc-drift-and-fresh-detection-dup.md) |
+| 🔲 Backlog | 9 | Build `fkit reconnect` tooling for disconnected subagent runners | [`build-fkit-reconnect-tooling.md`](../tasks/backlog/build-fkit-reconnect-tooling.md) |
+| 🔲 Backlog | 10 | Amend the subagent-disconnect incident doc with technical corrections | [`amend-subagent-disconnect-incident-doc.md`](../tasks/backlog/amend-subagent-disconnect-incident-doc.md) |
+| 🔲 Backlog | 11 | Formalize knowledge-base folder structure, including `incidents/` | [`formalize-knowledge-base-incidents-folder.md`](../tasks/backlog/formalize-knowledge-base-incidents-folder.md) |
 
 ## Context
 
+- **2026-07-10 incident addendum:** all six `fkit-team` teammate runners disconnected simultaneously
+  and required manual CLI/API recovery — see
+  [`ai-agents/knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md`](../knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md).
+  fkit-architect confirmed the root causes (runner death, `sys_session_list`/`sys_agent_list`
+  visibility, missing reconnect tool, non-TTY CLI crash) are all upstream Omnigent platform bugs, not
+  fixable in this repo — those stay addressed to the Omnigent tech team via the incident doc itself.
+  Tasks 9–11 (appended after the owner's original 1–8 ranking, flag for owner confirmation before
+  treating as locked) cover what *is* actionable here: task 9 builds a client-side mitigation script
+  so a repeat doesn't require rediscovering the recovery recipe by hand; task 10 folds in three small
+  technical corrections the architect flagged in the incident doc itself; task 11 formalizes the
+  knowledge-base folder structure (fkit-wiki confirmed no prior `incidents/`/`runbooks` convention
+  existed) so `incidents/` doesn't accumulate inconsistent write-ups the way `decisions/` did before
+  ADRs got a naming convention. Not folded into this addendum: filing the incident upstream with the
+  Omnigent maintainers — that's an owner action (external repo/account), not a task any fkit agent can
+  execute; the incident doc itself is already written to serve as that handoff input.
 - **2026-07-10 addendum:** fkit-architect relayed six findings from a follow-up inspection +
   owner conversation. Three warranted new task briefs (priorities 6–8, appended after the owner's
   original 1–3 ranking, not inserted into it — flag for owner confirmation before treating as
