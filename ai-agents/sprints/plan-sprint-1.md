@@ -24,9 +24,25 @@ CI tail task.
 | 🔲 Backlog | 9 | Build `fkit reconnect` tooling for disconnected subagent runners | [`build-fkit-reconnect-tooling.md`](../tasks/backlog/build-fkit-reconnect-tooling.md) |
 | 🔲 Backlog | 10 | Amend the subagent-disconnect incident doc with technical corrections | [`amend-subagent-disconnect-incident-doc.md`](../tasks/backlog/amend-subagent-disconnect-incident-doc.md) |
 | 🔲 Backlog | 11 | Formalize knowledge-base folder structure, including `incidents/` | [`formalize-knowledge-base-incidents-folder.md`](../tasks/backlog/formalize-knowledge-base-incidents-folder.md) |
+| 🔲 Backlog | 12 | Roll out ADR-004: fixed, role-based titles for consult spawns | [`rollout-adr-004-fixed-consult-titles.md`](../tasks/backlog/rollout-adr-004-fixed-consult-titles.md) |
+| 🔲 Backlog | 13 | Give every fkit agent direct wiki-query access | [`give-every-agent-direct-wiki-query-access.md`](../tasks/backlog/give-every-agent-direct-wiki-query-access.md) |
 
 ## Context
 
+- **2026-07-10 Agents-panel-noise addendum:** owner flagged Web UI panel clutter from ad hoc
+  consult children (8+ one-off topic-titled sessions from a single producer↔architect
+  conversation). Investigation (source-grounded against installed Omnigent 0.4.0) found neither
+  `sys_session_close` nor `archived` actually declutters the panel — only reducing distinct titles
+  created does. Landed as [`ADR-004`](../knowledge-base/decisions/adr-004-fixed-role-based-titles-for-consult-spawns.md)
+  (fixed `<target-agent>-consult` titles, reused across topics), with task 12 as its rollout. While
+  investigating a related idea (give every agent direct wiki-query access instead of spawning
+  fkit-wiki per lookup — task 13), the investigation itself (a 2-hop producer→architect→fkit-wiki
+  consult) hit a live, concrete instance of the exact reliability gap `document-consult-chain-envelope.md`
+  (priority 2) exists to catch: a child leg completed cleanly but never woke its parent to relay the
+  result, stalling silently until manually nudged, and recurring even after the nudge. That
+  incident is itself supporting evidence for task 13, folded into its context. Flag for owner
+  confirmation before treating priorities 12–13 as locked, per the same out-of-band-addition
+  convention as priorities 6–11 above.
 - **2026-07-10 incident addendum:** all six `fkit-team` teammate runners disconnected simultaneously
   and required manual CLI/API recovery — see
   [`ai-agents/knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md`](../knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md).
