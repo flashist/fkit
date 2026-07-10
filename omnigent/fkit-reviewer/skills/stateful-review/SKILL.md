@@ -81,8 +81,8 @@ Status: in-review | closed-out
   working memory.
 - **Also load settled ADRs:** skim `ai-agents/knowledge-base/decisions/` for any ADR relevant to the
   scope. An ADR's **"Re-raise only if"** counts exactly like an accepted residual (ADRs live in
-  knowledge-base, not the wiki, so you read them directly — the wiki-only-via-fkit-wiki rule is about
-  `ai-agents/wiki-vault/`).
+  knowledge-base, not the wiki, so you read them directly, same as you read `ai-agents/wiki-vault/`
+  directly via your own `query` skill — per ADR-005 only wiki *writes* go through fkit-wiki).
 - The **Round** for this pass = (highest Round already in *Reviewer findings*) + 1, or `1` if fresh.
 
 ---

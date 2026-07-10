@@ -27,8 +27,11 @@ git rather than a shared runtime state:
 - **fkit-adversarial-reviewer** — independent second opinion, deliberately a *different* model
   (Codex, not Claude) for genuine perspective diversity.
 - **fkit-architect** — architecture, design specs, ADRs, technical feasibility. No implementation.
-- **fkit-wiki** — sole gateway to `ai-agents/wiki-vault/`, the synthesized project-knowledge store
-  (Karpathy LLM-wiki pattern). Every other agent reaches wiki knowledge only by consulting it.
+- **fkit-wiki** — maintainer of `ai-agents/wiki-vault/`, the synthesized project-knowledge store
+  (Karpathy LLM-wiki pattern), and the **exclusive gateway for wiki writes** (ingest/lint/sync). Per
+  [`ADR-005`](decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md), every other agent
+  carries its own vendored copy of the `query` skill and reads the wiki directly, in-process — they
+  only consult fkit-wiki for writes or deeper multi-step research.
 
 Agents consult each other by spawning a sibling Omnigent session and reading the reply from their
 inbox (Omnigent has no native cross-bundle sub-agent tool yet). Coordination state — sprint plans,

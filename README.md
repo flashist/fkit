@@ -45,13 +45,14 @@ See [`omnigent/README.md`](./omnigent/README.md) for the full detail on all of t
 | **fkit-reviewer** | claude-sdk | code review (lead) |
 | **fkit-adversarial-reviewer** | codex | adversarial second opinion — a *different* model, on purpose |
 | **fkit-architect** | claude-sdk | architecture, design specs, ADRs |
-| **fkit-wiki** | codex | the project wiki — sole gateway to `ai-agents/wiki-vault/` |
+| **fkit-wiki** | codex | the project wiki — exclusive gateway for **writes**; reads are direct via a `query` skill vendored to every agent (ADR-005) |
 
 The `fkit-team` root session that `fkit` opens isn't a "doer" like the six above — it just stands the
 team up, then gets out of the way; you talk to a teammate directly by clicking it in the Subagents
 panel. Agents delegate to one another by spawning a sibling session and reading the reply from their
-inbox (every agent reaches the wiki through fkit-wiki; the coder consults the architect; the reviewer
-runs the adversarial pass). Skills are **scoped to their agent** — active in a session only while
+inbox (every agent reads the wiki directly via its own `query` skill and only spawns fkit-wiki for a
+write; the coder consults the architect; the reviewer runs the adversarial pass). Skills are **scoped
+to their agent** — active in a session only while
 that agent is. Full topology in [`omnigent/README.md`](./omnigent/README.md).
 
 ## Running one agent directly (without the team session)

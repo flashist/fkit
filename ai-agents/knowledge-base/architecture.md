@@ -62,11 +62,11 @@ path, not the recommended one).
 ```
 fkit repo root
 ├── omnigent/                     canonical agent bundles + orchestration scripts ("the framework")
-│   ├── fkit-producer/            config.yaml + skills/  (initiate-project, task-done, task-cancelled)
-│   ├── fkit-coder/                config.yaml + skills/  (plan-task, process-review, process-stateful-review)
-│   ├── fkit-reviewer/             config.yaml + skills/  (review, stateful-review)
-│   ├── fkit-adversarial-reviewer/ config.yaml only (prompt-only, no skills/)
-│   ├── fkit-architect/            config.yaml + skills/  (inspect, design-spec, evaluate-approach,
+│   ├── fkit-producer/            config.yaml + skills/  (query, initiate-project, task-done, task-cancelled)
+│   ├── fkit-coder/                config.yaml + skills/  (query, plan-task, process-review, process-stateful-review)
+│   ├── fkit-reviewer/             config.yaml + skills/  (query, review, stateful-review)
+│   ├── fkit-adversarial-reviewer/ config.yaml + skills/  (query — NEW, ADR-005; otherwise prompt-only)
+│   ├── fkit-architect/            config.yaml + skills/  (query, inspect, design-spec, evaluate-approach,
 │   │                                                       record-decision, survey-project)
 │   ├── fkit-wiki/                 config.yaml + skills/  (query, ingest, lint, sync)
 │   ├── fkit-team/                 config.yaml only — NEW: thin root orchestrator, no skills of its own
@@ -87,19 +87,22 @@ fkit repo root
 Each of the **seven** bundles (`fkit-producer/coder/reviewer/adversarial-reviewer/architect/wiki` plus
 the new `fkit-team`) is self-contained: `config.yaml` (executor/harness, `os_env`, guardrails, spawn
 capability, full system prompt) plus, for six of them, a `skills/` directory of Omnigent-native skills.
-`fkit-team` and `fkit-adversarial-reviewer` are prompt-only (no `skills/`). No shared/base config
+Only `fkit-team` is prompt-only (no `skills/`); `fkit-adversarial-reviewer` gained a `skills/` dir
+(just `query`) under ADR-005, so it's no longer the exception it used to be. No shared/base config
 exists (Omnigent has no `extends`); each `config.yaml` duplicates its guardrail block, though
-`fkit-team`'s guardrails differ deliberately (see Cross-cutting concerns).
+`fkit-team`'s guardrails differ deliberately (see Cross-cutting concerns). The `query` skill itself is
+duplicated byte-identical across all six bundles that carry it (canonical source
+`omnigent/fkit-wiki/skills/query/SKILL.md`, copied — also no shared-skill mechanism exists).
 
 | Agent | Harness | Skills | Role |
 |---|---|---|---|
 | fkit-team | claude-sdk | *(none — prompt-only)* | **NEW.** Root orchestrator: stands up the other six as named, durable child sessions; never itself plans/codes/reviews (`omnigent/fkit-team/config.yaml`) |
-| fkit-producer | claude-sdk | initiate-project, task-done, task-cancelled | product/sprint planning, task lifecycle (`omnigent/fkit-producer/skills/`) |
-| fkit-coder | claude-sdk | plan-task, process-review, process-stateful-review | sole source-write authority |
-| fkit-reviewer | claude-sdk | review, stateful-review | lead code review, REVIEW-ONLY |
-| fkit-adversarial-reviewer | **codex** | *(none — prompt-only)* | independent second-opinion review, deliberately a different model |
-| fkit-architect | claude-sdk | inspect, design-spec, evaluate-approach, record-decision, survey-project | architecture/design/ADRs, no implementation |
-| fkit-wiki | **codex** | query, ingest, lint, sync | sole gateway to `ai-agents/wiki-vault/` |
+| fkit-producer | claude-sdk | query, initiate-project, task-done, task-cancelled | product/sprint planning, task lifecycle (`omnigent/fkit-producer/skills/`) |
+| fkit-coder | claude-sdk | query, plan-task, process-review, process-stateful-review | sole source-write authority |
+| fkit-reviewer | claude-sdk | query, review, stateful-review | lead code review, REVIEW-ONLY |
+| fkit-adversarial-reviewer | **codex** | query | independent second-opinion review, deliberately a different model |
+| fkit-architect | claude-sdk | query, inspect, design-spec, evaluate-approach, record-decision, survey-project | architecture/design/ADRs, no implementation |
+| fkit-wiki | **codex** | query, ingest, lint, sync | exclusive gateway for wiki **writes**; `query` vendored to every other agent for direct, in-process reads (ADR-005) |
 
 (Corrects the first survey's skills table: `fkit-producer` does carry `initiate-project` as a real
 skill directory — `omnigent/fkit-producer/skills/initiate-project` — the first pass's component table
@@ -246,7 +249,10 @@ producer writes a task brief → coder `plan-task` → implements → reviewer `
 (delegating to `fkit-adversarial-reviewer`) → `ai-agents/reviews/<task-id>.md` → coder's
 `process-stateful-review` → producer's `task-done` moves the brief only on owner sign-off.
 
-**6. Wiki access**: unchanged — every agent reaches `ai-agents/wiki-vault/` only via `fkit-wiki`.
+**6. Wiki access**: **changed** — per ADR-005, reads are decentralized: every agent runs its own
+vendored `query` skill directly against `ai-agents/wiki-vault/`, in-process, no spawn required.
+Writes remain exclusively fkit-wiki's (`ingest`/`lint`/`sync`); agents spawn it only for a write or
+research beyond a simple lookup.
 
 ## Build / run / test
 
