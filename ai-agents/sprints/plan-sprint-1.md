@@ -4,7 +4,10 @@
 with dedicated skills."* The six agents already exist; this sprint closes the loop on the startup
 sequence itself — verify it actually works end-to-end for a new user, lock in the reliability work
 already touched, and scope (don't yet build) the next layer of hardening. Skill-set expansion is
-explicitly deferred past this sprint (owner decision, 2026-07-09).
+back in scope for this sprint (owner reversal, 2026-07-10 — supersedes the 2026-07-09 deferral
+decision below). More broadly: Sprint 1 is the first draft of fkit, and the owner expects its scope
+to keep shifting as work on it surfaces new priorities — treat this plan as actively evolving, not
+fixed.
 
 **Priority order this sprint** (owner-ranked): onboarding verification → consult-envelope doc →
 CI tail task.
@@ -29,6 +32,15 @@ CI tail task.
 
 ## Context
 
+- **2026-07-10 skill-expansion-reversal addendum:** owner reversed the 2026-07-09 decision to defer
+  skill-set expansion past Sprint 1 — it's back in scope. Rationale given: Sprint 1 is the first
+  draft of fkit, and it's expected to be a chaotic, adaptive sprint where scope keeps shifting as the
+  owner and agents learn what's needed, rather than a locked-scope sprint. No dedicated ADR or wiki
+  decision page existed for the original deferral (checked via fkit-wiki; the only record was this
+  plan's own text, now updated) — nothing else needs correcting for consistency. No skill-expansion
+  task briefs exist yet; the owner has not yet specified which skills to add for which agents, so none
+  are added to the Status table in this pass. Next step once the owner scopes specific
+  skill-expansion work: write task briefs and slot them into the Status table above.
 - **2026-07-10 Agents-panel-noise addendum:** owner flagged Web UI panel clutter from ad hoc
   consult children (8+ one-off topic-titled sessions from a single producer↔architect
   conversation). Investigation (source-grounded against installed Omnigent 0.4.0) found neither
@@ -93,7 +105,6 @@ CI tail task.
 
 ## Not in this sprint (explicitly deferred)
 
-- Expanding or polishing the six agents' skill sets (owner: after onboarding is solid).
 - `sandbox.write_paths` / structural enforcement of agent role boundaries (named risk in
   `architecture.md`, no timeline set yet).
 - A `bin`-based `npx fkit` installer (deferred per ADR-001).

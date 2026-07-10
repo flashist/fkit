@@ -33,3 +33,6 @@ existing entries; only append. Each ingest / lint / sync operation adds one entr
 - Ingested: `ai-agents/tasks/done/build-fkit-reconnect-tooling.md` → created [[tasks/build-fkit-reconnect-tooling]]
 - Updated backlinks: [[systems/fkit]]
 - Skipped (already covered): `ai-agents/tasks/backlog/build-fkit-reconnect-tooling.md` (superseded by the done brief); `ai-agents/tasks/backlog/amend-subagent-disconnect-incident-doc.md`, `ai-agents/tasks/backlog/formalize-knowledge-base-incidents-folder.md`, `ai-agents/tasks/backlog/give-every-agent-direct-wiki-query-access.md`, `ai-agents/tasks/backlog/rollout-adr-004-fixed-consult-titles.md` (backlog, not yet ingest-worthy)
+
+## 2026-07-10 — ingest
+- Ingested: `ai-agents/sprints/plan-sprint-1.md` → updated [[tasks/sprint-1-ship-the-onboarding-sequence]]
