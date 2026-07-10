@@ -21,7 +21,7 @@ CI tail task.
 | 🔲 Backlog | 6 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../tasks/backlog/extend-initiate-project-fill-overview.md) |
 | 🔲 Backlog | 7 | Bake Architecture pointer into scaffold CLAUDE.md/AGENTS.md templates | [`bake-architecture-pointer-into-scaffold-templates.md`](../tasks/backlog/bake-architecture-pointer-into-scaffold-templates.md) |
 | 🔲 Backlog | 8 (optional) | Fix stale agent-count docs + fresh-detection duplication | [`fix-agent-count-doc-drift-and-fresh-detection-dup.md`](../tasks/backlog/fix-agent-count-doc-drift-and-fresh-detection-dup.md) |
-| 🔲 Backlog | 9 | Build `fkit reconnect` tooling for disconnected subagent runners | [`build-fkit-reconnect-tooling.md`](../tasks/backlog/build-fkit-reconnect-tooling.md) |
+| ✅ Done | 9 | Build `fkit reconnect` tooling for disconnected subagent runners | [`build-fkit-reconnect-tooling.md`](../tasks/done/build-fkit-reconnect-tooling.md) |
 | 🔲 Backlog | 10 | Amend the subagent-disconnect incident doc with technical corrections | [`amend-subagent-disconnect-incident-doc.md`](../tasks/backlog/amend-subagent-disconnect-incident-doc.md) |
 | 🔲 Backlog | 11 | Formalize knowledge-base folder structure, including `incidents/` | [`formalize-knowledge-base-incidents-folder.md`](../tasks/backlog/formalize-knowledge-base-incidents-folder.md) |
 | 🔲 Backlog | 12 | Roll out ADR-004: fixed, role-based titles for consult spawns | [`rollout-adr-004-fixed-consult-titles.md`](../tasks/backlog/rollout-adr-004-fixed-consult-titles.md) |
