@@ -192,7 +192,7 @@ if [ -n "$newid" ]; then
   printf '%s\n' "$newid" > "$teamfile"
   curl -s -o /dev/null -X PATCH "$server_url/v1/sessions/$newid" \
     -H 'Content-Type: application/json' \
-    --data "{\"title\":\"fkit \xc2\xb7 $(basename "$proj")\"}" 2>/dev/null || true
+    --data "{\"title\":\"fkit · $(basename "$proj")\"}" 2>/dev/null || true
   echo "$(date): fkit-team restart complete. new_conv=$newid .fkit/team-session updated." \
        "old_conv=$old_conv_id abandoned (still exists server-side, disconnected;" \
        "its six teammates are NOT killed — also orphaned, unreferenced)."
