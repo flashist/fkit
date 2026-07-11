@@ -45,7 +45,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 13 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../tasks/backlog/extend-initiate-project-fill-overview.md) |
 | 🔲 Backlog | 14 | Add a `task-plan` skill to fkit-producer | [`add-task-plan-skill-to-producer.md`](../tasks/backlog/add-task-plan-skill-to-producer.md) |
 | 🔲 Backlog | 15 | Enforce the task status vocabulary in the source | [`enforce-task-status-vocabulary.md`](../tasks/backlog/enforce-task-status-vocabulary.md) |
-| 🔲 Backlog | 16 | Add a `status` skill to fkit-producer | [`add-status-skill-to-producer.md`](../tasks/backlog/add-status-skill-to-producer.md) |
+| ✅ Done | 16 | Add a `status` skill to fkit-producer | [`add-status-skill-to-producer.md`](../tasks/done/add-status-skill-to-producer.md) |
 | 🔲 Backlog | 17 | Restore Claude Code plan mode in `/fkit-plan-task` *(regression — independent; **recommended first pickup**)* | [`restore-plan-mode-in-plan-task.md`](../tasks/backlog/restore-plan-mode-in-plan-task.md) |
 | 🔲 Backlog | 18 | Remove `fkit --resume` and the blanket arg-passthrough *(Omnigent scar tissue — **after tasks 2 & 4**)* | [`remove-fkit-resume-passthrough.md`](../tasks/backlog/remove-fkit-resume-passthrough.md) |
 
