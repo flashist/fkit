@@ -32,7 +32,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 |---|---|---|---|
 | 🔲 Backlog | 1 | Extract the shared scaffold into `claude/` *(Phase 0.1)* | [`extract-scaffold-into-claude.md`](../tasks/backlog/extract-scaffold-into-claude.md) |
 | 🔲 Backlog | 2 | Build self-update for the Claude path *(Phase 0.2)* | [`build-claude-self-update.md`](../tasks/backlog/build-claude-self-update.md) |
-| 🔲 Backlog | 3 | Make Codex a checked prerequisite *(Phase 0.3)* ⚠️ **owner Q** | [`make-codex-a-checked-prerequisite.md`](../tasks/backlog/make-codex-a-checked-prerequisite.md) |
+| 🔲 Backlog | 3 | Make Codex a checked prerequisite *(Phase 0.3)* | [`make-codex-a-checked-prerequisite.md`](../tasks/backlog/make-codex-a-checked-prerequisite.md) |
 | 🔲 Backlog | 4 | Rewrite the installer for a single flavor *(Phase 1)* 🔥 | [`rewrite-installer-single-flavor.md`](../tasks/backlog/rewrite-installer-single-flavor.md) |
 | 🔲 Backlog | 5 | Delete `omnigent/` *(Phase 2)* | [`delete-omnigent-directory.md`](../tasks/backlog/delete-omnigent-directory.md) |
 | 🔲 Backlog | 6 | Reconcile the skill-ownership source of truth *(Phase 3 — independent)* | [`reconcile-skill-ownership-source-of-truth.md`](../tasks/backlog/reconcile-skill-ownership-source-of-truth.md) |
@@ -44,6 +44,8 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 12 | Bake the Architecture pointer into the scaffold templates | [`bake-architecture-pointer-into-scaffold-templates.md`](../tasks/backlog/bake-architecture-pointer-into-scaffold-templates.md) |
 | 🔲 Backlog | 13 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../tasks/backlog/extend-initiate-project-fill-overview.md) |
 | 🔲 Backlog | 14 | Add a `task-plan` skill to fkit-producer | [`add-task-plan-skill-to-producer.md`](../tasks/backlog/add-task-plan-skill-to-producer.md) |
+| 🔲 Backlog | 15 | Enforce the task status vocabulary in the source | [`enforce-task-status-vocabulary.md`](../tasks/backlog/enforce-task-status-vocabulary.md) |
+| 🔲 Backlog | 16 | Add a `status` skill to fkit-producer | [`add-status-skill-to-producer.md`](../tasks/backlog/add-status-skill-to-producer.md) |
 
 ## Dependency graph
 
