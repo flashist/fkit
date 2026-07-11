@@ -1,11 +1,27 @@
 #!/bin/sh
 # fkit claude — set up the current project for the Claude Code flavor of the fkit team (idempotent)
-# and launch Claude Code as the team lead. Invoked by the global `fkit` wrapper as `fkit claude`.
+# and launch Claude Code. Invoked by the global `fkit` wrapper as `fkit claude [role] [claude-args…]`.
+#
+#   fkit claude                  # the team lead (which is the coder by default)
+#   fkit claude architect        # a dedicated session LOCKED to that role (claude --agent fkit-architect)
+#   fkit claude reviewer         # ...a genuinely independent reviewer — it never saw the code written
+#   fkit claude producer|coder|wiki|adv
+#   fkit claude --resume         # any other arg is passed straight through to `claude`
 #
 # Env: FKIT_SETUP_ONLY=1 — set up but don't launch claude.
 set -eu
 here="$(cd "$(dirname "$0")" && pwd)"                  # .../claude
 proj="$PWD"
+
+# A leading bare word that names a role selects a role-locked session; anything else (a flag, a
+# prompt) is passed through to `claude` untouched.
+role=""
+case "${1:-}" in
+  producer|coder|architect|reviewer|wiki|adversarial-reviewer)
+    role="$1"; shift ;;
+  adv|adversarial)
+    role="adversarial-reviewer"; shift ;;
+esac
 
 "$here/fkit-claude-init.sh" "$proj"
 
@@ -17,6 +33,12 @@ command -v claude >/dev/null 2>&1 || {
   echo "  Install it from https://claude.com/claude-code, then run:  claude" >&2
   exit 127
 }
+
+# A role-locked session: the agent's own initialPrompt delivers its opening briefing, so no seed here.
+if [ -n "$role" ]; then
+  echo "fkit — opening a session as the ${role} (role-locked; /fkit-team lists the others)"
+  exec claude --agent "fkit-$role" "$@"
+fi
 
 # Fresh project → run the terminal intake (tty-safe; skips itself when headless), then launch
 # claude seeded straight into initiation. "Uninitialized" matches the same three-way test the
