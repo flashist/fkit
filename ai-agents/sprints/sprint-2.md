@@ -30,9 +30,9 @@ Omnigent-side doc drift** — its output would be a deletion.
 
 | Status | Priority | Task | Brief |
 |---|---|---|---|
-| 🔲 Backlog | 1 | Extract the shared scaffold into `claude/` *(Phase 0.1)* | [`extract-scaffold-into-claude.md`](../tasks/backlog/extract-scaffold-into-claude.md) |
+| ✅ Done | 1 | Extract the shared scaffold into `claude/` *(Phase 0.1)* | [`extract-scaffold-into-claude.md`](../tasks/done/extract-scaffold-into-claude.md) |
 | 🔲 Backlog | 2 | Build self-update for the Claude path *(Phase 0.2)* | [`build-claude-self-update.md`](../tasks/backlog/build-claude-self-update.md) |
-| 🔲 Backlog | 3 | Make Codex a checked prerequisite *(Phase 0.3)* | [`make-codex-a-checked-prerequisite.md`](../tasks/backlog/make-codex-a-checked-prerequisite.md) |
+| ✅ Done | 3 | Make Codex a checked prerequisite *(Phase 0.3)* | [`make-codex-a-checked-prerequisite.md`](../tasks/done/make-codex-a-checked-prerequisite.md) |
 | 🔲 Backlog | 4 | Rewrite the installer for a single flavor *(Phase 1)* 🔥 | [`rewrite-installer-single-flavor.md`](../tasks/backlog/rewrite-installer-single-flavor.md) |
 | 🔲 Backlog | 5 | Delete `omnigent/` *(Phase 2)* | [`delete-omnigent-directory.md`](../tasks/backlog/delete-omnigent-directory.md) |
 | 🔲 Backlog | 6 | Reconcile the skill-ownership source of truth *(Phase 3 — independent)* | [`reconcile-skill-ownership-source-of-truth.md`](../tasks/backlog/reconcile-skill-ownership-source-of-truth.md) |
@@ -41,12 +41,12 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 9 | Formalize the knowledge-base folder structure, incl. `incidents/` | [`formalize-knowledge-base-incidents-folder.md`](../tasks/backlog/formalize-knowledge-base-incidents-folder.md) |
 | 🔲 Backlog | 10 | Knowledge-base hygiene after the removal *(Phase 5a)* | [`knowledge-base-hygiene-post-omnigent.md`](../tasks/backlog/knowledge-base-hygiene-post-omnigent.md) |
 | 🔲 Backlog | 11 | Wiki sync after the removal *(Phase 5b — genuinely last)* | [`wiki-sync-post-omnigent.md`](../tasks/backlog/wiki-sync-post-omnigent.md) |
-| 🔲 Backlog | 12 | Bake the Architecture pointer into the scaffold templates | [`bake-architecture-pointer-into-scaffold-templates.md`](../tasks/backlog/bake-architecture-pointer-into-scaffold-templates.md) |
-| 🔲 Backlog | 13 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../tasks/backlog/extend-initiate-project-fill-overview.md) |
-| 🔲 Backlog | 14 | Add a `task-plan` skill to fkit-producer | [`add-task-plan-skill-to-producer.md`](../tasks/backlog/add-task-plan-skill-to-producer.md) |
-| 🔲 Backlog | 15 | Enforce the task status vocabulary in the source | [`enforce-task-status-vocabulary.md`](../tasks/backlog/enforce-task-status-vocabulary.md) |
+| ✅ Done | 12 | Bake the Architecture pointer into the scaffold templates | [`bake-architecture-pointer-into-scaffold-templates.md`](../tasks/done/bake-architecture-pointer-into-scaffold-templates.md) |
+| ✅ Done | 13 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../tasks/done/extend-initiate-project-fill-overview.md) |
+| ✅ Done | 14 | Add a `task-plan` skill to fkit-producer | [`add-task-plan-skill-to-producer.md`](../tasks/done/add-task-plan-skill-to-producer.md) |
+| ✅ Done | 15 | Enforce the task status vocabulary in the source | [`enforce-task-status-vocabulary.md`](../tasks/done/enforce-task-status-vocabulary.md) |
 | ✅ Done | 16 | Add a `status` skill to fkit-producer | [`add-status-skill-to-producer.md`](../tasks/done/add-status-skill-to-producer.md) |
-| 🔲 Backlog | 17 | Restore Claude Code plan mode in `/fkit-plan-task` *(regression — independent; **recommended first pickup**)* | [`restore-plan-mode-in-plan-task.md`](../tasks/backlog/restore-plan-mode-in-plan-task.md) |
+| ✅ Done | 17 | Restore Claude Code plan mode in `/fkit-plan-task` *(regression — independent)* | [`restore-plan-mode-in-plan-task.md`](../tasks/done/restore-plan-mode-in-plan-task.md) |
 | 🔲 Backlog | 18 | Remove `fkit --resume` and the blanket arg-passthrough *(Omnigent scar tissue — **after tasks 2 & 4**)* | [`remove-fkit-resume-passthrough.md`](../tasks/backlog/remove-fkit-resume-passthrough.md) |
 
 ## Dependency graph

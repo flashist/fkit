@@ -7,7 +7,7 @@ Sprint 2
 17 *(independent of the Phase 0–4 chain — recommended as the first pickup; see Notes)*
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 
