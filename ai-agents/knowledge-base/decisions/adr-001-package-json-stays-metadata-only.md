@@ -1,8 +1,27 @@
 # ADR-001: `package.json` stays metadata-only for now
 
-- **Status:** accepted
+- **Status:** **superseded** by
+  [ADR-011](adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md)
+  (`package.json` stays **with** its `scripts`; version bumping **continues**; npm stays open under a
+  scoped name).
 - **Date:** 2026-07-09
 - **Deciders:** owner (relayed via fkit-producer during project initiation), recorded by fkit-architect
+
+> **⚠ Read as history, not as current design — and do not follow it.** Kept for the record of *why*
+> `npx fkit` was deferred (that part still holds: there is still no `bin`, and building one is still
+> out of scope). Everything else is wrong:
+>
+> - **"Stop bumping/publishing `package.json`'s `version`" (`:26`) — do NOT do this.** The version is
+>   the git-tag release version (`bin/release.mjs:8,65`), and the Claude self-update resolves updates
+>   via `git ls-remote` against those tags. Following this line would break it. Version bumping
+>   continues.
+> - **"No `scripts`" (`:22`) no longer holds** — `package.json:3-9` has a release-tooling `scripts`
+>   block (`node bin/release.mjs`), which is not install semantics.
+> - **The npm-discoverability rationale (`:40-41`) was never true** — the npm name `fkit` belongs to
+>   an unrelated package (`nullobject/fkit`); this project has never had an npm listing.
+>
+> See [ADR-011](adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md) for the current
+> decision.
 
 ## Context
 
