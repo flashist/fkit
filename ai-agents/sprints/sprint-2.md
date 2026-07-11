@@ -33,8 +33,8 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 1 | Extract the shared scaffold into `claude/` *(Phase 0.1)* | [`extract-scaffold-into-claude.md`](../tasks/done/extract-scaffold-into-claude.md) |
 | ✅ Done | 2 | Build self-update for the Claude path *(Phase 0.2)* | [`build-claude-self-update.md`](../tasks/done/build-claude-self-update.md) |
 | ✅ Done | 3 | Make Codex a checked prerequisite *(Phase 0.3)* | [`make-codex-a-checked-prerequisite.md`](../tasks/done/make-codex-a-checked-prerequisite.md) |
-| 🔲 Backlog | 4 | Rewrite the installer for a single flavor *(Phase 1)* 🔥 | [`rewrite-installer-single-flavor.md`](../tasks/backlog/rewrite-installer-single-flavor.md) |
-| 🔲 Backlog | 5 | Delete `omnigent/` *(Phase 2)* | [`delete-omnigent-directory.md`](../tasks/backlog/delete-omnigent-directory.md) |
+| ✅ Done | 4 | Rewrite the installer for a single flavor *(Phase 1)* | [`rewrite-installer-single-flavor.md`](../tasks/done/rewrite-installer-single-flavor.md) |
+| ✅ Done | 5 | Delete `omnigent/` *(Phase 2)* | [`delete-omnigent-directory.md`](../tasks/done/delete-omnigent-directory.md) |
 | ✅ Done | 6 | Reconcile the skill-ownership source of truth *(Phase 3 — independent)* | [`reconcile-skill-ownership-source-of-truth.md`](../tasks/done/reconcile-skill-ownership-source-of-truth.md) |
 | 🔲 Backlog | 7 | Verify onboarding flow end-to-end *(the removal gate)* | [`verify-onboarding-flow-end-to-end.md`](../tasks/backlog/verify-onboarding-flow-end-to-end.md) |
 | 🔲 Backlog | 8 | Rewrite the docs against the post-removal reality *(Phase 4)* | [`rewrite-docs-post-omnigent.md`](../tasks/backlog/rewrite-docs-post-omnigent.md) |
