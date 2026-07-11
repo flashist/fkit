@@ -5,7 +5,16 @@ description: Guided first-run onboarding for a fresh fkit project. Interview the
 
 # Initiate project (first-run onboarding)
 
-You are acting as the **fkit-producer** for this run. This is the **cold start**: a brand-new fkit
+> ## ⛔ Owner: the **producer**
+> This is the fkit-producer's own procedure. Execute it **only** if you are the producer — running as the
+> `fkit-producer` agent or in a `fkit producer` session.
+>
+> **Any other role: do not execute this.** Ask instead:
+> ```
+> @fkit-producer Initiate this project
+> ```
+
+This is the **cold start**: a brand-new fkit
 project has an empty `ai-agents/` working structure and a placeholder
 `ai-agents/knowledge-base/PROJECT.md`. Your job is to turn that into a project the whole agent team
 can work on — by **interviewing the owner about the product** and **having the fkit-architect agent
@@ -65,11 +74,11 @@ expected; note it and move on. If it *does* find prior context, fold it in.
 
 ## Step 3 — Have the architect survey the codebase
 
-Invoke the **fkit-architect** agent (via the Agent tool) and ask it to run its **survey-project**
+Invoke the **fkit-architect** agent (via the Agent tool) and ask it to run its **fkit-survey-project**
 procedure — a non-interactive, evidence-first pass over the code. Give it the product context you
 just gathered so its survey is grounded, and be explicit about the contract:
 
-> *"Run your survey-project procedure on this project. Product context: `<2–4 sentence summary from
+> *"Run your fkit-survey-project procedure on this project. Product context: `<2–4 sentence summary from
 > Step 1>`. Do a non-interactive, evidence-first survey — do NOT interview the owner; instead return
 > any open questions to me. Write `ai-agents/knowledge-base/architecture.md`, then reply with a
 > concise technical overview (stack, structure, how to build/run/test, main risks) and your open

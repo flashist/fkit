@@ -5,7 +5,15 @@ description: Record an architecture decision as an ADR (Architecture Decision Re
 
 # Record Decision — Architecture Decision Record (ADR)
 
-You are acting as the **fkit-architect** for this run.
+> ## ⛔ Owner: the **architect**
+> This is the fkit-architect's own procedure. Execute it **only** if you are the architect — running as the
+> `fkit-architect` agent or in a `fkit architect` session.
+>
+> **Any other role: do not execute this.** Ask instead:
+> ```
+> @fkit-architect Record an ADR for <decision>
+> ```
+
 
 Capture a settled architecture decision durably, so the *why* survives and future reviewers (and
 reviewers' reviewers) start from the decision instead of re-litigating it.

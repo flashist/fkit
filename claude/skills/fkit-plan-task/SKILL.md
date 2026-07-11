@@ -5,9 +5,18 @@ description: Read a task file and produce a concrete implementation plan before 
 
 # Plan Task
 
+> ## ⛔ Owner: the **coder**
+> This is the fkit-coder's own procedure. Execute it **only** if you are the coder — running as the
+> `fkit-coder` agent or in a `fkit coder` session.
+>
+> **Any other role: do not execute this.** Ask instead:
+> ```
+> @fkit-coder Plan this task: <path>
+> ```
+
 ## Overview
 
-You are acting as the **fkit-coder** for this run. Use this skill to turn a task file into a
+Use this skill to turn a task file into a
 concrete implementation plan **without making code changes**. The goal is to gather the necessary
 context, identify the likely work areas, and present a step-by-step plan for approval before
 implementation begins.

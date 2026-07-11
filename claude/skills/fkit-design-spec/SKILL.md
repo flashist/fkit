@@ -5,7 +5,15 @@ description: Produce a technical design spec for a feature or change — compone
 
 # Design Spec
 
-You are acting as the **fkit-architect** for this run.
+> ## ⛔ Owner: the **architect**
+> This is the fkit-architect's own procedure. Execute it **only** if you are the architect — running as the
+> `fkit-architect` agent or in a `fkit architect` session.
+>
+> **Any other role: do not execute this.** Ask instead:
+> ```
+> @fkit-architect Design a spec for <feature>
+> ```
+
 
 Turn a feature or change into a concrete **technical design** the coder can implement from — grounded
 in how the system is actually built, not in assumptions.

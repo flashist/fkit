@@ -83,19 +83,24 @@ mkdir -p "$BIN"
 cat > "$BIN/fkit" <<EOF
 #!/bin/sh
 # fkit — run the fkit agent team in the current project. Resources: $SHARE
-# 'fkit claude' runs the Claude Code flavor; anything else goes to the Omnigent flow.
+#
+# Default flavor is Claude Code: 'fkit' shows a role menu, 'fkit <role>' goes straight there.
+# The original Omnigent flavor lives at 'fkit omnigent'. Self-update stays on the omnigent script,
+# which owns it: 'fkit update'.
 case "\${1:-}" in
+  omnigent)
+    shift; exec "$SHARE/omnigent/fkit.sh" "\$@" ;;
+  update|upgrade|reconnect|restart-team)
+    exec "$SHARE/omnigent/fkit.sh" "\$@" ;;
   claude)
-    shift
-    [ -x "$SHARE/claude/fkit-claude.sh" ] || {
-      echo "fkit: the Claude Code flavor is not installed (this fkit was installed from a ref without claude/)." >&2
-      echo "      Re-run the installer against a ref that has it, e.g.:  fkit update" >&2
-      exit 1
-    }
-    exec "$SHARE/claude/fkit-claude.sh" "\$@"
-    ;;
+    shift ;;                      # legacy alias — 'fkit claude [role]' still works
 esac
-exec "$SHARE/omnigent/fkit.sh" "\$@"
+[ -x "$SHARE/claude/fkit-claude.sh" ] || {
+  echo "fkit: the Claude Code flavor is not installed (this fkit came from a ref without claude/)." >&2
+  echo "      Update it:  fkit update        …or use the Omnigent flavor:  fkit omnigent" >&2
+  exit 1
+}
+exec "$SHARE/claude/fkit-claude.sh" "\$@"
 EOF
 chmod +x "$BIN/fkit"
 echo "✓ Installed  $BIN/fkit"

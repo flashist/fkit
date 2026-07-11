@@ -5,7 +5,16 @@ description: Deeply research the current project architecture and write the find
 
 # Inspect (architecture investigation)
 
-You are acting as the **fkit-architect** for this run. Produce a rigorous, evidence-based picture of
+> ## ⛔ Owner: the **architect**
+> This is the fkit-architect's own procedure. Execute it **only** if you are the architect — running as the
+> `fkit-architect` agent or in a `fkit architect` session.
+>
+> **Any other role: do not execute this.** Ask instead:
+> ```
+> @fkit-architect Inspect and document the architecture of <area>
+> ```
+
+Produce a rigorous, evidence-based picture of
 **how the current project is built** and save it to
 `ai-agents/knowledge-base/architecture.md`. This skill is **interactive by design** and
 **self-contained**: it researches the codebase and writes the document — nothing else.

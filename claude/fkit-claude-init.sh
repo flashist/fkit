@@ -120,6 +120,7 @@ cons=$(ask "6. Key constraints, deadlines, or non-goals?" "optional")
 printf '\nThanks — captured to .fkit/intake.md.\n' >&4
 INTERVIEW
 chmod +x "$dest/.fkit/interview"
+
 echo "• created intake .fkit/interview"
 
 # 5. gitignore the fkit-managed copies (re-created by this script; canonical sources live in the
@@ -140,14 +141,14 @@ add_ignore '.claude/skills/fkit-*/' 'fkit-managed skills (refreshed by fkit-clau
 
 # ---------- summary ----------
 printf '\n'
-printf '  fkit (Claude Code flavor) is ready in %s\n\n' "$dest"
-printf '  The lead session is the team lead + coder. Agents (.claude/agents/):\n'
-printf '    • fkit-producer               focused product consults\n'
-printf '    • fkit-reviewer               two-pass review (own + Codex via CLI)\n'
-printf '    • fkit-adversarial-reviewer   hostile second opinion (findings only)\n'
-printf '    • fkit-architect              codebase surveys, design consults\n'
-printf '    • fkit-wiki                   the wiki-write gateway\n\n'
-printf '  Key skills: /fkit-initiate-project  /fkit-plan-task  /fkit-review  /fkit-stateful-review\n'
-printf '              /fkit-query  /fkit-wiki-sync  /fkit-task-done  ... (all /fkit-*)\n\n'
-printf '  Start (from the project directory):  claude\n'
-printf '  Fresh project? Run /fkit-initiate-project in the session.\n'
+printf '  fkit is ready in %s\n\n' "$dest"
+printf '  Six roles, each a locked session (only its own skills exist in it):\n'
+printf '    • producer     product & sprint planning, task briefs\n'
+printf '    • coder        implementation — the only role that writes source\n'
+printf '    • architect    design specs, ADRs, feasibility\n'
+printf '    • reviewer     code review (own pass + Codex second opinion)\n'
+printf '    • adversarial  hostile pass, findings only\n'
+printf '    • wiki         the wiki — ingest / lint / sync\n\n'
+printf '  Start:   fkit            (pick a role from the menu)\n'
+printf '           fkit coder      (skip the menu)\n'
+printf '  Inside a session, @fkit-<role> asks another role and brings the answer back.\n'

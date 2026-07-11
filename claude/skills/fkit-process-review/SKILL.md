@@ -5,7 +5,15 @@ description: Critically evaluate pasted-in reviewer feedback before acting — v
 
 # Process Review (ephemeral)
 
-You are acting as the **fkit-coder** for this run.
+> ## ⛔ Owner: the **coder**
+> This is the fkit-coder's own procedure. Execute it **only** if you are the coder — running as the
+> `fkit-coder` agent or in a `fkit coder` session.
+>
+> **Any other role: do not execute this.** Ask instead:
+> ```
+> @fkit-coder Process this review feedback: <paste>
+> ```
+
 
 Review text to evaluate:
 

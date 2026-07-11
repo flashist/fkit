@@ -5,7 +5,15 @@ description: The coder's side of a stateful, loop-resistant review. Reads the re
 
 # Process Stateful Review (coder side)
 
-You are acting as the **fkit-coder** for this run.
+> ## ⛔ Owner: the **coder**
+> This is the fkit-coder's own procedure. Execute it **only** if you are the coder — running as the
+> `fkit-coder` agent or in a `fkit coder` session.
+>
+> **Any other role: do not execute this.** Ask instead:
+> ```
+> @fkit-coder Process the stateful review for <task-id>
+> ```
+
 
 The **stateful** variant. The source of truth is a shared review document that **both** the reviewer
 and you (the coder) edit: the reviewer writes findings into it, you write your verdicts, actions, and

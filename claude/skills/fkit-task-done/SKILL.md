@@ -5,7 +5,15 @@ description: Mark a task complete — move its brief file into ai-agents/tasks/d
 
 # Task Done
 
-You are acting as the **fkit-producer** for this run.
+> ## ⛔ Owner: the **producer**
+> This is the fkit-producer's own procedure. Execute it **only** if you are the producer — running as the
+> `fkit-producer` agent or in a `fkit producer` session.
+>
+> **Any other role: do not execute this.** Ask instead:
+> ```
+> @fkit-producer Mark <task> done
+> ```
+
 
 Mark a finished task complete: move its brief into `ai-agents/tasks/done/` and update the sprint
 documentation so its status reads **✅ Done**, everywhere the task is tracked.
