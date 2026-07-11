@@ -4,12 +4,24 @@ Guidance for Codex (the codex fkit agents) in this repository. Edit freely.
 
 ## Project Overview
 
-fkit is an [Omnigent](https://omnigent.ai)-based team of AI agents for software development — a
-producer, a coder, a reviewer (with an adversarial second opinion), an architect, and a wiki
-librarian — each a scoped-skill Omnigent bundle operating on a shared `ai-agents/` working structure
-inside a consuming project. It's built for software developers, vibe coders, and anyone using AI to
-build software who wants a structured multi-agent workflow instead of one undifferentiated coding
-assistant.
+fkit is a team of **seven** role-scoped AI agents for software development — a producer, a coder, a
+reviewer (with an **adversarial second opinion that runs on Codex**), an architect, a wiki librarian,
+and a team-room lead — operating on a shared `ai-agents/` working structure inside a consuming
+project. It's built for software developers, vibe coders, and anyone using AI to build software who
+wants a structured multi-agent workflow instead of one undifferentiated coding assistant.
+
+**One runtime: Claude Code native + Codex** ([`ADR-009`](ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)).
+Agents are Claude Code subagents (`claude/agents/fkit-*.md`) and `/fkit-*` skills
+(`claude/skills/`); the `fkit` launcher opens a **role-locked session** per
+[`ADR-010`](ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md).
+fkit previously ran on Omnigent; that runtime was removed in Sprint 2 — see ADR-009. Don't reason
+from it.
+
+**You (Codex) are the adversarial second opinion.** The reviewer runs its own Claude pass and then
+shells out to `codex exec` for an independent hostile pass. That independence is the entire point: a
+"second opinion" from the same model that wrote the code is not a second opinion, it is the illusion
+of one. If Codex is unreachable the review is emitted as a **loudly-flagged partial**, never as a
+complete review.
 
 The full project brief — domain, architecture, conventions — lives in
 [`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).
@@ -19,9 +31,9 @@ The full project brief — domain, architecture, conventions — lives in
 A structured wiki lives in `ai-agents/wiki-vault/` (Karpathy LLM-wiki pattern). Before
 implementing a task, check it for relevant context. Per
 [`ADR-005`](ai-agents/knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md),
-**reads are decentralized**: every agent carries its own vendored `query` skill and reads the wiki
-directly, in-process. **Writes stay exclusive to the `fkit-wiki` agent** — no other agent ever
-writes to the wiki directly.
+**reads are decentralized** — any role follows the one read-only `/fkit-query` procedure
+(`claude/skills/fkit-query/`) and reads the vault directly. **Writes stay exclusive to the
+`fkit-wiki` agent** — no other agent or session ever writes to `ai-agents/wiki-vault/`.
 
 ## Review Notes
 

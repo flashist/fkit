@@ -1,45 +1,69 @@
-# fkit on Claude Code (native port)
+# fkit on Claude Code — the runtime, in detail
 
-This directory is the **Claude Code native** flavor of the fkit agent team — a peer of
-[`omnigent/`](../omnigent/), which holds the original Omnigent runtime. Both flavors operate on the
-same runtime-agnostic `ai-agents/` working structure (tasks, sprints, reviews, knowledge-base,
-wiki-vault) — that shared file contract is the portability layer. See ADR-008 for the decision
-record.
+This directory **is** fkit's runtime: the seven roles as Claude Code subagents (`agents/`), their
+procedures as skills (`skills/`), the project scaffold (`scaffold/`), and the launcher
+(`fkit-claude.sh`). They operate on the `ai-agents/` working structure — tasks, sprints, reviews,
+knowledge-base, wiki-vault.
 
-## Why this exists
+fkit once shipped a second runtime on [Omnigent](https://omnigent.ai). It was **removed** in Sprint 2:
+its orchestration proved unreliable (sub-sub-agents failing to reply, dropped sessions, failed agent
+connections) and it hid Claude Code's native statusbar. See
+[ADR-009](../ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md).
 
-Omnigent's orchestration proved unreliable in practice (sub-sub-agents failing to reply back,
-dropped sessions, failed agent connections) and hides Claude Code's native statusbar (context,
-limits). This port runs the same role-separated team on Claude Code's stable first-party
-primitives: **custom subagents** (`.claude/agents/`) and **skills** (`.claude/skills/`), with the
-interactive session as the team lead.
+## The interaction model — role-locked sessions
 
-## The interaction model
+There is **no lead session wearing hats** and no team-root agent: Claude Code owns session lifecycle.
+`fkit <role>` opens a session **locked to that role**
+([ADR-010](../ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)):
 
-**The interactive Claude Code session is the team lead — and the coder by default.** There is no
-fkit-team root agent: Claude Code owns session lifecycle. Every role is reachable three ways, and
-roles consult each other directly.
+```sh
+fkit                # deterministic terminal menu (no LLM) → pick a role
+fkit coder          # skip the menu
+fkit producer | architect | reviewer | adv | wiki | lead
+```
 
-**Three ways to reach a role:**
-- **Wear the hat** — `/fkit-agent-<role>`. *This* session becomes that role (reading its definition
-  from `.claude/agents/`, so there's one source of truth) and holds it until you switch or say "exit
-  <role> mode". Best for working with a role interactively — this is what replaces Omnigent's
-  "click the teammate in the Subagents panel".
-- **One-off dispatch** — `@fkit-architect <question>`, or a job skill (`/fkit-review`,
-  `/fkit-wiki-sync`, …). A fresh agent answers in its own context and returns; your session keeps its
-  own hat.
-- **Dedicated session** — `fkit claude <role>` → `claude --agent fkit-<role>`. A whole session locked
-  to the role, opening with its own briefing (via the `initialPrompt` frontmatter). Best when you want
-  a **genuinely independent** role — especially the reviewer, which shouldn't have watched the code
-  being written.
+Each session is locked **two** ways:
 
-Agent definitions are **dual-mode**: spawned as a consult they never ask the owner (they answer and
-return open questions); as a session role the owner is present, so they interview freely and run their
-interactive init (the producer's situation briefing, the architect's "ask relentlessly").
+1. **`--agent fkit-<role>`** — the role's system prompt and **tool allowlist** (harness-enforced).
+2. **`--settings` with `skillOverrides`** — every `fkit-*` skill the role does **not** own is turned
+   `"off"`: hidden from the `/` menu **and unrunnable by name**. This is what makes *"the coder cannot
+   run the reviewer's procedure"* a fact rather than a request.
+
+Want two roles at once? Open another terminal tab. (We deliberately don't automate that — spawning
+terminals needs Accessibility permissions that fail worse than pressing Cmd-T.)
+
+### The skill lockdown — the central invariant
+
+**Role → skill ownership is declared in exactly one place:** `skills_for_role()` in
+`fkit-claude.sh`. That function is the single source of truth; `build_settings()` derives each
+session's `skillOverrides` from it.
+
+| Role | Its procedures (plus `/fkit-query` + `/fkit-team`, which everyone has) |
+|---|---|
+| producer | `initiate-project` · `task-plan` · `task-done` · `task-cancelled` · `status` |
+| coder | `plan-task` · `process-review` · `process-stateful-review` |
+| architect | `survey-project` · `inspect` · `design-spec` · `evaluate-approach` · `record-decision` |
+| reviewer | `review` · `stateful-review` |
+| adversarial-reviewer | `adversarial-review` |
+| wiki | `wiki-ingest` · `wiki-lint` · `wiki-sync` |
+| lead | *(none of its own — it routes)* |
+
+⚠️ **The lock is a wall in a session, a rule in a consult.** A *spawned* consult inherits the
+**calling session's** `skillOverrides`, not its own — so a consulted role may see skills that aren't
+its own, and may not see all of its own. There, the boundary is **advisory**, carried by the
+`⛔ Owner:` banner at the top of every skill. Agent-definition `skills:` frontmatter does **not**
+enforce anything (it is a preload hint) and was therefore **dropped, not generated** — see
+[ADR-012](../ai-agents/knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md).
+
+Because of that inheritance, a small **consult-reachable set** (`CONSULT_SKILLS`) is never turned off
+for any role — today `fkit-survey-project`, so the producer's `/fkit-initiate-project` can actually
+have the architect run its survey.
+
+## Consult topology
 
 ```
-Owner ⇄ LEAD SESSION (team lead; coder by default; any role via /fkit-agent-*)
-          │ Agent tool (synchronous; replaces Omnigent's spawn+inbox)
+Owner ⇄ ROLE-LOCKED SESSION  (fkit <role> — one role, its skills, its tools)
+          │ Agent tool (synchronous consult)
           ├─→ fkit-architect   ⇄ consults fkit-producer   (product context behind a technical call)
           ├─→ fkit-producer    ⇄ consults fkit-architect  (feasibility behind a product call)
           ├─→ fkit-coder        → consults architect / producer
@@ -50,71 +74,76 @@ Owner ⇄ LEAD SESSION (team lead; coder by default; any role via /fkit-agent-*)
 Consult rules: max TWO hops (messages carry "hop N of 2"; at hop 2 you answer or return an open
 question), never a cycle (never consult your invoker or anyone already in the chain), and the asker
 keeps the decision that's theirs. Genuinely new architecture decisions go to the OWNER.
-Wiki READS: any context, directly, via /fkit-query (ADR-005 intent — one copy, no vendoring).
+Wiki READS: any role, directly, via /fkit-query (ADR-005 — one skill, no vendoring).
 ```
+
+Agent definitions are **dual-mode**: spawned as a consult they never ask the owner (they answer and
+return open questions); as a session role the owner is present, so they interview freely and run their
+interactive init.
 
 ## The team
 
-| Agent (`.claude/agents/`) | Tools | Role |
+| Agent (`agents/`) | Tools | Role |
 |---|---|---|
 | fkit-producer | Read, Grep, Glob, Bash, Write, Edit, **Agent** | product & sprint planning, task briefs, lifecycle. Consults the architect. |
-| fkit-coder | Read, Grep, Glob, Bash, Write, Edit, **Agent** | implementation — sole source-write authority. Consults architect/producer. Not for *background* delegation: its plan/fix approval gates need the owner present, so run it as the lead, a hat, or a session. |
+| fkit-coder | Read, Grep, Glob, Bash, Write, Edit, **Agent**, EnterPlanMode, ExitPlanMode | implementation — sole source-write authority. Consults architect/producer. **Not for background delegation:** its plan/fix approval gates need the owner present, so run it as a session. |
 | fkit-reviewer | Read, Grep, Glob, Bash, Write, Edit, **Agent** | two-pass review (own + Codex via CLI); writes only `ai-agents/reviews/` documents. Consults the architect on design intent. |
-| fkit-adversarial-reviewer | Read, Grep, Glob, Bash | findings-only hostile pass on Codex (`codex exec --sandbox read-only`); flagged Claude fallback. **Structurally write-free; a leaf.** |
+| fkit-adversarial-reviewer | Read, Grep, Glob, Bash | findings-only hostile pass on Codex. **Structurally write-free; a leaf.** |
 | fkit-architect | Read, Grep, Glob, Bash, Write, Edit, **Agent** | architecture, design specs, ADRs, surveys. Consults the producer for product context. |
-| fkit-wiki | Read, Grep, Glob, Bash, Write, Edit | the wiki role — **exclusive write gateway** (ingest / lint / sync embedded). **A leaf.** |
+| fkit-wiki | Read, Grep, Glob, Bash, Write, Edit | the wiki role — **exclusive write gateway** (ingest / lint / sync). **A leaf.** |
+| fkit-lead | Read, Grep, Glob, Bash, **Agent** | the team room — routing help and wiki questions. Does no work itself. |
 
-Tool allowlists are a structural upgrade over Omnigent's prompt-only boundaries — but note two honest
-limits: an agent with Bash can technically still write files, and Claude Code **ignores**
-`Agent(type)` allowlists inside subagent definitions (they only work for a main-thread `--agent`), so
-*which* peer an agent may consult, and the two-hop cap, are **prompt-enforced**. Path-level hook
-enforcement is deferred hardening (see ADR-008).
+**Two honest limits** on the tool lock: an agent with Bash can technically still write files, and
+Claude Code **ignores** `Agent(type)` allowlists inside subagent definitions (they only work for a
+main-thread `--agent`), so *which* peer an agent may consult, and the two-hop cap, are
+**prompt-enforced**. Path-level hook enforcement is deferred hardening (ADR-010 §Options).
 
 ## The Codex adversarial pass
 
-Model diversity survives the port via the codex CLI (ADR-008): the reviewer (and the standalone
-adversarial agent) assemble a findings-only prompt + inline diff into `.fkit/tmp/`, then run
+Model diversity is the whole point of the second reviewer. The reviewer (and the standalone
+adversarial agent) assemble a findings-only prompt + inline diff into `.fkit/tmp/`, then run:
 
 ```sh
 codex exec --sandbox read-only --cd "$PWD" - < .fkit/tmp/adversarial-prompt.md
 ```
 
-Degradation is mandatory and loud: no codex → the review continues Claude-only with the verdict
-forced to `🟡 Partial review — codex unavailable`; the standalone agent falls back to its own pass
-labeled `[claude-fallback — NOT model-diverse]`. Codex reads the project's `AGENTS.md` natively —
-which is why init still drops that file.
+**Codex is required, not optional.** `fkit` preflights it at launch (installed? logged in?) and warns
+loudly — but does not wall you out. If Codex is unreachable mid-session, the review still runs and is
+emitted as a **flagged partial**: the reviewer's verdict is forced to `🟡 Partial review — Codex
+unavailable`, and the output leads with `[NOT model-diverse — INCOMPLETE]` **above the findings**. A
+one-model pass that reads like a full review carries unearned confidence — worse than no review.
 
-## Install & run in a project
+Codex reads the project's `AGENTS.md` natively, which is why init drops that file.
+
+## Install & run
 
 ```sh
-# one-time global install (installs both flavors)
-curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh   # once
 
-# in any project directory:
-fkit claude              # set up (idempotent) + launch Claude Code as the team lead
-fkit claude architect    # ...or a session locked to one role
-                         #    (producer | coder | architect | reviewer | wiki | adv)
-fkit                     # ...or the original Omnigent team flow
+cd /path/to/your/project
+fkit                 # menu → pick a role
+fkit architect       # ...or straight to one
+fkit update          # update fkit itself (it notifies; it never auto-updates)
 ```
 
-`fkit claude` runs `fkit-claude-init.sh`, which idempotently:
-1. copies the `ai-agents/` scaffold (from `claude/scaffold/` — single source of truth),
-2. drops `CLAUDE.md` (Claude-flavored, with the team map) and `AGENTS.md` (codex reads it),
-3. refreshes `.claude/agents/fkit-*.md` and `.claude/skills/fkit-*/` from `claude/`,
+`fkit` runs `fkit-claude-init.sh`, which idempotently:
+1. copies the `ai-agents/` scaffold (from `scaffold/` — single source of truth),
+2. drops `CLAUDE.md` (team map) and `AGENTS.md` (codex reads it),
+3. refreshes `.claude/agents/fkit-*.md` and `.claude/skills/fkit-*/` from here,
 4. installs the `.fkit/interview` terminal intake (fresh projects → `.fkit/intake.md`),
-5. gitignores the fkit-managed copies (`.fkit/`, `.claude/agents/fkit-*.md`,
-   `.claude/skills/fkit-*/`).
+5. gitignores the fkit-managed copies (`.fkit/`, `.claude/agents/fkit-*.md`, `.claude/skills/fkit-*/`).
 
-On a fresh project it then launches `claude` seeded to run `/fkit-initiate-project`; otherwise it
-just launches `claude`.
+On a fresh project it launches the producer seeded to run `/fkit-initiate-project`; otherwise it shows
+the menu.
 
-The `.claude/` copies are fkit-managed and refreshed on every init — edit the canonical sources
-here in `claude/` (or in your fork), not the copies.
+The `.claude/` copies are fkit-managed and refreshed on every init — **edit the canonical sources here
+in `claude/`, never the copies.**
 
-## What deliberately does not exist here
+## What deliberately does not exist
 
-- **fkit-team / reconnect / restart machinery** — Claude Code owns its sessions
-  (`claude --resume`); there is nothing to reconnect.
-- **Vendored per-agent `query` copies + sync script + drift check** — one `/fkit-query` skill
-  serves every context (ADR-004/005/006/007 are omnigent-path-only now).
-- **Experimental agent-teams mode** — possible later opt-in; subagents-first is the v1 decision.
+- **A team-root agent / reconnect / restart machinery** — Claude Code owns its sessions; there is
+  nothing to reconnect. Those verbs existed only to paper over Omnigent orchestration failures.
+- **Vendored per-agent `query` copies + sync script + drift check** — one `/fkit-query` skill serves
+  every role (ADR-005; ADR-004/006/007 died with the Omnigent path).
+- **`skills:` frontmatter on agent definitions** — inert for enforcement; dropped (ADR-012).
+- **Hook-based skill enforcement** — deferred hardening, with a now-known cost (ADR-012 §4).

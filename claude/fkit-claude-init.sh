@@ -14,7 +14,7 @@
 #   5. gitignore the fkit-managed copies
 #
 # Usage:  claude/fkit-claude-init.sh <project-root>    # e.g. `claude/fkit-claude-init.sh .`
-# Then:   cd <project-root> && claude                  # or:  fkit claude
+# Then:   cd <project-root> && fkit                    # pick a role from the menu
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"                  # .../claude
 scaffold="$here/scaffold"                              # the scaffold (repo checkout AND install share)
@@ -141,13 +141,14 @@ add_ignore '.claude/skills/fkit-*/' 'fkit-managed skills (refreshed by fkit-clau
 # ---------- summary ----------
 printf '\n'
 printf '  fkit is ready in %s\n\n' "$dest"
-printf '  Six roles, each a locked session (only its own skills exist in it):\n'
+printf '  Seven roles, each a locked session (only its own skills exist in it):\n'
 printf '    • producer     product & sprint planning, task briefs\n'
 printf '    • coder        implementation — the only role that writes source\n'
 printf '    • architect    design specs, ADRs, feasibility\n'
 printf '    • reviewer     code review (own pass + Codex second opinion)\n'
 printf '    • adversarial  hostile pass, findings only\n'
-printf '    • wiki         the wiki — ingest / lint / sync\n\n'
+printf '    • wiki         the wiki — ingest / lint / sync\n'
+printf '    • lead         the team room — who to ask, and routing\n\n'
 printf '  Start:   fkit            (pick a role from the menu)\n'
 printf '           fkit coder      (skip the menu)\n'
 printf '  Inside a session, @fkit-<role> asks another role and brings the answer back.\n'
