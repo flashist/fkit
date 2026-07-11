@@ -12,5 +12,6 @@ its *contents* are project-specific.
 | `knowledge-base/` | Investigation findings, decisions, reports, and research — project knowledge not easily derived from the code. `PROJECT.md` is the prose project brief. |
 | `wiki-vault/` | A structured wiki (Karpathy LLM-wiki pattern). `schema.md` = conventions/templates, `index.md` = catalog, `log.md` = activity log, `wiki/` = the pages. Maintained by the **fkit-wiki agent** — no other agent edits it. |
 
-Which model runs each agent is set per-agent in `omnigent/<agent>/config.yaml` (the `executor`
-harness/model); there is no project-level routing file.
+Agents run on Claude Code and inherit the session's model unless their definition
+(`.claude/agents/fkit-<role>.md`) pins one; there is no project-level routing file. The reviewer's
+adversarial second opinion runs on Codex, for genuine model diversity.

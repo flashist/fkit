@@ -7,7 +7,7 @@
     "release:major": "node bin/release.mjs --major",
     "release:dry": "node bin/release.mjs --dry-run"
   },
-  "description": "An Omnigent agent team for software projects: producer, coder, reviewer, architect, adversarial-reviewer, and wiki agents with per-agent scoped skills, plus a project scaffold.",
+  "description": "A Claude Code agent team for software projects: producer, coder, reviewer, architect, adversarial-reviewer, and wiki agents in role-locked sessions with scoped skills, plus a project scaffold. Reviews get an independent second opinion from Codex.",
   "license": "MIT",
   "author": "flashist",
   "repository": {
@@ -16,7 +16,6 @@
   },
   "homepage": "https://github.com/flashist/fkit#readme",
   "keywords": [
-    "omnigent",
     "claude",
     "claude-code",
     "codex",

@@ -8,7 +8,6 @@
 #   fkit coder              # skip the menu, straight to the coder
 #   fkit producer|architect|reviewer|wiki|adv|lead
 #   fkit --resume           # any other arg is passed straight through to `claude`
-#   fkit omnigent [...]     # the original Omnigent flavor
 #   fkit update             # update fkit itself
 #
 # Every session is locked two ways:

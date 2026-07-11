@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # One-command setup to use the fkit agent team on a project, Claude Code flavor.
-# Idempotent — safe to re-run. The Claude sibling of omnigent/fkit-init.sh.
+# Idempotent — safe to re-run.
 #
 # Claude Code discovers agents/skills from a project's .claude/ directory; this script puts the
 # fkit team there and scaffolds the shared working structure:
@@ -62,7 +62,7 @@ echo "• refreshed $n_agents agents → .claude/agents/, $n_skills skills → .
 # 4. first-run intake — a quick TERMINAL questionnaire asked before any LLM starts. It writes the
 #    owner's answers to .fkit/intake.md, which /fkit-initiate-project reads, so the basics are
 #    captured deterministically. tty-safe: probes the controlling terminal and skips cleanly when
-#    headless (the LLM interviews instead). Same script omnigent/fkit-init.sh installs.
+#    headless (the LLM interviews instead).
 mkdir -p "$dest/.fkit"
 cat > "$dest/.fkit/interview" <<'INTERVIEW'
 #!/bin/sh

@@ -4,14 +4,11 @@
 # Local Claude Code settings
 .claude/settings.local.json
 
-# Vendored fkit agent bundles (re-create with omnigent/vendor-agents.sh)
+# fkit-managed local state — role settings, intake, tmp (re-created by fkit-claude-init.sh)
 .fkit/
 
 # Per-run Codex home dir (transient, machine-specific)
 .codex-tmp/
-
-# Local Omnigent project config (fkit-managed runtime preferences)
-.omnigent/
 
 # fkit-managed agents (refreshed by fkit-claude-init.sh)
 .claude/agents/fkit-*.md

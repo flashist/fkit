@@ -49,5 +49,6 @@ need isn't here, amend this table — don't invent a value inline.
 - **Report reality, not the template.** If a dashboard shows a distinction this vocabulary cannot
   express, the dashboard is lying.
 
-Which model runs each agent is set per-agent in `omnigent/<agent>/config.yaml` (the `executor`
-harness/model); there is no project-level routing file.
+Agents run on Claude Code and inherit the session's model unless their definition
+(`.claude/agents/fkit-<role>.md`) pins one; there is no project-level routing file. The reviewer's
+adversarial second opinion runs on Codex, for genuine model diversity.
