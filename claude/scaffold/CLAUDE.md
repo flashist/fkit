@@ -19,7 +19,7 @@ again. Run `/fkit-team` any time for the roster and which role you're in.
 
 | Role | Does | Must not | **Its own** skills |
 |---|---|---|---|
-| **producer** | product & sprint planning, task briefs, task lifecycle | write code; move task files unprompted | `/fkit-initiate-project`, `/fkit-task-done`, `/fkit-task-cancelled` |
+| **producer** | product & sprint planning, task briefs, task lifecycle | write code; move task files unprompted | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-done`, `/fkit-task-cancelled` |
 | **coder** | implementation — sole source-write authority | commit unprompted; make product calls; settle new architecture; **review its own work** | `/fkit-plan-task`, `/fkit-process-review`, `/fkit-process-stateful-review` |
 | **architect** | architecture, design specs, ADRs, feasibility | implement features; write the wiki | `/fkit-survey-project`, `/fkit-inspect`, `/fkit-design-spec`, `/fkit-evaluate-approach`, `/fkit-record-decision` |
 | **reviewer** | code review (own pass + Codex second opinion), the review ledger | edit source code — ever | `/fkit-review`, `/fkit-stateful-review` |

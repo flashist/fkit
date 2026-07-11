@@ -43,7 +43,7 @@ A compact table of the sprint's tasks with these columns, in this order:
 
 | Column | Contents |
 |---|---|
-| **Status** | The task's real state. **Must be one of the six canonical values** — see [`task-status-vocabulary.md`](task-status-vocabulary.md): Backlog · In progress · Blocked · Done · Cancelled · Moved. **Never invent a value** (no "Not started", no "WIP") — if the board shows a distinction the vocabulary can't express, the board is lying. |
+| **Status** | The task's real state, rendered **exactly as the vocabulary writes it, marker and all** — see [`task-status-vocabulary.md`](task-status-vocabulary.md): `🔲 Backlog` · `🔄 In progress` · `🚧 Blocked — <reason>` · `✅ Done` · `⛔ Cancelled (YYYY-MM-DD) — <reason>` · `➡️ Moved to [Sprint N](…) — priority M`. **Never invent a value** (no "Not started", no "WIP") — if the board shows a distinction the vocabulary can't express, the board is lying. |
 | **#** | Priority number, matching the sprint plan. |
 | **Task** | Short title — the same wording the sprint plan uses. |
 | **Filename** | The brief's filename, linked to its path (`backlog/`, `done/`, or `cancelled/`). |
@@ -55,8 +55,12 @@ wants the summary stops at beat 6; the reader who wants the detail scrolls.
 - Keep it to **one row per task**, no wrapped prose in cells.
 - Show the **real** status of every task — including cancelled/moved rows if the sprint carries them.
   A board that hides its dead rows is a board that lies about scope.
-- Add a **one-line roll-up** under it (`N done · N in progress · N blocked · N not started`) so the
-  shape is legible without counting rows.
+- Add a **one-line roll-up** under it so the shape is legible without counting rows:
+  `N done · N in progress · N blocked · N backlog · N cancelled · N moved  —  of M`.
+  Print **only the non-zero terms**, and **always print `— of M`** (the sprint's total task count) —
+  the total is what makes an under-counting line structurally impossible: `4 done · 10 cancelled — of
+  14` cannot be mistaken for a 4-task sprint, and the terms must sum to M or a row was missed. The
+  roll-up names states in the **vocabulary's** words — `backlog`, never "not started".
 - If the board and reality disagree, **the prose above wins and the drift gets flagged** (see Rules).
   Never quietly render a stale board as if it were true.
 
@@ -66,8 +70,11 @@ wants the summary stops at beat 6; the reader who wants the detail scrolls.
   request — lead with the answer, not the evidence.
 - **Prose and short bullets in beats 1–6. The only table is the dashboard (beat 7).** A table is a
   report; beats 1–6 are an answer. Don't turn the answer back into a report.
-- **Sparing emphasis.** Bold the headline and genuine blockers. No emoji status markers, no 🔥 — they
-  are noise once the owner already knows the plan.
+- **Sparing emphasis.** Bold the headline and genuine blockers. **No decorative emoji in the prose
+  beats (1–6)**, no 🔥 — that kind of decoration is noise once the owner already knows the plan. **The
+  dashboard's Status column is the exception**: it carries the canonical emoji markers from
+  [`task-status-vocabulary.md`](task-status-vocabulary.md) (`🔲 🔄 🚧 ✅ ⛔ ➡️`) verbatim, because those
+  markers *are* the vocabulary — not decoration.
 - **Say "nothing" when it's nothing.** Empty sections are information. Padding them is how a status
   report starts lying.
 - **Lead with bad news.** If something slipped, broke, or was missed, it goes in the headline — not
