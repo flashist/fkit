@@ -86,7 +86,7 @@ creates — it's also how consulting agents reach each other. Agents run with
 
 `fkit` does this for you automatically. If you'd rather do it manually: the agents operate on an
 `ai-agents/` working structure and project-root `CLAUDE.md` / `AGENTS.md`. A starter for all of it
-ships in [`omnigent/scaffold/`](./omnigent/scaffold/) — copy `omnigent/scaffold/ai-agents/` and the
+ships in [`claude/scaffold/`](./claude/scaffold/) — copy `claude/scaffold/ai-agents/` and the
 `CLAUDE.md` / `AGENTS.md` into your project root, then fill in the placeholders. A project that
 already has an `ai-agents/` tree + context files needs nothing from the scaffold.
 

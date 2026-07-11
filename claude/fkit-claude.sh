@@ -92,7 +92,7 @@ esac
 skills_for_role() {
   case "$1" in
     lead)      echo "fkit-team fkit-query" ;;
-    producer)  echo "fkit-team fkit-query fkit-initiate-project fkit-task-done fkit-task-cancelled fkit-status" ;;
+    producer)  echo "fkit-team fkit-query fkit-initiate-project fkit-task-plan fkit-task-done fkit-task-cancelled fkit-status" ;;
     coder)     echo "fkit-team fkit-query fkit-plan-task fkit-process-review fkit-process-stateful-review" ;;
     architect) echo "fkit-team fkit-query fkit-survey-project fkit-inspect fkit-design-spec fkit-evaluate-approach fkit-record-decision" ;;
     reviewer)  echo "fkit-team fkit-query fkit-review fkit-stateful-review" ;;
@@ -142,6 +142,29 @@ command -v claude >/dev/null 2>&1 || {
   echo "  Install it from https://claude.com/claude-code, then run:  claude" >&2
   exit 127
 }
+
+# --- Codex preflight: required, but a WARNING, not a wall -------------------------------------
+# fkit is Claude Code + Codex. The adversarial reviewer's whole reason to exist is genuine model
+# diversity — a second opinion from a DIFFERENT model. A "Codex" review that silently ran on Claude
+# is a second opinion from the model that wrote the code: not a second opinion, the illusion of one,
+# which is worse than none. So Codex absence has to be loud HERE, where the user can still fix it,
+# rather than only in a flag on the review output.
+#
+# Per the owner's 2026-07-11 ruling this warns and continues — a Codex outage mid-session must not
+# wall the user out of their own team. `codex login status` is the check because a binary that cannot
+# authenticate is the same failure from the user's point of view (~70ms; it does not touch the model).
+codex_preflight() {
+  if ! command -v codex >/dev/null 2>&1; then
+    printf '\n  ⚠ Codex ('\''codex'\'') is not installed / not on PATH.\n' >&2
+    printf '    Reviews will run WITHOUT an independent second opinion — not model-diverse.\n' >&2
+    printf '    Fix:  npm install -g @openai/codex   &&   codex login\n\n' >&2
+  elif ! codex login status >/dev/null 2>&1; then
+    printf '\n  ⚠ Codex is installed but NOT logged in.\n' >&2
+    printf '    Reviews will run WITHOUT an independent second opinion — not model-diverse.\n' >&2
+    printf '    Fix:  codex login\n\n' >&2
+  fi
+}
+codex_preflight
 
 # --- Fresh project: skip the menu, go straight to the producer's cold start -------------------
 pm="$proj/ai-agents/knowledge-base/PROJECT.md"

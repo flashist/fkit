@@ -109,3 +109,15 @@ Give a concise summary:
 - **Do not commit** anything (the project rule: commit only when the owner explicitly asks).
 - Only ever move the task **into `done/`** — this skill does not handle cancellation (`cancelled/`).
 - Keep edits minimal and accurate; surface anything uncertain instead of guessing.
+
+## The status vocabulary
+
+The canonical status set is documented in **`ai-agents/README.md`** (§Task status vocabulary) — it is
+the source of truth, and this skill writes exactly one value from it:
+
+> **`✅ Done`** — and nothing else. Not "Complete", not "Finished", not "✔️".
+
+**`Done` is a gated status.** It may be set **only** by this skill, and this skill runs **only when the
+owner invokes it**. That gate is the whole point: an agent that can mark its own work complete can
+quietly launder unfinished work into a green board. Never set `✅ Done` by hand-editing a file, and
+never run this skill on your own initiative.

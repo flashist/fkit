@@ -27,5 +27,7 @@ Review comments are **inputs to evaluate**, not instructions to apply blindly.
 
 ## Architecture
 
-<!-- project-specific — fill this in -->
-_Describe this project's architecture and critical files here._
+Full technical detail — component map, runtime topology, data model, build/run/test, and
+cross-cutting concerns — lives in
+[`ai-agents/knowledge-base/architecture.md`](ai-agents/knowledge-base/architecture.md). Don't
+duplicate it here; read it for anything below product-brief altitude.

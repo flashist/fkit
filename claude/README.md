@@ -98,7 +98,7 @@ fkit                     # ...or the original Omnigent team flow
 ```
 
 `fkit claude` runs `fkit-claude-init.sh`, which idempotently:
-1. copies the shared `ai-agents/` scaffold (from `omnigent/scaffold/` — single source of truth),
+1. copies the `ai-agents/` scaffold (from `claude/scaffold/` — single source of truth),
 2. drops `CLAUDE.md` (Claude-flavored, with the team map) and `AGENTS.md` (codex reads it),
 3. refreshes `.claude/agents/fkit-*.md` and `.claude/skills/fkit-*/` from `claude/`,
 4. installs the `.fkit/interview` terminal intake (fresh projects → `.fkit/intake.md`),

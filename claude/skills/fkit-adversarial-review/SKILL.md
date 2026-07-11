@@ -45,9 +45,27 @@ inspect the working tree / recent diff with `git` and state what you reviewed.
    deduping and verification are the lead reviewer's job.
 
 **Fallback mode (mandatory when codex is missing, errors, times out, or returns nothing):** perform the
-adversarial pass **yourself**, following the hunt list below with full rigor — but label the output
-`[claude-fallback — NOT model-diverse]` and say why in the coverage line. **Never silently substitute
-yourself for Codex** — the whole point of this role is the second model.
+adversarial pass **yourself**, following the hunt list below with full rigor — but the result is a
+**flagged partial**, not a review. **Never silently substitute yourself for Codex** — the whole point of
+this role is the second model.
+
+> ### ⚠️ The fallback banner — first thing in the output, every time
+> When you fall back, the **very first lines** of your reply — above the findings, above any preamble —
+> must be exactly this block:
+>
+> ```
+> ⚠️ [claude-fallback — NOT model-diverse] — THIS REVIEW IS INCOMPLETE.
+> Codex was unreachable (<reason>), so this pass had NO independent second opinion:
+> the model that reviewed this code is the same model family that may have written it.
+> Treat it as a partial safety net, not a completed adversarial review.
+> Fix:  codex login   (or install Codex, then re-run the review)
+> ```
+>
+> **This flag is load-bearing, not decorative.** The failure this entire role exists to prevent is a
+> Claude pass being mistaken for a Codex pass — a second opinion from the same model carries *unearned
+> confidence*, which is strictly worse than no review at all. A reader skimming your output must hit
+> the flag **before** they hit a single finding. **A footer is not sufficient.** If someone who hadn't
+> read this skill could plausibly mistake your output for a complete review, the flagging has failed.
 
 ---
 
@@ -77,6 +95,8 @@ A false positive wastes the lead reviewer's time and erodes trust:
 - Nits are fine to note, but label them as such — separate from real defects.
 
 ## Output contract — FINDINGS ONLY
+
+**If you fell back, the fallback banner above comes first — before everything below.**
 
 Return a compact findings list and nothing else (no preamble, no plan, no fix diffs). For each:
 - **id** — a short handle (`X1`, `X2`, …).

@@ -117,6 +117,24 @@ Pick **exactly one**:
 - **🟡 Partial review — `<reviewer>` unavailable** — a reviewer failed or was skipped. **Takes
   precedence**: never pair a clean "Ready to merge" with a missing reviewer.
 
+**When the missing reviewer is Codex, the verdict line is not enough on its own.** Immediately under
+it — still above the findings — state plainly what is absent:
+
+```
+# Review — <scope>
+
+**Decision: 🟡 Partial review — Codex unavailable**
+
+⚠️ [NOT model-diverse — INCOMPLETE] Codex was unreachable (<reason>), so this review had **no
+independent second opinion**: the model that reviewed this code is the same model family that may
+have written it. Do not read this as a completed review.
+Fix:  codex login   (or install Codex, then re-run)
+```
+
+**This flag is load-bearing.** The failure it guards against is a one-model run being mistaken for a
+model-diverse review — unearned confidence, which is worse than an obviously missing review. A reader
+must hit this **before** the findings table, never in a footer.
+
 Then present:
 - **Reviewers run** — and any unavailable/skipped (loudly).
 - **Findings table**: **#** · **Reviewer** (`Claude` / `Codex` / `both`) · **Reviewer severity** (raw —

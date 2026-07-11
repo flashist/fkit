@@ -107,6 +107,34 @@ existing section shape:
 
 Never put secrets (DSNs, endpoints, keys) in `PROJECT.md` — it goes to git.
 
+## Step 4b — Fill the Project Overview in CLAUDE.md and AGENTS.md
+
+`PROJECT.md` is now written, but the project's two **root context files** still carry the scaffold's
+placeholder:
+
+```
+_One-paragraph overview of this project — fill in._
+```
+
+Nothing else ever fills it. Left alone, every initiated project keeps shipping "fill in" to the
+agents that read `CLAUDE.md` / `AGENTS.md` first — which is exactly the gap this step closes.
+
+- In **both** root `CLAUDE.md` and `AGENTS.md`, replace that placeholder line under
+  **`## Project Overview`** with **1–3 sentences** describing the project, derived from the Overview
+  you just wrote in `PROJECT.md`.
+- **Adapt, don't block-copy.** These are short orienting sentences, not a duplicate of the brief. If
+  the two files drift into a verbatim copy of `PROJECT.md`, they stop being worth reading.
+- **Keep the existing pointer line intact** — the sentence directing readers to
+  `ai-agents/knowledge-base/PROJECT.md` for the full brief stays exactly as it is. Overview here,
+  detail there.
+- **Leave the Architecture section alone.** It is a fixed pointer to the architect's
+  `architecture.md`, identical for every project — not something this step writes.
+- Same rule as `PROJECT.md`: **no secrets** — both files go to git.
+
+This stays inside what you already own: the Project Overview is **product-picture** content, sourced
+from the brief you wrote in Step 4. You write the product picture; the architect writes the technical
+one.
+
 ## Step 5 — Seed the wiki (optional)
 
 Offer to have the **fkit-wiki** agent ingest the two new knowledge-base files (`PROJECT.md` and

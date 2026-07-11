@@ -137,3 +137,16 @@ Give a concise summary:
 - Only ever move the task **into `cancelled/`** — this skill does not handle completion (`done/`).
 - Always record a **reason**; surface **dependents**; keep edits minimal and accurate; surface
   anything uncertain instead of guessing.
+
+## The status vocabulary
+
+The canonical status set is documented in **`ai-agents/README.md`** (§Task status vocabulary) — it is
+the source of truth, and this skill writes exactly one value from it:
+
+> **`⛔ Cancelled (YYYY-MM-DD) — <reason>`** — the date and the reason are **mandatory**, not optional
+> decoration. A cancellation with no stated cause cannot be acted on by anyone but the person who
+> wrote it.
+
+**`Cancelled` is a gated status.** It may be set **only** by this skill, and this skill runs **only
+when the owner invokes it** — cancelling work is a judgment about whether it will ever be done. Never
+set `⛔ Cancelled` by hand-editing a file, and never run this skill on your own initiative.

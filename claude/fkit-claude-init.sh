@@ -4,7 +4,7 @@
 #
 # Claude Code discovers agents/skills from a project's .claude/ directory; this script puts the
 # fkit team there and scaffolds the shared working structure:
-#   1. scaffold the ai-agents/ working structure (from omnigent/scaffold/ — single source of
+#   1. scaffold the ai-agents/ working structure (from claude/scaffold/ — single source of
 #      truth; skipped if it already exists)
 #   2. drop project-root CLAUDE.md (Claude-flavored, with the team map) and AGENTS.md (the codex
 #      CLI reads it for the adversarial pass) — skipped if they already exist
@@ -17,7 +17,7 @@
 # Then:   cd <project-root> && claude                  # or:  fkit claude
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"                  # .../claude
-scaffold="$here/../omnigent/scaffold"                  # shared scaffold (repo checkout AND install share)
+scaffold="$here/scaffold"                              # the scaffold (repo checkout AND install share)
 dest_in="${1:?usage: fkit-claude-init.sh <project-root>}"
 [ -d "$dest_in" ] || { echo "error: not a directory: $dest_in" >&2; exit 1; }
 dest="$(cd "$dest_in" && pwd)"                         # absolute
@@ -31,13 +31,12 @@ else
   echo "• created ai-agents/ (from scaffold)"
 fi
 
-# 2. shared context files (never clobber). CLAUDE.md comes from the Claude-flavored scaffold
-#    (it carries the team map + dispatch rules); AGENTS.md from the shared scaffold (codex exec
-#    reads it natively during the adversarial pass).
+# 2. shared context files (never clobber). CLAUDE.md carries the team map + dispatch rules;
+#    AGENTS.md is read natively by the codex CLI during the adversarial pass.
 if [ -e "$dest/CLAUDE.md" ]; then
   echo "• CLAUDE.md already present — left as-is"
 else
-  cp "$here/scaffold/CLAUDE.md" "$dest/CLAUDE.md"
+  cp "$scaffold/CLAUDE.md" "$dest/CLAUDE.md"
   echo "• created CLAUDE.md  (fill in its placeholders)"
 fi
 if [ -e "$dest/AGENTS.md" ]; then
