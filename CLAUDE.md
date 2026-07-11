@@ -1,27 +1,41 @@
 # CLAUDE.md
 
-Guidance for Claude Code (the claude-sdk fkit agents) in this repository. Edit freely.
+Guidance for Claude Code in this repository. Edit freely.
 
 ## Project Overview
 
-fkit is an [Omnigent](https://omnigent.ai)-based team of AI agents for software development — a
-producer, a coder, a reviewer (with an adversarial second opinion), an architect, and a wiki
-librarian — each a scoped-skill Omnigent bundle operating on a shared `ai-agents/` working structure
-inside a consuming project. It's built for software developers, vibe coders, and anyone using AI to
-build software who wants a structured multi-agent workflow instead of one undifferentiated coding
-assistant.
+fkit is a team of AI agents for software development — a producer, a coder, a reviewer (with an
+adversarial second opinion), an architect, and a wiki librarian — operating on a shared
+`ai-agents/` working structure inside a consuming project. It ships in **two runtime flavors** on
+the same file contracts (see
+[`ADR-008`](ai-agents/knowledge-base/decisions/adr-008-claude-code-native-port-alongside-omnigent.md)):
+the original [Omnigent](https://omnigent.ai) bundles under `omnigent/`, and a **Claude Code
+native** port under `claude/` (subagents + `/fkit-*` skills; write-up in
+[`claude/README.md`](claude/README.md)). Behavior changes must be mirrored in both flavors by hand.
 
 The full project brief — domain, architecture, conventions — lives in
 [`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).
+
+## The fkit team in this repo (dogfooded, Claude Code flavor)
+
+This repo runs its own Claude Code flavor: `.claude/agents/fkit-*.md` and `.claude/skills/fkit-*/`
+are fkit-managed copies refreshed from `claude/` by `claude/fkit-claude-init.sh .` — **edit the
+canonical sources in `claude/`, never the copies** (they are gitignored). The interactive session
+is the team lead and the coder; interactive role work runs via the `/fkit-*` skills; the reviewer,
+adversarial reviewer, architect (surveys/consults), producer (consults), and wiki agents run as
+subagents. Universal hard rules: never commit/push unprompted; wiki writes only via the fkit-wiki
+agent; task files move only via the owner-invoked `/fkit-task-done` / `/fkit-task-cancelled`; no
+secrets in any artifact.
 
 ## Knowledge Base & Wiki
 
 A structured wiki lives in `ai-agents/wiki-vault/` (Karpathy LLM-wiki pattern) — synthesized
 knowledge not easily derived from the code. Check it before non-trivial work. Per
 [`ADR-005`](ai-agents/knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md),
-**reads are decentralized**: every agent carries its own vendored `query` skill and reads the wiki
-directly, in-process. **Writes stay exclusive to the `fkit-wiki` agent** (its `ingest` / `lint` /
-`sync` skills) — no other agent ever writes to `ai-agents/wiki-vault/`.
+**reads are decentralized**: in the Claude Code flavor any context follows the one `/fkit-query`
+skill; in the Omnigent flavor every agent carries its own vendored `query` skill copy. **Writes
+stay exclusive to the `fkit-wiki` agent** (ingest / lint / sync) — no other agent or session ever
+writes to `ai-agents/wiki-vault/`.
 
 ## Review Notes
 

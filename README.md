@@ -1,33 +1,42 @@
 # fkit
 
-**An [Omnigent](https://omnigent.ai) agent team for software projects** — a producer, a coder, a
-reviewer (with an adversarial second opinion), an architect, and a wiki librarian, each a
-scoped-skill agent that operates on a shared `ai-agents/` working structure — plus a thin team root
-that stands them all up as one durable, resumable workspace.
+**An agent team for software projects** — a producer, a coder, a reviewer (with an adversarial
+second opinion), an architect, and a wiki librarian, each a role-scoped agent that operates on a
+shared `ai-agents/` working structure. It runs in two flavors on the same file contracts:
 
-fkit is built for [Omnigent](https://omnigent.ai) (Databricks' open-source agent meta-harness): each
-agent is an Omnigent **bundle** (`<agent>/config.yaml` + a per-agent `skills/` directory), and
-Omnigent runs it on the harness/model it declares (`claude-sdk` or `codex`). Everything lives under
-[`omnigent/`](./omnigent/) — see [`omnigent/README.md`](./omnigent/README.md) for the full write-up.
+- **Claude Code native** ([`claude/`](./claude/)) — the team as Claude Code custom subagents +
+  `/fkit-*` skills, with your interactive session as the team lead. Launch with `fkit claude`.
+- **[Omnigent](https://omnigent.ai)** ([`omnigent/`](./omnigent/)) — the original flavor: each agent
+  an Omnigent **bundle** (`config.yaml` + scoped `skills/`), stood up as one durable team session by
+  a thin root. Launch with `fkit`.
+
+See [`claude/README.md`](./claude/README.md) and [`omnigent/README.md`](./omnigent/README.md) for
+the full write-ups, and ADR-008 for the dual-runtime decision.
 
 ## Install & run
 
-One line installs `fkit` as a global command (like `omnigent` itself):
+One line installs `fkit` as a global command:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh   # once
-cd /path/to/your/project && fkit                                                   # every project, every time
+
+cd /path/to/your/project
+fkit claude     # Claude Code flavor — needs Claude Code (claude.com/claude-code)
+fkit            # Omnigent flavor    — needs Omnigent (omnigent.ai) + `omnigent setup`
 ```
 
-You'll also need [Omnigent](https://omnigent.ai) itself, installed separately — run `omnigent setup`
-once to configure the providers the agents' harnesses need (Claude for the `claude-sdk` agents,
-OpenAI/Codex for the `codex` agents).
+`fkit claude` sets the project up if needed (scaffolds `ai-agents/`, drops `CLAUDE.md`/`AGENTS.md`,
+copies the agents into `.claude/agents/` and the skills into `.claude/skills/`, runs a quick
+terminal intake on a fresh project) and launches Claude Code as the team lead — on a fresh project,
+seeded straight into `/fkit-initiate-project`. The adversarial reviewer additionally uses the
+`codex` CLI when present, for a genuinely different-model second opinion (the review degrades
+loudly to Claude-only without it).
 
-Running `fkit` inside a project sets it up if needed (scaffolds `ai-agents/`, drops
-`CLAUDE.md`/`AGENTS.md`, vendors the agent bundles into `.fkit/agents/`, runs a quick terminal intake
-on a fresh project) and opens **one durable, resumable team session**: a `fkit-team` root agent that
-stands up all six agents below as named, directly-chattable entries in the web UI's Subagents panel.
-Come back tomorrow and `fkit` resumes the exact same workspace instead of piling up new sessions.
+Running plain `fkit` inside a project does the Omnigent equivalent (scaffolds `ai-agents/`, drops
+context files, vendors the agent bundles into `.fkit/agents/`, runs the intake) and opens **one
+durable, resumable team session**: a `fkit-team` root agent that stands up all six agents below as
+named, directly-chattable entries in the web UI's Subagents panel. Come back tomorrow and `fkit`
+resumes the exact same workspace instead of piling up new sessions.
 
 `fkit` also keeps itself current: a normal launch does a throttled check and auto-updates when a
 newer version is published (toggle with `FKIT_NO_AUTO_UPDATE=1` / `FKIT_NO_UPDATE_CHECK=1`); run
@@ -38,24 +47,26 @@ See [`omnigent/README.md`](./omnigent/README.md) for the full detail on all of t
 
 ## The team
 
-| Agent | Harness | Role |
-|---|---|---|
-| **fkit-producer** | claude-sdk | product / sprint planning, task lifecycle |
-| **fkit-coder** | claude-sdk | implementation (sole source-write authority) |
-| **fkit-reviewer** | claude-sdk | code review (lead) |
-| **fkit-adversarial-reviewer** | codex | adversarial second opinion — a *different* model, on purpose |
-| **fkit-architect** | claude-sdk | architecture, design specs, ADRs |
-| **fkit-wiki** | codex | the project wiki — exclusive gateway for **writes**; reads are direct via a `query` skill vendored to every agent (ADR-005) |
+| Agent | Role |
+|---|---|
+| **fkit-producer** | product / sprint planning, task lifecycle |
+| **fkit-coder** | implementation (sole source-write authority) |
+| **fkit-reviewer** | code review (lead) |
+| **fkit-adversarial-reviewer** | adversarial second opinion — a *different* model (Codex), on purpose |
+| **fkit-architect** | architecture, design specs, ADRs |
+| **fkit-wiki** | the project wiki — exclusive gateway for **writes**; reads are direct via the `query` skill (ADR-005) |
 
-The `fkit-team` root session that `fkit` opens isn't a "doer" like the six above — it just stands the
-team up, then gets out of the way; you talk to a teammate directly by clicking it in the Subagents
-panel. Agents delegate to one another by spawning a sibling session and reading the reply from their
-inbox (every agent reads the wiki directly via its own `query` skill and only spawns fkit-wiki for a
-write; the coder consults the architect; the reviewer runs the adversarial pass). Skills are **scoped
-to their agent** — active in a session only while
-that agent is. Full topology in [`omnigent/README.md`](./omnigent/README.md).
+**Claude Code flavor:** your interactive session is the team lead *and* the coder — interactive
+role work (planning, initiation, task lifecycle, design) runs there via `/fkit-*` skills, while
+self-contained work (the review passes, the initiation codebase survey, all wiki writes) runs as
+subagents from `.claude/agents/`. Full topology in [`claude/README.md`](./claude/README.md).
 
-## Running one agent directly (without the team session)
+**Omnigent flavor:** the `fkit-team` root session stands the team up as directly-chattable
+sessions; agents delegate to one another by spawning a sibling session and reading the reply from
+their inbox. Skills are scoped to their agent. Full topology in
+[`omnigent/README.md`](./omnigent/README.md).
+
+## Running one agent directly (Omnigent flavor, without the team session)
 
 ```bash
 # from the root of the project you want the agent to work on
@@ -82,8 +93,15 @@ already has an `ai-agents/` tree + context files needs nothing from the scaffold
 ## Layout
 
 ```
-install.sh                       curl|sh entry point — installs the global `fkit` command
+install.sh                       curl|sh entry point — installs the global `fkit` command (both flavors)
 VERSION                          fkit's own version (bumped by `npm run release`)
+claude/
+  README.md                      the Claude Code flavor, in detail
+  fkit-claude.sh                 `fkit claude` — per-project setup + launch Claude Code as team lead
+  fkit-claude-init.sh            idempotent per-project setup (scaffold + context files + agents/skills)
+  agents/                        the team as Claude Code subagent definitions (.claude/agents/)
+  skills/                        the /fkit-* skills (.claude/skills/)
+  scaffold/CLAUDE.md             Claude-flavored root context file (team map + shared rules)
 omnigent/
   README.md                      the agent team, in detail
   fkit.sh                        the installed `fkit` command's logic (self-update + team launch)

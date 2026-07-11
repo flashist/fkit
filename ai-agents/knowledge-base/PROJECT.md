@@ -5,13 +5,15 @@
 
 ## Overview
 
-fkit is an [Omnigent](https://omnigent.ai)-based **team of AI agents for software development** — a
-producer, a coder, a reviewer (with an adversarial second opinion), an architect, and a wiki
-librarian — each a scoped-skill Omnigent bundle that operates on a shared `ai-agents/` working
-structure inside a consuming project. This repository *is* the framework: it dogfoods itself (its own
-`ai-agents/` tree is the one you're reading right now). It's built for software developers, vibe
-coders, and anyone using AI to build software, who want a structured multi-agent workflow instead of
-one undifferentiated coding assistant.
+fkit is a **team of AI agents for software development** — a producer, a coder, a reviewer (with an
+adversarial second opinion), an architect, and a wiki librarian — operating on a shared `ai-agents/`
+working structure inside a consuming project. It ships in two runtime flavors: the original
+[Omnigent](https://omnigent.ai) bundles under `omnigent/`, and a **Claude Code native** port under
+`claude/` (custom subagents + skills; see
+[`ADR-008`](decisions/adr-008-claude-code-native-port-alongside-omnigent.md)). This repository *is*
+the framework: it dogfoods itself (its own `ai-agents/` tree is the one you're reading right now).
+It's built for software developers, vibe coders, and anyone using AI to build software, who want a
+structured multi-agent workflow instead of one undifferentiated coding assistant.
 
 ## Domain & context
 
@@ -33,24 +35,29 @@ git rather than a shared runtime state:
   carries its own vendored copy of the `query` skill and reads the wiki directly, in-process — they
   only consult fkit-wiki for writes or deeper multi-step research.
 
-Agents consult each other by spawning a sibling Omnigent session and reading the reply from their
-inbox (Omnigent has no native cross-bundle sub-agent tool yet). Coordination state — sprint plans,
-task briefs, review ledgers, the wiki — lives entirely as files under `ai-agents/`, versioned in git.
+Consultation depends on the flavor: in the Omnigent flavor agents spawn a sibling Omnigent session
+and read the reply from their inbox (Omnigent has no native cross-bundle sub-agent tool yet); in
+the Claude Code flavor the lead session invokes role subagents via the Agent tool, synchronously.
+Either way, coordination state — sprint plans, task briefs, review ledgers, the wiki — lives
+entirely as files under `ai-agents/`, versioned in git.
 
 **Who it's for:** software developers, "vibe coders," and anyone using AI to build software who wants
 a repeatable, role-separated workflow they can drop into any project.
 
 ## Architecture
 
-Not a running application — no build step, no server, no database. The "codebase" is agent bundles
-(`omnigent/fkit-*/config.yaml` + a scoped `skills/` directory each), POSIX shell scaffolding
-(`install.sh`, `omnigent/fkit-init.sh`, `vendor-agents.sh`, `validate-bundles.sh`), and Markdown. The
-external **Omnigent** CLI is the only runtime dependency; it loads a bundle and runs it on the harness
-it declares — `claude-sdk` (Claude) for four agents, `codex` (OpenAI/Codex) for two (wiki,
-adversarial-reviewer). A consuming project gets fkit via `install.sh` → scaffolds its `ai-agents/`
-tree → vendors the six bundles to its own `.fkit/agents/` (required because Omnigent's
-`sys_session_create` can't reference paths outside the caller's cwd) → the producer's
-`initiate-project` skill (this run) turns the placeholder `PROJECT.md` into a real brief.
+Not a running application — no build step, no server, no database. The "codebase" is agent
+definitions and skills in two flavors, POSIX shell scaffolding, and Markdown. **Omnigent flavor**
+(`omnigent/`): agent bundles (`fkit-*/config.yaml` + a scoped `skills/` directory each) run by the
+external Omnigent CLI on the harness each declares — `claude-sdk` (Claude) or `codex`
+(OpenAI/Codex, for the wiki and adversarial-reviewer); a consuming project vendors the bundles to
+its `.fkit/agents/` (Omnigent's `sys_session_create` can't reference paths outside the caller's
+cwd). **Claude Code flavor** (`claude/`, per ADR-008): the same team as Claude Code subagent
+definitions (`claude/agents/*.md`) + `/fkit-*` skills (`claude/skills/`), copied into a consuming
+project's `.claude/` by `claude/fkit-claude-init.sh`; the interactive session is the team lead and
+coder, and the adversarial pass keeps model diversity via the `codex` CLI. Either way, a consuming
+project gets fkit via `install.sh` → `fkit claude` or `fkit` → the `initiate-project` onboarding
+turns the placeholder `PROJECT.md` into a real brief.
 
 Full technical detail — component map, runtime topology, data model, build/run/test, cross-cutting
 concerns, and identified risks — is in
@@ -62,8 +69,12 @@ concerns, and identified risks — is in
 - **Stage: Prototype.** Near-term goal is a user-friendly startup sequence and a first working set of
   agents with dedicated skills (six bundles already exist; hardening/polish is the current focus, not
   breadth).
-- **Omnigent-only, for now.** Hard constraint for this stage: no other meta-harness/runtime is being
-  targeted or supported. Don't design around portability to a different agent runtime yet.
+- **Dual-runtime: Omnigent + Claude Code native** (per
+  [`ADR-008`](decisions/adr-008-claude-code-native-port-alongside-omnigent.md), superseding the
+  earlier "Omnigent-only" constraint). The team ships in two flavors — the original Omnigent
+  bundles under `omnigent/` and a Claude Code native port under `claude/` (`fkit claude`) — both
+  operating on the same `ai-agents/` file contracts, which are the portability layer. No third
+  runtime is targeted. Behavior changes must be mirrored in both flavors by hand.
 - **Role boundaries are prompt-enforced, not sandboxed** (all agents run `sandbox: none`). "Never
   commit/push unprompted," "review-only," "wiki-writes-only" etc. are hard prompt rules backstopped
   only by a shared `blast_radius` guardrail against catastrophic ops. This is a known, accepted risk

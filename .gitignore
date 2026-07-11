@@ -12,3 +12,9 @@
 
 # Local Omnigent project config (fkit-managed runtime preferences)
 .omnigent/
+
+# fkit-managed agents (refreshed by fkit-claude-init.sh)
+.claude/agents/fkit-*.md
+
+# fkit-managed skills (refreshed by fkit-claude-init.sh)
+.claude/skills/fkit-*/

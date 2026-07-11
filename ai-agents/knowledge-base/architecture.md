@@ -376,3 +376,21 @@ Still **no build, no automated test suite**. Updated inventory:
 
 **Carried over, unchanged:**
 - `sandbox.write_paths` timeline (risk #2 above).
+
+## Addendum (2026-07-11) — Claude Code native flavor added
+
+Per [ADR-008](decisions/adr-008-claude-code-native-port-alongside-omnigent.md), fkit is now
+**dual-runtime**: a Claude Code native port lives under `claude/` as a peer of `omnigent/`,
+operating on the same `ai-agents/` file contracts (which are the portability layer). Shape:
+`claude/agents/*.md` (six subagent definitions with per-agent tool allowlists — the interactive
+session replaces `fkit-team` as lead *and* is the coder), `claude/skills/fkit-*/` (17 `/fkit-*`
+skills — interactive role work in the lead session, thin dispatchers to the review/wiki subagents),
+`claude/fkit-claude-init.sh` (idempotent per-project setup; reuses `omnigent/scaffold/ai-agents/`
+as the single scaffold source), `claude/fkit-claude.sh` (`fkit claude` — the generated global
+wrapper now dispatches `claude` to it; `install.sh` installs both flavors). The Codex adversarial
+pass survives via `codex exec --sandbox read-only` with mandatory loud degradation. Not ported,
+deliberately: fkit-team + reconnect/restart machinery (Claude Code owns session lifecycle), the
+vendored-`query` distribution (one `/fkit-query` skill; ADR-004/005/006/007 are now
+omnigent-path-only mechanics), and `validate-bundles.sh` equivalents. Full write-up:
+[`claude/README.md`](../../claude/README.md). This doc's Omnigent sections above remain accurate
+for the omnigent path and were not rewritten.

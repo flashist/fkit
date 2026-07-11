@@ -82,6 +82,9 @@ cat > "$dest/.fkit/interview" <<'INTERVIEW'
 set -eu
 root="$(cd "$(dirname "$0")/.." && pwd)"
 out="$root/.fkit/intake.md"
+# Answers already captured (e.g. a relaunch before initiation completed) — never re-ask or
+# overwrite them; delete .fkit/intake.md to redo the intake.
+[ -f "$out" ] && exit 0
 # Need a usable controlling terminal. `[ -r /dev/tty ]` is unreliable (the device node carries rw bits
 # even with no tty), so actually try to OPEN it; if that fails (headless/CI), skip cleanly and let the
 # LLM interview instead. `exec 3<file` would exit the shell on failure before any `|| exit`, so probe

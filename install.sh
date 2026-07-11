@@ -43,6 +43,18 @@ for s in fkit.sh fkit-init.sh fkit-reconnect.sh vendor-agents.sh validate-bundle
   [ -f "$SHARE/omnigent/$s" ] && chmod +x "$SHARE/omnigent/$s"
 done
 
+# 1a. the Claude Code flavor (agents + skills + its init/launcher) — see claude/README.md.
+#     The rm -rf sits OUTSIDE the guard so installing a ref without claude/ removes a stale flavor
+#     instead of leaving it behind.
+rm -rf "$SHARE/claude"
+if [ -d "$TMP/src/claude" ]; then
+  echo "Installing fkit resources → $SHARE/claude"
+  cp -R "$TMP/src/claude" "$SHARE/claude"
+  for s in fkit-claude.sh fkit-claude-init.sh; do
+    [ -f "$SHARE/claude/$s" ] && chmod +x "$SHARE/claude/$s"
+  done
+fi
+
 # 1b. record the installed version so `fkit` can show it at startup and tell when a newer one is
 #     published (self-update compares this sha against $REPO@$REF's head). Prefer git; fall back to the
 #     GitHub API via curl. The human-readable version is the repo-root VERSION file (single source of
@@ -70,7 +82,19 @@ echo "✓ Installed fkit v${ver:-?} ($(printf %s "${sha:-unknown}" | cut -c1-7))
 mkdir -p "$BIN"
 cat > "$BIN/fkit" <<EOF
 #!/bin/sh
-# fkit — run the fkit agent team in the current project. Resources: $SHARE/omnigent
+# fkit — run the fkit agent team in the current project. Resources: $SHARE
+# 'fkit claude' runs the Claude Code flavor; anything else goes to the Omnigent flow.
+case "\${1:-}" in
+  claude)
+    shift
+    [ -x "$SHARE/claude/fkit-claude.sh" ] || {
+      echo "fkit: the Claude Code flavor is not installed (this fkit was installed from a ref without claude/)." >&2
+      echo "      Re-run the installer against a ref that has it, e.g.:  fkit update" >&2
+      exit 1
+    }
+    exec "$SHARE/claude/fkit-claude.sh" "\$@"
+    ;;
+esac
 exec "$SHARE/omnigent/fkit.sh" "\$@"
 EOF
 chmod +x "$BIN/fkit"
