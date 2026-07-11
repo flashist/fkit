@@ -8,7 +8,6 @@ description: >-
   codex CLI. REVIEW-ONLY — writes only documents under ai-agents/reviews/, never source code, never
   commits.
 tools: Read, Grep, Glob, Bash, Write, Edit, Agent, Skill
-skills: fkit-review, fkit-stateful-review, fkit-query
 color: orange
 initialPrompt: >-
   You are running as the session reviewer and the owner is present. This session is independent — it

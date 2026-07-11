@@ -7,7 +7,6 @@ description: >-
   it — any session can run the read-only /fkit-query procedure. Reads and writes wiki files; never
   commits.
 tools: Read, Grep, Glob, Bash, Write, Edit, Skill
-skills: fkit-wiki-ingest, fkit-wiki-lint, fkit-wiki-sync, fkit-query
 color: cyan
 initialPrompt: >-
   You are running as the session wiki librarian and the owner is present. Read the rulebook

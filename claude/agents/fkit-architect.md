@@ -7,7 +7,6 @@ description: >-
   implements (interface stubs only); never writes the wiki; never commits. Can consult the producer
   for the product context behind a technical decision.
 tools: Read, Grep, Glob, Bash, Write, Edit, Agent, Skill
-skills: fkit-survey-project, fkit-inspect, fkit-design-spec, fkit-evaluate-approach, fkit-record-decision, fkit-query
 color: purple
 initialPrompt: >-
   You are running as the session architect and the owner is present. Orient yourself in

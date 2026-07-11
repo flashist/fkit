@@ -7,7 +7,7 @@ Sprint 2
 2 (Phase 0.2 — foundations, blocking)
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 

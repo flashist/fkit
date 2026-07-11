@@ -45,6 +45,102 @@ fi
 
 ROLES="producer coder architect reviewer adversarial-reviewer wiki lead"
 
+# --- Self-update ------------------------------------------------------------------------------
+# `fkit` (bare) runs THIS script, which until now had no update logic at all — so everyone on the
+# default path sat on whatever version they installed, forever, with nothing telling them otherwise.
+#
+# Shaped per ADR-009 §Decision 3, and deliberately UNLIKE the Omnigent launcher it replaces:
+#   - it NOTIFIES; it never auto-updates and never re-execs itself. Silently swapping the code out
+#     from under a running invocation is exactly the behavior we don't want back.
+#   - `fkit update` stays an explicit verb the user chooses to run.
+#   - the check is throttled, TIME-BOXED, and silent on failure. This sits in the startup path of
+#     every single `fkit`, so offline / proxied / captive-portal must cost nothing and print nothing.
+#     (Omnigent's check had no timeout and no GIT_TERMINAL_PROMPT guard — a repo that asks for
+#     credentials would hang the launcher indefinitely. Both are fixed here.)
+#
+# Env: FKIT_NO_UPDATE_CHECK=1     never touch the network.
+#      FKIT_UPDATE_INTERVAL_MIN   throttle window, minutes (default 60; 0 = check every launch).
+#      FKIT_REPO / FKIT_REF       update source (default flashist/fkit@main).
+share="$(cd "$here/.." && pwd)"        # install root (~/.local/share/fkit), or the repo root in a checkout
+FKIT_NET_TIMEOUT=5                     # seconds — hard ceiling on any update-check network call
+
+_fkit_verfield() {   # <key> → its value from the installed .version (empty if absent)
+  [ -f "$share/.version" ] || return 0
+  sed -n "s/^$1=//p" "$share/.version" | head -1
+}
+# A source checkout is the fkit repo itself. Key this ONLY on markers install.sh never copies into an
+# install (.git, the repo-root package.json) — never on anything inside claude/, which IS copied.
+_fkit_is_source_checkout() { [ -d "$share/.git" ] || [ -f "$share/package.json" ]; }
+
+_fkit_remote_sha() {   # → head sha of $repo@$ref, or empty. Never hangs, never fails loudly.
+  if command -v git >/dev/null 2>&1; then
+    GIT_TERMINAL_PROMPT=0 \
+    GIT_HTTP_LOW_SPEED_LIMIT=1000 GIT_HTTP_LOW_SPEED_TIME="$FKIT_NET_TIMEOUT" \
+      git ls-remote "https://github.com/$fkit_repo.git" "$fkit_ref" 2>/dev/null \
+      | awk 'NR==1{print $1}' || true
+  elif command -v curl >/dev/null 2>&1; then
+    curl -fsSL --max-time "$FKIT_NET_TIMEOUT" \
+      "https://api.github.com/repos/$fkit_repo/commits/$fkit_ref" 2>/dev/null \
+      | sed -n 's/.*"sha"[[:space:]]*:[[:space:]]*"\([0-9a-f]\{7,40\}\)".*/\1/p' | head -1 || true
+  fi
+  return 0
+}
+_fkit_remote_version() {   # → the human version string at $repo@$ref, or empty
+  command -v curl >/dev/null 2>&1 || return 0
+  curl -fsSL --max-time "$FKIT_NET_TIMEOUT" \
+    "https://raw.githubusercontent.com/$fkit_repo/$fkit_ref/VERSION" 2>/dev/null \
+    | head -1 | tr -d '[:space:]' || true
+  return 0
+}
+_fkit_reinstall() {   # run the canonical installer for $repo@$ref (refreshes resources + .version)
+  command -v curl >/dev/null 2>&1 || { echo "fkit: curl is required to update" >&2; return 1; }
+  FKIT_REPO="$fkit_repo" FKIT_REF="$fkit_ref" \
+    curl -fsSL "https://raw.githubusercontent.com/$fkit_repo/$fkit_ref/install.sh" | sh
+}
+
+fkit_repo="${FKIT_REPO:-$(_fkit_verfield repo)}"; fkit_repo="${fkit_repo:-flashist/fkit}"
+fkit_ref="${FKIT_REF:-$(_fkit_verfield ref)}";    fkit_ref="${fkit_ref:-main}"
+
+# Explicit: `fkit update`. A real verb the user invokes deliberately.
+case "${1:-}" in
+  update|--update|upgrade|--upgrade|self-update)
+    if _fkit_is_source_checkout; then
+      echo "fkit: this is a source checkout ($share) — update it with 'git pull'." >&2
+      exit 1
+    fi
+    printf '  fkit: updating from %s@%s...\n' "$fkit_repo" "$fkit_ref"
+    if _fkit_reinstall; then
+      printf '  fkit: now at v%s (%s)\n' \
+        "$(_fkit_verfield version)" "$(_fkit_verfield sha | cut -c1-7)"
+      rm -f "$share/.latest" "$share/.update-check" 2>/dev/null || true
+      exit 0
+    fi
+    echo "fkit: update failed." >&2; exit 1 ;;
+esac
+
+# Automatic: a throttled check that only ever PRINTS. Silent when current; silent when offline.
+if [ "${FKIT_NO_UPDATE_CHECK:-0}" != 1 ] && ! _fkit_is_source_checkout; then
+  stamp="$share/.update-check"
+  interval="${FKIT_UPDATE_INTERVAL_MIN:-60}"
+  due=1
+  if [ "$interval" -gt 0 ] 2>/dev/null && [ -f "$stamp" ] \
+     && [ -z "$(find "$stamp" -mmin +"$interval" 2>/dev/null)" ]; then
+    due=0                                        # inside the throttle window — stay off the network
+  fi
+  if [ "$due" = 1 ]; then
+    : > "$stamp" 2>/dev/null || true             # stamp up front: a failed check still costs the window
+    remote="$(_fkit_remote_sha)"
+    installed="$(_fkit_verfield sha)"
+    if [ -n "$remote" ] && [ -n "$installed" ] && [ "$remote" != "$installed" ]; then
+      rver="$(_fkit_remote_version)"; curver="$(_fkit_verfield version)"
+      { printf 'version=%s\n' "${rver:-unknown}"; printf 'sha=%s\n' "$remote"; } \
+        > "$share/.latest" 2>/dev/null || true
+      printf '\n  ↑ fkit v%s → v%s is available. Run:  fkit update\n\n' \
+        "${curver:-?}" "${rver:-?}"
+    fi
+  fi
+fi
+
 case "${1:-}" in
   -h|--help)
     cat <<'EOF'
@@ -67,9 +163,9 @@ Roles:
 Within a session, `@fkit-<role> <question>` asks another role and brings the answer back.
 
 Other:
-  fkit omnigent [...]   the original Omnigent flavor
   fkit update           update fkit itself
   FKIT_SETUP_ONLY=1     set the project up, then exit without launching
+  FKIT_NO_UPDATE_CHECK=1  never check for updates
 
 Anything that isn't a role is passed through to `claude` (e.g. `fkit --resume`).
 EOF
@@ -86,8 +182,20 @@ case "${1:-}" in
 esac
 
 # ---------------------------------------------------------------------------
-# Skill ownership — the single source of truth. A role sees ONLY these; every other fkit-* skill is
-# turned off. Non-fkit skills (the project's own, the user's own) are never touched.
+# Skill ownership — THE single source of truth (ADR-012 §1). A role session sees ONLY these; every
+# other fkit-* skill is turned off. Non-fkit skills (the project's own, the user's own) are never
+# touched.
+#
+# This is now the ONLY place role→skill ownership is expressed. The `skills:` frontmatter that used
+# to sit in claude/agents/*.md was DROPPED, not generated: Claude Code treats it as a PRELOAD hint,
+# not an allowlist, so it enforced nothing. Keeping it (even generated + drift-checked) would have
+# preserved a field that LOOKS like the invariant and isn't — worse than no field at all. Don't
+# re-add it.
+#
+# Scope of the lock, precisely (ADR-012 §2): it is structural in a role SESSION (this JSON is what
+# makes `fkit coder` genuinely unable to run /fkit-review — the property reviewer independence rests
+# on). In a spawned CONSULT it is advisory only, carried by the agent prompt and each skill's
+# `⛔ Owner:` banner. Don't claim more than that in the docs.
 # ---------------------------------------------------------------------------
 skills_for_role() {
   case "$1" in
@@ -102,11 +210,22 @@ skills_for_role() {
   esac
 }
 
+# Skills that must stay ON for EVERY role (ADR-012 §3). A spawned consult inherits the *caller's*
+# skillOverrides — not its own — so any skill a role is genuinely consulted TO RUN has to be left on
+# for everyone, or it is unreachable in the one place it's needed. Concretely: /fkit-initiate-project
+# has the PRODUCER spawn the architect to run fkit-survey-project; with survey-project off in the
+# producer's settings, the architect inherits that and project initiation cannot run its own survey.
+#
+# The cost, stated plainly: an owner in any role session can now invoke /fkit-survey-project by name.
+# That is a benign leak on a read-heavy doc procedure, traded against an initiation flow that is
+# otherwise broken. Deliberately minimal — adding to this set is a decision, not a convenience.
+CONSULT_SKILLS="fkit-survey-project fkit-query"
+
 # Writes the role's settings to a file and echoes its (relative) path. It goes in a FILE rather than
 # inline on argv because a terminal with no title yet labels the tab with the command line — and a
 # ~400-byte JSON blob makes every tab look identical. `--settings` takes a file or JSON; we take file.
 build_settings() {   # → .fkit/settings/<role>.json containing {"skillOverrides":{"<not-owned>":"off",…}}
-  allowed=" $(skills_for_role "$1") "
+  allowed=" $(skills_for_role "$1") $CONSULT_SKILLS "
   body=""
   for d in "$proj"/.claude/skills/fkit-*/; do
     [ -d "$d" ] || continue

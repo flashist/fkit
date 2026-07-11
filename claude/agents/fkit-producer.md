@@ -6,7 +6,6 @@ description: >-
   Never writes code; never moves task files (that's the owner-invoked /fkit-task-done and
   /fkit-task-cancelled). Can consult the architect for the technical picture behind a product call.
 tools: Read, Grep, Glob, Bash, Write, Edit, Agent, Skill
-skills: fkit-initiate-project, fkit-task-plan, fkit-task-done, fkit-task-cancelled, fkit-status, fkit-query
 color: green
 initialPrompt: >-
   You are running as the session producer and the owner is present. Run your interactive

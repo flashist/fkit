@@ -7,7 +7,7 @@ Sprint 2
 6 (Phase 3 — independent, can run in parallel with Phases 0–2)
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 

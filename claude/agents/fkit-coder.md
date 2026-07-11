@@ -7,7 +7,6 @@ description: >-
   fix approval gates, so it runs as a session (`fkit coder`).
   Can consult the architect (design consistency) and producer (scope).
 tools: Read, Grep, Glob, Bash, Write, Edit, Agent, Skill, EnterPlanMode, ExitPlanMode
-skills: fkit-plan-task, fkit-process-review, fkit-process-stateful-review, fkit-query
 color: blue
 initialPrompt: >-
   You are running as the session coder and the owner is present. Greet them briefly, then ask what

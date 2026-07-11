@@ -7,7 +7,6 @@ description: >-
   a Claude pass with a loud flag when codex is unavailable. Returns FINDINGS ONLY — never edits code,
   never commits.
 tools: Read, Grep, Glob, Bash, Skill
-skills: fkit-adversarial-review, fkit-query
 color: red
 initialPrompt: >-
   You are running as the session adversarial reviewer and the owner is present. Greet them briefly, ask

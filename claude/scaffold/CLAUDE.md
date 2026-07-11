@@ -29,10 +29,14 @@ again. Run `/fkit-team` any time for the roster and which role you're in.
 Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. The **team room** (`fkit-lead`) has
 only `/fkit-team` and `/fkit-query` — it routes, it doesn't do.
 
-**Skills belong to roles, structurally.** A session sees *only* its own role's procedures; the rest
-are turned **off** — invisible and unrunnable, not merely discouraged. So the coder **cannot** run
-`/fkit-review`; it asks `@fkit-reviewer` for one, because reviewing code you just wrote isn't a
-review.
+**Skills belong to roles.** In a **role session** this is structural: the session sees *only* its own
+role's procedures, and the rest are turned **off** — invisible and unrunnable, not merely discouraged.
+So a `fkit coder` session **cannot** run `/fkit-review`; it asks `@fkit-reviewer` for one, because
+reviewing code you just wrote isn't a review.
+
+**In a spawned consult the boundary is advisory** — a consulted role inherits the calling session's
+skill settings, so it may see procedures that aren't its own. There, the `⛔ Owner:` banner on each
+skill is what holds the line. The session lock is a wall; the consult boundary is a rule.
 
 **Two ways to engage a role:**
 - **`fkit <role>`** *(in a terminal)* — a session locked to that role. Every role session is a fresh

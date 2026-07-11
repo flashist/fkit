@@ -34,9 +34,15 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
      other** — architect ⇄ producer, coder → architect, reviewer → architect — up to **two hops**,
      never in a cycle.
 
-4. **Skills belong to roles.** Each role sees only its own procedures; the rest aren't just discouraged,
-   they're **turned off** (invisible and unrunnable). So the coder *cannot* run the reviewer's
-   procedure — it asks `@fkit-reviewer` for a review, because reviewing your own work isn't a review.
+4. **Skills belong to roles.** In a **role session** this is structural, not advice: a session sees
+   only its own procedures and the rest are **turned off** — invisible and unrunnable. So a `fkit coder`
+   session *cannot* run the reviewer's procedure; it asks `@fkit-reviewer`, because reviewing your own
+   work isn't a review.
+
+   **In a spawned consult the boundary is advisory, not enforced** (ADR-012). A consulted role inherits
+   the *calling* session's skill settings, so it may well see procedures that aren't its own. What holds
+   the line there is the `⛔ Owner:` banner at the top of every skill — and the role honoring it. Don't
+   mistake the consult boundary for the session lock: **one is a wall, the other is a rule.**
 
    | Role | Its procedures |
    |---|---|
