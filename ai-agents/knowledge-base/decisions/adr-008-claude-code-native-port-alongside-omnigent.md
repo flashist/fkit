@@ -1,8 +1,17 @@
 # ADR-008: Claude Code native port, alongside Omnigent
 
-- **Status:** accepted
+- **Status:** **superseded** by [ADR-009](adr-009-claude-code-native-is-the-only-runtime.md)
+  (dual-runtime → Claude-native only) and, for its role-access section (`:106-120`), by
+  [ADR-010](adr-010-role-locked-sessions-and-skill-lockdown.md) (hat skills → role-locked sessions).
 - **Date:** 2026-07-11
 - **Deciders:** owner (with Claude Code)
+
+> **⚠ Read as history, not as current design.** This ADR is deliberately kept because it is the
+> record of **why fkit left Omnigent** — do not delete it. But two of its decisions no longer hold:
+> fkit is no longer dual-runtime (Omnigent is being removed — ADR-009), and the
+> `/fkit-agent-<role>` "hat skills" it describes at `:106-120` **have been deleted from the code**
+> (replaced by role-locked sessions — ADR-010). Its context, its argument for tool-allowlist
+> enforcement, and its `ai-agents/` portability-layer reasoning all remain sound and load-bearing.
 
 ## Context
 
