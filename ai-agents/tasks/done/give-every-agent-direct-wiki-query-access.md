@@ -7,7 +7,8 @@ Sprint 1
 13
 
 ## Status
-🔲 Backlog
+✅ Done — verified complete in code by the 2026-07-11 doc-drift audit (every agent carries
+`/fkit-query` directly; no per-lookup fkit-wiki spawn required).
 
 ## Context
 

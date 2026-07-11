@@ -7,7 +7,7 @@ Sprint 1
 10
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (2026-07-11) — Omnigent removed: an Omnigent subagent-runner incident; the doc is archived to `history/` by Sprint 2 task 10 (ADR-009).
 
 ## Context
 

@@ -360,7 +360,7 @@ Still **no build, no automated test suite**. Updated inventory:
    confirmation.
 
 **Resolved this pass:**
-- ~~Priority: harden consultation topology vs. expand skill set~~ — resolved by `plan-sprint-1.md`
+- ~~Priority: harden consultation topology vs. expand skill set~~ — resolved by `sprints/done/sprint-1.md`
   (owner-ranked: onboarding verification → consult-envelope doc → CI; skill-set expansion explicitly
   deferred).
 - ~~Is `fkit-team`/`fkit.sh` deliberate and primary?~~ — owner-confirmed this session: yes, `fkit-team`

@@ -7,7 +7,7 @@ Sprint 1
 2
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (2026-07-11) — Omnigent removed: the spawn+inbox envelope died with Omnigent; the Claude 2-hop consult envelope is now recorded in ADR-010.
 
 ## Context
 

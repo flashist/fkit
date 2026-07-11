@@ -98,7 +98,7 @@ descriptions beyond removing a fragment that is now false.
 ### 7. Report
 Give a concise summary:
 - **Moved:** `<old path>` → `ai-agents/tasks/done/<file>.md`
-- **Updated:** each doc touched and how (e.g. "`plan-sprint-4.md` — status row → ✅ Done";
+- **Updated:** each doc touched and how (e.g. "`sprint-4.md` — status row → ✅ Done";
   "`refactor-auth-flow.md` — T4f slice → ✅ Done").
 - **Flagged:** anything not auto-resolved (no sprint row found, mismatch, multiple matches).
 - Remind that nothing was committed — the move + edits are staged/working-tree only.

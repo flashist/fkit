@@ -7,7 +7,8 @@ Sprint 1
 12
 
 ## Status
-🔲 Backlog
+✅ Done — verified complete in code by the 2026-07-11 doc-drift audit (consult spawns use fixed,
+role-based titles).
 
 ## Context
 

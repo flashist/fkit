@@ -123,7 +123,7 @@ auto-edit) anything now affected:
 Give a concise summary:
 - **Moved:** `<old path>` → `ai-agents/tasks/cancelled/<file>.md`
 - **Reason:** the one-line cancellation reason recorded.
-- **Updated:** each doc touched and how (e.g. "`plan-sprint-4.md` — status row → ⛔ Cancelled";
+- **Updated:** each doc touched and how (e.g. "`sprint-4.md` — status row → ⛔ Cancelled";
   "`<epic>.md` — T# slice → ⛔ Cancelled").
 - **Dependents flagged:** anything that depended on the cancelled task and may now need attention.
 - **Other flags:** no sprint row found, mismatch, multiple matches, or a request to cancel a

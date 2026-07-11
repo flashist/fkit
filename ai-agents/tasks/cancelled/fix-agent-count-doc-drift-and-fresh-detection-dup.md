@@ -7,7 +7,7 @@ Sprint 1
 8 (optional / low)
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (2026-07-11) — Omnigent removed: the drifted files are deleted, not fixed (ADR-009). Sprint 2 task 8 rewrites the docs against the post-removal reality.
 
 ## Context
 

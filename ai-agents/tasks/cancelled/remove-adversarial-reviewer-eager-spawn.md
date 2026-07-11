@@ -7,7 +7,7 @@ Sprint 1
 5
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (2026-07-11) — Omnigent removed: `fkit-team` (and its eager bootstrap roster) is deleted with Omnigent (ADR-009).
 
 ## Context
 

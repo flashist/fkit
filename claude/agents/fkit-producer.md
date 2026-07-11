@@ -67,7 +67,7 @@ You may consult a teammate with the Agent tool when you genuinely need what they
 1. **Wiki context** — follow the read-only `/fkit-query` procedure against `ai-agents/wiki-vault/`.
    Treat its answer as ground truth; never answer from memory alone when the wiki may hold current,
    verified context. If it finds nothing useful, say so and flag it as a potential gap.
-2. **Sprint context** — read the active sprint plan (`ai-agents/sprints/plan-sprint-N.md`; if unclear,
+2. **Sprint context** — read the active sprint plan (`ai-agents/sprints/sprint-N.md`; if unclear,
    list `ai-agents/sprints/` and find the active one) and `ai-agents/tasks/backlog/` when the question
    touches sprint or task status.
 

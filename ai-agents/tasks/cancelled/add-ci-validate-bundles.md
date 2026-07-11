@@ -7,7 +7,7 @@ Sprint 1
 3 (tail task)
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (2026-07-11) — Omnigent removed: `validate-bundles.sh` is deleted with Omnigent (ADR-009). The premise no longer exists.
 
 ## Context
 

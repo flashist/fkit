@@ -1,65 +1,64 @@
 # Verify onboarding flow end-to-end
 
 ## Sprint
-Sprint 1
+Sprint 2
 
 ## Priority
-1 (highest this sprint)
+7 (the removal gate — nothing ships until this passes)
 
 ## Status
 🔲 Backlog
 
 ## Context
 
-fkit's stated near-term goal is a *user-friendly startup sequence*. The pieces exist
-(`install.sh` → `omnigent/fkit-init.sh` → scaffold + vendor bundles → `.fkit/run` → terminal intake
-→ producer's `initiate-project` skill, which is what just ran in this session), but the owner flagged
-that several parts have had fixes applied recently in a separate working session — a launch/tty
-handling fix, browser-open behavior, and the terminal intake script — **none confirmed working
-end-to-end in a real, fresh terminal**. This session (running inside an existing repo, as the
-producer) does not exercise the *install* half of the flow at all (`install.sh`, `fkit-init.sh`,
-`.fkit/run`'s first-run detection) — only `initiate-project` itself, which did complete successfully
-here.
+> **Rescoped 2026-07-11 (Sprint 1 → Sprint 2).** This task's original *premise* died with Omnigent —
+> it was written to verify `install.sh` → `omnigent/fkit-init.sh` → vendored bundles → `.fkit/run`,
+> a path that no longer exists. Its *intent*, however, became **more** important, not less. Per the
+> removal plan §E: *"after this removal, nothing is more worth verifying than a clean install →
+> `fkit` → role session → consult → review."* Rewritten against the post-removal reality.
 
-This is investigation/verification work, not new feature work — the goal is to find out what's
-actually broken (if anything), not to build anything yet.
+Sprint 2 rips out an entire runtime, rewrites the `curl | sh` entry point, and adds new code to the
+startup path of every invocation. **This task is the proof that fkit still works when it's done.**
+
+It is the sprint's release gate. It is deliberately owned by a fresh pair of eyes running the *public*
+path — not by reading diffs, and not from inside this repo, which never exercises the install half of
+the flow at all.
 
 ## What to build (verification, not implementation)
 
-Run the flow for real, from a clean state, and record what happens at each step:
+Run the real, public flow from a genuinely clean state. Record the actual commands and their output —
+this is evidence, not vibes.
 
-1. **Fresh-clone test**: in a scratch directory (not this repo), run the public path —
-   `curl`-equivalent install or a local equivalent of `install.sh` against a throwaway target project
-   — and confirm `omnigent/fkit-init.sh <project-root>` completes: scaffolds `ai-agents/`, drops
-   `CLAUDE.md`/`AGENTS.md`, vendors the six bundles to `.fkit/agents/`, adds `.fkit/` to
-   `.gitignore`, writes `.fkit/intake.md` tooling and `.fkit/run`.
-2. **First-run launch**: run `.fkit/run` (default agent = producer) against that fresh scaffold and
-   confirm: it detects the uninitialized `PROJECT.md`, runs the terminal intake, and launches the
-   producer already seeded to trigger `initiate-project` — in particular, confirm the **tty/launch
-   fix** actually results in a usable interactive terminal session (this is the part flagged as
-   previously broken).
-3. **Browser-open behavior**: confirm whatever browser-open step exists in the flow (if any — check
-   `install.sh` / `fkit-init.sh` / `.fkit/run` for it) fires correctly and doesn't hang or error in a
-   plain terminal.
-4. **Full initiation**: let the seeded producer session run `initiate-project` against the fresh
-   scaffold's placeholder `PROJECT.md`, through to a written `PROJECT.md` + `architecture.md` — this
-   half is now proven to work *inside* a session (this repo's own run just did it); the open question
-   is only whether it's reachable via the real entry point end-to-end.
-5. Note the actual commands run and their output/exit codes — this becomes the evidence base for
-   whether the "user-friendly startup sequence" goal is met, and for scoping any follow-up fix tasks.
+1. **Clean install.** From a branch ref, into a **clean `$HOME`** (container, VM, or a
+   `HOME=$(mktemp -d)` harness). This is the `curl | sh` path a real new user takes. Confirm nothing
+   from `omnigent/` is fetched or copied.
+2. **Scaffold.** In a scratch project directory, confirm `fkit` scaffolds a complete project: the
+   full `ai-agents/` tree, `AGENTS.md`, `CLAUDE.md` — all from `claude/scaffold/` (Phase 0.1).
+3. **The role menu.** Bare `fkit` shows the deterministic 7-role menu. `fkit <role>` skips it.
+4. **Role-locked sessions — all 7.** For each role, confirm the lockdown is real: the `/` menu shows
+   only that role's skills, and a skill it does **not** own is **unrunnable even by explicit name**.
+   This is the flavor's central invariant (ADR-010) — test it, don't assume it.
+5. **A consult.** One role asking another, and getting the answer back.
+6. **A review — reaching Codex for real.** Confirm from the review's actual output that it genuinely
+   ran on Codex, not on a silent Claude fallback. Per ADR-009 a review that didn't reach Codex is not
+   a complete review.
+7. **First-run initiation.** Let the producer run `/fkit-initiate-project` against the fresh
+   scaffold's placeholder `PROJECT.md`, through to a written `PROJECT.md` + `architecture.md`.
+8. **Self-update.** `fkit update` works; the throttled notice fires when stale, stays silent when
+   current, and never errors offline (Phase 0.2).
 
 ## Verification steps
 
-- A fresh target project, run through the full public entry point, ends with a filled-in
-  `PROJECT.md` and a working producer session — no manual intervention beyond answering the intake
-  questions and normal interactive prompts.
-- Document exactly where (if anywhere) it breaks, hangs, or requires an undocumented workaround.
+- A brand-new user, on a clean machine, gets from `curl | sh` to a working initiated project with **no
+  manual intervention** beyond answering intake questions and normal interactive prompts.
+- Every step above passes, with recorded commands and exit codes.
+- Document exactly where — if anywhere — it breaks, hangs, or needs an undocumented workaround.
 
 ## Notes
 
-- This is naturally a **fkit-coder** or owner-run verification task (it involves running shell
-  commands and observing real terminal behavior), not something the producer can do itself.
-- If this surfaces concrete bugs, they become their own follow-up task briefs — do not fix inline as
-  part of "verification" without a brief; report findings back to the producer first so they can be
-  scoped and prioritized against the rest of Sprint 1.
-- Depends on nothing else in this sprint; the other two Sprint 1 tasks do not block on this one.
+- Owner: **fkit-coder** or the **owner**, run in a real terminal. The producer cannot do this.
+- **Depends on:** Phase 2 (`delete-omnigent-directory`), and therefore transitively on all of
+  Phase 0 and Phase 1.
+- If this surfaces concrete bugs, **report them back rather than fixing inline** — they get their own
+  briefs, scoped against the rest of the sprint. A verification task that quietly turns into a fix
+  task stops being a verification task.

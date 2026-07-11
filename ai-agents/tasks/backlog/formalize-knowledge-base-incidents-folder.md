@@ -1,10 +1,10 @@
 # Formalize the knowledge-base folder structure, including `incidents/`
 
 ## Sprint
-Sprint 1
+Sprint 2
 
 ## Priority
-11
+9
 
 ## Status
 🔲 Backlog

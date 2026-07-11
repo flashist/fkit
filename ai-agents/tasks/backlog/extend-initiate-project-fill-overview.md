@@ -1,10 +1,10 @@
 # Extend `initiate-project` to also fill CLAUDE.md/AGENTS.md Project Overview
 
 ## Sprint
-Sprint 1
+Sprint 2
 
 ## Priority
-6
+13
 
 ## Status
 🔲 Backlog
