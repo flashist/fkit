@@ -6,7 +6,7 @@ description: >-
   unprompted. NOT for background delegation — implementation needs the owner present for its plan and
   fix approval gates, so it runs as a session (`fkit coder`).
   Can consult the architect (design consistency) and producer (scope).
-tools: Read, Grep, Glob, Bash, Write, Edit, Agent, Skill
+tools: Read, Grep, Glob, Bash, Write, Edit, Agent, Skill, EnterPlanMode, ExitPlanMode
 skills: fkit-plan-task, fkit-process-review, fkit-process-stateful-review, fkit-query
 color: blue
 initialPrompt: >-

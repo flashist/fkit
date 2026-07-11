@@ -26,9 +26,15 @@ implementation begins.
 
 ## Workflow
 
-1. **Declare planning-only.** State clearly, up front, that this run is planning-only — no code will
-   be written yet, and no files will be edited until the plan is approved. (If Claude Code's plan
-   mode is active, it serves as the same gate — but keep this prose contract as the portable rule.)
+1. **Enter plan mode.** Use the **`EnterPlanMode`** tool to switch this run into plan mode, and state
+   clearly that it is planning-only — no code will be written, and no files edited, until the plan is
+   approved. Plan mode makes that a **wall the runtime enforces**, not a promise: `Write` and `Edit`
+   are refused for the duration.
+
+   **If the tool is unavailable** (you are a *spawned* `fkit-coder` consult rather than a
+   `fkit coder` session, so the runtime never granted it): do **not** error out. Fall back to the
+   **prose contract** — declare planning-only up front and honor it. The tool is the gate wherever
+   the runtime provides one; **the prose contract is the portable rule everywhere else.**
 2. Read the task file at `$ARGUMENTS`.
 3. **Gather wiki context.** If the task touches areas the wiki may cover, follow the read-only
    query procedure in `.claude/skills/fkit-query/SKILL.md` against `ai-agents/wiki-vault/` and use
@@ -38,8 +44,9 @@ implementation begins.
    documents.
 5. Identify the implementation scope, constraints, dependencies, risks, and likely validation steps.
 6. Produce a concrete step-by-step plan.
-7. **Stop for approval.** Present the plan and stop — do not make any code changes until the owner
-   approves it.
+7. **Stop for approval.** Use **`ExitPlanMode`** to present the finished plan and stop — do not make
+   any code changes until the owner approves it. (Without the tool, present the plan in prose and
+   stop just the same.) Approval is what releases the gate; nothing is edited before it.
 
 ## Planning Requirements
 

@@ -46,6 +46,8 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 14 | Add a `task-plan` skill to fkit-producer | [`add-task-plan-skill-to-producer.md`](../tasks/backlog/add-task-plan-skill-to-producer.md) |
 | 🔲 Backlog | 15 | Enforce the task status vocabulary in the source | [`enforce-task-status-vocabulary.md`](../tasks/backlog/enforce-task-status-vocabulary.md) |
 | 🔲 Backlog | 16 | Add a `status` skill to fkit-producer | [`add-status-skill-to-producer.md`](../tasks/backlog/add-status-skill-to-producer.md) |
+| 🔲 Backlog | 17 | Restore Claude Code plan mode in `/fkit-plan-task` *(regression — independent; **recommended first pickup**)* | [`restore-plan-mode-in-plan-task.md`](../tasks/backlog/restore-plan-mode-in-plan-task.md) |
+| 🔲 Backlog | 18 | Remove `fkit --resume` and the blanket arg-passthrough *(Omnigent scar tissue — **after tasks 2 & 4**)* | [`remove-fkit-resume-passthrough.md`](../tasks/backlog/remove-fkit-resume-passthrough.md) |
 
 ## Dependency graph
 
@@ -59,6 +61,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 12. arch pointer ──(needs 1)
 13. initiate-project overview ──(independent)
 14. task-plan skill ──(independent)
+18. remove --resume ──(needs 2 and 4: they fix the verb set it must not break)
 ```
 
 ## Where the risk actually is
@@ -156,6 +159,44 @@ live work. Per the removal plan §E, of Sprint 1's 12 backlog tickets:
   **Action:** fkit-architect records a new ADR superseding ADR-001, via `/fkit-record-decision`.
   Keep ADR-001's file (honest numbering), mark it superseded. Note that `package.json`'s
   `description` and `keywords` still say "Omnigent" — that cleanup already belongs to **task 5**.
+
+## Addendum — task 17 added out of band (2026-07-11)
+
+**Task 17 (`restore-plan-mode-in-plan-task`) was added after the sprint was planned**, from a defect
+fkit-coder diagnosed and confirmed today: `/fkit-plan-task` **no longer enters Claude Code's plan
+mode**. The Claude-native port (`627d5ea`) copied the Omnigent-era *prose-only* planning contract —
+a workaround for a harness that lacked the tools — back into the Claude flavor, **which has them**.
+The gate is a promise, not a wall. `claude/agents/fkit-coder.md` also omits `EnterPlanMode` /
+`ExitPlanMode` from its allowlist, so **both** the skill and the allowlist must be fixed or neither
+works.
+
+- **It is numbered 17 to avoid renumbering the owner's ranking, not because it is low.** It has **no
+  dependency on tasks 1–16** and is **recommended as the first thing picked up** — it repairs the
+  planning gate that the rest of this sprint, including the high-risk `install.sh` rewrite (task 4),
+  will be planned through.
+- **Owner decisions on it are already made** (no session-wide plan default, **no hooks** — ADR-010's
+  deferral stands — **no ADR**, and the model-initiated nature of the gate is an accepted residual).
+  They are recorded in the brief. **Do not reopen them.**
+
+## Addendum — task 18 added out of band (2026-07-11)
+
+**Task 18 (`remove-fkit-resume-passthrough`) was added after the sprint was planned**, on the owner's
+ruling: *"create a task for removing the `fkit --resume` thing (it was created to work around the
+limitations and bugs of omnigent)."* It is **the same class of work as tasks 1–5** — Omnigent scar
+tissue, removed rather than fixed. `--resume` existed for Omnigent's durable-root session model and its
+runner disconnect bugs; a Claude-native role session is just `claude --agent fkit-<role>`, so the problem
+it worked around is gone.
+
+- **It is a removal, not a repair.** fkit-coder's earlier triage offered *persist the role* vs *require a
+  role*. **The owner rejected both.** That framing is **closed** — do not reopen it, and do not build a
+  replacement feature.
+- **What actually goes** is the **blanket unrecognized-arg passthrough** in `claude/fkit-claude.sh`, which
+  is what routes `fkit --resume` into the `:190` "no role → lead" default and silently resumes any session,
+  coder included, under **lead's** lockdown. Doc-only removal would leave that live.
+- **Sequenced after tasks 2 and 4**, which between them decide the wrapper's argv surface and where
+  `fkit update` lives — the verb set task 18 must not break isn't final until they land. Numbered 18 for
+  **append-don't-renumber** discipline. If the coder is already in `fkit-claude.sh` for task 4, landing it
+  in the same pass is fine.
 
 ## Open questions for the owner
 

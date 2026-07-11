@@ -22,9 +22,26 @@
 # that are worse than pressing Cmd-T.)
 #
 # Env: FKIT_SETUP_ONLY=1 — set up but don't launch claude.
+#      FKIT_NO_SELF_HOST=1 — never re-exec into a checkout's own claude/ (see below).
 set -eu
 here="$(cd "$(dirname "$0")" && pwd)"                  # .../claude
 proj="$PWD"
+
+# --- Self-hosting: dogfood the working tree, not the installed snapshot ------------------------
+# `fkit` on PATH execs the INSTALLED copy under ~/.local/share/fkit/, so `here` points there — and
+# setup copies agents/skills from `here` into the project's .claude/. Launched inside an fkit
+# checkout, that silently overwrites the project with a snapshot of an older fkit: edits to
+# claude/ never reach the agents, and no number of relaunches helps (the snapshot only moves on
+# `fkit update`). Re-exec into the checkout's own script so the working tree is the source.
+# The env guard makes the re-exec run exactly once; the path check is what identifies a checkout.
+if [ "${FKIT_NO_SELF_HOST:-0}" != 1 ] \
+   && [ -x "$proj/claude/fkit-claude.sh" ] \
+   && [ "$proj/claude" != "$here" ]; then
+  printf '\n  → self-hosting: running from %s (working tree), not the installed fkit.\n' "$proj/claude"
+  FKIT_NO_SELF_HOST=1
+  export FKIT_NO_SELF_HOST
+  exec "$proj/claude/fkit-claude.sh" "$@"
+fi
 
 ROLES="producer coder architect reviewer adversarial-reviewer wiki lead"
 
