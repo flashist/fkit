@@ -7,7 +7,7 @@ Sprint 2
 7 (the removal gate — nothing ships until this passes)
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 

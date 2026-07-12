@@ -36,7 +36,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 4 | Rewrite the installer for a single flavor *(Phase 1)* | [`rewrite-installer-single-flavor.md`](../tasks/done/rewrite-installer-single-flavor.md) |
 | ✅ Done | 5 | Delete `omnigent/` *(Phase 2)* | [`delete-omnigent-directory.md`](../tasks/done/delete-omnigent-directory.md) |
 | ✅ Done | 6 | Reconcile the skill-ownership source of truth *(Phase 3 — independent)* | [`reconcile-skill-ownership-source-of-truth.md`](../tasks/done/reconcile-skill-ownership-source-of-truth.md) |
-| 🔲 Backlog | 7 | Verify onboarding flow end-to-end *(the removal gate)* | [`verify-onboarding-flow-end-to-end.md`](../tasks/backlog/verify-onboarding-flow-end-to-end.md) |
+| ✅ Done | 7 | Verify onboarding flow end-to-end *(the removal gate — PASSED, [evidence](../knowledge-base/onboarding-verification-2026-07-12.md))* | [`verify-onboarding-flow-end-to-end.md`](../tasks/done/verify-onboarding-flow-end-to-end.md) |
 | ✅ Done | 8 | Rewrite the docs against the post-removal reality *(Phase 4)* | [`rewrite-docs-post-omnigent.md`](../tasks/done/rewrite-docs-post-omnigent.md) |
 | 🔲 Backlog | 9 | Formalize the knowledge-base folder structure, incl. `incidents/` | [`formalize-knowledge-base-incidents-folder.md`](../tasks/backlog/formalize-knowledge-base-incidents-folder.md) |
 | 🔲 Backlog | 10 | Knowledge-base hygiene after the removal *(Phase 5a)* | [`knowledge-base-hygiene-post-omnigent.md`](../tasks/backlog/knowledge-base-hygiene-post-omnigent.md) |
