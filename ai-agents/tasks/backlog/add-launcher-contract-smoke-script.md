@@ -19,7 +19,7 @@ Task 7's release gate passed — but it was **a one-off manual run by a human**.
 change silently breaking `curl | sh`.
 
 **Why this is cheap:** *fkit is not an LLM product from a test-harness point of view — it is a **shell
-product that launches an LLM**.* `exec claude …` (`claude/fkit-claude.sh:368`) is a clean boundary, and
+product that launches an LLM**.* `exec claude …` (`claude/fkit-claude.sh:389`) is a clean boundary, and
 everything on fkit's side of it is a **pure function** of (argv, project state, env) → (exit code, the
 argv handed to `claude`, the files written). Stub `claude` on `PATH` and the whole role-lock contract
 falls out as text in milliseconds — no model, no auth, no cost, no flake.
@@ -52,33 +52,51 @@ friction.
 
 ## What to build
 
-**Runner: `node --test`.** Tests under `test/`. Add `"test": "node --test test/"` and
-`"engines": {"node": ">=20"}` to `package.json`.
+**Governed by [ADR-014](../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md) — read it
+first.** It records what is settled and what is deliberately still open. **Do not re-derive either.**
 
-**Zero devDependencies. No lockfile. No `node_modules`.** The repo has none today and must still have
-none afterwards — **adding a lockfile would be the actual regression.** `npm test` must work on a fresh
-clone with no install step.
+### Settled — these are locked (ADR-014)
 
-**Explicitly rejected — do not re-argue these:**
-- **bats-core / shellspec.** They are shell-*internals* harnesses; their value is mocking and sourcing
-  shell functions in isolation. **Nothing in scope needs that.** Every assertion here is black-box
-  process contract: run a subprocess, inspect its argv and exit code, parse a JSON file it left on
-  disk. bats gives you a process runner and no JSON parser, at the cost of an install step and the
-  `bats-assert` / `bats-support` submodule tax.
-- **A hand-rolled `sh` script.** See the rewrite note above.
+- **Zero devDependencies. No lockfile. No `node_modules`.** The repo has none today and must still have
+  none afterwards — **adding a lockfile would be the actual regression.** This binds *both* candidate
+  runners, so it is settled independently of the runner choice.
+- **Scope = black-box process contract.** The argv fkit hands to `claude` (including **whether it
+  exec'd at all**), and the `skillOverrides` map in `.fkit/settings/<role>.json`. **Not** shell
+  internals. **Not** LLM behavior.
+- **bats-core and shellspec are rejected.** Shell-*internals* harnesses — their value is mocking and
+  sourcing shell functions in isolation, which nothing here needs. bats notably ships a process runner
+  and **no JSON parser**, which is the one thing the crown-jewel assertion actually requires.
+- **Test infra never ships to consumers.** `install.sh:43` copies **only `claude/`** — so repo-root
+  tests cannot reach a consuming project by construction. *(This is why "no dependencies" is **not** an
+  argument here: it was defending the `curl | sh` story from a threat that does not exist. Do not
+  resurrect it.)*
+- **The 7×21 matrix is hard-coded in the test** — see Group B.
 
-*Why node is genuinely free, not merely cheap:* it is **built into Node ≥20** (no devDeps); Node is
-**already in this repo's toolchain** (`bin/release.mjs`, `npm run release`); and Node is **already a de
-facto prerequisite** — fkit's own installer tells users to `npm install -g @openai/codex`
-(`install.sh:131`, `fkit-claude.sh:309`). A machine that can run fkit's prerequisites can run
-`node --test`.
+### ⚠️ OPEN — the runner is NOT decided. Settle it when you pick this task up.
 
-*The clincher:* **the crown-jewel assertion is a JSON assertion.** `.fkit/settings/<role>.json` — the
-`skillOverrides` map that **is** the role lockdown (`fkit-claude.sh:257-269`; 21 skills × 7 roles). In
-`sh` you assert that with `grep '"fkit-review":"off"'` — a substring match against a JSON blob, exactly
-the kind of assertion that passes for the wrong reason. In node it is `JSON.parse` and a set
-comparison. That is not a stylistic preference; it is the difference between testing the invariant and
-testing a string.
+> **Owner ruling (2026-07-13):** *"I don't know — leave it as an open question that needs additional
+> investigation and discussion at the time the task is going to be done."*
+>
+> **An earlier draft of this brief stated "Runner: `node --test`" as settled. That was wrong** — it
+> asserted exactly the decision the owner declined to make. Corrected.
+
+**The two candidates, fairly:**
+
+| | For | Against |
+|---|---|---|
+| **`node --test`** | Built into Node ≥20 — **zero devDeps**, no lockfile, `npm test` works on a fresh clone with no install step. Node is already in the toolchain (`bin/release.mjs`) and already a de facto fkit prerequisite (`install.sh:131` tells users to `npm install -g @openai/codex`). **Real JSON assertions** (`JSON.parse` + set comparison), test isolation, per-test failure diffs. | A shell tool tested from JavaScript. A contributor who only edits skill markdown now needs Node to run the suite. |
+| **plain `sh` + a documented assert helper** | Shell tool, shell tests. No Node needed by any contributor. | You write the assert helper, the temp-dir trap, the pass/fail counter and the exit roll-up anyway — **that is a framework**, just an undocumented one. No test isolation. And the crown-jewel assertion becomes `grep '"fkit-review":"off"'` — **a substring match against a JSON blob, which can pass for the wrong reason.** |
+
+**Decision criteria, in ADR-014's order — do these, don't argue from taste:**
+
+1. **Write assertion #8 both ways for one role and compare.** If `sh` cannot express *"off for every
+   non-owned skill, off for **none** it owns, nor any `CONSULT_SKILLS`"* without becoming a JSON parser
+   built out of `grep`, **node wins on merits.** This is the dispositive experiment — run it.
+2. **Ask the owner whether *"shell tool, shell tests"* is a stated value.** Dispositive if yes.
+3. **Can anyone name a real Node-less contributor?** If not, the objection is hypothetical.
+
+**Both candidates already satisfy every settled point above**, so the runner choice **cannot reopen
+anything in that list.**
 
 ### Scope — unchanged, and it stays this size
 
@@ -130,7 +148,7 @@ not been tested. **Demonstrate the red run**, don't just report the green one.
 
 - **`FKIT_NO_SELF_HOST=1`** — `fkit-claude.sh:39-46` otherwise re-execs into the checkout.
 - **`FKIT_NO_UPDATE_CHECK=1`** — `:124`.
-- The temp project's `PROJECT.md` must **not** read as fresh, or `:326` **hijacks every role into
+- The temp project's `PROJECT.md` must **not** read as fresh, or `:337` **hijacks every role into
   `producer`**.
 - **`FKIT_SETUP_ONLY=1` exits at `:286`, before `build_settings()` runs (`:257`)** — so the
   settings-file assertions require actually reaching `exec claude`, with the stub on `PATH`.
@@ -171,7 +189,7 @@ not been tested. **Demonstrate the red run**, don't just report the green one.
 ## Open questions for the owner
 
 1. **Fresh-project routing must be pinned.** On a *fresh* project with no args and no tty the launcher
-   routes to **producer** with a seed prompt, not `lead` (`fkit-claude.sh:326` — the fresh branch has no
+   routes to **producer** with a seed prompt, not `lead` (`fkit-claude.sh:337` — the fresh branch has no
    tty check). Probably intended, but **the test must pin one behavior**, so someone has to rule.
 2. **Record an ADR for "how fkit tests itself"?** fkit-architect recommends one — *runner = `node:test`,
    zero devDeps, tests never ship to consumers, scope = black-box process contract* — with a

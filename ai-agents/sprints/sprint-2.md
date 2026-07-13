@@ -47,7 +47,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 15 | Enforce the task status vocabulary in the source | [`enforce-task-status-vocabulary.md`](../tasks/done/enforce-task-status-vocabulary.md) |
 | ✅ Done | 16 | Add a `status` skill to fkit-producer | [`add-status-skill-to-producer.md`](../tasks/done/add-status-skill-to-producer.md) |
 | ✅ Done | 17 | Restore Claude Code plan mode in `/fkit-plan-task` *(regression — independent)* | [`restore-plan-mode-in-plan-task.md`](../tasks/done/restore-plan-mode-in-plan-task.md) |
-| 🔲 Backlog | 18 | Remove `fkit --resume` and the blanket arg-passthrough *(Omnigent scar tissue)* | [`remove-fkit-resume-passthrough.md`](../tasks/backlog/remove-fkit-resume-passthrough.md) |
+| ✅ Done | 18 | Remove `fkit --resume` and the blanket arg-passthrough *(Omnigent scar tissue)* | [`remove-fkit-resume-passthrough.md`](../tasks/done/remove-fkit-resume-passthrough.md) |
 | ✅ Done | 19 | Repair the knowledge-base paths in product source *(ADR-013 fallout)* | [`repair-knowledge-base-paths-in-product-source.md`](../tasks/done/repair-knowledge-base-paths-in-product-source.md) |
 | 🔲 Backlog | 20 | Design a version-to-version migration mechanism *(**investigation first** — no implementation from the brief)* | [`design-version-to-version-migration-mechanism.md`](../tasks/backlog/design-version-to-version-migration-mechanism.md) |
 | 🔲 Backlog | 21 | Repair the 6 broken task links in the closed Sprint 1 plan *(one-off cleanup — independent)* | [`repair-broken-links-in-closed-sprint-plans.md`](../tasks/backlog/repair-broken-links-in-closed-sprint-plans.md) |

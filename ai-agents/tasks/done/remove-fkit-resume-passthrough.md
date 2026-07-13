@@ -7,7 +7,7 @@ Sprint 2
 18 *(same class as the Omnigent removal — sequenced **after tasks 2 and 4**; see Notes)*
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 
