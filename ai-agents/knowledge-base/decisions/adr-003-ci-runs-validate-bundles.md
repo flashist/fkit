@@ -1,6 +1,10 @@
 # ADR-003: Add CI running `omnigent/validate-bundles.sh`
 
-- **Status:** accepted
+- **Status:** **superseded** — Omnigent removed
+  ([ADR-009](adr-009-claude-code-native-is-the-only-runtime.md)). `omnigent/validate-bundles.sh`, the
+  script this ADR's CI would have run, no longer exists, and the CI never landed. **Kept for the
+  record** — the need it identified (fkit has *no* automated verification) is still unmet and still
+  open; see `../architecture.md`.
 - **Date:** 2026-07-09
 - **Deciders:** owner (relayed via fkit-producer during project initiation), recorded by fkit-architect
 - **Implementation:** tracked as a task brief for fkit-coder (producer to write); this ADR records the

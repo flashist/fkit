@@ -1,6 +1,9 @@
 # ADR-004: Fixed, role-based titles for ad hoc consult spawns (`<target-agent>-consult`)
 
-- **Status:** accepted
+- **Status:** **superseded** — Omnigent removed
+  ([ADR-009](adr-009-claude-code-native-is-the-only-runtime.md)). This ADR governs the titling of
+  `sys_session_create` consult spawns, an Omnigent mechanism that no longer exists; Claude Code
+  consults run through the Agent tool.
 - **Date:** 2026-07-10
 - **Deciders:** owner + fkit-architect
 

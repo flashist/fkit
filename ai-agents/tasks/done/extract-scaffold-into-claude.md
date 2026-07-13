@@ -12,7 +12,7 @@ Sprint 2
 ## Context
 
 Per the Omnigent-removal plan
-([`plan-omnigent-removal-2026-07-11.md`](../../knowledge-base/plan-omnigent-removal-2026-07-11.md)
+([`2026-07-11-plan-omnigent-removal.md`](../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
 §Phase 0.1) and [ADR-009](../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md).
 
 **`omnigent/` is load-bearing for the Claude flavor today.** The single most important fact about

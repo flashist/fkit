@@ -163,7 +163,7 @@ The producer rejected the **reasoning**:
    `claude --agent fkit-reviewer --settings .fkit/settings/reviewer.json -p "<prompt>"` → the harness
    refused a non-owned skill: `Skill fkit-plan-task is disabled for model invocation in skillOverrides
    settings`. **Automated e2e of fkit's own role sessions is feasible today, from a script.**
-2. **Per [ADR-012](decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md), a tester
+2. **Per [ADR-012](../decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md), a tester
    *subagent* CANNOT test the session lockdown** — it inherits the **caller's** `skillOverrides` and
    would report a confident green on its caller's settings. Any real session test must shell out to a
    **subprocess**. **On fkit's single most important invariant, an agent is strictly worse than a
@@ -227,9 +227,9 @@ explicitly non-agentic task; and the re-raise clause (the sandbox-authority dive
 
 ## Related
 
-- [`architecture.md`](architecture.md) §9.1 — **zero automated verification**, the top structural risk.
+- [`architecture.md`](../architecture.md) §9.1 — **zero automated verification**, the top structural risk.
   Not a role question, and it should not be used as evidence for one.
-- [`onboarding-verification-2026-07-12.md`](onboarding-verification-2026-07-12.md) — the task-7 run that
+- [`2026-07-12-onboarding-verification.md`](2026-07-12-onboarding-verification.md) — the task-7 run that
   surfaced the gap.
-- [`ADR-012`](decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md) — why a tester
+- [`ADR-012`](../decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md) — why a tester
   *subagent* cannot verify the lockdown.

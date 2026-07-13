@@ -1,6 +1,9 @@
 # ADR-006: Distribute the vendored `query` skill via relative symlinks, not byte-identical copies
 
-- **Status:** superseded by ADR-007 (distribution mechanism only — this ADR's underlying rationale for
+- **Status:** **superseded, on two grounds.** (1) **Omnigent removed**
+  ([ADR-009](adr-009-claude-code-native-is-the-only-runtime.md)) — the per-bundle vendored skill this
+  ADR distributes no longer exists at all. (2) Already superseded before that **by ADR-007**
+  (distribution mechanism only — this ADR's underlying rationale for
   wanting a single source of truth still stands; ADR-007 achieves it a different way, without symlinks,
   after this ADR's mechanism caused a real, reproducible git pathspec failure not caught by this ADR's
   own investigation. See

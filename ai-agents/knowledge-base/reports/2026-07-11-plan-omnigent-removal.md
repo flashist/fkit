@@ -5,9 +5,9 @@
 > dependencies between the pieces, and where the risk is. It is not a sprint plan and does not
 > assign or size anything.
 >
-> **Authorized by:** [ADR-009](decisions/adr-009-claude-code-native-is-the-only-runtime.md),
-> [ADR-010](decisions/adr-010-role-locked-sessions-and-skill-lockdown.md).
-> **Evidence:** [`doc-drift-audit-2026-07-11.md`](doc-drift-audit-2026-07-11.md).
+> **Authorized by:** [ADR-009](../decisions/adr-009-claude-code-native-is-the-only-runtime.md),
+> [ADR-010](../decisions/adr-010-role-locked-sessions-and-skill-lockdown.md).
+> **Evidence:** [`2026-07-11-doc-drift-audit.md`](2026-07-11-doc-drift-audit.md).
 
 ## The one thing that must not be got wrong
 
@@ -115,6 +115,14 @@ correct about the role-locked model.
 
 ## Phase 5 — Knowledge-base and wiki hygiene (last)
 
+> **⚠ Correction (2026-07-13).** Two claims in this section were overtaken before it was executed; the
+> original text is left standing as the record of what was planned. See the fuller note at **§D**.
+> - **ADR-005 was *not* marked superseded outright.** Its Omnigent *mechanism* died; its *rule* — wiki
+>   reads decentralized, writes exclusive to `fkit-wiki` — is **current law** (`../architecture.md`,
+>   `CLAUDE.md`). Only **003, 004, 006, 007** were superseded outright.
+> - **"ADR-001 stays open" is stale.** The owner ruled on 2026-07-11 and ADR-001 is now **superseded by
+>   [ADR-011](../decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md)**.
+
 - **Mark ADR-003/004/005/006/007 `superseded — Omnigent removed`** *(architect; do it in this phase,
   not earlier — an ADR should not claim to be superseded while its code still ships)*. **Keep the
   files.** Per ADR-009 §Related, delete nothing: ADR-008 in particular is the record of *why fkit
@@ -202,8 +210,28 @@ correct about the role-locked model.
 
 ## D. ARCHIVE, don't delete — knowledge-base (Phase 5)
 
+> **⚠ Correction (2026-07-13) — this section's routing was superseded before it was executed.**
+> Recorded inline per `README.md` ("reports are not edited once written, except for factual corrections
+> marked inline"); the original text below is left standing as the record of what was planned.
+>
+> [ADR-013](../decisions/adr-013-knowledge-base-root-holds-the-living-canon.md) now governs filing, and
+> it overrules three things below:
+> 1. **`history/` is for superseded *design docs* only** (ADR-002). Records don't go stale — designs do.
+>    The evaluation and the verification were filed to **`reports/`**, not `history/`. `history/` gained
+>    nothing.
+> 2. **The 2026-07-10 incident stayed in `incidents/`.** Routing it to `history/` would have emptied
+>    `incidents/` on the day it was formalized — it is a record of something that happened, and it does
+>    not stop having happened because Omnigent is gone.
+> 3. **ADR-005 was *not* marked flatly superseded.** Its Omnigent *mechanism* died; its *rule* — wiki
+>    reads decentralized, writes exclusive to `fkit-wiki` — is current law (`../architecture.md`,
+>    `CLAUDE.md`). Only **003, 004, 006, 007** were superseded outright. **ADR-001 did not "stay
+>    open"**: it was superseded by
+>    [ADR-011](../decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md).
+>
+> Executed as ADR-013 directs by task 10 (`knowledge-base-hygiene-post-omnigent`).
+
 **`ai-agents/knowledge-base/history/` already exists for exactly this**, by the precedent of
-[ADR-002](decisions/adr-002-archive-pre-omnigent-design-docs.md) (*"archive superseded design docs,
+[ADR-002](../decisions/adr-002-archive-pre-omnigent-design-docs.md) (*"archive superseded design docs,
 don't leave them at root"*). Reuse it rather than deleting:
 
 - `eval-vendored-query-skill-distribution.md` — omnigent-only evaluation → `history/`

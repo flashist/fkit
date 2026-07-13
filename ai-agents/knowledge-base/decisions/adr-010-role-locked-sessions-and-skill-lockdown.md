@@ -127,7 +127,7 @@ the drift class this project keeps paying for.
   [ADR-008](adr-008-claude-code-native-port-alongside-omnigent.md) (`:106-120`), which documents the
   now-deleted `/fkit-agent-<role>` hat skills.
 - [ADR-009](adr-009-claude-code-native-is-the-only-runtime.md) — the runtime this model lives on.
-- Evidence: [`doc-drift-audit-2026-07-11.md`](../doc-drift-audit-2026-07-11.md) (§"An open design
+- Evidence: [`2026-07-11-doc-drift-audit.md`](../reports/2026-07-11-doc-drift-audit.md) (§"An open design
   question — two sources of truth for the skill lock").
 - Code: `claude/fkit-claude.sh:14-18,29,75-103,151-199`, `claude/agents/fkit-lead.md`,
   `claude/skills/fkit-team/SKILL.md`, `claude/scaffold/CLAUDE.md:12-50`.

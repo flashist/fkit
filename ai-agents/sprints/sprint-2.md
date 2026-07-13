@@ -9,8 +9,8 @@ rewrite the docs and the wiki against the reality that's left.
 (Claude-native is the only runtime) and
 [ADR-010](../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)
 (role-locked sessions + skill lockdown).
-**Technical sequence from:** [`plan-omnigent-removal-2026-07-11.md`](../knowledge-base/plan-omnigent-removal-2026-07-11.md)
-(fkit-architect). **Evidence:** [`doc-drift-audit-2026-07-11.md`](../knowledge-base/doc-drift-audit-2026-07-11.md).
+**Technical sequence from:** [`2026-07-11-plan-omnigent-removal.md`](../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
+(fkit-architect). **Evidence:** [`2026-07-11-doc-drift-audit.md`](../knowledge-base/reports/2026-07-11-doc-drift-audit.md).
 
 ## ⚠️ The one thing that must not be got wrong
 
@@ -36,10 +36,10 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 4 | Rewrite the installer for a single flavor *(Phase 1)* | [`rewrite-installer-single-flavor.md`](../tasks/done/rewrite-installer-single-flavor.md) |
 | ✅ Done | 5 | Delete `omnigent/` *(Phase 2)* | [`delete-omnigent-directory.md`](../tasks/done/delete-omnigent-directory.md) |
 | ✅ Done | 6 | Reconcile the skill-ownership source of truth *(Phase 3 — independent)* | [`reconcile-skill-ownership-source-of-truth.md`](../tasks/done/reconcile-skill-ownership-source-of-truth.md) |
-| ✅ Done | 7 | Verify onboarding flow end-to-end *(the removal gate — PASSED, [evidence](../knowledge-base/onboarding-verification-2026-07-12.md))* | [`verify-onboarding-flow-end-to-end.md`](../tasks/done/verify-onboarding-flow-end-to-end.md) |
+| ✅ Done | 7 | Verify onboarding flow end-to-end *(the removal gate — PASSED, [evidence](../knowledge-base/reports/2026-07-12-onboarding-verification.md))* | [`verify-onboarding-flow-end-to-end.md`](../tasks/done/verify-onboarding-flow-end-to-end.md) |
 | ✅ Done | 8 | Rewrite the docs against the post-removal reality *(Phase 4)* | [`rewrite-docs-post-omnigent.md`](../tasks/done/rewrite-docs-post-omnigent.md) |
 | ✅ Done | 9 | Formalize the knowledge-base folder structure, incl. `incidents/` *(→ [ADR-013](../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md))* | [`formalize-knowledge-base-incidents-folder.md`](../tasks/done/formalize-knowledge-base-incidents-folder.md) |
-| 🔲 Backlog | 10 | Knowledge-base hygiene after the removal *(Phase 5a)* | [`knowledge-base-hygiene-post-omnigent.md`](../tasks/backlog/knowledge-base-hygiene-post-omnigent.md) |
+| ✅ Done | 10 | Knowledge-base hygiene after the removal *(Phase 5a)* | [`knowledge-base-hygiene-post-omnigent.md`](../tasks/done/knowledge-base-hygiene-post-omnigent.md) |
 | 🔲 Backlog | 11 | Wiki sync after the removal *(Phase 5b — genuinely last)* | [`wiki-sync-post-omnigent.md`](../tasks/backlog/wiki-sync-post-omnigent.md) |
 | ✅ Done | 12 | Bake the Architecture pointer into the scaffold templates | [`bake-architecture-pointer-into-scaffold-templates.md`](../tasks/done/bake-architecture-pointer-into-scaffold-templates.md) |
 | ✅ Done | 13 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../tasks/done/extend-initiate-project-fill-overview.md) |
@@ -50,6 +50,8 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 18 | Remove `fkit --resume` and the blanket arg-passthrough *(Omnigent scar tissue)* | [`remove-fkit-resume-passthrough.md`](../tasks/backlog/remove-fkit-resume-passthrough.md) |
 | ✅ Done | 19 | Repair the knowledge-base paths in product source *(ADR-013 fallout)* | [`repair-knowledge-base-paths-in-product-source.md`](../tasks/done/repair-knowledge-base-paths-in-product-source.md) |
 | 🔲 Backlog | 20 | Design a version-to-version migration mechanism *(**investigation first** — no implementation from the brief)* | [`design-version-to-version-migration-mechanism.md`](../tasks/backlog/design-version-to-version-migration-mechanism.md) |
+| 🔲 Backlog | 21 | Repair the 6 broken task links in the closed Sprint 1 plan *(one-off cleanup — independent)* | [`repair-broken-links-in-closed-sprint-plans.md`](../tasks/backlog/repair-broken-links-in-closed-sprint-plans.md) |
+| ✅ Done | 22 | Stop the task movers rotting links in closed sprint plans *(the recurrence — the real bug)* | [`harden-task-movers-against-closed-sprint-link-rot.md`](../tasks/done/harden-task-movers-against-closed-sprint-link-rot.md) |
 
 ## Dependency graph
 
@@ -200,8 +202,46 @@ it worked around is gone.
   **append-don't-renumber** discipline. If the coder is already in `fkit-claude.sh` for task 4, landing it
   in the same pass is fine.
 
+## Addendum — tasks 21 and 22 added out of band (2026-07-13)
+
+**A repo-wide link sweep run during task 10 surfaced a pre-existing defect out of task 10's scope:**
+`ai-agents/sprints/done/sprint-1.md` carries **6 broken links** (5 distinct tasks). Each is a
+`➡️ Moved to Sprint 2` row still pointing at `tasks/backlog/…` for a task that has since been
+completed into `tasks/done/`. fkit-coder found it, correctly did not fix it, and escalated.
+
+**The 6 links are the symptom; the recurrence is the bug.** `/fkit-task-done` and
+`/fkit-task-cancelled` update the *active* sprint plan but never re-point inbound links in a *closed*
+one — so **every future completion of a carried-over task breaks one more link** in an older plan.
+Notably, `fkit-task-done/SKILL.md` step 4 **already greps `ai-agents/sprints/` recursively and finds
+these rows**; step 5 simply has no instruction for them, because a `➡️ Moved` row has no status to
+flip. The skill sees the reference and drops it.
+
+**Split into two tasks on purpose**, per the owner's independent-shippability rule:
+- **21** is the one-off cleanup — uncontroversial, shippable today, independent of everything.
+- **22** is the process fix — and it is **`🚧 Blocked` on an owner ruling**, not on any other task.
+
+**Landing only 21 buys nothing durable**: the links rot again on the next carried-over completion.
+
 ## Open questions for the owner
 
 1. **Reserve `@flashist/fkit` on npm now, or leave npm alone until there's something to publish?**
    Nothing in Sprint 2 depends on the answer — it only decides whether the name is held before
    someone else takes it, the way `fkit` already went.
+
+2. **Task 22 — do the task movers repair inbound links repo-wide, or are closed sprint plans
+   immutable historical records that may point at where a task *was*?** **Task 22 cannot start until
+   this is answered.**
+   **Producer's recommendation: re-point the href, never the prose.** A closed plan's *claims* are
+   history and must stay frozen — `➡️ Moved to Sprint 2 — priority 7` is true forever. But a **link is
+   not a claim, it is a pointer**, and a pointer to a file that isn't there is rot, not history.
+   **The tradeoff:** the movers would then **write into `sprints/done/`**, a directory the project
+   currently treats as never-touched. If "closed" means *byte-frozen*, the honest alternative is to
+   accept the broken links by design — but that requires a permanent, unbounded `sprints/done/**`
+   exclusion in any future link check, permanently blinding it over a directory that only grows.
+
+3. **Should fkit own a mechanical link checker at all?** This repo has **no test suite and no link
+   check** — this defect was found only because fkit-coder hand-rolled a sweep, and every verification
+   step in tasks 21 and 22 is manual today. **Producer's position: worth doing, and its home is the
+   already-unsprinted [`add-e2e-smoke-script-for-fkit-itself.md`](../tasks/backlog/add-e2e-smoke-script-for-fkit-itself.md)** — deliberately **not**
+   folded into task 22, where it would ship untested alongside the very change it exists to test.
+   Flagged as a scoping question, not decided.

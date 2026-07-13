@@ -63,11 +63,15 @@ staging the move is enough; commits happen only when the owner explicitly asks.
 ### 4. Find every place the task is tracked
 Search for the task's **basename** across the docs that carry status:
 - `ai-agents/sprints/*.md` (the sprint plans and `sprint-backlog.md`)
+- **`ai-agents/sprints/done/*.md`** — **closed** sprint plans still *link* to tasks they carried over
 - the parent epic file, if step 2 found a `## Parent / Epic`
 
 ```
 grep -rn "<file>.md" ai-agents/sprints/ ai-agents/tasks/
 ```
+
+This grep is **recursive on purpose** — it reaches `sprints/done/`. Every hit it returns is handled in
+step 5; **none is discarded.** A reference you found and did nothing about is a link you broke.
 
 ### 5. Update each tracked location to "Done"
 For every reference found in step 4:
@@ -81,9 +85,31 @@ For every reference found in step 4:
   plain `✅ Done`). Update any prose "next slice" / ordering line in the epic that still points at the
   just-completed slice so it points at the genuinely-next one.
 - **A `**Status:**` line** inside a task's own body section in the sprint plan: set it to `✅ Done`.
+- **A *link* to the brief whose status must NOT change** — most often a `➡️ Moved to Sprint N` row in a
+  **closed** plan under `ai-agents/sprints/done/`, or a prose link anywhere: **re-point the href to the
+  task's new path in `done/`, and change nothing else on the line.**
+
+  **A link is not a claim; it is a pointer.** `➡️ Moved to Sprint 2 — priority 7` is *historically
+  true and stays exactly as written* — the status cell, the priority, the prose, all byte-identical.
+  Only the href moves, because a pointer to a file that is no longer there is not history, it is rot.
+  **This is a pointer repair, not a status update — never flip a `➡️ Moved` row to `✅ Done`.**
+
+- **The moved brief's OWN outbound links** — the reciprocal case, and the one most easily missed. The
+  brief you just moved has left `backlog/`, so any link *it* makes to a **sibling** brief
+  (`](./other-task.md)`, or a bare `](other-task.md)`) no longer resolves from `done/`. Re-point those
+  to where the sibling actually is — usually `](../backlog/other-task.md)`.
+
+  Briefs cross-link each other, so **one move breaks links in both directions**: inbound (handled
+  above) *and* outbound (here). Fixing only the inbound half leaves the move half-done.
 
 Make the **minimal** edit that flips the status accurately. Do not restructure tables or rewrite
 descriptions beyond removing a fragment that is now false.
+
+> **Yes, this writes into `ai-agents/sprints/done/`.** That is deliberate and owner-ruled: a closed
+> sprint plan's *claims* are frozen, but its *links* stay live. Repair the href; touch nothing else.
+
+**Then prove it.** Resolve every relative markdown link in the files you touched **and** in the moved
+brief. A move is not finished while a link it broke is still broken.
 
 ### 6. Handle ambiguity — never paper over it
 - **No reference found** in any sprint doc: the task may be unsprinted / backlog-only. Complete the
@@ -100,6 +126,10 @@ Give a concise summary:
 - **Moved:** `<old path>` → `ai-agents/tasks/done/<file>.md`
 - **Updated:** each doc touched and how (e.g. "`sprint-4.md` — status row → ✅ Done";
   "`refactor-auth-flow.md` — T4f slice → ✅ Done").
+- **Re-pointed links:** every href repaired, and where — **including any closed plan under
+  `sprints/done/`** (e.g. "`sprints/done/sprint-1.md:37` — href → `tasks/done/`; status cell
+  untouched"). A move that rewrote a closed sprint plan must be **visible in this report**, never a
+  surprise found later by a link sweep. If none were re-pointed, say so.
 - **Flagged:** anything not auto-resolved (no sprint row found, mismatch, multiple matches).
 - Remind that nothing was committed — the move + edits are staged/working-tree only.
 
@@ -112,8 +142,8 @@ Give a concise summary:
 
 ## The status vocabulary
 
-The canonical status set is documented in **`ai-agents/README.md`** (§Task status vocabulary) — it is
-the source of truth, and this skill writes exactly one value from it:
+The canonical status set is documented in **`ai-agents/knowledge-base/conventions/task-status-vocabulary.md`**
+— it is the source of truth, and this skill writes exactly one value from it:
 
 > **`✅ Done`** — and nothing else. Not "Complete", not "Finished", not "✔️".
 

@@ -26,7 +26,7 @@ The question was worked through on 2026-07-13 by the owner, fkit-coder, fkit-arc
 and fkit-producer (product consult). **All of the analysis is already done and recorded in full:**
 
 > 📄 **Primary reference — read it before doing anything else:**
-> [`ai-agents/knowledge-base/tester-agent-evaluation-2026-07-13.md`](../../knowledge-base/tester-agent-evaluation-2026-07-13.md)
+> [`ai-agents/knowledge-base/reports/2026-07-13-tester-agent-evaluation.md`](../../knowledge-base/reports/2026-07-13-tester-agent-evaluation.md)
 
 That document holds the question, the observed hole, the product read, the design read, the arguments
 both consults **explicitly killed** (do not re-raise them), the two load-bearing technical facts, the
@@ -95,7 +95,7 @@ produces. *"Watch for it the first time you write `.fkit/validate` for a real ap
   record — not inferred by an agent from the recommendation.
 - An ADR exists in `ai-agents/knowledge-base/decisions/` recording the ruling, the constraint
   disposition, and the re-raise clause.
-- `ai-agents/knowledge-base/tester-agent-evaluation-2026-07-13.md` has its **Status** line updated from
+- `ai-agents/knowledge-base/reports/2026-07-13-tester-agent-evaluation.md` has its **Status** line updated from
   *"⚠️ NO DECISION MADE"* to point at the ADR. (It stays as the underlying record; it is not rewritten.)
 - **No tester agent, no `/fkit-validate` skill and no code was written by this task.** If a diff exists,
   this task was executed wrongly.
@@ -142,7 +142,7 @@ Do not treat the smoke script as a probe for this decision, and do not hold it h
 ## Open questions
 
 All 7 are in §*Open questions* of
-[`tester-agent-evaluation-2026-07-13.md`](../../knowledge-base/tester-agent-evaluation-2026-07-13.md).
+[`2026-07-13-tester-agent-evaluation.md`](../../knowledge-base/reports/2026-07-13-tester-agent-evaluation.md).
 They are **for the owner**, and they are the substance of this task rather than a coda to it. Restated
 here only so this brief cannot be picked up without seeing them:
 

@@ -1,6 +1,12 @@
 # ADR-005: Vendor the wiki `query` skill directly into every fkit agent bundle — reads decentralized, writes stay fkit-wiki-exclusive
 
-- **Status:** accepted
+- **Status:** **superseded on mechanism only — its rule is accepted and IN FORCE.** The *mechanism* this
+  ADR chose (vendoring a copy of the `query` skill into each Omnigent agent bundle) died with Omnigent
+  ([ADR-009](adr-009-claude-code-native-is-the-only-runtime.md)); there is now one `/fkit-query` skill
+  and no vendoring. **The rule it established is current law and is not superseded:** wiki *reads* are
+  **decentralized** — any role runs the read-only `/fkit-query` procedure — while wiki *writes* stay
+  **exclusive to `fkit-wiki`**. Cited as live in `../../../CLAUDE.md`, `../../../AGENTS.md`, and
+  `../architecture.md`. **Do not read this ADR as retired.**
 - **Date:** 2026-07-10
 - **Deciders:** owner + fkit-architect
 

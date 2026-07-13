@@ -19,7 +19,7 @@ The port has now proved itself, and the cost has come due:
   to the `fkit omnigent` subcommand; `fkit claude` survives only as a legacy alias
   (`install.sh:87-103`). Omnigent is *already* the secondary path in practice.
 - **Hand-mirroring did not happen.** The 2026-07-11 doc-drift audit
-  ([`doc-drift-audit-2026-07-11.md`](../doc-drift-audit-2026-07-11.md)) found the Omnigent-side
+  ([`2026-07-11-doc-drift-audit.md`](../reports/2026-07-11-doc-drift-audit.md)) found the Omnigent-side
   docs, printed strings, and counts pervasively stale — `omnigent/README.md:50-84` still documents
   bare `fkit` as the Omnigent entrypoint, `omnigent/fkit-init.sh:212-217` prints "6 agents" over a
   list of five, and `omnigent/fkit-reconnect.sh:94,100` tells a user mid-incident to "run `fkit`",
@@ -128,7 +128,7 @@ not merely moved — which makes it a design decision inside this one (see ADR �
   surviving runtime.
 - [ADR-001](adr-001-package-json-stays-metadata-only.md) — **unresolved**; owner has flagged it for
   further investigation. Not settled by this ADR.
-- Evidence: [`doc-drift-audit-2026-07-11.md`](../doc-drift-audit-2026-07-11.md).
+- Evidence: [`2026-07-11-doc-drift-audit.md`](../reports/2026-07-11-doc-drift-audit.md).
 - Code: `install.sh:32-33,87-103`, `claude/fkit-claude-init.sh:20,24,30,46`,
   `claude/fkit-claude.sh`, `omnigent/fkit.sh`.
 </content>

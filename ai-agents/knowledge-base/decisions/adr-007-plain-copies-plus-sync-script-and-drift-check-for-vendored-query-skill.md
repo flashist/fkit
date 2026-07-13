@@ -1,6 +1,10 @@
 # ADR-007: Distribute the vendored `query` skill as plain copies again, kept in sync by a script with a mechanical drift-check — not symlinks
 
-- **Status:** accepted — supersedes ADR-006 on distribution mechanism only
+- **Status:** **superseded** — Omnigent removed
+  ([ADR-009](adr-009-claude-code-native-is-the-only-runtime.md)). The per-bundle copies, the sync
+  script, and the drift-check this ADR specifies all died with the Omnigent bundles; there is now one
+  `/fkit-query` skill and nothing to vendor. It **supersedes ADR-006** on distribution mechanism only —
+  that supersession stands as history, but both mechanisms are now moot.
 - **Date:** 2026-07-10
 - **Deciders:** owner + fkit-architect
 
@@ -26,7 +30,7 @@ point, not a one-off fluke, and warranted revisiting the mechanism (not ADR-005'
 which is unaffected).
 
 Full investigation, constraints, and the options comparison behind this decision are recorded in
-`ai-agents/knowledge-base/eval-vendored-query-skill-distribution.md`. Key facts grounding this decision:
+`ai-agents/knowledge-base/reports/2026-07-10-eval-vendored-query-skill-distribution.md`. Key facts grounding this decision:
 
 - `omnigent/vendor-agents.sh:5-9,20-27` copies each `omnigent/fkit-*/` bundle into a **consuming
   project's** `.fkit/agents/` via `cp -RP`. Every consuming project gitignores `.fkit/` by convention
@@ -120,7 +124,7 @@ writes stay fkit-wiki-exclusive), which is unaffected and stays intact.
 
 ## Related
 
-- `ai-agents/knowledge-base/eval-vendored-query-skill-distribution.md` — the full evaluation this ADR
+- `ai-agents/knowledge-base/reports/2026-07-10-eval-vendored-query-skill-distribution.md` — the full evaluation this ADR
   acts on.
 - `ai-agents/knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md` — core
   decision (vendor `query`, reads decentralized, writes fkit-wiki-exclusive); unaffected by this ADR.
