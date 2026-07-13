@@ -36,3 +36,20 @@ existing entries; only append. Each ingest / lint / sync operation adds one entr
 
 ## 2026-07-10 — ingest
 - Ingested: `ai-agents/sprints/plan-sprint-1.md` → updated [[tasks/sprint-1-ship-the-onboarding-sequence]]
+
+## 2026-07-13 — ingest (sync)
+- Sync window: f7b23f45aca3f3cf563fa3149d51cb444f9e7eb9 → HEAD (8a3f1e518d82b942937eb1023bcac7d51aea4b39) — 44 commits
+- Changed source files detected: 87; ingest-worthy after filtering: 45
+- **The post-Omnigent sync** (Sprint 2 task 11). The vault described a runtime that no longer exists; this rebuilds it against the Claude Code native + Codex reality.
+- Ingested: `ai-agents/knowledge-base/architecture.md`, `PROJECT.md` → rewrote [[systems/fkit]]; created [[systems/role-locked-sessions]], [[systems/install-and-self-update]], [[systems/review-and-model-diversity]], [[systems/knowledge-base-structure]]
+- Ingested: `ai-agents/knowledge-base/incidents/README.md`, `reports/README.md`, `conventions/*` → folded into [[systems/knowledge-base-structure]]
+- Updated: [[systems/subagent-runner-connectivity]] → marked 🕰️ HISTORICAL (its whole subject was deleted with Omnigent; kept as the record of *why fkit left*)
+- Ingested: `knowledge-base/decisions/adr-005…adr-013` → created 9 decision pages
+- Updated: [[decisions/adr-001-package-json-stays-metadata-only]], [[decisions/adr-003-ci-runs-validate-bundles]], [[decisions/adr-004-fixed-role-based-titles-for-consult-spawns]] → status `accepted` → `superseded`; [[decisions/adr-002-archive-pre-omnigent-design-docs]] → cross-linked to ADR-013
+- Ingested: `ai-agents/sprints/sprint-2.md` → created [[tasks/sprint-2-remove-omnigent]]
+- Ingested: `ai-agents/sprints/done/sprint-1.md` → updated [[tasks/sprint-1-ship-the-onboarding-sequence]] (source moved from `sprints/plan-sprint-1.md`; status → closed)
+- Ingested: 20 × `ai-agents/tasks/done/*.md` → created 20 task pages
+- Ingested: 5 × `ai-agents/tasks/cancelled/*.md` → created 5 task pages
+- Lint (targeted): 1 broken link fixed (a literal `[[wikilinks]]` in ADR-005 prose), 77 one-way links reciprocated, 1 template drift fixed. Vault now: 0 broken, 0 one-way, 0 index gaps.
+- Skipped: `ai-agents/tasks/backlog/*` (23 files — not done, a page would be premature); `ai-agents/reviews/`, `ai-agents/README.md` (not ingest-worthy kinds); the 8 pre-ADR-013 knowledge-base root paths (rename-only → `reports/`, `conventions/`)
+- ⚠️ Flagged for human review: `architecture.md` §8 and §9.6 claim ADRs 003/004/006/007 are "still marked `accepted` today" — they were marked superseded by the knowledge-base hygiene task, which ran after the doc was written. The wiki records the current (superseded) status.

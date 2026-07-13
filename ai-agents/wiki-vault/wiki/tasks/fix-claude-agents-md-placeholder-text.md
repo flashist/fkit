@@ -19,3 +19,5 @@ The root agent instructions no longer look like unfinished scaffold output, and 
 ## Related
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
 - [[systems/fkit]]
+- [[tasks/bake-architecture-pointer-into-scaffold-templates]]
+- [[tasks/extend-initiate-project-fill-overview]]

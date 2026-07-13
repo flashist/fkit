@@ -1,0 +1,47 @@
+# ADR-012: The skill lockdown is session-scoped; `skills:` frontmatter is dropped, not generated
+
+**Date**: 2026-07-11
+**Status**: accepted
+
+**Supersedes (in part)**: [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] §Decision 2 and §Decision 5
+
+## Context
+ADR-010 locked every session to one role and claimed the lock was **structural**: *"Role separation is enforced structurally, not by instruction."* It also left one thing to the coder: `skills_for_role()` is the single source of truth, and the `skills:` frontmatter *"must be generated from it or dropped."*
+
+Closing that established — **empirically, from live spawns** — that **the mechanism is not what ADR-010 assumed.**
+
+### What the mechanism actually is
+```
+skill availability in ANY context (session or spawned consult)
+  = all installed skills − the skillOverrides of the SESSION THAT LAUNCHED THE PROCESS
+
+`skills:` frontmatter  →  inert; no effect on enforcement
+```
+
+**A consult's skill set is a function of the *caller's* role, not the consultee's.** Three independent spawns from a **coder** session, each reporting the *coder's* skills rather than its own:
+
+1. A spawned `fkit-lead` was advertised **every** fkit skill, and the harness **accepted** its `Skill(fkit-status)` call — a **producer-owned** skill. **Only the `⛔ Owner:` prose banner in the skill body stopped it.**
+2. A spawned `fkit-architect` reported the coder's set — none of its own five procedures.
+3. A spawned `fkit-producer` saw the **coder's** skills and **could not see its own** (`initiate-project`, `task-done`, `task-cancelled`).
+
+This matches the Claude Code docs: `skills:` controls **preloading only** — *"Subagents can still invoke unlisted project, user, and plugin skills through the Skill tool."* `skillOverrides` has **no per-subagent scoping**.
+
+## Decision
+1. **Drop the `skills:` frontmatter from all 7 agents.** It is inert. **Keeping it — even generated — would preserve a field that *looks* like the invariant and isn't.** `skills_for_role()` in `claude/fkit-claude.sh` is the **only** place role→skill ownership is expressed. **Do not re-add it.**
+2. **State the lock's scope honestly.** It is **structural in a session** and **advisory in a consult**. The skill's `⛔ Owner:` banner is therefore **load-bearing, not decorative — it may not be deleted as "redundant."**
+3. **`CONSULT_SKILLS` is the escape valve inheritance forces.** `fkit-survey-project` and `fkit-query` stay **on for every role**, because `/fkit-initiate-project` has the **producer** spawn the architect to run the survey — with it off, initiation could not run its own architecture survey. **The set is deliberately minimal; adding to it is a decision, not a convenience.**
+
+## Consequences
+- **The property that matters survives**: in a role *session* the lock is real, and reviewer independence rests on exactly that.
+- **The accepted cost of `CONSULT_SKILLS`**: any role session can invoke `/fkit-survey-project` by name.
+- **A finding must say which path it means.** *"The skill lock is only prompt-enforced"* is **false of a session** and **true of a consult**. Do not restate this as a blanket defect.
+- **The only mechanism that could make per-role skill ownership real on the consult path is a `PreToolUse` gate on the `Skill` tool** — deferred, and **now priced**: decisions 2 and 3 exist *because* we don't have it.
+- ⚠️ **Open question, and it decides whether this is even fixable:** does the `PreToolUse` hook payload expose the **calling subagent's identity**? **If it does not, the hook cannot discriminate by role, and the option is not merely deferred but *unavailable*.** This must be established before anyone plans the hook as the fix.
+
+## Related
+- [[systems/role-locked-sessions]]
+- [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]]
+- [[systems/fkit]]
+- [[tasks/reconcile-skill-ownership-source-of-truth]]
+- [[systems/review-and-model-diversity]]
+- [[tasks/sprint-2-remove-omnigent]]

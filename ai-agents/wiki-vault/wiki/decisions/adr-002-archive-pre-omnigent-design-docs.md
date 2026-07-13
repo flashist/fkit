@@ -18,3 +18,7 @@ Move the four superseded documents into `ai-agents/knowledge-base/history/` and 
 
 ## Related
 - [[systems/fkit]]
+- [[systems/knowledge-base-structure]] — `history/` is for **superseded design docs only**; this ADR is what scoped it, and it stays closed at the four documents it already holds.
+- [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]]
+- [[tasks/formalize-knowledge-base-incidents-folder]]
+- [[tasks/knowledge-base-hygiene-post-omnigent]]

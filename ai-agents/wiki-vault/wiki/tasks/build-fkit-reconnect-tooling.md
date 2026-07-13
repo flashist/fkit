@@ -19,3 +19,4 @@ The team now has a repeatable reconnect command for disconnected runners while t
 - [[systems/subagent-runner-connectivity]]
 - [[systems/fkit]]
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
+- [[tasks/amend-subagent-disconnect-incident-doc]]

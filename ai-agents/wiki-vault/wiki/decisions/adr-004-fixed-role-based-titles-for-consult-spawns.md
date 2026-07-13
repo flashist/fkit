@@ -1,7 +1,13 @@
 # ADR-004: Fixed, role-based titles for ad hoc consult spawns (`<target-agent>-consult`)
 
 **Date**: 2026-07-10
-**Status**: accepted
+**Status**: superseded
+
+> ## ⚠️ Superseded — Omnigent removed ([[decisions/adr-009-claude-code-native-is-the-only-runtime]]).
+> This ADR governs the titling of `sys_session_create` consult spawns — **an Omnigent mechanism that
+> no longer exists.** Claude Code consults run through the Agent tool, with no titled child sessions
+> and no agents panel to flood. The rollout task ([[tasks/rollout-adr-004-fixed-consult-titles]]) was
+> nonetheless closed as **Done** — it was already complete in code when Omnigent was removed.
 
 ## Context
 The fkit agents that spawn consult children all shared the same generic titling instruction: derive a short, topic-summarizing title for each consult session.
@@ -24,3 +30,4 @@ The naming scheme is `<target-agent>-consult` with no spawner prefix. The child 
 ## Related
 - [[systems/fkit]]
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
+- [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]]
