@@ -195,6 +195,14 @@ esac
 # makes `fkit coder` genuinely unable to run /fkit-review — the property reviewer independence rests
 # on). In a spawned CONSULT it is advisory only, carried by the agent prompt and each skill's
 # `⛔ Owner:` banner. Don't claim more than that in the docs.
+#
+# ⚠️ CHANGING A ROLE'S SKILLS? Two hand-maintained tables MIRROR this list for humans and MUST be
+# updated in the same commit, or the help text lies about what a role can do:
+#   * claude/skills/fkit-team/SKILL.md  — the roster the /fkit-team skill prints
+#   * claude/README.md                  — the skill-ownership table
+# This has already bitten once: task 14 added fkit-task-plan here and to the producer's agent file,
+# but not to fkit-team's roster — so /fkit-team under-reported the producer's primary procedure for
+# two days. These are copies FOR READERS, not sources of truth; this function is the source of truth.
 # ---------------------------------------------------------------------------
 skills_for_role() {
   case "$1" in
