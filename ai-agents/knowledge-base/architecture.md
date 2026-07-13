@@ -232,23 +232,35 @@ contract every role shares (`ai-agents/README.md`).
 
 | Path | Written by | Contents |
 |---|---|---|
-| `knowledge-base/PROJECT.md` | producer (`initiate-project`) | the prose product brief |
-| `knowledge-base/architecture.md` | **architect** (`survey-project` / `inspect`) | this file |
-| `knowledge-base/decisions/adr-NNN-*.md` | **architect** (`record-decision`) | ADRs. The **"Re-raise only if"** field is what stops future reviews re-litigating a settled decision. |
-| `knowledge-base/history/` | architect | superseded design docs — **archive, don't delete** (ADR-002) |
+| `knowledge-base/PROJECT.md` | producer (`initiate-project`) | the prose product brief. **One of the only two documents allowed at the knowledge-base root** (ADR-013). |
+| `knowledge-base/architecture.md` | **architect** (`survey-project` / `inspect`) | this file — the other root document. Nothing else lives at the root. |
+| `knowledge-base/conventions/*.md` | whoever owns the convention; **new ones need the owner** | **standing rules the project reads on a normal run and obeys** — `task-status-vocabulary.md`, `status-report-format.md`. Prescriptive, maintained in place, **never dated**. [`conventions/README.md`](conventions/README.md) |
+| `knowledge-base/decisions/adr-NNN-*.md` | **architect** (`record-decision`) | ADRs — settled decisions: *why* the rule is what it is. The **"Re-raise only if"** field is what stops future reviews re-litigating a settled decision. No README: the `adr-NNN-<slug>` sequence *is* the convention. |
+| `knowledge-base/incidents/YYYY-MM-DD-*.md` | any session | postmortems of **fkit's own runtime/tooling** — not product bugs (those are task briefs). [`incidents/README.md`](incidents/README.md) |
+| `knowledge-base/reports/YYYY-MM-DD-*.md` | any session; evaluations from the **architect** | dated artifacts of work performed — audits, verifications, evaluations, executed plans. [`reports/README.md`](reports/README.md) |
+| `knowledge-base/history/` | architect | superseded **design docs** — docs that no longer describe reality. **Archive, don't delete** (ADR-002). Narrow, *not* the general archive. [`history/README.md`](history/README.md) |
 | `sprints/sprint-N.md` | producer | sprint plan + status table; completed sprints move to `sprints/done/` |
 | `tasks/{backlog,done,cancelled}/*.md` | producer **writes**; **only the owner moves**, via `/fkit-task-done` and `/fkit-task-cancelled` | task briefs |
 | `reviews/<task-id>.md` | reviewer **and** coder — a two-party ledger | findings + dispositions + **accepted residuals**. This is the loop-prevention memory: it carries decision state across review rounds so settled tradeoffs are not re-litigated. |
 | `wiki-vault/` | **`fkit-wiki` only** | Karpathy LLM-wiki: `schema.md` (conventions), `index.md` (catalog), `log.md` (activity), `wiki/{features,systems,decisions,tasks}/` |
 
-**Two invariants govern this tree:**
+**Three invariants govern this tree:**
 
 1. **Wiki reads are decentralized; wiki writes are exclusive to `fkit-wiki`** (ADR-005). Any context
    may follow the read-only `/fkit-query` procedure. **No other agent or session ever writes under
    `ai-agents/wiki-vault/`.** No exceptions.
 2. **The task status vocabulary is closed**
-   (`ai-agents/knowledge-base/task-status-vocabulary.md:11-21`): Backlog · In progress · Blocked ·
-   Done · Cancelled · Moved. Nothing else is valid. `Done` and `Cancelled` are **owner-only**.
+   (`ai-agents/knowledge-base/conventions/task-status-vocabulary.md:11-21`): Backlog · In progress ·
+   Blocked · Done · Cancelled · Moved. Nothing else is valid. `Done` and `Cancelled` are **owner-only**.
+3. **The knowledge-base root holds exactly two documents — `PROJECT.md` and `architecture.md`**
+   ([ADR-013](decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)). They are the
+   project-defining pair: *what we are building* and *how it is built*. **Everything else is filed by
+   kind** — `conventions/` (standing rules: *how we do it*), `decisions/` (ADRs: *why*), `incidents/`
+   (what happened to our runtime), `reports/` (work performed at a point in time), `history/`
+   (superseded designs). The checkable forms: **`ls knowledge-base/*.md` returns exactly those two
+   names**, and **a dated filename never lives at the root or in `conventions/`** — a dated name means
+   "a record of a moment". Records are never *superseded*, so they are never relocated once filed —
+   only designs go stale.
 
 **Generated, gitignored, per project:** `.fkit/settings/<role>.json` (the skill lockdown),
 `.fkit/interview` + `.fkit/intake.md` (terminal intake), `.fkit/tmp/adversarial-prompt.md` (the

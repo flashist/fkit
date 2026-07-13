@@ -22,9 +22,9 @@ already does by hand into a repeatable, sanctioned procedure.
 
 **The format is already designed and owner-approved** — do not redesign it. Two docs are the spec:
 
-- [`status-report-format.md`](../../knowledge-base/status-report-format.md) — the seven beats, the
+- [`status-report-format.md`](../../knowledge-base/conventions/status-report-format.md) — the seven beats, the
   rules, and the anti-patterns. **This is the contract.**
-- [`task-status-vocabulary.md`](../../knowledge-base/task-status-vocabulary.md) — the six valid
+- [`task-status-vocabulary.md`](../../knowledge-base/conventions/task-status-vocabulary.md) — the six valid
   statuses the dashboard may render, and nothing else.
 
 **The standard to hit, in the owner's words:** *"as if I ask the producer of the project what the

@@ -26,7 +26,7 @@ That last gap produced a concrete failure the same day: a producer status report
 was fabricated.
 
 The vocabulary is now defined in
-[`ai-agents/knowledge-base/task-status-vocabulary.md`](../../knowledge-base/task-status-vocabulary.md).
+[`ai-agents/knowledge-base/task-status-vocabulary.md`](../../knowledge-base/conventions/task-status-vocabulary.md).
 **This task makes it bind.** A convention that lives only in a knowledge-base doc is a suggestion; it
 has to be in the skills and the scaffold, because that is what actually ships to every project fkit
 creates.
@@ -74,6 +74,6 @@ Propagate the six canonical statuses — **Backlog · In progress · Blocked · 
 - Owner: **fkit-coder** — source-tree work under `claude/`.
 - **Depends on:** task 1 (`extract-scaffold-into-claude`) for the scaffold path. **Coordinate with
   task 14** (`add-task-plan-skill-to-producer`) — ideally land task 14 first, then this.
-- Related: [`status-report-format.md`](../../knowledge-base/status-report-format.md) — the producer's
+- Related: [`status-report-format.md`](../../knowledge-base/conventions/status-report-format.md) — the producer's
   status dashboard renders these values and no others.
 - Risk: **low.** Doc/skill text only, no runtime behavior change.
