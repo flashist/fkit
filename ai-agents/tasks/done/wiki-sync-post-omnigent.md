@@ -7,7 +7,7 @@ Sprint 2
 11 (Phase 5b — genuinely last)
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 

@@ -40,7 +40,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 8 | Rewrite the docs against the post-removal reality *(Phase 4)* | [`rewrite-docs-post-omnigent.md`](../tasks/done/rewrite-docs-post-omnigent.md) |
 | ✅ Done | 9 | Formalize the knowledge-base folder structure, incl. `incidents/` *(→ [ADR-013](../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md))* | [`formalize-knowledge-base-incidents-folder.md`](../tasks/done/formalize-knowledge-base-incidents-folder.md) |
 | ✅ Done | 10 | Knowledge-base hygiene after the removal *(Phase 5a)* | [`knowledge-base-hygiene-post-omnigent.md`](../tasks/done/knowledge-base-hygiene-post-omnigent.md) |
-| 🔲 Backlog | 11 | Wiki sync after the removal *(Phase 5b — genuinely last)* | [`wiki-sync-post-omnigent.md`](../tasks/backlog/wiki-sync-post-omnigent.md) |
+| ✅ Done | 11 | Wiki sync after the removal *(Phase 5b)* | [`wiki-sync-post-omnigent.md`](../tasks/done/wiki-sync-post-omnigent.md) |
 | ✅ Done | 12 | Bake the Architecture pointer into the scaffold templates | [`bake-architecture-pointer-into-scaffold-templates.md`](../tasks/done/bake-architecture-pointer-into-scaffold-templates.md) |
 | ✅ Done | 13 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../tasks/done/extend-initiate-project-fill-overview.md) |
 | ✅ Done | 14 | Add a `task-plan` skill to fkit-producer | [`add-task-plan-skill-to-producer.md`](../tasks/done/add-task-plan-skill-to-producer.md) |
