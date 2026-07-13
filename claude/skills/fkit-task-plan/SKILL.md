@@ -91,8 +91,8 @@ Use the established structure **exactly** — diff against an existing brief in
 ```
 
 - **`## Status` is always `🔲 Backlog` on creation** — the only valid status for a new brief. (If the
-  project keeps a status vocabulary at `ai-agents/knowledge-base/task-status-vocabulary.md`, that is
-  the source of truth for the full set.) **Never create a brief as `Done` or `Cancelled`**: those are
+  project keeps a status vocabulary at `ai-agents/knowledge-base/conventions/task-status-vocabulary.md`,
+  that is the source of truth for the full set.) **Never create a brief as `Done` or `Cancelled`**: those are
   owner-gated and set only by their mover skills.
 - **`## Verification steps` must be genuinely checkable.** "It works" is not a verification step. If
   you cannot say how the work would be proved, the brief is not ready.

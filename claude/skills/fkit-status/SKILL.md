@@ -31,9 +31,10 @@ a status briefing.
 > things stand, what's stuck, and what they need from you.
 >
 > **This skill is the contract.** If the project records its own status-report format or task-status
-> vocabulary in its knowledge base (`ai-agents/knowledge-base/status-report-format.md`,
-> `task-status-vocabulary.md`), read those and **defer to them** — they are the project's law and this
-> skill executes it. Absent those, what's written below is the format.
+> vocabulary in its knowledge base (`ai-agents/knowledge-base/conventions/status-report-format.md`,
+> `ai-agents/knowledge-base/conventions/task-status-vocabulary.md`), read those and **defer to them** —
+> they are the project's law and this skill executes it. Absent those, what's written below is the
+> format.
 
 ---
 

@@ -3,9 +3,9 @@
 > **The canonical set of task statuses for this project.** These are the *only* values that may appear
 > in a task brief's `## Status` field, a sprint plan's Status column, or a status dashboard.
 >
-> Before this doc (2026-07-11) the vocabulary was convention-by-accident: only `Done` and `Cancelled`
-> were specified anywhere (in the two mover skills), `Backlog` was simply what everyone typed, and
-> `Moved` was introduced ad hoc without being recorded. This doc fixes that.
+> This is a **starting convention**, shipped with the project scaffold. It is yours — amend it to fit
+> how your team actually works. What matters is that there is exactly **one** place the vocabulary is
+> defined, and that it is this one.
 
 ## The statuses
 
@@ -43,23 +43,15 @@ green board. Never set them by hand-editing a file.
 - **The brief and the sprint plan must agree.** Both carry the status; both get updated together. The
   mover skills already do this — do the same by hand.
 - **Report reality, not the template.** If a dashboard shows a distinction this vocabulary can't
-  express, the dashboard is lying. (This is exactly what happened on 2026-07-11: a status report
-  claimed "0 in progress · 14 not started" when no `In progress` status existed at all and every row
-  simply read `Backlog`.)
+  express, the dashboard is lying — fix the vocabulary, don't fake the row.
 
-## Where this must be enforced
+## Where this is enforced
 
-This vocabulary ships to every project fkit scaffolds, so it has to live in the source, not just here:
-
-- `claude/skills/fkit-task-done/SKILL.md` — sets `✅ Done`
-- `claude/skills/fkit-task-cancelled/SKILL.md` — sets `⛔ Cancelled`
-- `claude/skills/fkit-task-plan/SKILL.md` — sets `🔲 Backlog` on creation *(Sprint 2, task 14)*
-- `claude/agents/fkit-producer.md` — the producer reports against these values
-- `claude/scaffold/ai-agents/knowledge-base/conventions/task-status-vocabulary.md` — the scaffold ships
-  this convention, so new projects inherit the vocabulary as law rather than as a copy in a README
-- Any future `/fkit-status` skill — the dashboard renders these values and no others
-
-**Tracked by:** `ai-agents/tasks/backlog/enforce-task-status-vocabulary.md` (Sprint 2, priority 15).
+- `/fkit-task-done` — sets `✅ Done`
+- `/fkit-task-cancelled` — sets `⛔ Cancelled`
+- `/fkit-task-plan` — sets `🔲 Backlog` on creation
+- `/fkit-status` — the dashboard renders these values and no others
+- The producer reports against these values and no others
 
 ## Related
 

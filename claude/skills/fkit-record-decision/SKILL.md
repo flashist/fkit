@@ -30,7 +30,8 @@ reviewers' reviewers) start from the decision instead of re-litigating it.
 - Confirm what decision is being recorded and that it is actually **settled** (an ADR records a
   decision, not an open debate — if it's still open, use `fkit-evaluate-approach` first).
 - Ground the context in the codebase and any prior docs (`ai-agents/knowledge-base/`, including a prior
-  `eval-*.md` if this decision came from one). Cite `path:line` where relevant.
+  evaluation under `reports/` — `reports/YYYY-MM-DD-eval-*.md` — if this decision came from one). Cite
+  `path:line` where relevant.
 - Ask the owner for anything missing: the real driver, constraints, and which alternatives were
   genuinely considered. Do not invent rationale.
 
@@ -52,7 +53,7 @@ Use this structure:
 
 ## Context
 The forces at play: the problem, the constraints, and what makes this a real decision. Cite
-`path:line` and any `eval-*.md` this came from.
+`path:line` and any `reports/YYYY-MM-DD-eval-*.md` this came from.
 
 ## Decision
 The choice made, stated plainly and unambiguously.
@@ -69,8 +70,8 @@ The choice made, stated plainly and unambiguously.
   future review treats a matching finding as closeout, not a new defect.
 
 ## Related
-Links to relevant `path:line`, design specs (`design-*.md`), evaluations (`eval-*.md`), or superseded
-ADRs.
+Links to relevant `path:line`, design specs (`reports/YYYY-MM-DD-design-*.md`), evaluations
+(`reports/YYYY-MM-DD-eval-*.md`), or superseded ADRs.
 ```
 
 Keep it tight and honest — the value is the *why* and the rejected alternatives, not length.

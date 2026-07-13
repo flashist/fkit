@@ -1,6 +1,6 @@
 ---
 name: fkit-design-spec
-description: Produce a technical design spec for a feature or change — components, interfaces, data flow, trade-offs, and (optionally) interface stubs — grounded in the existing codebase. This is the design the coder implements from. Saved to ai-agents/knowledge-base/ — never the wiki. Makes no commits and writes no full implementation.
+description: Produce a technical design spec for a feature or change — components, interfaces, data flow, trade-offs, and (optionally) interface stubs — grounded in the existing codebase. This is the design the coder implements from. Saved to ai-agents/knowledge-base/reports/ — never the wiki. Makes no commits and writes no full implementation.
 ---
 
 # Design Spec
@@ -20,8 +20,9 @@ in how the system is actually built, not in assumptions.
 
 **Argument:** `$ARGUMENTS` — what to design (a feature name, a change, or a path to a task/brief).
 
-> **Boundaries.** You write the spec to `ai-agents/knowledge-base/` (or reference it from a related
-> task under `ai-agents/tasks/`) — **never the wiki** (`ai-agents/wiki-vault/` is fkit-wiki's). You
+> **Boundaries.** You write the spec to `ai-agents/knowledge-base/reports/` (or reference it from a
+> related task under `ai-agents/tasks/`) — **never the wiki** (`ai-agents/wiki-vault/` is fkit-wiki's),
+> and **never the knowledge-base root**, which holds only `PROJECT.md` and `architecture.md`. You
 > **design**, you don't implement: interface/type stubs to anchor the design are fine; full working
 > code is the coder's job.
 
@@ -41,7 +42,8 @@ Do not proceed with unresolved assumptions — surface each one.
 
 ## Step 3 — Write the design spec
 
-Save to `ai-agents/knowledge-base/design-<feature-slug>.md`. Adapt these sections:
+Save to `ai-agents/knowledge-base/reports/YYYY-MM-DD-design-<feature-slug>.md`, dated by when the work
+was done. Adapt these sections:
 - **Goal & context** — what this enables and why now; the success criteria.
 - **Constraints & scope** — hard constraints, and explicit in/out-of-scope boundaries.
 - **Proposed design** — the components and their responsibilities; how they fit the existing

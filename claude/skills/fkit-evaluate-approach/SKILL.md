@@ -1,6 +1,6 @@
 ---
 name: fkit-evaluate-approach
-description: Compare 2–3 candidate technical approaches for a problem with explicit trade-offs and a clear recommendation, grounded in the existing codebase and the owner's priorities. A decision aid that often feeds the record-decision skill. Saved to ai-agents/knowledge-base/ — never the wiki. Makes no commits and writes no implementation.
+description: Compare 2–3 candidate technical approaches for a problem with explicit trade-offs and a clear recommendation, grounded in the existing codebase and the owner's priorities. A decision aid that often feeds the record-decision skill. Saved to ai-agents/knowledge-base/reports/ — never the wiki. Makes no commits and writes no implementation.
 ---
 
 # Evaluate Approach
@@ -21,7 +21,8 @@ explicit dimensions, and make a **recommendation** — so the owner can decide f
 **Argument:** `$ARGUMENTS` — the problem/decision to evaluate (and, if you already have them, the
 candidate approaches).
 
-> **Boundaries.** Output goes to `ai-agents/knowledge-base/` — **never the wiki**. This is analysis, not
+> **Boundaries.** Output goes to `ai-agents/knowledge-base/reports/` — **never the wiki**, and **never
+> the knowledge-base root**, which holds only `PROJECT.md` and `architecture.md`. This is analysis, not
 > implementation: you write no code and change nothing under review. A settled decision should then be
 > recorded via the `fkit-record-decision` skill.
 
@@ -59,8 +60,9 @@ For each candidate, cover:
 
 ## Step 5 — Save and report
 
-Write the evaluation to `ai-agents/knowledge-base/eval-<topic-slug>.md` (for a quick, throwaway
-comparison you may present it inline and skip the file — ask if unsure). Summarize the recommendation
+Write the evaluation to `ai-agents/knowledge-base/reports/YYYY-MM-DD-eval-<topic-slug>.md`, dated by
+when the work was done (for a quick, throwaway comparison you may present it inline and skip the file —
+ask if unsure). Summarize the recommendation
 and the main tradeoff. **Make no commits.** If the decision is now settled, recommend recording it with
 the **fkit-record-decision** skill; if it belongs in the wiki, note that **fkit-wiki** should ingest it — you do not
 write the wiki.
