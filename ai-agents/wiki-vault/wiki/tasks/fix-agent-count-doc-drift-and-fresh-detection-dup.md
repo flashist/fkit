@@ -18,7 +18,9 @@ Flagged by fkit-architect during a follow-up architecture inspection (2026-07-10
 
 **This is the sprint's explicit policy, applied:** *"Do not fix Omnigent-side doc drift — its output would be a deletion."*
 
-⚠️ **The count bug is immortal, though.** The *same class* of drift survived the removal and is recorded in `architecture.md` §9.6: **`claude/fkit-claude-init.sh` prints "Six roles" and omits `lead`, immediately after copying seven agent files.** *The count is a literal, not derived* — which is precisely why it keeps going stale.
+⚠️ **The drift *class* outlived the ticket.** `architecture.md` §9.6 later recorded the same bug reborn on the Claude side — `claude/fkit-claude-init.sh` printing a **hard-coded role count** next to a line that separately *counts* the agent files it just copied.
+
+**Verified 2026-07-13: that instance is now fixed in code** (`:144` reads `Seven roles`), though `architecture.md` §9.6 still lists it as open. **But the shape that caused it is unchanged — the count is a literal, not derived** — so it can drift again the next time a role is added. *That is the actual lesson: the bug was fixed twice and its cause never was.*
 
 ## Related
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]

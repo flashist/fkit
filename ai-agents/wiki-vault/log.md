@@ -53,3 +53,12 @@ existing entries; only append. Each ingest / lint / sync operation adds one entr
 - Lint (targeted): 1 broken link fixed (a literal `[[wikilinks]]` in ADR-005 prose), 77 one-way links reciprocated, 1 template drift fixed. Vault now: 0 broken, 0 one-way, 0 index gaps.
 - Skipped: `ai-agents/tasks/backlog/*` (23 files — not done, a page would be premature); `ai-agents/reviews/`, `ai-agents/README.md` (not ingest-worthy kinds); the 8 pre-ADR-013 knowledge-base root paths (rename-only → `reports/`, `conventions/`)
 - ⚠️ Flagged for human review: `architecture.md` §8 and §9.6 claim ADRs 003/004/006/007 are "still marked `accepted` today" — they were marked superseded by the knowledge-base hygiene task, which ran after the doc was written. The wiki records the current (superseded) status.
+
+## 2026-07-13 — lint
+- Issues found: 3
+- Issues fixed: 2
+- Issues flagged for human review: 1
+- Scope: all 48 pages. Structural checks all clean (0 broken links, 0 one-way links, 0 index gaps, 0 orphans, 0 template drift, 0 secrets).
+- **Fixed — a stale claim ingested from a stale source.** [[systems/install-and-self-update]] and [[tasks/fix-agent-count-doc-drift-and-fresh-detection-dup]] both stated that `claude/fkit-claude-init.sh` prints **"Six roles"** and that its usage comment still advertises `fkit claude`. Both were taken from `architecture.md` §9.6 and **both are false against the code**: `:144` reads `Seven roles`, and the `fkit claude` comment is gone. Rewritten to record what the code says, and to keep the durable point (the count is a hard-coded literal, not derived — so it can drift again).
+- **Verified against the code** (all pass): 7 agent definitions · 21 skills · `skills_for_role()` / `build_settings()` / `CONSULT_SKILLS` present · **0 tracked `omnigent/` files** · **0 `skills:` frontmatter** (ADR-012 holds) · no `.github/` (the CI gap is real) · `EnterPlanMode` restored to the coder allowlist · `fkit --resume` passthrough still live (`fkit-claude.sh:356`) · Sprint 2 tally 18 done + 4 backlog = 22.
+- ⚠️ **Flagged for human review (not a wiki defect — a source defect):** `ai-agents/knowledge-base/architecture.md` §8 and §9.6 are **behind the code on three counts** — they state ADRs 003/004/006/007 are "still marked `accepted`" (they are superseded), that init prints "Six roles" (it prints "Seven"), and that the `fkit claude` usage comment survives (it does not). The architect owns that file; the wiki now records the verified state.

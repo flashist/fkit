@@ -52,7 +52,7 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 - **`fkit --resume` passes through to `claude` under the lead's lockdown** — see [[systems/fkit]].
 - **`GIT_TERMINAL_PROMPT=0`** on the update check exists so a credential-prompting remote can never hang the launcher.
 - **Idempotence**: both the installer and the per-project init are safe to re-run; init never clobbers an existing `ai-agents/`, `CLAUDE.md`, or `AGENTS.md`.
-- **Residual drift** (as recorded in `architecture.md`): `fkit-claude-init.sh` prints **"Six roles"** and omits `lead`, immediately after copying **7** agent files — the count is a literal, not derived; and its usage comment still advertises `fkit claude`, a verb that now hard-fails.
+- **The agent count is still a hard-coded literal, not derived.** `fkit-claude-init.sh:144` prints `Seven roles` as a `printf` string, while the line that actually *counts* the copied agents (`n_agents`, `:54`) is separate. **The two can drift apart again silently** — they have before. *(Verified 2026-07-13: the string currently reads "Seven" and is correct, and the stale `fkit claude` usage comment is gone. `architecture.md` §9.6 still lists both as open drift — **the doc is behind the code**.)*
 
 ## Related
 - [[systems/fkit]]
