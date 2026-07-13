@@ -357,7 +357,7 @@ This is recorded because it explains things that would otherwise look arbitrary:
 006, and 007 describe Omnigent-only mechanics and are due to be marked superseded now that the code
 is actually removed (ADR-009 §Related; tracked by
 `ai-agents/tasks/backlog/knowledge-base-hygiene-post-omnigent.md`) — they are still marked
-`accepted` today. See §9.6.
+`accepted` today. See §9.5.
 
 ---
 
@@ -402,14 +402,7 @@ expose the **calling subagent's identity**? If it does not, the hook cannot disc
 the option is not merely deferred but **unavailable** (ADR-012 §4). This must be established before
 anyone plans the hook as the fix.
 
-### 9.4 `fkit --resume` resumes any session under lead's lockdown
-
-`claude/fkit-claude.sh:348` defaults `role="lead"` whenever no role was named, and any unrecognized
-arg is passed straight through to `claude` (`:357`). So `fkit --resume` silently resumes **any**
-session — a coder session included — with the **lead's** skill overrides applied. Omnigent scar
-tissue; tracked by `ai-agents/tasks/backlog/remove-fkit-resume-passthrough.md`.
-
-### 9.5 The `.claude/` copies are gitignored and destroyed on every launch
+### 9.4 The `.claude/` copies are gitignored and destroyed on every launch
 
 `claude/fkit-claude-init.sh:51-60` does an `rm -f` + `cp` of `fkit-*` agents and skills on every
 single launch. **An edit made in `.claude/` instead of `claude/` is silently destroyed** — no
@@ -417,7 +410,7 @@ warning, no diff. (The self-hosting re-exec at `claude/fkit-claude.sh:36-43` exi
 the *installed* snapshot would otherwise overwrite the checkout's own working tree with an older
 copy of itself.) The rule is unconditional: **edit `claude/`, never `.claude/`.**
 
-### 9.6 Residual drift
+### 9.5 Residual drift
 
 - **`claude/fkit-claude-init.sh:144` prints "Six roles"** and omits `lead`, immediately after copying
   **7** agent files (`:53-54`, `n_agents`). The count is a literal, not derived.
@@ -454,5 +447,3 @@ copy of itself.) The rule is unconditional: **edit `claude/`, never `.claude/`.*
 2. **What is the intended verification story?** (§9.1.) ADR-003's CI died with its subject. Is a
    `shellcheck` + smoke-install CI in scope, or is manual verification the accepted permanent posture
    for a prototype? This is an owner call, not an architect's.
-3. **Is `fkit --resume` worth keeping at all** once the passthrough is fixed (§9.4), or should the
-   launcher require an explicit role for every invocation?

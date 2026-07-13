@@ -7,8 +7,11 @@
 #   fkit                    # menu → pick a role
 #   fkit coder              # skip the menu, straight to the coder
 #   fkit producer|architect|reviewer|wiki|adv|lead
-#   fkit --resume           # any other arg is passed straight through to `claude`
 #   fkit update             # update fkit itself
+#
+# A first argument that is not a role and not a known verb is a USAGE ERROR, not a session. It used
+# to fall through to `claude` unrecognized, which meant `fkit --resume` resumed ANY session under the
+# LEAD's lockdown — the role lock bypassed by accident. Args after a named role still pass through.
 #
 # Every session is locked two ways:
 #   * `--agent fkit-<role>`  — the role's system prompt and tool allowlist (harness-enforced)
@@ -166,7 +169,7 @@ Other:
   FKIT_SETUP_ONLY=1     set the project up, then exit without launching
   FKIT_NO_UPDATE_CHECK=1  never check for updates
 
-Anything that isn't a role is passed through to `claude` (e.g. `fkit --resume`).
+A first argument that is not a role is an error. Args AFTER a role pass through to `claude`.
 EOF
     exit 0 ;;
 esac
@@ -179,6 +182,26 @@ case "${1:-}" in
   adv|adversarial)
     role="adversarial-reviewer"; shift ;;
 esac
+
+# No role named, but args remain → a USAGE ERROR, not a session.
+#
+# This is where the old blanket passthrough was. Any unrecognized first arg used to fall through to
+# `claude` with role still empty — so `fkit --resume` hit the "no role → lead" default below and
+# silently resumed ANY session (a coder session included) under the LEAD's skill lockdown: no Write,
+# no Edit, no warning. A session pinned to exactly one role is the invariant the whole product rests
+# on (ADR-010), and a stray argv word was quietly bypassing it. Now it stops here.
+#
+# Deliberately placed AFTER role parsing (we must know whether a role was named) but BEFORE setup,
+# preflight, the fresh-project branch, the menu, and the lead default — all four of which exec
+# `claude` with "$@" and would otherwise re-open the same hole one level down. `update` and `--help`
+# exit above this, so they can never be swallowed by it. Args after a NAMED role still pass through
+# (`fkit coder --debug`): that path is intentional and is not what this guards.
+if [ -z "$role" ] && [ "$#" -gt 0 ]; then
+  printf 'fkit: "%s" is not a role.\n' "$1" >&2
+  printf '      Roles: %s (or: adv)\n' "$ROLES" >&2
+  printf '      Try:  fkit          (the menu)   ·   fkit <role>   ·   fkit --help\n' >&2
+  exit 2
+fi
 
 # ---------------------------------------------------------------------------
 # Skill ownership — THE single source of truth (ADR-012 §1). A role session sees ONLY these; every
@@ -352,7 +375,8 @@ if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || [ -r /dev/tty ]; }; then
   exec 3<&-
 fi
 
-# No role, not interactive (piped/CI, or extra args given) → the team room is the safe default.
+# No role and no tty (piped / CI) → the team room is the safe default. Reaching here with no role now
+# implies no args too — the guard above rejected those — so this is the no-args, no-tty case only.
 [ -n "$role" ] || role="lead"
 
 if [ "$role" = lead ]; then

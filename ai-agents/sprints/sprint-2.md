@@ -52,6 +52,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 20 | Design a version-to-version migration mechanism *(**investigation first** — no implementation from the brief)* | [`design-version-to-version-migration-mechanism.md`](../tasks/backlog/design-version-to-version-migration-mechanism.md) |
 | 🔲 Backlog | 21 | Repair the 6 broken task links in the closed Sprint 1 plan *(one-off cleanup — independent)* | [`repair-broken-links-in-closed-sprint-plans.md`](../tasks/backlog/repair-broken-links-in-closed-sprint-plans.md) |
 | ✅ Done | 22 | Stop the task movers rotting links in closed sprint plans *(the recurrence — the real bug)* | [`harden-task-movers-against-closed-sprint-link-rot.md`](../tasks/done/harden-task-movers-against-closed-sprint-link-rot.md) |
+| 🔲 Backlog | 23 | Add the launcher-contract test suite *(`node --test`, zero devDeps — **after 18**)* | [`add-launcher-contract-smoke-script.md`](../tasks/backlog/add-launcher-contract-smoke-script.md) |
 
 ## Dependency graph
 
