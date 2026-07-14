@@ -50,9 +50,10 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 18 | Remove `fkit --resume` and the blanket arg-passthrough *(Omnigent scar tissue)* | [`remove-fkit-resume-passthrough.md`](../tasks/done/remove-fkit-resume-passthrough.md) |
 | ✅ Done | 19 | Repair the knowledge-base paths in product source *(ADR-013 fallout)* | [`repair-knowledge-base-paths-in-product-source.md`](../tasks/done/repair-knowledge-base-paths-in-product-source.md) |
 | 🔲 Backlog | 20 | Design a version-to-version migration mechanism *(**investigation first** — no implementation from the brief)* | [`design-version-to-version-migration-mechanism.md`](../tasks/backlog/design-version-to-version-migration-mechanism.md) |
-| 🔲 Backlog | 21 | Repair the 6 broken task links in the closed Sprint 1 plan *(one-off cleanup — independent)* | [`repair-broken-links-in-closed-sprint-plans.md`](../tasks/backlog/repair-broken-links-in-closed-sprint-plans.md) |
+| ✅ Done | 21 | Repair the 6 broken task links in the closed Sprint 1 plan *(one-off cleanup)* | [`repair-broken-links-in-closed-sprint-plans.md`](../tasks/done/repair-broken-links-in-closed-sprint-plans.md) |
 | ✅ Done | 22 | Stop the task movers rotting links in closed sprint plans *(the recurrence — the real bug)* | [`harden-task-movers-against-closed-sprint-link-rot.md`](../tasks/done/harden-task-movers-against-closed-sprint-link-rot.md) |
-| 🔲 Backlog | 23 | Add the launcher-contract test suite *(`node --test`, zero devDeps — **after 18**)* | [`add-launcher-contract-smoke-script.md`](../tasks/backlog/add-launcher-contract-smoke-script.md) |
+| 🔲 Backlog | 23 | Add the launcher-contract test suite *(zero devDeps; **runner TBD** — [ADR-014](../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md))* | [`add-launcher-contract-smoke-script.md`](../tasks/backlog/add-launcher-contract-smoke-script.md) |
+| 🔲 Backlog | 24 | Stop agents asserting repo state they never checked *(a false instruction in both task movers, shipping to every project)* | [`stop-agents-asserting-unchecked-repo-state.md`](../tasks/backlog/stop-agents-asserting-unchecked-repo-state.md) |
 
 ## Dependency graph
 
@@ -243,6 +244,6 @@ flip. The skill sees the reference and drops it.
 3. **Should fkit own a mechanical link checker at all?** This repo has **no test suite and no link
    check** — this defect was found only because fkit-coder hand-rolled a sweep, and every verification
    step in tasks 21 and 22 is manual today. **Producer's position: worth doing, and its home is the
-   already-unsprinted [`add-e2e-smoke-script-for-fkit-itself.md`](../tasks/backlog/add-e2e-smoke-script-for-fkit-itself.md)** — deliberately **not**
+   already-unsprinted [`add-e2e-smoke-script-for-fkit-itself.md`](../tasks/cancelled/add-e2e-smoke-script-for-fkit-itself.md)** — deliberately **not**
    folded into task 22, where it would ship untested alongside the very change it exists to test.
    Flagged as a scoping question, not decided.

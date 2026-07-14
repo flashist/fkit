@@ -12,7 +12,7 @@ the prose; the movers may write into `sprints/done/`). Implemented by fkit-coder
 
 ## Context
 
-Fixing the 6 broken links in Sprint 1 ([task 21](../backlog/repair-broken-links-in-closed-sprint-plans.md)) is a
+Fixing the 6 broken links in Sprint 1 ([task 21](../done/repair-broken-links-in-closed-sprint-plans.md)) is a
 one-off. **The recurrence is the real bug**, and it is a defect in fkit's own product source.
 
 `/fkit-task-done` and `/fkit-task-cancelled` move a brief `backlog/` → `done/`/`cancelled/` and update
@@ -130,7 +130,7 @@ next `/fkit-task-done` re-breaks a link.
   test suite and no link check at all** — the only reason this defect was found is that fkit-coder
   hand-rolled a sweep. Every verification step above (and in task 21) is currently manual, which is
   precisely how this rotted unnoticed in the first place. There is already an unsprinted
-  [`add-e2e-smoke-script-for-fkit-itself.md`](../backlog/add-e2e-smoke-script-for-fkit-itself.md) that is the
+  [`add-e2e-smoke-script-for-fkit-itself.md`](../cancelled/add-e2e-smoke-script-for-fkit-itself.md) that is the
   natural home for it. **Producer's position: worth doing, and it belongs there, not smuggled in
   here** — a checker that lands inside this brief would ship untested alongside the very change it
   exists to test. Flagged for the owner as a scoping question, not decided.
