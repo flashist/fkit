@@ -59,20 +59,161 @@ else
   echo "• created ai-agents/ (from scaffold)"
 fi
 
-# 2. shared context files (never clobber). CLAUDE.md carries the team map + dispatch rules;
-#    AGENTS.md is read natively by the codex CLI during the adversarial pass.
-if [ -e "$dest/CLAUDE.md" ]; then
-  echo "• CLAUDE.md already present — left as-is"
-else
-  cp "$scaffold/CLAUDE.md" "$dest/CLAUDE.md"
-  echo "• created CLAUDE.md  (fill in its placeholders)"
+# 2. shared context files. CLAUDE.md carries the team map + dispatch rules; AGENTS.md is read
+#    natively by the codex CLI during the adversarial pass — which is why the universal hard rules
+#    have to be in BOTH: Claude reads one, Codex reads the other.
+#
+#    These files are the OWNER'S. We create them when absent, and otherwise touch exactly one region:
+#    a marker-delimited block that fkit owns and rewrites. Everything outside the markers is theirs and
+#    is never modified — that promise is what earns the right to write into a file they already had.
+#
+#    Before this, an existing CLAUDE.md/AGENTS.md was left entirely as-is, so a project that already
+#    used Claude Code (i.e. every brownfield one) received NONE of the universal hard rules, and fkit
+#    had no channel to ship a correction to them either.
+RULES_BEGIN='<!-- fkit:begin-rules -->'
+RULES_END='<!-- fkit:end-rules -->'
+RULES_MAX=4096   # the block lands in every agent's context on every turn; cap fkit's own verbosity
+
+RULES_TAG='fkit-managed:'   # appears in the block header; how we recognize a region we wrote
+
+rules_src="$scaffold/universal-rules.md"
+[ -f "$rules_src" ] || { echo "error: missing $rules_src" >&2; exit 1; }
+
+emit_block() {   # the fkit-managed block, markers included
+  printf '%s\n' "$RULES_BEGIN"
+  printf '<!-- %s this block is REPLACED on every `fkit` launch. Edits inside these two markers\n' "$RULES_TAG"
+  printf '     are overwritten. Put your own standing instructions OUTSIDE them — everything outside\n'
+  printf '     is yours and fkit never touches it. Note the markers are recognized only when a marker\n'
+  printf '     is ALONE on its line, so quoting one inline in your prose is safe; a bare marker line\n'
+  printf '     inside a code fence, however, still reads as a real marker. -->\n\n'
+  cat "$rules_src"
+  printf '%s\n' "$RULES_END"
+}
+
+# Cap the EMITTED block, not the source file — the source is only part of what lands in context, and
+# the block is what every agent actually pays for on every turn. Capping the input measured the wrong
+# thing.
+block_size="$(emit_block | wc -c | tr -d ' ')"
+if [ "$block_size" -gt "$RULES_MAX" ]; then
+  echo "error: the fkit rules block is ${block_size}B, over the ${RULES_MAX}B cap." >&2
+  echo "       It is injected into every agent's context on every turn. Trim $rules_src." >&2
+  exit 1
 fi
-if [ -e "$dest/AGENTS.md" ]; then
-  echo "• AGENTS.md already present — left as-is"
-else
-  cp "$scaffold/AGENTS.md" "$dest/AGENTS.md"
-  echo "• created AGENTS.md  (the codex CLI reads it)"
-fi
+
+# Line numbers where <marker> is the WHOLE line (leading/trailing whitespace tolerated).
+#
+# This MUST NOT be a substring match. `grep -F` would treat a CLAUDE.md that merely *documents* the
+# markers in prose — "the begin marker is `<!-- fkit:begin-rules -->` …" — as a real region, and
+# silently delete every line between the two sentences. That is someone else's file, and it happened:
+# it is the defect this function exists to prevent. awk compares the trimmed line for equality, so a
+# marker quoted inline in a sentence is inert.
+# \r is in the trim set on purpose: without it a CRLF file never matches its own markers, so every
+# launch appends ANOTHER block — unbounded growth — and the stale block, invisible to the matcher, can
+# never receive a rules correction again. That is this feature's original bug, resurrected for Windows.
+marker_lines() {   # <file> <marker> → matching line numbers, one per line
+  awk -v m="$2" '{ l = $0; gsub(/^[ \t\r]+|[ \t\r]+$/, "", l); if (l == m) print NR }' "$1"
+}
+
+merge_rules() {   # merge_rules <path> <name> — idempotent, in-place, refuses rather than guesses
+  f="$1"; name="$2"
+  # [ -L ] FIRST. -e/-f DEREFERENCE, so on a symlink they report on the target and we would write
+  # straight through it, outside the project. Same bug as the ai-agents/ guard above; second seam.
+  if [ -L "$f" ]; then
+    echo "⚠ skipped $name — it is a symlink; fkit will not write through it" >&2; return 0
+  fi
+  if [ -e "$f" ] && [ ! -f "$f" ]; then
+    echo "⚠ skipped $name — it exists but is not a regular file" >&2; return 0
+  fi
+  if [ ! -r "$f" ]; then
+    echo "⚠ skipped $name — fkit cannot read it (check its permissions)" >&2; return 0
+  fi
+  if [ ! -w "$f" ] || [ ! -w "$dest" ]; then
+    echo "⚠ skipped $name — not writable" >&2; return 0
+  fi
+
+  # `set --` rather than `… | head -1`: under `pipefail`, a consumer that exits early (head) SIGPIPEs
+  # the producer, and the whole pipeline reports 141 — which under `set -e` kills init outright, on the
+  # code path whose entire job is to refuse gracefully. No pipes here, so nothing to break.
+  # (Safe inside the function: we already captured the args as $f/$name.)
+  # shellcheck disable=SC2086
+  set -- $(marker_lines "$f" "$RULES_BEGIN"); nb=$#; lb="${1:-0}"
+  # shellcheck disable=SC2086
+  set -- $(marker_lines "$f" "$RULES_END");   ne=$#; le="${1:-0}"
+
+  tmp="$f.fkit-tmp.$$"
+  # A `set -e` abort between here and the mv would otherwise strand a .fkit-tmp.<pid> file in the
+  # owner's project root. Clean it up on any exit; the trap is cleared once the merge is settled.
+  trap 'rm -f "$tmp"' EXIT
+  if [ "$nb" = 0 ] && [ "$ne" = 0 ]; then
+    # No block yet (the brownfield case). Append once, at EOF — a defined, boring position; we do not
+    # try to divine where in someone else's document our section "belongs". Guarantee the separating
+    # newline ourselves: a file with no trailing newline would otherwise have its last line absorbed
+    # into the marker line.
+    { cat "$f"; [ -n "$(tail -c 1 "$f")" ] && printf '\n'; printf '\n'; emit_block; } > "$tmp"
+  elif [ "$nb" = 1 ] && [ "$ne" = 1 ] && [ "$lb" -lt "$le" ]; then
+    # Exactly one well-formed pair → replace the region WHERE IT IS. Not delete-and-append: a block
+    # that migrates to EOF on every launch is still us rearranging the owner's file, just slowly.
+    #
+    # But first: is this region ACTUALLY OURS? An empty region is an opt-in — the scaffold ships a bare
+    # marker pair, and an owner may add one to choose where the block goes. A region with content we
+    # did not write is a different animal: the markers got there some other way (the classic case is a
+    # bare marker line inside a fenced code block in the owner's own prose), and we are about to delete
+    # text we do not own. We still proceed — the markers are unambiguous — but we do NOT do it silently.
+    # stderr, because init's stdout is /dev/null'd on an already-set-up project, which is precisely when
+    # this fires.
+    # Guard the range: an ADJACENT pair (le == lb+1) encloses nothing, and `sed -n '5,4p'` does not
+    # print nothing — it prints the START line. Without this guard the probe read the end-marker line
+    # as if it were the region's content, so the scaffold's own bare marker pair looked like foreign
+    # text and EVERY brand-new project warned about the file fkit had just written. A warning that
+    # cries wolf on a user's first launch is worth less than no warning at all — and this one is the
+    # only thing making the code-fence tradeoff survivable.
+    if [ "$le" -gt "$((lb + 1))" ]; then
+      region="$(sed -n "$((lb + 1)),$((le - 1))p" "$f")"
+      # `case`, not `printf … | grep -q`: grep -q exits on its first match, EPIPEing printf, which under
+      # pipefail makes the pipeline non-zero — and the `!` then inverts that into "tag absent", firing
+      # the warning on a block we DID write, plus a raw "write error: Broken pipe" leak. No pipe, no bug.
+      case "$region" in
+        *"$RULES_TAG"*) has_tag=1 ;;
+        *)              has_tag=0 ;;
+      esac
+      if [ -n "$(printf '%s' "$region" | tr -d '[:space:]')" ] && [ "$has_tag" = 0 ]; then
+        echo "⚠ $name: replacing the content between the fkit rules markers — fkit did not write it." >&2
+        echo "    If those markers are part of your own text (e.g. inside a code fence), rename them;" >&2
+        echo "    everything between them is managed by fkit and is overwritten on every launch." >&2
+      fi
+    fi
+    { [ "$lb" -gt 1 ] && sed -n "1,$((lb - 1))p" "$f"; emit_block; sed -n "$((le + 1)),\$p" "$f"; } > "$tmp"
+  else
+    # Begin without end, end without begin, or several pairs: the extent of the block is UNKNOWABLE and
+    # the wrong guess silently deletes the owner's prose. Refuse; never "helpfully" re-close it.
+    echo "⚠ skipped $name — its fkit:begin-rules/fkit:end-rules markers are malformed" >&2
+    echo "    ($nb begin, $ne end). Fix or remove them and fkit will manage the block again." >&2
+    rm -f "$tmp"; trap - EXIT
+    return 0
+  fi
+
+  if cmp -s "$tmp" "$f"; then
+    rm -f "$tmp"; trap - EXIT           # unchanged: say NOTHING. init runs on every single launch, and
+    return 0                            # a per-launch "rewrote CLAUDE.md" trains people to ignore init's
+  fi                                    # output — which is the channel a real refusal has to get through.
+  mv "$tmp" "$f"                        # all-or-nothing: never leave a half-written CLAUDE.md behind
+  trap - EXIT
+  echo "• updated the fkit rules block in $name"
+}
+
+install_root_file() {   # create from the scaffold when absent, then merge the managed block
+  name="$1"; f="$dest/$name"
+  if [ -L "$f" ]; then
+    echo "⚠ skipped $name — it is a symlink; fkit will not write through it" >&2; return 0
+  fi
+  if [ ! -e "$f" ]; then
+    cp "$scaffold/$name" "$f"
+    echo "• created $name"
+  fi
+  merge_rules "$f" "$name"
+}
+install_root_file CLAUDE.md
+install_root_file AGENTS.md
 
 # 3. refresh the fkit-managed agents + skills (rm+cp of fkit-managed names ONLY — a user's own
 #    agents/skills in .claude/ are never touched)

@@ -9,6 +9,9 @@ _One-paragraph overview of this project — fill in._
 The full project brief — domain, architecture, conventions — lives in
 [`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).
 
+<!-- fkit:begin-rules -->
+<!-- fkit:end-rules -->
+
 ## Knowledge Base & Wiki
 
 A structured wiki lives in `ai-agents/wiki-vault/` (Karpathy LLM-wiki pattern). Before

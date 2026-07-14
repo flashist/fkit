@@ -58,7 +58,10 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 26 | Stop an init failure from bricking the launcher *(pre-existing defect)* | [`stop-init-failure-bricking-the-launcher.md`](../tasks/done/stop-init-failure-bricking-the-launcher.md) |
 | ✅ Done | 27 | Refuse init on a weird `ai-agents/` — symlink / file-where-dir *(live DoS + silent-skip bugs; the write-outside hazard is **prospective** — see the 2026-07-14 correction)* | [`refuse-init-on-weird-ai-agents-state.md`](../tasks/done/refuse-init-on-weird-ai-agents-state.md) |
 | 🔲 Backlog | 28 | Make launch converge `ai-agents/` additively *(**"the migration"** — needs 26 + 27)* | [`converge-ai-agents-additively-on-launch.md`](../tasks/backlog/converge-ai-agents-additively-on-launch.md) |
-| 🔲 Backlog | 29 | Add a shared instructions layer that every fkit agent reads *(**investigation first** — the consult path is the trap)* | [`add-shared-instructions-layer-for-all-agents.md`](../tasks/backlog/add-shared-instructions-layer-for-all-agents.md) |
+| 🔲 Backlog | 29 | Add a shared instructions layer that every fkit agent reads *(investigation **complete** — [findings rev 2](../knowledge-base/reports/2026-07-14-shared-instructions-layer.md); owner reviewed; spawned 30–32)* | [`add-shared-instructions-layer-for-all-agents.md`](../tasks/backlog/add-shared-instructions-layer-for-all-agents.md) |
+| 🔲 Backlog | 30 | Give Codex the universal hard rules it has never had *(**live defect** — the required second model runs with no floor)* | [`give-codex-the-universal-hard-rules.md`](../tasks/backlog/give-codex-the-universal-hard-rules.md) |
+| 🔲 Backlog | 31 | Merge an fkit-managed rules block into an **existing** `CLAUDE.md`/`AGENTS.md` *(the brownfield hole; **idempotent or it grows the file forever**)* | [`merge-fkit-rules-block-into-existing-root-context-files.md`](../tasks/backlog/merge-fkit-rules-block-into-existing-root-context-files.md) |
+| 🔲 Backlog | 32 | Add the "no secrets" rule to `fkit-lead.md` *(the 1 of 7 missing it — one line)* | [`add-no-secrets-rule-to-fkit-lead.md`](../tasks/backlog/add-no-secrets-rule-to-fkit-lead.md) |
 
 ## Dependency graph
 
@@ -339,6 +342,95 @@ already assumed its answer.
 rationale was wrong, and it has been replaced with the true one. *(fkit-architect is separately
 correcting the same claim in the migration report and checking ADR-015.)*
 
+## Addendum — tasks 30–32 added out of band (2026-07-14): the shared-instructions investigation's implementation
+
+**Task 29's investigation is complete and the owner has reviewed it.** Findings:
+[`reports/2026-07-14-shared-instructions-layer.md`](../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
+(**rev 2** — rev 1 went through an adversarial Codex pass, 17 findings, and **its recommendation did not
+survive**; rev 2 **reverses** it). Tasks 30–32 are the implementation the owner greenlit. Per the brief,
+the producer scopes these **only after** the review gate — which has now passed.
+
+**The headline is not "build a shared instructions layer."** It is: **the layer already exists and
+already ships** — the *"Universal hard rules (every role, every session)"* block in
+`claude/scaffold/CLAUDE.md:56-63`, proven **3/3** (Claude Code 2.1.208) to reach **both** a session and a
+spawned consult. **What is broken is its delivery, on two paths.** Nothing new gets built.
+
+**The owner's original need is already met, today, with zero code:** to give every fkit agent a standing
+instruction, he writes it in `CLAUDE.md`.
+
+### Rejected — by the owner, by name, and not to be reintroduced
+
+- **`ai-agents/AGENTS-COMMON.md` and the agent-file splice** (rev 1's recommendation). It **structurally
+  cannot reach Codex** — the adversarial skill builds its own prompt and Codex never reads
+  `.claude/agents/`. A "shared layer for **all** agents" that excludes the second model is misnamed. It
+  also **silently depended on parked task 28** (its stub ships inside `ai-agents/`). Report §4.
+- **`claude --append-system-prompt`.** **Session-only.** Two independent experiment designs, **0/3 then
+  0/2** into a spawned consult, with a within-subject control that stayed live. The tombstone matters:
+  it is the obvious idea, and the next person to have it must find the grave, not the trap. Report §5.
+- **The "seven files have drifted" motivation. It collapsed.** The rule is present in **6 of 7** agent
+  files — not 2 of 7 as task 29's brief claimed. Three counts were published, all three wrong, all three
+  from grepping one phrasing of a *semantic* rule. **Lesson: read the files.** The real case for this work
+  is holes 1 and 2 below, not the drift.
+- **A single edit point for the owner's own instructions** — the owner declined to pursue it on other
+  grounds. No task.
+
+### The two real holes — and hole 2 is the find
+
+- **Hole 2 → task 30. `codex exec --sandbox read-only --cd "$PWD"` means the codex CLI natively reads
+  root `AGENTS.md`** (init's own comment says so, `fkit-claude-init.sh:9-10`) — **and
+  `claude/scaffold/AGENTS.md` contains ZERO universal hard rules.** So does this repo's. **The one model
+  [ADR-009](../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md) *requires* for
+  independent, model-diverse review runs with no "never commit", no "no secrets", no "don't write the
+  wiki."** A live defect, near-free to fix, **fix it regardless of everything else.**
+- **Hole 1 → task 31.** Init leaves an existing `CLAUDE.md` **as-is** (`:64-65`), so **every brownfield
+  project — i.e. every project that already used Claude Code — has received none of fkit's rules, ever.**
+  And fkit has **no channel to ship a correction through**. Fix: a **marker-delimited, fkit-managed,
+  idempotent** block merged into both root files.
+
+### ⚠️ Idempotency is the load-bearing requirement in task 31
+
+**Init runs on every launch.** A merge that appends would grow the user's `CLAUDE.md` **without bound,
+one block per launch**. The block must be **replace-in-place** — same content, same position, byte-identical
+on re-run. The brief says so and its verification proves it: **run init 3×, get exactly one block and an
+identical checksum.**
+
+**Task 31 is also the first fkit code that writes into a file the user already owned**, unattended, every
+launch. Hence: everything outside the markers is untouched forever, malformed states **refuse** rather than
+guess, `[ -L ]` **before** `[ -e ]` (task 27's lesson, second seam), all-or-nothing via temp+`mv`, and
+**silence when nothing changed**.
+
+### Sequencing
+
+```
+30. codex gets the rules ──→ 31. idempotent merge into existing root files
+    (independent; ship first)     (needs 30's canonical text; NOT blocked by parked task 28)
+
+32. fkit-lead "no secrets" ──(independent; any time)
+```
+
+- **Task 31 does NOT depend on parked task 28 — confirmed.** `CLAUDE.md`/`AGENTS.md` are **project-root**
+  files handled by init **step 2** (`:62-75`), a **different seam** from the all-or-nothing `ai-agents/`
+  guard (`:55-56`) that 28 is about. **31 ships with 28 still parked.** *(This is exactly what killed the
+  splice: its delivery ran through `ai-agents/`.)*
+- **30 → 31 is a soft dependency**: 30 lands the canonical rules text that 31 hoists into a single source.
+  It could be done in one pass, but 30 is a live defect with a ten-minute fix and should not wait behind a
+  mechanism change. **Accepted churn:** 31 re-cuts ~8 lines that 30 wrote.
+
+### Delivery: structural. Compliance: advisory. Full stop.
+
+This makes the rules **arrive**. It does **not** make them **enforced**. There are **zero hooks** in this
+repo; **all seven agents hold `Bash`** and five hold `Write`/`Edit`. A rule in a context file is **prose
+asking an agent to behave**. Report §6 is the *only* claim level in the report, and the sprint will not
+carry a stronger one — the "structural, not by instruction" overclaim is what ADR-012 had to retrofit onto
+ADR-010, and it is not being repeated here.
+
+### Explicitly out of scope
+
+- **Stripping the duplicated rules out of the seven agent files.** Owner asked for **additive only**, and
+  with the drift motivation collapsed it is moot.
+- **Hooks / tool-level enforcement.** ADR-010's deferral stands.
+- **Anything requiring parked task 28.**
+
 ## Open questions for the owner
 
 1. **Reserve `@flashist/fkit` on npm now, or leave npm alone until there's something to publish?**
@@ -387,3 +479,30 @@ correcting the same claim in the migration report and checking ADR-015.)*
    reference-check re-run as a hard gate. It is **not** an every-launch silent operation, and it should
    not be smuggled into the convergence pass, where it would inherit "runs unattended on every launch"
    from code that is *additive by invariant*. **Say the word and I'll write the brief.**
+
+6. **Does the shared-instructions reversal get a tombstone ADR?** Not tasked — the owner has not ruled,
+   and the producer has not assumed. **Producer's recommendation: yes, and it is cheap.** The reversal
+   settles a mechanism question and **rejects two specific, obvious ideas by name**: `AGENTS-COMMON.md`
+   (cannot reach Codex) and **`claude --append-system-prompt`** (session-only — **0/3, then 0/2**, into a
+   spawned consult, on **Claude Code 2.1.208**). Both are the *first* thing a competent person reaches
+   for. Rev 1 of the report reached for one of them and it cost an adversarial review to undo. A dated
+   report is easy to miss; an ADR is where someone looks before proposing a mechanism.
+   **The tradeoff:** it pins a **negative result against one harness version**. If Claude Code later makes
+   `--append-system-prompt` inheritable, the ADR is a fossil that says "don't" about something that now
+   works. Mitigation is the one rev 2 already models — **record the version in the ADR itself** — but the
+   risk of a stale prohibition is real and is the reason this is a question, not a task.
+   **Owner: fkit-architect, via `/fkit-record-decision`.** Say the word.
+
+7. **The read-side symlink hazard — task, or a note on task 28?** Flagged, not assumed. Task 27 gated
+   **writes** through a symlinked `ai-agents/` (`[ -L ]` at `fkit-claude-init.sh:40`); it did **not** gate
+   **reads**. A future init step that *reads* `$dest/ai-agents/…` would read **through** the link and pull
+   off-project content into fkit's own behavior. **Nothing does that today** — and the one design that
+   would have (the rejected `AGENTS-COMMON.md` splice) is dead, which is why this is now latent rather
+   than live. **Tasks 30–32 do not touch it:** they read from the **scaffold** and write to the **project
+   root**. *(Task 31 has its own, different symlink exposure — a symlinked `CLAUDE.md` — and its brief
+   gates that with `[ -L ]` explicitly.)*
+   **Producer's recommendation: no task now.** A brief for a bug no code can reach is a brief that rots
+   before it ships. **Its right home is task 28** — the next thing that will genuinely read and write
+   per-path inside `ai-agents/`. **When 28 is unparked, this hazard goes into its brief as a requirement,
+   not into a task of its own.** If you'd rather have it tracked independently so it cannot be lost with
+   28, say so and I'll write it — that is the honest counter-argument, and it costs one brief.

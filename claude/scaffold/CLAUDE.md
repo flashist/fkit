@@ -53,14 +53,8 @@ vice versa. The adversarial reviewer and wiki are leaves: they consult no one. G
 architecture decisions go to the **owner** (record via `/fkit-record-decision`), never settled
 implicitly between agents.
 
-**Universal hard rules (every role, every session):**
-- **Never commit or push unless the owner explicitly asks.** "Implement" authorizes writing code,
-  not committing.
-- **Only the wiki role writes `ai-agents/wiki-vault/`** — as the fkit-wiki agent, or a `fkit wiki` session. Reads are decentralized: any session may follow `/fkit-query` directly.
-- **Task files move between `backlog/`, `done/`, `cancelled/` only via the owner-invoked
-  `/fkit-task-done` / `/fkit-task-cancelled` skills** — never on an agent's own initiative.
-- **No secrets in any artifact** — no DSNs, endpoints, keys, or credentials in briefs, docs, or
-  wiki pages; it all goes to git.
+<!-- fkit:begin-rules -->
+<!-- fkit:end-rules -->
 
 ## Knowledge Base & Wiki
 
