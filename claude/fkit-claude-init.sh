@@ -24,10 +24,38 @@ dest="$(cd "$dest_in" && pwd)"                         # absolute
 [ -d "$scaffold/ai-agents" ] || { echo "error: shared scaffold not found at $scaffold" >&2; exit 1; }
 
 # 1. ai-agents/ working structure (never clobber an existing one)
-if [ -e "$dest/ai-agents" ]; then
+#
+# PREFLIGHT FIRST — `[ -e ]` and `[ -d ]` DEREFERENCE symlinks, so on a symlinked ai-agents/ they
+# cheerfully report on a directory somewhere else entirely, and `cp -R` then writes THROUGH the link.
+# `[ -L ]` is the one test that does not lie, so it has to come first: any fix that reaches for -e/-d
+# ahead of -L puts the bug straight back. fkit must never write outside the project it was pointed at.
+#
+# Refusing is NOT a failure the user has to fix in order to launch. We skip this one step, say so
+# plainly, and carry on with the rest of setup — a weird ai-agents/ must not cost anyone their agents.
+# The message goes to STDERR on purpose: the launcher sends init's stdout to /dev/null on an
+# already-set-up project, and a live symlink or a file-where-the-dir-belongs looks "already set up" to
+# it — so on stdout this warning would be swallowed in exactly the cases it exists for.
+aa="$dest/ai-agents"
+aa_state=""
+if [ -L "$aa" ]; then
+  aa_state="a symlink — fkit will not write through it"
+elif [ -e "$aa" ] && [ ! -d "$aa" ]; then
+  aa_state="not a directory — something else is sitting where the ai-agents/ tree belongs"
+elif [ -d "$aa" ] && { [ ! -r "$aa" ] || [ ! -x "$aa" ]; }; then
+  aa_state="a directory fkit cannot read into — check its permissions"
+fi
+
+if [ -n "$aa_state" ]; then
+  {
+    echo "⚠ skipped ai-agents/ — it is $aa_state"
+    echo "    $aa"
+    echo "  Nothing was written to it and nothing is broken. The rest of setup continues and your"
+    echo "  session will start. Replace it with a real directory if you want fkit to manage it."
+  } >&2
+elif [ -e "$aa" ]; then
   echo "• ai-agents/ already present — left as-is"
 else
-  cp -R "$scaffold/ai-agents" "$dest/ai-agents"
+  cp -R "$scaffold/ai-agents" "$aa"
   echo "• created ai-agents/ (from scaffold)"
 fi
 
@@ -152,3 +180,15 @@ printf '    • lead         the team room — who to ask, and routing\n\n'
 printf '  Start:   fkit            (pick a role from the menu)\n'
 printf '           fkit coder      (skip the menu)\n'
 printf '  Inside a session, @fkit-<role> asks another role and brings the answer back.\n'
+
+# Exit 3 = "setup SUCCEEDED, but I deliberately did not touch ai-agents/". Distinct from 0 (all done)
+# and from any other non-zero (setup actually failed). The launcher needs this to know that a missing
+# PROJECT.md means "refused", not "fresh" — otherwise it force-starts the producer's cold start into a
+# tree it cannot write, on every launch.
+#
+# It is a STATUS, not a re-derived predicate, and that is the point: the launcher previously re-tested
+# the condition itself with `[ -d ] && [ ! -L ]`, which silently disagreed with this script about a
+# chmod-000 directory (`-d` is true for one — stat needs +x on the PARENT, not +r on the dir). The
+# predicate lived in two files and drifted on its first outing. It now lives here, once.
+[ -n "$aa_state" ] && exit 3
+exit 0

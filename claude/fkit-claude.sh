@@ -263,9 +263,24 @@ build_settings() {   # → .fkit/settings/<role>.json containing {"skillOverride
     case "$allowed" in *" $s "*) continue ;; esac
     body="$body${body:+,}\"$s\":\"off\""
   done
-  mkdir -p "$proj/.fkit/settings"
-  printf '{"skillOverrides":{%s}}\n' "$body" > "$proj/.fkit/settings/$1.json"
-  printf '.fkit/settings/%s.json' "$1"          # relative: we always exec from $proj (proj = $PWD)
+  # The lockdown is NOT optional: a session launched without --settings is a session with no role
+  # isolation at all (ADR-010), and it would fail *open* — every fkit skill live in every role. So when
+  # the project is not writable (read-only checkout, permissions) we neither skip the lockdown nor die
+  # on a raw `mkdir: Permission denied`; we hand the SAME JSON to --settings inline instead, which it
+  # also accepts. Inline costs us only the ugly tab title the file exists to avoid — a fair price on a
+  # path that is both rare and already degraded, and it beats a temp file: nothing to leak on every
+  # launch, and no world-writable /tmp surface to defend.
+  #
+  # Note the subshell around the write: a redirection that fails to OPEN is reported by the shell, not
+  # by printf, so `printf … > f 2>/dev/null` would still leak "Permission denied" to the terminal. The
+  # subshell puts the redirection *inside* the scope stderr is silenced for.
+  if mkdir -p "$proj/.fkit/settings" 2>/dev/null &&
+     ( printf '{"skillOverrides":{%s}}\n' "$body" > "$proj/.fkit/settings/$1.json" ) 2>/dev/null; then
+    printf '.fkit/settings/%s.json' "$1"        # relative: we always exec from $proj (proj = $PWD)
+    return 0
+  fi
+  echo "⚠ $proj is not writable — passing the role lockdown inline instead of via .fkit/." >&2
+  printf '{"skillOverrides":{%s}}' "$body"
 }
 
 # Name the tab for the role, so a wall of fkit tabs is readable. Claude Code overwrites this once the
@@ -277,13 +292,56 @@ set_tab_title() {
 
 # Setup runs every launch (idempotent), but stays QUIET on an already-set-up project — nobody wants
 # a wall of "already present" on every single launch. A first-time setup prints its summary in full.
+#
+# Setup is BEST-EFFORT; the session is not. init runs under `set -euo pipefail`, and this launcher
+# under `set -eu` — so an unguarded call meant any init failure (bad permissions, read-only checkout,
+# ENOSPC, a weird ai-agents/) killed the launcher before `claude` was ever exec'd, and the user lost
+# their whole team over a `cp`. Guard the call, warn loudly, and start the session anyway. A user must
+# always be able to reach their agents, even when fkit cannot finish setting the project up.
+setup_ok=1
+aa_refused=0
+setup_rc=0
 if [ -e "$proj/ai-agents" ] && [ -d "$proj/.claude/agents" ]; then
-  "$here/fkit-claude-init.sh" "$proj" >/dev/null
+  "$here/fkit-claude-init.sh" "$proj" >/dev/null || setup_rc=$?
 else
-  "$here/fkit-claude-init.sh" "$proj"
+  "$here/fkit-claude-init.sh" "$proj" || setup_rc=$?
+fi
+# 3 is init's "I set everything up, but I refused to touch ai-agents/" — a success, not a failure.
+# Anything else non-zero is a real setup failure. We take this as a STATUS from init rather than
+# re-testing the condition here: the two copies drifted the first time we tried that.
+case "$setup_rc" in
+  0) ;;
+  3) aa_refused=1 ;;
+  *) setup_ok=0 ;;
+esac
+
+if [ "$setup_ok" = 0 ]; then
+  echo >&2
+  echo "⚠ fkit could not finish setting up this project." >&2
+  echo "  Starting the session anyway — but fkit-managed files may be missing or stale" >&2
+  echo "  (agents, skills, or the ai-agents/ tree). Fix the cause above, then re-run: fkit" >&2
+  echo >&2
 fi
 
-[ "${FKIT_SETUP_ONLY:-0}" = 1 ] && exit 0
+# The promise is "a setup failure never costs you a project that ALREADY has its agents" — not "fkit
+# can start a session out of nothing". If setup failed AND no fkit agent was ever written to disk,
+# there is nothing to launch into: `claude --agent fkit-<role>` cannot resolve an agent file that does
+# not exist, and it would die on its own confusing "agent not found". Say so plainly instead.
+#
+# We deliberately do NOT drop --agent to force *some* session: an unroled session carries no ADR-010
+# lockdown, so it would fail OPEN — every role's skills live at once. Refusing is the safe answer.
+if [ "$setup_ok" = 0 ] && ! ls "$proj"/.claude/agents/fkit-*.md >/dev/null 2>&1; then
+  echo "⚠ fkit has no agents installed here, so there is no session to start." >&2
+  echo "  Setup could not write to the project — check that $proj is writable, then: fkit" >&2
+  exit 1
+fi
+
+# FKIT_SETUP_ONLY is a setup CHECK. A check that reports success on a failed setup is worse than no
+# check at all — so it exits non-zero when setup failed, rather than the blanket `exit 0` it used to.
+if [ "${FKIT_SETUP_ONLY:-0}" = 1 ]; then
+  [ "$setup_ok" = 1 ] || exit 1
+  exit 0
+fi
 
 command -v claude >/dev/null 2>&1 || {
   echo >&2
@@ -316,12 +374,30 @@ codex_preflight() {
 codex_preflight
 
 # --- Fresh project: skip the menu, go straight to the producer's cold start -------------------
+# "Fresh" is only a meaningful question when init actually manages ai-agents/. When it REFUSED the tree
+# (symlink, a file where the dir belongs, a directory it cannot read), PROJECT.md is missing for a
+# reason that has nothing to do with being new — and force-starting the producer's cold start would
+# strand the owner in an initiation that can never complete, on every launch, with no way to the menu.
+# So: a refused ai-agents/ is NOT fresh. Fall through to the menu and let them work.
+#
+# `aa_refused` comes from init's exit status (3). Do NOT re-derive it here — an earlier version tested
+# `[ -d ] && [ ! -L ]` and silently disagreed with init about a chmod-000 directory.
 pm="$proj/ai-agents/knowledge-base/PROJECT.md"
 fresh=0
-if [ ! -f "$pm" ] \
-   || grep -q 'fkit:uninitialized' "$pm" 2>/dev/null \
-   || grep -qF '# <Project name>' "$pm" 2>/dev/null; then
-  fresh=1
+# `setup_ok` is checked as well as `aa_refused`, and not only as a belt-and-braces: one exit status
+# cannot carry two facts. If init refuses ai-agents/ AND then fails a later step, `set -e` exits with
+# THAT failure (1) and the refusal is never signalled — so `aa_refused` alone would read 0 and the cold
+# start would come straight back. That state is not exotic; it is a read-only checkout (task 26) that
+# also has a weird ai-agents/ (task 27), i.e. the intersection of this work's own two briefs.
+#
+# It is independently right, too: the producer's initiation exists to WRITE ai-agents/, and a failed
+# setup is direct evidence fkit cannot write this project. Cold-starting into it could only fail.
+if [ "$aa_refused" = 0 ] && [ "$setup_ok" = 1 ]; then
+  if [ ! -f "$pm" ] \
+     || grep -q 'fkit:uninitialized' "$pm" 2>/dev/null \
+     || grep -qF '# <Project name>' "$pm" 2>/dev/null; then
+    fresh=1
+  fi
 fi
 if [ "$fresh" = 1 ] && [ -z "$role" ]; then
   printf '\n  This project is not initiated yet — starting the producer to set it up.\n'

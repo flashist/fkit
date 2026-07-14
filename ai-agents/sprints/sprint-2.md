@@ -49,11 +49,16 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 17 | Restore Claude Code plan mode in `/fkit-plan-task` *(regression — independent)* | [`restore-plan-mode-in-plan-task.md`](../tasks/done/restore-plan-mode-in-plan-task.md) |
 | ✅ Done | 18 | Remove `fkit --resume` and the blanket arg-passthrough *(Omnigent scar tissue)* | [`remove-fkit-resume-passthrough.md`](../tasks/done/remove-fkit-resume-passthrough.md) |
 | ✅ Done | 19 | Repair the knowledge-base paths in product source *(ADR-013 fallout)* | [`repair-knowledge-base-paths-in-product-source.md`](../tasks/done/repair-knowledge-base-paths-in-product-source.md) |
-| 🔲 Backlog | 20 | Design a version-to-version migration mechanism *(**investigation first** — no implementation from the brief)* | [`design-version-to-version-migration-mechanism.md`](../tasks/backlog/design-version-to-version-migration-mechanism.md) |
+| ✅ Done | 20 | Design a version-to-version migration mechanism *(investigation — [findings](../knowledge-base/reports/2026-07-14-migration-mechanism.md); spawned 25–28)* | [`design-version-to-version-migration-mechanism.md`](../tasks/done/design-version-to-version-migration-mechanism.md) |
 | ✅ Done | 21 | Repair the 6 broken task links in the closed Sprint 1 plan *(one-off cleanup)* | [`repair-broken-links-in-closed-sprint-plans.md`](../tasks/done/repair-broken-links-in-closed-sprint-plans.md) |
 | ✅ Done | 22 | Stop the task movers rotting links in closed sprint plans *(the recurrence — the real bug)* | [`harden-task-movers-against-closed-sprint-link-rot.md`](../tasks/done/harden-task-movers-against-closed-sprint-link-rot.md) |
 | 🔲 Backlog | 23 | Add the launcher-contract test suite *(zero devDeps; **runner TBD** — [ADR-014](../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md))* | [`add-launcher-contract-smoke-script.md`](../tasks/backlog/add-launcher-contract-smoke-script.md) |
 | 🔲 Backlog | 24 | Stop agents asserting repo state they never checked *(a false instruction in both task movers, shipping to every project)* | [`stop-agents-asserting-unchecked-repo-state.md`](../tasks/backlog/stop-agents-asserting-unchecked-repo-state.md) |
+| ✅ Done | 25 | Fix the scaffold — ship the KB folders its own README promises *(defect; 100% of new projects)* | [`fix-scaffold-knowledge-base-folders.md`](../tasks/done/fix-scaffold-knowledge-base-folders.md) |
+| ✅ Done | 26 | Stop an init failure from bricking the launcher *(pre-existing defect)* | [`stop-init-failure-bricking-the-launcher.md`](../tasks/done/stop-init-failure-bricking-the-launcher.md) |
+| ✅ Done | 27 | Refuse init on a weird `ai-agents/` — symlink / file-where-dir *(live DoS + silent-skip bugs; the write-outside hazard is **prospective** — see the 2026-07-14 correction)* | [`refuse-init-on-weird-ai-agents-state.md`](../tasks/done/refuse-init-on-weird-ai-agents-state.md) |
+| 🔲 Backlog | 28 | Make launch converge `ai-agents/` additively *(**"the migration"** — needs 26 + 27)* | [`converge-ai-agents-additively-on-launch.md`](../tasks/backlog/converge-ai-agents-additively-on-launch.md) |
+| 🔲 Backlog | 29 | Add a shared instructions layer that every fkit agent reads *(**investigation first** — the consult path is the trap)* | [`add-shared-instructions-layer-for-all-agents.md`](../tasks/backlog/add-shared-instructions-layer-for-all-agents.md) |
 
 ## Dependency graph
 
@@ -224,6 +229,116 @@ flip. The skill sees the reference and drops it.
 
 **Landing only 21 buys nothing durable**: the links rot again on the next carried-over completion.
 
+## Addendum — tasks 25–28 added out of band (2026-07-14): the migration investigation's implementation
+
+**Task 20's investigation is complete and the owner has reviewed it.** Findings:
+[`reports/2026-07-14-migration-mechanism.md`](../knowledge-base/reports/2026-07-14-migration-mechanism.md)
+(rev 2 — rev 1 went through an adversarial Codex pass and **did not survive intact**; two factual claims
+were false and the headline changed). Tasks 25–28 are the implementation the owner greenlit. Per the
+brief, the producer scopes these **only after** the review gate — which has now passed.
+
+**The headline is not "build a migration mechanism."** It is: **fkit already converges every project on
+every launch; `ai-agents/` is simply carved out of it.** Un-carving it — **additively** — is the fix.
+There is no migration mechanism, no version walk, and nothing new for a user to run.
+
+**Explicitly rejected, and not to be reintroduced:** the owner's `migration-current.md` +
+`migration-X.Y.Z.md` semver-walk idea, a per-project version cursor, and a migration agent. Rejected as
+**premature, not wrong** — the owner has acknowledged this. The strongest reason: **a version cursor
+cannot survive a `git clone`**, because `.fkit/` is gitignored (`fkit-claude-init.sh:137`) — so a fresh
+clone would replay every migration against an already-migrated tree. Report §6.
+
+### The invariant — owner-ratified, and the thing to protect
+
+> **Launch-time convergence NEVER writes to a path that already exists. Create-if-absent only. No
+> overwrite, no move, no delete — ever — inside a user's `ai-agents/`.**
+
+Every safety property in this design is downstream of that one line, and so is its one accepted
+limitation (below). **The owner has also ratified the report's §8 safety bar as REQUIRED, not
+optional:** non-fatal failure, refuse-on-weird-state, announce-what-you-did, an opt-out, and the
+`.gitkeep` rule.
+
+### Sequencing — the dependency is real, not a preference
+
+```
+25. scaffold fix ────────(independent; ship today; fixes NEW projects)
+26. non-fatal init ──┐
+                     ├──→ 28. additive convergence  (fixes EXISTING projects — "the migration")
+27. weird-state gate ┘
+```
+
+- **25 and 26 are independent, unblocked, ship-today bug fixes.** Neither waits on anything.
+- **27 is also a live bug on its own merits** — on two of its three cases. A **dangling** symlink makes
+  `[ -e ]` false, `cp -R` **refuses** with rc=1, and `set -euo pipefail` kills init (which, before task
+  26, **bricked the launcher**) — a denial-of-service bug. A **file** where the directory belongs makes
+  `[ -e ]` true, so init skips **silently, forever**, and fkit never says so. Its third case — a **live**
+  symlink, which `cp -R` genuinely *does* write through — is **unreachable today** because init skips it,
+  and **task 28 is precisely what makes it reachable**. It is split out of 28 rather than folded into it
+  so the hazard and its mitigation don't ship in the same commit, where a reviewer cannot tell them apart.
+- **28 must not land before 26 and 27.** It makes the unattended, every-launch, project-mutating code
+  path *more capable*; doing that while it can still brick the launcher, or while nothing yet stops a
+  per-path write from going through a symlink, is exactly backwards.
+- **25 and 28 are complementary:** 25 fixes what **new** projects receive; 28 carries that fix into
+  **existing** ones. Neither alone is sufficient.
+
+### Accepted residuals — decided, not overlooked
+
+- **Content drift is deferred — a deliberate owner decision.** A scaffold-authored file whose *contents*
+  drifted (this repo's `ai-agents/README.md` already has, in **both** directions) is a path that
+  **already exists** — so the invariant **forbids** convergence from fixing it. **The safety and the
+  limitation are the same property.** The report §3 costs the design that would fix it (a shipped
+  hash-manifest keyed on content *identity*, not version order). **Re-raise when a third fkit-authored
+  file starts drifting** — not before.
+- **A renamed folder gets you both.** Rename `sprints/` to `iterations/` and convergence recreates
+  `sprints/` alongside it. No stateless mechanism can know a rename happened. **Inherent limit — must be
+  disclosed in the docs, not discovered by a user.**
+- **The re-raise trigger, and it fires early:** the moment someone **proposes** a change that would
+  move, rename, or delete content inside a consuming project's `ai-agents/`, this decision is **void and
+  returns to the owner**. It fires on the *proposal*, not the implementation — because by the time a
+  destructive migration is *written*, the wrong hook has already been chosen. **It does not get dropped
+  into `fkit-claude-init.sh` as a one-off. Ever.**
+
+### Not scoped — deliberately
+
+The report's §9 **`.fkit/` Omnigent-orphan cleanup** (`.fkit/agents/`, `.fkit/run`, `.fkit/team-session`,
+`.omnigent/`) has **no task and is not in this sprint.** The owner did not greenlight it. It is the one
+**destructive** act in the report — an `rm -rf` in a user's project, with no rollback — and the report's
+own rev-1 deletion list **wrongly included `.fkit/settings`, which is live ADR-010 lockdown state
+rewritten on every launch** (`fkit-claude.sh:257-268`). A reviewer trusting that table would have shipped
+a delete of live state. **It needs its own owner decision on the consent model before it is scoped.** See
+open question 5.
+
+## Correction (2026-07-14) — task 27's stated rationale was wrong, and shipped that way
+
+**As first written, this addendum and task 27's brief both asserted — as established fact — that a
+*dangling* `ai-agents` symlink makes today's `cp -R` "write the scaffold through the link, to a path
+outside the project": a live, present-day write-outside-the-project bug.** It is not true, on any
+platform.
+
+- **fkit-coder could not reproduce it** on macOS/BSD `cp`: it refuses (`File exists`), rc=1, nothing
+  written outside the project.
+- **fkit-reviewer settled the Linux question in a Debian container:** **GNU coreutils 9.1 `cp -R` also
+  refuses** (`cannot overwrite non-directory`), rc=1, the outside path is **never created**. **BusyBox
+  refuses too.** Codex confirmed from the GNU manual that the historical write-through behavior on this
+  case occurs only under `POSIXLY_CORRECT`.
+
+**No live write-outside-the-project bug ever shipped.** What is real is stated above and in the brief:
+a **denial-of-service** bug on the dangling symlink (rc=1 → `set -euo pipefail` → dead init → bricked
+launcher, pre-task-26), a **silent-skip-forever** bug on a file-where-the-directory-belongs, and a
+**prospective** write-through on a *live* symlink that **task 28 is what arms**.
+
+**How it got here, recorded rather than smoothed over:** the claim entered
+[`reports/2026-07-14-migration-mechanism.md`](../knowledge-base/reports/2026-07-14-migration-mechanism.md),
+was carried into task 27's brief by the producer **without independent verification**, and was caught
+only at **implementation and review** — the second false claim to come out of that report's lineage
+(rev 1 lost two others to an adversarial Codex pass). **We did not know all along.** The lesson is the
+cheap one: *a behavioral claim about a shell builtin or coreutil is a claim to run, not to reason
+about* — and a brief that says "confirm the bug is real" **before** anyone has is a brief that has
+already assumed its answer.
+
+**Task 27 itself is unaffected and stands.** It is implemented, verified, and correct; only its stated
+rationale was wrong, and it has been replaced with the true one. *(fkit-architect is separately
+correcting the same claim in the migration report and checking ADR-015.)*
+
 ## Open questions for the owner
 
 1. **Reserve `@flashist/fkit` on npm now, or leave npm alone until there's something to publish?**
@@ -247,3 +362,28 @@ flip. The skill sees the reference and drops it.
    already-unsprinted [`add-e2e-smoke-script-for-fkit-itself.md`](../tasks/cancelled/add-e2e-smoke-script-for-fkit-itself.md)** — deliberately **not**
    folded into task 22, where it would ship untested alongside the very change it exists to test.
    Flagged as a scoping question, not decided.
+
+4. **Task 28 — where does the convergence opt-out live?** It is the one genuinely open design decision
+   in tasks 25–28, and it is **the same trap that killed the version cursor**: `.fkit/` is **gitignored**,
+   so an opt-out stored there **does not survive a `git clone`** — a teammate's launch would resurrect
+   the `wiki-vault/` the owner deliberately deleted.
+   **Producer's recommendation: a tracked opt-out file inside `ai-agents/`** (e.g.
+   `ai-agents/.fkit-keep-out`), listing paths convergence must never create. It is committed, so it
+   survives a clone and is shared with the team; it lives in the tree the user owns; and it records
+   **intent**, not **progress**, so it is not a version cursor by the back door.
+   **The tradeoff:** it puts an fkit-managed dotfile into the user's tracked history — a small,
+   permanent surface the project has so far avoided. The honest alternative is *no opt-out at all*, and
+   that one is not acceptable: it means a user who deleted a folder on purpose fights fkit about it on
+   every launch, forever.
+
+5. **The `.fkit/` Omnigent-orphan cleanup (report §9) — scope it, or leave it?** Not currently tasked;
+   the owner did not greenlight it and the producer has not assumed it. It is the **one destructive act**
+   in the report (`rm -rf` in a user's project, no rollback), and the report's own draft target list was
+   **wrong once already** — it named `.fkit/settings`, which is **live** ADR-010 lockdown state. Dead
+   residue really is sitting in this repo right now (`.fkit/agents/`, `.fkit/run`, `.fkit/team-session`,
+   `.omnigent/` — all with zero references in current code).
+   **Producer's recommendation: yes, but as its own task with its own owner gate**, and *after* 25–28
+   land — because it needs a **consent model** (announce-only? ask once?), a **dry-run**, and the
+   reference-check re-run as a hard gate. It is **not** an every-launch silent operation, and it should
+   not be smuggled into the convergence pass, where it would inherit "runs unattended on every launch"
+   from code that is *additive by invariant*. **Say the word and I'll write the brief.**
