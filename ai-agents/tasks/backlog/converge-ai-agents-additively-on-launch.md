@@ -111,14 +111,17 @@ resurrected on every launch, forever, with no way to stop it.** Deletion has to 
 invisible to a teammate who clones the repo, and **their** launch resurrects the folder the owner
 deliberately removed. **Do not put the opt-out in `.fkit/`.**
 
-**Producer's recommendation: a tracked, project-local opt-out file** — e.g. `ai-agents/.fkit-keep-out`
-(name is yours), listing the scaffold-relative paths convergence must never create, one per line, with a
-whole-tree form available. It is **committed**, so it survives a clone and is shared with the team; it
-lives **inside `ai-agents/`**, which the user owns; and it is **stateless** — it records *intent*, not
-*progress*, so it is not a cursor by the back door.
+**Owner decision (2026-07-15) — DECIDED: a tracked, project-local opt-out file** at
+**`ai-agents/.fkit-keep-out`**, listing the scaffold-relative paths convergence must never create, one
+per line, with a whole-tree form available. It is **committed**, so it survives a clone and is shared
+with the team; it lives **inside `ai-agents/`**, which the user owns; and it is **stateless** — it
+records *intent*, not *progress*, so it is not a cursor by the back door.
 
-**This is the one genuinely open design decision in the task.** Flag it to the owner before you build
-it if you disagree with the recommendation — do not settle it silently.
+**This was the one genuinely open design decision in the task — it is now settled.** The owner ratified
+the producer's recommendation (resolving Sprint 2 open question 4). The accepted tradeoff: it puts an
+fkit-managed dotfile into the user's tracked history — a small, permanent surface the project had so far
+avoided; the honest alternative (no opt-out) was rejected as unacceptable. **Do not re-open or re-site
+it; build to `ai-agents/.fkit-keep-out`.**
 
 ### 5. The limits — disclose, do not fix
 

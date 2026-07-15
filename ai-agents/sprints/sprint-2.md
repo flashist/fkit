@@ -65,6 +65,8 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 33 | Fix the headless menu-guard crash — `[ -r /dev/tty ]` never tests openability *(launcher defect against task-23 assertion 7's contract)* | [`fix-headless-menu-guard-crash.md`](../tasks/done/fix-headless-menu-guard-crash.md) |
 | 🔲 Backlog | 34 | Make `/fkit-task-done` flip the moved brief's own `## Status` header *(mover drift — sibling to task 22)* | [`task-done-flips-brief-own-status-header.md`](../tasks/backlog/task-done-flips-brief-own-status-header.md) |
 | 🔲 Backlog | 35 | Make `/fkit-task-cancelled` flip the moved brief's own `## Status` header *(same gap, `⛔ Cancelled` marker)* | [`task-cancelled-flips-brief-own-status-header.md`](../tasks/backlog/task-cancelled-flips-brief-own-status-header.md) |
+| 🔲 Backlog | 36 | Remove the `.fkit/` Omnigent-orphan residue *(OQ5 resolved; the one destructive act — own owner gate; needs a consent-model ruling)* | [`remove-fkit-omnigent-orphan-residue.md`](../tasks/backlog/remove-fkit-omnigent-orphan-residue.md) |
+| 🔲 Backlog | 37 | Record a tombstone ADR for the shared-instructions reversal *(OQ6 resolved; owner: fkit-architect)* | [`record-shared-instructions-reversal-adr.md`](../tasks/backlog/record-shared-instructions-reversal-adr.md) |
 
 ## Dependency graph
 
@@ -491,7 +493,48 @@ briefs (23, 30, 31, 32, 33) and the two leftovers is a separate manual concern v
 
 **Numbered 34/35 for append-don't-renumber discipline.** Owner to confirm the ranking.
 
+## Addendum — tasks 36 and 37, and one unsprinted task, added out of band (2026-07-15): open-question dispositions
+
+The owner's 2026-07-15 rulings on the open questions (below) spawned three briefs:
+
+- **Task 36 — `remove-fkit-omnigent-orphan-residue.md`** (OQ5). The migration report's §9 `.fkit/`
+  cleanup: the **one destructive act** in the whole migration design (`rm -rf` in a user's project, no
+  rollback). Deliberately **not** folded into the additive-convergence work (25–28), which never deletes.
+  **Depends on task 28**, and **blocked on an owner ruling on the consent model** (announce-only /
+  ask-once / dry-run-first) before the coder plans it. Exhaustive target list — `.fkit/agents/`,
+  `.fkit/run`, `.fkit/team-session`, `.omnigent/`; **`.fkit/settings` is live lockdown state and must
+  never be touched** (the rev-1 report named it for deletion — the mistake this task's reference-check
+  gate exists to catch).
+- **Task 37 — `record-shared-instructions-reversal-adr.md`** (OQ6). Tombstone ADR for the
+  shared-instructions reversal; rejects `AGENTS-COMMON.md` (cannot reach Codex) and
+  `--append-system-prompt` (session-only, `0/3`→`0/2` on Claude Code 2.1.208) **by name**, with the
+  version pinned. **Owner: fkit-architect**, via `/fkit-record-decision`. Depends on nothing.
+- **Unsprinted — `gate-read-side-symlink-hazard-in-init.md`** (OQ7). The read-side counterpart to task
+  27's write-side symlink guard. **Latent** (no code reads through `ai-agents/` today); tracked
+  independently, per the owner, so it is not lost while task 28 is parked. Filed unsprinted.
+
+**Numbered 36/37 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
 ## Open questions for the owner
+
+### Owner dispositions (2026-07-15) — all seven ruled
+
+The owner ruled on all seven open questions below. Recorded here; the original text is kept for the record.
+
+1. **OQ1 (npm reserve) — LEAVE IT for now.** No task; the scoped name is not held. Re-raisable any time.
+2. **OQ2 (mover link policy) — DO THE REC: re-point the href, never the prose.** Ratifies what task 22
+   already implemented; task 22's `✅ Done` stands. No new task.
+3. **OQ3 (mechanical link checker) — NO.** Not pursued. No task.
+4. **OQ4 (T28 opt-out location) — DO THE REC: a tracked `ai-agents/.fkit-keep-out`.** **Task 28 is
+   unblocked** — its brief §4 is updated from recommendation to decided.
+5. **OQ5 (`.fkit/` orphan cleanup) — DO THE REC: scoped as its own task with its own owner gate → task
+   36** (`remove-fkit-omnigent-orphan-residue.md`), depends on 28, blocked on a consent-model ruling.
+6. **OQ6 (tombstone ADR for the shared-instructions reversal) — DO THE REC → task 37**
+   (`record-shared-instructions-reversal-adr.md`), owner: fkit-architect via `/fkit-record-decision`.
+7. **OQ7 (read-side symlink hazard) — DO THE INDEPENDENT TASK** rather than fold it into task 28 →
+   **unsprinted backlog** (`gate-read-side-symlink-hazard-in-init.md`).
+
+---
 
 1. **Reserve `@flashist/fkit` on npm now, or leave npm alone until there's something to publish?**
    Nothing in Sprint 2 depends on the answer — it only decides whether the name is held before
