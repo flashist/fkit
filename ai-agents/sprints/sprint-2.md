@@ -63,6 +63,8 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 31 | Merge an fkit-managed rules block into an **existing** `CLAUDE.md`/`AGENTS.md` *(the brownfield hole; **idempotent or it grows the file forever**)* | [`merge-fkit-rules-block-into-existing-root-context-files.md`](../tasks/done/merge-fkit-rules-block-into-existing-root-context-files.md) |
 | ✅ Done | 32 | Add the "no secrets" rule to `fkit-lead.md` *(the 1 of 7 missing it — one line)* | [`add-no-secrets-rule-to-fkit-lead.md`](../tasks/done/add-no-secrets-rule-to-fkit-lead.md) |
 | ✅ Done | 33 | Fix the headless menu-guard crash — `[ -r /dev/tty ]` never tests openability *(launcher defect against task-23 assertion 7's contract)* | [`fix-headless-menu-guard-crash.md`](../tasks/done/fix-headless-menu-guard-crash.md) |
+| 🔲 Backlog | 34 | Make `/fkit-task-done` flip the moved brief's own `## Status` header *(mover drift — sibling to task 22)* | [`task-done-flips-brief-own-status-header.md`](../tasks/backlog/task-done-flips-brief-own-status-header.md) |
+| 🔲 Backlog | 35 | Make `/fkit-task-cancelled` flip the moved brief's own `## Status` header *(same gap, `⛔ Cancelled` marker)* | [`task-cancelled-flips-brief-own-status-header.md`](../tasks/backlog/task-cancelled-flips-brief-own-status-header.md) |
 
 ## Dependency graph
 
@@ -458,6 +460,36 @@ default" promise — was **dead code on any normal system.**
   It is **not Done** — that is owner-gated via `/fkit-task-done` after review.
 - **Scope boundary:** the **FRESH-project** headless case (producer vs lead) is **untouched** — it
   remains **task 23's reserved open question 1.**
+
+## Addendum — tasks 34 and 35 added out of band (2026-07-15): the task movers leave brief headers stale
+
+**A `/fkit-status` run on 2026-07-15 surfaced standing board-vs-brief drift produced by the movers
+themselves.** `/fkit-task-done` and `/fkit-task-cancelled` flip the sprint-plan Status cell and move
+the brief, but **neither updates the moved brief's own `## Status` field** — so a brief in `done/`
+still reads `🔲 Backlog` internally while the board reads `✅ Done`. Visible right now on tasks **23,
+30, 31, 32, 33** (closed by the current mover) plus two non-Sprint-2 leftovers
+(`build-fkit-reconnect-tooling.md`, `fix-claude-agents-md-placeholder-text.md`).
+
+**This is the same class as task 22** — a mover updating one record of a task's state and silently
+leaving another stale. Fix philosophy is identical: make the mover write *every* place the state lives.
+
+**Split into two on the owner's independent-shippability rule:**
+- **34** fixes `/fkit-task-done` (`✅ Done`).
+- **35** fixes `/fkit-task-cancelled` (`⛔ Cancelled (YYYY-MM-DD) — <reason>`, with the extra
+  requirement of reproducing the mandatory date+reason faithfully).
+
+Neither depends on the other; each closes drift on its own mover. They share a design (idempotent
+header write, flag-don't-invent a missing section) and **can co-land in one pass.**
+
+**Scope boundary — not a backfill.** These prevent *new* drift. Reconciling the five already-drifted
+briefs (23, 30, 31, 32, 33) and the two leftovers is a separate manual concern via deliberate edit —
+**not** an in-skill historical sweep.
+
+**No scaffold copy exists.** The mover skills live only in `claude/skills/`, not under
+`claude/scaffold/`, so the canonical sources are `claude/skills/fkit-task-done/SKILL.md` and
+`claude/skills/fkit-task-cancelled/SKILL.md`; the `.claude/` copies are gitignored and init-regenerated.
+
+**Numbered 34/35 for append-don't-renumber discipline.** Owner to confirm the ranking.
 
 ## Open questions for the owner
 
