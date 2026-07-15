@@ -52,16 +52,17 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 20 | Design a version-to-version migration mechanism *(investigation — [findings](../knowledge-base/reports/2026-07-14-migration-mechanism.md); spawned 25–28)* | [`design-version-to-version-migration-mechanism.md`](../tasks/done/design-version-to-version-migration-mechanism.md) |
 | ✅ Done | 21 | Repair the 6 broken task links in the closed Sprint 1 plan *(one-off cleanup)* | [`repair-broken-links-in-closed-sprint-plans.md`](../tasks/done/repair-broken-links-in-closed-sprint-plans.md) |
 | ✅ Done | 22 | Stop the task movers rotting links in closed sprint plans *(the recurrence — the real bug)* | [`harden-task-movers-against-closed-sprint-link-rot.md`](../tasks/done/harden-task-movers-against-closed-sprint-link-rot.md) |
-| 🔲 Backlog | 23 | Add the launcher-contract test suite *(zero devDeps; **runner TBD** — [ADR-014](../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md))* | [`add-launcher-contract-smoke-script.md`](../tasks/backlog/add-launcher-contract-smoke-script.md) |
+| ✅ Done | 23 | Add the launcher-contract test suite *(zero devDeps; **runner TBD** — [ADR-014](../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md))* | [`add-launcher-contract-smoke-script.md`](../tasks/done/add-launcher-contract-smoke-script.md) |
 | 🔲 Backlog | 24 | Stop agents asserting repo state they never checked *(a false instruction in both task movers, shipping to every project)* | [`stop-agents-asserting-unchecked-repo-state.md`](../tasks/backlog/stop-agents-asserting-unchecked-repo-state.md) |
 | ✅ Done | 25 | Fix the scaffold — ship the KB folders its own README promises *(defect; 100% of new projects)* | [`fix-scaffold-knowledge-base-folders.md`](../tasks/done/fix-scaffold-knowledge-base-folders.md) |
 | ✅ Done | 26 | Stop an init failure from bricking the launcher *(pre-existing defect)* | [`stop-init-failure-bricking-the-launcher.md`](../tasks/done/stop-init-failure-bricking-the-launcher.md) |
 | ✅ Done | 27 | Refuse init on a weird `ai-agents/` — symlink / file-where-dir *(live DoS + silent-skip bugs; the write-outside hazard is **prospective** — see the 2026-07-14 correction)* | [`refuse-init-on-weird-ai-agents-state.md`](../tasks/done/refuse-init-on-weird-ai-agents-state.md) |
 | 🔲 Backlog | 28 | Make launch converge `ai-agents/` additively *(**"the migration"** — needs 26 + 27)* | [`converge-ai-agents-additively-on-launch.md`](../tasks/backlog/converge-ai-agents-additively-on-launch.md) |
 | ✅ Done | 29 | Add a shared instructions layer that every fkit agent reads *(investigation — [findings rev 2](../knowledge-base/reports/2026-07-14-shared-instructions-layer.md); spawned 30–32)* | [`add-shared-instructions-layer-for-all-agents.md`](../tasks/done/add-shared-instructions-layer-for-all-agents.md) |
-| 🔲 Backlog | 30 | Give Codex the universal hard rules it has never had *(**live defect** — the required second model runs with no floor)* | [`give-codex-the-universal-hard-rules.md`](../tasks/backlog/give-codex-the-universal-hard-rules.md) |
-| 🔲 Backlog | 31 | Merge an fkit-managed rules block into an **existing** `CLAUDE.md`/`AGENTS.md` *(the brownfield hole; **idempotent or it grows the file forever**)* | [`merge-fkit-rules-block-into-existing-root-context-files.md`](../tasks/backlog/merge-fkit-rules-block-into-existing-root-context-files.md) |
-| 🔲 Backlog | 32 | Add the "no secrets" rule to `fkit-lead.md` *(the 1 of 7 missing it — one line)* | [`add-no-secrets-rule-to-fkit-lead.md`](../tasks/backlog/add-no-secrets-rule-to-fkit-lead.md) |
+| ✅ Done | 30 | Give Codex the universal hard rules it has never had *(**live defect** — the required second model runs with no floor)* | [`give-codex-the-universal-hard-rules.md`](../tasks/done/give-codex-the-universal-hard-rules.md) |
+| ✅ Done | 31 | Merge an fkit-managed rules block into an **existing** `CLAUDE.md`/`AGENTS.md` *(the brownfield hole; **idempotent or it grows the file forever**)* | [`merge-fkit-rules-block-into-existing-root-context-files.md`](../tasks/done/merge-fkit-rules-block-into-existing-root-context-files.md) |
+| ✅ Done | 32 | Add the "no secrets" rule to `fkit-lead.md` *(the 1 of 7 missing it — one line)* | [`add-no-secrets-rule-to-fkit-lead.md`](../tasks/done/add-no-secrets-rule-to-fkit-lead.md) |
+| ✅ Done | 33 | Fix the headless menu-guard crash — `[ -r /dev/tty ]` never tests openability *(launcher defect against task-23 assertion 7's contract)* | [`fix-headless-menu-guard-crash.md`](../tasks/done/fix-headless-menu-guard-crash.md) |
 
 ## Dependency graph
 
@@ -430,6 +431,33 @@ ADR-010, and it is not being repeated here.
   with the drift motivation collapsed it is moot.
 - **Hooks / tool-level enforcement.** ADR-010's deferral stands.
 - **Anything requiring parked task 28.**
+
+## Addendum — task 33 added out of band (2026-07-15): a launcher defect the task-23 suite caught
+
+**Task 33 (`fix-headless-menu-guard-crash`) was added after task 23's launcher-contract suite went
+red.** On a no-role, no-args invocation of an **initiated** project with **no controlling terminal**
+(piped / CI / detached), the launcher **crashed instead of defaulting to the team room.** The menu
+guard gated on `[ -r /dev/tty ]`, which tests the device node's permission bits (`access()`), **not**
+whether `open()` succeeds — and `/dev/tty` is world-`rw` on macOS/Linux, so it read TRUE with no
+controlling terminal. The branch was entered, `exec 3</dev/tty` failed ENXIO under `set -eu`, and the
+`role="lead"` default below was **never reached.** The lead default — the launcher's "piped/CI → safe
+default" promise — was **dead code on any normal system.**
+
+- **It is a defect against an EXISTING contract, not a decision.** `fkit-claude.sh:462-464` and **task
+  23's assertion 7** both already settle initiated-headless → lead. **No ADR.** fkit-architect confirmed
+  the `access()`-vs-`open()` cause (2026-07-15 consult).
+- **Fix (applied in the working tree):** swap `[ -r /dev/tty ]` at `:426` for an openability probe
+  `( exec 3</dev/tty ) 2>/dev/null`, which returns 0 only if `open()` genuinely succeeds. Verified:
+  headless→lead (exit 0), interactive menu still opens on a real pty, fresh→producer unchanged. Task
+  23's assertion 7 flipped from `todo` to enforcing and passes.
+- **Numbered 33 for append-don't-renumber discipline, not because it is low.** Its **priority intent
+  sits with the task-23/24/28 launcher cluster** — task 23 is what caught it, and 23's assertion 7 is
+  only truly enforcing once this lands. **Depends on nothing**; **can co-land with task 18's launcher
+  pass.**
+- **Status is `🔲 Backlog` on purpose:** the fix is **uncommitted and not yet independently reviewed.**
+  It is **not Done** — that is owner-gated via `/fkit-task-done` after review.
+- **Scope boundary:** the **FRESH-project** headless case (producer vs lead) is **untouched** — it
+  remains **task 23's reserved open question 1.**
 
 ## Open questions for the owner
 

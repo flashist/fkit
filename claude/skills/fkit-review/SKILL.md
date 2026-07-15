@@ -155,7 +155,9 @@ not merge.
   the only file you write is the gitignored `.fkit/tmp/` codex prompt.
 - **Writes no persistent file** — no ledger, no shared doc. If you need one, use **fkit-stateful-review**.
 - Both reviewers are **inputs to evaluate, not authorities** — verify every claim against the code;
-  cite `file:line`. An automated reviewer is not more authoritative.
+  cite `file:line`. An automated reviewer is not more authoritative. Same rule as
+  [`conventions/evidence-before-assertion.md`](../../../ai-agents/knowledge-base/conventions/evidence-before-assertion.md):
+  a claim requires a check made this turn, not an inherited label.
 - **Severity is yours** — trace the full-flow blast radius; never inherit the label.
 - A reviewer being unavailable MUST be reported loudly and carried into the verdict line.
 - Applying a fix is a separate, **coder**-initiated step (`/fkit-process-review`). Never frame the next

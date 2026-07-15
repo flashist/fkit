@@ -415,7 +415,15 @@ fi
 
 # --- The menu (deterministic; no LLM) ----------------------------------------------------------
 # Only when no role was named AND no other args were passed AND we have a terminal to ask on.
-if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || [ -r /dev/tty ]; }; then
+#
+# The "terminal to ask on" test must be whether /dev/tty can actually be OPENED, not `[ -r /dev/tty ]`.
+# `-r` checks the device node's permission bits (access()), and /dev/tty is world-rw on macOS/Linux, so
+# it reads TRUE even with no controlling terminal — the branch would then be entered and die at the
+# `exec 3</dev/tty` below (ENXIO "Device not configured") under `set -e`, never reaching the lead
+# default at the bottom. The subshell `( exec 3</dev/tty )` returns 0 only if open() genuinely succeeds
+# (non-fatal on failure inside this `||` test; 2>/dev/null swallows the ENXIO noise), so a headless run
+# correctly falls through to the team-room default instead of crashing.
+if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || ( exec 3</dev/tty ) 2>/dev/null; }; then
   if [ -t 0 ]; then exec 3<&0; else exec 3</dev/tty; fi
   proj_name="$(basename "$proj")"
   branch="$(git -C "$proj" rev-parse --abbrev-ref HEAD 2>/dev/null || echo '-')"

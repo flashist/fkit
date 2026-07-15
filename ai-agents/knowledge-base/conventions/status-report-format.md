@@ -81,6 +81,9 @@ wants the summary stops at beat 6; the reader who wants the detail scrolls.
   buried under progress. The owner should never learn a problem from the bottom of a list.
 - **Flag drift.** If the board says one thing and reality says another (a stale marker, a task done
   but not closed), say so — reconciling the record is the producer's job.
+- **The working tree is not the record — committed history is.** `git status`/`git diff` answer "what
+  changed since the last commit," not "does this work exist" or "is this committed." See
+  [`evidence-before-assertion.md`](evidence-before-assertion.md).
 - **Skip what hasn't changed.** On a repeat status in the same session, report the *delta*, not the
   whole state again.
 

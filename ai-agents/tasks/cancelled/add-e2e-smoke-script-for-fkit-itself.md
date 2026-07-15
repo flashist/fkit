@@ -13,7 +13,7 @@ settled argv surface.
 > ## ⛔ This document is cancelled. Nothing in it is an instruction.
 >
 > **The live brief is Sprint 2 task 23 —
-> [`add-launcher-contract-smoke-script.md`](../backlog/add-launcher-contract-smoke-script.md).**
+> [`add-launcher-contract-smoke-script.md`](../done/add-launcher-contract-smoke-script.md).**
 > That reference is here so a reader who lands on this file knows where the real work went. **It is a
 > pointer, not a hand-off:** do not build from this document, and do not treat anything below as a
 > spec, a scope, or a set of steps. Task 23 is self-contained and supersedes it entirely.

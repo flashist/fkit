@@ -58,7 +58,9 @@ quietly overruling it. You are not the reviewer.
 
 **Never state a count, a status, or a "what's next" you did not just read out of a file.** This skill
 exists because a status report was once improvised from memory and fabricated a number that looked
-precise and was false. If you haven't read it this run, you don't know it.
+precise and was false. If you haven't read it this run, you don't know it. This is the same failure
+as claiming repository state without checking it — see
+[`conventions/evidence-before-assertion.md`](../../../ai-agents/knowledge-base/conventions/evidence-before-assertion.md).
 
 ### 2. Reconcile drift — this is the core value of the skill
 
