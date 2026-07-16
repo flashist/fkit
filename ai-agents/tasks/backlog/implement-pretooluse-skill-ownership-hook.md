@@ -12,7 +12,7 @@ Sprint 2
 ## Context
 
 **Implements the design recorded in
-[`record-pretooluse-skill-gate-adr-amendment.md`](record-pretooluse-skill-gate-adr-amendment.md)
+[`record-pretooluse-skill-gate-adr-amendment.md`](../done/record-pretooluse-skill-gate-adr-amendment.md)
 (task 42)** — reference the resulting ADR by number once it exists. Fixes the live bug it documents:
 a coder session spawning `@fkit-reviewer` for a stateful review fails with `Error: Skill
 fkit-stateful-review is disabled for model invocation in skillOverrides settings`, because a spawned

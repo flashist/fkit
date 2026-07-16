@@ -1,10 +1,21 @@
 # ADR-012: The skill lockdown is session-scoped; `skills:` frontmatter is dropped, not generated
 
-- **Status:** accepted
+- **Status:** accepted — **Decisions 3 and 4 superseded by
+  [ADR-018](adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md)
+  (2026-07-16)**; §§1, 2 (structural-in-session half), 5 remain in force
 - **Date:** 2026-07-11
 - **Deciders:** owner (Mark Dolbyrev), with fkit-architect
 - **Supersedes (in part):** [ADR-010](adr-010-role-locked-sessions-and-skill-lockdown.md) §Decision 2
   (`adr-010:63-65`) and §Decision 5 (`adr-010:73-76`)
+
+> ⚠️ **Read this before trusting Decision 2's "advisory in a consult" language below.**
+> [ADR-018](adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md) reopens
+> Decisions 3 and 4 (their own pre-registered re-raise trigger, `adr-012:139-141`, is met) and adopts
+> the `PreToolUse` skill-ownership hook. Once that hook is implemented and verified (tracked in
+> `ai-agents/tasks/backlog/implement-pretooluse-skill-ownership-hook.md`), the "structural in a
+> session, advisory in a consult" split this file draws in Decision 2 **no longer describes current
+> truth** — enforcement extends to the consult path at any depth. This file is kept intact, unedited
+> below, as the historical record; ADR-018 is the current ground truth for the consult-path question.
 
 ## Context
 
