@@ -24,14 +24,13 @@ a status briefing.
   ambiguity** in the report.
 - **A sprint name** (e.g. `Sprint 1`) — resolve it against `ai-agents/sprints/` **and**
   `ai-agents/sprints/done/`. If nothing matches, say so and list what's there. Do not guess.
-- **A reserved full-board keyword** — `full` (aliases `all`, `board`), matched **case-insensitively**.
-  It is **not a sprint name**: recognize and **strip it before** resolving the sprint, so whatever
-  remains resolves per the two bullets above (empty → active sprint; a sprint name → that sprint). The
-  keyword forces the **complete step-4 dashboard — every task row — even on a repeat call** (it
-  overrides the step-5 delta default). It is honored wherever it appears in the argument, so
-  `/fkit-status full` targets the active sprint and forces the full board, and `/fkit-status Sprint 2
-  full` targets Sprint 2 and forces the full board. **`full` alone is never resolved as a sprint
-  name** — it does not error with "no sprint named `full`".
+
+**That is the whole contract — two cases, and no reserved words.** The argument selects **which sprint
+you are asked about**; it never selects *which version of the answer you give*. **This skill has one
+output.** There is no keyword, no switch, and no mode: every invocation renders the complete briefing,
+ending in the full step-4 board. `full`, `all` and `board` are ordinary text and therefore resolve as
+sprint names — so `/fkit-status full` correctly fails with *"no sprint named `full`"*. **That is the
+intended behavior, not a regression.**
 
 > **The standard being aimed at.** *"As if I ask the producer of the project what the status is, and
 > they provide it in a simple yet informative way."* **Answer like a producer being asked in person,
@@ -108,7 +107,7 @@ When they disagree:
   never silently repeats one that's false. Same for the roll-up: it counts the board of record, and
   **your prose says where that record is wrong.**
 - **Do not silently "fix" it.** Don't pick a winner and don't edit either file — reconciling the record
-  is a decision, and it's the owner's (see step 6). Surface it; let them call it. In particular `✅ Done`
+  is a decision, and it's the owner's (see step 5). Surface it; let them call it. In particular `✅ Done`
   and `⛔ Cancelled` are **owner-gated** — this skill never concludes them, however obvious the code
   looks.
 
@@ -152,8 +151,8 @@ bash .claude/skills/fkit-status/dashboard.sh <path-to-the-sprint-plan-you-resolv
 > (`install.sh:44-46` chmods a hardcoded list of two other files). Running it directly works on some
 > machines and fails on others. See [ADR-017](../../../ai-agents/knowledge-base/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit.md).
 
-You pass it a **path**; it does not resolve sprints. The argument contract, the `full` keyword, and the
-step-5 delta all stay yours.
+You pass it a **path**; it does not resolve sprints. Resolving the argument to a sprint plan stays
+yours.
 
 Its stdout has two delimited sections:
 
@@ -261,17 +260,7 @@ a number the plan's prose quotes about itself, which goes stale.
 **This fallback is deliberately lower fidelity, and says so in the flag.** The full contract lives in
 the script. Do not reconstruct it here.
 
-### 5. On a repeat status in the same session, report the delta
-
-If you already gave a status this session, report **what changed** — don't re-render the whole state.
-If nothing changed, say that.
-
-**Exception — an explicit full-board request overrides the delta default.** If the argument carries
-the reserved keyword (`full` / `all` / `board`, per the Argument contract), render the **complete
-board** — every step-4 row — regardless of whether a status was already given this session. The delta
-is the default only for repeat calls **without** the keyword.
-
-### 6. Report — and stop there
+### 5. Report — and stop there
 
 The briefing *is* the report. Two things to be explicit about:
 - **Drift** found in step 2 — surfaced under beat 6 as an owner decision, with what each source claims.
@@ -286,7 +275,9 @@ paths (`/fkit-task-done`, `/fkit-task-cancelled`, or a deliberate edit) — not 
 ## Rules
 - **Read-only. This skill writes nothing.** It never sets a status, moves a task file, edits a sprint
   plan, or commits — **including to fix drift it finds**. Step 2 surfaces drift; it does not repair it.
-- **Short by default** — readable in under 30 seconds. Detail is available on request.
+- **Short by default — and that is a rule about the prose, not the board.** Beats 1–6 read in under 30
+  seconds. **Beat 7 is always the complete board**, however many rows that is: it is reference material
+  and costs the reader nothing to skip. There is no shorter version of it to ask for.
 - **Prose and short bullets in beats 1–6. The dashboard is the only table.** Beats 1–6 are an answer;
   don't turn the answer back into a report.
 - **Sparing emphasis.** Bold the headline and genuine blockers. No decorative emoji, no 🔥 — the status
@@ -301,6 +292,7 @@ paths (`/fkit-task-done`, `/fkit-task-cancelled`, or a deliberate edit) — not 
 ```
 /fkit-status              # the active sprint
 /fkit-status Sprint 1     # a named sprint, including a closed one in sprints/done/
-/fkit-status full         # force the complete board even on a repeat (aliases: all, board)
-/fkit-status Sprint 2 full # force the complete board for a named sprint
 ```
+
+**Those are the only two forms, and both render the same, complete output.** The skill has no switches
+and no modes.

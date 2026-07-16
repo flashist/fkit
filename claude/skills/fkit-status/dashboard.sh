@@ -22,7 +22,7 @@
 # built to that contract; §9 lists what it must not reopen.
 #
 # CONTRACT: pure function of (sprint-plan path, the briefs it links) -> (stdout, exit code).
-#   - The SKILL resolves the sprint and the `full` keyword. This script never does; it takes a path.
+#   - The SKILL resolves the argument to a sprint plan. This script never does; it takes a path.
 #   - Reads the plan and the briefs it links. Nothing else. Not the code, not git.
 #   - Writes nothing. No network.
 #   - Non-zero exit + stderr on an unparseable plan; the skill then hand-builds a flagged fallback.

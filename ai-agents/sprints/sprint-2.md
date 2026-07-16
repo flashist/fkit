@@ -73,6 +73,8 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 41 | Build the deterministic dashboard script and wire it into `/fkit-status` *(owner: fkit-coder; [review](../reviews/build-deterministic-dashboard-script-for-fkit-status.md) closed-out, rounds 1–6, residuals recorded)* | [`build-deterministic-dashboard-script-for-fkit-status.md`](../tasks/done/build-deterministic-dashboard-script-for-fkit-status.md) |
 | 🔲 Backlog | 42 | Reopen ADR-012 Decisions 3 & 4 — record the `PreToolUse` skill-gate hook decision *(live bug fix, phase 1/2; owner: fkit-architect)* | [`record-pretooluse-skill-gate-adr-amendment.md`](../tasks/backlog/record-pretooluse-skill-gate-adr-amendment.md) |
 | 🔲 Backlog | 43 | Implement the `PreToolUse` skill-ownership gate (the hook-flip) *(needs 42; owner: fkit-coder)* | [`implement-pretooluse-skill-ownership-hook.md`](../tasks/backlog/implement-pretooluse-skill-ownership-hook.md) |
+| 🔲 Backlog | 44 | Remove the output variants from `/fkit-status` — one skill, one output *(**reverts task 38**; skill-text only; owner: fkit-coder)* | [`remove-output-variants-from-fkit-status.md`](../tasks/backlog/remove-output-variants-from-fkit-status.md) |
+| 🔲 Backlog | 45 | Wiki sync after the `/fkit-status` output-variant removal *(needs 44 — hard; owner: fkit-wiki)* | [`wiki-sync-fkit-status-output-variant-removal.md`](../tasks/backlog/wiki-sync-fkit-status-output-variant-removal.md) |
 
 ## Dependency graph
 
@@ -639,7 +641,90 @@ its append-order slot. Owner to confirm the ranking.
 (defeatable by prompt injection; would retire ADR-010's structural claim rather than strengthen it).
 Task 42 records that rejection so it isn't re-litigated.
 
+## Addendum — tasks 44 and 45 added out of band (2026-07-16): one skill, one output — reverting task 38
+
+**The owner ran `/fkit-status`, was told *"Board not re-rendered (delta default). Run `/fkit-status
+full` for the complete 43-row board"*, and asked why they should have to.** Ruling (verbatim):
+
+> *"I want to remove different versions of the skill, there should be 1 version of the output if I run
+> the skill, no additional arguments. I guess it means that we need to remove `full` and make the
+> full-run by default."*
+
+**This reverts task 38, `✅ Done` and shipped earlier the same week.** Task 38's brief argues
+persuasively *for* the switch. **It is stale for one reason worth recording:** the step-5 delta default
+was designed when the board was **hand-built by the LLM** — re-rendering 43 rows meant re-deriving every
+marker and risking the miscount `SKILL.md` warns about. **Task 41 made the board `bash dashboard.sh` —
+deterministic and free — retiring half the delta default's justification.** What survived was terseness
+alone, and that is the owner's call.
+
+**⚠️ `full` and the delta default go together or not at all.** Removing the keyword while keeping the
+delta would be **strictly worse than today** — no path to the full board at all. The delta default is
+the thing; `full` is only the patch on it.
+
+### Settled by the producer: the sprint-name argument **survives**
+
+*"No additional arguments"* reads literally as also killing `/fkit-status Sprint 1`. **It does not.**
+The owner glossed their own rule and **named only `full`**; a sprint name is not an output *variant*
+but a different *subject*; and killing it makes `sprints/done/` **unreachable by any path** — the same
+failure shape as removing `full` while keeping the delta. **Owner to confirm at review**; the brief does
+not build the two-argument removal on spec.
+
+### Sequencing
+
+```
+44. remove the variants (fkit-coder) ──→ 45. wiki sync (fkit-wiki)
+    (depends on nothing; 41 already landed)   (hard dependency — syncing first ingests the drift)
+```
+
+- **44 depends on nothing.** Task 41 is its *precondition already met*, not a blocker.
+- **45 is split out because only `fkit-wiki` may write the vault** (ADR-005) — 8 pages reference `full`.
+  Task 11's lesson: sync **after** the change, or the vault carries the drift with the authority of
+  verified knowledge.
+
+### Not in scope — deliberately
+
+- **The dated design report** (`reports/2026-07-16-design-deterministic-dashboard-for-fkit-status.md`,
+  3 refs) and **task 38's brief in `tasks/done/`**. Both are **history and stay frozen** — true when
+  written. Task 38 remains `✅ Done`; it *was* done.
+- **A softer delta** ("delta unless much changed"). A conditional variant is the same defect rewearing
+  the hat.
+
+### The tombstone-ADR call: **no ADR** — and the producer's reasoning, so it can be overruled
+
+**Recommendation: no ADR.** The precedent raised is task 37 (the shared-instructions tombstone), and
+**it does not transfer.** Task 37 tombstones a **mechanism** — it rejects `AGENTS-COMMON.md` and
+`--append-system-prompt` **by name**, both of which are the first thing a competent person reaches for
+and one of which cost an adversarial review to undo. **Nothing technical was learned here.** The owner
+changed their mind about terseness after task 41 changed the cost. This repo's ADRs record mechanism and
+structure (runtime, lockdown, KB layout, the exec bit) — not a product preference about one skill's
+output. The record is task 44's brief and this addendum, both naming task 38 so the trail is findable
+from the reverted work; task 45 additionally requires the task-38 **wiki page to be marked reverted
+rather than deleted**, which is where someone re-proposing the feature would actually look.
+
+**The tradeoff, stated plainly:** a brief in `tasks/backlog/` and an addendum in a sprint plan that will
+be archived to `sprints/done/` are **weaker records than an ADR**, and neither is where a person
+proposing a feature looks first. If `full` gets re-proposed citing task 38, this call was wrong and an
+ADR is one cheap architect task away. **See open question 8** — the generalizable principle may be
+better recorded as a **convention** than an ADR, and that is the owner's to rule.
+
 ## Open questions for the owner
+
+8. **Does *"one skill, one output"* generalize beyond `/fkit-status`?** The owner's ruling was about one
+   skill, and tasks 44/45 treat it that way. But the sentence *"there should be 1 version of the output
+   if I run the skill"* states a **principle that would constrain every fkit skill** — no output-variant
+   arguments, anywhere, ever.
+   **Producer's recommendation: if it generalizes, it is a `knowledge-base/conventions/` entry, not an
+   ADR** — it is a standing rule about how skills are written, which is exactly what
+   `task-status-vocabulary.md` and `evidence-before-assertion.md` are. **It also has more teeth than a
+   tombstone would:** a convention stops the *next* `full` from being written, where an ADR only explains
+   why this one died.
+   **The tradeoff:** it is a rule written from a single instance. The honest counter is that a variant
+   argument is sometimes right — `full` itself was defensible when the board was hand-built and
+   expensive, and it stopped being defensible only when task 41 made it free. A blanket convention would
+   have forbidden a decision that was **correct at the time**. **Not scoped; say the word and it becomes
+   a brief.**
+
+---
 
 ### Owner dispositions (2026-07-15) — all seven ruled
 
