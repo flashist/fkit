@@ -19,7 +19,7 @@ stay LLM-driven.
 **This task builds and wires; it does not decide.** All shape decisions — output contract (final board
 text vs structured facts), the `ready`/`after N` treatment, runtime (bash vs node), placement, ADR-or-
 not, test approach — are settled by its dependency,
-[`design-deterministic-dashboard-for-fkit-status`](./design-deterministic-dashboard-for-fkit-status.md).
+[`design-deterministic-dashboard-for-fkit-status`](../done/design-deterministic-dashboard-for-fkit-status.md).
 **Do not start this until that spec is reviewed with the owner** — building against an unsettled
 runtime or output contract is exactly what the split exists to prevent.
 
@@ -76,7 +76,7 @@ Per the design spec:
 
 - **Owner: fkit-coder** (product source under `claude/`), with fkit-architect available for consult on
   fidelity to the spec.
-- **Depends on:** [`design-deterministic-dashboard-for-fkit-status`](./design-deterministic-dashboard-for-fkit-status.md)
+- **Depends on:** [`design-deterministic-dashboard-for-fkit-status`](../done/design-deterministic-dashboard-for-fkit-status.md)
   **(hard).** Do not begin before that spec is owner-reviewed.
 - **Relates to:** tasks 34/35 (mover stale-header drift) — the drift set this script surfaces is
   produced by that same gap; the script *reports* the drift, it does not *fix* it.
