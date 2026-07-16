@@ -26,7 +26,7 @@ The three are easy to confuse and the distinction is the whole point of this fol
 | File | In force over |
 |---|---|
 | [`task-status-vocabulary.md`](task-status-vocabulary.md) | the six valid task statuses, and who may set each |
-| [`status-report-format.md`](status-report-format.md) | the shape of a status briefing — seven beats, then the board |
+| [`status-report-format.md`](status-report-format.md) | the shape of a status briefing — six beats, then the board |
 | [`evidence-before-assertion.md`](evidence-before-assertion.md) | a claim about repo/project state must come from a check made this turn |
 
 ## Naming
@@ -47,8 +47,8 @@ A new document earns a place here only if **all four** hold:
 3. **It is enforceable somewhere.** A convention nobody can check is a preference. State where it is
    enforced — ideally in `claude/` source, so it ships to every project and not just this one.
    (`task-status-vocabulary.md` §"Where this must be enforced" is the pattern.)
-4. **It is not already covered.** Prefer **amending an existing convention** to adding a fifth
-   document. Two well-known conventions beat six that nobody has read.
+4. **It is not already covered.** Prefer **amending an existing convention** to adding a fourth
+   document. A few well-known conventions beat many that nobody has read.
 
 Anything that doesn't clear that bar is a report, an ADR, or a task brief.
 

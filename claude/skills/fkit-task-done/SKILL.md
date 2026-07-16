@@ -131,7 +131,7 @@ Give a concise summary:
   untouched"). A move that rewrote a closed sprint plan must be **visible in this report**, never a
   surprise found later by a link sweep. If none were re-pointed, say so.
 - **Flagged:** anything not auto-resolved (no sprint row found, mismatch, multiple matches).
-- Remind that **this skill** made no commit — the move + edits are in the working tree. Do not claim
+- Remind that **this skill** made no commit — it leaves the move + edits in the working tree. Do not claim
   the repository has uncommitted work, or that anything is or isn't committed — this skill has not
   checked, and the owner may have committed between turns. If commit state matters to the report, run
   `git status` first. (See

@@ -47,9 +47,9 @@ A new document earns a place here only if **all four** hold:
 2. **It is prescriptive.** It says what *must* be done, in a form that can be complied with or
    violated. A description of how something currently works is `../architecture.md`, not a convention.
 3. **It is enforceable somewhere.** A convention nobody can check is a preference. State where it is
-   enforced.
-4. **It is not already covered.** Prefer **amending an existing convention** to adding a fourth or
-   fifth document. A few well-known conventions beat many that nobody has read.
+   enforced — ideally in tooling or code where the check runs automatically, not left to memory.
+4. **It is not already covered.** Prefer **amending an existing convention** to adding a fourth
+   document. A few well-known conventions beat many that nobody has read.
 
 Anything that doesn't clear that bar is a report, an ADR, or a task brief.
 

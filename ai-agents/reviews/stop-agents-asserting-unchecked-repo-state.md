@@ -9,7 +9,7 @@ claude/scaffold/ai-agents/knowledge-base/conventions/evidence-before-assertion.m
 ai-agents/knowledge-base/conventions/README.md, claude/scaffold/ai-agents/knowledge-base/conventions/README.md,
 ai-agents/knowledge-base/conventions/status-report-format.md,
 claude/scaffold/ai-agents/knowledge-base/conventions/status-report-format.md
-Status: in-review
+Status: closed-out
 
 ## Reviewer findings
 
@@ -20,7 +20,12 @@ Status: in-review
 | R3 | 1 | low | ai-agents/knowledge-base/conventions/README.md:29, :50-51 | Pre-existing staleness, not introduced by this diff (confirmed via `git log`/`git show HEAD`, predates this session, commit `a8cb0e7`): line 29 says status-report-format.md is "seven beats, then the board" while that doc's own heading says "six beats, then the board" (item 7 is "the dashboard," not a beat); lines 50-51 say "adding a fifth document... Two well-known conventions beat six" when the table above now lists three, so the next addition would be the fourth, not the fifth. Surfaced incidentally while reviewing the table row this diff added to the same file. |
 
 ## Coder response
-*(coder-owned — not written here)*
+
+| # | Verdict | Defect / Frontier | Action | Status |
+|---|---------|-------------------|--------|--------|
+| R1 | PARTIALLY CORRECT | Frontier-move | Owner-approved a micro-tightening. Applied across the 4 skills: `are in the working tree` → `it leaves … in the working tree`, scoping the clause to the skill's own behavior (self-knowable) rather than a bare repo-state assertion. Files: `fkit-task-done` L134, `fkit-task-cancelled` L161, `fkit-task-plan` L145, `fkit-process-stateful-review` L208. | ✅ done |
+| R2 | INCORRECT | — | **Disproven vs current code.** Scaffold `evidence-before-assertion.md` L28–29 already lists `/fkit-task-done, /fkit-task-cancelled, /fkit-task-plan, /fkit-process-stateful-review` — it does **not** omit `/fkit-process-stateful-review`. Claim false against the file as it stands. No change. | disproven |
+| R3 | CORRECT | Defect — **pre-existing, out-of-scope, KB-owned** | Live `conventions/README.md` is stale vs the doc it describes **and** vs its own scaffold twin: L29 "seven beats" should be "six beats" (`status-report-format.md` L16 + scaffold README L32 both say six); L51 "Two well-known conventions beat six" is a stale hardcoded count (scaffold L52 already reads "A few… beat many"); "fifth document" should be "fourth" (3 conventions now — stale in **both** copies). Pre-dates this task (commit `a8cb0e7`); fix is a KB write the **architect** owns per ADR-013 + task notes. **Owner-approved routing to `@fkit-architect`**, which applied it: live README L29 `seven beats`→`six beats`, L50–51 `fifth document / Two…beat six`→`fourth document / A few…beat many`; scaffold README `a fourth or fifth document`→`a fourth document`. Both READMEs now agree on the row + item 4. | ✅ done |
 
 ## Accepted residuals (shared, do-not-re-litigate)
 *(none yet)*

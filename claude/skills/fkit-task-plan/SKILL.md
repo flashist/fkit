@@ -142,7 +142,7 @@ Give a concise summary:
   dependency or conflict surfaced in step 3.
 - **Consulted:** if fkit-architect was consulted for the technical scope, say so and summarize what it
   established.
-- Remind that **this skill** made no commit — the new files + edits are in the working tree. Do not
+- Remind that **this skill** made no commit — it leaves the new files + edits in the working tree. Do not
   claim the repository has uncommitted work, or that anything is or isn't committed — this skill has
   not checked, and the owner may have committed between turns. If commit state matters to the report,
   run `git status` first. (See

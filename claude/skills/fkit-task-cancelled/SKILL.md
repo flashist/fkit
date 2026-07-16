@@ -158,7 +158,7 @@ Give a concise summary:
 - **Dependents flagged:** anything that depended on the cancelled task and may now need attention.
 - **Other flags:** no sprint row found, mismatch, multiple matches, or a request to cancel a
   done task.
-- Remind that **this skill** made no commit — the move + edits are in the working tree. Do not claim
+- Remind that **this skill** made no commit — it leaves the move + edits in the working tree. Do not claim
   the repository has uncommitted work, or that anything is or isn't committed — this skill has not
   checked, and the owner may have committed between turns. If commit state matters to the report, run
   `git status` first. (See

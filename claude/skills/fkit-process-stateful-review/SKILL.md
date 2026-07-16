@@ -205,8 +205,8 @@ Apply nothing I did not approve; INCORRECT findings get no code change.
 
 Concise summary: findings dispositioned this round, code changed (files + how tested + result), the
 *Coder response* rows written, any newly-recorded residual, the document's new Status, and anything
-flagged for my review. Remind me that **this skill** made no commit — the edits are in the working
-tree. Do not claim the repository has uncommitted work, or that anything is or isn't committed — this
+flagged for my review. Remind me that **this skill** made no commit — it leaves the edits in the
+working tree. Do not claim the repository has uncommitted work, or that anything is or isn't committed — this
 skill has not checked, and the owner may have committed between turns. If commit state matters to the
 report, run `git status` first. (See
 [`conventions/evidence-before-assertion.md`](../../../ai-agents/knowledge-base/conventions/evidence-before-assertion.md).)

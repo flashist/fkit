@@ -120,7 +120,7 @@ task(s). Findings land as `reports/YYYY-MM-DD-shared-instructions-layer.md` per
 - **Read first:** ADR-012 (why the consult path is the trap), `claude/fkit-claude.sh` (the `exec` at
   `:405` / `:457`), and `claude/fkit-claude-init.sh` (which generates the `.claude/` copies — the most
   likely seam).
-- **Related:** [task 24](../backlog/stop-agents-asserting-unchecked-repo-state.md) adds a standing rule
+- **Related:** [task 24](./stop-agents-asserting-unchecked-repo-state.md) adds a standing rule
   (`conventions/evidence-before-assertion.md`) that applies to **every role** — and today has no
   mechanism to reach them except a link from each skill. **It is the first real customer of whatever
   this task builds.** Worth reading its brief; do not merge the two.
