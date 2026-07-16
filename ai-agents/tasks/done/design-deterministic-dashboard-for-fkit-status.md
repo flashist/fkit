@@ -1,13 +1,13 @@
 # Design the deterministic dashboard generator for `/fkit-status`
 
 ## Sprint
-Backlog (unsprinted)
+Sprint 2
 
 ## Priority
-Unscheduled
+40
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 

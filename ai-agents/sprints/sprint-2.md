@@ -68,6 +68,9 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 36 | Remove the `.fkit/` Omnigent-orphan residue *(OQ5 resolved; the one destructive act — own owner gate; needs a consent-model ruling)* | [`remove-fkit-omnigent-orphan-residue.md`](../tasks/backlog/remove-fkit-omnigent-orphan-residue.md) |
 | 🔲 Backlog | 37 | Record a tombstone ADR for the shared-instructions reversal *(OQ6 resolved; owner: fkit-architect)* | [`record-shared-instructions-reversal-adr.md`](../tasks/backlog/record-shared-instructions-reversal-adr.md) |
 | ✅ Done | 38 | Add a full-board switch (`full`) to `/fkit-status` *(skill-text only; owner: fkit-coder)* | [`add-full-board-switch-to-fkit-status.md`](../tasks/done/add-full-board-switch-to-fkit-status.md) |
+| 🔲 Backlog | 39 | Investigate making `AskUserQuestion` available to fkit agents *(investigation — gates any grant; owner: fkit-architect)* | [`investigate-askuserquestion-availability-for-agents.md`](../tasks/backlog/investigate-askuserquestion-availability-for-agents.md) |
+| ✅ Done | 40 | Design the deterministic dashboard generator for `/fkit-status` *(design — [spec](../knowledge-base/reports/2026-07-16-design-deterministic-dashboard-for-fkit-status.md); spawned [ADR-017](../knowledge-base/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit.md))* | [`design-deterministic-dashboard-for-fkit-status.md`](../tasks/done/design-deterministic-dashboard-for-fkit-status.md) |
+| 🔲 Backlog | 41 | Build the deterministic dashboard script and wire it into `/fkit-status` *(needs 40 — **now unblocked**; owner: fkit-coder)* | [`build-deterministic-dashboard-script-for-fkit-status.md`](../tasks/backlog/build-deterministic-dashboard-script-for-fkit-status.md) |
 
 ## Dependency graph
 
@@ -527,6 +530,73 @@ or product code, no new skill registration.
 - **Owner: fkit-coder.** **Depends on: nothing** — independent of the mover-drift tasks (34, 35) and
   everything else in Sprint 2.
 - **Numbered 38 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — task 39 added out of band (2026-07-16): the AskUserQuestion investigation
+
+**Task 39 (`investigate-askuserquestion-availability-for-agents`) was scoped unsprinted from the
+owner's ask — *"make the `AskUserQuestion` skill available for all agents"* — then pulled into Sprint 2
+by the owner (2026-07-16).**
+
+**It is an investigation, and deliberately not the grant.** Three things established while scoping make
+the seven-line version premature:
+
+- **`AskUserQuestion` is a Claude Code *tool*, not a skill.** fkit gates skills via `skills_for_role()`
+  / `skillOverrides` ([ADR-010](../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md),
+  [ADR-012](../knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md))
+  and **tools** via the `tools:` frontmatter in `claude/agents/fkit-*.md`. Verified 2026-07-16: it is in
+  **none** of the seven allowlists and nowhere in `claude/` — **no agent can use it today.**
+- **Session-vs-consult behavior is unmeasured, with expensive precedent.** `--append-system-prompt`
+  looked obviously inheritable and was **session-only — 0/3, then 0/2** into a spawned consult
+  ([report rev 2](../knowledge-base/reports/2026-07-14-shared-instructions-layer.md), Claude Code
+  2.1.208). Same seam. Per
+  [`evidence-before-assertion`](../knowledge-base/conventions/evidence-before-assertion.md) (task 24),
+  **this is a claim to run, not to reason about.**
+- **"All agents" may be structurally false.** `fkit-adversarial-reviewer` reviews on **Codex**, which has
+  no `AskUserQuestion` — the same shape as the rejected `AGENTS-COMMON.md` (*"a shared layer for all
+  agents that excludes the second model is misnamed"*).
+
+**⚠️ It collides with a designed constraint, not an oversight.** `claude/agents/fkit-producer.md:44` and
+`claude/agents/fkit-architect.md:38` both instruct a spawned consult to return an open question **in its
+reply rather than asking**. Granting the tool would let a consult interrogate the owner mid-chain —
+**a change to the consult model (the two-hop envelope), which is an owner decision, not a tool toggle.**
+
+- **Owner: fkit-architect**, with the **owner present** for the consult-model call. **Depends on:
+  nothing. Blocks: any implementation of the grant** — no implementation brief until findings are
+  reviewed (the task-20 / task-29 pattern; both of those rev-1 recommendations died to an adversarial
+  Codex pass, and this report is recommended for the same).
+- **Numbered 39 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — tasks 40 and 41 added out of band (2026-07-16): the deterministic dashboard
+
+**The owner's ask — a "deterministic layer" for `/fkit-status`:** a script that renders the step-4
+dashboard, invoked by the skill so its output is shown, **replacing the prose dashboard-description**.
+Beats 1–6 stay LLM-driven. Scoped unsprinted (2026-07-16), then pulled into Sprint 2 by the owner.
+
+**Split design-then-implement on the architect's advice** (consult, 2026-07-16), because the runtime and
+output contract were unsettled **owner-facing** decisions — building against them unsettled is what the
+split exists to prevent.
+
+**The feasibility split that drives both tasks:** row cells, roll-up counts, drift *facts*, and four of
+the six Next-step shapes (`closed`, `dead`, `in Sprint N`, `waiting on owner`) are **deterministic**.
+**`ready` vs `after N` is NOT** — the `Depends on:` line is free text, naming dependencies by number, by
+phase name, and by filename slug. It is the one column the skill already flags as *"the easiest place to
+start making things up."*
+
+- **Task 40 — design. `✅ Done`**, closed by the owner via `/fkit-task-done`. Deliverables landed:
+  [the spec](../knowledge-base/reports/2026-07-16-design-deterministic-dashboard-for-fkit-status.md)
+  (all six items ruled) and
+  [**ADR-017**](../knowledge-base/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit.md).
+  Decisions: output contract = **one run, two delimited sections** (`BOARD` verbatim + `FACTS` narrated
+  from — so the board and beats 2/6 cannot disagree); `ready`/`after N` **stays LLM** with a sentinel
+  for underived cells, and **`Depends on:` is not touched**; runtime **bash**; placement
+  `claude/skills/fkit-status/dashboard.sh`, invoked **`bash <path>`, never `./<path>`** (the exec bit
+  does not survive the ship chain — ADR-017); test **yes**, `node --test` at repo root.
+- **Task 41 — implement + wire. `🔲 Backlog`, and now genuinely unblocked** — 40's spec is the contract
+  it builds against. **Kept as one unit** (script + wiring): a script with no wiring buys nothing, and
+  the wiring needs the script.
+
+**Numbered 40/41 for append-don't-renumber discipline — contiguous and in dependency order. Owner to
+confirm the ranking.**
 
 ## Open questions for the owner
 

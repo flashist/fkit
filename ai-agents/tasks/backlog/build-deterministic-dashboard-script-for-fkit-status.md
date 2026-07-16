@@ -1,10 +1,10 @@
 # Build the deterministic dashboard script and wire it into `/fkit-status`
 
 ## Sprint
-Backlog (unsprinted)
+Sprint 2
 
 ## Priority
-Unscheduled
+41
 
 ## Status
 🔲 Backlog

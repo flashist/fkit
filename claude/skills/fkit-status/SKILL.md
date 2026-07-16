@@ -72,25 +72,19 @@ as claiming repository state without checking it — see
 
 ### 2. Reconcile drift — this is the core value of the skill
 
-Cross-check, for every task in the sprint, the three things the record says about it:
-- the **sprint plan's Status cell**,
-- the **brief's own `## Status`**, and
-- **where the brief actually lives** (a brief in `done/` still marked `🔲 Backlog` is drift — the move
-  happened, the status edit didn't).
+**The drift *facts* are computed for you.** `dashboard.sh` (step 4) cross-checks, for every task, the
+three things the record says about it — the **sprint plan's Status cell**, the **brief's own
+`## Status`**, and **where the brief actually lives** (a brief in `done/` still marked `🔲 Backlog` is
+drift: the move happened, the status edit didn't) — and emits them as `⟦FACTS⟧` records.
 
 All three are `.md`. **The code is not a source here** — see step 1.
 
-**First, check the brief's `## Sprint` field — and skip the status cross-check if it names a different
-sprint.** A `➡️ Moved` row is the sprint's record that the task *left*; the brief now belongs to the
-sprint it moved to, and reads `🔲 Backlog` there **correctly**. That is not drift, and reporting it as
-drift would flag every moved row of every closed sprint forever, and hand the owner phantom decisions.
-Such a row keeps its `in Sprint N` next step. **Do still check that the brief's `## Sprint` actually
-names the sprint the `Moved` marker points at** — if they disagree, *that* is real drift.
+**Read the facts; don't re-derive them.** If you re-run the cross-check by hand you can disagree with
+the board you are about to paste, and the owner gets two accounts of one record. Run the script early
+enough that beats 2 and 6 can narrate from its output.
 
-Also check the marker itself against the vocabulary: **a status the plan records but the vocabulary
-forbids is *nonconformance*** (e.g. a `⛔ Cancelled` or `🚧 Blocked` cell with no reason, which the
-vocabulary makes mandatory). Sources can agree with each other and still all be wrong. Flag it; don't
-repair it. But keep the two kinds apart:
+**The disposition is yours** — and it is the part no script does. Each `drift` record is a finding you
+must explain and hand to the owner. Keep the two kinds apart:
 - **Disagreement drift** — the sources say different things, so the task's real state is *unknown*.
   That's an owner decision, and it takes the `waiting on owner` override below.
 - **Nonconformance** — the sources agree and the state is *known*; the marker is just written wrong
@@ -107,12 +101,12 @@ When they disagree:
   named in the prose. Without this rule "the record" is undefined the moment
   drift exists, and two producers hand the owner two different boards — the exact failure this skill
   prevents.
-- So: **in the dashboard, render the sprint plan's marker verbatim**, and — **for disagreement drift
-  only** — put `waiting on owner` in that row's Next step (it overrides the row's normal one: a drifted
-  `✅ Done` row reads `waiting on owner`, not `closed`). The board reports the record; **the prose
-  reports reality and names the gap.** That way the board never silently overrides a status the owner never set, and never
-  silently repeats one that's false. Same for the roll-up: it counts the board of record, and the prose
-  says where that record is wrong.
+- The script applies that rule for you: it renders the plan's marker verbatim, and — **for
+  disagreement drift only** — puts `waiting on owner` in that row's Next step (a drifted `✅ Done` row
+  reads `waiting on owner`, not `closed`). **The board reports the record; the prose reports reality
+  and names the gap.** That way the board never silently overrides a status the owner never set, and
+  never silently repeats one that's false. Same for the roll-up: it counts the board of record, and
+  **your prose says where that record is wrong.**
 - **Do not silently "fix" it.** Don't pick a winner and don't edit either file — reconciling the record
   is a decision, and it's the owner's (see step 6). Surface it; let them call it. In particular `✅ Done`
   and `⛔ Cancelled` are **owner-gated** — this skill never concludes them, however obvious the code
@@ -146,64 +140,91 @@ recommend picking up a task from a superseded plan. Its live tasks are the ones 
 point at the sprint they moved to. Drift in a closed sprint still gets flagged: a closed record can be
 wrong, and it stays wrong forever if nobody says so.
 
-### 4. The dashboard — last, and only the six statuses
+### 4. The dashboard — run the script, don't hand-build it
 
-A compact table, **at the end, after the answer**. It is reference material, not the briefing.
+**The board is computed, not recited.** Run:
 
-Columns, in this order: **Status · # · Task · Filename · Next step**
+```sh
+bash .claude/skills/fkit-status/dashboard.sh <path-to-the-sprint-plan-you-resolved-in-step-1>
+```
 
-- **Status** — the task's real state, as **one of the six canonical markers, and nothing else**:
-  `🔲 Backlog` · `🔄 In progress` · `🚧 Blocked — <reason>` · `✅ Done` ·
-  `⛔ Cancelled (YYYY-MM-DD) — <reason>` · `➡️ Moved to Sprint N — priority M`
+> **⚠️ `bash <path>` — never `./dashboard.sh`.** The exec bit is not guaranteed to survive install
+> (`install.sh:44-46` chmods a hardcoded list of two other files). Running it directly works on some
+> machines and fails on others. See [ADR-017](../../../ai-agents/knowledge-base/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit.md).
 
-  **Never invent a value.** No "Not started", no "WIP", no "Todo", no "Complete". If the board needs a
-  distinction the vocabulary can't express, **the board is lying** — flag that instead of inventing one.
-  **Copy the marker as the sprint plan writes it** — including its mandatory reason (`Blocked`,
-  `Cancelled`) and any link or qualifier the plan carries (`➡️ Moved to [Sprint 2](…) — priority 12
-  (rescoped)`). That is the vocabulary, not prose, so it belongs in the cell — but **keep it to one
-  line**: if a recorded reason is a paragraph, trim it to its first clause rather than wrapping the
-  table.
-- **#** — the priority number, matching the sprint plan.
-- **Task** — the same short wording the sprint plan uses.
-- **Filename** — the brief's filename, linked to where it actually lives (`backlog/`, `done/`,
-  `cancelled/`).
-- **Next step** — what actually advances it. The sprint plan has no such column, so **derive it** — from
-  the plan's dependency graph, its blockers and open questions, **and the brief's own `Depends on:`
-  line** (a sprint's graph often omits tasks; the brief still records the dependency, so check it
-  before concluding a task is free). Keep to these shapes:
-  `ready` · `after <N>` or `after <N>, <N>…` (name **every** task it waits on — don't collapse a
-  fan-in to one, and don't drop a dependency because another task already covers it transitively) ·
-  `waiting on owner` · `in Sprint N` (a moved row) · `dead` (a cancelled row) · `closed` (a done row).
-  **If neither the plan nor the brief records a dependency, it is `ready`.** Say `ready` — do not infer
-  a dependency nobody wrote down. An invented dependency is a fabrication like any other, and this
-  column is free text, which makes it the easiest place in the report to start making things up.
+You pass it a **path**; it does not resolve sprints. The argument contract, the `full` keyword, and the
+step-5 delta all stay yours.
 
-Then:
-- **One row per task**, no wrapped prose in cells.
-- **Show the dead rows** — cancelled and moved tasks too. A board that hides them lies about scope.
-- **A one-line roll-up** underneath, so the shape is legible without counting rows:
+Its stdout has two delimited sections:
 
-  ```
-  N done · N in progress · N blocked · N backlog · N cancelled · N moved  —  of M
-  ```
+```
+⟦fkit-dashboard v1⟧
+⟦BOARD⟧      ← the finished table + roll-up
+⟦FACTS⟧      ← the computed facts, one record per line
+⟦END⟧
+```
 
-  - Counted from **the record** (what the files actually say), and named with the vocabulary's words
-    (`backlog`, never "not started").
-  - **Print only the non-zero terms** — a clean sprint reads `2 done · 1 in progress · 11 backlog — of
-    14`, not a form with zeroes in it. Zero-filled slots are the "N/A-grade content" anti-pattern.
-  - **Always print `— of M`, the sprint's total task count.** This is the load-bearing part: it makes an
-    under-counting roll-up impossible. A closed sprint then reads `4 done · 10 cancelled — of 14`
-    instead of `4 done · 0 in progress · 0 blocked · 0 backlog`, which silently implies the sprint had
-    four tasks.
-    **`M` is the number of rows in the sprint plan's Status table** — count them. Not a number the
-    plan's prose quotes about itself; that prose goes stale (a plan may say "12 tickets" over a table
-    of 14). **The counts must sum to M.** If they don't, you miscounted or missed a row — recount
-    against the table before reporting.
-  - **If step 2 found drift, the roll-up must carry it** — append a plain clause saying so, e.g.
-    *"— as recorded; tasks \<N\> and \<N\> sit in `done/` but their briefs still read `🔲 Backlog`. See
-    above."* A roll-up counted from a record you already know is inconsistent, printed bare, is a
-    true-looking sentence that misleads. Counting the record is right; **printing it as if nobody
-    noticed the contradiction is not.**
+**If the version marker is not `⟦fkit-dashboard v1⟧`, say so rather than guessing at the shape.**
+
+#### What to do with `⟦BOARD⟧`
+
+**Paste it as beat 7 — verbatim, except the sentinel cells.** It is already the six columns, the six
+canonical markers copied from the plan, and the roll-up. Do not re-count it, re-sort it, re-word it,
+or "tidy" it. **The counts sum to `M` by construction** — that is the whole point of the script's
+existence, and a hand-adjusted board forfeits it.
+
+**The one thing you must fill: `⟨derive: …⟩` sentinels.** The script emits four of the six Next-step
+shapes itself (`closed`, `dead`, `in Sprint N`, `waiting on owner`). It **cannot** decide `ready` vs
+`after <N>`, because `Depends on:` is free text — so it hands you the **raw text it read**, in the cell:
+
+| The cell says | You replace it with |
+|---|---|
+| `⟨derive: none recorded⟩` | `ready` — nobody wrote down a dependency, so there isn't one |
+| `⟨derive: task 26 and task 27.⟩` | `after 26, 27` — name **every** task it waits on |
+
+**Use the text inside the sentinel. Do not re-open the brief** — that is how you drift from what the
+script saw. Name every task in a fan-in; don't drop one because another covers it transitively. **Do
+not infer a dependency nobody wrote down** — this column is free text and it is the easiest place in
+the report to start making things up. **A sentinel left in a delivered report is a bug** — that is
+deliberate: it fails visibly rather than inventing quietly.
+
+#### What to do with `⟦FACTS⟧`
+
+**Beats 2 and 6 narrate from these records — never re-derive them from the files.** If you compute
+drift yourself and the script computed it too, you can disagree with your own board, and the owner
+gets two accounts of one record. The records you need:
+
+```
+total <M>                                  ← the sprint's task count
+count <marker> <N>                         ← e.g. `count done 30`
+drift disagreement <task> plan="…" brief="…" location="…"
+drift nonconformance <task> kind="…" cell="…"
+drift relocated <task> linked="…" found="…"
+drift missing-brief <task> linked="…"
+drift multiple-status-tables count=<n>
+```
+
+Every `drift` record is an owner decision → **beat 6** (step 2 governs how to dispose of it: report,
+never repair; disagreement is theirs to reconcile, nonconformance is a marker written wrong). The
+roll-up already carries a generic drift clause pointing at beat 6 — **beat 6 is where you say what
+each one actually is.**
+
+#### If the script fails
+
+**Don't wall the owner out of their own status.** If it exits non-zero (missing plan, unparseable
+table, a bug), **hand-build the board and lead with the flag**:
+
+```
+⚠️ [dashboard hand-built — dashboard.sh failed: <reason>]
+```
+
+Then: the six columns above, one row per task, **markers copied from the plan's Status cell verbatim**,
+**show the dead rows** (a board that hides cancelled and moved tasks lies about scope), and a roll-up
+of the non-zero terms with **`— of M` where `M` is the number of rows in the table** — count them; not
+a number the plan's prose quotes about itself, which goes stale.
+
+**This fallback is deliberately lower fidelity, and says so in the flag.** The full contract lives in
+the script. Do not reconstruct it here.
 
 ### 5. On a repeat status in the same session, report the delta
 

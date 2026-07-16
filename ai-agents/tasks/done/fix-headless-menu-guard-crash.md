@@ -7,7 +7,7 @@ Sprint 2
 33
 
 ## Status
-🔲 Backlog
+✅ Done
 
 *(The fix is **implemented in the working tree** but **not committed** and **not yet independently
 reviewed**. It is not Done. `Done` is owner-gated and set only by `/fkit-task-done` after review.)*
