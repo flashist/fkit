@@ -4,8 +4,9 @@
 #
 # Claude Code discovers agents/skills from a project's .claude/ directory; this script puts the
 # fkit team there and scaffolds the shared working structure:
-#   1. scaffold the ai-agents/ working structure (from claude/scaffold/ — single source of
-#      truth; skipped if it already exists)
+#   1. scaffold the ai-agents/ working structure (from claude/scaffold/ — single source of truth).
+#      An existing tree is CONVERGED, not skipped: scaffold paths it lacks are created, and paths it
+#      already has are never touched (create-if-absent only — see converge_ai_agents below).
 #   2. drop project-root CLAUDE.md (Claude-flavored, with the team map) and AGENTS.md (the codex
 #      CLI reads it for the adversarial pass) — skipped if they already exist
 #   3. refresh .claude/agents/fkit-*.md and .claude/skills/fkit-*/ from claude/ (fkit-managed:
@@ -22,6 +23,246 @@ dest_in="${1:?usage: fkit-claude-init.sh <project-root>}"
 [ -d "$dest_in" ] || { echo "error: not a directory: $dest_in" >&2; exit 1; }
 dest="$(cd "$dest_in" && pwd)"                         # absolute
 [ -d "$scaffold/ai-agents" ] || { echo "error: shared scaffold not found at $scaffold" >&2; exit 1; }
+
+# ---------- convergence: top up an EXISTING ai-agents/ with scaffold paths it does not have ----------
+#
+# THE INVARIANT, and it is not negotiable:
+#
+#     Convergence NEVER writes to a path that already exists.
+#     Create-if-absent only. No overwrite, no move, no delete — ever — inside ai-agents/.
+#
+# Every safety property here is downstream of that one line. There is no rollback, no dry-run and no
+# refuse-on-dirty-tree because there is no torn state: nothing is mutated, only added. Break the
+# invariant and all three become mandatory, because this becomes an unattended, every-launch,
+# no-consent mutation of the user's own documents — the most dangerous code in fkit.
+#
+# Why this exists: `[ -e "$dest/ai-agents" ]` used to gate the copy of EVERYTHING beneath it, so the
+# guard was doing two jobs — "don't clobber the user's content" (right) and "don't add anything new"
+# (never intended). A project scaffolded last month could therefore never gain a scaffold path added
+# this month. Separating those two jobs is all this is.
+#
+# Its price, paid openly: this CANNOT fix content drift. A scaffold-authored file whose contents
+# changed (ai-agents/README.md is the standing example) is a path that ALREADY EXISTS, so we step over
+# it, forever. That residual is deliberate and owner-accepted. Do NOT "improve" this into overwriting a
+# file it thinks is stale: the safety and the limitation are the SAME property.
+#
+# STATELESS by design. The scaffold and the disk are the only inputs. No cursor, no manifest, no
+# version, no "which release is this project at" — a cursor cannot survive a `git clone` anyway,
+# because .fkit/ is gitignored (see add_ignore below). If this ever grows a notion of project version,
+# it has become the migration mechanism that was rejected on the merits.
+
+# Restore the shell state converge_ai_agents pins (IFS, noglob). An `if` rather than
+# `[ … ] && set +f`: under `set -e` a trailing test that FAILS is an unguarded non-zero, which is how
+# a tidy one-liner turns "nothing to converge" into "init died". This file has been bitten by that
+# shape before (see the marker_lines/`head -1` note below); do not reintroduce it.
+converge_restore() {
+  IFS="$oldifs"
+  if [ "$oldglob" = 0 ]; then set +f; fi
+}
+
+converge_ai_agents() {
+  created=""        # scaffold-relative paths this pass created — the announcement, and the .gitkeep rule
+  created_dirs=""   # dirs THIS pass created; the .gitkeep rule keys off exactly this set
+  skipped=""        # subtrees we refused to descend into (symlink / wrong type / failed write)
+
+  # These lists are NEWLINE-delimited and iterated with `for x in $list`, which splits on $IFS. Under
+  # the default IFS a path containing a SPACE would split into two bogus entries — and keep_out is USER
+  # input, so that is reachable, not theoretical. Pin IFS to newline for the whole function and restore
+  # it at every return. (`IFS= read` sets its own per-command, so the parsers below are unaffected.)
+  #
+  # `set -f` matters just as much, and pinning IFS alone did NOT cover it (round-1 review, R3): an
+  # unquoted `$list` is subject to GLOBBING as well as splitting. A keep-out line of `wiki-*` was
+  # therefore expanded against the launcher's CURRENT WORKING DIRECTORY — so the same repo with the
+  # same opt-out file converged differently depending on where you happened to run `fkit` from
+  # (reproduced: kept out from a dir containing a `wiki-vault` file, recreated from /tmp). These are
+  # PATH PATTERNS to match literally, never shell globs. No globbing anywhere in this function.
+  oldifs="$IFS"; IFS='
+'
+  case "$-" in *f*) oldglob=1 ;; *) oldglob=0 ;; esac    # restore only if WE turned it off
+  set -f
+
+  # The opt-out. A user who deliberately deleted wiki-vault/ (they don't use the wiki) must not have it
+  # silently resurrected on every launch forever with no way to stop it — deletion has to be
+  # respectable. One scaffold-relative path per line; an entry covers that path AND everything beneath
+  # it, which is the whole-tree form. `#` comments and blanks ignored.
+  #
+  # ⚠️ It lives in ai-agents/ — TRACKED — and NOT in .fkit/, which is gitignored. This is the same trap
+  # that killed the version cursor: an opt-out in .fkit/ is invisible to a teammate who clones the repo,
+  # and THEIR launch resurrects the folder the owner deliberately removed. It is still stateless: it
+  # records INTENT, not progress, so it is not a cursor by the back door.
+  keep_out=""
+  ko="$aa/.fkit-keep-out"
+  # An opt-out we cannot READ must fail CLOSED (round-1 review, R1). The old test silently fell through
+  # to "no opt-outs" — so a `chmod 000` (or symlinked, or directory) .fkit-keep-out meant the user's
+  # deliberate deletion was resurrected on every launch with NOT ONE WORD said, and the announcement
+  # then cheerfully listed the very folder they had opted out of. That was the lone silent fail-open in
+  # a file that refuses loudly everywhere else, and it failed in the user's DISfavour: we know intent
+  # was recorded and we cannot read it, which is precisely when guessing "they meant nothing" is worst.
+  # Skip convergence entirely and say why — the user can always fix the file; they cannot undo a
+  # resurrection they never saw.
+  if [ -e "$ko" ] || [ -L "$ko" ]; then
+    if [ -L "$ko" ] || [ ! -f "$ko" ] || [ ! -r "$ko" ]; then
+      {
+        echo "⚠ skipped converging ai-agents/ — its .fkit-keep-out cannot be read"
+        echo "    $ko"
+        echo "  It records which paths fkit must never create, so fkit will not guess. Nothing was"
+        echo "  written. Make it a readable regular file (or delete it) and fkit will converge again."
+      } >&2
+      converge_restore
+      return 0
+    fi
+  fi
+  if [ -f "$ko" ]; then
+    # `|| [ -n "$line" ]` so a final line with no trailing newline is still read. \r is trimmed for the
+    # same reason the rules matcher trims it: a CRLF checkout must not silently match nothing.
+    while IFS= read -r line || [ -n "$line" ]; do
+      line="$(printf '%s' "$line" | tr -d '\r')"
+      case "$line" in ''|'#'*) continue ;; esac
+      line="${line#./}"; line="${line#/}"           # normalize to scaffold-relative
+      while :; do case "$line" in */) line="${line%/}" ;; *) break ;; esac; done
+      [ -n "$line" ] && keep_out="$keep_out$line
+"
+    done < "$ko"
+  fi
+
+  # Walk the scaffold in `sort` order so a parent ALWAYS precedes its children: a child is its parent's
+  # string plus "/…", i.e. the parent is a proper prefix, and a proper prefix always sorts first. That
+  # ordering is what lets created_dirs and skipped be built in one pass — by the time we reach
+  # `a/b/.gitkeep` we already know whether we made `a/b`. LC_ALL=C keeps it byte-order and
+  # locale-independent. (The scaffold is fkit's own tree; no newlines in its filenames.)
+  #
+  # ⚠️ Collected FIRST, then fed in by heredoc — deliberately NOT `find … | while read`. A piped `while`
+  # runs in a SUBSHELL, so every assignment below (created, created_dirs, skipped) would be discarded
+  # the moment the loop ended: the walk would work perfectly and then announce NOTHING, on every run.
+  # That is invisible to any test that only checks the created files. No pipe into the loop, no bug.
+  tree="$(find "$scaffold/ai-agents" -mindepth 1 | LC_ALL=C sort)"
+  while IFS= read -r src; do
+    [ -n "$src" ] || continue
+    rel="${src#"$scaffold/ai-agents/"}"
+    dst="$aa/$rel"
+
+    # Inside a subtree we already refused? Stay out of it, silently — we warned once at its root.
+    in_skipped=0
+    for s in $skipped; do
+      case "$rel" in "$s"/*) in_skipped=1; break ;; esac
+    done
+    [ "$in_skipped" = 1 ] && continue
+
+    # Opted out? An entry covers the path itself and everything under it, so a subtree opt-out needs no
+    # separate bookkeeping.
+    kept=0
+    for k in $keep_out; do
+      case "$rel" in "$k"|"$k"/*) kept=1; break ;; esac
+    done
+    [ "$kept" = 1 ] && continue
+
+    # [ -L ] FIRST, ALWAYS. -e/-d DEREFERENCE. A symlinked ai-agents/ is caught by the preflight above,
+    # but per-path writes add a NEW seam the all-or-nothing guard never had: a symlinked SUBDIR
+    # (ai-agents/knowledge-base -> /somewhere/else) reads as an existing directory to -d, and we would
+    # then mkdir/cp straight THROUGH it, outside the project fkit was pointed at. -L is the one test
+    # that does not lie. A broken symlink is caught here too: -e is false for one, so without this we
+    # would `cp` through the dangling link and create its target.
+    if [ -L "$dst" ]; then
+      skipped="$skipped$rel
+"
+      echo "⚠ ai-agents/$rel is a symlink — fkit will not write through it" >&2
+      continue
+    fi
+
+    if [ -e "$dst" ]; then
+      # THE INVARIANT. The path exists: do nothing. Not a diff, not a compare, not a backup. Nothing.
+      # The one exception is not an exception to it — a scaffold DIRECTORY sitting on top of the user's
+      # FILE is not a path we can descend into, so we refuse the subtree rather than write into it.
+      if [ -d "$src" ] && [ ! -d "$dst" ]; then
+        skipped="$skipped$rel
+"
+        echo "⚠ ai-agents/$rel is not a directory — fkit will not converge below it" >&2
+      elif [ -d "$dst" ] && { [ ! -r "$dst" ] || [ ! -x "$dst" ]; }; then
+        # An existing dir we cannot read INTO (round-1 review, R4). Without this we descend anyway, and
+        # `[ -e ]` is false for every child — not because they are absent, but because we cannot stat
+        # them — so we try to create files that already exist and emit a warning per child, on EVERY
+        # launch, forever. Refuse the subtree once, with a message naming the actual cause.
+        skipped="$skipped$rel
+"
+        echo "⚠ ai-agents/$rel cannot be read into — fkit will not converge below it (check its permissions)" >&2
+      fi
+      continue
+    fi
+
+    if [ -d "$src" ]; then
+      # Non-fatal, per write: a convergence failure must NEVER brick the launcher, and must not even
+      # cost the user the REST of setup (their agents and skills are refreshed further down). We warn,
+      # refuse the subtree, and carry on — `set -e` never sees a non-zero.
+      if mkdir "$dst" 2>/dev/null; then
+        created="$created$rel/
+"
+        created_dirs="$created_dirs$rel
+"
+      else
+        skipped="$skipped$rel
+"
+        echo "⚠ could not create ai-agents/$rel — skipping it and everything under it" >&2
+      fi
+      continue
+    fi
+
+    # THE .gitkeep RULE — the subtle one a naive create-if-absent pass gets wrong.
+    #
+    # A user whose tasks/backlog/ holds real briefs has very likely deleted its .gitkeep. Blind
+    # create-if-absent RESURRECTS it on every launch and dirties `git status` forever — turning
+    # convergence into a thing that quietly edits the user's repo. A .gitkeep is a placeholder for an
+    # EMPTY directory; it is meaningless in a directory that has content.
+    #
+    # Rule: a .gitkeep is created ONLY when its own directory was created by THIS pass. Never added to a
+    # directory that already existed.
+    case "$rel" in
+      */.gitkeep|.gitkeep)
+        parent="${rel%/*}"
+        [ "$parent" = "$rel" ] && continue          # top-level .gitkeep: its dir is ai-agents/, which exists
+        is_new=0
+        for d in $created_dirs; do
+          [ "$d" = "$parent" ] && { is_new=1; break; }
+        done
+        [ "$is_new" = 1 ] || continue
+        ;;
+    esac
+
+    if cp "$src" "$dst" 2>/dev/null; then
+      created="$created$rel
+"
+    else
+      echo "⚠ could not create ai-agents/$rel" >&2
+    fi
+  done <<EOF
+$tree
+EOF
+
+  # ⚠️ THE OUTPUT TRAP, and it is why this goes to STDERR.
+  #
+  # Convergence only EVER fires on an already-set-up project — a fresh one takes the `cp -R` branch
+  # instead. And the launcher calls init with `>/dev/null` on exactly that kind of project
+  # (fkit-claude.sh). So an announcement on stdout is discarded 100% of the time: the feature would be
+  # "implemented", invisible, and would pass a naive review that only checked that the code echoes.
+  #
+  # Of the two honest fixes — print to stderr, or un-silence the call site — this takes STDERR, the
+  # channel this file already uses for precisely this reason (see the preflight refusal above). Simply
+  # removing the `>/dev/null` was rejected: it restores the wall of per-launch "• already present" noise
+  # that the quiet path exists to suppress, and noise is how a real refusal stops being read.
+  #
+  # Announce ONLY when something was created. The happy path runs on every launch of every project
+  # forever and must stay COMPLETELY silent. If fkit adds a path to a user's project it says so, once,
+  # on the launch it happens — silent mutation of someone's tree is what makes every other failure mode
+  # nasty.
+  if [ -z "$created" ]; then converge_restore; return 0; fi
+  {
+    echo "⚙ fkit added new paths to ai-agents/ (create-if-absent; nothing existing was changed):"
+    for p in $created; do echo "    $p"; done
+    echo "  Renamed one of these? fkit cannot tell a rename from a deletion, so you now have both —"
+    echo "  delete the new one and list it in ai-agents/.fkit-keep-out to stop it coming back."
+  } >&2
+  converge_restore
+  return 0
+}
 
 # 1. ai-agents/ working structure (never clobber an existing one)
 #
@@ -52,11 +293,11 @@ if [ -n "$aa_state" ]; then
     echo "  Nothing was written to it and nothing is broken. The rest of setup continues and your"
     echo "  session will start. Replace it with a real directory if you want fkit to manage it."
   } >&2
-elif [ -e "$aa" ]; then
-  echo "• ai-agents/ already present — left as-is"
-else
+elif [ ! -e "$aa" ]; then
   cp -R "$scaffold/ai-agents" "$aa"
   echo "• created ai-agents/ (from scaffold)"
+else
+  converge_ai_agents
 fi
 
 # 2. shared context files. CLAUDE.md carries the team map + dispatch rules; AGENTS.md is read

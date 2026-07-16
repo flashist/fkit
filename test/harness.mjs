@@ -9,10 +9,11 @@
 // Nothing here writes into the repo: every project lives under os.tmpdir(). `git status` stays clean.
 
 import { spawn } from 'node:child_process';
-import { mkdtempSync, writeFileSync, mkdirSync, chmodSync, readFileSync, readdirSync, existsSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, chmodSync, readFileSync, readdirSync, existsSync, rmSync, cpSync, readlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const REPO = dirname(HERE);                              // .../fkit
@@ -149,6 +150,53 @@ function runSync(args, { project, extraEnv = {} } = {}) {
   });
   cleanup(argvDir);
   return { code: r.status, stdout: r.stdout || '', stderr: r.stderr || '' };
+}
+
+// --- init / convergence ------------------------------------------------------------------------
+// The convergence contract (task 28) belongs to init, not to the launcher: init is what walks the
+// scaffold and tops up an existing ai-agents/. So the suite drives init DIRECTLY — the launcher is
+// only involved in the one assertion that the announcement survives its `>/dev/null` (which is the
+// whole trap), and that one uses runFkit above.
+export const INIT = join(REPO, 'claude', 'fkit-claude-init.sh');
+export const SCAFFOLD = join(REPO, 'claude', 'scaffold', 'ai-agents');
+
+// Run init against a project and resolve { code, stdout, stderr }. Note rc 3 = "refused ai-agents/".
+export function runInit(project) {
+  const r = spawnSync(INIT, [project], { stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf8' });
+  return { code: r.status, stdout: r.stdout || '', stderr: r.stderr || '' };
+}
+
+// A bare project dir with a COPY of the scaffold's ai-agents/ already in place — i.e. an
+// already-set-up project, which is the only kind convergence ever runs on.
+export function makeConvergeProject() {
+  const dir = mkdtempSync(join(tmpdir(), 'fkit-conv-'));
+  cpSync(SCAFFOLD, join(dir, 'ai-agents'), { recursive: true });
+  return dir;
+}
+
+// Every path under a dir → a content+type fingerprint, keyed by relative path. The invariant
+// assertion compares two of these: any pre-existing entry whose fingerprint moved (or which vanished)
+// is a broken invariant.
+//
+// ⚠️ Records DIRECTORIES and SYMLINKS, not just regular files (round-1 review, R5). Hashing only file
+// contents left the invariant check blind to precisely the mutations that are hardest to undo: a
+// pre-existing symlink swapped for a real directory, or an empty directory deleted, both scored as
+// "nothing changed". The invariant says NO overwrite, move, or delete of ANY path — so the manifest
+// has to see every path, and its type.
+export function manifest(root) {
+  const out = new Map();
+  const walk = (d, prefix) => {
+    for (const e of readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name < b.name ? -1 : 1)) {
+      const rel = prefix ? `${prefix}/${e.name}` : e.name;
+      const abs = join(d, e.name);
+      if (e.isSymbolicLink()) out.set(rel, `symlink:${readlinkSync(abs)}`);   // do NOT follow it
+      else if (e.isDirectory()) { out.set(rel, 'dir'); walk(abs, rel); }
+      else if (e.isFile()) out.set(rel, `file:${createHash('sha256').update(readFileSync(abs)).digest('hex')}`);
+      else out.set(rel, 'other');
+    }
+  };
+  walk(root, '');
+  return out;
 }
 
 // Read a role's generated lockdown settings file from a project.

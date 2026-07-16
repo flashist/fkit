@@ -15,3 +15,25 @@ its *contents* are project-specific.
 Agents run on Claude Code and inherit the session's model unless their definition
 (`.claude/agents/fkit-<role>.md`) pins one; there is no project-level routing file. The reviewer's
 adversarial second opinion runs on Codex, for genuine model diversity.
+
+## How fkit keeps this folder up to date
+
+Every `fkit` launch tops this tree up **additively**: any folder or file the current scaffold has and
+this project does not, fkit creates — announcing it once, on the launch it happens, and staying silent
+otherwise. That is how a project scaffolded before a path existed gains it, with no migration to run.
+
+> **fkit never writes to a path that already exists here.** Create-if-absent only — no overwrite, no
+> move, no delete, ever, inside `ai-agents/`.
+
+Two consequences follow directly from that rule, and both are deliberate:
+
+- **Content drift is not fixed.** A file you edited (this README included) is a path that already
+  exists, so fkit steps over it forever. You will not receive later scaffold improvements to a file you
+  already have. The safety and the limitation are the same property.
+- **A rename gets you both.** fkit compares the scaffold to the disk and keeps no history, so it cannot
+  tell a rename from a deletion and recreates the original alongside yours. An inherent limit of any
+  stateless mechanism, not a bug.
+
+To stop fkit creating a path, list it in **`ai-agents/.fkit-keep-out`** — one scaffold-relative path
+per line, an entry covering everything beneath it, `#` comments ignored. **Commit it**: it is tracked
+so it survives a clone, which is exactly what an opt-out under gitignored `.fkit/` would not do.

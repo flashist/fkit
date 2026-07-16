@@ -24,6 +24,45 @@ normal run and **defer to**. Two ship with the scaffold:
 They are **yours to amend** — but amend them *there*. A convention has exactly one home; a second copy
 of a rule is how the two drift apart and the project stops knowing which one is law.
 
+## How fkit keeps this folder up to date
+
+Every `fkit` launch tops this tree up **additively**: any folder or file the current scaffold has and
+your project does not, fkit creates. That is how a project scaffolded months ago gains a path added to
+fkit later, with no migration step to run. It says so on the launch it happens, and is otherwise
+silent.
+
+**The one rule it never breaks:**
+
+> **fkit never writes to a path that already exists here.** Create-if-absent only — no overwrite, no
+> move, no delete, ever, inside `ai-agents/`.
+
+Everything in this folder is **yours**. Rename things, delete things, rewrite them; fkit will not
+argue. Two consequences follow directly, and both are deliberate:
+
+- **Your edits are never "corrected".** Once a file exists, fkit steps over it forever — including
+  this README. If a later fkit improves a scaffold file, you will **not** receive that change to a
+  file you already have. Content is yours; only *absence* is topped up.
+- **A rename gets you both.** fkit compares the scaffold to your disk and nothing else — it cannot
+  tell "renamed `sprints/` to `iterations/`" from "deleted `sprints/`", so it recreates `sprints/`
+  alongside yours. This is an inherent limit of any mechanism that keeps no history of your project,
+  not a bug. Use the opt-out below.
+
+### Opting out — `ai-agents/.fkit-keep-out`
+
+Deleted `wiki-vault/` because you don't use a wiki? Say so, and fkit stops recreating it:
+
+```
+# ai-agents/.fkit-keep-out — paths fkit must never create. One per line, relative to ai-agents/.
+# An entry covers that path and everything under it. `#` comments and blank lines are ignored.
+wiki-vault
+knowledge-base/reports
+```
+
+**Commit this file.** It lives inside `ai-agents/` — tracked — precisely so it survives a `git clone`
+and applies for your whole team. A teammate's launch would otherwise resurrect the folder you
+deliberately removed. It records your *intent*, not fkit's progress: there is no version cursor here,
+and no notion of "which fkit release this project is at".
+
 Agents run on Claude Code and inherit the session's model unless their definition
 (`.claude/agents/fkit-<role>.md`) pins one; there is no project-level routing file. The reviewer's
 adversarial second opinion runs on Codex, for genuine model diversity.
