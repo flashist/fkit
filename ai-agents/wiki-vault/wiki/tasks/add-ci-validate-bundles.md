@@ -13,9 +13,9 @@ There was no CI in the repo. `omnigent/validate-bundles.sh` already existed and 
 ## Outcome
 **⛔ Cancelled (2026-07-11) — Omnigent removed.** `validate-bundles.sh` was deleted with the Omnigent runtime ([[decisions/adr-009-claude-code-native-is-the-only-runtime]]). **The premise no longer exists.**
 
-⚠️ **But the need it identified is still unmet and still open, and it is now the project's top structural risk.** fkit has **no CI and no test suite of any kind** — and the two files with the highest blast radius (`install.sh`, `claude/fkit-claude.sh`) have the least verification. *The script died; the gap it was covering got bigger.*
+⚠️ **The need it identified was real, and is now partly met.** *(Updated 2026-07-16, per [[systems/testing-and-verification]].)* `claude/fkit-claude.sh` is now covered by the launcher-contract suite ([[tasks/add-launcher-contract-smoke-script]], [[decisions/adr-014-how-fkit-tests-itself]]). **`install.sh` — the other file with the highest blast radius, and the `curl | sh` entry point — still has zero automated coverage, and there is still no `.github/`.** *The script died; the gap it was covering is reduced, not closed.*
 
-**Open question for the owner:** is a `shellcheck` + smoke-install CI in scope, or is manual verification the accepted permanent posture for a prototype? *(See `ai-agents/tasks/backlog/add-e2e-smoke-script-for-fkit-itself.md`.)*
+**Open question for the owner:** is a `shellcheck` + smoke-install CI in scope, or is manual verification the accepted permanent posture for a prototype? *(The nominated home for that question, [[tasks/add-e2e-smoke-script-for-fkit-itself]], has since been cancelled — superseded by [[tasks/add-launcher-contract-smoke-script]], which does not cover `install.sh`. The question itself is still unresolved.)*
 
 ## Related
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
@@ -23,3 +23,6 @@ There was no CI in the repo. `omnigent/validate-bundles.sh` already existed and 
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
 - [[systems/fkit]]
 - [[systems/testing-and-verification]]
+- [[tasks/add-e2e-smoke-script-for-fkit-itself]]
+- [[tasks/add-launcher-contract-smoke-script]]
+- [[decisions/adr-014-how-fkit-tests-itself]]

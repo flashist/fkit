@@ -33,3 +33,4 @@ It was also the producer's nominated home for a **mechanical link checker**, a q
 - [[tasks/remove-fkit-resume-passthrough]]
 - [[systems/testing-and-verification]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/add-ci-validate-bundles]]

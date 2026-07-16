@@ -17,7 +17,7 @@ Fix the **recurrence**, not the symptom: stop `/fkit-task-done` and `/fkit-task-
 **Split from the one-off cleanup on purpose**, per the owner's independent-shippability rule — the cleanup (task 21) is shippable today; this is the process fix. **Landing only the cleanup buys nothing durable: the links rot again on the next carried-over completion.**
 
 ## Outcome
-Done. *(The one-off repair of Sprint 1's 6 existing broken links — `ai-agents/tasks/backlog/repair-broken-links-in-closed-sprint-plans.md` — remains **open**.)*
+Done. *(The one-off repair of Sprint 1's 6 existing broken links — [[tasks/repair-broken-links-in-closed-sprint-plans]] — has also since landed, at `ai-agents/tasks/done/repair-broken-links-in-closed-sprint-plans.md`.)*
 
 ⚠️ **It was `🚧 Blocked` on an owner ruling**, not on another task, and the sprint plan still lists that ruling among its open questions: *do the movers repair inbound links repo-wide, or are closed sprint plans **immutable historical records** that may point at where a task was?*
 

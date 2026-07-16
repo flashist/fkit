@@ -30,7 +30,7 @@ Close the loop on fkit's startup sequence: verify the user-facing onboarding flo
 
 **The lesson that outlived it:** *the sprint's premise, not just its tasks, can be invalidated by a decision.* Cancelling per-ticket rather than wholesale is what saved five live pieces of work.
 
-⚠️ **Known defect in this file:** its `➡️ Moved to Sprint 2` rows carry **6 broken links**, still pointing at `tasks/backlog/…` for tasks since completed into `tasks/done/`. The one-off repair is still open (`ai-agents/tasks/backlog/repair-broken-links-in-closed-sprint-plans.md`); the recurrence — the real bug — was fixed by [[tasks/harden-task-movers-against-closed-sprint-link-rot]].
+✅ **Past defect in this file, now repaired.** Its `➡️ Moved to Sprint 2` rows once carried **6 broken links**, pointing at `tasks/backlog/…` for tasks since completed into `tasks/done/`. Both the one-off repair ([[tasks/repair-broken-links-in-closed-sprint-plans]], done) and the recurrence fix ([[tasks/harden-task-movers-against-closed-sprint-link-rot]], done) have landed. Verified 2026-07-16: `ai-agents/sprints/done/sprint-1.md` now links every moved task at `tasks/done/…`.
 
 ## Related
 - [[tasks/sprint-2-remove-omnigent]]

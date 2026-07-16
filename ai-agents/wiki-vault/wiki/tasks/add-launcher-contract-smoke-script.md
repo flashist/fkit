@@ -40,3 +40,4 @@ Give fkit its **first automated verification**. Stub `claude` and `codex` on `PA
 - [[systems/testing-and-verification]]
 - [[systems/role-locked-sessions]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/add-ci-validate-bundles]]

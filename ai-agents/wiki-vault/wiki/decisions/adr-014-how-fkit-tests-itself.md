@@ -45,6 +45,7 @@ The ADR deliberately **declined to pick the runner**, on the owner's explicit ru
 ## Related
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]] — **widens §2's fence** from two things to three; rests on the same `install.sh:43` fact, inverted by design
 - [[decisions/adr-003-ci-runs-validate-bundles]] — the dead Omnigent-era check this replaces
+- [[tasks/add-ci-validate-bundles]] — the cancelled task that first named the gap this ADR's suite partly closes
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]]
 - [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]]
