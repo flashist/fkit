@@ -152,6 +152,25 @@ analysis:**
     hardening).
   - **Menu visibility regresses in one narrow way** (§Decision 5): non-owned skills become visible,
     though not invocable, in the `/` menu across every session. Accepted, not fixed.
+  - **Non-fkit subagents lose ALL fkit skills, including the universal read-only ones — accepted
+    (owner, 2026-07-16), not an oversight.** The hook keys enforcement on `agent_type`, and resolves a
+    role only by stripping an `fkit-` prefix (`claude/skill-ownership-hook.sh:124-127`). So a
+    `general-purpose`, `Explore`, `claude`, or `codex:rescue` subagent — spawned from *any* fkit role
+    session, inheriting that session's `--settings` and therefore this hook, but carrying no fkit
+    identity of its own — is denied **every** `fkit-*` skill, `fkit-team` and `fkit-query` included,
+    even though `skills_for_role()` grants those two to every role
+    (`claude/skills-for-role.sh:20-26`). This is a real regression against the retired off-list: under
+    `skillOverrides`, `fkit-query` was in `CONSULT_SKILLS` and never turned off for anyone, so such a
+    subagent inherited it live and could run it. Fail-closed is the deliberate answer, and the same one
+    Decision 3 already gives for an absent `agent_type` (`skill-ownership-hook.sh:113-122`): a caller
+    with no fkit identity carries no ADR-010 lockdown context, and "unsure who this is" is not a reason
+    to let an fkit skill through. Cost: a general-purpose helper spawned mid-session cannot read the
+    wiki via `/fkit-query` — the *fkit role* that spawned it can, and should either run the query
+    itself or delegate to `fkit-wiki`. Re-raise only if this proves load-bearing in practice — i.e. a
+    real workflow needs a non-fkit subagent to run a universal read-only skill and cannot restructure
+    around it — in which case the narrow fix is an explicit universal-skill allowance for
+    identity-bearing non-fkit `agent_type`s, **never** a return to a blanket always-on list
+    (§Options).
   - Two prior ADRs (010, 012) now carry language ("advisory in a consult") that is accurate as
     *history* but not as *current truth* once this hook ships — readers must follow this ADR's pointer
     rather than trusting ADR-012's Decision 2 prose in isolation. Neither file is edited or
