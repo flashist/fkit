@@ -13,9 +13,10 @@ The full project brief — domain, architecture, conventions — lives in
 
 This project uses **fkit**, a team of role-scoped AI dev agents coordinating over the `ai-agents/`
 file tree. **Every fkit session is locked to exactly one role** (`claude --agent fkit-<role>`, with
-every other role's skills turned off). Running **`fkit`** in a terminal shows a role menu; **`fkit
-<role>`** goes straight there. To work in two roles at once, open another terminal tab and run `fkit`
-again. Run `/fkit-team` any time for the roster and which role you're in.
+every other role's skills denied on invocation by a `PreToolUse` hook — see below). Running
+**`fkit`** in a terminal shows a role menu; **`fkit <role>`** goes straight there. To work in two
+roles at once, open another terminal tab and run `fkit` again. Run `/fkit-team` any time for the
+roster and which role you're in.
 
 | Role | Does | Must not | **Its own** skills |
 |---|---|---|---|
@@ -29,14 +30,16 @@ again. Run `/fkit-team` any time for the roster and which role you're in.
 Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. The **team room** (`fkit-lead`) has
 only `/fkit-team` and `/fkit-query` — it routes, it doesn't do.
 
-**Skills belong to roles.** In a **role session** this is structural: the session sees *only* its own
-role's procedures, and the rest are turned **off** — invisible and unrunnable, not merely discouraged.
-So a `fkit coder` session **cannot** run `/fkit-review`; it asks `@fkit-reviewer` for one, because
-reviewing code you just wrote isn't a review.
+**Skills belong to roles.** This is structural — **in a role session and in a spawned consult
+alike**: a `PreToolUse` hook checks the REAL invoking agent's identity (a session's own role, or a
+spawned subagent's own role, at any consult depth) against role ownership on every skill call, and
+denies it if that role doesn't own it. So a `fkit coder` session **cannot** run `/fkit-review`, and
+neither can a subagent it spawns pretending to; it asks `@fkit-reviewer` for one, because reviewing
+code you just wrote isn't a review.
 
-**In a spawned consult the boundary is advisory** — a consulted role inherits the calling session's
-skill settings, so it may see procedures that aren't its own. There, the `⛔ Owner:` banner on each
-skill is what holds the line. The session lock is a wall; the consult boundary is a rule.
+One cost, stated plainly: a foreign skill is **visible** in the `/` menu but **not runnable** —
+invoking it is denied regardless of who's asking. The `⛔ Owner:` banner on each skill is a courtesy
+for a well-behaved agent to notice before trying, not the only thing stopping it.
 
 **Two ways to engage a role:**
 - **`fkit <role>`** *(in a terminal)* — a session locked to that role. Every role session is a fresh

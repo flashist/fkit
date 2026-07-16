@@ -15,9 +15,11 @@
 #
 # Every session is locked two ways:
 #   * `--agent fkit-<role>`  — the role's system prompt and tool allowlist (harness-enforced)
-#   * `--settings` with skillOverrides — every fkit-* skill the role does NOT own is turned "off":
-#     hidden from the / menu AND unrunnable by name. That is what makes "the coder cannot run the
-#     reviewer's procedure" a fact rather than a request.
+#   * `--settings` wiring a `PreToolUse` hook (skill-ownership-hook.sh, task 43 / ADR-018) that denies
+#     any `Skill` call whose REAL invoking agent's role doesn't own it, per skills_for_role() — at any
+#     spawn depth, not just this session. That is what makes "the coder cannot run the reviewer's
+#     procedure" a fact rather than a request, and it now holds for a spawned consult too, not only a
+#     plain session. (Cost: a foreign skill stays visible in the `/` menu — just not runnable.)
 #
 # Want two roles at once? Open a terminal tab yourself and run `fkit` again. (We deliberately do not
 # automate that: spawning terminals needs AppleScript/Accessibility permissions that fail in ways
@@ -214,10 +216,9 @@ fi
 # preserved a field that LOOKS like the invariant and isn't — worse than no field at all. Don't
 # re-add it.
 #
-# Scope of the lock, precisely (ADR-012 §2): it is structural in a role SESSION (this JSON is what
-# makes `fkit coder` genuinely unable to run /fkit-review — the property reviewer independence rests
-# on). In a spawned CONSULT it is advisory only, carried by the agent prompt and each skill's
-# `⛔ Owner:` banner. Don't claim more than that in the docs.
+# Scope of the lock, precisely (task 43 / ADR-018, superseding ADR-012 §2's "advisory in a consult"
+# half): a PreToolUse hook (skill-ownership-hook.sh) now enforces this against the REAL invoking
+# agent's identity, at any spawn depth — structural in a role SESSION *and* in a spawned CONSULT.
 #
 # ⚠️ CHANGING A ROLE'S SKILLS? Two hand-maintained tables MIRROR this list for humans and MUST be
 # updated in the same commit, or the help text lies about what a role can do:
@@ -225,44 +226,34 @@ fi
 #   * claude/README.md                  — the skill-ownership table
 # This has already bitten once: task 14 added fkit-task-plan here and to the producer's agent file,
 # but not to fkit-team's roster — so /fkit-team under-reported the producer's primary procedure for
-# two days. These are copies FOR READERS, not sources of truth; this function is the source of truth.
+# two days. These are copies FOR READERS, not sources of truth; skills_for_role() is the source of
+# truth (moved to skills-for-role.sh, task 43, so the PreToolUse hook can source it without pulling
+# in this script's top-level side effects).
 # ---------------------------------------------------------------------------
-skills_for_role() {
-  case "$1" in
-    lead)      echo "fkit-team fkit-query" ;;
-    producer)  echo "fkit-team fkit-query fkit-initiate-project fkit-task-plan fkit-task-done fkit-task-cancelled fkit-status" ;;
-    coder)     echo "fkit-team fkit-query fkit-plan-task fkit-process-review fkit-process-stateful-review" ;;
-    architect) echo "fkit-team fkit-query fkit-survey-project fkit-inspect fkit-design-spec fkit-evaluate-approach fkit-record-decision" ;;
-    reviewer)  echo "fkit-team fkit-query fkit-review fkit-stateful-review" ;;
-    adversarial-reviewer) echo "fkit-team fkit-query fkit-adversarial-review" ;;
-    wiki)      echo "fkit-team fkit-query fkit-wiki-ingest fkit-wiki-lint fkit-wiki-sync" ;;
-    *)         echo "" ;;
-  esac
-}
-
-# Skills that must stay ON for EVERY role (ADR-012 §3). A spawned consult inherits the *caller's*
-# skillOverrides — not its own — so any skill a role is genuinely consulted TO RUN has to be left on
-# for everyone, or it is unreachable in the one place it's needed. Concretely: /fkit-initiate-project
-# has the PRODUCER spawn the architect to run fkit-survey-project; with survey-project off in the
-# producer's settings, the architect inherits that and project initiation cannot run its own survey.
-#
-# The cost, stated plainly: an owner in any role session can now invoke /fkit-survey-project by name.
-# That is a benign leak on a read-heavy doc procedure, traded against an initiation flow that is
-# otherwise broken. Deliberately minimal — adding to this set is a decision, not a convenience.
-CONSULT_SKILLS="fkit-survey-project fkit-query"
+. "$here/skills-for-role.sh"
 
 # Writes the role's settings to a file and echoes its (relative) path. It goes in a FILE rather than
 # inline on argv because a terminal with no title yet labels the tab with the command line — and a
 # ~400-byte JSON blob makes every tab look identical. `--settings` takes a file or JSON; we take file.
-build_settings() {   # → .fkit/settings/<role>.json containing {"skillOverrides":{"<not-owned>":"off",…}}
-  allowed=" $(skills_for_role "$1") $CONSULT_SKILLS "
-  body=""
-  for d in "$proj"/.claude/skills/fkit-*/; do
-    [ -d "$d" ] || continue
-    s="$(basename "$d")"
-    case "$allowed" in *" $s "*) continue ;; esac
-    body="$body${body:+,}\"$s\":\"off\""
-  done
+#
+# Retired here (task 43 / ADR-018, replacing ADR-012 §3): the old `skillOverrides` "off" list and the
+# `CONSULT_SKILLS` always-on exception list it required. Both were a SESSION-scoped mechanism — they
+# governed what the launching process could see, not who was actually calling — so a spawned consult
+# inherited the *launcher's* list, never its own (the bug class task 43 fixes). The PreToolUse hook
+# below enforces against the REAL invoking agent's identity instead, at any spawn depth, so the
+# per-role off-list is no longer doing any work an unowned-skill call couldn't already be denied by
+# the hook — removing it retires the accepted `fkit-survey-project`-reachable-everywhere leak
+# (ADR-012 §3) as a side effect, not a separately engineered fix. Do not re-add either mechanism —
+# see ADR-018 for the record.
+build_settings() {   # → .fkit/settings/<role>.json containing {"hooks":{…}}
+  # PreToolUse skill-ownership hook (task 43 / ADR-018): denies a Skill call whenever the REAL
+  # invoking agent's role doesn't own it, at any spawn depth — this is what makes the lockdown hold
+  # in a spawned CONSULT, not just a plain session (unlike the retired off-list, which only ever did
+  # the latter). `bash "<path>"` — never a bare `"<path>"` — because the shipped file's exec bit is
+  # not guaranteed to survive the install/copy chain (ADR-017 rule 2; same reasoning as dashboard.sh).
+  # `$here` is absolute and this file is regenerated fresh on every launch, so an absolute path here
+  # is safe (unlike a COMMITTED settings.json, where it would break for every other machine).
+  hooks="\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Skill\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/skill-ownership-hook.sh\\\"\"}]}]}"
   # The lockdown is NOT optional: a session launched without --settings is a session with no role
   # isolation at all (ADR-010), and it would fail *open* — every fkit skill live in every role. So when
   # the project is not writable (read-only checkout, permissions) we neither skip the lockdown nor die
@@ -275,12 +266,12 @@ build_settings() {   # → .fkit/settings/<role>.json containing {"skillOverride
   # by printf, so `printf … > f 2>/dev/null` would still leak "Permission denied" to the terminal. The
   # subshell puts the redirection *inside* the scope stderr is silenced for.
   if mkdir -p "$proj/.fkit/settings" 2>/dev/null &&
-     ( printf '{"skillOverrides":{%s}}\n' "$body" > "$proj/.fkit/settings/$1.json" ) 2>/dev/null; then
+     ( printf '{%s}\n' "$hooks" > "$proj/.fkit/settings/$1.json" ) 2>/dev/null; then
     printf '.fkit/settings/%s.json' "$1"        # relative: we always exec from $proj (proj = $PWD)
     return 0
   fi
   echo "⚠ $proj is not writable — passing the role lockdown inline instead of via .fkit/." >&2
-  printf '{"skillOverrides":{%s}}' "$body"
+  printf '{%s}' "$hooks"
 }
 
 # Name the tab for the role, so a wall of fkit tabs is readable. Claude Code overwrites this once the
@@ -466,7 +457,9 @@ fi
 if [ "$role" = lead ]; then
   printf '\n  → team room. It routes and answers wiki questions; it does no work itself.\n\n'
 else
-  printf '\n  → %s session (locked: only the %s'"'"'s skills exist here).\n\n' "$role" "$role"
+  # "...are runnable here", not "...exist here": a foreign skill still shows up in the / menu
+  # (ADR-018 Decision 5) — the hook denies invoking it, it doesn't hide it. Round-1 review R5.
+  printf '\n  → %s session (locked: only the %s'"'"'s skills are runnable here).\n\n' "$role" "$role"
 fi
 settings="$(build_settings "$role")"
 set_tab_title "$role"

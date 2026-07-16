@@ -72,9 +72,10 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 40 | Design the deterministic dashboard generator for `/fkit-status` *(design — [spec](../knowledge-base/reports/2026-07-16-design-deterministic-dashboard-for-fkit-status.md); spawned [ADR-017](../knowledge-base/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit.md))* | [`design-deterministic-dashboard-for-fkit-status.md`](../tasks/done/design-deterministic-dashboard-for-fkit-status.md) |
 | ✅ Done | 41 | Build the deterministic dashboard script and wire it into `/fkit-status` *(owner: fkit-coder; [review](../reviews/build-deterministic-dashboard-script-for-fkit-status.md) closed-out, rounds 1–6, residuals recorded)* | [`build-deterministic-dashboard-script-for-fkit-status.md`](../tasks/done/build-deterministic-dashboard-script-for-fkit-status.md) |
 | ✅ Done | 42 | Reopen ADR-012 Decisions 3 & 4 — record the `PreToolUse` skill-gate hook decision *(live bug fix, phase 1/2; owner: fkit-architect)* | [`record-pretooluse-skill-gate-adr-amendment.md`](../tasks/done/record-pretooluse-skill-gate-adr-amendment.md) |
-| 🔲 Backlog | 43 | Implement the `PreToolUse` skill-ownership gate (the hook-flip) *(needs 42; owner: fkit-coder)* | [`implement-pretooluse-skill-ownership-hook.md`](../tasks/backlog/implement-pretooluse-skill-ownership-hook.md) |
+| ✅ Done | 43 | Implement the `PreToolUse` skill-ownership gate (the hook-flip) *(owner: fkit-coder; [review](../reviews/implement-pretooluse-skill-ownership-hook.md))* | [`implement-pretooluse-skill-ownership-hook.md`](../tasks/done/implement-pretooluse-skill-ownership-hook.md) |
 | 🔲 Backlog | 44 | Remove the output variants from `/fkit-status` — one skill, one output *(**reverts task 38**; skill-text only; owner: fkit-coder)* | [`remove-output-variants-from-fkit-status.md`](../tasks/backlog/remove-output-variants-from-fkit-status.md) |
 | 🔲 Backlog | 45 | Wiki sync after the `/fkit-status` output-variant removal *(needs 44 — hard; owner: fkit-wiki)* | [`wiki-sync-fkit-status-output-variant-removal.md`](../tasks/backlog/wiki-sync-fkit-status-output-variant-removal.md) |
+| 🔲 Backlog | 46 | Investigate adopting a proper mutation-testing library, replacing hand-rolled `prove-red.sh` *(investigation; owner: fkit-architect; spawned from task-43 review finding R2)* | [`investigate-mutation-testing-library-adoption.md`](../tasks/backlog/investigate-mutation-testing-library-adoption.md) |
 
 ## Dependency graph
 
@@ -706,6 +707,26 @@ be archived to `sprints/done/` are **weaker records than an ADR**, and neither i
 proposing a feature looks first. If `full` gets re-proposed citing task 38, this call was wrong and an
 ADR is one cheap architect task away. **See open question 8** — the generalizable principle may be
 better recorded as a **convention** than an ADR, and that is the owner's to rule.
+
+## Addendum — task 46 added out of band (2026-07-16): the mutation-testing-library question
+
+**Task 46 (`investigate-mutation-testing-library-adoption`) was scoped from the owner's reaction to a
+review finding, mid-implementation of task 43** — relayed by fkit-coder, not raised by the producer.
+Round-1 stateful review of task 43 (`ai-agents/reviews/implement-pretooluse-skill-ownership-hook.md`,
+finding **R2**) found `test/prove-red.sh` — the task-23 / [ADR-014](../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md)
+mutation-testing hard gate — silently broken by task 43's own refactor (a hardcoded path failing even
+at the unmutated baseline, and a `sed` mutation target that had moved). **R2 itself is fixed and
+verified inside task 43's scope** — task 46 is the forward-looking question the owner raised in
+response to it, verbatim: *"it looks like we need to use a proper library for auto-tests, which handles
+this specific type of tests 'testing negative cases'."*
+
+**It is scoped as an investigation, not an implementation, on purpose** — same pattern as tasks
+20/29/39/45(-adjacent): a library adoption here would have to reconcile with ADR-014's settled
+zero-devDependencies stance (Decision 4) and its hard-coded-oracle principle (Decision 5), and whether
+that tradeoff is worth it is an architecture call, not the producer's to make in the brief. **Owner:
+fkit-architect.** Depends on nothing; does not block task 43 or anything else in Sprint 2.
+
+**Numbered 46 for append-don't-renumber discipline. Owner to confirm the ranking.**
 
 ## Open questions for the owner
 

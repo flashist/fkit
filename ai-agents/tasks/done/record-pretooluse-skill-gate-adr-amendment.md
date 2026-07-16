@@ -86,7 +86,7 @@ Record an ADR (via `/fkit-record-decision`) that:
     claim rather than strengthen it). Record the rejection so it isn't re-litigated.
 - **Links to ADR-010, ADR-012** (superseding language; honest numbering — neither file is deleted or
   renumbered) and to this task's sibling implementation task
-  ([`implement-pretooluse-skill-ownership-hook.md`](../backlog/implement-pretooluse-skill-ownership-hook.md)).
+  ([`implement-pretooluse-skill-ownership-hook.md`](implement-pretooluse-skill-ownership-hook.md)).
 
 ## Verification steps
 
@@ -105,7 +105,7 @@ Record an ADR (via `/fkit-record-decision`) that:
   writes the decision — same division as task 37.
 - **Depends on: nothing.** The investigation is already done (three architect consults today,
   verified against the running binary). This is the recording step, not new analysis.
-- **Blocks:** [`implement-pretooluse-skill-ownership-hook.md`](../backlog/implement-pretooluse-skill-ownership-hook.md)
+- **Blocks:** [`implement-pretooluse-skill-ownership-hook.md`](implement-pretooluse-skill-ownership-hook.md)
   — hard dependency, same pattern as the design-then-implement split already used for tasks 40/41 and
   the investigation-then-implementation pattern for tasks 20/29/39: don't build against a decision
   that isn't recorded yet.

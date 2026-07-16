@@ -178,6 +178,18 @@ analysis:**
     restate the general worry ADR-012 already recorded and this ADR resolves.
   - Do **not** re-litigate the rejected "keep `CONSULT_SKILLS`, add members as needed" path (§Options)
     — that is the exact drift this ADR retires.
+  - **`disableAllHooks` is a real Claude Code settings key that turns off every hook, process-wide,
+    from any settings source** (project, user, or local — including this repo's own
+    `.claude/settings.local.json`, which the operator already controls). Because this lockdown is now
+    entirely hook-based, that one key is a single point of failure for the *entire* role-ownership
+    gate — a materially different fragility profile than the old per-skill `skillOverrides` off-list,
+    which required touching many entries individually to defeat. This does not weaken the ADR's actual
+    threat-model boundary: defeating the gate this way requires the operator's own settings, the same
+    actor the hook already serves, not a hostile third party. Accepted as an unavoidable consequence of
+    "entirely hook-based," not fixed here. Re-raise only if `disableAllHooks` (or an equivalent
+    single-key kill switch) becomes reachable by someone other than the operator — e.g. via an
+    untrusted or externally-supplied settings source merged into the process — which would turn this
+    from an accepted operator-controlled risk into a genuine hole in the boundary this ADR draws.
 
 ## Related
 

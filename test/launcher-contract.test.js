@@ -2,66 +2,43 @@
 //
 // Scope (settled, ADR-014 §2): the black-box process contract only —
 //   • the argv fkit hands to `claude`, INCLUDING whether it exec'd at all (Group A);
-//   • the skillOverrides map written to .fkit/settings/<role>.json — the 7×21 lockdown matrix (Group B).
+//   • the settings written to .fkit/settings/<role>.json (Group B).
 // NOT shell internals. NOT LLM behavior. `exec claude …` is the boundary; the suite asserts up to it.
 //
-// Runner: node --test, zero devDependencies (ADR-014 §4). Settled on the runner's OPEN question at
-// task-pickup time via ADR-014's dispositive criterion 1: the crown-jewel assertion (#8) is a JSON
-// set-comparison. In sh it degrades to substring `grep`, which passes for the wrong reason; in node
-// it is JSON.parse + exact set equality. node won on the merits.
+// Runner: node --test, zero devDependencies (ADR-014 §4).
 //
-// ⚠️ THE MATRIX BELOW IS HARD-CODED ON PURPOSE (ADR-014 §5). It is NOT derived from skills_for_role().
-// A test whose oracle is the implementation tests nothing — break the matrix and the derived oracle
-// breaks in lockstep, still green. This hard-coded copy IS the contract; a deliberate edit here when a
-// role's skills change is the ratchet, not a chore.
+// Group B was rewritten for task 43 / ADR-018: the per-role `skillOverrides` "off" list (the
+// "7×21 lockdown matrix") and the `CONSULT_SKILLS` exception list are RETIRED — both were
+// session-scoped (they governed what the launching process could see, not who was actually calling),
+// which is the bug class task 43 fixes. Role→skill enforcement is now a `PreToolUse` hook
+// (skill-ownership-hook.sh) that checks the REAL invoking agent's identity against skills_for_role()
+// at the point of each `Skill` call, not at session-launch time — see
+// test/skill-ownership-hook.test.js for that contract (fixtures-in, exit-code-out; a genuine
+// per-role/per-skill matrix belongs there now, not here). What THIS suite still owns is the much
+// narrower question: does `build_settings()` correctly wire the hook into every role's generated
+// settings? That's a fixed, role-INDEPENDENT shape (same hook, same matcher, for every role) — hence
+// no more hard-coded per-role UNIVERSE/OWNED/CONSULT matrix here; there is nothing role-shaped left
+// in this file's contract to hard-code.
 
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, chmodSync } from 'node:fs';
-import { join } from 'node:path';
-import { makeProject, runFkit, readSettings, cleanup, cleanupStub, projectSkillDirs } from './harness.mjs';
+import { chmodSync, existsSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { makeProject, runFkit, readSettings, cleanup, cleanupStub, LAUNCHER } from './harness.mjs';
 
-// --- THE CONTRACT (hard-coded; see the warning above) -----------------------------------------
+const ROLES = ['lead', 'producer', 'coder', 'architect', 'reviewer', 'adversarial-reviewer', 'wiki'];
 
-// The full universe of fkit-* skills the launcher's build_settings() iterates.
+// The one hook command every role's settings must carry — role-independent by design (the hook reads
+// the REAL caller's identity out of its own payload; it does not need a different command per role).
 //
-// Coverage note (deliberate, and pinned by the "universe matches disk" test in Group B): the per-role
-// off-set comparison alone canNOT see a role-specific skill added to the repo without being added here
-// IF it happens to be owned by every role — but no skill is. It genuinely cannot see a change to a
-// UNIVERSALLY-on skill (fkit-team / fkit-query / fkit-survey-project): those are off for no role, so
-// their presence never shows up in any off-set. That corner is closed separately by the assertion that
-// this UNIVERSE equals the fkit-* skill dirs actually on disk. A role-SPECIFIC skill deleted or added
-// still moves some role's off-set → red, as intended.
-const UNIVERSE = [
-  'fkit-adversarial-review', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-initiate-project',
-  'fkit-inspect', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review',
-  'fkit-query', 'fkit-record-decision', 'fkit-review', 'fkit-stateful-review', 'fkit-status',
-  'fkit-survey-project', 'fkit-task-cancelled', 'fkit-task-done', 'fkit-task-plan', 'fkit-team',
-  'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync',
-];
-
-// Skills each role OWNS (visible in its session). Mirror of skills_for_role() — maintained by hand.
-const OWNED = {
-  lead: ['fkit-team', 'fkit-query'],
-  producer: ['fkit-team', 'fkit-query', 'fkit-initiate-project', 'fkit-task-plan', 'fkit-task-done', 'fkit-task-cancelled', 'fkit-status'],
-  coder: ['fkit-team', 'fkit-query', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review'],
-  architect: ['fkit-team', 'fkit-query', 'fkit-survey-project', 'fkit-inspect', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-record-decision'],
-  reviewer: ['fkit-team', 'fkit-query', 'fkit-review', 'fkit-stateful-review'],
-  'adversarial-reviewer': ['fkit-team', 'fkit-query', 'fkit-adversarial-review'],
-  wiki: ['fkit-team', 'fkit-query', 'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync'],
-};
-
-// Skills forced ON for EVERY role regardless of ownership (ADR-012 §3 — a spawned consult inherits the
-// caller's overrides, so a consulted skill must never be off anywhere). Never appears in any off-set.
-const CONSULT = ['fkit-survey-project', 'fkit-query'];
-
-const ROLES = Object.keys(OWNED);
-
-// The expected off-set for a role: everything in the universe it neither owns nor is a consult skill.
-function expectedOff(role) {
-  const on = new Set([...OWNED[role], ...CONSULT]);
-  return new Set(UNIVERSE.filter((s) => !on.has(s)));
-}
+// ⚠️ Derived from LAUNCHER's own directory, NOT hard-coded to this checkout's REPO path (round-1
+// review, R2). `build_settings()` computes `$here` from the launcher script actually being run, so
+// `prove-red.sh`'s mutant copies (a full copy of claude/ under a temp dir, run via FKIT_LAUNCHER)
+// generate their OWN, correctly-different absolute path — a hard-coded REPO path would never match a
+// copy's settings, failing even the "unmutated copy must be green" baseline. This must track
+// whichever launcher is actually under test.
+const HOOK_SCRIPT = join(dirname(LAUNCHER), 'skill-ownership-hook.sh');
+const HOOK_COMMAND = `bash "${HOOK_SCRIPT}"`;
 
 // --- shared, initiated project (all assertions below want a non-fresh tree) --------------------
 let PROJECT;
@@ -155,53 +132,48 @@ describe('Group A — argv contract', () => {
 });
 
 // =================================================================================================
-// Group B — the lockdown matrix (the crown jewel; needs no LLM). JSON.parse + exact set equality.
+// Group B — the hook-wiring contract (task 43 / ADR-018). No more per-role matrix: every role gets
+// the SAME hook, wired the SAME way — role-specific enforcement now lives entirely inside the hook
+// script itself (test/skill-ownership-hook.test.js), keyed on the REAL caller's identity at the
+// point of each Skill call, not on which role's settings file launched the process.
 // =================================================================================================
-describe('Group B — lockdown matrix', () => {
-  // 8. For each role, the settings file turns OFF exactly the non-owned, non-consult skills — no more
-  //    (nothing owned is off), no fewer (every foreign skill is off).
+describe('Group B — hook wiring', () => {
+  // 8. For every role, the generated settings wires exactly one PreToolUse hook on the Skill tool,
+  //    pointing at the real, on-disk skill-ownership-hook.sh — invoked via `bash "<path>"`, never a
+  //    bare path (ADR-017 rule 2: the shipped file's exec bit is not guaranteed to survive the
+  //    install/copy chain — a bare path here would silently stop enforcing on a real install).
   for (const role of ROLES) {
-    test(`8. ${role}: skillOverrides off-set == universe − owned − consult`, async () => {
+    test(`8. ${role}: settings wire the PreToolUse Skill hook`, async () => {
       const r = await runFkit([role], { project: PROJECT });
       assert.equal(r.exec, true, `stderr: ${r.stderr}`);
-      const overrides = readSettings(PROJECT, role).skillOverrides;
-
-      // Every entry present must be valued exactly "off" (the file only ever lists off skills).
-      for (const [k, v] of Object.entries(overrides)) {
-        assert.equal(v, 'off', `${role}: ${k} should be "off", got ${JSON.stringify(v)}`);
-      }
-      const actualOff = new Set(Object.keys(overrides));
-      assert.deepEqual(actualOff, expectedOff(role), `${role}: off-set mismatch`);
-
-      // Belt-and-braces on the two directions set-equality already covers, stated as intent:
-      for (const owned of OWNED[role]) {
-        assert.ok(!actualOff.has(owned), `${role}: OWNED skill ${owned} must not be off`);
-      }
-      for (const c of CONSULT) {
-        assert.ok(!actualOff.has(c), `${role}: CONSULT skill ${c} must never be off`);
-      }
+      const settings = readSettings(PROJECT, role);
+      const preToolUse = settings.hooks?.PreToolUse;
+      assert.equal(preToolUse?.length, 1, `${role}: expected exactly one PreToolUse hook entry`);
+      assert.equal(preToolUse[0].matcher, 'Skill', `${role}: hook must be scoped to the Skill tool`);
+      assert.equal(preToolUse[0].hooks?.length, 1, `${role}: expected exactly one command`);
+      assert.equal(preToolUse[0].hooks[0].type, 'command');
+      assert.equal(preToolUse[0].hooks[0].command, HOOK_COMMAND,
+        `${role}: hook command must invoke the script via an explicit interpreter, not a bare path`);
     });
   }
 
-  // 9. Negative control — makes the two directions concrete on one role. Guard on this run's own exec
-  //    (not a settings file left by an earlier coder test) so a coder run that stopped before writing
-  //    settings can't pass on stale data.
-  test('9. coder: fkit-review is off; fkit-plan-task is NOT', async () => {
-    const r = await runFkit(['coder'], { project: PROJECT });
-    assert.equal(r.exec, true, `stderr: ${r.stderr}`);
-    const overrides = readSettings(PROJECT, 'coder').skillOverrides;
-    assert.equal(overrides['fkit-review'], 'off', 'a skill the coder does not own must be off');
-    assert.ok(!('fkit-plan-task' in overrides), 'a skill the coder owns must not appear in the off map');
+  // 9. The RETIREMENT is itself part of the contract, not an incidental side effect: no role's
+  //    settings may carry a `skillOverrides` key any more. A stray reintroduction (e.g. a rebase
+  //    that resurrects the old mechanism alongside the new one) must go red here, not ship silently.
+  test('9. no role\'s settings carry a skillOverrides key any more (retired, task 43)', async () => {
+    for (const role of ROLES) {
+      const r = await runFkit([role], { project: PROJECT });
+      assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+      const settings = readSettings(PROJECT, role);
+      assert.ok(!('skillOverrides' in settings), `${role}: skillOverrides must not be generated any more`);
+    }
   });
 
-  // 10. The hard-coded UNIVERSE must equal the fkit-* skill dirs actually on disk. This closes the one
-  //     corner the per-role off-sets cannot see: a UNIVERSALLY-on skill (fkit-team / fkit-query /
-  //     fkit-survey-project) added or removed never moves any role's off-set, so only a direct
-  //     universe-vs-disk check catches it — and it also forces the deliberate UNIVERSE edit whenever
-  //     the skill set changes (the ratchet, made total).
-  test('10. hard-coded UNIVERSE == fkit-* skill dirs on disk', () => {
-    assert.deepEqual(new Set(projectSkillDirs(PROJECT)), new Set(UNIVERSE),
-      'UNIVERSE has drifted from the skills actually shipped — update the hard-coded list deliberately');
+  // 10. The hook script this settings entry points at must actually exist on disk — a settings file
+  //     that correctly NAMES a script Claude Code can't find would fail exactly as badly (silently,
+  //     per the fail-open hazard) as never wiring the hook in the first place.
+  test('10. the hook script the settings point at exists on disk', () => {
+    assert.ok(existsSync(HOOK_SCRIPT), `expected ${HOOK_SCRIPT} to exist`);
   });
 });
 
@@ -212,9 +184,9 @@ describe('Group B — lockdown matrix', () => {
 describe('Group C — degradation & fresh-project routing', () => {
   // 11. Read-only project → build_settings() cannot write .fkit/settings and MUST fall back to passing
   //     the SAME lockdown JSON inline on --settings. If that fallback ever emitted empty/garbage, the
-  //     session would launch with no role isolation (fail-open) — so pin that the inline value is real,
-  //     complete lockdown JSON with the correct off-set. (Happy-path Group B only ever sees the file.)
-  test('11. read-only project → inline --settings carries the full lockdown', async () => {
+  //     session would launch with no role isolation (fail-open) — so pin that the inline value carries
+  //     the real hook wiring, not just any JSON. (Happy-path Group B only ever sees the file.)
+  test('11. read-only project → inline --settings carries the hook wiring', async () => {
     const proj = makeProject({ fresh: false });
     try {
       chmodSync(join(proj, '.fkit'), 0o500);         // make .fkit unwritable → mkdir .fkit/settings fails
@@ -224,8 +196,10 @@ describe('Group C — degradation & fresh-project routing', () => {
       assert.equal(r.argv[2], '--settings');
       const val = r.argv[3];
       assert.match(val, /^\{/, `expected inline JSON, got: ${val}`);
-      const off = new Set(Object.keys(JSON.parse(val).skillOverrides));
-      assert.deepEqual(off, expectedOff('coder'), 'inline fallback lockdown must match the file lockdown');
+      const inline = JSON.parse(val);
+      assert.ok(!('skillOverrides' in inline), 'the retired mechanism must not resurface in the fallback');
+      assert.equal(inline.hooks?.PreToolUse?.[0]?.hooks?.[0]?.command, HOOK_COMMAND,
+        'inline fallback must carry the same hook wiring as the file path would have');
     } finally {
       chmodSync(join(proj, '.fkit'), 0o700);          // restore so cleanup can remove it
       cleanup(proj);

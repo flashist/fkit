@@ -25,9 +25,11 @@ fkit producer | architect | reviewer | adv | wiki | lead
 Each session is locked **two** ways:
 
 1. **`--agent fkit-<role>`** — the role's system prompt and **tool allowlist** (harness-enforced).
-2. **`--settings` with `skillOverrides`** — every `fkit-*` skill the role does **not** own is turned
-   `"off"`: hidden from the `/` menu **and unrunnable by name**. This is what makes *"the coder cannot
-   run the reviewer's procedure"* a fact rather than a request.
+2. **`--settings` wiring a `PreToolUse` skill-ownership hook** (task 43 / ADR-018) — every `Skill`
+   call is checked against the REAL invoking agent's role, and denied if that role doesn't own it.
+   A foreign skill stays **visible** in the `/` menu but is **not runnable**. This is what makes
+   *"the coder cannot run the reviewer's procedure"* a fact rather than a request — see the "skill
+   lockdown" section below for the full detail.
 
 Want two roles at once? Open another terminal tab. (We deliberately don't automate that — spawning
 terminals needs Accessibility permissions that fail worse than pressing Cmd-T.)
@@ -35,8 +37,8 @@ terminals needs Accessibility permissions that fail worse than pressing Cmd-T.)
 ### The skill lockdown — the central invariant
 
 **Role → skill ownership is declared in exactly one place:** `skills_for_role()` in
-`fkit-claude.sh`. That function is the single source of truth; `build_settings()` derives each
-session's `skillOverrides` from it.
+`skills-for-role.sh`, sourced by both `fkit-claude.sh` and the `PreToolUse` skill-ownership hook
+below. That function is the single source of truth.
 
 | Role | Its procedures (plus `/fkit-query` + `/fkit-team`, which everyone has) |
 |---|---|
@@ -48,16 +50,21 @@ session's `skillOverrides` from it.
 | wiki | `wiki-ingest` · `wiki-lint` · `wiki-sync` |
 | lead | *(none of its own — it routes)* |
 
-⚠️ **The lock is a wall in a session, a rule in a consult.** A *spawned* consult inherits the
-**calling session's** `skillOverrides`, not its own — so a consulted role may see skills that aren't
-its own, and may not see all of its own. There, the boundary is **advisory**, carried by the
-`⛔ Owner:` banner at the top of every skill. Agent-definition `skills:` frontmatter does **not**
-enforce anything (it is a preload hint) and was therefore **dropped, not generated** — see
-[ADR-012](../ai-agents/knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md).
+**The lock is a wall in a session AND in a consult** (task 43 /
+[ADR-018](../ai-agents/knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md),
+superseding [ADR-012](../ai-agents/knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md)
+§2's "advisory in a consult" half). A `PreToolUse` hook (`skill-ownership-hook.sh`) gates every
+`Skill` call against the REAL invoking agent's identity, read straight from the hook payload — a
+role session's own type, or a spawned subagent's own type, at any consult depth — not the launching
+session's inherited settings. That's what fixed the bug ADR-012 could only price: a consulted role
+used to see whatever the *caller* could see; now it's checked against what *it itself* owns,
+wherever it sits in a consult chain. Agent-definition `skills:` frontmatter still enforces nothing
+(a preload hint only) and stays dropped, not generated.
 
-Because of that inheritance, a small **consult-reachable set** (`CONSULT_SKILLS`) is never turned off
-for any role — today `fkit-survey-project`, so the producer's `/fkit-initiate-project` can actually
-have the architect run its survey.
+The old always-on exception list (`CONSULT_SKILLS`, plus the `skillOverrides` "off" list
+`build_settings()` used to generate) is retired — enforcement no longer depends on a hand-maintained
+list of skills that must stay reachable from every session; a role simply reaches what
+`skills_for_role()` says it owns, checked at the point of each call.
 
 ## Consult topology
 
@@ -146,4 +153,6 @@ in `claude/`, never the copies.**
 - **Vendored per-agent `query` copies + sync script + drift check** — one `/fkit-query` skill serves
   every role (ADR-005; ADR-004/006/007 died with the Omnigent path).
 - **`skills:` frontmatter on agent definitions** — inert for enforcement; dropped (ADR-012).
-- **Hook-based skill enforcement** — deferred hardening, with a now-known cost (ADR-012 §4).
+- **A hand-maintained `CONSULT_SKILLS` always-on exception list** — superseded by the `PreToolUse`
+  skill-ownership hook (task 43 / ADR-018), which no longer needs one: enforcement follows the real
+  caller's identity instead of a list of skills nothing is allowed to turn off.

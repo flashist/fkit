@@ -34,15 +34,17 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
      other** — architect ⇄ producer, coder → architect, reviewer → architect — up to **two hops**,
      never in a cycle.
 
-4. **Skills belong to roles.** In a **role session** this is structural, not advice: a session sees
-   only its own procedures and the rest are **turned off** — invisible and unrunnable. So a `fkit coder`
-   session *cannot* run the reviewer's procedure; it asks `@fkit-reviewer`, because reviewing your own
-   work isn't a review.
+4. **Skills belong to roles.** This is structural, not advice, **in a role session and in a spawned
+   consult alike** (task 43 / ADR-018): a `PreToolUse` hook checks the REAL invoking agent's identity
+   — a session's own role, or a spawned subagent's own role, at any consult depth — against
+   `skills_for_role()` on every `Skill` call, and denies it if that role doesn't own it. So a
+   `fkit coder` session *cannot* run the reviewer's procedure, and neither can a subagent it spawns
+   pretending to; it asks `@fkit-reviewer`, because reviewing your own work isn't a review.
 
-   **In a spawned consult the boundary is advisory, not enforced** (ADR-012). A consulted role inherits
-   the *calling* session's skill settings, so it may well see procedures that aren't its own. What holds
-   the line there is the `⛔ Owner:` banner at the top of every skill — and the role honoring it. Don't
-   mistake the consult boundary for the session lock: **one is a wall, the other is a rule.**
+   One honest cost: a foreign skill is **visible** in the `/` menu (the old off-list also hid it;
+   this mechanism doesn't) but remains **unrunnable** — invoking it is denied regardless. Visible-but-
+   blocked, not invisible-and-blocked. The `⛔ Owner:` banner at the top of every skill is now a
+   courtesy for a well-behaved agent to notice before trying, not the only thing stopping it.
 
    | Role | Its procedures |
    |---|---|
