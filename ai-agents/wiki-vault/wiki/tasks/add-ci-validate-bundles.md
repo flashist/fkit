@@ -22,3 +22,4 @@ There was no CI in the repo. `omnigent/validate-bundles.sh` already existed and 
 - [[decisions/adr-003-ci-runs-validate-bundles]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
 - [[systems/fkit]]
+- [[systems/testing-and-verification]]

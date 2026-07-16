@@ -30,3 +30,4 @@ Consequently the verification was **not optional**: it had to be installed **fro
 - [[tasks/verify-onboarding-flow-end-to-end]]
 - [[systems/install-and-self-update]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
+- [[tasks/remove-fkit-resume-passthrough]]

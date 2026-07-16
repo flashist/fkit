@@ -28,3 +28,5 @@ Done. *(The one-off repair of Sprint 1's 6 existing broken links — `ai-agents/
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
 - [[tasks/add-task-plan-skill-to-producer]]
 - [[systems/fkit]]
+- [[tasks/repair-broken-links-in-closed-sprint-plans]]
+- [[tasks/stop-agents-asserting-unchecked-repo-state]]

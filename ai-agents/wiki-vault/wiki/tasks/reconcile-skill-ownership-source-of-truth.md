@@ -29,3 +29,4 @@ This produced [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-d
 - [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]]
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]]
 - [[systems/role-locked-sessions]]
+- [[tasks/add-full-board-switch-to-fkit-status]]

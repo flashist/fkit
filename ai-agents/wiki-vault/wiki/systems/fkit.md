@@ -56,9 +56,9 @@ Generated and gitignored per project: `.fkit/settings/<role>.json` (the skill lo
 
 ## Gotchas / Known Issues
 - **Edit `claude/`, never `.claude/`.** `claude/fkit-claude-init.sh` does an `rm -f` + `cp` of the `fkit-*` agents and skills on **every single launch**. An edit made in `.claude/` is silently destroyed — no warning, no diff.
-- **Zero automated verification — the top structural risk.** No CI, no test suite, no `.github/`. The project's only automated check was `omnigent/validate-bundles.sh`, which **died with the Omnigent removal**, and [[decisions/adr-003-ci-runs-validate-bundles]]'s CI never landed. The two files with the highest blast radius — `install.sh` and `claude/fkit-claude.sh` — are the two with the least verification.
+- **Verification is partial, no longer absent.** *(Updated 2026-07-16.)* For most of fkit's life there was **zero** automated verification — the only check, `omnigent/validate-bundles.sh`, **died with the Omnigent removal**, and [[decisions/adr-003-ci-runs-validate-bundles]]'s CI never landed. **`claude/fkit-claude.sh` is now covered** by the launcher-contract suite (`npm test`) — the argv contract plus the 7×21 lockdown matrix ([[decisions/adr-014-how-fkit-tests-itself]], [[systems/testing-and-verification]]). **`install.sh` still has none, and there is still no `.github/`** — so the `curl | sh` entry point, the highest-blast-radius file in the repo, remains unverified. **The risk is reduced, not closed.**
 - **Single-vendor concentration is accepted, not a defect.** There is no fallback runtime. A finding of the form *"fkit only runs on one vendor's CLI"* is [[decisions/adr-009-claude-code-native-is-the-only-runtime]], not a bug.
-- **`fkit --resume` resumes any session under the lead's lockdown.** The launcher defaults `role="lead"` when no role is named and passes unrecognized args through to `claude` — so `fkit --resume` silently resumes *any* session, a coder session included, with the **lead's** overrides applied. Omnigent scar tissue; tracked by `ai-agents/tasks/backlog/remove-fkit-resume-passthrough.md`.
+- **`fkit --resume` is gone** *(fixed 2026-07-13; this page previously described the live bug).* The blanket unrecognized-arg passthrough silently resumed *any* session — a coder session included — under the **lead's** lockdown: *the user got their conversation back and their role taken away, with no warning.* Removed by [[tasks/remove-fkit-resume-passthrough]]; a stray arg with no named role is now a **usage error**, and the removal is **pinned by a test**.
 - **No agent commits or pushes unprompted.** A **prompt rule in every agent definition — not a sandbox.** It is the one place fkit's boundaries depend entirely on instruction-following.
 - **No secrets in any artifact.** Nothing fkit produces may carry a credential — all of it goes to git.
 
@@ -69,15 +69,24 @@ This is recorded because it explains things that would otherwise look arbitrary:
 
 ## Open questions
 1. **Does the `PreToolUse` hook payload expose the calling subagent's identity?** This single question decides whether the consult-path skill boundary is *fixable* or *permanently advisory* — see [[systems/role-locked-sessions]].
-2. **What is the intended verification story?** ADR-003's CI died with its subject. Is a `shellcheck` + smoke-install CI in scope, or is manual verification the accepted permanent posture for a prototype? **An owner call.**
-3. **Is `fkit --resume` worth keeping at all**, or should the launcher require an explicit role?
+2. ~~**What is the intended verification story?**~~ **Answered** by [[decisions/adr-014-how-fkit-tests-itself]]: a black-box process contract at the repo root, zero devDeps, never shipped to consumers. **What remains open is narrower** — `install.sh` e2e and a CI workflow are deferred to Sprint 3, and *"does a red suite gate `Done`?"* is still an owner call.
+3. ~~**Is `fkit --resume` worth keeping at all?**~~ **Answered: no.** The owner ruled **removal**, rejecting both of the coder's proposed fixes (*persist the role* / *require a role*). The question is **closed** — do not reopen it, and do not build a replacement.
+4. **What is the consent model for the one destructive act still on the table** — clearing the `.fkit/` Omnigent orphans (`rm -rf` in a user's project, no rollback)? Announce-only, ask-once, or dry-run-first? **Blocks Sprint 2 task 36.**
 
 ## Related
 - [[systems/role-locked-sessions]]
 - [[systems/install-and-self-update]]
 - [[systems/review-and-model-diversity]]
 - [[systems/knowledge-base-structure]]
+- [[systems/testing-and-verification]]
+- [[systems/launch-convergence-and-init]]
 - [[systems/subagent-runner-connectivity]]
+- [[decisions/adr-014-how-fkit-tests-itself]]
+- [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]]
+- [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
+- [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]]
+- [[tasks/add-no-secrets-rule-to-fkit-lead]]
+- [[tasks/stop-agents-asserting-unchecked-repo-state]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]]
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]]
@@ -100,3 +109,4 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[tasks/remove-adversarial-reviewer-eager-spawn]]
 - [[tasks/restore-plan-mode-in-plan-task]]
 - [[tasks/rewrite-docs-post-omnigent]]
+- [[tasks/wiki-sync-post-omnigent]]

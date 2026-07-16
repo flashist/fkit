@@ -48,15 +48,27 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 
 ## Gotchas / Known Issues
 - **`install.sh` is the blast radius of the whole product.** A bad landing breaks installation *including the self-update path that would ship the fix*. It **cannot be verified by reading a diff** — it must be installed from a ref into a clean `$HOME`.
-- **`install.sh` and `claude/fkit-claude.sh` have zero automated coverage.** Both are POSIX shell. `build_settings()` generates **the skill lockdown itself** — a silent regression there would degrade the one boundary that is genuinely structural, and nothing would catch it.
-- **`fkit --resume` passes through to `claude` under the lead's lockdown** — see [[systems/fkit]].
+- **`install.sh` still has zero automated coverage** — and it is the `curl | sh` entry point. `claude/fkit-claude.sh` **is now covered** (argv contract + the `skillOverrides` matrix) by the launcher-contract suite — see [[systems/testing-and-verification]]. *(Updated 2026-07-16: the risk is **reduced, not closed**. `architecture.md` §9.1 still says both files have "no coverage of any kind" — **the doc is behind the code**.)*
+- **`fkit --resume` is gone** — the blanket unrecognized-arg passthrough that silently resumed *any* session under the **lead's** lockdown was removed by [[tasks/remove-fkit-resume-passthrough]], and the removal is now **pinned by a test**. A stray arg with no named role is a **usage error**; the *no-args, no-tty → lead* default survives.
 - **`GIT_TERMINAL_PROMPT=0`** on the update check exists so a credential-prompting remote can never hang the launcher.
-- **Idempotence**: both the installer and the per-project init are safe to re-run; init never clobbers an existing `ai-agents/`, `CLAUDE.md`, or `AGENTS.md`.
-- **The agent count is still a hard-coded literal, not derived.** `fkit-claude-init.sh:144` prints `Seven roles` as a `printf` string, while the line that actually *counts* the copied agents (`n_agents`, `:54`) is separate. **The two can drift apart again silently** — they have before. *(Verified 2026-07-13: the string currently reads "Seven" and is correct, and the stale `fkit claude` usage comment is gone. `architecture.md` §9.6 still lists both as open drift — **the doc is behind the code**.)*
+- **Idempotence**: both the installer and the per-project init are safe to re-run. ⚠️ **"Init never clobbers an existing `CLAUDE.md`/`AGENTS.md`" is no longer the whole story** — it now **merges an fkit-managed, marker-delimited block** into them (everything outside the markers is untouched forever), which is what finally gave **brownfield** projects the universal hard rules. `ai-agents/` is still left as-is: **per-path additive convergence is designed and approved but NOT yet shipped** (Sprint 2 task 28, backlog). See [[systems/launch-convergence-and-init]].
+- **An init failure no longer bricks the launcher.** It used to: init runs under `set -euo pipefail` and was called unguarded, so any failure took the user's whole team offline. **Setup is best-effort; the session is not** ([[tasks/stop-init-failure-bricking-the-launcher]]).
+- **The agent count is still a hard-coded literal, not derived.** `fkit-claude-init.sh` prints `Seven roles` as a `printf` string, while the line that actually *counts* the copied agents (`n_agents`) is separate. **The two can drift apart again silently** — they have before. *(Re-verified 2026-07-16: the string reads "Seven" and is correct, and the stale `fkit claude` usage comment is gone. `architecture.md` §9.5 still lists both as open drift — **the doc is behind the code**.)*
+- **The exec bit does not survive install for anything but two hardcoded filenames.** Any *other* shipped script rides a tarball + `cp -R` chain that does not guarantee the bit — an **umask-dependent break that reproduces on nobody's dev machine**. Hence [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]]: shipped skill executables are invoked `bash <path>`, **never `./<path>`**, and the installer is not touched.
 
 ## Related
 - [[systems/fkit]]
 - [[systems/role-locked-sessions]]
+- [[systems/launch-convergence-and-init]]
+- [[systems/testing-and-verification]]
+- [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]]
+- [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
+- [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]]
+- [[decisions/adr-014-how-fkit-tests-itself]]
+- [[tasks/remove-fkit-resume-passthrough]]
+- [[tasks/stop-init-failure-bricking-the-launcher]]
+- [[tasks/fix-headless-menu-guard-crash]]
+- [[tasks/design-version-to-version-migration-mechanism]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
 - [[decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name]]
 - [[decisions/adr-001-package-json-stays-metadata-only]]
@@ -69,3 +81,5 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 - [[tasks/fix-agent-count-doc-drift-and-fresh-detection-dup]]
 - [[tasks/make-codex-a-checked-prerequisite]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/wiki-sync-post-omnigent]]
+- [[tasks/merge-fkit-rules-block-into-existing-root-context-files]]

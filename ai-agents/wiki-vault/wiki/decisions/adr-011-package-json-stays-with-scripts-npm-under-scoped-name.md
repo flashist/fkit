@@ -35,3 +35,5 @@
 - [[systems/fkit]]
 - [[tasks/build-claude-self-update]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-014-how-fkit-tests-itself]]
+- [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]]

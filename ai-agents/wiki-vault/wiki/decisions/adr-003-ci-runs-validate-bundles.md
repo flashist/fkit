@@ -28,3 +28,5 @@ The initial workflow does not need to install Omnigent, because the script still
 - [[systems/fkit]]
 - [[tasks/add-ci-validate-bundles]]
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
+- [[decisions/adr-014-how-fkit-tests-itself]]
+- [[systems/testing-and-verification]]

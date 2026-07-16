@@ -27,3 +27,6 @@ The sibling of [[tasks/add-task-plan-skill-to-producer]], on the same logic: **f
 - [[tasks/enforce-task-status-vocabulary]]
 - [[tasks/repair-knowledge-base-paths-in-product-source]]
 - [[systems/knowledge-base-structure]]
+- [[tasks/stop-agents-asserting-unchecked-repo-state]]
+- [[tasks/design-deterministic-dashboard-for-fkit-status]]
+- [[tasks/add-full-board-switch-to-fkit-status]]

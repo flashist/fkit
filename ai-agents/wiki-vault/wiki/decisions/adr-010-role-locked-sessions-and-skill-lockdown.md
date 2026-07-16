@@ -48,3 +48,6 @@ Plus:
 - [[tasks/document-consult-chain-envelope]]
 - [[tasks/restore-plan-mode-in-plan-task]]
 - [[tasks/rewrite-docs-post-omnigent]]
+- [[decisions/adr-014-how-fkit-tests-itself]]
+- [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
+- [[systems/testing-and-verification]]

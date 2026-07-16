@@ -41,8 +41,15 @@ This principle caught a real error: the knowledge-base hygiene pass had improvis
 - **`ls knowledge-base/*.md` returns exactly two names.**
 - **A dated filename never lives at the root or in `conventions/`** — a dated name means "a record of a moment".
 
+### The conventions in force
+`conventions/README.md` indexes three: **`task-status-vocabulary.md`** (the six valid statuses, and who may set each), **`status-report-format.md`** (the shape of a status briefing), and — added 2026-07-16 — **`evidence-before-assertion.md`**: *a claim about repo/project state must come from a check made this turn.*
+
+**The third exists because the second's scope was too narrow.** `status-report-format.md` was written after *"a status report was once improvised from memory and fabricated a number that looked precise and was false"* — but it governs `/fkit-status` only, and **it did not govern the moment an agent decides whether work exists**, which is exactly where the same failure recurred three times in one session. **The convention was right; its scope was too narrow.** See [[tasks/stop-agents-asserting-unchecked-repo-state]].
+
 ## Gotchas / Known Issues
 - **`decisions/` has no README on purpose**: the `adr-NNN-<slug>` sequence *is* the convention.
+- **The scaffold shipped a README promising five `knowledge-base/` folders and created one** — so a fresh project's agents were told to file into four folders that did not exist on disk. **ADR-013 made the decision; the scaffold simply never implemented it.** Fixed for **new** projects only ([[tasks/fix-scaffold-knowledge-base-folders]]); existing projects need convergence, which is still backlog.
+- **The two conventions-README copies (live vs scaffold) diverge on the "enforceable somewhere" item**, and **that may be correct** — the dropped text is repo-specific and a fresh project has neither the `claude/` layout nor the file it cross-references. Tracked as [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]].
 - **The ADR "Re-raise only if" field is load-bearing** — it is what stops future reviews re-litigating a settled decision.
 - **The task status vocabulary is a closed set**: `Backlog` · `In progress` · `Blocked` · `Done` · `Cancelled` · `Moved`. **No other value is valid** — not "Not started", not "WIP", not "Todo". `Done` and `Cancelled` are **owner-only**, set via `/fkit-task-done` and `/fkit-task-cancelled`. If a status you need isn't there, **amend the convention — don't invent a value inline.**
 - **Skills read these conventions as live contracts.** When ADR-013 moved them into `conventions/`, product source under `claude/` still pointed at the old paths, and two shipped skills broke — **silently**, because a skill that cannot find its contract document falls back to its own inline copy. That is exactly the drift the conventions exist to remove. See [[tasks/repair-knowledge-base-paths-in-product-source]].
@@ -50,8 +57,17 @@ This principle caught a real error: the knowledge-base hygiene pass had improvis
 
 ## Related
 - [[systems/fkit]]
+- [[systems/launch-convergence-and-init]]
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]]
 - [[decisions/adr-002-archive-pre-omnigent-design-docs]]
+- [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]]
+- [[tasks/stop-agents-asserting-unchecked-repo-state]]
+- [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]]
+- [[tasks/fix-scaffold-knowledge-base-folders]]
+- [[tasks/design-version-to-version-migration-mechanism]]
+- [[tasks/wiki-sync-post-omnigent]]
+- [[tasks/design-deterministic-dashboard-for-fkit-status]]
+- [[tasks/repair-broken-links-in-closed-sprint-plans]]
 - [[tasks/formalize-knowledge-base-incidents-folder]]
 - [[tasks/knowledge-base-hygiene-post-omnigent]]
 - [[tasks/repair-knowledge-base-paths-in-product-source]]

@@ -13,6 +13,8 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[systems/install-and-self-update]] — `install.sh`, the `fkit` launcher, preflight, onboarding, self-update, release
 - [[systems/review-and-model-diversity]] — The Codex adversarial pass, loud degradation, and the review ledger
 - [[systems/knowledge-base-structure]] — How `ai-agents/knowledge-base/` is filed: conventions vs decisions vs records
+- [[systems/testing-and-verification]] — The launcher-contract suite: black-box scope, the hard-coded matrix, what is still uncovered
+- [[systems/launch-convergence-and-init]] — What fkit writes into a project on every launch: the invariant, the seams, the symlink lesson
 - [[systems/subagent-runner-connectivity]] — 🕰️ Historical: Omnigent runner disconnects and the reconnect stopgap
 
 ## Decisions
@@ -29,12 +31,16 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name]] — `package.json` stays with its `scripts`; version bumping is load-bearing
 - [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]] — The lockdown follows the *launching session*; `skills:` frontmatter dropped
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]] — The KB root holds only `PROJECT.md` + `architecture.md`
+- [[decisions/adr-014-how-fkit-tests-itself]] — Black-box process contract, zero devDeps, hard-coded matrix; runner left open (later `node --test`)
+- [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — **fkit adds, never mutates, inside `ai-agents/`. There is no migration mechanism**
+- [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — The layer already exists; **delivery structural, compliance advisory**
+- [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]] — Shipped skill executables: `bash <path>`, never the exec bit
 
 ## Tasks
 
 ### Sprints
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — 🔒 Closed: the Omnigent-era onboarding sprint, and how its 12 tickets were dispositioned
-- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (18/22 done)
+- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**33/38 done**; grew 22 → 38)
 
 ### Sprint 2 — the removal chain
 - [[tasks/extract-scaffold-into-claude]] — Move the shared scaffold out of `omnigent/` (Phase 0.1)
@@ -45,11 +51,36 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/verify-onboarding-flow-end-to-end]] — ✅ The release gate: clean install → session → consult → review. PASSED
 - [[tasks/rewrite-docs-post-omnigent]] — Rewrite every doc against the post-removal reality
 - [[tasks/reconcile-skill-ownership-source-of-truth]] — One source of truth for role→skill ownership → ADR-012
+- [[tasks/remove-fkit-resume-passthrough]] — Drop the blanket arg-passthrough that resumed any session as `lead`
+- [[tasks/wiki-sync-post-omnigent]] — The Phase 5b vault rebuild; genuinely last, and why
 
 ### Sprint 2 — knowledge base
 - [[tasks/formalize-knowledge-base-incidents-folder]] — Give `incidents/` a convention → ADR-013
 - [[tasks/knowledge-base-hygiene-post-omnigent]] — Mark the Omnigent ADRs superseded; file the loose root docs
 - [[tasks/repair-knowledge-base-paths-in-product-source]] — Repoint shipped skills at the moved `conventions/` paths
+- [[tasks/repair-broken-links-in-closed-sprint-plans]] — The 6 broken links; the one-off cleanup
+- [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]] — Live vs scaffold README divergence — **possibly intentional**
+
+### Sprint 2 — testing & verification
+- [[tasks/add-launcher-contract-smoke-script]] — fkit's first automated verification → ADR-014; **caught a live defect immediately**
+- [[tasks/stop-agents-asserting-unchecked-repo-state]] — A **false instruction in both movers**, shipping to every project → `evidence-before-assertion.md`
+- [[tasks/fix-headless-menu-guard-crash]] — `[ -r /dev/tty ]` never tests openability; the lead default was **dead code**
+
+### Sprint 2 — the migration investigation (and its "build nothing" answer)
+- [[tasks/design-version-to-version-migration-mechanism]] — Investigation → ADR-015; **rejected the semver walk**
+- [[tasks/fix-scaffold-knowledge-base-folders]] — The scaffold promised five KB folders and shipped one
+- [[tasks/stop-init-failure-bricking-the-launcher]] — Any init failure took the user's whole team offline
+- [[tasks/refuse-init-on-weird-ai-agents-state]] — The `[ -L ]` gate; **its stated rationale shipped false and was corrected**
+
+### Sprint 2 — the shared-instructions investigation (and its reversal)
+- [[tasks/add-shared-instructions-layer-for-all-agents]] — Investigation → ADR-016; **the layer already existed**
+- [[tasks/give-codex-the-universal-hard-rules]] — The required second model ran with **no rules at all**
+- [[tasks/merge-fkit-rules-block-into-existing-root-context-files]] — The brownfield hole; **first fkit code to write into a file the user owned**
+- [[tasks/add-no-secrets-rule-to-fkit-lead]] — The 1 of 7 missing it — one line
+
+### `/fkit-status` tooling
+- [[tasks/design-deterministic-dashboard-for-fkit-status]] — Design-first → ADR-017; implementation still backlog
+- [[tasks/add-full-board-switch-to-fkit-status]] — A reserved `full` keyword overriding the delta default
 
 ### Sprint 2 — producer & coder tooling
 - [[tasks/add-task-plan-skill-to-producer]] — A procedure for writing task briefs; decompose to smallest shippable unit
@@ -66,8 +97,11 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/give-every-agent-direct-wiki-query-access]] — Decentralize wiki reads → ADR-005
 - [[tasks/rollout-adr-004-fixed-consult-titles]] — Fixed role-based consult titles (subject since removed)
 
+### Cancelled
+- [[tasks/add-e2e-smoke-script-for-fkit-itself]] — ⛔ Superseded by the launcher-contract suite; **two of its instructions are actively wrong**
+
 ### Sprint 1 — cancelled (Omnigent removed)
-- [[tasks/add-ci-validate-bundles]] — ⛔ CI for `validate-bundles.sh`; **the verification gap it named is still open**
+- [[tasks/add-ci-validate-bundles]] — ⛔ CI for `validate-bundles.sh`; **the gap it named is now partly closed — `install.sh` still uncovered**
 - [[tasks/document-consult-chain-envelope]] — ⛔ The consult envelope is now recorded in ADR-010
 - [[tasks/amend-subagent-disconnect-incident-doc]] — ⛔ An Omnigent incident write-up
 - [[tasks/fix-agent-count-doc-drift-and-fresh-detection-dup]] — ⛔ The drifted files were deleted, not fixed

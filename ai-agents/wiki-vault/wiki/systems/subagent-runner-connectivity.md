@@ -51,3 +51,5 @@ Two things in today's code only make sense because of this:
 - [[tasks/delete-omnigent-directory]]
 - [[tasks/formalize-knowledge-base-incidents-folder]]
 - [[tasks/rollout-adr-004-fixed-consult-titles]]
+- [[tasks/remove-fkit-resume-passthrough]]
+- [[tasks/wiki-sync-post-omnigent]]

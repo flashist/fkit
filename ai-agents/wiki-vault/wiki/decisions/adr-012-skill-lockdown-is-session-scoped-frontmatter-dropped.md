@@ -45,3 +45,8 @@ This matches the Claude Code docs: `skills:` controls **preloading only** — *"
 - [[tasks/reconcile-skill-ownership-source-of-truth]]
 - [[systems/review-and-model-diversity]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-014-how-fkit-tests-itself]]
+- [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
+- [[systems/testing-and-verification]]
+- [[tasks/add-e2e-smoke-script-for-fkit-itself]]
+- [[tasks/add-shared-instructions-layer-for-all-agents]]

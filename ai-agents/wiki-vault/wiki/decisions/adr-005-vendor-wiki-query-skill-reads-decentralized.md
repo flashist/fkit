@@ -40,3 +40,4 @@ The proposal reversed a stated, checked-in project rule: root `CLAUDE.md` said *
 - [[tasks/give-every-agent-direct-wiki-query-access]]
 - [[systems/subagent-runner-connectivity]]
 - [[tasks/knowledge-base-hygiene-post-omnigent]]
+- [[tasks/wiki-sync-post-omnigent]]

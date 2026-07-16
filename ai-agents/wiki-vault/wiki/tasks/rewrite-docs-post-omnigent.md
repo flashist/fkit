@@ -30,3 +30,4 @@ Done. `architecture.md` was rewritten as a post-removal document with `path:line
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]]
 - [[tasks/fix-agent-count-doc-drift-and-fresh-detection-dup]]
+- [[tasks/wiki-sync-post-omnigent]]

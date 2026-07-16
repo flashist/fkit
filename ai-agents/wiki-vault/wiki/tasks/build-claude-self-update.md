@@ -26,3 +26,5 @@ The design deliberately **never auto-updates and never re-execs itself** — a d
 - [[systems/install-and-self-update]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
 - [[decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name]]
+- [[tasks/design-version-to-version-migration-mechanism]]
+- [[tasks/remove-fkit-resume-passthrough]]

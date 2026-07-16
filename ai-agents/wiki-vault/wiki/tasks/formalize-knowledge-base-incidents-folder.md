@@ -30,3 +30,5 @@ Done — and it grew well past its brief, because the architect found the root i
 - [[systems/subagent-runner-connectivity]]
 - [[decisions/adr-002-archive-pre-omnigent-design-docs]]
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
+- [[tasks/fix-scaffold-knowledge-base-folders]]
+- [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]]

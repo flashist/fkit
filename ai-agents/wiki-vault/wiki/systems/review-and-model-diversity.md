@@ -59,3 +59,6 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]]
 - [[tasks/rewrite-docs-post-omnigent]]
 - [[tasks/verify-onboarding-flow-end-to-end]]
+- [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
+- [[tasks/give-codex-the-universal-hard-rules]]
+- [[tasks/wiki-sync-post-omnigent]]

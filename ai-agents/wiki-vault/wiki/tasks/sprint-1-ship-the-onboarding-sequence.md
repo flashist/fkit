@@ -41,3 +41,4 @@ Close the loop on fkit's startup sequence: verify the user-facing onboarding flo
 - [[decisions/adr-003-ci-runs-validate-bundles]]
 - [[decisions/adr-004-fixed-role-based-titles-for-consult-spawns]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
+- [[tasks/repair-broken-links-in-closed-sprint-plans]]

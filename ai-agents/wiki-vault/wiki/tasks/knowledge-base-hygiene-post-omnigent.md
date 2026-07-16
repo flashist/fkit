@@ -35,3 +35,5 @@ Done — **but the brief had to be rewritten mid-flight, and that is the interes
 - [[decisions/adr-002-archive-pre-omnigent-design-docs]]
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]]
 - [[tasks/rewrite-docs-post-omnigent]]
+- [[tasks/wiki-sync-post-omnigent]]
+- [[tasks/repair-broken-links-in-closed-sprint-plans]]

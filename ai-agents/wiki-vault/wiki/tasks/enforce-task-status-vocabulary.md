@@ -33,3 +33,4 @@ Done. `conventions/task-status-vocabulary.md` is the canonical set, and the sour
 - [[tasks/add-status-skill-to-producer]]
 - [[tasks/repair-knowledge-base-paths-in-product-source]]
 - [[systems/knowledge-base-structure]]
+- [[tasks/stop-agents-asserting-unchecked-repo-state]]
