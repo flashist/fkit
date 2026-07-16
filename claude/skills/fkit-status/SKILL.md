@@ -24,6 +24,14 @@ a status briefing.
   ambiguity** in the report.
 - **A sprint name** (e.g. `Sprint 1`) — resolve it against `ai-agents/sprints/` **and**
   `ai-agents/sprints/done/`. If nothing matches, say so and list what's there. Do not guess.
+- **A reserved full-board keyword** — `full` (aliases `all`, `board`), matched **case-insensitively**.
+  It is **not a sprint name**: recognize and **strip it before** resolving the sprint, so whatever
+  remains resolves per the two bullets above (empty → active sprint; a sprint name → that sprint). The
+  keyword forces the **complete step-4 dashboard — every task row — even on a repeat call** (it
+  overrides the step-5 delta default). It is honored wherever it appears in the argument, so
+  `/fkit-status full` targets the active sprint and forces the full board, and `/fkit-status Sprint 2
+  full` targets Sprint 2 and forces the full board. **`full` alone is never resolved as a sprint
+  name** — it does not error with "no sprint named `full`".
 
 > **The standard being aimed at.** *"As if I ask the producer of the project what the status is, and
 > they provide it in a simple yet informative way."* **Answer like a producer being asked in person,
@@ -202,6 +210,11 @@ Then:
 If you already gave a status this session, report **what changed** — don't re-render the whole state.
 If nothing changed, say that.
 
+**Exception — an explicit full-board request overrides the delta default.** If the argument carries
+the reserved keyword (`full` / `all` / `board`, per the Argument contract), render the **complete
+board** — every step-4 row — regardless of whether a status was already given this session. The delta
+is the default only for repeat calls **without** the keyword.
+
 ### 6. Report — and stop there
 
 The briefing *is* the report. Two things to be explicit about:
@@ -232,4 +245,6 @@ paths (`/fkit-task-done`, `/fkit-task-cancelled`, or a deliberate edit) — not 
 ```
 /fkit-status              # the active sprint
 /fkit-status Sprint 1     # a named sprint, including a closed one in sprints/done/
+/fkit-status full         # force the complete board even on a repeat (aliases: all, board)
+/fkit-status Sprint 2 full # force the complete board for a named sprint
 ```

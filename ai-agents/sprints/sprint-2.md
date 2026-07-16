@@ -67,6 +67,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 35 | Make `/fkit-task-cancelled` flip the moved brief's own `## Status` header *(same gap, `⛔ Cancelled` marker)* | [`task-cancelled-flips-brief-own-status-header.md`](../tasks/backlog/task-cancelled-flips-brief-own-status-header.md) |
 | 🔲 Backlog | 36 | Remove the `.fkit/` Omnigent-orphan residue *(OQ5 resolved; the one destructive act — own owner gate; needs a consent-model ruling)* | [`remove-fkit-omnigent-orphan-residue.md`](../tasks/backlog/remove-fkit-omnigent-orphan-residue.md) |
 | 🔲 Backlog | 37 | Record a tombstone ADR for the shared-instructions reversal *(OQ6 resolved; owner: fkit-architect)* | [`record-shared-instructions-reversal-adr.md`](../tasks/backlog/record-shared-instructions-reversal-adr.md) |
+| 🔲 Backlog | 38 | Add a full-board switch (`full`) to `/fkit-status` *(skill-text only; owner: fkit-coder)* | [`add-full-board-switch-to-fkit-status.md`](../tasks/backlog/add-full-board-switch-to-fkit-status.md) |
 
 ## Dependency graph
 
@@ -514,6 +515,18 @@ The owner's 2026-07-15 rulings on the open questions (below) spawned three brief
   independently, per the owner, so it is not lost while task 28 is parked. Filed unsprinted.
 
 **Numbered 36/37 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — task 38 added out of band (2026-07-16): the full-board switch
+
+**Task 38 (`add-full-board-switch-to-fkit-status`) was scoped unsprinted, then pulled into Sprint 2 by
+the owner (2026-07-16).** It adds a reserved `full` keyword (aliases `all` / `board`) that forces
+`/fkit-status` to render the complete step-4 dashboard even on a repeat call, overriding the step-5
+delta default. **Skill-text only** — `claude/skills/fkit-status/SKILL.md`, no scaffold copy, no launcher
+or product code, no new skill registration.
+
+- **Owner: fkit-coder.** **Depends on: nothing** — independent of the mover-drift tasks (34, 35) and
+  everything else in Sprint 2.
+- **Numbered 38 for append-don't-renumber discipline. Owner to confirm the ranking.**
 
 ## Open questions for the owner
 
