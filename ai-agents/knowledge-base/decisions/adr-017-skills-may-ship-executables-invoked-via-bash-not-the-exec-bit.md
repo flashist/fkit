@@ -144,6 +144,6 @@ Four forces make this a real decision rather than a file drop:
   non-`SKILL.md` file).
 - `claude/skills/fkit-status/SKILL.md:198-201` — the *"counts must sum to M"* instruction this class of
   change exists to turn into an invariant.
-- `ai-agents/tasks/backlog/build-deterministic-dashboard-script-for-fkit-status.md` — the first
+- `ai-agents/tasks/done/build-deterministic-dashboard-script-for-fkit-status.md` — the first
   implementation under this ADR.
 </content>

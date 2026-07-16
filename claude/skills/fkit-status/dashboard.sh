@@ -68,50 +68,137 @@ if [ -n "$REL_SUB" ]; then
 fi
 
 # --- the plan's own sprint name (drift rule 1 compares the brief's ## Sprint against it) -----------
+# ⚠️ Rule 1 depends on this. If it resolves empty, the rule-1 skip silently STOPS APPLYING and every
+# row falls through to the rule-3 cross-check — failing toward MORE drift, which is exactly the
+# "phantom decisions" §5.2 rule 1 exists to prevent. So: try the H1, then fall back to the filename,
+# and if it is still unresolved REPORT it rather than quietly disabling the rule.
 PLAN_SPRINT=$(sed -n 's/^# \(Sprint [0-9][0-9]*\).*/\1/p' "$PLAN_FILE" | head -1)
+if [ -z "$PLAN_SPRINT" ]; then
+  # sprint-2.md -> "Sprint 2". A plan whose H1 is prose ("# Hardening — the launcher sprint") is
+  # otherwise indistinguishable from one with no sprint identity at all.
+  PLAN_SPRINT=$(basename "$PLAN_FILE" .md | sed -n 's/^sprint-\([0-9][0-9]*\)$/Sprint \1/p')
+fi
 
-# --- guard: more than one ## Status section (§8 OQ2) — parse the FIRST, report the fact ------------
-STATUS_SECTIONS=$(grep -c '^## Status' "$PLAN_FILE" 2>/dev/null || echo 0)
+# --- "is this the ## Status heading?" — ONE definition, used everywhere ----------------------------
+# ⚠️ There were THREE grammars for this: `grep -c '^## Status'` (prefix), the awk rule (exact), and the
+# existence check (prefix). A plan with a `## Status report` section therefore counted as a second
+# Status table, emitted a false `multiple-status-tables`, and could die with a misleading message —
+# while the parser itself correctly ignored it. Two grammars for one question is the defect class this
+# script's own comments forbid; a third is not better. `[ \t]*$` anchors all three to the same answer.
+# ⚠️ REAL TAB, NOT `\t`. The escape is not portable across grep dialects: BSD grep (what a consumer
+# actually has) reads `[ \t]` as the literal set {backslash, space, t} and does NOT match a tab, while
+# awk expands `\t` and does. Same regex text, two answers — so `## Status<TAB>` made the guard `die`
+# while the parser accepted the section. ANSI-C quoting expands the tab HERE, in bash, so both engines
+# receive a literal tab and cannot disagree.
+#
+# ⚠️ This was invisible on the dev machine: `grep` on PATH is ugrep, which matches GNU behaviour and
+# agrees with awk. The divergence only appears against /usr/bin/grep. Two reviewers were fooled by the
+# same shadowed binary. Do not "simplify" this back to a '\t' literal.
+STATUS_HEADING_RE=$'^## Status[ \t]*$'
+
+# `grep -c` prints 0 AND exits 1 on no match, so a `|| echo 0` here would emit BOTH and yield "0\n0",
+# which breaks the -gt integer test below. Let it print its own 0.
+STATUS_SECTIONS=$(grep -cE "$STATUS_HEADING_RE" "$PLAN_FILE" 2>/dev/null)
+[ -n "$STATUS_SECTIONS" ] || STATUS_SECTIONS=0
 
 # --- pull the first ## Status section's table rows -------------------------------------------------
-# Emits: status<TAB>priority<TAB>task<TAB>brief-cell
+# Emits: status<US>priority<US>task<US>brief-cell, one record per table row.
 # Splits on "|" and takes status=$2, priority=$3, brief=$(NF-1), task=join($4..$(NF-2)) — so a pipe
 # inside the task wording does not shift the brief column.
+#
+# ⚠️ The field separator is US (\x1f, `\037`), NOT tab. Tab is IFS *whitespace*, which bash's `read`
+# COLLAPSES — so an empty Task cell would silently shift the brief link left into the Task column,
+# empty the Filename, and emit a phantom `missing-brief`. US is not IFS whitespace, so empty fields
+# hold their position.
+#
+# ⚠️ A row that does not parse is NOT skipped. Silently dropping it would redefine `M` as "rows that
+# survived parsing" and let a task vanish from the board with no row, no fact and no warning — the
+# very failure this script exists to prevent, through a different door. It emits a MALFORMED marker
+# and the caller hard-fails (owner ruling, 2026-07-16: hard-fail -> SKILL.md's flagged fallback).
+# ⚠️ ROW ADMISSION IS A CLASS, NOT A LIST OF CASES. Every candidate data row in the section MUST leave
+# this function as exactly one record. `NF < 5` was once the only door that dropped a row; an empty
+# Status cell and a pipe-less row were two more. The question to ask of any edit here is not "is this
+# row valid?" but **"can any line in the table fail to produce a record?"** — if yes, `M` silently
+# becomes "rows that survived parsing" and a task vanishes from the board.
+#
+# ⚠️ The record TYPE is out-of-band (leading `D`/`M` field), not an in-band `MALFORMED` string: a row
+# whose Status cell is literally the word MALFORMED must be data, not a control record.
 extract_rows() {
-  awk -F'|' '
-    /^## Status[ \t]*$/ { if (seen) exit; seen=1; inSec=1; next }
+  awk -F'|' -v US=$'\037' -v HRE="$STATUS_HEADING_RE" '
+    # GFM escapes a literal pipe in a cell as `\|`. It is CONTENT, not a delimiter — splitting on it
+    # shifted every later field and rendered a six-column board with the priority set to cell debris.
+    # Park it, split, then restore it still-escaped so the emitted table stays valid markdown.
+    # (Index-based, not gsub: gsub replacement escaping for a backslash is ambiguous across awks.)
+    function unesc(s,   out, i) {
+      out = ""
+      while ((i = index(s, "\002")) > 0) { out = out substr(s, 1, i-1) "\\|"; s = substr(s, i+1) }
+      return out s
+    }
+    $0 ~ HRE { if (seen) exit; seen=1; inSec=1; inTbl=0; next }   # HRE: the ONE heading grammar
     inSec && /^## / { exit }
     !inSec { next }
-    /^[ \t]*$/ { next }
-    $0 !~ /^\|/ { next }
-    { line=$0 }
-    line ~ /^\|[ \t]*-*[ \t]*\|/ && line ~ /^\|[-: \t|]*\|[ \t]*$/ { next }   # |---|---| separator
+    # ⚠️ THE TWIN CLASS QUESTION, ANSWERED PROPERLY THIS TIME. "Can any line fail to produce a
+    # record?" has a mirror: "can any line produce a record that is NOT a row?" Closing it only for
+    # prose AFTER the table left two doors open — pipe-bearing prose BEFORE the table, and a block
+    # with no separator at all — because `inTbl` was set by the separator but nothing was excluded
+    # while waiting for it.
+    #
+    # GFM: the delimiter row is MANDATORY. A pipe block without one is not a table, so it has no rows.
+    # The admission window is therefore exactly: opens AT the separator, closes at the first blank or
+    # pipe-less line. Everything before the separator (heading, caption, prose, the header row itself)
+    # is outside it. A separator-less `## Status` block yields zero rows and hard-fails to the
+    # flagged fallback in SKILL.md — consistent with the R2 owner ruling, and it is not "destroying a
+    # usable board": markdown renders that block as prose too, so there was no board to destroy.
+    # (NB: no apostrophes in this comment — it lives inside a single-quoted awk program.)
+    { line=$0; gsub(/\037/, " ", line); gsub(/\\\|/, "\002", line) }          # US cannot shift fields; \| is content
+    !inTbl && line ~ /^[ \t]*\|?[-: \t|]+\|[-: \t|]*$/ { inTbl=1; next }      # |---|---| separator: window OPENS
+    !inTbl { next }                                                           # header/caption/prose: not rows
+    /^[ \t]*$/ { inSec=0; next }                                              # window CLOSES
+    $0 !~ /\|/ { inSec=0; next }                                              # window CLOSES
     {
-      if (NF < 5) next
-      st=$2; pr=$3; br=$(NF-1)
-      task=""
-      for (i=4; i<=NF-2; i++) task = (task=="" ? $i : task "|" $i)
+      n = split(line, cell, "|")
+      # GFM allows the leading/trailing pipes to be omitted; normalise both away.
+      lo = (line ~ /^[ \t]*\|/) ? 2 : 1
+      hi = (line ~ /\|[ \t]*$/) ? n - 1 : n
+      ncell = hi - lo + 1
+      if (ncell < 4) { printf "M%s%s\n", US, line; next }
+      st = cell[lo]; pr = cell[lo+1]; br = cell[hi]
+      task = ""
+      for (i = lo+2; i <= hi-1; i++) task = (task=="" ? cell[i] : task "|" cell[i])
       gsub(/^[ \t]+|[ \t]+$/, "", st)
       gsub(/^[ \t]+|[ \t]+$/, "", pr)
       gsub(/^[ \t]+|[ \t]+$/, "", task)
       gsub(/^[ \t]+|[ \t]+$/, "", br)
-      if (st == "Status") next                                                # header row
-      printf "%s\t%s\t%s\t%s\n", st, pr, task, br
+      printf "D%s%s%s%s%s%s%s%s\n", US, unesc(st), US, unesc(pr), US, unesc(task), US, unesc(br)
     }
   ' "$PLAN_FILE"
 }
 
-grep -q '^## Status' "$PLAN_FILE" || die "no '## Status' section in $PLAN"
+grep -qE "$STATUS_HEADING_RE" "$PLAN_FILE" || die "no '## Status' section in $PLAN"
 
 ROWS=$(extract_rows)
 [ -n "$ROWS" ] || die "no parseable rows in the '## Status' table of $PLAN"
+
+# Hard-fail on an unparseable row rather than rendering a board that is quietly missing a task.
+# (Owner ruling 2026-07-16: hard-fail -> SKILL.md's flagged hand-built fallback.)
+if printf '%s\n' "$ROWS" | grep -q "^M$(printf '\037')"; then
+  bad=$(printf '%s\n' "$ROWS" | grep "^M$(printf '\037')" | head -1 | cut -d"$(printf '\037')" -f2-)
+  die "unparseable row in the '## Status' table of $PLAN (need 4 cells): $bad"
+fi
 
 # --- helpers ---------------------------------------------------------------------------------------
 
 # Canonical key for a status cell, by marker PREFIX. `➡️` is U+27A1 + U+FE0F (VS16); matching the base
 # codepoint alone accepts both the VS16 form (what every live plan writes) and a bare hand-edited `➡`.
+#
+# ⚠️ ABSENT and UNRECOGNIZED are different answers and must not share a sentinel. An empty cell means
+# "the source says nothing"; `WIP` means "the source says something outside the vocabulary". Collapsing
+# both to `unknown` and then comparing for equality produced a false `waiting on owner` on a brief that
+# merely lacks a `## Status` heading — SKILL.md:88 defines disagreement as "the sources say different
+# things", and an absent source says nothing.
 marker_key() {
   case "$1" in
+    '')     printf '' ;;
     '✅'*)  printf 'done' ;;
     '🔄'*)  printf 'inprogress' ;;
     '🚧'*)  printf 'blocked' ;;
@@ -145,43 +232,180 @@ field_value() {
 }
 
 # Raw `Depends on:` text, single-line, for the sentinel. NEVER interpreted (spec §4.2).
+#
+# ⚠️ ANCHORED TO THE BOLD DECLARATION `**Depends on:` — not a bare `Depends on:` anywhere in the file.
+# A brief may *discuss* the field in prose or a code span (`` `Depends on:` ``), and an unanchored
+# `grep -m1` matched that prose instead of the declaration. Live proof at the time of writing: this
+# script's own task brief made the sentinel render `⟨derive: ` line is⟩` — the LLM is forbidden to
+# re-open the brief (SKILL.md), so it would derive the dependency from garbage. Verified across the
+# task tree: 32 of 32 briefs declare with the bold form, and every non-bold hit is prose.
+# ⚠️ Do NOT "simplify" this to `^\*\*Depends on:` — real declarations appear mid-line, e.g.
+# `date+reason. **Depends on: nothing. Relates to: task 34.**`. Bold is the discriminator, not column 1.
+#
+# ⚠️ NO LENGTH CAP. An earlier 72-byte trim silently deleted dependencies — `…, and also task 99.`
+# lost task 99 and the board read `after 11`, while SKILL.md orders the LLM to name EVERY task and
+# forbids re-opening the brief. §4.2 says the sentinel carries the RAW text; a wide cell is a cosmetic
+# cost, a dropped dependency is a fabrication.
+# ── THE DEPENDENCY GRAMMAR ────────────────────────────────────────────────────────────────────────
+# This function has been wrong three times. It is now written as a CLOSED GRAMMAR with ONE code path,
+# because every previous bug came from the same two habits: a branch that returned early (skipping the
+# join and the sanitiser), and a completion test that its own label satisfied.
+#
+#   FORM              EXAMPLE                                   TERMINATOR
+#   ────────────────  ────────────────────────────────────────  ──────────────────────────────────
+#   S  section        `## Depends on` / `- task 12` / `- task 99`  next `##` or blank line
+#   BL bold-label     `**Depends on:** [link] **(hard).**`      end of block
+#   BI bold-inline    `**Depends on: task 18** trailing prose`  the `**` CLOSING the label's bold
+#   P  plain          `Depends on: task 12.`  (fkit-task-plan:70) end of block
+#
+# ⚠️ RULES, each paid for by a defect:
+#  1. ONE exit. Locate → join → extract → sanitise → emit. No branch may `print` and `exit` on its own
+#     (that dropped a fan-in's second item and skipped `|` sanitising, rendering a 6-column board).
+#  2. NO completion test a LABEL can satisfy. `buf ~ /\*\*Depends on:.*\*\*/` matched `**Depends on:**`
+#     itself, so the wrap-join never fired and live task 41 lost its `(hard)` qualifier.
+#  3. BI is the ONLY form with an unambiguous in-band terminator. For BL/P/S, OVER-INCLUDE trailing
+#     prose rather than guess where the dependency ends: verbose is a cosmetic cost, a dropped
+#     dependency is a fabrication, and §4.2 asks for the RAW text anyway.
+#  4. The colon is OPTIONAL when bold (`**Depends on nothing.**` — 4 live briefs), REQUIRED when
+#     plain: unbolded prose says "this depends on the owner" and must not be mistaken for a
+#     declaration.
+#  5. A CODE SPAN is prose ABOUT the field, never a declaration (the original R1).
+# Emits `<form>␟<content>` when a declaration EXISTS, and nothing at all when none does. That
+# distinction is the whole contract:
+#   no output        → the brief records no dependency → `none recorded` → the LLM may say `ready`
+#   output, content  → the dependency, raw
+#   output, EMPTY    → a declaration we could not read → the LOUD path, never `ready`
+#
+# ⚠️ THERE IS ONE GRAMMAR. There used to be two: this function, plus a `depends_mentioned` guard with
+# its own narrower pattern. The loud path was then gated on *this* returning empty while *that* decided
+# whether to fire — so a form the guard didn't know silently became `none recorded` → `ready`
+# (3 of the 4 live `Depends on nothing` briefs are PLAIN COLONLESS, which the guard missed), and a
+# non-empty-but-wrong parse never consulted the guard at all. The caller now branches on this
+# function's own answer. Do not reintroduce a second pattern anywhere.
 depends_raw() {
-  grep -m1 'Depends on:' "$1" 2>/dev/null \
-    | sed -e 's/.*Depends on:[[:space:]]*//' \
-          -e 's/\*\*//g' \
-          -e 's/|/ /g' \
-          -e 's/[[:space:]][[:space:]]*/ /g' \
-          -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' \
-    | awk '{
-        if (length($0) <= 72) { print; exit }
-        out=""
-        n=split($0, w, " ")
-        for (i=1; i<=n; i++) {
-          if (length(out) + length(w[i]) + 1 > 72) break
-          out = (out=="" ? w[i] : out " " w[i])
+  awk '
+    function sanitise(s) {
+      gsub(/\*\*/, "", s); gsub(/\|/, " ", s); gsub(/\037/, " ", s); gsub(/\t/, " ", s)
+      while (s ~ /  /) gsub(/  /, " ", s)
+      sub(/^ +/, "", s); sub(/ +$/, "", s)
+      return s
+    }
+    function indent(s,   t) { t = s; sub(/[^ \t].*$/, "", t); gsub(/\t/, "    ", t); return length(t) }
+    function blank(s)    { return s ~ /^[ \t]*$/ }
+    function heading(s)  { return s ~ /^#/ }
+    function listItem(s) { return s ~ /^[ \t]*[-*+][ \t]/ }
+
+    # ⚠️ MASK CODE SPANS, DO NOT VETO THE LINE. Rule 5 says a code span is prose about the field, never
+    # a declaration — but it was implemented as `line does not contain a span mention`, which is a
+    # LINE-scoped veto, and rule 3 explicitly ORDERS over-including trailing prose. So a real
+    # declaration that happened to share a line with a span mention was discarded whole → no
+    # declaration found → `none recorded` → the LLM prints `ready`. That is a FABRICATED ABSENCE: the
+    # worst direction, and the one this function has now been wrong about twice.
+    #
+    # ⚠️ LENGTH IS PRESERVED (spans become \001 filler, not deleted) so an index into the masked text
+    # is a valid index into the RAW text. That is what lets us LOCATE on the masked copy while
+    # EXTRACTING from the raw one — necessary because a real dependency may legitimately BE a code
+    # span (`**Depends on:** \`design-…\``), which deleting spans would destroy.
+    function maskspans(s,   out, i, j, k) {
+      out = ""
+      while ((i = index(s, "`")) > 0) {
+        out = out substr(s, 1, i - 1)
+        s = substr(s, i)
+        j = index(substr(s, 2), "`")
+        if (j == 0) { for (k = 1; k <= length(s); k++) out = out "\001"; return out }
+        for (k = 1; k <= j + 1; k++) out = out "\001"
+        s = substr(s, j + 2)
+      }
+      return out s
+    }
+
+    # Join the declaration across wraps. ⚠️ A MORE-INDENTED list item is a SUB-BULLET of the
+    # declaration, not the end of it: `**Depends on:** hard prerequisites:` followed by `- task 12`
+    # / `- task 13` yielded `hard prerequisites:` — non-empty, so the loud path never fired, and both
+    # tasks vanished. Only a sibling-or-shallower item ends it.
+    function joinFrom(i, base,   j, out) {
+      out = L[i]
+      for (j = i + 1; j <= N; j++) {
+        if (blank(L[j]) || heading(L[j]) || F[j]) break
+        if (listItem(L[j]) && indent(L[j]) <= base) break
+        out = out " " L[j]
+      }
+      return out
+    }
+    function sectionFrom(i,   j, out, t) {
+      out = ""
+      for (j = i + 1; j <= N; j++) {
+        if (heading(L[j])) break
+        if (blank(L[j])) { if (out != "") break; continue }
+        if (F[j]) break
+        t = L[j]; sub(/^[ \t]*[-*+][ \t]*/, "", t)
+        out = (out == "" ? t : out "; " t)
+      }
+      return out
+    }
+    # F[n] marks a line that is inside (or is) a fenced code block. ⚠️ Fences were not excluded at all:
+    # a declaration written as an EXAMPLE inside ``` parsed as real, and a fence marker leaked into the
+    # sentinel (`derive 1 depends="task 99; ```"`). 4 of the 41 live briefs already carry both a fence
+    # and a declaration.
+    { L[NR] = $0
+      if ($0 ~ /^[ \t]*(```|~~~)/) { F[NR] = 1; fence = !fence } else { F[NR] = fence }
+      M[NR] = maskspans($0)
+    }
+    END {
+      N = NR
+      # ⚠️ CHOOSE BY FORM PRIORITY, NEVER BY LINE ORDER. These rules used to gate on `!form` inside
+      # awk s per-LINE loop, so the FIRST LINE won rather than the first FORM — and a prose sentence
+      # mentioning the field beat the real bold declaration further down the brief.
+      #
+      #   S  `## Depends on[.:]`            — trailing punctuation tolerated
+      #   B  `**Depends on[: ]…`            — bold; colon OPTIONAL (`**Depends on nothing.**`)
+      #   P  `- Depends on[: ]…`            — plain; anchored to line start or a list marker, so
+      #                                       ordinary prose ("whether it ships depends on the owner")
+      #                                       is not a declaration. Colon optional: 3 of the 4 live
+      #                                       `Depends on nothing` briefs omit it.
+      # ⚠️ LOCATE on M[] (spans masked, length preserved), EXTRACT from L[] (raw). Never locate on the
+      # raw text — a mention inside a span becomes a declaration. Never extract from the masked text —
+      # a dependency that IS a span gets destroyed. F[] excludes fenced blocks entirely.
+      for (i = 1; i <= N; i++)
+        if (!F[i] && M[i] ~ /^##[ \t]+Depends on[.:]?[ \t]*$/) { print "S\037" sanitise(sectionFrom(i)); exit }
+      for (i = 1; i <= N; i++)
+        if (!F[i] && M[i] ~ /\*\*Depends on[.: ]/) {
+          b = joinFrom(i, indent(L[i]))
+          s = substr(b, index(maskspans(b), "**Depends on") + 12)
+          sub(/^[.:]?[ \t]*/, "", s)
+          if (s ~ /^\*\*/) { sub(/^\*\*[ \t]*/, "", s); print "BL\037" sanitise(s) }
+          else             { sub(/\*\*.*$/, "", s);     print "BI\037" sanitise(s) }
+          exit
         }
-        print out "…"
-      }'
+      for (i = 1; i <= N; i++)
+        if (!F[i] && M[i] ~ /^[ \t]*([-*+][ \t]*)?Depends on[.: ]/) {
+          b = joinFrom(i, indent(L[i]))
+          s = substr(b, index(maskspans(b), "Depends on") + 10)
+          sub(/^[.:]?[ \t]*/, "", s)
+          print "P\037" sanitise(s)
+          exit
+        }
+    }
+  ' "$1" 2>/dev/null | head -1
 }
 
 # Trim a cell to its first clause so the table never wraps (SKILL.md:163-165). Markers carry mandatory
 # reasons, which belong in the cell — but a recorded reason that is a paragraph does not.
+# The marker and its mandatory reason belong in the cell verbatim — but a reason recorded as a
+# PARAGRAPH is trimmed to its FIRST CLAUSE rather than wrapping the table (SKILL.md:163-165).
+#
+# ⚠️ "First clause" means a clause boundary — `. ` — NOT a byte count. An earlier 120-byte word-cut
+# let a 3-clause 100-char cell through untrimmed and sliced a 130-char single clause mid-sentence:
+# the opposite of the contract on both sides.
+# ⚠️ The boundary is period-SPACE, never a bare period: a live moved cell carries a markdown link
+# (`➡️ Moved to [Sprint 2](../sprint-2.md) — priority 12`), and cutting at the first `.` would sever
+# it inside `sprint-2.md`. Splitting on `. ` leaves links intact.
 one_line_cell() {
   printf '%s' "$1" | tr '\n' ' ' | sed -e 's/[[:space:]][[:space:]]*/ /g' -e 's/^ //' -e 's/ $//' \
     | awk '{
-        # The marker and its mandatory reason belong in the cell verbatim — but a reason recorded as a
-        # PARAGRAPH gets trimmed to its first clause rather than wrapping the table (SKILL.md:163-165).
-        # The cap is generous: the longest live cell (a ➡️ Moved with a link and a qualifier) is well
-        # under it, so a conforming cell is never touched. Cut on a space so a multibyte char cannot be
-        # split in half under LC_ALL=C.
-        if (length($0) <= 120) { print; exit }
-        out=""
-        n=split($0, w, " ")
-        for (i=1; i<=n; i++) {
-          if (length(out) + length(w[i]) + 1 > 120) break
-          out = (out=="" ? w[i] : out " " w[i])
-        }
-        print out "…"
+        i = index($0, ". ")
+        if (i > 0) { print substr($0, 1, i - 1) "…"; exit }
+        print
       }'
 }
 
@@ -210,11 +434,15 @@ DRIFT_TASKS=""
 add_fact() { FACTS="${FACTS}$1
 "; }
 
-while IFS="$(printf '\t')" read -r st pr task br; do
-  [ -n "$st" ] || continue
+while IFS=$'\037' read -r rtype st pr task br; do
+  [ "$rtype" = "D" ] || continue
   total=$((total + 1))
 
-  st=$(one_line_cell "$st")
+  # ⚠️ SEMANTICS READ `st`; ONLY THE BOARD CELL READS `st_cell`. The clause trim is a PRESENTATION
+  # concern, and running it first rewrote the input every downstream check reads: a conforming
+  # `⛔ Cancelled (2026-07-16). Superseded — see task 9` was trimmed to `⛔ Cancelled (2026-07-16)…`
+  # and then reported as `cancelled-without-reason` — drift manufactured out of formatting.
+  st_cell=$(one_line_cell "$st")
   key=$(marker_key "$st")
   tid=$(task_id "$pr")
   [ -n "$tid" ] || tid="?"
@@ -282,13 +510,30 @@ while IFS="$(printf '\t')" read -r st pr task br; do
     blocked)
       printf '%s' "$st" | grep -q '—' || nonconf="blocked-without-reason" ;;
     cancelled)
-      printf '%s' "$st" | grep -qE '\([0-9]{4}-[0-9]{2}-[0-9]{2}\)' && \
-        printf '%s' "$st" | grep -q '—' || nonconf="cancelled-without-reason" ;;
+      # ⚠️ The date and the reason are SEPARATE requirements and must be named separately: an
+      # `A && B || C` chain reported a missing DATE as `cancelled-without-reason`, telling the owner
+      # to supply a reason that was already in the cell while never naming the real defect.
+      if ! printf '%s' "$st" | grep -qE '\([0-9]{4}-[0-9]{2}-[0-9]{2}\)'; then
+        nonconf="cancelled-without-date"
+      elif ! printf '%s' "$st" | grep -q '—'; then
+        nonconf="cancelled-without-reason"
+      fi ;;
     moved)
       [ -n "$moved_target" ] || nonconf="moved-without-target" ;;
     unknown)
       nonconf="unknown-marker" ;;
+    '')
+      # The plan recorded no status at all. Previously this row was dropped outright (R17).
+      nonconf="missing-status-cell" ;;
   esac
+  # A brief with no `## Status` heading is a defect in the BRIEF. It is reported, and it does not by
+  # itself make a disagreement — an absent source says nothing (SKILL.md:88). The empty `b_key` now
+  # correctly skips the marker comparison below, while the LOCATION cross-check still runs, so real
+  # drift on such a row is still found.
+  if [ -n "$brief_path" ] && [ -z "$b_key" ]; then
+    add_fact "drift nonconformance $tid kind=\"brief-missing-status\" cell=\"$(fact_value "$st")\""
+    DRIFT_TASKS="$DRIFT_TASKS $tid"
+  fi
   if [ -n "$nonconf" ]; then
     add_fact "drift nonconformance $tid kind=\"$nonconf\" cell=\"$(fact_value "$st")\""
     DRIFT_TASKS="$DRIFT_TASKS $tid"
@@ -298,11 +543,25 @@ while IFS="$(printf '\t')" read -r st pr task br; do
   # Rule 1: read the brief's ## Sprint FIRST. If it names a different sprint, SKIP the status
   # cross-check — a ➡️ Moved row's brief reads `🔲 Backlog` in its new sprint CORRECTLY, and flagging
   # it would flag every moved row of every closed sprint forever (SKILL.md:83-88).
+  #
+  # ⚠️ THE SPLIT IS ABOUT THE OVERRIDE, NOT ABOUT DETECTION (§9: "the override applies to one and not
+  # the other"). Gating the whole block on `nonconf` over-corrected and HID REAL DRIFT: a plan cell
+  # reading `🚧 Blocked` (no reason) whose brief says `✅ Done` in `done/` reported only the missing
+  # em-dash, and the done task rendered as actionable.
+  #
+  # The true constraint is narrower: a plan marker we could not PARSE (`unknown`/absent) cannot be
+  # meaningfully compared to the brief's key — it can never equal it, so rule 3 would fire every time
+  # on a purely cosmetic defect. That, and only that, is what must skip the comparison. Every
+  # parseable marker gets the full cross-check, and nonconformance is reported alongside it.
   disagree=""
-  if [ -n "$brief_path" ]; then
+  if [ -n "$brief_path" ] && [ -n "$key" ] && [ "$key" != "unknown" ]; then
     if [ "$key" = "moved" ]; then
       # Rule 2: but DO check the Moved target against the brief's ## Sprint. Disagreement is real drift.
-      if [ -n "$moved_target" ] && [ -n "$b_sprint" ] && [ "$b_sprint" != "$moved_target" ]; then
+      if [ -z "$b_sprint" ]; then
+        # An unresolvable state must not render as a clean `in Sprint N`. Report it; don't guess.
+        add_fact "drift missing-sprint $tid plan=\"$(fact_value "$st")\" moved_target=\"$moved_target\""
+        DRIFT_TASKS="$DRIFT_TASKS $tid"
+      elif [ -n "$moved_target" ] && [ "$b_sprint" != "$moved_target" ]; then
         disagree=1
         add_fact "drift disagreement $tid plan=\"$(fact_value "$st")\" brief_sprint=\"$(fact_value "$b_sprint")\" moved_target=\"$moved_target\""
         DRIFT_TASKS="$DRIFT_TASKS $tid"
@@ -335,15 +594,32 @@ while IFS="$(printf '\t')" read -r st pr task br; do
       cancelled) next="dead" ;;
       moved)     next="in ${moved_target:-Sprint ?}" ;;
       *)
-        dep=$(depends_raw "$brief_path" 2>/dev/null)
-        [ -n "$dep" ] || dep="none recorded"
-        next="⟨derive: ${dep}⟩"
-        add_fact "derive $tid depends=\"$(fact_value "$dep")\""
+        # ⚠️ Branch on WHETHER A DECLARATION EXISTS, not on whether we got text out of it. Those are
+        # different questions, and conflating them is what let a declaration the parser could not read
+        # become `none recorded` — which the LLM renders `ready`, inventing the ABSENCE of a
+        # dependency. That is the original R1 with the sign flipped, and it is the worse direction:
+        # a wrong dependency is visible, a fabricated `ready` is not.
+        draw=""
+        [ -n "$brief_path" ] && draw=$(depends_raw "$brief_path" 2>/dev/null)
+        if [ -z "$draw" ]; then
+          next="⟨derive: none recorded⟩"
+          add_fact "derive $tid depends=\"none recorded\""
+        else
+          dep=${draw#*$'\037'}
+          if [ -n "$dep" ]; then
+            next="⟨derive: ${dep}⟩"
+            add_fact "derive $tid depends=\"$(fact_value "$dep")\""
+          else
+            next="⟨derive: UNPARSEABLE — see brief⟩"
+            add_fact "drift depends-unparseable $tid brief=\"$(fact_value "$linked")\" form=\"${draw%%$'\037'*}\""
+            DRIFT_TASKS="$DRIFT_TASKS $tid"
+          fi
+        fi
         ;;
     esac
   fi
 
-  BOARD_ROWS="${BOARD_ROWS}| ${st} | ${pr} | ${task} | ${br_cell} | ${next} |
+  BOARD_ROWS="${BOARD_ROWS}| ${st_cell} | ${pr} | ${task} | ${br_cell} | ${next} |
 "
 done <<EOF
 $ROWS
@@ -367,14 +643,27 @@ if [ "$STATUS_SECTIONS" -gt 1 ]; then
   add_fact "drift multiple-status-tables count=$STATUS_SECTIONS"
 fi
 
+# Rule 1 needs the plan's sprint identity. If neither the H1 nor the filename yielded one, the rule is
+# inert — say so, rather than letting the board fail silently toward phantom drift.
+if [ -z "$PLAN_SPRINT" ]; then
+  add_fact "drift unresolved-plan-sprint h1=\"$(fact_value "$(head -1 "$PLAN_FILE")")\""
+fi
+
 # Drift clause — templated, deterministic, deliberately generic. It points at beat 6; it does not try
 # to be beat 6. Templating each drift kind into English is prose-generation, not this script's job.
+# ⚠️ EVERY drift record must reach this clause, or SKILL.md's "every drift record is an owner
+# decision" is false for the ones that don't. Plan-level drift (multiple status tables, an
+# unresolved sprint identity) has no task id, so it cannot ride DRIFT_TASKS — it needs its own arm.
 drift_clause=""
+plan_level_drift=""
+[ "$STATUS_SECTIONS" -gt 1 ] && plan_level_drift=1
+[ -z "$PLAN_SPRINT" ] && plan_level_drift=1
 if [ -n "$DRIFT_TASKS" ]; then
   uniq_tasks=$(printf '%s\n' $DRIFT_TASKS | sort -n | uniq | tr '\n' ',' | sed -e 's/,$//' -e 's/,/, /g')
   drift_clause="  — as recorded; drift on tasks ${uniq_tasks} — see above."
-elif [ "$STATUS_SECTIONS" -gt 1 ]; then
-  drift_clause="  — as recorded; see above."
+  [ -n "$plan_level_drift" ] && drift_clause="  — as recorded; drift on tasks ${uniq_tasks}, and on the plan itself — see above."
+elif [ -n "$plan_level_drift" ]; then
+  drift_clause="  — as recorded; drift on the plan itself — see above."
 fi
 
 # --- emit ------------------------------------------------------------------------------------------

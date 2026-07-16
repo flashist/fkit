@@ -55,7 +55,7 @@ a status briefing.
   The sprint row's link tells you where the brief lives; a `Moved` row may still link to `backlog/`.
 - Parse each brief's **`## Status`** field by its **marker prefix** (`🔲`, `🔄`, `🚧`, `✅`, `⛔`, `➡️`).
   The value is free text after the marker and **may wrap across lines** — don't match on the whole line.
-- Note each brief's **`## Sprint`** field too — step 2 needs it.
+- Note each brief's **`## Sprint`** field too — it is what tells you which sprint a task now belongs to.
 
 **The `.md` files are the record, and the record is what you report.** The sprint plan and the briefs —
 that is the whole source set. **Do not go reading the code or the git history to second-guess them.**
@@ -168,7 +168,7 @@ Its stdout has two delimited sections:
 
 #### What to do with `⟦BOARD⟧`
 
-**Paste it as beat 7 — verbatim, except the sentinel cells.** It is already the six columns, the six
+**Paste it as beat 7 — verbatim, except the sentinel cells.** It is already the five columns, the six
 canonical markers copied from the plan, and the roll-up. Do not re-count it, re-sort it, re-word it,
 or "tidy" it. **The counts sum to `M` by construction** — that is the whole point of the script's
 existence, and a hand-adjusted board forfeits it.
@@ -181,12 +181,22 @@ shapes itself (`closed`, `dead`, `in Sprint N`, `waiting on owner`). It **cannot
 |---|---|
 | `⟨derive: none recorded⟩` | `ready` — nobody wrote down a dependency, so there isn't one |
 | `⟨derive: task 26 and task 27.⟩` | `after 26, 27` — name **every** task it waits on |
+| `⟨derive: UNPARSEABLE — see brief⟩` | **the one case where you open the brief** — see below |
 
 **Use the text inside the sentinel. Do not re-open the brief** — that is how you drift from what the
 script saw. Name every task in a fan-in; don't drop one because another covers it transitively. **Do
 not infer a dependency nobody wrote down** — this column is free text and it is the easiest place in
 the report to start making things up. **A sentinel left in a delivered report is a bug** — that is
 deliberate: it fails visibly rather than inventing quietly.
+
+> **`⟨derive: UNPARSEABLE — see brief⟩` — the sanctioned exception.** The brief declares a dependency
+> in a form the script could not read. **Open that brief and read it yourself.** The "don't re-open the
+> brief" rule exists to stop you drifting from what the script saw — and here the script saw
+> *nothing*, so there is nothing to drift from and the rule's reason does not apply. Resolve it to
+> `ready` / `after <N>` as usual. **If you still cannot tell, put `waiting on owner` and say why in
+> beat 6** — the accompanying `drift depends-unparseable` fact is an owner decision like any other.
+> What you must **never** do is read it as `ready`: the script is telling you it could not find the
+> dependency, not that there isn't one.
 
 #### What to do with `⟦FACTS⟧`
 
@@ -197,12 +207,37 @@ gets two accounts of one record. The records you need:
 ```
 total <M>                                  ← the sprint's task count
 count <marker> <N>                         ← e.g. `count done 30`
+
 drift disagreement <task> plan="…" brief="…" location="…"
+drift disagreement <task> plan="…" brief_sprint="…" moved_target="…"
+    ↑ two shapes. The second is the ➡️ Moved case: the plan says the task moved to one sprint and
+      the brief claims another. Same finding — the record contradicts itself — different sources.
+
 drift nonconformance <task> kind="…" cell="…"
+    ↑ kinds: blocked-without-reason · cancelled-without-date · cancelled-without-reason ·
+      moved-without-target · unknown-marker · brief-missing-status · missing-status-cell.
+      The marker is written wrong, or a source is absent — the state is still KNOWN, so these rows
+      keep their normal next step. `cancelled-without-date` and `-reason` are DIFFERENT defects:
+      report the one named, or you send the owner to fix something already in the cell.
 drift relocated <task> linked="…" found="…"
 drift missing-brief <task> linked="…"
+drift missing-sprint <task> plan="…" moved_target="…"
+drift depends-unparseable <task> brief="…" form="S|BL|BI|P"
+    ↑ the brief declares a dependency the script could not read. `form` is which declaration shape it
+      matched, so you know what to look for. Pairs with the `⟨derive: UNPARSEABLE — see brief⟩`
+      sentinel above — which is the ONE case where you open the brief yourself. Never read it as
+      `ready`.
 drift multiple-status-tables count=<n>
+drift unresolved-plan-sprint h1="…"
+    ↑ the plan has no recoverable `Sprint N` identity, so **drift rule 1** (skip the status
+      cross-check when a brief's `## Sprint` names a different sprint) could not be applied — which
+      means any drift below may be phantom. Say so; don't pretend the board is fully reconciled.
 ```
+
+**This list is a mirror of the script's output and has drifted from it six times** (review rounds 1–6;
+twice it was recorded as fixed when it was not). **If you see a `drift` record whose kind is not listed
+here, report it as-is and say the grammar is out of date** — do not silently skip it. An unlisted
+record is still an owner decision, and this list is the least trustworthy thing on this page.
 
 Every `drift` record is an owner decision → **beat 6** (step 2 governs how to dispose of it: report,
 never repair; disagreement is theirs to reconcile, nonconformance is a marker written wrong). The
@@ -218,7 +253,7 @@ table, a bug), **hand-build the board and lead with the flag**:
 ⚠️ [dashboard hand-built — dashboard.sh failed: <reason>]
 ```
 
-Then: the six columns above, one row per task, **markers copied from the plan's Status cell verbatim**,
+Then: the five columns above, one row per task, **markers copied from the plan's Status cell verbatim**,
 **show the dead rows** (a board that hides cancelled and moved tasks lies about scope), and a roll-up
 of the non-zero terms with **`— of M` where `M` is the number of rows in the table** — count them; not
 a number the plan's prose quotes about itself, which goes stale.

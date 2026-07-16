@@ -70,7 +70,9 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 38 | Add a full-board switch (`full`) to `/fkit-status` *(skill-text only; owner: fkit-coder)* | [`add-full-board-switch-to-fkit-status.md`](../tasks/done/add-full-board-switch-to-fkit-status.md) |
 | 🔲 Backlog | 39 | Investigate making `AskUserQuestion` available to fkit agents *(investigation — gates any grant; owner: fkit-architect)* | [`investigate-askuserquestion-availability-for-agents.md`](../tasks/backlog/investigate-askuserquestion-availability-for-agents.md) |
 | ✅ Done | 40 | Design the deterministic dashboard generator for `/fkit-status` *(design — [spec](../knowledge-base/reports/2026-07-16-design-deterministic-dashboard-for-fkit-status.md); spawned [ADR-017](../knowledge-base/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit.md))* | [`design-deterministic-dashboard-for-fkit-status.md`](../tasks/done/design-deterministic-dashboard-for-fkit-status.md) |
-| 🔲 Backlog | 41 | Build the deterministic dashboard script and wire it into `/fkit-status` *(needs 40 — **now unblocked**; owner: fkit-coder)* | [`build-deterministic-dashboard-script-for-fkit-status.md`](../tasks/backlog/build-deterministic-dashboard-script-for-fkit-status.md) |
+| ✅ Done | 41 | Build the deterministic dashboard script and wire it into `/fkit-status` *(owner: fkit-coder; [review](../reviews/build-deterministic-dashboard-script-for-fkit-status.md) closed-out, rounds 1–6, residuals recorded)* | [`build-deterministic-dashboard-script-for-fkit-status.md`](../tasks/done/build-deterministic-dashboard-script-for-fkit-status.md) |
+| 🔲 Backlog | 42 | Reopen ADR-012 Decisions 3 & 4 — record the `PreToolUse` skill-gate hook decision *(live bug fix, phase 1/2; owner: fkit-architect)* | [`record-pretooluse-skill-gate-adr-amendment.md`](../tasks/backlog/record-pretooluse-skill-gate-adr-amendment.md) |
+| 🔲 Backlog | 43 | Implement the `PreToolUse` skill-ownership gate (the hook-flip) *(needs 42; owner: fkit-coder)* | [`implement-pretooluse-skill-ownership-hook.md`](../tasks/backlog/implement-pretooluse-skill-ownership-hook.md) |
 
 ## Dependency graph
 
@@ -597,6 +599,45 @@ start making things up."*
 
 **Numbered 40/41 for append-don't-renumber discipline — contiguous and in dependency order. Owner to
 confirm the ranking.**
+
+## Addendum — tasks 42 and 43 added out of band (2026-07-16): the coder→reviewer skill-gate bug
+
+**A live bug surfaced today during ordinary use of Sprint 2 workflow, not from a task in progress:**
+fkit-coder spawning `@fkit-reviewer` to run a stateful review failed with `Error: Skill
+fkit-stateful-review is disabled for model invocation in skillOverrides settings`. Traced across
+three fkit-coder ↔ fkit-architect consults today to the same mechanism
+[ADR-012](../knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md)
+already found once: a spawned subagent inherits the *launching* session's `skillOverrides`, not its
+own role's. ADR-012 hand-patched one instance of this (producer → architect, `fkit-survey-project`,
+via `CONSULT_SKILLS`); coder → reviewer is the same class, unpatched, and it will keep recurring for
+any other role pair.
+
+**This is not a new decision — it is ADR-012's own re-raise trigger, now confirmed met.** ADR-012
+Decision 4's residual-risk clause says to reopen Decisions 3 and 4 together the moment the
+`PreToolUse` hook payload is confirmed to expose the calling subagent's real identity *and* someone is
+prepared to build the gate. Verified today, against the running Claude Code binary: the payload does
+expose the real caller (`agent_type`/`agent_id`) at any spawn depth, and the design (**"the
+hook-flip"**) is worked out — a `PreToolUse` hook on the `Skill` tool that denies by the invoker's
+*actual* role (keyed on the existing `skills_for_role()` source of truth), replacing the
+`skillOverrides`-based off-list and retiring `CONSULT_SKILLS` entirely. Full design detail is in
+task 42's brief.
+
+**Split design-then-implement, on the same pattern already used for tasks 40/41 and the
+investigation-then-implementation tasks 20/29/39** — recording an ADR and building against it are
+independently shippable, and the architect said the ADR amendment must land first:
+- **Task 42 — record the ADR** (reopen ADR-012 Decisions 3 & 4). Owner: fkit-architect. Depends on
+  nothing; the analysis is already done.
+- **Task 43 — implement the hook**, retire the old off-list/`CONSULT_SKILLS` plumbing once the hook is
+  verified, update the two docs ADR-012 flagged. Owner: fkit-coder. **Depends on task 42 — hard.**
+
+**Priority intent, despite append-only numbering:** this is a live bug blocking the coder's ability to
+consult the reviewer at all for a stateful review — **recommended as the next thing picked up**,
+ahead of the remaining lower-urgency backlog (34–39, 41), the same way task 17 was prioritized out of
+its append-order slot. Owner to confirm the ranking.
+
+**Not in scope for either task:** the "prose-only, no hook" alternative — evaluated and rejected today
+(defeatable by prompt injection; would retire ADR-010's structural claim rather than strengthen it).
+Task 42 records that rejection so it isn't re-litigated.
 
 ## Open questions for the owner
 
