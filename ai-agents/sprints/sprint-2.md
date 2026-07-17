@@ -79,6 +79,10 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 47 | Record the "one skill, one output" convention *(OQ8 resolved — generalize; document only; owner: fkit-architect → [`conventions/one-skill-one-output.md`](../knowledge-base/conventions/one-skill-one-output.md))* | [`record-one-skill-one-output-convention.md`](../tasks/done/record-one-skill-one-output-convention.md) |
 | 🔲 Backlog | 48 | Ship the one-skill-one-output convention in the scaffold *(closes the 4th live-vs-scaffold instance; owner: fkit-coder; independent — does not wait for 49)* | [`ship-one-skill-one-output-convention-in-scaffold.md`](../tasks/backlog/ship-one-skill-one-output-convention-in-scaffold.md) |
 | 🔲 Backlog | 49 | Investigate dual-home parity — dogfood `ai-agents/` vs `claude/scaffold/` *(investigation — gates all parity implementation; owner: fkit-architect)* | [`investigate-dual-home-parity-live-vs-scaffold.md`](../tasks/backlog/investigate-dual-home-parity-live-vs-scaffold.md) |
+| 🔲 Backlog | 50 | Rename the producer's `fkit-task-plan` skill to `fkit-task-brief` *(name collision with the coder's `fkit-plan-task`; atomic — dir + `skills-for-role.sh` + hook together; owner: fkit-coder)* | [`rename-task-plan-skill-to-task-brief.md`](../tasks/backlog/rename-task-plan-skill-to-task-brief.md) |
+| 🔲 Backlog | 51 | Wiki sync after the `task-plan` → `task-brief` rename *(needs 50 — hard; 8 vault pages; owner: fkit-wiki)* | [`wiki-sync-task-plan-rename.md`](../tasks/backlog/wiki-sync-task-plan-rename.md) |
+| 🔲 Backlog | 52 | Design the coder's `task-ship-loop` skill *(design — owner approves the loop steps before implementation; owner: fkit-architect, consults producer)* | [`design-task-ship-loop-skill.md`](../tasks/backlog/design-task-ship-loop-skill.md) |
+| 🔲 Backlog | 53 | Implement the `task-ship-loop` skill from the approved design *(needs 52 incl. owner approval — hard; owner: fkit-coder)* | [`implement-task-ship-loop-skill.md`](../tasks/backlog/implement-task-ship-loop-skill.md) |
 
 ## Dependency graph
 
@@ -769,6 +773,49 @@ shipped to the end users."*
   (`ai-agents/README.md`, both directions, deliberate) — a naive parity check is red from birth.
 
 **Numbered 48/49 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — tasks 50 and 51 added out of band (2026-07-17): the skill-name collision
+
+**The owner's ask:** rename the producer's `/fkit-task-plan` to `/fkit-task-brief` — it is the coder's
+`/fkit-plan-task` with **the same two words swapped**, for the opposite end of the task lifecycle.
+The new name says what the skill produces: briefs.
+
+**Split coder/wiki on ADR-005's write boundary, same as 44/45:**
+- **Task 50 — the rename** (owner: fkit-coder). Deliberately **atomic**: the skill directory,
+  `skills-for-role.sh` (the ownership source of truth), and the task-43 PreToolUse hook must flip
+  together or the producer loses the skill mid-rename. Dual-home discipline applies — the two
+  conventions files naming the skill change in **both** the live tree and the scaffold. Every
+  `task-plan` grep hit must be read, not batch-replaced — half the vocabulary belongs to the coder's
+  un-renamed skill. History (closed plans, done briefs, reports, this plan's frozen addenda) stays
+  frozen.
+- **Task 51 — wiki sync after** (owner: fkit-wiki; **needs 50 — hard**). 8 vault pages carry the old
+  name; living pages get the new name, historical pages get the task-45 mark-don't-delete treatment.
+
+**Numbered 50/51 for append-don't-renumber discipline — contiguous and in dependency order. Owner to
+confirm the ranking.**
+
+## Addendum — tasks 52 and 53 added out of band (2026-07-17): the coder's autonomous loop
+
+**The owner's ask:** a coder skill (working name `task-ship-loop`) taking a task from brief to done
+with minimal owner involvement — a 13-step loop sketch, with the owner's own caveats built in: the
+sketch is **not final**, the coder/producer/architect refine it together, and **the owner approves
+the steps before implementation**. That caveat *is* the design-then-implement split (the 40/41,
+42/43 pattern):
+
+- **Task 52 — design** (owner: fkit-architect, consults producer). Must resolve, as owner-facing
+  proposals, the conflicts the record already shows: **step 13 vs the owner-invoked mover gate**
+  (a consent-model decision), **"autonomous" vs the coder's own "owner present for plan and fix
+  gates" contract** (a deliberate amendment, not drift), **sub-agents cannot ask the owner**
+  (the task-39 seam — design within today's envelope or declare the dependency), and the **two-hop
+  consult envelope**. Ends with a numbered loop the owner approves. Adversarial pass recommended
+  (the 20/29 precedent).
+- **Task 53 — implement** (owner: fkit-coder; **needs 52 including the approval — hard**). Skill dir,
+  `skills-for-role.sh` registration, hook coverage, ADR-014 tests, dry-run on a real task. Its wiki
+  sync is deliberately **not** pre-created — the design may rename or reshape the skill; scoped when
+  53 lands.
+
+**Numbered 52/53 for append-don't-renumber discipline — contiguous and in dependency order. Owner to
+confirm the ranking.**
 
 ## Open questions for the owner
 
