@@ -83,6 +83,8 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 51 | Wiki sync after the `task-plan` → `task-brief` rename *(needs 50 — hard; 8 vault pages; owner: fkit-wiki)* | [`wiki-sync-task-plan-rename.md`](../tasks/backlog/wiki-sync-task-plan-rename.md) |
 | ✅ Done | 52 | Design the coder's `task-ship-loop` skill *(design — [spec, rev 3, owner-approved](../knowledge-base/reports/2026-07-17-design-task-ship-loop-skill.md); spawns ADR-019/ADR-020; owner: fkit-architect)* | [`design-task-ship-loop-skill.md`](../tasks/done/design-task-ship-loop-skill.md) |
 | 🔲 Backlog | 53 | Implement the `task-ship-loop` skill from the approved design *(needs 52 incl. owner approval — hard; owner: fkit-coder)* | [`implement-task-ship-loop-skill.md`](../tasks/backlog/implement-task-ship-loop-skill.md) |
+| 🔲 Backlog | 54 | Design the `fkit-git` agent + commit/push consent model *(design — **collides with the "never commit" hard rule**; owner present for the ruling; owner: fkit-architect)* | [`design-fkit-git-agent-and-consent-model.md`](../tasks/backlog/design-fkit-git-agent-and-consent-model.md) |
+| 🔲 Backlog | 55 | Implement the `fkit-git` agent + `commit-push` skill from the approved design *(needs 54 incl. owner approval — hard; owner: fkit-coder)* | [`implement-fkit-git-agent-and-commit-push.md`](../tasks/backlog/implement-fkit-git-agent-and-commit-push.md) |
 | 🔲 Backlog | 54 | Grant the `AskUserQuestion` tool to the six Claude-side agents *(implements [ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md) Decision 4 / task 39 findings; tool grant, not a skill; owner: fkit-coder)* | [`grant-askuserquestion-tool-to-six-claude-agents.md`](../tasks/backlog/grant-askuserquestion-tool-to-six-claude-agents.md) |
 
 ## Dependency graph
@@ -817,6 +819,31 @@ the steps before implementation**. That caveat *is* the design-then-implement sp
 
 **Numbered 52/53 for append-don't-renumber discipline — contiguous and in dependency order. Owner to
 confirm the ranking.**
+
+## Addendum — tasks 54 and 55 added out of band (2026-07-17): the `fkit-git` agent
+
+**The owner's ask:** a new agent `fkit-git` owning git work, with one skill `commit-push` (commit +
+push all uncommitted changes, caller-supplied title/message), invocable by other agents.
+
+**⚠️ Scoped design-first because it collides with a universal hard rule.** `CLAUDE.md:49`:
+*"Never commit or push unless the owner explicitly asks."* An agent that commits **on another agent's
+request** routes around that gate — a change to the meaning of the team's core safety guarantee, which
+is an **owner decision, not an implementation detail** (the task-36 consent-model / task-52-D1
+precedent). Two further conflicts the design must handle: the **seven→eight agent-count** ripple
+(asserted verbatim in `CLAUDE.md`, `PROJECT.md`, wiki, README, launcher, `fkit-team`), and
+**no-secrets-on-push** (an agent that blind-commits a dirty tree is the highest-risk secret-leak
+surface).
+
+- **Task 54 — design** (owner: fkit-architect, **owner present** for the consent ruling). Resolves the
+  consent model (producer's steer: owner-only or explicit-relay, **not** a silent weakening of the hard
+  rule), the commit-push contract (staging scope, forbidden force-push, failure/announce), the agent
+  contract (tools, consult reachability, session-or-consult), and enumerates the count ripple. May
+  require an ADR amending/scoping the hard rule. Ends with the owner's approval.
+- **Task 55 — implement** (owner: fkit-coder; **needs 54 incl. approval — hard**). Agent file, skill,
+  registration, hook coverage, count/roster updates, ADR-014 tests. Its wiki sync is deliberately not
+  pre-created.
+
+**Numbered 54/55 for append-don't-renumber discipline. Owner to confirm the ranking.**
 
 ## Open questions for the owner
 
