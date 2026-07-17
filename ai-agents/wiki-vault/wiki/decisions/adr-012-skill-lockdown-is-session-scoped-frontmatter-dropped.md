@@ -1,9 +1,11 @@
 # ADR-012: The skill lockdown is session-scoped; `skills:` frontmatter is dropped, not generated
 
 **Date**: 2026-07-11
-**Status**: accepted
+**Status**: accepted — **Decisions 3 and 4 superseded by [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]** (2026-07-16); §§1, 2 (structural-in-session half), 5 remain in force
 
 **Supersedes (in part)**: [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] §Decision 2 and §Decision 5
+
+> ⚠️ **Read this before trusting Decision 2's "advisory in a consult" language below.** [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] reopened Decisions 3 and 4 (their own pre-registered re-raise trigger was met) and adopted the `PreToolUse` skill-ownership hook — now **implemented and verified** ([[tasks/implement-pretooluse-skill-ownership-hook]]). Enforcement now follows the **real caller at any spawn depth**, so the "structural in a session, advisory in a consult" split this page draws **no longer describes current truth**. `CONSULT_SKILLS` (Decision 3) is retired. This file is kept intact as the historical record; **ADR-018 is the current ground truth for the consult-path question.**
 
 ## Context
 ADR-010 locked every session to one role and claimed the lock was **structural**: *"Role separation is enforced structurally, not by instruction."* It also left one thing to the coder: `skills_for_role()` is the single source of truth, and the `skills:` frontmatter *"must be generated from it or dropped."*
@@ -50,3 +52,6 @@ This matches the Claude Code docs: `skills:` controls **preloading only** — *"
 - [[systems/testing-and-verification]]
 - [[tasks/add-e2e-smoke-script-for-fkit-itself]]
 - [[tasks/add-shared-instructions-layer-for-all-agents]]
+- [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
+- [[tasks/record-pretooluse-skill-gate-adr-amendment]]
+- [[tasks/implement-pretooluse-skill-ownership-hook]]

@@ -51,6 +51,7 @@ The safety bar asserted, as verified, that `cp -R` **writes through a symlinked 
 *Not* a trigger: adding a folder, README, or file to the scaffold — **that is convergence, and it works.**
 
 ## Related
+- [[tasks/converge-ai-agents-additively-on-launch]]
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — the root-file seam, deliberately **not** dependent on this one's parked work
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]] — its Consequences section already does `migration-current.md`'s authoring job; also the amend-in-place precedent
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]] — the removal whose orphaned `.fkit/` state is the one destructive act still on the table

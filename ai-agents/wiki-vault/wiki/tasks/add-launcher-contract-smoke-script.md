@@ -24,9 +24,6 @@ Give fkit its **first automated verification**. Stub `claude` and `codex` on `PA
 **Done.** `test/harness.mjs`, `test/launcher-contract.test.js`, `test/prove-red.sh`; `npm test` = `node --test test/*.test.js`. Zero devDependencies, no lockfile, no `node_modules` — runs on a fresh clone with no install step.
 
 **It immediately earned its seat:** making **assertion 7** enforcing turned the suite **red** and exposed a live launcher defect — the headless lead-default was dead code on any normal system ([[tasks/fix-headless-menu-guard-crash]]).
-
-⚠️ **The brief's own `## Status` header still reads `🔲 Backlog`** though it sits in `done/` — the mover drift that Sprint 2 tasks 34/35 exist to stop. Recorded here as **done**, per the sprint board.
-
 **Deferred to Sprint 3, explicitly:** `install.sh` e2e, a CI workflow, and the static drift check across the three `skills_for_role()` mirrors (it needs a **normalizer** — they use three different naming conventions).
 
 **Open questions raised:** fresh-project headless routing (producer vs lead) must be pinned by someone — reserved as the task's **open question 1**; and whether a red suite gates `Done`.

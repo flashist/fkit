@@ -27,6 +27,7 @@ So a permissions problem on `.claude/`, a read-only checkout, ENOSPC, or one fai
 **It is the precondition for additive convergence** (Sprint 2 task 28, still backlog): convergence adds *more* work to this same unattended, every-launch path, and **making that path more capable while it can still brick the launcher is exactly backwards.**
 
 ## Related
+- [[tasks/converge-ai-agents-additively-on-launch]]
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]]
 - [[tasks/design-version-to-version-migration-mechanism]] — the investigation that found it
 - [[tasks/refuse-init-on-weird-ai-agents-state]] — the sibling precondition

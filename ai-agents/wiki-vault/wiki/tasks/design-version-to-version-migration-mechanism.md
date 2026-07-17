@@ -29,6 +29,7 @@ An **investigation**, explicitly not a build.
 **Found in passing, and the more urgent of the two things it found:** [[tasks/stop-init-failure-bricking-the-launcher]].
 
 ## Related
+- [[tasks/converge-ai-agents-additively-on-launch]]
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — the decision it produced
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]] — the live worked example that motivated it
 - [[tasks/fix-scaffold-knowledge-base-folders]] · [[tasks/stop-init-failure-bricking-the-launcher]] · [[tasks/refuse-init-on-weird-ai-agents-state]] — the defects it spawned

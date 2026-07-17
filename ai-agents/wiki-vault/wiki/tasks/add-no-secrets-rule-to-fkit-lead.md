@@ -21,9 +21,6 @@ Six of the seven agent files carried a "no secrets / no sensitive information" r
 **Split out on purpose:** an **agent-definition** file, where tasks 30 and 31 touch **scaffold and init** — different files, different verification, independently shippable. **Numbered last because it is the least consequential of the three, not because it was blocked.**
 
 It is the **residue of the motivation [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] downgraded** — and the ADR explicitly notes it *"should not be lost with it."*
-
-⚠️ The brief's own `## Status` header still reads `🔲 Backlog` though it sits in `done/` — mover drift; the sprint board reads Done.
-
 ## Related
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — the collapsed drift motivation, and this as its residue
 - [[tasks/add-shared-instructions-layer-for-all-agents]]

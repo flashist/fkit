@@ -35,6 +35,7 @@ The shared, runtime-agnostic **`ai-agents/` file contracts are the portability l
 - The `ai-agents/` portability layer proved its worth: when Omnigent was deleted, **the coordination state survived untouched.**
 
 ## Related
+- [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
 - [[systems/fkit]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]]

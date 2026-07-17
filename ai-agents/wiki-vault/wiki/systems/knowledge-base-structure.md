@@ -42,9 +42,9 @@ This principle caught a real error: the knowledge-base hygiene pass had improvis
 - **A dated filename never lives at the root or in `conventions/`** — a dated name means "a record of a moment".
 
 ### The conventions in force
-`conventions/README.md` indexes three: **`task-status-vocabulary.md`** (the six valid statuses, and who may set each), **`status-report-format.md`** (the shape of a status briefing), and — added 2026-07-16 — **`evidence-before-assertion.md`**: *a claim about repo/project state must come from a check made this turn.*
+`conventions/README.md` indexes four: **`task-status-vocabulary.md`** (the six valid statuses, and who may set each), **`status-report-format.md`** (the shape of a status briefing), **`evidence-before-assertion.md`** (added 2026-07-16 — *a claim about repo/project state must come from a check made this turn*), and — added 2026-07-17 — **`one-skill-one-output.md`**: *for any subject a skill produces one complete output; arguments select subjects and inputs, never output variants* ([[tasks/record-one-skill-one-output-convention]]). Its litmus test — does the argument change *what the skill works on* (a parameter, allowed) or *what the same work looks like when reported* (a variant, forbidden)?
 
-**The third exists because the second's scope was too narrow.** `status-report-format.md` was written after *"a status report was once improvised from memory and fabricated a number that looked precise and was false"* — but it governs `/fkit-status` only, and **it did not govern the moment an agent decides whether work exists**, which is exactly where the same failure recurred three times in one session. **The convention was right; its scope was too narrow.** See [[tasks/stop-agents-asserting-unchecked-repo-state]].
+**`evidence-before-assertion` exists because `status-report-format`'s scope was too narrow.** `status-report-format.md` was written after *"a status report was once improvised from memory and fabricated a number that looked precise and was false"* — but it governs `/fkit-status` only, and **it did not govern the moment an agent decides whether work exists**, which is exactly where the same failure recurred three times in one session. **The convention was right; its scope was too narrow.** See [[tasks/stop-agents-asserting-unchecked-repo-state]].
 
 ## Gotchas / Known Issues
 - **`decisions/` has no README on purpose**: the `adr-NNN-<slug>` sequence *is* the convention.
@@ -56,6 +56,8 @@ This principle caught a real error: the knowledge-base hygiene pass had improvis
 - **The drift rate is real.** The task brief that prompted ADR-013 listed six loose root files; by the time it was picked up there were **eight**.
 
 ## Related
+- [[tasks/task-cancelled-flips-brief-own-status-header]]
+- [[tasks/task-done-flips-brief-own-status-header]]
 - [[systems/fkit]]
 - [[systems/launch-convergence-and-init]]
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]]
@@ -73,6 +75,7 @@ This principle caught a real error: the knowledge-base hygiene pass had improvis
 - [[tasks/repair-knowledge-base-paths-in-product-source]]
 - [[tasks/enforce-task-status-vocabulary]]
 - [[tasks/add-status-skill-to-producer]]
+- [[tasks/record-one-skill-one-output-convention]]
 - [[tasks/amend-subagent-disconnect-incident-doc]]
 - [[tasks/bake-architecture-pointer-into-scaffold-templates]]
 - [[tasks/sprint-2-remove-omnigent]]

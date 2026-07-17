@@ -35,6 +35,7 @@ The correction propagated to the sprint plan and to [[decisions/adr-015-additive
 **Its lesson generalized to a second seam:** the brownfield merge gates a symlinked `CLAUDE.md` with `[ -L ]` for exactly this reason. **The read-side counterpart remains open and latent.**
 
 ## Related
+- [[tasks/converge-ai-agents-additively-on-launch]]
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]]
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — records the unclosed read-side hazard
 - [[tasks/stop-init-failure-bricking-the-launcher]] — the sibling precondition

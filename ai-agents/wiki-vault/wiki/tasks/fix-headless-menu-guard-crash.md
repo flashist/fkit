@@ -21,9 +21,6 @@ On a **no-role, no-args invocation of an initiated project with no controlling t
 **Done.** Verified across **all three routing paths**: headless → lead (exit 0), the interactive menu still opens on a real pty, fresh → producer unchanged. **Task 23's assertion 7 flipped from `todo` to enforcing and passes.**
 
 **This is the launcher-contract suite's first catch** — the defect was found *because* assertion 7 was made enforcing and went red. A worked example of why the suite exists: **fkit's failure mode is silent-wrong**, and this one hid behind a predicate that looked right.
-
-⚠️ The brief's own `## Status` header still reads `🔲 Backlog` though it sits in `done/` — mover drift; the sprint board reads Done.
-
 ## Related
 - [[tasks/add-launcher-contract-smoke-script]] — assertion 7 is what caught it
 - [[decisions/adr-014-how-fkit-tests-itself]]

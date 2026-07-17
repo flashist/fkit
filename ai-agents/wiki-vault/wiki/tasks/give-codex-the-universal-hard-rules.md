@@ -29,9 +29,6 @@ So Codex — required by [[decisions/adr-009-claude-code-native-is-the-only-runt
 ⚠️ **Delivery, not a floor — and the brief said so on purpose.** There are **zero hooks**; a rule in a context file is **prose asking a model to behave**. *"Do not let a reviewer read 'structural floor' into it — that overclaim is exactly what ADR-012 had to retrofit onto ADR-010."* **[[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] then made that very overclaim in its own summary and had to be amended.**
 
 **Accepted churn, explicitly:** task 31 re-cut these same ~8 lines into a marker-delimited managed block. *"Cheaper than delaying a live defect fix behind a mechanism change."*
-
-⚠️ The brief's own `## Status` header still reads `🔲 Backlog` though it sits in `done/` — mover drift; the sprint board reads Done.
-
 ## Related
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]] — Codex is a **required** runtime; this was a live defect against that premise

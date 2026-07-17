@@ -43,6 +43,9 @@ The ADR deliberately **declined to pick the runner**, on the owner's explicit ru
 - **Re-raise only if:** shell *internals* ever need asserting in isolation (shellspec becomes live again); **Node stops being a de facto prerequisite** (removing the strongest leg of the `node --test` case); or **test infrastructure ever becomes something a consuming project installs** — that inverts the `install.sh:43` fact everything here rests on.
 
 ## Related
+- [[tasks/build-deterministic-dashboard-script-for-fkit-status]]
+- [[tasks/implement-pretooluse-skill-ownership-hook]]
+- [[tasks/task-done-flips-brief-own-status-header]]
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]] — **widens §2's fence** from two things to three; rests on the same `install.sh:43` fact, inverted by design
 - [[decisions/adr-003-ci-runs-validate-bundles]] — the dead Omnigent-era check this replaces
 - [[tasks/add-ci-validate-bundles]] — the cancelled task that first named the gap this ADR's suite partly closes

@@ -30,9 +30,6 @@
 **Provenance: diagnosed in-session by the producer after making the error three times**, and the owner asked for it to be **tasked rather than left as a promise to do better**. *"That is the right call — a behavioral resolution held by one agent in one session protects nobody. The source defect would have kept producing this failure in every project fkit ships to."*
 
 **Not a hook, deliberately** — *the fix is a rule agents read and a false instruction removed, not enforcement machinery.*
-
-⚠️ The brief's own `## Status` header still reads `🔲 Backlog` though it sits in `done/` — mover drift; the sprint board reads Done.
-
 ## Related
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]] — where the convention is filed
 - [[tasks/add-shared-instructions-layer-for-all-agents]] — this rule was *"the first real customer"* of whatever that built

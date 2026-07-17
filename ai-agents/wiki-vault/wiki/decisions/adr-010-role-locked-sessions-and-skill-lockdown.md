@@ -37,6 +37,9 @@ Plus:
 - ADR-012 corrected the scope: the lockdown follows **the launching session**, so on the **consult path it is advisory**, not structural.
 
 ## Related
+- [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
+- [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]]
+- [[tasks/design-task-ship-loop-skill]]
 - [[systems/role-locked-sessions]]
 - [[systems/fkit]]
 - [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]]

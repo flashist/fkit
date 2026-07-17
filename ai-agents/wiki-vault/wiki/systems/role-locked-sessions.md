@@ -1,7 +1,7 @@
 # Role-Locked Sessions & the Skill Lockdown
 
 **Layer**: shared
-**Key files**: `claude/fkit-claude.sh` (`skills_for_role()`, `build_settings()`, `CONSULT_SKILLS`), `claude/agents/fkit-*.md`, `.fkit/settings/<role>.json`
+**Key files**: `claude/skills-for-role.sh` (`skills_for_role()` — the single source of truth), `claude/fkit-claude.sh` (`build_settings()`), `claude/skill-ownership-hook.sh` (the `PreToolUse` skill-ownership gate), `claude/agents/fkit-*.md`, `.fkit/settings/<role>.json`
 
 ## Summary
 Every fkit session is pinned to exactly one role. `fkit <role>` launches `claude --agent fkit-<role>` with generated `--settings`, so the session gets that role's system prompt, its **tool allowlist**, and **only its own `/fkit-*` skills** — every other fkit skill is turned off, invisible and unrunnable.
@@ -15,20 +15,25 @@ A session is locked **two ways**:
 1. **`--agent fkit-<role>`** — the role's system prompt **and tool allowlist**. Harness-enforced.
 2. **`--settings` carrying `skillOverrides`** — `build_settings()` writes `{"skillOverrides":{"<not-owned>":"off",…}}` to `.fkit/settings/<role>.json`. Every `fkit-*` skill the role does not own is hidden from the `/` menu **and unrunnable by name**. Non-fkit skills (the project's own, the user's own) are never touched.
 
-### The scope of the lock is the load-bearing detail
+### The scope of the lock — now structural at any depth (2026-07-16)
+
+**There have been two eras.** The distinction matters because two ADRs and much of the older wiki describe the first.
+
+**Era 1 — `skillOverrides`, session-scoped ([[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]]).** The lock was a `skillOverrides` off-list carried by the *launching* session and inherited by every subagent:
 
 ```
-skill availability in ANY context (session OR spawned consult)
-  = all installed skills − the skillOverrides of the SESSION THAT LAUNCHED THE PROCESS
+skill availability = all installed skills − the skillOverrides of the SESSION THAT LAUNCHED THE PROCESS
 ```
 
-- **In a role SESSION the lock is structural.** `fkit coder` genuinely cannot run `/fkit-review`. **This is the property reviewer independence rests on, and it holds.**
-- **In a spawned CONSULT it is advisory.** A subagent inherits the *caller's* overrides, **not its own** — confirmed empirically from live spawns. Only the agent's system prompt and the skill's `⛔ Owner:` banner stand between a confused subagent and someone else's procedure. **The banner is therefore load-bearing, not decorative — it may not be deleted as "redundant."**
+So the lock was **structural in a role session** but **advisory in a spawned consult** — a subagent inherited the *caller's* overrides, not its own, and only the skill's `⛔ Owner:` banner stopped a confused consult from running someone else's procedure. `CONSULT_SKILLS` was a hand-maintained always-on list papering over the gap for the one known case (producer → architect → `fkit-survey-project`).
 
-> ⚠️ **Do not restate this as a blanket defect.** *"The skill lock is only prompt-enforced"* is **false of a session** and **true of a consult**. A finding must say **which path** it means.
+**Era 2 — the `PreToolUse` hook, structural at any depth ([[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]], implemented [[tasks/implement-pretooluse-skill-ownership-hook]]).** The `skillOverrides` off-list and `CONSULT_SKILLS` are **retired**. A `PreToolUse` hook on the `Skill` tool now reads the **real invoking agent's identity** (`agent_type`) from the hook payload — at any spawn depth — and **denies** any skill the caller's role doesn't own per `skills_for_role()`. Enforcement follows the actual caller, top-level session or a consult nested any number of hops.
 
-### `CONSULT_SKILLS` — the escape valve that inheritance forces
-`fkit-survey-project` and `fkit-query` stay **on for every role**, because `/fkit-initiate-project` has the **producer** spawn the architect to run the survey — with it off, initiation could not run its own architecture survey. The accepted cost: any role session can invoke `/fkit-survey-project` by name. **The set is deliberately minimal; adding to it is a decision, not a convenience.**
+- **The lock is now structural everywhere it was meant to be.** `fkit coder` cannot run `/fkit-review` in a session, **and a spawned consult cannot run a skill its real role doesn't own either.** The `⛔ Owner:` banner is now a **belt-and-braces backstop, not the sole enforcement** on the consult path.
+- **Fail-closed is a hard requirement:** Claude Code hooks fail *open* by default, so any internal hook error must resolve to an explicit deny.
+- **Accepted costs (ADR-018):** non-owned skills are now **visible** in the `/` menu though **denied on invocation**; and a **non-fkit subagent** (`general-purpose`, `codex:rescue`, …) carries no `fkit-` identity and is therefore denied **every** `fkit-*` skill, `fkit-query`/`fkit-team` included — the fkit role that spawned it must run the query itself.
+
+> ⚠️ **Older ADR-010/012 language — "advisory in a consult" — is now history, not current truth.** Do **not** re-raise "role separation is only prompt-enforced in a consult" as a defect; that is what ADR-018 closed. A finding must point to a *specific* hook failure (a role reaching a skill it doesn't own, or a fail-open path).
 
 ### Consultation — the Agent tool, two hops, no cycles
 Cross-role work is a **consult**, never a role switch. `@fkit-<role> <question>` spawns a fresh context that answers and returns; the asker keeps the decision that is theirs. The rules are carried in every agent prompt:
@@ -42,15 +47,17 @@ Cross-role work is a **consult**, never a role switch. `@fkit-<role> <question>`
 
 ## Gotchas / Known Issues
 - **There is no `skills:` frontmatter.** It was dropped from all 7 agents: Claude Code treats it as a *preload hint*, not an allowlist, so it enforced nothing. Keeping it — even generated — would have preserved a field that *looks* like the invariant and isn't. **Do not re-add it.**
-- **Ownership has exactly one source of truth**: `skills_for_role()` in `claude/fkit-claude.sh`. Two sources of truth for the flavor's central invariant is one too many.
-- **The only mechanism that could make per-role skill ownership real on the consult path is a `PreToolUse` gate on the `Skill` tool** — deferred, and now priced.
-- **Open question that decides whether this is even fixable:** does the `PreToolUse` hook payload expose the **calling subagent's identity**? If it does not, the hook cannot discriminate by role and the option is not merely deferred but **unavailable**. This must be established before anyone plans the hook as the fix.
-- `fkit --resume` bypasses the intended lock — see [[systems/fkit]].
+- **Ownership has exactly one source of truth**: `skills_for_role()` — extracted into `claude/skills-for-role.sh` so both the launcher and the `PreToolUse` hook read it directly (the hook must **not** source `fkit-claude.sh`, whose top-level side effects would fire). Two sources of truth for the flavor's central invariant is one too many.
+- **The `PreToolUse` gate is no longer deferred — it is implemented** ([[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]). The old open question — *does the hook payload expose the calling subagent's identity?* — was **answered yes**, verified against the running Claude Code binary (`agent_type`/`agent_id`, at any depth). That is what made the hook available rather than merely priced.
+- **`disableAllHooks` is a single point of failure** for the whole gate now that enforcement is entirely hook-based — accepted, because it needs the operator's own settings (the same actor the hook serves).
 
 ## Related
 - [[systems/fkit]]
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]]
 - [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]]
+- [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
+- [[tasks/record-pretooluse-skill-gate-adr-amendment]]
+- [[tasks/implement-pretooluse-skill-ownership-hook]]
 - [[decisions/adr-008-claude-code-native-port-alongside-omnigent]]
 - [[systems/review-and-model-diversity]]
 - [[tasks/reconcile-skill-ownership-source-of-truth]]

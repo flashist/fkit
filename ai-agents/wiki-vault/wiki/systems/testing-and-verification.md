@@ -54,6 +54,8 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - **Not the tester-agent question.** *"Building the script will teach us almost nothing about whether the tester earns its seat."* The two must not be bundled.
 
 ## Related
+- [[tasks/build-deterministic-dashboard-script-for-fkit-status]]
+- [[tasks/implement-pretooluse-skill-ownership-hook]]
 - [[decisions/adr-014-how-fkit-tests-itself]]
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]]
 - [[decisions/adr-003-ci-runs-validate-bundles]]

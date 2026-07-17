@@ -24,6 +24,8 @@ Done. *(The one-off repair of Sprint 1's 6 existing broken links — [[tasks/rep
 **Producer's recommendation — re-point the href, never the prose.** A closed plan's *claims* are history and must stay frozen. But **a link is not a claim, it is a pointer — and a pointer to a file that isn't there is rot, not history.** *The tradeoff:* the movers would then **write into `sprints/done/`**, a directory the project currently treats as never-touched. If "closed" means *byte-frozen*, the honest alternative is to accept the broken links by design — but that requires a **permanent, unbounded `sprints/done/**` exclusion in any future link check**, permanently blinding it over a directory that only grows.
 
 ## Related
+- [[tasks/task-cancelled-flips-brief-own-status-header]]
+- [[tasks/task-done-flips-brief-own-status-header]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
 - [[tasks/add-task-plan-skill-to-producer]]

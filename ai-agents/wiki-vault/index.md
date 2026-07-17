@@ -35,12 +35,15 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — **fkit adds, never mutates, inside `ai-agents/`. There is no migration mechanism**
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — The layer already exists; **delivery structural, compliance advisory**
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]] — Shipped skill executables: `bash <path>`, never the exec bit
+- [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — **`PreToolUse` hook enforces skill ownership by the real caller at any depth; `CONSULT_SKILLS` retired.** Supersedes ADR-012 Decisions 3&4
+- [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — The coder's ship-loop runs autonomously by default; gated only at plan-approval and the owner-only done-gate
+- [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — Per-task `plans/` + `worklogs/` dirs, keyed by task-id, mirroring `reviews/`
 
 ## Tasks
 
 ### Sprints
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — 🔒 Closed: the Omnigent-era onboarding sprint, and how its 12 tickets were dispositioned
-- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**33/38 done**; grew 22 → 38)
+- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**42/53 done**; grew 22 → 53)
 
 ### Sprint 2 — the removal chain
 - [[tasks/extract-scaffold-into-claude]] — Move the shared scaffold out of `omnigent/` (Phase 0.1)
@@ -71,6 +74,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/fix-scaffold-knowledge-base-folders]] — The scaffold promised five KB folders and shipped one
 - [[tasks/stop-init-failure-bricking-the-launcher]] — Any init failure took the user's whole team offline
 - [[tasks/refuse-init-on-weird-ai-agents-state]] — The `[ -L ]` gate; **its stated rationale shipped false and was corrected**
+- [[tasks/converge-ai-agents-additively-on-launch]] — **"the migration" — now Done**: per-path create-if-absent top-up under the never-overwrite invariant
 
 ### Sprint 2 — the shared-instructions investigation (and its reversal)
 - [[tasks/add-shared-instructions-layer-for-all-agents]] — Investigation → ADR-016; **the layer already existed**
@@ -79,8 +83,17 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/add-no-secrets-rule-to-fkit-lead]] — The 1 of 7 missing it — one line
 
 ### `/fkit-status` tooling
-- [[tasks/design-deterministic-dashboard-for-fkit-status]] — Design-first → ADR-017; implementation still backlog
-- [[tasks/add-full-board-switch-to-fkit-status]] — A reserved `full` keyword overriding the delta default
+- [[tasks/design-deterministic-dashboard-for-fkit-status]] — Design-first → ADR-017; **implementation now Done**
+- [[tasks/build-deterministic-dashboard-script-for-fkit-status]] — fkit's **first shipped executable** (`dashboard.sh`); the roll-up becomes a computed invariant
+- [[tasks/add-full-board-switch-to-fkit-status]] — A reserved `full` keyword overriding the delta default (**later reverted by task 44**)
+- [[tasks/record-one-skill-one-output-convention]] — The standing rule the `full` reversal generalized: one complete output per subject; no output-variant arguments
+
+### Sprint 2 — the consult-path skill-gate hook
+- [[tasks/record-pretooluse-skill-gate-adr-amendment]] — Reopens ADR-012 Decisions 3&4 → ADR-018
+- [[tasks/implement-pretooluse-skill-ownership-hook]] — The `PreToolUse` hook-flip; retires `CONSULT_SKILLS`, enforces by the real caller
+
+### Sprint 2 — the coder's autonomous ship-loop
+- [[tasks/design-task-ship-loop-skill]] — Owner-approved design → ADR-019 + ADR-020; brief→done with minimal owner involvement (impl is task 53, backlog)
 
 ### Sprint 2 — producer & coder tooling
 - [[tasks/add-task-plan-skill-to-producer]] — A procedure for writing task briefs; decompose to smallest shippable unit
@@ -88,6 +101,8 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/enforce-task-status-vocabulary]] — The closed status set: Backlog · In progress · Blocked · Done · Cancelled · Moved
 - [[tasks/restore-plan-mode-in-plan-task]] — Regression: the planning gate was prose, not a wall
 - [[tasks/harden-task-movers-against-closed-sprint-link-rot]] — Stop the movers rotting links in closed sprint plans
+- [[tasks/task-done-flips-brief-own-status-header]] — `/fkit-task-done` now flips the moved brief's own `## Status` (mover drift, sibling of task 22)
+- [[tasks/task-cancelled-flips-brief-own-status-header]] — Same fix for `/fkit-task-cancelled`, reproducing the mandatory date+reason
 - [[tasks/bake-architecture-pointer-into-scaffold-templates]] — Scaffold points at `architecture.md` instead of a placeholder
 - [[tasks/extend-initiate-project-fill-overview]] — Initiation fills the CLAUDE.md/AGENTS.md Project Overview
 

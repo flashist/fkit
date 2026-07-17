@@ -78,6 +78,7 @@ Init runs under `set -euo pipefail` and was called **unguarded** from a launcher
 - ⚠️ **The scaffold's `ai-agents/README.md` names sprint plans `plan-sprint-N.md`; the shipped skills write `sprint-N.md`.** The **scaffold is wrong and every new project got it**; fixed in the scaffold by [[tasks/fix-scaffold-knowledge-base-folders]], but **existing projects keep the wrong copy** — the accepted residual above.
 
 ## Related
+- [[tasks/converge-ai-agents-additively-on-launch]]
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]]
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]]

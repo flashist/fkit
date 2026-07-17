@@ -40,7 +40,7 @@ Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedure
 | wiki | `wiki-ingest`, `wiki-lint`, `wiki-sync` |
 | everyone | `team` (roster/signpost), `query` (read-only wiki reads) |
 
-**Role→skill ownership is declared in exactly one place: `skills_for_role()` in `claude/fkit-claude.sh`** — the single source of truth ([[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]]).
+**Role→skill ownership is declared in exactly one place: `skills_for_role()`** — extracted into `claude/skills-for-role.sh` and read by both the launcher and the `PreToolUse` skill-ownership hook that now enforces it at any spawn depth ([[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]], [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]).
 
 ### Runtime topology — one process, one role, no orchestrator
 There is no fkit daemon, no root agent, no session broker, no message bus. **Claude Code owns the session lifecycle**; fkit is a launcher and a set of prompts. Two roles at once means two terminal tabs — deliberately not automated. Role routing is an `if/else`: **no LLM sits in the path that decides which role you get.**
@@ -51,6 +51,8 @@ Sessions are **role-locked**, and cross-role work is a **consult**, never a role
 There is no database. The **`ai-agents/` tree is the entire coordination state**: `knowledge-base/` (see [[systems/knowledge-base-structure]]), `sprints/`, `tasks/{backlog,done,cancelled}/`, `reviews/<task-id>.md`, and `wiki-vault/` (this wiki).
 
 `reviews/<task-id>.md` is a **two-party ledger**, written by reviewer *and* coder. It is the loop-prevention memory: it carries decision state and **accepted residuals** across review rounds so settled tradeoffs are not re-litigated.
+
+**Two more per-task, task-id-keyed record dirs are sanctioned** ([[decisions/adr-020-per-task-plan-and-worklog-artifacts]]), mirroring `reviews/` — written by the coder's autonomous ship-loop, git-tracked, retained by id, **not** moved by task-done and **not** wiki-ingested: `plans/<task-id>.md` (the owner-approved plan — the loop's autonomy boundary) and `worklogs/<task-id>.md` (the worklog + owner-decision log → finalized ready-for-done report). *(The loop itself is designed and owner-approved — [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — but not yet implemented; its skill is Sprint 2 task 53, backlog.)*
 
 Generated and gitignored per project: `.fkit/settings/<role>.json` (the skill lockdown), `.fkit/interview` + `.fkit/intake.md`, `.fkit/tmp/adversarial-prompt.md`, and the fkit-managed `.claude/agents/fkit-*.md` + `.claude/skills/fkit-*/` copies.
 
@@ -68,10 +70,10 @@ fkit originally shipped as [Omnigent](https://omnigent.ai) agent bundles under `
 This is recorded because it explains things that would otherwise look arbitrary: why four retired verbs (`omnigent`, `claude`, `reconnect`, `restart-team`) **fail loudly** rather than being silently dropped; why self-update notifies rather than auto-updates; and why ADR-008 is kept rather than deleted — it is the record of *why fkit left Omnigent*.
 
 ## Open questions
-1. **Does the `PreToolUse` hook payload expose the calling subagent's identity?** This single question decides whether the consult-path skill boundary is *fixable* or *permanently advisory* — see [[systems/role-locked-sessions]].
+1. ~~**Does the `PreToolUse` hook payload expose the calling subagent's identity?**~~ **Answered: yes** — verified against the running Claude Code binary (`agent_type`/`agent_id`, at any spawn depth). The consult-path skill boundary is now **structurally enforced**, not advisory: [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]], implemented by [[tasks/implement-pretooluse-skill-ownership-hook]]. See [[systems/role-locked-sessions]].
 2. ~~**What is the intended verification story?**~~ **Answered** by [[decisions/adr-014-how-fkit-tests-itself]]: a black-box process contract at the repo root, zero devDeps, never shipped to consumers. **What remains open is narrower** — `install.sh` e2e and a CI workflow are deferred to Sprint 3, and *"does a red suite gate `Done`?"* is still an owner call.
 3. ~~**Is `fkit --resume` worth keeping at all?**~~ **Answered: no.** The owner ruled **removal**, rejecting both of the coder's proposed fixes (*persist the role* / *require a role*). The question is **closed** — do not reopen it, and do not build a replacement.
-4. **What is the consent model for the one destructive act still on the table** — clearing the `.fkit/` Omnigent orphans (`rm -rf` in a user's project, no rollback)? Announce-only, ask-once, or dry-run-first? **Blocks Sprint 2 task 36.**
+4. ~~**What is the consent model for the one destructive act still on the table** — clearing the `.fkit/` Omnigent orphans?~~ **Answered: announce-only** (owner, 2026-07-17 — owner is currently fkit's only user; Omnigent-scoped, no precedent for future destructive ops). **Sprint 2 task 36 is unblocked** (still backlog). `.fkit/settings` is live lockdown state and must never be touched.
 
 ## Related
 - [[systems/role-locked-sessions]]
@@ -85,6 +87,11 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]]
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]]
+- [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
+- [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]]
+- [[decisions/adr-020-per-task-plan-and-worklog-artifacts]]
+- [[tasks/implement-pretooluse-skill-ownership-hook]]
+- [[tasks/converge-ai-agents-additively-on-launch]]
 - [[tasks/add-no-secrets-rule-to-fkit-lead]]
 - [[tasks/stop-agents-asserting-unchecked-repo-state]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]

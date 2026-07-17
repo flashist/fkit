@@ -42,6 +42,7 @@
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — the invariant a *writing* shipped executable would answer to
 - [[decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name]] — `package.json` scope, no `bin` field
 - [[tasks/design-deterministic-dashboard-for-fkit-status]] — the design this generalizes
+- [[tasks/build-deterministic-dashboard-script-for-fkit-status]] — the first implementation under this ADR (`dashboard.sh`)
 - [[tasks/add-full-board-switch-to-fkit-status]] — the sibling `/fkit-status` change
 - [[systems/testing-and-verification]]
 - [[systems/install-and-self-update]]

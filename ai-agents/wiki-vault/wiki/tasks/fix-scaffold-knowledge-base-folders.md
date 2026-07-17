@@ -24,6 +24,7 @@ The verification that mattered was the comparison, not the tree-walk: **scaffold
 ⚠️ **The residue is accepted knowingly:** existing projects keep the wrong `plan-sprint-N.md` README **forever** under ADR-015's invariant, and *that file is read by an agent at runtime*.
 
 ## Related
+- [[tasks/converge-ai-agents-additively-on-launch]]
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]] — the law the scaffold never implemented
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — why existing projects keep the drift
 - [[tasks/design-version-to-version-migration-mechanism]] — the investigation that surfaced it

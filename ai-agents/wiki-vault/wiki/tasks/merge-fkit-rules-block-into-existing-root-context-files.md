@@ -25,9 +25,6 @@
 **This is the first fkit code that writes into a file the user already owned**, unattended, on every launch. **Risk: moderate** — *"the blast radius of getting the merge wrong is someone else's `CLAUDE.md`. Every safety requirement above exists for that one sentence."* This repo, being brownfield itself, was used as the honest test.
 
 ⚠️ **Delivery: structural. Compliance: advisory.** *"Do not write 'floor', 'teeth', or 'non-overridable' into any comment, message, or commit body for this change."*
-
-⚠️ The brief's own `## Status` header still reads `🔲 Backlog` though it sits in `done/` — mover drift; the sprint board reads Done.
-
 ## Related
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — the *other* seam, and the parked task this one does **not** depend on

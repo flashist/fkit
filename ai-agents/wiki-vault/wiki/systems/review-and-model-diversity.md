@@ -49,6 +49,7 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - The adversarial reviewer was formerly eager-spawned at session start under Omnigent's `fkit-team`, which cluttered the agents panel; that root agent is deleted — see [[tasks/remove-adversarial-reviewer-eager-spawn]].
 
 ## Related
+- [[tasks/sprint-2-remove-omnigent]]
 - [[systems/fkit]]
 - [[systems/role-locked-sessions]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
@@ -62,3 +63,6 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
 - [[tasks/give-codex-the-universal-hard-rules]]
 - [[tasks/wiki-sync-post-omnigent]]
+- [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
+- [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]]
+- [[tasks/design-task-ship-loop-skill]]

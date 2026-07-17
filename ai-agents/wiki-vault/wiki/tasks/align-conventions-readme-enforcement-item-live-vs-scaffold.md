@@ -29,6 +29,7 @@ The two copies of the conventions-index README diverge on item 3 of **"The bar f
 ⚠️ The brief's own `## Status` header still reads `🔲 Backlog` though it sits in `done/` — mover drift. ⚠️ **The wiki records that the task closed; it does not record which option (a or b) was chosen** — that is in the task's close-out, not in the brief. Flagged rather than guessed.
 
 ## Related
+- [[tasks/record-one-skill-one-output-convention]]
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]] — the architect's ownership of KB structure
 - [[tasks/stop-agents-asserting-unchecked-repo-state]] — the review that surfaced it; also added the third convention
 - [[tasks/fix-scaffold-knowledge-base-folders]] — shipped the scaffold's `conventions/README.md` in the first place

@@ -2,7 +2,7 @@
 
 **Source**: `ai-agents/tasks/done/design-deterministic-dashboard-for-fkit-status.md`
 **Status**: done
-**Sprint/Tag**: Unsprinted — design-first
+**Sprint/Tag**: Sprint 2 — priority 40
 
 ## Goal
 The owner wants a **deterministic layer** for `/fkit-status`: a script that renders the step-4 dashboard, replacing the **prose dashboard-description** the producer LLM follows to hand-build a table plus a roll-up. Beats 1–6 stay LLM-driven.
@@ -30,13 +30,12 @@ The owner wants a **deterministic layer** for `/fkit-status`: a script that rend
 
 **Scope boundary held: the `Depends on:` format was not touched.** Constraining it to be machine-parseable is a separate, larger convention change touching every brief, `/fkit-task-plan`, and both movers. **The recommendation was: not now.**
 
-**Implementation is still backlog** — `build-deterministic-dashboard-script-for-fkit-status`. Verified 2026-07-16: `claude/skills/fkit-status/` contains **only `SKILL.md`**; `dashboard.sh` does not exist yet.
-
-⚠️ The brief's own `## Status` header still reads `🔲 Backlog` though it sits in `done/` — mover drift.
+**Implementation is now Done** — [[tasks/build-deterministic-dashboard-script-for-fkit-status]] shipped `claude/skills/fkit-status/dashboard.sh` and wired it into the skill.
 
 ## Related
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]] — the decision it produced
 - [[decisions/adr-014-how-fkit-tests-itself]] — the fence it widens, and the precedent that does **not** apply
+- [[tasks/build-deterministic-dashboard-script-for-fkit-status]] — the implementation of this design
 - [[tasks/add-full-board-switch-to-fkit-status]] — the sibling `/fkit-status` change
 - [[tasks/add-status-skill-to-producer]] — the skill being made deterministic
 - [[systems/testing-and-verification]]
