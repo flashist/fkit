@@ -107,6 +107,17 @@ test('coder owns fkit-plan-task -> allow', () => {
   assertAllow(r, 'coder x fkit-plan-task');
 });
 
+test('coder owns fkit-task-ship-loop -> allow (task 53 / ADR-019)', () => {
+  const r = run(payload({ agentType: 'fkit-coder', skill: 'fkit-task-ship-loop' }));
+  assertAllow(r, 'coder x fkit-task-ship-loop');
+});
+
+test('a non-coder role does NOT own fkit-task-ship-loop -> deny (ADR-019: coder-only is what authorizes autonomy)', () => {
+  const r = run(payload({ agentType: 'fkit-producer', skill: 'fkit-task-ship-loop' }));
+  assertDeny(r, 'producer x fkit-task-ship-loop');
+  assert.match(r.err, /does not own skill 'fkit-task-ship-loop'/);
+});
+
 test('a spawned subagent identity (agent_id present) is honored the same as a session', () => {
   const r = run(payload({ agentType: 'fkit-reviewer', agentId: 'abc123', skill: 'fkit-stateful-review' }));
   assertAllow(r, 'subagent identity honored');
@@ -210,14 +221,15 @@ const UNIVERSE = [
   'fkit-adversarial-review', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-initiate-project',
   'fkit-inspect', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review',
   'fkit-query', 'fkit-record-decision', 'fkit-review', 'fkit-stateful-review', 'fkit-status',
-  'fkit-survey-project', 'fkit-task-cancelled', 'fkit-task-done', 'fkit-task-plan', 'fkit-team',
+  'fkit-survey-project', 'fkit-task-cancelled', 'fkit-task-done', 'fkit-task-plan',
+  'fkit-task-ship-loop', 'fkit-team',
   'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync',
 ];
 
 const OWNED = {
   lead: ['fkit-team', 'fkit-query'],
   producer: ['fkit-team', 'fkit-query', 'fkit-initiate-project', 'fkit-task-plan', 'fkit-task-done', 'fkit-task-cancelled', 'fkit-status'],
-  coder: ['fkit-team', 'fkit-query', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review'],
+  coder: ['fkit-team', 'fkit-query', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review', 'fkit-task-ship-loop'],
   architect: ['fkit-team', 'fkit-query', 'fkit-survey-project', 'fkit-inspect', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-record-decision'],
   reviewer: ['fkit-team', 'fkit-query', 'fkit-review', 'fkit-stateful-review'],
   'adversarial-reviewer': ['fkit-team', 'fkit-query', 'fkit-adversarial-review'],

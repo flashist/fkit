@@ -43,7 +43,7 @@ below. That function is the single source of truth.
 | Role | Its procedures (plus `/fkit-query` + `/fkit-team`, which everyone has) |
 |---|---|
 | producer | `initiate-project` · `task-plan` · `task-done` · `task-cancelled` · `status` |
-| coder | `plan-task` · `process-review` · `process-stateful-review` |
+| coder | `plan-task` · `process-review` · `process-stateful-review` · `task-ship-loop` |
 | architect | `survey-project` · `inspect` · `design-spec` · `evaluate-approach` · `record-decision` |
 | reviewer | `review` · `stateful-review` |
 | adversarial-reviewer | `adversarial-review` |

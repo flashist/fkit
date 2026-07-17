@@ -50,7 +50,7 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
    |---|---|
    | lead (team room) | `/fkit-team`, `/fkit-query` — it routes; it does no work |
    | producer | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-plan`, `/fkit-task-done`, `/fkit-task-cancelled` |
-   | coder | `/fkit-plan-task`, `/fkit-process-review`, `/fkit-process-stateful-review` |
+   | coder | `/fkit-plan-task`, `/fkit-process-review`, `/fkit-process-stateful-review`, `/fkit-task-ship-loop` |
    | architect | `/fkit-survey-project`, `/fkit-inspect`, `/fkit-design-spec`, `/fkit-evaluate-approach`, `/fkit-record-decision` |
    | reviewer | `/fkit-review`, `/fkit-stateful-review` |
    | adversarial-reviewer | `/fkit-adversarial-review` |
