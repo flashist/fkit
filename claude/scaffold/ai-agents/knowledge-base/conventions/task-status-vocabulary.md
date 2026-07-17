@@ -49,7 +49,7 @@ green board. Never set them by hand-editing a file.
 
 - `/fkit-task-done` — sets `✅ Done`
 - `/fkit-task-cancelled` — sets `⛔ Cancelled`
-- `/fkit-task-plan` — sets `🔲 Backlog` on creation
+- `/fkit-task-brief` — sets `🔲 Backlog` on creation
 - `/fkit-status` — the dashboard renders these values and no others
 - The producer reports against these values and no others
 

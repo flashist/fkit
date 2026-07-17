@@ -225,9 +225,9 @@ fi
 # updated in the same commit, or the help text lies about what a role can do:
 #   * claude/skills/fkit-team/SKILL.md  — the roster the /fkit-team skill prints
 #   * claude/README.md                  — the skill-ownership table
-# This has already bitten once: task 14 added fkit-task-plan here and to the producer's agent file,
-# but not to fkit-team's roster — so /fkit-team under-reported the producer's primary procedure for
-# two days. These are copies FOR READERS, not sources of truth; skills_for_role() is the source of
+# This has already bitten once: task 14 added the producer's brief-creation skill here and to the
+# producer's agent file, but not to fkit-team's roster — so /fkit-team under-reported the producer's
+# primary procedure for two days. These are copies FOR READERS, not sources of truth; skills_for_role() is the source of
 # truth (moved to skills-for-role.sh, task 43, so the PreToolUse hook can source it without pulling
 # in this script's top-level side effects).
 # ---------------------------------------------------------------------------

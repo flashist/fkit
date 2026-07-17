@@ -294,7 +294,7 @@ skips cleanly when headless (`:62-123`) → the launcher detects the uninitializ
 `/fkit-initiate-project` (`:295-307`) → the producer interviews the owner, **spawns the architect to
 run `fkit-survey-project`**, and writes `PROJECT.md`.
 
-**3 — Task flow.** producer `/fkit-task-plan` (decompose to the **smallest independently shippable**
+**3 — Task flow.** producer `/fkit-task-brief` (decompose to the **smallest independently shippable**
 units, with dependencies recorded) → coder `/fkit-plan-task` (**Claude Code plan mode** — an owner
 approval gate) → implement → reviewer `/fkit-review` or `/fkit-stateful-review` → coder
 `/fkit-process-stateful-review` (verify each finding; **defect vs frontier-move**; fixes gated on

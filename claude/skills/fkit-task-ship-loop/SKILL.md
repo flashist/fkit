@@ -19,7 +19,7 @@ description: The coder's autonomous brief-to-done loop. Takes one backlog task f
 
 > ## ⛔ This skill does NOT move task files.
 > Despite the `task-*` name, this is **not** part of the producer's task-file-lifecycle namespace
-> (`task-brief`/`task-plan`, `task-done`, `task-cancelled`). It **never** moves a brief between
+> (`task-brief`, `task-done`, `task-cancelled`). It **never** moves a brief between
 > `backlog/`, `done/`, `cancelled/`, **never** sets `✅ Done`, and **never** tells or spawns another
 > agent to do so. Its terminal act is a finalized evidence packet plus an ask — the owner closes the
 > task the normal way, via the owner-invoked `/fkit-task-done` in a `fkit producer` session

@@ -25,7 +25,7 @@
 
 ## Where this is enforced
 
-- `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-task-plan`, `/fkit-process-stateful-review` — none
+- `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-task-brief`, `/fkit-process-stateful-review` — none
   of them claim the whole repository's commit state; each only reports what it itself did.
 - `/fkit-status` — never states a count, a status, or a "what's next" not just read out of a file this
   run.

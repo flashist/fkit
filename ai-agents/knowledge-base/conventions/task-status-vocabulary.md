@@ -53,7 +53,7 @@ This vocabulary ships to every project fkit scaffolds, so it has to live in the 
 
 - `claude/skills/fkit-task-done/SKILL.md` — sets `✅ Done`
 - `claude/skills/fkit-task-cancelled/SKILL.md` — sets `⛔ Cancelled`
-- `claude/skills/fkit-task-plan/SKILL.md` — sets `🔲 Backlog` on creation *(Sprint 2, task 14)*
+- `claude/skills/fkit-task-brief/SKILL.md` — sets `🔲 Backlog` on creation *(Sprint 2, task 14)*
 - `claude/agents/fkit-producer.md` — the producer reports against these values
 - `claude/scaffold/ai-agents/knowledge-base/conventions/task-status-vocabulary.md` — the scaffold ships
   this convention, so new projects inherit the vocabulary as law rather than as a copy in a README

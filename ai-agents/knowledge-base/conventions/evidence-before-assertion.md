@@ -32,7 +32,7 @@ This is read on a normal run, not just when something goes wrong — every skill
 
 - `claude/skills/fkit-task-done/SKILL.md` — no longer claims "nothing was committed"
 - `claude/skills/fkit-task-cancelled/SKILL.md` — same fix
-- `claude/skills/fkit-task-plan/SKILL.md` — same fix
+- `claude/skills/fkit-task-brief/SKILL.md` — same fix
 - `claude/skills/fkit-process-stateful-review/SKILL.md` — same fix, in its final-report step
 - `claude/skills/fkit-status/SKILL.md` — the skill this rule was first written to generalize (see its
   step 1, "never state a count you did not just read out of a file")

@@ -1,9 +1,9 @@
 ---
-name: fkit-task-plan
+name: fkit-task-brief
 description: Turn a raw task description into one or more task briefs under ai-agents/tasks/backlog/ — decomposing it into the smallest independently shippable units, with dependency links recorded. Takes the task description as its argument, which may name a sprint inline ("for Sprint 2: …"); with no sprint named the briefs are filed as unsprinted backlog. Use when scoping new work into the backlog.
 ---
 
-# Task Plan
+# Task Brief
 
 > ## ⛔ Owner: the **producer**
 > This is the fkit-producer's own procedure. Execute it **only** if you are the producer — running as the

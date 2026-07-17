@@ -18,7 +18,7 @@
 skills_for_role() {
   case "$1" in
     lead)      echo "fkit-team fkit-query" ;;
-    producer)  echo "fkit-team fkit-query fkit-initiate-project fkit-task-plan fkit-task-done fkit-task-cancelled fkit-status" ;;
+    producer)  echo "fkit-team fkit-query fkit-initiate-project fkit-task-brief fkit-task-done fkit-task-cancelled fkit-status" ;;
     coder)     echo "fkit-team fkit-query fkit-plan-task fkit-process-review fkit-process-stateful-review fkit-task-ship-loop" ;;
     architect) echo "fkit-team fkit-query fkit-survey-project fkit-inspect fkit-design-spec fkit-evaluate-approach fkit-record-decision" ;;
     reviewer)  echo "fkit-team fkit-query fkit-review fkit-stateful-review" ;;

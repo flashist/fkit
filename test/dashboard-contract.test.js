@@ -645,9 +645,9 @@ test('R18/R3: an unparseable marker is reported without a phantom disagreement',
 });
 
 // R19 — ⚠️ the anchor must accept the forms THE PROJECT DOCUMENTS, not the ones one author happened
-// to write. `fkit-task-plan/SKILL.md:70` — the only instruction in the repo for recording a
+// to write. `fkit-task-brief/SKILL.md:70` — the only instruction in the repo for recording a
 // dependency — prescribes an UNBOLDED `Depends on:` in `## Notes`.
-test('R19: the unbolded form fkit-task-plan prescribes is parsed', () => {
+test('R19: the unbolded form fkit-task-brief prescribes is parsed', () => {
   const p = fixture({
     plan: plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n## Notes\n\n- Depends on: task 12.\n' }) },

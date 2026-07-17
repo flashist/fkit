@@ -221,14 +221,14 @@ const UNIVERSE = [
   'fkit-adversarial-review', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-initiate-project',
   'fkit-inspect', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review',
   'fkit-query', 'fkit-record-decision', 'fkit-review', 'fkit-stateful-review', 'fkit-status',
-  'fkit-survey-project', 'fkit-task-cancelled', 'fkit-task-done', 'fkit-task-plan',
+  'fkit-survey-project', 'fkit-task-cancelled', 'fkit-task-done', 'fkit-task-brief',
   'fkit-task-ship-loop', 'fkit-team',
   'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync',
 ];
 
 const OWNED = {
   lead: ['fkit-team', 'fkit-query'],
-  producer: ['fkit-team', 'fkit-query', 'fkit-initiate-project', 'fkit-task-plan', 'fkit-task-done', 'fkit-task-cancelled', 'fkit-status'],
+  producer: ['fkit-team', 'fkit-query', 'fkit-initiate-project', 'fkit-task-brief', 'fkit-task-done', 'fkit-task-cancelled', 'fkit-status'],
   coder: ['fkit-team', 'fkit-query', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review', 'fkit-task-ship-loop'],
   architect: ['fkit-team', 'fkit-query', 'fkit-survey-project', 'fkit-inspect', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-record-decision'],
   reviewer: ['fkit-team', 'fkit-query', 'fkit-review', 'fkit-stateful-review'],

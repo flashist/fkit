@@ -55,7 +55,7 @@ An **investigation with findings, not an implementation.** Deliverable: a dated 
 2. **The must-match manifest question.** Should parity be defined by an explicit manifest (which
    files are canonical pairs, which divergence is accepted), by directory convention, or by exclusion
    list? How does the answer avoid becoming its own second source of drift?
-3. **The process layer.** Spec the change to `/fkit-task-plan` (a mandatory scoping check: work
+3. **The process layer.** Spec the change to `/fkit-task-brief` (a mandatory scoping check: work
    touching an fkit-authored artifact that ships in the scaffold must scope the scaffold counterpart
    or state its omission) and a short `knowledge-base/conventions/` entry recording the dual-home
    rule. Note: prose asking agents to behave — advisory, same claim level as the shared-instructions
@@ -91,6 +91,6 @@ of those rev-1 recommendations did not survive Codex review intact.
 - **Depends on: nothing. Blocks: all implementation of dual-home parity** — implementation briefs are
   scoped only after the owner reviews the findings (the task-20/29/39 investigation-first pattern).
 - **Task 48 does not wait for this** — it closes the current instance independently.
-- The findings may spawn: a `/fkit-task-plan` skill edit (fkit-coder), a conventions entry
+- The findings may spawn: a `/fkit-task-brief` skill edit (fkit-coder), a conventions entry
   (fkit-architect), a parity test (fkit-coder), and possibly a reopening of the content-drift
   decision (owner). None of these is authorized by this brief.

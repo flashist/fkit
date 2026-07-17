@@ -79,13 +79,15 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 47 | Record the "one skill, one output" convention *(OQ8 resolved — generalize; document only; owner: fkit-architect → [`conventions/one-skill-one-output.md`](../knowledge-base/conventions/one-skill-one-output.md))* | [`record-one-skill-one-output-convention.md`](../tasks/done/record-one-skill-one-output-convention.md) |
 | ✅ Done | 48 | Ship the one-skill-one-output convention in the scaffold *(closes the 4th live-vs-scaffold instance; owner: fkit-coder; independent — does not wait for 49)* | [`ship-one-skill-one-output-convention-in-scaffold.md`](../tasks/done/ship-one-skill-one-output-convention-in-scaffold.md) |
 | 🔲 Backlog | 49 | Investigate dual-home parity — dogfood `ai-agents/` vs `claude/scaffold/` *(investigation — gates all parity implementation; owner: fkit-architect)* | [`investigate-dual-home-parity-live-vs-scaffold.md`](../tasks/backlog/investigate-dual-home-parity-live-vs-scaffold.md) |
-| 🔲 Backlog | 50 | Rename the producer's `fkit-task-plan` skill to `fkit-task-brief` *(name collision with the coder's `fkit-plan-task`; atomic — dir + `skills-for-role.sh` + hook together; owner: fkit-coder)* | [`rename-task-plan-skill-to-task-brief.md`](../tasks/backlog/rename-task-plan-skill-to-task-brief.md) |
+| ✅ Done | 50 | Rename the producer's `fkit-task-plan` skill to `fkit-task-brief` *(name collision with the coder's `fkit-plan-task`; atomic — dir + `skills-for-role.sh` + hook together; owner: fkit-coder)* | [`rename-task-plan-skill-to-task-brief.md`](../tasks/done/rename-task-plan-skill-to-task-brief.md) |
 | 🔲 Backlog | 51 | Wiki sync after the `task-plan` → `task-brief` rename *(needs 50 — hard; 8 vault pages; owner: fkit-wiki)* | [`wiki-sync-task-plan-rename.md`](../tasks/backlog/wiki-sync-task-plan-rename.md) |
 | ✅ Done | 52 | Design the coder's `task-ship-loop` skill *(design — [spec, rev 3, owner-approved](../knowledge-base/reports/2026-07-17-design-task-ship-loop-skill.md); spawns ADR-019/ADR-020; owner: fkit-architect)* | [`design-task-ship-loop-skill.md`](../tasks/done/design-task-ship-loop-skill.md) |
 | ✅ Done | 53 | Implement the `task-ship-loop` skill from the approved design *(owner: fkit-coder; skill live, registered for coder, hook suite green)* | [`implement-task-ship-loop-skill.md`](../tasks/done/implement-task-ship-loop-skill.md) |
 | ✅ Done | 54 | Grant the `AskUserQuestion` tool to the six Claude-side agents *(implements [ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md) Decision 4 / task 39 findings; tool grant, not a skill; owner: fkit-coder)* | [`grant-askuserquestion-tool-to-six-claude-agents.md`](../tasks/done/grant-askuserquestion-tool-to-six-claude-agents.md) |
 | 🔲 Backlog | 55 | Design the `fkit-git` agent + commit/push consent model *(design — **collides with the "never commit" hard rule**; owner present for the ruling; owner: fkit-architect)* | [`design-fkit-git-agent-and-consent-model.md`](../tasks/backlog/design-fkit-git-agent-and-consent-model.md) |
 | 🔲 Backlog | 56 | Implement the `fkit-git` agent + `commit-push` skill from the approved design *(needs 55 incl. owner approval — hard; owner: fkit-coder)* | [`implement-fkit-git-agent-and-commit-push.md`](../tasks/backlog/implement-fkit-git-agent-and-commit-push.md) |
+| 🔲 Backlog | 57 | Relax the tool allowlist for every role except the adversarial reviewer *(implements [ADR-022](../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md); subsumes task 54's mechanism; tools change only — skills stay locked; owner: fkit-coder)* | [`relax-tool-allowlists-except-adversarial-reviewer.md`](../tasks/backlog/relax-tool-allowlists-except-adversarial-reviewer.md) |
+| 🔲 Backlog | 58 | Refresh the docs for the tool-allowlist relaxation *(ADR-022 doc follow-up; soft-needs 57; owner: fkit-architect)* | [`refresh-architecture-docs-for-tool-relaxation.md`](../tasks/backlog/refresh-architecture-docs-for-tool-relaxation.md) |
 
 ## Dependency graph
 
@@ -847,6 +849,42 @@ surface).
   pre-created.
 
 **Numbered 55/56. Owner to confirm the ranking.**
+
+## Addendum — tasks 57 and 58 added out of band (2026-07-18): tool allowlists relaxed (ADR-022)
+
+**Owner ruling (2026-07-18), recorded as
+[ADR-022](../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)
+(accepted):** relax the **tool-allowlist** half of the role lock. Six roles — producer, coder,
+architect, reviewer, wiki, lead — get **unrestricted tools**; the **adversarial reviewer keeps its
+exact current allowlist** (`Read, Grep, Glob, Bash, Skill`, byte-untouched). The ADR's audit found the
+capability tools (`WebSearch`/`WebFetch`/`LSP`/`NotebookEdit`) were excluded by **accident, not
+decision**, the `tools:` wall was never a real sandbox (Bash escape hatch), and **only** the
+adversarial reviewer's wall protects a real invariant (its independence — the second opinion never had
+write authority over the code it judges).
+
+**This is a tools change only.** The **skill lockdown stays** (ADR-018 hook unchanged — the coder
+still can't run `/fkit-review`), and the **prompt-level role contracts stay** (ADR-022 Decision 5 —
+no role-boundary prose is edited).
+
+**Split coder-implement / architect-doc-refresh, per the ADR's own division of labor:**
+- **Task 57 — implement** (owner: fkit-coder). Remove the `tools:` line from the six agent files
+  (recommended mechanism: omit it, so they inherit all tools); keep the adversarial reviewer's line
+  byte-identical. **Subsumes task 54** (`grant-askuserquestion`, `✅ Done`): the six retain
+  `AskUserQuestion` by **inheritance** instead of an explicit entry — capability preserved, mechanism
+  superseded, task 54 not undone. **Depends on ADR-022** (exists). Blocks nothing.
+- **Task 58 — doc refresh** (owner: fkit-architect). Update `architecture.md` (the "strongest
+  boundary" line, §4.1 per-role tool table, §5.3/:209 lead's structural `Agent(...)` note) and the
+  tool-allowlist mentions in `PROJECT.md`/`CLAUDE.md`. **NOT the coder's job** (ADR-022 Consequences).
+  Soft-depends on 57 — the docs describe the reality 57 lands.
+
+**Two open questions carried, not settled** (the producer does not act on them):
+1. **Should task 54 be annotated "mechanism superseded by 57"?** It is **not** a cancellation — its
+   grant survives via inheritance. Flagged so a future reader isn't confused that the explicit
+   `AskUserQuestion` entry is gone; owner's call whether it's worth a breadcrumb.
+2. **Does the wiki vault need a sync?** Only if a `wiki-vault/` page enumerates per-agent tool
+   allowlists (owner: fkit-wiki). Not pre-filed — worth a task only if the vault records them.
+
+**Numbered 57/58 for append-don't-renumber discipline. Owner to confirm the ranking.**
 
 ## Open questions for the owner
 

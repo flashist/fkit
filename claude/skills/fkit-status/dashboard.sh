@@ -256,7 +256,7 @@ field_value() {
 #   S  section        `## Depends on` / `- task 12` / `- task 99`  next `##` or blank line
 #   BL bold-label     `**Depends on:** [link] **(hard).**`      end of block
 #   BI bold-inline    `**Depends on: task 18** trailing prose`  the `**` CLOSING the label's bold
-#   P  plain          `Depends on: task 12.`  (fkit-task-plan:70) end of block
+#   P  plain          `Depends on: task 12.`  (fkit-task-brief:70) end of block
 #
 # ⚠️ RULES, each paid for by a defect:
 #  1. ONE exit. Locate → join → extract → sanitise → emit. No branch may `print` and `exit` on its own
