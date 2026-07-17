@@ -13,6 +13,8 @@
 #      removed and re-copied; other files in .claude/ are never touched)
 #   4. install the .fkit/interview terminal intake; on a fresh project, run it → .fkit/intake.md
 #   5. gitignore the fkit-managed copies
+#   6. delete the Omnigent orphan residue this project may still carry (claude/orphan-targets) — the
+#      one destructive thing fkit does; announced per path, gated on a reference check
 #
 # Usage:  claude/fkit-claude-init.sh <project-root>    # e.g. `claude/fkit-claude-init.sh .`
 # Then:   cd <project-root> && fkit                    # pick a role from the menu
@@ -547,6 +549,297 @@ add_ignore() {  # add_ignore <pattern> <comment>
 add_ignore '.fkit/' 'fkit-managed local state (intake, tmp; re-created by fkit init)'
 add_ignore '.claude/agents/fkit-*.md' 'fkit-managed agents (refreshed by fkit-claude-init.sh)'
 add_ignore '.claude/skills/fkit-*/' 'fkit-managed skills (refreshed by fkit-claude-init.sh)'
+
+# ---------- 6. the Omnigent orphan residue ----------
+#
+# ⚠️ THIS IS THE ONLY DESTRUCTIVE OPERATION IN FKIT. Read the whole comment before touching it.
+#
+# The old Omnigent runtime wrote its own state into the CONSUMING project — vendored agent bundles, a
+# runner, session state, its own config dir. ADR-009 deleted that runtime in Sprint 2 and nothing has
+# referenced those paths since, but init never cleaned them: every launch of a project that used the old
+# flavor steps over orphaned bundles from a runtime that no longer exists. Task 36 / migration report §9.
+#
+# The paths themselves are in claude/orphan-targets and are NOT repeated here, on purpose. Naming one in
+# this comment is a REFERENCE, and the gate below counts references — prose included. It cannot tell
+# "we mention this path" from "we use this path", and it must not try: a gate that judges intent is a
+# gate that can be argued with. Say what the code does; let the list say which paths.
+#
+# It is NOT part of convergence, deliberately. Convergence's invariant is "never writes to a path that
+# already exists — no overwrite, no move, no delete, ever". A delete folded into that function would
+# falsify its own design record and, worse, inherit "runs silently, unattended, on every launch" for the
+# one operation that must never be silent. Separate function, separate section, its own bar.
+#
+# ONE-TIME BY BEING SELF-LIMITING, not by remembering anything. Once the targets are gone, every later
+# launch is a no-op and says nothing. No cursor, no manifest, no "did I already clean this" flag — the
+# same reason convergence is stateless: .fkit/ is gitignored, so a cursor cannot survive a clone.
+#
+# CONSENT: announce-only, by owner ruling (2026-07-17) — delete on run, print exactly what was removed.
+# No prompt, no stored consent (a stored decision cannot survive a clone either — the same trap).
+# The ruling decides THIS cleanup only and sets no precedent: any future destructive operation goes back
+# to the owner. It waived the ceremony, NOT the safety bar below.
+#
+# ⚠️ THE ANNOUNCEMENT IS THE CONSENT. Announce-only means there is no prompt and no stored decision, so
+# the printed list is the ONLY thing standing between fkit and deleting something behind the user's back.
+# An announcement that is wrong in the destructive direction ("did not remove" about something we
+# emptied) is therefore not a cosmetic bug — it is the consent model failing. Every branch below that
+# touches the disk MUST report what actually happened, not what the exit status implied.
+#
+# ACCEPTED RESIDUALS — owner-ruled 2026-07-17, review round 1. Do NOT "fix" these silently:
+#   • TOCTOU (C4): between the symlink check and `rm -rf` there is a microsecond window in which the path
+#     could be swapped for a symlink. This is NOT closable in shell — it needs openat()-class primitives.
+#     A partial mitigation would shrink the window while making the code LOOK safe, which is worse than
+#     the honest gap. Accepted knowingly. Anyone attacking that window can already write the tree
+#     directly. If this file ever stops being shell, close it properly.
+#   • Buffered announcement (C3): the report prints after the loop, so a kill -9 mid-cleanup deletes
+#     without ever announcing — and, because the cleanup is self-limiting, it never announces later
+#     either. Accepted: announcing per-path would fragment the report for a window you have to be
+#     actively killing fkit to hit.
+orphan_targets="$here/orphan-targets"      # THE list. Exhaustive by ruling — see that file's header.
+
+# Does a target path still appear anywhere in fkit's own shipped sources? THE GATE.
+#
+# The list above is a claim that these paths are dead, written down on 2026-07-14. This re-checks that
+# claim against the code, at run time, immediately before deleting anything — because the claim has
+# already been wrong once: revision 1 of the report named .fkit/settings for deletion, which is live
+# lockdown state written on every launch. A target that has GAINED a reference since is refused, not
+# deleted, and the discrepancy is printed. Evidence before assertion: the list does not get to be
+# trusted just because it is a list.
+#
+# The exclusion is exactly one file — orphan-targets itself, which necessarily contains every token.
+# That is why the list lives in its own data file rather than inline here: a reference that crept into
+# THIS script is then still caught by the gate, which it would not be if we had to exclude this file.
+#
+# ⚠️ IT FAILS CLOSED, and that is the whole point (review round 1, R2). The first version answered
+# "could not run the check" and "ran the check, found nothing" with the same empty string — so a grep
+# that errored read as "verified dead" and we deleted. A gate whose failure mode is `delete` is not a
+# gate. Now: rc>1 from grep (missing, unreadable, broken) → return 2 → the caller REFUSES the target.
+# `-i` because macOS filesystems are case-insensitive (C5): a differently-cased list line would find the
+# real path on disk while a case-sensitive grep found no references to it. Matching more than we
+# strictly need only ever causes a refusal, never a deletion — errors in the safe direction.
+# The `($|[^A-Za-z0-9_.-])` boundary stops a short target matching a LONGER unrelated path that merely
+# starts with the same bytes (C1) — while still counting a reference to a path INSIDE the target, or one
+# followed by a quote, as the real reference it is.
+orphan_refs() {  # orphan_refs <path-token> → prints referencing files; rc 0 = check ran, 2 = UNTRUSTWORTHY
+  esc="$(printf '%s' "$1" | sed 's/[][\.*^$(){}?+|]/\\&/g')" || return 2
+  out=""
+  rc=0
+  out="$(grep -rlEi -- "$esc(\$|[^A-Za-z0-9_.-])" "$here" 2>/dev/null)" || rc=$?
+  # grep's contract: 0 = matched, 1 = no match, >1 = it could not do its job. Only 0 and 1 are answers.
+  if [ "$rc" -gt 1 ]; then return 2; fi
+  printf '%s' "$out" | grep -vxF -- "$orphan_targets" || true
+  return 0
+}
+
+# Is this list line safe to delete — i.e. does it stay inside the project, with no symlink anywhere in
+# the chain? Prints the reason it is NOT, and returns non-zero.
+#
+# ⚠️ THE PARENT CHAIN, not just the leaf (review round 1, R1 — the one that mattered). `[ -L "$p" ]` on
+# the target itself is NOT enough: make any PARENT directory in the chain a symlink to somewhere outside
+# the project, and the leaf is then a real directory inside the link target — so -L on the leaf is FALSE,
+# -e is TRUE, and `rm -rf` happily deletes outside the project fkit was pointed at. (Reproduced in
+# review, not theorized.) §1 of this file already wrote that lesson
+# down for convergence ("-L is the one test that does not lie") — but convergence only CREATES. It never
+# got applied to the one operation that DELETES. Walk every component.
+#
+# Pure string work plus one -L per component: no globbing, no IFS splitting, no normalization. We do NOT
+# resolve `..` and then check — we refuse it outright (R3). Normalizing is how you get talked into a
+# path you did not mean.
+orphan_contained() {  # orphan_contained <relative-line> → 0 = safe, non-zero + reason on stdout
+  case "$1" in
+    /*) echo "it is an absolute path"; return 1 ;;
+  esac
+  _rest="$1"
+  _cur="$dest"
+  while [ -n "$_rest" ]; do
+    _seg="${_rest%%/*}"
+    case "$_rest" in */*) _rest="${_rest#*/}" ;; *) _rest="" ;; esac
+    case "$_seg" in
+      ''|.) continue ;;
+      ..) echo "it contains '..' and would escape the project"; return 1 ;;
+    esac
+    _cur="$_cur/$_seg"
+    if [ -L "$_cur" ]; then
+      echo "'$_seg' is a symlink — fkit will not delete through one"
+      return 1
+    fi
+  done
+  return 0
+}
+
+cleanup_orphans() {
+  # Announcement text, assembled as ready-to-print lines. Deliberately NOT a list iterated with
+  # `for p in $removed`: that splits on IFS and GLOBS, which is the bug convergence had to pin IFS and
+  # `set -f` to avoid. Nothing to split here means nothing to get wrong here.
+  removed=""
+  partial=""
+  refused=""
+  dry=0
+  if [ "${FKIT_CLEANUP_DRY_RUN:-0}" = 1 ]; then dry=1; fi
+
+  # Missing OR unreadable. An unreadable list is not "no targets" — it is "we do not know", and the one
+  # thing we must not do when we do not know is delete. Fail closed, say why, carry on non-fatally.
+  if [ ! -f "$orphan_targets" ] || [ ! -r "$orphan_targets" ]; then
+    echo "⚠ fkit's orphan-target list is missing or unreadable ($orphan_targets) — skipping the cleanup" >&2
+    return 0
+  fi
+
+  # `|| [ -n "$line" ]` so a final line with no trailing newline is still read; \r trimmed for a CRLF
+  # checkout. Same shape as the .fkit-keep-out parser above, same reasons.
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="$(printf '%s' "$line" | tr -d '\r')"
+    # Trim surrounding whitespace BEFORE the comment test (C6). Without this, "  # a comment" is a
+    # comment to a human and to the test suite's parser, and a TARGET PATH to this one — the two parsers
+    # disagreeing about which lines are live, in the file that says what to delete.
+    line="${line#"${line%%[![:space:]]*}"}"
+    line="${line%"${line##*[![:space:]]}"}"
+    case "$line" in ''|'#'*) continue ;; esac
+    # ⚠️ `./` only. Do NOT strip a leading `/` here (R8): the keep-out parser above does, because for it
+    # a leading slash is a harmless way of writing "relative to ai-agents/". Here it is not harmless —
+    # stripping it turns `/tmp/cache` into `tmp/cache` and makes orphan_contained's absolute-path
+    # refusal UNREACHABLE, so we delete a path inside the project that nobody named. An absolute line is
+    # a mistake, and a mistake in this file is a delete: refuse it, do not normalize it into a
+    # different, silently-plausible path. Reproduced before fixing — it deleted $dest/tmp/cache and
+    # announced it as a clean removal.
+    line="${line#./}"
+    while :; do case "$line" in */) line="${line%/}" ;; *) break ;; esac; done
+    [ -n "$line" ] || continue
+
+    # Containment + the parent chain. Before ANY stat of the target, before the gate, before everything.
+    reason=""
+    if ! reason="$(orphan_contained "$line")"; then
+      refused="$refused    $line — refused: $reason
+"
+      continue
+    fi
+
+    p="$dest/$line"
+    exists=0
+    if [ -e "$p" ] || [ -L "$p" ]; then exists=1; fi
+
+    # Belt and braces over the ruling. The list is not supposed to be able to name lockdown state; if it
+    # ever does, we refuse here rather than find out from a user whose role session stopped locking down.
+    # Lower-cased first (C5): the guard must not be defeated by `.Fkit/Settings` on a filesystem that
+    # would cheerfully match it to the real thing. Announced only when the path is actually there —
+    # otherwise a bad list line nags on every launch of every project forever with nothing at stake.
+    lc="$(printf '%s' "$line" | tr '[:upper:]' '[:lower:]')"
+    case "$lc" in
+      *settings*)
+        if [ "$exists" = 1 ]; then
+          refused="$refused    $line — refused: fkit will never delete lockdown state
+"
+        fi
+        continue
+        ;;
+    esac
+
+    # Absent already? The overwhelmingly common case — every project that never used Omnigent, on every
+    # launch, forever. Say nothing.
+    if [ "$exists" = 0 ]; then continue; fi
+
+    # THE GATE. rc 2 = the check could not be trusted → refuse. Never delete on an unproven check.
+    refs=""
+    gate_rc=0
+    refs="$(orphan_refs "$line")" || gate_rc=$?
+    if [ "$gate_rc" -gt 1 ]; then
+      refused="$refused    $line — refused: the reference check could not be run, so fkit will not assume it is dead
+"
+      continue
+    fi
+    if [ -n "$refs" ]; then
+      refused="$refused    $line — refused: still referenced in fkit's own sources
+"
+      while IFS= read -r r; do
+        [ -n "$r" ] && refused="$refused        $r
+"
+      done <<EOF
+$refs
+EOF
+      continue
+    fi
+
+    if [ "$dry" = 1 ]; then
+      removed="$removed    $line
+"
+      continue
+    fi
+
+    # What was in there BEFORE we tried? `rm -rf` is not atomic (C2): it unlinks the contents, then the
+    # directory. So it can destroy everything inside and STILL exit non-zero because the directory itself
+    # would not go. Reporting that as "did NOT remove" — which is what the first version did — tells the
+    # user their data is intact at the moment it is gone. Under announce-only that is the consent model
+    # lying in the destructive direction. Count first, compare after, and say the true thing.
+    #
+    # ⛔ ACCEPTED RESIDUAL — THIS DETECTION IS SHALLOW, AND KNOWINGLY SO (R6, owner-ruled 2026-07-17).
+    # `ls -A` counts ONE level; `rm -rf` recurses. Lock the target itself at 0500 with a writable subdir
+    # and the nested contents are destroyed while this count is unchanged (1 → 1) — so the branch below
+    # reports "left as it is" about a subtree that is gone. That is C2's exact failure, one level down,
+    # and it is NOT fixed. It is accepted because the destroyed content is always inside a named target
+    # (orphan_contained keeps the walk in-project), so the harm is the wrong sentence rather than the
+    # user's data. Do not read the "left as it is" branch as a guarantee — it is a best effort at one
+    # level. Re-raise: see the ledger. If you fix it, `find "$p" | wc -l` is the honest count, and the
+    # test must use the NESTED fixture and be run red first — the last test written here asserted the
+    # wrong message was correct and shipped green.
+    had=""
+    if [ -d "$p" ] && [ ! -L "$p" ]; then
+      had="$(ls -A "$p" 2>/dev/null | wc -l | tr -d ' ')" || had=""
+    fi
+
+    # Non-fatal, per path — task 26's bar. A cleanup failure must never brick the launcher, and must not
+    # cost the user the rest of setup either. Warn, carry on; `set -e` never sees a non-zero.
+    if rm -rf "$p" 2>/dev/null; then
+      removed="$removed    $line
+"
+    elif [ ! -e "$p" ] && [ ! -L "$p" ]; then
+      # Non-zero, but the path is gone. It was removed; report what IS, not what rc said.
+      removed="$removed    $line
+"
+    else
+      now=""
+      if [ -d "$p" ] && [ ! -L "$p" ]; then
+        now="$(ls -A "$p" 2>/dev/null | wc -l | tr -d ' ')" || now=""
+      fi
+      if [ -n "$had" ] && [ -n "$now" ] && [ "$now" != "$had" ]; then
+        partial="$partial    $line — PARTLY REMOVED: some of its contents are gone; the rest would not delete
+"
+      else
+        refused="$refused    $line — could not remove it, and it was left as it is (check its permissions)
+"
+      fi
+    fi
+  done < "$orphan_targets"
+
+  # STDERR, for the same reason convergence announces on stderr — THE OUTPUT TRAP. The launcher calls
+  # init with `>/dev/null` on exactly the projects that carry this residue (an already-set-up one), so a
+  # stdout announcement is discarded 100% of the time: implemented, invisible, and green in any review
+  # that only checked that the code echoes.
+  if [ -z "$removed" ] && [ -z "$partial" ] && [ -z "$refused" ]; then return 0; fi
+  {
+    if [ -n "$removed" ] && [ "$dry" = 1 ]; then
+      echo "⚙ fkit WOULD remove these dead Omnigent paths (dry run — nothing was deleted):"
+      printf '%s' "$removed"
+      echo "  Unset FKIT_CLEANUP_DRY_RUN to let the next launch remove them."
+    elif [ -n "$removed" ]; then
+      echo "⚙ fkit removed these dead Omnigent paths, left behind by a runtime removed in Sprint 2:"
+      printf '%s' "$removed"
+      echo "  They were fkit's own, gitignored, and referenced by nothing. Nothing else was touched."
+    fi
+    # THE MIDDLE STATE, and it is the reason this block has three branches instead of two. Do not fold
+    # it back into "did NOT remove": that sentence is a promise the disk no longer keeps.
+    if [ -n "$partial" ]; then
+      echo "⚠ fkit PARTLY removed these — their contents are gone, the paths themselves are not:"
+      printf '%s' "$partial"
+      echo "  This is not recoverable from here. They were dead Omnigent state, so nothing live was lost,"
+      echo "  but fkit is telling you because it deleted more than it managed to finish."
+    fi
+    if [ -n "$refused" ]; then
+      echo "⚠ fkit did NOT remove these, and will not without a look from you:"
+      printf '%s' "$refused"
+    fi
+  } >&2
+  return 0
+}
+
+cleanup_orphans
 
 # ---------- summary ----------
 printf '\n'

@@ -170,6 +170,7 @@ Other:
   fkit update           update fkit itself
   FKIT_SETUP_ONLY=1     set the project up, then exit without launching
   FKIT_NO_UPDATE_CHECK=1  never check for updates
+  FKIT_CLEANUP_DRY_RUN=1  report the dead Omnigent paths fkit would delete, and delete nothing
 
 A first argument that is not a role is an error. Args AFTER a role pass through to `claude`.
 EOF

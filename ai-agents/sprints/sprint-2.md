@@ -64,8 +64,8 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 32 | Add the "no secrets" rule to `fkit-lead.md` *(the 1 of 7 missing it — one line)* | [`add-no-secrets-rule-to-fkit-lead.md`](../tasks/done/add-no-secrets-rule-to-fkit-lead.md) |
 | ✅ Done | 33 | Fix the headless menu-guard crash — `[ -r /dev/tty ]` never tests openability *(launcher defect against task-23 assertion 7's contract)* | [`fix-headless-menu-guard-crash.md`](../tasks/done/fix-headless-menu-guard-crash.md) |
 | ✅ Done | 34 | Make `/fkit-task-done` flip the moved brief's own `## Status` header *(mover drift — sibling to task 22)* | [`task-done-flips-brief-own-status-header.md`](../tasks/done/task-done-flips-brief-own-status-header.md) |
-| 🔲 Backlog | 35 | Make `/fkit-task-cancelled` flip the moved brief's own `## Status` header *(same gap, `⛔ Cancelled` marker)* | [`task-cancelled-flips-brief-own-status-header.md`](../tasks/backlog/task-cancelled-flips-brief-own-status-header.md) |
-| 🔲 Backlog | 36 | Remove the `.fkit/` Omnigent-orphan residue *(OQ5 resolved; the one destructive act — own owner gate; needs a consent-model ruling)* | [`remove-fkit-omnigent-orphan-residue.md`](../tasks/backlog/remove-fkit-omnigent-orphan-residue.md) |
+| ✅ Done | 35 | Make `/fkit-task-cancelled` flip the moved brief's own `## Status` header *(same gap, `⛔ Cancelled` marker)* | [`task-cancelled-flips-brief-own-status-header.md`](../tasks/done/task-cancelled-flips-brief-own-status-header.md) |
+| 🔲 Backlog | 36 | Remove the `.fkit/` Omnigent-orphan residue *(OQ5 resolved; the one destructive act — own owner gate; consent model ruled **announce-only** 2026-07-17 — unblocked)* | [`remove-fkit-omnigent-orphan-residue.md`](../tasks/backlog/remove-fkit-omnigent-orphan-residue.md) |
 | 🔲 Backlog | 37 | Record a tombstone ADR for the shared-instructions reversal *(OQ6 resolved; owner: fkit-architect)* | [`record-shared-instructions-reversal-adr.md`](../tasks/backlog/record-shared-instructions-reversal-adr.md) |
 | ✅ Done | 38 | Add a full-board switch (`full`) to `/fkit-status` *(skill-text only; owner: fkit-coder)* | [`add-full-board-switch-to-fkit-status.md`](../tasks/done/add-full-board-switch-to-fkit-status.md) |
 | 🔲 Backlog | 39 | Investigate making `AskUserQuestion` available to fkit agents *(investigation — gates any grant; owner: fkit-architect)* | [`investigate-askuserquestion-availability-for-agents.md`](../tasks/backlog/investigate-askuserquestion-availability-for-agents.md) |
@@ -76,6 +76,9 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 44 | Remove the output variants from `/fkit-status` — one skill, one output *(**reverts task 38**; skill-text only; owner: fkit-coder)* | [`remove-output-variants-from-fkit-status.md`](../tasks/backlog/remove-output-variants-from-fkit-status.md) |
 | 🔲 Backlog | 45 | Wiki sync after the `/fkit-status` output-variant removal *(needs 44 — hard; owner: fkit-wiki)* | [`wiki-sync-fkit-status-output-variant-removal.md`](../tasks/backlog/wiki-sync-fkit-status-output-variant-removal.md) |
 | 🔲 Backlog | 46 | Investigate adopting a proper mutation-testing library, replacing hand-rolled `prove-red.sh` *(investigation; owner: fkit-architect; spawned from task-43 review finding R2)* | [`investigate-mutation-testing-library-adoption.md`](../tasks/backlog/investigate-mutation-testing-library-adoption.md) |
+| ✅ Done | 47 | Record the "one skill, one output" convention *(OQ8 resolved — generalize; document only; owner: fkit-architect → [`conventions/one-skill-one-output.md`](../knowledge-base/conventions/one-skill-one-output.md))* | [`record-one-skill-one-output-convention.md`](../tasks/done/record-one-skill-one-output-convention.md) |
+| 🔲 Backlog | 48 | Ship the one-skill-one-output convention in the scaffold *(closes the 4th live-vs-scaffold instance; owner: fkit-coder; independent — does not wait for 49)* | [`ship-one-skill-one-output-convention-in-scaffold.md`](../tasks/backlog/ship-one-skill-one-output-convention-in-scaffold.md) |
+| 🔲 Backlog | 49 | Investigate dual-home parity — dogfood `ai-agents/` vs `claude/scaffold/` *(investigation — gates all parity implementation; owner: fkit-architect)* | [`investigate-dual-home-parity-live-vs-scaffold.md`](../tasks/backlog/investigate-dual-home-parity-live-vs-scaffold.md) |
 
 ## Dependency graph
 
@@ -509,8 +512,9 @@ The owner's 2026-07-15 rulings on the open questions (below) spawned three brief
 - **Task 36 — `remove-fkit-omnigent-orphan-residue.md`** (OQ5). The migration report's §9 `.fkit/`
   cleanup: the **one destructive act** in the whole migration design (`rm -rf` in a user's project, no
   rollback). Deliberately **not** folded into the additive-convergence work (25–28), which never deletes.
-  **Depends on task 28**, and **blocked on an owner ruling on the consent model** (announce-only /
-  ask-once / dry-run-first) before the coder plans it. Exhaustive target list — `.fkit/agents/`,
+  **Depends on task 28** (met), and was blocked on an owner ruling on the consent model — **ruled
+  2026-07-17: announce-only** (owner is currently fkit's only user; Omnigent-scoped only, no precedent
+  for future destructive operations). **Unblocked.** Exhaustive target list — `.fkit/agents/`,
   `.fkit/run`, `.fkit/team-session`, `.omnigent/`; **`.fkit/settings` is live lockdown state and must
   never be touched** (the rev-1 report named it for deletion — the mistake this task's reference-check
   gate exists to catch).
@@ -728,7 +732,48 @@ fkit-architect.** Depends on nothing; does not block task 43 or anything else in
 
 **Numbered 46 for append-don't-renumber discipline. Owner to confirm the ranking.**
 
+## Addendum — task 47 added out of band (2026-07-17): OQ8 resolved — the convention
+
+**The owner ruled OQ8: generalize.** *"One skill, one output"* is a standing rule for every fkit
+skill, recorded as a `knowledge-base/conventions/` entry per the producer's recommendation — with the
+owner's own qualification built in: **operands are not variants.** Skills that require arguments
+(`/fkit-task-done <path>`, `/fkit-task-cancelled <path> <reason>`, `/fkit-status <sprint>`, stateful
+review's docs) are untouched — an argument that selects *what the skill works on* is a parameter; one
+that selects *what the same work looks like when reported* is the forbidden variant. Task 47 records
+the rule, the litmus test, the honest history (`full` was correct when written; task 41 made it
+wrong), and the escape hatch (a proposed variant goes to the owner, at proposal time).
+
+- **Owner: fkit-architect.** Document only. **Depends on: nothing; does not block task 44** — task 44
+  is the instance, 47 is the rule; shippable in either order.
+- **Numbered 47 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — tasks 48 and 49 added out of band (2026-07-17): the dual-home parity gap
+
+**Task 47's delivery surfaced the fourth instance of a recurring class:** the convention landed in the
+live `ai-agents/knowledge-base/` but not in `claude/scaffold/ai-agents/` — so consuming projects would
+never receive it. Prior instances, all fixed one-at-a-time without touching the cause:
+`fix-scaffold-knowledge-base-folders`, `bake-architecture-pointer-into-scaffold-templates`,
+`align-conventions-readme-enforcement-item-live-vs-scaffold`. The owner ruled the cause now gets
+addressed: *"changes are applied both to the current dogfood version and to the version that will be
+shipped to the end users."*
+
+**Split on the independent-shippability rule, and deliberately NOT sequenced:**
+- **Task 48** closes the current instance — copy the convention + index row into the scaffold, verify
+  by clean-init and convergence check. Owner: fkit-coder. **Does not wait for 49.**
+- **Task 49** is the investigation into the cause — enumerate the dual-home files, rule on a
+  must-match manifest vs accepted drift, spec a process layer (`/fkit-task-plan` scoping check +
+  convention entry) and a mechanical parity test under ADR-014's zero-devDeps constraint, and state
+  whether the deferred content-drift decision's *"third drifting file"* re-raise trigger has fired.
+  Owner: fkit-architect. **Investigation-first (the task-20/29/39 pattern): implementation briefs only
+  after the owner reviews findings.** Known trap recorded in the brief: accepted drift exists
+  (`ai-agents/README.md`, both directions, deliberate) — a naive parity check is red from birth.
+
+**Numbered 48/49 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
 ## Open questions for the owner
+
+*(OQ8 resolved 2026-07-17 — ruled "generalize", spawning task 47. Original text kept below for the
+record.)*
 
 8. **Does *"one skill, one output"* generalize beyond `/fkit-status`?** The owner's ruling was about one
    skill, and tasks 44/45 treat it that way. But the sentence *"there should be 1 version of the output

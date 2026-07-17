@@ -1,0 +1,26 @@
+# fkit — the Omnigent orphan residue: paths the OLD Omnigent runtime wrote into a CONSUMING project
+# and that nothing in fkit has referenced since ADR-009 removed that runtime in Sprint 2.
+#
+# One project-relative path per line. `#` comments and blank lines are ignored. Read by
+# cleanup_orphans() in fkit-claude-init.sh, which deletes each entry — once, announced, per project.
+#
+# ⛔ THIS LIST IS EXHAUSTIVE BY OWNER RULING (task 36), NOT BY CONVENIENCE.
+#    Adding a line here is a NEW OWNER DECISION — it is an `rm -rf` in someone else's project with no
+#    rollback. It is the only destructive operation in fkit. Do not add a path because it looks dead.
+#
+# ⚠️ NEVER add .fkit/settings. It is LIVE ADR-010 lockdown state, rewritten on every launch by
+#    build_settings() in fkit-claude.sh. Revision 1 of the migration report listed it for deletion and
+#    was wrong; a reviewer trusting that table would have shipped a delete of live state. The
+#    reference-check gate in cleanup_orphans() exists to catch exactly that class of mistake: an entry
+#    that is still referenced anywhere in claude/ is REFUSED, not deleted. The gate is a backstop for
+#    this list, not a substitute for reading it.
+#
+# Also never targets, for the record: .fkit/intake.md (the owner's hand-typed answers), .fkit/interview,
+# .fkit/tmp/ — all live, all fkit's current state, none of them Omnigent's.
+#
+# Source: knowledge-base/reports/2026-07-14-migration-mechanism.md §9.
+
+.fkit/agents
+.fkit/run
+.fkit/team-session
+.omnigent

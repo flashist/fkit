@@ -102,30 +102,37 @@ For every reference found in step 4:
   Briefs cross-link each other, so **one move breaks links in both directions**: inbound (handled
   above) *and* outbound (here). Fixing only the inbound half leaves the move half-done.
 
-- **The moved brief's OWN `## Status` field** — the single value line immediately below the `## Status`
-  heading in the file you just moved into `done/`, up to the next blank line or heading. Set that line
-  to `✅ Done`, the same canonical marker the vocabulary defines (see below) and the same wording you
-  just wrote into the board. Touch only that one line — nothing else under the heading.
+Make the **minimal** edit that flips the status accurately. Do not restructure tables or rewrite
+descriptions beyond removing a fragment that is now false.
+
+> **Yes, this writes into `ai-agents/sprints/done/`.** That is deliberate and owner-ruled: a closed
+> sprint plan's *claims* are frozen, but its *links* stay live. Repair the href; touch nothing else.
+
+**Now do this regardless of how many references step 4 found — even zero** (an unsprinted task has no
+board row at all, but this still applies):
+
+- **The moved brief's OWN `## Status` field** — the single line immediately below the `## Status`
+  heading in the file you just moved into `done/`. Set that line to `✅ Done`, the same canonical
+  marker the vocabulary defines (see below). Touch only that one line — nothing else under the heading.
+  If the value legitimately spans more than one line, that is outside this skill's authority to guess
+  at — flag it in the report instead of partially rewriting it.
 
   - **Already reads `✅ Done`?** Leave it byte-identical — no second marker, no appended line. Re-running
     this skill on an already-done brief must be a no-op here.
   - **Reads anything else** (`🔲 Backlog`, `🔄 In progress`, `🚧 Blocked — …`, etc.)? Replace it with
     `✅ Done`.
   - **No `## Status` heading at all?** Do not invent one. Leave the heading absent and flag it in the
-    report (step 7): `no ## Status field found in <brief> — board updated, brief header unchanged`. This
-    is scoped to the `## Status` field alone — it does **not** exempt the brief from the outbound-link
-    repair above; a status-less brief whose sibling links need re-pointing still gets that fix.
+    report (step 7). If a board row was updated, use the exact wording `no ## Status field found in
+    <brief> — board updated, brief header unchanged`. If step 4 found **no** board row either (the
+    unsprinted case), do not claim "board updated" — say instead `no ## Status field found in <brief>
+    — brief header unchanged (no sprint board reference existed to update)`. This is scoped to the
+    `## Status` field alone — it does **not** exempt the brief from the outbound-link repair above; a
+    status-less brief whose sibling links need re-pointing still gets that fix.
 
-  This is the brief's *own* copy of its status, separate from the board update above — the board is the
-  sprint plan's copy. Both must be written. A brief that still reads `🔲 Backlog` internally while the
-  board reads `✅ Done` is exactly the drift this skill exists to prevent. Only the brief just moved is
-  touched here — never a sweep repairing other briefs already sitting in `done/`.
-
-Make the **minimal** edit that flips the status accurately. Do not restructure tables or rewrite
-descriptions beyond removing a fragment that is now false.
-
-> **Yes, this writes into `ai-agents/sprints/done/`.** That is deliberate and owner-ruled: a closed
-> sprint plan's *claims* are frozen, but its *links* stay live. Repair the href; touch nothing else.
+  This is the brief's *own* copy of its status, separate from whatever board update may have happened
+  above. Where a board exists, a brief that still reads `🔲 Backlog` internally while the board reads
+  `✅ Done` is exactly the drift this skill exists to prevent. Only the brief just moved is touched
+  here — never a sweep repairing other briefs already sitting in `done/`.
 
 **Then prove it.** Resolve every relative markdown link in the files you touched **and** in the moved
 brief. A move is not finished while a link it broke is still broken.
@@ -146,9 +153,10 @@ Give a concise summary:
 - **Updated:** each doc touched and how (e.g. "`sprint-4.md` — status row → ✅ Done";
   "`refactor-auth-flow.md` — T4f slice → ✅ Done").
 - **Brief's own status header:** state what happened to the moved brief's `## Status` field — set to
-  `✅ Done`, already read `✅ Done` (no change needed), or the exact flag from step 5: `no ## Status
-  field found in <brief> — board updated, brief header unchanged`. The owner should see this happened,
-  not just infer it.
+  `✅ Done`, already read `✅ Done` (no change needed), or the missing-heading flag from step 5, using
+  whichever of its two wordings applies (board updated, or no board reference existed). This runs even
+  when step 4 found zero references — say so if it did. The owner should see this happened, not just
+  infer it.
 - **Re-pointed links:** every href repaired, and where — **including any closed plan under
   `sprints/done/`** (e.g. "`sprints/done/sprint-1.md:37` — href → `tasks/done/`; status cell
   untouched"). A move that rewrote a closed sprint plan must be **visible in this report**, never a

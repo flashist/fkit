@@ -33,10 +33,23 @@ addition to it is a new owner decision.
 **Owner decision (2026-07-15):** greenlit as its own task with its own owner gate, to be done **after
 tasks 25–28 land** — resolving Sprint 2 open question 5.
 
-## ⚠️ Blocking owner decision — the consent model — settle before implementation
+## ✅ Owner decision (2026-07-17) — consent model: **announce-only**
 
-This deletes files in a user's project. It is **not** an every-launch silent operation. Before the
-coder builds it, the owner must choose the consent model. Options, for the owner to rule on:
+**The owner ruled: announce-only** — delete on run, print exactly what was removed. Rationale
+(owner's, verbatim in spirit): the task is strictly Omnigent-scoped, and *"currently I am the only
+user of fkit"* — the ask-once / dry-run-first ceremony buys nothing for a single-operator install.
+
+- The ruling **decides this cleanup only** — it sets no precedent for any future destructive
+  operation, which returns to the owner per the standing re-raise trigger.
+- The **dry-run capability, per-path announcement, reference-check gate, and non-fatal bar below all
+  still apply** — announce-only is the consent model, not a waiver of the safety bar.
+- The rejected options, for the record: **ask-once** (needs clone-surviving stored consent — the T28
+  trap) and **dry-run-first** (two-step ceremony). Rejected as unnecessary for the current user base,
+  not as wrong.
+
+**Task 36 is unblocked.** The coder's plan may begin.
+
+<details><summary>Original options put to the owner (for the record)</summary>
 
 - **Announce-only** — delete on run, print exactly what was removed. Simplest; irreversible without git.
 - **Ask-once** — on first detection, show the target list and require confirmation; record the choice so
@@ -45,7 +58,7 @@ coder builds it, the owner must choose the consent model. Options, for the owner
 - **Dry-run-first** — first run only *reports* what it would delete; a second explicit invocation
   performs it.
 
-**Do not pick one silently.** The coder's plan must not begin until the owner has chosen.
+</details>
 
 ## What to build
 
@@ -73,8 +86,8 @@ coder builds it, the owner must choose the consent model. Options, for the owner
   run the cleanup, and confirm that target is **refused** (not deleted) with the discrepancy reported.
 - **Dry-run** reports the deletion set and removes nothing; `git status` / the tree is unchanged after a
   dry-run.
-- **The chosen consent model behaves as ruled** (e.g. ask-once does not re-ask after a recorded choice;
-  the recorded choice survives a `git clone` if that model is chosen).
+- **The chosen consent model behaves as ruled — announce-only:** the run deletes and prints every
+  removed path; there is no confirmation prompt and no stored consent state.
 - **Non-fatal:** force a deletion failure and confirm `fkit` warns and still starts.
 
 ## Notes
@@ -83,11 +96,8 @@ coder builds it, the owner must choose the consent model. Options, for the owner
 - **Depends on: tasks 25, 26, 27, 28.** The owner gated this "after 25–28 land." Task 28 (additive
   convergence) is the nearest — this cleanup must not ship before the migration family it follows, and it
   reuses task 26's non-fatal bar. **Depends on: 28 (hard).**
-- **Consent-model ruling is a hard prerequisite** — the coder's plan is blocked until the owner chooses
-  from the options above.
-- **If ask-once is chosen, its recorded consent has the T28-opt-out clone problem** — `.fkit/` is
-  gitignored, so a stored "already asked" flag there dies on a `git clone`. Reuse the T28 decision
-  (tracked file inside `ai-agents/`) rather than re-inventing it.
+- **Consent-model ruling: DECIDED — announce-only (2026-07-17).** The former hard prerequisite is
+  satisfied; the coder's plan may begin.
 - **Risk: high — this is the only irreversible operation in the migration work.** Everything else in
   tasks 25–28 is additive. Treat the reference-check gate and the fixed target list as the specification.
 - Technical/evidence source: migration report §9. **Do not expand the target list without a fresh owner

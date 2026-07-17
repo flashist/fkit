@@ -121,6 +121,41 @@ descriptions beyond removing a fragment that is now false and adding the reason.
 > **Yes, this writes into `ai-agents/sprints/done/`.** That is deliberate and owner-ruled: a closed
 > sprint plan's *claims* are frozen, but its *links* stay live. Repair the href; touch nothing else.
 
+**Now do this regardless of how many references step 4 found — even zero** (an unsprinted task has no
+board row at all, but this still applies):
+
+- **The moved brief's OWN `## Status` field** — the single line immediately below the `## Status`
+  heading in the file you just moved into `cancelled/`. Set that line to the **full canonical marker**
+  — `⛔ Cancelled (YYYY-MM-DD) — <reason>` — using **the exact same date and reason** you just wrote
+  into the board (or, if step 4 found no board row at all, the same date and reason you are recording
+  in this run's report). Use this **regardless of what the line previously held.** The brief must read
+  the same marker the board reads (where a board exists); a bare `⛔ Cancelled` with no date/reason in
+  the brief is nonconformant with the vocabulary. Touch only that one line — nothing else under the
+  heading. If the value legitimately spans more than one line, that is outside this skill's authority to
+  guess at — flag it in the report instead of partially rewriting it.
+
+  This applies even if the line already *looks* like a cancelled marker with some other date/reason —
+  step 1 already confirmed the file was **not** in `cancelled/` before you got here, so any such marker
+  predates this run (stale hand-edit or old drift, not a prior pass of this same invocation) and must be
+  overwritten to match this run, not preserved. **Idempotency comes from step 1, not from preserving
+  old content here:** a genuine re-run means pointing this skill at the file's new `cancelled/` path,
+  which step 1 already stops on ("already in `cancelled/` — nothing to do") before this bullet is ever
+  reached — so a true re-run never touches this field at all, let alone twice.
+
+  - **No `## Status` heading at all?** Do not invent one. Leave the heading absent and flag it in the
+    report (step 8). If a board row was updated, use the exact wording `no ## Status field found in
+    <brief> — board updated, brief header unchanged`. If step 4 found **no** board row either (the
+    unsprinted case), do not claim "board updated" — say instead `no ## Status field found in <brief>
+    — brief header unchanged (no sprint board reference existed to update)`. This is scoped to the
+    `## Status` field alone — it does **not** exempt the brief from the outbound-link repair above; a
+    status-less brief whose sibling links need re-pointing still gets that fix.
+
+  This is the brief's *own* copy of its status, separate from whatever board update may have happened
+  above. Where a board exists, both must be written and must carry the **same date and reason** — a
+  brief reading a different reason than the board is exactly the nonconformance this fix must not
+  introduce. Only the brief just moved is touched here — never a sweep repairing other briefs already
+  sitting in `cancelled/`.
+
 **Then prove it.** Resolve every relative markdown link in the files you touched **and** in the moved
 brief. A move is not finished while a link it broke is still broken.
 
@@ -151,6 +186,12 @@ Give a concise summary:
 - **Reason:** the one-line cancellation reason recorded.
 - **Updated:** each doc touched and how (e.g. "`sprint-4.md` — status row → ⛔ Cancelled";
   "`<epic>.md` — T# slice → ⛔ Cancelled").
+- **Brief's own status header:** state what happened to the moved brief's `## Status` field — set to
+  the full `⛔ Cancelled (YYYY-MM-DD) — <reason>` marker, including flagging it if it overwrote a
+  pre-existing, different cancelled-shaped marker (stale drift, not this run's own no-op) — or the
+  missing-heading flag from above, using whichever of its two wordings applies (board updated, or no
+  board reference existed). This runs even when step 4 found zero references — say so if it did. The
+  owner should see this happened, not just infer it.
 - **Re-pointed links:** every href repaired, and where — **including any closed plan under
   `sprints/done/`** (e.g. "`sprints/done/sprint-1.md:37` — href → `tasks/cancelled/`; status cell
   untouched"). A move that rewrote a closed sprint plan must be **visible in this report**, never a

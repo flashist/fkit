@@ -28,6 +28,7 @@ The three are easy to confuse and the distinction is the whole point of this fol
 | [`task-status-vocabulary.md`](task-status-vocabulary.md) | the six valid task statuses, and who may set each |
 | [`status-report-format.md`](status-report-format.md) | the shape of a status briefing — six beats, then the board |
 | [`evidence-before-assertion.md`](evidence-before-assertion.md) | a claim about repo/project state must come from a check made this turn |
+| [`one-skill-one-output.md`](one-skill-one-output.md) | a skill yields one complete output per subject — arguments select subjects, never output variants |
 
 ## Naming
 
