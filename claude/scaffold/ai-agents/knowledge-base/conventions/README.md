@@ -22,7 +22,7 @@ The three are easy to confuse, and the distinction is the whole point of this fo
 
 ## What's here
 
-Three conventions ship with the scaffold. They are **yours to amend** — but amend them *here*. A
+Four conventions ship with the scaffold. They are **yours to amend** — but amend them *here*. A
 convention has exactly one home; a second copy of a rule is how the two drift apart and the project
 stops knowing which one is law.
 
@@ -31,6 +31,7 @@ stops knowing which one is law.
 | [`task-status-vocabulary.md`](task-status-vocabulary.md) | the valid task statuses, and who may set each |
 | [`status-report-format.md`](status-report-format.md) | the shape of a status briefing — six beats, then the board |
 | [`evidence-before-assertion.md`](evidence-before-assertion.md) | a claim about repo/project state must come from a check made this turn |
+| [`one-skill-one-output.md`](one-skill-one-output.md) | a skill yields one complete output per subject — arguments select subjects, never output variants |
 
 ## Naming
 
@@ -48,7 +49,7 @@ A new document earns a place here only if **all four** hold:
    violated. A description of how something currently works is `../architecture.md`, not a convention.
 3. **It is enforceable somewhere.** A convention nobody can check is a preference. State where it is
    enforced — ideally in tooling or code where the check runs automatically, not left to memory.
-4. **It is not already covered.** Prefer **amending an existing convention** to adding a fourth
+4. **It is not already covered.** Prefer **amending an existing convention** to adding another
    document. A few well-known conventions beat many that nobody has read.
 
 Anything that doesn't clear that bar is a report, an ADR, or a task brief.

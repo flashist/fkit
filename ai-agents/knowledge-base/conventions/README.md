@@ -48,7 +48,7 @@ A new document earns a place here only if **all four** hold:
 3. **It is enforceable somewhere.** A convention nobody can check is a preference. State where it is
    enforced — ideally in `claude/` source, so it ships to every project and not just this one.
    (`task-status-vocabulary.md` §"Where this must be enforced" is the pattern.)
-4. **It is not already covered.** Prefer **amending an existing convention** to adding a fourth
+4. **It is not already covered.** Prefer **amending an existing convention** to adding another
    document. A few well-known conventions beat many that nobody has read.
 
 Anything that doesn't clear that bar is a report, an ADR, or a task brief.
