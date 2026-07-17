@@ -92,13 +92,13 @@ interactive init.
 
 | Agent (`agents/`) | Tools | Role |
 |---|---|---|
-| fkit-producer | Read, Grep, Glob, Bash, Write, Edit, **Agent** | product & sprint planning, task briefs, lifecycle. Consults the architect. |
-| fkit-coder | Read, Grep, Glob, Bash, Write, Edit, **Agent**, EnterPlanMode, ExitPlanMode | implementation — sole source-write authority. Consults architect/producer. **Not for background delegation:** its plan/fix approval gates need the owner present, so run it as a session. |
-| fkit-reviewer | Read, Grep, Glob, Bash, Write, Edit, **Agent** | two-pass review (own + Codex via CLI); writes only `ai-agents/reviews/` documents. Consults the architect on design intent. |
+| fkit-producer | Read, Grep, Glob, Bash, Write, Edit, **Agent**, AskUserQuestion | product & sprint planning, task briefs, lifecycle. Consults the architect. |
+| fkit-coder | Read, Grep, Glob, Bash, Write, Edit, **Agent**, EnterPlanMode, ExitPlanMode, AskUserQuestion | implementation — sole source-write authority. Consults architect/producer. **Not for background delegation:** its plan/fix approval gates need the owner present, so run it as a session. |
+| fkit-reviewer | Read, Grep, Glob, Bash, Write, Edit, **Agent**, AskUserQuestion | two-pass review (own + Codex via CLI); writes only `ai-agents/reviews/` documents. Consults the architect on design intent. |
 | fkit-adversarial-reviewer | Read, Grep, Glob, Bash | findings-only hostile pass on Codex. **Structurally write-free; a leaf.** |
-| fkit-architect | Read, Grep, Glob, Bash, Write, Edit, **Agent** | architecture, design specs, ADRs, surveys. Consults the producer for product context. |
-| fkit-wiki | Read, Grep, Glob, Bash, Write, Edit | the wiki role — **exclusive write gateway** (ingest / lint / sync). **A leaf.** |
-| fkit-lead | Read, Grep, Glob, Bash, **Agent** | the team room — routing help and wiki questions. Does no work itself. |
+| fkit-architect | Read, Grep, Glob, Bash, Write, Edit, **Agent**, AskUserQuestion | architecture, design specs, ADRs, surveys. Consults the producer for product context. |
+| fkit-wiki | Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion | the wiki role — **exclusive write gateway** (ingest / lint / sync). **A leaf.** |
+| fkit-lead | Read, Grep, Glob, Bash, **Agent**, AskUserQuestion | the team room — routing help and wiki questions. Does no work itself. |
 
 **Two honest limits** on the tool lock: an agent with Bash can technically still write files, and
 Claude Code **ignores** `Agent(type)` allowlists inside subagent definitions (they only work for a

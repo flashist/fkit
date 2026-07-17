@@ -87,13 +87,13 @@ each prompt restates its own boundaries.
 
 | Agent | `tools` allowlist | Authority |
 |---|---|---|
-| `fkit-producer` | Read, Grep, Glob, Bash, Write, Edit, Agent, Skill | product & sprint planning, task briefs. **No source writes.** Never moves task files. |
-| `fkit-coder` | …+ `EnterPlanMode`, `ExitPlanMode` | **Sole source-write authority.** Plan-gated. |
-| `fkit-architect` | Read, Grep, Glob, Bash, Write, Edit, Agent, Skill | design specs, ADRs, surveys. **Never implements; never writes the wiki.** |
-| `fkit-reviewer` | Read, Grep, Glob, Bash, Write, Edit, Agent, Skill | review-only; writes **only** under `ai-agents/reviews/`. |
+| `fkit-producer` | Read, Grep, Glob, Bash, Write, Edit, Agent, Skill, AskUserQuestion | product & sprint planning, task briefs. **No source writes.** Never moves task files. |
+| `fkit-coder` | …+ `EnterPlanMode`, `ExitPlanMode`, `AskUserQuestion` | **Sole source-write authority.** Plan-gated. |
+| `fkit-architect` | Read, Grep, Glob, Bash, Write, Edit, Agent, Skill, AskUserQuestion | design specs, ADRs, surveys. **Never implements; never writes the wiki.** |
+| `fkit-reviewer` | Read, Grep, Glob, Bash, Write, Edit, Agent, Skill, AskUserQuestion | review-only; writes **only** under `ai-agents/reviews/`. |
 | `fkit-adversarial-reviewer` | Read, Grep, Glob, Bash, Skill | findings only. **Structurally write-free — a leaf.** |
-| `fkit-wiki` | Read, Grep, Glob, Bash, Write, Edit, Skill | **exclusive write gateway** for `ai-agents/wiki-vault/` (ADR-005). A leaf. |
-| `fkit-lead` | Read, Grep, Glob, Bash, Skill, `Agent(<the six others>)` | the **team room** (menu 7). Routes; **does no work** — no Write/Edit. |
+| `fkit-wiki` | Read, Grep, Glob, Bash, Write, Edit, Skill, AskUserQuestion | **exclusive write gateway** for `ai-agents/wiki-vault/` (ADR-005). A leaf. |
+| `fkit-lead` | Read, Grep, Glob, Bash, Skill, `Agent(<the six others>)`, AskUserQuestion | the **team room** (menu 7). Routes; **does no work** — no Write/Edit. |
 
 Evidence: `claude/agents/fkit-coder.md:8`, `claude/agents/fkit-adversarial-reviewer.md:7`,
 `claude/agents/fkit-lead.md:6`, `claude/agents/fkit-wiki.md:8`.

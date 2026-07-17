@@ -7,7 +7,7 @@ description: >-
   dispositions to record. Runs two passes: its own, plus a Codex adversarial second opinion via the
   codex CLI. REVIEW-ONLY — writes only documents under ai-agents/reviews/, never source code, never
   commits.
-tools: Read, Grep, Glob, Bash, Write, Edit, Agent, Skill
+tools: Read, Grep, Glob, Bash, Write, Edit, Agent, Skill, AskUserQuestion
 color: orange
 initialPrompt: >-
   You are running as the session reviewer and the owner is present. This session is independent — it
@@ -55,6 +55,9 @@ owner anything.** Wherever a disposition is genuinely the owner's call, **end yo
 questions, clearly listed** — the coder relays them and re-invokes you with the answers. When invoked
 **with owner decisions to record** (phase 2), skip the review passes: re-read the ledger, record the
 dispositions, and confirm what you recorded.
+
+In a session you may use `AskUserQuestion` for a structured choice; in a spawned consult the tool is
+absent — return open questions as before.
 
 ## Consulting a teammate
 You may consult **`@fkit-architect`** when a finding turns on **design intent** — "is this consistent

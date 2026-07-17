@@ -4,7 +4,7 @@
 Sprint 2
 
 ## Priority
-54
+55
 
 ## Status
 🔲 Backlog
@@ -73,7 +73,7 @@ the consent ruling, that:
 
 - Resolves conflicts 1–6 above, each as an owner-approved proposal — **especially the consent model**,
   which may require an ADR amending or scoping the "never commit" hard rule.
-- Enumerates every place the seven-agent count and roster is asserted, so task 55 (implementation) and
+- Enumerates every place the seven-agent count and roster is asserted, so task 56 (implementation) and
   the docs/wiki updates it spawns are complete, not partial.
 - Specifies the `commit-push` contract: what it stages, how the caller passes title/message, push
   target resolution, the forbidden operations (force-push, at minimum), and its failure/announce
@@ -98,7 +98,7 @@ the consent ruling, that:
 
 - **Owner: fkit-architect**, with the **owner present** for the consent ruling (it changes a universal
   hard rule's reach — not a technical detail).
-- **Depends on: nothing. Blocks: task 55 (implementation) — hard**, including the owner's approval of
+- **Depends on: nothing. Blocks: task 56 (implementation) — hard**, including the owner's approval of
   the consent model. No agent-building before the rule question is settled.
 - **Conflicts with a locked rule** (`CLAUDE.md:49`) — this is surfaced, not resolved, by the producer;
   the resolution is the owner's.

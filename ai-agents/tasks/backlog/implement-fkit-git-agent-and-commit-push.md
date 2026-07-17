@@ -4,26 +4,26 @@
 Sprint 2
 
 ## Priority
-55
+56
 
 ## Status
 🔲 Backlog
 
 ## Context
 
-**Task 54 designs `fkit-git` and gets the owner's ruling on the commit/push consent model.** This
+**Task 55 designs `fkit-git` and gets the owner's ruling on the commit/push consent model.** This
 task builds the approved design: the agent file, the `commit-push` skill, its registration, the
 eight-agent count/roster updates, and any hard-rule amendment the owner approved. Scoped now at shape
-level (the 52/53, 40/41 pattern); **task 54's approved spec governs and wins wherever it differs.**
+level (the 52/53, 40/41 pattern); **task 55's approved spec governs and wins wherever it differs.**
 
-**⚠️ Do not start before task 54's owner approval is recorded.** The whole point of the design gate is
+**⚠️ Do not start before task 55's owner approval is recorded.** The whole point of the design gate is
 that this agent's core skill collides with the *"never commit or push unless the owner explicitly
 asks"* universal hard rule (`CLAUDE.md:49`). Building it before the consent model is ruled would ship
 a routing-around of the team's central safety guarantee.
 
 ## What to build
 
-*(Shape only — task 54's approved spec is the specification.)*
+*(Shape only — task 55's approved spec is the specification.)*
 
 - `claude/agents/fkit-git.md` — the agent contract per the approved design: role description, tool
   allowlist (at least `Bash`; no `Write`/`Edit` unless the design justifies it), the universal hard
@@ -39,16 +39,16 @@ a routing-around of the team's central safety guarantee.
   commit.
 - If `fkit-git` is a session role per the design: launcher menu wiring in `fkit-claude.sh`.
 - **The seven→eight agent-count and roster updates** the design enumerated: `CLAUDE.md`,
-  `PROJECT.md`, scaffold `CLAUDE.md`, `README`, `fkit-team` skill, launcher — every place task 54
+  `PROJECT.md`, scaffold `CLAUDE.md`, `README`, `fkit-team` skill, launcher — every place task 55
   listed. The wiki is **out of scope** (fkit-wiki's exclusive path — a separate sync task once this
   lands).
-- Any ADR or hard-rule rewrite the owner approved in task 54 (only if approved).
+- Any ADR or hard-rule rewrite the owner approved in task 55 (only if approved).
 - Tests per ADR-014 (`node --test`, zero devDeps): the hook allow-for-`fkit-git` / deny-for-others,
   both directions; plus whatever exit-path checks the design specifies for `commit-push`.
 
 ## Verification steps
 
-- Task 54's approved spec exists and this implementation matches it; forced deviations are listed and
+- Task 55's approved spec exists and this implementation matches it; forced deviations are listed and
   justified in the coder's report.
 - The approved consent model is enforced as designed — a commit/push cannot happen by a path the owner
   ruled out (proven, not asserted).
@@ -57,13 +57,13 @@ a routing-around of the team's central safety guarantee.
 - The ADR-018 hook allows `fkit-git`'s skill and denies every other role, both directions.
 - `node --test` at repo root: green.
 - Every asserted agent count reads **eight** (or the design's chosen wording) consistently across the
-  files task 54 enumerated — no file still says "seven".
+  files task 55 enumerated — no file still says "seven".
 - No change to `ai-agents/wiki-vault/` (its sync is a separate task once the agent name/shape is final).
 
 ## Notes
 
 - **Owner: fkit-coder.**
-- **Depends on: task 54 — hard, including its owner-approval gate.** Blocks: a follow-up wiki sync
+- **Depends on: task 55 — hard, including its owner-approval gate.** Blocks: a follow-up wiki sync
   (scoped when this lands — deliberately not pre-created while the design may still rename/reshape).
 - **Highest-care item in the sprint:** it ships the one agent licensed to commit. The consent model
   and the forbidden-operations list are the specification, not guidance.
