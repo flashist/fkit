@@ -66,7 +66,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 34 | Make `/fkit-task-done` flip the moved brief's own `## Status` header *(mover drift — sibling to task 22)* | [`task-done-flips-brief-own-status-header.md`](../tasks/done/task-done-flips-brief-own-status-header.md) |
 | ✅ Done | 35 | Make `/fkit-task-cancelled` flip the moved brief's own `## Status` header *(same gap, `⛔ Cancelled` marker)* | [`task-cancelled-flips-brief-own-status-header.md`](../tasks/done/task-cancelled-flips-brief-own-status-header.md) |
 | ✅ Done | 36 | Remove the `.fkit/` Omnigent-orphan residue *(OQ5 resolved; announce-only ruled 2026-07-17; 4-path list, `.fkit/settings` protected, non-fatal; owner: fkit-coder)* | [`remove-fkit-omnigent-orphan-residue.md`](../tasks/done/remove-fkit-omnigent-orphan-residue.md) |
-| 🔲 Backlog | 37 | Record a tombstone ADR for the shared-instructions reversal *(OQ6 resolved; owner: fkit-architect)* | [`record-shared-instructions-reversal-adr.md`](../tasks/backlog/record-shared-instructions-reversal-adr.md) |
+| 🔲 Backlog | 37 | Record a tombstone ADR for the shared-instructions reversal *(**duplicate — already recorded as [ADR-016](../knowledge-base/decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer.md), 2026-07-14, before this task was scoped; see OQ6**. Awaiting the owner's `/fkit-task-cancelled`; owner: fkit-architect)* | [`record-shared-instructions-reversal-adr.md`](../tasks/backlog/record-shared-instructions-reversal-adr.md) |
 | ✅ Done | 38 | Add a full-board switch (`full`) to `/fkit-status` *(skill-text only; owner: fkit-coder)* | [`add-full-board-switch-to-fkit-status.md`](../tasks/done/add-full-board-switch-to-fkit-status.md) |
 | ✅ Done | 39 | Investigate making `AskUserQuestion` available to fkit agents *(investigation — [findings](../knowledge-base/reports/2026-07-17-askuserquestion-availability-for-agents.md); spawned [ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md); owner: fkit-architect)* | [`investigate-askuserquestion-availability-for-agents.md`](../tasks/done/investigate-askuserquestion-availability-for-agents.md) |
 | ✅ Done | 40 | Design the deterministic dashboard generator for `/fkit-status` *(design — [spec](../knowledge-base/reports/2026-07-16-design-deterministic-dashboard-for-fkit-status.md); spawned [ADR-017](../knowledge-base/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit.md))* | [`design-deterministic-dashboard-for-fkit-status.md`](../tasks/done/design-deterministic-dashboard-for-fkit-status.md) |
@@ -546,6 +546,11 @@ The owner's 2026-07-15 rulings on the open questions (below) spawned three brief
   shared-instructions reversal; rejects `AGENTS-COMMON.md` (cannot reach Codex) and
   `--append-system-prompt` (session-only, `0/3`→`0/2` on Claude Code 2.1.208) **by name**, with the
   version pinned. **Owner: fkit-architect**, via `/fkit-record-decision`. Depends on nothing.
+  **⚠️ Duplicate — do not implement.** All of the above was already recorded as
+  [`ADR-016`](../knowledge-base/decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer.md)
+  on **2026-07-14**, before this task was scoped; verified against all five of the task's own
+  verification steps (see OQ6). The brief stays in `backlog/` at `🔲 Backlog` until the owner runs
+  `/fkit-task-cancelled`.
 - **Unsprinted — `gate-read-side-symlink-hazard-in-init.md`** (OQ7). The read-side counterpart to task
   27's write-side symlink guard. **Latent** (no code reads through `ai-agents/` today); tracked
   independently, per the owner, so it is not lost while task 28 is parked. Filed unsprinted.
@@ -1190,8 +1195,18 @@ The owner ruled on all seven open questions below. Recorded here; the original t
    not be smuggled into the convergence pass, where it would inherit "runs unattended on every launch"
    from code that is *additive by invariant*. **Say the word and I'll write the brief.**
 
-6. **Does the shared-instructions reversal get a tombstone ADR?** Not tasked — the owner has not ruled,
-   and the producer has not assumed. **Producer's recommendation: yes, and it is cheap.** The reversal
+6. **Does the shared-instructions reversal get a tombstone ADR?** **✅ Resolved — and it already was, at
+   the time this question was written.** [`ADR-016`](../knowledge-base/decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer.md)
+   was recorded **2026-07-14**, the same day as report rev 2 and *before* this question was raised, and
+   it satisfies every acceptance criterion below: both rejections by name (`AGENTS-COMMON.md` at
+   `adr-016:154-172`, `--append-system-prompt` at `:137-152`), harness version pinned (Claude Code
+   2.1.208 at `:14`, `:40`), experiment counts recorded (`0/3` at `:46`; `0/3`→`0/2` at `:58`, `:140`),
+   re-raise trigger at `:272-275`, report rev 2 linked as evidence at `:7`, `:324-328`.
+   **Consequence: task 37 was scoped from this question in error — it is a duplicate of already-completed
+   work.** Its brief stays in `backlog/` with Status `🔲 Backlog`; cancelling it is the owner's call via
+   `/fkit-task-cancelled` and has not been run. **ADR-016 is not to be edited** — the owner ruled it
+   stays exactly as-is.
+   *The original reasoning is kept below as the historical record of what was weighed.* The reversal
    settles a mechanism question and **rejects two specific, obvious ideas by name**: `AGENTS-COMMON.md`
    (cannot reach Codex) and **`claude --append-system-prompt`** (session-only — **0/3, then 0/2**, into a
    spawned consult, on **Claude Code 2.1.208**). Both are the *first* thing a competent person reaches

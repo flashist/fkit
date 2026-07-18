@@ -3,8 +3,22 @@
 - **Date:** 2026-07-18
 - **Author:** fkit-architect (spawned consult; chain `coder → architect`, hop 1 of 2)
 - **Task:** [`design-spawned-invocation-consent-model-for-task-movers.md`](../../tasks/backlog/design-spawned-invocation-consent-model-for-task-movers.md) (Sprint 2, #63)
-- **Status:** 🟡 **Draft — awaiting owner rulings.** No ADR recorded, no implementation authorized.
-- **Blocks:** task 64 (implementation) — hard, including the owner's approval and the reversal ADR.
+- **Status:** ✅ **Ruled on and closed (2026-07-18).** All six questions in §9 were put to the owner and
+  answered; the decision is recorded as
+  [**ADR-025**](../decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md). This report is now
+  the **evidence record** of what was weighed, not a live design.
+- **The owner ruled against this report's recommendation, knowingly.** §9 recommended *keep the movers
+  owner-only*; the owner **relaxed both**. The rulings, for the record: **Q1 relax** · **Q2 relax
+  both** (not `cancelled`-only) · **Q3 distinct agent-closed marker: yes** · **Q4 any spawned role may
+  invoke** (the "not the role that did the work" restriction declined — it was never enforceable) ·
+  **Q5 spawned agents do all the work** (the §6 prepared-move packet is **not** built) · **Q6/Q6b
+  prose-only** — no hook precondition, no §7 hardening; the contradicting SKILL.md prose is rewritten
+  to match · **Q7 adversarial Codex pass mandatory before task 64.**
+- **The §3 finding stands unchanged and is the reason ADR-025 claims no residual guarantee:** no
+  fabrication-resistant precondition exists. With Q6b = prose-only, **L1–L4 are all open** and the audit
+  marker is advisory. See ADR-025's honesty clause.
+- **Blocks:** task 64 (implementation) — **unblocked by ADR-025**, subject to the mandatory adversarial
+  pass. Bounded write surface: §8 rows 1–12, **minus row 9** (no hook change).
 
 ---
 
