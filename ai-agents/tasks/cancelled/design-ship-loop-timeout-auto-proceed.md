@@ -7,7 +7,7 @@ Sprint 2
 59
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (2026-07-18) — feasible but declined on cost per ADR-024; safe version = launch-mode + gate re-expression + session-global user-scope AFK timer, not worth the convenience
 
 ## Context
 

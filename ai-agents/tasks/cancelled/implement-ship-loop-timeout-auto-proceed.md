@@ -7,7 +7,7 @@ Sprint 2
 60
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (2026-07-18) — parent design task 59 declined per ADR-024; feature not built, so no implementation
 
 ## Context
 

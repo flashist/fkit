@@ -82,24 +82,34 @@ fkit-managed `.claude/agents/fkit-*.md` + `.claude/skills/fkit-*/` copies, `.cod
 ### 4.1 The seven roles
 
 Each role is **one file**: `claude/agents/fkit-<role>.md` — YAML frontmatter (`name`, `description`,
-`tools`, `color`, `initialPrompt`) plus a system prompt in the body. There is no shared base class;
-each prompt restates its own boundaries.
+`color`, `initialPrompt`, and — only for the adversarial reviewer — `tools`) plus a system prompt in
+the body. There is no shared base class; each prompt restates its own boundaries.
 
-| Agent | `tools` allowlist | Authority |
+Per [**ADR-022**](decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md) (2026-07-18),
+**the six Claude-side roles carry no `tools:` line at all** — a subagent with no `tools:` field
+inherits the full Claude Code tool set. Only the adversarial reviewer keeps an explicit allowlist.
+
+| Agent | `tools` | Authority (prompt-enforced unless noted) |
 |---|---|---|
-| `fkit-producer` | Read, Grep, Glob, Bash, Write, Edit, Agent, Skill, AskUserQuestion | product & sprint planning, task briefs. **No source writes.** Never moves task files. |
-| `fkit-coder` | …+ `EnterPlanMode`, `ExitPlanMode`, `AskUserQuestion` | **Sole source-write authority.** Plan-gated. |
-| `fkit-architect` | Read, Grep, Glob, Bash, Write, Edit, Agent, Skill, AskUserQuestion | design specs, ADRs, surveys. **Never implements; never writes the wiki.** |
-| `fkit-reviewer` | Read, Grep, Glob, Bash, Write, Edit, Agent, Skill, AskUserQuestion | review-only; writes **only** under `ai-agents/reviews/`. |
-| `fkit-adversarial-reviewer` | Read, Grep, Glob, Bash, Skill | findings only. **Structurally write-free — a leaf.** |
-| `fkit-wiki` | Read, Grep, Glob, Bash, Write, Edit, Skill, AskUserQuestion | **exclusive write gateway** for `ai-agents/wiki-vault/` (ADR-005). A leaf. |
-| `fkit-lead` | Read, Grep, Glob, Bash, Skill, `Agent(<the six others>)`, AskUserQuestion | the **team room** (menu 7). Routes; **does no work** — no Write/Edit. |
+| `fkit-producer` | *(none — inherits all)* | product & sprint planning, task briefs. **No source writes.** Never moves task files. |
+| `fkit-coder` | *(none — inherits all)* | **Sole source-write authority.** Plan-gated. |
+| `fkit-architect` | *(none — inherits all)* | design specs, ADRs, surveys. **Never implements; never writes the wiki.** |
+| `fkit-reviewer` | *(none — inherits all)* | review-only; writes **only** under `ai-agents/reviews/`. |
+| `fkit-wiki` | *(none — inherits all)* | **exclusive write gateway** for `ai-agents/wiki-vault/` (ADR-005). |
+| `fkit-lead` | *(none — inherits all)* | the **team room** (menu 7). Routes rather than does — **prompt-enforced**, no longer a tool wall. |
+| `fkit-adversarial-reviewer` | `Read, Grep, Glob, Bash, Skill` | findings only. **Structurally write-free — a leaf, and the one deliberate tool wall.** |
 
-Evidence: `claude/agents/fkit-coder.md:8`, `claude/agents/fkit-adversarial-reviewer.md:7`,
-`claude/agents/fkit-lead.md:6`, `claude/agents/fkit-wiki.md:8`.
+Evidence: `claude/agents/fkit-adversarial-reviewer.md:9` (the sole surviving `tools:` line); the other
+six files carry no `tools:` frontmatter.
 
-The **tool allowlist is harness-enforced** — it is the strongest boundary in the system. The
-adversarial reviewer and the lead genuinely cannot write files; that is structural, not a request.
+**The one remaining structural tool wall is the adversarial reviewer's** (ADR-022 Decision 2–3). It
+holds no Write/Edit/Agent, so *"the independent, model-diverse second opinion never touched the code it
+is judging"* is a **structural fact, not a promise** — the invariant closest to fkit's separation-of-
+authority thesis, deliberately kept when every other wall was relaxed. For the six unrestricted roles,
+role separation now rests on **prompts + the skill-ownership hook (ADR-018)**, not on tools — a knowing
+tradeoff (ADR-022 Consequences): the tool wall was never a real sandbox anyway (any agent with `Bash`
+can write via the shell — ADR-008:85), while the **skill lockdown is untouched** (§4.2, ADR-018) so a
+role still cannot run another role's *procedure*.
 
 > **There is no `skills:` frontmatter.** It was dropped from all 7 agents per
 > [**ADR-012**](decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md) §1: Claude
@@ -159,7 +169,10 @@ Two roles at once = **two terminal tabs**. Deliberately not automated
 
 A session is locked **two ways**:
 
-1. **`--agent fkit-<role>`** — the role's system prompt **and tool allowlist**. Harness-enforced.
+1. **`--agent fkit-<role>`** — the role's system prompt (and, for the adversarial reviewer only, its
+   `tools:` allowlist). Harness-enforced. Since ADR-022 the six other roles carry no `tools:` line, so
+   for them this half of the lock is the system prompt alone; the adversarial reviewer's tool wall
+   still binds at any spawn depth.
 2. **`--settings` carrying `skillOverrides`** — `build_settings()`
    (`claude/fkit-claude.sh:226-238`) writes `{"skillOverrides":{"<not-owned>":"off",…}}` to
    `.fkit/settings/<role>.json`. Every `fkit-*` skill the role does not own is **hidden from the `/`
@@ -206,7 +219,11 @@ The rules are carried in every agent prompt ("Consult rules — hard"):
 
 **This topology is prompt-enforced, and knowingly so**: Claude Code ignores `Agent(type)` allowlists
 inside *subagent* definitions, so the hop budget cannot be made structural (ADR-010 §Consequences).
-It *is* structural in one place — `fkit-lead`'s own `Agent(...)` list (`claude/agents/fkit-lead.md:6`).
+It *was* structural in one place — `fkit-lead`'s own scoped `Agent(...)` list — but that line was
+dropped when the lead's `tools:` frontmatter was removed
+([**ADR-022**](decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md) Decision 1). The
+consult topology is now **prompt-enforced everywhere, with no structural exception** — a small,
+knowingly-taken loss (ADR-022 Consequences).
 
 ```mermaid
 flowchart TB

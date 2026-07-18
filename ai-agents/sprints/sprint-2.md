@@ -88,10 +88,12 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 56 | Implement the `fkit-git` agent + `commit-push` skill from the approved design *(needs 55 incl. owner approval — hard; owner: fkit-coder)* | [`implement-fkit-git-agent-and-commit-push.md`](../tasks/backlog/implement-fkit-git-agent-and-commit-push.md) |
 | ✅ Done | 57 | Relax the tool allowlist for every role except the adversarial reviewer *(implements [ADR-022](../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md); subsumes task 54's mechanism; tools change only — skills stay locked; owner: fkit-coder)* | [`relax-tool-allowlists-except-adversarial-reviewer.md`](../tasks/done/relax-tool-allowlists-except-adversarial-reviewer.md) |
 | 🔲 Backlog | 58 | Refresh the docs for the tool-allowlist relaxation *(ADR-022 doc follow-up; soft-needs 57; owner: fkit-architect)* | [`refresh-architecture-docs-for-tool-relaxation.md`](../tasks/backlog/refresh-architecture-docs-for-tool-relaxation.md) |
-| 🔲 Backlog | 59 | Design a timeout-auto-proceed for the ship-loop's owner questions *(design — **feasibility unknown, amends ADR-019, done-gate must stay hard**; owner present; owner: fkit-architect)* | [`design-ship-loop-timeout-auto-proceed.md`](../tasks/backlog/design-ship-loop-timeout-auto-proceed.md) |
-| 🔲 Backlog | 60 | Implement the ship-loop timeout-auto-proceed from the approved design *(needs 59 incl. approval + feasibility verdict — hard; owner: fkit-coder)* | [`implement-ship-loop-timeout-auto-proceed.md`](../tasks/backlog/implement-ship-loop-timeout-auto-proceed.md) |
+| ⛔ Cancelled | 59 | Design a timeout-auto-proceed for the ship-loop's owner questions *(⛔ Cancelled (2026-07-18) — feasible but declined on cost per [ADR-024](../knowledge-base/decisions/adr-024-ship-loop-owner-question-timeout-is-not-built.md); safe version = launch-mode + gate re-expression + session-global user-scope AFK timer, not worth the convenience)* | [`design-ship-loop-timeout-auto-proceed.md`](../tasks/cancelled/design-ship-loop-timeout-auto-proceed.md) |
+| ⛔ Cancelled | 60 | Implement the ship-loop timeout-auto-proceed from the approved design *(⛔ Cancelled (2026-07-18) — parent design task 59 declined per [ADR-024](../knowledge-base/decisions/adr-024-ship-loop-owner-question-timeout-is-not-built.md); feature not built, so no implementation)* | [`implement-ship-loop-timeout-auto-proceed.md`](../tasks/cancelled/implement-ship-loop-timeout-auto-proceed.md) |
 | 🔲 Backlog | 61 | Restructure the coder's report — bullet summary first, interview on open questions last *(agent-contract edit; session=AskUserQuestion / consult=return-in-reply; owner: fkit-coder)* | [`restructure-coder-report-summary-then-interview.md`](../tasks/backlog/restructure-coder-report-summary-then-interview.md) |
 | 🔲 Backlog | 62 | Add a "Speak in simple terms" output-style preference for all agents *(preference not hard-rule; 4 files — CLAUDE.md + AGENTS.md × dogfood + scaffold; owner: fkit-coder)* | [`add-speak-in-simple-terms-output-style.md`](../tasks/backlog/add-speak-in-simple-terms-output-style.md) |
+| 🔲 Backlog | 63 | Design a laundering-safe consent model for **spawned** invocation of the task movers *(design — **reverses the owner-only done-gate hard rule + ADR-019**; owner present; adversarial pass recommended; owner: fkit-architect)* | [`design-spawned-invocation-consent-model-for-task-movers.md`](../tasks/backlog/design-spawned-invocation-consent-model-for-task-movers.md) |
+| 🔲 Backlog | 64 | Implement spawned invocation for the task movers from the approved design *(needs 63 incl. approval + recorded ADR — hard; owner: fkit-coder)* | [`implement-spawned-invocation-for-task-movers.md`](../tasks/backlog/implement-spawned-invocation-for-task-movers.md) |
 
 ## Dependency graph
 
@@ -953,6 +955,40 @@ reading that "all agents" means every deployment. Owner to confirm it should rea
 and not stay local to this repo.
 
 **Numbered 62 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — tasks 63 and 64 added out of band (2026-07-18): spawned invocation of the task movers
+
+**The owner's ask:** let another agent drive `/fkit-task-done` and `/fkit-task-cancelled` by **spawning
+the producer sub-agent and asking it to run them** — e.g. the coder finishes a task, spawns
+`@fkit-producer`, and asks it to mark the task done. Today both movers are **owner-only**.
+
+**⚠️ This reverses a locked, load-bearing decision — flagged before scoping.** The movers are owner-only
+on purpose, in three places: the **CLAUDE.md universal hard rule** (*"only via the owner-invoked mover
+… do not tell anyone else to"*), **ADR-019** (*"Done is owner-gated, anti-laundering"* — the autonomous
+ship-loop stops at the owner-only done-gate by design), and the **`fkit-task-done` skill** (*"an agent
+that can mark its own work complete can quietly launder unfinished work into a green board"*). The
+owner chose to pursue the relaxation **deliberately, via a reversal ADR** (option B, 2026-07-18) — hence
+design-first.
+
+**The gating problem is the exact one that already sank a design.** ADR-019 records that a rev-1 attempt
+to relax a gate "for a spawned/loop context" was **killed by a Codex adversarial pass** — *there is no
+runtime-authenticated signal for "loop context,"* so the relaxation was either unenforceable or claimable
+by any standalone invocation. A spawned producer **has no owner channel** (ADR-012 banner is advisory;
+AskUserQuestion is session-only, ADR-021), so "coder asks producer to mark done" is functionally "the
+coder marks its own work done." The design **must** answer this by specifying an **authenticated,
+checkable precondition** an agent cannot fabricate for its own work (candidate: a closed review ledger
+with a passing verdict) — or conclude honestly that none exists and the movers stay owner-only.
+
+**Asymmetry flagged:** `done` turns the board green (the laundering target); `cancelled` records a drop
+with a reason (far less prone). The design rules whether they get the same relaxation or a weaker guard
+for cancelled.
+
+- **Task 63 — design** (owner: fkit-architect, owner present; reverses a hard rule + amends ADR-019;
+  adversarial pass recommended; records the reversal ADR).
+- **Task 64 — implement** (owner: fkit-coder; **needs 63 incl. approval + recorded ADR — hard**; shrinks
+  to whatever the ruling authorizes, possibly nothing if the relaxation is judged unsafe).
+
+**Numbered 63/64 for append-don't-renumber discipline. Owner to confirm the ranking.**
 
 ## Open questions for the owner
 

@@ -37,8 +37,10 @@ git rather than a shared runtime state:
 - **fkit-lead** — the team room: routing help and wiki questions. It does no work itself.
 
 **Sessions are role-locked** ([`ADR-010`](decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)):
-`fkit <role>` pins a session to that role's prompt, tool allowlist, and only its own skills — every
-other `/fkit-*` skill is turned off. Roles consult each other with the Agent tool, synchronously, up
+`fkit <role>` pins a session to that role's prompt and only its own skills — every other `/fkit-*`
+skill is turned off. (The per-role *tool* allowlist was relaxed for every role except the adversarial
+reviewer — [`ADR-022`](decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md); the skill
+lock is unchanged.) Roles consult each other with the Agent tool, synchronously, up
 to two hops and never in a cycle. (In a *spawned consult* the skill boundary is advisory rather than
 enforced — [`ADR-012`](decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md).)
 Coordination state — sprint plans, task briefs, review ledgers, the wiki — lives entirely as files
@@ -75,8 +77,10 @@ concerns, and identified risks — is in
   opinion genuinely model-diverse.
 - **Role boundaries: structural in a session, prompt-enforced in a consult.** Per
   [`ADR-010`](decisions/adr-010-role-locked-sessions-and-skill-lockdown.md), a `fkit <role>` session
-  is locked by the harness — the role's tool allowlist, and a `skillOverrides` lockdown that makes
-  every non-owned `/fkit-*` skill unrunnable. But per
+  is locked by the harness — a `skillOverrides` lockdown that makes every non-owned `/fkit-*` skill
+  unrunnable (plus, for the adversarial reviewer alone, a `tools:` wall — the per-role tool allowlist
+  was otherwise relaxed,
+  [`ADR-022`](decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)). But per
   [`ADR-012`](decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md), a *spawned
   consult* inherits the **caller's** skill settings, so there the boundary is advisory (the `⛔ Owner:`
   banner). Likewise "never commit/push unprompted" and the two-hop consult cap remain prompt rules.

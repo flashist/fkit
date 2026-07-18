@@ -26,9 +26,12 @@ fkit-managed copies refreshed from `claude/` by `claude/fkit-claude-init.sh .` �
 sources in `claude/`, never the copies** (they are gitignored).
 
 **Sessions are role-locked** ([`ADR-010`](ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)):
-`fkit <role>` opens a session pinned to that role's system prompt, tool allowlist, and **only its own
+`fkit <role>` opens a session pinned to that role's system prompt and **only its own
 `/fkit-*` skills** — every other fkit skill is turned off, invisible and unrunnable. That is what makes
-"the coder cannot run the reviewer's procedure" a fact rather than a request. Within a session,
+"the coder cannot run the reviewer's procedure" a fact rather than a request. (The per-role *tool*
+allowlist was relaxed for every role except the adversarial reviewer —
+[`ADR-022`](ai-agents/knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md);
+the skill lock above is unchanged.) Within a session,
 `@fkit-<role>` consults another role and brings the answer back (max two hops, never a cycle).
 
 ⚠️ **The lock is a wall in a session, a rule in a consult.** A *spawned* consult inherits the
