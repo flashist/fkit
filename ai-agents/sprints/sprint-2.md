@@ -94,6 +94,15 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 62 | Add a "Speak in simple terms" output-style preference for all agents *(preference not hard-rule; 4 files — CLAUDE.md + AGENTS.md × dogfood + scaffold; owner: fkit-coder)* | [`add-speak-in-simple-terms-output-style.md`](../tasks/backlog/add-speak-in-simple-terms-output-style.md) |
 | 🔲 Backlog | 63 | Design a laundering-safe consent model for **spawned** invocation of the task movers *(design — **reverses the owner-only done-gate hard rule + ADR-019**; owner present; adversarial pass recommended; owner: fkit-architect)* | [`design-spawned-invocation-consent-model-for-task-movers.md`](../tasks/backlog/design-spawned-invocation-consent-model-for-task-movers.md) |
 | 🔲 Backlog | 64 | Implement spawned invocation for the task movers from the approved design *(needs 63 incl. approval + recorded ADR — hard; owner: fkit-coder)* | [`implement-spawned-invocation-for-task-movers.md`](../tasks/backlog/implement-spawned-invocation-for-task-movers.md) |
+| 🔲 Backlog | 65 | Filter the `/fkit-status` board to open tasks only *(conscious reversal of "show the dead rows"; roll-up kept, drifted rows always visible, replace not toggle; owner: fkit-coder)* | [`filter-fkit-status-board-to-open-tasks.md`](../tasks/backlog/filter-fkit-status-board-to-open-tasks.md) |
+| 🔲 Backlog | 66 | Wiki sync after the filtered `/fkit-status` board *(needs 65 — hard; owner: fkit-wiki)* | [`wiki-sync-filtered-fkit-status-board.md`](../tasks/backlog/wiki-sync-filtered-fkit-status-board.md) |
+| 🔲 Backlog | 67 | Add a Backlog board — the default home for unsprinted task briefs *(persistent `sprints/backlog.md`, backfills 5 unsprinted briefs; filename deliberately outside the `sprint-*.md` glob; owner: fkit-coder)* | [`add-backlog-board-default-for-unsprinted-task-briefs.md`](../tasks/backlog/add-backlog-board-default-for-unsprinted-task-briefs.md) |
+| 🔲 Backlog | 68 | Report the Backlog board in `/fkit-status` on request only *(`Backlog` as a target-selector argument — conforms to one-skill-one-output; needs 67 — hard; owner: fkit-coder)* | [`report-backlog-board-in-fkit-status-on-request-only.md`](../tasks/backlog/report-backlog-board-in-fkit-status-on-request-only.md) |
+| 🔲 Backlog | 69 | Wiki sync after the Backlog board introduction *(needs 67 and 68 — hard; owner: fkit-wiki)* | [`wiki-sync-backlog-board-introduction.md`](../tasks/backlog/wiki-sync-backlog-board-introduction.md) |
+| 🔲 Backlog | 70 | Add the `/fkit-open-questions-interview` skill for the six Claude-side roles *(session-history sweep, interview-only, zero write surface; consult degrade per ADR-021; adversarial reviewer excluded per ADR-022; owner: fkit-coder)* | [`add-open-questions-interview-skill-for-six-roles.md`](../tasks/backlog/add-open-questions-interview-skill-for-six-roles.md) |
+| 🔲 Backlog | 71 | Wiki sync after the `/fkit-open-questions-interview` skill lands *(needs 70 — hard; owner: fkit-wiki)* | [`wiki-sync-open-questions-interview-skill.md`](../tasks/backlog/wiki-sync-open-questions-interview-skill.md) |
+| 🔲 Backlog | 72 | Add the `/fkit-dumb-down` skill for the six Claude-side roles *(on-demand re-explain, content-preserving, zero write surface; complementary to task 62 — owner ruled BOTH; adversarial reviewer excluded per ADR-022; owner: fkit-coder)* | [`add-dumb-down-skill-for-six-roles.md`](../tasks/backlog/add-dumb-down-skill-for-six-roles.md) |
+| 🔲 Backlog | 73 | Wiki sync after the `/fkit-dumb-down` skill lands *(needs 72 — hard; may batch with 71 in one run; owner: fkit-wiki)* | [`wiki-sync-dumb-down-skill.md`](../tasks/backlog/wiki-sync-dumb-down-skill.md) |
 
 ## Dependency graph
 
@@ -989,6 +998,108 @@ for cancelled.
   to whatever the ruling authorizes, possibly nothing if the relaxation is judged unsafe).
 
 **Numbered 63/64 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — tasks 65 and 66 added out of band (2026-07-18): the filtered `/fkit-status` board
+
+**The owner's ask:** the `/fkit-status` dashboard shows **only tasks that are not complete yet** — hide
+`✅ Done` and `⛔ Cancelled` rows. Scoped via the producer interview (2026-07-18); the four rulings —
+recorded in task 65's brief and **not to be reopened**:
+
+1. **Roll-up totals line stays** (rows hidden, scope visible).
+2. **`➡️ Moved` rows are hidden too** (third inert state).
+3. **Drifted rows always render** — filter on **reconciled** state, not the raw marker. Hiding a drift
+   buries a finding.
+4. **Replace, not a switch** — a toggle would reverse the locked one-skill-one-output ruling (task 44)
+   and needs a reversal ADR first.
+
+**⚠️ Conscious reversal, flagged before scoping:** the skill's design principle *"show the dead rows —
+a board that hides cancelled and moved tasks lies about scope"* is knowingly reversed by the owner;
+ruling 1 is the mitigation. The change lives in `dashboard.sh`'s `⟦BOARD⟧` rendering (the board is
+computed, not recited) plus the SKILL.md prose, so skill and script agree.
+
+- **Task 65 — implement** (owner: fkit-coder; script + skill text + tests, one shippable unit;
+  depends on nothing).
+- **Task 66 — wiki sync** (owner: fkit-wiki; **needs 65 — hard**; the task-45/51 precedent).
+
+**Numbered 65/66 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — tasks 67–69 added out of band (2026-07-18): the Backlog board
+
+**The owner's ask:** when `/fkit-task-brief` gets **no sprint name**, the brief lands on a **real
+Backlog board** — a persistent `ai-agents/sprints/backlog.md` with its own status table — not today's
+board-less `## Sprint: Backlog (unsprinted)` field. Interviewed 2026-07-18; the owner's ruling adds:
+**`/fkit-status` must not report it unless asked for it specifically.**
+
+**Key facts the split rests on:**
+
+- Five unsprinted briefs exist today with no board row anywhere — task 67 backfills them.
+- `/fkit-status`'s default run globs `sprint-*.md`, so `backlog.md` is invisible to it **by
+  construction** — the filename is load-bearing and stays outside the glob.
+- The "report on request" half is one more value of the **existing sprint-name argument** — a target
+  selector, not an output variant. **Conforms to one-skill-one-output; no reversal ADR.**
+- The task-brief skill's "never invent a sprint" rule gets a **designed, documented exception** for
+  the backlog board; the movers' recursive `sprints/` sweep should handle its rows unchanged
+  (**verify, don't assume** — in 67's scope).
+
+- **Task 67 — board + filing default** (owner: fkit-coder; skill text + board file + backfill;
+  depends on nothing).
+- **Task 68 — status read-side** (owner: fkit-coder; **needs 67 — hard**; reuses the closed-sprint
+  "say it's moot" pattern for the sprint-shaped beats; if task 65 lands first, its filter applies to
+  the backlog board too — no special-casing).
+- **Task 69 — wiki sync** (owner: fkit-wiki; **needs 67 and 68 — hard**; one sync after both, per the
+  45/51/66 precedent).
+
+**Numbered 67–69 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — tasks 70 and 71 added out of band (2026-07-18): the open-questions interview skill
+
+**The owner's ask:** a skill *"available for ALL agents"* — `/fkit-open-questions-interview`, *"If
+there are any open questions, interview me about them."* Interviewed 2026-07-18; three rulings,
+recorded in task 70's brief and **not to be reopened**:
+
+1. **Source = the current session's history only** — questions put to the owner and left unanswered.
+   Not the sprint plan, not briefs, not docs.
+2. **Scope = the six Claude-side roles.** The adversarial reviewer is excluded — Codex-run, restricted
+   allowlist (ADR-022), no interactive channel. The task-39 finding ("all agents" excluding the second
+   model is the structural reality) applies; no ADR change needed.
+3. **Interview only** — answers live in the conversation; the skill writes nothing.
+
+**The known seam is designed in, not discovered later:** `AskUserQuestion` is session-only (ADR-021),
+so the skill interviews in a session and **degrades in a spawned consult** to listing the unanswered
+questions in its reply — the existing consult pattern. Registration is mechanical:
+`skills_for_role()` + the task-43 `PreToolUse` gate, with allow/deny tests.
+
+- **Task 70 — implement** (owner: fkit-coder; skill dir + six-role registration + tests, one
+  shippable unit; depends on nothing).
+- **Task 71 — wiki sync** (owner: fkit-wiki; **needs 70 — hard**; the 45/51/66/69 precedent).
+
+**Numbered 70/71 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — tasks 72 and 73 added out of band (2026-07-18): the dumb-down skill
+
+**The owner's ask:** a skill for all agents — `/fkit-dumb-down`, *"Explain again in simple terms"* —
+an on-demand plain-language re-explanation of the agent's previous answer.
+
+**Conflict checked before scoping — task 62 overlap, owner ruled BOTH (2026-07-18):** task 62 is the
+**standing** simple-style preference; this is the **on-demand** re-explain. Complementary, independent,
+either order. Neither folds into the other.
+
+**Scoping facts:**
+
+- **Six Claude-side roles** — the adversarial reviewer excluded, applying the same-day task-70 ruling
+  (Codex-run, ADR-022). Assumed rather than re-asked; owner to confirm.
+- **No ADR-021 seam** — unlike task 70, no owner channel is needed: the skill rewrites the agent's own
+  prior output, so it behaves identically in sessions and consults.
+- **Content-preserving is load-bearing:** simplification must not drop caveats, failures, or flags —
+  the "concision is not omission" rule applied to simplification.
+- Registration is mechanical: `skills_for_role()` + the task-43 gate, with allow/deny tests.
+
+- **Task 72 — implement** (owner: fkit-coder; skill dir + six-role registration + tests, one
+  shippable unit; depends on nothing).
+- **Task 73 — wiki sync** (owner: fkit-wiki; **needs 72 — hard**; may batch with task 71 in one sync
+  run if both parents have landed — separate rows, one pass).
+
+**Numbered 72/73 for append-don't-renumber discipline. Owner to confirm the ranking.**
 
 ## Open questions for the owner
 
