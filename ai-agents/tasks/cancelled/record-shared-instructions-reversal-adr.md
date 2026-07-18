@@ -7,7 +7,7 @@ Sprint 2
 37
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (2026-07-19) — superseded by ADR-016
 
 ## Context
 

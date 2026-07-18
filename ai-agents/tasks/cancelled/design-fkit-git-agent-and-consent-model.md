@@ -7,7 +7,7 @@ Sprint 2
 55
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (2026-07-19) — not pursuing git automation
 
 ## Context
 

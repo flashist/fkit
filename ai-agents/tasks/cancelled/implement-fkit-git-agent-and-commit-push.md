@@ -7,7 +7,7 @@ Sprint 2
 56
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (2026-07-19) — parent design task 55 declined
 
 ## Context
 
