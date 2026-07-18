@@ -56,7 +56,11 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
    | adversarial-reviewer | `/fkit-adversarial-review` |
    | wiki | `/fkit-wiki-ingest`, `/fkit-wiki-lint`, `/fkit-wiki-sync` |
 
-   Every role also has `/fkit-query` (wiki reads) and `/fkit-team`.
+   Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **The six Claude-side roles** —
+   everyone above **except `adversarial-reviewer`** — also have two more:
+   `/fkit-open-questions-interview` (sweep this session for questions the owner never answered, and ask
+   them) and `/fkit-dumb-down` (re-explain your last answer in simple terms). The adversarial reviewer
+   is excluded from both because it reviews on Codex under a restricted allowlist (ADR-022).
 
 5. **Note how the team coordinates:** through **files**, not chat — task briefs
    (`ai-agents/tasks/`), the sprint plan (`ai-agents/sprints/`), the review ledger

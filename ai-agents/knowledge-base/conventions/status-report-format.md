@@ -53,8 +53,15 @@ It goes **at the end, after the answer** — it is reference material, not the b
 wants the summary stops at beat 6; the reader who wants the detail scrolls.
 
 - Keep it to **one row per task**, no wrapped prose in cells.
-- Show the **real** status of every task — including cancelled/moved rows if the sprint carries them.
-  A board that hides its dead rows is a board that lies about scope.
+- Show the **real** status of every task you show — markers copied from the record, never softened.
+- **Show open work only.** Rows whose reconciled state is `✅ Done`, `⛔ Cancelled` or `➡️ Moved` are
+  omitted (owner ruling, 2026-07-18). **The roll-up is what keeps this honest** — it counts *every*
+  task and ends `— of M`, so scope stays visible even though the dead rows do not. Hiding rows
+  *without* the roll-up would be a board that lies about scope; that objection is real, and the
+  roll-up is the answer to it.
+- **A row with drift on it always shows, whatever its marker says.** The filter is on the
+  **reconciled** state: a task stamped `✅ Done` whose brief disagrees is not known to be done, and
+  hiding it would bury a finding.
 - Add a **one-line roll-up** under it so the shape is legible without counting rows:
   `N done · N in progress · N blocked · N backlog · N cancelled · N moved  —  of M`.
   Print **only the non-zero terms**, and **always print `— of M`** (the sprint's total task count) —

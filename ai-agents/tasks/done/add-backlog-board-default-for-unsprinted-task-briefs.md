@@ -7,7 +7,7 @@ Sprint 2
 67
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 

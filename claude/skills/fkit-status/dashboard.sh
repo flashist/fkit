@@ -31,6 +31,14 @@
 
 set -u
 
+# ⚠️ `set -f` (no pathname expansion) is a CORRECTNESS guard, not tidiness. `$DRIFT_TASKS` is
+# deliberately word-split UNQUOTED to iterate task ids; without `-f`, any id containing a glob
+# metacharacter is expanded against the CURRENT WORKING DIRECTORY — so the legacy `tid="?"` sentinel
+# silently becomes the name of any one-character file that happens to sit next to the caller. The
+# script would then report drift on a task that does not exist, with the name of an unrelated file.
+# Nothing here globs on purpose.
+set -f
+
 LC_ALL=C
 export LC_ALL
 
@@ -77,6 +85,27 @@ if [ -z "$PLAN_SPRINT" ]; then
   # sprint-2.md -> "Sprint 2". A plan whose H1 is prose ("# Hardening — the launcher sprint") is
   # otherwise indistinguishable from one with no sprint identity at all.
   PLAN_SPRINT=$(basename "$PLAN_FILE" .md | sed -n 's/^sprint-\([0-9][0-9]*\)$/Sprint \1/p')
+fi
+# ⚠️ BASENAME, NOT A FULL PATH — deliberate (owner-ruled 2026-07-18, review R4). Any `backlog.md`
+# resolves to the `Backlog` identity, including an archived `sprints/done/backlog.md`. An archived
+# backlog board is still a backlog board; tightening this to the canonical path would make the archived
+# copy report false `unresolved-plan-sprint` drift instead.
+if [ -z "$PLAN_SPRINT" ] && [ "$(basename "$PLAN_FILE" .md)" = "backlog" ]; then
+  # THE BACKLOG BOARD (task 67) has a real identity — it just isn't a numbered sprint. Its H1 is prose
+  # and its filename is deliberately outside the `sprint-*.md` glob, so both rules above miss it and it
+  # would report `unresolved-plan-sprint` on EVERY run: a permanent false drift record on a board that
+  # is perfectly well-formed.
+  #
+  # ⚠️ THIS IS NOT COSMETIC — it is what makes drift rule 1 work on this board. Rule 1 skips the status
+  # cross-check when a brief's `## Sprint` names a DIFFERENT sprint than the plan. With PLAN_SPRINT
+  # empty, the rule is inert and every row falls through to the full cross-check; with it set to
+  # `Backlog`, a backlog brief (which reads `## Sprint: Backlog` since task 67) matches, the rule
+  # correctly does NOT skip, and real status drift on backlog rows is still found.
+  #
+  # ⚠️ The value must match what the briefs actually write. Task 67 normalized all of them from
+  # `Backlog (unsprinted)` to `Backlog` for exactly this reason — if they ever diverge again, every
+  # backlog row silently takes rule 1's skip and status drift on this board stops being reported.
+  PLAN_SPRINT="Backlog"
 fi
 
 # --- "is this the ## Status heading?" — ONE definition, used everywhere ----------------------------
@@ -434,9 +463,22 @@ DRIFT_TASKS=""
 add_fact() { FACTS="${FACTS}$1
 "; }
 
+# Record drift against the current row. TWO effects, deliberately fused into one call: the plan-level
+# `DRIFT_TASKS` list (which feeds the roll-up's drift clause) and the per-row `row_drift` flag (which
+# forces the row to RENDER even when its marker is inert).
+#
+# ⚠️ THE FUSION IS THE POINT. The board now hides done/cancelled/moved rows, and the ONE exception is
+# "this row has drift on it". If a future drift fact appends to DRIFT_TASKS without setting row_drift,
+# that finding gets reported in ⟦FACTS⟧ while its row silently vanishes from the board — the owner is
+# told task 47 is drifted and then cannot find task 47. Hiding a drift buries a finding, which is the
+# exact failure the always-render rule exists to prevent. Every drift site calls THIS, never the
+# assignment directly.
+mark_drift() { DRIFT_TASKS="$DRIFT_TASKS $tid"; row_drift=1; }
+
 while IFS=$'\037' read -r rtype st pr task br; do
   [ "$rtype" = "D" ] || continue
   total=$((total + 1))
+  row_drift=""   # per-row; set ONLY via mark_drift(). Forces an inert-marker row to render anyway.
 
   # ⚠️ SEMANTICS READ `st`; ONLY THE BOARD CELL READS `st_cell`. The clause trim is a PRESENTATION
   # concern, and running it first rewrote the input every downstream check reads: a conforming
@@ -445,7 +487,6 @@ while IFS=$'\037' read -r rtype st pr task br; do
   st_cell=$(one_line_cell "$st")
   key=$(marker_key "$st")
   tid=$(task_id "$pr")
-  [ -n "$tid" ] || tid="?"
 
   case "$key" in
     done)       c_done=$((c_done + 1)) ;;
@@ -461,6 +502,31 @@ while IFS=$'\037' read -r rtype st pr task br; do
   linked=$(printf '%s' "$br" | sed -n 's/.*](\([^)]*\)).*/\1/p' | head -1)
   fname=$(basename "$linked" 2>/dev/null)
   [ -n "$fname" ] && [ "$fname" != "/" ] || fname=""
+
+  # -- the FACTS id ---------------------------------------------------------------------------------
+  # Normally the Priority number. **The BACKLOG BOARD (task 67) has no numbers** — its Priority cells
+  # are `—` by design, because the board is unranked — so every record would key `?`, and the roll-up
+  # drift clause would `uniq` several distinct drifted rows down to a single useless `?`. The owner
+  # would be told drift exists and given no way to find it.
+  #
+  # Fall back to the BRIEF'S FILENAME STEM, which is a single token (so the positional `key="value"`
+  # grammar is unaffected) and is the identifier every other part of fkit already uses for a task —
+  # it is what the reader would go and open. `?` survives only when there is neither a number nor a
+  # resolvable filename, which is a genuinely unidentifiable row.
+  #
+  # ⚠️ ORDER MATTERS: a numbered plan keeps numbering. This is a fallback, not a replacement — changing
+  # sprint plans to filename ids would break every `drift on tasks 59, 60` reference the skill narrates.
+  # ⚠️ SANITISED, and the sanitising is NOT optional. `tid` is emitted POSITIONALLY into FACTS
+  # (`drift nonconformance <tid> kind="…"`) and is later word-split out of `$DRIFT_TASKS`. A filename
+  # containing a space therefore becomes TWO task names, and the roll-up invents a task that does not
+  # exist — reproduced live before this guard: two rows yielded `drift on tasks my, re[a]d, task`.
+  # Glob metacharacters are the same class of hazard through the unquoted split below.
+  # This mirrors the invariant `task_id()` already enforces for the Priority cell; a fallback that
+  # skipped it was inconsistent with a rule this file established deliberately.
+  if [ -z "$tid" ] && [ -n "$fname" ]; then
+    tid=$(printf '%s' "$fname" | sed -e 's/\.md$//' -e 's/[^A-Za-z0-9._-]/-/g')
+  fi
+  [ -n "$tid" ] || tid="?"
 
   brief_path=""
   found_dir=""
@@ -484,10 +550,10 @@ while IFS=$'\037' read -r rtype st pr task br; do
     corrected="${REL_PREFIX}tasks/${found_dir}/${fname}"
     br_cell="[\`${fname}\`](${corrected})"
     add_fact "drift relocated $tid linked=\"$(fact_value "$linked")\" found=\"$(fact_value "$corrected")\""
-    DRIFT_TASKS="$DRIFT_TASKS $tid"
+    mark_drift
   elif [ -z "$brief_path" ]; then
     add_fact "drift missing-brief $tid linked=\"$(fact_value "$linked")\""
-    DRIFT_TASKS="$DRIFT_TASKS $tid"
+    mark_drift
   fi
 
   # -- brief fields ----------------------------------------------------------------------------
@@ -532,11 +598,11 @@ while IFS=$'\037' read -r rtype st pr task br; do
   # drift on such a row is still found.
   if [ -n "$brief_path" ] && [ -z "$b_key" ]; then
     add_fact "drift nonconformance $tid kind=\"brief-missing-status\" cell=\"$(fact_value "$st")\""
-    DRIFT_TASKS="$DRIFT_TASKS $tid"
+    mark_drift
   fi
   if [ -n "$nonconf" ]; then
     add_fact "drift nonconformance $tid kind=\"$nonconf\" cell=\"$(fact_value "$st")\""
-    DRIFT_TASKS="$DRIFT_TASKS $tid"
+    mark_drift
   fi
 
   # -- disagreement drift ------------------------------------------------------------------------
@@ -560,11 +626,41 @@ while IFS=$'\037' read -r rtype st pr task br; do
       if [ -z "$b_sprint" ]; then
         # An unresolvable state must not render as a clean `in Sprint N`. Report it; don't guess.
         add_fact "drift missing-sprint $tid plan=\"$(fact_value "$st")\" moved_target=\"$moved_target\""
-        DRIFT_TASKS="$DRIFT_TASKS $tid"
+        mark_drift
       elif [ -n "$moved_target" ] && [ "$b_sprint" != "$moved_target" ]; then
         disagree=1
         add_fact "drift disagreement $tid plan=\"$(fact_value "$st")\" brief_sprint=\"$(fact_value "$b_sprint")\" moved_target=\"$moved_target\""
-        DRIFT_TASKS="$DRIFT_TASKS $tid"
+        mark_drift
+      fi
+    elif [ "$PLAN_SPRINT" = "Backlog" ]; then
+      # ⚠️ RULE 1 DOES NOT APPLY TO THE BACKLOG BOARD, and this arm must come FIRST.
+      #
+      # Rule 1's premise is that a brief naming a different sprint is LEGITIMATE — on a sprint board it
+      # means the task was carried elsewhere, and flagging it would flag every moved row forever. On the
+      # BACKLOG board that same condition is inverted: a brief naming a real sprint means the task has
+      # been SCHEDULED but its row was never moved off the unscheduled board. That is not noise to
+      # skip, it is the single highest-value drift this board can surface.
+      #
+      # ⚠️ THIS IS A FIX FOR A REGRESSION THIS FILE CAUSED. Before `backlog.md` was given an identity,
+      # PLAN_SPRINT was empty here, rule 1's `[ -n "$PLAN_SPRINT" ]` guard was false, and such rows fell
+      # through to the rule-3 cross-check and WERE reported. Adding the identity silently activated the
+      # skip and lost that reporting. Verified by A/B on a fixture (board `🔲 Backlog`, brief
+      # `## Sprint: Sprint 2` + `## Status: 🔄 In progress`): reported before, silent after, reported
+      # again with this arm. It also contradicted SKILL.md's own instruction that an in-progress
+      # backlog row is "a finding, not a status" — the script was guaranteeing the skill never saw one.
+      #
+      # A genuinely relocated backlog row is the `➡️ Moved` case, which rule 2 handles above and which
+      # never reaches here. So there is nothing left for rule 1 to legitimately excuse on this board.
+      :  # fall through to rule 3 — deliberately no skip
+      exp=$(expected_dir "$key")
+      bad=""
+      [ -n "$b_key" ] && [ "$b_key" != "$key" ] && bad=1
+      [ -n "$exp" ] && [ -n "$found_dir" ] && [ "$found_dir" != "$exp" ] && bad=1
+      [ -n "$b_sprint" ] && [ "$b_sprint" != "Backlog" ] && bad=1   # scheduled, but still on this board
+      if [ -n "$bad" ]; then
+        disagree=1
+        add_fact "drift disagreement $tid plan=\"$(fact_value "$st")\" brief=\"$(fact_value "$b_status")\" brief_sprint=\"$(fact_value "$b_sprint")\" location=\"$found_dir/\""
+        mark_drift
       fi
     elif [ -n "$PLAN_SPRINT" ] && [ -n "$b_sprint" ] && [ "$b_sprint" != "$PLAN_SPRINT" ]; then
       : # brief belongs to another sprint — status cross-check skipped, per rule 1
@@ -577,7 +673,7 @@ while IFS=$'\037' read -r rtype st pr task br; do
       if [ -n "$bad" ]; then
         disagree=1
         add_fact "drift disagreement $tid plan=\"$(fact_value "$st")\" brief=\"$(fact_value "$b_status")\" location=\"$found_dir/\""
-        DRIFT_TASKS="$DRIFT_TASKS $tid"
+        mark_drift
       fi
     fi
   fi
@@ -612,12 +708,36 @@ while IFS=$'\037' read -r rtype st pr task br; do
           else
             next="⟨derive: UNPARSEABLE — see brief⟩"
             add_fact "drift depends-unparseable $tid brief=\"$(fact_value "$linked")\" form=\"${draw%%$'\037'*}\""
-            DRIFT_TASKS="$DRIFT_TASKS $tid"
+            mark_drift
           fi
         fi
         ;;
     esac
   fi
+
+  # --- THE OPEN-WORK FILTER (task 65) ------------------------------------------------------------
+  # The board renders OPEN work only: rows whose reconciled state is `done`, `cancelled` or `moved` are
+  # omitted. This is a CONSCIOUS REVERSAL of this script's original "show the dead rows" principle
+  # (owner ruling, 2026-07-18) — not drift, and not to be "restored" by a later reader who finds the
+  # old principle quoted in an ADR or an older SKILL.md revision.
+  #
+  # ⚠️ THE THREE THINGS THAT MAKE THE REVERSAL SAFE, none of which may be dropped:
+  #  1. The ROLL-UP still counts every row and still ends `— of M`. `total` and the c_* counters are
+  #     incremented ABOVE this guard, so scope stays visible even though the rows do not. Hiding rows
+  #     without keeping the roll-up would make the board lie about scope — the original objection, and
+  #     the mitigation the owner ruled in.
+  #  2. ⟦FACTS⟧ is UNTOUCHED. Facts are emitted above this guard, so drift on a hidden row is still
+  #     reported to the skill and still reaches beat 6.
+  #  3. A row carrying ANY drift RENDERS REGARDLESS of its marker (`row_drift`). We filter on the
+  #     RECONCILED state, never the raw cell: a row stamped `✅ Done` whose brief disagrees is not
+  #     actually known to be done, and hiding it would bury the finding. `cancelled-without-date`
+  #     counts — which is why live tasks 59/60 still appear.
+  #
+  # Deliberately NOT a toggle. One skill, one output (conventions/one-skill-one-output.md, task 44);
+  # a `full`/`all` switch would reverse that ruling and needs its own ADR first.
+  case "$key" in
+    done|cancelled|moved) [ -n "$row_drift" ] || continue ;;
+  esac
 
   BOARD_ROWS="${BOARD_ROWS}| ${st_cell} | ${pr} | ${task} | ${br_cell} | ${next} |
 "

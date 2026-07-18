@@ -221,10 +221,18 @@ fi
 # half): a PreToolUse hook (skill-ownership-hook.sh) now enforces this against the REAL invoking
 # agent's identity, at any spawn depth — structural in a role SESSION *and* in a spawned CONSULT.
 #
-# ⚠️ CHANGING A ROLE'S SKILLS? Two hand-maintained tables MIRROR this list for humans and MUST be
-# updated in the same commit, or the help text lies about what a role can do:
+# ⚠️ CHANGING A ROLE'S SKILLS? FOUR hand-maintained places MIRROR this list for humans and MUST be
+# updated in the same commit, or the docs lie about what a role can do:
 #   * claude/skills/fkit-team/SKILL.md  — the roster the /fkit-team skill prints
 #   * claude/README.md                  — the skill-ownership table
+#   * claude/scaffold/CLAUDE.md         — SHIPS INTO EVERY CONSUMING PROJECT's root CLAUDE.md
+#   * ai-agents/knowledge-base/architecture.md — the skill count and the role/skill table
+#
+# ⚠️ THIS LIST SAID "TWO" UNTIL 2026-07-18, AND THE OMISSION COST EXACTLY WHAT IT LOOKS LIKE IT WOULD.
+# Task 70 followed the two-item list precisely and still shipped a false statement into every consuming
+# project (scaffold/CLAUDE.md asserted the lead role has "only" two skills, which had just stopped being
+# true). A checklist that is itself incomplete is worse than no checklist: it is followed, and it fails.
+# If you add a fifth mirror, add it HERE FIRST.
 # This has already bitten once: task 14 added the producer's brief-creation skill here and to the
 # producer's agent file, but not to fkit-team's roster — so /fkit-team under-reported the producer's
 # primary procedure for two days. These are copies FOR READERS, not sources of truth; skills_for_role() is the source of

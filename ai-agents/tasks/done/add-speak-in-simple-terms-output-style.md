@@ -7,7 +7,7 @@ Sprint 2
 62
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 
@@ -28,6 +28,19 @@ shape *where* it goes:
   `CLAUDE.md`.** Task 29/30's lesson, verbatim: *"a shared layer for all agents that excludes the second
   model is misnamed."* The codex CLI reads root `AGENTS.md`; Claude-side agents read `CLAUDE.md`. The
   preference goes in **both**.
+
+> **⚠️ CORRECTION added 2026-07-18 (implementation, review finding R1) — the four-file premise below
+> is DISPROVEN. Read this before following it.** Verified against the tree at build time:
+> `claude/scaffold/CLAUDE.md` and `claude/scaffold/AGENTS.md` contain **no `## Output style` section
+> at all**; the section lives in **`claude/scaffold/universal-rules.md`**, and root `CLAUDE.md` /
+> `AGENTS.md` carry it **inside the `<!-- fkit:begin-rules -->` markers, regenerated from that source
+> on every launch**. Building as written would have hand-edited two generated files (**silently
+> overwritten on the next `fkit` launch**) and two files with no such section.
+> **Owner ruled 2026-07-18: build the one-file version** — edit `universal-rules.md`, then re-run init.
+> The ruling and the reasoning are recorded in
+> [`plans/add-speak-in-simple-terms-output-style.md`](../../plans/add-speak-in-simple-terms-output-style.md).
+> The text below is preserved as **what the brief's author believed at scoping time**, not as
+> instructions to follow.
 
 **⚠️ Dual-home — the task-48/49 lesson applies.** The output-style section lives in **four** files:
 - `CLAUDE.md` and `AGENTS.md` at the repo root (this repo's dogfood agents), and

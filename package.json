@@ -2,7 +2,9 @@
   "name": "fkit",
   "version": "0.1.30",
   "scripts": {
-    "test": "node --test test/*.test.js",
+    "test": "node --test test/*.test.js && bash test/prove-red.sh",
+    "test:unit": "node --test test/*.test.js",
+    "test:prove-red": "bash test/prove-red.sh",
     "release": "node bin/release.mjs",
     "release:minor": "node bin/release.mjs --minor",
     "release:major": "node bin/release.mjs --major",

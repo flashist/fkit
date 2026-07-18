@@ -96,7 +96,10 @@ test('clean sprint: board renders; roll-up prints only non-zero terms', () => {
   const { code, out } = run(p);
   assert.equal(code, 0);
   assert.match(out, /^⟦fkit-dashboard v1⟧/);
-  assert.equal(boardRows(out).length, 2);
+  // The board shows OPEN WORK ONLY (task 65) — the clean ✅ row is omitted. The roll-up is unchanged
+  // and still counts it, which is the whole mitigation: rows hidden, scope visible.
+  assert.equal(boardRows(out).length, 1, 'the done row is filtered out of the board');
+  assert.match(boardRows(out)[0], /Beta/);
   assert.equal(rollup(out).trim(), '1 done · 1 backlog  —  of 2');
   assert.doesNotMatch(rollup(out), /0 /, 'zero-filled slots are the N/A-grade anti-pattern');
 });
@@ -157,7 +160,13 @@ test('➡️ Moved with a matching brief ## Sprint: NOT drift; next step is in S
   });
   const { out } = run(p);
   assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'a correctly-moved row is not drift');
-  assert.match(boardRows(out)[0], /\| in Sprint 2 \|$/);
+  // ➡️ Moved is the third inert state and is filtered from the board (task 65). The `in Sprint N`
+  // next-step rendering is covered by the clause-trim test below, whose no-brief fixture renders a
+  // moved row via `missing-brief` drift WITHOUT a disagreement — the only combination that still
+  // reaches `in Sprint N`. ⚠️ NOT by the disagreeing-target test that follows this one: disagreement
+  // takes the `waiting on owner` override, so it can never assert this shape. An earlier revision of
+  // this comment claimed it did, and the shape silently lost all coverage (review R1).
+  assert.equal(boardRows(out).length, 0, 'a clean moved row is off the board');
   assert.doesNotMatch(rollup(out), /drift/);
 });
 
@@ -256,7 +265,9 @@ test('brief ## Status wrapping across lines: matched by marker prefix', () => {
   });
   const { out } = run(p);
   assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'the wrapped ✅ matches ✅ — no phantom drift');
-  assert.match(boardRows(out)[0], /\| closed \|$/);
+  // Clean ✅ ⇒ filtered from the board (task 65). For an inert marker, "absent" is equivalent to
+  // "undrifted": a phantom drift fact would have forced the row to render.
+  assert.equal(boardRows(out).length, 0, 'no drift, so the done row stays off the board');
 });
 
 // 11 — a malformed plan exits NON-ZERO with a message on stderr. This is what drives the skill's
@@ -314,22 +325,33 @@ test('the clause trim is not a byte count: long single clause survives whole', (
 test('the clause trim never severs a markdown link in a moved cell', () => {
   const p = fixture({
     plan: plan(['| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 12 (rescoped) | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
-    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 2', priority: 12 }) },
+    // ⚠️ NO BRIEF, deliberately. A clean ➡️ Moved row is filtered off the board (task 65), so this
+    // presentation test needs the row to RENDER: the resulting `missing-brief` drift forces it back
+    // on. The Status cell — the only thing under test — is byte-for-byte what it always was.
+    briefs: {},
   });
   const { out } = run(p);
   const cells = boardRows(out)[0].split('|').map((c) => c.trim());
   assert.match(cells[1], /\(\.\.\/sprint-2\.md\)/, 'the link survives intact');
   assert.doesNotMatch(cells[1], /…/);
+  // ⚠️ THE SOLE SURVIVING COVERAGE of the `in Sprint N` next-step shape (review R1). It lives here,
+  // on a presentation test, because this is the only fixture left that renders a moved row without a
+  // disagreement — every other moved row is either filtered off the board (clean) or overridden to
+  // `waiting on owner` (disagreeing). Do not remove it, and do not give this fixture a brief.
+  assert.match(boardRows(out)[0], /\| in Sprint 2 \|$/, 'moved rows still resolve to `in Sprint N`');
 });
 
 // 13 — two ## Status tables: parse the FIRST and REPORT the fact. The script must not silently pick
 // one of two candidate boards. No such plan exists today; this is a hand-edit guard.
 test('two ## Status sections: the first is parsed, and the ambiguity is reported', () => {
   const p = fixture({
-    plan: plan(['| ✅ Done | 1 | Alpha | [`a.md`](../tasks/done/a.md) |'], {
+    // ⚠️ An OPEN row, so the board-length assertion below measures table selection rather than the
+    // task-65 open-work filter. With a ✅ row here, "1 row" and "0 rows" would both be explicable and
+    // the test would stop discriminating.
+    plan: plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |'], {
       extraSections: '\n## Status\n\n| Status | Priority | Task | Brief |\n|---|---|---|---|\n| 🔲 Backlog | 9 | Decoy | [`z.md`](../tasks/backlog/z.md) |\n',
     }),
-    briefs: { 'done/a.md': brief({ title: 'Alpha', status: '✅ Done', priority: 1 }) },
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1 }) },
   });
   const { out } = run(p);
   assert.equal(boardRows(out).length, 1, 'only the first table is parsed');
@@ -384,7 +406,9 @@ test('R10: exact stdout — the full contract, pinned byte for byte', () => {
     '⟦BOARD⟧',
     '| Status | # | Task | Filename | Next step |',
     '|---|---|---|---|---|',
-    '| ✅ Done | 1 | Alpha | [`a.md`](../tasks/done/a.md) | closed |',
+    // ⚠️ The ✅ row is ABSENT BY DESIGN (task 65: the board shows open work only). The roll-up below
+    // still reads `1 done · 1 backlog  —  of 2` — that mismatch between rows shown and rows counted
+    // is the contract, not a bug. Do not "restore" the done row to make them agree.
     '| 🔲 Backlog | 2 | Beta | [`b.md`](../tasks/backlog/b.md) | ⟨derive: none recorded⟩ |',
     '',
     '1 done · 1 backlog  —  of 2',
@@ -592,7 +616,11 @@ test('R17: an empty Status cell still produces a row — M is the table, not the
     },
   });
   const { out } = run(p);
-  assert.equal(boardRows(out).length, 3, 'every table row reaches the board');
+  // The ✅ row is filtered (task 65); the blank-status row is NOT — it carries `missing-status-cell`
+  // nonconformance, and a drifted row always renders. THE POINT OF R17 IS UNCHANGED and is now
+  // carried by the roll-up: M is still 3, so the unparsed row did not vanish from the record.
+  assert.equal(boardRows(out).length, 2, 'the blank-status row renders on its drift; only the clean ✅ is hidden');
+  assert.ok(boardRows(out).some((r) => r.includes('Beta')), 'the blank-status row is the one that must not vanish');
   assert.match(rollup(out), /—  of 3$|—  of 3 /, 'M counts the table, not the rows that parsed');
   assert.equal(rollupSum(out), 3, 'and the terms still sum to it');
   assert.ok(facts(out).some((f) => f.includes('kind="missing-status-cell"')), 'the blank cell is reported');
@@ -610,8 +638,12 @@ test('R17: a GFM row without leading/trailing pipes is still admitted', () => {
     },
   });
   const { out } = run(p);
-  assert.equal(boardRows(out).length, 2, 'GFM allows the outer pipes to be omitted');
-  assert.equal(rollupSum(out), 2);
+  // The pipe-less row is the ADMISSION being tested; the ✅ row is filtered by task 65. Admission is
+  // therefore asserted through the roll-up (M=2), which counts every admitted row regardless of the
+  // board filter — a stronger check here than a row count that the filter also moves.
+  assert.equal(boardRows(out).length, 1, 'the open pipe-less row reaches the board');
+  assert.match(boardRows(out)[0], /Beta/, 'and it is the pipe-less one');
+  assert.equal(rollupSum(out), 2, 'GFM allows the outer pipes to be omitted — both rows were admitted');
 });
 
 // R18 — ⚠️ THE SPLIT IS ABOUT THE OVERRIDE, NOT DETECTION. Round 1 over-corrected and let a cosmetic
@@ -733,7 +765,9 @@ test('R21: the clause trim is presentation-only and never manufactures drift', (
   });
   const { out } = run(p);
   assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'date and reason are both present — no defect');
-  assert.match(boardRows(out)[0], /\| dead \|$/);
+  // Clean ⛔ ⇒ filtered from the board (task 65). Absence IS the assertion here: had the trim
+  // manufactured a `cancelled-without-reason`, the row would have been forced back onto the board.
+  assert.equal(boardRows(out).length, 0, 'no manufactured drift, so the cancelled row stays hidden');
 });
 
 // R22 — every drift record must reach the roll-up clause, or SKILL.md's "every drift record is an
@@ -1227,4 +1261,352 @@ test('a quote inside a Depends on: line cannot break the key="value" grammar', (
   const { out } = run(p);
   const f = facts(out).find((l) => l.startsWith('derive 1'));
   assert.equal((f.match(/"/g) || []).length, 2, 'exactly the two delimiting quotes survive');
+});
+
+// ───────────────────────────────────────────────────────────────────────────────────────────────────
+// TASK 65 — THE OPEN-WORK FILTER. The board renders open work only; ✅/⛔/➡️ rows are omitted.
+//
+// ⚠️ THIS IS A CONSCIOUS REVERSAL of the script's original "show the dead rows" principle (owner
+// ruling, 2026-07-18), and these tests exist to stop it being silently reverted BACK by a reader who
+// finds the old principle quoted in an older SKILL.md revision or an ADR. The reversal is only safe
+// because of three properties, and there is a test below for each: the roll-up still counts every
+// row, ⟦FACTS⟧ still reports on hidden rows, and a DRIFTED row renders whatever its marker says.
+// ───────────────────────────────────────────────────────────────────────────────────────────────────
+
+// The three inert states, in one plan, each with a matching brief so none of them drifts.
+const INERT_PLAN = [
+  '| ✅ Done | 1 | Alpha | [`a.md`](../tasks/done/a.md) |',
+  '| ⛔ Cancelled (2026-07-16) — superseded | 2 | Beta | [`b.md`](../tasks/cancelled/b.md) |',
+  '| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 12 | 3 | Gamma | [`c.md`](../tasks/backlog/c.md) |',
+  '| 🔲 Backlog | 4 | Delta | [`d.md`](../tasks/backlog/d.md) |',
+];
+const INERT_BRIEFS = {
+  'done/a.md': brief({ title: 'Alpha', status: '✅ Done', priority: 1 }),
+  'cancelled/b.md': brief({ title: 'Beta', status: '⛔ Cancelled (2026-07-16) — superseded', priority: 2 }),
+  'backlog/c.md': brief({ title: 'Gamma', sprint: 'Sprint 2', status: '🔲 Backlog', priority: 12 }),
+  'backlog/d.md': brief({ title: 'Delta', priority: 4 }),
+};
+
+test('task 65: done, cancelled and moved rows are all omitted from the board', () => {
+  const p = fixture({ plan: plan(INERT_PLAN), briefs: INERT_BRIEFS });
+  const { code, out } = run(p);
+  assert.equal(code, 0);
+  assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'the fixture is clean — nothing forced to render');
+  assert.equal(boardRows(out).length, 1, 'only the open row survives the filter');
+  assert.match(boardRows(out)[0], /Delta/);
+  for (const gone of ['Alpha', 'Beta', 'Gamma']) {
+    assert.doesNotMatch(boardRows(out).join('\n'), new RegExp(gone), `${gone} is inert and must not render`);
+  }
+});
+
+// PROPERTY 1 — scope stays visible. This is the mitigation the owner ruled in when reversing
+// "show the dead rows": rows go, totals stay. A roll-up that counted only rendered rows would hide
+// the scope twice over and make the board lie in the direction the old principle warned about.
+test('task 65: the roll-up still counts every hidden row, and M is the whole table', () => {
+  const p = fixture({ plan: plan(INERT_PLAN), briefs: INERT_BRIEFS });
+  const { out } = run(p);
+  assert.equal(rollup(out).trim(), '1 done · 1 backlog · 1 cancelled · 1 moved  —  of 4');
+  assert.equal(rollupSum(out), 4, 'the terms sum to M even though only one row rendered');
+  assert.equal(boardRows(out).length, 1, 'rows shown ≠ rows counted — deliberately');
+});
+
+// PROPERTY 2 — a hidden row is still REPORTED. Beats 2 and 6 narrate from ⟦FACTS⟧, so drift on a
+// closed task must survive the filter; otherwise filtering the board would silently filter the
+// owner's decision list too.
+test('task 65: a drift fact on a closed-marked row survives into ⟦FACTS⟧ and the roll-up clause', () => {
+  const p = fixture({
+    // ⛔ with no date: nonconformance. It does NOT flip the state to unknown, so the row stays
+    // cancelled — and the fact must still reach ⟦FACTS⟧.
+    //
+    // ⚠️ THE ROW HERE RENDERS, and the title says so deliberately (review R5). "A drift fact about a
+    // HIDDEN row" is an unreachable scenario by construction — every in-loop drift fact calls
+    // `mark_drift`, which is what forces the row back onto the board. What survives the filter for a
+    // genuinely hidden row is `total` / `count *`, asserted in the roll-up test above.
+    plan: plan([
+      '| ⛔ Cancelled — superseded | 1 | Alpha | [`a.md`](../tasks/cancelled/a.md) |',
+      '| 🔲 Backlog | 2 | Beta | [`b.md`](../tasks/backlog/b.md) |',
+    ]),
+    briefs: {
+      'cancelled/a.md': brief({ title: 'Alpha', status: '⛔ Cancelled — superseded', priority: 1 }),
+      'backlog/b.md': brief({ title: 'Beta', priority: 2 }),
+    },
+  });
+  const { out } = run(p);
+  assert.ok(facts(out).some((f) => f.includes('kind="cancelled-without-date"')), 'the fact survives the board filter');
+  assert.match(rollup(out), /drift on tasks 1\b/, 'and it reaches the roll-up drift clause');
+});
+
+// PROPERTY 3 — THE SAFETY VALVE, and the reason we filter on RECONCILED state rather than the raw
+// marker. A row stamped ✅ whose brief disagrees is not known to be done; hiding it would bury the
+// finding. ⚠️ If this test ever fails, the filter has started hiding drift — stop and fix the filter,
+// do not relax the test.
+test('task 65: a done-marked row WITH drift still renders, and says waiting on owner', () => {
+  const p = fixture({
+    plan: plan(['| ✅ Done | 1 | Alpha | [`a.md`](../tasks/done/a.md) |']),
+    // The plan says done; the brief says backlog, from backlog/. Disagreement — state is UNKNOWN.
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const { out } = run(p);
+  assert.equal(boardRows(out).length, 1, 'a drifted row renders whatever its marker claims');
+  assert.match(boardRows(out)[0], /\| waiting on owner \|$/);
+  assert.ok(facts(out).some((f) => f.startsWith('drift disagreement 1')));
+});
+
+// The `closed` and `dead` next-step shapes are still reachable — on rows a NONCONFORMANCE forced back
+// onto the board. Nonconformance does not take the waiting-on-owner override (SKILL.md), so a
+// cancelled row stays `dead` even while rendering. Without this, filtering would quietly delete two of
+// the script's four next-step shapes from the suite's coverage.
+test('task 65: nonconformance renders the row but leaves its next step inert', () => {
+  const p = fixture({
+    plan: plan([
+      '| ⛔ Cancelled — superseded | 1 | Alpha | [`a.md`](../tasks/cancelled/a.md) |',
+      '| ✅ Done | 2 | Beta | [`b.md`](../tasks/done/b.md) |',
+    ]),
+    briefs: {
+      'cancelled/a.md': brief({ title: 'Alpha', status: '⛔ Cancelled — superseded', priority: 1 }),
+      // No ## Status heading ⇒ `brief-missing-status` nonconformance ⇒ renders, but no disagreement.
+      'done/b.md': '# Beta\n\n## Sprint\nSprint 1\n\n## Priority\n2\n\n## Context\n\nBody.\n',
+    },
+  });
+  const { out } = run(p);
+  const rows = boardRows(out);
+  assert.equal(rows.length, 2, 'both were forced back on by nonconformance');
+  assert.match(rows.find((r) => r.includes('Alpha')), /\| dead \|$/, 'cancelled stays dead, not waiting on owner');
+  assert.match(rows.find((r) => r.includes('Beta')), /\| closed \|$/, 'done stays closed');
+});
+
+// A plan of nothing but closed work renders an EMPTY board — legitimately. The roll-up is what tells
+// the owner the sprint exists and is finished; an empty board must not be mistaken for a parse
+// failure, which exits non-zero and takes SKILL.md's flagged fallback instead.
+test('task 65: an all-closed sprint renders an empty board, exit 0, roll-up intact', () => {
+  const p = fixture({
+    plan: plan(['| ✅ Done | 1 | Alpha | [`a.md`](../tasks/done/a.md) |']),
+    briefs: { 'done/a.md': brief({ title: 'Alpha', status: '✅ Done', priority: 1 }) },
+  });
+  const { code, out } = run(p);
+  assert.equal(code, 0, 'an empty board is a valid board, not a failure');
+  assert.equal(boardRows(out).length, 0);
+  assert.equal(rollup(out).trim(), '1 done  —  of 1', 'the roll-up still tells the whole story');
+  assert.ok(facts(out).includes('total 1'));
+});
+
+// ───────────────────────────────────────────────────────────────────────────────────────────────────
+// TASK 68 — THE BACKLOG BOARD. `ai-agents/sprints/backlog.md` is a real board with the same table
+// shape as a sprint plan, but two things a sprint plan never has: no `Sprint N` identity, and no
+// priority numbers (its cells are `—`, because the board is unranked by design).
+//
+// ⚠️ Both of those used to degrade the output silently — a permanent false `unresolved-plan-sprint`
+// drift record, and every FACTS record keyed `?` so several distinct drifted rows collapsed to one
+// unattributable entry. These tests pin both fixes AND pin that the numbered sprint path is unchanged.
+// ───────────────────────────────────────────────────────────────────────────────────────────────────
+
+// A backlog board: unranked (`—`) priorities, prose H1, filename `backlog.md`.
+function backlogFixture(rows, briefs = {}) {
+  const root = mkdtempSync(join(tmpdir(), 'fkit-dash-'));
+  MADE.push(root);
+  const agents = join(root, 'ai-agents');
+  for (const d of ['tasks/backlog', 'tasks/done', 'tasks/cancelled', 'sprints', 'sprints/done']) {
+    mkdirSync(join(agents, d), { recursive: true });
+  }
+  for (const [rel, body] of Object.entries(briefs)) writeFileSync(join(agents, 'tasks', rel), body);
+  const planPath = join(agents, 'sprints', 'backlog.md');
+  writeFileSync(
+    planPath,
+    `# Backlog — the default home for unsprinted task briefs\n\nProse header.\n\n## Status\n\n| Status | Priority | Task | Brief |\n|---|---|---|---|\n${rows.join('\n')}\n\n## Notes\n\nTail.\n`,
+  );
+  return planPath;
+}
+
+test('task 68: the backlog board resolves to the `Backlog` identity — no phantom unresolved-plan-sprint', () => {
+  const p = backlogFixture(
+    ['| 🔲 Backlog | — | Alpha | [`a.md`](../tasks/backlog/a.md) |'],
+    { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Backlog', priority: 'Unscheduled' }) },
+  );
+  const { code, out } = run(p);
+  assert.equal(code, 0);
+  // Neither the H1 nor the filename yields `Sprint N`; without the backlog rule this would fire.
+  assert.equal(
+    facts(out).filter((f) => f.includes('unresolved-plan-sprint')).length, 0,
+    'a well-formed backlog board must not report drift against itself',
+  );
+  assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'and no other drift either');
+});
+
+// Rule 1 skips the status cross-check when a brief names a DIFFERENT sprint than the board. A
+// `Backlog` board and a `## Sprint: Backlog` brief MATCH, so the rule does not skip and real drift is
+// still caught.
+//
+// ⚠️ SCOPE OF THIS TEST, stated honestly (review R6): the fixture writes its own brief, so this pins
+// the SCRIPT'S behavior given matching values. It does **not** and cannot guarantee that the repo's
+// real briefs still say `Backlog` — if task 67's normalization were reverted in the live tree, this
+// test would stay green. That coupling is enforced by the live board, not here.
+test('task 68: rule 1 does NOT skip on the backlog board — real status drift is still found', () => {
+  const p = backlogFixture(
+    ['| 🔲 Backlog | — | Alpha | [`a.md`](../tasks/backlog/a.md) |'],
+    // Brief says done, and lives in done/ — genuine disagreement with the board's `🔲 Backlog`.
+    { 'done/a.md': brief({ title: 'Alpha', sprint: 'Backlog', status: '✅ Done', priority: 'Unscheduled' }) },
+  );
+  const { out } = run(p);
+  assert.ok(
+    facts(out).some((f) => f.startsWith('drift disagreement')),
+    'the cross-check must run — a silent rule-1 skip here would hide every backlog status drift',
+  );
+});
+
+test('task 68: FACTS records key by brief filename stem when the priority is `—`', () => {
+  const p = backlogFixture(
+    [
+      '| 🔲 Backlog | — | Alpha | [`alpha.md`](../tasks/backlog/alpha.md) |',
+      '| 🔲 Backlog | — | Zeta | [`zeta.md`](../tasks/backlog/zeta.md) |',
+    ],
+    {
+      // No ## Status ⇒ brief-missing-status, on zeta only.
+      'backlog/zeta.md': '# Zeta\n\n## Sprint\nBacklog\n\n## Priority\nUnscheduled\n\n## Context\n\nB.\n',
+      'backlog/alpha.md': brief({ title: 'Alpha', sprint: 'Backlog', priority: 'Unscheduled' }),
+    },
+  );
+  const { out } = run(p);
+  assert.ok(
+    facts(out).some((f) => f.startsWith('drift nonconformance zeta ')),
+    'keyed by the brief stem, not `?`',
+  );
+  assert.doesNotMatch(rollup(out), /drift on tasks \?/, 'an unattributable `?` is the failure mode');
+  assert.match(rollup(out), /drift on tasks zeta/);
+});
+
+// ⚠️ THE FALLBACK IS A FALLBACK. A numbered plan must keep numbering — the skill narrates
+// `drift on tasks 59, 60`, and switching sprint plans to filename ids would break every such reference.
+test('task 68: a numbered sprint plan still keys FACTS by number, not by filename', () => {
+  const p = fixture({
+    plan: plan(['| 🔲 Backlog | 7 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': '# Alpha\n\n## Sprint\nSprint 1\n\n## Priority\n7\n\n## Context\n\nB.\n' },
+  });
+  const { out } = run(p);
+  assert.ok(facts(out).some((f) => f.startsWith('drift nonconformance 7 ')), 'numbers win where they exist');
+  assert.doesNotMatch(out, /drift nonconformance a /);
+});
+
+test('task 68: `—` priority cells render verbatim and the roll-up is still correct', () => {
+  const p = backlogFixture(
+    [
+      '| 🔲 Backlog | — | Alpha | [`a.md`](../tasks/backlog/a.md) |',
+      '| 🚧 Blocked — waiting on the owner | — | Beta | [`b.md`](../tasks/backlog/b.md) |',
+    ],
+    {
+      'backlog/a.md': brief({ title: 'Alpha', sprint: 'Backlog', priority: 'Unscheduled' }),
+      'backlog/b.md': brief({ title: 'Beta', sprint: 'Backlog', status: '🚧 Blocked — waiting on the owner', priority: 'Unscheduled' }),
+    },
+  );
+  const { code, out } = run(p);
+  assert.equal(code, 0);
+  assert.equal(boardRows(out).length, 2, 'both open rows render');
+  for (const r of boardRows(out)) assert.match(r, /\| — \|/, 'the unranked cell is rendered as written');
+  assert.equal(rollup(out).trim(), '1 blocked · 1 backlog  —  of 2');
+  assert.equal(rollupSum(out), 2);
+});
+
+// A brief whose ## Priority carries a free-text qualifier (`Unscheduled — high-value (…)`) is live in
+// this repo. It must not become a number, and must not break the stem fallback.
+test('task 68: a free-text ## Priority qualifier does not leak into the board or the FACTS id', () => {
+  const p = backlogFixture(
+    ['| 🔲 Backlog | — | Alpha | [`a.md`](../tasks/backlog/a.md) |'],
+    { 'backlog/a.md': '# Alpha\n\n## Sprint\nBacklog\n\n## Priority\nUnscheduled — high-value (see Context)\n\n## Context\n\nB.\n' },
+  );
+  const { code, out } = run(p);
+  assert.equal(code, 0);
+  assert.match(boardRows(out)[0], /\| — \|/, 'the board shows the plan cell, never the brief field');
+  assert.ok(facts(out).some((f) => f.startsWith('drift nonconformance a ')), 'stem fallback still applies');
+  // ⚠️ THE DISTINGUISHING ASSERTION (review R5). Without this the test passes for ANY brief priority,
+  // so it proved nothing about the free-text qualifier it exists to test. The qualifier must not reach
+  // the board cell, the FACTS id, or anywhere else in the output.
+  assert.doesNotMatch(out, /high-value/, 'the free-text qualifier leaks nowhere');
+  assert.doesNotMatch(out, /Unscheduled/, 'nor does the brief-side Priority field at all');
+});
+
+// R7 — `PLAN_SPRINT` has THREE consumers, not one. I claimed only drift rule 1 changed behavior; the
+// review showed the `unresolved-plan-sprint` fact and the roll-up's plan-level-drift clause changed
+// too. Those two ARE the intended fix — but nothing asserted them, so a regression would be silent.
+test('task 68: the backlog identity also silences the plan-level drift clause, not just the fact', () => {
+  const p = backlogFixture(
+    ['| 🔲 Backlog | — | Alpha | [`a.md`](../tasks/backlog/a.md) |'],
+    { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Backlog', priority: 'Unscheduled' }) },
+  );
+  const { out } = run(p);
+  assert.equal(facts(out).filter((f) => f.includes('unresolved-plan-sprint')).length, 0, 'consumer 2: the fact');
+  assert.doesNotMatch(rollup(out), /on the plan itself/, 'consumer 3: the roll-up clause');
+  assert.doesNotMatch(rollup(out), /drift/, 'a clean backlog board carries no drift clause at all');
+});
+
+// A plan with NO recoverable identity must still report — the backlog rule is one filename, not a
+// blanket "stop complaining about unresolved sprints".
+test('task 68: a genuinely unidentifiable plan still reports unresolved-plan-sprint', () => {
+  const root = mkdtempSync(join(tmpdir(), 'fkit-dash-'));
+  MADE.push(root);
+  const agents = join(root, 'ai-agents');
+  for (const d of ['tasks/backlog', 'sprints']) mkdirSync(join(agents, d), { recursive: true });
+  writeFileSync(join(agents, 'tasks/backlog/a.md'), brief({ title: 'Alpha' }));
+  // Prose H1, and a filename that is neither `sprint-N` nor `backlog`.
+  const planPath = join(agents, 'sprints', 'hardening.md');
+  writeFileSync(planPath, '# Hardening — the launcher push\n\n## Status\n\n| Status | Priority | Task | Brief |\n|---|---|---|---|\n| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |\n');
+  const { out } = run(planPath);
+  assert.ok(facts(out).some((f) => f.includes('unresolved-plan-sprint')), 'the backlog rule must not over-reach');
+  assert.match(rollup(out), /on the plan itself/);
+});
+
+// R2 — the stem is NOT always a single token. Reproduced live before the guard: two rows yielded
+// `drift on tasks my, re[a]d, task` — a phantom third task, and a broken positional FACTS grammar.
+// ⚠️ Glob metacharacters matter as much as spaces: `$DRIFT_TASKS` is word-split UNQUOTED.
+test('task 68: a filename with spaces or glob metacharacters cannot break the FACTS grammar', () => {
+  const p = backlogFixture(
+    [
+      '| 🔲 Backlog | — | Spaced | [`my task.md`](../tasks/backlog/my task.md) |',
+      '| 🔲 Backlog | — | Globby | [`re[a]d.md`](../tasks/backlog/re[a]d.md) |',
+    ],
+    {
+      'backlog/my task.md': '# S\n\n## Sprint\nBacklog\n\n## Priority\nUnscheduled\n\n## Context\n\nB.\n',
+      'backlog/re[a]d.md': '# G\n\n## Sprint\nBacklog\n\n## Priority\nUnscheduled\n\n## Context\n\nB.\n',
+    },
+  );
+  const { out } = run(p);
+  const ids = facts(out).filter((f) => f.startsWith('drift nonconformance')).map((f) => f.split(' ')[2]);
+  assert.equal(ids.length, 2, 'two rows, two records');
+  for (const id of ids) {
+    assert.doesNotMatch(id, /[^A-Za-z0-9._-]/, `id ${id} must be a single safe token`);
+  }
+  // The roll-up must name exactly the two real tasks — not three, and not a phantom.
+  const named = rollup(out).replace(/^.*drift on tasks /, '').replace(/ — see above\..*$/, '').split(', ');
+  assert.equal(named.length, 2, `roll-up invented a task: ${JSON.stringify(named)}`);
+});
+
+// R1 — THE REGRESSION GUARD. Giving `backlog.md` a `Backlog` identity activated drift rule 1's skip,
+// silently losing a finding the script reported before task 68. A/B verified at the time; this test is
+// what stops it coming back.
+//
+// ⚠️ "Scheduled but still on the unscheduled board" is the backlog board's HIGHEST-VALUE drift. Rule 1
+// exists to excuse a brief that names another sprint — legitimate on a sprint board (a moved row),
+// and precisely the defect here. If this test goes red, do not relax it: the skip has been
+// re-activated and the board has gone quiet about scheduled work.
+test('task 68 / R1: a backlog row whose brief names a real sprint is DRIFT, never a rule-1 skip', () => {
+  const p = backlogFixture(
+    ['| 🔲 Backlog | — | Alpha | [`a.md`](../tasks/backlog/a.md) |'],
+    { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 2', status: '🔄 In progress', priority: 7 }) },
+  );
+  const { out } = run(p);
+  const d = facts(out).find((f) => f.startsWith('drift disagreement'));
+  assert.ok(d, 'the skip must NOT apply on the backlog board');
+  assert.match(d, /brief_sprint="Sprint 2"/, 'and the record names the actual problem');
+  assert.match(boardRows(out)[0], /\| waiting on owner \|$/);
+});
+
+// The mirror case: rule 1 STILL skips on a real sprint board. The backlog arm must not have broken it.
+test('task 68 / R1: rule 1 still skips normally on a numbered sprint board', () => {
+  const p = fixture({
+    plan: plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 9', status: '✅ Done', priority: 3 }) },
+  });
+  const { out } = run(p);
+  assert.equal(
+    facts(out).filter((f) => f.startsWith('drift disagreement')).length, 0,
+    'a brief naming another sprint is a legitimate skip on a SPRINT board — rule 1 is intact',
+  );
 });

@@ -56,6 +56,9 @@ Your work lives in your own skills:
   `ai-agents/knowledge-base/decisions/`. Its **"Re-raise only if"** field is what stops future reviews
   re-litigating the decision.
 - **`fkit-query`** — read the wiki (read-only).
+- **`fkit-open-questions-interview`** — sweep this session for questions put to the owner that were
+  never answered, and ask them. Interview-only; writes nothing.
+- **`fkit-dumb-down`** — re-explain your last answer in simple terms, keeping every caveat.
 
 The four interactive ones (`inspect`, `design-spec`, `evaluate-approach`, `record-decision`) need the
 owner. If you're running as a **consult** and one of them is really what's needed, say so and return

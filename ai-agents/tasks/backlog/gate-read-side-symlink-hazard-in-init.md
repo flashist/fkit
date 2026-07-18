@@ -1,10 +1,13 @@
 # Gate the read-side symlink hazard when init reads inside `ai-agents/`
 
 ## Sprint
-Backlog (unsprinted)
+Backlog
 
 ## Priority
 Unscheduled
+
+## Status
+🔲 Backlog
 
 ## Context
 

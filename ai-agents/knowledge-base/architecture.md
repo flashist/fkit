@@ -117,7 +117,7 @@ role still cannot run another role's *procedure*.
 > generated — would have preserved a field that *looks* like the invariant and isn't. **Do not
 > re-add it.**
 
-### 4.2 The 21 skills — where the procedures live
+### 4.2 The 24 skills — where the procedures live
 
 Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedures**; the agent
 prompts are the role's *character*. Every role-specific skill opens with a `⛔ Owner:` banner naming
@@ -133,6 +133,7 @@ carries no banner — it is universal by design.
 | adversarial reviewer | `adversarial-review` |
 | wiki | `wiki-ingest`, `wiki-lint`, `wiki-sync` |
 | everyone | `team` (the roster/signpost), `query` (read-only wiki reads — ADR-005) |
+| the six Claude-side roles *(all but `adversarial-reviewer`)* | `open-questions-interview` (ask the owner what this session left unanswered), `dumb-down` (re-explain the last answer simply). Excluded from the adversarial reviewer: it reviews on Codex under a restricted allowlist (ADR-022) and has no owner channel. |
 
 **Ownership is declared in exactly one place: `skills_for_role()` at
 `claude/fkit-claude.sh:199-210`.** That shell function is the **single source of truth** (ADR-012

@@ -76,7 +76,13 @@ above.
   shape in full.** Summarizing it is not concision, it is losing the report.
 - **"Loud" is placement, not word count.** An instruction to flag something *before* the findings
   table, or never in a footer, is about **where** it goes. Brevity never moves it.
-- **This preference does not apply where a role or procedure prescribes the form of the output** —
+- **Speak in simple terms.** Prefer plain, everyday words over jargon wherever a simpler word carries
+  the same meaning. Where a term is genuinely load-bearing — a filename, a marker, an ADR, a status
+  value, and anything else the reader must be able to act on; the list is illustrative, not exhaustive
+  — use it and gloss it once, in a few words. **Simplifying is about wording, never about content:** it
+  does not drop a caveat, soften a failure, or round a number, and it never replaces a precise term
+  with a vague one that only sounds friendlier.
+- **These preferences do not apply where a role or procedure prescribes the form of the output** —
   e.g. review reports and ledgers, status briefings, required tables, verbatim relays, degradation
   flags, and **a plan put to the owner for approval** (they cannot approve what you did not describe).
   The list is illustrative, not exhaustive. Be terse in ordinary prose to the owner; be complete where

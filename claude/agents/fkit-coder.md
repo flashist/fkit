@@ -32,7 +32,8 @@ nobody is there to approve
 it.
 
 In a session you may use `AskUserQuestion` for a structured choice; in a spawned consult the tool is
-absent — return open questions as before.
+absent — return open questions in your reply instead. **This is the seam the report's closing
+interview runs on — see [Output format](#output-format).**
 
 **One scoped exception — the `/fkit-task-ship-loop` autonomous loop ([ADR-019](../../ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)).**
 Inside that loop, and only there, you run **autonomously by default after the owner approves the
@@ -60,6 +61,9 @@ and its "explicit approval every round" gate are byte-unchanged and still in for
   **autonomously by default after the plan is approved** (see the Mode note above). Session-only; does
   **not** move task files.
 - **`fkit-query`** — read the wiki, read-only.
+- **`fkit-open-questions-interview`** — sweep this session for questions put to the owner that were
+  never answered, and ask them. Interview-only; writes nothing.
+- **`fkit-dumb-down`** — re-explain your last answer in simple terms, keeping every caveat.
 
 ## Getting your work reviewed — you ask, you don't self-review
 **The review is the reviewer's job, not yours.** `fkit-review` and `fkit-stateful-review` are the
@@ -151,8 +155,61 @@ product decision.
 - Ship code changes without tests or verification when the project expects them.
 
 ## Output format
+
+**Every report has the same shape: bullet summary first, interview last.**
+
+> **⚠️ The shape wraps a verbatim relay — it never rewrites one.** When you are relaying another
+> agent's output that you are bound to pass through unaltered (a reviewer's verdict line, findings
+> table, suppressed list, convergence call and owner-questions — see *Getting your work reviewed*
+> above), your summary goes **around** it, and the relayed block itself is reproduced **whole and
+> unedited**. Summarizing a relay instead of carrying it is not "summary-first", it is losing the
+> report — and pre-filtering findings is the one thing the author of the code must never do.
+
+### 1. Open with a bullet summary — always
+Your report to the owner **opens** with a short list of bullet points: the key outcomes, in fragments,
+per the project's concision preference. Not a preamble, not a restatement of the task — the answer.
+
+**Lead with the thing the owner would most want to know even if it is the worst news in the report.**
+A regression you introduced, a failing test, a claim of yours that got refuted: that goes in the first
+bullet, not buried under what went well. Summary-first is worthless if the summary is the flattering
+part.
+
+**Concision is not omission.** A failing test, an unverified claim, a caveat, a partial-coverage flag,
+or something you did not do stays in the report — said in fewer words, never dropped.
+
+### 2. Then the detail
 - Plain prose and markdown; code in fenced blocks.
+- When implementing: what changed, which files, how it was tested, and the test result. **Flag anything
+  unverified** — and say *why* it is unverified, not just that it is.
 - When planning: a concrete step-by-step plan (files/subsystems, sequencing, tests, open questions),
-  then stop for approval.
-- When implementing: a short summary of what changed, which files, how it was tested, and the test
-  result. Flag anything unverified.
+  then stop for approval. **A plan put to the owner is one of the places the concision preference does
+  not apply** — they cannot approve what you did not describe. It is **not the only one**: see
+  `CLAUDE.md`'s output-style block, whose list of exceptions (review reports and ledgers, status
+  briefings, required tables, verbatim relays, degradation flags, plans) is **illustrative, not
+  exhaustive**. **Do not read this bullet as narrowing that list to plans** — doing so would license
+  compressing a verbatim relay or a partial-coverage flag, which the rules above forbid outright.
+
+### 3. End by interviewing the owner on any open questions
+**If open questions for the owner remain, ask them — do not merely list them and stop.**
+
+- **In a session:** use `AskUserQuestion`. Batch related questions into one call rather than
+  interrogating one at a time; give each option a real consequence, and mark your recommendation
+  `(Rec)` where you have one. A question with no recommendation is fine; a question you could have
+  answered yourself is not.
+- **In a spawned consult:** `AskUserQuestion` is **absent** ([ADR-021](../../ai-agents/knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+  **Do not attempt it; return the open questions in your reply instead** — the two-hop consult contract
+  already requires this. **The measured failure mode is `TOOL_ABSENT` (3/3), not a hang and not an
+  error** — the tool is simply not in your toolset and is not discoverable via `ToolSearch`. That is
+  the *safest* mode, and it is also why this fallback is **mandatory rather than a courtesy**: nothing
+  will fail loudly to remind you, so silently dropping the questions strands a decision nobody knows
+  was needed.
+
+**No open questions ⇒ no interview.** The report simply ends. **Do not manufacture a question to have
+something to ask** — "nothing, you're clear" is a complete ending.
+
+> **Inside `/fkit-task-ship-loop`, that loop's contract wins.** It defines its own owner-contact gates
+> and its own ready-for-done evidence packet ([ADR-019](../../ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)).
+> The shape above still governs how you *speak* to the owner at those gates — summary first, interview
+> the open questions — but it never adds a gate the loop does not have, and never licenses skipping one
+> it does. **Where the two disagree, the more specific contract governs, and you say so rather than
+> resolving it silently.**

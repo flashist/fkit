@@ -24,13 +24,26 @@ a status briefing.
   ambiguity** in the report.
 - **A sprint name** (e.g. `Sprint 1`) — resolve it against `ai-agents/sprints/` **and**
   `ai-agents/sprints/done/`. If nothing matches, say so and list what's there. Do not guess.
+- **`Backlog`** (case-insensitive) — the **Backlog board**, `ai-agents/sprints/backlog.md`: the
+  standing board for briefs that have been scoped but not scheduled into a sprint. **If the file does
+  not exist, say so and stop — do not create it.** This skill is read-only; the board is created by
+  `/fkit-task-brief` when the first unsprinted brief is filed.
 
-**That is the whole contract — two cases, and no reserved words.** The argument selects **which sprint
-you are asked about**; it never selects *which version of the answer you give*. **This skill has one
-output.** There is no keyword, no switch, and no mode: every invocation renders the complete briefing,
-ending in the full step-4 board. `full`, `all` and `board` are ordinary text and therefore resolve as
-sprint names — so `/fkit-status full` correctly fails with *"no sprint named `full`"*. **That is the
-intended behavior, not a regression.**
+**That is the whole contract — three targets, and no reserved words.** The argument selects **which
+board you are asked about**; it never selects *which version of the answer you give*. **This skill has
+one output.** There is no keyword, no switch, and no mode: every invocation renders the complete
+briefing, ending in the full step-4 board. `full`, `all` and `board` are ordinary text and therefore
+resolve as board names — so `/fkit-status full` correctly fails with *"no sprint named `full`"*.
+**That is the intended behavior, not a regression.**
+
+> **Why `Backlog` is a target and not a mode.** It names **which board to report on**, exactly as
+> `Sprint 1` does — one board in, one briefing out. It does not ask for a different rendering of the
+> same board, which is what
+> [`one-skill-one-output`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)
+> (task 44) forbids. **The default run never includes it:** an empty argument resolves the active
+> sprint by globbing `sprint-*.md`, and `backlog.md` is deliberately outside that glob — so
+> unscheduled work is reported **only when asked for by name**, by construction rather than by a rule
+> anyone has to remember.
 
 > **The standard being aimed at.** *"As if I ask the producer of the project what the status is, and
 > they provide it in a simple yet informative way."* **Answer like a producer being asked in person,
@@ -139,6 +152,23 @@ recommend picking up a task from a superseded plan. Its live tasks are the ones 
 point at the sprint they moved to. Drift in a closed sprint still gets flagged: a closed record can be
 wrong, and it stays wrong forever if nobody says so.
 
+**On the Backlog board**, apply the same "say it's moot, don't invent it" discipline — but to a
+different set of beats, because the backlog is *unscheduled*, not *finished*:
+
+| Beat | On the Backlog board |
+|---|---|
+| 1 · Headline | **How much unscheduled work is sitting here** — the count, and what kind of work it is. Not "progress": there is none to report. **Do not say whether the backlog is growing or shrinking** — you are reading one snapshot, and the source set has no history to ground a trend in. |
+| 2 · Drift | **Applies in full.** Report it exactly as for a sprint. |
+| 3 · What's moving | **Moot — say so in one line.** Nothing on this board is in progress by definition; work that has started belongs in a sprint. If a row *does* read `🔄 In progress`, that is a **finding**, not a status: say so. |
+| 4 · What's next | **Not "the one thing to pick up"** — nothing here is scheduled, and recommending one would be a planning act this skill doesn't own. Instead, report what the board already computed: **which rows have no unmet dependency** (Next step `ready`) and are therefore pullable into a sprint whenever the owner wants. **Do not call anything "stale"** — no brief carries a date, so age is not in the source set. |
+| 5 · What's in the way | **Usually moot** — unscheduled work isn't blocked, it's unscheduled. Report a genuine `🚧 Blocked` row if one exists. |
+| 6 · What you need | **Applies in full** — drift, and anything that should be scheduled but isn't. |
+| 7 · The board | **Applies in full**, via the script as usual. |
+
+**There is no goal line, no phases, and no priority ranking** — the board is unranked by design and
+its Priority cells read `—`. **Do not invent a ranking, and do not describe the `—` cells as missing
+data**: unranked is the design, and a number here would be a commitment nobody made.
+
 ### 4. The dashboard — run the script, don't hand-build it
 
 **The board is computed, not recited.** Run:
@@ -167,10 +197,34 @@ Its stdout has two delimited sections:
 
 #### What to do with `⟦BOARD⟧`
 
-**Paste it as beat 7 — verbatim, except the sentinel cells.** It is already the five columns, the six
+**Paste it as beat 7 — verbatim, except the sentinel cells.** It is already the five columns, the
 canonical markers copied from the plan, and the roll-up. Do not re-count it, re-sort it, re-word it,
 or "tidy" it. **The counts sum to `M` by construction** — that is the whole point of the script's
 existence, and a hand-adjusted board forfeits it.
+
+**The board shows OPEN WORK ONLY.** Rows whose reconciled state is `✅ Done`, `⛔ Cancelled` or
+`➡️ Moved` are omitted by the script (owner ruling, 2026-07-18). Three things make that safe, and you
+must not undo any of them by hand:
+
+- **Scope lives in the roll-up.** It still counts **every** row and still ends `— of M`, so the board
+  is smaller than `M` **by design** — that is not a miscount, and **you must not "fix" it** by
+  adjusting the totals to match the visible rows. If the owner asks where the rest went, the roll-up
+  is the answer.
+- **`⟦FACTS⟧` still counts hidden rows.** `total` and every `count <marker>` cover the whole table, so
+  the facts you narrate beats 2 and 6 from never shrink to the visible rows. **Drift facts are a
+  different case: a drifted row is never hidden** (see the next bullet), so a `drift` record always has
+  a row you can point at. If you ever meet a `drift` record whose task is not on the board, that is a
+  **bug to report**, not a state to explain away.
+- **A drifted row always renders**, whatever its marker says. The filter is on the **reconciled**
+  state: a row stamped `✅ Done` whose brief disagrees is not actually known to be done, so it stays
+  visible. **You will therefore sometimes see a `✅`/`⛔` row on the board — that is the script telling
+  you it is unresolved, not a leak.** Do not drop it for consistency.
+
+> **This reverses the older "show the dead rows" principle, knowingly.** Earlier revisions of this
+> skill argued a board that hides cancelled and moved tasks lies about scope. The owner reversed it;
+> keeping the roll-up is the mitigation. **It is not a toggle** — there is no `full`/`all` switch, per
+> [`one-skill-one-output`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)
+> (task 44). Adding one would need a reversal ADR first.
 
 **The one thing you must fill: `⟨derive: …⟩` sentinels.** The script emits four of the six Next-step
 shapes itself (`closed`, `dead`, `in Sprint N`, `waiting on owner`). It **cannot** decide `ready` vs
@@ -204,13 +258,17 @@ drift yourself and the script computed it too, you can disagree with your own bo
 gets two accounts of one record. The records you need:
 
 ```
-total <M>                                  ← the sprint's task count
+total <M>                                  ← the board's task count
 count <marker> <N>                         ← e.g. `count done 30`
 
 drift disagreement <task> plan="…" brief="…" location="…"
 drift disagreement <task> plan="…" brief_sprint="…" moved_target="…"
-    ↑ two shapes. The second is the ➡️ Moved case: the plan says the task moved to one sprint and
+drift disagreement <task> plan="…" brief="…" brief_sprint="…" location="…"
+    ↑ three shapes. The second is the ➡️ Moved case: the plan says the task moved to one sprint and
       the brief claims another. Same finding — the record contradicts itself — different sources.
+      The third is the BACKLOG BOARD case, and `brief_sprint` is the part to read: if it names a real
+      sprint, the task has been SCHEDULED but its row was never moved off the unscheduled board.
+      Say that plainly in beat 6 — it is the most actionable thing this board reports.
 
 drift nonconformance <task> kind="…" cell="…"
     ↑ kinds: blocked-without-reason · cancelled-without-date · cancelled-without-reason ·
@@ -233,6 +291,13 @@ drift unresolved-plan-sprint h1="…"
       means any drift below may be phantom. Say so; don't pretend the board is fully reconciled.
 ```
 
+> **⚠️ `<task>` is not always a number.** It is the Priority number when the board has one, and the
+> **brief's filename stem** when it does not — which is every row of the **Backlog board**, whose
+> Priority cells are `—` by design. Both forms are a single token, so the `key="value"` grammar is
+> unchanged. **Narrate whichever form you were given**: on the backlog board the roll-up's drift clause
+> reads `drift on tasks gate-read-side-symlink-hazard-in-init`, and that *is* the task's identifier —
+> do not translate it into a number, and do not report it as a malformed record.
+
 **This list is a mirror of the script's output and has drifted from it six times** (review rounds 1–6;
 twice it was recorded as fixed when it was not). **If you see a `drift` record whose kind is not listed
 here, report it as-is and say the grammar is out of date** — do not silently skip it. An unlisted
@@ -252,10 +317,14 @@ table, a bug), **hand-build the board and lead with the flag**:
 ⚠️ [dashboard hand-built — dashboard.sh failed: <reason>]
 ```
 
-Then: the five columns above, one row per task, **markers copied from the plan's Status cell verbatim**,
-**show the dead rows** (a board that hides cancelled and moved tasks lies about scope), and a roll-up
-of the non-zero terms with **`— of M` where `M` is the number of rows in the table** — count them; not
-a number the plan's prose quotes about itself, which goes stale.
+Then: the five columns above, **markers copied from the plan's Status cell verbatim**, **one row per
+OPEN task** — omit `✅ Done` / `⛔ Cancelled` / `➡️ Moved` rows, but **keep any row you found drift on,
+whatever its marker** — and a roll-up of the non-zero terms with **`— of M` where `M` is the number of
+rows in the table** — **count every row, including the ones you omitted**; not a number the plan's
+prose quotes about itself, which goes stale.
+
+**`M` is the whole table, not the rows you rendered.** That is what keeps scope honest while the board
+shows only open work — get it wrong here and the fallback hides the hidden rows twice over.
 
 **This fallback is deliberately lower fidelity, and says so in the flag.** The full contract lives in
 the script. Do not reconstruct it here.
@@ -276,8 +345,10 @@ paths (`/fkit-task-done`, `/fkit-task-cancelled`, or a deliberate edit) — not 
 - **Read-only. This skill writes nothing.** It never sets a status, moves a task file, edits a sprint
   plan, or commits — **including to fix drift it finds**. Step 2 surfaces drift; it does not repair it.
 - **Short by default — and that is a rule about the prose, not the board.** Beats 1–6 read in under 30
-  seconds. **Beat 7 is always the complete board**, however many rows that is: it is reference material
-  and costs the reader nothing to skip. There is no shorter version of it to ask for.
+  seconds. **Beat 7 is always the board the script rendered** — every open row, however many that is,
+  plus any drifted row. It is reference material and costs the reader nothing to skip. **There is no
+  shorter version of it to ask for, and no longer one either**: the closed rows are not a hidden mode,
+  they are simply not on the board (their totals stay in the roll-up).
 - **Prose and short bullets in beats 1–6. The dashboard is the only table.** Beats 1–6 are an answer;
   don't turn the answer back into a report.
 - **Sparing emphasis.** Bold the headline and genuine blockers. No decorative emoji, no 🔥 — the status

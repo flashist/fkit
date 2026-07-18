@@ -7,7 +7,7 @@ Sprint 2
 61
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 
@@ -20,9 +20,14 @@ This is a change to the coder's agent contract, `claude/agents/fkit-coder.md` �
 **Agent files are not dual-homed** (verified 2026-07-18: no `claude/scaffold/` copy), so the task-48/49
 parity concern does not apply.
 
-**The interview mechanism already has its seam.** `fkit-coder.md:34-35` already states: *"In a session
-you may use `AskUserQuestion` for a structured choice; in a spawned consult the tool is absent — return
-open questions as before."* The coder now holds `AskUserQuestion` in a session (ADR-022 relaxed tools).
+**The interview mechanism already has its seam.** `fkit-coder.md:34-35` stated, **at scoping time**:
+*"In a session you may use `AskUserQuestion` for a structured choice; in a spawned consult the tool is
+absent — return open questions as before."*
+
+> **Note added 2026-07-18 (task 61 implementation, review finding R6):** this task **changed that
+> wording** — the seam now reads *"…return open questions in your reply instead"* and carries a pointer
+> to the new `## Output format` section. The quote above is preserved as the **pre-change** text the
+> brief was written against; **do not read it as the current contract.** Read `claude/agents/fkit-coder.md`. The coder now holds `AskUserQuestion` in a session (ADR-022 relaxed tools).
 So the "interview" is: in a **session**, use `AskUserQuestion` to ask the open questions; in a **spawned
 consult**, the tool is `TOOL_ABSENT` (ADR-021) and the coder **must** fall back to returning the
 questions in its reply — the existing two-hop consult contract. This degradation is **forced, not

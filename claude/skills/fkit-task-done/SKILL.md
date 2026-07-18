@@ -45,7 +45,7 @@ documentation so its status reads **✅ Done**, everywhere the task is tracked.
 ### 2. Read the task file to learn its context
 Capture, for use in later steps and the final report:
 - The **H1 title**.
-- The **`## Sprint`** field (e.g. `Sprint 4`, `Sprint backlog`, `Backlog (unsprinted)`).
+- The **`## Sprint`** field (e.g. `Sprint 4`, or `Backlog` for a task on the unranked `backlog.md` board).
 - Whether it declares a **`## Parent / Epic`** (a path to an epic file) — if so, this is a child slice
   and the epic's own status table is one of the places to update.
 - The basename of the file (used to find references).
@@ -62,7 +62,7 @@ staging the move is enough; commits happen only when the owner explicitly asks.
 
 ### 4. Find every place the task is tracked
 Search for the task's **basename** across the docs that carry status:
-- `ai-agents/sprints/*.md` (the sprint plans and `sprint-backlog.md`)
+- `ai-agents/sprints/*.md` (the sprint plans, and the unranked `backlog.md` board)
 - **`ai-agents/sprints/done/*.md`** — **closed** sprint plans still *link* to tasks they carried over
 - the parent epic file, if step 2 found a `## Parent / Epic`
 
@@ -108,8 +108,10 @@ descriptions beyond removing a fragment that is now false.
 > **Yes, this writes into `ai-agents/sprints/done/`.** That is deliberate and owner-ruled: a closed
 > sprint plan's *claims* are frozen, but its *links* stay live. Repair the href; touch nothing else.
 
-**Now do this regardless of how many references step 4 found — even zero** (an unsprinted task has no
-board row at all, but this still applies):
+**Now do this regardless of how many references step 4 found — even zero.** Since task 67 every brief
+should have a row *somewhere* — a sprint plan, or the unranked `backlog.md` board — so **zero
+references is now itself worth reporting**, not the expected case for unsprinted work. A hand-filed
+brief may still have none. Either way, this step applies:
 
 - **The moved brief's OWN `## Status` field** — the single line immediately below the `## Status`
   heading in the file you just moved into `done/`. Set that line to `✅ Done`, the same canonical
@@ -140,7 +142,7 @@ brief. A move is not finished while a link it broke is still broken.
 ### 6. Handle ambiguity — never paper over it
 - **No reference found** in any sprint doc: the task may be unsprinted / backlog-only. Complete the
   move, then **report that no sprint status row was found** so the owner knows nothing else changed.
-- **Multiple references** (e.g. sprint plan + epic + `sprint-backlog.md`): update **all** of them and
+- **Multiple references** (e.g. sprint plan + epic + `backlog.md`): update **all** of them and
   list each in the report.
 - **`## Sprint` says a sprint, but that sprint plan has no matching row:** report the mismatch rather
   than inventing a row.

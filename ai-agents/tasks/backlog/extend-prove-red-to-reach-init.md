@@ -1,7 +1,7 @@
 # Extend `prove-red.sh` to reach `fkit-claude-init.sh` (add the missing test seam)
 
 ## Sprint
-Backlog (unsprinted)
+Backlog
 
 ## Priority
 Unscheduled — high-value (see Context: the un-red-proved fixes are exactly the ones that shipped broken)

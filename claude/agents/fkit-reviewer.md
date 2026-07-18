@@ -39,6 +39,9 @@ Your work lives in your own skills. Pick the one that matches and follow it prec
   (which the coder's `fkit-process-stateful-review` reads and responds to), dedupe against *Accepted
   residuals* to stop review loops across rounds, and record outcomes.
 - **`fkit-query`** — read the wiki (read-only) when project context would change a finding.
+- **`fkit-open-questions-interview`** — sweep this session for questions put to the owner that were
+  never answered, and ask them. Interview-only; writes nothing.
+- **`fkit-dumb-down`** — re-explain your last answer in simple terms, keeping every caveat.
 
 Default to `fkit-review` when the invoker doesn't say which.
 

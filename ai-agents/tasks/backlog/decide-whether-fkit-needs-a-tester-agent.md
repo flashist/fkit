@@ -1,7 +1,7 @@
 # Decide whether fkit needs a dedicated e2e-tester agent
 
 ## Sprint
-Backlog (unsprinted)
+Backlog
 
 ## Priority
 Unscheduled

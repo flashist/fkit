@@ -1,7 +1,7 @@
 # Add a worked example to `evidence-before-assertion.md`, drawn from task 36
 
 ## Sprint
-Backlog (unsprinted)
+Backlog
 
 ## Priority
 Unscheduled

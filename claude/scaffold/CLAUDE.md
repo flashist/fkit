@@ -27,8 +27,11 @@ roster and which role you're in.
 | **adversarial-reviewer** | hostile second opinion on Codex, findings only | edit anything | `/fkit-adversarial-review` |
 | **wiki** | the wiki — ingest / lint / sync; **exclusive write gateway** | write outside `ai-agents/wiki-vault/` | `/fkit-wiki-ingest`, `/fkit-wiki-lint`, `/fkit-wiki-sync` |
 
-Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. The **team room** (`fkit-lead`) has
-only `/fkit-team` and `/fkit-query` — it routes, it doesn't do.
+Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **The six Claude-side roles** — all
+but `adversarial-reviewer`, which reviews on Codex under a restricted allowlist — also have
+`/fkit-open-questions-interview` (ask the owner about questions this session left unanswered) and
+`/fkit-dumb-down` (re-explain the last answer in simple terms). The **team room** (`fkit-lead`) has no
+procedures of its own beyond these shared ones — it routes, it doesn't do.
 
 **Skills belong to roles.** This is structural — **in a role session and in a spawned consult
 alike**: a `PreToolUse` hook checks the REAL invoking agent's identity (a session's own role, or a

@@ -35,7 +35,9 @@ owner might not have thought to ask. Your interactive skills are `/fkit-initiate
 project), `/fkit-status` (answer *"what's the status?"* — read-only), `/fkit-task-brief` (scope a
 description into task briefs — **decomposed** into the smallest independently shippable units), and
 `/fkit-task-done` and `/fkit-task-cancelled` (the only sanctioned way task files move — and only when
-the owner invokes them).
+the owner invokes them). You also have `/fkit-open-questions-interview` (sweep this session for
+questions put to the owner that were never answered, and ask them) and `/fkit-dumb-down` (re-explain
+your last answer in simple terms, keeping every caveat).
 
 **B) Spawned as a consult** (invoked by the lead session or a teammate): **you have no channel to the
 owner.** Answer the question you were handed **directly and concisely** from what the project records

@@ -1,6 +1,6 @@
 ---
 name: fkit-task-brief
-description: Turn a raw task description into one or more task briefs under ai-agents/tasks/backlog/ — decomposing it into the smallest independently shippable units, with dependency links recorded. Takes the task description as its argument, which may name a sprint inline ("for Sprint 2: …"); with no sprint named the briefs are filed as unsprinted backlog. Use when scoping new work into the backlog.
+description: Turn a raw task description into one or more task briefs under ai-agents/tasks/backlog/ — decomposing it into the smallest independently shippable units, with dependency links recorded. Takes the task description as its argument, which may name a sprint inline ("for Sprint 2: …"); with no sprint named the briefs are filed on the Backlog board. Use when scoping new work into the backlog.
 ---
 
 # Task Brief
@@ -21,7 +21,7 @@ Turn a raw description of work into **task briefs** in `ai-agents/tasks/backlog/
 
 **Argument:** `$ARGUMENTS` — the raw task description. It may name a sprint inline (e.g.
 *"for Sprint 2: add rate limiting to the API"*, *"add to the backlog: …"*). If no sprint is named,
-the briefs are filed as **unsprinted backlog**.
+the briefs are filed on the **Backlog board** (`ai-agents/sprints/backlog.md`).
 
 > **The central behavior is decomposition, not transcription.** An invocation that takes a large
 > description and emits one large brief has **failed at its main job**. The owner's standing rule:
@@ -42,8 +42,16 @@ the briefs are filed as **unsprinted backlog**.
 - If a sprint is named, resolve it to an **existing** plan: list `ai-agents/sprints/` and match
   (e.g. `Sprint 2` → `ai-agents/sprints/sprint-2.md`).
 - **Never invent a sprint that doesn't exist.** If the named sprint has no plan file, **stop and
-  ask** — do not create the plan, and do not silently file the work as unsprinted.
-- If no sprint is named, treat the work as **unsprinted backlog** (`## Sprint: Backlog (unsprinted)`).
+  ask** — do not create the plan, and **do not quietly divert the work to the Backlog board instead.**
+  The owner named a sprint; silently filing elsewhere is a different answer to the one they asked for.
+- If no sprint is named, file the work against the **Backlog board** (`## Sprint: Backlog`) — see
+  step 7. It is a real board with a real row, not a "no board" state.
+
+> **⚠️ The Backlog board is the ONE designed exception to "never invent a sprint that doesn't exist",
+> and it is deliberate, not drift.** `ai-agents/sprints/backlog.md` is **created if absent**. The rule
+> above exists so a *typo'd or imagined sprint name* never silently materializes a plan file — the
+> Backlog board is neither: it is a single, fixed, well-known path that every unsprinted brief shares.
+> **The exception is exactly one filename.** Any other missing sprint still stops and asks.
 - If `$ARGUMENTS` is empty, ask what to scope. Do not guess.
 
 ### 2. Ground the work before drafting
@@ -105,7 +113,8 @@ Use the established structure **exactly** — diff against an existing brief in
   decisions. Flag the addition for owner confirmation in the report.
 - **Sub-tasks from one split** should be **contiguous and in dependency order**, so the sequence reads
   correctly.
-- **Unsprinted:** `## Priority` reads `Unscheduled`.
+- **Backlog board:** `## Priority` reads `Unscheduled`, and the board row's Priority cell reads `—`.
+  The board is unranked by design — see step 7.
 
 ### 6. Write each brief
 Write to `ai-agents/tasks/backlog/<kebab-case-title>.md` — **new files, not moves.**
@@ -113,12 +122,63 @@ Write to `ai-agents/tasks/backlog/<kebab-case-title>.md` — **new files, not mo
   or the title needs to be more specific.
 - **Do not commit** — writing the files is enough; commits happen only when the owner explicitly asks.
 
-### 7. Update the sprint plan — only if a sprint was named
+### 7. Update the board — every brief gets a row, always
 - **If a sprint was named:** add **one Status-table row per new brief**, matching the table's existing
   format exactly, plus a short **dated addendum note** explaining the out-of-band addition (follow the
   "Addendum — task N added out of band (YYYY-MM-DD)" precedent already in the sprint plans).
-- **If no sprint was named: touch no sprint plan.** The brief's `## Sprint: Backlog (unsprinted)` field
-  is the record. Do not add rows to a sprint the owner didn't name.
+- **If no sprint was named: add the rows to the Backlog board, `ai-agents/sprints/backlog.md`.**
+  Same Status-table format as a sprint plan (`Status | Priority | Task | Brief`) — that identical
+  shape is what lets `dashboard.sh` and both task movers parse it with no special-casing.
+  - **Create the file if it is absent** (the designed exception in step 1). ⚠️ **In a fresh project
+    there is no existing board to copy** — the required structure is therefore given here, in full:
+
+    ```markdown
+    # Backlog — the default home for unsprinted task briefs
+
+    <short header: this is not a sprint; the filename is deliberately `backlog.md`, NOT
+    `sprint-backlog.md`, because /fkit-status globs `sprint-*.md` to find the active sprint;
+    the Priority column reads `—` because this board is unranked by design.>
+
+    ## Status
+
+    | Status | Priority | Task | Brief |
+    |---|---|---|---|
+    | 🔲 Backlog | — | <Task title> | [`<brief>.md`](../tasks/backlog/<brief>.md) |
+    ```
+
+    The `## Status` heading and the four-column table are **load-bearing**, not stylistic:
+    `dashboard.sh` and both task movers locate rows by exactly that shape. The header prose is yours
+    to word; the structure is not.
+  - **The Priority cell is `—`, always.** This board is unranked by design; the briefs read
+    `## Priority: Unscheduled` to match. **Do not number backlog rows** — a number here is a
+    commitment nobody made. Needing a rank is the signal to pull the task into a sprint.
+  - **No dated addendum note** — that convention exists to explain an out-of-band addition to a
+    *planned* sprint. The backlog is where unplanned work is supposed to go, so there is nothing out
+    of band to explain.
+  - **Still do not add rows to a sprint the owner didn't name.**
+- **⚠️ Never file against `backlog.md` by writing a `sprint-backlog.md`.** `/fkit-status` finds the
+  active sprint by globbing `sprint-*.md`; the backlog is excluded from the default status run purely
+  because its filename does not match. A name inside the glob turns unscheduled work into the reported
+  active sprint.
+- **Pulling a backlog task into a sprint is the producer's act, not this skill's.** It takes **three**
+  edits, and **all three are mandatory** — see the warning below:
+  1. Add the row to the sprint plan, with a real priority number.
+  2. Flip the backlog row to `➡️ Moved to [Sprint N](sprint-N.md) — priority M`, the canonical marker
+     from [`task-status-vocabulary.md`](../../../ai-agents/knowledge-base/conventions/task-status-vocabulary.md).
+     **`— priority M` is mandatory and is not dropped just because this board is unranked** — `M` is
+     the priority the task receives in **Sprint N** (step 1), which is exactly what the reader of a
+     moved row needs. **Do not delete the backlog row**; deleting it loses the pointer to where the
+     work went.
+  3. **Update the brief's own `## Sprint` field to `Sprint N`** (and give `## Priority` the real
+     number).
+
+  > **⚠️ Step 3 is the one that gets forgotten, and omitting it manufactures permanent drift.**
+  > `dashboard.sh`'s drift rule 2 compares a `➡️ Moved` row's target against the brief's `## Sprint`.
+  > Leave the brief saying `Backlog` and the board says Sprint N: the two sources now disagree, so the
+  > row is flagged `drift disagreement` — and because a drifted row **always renders**, it never
+  > disappears from the backlog board. Every task ever pulled into a sprint would leave a permanent
+  > drifted row behind. Verified empirically, 2026-07-18: with step 3, no drift and the row correctly
+  > drops off; without it, `drift disagreement … brief_sprint="Backlog" moved_target="Sprint 2"`.
 - **Never renumber or alter an existing row.**
 
 ### 8. Never
@@ -128,8 +188,11 @@ Write to `ai-agents/tasks/backlog/<kebab-case-title>.md` — **new files, not mo
 - Produce or modify source code.
 - Write to `ai-agents/wiki-vault/` (wiki writes are the fkit-wiki agent's, exclusively).
 
-This skill creates **new Markdown briefs** and optionally edits **one sprint plan**. That is its whole
-write surface — the same authority boundary every producer skill respects.
+This skill creates **new Markdown briefs** and edits **exactly one board** — the named sprint plan, or
+`ai-agents/sprints/backlog.md` (creating it if absent) when no sprint was named. **A board edit is not
+optional**: every brief gets a row somewhere, or the work is invisible to every board-driven view,
+which is the gap the Backlog board exists to close. That is its whole write surface — the same
+authority boundary every producer skill respects.
 
 ### 9. Report
 Give a concise summary:
@@ -137,7 +200,7 @@ Give a concise summary:
 - **Split rationale:** *why N briefs and not 1* — which seams made each piece independently shippable.
   If you emitted one brief, say why the work is genuinely a single unit.
 - **Dependencies:** the links recorded between the new briefs.
-- **Sprint:** which sprint plan was filed against (and the rows added), or "unsprinted".
+- **Sprint:** which plan was filed against and the rows added — a named sprint, or the Backlog board (say so explicitly, and say if you created it).
 - **Flagged for owner confirmation:** the appended priorities, anything you had to assume, and any
   dependency or conflict surfaced in step 3.
 - **Consulted:** if fkit-architect was consulted for the technical scope, say so and summarize what it

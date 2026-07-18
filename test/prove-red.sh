@@ -87,9 +87,29 @@ hc="$(run_hook_suite "$clean_hook")"; echo "$hc"
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
 # fkit-claude.sh, and is checked via skill-ownership-hook.test.js's own exhaustive matrix (which now
 # owns role↔skill correctness), not the retired launcher-contract Group B assertion 8.
+#
+# ⚠️ THE MUTATION IS ROSTER-INDEPENDENT ON PURPOSE, AND THIS IS PAID FOR BY A REAL FAILURE.
+# It used to match the reviewer's ENTIRE skill list byte-for-byte. Task 70 added one skill to that
+# line, the `sed` silently stopped matching, and the "mutant" became identical to the original — so
+# mutation 1 tested nothing. It failed loudly (`✗ hard gate FAILED`), but ONLY to whoever ran this
+# script, and `npm test` did not run it. A green suite hid a disarmed hard gate.
+#
+# So: anchor on the `reviewer)` arm and delete ONLY the `fkit-review` token from it. Adding, removing
+# or reordering any other skill cannot break this. The post-condition below is the real guard —
+# it FAILS THE RUN if the mutation was a no-op, so this can never again silently prove nothing.
 m1="$(make_claude_copy claude-mutant-skills)"
 m1_lib="$(dirname "$m1")/skills-for-role.sh"
-sed -i.bak 's/reviewer)  echo "fkit-team fkit-query fkit-review fkit-stateful-review"/reviewer)  echo "fkit-team fkit-query fkit-stateful-review"/' "$m1_lib"
+cp "$m1_lib" "$m1_lib.orig"
+# Strip the standalone `fkit-review` token from the reviewer arm only. The trailing-space alternation
+# keeps `fkit-review` from matching inside `fkit-review-something` and leaves `fkit-stateful-review`
+# untouched (different token, and not a suffix match because we anchor on the space/quote boundary).
+sed -i.bak -E 's/^([ \t]*reviewer\)[ \t]*echo "[^"]*)fkit-review ([^"]*")/\1\2/' "$m1_lib"
+if cmp -s "$m1_lib" "$m1_lib.orig"; then
+  echo "1. broke skills_for_role(reviewer) ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result below."
+  fail=1
+fi
 m1_hook="$(dirname "$m1")/skill-ownership-hook.sh"
 printf '1. broke skills_for_role(reviewer) — matrix "reviewer × fkit-review" should go RED ... '
 r1="$(run_hook_suite "$m1_hook")"; echo "$r1"

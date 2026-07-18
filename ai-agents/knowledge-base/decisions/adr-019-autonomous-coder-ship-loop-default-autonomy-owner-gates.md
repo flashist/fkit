@@ -7,6 +7,10 @@
 - **Amends (does not supersede):** the coder's "owner present for the fix gate" contract in
   `claude/agents/fkit-coder.md:28-33` — narrowed for this one skill's context, unchanged everywhere
   else.
+- **Amended in place (2026-07-18, owner ruling):** **Decision 3's "No `AskUserQuestion` dependency"
+  clause only.** The tool is now granted ([ADR-022](adr-022-tools-unrestricted-except-adversarial-reviewer.md));
+  see the amendment note inside Decision 3. **Every other decision here is unchanged** — including the
+  turn-ending/idling behavior itself, which is **not** repealed.
 
 ## Context
 
@@ -58,8 +62,29 @@ owner-only done-gate. It never moves a task file.**
 3. **"Walk away" is ordinary in-session turn-taking, not background delegation.** The loop stays a
    `fkit coder` **session** with the owner reachable; between gates it proceeds without waiting, and at
    an important question it **ends its turn and idles** until the owner returns to the terminal. It
-   **refuses** a genuinely spawned/headless invocation and returns the plan instead. No `AskUserQuestion`
-   dependency (task 39).
+   **refuses** a genuinely spawned/headless invocation and returns the plan instead. ~~No
+   `AskUserQuestion` dependency (task 39).~~ — **amended 2026-07-18, see below.**
+
+   > **Amendment (2026-07-18, owner ruling; surfaced by task 61's stateful review, R1).**
+   > **In a session, `AskUserQuestion` is the expected way for the loop to put an important question to
+   > the owner.** The struck clause was written on 2026-07-17 while task 39's investigation was still
+   > open and **no fkit agent held the tool**; it recorded that the loop's owner-contact design did not
+   > *depend* on a capability the coder did not have. [ADR-022](adr-022-tools-unrestricted-except-adversarial-reviewer.md)
+   > (2026-07-18) granted it, so the premise is gone. Live ship-loop runs this session confirm it works
+   > well at gates.
+   >
+   > **What does NOT change:**
+   > - **The turn-ending/idling behavior is not repealed.** The loop still ends its turn and waits for
+   >   the owner; a structured prompt is *how* it waits, not a replacement for waiting. There is still
+   >   no timeout and no auto-proceed ([ADR-024](adr-024-ship-loop-owner-question-timeout-is-not-built.md)).
+   > - **Spawned/headless is unaffected.** The tool is `TOOL_ABSENT` in any consult
+   >   ([ADR-021](adr-021-askuserquestion-is-session-only-absent-in-consults.md)) and the loop refuses
+   >   such an invocation anyway (this same Decision 3).
+   > - **The plan-gate and done-gate keep their own enforcement, independent of the asking mechanism** —
+   >   plan mode for the former (Decision 2), the owner-invoked `/fkit-task-done` mover for the latter
+   >   (Decision 5). Using a structured prompt to *ask* at either gate does not route around either.
+   >
+   > This is a mechanism amendment, not a gate change: it neither adds a gate nor removes one.
 4. **The autonomous class is bounded by fix *shape*, not verdict, plus an obvious-winner rule.** The
    loop applies a change without asking **only if** it is (a) verified `CORRECT`, (b) mechanical/
    localized, and (c) inside the approved plan's design — **or** it is an **obvious winner** (one option
@@ -67,7 +92,7 @@ owner-only done-gate. It never moves a task file.**
    judgment call: a frontier-move / recording a residual, a regression or review oscillation, a disputed
    severity that changes scope, a broad/behavior-changing fix, a genuine tradeoff with no dominant
    option, or anything outside the plan (a new architecture/scope decision → owner,
-   `fkit-coder.md:90-94`). **When in doubt about the shape, it stops.** Every autonomous choice — every
+   `fkit-coder.md:109-113`). **When in doubt about the shape, it stops.** Every autonomous choice — every
    obvious winner — is recorded in the task's worklog decision-log (ADR-020) so it is auditable.
 5. **The done-gate is unchanged and owner-only.** The loop's terminal act is a finalized ready-for-done
    **evidence packet** (evidence to judge, not a done-verdict) plus the explicit ask. **It does not move
@@ -136,6 +161,16 @@ unchanged.**
     reopen this ADR; that is exactly the unenforceable path the Codex pass rejected.
   - **The owner later wants relayed-consent close-out** (loop-triggered task-done) — that is a **new**
     consent-model decision needing its **own** ADR; do not settle it implicitly here.
+  - **A session-global `AskUserQuestion` timeout is armed** (`askUserQuestionTimeout` in *user* settings,
+    or `CLAUDE_AFK_TIMEOUT_MS`) **while the loop uses the tool at the plan-gate or done-gate.** Both
+    gates hold independently of the asking mechanism (plan mode; the owner-invoked mover), so this is
+    **not** a live hole today — the shipped default is `"never"` and
+    [ADR-024](adr-024-ship-loop-owner-question-timeout-is-not-built.md) declined to arm any timer. Named
+    because ADR-024 reasoned about exactly this coupling: if a timer is ever armed, re-check that the two
+    gates are not auto-proceedable, and prefer ADR-024's plain-wait expression for them.
+  - Do **not** re-raise "the loop should not use `AskUserQuestion`" — that is the 2026-07-18 amendment
+    above, taken knowingly on a premise (the tool being ungranted) that no longer holds. A finding must
+    show a concrete failure of the *asking* mechanism, not restate the struck clause.
   - Do **not** re-raise "the coder shouldn't apply fixes without owner approval" as a defect against
     this loop — that is the per-round rule this ADR deliberately amends for `fkit-task-ship-loop` only;
     a finding must point to a specific failure of the shape/stop-list boundary, not restate the general
@@ -151,6 +186,13 @@ unchanged.**
   `PreToolUse` hook that makes "only the coder can run this skill" structural, at any spawn depth.
 - [ADR-010](adr-010-role-locked-sessions-and-skill-lockdown.md) — the consult envelope the loop operates
   within (hop 0 session; hop-1 consults; no cycles).
+- [ADR-022](adr-022-tools-unrestricted-except-adversarial-reviewer.md) — grants the coder
+  `AskUserQuestion` (by inheritance); the fact that voids Decision 3's struck clause.
+- [ADR-021](adr-021-askuserquestion-is-session-only-absent-in-consults.md) — the session/consult seam:
+  the tool is `TOOL_ABSENT` in any spawned consult, so the amendment is **session-only** by construction.
+- [ADR-024](adr-024-ship-loop-owner-question-timeout-is-not-built.md) — declines the owner-question
+  timeout; its "safe design" already treated `AskUserQuestion` as the mid-loop asking mechanism, which
+  independently corroborates the amendment. Its plan-gate/done-gate exclusions stand.
 - Code the implementation (task 53) touches: `claude/skills-for-role.sh` (register for the coder),
   `claude/agents/fkit-coder.md:28-33` (the scoped contract note), `claude/skills/fkit-team/SKILL.md`
   and `claude/README.md` (mirror tables).

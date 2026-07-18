@@ -1,7 +1,7 @@
 # Gate the symlink escape when init writes the `.fkit/interview` intake
 
 ## Sprint
-Backlog (unsprinted)
+Backlog
 
 ## Priority
 Unscheduled

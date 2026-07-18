@@ -220,6 +220,7 @@ test('a tool_name other than Skill reaching this hook -> deny, defensively (matc
 const UNIVERSE = [
   'fkit-adversarial-review', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-initiate-project',
   'fkit-inspect', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review',
+  'fkit-dumb-down', 'fkit-open-questions-interview',
   'fkit-query', 'fkit-record-decision', 'fkit-review', 'fkit-stateful-review', 'fkit-status',
   'fkit-survey-project', 'fkit-task-cancelled', 'fkit-task-done', 'fkit-task-brief',
   'fkit-task-ship-loop', 'fkit-team',
@@ -227,13 +228,13 @@ const UNIVERSE = [
 ];
 
 const OWNED = {
-  lead: ['fkit-team', 'fkit-query'],
-  producer: ['fkit-team', 'fkit-query', 'fkit-initiate-project', 'fkit-task-brief', 'fkit-task-done', 'fkit-task-cancelled', 'fkit-status'],
-  coder: ['fkit-team', 'fkit-query', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review', 'fkit-task-ship-loop'],
-  architect: ['fkit-team', 'fkit-query', 'fkit-survey-project', 'fkit-inspect', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-record-decision'],
-  reviewer: ['fkit-team', 'fkit-query', 'fkit-review', 'fkit-stateful-review'],
+  lead: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down'],
+  producer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-initiate-project', 'fkit-task-brief', 'fkit-task-done', 'fkit-task-cancelled', 'fkit-status'],
+  coder: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review', 'fkit-task-ship-loop'],
+  architect: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-survey-project', 'fkit-inspect', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-record-decision'],
+  reviewer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-review', 'fkit-stateful-review'],
   'adversarial-reviewer': ['fkit-team', 'fkit-query', 'fkit-adversarial-review'],
-  wiki: ['fkit-team', 'fkit-query', 'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync'],
+  wiki: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync'],
 };
 
 for (const role of Object.keys(OWNED)) {

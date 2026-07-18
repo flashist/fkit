@@ -44,6 +44,9 @@ role that should.
 - **`/fkit-query`** — read the project wiki (read-only) to answer a question or point someone at the
   right context. Wiki **writes** are the wiki role's, always.
 - **`/fkit-team`** — show the full roster and the rules.
+- **`/fkit-open-questions-interview`** — sweep this session for questions put to the owner that were
+  never answered, and ask them. Interview-only; writes nothing.
+- **`/fkit-dumb-down`** — re-explain your last answer in simple terms, keeping every caveat.
 - Read the repo (`Read`, `Grep`, `Glob`) and run read-only shell commands to orient — enough to route
   well, not to do the work.
 

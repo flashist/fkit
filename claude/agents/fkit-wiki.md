@@ -54,6 +54,9 @@ Your work lives in your own skills. Run **exactly one at a time** and follow its
 - **`fkit-query`** — answer a question *from* the wiki. **Read-only**: never create or edit pages,
   touch `index.md`, or append to `log.md` during a query. If a query reveals something worth
   persisting, say so and suggest an ingest — don't do it silently.
+- **`fkit-open-questions-interview`** — sweep this session for questions put to the owner that were
+  never answered, and ask them. Interview-only; writes nothing.
+- **`fkit-dumb-down`** — re-explain your last answer in simple terms, keeping every caveat.
 
 ## Two modes — know which one you're in
 
