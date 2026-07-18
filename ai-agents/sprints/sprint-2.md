@@ -65,7 +65,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 33 | Fix the headless menu-guard crash — `[ -r /dev/tty ]` never tests openability *(launcher defect against task-23 assertion 7's contract)* | [`fix-headless-menu-guard-crash.md`](../tasks/done/fix-headless-menu-guard-crash.md) |
 | ✅ Done | 34 | Make `/fkit-task-done` flip the moved brief's own `## Status` header *(mover drift — sibling to task 22)* | [`task-done-flips-brief-own-status-header.md`](../tasks/done/task-done-flips-brief-own-status-header.md) |
 | ✅ Done | 35 | Make `/fkit-task-cancelled` flip the moved brief's own `## Status` header *(same gap, `⛔ Cancelled` marker)* | [`task-cancelled-flips-brief-own-status-header.md`](../tasks/done/task-cancelled-flips-brief-own-status-header.md) |
-| 🔲 Backlog | 36 | Remove the `.fkit/` Omnigent-orphan residue *(OQ5 resolved; the one destructive act — own owner gate; consent model ruled **announce-only** 2026-07-17 — unblocked)* | [`remove-fkit-omnigent-orphan-residue.md`](../tasks/backlog/remove-fkit-omnigent-orphan-residue.md) |
+| ✅ Done | 36 | Remove the `.fkit/` Omnigent-orphan residue *(OQ5 resolved; announce-only ruled 2026-07-17; 4-path list, `.fkit/settings` protected, non-fatal; owner: fkit-coder)* | [`remove-fkit-omnigent-orphan-residue.md`](../tasks/done/remove-fkit-omnigent-orphan-residue.md) |
 | 🔲 Backlog | 37 | Record a tombstone ADR for the shared-instructions reversal *(OQ6 resolved; owner: fkit-architect)* | [`record-shared-instructions-reversal-adr.md`](../tasks/backlog/record-shared-instructions-reversal-adr.md) |
 | ✅ Done | 38 | Add a full-board switch (`full`) to `/fkit-status` *(skill-text only; owner: fkit-coder)* | [`add-full-board-switch-to-fkit-status.md`](../tasks/done/add-full-board-switch-to-fkit-status.md) |
 | ✅ Done | 39 | Investigate making `AskUserQuestion` available to fkit agents *(investigation — [findings](../knowledge-base/reports/2026-07-17-askuserquestion-availability-for-agents.md); spawned [ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md); owner: fkit-architect)* | [`investigate-askuserquestion-availability-for-agents.md`](../tasks/done/investigate-askuserquestion-availability-for-agents.md) |
@@ -86,8 +86,12 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 54 | Grant the `AskUserQuestion` tool to the six Claude-side agents *(implements [ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md) Decision 4 / task 39 findings; tool grant, not a skill; owner: fkit-coder)* | [`grant-askuserquestion-tool-to-six-claude-agents.md`](../tasks/done/grant-askuserquestion-tool-to-six-claude-agents.md) |
 | 🔲 Backlog | 55 | Design the `fkit-git` agent + commit/push consent model *(design — **collides with the "never commit" hard rule**; owner present for the ruling; owner: fkit-architect)* | [`design-fkit-git-agent-and-consent-model.md`](../tasks/backlog/design-fkit-git-agent-and-consent-model.md) |
 | 🔲 Backlog | 56 | Implement the `fkit-git` agent + `commit-push` skill from the approved design *(needs 55 incl. owner approval — hard; owner: fkit-coder)* | [`implement-fkit-git-agent-and-commit-push.md`](../tasks/backlog/implement-fkit-git-agent-and-commit-push.md) |
-| 🔲 Backlog | 57 | Relax the tool allowlist for every role except the adversarial reviewer *(implements [ADR-022](../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md); subsumes task 54's mechanism; tools change only — skills stay locked; owner: fkit-coder)* | [`relax-tool-allowlists-except-adversarial-reviewer.md`](../tasks/backlog/relax-tool-allowlists-except-adversarial-reviewer.md) |
+| ✅ Done | 57 | Relax the tool allowlist for every role except the adversarial reviewer *(implements [ADR-022](../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md); subsumes task 54's mechanism; tools change only — skills stay locked; owner: fkit-coder)* | [`relax-tool-allowlists-except-adversarial-reviewer.md`](../tasks/done/relax-tool-allowlists-except-adversarial-reviewer.md) |
 | 🔲 Backlog | 58 | Refresh the docs for the tool-allowlist relaxation *(ADR-022 doc follow-up; soft-needs 57; owner: fkit-architect)* | [`refresh-architecture-docs-for-tool-relaxation.md`](../tasks/backlog/refresh-architecture-docs-for-tool-relaxation.md) |
+| 🔲 Backlog | 59 | Design a timeout-auto-proceed for the ship-loop's owner questions *(design — **feasibility unknown, amends ADR-019, done-gate must stay hard**; owner present; owner: fkit-architect)* | [`design-ship-loop-timeout-auto-proceed.md`](../tasks/backlog/design-ship-loop-timeout-auto-proceed.md) |
+| 🔲 Backlog | 60 | Implement the ship-loop timeout-auto-proceed from the approved design *(needs 59 incl. approval + feasibility verdict — hard; owner: fkit-coder)* | [`implement-ship-loop-timeout-auto-proceed.md`](../tasks/backlog/implement-ship-loop-timeout-auto-proceed.md) |
+| 🔲 Backlog | 61 | Restructure the coder's report — bullet summary first, interview on open questions last *(agent-contract edit; session=AskUserQuestion / consult=return-in-reply; owner: fkit-coder)* | [`restructure-coder-report-summary-then-interview.md`](../tasks/backlog/restructure-coder-report-summary-then-interview.md) |
+| 🔲 Backlog | 62 | Add a "Speak in simple terms" output-style preference for all agents *(preference not hard-rule; 4 files — CLAUDE.md + AGENTS.md × dogfood + scaffold; owner: fkit-coder)* | [`add-speak-in-simple-terms-output-style.md`](../tasks/backlog/add-speak-in-simple-terms-output-style.md) |
 
 ## Dependency graph
 
@@ -885,6 +889,70 @@ no role-boundary prose is edited).
    allowlists (owner: fkit-wiki). Not pre-filed — worth a task only if the vault records them.
 
 **Numbered 57/58 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — tasks 59 and 60 added out of band (2026-07-18): ship-loop timeout-auto-proceed
+
+**The owner's ask:** in `fkit-task-ship-loop`, an owner question that goes unanswered currently blocks
+the whole loop forever. Instead — present options with one marked **recommended**, and if the owner is
+silent for ~30s, proceed on the recommended one. Owner said *"if possible."*
+
+**Scoped design-first — feasibility is the gating unknown.** Claude Code is turn-based; there is no
+established ambient wall-clock timer that re-invokes the model after 30s of silence. Whether a timed
+auto-proceed is expressible **at all** must be **tested against the binary, not reasoned** (the task-39
+`AskUserQuestion` precedent: looked capable, measured session-only 0/3→0/2). If infeasible, the design
+recommends the closest achievable alternative (e.g. an up-front proceed-on-defaults grant), not a timer
+that never fires.
+
+**Hard conflicts flagged for the design (owner rules):** the **done-gate must stay a hard stop** —
+auto-advancing "mark it done" routes around the owner-invoked mover (a universal hard rule D1
+preserved); the **plan-approval gate** is ADR-019's central guarantee and is **excluded by default**
+unless the owner explicitly rules to weaken it; the **mid-loop important-questions** are the plausible
+target, and even there it shifts ADR-019's claim level to autonomous *judgment* defaults — hence the
+ADR-019 amendment.
+
+- **Task 59 — design** (owner: fkit-architect, owner present; adversarial pass recommended).
+- **Task 60 — implement** (owner: fkit-coder; **needs 59 incl. approval + feasibility verdict — hard**).
+
+*(Numbered 59/60 — renumbered from a first-drafted 57/58 to avoid a duplicate-priority collision with
+the concurrently-added tool-allowlist-relaxation tasks, which hold 57/58.)* **Owner to confirm the
+ranking.**
+
+## Addendum — task 61 added out of band (2026-07-18): the coder's report shape
+
+**The owner's ask:** change how the coder reports back — (1) **open with a bullet-point summary**, and
+(2) **end by interviewing the owner** on any open questions, rather than only listing them.
+
+**One brief, single-file** (`claude/agents/fkit-coder.md`) — agent files are not dual-homed (no
+scaffold copy), and the change needs no investigation: the session-vs-consult seam it relies on is
+already codified at `fkit-coder.md:34-35` (session → `AskUserQuestion`, now held via ADR-022; spawned
+consult → tool absent per ADR-021, return questions in the reply). That degradation is **forced**, and
+the brief keeps it. Consistency to honor, not override: the `status-report-format` convention /
+"be concise" (the summary aligns with them, no second format), and the ship-loop's own §6.3 report
+(the loop's specific contract wins inside the loop; this general contract governs ordinary reports).
+**Soft-adjacent to tasks 59/60** — no hard dependency.
+
+**Numbered 61 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — task 62 added out of band (2026-07-18): "speak in simple terms"
+
+**The owner's ask:** a standing instruction for every agent — *"Speak in simple terms"* (simpler,
+easier words). This is the task-29 shared-instructions case: to give every fkit agent a standing
+instruction, write it in the shared context files — **no code, no new mechanism.**
+
+**One brief, atomic across four files.** Settled placement, per the task-29/30 findings:
+- It is an **output-style preference** (like "be concise"), so it goes in the **`## Output style`**
+  section — **not** the universal-hard-rules block, and **not** the task-31 marker-managed block.
+- **"All agents" includes the Codex-run adversarial reviewer**, so it must be in **`AGENTS.md`**, not
+  only `CLAUDE.md` (task-29's "a shared layer that excludes the second model is misnamed").
+- **Dual-home** (task-48/49): the section lives in four files — root `CLAUDE.md`/`AGENTS.md` (dogfood)
+  and `claude/scaffold/CLAUDE.md`/`AGENTS.md` (shipped). All four carry byte-identical wording or "all
+  agents" is true in one home only.
+
+**One scope question for the owner:** the brief ships it **fkit-wide** (scaffold + dogfood) on the
+reading that "all agents" means every deployment. Owner to confirm it should reach consuming projects
+and not stay local to this repo.
+
+**Numbered 62 for append-don't-renumber discipline. Owner to confirm the ranking.**
 
 ## Open questions for the owner
 

@@ -6,7 +6,6 @@ description: >-
   changed since the last sync), or a deep multi-step wiki research question. Simple lookups don't need
   it — any session can run the read-only /fkit-query procedure. Reads and writes wiki files; never
   commits.
-tools: Read, Grep, Glob, Bash, Write, Edit, Skill, AskUserQuestion
 color: cyan
 initialPrompt: >-
   You are running as the session wiki librarian and the owner is present. Read the rulebook

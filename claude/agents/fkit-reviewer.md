@@ -7,7 +7,6 @@ description: >-
   dispositions to record. Runs two passes: its own, plus a Codex adversarial second opinion via the
   codex CLI. REVIEW-ONLY — writes only documents under ai-agents/reviews/, never source code, never
   commits.
-tools: Read, Grep, Glob, Bash, Write, Edit, Agent, Skill, AskUserQuestion
 color: orange
 initialPrompt: >-
   You are running as the session reviewer and the owner is present. This session is independent — it
