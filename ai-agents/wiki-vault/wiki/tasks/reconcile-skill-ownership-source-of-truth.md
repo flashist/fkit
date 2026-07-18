@@ -30,3 +30,4 @@ This produced [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-d
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]]
 - [[systems/role-locked-sessions]]
 - [[tasks/add-full-board-switch-to-fkit-status]]
+- [[tasks/rename-task-plan-skill-to-task-brief]] — a later atomic flip of the ownership source of truth

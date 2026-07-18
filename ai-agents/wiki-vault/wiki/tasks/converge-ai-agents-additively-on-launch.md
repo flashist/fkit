@@ -26,3 +26,5 @@ Replaced the all-or-nothing guard with a **per-path create-if-absent top-up**:
 - [[tasks/refuse-init-on-weird-ai-agents-state]] — task 27, a hard precondition
 - [[systems/fkit]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/remove-fkit-omnigent-orphan-residue]] — the destructive sibling deliberately kept out of this additive pass
+- [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — a new-file delivery this convergence carries to existing projects

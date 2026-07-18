@@ -38,12 +38,14 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — **`PreToolUse` hook enforces skill ownership by the real caller at any depth; `CONSULT_SKILLS` retired.** Supersedes ADR-012 Decisions 3&4
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — The coder's ship-loop runs autonomously by default; gated only at plan-approval and the owner-only done-gate
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — Per-task `plans/` + `worklogs/` dirs, keyed by task-id, mirroring `reviews/`
+- [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — Tombstone: `AskUserQuestion` measured session-only (2.1.212); the consult "return open questions" contract is the only option
+- [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — **Tool allowlists relaxed for six roles; the adversarial reviewer's wall is the sole structural tool restriction**
 
 ## Tasks
 
 ### Sprints
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — 🔒 Closed: the Omnigent-era onboarding sprint, and how its 12 tickets were dispositioned
-- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**42/53 done**; grew 22 → 53)
+- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**50/62 done**; grew 22 → 62)
 
 ### Sprint 2 — the removal chain
 - [[tasks/extract-scaffold-into-claude]] — Move the shared scaffold out of `omnigent/` (Phase 0.1)
@@ -56,6 +58,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/reconcile-skill-ownership-source-of-truth]] — One source of truth for role→skill ownership → ADR-012
 - [[tasks/remove-fkit-resume-passthrough]] — Drop the blanket arg-passthrough that resumed any session as `lead`
 - [[tasks/wiki-sync-post-omnigent]] — The Phase 5b vault rebuild; genuinely last, and why
+- [[tasks/remove-fkit-omnigent-orphan-residue]] — The one destructive act (`rm -rf` of 4 orphan paths); consent model ruled **announce-only**; `.fkit/settings` untouchable
 
 ### Sprint 2 — knowledge base
 - [[tasks/formalize-knowledge-base-incidents-folder]] — Give `incidents/` a convention → ADR-013
@@ -86,17 +89,28 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/design-deterministic-dashboard-for-fkit-status]] — Design-first → ADR-017; **implementation now Done**
 - [[tasks/build-deterministic-dashboard-script-for-fkit-status]] — fkit's **first shipped executable** (`dashboard.sh`); the roll-up becomes a computed invariant
 - [[tasks/add-full-board-switch-to-fkit-status]] — A reserved `full` keyword overriding the delta default (**later reverted by task 44**)
+- [[tasks/remove-output-variants-from-fkit-status]] — Task 44: the delta default and `full` deleted together; one output on every invocation (sprint-name operand survives)
 - [[tasks/record-one-skill-one-output-convention]] — The standing rule the `full` reversal generalized: one complete output per subject; no output-variant arguments
+- [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — Task 48: the convention shipped in the scaffold — the **fourth** live-vs-scaffold parity instance
 
 ### Sprint 2 — the consult-path skill-gate hook
 - [[tasks/record-pretooluse-skill-gate-adr-amendment]] — Reopens ADR-012 Decisions 3&4 → ADR-018
 - [[tasks/implement-pretooluse-skill-ownership-hook]] — The `PreToolUse` hook-flip; retires `CONSULT_SKILLS`, enforces by the real caller
 
 ### Sprint 2 — the coder's autonomous ship-loop
-- [[tasks/design-task-ship-loop-skill]] — Owner-approved design → ADR-019 + ADR-020; brief→done with minimal owner involvement (impl is task 53, backlog)
+- [[tasks/design-task-ship-loop-skill]] — Owner-approved design → ADR-019 + ADR-020; brief→done with minimal owner involvement
+- [[tasks/implement-task-ship-loop-skill]] — Task 53: the loop built and live — skill registered for the coder, hook suite green
+
+### Sprint 2 — the `AskUserQuestion` seam and the tool-posture reversal
+- [[tasks/investigate-askuserquestion-availability-for-agents]] — Measured the session/consult seam (consult `TOOL_ABSENT` 3/3) → ADR-021
+- [[tasks/grant-askuserquestion-tool-to-six-claude-agents]] — Task 54: the six-agent grant; mechanism later superseded by task 57, capability preserved
+- [[tasks/relax-tool-allowlists-except-adversarial-reviewer]] — Task 57: six `tools:` lines removed (ADR-022); the adversarial reviewer's wall stays byte-identical
+
+### Sprint 2 — the skill-name collision
+- [[tasks/rename-task-plan-skill-to-task-brief]] — Task 50: `/fkit-task-plan` → `/fkit-task-brief`, atomic across dir + ownership source of truth + hook
 
 ### Sprint 2 — producer & coder tooling
-- [[tasks/add-task-plan-skill-to-producer]] — A procedure for writing task briefs; decompose to smallest shippable unit
+- [[tasks/add-task-plan-skill-to-producer]] — A procedure for writing task briefs; decompose to smallest shippable unit (skill since renamed `fkit-task-brief`, task 50)
 - [[tasks/add-status-skill-to-producer]] — A procedure for answering "what's the status?"
 - [[tasks/enforce-task-status-vocabulary]] — The closed status set: Backlog · In progress · Blocked · Done · Cancelled · Moved
 - [[tasks/restore-plan-mode-in-plan-task]] — Regression: the planning gate was prose, not a wall

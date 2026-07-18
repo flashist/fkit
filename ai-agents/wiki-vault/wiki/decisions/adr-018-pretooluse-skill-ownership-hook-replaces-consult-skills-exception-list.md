@@ -42,3 +42,7 @@ ADR-012 established — empirically — that the fkit skill lockdown is **sessio
 - [[tasks/implement-pretooluse-skill-ownership-hook]] — the implementation this unblocked
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — relies on this hook to make "only the coder can run the loop" structural
 - [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — relaxes tools; explicitly keeps this hook's skill lockdown
+- [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]
+- [[tasks/implement-task-ship-loop-skill]] — a skill this hook gates
+- [[tasks/rename-task-plan-skill-to-task-brief]] — a rename that had to flip atomically with this hook

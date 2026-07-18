@@ -28,7 +28,7 @@ The owner wants a **deterministic layer** for `/fkit-status`: a script that rend
 
 **Runtime: bash** — *fkit's entire product surface is bash, the parse is line-oriented markdown (no JSON assertion, unlike the `skillOverrides` map that won node for the test suite), and bash adds **zero** new PATH assumption on a consumer machine.* **ADR-014's `node --test` precedent is for repo-root infra that cannot ship to consumers — the opposite calculus.**
 
-**Scope boundary held: the `Depends on:` format was not touched.** Constraining it to be machine-parseable is a separate, larger convention change touching every brief, `/fkit-task-plan`, and both movers. **The recommendation was: not now.**
+**Scope boundary held: the `Depends on:` format was not touched.** Constraining it to be machine-parseable is a separate, larger convention change touching every brief, `/fkit-task-plan` (since renamed `/fkit-task-brief`), and both movers. **The recommendation was: not now.**
 
 **Implementation is now Done** — [[tasks/build-deterministic-dashboard-script-for-fkit-status]] shipped `claude/skills/fkit-status/dashboard.sh` and wired it into the skill.
 

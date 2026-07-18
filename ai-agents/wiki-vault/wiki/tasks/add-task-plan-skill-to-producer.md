@@ -17,11 +17,12 @@ The producer had `initiate-project` / `task-done` / `task-cancelled` — **the *
 **The test is independent shippability, not size.** And: **splits must carry their dependency links, or the split has lost information.**
 
 ## Outcome
-Done. `/fkit-task-plan` is now a producer-owned skill.
+Done. `/fkit-task-plan` became a producer-owned skill — **since renamed to `/fkit-task-brief`** (Sprint 2 task 50, [[tasks/rename-task-plan-skill-to-task-brief]]) to break the name collision with the coder's `/fkit-plan-task`.
 
 The rule it encodes is visible in Sprint 2's own shape — most clearly in the **21 / 22 split**, where the one-off link repair and the process fix that stops the rot recurring were deliberately made **separate tasks**, on the grounds that *"landing only 21 buys nothing durable."*
 
 ## Related
+- [[tasks/rename-task-plan-skill-to-task-brief]] — the later rename to `/fkit-task-brief`
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
 - [[tasks/add-status-skill-to-producer]]

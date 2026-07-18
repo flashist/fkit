@@ -17,7 +17,7 @@ The reviewer assembles a **findings-only prompt plus an inline diff** into `.fki
 codex exec --sandbox read-only --cd "$PWD" -
 ```
 
-`fkit-adversarial-reviewer` has **no Write or Edit tools at all** — it is structurally write-free, a leaf that returns findings and nothing else. That is enforced by its tool allowlist, not by instruction.
+`fkit-adversarial-reviewer` has **no Write or Edit tools at all** — it is structurally write-free, a leaf that returns findings and nothing else. That is enforced by its tool allowlist, not by instruction — and since [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] (2026-07-18) it is **the only structural tool wall left in fkit**: every other role's allowlist was relaxed, deliberately, because this is the one wall protecting a checkable invariant (the second opinion never had write authority over the code it judges). Its `tools:` line holds at any spawn depth and is not to be "tidied up" to match the others.
 
 ### Degradation is loud
 With no Codex available, the review **leads with**:
@@ -65,4 +65,6 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - [[tasks/wiki-sync-post-omnigent]]
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]]
+- [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]
+- [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]
 - [[tasks/design-task-ship-loop-skill]]

@@ -26,3 +26,4 @@ The sibling of [[tasks/extend-initiate-project-fill-overview]]: together they cl
 - [[tasks/extend-initiate-project-fill-overview]]
 - [[tasks/fix-claude-agents-md-placeholder-text]]
 - [[systems/knowledge-base-structure]]
+- [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — the fourth parity instance

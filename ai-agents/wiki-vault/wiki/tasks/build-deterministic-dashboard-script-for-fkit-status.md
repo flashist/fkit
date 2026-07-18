@@ -26,3 +26,4 @@ Implement the "deterministic layer" the owner asked for on `/fkit-status`: a scr
 - [[systems/testing-and-verification]]
 - [[tasks/record-one-skill-one-output-convention]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/remove-output-variants-from-fkit-status]] — the delta-default removal this script made cheap

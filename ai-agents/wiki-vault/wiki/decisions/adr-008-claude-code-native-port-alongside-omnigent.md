@@ -42,3 +42,4 @@ The shared, runtime-agnostic **`ai-agents/` file contracts are the portability l
 - [[systems/role-locked-sessions]]
 - [[systems/review-and-model-diversity]]
 - [[systems/subagent-runner-connectivity]]
+- [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — amends this ADR's tool-allowlist half

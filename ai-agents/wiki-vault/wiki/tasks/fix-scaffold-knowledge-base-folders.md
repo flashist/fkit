@@ -34,3 +34,4 @@ The verification that mattered was the comparison, not the tree-walk: **scaffold
 - [[systems/knowledge-base-structure]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/stop-init-failure-bricking-the-launcher]]
+- [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — the fourth parity instance

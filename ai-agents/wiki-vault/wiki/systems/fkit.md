@@ -23,17 +23,17 @@ Each role is one file — `claude/agents/fkit-<role>.md`: YAML frontmatter (`nam
 | `fkit-reviewer` | Review-only; writes **only** under `ai-agents/reviews/`. |
 | `fkit-adversarial-reviewer` | Findings only. **Structurally write-free — a leaf.** Runs on Codex. |
 | `fkit-wiki` | **Exclusive write gateway** for `ai-agents/wiki-vault/`. A leaf. |
-| `fkit-lead` | The **team room** (menu 7). Routes; **does no work** — no Write/Edit. |
+| `fkit-lead` | The **team room** (menu 7). Routes; **does no work** — a prompt contract since ADR-022 (its no-Write/Edit tool wall is gone). |
 
-The **tool allowlist is harness-enforced** and is the strongest boundary in the system: the adversarial reviewer and the lead genuinely *cannot* write files. That is structural, not a request.
+**The tool-allowlist posture was deliberately reversed on 2026-07-18** ([[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]], implemented by [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]): the six Claude-side agents now carry **no `tools:` line at all** — they inherit every Claude Code tool (`WebSearch`, `LSP`, `AskUserQuestion`, …) — and role separation for them rests on **prompts + the skill hook**, accepted knowingly. **Exactly one structural tool wall remains, and it is deliberate: the adversarial reviewer's** (`Read, Grep, Glob, Bash, Skill` — no Write/Edit/Agent), which keeps *"the second opinion never touched the code it judges"* a structural fact at any spawn depth. *(Older "strongest boundary in the system" language — including `architecture.md`'s — describes the superseded posture; the doc refresh is Sprint 2 task 58, backlog.)*
 
-### The 21 skills
+### The 22 skills
 Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedures**; the agent prompts are the role's *character*. Every role-specific skill opens with a `⛔ Owner:` banner naming the one role allowed to run it. Only `fkit-query` carries no banner — it is universal by design.
 
 | Owner | Skills |
 |---|---|
-| producer | `initiate-project`, `task-plan`, `task-done`, `task-cancelled`, `status` |
-| coder | `plan-task`, `process-review`, `process-stateful-review` |
+| producer | `initiate-project`, `task-brief` *(renamed from `task-plan`, [[tasks/rename-task-plan-skill-to-task-brief]])*, `task-done`, `task-cancelled`, `status` |
+| coder | `plan-task`, `process-review`, `process-stateful-review`, `task-ship-loop` *([[tasks/implement-task-ship-loop-skill]])* |
 | architect | `survey-project`, `inspect`, `design-spec`, `evaluate-approach`, `record-decision` |
 | reviewer | `review`, `stateful-review` |
 | adversarial reviewer | `adversarial-review` |
@@ -52,7 +52,7 @@ There is no database. The **`ai-agents/` tree is the entire coordination state**
 
 `reviews/<task-id>.md` is a **two-party ledger**, written by reviewer *and* coder. It is the loop-prevention memory: it carries decision state and **accepted residuals** across review rounds so settled tradeoffs are not re-litigated.
 
-**Two more per-task, task-id-keyed record dirs are sanctioned** ([[decisions/adr-020-per-task-plan-and-worklog-artifacts]]), mirroring `reviews/` — written by the coder's autonomous ship-loop, git-tracked, retained by id, **not** moved by task-done and **not** wiki-ingested: `plans/<task-id>.md` (the owner-approved plan — the loop's autonomy boundary) and `worklogs/<task-id>.md` (the worklog + owner-decision log → finalized ready-for-done report). *(The loop itself is designed and owner-approved — [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — but not yet implemented; its skill is Sprint 2 task 53, backlog.)*
+**Two more per-task, task-id-keyed record dirs are sanctioned** ([[decisions/adr-020-per-task-plan-and-worklog-artifacts]]), mirroring `reviews/` — written by the coder's autonomous ship-loop, git-tracked, retained by id, **not** moved by task-done and **not** wiki-ingested: `plans/<task-id>.md` (the owner-approved plan — the loop's autonomy boundary) and `worklogs/<task-id>.md` (the worklog + owner-decision log → finalized ready-for-done report). *(The loop is now **built and live** — [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]], implemented by [[tasks/implement-task-ship-loop-skill]].)*
 
 Generated and gitignored per project: `.fkit/settings/<role>.json` (the skill lockdown), `.fkit/interview` + `.fkit/intake.md`, `.fkit/tmp/adversarial-prompt.md`, and the fkit-managed `.claude/agents/fkit-*.md` + `.claude/skills/fkit-*/` copies.
 
@@ -73,7 +73,7 @@ This is recorded because it explains things that would otherwise look arbitrary:
 1. ~~**Does the `PreToolUse` hook payload expose the calling subagent's identity?**~~ **Answered: yes** — verified against the running Claude Code binary (`agent_type`/`agent_id`, at any spawn depth). The consult-path skill boundary is now **structurally enforced**, not advisory: [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]], implemented by [[tasks/implement-pretooluse-skill-ownership-hook]]. See [[systems/role-locked-sessions]].
 2. ~~**What is the intended verification story?**~~ **Answered** by [[decisions/adr-014-how-fkit-tests-itself]]: a black-box process contract at the repo root, zero devDeps, never shipped to consumers. **What remains open is narrower** — `install.sh` e2e and a CI workflow are deferred to Sprint 3, and *"does a red suite gate `Done`?"* is still an owner call.
 3. ~~**Is `fkit --resume` worth keeping at all?**~~ **Answered: no.** The owner ruled **removal**, rejecting both of the coder's proposed fixes (*persist the role* / *require a role*). The question is **closed** — do not reopen it, and do not build a replacement.
-4. ~~**What is the consent model for the one destructive act still on the table** — clearing the `.fkit/` Omnigent orphans?~~ **Answered: announce-only** (owner, 2026-07-17 — owner is currently fkit's only user; Omnigent-scoped, no precedent for future destructive ops). **Sprint 2 task 36 is unblocked** (still backlog). `.fkit/settings` is live lockdown state and must never be touched.
+4. ~~**What is the consent model for the one destructive act still on the table** — clearing the `.fkit/` Omnigent orphans?~~ **Answered: announce-only** (owner, 2026-07-17), and the cleanup is now **Done** ([[tasks/remove-fkit-omnigent-orphan-residue]]). `.fkit/settings` is live lockdown state and must never be touched.
 
 ## Related
 - [[systems/role-locked-sessions]]
@@ -90,6 +90,11 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]]
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]]
+- [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]
+- [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]
+- [[tasks/implement-task-ship-loop-skill]]
+- [[tasks/rename-task-plan-skill-to-task-brief]]
+- [[tasks/remove-fkit-omnigent-orphan-residue]]
 - [[tasks/implement-pretooluse-skill-ownership-hook]]
 - [[tasks/converge-ai-agents-additively-on-launch]]
 - [[tasks/add-no-secrets-rule-to-fkit-lead]]

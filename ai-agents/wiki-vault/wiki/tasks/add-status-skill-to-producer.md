@@ -30,3 +30,4 @@ The sibling of [[tasks/add-task-plan-skill-to-producer]], on the same logic: **f
 - [[tasks/stop-agents-asserting-unchecked-repo-state]]
 - [[tasks/design-deterministic-dashboard-for-fkit-status]]
 - [[tasks/add-full-board-switch-to-fkit-status]]
+- [[tasks/remove-output-variants-from-fkit-status]] — the one-output reversion applied to this skill

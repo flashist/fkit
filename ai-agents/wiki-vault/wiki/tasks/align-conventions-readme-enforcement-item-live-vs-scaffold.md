@@ -36,3 +36,4 @@ The two copies of the conventions-index README diverge on item 3 of **"The bar f
 - [[tasks/formalize-knowledge-base-incidents-folder]]
 - [[systems/knowledge-base-structure]]
 - [[systems/launch-convergence-and-init]]
+- [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — the fourth parity instance

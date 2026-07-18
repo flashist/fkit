@@ -89,3 +89,5 @@ The "Positive" section read **"Codex finally gets a floor."** Fifteen lines abov
 - [[tasks/sprint-2-remove-omnigent]]
 - [[systems/install-and-self-update]]
 - [[systems/fkit]]
+- [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — the sibling tombstone on the same session/consult seam
+- [[tasks/investigate-askuserquestion-availability-for-agents]]

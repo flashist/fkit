@@ -36,3 +36,4 @@ fkit already has the precedent: `ai-agents/reviews/<task-id>.md` — a git-track
 - [[systems/fkit]] — the `ai-agents/` data model these extend
 - [[tasks/design-task-ship-loop-skill]] — the design (§4.1, §7) that produced this ADR
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/implement-task-ship-loop-skill]] — the loop that writes these artifacts, now live

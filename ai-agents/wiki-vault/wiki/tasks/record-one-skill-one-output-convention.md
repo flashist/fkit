@@ -19,11 +19,14 @@ Wrote `ai-agents/knowledge-base/conventions/one-skill-one-output.md`, and added 
 **Owner: fkit-architect** — a knowledge-base document, no code. Scope boundary: it **records** the rule; it does not audit-and-fix the skill set (a further live variant is a finding to flag, not fix here).
 
 ## Outcome
-**Done.** Its delivery surfaced the **fourth** live-vs-scaffold parity instance (the convention landed in the live tree but not `claude/scaffold/ai-agents/knowledge-base/conventions/`), spawning tasks 48 (ship it in the scaffold) and 49 (investigate the parity cause) — both backlog.
+**Done.** Its delivery surfaced the **fourth** live-vs-scaffold parity instance (the convention landed in the live tree but not `claude/scaffold/ai-agents/knowledge-base/conventions/`), spawning tasks 48 ([[tasks/ship-one-skill-one-output-convention-in-scaffold]] — now Done) and 49 (the parity-cause investigation, backlog). Task 44 ([[tasks/remove-output-variants-from-fkit-status]] — Done) applied the rule to `/fkit-status` itself.
 
 ## Related
+- [[tasks/remove-output-variants-from-fkit-status]] — task 44, the instance this rule generalizes
+- [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — task 48, which ships the convention to consuming projects
 - [[systems/knowledge-base-structure]] — the conventions folder this entry joins
 - [[tasks/add-full-board-switch-to-fkit-status]] — task 38, the honest history (the `full` switch, later reverted)
 - [[tasks/build-deterministic-dashboard-script-for-fkit-status]] — task 41, which made rendering free and retired the variant
 - [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]] — a prior live-vs-scaffold parity instance
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/implement-task-ship-loop-skill]] — the ship-loop's operand-only argument contract follows this rule

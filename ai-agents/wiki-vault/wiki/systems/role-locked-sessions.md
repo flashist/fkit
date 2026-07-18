@@ -4,7 +4,7 @@
 **Key files**: `claude/skills-for-role.sh` (`skills_for_role()` — the single source of truth), `claude/fkit-claude.sh` (`build_settings()`), `claude/skill-ownership-hook.sh` (the `PreToolUse` skill-ownership gate), `claude/agents/fkit-*.md`, `.fkit/settings/<role>.json`
 
 ## Summary
-Every fkit session is pinned to exactly one role. `fkit <role>` launches `claude --agent fkit-<role>` with generated `--settings`, so the session gets that role's system prompt, its **tool allowlist**, and **only its own `/fkit-*` skills** — every other fkit skill is turned off, invisible and unrunnable.
+Every fkit session is pinned to exactly one role. `fkit <role>` launches `claude --agent fkit-<role>` with generated `--settings`, so the session gets that role's system prompt and **only its own `/fkit-*` skills** — every other fkit skill is denied. *(Until 2026-07-18 the lock also carried a per-role **tool allowlist**; ADR-022 relaxed that half — see below.)*
 
 This is what makes *"the coder cannot run the reviewer's procedure"* a **fact rather than a request**. It replaced an earlier model where a single lead session "wore hats" — which was prompt-enforced, and therefore exactly as strong as the model's willingness to comply.
 
@@ -12,7 +12,7 @@ This is what makes *"the coder cannot run the reviewer's procedure"* a **fact ra
 
 A session is locked **two ways**:
 
-1. **`--agent fkit-<role>`** — the role's system prompt **and tool allowlist**. Harness-enforced.
+1. **`--agent fkit-<role>`** — the role's system prompt (and, for the adversarial reviewer only, a tool allowlist). Harness-enforced.
 2. **`--settings` carrying `skillOverrides`** — `build_settings()` writes `{"skillOverrides":{"<not-owned>":"off",…}}` to `.fkit/settings/<role>.json`. Every `fkit-*` skill the role does not own is hidden from the `/` menu **and unrunnable by name**. Non-fkit skills (the project's own, the user's own) are never touched.
 
 ### The scope of the lock — now structural at any depth (2026-07-16)
@@ -43,7 +43,11 @@ Cross-role work is a **consult**, never a role switch. `@fkit-<role> <question>`
 - **never consult your invoker**, or anyone already named in the chain (the chain is passed along);
 - **genuinely new architecture decisions escalate to the owner** — never settled implicitly between agents.
 
-**This topology is prompt-enforced, knowingly**: Claude Code ignores `Agent(type)` allowlists inside *subagent* definitions, so the hop budget cannot be made structural. It *is* structural in one place — `fkit-lead`'s own `Agent(...)` list.
+**This topology is prompt-enforced, knowingly**: Claude Code ignores `Agent(type)` allowlists inside *subagent* definitions, so the hop budget cannot be made structural. *(It used to be structural in one place — `fkit-lead`'s own `Agent(...)` list — until ADR-022 removed the lead's `tools:` line; the topology is now prompt-enforced everywhere, taken knowingly.)*
+
+### The tool half of the lock — relaxed (2026-07-18)
+
+**[[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]** (implemented by [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]) relaxed the **tool-allowlist** half of the role lock: the six Claude-side agents carry **no `tools:` line** and inherit every Claude Code tool. Rationale: the capability tools were excluded by accident; the wall was never a real sandbox (every agent holds `Bash`); and only one wall protects a checkable invariant. **The adversarial reviewer keeps `tools: Read, Grep, Glob, Bash, Skill` byte-identical** — an agent's own `tools:` line governs it at any spawn depth, so its independence survives even when spawned by an unrestricted reviewer. **The skill lockdown (the ADR-018 hook) is deliberately untouched** — capabilities are free, procedures stay role-locked. Related: [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — `AskUserQuestion` works in a session but is `TOOL_ABSENT` in any spawned consult regardless of the grant (measured, Claude Code 2.1.212), so the consult "return open questions" contract is the only option a consult has.
 
 ## Gotchas / Known Issues
 - **There is no `skills:` frontmatter.** It was dropped from all 7 agents: Claude Code treats it as a *preload hint*, not an allowlist, so it enforced nothing. Keeping it — even generated — would have preserved a field that *looks* like the invariant and isn't. **Do not re-add it.**
@@ -58,6 +62,11 @@ Cross-role work is a **consult**, never a role switch. `@fkit-<role> <question>`
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
 - [[tasks/record-pretooluse-skill-gate-adr-amendment]]
 - [[tasks/implement-pretooluse-skill-ownership-hook]]
+- [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]]
+- [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]
+- [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]
+- [[tasks/investigate-askuserquestion-availability-for-agents]]
+- [[tasks/rename-task-plan-skill-to-task-brief]]
 - [[decisions/adr-008-claude-code-native-port-alongside-omnigent]]
 - [[systems/review-and-model-diversity]]
 - [[tasks/reconcile-skill-ownership-source-of-truth]]

@@ -79,3 +79,4 @@ This principle caught a real error: the knowledge-base hygiene pass had improvis
 - [[tasks/amend-subagent-disconnect-incident-doc]]
 - [[tasks/bake-architecture-pointer-into-scaffold-templates]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — the convention's scaffold delivery

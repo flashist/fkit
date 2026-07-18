@@ -36,3 +36,4 @@ Task 53 applies the single contract edit this requires: a scoped note in `fkit-c
 - [[systems/fkit]]
 - [[tasks/design-task-ship-loop-skill]] — the design task (priority 52) that produced this ADR
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/implement-task-ship-loop-skill]] — the implementation (task 53)

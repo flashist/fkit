@@ -95,3 +95,4 @@ Init runs under `set -euo pipefail` and was called **unguarded** from a launcher
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/add-shared-instructions-layer-for-all-agents]]
 - [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]]
+- [[tasks/remove-fkit-omnigent-orphan-residue]] — the one-time destructive cleanup kept out of the every-launch pass

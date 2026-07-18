@@ -54,3 +54,5 @@ Plus:
 - [[decisions/adr-014-how-fkit-tests-itself]]
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
 - [[systems/testing-and-verification]]
+- [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — measured confirmation of the consult envelope
+- [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — relaxes this ADR's tool-allowlist half; the skill half stands

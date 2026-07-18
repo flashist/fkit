@@ -9,7 +9,7 @@ Execute the removal of the Omnigent runtime **end to end**: extract what the Cla
 
 Authorized by [[decisions/adr-009-claude-code-native-is-the-only-runtime]] and [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]].
 
-**The sprint has grown far past its original scope — from 22 tasks to 53.** The removal itself finished early; **everything after task 22 is work the removal *uncovered*** — investigations that mostly concluded "build nothing", the defects they found on the way, and a set of skill-quality and coder-autonomy improvements the owner scoped as the runtime settled.
+**The sprint has grown far past its original scope — from 22 tasks to 62.** The removal itself finished early; **everything after task 22 is work the removal *uncovered*** — investigations that mostly concluded "build nothing", the defects they found on the way, and a set of skill-quality and coder-autonomy improvements the owner scoped as the runtime settled.
 
 ## Key Changes
 
@@ -51,11 +51,20 @@ Authorized by [[decisions/adr-009-claude-code-native-is-the-only-runtime]] and [
 ### The coder→reviewer skill-gate bug (42, 43)
 A live bug — a coder spawning `@fkit-reviewer` failed because a subagent inherits the launching session's `skillOverrides`. 42 [[tasks/record-pretooluse-skill-gate-adr-amendment]] → [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] · 43 [[tasks/implement-pretooluse-skill-ownership-hook]] built the `PreToolUse` hook that keys enforcement on the **real caller at any spawn depth**, retiring `CONSULT_SKILLS` and extending ADR-010's structural claim to the consult path.
 
-### One skill, one output (44, 45, 47)
-The owner reverted the `full` switch — *"there should be 1 version of the output."* 47 [[tasks/record-one-skill-one-output-convention]] recorded the general rule (operands allowed, output variants forbidden). 44 (remove the variants) and 45 (wiki sync after 44) are **still backlog**.
+### One skill, one output (44, 45, 47, 48, 49)
+The owner reverted the `full` switch — *"there should be 1 version of the output."* 47 [[tasks/record-one-skill-one-output-convention]] recorded the general rule (operands allowed, output variants forbidden); 44 [[tasks/remove-output-variants-from-fkit-status]] applied it, deleting the delta default and `full` together (the sprint-name operand survives). 48 [[tasks/ship-one-skill-one-output-convention-in-scaffold]] shipped the convention in the scaffold — the **fourth** live-vs-scaffold parity instance, spawning 49 (the parity-cause investigation, backlog). 45 (the pre-filed wiki sync) remains backlog.
 
 ### The coder's autonomous ship-loop (52, 53)
-52 [[tasks/design-task-ship-loop-skill]] — an owner-approved design for a coder skill that takes a task brief → done with minimal owner involvement → [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] + [[decisions/adr-020-per-task-plan-and-worklog-artifacts]]. 53 (implement) is **backlog**, hard-blocked on 52.
+52 [[tasks/design-task-ship-loop-skill]] — an owner-approved design for a coder skill that takes a task brief → done with minimal owner involvement → [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] + [[decisions/adr-020-per-task-plan-and-worklog-artifacts]]. 53 [[tasks/implement-task-ship-loop-skill]] built exactly that spec — skill live, hook suite green. Follow-ups from use, all backlog: 59/60 (timeout-auto-proceed for owner questions, design-first — feasibility unmeasured), 61 (the coder's report shape), 62 ("speak in simple terms").
+
+### The `AskUserQuestion` seam and the tool-posture reversal (39, 54, 57, 58)
+39 [[tasks/investigate-askuserquestion-availability-for-agents]] measured the session/consult seam (Claude Code 2.1.212: session works, consult `TOOL_ABSENT` 3/3) → [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] · 54 [[tasks/grant-askuserquestion-tool-to-six-claude-agents]] granted the tool to the six Claude-side agents. Then the audit's wider finding — capability tools excluded by **accident**, the `tools:` wall never a real sandbox — became [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]: 57 [[tasks/relax-tool-allowlists-except-adversarial-reviewer]] removed the six `tools:` lines entirely (54's grant survives by inheritance), leaving the adversarial reviewer's wall as **the sole structural tool restriction**. 58 (the doc refresh) is backlog.
+
+### The skill-name collision (50, 51)
+50 [[tasks/rename-task-plan-skill-to-task-brief]] renamed the producer's `/fkit-task-plan` → `/fkit-task-brief` (the coder's `/fkit-plan-task` with the same two words swapped) — atomic across the skill dir, `skills-for-role.sh`, and the ADR-018 hook. 51 (its pre-filed wiki sync) remains backlog.
+
+### The orphan cleanup (36) and the `fkit-git` question (55, 56)
+36 [[tasks/remove-fkit-omnigent-orphan-residue]] — the one destructive act, ruled **announce-only** — is Done. 55/56 (design then implement an `fkit-git` agent + `commit-push` skill) are backlog — design-first because it **collides with the "never commit" universal hard rule**, an owner ruling.
 
 ### Owner decisions taken during the sprint
 - **Codex unreachable ⇒ a loudly-flagged partial, not a hard fail.** The flag is load-bearing.
@@ -65,9 +74,9 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 - **The `.fkit/` orphan-cleanup consent model → announce-only** (2026-07-17), unblocking task 36.
 
 ## Outcome
-**42 of 53 tasks Done.** Omnigent is gone; the release gate passed on a clean install; fkit has automated verification for the first time; Codex finally receives the universal hard rules; **"the migration" (additive convergence) landed**; the coder→reviewer consult path is now structurally enforced; and the coder's autonomous ship-loop is designed and owner-approved.
+**50 of 62 tasks Done.** Omnigent is gone; the release gate passed on a clean install; fkit has automated verification for the first time; Codex finally receives the universal hard rules; **"the migration" (additive convergence) landed**; the coder→reviewer consult path is structurally enforced; the coder's autonomous ship-loop is **built and live**; the `.fkit/` orphan residue is cleaned; and the tool-allowlist posture was deliberately reversed (ADR-022) — one structural tool wall remains, the adversarial reviewer's.
 
-**Still Backlog (11):** **36** remove the `.fkit/` Omnigent-orphan residue (**the one destructive act** — now unblocked, announce-only); **37** the tombstone ADR for the shared-instructions reversal; **39** the `AskUserQuestion` availability investigation; **44 / 45** remove the `/fkit-status` output variants (reverting 38) and its wiki sync; **46** the mutation-testing-library investigation (spawned from task-43 review finding R2); **48 / 49** ship one-skill-one-output in the scaffold and the dual-home parity investigation; **50 / 51** rename the producer's `task-plan` → `task-brief` and its wiki sync; **53** implement the `task-ship-loop` skill.
+**Still Backlog (12):** **37** the tombstone ADR for the shared-instructions reversal; **45 / 51** the two pre-filed wiki syncs (output-variant removal; `task-brief` rename); **46** the mutation-testing-library investigation; **49** the dual-home parity investigation; **55 / 56** design + implement the `fkit-git` agent (collides with the "never commit" hard rule — owner ruling needed); **58** the ADR-022 doc refresh; **59 / 60** design + implement the ship-loop timeout-auto-proceed; **61** the coder's report shape; **62** "speak in simple terms".
 
 **Owner dispositions (2026-07-15) — all seven original open questions ruled** (OQ8 added later, ruled 2026-07-17 → "generalize", spawning task 47).
 
@@ -84,6 +93,6 @@ Its sibling: **a count of a *semantic* rule cannot be established by grepping on
 - [[systems/testing-and-verification]] · [[systems/launch-convergence-and-init]] · [[systems/review-and-model-diversity]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]] · [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] · [[decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name]] · [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]] · [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]]
 - [[decisions/adr-014-how-fkit-tests-itself]] · [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] · [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] · [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]]
-- [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] · [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] · [[decisions/adr-020-per-task-plan-and-worklog-artifacts]]
+- [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] · [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] · [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] · [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] · [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]
 - [[systems/subagent-runner-connectivity]]
 - [[tasks/give-every-agent-direct-wiki-query-access]] · [[tasks/rollout-adr-004-fixed-consult-titles]] · [[tasks/add-e2e-smoke-script-for-fkit-itself]]

@@ -35,3 +35,4 @@ So a permissions problem on `.claude/`, a read-only checkout, ENOSPC, or one fai
 - [[systems/launch-convergence-and-init]]
 - [[systems/install-and-self-update]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/remove-fkit-omnigent-orphan-residue]] — reuses this task's non-fatal bar

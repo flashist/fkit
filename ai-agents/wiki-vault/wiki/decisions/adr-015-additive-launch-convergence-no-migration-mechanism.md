@@ -64,3 +64,5 @@ The safety bar asserted, as verified, that `cp -R` **writes through a symlinked 
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]]
 - [[systems/knowledge-base-structure]]
 - [[systems/fkit]]
+- [[tasks/remove-fkit-omnigent-orphan-residue]] — the one sanctioned destructive exception (announce-only, owner-ruled)
+- [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — a delivery via the convergence this ADR ratifies
