@@ -123,7 +123,7 @@ the convention this task is about.
     (`gate-symlink-escape-in-init-intake-write.md`, whose Context makes the identical observation: *"a
     rule stated in a file's own comments and then missed twice is not three bugs — it is one doctrine
     that has no enforcement point"*).
-  - **Also live and adjacent: [`investigate-mutation-testing-library-adoption.md`](investigate-mutation-testing-library-adoption.md)**
+  - **Also live and adjacent: [`investigate-mutation-testing-library-adoption.md`](../done/investigate-mutation-testing-library-adoption.md)**
     (Sprint 2, priority 46) — the owner's ask to replace hand-rolled `prove-red.sh` with a proper
     mutation-testing library. **That task is the natural home for the enforcement answer**, and it is
     already sprinted and ahead of this one.

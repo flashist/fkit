@@ -2,7 +2,7 @@
 
 - **Date:** 2026-07-18
 - **Author:** fkit-architect
-- **Task:** [`investigate-mutation-testing-library-adoption.md`](../../tasks/backlog/investigate-mutation-testing-library-adoption.md) (Sprint 2, #46)
+- **Task:** [`investigate-mutation-testing-library-adoption.md`](../../tasks/done/investigate-mutation-testing-library-adoption.md) (Sprint 2, #46)
 - **Status:** ✅ **Ruled on and closed (2026-07-19).** Recorded as [**ADR-026**](../decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled.md). This report is now the evidence record, not a live recommendation. **No dependency was added; `test/` is untouched.**
 - **Owner rulings (2026-07-19):** **ratified "stay hand-rolled; no library fits"** and asked for the tombstone (ADR-026) so *"just use Stryker"* is not re-proposed. **ADR-014 Decision 4 stands unamended** — no candidate exists to trade the zero-devDeps principle for. Of §4's two interim hardenings, **only (1) was selected** — wire `prove-red.sh` into an automated gate. **(2), the no-op-mutation guard, was not selected**, so **R2's second failure mode remains open**; see ADR-026 Decision 5, which records it as offered-and-not-taken rather than rejected on merit.
 - **Trigger:** the owner's reaction to review finding **R2** on task 43 — *"it looks like we need to use a proper library for auto-tests, which handles this specific type of tests 'testing negative cases'."* R2 itself is **already fixed and verified inside task 43**; this is the forward-looking library question only.
