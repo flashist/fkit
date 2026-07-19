@@ -1,4 +1,4 @@
-# ADR-029: A `Stop` hook enforces the turn-completion contract — interactive questions and a "What's next?" close
+# ADR-030: A `Stop` hook enforces the turn-completion contract — interactive questions and a "What's next?" close
 
 - **Status:** accepted
 - **Date:** 2026-07-19

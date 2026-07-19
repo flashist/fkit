@@ -3,7 +3,7 @@
 - **Date:** 2026-07-19
 - **Author:** fkit-architect
 - **Status:** ✅ **Designed, owner-ruled, not built.** Decision recorded as
-  [**ADR-029**](../decisions/adr-029-stop-hook-enforces-turn-completion-contract.md).
+  [**ADR-030**](../decisions/adr-030-stop-hook-enforces-turn-completion-contract.md).
   **No code was written by this design.** Implementation is fkit-coder's, from a producer-written brief.
 - **Raised by:** the owner, 2026-07-19 — two requests that turned out to be one problem.
 
@@ -134,7 +134,7 @@ block-once posture bounds.
 
 ```sh
 #!/bin/sh
-# claude/turn-completion-hook.sh — Stop hook, ADR-029.
+# claude/turn-completion-hook.sh — Stop hook, ADR-030.
 # Enforces the turn-completion contract. Presence checks only; never judges content.
 # Sibling of skill-ownership-hook.sh (ADR-018); wired in fkit-claude.sh:build_settings().
 

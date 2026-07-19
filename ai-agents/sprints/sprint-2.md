@@ -108,6 +108,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 76 | Migrate all 89 tasks into folders and update the 13 tooling files *(**atomic — the point of no return**; needs 75 — hard; review strongly recommended; owner: fkit-coder)* | [`migrate-tasks-to-folder-structure-and-update-tooling.md`](../tasks/backlog/migrate-tasks-to-folder-structure-and-update-tooling.md) |
 | 🔲 Backlog | 77 | Repair the ~110 task links in `reviews/` and `knowledge-base/` *(needs 76 — hard; parallel with 78; owner: fkit-coder)* | [`repair-task-links-outside-the-wiki-after-migration.md`](../tasks/backlog/repair-task-links-outside-the-wiki-after-migration.md) |
 | 🔲 Backlog | 78 | Wiki sync after the task-folder migration *(~96 vault refs + structural re-description; needs 76 — hard; parallel with 77; owner: fkit-wiki)* | [`wiki-sync-task-folder-migration.md`](../tasks/backlog/wiki-sync-task-folder-migration.md) |
+| 🔲 Backlog | 79 | Compress the Output style section of `universal-rules.md` *(reclaims 549 B; block 3557→3008 B against a launch-blocking 4096 cap; **review pass required** — R3 precedent; sequenced **before** the not-yet-filed ADR-029 prose addition, same file; owner: fkit-coder)* | [`compress-universal-rules-output-style-section.md`](../tasks/backlog/compress-universal-rules-output-style-section.md) |
 
 ### Addendum — tasks 74–78 added out of band (2026-07-19)
 
@@ -1126,6 +1127,50 @@ either order. Neither folds into the other.
   run if both parents have landed — separate rows, one pass).
 
 **Numbered 72/73 for append-don't-renumber discipline. Owner to confirm the ranking.**
+
+## Addendum — task 79 added out of band (2026-07-19): the rules-block budget
+
+**The owner's ask, explicit:** compress `claude/scaffold/universal-rules.md` to reclaim headroom in the
+fkit-managed rules block, in this sprint. Not a proposal weighed by the producer — a scoping request.
+
+**Why it is real, and why now:**
+
+- The block is injected into **every** consuming project's `CLAUDE.md` and `AGENTS.md` on **every
+  launch** (`fkit-claude-init.sh:322`), and lands in every agent's context on every turn.
+- The cap is `RULES_MAX=4096` (`:318`). The block measures **3557 B — 87% consumed, 539 B left.**
+- **Overflow is `exit 1` (`:340-343`) — it fails the launch, it does not degrade.** This is a
+  launch-blocking budget, which is what makes 539 B uncomfortable rather than merely tight.
+- Review finding **R2** on task 62 already flagged this at 84%. Its test half is closed
+  (`test/rules-block-budget.test.js`); its trim half was never scoped. This is that half.
+
+**Scoping facts:**
+
+- **Output style is 67% of the block** (2397 B). The architect drafted and measured a replacement:
+  **2397 → 1848 B, saving 549 B**, headroom **539 → 1088 B**. The brief carries that draft **verbatim**.
+- **The saving is structural, not wordsmithing** — two bullets were stating one rule twice with
+  overlapping enumerations, and the precedence preamble stated its point five ways.
+- **The risk is a clarity regression, not the byte count.** Findings **R3** (raised by *both* reviewers
+  — a bullet became the wrong antecedent and produced a real misreading) and **R4** (the ~40 B
+  enumeration disclaimer the owner **knowingly kept** against R2's budget warning) are direct
+  precedent. **The brief makes a review pass mandatory and states that a cut which saves bytes by
+  dropping a qualifier is a regression.**
+- **`## Universal hard rules` is untouched.** `RULES_MAX` is untouched.
+- **Dual-home parity is believed not to apply** — the file is under `claude/scaffold/`, not
+  `claude/scaffold/ai-agents/`, and a `find` returned one copy. **The brief requires the coder to
+  re-verify rather than trust that.**
+
+- **Task 79 — implement** (owner: fkit-coder; one file, one section, one atomic replacement; depends on
+  nothing; independently shippable today).
+
+**Sequencing — recorded so the two do not collide:** the **ADR-029 prose addition** (the
+*"What's next?"* / ask-interactively rules, ~430 B, from
+[`ADR-029 stop-hook`](../knowledge-base/decisions/adr-029-stop-hook-enforces-turn-completion-contract.md))
+is a **separate brief that has not been written yet**. It touches **the same file and likely the same
+section**, and is **sequenced after 79**. Its ~430 B fits comfortably in the 1088 B task 79 creates;
+against today's 539 B it would leave the block at ~97% of a cap that fails the launch.
+
+**Numbered 79 for append-don't-renumber discipline. No wiki-sync row scoped** — this is scaffold prose,
+not a behavioural or structural change the vault describes; say the word if you want one anyway.
 
 ## Open questions for the owner
 
