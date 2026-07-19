@@ -103,6 +103,26 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 71 | Wiki sync after the `/fkit-open-questions-interview` skill lands *(needs 70 — hard; owner: fkit-wiki)* | [`wiki-sync-open-questions-interview-skill.md`](../tasks/backlog/wiki-sync-open-questions-interview-skill.md) |
 | ✅ Done | 72 | Add the `/fkit-dumb-down` skill for the six Claude-side roles *(on-demand re-explain, content-preserving, zero write surface; complementary to task 62 — owner ruled BOTH; adversarial reviewer excluded per ADR-022; owner: fkit-coder)* | [`add-dumb-down-skill-for-six-roles.md`](../tasks/done/add-dumb-down-skill-for-six-roles.md) |
 | 🔲 Backlog | 73 | Wiki sync after the `/fkit-dumb-down` skill lands *(needs 72 — hard; may batch with 71 in one run; owner: fkit-wiki)* | [`wiki-sync-dumb-down-skill.md`](../tasks/backlog/wiki-sync-dumb-down-skill.md) |
+| 🔲 Backlog | 74 | Design the task-folder structure and the global task-ID scheme *(design — gates 75–78; **collides with task 64**; adversarial pass recommended; owner: fkit-architect)* | [`design-task-folder-structure-and-id-scheme.md`](../tasks/backlog/design-task-folder-structure-and-id-scheme.md) |
+| 🔲 Backlog | 75 | Assign global task IDs to all 89 briefs and create the ID registry *(no file moves — reversible by design; needs 74 — hard; owner: fkit-coder)* | [`assign-global-task-ids-and-create-registry.md`](../tasks/backlog/assign-global-task-ids-and-create-registry.md) |
+| 🔲 Backlog | 76 | Migrate all 89 tasks into folders and update the 13 tooling files *(**atomic — the point of no return**; needs 75 — hard; review strongly recommended; owner: fkit-coder)* | [`migrate-tasks-to-folder-structure-and-update-tooling.md`](../tasks/backlog/migrate-tasks-to-folder-structure-and-update-tooling.md) |
+| 🔲 Backlog | 77 | Repair the ~110 task links in `reviews/` and `knowledge-base/` *(needs 76 — hard; parallel with 78; owner: fkit-coder)* | [`repair-task-links-outside-the-wiki-after-migration.md`](../tasks/backlog/repair-task-links-outside-the-wiki-after-migration.md) |
+| 🔲 Backlog | 78 | Wiki sync after the task-folder migration *(~96 vault refs + structural re-description; needs 76 — hard; parallel with 77; owner: fkit-wiki)* | [`wiki-sync-task-folder-migration.md`](../tasks/backlog/wiki-sync-task-folder-migration.md) |
+
+### Addendum — tasks 74–78 added out of band (2026-07-19)
+
+The owner asked for the task structure to change: a task becomes a **folder** named by a **global task
+ID**, holding the brief plus every related artifact (plan, worklog, reviews, assets), inside the
+existing `tasks/{backlog,done,cancelled}/` boards.
+
+**Three owner rulings taken at scoping time (2026-07-19):** a **new global sequential ID** (tasks have
+none today — the numbers in conversation are sprint-scoped priority and collide across sprints); **all
+89 briefs migrate in one pass**, no dual-format period; and the **wiki-vault's ~96 refs are a separate
+`fkit-wiki` task**, because only that role may write the vault.
+
+Scoped into five briefs — design (74), IDs (75), the atomic migration + tooling (76), then the two
+parallel link repairs (77 coder, 78 wiki). Priorities appended after 73; the existing ranking is
+untouched. **Ranking and the 64-vs-76 ordering are for the owner to confirm.**
 
 ## Dependency graph
 
