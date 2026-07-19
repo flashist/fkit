@@ -4,13 +4,25 @@
 - **Raised by:** the owner, after Sprint 2's release gate (task 7) required him to hand-run the
   interactive verification steps.
 - **Participants:** owner, fkit-coder, fkit-architect (design consult), fkit-producer (product consult).
-- **Status:** ⚠️ **NO DECISION MADE.** The architect and producer both recommend **against** an 8th role.
-  **The owner has not ruled.** This document records the discussion so the decision can be made later
-  without re-deriving it. Deciding it is its own backlog task.
+- **Status:** ✅ **Ruled on and closed (2026-07-19).** All 7 open questions below were put to the owner and
+  answered; the decision is recorded as
+  [**ADR-028**](../decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md). This document
+  remains the underlying evidence record and is **not** rewritten.
+- **The owner ruled AGAINST this document's recommendation, knowingly.** fkit **gains an eighth role, a
+  tester**. Rulings: **Q1 a seat, not a capability** · **Q2 fkit is used on no other project today — the
+  demand case is a hypothesis** · **Q3 broad scope (terminal + browser + native), built-in tools,
+  deliberately unhardened** · **Q4 tester is read-only; the coder's sole-source-write invariant is
+  preserved, no ephemeral-driver carve-out** · **Q5 `.fkit/validate` dropped entirely** · **Q6 the
+  "seven roles, not breadth" constraint is explicitly reversed** · **Q7 the fkit CI smoke script goes
+  first.**
+- **The ruling is not a bare override.** The **sandbox-authority divergence** flagged below as the one
+  argument that beats the architect's has **fired**: Q3's unhardened, network- and write-enabled envelope
+  is an authority no other role holds, so the seat is earned on the architect's own criterion. See
+  ADR-028 §Context.
 
 > **Read this first, and don't skip it.** Everything below is *recommendation and evidence*, not a
-> decision. If a future reader treats the architect's "no 8th role" as settled, this document has
-> failed at its only job. **New architecture direction needs the owner's sign-off.**
+> decision — and the decision, when it came, went the **other way**. Read ADR-028 for what was actually
+> ruled; read this for why the question was hard.
 
 ## The question
 
