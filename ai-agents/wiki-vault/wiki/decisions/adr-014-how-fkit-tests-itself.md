@@ -63,3 +63,7 @@ The ADR deliberately **declined to pick the runner**, on the owner's explicit ru
 - [[tasks/design-deterministic-dashboard-for-fkit-status]]
 - [[systems/install-and-self-update]]
 - [[systems/fkit]]
+- [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — Decision 4 upheld **unamended**; no mutation-testing library can mutate shell
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the parity test scoped under these constraints
+- [[tasks/add-dumb-down-skill-for-six-roles]]
+- [[tasks/filter-fkit-status-board-to-open-tasks]]

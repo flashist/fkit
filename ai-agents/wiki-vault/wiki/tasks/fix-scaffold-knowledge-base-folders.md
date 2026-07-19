@@ -35,3 +35,4 @@ The verification that mattered was the comparison, not the tree-walk: **scaffold
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/stop-init-failure-bricking-the-launcher]]
 - [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — the fourth parity instance
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — one of the four prior point-fixes this ADR generalizes

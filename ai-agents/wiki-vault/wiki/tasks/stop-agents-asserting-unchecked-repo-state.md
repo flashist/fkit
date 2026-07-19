@@ -39,3 +39,5 @@
 - [[systems/knowledge-base-structure]]
 - [[systems/fkit]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/add-speak-in-simple-terms-output-style]] — a brief whose stated premise shipped false and was caught only at implementation; the same lesson at the scoping seam
+- [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — an investigation that reasoned a feasibility verdict instead of measuring it, then corrected

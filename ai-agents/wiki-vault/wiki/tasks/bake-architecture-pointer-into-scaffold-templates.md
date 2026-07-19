@@ -27,3 +27,4 @@ The sibling of [[tasks/extend-initiate-project-fill-overview]]: together they cl
 - [[tasks/fix-claude-agents-md-placeholder-text]]
 - [[systems/knowledge-base-structure]]
 - [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — the fourth parity instance
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — one of the four prior point-fixes this ADR generalizes

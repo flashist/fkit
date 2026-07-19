@@ -26,3 +26,6 @@ Build the hook that [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces
 - [[systems/testing-and-verification]]
 - [[systems/fkit]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — this task's review finding R2 triggered that investigation
+- [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — six-role skills registered through this gate
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the hook gates the Skill tool only, and cannot answer *is the work done*

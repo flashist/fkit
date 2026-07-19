@@ -42,3 +42,5 @@ An **investigation**, explicitly not a build: *"do not implement from this brief
 - [[systems/launch-convergence-and-init]]
 - [[systems/role-locked-sessions]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/add-speak-in-simple-terms-output-style]] — the "already met with zero new mechanism" case this investigation described, exercised
+- [[tasks/record-shared-instructions-reversal-adr]] — task 37, the duplicate tombstone, cancelled

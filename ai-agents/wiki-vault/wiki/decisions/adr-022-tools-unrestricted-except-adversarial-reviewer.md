@@ -34,3 +34,7 @@ Every fkit agent carried an explicit `tools:` allowlist — ADR-008's "structura
 - [[tasks/grant-askuserquestion-tool-to-six-claude-agents]] — the explicit-grant mechanism this subsumed
 - [[systems/fkit]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — unrestricted tools are why every candidate precondition artifact is agent-writable
+- [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — the adversarial reviewer excluded from both, on this ADR's restricted-allowlist fact
+- [[tasks/restructure-coder-report-summary-then-interview]] — the coder holds `AskUserQuestion` in a session by inheritance
+- [[decisions/adr-023-fkit-git-agent-is-not-built]] — the team stays seven; no eighth role joins the relaxed set

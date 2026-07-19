@@ -66,3 +66,4 @@ The safety bar asserted, as verified, that `cp -R` **writes through a symlinked 
 - [[systems/fkit]]
 - [[tasks/remove-fkit-omnigent-orphan-residue]] — the one sanctioned destructive exception (announce-only, owner-ruled)
 - [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — a delivery via the convergence this ADR ratifies
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the additive invariant is *why* the consuming-project content-drift seam cannot be fixed by convergence, and stays a separate deferred decision

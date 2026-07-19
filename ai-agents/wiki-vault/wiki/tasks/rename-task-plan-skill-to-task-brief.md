@@ -22,3 +22,4 @@ Rename the producer's `/fkit-task-plan` (scope a description into backlog briefs
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the hook that had to flip with it
 - [[systems/fkit]] · [[systems/role-locked-sessions]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — a later edit to the same skill, under its new name

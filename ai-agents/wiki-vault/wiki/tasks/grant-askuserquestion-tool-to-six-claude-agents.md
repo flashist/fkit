@@ -20,3 +20,4 @@ Implement ADR-021 Decision 4: add the built-in `AskUserQuestion` **tool** to the
 - [[tasks/relax-tool-allowlists-except-adversarial-reviewer]] — task 57, which superseded the mechanism while preserving the capability
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/restructure-coder-report-summary-then-interview]] — the coder's interview, built on this capability (now held by inheritance)

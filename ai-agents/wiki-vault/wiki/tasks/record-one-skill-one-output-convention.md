@@ -30,3 +30,6 @@ Wrote `ai-agents/knowledge-base/conventions/one-skill-one-output.md`, and added 
 - [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]] — a prior live-vs-scaffold parity instance
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/implement-task-ship-loop-skill]] — the ship-loop's operand-only argument contract follows this rule
+- [[tasks/filter-fkit-status-board-to-open-tasks]] — the "replace, don't switch" ruling this convention forced
+- [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — a target selector, not an output variant; conforms with no reversal ADR
+- [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]

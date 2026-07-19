@@ -23,3 +23,5 @@ Make `/fkit-status` render **one output — the complete briefing with the full 
 - [[tasks/record-one-skill-one-output-convention]] — the standing rule generalized from this reversal
 - [[tasks/add-status-skill-to-producer]] — the skill itself
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/filter-fkit-status-board-to-open-tasks]] — why the filtered board replaces rather than toggles
+- [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — the target-selector argument that survived this removal

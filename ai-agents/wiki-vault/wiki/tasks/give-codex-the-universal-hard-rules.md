@@ -38,3 +38,6 @@ So Codex — required by [[decisions/adr-009-claude-code-native-is-the-only-runt
 - [[systems/review-and-model-diversity]]
 - [[systems/launch-convergence-and-init]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/add-speak-in-simple-terms-output-style]] — the same `AGENTS.md` reach applied to an output-style preference
+- [[decisions/adr-023-fkit-git-agent-is-not-built]] — the commit rule Codex now receives, reaffirmed
+- [[tasks/record-shared-instructions-reversal-adr]]

@@ -46,3 +46,5 @@ ADR-012 established — empirically — that the fkit skill lockdown is **sessio
 - [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]
 - [[tasks/implement-task-ship-loop-skill]] — a skill this hook gates
 - [[tasks/rename-task-plan-skill-to-task-brief]] — a rename that had to flip atomically with this hook
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — knowingly chooses the prose-only posture §6 rejected here; its authenticated `agent_type` is the one unforgeable signal, and it cannot answer *is the work done*
+- [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — six-role skills registered through this gate

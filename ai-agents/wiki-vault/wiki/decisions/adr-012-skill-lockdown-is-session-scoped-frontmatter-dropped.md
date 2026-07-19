@@ -55,3 +55,4 @@ This matches the Claude Code docs: `skills:` controls **preloading only** — *"
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
 - [[tasks/record-pretooluse-skill-gate-adr-amendment]]
 - [[tasks/implement-pretooluse-skill-ownership-hook]]
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the advisory `⛔ Owner:` banner is why a spawned producer is not a second judgment

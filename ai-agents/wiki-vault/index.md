@@ -40,12 +40,18 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — Per-task `plans/` + `worklogs/` dirs, keyed by task-id, mirroring `reviews/`
 - [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — Tombstone: `AskUserQuestion` measured session-only (2.1.212); the consult "return open questions" contract is the only option
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — **Tool allowlists relaxed for six roles; the adversarial reviewer's wall is the sole structural tool restriction**
+- [[decisions/adr-023-fkit-git-agent-is-not-built]] — Tombstone: no commit/push agent; **the "never commit unprompted" hard rule reaffirmed, not amended**
+- [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — Tombstone: the AFK timeout **is** real (2.1.214) — declined on **cost, not feasibility**
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — ⚠️ **Reverses a universal hard rule**: spawned agents may close tasks; the anti-laundering guarantee is **removed**, not downgraded
+- [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — Tombstone: no library mutates shell; **ADR-014 Decision 4 unamended**; the real gap was gating
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — The 5th convention + a parity test; the consuming-project drift decision **stays deferred despite its fired trigger**
 
 ## Tasks
 
 ### Sprints
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — 🔒 Closed: the Omnigent-era onboarding sprint, and how its 12 tickets were dispositioned
-- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**50/62 done**; grew 22 → 62)
+- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**57 done · 11 backlog · 5 cancelled — of 73**; grew 22 → 73)
+- [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — 🆕 The **Backlog board** (`sprints/backlog.md`) — the standing home for unsprinted briefs
 
 ### Sprint 2 — the removal chain
 - [[tasks/extract-scaffold-into-claude]] — Move the shared scaffold out of `omnigent/` (Phase 0.1)
@@ -106,6 +112,16 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/grant-askuserquestion-tool-to-six-claude-agents]] — Task 54: the six-agent grant; mechanism later superseded by task 57, capability preserved
 - [[tasks/relax-tool-allowlists-except-adversarial-reviewer]] — Task 57: six `tools:` lines removed (ADR-022); the adversarial reviewer's wall stays byte-identical
 
+### Sprint 2 — the `/fkit-status` board reshaped
+- [[tasks/filter-fkit-status-board-to-open-tasks]] — Task 65: the board shows **open work only** — a conscious reversal of "show the dead rows", roll-up as the mitigation
+- [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — Task 68: `Backlog` as a **target selector**, conforming to one-skill-one-output
+
+### Sprint 2 — output style and the two six-role skills
+- [[tasks/add-open-questions-interview-skill-for-six-roles]] — Task 70: `/fkit-open-questions-interview` — session-history sweep, interview-only, zero writes
+- [[tasks/add-dumb-down-skill-for-six-roles]] — Task 72: `/fkit-dumb-down` — on-demand plain-language re-explain; **content-preserving**
+- [[tasks/add-speak-in-simple-terms-output-style]] — Task 62: the standing preference — **its four-file premise was disproven at build time**
+- [[tasks/restructure-coder-report-summary-then-interview]] — Task 61: summary-first, interview-last, with the forced consult degrade
+
 ### Sprint 2 — the skill-name collision
 - [[tasks/rename-task-plan-skill-to-task-brief]] — Task 50: `/fkit-task-plan` → `/fkit-task-brief`, atomic across dir + ownership source of truth + hook
 
@@ -128,6 +144,11 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 
 ### Cancelled
 - [[tasks/add-e2e-smoke-script-for-fkit-itself]] — ⛔ Superseded by the launcher-contract suite; **two of its instructions are actively wrong**
+- [[tasks/design-fkit-git-agent-and-consent-model]] — ⛔ Task 55: the owner ruled for unattended commit/push, then **reversed in the same session** → ADR-023
+- [[tasks/implement-fkit-git-agent-and-commit-push]] — ⛔ Task 56: never started; parent design declined
+- [[tasks/design-ship-loop-timeout-auto-proceed]] — ⛔ Task 59: **feasible** (the first verdict was wrong) but declined on cost → ADR-024
+- [[tasks/implement-ship-loop-timeout-auto-proceed]] — ⛔ Task 60: never started; parent design declined
+- [[tasks/record-shared-instructions-reversal-adr]] — ⛔ Task 37: a **duplicate** — already recorded as ADR-016 four days before scoping
 
 ### Sprint 1 — cancelled (Omnigent removed)
 - [[tasks/add-ci-validate-bundles]] — ⛔ CI for `validate-bundles.sh`; **the gap it named is now partly closed — `install.sh` still uncovered**

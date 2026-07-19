@@ -24,3 +24,8 @@ Build exactly the owner-approved design from task 52 ([[tasks/design-task-ship-l
 - [[tasks/record-one-skill-one-output-convention]] — the argument-contract rule it follows
 - [[systems/fkit]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — the timeout follow-up, declined on cost; the loop is unchanged
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — removes the done-gate this loop stopped at; the plan-gate survives
+- [[tasks/restructure-coder-report-summary-then-interview]] — the coder's general report contract; this loop's own contract wins inside the loop
+- [[tasks/design-ship-loop-timeout-auto-proceed]]
+- [[tasks/implement-ship-loop-timeout-auto-proceed]]

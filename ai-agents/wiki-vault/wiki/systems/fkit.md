@@ -27,7 +27,7 @@ Each role is one file — `claude/agents/fkit-<role>.md`: YAML frontmatter (`nam
 
 **The tool-allowlist posture was deliberately reversed on 2026-07-18** ([[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]], implemented by [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]): the six Claude-side agents now carry **no `tools:` line at all** — they inherit every Claude Code tool (`WebSearch`, `LSP`, `AskUserQuestion`, …) — and role separation for them rests on **prompts + the skill hook**, accepted knowingly. **Exactly one structural tool wall remains, and it is deliberate: the adversarial reviewer's** (`Read, Grep, Glob, Bash, Skill` — no Write/Edit/Agent), which keeps *"the second opinion never touched the code it judges"* a structural fact at any spawn depth. *(Older "strongest boundary in the system" language — including `architecture.md`'s — describes the superseded posture; the doc refresh is Sprint 2 task 58, backlog.)*
 
-### The 22 skills
+### The 24 skills
 Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedures**; the agent prompts are the role's *character*. Every role-specific skill opens with a `⛔ Owner:` banner naming the one role allowed to run it. Only `fkit-query` carries no banner — it is universal by design.
 
 | Owner | Skills |
@@ -39,6 +39,9 @@ Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedure
 | adversarial reviewer | `adversarial-review` |
 | wiki | `wiki-ingest`, `wiki-lint`, `wiki-sync` |
 | everyone | `team` (roster/signpost), `query` (read-only wiki reads) |
+| the six Claude-side roles *(all but the adversarial reviewer)* | `open-questions-interview` — interview the owner on what this session left unanswered ([[tasks/add-open-questions-interview-skill-for-six-roles]]) · `dumb-down` — re-explain the last answer in plain language ([[tasks/add-dumb-down-skill-for-six-roles]]) |
+
+**The adversarial reviewer is excluded from both new skills for a structural reason, not a preference:** it reviews on Codex under a restricted allowlist (ADR-022) and has **no owner channel**. This is the task-39 finding applied — *"all agents" excluding the second model is the structural reality.*
 
 **Role→skill ownership is declared in exactly one place: `skills_for_role()`** — extracted into `claude/skills-for-role.sh` and read by both the launcher and the `PreToolUse` skill-ownership hook that now enforces it at any spawn depth ([[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]], [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]).
 
@@ -58,10 +61,14 @@ Generated and gitignored per project: `.fkit/settings/<role>.json` (the skill lo
 
 ## Gotchas / Known Issues
 - **Edit `claude/`, never `.claude/`.** `claude/fkit-claude-init.sh` does an `rm -f` + `cp` of the `fkit-*` agents and skills on **every single launch**. An edit made in `.claude/` is silently destroyed — no warning, no diff.
+- **`prove-red.sh` runs only when a human types it** — it is not in `npm test` and there is no `.github/`. The mutation-testing-library question that raised is **closed**: no library can mutate shell ([[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]]). An automated gate is approved but **not yet shipped**.
+- **Six fkit-authored files are drifted between the live tree and the shipped scaffold** — new projects receive stale copies of `ai-agents/README.md` and four conventions. A convention now governs this; the reconciliation and parity test are scoped, not built ([[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]).
 - **Verification is partial, no longer absent.** *(Updated 2026-07-16.)* For most of fkit's life there was **zero** automated verification — the only check, `omnigent/validate-bundles.sh`, **died with the Omnigent removal**, and [[decisions/adr-003-ci-runs-validate-bundles]]'s CI never landed. **`claude/fkit-claude.sh` is now covered** by the launcher-contract suite (`npm test`) — the argv contract plus the 7×21 lockdown matrix ([[decisions/adr-014-how-fkit-tests-itself]], [[systems/testing-and-verification]]). **`install.sh` still has none, and there is still no `.github/`** — so the `curl | sh` entry point, the highest-blast-radius file in the repo, remains unverified. **The risk is reduced, not closed.**
 - **Single-vendor concentration is accepted, not a defect.** There is no fallback runtime. A finding of the form *"fkit only runs on one vendor's CLI"* is [[decisions/adr-009-claude-code-native-is-the-only-runtime]], not a bug.
 - **`fkit --resume` is gone** *(fixed 2026-07-13; this page previously described the live bug).* The blanket unrecognized-arg passthrough silently resumed *any* session — a coder session included — under the **lead's** lockdown: *the user got their conversation back and their role taken away, with no warning.* Removed by [[tasks/remove-fkit-resume-passthrough]]; a stray arg with no named role is now a **usage error**, and the removal is **pinned by a test**.
-- **No agent commits or pushes unprompted.** A **prompt rule in every agent definition — not a sandbox.** It is the one place fkit's boundaries depend entirely on instruction-following.
+- **No agent commits or pushes unprompted.** A **prompt rule in every agent definition — not a sandbox.** It is the one place fkit's boundaries depend entirely on instruction-following. **Reaffirmed, not amended, on 2026-07-18**: the owner considered an eighth agent (`fkit-git`) with an agent-invocable `commit-push` skill, briefly ruled for it, then reversed within the same session — an agent that pushes whatever is uncommitted, unattended, is the highest-risk surface for leaking secrets to a remote. **fkit will not gain a commit/push agent** ([[decisions/adr-023-fkit-git-agent-is-not-built]]); the team stays seven.
+- ⚠️ **The task movers are NO LONGER owner-only** *(changed 2026-07-18 — this reverses a universal hard rule)*. [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] lets **any spawned agent** run `/fkit-task-done` and `/fkit-task-cancelled`, **including the coder closing its own task**. The architect recommended keeping the gate; the owner ruled against that recommendation knowingly. **What replaced the guarantee is not an equivalent:** an agent-closed move is supposed to carry a distinct `(agent-closed — not owner-verified)` marker, but the marker is **prose written by the same agent that performs the move**, with **no code path able to enforce it**, and git carries no authenticated trace (agents cannot commit, so the owner authors the commit). **Prevention is removed, with a labelling convention in its place** — treat a green board row as unverified unless a human looked at it.
+- **Two of the four known laundering paths are worth naming when reading any board:** the *confused optimist* (the coder genuinely believes it is done; **the normal failure, not an exotic one**) and an un-audited `cancelled/` — an agent that cannot finish a task can now make its own obligation disappear.
 - **No secrets in any artifact.** Nothing fkit produces may carry a credential — all of it goes to git.
 
 ## History — fkit formerly ran on Omnigent
@@ -91,6 +98,23 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]]
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]]
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]
+- [[decisions/adr-023-fkit-git-agent-is-not-built]]
+- [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]]
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]]
+- [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]]
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]
+- [[tasks/add-open-questions-interview-skill-for-six-roles]]
+- [[tasks/add-dumb-down-skill-for-six-roles]]
+- [[tasks/add-speak-in-simple-terms-output-style]]
+- [[tasks/restructure-coder-report-summary-then-interview]]
+- [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]
+- [[tasks/report-backlog-board-in-fkit-status-on-request-only]]
+- [[tasks/filter-fkit-status-board-to-open-tasks]]
+- [[tasks/design-fkit-git-agent-and-consent-model]]
+- [[tasks/implement-fkit-git-agent-and-commit-push]]
+- [[tasks/design-ship-loop-timeout-auto-proceed]]
+- [[tasks/implement-ship-loop-timeout-auto-proceed]]
+- [[tasks/record-shared-instructions-reversal-adr]]
 - [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]
 - [[tasks/implement-task-ship-loop-skill]]
 - [[tasks/rename-task-plan-skill-to-task-brief]]

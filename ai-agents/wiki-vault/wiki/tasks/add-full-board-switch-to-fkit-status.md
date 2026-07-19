@@ -33,3 +33,4 @@ Risk low — no product/runtime code, no launcher change, **no new skill registr
 - [[tasks/reconcile-skill-ownership-source-of-truth]] — the skill-registration mirrors it avoids touching
 - [[systems/role-locked-sessions]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/filter-fkit-status-board-to-open-tasks]] — the board reshaped again, this time without a switch

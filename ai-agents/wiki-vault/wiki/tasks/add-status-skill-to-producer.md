@@ -31,3 +31,5 @@ The sibling of [[tasks/add-task-plan-skill-to-producer]], on the same logic: **f
 - [[tasks/design-deterministic-dashboard-for-fkit-status]]
 - [[tasks/add-full-board-switch-to-fkit-status]]
 - [[tasks/remove-output-variants-from-fkit-status]] — the one-output reversion applied to this skill
+- [[tasks/filter-fkit-status-board-to-open-tasks]] — the board filtered to open work
+- [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — `Backlog` added as a resolvable named target

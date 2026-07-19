@@ -28,3 +28,4 @@ The rule it encodes is visible in Sprint 2's own shape — most clearly in the *
 - [[tasks/add-status-skill-to-producer]]
 - [[tasks/harden-task-movers-against-closed-sprint-link-rot]]
 - [[systems/fkit]]
+- [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the skill's no-sprint path rewritten to file onto a real board

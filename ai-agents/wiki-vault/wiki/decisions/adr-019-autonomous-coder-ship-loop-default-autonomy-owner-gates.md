@@ -37,3 +37,9 @@ Task 53 applies the single contract edit this requires: a scoped note in `fkit-c
 - [[tasks/design-task-ship-loop-skill]] — the design task (priority 52) that produced this ADR
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/implement-task-ship-loop-skill]] — the implementation (task 53)
+- [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — the owner-question timeout, declined on cost; this ADR's gates unchanged
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — **amends this ADR's Decision 5**: the done-gate is removed; the plan-gate survives
+- [[tasks/design-ship-loop-timeout-auto-proceed]] · [[tasks/implement-ship-loop-timeout-auto-proceed]] — cancelled follow-ups
+- [[tasks/restructure-coder-report-summary-then-interview]] — the general coder report contract; the loop's own contract wins inside the loop
+- [[decisions/adr-023-fkit-git-agent-is-not-built]]
+- [[tasks/design-fkit-git-agent-and-consent-model]]

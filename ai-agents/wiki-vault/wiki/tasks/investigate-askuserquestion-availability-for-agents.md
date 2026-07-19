@@ -24,3 +24,6 @@ Findings (`knowledge-base/reports/2026-07-17-askuserquestion-availability-for-ag
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — the same-seam precedent (`--append-system-prompt` session-only)
 - [[systems/role-locked-sessions]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — the seam-measuring precedent this investigation set, first violated then honored
+- [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — the "all agents excludes the second model" finding applied
+- [[tasks/design-ship-loop-timeout-auto-proceed]]

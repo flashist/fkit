@@ -91,3 +91,7 @@ The "Positive" section read **"Codex finally gets a floor."** Fifteen lines abov
 - [[systems/fkit]]
 - [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — the sibling tombstone on the same session/consult seam
 - [[tasks/investigate-askuserquestion-availability-for-agents]]
+- [[tasks/record-shared-instructions-reversal-adr]] — task 37, cancelled as a duplicate of this ADR
+- [[tasks/add-speak-in-simple-terms-output-style]] — a standing preference delivered through this layer
+- [[decisions/adr-023-fkit-git-agent-is-not-built]] — the reaffirmed commit rule every agent holds via this layer
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — *delivery structural, compliance advisory*, the claim level of its process layer

@@ -30,3 +30,4 @@ The initial workflow does not need to install Omnigent, because the script still
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
 - [[decisions/adr-014-how-fkit-tests-itself]]
 - [[systems/testing-and-verification]]
+- [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — **no `.github/workflows/` exists today**, which is why its approved gate has no CI lane to land in yet

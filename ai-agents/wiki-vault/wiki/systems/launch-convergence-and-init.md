@@ -96,3 +96,4 @@ Init runs under `set -euo pipefail` and was called **unguarded** from a launcher
 - [[tasks/add-shared-instructions-layer-for-all-agents]]
 - [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]]
 - [[tasks/remove-fkit-omnigent-orphan-residue]] — the one-time destructive cleanup kept out of the every-launch pass
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]

@@ -44,12 +44,19 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 ### The hard gate
 **Break one `skills_for_role()` entry and confirm the suite goes red.** *A test that has never failed has not been tested* — hence `test/prove-red.sh`, and the requirement to **demonstrate the red run**, not just report the green one.
 
+`prove-red.sh` mutates a copy of the shell sources with `sed`, runs the suite against the mutant, and asserts it goes red. **The mutation-testing-library question it raises is settled and closed** — [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]]: **no library fits, because the SUT decides it.** Mutation-testing libraries mutate source in a language they parse; the closest candidate, Stryker, mutates JS/TS and **cannot mutate shell** — it would mutate `bin/release.mjs` and the test files, i.e. everything except the product. So ADR-014's zero-devDeps principle was never actually put in tension: **there was no contender to trade it for.** Do not re-propose a mutation-testing library without naming one that **mutates shell**.
+
+### The parity test — scoped, not built
+[[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] adds a **fourth** thing in scope: `test/dual-home-parity.test.js` asserting every fkit-authored dual-homed file is byte-identical across `ai-agents/` and `claude/scaffold/ai-agents/`, with an explicit exception list for the deliberately project-specific paths. Same constraints (`node --test`, zero devDeps, repo root). **Order is part of the decision — convention, then a reconciliation of the six drifted files, then the test**; building the test first just produces a red suite nobody can act on. **None of it is built yet.**
+
 ## Gotchas / Known Issues
 
 - **Environment traps that make the suite test the wrong thing:** `FKIT_NO_SELF_HOST=1` (the launcher otherwise re-execs into the checkout); `FKIT_NO_UPDATE_CHECK=1`; the temp project's `PROJECT.md` must **not** read as fresh, or the launcher **hijacks every role into `producer`**; `FKIT_SETUP_ONLY=1` exits **before** `build_settings()` runs, so settings-file assertions require actually reaching `exec claude` with the stub on `PATH`.
 - **The suite is what caught a real launcher defect.** Assertion 7 (no-args, no-tty, initiated → `fkit-lead`) went red on being made enforcing, exposing [[tasks/fix-headless-menu-guard-crash]] — a dead lead-default on any normal system.
 - ⚠️ **`architecture.md` §9.1 is behind the code.** It still names *"zero automated verification"* as the top structural risk and states both high-blast-radius files are *"POSIX shell with no coverage of any kind."* **`claude/fkit-claude.sh` now has coverage** — argv contract + the lockdown matrix. **`install.sh` genuinely still has none**, so the risk is *reduced, not closed*. Flagged for the architect.
 - ⚠️ **ADR-014 still presents the runner as an open question**, though `node --test` is shipped and wired to `npm test`. The ADR has not been amended.
+- ⚠️ **`prove-red.sh` is not gated by anything — it runs only when a human types it.** Verified 2026-07-19: it is **not in `npm test`**, and there is **no `.github/workflows/` in the tree at all**. That is why the task-43 review's finding **R2** — two silent failures, a baseline going red for the *wrong* reason and a `sed` mutation that had become a **no-op** because its target moved files — was caught by manual audit and nothing else. ADR-026 identifies this correctly as a **gating** problem, not a tooling-sophistication one, and **approves wiring it into an automated gate** (sizing is the coder's call; it plausibly belongs in a `test:full` / CI lane rather than the inner loop). **The brief has not shipped — automated gating is a promise, not a fact.**
+- ⚠️ **R2's no-op-mutation failure mode is still open.** ADR-026 Decision 5 records a ~3-line zero-dep guard (assert each mutation actually changed the file) as **offered and not taken** — one of two hardenings, only the first chosen. **Decision 4's gate does not help it**: a no-op mutation produces a passing suite either way, so it still reads as a healthy check. Cheap to re-offer.
 - **Still uncovered, and named:** `install.sh` e2e (the `curl | sh` entry point — *it cannot be verified by reading a diff*), a CI workflow (there is no `.github/`), and the **static drift check** across the three hand-maintained mirrors of `skills_for_role()`, which needs a **normalizer** because they use three different naming conventions. All deferred to Sprint 3.
 - **Not the tester-agent question.** *"Building the script will teach us almost nothing about whether the tester earns its seat."* The two must not be bundled.
 
@@ -71,4 +78,7 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[systems/install-and-self-update]]
 - [[systems/fkit]]
 - [[tasks/wiki-sync-post-omnigent]]
+- [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — the closed library question and the approved gating fix
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the scoped-but-unbuilt parity test
+- [[systems/knowledge-base-structure]] — the conventions the parity test would enforce
 - [[tasks/sprint-2-remove-omnigent]]

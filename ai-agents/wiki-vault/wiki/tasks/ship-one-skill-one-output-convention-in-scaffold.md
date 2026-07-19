@@ -21,3 +21,4 @@ Task 47 recorded the "one skill, one output" convention — but only in this rep
 - [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]] · [[tasks/fix-scaffold-knowledge-base-folders]] · [[tasks/bake-architecture-pointer-into-scaffold-templates]] — the three prior parity instances
 - [[systems/knowledge-base-structure]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the convention that generalizes this and three sibling point-fixes

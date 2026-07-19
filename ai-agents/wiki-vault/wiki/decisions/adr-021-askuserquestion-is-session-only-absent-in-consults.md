@@ -32,3 +32,8 @@ On Claude Code 2.1.212, `AskUserQuestion` functions in a top-level `fkit <role>`
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — the precedent tombstone (`--append-system-prompt` session-only), same seam, same measure-don't-reason discipline
 - [[systems/role-locked-sessions]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — the AFK-timeout fact this ADR's per-call finding did not cover; the precedent it first violated
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — why a spawned producer has no owner channel
+- [[tasks/add-open-questions-interview-skill-for-six-roles]] — a skill built around this seam's consult degrade
+- [[tasks/restructure-coder-report-summary-then-interview]] — the coder's interview, degrading across this seam
+- [[tasks/design-ship-loop-timeout-auto-proceed]]

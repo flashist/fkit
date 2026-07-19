@@ -49,6 +49,17 @@ Cross-role work is a **consult**, never a role switch. `@fkit-<role> <question>`
 
 **[[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]** (implemented by [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]) relaxed the **tool-allowlist** half of the role lock: the six Claude-side agents carry **no `tools:` line** and inherit every Claude Code tool. Rationale: the capability tools were excluded by accident; the wall was never a real sandbox (every agent holds `Bash`); and only one wall protects a checkable invariant. **The adversarial reviewer keeps `tools: Read, Grep, Glob, Bash, Skill` byte-identical** — an agent's own `tools:` line governs it at any spawn depth, so its independence survives even when spawned by an unrestricted reviewer. **The skill lockdown (the ADR-018 hook) is deliberately untouched** — capabilities are free, procedures stay role-locked. Related: [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — `AskUserQuestion` works in a session but is `TOOL_ABSENT` in any spawned consult regardless of the grant (measured, Claude Code 2.1.212), so the consult "return open questions" contract is the only option a consult has.
 
+### What the lock does NOT cover — the task movers (2026-07-18)
+
+**[[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] removed the owner-only gate on `/fkit-task-done` and `/fkit-task-cancelled`.** Any spawned agent may now move task files, including **the coder closing its own task**. Two facts about how this interacts with the lock:
+
+- **The skill gate does not compensate.** The `PreToolUse` hook gates the `Skill` tool by the authenticated caller — it answers *"who is calling"*, never *"is this work complete"*. It will happily allow a mover call from a role that owns the skill.
+- **A spawned producer is not a second judgment.** It has **no owner channel** — the `⛔ Owner:` banner is advisory (ADR-012) and `AskUserQuestion` is absent (ADR-021). So *"the coder spawns the producer and asks it to mark done"* is functionally *"the coder marks its own work done, with an extra hop in between."* The spawned role adds a **name**, not a judgment.
+
+The ADR's own honesty clause is the thing to read: **prevention is gone, and the replacement — an `(agent-closed — not owner-verified)` marker — is prose written by the same agent that performs the move, with no code path able to enforce it.** Git does not backstop it either: agents cannot commit, so the commit landing an agent-closed move is authored by the **owner**, and history carries no authenticated trace.
+
+**This is the one place where a universal hard rule was reversed rather than reaffirmed** — contrast [[decisions/adr-023-fkit-git-agent-is-not-built]], which kept commit/push owner-only the same week. The owner's stated distinction is **blast radius**.
+
 ## Gotchas / Known Issues
 - **There is no `skills:` frontmatter.** It was dropped from all 7 agents: Claude Code treats it as a *preload hint*, not an allowlist, so it enforced nothing. Keeping it — even generated — would have preserved a field that *looks* like the invariant and isn't. **Do not re-add it.**
 - **Ownership has exactly one source of truth**: `skills_for_role()` — extracted into `claude/skills-for-role.sh` so both the launcher and the `PreToolUse` hook read it directly (the hook must **not** source `fkit-claude.sh`, whose top-level side effects would fire). Two sources of truth for the flavor's central invariant is one too many.
@@ -83,4 +94,8 @@ Cross-role work is a **consult**, never a role switch. `@fkit-<role> <question>`
 - [[tasks/add-no-secrets-rule-to-fkit-lead]]
 - [[tasks/add-full-board-switch-to-fkit-status]]
 - [[tasks/add-shared-instructions-layer-for-all-agents]]
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the owner-only mover gate, removed
+- [[decisions/adr-023-fkit-git-agent-is-not-built]] — the same week's opposite ruling for commit/push
+- [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — the owner gates left waiting rather than timed
+- [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — the two six-role skills registered through `skills_for_role()` and the hook
 - [[tasks/wiki-sync-post-omnigent]]

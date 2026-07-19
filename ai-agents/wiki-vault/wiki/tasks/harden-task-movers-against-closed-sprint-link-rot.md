@@ -32,3 +32,5 @@ Done. *(The one-off repair of Sprint 1's 6 existing broken links — [[tasks/rep
 - [[systems/fkit]]
 - [[tasks/repair-broken-links-in-closed-sprint-plans]]
 - [[tasks/stop-agents-asserting-unchecked-repo-state]]
+- [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the recursive `sprints/` sweep this task established is what lets the movers find backlog-board rows unchanged
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the movers are no longer owner-only

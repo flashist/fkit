@@ -27,3 +27,6 @@ Implement the "deterministic layer" the owner asked for on `/fkit-status`: a scr
 - [[tasks/record-one-skill-one-output-convention]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/remove-output-variants-from-fkit-status]] — the delta-default removal this script made cheap
+- [[tasks/filter-fkit-status-board-to-open-tasks]] — the open-work filter, implemented in this script's ⟦BOARD⟧ rendering
+- [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — this script confirmed against the backlog board's `—` priority cells
+- [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board whose table format this script parses unchanged
