@@ -48,3 +48,6 @@ ADR-012 established — empirically — that the fkit skill lockdown is **sessio
 - [[tasks/rename-task-plan-skill-to-task-brief]] — a rename that had to flip atomically with this hook
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — knowingly chooses the prose-only posture §6 rejected here; its authenticated `agent_type` is the one unforgeable signal, and it cannot answer *is the work done*
 - [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — six-role skills registered through this gate
+- [[decisions/adr-014-how-fkit-tests-itself]] — its 7×21 matrix (Decisions 3 & 5) was **retired here**; the hard-coded-oracle principle survives, relocated to the hook's own contract suite
+- [[systems/testing-and-verification]] — where the per-role/per-skill matrix now lives (`test/skill-ownership-hook.test.js`)
+- [[tasks/add-launcher-contract-smoke-script]] — the suite whose Group B this decision rewrote

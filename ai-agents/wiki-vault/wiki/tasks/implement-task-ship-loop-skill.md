@@ -14,7 +14,11 @@ Build exactly the owner-approved design from task 52 ([[tasks/design-task-ship-l
 - Writes the ADR-020 per-task artifacts (`plans/<task-id>.md`, `worklogs/<task-id>.md`).
 
 ## Outcome
-**Done** — skill live, registered for the coder, hook suite green (per the sprint board close-out). The loop is **session-only by design** and refuses spawned/headless invocation; it does **not** move task files (the done-gate stays owner-invoked). Follow-up already filed from use: tasks 59/60 (timeout-auto-proceed for owner questions, design-first — feasibility unmeasured) are backlog.
+**Done** — skill live, registered for the coder, hook suite green (per the sprint board close-out). The loop is **session-only by design** and refuses spawned/headless invocation, and **it still does not move task files itself.**
+
+⚠️ **Two claims on this page went stale and are corrected here (lint, 2026-07-19):**
+- **The done-gate is no longer owner-invoked.** [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] (2026-07-18) removed that gate — any spawned agent may now run either mover, **including the coder closing its own task**. ADR-019 sold this loop's autonomy on two human gates; **one of them is gone.** The plan-gate is untouched and remains the one unremovable checkpoint. The loop not moving files itself is now a property of *the loop*, not of a rule protecting it.
+- **Tasks 59/60 are cancelled, not backlog, and the feasibility WAS measured.** [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] established that a timed auto-proceed **is** buildable (a real AFK timeout exists on Claude Code 2.1.214) and was **declined on cost**, not feasibility. The first investigation verdict said "not runtime-expressible" and was **wrong** — do not repeat it.
 
 ## Related
 - [[tasks/design-task-ship-loop-skill]] — task 52, the approved design this implements

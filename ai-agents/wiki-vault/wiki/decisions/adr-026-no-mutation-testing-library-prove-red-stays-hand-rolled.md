@@ -16,7 +16,12 @@
 **The ADR-014 tension therefore does not need resolving: it never arises.**
 
 ### The real defect R2 exposed was not hand-rolling
-Verified: `prove-red.sh` is **not in `npm test`**, and there is **no `.github/workflows/` in the tree at all**. **It runs only when a human types `test/prove-red.sh`.** That is why R2's failures were caught by manual audit and nothing else — a **gating** problem, not a **tooling-sophistication** problem. No library would have fixed it.
+The ADR states: `prove-red.sh` is **not in `npm test`**, and there is **no `.github/workflows/` in the tree at all**, so **it runs only when a human types `test/prove-red.sh`** — a **gating** problem, not a **tooling-sophistication** problem, which no library would have fixed. **The diagnosis is right. The supporting fact was already out of date when the ADR was written.**
+
+> **⚠️ LINT WARNING (2026-07-19) — this ADR's Context is falsified by the tree, and Decision 4 is already done.**
+> `package.json` reads `"test": "node --test test/*.test.js && bash test/prove-red.sh"` — **the gate shipped in commit `0ad055a` on 2026-07-18 at 21:34**, the evening *before* this ADR's date. So the claim *"not in `npm test`"* was false at authoring, and **Decision 4 approves work that had already landed** (in the inner-loop `npm test`, not the `test:full`/CI lane it floated as likelier).
+> **The `.github/workflows/` half is still true** — there is no CI, verified 2026-07-19.
+> **This ADR is architect-owned; the wiki does not edit it.** Its Context and Decision 4 need revisiting. **Nothing else in the ruling is affected** — the library survey, the SUT reasoning, ADR-014 Decision 4 standing unamended, and Decision 5's still-open no-op-mutation gap are all unchanged.
 
 ## Decision
 1. **No mutation-testing library is adopted.** `prove-red.sh` stays hand-rolled — no dependency, no lockfile, no `node_modules`.
@@ -27,7 +32,7 @@ Verified: `prove-red.sh` is **not in `npm test`**, and there is **no `.github/wo
 
 ## Consequences
 - Zero devDependencies, no lockfile — ADR-014's posture intact; the question is closed with its reasoning on record; and the real defect is correctly identified and being fixed.
-- **Negative:** `prove-red.sh` remains bespoke shell — no upstream maintenance, its correctness resting on fkit's own tests. **R2's no-op-mutation failure mode is still open** — a mutation whose `sed` target has moved silently produces a passing suite and reads as a healthy check. **This is the known, unmitigated residue.** And **automated gating is a promise, not a fact, until Decision 4's brief ships** — today `prove-red.sh` still runs only when a human types it.
+- **Negative:** `prove-red.sh` remains bespoke shell — no upstream maintenance, its correctness resting on fkit's own tests. **R2's no-op-mutation failure mode is still open** — a mutation whose `sed` target has moved silently produces a passing suite and reads as a healthy check. **This is the known, unmitigated residue**, and now the only one: the gate ships, so a no-op mutation reads as healthy on *every* `npm test`. *(The ADR's own text here — "automated gating is a promise, not a fact, until Decision 4's brief ships" — is superseded by the tree; see the LINT WARNING above.)*
 - **Re-raise only if:** a maintained tool appears that genuinely **mutates POSIX shell** and drives a process-level oracle (then an ADR-014 amendment is required **before** implementation — the trigger has not fired); `prove-red.sh` grows beyond a small shell loop; or a **third** silent-failure mode is found (two were tolerable; a pattern is evidence it is under-engineered). Do **not** re-raise *"use a proper mutation-testing library"* without naming a tool that **mutates shell**, or *"prove-red.sh isn't automated"* as a defect against this ADR — that is Decision 4, already approved and awaiting its brief.
 
 ## Related

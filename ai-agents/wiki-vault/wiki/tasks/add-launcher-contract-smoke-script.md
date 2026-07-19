@@ -16,7 +16,7 @@ Give fkit its **first automated verification**. Stub `claude` and `codex` on `PA
 - **Group A — the argv contract** (7 assertions): each role → `--agent fkit-<role> --settings …`; `fkit --resume` → **non-zero and `claude` never exec'd**; unknown first arg → same; `--help` → exit 0, no exec; `fkit update` not swallowed by the usage-error branch; `fkit coder --debug` passthrough still works; **no-args, no-tty, initiated → `fkit-lead`**.
 - **Group B — the lockdown matrix** (the crown jewel): `JSON.parse` each `.fkit/settings/<role>.json`; every non-owned skill **off**, none it owns (nor any `CONSULT_SKILLS`) off. Plus a negative control.
 - **Runner: `node --test`** — the open question ADR-014 deliberately left for pickup time, settled here. Wired to `npm test`; zero devDeps, no lockfile.
-- **The 7×21 matrix is hard-coded**, reversing the guidance in [[tasks/add-e2e-smoke-script-for-fkit-itself]].
+- **The 7×21 matrix is hard-coded**, reversing the guidance in [[tasks/add-e2e-smoke-script-for-fkit-itself]]. *(⚠️ As-built, 2026-07-15. **That matrix was retired at task 43** — [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — because it was session-scoped. The hard-coded-oracle principle survives; the matrix moved to `test/skill-ownership-hook.test.js`. Recorded by lint 2026-07-19.)*
 
 **Assertion 2 is why exit codes are not enough.** `fkit --resume` **exited 0** and launched a session — green exit, broken invariant. *"`claude` was never exec'd"* is the assertion that catches it.
 

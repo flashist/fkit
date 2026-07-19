@@ -20,7 +20,7 @@ Until 2026-07-11 the project had **no defined task-status vocabulary** — it wa
 **The closed set:** `Backlog` · `In progress` · `Blocked` · `Done` · `Cancelled` · `Moved`.
 
 - **`Blocked` and `Cancelled` require a mandatory reason.**
-- **`Done` and `Cancelled` are owner-only**, set via `/fkit-task-done` and `/fkit-task-cancelled`.
+- **`Done` and `Cancelled` are set only via `/fkit-task-done` and `/fkit-task-cancelled`** — but ⚠️ **no longer owner-only** *(corrected by lint 2026-07-19; this page previously said they were)*. [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] (2026-07-18) removed that gate: **any spawned agent may now invoke either mover.** An agent-performed close-out is supposed to carry a distinct `(agent-closed — not owner-verified)` marker, but **that marker is unenforced prose** — read the ADR's honesty clause before trusting a green row. *(As of 2026-07-19 the reversal is decided but **not yet implemented** — task 64 is backlog and gated on a mandatory adversarial pass, so the shipped skills still enforce owner-invoked.)*
 - **No other value is valid** — not "Not started", not "WIP", not "Todo", not "Complete". *If a status you need isn't there, amend the convention — don't invent a value inline.*
 
 ## Outcome
