@@ -20,7 +20,7 @@ Every fkit agent carried an explicit `tools:` allowlist — ADR-008's "structura
 ## Consequences
 - Working roles gain web research, LSP, notebooks, and any future built-in; less allowlist maintenance; the one wall that matters is now legible.
 - **Role separation for the five now rests on prompts + the skill hook** — a real reduction in structural enforcement, accepted knowingly. The lead *can* now act as a generalist (prompt-only guardrail). Do not re-raise these as defects without a concrete harm.
-- Docs describe a superseded posture until the architect follow-up lands (`architecture.md` "strongest boundary" line, §4.1 tool table, lead's `Agent(...)` note; `PROJECT.md`, `CLAUDE.md`) — Sprint 2 task 58, backlog.
+- ~~Docs describe a superseded posture until the architect follow-up lands~~ **— resolved.** Sprint 2 task 58 ([[tasks/refresh-architecture-docs-for-tool-relaxation]]) is **Done**; verified 2026-07-19, the *"strongest boundary"* language is gone from `architecture.md`, `PROJECT.md` and `CLAUDE.md`, and §4.1 shows the six roles carrying no `tools:` line. *(`architecture.md` is behind again on a **different** axis — it cites no ADR past 022 — but that is outside this ADR's follow-up.)*
 - Re-raise only if: an unrestricted role's tools cause a concrete problem (reopen for that role/tool, not the blanket); someone proposes touching the adversarial reviewer's line; or someone proposes relaxing the *skill* lockdown "to match" (a different decision — ADR-018's domain).
 
 ## Related
@@ -37,4 +37,6 @@ Every fkit agent carried an explicit `tools:` allowlist — ADR-008's "structura
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — unrestricted tools are why every candidate precondition artifact is agent-writable
 - [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — the adversarial reviewer excluded from both, on this ADR's restricted-allowlist fact
 - [[tasks/restructure-coder-report-summary-then-interview]] — the coder holds `AskUserQuestion` in a session by inheritance
-- [[decisions/adr-023-fkit-git-agent-is-not-built]] — the team stays seven; no eighth role joins the relaxed set
+- [[decisions/adr-023-fkit-git-agent-is-not-built]] — declined a *git* eighth role; **its "the team stays seven" is no longer current**
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — ⚠️ **in direct tension with this ADR.** The tester's whole justification is a **deliberately unhardened, network- and write-enabled envelope**, while this ADR's one surviving structural wall exists precisely because unrestricted tools were judged unacceptable for a role. ADR-028 records the tension against itself rather than resolving it
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58, this ADR's architect-owned doc follow-up (**Done**)

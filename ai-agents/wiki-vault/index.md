@@ -8,7 +8,7 @@ Add an entry here whenever a page is created (see `schema.md`).
 _(none yet — fkit's user-facing surface is documented as systems)_
 
 ## Systems
-- [[systems/fkit]] — The seven-role Claude Code native + Codex agent team: roles, skills, topology, data model
+- [[systems/fkit]] — The Claude Code native + Codex agent team: **seven roles built, an eighth authorized** (ADR-028) — roles, skills, topology, data model
 - [[systems/role-locked-sessions]] — The skill lockdown: structural in a session, advisory in a consult
 - [[systems/install-and-self-update]] — `install.sh`, the `fkit` launcher, preflight, onboarding, self-update, release
 - [[systems/review-and-model-diversity]] — The Codex adversarial pass, loud degradation, and the review ledger
@@ -45,6 +45,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — ⚠️ **Reverses a universal hard rule**: spawned agents may close tasks; the anti-laundering guarantee is **removed**, not downgraded
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — Tombstone: no library mutates shell; **ADR-014 Decision 4 unamended**; the real gap was gating
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — The 5th convention + a parity test; the consuming-project drift decision **stays deferred despite its fired trigger**
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — ⚠️ **Reverses the owner's own "not breadth" constraint**: an eighth **tester** seat on *sandbox authority*, against the architect's and producer's recommendation. **Decided, not built**
 
 ## Tasks
 
@@ -77,6 +78,12 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/add-launcher-contract-smoke-script]] — fkit's first automated verification → ADR-014; **caught a live defect immediately**
 - [[tasks/stop-agents-asserting-unchecked-repo-state]] — A **false instruction in both movers**, shipping to every project → `evidence-before-assertion.md`
 - [[tasks/fix-headless-menu-guard-crash]] — `[ -r /dev/tty ]` never tests openability; the lead default was **dead code**
+
+### Sprint 2 — the four investigations closed 2026-07-19
+- [[tasks/investigate-mutation-testing-library-adoption]] — Task 46 → ADR-026: **no library mutates shell**, so the zero-devDeps tension never existed; the real defect was gating
+- [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — Task 49 → ADR-027: the **cause** of a four-instance defect class; the enumeration corrected itself from five drifted files to **six**
+- [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — Task 63 → ADR-025: **no fabrication-resistant precondition exists**; prevention removed, an unenforced prose marker in its place
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — Task 58 → the ADR-022 doc follow-up, Done; `architecture.md` is nonetheless **behind again** (no ADR past 022)
 
 ### Sprint 2 — the migration investigation (and its "build nothing" answer)
 - [[tasks/design-version-to-version-migration-mechanism]] — Investigation → ADR-015; **rejected the semver walk**

@@ -65,6 +65,9 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - ⚠️ **R2's no-op-mutation failure mode is still open — and now it is the *only* unmitigated half.** ADR-026 Decision 5 records a ~3-line zero-dep guard (assert each mutation actually changed the file) as **offered and not taken** — one of two hardenings, only the first chosen. **Decision 4's gate, now shipped, does not help it**: a no-op mutation produces a passing suite either way, so it still reads as a healthy check *and now does so on every `npm test`*. Cheap to re-offer.
 - **Still uncovered, and named:** `install.sh` e2e (the `curl | sh` entry point — *it cannot be verified by reading a diff*), a CI workflow (there is no `.github/`), and the **static drift check** across the three hand-maintained mirrors of `skills_for_role()`, which needs a **normalizer** because they use three different naming conventions. All deferred to Sprint 3.
 - **Not the tester-agent question.** *"Building the script will teach us almost nothing about whether the tester earns its seat."* The two must not be bundled.
+  > **The tester question is now RULED — and the separation above held.** [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] (2026-07-19) authorizes an eighth **tester** seat on **sandbox authority**, over the architect's and producer's recommendation. It was decided on its own merits, **not** as a conclusion drawn from the smoke script — exactly as the producer insisted. **What the two questions genuinely share is sequencing:** ADR-028 Decision 7 puts fkit's own regression gate **first**, *"the bigger risk and it's cheap — full stop, not as an experiment."*
+  > **Verified 2026-07-19, and the picture is better than ADR-028 assumed:** the task it sequenced against, [[tasks/add-e2e-smoke-script-for-fkit-itself]], is **cancelled** — superseded by task 23, which is **Done**. **The two things the tester actually waits behind are the two named on this page:** ADR-026 Decision 4's automated gate *(shipped 2026-07-18 — see above; ADR-028 did not know this either)* and **the still-absent `.github/` workflow** ([[decisions/adr-003-ci-runs-validate-bundles]]).
+  > ⚠️ **And this page is where the tester's own limit is recorded:** per [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]] a tester **subagent cannot verify fkit's session lockdown** — it inherits the caller's overrides and would green the caller's settings. **On fkit's single most important invariant, an agent is strictly worse than a script.**
 
 ## Related
 - [[tasks/build-deterministic-dashboard-script-for-fkit-status]]
@@ -87,4 +90,7 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — the closed library question and the approved gating fix
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the scoped-but-unbuilt parity test
 - [[systems/knowledge-base-structure]] — the conventions the parity test would enforce
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — the tester seat, sequenced **behind** this page's remaining gaps
+- [[tasks/investigate-mutation-testing-library-adoption]] — task 46, the investigation behind ADR-026
+- [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the investigation behind ADR-027
 - [[tasks/sprint-2-remove-omnigent]]

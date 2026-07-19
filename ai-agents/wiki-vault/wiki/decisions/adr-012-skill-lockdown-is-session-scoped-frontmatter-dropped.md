@@ -56,3 +56,4 @@ This matches the Claude Code docs: `skills:` controls **preloading only** — *"
 - [[tasks/record-pretooluse-skill-gate-adr-amendment]]
 - [[tasks/implement-pretooluse-skill-ownership-hook]]
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the advisory `⛔ Owner:` banner is why a spawned producer is not a second judgment
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — this ADR is why the planned tester **structurally cannot verify fkit's own session lockdown**: a spawned subagent inherits the *caller's* skill overrides and would report a confident green on the caller's settings. **Do not scope the tester to it** — a real session test must shell out to a subprocess

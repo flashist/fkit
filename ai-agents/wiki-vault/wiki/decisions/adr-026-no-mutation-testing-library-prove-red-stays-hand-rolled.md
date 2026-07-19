@@ -43,3 +43,5 @@ The ADR states: `prove-red.sh` is **not in `npm test`**, and there is **no `.git
 - [[tasks/implement-pretooluse-skill-ownership-hook]] — task 43, whose review finding R2 triggered this investigation
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[systems/knowledge-base-structure]]
+- [[tasks/investigate-mutation-testing-library-adoption]] — task 46, the investigation that produced this ruling (**Done**)
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — Decision 4's gate is one of the two unfinished pieces the planned tester seat waits behind

@@ -73,3 +73,4 @@ A spawned producer has **no owner channel** — its `⛔ Owner:` banner is advis
 - [[tasks/implement-pretooluse-skill-ownership-hook]]
 - [[tasks/implement-task-ship-loop-skill]]
 - [[tasks/enforce-task-status-vocabulary]] — the status vocabulary whose `Done`/`Cancelled` owner-only rule this ADR reverses
+- [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, the design task that produced this ruling (**Done**)

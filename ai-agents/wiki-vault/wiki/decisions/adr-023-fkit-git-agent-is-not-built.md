@@ -12,6 +12,7 @@ The owner asked (2026-07-17) for an eighth agent, `fkit-git`, with one skill —
 1. **`fkit-git` will not be built** — no agent file, no skill dir, no `skills-for-role.sh` entry, no hook coverage, no launcher-menu change.
 2. **The universal hard rule stands UNCHANGED and is reaffirmed, not amended.** Commit and push stay a manual action the owner performs (or explicitly instructs in-session). **No agent gains commit/push authority.**
 3. **The team stays seven roles.** No count/roster ripple anywhere.
+   > ⚠️ **No longer current — superseded on the count claim only, 2026-07-19.** [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] authorizes an eighth seat (a **tester**), so the roster ripple this ADR avoided **is now owed**. **ADR-023 is NOT superseded as a whole**: Decision 3 was a *consequence* of declining a git agent, not an independent constraint, and Decisions 1, 2, 4 and 5 — including the reaffirmed *"never commit or push unprompted"* hard rule — **stand unchanged**.
 4. The design spec is retired as history — the record of what was weighed, not a live design.
 5. Task 55 cancelled; task 56 (implementation) never created.
 
@@ -33,5 +34,6 @@ The owner asked (2026-07-17) for an eighth agent, `fkit-git`, with one skill —
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — every agent holds the reaffirmed commit rule
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — the eighth seat that *did* land, making this ADR's Decision 3 stale; its seven→eight ripple table is reused from task 55's design spec
 - [[systems/role-locked-sessions]]
 - [[tasks/give-codex-the-universal-hard-rules]]
