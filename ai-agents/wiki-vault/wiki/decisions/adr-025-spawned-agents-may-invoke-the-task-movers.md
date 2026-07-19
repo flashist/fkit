@@ -95,4 +95,5 @@ A spawned producer has **no owner channel** — its `⛔ Owner:` banner is advis
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, the design task that produced this ruling (**Done**)
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which **built** this ADR and produced the amendment above (**Done — agent-closed, not owner-verified**)
 - [[tasks/implement-task-ship-loop-skill]] — the loop whose terminal act this ADR changed: it now closes its own task
-- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58; `architecture.md` is current on this ADR but records neither ADR-028 nor ADR-029
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58; `architecture.md` is current on this ADR (it is that file's **highest** cited ADR) but records **none of ADR-026, 027, 028, 029 or 030** — nor the 023/024 tombstones. *(Corrected 2026-07-19 by lint: this line previously named only 028 and 030.)*
+- [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the task-folder migration **rewrites the movers this ADR changed**, and names task 64's unverified output as an accepted risk

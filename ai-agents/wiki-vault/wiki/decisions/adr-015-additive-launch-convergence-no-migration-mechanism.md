@@ -68,3 +68,4 @@ The safety bar asserted, as verified, that `cp -R` **writes through a symlinked 
 - [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — a delivery via the convergence this ADR ratifies
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the additive invariant is *why* the consuming-project content-drift seam cannot be fixed by convergence, and stays a separate deferred decision
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49: why launch-time convergence cannot fix content drift by invariant
+- [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the additive invariant here forced that migration's consuming-project half into a **separate, deferred** decision; **ADR-015 is not reopened by it**

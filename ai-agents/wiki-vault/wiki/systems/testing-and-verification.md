@@ -94,4 +94,4 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[tasks/investigate-mutation-testing-library-adoption]] — task 46, the investigation behind ADR-026
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the investigation behind ADR-027
 - [[tasks/sprint-2-remove-omnigent]]
-- [[decisions/adr-029-stop-hook-enforces-turn-completion-contract]] — a second hook whose session-scoped behaviour fkit **cannot fully test itself**; automated coverage reaches its script logic against synthetic payloads only
+- [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a second hook whose session-scoped behaviour fkit **cannot fully test itself**; automated coverage reaches its script logic against synthetic payloads only

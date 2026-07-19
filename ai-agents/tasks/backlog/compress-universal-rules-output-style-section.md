@@ -114,8 +114,8 @@ overrides a hard rule above.**
 
 ## Explicitly NOT in scope
 
-- **The ADR-029 prose addition** — the *"What's next?"* / ask-interactively rules from
-  [`adr-029-stop-hook-enforces-turn-completion-contract.md`](../../knowledge-base/decisions/adr-029-stop-hook-enforces-turn-completion-contract.md)
+- **The ADR-030 prose addition** — the *"What's next?"* / ask-interactively rules from
+  [`adr-030-stop-hook-enforces-turn-completion-contract.md`](../../knowledge-base/decisions/adr-030-stop-hook-enforces-turn-completion-contract.md)
   (~430 B). That is a **separate, later brief, not yet filed.** It is **sequenced after this task** and
   touches **the same file and likely the same section** — do not fold it in, and do not let the two
   land in one review.
@@ -127,7 +127,7 @@ overrides a hard rule above.**
 
 - **Owner: fkit-coder** — a source change to `claude/scaffold/universal-rules.md`.
 - **Depends on: nothing.** Independently shippable today.
-- **Blocks: the ADR-029 prose-addition brief** (not yet written). That brief's ~430 B fits comfortably
+- **Blocks: the ADR-030 prose-addition brief** (not yet written). That brief's ~430 B fits comfortably
   in the 1088 B of headroom this task creates; without this task it fits in 539 B but leaves the block
   at ~97% of a launch-blocking cap.
 - **Why this is one task, not several:** one file, one section, one atomic replacement whose whole

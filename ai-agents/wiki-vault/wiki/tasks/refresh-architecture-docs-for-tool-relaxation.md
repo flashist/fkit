@@ -23,7 +23,7 @@ The brief was unusually specific about **framing the change accurately rather th
 ## Outcome
 Done. The four staleness counts the vault had carried against `architecture.md` since 2026-07-13 are **largely closed**.
 
-⚠️ **But `architecture.md` is current on ADR-022 and already behind again.** Verified 2026-07-19: it cites ADRs up to **022 only** — **ADR-023 through ADR-028 are absent**. Most consequential:
+⚠️ **But `architecture.md` is behind again.** Re-verified 2026-07-19 by lint: it cites ADRs up to **025** — so **ADR-026, 027, 028, 029 and 030 are absent**, as are the 023/024 tombstones. *(An earlier revision of this line said "022 only / 023 through 028 absent"; that was wrong — ADR-025 is cited four times.)* Most consequential:
 - **[[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]]**, which contradicts any remaining owner-only mover language;
 - **[[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]]**, against which `architecture.md:4` and `:82` (*"seven roles"*) **are now false**;
 - the fifth convention ([[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]).

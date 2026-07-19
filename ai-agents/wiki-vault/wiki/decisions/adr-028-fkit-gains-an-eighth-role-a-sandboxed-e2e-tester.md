@@ -61,4 +61,4 @@ The owner's scope ruling (Q3) triggers precisely that condition. **The seat is e
 - Source: `ai-agents/knowledge-base/reports/2026-07-13-tester-agent-evaluation.md` — the evidence record: the question, the observed hole, the killed arguments, the flip condition
 - [[tasks/sprint-2-remove-omnigent]] — the sprint board; its parent investigation row is still open despite this ruling
 - [[tasks/investigate-mutation-testing-library-adoption]] — task 46 → ADR-026, one of the two unfinished pieces of the gate the tester waits behind
-- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58, which brought `architecture.md` current on ADR-022; it is **behind again on this ADR**, its *"seven roles"* lines (`:4`, `:82`) now false
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58, which brought `architecture.md` current on ADR-022; it has since reached ADR-025 but is **behind again on this ADR**, its *"seven roles"* lines (`:4`, `:82`) now false

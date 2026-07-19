@@ -7,7 +7,31 @@ Sprint 2
 74
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
+
+## Correction (2026-07-19) — three facts in this brief were stale when written
+
+The design landed and measured the tree. **Everything below is the record of what was scoped; where it
+disagrees with the design spec, the spec wins.** Corrections are in
+[`reports/2026-07-19-design-task-folder-structure-and-id-scheme.md`](../../knowledge-base/reports/2026-07-19-design-task-folder-structure-and-id-scheme.md)
+§0:
+
+- **"89 briefs (12 · 66 · 11)" was already wrong.** Measured **94** on 2026-07-19, **95** days later.
+  Tasks 75–78 now say *derive the count*. No downstream brief names a figure.
+- **"Task 64 collides with this change"** — **task 64 is Done. There is no collision and no ordering to
+  state** (spec §9.1). The warnings this brief spawned have been removed from row 74 and task 76.
+- **"13 product source files"** — measured **21 under `claude/`**, plus 4 test files and 2
+  `reviews/README.md` copies (spec §8).
+
+**Two owner rulings taken after this brief was written also change downstream scope:** the stored **ID
+registry is dropped** (spec §3.6 — task 75 shrinks), and **`plans/` and `worklogs/` are absorbed
+alongside `reviews/`** (spec §4.3 — tasks 76 and 77 widen).
+
+**And the adversarial pass corrected one more thing this brief got wrong.** Its ADR-027 bullet below
+(*"the scaffold must land the same structure"*) **is not what the design ruled.** The scaffold is
+**unchanged** — three empty board directories with `.gitkeep`s, which is already correct, because a
+task folder is never empty and a fresh project has no tasks (spec §4.1 / ADR-029 Decision 9). The false
+instruction propagated into task 76 and has been removed there. Parity holds for free.
 
 ## Context
 

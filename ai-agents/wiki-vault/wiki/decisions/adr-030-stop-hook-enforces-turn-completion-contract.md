@@ -1,4 +1,4 @@
-# ADR-029: A `Stop` hook enforces the turn-completion contract — interactive questions and a "What's next?" close
+# ADR-030: A `Stop` hook enforces the turn-completion contract — interactive questions and a "What's next?" close
 
 **Date**: 2026-07-19
 **Status**: accepted
@@ -103,6 +103,9 @@ escape. It was put back to the owner and resolved into the checkable form in Dec
   safety-critical
 - [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]] — why fkit cannot fully
   test a session-scoped hook
+- [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the ADR that now holds the
+  number **029**, which this decision briefly carried; every inbound link to
+  `adr-029-stop-hook-…` was repointed here by task 80
 - [[systems/role-locked-sessions]] — the hook layer this adds a second member to
 - [[systems/fkit]] · [[systems/testing-and-verification]]
 - Source: `knowledge-base/reports/2026-07-19-design-turn-completion-hook.md`; code cited

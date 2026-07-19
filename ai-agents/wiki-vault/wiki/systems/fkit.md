@@ -109,7 +109,7 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[decisions/adr-023-fkit-git-agent-is-not-built]]
 - [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]]
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]]
-- [[decisions/adr-029-stop-hook-enforces-turn-completion-contract]] — a **second** hook (`Stop`) decided 2026-07-19 to enforce interactive questions and a "What's next?" close. **Decided, not built** — `claude/turn-completion-hook.sh` is not in the tree
+- [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a **second** hook (`Stop`) decided 2026-07-19 to enforce interactive questions and a "What's next?" close. **Decided, not built** — `claude/turn-completion-hook.sh` is not in the tree
 - [[tasks/implement-spawned-invocation-for-task-movers]]
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]]
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]
@@ -161,3 +161,4 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[tasks/restore-plan-mode-in-plan-task]]
 - [[tasks/rewrite-docs-post-omnigent]]
 - [[tasks/wiki-sync-post-omnigent]]
+- [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — 🔀 **Decided, not built**: a task becomes a folder `tasks/<board>/<NNNN>-<slug>/` under a permanent global ID; `plans/`, `worklogs/` and `reviews/` are absorbed. The largest structural change to this data model in the project's history

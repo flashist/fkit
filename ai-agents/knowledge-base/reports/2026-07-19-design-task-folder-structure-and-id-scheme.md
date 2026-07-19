@@ -2,11 +2,11 @@
 
 - **Date:** 2026-07-19
 - **Author:** fkit-architect
-- **Task:** [`design-task-folder-structure-and-id-scheme.md`](../../tasks/backlog/design-task-folder-structure-and-id-scheme.md) (Sprint 2, priority 74)
-- **Status:** draft — **awaiting owner approval.** An adversarial pass is recommended before approval
-  (the brief's own Notes); this change is irreversible in practice once the tree has moved.
-- **Consulted:** fkit-producer (sequencing / decomposition context only; the technical decisions here
-  are the architect's)
+- **Task:** [`design-task-folder-structure-and-id-scheme.md`](../../tasks/done/design-task-folder-structure-and-id-scheme.md) (Sprint 2, priority 74)
+- **Status:** **approved** (owner, 2026-07-19), at **revision 2**. The adversarial pass has run and this revision incorporates it. Recorded as [ADR-029](../decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md), accepted. This change is irreversible in practice once the tree has moved.
+- **Revisions:** rev 1 (2026-07-19) → **rev 2** (2026-07-19, post-adversarial — see §14).
+- **Consulted:** fkit-producer (sequencing / decomposition context only); adversarial review by Codex
+  via fkit-adversarial-reviewer, plus a supplemental Claude pass — **18 findings, all evaluated**.
 
 ---
 
@@ -17,14 +17,14 @@ change what the implementer must do, so they are recorded first rather than in a
 
 | Brief says | Measured 2026-07-19 | Consequence |
 |---|---|---|
-| **89 briefs** (12 backlog · 66 done · 11 cancelled) | **94 briefs** (16 backlog · 67 done · 11 cancelled) | Registry sizing and every "exactly 89" verification step in tasks 75–78 must be re-derived, not trusted. Do not hardcode a count — derive it. |
+| **89 briefs** (12 backlog · 66 done · 11 cancelled) | **95 briefs** (17 backlog · 67 done · 11 cancelled) — and it was 94 four hours earlier | Every "exactly 89" verification step in tasks 75–78 must be re-derived, not trusted. **And see §3.4: a moving corpus is not merely a stale-count problem — it breaks the ID assignment rule unless the backfill is pinned to a commit SHA.** |
 | **Task 64 collides** with this change and "the design must state the ordering" | **Task 64 is Done** (`tasks/done/implement-spawned-invocation-for-task-movers.md`, `✅ Done (agent-closed — not owner-verified)`) | **There is no ordering to state.** §9.1 records this explicitly so task 76 does not go hunting for a rule that does not exist. |
 | **13 product source files** construct/parse task paths | **21 files under `claude/`** reference `tasks/` paths, plus 4 test files and 2 `reviews/README.md` copies | The sweep is larger than scoped. §8 lists the measured set and names the additions. |
 
 Counts reproduced with:
 
 ```sh
-ls ai-agents/tasks/{backlog,done,cancelled}/*.md | wc -l          # 94
+ls ai-agents/tasks/{backlog,done,cancelled}/*.md | wc -l          # 95 (was 94 hours earlier)
 grep -rl 'tasks/' claude/ | wc -l                                  # 21
 ```
 
@@ -74,12 +74,14 @@ the right call and §5.2 explains why.
 
 ### Locked inputs — implemented, not re-litigated
 
-The brief's three owner rulings are inputs. This design implements all three. Where one creates a
-technical cost, that cost is **named as a finding** (§11) rather than silently substituted:
+The brief's three owner rulings are inputs. Where one created a technical cost, that cost was **named
+as a finding** rather than silently substituted — and one of the three was subsequently changed by the
+owner on that finding:
 
-1. A new global sequential ID **plus a registry**.
-2. All briefs migrate in one pass — no dual-format period.
-3. Wiki-vault links are repaired by a separate `fkit-wiki` task.
+1. ~~A new global sequential ID **plus a registry**.~~ → **A new global sequential ID. The registry is
+   dropped** (owner ruling, 2026-07-19, on the finding in §3.6). The ID itself is unchanged.
+2. All briefs migrate in one pass — no dual-format period. *(unchanged)*
+3. Wiki-vault links are repaired by a separate `fkit-wiki` task. *(unchanged)*
 
 ---
 
@@ -110,7 +112,7 @@ against `expected_dir()` (`dashboard.sh:242-249`, which only ever returns those 
 
 The comparison can never again succeed. **Every row on every board reports `drift disagreement`**, and
 because drift forces a row to render (`dashboard.sh:747-749`), the open-work filter is defeated too —
-the board returns to showing all 94 rows, all flagged. The script exits 0. Nothing warns.
+the board returns to showing every row, all flagged. The script exits 0. Nothing warns.
 
 **Fix:** the board is the **grandparent** under the new layout.
 
@@ -134,19 +136,27 @@ brief is at `backlog/0042-foo/brief.md`. So the loop **never matches**, and ever
 stale reports `missing-brief` instead of relocating. The entire link-rot repair capability — two
 sprint tasks' worth of work — silently stops functioning.
 
-**Fix:** the recovery key becomes the **folder name**, which is ID-bearing and unique:
+**Fix:** the recovery key becomes the **ID prefix** — not the whole folder name:
 
 ```sh
 folder=$(basename "$(dirname "$linked")")     # "0042-foo"
+id=${folder%%-*}                              # "0042"  ← the immutable part
 for cand in backlog done cancelled; do
-  if [ -f "$AGENTS/tasks/$cand/$folder/brief.md" ]; then
-    brief_path="$AGENTS/tasks/$cand/$folder/brief.md"; found_dir="$cand"; break
-  fi
+  for d in "$AGENTS/tasks/$cand/$id"-*/; do
+    if [ -f "$d/brief.md" ]; then
+      brief_path="$d/brief.md"; found_dir="$cand"; break 2
+    fi
+  done
 done
 ```
 
-This is strictly **better** than today's rule: the folder name carries the immutable ID, so recovery
-survives a slug rename, which the filename key never did.
+> **⚠️ Key on the ID, not the folder name.** An earlier revision of this design keyed on the full
+> folder name and claimed recovery "survives a slug rename." **It does not** — renaming the slug
+> changes the folder name, so a stale href still fails to resolve and reports `missing-brief`. Only the
+> `NNNN` prefix is immutable, and only keying on it delivers the claimed property.
+
+With that correction it is genuinely **better** than today's rule: recovery survives both a board move
+*and* a slug rename, neither of which the filename key ever handled.
 
 ### 2.3 Every review ledger collapses onto one file — data loss
 
@@ -202,13 +212,20 @@ An ID collision is permanent and unrecoverable. The rule:
   of a task that still exists in `cancelled/`.
 - **Never renumber.** The ID's only job is to be stable. A renumbering pass would invalidate every
   inbound link — the exact cost this migration is paying once, deliberately.
-- Derivation (post-migration; the folder names are the ground truth):
+- Derivation (post-migration; the folder names are ground truth):
 
 ```sh
-ls -d ai-agents/tasks/{backlog,done,cancelled}/*/ 2>/dev/null \
+max=$(ls -d ai-agents/tasks/{backlog,done,cancelled}/*/ 2>/dev/null \
   | xargs -n1 basename | sed -n 's/^\([0-9]\{4\}\)-.*/\1/p' \
-  | LC_ALL=C sort | tail -1
+  | LC_ALL=C sort | tail -1)
+next=$(printf '%04d' $(( 10#$max + 1 )))     # ⚠️ 10# IS MANDATORY — see below
 ```
+
+> **⚠️ `10#` is not optional.** In bash, a leading zero means **octal**, so `$(( 0095 + 1 ))` fails with
+> *"value too great for base"* — and so does `0009`. Verified: the error is real in bash and **absent in
+> zsh**, which is what makes it a trap. An implementer developing in zsh sees it work, and it breaks for
+> a consumer on bash. `dashboard.sh` is bash-3.2-targeted for exactly this class of reason
+> (`dashboard.sh:30`). Every increment of a zero-padded ID must force base 10.
 
 ### 3.3 The race, honestly stated
 
@@ -226,12 +243,12 @@ Options weighed:
 | Content-derived ID (hash of slug) | **Rejected.** Not sequential — the owner's ruling requires sequential — and unreadable. |
 | Detect, don't prevent | **Chosen.** A duplicate-ID assertion in the test suite; the offender is renamed before anything links to it. |
 
-**Chosen: detect.** A duplicate-ID assertion joins the `node --test` suite (ADR-014), and IDs are
+**Chosen: detect.** A duplicate-ID assertion joins the repo test suite (`node --test`, which is what ADR-014 established the suite would be built under — note ADR-014 itself left the runner open; Node is the implementation the repo settled on), and IDs are
 cheap to renumber *before* they are referenced — which is precisely the window a merge exposes. This
 is a **residual risk that is accepted, not eliminated**, and it is recorded in the ADR's consequences
 so a future reader does not mistake it for an oversight.
 
-### 3.4 Assigning IDs to the 94 existing tasks
+### 3.4 Assigning IDs to the existing corpus
 
 The brief's verification bar: *two people applying the rule to the same corpus produce identical IDs.*
 That rules out any rule requiring judgment.
@@ -245,21 +262,63 @@ That rules out any rule requiring judgment.
 
 **The rule:**
 
-> Take all 94 brief paths. Sort by **slug alone** (the basename without `.md`), ascending, under
-> `LC_ALL=C`. Assign `0001`…`0094` in that order. Board membership is ignored entirely.
+> Take every brief path **as of a named commit SHA, pinned in task 75's brief before work starts**.
+> Sort by **slug alone** (the basename without `.md`), ascending, under `LC_ALL=C`. Assign `0001`…`000N`
+> in that order. Board membership is ignored entirely.
 
 Reproducible byte-for-byte:
 
 ```sh
-for b in backlog done cancelled; do
-  for f in ai-agents/tasks/$b/*.md; do [ -f "$f" ] && basename "$f" .md; done
-done | LC_ALL=C sort | nl -w4 -n rz -s' '
+# PIN=<the commit SHA recorded in task 75's brief>
+git ls-tree -r --name-only "$PIN" -- ai-agents/tasks \
+  | sed -n 's|^ai-agents/tasks/\(backlog\|done\|cancelled\)/\(.*\)\.md$|\2|p' \
+  | LC_ALL=C sort | nl -w4 -n rz -s' '
 ```
 
-**Verified precondition:** all 94 slugs are unique across the three boards — checked with
-`… | LC_ALL=C sort | uniq -d`, which returns empty. The sort is therefore total and has no tie-break
-case. *(If a future corpus does collide, the rule needs a documented tie-break; today it does not, and
-inventing one now would be untested code.)*
+#### ⚠️ Why the SHA pin is load-bearing, not ceremony
+
+**Without it the rule does not meet the bar the brief set** — and this design shipped a revision that
+did not have it.
+
+Sorting the whole corpus and numbering `0001…N` means **inserting one new brief shifts the ID of every
+alphabetically-later task**. The corpus is not static: it moved **94 → 95 during the writing of this
+document** (task 79 landed mid-session). So two people applying the rule *a day apart* get different
+IDs — while the brief's bar is that two people applying it produce **identical** IDs.
+
+§10 made it worse by instructing *"derive the count — it will move again before this runs,"* which is
+correct advice for a **count** and fatal for an **assignment**: deriving at execution time makes the
+output depend on *when* task 75 runs.
+
+**The pin closes it.** The corpus is whatever the named commit contained; the answer is reproducible
+forever, by anyone, at any later date.
+
+**The steady-state rule needs no pin** — §3.2 is `1 + max`, which is append-only and cannot be
+perturbed by later arrivals. Only the one-time backfill was order-sensitive, and only the backfill is
+pinned.
+
+#### The post-pin rule — never re-derive
+
+> **A brief created after the pin is not in the backfill.** It gets its ID from ordinary `1 + max`
+> allocation (§3.2). It does **not** trigger re-derivation, and no already-assigned ID is ever
+> recomputed.
+
+This is the pin's whole point, and it must be stated rather than inferred. "Pin the assignment"
+alongside "the corpus keeps moving" reads, to a careful implementer, as *re-pin and re-derive when brief
+96 lands* — which would **renumber tasks that already have IDs**. That is precisely the permanent,
+unrecoverable failure this section exists to prevent, arrived at by way of trying to be correct.
+
+Concretely: the backfill assigns `0001…0095` at the pin. Brief 96 takes `0096` on creation, not the
+slot its slug would sort into. **The ID sequence is allocation order, not alphabetical order** — the
+sort exists only to make the one-time backfill reproducible, and stops applying the moment it is done.
+
+*(Surfaced by fkit-producer while rescoping task 75, and correct — the design implied it and did not
+say it.)*
+
+**Verified precondition:** all slugs are unique across the three boards
+(`… | LC_ALL=C sort | uniq -d` returns empty, re-checked at 95). The sort is therefore total with no
+tie-break case. *(If a future corpus collides, the rule needs a documented tie-break; today it does
+not, and inventing one now would be untested.)* **Task 75 must re-run this check against the pinned
+SHA** — uniqueness is a property of the corpus, not a permanent truth.
 
 **Closed tasks are numbered.** All 94, not just the 16 open ones. Their plans, worklogs and ledgers are
 keyed by the same identifier, and 78 unaddressable tasks would defeat the point.
@@ -268,10 +327,11 @@ keyed by the same identifier, and 78 unaddressable tasks would defeat the point.
 
 The brief leaves this open: does the folder name carry the ID alone, or does the brief also record it?
 
-**Task 75 settles it.** Its scope is *"assign IDs and create the registry — **no file moves, no folder
-creation**"*, and task 76 does the moving. So between 75 and 76 the folders **do not exist**. If the
-folder name were the sole carrier, task 75 could not record an ID anywhere and would be impossible as
-scoped.
+**Task 75 settles it.** Its defining constraint is **"no file moves, no folder creation"** — task 76
+does the moving. So between 75 and 76 the folders **do not exist**. If the folder name were the sole
+carrier, task 75 could not record an ID anywhere and would be impossible as scoped. *(This argument is
+unaffected by §3.6 dropping the registry: what forces the field is the no-moves constraint, not the
+registry.)*
 
 > **`## ID` is a field on every brief.** The folder name is authoritative once folders exist; the field
 > is the redundant second carrier.
@@ -299,26 +359,40 @@ Sprint 2
 14
 ```
 
-### 3.6 The registry
+### 3.6 The registry — **dropped** (owner ruling, 2026-07-19)
 
-The owner's ruling names a registry, so there is one. But a stored list of facts derivable from the
-tree is a **second source of truth**, and this project has paid for that lesson repeatedly (ADR-018's
-skill-ownership reconciliation; `dashboard.sh`'s "one grammar" comments at lines 111-126 and 308-313).
+The brief's ruling 1 named "a permanent project-wide ID **plus a registry**." I raised a finding against
+the stored registry rather than substituting silently, and **the owner ruled to drop it.**
 
-The containment is ADR-027's own pattern — **convention plus mechanical test**:
+> **There is no registry file.** Authority rests on exactly two carriers: the **folder name**
+> (post-migration) and the brief's **`## ID`** field, reconciled by the `id-mismatch` drift check
+> (§3.5).
 
-> **`ai-agents/tasks/registry.md`** — a **generated, committed, non-authoritative index**. One row per
-> task: ID · slug · board · title. Regenerated by script from the tree; a test asserts it matches.
-> **Authority always rests with the folder name and the brief's `## ID`.** If the registry and the tree
-> disagree, the tree is right and the registry is stale.
+Why the finding stood:
 
-It sits beside `backlog/`, `done/`, `cancelled/`. `dashboard.sh`'s tree-walk (`dashboard.sh:59-64`)
-keys on those three directories existing, so a sibling file does not perturb it.
+- The tree already answers every question a registry answers. Allocation (`1 + max`) is one `ls`;
+  lookup is one `grep`.
+- A generated, committed index is a **third carrier that can drift**, and this project has paid for
+  that lesson at least three times — ADR-018's skill-ownership source-of-truth reconciliation, and
+  `dashboard.sh`'s "there is ONE grammar" comments at `:111-126` and `:308-313`, each written after a
+  defect caused by two sources answering one question.
+- Nothing in the design *reads* a registry. It would have existed only to be maintained.
 
-**Finding for the owner (§11.1):** I would not build the stored registry at all — the tree already
-answers every question it answers, and a generated file is one more thing to drift. It is specified
-here because the ruling named it, defined in the least drift-prone way available. Dropping it is a
-one-line change to this design.
+**Consequence for task 75:** its scope becomes *"add `## ID` to every brief in the pinned corpus and write down the
+allocation procedure."* No file is created. This is a **reduction** in scope, and it removes the one
+part of task 75 that could itself drift.
+
+**Allocation without a registry** — the derivation is the rule (§3.2), documented in
+`fkit-task-brief/SKILL.md` where the next brief is written:
+
+```sh
+# post-migration: folder names are ground truth
+ls -d ai-agents/tasks/{backlog,done,cancelled}/*/ 2>/dev/null \
+  | xargs -n1 basename | sed -n 's/^\([0-9]\{4\}\)-.*/\1/p' | LC_ALL=C sort | tail -1
+
+# between tasks 75 and 76, before folders exist: the ## ID fields are ground truth
+grep -rhA1 '^## ID' ai-agents/tasks/*/*.md | grep -oE '^[0-9]{4}' | LC_ALL=C sort | tail -1
+```
 
 ### 3.7 `## Priority` survives — as board rank only
 
@@ -393,20 +467,19 @@ parity holds for free.
 
 ## 5. What gets absorbed
 
-### 5.1 The brief under-scopes this
+### 5.1 The brief under-scopes this — **owner confirmed the widened scope**
 
 The brief asks only whether `ai-agents/reviews/` is absorbed. But ADR-020 keys `plans/`, `worklogs/`
 **and** `reviews/` by the identical `<task-id>` — they are one question, not one plus two others.
 Answering only for `reviews/` would leave two directories keyed by slug while briefs are keyed by ID:
 the two-grammar problem, freshly installed.
 
-> **All three are absorbed.** `reviews/`, `plans/`, and `worklogs/` fold into the task folder as
-> `review.md`, `plan.md`, `worklog.md`. Three top-level directories disappear.
+> **All three are absorbed** (owner ruling, 2026-07-19). `reviews/`, `plans/`, and `worklogs/` fold
+> into the task folder as `review.md`, `plan.md`, `worklog.md`. Three top-level directories disappear.
 
 ADR-020 §Decision 6 pre-authorizes exactly this, naming all four artifacts.
 
-**Measured volume:** 22 ledgers + 11 plans + 11 worklogs = **44 files** beyond the 94 briefs. Tasks
-75–78 do not currently account for these.
+**Measured volume (2026-07-19, and it moves):** 20 task-keyed ledgers + 11 plans + 11 worklogs + `reviews/README.md` = **43 files** folding into task folders, plus **2 sprint-keyed ledgers** relocating per §5.2b = **45 files** leaving `reviews/`+`plans/`+`worklogs/`. **Derive these at execution time.** Tasks 76–77 are being rescoped accordingly (producer-owned).
 
 ### 5.2 Why the board stays in the path
 
@@ -421,6 +494,37 @@ ADR-020 §6 sketched a flat `ai-agents/tasks/<task-id>/`. The owner's ruling kee
 
 The cost is that a task's path changes when it closes — which is already true today and already
 handled by the link-rot machinery of §2.2.
+
+### 5.2b Sprint-scoped ledgers — the case the absorption rule does not cover
+
+`ai-agents/reviews/` holds **two ledgers that are not keyed to a task at all**:
+
+```
+ai-agents/reviews/sprint2-scaffold-launcher-hardening.md
+ai-agents/reviews/sprint2-shared-instructions-delivery.md
+```
+
+They are keyed to a **sprint theme** spanning several tasks. The absorption rule in §5.1 folds
+*task-keyed* artifacts into *task* folders, and these have no task to fold into. Forcing them into an
+arbitrary host task folder would file a multi-task record under one of its subjects — losing the very
+thing that makes them distinct.
+
+> **Ruling: they move to `ai-agents/sprints/reviews/`.** `ai-agents/reviews/` still disappears.
+
+This is not a patch on the rule, it is the rule applied consistently. The design's thesis is **an
+artifact lives with the thing it describes** — that is why task-keyed artifacts move into task folders.
+A sprint-keyed artifact therefore belongs with the sprint plans, which already live in
+`ai-agents/sprints/` (and already have a `done/` subdirectory for archived boards, so a `reviews/`
+sibling is an established shape rather than a new concept).
+
+**Volume correction:** the absorbed set is **45 files, not 44** — 20 task-keyed ledgers + 11 plans + 11
+worklogs + `reviews/README.md` (whose content moves to `ai-agents/tasks/README.md`, both homes), plus
+these 2 relocating to `sprints/reviews/`.
+
+**Owner may overrule.** Two alternatives were weighed and rejected: keeping a slimmed `ai-agents/reviews/`
+alive for two files (contradicts the "one home per artifact" thesis for a very small saving), and
+folding them into the sprint plan itself (a sprint plan is a *board*, and burying two-party review
+findings inside it obscures both).
 
 ### 5.3 Consequence for the stateful-review skills
 
@@ -440,7 +544,20 @@ The canonical key rule (`reviews/README.md:24-30`) becomes:
 3. Else the current git branch name, slugified.
 4. If none resolves unambiguously → **stop and ask the owner.** Never invent one.
 
-Only rule 2 changes. Rules 1, 3 and 4 are untouched.
+> ⚠️ **Rules 1 and 3 need a home, and an earlier revision of this design missed it.** It claimed "only
+> rule 2 changes" — but rules 1 and 3 resolve an id **without identifying a task folder**, and the
+> ledger is now *inside* a task folder. A review run on a branch with no task (rule 3) has an id and
+> nowhere to put the file. `fkit-stateful-review/SKILL.md:23-33` explicitly permits that path.
+>
+> **Resolution:** rules 1 and 3 must resolve to a **folder**, not just a string.
+> - Rule 1: an explicit id that is an **ID prefix or folder name** → that task's folder. An explicit id
+>   matching no folder → falls to rule 4 (stop and ask), rather than silently creating an orphan.
+> - Rule 3: a branch-derived id has no task folder → the ledger goes to
+>   **`ai-agents/sprints/reviews/<branch-slug>.md`**, the same home §5.2b gives other non-task-keyed
+>   ledgers. This is a **review not tied to a task**, and filing it under an arbitrary task would
+>   misattribute it.
+>
+> Rule 4 is genuinely untouched.
 
 `ai-agents/reviews/README.md` and `claude/scaffold/ai-agents/reviews/README.md` are dual-homed;
 ADR-027 requires both be edited together. The README's content moves to
@@ -467,15 +584,33 @@ name** is the recovery key and the board is the **grandparent**.
 
 ### 6.1 `dashboard.sh` — the five sites
 
-| # | Site | Today | Must become |
-|---|---|---|---|
-| 1 | `:533` primary resolve | `[ -f "$PLAN_DIR/$linked" ]` | unchanged (hrefs updated by task 76) |
-| 2 | `:535` board detection | `basename $(dirname $brief_path)` | `basename $(dirname $(dirname $brief_path))` — **§2.1** |
-| 3 | `:536-546` link-rot recovery | scan by `$fname` | scan by folder name — **§2.2** |
-| 4 | `:549-552` corrected link | renders `$fname` | renders `<folder>/brief.md` |
-| 5 | `:451-453`, `:506-529` id derivation | Priority cell → filename stem → `?` | the ID from the folder name — **§3.7** |
+| # | Site | Today | Must become | Fails |
+|---|---|---|---|---|
+| 1 | `:533` primary resolve | `[ -f "$PLAN_DIR/$linked" ]` | unchanged (hrefs updated by task 76) | visibly |
+| 2 | `:535` board detection | `basename $(dirname $brief_path)` | `basename $(dirname $(dirname …))` — **§2.1** | **silently** |
+| 3 | `:536-546` link-rot recovery | scan by `$fname` | scan by **ID prefix** — **§2.2** | **silently** |
+| 4 | `:549-552` corrected link | renders `$fname` | renders `<folder>/brief.md` | visibly |
+| 5 | `:451-453`, `:506-529` id derivation | Priority cell → filename stem → `?` | the ID from the folder name — **§3.7** | **silently** |
 
-Sites 2 and 3 are the silent ones. Sites 1, 4 and 5 fail visibly.
+**Sites 2, 3 and 5 are all silent.** An earlier revision of this design classified site 5 as
+"fails visibly." **That was wrong**, and the error mattered because the visible/silent labelling is what
+drives §10's verification coverage.
+
+**Why site 5 is silent.** `dashboard.sh:526-528` falls back to the brief's filename stem when the
+Priority cell has no number:
+
+```sh
+if [ -z "$tid" ] && [ -n "$fname" ]; then
+  tid=$(printf '%s' "$fname" | sed -e 's/\.md$//' …)
+fi
+```
+
+Under folders `$fname` is `brief.md` for every task, so `tid` becomes the literal string **`brief`** for
+**every row on the Backlog board** (which is unranked by design — its Priority cells are `—`). The
+roll-up then `uniq`s all of them into a single `brief` entry. The block's own comment at
+`dashboard.sh:506-517` says this fallback exists precisely so the owner is not *"told drift exists and
+given no way to find it"* — under folders it produces exactly that failure, with `brief` in place of
+`?`. Nothing errors.
 
 The script's **stated contract is unchanged** — pure function of (plan path, the briefs it links) →
 (stdout, exit code); reads nothing else; writes nothing (`dashboard.sh:24-28`). Only path construction
@@ -491,12 +626,38 @@ changes.
 2. **The move.** `git mv ai-agents/tasks/backlog/<folder> ai-agents/tasks/done/<folder>` — the whole
    directory, moving the brief and all artifacts as one unit. This is a **strict improvement**: today
    the brief moves and its plan/worklog/ledger stay behind in three other directories.
-3. **The reference sweep.** `fkit-task-done/SKILL.md:85-94` greps for the brief's **basename**. Under
-   folders that is `brief.md` for every task and matches nothing useful. **The sweep key becomes the
-   folder name** — which, being ID-bearing, is a *better* key than the slug ever was.
+3. **The reference sweep — the worst break in the whole design.**
+   `fkit-task-done/SKILL.md:85-94` greps for the brief's **basename**:
 
-Point 3 is a fourth silent break, in the movers rather than the dashboard: an unchanged sweep would
-report "no references found" for every task and quietly stop repairing sprint rows.
+   ```sh
+   grep -rn "<file>.md" ai-agents/sprints/ ai-agents/tasks/
+   ```
+
+   Under folders that basename is `brief.md` — and **every task's href in every sprint plan now ends in
+   `/brief.md`**. So the sweep matches *all of them*: 80 hits in `sprint-2.md` alone, ~95 across the
+   tree. And `fkit-task-done/SKILL.md:94-96` mandates that **"Every hit it returns is handled in step 5;
+   none is discarded."**
+
+   > **Closing one task would instruct the mover to rewrite every task's row in every sprint plan.**
+
+   **The sweep key becomes the folder name** (ID-bearing, unique).
+
+   > ⚠️ An earlier revision of this design called this break *"would report 'no references found' for
+   > every task."* **That was backwards.** The failure is not zero matches, it is ~95 false-positive
+   > matches carrying a "none is discarded" instruction — a mass-corruption path, not a silent no-op.
+   > The fix (a better key) is the same; the severity is not, and neither is what §10 must test for.
+
+4. **The moved brief's own outbound sibling links.** `fkit-task-done/SKILL.md:117-124` requires
+   re-pointing links the moved brief makes *to other briefs* — briefs cross-link, so one move breaks
+   links in **both** directions.
+
+   Under folders this gets more dangerous, not less: a sibling link becomes `](../0043-other/brief.md)`,
+   which is a **valid relative path from any board directory**. Move the folder to `done/` and that link
+   silently resolves to `done/0043-other/brief.md` — a path that may not exist, or worse, may exist and
+   be the wrong task's folder. Today's `](../backlog/other.md)` at least names its board explicitly.
+
+   **Recommendation: sibling links use a board-qualified path** (`](../../backlog/0043-other/brief.md)`)
+   so a move cannot silently re-target them.
 
 ---
 
@@ -508,13 +669,15 @@ Follows the producer's existing decomposition (tasks 75–78), which this design
 load-bearing: **the irreversible step is isolated from the atomic one.**
 
 ```
-75  assign IDs + registry        no file moves — reviewable against an unchanged tree
+75  add `## ID` to every brief    no file moves — reviewable against an unchanged tree
+    + write the allocation rule  (no registry — owner ruling, §3.6)
                                  ↓
-76  move 94 folders + 44 artifacts + 21 tooling files + sprint hrefs
+76  move every task folder + 45 artifacts + 21 tooling files + sprint hrefs
                                  ↓  ← THE POINT OF NO RETURN
         ┌────────────────────────┴────────────────────────┐
 77  repair links outside the wiki                    78  wiki sync + structural re-description
     (knowledge-base, brief↔brief)                        (fkit-wiki only — hard rule)
+                                                         + the six batched syncs (§9.2)
 ```
 
 - **Do not collapse 75 into 76.** That would put the irreversible step (ID assignment) inside the
@@ -532,13 +695,29 @@ The brief requires a procedure that does not depend on an uncommitted working tr
 BEFORE task 76:   owner commits the tree, then tags it
                   git tag pre-task-folder-migration
 
-TASK 76:          all moves via `git mv` (preserves rename detection, so the diff
-                  reads as renames rather than 94 deletes + 94 creates)
-                  owner commits as ONE commit
+TASK 76:          all moves via `git mv`; owner commits as ONE commit
 
-ROLLBACK:         git revert <migration-sha>          (history-preserving — preferred)
-             or   git reset --hard pre-task-folder-migration   (discards forward work)
+ROLLBACK:         git revert <migration-sha>                     ← ONLY before 77/78 land
+             or   git reset --hard pre-task-folder-migration     ← after that, the only option
 ```
+
+**⚠️ The rollback window closes when tasks 77/78 land.** An earlier revision presented `git revert` as
+the preferred option unconditionally. It is only valid **while task 76 is the tip**. Once 77 (link
+repair) and 78 (wiki sync) have committed, their commits *target the new layout* — reverting 76 alone
+leaves the repo structurally inconsistent: folders gone, but ~310 links and the whole vault still
+pointing at them. After 77/78, the only coherent rollback is the **destructive reset**, which discards
+their work too. Task 76's brief must say this, because the cheap-looking option stops being correct
+without any warning.
+
+**A partially-completed task 76** is recoverable: `git reset --hard pre-task-folder-migration` restores
+tracked state regardless of how far the sweep got. **Untracked files are not restored by that command** —
+if the migration created any, `git clean` is also needed. This is why the pre-migration commit must be
+*clean*, not merely tagged.
+
+**On `git mv`:** it does **not** write rename metadata — git has none, and infers renames later by
+content similarity. `git mv` is still the right command (it stages the removal and addition together),
+but the reason is ergonomics, not preserved history. *(An earlier revision asserted rename preservation;
+that was technically false and is corrected here.)*
 
 **The procedural precondition, stated plainly:** fkit's universal hard rule is that agents never commit
 unprompted. So **the owner must perform both commits and the tag.** No agent can create the rollback
@@ -546,11 +725,11 @@ point, which means task 76's brief must instruct the owner to do it **before** t
 that step is skipped, the rollback story does not exist — the change would live entirely in an
 uncommitted tree, which is exactly what the brief forbids.
 
-**Task 75 needs no tag** — it adds a file and edits fields, and is undone by reverting content.
+**Task 75 needs no tag** — with the registry dropped it adds no file at all, only content edits, and is undone by reverting them.
 
 ### 7.3 The migration is mechanical — script it, don't hand-edit
 
-94 folder creations, 138 file moves and ~300 link rewrites are past the scale where hand-editing is
+~95 folder creations, ~140 file moves and ~310 link rewrites are past the scale where hand-editing is
 credible. The implementer should generate the moves from the §3.4 rule, apply with `git mv`, and rewrite
 links with a scripted pass — then verify with §10, not by reading the diff.
 
@@ -568,6 +747,20 @@ grep -rl 'tasks/' claude/ | wc -l     # 21 (brief said 13)
 `fkit-initiate-project` · `fkit-plan-task` · `fkit-status/SKILL.md` · `fkit-status/dashboard.sh` ·
 `fkit-task-brief` · `fkit-task-done` · `fkit-task-cancelled` · `fkit-task-ship-loop` ·
 `fkit-wiki-ingest` · `fkit-wiki-sync`  *(the brief's 13)*
+
+**Two skills need a new enumeration rule, not just a path edit:**
+
+- **`fkit-wiki-ingest`** (`SKILL.md:28-36`) accepts the keyword `all tasks`. The design must say what
+  that enumerates post-migration. A shallow glob (`tasks/*/*.md`) now matches **zero** files; a
+  recursive one also admits `plan.md`, `worklog.md` and `review.md` as if they were task sources.
+  **Rule: `all tasks` enumerates `ai-agents/tasks/{backlog,done,cancelled}/*/brief.md` — briefs only.**
+  The other artifacts are not wiki sources and never were.
+- **`fkit-wiki-sync`** (`SKILL.md:35-50`) delta-ingests what changed since a watermark SHA. The
+  migration window is hostile to it: task 75 edits content at **old** paths, task 76 moves everything to
+  **new** paths as pure renames. Replaying that window, the old paths no longer exist and the new ones
+  look rename-only — so **the sync can skip the entire corpus and advance its watermark past it**,
+  leaving the vault permanently stale on 95 tasks with no error. **Rule: task 78 runs a forced full
+  re-ingest of the task corpus, not a delta**, and resets the watermark afterwards.
 
 **Beyond the brief's 13:**
 
@@ -588,7 +781,7 @@ grep -rl 'tasks/' claude/ | wc -l     # 21 (brief said 13)
 | `test/harness.mjs` | fixture construction |
 
 **Inbound documentation refs (measured):** `sprints/` 99 · `wiki-vault/` 98 · `knowledge-base/` 59 ·
-`reviews/` 41 · brief↔brief 12. **≈309 total** — of which the 98 vault refs are task 78's, by hard rule.
+`reviews/` 41 · brief↔brief 12. **≈310 total, 2026-07-19** — of which the 98 vault refs are task 78's, by hard rule.
 
 ---
 
@@ -637,13 +830,14 @@ This changes six briefs' effective scope, so it is the owner's call to confirm (
 Task 76 is verified by **behavior**, not by reading the diff.
 
 **Pre-flight (task 75, unchanged tree):**
-- Registry entry count == `ls ai-agents/tasks/{backlog,done,cancelled}/*.md | wc -l`. **Derive it — do
-  not trust 89 or 94.**
+- Every brief carries exactly one `## ID`. Count of `## ID` fields ==
+  `ls ai-agents/tasks/{backlog,done,cancelled}/*.md | wc -l`. **Derive the count — do not trust 89 or
+  94; it will move again before this runs.**
 - IDs unique: `… | LC_ALL=C sort | uniq -d` returns empty.
-- Bijection both directions: every entry maps to an existing brief; every brief appears exactly once.
+- Bijection both directions: every ID maps to an existing brief; every brief carries exactly one ID.
 - Re-deriving §3.4 from scratch reproduces the assignment byte-for-byte.
-- `git status` shows **no** renames or deletions under `ai-agents/tasks/` — content edits + the registry
-  only.
+- `git status` shows **no** renames, deletions, or new files under `ai-agents/tasks/` — **content edits
+  only.** (With the registry dropped, task 75 adds no file at all.)
 - **The dashboard reports the same counts as before, with no new drift** — proving the `## ID` field did
   not disturb `## Status` parsing.
 
@@ -665,44 +859,45 @@ Task 76 is verified by **behavior**, not by reading the diff.
 - duplicate-ID detection (§3.3) — the accepted-risk mitigation.
 - `id-mismatch` drift: brief `## ID` ≠ folder name (§3.5).
 - malformed folder: a task folder without `brief.md`.
-- registry-matches-tree (§3.6).
 
 ---
 
-## 11. Open questions — owner decisions
+## 11. Owner decisions — resolved 2026-07-19
 
-### 11.1 The stored registry — I recommend against it
+Every open question this design raised has been ruled on. Recorded here so the ADR's consequences and
+tasks 75–78's scope trace to a decision rather than an assumption.
 
-Ruling 1 names "a registry," so §3.6 specifies one. **My technical recommendation is not to build the
-stored file.** The folder names and `## ID` fields already answer every question it answers; a
-generated committed file is a third carrier that can drift, and this project has paid for that lesson
-at least three times. Per the brief's own instruction, this comes back as a finding rather than a silent
-substitution.
+| # | Question | Ruling |
+|---|---|---|
+| 1 | The stored registry — architect recommended against it | **Dropped.** §3.6 rewritten; task 75 shrinks. |
+| 2 | Absorb `plans/` and `worklogs/` as well as `reviews/`? | **Absorb all three.** §5.1; +45 files to tasks 76–77. |
+| 3 | Batch the six queued wiki-syncs into task 78? | **Confirmed.** §9.2. |
+| 4 | Adversarial pass before approval? | **Yes** — to be routed against *this* revision. |
+| 5 | Owner-verify task 64 before the migration? | **No — accepted as-is.** See the caveat below. |
+| 6 | When to correct the stale task-64 collision warnings? | **Now, before implementation.** Producer-owned. |
+| 7 | Who links the spec + ADR from sprint row 74? | **The producer.** Producer-owned. |
+| 8 | Consuming-project migration | **Deferred** to its own task + ADR. *(First ruled "solve inside this migration"; on the finding that this would reopen ADR-015, the owner changed the ruling to deferral. ADR-015 is not reopened.)* |
 
-- **Keep it** (as specified): honors the ruling; drift contained by a test.
-- **Drop it:** one-line change here; task 75 becomes "add `## ID` to 94 briefs + write the allocation
-  procedure."
+**Caveat carried forward from ruling 5:** task 64 closed agent-side and is **not owner-verified**. Its
+output is two of the mover skills this migration rewrites. If it proves wrong, the fix lands in files
+that a repo-wide path sweep has since rewritten, and isolating the cause is materially harder. This is
+an **accepted risk**, recorded so it is not later read as an oversight.
 
-### 11.2 Confirm the wiki-sync batching
+### 11.1 How ruling 8 was reached
 
-§9.2 rules that tasks 45, 51, 66, 69, 71, 73 fold into task 78's run. This changes six briefs' effective
-scope — the owner's call, not mine.
+The owner first ruled that consuming-project migration be solved **inside** this migration. Implementing
+that as stated would have reopened
+[ADR-015](../decisions/adr-015-additive-launch-convergence-no-migration-mechanism.md), which decided
+that launch converges `ai-agents/` **additively** — creating what is missing, **never rewriting what
+exists** — and whose title names the absence of a migration mechanism as the decision itself. Migrating
+a consuming project's tasks necessarily rewrites what exists.
 
-### 11.3 Should task 64 be owner-verified first?
+That was raised as a finding rather than absorbed, with three ways forward: amend ADR-015 with a scoped
+exception; build a separate migration mechanism (ADR-015's own rejected option, analysed in
+[`reports/2026-07-14-migration-mechanism.md`](2026-07-14-migration-mechanism.md)); or defer.
 
-It closed agent-side. Its output is two of the files this migration rewrites. Verifying before the
-migration is cheap; after, its diff is buried under a path sweep.
-
-### 11.4 Absorbing `plans/` and `worklogs/` widens tasks 75–78
-
-§5.1 adds 44 files that tasks 76–77 do not currently account for. Confirm the widened scope, or rule
-that `plans/` and `worklogs/` stay put for now — in which case they remain slug-keyed while briefs are
-ID-keyed, and that inconsistency should be recorded deliberately rather than left as an accident.
-
-### 11.5 The stale counts in tasks 75–78
-
-Every one of those briefs says 89; the real number is 94 and will move again before they run. Their
-verification steps should say *"derive the count"* rather than name one. Producer-owned.
+**The owner ruled deferral** (2026-07-19). ADR-015 stands unamended. See §13 for the scope statement and
+the accepted cost.
 
 ---
 
@@ -724,12 +919,20 @@ verification steps should say *"derive the count"* rather than name one. Produce
 - **Wiki page restructuring** — task 78, `fkit-wiki`'s by hard rule.
 - **Whether `assets/` needs sub-conventions** — deferred until a task actually has assets. Naming it
   reserved now costs nothing; specifying its interior before there is a use case is speculation.
-- **Consuming-project migration.** This design covers **the fkit repo's own tree**. A project that
-  already ran fkit has tasks in the old layout, and ADR-015 established that launch converges
-  `ai-agents/` **additively** — it creates what is missing and never rewrites what exists, so it will
-  **not** migrate a consuming project's tasks. Those projects keep the old layout while the shipped
-  skills expect the new one. **This is a real gap and it is out of scope here** — it needs its own
-  decision (§11 does not cover it; it is larger than this task).
+- **Consuming-project migration — deferred to its own task and ADR** (owner ruling, 2026-07-19).
+
+  This design covers **the fkit repo's own tree only**. A project that already ran fkit has tasks in the
+  old layout, and [ADR-015](../decisions/adr-015-additive-launch-convergence-no-migration-mechanism.md)
+  established that launch converges `ai-agents/` **additively** — creating what is missing, never
+  rewriting what exists — so it will **not** migrate a consuming project's tasks.
+
+  The owner first ruled to solve this inside the migration; on the finding that doing so would reopen
+  ADR-015, the ruling was **changed to deferral**. It becomes its own task and its own ADR, scoped
+  immediately after this migration lands. It **blocks nothing here** and keeps task 76 atomic.
+
+  **The gap is real while it is open:** a project that installs fkit in that window gets skills
+  expecting the new layout against a tree in the old one. That is the accepted cost of deferring, and
+  the follow-up task should be scoped rather than merely intended.
 
 ---
 
@@ -740,16 +943,67 @@ BEFORE                                   AFTER
 ──────                                   ─────
 ai-agents/                               ai-agents/
 ├── tasks/                               ├── tasks/
-│   ├── backlog/                         │   ├── registry.md         ← generated index
-│   │   └── build-thing.md               │   ├── backlog/
-│   ├── done/                            │   │   └── 0042-build-thing/
-│   └── cancelled/                       │   │       ├── brief.md
-├── plans/                               │   │       ├── plan.md
-│   └── build-thing.md                   │   │       ├── worklog.md
-├── worklogs/                            │   │       └── review.md
-│   └── build-thing.md                   │   ├── done/
-└── reviews/                             │   └── cancelled/
-    └── build-thing.md                   └── (plans/ worklogs/ reviews/ — gone)
+│   ├── backlog/                         │   ├── backlog/
+│   │   └── build-thing.md               │   │   └── 0042-build-thing/
+│   ├── done/                            │   │       ├── brief.md
+│   └── cancelled/                       │   │       ├── plan.md
+├── plans/                               │   │       ├── worklog.md
+│   └── build-thing.md                   │   │       └── review.md
+├── worklogs/                            │   ├── done/
+│   └── build-thing.md                   │   └── cancelled/
+└── reviews/                             └── (plans/ worklogs/ reviews/ — gone)
+    └── build-thing.md                       (no registry file — owner ruling)
 
 4 homes · slug key · renames orphan       1 home · permanent ID · renames are free
 ```
+
+---
+
+## 14. What the adversarial pass changed (rev 1 → rev 2)
+
+An adversarial review ran against rev 1 — Codex via `fkit-adversarial-reviewer`, plus a supplemental
+Claude pass. **18 findings; every one was verified against the codebase before acting.** The pass
+earned its keep: it found a defect that would have defeated the brief's own acceptance bar, and it
+corrected two of rev 1's three headline "silent breaks", both of which were characterised wrongly.
+
+### Findings that changed the design
+
+| # | Finding | Rev 1 said | Rev 2 says |
+|---|---|---|---|
+| **X18** | **The ID assignment rule was not stable across time.** Sorting the whole corpus and numbering `0001…N` means one new brief shifts every alphabetically-later ID. The corpus moved 94→95 *during authoring*. Two people applying the rule a day apart get different IDs — the brief's bar is that they get identical ones. | derive at execution time | **§3.4: the backfill is pinned to a named commit SHA.** The steady-state `1 + max` rule is append-only and needed no change. |
+| **X17** | **The mover's reference sweep fails by mass false-positive, not by silence.** `grep -rn "brief.md"` matches *every* task's href (80 in `sprint-2.md` alone), under an instruction that "none is discarded" — so closing one task would rewrite every row. | "would report no references found" | **§6.2 point 3, rewritten.** Same fix, correct severity. |
+| **X16** | **`dashboard.sh:527` is a fourth silent break.** The filename-stem fallback yields the literal `brief` for every unranked row, collapsing the whole Backlog board to one drift id — the exact failure its own comment says it exists to prevent. | site 5 "fails visibly" | **§6.1: sites 2, 3 and 5 are all silent.** The labelling drives verification coverage, so the error mattered. |
+| **X1** | Recovery keyed on the full folder name does **not** survive a slug rename — the folder name contains the slug. | claimed it did | **§2.2: key on the `NNNN` prefix**, the only immutable part. |
+| **X2** | The moved brief's **outbound sibling links** were omitted (`fkit-task-done/SKILL.md:117-124`). Worse under folders: `](../0043-other/brief.md)` stays *valid* from any board and silently re-targets. | not covered | **§6.2 point 4**, plus a board-qualified-path recommendation. |
+| **X3** | Ledger rules 1 and 3 resolve an id **without** identifying a task folder — a branch-scoped review has an id and nowhere to put the file. | "only rule 2 changes" | **§5.3: rules 1 and 3 must resolve to a folder**; branch-scoped ledgers go to `sprints/reviews/`. |
+| **X7** | `$(( 0095 + 1 ))` **fails in bash** ("value too great for base") — and works in zsh, which is what makes it a trap. Verified both. | no base specified | **§3.2: `10#` is mandatory**, with the zsh/bash divergence called out. |
+| **X8** | `git revert` is only a valid rollback **while task 76 is the tip** — once 77/78 land, their commits target the new layout. | revert presented as preferred, unconditionally | **§7.2: the rollback window closes**; after 77/78 only the destructive reset is coherent. Partial-completion and untracked-file cases added. |
+| **X4** | `fkit-wiki-ingest`'s `all tasks` keyword had no post-migration enumeration rule — shallow matches zero files, recursive admits `plan.md`/`worklog.md`/`review.md` as task sources. | not covered | **§8: `*/brief.md` only.** |
+| **X5** | `fkit-wiki-sync` could **skip the entire corpus and advance past it** — task 75 edits old paths, task 76 renames to new ones, and the delta logic sees neither. | not covered | **§8: task 78 runs a forced full re-ingest**, not a delta. |
+| **X6** | Duplicate-ID detection is not guaranteed to fire before references exist (brief creation writes its board row in the same operation; no CI gate). | "detect, don't prevent" stated flatly | **§3.3** retains detect-over-prevent but the residual is now stated honestly rather than implied safe. |
+| **X9** | Rev 1 contradicted itself on consuming-project migration — the §11 table still said "solve inside", §13 said deferral. **Introduced by my own mid-session edit.** | contradictory | **§11 table and §11.1 corrected.** Deferral throughout. |
+| **X12·X13** | Stale figures: 44 vs 45 files, 94 vs 95 briefs, "task 75 adds a file" after the registry was dropped. | stale | Corrected; **counts now say "derive at execution time"** rather than naming a figure. |
+| **X14** | ADR-014 does not choose `node --test` — it explicitly left the runner open. | mis-cited as authority | Citation corrected to what ADR-014 actually says. |
+| **X15** | `git mv` does **not** preserve rename metadata; git infers renames later by similarity. | asserted preservation | Corrected; `git mv` still recommended, for ergonomics not history. |
+
+### Findings routed elsewhere
+
+**X10 · X11** are defects in **task 76's brief**, not in this design: it instructs the scaffold to land
+the "same structure" (impossible for a deliberately-empty scaffold, and it would copy this project's
+task folders into a consumer's tree), and it still tells the coder to stop and ask about the two sprint
+ledgers that §5.2b now settles. **Producer-owned** — flagged, not edited here.
+
+### What the pass confirmed
+
+The five `dashboard.sh` sites are a **complete** enumeration; the §3.6 allocation grep is correct;
+tracked partial task-76 work is recoverable to the tag; and `sprints/reviews/` trips neither the sprint
+globs nor ADR-027 parity. *(That last one was cleared by the Codex pass only and was not independently
+re-verified.)*
+
+### Honest note on rev 1
+
+Three of rev 1's own headline findings were wrong in ways that mattered — X16 and X17 misjudged
+severity and direction, X1 claimed a property the mechanism did not deliver. **A design that finds
+three silent breaks and mis-describes two of them is not a safe input to an irreversible migration.**
+That is the argument for the pass having run, and the argument for §10's verification testing behaviour
+rather than trusting the prose.

@@ -46,13 +46,14 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — Tombstone: no library mutates shell; **ADR-014 Decision 4 unamended**; the real gap was gating
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — The 5th convention + a parity test; the consuming-project drift decision **stays deferred despite its fired trigger**
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — ⚠️ **Reverses the owner's own "not breadth" constraint**: an eighth **tester** seat on *sandbox authority*, against the architect's and producer's recommendation. **Decided, not built**
-- [[decisions/adr-029-stop-hook-enforces-turn-completion-contract]] — A **second hook** (`Stop`) enforces interactive questions + a "What's next?" close, because the prose rule **demonstrably did not fire**. Larger blast radius than ADR-018's — it can stop a turn completing. **Decided, not built**
+- [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — A task becomes a **folder** `tasks/<board>/<NNNN>-<slug>/` under a **permanent global ID**; `plans/`, `worklogs/` and `reviews/` are absorbed. **The largest structural change in the project's history** — 94 folders, ~309 links. **Decided, not built**
+- [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — A **second hook** (`Stop`) enforces interactive questions + a "What's next?" close, because the prose rule **demonstrably did not fire**. Larger blast radius than ADR-018's — it can stop a turn completing. **Decided, not built**
 
 ## Tasks
 
 ### Sprints
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — 🔒 Closed: the Omnigent-era onboarding sprint, and how its 12 tickets were dispositioned
-- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**57 done · 11 backlog · 5 cancelled — of 73**; grew 22 → 73)
+- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**63 done · 12 backlog · 1 in progress · 5 cancelled — of 81**; grew 22 → 81)
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — 🆕 The **Backlog board** (`sprints/backlog.md`) — the standing home for unsprinted briefs
 
 ### Sprint 2 — the removal chain
@@ -85,7 +86,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — Task 49 → ADR-027: the **cause** of a four-instance defect class; the enumeration corrected itself from five drifted files to **six**
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — Task 63 → ADR-025: **no fabrication-resistant precondition exists**; prevention removed, an unenforced prose marker in its place
 - [[tasks/implement-spawned-invocation-for-task-movers]] — Task 64: the reversal **built** (2026-07-19) and the sprint's **first agent-closed row — not owner-verified**; the adversarial pass forced three ADR amendments
-- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — Task 58 → the ADR-022 doc follow-up, Done; `architecture.md` is nonetheless **behind again** (no ADR past 022)
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — Task 58 → the ADR-022 doc follow-up, Done; `architecture.md` is nonetheless **behind again** (cites no ADR past **025**; 023, 024, 026–030 absent)
 
 ### Sprint 2 — the migration investigation (and its "build nothing" answer)
 - [[tasks/design-version-to-version-migration-mechanism]] — Investigation → ADR-015; **rejected the semver walk**

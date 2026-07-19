@@ -1,13 +1,18 @@
 # ADR-029: A task is a folder, keyed by a permanent global ID
 
-- **Status:** **proposed** — awaiting owner approval. Flip to `accepted` (with the date) when the owner
-  signs off on the design; **no implementation starts before that.**
+- **Status:** **accepted** — owner-approved 2026-07-19, on design revision 2. Both acceptance gates were
+  clear at approval: the adversarial pass had **run** (18 findings, all evaluated and incorporated), and
+  the ADR-015 collision was **resolved by deferral**.
+- **Deciders:** owner (Mark Dolbyrev); recorded by fkit-architect; fkit-producer consulted for
+  sequencing/decomposition; adversarial review by Codex via fkit-adversarial-reviewer.
+- **Revisions:** 2026-07-19 — Decision 8 inverted (registry dropped), Decision 7 confirmed
+  (`plans/`+`worklogs/` absorbed), consuming-project migration deferred; then **revision 2**, post
+  adversarial pass: the ID backfill is **pinned to a commit SHA** (Decision 4), the ledger key resolves
+  to a **folder** (Decision 7), and the **rollback window** is bounded (Consequences).
 - **Date:** 2026-07-19
-- **Deciders:** owner (Mark Dolbyrev) — *pending*; recorded by fkit-architect; fkit-producer consulted
-  for sequencing/decomposition context
 - **Evidence:** [`reports/2026-07-19-design-task-folder-structure-and-id-scheme.md`](../reports/2026-07-19-design-task-folder-structure-and-id-scheme.md)
   — the full design, including the measured blast radius and the three silent-break mechanisms.
-- **Task:** [`design-task-folder-structure-and-id-scheme.md`](../../tasks/backlog/design-task-folder-structure-and-id-scheme.md) (Sprint 2, priority 74)
+- **Task:** [`design-task-folder-structure-and-id-scheme.md`](../../tasks/done/design-task-folder-structure-and-id-scheme.md) (Sprint 2, priority 74)
 - **Implements:** [ADR-020](adr-020-per-task-plan-and-worklog-artifacts.md) §Decision 6 — the per-task
   folder it recorded as the intended future direction.
 
@@ -48,7 +53,7 @@ and one destroys data:
    identically, so they agree perfectly on the wrong file. **This is data loss, and it is the reason
    the brief filename decision could not be made in isolation.**
 
-The brief's other stated facts were also stale: **94 briefs, not 89**; **21 tooling files, not 13**; and
+The brief's other stated facts were also stale: **95 briefs, not 89** (94 when the design was drafted hours earlier — see Decision 4 on why a moving corpus is more than a stale count); **21 tooling files, not 13**; and
 **task 64 — which the brief instructs this design to sequence against — is already Done.**
 
 ## Decision
@@ -93,13 +98,28 @@ real machinery for a single-owner prototype and a stale lock is the worse failur
 
 ### 4. Existing tasks are numbered by slug, `LC_ALL=C`-sorted, board-blind
 
-> Take all brief paths. Sort by **slug alone**, ascending, under `LC_ALL=C`. Assign `0001`… in that
-> order. Board membership is ignored.
+> Take every brief path **as of a commit SHA pinned in task 75's brief before work starts**. Sort by
+> **slug alone**, ascending, under `LC_ALL=C`. Assign `0001`… in that order. Board membership is ignored.
 
 The bar the brief set is that two people applying the rule produce **identical** IDs, which excludes any
 rule requiring judgment. Chronological ordering needs git archaeology and ties; sprint+priority is the
 collision being fixed; board-then-alphabetical disagrees the moment a task moves mid-assignment.
-Verified precondition: all 94 slugs are unique, so the sort is total with no tie-break case.
+Verified precondition: all slugs are unique, so the sort is total with no tie-break case — **re-checked
+against the pinned SHA**, since uniqueness is a property of the corpus, not a permanent truth.
+
+**The SHA pin is load-bearing and was added in revision 2 after the adversarial pass.** Numbering a
+sorted corpus `0001…N` means one new brief shifts every alphabetically-later ID — and the corpus moved
+**94 → 95 while this design was being written**. Without the pin, two people applying the rule *a day
+apart* get different IDs, which fails the very bar this decision is built to meet. **Only the one-time
+backfill is pinned**; the steady-state `1 + max` rule in Decision 3 is append-only and cannot be
+perturbed.
+
+**Post-pin rule — never re-derive.** A brief created after the pin is not in the backfill; it takes
+`1 + max` on creation and triggers **no** re-derivation. No assigned ID is ever recomputed. Stated
+explicitly because "pin the assignment" alongside "the corpus keeps moving" can be read as *re-pin when
+the next brief lands* — which would renumber tasks that already have IDs, the exact permanent failure
+this decision exists to prevent. **The ID sequence is allocation order, not alphabetical order**; the
+sort makes the one-time backfill reproducible and then stops applying.
 
 **All tasks are numbered, including closed ones** — their artifacts are keyed by the same identifier.
 
@@ -129,22 +149,43 @@ Three top-level directories disappear. The brief asked only about `reviews/`, bu
 identically — answering for one would leave two directories slug-keyed while briefs are ID-keyed,
 installing the two-grammar problem fresh. ADR-020 §6 pre-authorizes all four artifacts.
 
-The ledger-key rule (`reviews/README.md`) changes **rule 2 only** — "the task file's basename" becomes
-"the task folder name". Rules 1, 3 and 4 are untouched. Both stateful-review skills must change in the
-same commit or the ledger forks.
+The ledger-key rule (`reviews/README.md`) changes so that **rules 1, 2 and 3 resolve to a folder, not a
+string** — because the ledger now lives *inside* a task folder, an id alone is no longer enough. Rule 2
+becomes "the task folder name". Rule 1 accepts an ID prefix or folder name, and an explicit id matching
+no folder falls through to rule 4 rather than creating an orphan. Rule 3's branch-derived id has no task
+folder at all, so its ledger goes to `ai-agents/sprints/reviews/<branch-slug>.md`. Rule 4 is untouched.
+Both stateful-review skills must change in the same commit or the ledger forks.
 
-### 8. The registry is a generated, non-authoritative index
+*(Revision 2: rev 1 claimed "only rule 2 changes." The adversarial pass showed rules 1 and 3 resolve ids
+without identifying a folder — `fkit-stateful-review/SKILL.md:23-33` explicitly permits the branch path —
+leaving a valid review with nowhere to write.)*
 
-`ai-agents/tasks/registry.md` — one row per task, regenerated from the tree, verified by a test.
-**Authority always rests with the folder name and `## ID`.** If the registry and the tree disagree, the
-tree is right.
+**Two ledgers are sprint-keyed, not task-keyed** (`sprint2-scaffold-launcher-hardening.md`,
+`sprint2-shared-instructions-delivery.md`) and have no task folder to fold into. They move to
+**`ai-agents/sprints/reviews/`** — the same principle applied consistently: an artifact lives with the
+thing it describes, and these describe a sprint. `ai-agents/reviews/` still disappears.
 
-**Recorded dissent:** the architect recommends **not** building the stored file at all — the tree
-already answers every question it answers, and a generated committed file is a third carrier that can
-drift, a lesson this project has paid for at least three times (ADR-018's skill-ownership reconciliation;
-`dashboard.sh`'s "one grammar" comments). It is specified because the owner's ruling named a registry,
-and defined in the least drift-prone way available. **This dissent is recorded, not overridden** — see
-"Re-raise only if".
+### 8. There is no registry file
+
+The task brief's ruling 1 named "a permanent project-wide ID **plus a registry**." The architect raised
+a finding against the stored registry rather than substituting silently, and **the owner ruled to drop
+it** (2026-07-19). The ID itself is unchanged.
+
+> **Two carriers, no third.** The **folder name** (post-migration) and the brief's **`## ID`** field,
+> reconciled by the `id-mismatch` drift check. Nothing else stores an ID.
+
+The reasoning that carried the finding:
+
+- The tree already answers every question a registry would. Allocation (`1 + max`) is one `ls`; lookup
+  is one `grep`.
+- A generated, committed index is a **third carrier that can drift** — a lesson this project has paid
+  for at least three times (ADR-018's skill-ownership source-of-truth reconciliation; `dashboard.sh`'s
+  "there is ONE grammar" comments at `:111-126` and `:308-313`, each written after a defect caused by
+  two sources answering one question).
+- **Nothing in the design reads a registry.** It would have existed only to be maintained.
+
+**Consequence:** task 75 shrinks to *"add `## ID` to all 94 briefs and write down the allocation
+procedure"* — it now creates no file at all.
 
 ### 9. The scaffold is unchanged; `.gitkeep` never arises
 
@@ -157,7 +198,10 @@ not hardcoded).
 ### 10. Sequencing
 
 - **Against task 64: there is no ordering.** It is already Done; the collision the brief describes does
-  not exist. Two stale warnings asserting otherwise should be corrected (producer-owned).
+  not exist. Two stale warnings asserting otherwise are being corrected before implementation
+  (producer-owned, owner-ruled 2026-07-19). **Task 64 itself is accepted without owner verification**
+  (owner ruling) — an accepted risk, since its output is two of the mover skills this migration
+  rewrites.
 - **The six queued wiki-syncs (45, 51, 66, 69, 71, 73) wait and batch into task 78.** Their subject is
   task-board mechanics; running them first means writing those pages twice and having the vault carry a
   *verified-knowledge* description of a structure about to change. Sprint 2 task 11 established this
@@ -168,14 +212,20 @@ not hardcoded).
 ### 11. Rollback is a git tag the owner creates
 
 ```
-BEFORE task 76:  owner commits, then `git tag pre-task-folder-migration`
+BEFORE task 76:  owner commits (CLEAN tree), then `git tag pre-task-folder-migration`
 TASK 76:         all moves via `git mv`; owner commits as ONE commit
-ROLLBACK:        git revert <sha>   or   git reset --hard pre-task-folder-migration
+ROLLBACK:        git revert <sha>                      ← ONLY while 76 is the tip
+            or   git reset --hard pre-task-folder-migration   ← after 77/78, the only option
 ```
 
 **Agents never commit unprompted (universal hard rule), so the owner must create the rollback point
 before the agent starts.** If that step is skipped the rollback story does not exist — the change would
 live entirely in an uncommitted tree, which the brief explicitly forbids.
+
+**The revert window closes when tasks 77/78 land** (revision 2). Their commits target the new layout, so
+reverting 76 alone leaves folders gone and ~310 links plus the whole vault still pointing at them. After
+that, only the destructive reset is coherent — and it discards their work too. The pre-migration commit
+must be **clean**, not merely tagged: `reset --hard` does not remove untracked files.
 
 ## Options considered
 
@@ -214,11 +264,18 @@ live entirely in an uncommitted tree, which the brief explicitly forbids.
 - The cross-branch ID race is a **residual accepted risk**, not an eliminated one.
 - The rollback story depends on the **owner** performing a commit and tag the agent cannot do.
 
-**Known gap, deliberately out of scope**
-- **Consuming projects are not migrated.** ADR-015 established that launch converges `ai-agents/`
-  **additively** — it creates what is missing and never rewrites what exists — so a project that already
-  ran fkit keeps the old layout while the shipped skills expect the new one. This is a real gap needing
-  its own decision; it is named here so it is not discovered as a surprise.
+**Deferred, deliberately and on the record**
+- **Consuming projects are not migrated by this change** (owner ruling, 2026-07-19). A project that
+  already ran fkit has tasks in the old layout, and
+  [ADR-015](adr-015-additive-launch-convergence-no-migration-mechanism.md) decided that launch converges
+  `ai-agents/` **additively** — creating what is missing, **never rewriting what exists**.
+
+  The owner first ruled to solve this inside the migration; on the finding that doing so would reopen
+  ADR-015, the ruling was **changed to deferral**. It becomes **its own task and its own ADR**, scoped
+  immediately after this migration lands. **ADR-015 is therefore not reopened by this ADR.**
+
+  **The accepted cost:** while that follow-up is open, a project installing fkit gets skills expecting
+  the new layout against a tree in the old one. Named here so it is a decision, not a discovery.
 
 ## Re-raise only if
 
@@ -228,9 +285,9 @@ live entirely in an uncommitted tree, which the brief explicitly forbids.
 - **The ID format or the never-reuse rule is questioned.** Settled. The one thing that would justify
   reopening is a **duplicate ID actually occurring in practice** — that is evidence the accepted risk in
   Decision 3 was mispriced, and it warrants revisiting prevention over detection.
-- **The stored registry drifts from the tree more than once**, or maintaining it costs more than it
-  returns — the architect's recorded dissent in Decision 8 becomes actionable, and dropping the file is
-  a small, contained change.
+- **A registry file is proposed again.** Decision 8 dropped it on a stated finding, and the owner ruled.
+  Reopening needs a concrete consumer — something that must *read* an index the tree cannot answer. "It
+  would be convenient" is not that.
 - **Do not re-raise** the dual-format transition, content-hash IDs, or numbering only open tasks. All
   three were weighed and rejected on stated grounds.
 - **Do not re-raise** the task-64 ordering. It is Done; there is no collision.

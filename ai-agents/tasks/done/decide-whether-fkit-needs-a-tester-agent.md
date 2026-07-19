@@ -7,7 +7,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Context
 

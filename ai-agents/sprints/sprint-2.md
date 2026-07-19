@@ -74,13 +74,13 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 42 | Reopen ADR-012 Decisions 3 & 4 — record the `PreToolUse` skill-gate hook decision *(live bug fix, phase 1/2; owner: fkit-architect)* | [`record-pretooluse-skill-gate-adr-amendment.md`](../tasks/done/record-pretooluse-skill-gate-adr-amendment.md) |
 | ✅ Done | 43 | Implement the `PreToolUse` skill-ownership gate (the hook-flip) *(owner: fkit-coder; [review](../reviews/implement-pretooluse-skill-ownership-hook.md))* | [`implement-pretooluse-skill-ownership-hook.md`](../tasks/done/implement-pretooluse-skill-ownership-hook.md) |
 | ✅ Done | 44 | Remove the output variants from `/fkit-status` — one skill, one output *(**reverts task 38**; skill-text only; owner: fkit-coder)* | [`remove-output-variants-from-fkit-status.md`](../tasks/done/remove-output-variants-from-fkit-status.md) |
-| 🔲 Backlog | 45 | Wiki sync after the `/fkit-status` output-variant removal *(needs 44 — hard; owner: fkit-wiki)* | [`wiki-sync-fkit-status-output-variant-removal.md`](../tasks/backlog/wiki-sync-fkit-status-output-variant-removal.md) |
+| 🔲 Backlog | 45 | Wiki sync after the `/fkit-status` output-variant removal *(needs 44 — hard; **do not run early — batches into task 78** per the task-74 design §9.2; owner: fkit-wiki)* | [`wiki-sync-fkit-status-output-variant-removal.md`](../tasks/backlog/wiki-sync-fkit-status-output-variant-removal.md) |
 | ✅ Done | 46 | Investigate adopting a proper mutation-testing library, replacing hand-rolled `prove-red.sh` *(investigation — [findings](../knowledge-base/reports/2026-07-18-mutation-testing-library-adoption.md); spawned [ADR-026](../knowledge-base/decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled.md); owner: fkit-architect; spawned from task-43 review finding R2)* | [`investigate-mutation-testing-library-adoption.md`](../tasks/done/investigate-mutation-testing-library-adoption.md) |
 | ✅ Done | 47 | Record the "one skill, one output" convention *(OQ8 resolved — generalize; document only; owner: fkit-architect → [`conventions/one-skill-one-output.md`](../knowledge-base/conventions/one-skill-one-output.md))* | [`record-one-skill-one-output-convention.md`](../tasks/done/record-one-skill-one-output-convention.md) |
 | ✅ Done | 48 | Ship the one-skill-one-output convention in the scaffold *(closes the 4th live-vs-scaffold instance; owner: fkit-coder; independent — does not wait for 49)* | [`ship-one-skill-one-output-convention-in-scaffold.md`](../tasks/done/ship-one-skill-one-output-convention-in-scaffold.md) |
 | ✅ Done | 49 | Investigate dual-home parity — dogfood `ai-agents/` vs `claude/scaffold/` *(investigation — [findings](../knowledge-base/reports/2026-07-18-dual-home-parity-live-vs-scaffold.md); spawned [ADR-027](../knowledge-base/decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test.md); owner: fkit-architect)* | [`investigate-dual-home-parity-live-vs-scaffold.md`](../tasks/done/investigate-dual-home-parity-live-vs-scaffold.md) |
 | ✅ Done | 50 | Rename the producer's `fkit-task-plan` skill to `fkit-task-brief` *(name collision with the coder's `fkit-plan-task`; atomic — dir + `skills-for-role.sh` + hook together; owner: fkit-coder)* | [`rename-task-plan-skill-to-task-brief.md`](../tasks/done/rename-task-plan-skill-to-task-brief.md) |
-| 🔲 Backlog | 51 | Wiki sync after the `task-plan` → `task-brief` rename *(needs 50 — hard; 8 vault pages; owner: fkit-wiki)* | [`wiki-sync-task-plan-rename.md`](../tasks/backlog/wiki-sync-task-plan-rename.md) |
+| 🔲 Backlog | 51 | Wiki sync after the `task-plan` → `task-brief` rename *(needs 50 — hard; 8 vault pages; **do not run early — batches into task 78** per the task-74 design §9.2; owner: fkit-wiki)* | [`wiki-sync-task-plan-rename.md`](../tasks/backlog/wiki-sync-task-plan-rename.md) |
 | ✅ Done | 52 | Design the coder's `task-ship-loop` skill *(design — [spec, rev 3, owner-approved](../knowledge-base/reports/2026-07-17-design-task-ship-loop-skill.md); spawns ADR-019/ADR-020; owner: fkit-architect)* | [`design-task-ship-loop-skill.md`](../tasks/done/design-task-ship-loop-skill.md) |
 | ✅ Done | 53 | Implement the `task-ship-loop` skill from the approved design *(owner: fkit-coder; skill live, registered for coder, hook suite green)* | [`implement-task-ship-loop-skill.md`](../tasks/done/implement-task-ship-loop-skill.md) |
 | ✅ Done | 54 | Grant the `AskUserQuestion` tool to the six Claude-side agents *(implements [ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md) Decision 4 / task 39 findings; tool grant, not a skill; owner: fkit-coder)* | [`grant-askuserquestion-tool-to-six-claude-agents.md`](../tasks/done/grant-askuserquestion-tool-to-six-claude-agents.md) |
@@ -95,20 +95,25 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 63 | Design a laundering-safe consent model for **spawned** invocation of the task movers *(design — [spec](../knowledge-base/reports/2026-07-18-design-spawned-invocation-consent-model-for-task-movers.md); spawned [ADR-025](../knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md), **reverses the owner-only done-gate hard rule + ADR-019**; owner: fkit-architect)* | [`design-spawned-invocation-consent-model-for-task-movers.md`](../tasks/done/design-spawned-invocation-consent-model-for-task-movers.md) |
 | ✅ Done (agent-closed — not owner-verified) | 64 | Implement spawned invocation for the task movers from the approved design *(owner: fkit-coder)* | [`implement-spawned-invocation-for-task-movers.md`](../tasks/done/implement-spawned-invocation-for-task-movers.md) |
 | ✅ Done | 65 | Filter the `/fkit-status` board to open tasks only *(conscious reversal of "show the dead rows"; roll-up kept, drifted rows always visible, replace not toggle; owner: fkit-coder)* | [`filter-fkit-status-board-to-open-tasks.md`](../tasks/done/filter-fkit-status-board-to-open-tasks.md) |
-| 🔲 Backlog | 66 | Wiki sync after the filtered `/fkit-status` board *(needs 65 — hard; owner: fkit-wiki)* | [`wiki-sync-filtered-fkit-status-board.md`](../tasks/backlog/wiki-sync-filtered-fkit-status-board.md) |
+| 🔲 Backlog | 66 | Wiki sync after the filtered `/fkit-status` board *(needs 65 — hard; **do not run early — batches into task 78** per the task-74 design §9.2; owner: fkit-wiki)* | [`wiki-sync-filtered-fkit-status-board.md`](../tasks/backlog/wiki-sync-filtered-fkit-status-board.md) |
 | ✅ Done | 67 | Add a Backlog board — the default home for unsprinted task briefs *(persistent `sprints/backlog.md`, backfills 5 unsprinted briefs; filename deliberately outside the `sprint-*.md` glob; owner: fkit-coder)* | [`add-backlog-board-default-for-unsprinted-task-briefs.md`](../tasks/done/add-backlog-board-default-for-unsprinted-task-briefs.md) |
 | ✅ Done | 68 | Report the Backlog board in `/fkit-status` on request only *(`Backlog` as a target-selector argument — conforms to one-skill-one-output; owner: fkit-coder)* | [`report-backlog-board-in-fkit-status-on-request-only.md`](../tasks/done/report-backlog-board-in-fkit-status-on-request-only.md) |
-| 🔲 Backlog | 69 | Wiki sync after the Backlog board introduction *(needs 67 and 68 — hard; owner: fkit-wiki)* | [`wiki-sync-backlog-board-introduction.md`](../tasks/backlog/wiki-sync-backlog-board-introduction.md) |
+| 🔲 Backlog | 69 | Wiki sync after the Backlog board introduction *(needs 67 and 68 — hard; **do not run early — batches into task 78** per the task-74 design §9.2; owner: fkit-wiki)* | [`wiki-sync-backlog-board-introduction.md`](../tasks/backlog/wiki-sync-backlog-board-introduction.md) |
 | ✅ Done | 70 | Add the `/fkit-open-questions-interview` skill for the six Claude-side roles *(session-history sweep, interview-only, zero write surface; consult degrade per ADR-021; adversarial reviewer excluded per ADR-022; owner: fkit-coder)* | [`add-open-questions-interview-skill-for-six-roles.md`](../tasks/done/add-open-questions-interview-skill-for-six-roles.md) |
-| 🔲 Backlog | 71 | Wiki sync after the `/fkit-open-questions-interview` skill lands *(needs 70 — hard; owner: fkit-wiki)* | [`wiki-sync-open-questions-interview-skill.md`](../tasks/backlog/wiki-sync-open-questions-interview-skill.md) |
+| 🔲 Backlog | 71 | Wiki sync after the `/fkit-open-questions-interview` skill lands *(needs 70 — hard; **do not run early — batches into task 78** per the task-74 design §9.2; owner: fkit-wiki)* | [`wiki-sync-open-questions-interview-skill.md`](../tasks/backlog/wiki-sync-open-questions-interview-skill.md) |
 | ✅ Done | 72 | Add the `/fkit-dumb-down` skill for the six Claude-side roles *(on-demand re-explain, content-preserving, zero write surface; complementary to task 62 — owner ruled BOTH; adversarial reviewer excluded per ADR-022; owner: fkit-coder)* | [`add-dumb-down-skill-for-six-roles.md`](../tasks/done/add-dumb-down-skill-for-six-roles.md) |
-| 🔲 Backlog | 73 | Wiki sync after the `/fkit-dumb-down` skill lands *(needs 72 — hard; may batch with 71 in one run; owner: fkit-wiki)* | [`wiki-sync-dumb-down-skill.md`](../tasks/backlog/wiki-sync-dumb-down-skill.md) |
-| 🔲 Backlog | 74 | Design the task-folder structure and the global task-ID scheme *(design — gates 75–78; **collides with task 64**; adversarial pass recommended; owner: fkit-architect)* | [`design-task-folder-structure-and-id-scheme.md`](../tasks/backlog/design-task-folder-structure-and-id-scheme.md) |
-| 🔲 Backlog | 75 | Assign global task IDs to all 89 briefs and create the ID registry *(no file moves — reversible by design; needs 74 — hard; owner: fkit-coder)* | [`assign-global-task-ids-and-create-registry.md`](../tasks/backlog/assign-global-task-ids-and-create-registry.md) |
-| 🔲 Backlog | 76 | Migrate all 89 tasks into folders and update the 13 tooling files *(**atomic — the point of no return**; needs 75 — hard; review strongly recommended; owner: fkit-coder)* | [`migrate-tasks-to-folder-structure-and-update-tooling.md`](../tasks/backlog/migrate-tasks-to-folder-structure-and-update-tooling.md) |
-| 🔲 Backlog | 77 | Repair the ~110 task links in `reviews/` and `knowledge-base/` *(needs 76 — hard; parallel with 78; owner: fkit-coder)* | [`repair-task-links-outside-the-wiki-after-migration.md`](../tasks/backlog/repair-task-links-outside-the-wiki-after-migration.md) |
-| 🔲 Backlog | 78 | Wiki sync after the task-folder migration *(~96 vault refs + structural re-description; needs 76 — hard; parallel with 77; owner: fkit-wiki)* | [`wiki-sync-task-folder-migration.md`](../tasks/backlog/wiki-sync-task-folder-migration.md) |
-| 🔲 Backlog | 79 | Compress the Output style section of `universal-rules.md` *(reclaims 549 B; block 3557→3008 B against a launch-blocking 4096 cap; **review pass required** — R3 precedent; sequenced **before** the not-yet-filed ADR-029 prose addition, same file; owner: fkit-coder)* | [`compress-universal-rules-output-style-section.md`](../tasks/backlog/compress-universal-rules-output-style-section.md) |
+| 🔲 Backlog | 73 | Wiki sync after the `/fkit-dumb-down` skill lands *(needs 72 — hard; **do not run early — batches into task 78** per the task-74 design §9.2; owner: fkit-wiki)* | [`wiki-sync-dumb-down-skill.md`](../tasks/backlog/wiki-sync-dumb-down-skill.md) |
+| ✅ Done (agent-closed — not owner-verified) | 74 | Design the task-folder structure and the global task-ID scheme *(design — [spec](../knowledge-base/reports/2026-07-19-design-task-folder-structure-and-id-scheme.md), [ADR-029](../knowledge-base/decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md) **accepted**; gates 75–78; owner: fkit-architect)* | [`design-task-folder-structure-and-id-scheme.md`](../tasks/done/design-task-folder-structure-and-id-scheme.md) |
+| 🔲 Backlog | 75 | Add an `## ID` field to every brief and write down the allocation procedure *(**no registry file** — owner ruled 2026-07-19; **corpus pinned to a commit SHA**; no file moves — reversible by design; needs 74 — hard; owner: fkit-coder)* | [`assign-global-task-ids-and-create-registry.md`](../tasks/backlog/assign-global-task-ids-and-create-registry.md) |
+| 🔲 Backlog | 76 | Migrate every task into a folder, absorb `plans/` + `worklogs/` + `reviews/`, and update the tooling *(**atomic — the point of no return**; needs 75 — hard; review strongly recommended; owner: fkit-coder)* | [`migrate-tasks-to-folder-structure-and-update-tooling.md`](../tasks/backlog/migrate-tasks-to-folder-structure-and-update-tooling.md) |
+| 🔲 Backlog | 77 | Repair the task links in `reviews/`, `knowledge-base/` and brief↔brief *(**covers pre-existing rot too — ~1/3 already broken before the migration**; **⚠️ its baseline-capture step must run BEFORE 76**, everything else after; sprint-keyed ledgers move to `sprints/reviews/` per design §5.2b; needs 76 — hard; parallel with 78; owner: fkit-coder)* | [`repair-task-links-outside-the-wiki-after-migration.md`](../tasks/backlog/repair-task-links-outside-the-wiki-after-migration.md) |
+| 🔲 Backlog | 78 | Wiki sync after the task-folder migration *(~96 vault refs + structural re-description; **batches the six queued syncs 45/51/66/69/71/73**; needs 76 — hard; parallel with 77; owner: fkit-wiki)* | [`wiki-sync-task-folder-migration.md`](../tasks/backlog/wiki-sync-task-folder-migration.md) |
+| 🔲 Backlog | 79 | Compress the Output style section of `universal-rules.md` *(reclaims 549 B; block 3557→3008 B against a launch-blocking 4096 cap; **review pass required** — R3 precedent; sequenced **before** the not-yet-filed ADR-030 prose addition, same file; owner: fkit-coder)* | [`compress-universal-rules-output-style-section.md`](../tasks/backlog/compress-universal-rules-output-style-section.md) |
+| 🔄 In progress | 80 | Repair the stale `adr-029-stop-hook` links in the wiki vault *(**page rename + 11 files' inbound links** — the vault page itself sat at the old slug, so links resolved silently to the wrong ADR — target is now [ADR-030](../knowledge-base/decisions/adr-030-stop-hook-enforces-turn-completion-contract.md); **owner pulled it forward out of task 78** — depends on nothing, does not wait for the migration; **in flight at filing time**; owner: fkit-wiki)* | [`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](../tasks/backlog/repair-stale-adr-029-stop-hook-links-in-the-vault.md) |
+| 🔲 Backlog | 81 | Extend the task movers' reference sweep to `knowledge-base/` *(shipped defect — both movers grep `sprints/` + `tasks/` only, so ADR/report back-links rot on every close; same class as 21/22; **`fkit-task-cancelled` has the gap twice**; recommend landing before 76; owner: fkit-coder)* — **Part B**: next-ADR-number derivation looks in too few places *(2026-07-19 collision)* — **Part C** *(added 2026-07-19)*: `/fkit-wiki-lint` cross-checks vault ADR number vs knowledge-base slug, since a reused number stays resolvable and is invisible to a link check; **Part C ownership settled 2026-07-19 — fkit-coder, task does not split; the wiki's exclusivity is over the vault, not over its own skill source** — **Part D** *(absorbed from 82)*: `claude/fkit-claude-init.sh:847` hard-codes *"Seven roles"*; it is executable source so the architect may not edit it; **⚠️ ADR-028 is decided-not-built — do not blindly substitute Eight**; all four parts fkit-coder | [`extend-mover-reference-sweep-to-the-knowledge-base.md`](../tasks/backlog/extend-mover-reference-sweep-to-the-knowledge-base.md) |
+| 🔲 Backlog | 82 | Refresh `architecture.md` for ADRs 026–030 and the eighth role *(**`architecture.md:4` and `:82` say seven roles; ADR-028 added an eighth — the canonical doc is factually wrong about the team's shape**; **5 doc sites in 4 files** — `architecture.md:4,82`, `CLAUDE.md:7`, `AGENTS.md:7`, `README.md:76`, `claude/README.md:3` — **enumerated by [ADR-028](../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md):154-169, which says do not re-derive the list**; also adds a **dated ADR-023→028 pointer** (**ADR-023 is NOT superseded — only its count claim is overtaken**); `PROJECT.md:8,72` moved to **task 83** per ADR-028:154 (the product brief is not the architect's); `claude/fkit-claude-init.sh:847` is executable source, **task 81 Part D**; `wiki-vault/index.md:11` + `wiki/systems/fkit.md:7,15` are **fkit-wiki's resync, flag don't fix**; cites only up to ADR-025, so 026–030 absent plus the 023/024 tombstones; ADR-028/029/030 are **decided but not built** and must not be described as existing structure; historical "seven" in ADRs/reports/closed rows **must stay**; precedent task 58; owner: fkit-architect)* | [`refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role.md`](../tasks/backlog/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role.md) |
+| 🔲 Backlog | 83 | Amend the product brief for the eighth role — `PROJECT.md:8,72` *(split from 82 per **ADR-028:154** — the brief is the product document, not the architect's; **`:72`'s "not breadth" clause is a product constraint ADR-028 knowingly reverses, so this is a stance restatement, not a count fix**; ADR-028 is **decided-not-built** so the brief must not promise a role that does not exist; **⚠️ needs owner sign-off on the stance wording**; owner: fkit-producer)* | [`amend-project-brief-for-the-eighth-role.md`](../tasks/backlog/amend-project-brief-for-the-eighth-role.md) |
+| 🔲 Backlog | 84 | Wiki resync for the eighth role — after the source docs land *(**⚠️ filed under a false premise, corrected in the brief: the vault is NOT stale** — `index.md:11` and `systems/fkit.md:9,17` already carry an accurate decided-not-built note; ADR-028:165 named them stale and the wiki fixed them afterwards. **The real work is the mirror image** — `fkit.md:9` tracks *which source docs still assert seven*, and that tracking claim expires when 82/83/81-D land; **depends on 82 + 83 + 81 Part D**, precedent task 11 / `sprint-2.md:209`; **not folded into 78**; decided-not-built framing must survive; owner: fkit-wiki)* | [`wiki-resync-eighth-role-after-source-docs-land.md`](../tasks/backlog/wiki-resync-eighth-role-after-source-docs-land.md) |
 
 ### Addendum — tasks 74–78 added out of band (2026-07-19)
 
@@ -118,12 +123,55 @@ existing `tasks/{backlog,done,cancelled}/` boards.
 
 **Three owner rulings taken at scoping time (2026-07-19):** a **new global sequential ID** (tasks have
 none today — the numbers in conversation are sprint-scoped priority and collide across sprints); **all
-89 briefs migrate in one pass**, no dual-format period; and the **wiki-vault's ~96 refs are a separate
+briefs migrate in one pass**, no dual-format period; and the **wiki-vault's ~96 refs are a separate
 `fkit-wiki` task**, because only that role may write the vault.
 
 Scoped into five briefs — design (74), IDs (75), the atomic migration + tooling (76), then the two
 parallel link repairs (77 coder, 78 wiki). Priorities appended after 73; the existing ranking is
-untouched. **Ranking and the 64-vs-76 ordering are for the owner to confirm.**
+untouched. **Ranking is for the owner to confirm.**
+
+### Corrections (2026-07-19, after the task-74 design landed)
+
+Applied from the design spec
+([`2026-07-19-design-task-folder-structure-and-id-scheme.md`](../knowledge-base/reports/2026-07-19-design-task-folder-structure-and-id-scheme.md))
+and the owner's rulings on it:
+
+- **The task-64 collision is gone.** Task 64 is Done, so there is no ordering to state. The warnings on
+  row 74 and in task 76's brief have been removed — an implementer following them would hunt for a rule
+  that does not exist (spec §9.1).
+- **Never hardcode a brief count.** The scoping figure of **89** was already stale when written; the
+  measured number on 2026-07-19 was **94**, and it is **95** as this correction is applied. Tasks 75–78
+  now say *derive the count* (`ls ai-agents/tasks/{backlog,done,cancelled}/*.md | wc -l`) rather than
+  naming a figure. **A named count in a verification step is a guaranteed future failure.**
+- **The stored ID registry is dropped** (owner ruling, spec §3.6). Authority rests on the folder name
+  and the brief's `## ID` field. Task 75 shrinks accordingly.
+- **`plans/`, `worklogs/` AND `reviews/` are all absorbed** into task folders as `plan.md`,
+  `worklog.md`, `review.md` (owner ruling, spec §4.3) — three top-level directories disappear, not one.
+  Tasks 76 and 77 widen accordingly.
+- **The six queued wiki-syncs (45, 51, 66, 69, 71, 73) wait and batch into task 78** (owner ruling, spec
+  §9.2). This **reverses** the recommendation previously recorded in task 78's brief, which advised
+  running them *before* task 76. Their rows now carry a do-not-run-early marker.
+- **Consuming-project migration scope is deliberately untouched** — it is open on an ADR-015 question
+  the architect still has with the owner.
+- **Task 74 is Done** (2026-07-19, agent-closed — not owner-verified). The owner approved the design and
+  ADR-029 is `accepted`.
+
+**Second round — from the adversarial pass on the design (2026-07-19).** Three more defects, all in the
+briefs rather than the design:
+
+- **Task 76's scaffold instruction was impossible to follow** and has been reversed. It said the
+  scaffold "must land the same structure"; obeying that literally would copy *this project's* task
+  folders into a consuming project's scaffold, and its verification condition cannot be satisfied by a
+  deliberately-empty scaffold. **The scaffold is unchanged** — the three `.gitkeep`s stay as they are
+  (spec §4.1 / ADR-029 Decision 9). ADR-027 parity holds for free.
+- **Task 76's stop-and-ask on the two sprint-scoped review ledgers is settled and removed.** They move
+  to `ai-agents/sprints/reviews/` (spec §5.2b / ADR-029 Decision 7); `ai-agents/reviews/` still
+  disappears. As written the brief would have halted the migration **at the point of no return** on an
+  answered question.
+- **Task 75's ID backfill must be pinned to a named commit SHA**, recorded in the brief before work
+  starts. Without the pin the assignment shifts every time a brief is added — the corpus moved 89→94→95
+  in days — which silently fails the design's *"two people produce identical IDs"* bar. **Counting stays
+  live; the assignment is pinned.**
 
 ## Dependency graph
 
@@ -1162,9 +1210,9 @@ fkit-managed rules block, in this sprint. Not a proposal weighed by the producer
 - **Task 79 — implement** (owner: fkit-coder; one file, one section, one atomic replacement; depends on
   nothing; independently shippable today).
 
-**Sequencing — recorded so the two do not collide:** the **ADR-029 prose addition** (the
+**Sequencing — recorded so the two do not collide:** the **ADR-030 prose addition** (the
 *"What's next?"* / ask-interactively rules, ~430 B, from
-[`ADR-029 stop-hook`](../knowledge-base/decisions/adr-029-stop-hook-enforces-turn-completion-contract.md))
+[`ADR-030 stop-hook`](../knowledge-base/decisions/adr-030-stop-hook-enforces-turn-completion-contract.md))
 is a **separate brief that has not been written yet**. It touches **the same file and likely the same
 section**, and is **sequenced after 79**. Its ~430 B fits comfortably in the 1088 B task 79 creates;
 against today's 539 B it would leave the block at ~97% of a cap that fails the launch.

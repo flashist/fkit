@@ -48,3 +48,4 @@ fkit stores some documents twice: `ai-agents/…` (the tree fkit dogfoods on its
 - [[tasks/filter-fkit-status-board-to-open-tasks]]
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the investigation that produced this ruling (**Done**)
 - [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58; the fifth convention is among what `architecture.md` still does not record
+- [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — parity holds for free (its Decision 9): the scaffold and its `.gitkeep` files do not change under the task-folder migration

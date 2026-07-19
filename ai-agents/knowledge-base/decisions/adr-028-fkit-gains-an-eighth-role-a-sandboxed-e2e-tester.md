@@ -6,7 +6,7 @@
 - **Evidence:** [`reports/2026-07-13-tester-agent-evaluation.md`](../reports/2026-07-13-tester-agent-evaluation.md)
   — the full discussion (owner, fkit-coder, fkit-architect, fkit-producer), including the five arguments
   that were examined and **killed** and must not be re-raised.
-- **Task:** [`decide-whether-fkit-needs-a-tester-agent.md`](../../tasks/backlog/decide-whether-fkit-needs-a-tester-agent.md)
+- **Task:** [`decide-whether-fkit-needs-a-tester-agent.md`](../../tasks/done/decide-whether-fkit-needs-a-tester-agent.md)
 
 > **What this ADR decides, in one line:** fkit adds an **eighth role, a tester**, whose unique authority
 > is a **sandbox** authority — a permission envelope no other role gets — and the owner **knowingly
