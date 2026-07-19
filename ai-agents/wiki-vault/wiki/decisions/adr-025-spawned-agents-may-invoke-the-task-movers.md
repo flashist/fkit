@@ -95,3 +95,4 @@ A spawned producer has **no owner channel** — its `⛔ Owner:` banner is advis
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, the design task that produced this ruling (**Done**)
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which **built** this ADR and produced the amendment above (**Done — agent-closed, not owner-verified**)
 - [[tasks/implement-task-ship-loop-skill]] — the loop whose terminal act this ADR changed: it now closes its own task
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58; `architecture.md` is current on this ADR but records neither ADR-028 nor ADR-029

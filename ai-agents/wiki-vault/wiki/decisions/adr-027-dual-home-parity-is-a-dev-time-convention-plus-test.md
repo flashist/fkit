@@ -47,3 +47,4 @@ fkit stores some documents twice: `ai-agents/…` (the tree fkit dogfoods on its
 - [[tasks/add-speak-in-simple-terms-output-style]]
 - [[tasks/filter-fkit-status-board-to-open-tasks]]
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the investigation that produced this ruling (**Done**)
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58; the fifth convention is among what `architecture.md` still does not record

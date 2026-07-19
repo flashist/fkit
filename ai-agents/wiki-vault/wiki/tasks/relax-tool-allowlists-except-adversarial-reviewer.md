@@ -24,3 +24,4 @@ Implement ADR-022: remove the `tools:` frontmatter line from the six Claude-side
 - [[systems/role-locked-sessions]] · [[systems/review-and-model-diversity]] — the surviving wall's home
 - [[systems/fkit]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58, the doc half of ADR-022 to this task's code half

@@ -106,3 +106,4 @@ The ADR's own honesty clause is the thing to read: **prevention is gone, and the
 - [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — the two six-role skills registered through `skills_for_role()` and the hook
 - [[tasks/wiki-sync-post-omnigent]]
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, the design behind *what the lock does NOT cover*
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58: the doc refresh that corrected the superseded "tool allowlist is the strongest boundary" claim

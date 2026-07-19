@@ -54,3 +54,4 @@ ADR-012 established — empirically — that the fkit skill lockdown is **sessio
 - [[decisions/adr-029-stop-hook-enforces-turn-completion-contract]] — the **second** hook, extending this one's wiring pattern to end-of-turn behaviour. ⚠️ **Materially larger blast radius**: this hook denies one tool call, that one can stop a turn completing
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which had to change this hook's **data source** (`skills-for-role.sh`) to make ADR-025 workable; the hook script itself is unchanged
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63: the hook gates *role*, so it could not carry the mover gate
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58, which had to state plainly that **tools opened and skills did not** — this hook is the boundary that stayed

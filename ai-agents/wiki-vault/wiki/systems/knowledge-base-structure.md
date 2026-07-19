@@ -96,3 +96,4 @@ This principle caught a real error: the knowledge-base hygiene pass had improvis
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — the sibling "manual audit → automated gate" ruling
 - [[systems/testing-and-verification]]
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the dual-home drift across the conventions and README
+- [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58: the architect-owned refresh of the KB's own root docs after ADR-022
