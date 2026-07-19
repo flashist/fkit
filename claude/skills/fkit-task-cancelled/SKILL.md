@@ -5,14 +5,16 @@ description: Mark a task cancelled — move its brief into ai-agents/tasks/cance
 
 # Task Cancelled
 
-> ## ⛔ Owner: the **producer**
-> This is the fkit-producer's own procedure. Execute it **only** if you are the producer — running as the
-> `fkit-producer` agent or in a `fkit producer` session.
+> ## ⛔ Owner: the **producer** — but **any agent may invoke it**
+> This is the fkit-producer's procedure and it lives in the producer's namespace. Since
+> [ADR-025](../../../ai-agents/knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)
+> it is **not owner-only**: any spawned fkit role may run it, including on its own task.
+> (The one exception is `fkit-adversarial-reviewer`, whose contract is findings-only.)
 >
-> **Any other role: do not execute this.** Ask instead:
-> ```
-> @fkit-producer Cancel <task> — reason: <why>
-> ```
+> **⚠️ If you are an agent and not the owner, you MUST write the agent-closed marker** — see
+> *The status vocabulary* below. **Cancelling is the least-audited path in fkit**: nobody reads
+> `cancelled/`. An agent that cannot finish a task can make its own obligation disappear here, and the
+> chance anyone notices is close to zero. Weigh that before you invoke this on your own work.
 
 
 Mark a dropped task cancelled: move its brief into `ai-agents/tasks/cancelled/` and update the sprint
@@ -28,11 +30,27 @@ status marker, and that cancellation records *why* and flags what it leaves behi
    cancelled. It is recorded verbatim (trimmed to a concise line) in the sprint docs, so it must be a
    real rationale, not a placeholder.
 
-> **Why this skill exists.** The standing convention is that task files are moved between
-> `backlog/`, `done/`, and `cancelled/` **manually, after review** — never automatically during
-> normal work. This skill is the *sanctioned* way to perform the cancel move: it runs **only when
-> the owner invokes it**, so it stays under their control. Invoking it is the signal that the task has
-> been deliberately dropped. Do not run it on your own initiative.
+> **Why this skill exists.** Task files are moved between `backlog/`, `done/`, and `cancelled/`
+> **deliberately, after review** — never as a side effect of normal work. This skill is the *sanctioned*
+> way to perform the cancel move: it updates every place the task is tracked and records *why*, so the
+> board and the brief never drift apart. Invoking it is the signal that the task was deliberately dropped.
+>
+> **What it no longer is: a gate.** It used to run only when the owner invoked it. ADR-025 removed that
+> **knowingly**. What replaces it is the `(agent-closed — not owner-verified)` marker, and **the marker
+> is prose — nothing enforces it.**
+
+## Resolve the status value FIRST
+
+Before any edit, decide which marker this run writes — **every `⛔ Cancelled` in the steps below means
+this resolved value, not the literal string**:
+
+| You are | Marker to write |
+|---|---|
+| The **owner**, invoking this in a session | `⛔ Cancelled (YYYY-MM-DD) — <reason>` |
+| **Any agent** — spawned, in a loop, or cancelling its own work | `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>` |
+
+**If you are unsure which you are, you are an agent.** The date and reason stay mandatory in both
+forms; the qualifier is prepended, never a substitute for them.
 
 ---
 
@@ -128,7 +146,8 @@ brief may still have none. Either way, this step applies:
 
 - **The moved brief's OWN `## Status` field** — the single line immediately below the `## Status`
   heading in the file you just moved into `cancelled/`. Set that line to the **full canonical marker**
-  — `⛔ Cancelled (YYYY-MM-DD) — <reason>` — using **the exact same date and reason** you just wrote
+  — `⛔ Cancelled (YYYY-MM-DD) — <reason>`, or the agent-closed form you resolved above — using **the
+  exact same date and reason** you just wrote
   into the board (or, if step 4 found no board row at all, the same date and reason you are recording
   in this run's report). Use this **regardless of what the line previously held.** The brief must read
   the same marker the board reads (where a board exists); a bare `⛔ Cancelled` with no date/reason in
@@ -189,7 +208,7 @@ Give a concise summary:
 - **Updated:** each doc touched and how (e.g. "`sprint-4.md` — status row → ⛔ Cancelled";
   "`<epic>.md` — T# slice → ⛔ Cancelled").
 - **Brief's own status header:** state what happened to the moved brief's `## Status` field — set to
-  the full `⛔ Cancelled (YYYY-MM-DD) — <reason>` marker, including flagging it if it overwrote a
+  the full marker you resolved (owner or agent-closed form), including flagging it if it overwrote a
   pre-existing, different cancelled-shaped marker (stale drift, not this run's own no-op) — or the
   missing-heading flag from above, using whichever of its two wordings applies (board updated, or no
   board reference existed). This runs even when step 4 found zero references — say so if it did. The
@@ -218,12 +237,30 @@ Give a concise summary:
 ## The status vocabulary
 
 The canonical status set is documented in **`ai-agents/knowledge-base/conventions/task-status-vocabulary.md`**
-— it is the source of truth, and this skill writes exactly one value from it:
+— it is the source of truth, and this skill writes exactly one of its two cancelled values:
 
-> **`⛔ Cancelled (YYYY-MM-DD) — <reason>`** — the date and the reason are **mandatory**, not optional
-> decoration. A cancellation with no stated cause cannot be acted on by anyone but the person who
-> wrote it.
+> **`⛔ Cancelled (YYYY-MM-DD) — <reason>`** (owner), or
+> **`⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>`** (any agent) — the date
+> and the reason are **mandatory** in both forms, not optional decoration. A cancellation with no
+> stated cause cannot be acted on by anyone but the person who wrote it.
+>
+> ⚠️ **The qualifier contains an em-dash of its own, so it does NOT satisfy the reason requirement.**
+> `⛔ Cancelled (agent-closed — not owner-verified) (2026-07-19)` with nothing after it is **invalid**,
+> and the dashboard's `cancelled-without-reason` lint cannot catch it. Write a real reason after a
+> final ` — `.
 
-**`Cancelled` is a gated status.** It may be set **only** by this skill, and this skill runs **only
-when the owner invokes it** — cancelling work is a judgment about whether it will ever be done. Never
-set `⛔ Cancelled` by hand-editing a file, and never run this skill on your own initiative.
+**`Cancelled` is skill-gated, not owner-gated.** It may be set **only** by this skill — never by
+hand-editing a file — but **any agent may run this skill** (ADR-025). Cancelling work is still a
+judgment about whether it will ever be done; what changed is that an agent is now allowed to make that
+judgment, not that the judgment got smaller.
+
+⚠️ **The agent-closed marker is the entire residual mechanism, and it is unenforced.** No code path
+checks it. **Apply it whenever you are not the owner.**
+
+⚠️ **The marker does not show up in `/fkit-status`.** The dashboard matches the `⛔` prefix and
+collapses every variant to plain `cancelled`, then filters the row off the open board. Known, accepted,
+recorded in ADR-025's honesty clause — **not** a defect to file.
+
+⚠️ **`cancelled/` is audited by nobody.** ADR-025 records this as the relaxation's sharpest cost: a
+false `done` is caught when someone uses the feature, but a false `cancelled` may never be caught at
+all. If you are an agent cancelling your own task, that asymmetry is working against the record.

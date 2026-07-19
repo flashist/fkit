@@ -33,3 +33,4 @@ Step 4 was the one that mattered most: for **each** of the 7 roles, confirm the 
 - [[systems/install-and-self-update]]
 - [[systems/role-locked-sessions]]
 - [[systems/review-and-model-diversity]]
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — task 7, the run that surfaced the hole this ADR answers

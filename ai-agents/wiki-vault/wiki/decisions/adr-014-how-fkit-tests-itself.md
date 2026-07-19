@@ -71,3 +71,6 @@ The ADR deliberately **declined to pick the runner**, on the owner's explicit ru
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the parity test scoped under these constraints
 - [[tasks/add-dumb-down-skill-for-six-roles]]
 - [[tasks/filter-fkit-status-board-to-open-tasks]]
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — the eighth-role tester, sequenced behind this ADR's remaining gaps
+- [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, whose parity test is scoped but unbuilt
+- [[tasks/investigate-mutation-testing-library-adoption]] — task 46: its Decision 4 stands **unamended**; no library mutates shell

@@ -809,6 +809,51 @@ test('R25: a cancelled cell missing its DATE says so, not "without-reason"', () 
   assert.equal(facts(out).filter((f) => f.includes('cancelled-without-reason')).length, 0);
 });
 
+// R27 (task 64, review R3) — the ADR-025 agent-closed qualifier contains an em-dash of its OWN, so a
+// naive `grep -q '—'` on the raw cell accepts a cancellation that has NO reason: the qualifier
+// satisfies the check meant for the reason. The lint then reports CLEAN on the one closure path
+// nobody audits (`cancelled/`), which is strictly worse than having no lint — it manufactures
+// confidence. The fix strips `(agent-closed …)` before both conformance tests.
+//
+// ⚠️ ASSERT THE OWNER FORM TOO. Stripping is a rewrite of the value the checks see, so it can regress
+// the plain owner marker just as easily as it fixes the agent one. Both directions are pinned here.
+test('R27: an agent-closed cancellation with NO reason is caught, not passed as clean', () => {
+  const st = '⛔ Cancelled (agent-closed — not owner-verified) (2026-07-19)';
+  const p = fixture({
+    plan: plan([`| ${st} | 1 | Alpha | [\`a.md\`](../tasks/cancelled/a.md) |`]),
+    briefs: { 'cancelled/a.md': brief({ title: 'Alpha', status: st, priority: 1 }) },
+  });
+  const { out } = run(p);
+  assert.ok(
+    facts(out).some((f) => f.includes('kind="cancelled-without-reason"')),
+    'the qualifier must not satisfy the reason requirement',
+  );
+});
+
+test('R27b: an agent-closed cancellation WITH a reason is clean, and its date still parses', () => {
+  const st = '⛔ Cancelled (agent-closed — not owner-verified) (2026-07-19) — superseded by task 70';
+  const p = fixture({
+    plan: plan([`| ${st} | 1 | Alpha | [\`a.md\`](../tasks/cancelled/a.md) |`]),
+    briefs: { 'cancelled/a.md': brief({ title: 'Alpha', status: st, priority: 1 }) },
+  });
+  const { out } = run(p);
+  assert.equal(
+    facts(out).filter((f) => f.includes('cancelled-without-')).length,
+    0,
+    'a well-formed agent-closed cancellation must raise no nonconformance',
+  );
+});
+
+test('R27c: the plain OWNER cancelled form is unaffected by the qualifier strip', () => {
+  const st = '⛔ Cancelled (2026-07-19) — superseded by task 70';
+  const p = fixture({
+    plan: plan([`| ${st} | 1 | Alpha | [\`a.md\`](../tasks/cancelled/a.md) |`]),
+    briefs: { 'cancelled/a.md': brief({ title: 'Alpha', status: st, priority: 1 }) },
+  });
+  const { out } = run(p);
+  assert.equal(facts(out).filter((f) => f.includes('cancelled-without-')).length, 0);
+});
+
 // R26 — a literal US byte in a cell must not shift fields (it is the field delimiter).
 test('R26: a literal US byte in a cell cannot corrupt field alignment', () => {
   const p = fixture({

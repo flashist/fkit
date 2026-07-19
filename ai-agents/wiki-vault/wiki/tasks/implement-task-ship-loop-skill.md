@@ -14,10 +14,11 @@ Build exactly the owner-approved design from task 52 ([[tasks/design-task-ship-l
 - Writes the ADR-020 per-task artifacts (`plans/<task-id>.md`, `worklogs/<task-id>.md`).
 
 ## Outcome
-**Done** — skill live, registered for the coder, hook suite green (per the sprint board close-out). The loop is **session-only by design** and refuses spawned/headless invocation, and **it still does not move task files itself.**
+**Done** — skill live, registered for the coder, hook suite green (per the sprint board close-out). The loop is **session-only by design** and refuses spawned/headless invocation.
 
-⚠️ **Two claims on this page went stale and are corrected here (lint, 2026-07-19):**
-- **The done-gate is no longer owner-invoked.** [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] (2026-07-18) removed that gate — any spawned agent may now run either mover, **including the coder closing its own task**. ADR-019 sold this loop's autonomy on two human gates; **one of them is gone.** The plan-gate is untouched and remains the one unremovable checkpoint. The loop not moving files itself is now a property of *the loop*, not of a rule protecting it.
+⚠️ **Three claims on this page went stale and are corrected here (lint 2026-07-19; sync 2026-07-19):**
+- **The loop now closes its own task.** Task 64 ([[tasks/implement-spawned-invocation-for-task-movers]]) made the loop's terminal act a self-close writing `✅ Done (agent-closed — not owner-verified)`. The earlier statement *"it still does not move task files itself"* is **no longer true.**
+- **The done-gate is gone.** [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] removed it — any role but the adversarial reviewer may run either mover, **including the coder closing its own task**. ADR-019 sold this loop's autonomy on **two** human gates; **only the plan gate remains**, and it is the one unremovable checkpoint. ⚠️ **The composition is the concerning part**: plan approval, then unattended build → verify → review → judge → close. That is ADR-025's **L1 (the confused optimist) at full strength** — the loop can turn a row green on its own judgment with no human having looked. The loop's prose stops short of self-closing a *degraded* run (no Codex pass, red verification, unresolved residual) and never self-cancels, but those are **loop-local conservatism, not guarantees ADR-025 provides** — nothing enforces them.
 - **Tasks 59/60 are cancelled, not backlog, and the feasibility WAS measured.** [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] established that a timed auto-proceed **is** buildable (a real AFK timeout exists on Claude Code 2.1.214) and was **declined on cost**, not feasibility. The first investigation verdict said "not runtime-expressible" and was **wrong** — do not repeat it.
 
 ## Related
@@ -30,6 +31,8 @@ Build exactly the owner-approved design from task 52 ([[tasks/design-task-ship-l
 - [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — the timeout follow-up, declined on cost; the loop is unchanged
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — removes the done-gate this loop stopped at; the plan-gate survives
+- [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which made this loop close its own task
 - [[tasks/restructure-coder-report-summary-then-interview]] — the coder's general report contract; this loop's own contract wins inside the loop
 - [[tasks/design-ship-loop-timeout-auto-proceed]]
 - [[tasks/implement-ship-loop-timeout-auto-proceed]]
+- [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, whose ruling removed this loop's done-gate

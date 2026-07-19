@@ -7,7 +7,7 @@ Sprint 2
 64
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Context
 
@@ -43,7 +43,7 @@ asymmetric, build only what it authorized.)*
 - The **ADR-019 amendment** recorded (if task 63 left it to implementation).
 - **Scaffold / dual-home parity:** the movers live in `claude/skills/`; confirm whether scaffold copies
   exist and keep parity (the task-48/49 lesson).
-- Tests per [ADR-014](../../knowledge-base/decisions/adr-014-tests-are-node-test-zero-dependencies.md)
+- Tests per [ADR-014](../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md)
   (`node --test`, zero devDeps) as the design specifies — at minimum, that a mover invocation **lacking
   the authenticated precondition refuses to move the file**.
 

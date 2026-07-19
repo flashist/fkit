@@ -49,9 +49,13 @@ Cross-role work is a **consult**, never a role switch. `@fkit-<role> <question>`
 
 **[[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]** (implemented by [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]) relaxed the **tool-allowlist** half of the role lock: the six Claude-side agents carry **no `tools:` line** and inherit every Claude Code tool. Rationale: the capability tools were excluded by accident; the wall was never a real sandbox (every agent holds `Bash`); and only one wall protects a checkable invariant. **The adversarial reviewer keeps `tools: Read, Grep, Glob, Bash, Skill` byte-identical** — an agent's own `tools:` line governs it at any spawn depth, so its independence survives even when spawned by an unrestricted reviewer. **The skill lockdown (the ADR-018 hook) is deliberately untouched** — capabilities are free, procedures stay role-locked. Related: [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — `AskUserQuestion` works in a session but is `TOOL_ABSENT` in any spawned consult regardless of the grant (measured, Claude Code 2.1.212), so the consult "return open questions" contract is the only option a consult has.
 
-### What the lock does NOT cover — the task movers (2026-07-18)
+### What the lock does NOT cover — the task movers (2026-07-18, shipped 2026-07-19)
 
-**[[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] removed the owner-only gate on `/fkit-task-done` and `/fkit-task-cancelled`.** Any spawned agent may now move task files, including **the coder closing its own task**. Two facts about how this interacts with the lock:
+**[[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] removed the owner-only gate on `/fkit-task-done` and `/fkit-task-cancelled`**, and [[tasks/implement-spawned-invocation-for-task-movers]] shipped it. Any spawned agent may now move task files, including **the coder closing its own task**.
+
+**The change landed in `skills_for_role()` itself** — the single source of truth this page describes. `claude/skills-for-role.sh` now lists both movers under `lead`, `producer`, `coder`, `architect`, `reviewer` and `wiki`; **`adversarial-reviewer` is the one role without them**, deliberately (findings-only contract, never edits, restricted Codex allowlist per [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]), and `test/skill-ownership-hook.test.js` pins that as a **deny** assertion. ⚠️ **This is worth understanding precisely: the lock did not fail here, it was reconfigured.** The mandatory adversarial pass found ADR-025 unbuildable as written — its Decision 5 forbade touching the hook, but the hook's data source still said `producer` only, so **every non-producer mover call would have been denied before the relaxed prose was read.** The owner ruled to change the mapping. `skill-ownership-hook.sh` itself is unchanged.
+
+Two facts about how this interacts with the lock:
 
 - **The skill gate does not compensate.** The `PreToolUse` hook gates the `Skill` tool by the authenticated caller — it answers *"who is calling"*, never *"is this work complete"*. It will happily allow a mover call from a role that owns the skill.
 - **A spawned producer is not a second judgment.** It has **no owner channel** — the `⛔ Owner:` banner is advisory (ADR-012) and `AskUserQuestion` is absent (ADR-021). So *"the coder spawns the producer and asks it to mark done"* is functionally *"the coder marks its own work done, with an extra hop in between."* The spawned role adds a **name**, not a judgment.
@@ -95,7 +99,10 @@ The ADR's own honesty clause is the thing to read: **prevention is gone, and the
 - [[tasks/add-full-board-switch-to-fkit-status]]
 - [[tasks/add-shared-instructions-layer-for-all-agents]]
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the owner-only mover gate, removed
+- [[tasks/implement-spawned-invocation-for-task-movers]] — task 64: the mover grant written into `skills_for_role()`, with the adversarial reviewer excluded
+- [[decisions/adr-029-stop-hook-enforces-turn-completion-contract]] — a **second** hook (`Stop`) decided 2026-07-19, extending this hook layer to end-of-turn behaviour. **Decided, not built**; its consult skip is safety-critical because `AskUserQuestion` is absent in spawned consults
 - [[decisions/adr-023-fkit-git-agent-is-not-built]] — the same week's opposite ruling for commit/push
 - [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — the owner gates left waiting rather than timed
 - [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — the two six-role skills registered through `skills_for_role()` and the hook
 - [[tasks/wiki-sync-post-omnigent]]
+- [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, the design behind *what the lock does NOT cover*

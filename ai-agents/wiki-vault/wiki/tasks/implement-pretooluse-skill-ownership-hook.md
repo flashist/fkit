@@ -29,3 +29,4 @@ Build the hook that [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — this task's review finding R2 triggered that investigation
 - [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — six-role skills registered through this gate
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the hook gates the Skill tool only, and cannot answer *is the work done*
+- [[tasks/investigate-mutation-testing-library-adoption]] — task 43, where the R2 no-op-mutation gap was found

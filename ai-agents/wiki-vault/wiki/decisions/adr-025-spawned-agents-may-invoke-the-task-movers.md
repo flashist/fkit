@@ -9,6 +9,25 @@
 
 **Pre-registered:** ADR-019's own "re-raise only if" named this exact decision as needing its own ADR. This is that ADR. **The architect's recommendation in the design spec was to keep it owner-only. The owner ruled against the recommendation, knowingly.** Both facts are recorded on purpose.
 
+**Implemented** by task 64 ([[tasks/implement-spawned-invocation-for-task-movers]]), landed 2026-07-19. **This is no longer a decision awaiting build — it is the shipped behaviour.**
+
+## Amendment (2026-07-19, during task 64 implementation)
+
+⚠️ **Read the amendment together with Decision 5 below, not the Decision on its own — they contradict without it.** Three owner-ruled changes, all with the owner present.
+
+**A1 — Decision 5 is reversed for the hook's data source.** The mandatory adversarial pass (Decision 6) found this ADR **self-contradictory**: Decision 2 grants every spawned role the movers, but Decision 5 forbade touching the hook — and `claude/skills-for-role.sh` listed both movers under `producer` only, so `claude/skill-ownership-hook.sh` denied every non-producer call before the relaxed prose was ever read. **As written, Decision 2 could not take effect.** The owner ruled: change the mapping, keep "any role."
+
+- Changed: `claude/skills-for-role.sh` only — the movers added to `lead`, `coder`, `architect`, `reviewer`, `wiki` (`producer` already had them). Verified in the tree 2026-07-19.
+- **`claude/skill-ownership-hook.sh` is still unchanged** (verified — no diff), so the *substance* of Decision 5 stands exactly as recorded: **no precondition check, prose-only, nothing verifies that work is actually done.** The honesty clause is untouched.
+
+**A2 — `fkit-adversarial-reviewer` is excluded from the movers** (owner ruling). Decision 2 says "any spawned role"; this is the one exception. Its contract is findings-only, it never edits anything, and it runs on Codex under a restricted allowlist ([[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]). **The exclusion is deliberate — not an oversight and not a bug to fix**; `test/skill-ownership-hook.test.js` pins it as a deny assertion.
+
+**A3 — the agent-closed marker is invisible in `/fkit-status`, and that is accepted.** Decision 3 calls the marker "the entire residual mechanism." The adversarial pass found it does not reach the surface an owner actually reads: `claude/skills/fkit-status/dashboard.sh` matches the **marker prefix**, collapsing `✅ Done (agent-closed — not owner-verified)` to a plain `done`, then filters the row off the open board; the roll-up counts it as an ordinary close. Confirmed against the code. The owner ruled **accept and record**, not fix.
+
+> **So the honesty clause is weaker than it reads.** It says detection is advisory rather than structural. Add: **the advisory signal is also not surfaced.** To tell an agent-closed task from an owner-closed one you must open the sprint plan or the brief — `/fkit-status` will not tell you, and nothing counts how many closes were agent-performed. What remains is a marker in a file that nothing enforces, nothing verifies, and nothing reports.
+
+**Also amended by implication — the ship-loop's terminal act.** [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] sold the loop's autonomy on **two** human gates; this ADR removed one, and task 64 made the loop **close its own task**. The composition — plan approval, then unattended build/review/judge/close — is **L1 at full strength**. The loop's own prose stops short of self-closing a *degraded* run (no Codex pass, red verification, unresolved residual) and never self-cancels; those are **loop-local conservatism, not guarantees this ADR provides**.
+
 ## Context
 
 The owner asked that another agent be able to drive the movers by spawning the producer, removing the coder → producer session switch at close-out. The spec split the ask in two: **W1 — remove the session switch** (ergonomics, solvable without touching the gate) and **W2 — remove the owner from the close-out decision** (a guarantee, not solvable).
@@ -41,7 +60,7 @@ A spawned producer has **no owner channel** — its `⛔ Owner:` banner is advis
 2. **Any spawned role may invoke them.** The "only a role that did not do the work" restriction is **not** adopted — correctly, since *who did the work* is self-reported in files the doer wrote. **The coder may close its own task.**
 3. **Agent-closed moves carry a distinct marker** — `✅ Done (agent-closed — not owner-verified)` and the `cancelled` equivalent — written into the brief and the board. Never visually identical to an owner-closed move. **This marker is the entire residual mechanism.**
 4. **Spawned agents do the whole job.** The "prepared-move packet" (agents derive, owner fires) is **not** built.
-5. **Prose-only — the hook is not changed.** No precondition check is added. Instead, every SKILL.md and agent-prompt line asserting the owner-only rule is rewritten to match the new reality.
+5. **Prose-only — the hook is not changed.** No precondition check is added. Instead, every SKILL.md and agent-prompt line asserting the owner-only rule is rewritten to match the new reality. ⚠️ **Partly reversed — see A1 above**: the hook's *data source* (`claude/skills-for-role.sh`) had to change or Decision 2 could not take effect. The hook script itself is unchanged, so **"no precondition check, nothing verifies the work is done" still holds.**
 6. **An adversarial Codex pass is mandatory before task 64 (implementation) starts.** A Codex pass killed the closest prior attempt at this exact relaxation (ADR-019 rev-1).
 
 ### The honesty clause — what replaces the guarantee: nothing equivalent
@@ -74,3 +93,5 @@ A spawned producer has **no owner channel** — its `⛔ Owner:` banner is advis
 - [[tasks/implement-task-ship-loop-skill]]
 - [[tasks/enforce-task-status-vocabulary]] — the status vocabulary whose `Done`/`Cancelled` owner-only rule this ADR reverses
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, the design task that produced this ruling (**Done**)
+- [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which **built** this ADR and produced the amendment above (**Done — agent-closed, not owner-verified**)
+- [[tasks/implement-task-ship-loop-skill]] — the loop whose terminal act this ADR changed: it now closes its own task

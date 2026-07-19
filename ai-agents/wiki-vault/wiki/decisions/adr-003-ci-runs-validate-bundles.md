@@ -31,3 +31,4 @@ The initial workflow does not need to install Omnigent, because the script still
 - [[decisions/adr-014-how-fkit-tests-itself]]
 - [[systems/testing-and-verification]]
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — **no `.github/workflows/` exists today**, which is why its approved gate has no CI lane to land in yet
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — the CI gap this ADR's tester seat would finally address

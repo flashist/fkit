@@ -40,3 +40,4 @@ Every fkit agent carried an explicit `tools:` allowlist — ADR-008's "structura
 - [[decisions/adr-023-fkit-git-agent-is-not-built]] — declined a *git* eighth role; **its "the team stays seven" is no longer current**
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — ⚠️ **in direct tension with this ADR.** The tester's whole justification is a **deliberately unhardened, network- and write-enabled envelope**, while this ADR's one surviving structural wall exists precisely because unrestricted tools were judged unacceptable for a role. ADR-028 records the tension against itself rather than resolving it
 - [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58, this ADR's architect-owned doc follow-up (**Done**)
+- [[tasks/implement-spawned-invocation-for-task-movers]] — task 64: the adversarial reviewer's restricted allowlist is **why it is the one role excluded** from the task movers

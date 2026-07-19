@@ -51,3 +51,6 @@ ADR-012 established — empirically — that the fkit skill lockdown is **sessio
 - [[decisions/adr-014-how-fkit-tests-itself]] — its 7×21 matrix (Decisions 3 & 5) was **retired here**; the hard-coded-oracle principle survives, relocated to the hook's own contract suite
 - [[systems/testing-and-verification]] — where the per-role/per-skill matrix now lives (`test/skill-ownership-hook.test.js`)
 - [[tasks/add-launcher-contract-smoke-script]] — the suite whose Group B this decision rewrote
+- [[decisions/adr-029-stop-hook-enforces-turn-completion-contract]] — the **second** hook, extending this one's wiring pattern to end-of-turn behaviour. ⚠️ **Materially larger blast radius**: this hook denies one tool call, that one can stop a turn completing
+- [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which had to change this hook's **data source** (`skills-for-role.sh`) to make ADR-025 workable; the hook script itself is unchanged
+- [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63: the hook gates *role*, so it could not carry the mover gate

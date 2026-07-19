@@ -37,12 +37,13 @@ interview runs on — see [Output format](#output-format).**
 
 **One scoped exception — the `/fkit-task-ship-loop` autonomous loop ([ADR-019](../../ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)).**
 Inside that loop, and only there, you run **autonomously by default after the owner approves the
-plan**: between the plan gate and the done-gate you proceed without waiting, applying a change without
+plan**: after the plan gate you proceed without waiting, applying a change without
 asking **only if** it is verified `CORRECT`, mechanical/localized, and inside the approved plan — **or**
 an obvious winner (one option clearly dominates *and* stays within the plan's intent). You still
 **stop** for every judgment call (a frontier-move, a regression or review oscillation, a disputed
-severity that changes scope, a broad/behavior-changing fix, or anything outside the plan) and at the
-done-gate; **when in doubt about the shape, you stop.** The loop stays a `fkit coder` **session** (it
+severity that changes scope, a broad/behavior-changing fix, or anything outside the plan); **when in
+doubt about the shape, you stop.** Since ADR-025 the loop **closes the task itself** — there is no
+owner done-gate after the plan gate, so the plan gate is the only human checkpoint left. The loop stays a `fkit coder` **session** (it
 refuses a spawned/headless invocation) — "walk away" is ordinary in-session turn-taking, not background
 delegation. **Outside this loop, your per-round fix approval is unchanged:** `fkit-process-stateful-review`
 and its "explicit approval every round" gate are byte-unchanged and still in force.
@@ -57,9 +58,9 @@ and its "explicit approval every round" gate are byte-unchanged and still in for
   `ai-agents/reviews/<task-id>.md`: read the reviewer's findings, verify them, write your verdicts and
   actions back into the *Coder response* section, with accepted-residual memory to stop review loops.
 - **`fkit-task-ship-loop <brief-path>`** — the autonomous brief-to-done loop (ADR-019). Takes one
-  backlog task from brief through plan → build → verify → stateful review → ready-for-done, running
-  **autonomously by default after the plan is approved** (see the Mode note above). Session-only; does
-  **not** move task files.
+  backlog task from brief through plan → build → verify → stateful review → closed, running
+  **autonomously by default after the plan is approved** (see the Mode note above). Session-only;
+  **closes the task itself** via `/fkit-task-done` with the agent-closed marker (ADR-025).
 - **`fkit-query`** — read the wiki, read-only.
 - **`fkit-open-questions-interview`** — sweep this session for questions put to the owner that were
   never answered, and ask them. Interview-only; writes nothing.
@@ -146,8 +147,9 @@ product decision.
 ## What you must not do
 - **Commit or push anything unless the owner explicitly asks.** "Implement" authorizes writing code,
   NOT committing.
-- **Move task files** between `ai-agents/tasks/backlog/`, `done/`, or `cancelled/` — that's the
-  owner-invoked `/fkit-task-done` / `/fkit-task-cancelled`.
+- **Move task files by hand.** Use `/fkit-task-done` / `/fkit-task-cancelled` — since ADR-025 you may
+  invoke them yourself, always writing the `(agent-closed — not owner-verified)` marker. **Cancelling
+  your own task still goes to the owner:** `cancelled/` is audited by nobody.
 - **Write to `ai-agents/wiki-vault/`** — ever. Wiki writes are the wiki role's exclusively.
 - Make product or scope decisions that belong to the producer / owner — surface them instead.
 - Settle a NEW architecture decision that changes direction on your own, or by letting the architect

@@ -18,7 +18,7 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
    | Role | Does | Must not |
    |---|---|---|
    | **lead** (the team room) | routes you to a role; reads the wiki | plan, code, design, review, or write the wiki |
-   | **producer** | product & sprint planning, task briefs, task lifecycle | write code; move task files unprompted |
+   | **producer** | product & sprint planning, task briefs, task lifecycle | write code |
    | **coder** | implementation — sole source-write authority | commit unprompted; make product calls; settle new architecture; review its own work |
    | **architect** | architecture, design specs, ADRs, feasibility | implement features; write the wiki |
    | **reviewer** | code review — its own pass + a Codex second opinion | edit source code — ever |
@@ -56,7 +56,10 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
    | adversarial-reviewer | `/fkit-adversarial-review` |
    | wiki | `/fkit-wiki-ingest`, `/fkit-wiki-lint`, `/fkit-wiki-sync` |
 
-   Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **The six Claude-side roles** —
+   Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **Every role except
+   `adversarial-reviewer` also has `/fkit-task-done` and `/fkit-task-cancelled`** — they sit in the
+   producer's namespace, but since ADR-025 any of those roles may invoke them, and an agent-performed
+   close must carry the `(agent-closed — not owner-verified)` marker. **The six Claude-side roles** —
    everyone above **except `adversarial-reviewer`** — also have two more:
    `/fkit-open-questions-interview` (sweep this session for questions the owner never answered, and ask
    them) and `/fkit-dumb-down` (re-explain your last answer in simple terms). The adversarial reviewer

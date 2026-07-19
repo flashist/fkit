@@ -23,3 +23,4 @@ The design was produced and is retained as history. It surfaced the head-on coll
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the same week's opposite ruling for the task movers; the distinction is blast radius
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — the ship-loop does not commit, so no git agent is needed to finish a loop
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — the *other* eighth-role proposal; declined, where this one was accepted

@@ -95,3 +95,4 @@ The "Positive" section read **"Codex finally gets a floor."** Fifteen lines abov
 - [[tasks/add-speak-in-simple-terms-output-style]] — a standing preference delivered through this layer
 - [[decisions/adr-023-fkit-git-agent-is-not-built]] — the reaffirmed commit rule every agent holds via this layer
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — *delivery structural, compliance advisory*, the claim level of its process layer
+- [[decisions/adr-029-stop-hook-enforces-turn-completion-contract]] — §6 *delivery structural, compliance advisory* **observed live**: a well-written rule in this layer did not fire, which is that ADR's entire premise. It also spends most of the managed block's remaining ~561 bytes

@@ -52,9 +52,9 @@ Role→skill ownership is declared in exactly one place: `skills_for_role()` in 
 - **Never commit or push unless the owner explicitly asks.** "Implement" authorizes writing code,
   not committing.
 - **Only the wiki role writes `ai-agents/wiki-vault/`.** Reads are decentralized; writes are not.
-- **Task files move between `backlog/`, `done/`, `cancelled/` only via the owner-invoked
-  `/fkit-task-done` / `/fkit-task-cancelled`** — never on an agent's own initiative. Do not move one,
-  do not tell anyone else to, and do not report a task as moved.
+- **Task files move between `backlog/`, `done/`, `cancelled/` only via `/fkit-task-done` /
+  `/fkit-task-cancelled`** — never by hand. Any role but the adversarial reviewer may invoke them; a
+  task an agent closes MUST carry the `(agent-closed — not owner-verified)` marker.
 - **No secrets in any artifact** — no DSNs, endpoints, keys, or credentials in findings, reports,
   docs, or wiki pages; it all goes to git.
 

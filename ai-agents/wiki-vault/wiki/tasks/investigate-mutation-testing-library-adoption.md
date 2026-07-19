@@ -31,3 +31,4 @@ The survey had to reconcile with ADR-014's settled points: **zero devDependencie
 - [[tasks/add-launcher-contract-smoke-script]] — task 23, which built `prove-red.sh`
 - [[systems/testing-and-verification]] · [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — ADR-026 Decision 4 is one of the two unfinished pieces of the gate the tester seat waits behind
+- [[systems/fkit]] — the `prove-red` gap recorded as a standing gap

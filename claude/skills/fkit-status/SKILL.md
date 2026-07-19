@@ -121,8 +121,9 @@ When they disagree:
   **your prose says where that record is wrong.**
 - **Do not silently "fix" it.** Don't pick a winner and don't edit either file — reconciling the record
   is a decision, and it's the owner's (see step 5). Surface it; let them call it. In particular `✅ Done`
-  and `⛔ Cancelled` are **owner-gated** — this skill never concludes them, however obvious the code
-  looks.
+  and `⛔ Cancelled` are **set only by the movers** (`/fkit-task-done`, `/fkit-task-cancelled`) — this
+  skill never concludes them, however obvious the code looks. It is read-only; that is unchanged by
+  ADR-025 letting any role invoke those movers.
 
 ### 3. Emit the seven beats, in order
 
@@ -203,7 +204,9 @@ or "tidy" it. **The counts sum to `M` by construction** — that is the whole po
 existence, and a hand-adjusted board forfeits it.
 
 **The board shows OPEN WORK ONLY.** Rows whose reconciled state is `✅ Done`, `⛔ Cancelled` or
-`➡️ Moved` are omitted by the script (owner ruling, 2026-07-18). Three things make that safe, and you
+`➡️ Moved` are omitted by the script (owner ruling, 2026-07-18) — **including the
+`(agent-closed — not owner-verified)` variants, which the script matches by marker prefix and cannot
+distinguish** (ADR-025 honesty clause; accepted, not a defect). Three things make that safe, and you
 must not undo any of them by hand:
 
 - **Scope lives in the roll-up.** It still counts **every** row and still ends `— of M`, so the board

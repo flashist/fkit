@@ -38,3 +38,4 @@ The two copies of the conventions-index README diverge on item 3 of **"The bar f
 - [[systems/launch-convergence-and-init]]
 - [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — the fourth parity instance
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the standing rule this point-fix anticipated; `conventions/README.md` is now a named, intentional divergence
+- [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the investigation that named this an instance of a class

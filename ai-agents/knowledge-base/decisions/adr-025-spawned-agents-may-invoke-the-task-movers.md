@@ -19,6 +19,49 @@
 > a false close-out, and nothing detects one except a marker written by the same agent that performs
 > the move.**
 
+## Amendment (2026-07-19, during task 64 implementation)
+
+Three changes, all owner-ruled with the owner present. **Decision 5 below is partly reversed** — read
+it together with this block, not on its own.
+
+**A1 — Decision 5 is reversed for the hook's data source.** The mandatory adversarial pass (Decision 6)
+found this ADR **self-contradictory**: Decision 2 grants every spawned role the movers, but Decision 5
+forbids touching the hook — and `claude/skills-for-role.sh` listed both movers under `producer` only,
+so `claude/skill-ownership-hook.sh` denied every non-producer call before the relaxed prose was ever
+read. **As written, Decision 2 could not take effect.** Verified against the code before acting, not
+taken on the reviewer's word. The owner ruled: **change the mapping, keep "any role."**
+
+- What changed: `claude/skills-for-role.sh` only — the movers were added to `lead`, `coder`,
+  `architect`, `reviewer`, `wiki` (`producer` already had them).
+- **`claude/skill-ownership-hook.sh` itself is still unchanged**, so the *substance* of Decision 5 —
+  **no precondition check, prose-only, nothing verifies that work is actually done** — stands exactly
+  as recorded. The honesty clause is untouched.
+
+**A2 — `fkit-adversarial-reviewer` is excluded from the movers** (owner ruling). Decision 2 says "any
+spawned role"; this is the one exception. Its contract is findings-only, it never edits anything, and it
+runs on Codex under a restricted allowlist (ADR-022). **The exclusion is deliberate — not an
+oversight, and not a bug to fix.** `test/skill-ownership-hook.test.js` pins it as a deny assertion.
+
+**A3 — the audit marker is invisible in `/fkit-status`, and that is accepted.** Decision 3 calls the
+marker "the entire residual mechanism." The adversarial pass found it does not reach the surface an
+owner actually reads: `claude/skills/fkit-status/dashboard.sh` matches the **marker prefix**, collapsing
+`✅ Done (agent-closed — not owner-verified)` to plain `done`, then filters the row off the open board;
+the roll-up counts it as an ordinary close. Confirmed against the code. The owner ruled **accept and
+record**, not fix.
+
+> **So the honesty clause is weaker than it reads.** It says detection is advisory rather than
+> structural. Add: **the advisory signal is also not surfaced.** To tell an agent-closed task from an
+> owner-closed one you must open the sprint plan or the brief — `/fkit-status` will not tell you, and
+> nothing counts how many closes were agent-performed. What remains is a marker in a file that nothing
+> enforces, nothing verifies, and nothing reports.
+
+**Also amended by implication: the ship-loop's terminal act.** ADR-019 sold the loop's autonomy on two
+human gates; this ADR removed one, and task 64 made the loop close its own task (owner ruling). The
+composition — plan approval, then unattended build/review/judge/close — is **L1 at full strength**. The
+loop's own prose now stops short of self-closing a *degraded* run (no Codex pass, red verification,
+unresolved residual) and never self-cancels; those are loop-local conservatism, **not** guarantees this
+ADR provides.
+
 ## Context
 
 The owner asked that another agent be able to drive the task movers by spawning the producer, removing

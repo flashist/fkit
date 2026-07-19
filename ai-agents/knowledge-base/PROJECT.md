@@ -87,8 +87,10 @@ concerns, and identified risks — is in
   A known, accepted limit — not a claim to overstate.
 - **No secrets in any artifact** — no DSNs, endpoints, keys, or credentials in task briefs, sprint
   plans, PROJECT.md, or the wiki, since all of it goes to git.
-- **Task lifecycle discipline**: the producer writes/plans; only the owner (via the producer's
-  `task-done`/`task-cancelled` skills) moves task files between `backlog/`, `done/`, `cancelled/`.
+- **Task lifecycle discipline**: the producer writes/plans; task files move between `backlog/`,
+  `done/`, `cancelled/` only via the `task-done`/`task-cancelled` skills — which, since ADR-025, **any
+  role may invoke**, marking an agent-performed close `(agent-closed — not owner-verified)`. That
+  relaxation removed the anti-laundering guarantee knowingly; nothing structural replaced it.
 - **Consult-chain envelope (corrected during initiation)**: the onboarding/startup sequence is
   **interactive**, not headless — `-p` only seeds the first message, the session stays live for the
   owner to answer questions — and initiation only uses **one-hop** consults (producer→architect,

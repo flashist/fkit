@@ -100,8 +100,8 @@ Use the established structure **exactly** — diff against an existing brief in
 
 - **`## Status` is always `🔲 Backlog` on creation** — the only valid status for a new brief. (If the
   project keeps a status vocabulary at `ai-agents/knowledge-base/conventions/task-status-vocabulary.md`,
-  that is the source of truth for the full set.) **Never create a brief as `Done` or `Cancelled`**: those are
-  owner-gated and set only by their mover skills.
+  that is the source of truth for the full set.) **Never create a brief as `Done` or `Cancelled`**: those
+  are set only by their mover skills.
 - **`## Verification steps` must be genuinely checkable.** "It works" is not a verification step. If
   you cannot say how the work would be proved, the brief is not ready.
 - No code snippets beyond schema stubs / config values. A brief says *what* and *why*, not *how* — the
@@ -182,7 +182,7 @@ Write to `ai-agents/tasks/backlog/<kebab-case-title>.md` — **new files, not mo
 - **Never renumber or alter an existing row.**
 
 ### 8. Never
-- Move or rename an existing task file (that's `/fkit-task-done` / `/fkit-task-cancelled`, owner-invoked).
+- Move or rename an existing task file (that's `/fkit-task-done` / `/fkit-task-cancelled`).
 - Write to `ai-agents/tasks/done/` or `ai-agents/tasks/cancelled/`.
 - Set a status of `✅ Done` or `⛔ Cancelled` on anything.
 - Produce or modify source code.

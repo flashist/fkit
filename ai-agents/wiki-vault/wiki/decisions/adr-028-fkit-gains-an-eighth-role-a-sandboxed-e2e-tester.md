@@ -59,3 +59,5 @@ The owner's scope ruling (Q3) triggers precisely that condition. **The seat is e
 - [[tasks/verify-onboarding-flow-end-to-end]] — task 7, the run that surfaced the hole
 - [[systems/testing-and-verification]] · [[systems/fkit]] · [[systems/review-and-model-diversity]]
 - Source: `ai-agents/knowledge-base/reports/2026-07-13-tester-agent-evaluation.md` — the evidence record: the question, the observed hole, the killed arguments, the flip condition
+- [[tasks/sprint-2-remove-omnigent]] — the sprint board; its parent investigation row is still open despite this ruling
+- [[tasks/investigate-mutation-testing-library-adoption]] — task 46 → ADR-026, one of the two unfinished pieces of the gate the tester waits behind

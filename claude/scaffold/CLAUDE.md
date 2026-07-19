@@ -20,14 +20,17 @@ roster and which role you're in.
 
 | Role | Does | Must not | **Its own** skills |
 |---|---|---|---|
-| **producer** | product & sprint planning, task briefs, task lifecycle | write code; move task files unprompted | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-done`, `/fkit-task-cancelled` |
+| **producer** | product & sprint planning, task briefs, task lifecycle | write code | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-done`, `/fkit-task-cancelled` |
 | **coder** | implementation — sole source-write authority | commit unprompted; make product calls; settle new architecture; **review its own work** | `/fkit-plan-task`, `/fkit-process-review`, `/fkit-process-stateful-review`, `/fkit-task-ship-loop` |
 | **architect** | architecture, design specs, ADRs, feasibility | implement features; write the wiki | `/fkit-survey-project`, `/fkit-inspect`, `/fkit-design-spec`, `/fkit-evaluate-approach`, `/fkit-record-decision` |
 | **reviewer** | code review (own pass + Codex second opinion), the review ledger | edit source code — ever | `/fkit-review`, `/fkit-stateful-review` |
 | **adversarial-reviewer** | hostile second opinion on Codex, findings only | edit anything | `/fkit-adversarial-review` |
 | **wiki** | the wiki — ingest / lint / sync; **exclusive write gateway** | write outside `ai-agents/wiki-vault/` | `/fkit-wiki-ingest`, `/fkit-wiki-lint`, `/fkit-wiki-sync` |
 
-Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **The six Claude-side roles** — all
+Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **Every role but
+`adversarial-reviewer` also has the two task movers** `/fkit-task-done` and `/fkit-task-cancelled` —
+they live in the producer's namespace but any role may invoke them, and an agent-performed close must
+carry the `(agent-closed — not owner-verified)` marker. **The six Claude-side roles** — all
 but `adversarial-reviewer`, which reviews on Codex under a restricted allowlist — also have
 `/fkit-open-questions-interview` (ask the owner about questions this session left unanswered) and
 `/fkit-dumb-down` (re-explain the last answer in simple terms). The **team room** (`fkit-lead`) has no

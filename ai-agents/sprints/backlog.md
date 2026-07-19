@@ -22,9 +22,9 @@ active sprint. **Do not "normalize" this name.**
   > **⚠️ Skip the brief-side update and the row never goes away.** Drift rule 2 compares the `Moved`
   > target against the brief's `## Sprint`; a mismatch is `drift disagreement`, and a drifted row
   > always renders. Every pulled task would leave a permanent drifted row on this board.
-- **Closed here:** a backlog task can be completed or cancelled without ever joining a sprint. The
-  owner-invoked `/fkit-task-done` / `/fkit-task-cancelled` already sweep `ai-agents/sprints/`
-  recursively, so they find and flip rows in this file unchanged.
+- **Closed here:** a backlog task can be completed or cancelled without ever joining a sprint.
+  `/fkit-task-done` / `/fkit-task-cancelled` already sweep `ai-agents/sprints/` recursively, so they
+  find and flip rows in this file unchanged.
 
 ## Priority
 

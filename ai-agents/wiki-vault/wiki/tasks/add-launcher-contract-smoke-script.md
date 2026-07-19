@@ -38,3 +38,5 @@ Give fkit its **first automated verification**. Stub `claude` and `codex` on `PA
 - [[systems/role-locked-sessions]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/add-ci-validate-bundles]]
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — the suite whose remaining gaps gate the tester seat
+- [[tasks/investigate-mutation-testing-library-adoption]] — task 23 built `prove-red.sh`; task 46 found the real gap was gating it

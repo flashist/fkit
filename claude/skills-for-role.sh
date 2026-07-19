@@ -23,15 +23,24 @@
 # If you add a fifth mirror, add it HERE FIRST.
 # (Same caution as before this file existed — see git history on fkit-claude.sh for the original.)
 
+# ⚠️ THE TASK MOVERS ARE OWNED BY EVERY ROLE BUT ONE (ADR-025, 2026-07-19).
+# `fkit-task-done` / `fkit-task-cancelled` used to be producer-only, and that was the anti-laundering
+# gate: an agent could not mark its own work complete. ADR-025 removed the gate knowingly — any spawned
+# role may now close a task. This list is what makes that true; the movers' own prose cannot grant a
+# permission the hook denies (the contradiction Codex found as X1 before task 64 shipped).
+#
+# `adversarial-reviewer` is DELIBERATELY EXCLUDED (owner ruling, 2026-07-19). Its contract is
+# findings-only, it never edits anything, and it runs on Codex under a restricted tool allowlist
+# (ADR-022). Excluding it is intentional — do NOT "fix" it by adding the movers here.
 skills_for_role() {
   case "$1" in
-    lead)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down" ;;
+    lead)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-task-done fkit-task-cancelled" ;;
     producer)  echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-initiate-project fkit-task-brief fkit-task-done fkit-task-cancelled fkit-status" ;;
-    coder)     echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-plan-task fkit-process-review fkit-process-stateful-review fkit-task-ship-loop" ;;
-    architect) echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-survey-project fkit-inspect fkit-design-spec fkit-evaluate-approach fkit-record-decision" ;;
-    reviewer)  echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-review fkit-stateful-review" ;;
+    coder)     echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-plan-task fkit-process-review fkit-process-stateful-review fkit-task-ship-loop fkit-task-done fkit-task-cancelled" ;;
+    architect) echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-survey-project fkit-inspect fkit-design-spec fkit-evaluate-approach fkit-record-decision fkit-task-done fkit-task-cancelled" ;;
+    reviewer)  echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-review fkit-stateful-review fkit-task-done fkit-task-cancelled" ;;
     adversarial-reviewer) echo "fkit-team fkit-query fkit-adversarial-review" ;;
-    wiki)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-wiki-ingest fkit-wiki-lint fkit-wiki-sync" ;;
+    wiki)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-wiki-ingest fkit-wiki-lint fkit-wiki-sync fkit-task-done fkit-task-cancelled" ;;
     *)         echo "" ;;
   esac
 }

@@ -97,3 +97,4 @@ Init runs under `set -euo pipefail` and was called **unguarded** from a launcher
 - [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]]
 - [[tasks/remove-fkit-omnigent-orphan-residue]] — the one-time destructive cleanup kept out of the every-launch pass
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]
+- [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the drift convergence cannot repair

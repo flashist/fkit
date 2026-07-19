@@ -68,3 +68,4 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]
 - [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]
 - [[tasks/design-task-ship-loop-skill]]
+- [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — the eighth role decided 2026-07-19; **decided, not built**

@@ -31,3 +31,5 @@ No implementation — the deliverable is `knowledge-base/reports/2026-07-18-dual
 - [[tasks/fix-scaffold-knowledge-base-folders]] · [[tasks/bake-architecture-pointer-into-scaffold-templates]] · [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]] — the earlier instances
 - [[systems/knowledge-base-structure]] · [[systems/launch-convergence-and-init]] · [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — why launch-time convergence cannot fix content drift by invariant
+- [[systems/fkit]] — the dual-home drift recorded as a standing gap
+- [[systems/testing-and-verification]] — where the parity test this investigation scoped would live; **scoped, not built**

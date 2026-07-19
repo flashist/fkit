@@ -37,3 +37,4 @@ The owner asked (2026-07-17) for an eighth agent, `fkit-git`, with one skill —
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — the eighth seat that *did* land, making this ADR's Decision 3 stale; its seven→eight ripple table is reused from task 55's design spec
 - [[systems/role-locked-sessions]]
 - [[tasks/give-codex-the-universal-hard-rules]]
+- [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, the opposite ruling the same week; the distinction is blast radius

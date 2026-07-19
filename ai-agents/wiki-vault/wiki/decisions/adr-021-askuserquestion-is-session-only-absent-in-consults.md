@@ -37,3 +37,5 @@ On Claude Code 2.1.212, `AskUserQuestion` functions in a top-level `fkit <role>`
 - [[tasks/add-open-questions-interview-skill-for-six-roles]] — a skill built around this seam's consult degrade
 - [[tasks/restructure-coder-report-summary-then-interview]] — the coder's interview, degrading across this seam
 - [[tasks/design-ship-loop-timeout-auto-proceed]]
+- [[decisions/adr-029-stop-hook-enforces-turn-completion-contract]] — this seam makes that hook's consult skip **safety-critical**: blocking a consult for a missing `AskUserQuestion` call would demand a tool that cannot be called
+- [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63: no owner channel in a consult is why relayed consent is unverifiable

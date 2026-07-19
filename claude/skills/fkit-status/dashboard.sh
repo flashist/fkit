@@ -579,9 +579,18 @@ while IFS=$'\037' read -r rtype st pr task br; do
       # ⚠️ The date and the reason are SEPARATE requirements and must be named separately: an
       # `A && B || C` chain reported a missing DATE as `cancelled-without-reason`, telling the owner
       # to supply a reason that was already in the cell while never naming the real defect.
-      if ! printf '%s' "$st" | grep -qE '\([0-9]{4}-[0-9]{2}-[0-9]{2}\)'; then
+      #
+      # ⚠️ STRIP THE AGENT-CLOSED QUALIFIER BEFORE THE REASON TEST (task 64, review R3). The ADR-025
+      # marker `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD)` carries an em-dash of
+      # its OWN, so testing the raw cell for `—` passes a cancellation that has no reason at all — the
+      # qualifier satisfies the check meant for the reason. That is worse than a missed lint: it
+      # reports CLEAN on the one closure path nobody audits. The date test is unaffected (it matches a
+      # parenthesised bare date, which the qualifier is not), but it is run against the stripped value
+      # too so both checks see the same string.
+      st_reason="$(printf '%s' "$st" | sed 's/(agent-closed[^)]*)//')"
+      if ! printf '%s' "$st_reason" | grep -qE '\([0-9]{4}-[0-9]{2}-[0-9]{2}\)'; then
         nonconf="cancelled-without-date"
-      elif ! printf '%s' "$st" | grep -q '—'; then
+      elif ! printf '%s' "$st_reason" | grep -q '—'; then
         nonconf="cancelled-without-reason"
       fi ;;
     moved)

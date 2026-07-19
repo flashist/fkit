@@ -40,3 +40,4 @@ The brief pre-enumerated the write surface so task 64 stays bounded: both SKILL.
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — the worklog evidence evaluated as a candidate precondition
 - [[systems/role-locked-sessions]] — *"what the lock does NOT cover"*
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]] · [[tasks/implement-task-ship-loop-skill]]
+- [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which built this design; **this spec overrode the brief**, whose authenticated-precondition check was never built because no such precondition exists

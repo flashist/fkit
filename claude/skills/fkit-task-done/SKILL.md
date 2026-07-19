@@ -5,14 +5,14 @@ description: Mark a task complete — move its brief file into ai-agents/tasks/d
 
 # Task Done
 
-> ## ⛔ Owner: the **producer**
-> This is the fkit-producer's own procedure. Execute it **only** if you are the producer — running as the
-> `fkit-producer` agent or in a `fkit producer` session.
+> ## ⛔ Owner: the **producer** — but **any agent may invoke it**
+> This is the fkit-producer's procedure and it lives in the producer's namespace. Since
+> [ADR-025](../../../ai-agents/knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)
+> it is **not owner-only**: any spawned fkit role may run it, including the coder closing its own task.
+> (The one exception is `fkit-adversarial-reviewer`, whose contract is findings-only.)
 >
-> **Any other role: do not execute this.** Ask instead:
-> ```
-> @fkit-producer Mark <task> done
-> ```
+> **⚠️ If you are an agent and not the owner, you MUST write the agent-closed marker** — see
+> *The status vocabulary* below. That marker is the only trace that no human checked this work.
 
 
 Mark a finished task complete: move its brief into `ai-agents/tasks/done/` and update the sprint
@@ -23,11 +23,28 @@ documentation so its status reads **✅ Done**, everywhere the task is tracked.
 (`add-export-endpoint.md`) is also acceptable — resolve it under
 `ai-agents/tasks/backlog/`.
 
-> **Why this skill exists.** The standing convention is that task files are moved between
-> `backlog/`, `done/`, and `cancelled/` **manually, after review** — never automatically during
-> normal work. This skill is the *sanctioned* way to perform that move: it runs **only when the owner
-> invokes it**, so it stays under their control. Invoking it is the signal that the task has been
-> reviewed and is genuinely complete. Do not run it on your own initiative.
+> **Why this skill exists.** Task files are moved between `backlog/`, `done/`, and `cancelled/`
+> **deliberately, after review** — never as a side effect of normal work. This skill is the *sanctioned*
+> way to perform that move: it updates every place the task is tracked, so the board and the brief never
+> drift apart. Invoking it is the signal that the task is genuinely complete.
+>
+> **What it no longer is: a gate.** It used to run only when the owner invoked it, and that was the
+> whole anti-laundering protection — an agent that can mark its own work complete can quietly launder
+> unfinished work into a green board. ADR-025 removed that protection **knowingly**. What replaces it is
+> the `(agent-closed — not owner-verified)` marker, and **the marker is prose — nothing enforces it.**
+> If you are an agent, applying it honestly is the entire safeguard, and it rests on you.
+
+## Resolve the status value FIRST
+
+Before any edit, decide which marker this run writes — **every `✅ Done` in the steps below means this
+resolved value, not the literal string**:
+
+| You are | Marker to write |
+|---|---|
+| The **owner**, invoking this in a session | `✅ Done` |
+| **Any agent** — spawned, in a loop, or closing its own work | `✅ Done (agent-closed — not owner-verified)` |
+
+**If you are unsure which you are, you are an agent.** The owner does not need to wonder.
 
 ---
 
@@ -38,7 +55,11 @@ documentation so its status reads **✅ Done**, everywhere the task is tracked.
 - **Stop with a clear message if:**
   - the file does not exist, or
   - it is not under `ai-agents/tasks/`, or
-  - it is already in `ai-agents/tasks/done/` (nothing to do — say so), or
+  - it is already in `ai-agents/tasks/done/` (nothing to do — say so). **One exception: the
+    owner-verification upgrade.** If you are the **owner** and the brief's `## Status` reads
+    `✅ Done (agent-closed — not owner-verified)`, do **not** stop — continue, skipping the move (the
+    file is already in place) and performing the status updates only, so the qualifier is cleared
+    everywhere it appears. An agent hitting this case still stops: only the owner can upgrade. Or
   - it is in `ai-agents/tasks/cancelled/` (this skill is for completion, not cancellation — flag it).
 - If `$ARGUMENTS` is empty, ask which task file to mark done. Do not guess.
 
@@ -119,8 +140,13 @@ brief may still have none. Either way, this step applies:
   If the value legitimately spans more than one line, that is outside this skill's authority to guess
   at — flag it in the report instead of partially rewriting it.
 
-  - **Already reads `✅ Done`?** Leave it byte-identical — no second marker, no appended line. Re-running
-    this skill on an already-done brief must be a no-op here.
+  - **Already reads the marker you would write?** Leave it byte-identical — no second marker, no
+    appended line. Re-running this skill on an already-done brief must be a no-op here.
+  - **Already `✅ Done` and you are an agent?** No-op. **Never downgrade an owner-closed task to
+    agent-closed** — the owner's verification is not yours to erase.
+  - **Already `✅ Done (agent-closed — not owner-verified)` and you are the OWNER?** Replace it with
+    plain `✅ Done` and say so in the report. A human has now checked the work, which is exactly what
+    the qualifier said had not happened — this is the one legitimate upgrade path.
   - **Reads anything else** (`🔲 Backlog`, `🔄 In progress`, `🚧 Blocked — …`, etc.)? Replace it with
     `✅ Done`.
   - **No `## Status` heading at all?** Do not invent one. Leave the heading absent and flag it in the
@@ -182,9 +208,20 @@ Give a concise summary:
 The canonical status set is documented in **`ai-agents/knowledge-base/conventions/task-status-vocabulary.md`**
 — it is the source of truth, and this skill writes exactly one value from it:
 
-> **`✅ Done`** — and nothing else. Not "Complete", not "Finished", not "✔️".
+> **`✅ Done`** — or, when an agent performs the close,
+> **`✅ Done (agent-closed — not owner-verified)`**. Nothing else. Not "Complete", not "Finished",
+> not "✔️".
 
-**`Done` is a gated status.** It may be set **only** by this skill, and this skill runs **only when the
-owner invokes it**. That gate is the whole point: an agent that can mark its own work complete can
-quietly launder unfinished work into a green board. Never set `✅ Done` by hand-editing a file, and
-never run this skill on your own initiative.
+**`Done` is skill-gated, not owner-gated.** It may be set **only** by this skill — never by
+hand-editing a file — but **any agent may run this skill** (ADR-025). The old owner-only gate was the
+anti-laundering protection; it is gone, and nothing structural replaced it.
+
+⚠️ **The agent-closed marker is the entire residual mechanism, and it is unenforced.** No code path
+checks it. The same agent that would wrongly close a task is the agent deciding whether to label the
+close — so the label is worth exactly what your honesty is worth. **Apply it whenever you are not the
+owner.**
+
+⚠️ **The marker does not show up in `/fkit-status`.** The dashboard matches the `✅` prefix and
+collapses every variant to plain `done`, then filters the row off the open board. Distinguishing
+agent-closed from owner-closed means opening the sprint plan or the brief. Known, accepted, recorded in
+ADR-025's honesty clause — **not** a defect to file.

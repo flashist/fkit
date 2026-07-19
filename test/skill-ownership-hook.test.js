@@ -182,6 +182,45 @@ test('agent_type present but not an fkit-* agent -> deny for an fkit-* skill', (
   assert.match(r.err, /not an fkit-\* agent/);
 });
 
+// =================================================================================================
+// THE TASK MOVERS (ADR-025, task 64) — the highest-care area in this file.
+//
+// ⚠️ WHAT THESE TESTS DO AND DO NOT PROVE. ADR-025 removed the owner-only gate on the movers and
+// replaced it with NOTHING structural — the `(agent-closed — not owner-verified)` marker is prose in
+// the SKILL.md and no code path enforces it. So there is no "an agent closing its own work is refused"
+// test to write; that refusal no longer exists, by design. What IS testable, and what these pin, is:
+//   1. the relaxation actually took effect (the X1 contradiction cannot come back), and
+//   2. the fail-CLOSED paths still hold for the movers specifically — an unidentifiable caller is
+//      denied even now that almost every identifiable one is allowed.
+// Point 2 matters more after the relaxation than before it: with six of seven roles allowed, the
+// deny paths are the only thing left, and a fail-OPEN there would let an unroled session move files.
+// =================================================================================================
+
+for (const mover of ['fkit-task-done', 'fkit-task-cancelled']) {
+  test(`coder owns ${mover} -> allow (ADR-025: the coder may close its own task)`, () => {
+    const r = run(payload({ agentType: 'fkit-coder', skill: mover }));
+    assertAllow(r, `coder x ${mover}`);
+  });
+
+  test(`adversarial-reviewer does NOT own ${mover} -> deny (owner ruling: findings-only)`, () => {
+    const r = run(payload({ agentType: 'fkit-adversarial-reviewer', skill: mover }));
+    assertDeny(r, `adversarial-reviewer x ${mover}`);
+  });
+
+  test(`${mover} with NO agent_type -> deny (unrolled session must not move task files)`, () => {
+    const raw = `{"session_id":"x","hook_event_name":"PreToolUse","tool_name":"Skill","tool_input":{"skill":"${mover}"}}`;
+    const r = run(raw);
+    assertDeny(r, `no agent_type x ${mover}`);
+    assert.match(r.err, /no agent_type/);
+  });
+
+  test(`${mover} from a non-fkit agent_type -> deny`, () => {
+    const r = run(payload({ agentType: 'some-other-agent', skill: mover }));
+    assertDeny(r, `non-fkit agent_type x ${mover}`);
+    assert.match(r.err, /not an fkit-\* agent/);
+  });
+}
+
 test('malformed / non-JSON payload -> deny, not a crash', () => {
   const r = run('not even json {{{');
   assertDeny(r, 'malformed payload');
@@ -227,14 +266,24 @@ const UNIVERSE = [
   'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync',
 ];
 
+// ⚠️ THE TASK MOVERS ARE OWNED BY EVERY ROLE BUT `adversarial-reviewer` (ADR-025, task 64).
+// They were producer-only until 2026-07-19, and that was the anti-laundering gate. ADR-025 removed it
+// knowingly. This mirror is what proves the removal actually took effect: before task 64 the movers'
+// prose claimed any role could invoke them while THIS mapping still denied every non-producer call —
+// the contradiction Codex found as X1. If prose and mapping ever disagree again, the mapping wins and
+// the prose is the bug.
+const MOVERS = ['fkit-task-done', 'fkit-task-cancelled'];
+
 const OWNED = {
-  lead: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down'],
+  lead: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', ...MOVERS],
   producer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-initiate-project', 'fkit-task-brief', 'fkit-task-done', 'fkit-task-cancelled', 'fkit-status'],
-  coder: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review', 'fkit-task-ship-loop'],
-  architect: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-survey-project', 'fkit-inspect', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-record-decision'],
-  reviewer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-review', 'fkit-stateful-review'],
+  coder: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review', 'fkit-task-ship-loop', ...MOVERS],
+  architect: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-survey-project', 'fkit-inspect', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-record-decision', ...MOVERS],
+  reviewer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-review', 'fkit-stateful-review', ...MOVERS],
+  // NOT the movers — deliberate owner ruling (2026-07-19), not an omission. Findings-only contract,
+  // restricted Codex allowlist (ADR-022). The matrix below turns this into a real deny assertion.
   'adversarial-reviewer': ['fkit-team', 'fkit-query', 'fkit-adversarial-review'],
-  wiki: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync'],
+  wiki: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync', ...MOVERS],
 };
 
 for (const role of Object.keys(OWNED)) {

@@ -36,16 +36,17 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — The layer already exists; **delivery structural, compliance advisory**
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]] — Shipped skill executables: `bash <path>`, never the exec bit
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — **`PreToolUse` hook enforces skill ownership by the real caller at any depth; `CONSULT_SKILLS` retired.** Supersedes ADR-012 Decisions 3&4
-- [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — The coder's ship-loop runs autonomously by default; gated only at plan-approval and the owner-only done-gate
+- [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — The coder's ship-loop runs autonomously by default. ⚠️ **Its done-gate is gone** (ADR-025, shipped by task 64 — the loop now closes its own task); **only the plan gate remains**
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — Per-task `plans/` + `worklogs/` dirs, keyed by task-id, mirroring `reviews/`
 - [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — Tombstone: `AskUserQuestion` measured session-only (2.1.212); the consult "return open questions" contract is the only option
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — **Tool allowlists relaxed for six roles; the adversarial reviewer's wall is the sole structural tool restriction**
 - [[decisions/adr-023-fkit-git-agent-is-not-built]] — Tombstone: no commit/push agent; **the "never commit unprompted" hard rule reaffirmed, not amended**
 - [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — Tombstone: the AFK timeout **is** real (2.1.214) — declined on **cost, not feasibility**
-- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — ⚠️ **Reverses a universal hard rule**: spawned agents may close tasks; the anti-laundering guarantee is **removed**, not downgraded
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — ⚠️ **Reverses a universal hard rule**: spawned agents may close tasks; the anti-laundering guarantee is **removed**, not downgraded. **Shipped 2026-07-19; amended three times in the building** (hook data source, adversarial-reviewer exclusion, marker invisible in `/fkit-status`)
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — Tombstone: no library mutates shell; **ADR-014 Decision 4 unamended**; the real gap was gating
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — The 5th convention + a parity test; the consuming-project drift decision **stays deferred despite its fired trigger**
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — ⚠️ **Reverses the owner's own "not breadth" constraint**: an eighth **tester** seat on *sandbox authority*, against the architect's and producer's recommendation. **Decided, not built**
+- [[decisions/adr-029-stop-hook-enforces-turn-completion-contract]] — A **second hook** (`Stop`) enforces interactive questions + a "What's next?" close, because the prose rule **demonstrably did not fire**. Larger blast radius than ADR-018's — it can stop a turn completing. **Decided, not built**
 
 ## Tasks
 
@@ -83,6 +84,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/investigate-mutation-testing-library-adoption]] — Task 46 → ADR-026: **no library mutates shell**, so the zero-devDeps tension never existed; the real defect was gating
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — Task 49 → ADR-027: the **cause** of a four-instance defect class; the enumeration corrected itself from five drifted files to **six**
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — Task 63 → ADR-025: **no fabrication-resistant precondition exists**; prevention removed, an unenforced prose marker in its place
+- [[tasks/implement-spawned-invocation-for-task-movers]] — Task 64: the reversal **built** (2026-07-19) and the sprint's **first agent-closed row — not owner-verified**; the adversarial pass forced three ADR amendments
 - [[tasks/refresh-architecture-docs-for-tool-relaxation]] — Task 58 → the ADR-022 doc follow-up, Done; `architecture.md` is nonetheless **behind again** (no ADR past 022)
 
 ### Sprint 2 — the migration investigation (and its "build nothing" answer)

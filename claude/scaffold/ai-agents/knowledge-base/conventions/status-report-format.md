@@ -45,7 +45,7 @@ A compact table of the sprint's tasks with these columns, in this order:
 
 | Column | Contents |
 |---|---|
-| **Status** | The task's real state, rendered **exactly as the vocabulary writes it, marker and all** — see [`task-status-vocabulary.md`](task-status-vocabulary.md): `🔲 Backlog` · `🔄 In progress` · `🚧 Blocked — <reason>` · `✅ Done` · `⛔ Cancelled (YYYY-MM-DD) — <reason>` · `➡️ Moved to [Sprint N](…) — priority M`. **Never invent a value** (no "Not started", no "WIP") — if the board shows a distinction the vocabulary can't express, the board is lying. |
+| **Status** | The task's real state, rendered **exactly as the vocabulary writes it, marker and all** — see [`task-status-vocabulary.md`](task-status-vocabulary.md): `🔲 Backlog` · `🔄 In progress` · `🚧 Blocked — <reason>` · `✅ Done` · `⛔ Cancelled (YYYY-MM-DD) — <reason>` · `➡️ Moved to [Sprint N](…) — priority M`, plus the **agent-closed** variants of the last two (`✅ Done (agent-closed — not owner-verified)`, and the same qualifier on `⛔ Cancelled`). **Never invent a value** (no "Not started", no "WIP") — if the board shows a distinction the vocabulary can't express, the board is lying. |
 | **#** | Priority number, matching the sprint plan. |
 | **Task** | Short title — the same wording the sprint plan uses. |
 | **Filename** | The brief's filename, linked to its path (`backlog/`, `done/`, or `cancelled/`). |

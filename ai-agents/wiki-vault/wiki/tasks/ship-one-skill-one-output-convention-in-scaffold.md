@@ -22,3 +22,4 @@ Task 47 recorded the "one skill, one output" convention — but only in this rep
 - [[systems/knowledge-base-structure]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the convention that generalizes this and three sibling point-fixes
+- [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49: this was the fourth instance, and deliberately did not wait for it

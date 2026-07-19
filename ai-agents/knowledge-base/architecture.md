@@ -91,7 +91,7 @@ inherits the full Claude Code tool set. Only the adversarial reviewer keeps an e
 
 | Agent | `tools` | Authority (prompt-enforced unless noted) |
 |---|---|---|
-| `fkit-producer` | *(none — inherits all)* | product & sprint planning, task briefs. **No source writes.** Never moves task files. |
+| `fkit-producer` | *(none — inherits all)* | product & sprint planning, task briefs. **No source writes.** Owns the task-movers' namespace (any role may invoke them — ADR-025). |
 | `fkit-coder` | *(none — inherits all)* | **Sole source-write authority.** Plan-gated. |
 | `fkit-architect` | *(none — inherits all)* | design specs, ADRs, surveys. **Never implements; never writes the wiki.** |
 | `fkit-reviewer` | *(none — inherits all)* | review-only; writes **only** under `ai-agents/reviews/`. |
@@ -258,7 +258,7 @@ contract every role shares (`ai-agents/README.md`).
 | `knowledge-base/reports/YYYY-MM-DD-*.md` | any session; evaluations from the **architect** | dated artifacts of work performed — audits, verifications, evaluations, executed plans. [`reports/README.md`](reports/README.md) |
 | `knowledge-base/history/` | architect | superseded **design docs** — docs that no longer describe reality. **Archive, don't delete** (ADR-002). Narrow, *not* the general archive. [`history/README.md`](history/README.md) |
 | `sprints/sprint-N.md` | producer | sprint plan + status table; completed sprints move to `sprints/done/` |
-| `tasks/{backlog,done,cancelled}/*.md` | producer **writes**; **only the owner moves**, via `/fkit-task-done` and `/fkit-task-cancelled` | task briefs |
+| `tasks/{backlog,done,cancelled}/*.md` | producer **writes**; **any role but `adversarial-reviewer` moves**, via `/fkit-task-done` and `/fkit-task-cancelled` (ADR-025; an agent-performed close is marked `(agent-closed — not owner-verified)`) | task briefs |
 | `reviews/<task-id>.md` | reviewer **and** coder — a two-party ledger | findings + dispositions + **accepted residuals**. This is the loop-prevention memory: it carries decision state across review rounds so settled tradeoffs are not re-litigated. |
 | `wiki-vault/` | **`fkit-wiki` only** | Karpathy LLM-wiki: `schema.md` (conventions), `index.md` (catalog), `log.md` (activity), `wiki/{features,systems,decisions,tasks}/` |
 
@@ -269,7 +269,10 @@ contract every role shares (`ai-agents/README.md`).
    `ai-agents/wiki-vault/`.** No exceptions.
 2. **The task status vocabulary is closed**
    (`ai-agents/knowledge-base/conventions/task-status-vocabulary.md:11-21`): Backlog · In progress ·
-   Blocked · Done · Cancelled · Moved. Nothing else is valid. `Done` and `Cancelled` are **owner-only**.
+   Blocked · Done · Cancelled · Moved, plus the `(agent-closed — not owner-verified)` variants of the
+   last two. Nothing else is valid. `Done` and `Cancelled` are **skill-gated, not owner-gated**
+   (ADR-025): any role but `adversarial-reviewer` may invoke the movers, and the agent-closed marker —
+   **prose, unenforced** — is all that replaced the old owner-only gate.
 3. **The knowledge-base root holds exactly two documents — `PROJECT.md` and `architecture.md`**
    ([ADR-013](decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)). They are the
    project-defining pair: *what we are building* and *how it is built*. **Everything else is filed by
@@ -316,7 +319,8 @@ run `fkit-survey-project`**, and writes `PROJECT.md`.
 units, with dependencies recorded) → coder `/fkit-plan-task` (**Claude Code plan mode** — an owner
 approval gate) → implement → reviewer `/fkit-review` or `/fkit-stateful-review` → coder
 `/fkit-process-stateful-review` (verify each finding; **defect vs frontier-move**; fixes gated on
-the owner) → **the owner** runs `/fkit-task-done`.
+the owner) → `/fkit-task-done` — run by the owner, or by an agent writing the agent-closed marker
+(ADR-025).
 
 **4 — Review + the adversarial pass.** The reviewer runs its own pass, then assembles a
 findings-only prompt plus an inline diff into `.fkit/tmp/adversarial-prompt.md` and pipes it to
