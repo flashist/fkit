@@ -162,3 +162,6 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[tasks/rewrite-docs-post-omnigent]]
 - [[tasks/wiki-sync-post-omnigent]]
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — 🔀 **Decided, not built**: a task becomes a folder `tasks/<board>/<NNNN>-<slug>/` under a permanent global ID; `plans/`, `worklogs/` and `reviews/` are absorbed. The largest structural change to this data model in the project's history
+- [[tasks/decide-whether-fkit-needs-a-tester-agent]]
+- [[tasks/design-task-folder-structure-and-id-scheme]]
+- [[tasks/assign-global-task-ids-and-create-registry]]

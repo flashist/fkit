@@ -39,3 +39,5 @@ fkit already has the precedent: `ai-agents/reviews/<task-id>.md` — a git-track
 - [[tasks/implement-task-ship-loop-skill]] — the loop that writes these artifacts, now live
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63 evaluated the worklog as a candidate precondition and found it **forgeable by the writer**
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — executes this ADR's §6 per-task folder and **absorbs all three** of its top-level directories (`plans/`, `worklogs/`, `reviews/`); its flat `<task-id>/` sketch was rejected for keeping the board in the path
+- [[tasks/design-task-folder-structure-and-id-scheme]] — task 74 executes this ADR's §6 end state: the per-task folder
+- [[tasks/assign-global-task-ids-and-create-registry]] — task 75: the ID that keys `plans/`, `worklogs/` and `reviews/` together

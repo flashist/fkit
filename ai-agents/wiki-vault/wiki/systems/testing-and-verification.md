@@ -95,3 +95,4 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the investigation behind ADR-027
 - [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a second hook whose session-scoped behaviour fkit **cannot fully test itself**; automated coverage reaches its script logic against synthetic payloads only
+- [[tasks/decide-whether-fkit-needs-a-tester-agent]] — the decision task that closed the tester question (ID 0024); the static-review gap it names is recorded on this page

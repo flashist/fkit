@@ -30,3 +30,5 @@ Implement the "deterministic layer" the owner asked for on `/fkit-status`: a scr
 - [[tasks/filter-fkit-status-board-to-open-tasks]] — the open-work filter, implemented in this script's ⟦BOARD⟧ rendering
 - [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — this script confirmed against the backlog board's `—` priority cells
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board whose table format this script parses unchanged
+- [[tasks/design-task-folder-structure-and-id-scheme]] — task 74: three of the folder migration's silent breaks live in `dashboard.sh`, and it gains an `id-mismatch` drift kind
+- [[tasks/assign-global-task-ids-and-create-registry]] — task 75: the `## ID` stamp had to leave `dashboard.sh`'s `## Status` parsing undisturbed

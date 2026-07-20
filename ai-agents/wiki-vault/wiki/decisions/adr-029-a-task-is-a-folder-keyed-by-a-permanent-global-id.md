@@ -136,3 +136,5 @@ re-raise the dual-format transition, content-hash IDs, numbering only open tasks
   evidence `knowledge-base/reports/2026-07-19-design-task-folder-structure-and-id-scheme.md` (revision 2,
   post-adversarial); code cited `claude/dashboard.sh:111-126,308-313,535-546,667,681`,
   `ai-agents/reviews/README.md:24-30`, `claude/skills/fkit-stateful-review/SKILL.md:23-33`
+- [[tasks/design-task-folder-structure-and-id-scheme]] — task 74, the design task that produced this ADR (**Done, agent-closed — not owner-verified**)
+- [[tasks/assign-global-task-ids-and-create-registry]] — task 75, the ID backfill: Decision 4's SHA pin and Decision 8's no-registry ruling, both verified reproducible

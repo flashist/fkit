@@ -53,7 +53,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 
 ### Sprints
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — 🔒 Closed: the Omnigent-era onboarding sprint, and how its 12 tickets were dispositioned
-- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**63 done · 12 backlog · 1 in progress · 5 cancelled — of 81**; grew 22 → 81)
+- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**64 done · 15 backlog · 1 in progress · 5 cancelled — of 85**; grew 22 → 85)
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — 🆕 The **Backlog board** (`sprints/backlog.md`) — the standing home for unsprinted briefs
 
 ### Sprint 2 — the removal chain
@@ -80,6 +80,11 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/add-launcher-contract-smoke-script]] — fkit's first automated verification → ADR-014; **caught a live defect immediately**
 - [[tasks/stop-agents-asserting-unchecked-repo-state]] — A **false instruction in both movers**, shipping to every project → `evidence-before-assertion.md`
 - [[tasks/fix-headless-menu-guard-crash]] — `[ -r /dev/tty ]` never tests openability; the lead default was **dead code**
+
+### Sprint 2 — the task-folder restructure (74, 75) and the tester ruling
+- [[tasks/design-task-folder-structure-and-id-scheme]] — Task 74 → ADR-029: a task becomes a **folder** keyed by a permanent global ID. The design found **three silent breaks and one data-loss path** the brief never suspected
+- [[tasks/assign-global-task-ids-and-create-registry]] — Task 75 → every brief stamped with an `## ID`, **corpus pinned to a commit SHA**; no registry, no file moves. Backfill verified reproducible
+- [[tasks/decide-whether-fkit-needs-a-tester-agent]] — ID 0024 (Backlog board) → ADR-028: the eighth-role ruling; **the owner ruled against the recommendation, knowingly**
 
 ### Sprint 2 — the four investigations closed 2026-07-19
 - [[tasks/investigate-mutation-testing-library-adoption]] — Task 46 → ADR-026: **no library mutates shell**, so the zero-devDeps tension never existed; the real defect was gating

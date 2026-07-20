@@ -34,3 +34,4 @@ Step 4 was the one that mattered most: for **each** of the 7 roles, confirm the 
 - [[systems/role-locked-sessions]]
 - [[systems/review-and-model-diversity]]
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — task 7, the run that surfaced the hole this ADR answers
+- [[tasks/decide-whether-fkit-needs-a-tester-agent]] — task 7's ad-hoc verify/judge split is the observed hole that decision task cites

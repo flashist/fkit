@@ -35,3 +35,4 @@ It was also the producer's nominated home for a **mechanical link checker**, a q
 - [[systems/testing-and-verification]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/add-ci-validate-bundles]]
+- [[tasks/decide-whether-fkit-needs-a-tester-agent]] — the tester decision; this CI task is **explicitly independent of it** and must not be bundled or held hostage

@@ -33,3 +33,4 @@ The read-side half — making `/fkit-status` report this board **only on request
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[systems/knowledge-base-structure]]
 - [[tasks/build-deterministic-dashboard-script-for-fkit-status]]
+- [[tasks/decide-whether-fkit-needs-a-tester-agent]] — a Backlog-board task whose ruling produced ADR-028; **its close does not move Sprint 2's count**
