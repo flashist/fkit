@@ -57,6 +57,22 @@ task folder always contains at least a brief, so it never needs a `.gitkeep` of 
 project starts with no tasks. **ADR-027 dual-home parity holds for free**, and
 `test/converge-contract.test.js` needs no change.
 
+**⚠️ Two of the design's three new assertions live here — added 2026-07-20, owner-approved.** Design
+spec §10 *"New assertions to add"* names three. All three had been dropped from every brief; the review
+of task 75 caught the first (finding R3) and it now has its own task,
+[`assert-task-ids-are-unique-in-the-test-suite.md`](assert-task-ids-are-unique-in-the-test-suite.md)
+(ID `0101`). **The other two belong here, and the reason is not convenience.** The `id-mismatch` check
+and the malformed-folder check both assert against a structure — `<board>/<NNNN>-<slug>/brief.md` —
+that **does not exist until this task creates it**. Neither can be written before the migration, and
+neither can be *red-proved* before it, so neither is independently shippable. `0101`'s subject is the
+IDs already in the tree today; these two have no subject until the folders exist.
+
+**`id-mismatch` is this task completing its own design, not extra scope.** ADR-029 Decision 5 rules
+that the ID has **two carriers** — the folder name (authoritative) and the brief's `## ID` field — on
+the stated principle *"carry both and lint the disagreement."* This task is what creates the second
+carrier. **Ship the folders without the reconciliation and the task installs a drift it cannot
+detect** — precisely the failure the two-carrier decision was accepted on condition of avoiding.
+
 ## What to build
 
 - **The migration** — every brief into `ai-agents/tasks/<board>/<ID>-<slug>/<brief-filename>` per
@@ -80,6 +96,20 @@ project starts with no tasks. **ADR-027 dual-home parity holds for free**, and
   hrefs as they already do.
 - **The sprint-board hrefs** in `ai-agents/sprints/` (~94 refs — derive it) re-pointed to the new paths.
 - **Nothing in `claude/scaffold/ai-agents/tasks/` changed** — see the warning above.
+- **An `id-mismatch` drift kind in `dashboard.sh`** — design spec §3.5 / ADR-029 Decision 5. Fires when
+  a brief's `## ID` field disagrees with the four-digit prefix of its own folder name. Build it as a
+  **sibling of the existing status-drift rule 3**, which already cross-checks the brief's `## Status`
+  against its board directory — same shape, same reporting path, same record format. This is a
+  *reported* disagreement, not a repair: the drift record names both values and the folder name is the
+  authoritative one (ADR-029 Decision 5). **Do not auto-correct either carrier.**
+- **A malformed-folder drift kind in `dashboard.sh`** — ADR-029 Decision 1: *"A folder **without**
+  `brief.md` is malformed and is reported as drift."* A folder containing only `brief.md` is the normal
+  case and needs no marker; `plan.md`, `worklog.md`, `review.md` and `assets/` are reserved names whose
+  presence is never drift. Report, do not delete or repair.
+- **Contract tests for both new drift kinds**, in `test/dashboard-contract.test.js` — that suite is
+  already fixtures-in / exact-text-out (`test/dashboard-contract.test.js:8-9`), so both are ordinary
+  fixture cases: a folder whose `## ID` disagrees with its name, and a folder with no `brief.md`. This
+  is the §10 "assertions to add" half; the drift kinds above are the implementation half.
 
 ## Verification steps
 
@@ -107,15 +137,62 @@ project starts with no tasks. **ADR-027 dual-home parity holds for free**, and
 - `node --test test/converge-contract.test.js` passes **unmodified**.
 - `ai-agents/sprints/reviews/` holds exactly the two sprint-scoped ledgers, and
   `ai-agents/reviews/` no longer exists.
+- **`id-mismatch` fires, and is red-proved.** A fixture folder whose brief `## ID` disagrees with its
+  folder-name prefix emits an `id-mismatch` drift record naming **both** values. Then confirm the
+  guard bites: correct the fixture's `## ID` and the record must disappear. A check that reports
+  regardless of the input proves nothing (`test/prove-red.sh:4-8`).
+- **Malformed-folder fires, and is red-proved.** A fixture task folder with no `brief.md` is reported
+  as drift; the same folder with a `brief.md` added is not. A folder holding `brief.md` **plus** any of
+  `plan.md` / `worklog.md` / `review.md` / `assets/` is **not** drift — assert that explicitly, or the
+  check will flag every task that has a plan.
+- **Neither new drift kind fires across the real migrated corpus.** After the move, all ~95 folders
+  report zero `id-mismatch` and zero malformed-folder records. ⚠️ **This is the migration's own
+  correctness check** — an `id-mismatch` here means a folder was named from the wrong ID, which is a
+  silent mis-key of a task and its artifacts. Run it before declaring the migration done.
+- **The two new kinds do not perturb the existing ones.** The pre-migration drift baseline (captured
+  per the check above) is unchanged in `missing-brief`, `relocated` and `brief-missing-status` counts —
+  the new records are additions, not reclassifications.
 
 ## Notes
 
 - **Owner: fkit-coder.**
 - **Depends on: task 75 — hard** (IDs must exist before folders can be named after them), and
   transitively on task 74's approved design.
+- **⚠️ Gated by task 85 (ID `0101`) — a SCHEDULING gate, owner-ruled 2026-07-20. Do not start this task
+  until 85 has landed.** *Not* a technical dependency: this task builds, tests and ships without the
+  duplicate-ID guard, and nothing in the migration reads it. The gate exists because the guard's value
+  is entirely **pre-merge** — this task is the largest merge in the project's history and exactly the
+  long-lived branch ADR-029 Decision 3's accepted race needs. A collision caught before the merge costs
+  a rename; one caught after means renumbering an ID that things already link to, which is the
+  permanent unrecoverable failure the ID scheme exists to prevent. **Recorded on both briefs
+  deliberately** — an unrecorded sequencing preference evaporates under schedule pressure.
 - **Blocks: tasks 77 and 78** — both repair links to paths this task creates.
 - **A review is strongly recommended before this is marked done.** It is the largest single structural
   change in the project's history and the point of no return; task 74's rollback procedure should be
   confirmed workable *before* starting, not discovered afterwards.
 - Tasks 77 and 78 can run **in parallel** once this lands — they touch disjoint file sets and different
   write authorities.
+- **On the §3.5 / §10 wording, so it is not re-litigated:** spec §3.5 describes `id-mismatch` as a
+  *drift record*, §10 lists it under *assertions to add*. These are not competing options. **§10 is the
+  spec's Verification section** — an "assertion" there is a test proving the drift kind fires. The drift
+  kind is the implementation (ADR-029 Decision 5, accepted); the contract test is its proof. **Build
+  both.** Owner-approved 2026-07-20; producer-resolved against the sources, not by preference.
+- **Cross-reference — the third §10 assertion is NOT yours.** Duplicate-ID detection is
+  [`assert-task-ids-are-unique-in-the-test-suite.md`](assert-task-ids-are-unique-in-the-test-suite.md)
+  (ID `0101`), which ships independently of this task on either layout. Its brief requires the guard to
+  discover briefs in **both** the flat (`<board>/<slug>.md`) and folder (`<board>/<NNNN>-<slug>/brief.md`)
+  shapes precisely so this migration does not silently disable it. **If `0101` has already landed when
+  you run: confirm its guard still finds a non-zero brief count after the move.** A uniqueness check
+  over zero discovered briefs passes green while guarding nothing.
+- **🔒 If planning finds this task too large, the split is available — say so rather than absorbing
+  it.** The two drift kinds are *additive* to `dashboard.sh` and move no files, so they could ship as a
+  follow-up immediately after this task. **That was weighed and not chosen** (producer, 2026-07-20): the
+  marginal cost is low on a file this task already rewrites, and the gap between the two tasks is
+  exactly the window in which a mis-keyed folder from the mass move would go undetected — the moment the
+  check is worth most. **This is a recorded tradeoff, not a prohibition.** If the plan shows the atomic
+  commit is genuinely unmanageable, raise it with the owner and propose the split; do not quietly drop
+  the checks.
+- **Design spec is at revision 3** (2026-07-20, corrective — §3.2's `10#` rationale was wrong and was
+  rewritten; §14 row X19). **No decision changed and §10 is untouched**, so the assertion list above
+  stands. Architect's standing ruling: on any spec-vs-skill disagreement about ID *allocation*, the
+  skill (`claude/skills/fkit-task-brief/SKILL.md` step 6) is authoritative.

@@ -104,7 +104,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 72 | Add the `/fkit-dumb-down` skill for the six Claude-side roles *(on-demand re-explain, content-preserving, zero write surface; complementary to task 62 — owner ruled BOTH; adversarial reviewer excluded per ADR-022; owner: fkit-coder)* | [`add-dumb-down-skill-for-six-roles.md`](../tasks/done/add-dumb-down-skill-for-six-roles.md) |
 | 🔲 Backlog | 73 | Wiki sync after the `/fkit-dumb-down` skill lands *(needs 72 — hard; **do not run early — batches into task 78** per the task-74 design §9.2; owner: fkit-wiki)* | [`wiki-sync-dumb-down-skill.md`](../tasks/backlog/wiki-sync-dumb-down-skill.md) |
 | ✅ Done (agent-closed — not owner-verified) | 74 | Design the task-folder structure and the global task-ID scheme *(design — [spec](../knowledge-base/reports/2026-07-19-design-task-folder-structure-and-id-scheme.md), [ADR-029](../knowledge-base/decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md) **accepted**; gates 75–78; owner: fkit-architect)* | [`design-task-folder-structure-and-id-scheme.md`](../tasks/done/design-task-folder-structure-and-id-scheme.md) |
-| 🔲 Backlog | 75 | Add an `## ID` field to every brief and write down the allocation procedure *(**no registry file** — owner ruled 2026-07-19; **corpus pinned to a commit SHA**; no file moves — reversible by design; needs 74 — hard; owner: fkit-coder)* | [`assign-global-task-ids-and-create-registry.md`](../tasks/backlog/assign-global-task-ids-and-create-registry.md) |
+| ✅ Done (agent-closed — not owner-verified) | 75 | Add an `## ID` field to every brief and write down the allocation procedure *(**no registry file** — owner ruled 2026-07-19; **corpus pinned to a commit SHA**; no file moves — reversible by design; needs 74 — hard; owner: fkit-coder)* | [`assign-global-task-ids-and-create-registry.md`](../tasks/done/assign-global-task-ids-and-create-registry.md) |
 | 🔲 Backlog | 76 | Migrate every task into a folder, absorb `plans/` + `worklogs/` + `reviews/`, and update the tooling *(**atomic — the point of no return**; needs 75 — hard; review strongly recommended; owner: fkit-coder)* | [`migrate-tasks-to-folder-structure-and-update-tooling.md`](../tasks/backlog/migrate-tasks-to-folder-structure-and-update-tooling.md) |
 | 🔲 Backlog | 77 | Repair the task links in `reviews/`, `knowledge-base/` and brief↔brief *(**covers pre-existing rot too — ~1/3 already broken before the migration**; **⚠️ its baseline-capture step must run BEFORE 76**, everything else after; sprint-keyed ledgers move to `sprints/reviews/` per design §5.2b; needs 76 — hard; parallel with 78; owner: fkit-coder)* | [`repair-task-links-outside-the-wiki-after-migration.md`](../tasks/backlog/repair-task-links-outside-the-wiki-after-migration.md) |
 | 🔲 Backlog | 78 | Wiki sync after the task-folder migration *(~96 vault refs + structural re-description; **batches the six queued syncs 45/51/66/69/71/73**; needs 76 — hard; parallel with 77; owner: fkit-wiki)* | [`wiki-sync-task-folder-migration.md`](../tasks/backlog/wiki-sync-task-folder-migration.md) |
@@ -114,6 +114,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 82 | Refresh `architecture.md` for ADRs 026–030 and the eighth role *(**`architecture.md:4` and `:82` say seven roles; ADR-028 added an eighth — the canonical doc is factually wrong about the team's shape**; **5 doc sites in 4 files** — `architecture.md:4,82`, `CLAUDE.md:7`, `AGENTS.md:7`, `README.md:76`, `claude/README.md:3` — **enumerated by [ADR-028](../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md):154-169, which says do not re-derive the list**; also adds a **dated ADR-023→028 pointer** (**ADR-023 is NOT superseded — only its count claim is overtaken**); `PROJECT.md:8,72` moved to **task 83** per ADR-028:154 (the product brief is not the architect's); `claude/fkit-claude-init.sh:847` is executable source, **task 81 Part D**; `wiki-vault/index.md:11` + `wiki/systems/fkit.md:7,15` are **fkit-wiki's resync, flag don't fix**; cites only up to ADR-025, so 026–030 absent plus the 023/024 tombstones; ADR-028/029/030 are **decided but not built** and must not be described as existing structure; historical "seven" in ADRs/reports/closed rows **must stay**; precedent task 58; owner: fkit-architect)* | [`refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role.md`](../tasks/backlog/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role.md) |
 | 🔲 Backlog | 83 | Amend the product brief for the eighth role — `PROJECT.md:8,72` *(split from 82 per **ADR-028:154** — the brief is the product document, not the architect's; **`:72`'s "not breadth" clause is a product constraint ADR-028 knowingly reverses, so this is a stance restatement, not a count fix**; ADR-028 is **decided-not-built** so the brief must not promise a role that does not exist; **⚠️ needs owner sign-off on the stance wording**; owner: fkit-producer)* | [`amend-project-brief-for-the-eighth-role.md`](../tasks/backlog/amend-project-brief-for-the-eighth-role.md) |
 | 🔲 Backlog | 84 | Wiki resync for the eighth role — after the source docs land *(**⚠️ filed under a false premise, corrected in the brief: the vault is NOT stale** — `index.md:11` and `systems/fkit.md:9,17` already carry an accurate decided-not-built note; ADR-028:165 named them stale and the wiki fixed them afterwards. **The real work is the mirror image** — `fkit.md:9` tracks *which source docs still assert seven*, and that tracking claim expires when 82/83/81-D land; **depends on 82 + 83 + 81 Part D**, precedent task 11 / `sprint-2.md:209`; **not folded into 78**; decided-not-built framing must survive; owner: fkit-wiki)* | [`wiki-resync-eighth-role-after-source-docs-land.md`](../tasks/backlog/wiki-resync-eighth-role-after-source-docs-land.md) |
+| 🔲 Backlog | 85 | Assert task IDs are unique in the test suite — the ADR-029 duplicate-ID guard *(**⚠️ priority 85 is append rank, NOT run order — this must land BEFORE 76**, owner-ruled 2026-07-20; ADR-029 Decision 3's **sole** named mitigation for the accepted cross-branch race, and it was never built — task 75 review finding R3; scope is the duplicate-ID assertion **only** — the other two design §10 assertions are in 76; the guard must discover briefs in **both** the flat and folder shapes so 76 cannot silently blind it; owner: fkit-coder)* | [`assert-task-ids-are-unique-in-the-test-suite.md`](../tasks/backlog/assert-task-ids-are-unique-in-the-test-suite.md) |
 
 ### Addendum — tasks 74–78 added out of band (2026-07-19)
 
@@ -1344,3 +1345,42 @@ The owner ruled on all seven open questions below. Recorded here; the original t
    per-path inside `ai-agents/`. **When 28 is unparked, this hazard goes into its brief as a requirement,
    not into a task of its own.** If you'd rather have it tracked independently so it cannot be lost with
    28, say so and I'll write it — that is the honest counter-argument, and it costs one brief.
+
+## Addendum — task 85 added out of band (2026-07-20): the duplicate-ID guard, and why it runs before 76
+
+**Owner ruling, 2026-07-20.** Pulled out of the Backlog board into this sprint, **scheduled ahead of
+task 76**, after the producer raised the sequencing as an open question.
+
+**What it is.** ADR-029 Decision 3 accepts the cross-branch ID allocation race rather than preventing
+it, and names **exactly one** mitigation: *"a duplicate-ID assertion in the `node --test` suite."* The
+design spec says the same at §3.3 and lists it first under §10 *"New assertions to add."* It was never
+built. The stateful review of task 75 caught it as finding **R3**; the ledger records R3 as deferred
+to this task. **101 IDs are live with no automated uniqueness guard.**
+
+**Why before 76, not after.** Task 76 is the largest merge in the project's history and exactly the
+long-lived branch the race needs — two branches can each allocate the same ID and merge **cleanly**,
+because the names differ and git sees no textual conflict. Guarding before that merge costs one test.
+Discovering a collision after it means **renumbering an ID that things already link to**, which is the
+permanent, unrecoverable failure the entire scheme exists to prevent.
+
+**⚠️ Priority 85 is append rank, not run order.** This is the tension the ruling created: the ranks
+around 76 are dense, and `fkit-task-brief` step 5 forbids renumbering or inserting into the owner's
+ranking. **The tail was not renumbered** — the board's own established convention carries run order
+instead, as it already does for three rows: **77** holds priority 77 while its note reads *"its
+baseline-capture step must run BEFORE 76"*; **81** at priority 81 reads *"recommend landing before
+76"*; **80** was *"pulled forward out of task 78."* Order lives in the note and the dependency line;
+the Priority cell is board rank only (ADR-029 Decision 6). **Reading 85 as "last" is the misread this
+note exists to prevent.**
+
+**A scheduling gate, not a technical one.** Task 76 would build, test and ship without this guard —
+nothing in the migration reads it. The gate exists because the guard's value is entirely *pre*-merge.
+It is recorded on **both** briefs so it cannot quietly evaporate under schedule pressure.
+
+**Scope is one assertion, not three.** §10 names three. The other two — `id-mismatch` drift and
+malformed-folder — assert against a structure task 76 creates, so neither can be written or red-proved
+before it; both were added to **76's** brief on 2026-07-20 (owner-approved) rather than here.
+
+**One reciprocal requirement, flagged because it is a silent failure.** If this task lands first, task
+76 must confirm the guard still finds a **non-zero** brief count after the move. A uniqueness check
+over zero discovered briefs passes green while guarding nothing. This brief requires dual-shape
+discovery for that reason; 76's brief carries the matching check.

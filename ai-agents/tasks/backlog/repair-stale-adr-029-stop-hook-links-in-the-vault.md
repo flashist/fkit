@@ -48,7 +48,7 @@ silently and completely, unlike a broken link, which announces itself.
 > correct under either mechanism and is unchanged** — only the mechanism was misdescribed.
 
 Waiting for [task 78](wiki-sync-task-folder-migration.md) would mean waiting out tasks
-[75](assign-global-task-ids-and-create-registry.md) and
+[75](../done/assign-global-task-ids-and-create-registry.md) and
 [76](migrate-tasks-to-folder-structure-and-update-tooling.md) — the entire folder migration.
 
 ## What to build

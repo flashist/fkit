@@ -3,8 +3,8 @@
 - **Date:** 2026-07-19
 - **Author:** fkit-architect
 - **Task:** [`design-task-folder-structure-and-id-scheme.md`](../../tasks/done/design-task-folder-structure-and-id-scheme.md) (Sprint 2, priority 74)
-- **Status:** **approved** (owner, 2026-07-19), at **revision 2**. The adversarial pass has run and this revision incorporates it. Recorded as [ADR-029](../decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md), accepted. This change is irreversible in practice once the tree has moved.
-- **Revisions:** rev 1 (2026-07-19) → **rev 2** (2026-07-19, post-adversarial — see §14).
+- **Status:** **approved** (owner, 2026-07-19), at **revision 3**. The adversarial pass has run and rev 2 incorporates it. Recorded as [ADR-029](../decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md), accepted. This change is irreversible in practice once the tree has moved.
+- **Revisions:** rev 1 (2026-07-19) → rev 2 (2026-07-19, post-adversarial — see §14) → **rev 3** (2026-07-20, corrective). **Rev 3 changes no decision** — it fixes a false *rationale* in §3.2 (finding X19): the `10#` guard was justified by a loud error that in fact fires only for IDs containing an `8` or `9`, while the common case increments silently wrong. The rule was always right; the reason given for it was not.
 - **Consulted:** fkit-producer (sequencing / decomposition context only); adversarial review by Codex
   via fkit-adversarial-reviewer, plus a supplemental Claude pass — **18 findings, all evaluated**.
 
@@ -221,11 +221,27 @@ max=$(ls -d ai-agents/tasks/{backlog,done,cancelled}/*/ 2>/dev/null \
 next=$(printf '%04d' $(( 10#$max + 1 )))     # ⚠️ 10# IS MANDATORY — see below
 ```
 
-> **⚠️ `10#` is not optional.** In bash, a leading zero means **octal**, so `$(( 0095 + 1 ))` fails with
-> *"value too great for base"* — and so does `0009`. Verified: the error is real in bash and **absent in
-> zsh**, which is what makes it a trap. An implementer developing in zsh sees it work, and it breaks for
-> a consumer on bash. `dashboard.sh` is bash-3.2-targeted for exactly this class of reason
+> **⚠️ `10#` is not optional, and dropping it usually fails SILENTLY.** In bash a leading zero means
+> **octal**. The dangerous case is the quiet one: **if the ID contains no `8` or `9` it is valid octal,
+> and the arithmetic just returns the wrong number with no error at all.** Verified on bash today:
+>
+> ```sh
+> max=0100    $(( max + 1 ))  → 65   → printf %04d → 0065   ← SILENT, and 0065 is already assigned
+> max=0064    $(( max + 1 ))  → 53   → printf %04d → 0053   ← SILENT
+> max=0095    $(( max + 1 ))  → bash: value too great for base   ← loud, the lucky case
+> ```
+>
+> **Do not rely on seeing an error.** The loud form fires only when an `8` or `9` appears. At the
+> corpus's current max of `0100` the failure is silent, and `0065` is a real assigned ID
+> (`tasks/done/record-pretooluse-skill-gate-adr-amendment.md`) — so dropping `10#` today produces a
+> permanent, unrecoverable collision with no signal. The whole increment is also **absent in zsh**,
+> which is what makes it a trap: an implementer developing in zsh sees it work, and it breaks for a
+> consumer on bash. `dashboard.sh` is bash-3.2-targeted for exactly this class of reason
 > (`dashboard.sh:30`). Every increment of a zero-padded ID must force base 10.
+>
+> **The live, authoritative copy of this warning is `claude/skills/fkit-task-brief/SKILL.md` step 6** —
+> it is the one that executes. This spec is a dated design record; if the two ever disagree, the skill
+> wins.
 
 ### 3.3 The race, honestly stated
 
@@ -984,13 +1000,14 @@ corrected two of rev 1's three headline "silent breaks", both of which were char
 
 | # | Finding | Rev 1 said | Rev 2 says |
 |---|---|---|---|
+| **X19** *(rev 3, post-approval)* | **§3.2's rationale for `10#` was false in the common case.** It justified the guard by the loud error (`0095` → "value too great for base"), but that fires only when the ID contains an `8` or `9`. Every other ID is **valid octal** and increments **silently wrong**: at the corpus's real max, `0100 + 1` → `0065`, an already-assigned ID. Re-verified on bash. | "you'd see an error" | **§3.2 rewritten to lead with the silent mode**, with `0100 → 0065` as the primary example and `0095` demoted to the lucky case. Raised by fkit-coder from stateful-review finding R1 on task 75; the adversarial pass had cleared this area, having tested only the correct form. |
 | **X18** | **The ID assignment rule was not stable across time.** Sorting the whole corpus and numbering `0001…N` means one new brief shifts every alphabetically-later ID. The corpus moved 94→95 *during authoring*. Two people applying the rule a day apart get different IDs — the brief's bar is that they get identical ones. | derive at execution time | **§3.4: the backfill is pinned to a named commit SHA.** The steady-state `1 + max` rule is append-only and needed no change. |
 | **X17** | **The mover's reference sweep fails by mass false-positive, not by silence.** `grep -rn "brief.md"` matches *every* task's href (80 in `sprint-2.md` alone), under an instruction that "none is discarded" — so closing one task would rewrite every row. | "would report no references found" | **§6.2 point 3, rewritten.** Same fix, correct severity. |
 | **X16** | **`dashboard.sh:527` is a fourth silent break.** The filename-stem fallback yields the literal `brief` for every unranked row, collapsing the whole Backlog board to one drift id — the exact failure its own comment says it exists to prevent. | site 5 "fails visibly" | **§6.1: sites 2, 3 and 5 are all silent.** The labelling drives verification coverage, so the error mattered. |
 | **X1** | Recovery keyed on the full folder name does **not** survive a slug rename — the folder name contains the slug. | claimed it did | **§2.2: key on the `NNNN` prefix**, the only immutable part. |
 | **X2** | The moved brief's **outbound sibling links** were omitted (`fkit-task-done/SKILL.md:117-124`). Worse under folders: `](../0043-other/brief.md)` stays *valid* from any board and silently re-targets. | not covered | **§6.2 point 4**, plus a board-qualified-path recommendation. |
 | **X3** | Ledger rules 1 and 3 resolve an id **without** identifying a task folder — a branch-scoped review has an id and nowhere to put the file. | "only rule 2 changes" | **§5.3: rules 1 and 3 must resolve to a folder**; branch-scoped ledgers go to `sprints/reviews/`. |
-| **X7** | `$(( 0095 + 1 ))` **fails in bash** ("value too great for base") — and works in zsh, which is what makes it a trap. Verified both. | no base specified | **§3.2: `10#` is mandatory**, with the zsh/bash divergence called out. |
+| **X7** | An unbased `$(( 0NNN + 1 ))` is parsed as **octal** in bash — and works in zsh, which is what makes it a trap. Verified both. | no base specified | **§3.2: `10#` is mandatory**, with the zsh/bash divergence called out. **Corrected rev 3** — see X19: the failure is usually silent, not the loud "value too great for base". |
 | **X8** | `git revert` is only a valid rollback **while task 76 is the tip** — once 77/78 land, their commits target the new layout. | revert presented as preferred, unconditionally | **§7.2: the rollback window closes**; after 77/78 only the destructive reset is coherent. Partial-completion and untracked-file cases added. |
 | **X4** | `fkit-wiki-ingest`'s `all tasks` keyword had no post-migration enumeration rule — shallow matches zero files, recursive admits `plan.md`/`worklog.md`/`review.md` as task sources. | not covered | **§8: `*/brief.md` only.** |
 | **X5** | `fkit-wiki-sync` could **skip the entire corpus and advance past it** — task 75 edits old paths, task 76 renames to new ones, and the delta logic sees neither. | not covered | **§8: task 78 runs a forced full re-ingest**, not a delta. |

@@ -152,19 +152,50 @@ max=$(ls -d ai-agents/tasks/{backlog,done,cancelled}/*/ 2>/dev/null \
   | xargs -n1 basename | sed -n 's/^\([0-9]\{4\}\)-.*/\1/p' | LC_ALL=C sort | tail -1)
 ```
 
-Three things that will bite you:
+Four things that will bite you:
 
-- **⚠️ `10#` is not optional.** In bash a leading zero means **octal**, so `$(( 0095 + 1 ))` fails with
-  *"value too great for base"* — and so does `0009`. It works fine in **zsh**, which is exactly what
-  makes it a trap: it passes for whoever writes it and breaks for whoever runs it. Always force base 10.
+- **⚠️ `10#` is not optional, and dropping it usually fails SILENTLY.** In bash a leading zero means
+  **octal**. The dangerous case is the quiet one — **if the ID has no `8` or `9` in it, it is valid
+  octal and the arithmetic simply returns the wrong number, with no error at all:**
+
+  ```sh
+  max=0100    $(( max + 1 ))  → 65   → printf %04d → 0065   ← SILENT, and 0065 is already assigned
+  max=0064    $(( max + 1 ))  → 53   → printf %04d → 0053   ← SILENT
+  max=0095    $(( max + 1 ))  → bash: value too great for base   ← loud, the lucky case
+  ```
+
+  **Do not rely on seeing an error.** The loud form only happens when an `8` or `9` appears; the rest of
+  the time you get a plausible-looking four-digit number that collides with an existing task — which is
+  permanent and unrecoverable once anything links to it. It also works fine in **zsh**, so it passes for
+  whoever writes it and breaks for whoever runs it. **Always force base 10.**
 - **Scan all three boards, never just `backlog/`.** A cancelled task keeps its ID forever, and its
   artifacts and inbound links still reference it. Allocating from `backlog/` alone reissues the ID of a
   task that still exists in `cancelled/`.
 - **Never renumber an assigned ID.** The ID's only job is to be stable; renumbering invalidates every
   inbound link. `## Priority` is board rank and moves freely — the ID is identity and never moves.
+- **⚠️ A split emits N briefs, so allocate N IDs — increment per brief, not per run.** Step 3
+  decomposes one description into several briefs, and that is this skill's main job, so the multi-brief
+  case is the *normal* case. Deriving `max` once and stamping that single `next` onto every brief gives
+  them all the **same ID** — a guaranteed collision, created by the allocation step itself:
 
-**The cross-branch race, stated honestly.** Two sessions on the *same* tree cannot collide — the first
-brief exists before the second is allocated. Two sessions on **different git branches can**: both read
+  ```sh
+  max=$(grep -rhA1 '^## ID' ai-agents/tasks/{backlog,done,cancelled}/ \
+    | grep -oE '^[0-9]{4}' | LC_ALL=C sort | tail -1)
+  n=$(( 10#$max ))
+  for brief in "${briefs[@]}"; do
+    n=$(( n + 1 ))
+    id=$(printf '%04d' "$n")        # 0101, 0102, 0103 …
+  done
+  ```
+
+  Assign them in **dependency order**, matching the contiguous ordering step 5 already requires of
+  priorities, so the ID sequence reads the same way the split does.
+
+**The cross-branch race, stated honestly.** Two sessions on the *same* tree, **allocating in sequence**,
+cannot collide — the first brief exists before the second is allocated. That qualifier is load-bearing:
+two sessions on one tree that both derive `max` *before* either writes its brief collide exactly like
+the cross-branch case. Same-tree is not inherently safe; **sequential** allocation is what makes it safe.
+Two sessions on **different git branches can** collide regardless: both read
 the same max, both allocate the same ID, and the branches merge cleanly because the filenames differ.
 Git will not catch it. The chosen answer is **detect, not prevent** — a duplicate-ID check, with the
 offender renumbered *before* anything links to it. This is an accepted residual risk, not a solved
