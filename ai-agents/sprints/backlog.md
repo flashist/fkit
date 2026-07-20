@@ -39,7 +39,7 @@ column). If a task needs a rank, that is the signal to pull it into a sprint, no
 | Status | Priority | Task | Brief |
 |---|---|---|---|
 | 🔲 Backlog | — | Add two worked examples to `evidence-before-assertion.md` — task 36, and the ADR-029/030 vault repair | [`add-worked-example-to-evidence-before-assertion.md`](../tasks/backlog/add-worked-example-to-evidence-before-assertion.md) |
-| ➡️ Moved to [Sprint 2](sprint-2.md) — priority 85 | — | Assert task IDs are unique in the test suite (the ADR-029 duplicate-ID guard) | [`assert-task-ids-are-unique-in-the-test-suite.md`](../tasks/backlog/assert-task-ids-are-unique-in-the-test-suite.md) |
+| ➡️ Moved to [Sprint 2](sprint-2.md) — priority 85 | — | Assert task IDs are unique in the test suite (the ADR-029 duplicate-ID guard) | [`assert-task-ids-are-unique-in-the-test-suite.md`](../tasks/done/assert-task-ids-are-unique-in-the-test-suite.md) |
 | ✅ Done (agent-closed — not owner-verified) | — | Decide whether fkit needs a dedicated e2e-tester agent *(ruling recorded — [ADR-028](../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))* | [`decide-whether-fkit-needs-a-tester-agent.md`](../tasks/done/decide-whether-fkit-needs-a-tester-agent.md) |
 | 🔲 Backlog | — | Extend `prove-red.sh` to reach `fkit-claude-init.sh` (add the missing test seam) | [`extend-prove-red-to-reach-init.md`](../tasks/backlog/extend-prove-red-to-reach-init.md) |
 | 🔲 Backlog | — | Gate the read-side symlink hazard when init reads inside `ai-agents/` | [`gate-read-side-symlink-hazard-in-init.md`](../tasks/backlog/gate-read-side-symlink-hazard-in-init.md) |

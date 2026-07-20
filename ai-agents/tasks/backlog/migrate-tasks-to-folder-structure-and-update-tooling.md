@@ -60,7 +60,7 @@ project starts with no tasks. **ADR-027 dual-home parity holds for free**, and
 **⚠️ Two of the design's three new assertions live here — added 2026-07-20, owner-approved.** Design
 spec §10 *"New assertions to add"* names three. All three had been dropped from every brief; the review
 of task 75 caught the first (finding R3) and it now has its own task,
-[`assert-task-ids-are-unique-in-the-test-suite.md`](assert-task-ids-are-unique-in-the-test-suite.md)
+[`assert-task-ids-are-unique-in-the-test-suite.md`](../done/assert-task-ids-are-unique-in-the-test-suite.md)
 (ID `0101`). **The other two belong here, and the reason is not convenience.** The `id-mismatch` check
 and the malformed-folder check both assert against a structure — `<board>/<NNNN>-<slug>/brief.md` —
 that **does not exist until this task creates it**. Neither can be written before the migration, and
@@ -178,7 +178,7 @@ detect** — precisely the failure the two-carrier decision was accepted on cond
   kind is the implementation (ADR-029 Decision 5, accepted); the contract test is its proof. **Build
   both.** Owner-approved 2026-07-20; producer-resolved against the sources, not by preference.
 - **Cross-reference — the third §10 assertion is NOT yours.** Duplicate-ID detection is
-  [`assert-task-ids-are-unique-in-the-test-suite.md`](assert-task-ids-are-unique-in-the-test-suite.md)
+  [`assert-task-ids-are-unique-in-the-test-suite.md`](../done/assert-task-ids-are-unique-in-the-test-suite.md)
   (ID `0101`), which ships independently of this task on either layout. Its brief requires the guard to
   discover briefs in **both** the flat (`<board>/<slug>.md`) and folder (`<board>/<NNNN>-<slug>/brief.md`)
   shapes precisely so this migration does not silently disable it. **If `0101` has already landed when

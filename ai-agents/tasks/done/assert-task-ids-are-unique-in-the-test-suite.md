@@ -10,7 +10,7 @@ Sprint 2
 85 — **but must land BEFORE task 76** (priority here is append rank, not run order; see Notes)
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Context
 
