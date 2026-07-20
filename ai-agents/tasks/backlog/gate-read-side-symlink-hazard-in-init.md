@@ -1,5 +1,8 @@
 # Gate the read-side symlink hazard when init reads inside `ai-agents/`
 
+## ID
+0045
+
 ## Sprint
 Backlog
 

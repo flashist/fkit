@@ -271,9 +271,23 @@ Reproducible byte-for-byte:
 ```sh
 # PIN=<the commit SHA recorded in task 75's brief>
 git ls-tree -r --name-only "$PIN" -- ai-agents/tasks \
-  | sed -n 's|^ai-agents/tasks/\(backlog\|done\|cancelled\)/\(.*\)\.md$|\2|p' \
-  | LC_ALL=C sort | nl -w4 -n rz -s' '
+  | sed -nE 's#^ai-agents/tasks/(backlog|done|cancelled)/(.+)\.md$#\2#p' \
+  | LC_ALL=C sort | nl -w4 -n rz -s'  '
 ```
+
+> **⚠️ `sed -E` with a non-`|` delimiter is mandatory, and this is the third instance of this trap in
+> the repo.** An earlier revision of this design wrote `sed -n 's|…\(backlog\|done\|cancelled\)…'`.
+> **BSD sed — what macOS ships, and what this project is developed on — does not support `\|`
+> alternation in a basic regex.** It matches nothing and exits 0, so the pipeline returns an **empty
+> corpus** and task 75 reports "no tasks found" rather than failing. GNU sed accepts it, so the bug is
+> invisible to anyone testing on Linux or with GNU coreutils on `PATH`.
+>
+> Note also the delimiter: `-E` alone is not enough, because `|` is both the alternation operator and
+> the `s|…|…|` delimiter. `s#…#…#` sidesteps it.
+>
+> **Verified against the live repo:** the broken form returns `0` rows; the form above returns the full
+> corpus. Same class as the `10#` octal trap in §3.2 and `dashboard.sh`'s `\t` grep trap
+> (`dashboard.sh:117-125`), both of which were also *"works on my machine, fails on a consumer's."*
 
 #### ⚠️ Why the SHA pin is load-bearing, not ceremony
 
@@ -320,7 +334,7 @@ tie-break case. *(If a future corpus collides, the rule needs a documented tie-b
 not, and inventing one now would be untested.)* **Task 75 must re-run this check against the pinned
 SHA** — uniqueness is a property of the corpus, not a permanent truth.
 
-**Closed tasks are numbered.** All 94, not just the 16 open ones. Their plans, worklogs and ledgers are
+**Closed tasks are numbered.** The whole pinned corpus, not just the open ones. Their plans, worklogs and ledgers are
 keyed by the same identifier, and 78 unaddressable tasks would defeat the point.
 
 ### 3.5 `## ID` is a brief field — forced by task 75, not chosen

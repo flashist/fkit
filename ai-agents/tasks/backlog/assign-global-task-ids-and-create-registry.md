@@ -1,5 +1,8 @@
 # Assign a global task ID to every brief and write down the allocation procedure
 
+## ID
+0017
+
 ## Sprint
 Sprint 2
 
@@ -54,6 +57,45 @@ unrecoverable failure this task exists to prevent.
 **Deriving the *count* at execution time is still correct** — that is how you verify every brief in the
 pinned set got a field. It is the **assignment** that is pinned, not the counting.
 
+## Pinned corpus
+
+**SHA:** `e62b4f509481c19e5409c523ef873aafb063913f`
+**Date:** 2026-07-19 — commit message `Tasks update`
+**Recorded:** 2026-07-19, by the producer, on the owner's authorization — **before** any ID was
+assigned. The working tree was clean at this commit (`git status --porcelain` empty), so the pin
+captures the whole corpus with nothing left outside it.
+
+**Measured at the pin** (re-derived by the producer at recording time, not copied from an earlier
+claim):
+
+- **100 briefs** across `backlog/`, `done/`, `cancelled/`.
+- **All 100 slugs unique** — `LC_ALL=C sort | uniq -d` returns empty, so the sort is a total order
+  and no tie-break case arises.
+- The assignment runs `0001 add-backlog-board-default-for-unsprinted-task-briefs` through
+  `0100 wiki-sync-task-plan-rename`, and reproduces identically on re-derivation.
+
+### The derivation command — use this one, verbatim
+
+```sh
+PIN=e62b4f509481c19e5409c523ef873aafb063913f
+git ls-tree -r --name-only "$PIN" -- ai-agents/tasks \
+  | sed -nE 's#^ai-agents/tasks/(backlog|done|cancelled)/(.+)\.md$#\2#p' \
+  | LC_ALL=C sort | nl -w4 -n rz -s'  '
+```
+
+⚠️ **Do not use the snippet as originally printed in task 74's design spec §3.4.** It used `\|`
+alternation inside a basic regex (`sed -n 's|…\(backlog\|done\|cancelled\)…|p'`). **BSD sed — what
+macOS ships, and what this project is developed on — does not support that.** It matches nothing and
+**exits 0**, so the pipeline returns an empty corpus and the task looks like it ran against an empty
+repo instead of a broken command. GNU sed accepts it, so the bug is invisible on Linux. Verified at
+this pin: the old form returned **0** rows where the corrected form returns **100**.
+
+`-E` alone is not the fix — `|` is both the alternation operator and the `s|…|…|` delimiter, so the
+delimiter must change too (hence `s#…#…#`). Spec §3.4 now documents the trap.
+
+⚠️ **An empty result from this command means a broken command, not an empty corpus.** If the count is
+not 100, stop and fix the command — do not proceed to assign IDs.
+
 ## What to build
 
 - **An `## ID` field on every existing brief**, across `backlog/`, `done/`, and `cancelled/`, in the
@@ -78,6 +120,8 @@ registry is not built at all.
   assignment was made — not backfilled afterwards.
 - The IDs follow task 74's ordering rule reproducibly: **re-deriving the assignment from the rule
   against the pinned SHA** produces the same result. Re-derive it as the check, do not assume it.
+- **The derivation command returns 100 rows at the pin.** Anything less — especially 0 — is a broken
+  command, not a smaller corpus. Fix the command before assigning anything.
 - Any brief created after the pin is either absent from the backfill or carries an ID allocated by
   `1 + max` — **no brief in the pinned set was renumbered.**
 - The allocation procedure is written down and a reader can apply it to allocate the next ID without

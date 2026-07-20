@@ -1,5 +1,8 @@
 # Add an e2e smoke script for fkit itself
 
+## ID
+0004
+
 ## Sprint
 Backlog (unsprinted)
 

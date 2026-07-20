@@ -1,5 +1,8 @@
 # Add the "no secrets" rule to `fkit-lead.md` — the one agent file missing it
 
+## ID
+0007
+
 ## Sprint
 Sprint 2
 

@@ -1,5 +1,8 @@
 # Refuse to run init against a weird `ai-agents/` — symlink, file-where-dir, unreadable
 
+## ID
+0069
+
 ## Sprint
 Sprint 2
 

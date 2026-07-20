@@ -1,5 +1,8 @@
 # Bake the Architecture pointer sentence into the scaffold CLAUDE.md/AGENTS.md templates
 
+## ID
+0018
+
 ## Sprint
 Sprint 2
 

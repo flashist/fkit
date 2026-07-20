@@ -1,5 +1,8 @@
 # Implement the coder's `task-ship-loop` skill from the approved design
 
+## ID
+0055
+
 ## Sprint
 Sprint 2
 

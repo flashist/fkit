@@ -1,5 +1,8 @@
 # Make `/fkit-task-cancelled` flip the moved brief's own `## Status` header
 
+## ID
+0089
+
 ## Sprint
 Sprint 2
 

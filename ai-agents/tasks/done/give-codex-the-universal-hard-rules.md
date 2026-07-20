@@ -1,5 +1,8 @@
 # Give Codex the universal hard rules it has never had
 
+## ID
+0047
+
 ## Sprint
 Sprint 2
 

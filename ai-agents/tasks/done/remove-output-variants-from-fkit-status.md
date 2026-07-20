@@ -1,5 +1,8 @@
 # Remove the output variants from `/fkit-status` — one skill, one output
 
+## ID
+0074
+
 ## Sprint
 Sprint 2
 

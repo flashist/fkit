@@ -1,5 +1,8 @@
 # Gate the symlink escape when init writes the `.fkit/interview` intake
 
+## ID
+0046
+
 ## Sprint
 Backlog
 

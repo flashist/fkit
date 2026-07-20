@@ -1,5 +1,8 @@
 # Grant the `AskUserQuestion` tool to the six Claude-side agents
 
+## ID
+0049
+
 ## Sprint
 Sprint 2
 

@@ -1,5 +1,8 @@
 # Extract the shared scaffold into `claude/`
 
+## ID
+0038
+
 ## Sprint
 Sprint 2
 

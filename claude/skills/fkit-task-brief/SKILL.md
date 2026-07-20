@@ -45,7 +45,7 @@ the briefs are filed on the **Backlog board** (`ai-agents/sprints/backlog.md`).
   ask** — do not create the plan, and **do not quietly divert the work to the Backlog board instead.**
   The owner named a sprint; silently filing elsewhere is a different answer to the one they asked for.
 - If no sprint is named, file the work against the **Backlog board** (`## Sprint: Backlog`) — see
-  step 7. It is a real board with a real row, not a "no board" state.
+  step 8. It is a real board with a real row, not a "no board" state.
 
 > **⚠️ The Backlog board is the ONE designed exception to "never invent a sprint that doesn't exist",
 > and it is deliberate, not drift.** `ai-agents/sprints/backlog.md` is **created if absent**. The rule
@@ -89,6 +89,7 @@ Use the established structure **exactly** — diff against an existing brief in
 ```
 # <Title>
 
+## ID
 ## Sprint
 ## Priority
 ## Status
@@ -114,15 +115,71 @@ Use the established structure **exactly** — diff against an existing brief in
 - **Sub-tasks from one split** should be **contiguous and in dependency order**, so the sequence reads
   correctly.
 - **Backlog board:** `## Priority` reads `Unscheduled`, and the board row's Priority cell reads `—`.
-  The board is unranked by design — see step 7.
+  The board is unranked by design — see step 8.
 
-### 6. Write each brief
+### 6. Allocate the `## ID` — permanent, and unrecoverable if wrong
+
+Every brief carries a **global task ID**: four digits, zero-padded, no prefix (`0001`…`9999`). It goes
+immediately after the H1, with the value on the next line:
+
+```markdown
+# Build the export endpoint
+
+## ID
+0042
+
+## Sprint
+Sprint 2
+```
+
+**The rule:**
+
+> **Next ID = 1 + the highest ID that has ever existed, across all three boards. IDs are never reused,
+> never renumbered, and never recycled from a cancelled task.**
+
+Derive the highest existing ID — **the brief's `## ID` fields are ground truth**:
+
+```sh
+max=$(grep -rhA1 '^## ID' ai-agents/tasks/{backlog,done,cancelled}/ \
+  | grep -oE '^[0-9]{4}' | LC_ALL=C sort | tail -1)
+next=$(printf '%04d' $(( 10#$max + 1 )))     # ⚠️ 10# IS MANDATORY — see below
+```
+
+Once tasks live in ID-prefixed folders (task 76), folder names become ground truth instead:
+
+```sh
+max=$(ls -d ai-agents/tasks/{backlog,done,cancelled}/*/ 2>/dev/null \
+  | xargs -n1 basename | sed -n 's/^\([0-9]\{4\}\)-.*/\1/p' | LC_ALL=C sort | tail -1)
+```
+
+Three things that will bite you:
+
+- **⚠️ `10#` is not optional.** In bash a leading zero means **octal**, so `$(( 0095 + 1 ))` fails with
+  *"value too great for base"* — and so does `0009`. It works fine in **zsh**, which is exactly what
+  makes it a trap: it passes for whoever writes it and breaks for whoever runs it. Always force base 10.
+- **Scan all three boards, never just `backlog/`.** A cancelled task keeps its ID forever, and its
+  artifacts and inbound links still reference it. Allocating from `backlog/` alone reissues the ID of a
+  task that still exists in `cancelled/`.
+- **Never renumber an assigned ID.** The ID's only job is to be stable; renumbering invalidates every
+  inbound link. `## Priority` is board rank and moves freely — the ID is identity and never moves.
+
+**The cross-branch race, stated honestly.** Two sessions on the *same* tree cannot collide — the first
+brief exists before the second is allocated. Two sessions on **different git branches can**: both read
+the same max, both allocate the same ID, and the branches merge cleanly because the filenames differ.
+Git will not catch it. The chosen answer is **detect, not prevent** — a duplicate-ID check, with the
+offender renumbered *before* anything links to it. This is an accepted residual risk, not a solved
+problem; if you are allocating on a branch that has been open a while, re-check the max after merging.
+
+Full rationale: [ADR-029](../../../ai-agents/knowledge-base/decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md)
+and the design spec's §3.2–3.3.
+
+### 7. Write each brief
 Write to `ai-agents/tasks/backlog/<kebab-case-title>.md` — **new files, not moves.**
 - Check the filename isn't already taken; if it is, either the work already exists (say so, and stop)
   or the title needs to be more specific.
 - **Do not commit** — writing the files is enough; commits happen only when the owner explicitly asks.
 
-### 7. Update the board — every brief gets a row, always
+### 8. Update the board — every brief gets a row, always
 - **If a sprint was named:** add **one Status-table row per new brief**, matching the table's existing
   format exactly, plus a short **dated addendum note** explaining the out-of-band addition (follow the
   "Addendum — task N added out of band (YYYY-MM-DD)" precedent already in the sprint plans).
@@ -181,7 +238,7 @@ Write to `ai-agents/tasks/backlog/<kebab-case-title>.md` — **new files, not mo
   > drops off; without it, `drift disagreement … brief_sprint="Backlog" moved_target="Sprint 2"`.
 - **Never renumber or alter an existing row.**
 
-### 8. Never
+### 9. Never
 - Move or rename an existing task file (that's `/fkit-task-done` / `/fkit-task-cancelled`).
 - Write to `ai-agents/tasks/done/` or `ai-agents/tasks/cancelled/`.
 - Set a status of `✅ Done` or `⛔ Cancelled` on anything.
@@ -194,7 +251,7 @@ optional**: every brief gets a row somewhere, or the work is invisible to every 
 which is the gap the Backlog board exists to close. That is its whole write surface — the same
 authority boundary every producer skill respects.
 
-### 9. Report
+### 10. Report
 Give a concise summary:
 - **Created:** every file path written.
 - **Split rationale:** *why N briefs and not 1* — which seams made each piece independently shippable.

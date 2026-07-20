@@ -1,5 +1,8 @@
 # Add the `/fkit-dumb-down` skill for the six Claude-side roles
 
+## ID
+0003
+
 ## Sprint
 Sprint 2
 

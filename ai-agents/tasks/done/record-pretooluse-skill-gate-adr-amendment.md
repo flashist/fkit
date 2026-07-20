@@ -1,5 +1,8 @@
 # Reopen ADR-012 Decisions 3 & 4 — record the PreToolUse skill-gate hook
 
+## ID
+0065
+
 ## Sprint
 Sprint 2
 

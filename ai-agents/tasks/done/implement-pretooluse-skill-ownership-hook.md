@@ -1,5 +1,8 @@
 # Implement the `PreToolUse` skill-ownership gate (the hook-flip)
 
+## ID
+0052
+
 ## Sprint
 Sprint 2
 

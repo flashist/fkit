@@ -1,5 +1,8 @@
 # Design the coder's `task-ship-loop` skill — the autonomous brief-to-done loop
 
+## ID
+0031
+
 ## Sprint
 Sprint 2
 

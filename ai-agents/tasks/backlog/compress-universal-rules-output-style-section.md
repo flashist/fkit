@@ -1,5 +1,8 @@
 # Compress the Output style section of `universal-rules.md` to reclaim rules-block headroom
 
+## ID
+0022
+
 ## Sprint
 Sprint 2
 

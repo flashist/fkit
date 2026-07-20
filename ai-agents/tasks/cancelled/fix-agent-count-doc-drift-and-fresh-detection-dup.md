@@ -1,5 +1,8 @@
 # Fix stale agent-count docs and duplicated fresh-project detection
 
+## ID
+0040
+
 ## Sprint
 Sprint 1
 

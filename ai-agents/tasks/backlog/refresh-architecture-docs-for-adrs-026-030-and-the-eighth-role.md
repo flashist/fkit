@@ -1,5 +1,8 @@
 # Refresh `architecture.md` for ADRs 026–030 and the eighth role
 
+## ID
+0067
+
 ## Sprint
 Sprint 2
 

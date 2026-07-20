@@ -1,5 +1,8 @@
 # Add the `/fkit-open-questions-interview` skill for the six Claude-side roles
 
+## ID
+0008
+
 ## Sprint
 Sprint 2
 

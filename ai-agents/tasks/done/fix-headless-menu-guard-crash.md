@@ -1,5 +1,8 @@
 # Fix the headless menu-guard crash — `[ -r /dev/tty ]` never tests openability
 
+## ID
+0042
+
 ## Sprint
 Sprint 2
 

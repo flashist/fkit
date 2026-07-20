@@ -1,5 +1,8 @@
 # Merge an fkit-managed rules block into an **existing** `CLAUDE.md` / `AGENTS.md` — the brownfield hole
 
+## ID
+0061
+
 ## Sprint
 Sprint 2
 

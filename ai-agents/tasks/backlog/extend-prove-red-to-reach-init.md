@@ -1,5 +1,8 @@
 # Extend `prove-red.sh` to reach `fkit-claude-init.sh` (add the missing test seam)
 
+## ID
+0037
+
 ## Sprint
 Backlog
 
