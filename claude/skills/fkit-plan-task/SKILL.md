@@ -22,7 +22,7 @@ context, identify the likely work areas, and present a step-by-step plan for app
 implementation begins.
 
 **Argument:** `$ARGUMENTS` — the path to the task file (e.g.
-`ai-agents/tasks/backlog/add-export-endpoint.md`).
+`ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`).
 
 ## Workflow
 
@@ -71,5 +71,5 @@ Include when relevant:
 ## Usage
 
 Examples:
-- `/fkit-plan-task ai-agents/tasks/backlog/add-export-endpoint.md`
-- `/fkit-plan-task ai-agents/tasks/backlog/fix-pagination-bug.md`
+- `/fkit-plan-task ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`
+- `/fkit-plan-task ai-agents/tasks/backlog/0043-fix-pagination-bug/brief.md`

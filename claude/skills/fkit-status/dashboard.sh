@@ -499,9 +499,13 @@ while IFS=$'\037' read -r rtype st pr task br; do
   esac
 
   # -- resolve the brief -----------------------------------------------------------------------
+  # Post-migration (task 76): the href points at `brief.md` INSIDE a task folder
+  # `tasks/<board>/<NNNN>-<slug>/brief.md`. The FOLDER NAME is the recovery key AND the identity; the
+  # board is the folder's PARENT (brief.md's grandparent). `brief.md` is the same basename for every
+  # task, so it carries no identity — never key a task on it.
   linked=$(printf '%s' "$br" | sed -n 's/.*](\([^)]*\)).*/\1/p' | head -1)
-  fname=$(basename "$linked" 2>/dev/null)
-  [ -n "$fname" ] && [ "$fname" != "/" ] || fname=""
+  folder=$(basename "$(dirname "$linked")" 2>/dev/null)
+  [ -n "$folder" ] && [ "$folder" != "/" ] && [ "$folder" != "." ] || folder=""
 
   # -- the FACTS id ---------------------------------------------------------------------------------
   # Normally the Priority number. **The BACKLOG BOARD (task 67) has no numbers** — its Priority cells
@@ -509,10 +513,11 @@ while IFS=$'\037' read -r rtype st pr task br; do
   # drift clause would `uniq` several distinct drifted rows down to a single useless `?`. The owner
   # would be told drift exists and given no way to find it.
   #
-  # Fall back to the BRIEF'S FILENAME STEM, which is a single token (so the positional `key="value"`
-  # grammar is unaffected) and is the identifier every other part of fkit already uses for a task —
-  # it is what the reader would go and open. `?` survives only when there is neither a number nor a
-  # resolvable filename, which is a genuinely unidentifiable row.
+  # Fall back to the TASK-FOLDER NAME (`<NNNN>-<slug>`), a single token (so the positional
+  # `key="value"` grammar is unaffected) and the identifier every other part of fkit uses for a task —
+  # it is what the reader would go and open. Post-migration `brief.md` is a SHARED basename and would
+  # collapse every unnumbered task to one id, so the folder name is the only usable fallback. `?`
+  # survives only when there is neither a number nor a resolvable folder — a genuinely unidentifiable row.
   #
   # ⚠️ ORDER MATTERS: a numbered plan keeps numbering. This is a fallback, not a replacement — changing
   # sprint plans to filename ids would break every `drift on tasks 59, 60` reference the skill narrates.
@@ -523,37 +528,91 @@ while IFS=$'\037' read -r rtype st pr task br; do
   # Glob metacharacters are the same class of hazard through the unquoted split below.
   # This mirrors the invariant `task_id()` already enforces for the Priority cell; a fallback that
   # skipped it was inconsistent with a rule this file established deliberately.
-  if [ -z "$tid" ] && [ -n "$fname" ]; then
-    tid=$(printf '%s' "$fname" | sed -e 's/\.md$//' -e 's/[^A-Za-z0-9._-]/-/g')
+  if [ -z "$tid" ] && [ -n "$folder" ]; then
+    tid=$(printf '%s' "$folder" | sed -e 's/[^A-Za-z0-9._-]/-/g')
   fi
   [ -n "$tid" ] || tid="?"
 
+  # ⚠️ `found_dir` is the BOARD (backlog|done|cancelled) — the folder's PARENT, i.e. brief.md's
+  # GRANDPARENT. Pre-migration it was brief.md's parent; the extra level is the whole point of the new
+  # layout and the single easiest thing to get wrong. `expected_dir` cross-checks below depend on it.
   brief_path=""
   found_dir=""
+  folder_dir=""     # the resolved task-folder path
+  malformed=""      # folder exists but has no brief.md (ADR-029 Decision 1) — reported, never repaired
   if [ -n "$linked" ] && [ -f "$PLAN_DIR/$linked" ]; then
     brief_path="$PLAN_DIR/$linked"
-    found_dir=$(basename "$(dirname "$brief_path")")
-  elif [ -n "$fname" ]; then
-    # Link rot (tasks 21/22): the target moved. Find it, report it, and render the CORRECTED link —
-    # a script that trusts a stale link renders a broken board.
+    folder_dir=$(dirname "$brief_path")
+    found_dir=$(basename "$(dirname "$folder_dir")")
+  elif [ -n "$linked" ] && [ -d "$PLAN_DIR/$(dirname "$linked")" ]; then
+    # The folder is where the link says, but brief.md is missing → malformed, NOT missing/relocated.
+    # ⚠️ GUARD: a malformed folder is a BOARD-CHILD without brief.md. If the link's parent dir is a
+    # board itself (a stale flat `tasks/<board>/x.md` href), its grandparent is `tasks/`, not a board —
+    # that is a missing brief, not a malformed folder. Only fire malformed when the grandparent IS a board.
+    folder_dir="$PLAN_DIR/$(dirname "$linked")"
+    found_dir=$(basename "$(dirname "$folder_dir")")
+    case "$found_dir" in
+      # ⚠️ R6 GUARD: a malformed folder is one whose `brief.md` is ACTUALLY absent. Check it directly
+      # rather than inferring it from the earlier `-f` branch having failed — the href could point at
+      # some OTHER missing file (`…/<folder>/typo.md`) inside a well-formed folder, which is a broken
+      # link (→ missing-brief), not a malformed folder.
+      backlog|done|cancelled)
+        if [ ! -f "$folder_dir/brief.md" ]; then
+          malformed=1
+        else
+          found_dir=""; folder_dir=""   # folder is well-formed; the linked file is just missing
+        fi ;;
+      *) found_dir=""; folder_dir="" ;;   # not a task folder → fall through to missing-brief
+    esac
+  elif [ -n "$folder" ]; then
+    # Link rot (tasks 21/22): the FOLDER moved between boards. Recover by FOLDER NAME (brief.md is a
+    # shared basename and cannot identify a task). Report, and render the CORRECTED link.
     for cand in backlog done cancelled; do
-      if [ -f "$AGENTS/tasks/$cand/$fname" ]; then
-        brief_path="$AGENTS/tasks/$cand/$fname"
+      if [ -f "$AGENTS/tasks/$cand/$folder/brief.md" ]; then
+        brief_path="$AGENTS/tasks/$cand/$folder/brief.md"
+        folder_dir="$AGENTS/tasks/$cand/$folder"
         found_dir="$cand"
+        break
+      elif [ -d "$AGENTS/tasks/$cand/$folder" ] && [ ! -f "$AGENTS/tasks/$cand/$folder/brief.md" ]; then
+        # Folder exists on this board but has no brief.md → malformed (R6: check brief.md directly).
+        folder_dir="$AGENTS/tasks/$cand/$folder"
+        found_dir="$cand"
+        malformed=1
         break
       fi
     done
   fi
 
   br_cell="$br"
-  if [ -n "$brief_path" ] && [ -n "$linked" ] && [ ! -f "$PLAN_DIR/$linked" ]; then
-    corrected="${REL_PREFIX}tasks/${found_dir}/${fname}"
-    br_cell="[\`${fname}\`](${corrected})"
+  if [ -n "$malformed" ]; then
+    add_fact "drift malformed-folder $tid folder=\"$(fact_value "$folder")\" location=\"$(fact_value "$found_dir")/\""
+    mark_drift
+  elif [ -n "$brief_path" ] && [ -n "$linked" ] && [ ! -f "$PLAN_DIR/$linked" ]; then
+    corrected="${REL_PREFIX}tasks/${found_dir}/${folder}/brief.md"
+    br_cell="[\`${folder}\`](${corrected})"
     add_fact "drift relocated $tid linked=\"$(fact_value "$linked")\" found=\"$(fact_value "$corrected")\""
     mark_drift
   elif [ -z "$brief_path" ]; then
     add_fact "drift missing-brief $tid linked=\"$(fact_value "$linked")\""
     mark_drift
+  fi
+
+  # -- id carriers (ADR-029 Decision 5): brief `## ID` vs folder-name prefix ----------------------
+  # Two carriers; the FOLDER NAME is authoritative. REPORT disagreement naming both values; never
+  # auto-correct either carrier. Sibling of the status cross-check (drift rule 3) below.
+  # A brief with NO `## ID` is `brief-missing-id` — the same shape as `brief-missing-status`: an absent
+  # second carrier the `id-mismatch` reconciliation cannot see (owner-ruled, review R#4). Post-ADR-029
+  # every brief carries `## ID`, so its absence is a real defect, not a legitimate quiet case.
+  if [ -n "$brief_path" ] && [ -n "$folder" ]; then
+    b_id=$(field_value "$brief_path" "ID")
+    folder_id=${folder%%-*}
+    if [ -z "$b_id" ]; then
+      add_fact "drift nonconformance $tid kind=\"brief-missing-id\" folder=\"$(fact_value "$folder")\""
+      mark_drift
+    elif [ "$b_id" != "$folder_id" ]; then
+      add_fact "drift id-mismatch $tid brief_id=\"$(fact_value "$b_id")\" folder=\"$(fact_value "$folder")\""
+      mark_drift
+    fi
   fi
 
   # -- brief fields ----------------------------------------------------------------------------

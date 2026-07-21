@@ -1,6 +1,6 @@
 ---
 name: fkit-stateful-review
-description: The reviewer's side of a stateful, loop-resistant review. Runs its own pass plus a Codex adversarial second opinion, dedupes against the shared ledger so settled tradeoffs aren't re-litigated, verifies each finding against the code, and writes the Reviewer findings section of ai-agents/reviews/<task-id>.md — which the coder's fkit-process-stateful-review reads and responds to. REVIEW-ONLY — writes documents, never source code.
+description: The reviewer's side of a stateful, loop-resistant review. Runs its own pass plus a Codex adversarial second opinion, dedupes against the shared ledger so settled tradeoffs aren't re-litigated, verifies each finding against the code, and writes the Reviewer findings section of the task folder's review.md ledger — which the coder's fkit-process-stateful-review reads and responds to. REVIEW-ONLY — writes documents, never source code.
 ---
 
 # Stateful Review (reviewer side) — the reviewer's procedure
@@ -23,11 +23,13 @@ review start from the decision state instead of re-deriving it blind, round afte
 **Argument:** `$ARGUMENTS` — optional: the **task-id**, plus scope flags `--base <ref>`, `--scope
 <auto|working-tree|branch>`. Default: working tree / `auto`.
 
-**Task-id — resolve it the same way every time** (the reviewer and coder MUST agree, or the ledger
-forks and the loop-prevention memory is silently defeated):
-1. Explicit task-id in `$ARGUMENTS` → use it verbatim.
-2. Else the task file's **basename without extension** (`ai-agents/tasks/**/<task-id>.md`).
-3. Else the current **git branch name**, slugified.
+**Ledger key — resolve it the same way every time** (the reviewer and coder MUST agree, or the ledger
+forks and the loop-prevention memory is silently defeated). Since ADR-029 the ledger lives **inside the
+task folder** as `review.md`, so the key resolves to a FOLDER, not a bare string:
+1. Explicit task-id in `$ARGUMENTS` → the task whose **ID prefix or folder name** it matches; its
+   folder's `review.md`. An explicit id matching no folder → rule 4 (never an orphan).
+2. Else the task **folder name** (`ai-agents/tasks/**/<NNNN>-<slug>/` → `<NNNN>-<slug>`); its `review.md`.
+3. Else the current **git branch name**, slugified → `ai-agents/sprints/reviews/<branch-slug>.md`.
 4. If none resolves **unambiguously** → **STOP and ask** (the owner if they're present; otherwise
    return the question to whoever invoked you). Never invent one, and never auto-create a ledger from
    a guessed id.
@@ -36,8 +38,8 @@ forks and the loop-prevention memory is silently defeated):
 
 ## The shared review document — schema & ownership
 
-`ai-agents/reviews/<task-id>.md` has three sections with **explicit ownership**. This schema is shared
-with the coder's `fkit-process-stateful-review` — **keep it exact** so the two sides interoperate.
+The task folder's `review.md` ledger has three sections with **explicit ownership**. This schema is
+shared with the coder's `fkit-process-stateful-review` — **keep it exact** so the two sides interoperate.
 
 ```
 # Review — <task-id>
@@ -75,7 +77,7 @@ Status: in-review | closed-out
 ## Step 0 — Open (or create) the shared document
 
 - Resolve the **task-id** by the canonical rule above, and the review **scope**.
-- Read `ai-agents/reviews/<task-id>.md`. **If it doesn't exist — and only once the task-id is resolved,
+- Read the task folder's `review.md`. **If it doesn't exist — and only once the key is resolved,
   not guessed — create it** with the schema above (fill the header; leave the tables ready). Load the
   **Accepted residuals** and any existing *Reviewer findings* / *Coder response* rows.
 - **Load settled ADRs:** skim `ai-agents/knowledge-base/decisions/` for any ADR relevant to the scope.
@@ -157,7 +159,7 @@ this fix?".
 ## Step 7 — Optional: standalone coder handoff spec
 
 The *Reviewer findings* section **is** the handoff. If additionally asked for a self-contained spec for
-a coder that hasn't seen the review, write `ai-agents/reviews/<task-id>-coder-handoff.md`: **Context**
+a coder that hasn't seen the review, write `<task-folder>/coder-handoff.md`: **Context**
 (what the code is; the in/out-of-scope boundary), **Changes to make** (a table `severity · required? ·
 location · summary`, then per-finding detail with `file:line`, the problem, honest impact carrying your
 verdict, and a recommended fix), **Do NOT change** (the accepted residuals), and **Validation /
@@ -167,8 +169,9 @@ acceptance criteria**. It *describes* recommended changes; it applies none.
 
 ## Hard rules
 
-- **REVIEW ONLY: never edit source code** — not even with approval. You write only documents under
-  `ai-agents/reviews/` (plus the gitignored `.fkit/tmp/` codex prompt).
+- **REVIEW ONLY: never edit source code** — not even with approval. You write only the review ledger —
+  a task folder's `review.md`, or a sprint-keyed ledger under `ai-agents/sprints/reviews/` (plus the
+  gitignored `.fkit/tmp/` codex prompt).
 - **Ownership:** write only *Reviewer findings* (+ shared *Accepted residuals* with the owner's
   approval). **Never** write the *Coder response* section or the code under review.
 - Output-side **dedup against the ledger is mandatory**, even if the reviewers ignored the priming.

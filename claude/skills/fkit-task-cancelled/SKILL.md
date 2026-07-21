@@ -24,7 +24,7 @@ status marker, and that cancellation records *why* and flags what it leaves behi
 
 **Arguments:** `$ARGUMENTS` carries **two** parameters:
 1. **Task file path** — the first whitespace-separated token (e.g.
-   `ai-agents/tasks/backlog/fix-pagination-bug.md`). A bare filename is also
+   `ai-agents/tasks/backlog/0043-fix-pagination-bug/brief.md`). A bare filename is also
    acceptable — resolve it under `ai-agents/tasks/backlog/`.
 2. **Cancellation reason** — **everything after the path**: the text explaining *why* the task was
    cancelled. It is recorded verbatim (trimmed to a concise line) in the sprint docs, so it must be a
@@ -57,9 +57,10 @@ forms; the qualifier is prepended, never a substitute for them.
 ## Steps — do these in order
 
 ### 1. Resolve and validate the input
-- Take the **first token** of `$ARGUMENTS` as the task file path and resolve it to a real file (if
-  it's a bare filename, look in `ai-agents/tasks/backlog/`). Treat **everything after the path** as
-  the cancellation **reason** (the second parameter — see step 2).
+- Take the **first token** of `$ARGUMENTS` as the task path and resolve it to a real task **folder**
+  (the brief path `ai-agents/tasks/<board>/<NNNN>-<slug>/brief.md`, or a bare folder name / slug —
+  looked up under `ai-agents/tasks/backlog/`, then the other boards). Treat **everything after the
+  path** as the cancellation **reason** (the second parameter — see step 2).
 - **Stop with a clear message if:**
   - the file does not exist, or
   - it is not under `ai-agents/tasks/`, or
@@ -74,31 +75,38 @@ Capture, for use in later steps and the final report:
 - The **`## Sprint`** field (e.g. `Sprint 4`, or `Backlog` for a task on the unranked `backlog.md` board).
 - Whether it declares a **`## Parent / Epic`** (a path to an epic file) — if so, this is a child slice
   and the epic's own status table is one of the places to update.
-- The basename of the file (used to find references).
+- The **task-folder name** `<NNNN>-<slug>` (the brief is `<folder>/brief.md`) — the token used to find
+  references. Never key on `brief.md`; every task shares it.
 - The **cancellation reason** — the second parameter (the text after the path). **If it is empty,
   ask the owner for the reason before proceeding** — every cancelled entry in this project carries a
   rationale, and a cancel without one is poor record-keeping. Do not invent a reason.
 
-### 3. Move the file to `cancelled/`
-Use `git mv` so history is preserved:
+### 3. Move the task FOLDER to `cancelled/`
+Since ADR-029 a task is a **folder**, not a lone file. Move the whole folder (brief + any `plan.md` /
+`worklog.md` / `review.md` / `assets/` inside it) with `git mv` so history is preserved:
 
 ```
-git mv ai-agents/tasks/backlog/<file>.md ai-agents/tasks/cancelled/<file>.md
+git mv ai-agents/tasks/backlog/<NNNN>-<slug> ai-agents/tasks/cancelled/<NNNN>-<slug>
 ```
 
-(If the file lives elsewhere under `ai-agents/tasks/`, move it from there.) **Do not commit** —
+(If the folder lives elsewhere under `ai-agents/tasks/`, move it from there.) **Do not commit** —
 staging the move is enough; commits happen only when the owner explicitly asks.
 
 ### 4. Find every place the task is referenced
-Search for the task's **basename** across everything under `ai-agents/` — status boards *and* prose:
+Search for the task's **folder name** `<NNNN>-<slug>` across everything under `ai-agents/` — status
+boards *and* prose. Inbound links point at `tasks/<board>/<NNNN>-<slug>/brief.md`, so the folder name
+is the stable token (never grep `brief.md`):
 - `ai-agents/sprints/*.md` (the sprint plans, and the unranked `backlog.md` board)
 - **`ai-agents/sprints/done/*.md`** — **closed** sprint plans still *link* to tasks they carried over
 - **`ai-agents/knowledge-base/`** — ADRs and reports routinely back-link the brief that spawned them
-- `ai-agents/reviews/`, `ai-agents/plans/`, `ai-agents/worklogs/` — all key artifacts by task-id
+- **`ai-agents/tasks/`** itself — since ADR-029 the plans, worklogs and review ledgers live **inside**
+  the task folders (`plan.md` / `worklog.md` / `review.md`), and briefs cross-link each other; the
+  top-level `plans/` `worklogs/` `reviews/` directories no longer exist
+- **`ai-agents/sprints/reviews/`** — sprint-keyed review ledgers may reference the task
 - the parent epic file, if step 2 found a `## Parent / Epic`
 
 ```
-grep -rn --exclude-dir=wiki-vault "<file>.md" ai-agents/
+grep -rn --exclude-dir=wiki-vault "<NNNN>-<slug>" ai-agents/
 ```
 
 > **⚠️ Why the whole of `ai-agents/` and not a list of directories.** This sweep used to name
@@ -151,13 +159,18 @@ For every reference found in step 4:
   brief as the *reason* for a decision. Cancelling the task does **not** retract the ADR, and this
   skill must not imply that it does — repair the pointer, flag the tension, decide nothing.
 
-- **A hit in `ai-agents/reviews/`, `plans/`, or `worklogs/`** — same rule: re-point the href, change
-  nothing else. These are task-keyed records of what happened, not statements about where a file lives.
+- **A hit in a sibling task folder's `plan.md`, `worklog.md` or `review.md`, or in
+  `ai-agents/sprints/reviews/`** — same rule: re-point the href, change nothing else. Since ADR-029
+  these task-keyed records live inside the task folders (the old top-level `reviews/` `plans/`
+  `worklogs/` directories are gone); a sprint-keyed ledger lives in `sprints/reviews/`. They record
+  what happened, not where a file lives.
 
-- **The moved brief's OWN outbound links** — the reciprocal case, and the one most easily missed. The
-  brief you just moved has left `backlog/`, so any link *it* makes to a **sibling** brief
-  (`](./other-task.md)`, or a bare `](other-task.md)`) no longer resolves from `cancelled/`. Re-point
-  those to where the sibling actually is — usually `](../backlog/other-task.md)`.
+- **The moved folder's OWN outbound links** — the reciprocal case, and the one most easily missed. The
+  brief you just moved has left `backlog/`, so any link *it* (or its `plan.md`/`worklog.md`/`review.md`)
+  makes to a **sibling** task no longer resolves from `cancelled/`. A sibling link now targets another
+  folder's brief — `](../<other-NNNN-slug>/brief.md)` from a peer on the same board, or
+  `](../../backlog/<other-NNNN-slug>/brief.md)` across boards. Re-point to where the sibling actually
+  is, minding the extra folder level the new layout adds to every relative depth.
 
   Briefs cross-link each other, so **one move breaks links in both directions**: inbound (handled
   above) *and* outbound (here). Fixing only the inbound half leaves the move half-done.
@@ -212,12 +225,13 @@ brief. A move is not finished while a link it broke is still broken.
 ### 6. Flag downstream dependents — cancellation can orphan work
 Unlike completion, cancelling a task can **break things that depended on it**. Surface (do **not**
 auto-edit) anything now affected:
-- Search for tasks/docs that name the cancelled task as a dependency — its basename in a
-  **`## Depends on`** section, a `*(blocked: …)*` / `Depends …` annotation, a `Depends on` table
-  column, or prose like "needs `<task>`".
+- Search for tasks/docs that name the cancelled task as a dependency — its **folder name**
+  `<NNNN>-<slug>` (or the bare slug) in a **`## Depends on`** section, a `*(blocked: …)*` / `Depends …`
+  annotation, a `Depends on` table column, or prose like "needs `<task>`". Never key on `brief.md` —
+  every task shares it.
 
   ```
-  grep -rn --exclude-dir=wiki-vault "<file>.md\|<short task name>" ai-agents/
+  grep -rn --exclude-dir=wiki-vault "<NNNN>-<slug>\|<short task name>" ai-agents/
   ```
 
   **⚠️ This is the SECOND sweep in this skill, and it is the one most easily missed** — step 4's grep
@@ -233,14 +247,14 @@ auto-edit) anything now affected:
   order, and do not skim** — skimming 1500 lines is how a real dependent gets missed, which is the
   failure this sweep exists to prevent:
 
-  1. **Basename hits first (`<file>.md`).** Precise and few. These are near-certainly real references.
-     Handle every one.
+  1. **Folder-name hits first (`<NNNN>-<slug>`).** Precise and few. These are near-certainly real
+     references. Handle every one.
   2. **Then short-name hits, filtered to the ones that read as a dependency** — near `Depends on`,
      `blocked`, `needs`, `waits on`, or a task-table row. A short task name appearing in ordinary prose
      usually is not a dependency claim.
-  3. **Historical records (`knowledge-base/`, `reviews/`, `plans/`, `worklogs/`) are usually
-     narrative, not dependency.** An ADR mentioning the task is recording history, not declaring a
-     block. Read them, but expect most to need no action beyond the href repair from step 4.
+  3. **Historical records (`knowledge-base/`, and the in-folder `review.md` / `plan.md` / `worklog.md`)
+     are usually narrative, not dependency.** An ADR mentioning the task is recording history, not
+     declaring a block. Read them, but expect most to need no action beyond the href repair from step 4.
 
   **If the short-name search is too noisy to read honestly, say so in the report** and fall back to the
   basename results — an explicit "I triaged basenames only, short-name search returned N hits and was
@@ -259,7 +273,7 @@ auto-edit) anything now affected:
 
 ### 8. Report
 Give a concise summary:
-- **Moved:** `<old path>` → `ai-agents/tasks/cancelled/<file>.md`
+- **Moved:** `<old folder>` → `ai-agents/tasks/cancelled/<NNNN>-<slug>/`
 - **Reason:** the one-line cancellation reason recorded.
 - **Updated:** each doc touched and how (e.g. "`sprint-4.md` — status row → ⛔ Cancelled";
   "`<epic>.md` — T# slice → ⛔ Cancelled").

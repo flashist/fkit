@@ -1,6 +1,6 @@
 # Plan — Migrate every task into a folder, update the tooling (task 76)
 
-**Task:** `ai-agents/tasks/backlog/migrate-tasks-to-folder-structure-and-update-tooling.md`
+**Task:** `ai-agents/tasks/done/0062-migrate-tasks-to-folder-structure-and-update-tooling/brief.md`
 **Task ID:** 0062 · **Sprint 2**, priority 76 · **Owner:** fkit-coder
 **Approved:** 2026-07-21 — owner approved the plan **atomic, as written**, and **authorized the coder to
 create the rollback point** (commit clean tree + `git tag pre-task-folder-migration`).

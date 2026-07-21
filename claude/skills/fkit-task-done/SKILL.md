@@ -19,7 +19,7 @@ Mark a finished task complete: move its brief into `ai-agents/tasks/done/` and u
 documentation so its status reads **✅ Done**, everywhere the task is tracked.
 
 **Argument:** `$ARGUMENTS` — the path to the task brief file (e.g.
-`ai-agents/tasks/backlog/add-export-endpoint.md`). A bare filename
+`ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`). A bare filename
 (`add-export-endpoint.md`) is also acceptable — resolve it under
 `ai-agents/tasks/backlog/`.
 
@@ -51,7 +51,9 @@ resolved value, not the literal string**:
 ## Steps — do these in order
 
 ### 1. Resolve and validate the input
-- Resolve `$ARGUMENTS` to a real file. If it's a bare filename, look in `ai-agents/tasks/backlog/`.
+- Resolve `$ARGUMENTS` to a real task **folder** — the brief path
+  `ai-agents/tasks/<board>/<NNNN>-<slug>/brief.md`, or a bare folder name / slug, resolves to the
+  folder (a bare name is looked up under `ai-agents/tasks/backlog/`, then the other boards).
 - **Stop with a clear message if:**
   - the file does not exist, or
   - it is not under `ai-agents/tasks/`, or
@@ -69,28 +71,35 @@ Capture, for use in later steps and the final report:
 - The **`## Sprint`** field (e.g. `Sprint 4`, or `Backlog` for a task on the unranked `backlog.md` board).
 - Whether it declares a **`## Parent / Epic`** (a path to an epic file) — if so, this is a child slice
   and the epic's own status table is one of the places to update.
-- The basename of the file (used to find references).
+- The **task-folder name** `<NNNN>-<slug>` (the brief is `<folder>/brief.md`). The folder name — not
+  `brief.md`, which is the same for every task — is the token used to find references.
 
-### 3. Move the file to `done/`
-Use `git mv` so history is preserved:
+### 3. Move the task FOLDER to `done/`
+Since ADR-029 a task is a **folder**, not a lone file. Move the whole folder (brief + any `plan.md` /
+`worklog.md` / `review.md` / `assets/` inside it) with `git mv` so history is preserved:
 
 ```
-git mv ai-agents/tasks/backlog/<file>.md ai-agents/tasks/done/<file>.md
+git mv ai-agents/tasks/backlog/<NNNN>-<slug> ai-agents/tasks/done/<NNNN>-<slug>
 ```
 
-(If the file lives somewhere else under `ai-agents/tasks/`, move it from there.) **Do not commit** —
+(If the folder lives somewhere else under `ai-agents/tasks/`, move it from there.) **Do not commit** —
 staging the move is enough; commits happen only when the owner explicitly asks.
 
 ### 4. Find every place the task is referenced
-Search for the task's **basename** across everything under `ai-agents/` — status boards *and* prose:
+Search for the task's **folder name** `<NNNN>-<slug>` across everything under `ai-agents/` — status
+boards *and* prose. Inbound links now point at `tasks/<board>/<NNNN>-<slug>/brief.md`, so the folder
+name is the stable token (never grep `brief.md` — every task shares it):
 - `ai-agents/sprints/*.md` (the sprint plans, and the unranked `backlog.md` board)
 - **`ai-agents/sprints/done/*.md`** — **closed** sprint plans still *link* to tasks they carried over
 - **`ai-agents/knowledge-base/`** — ADRs and reports routinely back-link the brief that spawned them
-- `ai-agents/reviews/`, `ai-agents/plans/`, `ai-agents/worklogs/` — all key artifacts by task-id
+- **`ai-agents/tasks/`** itself — since ADR-029 the plans, worklogs and review ledgers live **inside**
+  the task folders (`plan.md` / `worklog.md` / `review.md`), and briefs cross-link each other; the
+  top-level `plans/` `worklogs/` `reviews/` directories no longer exist
+- **`ai-agents/sprints/reviews/`** — sprint-keyed review ledgers may reference the task
 - the parent epic file, if step 2 found a `## Parent / Epic`
 
 ```
-grep -rn --exclude-dir=wiki-vault "<file>.md" ai-agents/
+grep -rn --exclude-dir=wiki-vault "<NNNN>-<slug>" ai-agents/
 ```
 
 This grep is **recursive on purpose** — it reaches `sprints/done/`. Every hit it returns is handled in
@@ -140,13 +149,18 @@ For every reference found in step 4:
   text from this skill; if the surrounding sentence has become factually wrong, that is an ADR
   amendment and belongs to the architect, so **flag it in the report** instead.
 
-- **A hit in `ai-agents/reviews/`, `plans/`, or `worklogs/`** — same rule: re-point the href, change
-  nothing else. These are task-keyed records of what happened, not statements about where a file lives.
+- **A hit in a sibling task folder's `plan.md`, `worklog.md` or `review.md`, or in
+  `ai-agents/sprints/reviews/`** — same rule: re-point the href, change nothing else. Since ADR-029
+  these task-keyed records live inside the task folders (the old top-level `reviews/` `plans/`
+  `worklogs/` directories are gone); a sprint-keyed ledger lives in `sprints/reviews/`. They record
+  what happened, not where a file lives.
 
-- **The moved brief's OWN outbound links** — the reciprocal case, and the one most easily missed. The
-  brief you just moved has left `backlog/`, so any link *it* makes to a **sibling** brief
-  (`](./other-task.md)`, or a bare `](other-task.md)`) no longer resolves from `done/`. Re-point those
-  to where the sibling actually is — usually `](../backlog/other-task.md)`.
+- **The moved folder's OWN outbound links** — the reciprocal case, and the one most easily missed. The
+  brief you just moved has left `backlog/`, so any link *it* (or its `plan.md`/`worklog.md`/`review.md`)
+  makes to a **sibling** task no longer resolves from `done/`. A sibling link now targets another
+  folder's brief — `](../<other-NNNN-slug>/brief.md)` from a peer on the same board, or
+  `](../../backlog/<other-NNNN-slug>/brief.md)` across boards. Re-point to where the sibling actually
+  is, minding the extra folder level the new layout adds to every relative depth.
 
   Briefs cross-link each other, so **one move breaks links in both directions**: inbound (handled
   above) *and* outbound (here). Fixing only the inbound half leaves the move half-done.
@@ -205,7 +219,7 @@ brief. A move is not finished while a link it broke is still broken.
 
 ### 7. Report
 Give a concise summary:
-- **Moved:** `<old path>` → `ai-agents/tasks/done/<file>.md`
+- **Moved:** `<old folder>` → `ai-agents/tasks/done/<NNNN>-<slug>/`
 - **Updated:** each doc touched and how (e.g. "`sprint-4.md` — status row → ✅ Done";
   "`refactor-auth-flow.md` — T4f slice → ✅ Done").
 - **Brief's own status header:** state what happened to the moved brief's `## Status` field — set to

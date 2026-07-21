@@ -30,6 +30,46 @@ const MADE = [];
 after(() => MADE.forEach(cleanup));
 
 // Build a throwaway ai-agents/ tree. `briefs` maps "<dir>/<file>.md" -> brief body fields.
+//
+// ⚠️ POST-MIGRATION LAYOUT (task 76). A brief now lives at `tasks/<board>/<NNNN>-<slug>/brief.md`,
+// not `tasks/<board>/<slug>.md`. This helper folds each brief into a folder transparently: it assigns
+// a deterministic 4-digit ID (insertion order), writes the brief as `brief.md` inside `<ID>-<slug>/`,
+// injects a matching `## ID` field (so the `id-mismatch` drift check stays silent), and folder-izes
+// every task href in the plan text — `../tasks/<B>/<slug>.md` → `../tasks/<B>/<ID>-<slug>/brief.md`,
+// PRESERVING the board token `<B>` the test wrote so the link-rot/relocation cases still fire. Tests
+// keep writing the flat `slug.md` shape in their inline rows and briefs maps; the fold is invisible
+// to them except where a test pins exact stdout (those expectations carry the folder href).
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// Shared fold: assign a deterministic 4-digit ID per brief (insertion order), write it as `brief.md`
+// inside `<board>/<ID>-<slug>/`, inject a matching `## ID`, and folder-ize the plan's task hrefs
+// (keeping the board token the caller wrote). Returns the rewritten plan text. Used by both fixtures.
+function foldBriefsAndPlan(agents, briefs, planText) {
+  let seq = 0;
+  const idBySlug = {};
+  for (const [rel, body] of Object.entries(briefs)) {
+    const [board, file] = rel.split('/');
+    const slug = file.replace(/\.md$/, '');
+    seq += 1;
+    const id = String(seq).padStart(4, '0');
+    idBySlug[slug] = id;
+    const folder = join(agents, 'tasks', board, `${id}-${slug}`);
+    mkdirSync(folder, { recursive: true });
+    const withId = /\n## ID\n/.test(body)
+      ? body
+      : body.replace(/^(# .*\n\n)/, `$1## ID\n${id}\n\n`);
+    writeFileSync(join(folder, 'brief.md'), withId);
+  }
+  let out = planText;
+  for (const [slug, id] of Object.entries(idBySlug)) {
+    out = out.replace(
+      new RegExp(`(\\.\\./(?:\\.\\./)?tasks/(?:backlog|done|cancelled)/)${escapeRe(slug)}\\.md`, 'g'),
+      (_m, prefix) => `${prefix}${id}-${slug}/brief.md`,
+    );
+  }
+  return out;
+}
+
 function fixture({ plan, briefs = {}, planDir = 'sprints' }) {
   const root = mkdtempSync(join(tmpdir(), 'fkit-dash-'));
   MADE.push(root);
@@ -37,16 +77,15 @@ function fixture({ plan, briefs = {}, planDir = 'sprints' }) {
   for (const d of ['tasks/backlog', 'tasks/done', 'tasks/cancelled', 'sprints', 'sprints/done']) {
     mkdirSync(join(agents, d), { recursive: true });
   }
-  for (const [rel, body] of Object.entries(briefs)) {
-    writeFileSync(join(agents, 'tasks', rel), body);
-  }
+  const planText = foldBriefsAndPlan(agents, briefs, plan);
   const planPath = join(agents, planDir, 'sprint-1.md');
-  writeFileSync(planPath, plan);
+  writeFileSync(planPath, planText);
   return planPath;
 }
 
-function brief({ title = 'T', sprint = 'Sprint 1', status = '🔲 Backlog', priority = 1, extra = '' }) {
-  return `# ${title}\n\n## Sprint\n${sprint}\n\n## Priority\n${priority}\n\n## Status\n${status}\n\n## Context\n\nBody.\n${extra}\n`;
+function brief({ title = 'T', sprint = 'Sprint 1', status = '🔲 Backlog', priority = 1, id = null, extra = '' }) {
+  const idBlock = id ? `## ID\n${id}\n\n` : '';
+  return `# ${title}\n\n${idBlock}## Sprint\n${sprint}\n\n## Priority\n${priority}\n\n## Status\n${status}\n\n## Context\n\nBody.\n${extra}\n`;
 }
 
 // A plan with the given table rows (each already a `| … |` line).
@@ -214,15 +253,16 @@ test('link rot: brief resolved by filename, relocated fact, corrected link rende
   });
   const { out } = run(p);
   assert.ok(
-    facts(out).some((f) => f.includes('drift relocated 1') && f.includes('found="../tasks/done/a.md"')),
+    facts(out).some((f) => f.includes('drift relocated 1') && f.includes('found="../tasks/done/0001-a/brief.md"')),
     'the relocation is reported',
   );
-  assert.match(boardRows(out)[0], /\(\.\.\/tasks\/done\/a\.md\)/, 'the board renders the corrected link');
+  assert.match(boardRows(out)[0], /\(\.\.\/tasks\/done\/0001-a\/brief\.md\)/, 'the board renders the corrected link');
 });
 
 // 8 — a missing brief is reported, and THE ROW STILL RENDERS. A board that drops a row lies about scope.
 test('missing brief: fact emitted, row still renders', () => {
-  const p = fixture({ plan: plan(['| 🔲 Backlog | 1 | Ghost | [`gone.md`](../tasks/backlog/gone.md) |']), briefs: {} });
+  // Folder-shape href to a folder that does not exist → missing-brief (not malformed: nothing is there).
+  const p = fixture({ plan: plan(['| 🔲 Backlog | 1 | Ghost | [`gone`](../tasks/backlog/0099-gone/brief.md) |']), briefs: {} });
   const { out } = run(p);
   assert.ok(facts(out).some((f) => f.includes('drift missing-brief 1')));
   assert.equal(boardRows(out).length, 1, 'the row still renders');
@@ -409,7 +449,7 @@ test('R10: exact stdout — the full contract, pinned byte for byte', () => {
     // ⚠️ The ✅ row is ABSENT BY DESIGN (task 65: the board shows open work only). The roll-up below
     // still reads `1 done · 1 backlog  —  of 2` — that mismatch between rows shown and rows counted
     // is the contract, not a bug. Do not "restore" the done row to make them agree.
-    '| 🔲 Backlog | 2 | Beta | [`b.md`](../tasks/backlog/b.md) | ⟨derive: none recorded⟩ |',
+    '| 🔲 Backlog | 2 | Beta | [`b.md`](../tasks/backlog/0002-b/brief.md) | ⟨derive: none recorded⟩ |',
     '',
     '1 done · 1 backlog  —  of 2',
     '⟦FACTS⟧',
@@ -542,7 +582,7 @@ test('R7: an empty Task cell holds its position — no field shifting, no phanto
   const { out } = run(p);
   const cells = boardRows(out)[0].split('|').map((c) => c.trim());
   assert.equal(cells[3], '', 'the empty Task cell stays empty');
-  assert.equal(cells[4], '[`a.md`](../tasks/backlog/a.md)', 'the link stays in Filename');
+  assert.equal(cells[4], '[`a.md`](../tasks/backlog/0001-a/brief.md)', 'the link stays in Filename');
   assert.equal(facts(out).filter((f) => f.includes('missing-brief')).length, 0, 'no phantom drift');
 });
 
@@ -778,9 +818,13 @@ test('R22: plan-level drift reaches the roll-up clause', () => {
   const agents = join(root, 'ai-agents');
   mkdirSync(join(agents, 'tasks', 'backlog'), { recursive: true });
   mkdirSync(join(agents, 'sprints'), { recursive: true });
-  writeFileSync(join(agents, 'tasks', 'backlog', 'a.md'), brief({ title: 'Alpha' }));
+  const planText = foldBriefsAndPlan(
+    agents,
+    { 'backlog/a.md': brief({ title: 'Alpha' }) },
+    plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |'], { title: '# Hardening' }),
+  );
   const planPath = join(agents, 'sprints', 'hardening.md');
-  writeFileSync(planPath, plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |'], { title: '# Hardening' }));
+  writeFileSync(planPath, planText);
   const { out } = run(planPath);
   assert.ok(facts(out).some((f) => f.startsWith('drift unresolved-plan-sprint')));
   assert.match(rollup(out), /drift on the plan itself/, 'a bare roll-up would hide it from the owner');
@@ -862,7 +906,7 @@ test('R26: a literal US byte in a cell cannot corrupt field alignment', () => {
   });
   const { out } = run(p);
   const cells = boardRows(out)[0].split('|').map((c) => c.trim());
-  assert.equal(cells[4], '[`a.md`](../tasks/backlog/a.md)', 'the link stays in Filename despite the US byte');
+  assert.equal(cells[4], '[`a.md`](../tasks/backlog/0001-a/brief.md)', 'the link stays in Filename despite the US byte');
   assert.equal(facts(out).filter((f) => f.includes('missing-brief')).length, 0, 'no phantom drift');
   assert.doesNotMatch(out, //, 'the byte is neutralised, not passed through into the board');
 });
@@ -969,7 +1013,7 @@ test('R34: a GFM-escaped pipe in the Status cell is content, not a delimiter', (
   // the rendered markdown is five columns.
   assert.equal(
     boardRows(out)[0],
-    '| 🚧 Blocked — a \\| b | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) | ⟨derive: none recorded⟩ |',
+    '| 🚧 Blocked — a \\| b | 1 | Alpha | [`a.md`](../tasks/backlog/0001-a/brief.md) | ⟨derive: none recorded⟩ |',
   );
   assert.ok(facts(out).includes('total 1'));
   assert.equal(facts(out).filter((f) => f.startsWith('drift disagreement')).length, 0, 'no phantom drift');
@@ -1236,13 +1280,13 @@ test('R50/R53: exact stdout on the LOUD path — the fact is pinned in full', ()
     '⟦BOARD⟧',
     '| Status | # | Task | Filename | Next step |',
     '|---|---|---|---|---|',
-    '| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) | ⟨derive: UNPARSEABLE — see brief⟩ |',
+    '| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/0001-a/brief.md) | ⟨derive: UNPARSEABLE — see brief⟩ |',
     '',
     '1 backlog  —  of 1  — as recorded; drift on tasks 1 — see above.',
     '⟦FACTS⟧',
     'total 1',
     'count backlog 1',
-    'drift depends-unparseable 1 brief="../tasks/backlog/a.md" form="BL"',
+    'drift depends-unparseable 1 brief="../tasks/backlog/0001-a/brief.md" form="BL"',
     '⟦END⟧',
     '',
   ].join('\n'));
@@ -1453,12 +1497,13 @@ function backlogFixture(rows, briefs = {}) {
   for (const d of ['tasks/backlog', 'tasks/done', 'tasks/cancelled', 'sprints', 'sprints/done']) {
     mkdirSync(join(agents, d), { recursive: true });
   }
-  for (const [rel, body] of Object.entries(briefs)) writeFileSync(join(agents, 'tasks', rel), body);
-  const planPath = join(agents, 'sprints', 'backlog.md');
-  writeFileSync(
-    planPath,
+  const planText = foldBriefsAndPlan(
+    agents,
+    briefs,
     `# Backlog — the default home for unsprinted task briefs\n\nProse header.\n\n## Status\n\n| Status | Priority | Task | Brief |\n|---|---|---|---|\n${rows.join('\n')}\n\n## Notes\n\nTail.\n`,
   );
+  const planPath = join(agents, 'sprints', 'backlog.md');
+  writeFileSync(planPath, planText);
   return planPath;
 }
 
@@ -1512,11 +1557,11 @@ test('task 68: FACTS records key by brief filename stem when the priority is `�
   );
   const { out } = run(p);
   assert.ok(
-    facts(out).some((f) => f.startsWith('drift nonconformance zeta ')),
-    'keyed by the brief stem, not `?`',
+    facts(out).some((f) => /^drift nonconformance \d{4}-zeta /.test(f)),
+    'keyed by the folder name (`<ID>-<slug>`), not `?`',
   );
   assert.doesNotMatch(rollup(out), /drift on tasks \?/, 'an unattributable `?` is the failure mode');
-  assert.match(rollup(out), /drift on tasks zeta/);
+  assert.match(rollup(out), /drift on tasks \d{4}-zeta/);
 });
 
 // ⚠️ THE FALLBACK IS A FALLBACK. A numbered plan must keep numbering — the skill narrates
@@ -1560,7 +1605,7 @@ test('task 68: a free-text ## Priority qualifier does not leak into the board or
   const { code, out } = run(p);
   assert.equal(code, 0);
   assert.match(boardRows(out)[0], /\| — \|/, 'the board shows the plan cell, never the brief field');
-  assert.ok(facts(out).some((f) => f.startsWith('drift nonconformance a ')), 'stem fallback still applies');
+  assert.ok(facts(out).some((f) => /^drift nonconformance \d{4}-a /.test(f)), 'folder-name fallback still applies');
   // ⚠️ THE DISTINGUISHING ASSERTION (review R5). Without this the test passes for ANY brief priority,
   // so it proved nothing about the free-text qualifier it exists to test. The qualifier must not reach
   // the board cell, the FACTS id, or anywhere else in the output.
@@ -1653,5 +1698,91 @@ test('task 68 / R1: rule 1 still skips normally on a numbered sprint board', () 
   assert.equal(
     facts(out).filter((f) => f.startsWith('drift disagreement')).length, 0,
     'a brief naming another sprint is a legitimate skip on a SPRINT board — rule 1 is intact',
+  );
+});
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────
+// TASK 76 — the two new drift kinds the folder migration introduces (design spec §3.5, §4; ADR-029
+// Decisions 5 and 1). Both are §10 "assertions to add" and both are RED-PROVED: the negative case
+// confirms the check bites, so a check that reported regardless of input cannot pass here
+// (test/prove-red.sh:4-8 is the same discipline applied to the launcher guards).
+
+// Build a single-task tree at tasks/done/<folderName>/ with a caller-controlled brief body (no `## ID`
+// auto-injection — these tests deliberately control the ID carrier), plus optional companion files.
+function folderTree({ folderName, briefBody = null, companions = [] }) {
+  const root = mkdtempSync(join(tmpdir(), 'fkit-dash-'));
+  MADE.push(root);
+  const agents = join(root, 'ai-agents');
+  for (const d of ['tasks/done', 'sprints']) mkdirSync(join(agents, d), { recursive: true });
+  const folder = join(agents, 'tasks', 'done', folderName);
+  mkdirSync(folder, { recursive: true });
+  if (briefBody !== null) writeFileSync(join(folder, 'brief.md'), briefBody);
+  for (const c of companions) writeFileSync(join(folder, c), 'reserved companion\n');
+  const planPath = join(agents, 'sprints', 'sprint-1.md');
+  writeFileSync(planPath, plan([`| ✅ Done | 1 | Alpha | [\`alpha\`](../tasks/done/${folderName}/brief.md) |`]));
+  return run(planPath);
+}
+
+const doneBrief = (id) => `# Alpha\n\n## ID\n${id}\n\n## Sprint\nSprint 1\n\n## Priority\n1\n\n## Status\n✅ Done\n\n## Context\n\nB.\n`;
+
+// §3.5 / ADR-029 Decision 5 — the brief's `## ID` and the folder-name prefix are two carriers; the
+// folder is authoritative and the disagreement is REPORTED (never auto-corrected), naming both values.
+test('task 76: id-mismatch — brief ## ID disagrees with folder prefix → drift naming BOTH; correcting it clears the record', () => {
+  const bad = folderTree({ folderName: '0042-alpha', briefBody: doneBrief('0099') });
+  assert.equal(bad.code, 0, 'a disagreement is a drift record, not a hard failure');
+  assert.ok(
+    facts(bad.out).some((f) => /^drift id-mismatch 1 brief_id="0099" folder="0042-alpha"/.test(f)),
+    'the record names BOTH carriers (folder authoritative), like the status cross-check',
+  );
+  // RED-PROVE: make the ID match the folder — the record MUST disappear. A check that fired regardless
+  // would still fire here and fail this assertion.
+  const good = folderTree({ folderName: '0042-alpha', briefBody: doneBrief('0042') });
+  assert.equal(
+    facts(good.out).filter((f) => f.includes('id-mismatch')).length, 0,
+    'when ## ID equals the folder prefix there is no disagreement — the guard bites',
+  );
+});
+
+// §4 / ADR-029 Decision 1 — a task folder WITHOUT brief.md is malformed and reported; the normal case
+// (brief.md present, optionally with reserved companions plan.md/worklog.md/review.md/assets) is not.
+test('task 76: malformed-folder — a folder without brief.md is drift; adding brief.md clears it; reserved companions are never drift', () => {
+  const bad = folderTree({ folderName: '0042-alpha', briefBody: null });
+  assert.equal(bad.code, 0, 'malformed is reported, not fatal');
+  assert.ok(
+    facts(bad.out).some((f) => /^drift malformed-folder 1 folder="0042-alpha" location="done\/"/.test(f)),
+    'a task folder lacking brief.md is reported as malformed',
+  );
+  // RED-PROVE: add brief.md — the malformed record MUST disappear.
+  const good = folderTree({ folderName: '0042-alpha', briefBody: doneBrief('0042') });
+  assert.equal(
+    facts(good.out).filter((f) => f.includes('malformed-folder')).length, 0,
+    'a folder containing brief.md is the normal case — the guard bites',
+  );
+  // And brief.md PLUS a reserved companion (plan.md) is still the normal case, never malformed —
+  // assert it explicitly, or the check would flag every task that has a plan.
+  const withPlan = folderTree({ folderName: '0042-alpha', briefBody: doneBrief('0042'), companions: ['plan.md'] });
+  assert.equal(
+    facts(withPlan.out).filter((f) => f.includes('malformed-folder')).length, 0,
+    'brief.md + plan.md is the normal case; reserved companions are not drift',
+  );
+});
+
+// R#4 (owner-approved) — a brief with NO `## ID` is `brief-missing-id`, symmetric with
+// `brief-missing-status`: an absent second carrier the id-mismatch reconciliation cannot see. Since
+// ADR-029 every brief carries `## ID`, so its absence is a real defect. Red-proved.
+const noIdBrief = '# Alpha\n\n## Sprint\nSprint 1\n\n## Priority\n1\n\n## Status\n✅ Done\n\n## Context\n\nB.\n';
+
+test('task 76: brief-missing-id — a brief with no ## ID is nonconformance; adding ## ID clears it', () => {
+  const bad = folderTree({ folderName: '0042-alpha', briefBody: noIdBrief });
+  assert.equal(bad.code, 0, 'a missing ## ID is a drift record, not a hard failure');
+  assert.ok(
+    facts(bad.out).some((f) => /^drift nonconformance 1 kind="brief-missing-id" folder="0042-alpha"/.test(f)),
+    'a brief lacking ## ID is reported as brief-missing-id, naming the folder',
+  );
+  // RED-PROVE: add ## ID matching the folder — the record MUST disappear.
+  const good = folderTree({ folderName: '0042-alpha', briefBody: doneBrief('0042') });
+  assert.equal(
+    facts(good.out).filter((f) => f.includes('brief-missing-id')).length, 0,
+    'a brief carrying ## ID has no missing-id nonconformance — the guard bites',
   );
 });

@@ -10,7 +10,7 @@ Sprint 2
 76
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Context
 

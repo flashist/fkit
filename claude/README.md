@@ -94,7 +94,7 @@ interactive init.
 |---|---|---|
 | fkit-producer | Read, Grep, Glob, Bash, Write, Edit, **Agent**, AskUserQuestion | product & sprint planning, task briefs, lifecycle. Consults the architect. |
 | fkit-coder | Read, Grep, Glob, Bash, Write, Edit, **Agent**, EnterPlanMode, ExitPlanMode, AskUserQuestion | implementation — sole source-write authority. Consults architect/producer. **Not for background delegation:** its plan/fix approval gates need the owner present, so run it as a session. |
-| fkit-reviewer | Read, Grep, Glob, Bash, Write, Edit, **Agent**, AskUserQuestion | two-pass review (own + Codex via CLI); writes only `ai-agents/reviews/` documents. Consults the architect on design intent. |
+| fkit-reviewer | Read, Grep, Glob, Bash, Write, Edit, **Agent**, AskUserQuestion | two-pass review (own + Codex via CLI); writes only review ledgers (a task folder's `review.md`, or `ai-agents/sprints/reviews/`). Consults the architect on design intent. |
 | fkit-adversarial-reviewer | Read, Grep, Glob, Bash | findings-only hostile pass on Codex. **Structurally write-free; a leaf.** |
 | fkit-architect | Read, Grep, Glob, Bash, Write, Edit, **Agent**, AskUserQuestion | architecture, design specs, ADRs, surveys. Consults the producer for product context. |
 | fkit-wiki | Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion | the wiki role — **exclusive write gateway** (ingest / lint / sync). **A leaf.** |

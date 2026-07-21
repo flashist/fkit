@@ -55,7 +55,7 @@ and its "explicit approval every round" gate are byte-unchanged and still in for
   ad-hoc comments): verify each claim, classify defect vs frontier-move, assign verdicts, gate on the
   owner's approval, then apply approved fixes. Ephemeral — no review file.
 - **`fkit-process-stateful-review`** — your side of a stateful review tracked in the shared ledger
-  `ai-agents/reviews/<task-id>.md`: read the reviewer's findings, verify them, write your verdicts and
+  the task folder's `review.md`: read the reviewer's findings, verify them, write your verdicts and
   actions back into the *Coder response* section, with accepted-residual memory to stop review loops.
 - **`fkit-task-ship-loop <brief-path>`** — the autonomous brief-to-done loop (ADR-019). Takes one
   backlog task from brief through plan → build → verify → stateful review → closed, running

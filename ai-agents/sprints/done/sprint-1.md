@@ -34,20 +34,20 @@ CI tail task.
 
 | Status | Priority | Task | Brief |
 |---|---|---|---|
-| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 7 (reframed) | 1 | Verify onboarding flow end-to-end | [`verify-onboarding-flow-end-to-end.md`](../../tasks/done/verify-onboarding-flow-end-to-end.md) |
-| ⛔ Cancelled (2026-07-11) | 2 | Document the consult-chain envelope — the Claude 2-hop consult envelope is now recorded in ADR-010 | [`document-consult-chain-envelope.md`](../../tasks/cancelled/document-consult-chain-envelope.md) |
-| ⛔ Cancelled (2026-07-11) | 3 | Add CI: run validate-bundles.sh — `validate-bundles.sh` is deleted with Omnigent (ADR-009) | [`add-ci-validate-bundles.md`](../../tasks/cancelled/add-ci-validate-bundles.md) |
-| ✅ Done | 4 | Replace leftover placeholder text in CLAUDE.md / AGENTS.md | [`fix-claude-agents-md-placeholder-text.md`](../../tasks/done/fix-claude-agents-md-placeholder-text.md) |
-| ⛔ Cancelled (2026-07-11) | 5 | Remove eager auto-spawn of fkit-adversarial-reviewer at session start — `fkit-team` is deleted with Omnigent (ADR-009) | [`remove-adversarial-reviewer-eager-spawn.md`](../../tasks/cancelled/remove-adversarial-reviewer-eager-spawn.md) |
-| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 13 | 6 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../../tasks/done/extend-initiate-project-fill-overview.md) |
-| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 12 (rescoped) | 7 | Bake Architecture pointer into scaffold CLAUDE.md/AGENTS.md templates | [`bake-architecture-pointer-into-scaffold-templates.md`](../../tasks/done/bake-architecture-pointer-into-scaffold-templates.md) |
-| ⛔ Cancelled (2026-07-11) | 8 (optional) | Fix stale agent-count docs + fresh-detection duplication — the drifted files are deleted, not fixed (ADR-009) | [`fix-agent-count-doc-drift-and-fresh-detection-dup.md`](../../tasks/cancelled/fix-agent-count-doc-drift-and-fresh-detection-dup.md) |
-| ✅ Done | 9 | Build `fkit reconnect` tooling for disconnected subagent runners | [`build-fkit-reconnect-tooling.md`](../../tasks/done/build-fkit-reconnect-tooling.md) |
-| ⛔ Cancelled (2026-07-11) | 10 | Amend the subagent-disconnect incident doc with technical corrections — an Omnigent-runner incident; doc archived to `history/` (ADR-009) | [`amend-subagent-disconnect-incident-doc.md`](../../tasks/cancelled/amend-subagent-disconnect-incident-doc.md) |
-| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 9 | 11 | Formalize knowledge-base folder structure, including `incidents/` | [`formalize-knowledge-base-incidents-folder.md`](../../tasks/done/formalize-knowledge-base-incidents-folder.md) |
-| ✅ Done | 12 | Roll out ADR-004: fixed, role-based titles for consult spawns | [`rollout-adr-004-fixed-consult-titles.md`](../../tasks/done/rollout-adr-004-fixed-consult-titles.md) |
-| ✅ Done | 13 | Give every fkit agent direct wiki-query access | [`give-every-agent-direct-wiki-query-access.md`](../../tasks/done/give-every-agent-direct-wiki-query-access.md) |
-| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 14 (scope widened) | 14 | Add a `task-plan` skill to fkit-producer | [`add-task-plan-skill-to-producer.md`](../../tasks/done/add-task-plan-skill-to-producer.md) |
+| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 7 (reframed) | 1 | Verify onboarding flow end-to-end | [`verify-onboarding-flow-end-to-end.md`](../../tasks/done/0091-verify-onboarding-flow-end-to-end/brief.md) |
+| ⛔ Cancelled (2026-07-11) | 2 | Document the consult-chain envelope — the Claude 2-hop consult envelope is now recorded in ADR-010 | [`document-consult-chain-envelope.md`](../../tasks/cancelled/0033-document-consult-chain-envelope/brief.md) |
+| ⛔ Cancelled (2026-07-11) | 3 | Add CI: run validate-bundles.sh — `validate-bundles.sh` is deleted with Omnigent (ADR-009) | [`add-ci-validate-bundles.md`](../../tasks/cancelled/0002-add-ci-validate-bundles/brief.md) |
+| ✅ Done | 4 | Replace leftover placeholder text in CLAUDE.md / AGENTS.md | [`fix-claude-agents-md-placeholder-text.md`](../../tasks/done/0041-fix-claude-agents-md-placeholder-text/brief.md) |
+| ⛔ Cancelled (2026-07-11) | 5 | Remove eager auto-spawn of fkit-adversarial-reviewer at session start — `fkit-team` is deleted with Omnigent (ADR-009) | [`remove-adversarial-reviewer-eager-spawn.md`](../../tasks/cancelled/0071-remove-adversarial-reviewer-eager-spawn/brief.md) |
+| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 13 | 6 | Extend `initiate-project` to fill CLAUDE.md/AGENTS.md Project Overview | [`extend-initiate-project-fill-overview.md`](../../tasks/done/0035-extend-initiate-project-fill-overview/brief.md) |
+| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 12 (rescoped) | 7 | Bake Architecture pointer into scaffold CLAUDE.md/AGENTS.md templates | [`bake-architecture-pointer-into-scaffold-templates.md`](../../tasks/done/0018-bake-architecture-pointer-into-scaffold-templates/brief.md) |
+| ⛔ Cancelled (2026-07-11) | 8 (optional) | Fix stale agent-count docs + fresh-detection duplication — the drifted files are deleted, not fixed (ADR-009) | [`fix-agent-count-doc-drift-and-fresh-detection-dup.md`](../../tasks/cancelled/0040-fix-agent-count-doc-drift-and-fresh-detection-dup/brief.md) |
+| ✅ Done | 9 | Build `fkit reconnect` tooling for disconnected subagent runners | [`build-fkit-reconnect-tooling.md`](../../tasks/done/0021-build-fkit-reconnect-tooling/brief.md) |
+| ⛔ Cancelled (2026-07-11) | 10 | Amend the subagent-disconnect incident doc with technical corrections — an Omnigent-runner incident; doc archived to `history/` (ADR-009) | [`amend-subagent-disconnect-incident-doc.md`](../../tasks/cancelled/0016-amend-subagent-disconnect-incident-doc/brief.md) |
+| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 9 | 11 | Formalize knowledge-base folder structure, including `incidents/` | [`formalize-knowledge-base-incidents-folder.md`](../../tasks/done/0044-formalize-knowledge-base-incidents-folder/brief.md) |
+| ✅ Done | 12 | Roll out ADR-004: fixed, role-based titles for consult spawns | [`rollout-adr-004-fixed-consult-titles.md`](../../tasks/done/0085-rollout-adr-004-fixed-consult-titles/brief.md) |
+| ✅ Done | 13 | Give every fkit agent direct wiki-query access | [`give-every-agent-direct-wiki-query-access.md`](../../tasks/done/0048-give-every-agent-direct-wiki-query-access/brief.md) |
+| ➡️ Moved to [Sprint 2](../sprint-2.md) — priority 14 (scope widened) | 14 | Add a `task-plan` skill to fkit-producer | [`add-task-plan-skill-to-producer.md`](../../tasks/done/0012-add-task-plan-skill-to-producer/brief.md) |
 
 ## Context
 
@@ -71,7 +71,7 @@ CI tail task.
   `task-plan` skill or formalized producer skill-authoring beyond the three existing skills' own
   source precedent — and surfaced that `Backlog (unsprinted)` is already a `## Sprint` value the
   mover skills recognize but no live brief has ever used; this task will be the first to exercise
-  that path. See [`add-task-plan-skill-to-producer.md`](../../tasks/done/add-task-plan-skill-to-producer.md)
+  that path. See [`add-task-plan-skill-to-producer.md`](../../tasks/done/0012-add-task-plan-skill-to-producer/brief.md)
   for full scope, including one open question flagged for the owner before fkit-coder starts (does
   "plan the task" mean one brief in/one brief out, or something richer like sub-task breakdown).
 - **2026-07-10 Agents-panel-noise addendum:** owner flagged Web UI panel clutter from ad hoc
