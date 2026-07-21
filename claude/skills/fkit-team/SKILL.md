@@ -67,7 +67,7 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
 
 5. **Note how the team coordinates:** through **files**, not chat — task briefs
    (`ai-agents/tasks/`), the sprint plan (`ai-agents/sprints/`), the review ledger
-   (`ai-agents/reviews/<task-id>.md`), the knowledge base, and the wiki. Separate sessions see the
+   (the task folder's `review.md`), the knowledge base, and the wiki. Separate sessions see the
    same artifacts; that's the shared state.
 
 6. If the owner asked "who should I talk to about X?", **answer that** concretely instead of dumping

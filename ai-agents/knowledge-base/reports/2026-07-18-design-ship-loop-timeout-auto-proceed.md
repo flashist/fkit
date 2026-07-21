@@ -2,7 +2,7 @@
 
 - **Date:** 2026-07-18
 - **Author:** fkit-architect (feasibility corroborated by an fkit-coder runtime consult, hop 1)
-- **Task:** [`design-ship-loop-timeout-auto-proceed.md`](../../tasks/backlog/design-ship-loop-timeout-auto-proceed.md) (Sprint 2, #59)
+- **Task:** [`design-ship-loop-timeout-auto-proceed.md`](../../tasks/cancelled/0028-design-ship-loop-timeout-auto-proceed/brief.md) (Sprint 2, #59)
 - **Status:** ⚰️ **CLOSED — feature will NOT be built (owner decision, 2026-07-18; recorded as [ADR-024](../decisions/adr-024-ship-loop-owner-question-timeout-is-not-built.md)).** The investigation established that a timed auto-proceed *is* feasible — via Claude Code's AFK-mode timeout (`askUserQuestionTimeout`, confirmed real on the installed binary **2.1.214**), scoped to a dedicated ship-loop launch with the plan/done gates expressed as plain waits so the session-global timer never fires on them. **The owner weighed it and decided the added launch-mode complexity + reliance on a session-global, user-scope timer are not worth it.** The ship-loop stays as-is. Retained as the record of what was weighed. Task 59 cancelled; task 60 not created.
 - **~~Blocks:~~** task 60 (implementation) — **not created** (feature declined).
 

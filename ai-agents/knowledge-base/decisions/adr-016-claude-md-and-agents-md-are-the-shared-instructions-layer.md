@@ -23,7 +23,7 @@
 ## Context
 
 The trigger was task
-[`add-shared-instructions-layer-for-all-agents.md`](../../tasks/backlog/add-shared-instructions-layer-for-all-agents.md),
+[`add-shared-instructions-layer-for-all-agents.md`](../../tasks/done/0009-add-shared-instructions-layer-for-all-agents/brief.md),
 whose premise was *"there is nowhere to put an instruction that all fkit agents read."*
 
 **That premise is false.** `claude/scaffold/CLAUDE.md:56-63` ships a **"Universal hard rules (every

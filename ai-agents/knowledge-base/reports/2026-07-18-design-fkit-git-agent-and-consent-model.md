@@ -2,7 +2,7 @@
 
 - **Date:** 2026-07-18
 - **Author:** fkit-architect
-- **Task:** [`design-fkit-git-agent-and-consent-model.md`](../../tasks/backlog/design-fkit-git-agent-and-consent-model.md) (Sprint 2, #55)
+- **Task:** [`design-fkit-git-agent-and-consent-model.md`](../../tasks/cancelled/0027-design-fkit-git-agent-and-consent-model/brief.md) (Sprint 2, #55)
 - **Status:** ⚰️ **SUPERSEDED / not built — see [ADR-023](../decisions/adr-023-fkit-git-agent-is-not-built.md).** On 2026-07-18 the owner initially ruled consent model (c) fully-unattended, then **reversed within the session and cancelled `fkit-git` entirely** — an unattended commit+push is too high a risk of pushing sensitive/unintended content to a remote. This document is retained as the **record of what was weighed**, not a live design. Task 55 is cancelled; task 56 is not created.
 - **~~Blocks:~~** task 56 (implementation) — **not created** (see ADR-023).
 

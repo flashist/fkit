@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-16
 **Author:** fkit-architect, with the owner present
-**Task:** [`design-deterministic-dashboard-for-fkit-status.md`](../../tasks/done/design-deterministic-dashboard-for-fkit-status.md)
+**Task:** [`design-deterministic-dashboard-for-fkit-status.md`](../../tasks/done/0026-design-deterministic-dashboard-for-fkit-status/brief.md)
 **Blocks:** `build-deterministic-dashboard-script-for-fkit-status` — **this spec is the contract that task builds against.**
 
 > **This is a design, not an implementation.** No script is written here. Every one of the task's six

@@ -27,7 +27,8 @@ Add or update wiki pages from a named source.
 2. **Read the catalog:** `ai-agents/wiki-vault/index.md` — what pages already exist.
 3. **Resolve what to ingest:**
    - a specific file path → that file
-   - `all tasks` → everything in `ai-agents/tasks/backlog/` and `ai-agents/tasks/done/`
+   - `all tasks` → every brief, i.e. `ai-agents/tasks/{backlog,done}/*/brief.md` (briefs only — since
+     ADR-029 each task is a folder; do **not** ingest the sibling `plan.md` / `worklog.md` / `review.md`)
    - `knowledge-base` → everything in `ai-agents/knowledge-base/`
    - `architecture` → `CLAUDE.md` and the schema's domain reference
    - a directory path → all markdown files in it

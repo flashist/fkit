@@ -6,7 +6,7 @@
 - **Evidence:** [`reports/2026-07-13-tester-agent-evaluation.md`](../reports/2026-07-13-tester-agent-evaluation.md)
   — the full discussion (owner, fkit-coder, fkit-architect, fkit-producer), including the five arguments
   that were examined and **killed** and must not be re-raised.
-- **Task:** [`decide-whether-fkit-needs-a-tester-agent.md`](../../tasks/done/decide-whether-fkit-needs-a-tester-agent.md)
+- **Task:** [`decide-whether-fkit-needs-a-tester-agent.md`](../../tasks/done/0024-decide-whether-fkit-needs-a-tester-agent/brief.md)
 
 > **What this ADR decides, in one line:** fkit adds an **eighth role, a tester**, whose unique authority
 > is a **sandbox** authority — a permission envelope no other role gets — and the owner **knowingly
@@ -188,10 +188,10 @@ criterion.**
 - `claude/skills/fkit-review/SKILL.md:113` — the reviewer's `(validation-gated)` marker, the hole admitted
   in the reviewer's own vocabulary.
 - `claude/agents/fkit-coder.md:112-113` — "did you test it?" as pure self-report.
-- [`tasks/done/add-launcher-contract-smoke-script.md`](../../tasks/done/add-launcher-contract-smoke-script.md)
+- [`tasks/done/add-launcher-contract-smoke-script.md`](../../tasks/done/0006-add-launcher-contract-smoke-script/brief.md)
   — Sprint 2 task 23, **Done**: the regression gate the owner sequenced ahead of the tester, already
   shipped. It superseded `add-e2e-smoke-script-for-fkit-itself.md`
-  ([cancelled](../../tasks/cancelled/add-e2e-smoke-script-for-fkit-itself.md) 2026-07-14), which is the
+  ([cancelled](../../tasks/cancelled/0004-add-e2e-smoke-script-for-fkit-itself/brief.md) 2026-07-14), which is the
   task named in the evaluation and in the owner's Q7 framing.
 - [ADR-026](adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled.md) Decision 4 and
   [ADR-003](adr-003-ci-runs-validate-bundles.md) — the two unfinished pieces of that gate.

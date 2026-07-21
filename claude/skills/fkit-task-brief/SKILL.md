@@ -205,9 +205,18 @@ Full rationale: [ADR-029](../../../ai-agents/knowledge-base/decisions/adr-029-a-
 and the design spec's §3.2–3.3.
 
 ### 7. Write each brief
-Write to `ai-agents/tasks/backlog/<kebab-case-title>.md` — **new files, not moves.**
-- Check the filename isn't already taken; if it is, either the work already exists (say so, and stop)
-  or the title needs to be more specific.
+Since ADR-029 a task is a **folder**. Create the folder and write the brief as `brief.md` inside it —
+**new folders, not moves:**
+
+```
+ai-agents/tasks/backlog/<NNNN>-<kebab-case-title>/brief.md
+```
+
+- `<NNNN>` is the ID allocated in step 6; the brief's **`## ID` field must carry the same value** (the
+  folder name is authoritative, `## ID` is the second carrier, and `dashboard.sh`'s `id-mismatch` drift
+  check reconciles them — a disagreement is reported, so make them match).
+- Check the **folder name** isn't already taken; if it is, either the work already exists (say so, and
+  stop) or the title needs to be more specific.
 - **Do not commit** — writing the files is enough; commits happen only when the owner explicitly asks.
 
 ### 8. Update the board — every brief gets a row, always
@@ -231,7 +240,7 @@ Write to `ai-agents/tasks/backlog/<kebab-case-title>.md` — **new files, not mo
 
     | Status | Priority | Task | Brief |
     |---|---|---|---|
-    | 🔲 Backlog | — | <Task title> | [`<brief>.md`](../tasks/backlog/<brief>.md) |
+    | 🔲 Backlog | — | <Task title> | [`<NNNN>-<slug>`](../tasks/backlog/<NNNN>-<slug>/brief.md) |
     ```
 
     The `## Status` heading and the four-column table are **load-bearing**, not stylistic:

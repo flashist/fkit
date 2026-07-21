@@ -1,6 +1,6 @@
 ---
 name: fkit-process-stateful-review
-description: The coder's side of a stateful, loop-resistant review. Reads the reviewer's findings from a shared review .md file (source of truth), verifies each against the codebase, classifies defect vs frontier-move, assigns verdicts, gates code changes on your approval, applies approved fixes, and records the outcome back into the shared file. Reviewer and coder each own a section and round-trip in place. Use when a review is tracked in a shared ai-agents/reviews/<task-id>.md document.
+description: The coder's side of a stateful, loop-resistant review. Reads the reviewer's findings from a shared review .md file (source of truth), verifies each against the codebase, classifies defect vs frontier-move, assigns verdicts, gates code changes on your approval, applies approved fixes, and records the outcome back into the shared file. Reviewer and coder each own a section and round-trip in place. Use when a review is tracked in a shared review.md ledger inside the task folder.
 ---
 
 # Process Stateful Review (coder side)
@@ -24,23 +24,27 @@ lets a multi-round review start from the decision state instead of re-deriving i
 > instead. This skill's whole point is the shared file — it reads and writes it every run.
 
 **Argument:** `$ARGUMENTS` — optional. May include the **task-id** (resolved by the canonical rule
-below). The shared review doc lives at `ai-agents/reviews/<task-id>.md`.
+below). Since ADR-029 the shared ledger lives **inside the task folder** at
+`ai-agents/tasks/<board>/<NNNN>-<slug>/review.md` (a branch-only review with no task folder goes to
+`ai-agents/sprints/reviews/<branch-slug>.md`).
 
-**Task-id — resolve it the same way every time (the coder and reviewer MUST agree, or the ledger
-forks and the loop-prevention memory is silently defeated):**
-1. Explicit `$ARGUMENTS` task-id → use it verbatim.
-2. Else the task file's **basename without extension** (`ai-agents/tasks/**/<task-id>.md` → `<task-id>`).
-3. Else the current **git branch name**, slugified.
+**Ledger key — resolve it the same way every time (the coder and reviewer MUST agree, or the ledger
+forks and the loop-prevention memory is silently defeated). It resolves to a FOLDER, not a bare
+string:**
+1. Explicit `$ARGUMENTS` task-id → the task whose **ID prefix or folder name** it matches; its folder's
+   `review.md`. An explicit id matching no folder → rule 4 (never an orphan).
+2. Else the task **folder name** (`ai-agents/tasks/**/<NNNN>-<slug>/` → `<NNNN>-<slug>`); its `review.md`.
+3. Else the current **git branch name**, slugified → `ai-agents/sprints/reviews/<branch-slug>.md`.
 4. If none of these resolves **unambiguously** → **STOP and ask the owner.** Never invent one.
 
-Create `ai-agents/reviews/<task-id>.md` only once the id is resolved by rule 1–3 or confirmed by the
-owner — never auto-create a ledger from a guessed id.
+Create the `review.md` only once the key is resolved by rule 1–3 or confirmed by the owner — never
+auto-create a ledger from a guessed id.
 
 ---
 
 ## The shared review document — schema & ownership
 
-`ai-agents/reviews/<task-id>.md` has three sections with **explicit ownership**:
+The task folder's `review.md` ledger has three sections with **explicit ownership**:
 
 ```
 # Review — <task-id>
@@ -89,7 +93,7 @@ conclude gets recorded in the shared file so the next round doesn't re-derive it
 
 - Resolve the **task-id** by the canonical rule above (stop and ask if it doesn't resolve
   unambiguously — never auto-create a ledger from a guessed id).
-- Read `ai-agents/reviews/<task-id>.md`. **If it doesn't exist — and only once the task-id is
+- Read the task folder's `review.md`. **If it doesn't exist — and only once the key is
   resolved — create it** with the schema above: fill the header, seed *Reviewer findings* from
   whatever findings you were handed (or leave a note that the reviewer will populate it), and leave
   *Coder response* / *Accepted residuals* ready to fill.

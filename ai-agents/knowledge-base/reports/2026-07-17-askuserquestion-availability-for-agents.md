@@ -2,7 +2,7 @@
 
 - **Date:** 2026-07-17
 - **Author:** fkit-architect (owner present)
-- **Task:** [`investigate-askuserquestion-availability-for-agents.md`](../../tasks/backlog/investigate-askuserquestion-availability-for-agents.md)
+- **Task:** [`investigate-askuserquestion-availability-for-agents.md`](../../tasks/done/0056-investigate-askuserquestion-availability-for-agents/brief.md)
   (Sprint 2, priority 39)
 - **Status:** **reviewed with the owner, 2026-07-17.** Owner rulings recorded inline (§5, §6): **grant
   to the six Claude-side agents** (not the adversarial reviewer); **record the harness-fact tombstone**

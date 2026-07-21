@@ -46,7 +46,7 @@ which removed the owner-only done-gate** (ADR-019 §Decision 5) — and the owne
 (rev 3, §11).
 
 **Argument:** `$ARGUMENTS` — the path to the **task brief** (e.g.
-`ai-agents/tasks/backlog/add-export-endpoint.md`). An **operand** — it selects *which task* the loop
+`ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`). An **operand** — it selects *which task* the loop
 ships. Per [`conventions/one-skill-one-output.md`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)
 there are **no output-variant arguments**: no `full`, no verbosity flag, no summary/partial mode. One
 brief in, one loop.
@@ -79,16 +79,20 @@ A SKILL.md holds no memory across turns or context compaction, and this loop run
 stretches. It anchors to durable, git-tracked, task-id-keyed files and **re-derives its position on
 every resume** ([ADR-020](../../../ai-agents/knowledge-base/decisions/adr-020-per-task-plan-and-worklog-artifacts.md)):
 
+Since ADR-029 these artifacts live **inside the task folder** alongside `brief.md`:
+
 | File | Written by the loop | Holds |
 |---|---|---|
-| `ai-agents/plans/<task-id>.md` | at plan approval | the approved implementation plan — **the boundary the loop's autonomy is measured against** |
-| `ai-agents/worklogs/<task-id>.md` | opened post-approval, grows P2–P5 | worklog + owner-decision log (every important question asked, **every obvious winner chosen while the owner was away**) → the finalized close-out report |
-| `ai-agents/reviews/<task-id>.md` | reviewer + coder (existing ledger) | the two-party review findings/verdicts — a **separate** file (different ownership); not merged into the worklog |
+| `<task-folder>/plan.md` | at plan approval | the approved implementation plan — **the boundary the loop's autonomy is measured against** |
+| `<task-folder>/worklog.md` | opened post-approval, grows P2–P5 | worklog + owner-decision log (every important question asked, **every obvious winner chosen while the owner was away**) → the finalized close-out report |
+| `<task-folder>/review.md` | reviewer + coder (existing ledger) | the two-party review findings/verdicts — a **separate** file (different ownership); not merged into the worklog |
 
-- Both new files are **git-tracked, left in the working tree; the owner commits — never the loop.**
-  Create the `ai-agents/plans/` and `ai-agents/worklogs/` directories if they do not yet exist.
-- Neither is moved by `/fkit-task-done`; neither is wiki-ingested; neither is a task brief (the
-  backlog→done→cancelled move lifecycle does not apply — they are records keyed by id that stay put).
+`<task-folder>` = `ai-agents/tasks/<board>/<NNNN>-<slug>/` — the same folder that holds `brief.md`.
+
+- All three are **git-tracked, left in the working tree; the owner commits — never the loop.** The
+  folder already exists (the brief is in it); just write the file beside `brief.md`.
+- They **move with the folder** when `/fkit-task-done` (or `-cancelled`) relocates the task — they are
+  reserved names inside it, not separate top-level records. None is wiki-ingested; none is a task brief.
 - **Fail-safe on resume:** if the loop cannot establish from these files that a gate was passed, it
   **returns to the nearest owner gate** — it never infers a plan approval it cannot evidence.
 - **Status write = both locations:** every status transition writes the brief's `## Status` **and** the
@@ -108,16 +112,16 @@ every resume** ([ADR-020](../../../ai-agents/knowledge-base/decisions/adr-020-pe
 2. **Clarify & plan.** If the brief is ambiguous on design/scope, consult **@fkit-architect**
    (design/structure) or **@fkit-producer** (scope/requirements) at **hop 1** — state "hop 1 of 2" and
    surface any open questions they return. Run **`/fkit-plan-task`** → produce the plan in plan mode.
-   *(The plan is persisted to `ai-agents/plans/<task-id>.md` at approval in step 4 — plan mode's write
+   *(The plan is persisted to `<task-folder>/plan.md` at approval in step 4 — plan mode's write
    wall forbids writing it here, and ADR-020 keys the artifact to plan approval.)* *(Autonomous up to
    the gate.)*
 3. **⛔ STOP — plan approval.** Present the plan (+ any open questions) and wait. **If the owner rejects
    it, stop** — the task stays `🔲 Backlog` (In progress is *not* set); report the rejection to the
    owner (no worklog is opened before approval). *After approval, the owner may walk away.*
 4. **Persist the plan, mark In progress & build.** On approval (plan mode releases the write wall),
-   write the approved plan to `ai-agents/plans/<task-id>.md` — the durable autonomy boundary. Set
+   write the approved plan to `<task-folder>/plan.md` — the durable autonomy boundary. Set
    `🔄 In progress` in **both** the brief `## Status` **and** the sprint row. Open
-   `ai-agents/worklogs/<task-id>.md`. Implement the approved plan with minimal, idiomatic diffs, logging
+   `<task-folder>/worklog.md`. Implement the approved plan with minimal, idiomatic diffs, logging
    notable decisions and **every obvious winner** chosen. *(Autonomous.)*
 5. **Verify.** Test per project conventions (ADR-014: `node --test`, zero devDeps for this repo),
    using sub-agents where they help. On failure: diagnose → fix → re-verify. **Budget: 3 no-progress
@@ -140,7 +144,7 @@ every resume** ([ADR-020](../../../ai-agents/knowledge-base/decisions/adr-020-pe
 7. **Re-verify & loop.** **If any code changed in step 6, return to step 5.** Repeat steps 6–7 until
    the ledger is **closed-out with the last verify green.** Non-convergence (the loop-check fires) →
    **⛔ STOP** with the convergence call and a `🚧 Blocked — review not converging` worklog.
-8. **Finalize the report.** Complete `ai-agents/worklogs/<task-id>.md` into the close-out
+8. **Finalize the report.** Complete `<task-folder>/worklog.md` into the close-out
    **evidence packet** (see below) — evidence for the owner to judge, **not** a done-verdict.
 9. **Close the task.** Invoke **`/fkit-task-done`** on the brief. You are an agent, so it writes
    `✅ Done (agent-closed — not owner-verified)` — in the brief and every board row. **Apply that
@@ -190,7 +194,7 @@ Grounding; implementing the approved plan; verify cycles within budget; verifyin
 findings; applying mechanical in-plan `CORRECT`-defect fixes and obvious winners; consulting agents
 within the hop budget.
 
-### The close-out evidence packet — the finalized `worklogs/<task-id>.md`
+### The close-out evidence packet — the finalized `<task-folder>/worklog.md`
 Evidence for the owner to judge, **not** a done-verdict. Contains, at minimum:
 - **Task filename · problems encountered · lessons learned · open questions.**
 - **Owner-decision log** — every important question asked and every obvious winner chosen while the
@@ -254,5 +258,5 @@ Evidence for the owner to judge, **not** a done-verdict. Contains, at minimum:
 ## Usage
 
 ```
-/fkit-task-ship-loop ai-agents/tasks/backlog/add-export-endpoint.md
+/fkit-task-ship-loop ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md
 ```

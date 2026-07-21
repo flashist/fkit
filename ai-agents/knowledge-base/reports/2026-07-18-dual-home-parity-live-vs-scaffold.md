@@ -2,7 +2,7 @@
 
 - **Date:** 2026-07-18
 - **Author:** fkit-architect
-- **Task:** [`investigate-dual-home-parity-live-vs-scaffold.md`](../../tasks/done/investigate-dual-home-parity-live-vs-scaffold.md) (Sprint 2, #49)
+- **Task:** [`investigate-dual-home-parity-live-vs-scaffold.md`](../../tasks/done/0057-investigate-dual-home-parity-live-vs-scaffold/brief.md) (Sprint 2, #49)
 - **Status:** ✅ **Ruled on and closed (2026-07-19).** Recorded as [**ADR-027**](../decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test.md), which creates the standing rule [`conventions/dual-home-parity.md`](../conventions/dual-home-parity.md). This report is now the evidence record. **Nothing in `ai-agents/wiki-vault/` was touched.**
 - **Owner rulings (2026-07-19):** **adopt the process layer, then the mechanical parity test** (the recommended combination, in that order) · **do not reopen** the deferred consuming-project content-drift decision, notwithstanding its fired trigger — it governs a different seam (ADR-027 Decision 4).
 - **Correction to §1, found on re-verification (`diff -rq`, 2026-07-19):** this report enumerated **five** drifted `conventions/*` files. The re-run found **six** fkit-authored files out of step — the five plus **`ai-agents/README.md` (63 diff-lines, the largest of them)**. **The reconciliation is scoped to six files, not five.** `reviews/README.md` and `wiki-vault/schema.md` are in step.

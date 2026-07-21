@@ -40,11 +40,14 @@ Deduplicate (a file may appear in several commits). That's the candidate list.
 
 ## Step 3 — Filter to ingest-worthy files
 
-**Keep:** `ai-agents/sprints/*.md`, `ai-agents/sprints/done/*.md`, `ai-agents/tasks/done/*.md`,
-`ai-agents/tasks/cancelled/*.md`, `ai-agents/knowledge-base/*.md` (including `decisions/`).
+**Keep:** `ai-agents/sprints/*.md`, `ai-agents/sprints/done/*.md`, `ai-agents/sprints/reviews/*.md`,
+the briefs of done/cancelled tasks `ai-agents/tasks/{done,cancelled}/*/brief.md`,
+`ai-agents/knowledge-base/*.md` (including `decisions/`). Since ADR-029 a task is a **folder**; ingest
+its `brief.md`, not the sibling `plan.md` / `worklog.md` / `review.md`.
 
-**Skip:** `ai-agents/wiki-vault/**` (wiki output, not a source); `ai-agents/tasks/backlog/*.md` (not
-done yet — a page would be premature); files only renamed, not modified.
+**Skip:** `ai-agents/wiki-vault/**` (wiki output, not a source); `ai-agents/tasks/backlog/*/brief.md`
+(not done yet — a page would be premature); the in-folder `plan.md` / `worklog.md` / `review.md`
+(working artifacts, not sources); files only renamed, not modified.
 
 If the filtered list is empty → report *"Wiki is up to date — no ingest-worthy changes since
 `<since>`."* and stop.
