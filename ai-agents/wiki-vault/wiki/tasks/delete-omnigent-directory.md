@@ -1,6 +1,6 @@
 # Delete `omnigent/`
 
-**Source**: `ai-agents/tasks/done/delete-omnigent-directory.md`
+**Source**: `ai-agents/tasks/done/0025-delete-omnigent-directory/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 5 (Phase 2)
 

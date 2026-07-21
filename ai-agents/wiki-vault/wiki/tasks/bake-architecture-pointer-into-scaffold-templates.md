@@ -1,6 +1,6 @@
 # Bake the Architecture pointer into the scaffold templates
 
-**Source**: `ai-agents/tasks/done/bake-architecture-pointer-into-scaffold-templates.md`
+**Source**: `ai-agents/tasks/done/0018-bake-architecture-pointer-into-scaffold-templates/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 12 (carried from Sprint 1, rescoped)
 

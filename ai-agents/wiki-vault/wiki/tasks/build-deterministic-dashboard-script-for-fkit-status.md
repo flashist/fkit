@@ -1,6 +1,6 @@
 # Build the deterministic dashboard script and wire it into `/fkit-status`
 
-**Source**: `ai-agents/tasks/done/build-deterministic-dashboard-script-for-fkit-status.md`
+**Source**: `ai-agents/tasks/done/0020-build-deterministic-dashboard-script-for-fkit-status/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 41
 
@@ -32,3 +32,4 @@ Implement the "deterministic layer" the owner asked for on `/fkit-status`: a scr
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board whose table format this script parses unchanged
 - [[tasks/design-task-folder-structure-and-id-scheme]] — task 74: three of the folder migration's silent breaks live in `dashboard.sh`, and it gains an `id-mismatch` drift kind
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75: the `## ID` stamp had to leave `dashboard.sh`'s `## Status` parsing undisturbed
+- [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration

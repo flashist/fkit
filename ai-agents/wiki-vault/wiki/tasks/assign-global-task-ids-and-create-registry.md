@@ -1,6 +1,6 @@
 # Assign a global task ID to every brief and write down the allocation procedure
 
-**Source**: `ai-agents/tasks/done/assign-global-task-ids-and-create-registry.md`
+**Source**: `ai-agents/tasks/done/0017-assign-global-task-ids-and-create-registry/brief.md`
 **Status**: done — ⚠️ **`(agent-closed — not owner-verified)`**
 **Sprint/Tag**: Sprint 2 · ID **0017** · priority 75 · owner fkit-coder
 
@@ -37,3 +37,5 @@ Done. **Independently re-verified by the wiki on 2026-07-20 rather than taken fr
 - [[tasks/build-deterministic-dashboard-script-for-fkit-status]] — `dashboard.sh`, which gains the `id-mismatch` drift kind and whose `## Status` parsing this task had to leave undisturbed
 - [[decisions/adr-014-how-fkit-tests-itself]] — where the duplicate-ID assertion must fit
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]] · [[systems/knowledge-base-structure]]
+- [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard
+- [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration

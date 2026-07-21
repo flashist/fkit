@@ -1,6 +1,6 @@
 # Amend the subagent-disconnect incident doc with technical corrections
 
-**Source**: `ai-agents/tasks/cancelled/amend-subagent-disconnect-incident-doc.md`
+**Source**: `ai-agents/tasks/cancelled/0016-amend-subagent-disconnect-incident-doc/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Sprint 1 — cancelled 2026-07-11
 

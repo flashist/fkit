@@ -1,6 +1,6 @@
 # Knowledge-base hygiene after the removal
 
-**Source**: `ai-agents/tasks/done/knowledge-base-hygiene-post-omnigent.md`
+**Source**: `ai-agents/tasks/done/0059-knowledge-base-hygiene-post-omnigent/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 10 (Phase 5a)
 

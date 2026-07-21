@@ -1,6 +1,6 @@
 # Make Codex a checked prerequisite
 
-**Source**: `ai-agents/tasks/done/make-codex-a-checked-prerequisite.md`
+**Source**: `ai-agents/tasks/done/0060-make-codex-a-checked-prerequisite/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 3 (Phase 0.3, blocking)
 

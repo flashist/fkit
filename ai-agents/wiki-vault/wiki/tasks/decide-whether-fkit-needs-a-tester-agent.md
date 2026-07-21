@@ -1,6 +1,6 @@
 # Decide whether fkit needs a dedicated e2e-tester agent
 
-**Source**: `ai-agents/tasks/done/decide-whether-fkit-needs-a-tester-agent.md`
+**Source**: `ai-agents/tasks/done/0024-decide-whether-fkit-needs-a-tester-agent/brief.md`
 **Status**: done — ⚠️ **`(agent-closed — not owner-verified)`**
 **Sprint/Tag**: Backlog board · ID **0024** · priority Unscheduled · **owner: the OWNER**
 

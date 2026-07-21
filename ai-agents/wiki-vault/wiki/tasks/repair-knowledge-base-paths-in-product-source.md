@@ -1,6 +1,6 @@
 # Repair the knowledge-base paths in product source
 
-**Source**: `ai-agents/tasks/done/repair-knowledge-base-paths-in-product-source.md`
+**Source**: `ai-agents/tasks/done/0077-repair-knowledge-base-paths-in-product-source/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 19 (ADR-013 fallout)
 

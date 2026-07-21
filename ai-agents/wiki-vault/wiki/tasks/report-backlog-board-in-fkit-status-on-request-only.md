@@ -1,6 +1,6 @@
 # Report the Backlog board in `/fkit-status` on request only
 
-**Source**: `ai-agents/tasks/done/report-backlog-board-in-fkit-status-on-request-only.md`
+**Source**: `ai-agents/tasks/done/0080-report-backlog-board-in-fkit-status-on-request-only/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 68
 

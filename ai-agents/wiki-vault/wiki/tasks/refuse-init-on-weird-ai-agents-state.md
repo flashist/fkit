@@ -1,6 +1,6 @@
 # Refuse to run init against a weird `ai-agents/` — symlink, file-where-dir, unreadable
 
-**Source**: `ai-agents/tasks/done/refuse-init-on-weird-ai-agents-state.md`
+**Source**: `ai-agents/tasks/done/0069-refuse-init-on-weird-ai-agents-state/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 27
 

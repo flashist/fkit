@@ -1,6 +1,6 @@
 # Rewrite the installer for a single flavor
 
-**Source**: `ai-agents/tasks/done/rewrite-installer-single-flavor.md`
+**Source**: `ai-agents/tasks/done/0084-rewrite-installer-single-flavor/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 4 (Phase 1)
 

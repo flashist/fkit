@@ -1,6 +1,6 @@
 # Design a timeout-auto-proceed for the ship-loop's owner questions
 
-**Source**: `ai-agents/tasks/cancelled/design-ship-loop-timeout-auto-proceed.md`
+**Source**: `ai-agents/tasks/cancelled/0028-design-ship-loop-timeout-auto-proceed/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Sprint 2 — priority 59. Cancelled 2026-07-18 — declined on cost per ADR-024.
 

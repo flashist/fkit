@@ -1,6 +1,6 @@
 # Record the "one skill, one output" convention
 
-**Source**: `ai-agents/tasks/done/record-one-skill-one-output-convention.md`
+**Source**: `ai-agents/tasks/done/0064-record-one-skill-one-output-convention/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 47
 

@@ -138,3 +138,15 @@ re-raise the dual-format transition, content-hash IDs, numbering only open tasks
   `ai-agents/reviews/README.md:24-30`, `claude/skills/fkit-stateful-review/SKILL.md:23-33`
 - [[tasks/design-task-folder-structure-and-id-scheme]] — task 74, the design task that produced this ADR (**Done, agent-closed — not owner-verified**)
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75, the ID backfill: Decision 4's SHA pin and Decision 8's no-registry ruling, both verified reproducible
+- [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard
+- [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — task 81, the mover KB-sweep fix + ADR-number guard
+- [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
+- [[tasks/repair-task-links-outside-the-wiki-after-migration]] — task 77, the post-migration doc-link repair
+- [[tasks/wiki-sync-backlog-board-introduction]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-dumb-down-skill]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-filtered-fkit-status-board]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-fkit-status-output-variant-removal]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-open-questions-interview-skill]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-task-plan-rename]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/implement-task-ship-loop-skill]] — the ship-loop whose `plan.md`/`worklog.md` artifacts moved into the task folder under this ADR
+- [[systems/review-and-model-diversity]] — the review ledger (`review.md`) absorbed into the task folder by this ADR

@@ -1,6 +1,6 @@
 # Give Codex the universal hard rules it has never had
 
-**Source**: `ai-agents/tasks/done/give-codex-the-universal-hard-rules.md`
+**Source**: `ai-agents/tasks/done/0047-give-codex-the-universal-hard-rules/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 30
 

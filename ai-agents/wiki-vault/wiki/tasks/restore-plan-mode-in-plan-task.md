@@ -1,6 +1,6 @@
 # Restore Claude Code plan mode in `/fkit-plan-task`
 
-**Source**: `ai-agents/tasks/done/restore-plan-mode-in-plan-task.md`
+**Source**: `ai-agents/tasks/done/0081-restore-plan-mode-in-plan-task/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 17 (regression — independent; added out of band 2026-07-11)
 

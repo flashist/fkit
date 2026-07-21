@@ -1,6 +1,6 @@
 # Add the "no secrets" rule to `fkit-lead.md` — the one agent file missing it
 
-**Source**: `ai-agents/tasks/done/add-no-secrets-rule-to-fkit-lead.md`
+**Source**: `ai-agents/tasks/done/0007-add-no-secrets-rule-to-fkit-lead/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 32
 

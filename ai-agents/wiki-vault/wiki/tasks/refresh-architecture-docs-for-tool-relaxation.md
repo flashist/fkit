@@ -1,6 +1,6 @@
 # Refresh the docs for the tool-allowlist relaxation (ADR-022)
 
-**Source**: `ai-agents/tasks/done/refresh-architecture-docs-for-tool-relaxation.md`
+**Source**: `ai-agents/tasks/done/0068-refresh-architecture-docs-for-tool-relaxation/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 · priority 58 · owner fkit-architect · documentation only
 

@@ -1,6 +1,6 @@
 # Stop agents asserting repo state they never checked
 
-**Source**: `ai-agents/tasks/done/stop-agents-asserting-unchecked-repo-state.md`
+**Source**: `ai-agents/tasks/done/0087-stop-agents-asserting-unchecked-repo-state/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 24
 

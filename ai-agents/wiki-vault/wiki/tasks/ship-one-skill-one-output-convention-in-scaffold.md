@@ -1,6 +1,6 @@
 # Ship the one-skill-one-output convention in the scaffold
 
-**Source**: `ai-agents/tasks/done/ship-one-skill-one-output-convention-in-scaffold.md`
+**Source**: `ai-agents/tasks/done/0086-ship-one-skill-one-output-convention-in-scaffold/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 48
 

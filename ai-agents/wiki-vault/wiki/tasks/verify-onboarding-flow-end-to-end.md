@@ -1,6 +1,6 @@
 # Verify the onboarding flow end-to-end
 
-**Source**: `ai-agents/tasks/done/verify-onboarding-flow-end-to-end.md`
+**Source**: `ai-agents/tasks/done/0091-verify-onboarding-flow-end-to-end/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 7 (**the release gate**)
 

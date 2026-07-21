@@ -1,6 +1,6 @@
 # Make `/fkit-task-done` flip the moved brief's own `## Status` header
 
-**Source**: `ai-agents/tasks/done/task-done-flips-brief-own-status-header.md`
+**Source**: `ai-agents/tasks/done/0090-task-done-flips-brief-own-status-header/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 34
 

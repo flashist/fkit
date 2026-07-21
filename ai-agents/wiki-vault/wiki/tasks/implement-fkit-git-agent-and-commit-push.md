@@ -1,6 +1,6 @@
 # Implement the `fkit-git` agent + `commit-push` skill
 
-**Source**: `ai-agents/tasks/cancelled/implement-fkit-git-agent-and-commit-push.md`
+**Source**: `ai-agents/tasks/cancelled/0051-implement-fkit-git-agent-and-commit-push/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Sprint 2 — priority 56. Cancelled 2026-07-19 — parent design task 55 declined.
 

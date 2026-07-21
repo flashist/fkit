@@ -1,6 +1,6 @@
 # Add the `/fkit-dumb-down` skill for the six Claude-side roles
 
-**Source**: `ai-agents/tasks/done/add-dumb-down-skill-for-six-roles.md`
+**Source**: `ai-agents/tasks/done/0003-add-dumb-down-skill-for-six-roles/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 72
 
@@ -29,3 +29,4 @@ Done. fkit's skill count goes 23 → 24.
 - [[systems/role-locked-sessions]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
 - [[tasks/investigate-askuserquestion-availability-for-agents]]
+- [[tasks/wiki-sync-dumb-down-skill]] — a batched wiki-sync task (discharged by the migration sync)

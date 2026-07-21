@@ -1,6 +1,6 @@
 # Add the `/fkit-open-questions-interview` skill for the six Claude-side roles
 
-**Source**: `ai-agents/tasks/done/add-open-questions-interview-skill-for-six-roles.md`
+**Source**: `ai-agents/tasks/done/0008-add-open-questions-interview-skill-for-six-roles/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 70
 
@@ -29,3 +29,4 @@ Done — skill dir, registration and tests landed as one unit (a registered skil
 - [[systems/role-locked-sessions]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
 - [[tasks/restructure-coder-report-summary-then-interview]]
+- [[tasks/wiki-sync-open-questions-interview-skill]] — a batched wiki-sync task (discharged by the migration sync)

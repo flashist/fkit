@@ -1,6 +1,6 @@
 # Remove eager auto-spawn of fkit-adversarial-reviewer at session start
 
-**Source**: `ai-agents/tasks/cancelled/remove-adversarial-reviewer-eager-spawn.md`
+**Source**: `ai-agents/tasks/cancelled/0071-remove-adversarial-reviewer-eager-spawn/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Sprint 1 — cancelled 2026-07-11
 

@@ -1,6 +1,6 @@
 # Merge an fkit-managed rules block into an existing `CLAUDE.md` / `AGENTS.md` — the brownfield hole
 
-**Source**: `ai-agents/tasks/done/merge-fkit-rules-block-into-existing-root-context-files.md`
+**Source**: `ai-agents/tasks/done/0061-merge-fkit-rules-block-into-existing-root-context-files/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 31
 

@@ -98,3 +98,5 @@ This principle caught a real error: the knowledge-base hygiene pass had improvis
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the dual-home drift across the conventions and README
 - [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58: the architect-owned refresh of the KB's own root docs after ADR-022
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75: where the ID allocation procedure is written down
+- [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — task 81, the mover KB-sweep fix + ADR-number guard
+- [[tasks/repair-task-links-outside-the-wiki-after-migration]] — task 77, the post-migration doc-link repair

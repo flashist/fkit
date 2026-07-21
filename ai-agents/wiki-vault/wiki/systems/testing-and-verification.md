@@ -96,3 +96,6 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a second hook whose session-scoped behaviour fkit **cannot fully test itself**; automated coverage reaches its script logic against synthetic payloads only
 - [[tasks/decide-whether-fkit-needs-a-tester-agent]] — the decision task that closed the tester question (ID 0024); the static-review gap it names is recorded on this page
+- [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard
+- [[tasks/compress-universal-rules-output-style-section]] — task 79, the universal-rules compression
+- [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration

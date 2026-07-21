@@ -1,6 +1,6 @@
 # Give every agent direct wiki `query` access
 
-**Source**: `ai-agents/tasks/done/give-every-agent-direct-wiki-query-access.md`
+**Source**: `ai-agents/tasks/done/0048-give-every-agent-direct-wiki-query-access/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 1 → closed as Done during Sprint 2 disposition
 

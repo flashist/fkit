@@ -112,3 +112,4 @@ escape. It was put back to the owner and resolved into the checkable form in Dec
   `claude/fkit-claude.sh:257-283`, `claude/fkit-claude-init.sh:316-341`,
   `claude/agents/fkit-coder.md:34,:192-198`
 - [[tasks/sprint-2-remove-omnigent]] — the sprint this decision was taken during; it carries no numbered row
+- [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — task 81, the mover KB-sweep fix + ADR-number guard

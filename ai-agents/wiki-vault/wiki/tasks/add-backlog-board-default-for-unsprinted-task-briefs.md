@@ -1,6 +1,6 @@
 # Add a Backlog board — the default home for unsprinted task briefs
 
-**Source**: `ai-agents/tasks/done/add-backlog-board-default-for-unsprinted-task-briefs.md`
+**Source**: `ai-agents/tasks/done/0001-add-backlog-board-default-for-unsprinted-task-briefs/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 67
 
@@ -34,3 +34,4 @@ The read-side half — making `/fkit-status` report this board **only on request
 - [[systems/knowledge-base-structure]]
 - [[tasks/build-deterministic-dashboard-script-for-fkit-status]]
 - [[tasks/decide-whether-fkit-needs-a-tester-agent]] — a Backlog-board task whose ruling produced ADR-028; **its close does not move Sprint 2's count**
+- [[tasks/wiki-sync-backlog-board-introduction]] — a batched wiki-sync task (discharged by the migration sync)

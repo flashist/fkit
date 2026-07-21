@@ -1,6 +1,6 @@
 # Add a "Speak in simple terms" output-style preference for all agents
 
-**Source**: `ai-agents/tasks/done/add-speak-in-simple-terms-output-style.md`
+**Source**: `ai-agents/tasks/done/0010-add-speak-in-simple-terms-output-style/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 62
 
@@ -31,3 +31,4 @@ This is the second time a brief's stated premise shipped false and was caught on
 - [[tasks/stop-agents-asserting-unchecked-repo-state]] — the `evidence-before-assertion` convention this task's correction re-proves
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the dual-home concern the brief invoked; the real structure is a single generated source
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/compress-universal-rules-output-style-section]] — task 79, the universal-rules compression

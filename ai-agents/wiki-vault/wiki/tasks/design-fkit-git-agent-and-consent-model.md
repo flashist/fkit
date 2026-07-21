@@ -1,6 +1,6 @@
 # Design the `fkit-git` agent + commit/push consent model
 
-**Source**: `ai-agents/tasks/cancelled/design-fkit-git-agent-and-consent-model.md`
+**Source**: `ai-agents/tasks/cancelled/0027-design-fkit-git-agent-and-consent-model/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Sprint 2 — priority 55. Cancelled 2026-07-19 — not pursuing git automation.
 

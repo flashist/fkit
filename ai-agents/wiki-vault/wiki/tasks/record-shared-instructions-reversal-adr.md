@@ -1,6 +1,6 @@
 # Record a tombstone ADR for the shared-instructions reversal
 
-**Source**: `ai-agents/tasks/cancelled/record-shared-instructions-reversal-adr.md`
+**Source**: `ai-agents/tasks/cancelled/0066-record-shared-instructions-reversal-adr/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Sprint 2 — priority 37. Cancelled 2026-07-19 — superseded by ADR-016 (duplicate).
 

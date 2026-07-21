@@ -1,6 +1,6 @@
 # Build `fkit reconnect` tooling for disconnected subagent runners
 
-**Source**: `ai-agents/tasks/done/build-fkit-reconnect-tooling.md`
+**Source**: `ai-agents/tasks/done/0021-build-fkit-reconnect-tooling/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 1
 

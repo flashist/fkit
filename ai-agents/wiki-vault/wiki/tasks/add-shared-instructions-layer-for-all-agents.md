@@ -1,6 +1,6 @@
 # Add a shared instructions layer that every fkit agent reads
 
-**Source**: `ai-agents/tasks/done/add-shared-instructions-layer-for-all-agents.md`
+**Source**: `ai-agents/tasks/done/0009-add-shared-instructions-layer-for-all-agents/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 29 (investigation)
 

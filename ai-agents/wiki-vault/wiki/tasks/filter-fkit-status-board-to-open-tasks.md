@@ -1,6 +1,6 @@
 # Filter the `/fkit-status` board to open tasks only
 
-**Source**: `ai-agents/tasks/done/filter-fkit-status-board-to-open-tasks.md`
+**Source**: `ai-agents/tasks/done/0039-filter-fkit-status-board-to-open-tasks/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 65
 
@@ -34,3 +34,4 @@ The **`status-report-format` convention was amended to match** — its *"show th
 - [[systems/knowledge-base-structure]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]
 - [[tasks/add-status-skill-to-producer]]
+- [[tasks/wiki-sync-filtered-fkit-status-board]] — a batched wiki-sync task (discharged by the migration sync)

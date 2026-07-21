@@ -53,7 +53,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 
 ### Sprints
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — 🔒 Closed: the Omnigent-era onboarding sprint, and how its 12 tickets were dispositioned
-- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**64 done · 15 backlog · 1 in progress · 5 cancelled — of 85**; grew 22 → 85)
+- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**75 done · 4 backlog · 1 in progress · 5 cancelled — of 85**; grew 22 → 85)
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — 🆕 The **Backlog board** (`sprints/backlog.md`) — the standing home for unsprinted briefs
 
 ### Sprint 2 — the removal chain
@@ -81,10 +81,18 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/stop-agents-asserting-unchecked-repo-state]] — A **false instruction in both movers**, shipping to every project → `evidence-before-assertion.md`
 - [[tasks/fix-headless-menu-guard-crash]] — `[ -r /dev/tty ]` never tests openability; the lead default was **dead code**
 
-### Sprint 2 — the task-folder restructure (74, 75) and the tester ruling
+### Sprint 2 — the task-folder restructure (74–77, 85) and the tester ruling
 - [[tasks/design-task-folder-structure-and-id-scheme]] — Task 74 → ADR-029: a task becomes a **folder** keyed by a permanent global ID. The design found **three silent breaks and one data-loss path** the brief never suspected
 - [[tasks/assign-global-task-ids-and-create-registry]] — Task 75 → every brief stamped with an `## ID`, **corpus pinned to a commit SHA**; no registry, no file moves. Backfill verified reproducible
+- [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — Task 76 → **the migration shipped (2026-07-21)**: ~186 files, three artifact dirs absorbed, the point of no return. Agent-closed
+- [[tasks/repair-task-links-outside-the-wiki-after-migration]] — Task 77 → the knowledge-base + in-tree doc-link repair; also cleared **pre-existing** rot the movers had left
+- [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — Task 85 (ID 0101) → ADR-029 Decision 3's duplicate-ID guard; **ran before task 76** — its value is pre-merge
 - [[tasks/decide-whether-fkit-needs-a-tester-agent]] — ID 0024 (Backlog board) → ADR-028: the eighth-role ruling; **the owner ruled against the recommendation, knowingly**
+
+### Sprint 2 — the six batched wiki-syncs (discharged by the task-folder sync, 2026-07-21)
+- [[tasks/wiki-sync-fkit-status-output-variant-removal]] · [[tasks/wiki-sync-task-plan-rename]] · [[tasks/wiki-sync-filtered-fkit-status-board]] · [[tasks/wiki-sync-backlog-board-introduction]] · [[tasks/wiki-sync-open-questions-interview-skill]] · [[tasks/wiki-sync-dumb-down-skill]] — priorities 45/51/66/69/71/73; each **batched into the migration sync** rather than run first (ADR-029 §9.2); every subject already recorded on its implementation page
+- [[tasks/compress-universal-rules-output-style-section]] — Task 79 (ID 0022) → reclaimed ~549 B under the launch-blocking 4096-B universal-rules cap
+- [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — Task 81 (ID 0036) → movers now sweep `knowledge-base/`; **Part B is the first defence against the ADR-number collision** that actually happened 2026-07-19
 
 ### Sprint 2 — the four investigations closed 2026-07-19
 - [[tasks/investigate-mutation-testing-library-adoption]] — Task 46 → ADR-026: **no library mutates shell**, so the zero-devDeps tension never existed; the real defect was gating

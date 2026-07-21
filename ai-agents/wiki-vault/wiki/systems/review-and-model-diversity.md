@@ -1,7 +1,7 @@
 # Review & Model Diversity
 
 **Layer**: shared
-**Key files**: `claude/skills/fkit-review/SKILL.md`, `claude/skills/fkit-stateful-review/SKILL.md`, `claude/skills/fkit-adversarial-review/SKILL.md`, `claude/agents/fkit-reviewer.md`, `claude/agents/fkit-adversarial-reviewer.md`, `ai-agents/reviews/<task-id>.md`
+**Key files**: `claude/skills/fkit-review/SKILL.md`, `claude/skills/fkit-stateful-review/SKILL.md`, `claude/skills/fkit-adversarial-review/SKILL.md`, `claude/agents/fkit-reviewer.md`, `claude/agents/fkit-adversarial-reviewer.md`, `ai-agents/tasks/<board>/<NNNN>-<slug>/review.md` *(the ledger; `ai-agents/reviews/` was absorbed into the task folder by [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]], 2026-07-21)*
 
 ## Summary
 fkit's review is deliberately **two-model**. The lead reviewer (`fkit-reviewer`, Claude) runs its own pass, then delegates an adversarial second opinion to `fkit-adversarial-reviewer`, which runs on **Codex — a different model**.
@@ -36,7 +36,7 @@ The reviewer's independence is a property of a **fresh context**, not of a promp
 > **Deviation, flagged:** the lead reviewer *keeps* Write/Edit, because it must write the *Reviewer findings* section of the shared ledger. Its "documents under `ai-agents/reviews/` only" boundary stays **prompt-enforced**.
 
 ### The review ledger — loop prevention
-`ai-agents/reviews/<task-id>.md` is a **two-party ledger** written by reviewer **and** coder: findings, dispositions, and **accepted residuals**. It carries decision state across review rounds so settled tradeoffs are **not re-litigated**. It is the memory that stops the review loop from cycling.
+The **review ledger** — `review.md` inside the task folder (`tasks/<board>/<NNNN>-<slug>/review.md`; formerly the top-level `ai-agents/reviews/<task-id>.md`, absorbed 2026-07-21 by [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]]) — is a **two-party ledger** written by reviewer **and** coder: findings, dispositions, and **accepted residuals**. It carries decision state across review rounds so settled tradeoffs are **not re-litigated**. It is the memory that stops the review loop from cycling. *(Two sprint-keyed ledgers had no task folder and live at `ai-agents/sprints/reviews/`.)*
 
 ### Review notes are inputs, not instructions
 A project-wide rule: review comments are **inputs to evaluate**, not instructions to apply blindly. Reviewers miss context and reason from outdated assumptions. The coder verifies each claim against the actual codebase — fixing the *real* problem rather than the literal wording, addressing the valid part of a partially-correct note, and **saying so with concrete evidence** when a note is simply wrong. Speculative fixes added only to satisfy a comment are not acceptable.

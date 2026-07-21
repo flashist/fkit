@@ -1,6 +1,6 @@
 # Rename the producer's `fkit-task-plan` skill to `fkit-task-brief`
 
-**Source**: `ai-agents/tasks/done/rename-task-plan-skill-to-task-brief.md`
+**Source**: `ai-agents/tasks/done/0075-rename-task-plan-skill-to-task-brief/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 50
 
@@ -23,3 +23,4 @@ Rename the producer's `/fkit-task-plan` (scope a description into backlog briefs
 - [[systems/fkit]] · [[systems/role-locked-sessions]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — a later edit to the same skill, under its new name
+- [[tasks/wiki-sync-task-plan-rename]] — a batched wiki-sync task (discharged by the migration sync)

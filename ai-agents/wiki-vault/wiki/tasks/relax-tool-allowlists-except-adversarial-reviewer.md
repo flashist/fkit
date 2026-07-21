@@ -1,6 +1,6 @@
 # Relax the tool allowlist for every role except the adversarial reviewer
 
-**Source**: `ai-agents/tasks/done/relax-tool-allowlists-except-adversarial-reviewer.md`
+**Source**: `ai-agents/tasks/done/0070-relax-tool-allowlists-except-adversarial-reviewer/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 57
 

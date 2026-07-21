@@ -1,6 +1,6 @@
 # Fix the scaffold — ship the knowledge-base folders its own README promises
 
-**Source**: `ai-agents/tasks/done/fix-scaffold-knowledge-base-folders.md`
+**Source**: `ai-agents/tasks/done/0043-fix-scaffold-knowledge-base-folders/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 25
 

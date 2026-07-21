@@ -1,6 +1,6 @@
 # Formalize the knowledge-base folder structure, incl. `incidents/`
 
-**Source**: `ai-agents/tasks/done/formalize-knowledge-base-incidents-folder.md`
+**Source**: `ai-agents/tasks/done/0044-formalize-knowledge-base-incidents-folder/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 9
 

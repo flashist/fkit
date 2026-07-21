@@ -1,7 +1,9 @@
 # ADR-020: Per-task `plans/` and `worklogs/` artifacts, keyed by task-id, mirroring `reviews/`
 
 **Date**: 2026-07-17
-**Status**: accepted
+**Status**: accepted — ⚠️ **its top-level-directory arrangement is SUPERSEDED by [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]]** (migration shipped 2026-07-21)
+
+> ⚠️ **The "each in its own top-level directory" mechanism below is no longer how it works.** ADR-029 folded `ai-agents/plans/`, `ai-agents/worklogs/` **and** `ai-agents/reviews/` *into the task folder* — they are now `plan.md`, `worklog.md`, `review.md` inside `tasks/<board>/<NNNN>-<slug>/`, keyed by the folder, not by a slug in a separate directory. **ADR-029 explicitly executes this ADR's own §Decision-6 end-state** (*"collapse the brief, plan, worklog and review ledger into a single per-task folder … today's separate top-level dirs are a known stepping stone toward that"*). The *artifacts, their contents, their lifecycle and the "coder writes them, owner commits, not wiki-ingested" rules below are all still current* — **only their location moved.** Read every `ai-agents/{plans,worklogs,reviews}/<task-id>.md` path below as `…/<task folder>/{plan,worklog,review}.md`.
 
 ## Context
 The autonomous ship-loop ([[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]]) runs a long autonomous stretch after the owner approves the plan and walks away. Two problems fall out of that:
@@ -41,3 +43,4 @@ fkit already has the precedent: `ai-agents/reviews/<task-id>.md` — a git-track
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — executes this ADR's §6 per-task folder and **absorbs all three** of its top-level directories (`plans/`, `worklogs/`, `reviews/`); its flat `<task-id>/` sketch was rejected for keeping the board in the path
 - [[tasks/design-task-folder-structure-and-id-scheme]] — task 74 executes this ADR's §6 end state: the per-task folder
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75: the ID that keys `plans/`, `worklogs/` and `reviews/` together
+- [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration

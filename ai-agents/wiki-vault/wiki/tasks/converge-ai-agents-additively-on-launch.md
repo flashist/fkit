@@ -1,6 +1,6 @@
 # Make launch converge `ai-agents/` additively — "the migration"
 
-**Source**: `ai-agents/tasks/done/converge-ai-agents-additively-on-launch.md`
+**Source**: `ai-agents/tasks/done/0023-converge-ai-agents-additively-on-launch/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 28
 

@@ -94,7 +94,7 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 - **The `.fkit/` orphan-cleanup consent model → announce-only** (2026-07-17), unblocking task 36.
 
 ## Outcome
-**64 done · 15 backlog · 1 in progress · 5 cancelled — of 85.** *(Updated 2026-07-20, re-derived from `ai-agents/sprints/sprint-2.md` rather than from any reported figure: the sprint grew 81 → 85 with tasks **82** (refresh `architecture.md` for ADRs 026–030 and the eighth role), **83** (amend `PROJECT.md:8,72` — split from 82 per ADR-028:154, because the brief is the product document), **84** (the eighth-role wiki resync) and **85** (the duplicate-ID guard); task **75** closed — **agent-closed, not owner-verified**, the third such row. Task **80** remains the one row In progress.)* ⚠️ **Three Done rows are agent-closed and not owner-verified** (64, 74, 75).
+**75 done · 4 backlog · 1 in progress · 5 cancelled — of 85.** *(Updated 2026-07-21, re-derived from `ai-agents/sprints/sprint-2.md`: **+11 done** since the last sync — the whole task-folder migration cluster landed. Tasks **76** (the migration itself — ~186 files, the point of no return), **77** (the doc-link repair), **79**, **81**, **85** and the six batched wiki-syncs (93–97, 100) all closed, **most agent-closed**. Task **80** (the adr-029-stop-hook vault repair) is the one row In progress — **its vault work is in fact complete** (done by fkit-wiki 2026-07-19); the board row has not been moved.)* ⚠️ **Many Done rows are agent-closed and not owner-verified**, including **74, 75, 76** — the design, the ID backfill and the migration itself, i.e. the whole least-reversible change in the project's history.
 
 ⚠️ **Task 85 is filed at priority 85 but must run BEFORE task 76** — owner-ruled 2026-07-20. It is ADR-029 Decision 3's duplicate-ID detection, the *sole* mitigation for the accepted cross-branch ID race. **Priority here is append rank, not run order**, and reading the board as a queue would run the migration before its own guard. Omnigent is gone; the release gate passed on a clean install; fkit has automated verification for the first time; Codex finally receives the universal hard rules; **"the migration" (additive convergence) landed**; the coder→reviewer consult path is structurally enforced; the coder's autonomous ship-loop is **built and live**; the `.fkit/` orphan residue is cleaned; the tool-allowlist posture was deliberately reversed (ADR-022) leaving one structural tool wall; the `/fkit-status` board now shows open work only and unsprinted briefs finally have a board; and two six-role skills landed.
 
@@ -102,7 +102,7 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 
 **Cancelled (5):** **37** the duplicate shared-instructions tombstone (already ADR-016); **55 / 56** the `fkit-git` agent (hard rule reaffirmed); **59 / 60** the ship-loop timeout (feasible, declined on cost).
 
-**Still Backlog (15):** **45 / 51 / 66 / 69 / 71 / 73** — six pre-filed wiki syncs, now **batching into task 78** by ADR-029 Decision 10 rather than running first; the remainder of the **task-folder migration cluster (76, 77, 78)**; **79** and **81**; and the four newest rows **82 / 83 / 84 / 85**. Tasks **74** and **75** are no longer backlog — both Done (agent-closed).
+**Still Backlog (4):** **78** (the wiki sync after the migration — *this run is executing it*), and the eighth-role doc trio **82 / 83 / 84** (`architecture.md`, `PROJECT.md`, then the resync). The six batched wiki-syncs are now **Done** — discharged by this migration sync. **In progress (1): 80**, the adr-029-stop-hook vault repair, whose vault work is complete but whose row has not been moved.
 
 ### New cluster — the task-folder migration (74–78), all Backlog
 
@@ -143,3 +143,14 @@ Its sibling: **a count of a *semantic* rule cannot be established by grepping on
 - [[tasks/give-every-agent-direct-wiki-query-access]] · [[tasks/rollout-adr-004-fixed-consult-titles]] · [[tasks/add-e2e-smoke-script-for-fkit-itself]]
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the migration cluster (74–78) on this board: a task becomes a folder under a permanent global ID. **Decided, not built**
 - [[tasks/design-task-folder-structure-and-id-scheme]] · [[tasks/assign-global-task-ids-and-create-registry]] — tasks 74 and 75, the task-folder design and the ID backfill (**both agent-closed**)
+- [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard
+- [[tasks/compress-universal-rules-output-style-section]] — task 79, the universal-rules compression
+- [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — task 81, the mover KB-sweep fix + ADR-number guard
+- [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
+- [[tasks/repair-task-links-outside-the-wiki-after-migration]] — task 77, the post-migration doc-link repair
+- [[tasks/wiki-sync-backlog-board-introduction]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-dumb-down-skill]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-filtered-fkit-status-board]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-fkit-status-output-variant-removal]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-open-questions-interview-skill]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-task-plan-rename]] — a batched wiki-sync task (discharged by the migration sync)

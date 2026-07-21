@@ -1,6 +1,6 @@
 # Investigate adopting a proper mutation-testing library, replacing hand-rolled `prove-red.sh`
 
-**Source**: `ai-agents/tasks/done/investigate-mutation-testing-library-adoption.md`
+**Source**: `ai-agents/tasks/done/0058-investigate-mutation-testing-library-adoption/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 · priority 46 · owner fkit-architect · investigation-first
 

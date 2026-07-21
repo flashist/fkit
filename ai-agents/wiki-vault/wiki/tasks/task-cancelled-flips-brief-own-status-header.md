@@ -1,6 +1,6 @@
 # Make `/fkit-task-cancelled` flip the moved brief's own `## Status` header
 
-**Source**: `ai-agents/tasks/done/task-cancelled-flips-brief-own-status-header.md`
+**Source**: `ai-agents/tasks/done/0089-task-cancelled-flips-brief-own-status-header/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 35
 

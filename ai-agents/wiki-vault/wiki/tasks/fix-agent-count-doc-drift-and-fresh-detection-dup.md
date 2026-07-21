@@ -1,6 +1,6 @@
 # Fix stale agent-count docs and duplicated fresh-project detection
 
-**Source**: `ai-agents/tasks/cancelled/fix-agent-count-doc-drift-and-fresh-detection-dup.md`
+**Source**: `ai-agents/tasks/cancelled/0040-fix-agent-count-doc-drift-and-fresh-detection-dup/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Sprint 1 — cancelled 2026-07-11
 

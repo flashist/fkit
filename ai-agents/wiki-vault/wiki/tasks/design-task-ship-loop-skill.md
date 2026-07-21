@@ -1,6 +1,6 @@
 # Design the coder's `task-ship-loop` skill — the autonomous brief-to-done loop
 
-**Source**: `ai-agents/tasks/done/design-task-ship-loop-skill.md`
+**Source**: `ai-agents/tasks/done/0031-design-task-ship-loop-skill/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 52
 

@@ -77,3 +77,4 @@ The ADR deliberately **declined to pick the runner**, on the owner's explicit ru
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — adds a **duplicate-ID assertion** to this suite; detection here is the entire mitigation for its accepted cross-branch ID race
 - [[tasks/design-task-folder-structure-and-id-scheme]] — task 74; the duplicate-ID guard it defers must fit this ADR's constraints
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75; its guard is filed as task 85 against this suite
+- [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard

@@ -1,6 +1,6 @@
 # Add CI: run `validate-bundles.sh`
 
-**Source**: `ai-agents/tasks/cancelled/add-ci-validate-bundles.md`
+**Source**: `ai-agents/tasks/cancelled/0002-add-ci-validate-bundles/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Sprint 1 — cancelled 2026-07-11
 

@@ -1,6 +1,6 @@
 # Add an e2e smoke script for fkit itself
 
-**Source**: `ai-agents/tasks/cancelled/add-e2e-smoke-script-for-fkit-itself.md`
+**Source**: `ai-agents/tasks/cancelled/0004-add-e2e-smoke-script-for-fkit-itself/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Unsprinted — ⛔ Cancelled 2026-07-14
 

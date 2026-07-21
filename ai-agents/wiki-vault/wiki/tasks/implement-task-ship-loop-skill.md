@@ -1,6 +1,6 @@
 # Implement the coder's `task-ship-loop` skill
 
-**Source**: `ai-agents/tasks/done/implement-task-ship-loop-skill.md`
+**Source**: `ai-agents/tasks/done/0055-implement-task-ship-loop-skill/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 53
 
@@ -11,7 +11,7 @@ Build exactly the owner-approved design from task 52 ([[tasks/design-task-ship-l
 - The skill directory `claude/skills/fkit-task-ship-loop/` with the approved loop and the `⛔ Owner: the coder` banner.
 - Registered in the coder's list in `claude/skills-for-role.sh` — so the session lockdown and the ADR-018 `PreToolUse` hook allow the coder and deny everyone else; hook suite proves both directions.
 - Argument contract per the one-skill-one-output convention: the task-brief path is an operand; no output variants.
-- Writes the ADR-020 per-task artifacts (`plans/<task-id>.md`, `worklogs/<task-id>.md`).
+- Writes the ADR-020 per-task artifacts — since the task-folder migration ([[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]], 2026-07-21) these are `plan.md` and `worklog.md` **inside the task folder**, not the former top-level `plans/<task-id>.md` / `worklogs/<task-id>.md`.
 
 ## Outcome
 **Done** — skill live, registered for the coder, hook suite green (per the sprint board close-out). The loop is **session-only by design** and refuses spawned/headless invocation.

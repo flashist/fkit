@@ -1,6 +1,6 @@
 # Repair the broken task links in the closed Sprint 1 plan
 
-**Source**: `ai-agents/tasks/done/repair-broken-links-in-closed-sprint-plans.md`
+**Source**: `ai-agents/tasks/done/0076-repair-broken-links-in-closed-sprint-plans/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 21
 
@@ -28,3 +28,5 @@
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — the closed plan repaired
 - [[systems/knowledge-base-structure]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — task 81, the mover KB-sweep fix + ADR-number guard
+- [[tasks/repair-task-links-outside-the-wiki-after-migration]] — task 77, the post-migration doc-link repair

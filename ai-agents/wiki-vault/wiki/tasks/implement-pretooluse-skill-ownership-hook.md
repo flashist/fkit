@@ -1,6 +1,6 @@
 # Implement the `PreToolUse` skill-ownership gate (the hook-flip)
 
-**Source**: `ai-agents/tasks/done/implement-pretooluse-skill-ownership-hook.md`
+**Source**: `ai-agents/tasks/done/0052-implement-pretooluse-skill-ownership-hook/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 43
 

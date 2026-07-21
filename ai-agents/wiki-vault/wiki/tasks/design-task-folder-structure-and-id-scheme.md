@@ -1,6 +1,6 @@
 # Design the task-folder structure and the global task-ID scheme
 
-**Source**: `ai-agents/tasks/done/design-task-folder-structure-and-id-scheme.md`
+**Source**: `ai-agents/tasks/done/0030-design-task-folder-structure-and-id-scheme/brief.md`
 **Status**: done — ⚠️ **`(agent-closed — not owner-verified)`**
 **Sprint/Tag**: Sprint 2 · ID **0030** · priority 74 · owner fkit-architect · design-first
 
@@ -41,3 +41,4 @@ Notable rulings the design carried:
 - [[tasks/build-deterministic-dashboard-script-for-fkit-status]] — `dashboard.sh`, the tool three of the silent breaks live in
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which the brief wrongly told this design to sequence against
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]] · [[systems/review-and-model-diversity]]
+- [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration

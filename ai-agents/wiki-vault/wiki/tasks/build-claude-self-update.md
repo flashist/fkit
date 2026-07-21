@@ -1,6 +1,6 @@
 # Build self-update for the Claude path
 
-**Source**: `ai-agents/tasks/done/build-claude-self-update.md`
+**Source**: `ai-agents/tasks/done/0019-build-claude-self-update/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 2 (Phase 0.2, blocking)
 

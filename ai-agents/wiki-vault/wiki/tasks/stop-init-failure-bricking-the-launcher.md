@@ -1,6 +1,6 @@
 # Stop an init failure from bricking the launcher
 
-**Source**: `ai-agents/tasks/done/stop-init-failure-bricking-the-launcher.md`
+**Source**: `ai-agents/tasks/done/0088-stop-init-failure-bricking-the-launcher/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 26
 

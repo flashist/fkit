@@ -1,6 +1,6 @@
 # Add the launcher-contract test suite
 
-**Source**: `ai-agents/tasks/done/add-launcher-contract-smoke-script.md`
+**Source**: `ai-agents/tasks/done/0006-add-launcher-contract-smoke-script/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 23
 

@@ -1,6 +1,6 @@
 # Add a `status` skill to fkit-producer
 
-**Source**: `ai-agents/tasks/done/add-status-skill-to-producer.md`
+**Source**: `ai-agents/tasks/done/0011-add-status-skill-to-producer/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 16
 

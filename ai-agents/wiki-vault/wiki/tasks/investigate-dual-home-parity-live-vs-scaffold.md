@@ -1,6 +1,6 @@
 # Investigate dual-home parity — keeping the dogfood tree and the scaffold in step
 
-**Source**: `ai-agents/tasks/done/investigate-dual-home-parity-live-vs-scaffold.md`
+**Source**: `ai-agents/tasks/done/0057-investigate-dual-home-parity-live-vs-scaffold/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 · priority 49 · owner fkit-architect · investigation-first
 

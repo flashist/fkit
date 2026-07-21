@@ -1,6 +1,6 @@
 # Remove `fkit --resume` and the blanket arg-passthrough
 
-**Source**: `ai-agents/tasks/done/remove-fkit-resume-passthrough.md`
+**Source**: `ai-agents/tasks/done/0073-remove-fkit-resume-passthrough/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 18
 

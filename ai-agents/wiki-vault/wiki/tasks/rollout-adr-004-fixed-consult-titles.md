@@ -1,6 +1,6 @@
 # Roll out ADR-004's fixed consult titles
 
-**Source**: `ai-agents/tasks/done/rollout-adr-004-fixed-consult-titles.md`
+**Source**: `ai-agents/tasks/done/0085-rollout-adr-004-fixed-consult-titles/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 1 → closed as Done during Sprint 2 disposition
 

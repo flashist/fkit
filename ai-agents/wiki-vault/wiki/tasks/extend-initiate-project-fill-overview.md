@@ -1,6 +1,6 @@
 # Extend `initiate-project` to fill the CLAUDE.md / AGENTS.md Project Overview
 
-**Source**: `ai-agents/tasks/done/extend-initiate-project-fill-overview.md`
+**Source**: `ai-agents/tasks/done/0035-extend-initiate-project-fill-overview/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 13 (carried from Sprint 1)
 

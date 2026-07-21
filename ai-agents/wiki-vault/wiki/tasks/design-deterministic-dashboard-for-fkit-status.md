@@ -1,6 +1,6 @@
 # Design the deterministic dashboard generator for `/fkit-status`
 
-**Source**: `ai-agents/tasks/done/design-deterministic-dashboard-for-fkit-status.md`
+**Source**: `ai-agents/tasks/done/0026-design-deterministic-dashboard-for-fkit-status/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 40
 

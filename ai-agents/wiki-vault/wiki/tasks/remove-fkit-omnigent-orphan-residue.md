@@ -1,6 +1,6 @@
 # Remove the `.fkit/` Omnigent-orphan residue
 
-**Source**: `ai-agents/tasks/done/remove-fkit-omnigent-orphan-residue.md`
+**Source**: `ai-agents/tasks/done/0072-remove-fkit-omnigent-orphan-residue/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 36
 

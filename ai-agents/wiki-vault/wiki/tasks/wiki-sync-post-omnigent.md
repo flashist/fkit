@@ -1,6 +1,6 @@
 # Wiki sync after the Omnigent removal
 
-**Source**: `ai-agents/tasks/done/wiki-sync-post-omnigent.md`
+**Source**: `ai-agents/tasks/done/0098-wiki-sync-post-omnigent/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 11 (Phase 5b — genuinely last)
 

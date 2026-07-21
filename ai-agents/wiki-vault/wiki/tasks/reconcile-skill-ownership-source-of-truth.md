@@ -1,6 +1,6 @@
 # Reconcile the skill-ownership source of truth
 
-**Source**: `ai-agents/tasks/done/reconcile-skill-ownership-source-of-truth.md`
+**Source**: `ai-agents/tasks/done/0063-reconcile-skill-ownership-source-of-truth/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 6 (Phase 3 — independent)
 

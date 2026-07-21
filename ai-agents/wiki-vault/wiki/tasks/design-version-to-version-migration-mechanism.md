@@ -1,6 +1,6 @@
 # Design a version-to-version migration mechanism
 
-**Source**: `ai-agents/tasks/done/design-version-to-version-migration-mechanism.md`
+**Source**: `ai-agents/tasks/done/0032-design-version-to-version-migration-mechanism/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 20 (investigation)
 

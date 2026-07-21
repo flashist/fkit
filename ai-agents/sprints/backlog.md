@@ -44,6 +44,8 @@ column). If a task needs a rank, that is the signal to pull it into a sprint, no
 | 🔲 Backlog | — | Extend `prove-red.sh` to reach `fkit-claude-init.sh` (add the missing test seam) | [`extend-prove-red-to-reach-init.md`](../tasks/backlog/0037-extend-prove-red-to-reach-init/brief.md) |
 | 🔲 Backlog | — | Gate the read-side symlink hazard when init reads inside `ai-agents/` | [`gate-read-side-symlink-hazard-in-init.md`](../tasks/backlog/0045-gate-read-side-symlink-hazard-in-init/brief.md) |
 | 🔲 Backlog | — | Gate the symlink escape when init writes the `.fkit/interview` intake | [`gate-symlink-escape-in-init-intake-write.md`](../tasks/backlog/0046-gate-symlink-escape-in-init-intake-write/brief.md) |
+| 🔲 Backlog | — | Decide whether to drop the numeric prefix from task-folder names *(investigation — **weighs against ADR-029 Decision 5 + the just-executed task-76 migration**; blocks 0103; owner: fkit-architect)* | [`0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names`](../tasks/backlog/0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names/brief.md) |
+| 🔲 Backlog | — | Implement the task-folder-name scheme change from the approved design *(needs 0102 incl. approval + any ADR — hard; **may be cancelled if 0102 says keep the number**; owner: fkit-coder)* | [`0103-implement-task-folder-name-scheme-change`](../tasks/backlog/0103-implement-task-folder-name-scheme-change/brief.md) |
 
 ## Notes
 

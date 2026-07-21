@@ -1,6 +1,6 @@
 # Align the conventions-README "enforceable somewhere" item: live vs scaffold
 
-**Source**: `ai-agents/tasks/done/align-conventions-readme-enforcement-item-live-vs-scaffold.md`
+**Source**: `ai-agents/tasks/done/0014-align-conventions-readme-enforcement-item-live-vs-scaffold/brief.md`
 **Status**: done
 **Sprint/Tag**: Unsprinted
 

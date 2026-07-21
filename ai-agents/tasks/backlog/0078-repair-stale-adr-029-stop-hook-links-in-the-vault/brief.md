@@ -47,7 +47,7 @@ silently and completely, unlike a broken link, which announces itself.
 > that settles it is `git cat-file -e HEAD:<path>`, not `ls`. **The urgency conclusion below was
 > correct under either mechanism and is unchanged** — only the mechanism was misdescribed.
 
-Waiting for [task 78](../0099-wiki-sync-task-folder-migration/brief.md) would mean waiting out tasks
+Waiting for [task 78](../../done/0099-wiki-sync-task-folder-migration/brief.md) would mean waiting out tasks
 [75](../../done/0017-assign-global-task-ids-and-create-registry/brief.md) and
 [76](../../done/0062-migrate-tasks-to-folder-structure-and-update-tooling/brief.md) — the entire folder migration.
 
@@ -102,7 +102,7 @@ above. Derive the set with `grep -rl` rather than working from any list written 
   > `wiki/decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md` and the 7 back-link
   > lines pointing at it. Nothing else depends on it. Note that reverting hands the page back to task
   > 78, which waits out the whole migration.
-- **Relates to [task 78](../0099-wiki-sync-task-folder-migration/brief.md)**, whose scope no longer carries this
+- **Relates to [task 78](../../done/0099-wiki-sync-task-folder-migration/brief.md)**, whose scope no longer carries this
   repair — a note to that effect has been added to task 78's brief so it is not done twice.
 - **Root cause is the ADR-numbering collision itself**, not the vault. Nothing in this task prevents a
   second collision; whether the allocation procedure needs a guard is an open question for the owner.

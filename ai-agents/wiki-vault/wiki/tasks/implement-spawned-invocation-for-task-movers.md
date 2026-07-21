@@ -1,6 +1,6 @@
 # Implement spawned invocation for the task movers from the approved design
 
-**Source**: `ai-agents/tasks/done/implement-spawned-invocation-for-task-movers.md`
+**Source**: `ai-agents/tasks/done/0054-implement-spawned-invocation-for-task-movers/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 64
 

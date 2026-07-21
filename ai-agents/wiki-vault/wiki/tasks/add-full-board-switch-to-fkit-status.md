@@ -1,6 +1,6 @@
 # Add a full-board switch to `/fkit-status`
 
-**Source**: `ai-agents/tasks/done/add-full-board-switch-to-fkit-status.md`
+**Source**: `ai-agents/tasks/done/0005-add-full-board-switch-to-fkit-status/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 38
 

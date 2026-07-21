@@ -1,6 +1,6 @@
 # Rewrite the docs against the post-removal reality
 
-**Source**: `ai-agents/tasks/done/rewrite-docs-post-omnigent.md`
+**Source**: `ai-agents/tasks/done/0083-rewrite-docs-post-omnigent/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 8 (Phase 4)
 

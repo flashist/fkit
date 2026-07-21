@@ -1,6 +1,6 @@
 # Restructure the coder's report — bullet summary first, interview on open questions last
 
-**Source**: `ai-agents/tasks/done/restructure-coder-report-summary-then-interview.md`
+**Source**: `ai-agents/tasks/done/0082-restructure-coder-report-summary-then-interview/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 61
 

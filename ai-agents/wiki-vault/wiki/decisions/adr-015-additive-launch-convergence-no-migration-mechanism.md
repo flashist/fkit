@@ -70,3 +70,4 @@ The safety bar asserted, as verified, that `cp -R` **writes through a symlinked 
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49: why launch-time convergence cannot fix content drift by invariant
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the additive invariant here forced that migration's consuming-project half into a **separate, deferred** decision; **ADR-015 is not reopened by it**
 - [[tasks/design-task-folder-structure-and-id-scheme]] — task 74; the consuming-project migration was **deferred rather than solved**, so this ADR is **not reopened**
+- [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration

@@ -1,6 +1,6 @@
 # Investigate making `AskUserQuestion` available to fkit agents
 
-**Source**: `ai-agents/tasks/done/investigate-askuserquestion-availability-for-agents.md`
+**Source**: `ai-agents/tasks/done/0056-investigate-askuserquestion-availability-for-agents/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 39
 

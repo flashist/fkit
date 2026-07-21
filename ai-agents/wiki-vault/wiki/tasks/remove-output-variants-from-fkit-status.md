@@ -1,6 +1,6 @@
 # Remove the output variants from `/fkit-status` — one skill, one output
 
-**Source**: `ai-agents/tasks/done/remove-output-variants-from-fkit-status.md`
+**Source**: `ai-agents/tasks/done/0074-remove-output-variants-from-fkit-status/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 44
 
@@ -25,3 +25,4 @@ Make `/fkit-status` render **one output — the complete briefing with the full 
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/filter-fkit-status-board-to-open-tasks]] — why the filtered board replaces rather than toggles
 - [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — the target-selector argument that survived this removal
+- [[tasks/wiki-sync-fkit-status-output-variant-removal]] — a batched wiki-sync task (discharged by the migration sync)

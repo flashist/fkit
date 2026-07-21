@@ -110,7 +110,7 @@ tracking the docs' staleness, and that tracking note expires when the staleness 
   uncorrected ones and achieve nothing. **Precedent: Sprint 2 task 11**, and the standing note at
   `sprint-2.md:209` — *"Task 11 (wiki sync) is genuinely last. Syncing before the docs are rewritten
   just ingests the drift."*
-- **Deliberately NOT folded into [task 78](../0099-wiki-sync-task-folder-migration/brief.md).** 78 waits out the
+- **Deliberately NOT folded into [task 78](../../done/0099-wiki-sync-task-folder-migration/brief.md).** 78 waits out the
   whole 75 → 76 migration. Different subject matter, and a much longer timer. **This is independently
   shippable** once its three dependencies land.
 - **Scope is small and may turn out to be near-zero.** If 82/83/81-D land cleanly, this could be a

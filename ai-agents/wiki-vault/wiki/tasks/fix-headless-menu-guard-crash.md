@@ -1,6 +1,6 @@
 # Fix the headless menu-guard crash — `[ -r /dev/tty ]` never tests openability
 
-**Source**: `ai-agents/tasks/done/fix-headless-menu-guard-crash.md`
+**Source**: `ai-agents/tasks/done/0042-fix-headless-menu-guard-crash/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 33
 

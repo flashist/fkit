@@ -1,6 +1,6 @@
 # Extract the shared scaffold into `claude/`
 
-**Source**: `ai-agents/tasks/done/extract-scaffold-into-claude.md`
+**Source**: `ai-agents/tasks/done/0038-extract-scaffold-into-claude/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 1 (Phase 0.1, blocking)
 

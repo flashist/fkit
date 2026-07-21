@@ -1,6 +1,6 @@
 # Implement the ship-loop timeout-auto-proceed
 
-**Source**: `ai-agents/tasks/cancelled/implement-ship-loop-timeout-auto-proceed.md`
+**Source**: `ai-agents/tasks/cancelled/0053-implement-ship-loop-timeout-auto-proceed/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Sprint 2 — priority 60. Cancelled 2026-07-18 — parent design task 59 declined.
 

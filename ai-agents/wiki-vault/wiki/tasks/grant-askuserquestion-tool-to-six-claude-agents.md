@@ -1,6 +1,6 @@
 # Grant the `AskUserQuestion` tool to the six Claude-side agents
 
-**Source**: `ai-agents/tasks/done/grant-askuserquestion-tool-to-six-claude-agents.md`
+**Source**: `ai-agents/tasks/done/0049-grant-askuserquestion-tool-to-six-claude-agents/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 54
 

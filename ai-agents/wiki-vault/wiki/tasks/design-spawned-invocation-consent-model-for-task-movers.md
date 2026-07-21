@@ -1,6 +1,6 @@
 # Design a laundering-safe consent model for spawned invocation of the task movers
 
-**Source**: `ai-agents/tasks/done/design-spawned-invocation-consent-model-for-task-movers.md`
+**Source**: `ai-agents/tasks/done/0029-design-spawned-invocation-consent-model-for-task-movers/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 · priority 63 · owner fkit-architect (owner present) · design-first
 

@@ -22,7 +22,7 @@ Each role is one file — `claude/agents/fkit-<role>.md`: YAML frontmatter (`nam
 | `fkit-producer` | Product & sprint planning, task briefs. **No source writes.** Never moves task files. |
 | `fkit-coder` | **Sole source-write authority.** Plan-gated (`EnterPlanMode` / `ExitPlanMode`). |
 | `fkit-architect` | Design specs, ADRs, surveys. **Never implements; never writes the wiki.** |
-| `fkit-reviewer` | Review-only; writes **only** under `ai-agents/reviews/`. |
+| `fkit-reviewer` | Review-only; writes **only** the `review.md` ledger inside a task folder (formerly `ai-agents/reviews/`, absorbed by ADR-029). |
 | `fkit-adversarial-reviewer` | Findings only. **Structurally write-free — a leaf.** Runs on Codex. |
 | `fkit-wiki` | **Exclusive write gateway** for `ai-agents/wiki-vault/`. A leaf. |
 | `fkit-lead` | The **team room** (menu 7). Routes; **does no work** — a prompt contract since ADR-022 (its no-Write/Edit tool wall is gone). |
@@ -55,11 +55,26 @@ There is no fkit daemon, no root agent, no session broker, no message bus. **Cla
 Sessions are **role-locked**, and cross-role work is a **consult**, never a role switch — see [[systems/role-locked-sessions]]. Install, the launcher, and self-update: [[systems/install-and-self-update]]. The Codex second opinion: [[systems/review-and-model-diversity]].
 
 ### Data model — everything is a file in git
-There is no database. The **`ai-agents/` tree is the entire coordination state**: `knowledge-base/` (see [[systems/knowledge-base-structure]]), `sprints/`, `tasks/{backlog,done,cancelled}/`, `reviews/<task-id>.md`, and `wiki-vault/` (this wiki).
+There is no database. The **`ai-agents/` tree is the entire coordination state**: `knowledge-base/` (see [[systems/knowledge-base-structure]]), `sprints/`, `tasks/{backlog,done,cancelled}/`, and `wiki-vault/` (this wiki).
 
-`reviews/<task-id>.md` is a **two-party ledger**, written by reviewer *and* coder. It is the loop-prevention memory: it carries decision state and **accepted residuals** across review rounds so settled tradeoffs are not re-litigated.
+**A task is a FOLDER, keyed by a permanent global ID** *(since [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]], migration shipped 2026-07-21 by [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]])*. The old shape — a task was one file, `tasks/<board>/<slug>.md`, with its plan, worklog and review ledger scattered across three *separate top-level directories* keyed by a slug that could change — **is gone.** Now:
 
-**Two more per-task, task-id-keyed record dirs are sanctioned** ([[decisions/adr-020-per-task-plan-and-worklog-artifacts]]), mirroring `reviews/` — written by the coder's autonomous ship-loop, git-tracked, retained by id, **not** moved by task-done and **not** wiki-ingested: `plans/<task-id>.md` (the owner-approved plan — the loop's autonomy boundary) and `worklogs/<task-id>.md` (the worklog + owner-decision log → finalized ready-for-done report). *(The loop is now **built and live** — [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]], implemented by [[tasks/implement-task-ship-loop-skill]].)*
+```
+ai-agents/tasks/<board>/<NNNN>-<slug>/
+├── brief.md      REQUIRED — the task itself
+├── plan.md       optional  — the owner-approved plan (ADR-020)
+├── worklog.md    optional  — worklog + owner-decision log
+├── review.md     optional  — the two-party review ledger
+└── assets/       optional
+```
+
+- **`<NNNN>` is a permanent four-digit global ID** — `0001`…`9999`, zero-padded, allocated `1 + max` across all three boards, **never reused, never renumbered.** It fixes the old collision where Sprint 1 and Sprint 2 each had a "task 46": sprint-scoped priority was never a unique identifier. The ID also carries in an **`## ID` brief field**; the folder name is authoritative and `dashboard.sh` lints the two with an **`id-mismatch`** drift kind.
+- **There is NO registry file.** The owner ruled against a stored index ([[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] Decision 8) — a third carrier that can drift. Authority is the folder name plus `## ID`; allocation is `1 + max` from the tree (one `ls`), lookup is one `grep`.
+- **`review.md` is a two-party ledger**, written by reviewer *and* coder — the loop-prevention memory carrying decision state and **accepted residuals** across review rounds so settled tradeoffs are not re-litigated. It **lives inside the task folder now**; the old `reviews/<slug>.md` top-level directory no longer exists.
+- **`plan.md` and `worklog.md`** are the coder ship-loop's artifacts ([[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — whose §6 folder end-state ADR-029 executes): git-tracked, **not** wiki-ingested. `plan.md` is the loop's autonomy boundary; `worklog.md` is the worklog + owner-decision log → the ready-for-done report. *(The loop is built and live — [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]], [[tasks/implement-task-ship-loop-skill]].)*
+- **The movers now `git mv` the whole folder**, so a close carries the brief *and* its plan, worklog and ledger as one unit — the old shape moved the brief and orphaned the other three.
+- **The three absorbed top-level dirs — `ai-agents/reviews/`, `plans/`, `worklogs/` — are gone.** Two review ledgers were sprint-keyed, not task-keyed, and had no task folder to fold into; they moved to `ai-agents/sprints/reviews/`.
+- **Consuming projects are not migrated** ([[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]], deferred) — [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] converges additively and cannot rewrite an existing project's old-layout tasks. That reconciliation is its own future task and ADR.
 
 Generated and gitignored per project: `.fkit/settings/<role>.json` (the skill lockdown), `.fkit/interview` + `.fkit/intake.md`, `.fkit/tmp/adversarial-prompt.md`, and the fkit-managed `.claude/agents/fkit-*.md` + `.claude/skills/fkit-*/` copies.
 
@@ -165,3 +180,12 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[tasks/decide-whether-fkit-needs-a-tester-agent]]
 - [[tasks/design-task-folder-structure-and-id-scheme]]
 - [[tasks/assign-global-task-ids-and-create-registry]]
+- [[tasks/compress-universal-rules-output-style-section]] — task 79, the universal-rules compression
+- [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — task 81, the mover KB-sweep fix + ADR-number guard
+- [[tasks/repair-task-links-outside-the-wiki-after-migration]] — task 77, the post-migration doc-link repair
+- [[tasks/wiki-sync-backlog-board-introduction]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-dumb-down-skill]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-filtered-fkit-status-board]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-fkit-status-output-variant-removal]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-open-questions-interview-skill]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-task-plan-rename]] — a batched wiki-sync task (discharged by the migration sync)

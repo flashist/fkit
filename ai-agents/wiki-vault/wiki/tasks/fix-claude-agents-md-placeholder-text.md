@@ -1,6 +1,6 @@
 # Replace leftover placeholder text in CLAUDE.md / AGENTS.md
 
-**Source**: `ai-agents/tasks/done/fix-claude-agents-md-placeholder-text.md`
+**Source**: `ai-agents/tasks/done/0041-fix-claude-agents-md-placeholder-text/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 1
 

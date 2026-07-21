@@ -1,6 +1,6 @@
 # Document the consult-chain envelope
 
-**Source**: `ai-agents/tasks/cancelled/document-consult-chain-envelope.md`
+**Source**: `ai-agents/tasks/cancelled/0033-document-consult-chain-envelope/brief.md`
 **Status**: cancelled
 **Sprint/Tag**: Sprint 1 — cancelled 2026-07-11
 

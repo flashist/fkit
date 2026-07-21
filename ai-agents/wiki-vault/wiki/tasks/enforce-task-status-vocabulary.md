@@ -1,6 +1,6 @@
 # Enforce the task status vocabulary in the source
 
-**Source**: `ai-agents/tasks/done/enforce-task-status-vocabulary.md`
+**Source**: `ai-agents/tasks/done/0034-enforce-task-status-vocabulary/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 15
 

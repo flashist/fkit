@@ -1,6 +1,6 @@
 # Reopen ADR-012 Decisions 3 & 4 — record the `PreToolUse` skill-gate hook
 
-**Source**: `ai-agents/tasks/done/record-pretooluse-skill-gate-adr-amendment.md`
+**Source**: `ai-agents/tasks/done/0065-record-pretooluse-skill-gate-adr-amendment/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 42
 

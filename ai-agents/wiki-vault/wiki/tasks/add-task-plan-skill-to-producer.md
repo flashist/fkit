@@ -1,6 +1,6 @@
 # Add a `task-plan` skill to fkit-producer
 
-**Source**: `ai-agents/tasks/done/add-task-plan-skill-to-producer.md`
+**Source**: `ai-agents/tasks/done/0012-add-task-plan-skill-to-producer/brief.md`
 **Status**: done
 **Sprint/Tag**: Sprint 2 — priority 14 (carried from Sprint 1, rescoped)
 
