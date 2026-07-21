@@ -16,7 +16,7 @@ Sprint 2
 
 Six of the seven agent files carry a "no secrets / no sensitive information" rule. **Exactly one does
 not: `claude/agents/fkit-lead.md`.** Verified in
-[`reports/2026-07-14-shared-instructions-layer.md`](../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
+[`reports/2026-07-14-shared-instructions-layer.md`](../../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
 §1 — the third and final count, after two earlier greps published wrong numbers by matching one phrasing
 of a semantic rule.
 

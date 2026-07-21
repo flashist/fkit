@@ -1,6 +1,6 @@
 # Plan — Add the `/fkit-dumb-down` skill for the six Claude-side roles
 
-**Task:** [`add-dumb-down-skill-for-six-roles.md`](../tasks/done/add-dumb-down-skill-for-six-roles.md)
+**Task:** [`add-dumb-down-skill-for-six-roles.md`](./brief.md)
 · **Sprint 2, priority 72** · **Approved by the owner: 2026-07-18**
 
 ## The change

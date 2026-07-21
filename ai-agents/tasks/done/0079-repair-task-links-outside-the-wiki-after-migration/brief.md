@@ -10,11 +10,11 @@ Sprint 2
 77
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Context
 
-The migration ([task 76](migrate-tasks-to-folder-structure-and-update-tooling.md)) repairs the
+The migration ([task 76](../../done/0062-migrate-tasks-to-folder-structure-and-update-tooling/brief.md)) repairs the
 **executable** references — the sprint-board hrefs `dashboard.sh` and the movers actually follow. It
 deliberately leaves the **documentation** references, which are numerous but which nothing executes:
 
@@ -47,7 +47,7 @@ may write there.
 the links the migration moved."* That is too narrow. **A large share of the task-brief links outside
 `sprints/` and `tasks/` are already broken today, before task 76 moves anything** — rotted by past
 task closes, because the movers' reference sweep never covered `ai-agents/knowledge-base/`
-(the defect [task 81](../done/extend-mover-reference-sweep-to-the-knowledge-base.md) fixes).
+(the defect [task 81](../../done/0036-extend-mover-reference-sweep-to-the-knowledge-base/brief.md) fixes).
 
 An indicative 2026-07-19 measurement found **16 of 47** such links already broken — roughly a third.
 **That measurement was rough and is not audited**: dedup may misattribute a source or double-count.
@@ -141,7 +141,7 @@ explicitly rather than left to inference.
   > at run time, and task 76 needs to route the two kinds differently. **Confirm task 76's brief
   > encodes the split before starting this task** — if it does not, this task inherits a migration
   > that put the sprint ledgers in the wrong place.
-- **Related defect: [task 81](../done/extend-mover-reference-sweep-to-the-knowledge-base.md)** fixes the mover
+- **Related defect: [task 81](../../done/0036-extend-mover-reference-sweep-to-the-knowledge-base/brief.md)** fixes the mover
   gap that *caused* the pre-existing rot. Task 81 stops new rot; this task clears the accumulated
   backlog of it. Neither substitutes for the other, and 81 landing first (as recommended) does not
   shrink this task's scope.

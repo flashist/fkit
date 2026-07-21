@@ -130,7 +130,7 @@ not a **tooling-sophistication** problem, and no library would have fixed it.
 - [ADR-003](adr-003-ci-runs-validate-bundles.md) — the CI posture whose subject died with the Omnigent
   removal. **No `.github/workflows/` exists today**, which is why Decision 4's gate has no CI lane to
   land in yet; the sizing call interacts with this.
-- Task 43 review: [`ai-agents/reviews/implement-pretooluse-skill-ownership-hook.md`](../../reviews/implement-pretooluse-skill-ownership-hook.md)
+- Task 43 review: [`ai-agents/reviews/implement-pretooluse-skill-ownership-hook.md`](../../tasks/done/0052-implement-pretooluse-skill-ownership-hook/review.md)
   — finding **R2**, fixed within task 43. This ADR is the forward-looking library question only.
 - Code, verified: `test/prove-red.sh` (the shell-mutation loop); `package.json:5` (`npm test` — does
   **not** include `prove-red.sh`).

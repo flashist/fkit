@@ -14,7 +14,7 @@ Sprint 1
 
 ## Context
 
-Incident: [`ai-agents/knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md`](../../knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md).
+Incident: [`ai-agents/knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md`](../../../knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md).
 All six `fkit-team` teammate sessions lost their runner processes simultaneously
 (`runner_online: false`, `status: failed`); `sys_session_list`/`sys_agent_list` showed **zero**
 children the whole time even though the sessions still existed server-side. Recovery required

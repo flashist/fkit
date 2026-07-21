@@ -25,7 +25,7 @@ make the movers owner-only *on purpose*:
 1. **CLAUDE.md universal hard rule:** task files move to `done/`/`cancelled/` *"only via the
    owner-invoked `/fkit-task-done` / `/fkit-task-cancelled` — never on an agent's own initiative. Do
    not move one, do not tell anyone else to."*
-2. **[ADR-019](../../knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md):**
+2. **[ADR-019](../../../knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md):**
    *"Done is owner-gated, anti-laundering."* The autonomous ship-loop was deliberately built to run
    unattended **yet still stop at the owner-only done-gate** and never move a task file.
 3. **`fkit-task-done/SKILL.md`:** *"an agent that can mark its own work complete can quietly launder
@@ -44,13 +44,13 @@ review verdict certifies a finding's accuracy, **not** that work is genuinely do
 straight back into that problem and **must answer it**, not restate the wish:
 
 - A producer **spawned as a consult has no owner channel** (its `⛔ Owner:` banner is advisory, not a
-  wall — [ADR-012](../../knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md);
+  wall — [ADR-012](../../../knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md);
   `AskUserQuestion` is session-only, absent in consults —
-  [ADR-021](../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+  [ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
   So "coder asks producer to mark done" is functionally **"the coder marks its own work done"** — the
   laundering path the gate exists to block.
 - The owner-only gate today is enforced by **skill text**, not by the `PreToolUse` skill-ownership hook
-  ([ADR-018](../../knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md)) —
+  ([ADR-018](../../../knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md)) —
   the hook gates *role*, and the spawned sub-agent legitimately **is** the producer role. So relaxation
   cannot lean on the hook; it needs a **positive, checkable precondition** an agent cannot fabricate
   for its own work.
@@ -70,7 +70,7 @@ A dated design spec in `ai-agents/knowledge-base/reports/`, owner present for th
   replaces owner-presence as the anti-laundering guard — one an agent **cannot fabricate for its own
   work**. Candidates to evaluate against the actual project state, not assert: a **closed stateful
   review ledger** (`ai-agents/reviews/<task-id>.md`) with a passing verdict for the task; recorded
-  worklog evidence ([ADR-020](../../knowledge-base/decisions/adr-020-per-task-plan-and-worklog-artifacts.md));
+  worklog evidence ([ADR-020](../../../knowledge-base/decisions/adr-020-per-task-plan-and-worklog-artifacts.md));
   a review-role sign-off. State precisely what the relaxed mover would check before moving a file.
 - **If no such signal exists, says so plainly** (the task-39/59 honesty) — and then the honest outcome
   may be "keep it owner-only," which the owner rules on.

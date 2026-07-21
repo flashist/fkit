@@ -18,7 +18,7 @@ Sprint 2
 on.**
 
 `claude/scaffold/ai-agents/README.md:11` already ships
-[ADR-013](../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)'s law,
+[ADR-013](../../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)'s law,
 naming **five** knowledge-base folders — `conventions/`, `decisions/`, `incidents/`, `reports/`,
 `history/`. `claude/scaffold/ai-agents/knowledge-base/` creates **one**: `conventions/`. A project
 scaffolded today ships with a README instructing its agents to file documents into **four folders that
@@ -31,7 +31,7 @@ scaffold's own README disagrees with the scaffold's own skills**, and every new 
 disagreement.
 
 Rationale and evidence:
-[`reports/2026-07-14-migration-mechanism.md`](../../knowledge-base/reports/2026-07-14-migration-mechanism.md)
+[`reports/2026-07-14-migration-mechanism.md`](../../../knowledge-base/reports/2026-07-14-migration-mechanism.md)
 §3, §4, and follow-up §11.1. The report is emphatic that **this is not a migration problem** — it is a
 plain defect in fkit's *current output*, it needs no mechanism, and it is gated on nothing.
 

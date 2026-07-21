@@ -4,7 +4,7 @@
   post-implementation — see §0.1**
 - **Kind:** investigation / evaluation (feeds an owner decision; ADR only if the owner rules for one)
 - **Author:** fkit-architect, at the request of the coder, per
-  [`ai-agents/tasks/backlog/design-version-to-version-migration-mechanism.md`](../../tasks/backlog/design-version-to-version-migration-mechanism.md)
+  [`ai-agents/tasks/backlog/design-version-to-version-migration-mechanism.md`](../../tasks/done/0032-design-version-to-version-migration-mechanism/brief.md)
 - **Rev 2 exists because** rev 1 went through an adversarial review on Codex and **did not survive
   intact.** Two factual claims were false. The substitute I proposed had not been held to the safety
   standard I applied to the idea I rejected. §0 lists every correction. The headline changed.

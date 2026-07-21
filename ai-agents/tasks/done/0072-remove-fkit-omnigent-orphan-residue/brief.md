@@ -16,7 +16,7 @@ Sprint 2
 
 **Dead Omnigent residue is still sitting in projects that used the old runtime.** Per the migration
 report's §9
-([`reports/2026-07-14-migration-mechanism.md`](../../knowledge-base/reports/2026-07-14-migration-mechanism.md)),
+([`reports/2026-07-14-migration-mechanism.md`](../../../knowledge-base/reports/2026-07-14-migration-mechanism.md)),
 the following paths are orphaned by the Omnigent removal and have **zero references in current code**:
 `.fkit/agents/`, `.fkit/run`, `.fkit/team-session`, and `.omnigent/`. They exist in this very repo right
 now. They do nothing, and they confuse anyone reading the tree.

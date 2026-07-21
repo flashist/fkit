@@ -1,7 +1,7 @@
 # Worklog — Add a Backlog board, the default home for unsprinted task briefs
 
-**Task:** [`add-backlog-board-default-for-unsprinted-task-briefs.md`](../tasks/done/add-backlog-board-default-for-unsprinted-task-briefs.md)
-· **Sprint 2, priority 67** · **Plan:** [`plans/add-backlog-board-default-for-unsprinted-task-briefs.md`](../plans/add-backlog-board-default-for-unsprinted-task-briefs.md)
+**Task:** [`add-backlog-board-default-for-unsprinted-task-briefs.md`](./brief.md)
+· **Sprint 2, priority 67** · **Plan:** [`plans/add-backlog-board-default-for-unsprinted-task-briefs.md`](./plan.md)
 · **Ledger:** `ai-agents/reviews/add-backlog-board-default-for-unsprinted-task-briefs.md`
 
 **Status: 🔄 In progress — READY FOR DONE.** Implemented, reviewed (round 1, all findings resolved),
@@ -9,7 +9,7 @@ re-verified green. Awaiting the owner's `/fkit-task-done`; this loop never sets 
 
 ## Review — round 1, all findings resolved
 
-**Ledger:** [`reviews/add-backlog-board-default-for-unsprinted-task-briefs.md`](../reviews/add-backlog-board-default-for-unsprinted-task-briefs.md)
+**Ledger:** [`reviews/add-backlog-board-default-for-unsprinted-task-briefs.md`](./review.md)
 · **Verdict: changes requested — 8 defects, 1 high.**
 
 **✅ Codex coverage FULL — `codex-cli 0.144.4` completed.** Genuinely model-diverse; no degradation.

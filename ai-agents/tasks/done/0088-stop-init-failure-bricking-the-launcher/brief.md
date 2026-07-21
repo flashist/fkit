@@ -31,7 +31,7 @@ any of these takes the user's entire team offline. Init runs on **every single l
 
 **This is a pre-existing latent defect, found in passing.** It is independent of migrations and of
 everything else in this group, and it is
-[worth fixing regardless](../../knowledge-base/reports/2026-07-14-migration-mechanism.md) — see
+[worth fixing regardless](../../../knowledge-base/reports/2026-07-14-migration-mechanism.md) — see
 `reports/2026-07-14-migration-mechanism.md` §8 (the "non-fatal failure" row, rated **REQUIRED — and
 currently violated**) and follow-up §11.4.
 

@@ -1,6 +1,6 @@
 # Plan — Add the `/fkit-open-questions-interview` skill for the six Claude-side roles
 
-**Task:** [`add-open-questions-interview-skill-for-six-roles.md`](../tasks/done/add-open-questions-interview-skill-for-six-roles.md)
+**Task:** [`add-open-questions-interview-skill-for-six-roles.md`](./brief.md)
 · **Sprint 2, priority 70** · **Approved by the owner: 2026-07-18**
 
 ## The change

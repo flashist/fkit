@@ -14,7 +14,7 @@ Sprint 2
 
 ## Context
 
-The task-folder restructure ([task 74](design-task-folder-structure-and-id-scheme.md)) names folders
+The task-folder restructure ([task 74](../0030-design-task-folder-structure-and-id-scheme/brief.md)) names folders
 by a **global task ID** — a concept that does not exist in this project today. No brief carries an
 `## ID` field; the numbers used in conversation are sprint-scoped priority and collide across sprints.
 

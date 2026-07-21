@@ -15,7 +15,7 @@ role-based titles).
 
 ## Context
 
-[`ADR-004`](../../knowledge-base/decisions/adr-004-fixed-role-based-titles-for-consult-spawns.md)
+[`ADR-004`](../../../knowledge-base/decisions/adr-004-fixed-role-based-titles-for-consult-spawns.md)
 (accepted, 2026-07-10) decided that every fkit agent spawning an ad hoc consult child should use a
 **fixed, reusable, role-based title** (`<target-agent>-consult`) instead of a fresh topic-derived
 title per question — this is what's currently flooding the Web UI's Agents panel with one-off

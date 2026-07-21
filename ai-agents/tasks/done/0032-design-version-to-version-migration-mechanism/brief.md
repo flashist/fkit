@@ -18,7 +18,7 @@ fkit has started changing the **shape of things it has already put on disk** —
 carry an existing installation across those changes.
 
 Sprint 2 alone did it repeatedly: the scaffold moved, `omnigent/` was deleted, and
-[ADR-013](../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)
+[ADR-013](../../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)
 restructured the whole knowledge base — new folders, files moved and renamed. A project scaffolded
 last week does not have `conventions/`, `reports/`, or `incidents/`. **Nothing today tells it to
 create them.** `fkit update` (Sprint 2 task 2) updates the *tool*; it does nothing about the *project

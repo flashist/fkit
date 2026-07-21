@@ -16,7 +16,7 @@ Sprint 2
 
 **Task 47 recorded the "one skill, one output" convention — but only in this repo's live
 knowledge-base.** The document exists at
-[`conventions/one-skill-one-output.md`](../../knowledge-base/conventions/one-skill-one-output.md)
+[`conventions/one-skill-one-output.md`](../../../knowledge-base/conventions/one-skill-one-output.md)
 (this repo's dogfood `ai-agents/`), while the scaffold every consuming project receives —
 `claude/scaffold/ai-agents/knowledge-base/conventions/` — ships only the three older entries
 (`task-status-vocabulary.md`, `evidence-before-assertion.md`, `status-report-format.md`, plus the

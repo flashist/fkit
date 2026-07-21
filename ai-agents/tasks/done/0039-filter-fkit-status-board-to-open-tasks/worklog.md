@@ -1,7 +1,7 @@
 # Worklog — Filter the `/fkit-status` board to open tasks only
 
-**Task:** [`filter-fkit-status-board-to-open-tasks.md`](../tasks/done/filter-fkit-status-board-to-open-tasks.md)
-· **Sprint 2, priority 65** · **Plan:** [`plans/filter-fkit-status-board-to-open-tasks.md`](../plans/filter-fkit-status-board-to-open-tasks.md)
+**Task:** [`filter-fkit-status-board-to-open-tasks.md`](./brief.md)
+· **Sprint 2, priority 65** · **Plan:** [`plans/filter-fkit-status-board-to-open-tasks.md`](./plan.md)
 · **Ledger:** `ai-agents/reviews/filter-fkit-status-board-to-open-tasks.md`
 
 **Status: 🔄 In progress — READY FOR DONE.** Implemented, reviewed (round 1, closed out), re-verified
@@ -9,7 +9,7 @@ green. Awaiting the owner's `/fkit-task-done`; this loop never sets `✅ Done`.
 
 ## Review — round 1, closed out
 
-**Ledger:** [`reviews/filter-fkit-status-board-to-open-tasks.md`](../reviews/filter-fkit-status-board-to-open-tasks.md)
+**Ledger:** [`reviews/filter-fkit-status-board-to-open-tasks.md`](./review.md)
 · **Verdict: changes requested — 5 defects, none blocking.**
 
 **✅ Codex coverage FULL — `codex-cli 0.144.4` completed.** The review was genuinely model-diverse; no

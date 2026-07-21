@@ -20,8 +20,8 @@ question, the coder should **present options with one marked *recommended*, and 
 reply within ~30 seconds, proceed with the recommended option.** The owner said *"if possible"* — the
 feasibility is explicitly part of the question.
 
-This **modifies the approved ship-loop** ([spec](../../knowledge-base/reports/2026-07-17-design-task-ship-loop-skill.md),
-[ADR-019](../../knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)),
+This **modifies the approved ship-loop** ([spec](../../../knowledge-base/reports/2026-07-17-design-task-ship-loop-skill.md),
+[ADR-019](../../../knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)),
 so it is scoped design-first: settle feasibility and the contract with the owner, record the ADR-019
 amendment, then task 60 builds it. Nothing is implemented here.
 
@@ -32,8 +32,8 @@ model "30 seconds later" if the human is silent** — a turn ends and the human 
 a "wait 30s, then proceed on the default" is *expressible at all* in the runtime is the **central
 open question**, and the precedent is expensive: `AskUserQuestion` looked obviously capable and the
 task-39 investigation found it **session-only, 0/3 then 0/2** into a consult
-([ADR-021](../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
-Per [`evidence-before-assertion`](../../knowledge-base/conventions/evidence-before-assertion.md)
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+Per [`evidence-before-assertion`](../../../knowledge-base/conventions/evidence-before-assertion.md)
 (task 24): **this must be tested against the running binary, not asserted.** Candidates the design
 must actually probe: does `AskUserQuestion` (just granted, ADR-021) support a timeout/default-on-no-
 response? Can a session skill express a timed auto-continue any other way? **If the runtime cannot do

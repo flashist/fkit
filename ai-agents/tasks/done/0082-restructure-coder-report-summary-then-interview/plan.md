@@ -1,6 +1,6 @@
 # Plan — Restructure the coder's report: bullet summary first, interview last
 
-**Task:** [`restructure-coder-report-summary-then-interview.md`](../tasks/done/restructure-coder-report-summary-then-interview.md)
+**Task:** [`restructure-coder-report-summary-then-interview.md`](./brief.md)
 · **Sprint 2, priority 61** · **Approved by the owner: 2026-07-18**
 
 ## The change

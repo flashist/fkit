@@ -46,7 +46,7 @@ reachable**:
 > than quietly softened.
 
 Rationale:
-[`reports/2026-07-14-migration-mechanism.md`](../../knowledge-base/reports/2026-07-14-migration-mechanism.md)
+[`reports/2026-07-14-migration-mechanism.md`](../../../knowledge-base/reports/2026-07-14-migration-mechanism.md)
 §8, the **"refuse on weird state"** row — rated **REQUIRED** and owner-ratified. The report frames it as
 part of convergence; **it is separable, two of its three cases are bugs on their own merits, and it is
 the precondition convergence needs.** Hence its own task.

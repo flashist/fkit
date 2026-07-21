@@ -15,7 +15,7 @@ Sprint 2
 ## Context
 
 **Owner ruling (2026-07-18), recorded as
-[ADR-022](../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)
+[ADR-022](../../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)
 (accepted):** relax the tool-allowlist half of the role lock. Six of the seven agents get
 **unrestricted tools**; the adversarial reviewer keeps its exact minimal allowlist. This is a **tools
 change only** — the skill lockdown and the prompt-level role contracts are untouched.
@@ -106,7 +106,7 @@ is the producer's domain," not the reviewer's "review-only." Just the `tools:` l
 ## Notes
 
 - **Owner: fkit-coder** — a source edit to the canonical agent files under `claude/agents/`.
-- **Depends on: [ADR-022](../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)**
+- **Depends on: [ADR-022](../../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)**
   (exists, accepted). **Blocks: nothing.**
 - **Atomic, one unit:** the six removals + keeping the seventh are a single independently shippable
   change; there is no dependency ordering among the six and no smaller unit ships value on its own.

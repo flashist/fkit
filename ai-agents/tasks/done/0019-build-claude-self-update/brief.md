@@ -15,8 +15,8 @@ Sprint 2
 ## Context
 
 Per the Omnigent-removal plan
-([`2026-07-11-plan-omnigent-removal.md`](../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
-§Phase 0.2) and [ADR-009](../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)
+([`2026-07-11-plan-omnigent-removal.md`](../../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
+§Phase 0.2) and [ADR-009](../../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)
 §Decision 3.
 
 **This is also a live bug fix, not just removal plumbing.** `claude/fkit-claude.sh` has **no update

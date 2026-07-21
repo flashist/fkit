@@ -2,7 +2,7 @@
 
 - **Date:** 2026-07-18
 - **Author:** fkit-architect (spawned consult; chain `coder → architect`, hop 1 of 2)
-- **Task:** [`design-spawned-invocation-consent-model-for-task-movers.md`](../../tasks/done/design-spawned-invocation-consent-model-for-task-movers.md) (Sprint 2, #63)
+- **Task:** [`design-spawned-invocation-consent-model-for-task-movers.md`](../../tasks/done/0029-design-spawned-invocation-consent-model-for-task-movers/brief.md) (Sprint 2, #63)
 - **Status:** ✅ **Ruled on and closed (2026-07-18).** All six questions in §9 were put to the owner and
   answered; the decision is recorded as
   [**ADR-025**](../decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md). This report is now

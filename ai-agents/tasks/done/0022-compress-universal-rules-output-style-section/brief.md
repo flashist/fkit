@@ -30,7 +30,7 @@ that `claude/fkit-claude-init.sh:322` (`rules_src`) injects into **every** consu
   every agent's context on every turn."*
 - **Overflow is a hard `exit 1`** at `claude/fkit-claude-init.sh:340-343`. An over-budget block **fails
   the launch** — it does not degrade, it does not warn. This is a launch-blocking budget.
-- Prior review [`add-speak-in-simple-terms-output-style.md`](../../reviews/add-speak-in-simple-terms-output-style.md)
+- Prior review [`add-speak-in-simple-terms-output-style.md`](../0010-add-speak-in-simple-terms-output-style/review.md)
   finding **R2** already flagged the budget at 84% consumed. R2's test-coverage half is now closed:
   `test/rules-block-budget.test.js` exists.
 
@@ -98,7 +98,7 @@ overrides a hard rule above.**
 3. **Do not touch the `## Universal hard rules` section.** Out of scope.
 4. **Verify the dual-home question rather than assuming.** `claude/scaffold/universal-rules.md` sits
    under `claude/scaffold/` but is **not** under `claude/scaffold/ai-agents/`, so
-   [`conventions/dual-home-parity.md`](../../knowledge-base/conventions/dual-home-parity.md) is
+   [`conventions/dual-home-parity.md`](../../../knowledge-base/conventions/dual-home-parity.md) is
    believed **not** to apply — one copy only. **Confirm with a `find` before editing, do not trust this
    note.** (A `find` on 2026-07-19 returned exactly one path; re-run it.)
 5. **Do not change `RULES_MAX`.** Raising the cap is not the fix and is not in scope.
@@ -118,7 +118,7 @@ overrides a hard rule above.**
 ## Explicitly NOT in scope
 
 - **The ADR-030 prose addition** — the *"What's next?"* / ask-interactively rules from
-  [`adr-030-stop-hook-enforces-turn-completion-contract.md`](../../knowledge-base/decisions/adr-030-stop-hook-enforces-turn-completion-contract.md)
+  [`adr-030-stop-hook-enforces-turn-completion-contract.md`](../../../knowledge-base/decisions/adr-030-stop-hook-enforces-turn-completion-contract.md)
   (~430 B). That is a **separate, later brief, not yet filed.** It is **sequenced after this task** and
   touches **the same file and likely the same section** — do not fold it in, and do not let the two
   land in one review.

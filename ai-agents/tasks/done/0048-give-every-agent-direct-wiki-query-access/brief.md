@@ -16,7 +16,7 @@ Sprint 1
 ## Context
 
 Originally the owner's idea #1 in a wider panel-noise discussion (2026-07-10), alongside two other
-ideas that became [`ADR-004`](../../knowledge-base/decisions/adr-004-fixed-role-based-titles-for-consult-spawns.md):
+ideas that became [`ADR-004`](../../../knowledge-base/decisions/adr-004-fixed-role-based-titles-for-consult-spawns.md):
 instead of every agent spawning a fresh `fkit-wiki` sub-agent session for every wiki lookup (the
 single biggest source of ad hoc consult children today), vendor the wiki `query` skill directly
 into every agent's own bundle, with direct read access to `ai-agents/wiki-vault/`, so a lookup

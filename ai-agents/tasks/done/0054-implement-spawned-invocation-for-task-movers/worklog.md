@@ -1,7 +1,7 @@
 # Worklog: implement spawned invocation for the task movers (task 64)
 
-- **Task:** [`implement-spawned-invocation-for-task-movers.md`](../tasks/done/implement-spawned-invocation-for-task-movers.md) (Sprint 2, #64)
-- **Plan:** [`plans/implement-spawned-invocation-for-task-movers.md`](../plans/implement-spawned-invocation-for-task-movers.md)
+- **Task:** [`implement-spawned-invocation-for-task-movers.md`](./brief.md) (Sprint 2, #64)
+- **Plan:** [`plans/implement-spawned-invocation-for-task-movers.md`](./plan.md)
 - **Opened:** 2026-07-19, after owner plan approval
 - **Loop:** `/fkit-task-ship-loop` (ADR-019), coder session, owner present at the gates
 
@@ -88,7 +88,7 @@ this same diff edited.** Not missed files — missed *lines in files I had open*
 
 ## Review
 
-- **Ledger:** [`reviews/implement-spawned-invocation-for-task-movers.md`](../reviews/implement-spawned-invocation-for-task-movers.md), Round 1.
+- **Ledger:** [`reviews/implement-spawned-invocation-for-task-movers.md`](./review.md), Round 1.
 - **Verdict:** 🛑 Blocked — 7 confirmed defects (2 high), 1 partially-correct pre-existing.
 - **Coverage: FULL and model-diverse** — reviewer's own pass plus Codex adversarial (`codex-cli
   0.144.4`). Plus the separate mandatory pre-implementation Codex pass (ADR-025 Decision 6).

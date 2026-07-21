@@ -36,15 +36,15 @@ standing flag):
 
 - **`architecture.md:4`** — *"runtime, seven roles, no orchestrator…"*
 - **`architecture.md:82`** — *"### 4.1 The seven roles"*
-- [**ADR-028**](../../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
+- [**ADR-028**](../../../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
   adds an **eighth** role, a sandboxed e2e tester.
 
 ### 🔴 The authoritative site list already existed. Read it; do not re-derive it.
 
-**[ADR-028 `:154-169`](../../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
+**[ADR-028 `:154-169`](../../../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
 is this task's source of truth for the affected sites.** Its follow-up 2 is titled, in terms: *"The
 seven→eight ripple is already enumerated — **do not re-derive it**."* It points at the full table in
-[`reports/2026-07-18-design-fkit-git-agent-and-consent-model.md:67-77`](../../knowledge-base/reports/2026-07-18-design-fkit-git-agent-and-consent-model.md)
+[`reports/2026-07-18-design-fkit-git-agent-and-consent-model.md:67-77`](../../../knowledge-base/reports/2026-07-18-design-fkit-git-agent-and-consent-model.md)
 — built for the git-agent question ADR-023 declined, where the ripple is identical and only the eighth
 role differs — and **re-verifies the claims as still live on 2026-07-19.**
 
@@ -53,7 +53,7 @@ role differs — and **re-verifies the claims as still live on 2026-07-19.**
 > section before scoping** — the section that says in its own heading not to re-derive the list. The
 > hand-assembled version had **five of the nine live sites** and missed the one flagged as *"the one
 > most likely to be missed."* **This is the fourth instance in a single day of the same failure the
-> [`add-worked-example-to-evidence-before-assertion`](add-worked-example-to-evidence-before-assertion.md)
+> [`add-worked-example-to-evidence-before-assertion`](../0013-add-worked-example-to-evidence-before-assertion/brief.md)
 > task is being widened to document:** asserting from what was to hand instead of checking the record
 > that already existed. It cost nothing this time only because someone swept again.
 
@@ -104,7 +104,7 @@ class as the rest of the task. Scoped under "What to build" above, with its two 
   **Work from ADR-028's enumeration, not from this table** — the table is a convenience, the ADR is the
   source of truth, and re-deriving from a convenience copy is how this brief got under-scoped the first
   time. **`PROJECT.md` is task 83's and `fkit-claude-init.sh` is task 81's — do not touch either.**
-- **Add a dated pointer from [ADR-023](../../knowledge-base/decisions/adr-023-fkit-git-agent-is-not-built.md)
+- **Add a dated pointer from [ADR-023](../../../knowledge-base/decisions/adr-023-fkit-git-agent-is-not-built.md)
   to ADR-028.** ADR-023 `:37` Decision 3 reads *"**The team stays seven role-scoped agents.** No
   count/roster ripple…"* — a claim ADR-028 later falsified. An ADR edit is architect work and this is
   the same defect class as the rest of the task: a record whose stale claim reads as current. **Two
@@ -165,7 +165,7 @@ class as the rest of the task. Scoped under "What to build" above, with its two 
 - **Owner: fkit-architect.** **Documentation only** — no agent-file, skill, or source edits.
 - **Depends on: nothing.** No blockers; can start immediately.
 - **🔴 `claude/fkit-claude-init.sh:847` is NOT in this task — moved to
-  [task 81](../done/extend-mover-reference-sweep-to-the-knowledge-base.md) as Part D.** The line is
+  [task 81](../../done/0036-extend-mover-reference-sweep-to-the-knowledge-base/brief.md) as Part D.** The line is
   `printf '  Seven roles, each a locked session…'` — **executable source, not prose** (ADR-028:164
   flags it as *"code, not prose, and the one most likely to be missed"*). The architect does not write
   source. Task 81 is already fkit-coder's and already editing files under `claude/`, so it absorbs the
@@ -181,7 +181,7 @@ class as the rest of the task. Scoped under "What to build" above, with its two 
     inconsistency than today's. Whoever closes the second of the two should re-run the `seven` sweep
     across the whole repo before calling it done.
 - **🔴 `PROJECT.md:8` and `:72` are NOT in this task — owner ruling 2026-07-19, honoring ADR-028:154.**
-  Moved to [task 83](amend-project-brief-for-the-eighth-role.md), producer-owned. **The architect does
+  Moved to [task 83](../0015-amend-project-brief-for-the-eighth-role/brief.md), producer-owned. **The architect does
   not rewrite the product brief's stance.**
   - **The authority: ADR-028:154-157**, follow-up 1 — the `PROJECT.md` amendment is the *"owner's or
     producer's call — **the brief is the product document, not the architect's**."*
@@ -200,7 +200,7 @@ class as the rest of the task. Scoped under "What to build" above, with its two 
   worse error than the stale count it replaces. **ADR-026 and ADR-027 do not carry this hazard** —
   026 records a "no", 027 a convention already in force — so the constraint is specifically about
   028/029/030.
-- **Precedent for shape: task 58**, [`refresh-architecture-docs-for-tool-relaxation.md`](../done/refresh-architecture-docs-for-tool-relaxation.md)
+- **Precedent for shape: task 58**, [`refresh-architecture-docs-for-tool-relaxation.md`](../../done/0068-refresh-architecture-docs-for-tool-relaxation/brief.md)
   — same job (docs catching up to accepted ADRs), same owner, and its structure of *supersedes-this-
   claim* bullets is worth copying rather than reinventing.
 - **Sprint call: Sprint 2, priority 82.** The stale-citation half is ordinary maintenance and would

@@ -1,8 +1,8 @@
 # Review — sprint2-scaffold-launcher-hardening
 
-Task: [`tasks/backlog/fix-scaffold-knowledge-base-folders.md`](../tasks/backlog/fix-scaffold-knowledge-base-folders.md) (25) ·
-[`tasks/backlog/stop-init-failure-bricking-the-launcher.md`](../tasks/backlog/stop-init-failure-bricking-the-launcher.md) (26) ·
-[`tasks/backlog/refuse-init-on-weird-ai-agents-state.md`](../tasks/backlog/refuse-init-on-weird-ai-agents-state.md) (27)
+Task: [`tasks/backlog/fix-scaffold-knowledge-base-folders.md`](../../tasks/done/0043-fix-scaffold-knowledge-base-folders/brief.md) (25) ·
+[`tasks/backlog/stop-init-failure-bricking-the-launcher.md`](../../tasks/done/0088-stop-init-failure-bricking-the-launcher/brief.md) (26) ·
+[`tasks/backlog/refuse-init-on-weird-ai-agents-state.md`](../../tasks/done/0069-refuse-init-on-weird-ai-agents-state/brief.md) (27)
 File(s) under review: `claude/fkit-claude.sh`, `claude/fkit-claude-init.sh`, `claude/scaffold/ai-agents/README.md`,
 `claude/scaffold/ai-agents/knowledge-base/{conventions/README.md, decisions|incidents|reports|history/.gitkeep}`,
 deleted `claude/scaffold/ai-agents/knowledge-base/.gitkeep`

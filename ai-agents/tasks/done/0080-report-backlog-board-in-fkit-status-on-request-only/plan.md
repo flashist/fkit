@@ -1,6 +1,6 @@
 # Plan — Report the Backlog board in `/fkit-status` on request only
 
-**Task:** [`report-backlog-board-in-fkit-status-on-request-only.md`](../tasks/done/report-backlog-board-in-fkit-status-on-request-only.md)
+**Task:** [`report-backlog-board-in-fkit-status-on-request-only.md`](./brief.md)
 · **Sprint 2, priority 68** · **Approved by the owner: 2026-07-18** · **Depends on task 67 (met)**
 
 ## The change

@@ -42,7 +42,7 @@ saw `adr-028` as the highest, and allocated **029**. But **029 was already thoro
 task brief referenced `adr-029-stop-hook-…`, and roughly **ten `ai-agents/wiki-vault/` pages had
 already ingested it**. The only place it was *not* claimed was the `decisions/` directory itself: the
 file did not exist on disk yet. The stop-hook decision had to be renumbered to **ADR-030**, and the
-cleanup became [task 80](../backlog/repair-stale-adr-029-stop-hook-links-in-the-vault.md).
+cleanup became [task 80](../../backlog/0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md).
 
 **The rule to write down: the next ADR number is derived from every place a number can be claimed,
 not from a `decisions/` directory listing.** A number claimed *anywhere* counts as taken.
@@ -129,7 +129,7 @@ and any that a future authoring path introduces around the guard.
 
 - **`claude/fkit-claude-init.sh:847`** currently reads
   `printf '  Seven roles, each a locked session (only its own skills exist in it):\n'`.
-  [**ADR-028**](../../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
+  [**ADR-028**](../../../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
   added an eighth role. **Correct the count.**
 - **Why it is here and not in task 82:** this is **executable source**, not documentation —
   ADR-028:164 singles it out as *"code, not prose, and the one most likely to be missed."* Task 82 is
@@ -230,7 +230,7 @@ and any that a future authoring path introduces around the guard.
     without that making it the architect's task.
   - **Consult fkit-wiki on Part C's detail** — it knows the vault's slug conventions and can say where
     the check will produce noise. **Consult, not ownership.**
-- **Part D is a one-line absorption from [task 82](../backlog/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role.md)**,
+- **Part D is a one-line absorption from [task 82](../../backlog/0067-refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role/brief.md)**,
   not scope creep — see below.
 - **⚠️ Cross-task risk introduced by Part D: the role count is now corrected in two tasks by two
   roles.** If 81 lands and 82 does not, **the installer prints "eight roles" while every document says
@@ -241,7 +241,7 @@ and any that a future authoring path introduces around the guard.
   one canonical home (`claude/skills/fkit-task-*/SKILL.md`); `claude/scaffold/` carries no copy, and
   `.claude/skills/` is a gitignored copy refreshed by init. Nothing to keep in parity beyond re-running
   init.
-- **Sequencing against the folder migration.** [Task 76](../backlog/migrate-tasks-to-folder-structure-and-update-tooling.md)
+- **Sequencing against the folder migration.** [Task 76](../0062-migrate-tasks-to-folder-structure-and-update-tooling/brief.md)
   rewrites the movers' path handling wholesale, and absorbs `plans/`, `worklogs/` and `reviews/` into
   the task folder. This task touches the same lines. Landing it **before** 76 means 76 rebases onto it;
   landing it after means the rot continues through the whole migration window. **Recommendation: land

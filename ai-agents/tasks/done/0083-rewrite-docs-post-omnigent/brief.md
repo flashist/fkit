@@ -15,9 +15,9 @@ Sprint 2
 ## Context
 
 Per the Omnigent-removal plan
-([`2026-07-11-plan-omnigent-removal.md`](../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
-§Phase 4), the [doc-drift audit](../../knowledge-base/reports/2026-07-11-doc-drift-audit.md), and
-ADR-[009](../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)/[010](../../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md).
+([`2026-07-11-plan-omnigent-removal.md`](../../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
+§Phase 4), the [doc-drift audit](../../../knowledge-base/reports/2026-07-11-doc-drift-audit.md), and
+ADR-[009](../../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)/[010](../../../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md).
 
 **This task comes _after_ the deletion, deliberately.** The prize for sequencing the sprint correctly
 is that the docs get written **once, against what actually exists** — instead of correcting drift in

@@ -1,8 +1,8 @@
 # Review — sprint2-shared-instructions-delivery
 
-Task: [`tasks/backlog/give-codex-the-universal-hard-rules.md`](../tasks/backlog/give-codex-the-universal-hard-rules.md) (30) ·
-[`tasks/backlog/merge-fkit-rules-block-into-existing-root-context-files.md`](../tasks/backlog/merge-fkit-rules-block-into-existing-root-context-files.md) (31) ·
-[`tasks/backlog/add-no-secrets-rule-to-fkit-lead.md`](../tasks/backlog/add-no-secrets-rule-to-fkit-lead.md) (32)
+Task: [`tasks/backlog/give-codex-the-universal-hard-rules.md`](../../tasks/done/0047-give-codex-the-universal-hard-rules/brief.md) (30) ·
+[`tasks/backlog/merge-fkit-rules-block-into-existing-root-context-files.md`](../../tasks/done/0061-merge-fkit-rules-block-into-existing-root-context-files/brief.md) (31) ·
+[`tasks/backlog/add-no-secrets-rule-to-fkit-lead.md`](../../tasks/done/0007-add-no-secrets-rule-to-fkit-lead/brief.md) (32)
 File(s) under review: `claude/fkit-claude-init.sh`, `claude/scaffold/universal-rules.md` (new),
 `claude/scaffold/CLAUDE.md`, `claude/scaffold/AGENTS.md`, `claude/agents/fkit-lead.md`,
 and this repo's own `/CLAUDE.md` + `/AGENTS.md` (dogfooding, required by brief 31).

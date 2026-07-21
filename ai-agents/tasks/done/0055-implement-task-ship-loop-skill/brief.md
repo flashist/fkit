@@ -35,7 +35,7 @@ against a recommendation that did not survive review.
 - Registration: the coder's list in `claude/skills-for-role.sh` — the single source of truth — so the
   session lockdown and the task-43 PreToolUse hook both allow the coder and deny everyone else.
 - Argument contract per the one-skill-one-output convention
-  ([`conventions/one-skill-one-output.md`](../../knowledge-base/conventions/one-skill-one-output.md)):
+  ([`conventions/one-skill-one-output.md`](../../../knowledge-base/conventions/one-skill-one-output.md)):
   the task-brief path is an operand; no output-variant arguments.
 - Any agent-contract amendments the approved design ruled (e.g. `fkit-coder.md` wording about the
   plan/fix gates) — only those the owner approved in 52.

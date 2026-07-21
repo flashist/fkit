@@ -1,7 +1,7 @@
 # Design — the coder's autonomous ship-loop (`fkit-task-ship-loop`)
 
 **Date:** 2026-07-17 · **Author:** fkit-architect · **Task:**
-[`design-task-ship-loop-skill.md`](../../tasks/backlog/design-task-ship-loop-skill.md) (Sprint 2,
+[`design-task-ship-loop-skill.md`](../../tasks/done/0031-design-task-ship-loop-skill/brief.md) (Sprint 2,
 priority 52) · **Blocks:** task 53 (implementation) — hard.
 
 **Status: ✅ OWNER-APPROVED (rev 3, 2026-07-17).** The numbered loop in §11 and every decision in §5 /

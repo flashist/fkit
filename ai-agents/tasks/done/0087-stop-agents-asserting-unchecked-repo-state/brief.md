@@ -41,7 +41,7 @@ every single run. **This ships to every project fkit scaffolds.**
 
 The irony is exact, and worth stating because it explains why this deserves a task rather than a
 resolution to try harder:
-[`status-report-format.md`](../../knowledge-base/conventions/status-report-format.md) exists *because*
+[`status-report-format.md`](../../../knowledge-base/conventions/status-report-format.md) exists *because*
 *"a status report was once improvised from memory and fabricated a number that looked precise and was
 false."* That doc governs `/fkit-status`. **It does not govern the moment an agent decides whether work
 exists** — and that is precisely where the same failure recurred. The convention is right; its scope is
@@ -62,7 +62,7 @@ knowledge; *"nothing was committed"* is a claim about the world that requires a 
 ### 2. Add the standing rule where agents will actually read it
 
 A new convention — **`ai-agents/knowledge-base/conventions/evidence-before-assertion.md`** — filed per
-[ADR-013](../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)
+[ADR-013](../../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)
 (`conventions/` = standing rules read on a normal run and obeyed).
 
 It must state, at minimum:

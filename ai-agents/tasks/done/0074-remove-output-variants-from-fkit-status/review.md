@@ -10,7 +10,7 @@ closed out at `ai-agents/reviews/build-deterministic-dashboard-script-for-fkit-s
 residuals stand. This review covers only the task-44 site list.
 
 **Verification coverage — read this before reading the verdict.** `npm test` (107/107 green) **proves
-nothing about this change.** [ADR-017](../knowledge-base/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit.md)
+nothing about this change.** [ADR-017](../../../knowledge-base/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit.md)
 rule 4 fences the suite to a shipped executable's *"(argv, project files) → (stdout, exit code)"*
 contract. This change is skill **prose** — it has no stdout and is not an executable. The suite does
 not cover it and **cannot**. The only real check is a live `fkit producer` session (owner's to run) —

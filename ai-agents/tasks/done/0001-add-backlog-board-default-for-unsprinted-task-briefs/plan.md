@@ -1,6 +1,6 @@
 # Plan — Add a Backlog board, the default home for unsprinted task briefs
 
-**Task:** [`add-backlog-board-default-for-unsprinted-task-briefs.md`](../tasks/done/add-backlog-board-default-for-unsprinted-task-briefs.md)
+**Task:** [`add-backlog-board-default-for-unsprinted-task-briefs.md`](./brief.md)
 · **Sprint 2, priority 67** · **Approved by the owner: 2026-07-18**
 
 The durable autonomy boundary for this ship-loop run.

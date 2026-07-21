@@ -54,7 +54,7 @@ and it has a trap in it:
 
 > **The load-bearing unknown: does the mechanism reach a *spawned consult*, or only a session?**
 >
-> Per [ADR-012](../../knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md),
+> Per [ADR-012](../../../knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md),
 > a spawned `@fkit-<role>` consult **inherits the calling session's settings, not its own**. That is
 > exactly how the skill lockdown ended up being *"a wall in a session, a rule in a consult."*
 >
@@ -65,7 +65,7 @@ and it has a trap in it:
 
 **Sequence:** investigate → report → owner reviews → **then** implementation is scoped into its own
 task(s). Findings land as `reports/YYYY-MM-DD-shared-instructions-layer.md` per
-[ADR-013](../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md).
+[ADR-013](../../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md).
 
 ## What the investigation must answer
 
@@ -123,7 +123,7 @@ task(s). Findings land as `reports/YYYY-MM-DD-shared-instructions-layer.md` per
 - **Read first:** ADR-012 (why the consult path is the trap), `claude/fkit-claude.sh` (the `exec` at
   `:405` / `:457`), and `claude/fkit-claude-init.sh` (which generates the `.claude/` copies — the most
   likely seam).
-- **Related:** [task 24](./stop-agents-asserting-unchecked-repo-state.md) adds a standing rule
+- **Related:** [task 24](../0087-stop-agents-asserting-unchecked-repo-state/brief.md) adds a standing rule
   (`conventions/evidence-before-assertion.md`) that applies to **every role** — and today has no
   mechanism to reach them except a link from each skill. **It is the first real customer of whatever
   this task builds.** Worth reading its brief; do not merge the two.

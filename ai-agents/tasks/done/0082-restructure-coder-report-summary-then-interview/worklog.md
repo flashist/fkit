@@ -1,8 +1,8 @@
 # Worklog — Restructure the coder's report: bullet summary first, interview last
 
-**Task:** [`restructure-coder-report-summary-then-interview.md`](../tasks/done/restructure-coder-report-summary-then-interview.md)
-· **Sprint 2, priority 61** · **Plan:** [`plans/restructure-coder-report-summary-then-interview.md`](../plans/restructure-coder-report-summary-then-interview.md)
-· **Ledger:** [`reviews/restructure-coder-report-summary-then-interview.md`](../reviews/restructure-coder-report-summary-then-interview.md)
+**Task:** [`restructure-coder-report-summary-then-interview.md`](./brief.md)
+· **Sprint 2, priority 61** · **Plan:** [`plans/restructure-coder-report-summary-then-interview.md`](./plan.md)
+· **Ledger:** [`reviews/restructure-coder-report-summary-then-interview.md`](./review.md)
 
 **Status: 🔄 In progress — READY FOR DONE**, with one honest caveat below. Awaiting the owner's
 `/fkit-task-done`; this loop never sets `✅ Done`.

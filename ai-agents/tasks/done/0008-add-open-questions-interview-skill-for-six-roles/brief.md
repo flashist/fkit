@@ -23,13 +23,13 @@ them."* Interview rulings, recorded here so the coder does not reopen them:
    flagged for them) and **never answered**, dedups, and interviews the owner about them.
 2. **Scope = the six Claude-side roles** — every role except `fkit-adversarial-reviewer` (Codex-run,
    restricted allowlist per
-   [ADR-022](../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md),
+   [ADR-022](../../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md),
    no interactive channel). No ADR change needed.
 3. **Interview only.** Answers live in the conversation; the skill records nothing to files. Zero
    write surface.
 
 **Session-vs-consult — the known seam
-([ADR-021](../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)):**
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)):**
 `AskUserQuestion` exists only in a session. The skill must carry the standard degrade: in a session,
 interview via `AskUserQuestion` (batched, with recommendations where the session already implies one);
 in a spawned consult (no owner channel), **do not attempt to interview** — list the unanswered

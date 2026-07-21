@@ -1,8 +1,8 @@
 # Worklog — Add the `/fkit-open-questions-interview` skill for the six Claude-side roles
 
-**Task:** [`add-open-questions-interview-skill-for-six-roles.md`](../tasks/done/add-open-questions-interview-skill-for-six-roles.md)
-· **Sprint 2, priority 70** · **Plan:** [`plans/add-open-questions-interview-skill-for-six-roles.md`](../plans/add-open-questions-interview-skill-for-six-roles.md)
-· **Ledger:** [`reviews/add-open-questions-interview-skill-for-six-roles.md`](../reviews/add-open-questions-interview-skill-for-six-roles.md)
+**Task:** [`add-open-questions-interview-skill-for-six-roles.md`](./brief.md)
+· **Sprint 2, priority 70** · **Plan:** [`plans/add-open-questions-interview-skill-for-six-roles.md`](./plan.md)
+· **Ledger:** [`reviews/add-open-questions-interview-skill-for-six-roles.md`](./review.md)
 
 **Status: 🔄 In progress — READY FOR DONE**, with one caveat below. Awaiting the owner's
 `/fkit-task-done`; this loop never sets `✅ Done`.

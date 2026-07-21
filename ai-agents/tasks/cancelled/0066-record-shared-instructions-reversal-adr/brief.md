@@ -16,7 +16,7 @@ Sprint 2
 
 **The shared-instructions investigation (task 29) reversed its own rev-1 recommendation, and the
 reversal rejects two obvious mechanisms by name.** Findings:
-[`reports/2026-07-14-shared-instructions-layer.md`](../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
+[`reports/2026-07-14-shared-instructions-layer.md`](../../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
 (rev 2). The headline is that the shared layer **already exists and already ships** — the *"Universal
 hard rules"* block in `claude/scaffold/CLAUDE.md`, proven to reach both a session and a spawned consult
 — so nothing new gets built; what was broken was delivery on two paths, fixed by tasks 30–32.

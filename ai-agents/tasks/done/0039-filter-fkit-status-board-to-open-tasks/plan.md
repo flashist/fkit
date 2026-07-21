@@ -1,6 +1,6 @@
 # Plan — Filter the `/fkit-status` board to open tasks only
 
-**Task:** [`filter-fkit-status-board-to-open-tasks.md`](../tasks/done/filter-fkit-status-board-to-open-tasks.md)
+**Task:** [`filter-fkit-status-board-to-open-tasks.md`](./brief.md)
 · **Sprint 2, priority 65** · **Approved by the owner: 2026-07-18**
 
 This is the durable autonomy boundary for the ship-loop run. Work outside it stops for the owner.

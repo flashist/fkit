@@ -1,8 +1,8 @@
 # Worklog — Add a "Speak in simple terms" output-style preference for all agents
 
-**Task:** [`add-speak-in-simple-terms-output-style.md`](../tasks/done/add-speak-in-simple-terms-output-style.md)
-· **Sprint 2, priority 62** · **Plan:** [`plans/add-speak-in-simple-terms-output-style.md`](../plans/add-speak-in-simple-terms-output-style.md)
-· **Ledger:** [`reviews/add-speak-in-simple-terms-output-style.md`](../reviews/add-speak-in-simple-terms-output-style.md)
+**Task:** [`add-speak-in-simple-terms-output-style.md`](./brief.md)
+· **Sprint 2, priority 62** · **Plan:** [`plans/add-speak-in-simple-terms-output-style.md`](./plan.md)
+· **Ledger:** [`reviews/add-speak-in-simple-terms-output-style.md`](./review.md)
 
 **Status: 🔄 In progress — READY FOR DONE**, with one caveat below. Awaiting the owner's
 `/fkit-task-done`; this loop never sets `✅ Done`.

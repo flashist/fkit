@@ -2,7 +2,7 @@
 
 - **Date:** 2026-07-14
 - **Author:** fkit-architect (consulted by the coder, who ran the delivery experiment)
-- **Task:** [`add-shared-instructions-layer-for-all-agents.md`](../../tasks/backlog/add-shared-instructions-layer-for-all-agents.md)
+- **Task:** [`add-shared-instructions-layer-for-all-agents.md`](../../tasks/done/0009-add-shared-instructions-layer-for-all-agents/brief.md)
 - **Status:** open — awaiting owner review. **No implementation is scoped by this report.**
 - **Revision 2.** Revision 1 recommended building an `ai-agents/AGENTS-COMMON.md` splice. It was
   reviewed adversarially (Codex + Claude, 17 findings) and **the recommendation did not survive**. This

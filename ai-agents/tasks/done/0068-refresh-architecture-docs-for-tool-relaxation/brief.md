@@ -14,7 +14,7 @@ Sprint 2
 
 ## Context
 
-[ADR-022](../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)
+[ADR-022](../../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)
 (accepted 2026-07-18) relaxes the tool allowlist for every role except the adversarial reviewer. It
 leaves several **standing doc claims describing a superseded posture** — the docs still assert the
 tool allowlist as a hard, per-role wall. ADR-022's own Consequences section names these explicitly as
@@ -64,7 +64,7 @@ Update the claims ADR-022 supersedes. Per ADR-022 (Consequences + Related), the 
 
 - **Owner: fkit-architect** — a knowledge-base / root-doc edit; the architect owns `architecture.md`
   and these doc claims.
-- **Depends on: [ADR-022](../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)**
+- **Depends on: [ADR-022](../../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)**
   (exists). **Soft-depends on task 57** — the docs describe the reality task 57 lands. The architect
   can write against ADR-022 as the contract, but the docs are only *true* once 57 ships; sequence 58
   after 57 (or co-verify) so the docs don't describe a state not yet in the tree.

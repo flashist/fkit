@@ -1,6 +1,6 @@
 # Plan — Add a "Speak in simple terms" output-style preference for all agents
 
-**Task:** [`add-speak-in-simple-terms-output-style.md`](../tasks/done/add-speak-in-simple-terms-output-style.md)
+**Task:** [`add-speak-in-simple-terms-output-style.md`](./brief.md)
 · **Sprint 2, priority 62** · **Approved by the owner: 2026-07-18**
 
 ## ⚠️ The brief's "What to build" was factually wrong, and the owner ruled on the correction first

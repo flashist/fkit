@@ -15,14 +15,14 @@ Unscheduled
 ## Context
 
 **The ask, from the fkit-reviewer's Round 2 closeout of task 36, owner-approved 2026-07-17:** add a
-**worked example** to [`ai-agents/knowledge-base/conventions/evidence-before-assertion.md`](../../knowledge-base/conventions/evidence-before-assertion.md)
+**worked example** to [`ai-agents/knowledge-base/conventions/evidence-before-assertion.md`](../../../knowledge-base/conventions/evidence-before-assertion.md)
 showing what it costs when the convention is ignored. The reviewer's words, at
 `ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md:160`: *"That belongs in
 `conventions/evidence-before-assertion.md` as a worked example."*
 
 **Why prose is being asked to do more work than prose usually does.** The rule was already written
 down. It was already **stated in the words that fit this exact failure** — task 27's Correction in
-[`sprint-2.md:354`](../../sprints/sprint-2.md): *"a behavioral claim about a shell builtin or coreutil
+[`sprint-2.md:354`](../../../sprints/sprint-2.md): *"a behavioral claim about a shell builtin or coreutil
 is a claim to run, not to reason about."* It was still broken **four times in one task, by the
 fkit-coder, who read the convention at the start of that task.** The reviewer's framing: *"Naming a
 pattern doesn't stop it; a red-first test does."* A stated principle demonstrably did not survive
@@ -42,7 +42,7 @@ peer agent's correction** instead of verifying it, where the false claim then **
 owner as fact**. **Neither the convention's existing preamble nor the task 36 example covers the
 multi-hop case** — a claim that is wrong at hop 1 and unchecked at hop 2.
 
-## The evidence — task 36, ledger [`ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md`](../../reviews/remove-fkit-omnigent-orphan-residue.md)
+## The evidence — task 36, ledger [`ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md`](../../done/0072-remove-fkit-omnigent-orphan-residue/review.md)
 
 **Verified against the ledger while scoping this brief** — every claim below has a line reference, per
 the convention this task is about.
@@ -68,7 +68,7 @@ the convention this task is about.
 ## The evidence — example 2, the ADR-029/030 vault repair, 2026-07-19
 
 **Source of this account: the owner's own ruling of 2026-07-19, relayed via fkit-architect, plus the
-blockquote already standing in task 80's brief** ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](repair-stale-adr-029-stop-hook-links-in-the-vault.md), lines 40-45).
+blockquote already standing in task 80's brief** ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](../0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md), lines 40-45).
 **The two git checks below were re-run while scoping this widening and are confirmed**, per the
 convention this task is about.
 
@@ -129,7 +129,7 @@ convention this task is about.
 
 - **Write it from the two sources named above**, both of which the author can read directly: the
   material in "The evidence — example 2" in this brief, and **task 80's own blockquote**
-  ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](repair-stale-adr-029-stop-hook-links-in-the-vault.md) :40-45),
+  ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](../0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md) :40-45),
   which records the incident independently. **Re-run the two `git cat-file -e HEAD:` checks** rather
   than copying their results on trust — writing this example from an unverified account would reproduce
   the exact defect the example is about.
@@ -179,7 +179,7 @@ convention this task is about.
   example is about.
 - The document still reads as a **convention** (prescriptive, current) and not as an incident report —
   the examples serve the rule; the rule is not a footnote to the examples. See the
-  convention/report boundary in [`conventions/README.md`](../../knowledge-base/conventions/README.md).
+  convention/report boundary in [`conventions/README.md`](../../../knowledge-base/conventions/README.md).
 - **Length check — now the sharpest risk, and it got sharper with the widening.** The doc will carry
   **three** worked examples (the 2026-07-13 preamble plus two new). It must stay something an agent
   actually reads on a normal run. If three examples make it long enough to skim past, it has failed at
@@ -234,7 +234,7 @@ convention this task is about.
   the lesson may be that it needs an *enforcement point*, not more prose.** This brief does not settle
   that and must not pretend to. Two facts sharpen it beyond how it was handed to me:
   - **An enforcement point already exists — and its scope excludes exactly where task 36 failed.**
-    `test/prove-red.sh` (task 23 / [ADR-014](../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md))
+    `test/prove-red.sh` (task 23 / [ADR-014](../../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md))
     is this project's hard mutation gate, built on *"a test that has never failed has not been
     tested"* — which **is** "red-prove or don't claim the fix", already mechanized. But its header
     (`test/prove-red.sh:20-25`) declares **two mutations, both against the launcher**. It does not
@@ -246,7 +246,7 @@ convention this task is about.
     (`gate-symlink-escape-in-init-intake-write.md`, whose Context makes the identical observation: *"a
     rule stated in a file's own comments and then missed twice is not three bugs — it is one doctrine
     that has no enforcement point"*).
-  - **Also live and adjacent: [`investigate-mutation-testing-library-adoption.md`](../done/investigate-mutation-testing-library-adoption.md)**
+  - **Also live and adjacent: [`investigate-mutation-testing-library-adoption.md`](../../done/0058-investigate-mutation-testing-library-adoption/brief.md)**
     (Sprint 2, priority 46) — the owner's ask to replace hand-rolled `prove-red.sh` with a proper
     mutation-testing library. **That task is the natural home for the enforcement answer**, and it is
     already sprinted and ahead of this one.

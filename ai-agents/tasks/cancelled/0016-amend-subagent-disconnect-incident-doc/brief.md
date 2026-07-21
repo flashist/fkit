@@ -14,7 +14,7 @@ Sprint 1
 
 ## Context
 
-fkit-architect reviewed [`ai-agents/knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md`](../../knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md)
+fkit-architect reviewed [`ai-agents/knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md`](../../../knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md)
 during the 2026-07-10 producer consult that generated this task's sibling brief
 (`build-fkit-reconnect-tooling.md`).
 

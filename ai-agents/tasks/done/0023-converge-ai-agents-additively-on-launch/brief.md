@@ -38,7 +38,7 @@ therefore **never gain a new scaffold path** — which is why a project scaffold
 intended). **Separating those two jobs is the whole task.**
 
 Full rationale and evidence:
-[`reports/2026-07-14-migration-mechanism.md`](../../knowledge-base/reports/2026-07-14-migration-mechanism.md)
+[`reports/2026-07-14-migration-mechanism.md`](../../../knowledge-base/reports/2026-07-14-migration-mechanism.md)
 (rev 2, post-adversarial-review) §1, §8, §11.2. The owner has reviewed it and greenlit this.
 
 **What was rejected, and must not creep back in.** No `migration-current.md`. No `migration-X.Y.Z.md`.

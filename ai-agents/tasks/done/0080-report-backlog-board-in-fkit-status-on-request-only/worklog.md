@@ -1,8 +1,8 @@
 # Worklog — Report the Backlog board in `/fkit-status` on request only
 
-**Task:** [`report-backlog-board-in-fkit-status-on-request-only.md`](../tasks/done/report-backlog-board-in-fkit-status-on-request-only.md)
-· **Sprint 2, priority 68** · **Plan:** [`plans/report-backlog-board-in-fkit-status-on-request-only.md`](../plans/report-backlog-board-in-fkit-status-on-request-only.md)
-· **Ledger:** [`reviews/report-backlog-board-in-fkit-status-on-request-only.md`](../reviews/report-backlog-board-in-fkit-status-on-request-only.md)
+**Task:** [`report-backlog-board-in-fkit-status-on-request-only.md`](./brief.md)
+· **Sprint 2, priority 68** · **Plan:** [`plans/report-backlog-board-in-fkit-status-on-request-only.md`](./plan.md)
+· **Ledger:** [`reviews/report-backlog-board-in-fkit-status-on-request-only.md`](./review.md)
 
 **Status: 🔄 In progress — READY FOR DONE.** Implemented, reviewed (round 1, all 7 findings resolved),
 re-verified green. Awaiting the owner's `/fkit-task-done`; this loop never sets `✅ Done`.
@@ -26,7 +26,7 @@ rule-1 effect was a loss, not a gain. I asked them to challenge it, they did, an
 reproduced the A/B myself before accepting it.
 
 **The lesson, stated plainly:** I reasoned about rule 1 instead of running it. The repo already has a
-convention for this — [`evidence-before-assertion`](../knowledge-base/conventions/evidence-before-assertion.md) —
+convention for this — [`evidence-before-assertion`](../../../knowledge-base/conventions/evidence-before-assertion.md) —
 and this is the second time in this sprint's lineage that a claim about shell behavior was asserted
 rather than executed.
 

@@ -16,7 +16,7 @@ Sprint 2
 
 The design landed and measured the tree. **Everything below is the record of what was scoped; where it
 disagrees with the design spec, the spec wins.** Corrections are in
-[`reports/2026-07-19-design-task-folder-structure-and-id-scheme.md`](../../knowledge-base/reports/2026-07-19-design-task-folder-structure-and-id-scheme.md)
+[`reports/2026-07-19-design-task-folder-structure-and-id-scheme.md`](../../../knowledge-base/reports/2026-07-19-design-task-folder-structure-and-id-scheme.md)
 §0:
 
 - **"89 briefs (12 · 66 · 11)" was already wrong.** Measured **94** on 2026-07-19, **95** days later.
@@ -78,7 +78,7 @@ skills `fkit-initiate-project`, `fkit-plan-task`, `fkit-status` (SKILL.md **and*
   collide. The design must state the ordering.
 - **Six wiki-syncs are queued** (45, 51, 66, 69, 71, 73) whose subject matter is task-board mechanics.
   If they run *after* the migration they document a structure that changed underneath them.
-- **[ADR-027](../../knowledge-base/decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test.md)
+- **[ADR-027](../../../knowledge-base/decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test.md)
   (dual-home parity)** — `claude/scaffold/ai-agents/tasks/` ships `backlog/`, `done/`, `cancelled/`
   with `.gitkeep`s. The scaffold must land the same structure or parity breaks on the next check.
 - **`ai-agents/reviews/<task-id>.md`** already uses a "task-id" naming convention that is really the

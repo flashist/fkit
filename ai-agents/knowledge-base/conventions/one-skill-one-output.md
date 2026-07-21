@@ -44,7 +44,7 @@ Applied to the owner's own examples, all on the allowed side:
 
 This rule is written from a single instance, and the instance was **not a mistake**. The
 `/fkit-status full` keyword and its delta default (task 38,
-[`add-full-board-switch-to-fkit-status.md`](../../tasks/done/add-full-board-switch-to-fkit-status.md)
+[`add-full-board-switch-to-fkit-status.md`](../../tasks/done/0005-add-full-board-switch-to-fkit-status/brief.md)
 — frozen history, `✅ Done`, because it *was* done) were **correct when written**: the board was
 hand-built by the LLM, and re-rendering 43 rows meant re-deriving every marker and risking a
 miscount. Deltaing served both terseness and accuracy.
@@ -77,6 +77,6 @@ the fact.
 
 ## Provenance
 
-- Task 44 — the instance: [`remove-output-variants-from-fkit-status.md`](../../tasks/backlog/remove-output-variants-from-fkit-status.md)
-- Task 38 — the honest history: [`add-full-board-switch-to-fkit-status.md`](../../tasks/done/add-full-board-switch-to-fkit-status.md)
+- Task 44 — the instance: [`remove-output-variants-from-fkit-status.md`](../../tasks/done/0074-remove-output-variants-from-fkit-status/brief.md)
+- Task 38 — the honest history: [`add-full-board-switch-to-fkit-status.md`](../../tasks/done/0005-add-full-board-switch-to-fkit-status/brief.md)
 - Sprint 2 plan — the OQ8 ruling and the tasks-44/45 and task-47 addenda: [`sprint-2.md`](../../sprints/sprint-2.md)

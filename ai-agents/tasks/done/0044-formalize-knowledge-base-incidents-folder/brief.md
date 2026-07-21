@@ -18,7 +18,7 @@ Sprint 2
 subfolders — `decisions/` (numbered ADRs, e.g. `adr-001-...md`), `history/` (superseded
 pre-Omnigent design docs, documented by its own `history/README.md` and referenced from
 `architecture.md`), and, as of the 2026-07-10 incident,
-[`incidents/`](../../knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md) — created
+[`incidents/`](../../../knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md) — created
 ad hoc to hold that write-up, with no documented convention for what belongs there or how future
 incidents should be named/structured.
 

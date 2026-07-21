@@ -14,7 +14,7 @@ Sprint 2
 
 ## Context
 
-[**ADR-028**](../../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
+[**ADR-028**](../../../knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
 adds an **eighth** role — a sandboxed e2e tester. `ai-agents/knowledge-base/PROJECT.md` still describes
 a team of seven, in two places:
 
@@ -25,7 +25,7 @@ a team of seven, in two places:
   a user-friendly startup sequence and a solid working set of **seven** roles with dedicated skills;
   hardening/polish is the current focus, **not breadth**."*
 
-**Split out of [task 82](refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role.md) by owner
+**Split out of [task 82](../0067-refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role/brief.md) by owner
 ruling, 2026-07-19**, which honors **ADR-028:154-157**: the `PROJECT.md` amendment is the *"owner's or
 producer's call — **the brief is the product document, not the architect's**."* Task 82 corrects the
 same count in the architect's documents and is separately owned.
@@ -91,10 +91,10 @@ today.** This is the sharpest hazard in the task and the reason it is not a find
   puts it to the owner"*, not *"decides it"*.
 - **Sibling tasks, all correcting the same seven→eight claim in different places — enumerated by
   ADR-028:154-169, which says do not re-derive the list:**
-  - [**Task 82**](refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role.md) —
+  - [**Task 82**](../0067-refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role/brief.md) —
     `architecture.md:4,:82`, `CLAUDE.md:7`, `AGENTS.md:7`, `README.md:76`, `claude/README.md:3`, plus
     the ADR-023 pointer. **fkit-architect.**
-  - [**Task 81 Part D**](../done/extend-mover-reference-sweep-to-the-knowledge-base.md) —
+  - [**Task 81 Part D**](../../done/0036-extend-mover-reference-sweep-to-the-knowledge-base/brief.md) —
     `claude/fkit-claude-init.sh:847`, executable source. **fkit-coder.**
   - **`wiki-vault/index.md:11` and `wiki-vault/wiki/systems/fkit.md:7,:15`** — **fkit-wiki's resync,
     not any of these tasks.** No brief filed; flag it to the owner so one gets scheduled.

@@ -79,7 +79,7 @@ of those rev-1 recommendations did not survive Codex review intact.
 
 - A dated report exists in `ai-agents/knowledge-base/reports/` covering all six items above.
 - The dual-home enumeration is evidence-based — produced by comparing the actual trees, not recalled
-  (per [`conventions/evidence-before-assertion.md`](../../knowledge-base/conventions/evidence-before-assertion.md)).
+  (per [`conventions/evidence-before-assertion.md`](../../../knowledge-base/conventions/evidence-before-assertion.md)).
 - The report explicitly addresses the deferred content-drift decision and states whether the re-raise
   trigger has fired, with the file list as evidence.
 - Any mechanical-check proposal states its ADR-014 fit (or the conflict, if one exists).

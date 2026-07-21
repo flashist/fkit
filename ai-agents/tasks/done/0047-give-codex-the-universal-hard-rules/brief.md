@@ -18,7 +18,7 @@ Sprint 2
 rules.** Not a design gap — a live defect, shipping today, to every project fkit has ever set up.
 
 The chain, every link verified in
-[`reports/2026-07-14-shared-instructions-layer.md`](../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
+[`reports/2026-07-14-shared-instructions-layer.md`](../../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
 §3 (hole 2):
 
 1. The adversarial pass shells out to the codex CLI:
@@ -29,7 +29,7 @@ The chain, every link verified in
 3. **`claude/scaffold/AGENTS.md` has no universal-hard-rules section at all.** Neither does this repo's
    own `AGENTS.md`. Verified: zero matches for `never commit` / `no secrets` / `wiki writes` in either.
 
-So Codex — the model [ADR-009](../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)
+So Codex — the model [ADR-009](../../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)
 makes a **hard prerequisite** precisely so the second opinion is genuinely independent — receives the
 project overview, the wiki note, the review-notes note, and the architecture pointer, and **not one** of:
 don't commit unprompted, don't write the wiki, don't move task files, **no secrets in any artifact**.

@@ -20,8 +20,8 @@ Sprint 2
 skill.** The distinction is load-bearing because fkit gates the two through **different mechanisms**:
 
 - **Skills** — `skills_for_role()` in `claude/fkit-claude.sh`, realized as the `skillOverrides` map in
-  `.fkit/settings/<role>.json` ([ADR-010](../../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md),
-  [ADR-012](../../knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md)).
+  `.fkit/settings/<role>.json` ([ADR-010](../../../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md),
+  [ADR-012](../../../knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md)).
 - **Tools** — the `tools:` frontmatter line in each `claude/agents/fkit-*.md`.
 
 So this is a **tool-allowlist** change, and nothing to do with `skills_for_role()`. **Verified
@@ -40,9 +40,9 @@ fkit agents run in two contexts: a **role-locked session** (owner present) and a
 **There is direct, expensive precedent.** `claude --append-system-prompt` is **session-only** — it
 looked obviously inheritable and was not: **0/3, then 0/2** into a spawned consult, across two
 independent experiment designs with a within-subject control that stayed live
-([`reports/2026-07-14-shared-instructions-layer.md`](../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
+([`reports/2026-07-14-shared-instructions-layer.md`](../../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
 rev 2, on Claude Code 2.1.208). It is the same class of question about the same seam. And the
-[`evidence-before-assertion`](../../knowledge-base/conventions/evidence-before-assertion.md) convention
+[`evidence-before-assertion`](../../../knowledge-base/conventions/evidence-before-assertion.md) convention
 — plus the task-27 correction, where a behavioral claim about `cp -R` shipped false because nobody ran
 it — says exactly this: **a behavioral claim about the harness is a claim to run.**
 
@@ -68,7 +68,7 @@ architecture decision and it is the owner's.** `fkit-adversarial-reviewer` carri
 **findings only** — that an interactive prompt sits awkwardly against.
 
 **A documented failure mode of exactly this pattern is already in the knowledge base:**
-[`history/fkit-external-review-report.md:124`](../../knowledge-base/history/fkit-external-review-report.md)
+[`history/fkit-external-review-report.md:124`](../../../knowledge-base/history/fkit-external-review-report.md)
 records a skill that gated its writes on interactive `AskUserQuestion` while its delegated stub ran
 non-interactive — *"nobody present to answer the mandatory questions."*
 

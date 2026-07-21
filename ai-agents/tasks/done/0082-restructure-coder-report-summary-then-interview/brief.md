@@ -37,7 +37,7 @@ questions in its reply — the existing two-hop consult contract. This degradati
 optional**, and the brief must preserve it.
 
 **⚠️ Consistency conflicts to honor, not override:**
-- **The output-style convention** ([`status-report-format.md`](../../knowledge-base/conventions/status-report-format.md))
+- **The output-style convention** ([`status-report-format.md`](../../../knowledge-base/conventions/status-report-format.md))
   and CLAUDE.md's "be extremely concise" — the bullet summary must *align* with these, not restate a
   full report. This change should make the coder's report **more** conforming, not add a second format.
 - **The ship-loop's own report contract.** `fkit-task-ship-loop` has a specialized ready-for-done

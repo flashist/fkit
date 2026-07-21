@@ -27,7 +27,7 @@ vice versa.**
 
 **Scope — six Claude-side roles**, excluding `fkit-adversarial-reviewer`, per the same-day task-70
 ruling and the same structural fact: its review runs on Codex under a restricted allowlist
-([ADR-022](../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)).
+([ADR-022](../../../knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)).
 Flagged for owner confirmation in the scoping report; assumed, not re-asked.
 
 **No ADR-021 seam here** — unlike `/fkit-open-questions-interview` (task 70), this skill needs no

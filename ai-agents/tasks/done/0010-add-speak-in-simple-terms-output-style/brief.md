@@ -17,7 +17,7 @@ Sprint 2
 **The owner's ask (2026-07-18):** give every fkit agent a standing instruction — *"Speak in simple
 terms"* — so agents use simpler, easier-to-understand words.
 
-**This is the exact use case the task-29 shared-instructions investigation settled** ([findings rev 2](../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)):
+**This is the exact use case the task-29 shared-instructions investigation settled** ([findings rev 2](../../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)):
 to give every fkit agent a standing instruction, you write it in the shared context files — **no code,
 no new mechanism.** The delivery channel is proven (session + spawned consult, 3/3). Two settled facts
 shape *where* it goes:
@@ -41,7 +41,7 @@ shape *where* it goes:
 > overwritten on the next `fkit` launch**) and two files with no such section.
 > **Owner ruled 2026-07-18: build the one-file version** — edit `universal-rules.md`, then re-run init.
 > The ruling and the reasoning are recorded in
-> [`plans/add-speak-in-simple-terms-output-style.md`](../../plans/add-speak-in-simple-terms-output-style.md).
+> [`plans/add-speak-in-simple-terms-output-style.md`](./plan.md).
 > The text below is preserved as **what the brief's author believed at scoping time**, not as
 > instructions to follow.
 

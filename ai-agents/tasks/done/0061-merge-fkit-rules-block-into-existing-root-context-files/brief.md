@@ -33,7 +33,7 @@ a fix to the shared rules reaches *new* projects only. Every existing project is
 got — or, in the brownfield case, on nothing.
 
 Rationale:
-[`reports/2026-07-14-shared-instructions-layer.md`](../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
+[`reports/2026-07-14-shared-instructions-layer.md`](../../../knowledge-base/reports/2026-07-14-shared-instructions-layer.md)
 §3 (hole 1) and §7 (recommendation 2). Owner ruled **approved** (2026-07-14), in the report's
 recommended shape: a **marker-delimited, fkit-managed, idempotent block**, merged into the two root
 files at init.

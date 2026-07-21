@@ -15,8 +15,8 @@ Sprint 2
 ## Context
 
 Per the Omnigent-removal plan
-([`2026-07-11-plan-omnigent-removal.md`](../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
-§Phase 0.3) and [ADR-009](../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)
+([`2026-07-11-plan-omnigent-removal.md`](../../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
+§Phase 0.3) and [ADR-009](../../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)
 §Decision 2.
 
 The runtime is now **Claude Code native + Codex sidekick**. Codex is no longer a nice-to-have that
@@ -50,8 +50,8 @@ partial being impossible to misread as a complete review. Implement accordingly:
 ## Context
 
 Per the Omnigent-removal plan
-([`2026-07-11-plan-omnigent-removal.md`](../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
-§Phase 0.3) and [ADR-009](../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)
+([`2026-07-11-plan-omnigent-removal.md`](../../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
+§Phase 0.3) and [ADR-009](../../../knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)
 §Decision 2.
 
 The runtime is now **Claude Code native + Codex sidekick**. Codex is **required**, not optional.

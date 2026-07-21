@@ -55,7 +55,7 @@ friction.
 
 ## What to build
 
-**Governed by [ADR-014](../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md) — read it
+**Governed by [ADR-014](../../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md) — read it
 first.** It records what is settled and what is deliberately still open. **Do not re-derive either.**
 
 ### Settled — these are locked (ADR-014)
@@ -131,7 +131,7 @@ session — green exit, broken invariant. *"`claude` was never exec'd"* is the a
 > **⚠️ Hard-code the 7×21 matrix in the test. Do NOT derive it from `skills_for_role()`.**
 >
 > **This reverses an instruction in the earlier brief and in
-> [`add-e2e-smoke-script-for-fkit-itself.md`](../cancelled/add-e2e-smoke-script-for-fkit-itself.md):65-67**, which
+> [`add-e2e-smoke-script-for-fkit-itself.md`](../../cancelled/0004-add-e2e-smoke-script-for-fkit-itself/brief.md):65-67**, which
 > both said to drive the expected matrix from `skills_for_role()` rather than hard-code a second copy.
 > That is wrong, and it is the classic testing error: **a test whose oracle is the implementation tests
 > nothing** — break the matrix and the test's expectations break with it, in lockstep, and it still
@@ -140,7 +140,7 @@ session — green exit, broken invariant. *"`claude` was never exec'd"* is the a
 > The hard-coded matrix **is the contract.** Forcing a deliberate test edit when a role's skills change
 > is not a maintenance burden — **it is the ratchet**, and it makes the test the one *enforcing* mirror
 > among the three hand-maintained ones flagged at `fkit-claude.sh:222-228` (the drift that has
-> [already bitten once](../../../claude/fkit-claude.sh)).
+> [already bitten once](../../../../claude/fkit-claude.sh)).
 
 ### The hard gate — do not skip it
 
@@ -179,7 +179,7 @@ not been tested. **Demonstrate the red run**, don't just report the green one.
   in sync but use **three different naming conventions** (`fkit-task-plan` vs `task-plan`), so that
   check needs a normalizer — real work, correctly deferred.
 - **Not the tester-agent question.** Per
-  [`2026-07-13-tester-agent-evaluation.md`](../../knowledge-base/reports/2026-07-13-tester-agent-evaluation.md):
+  [`2026-07-13-tester-agent-evaluation.md`](../../../knowledge-base/reports/2026-07-13-tester-agent-evaluation.md):
   *"building the script will teach us almost nothing about whether the tester earns its seat."* **Do
   not bundle them.**
 - Technical picture: **fkit-architect** (2026-07-13, two consults — the second overturning the first on

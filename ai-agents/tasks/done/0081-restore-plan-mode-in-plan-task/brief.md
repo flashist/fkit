@@ -52,7 +52,7 @@ allowlist must be fixed, or neither works.**
 - **No ADR.** This is a regression fix, not an architecture decision. Do not open one.
 - **No hooks.** A `PreToolUse` hook denying `Write`/`Edit` during the plan run is **rejected** — it would
   reopen the hook-enforcement option that
-  [ADR-010](../../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md) §Options
+  [ADR-010](../../../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md) §Options
   explicitly **deferred**, and it isn't needed here. **ADR-010's deferral stands.**
 - **Accepted residual.** The gate is **model-initiated** (the coder chooses to call `EnterPlanMode`) even
   though it is **harness-enforced once entered**. It does not stop a coder that simply never runs

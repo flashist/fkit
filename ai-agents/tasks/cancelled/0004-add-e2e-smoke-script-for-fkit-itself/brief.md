@@ -16,7 +16,7 @@ settled argv surface.
 > ## ⛔ This document is cancelled. Nothing in it is an instruction.
 >
 > **The live brief is Sprint 2 task 23 —
-> [`add-launcher-contract-smoke-script.md`](../done/add-launcher-contract-smoke-script.md).**
+> [`add-launcher-contract-smoke-script.md`](../../done/0006-add-launcher-contract-smoke-script/brief.md).**
 > That reference is here so a reader who lands on this file knows where the real work went. **It is a
 > pointer, not a hand-off:** do not build from this document, and do not treat anything below as a
 > spec, a scope, or a set of steps. Task 23 is self-contained and supersedes it entirely.
@@ -24,7 +24,7 @@ settled argv surface.
 > **Two things below are actively wrong** — recorded so nobody follows them:
 > - Its guidance to **derive the expected skill matrix from `skills_for_role()`** rather than hard-code
 >   it is **overridden by
->   [ADR-014](../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md)**. A test whose oracle is
+>   [ADR-014](../../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md)**. A test whose oracle is
 >   the implementation tests nothing.
 > - Its warning that this work **"collides with `remove-fkit-resume-passthrough`"** is **spent** — that
 >   task landed on 2026-07-13 and the argv surface it rewrote is now final.

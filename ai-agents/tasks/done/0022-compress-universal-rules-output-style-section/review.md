@@ -1,6 +1,6 @@
 # Review — compress-universal-rules-output-style-section
 
-Task: [`ai-agents/tasks/done/compress-universal-rules-output-style-section.md`](../tasks/done/compress-universal-rules-output-style-section.md)
+Task: [`ai-agents/tasks/done/compress-universal-rules-output-style-section.md`](./brief.md)
 File(s) under review: `claude/scaffold/universal-rules.md` (substantive) · `ai-agents/tasks/done/compress-universal-rules-output-style-section.md`, `ai-agents/sprints/sprint-2.md` (bookkeeping) · `test/rules-block-budget.test.js` (in scope by the coder's explicit request — it is the measuring instrument for the acceptance criteria)
 Out of scope, not reviewed: tasks 85 and 81 working-tree changes (closed, ledgers closed-out).
 Status: closed-out (reviewer side, round 2) — all six findings disposed: R1 record corrected, R2 + R3 fixed and independently re-verified by the reviewer, R4 + R5 accepted as residuals by owner ruling, R6 trivial/cosmetic and deferred. **The *Coder response* table below is still the coder's to fill in** — it is empty by ownership, not by oversight.

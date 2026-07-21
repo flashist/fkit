@@ -14,7 +14,7 @@ Sprint 2
 
 ## Context
 
-[ADR-013](../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)
+[ADR-013](../../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)
 restructured `ai-agents/knowledge-base/`: the root now holds **only** `PROJECT.md` and
 `architecture.md`, and everything else is filed by kind into `decisions/`, `conventions/`,
 `incidents/`, `reports/`, `history/`. Task 9 executed the folder side of that — including moving the

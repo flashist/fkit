@@ -1,7 +1,7 @@
 # Verification: onboarding flow end-to-end, post-Omnigent-removal
 
 - **Date:** 2026-07-12
-- **Task:** [`verify-onboarding-flow-end-to-end.md`](../../tasks/done/verify-onboarding-flow-end-to-end.md)
+- **Task:** [`verify-onboarding-flow-end-to-end.md`](../../tasks/done/0091-verify-onboarding-flow-end-to-end/brief.md)
   — Sprint 2, priority 7. **The release gate.**
 - **Artifact under test:** `origin/main` @ `44cef79`, fetched via the real
   `curl -fsSL …/install.sh | sh` — the public path a new user takes.

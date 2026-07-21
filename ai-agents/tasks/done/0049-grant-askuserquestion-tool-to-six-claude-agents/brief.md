@@ -15,9 +15,9 @@ Sprint 2
 ## Context
 
 **Owner ruling (2026-07-17)**, following the reviewed-and-closed investigation task 39
-([findings](../../knowledge-base/reports/2026-07-17-askuserquestion-availability-for-agents.md),
+([findings](../../../knowledge-base/reports/2026-07-17-askuserquestion-availability-for-agents.md),
 esp. §5 + the boxed Owner ruling; settled in
-[ADR-021](../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md),
+[ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md),
 Decision 4): grant the built-in `AskUserQuestion` **tool** to the **six Claude-side agents** —
 producer, coder, architect, reviewer, wiki, lead — and **not** `fkit-adversarial-reviewer`.
 

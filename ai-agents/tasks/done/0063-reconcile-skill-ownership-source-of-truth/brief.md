@@ -15,8 +15,8 @@ Sprint 2
 ## Context
 
 Per the Omnigent-removal plan
-([`2026-07-11-plan-omnigent-removal.md`](../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
-§Phase 3) and [ADR-010](../../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)
+([`2026-07-11-plan-omnigent-removal.md`](../../../knowledge-base/reports/2026-07-11-plan-omnigent-removal.md)
+§Phase 3) and [ADR-010](../../../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)
 §5.
 
 Skill ownership per role is currently declared in **two places that disagree**:

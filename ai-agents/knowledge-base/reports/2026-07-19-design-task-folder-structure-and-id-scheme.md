@@ -2,7 +2,7 @@
 
 - **Date:** 2026-07-19
 - **Author:** fkit-architect
-- **Task:** [`design-task-folder-structure-and-id-scheme.md`](../../tasks/done/design-task-folder-structure-and-id-scheme.md) (Sprint 2, priority 74)
+- **Task:** [`design-task-folder-structure-and-id-scheme.md`](../../tasks/done/0030-design-task-folder-structure-and-id-scheme/brief.md) (Sprint 2, priority 74)
 - **Status:** **approved** (owner, 2026-07-19), at **revision 3**. The adversarial pass has run and rev 2 incorporates it. Recorded as [ADR-029](../decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md), accepted. This change is irreversible in practice once the tree has moved.
 - **Revisions:** rev 1 (2026-07-19) → rev 2 (2026-07-19, post-adversarial — see §14) → **rev 3** (2026-07-20, corrective). **Rev 3 changes no decision** — it fixes a false *rationale* in §3.2 (finding X19): the `10#` guard was justified by a loud error that in fact fires only for IDs containing an `8` or `9`, while the common case increments silently wrong. The rule was always right; the reason given for it was not.
 - **Consulted:** fkit-producer (sequencing / decomposition context only); adversarial review by Codex

@@ -18,9 +18,9 @@ Sprint 2
 need to use a proper library for auto-tests, which handles this specific type of tests 'testing
 negative cases'."*
 
-**What triggered it:** [`ai-agents/reviews/implement-pretooluse-skill-ownership-hook.md`](../../reviews/implement-pretooluse-skill-ownership-hook.md),
+**What triggered it:** [`ai-agents/reviews/implement-pretooluse-skill-ownership-hook.md`](../0052-implement-pretooluse-skill-ownership-hook/review.md),
 finding **R2**. `test/prove-red.sh` — this project's hand-rolled mutation-testing hard gate (task 23 /
-[ADR-014](../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md), *"a test that has never
+[ADR-014](../../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md), *"a test that has never
 failed has not been tested"*) — was broken by task 43's refactor, silently, in two ways that were easy
 to miss:
 
@@ -46,7 +46,7 @@ that a refactor can silently invalidate, with no structural mechanism (only a hu
 
 ### Relevant background — this is not a green field
 
-- **[ADR-014](../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md)** is the standing
+- **[ADR-014](../../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md)** is the standing
   decision that governs this area. It settles, among other things: **zero devDependencies, no
   lockfile, no `node_modules`** (Decision 4) and **the expected matrix/oracle is hard-coded in the test,
   never derived from the implementation** (Decision 5 — *"a test whose oracle is the implementation

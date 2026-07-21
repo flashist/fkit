@@ -12,7 +12,7 @@
 - **Date:** 2026-07-19
 - **Evidence:** [`reports/2026-07-19-design-task-folder-structure-and-id-scheme.md`](../reports/2026-07-19-design-task-folder-structure-and-id-scheme.md)
   — the full design, including the measured blast radius and the three silent-break mechanisms.
-- **Task:** [`design-task-folder-structure-and-id-scheme.md`](../../tasks/done/design-task-folder-structure-and-id-scheme.md) (Sprint 2, priority 74)
+- **Task:** [`design-task-folder-structure-and-id-scheme.md`](../../tasks/done/0030-design-task-folder-structure-and-id-scheme/brief.md) (Sprint 2, priority 74)
 - **Implements:** [ADR-020](adr-020-per-task-plan-and-worklog-artifacts.md) §Decision 6 — the per-task
   folder it recorded as the intended future direction.
 

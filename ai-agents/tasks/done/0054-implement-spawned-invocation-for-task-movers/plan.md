@@ -1,9 +1,9 @@
 # Plan: implement spawned invocation for the task movers (task 64)
 
-- **Task:** [`implement-spawned-invocation-for-task-movers.md`](../tasks/done/implement-spawned-invocation-for-task-movers.md) (Sprint 2, #64)
+- **Task:** [`implement-spawned-invocation-for-task-movers.md`](./brief.md) (Sprint 2, #64)
 - **Approved:** 2026-07-19, owner present, `/fkit-task-ship-loop`
-- **Governing decision:** [ADR-025](../knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)
-- **Evidence:** [design spec §8](../knowledge-base/reports/2026-07-18-design-spawned-invocation-consent-model-for-task-movers.md)
+- **Governing decision:** [ADR-025](../../../knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)
+- **Evidence:** [design spec §8](../../../knowledge-base/reports/2026-07-18-design-spawned-invocation-consent-model-for-task-movers.md)
 
 > **This file is the boundary the loop's autonomy is measured against.** Anything outside it is a
 > judgment call that stops for the owner.

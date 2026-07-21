@@ -22,7 +22,7 @@ ruling (2026-07-16, verbatim):
 > the skill, no additional arguments. I guess it means that we need to remove `full` and make the
 > full-run by default."*
 
-**This reverts task 38** ([`add-full-board-switch-to-fkit-status.md`](../done/add-full-board-switch-to-fkit-status.md),
+**This reverts task 38** ([`add-full-board-switch-to-fkit-status.md`](../0005-add-full-board-switch-to-fkit-status/brief.md),
 `✅ Done`, shipped 2026-07-16). That brief argues persuasively *for* the switch. **Its argument is now
 stale for one specific reason, and the reason matters more than the reversal:**
 

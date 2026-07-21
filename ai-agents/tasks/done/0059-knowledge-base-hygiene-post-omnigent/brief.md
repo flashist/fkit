@@ -29,11 +29,11 @@ while the code it describes is still shipping.
 > have **emptied `incidents/` on the day it was formalized**, and mis-filed four records as superseded
 > designs.
 >
-> [ADR-013](../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)
+> [ADR-013](../../../knowledge-base/decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)
 > (task 9) now governs. The correcting principle: **records don't go stale, designs do.** An audit, a
 > verification, an evaluation, a plan, an incident — none of them become *false* when the system they
 > describe is removed. They stay true; they happened. `history/` is for **superseded design docs
-> only** ([ADR-002](../../knowledge-base/decisions/adr-002-archive-pre-omnigent-design-docs.md)), and
+> only** ([ADR-002](../../../knowledge-base/decisions/adr-002-archive-pre-omnigent-design-docs.md)), and
 > it stays closed at the four it already holds.
 >
 > **Execute the table below. Do not re-derive it.**
@@ -49,7 +49,7 @@ while the code it describes is still shipping.
 - **ADR-001 — mark `superseded by ADR-011`.** *(Changed 2026-07-13: this brief previously said "stays
   open — do not touch its status." That is stale. The owner ruled on 2026-07-11 that `package.json`
   stays with its `scripts`, and
-  [ADR-011](../../knowledge-base/decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md)
+  [ADR-011](../../../knowledge-base/decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md)
   was recorded. The question below is **closed** — do not re-raise it.)*
 
 **2. File the six loose root documents into `reports/`.**

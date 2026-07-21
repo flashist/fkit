@@ -9,7 +9,7 @@ Status: in-review — R1/R3/R4/R5 fixed and re-verified (28/28 green, full suite
 Round 1 reviewers: fkit-reviewer (own pass) + Codex `codex-cli 0.144.4` (adversarial, model-diverse).
 Both ran. Coverage is **full** — no reviewer degraded.
 
-Governing decision: [`ADR-015`](../knowledge-base/decisions/adr-015-additive-launch-convergence-no-migration-mechanism.md).
+Governing decision: [`ADR-015`](../../../knowledge-base/decisions/adr-015-additive-launch-convergence-no-migration-mechanism.md).
 
 ## What was verified GREEN (recorded so coverage is distinguishable from silence)
 

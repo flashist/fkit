@@ -32,7 +32,7 @@ It is **pre-existing and out of task 10's scope** — task 10 neither caused it 
 
 **This brief is the one-off cleanup only.** The *recurrence* — every future `/fkit-task-done` on a
 carried-over task breaks another link in an older sprint plan — is [task
-22](../done/harden-task-movers-against-closed-sprint-link-rot.md), and it is gated on an owner decision.
+22](../0050-harden-task-movers-against-closed-sprint-link-rot/brief.md), and it is gated on an owner decision.
 The two are deliberately split: this one is uncontroversial and shippable today; task 22 is not.
 
 ## What to build
