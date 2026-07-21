@@ -165,7 +165,7 @@ class as the rest of the task. Scoped under "What to build" above, with its two 
 - **Owner: fkit-architect.** **Documentation only** — no agent-file, skill, or source edits.
 - **Depends on: nothing.** No blockers; can start immediately.
 - **🔴 `claude/fkit-claude-init.sh:847` is NOT in this task — moved to
-  [task 81](extend-mover-reference-sweep-to-the-knowledge-base.md) as Part D.** The line is
+  [task 81](../done/extend-mover-reference-sweep-to-the-knowledge-base.md) as Part D.** The line is
   `printf '  Seven roles, each a locked session…'` — **executable source, not prose** (ADR-028:164
   flags it as *"code, not prose, and the one most likely to be missed"*). The architect does not write
   source. Task 81 is already fkit-coder's and already editing files under `claude/`, so it absorbs the

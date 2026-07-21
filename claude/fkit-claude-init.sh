@@ -844,7 +844,16 @@ cleanup_orphans
 # ---------- summary ----------
 printf '\n'
 printf '  fkit is ready in %s\n\n' "$dest"
-printf '  Seven roles, each a locked session (only its own skills exist in it):\n'
+# ⚠️ NO ROLE COUNT ON THIS LINE — deliberate, owner-ruled 2026-07-20 (task 81 Part D).
+# It used to read "Seven roles, …" directly above the seven-item list below. ADR-028 adds an eighth
+# role (a sandboxed e2e tester) but that role is DECIDED, NOT BUILT — no agent file ships for it. So
+# "Eight" would promise a role that does not exist, and "Seven" goes stale the day it does. Naming no
+# number is accurate in both worlds, and the list below stays the single source of what actually ships.
+# Add the tester to the list when the agent exists; do not reintroduce a count.
+# ⚠️ This list is what the installer PRINTS. It is not the acceptance list — `fkit-claude.sh` decides
+# which role names a session will accept. The two must be kept in step by hand; neither derives from
+# the other, and nothing tests that they agree.
+printf '  Role-locked sessions — inside each, only its own skills exist:\n'
 printf '    • producer     product & sprint planning, task briefs\n'
 printf '    • coder        implementation — the only role that writes source\n'
 printf '    • architect    design specs, ADRs, feasibility\n'

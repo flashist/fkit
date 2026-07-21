@@ -81,18 +81,35 @@ git mv ai-agents/tasks/backlog/<file>.md ai-agents/tasks/done/<file>.md
 (If the file lives somewhere else under `ai-agents/tasks/`, move it from there.) **Do not commit** —
 staging the move is enough; commits happen only when the owner explicitly asks.
 
-### 4. Find every place the task is tracked
-Search for the task's **basename** across the docs that carry status:
+### 4. Find every place the task is referenced
+Search for the task's **basename** across everything under `ai-agents/` — status boards *and* prose:
 - `ai-agents/sprints/*.md` (the sprint plans, and the unranked `backlog.md` board)
 - **`ai-agents/sprints/done/*.md`** — **closed** sprint plans still *link* to tasks they carried over
+- **`ai-agents/knowledge-base/`** — ADRs and reports routinely back-link the brief that spawned them
+- `ai-agents/reviews/`, `ai-agents/plans/`, `ai-agents/worklogs/` — all key artifacts by task-id
 - the parent epic file, if step 2 found a `## Parent / Epic`
 
 ```
-grep -rn "<file>.md" ai-agents/sprints/ ai-agents/tasks/
+grep -rn --exclude-dir=wiki-vault "<file>.md" ai-agents/
 ```
 
 This grep is **recursive on purpose** — it reaches `sprints/done/`. Every hit it returns is handled in
 step 5; **none is discarded.** A reference you found and did nothing about is a link you broke.
+
+> **⚠️ Why the whole of `ai-agents/` and not a list of directories.** This sweep used to name
+> `ai-agents/sprints/ ai-agents/tasks/` explicitly. That list was correct when written and **went
+> stale**: `knowledge-base/` was never in it, and `plans/` + `worklogs/` did not yet exist (ADR-020
+> added them). The movers therefore rotted links on every close, **by design**. Sweeping the parent
+> directory with one named exclusion is self-maintaining — a new sibling directory is covered the day
+> it appears, with nobody having to remember this file.
+>
+> ### ⛔ `wiki-vault/` is excluded deliberately — do NOT "fix" this
+>
+> **Only `fkit-wiki` writes `ai-agents/wiki-vault/`** ([ADR-005](../../../ai-agents/knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)).
+> A mover that re-pointed a vault link would breach that boundary — so this sweep must not surface
+> vault hits it has no authority to repair. **If a vault link rots when a task moves, that is the wiki
+> role's repair to make**, via `/fkit-wiki-lint` or a sync. Say so in the report if it seems likely;
+> never reach in and fix it.
 
 ### 5. Update each tracked location to "Done"
 For every reference found in step 4:
@@ -114,6 +131,17 @@ For every reference found in step 4:
   true and stays exactly as written* — the status cell, the priority, the prose, all byte-identical.
   Only the href moves, because a pointer to a file that is no longer there is not history, it is rot.
   **This is a pointer repair, not a status update — never flip a `➡️ Moved` row to `✅ Done`.**
+
+- **A hit in `ai-agents/knowledge-base/`** — an ADR or a report back-linking the brief that spawned it.
+  **Re-point the href to the new path in `done/`, and change nothing else on the line.** Identical
+  treatment to a closed sprint plan, and for the identical reason: **a historical record's *claims* are
+  frozen; its *links* are not.** An ADR that says "this was decided while task 42 was open" stays
+  exactly as written — only the href moves. **Never** edit an ADR's prose, status, date, or decision
+  text from this skill; if the surrounding sentence has become factually wrong, that is an ADR
+  amendment and belongs to the architect, so **flag it in the report** instead.
+
+- **A hit in `ai-agents/reviews/`, `plans/`, or `worklogs/`** — same rule: re-point the href, change
+  nothing else. These are task-keyed records of what happened, not statements about where a file lives.
 
 - **The moved brief's OWN outbound links** — the reciprocal case, and the one most easily missed. The
   brief you just moved has left `backlog/`, so any link *it* makes to a **sibling** brief
@@ -189,6 +217,14 @@ Give a concise summary:
   `sprints/done/`** (e.g. "`sprints/done/sprint-1.md:37` — href → `tasks/done/`; status cell
   untouched"). A move that rewrote a closed sprint plan must be **visible in this report**, never a
   surprise found later by a link sweep. If none were re-pointed, say so.
+- **Knowledge-base hits, called out separately** — list every href repaired under
+  `ai-agents/knowledge-base/` on its own (e.g. "`knowledge-base/decisions/adr-029-….md:88` — href →
+  `tasks/done/`; ADR prose untouched"). These are edits to *historical records*, so they get the same
+  distinct visibility as `sprints/done/` rather than being folded into a general count. Same for
+  `reviews/`, `plans/`, and `worklogs/` hits. If there were none, say so.
+- **Vault links NOT touched:** if the task seems likely to be referenced from `ai-agents/wiki-vault/`,
+  say so and name it as **fkit-wiki's** repair — this skill deliberately does not sweep or edit the
+  vault (ADR-005). Do not assert whether vault links actually rotted; this skill did not look.
 - **Flagged:** anything not auto-resolved (no sprint row found, mismatch, multiple matches).
 - Remind that **this skill** made no commit — it leaves the move + edits in the working tree. Do not claim
   the repository has uncommitted work, or that anything is or isn't committed — this skill has not

@@ -89,15 +89,29 @@ git mv ai-agents/tasks/backlog/<file>.md ai-agents/tasks/cancelled/<file>.md
 (If the file lives elsewhere under `ai-agents/tasks/`, move it from there.) **Do not commit** —
 staging the move is enough; commits happen only when the owner explicitly asks.
 
-### 4. Find every place the task is tracked
-Search for the task's **basename** across the docs that carry status:
+### 4. Find every place the task is referenced
+Search for the task's **basename** across everything under `ai-agents/` — status boards *and* prose:
 - `ai-agents/sprints/*.md` (the sprint plans, and the unranked `backlog.md` board)
 - **`ai-agents/sprints/done/*.md`** — **closed** sprint plans still *link* to tasks they carried over
+- **`ai-agents/knowledge-base/`** — ADRs and reports routinely back-link the brief that spawned them
+- `ai-agents/reviews/`, `ai-agents/plans/`, `ai-agents/worklogs/` — all key artifacts by task-id
 - the parent epic file, if step 2 found a `## Parent / Epic`
 
 ```
-grep -rn "<file>.md" ai-agents/sprints/ ai-agents/tasks/
+grep -rn --exclude-dir=wiki-vault "<file>.md" ai-agents/
 ```
+
+> **⚠️ Why the whole of `ai-agents/` and not a list of directories.** This sweep used to name
+> `ai-agents/sprints/ ai-agents/tasks/` explicitly. That list was correct when written and **went
+> stale**: `knowledge-base/` was never in it, and `plans/` + `worklogs/` did not yet exist (ADR-020
+> added them). The movers therefore rotted links on every close, **by design**. Sweeping the parent
+> directory with one named exclusion is self-maintaining.
+>
+> ### ⛔ `wiki-vault/` is excluded deliberately — do NOT "fix" this
+>
+> **Only `fkit-wiki` writes `ai-agents/wiki-vault/`** ([ADR-005](../../../ai-agents/knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)).
+> A mover that re-pointed a vault link would breach that boundary. **If a vault link rots when a task
+> moves, that is the wiki role's repair to make** — never reach in and fix it.
 
 This grep is **recursive on purpose** — it reaches `sprints/done/`. Every hit it returns is handled in
 step 5; **none is discarded.** A reference you found and did nothing about is a link you broke.
@@ -124,6 +138,21 @@ For every reference found in step 4:
   true and stays exactly as written* — the status cell, the priority, the prose, all byte-identical.
   Only the href moves, because a pointer to a file that is no longer there is not history, it is rot.
   **This is a pointer repair, not a status update — never flip a `➡️ Moved` row to `⛔ Cancelled`.**
+
+- **A hit in `ai-agents/knowledge-base/`** — an ADR or a report back-linking the brief that spawned it.
+  **Re-point the href to the new path in `cancelled/`, and change nothing else on the line.** Identical
+  treatment to a closed sprint plan, and for the identical reason: **a historical record's *claims* are
+  frozen; its *links* are not.** An ADR that says "this was decided while task 42 was open" stays
+  exactly as written — only the href moves. **Never** edit an ADR's prose, status, date, or decision
+  text from this skill; if the surrounding sentence has become factually wrong, that is an ADR
+  amendment and belongs to the architect, so **flag it in the report** instead.
+
+  ⚠️ **Cancellation makes this sharper than completion does.** A knowledge-base record may cite this
+  brief as the *reason* for a decision. Cancelling the task does **not** retract the ADR, and this
+  skill must not imply that it does — repair the pointer, flag the tension, decide nothing.
+
+- **A hit in `ai-agents/reviews/`, `plans/`, or `worklogs/`** — same rule: re-point the href, change
+  nothing else. These are task-keyed records of what happened, not statements about where a file lives.
 
 - **The moved brief's OWN outbound links** — the reciprocal case, and the one most easily missed. The
   brief you just moved has left `backlog/`, so any link *it* makes to a **sibling** brief
@@ -188,8 +217,35 @@ auto-edit) anything now affected:
   column, or prose like "needs `<task>`".
 
   ```
-  grep -rn "<file>.md\|<short task name>" ai-agents/tasks/ ai-agents/sprints/
+  grep -rn --exclude-dir=wiki-vault "<file>.md\|<short task name>" ai-agents/
   ```
+
+  **⚠️ This is the SECOND sweep in this skill, and it is the one most easily missed** — step 4's grep
+  is the obvious one; this dependency search is a separate command that had the same too-narrow root
+  set. Both were widened together. A dependency declared in an ADR, a design report, or a review
+  ledger is exactly the kind of hit the old `tasks/ sprints/` pair could never see. Same `wiki-vault/`
+  exclusion, same reason.
+
+  #### ⚠️ Triage the results — the wider root set is much noisier, by design
+
+  Measured on this repo, widening took a **basename** search from ~4 to ~17 hits, and a **short task
+  name** search from ~381 to ~1527. The recall is the point; the volume is the cost. **Read it in this
+  order, and do not skim** — skimming 1500 lines is how a real dependent gets missed, which is the
+  failure this sweep exists to prevent:
+
+  1. **Basename hits first (`<file>.md`).** Precise and few. These are near-certainly real references.
+     Handle every one.
+  2. **Then short-name hits, filtered to the ones that read as a dependency** — near `Depends on`,
+     `blocked`, `needs`, `waits on`, or a task-table row. A short task name appearing in ordinary prose
+     usually is not a dependency claim.
+  3. **Historical records (`knowledge-base/`, `reviews/`, `plans/`, `worklogs/`) are usually
+     narrative, not dependency.** An ADR mentioning the task is recording history, not declaring a
+     block. Read them, but expect most to need no action beyond the href repair from step 4.
+
+  **If the short-name search is too noisy to read honestly, say so in the report** and fall back to the
+  basename results — an explicit "I triaged basenames only, short-name search returned N hits and was
+  not exhaustively read" is a true statement the owner can act on. Silently skimming and implying full
+  coverage is not.
 - **List each dependent in the report** as "now affected — may need re-scoping or its own cancel,"
   so the owner can decide. Do not silently rewrite dependents; cancellation ripple is a judgment call.
 
@@ -217,6 +273,14 @@ Give a concise summary:
   `sprints/done/`** (e.g. "`sprints/done/sprint-1.md:37` — href → `tasks/cancelled/`; status cell
   untouched"). A move that rewrote a closed sprint plan must be **visible in this report**, never a
   surprise found later by a link sweep. If none were re-pointed, say so.
+- **Knowledge-base hits, called out separately** — list every href repaired under
+  `ai-agents/knowledge-base/` on its own (e.g. "`knowledge-base/decisions/adr-029-….md:88` — href →
+  `tasks/cancelled/`; ADR prose untouched"). These are edits to *historical records*, so they get the
+  same distinct visibility as `sprints/done/` rather than being folded into a general count. Same for
+  `reviews/`, `plans/`, and `worklogs/` hits. If there were none, say so.
+- **Vault links NOT touched:** if the task seems likely to be referenced from `ai-agents/wiki-vault/`,
+  say so and name it as **fkit-wiki's** repair — this skill deliberately does not sweep or edit the
+  vault (ADR-005). Do not assert whether vault links actually rotted; this skill did not look.
 - **Dependents flagged:** anything that depended on the cancelled task and may now need attention.
 - **Other flags:** no sprint row found, mismatch, multiple matches, or a request to cancel a
   done task.

@@ -10,7 +10,7 @@ Sprint 2
 79
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Context
 

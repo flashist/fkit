@@ -22,6 +22,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import { REPO } from './harness.mjs';
 
@@ -37,22 +38,38 @@ function rulesMax() {
 }
 
 // Reproduce emit_block()'s output size: markers + the explanatory comment + the source.
-// ⚠️ Mirrors `emit_block()` in fkit-claude-init.sh. If that function's preamble changes, this must
-// change with it — the assertion below is only as honest as this reproduction.
+// ⚠️ RUNS THE REAL `emit_block()` — it does NOT reimplement it (review R2, task 79).
+//
+// It used to reproduce the function in JavaScript, and the reproduction was wrong by 107 B in two
+// independent ways:
+//   1. It measured the preamble as the *JavaScript source text* of the seven `printf` lines — 568
+//      chars of script, not the 443 bytes those printfs actually emit.
+//   2. It used `src.length`, which counts UTF-16 code units (2521), not UTF-8 bytes (2539). This file
+//      is dense with `—`, `⚠️` and `⛔`, so that gap grows with every symbol added.
+//
+// ⚠️ WHY THAT WAS DANGEROUS RATHER THAN UNTIDY. The two errors move in OPPOSITE directions and
+// independently. It happened to over-count, so the test was conservative — but past roughly 125 B of
+// divergence the sign flips, and a conservative guard becomes one that reports GREEN on a block
+// `fkit-claude-init.sh` then rejects with `exit 1`, breaking every launch in every consuming project.
+// The old header comment asserted the reproduction was faithful, which is precisely what made the
+// drift invisible at the read site.
+//
+// The lesson generalises: **a test that asserts fidelity to a shell function while reimplementing it
+// in another language is asserting something nothing checks.** Run the real thing.
 function emittedBlockSize() {
-  const init = readFileSync(INIT, 'utf8');
-  const begin = init.match(/^RULES_BEGIN='(.*)'$/m)[1];
-  const end = init.match(/^RULES_END='(.*)'$/m)[1];
-  const preamble = init
-    .split('emit_block() {')[1]
-    .split('}')[0]
-    .split('\n')
-    .filter((l) => l.includes("printf '") || l.includes("printf '<!--"))
-    .join('\n');
-  const src = readFileSync(SOURCE, 'utf8');
-  // begin marker + newline, the preamble comment (approximated by its literal text length), source,
-  // end marker + newline. The preamble is static text in the script, so its own length is the cost.
-  return begin.length + 1 + preamble.length + src.length + end.length + 1;
+  const r = spawnSync('bash', ['-c',
+    // Source the script's variables without executing it, then call the real emit_block.
+    `set -a
+     RULES_BEGIN=$(grep -oE "^RULES_BEGIN='.*'" "$0" | sed "s/^RULES_BEGIN='//;s/'\\$//")
+     RULES_END=$(grep -oE "^RULES_END='.*'" "$0" | sed "s/^RULES_END='//;s/'\\$//")
+     RULES_TAG=$(grep -oE "^RULES_TAG='.*'" "$0" | sed "s/^RULES_TAG='//;s/'\\$//")
+     rules_src="$1"
+     set +a
+     eval "$(sed -n '/^emit_block() {/,/^}/p' "$0")"
+     emit_block`,
+    INIT, SOURCE]);
+  assert.equal(r.status, 0, `emit_block failed: ${r.stderr}`);
+  return Buffer.byteLength(r.stdout);          // UTF-8 bytes, which is what the cap counts
 }
 
 test('the emitted rules block stays under RULES_MAX', () => {
