@@ -42,7 +42,7 @@ saw `adr-028` as the highest, and allocated **029**. But **029 was already thoro
 task brief referenced `adr-029-stop-hook-…`, and roughly **ten `ai-agents/wiki-vault/` pages had
 already ingested it**. The only place it was *not* claimed was the `decisions/` directory itself: the
 file did not exist on disk yet. The stop-hook decision had to be renumbered to **ADR-030**, and the
-cleanup became [task 80](../../backlog/0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md).
+cleanup became [task 80](../0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md).
 
 **The rule to write down: the next ADR number is derived from every place a number can be claimed,
 not from a `decisions/` directory listing.** A number claimed *anywhere* counts as taken.

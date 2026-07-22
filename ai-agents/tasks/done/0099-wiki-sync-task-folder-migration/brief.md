@@ -65,7 +65,7 @@ wrong at the moment task 76 lands, not merely stale in their hrefs.
 
 - **⚠️ Scope reduced 2026-07-19 — the ADR-029/ADR-030 link repair is NOT this task's work.** Ten vault
   pages linking the renumbered `adr-029-stop-hook-…` slug were **pulled forward into
-  [task 80](../../backlog/0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md)** by owner ruling, because the stale
+  [task 80](../0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md)** by owner ruling, because the stale
   links fail silently and this task waits out the whole migration (tasks 75 and 76). **Do not repeat
   that repair here.** If `grep -rn "adr-029-stop-hook" ai-agents/wiki-vault/` still returns hits when
   this task runs, task 80 did not finish — say so rather than quietly absorbing it.

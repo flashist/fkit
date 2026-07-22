@@ -68,7 +68,7 @@ the convention this task is about.
 ## The evidence — example 2, the ADR-029/030 vault repair, 2026-07-19
 
 **Source of this account: the owner's own ruling of 2026-07-19, relayed via fkit-architect, plus the
-blockquote already standing in task 80's brief** ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](../0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md), lines 40-45).
+blockquote already standing in task 80's brief** ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](../../done/0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md), lines 40-45).
 **The two git checks below were re-run while scoping this widening and are confirmed**, per the
 convention this task is about.
 
@@ -129,7 +129,7 @@ convention this task is about.
 
 - **Write it from the two sources named above**, both of which the author can read directly: the
   material in "The evidence — example 2" in this brief, and **task 80's own blockquote**
-  ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](../0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md) :40-45),
+  ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](../../done/0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md) :40-45),
   which records the incident independently. **Re-run the two `git cat-file -e HEAD:` checks** rather
   than copying their results on trust — writing this example from an unverified account would reproduce
   the exact defect the example is about.
