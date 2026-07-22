@@ -73,7 +73,7 @@ claude/
   README.md                      the runtime, in detail (topology + skill lockdown)
   fkit-claude.sh                 the `fkit` command: role menu, role-locked launch, self-update
   fkit-claude-init.sh            idempotent per-project setup (scaffold + context files + agents/skills)
-  agents/                        the seven roles as Claude Code subagent definitions
+  agents/                        the seven roles as Claude Code subagent definitions (an 8th, a tester, is authorized — ADR-028 — but not yet built)
   skills/                        the /fkit-* procedures
   scaffold/                      starter ai-agents/ tree + CLAUDE.md / AGENTS.md
 ai-agents/                       fkit's own working structure (it is run on itself)

@@ -1,7 +1,9 @@
 # fkit — Architecture
 
-**The architecture of the system as it exists today** (2026-07-11, post-Omnigent-removal). One
-runtime, seven roles, no orchestrator, everything coordinated through files in git.
+**The architecture of the system as it exists today** (last refreshed 2026-07-22; originally
+2026-07-11, post-Omnigent-removal). One runtime, **seven built roles** (an eighth, a sandboxed e2e
+tester, is authorized in [ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
+but **not yet built**), no orchestrator, everything coordinated through files in git.
 
 Every claim carries a `path:line` reference. Anything the code could not answer is an open question
 (§11), not a guess.
@@ -12,7 +14,10 @@ Every claim carries a `path:line` reference. Anything the code could not answer 
 
 fkit is **not an application.** It is a **distributable team of role-scoped AI agents for software
 development** — producer, coder, reviewer, adversarial reviewer, architect, wiki librarian, and a
-"team room" lead — that a developer installs once and then runs inside *their own* project.
+"team room" lead — that a developer installs once and then runs inside *their own* project. That is
+**seven roles as built**; an eighth, a sandboxed e2e tester, is a decision taken
+([ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)) and **not yet
+built** — described where the roles are (§4.1), not counted among them.
 
 This repository **is the framework**. Its "source" is:
 
@@ -22,8 +27,9 @@ This repository **is the framework**. Its "source" is:
 - **one small Node script** — `bin/release.mjs`, to cut a release
 - **a scaffold** — `claude/scaffold/`, the `ai-agents/` tree a consuming project receives
 
-There is no build step, no server, no database, no runtime state outside files, and **no test suite**
-(see §9.1).
+There is no build step, no server, no database, and no runtime state outside files. There **is** a
+zero-dependency test suite (`node --test` + a hand-rolled mutation gate) but **no CI to run it** — see
+§9.1.
 
 The product thesis (`ai-agents/knowledge-base/PROJECT.md:18-24`): AI coding assistants collapse
 product decisions, implementation, and review into one undifferentiated chat loop with **no
@@ -117,6 +123,15 @@ role still cannot run another role's *procedure*.
 > generated — would have preserved a field that *looks* like the invariant and isn't. **Do not
 > re-add it.**
 
+> **An eighth role is decided but not built.**
+> [**ADR-028**](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md) (2026-07-19)
+> authorizes a **sandboxed e2e tester** — the first role whose distinguishing authority is a
+> *permission envelope* (a sandbox) rather than a skill, and the decision on which the owner
+> **knowingly reversed** the "seven roles, not breadth" constraint. **It does not exist yet:**
+> `claude/agents/` holds **seven** `fkit-*.md` files, no tester among them. The row above is therefore
+> the whole built team; this note is the plan. When the tester ships, it becomes an eighth table row —
+> until then, "seven roles" is the fact and "eight" would be a claim about code that is not there.
+
 ### 4.2 The 24 skills — where the procedures live
 
 Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedures**; the agent
@@ -197,6 +212,14 @@ skill availability in ANY context (session OR spawned consult)
   a session* and *true of a consult*; a finding must say **which path** it means (ADR-012 §Residual
   risks).
 
+> **A second hook is decided but not built.** A `Stop` hook enforcing the **turn-completion contract**
+> — interactive questions actually asked, a "What's next?" close — is authorized in
+> [**ADR-030**](decisions/adr-030-stop-hook-enforces-turn-completion-contract.md) (2026-07-19) because
+> the prose rule for it *demonstrably did not fire*. It would make turn-completion structural the way
+> ADR-018's `PreToolUse` gate made skill ownership structural. **It does not exist yet** —
+> `claude/` ships no such hook script; today the contract is prompt-only. Larger blast radius than
+> ADR-018's, since a `Stop` hook can block a turn from completing — which is why it is decided but held.
+
 **`CONSULT_SKILLS` (`claude/fkit-claude.sh:221`) is the escape valve** that inheritance forces:
 `fkit-survey-project` and `fkit-query` stay **on for every role**, because `/fkit-initiate-project`
 has the **producer** spawn the architect to run the survey — with it off, initiation could not run
@@ -258,8 +281,8 @@ contract every role shares (`ai-agents/README.md`).
 | `knowledge-base/reports/YYYY-MM-DD-*.md` | any session; evaluations from the **architect** | dated artifacts of work performed — audits, verifications, evaluations, executed plans. [`reports/README.md`](reports/README.md) |
 | `knowledge-base/history/` | architect | superseded **design docs** — docs that no longer describe reality. **Archive, don't delete** (ADR-002). Narrow, *not* the general archive. [`history/README.md`](history/README.md) |
 | `sprints/sprint-N.md` | producer | sprint plan + status table; completed sprints move to `sprints/done/` |
-| `tasks/{backlog,done,cancelled}/*.md` | producer **writes**; **any role but `adversarial-reviewer` moves**, via `/fkit-task-done` and `/fkit-task-cancelled` (ADR-025; an agent-performed close is marked `(agent-closed — not owner-verified)`) | task briefs |
-| `reviews/<task-id>.md` | reviewer **and** coder — a two-party ledger | findings + dispositions + **accepted residuals**. This is the loop-prevention memory: it carries decision state across review rounds so settled tradeoffs are not re-litigated. |
+| `tasks/{backlog,done,cancelled}/<NNNN>-<slug>/` | producer **writes** the brief; **any role but `adversarial-reviewer` moves the folder**, via `/fkit-task-done` and `/fkit-task-cancelled` (ADR-025; an agent-performed close is marked `(agent-closed — not owner-verified)`) | **A task is a folder, not a file** ([ADR-029](decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md), migrated 2026-07-22). The folder is keyed by a **permanent four-digit global ID** (`0001`…, never reused, never renumbered) and holds `brief.md` plus, when they exist, `plan.md`, `worklog.md`, `review.md`, and an `assets/` dir. The board (`backlog`/`done`/`cancelled`) is the folder's **parent**. |
+| *(within each task folder)* `review.md` | reviewer **and** coder — a two-party ledger | findings + dispositions + **accepted residuals**. The loop-prevention memory: it carries decision state across review rounds so settled tradeoffs are not re-litigated. **Absorbed into the task folder by ADR-029** — the former top-level `reviews/<task-id>.md`, along with `plans/` and `worklogs/` (ADR-020), no longer exist; a task's artifacts now live with its brief. |
 | `wiki-vault/` | **`fkit-wiki` only** | Karpathy LLM-wiki: `schema.md` (conventions), `index.md` (catalog), `log.md` (activity), `wiki/{features,systems,decisions,tasks}/` |
 
 **Three invariants govern this tree:**
@@ -320,7 +343,13 @@ units, with dependencies recorded) → coder `/fkit-plan-task` (**Claude Code pl
 approval gate) → implement → reviewer `/fkit-review` or `/fkit-stateful-review` → coder
 `/fkit-process-stateful-review` (verify each finding; **defect vs frontier-move**; fixes gated on
 the owner) → `/fkit-task-done` — run by the owner, or by an agent writing the agent-closed marker
-(ADR-025).
+(ADR-025). The coder can also run this brief-to-done sequence as **one autonomous loop**,
+`/fkit-task-ship-loop` ([ADR-019](decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)):
+after a single up-front plan approval it runs autonomously, stopping only for the owner's important
+questions, and persists a per-task `plan.md` + `worklog.md` (ADR-020) as its durable memory. A
+**timeout that would auto-proceed past those owner questions was designed and declined** on cost —
+[ADR-024](decisions/adr-024-ship-loop-owner-question-timeout-is-not-built.md), a tombstone: the loop
+waits for a real answer rather than guessing one.
 
 **4 — Review + the adversarial pass.** The reviewer runs its own pass, then assembles a
 findings-only prompt plus an inline diff into `.fkit/tmp/adversarial-prompt.md` and pipes it to
@@ -385,26 +414,35 @@ is actually removed (ADR-009 §Related; tracked by
 
 ## 9. Risks and technical debt — the live ones
 
-### 9.1 Zero automated verification (the top structural risk)
+### 9.1 A test suite exists, but nothing runs it automatically — no CI
 
-**There is no CI and no test suite.** No `.github/` directory exists. The project's only automated
-check was `omnigent/validate-bundles.sh`, mandated by
-[ADR-003](decisions/adr-003-ci-runs-validate-bundles.md) — **that script died with the Omnigent
-removal, and ADR-003's CI never landed.** Nothing replaced it.
+**There is a test suite; there is no CI.** [ADR-014](decisions/adr-014-how-fkit-tests-itself.md)
+established how fkit tests itself, and `test/` now holds a real one: **eight `node --test` contract
+suites** (`launcher-contract`, `converge-contract`, `dashboard-contract`, `skill-ownership-hook`,
+`orphan-cleanup`, `rules-block-budget`, `adr-number-uniqueness`, `task-id-uniqueness`) plus
+**`prove-red.sh`, a hand-rolled mutation gate** that proves each suite actually fails against a
+deliberately-broken copy. The mutation gate is **hand-rolled by decision, not by omission** — 
+[ADR-026](decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled.md) weighed a
+mutation-testing library and declined it; do not read `prove-red.sh` as a stopgap awaiting one. **Zero
+npm dependencies**, run via `npm test` (`node --test test/*.test.js && bash test/prove-red.sh`).
 
-What now rests entirely on **manual verification**:
+**What the suite does not cover, and what that leaves at risk:**
 
-- `install.sh` — the `curl | sh` entry point. A bad landing breaks installation *including the
-  self-update path that would ship the fix*. It cannot be verified by reading a diff; it must be
-  installed from a ref into a clean `$HOME`.
-- `claude/fkit-claude.sh` — the launcher: self-update, preflight, the menu, and `build_settings()`,
-  which generates **the skill lockdown itself**. A silent regression here would degrade the one
-  boundary that is genuinely structural (§5.2), and nothing would catch it.
+- **No CI.** `.github/workflows/` does not exist, so the suite runs **only when someone remembers to
+  run it** ([ADR-003](decisions/adr-003-ci-runs-validate-bundles.md)'s CI never landed; the
+  `omnigent/validate-bundles.sh` it mandated died with the Omnigent removal). Green on a laptop is not
+  green in the pipeline, because there is no pipeline.
+- **`install.sh`** — the `curl | sh` entry point — has **no automated coverage**. A bad landing breaks
+  installation *including the self-update path that would ship the fix*; it cannot be verified by
+  reading a diff, and must be installed from a ref into a clean `$HOME`.
+- **`claude/fkit-claude.sh`** is covered by `launcher-contract.test.js` (and its mutations proven by
+  `prove-red.sh`), but that harness exercises the launcher's contract, not a real self-update over the
+  network or a real menu on a tty — those edges stay manual.
 
-Both are POSIX shell with no coverage of any kind. **This is a live, unmitigated risk**, not a
-deferred nice-to-have: the two files with the highest blast radius in the repo are the two with the
-least verification. A minimal `shellcheck` + a smoke install into a temp `$HOME` would close most of
-it cheaply.
+**The residual risk shifted rather than closed:** the highest-blast-radius file (`install.sh`) is
+still unverified, and the suite that covers the rest is not wired to run on its own. A `shellcheck`
+pass, a smoke install into a temp `$HOME`, and a `.github/workflows/` that runs `npm test` would close
+most of what remains, cheaply.
 
 ### 9.2 Single-vendor concentration — accepted, not a defect
 
@@ -442,6 +480,14 @@ copy of itself.) The rule is unconditional: **edit `claude/`, never `.claude/`.*
   (§8). ADR-009 said to mark them superseded *when the code is actually removed* — that condition is
   now met.
 
+**Drift between the two homes is now governed.** fkit-authored files that live in **both** the
+dogfooded `ai-agents/` tree and `claude/scaffold/` (what a consuming project receives) used to drift
+silently. [ADR-027](decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test.md) makes
+it a **dev-time convention plus a mechanical test** (`test/` parity check, §9.1): a dual-homed file is
+edited in both trees in the same change, with an explicit exception list for the deliberately-divergent
+placeholders (`PROJECT.md`, the wiki vault's own project data). Prevention is the convention; detection
+is the test.
+
 ---
 
 ## 10. Cross-cutting concerns
@@ -457,7 +503,10 @@ copy of itself.) The rule is unconditional: **edit `claude/`, never `.claude/`.*
   **No LLM sits in the path that decides which role you get.**
 - **Git authority.** No agent commits or pushes unprompted. This is a prompt rule in every agent
   definition — not a sandbox — and it is the one place fkit's boundaries depend entirely on
-  instruction-following.
+  instruction-following. A **dedicated git agent** (with a commit/push consent model) was designed and
+  **declined** — [ADR-023](decisions/adr-023-fkit-git-agent-is-not-built.md) (a tombstone: the "never
+  commit unprompted" hard rule stands, and no eighth-role count ripple follows from it). The rule is
+  the design, not a stopgap for a missing agent.
 
 ---
 
@@ -466,6 +515,8 @@ copy of itself.) The rule is unconditional: **edit `claude/`, never `.claude/`.*
 1. **Does the `PreToolUse` hook payload expose the calling subagent's identity?** (§9.3.) This is the
    single question that decides whether the consult-path skill boundary is *fixable* or *permanently
    advisory*. It should be answered before any task proposes the hook.
-2. **What is the intended verification story?** (§9.1.) ADR-003's CI died with its subject. Is a
-   `shellcheck` + smoke-install CI in scope, or is manual verification the accepted permanent posture
-   for a prototype? This is an owner call, not an architect's.
+2. **Is the test suite going to CI?** (§9.1.) The suite now exists (ADR-014; contract tests +
+   `prove-red.sh` mutation gate, ADR-026) — the open part is that **nothing runs it automatically**.
+   ADR-003's CI died with its subject and never landed. Is a `.github/workflows/` that runs `npm test`
+   (plus `shellcheck` + a smoke install for `install.sh`) in scope, or is run-it-yourself the accepted
+   posture for a prototype? An owner call, not an architect's.

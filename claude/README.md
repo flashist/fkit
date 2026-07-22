@@ -2,7 +2,9 @@
 
 This directory **is** fkit's runtime: the seven roles as Claude Code subagents (`agents/`), their
 procedures as skills (`skills/`), the project scaffold (`scaffold/`), and the launcher
-(`fkit-claude.sh`). They operate on the `ai-agents/` working structure — tasks, sprints, reviews,
+(`fkit-claude.sh`). (An **eighth** role, a sandboxed e2e tester, is authorized in
+[ADR-028](../ai-agents/knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
+but **not yet built** — seven ship today.) They operate on the `ai-agents/` working structure — tasks, sprints, reviews,
 knowledge-base, wiki-vault.
 
 fkit once shipped a second runtime on [Omnigent](https://omnigent.ai). It was **removed** in Sprint 2:

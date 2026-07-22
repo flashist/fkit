@@ -37,6 +37,15 @@ agent's judgment.
 3. **The team stays seven role-scoped agents.** No count/roster ripple; the "team of seven" assertions
    in `CLAUDE.md`, `PROJECT.md`, `architecture.md`, `README.md`, the wiki, the launcher menu, and
    `fkit-team` are all left as-is.
+
+   > **Pointer added 2026-07-22 (does not reopen this ADR).** Decision 3's *count* claim — "the team
+   > stays seven role-scoped agents" — was **overtaken by
+   > [ADR-028](adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md) (2026-07-19)**, which
+   > authorizes an **eighth** role (a sandboxed e2e tester). It is decided but not yet built, so the
+   > count is seven today and eight once it ships. **Only this count claim is overtaken.** ADR-023's
+   > actual decision — **`fkit-git` is not built and the "never commit unprompted" hard rule stands** —
+   > is **NOT superseded** and continues to hold on its own reasoning; the eighth role has nothing to do
+   > with git authority. Do not read this pointer as reopening the `fkit-git` question.
 4. **The design spec is retired as history.** [`reports/2026-07-18-design-fkit-git-agent-and-consent-model.md`](../reports/2026-07-18-design-fkit-git-agent-and-consent-model.md)
    is marked superseded by this ADR — kept as the record of what was weighed, not a live design.
 5. **Task 55 is cancelled; task 56 (implementation) is not created.** *(Moved via the owner-invoked
