@@ -162,7 +162,7 @@ Roles:
   reviewer     code review — its own pass + a Codex second opinion
   adv          adversarial reviewer — hostile pass, findings only
   wiki         the wiki — ingest / lint / sync (the exclusive write gateway)
-  lead         the team room — routing help and wiki questions; does no work itself
+  lead         the team room & conductor — routes you to a role, or drives the team for you
 
 Within a session, `@fkit-<role> <question>` asks another role and brings the answer back.
 
@@ -437,7 +437,7 @@ if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || ( exec 3</dev/tty ) 2>/dev/
   printf '   4) reviewer     code review (own pass + Codex second opinion)\n'
   printf '   5) adversarial  hostile pass, findings only\n'
   printf '   6) wiki         the wiki — ingest / lint / sync\n'
-  printf '   7) team room    not sure who you need? ask here\n\n'
+  printf '   7) team room    route to a role, or have it drive the work for you\n\n'
   printf '  Two roles at once? Open another terminal tab and run fkit again.\n\n'
 
   while [ -z "$role" ]; do
@@ -464,7 +464,7 @@ fi
 [ -n "$role" ] || role="lead"
 
 if [ "$role" = lead ]; then
-  printf '\n  → team room. It routes and answers wiki questions; it does no work itself.\n\n'
+  printf '\n  → team room. It routes and answers wiki questions, and can drive the team (spawn and sequence roles) when you hand it a goal.\n\n'
 else
   # "...are runnable here", not "...exist here": a foreign skill still shows up in the / menu
   # (ADR-018 Decision 5) — the hook denies invoking it, it doesn't hide it. Round-1 review R5.

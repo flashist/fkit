@@ -118,6 +118,17 @@ test('a non-coder role does NOT own fkit-task-ship-loop -> deny (ADR-019: coder-
   assert.match(r.err, /does not own skill 'fkit-task-ship-loop'/);
 });
 
+test('lead owns fkit-sprint-ship-loop -> allow (task 0112 / ADR-032: lead is the sprint conductor)', () => {
+  const r = run(payload({ agentType: 'fkit-lead', skill: 'fkit-sprint-ship-loop' }));
+  assertAllow(r, 'lead x fkit-sprint-ship-loop');
+});
+
+test('a non-lead role does NOT own fkit-sprint-ship-loop -> deny (ADR-032: lead-only is what authorizes the conductor)', () => {
+  const r = run(payload({ agentType: 'fkit-coder', skill: 'fkit-sprint-ship-loop' }));
+  assertDeny(r, 'coder x fkit-sprint-ship-loop');
+  assert.match(r.err, /does not own skill 'fkit-sprint-ship-loop'/);
+});
+
 test('a spawned subagent identity (agent_id present) is honored the same as a session', () => {
   const r = run(payload({ agentType: 'fkit-reviewer', agentId: 'abc123', skill: 'fkit-stateful-review' }));
   assertAllow(r, 'subagent identity honored');

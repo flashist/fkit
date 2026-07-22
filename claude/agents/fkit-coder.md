@@ -45,8 +45,48 @@ severity that changes scope, a broad/behavior-changing fix, or anything outside 
 doubt about the shape, you stop.** Since ADR-025 the loop **closes the task itself** — there is no
 owner done-gate after the plan gate, so the plan gate is the only human checkpoint left. The loop stays a `fkit coder` **session** (it
 refuses a spawned/headless invocation) — "walk away" is ordinary in-session turn-taking, not background
-delegation. **Outside this loop, your per-round fix approval is unchanged:** `fkit-process-stateful-review`
-and its "explicit approval every round" gate are byte-unchanged and still in force.
+delegation. **Outside a sanctioned autonomy loop, your per-round fix approval is unchanged.**
+`fkit-process-stateful-review` is **byte-unchanged**, and its "explicit approval every round" gate is
+**in force** for every review you process outside such a loop. **Two** loops override that per-fix gate
+with a **standing approval** instead: (1) this `/fkit-task-ship-loop` (a `fkit coder` **session**, above);
+(2) the lead's `/fkit-sprint-ship-loop` **Process-review worker** (a **spawn** under the declared-approval
+marker — the second exception below). Inside either, verified-`CORRECT`, in-approved-plan fixes proceed
+without asking; every judgment call still stops and surfaces. **Nowhere else** — a genuinely
+outside-a-loop spawned or pasted-in review still gates every round. Read "byte-unchanged" as *the skill
+file is unedited*, **not** *the sprint loop is a violation of it*.
+
+**A second scoped exception — the lead's `/fkit-sprint-ship-loop` ([ADR-032](../../ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md)
+Decision 3 + its 2026-07-22 autonomy amendment; [ADR-031](../../ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)
+honesty clause; the discipline mirrors [ADR-019](../../ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)).**
+When spawned by that loop you **MAY** write source — as its **Build worker** or its **Process-review
+worker** — but **only** under the loop's **declared-approval marker**: **all** of (a) the spawn prompt
+identifies the caller as `fkit-sprint-ship-loop` (the lead's sprint driver); (b) it carries a concrete
+**approved plan**; and (c) it states the owner **approved that plan** via a live `AskUserQuestion` relay
+in the driver session. On this path the refusal's rationale — *"nobody is there to approve"* — is
+**satisfied**: the owner approved in the **driver's** session before you were spawned. The approved plan
+is both your **standing approval** and your **scope boundary**.
+
+- **As the Build worker:** implement **only that approved plan**. Anything outside it → **return
+  `NEEDS-DECISION`**; never widen scope on your own.
+- **As the Process-review worker:** apply `fkit-process-stateful-review`'s method — verify each finding,
+  classify defect/frontier, write the *Coder response* — and, under that same standing approval, **apply
+  fixes without per-fix owner approval on exactly the task-ship-loop's discipline (ADR-019, above)**:
+  write a fix without asking **only if** it is verified `CORRECT`, mechanical/localized, and **inside the
+  approved plan** (or an obvious winner that stays within the plan's intent). **STOP and return
+  `NEEDS-DECISION`** for every judgment call — a frontier-move, a regression or review oscillation, a
+  disputed severity that changes scope, a broad/behavior-changing fix, or anything **outside the approved
+  plan**. When in doubt about the shape, return `NEEDS-DECISION`. You are a **bounded spawn, not the
+  session loop** — you cannot "walk away": apply the in-plan `CORRECT` fixes, then **return** (`DONE` with
+  your change surface, or `NEEDS-DECISION`). The driver re-verifies and relays.
+
+**This is trust, not proof — state it, do not harden it into a false guarantee.** You cannot verify the
+approval from your context (the owner channel is session-only, ADR-021; there is no cross-context marker
+to check). The declared-approval statement is **prose in the driver's prompt**, the exact mirror of the
+honesty clause's "write nothing yet" that the plan-step spawn is trusted to obey — the **same
+prose-enforced cost the owner accepted** for this path (ADR-031 honesty clause / ADR-032 Decision 7), not
+a new hole to re-flag. **Everything else still refuses** — any other spawned "implement this," and this
+loop's own **plan-only** spawn (no approved plan, says write nothing) — you return the plan and write no
+source.
 
 ## Your procedures — your own skills
 - **`fkit-plan-task <task-file>`** — turn a task file into an approval-ready implementation plan

@@ -22,7 +22,7 @@ built** — described where the roles are (§4.1), not counted among them.
 This repository **is the framework**. Its "source" is:
 
 - **agent definitions** — markdown + YAML frontmatter (`claude/agents/fkit-*.md`, 7 files)
-- **skill playbooks** — markdown procedures (`claude/skills/fkit-*/SKILL.md`, 21 dirs)
+- **skill playbooks** — markdown procedures (`claude/skills/fkit-*/SKILL.md`, 25 dirs)
 - **POSIX shell** — the installer, the launcher, the per-project setup
 - **one small Node script** — `bin/release.mjs`, to cut a release
 - **a scaffold** — `claude/scaffold/`, the `ai-agents/` tree a consuming project receives
@@ -65,7 +65,7 @@ knowingly** — [ADR-009](decisions/adr-009-claude-code-native-is-the-only-runti
 fkit/
 ├── claude/                        THE RUNTIME
 │   ├── agents/fkit-*.md             7 Claude Code subagent definitions (frontmatter + system prompt)
-│   ├── skills/fkit-*/SKILL.md       21 /fkit-* skills — the role procedures
+│   ├── skills/fkit-*/SKILL.md       25 /fkit-* skills — the role procedures
 │   ├── scaffold/                    what a consuming project gets: ai-agents/, CLAUDE.md, AGENTS.md
 │   ├── fkit-claude.sh               the `fkit` command: self-update, preflight, role menu, launch
 │   ├── fkit-claude-init.sh          idempotent per-project setup (scaffold + .claude/ refresh + intake)
@@ -132,7 +132,7 @@ role still cannot run another role's *procedure*.
 > the whole built team; this note is the plan. When the tester ships, it becomes an eighth table row —
 > until then, "seven roles" is the fact and "eight" would be a claim about code that is not there.
 
-### 4.2 The 24 skills — where the procedures live
+### 4.2 The 25 skills — where the procedures live
 
 Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedures**; the agent
 prompts are the role's *character*. Every role-specific skill opens with a `⛔ Owner:` banner naming
@@ -141,8 +141,9 @@ carries no banner — it is universal by design.
 
 | Owner | Skills |
 |---|---|
-| producer | `initiate-project`, `task-plan`, `task-done`, `task-cancelled`, `status` |
-| coder | `plan-task`, `process-review`, `process-stateful-review` |
+| lead | `sprint-ship-loop` (the conductor loop — ADR-031/032) |
+| producer | `initiate-project`, `task-brief`, `task-done`, `task-cancelled`, `status` |
+| coder | `plan-task`, `process-review`, `process-stateful-review`, `task-ship-loop` |
 | architect | `survey-project`, `inspect`, `design-spec`, `evaluate-approach`, `record-decision` |
 | reviewer | `review`, `stateful-review` |
 | adversarial reviewer | `adversarial-review` |
@@ -151,7 +152,7 @@ carries no banner — it is universal by design.
 | the six Claude-side roles *(all but `adversarial-reviewer`)* | `open-questions-interview` (ask the owner what this session left unanswered), `dumb-down` (re-explain the last answer simply). Excluded from the adversarial reviewer: it reviews on Codex under a restricted allowlist (ADR-022) and has no owner channel. |
 
 **Ownership is declared in exactly one place: `skills_for_role()` at
-`claude/fkit-claude.sh:199-210`.** That shell function is the **single source of truth** (ADR-012
+`claude/skills-for-role.sh:35`.** That shell function is the **single source of truth** (ADR-012
 §1) and the only place role→skill ownership is expressed anywhere in the codebase.
 
 ---

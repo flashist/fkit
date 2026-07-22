@@ -33,8 +33,10 @@ they live in the producer's namespace but any role may invoke them, and an agent
 carry the `(agent-closed — not owner-verified)` marker. **The six Claude-side roles** — all
 but `adversarial-reviewer`, which reviews on Codex under a restricted allowlist — also have
 `/fkit-open-questions-interview` (ask the owner about questions this session left unanswered) and
-`/fkit-dumb-down` (re-explain the last answer in simple terms). The **team room** (`fkit-lead`) has no
-procedures of its own beyond these shared ones — it routes, it doesn't do.
+`/fkit-dumb-down` (re-explain the last answer in simple terms). The **team room & conductor**
+(`fkit-lead`) owns **`/fkit-sprint-ship-loop`** (drive a whole sprint's eligible tasks brief→closed by
+spawning role workers and relaying decisions) beyond the shared skills — it routes, and drives the team
+when you hand it a goal.
 
 **Skills belong to roles.** This is structural — **in a role session and in a spawned consult
 alike**: a `PreToolUse` hook checks the REAL invoking agent's identity (a session's own role, or a
