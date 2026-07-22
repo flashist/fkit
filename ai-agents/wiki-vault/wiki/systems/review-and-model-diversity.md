@@ -33,7 +33,7 @@ The older `[claude-fallback — NOT model-diverse]` path is no longer a supporte
 ### Reviewer independence rests on the session lock
 The reviewer's independence is a property of a **fresh context**, not of a prompt. `fkit reviewer` *is* a fresh context, and a coder session **cannot execute `/fkit-review`** because the skill does not exist in it — see [[systems/role-locked-sessions]].
 
-> **Deviation, flagged:** the lead reviewer *keeps* Write/Edit, because it must write the *Reviewer findings* section of the shared ledger. Its "documents under `ai-agents/reviews/` only" boundary stays **prompt-enforced**.
+> **Deviation, flagged:** the lead reviewer *keeps* Write/Edit, because it must write the *Reviewer findings* section of the shared ledger. Its write boundary — the `review.md` ledger inside a task folder (formerly `ai-agents/reviews/`, absorbed by [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] 2026-07-21), plus `ai-agents/sprints/reviews/` for the two sprint-keyed ledgers — stays **prompt-enforced**.
 
 ### The review ledger — loop prevention
 The **review ledger** — `review.md` inside the task folder (`tasks/<board>/<NNNN>-<slug>/review.md`; formerly the top-level `ai-agents/reviews/<task-id>.md`, absorbed 2026-07-21 by [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]]) — is a **two-party ledger** written by reviewer **and** coder: findings, dispositions, and **accepted residuals**. It carries decision state across review rounds so settled tradeoffs are **not re-litigated**. It is the memory that stops the review loop from cycling. *(Two sprint-keyed ledgers had no task folder and live at `ai-agents/sprints/reviews/`.)*

@@ -19,7 +19,7 @@ Done. Unsprinted work is now visible on a board for the first time. The **pull-i
 
 Mover compatibility was **verified, not assumed** — the movers already sweep `ai-agents/sprints/` recursively (task 22 lineage), so they find and flip `backlog.md` rows unchanged. A backlog task can therefore be completed or cancelled without ever joining a sprint.
 
-⚠️ **Known drift, reported not repaired** (recorded on the board itself): `gate-read-side-symlink-hazard-in-init.md` has **no `## Status` section**, so `dashboard.sh` reports `brief-missing-status` against its row. The board is correct; the brief is incomplete. Fixing a brief's own fields is the producer's call.
+✅ **A drift this page once recorded is now resolved** *(re-verified 2026-07-22)*: the `gate-read-side-symlink-hazard-in-init` brief (now `tasks/backlog/0045-gate-read-side-symlink-hazard-in-init/brief.md`) once had **no `## Status` section** and `dashboard.sh` flagged `brief-missing-status` against its row. The brief now carries a `## Status`, so the drift is gone — recorded here because the missing-field-shows-as-drift behaviour it illustrated is the real, durable point.
 
 The read-side half — making `/fkit-status` report this board **only on request** — is [[tasks/report-backlog-board-in-fkit-status-on-request-only]] (task 68).
 
