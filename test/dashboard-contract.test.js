@@ -58,7 +58,14 @@ function foldBriefsAndPlan(agents, briefs, planText) {
     const withId = /\n## ID\n/.test(body)
       ? body
       : body.replace(/^(# .*\n\n)/, `$1## ID\n${id}\n\n`);
-    writeFileSync(join(folder, 'brief.md'), withId);
+    // Mirror the ## ID fold: task 0106 made ## Owner mandatory, so a brief without one now emits a
+    // `brief-missing-owner` drift. Inject a default owner when absent so existing fixtures stay clean;
+    // a fixture that WANTS the missing-owner case declares `## Owner` with an empty value (that matches
+    // this guard, so no injection, and the empty value renders `—` + drift).
+    const withOwner = /\n## Owner\n/.test(withId)
+      ? withId
+      : withId.replace(/^(# .*\n\n(?:## ID\n\d+\n\n)?)/, `$1## Owner\nfkit-coder\n\n`);
+    writeFileSync(join(folder, 'brief.md'), withOwner);
   }
   let out = planText;
   for (const [slug, id] of Object.entries(idBySlug)) {
@@ -444,12 +451,12 @@ test('R10: exact stdout — the full contract, pinned byte for byte', () => {
   assert.equal(out, [
     '⟦fkit-dashboard v1⟧',
     '⟦BOARD⟧',
-    '| Status | # | Task | Filename | Next step |',
-    '|---|---|---|---|---|',
+    '| Status | # | Task | Filename | Owner | Next step |',
+    '|---|---|---|---|---|---|',
     // ⚠️ The ✅ row is ABSENT BY DESIGN (task 65: the board shows open work only). The roll-up below
     // still reads `1 done · 1 backlog  —  of 2` — that mismatch between rows shown and rows counted
     // is the contract, not a bug. Do not "restore" the done row to make them agree.
-    '| 🔲 Backlog | 2 | Beta | [`b.md`](../tasks/backlog/0002-b/brief.md) | ⟨derive: none recorded⟩ |',
+    '| 🔲 Backlog | 2 | Beta | [`b.md`](../tasks/backlog/0002-b/brief.md) | fkit-coder | ⟨derive: none recorded⟩ |',
     '',
     '1 done · 1 backlog  —  of 2',
     '⟦FACTS⟧',
@@ -1010,10 +1017,10 @@ test('R34: a GFM-escaped pipe in the Status cell is content, not a delimiter', (
   const { out } = run(p);
   // ⚠️ Assert the exact row: a naive split('|') would itself re-split the escape and "prove" a
   // six-column board that isn't there. The escape must survive INTO the output, still escaped, so
-  // the rendered markdown is five columns.
+  // the rendered markdown is six columns.
   assert.equal(
     boardRows(out)[0],
-    '| 🚧 Blocked — a \\| b | 1 | Alpha | [`a.md`](../tasks/backlog/0001-a/brief.md) | ⟨derive: none recorded⟩ |',
+    '| 🚧 Blocked — a \\| b | 1 | Alpha | [`a.md`](../tasks/backlog/0001-a/brief.md) | fkit-coder | ⟨derive: none recorded⟩ |',
   );
   assert.ok(facts(out).includes('total 1'));
   assert.equal(facts(out).filter((f) => f.startsWith('drift disagreement')).length, 0, 'no phantom drift');
@@ -1027,8 +1034,48 @@ test('grammar hazard: a pipe in any form cannot break the table', () => {
       briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra }) },
     });
     const { out } = run(p);
-    assert.equal(boardRows(out)[0].split('|').length - 2, 5, 'the board stays five columns');
+    assert.equal(boardRows(out)[0].split('|').length - 2, 6, 'the board stays six columns');
   }
+});
+
+// Task 0106 — the Owner column. dashboard.sh reads the brief's `## Owner` (same pass as `## Status`)
+// and renders it as the 5th cell, between Filename and Next step. `## Owner` is mandatory (0104), so an
+// absent owner renders `—` AND is flagged as `brief-missing-owner` drift, mirroring `brief-missing-status`.
+test('task 0106: the Owner column renders the brief owner; a missing owner is `—` + drift', () => {
+  // Explicit `## Owner` bodies: the fold injects a default only when `## Owner` is ABSENT, so an empty
+  // `## Owner` value survives as the intentional missing-owner case.
+  const withOwner = '# Alpha\n\n## Sprint\nSprint 1\n\n## Priority\n1\n\n## Status\n🔲 Backlog\n\n## Owner\nfkit-wiki\n\n## Context\n\nBody.\n';
+  // Beta is ✅ Done — normally OMITTED from the open-work board. Its empty `## Owner` therefore also
+  // proves `mark_drift`'s FUSED effects: the drift both FORCE-RENDERS the otherwise-hidden row AND
+  // reaches the roll-up drift clause — not just the `add_fact` record (regression guard, review R1).
+  const noOwner = '# Beta\n\n## Sprint\nSprint 1\n\n## Priority\n2\n\n## Status\n✅ Done\n\n## Owner\n\n## Context\n\nBody.\n';
+  const p = fixture({
+    plan: plan([
+      '| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |',
+      '| ✅ Done | 2 | Beta | [`b.md`](../tasks/done/b.md) |',
+    ]),
+    briefs: { 'backlog/a.md': withOwner, 'done/b.md': noOwner },
+  });
+  const { code, out } = run(p);
+  assert.equal(code, 0);
+  // header carries Owner, positioned between Filename and Next step
+  assert.match(out, /\| Status \| # \| Task \| Filename \| Owner \| Next step \|/);
+  const rows = boardRows(out);
+  // Owner is the 5th ` | `-delimited field (Status·#·Task·Filename·Owner·Next step)
+  const alpha = rows.find((r) => r.includes('Alpha'));
+  assert.equal(alpha.split(' | ')[4], 'fkit-wiki', 'the brief owner renders in the Owner column');
+  // the ✅ Done Beta row is present ONLY because its brief-missing-owner drift force-rendered it
+  const beta = rows.find((r) => r.includes('Beta'));
+  assert.ok(beta, 'the missing-owner Done row is force-rendered by its drift, not silently dropped');
+  assert.equal(beta.split(' | ')[4], '—', 'a missing owner renders `—`, not a blank/broken row');
+  // mandatory-field enforcement + the fused mark_drift effects: the FACT and the roll-up drift clause
+  assert.ok(facts(out).includes('drift nonconformance 2 kind="brief-missing-owner"'), 'missing owner is a drift fact');
+  assert.match(rollup(out), /drift on tasks .*\b2\b/, 'brief-missing-owner reaches the roll-up drift clause');
+  assert.equal(
+    facts(out).filter((f) => f.includes('brief-missing-owner')).length,
+    1,
+    'only the empty-owner brief drifts',
+  );
 });
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────
@@ -1278,9 +1325,9 @@ test('R50/R53: exact stdout on the LOUD path — the fact is pinned in full', ()
   assert.equal(out, [
     '⟦fkit-dashboard v1⟧',
     '⟦BOARD⟧',
-    '| Status | # | Task | Filename | Next step |',
-    '|---|---|---|---|---|',
-    '| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/0001-a/brief.md) | ⟨derive: UNPARSEABLE — see brief⟩ |',
+    '| Status | # | Task | Filename | Owner | Next step |',
+    '|---|---|---|---|---|---|',
+    '| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/0001-a/brief.md) | fkit-coder | ⟨derive: UNPARSEABLE — see brief⟩ |',
     '',
     '1 backlog  —  of 1  — as recorded; drift on tasks 1 — see above.',
     '⟦FACTS⟧',

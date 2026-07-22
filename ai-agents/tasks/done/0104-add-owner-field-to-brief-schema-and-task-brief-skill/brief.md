@@ -27,7 +27,7 @@ field.
 prose in two places: `owner: fkit-X` inside ~47/85 board-row task cells, and `- **Owner: fkit-X.**` in
 ~78/103 briefs' `## Notes`. This task creates the field; task
 [0105](../0105-backfill-owner-field-into-existing-briefs/brief.md) populates the ~103 existing briefs;
-task [0106](../../backlog/0106-render-owner-column-in-fkit-status/brief.md) renders it.
+task [0106](../0106-render-owner-column-in-fkit-status/brief.md) renders it.
 
 **This is the schema-and-tooling half — it defines the field and makes every *new* brief carry it.** It
 does not touch existing briefs (that is 0105) and does not change the render (that is 0106).

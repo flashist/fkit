@@ -198,7 +198,7 @@ Its stdout has two delimited sections:
 
 #### What to do with `⟦BOARD⟧`
 
-**Paste it as beat 7 — verbatim, except the sentinel cells.** It is already the five columns, the
+**Paste it as beat 7 — verbatim, except the sentinel cells.** It is already the six columns, the
 canonical markers copied from the plan, and the roll-up. Do not re-count it, re-sort it, re-word it,
 or "tidy" it. **The counts sum to `M` by construction** — that is the whole point of the script's
 existence, and a hand-adjusted board forfeits it.
@@ -273,9 +273,11 @@ drift disagreement <task> plan="…" brief="…" brief_sprint="…" location="�
       sprint, the task has been SCHEDULED but its row was never moved off the unscheduled board.
       Say that plainly in beat 6 — it is the most actionable thing this board reports.
 
-drift nonconformance <task> kind="…" cell="…"
+drift nonconformance <task> kind="…" [kind-specific field]
     ↑ kinds: blocked-without-reason · cancelled-without-date · cancelled-without-reason ·
-      moved-without-target · unknown-marker · brief-missing-status · missing-status-cell.
+      moved-without-target · unknown-marker · brief-missing-status · brief-missing-owner · missing-status-cell.
+      The field after `kind=` is kind-specific: most carry `cell="…"`, `brief-missing-id` carries
+      `folder="…"`, and `brief-missing-owner` carries none.
       The marker is written wrong, or a source is absent — the state is still KNOWN, so these rows
       keep their normal next step. `cancelled-without-date` and `-reason` are DIFFERENT defects:
       report the one named, or you send the owner to fix something already in the cell.
@@ -320,7 +322,7 @@ table, a bug), **hand-build the board and lead with the flag**:
 ⚠️ [dashboard hand-built — dashboard.sh failed: <reason>]
 ```
 
-Then: the five columns above, **markers copied from the plan's Status cell verbatim**, **one row per
+Then: the six columns above (`Status · # · Task · Filename · Owner · Next step`), **markers copied from the plan's Status cell verbatim**, **one row per
 OPEN task** — omit `✅ Done` / `⛔ Cancelled` / `➡️ Moved` rows, but **keep any row you found drift on,
 whatever its marker** — and a roll-up of the non-zero terms with **`— of M` where `M` is the number of
 rows in the table** — **count every row, including the ones you omitted**; not a number the plan's

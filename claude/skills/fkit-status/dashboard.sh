@@ -616,10 +616,11 @@ while IFS=$'\037' read -r rtype st pr task br; do
   fi
 
   # -- brief fields ----------------------------------------------------------------------------
-  b_status=""; b_sprint=""; b_key=""
+  b_status=""; b_sprint=""; b_key=""; b_owner=""
   if [ -n "$brief_path" ]; then
     b_status=$(field_value "$brief_path" "Status")
     b_sprint=$(field_value "$brief_path" "Sprint")
+    b_owner=$(field_value "$brief_path" "Owner")
     b_key=$(marker_key "$b_status")
   fi
 
@@ -666,6 +667,12 @@ while IFS=$'\037' read -r rtype st pr task br; do
   # drift on such a row is still found.
   if [ -n "$brief_path" ] && [ -z "$b_key" ]; then
     add_fact "drift nonconformance $tid kind=\"brief-missing-status\" cell=\"$(fact_value "$st")\""
+    mark_drift
+  fi
+  # A brief with no `## Owner` value is the same shape of defect: `## Owner` is mandatory (0104), so its
+  # absence is drift, mirroring `brief-missing-status`. Reported here; the row still renders `—` below.
+  if [ -n "$brief_path" ] && [ -z "$b_owner" ]; then
+    add_fact "drift nonconformance $tid kind=\"brief-missing-owner\""
     mark_drift
   fi
   if [ -n "$nonconf" ]; then
@@ -807,7 +814,7 @@ while IFS=$'\037' read -r rtype st pr task br; do
     done|cancelled|moved) [ -n "$row_drift" ] || continue ;;
   esac
 
-  BOARD_ROWS="${BOARD_ROWS}| ${st_cell} | ${pr} | ${task} | ${br_cell} | ${next} |
+  BOARD_ROWS="${BOARD_ROWS}| ${st_cell} | ${pr} | ${task} | ${br_cell} | ${b_owner:-—} | ${next} |
 "
 done <<EOF
 $ROWS
@@ -857,8 +864,8 @@ fi
 # --- emit ------------------------------------------------------------------------------------------
 printf '%s\n' "$VERSION_MARKER"
 printf '%s\n' '⟦BOARD⟧'
-printf '%s\n' '| Status | # | Task | Filename | Next step |'
-printf '%s\n' '|---|---|---|---|---|'
+printf '%s\n' '| Status | # | Task | Filename | Owner | Next step |'
+printf '%s\n' '|---|---|---|---|---|---|'
 printf '%s' "$BOARD_ROWS"
 printf '\n'
 printf '%s  —  of %s%s\n' "$rollup" "$total" "$drift_clause"
