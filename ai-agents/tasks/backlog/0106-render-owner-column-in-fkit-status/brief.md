@@ -20,7 +20,7 @@ it goes **just before Next step**. Today the owner is buried inside the Task cel
 (`… owner: fkit-wiki)`), if it appears at all.
 
 **This is the render half, and it depends on the other two:** task
-[0104](../0104-add-owner-field-to-brief-schema-and-task-brief-skill/brief.md) defines the `## Owner`
+[0104](../../done/0104-add-owner-field-to-brief-schema-and-task-brief-skill/brief.md) defines the `## Owner`
 field and task [0105](../0105-backfill-owner-field-into-existing-briefs/brief.md) populates the ~103
 existing briefs. `dashboard.sh` already opens each brief to read `## Status`, so reading `## Owner` from
 the same place is a small extension of an existing mechanism — **not** a new prose-scrape of the board

@@ -93,16 +93,29 @@ Use the established structure **exactly** — diff against an existing brief in
 ## Sprint
 ## Priority
 ## Status
+## Owner
 ## Context
 ## What to build
 ## Verification steps
 ## Notes
 ```
 
+> **The inline skeleton above is authoritative — not any one existing brief.** Existing briefs predate
+> `## Owner` (they are backfilled by task 0105), so a diff against an older brief will legitimately show
+> `## Owner` as the one field it lacks. **Add the field to match the skeleton; never drop it to match an
+> old brief.**
+
 - **`## Status` is always `🔲 Backlog` on creation** — the only valid status for a new brief. (If the
   project keeps a status vocabulary at `ai-agents/knowledge-base/conventions/task-status-vocabulary.md`,
   that is the source of truth for the full set.) **Never create a brief as `Done` or `Cancelled`**: those
   are set only by their mover skills.
+- **`## Owner` is mandatory and populated on creation** — a single fkit role name on the line after the
+  heading, positioned **right after `## Status`** (identity → status → owner, grouped), mirroring how
+  `## Status` carries its value. The producer already decides the owner when scoping a task, so this
+  only records that decision in the field — there is no "assign it later" state. The value **must** be
+  one of the seven live roles in `ai-agents/knowledge-base/conventions/task-owner-vocabulary.md`, which
+  is the source of truth for the valid set (and excludes the not-yet-built eighth role). Most build
+  tasks are `fkit-coder`, planning tasks `fkit-producer`, wiki work `fkit-wiki`.
 - **`## Verification steps` must be genuinely checkable.** "It works" is not a verification step. If
   you cannot say how the work would be proved, the brief is not ready.
 - No code snippets beyond schema stubs / config values. A brief says *what* and *why*, not *how* — the
@@ -317,3 +330,6 @@ Give a concise summary:
 - **Do not renumber** the owner's existing priority ranking.
 - Every new brief is `🔲 Backlog`. Ask when underspecified; scope an investigation when the shape is
   unknown; surface conflicts instead of planning around them.
+- **Every new brief carries a populated `## Owner`** — a single role from the seven in
+  [`task-owner-vocabulary.md`](../../../ai-agents/knowledge-base/conventions/task-owner-vocabulary.md),
+  placed right after `## Status`.

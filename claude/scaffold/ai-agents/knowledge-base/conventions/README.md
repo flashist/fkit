@@ -22,13 +22,14 @@ The three are easy to confuse, and the distinction is the whole point of this fo
 
 ## What's here
 
-Four conventions ship with the scaffold. They are **yours to amend** — but amend them *here*. A
+Five conventions ship with the scaffold. They are **yours to amend** — but amend them *here*. A
 convention has exactly one home; a second copy of a rule is how the two drift apart and the project
 stops knowing which one is law.
 
 | File | In force over |
 |---|---|
 | [`task-status-vocabulary.md`](task-status-vocabulary.md) | the valid task statuses, and who may set each |
+| [`task-owner-vocabulary.md`](task-owner-vocabulary.md) | the seven valid task owners, and that every brief carries exactly one |
 | [`status-report-format.md`](status-report-format.md) | the shape of a status briefing — six beats, then the board |
 | [`evidence-before-assertion.md`](evidence-before-assertion.md) | a claim about repo/project state must come from a check made this turn |
 | [`one-skill-one-output.md`](one-skill-one-output.md) | a skill yields one complete output per subject — arguments select subjects, never output variants |

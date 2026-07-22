@@ -10,7 +10,7 @@ Sprint 2
 84
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 
@@ -40,7 +40,7 @@ board — and it was read as the latter. **The handed-over line numbers were als
 (`fkit.md:15` is the `## Architecture` heading; the real sites are `:7`, `:9`, `:17`).
 
 > **This is the fifth instance in one day of the failure the
-> [`add-worked-example-to-evidence-before-assertion`](../0013-add-worked-example-to-evidence-before-assertion/brief.md)
+> [`add-worked-example-to-evidence-before-assertion`](../../backlog/0013-add-worked-example-to-evidence-before-assertion/brief.md)
 > task is being widened to document** — and the first where the stale source was *an ADR being used as
 > current state*. Logged here deliberately: it is a **new sub-variant** worth the convention author's
 > attention. **A decision record tells you what was true when it was decided; only the artifact tells
@@ -110,7 +110,7 @@ tracking the docs' staleness, and that tracking note expires when the staleness 
   uncorrected ones and achieve nothing. **Precedent: Sprint 2 task 11**, and the standing note at
   `sprint-2.md:209` — *"Task 11 (wiki sync) is genuinely last. Syncing before the docs are rewritten
   just ingests the drift."*
-- **Deliberately NOT folded into [task 78](../../done/0099-wiki-sync-task-folder-migration/brief.md).** 78 waits out the
+- **Deliberately NOT folded into [task 78](../0099-wiki-sync-task-folder-migration/brief.md).** 78 waits out the
   whole 75 → 76 migration. Different subject matter, and a much longer timer. **This is independently
   shippable** once its three dependencies land.
 - **Scope is small and may turn out to be near-zero.** If 82/83/81-D land cleanly, this could be a

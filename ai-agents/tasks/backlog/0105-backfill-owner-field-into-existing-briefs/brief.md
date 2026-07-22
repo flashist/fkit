@@ -14,7 +14,7 @@ Sprint 2
 
 ## Context
 
-Task [0104](../0104-add-owner-field-to-brief-schema-and-task-brief-skill/brief.md) adds `## Owner` to
+Task [0104](../../done/0104-add-owner-field-to-brief-schema-and-task-brief-skill/brief.md) adds `## Owner` to
 the brief schema so *new* briefs carry it. This task adds it to the **~103 briefs that already exist**
 across `backlog/`, `done/`, and `cancelled/`, so the render (task
 [0106](../0106-render-owner-column-in-fkit-status/brief.md)) shows a real owner on every row, not just
