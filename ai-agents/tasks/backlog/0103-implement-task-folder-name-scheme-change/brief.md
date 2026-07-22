@@ -12,6 +12,9 @@ Unscheduled
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-coder
+
 ## Context
 
 The implementation half of the owner's 2026-07-21 observation that a task carries two mismatched

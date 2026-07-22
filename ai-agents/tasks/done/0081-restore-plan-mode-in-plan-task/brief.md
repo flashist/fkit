@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **`/fkit-plan-task` no longer enters Claude Code's plan mode. It used to. The Claude-native port

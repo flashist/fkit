@@ -13,6 +13,9 @@ Sprint 1
 ✅ Done — verified complete in code by the 2026-07-11 doc-drift audit (every agent carries
 `/fkit-query` directly; no per-lookup fkit-wiki spawn required).
 
+## Owner
+fkit-coder
+
 ## Context
 
 Originally the owner's idea #1 in a wider panel-noise discussion (2026-07-10), alongside two other

@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done (agent-closed — not owner-verified)
 
+## Owner
+fkit-coder
+
 ## Context
 
 **Task 63 designs a laundering-safe consent model** that lets another agent drive

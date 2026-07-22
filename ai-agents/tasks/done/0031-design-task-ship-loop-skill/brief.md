@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 **The owner's ask (2026-07-17):** a coder skill, working name `task-ship-loop`, that takes a task

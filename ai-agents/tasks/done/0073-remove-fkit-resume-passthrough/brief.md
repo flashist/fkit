@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **`fkit --resume` is Omnigent scar tissue, not a feature.** It exists because the Omnigent flavor's

@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **Dead Omnigent residue is still sitting in projects that used the old runtime.** Per the migration

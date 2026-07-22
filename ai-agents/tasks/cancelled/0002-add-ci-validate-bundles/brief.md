@@ -12,6 +12,9 @@ Sprint 1
 ## Status
 ⛔ Cancelled (2026-07-11) — Omnigent removed: `validate-bundles.sh` is deleted with Omnigent (ADR-009). The premise no longer exists.
 
+## Owner
+fkit-coder
+
 ## Context
 
 There is currently no CI in this repo (no `.github/workflows`). `omnigent/validate-bundles.sh`

@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 Until 2026-07-11 this project had **no defined task-status vocabulary**. It was convention-by-accident:

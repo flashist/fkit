@@ -12,6 +12,9 @@ Unscheduled
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-coder
+
 ## Context
 
 **Task 27 gated *writes* through a symlinked `ai-agents/`, but not *reads*.** It added a `[ -L ]` check

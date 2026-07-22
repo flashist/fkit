@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 `claude/fkit-claude-init.sh:27-32` decides what to do about `ai-agents/` using `[ -e "$dest/ai-agents" ]`.

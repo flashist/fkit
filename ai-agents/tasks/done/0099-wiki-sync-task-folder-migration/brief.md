@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-wiki
+
 ## Context
 
 The task-folder migration ([task 76](../0062-migrate-tasks-to-folder-structure-and-update-tooling/brief.md)) changes

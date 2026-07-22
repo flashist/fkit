@@ -10,14 +10,17 @@ Sprint 2
 87
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
+
+## Owner
+fkit-coder
 
 ## Context
 
 Task [0104](../../done/0104-add-owner-field-to-brief-schema-and-task-brief-skill/brief.md) adds `## Owner` to
 the brief schema so *new* briefs carry it. This task adds it to the **~103 briefs that already exist**
 across `backlog/`, `done/`, and `cancelled/`, so the render (task
-[0106](../0106-render-owner-column-in-fkit-status/brief.md)) shows a real owner on every row, not just
+[0106](../../backlog/0106-render-owner-column-in-fkit-status/brief.md)) shows a real owner on every row, not just
 on briefs created after 0104.
 
 **The wrinkle, measured 2026-07-22 — the owner is not recoverable for every brief.** Of 103 briefs:

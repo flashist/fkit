@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ⛔ Cancelled (2026-07-19) — parent design task 55 declined
 
+## Owner
+fkit-coder
+
 ## Context
 
 **Task 55 designs `fkit-git` and gets the owner's ruling on the commit/push consent model.** This

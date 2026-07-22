@@ -12,6 +12,9 @@ Unscheduled — high-value (see Context: the un-red-proved fixes are exactly the
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-coder
+
 ## Context
 
 **`prove-red.sh` mechanizes "a test that has never failed has not been tested" — but it cannot run on

@@ -12,6 +12,9 @@ Sprint 1
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-coder
+
 ## Context
 
 Both root instruction files still carry raw scaffold placeholder text:

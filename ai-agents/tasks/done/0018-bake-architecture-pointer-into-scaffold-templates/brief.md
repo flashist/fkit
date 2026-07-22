@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 > **Rescoped 2026-07-11 (Sprint 1 → Sprint 2).** This task originally targeted

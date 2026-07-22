@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **On 2026-07-13 the producer made the same class of error three times in one session, and the source

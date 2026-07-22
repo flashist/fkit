@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-wiki
+
 ## Context
 
 Per the Omnigent-removal plan

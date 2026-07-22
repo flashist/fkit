@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-wiki
+
 ## Context
 
 **Task 50 renames the producer's `/fkit-task-plan` skill to `/fkit-task-brief`.** The wiki vault

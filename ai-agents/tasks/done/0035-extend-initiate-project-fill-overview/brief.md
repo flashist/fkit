@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 `ai-agents/tasks/done/fix-claude-agents-md-placeholder-text.md` fixed, as a one-off, the fact that

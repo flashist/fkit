@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 `ai-agents/sprints/done/sprint-1.md` carries **6 broken relative links** (5 distinct tasks). Every one

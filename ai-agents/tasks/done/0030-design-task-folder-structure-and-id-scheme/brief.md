@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done (agent-closed — not owner-verified)
 
+## Owner
+fkit-architect
+
 ## Correction (2026-07-19) — three facts in this brief were stale when written
 
 The design landed and measured the tree. **Everything below is the record of what was scoped; where it

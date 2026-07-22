@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **Task 52 designs the coder's autonomous brief-to-done loop and gets its steps approved by the

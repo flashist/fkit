@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **`/fkit-status` has no way to force the full board on a repeat call in the same session.** Step 5 of

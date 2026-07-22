@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 **Live bug, found today (2026-07-16) by fkit-coder:** spawning `@fkit-reviewer` to run a stateful

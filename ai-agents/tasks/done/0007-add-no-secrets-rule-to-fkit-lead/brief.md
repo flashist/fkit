@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 Six of the seven agent files carry a "no secrets / no sensitive information" rule. **Exactly one does

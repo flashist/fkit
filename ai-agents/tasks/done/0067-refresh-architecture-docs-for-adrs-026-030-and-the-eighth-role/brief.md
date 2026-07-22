@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 **The canonical architecture document is factually wrong about the shape of the team.** That is the

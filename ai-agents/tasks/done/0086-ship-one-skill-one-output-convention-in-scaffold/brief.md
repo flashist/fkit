@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **Task 47 recorded the "one skill, one output" convention — but only in this repo's live

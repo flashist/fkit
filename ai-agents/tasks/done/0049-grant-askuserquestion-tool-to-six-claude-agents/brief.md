@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **Owner ruling (2026-07-17)**, following the reviewed-and-closed investigation task 39

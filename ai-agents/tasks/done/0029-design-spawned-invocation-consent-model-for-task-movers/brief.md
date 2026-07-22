@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 **The owner's ask (2026-07-18):** let another agent drive the producer's `/fkit-task-done` and

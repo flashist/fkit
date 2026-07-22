@@ -12,6 +12,9 @@ Unscheduled
 ## Status
 ✅ Done (agent-closed — not owner-verified)
 
+## Owner
+fkit-architect
+
 ## Context
 
 **This is a decision task. Its deliverable is a ruling — not code, and not a tester agent.**

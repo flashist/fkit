@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 **The owner's ask:** *"Make the `AskUserQuestion` skill available for all agents."*

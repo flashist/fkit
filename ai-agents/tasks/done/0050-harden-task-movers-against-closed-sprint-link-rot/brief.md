@@ -13,6 +13,9 @@ Sprint 2
 ✅ Done — **the owner ruled 2026-07-13 for the producer's recommendation** (re-point the href, never
 the prose; the movers may write into `sprints/done/`). Implemented by fkit-coder.
 
+## Owner
+fkit-coder
+
 ## Context
 
 Fixing the 6 broken links in Sprint 1 ([task 21](../0076-repair-broken-links-in-closed-sprint-plans/brief.md)) is a

@@ -12,6 +12,9 @@ Sprint 1
 ## Status
 ⛔ Cancelled (2026-07-11) — Omnigent removed: the spawn+inbox envelope died with Omnigent; the Claude 2-hop consult envelope is now recorded in ADR-010.
 
+## Owner
+fkit-architect
+
 ## Context
 
 During project initiation, the architect's survey flagged deep multi-hop agent consultation under

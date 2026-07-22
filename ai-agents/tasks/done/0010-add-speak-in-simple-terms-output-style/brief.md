@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **The owner's ask (2026-07-18):** give every fkit agent a standing instruction — *"Speak in simple

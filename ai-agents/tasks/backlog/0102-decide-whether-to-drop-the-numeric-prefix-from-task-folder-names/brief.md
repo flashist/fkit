@@ -12,6 +12,9 @@ Unscheduled
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-architect
+
 ## Context
 
 **The owner's observation (2026-07-21):** it is confusing that a task carries **two different numbers**

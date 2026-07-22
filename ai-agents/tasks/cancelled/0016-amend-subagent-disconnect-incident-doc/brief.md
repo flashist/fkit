@@ -12,6 +12,9 @@ Sprint 1
 ## Status
 ⛔ Cancelled (2026-07-11) — Omnigent removed: an Omnigent subagent-runner incident; the doc is archived to `history/` by Sprint 2 task 10 (ADR-009).
 
+## Owner
+fkit-architect
+
 ## Context
 
 fkit-architect reviewed [`ai-agents/knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md`](../../../knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md)

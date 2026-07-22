@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 The producer has `initiate-project` / `task-done` / `task-cancelled` — the **create** leg of the task

@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-wiki
+
 ## Context
 
 **Tasks 67 and 68 change two skills' observable behavior:** `/fkit-task-brief`'s no-sprint path now

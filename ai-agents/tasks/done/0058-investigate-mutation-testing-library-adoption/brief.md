@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 **The owner's ask, verbatim, raised in response to a review finding on task 43:** *"it looks like we

@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done (agent-closed — not owner-verified)
 
+## Owner
+fkit-coder
+
 ## Context
 
 The structural change itself: every task becomes a folder, every task artifact moves inside it, and

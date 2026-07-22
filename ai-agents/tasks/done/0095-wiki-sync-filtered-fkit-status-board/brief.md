@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-wiki
+
 ## Context
 
 **Task 65 changes `/fkit-status`'s observable behavior:** the board hides `✅ Done` / `⛔ Cancelled` /

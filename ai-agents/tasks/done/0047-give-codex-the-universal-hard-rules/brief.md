@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **The one model fkit *requires* for independent, model-diverse review runs with none of fkit's shared

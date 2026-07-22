@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 fkit has started changing the **shape of things it has already put on disk** — and it has no way to

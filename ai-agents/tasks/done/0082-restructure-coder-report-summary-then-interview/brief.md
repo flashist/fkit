@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **The owner's ask (2026-07-18):** change how the coder agent reports back to the owner:

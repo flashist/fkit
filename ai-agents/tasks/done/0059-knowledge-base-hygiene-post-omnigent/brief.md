@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 Per the Omnigent-removal plan (`plan-omnigent-removal-2026-07-11.md`, itself filed by this task)

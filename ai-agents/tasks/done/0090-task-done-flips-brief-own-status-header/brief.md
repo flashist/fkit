@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **`/fkit-task-done` updates the board but not the brief.** Its step 5 flips the sprint-plan Status

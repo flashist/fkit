@@ -12,6 +12,9 @@ Sprint 1
 ## Status
 ⛔ Cancelled (2026-07-11) — Omnigent removed: the drifted files are deleted, not fixed (ADR-009). Sprint 2 task 8 rewrites the docs against the post-removal reality.
 
+## Owner
+fkit-coder
+
 ## Context
 
 Two small, unrelated-but-adjacent drifts in the install-path files, flagged by fkit-architect during

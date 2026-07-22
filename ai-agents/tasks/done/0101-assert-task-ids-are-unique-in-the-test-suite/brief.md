@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done (agent-closed — not owner-verified)
 
+## Owner
+fkit-coder
+
 ## Context
 
 **ADR-029 accepted a race and named exactly one mitigation. The mitigation was never built.**

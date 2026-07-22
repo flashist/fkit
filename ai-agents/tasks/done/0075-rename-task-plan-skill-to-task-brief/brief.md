@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **The owner's ask (2026-07-17):** rename the producer's `/fkit-task-plan` skill to `/fkit-task-brief`,

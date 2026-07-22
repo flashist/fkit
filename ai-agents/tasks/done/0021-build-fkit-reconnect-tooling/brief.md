@@ -12,6 +12,9 @@ Sprint 1
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-coder
+
 ## Context
 
 Incident: [`ai-agents/knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md`](../../../knowledge-base/incidents/2026-07-10-subagent-runners-disconnected.md).

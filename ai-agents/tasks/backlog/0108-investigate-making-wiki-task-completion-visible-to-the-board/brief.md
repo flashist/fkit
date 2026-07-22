@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-architect
+
 ## Context
 
 `fkit-wiki` does real, completable work (ingests, syncs, lint, targeted repairs), but it **cannot move

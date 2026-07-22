@@ -12,6 +12,9 @@ Unscheduled
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-architect
+
 ## Context
 
 The two copies of the conventions-index README diverge on item 3 of **"The bar for adding one"** (the

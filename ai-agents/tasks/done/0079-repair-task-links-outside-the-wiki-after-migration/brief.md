@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done (agent-closed — not owner-verified)
 
+## Owner
+fkit-coder
+
 ## Context
 
 The migration ([task 76](../../done/0062-migrate-tasks-to-folder-structure-and-update-tooling/brief.md)) repairs the

@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-coder
+
 ## Context
 
 `dashboard.sh` derives each open task's **Next step** (`ready` / `after <N>`) from a dependency it can

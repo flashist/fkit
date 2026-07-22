@@ -12,6 +12,9 @@ Unscheduled
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-coder
+
 ## Context
 
 **`fkit-claude-init.sh` §4 writes through a symlinked `.fkit/`, landing a file outside the project.**

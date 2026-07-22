@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **fkit has zero automated verification.** No CI, no test suite, no `.github/`. Its only automated check

@@ -12,6 +12,9 @@ Sprint 1
 ## Status
 ⛔ Cancelled (2026-07-11) — Omnigent removed: `fkit-team` (and its eager bootstrap roster) is deleted with Omnigent (ADR-009).
 
+## Owner
+fkit-coder
+
 ## Context
 
 The adversarial-reviewer agent currently appears as a standalone session in the Omnigent UI's

@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **This is "the migration" — and it is not a migration mechanism.** It is the fix that lets an existing

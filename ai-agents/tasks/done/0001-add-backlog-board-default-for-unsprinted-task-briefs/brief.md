@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **The owner's ask (2026-07-18):** when `/fkit-task-brief` is invoked with **no sprint named**, the

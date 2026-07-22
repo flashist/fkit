@@ -15,6 +15,9 @@ Sprint 2
 *(The fix is **implemented in the working tree** but **not committed** and **not yet independently
 reviewed**. It is not Done. `Done` is owner-gated and set only by `/fkit-task-done` after review.)*
 
+## Owner
+fkit-coder
+
 ## Context
 
 **On a NO-ROLE, NO-ARGS invocation of an INITIATED project with no controlling terminal** (piped, CI,

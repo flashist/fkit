@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **The owner's ask (2026-07-18):** the `/fkit-status` dashboard should show **only tasks that are not

@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 **The owner ruled (2026-07-17) that the task-44 principle generalizes** — resolving Sprint 2 open

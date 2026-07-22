@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ⛔ Cancelled (2026-07-18) — parent design task 59 declined per ADR-024; feature not built, so no implementation
 
+## Owner
+fkit-coder
+
 ## Context
 
 **Task 59 designs the timeout-auto-proceed for the ship-loop's owner questions and gets the owner's

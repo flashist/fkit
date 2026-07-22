@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **Today, any failure inside `fkit-claude-init.sh` prevents `fkit` from starting at all.** The user does

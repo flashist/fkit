@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 **The owner wants a "deterministic layer" for `/fkit-status`:** a script that renders the step-4

@@ -13,6 +13,9 @@ Sprint 1
 ✅ Done — verified complete in code by the 2026-07-11 doc-drift audit (consult spawns use fixed,
 role-based titles).
 
+## Owner
+fkit-coder
+
 ## Context
 
 [`ADR-004`](../../../knowledge-base/decisions/adr-004-fixed-role-based-titles-for-consult-spawns.md)

@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 The producer is asked *"what's the status?"* constantly, and has **no procedure for answering it** —

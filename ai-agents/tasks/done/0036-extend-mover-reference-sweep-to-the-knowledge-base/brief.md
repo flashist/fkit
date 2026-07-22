@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done (agent-closed — not owner-verified)
 
+## Owner
+fkit-coder
+
 ## Context
 
 Both task movers sweep for inbound references after moving a brief, so that links to the old path get

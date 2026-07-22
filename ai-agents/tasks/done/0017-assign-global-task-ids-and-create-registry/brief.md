@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done (agent-closed — not owner-verified)
 
+## Owner
+fkit-coder
+
 ## Context
 
 The task-folder restructure ([task 74](../0030-design-task-folder-structure-and-id-scheme/brief.md)) names folders

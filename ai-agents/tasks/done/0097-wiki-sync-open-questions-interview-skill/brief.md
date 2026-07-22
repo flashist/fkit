@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-wiki
+
 ## Context
 
 **Task 70 adds a new six-role skill** — `/fkit-open-questions-interview` — changing every Claude-side

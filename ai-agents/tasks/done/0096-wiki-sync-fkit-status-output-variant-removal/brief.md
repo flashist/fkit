@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-wiki
+
 ## Context
 
 **Task 44 removes the `full` keyword and the delta default from `/fkit-status`.** Eight wiki pages

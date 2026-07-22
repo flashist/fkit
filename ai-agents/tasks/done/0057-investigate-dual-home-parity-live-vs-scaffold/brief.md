@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 **fkit-authored artifacts live in two homes, and nothing enforces that a change lands in both:** this

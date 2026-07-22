@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **The scaffold contradicts itself on day one, and it does so for 100% of projects created from now

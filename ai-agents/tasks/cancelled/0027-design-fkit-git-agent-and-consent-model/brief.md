@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ⛔ Cancelled (2026-07-19) — not pursuing git automation
 
+## Owner
+fkit-architect
+
 ## Context
 
 **The owner's ask (2026-07-17):** a new agent `fkit-git` responsible for git work, with one skill for

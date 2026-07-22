@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 `ai-agents/knowledge-base/` now has four things in it: `PROJECT.md`, `architecture.md`, and three

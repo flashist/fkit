@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **The owner's ruling (2026-07-18, with task 67):** `/fkit-status` must **not** report the Backlog

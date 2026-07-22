@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **Implements the "deterministic layer" the owner asked for on `/fkit-status`:** a script that renders

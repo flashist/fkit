@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **`/fkit-task-cancelled` has the same gap as `/fkit-task-done`** (see task 34): it flips the sprint-plan

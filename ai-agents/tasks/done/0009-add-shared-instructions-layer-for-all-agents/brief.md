@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-architect
+
 ## Context
 
 **There is no way to give all seven fkit agents an instruction at once.** Today an instruction that

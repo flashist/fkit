@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done (agent-closed — not owner-verified)
 
+## Owner
+fkit-coder
+
 ## Context
 
 The owner wants `/fkit-status` to render **Owner** as a first-class field, *"the same way as Status,
@@ -23,7 +26,7 @@ field.
 **Owner is not a structured field today.** No brief has a `## Owner` heading. The value lives as free
 prose in two places: `owner: fkit-X` inside ~47/85 board-row task cells, and `- **Owner: fkit-X.**` in
 ~78/103 briefs' `## Notes`. This task creates the field; task
-[0105](../../backlog/0105-backfill-owner-field-into-existing-briefs/brief.md) populates the ~103 existing briefs;
+[0105](../0105-backfill-owner-field-into-existing-briefs/brief.md) populates the ~103 existing briefs;
 task [0106](../../backlog/0106-render-owner-column-in-fkit-status/brief.md) renders it.
 
 **This is the schema-and-tooling half — it defines the field and makes every *new* brief carry it.** It

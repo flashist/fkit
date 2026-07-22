@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done (agent-closed — not owner-verified)
 
+## Owner
+fkit-coder
+
 ## Context
 
 `claude/scaffold/universal-rules.md` (3064 B) is the **single source** for the marker-delimited block

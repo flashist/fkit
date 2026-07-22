@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-coder
+
 ## Context
 
 **The owner ran `/fkit-status` and was told to run it again.** The producer replied *"Board not

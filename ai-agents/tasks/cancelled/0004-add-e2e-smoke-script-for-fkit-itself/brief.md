@@ -31,6 +31,9 @@ settled argv surface.
 >
 > Kept as a record of the thinking, per the archive-don't-delete convention. Read it as history.
 
+## Owner
+fkit-coder
+
 ## Context
 
 **fkit ships a `curl | sh` entry point with zero automated coverage.** `architecture.md` §9.1 names

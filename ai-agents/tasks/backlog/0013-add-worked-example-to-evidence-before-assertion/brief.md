@@ -12,6 +12,9 @@ Unscheduled
 ## Status
 🔲 Backlog
 
+## Owner
+fkit-producer
+
 ## Context
 
 **The ask, from the fkit-reviewer's Round 2 closeout of task 36, owner-approved 2026-07-17:** add a

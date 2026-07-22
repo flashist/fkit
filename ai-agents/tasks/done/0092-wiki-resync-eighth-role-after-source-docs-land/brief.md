@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-wiki
+
 ## Context
 
 ### 🔴 Read this first: the premise this task was filed under was WRONG, and the corrected version is a different task

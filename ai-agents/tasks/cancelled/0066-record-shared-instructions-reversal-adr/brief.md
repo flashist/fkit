@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ⛔ Cancelled (2026-07-19) — superseded by ADR-016
 
+## Owner
+fkit-architect
+
 ## Context
 
 **The shared-instructions investigation (task 29) reversed its own rev-1 recommendation, and the

@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-wiki
+
 ## Context
 
 On 2026-07-19 a new ADR was recorded against a number that was already claimed. **ADR-029 is now

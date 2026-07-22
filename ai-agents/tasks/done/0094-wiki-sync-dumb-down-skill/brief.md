@@ -12,6 +12,9 @@ Sprint 2
 ## Status
 ✅ Done
 
+## Owner
+fkit-wiki
+
 ## Context
 
 **Task 72 adds a new six-role skill** — `/fkit-dumb-down` — changing every Claude-side role's skill
