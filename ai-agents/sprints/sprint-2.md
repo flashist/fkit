@@ -120,6 +120,58 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done (agent-closed — not owner-verified) | 88 | Render the Owner column in `/fkit-status`, between Filename and Next step *(the feature the owner asked for; `dashboard.sh` + `SKILL.md` contract + test; needs 86 + 87 — hard; owner: fkit-coder)* | [`0106-render-owner-column-in-fkit-status`](../tasks/done/0106-render-owner-column-in-fkit-status/brief.md) |
 | 🔲 Backlog | 89 | Make a task's `## Notes`-prose dependency visible to `dashboard.sh` *(the task-84 misreport, 7 status runs; parse-Notes vs enforce-row is the coder's design call; owner: fkit-coder)* | [`0107-teach-dashboard-to-resolve-notes-dependencies`](../tasks/backlog/0107-teach-dashboard-to-resolve-notes-dependencies/brief.md) |
 | 🔲 Backlog | 90 | Investigate making fkit-wiki task completion visible to the board *(investigation — task 80 stuck `In progress` a week; `log.md` is an unread status source; must not breach the owner-gated close; owner: fkit-architect)* | [`0108-investigate-making-wiki-task-completion-visible-to-the-board`](../tasks/backlog/0108-investigate-making-wiki-task-completion-visible-to-the-board/brief.md) |
+| 🔲 Backlog | 91 | Design fkit-lead as the orchestrating front door + the `fkit-sprint-ship-loop` skill *(design/feasibility only — owner ruled evolve `fkit-lead` into the single-point-of-interaction doer, relay owner decisions live, design-first; reverses ADR-010 non-doer, collides with ADR-021/024, `task-ship-loop` is session-only; blocks the follow-on implementation tasks; **sprint-fit flagged — Sprint 3 candidate**; owner: fkit-architect)* | [`0109-design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop`](../tasks/backlog/0109-design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop/brief.md) |
+| 🔲 Backlog | 92 | Evolve `fkit-lead` into the orchestrating conductor — reverse the non-doer stance, add conductor remit + driver discipline, keep routing *(agent-def edit; T2 of design §11; depends on ADR-031/032 which are Done; owner: fkit-coder)* | [`0110-evolve-fkit-lead-into-orchestrating-conductor`](../tasks/backlog/0110-evolve-fkit-lead-into-orchestrating-conductor/brief.md) |
+| 🔲 Backlog | 93 | Build the `fkit-sprint-ship-loop` skill — the lead's sprint-scope conductor loop *(the substantive build, design §5; **must carry the plan-gate honesty clause as prose, not a false structural guarantee**; needs 92; owner: fkit-coder)* | [`0111-build-fkit-sprint-ship-loop-skill`](../tasks/backlog/0111-build-fkit-sprint-ship-loop-skill/brief.md) |
+| 🔲 Backlog | 94 | Wire `fkit-sprint-ship-loop` into `skills_for_role()` + the FOUR mirrors in the same commit *(`skills-for-role.sh:37` + 4 mirrors per the `:12-24` checklist that has shipped false docs before; needs 93; owner: fkit-coder)* | [`0112-wire-lead-sprint-ship-loop-skill-ownership-and-mirrors`](../tasks/backlog/0112-wire-lead-sprint-ship-loop-skill-ownership-and-mirrors/brief.md) |
+| 🔲 Backlog | 95 | Update the launcher menu/help text — "does no work itself" → accurate to a conductor *(text only, no control-flow change per design §4.4; needs 92; owner: fkit-coder)* | [`0113-update-launcher-menu-help-for-conductor`](../tasks/backlog/0113-update-launcher-menu-help-for-conductor/brief.md) |
+| 🔲 Backlog | 96 | Amend PROJECT.md for the evolved `fkit-lead` conductor *(product-brief half of design §11 T6; **needs owner sign-off on stance wording**; needs 92 + 94; owner: fkit-producer)* | [`0114-amend-project-brief-for-lead-conductor`](../tasks/backlog/0114-amend-project-brief-for-lead-conductor/brief.md) |
+| 🔲 Backlog | 97 | Refresh architecture.md for the lead conductor + fix the stale §5.2 lock description *(architecture half of T6 **plus** the independent §5.2 `skillOverrides`→ADR-018-hook stale-lock fix, design §1.1; coordinates with 94 on the same file; needs 92 + 94; owner: fkit-architect)* | [`0115-refresh-architecture-doc-for-lead-conductor-and-stale-lock`](../tasks/backlog/0115-refresh-architecture-doc-for-lead-conductor-and-stale-lock/brief.md) |
+| 🔲 Backlog | 98 | Add `fkit-sprint-ship-loop` to the ADR-030 Stop-hook skip set *(**gated — the ADR-030 hook is authorized but NOT yet built**; filed to preserve the dependency, do not start until `turn-completion-hook.sh` exists; needs 93 + ADR-030 impl; owner: fkit-coder)* | [`0116-add-sprint-ship-loop-to-stop-hook-skip-set`](../tasks/backlog/0116-add-sprint-ship-loop-to-stop-hook-skip-set/brief.md) |
+| 🔲 Backlog | 99 | Wiki ingest — ADR-031/032, the design report, and the evolved lead role *(vault write — fkit-wiki only; recommend running last, after 96 + 97 land; needs T1 (Done) + 92; owner: fkit-wiki)* | [`0117-wiki-ingest-lead-conductor-and-adrs-031-032`](../tasks/backlog/0117-wiki-ingest-lead-conductor-and-adrs-031-032/brief.md) |
+
+### Addendum — tasks 92–99 added out of band (2026-07-22): the fkit-lead-orchestrator implementation
+
+The design/feasibility task 91 (0109) is **approved** and its two ADRs — [ADR-031](../knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)
+(lead becomes the orchestrating front door) and [ADR-032](../knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md)
+(the sprint-ship-loop autonomy & consent model) — are recorded. This is the follow-on implementation,
+scoped from the design report's §11 (T2–T8; **T1 — record the ADRs — is already Done**, so no brief).
+The eight T-tasks decompose into eight briefs (T6 split by owner into 96/97).
+
+**Dependency shape (design §11):** `92 → {93 → 94, 95} → {96, 97} → 99`; **98 is gated on the separate,
+not-yet-built ADR-030 Stop-hook** and must not be started until `claude/turn-completion-hook.sh` exists.
+
+**Three things the briefs deliberately carry so implementation doesn't lose them:**
+- **93** must keep the **plan-gate honesty clause** (design §3.5, ADR-031) as *prose* — on the
+  orchestrated path "no code before the owner approves the plan" is prose-enforced, **not** a runtime
+  write-wall; a coder must not "fix" it into a false structural guarantee.
+- **94** must land the `skills-for-role.sh:37` change **and the four mirrors in the same commit** (the
+  `:12-24` checklist, which has shipped false docs before). **97** and **94** both touch
+  architecture.md — 97 lands after 94 and must not revert its mirror row.
+- **97** also folds in the **independent §5.2 stale-lock fix** (architecture.md still describes the
+  retired `skillOverrides`/`CONSULT_SKILLS`, not the ADR-018 hook).
+
+**Two open questions for the owner (design §14 — flagged in the 0111 brief, do not block):** the
+working skill name `fkit-sprint-ship-loop`; and whether the general-conductor primitive is its own
+named skill or only runs through the sprint loop.
+
+**Owner rulings honored:** filed to **Sprint 2** (owner overrode the design's Sprint-3-candidate flag);
+close posture = agent-closed marker by default. Priorities 92–99 appended after 91; existing ranking
+untouched. **Ranking is for the owner to confirm.**
+
+### Addendum — task 91 added out of band (2026-07-22)
+
+The owner wants a **single point of interaction** — one agent, aware of the whole toolkit, that knows
+each role and spawns/drives them so they needn't open a session per role. After discussion the owner
+ruled (2026-07-22): **evolve `fkit-lead`** into that single-point doer/orchestrator (keep the name,
+reversing its deliberate non-doer stance), **relay owner decisions live** (pause → ask → resume), and
+**design first**. Task 91 is therefore a **design/feasibility task only** (owner: fkit-architect); it
+must resolve the collisions with ADR-010 (lead-is-not-a-doer), ADR-021 (spawned agents have no owner
+channel), the session-only `task-ship-loop`, and ADR-024 (declined single-task auto-proceed), then spawn
+the ADR(s) and the follow-on implementation tasks. Priority appended after 90; existing ranking
+untouched. **⚠️ Filed to Sprint 2 per the owner's "current sprint" instruction, but it is thematically a
+Sprint 3 candidate — Sprint 2 is the Omnigent removal and is 82/90 done. Sprint-fit and ranking are for
+the owner to confirm.**
 
 ### Addendum — tasks 89–90 added out of band (2026-07-22)
 
