@@ -230,7 +230,7 @@ and any that a future authoring path introduces around the guard.
     without that making it the architect's task.
   - **Consult fkit-wiki on Part C's detail** — it knows the vault's slug conventions and can say where
     the check will produce noise. **Consult, not ownership.**
-- **Part D is a one-line absorption from [task 82](../../backlog/0067-refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role/brief.md)**,
+- **Part D is a one-line absorption from [task 82](../0067-refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role/brief.md)**,
   not scope creep — see below.
 - **⚠️ Cross-task risk introduced by Part D: the role count is now corrected in two tasks by two
   roles.** If 81 lands and 82 does not, **the installer prints "eight roles" while every document says

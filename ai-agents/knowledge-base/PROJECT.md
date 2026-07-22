@@ -7,7 +7,9 @@
 
 fkit is a **team of seven role-scoped AI agents for software development** — a producer, a coder, a
 reviewer (with an adversarial second opinion), an architect, a wiki librarian, and a team-room lead —
-operating on a shared `ai-agents/` working structure inside a consuming project. It runs on **one
+operating on a shared `ai-agents/` working structure inside a consuming project. An **eighth** role, a
+sandboxed e2e tester, is authorized ([ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
+but **not yet built** — the team is seven today. It runs on **one
 runtime: Claude Code native + Codex** (see
 [`ADR-009`](decisions/adr-009-claude-code-native-is-the-only-runtime.md)), as custom subagents and
 `/fkit-*` skills under `claude/`. This repository *is* the framework: it dogfoods itself (its own
@@ -69,7 +71,10 @@ concerns, and identified risks — is in
 ## Conventions & constraints
 
 - **Stage: Prototype.** Near-term goal is a user-friendly startup sequence and a solid working set of
-  seven roles with dedicated skills; hardening/polish is the current focus, not breadth.
+  the seven built roles with dedicated skills; hardening/polish is the current focus. The team is **no
+  longer breadth-constrained** — it grows when a capability gap justifies a new role, and the eighth (a
+  sandboxed e2e tester) is authorized in
+  [`ADR-028`](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md) but not yet built.
 - **Single runtime: Claude Code native + Codex** (per
   [`ADR-009`](decisions/adr-009-claude-code-native-is-the-only-runtime.md), which **removed** the
   Omnigent flavor and supersedes ADR-008's dual-runtime decision). No second runtime is maintained and

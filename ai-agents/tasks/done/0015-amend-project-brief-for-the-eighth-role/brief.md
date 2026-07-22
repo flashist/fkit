@@ -10,7 +10,7 @@ Sprint 2
 83
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 
@@ -94,7 +94,7 @@ today.** This is the sharpest hazard in the task and the reason it is not a find
   - [**Task 82**](../0067-refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role/brief.md) —
     `architecture.md:4,:82`, `CLAUDE.md:7`, `AGENTS.md:7`, `README.md:76`, `claude/README.md:3`, plus
     the ADR-023 pointer. **fkit-architect.**
-  - [**Task 81 Part D**](../../done/0036-extend-mover-reference-sweep-to-the-knowledge-base/brief.md) —
+  - [**Task 81 Part D**](../0036-extend-mover-reference-sweep-to-the-knowledge-base/brief.md) —
     `claude/fkit-claude-init.sh:847`, executable source. **fkit-coder.**
   - **`wiki-vault/index.md:11` and `wiki-vault/wiki/systems/fkit.md:7,:15`** — **fkit-wiki's resync,
     not any of these tasks.** No brief filed; flag it to the owner so one gets scheduled.

@@ -10,7 +10,7 @@ Sprint 2
 82
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Context
 
@@ -53,7 +53,7 @@ role differs — and **re-verifies the claims as still live on 2026-07-19.**
 > section before scoping** — the section that says in its own heading not to re-derive the list. The
 > hand-assembled version had **five of the nine live sites** and missed the one flagged as *"the one
 > most likely to be missed."* **This is the fourth instance in a single day of the same failure the
-> [`add-worked-example-to-evidence-before-assertion`](../0013-add-worked-example-to-evidence-before-assertion/brief.md)
+> [`add-worked-example-to-evidence-before-assertion`](../../backlog/0013-add-worked-example-to-evidence-before-assertion/brief.md)
 > task is being widened to document:** asserting from what was to hand instead of checking the record
 > that already existed. It cost nothing this time only because someone swept again.
 
@@ -165,7 +165,7 @@ class as the rest of the task. Scoped under "What to build" above, with its two 
 - **Owner: fkit-architect.** **Documentation only** — no agent-file, skill, or source edits.
 - **Depends on: nothing.** No blockers; can start immediately.
 - **🔴 `claude/fkit-claude-init.sh:847` is NOT in this task — moved to
-  [task 81](../../done/0036-extend-mover-reference-sweep-to-the-knowledge-base/brief.md) as Part D.** The line is
+  [task 81](../0036-extend-mover-reference-sweep-to-the-knowledge-base/brief.md) as Part D.** The line is
   `printf '  Seven roles, each a locked session…'` — **executable source, not prose** (ADR-028:164
   flags it as *"code, not prose, and the one most likely to be missed"*). The architect does not write
   source. Task 81 is already fkit-coder's and already editing files under `claude/`, so it absorbs the
@@ -200,7 +200,7 @@ class as the rest of the task. Scoped under "What to build" above, with its two 
   worse error than the stale count it replaces. **ADR-026 and ADR-027 do not carry this hazard** —
   026 records a "no", 027 a convention already in force — so the constraint is specifically about
   028/029/030.
-- **Precedent for shape: task 58**, [`refresh-architecture-docs-for-tool-relaxation.md`](../../done/0068-refresh-architecture-docs-for-tool-relaxation/brief.md)
+- **Precedent for shape: task 58**, [`refresh-architecture-docs-for-tool-relaxation.md`](../0068-refresh-architecture-docs-for-tool-relaxation/brief.md)
   — same job (docs catching up to accepted ADRs), same owner, and its structure of *supersedes-this-
   claim* bullets is worth copying rather than reinventing.
 - **Sprint call: Sprint 2, priority 82.** The stale-citation half is ordinary maintenance and would
