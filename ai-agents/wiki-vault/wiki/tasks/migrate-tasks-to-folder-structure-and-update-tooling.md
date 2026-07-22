@@ -39,3 +39,4 @@ Done, agent-closed. **Worklog records the full verification walk**, self-checked
 - [[tasks/wiki-sync-fkit-status-output-variant-removal]] — a batched wiki-sync task (discharged by the migration sync)
 - [[tasks/wiki-sync-open-questions-interview-skill]] — a batched wiki-sync task (discharged by the migration sync)
 - [[tasks/wiki-sync-task-plan-rename]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description

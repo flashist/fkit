@@ -35,3 +35,4 @@ The brief's structure held up: the flip condition it insisted must survive is **
 - [[systems/testing-and-verification]] — where the static-review gap and the tester's own limits are recorded
 - [[systems/fkit]] · [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — its home board
 - Source: `ai-agents/knowledge-base/reports/2026-07-13-tester-agent-evaluation.md` — the evaluation the brief deliberately does not restate
+- [[tasks/amend-project-brief-for-the-eighth-role]] — task 83, the PROJECT.md eighth-role amendment

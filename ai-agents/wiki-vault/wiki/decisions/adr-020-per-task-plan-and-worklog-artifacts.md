@@ -44,3 +44,4 @@ fkit already has the precedent: `ai-agents/reviews/<task-id>.md` — a git-track
 - [[tasks/design-task-folder-structure-and-id-scheme]] — task 74 executes this ADR's §6 end state: the per-task folder
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75: the ID that keys `plans/`, `worklogs/` and `reviews/` together
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
+- [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description

@@ -20,3 +20,6 @@ Done, agent-closed. Part A stops *new* knowledge-base rot; the accumulated rot i
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the ADR whose number collision motivated Part B
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — the ADR forced to renumber by that collision
 - [[systems/knowledge-base-structure]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/amend-project-brief-for-the-eighth-role]] — task 83, the PROJECT.md eighth-role amendment
+- [[tasks/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role]] — task 82, the architecture.md refresh for ADRs 026–030 + the eighth role
+- [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — task 80, the ADR-029/030 vault link repair

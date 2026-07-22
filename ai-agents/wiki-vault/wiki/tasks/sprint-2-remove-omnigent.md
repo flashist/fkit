@@ -9,7 +9,7 @@ Execute the removal of the Omnigent runtime **end to end**: extract what the Cla
 
 Authorized by [[decisions/adr-009-claude-code-native-is-the-only-runtime]] and [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]].
 
-**The sprint has grown far past its original scope — from 22 tasks to 85.** The removal itself finished early; **everything after task 22 is work the removal *uncovered*** — investigations that mostly concluded "build nothing", the defects they found on the way, and a set of skill-quality and coder-autonomy improvements the owner scoped as the runtime settled.
+**The sprint has grown far past its original scope — from 22 tasks to 90.** The removal itself finished early; **everything after task 22 is work the removal *uncovered*** — investigations that mostly concluded "build nothing", the defects they found on the way, and a set of skill-quality and coder-autonomy improvements the owner scoped as the runtime settled.
 
 ## Key Changes
 
@@ -94,7 +94,7 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 - **The `.fkit/` orphan-cleanup consent model → announce-only** (2026-07-17), unblocking task 36.
 
 ## Outcome
-**75 done · 4 backlog · 1 in progress · 5 cancelled — of 85.** *(Updated 2026-07-21, re-derived from `ai-agents/sprints/sprint-2.md`: **+11 done** since the last sync — the whole task-folder migration cluster landed. Tasks **76** (the migration itself — ~186 files, the point of no return), **77** (the doc-link repair), **79**, **81**, **85** and the six batched wiki-syncs (93–97, 100) all closed, **most agent-closed**. Task **80** (the adr-029-stop-hook vault repair) is the one row In progress — **its vault work is in fact complete** (done by fkit-wiki 2026-07-19); the board row has not been moved.)* ⚠️ **Many Done rows are agent-closed and not owner-verified**, including **74, 75, 76** — the design, the ID backfill and the migration itself, i.e. the whole least-reversible change in the project's history.
+**79 done · 6 backlog · 0 in progress · 5 cancelled — of 90.** *(Updated 2026-07-22, re-derived from `ai-agents/sprints/sprint-2.md`: **+4 done** since the last sync — the owner closed the two fkit-wiki tasks (**78** the migration sync, **80** the adr-029-stop-hook repair) and the two eighth-role doc tasks (**82** `architecture.md`, **83** `PROJECT.md`). The sprint grew 85 → 90 with a **new dashboard/schema cluster (86–90)**: a structured `## Owner` field + backfill + Owner column, a `## Notes`-prose dependency the dashboard should resolve, and an investigation into making fkit-wiki task completion visible to the board.)* ⚠️ **Many Done rows remain agent-closed and not owner-verified** — the whole task-folder migration (74, 75, 76) among them.
 
 ⚠️ **Task 85 is filed at priority 85 but must run BEFORE task 76** — owner-ruled 2026-07-20. It is ADR-029 Decision 3's duplicate-ID detection, the *sole* mitigation for the accepted cross-branch ID race. **Priority here is append rank, not run order**, and reading the board as a queue would run the migration before its own guard. Omnigent is gone; the release gate passed on a clean install; fkit has automated verification for the first time; Codex finally receives the universal hard rules; **"the migration" (additive convergence) landed**; the coder→reviewer consult path is structurally enforced; the coder's autonomous ship-loop is **built and live**; the `.fkit/` orphan residue is cleaned; the tool-allowlist posture was deliberately reversed (ADR-022) leaving one structural tool wall; the `/fkit-status` board now shows open work only and unsprinted briefs finally have a board; and two six-role skills landed.
 
@@ -102,7 +102,7 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 
 **Cancelled (5):** **37** the duplicate shared-instructions tombstone (already ADR-016); **55 / 56** the `fkit-git` agent (hard rule reaffirmed); **59 / 60** the ship-loop timeout (feasible, declined on cost).
 
-**Still Backlog (4):** **78** (the wiki sync after the migration — *this run is executing it*), and the eighth-role doc trio **82 / 83 / 84** (`architecture.md`, `PROJECT.md`, then the resync). The six batched wiki-syncs are now **Done** — discharged by this migration sync. **In progress (1): 80**, the adr-029-stop-hook vault repair, whose vault work is complete but whose row has not been moved.
+**Still Backlog (6):** **84** (the eighth-role wiki resync — *now largely discharged by this sync*: the vault's stale seven-role notes were corrected once tasks 82/83 landed the source docs) and the **new cluster 86–90** (the `## Owner` field + backfill + column, the `## Notes`-dependency dashboard work, and the wiki-completion-visibility investigation). **In progress: none.** Tasks 78, 80, 82, 83 all closed this round.
 
 ### New cluster — the task-folder migration (74–78), all Backlog
 
@@ -154,3 +154,7 @@ Its sibling: **a count of a *semantic* rule cannot be established by grepping on
 - [[tasks/wiki-sync-fkit-status-output-variant-removal]] — a batched wiki-sync task (discharged by the migration sync)
 - [[tasks/wiki-sync-open-questions-interview-skill]] — a batched wiki-sync task (discharged by the migration sync)
 - [[tasks/wiki-sync-task-plan-rename]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/amend-project-brief-for-the-eighth-role]] — task 83, the PROJECT.md eighth-role amendment
+- [[tasks/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role]] — task 82, the architecture.md refresh for ADRs 026–030 + the eighth role
+- [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — task 80, the ADR-029/030 vault link repair
+- [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description

@@ -113,3 +113,5 @@ escape. It was put back to the owner and resolved into the checkable form in Dec
   `claude/agents/fkit-coder.md:34,:192-198`
 - [[tasks/sprint-2-remove-omnigent]] — the sprint this decision was taken during; it carries no numbered row
 - [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — task 81, the mover KB-sweep fix + ADR-number guard
+- [[tasks/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role]] — task 82, the architecture.md refresh for ADRs 026–030 + the eighth role
+- [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — task 80, the ADR-029/030 vault link repair

@@ -99,3 +99,4 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard
 - [[tasks/compress-universal-rules-output-style-section]] — task 79, the universal-rules compression
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
+- [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — task 80, the ADR-029/030 vault link repair

@@ -70,3 +70,4 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - [[tasks/design-task-ship-loop-skill]]
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — the eighth role decided 2026-07-19; **decided, not built**
 - [[tasks/design-task-folder-structure-and-id-scheme]] — the adversarial pass on task 74 produced **18 findings** and forced revision 2's three substantive changes
+- [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description

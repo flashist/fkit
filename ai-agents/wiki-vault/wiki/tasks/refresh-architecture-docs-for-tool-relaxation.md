@@ -23,12 +23,7 @@ The brief was unusually specific about **framing the change accurately rather th
 ## Outcome
 Done. The four staleness counts the vault had carried against `architecture.md` since 2026-07-13 are **largely closed**.
 
-⚠️ **But `architecture.md` is behind again.** Re-verified 2026-07-19 by lint: it cites ADRs up to **025** — so **ADR-026, 027, 028, 029 and 030 are absent**, as are the 023/024 tombstones. *(An earlier revision of this line said "022 only / 023 through 028 absent"; that was wrong — ADR-025 is cited four times.)* Most consequential:
-- **[[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]]**, which contradicts any remaining owner-only mover language;
-- **[[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]]**, against which `architecture.md:4` and `:82` (*"seven roles"*) **are now false**;
-- the fifth convention ([[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]).
-
-**This task's scope was ADR-022 and it discharged it** — the residue belongs to a follow-up, not to a reopening of task 58.
+✅ **The "behind again" residue is now RESOLVED.** For several syncs this page flagged that `architecture.md` cited ADRs only up to 025 — so 026–030 (and the eighth-role reversal) were absent. **[[tasks/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role]] (task 82) closed it**: verified 2026-07-22, `architecture.md` now cites ADRs to 030 and frames "seven built, an eighth authorized-not-built." The `PROJECT.md` half was [[tasks/amend-project-brief-for-the-eighth-role]] (task 83). **This task's own scope was ADR-022 and it discharged it in full** — the 026–030 residue was always a separate follow-up, now also done.
 
 **The brief's own open question is now answered.** It asked whether the vault needed a sync for this and declined to pre-file a brief. It did: the wiki records agent tool allowlists, and the correction landed in the **2026-07-18 sync**, before this task closed.
 
@@ -38,3 +33,5 @@ Done. The four staleness counts the vault had carried against `architecture.md` 
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the skill lockdown that pointedly did **not** change
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — makes `architecture.md`'s seven-role claim false
 - [[systems/fkit]] · [[systems/role-locked-sessions]] · [[systems/knowledge-base-structure]] · [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — related
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — related

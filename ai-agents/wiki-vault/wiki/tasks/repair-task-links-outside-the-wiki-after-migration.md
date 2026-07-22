@@ -26,3 +26,4 @@ Done, agent-closed. **The wiki is the last mile:** task 76 fixed the executable 
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the migration; §5.2b, the sprint-keyed-ledger special case
 - [[tasks/harden-task-movers-against-closed-sprint-link-rot]] · [[tasks/repair-broken-links-in-closed-sprint-plans]] — the same link-rot class, one sprint earlier
 - [[systems/fkit]] · [[systems/knowledge-base-structure]] · [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description

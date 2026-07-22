@@ -53,7 +53,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 
 ### Sprints
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — 🔒 Closed: the Omnigent-era onboarding sprint, and how its 12 tickets were dispositioned
-- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**75 done · 4 backlog · 1 in progress · 5 cancelled — of 85**; grew 22 → 85)
+- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**79 done · 6 backlog · 0 in progress · 5 cancelled — of 90**; grew 22 → 90)
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — 🆕 The **Backlog board** (`sprints/backlog.md`) — the standing home for unsprinted briefs
 
 ### Sprint 2 — the removal chain
@@ -93,6 +93,12 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/wiki-sync-fkit-status-output-variant-removal]] · [[tasks/wiki-sync-task-plan-rename]] · [[tasks/wiki-sync-filtered-fkit-status-board]] · [[tasks/wiki-sync-backlog-board-introduction]] · [[tasks/wiki-sync-open-questions-interview-skill]] · [[tasks/wiki-sync-dumb-down-skill]] — priorities 45/51/66/69/71/73; each **batched into the migration sync** rather than run first (ADR-029 §9.2); every subject already recorded on its implementation page
 - [[tasks/compress-universal-rules-output-style-section]] — Task 79 (ID 0022) → reclaimed ~549 B under the launch-blocking 4096-B universal-rules cap
 - [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — Task 81 (ID 0036) → movers now sweep `knowledge-base/`; **Part B is the first defence against the ADR-number collision** that actually happened 2026-07-19
+
+### Sprint 2 — the two fkit-wiki tasks and the eighth-role doc fixes (closed 2026-07-22)
+- [[tasks/wiki-sync-task-folder-migration]] — Task 78 (ID 0099) → the post-migration vault re-description: 104 path refs re-pointed, the structural pages rewritten, the folder/global-ID model ingested
+- [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — Task 80 (ID 0078) → repaired the ADR-029/030 number-collision links that **resolved silently to the wrong decision**
+- [[tasks/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role]] — Task 82 (ID 0067) → `architecture.md` now cites ADRs to 030 and frames "seven built, an eighth authorized"; **closes a four-sync-old flag**
+- [[tasks/amend-project-brief-for-the-eighth-role]] — Task 83 (ID 0015) → `PROJECT.md:8,72` corrected, the "not breadth" constraint reversed on the record
 
 ### Sprint 2 — the four investigations closed 2026-07-19
 - [[tasks/investigate-mutation-testing-library-adoption]] — Task 46 → ADR-026: **no library mutates shell**, so the zero-devDeps tension never existed; the real defect was gating

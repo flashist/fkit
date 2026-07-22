@@ -150,3 +150,6 @@ re-raise the dual-format transition, content-hash IDs, numbering only open tasks
 - [[tasks/wiki-sync-task-plan-rename]] — a batched wiki-sync task (discharged by the migration sync)
 - [[tasks/implement-task-ship-loop-skill]] — the ship-loop whose `plan.md`/`worklog.md` artifacts moved into the task folder under this ADR
 - [[systems/review-and-model-diversity]] — the review ledger (`review.md`) absorbed into the task folder by this ADR
+- [[tasks/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role]] — task 82, the architecture.md refresh for ADRs 026–030 + the eighth role
+- [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — task 80, the ADR-029/030 vault link repair
+- [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
