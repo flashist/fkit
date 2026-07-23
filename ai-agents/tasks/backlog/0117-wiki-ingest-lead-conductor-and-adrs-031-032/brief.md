@@ -29,6 +29,10 @@ Via `/fkit-wiki-ingest` (or `/fkit-wiki-sync`), update `ai-agents/wiki-vault/`:
 
 - **Ingest [ADR-031](../../../knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)
   and [ADR-032](../../../knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md).**
+  ⚠️ **ADR-032 is amended by [ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)**
+  (2026-07-23 — the orchestrator now **spawns the producer to close**, it does not close directly).
+  Ingest the **amended** ADR-032, not its as-first-written close posture. ADR-033 itself and the
+  ADR-025-reversal vault pages are owned by **task 0126** (do not duplicate that scope here).
 - **Ingest the design report**
   (`ai-agents/knowledge-base/reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md`).
 - **Update the lead-role description in `wiki/systems/fkit.md`** to the evolved conductor nature (and

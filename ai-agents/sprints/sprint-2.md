@@ -119,7 +119,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done (agent-closed — not owner-verified) | 87 | Backfill the `## Owner` field into all ~103 existing briefs *(**~25 have no recoverable owner — owner-assigned, never guessed**; needs 86 — hard; blocks 88; owner: fkit-coder)* | [`0105-backfill-owner-field-into-existing-briefs`](../tasks/done/0105-backfill-owner-field-into-existing-briefs/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 88 | Render the Owner column in `/fkit-status`, between Filename and Next step *(the feature the owner asked for; `dashboard.sh` + `SKILL.md` contract + test; needs 86 + 87 — hard; owner: fkit-coder)* | [`0106-render-owner-column-in-fkit-status`](../tasks/done/0106-render-owner-column-in-fkit-status/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 89 | Make a task's `## Notes`-prose dependency visible to `dashboard.sh` *(the task-84 misreport, 7 status runs; parse-Notes vs enforce-row is the coder's design call; owner: fkit-coder)* | [`0107-teach-dashboard-to-resolve-notes-dependencies`](../tasks/done/0107-teach-dashboard-to-resolve-notes-dependencies/brief.md) |
-| 🔲 Backlog | 90 | Investigate making fkit-wiki task completion visible to the board *(investigation — task 80 stuck `In progress` a week; `log.md` is an unread status source; must not breach the owner-gated close; owner: fkit-architect)* | [`0108-investigate-making-wiki-task-completion-visible-to-the-board`](../tasks/backlog/0108-investigate-making-wiki-task-completion-visible-to-the-board/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 90 | Investigate making fkit-wiki task completion visible to the board *(investigation — task 80 stuck `In progress` a week; `log.md` is an unread status source; owner overrode the report's recommendation → the movers become producer-only, [ADR-033](../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md); report: [`2026-07-23-eval-wiki-task-completion-visible-to-the-board`](../knowledge-base/reports/2026-07-23-eval-wiki-task-completion-visible-to-the-board.md); owner: fkit-architect)* | [`0108-investigate-making-wiki-task-completion-visible-to-the-board`](../tasks/done/0108-investigate-making-wiki-task-completion-visible-to-the-board/brief.md) |
 | ✅ Done | 91 | Design fkit-lead as the orchestrating front door + the `fkit-sprint-ship-loop` skill *(design/feasibility only — owner ruled evolve `fkit-lead` into the single-point-of-interaction doer, relay owner decisions live, design-first; reverses ADR-010 non-doer, collides with ADR-021/024, `task-ship-loop` is session-only; blocks the follow-on implementation tasks; owner: fkit-architect)* | [`0109-design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop`](../tasks/done/0109-design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 92 | Evolve `fkit-lead` into the orchestrating conductor — reverse the non-doer stance, add conductor remit + driver discipline, keep routing *(agent-def edit; T2 of design §11; depends on ADR-031/032 which are Done; owner: fkit-coder)* | [`0110-evolve-fkit-lead-into-orchestrating-conductor`](../tasks/done/0110-evolve-fkit-lead-into-orchestrating-conductor/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 93 | Build the `fkit-sprint-ship-loop` skill — the lead's sprint-scope conductor loop *(the substantive build, design §5; **must carry the plan-gate honesty clause as prose, not a false structural guarantee**; needs 92; owner: fkit-coder)* | [`0111-build-fkit-sprint-ship-loop-skill`](../tasks/done/0111-build-fkit-sprint-ship-loop-skill/brief.md) |
@@ -134,6 +134,36 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 102 | Fix the `fkit-sprint-ship-loop` SKILL.md owner-banner format *(cosmetic; bare `# ⛔ Owner:` H1 → sibling-style title; no ADR-018-hook impact; independent; owner: fkit-coder)* | [`0120-fix-sprint-ship-loop-skill-owner-banner-format`](../tasks/backlog/0120-fix-sprint-ship-loop-skill-owner-banner-format/brief.md) |
 | 🔲 Backlog | 103 | Decide whether to drop the numeric prefix from task-folder names *(investigation — **weighs against ADR-029 Decision 5 + the task-76 migration**; the two-numbers confusion, folder-ID `0109` vs sprint priority `91`; blocks 104; owner: fkit-architect)* | [`0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names`](../tasks/backlog/0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names/brief.md) |
 | 🔲 Backlog | 104 | Implement the task-folder-name scheme change from the approved design *(needs 103 incl. approval + any ADR — hard; **may be cancelled if 103 says keep the number**; owner: fkit-coder)* | [`0103-implement-task-folder-name-scheme-change`](../tasks/backlog/0103-implement-task-folder-name-scheme-change/brief.md) |
+| 🔲 Backlog | 105 | Rewrite `fkit-task-ship-loop` step 9 — coder self-close → route close to producer *(ADR-033 §3 ripple, amends ADR-019; ships **before** 0124; owner: fkit-coder)* | [`0122-route-coder-ship-loop-close-to-producer`](../tasks/backlog/0122-route-coder-ship-loop-close-to-producer/brief.md) |
+| 🔲 Backlog | 106 | Rewrite `fkit-sprint-ship-loop` close step — driver self-close → spawn producer to close *(ADR-033 §4 ripple, amends ADR-032; revises 0111's as-first-written close; ships **before** 0124; owner: fkit-coder)* | [`0123-route-sprint-ship-loop-close-to-producer`](../tasks/backlog/0123-route-sprint-ship-loop-close-to-producer/brief.md) |
+| 🔲 Backlog | 107 | Revert the task movers to producer-only — `skills-for-role.sh` + 4 mirrors + hook test + mover SKILL prose *(ADR-033 §1 structural core; needs 105 + 106 — hard; owner: fkit-coder)* | [`0124-revert-task-movers-to-producer-only`](../tasks/backlog/0124-revert-task-movers-to-producer-only/brief.md) |
+| 🔲 Backlog | 108 | Wiki flag-don't-close convention — 3 wiki SKILLs end by flagging "task N ready to close" *(ADR-033 §2 / task 0108's operative fix; recommend co-landing with 107; owner: fkit-coder)* | [`0125-wiki-skills-flag-ready-to-close`](../tasks/backlog/0125-wiki-skills-flag-ready-to-close/brief.md) |
+| 🔲 Backlog | 109 | Wiki resync for ADR-033 — ingest the ADR + resync vault pages asserting the ADR-025 "any role may close" rule *(needs 107 — hard; owner: fkit-wiki)* | [`0126-wiki-resync-for-adr-033`](../tasks/backlog/0126-wiki-resync-for-adr-033/brief.md) |
+
+### Addendum — tasks 105–109 added out of band (2026-07-23): the ADR-033 mover-authority reversal ripple
+
+The owner ruled during the task 0108 open-questions interview that **the task movers become
+producer-only again**, reversing [ADR-025](../knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md);
+recorded as [ADR-033](../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md).
+These five briefs are its implementation ripple (ADR-033 §Follow-on), decomposed into the smallest
+independently shippable units:
+
+- **105 (0122)** — coder ship-loop step 9: self-close → producer route (ADR-033 §3, amends ADR-019).
+- **106 (0123)** — sprint-ship-loop close step: driver self-close → spawn producer to close (ADR-033 §4,
+  amends ADR-032). **This revises what 0111 built** to ADR-032-as-first-written; 0111 stays closed.
+- **107 (0124)** — the structural core: `skills-for-role.sh` producer-only + the four mirrors + the hook
+  test flip + the two movers' SKILL "any role may close" prose, one atomic unit (ADR-033 §1).
+- **108 (0125)** — the wiki flag-don't-close convention in the three wiki SKILL *sources* (coder-owned
+  per the task 0081 Part C ruling). **This is task 0108's operative implementation fix.**
+- **109 (0126)** — fkit-wiki resync: ingest ADR-033, resync the vault pages asserting the ADR-025 "any
+  role may close" rule (vault write — fkit-wiki only).
+
+**Dependency shape:** `{105, 106} → 107 → {109}`; **107 must land after 105 + 106** so the ship-loops
+reroute to a producer spawn before the grants are removed (else the loops hit a hook-denied mover).
+**108 is independent** (additive flag) but recommended to co-land with 107 so the 0108 gap does not
+re-open in the interval. Existing dependencies for 0115 and 0117 were updated to build to ADR-033 (see
+their briefs). Priorities 105–109 appended after 104; existing ranking untouched. **Ranking is for the
+owner to confirm.**
 
 ### Addendum — tasks 103–104 pulled in from the Backlog (2026-07-23)
 

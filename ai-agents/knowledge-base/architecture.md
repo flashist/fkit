@@ -1,9 +1,9 @@
 # fkit — Architecture
 
-**The architecture of the system as it exists today** (last refreshed 2026-07-22; originally
+**The architecture of the system as it exists today** (last refreshed 2026-07-23; originally
 2026-07-11, post-Omnigent-removal). One runtime, **seven built roles** (an eighth, a sandboxed e2e
 tester, is authorized in [ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
-but **not yet built**), no orchestrator, everything coordinated through files in git.
+but **not yet built**), no orchestrator *daemon* (the `fkit-lead` conductor is an in-session driver, not runtime infrastructure — §5.1), everything coordinated through files in git.
 
 Every claim carries a `path:line` reference. Anything the code could not answer is an open question
 (§11), not a guess.
@@ -102,7 +102,7 @@ inherits the full Claude Code tool set. Only the adversarial reviewer keeps an e
 | `fkit-architect` | *(none — inherits all)* | design specs, ADRs, surveys. **Never implements; never writes the wiki.** |
 | `fkit-reviewer` | *(none — inherits all)* | review-only; writes **only** under `ai-agents/reviews/`. |
 | `fkit-wiki` | *(none — inherits all)* | **exclusive write gateway** for `ai-agents/wiki-vault/` (ADR-005). |
-| `fkit-lead` | *(none — inherits all)* | the **team room** (menu 7). Routes rather than does — **prompt-enforced**, no longer a tool wall. |
+| `fkit-lead` | *(none — inherits all)* | the **team room + orchestrating conductor** (menu 7; ADR-031). **Routes** ("who do I need?") **and drives**: spawns/sequences peers, holds the owner channel, relays owner decisions live. Owns `sprint-ship-loop` (ADR-032). **Writes no source, never reviews** — each role's work runs in its own fresh spawned context, so separation-of-authority holds. |
 | `fkit-adversarial-reviewer` | `Read, Grep, Glob, Bash, Skill` | findings only. **Structurally write-free — a leaf, and the one deliberate tool wall.** |
 
 Evidence: `claude/agents/fkit-adversarial-reviewer.md:9` (the sole surviving `tools:` line); the other
@@ -159,10 +159,12 @@ carries no banner — it is universal by design.
 
 ## 5. Runtime topology
 
-### 5.1 One process. One role. No orchestrator.
+### 5.1 One process. One role. No orchestrator *daemon*.
 
 There is no fkit daemon, no root agent, no session broker, no message bus. **Claude Code owns the
-session lifecycle**; fkit is a launcher and a set of prompts.
+session lifecycle**; fkit is a launcher and a set of prompts. *(The `fkit-lead` **conductor** (ADR-031,
+§4.1) is not a counter-example: it is an ordinary in-session agent that drives peers via the Agent
+tool — a role that orchestrates, introducing no daemon, broker, or bus.)*
 
 ```
 install.sh   (curl | sh — once)
@@ -190,28 +192,34 @@ A session is locked **two ways**:
    `tools:` allowlist). Harness-enforced. Since ADR-022 the six other roles carry no `tools:` line, so
    for them this half of the lock is the system prompt alone; the adversarial reviewer's tool wall
    still binds at any spawn depth.
-2. **`--settings` carrying `skillOverrides`** — `build_settings()`
-   (`claude/fkit-claude.sh:226-238`) writes `{"skillOverrides":{"<not-owned>":"off",…}}` to
-   `.fkit/settings/<role>.json`. Every `fkit-*` skill the role does not own is **hidden from the `/`
-   menu and unrunnable by name**. Non-fkit skills (the project's own, the user's own) are never
-   touched.
+2. **`--settings` wiring a `PreToolUse` skill-ownership hook** — `build_settings()`
+   (`claude/fkit-claude.sh:257-265`) writes `{"hooks":{"PreToolUse":[{"matcher":"Skill",…}]}}` pointing
+   at `claude/skill-ownership-hook.sh`. The hook **denies** a `Skill` call whenever the **real invoking
+   agent's role** — read from the payload's `agent_type` and stripped to a role — does not own the skill
+   per `skills_for_role()` (`claude/skill-ownership-hook.sh:110-136`). Non-fkit skills are never touched.
+   This **replaced** the old `skillOverrides` "off" list
+   ([**ADR-018**](decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md),
+   which retired both it and the `CONSULT_SKILLS` exception).
 
-**The scope of that lock is the load-bearing detail**, pinned down by ADR-012 §2:
+**The scope of that lock is the load-bearing detail — and ADR-018 changed it.** Enforcement follows the
+**real caller's identity at any spawn depth**, not the launching session's settings (superseding
+ADR-012 §2's session-scoped model):
 
 ```
-skill availability in ANY context (session OR spawned consult)
-  = all installed skills − the skillOverrides of the SESSION THAT LAUNCHED THE PROCESS
+a Skill call in ANY context (session OR spawned consult, any depth) is
+  ALLOWED  ⇔  skills_for_role(agent_type of the REAL invoking agent) owns it
 ```
 
-- **In a role SESSION the lock is structural.** `fkit coder` genuinely cannot run `/fkit-review`.
-  **This is the property reviewer independence rests on, and it holds.**
-- **In a spawned CONSULT it is advisory.** A subagent inherits the *caller's* overrides, **not its
-  own** — empirically confirmed from live spawns (ADR-012 §Context). Only the agent's system prompt
-  and the skill's `⛔ Owner:` banner stand between a confused subagent and someone else's procedure.
-  The banner is therefore **load-bearing, not decorative** — it may not be deleted as "redundant."
-- **Do not restate this as a blanket defect.** "The skill lock is only prompt-enforced" is *false of
-  a session* and *true of a consult*; a finding must say **which path** it means (ADR-012 §Residual
-  risks).
+- **In a role SESSION the lock is structural.** `fkit coder` genuinely cannot run `/fkit-review` — the
+  hook denies it. **This is the property reviewer independence rests on, and it holds.**
+- **In a spawned CONSULT it is now *also* structural** (ADR-018, superseding ADR-012 §2's "advisory in
+  a consult"). The hook reads the *spawned subagent's own* `agent_type` — confirmed empirically at
+  0/1/2 hops — so a consult reaches exactly its own role's skills, never the launcher's. The skill's
+  `⛔ Owner:` banner is now the **human-readable** owner, no longer the enforcement.
+- **Two accepted costs** (ADR-018 §Consequences): a non-owned skill stays **visible** in the `/` menu
+  (denied only on invocation, not hidden); and a **non-fkit** subagent (`general-purpose`, `Explore`)
+  carries no fkit `agent_type`, so it is denied **every** `fkit-*` skill — `fkit-query` included —
+  fail-closed by design. Hook internal errors also fail **closed** (deny), never open.
 
 > **A second hook is decided but not built.** A `Stop` hook enforcing the **turn-completion contract**
 > — interactive questions actually asked, a "What's next?" close — is authorized in
@@ -221,12 +229,13 @@ skill availability in ANY context (session OR spawned consult)
 > `claude/` ships no such hook script; today the contract is prompt-only. Larger blast radius than
 > ADR-018's, since a `Stop` hook can block a turn from completing — which is why it is decided but held.
 
-**`CONSULT_SKILLS` (`claude/fkit-claude.sh:221`) is the escape valve** that inheritance forces:
-`fkit-survey-project` and `fkit-query` stay **on for every role**, because `/fkit-initiate-project`
-has the **producer** spawn the architect to run the survey — with it off, initiation could not run
-its own architecture survey. The accepted cost: any role session can invoke `/fkit-survey-project`
-by name. **The set is deliberately minimal; adding to it is a decision, not a convenience**
-(ADR-012 §3).
+**`CONSULT_SKILLS` and the `skillOverrides` off-list are gone — both retired by ADR-018.** They were a
+*session-scoped* mechanism: they governed what the launching process could see, so a consult inherited
+the *launcher's* list, never its own — the bug class ADR-018 fixes. With enforcement keyed on the real
+caller's `agent_type`, no always-on exception list is needed. `/fkit-initiate-project` still has the
+**producer** spawn the architect to run `fkit-survey-project`; the architect's own identity now lets the
+hook allow it, with no carve-out — and the old leak (`fkit-survey-project` reachable from every session
+by name) closed as a side effect. **Do not re-add either mechanism** (ADR-018 §Options).
 
 ### 5.3 Consultation — the Agent tool, two hops, no cycles
 
@@ -252,7 +261,7 @@ knowingly-taken loss (ADR-022 Consequences).
 
 ```mermaid
 flowchart TB
-  O((owner)) -->|fkit menu| S["role SESSION<br/>claude --agent fkit-role<br/>+ skillOverrides — structural lock"]
+  O((owner)) -->|fkit menu| S["role SESSION<br/>claude --agent fkit-role<br/>+ PreToolUse skill-ownership hook — structural at any depth"]
   S -->|Agent tool: hop 1| P[producer] & C[coder] & A[architect] & R[reviewer] & W[wiki] & AR[adv-reviewer]
   A <-->|product context| P
   C -->|design consistency| A
@@ -452,16 +461,17 @@ change, fkit has no second leg to stand on. **ADR-009 §Consequences takes this 
 the main thing the decision buys its simplicity with. **A finding of the form "fkit only runs on one
 vendor's CLI" is this decision, not a bug.**
 
-### 9.3 The consult path's skill boundary is advisory
+### 9.3 The consult-path skill boundary is structural — closed by ADR-018
 
-Stated precisely in §5.2 and settled in ADR-012 §2. The only mechanism that could make per-role skill
-ownership real on the consult path is a **`PreToolUse` gate on the `Skill` tool** — **deferred, and
-now priced**: ADR-012's decisions 2 and 3 exist *because* we don't have it.
-
-**Open question, and it decides whether this is even fixable:** does the `PreToolUse` hook payload
-expose the **calling subagent's identity**? If it does not, the hook cannot discriminate by role and
-the option is not merely deferred but **unavailable** (ADR-012 §4). This must be established before
-anyone plans the hook as the fix.
+**Formerly a live risk; now closed, and recorded here so it is not re-raised.** ADR-012 §2 had this
+boundary as *advisory*, and ADR-012 §4 flagged the deciding open question — *does the `PreToolUse`
+payload expose the calling subagent's identity?* **Both are resolved:** the payload **does** expose the
+real caller's `agent_type` at any spawn depth (verified 0/1/2 hops), and the skill-ownership hook was
+built on it (ADR-018; §5.2; the `skill-ownership-hook` contract suite, §9.1). Per-role skill ownership
+is now structural in a session **and** in a consult. The residual that remains is not this boundary but
+the **`disableAllHooks` single-key kill switch** (ADR-018 §Consequences): the lockdown being entirely
+hook-based, one operator-controlled settings key disables the whole gate — an operator-scoped risk, not
+a third-party hole, accepted and recorded there.
 
 ### 9.4 The `.claude/` copies are gitignored and destroyed on every launch
 
@@ -513,9 +523,9 @@ is the test.
 
 ## 11. Open questions
 
-1. **Does the `PreToolUse` hook payload expose the calling subagent's identity?** (§9.3.) This is the
-   single question that decides whether the consult-path skill boundary is *fixable* or *permanently
-   advisory*. It should be answered before any task proposes the hook.
+1. **~~Does the `PreToolUse` hook payload expose the calling subagent's identity?~~ — RESOLVED (ADR-018).**
+   It does, at any spawn depth; the skill-ownership hook is built on it and the consult-path boundary is
+   now structural (§5.2, §9.3). Kept as a closed pointer so the once-open question is not re-opened.
 2. **Is the test suite going to CI?** (§9.1.) The suite now exists (ADR-014; contract tests +
    `prove-red.sh` mutation gate, ADR-026) — the open part is that **nothing runs it automatically**.
    ADR-003's CI died with its subject and never landed. Is a `.github/workflows/` that runs `npm test`

@@ -68,3 +68,7 @@ blast radius).
   the name in five places; renaming after this lands is a five-file change.
 - No commit — the "same commit" requirement means the mirror set must move **together** when the owner
   does commit; leave the coordinated edit in the working tree.
+- **ADR-033 note (2026-07-23).** This task wired **lead's `fkit-sprint-ship-loop` skill ownership**,
+  which [ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)
+  does **not** change — it stays valid. The separate **mover** ownership in `skills-for-role.sh` (which
+  ADR-033 reverts to producer-only) is handled by **task 0124** (priority 107), not a redo of this task.

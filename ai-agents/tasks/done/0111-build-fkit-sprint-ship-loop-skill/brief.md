@@ -100,3 +100,7 @@ who want the structural wall ship the task the old way: `fkit coder` + `/fkit-ta
   "spawned/return-only" branch, or does the driver's spawn prompt fully carry "return a plan, write no
   source"? Design leans: driver-prompt carries it — confirm against the binary.
 - No commit — leave files in the working tree.
+- **⚠️ Superseded in part by ADR-033 (2026-07-23).** This skill was built to **ADR-032-as-first-written**,
+  where the driver runs `/fkit-task-done` itself (§5.2 Close row). [ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)
+  §4 makes the movers **producer-only** — the loop must now **spawn `@fkit-producer` to close** instead.
+  This task stays Done; the revision lands via **task 0123** (priority 106).

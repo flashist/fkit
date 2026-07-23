@@ -2,7 +2,7 @@
 
 - **Date:** 2026-07-23
 - **Author:** fkit-architect (owner present, session)
-- **Task:** [`0108`](../../tasks/backlog/0108-investigate-making-wiki-task-completion-visible-to-the-board/brief.md)
+- **Task:** [`0108`](../../tasks/done/0108-investigate-making-wiki-task-completion-visible-to-the-board/brief.md)
 - **Kind:** investigation with a recommendation — **no code changed, no wiki write, no commit.**
 
 > ## ⚠️ OUTCOME (2026-07-23) — the owner overrode this report's recommendation. See [ADR-033](../decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md).

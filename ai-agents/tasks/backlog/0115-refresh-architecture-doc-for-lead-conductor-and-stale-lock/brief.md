@@ -62,6 +62,13 @@ Edit `ai-agents/knowledge-base/architecture.md` (confirm live line numbers befor
 - **⚠️ Coordinate with 0112 on architecture.md** — 0112 updates the `skills_for_role` *mirror row* for
   lead in the same file; this task updates the lead *prose* + §5.2. 0115 runs after 0112 (dependency
   above), so land on top of 0112's mirror edit without reverting it.
+- **⚠️ ADR-033 interaction (2026-07-23) — also coordinate with 0124.** The movers became **producer-only**
+  ([ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md),
+  reversing ADR-025). Task 0124 reverts architecture.md's **mover-ownership** listing rows in the same
+  file. This task touches lead's row + §5.2 lock; **do not revert 0124's mover-ownership edit**, and if
+  §5.2 (the ADR-018 hook) prose references who owns the movers, describe it as producer-only per ADR-033.
+  Recommend landing this **after** 0124 so architecture.md reflects the reverted state; touch different
+  rows so the two edits do not clobber.
 - **The §5.2 stale-lock fix is independent of the lead change** but folded here per design §9.5 —
   do not drop it.
 - No commit — leave the edit in the working tree.
