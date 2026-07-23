@@ -2,7 +2,7 @@
 
 - **Date:** 2026-07-22
 - **Author:** fkit-architect (owner present, session)
-- **Task:** [`0109`](../../tasks/backlog/0109-design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop/brief.md)
+- **Task:** [`0109`](../../tasks/done/0109-design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop/brief.md)
 - **Status:** design / feasibility only — **no source changed, no ADR written, no task filed.** The
   ADRs (§10) and follow-on tasks (§11) are *enumerated here* and created only after the owner reviews
   this spec.

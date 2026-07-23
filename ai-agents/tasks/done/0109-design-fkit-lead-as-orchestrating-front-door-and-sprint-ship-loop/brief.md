@@ -10,7 +10,7 @@ Sprint 2
 91
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Owner
 fkit-architect

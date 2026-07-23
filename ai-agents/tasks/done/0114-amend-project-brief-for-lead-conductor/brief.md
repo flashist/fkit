@@ -10,7 +10,7 @@ Sprint 2
 96
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Owner
 fkit-producer

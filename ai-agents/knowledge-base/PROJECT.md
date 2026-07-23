@@ -6,7 +6,7 @@
 ## Overview
 
 fkit is a **team of seven role-scoped AI agents for software development** — a producer, a coder, a
-reviewer (with an adversarial second opinion), an architect, a wiki librarian, and a team-room lead —
+reviewer (with an adversarial second opinion), an architect, a wiki librarian, and an orchestrating lead —
 operating on a shared `ai-agents/` working structure inside a consuming project. An **eighth** role, a
 sandboxed e2e tester, is authorized ([ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
 but **not yet built** — the team is seven today. It runs on **one
@@ -36,7 +36,12 @@ git rather than a shared runtime state:
   [`ADR-005`](decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md), every other role
   reads the wiki directly via the one read-only `/fkit-query` procedure — they consult fkit-wiki only
   for writes or deeper multi-step research.
-- **fkit-lead** — the team room: routing help and wiki questions. It does no work itself.
+- **fkit-lead** — the **single point of interaction**: a conductor that spawns and drives any role —
+  giving each a bounded task, awaiting completion, and relaying your decisions live — while keeping its
+  routing remit ("who do I need?", wiki questions, one-off `@role` consults). This reverses its old
+  router-only "does no work itself" stance
+  ([`ADR-031`](decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)): it now conducts
+  the team, but as a conductor, never a performer — it still writes no source and runs no reviews.
 
 **Sessions are role-locked** ([`ADR-010`](decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)):
 `fkit <role>` pins a session to that role's prompt and only its own skills — every other `/fkit-*`
