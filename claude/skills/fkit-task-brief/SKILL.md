@@ -75,9 +75,21 @@ a part can be developed, tested, and shipped separately, it is its own task.**
   cannot see — module seams, deployment units, what can actually be tested in isolation — **consult
   fkit-architect** for the technical scope. That consult is **expected and sanctioned**, not a
   fallback or an admission of failure.
-- **Emit one brief per shippable unit**, and record the **dependency links between them** (`Depends
-  on:` / `Blocks:` in `## Notes`). **A dependency chain that isn't written down is a split that has
-  lost information** — the ordering is the most valuable thing the split produces.
+- **Emit one brief per shippable unit**, and record the **dependency links between them** in `## Notes`.
+  **Use the one canonical form the status board can read** — a `## Notes` bullet that opens with the
+  bold label and nothing before it:
+  - `- **Depends on:** <tasks, or "nothing">`
+  - `- **Blocks:** <tasks>`
+
+  **The label must be flush against the `**` — no emoji, quote, or other decoration between `**` and
+  `Depends on`.** `dashboard.sh` parses this exact form to derive each task's Next-step; a decorated
+  variant like `- **⚠️ Depends on …**` is read as *no dependency* and the board falsely shows the task
+  as pullable (the task-84 misreport — see
+  [`conventions/dependency-declaration-form.md`](../../../ai-agents/knowledge-base/conventions/dependency-declaration-form.md)).
+  A non-canonical declaration now renders a LOUD `⟨derive: UNPARSEABLE — see brief⟩` on the board rather
+  than a silent false `ready`, but the fix is to write the canonical form, not to trip the guard.
+  **A dependency chain that isn't written down is a split that has lost information** — the ordering is
+  the most valuable thing the split produces.
 - **Do not split for the sake of splitting.** If the description is genuinely one unit, one brief out.
 - **Flag dependencies and conflicts.** If the work depends on unfinished work, or conflicts with a
   locked decision (an ADR, a wiki page), say so in `## Context` — do not quietly plan around it.

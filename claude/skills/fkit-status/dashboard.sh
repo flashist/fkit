@@ -414,6 +414,36 @@ depends_raw() {
           print "P\037" sanitise(s)
           exit
         }
+      # ── U: THE LOUD GUARD (task 0107) ────────────────────────────────────────────────────────────
+      # NB: no apostrophes in this comment — it lives inside a single-quoted awk program (see line 181).
+      # Reached ONLY when the four canonical arms above all failed to locate a declaration — each of
+      # them exits on a catch. A line whose `Depends on` label is preceded SOLELY by non-letter
+      # markup/decoration is declaration-SHAPED but non-canonical: e.g. `- **⚠️ Depends on tasks 82…**`
+      # (the live task-84 misreport — the `⚠️ ` between `**` and the label defeats the BL/BI anchor).
+      # Emitting EMPTY content routes the caller to its EXISTING loud path (`⟨UNPARSEABLE — see brief⟩`
+      # + `drift depends-unparseable`), NOT the silent `none recorded` that renders a fabricated `ready`
+      # — the worst direction, per this function header.
+      #
+      # ⚠️ THIS IS THE ONE-GRAMMAR LAST LOCATE ARM, NOT A SECOND PATTERN. The invariant this file
+      # forbids (see the header: THERE IS ONE GRAMMAR … do not reintroduce a second pattern anywhere)
+      # is a SEPARATE guard function whose pattern DISAGREES with extraction and gates the loud path
+      # independently. This is inside depends_raw, part of its single locate sequence; the caller still
+      # branches only on the answer THIS function returns.
+      #
+      # ⚠️ THE ANCHOR IS LETTER-BLOCKED ON PURPOSE. `^[^A-Za-z]*Depends on[.: ]` matches only when
+      # EVERYTHING before the label is non-letter (markup/emoji/space) AND the label is closed by a
+      # declaration punctuation (`.`, `:`, or space). Any ASCII letter before it — ordinary prose that
+      # merely MENTIONS the field, e.g. a quoted `Depends on tasks 82, 83` or
+      # `Option A — teach dashboard to read a Depends on: line` — blocks the match, and the `[.: ]`
+      # terminator drops the substring case (`Depends online`). Matching on M[] (spans masked to \001,
+      # fences excluded via F[]) means a code-span or fenced mention never trips it either.
+      # ⚠️ IT DOES NOT FIRE ON ORDINARY ASCII PROSE — but it is NOT prose-proof in general: a
+      # declaration-SHAPED line whose prefix is non-Latin-script (Cyrillic `Примечание: Depends on:`), a
+      # blockquote (`> Depends on:`) or a table cell (`| Depends on:`) still trips it. That is the SAFE
+      # direction (a LOUD flag the owner checks, never a fabricated `ready`) and is an accepted residual
+      # (task 0107 review R1) — not a defect to "fix" by narrowing further.
+      for (i = 1; i <= N; i++)
+        if (!F[i] && M[i] ~ /^[^A-Za-z]*Depends on[.: ]/) { print "U\037"; exit }
     }
   ' "$1" 2>/dev/null | head -1
 }

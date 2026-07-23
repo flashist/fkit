@@ -298,6 +298,47 @@ test('no Depends on: line → ⟨derive: none recorded⟩ — still not a guess'
   assert.match(boardRows(out)[0], /⟨derive: none recorded⟩/);
 });
 
+// 9b — task 0107: a DECORATED declaration (label not flush against `**`) is the task-84 misreport
+// shape. It must render LOUD (⟨UNPARSEABLE — see brief⟩ + drift), NEVER silent `none recorded`/`ready`.
+test('decorated Depends-on (⚠️ before the label) → LOUD ⟨UNPARSEABLE⟩ + drift, never a false ready', () => {
+  const p = fixture({
+    plan: plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: {
+      'backlog/a.md': brief({
+        title: 'Alpha',
+        priority: 1,
+        extra: '\n- **⚠️ Depends on tasks 82, 83 and 81 Part D — a real dependency.** The work…\n',
+      }),
+    },
+  });
+  const { out } = run(p);
+  assert.match(boardRows(out)[0], /⟨derive: UNPARSEABLE — see brief⟩/, 'the decorated declaration is read LOUD');
+  assert.doesNotMatch(boardRows(out)[0], /none recorded|ready|after/, 'never a fabricated absence');
+  assert.ok(
+    facts(out).some((f) => /^drift depends-unparseable 1 /.test(f) && /form="U"/.test(f)),
+    'a drift fact is emitted so the LOUD row reaches the owner',
+  );
+});
+
+// 9c — the guard is LETTER-BLOCKED: prose that merely MENTIONS "Depends on" (a letter before the label,
+// or inside a code span) is NOT a declaration and must NOT trip the guard. Regression guard for the
+// naive "any mention" reading, which would fabricate drift on task 0107's own brief.
+test('prose mention of Depends on (letters before the label) → still ⟨none recorded⟩, no drift', () => {
+  const p = fixture({
+    plan: plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: {
+      'backlog/a.md': brief({
+        title: 'Alpha',
+        priority: 1,
+        extra: '\nObserved: task 84 declares "Depends on tasks 82, 83" in its Notes, and teaching the\nscript to read a `Depends on:` line is one option.\n',
+      }),
+    },
+  });
+  const { out } = run(p);
+  assert.match(boardRows(out)[0], /⟨derive: none recorded⟩/, 'a bare prose mention is not a declaration');
+  assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'no phantom drift on prose');
+});
+
 // 10 — a ## Status value is free text that MAY WRAP. Match the marker PREFIX, not the whole line.
 test('brief ## Status wrapping across lines: matched by marker prefix', () => {
   const p = fixture({
