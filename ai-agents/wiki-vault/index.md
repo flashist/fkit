@@ -47,7 +47,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — The 5th convention + a parity test; the consuming-project drift decision **stays deferred despite its fired trigger**
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — ⚠️ **Reverses the owner's own "not breadth" constraint**: an eighth **tester** seat on *sandbox authority*, against the architect's and producer's recommendation. **Decided, not built**
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — A task becomes a **folder** `tasks/<board>/<NNNN>-<slug>/` under a **permanent global ID**; `plans/`, `worklogs/` and `reviews/` are absorbed. **The largest structural change in the project's history** — 94 folders, ~309 links. **Decided, not built**
-- [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — A **second hook** (`Stop`) enforces interactive questions + a "What's next?" close, because the prose rule **demonstrably did not fire**. Larger blast radius than ADR-018's — it can stop a turn completing. **Decided, not built**
+- [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — A **second hook** (`Stop`) enforces interactive questions + a "What's next?" close, because the prose rule **demonstrably did not fire**. Larger blast radius than ADR-018's — it can stop a turn completing. **Built 2026-07-23** (task 0127); **Addendum — 2026-07-23**: check A's "no `AskUserQuestion` this turn" signal comes from a **PreToolUse marker**, not the transcript (transcript presupposition proved false in review)
 
 ## Tasks
 
@@ -131,6 +131,9 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 ### Sprint 2 — the consult-path skill-gate hook
 - [[tasks/record-pretooluse-skill-gate-adr-amendment]] — Reopens ADR-012 Decisions 3&4 → ADR-018
 - [[tasks/implement-pretooluse-skill-ownership-hook]] — The `PreToolUse` hook-flip; retires `CONSULT_SKILLS`, enforces by the real caller
+
+### Sprint 2 — the ADR-030 turn-completion hook
+- [[tasks/build-adr-030-stop-hook]] — Task 0127 (ID 0127) → the ADR-030 hook half **built 2026-07-23, agent-closed**: a `Stop` hook (checks A + B) plus a `PreToolUse` `AskUserQuestion` **marker** hook. The model-diverse review forced **Path 2** — check A's signal moved off the transcript (a proven fail-open violation, R1) onto the marker; consult skip made **structural** (`Stop`-only). Unblocks task 0116
 
 ### Sprint 2 — the coder's autonomous ship-loop
 - [[tasks/design-task-ship-loop-skill]] — Owner-approved design → ADR-019 + ADR-020; brief→done with minimal owner involvement

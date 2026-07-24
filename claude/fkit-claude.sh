@@ -262,7 +262,26 @@ build_settings() {   # → .fkit/settings/<role>.json containing {"hooks":{…}}
   # not guaranteed to survive the install/copy chain (ADR-017 rule 2; same reasoning as dashboard.sh).
   # `$here` is absolute and this file is regenerated fresh on every launch, so an absolute path here
   # is safe (unlike a COMMITTED settings.json, where it would break for every other machine).
-  hooks="\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Skill\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/skill-ownership-hook.sh\\\"\"}]}]}"
+  #
+  # Stop turn-completion hook (task 0127 / ADR-030): a SECOND key in the same object, enforcing the
+  # end-of-turn contract (ask interactively; close with "What's next?"). No `matcher` — Stop is not
+  # tool-scoped. Registered on Stop ONLY (never SubagentStop) so it never fires in a spawned consult,
+  # which is the safety-critical skip (ADR-030 Decision 7). Same `bash "<path>"` form and absolute
+  # `$here` as the PreToolUse entry, for the same reasons.
+  #
+  # AskUserQuestion marker hook (task 0127 / ADR-030 path 2): a SECOND PreToolUse entry, matched on the
+  # AskUserQuestion tool, records a turn-scoped marker so the Stop hook can reliably tell whether the
+  # owner was asked via the tool this turn (a Stop payload has no tool-call list; the transcript is
+  # unreliable). The state dir it writes to is created at launch below so the Stop hook can trust a
+  # missing marker as "tool not used" rather than "infra not ready".
+  # Ship-loop marker hook (task 0129 / ADR-030): a UserPromptExpansion entry — the ONE event that fires
+  # on a direct `/command` invocation with an authoritative `command_name` — records a session marker so
+  # the Stop hook knows a ship-loop is driving WITHOUT scanning the transcript (the transcript scan
+  # over-skipped on marker-as-content — 0127 R8). No matcher; the hook self-filters on command_name.
+  hooks="\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Skill\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/skill-ownership-hook.sh\\\"\"}]},{\"matcher\":\"AskUserQuestion\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/askuserquestion-marker-hook.sh\\\"\"}]}],\"Stop\":[{\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/turn-completion-hook.sh\\\"\"}]}],\"UserPromptExpansion\":[{\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/shiploop-marker-hook.sh\\\"\"}]}]}"
+  # Best-effort: ensure the marker state dir exists so the Stop hook's "infra ready" proxy holds from
+  # turn 1 (a read-only project simply leaves it absent → Stop fails open, suppressing check A).
+  mkdir -p "$proj/.fkit/state" 2>/dev/null || :
   # The lockdown is NOT optional: a session launched without --settings is a session with no role
   # isolation at all (ADR-010), and it would fail *open* — every fkit skill live in every role. So when
   # the project is not writable (read-only checkout, permissions) we neither skip the lockdown nor die

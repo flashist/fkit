@@ -124,7 +124,7 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[decisions/adr-023-fkit-git-agent-is-not-built]]
 - [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]]
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]]
-- [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a **second** hook (`Stop`) decided 2026-07-19 to enforce interactive questions and a "What's next?" close. **Decided, not built** — `claude/turn-completion-hook.sh` is not in the tree
+- [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a **second** hook (`Stop`) decided 2026-07-19 to enforce interactive questions and a "What's next?" close. **Built 2026-07-23** (task 0127) — `claude/turn-completion-hook.sh` (`Stop`) + `claude/askuserquestion-marker-hook.sh` (`PreToolUse` marker) now in the tree; check A's signal comes from the marker, not the transcript (Addendum — 2026-07-23)
 - [[tasks/implement-spawned-invocation-for-task-movers]]
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]]
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]

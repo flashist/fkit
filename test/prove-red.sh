@@ -56,6 +56,36 @@ run_hook_suite() {   # <hook-script-path>
   fi
 }
 
+# Run ONLY the turn-completion-hook suite against a hook-script path (task 0127 / ADR-030); redirected
+# via FKIT_TURN_COMPLETION_HOOK, its own standalone-script seam (same pattern as run_hook_suite).
+run_turn_hook_suite() {   # <hook-script-path>
+  if FKIT_TURN_COMPLETION_HOOK="$1" node --test "$repo/test/turn-completion-hook.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
+# Run ONLY the AskUserQuestion-marker-hook suite against a hook-script path (task 0127 / ADR-030 path 2);
+# redirected via FKIT_ASKUQ_MARKER_HOOK, its own standalone-script seam.
+run_marker_hook_suite() {   # <hook-script-path>
+  if FKIT_ASKUQ_MARKER_HOOK="$1" node --test "$repo/test/askuserquestion-marker-hook.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
+# Run ONLY the ship-loop-marker-hook suite against a hook-script path (task 0129); redirected via
+# FKIT_SHIPLOOP_MARKER_HOOK, its own standalone-script seam.
+run_shiploop_marker_suite() {   # <hook-script-path>
+  if FKIT_SHIPLOOP_MARKER_HOOK="$1" node --test "$repo/test/shiploop-marker-hook.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
 # A full, independent copy of claude/ whose launcher we can mutate. $1 = name; echoes the launcher path.
 make_claude_copy() {
   dst="$work/$1"
@@ -82,6 +112,25 @@ clean_hook="$(dirname "$clean_copy")/skill-ownership-hook.sh"
 printf '0c. unmutated copy hook-matrix suite should be green ... '
 hc="$(run_hook_suite "$clean_hook")"; echo "$hc"
 [ "$hc" = green ] || { echo "   ✗ an UNMUTATED copy's hook suite is red — mutation 1 below would be false."; fail=1; }
+
+# --- 0d. An UNMUTATED copy's turn-completion-hook suite must ALSO be green (task 0127 / ADR-030;
+#     same reasoning as 0c, for run_turn_hook_suite()) -----------------------------------------------
+clean_turn_hook="$(dirname "$clean_copy")/turn-completion-hook.sh"
+printf '0d. unmutated copy turn-completion-hook suite should be green ... '
+tc="$(run_turn_hook_suite "$clean_turn_hook")"; echo "$tc"
+[ "$tc" = green ] || { echo "   ✗ an UNMUTATED copy's turn-completion suite is red — mutation 3 below would be false."; fail=1; }
+
+# --- 0e. An UNMUTATED copy's AskUserQuestion-marker-hook suite must ALSO be green (task 0127 path 2) --
+clean_marker_hook="$(dirname "$clean_copy")/askuserquestion-marker-hook.sh"
+printf '0e. unmutated copy marker-hook suite should be green ... '
+mc="$(run_marker_hook_suite "$clean_marker_hook")"; echo "$mc"
+[ "$mc" = green ] || { echo "   ✗ an UNMUTATED copy's marker-hook suite is red — mutation 5 below would be false."; fail=1; }
+
+# --- 0f. An UNMUTATED copy's ship-loop-marker-hook suite must ALSO be green (task 0129) --------------
+clean_shiploop_hook="$(dirname "$clean_copy")/shiploop-marker-hook.sh"
+printf '0f. unmutated copy ship-loop-marker-hook suite should be green ... '
+sc="$(run_shiploop_marker_suite "$clean_shiploop_hook")"; echo "$sc"
+[ "$sc" = green ] || { echo "   ✗ an UNMUTATED copy's ship-loop-marker suite is red — mutation 7 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -128,6 +177,116 @@ if [ "$r2" != red ]; then
   echo "   ✗ the suite did NOT catch the --resume passthrough regression (task 18)."; fail=1
 elif ! grep -Eq '(✖|not ok|fail).*2\. .*--resume' "$out"; then
   echo "   ✗ suite went red but NOT at assertion 2 (--resume) — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 3: disable check B (force "What's next?" always-present) → the "B missing -> block"
+#     assertion in turn-completion-hook.test.js must go red (task 0127 / ADR-030). Proves the Stop
+#     hook's primary, EXACT check is actually enforced by the suite, not merely present. -------------
+m3="$(make_claude_copy claude-mutant-checkb)"
+m3_hook="$(dirname "$m3")/turn-completion-hook.sh"
+cp "$m3_hook" "$m3_hook.orig"
+# Initialise the "missing" flag to 0 instead of 1: the heading-present case only ever sets it to 0, so
+# with a 0 default check B can never fire — every reply reads as if it closed with "What's next?".
+sed -i.bak 's/^whats_next_missing=1$/whats_next_missing=0/' "$m3_hook"
+if cmp -s "$m3_hook" "$m3_hook.orig"; then
+  echo "3. disabled check B ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result below."
+  fail=1
+fi
+printf '3. disabled check B — turn-completion "B: message with no ..." should go RED ... '
+r3="$(run_turn_hook_suite "$m3_hook")"; echo "$r3"
+if [ "$r3" != red ]; then
+  echo "   ✗ the suite did NOT catch a disabled check B."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*B: message with no' "$out"; then
+  echo "   ✗ suite went red but NOT at the check-B assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 4: a present marker no longer suppresses check A → the R1-regression assertion in
+#     turn-completion-hook.test.js must go red (task 0127 / ADR-030 path 2). This is THE defect the
+#     path-2 rework fixed (a turn that used AskUserQuestion was being false-blocked) — pin that the
+#     suite actually catches its return. ---------------------------------------------------------------
+m4="$(make_claude_copy claude-mutant-marker)"
+m4_hook="$(dirname "$m4")/turn-completion-hook.sh"
+cp "$m4_hook" "$m4_hook.orig"
+# Neutralise the marker read: had_marker can never become 1, so a present marker stops suppressing A.
+sed -i.bak 's/had_marker=1/had_marker=0/' "$m4_hook"
+if cmp -s "$m4_hook" "$m4_hook.orig"; then
+  echo "4. marker no longer suppresses A ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   Fix the mutation in test/prove-red.sh before trusting any result below."
+  fail=1
+fi
+printf '4. marker stops suppressing A — turn-completion "A/R1 regression: marker present" should go RED ... '
+r4="$(run_turn_hook_suite "$m4_hook")"; echo "$r4"
+if [ "$r4" != red ]; then
+  echo "   ✗ the suite did NOT catch the R1 regression returning."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*A/R1 regression: marker present' "$out"; then
+  echo "   ✗ suite went red but NOT at the R1-regression assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 5: the marker hook records for EVERY tool, not just AskUserQuestion → the
+#     "non-AskUserQuestion tool → writes NO marker" assertion must go red (task 0127 path 2). Proves the
+#     tool gate is actually enforced by the suite. --------------------------------------------------
+m5="$(make_claude_copy claude-mutant-markergate)"
+m5_hook="$(dirname "$m5")/askuserquestion-marker-hook.sh"
+cp "$m5_hook" "$m5_hook.orig"
+# Drop the early-exit on a non-AskUserQuestion tool: `|| allow` → `|| :`, so any tool falls through and
+# writes the marker.
+sed -i.bak 's/"AskUserQuestion" ] || allow/"AskUserQuestion" ] || :/' "$m5_hook"
+if cmp -s "$m5_hook" "$m5_hook.orig"; then
+  echo "5. marker gate removed ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   Fix the mutation in test/prove-red.sh before trusting any result below."
+  fail=1
+fi
+printf '5. marker records for any tool — marker-hook "a non-AskUserQuestion tool" should go RED ... '
+r5="$(run_marker_hook_suite "$m5_hook")"; echo "$r5"
+if [ "$r5" != red ]; then
+  echo "   ✗ the suite did NOT catch a removed tool gate."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*a non-AskUserQuestion tool' "$out"; then
+  echo "   ✗ suite went red but NOT at the tool-gate assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 6: disable the transcript-independent ship-loop marker read (SKIP 3) → the
+#     "SKIP: a ship-loop session marker present" test must go red (task 0129). Proves the marker-based
+#     skip is actually enforced by the suite, not merely present. ---------------------------------------
+m6="$(make_claude_copy claude-mutant-shiploop)"
+m6_hook="$(dirname "$m6")/turn-completion-hook.sh"
+cp "$m6_hook" "$m6_hook.orig"
+# Neutralise the marker existence check so the ship-loop skip can never fire.
+sed -i.bak 's#\[ -e "$cwd/.fkit/state/shiploop-$session_id" \]#false#' "$m6_hook"
+if cmp -s "$m6_hook" "$m6_hook.orig"; then
+  echo "6. disabled the ship-loop marker read ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   Fix the mutation in test/prove-red.sh before trusting any result below."
+  fail=1
+fi
+printf '6. ship-loop marker read disabled — turn-completion "SKIP: a ship-loop session marker present" should go RED ... '
+r6="$(run_turn_hook_suite "$m6_hook")"; echo "$r6"
+if [ "$r6" != red ]; then
+  echo "   ✗ the suite did NOT catch a disabled ship-loop marker skip."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*SKIP: a ship-loop session marker present' "$out"; then
+  echo "   ✗ suite went red but NOT at the ship-loop marker-skip assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 7: remove the ship-loop-marker hook's command_name gate (writes the marker for ANY
+#     command) → the "a NON-ship-loop command → writes nothing" assertion must go red (task 0129 review
+#     R3). Proves the WRITER's self-filter — which IS the R8 fix — is load-bearing, not just the reader. -
+m7="$(make_claude_copy claude-mutant-shiploopgate)"
+m7_hook="$(dirname "$m7")/shiploop-marker-hook.sh"
+cp "$m7_hook" "$m7_hook.orig"
+# Drop the default arm's early-exit: `*) allow ;;` → `*) : ;;`, so any command_name falls through and
+# writes the marker.
+sed -i.bak 's/^  \*) allow ;;/  *) : ;;/' "$m7_hook"
+if cmp -s "$m7_hook" "$m7_hook.orig"; then
+  echo "7. ship-loop marker gate removed ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   Fix the mutation in test/prove-red.sh before trusting any result below."
+  fail=1
+fi
+printf '7. ship-loop marker records for any command — marker-hook "a NON-ship-loop command" should go RED ... '
+r7="$(run_shiploop_marker_suite "$m7_hook")"; echo "$r7"
+if [ "$r7" != red ]; then
+  echo "   ✗ the suite did NOT catch a removed command_name gate (the R8 fix is not mutation-covered)."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*a NON-ship-loop command' "$out"; then
+  echo "   ✗ suite went red but NOT at the command-gate assertion — red for the wrong reason."; fail=1
 fi
 
 echo

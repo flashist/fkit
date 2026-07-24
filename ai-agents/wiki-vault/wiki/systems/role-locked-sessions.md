@@ -100,7 +100,8 @@ The ADR's own honesty clause is the thing to read: **prevention is gone, and the
 - [[tasks/add-shared-instructions-layer-for-all-agents]]
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the owner-only mover gate, removed
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64: the mover grant written into `skills_for_role()`, with the adversarial reviewer excluded
-- [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a **second** hook (`Stop`) decided 2026-07-19, extending this hook layer to end-of-turn behaviour. **Decided, not built**; its consult skip is safety-critical because `AskUserQuestion` is absent in spawned consults
+- [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a **second** hook (`Stop`) decided 2026-07-19, extending this hook layer to end-of-turn behaviour. **Built 2026-07-23** (task 0127) — and it added **two** members to the layer: the `Stop` hook plus a `PreToolUse` `AskUserQuestion` **marker** hook that supplies check A's signal. Its consult skip is safety-critical because `AskUserQuestion` is absent in spawned consults — as built the skip is **structural** (`Stop`-only, never `SubagentStop`)
+- [[tasks/build-adr-030-stop-hook]] — task 0127: the ADR-030 hooks built (the `Stop` + `PreToolUse` marker pair) and reviewed model-diverse; check A moved off the transcript onto the marker
 - [[decisions/adr-023-fkit-git-agent-is-not-built]] — the same week's opposite ruling for commit/push
 - [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — the owner gates left waiting rather than timed
 - [[tasks/add-open-questions-interview-skill-for-six-roles]] · [[tasks/add-dumb-down-skill-for-six-roles]] — the two six-role skills registered through `skills_for_role()` and the hook

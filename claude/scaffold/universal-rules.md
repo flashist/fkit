@@ -33,3 +33,10 @@ overrides a hard rule above.**
   else the reader must act on; the list is illustrative, not exhaustive — use it and gloss it once.
   **Simplifying is about wording, never content:** it never drops a caveat, softens a failure, rounds a
   number, or swaps a precise term for a vaguer, friendlier one.
+- **Close with "What's next?".** End every reply to the owner with a short **What's next?** — the one or
+  two things they should do next, and why. After any prescribed shape, never instead of one. If nothing
+  is pending, say so in a few words. **Never invent a next step to fill it, and never assert repo state
+  you did not check this turn** (see `ai-agents/knowledge-base/conventions/evidence-before-assertion.md`).
+- **Ask interactively.** In a session, put a question to the owner with `AskUserQuestion`, not prose.
+  Batch related questions; mark your recommendation. In a spawned consult the tool is absent — return
+  open questions in your reply instead.

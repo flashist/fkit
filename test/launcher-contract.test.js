@@ -40,6 +40,23 @@ const ROLES = ['lead', 'producer', 'coder', 'architect', 'reviewer', 'adversaria
 const HOOK_SCRIPT = join(dirname(LAUNCHER), 'skill-ownership-hook.sh');
 const HOOK_COMMAND = `bash "${HOOK_SCRIPT}"`;
 
+// The Stop turn-completion hook (task 0127 / ADR-030): the SECOND hook build_settings() wires, into the
+// same {"hooks":{…}} object. Same launcher-relative derivation as HOOK_SCRIPT (see the note above) so
+// prove-red.sh's mutant copies generate their own correct absolute path.
+const STOP_HOOK_SCRIPT = join(dirname(LAUNCHER), 'turn-completion-hook.sh');
+const STOP_HOOK_COMMAND = `bash "${STOP_HOOK_SCRIPT}"`;
+
+// The AskUserQuestion marker hook (task 0127 / ADR-030 path 2): the SECOND PreToolUse entry, matched on
+// the AskUserQuestion tool, that records the marker the Stop hook reads. Same launcher-relative
+// derivation as the others.
+const MARKER_HOOK_SCRIPT = join(dirname(LAUNCHER), 'askuserquestion-marker-hook.sh');
+const MARKER_HOOK_COMMAND = `bash "${MARKER_HOOK_SCRIPT}"`;
+
+// The ship-loop marker hook (task 0129 / ADR-030): a UserPromptExpansion entry recording a real
+// ship-loop slash-command invocation. Same launcher-relative derivation as the others.
+const SHIPLOOP_HOOK_SCRIPT = join(dirname(LAUNCHER), 'shiploop-marker-hook.sh');
+const SHIPLOOP_HOOK_COMMAND = `bash "${SHIPLOOP_HOOK_SCRIPT}"`;
+
 // --- shared, initiated project (all assertions below want a non-fresh tree) --------------------
 let PROJECT;
 before(() => { PROJECT = makeProject({ fresh: false }); });
@@ -138,22 +155,67 @@ describe('Group A — argv contract', () => {
 // point of each Skill call, not on which role's settings file launched the process.
 // =================================================================================================
 describe('Group B — hook wiring', () => {
-  // 8. For every role, the generated settings wires exactly one PreToolUse hook on the Skill tool,
-  //    pointing at the real, on-disk skill-ownership-hook.sh — invoked via `bash "<path>"`, never a
-  //    bare path (ADR-017 rule 2: the shipped file's exec bit is not guaranteed to survive the
-  //    install/copy chain — a bare path here would silently stop enforcing on a real install).
+  // 8. For every role, the generated settings wire TWO PreToolUse hooks, both via `bash "<path>"`
+  //    (never a bare path — ADR-017 rule 2, the exec bit is not guaranteed to survive install/copy):
+  //      • matcher "Skill"           → skill-ownership-hook.sh (ADR-018 lockdown), and
+  //      • matcher "AskUserQuestion" → askuserquestion-marker-hook.sh (task 0127 / ADR-030 path 2).
+  //    Matched by matcher, not array index, so a reorder can't silently pass. The AskUserQuestion entry
+  //    must be ADDED alongside the Skill one, never displace it — losing the Skill entry would silently
+  //    unbolt the whole role lockdown, so pin both are present.
   for (const role of ROLES) {
-    test(`8. ${role}: settings wire the PreToolUse Skill hook`, async () => {
+    test(`8. ${role}: settings wire both PreToolUse hooks (Skill lockdown + AskUserQuestion marker)`, async () => {
       const r = await runFkit([role], { project: PROJECT });
       assert.equal(r.exec, true, `stderr: ${r.stderr}`);
       const settings = readSettings(PROJECT, role);
       const preToolUse = settings.hooks?.PreToolUse;
-      assert.equal(preToolUse?.length, 1, `${role}: expected exactly one PreToolUse hook entry`);
-      assert.equal(preToolUse[0].matcher, 'Skill', `${role}: hook must be scoped to the Skill tool`);
-      assert.equal(preToolUse[0].hooks?.length, 1, `${role}: expected exactly one command`);
-      assert.equal(preToolUse[0].hooks[0].type, 'command');
-      assert.equal(preToolUse[0].hooks[0].command, HOOK_COMMAND,
-        `${role}: hook command must invoke the script via an explicit interpreter, not a bare path`);
+      assert.equal(preToolUse?.length, 2, `${role}: expected two PreToolUse entries (Skill + AskUserQuestion)`);
+      const skill = preToolUse.find((e) => e.matcher === 'Skill');
+      const marker = preToolUse.find((e) => e.matcher === 'AskUserQuestion');
+      assert.ok(skill, `${role}: the Skill lockdown PreToolUse entry must still be present`);
+      assert.ok(marker, `${role}: the AskUserQuestion marker PreToolUse entry must be present`);
+      assert.equal(skill.hooks?.[0]?.type, 'command');
+      assert.equal(skill.hooks?.[0]?.command, HOOK_COMMAND,
+        `${role}: Skill hook must invoke skill-ownership-hook.sh via an explicit interpreter`);
+      assert.equal(marker.hooks?.[0]?.type, 'command');
+      assert.equal(marker.hooks?.[0]?.command, MARKER_HOOK_COMMAND,
+        `${role}: AskUserQuestion hook must invoke askuserquestion-marker-hook.sh via an explicit interpreter`);
+    });
+  }
+
+  // 8b. For every role, the SAME settings object also wires exactly one Stop hook (task 0127 /
+  //     ADR-030), pointing at the on-disk turn-completion-hook.sh via `bash "<path>"`. Stop is NOT
+  //     tool-scoped, so — unlike the PreToolUse entry — it carries no `matcher`; a stray matcher here
+  //     would be a wiring bug. It must NOT displace the PreToolUse entry: assertion 8 already pins that
+  //     PreToolUse survives, and this pins Stop is added alongside it, not instead of it.
+  for (const role of ROLES) {
+    test(`8b. ${role}: settings wire the Stop turn-completion hook`, async () => {
+      const r = await runFkit([role], { project: PROJECT });
+      assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+      const settings = readSettings(PROJECT, role);
+      const stop = settings.hooks?.Stop;
+      assert.equal(stop?.length, 1, `${role}: expected exactly one Stop hook entry`);
+      assert.ok(!('matcher' in stop[0]), `${role}: a Stop hook must not be tool-scoped (no matcher)`);
+      assert.equal(stop[0].hooks?.length, 1, `${role}: expected exactly one Stop command`);
+      assert.equal(stop[0].hooks[0].type, 'command');
+      assert.equal(stop[0].hooks[0].command, STOP_HOOK_COMMAND,
+        `${role}: Stop command must invoke turn-completion-hook.sh via an explicit interpreter, not a bare path`);
+    });
+  }
+
+  // 8c. For every role, the settings wire exactly one UserPromptExpansion hook (task 0129 / ADR-030) —
+  //     the transcript-independent ship-loop marker. Not tool-scoped (no matcher); the hook self-filters
+  //     on command_name. Added alongside PreToolUse + Stop, never displacing them.
+  for (const role of ROLES) {
+    test(`8c. ${role}: settings wire the UserPromptExpansion ship-loop marker hook`, async () => {
+      const r = await runFkit([role], { project: PROJECT });
+      assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+      const settings = readSettings(PROJECT, role);
+      const upe = settings.hooks?.UserPromptExpansion;
+      assert.equal(upe?.length, 1, `${role}: expected exactly one UserPromptExpansion hook entry`);
+      assert.ok(!('matcher' in upe[0]), `${role}: the ship-loop marker hook self-filters (no matcher)`);
+      assert.equal(upe[0].hooks?.[0]?.type, 'command');
+      assert.equal(upe[0].hooks?.[0]?.command, SHIPLOOP_HOOK_COMMAND,
+        `${role}: UserPromptExpansion command must invoke shiploop-marker-hook.sh via an explicit interpreter`);
     });
   }
 
@@ -174,6 +236,9 @@ describe('Group B — hook wiring', () => {
   //     per the fail-open hazard) as never wiring the hook in the first place.
   test('10. the hook script the settings point at exists on disk', () => {
     assert.ok(existsSync(HOOK_SCRIPT), `expected ${HOOK_SCRIPT} to exist`);
+    assert.ok(existsSync(STOP_HOOK_SCRIPT), `expected ${STOP_HOOK_SCRIPT} to exist`);
+    assert.ok(existsSync(MARKER_HOOK_SCRIPT), `expected ${MARKER_HOOK_SCRIPT} to exist`);
+    assert.ok(existsSync(SHIPLOOP_HOOK_SCRIPT), `expected ${SHIPLOOP_HOOK_SCRIPT} to exist`);
   });
 });
 
@@ -198,8 +263,16 @@ describe('Group C — degradation & fresh-project routing', () => {
       assert.match(val, /^\{/, `expected inline JSON, got: ${val}`);
       const inline = JSON.parse(val);
       assert.ok(!('skillOverrides' in inline), 'the retired mechanism must not resurface in the fallback');
-      assert.equal(inline.hooks?.PreToolUse?.[0]?.hooks?.[0]?.command, HOOK_COMMAND,
-        'inline fallback must carry the same hook wiring as the file path would have');
+      const inlineSkill = inline.hooks?.PreToolUse?.find((e) => e.matcher === 'Skill');
+      const inlineMarker = inline.hooks?.PreToolUse?.find((e) => e.matcher === 'AskUserQuestion');
+      assert.equal(inlineSkill?.hooks?.[0]?.command, HOOK_COMMAND,
+        'inline fallback must carry the Skill lockdown hook wiring');
+      assert.equal(inlineMarker?.hooks?.[0]?.command, MARKER_HOOK_COMMAND,
+        'inline fallback must carry the AskUserQuestion marker hook wiring');
+      assert.equal(inline.hooks?.Stop?.[0]?.hooks?.[0]?.command, STOP_HOOK_COMMAND,
+        'inline fallback must also carry the Stop turn-completion hook wiring');
+      assert.equal(inline.hooks?.UserPromptExpansion?.[0]?.hooks?.[0]?.command, SHIPLOOP_HOOK_COMMAND,
+        'inline fallback must also carry the ship-loop marker hook wiring');
     } finally {
       chmodSync(join(proj, '.fkit'), 0o700);          // restore so cleanup can remove it
       cleanup(proj);
