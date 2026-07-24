@@ -132,3 +132,74 @@ escape. It was put back to the owner and resolved into the checkable form in Dec
 - Code: `claude/fkit-claude.sh:257-283`, `claude/skill-ownership-hook.sh`,
   `claude/fkit-claude-init.sh:316-341`, `claude/agents/fkit-coder.md:34,:192-198`.
 - **Wiki:** **fkit-wiki** should ingest this ADR — an architect never writes the vault.
+
+---
+
+## Addendum — 2026-07-23: check A's "no `AskUserQuestion` this turn" signal, corrected at implementation
+
+- **Status:** accepted (refines Decision 2A; does **not** supersede the ADR)
+- **Deciders:** owner (Mark Dolbyrev), with fkit-architect; from task 0127's model-diverse review
+- **Evidence:** review ledger `ai-agents/tasks/done/0127-build-adr-030-stop-hook/review.md` (R1–R8, closed-out ✅; R7 over-skip found in owner live-verify, fixed; R8 accepted → 0129)
+
+### The presupposition this corrects
+Decision 2A reads *"interrogative content … **and no `AskUserQuestion` call this turn**."* It presupposed
+that "no `AskUserQuestion` call this turn" is something a `Stop` hook can detect. **Review R1 (reviewer +
+Codex, reproduced) proved it is not.** A `Stop` payload carries **no tool-call list**, and the transcript
+at `transcript_path` is an unreliable source for it three ways: the turn's real `AskUserQuestion` call is
+followed by a `tool_result` line that is itself `"type":"user"`, so an "after the last user line" scan
+resets **past** the call; a readable but unexpected-format file (e.g. `/etc/hosts`) yields a confident
+"no tool"; and the official docs say the file **lags** in-memory state and parsing it is version-fragile.
+Each produces a **confident false BLOCK of a turn that DID use the tool** — a direct violation of
+**Decision 6 (fail open, always)** in the exact direction this ADR rates worst.
+
+### The mechanism now shipped (design's "path 2" — extend the proven PreToolUse path, not a transcript scan)
+Check A no longer reads the transcript. "No `AskUserQuestion` this turn" is derived from a **turn-scoped
+marker written by a second `PreToolUse` hook**, matched on the `AskUserQuestion` tool — the same hook
+mechanism ADR-018 already proved, consistent with §5.1's *"do not invent a second mechanism."*
+
+- **Write:** `claude/askuserquestion-marker-hook.sh` (`PreToolUse`, `matcher:"AskUserQuestion"`) touches
+  `$cwd/.fkit/state/askuq-<session_id>` when the tool is invoked (`:57`). Wired as a **second `PreToolUse`
+  entry** alongside the skill-ownership hook in the one `{"hooks":{…}}` object `build_settings()` emits
+  (`claude/fkit-claude.sh:277`). PreToolUse firing on `AskUserQuestion` was confirmed against the CC docs
+  (only `EndConversation` is hook-exempt).
+- **Read + consume:** the `Stop` hook `claude/turn-completion-hook.sh` reads the marker and **deletes it**
+  (`:76-77`), so it is strictly turn-scoped. Marker **present ⇒ tool was used ⇒ suppress check A**
+  (`:133-134`).
+
+### Marker lifetime / confidence rule — how fail-open (Decision 6) is preserved
+A **missing** marker is trusted as "no tool used" **only when the state dir exists AND is writable** —
+`marker_infra_ok` requires `[ -d "$cwd/.fkit/state" ] && [ -w … ]` (`turn-completion-hook.sh:73`); the
+launcher pre-creates that dir (`fkit-claude.sh:278`). If the signal cannot be trusted (dir absent or
+unwritable), `asked_with_tool` stays `1` and **check A is suppressed** — fail open. A stale marker (write
+succeeded, consume missed) fails toward a **suppressed / dormant** check A, the safe direction. This is
+the **R4 hardening**, owner-ruled: it closes the dir-present-but-unwritable false-block in the mandated
+direction.
+
+### Two design questions this settles
+- **§7 OQ3 (turn-scoped state for block-once):** resolved with **no marker file** — block-once uses Claude
+  Code's built-in `stop_hook_active` (`turn-completion-hook.sh:81`). The only marker file is the
+  AskUserQuestion one above.
+- **The consult skip (§5.3, safety-critical):** now **structural** — the `Stop` hook is registered on
+  `Stop` **only, never `SubagentStop`** (`fkit-claude.sh:268`), so it never fires in a spawned consult
+  where `AskUserQuestion` is absent (ADR-021). The unescapable-block hazard is closed by wiring, not by
+  runtime detection.
+
+### Accepted residuals (owner-ruled; do not re-litigate — see the ledger)
+Recorded in `…/0127-build-adr-030-stop-hook/review.md` "Accepted residuals", each with a `Re-raise only
+if` condition:
+- **Exotic mid-session `cwd` change (R4 residual):** if `cwd` at the PreToolUse write differs from `cwd`
+  at the `Stop` read, the marker is sought in the wrong place → possible false block. Genuinely exotic
+  (a working-dir change between an `AskUserQuestion` call and turn end), block-once-bounded. Re-raise only
+  if a real `cwd` change mid-session is observed, or a `cwd`-independent marker key becomes available.
+- **Top-level headless `-p` run has no skip (R5):** self-heals via block-once (escapable, unlike the
+  consult case); likely not distinguishable from the `Stop` payload. Re-raise only if a reliable
+  headless signal appears, or the block is shown unescapable headlessly.
+- **Ship-loop under-skip on an unreadable/lagging transcript (R6):** degraded-only, block-once-bounded,
+  session-only, pre-existing. **Named producer follow-up** (not filed by this task): give the ship-loop a
+  transcript-independent skip signal; task 0116 extends the same seam.
+
+### Net effect on the original decision
+Decision 2A's **intent is preserved and now enforceable** — check A fires on a genuine prose question that
+did not use the tool, and never on a turn that did — without violating Decision 6. Decision 2A's stated
+*mechanism assumption* (transcript-derivable) is what changed; the check itself stands. Nothing in
+Decisions 1–8 is withdrawn.

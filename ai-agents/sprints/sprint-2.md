@@ -127,7 +127,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done (agent-closed — not owner-verified) | 95 | Update the launcher menu/help text — "does no work itself" → accurate to a conductor *(text only, no control-flow change per design §4.4; needs 92; owner: fkit-coder)* | [`0113-update-launcher-menu-help-for-conductor`](../tasks/done/0113-update-launcher-menu-help-for-conductor/brief.md) |
 | ✅ Done | 96 | Amend PROJECT.md for the evolved `fkit-lead` conductor *(product-brief half of design §11 T6; owner-signed-off stance wording; needs 92 + 94; owner: fkit-producer)* | [`0114-amend-project-brief-for-lead-conductor`](../tasks/done/0114-amend-project-brief-for-lead-conductor/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 97 | Refresh architecture.md for the lead conductor + fix the stale §5.2 lock description *(architecture half of T6 **plus** the independent §5.2 `skillOverrides`→ADR-018-hook stale-lock fix, design §1.1; coordinates with 94 on the same file; needs 92 + 94; owner: fkit-architect)* | [`0115-refresh-architecture-doc-for-lead-conductor-and-stale-lock`](../tasks/done/0115-refresh-architecture-doc-for-lead-conductor-and-stale-lock/brief.md) |
-| 🔲 Backlog | 98 | Add `fkit-sprint-ship-loop` to the ADR-030 Stop-hook skip set *(**gated — the ADR-030 hook is authorized but NOT yet built**; filed to preserve the dependency, do not start until `turn-completion-hook.sh` exists; needs 93 + ADR-030 impl; owner: fkit-coder)* | [`0116-add-sprint-ship-loop-to-stop-hook-skip-set`](../tasks/backlog/0116-add-sprint-ship-loop-to-stop-hook-skip-set/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 98 | Add `fkit-sprint-ship-loop` to the ADR-030 Stop-hook skip set *(one skip-list entry + test; owner: fkit-coder)* | [`0116-add-sprint-ship-loop-to-stop-hook-skip-set`](../tasks/done/0116-add-sprint-ship-loop-to-stop-hook-skip-set/brief.md) |
 | 🔲 Backlog | 99 | Wiki ingest — ADR-031/032, the design report, and the evolved lead role *(vault write — fkit-wiki only; recommend running last, after 96 + 97 land; needs T1 (Done) + 92; owner: fkit-wiki)* | [`0117-wiki-ingest-lead-conductor-and-adrs-031-032`](../tasks/backlog/0117-wiki-ingest-lead-conductor-and-adrs-031-032/brief.md) |
 | 🔲 Backlog | 100 | Record the ADR-032 sprint-ship-loop autonomy amendment — Build carve-out + Process-review autonomy (option b) + accepted cost + do-not-re-raise guard *(**owner is writing this in a `fkit architect` session** — tracking only, not reassigned; blocks 99's ingest of the *amended* ADR-032; owner: fkit-architect)* | [`0118-record-adr-032-sprint-ship-loop-autonomy-amendment`](../tasks/backlog/0118-record-adr-032-sprint-ship-loop-autonomy-amendment/brief.md) |
 | 🔲 Backlog | 101 | Track the `fkit-coder` declared-approval carve-out — the guarantee-surface change 0111 folded in *(**already implemented in the working tree — done-pending-review, not re-do**; the architect asked it get its own reviewable record; needs 93 + 100; **recommend owner-verify, not agent-close**; owner: fkit-coder)* | [`0119-track-fkit-coder-declared-approval-carve-out`](../tasks/backlog/0119-track-fkit-coder-declared-approval-carve-out/brief.md) |
@@ -139,6 +139,73 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 107 | Revert the task movers to producer-only — `skills-for-role.sh` + 4 mirrors + hook test + mover SKILL prose *(ADR-033 §1 structural core; needs 105 + 106 — hard; owner: fkit-coder)* | [`0124-revert-task-movers-to-producer-only`](../tasks/backlog/0124-revert-task-movers-to-producer-only/brief.md) |
 | 🔲 Backlog | 108 | Wiki flag-don't-close convention — 3 wiki SKILLs end by flagging "task N ready to close" *(ADR-033 §2 / task 0108's operative fix; recommend co-landing with 107; owner: fkit-coder)* | [`0125-wiki-skills-flag-ready-to-close`](../tasks/backlog/0125-wiki-skills-flag-ready-to-close/brief.md) |
 | 🔲 Backlog | 109 | Wiki resync for ADR-033 — ingest the ADR + resync vault pages asserting the ADR-025 "any role may close" rule *(needs 107 — hard; owner: fkit-wiki)* | [`0126-wiki-resync-for-adr-033`](../tasks/backlog/0126-wiki-resync-for-adr-033/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 110 | Build the ADR-030 `Stop` hook — turn-completion contract enforcement *(Path 2 marker; owner live-verified check B end-to-end; R8 over-skip residual accepted → fix in 0129; owner: fkit-coder)* | [`0127-build-adr-030-stop-hook`](../tasks/done/0127-build-adr-030-stop-hook/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 111 | Give the fkit ship-loop(s) a transcript-independent skip signal for the ADR-030 Stop hook *(`UserPromptExpansion` marker replaces the transcript scan; fixes R8 over-skip + R6 under-skip for both loops; owner: fkit-coder)* | [`0129-transcript-independent-ship-loop-skip-signal`](../tasks/done/0129-transcript-independent-ship-loop-skip-signal/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 112 | Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively *(ADR-030 Decision 8; two clauses added to `universal-rules.md`; block at 91% → follow-up 0130; owner: fkit-coder)* | [`0128-add-adr-030-prose-half-to-universal-rules`](../tasks/done/0128-add-adr-030-prose-half-to-universal-rules/brief.md) |
+| 🔲 Backlog | 113 | Reclaim universal-rules-block budget headroom — compression pass **or** a signed `RULES_MAX` bump *(0128 left the block at 91.1% / 363 B; measure-and-propose then implement the owner-signed option; a cap bump is an owner/architect call; owner: fkit-coder)* | [`0130-reclaim-rules-block-budget-headroom`](../tasks/backlog/0130-reclaim-rules-block-budget-headroom/brief.md) |
+
+### Addendum — task 0129 added out of band (2026-07-23), then pulled forward to priority 111: the transcript-independent ship-loop skip signal (0127 residuals R6 + R8)
+
+Filed from task **0127**'s review — accepted residuals **R6** and **R8** carried a **named producer
+follow-up**. The 0127 Stop hook decides a `/fkit-task-ship-loop` turn by scanning `transcript_path` for
+the command-marker *text* (SKIP-3), which is fragile in both directions:
+- **R6 (under-skip, low):** a missing/unreadable/lagging transcript fails to skip a real ship-loop turn
+  → spurious "What's next?" / interactive block. Bounded (block-once-escapable, degraded-only,
+  session-only, pre-existing).
+- **R8 (over-skip — the reason for the pull-forward):** the scan matches the bare command string
+  **wherever it appears as transcript content** (a file read, `tool_result`, attachment, pasted excerpt),
+  not just a real invocation, so the hook **silently disables itself**. On this dogfooding repo most
+  self-maintenance sessions read files containing the marker → **the hook is effectively non-enforcing
+  here until 0129 lands.** Fail-open-safe (over-skip = not-block), so accepted for 0127; downstream
+  consuming projects unaffected.
+
+**0129** is the durable fix: replace the substring scan with an **authoritative, transcript-independent**
+signal for a real ship-loop invocation — candidate leads **`UserPromptExpansion` `command_name`**
+(Codex-surfaced during 0127 review; verify against the Claude Code hooks docs in planning — would fix R8,
+R6, and the R8 known-limitation test in one change, for both loops) **or** a loop-written
+`$cwd/.fkit/state/` marker (the pattern 0127 introduced for the `AskUserQuestion` PreToolUse marker).
+Fail-open preserved.
+
+- **Owner pulled 0129 forward (2026-07-23):** re-ranked **112 → 111** (now directly after the reopened
+  hook 0127 at 110, ahead of the independent prose-half 0128, which moved 111 → 112). Motivated by R8
+  found during owner live-verification of the reopened 0127.
+- **Depends on 0127** — the hook (reopened for its R7 fix, being re-closed), its `$cwd/.fkit/state/`
+  marker pattern, and the skip list this hardens. Do not start before 0127's rework lands.
+- **Relates to 0116** (backlog, priority 98) — 0116 adds `/fkit-sprint-ship-loop` to the *same*
+  transcript-scanned skip list. 0129 makes detection robust for **both** loops; whichever of the two
+  lands second must not re-introduce a transcript-only skip. **Do not do them blindly in isolation.**
+- **Scope decision surfaced for the owner** (in the brief): which signal (Lead A vs Lead B), and whether
+  to keep the transcript scan as a fallback. Does not block starting.
+- **Flagged for owner confirmation:** the 111 placement and the single adjacent bump of 0128 (111 → 112).
+  0129 was ranked no lower than 111 because it depends on 0127 (110); going ahead of the ADR-033 chain
+  (105–109) — which itself sits ahead of 0127 — would be incoherent. Owner can override.
+
+Filed while the fkit-coder was running `/fkit-task-ship-loop` on **0116** and hit a hard blocker: 0116
+is gated on the ADR-030 `Stop` hook, which is **accepted but not built** (`claude/turn-completion-hook.sh`
+does not exist) and had **no brief tracking it**. Both ADR-030 deliverables were unfiled:
+
+- **110 (0127) — the hook.** `claude/turn-completion-hook.sh` + the second `Stop` key in
+  `build_settings()` + `node --test` coverage. Design is complete
+  ([`2026-07-19-design-turn-completion-hook.md`](../knowledge-base/reports/2026-07-19-design-turn-completion-hook.md),
+  [ADR-030](../knowledge-base/decisions/adr-030-stop-hook-enforces-turn-completion-contract.md)) — **no
+  new design decision needed**. This is **0116's sole remaining blocker** (0116's other dependency, task
+  93 / 0111, is Done).
+- **111 (0128) — the prose half.** ADR-030 Decision 8 / design §5.5 — the two clauses the hook cannot
+  enforce, added to `claude/scaffold/universal-rules.md`. **Task 79 / 0022 was compressed specifically to
+  make room for it**, then the brief was never written. A producer catch, not part of the coder's request.
+
+**The two halves are independently shippable in either order — neither blocks the other.** Only 0127
+unblocks 0116; 0128 is already unblocked today.
+
+**Two open questions for the owner on 0127 (design §7 — do not block starting):** (1) the exact heading
+text for check B — literally `What's next?` or a looser match (it is a string-match *contract*; design
+recommends the literal string); (2) whether check A (ask-interactively enforcement) is universal or
+coder-only — ADR-030 Decision 3 made *"What's next?"* universal but did not rule on check A (design
+recommends universal). A third item — the block-once turn-scoped marker — is a **coder-level** decision,
+flagged in the 0127 brief as the piece most likely to go subtly wrong (design §5.4).
+
+**Priorities 110–111 appended after 109; existing ranking untouched. Ranking is for the owner to
+confirm.**
 
 ### Addendum — tasks 105–109 added out of band (2026-07-23): the ADR-033 mover-authority reversal ripple
 
@@ -1525,3 +1592,22 @@ before it; both were added to **76's** brief on 2026-07-20 (owner-approved) rath
 76 must confirm the guard still finds a **non-zero** brief count after the move. A uniqueness check
 over zero discovered briefs passes green while guarding nothing. This brief requires dual-shape
 discovery for that reason; 76's brief carries the matching check.
+
+## Addendum — task 0130 added out of band (2026-07-24): reclaim rules-block budget headroom
+
+**Owner-directed follow-up from task 0128's review**, filed by the producer. Task 0128 (the ADR-030
+prose half) brought the fkit-managed rules block to **91.1% of `RULES_MAX=4096` — 3733 B emitted,
+363 B headroom.** `fkit-claude-init.sh` aborts a launch above the cap, and
+`test/rules-block-budget.test.js` trips a warning gate at 92% — the block is one cross-cutting rule from
+being blocked. 0130 hardens the budget: measure-and-propose, then implement the owner-signed option —
+either a **compression pass** (the 0022 precedent) or a deliberate **`RULES_MAX` bump**.
+
+**Not a 0128 defect** — 0128's review closed clean and flagged this as the follow-up. **No hard
+dependency**; it should land before the next cross-cutting rule needs the room.
+
+**A `RULES_MAX` bump is an owner/architect call, not the coder's alone** — the cap exists because the
+block lands in every agent's context on every turn. The coder presents the option + tradeoff and
+implements the signed choice.
+
+**Priority 113 is appended after the tail, not inserted** — `fkit-task-brief` step 5 forbids renumbering
+the owner's ranking. Flagged for owner confirmation.

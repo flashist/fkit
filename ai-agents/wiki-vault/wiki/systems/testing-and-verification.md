@@ -95,6 +95,7 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the investigation behind ADR-027
 - [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a second hook whose session-scoped behaviour fkit **cannot fully test itself**; automated coverage reaches its script logic against synthetic payloads only
+- [[tasks/build-adr-030-stop-hook]] — task 0127, the build that proved that limit live: `node --test` (493 pass) + `prove-red.sh` cover the script logic and real marker files, but the live `AskUserQuestion`→marker→block path stayed hand-verified (ADR-021)
 - [[tasks/decide-whether-fkit-needs-a-tester-agent]] — the decision task that closed the tester question (ID 0024); the static-review gap it names is recorded on this page
 - [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard
 - [[tasks/compress-universal-rules-output-style-section]] — task 79, the universal-rules compression
