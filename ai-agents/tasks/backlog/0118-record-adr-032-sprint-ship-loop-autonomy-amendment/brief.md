@@ -37,10 +37,22 @@ that has no formal text; (b) 0117 (wiki ingest of ADRs 031/032) would ingest a *
 missing the Build + Process-review exceptions. This brief exists to make that dependency visible and
 prevent the amendment from being silently dropped.
 
-**⚠️ The owner stated (2026-07-22) they will write this amendment themselves in a `fkit architect`
-session.** This brief is a **tracking record only** — it does not scope the ADR write as anyone else's
-work (ADRs are the architect's). It is filed so the dependency chain (0119 cites it; 0117 must ingest
-the amended version) is tracked, not to reassign the write.
+**⚠️ Reassigned 2026-07-25 — this is no longer a tracking-only record; it is live work.**
+
+The brief formerly read: *"the owner stated (2026-07-22) they will write this amendment themselves in a
+`fkit architect` session… a tracking record only."* On **2026-07-25** the producer verified the ADR
+directly — `grep -niE "amend|carve-out|do-not-re-raise"` against
+`knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md` returns **zero
+matches**. The amendment was never written. **The owner ruled the task stalled and reassigned it** to be
+executed as ordinary architect work rather than waited on.
+
+**Consequence: this has been blocking 0117 for three days** and nobody was tracking it as a block,
+because the brief said someone had it. **The lesson is procedural, not personal — a task parked on
+"the owner is doing it himself" has no owner the board can chase.** Prefer a real assignee with the
+owner as reviewer.
+
+**The four decisions below are settled (owner-ruled 2026-07-22) and are NOT reopened by this
+reassignment.** The architect writes up decisions already made; it does not re-decide them.
 
 ## What to build
 
@@ -67,10 +79,16 @@ owner) that records, as a single reviewable unit:
 
 ## Notes
 
-- **Owner:** fkit-architect (ADRs are the architect's; the owner is writing it in an architect session).
-- **Blocks:** 0117 (wiki ingest must ingest the *amended* ADR-032 — recommend the amendment land before
-  0117 runs) and closes the citation gap in 0119.
-- **Depends on:** the owner-approved decisions of 2026-07-22 (already made) — no build dependency.
-- **⚠️ Owner is handling the write.** Do not spawn a coder for this; do not re-decide the option-b
-  ruling — it is settled.
+- **Owner:** fkit-architect — **live assignment as of 2026-07-25**, not a placeholder. Run
+  `/fkit-record-decision` in a `fkit architect` session.
+- **Blocks:** 0117 (wiki ingest must ingest the *amended* ADR-032 — the amendment lands before 0117 runs)
+  and closes the citation gap in 0119.
+- **Depends on:** nothing. The four decisions were owner-approved 2026-07-22; this is a write-up, not a
+  decision task.
+- **⚠️ Do not re-decide the option-b ruling, the carve-outs, or the accepted cost** — all settled
+  2026-07-22 and re-affirmed by the reassignment. The architect's job here is to write down what was
+  decided, not to re-litigate it. If the architect believes a decision is wrong, that is an open question
+  for the owner, **not** an edit to the amendment.
+- **Verified 2026-07-25:** ADR-032 contains no amendment text. Start from nothing; there is no partial
+  draft to find.
 - No commit — leave the ADR file in the working tree.

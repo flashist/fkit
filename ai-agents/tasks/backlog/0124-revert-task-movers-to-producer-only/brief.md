@@ -53,6 +53,34 @@ Per ADR-033 §1 and §Consequences:
    body prose to **producer-only** per ADR-033. Keep the agent-closed marker rule: a producer **spawned**
    by another agent still writes `✅ Done (agent-closed — not owner-verified)`; only an owner-present
    producer session yields a plain owner-verified close (ADR-033 §5).
+5. **The agent definitions and the universal rules block — added 2026-07-25, see ⚠️ below.** These are
+   **not** on the `skills-for-role.sh:12-24` mirror checklist, which is why item 2's "four mirrors" does
+   not reach them. Each states the ADR-025 grant as fact in an agent's **system prompt**, which outranks
+   a SKILL in that agent's context:
+   - `claude/scaffold/universal-rules.md:7` — *"Any role but the adversarial reviewer may invoke them."*
+     This is the fkit-managed rules block that lands in **every agent's context on every turn** and is
+     what generates the repo-root `CLAUDE.md` / `AGENTS.md` blocks. Highest blast radius in the repo.
+     **Coordinate with task 0130** (rules-block budget, 91.1% of `RULES_MAX`): producer-only is shorter
+     than the "any role but…" clause, so this edit returns a few bytes of headroom — measure, don't
+     assume, and tell 0130 the new figure.
+   - `claude/agents/fkit-producer.md` — lines 7, 37–38, 95–96 (three assertions of "since ADR-025 any
+     role may invoke them").
+   - `claude/agents/fkit-coder.md` — line 103 (*"closes the task itself via `/fkit-task-done`"*) and
+     lines 190–191 (*"since ADR-025 you may invoke them yourself"*, sitting in the coder's **hard
+     must-not-do list**). Both directly contradict 0122's rewrite.
+   - **Sanctioned-hand-off carve-out — added 2026-07-25 (owner ruling), source: task 0122's review
+     ledger finding R4 (raised by Codex, verified by the coder against both files).** Two further
+     lines — **not** among those listed above — state a **hard rule** that ADR-033 now contradicts:
+     - `claude/agents/fkit-coder.md:165` — *"A consult is a focused question, not a hand-off."*
+     - `claude/agents/fkit-producer.md:67` — the mirror of the same rule.
+
+     ADR-033 §3/§4 make a **producer spawn to close** the sanctioned terminal act of both ship-loops.
+     That spawn **is an action hand-off**, which those two rules currently forbid. A system prompt
+     outranks a SKILL in an agent's context, so leaving them as-is puts a hard rule in tension with
+     the very loop step it is supposed to authorize. **Add a carve-out** naming the
+     producer-spawn-to-close as the one sanctioned hand-off; **do not delete the rule** — it still
+     holds for every other consult.
+   Keep the agent-closed marker rule intact everywhere (ADR-033 §5).
 
 ## Verification steps
 
@@ -60,10 +88,23 @@ Per ADR-033 §1 and §Consequences:
 2. All four mirrors reflect producer-only movers; the `:12-24` checklist is satisfied (no mirror stale).
 3. `skill-ownership-hook.test.js` asserts allow-for-producer / deny-for-all-others (incl. adversarial
    reviewer) with the JSON deny shape pinned; the full test suite is green.
-4. The ADR-027 dual-home parity test passes (live vs scaffold).
+4. **Live/scaffold parity holds for every file this task touches** — verified by `diff`, **by hand**.
+   ⚠️ **Corrected 2026-07-25: `test/dual-home-parity.test.js` DOES NOT EXIST.** ADR-027 §Decision 2
+   called for it; the brief was never filed until 0133 (2026-07-25). This step previously read *"the
+   ADR-027 dual-home parity test passes"* — an unrunnable instruction. **Do not go looking for that
+   test, and do not build it here** (that is 0132 → 0133). `diff` each dual-homed file you edited
+   against its counterpart and report the result.
 5. Both movers' SKILLs read producer-only, retaining the agent-closed-marker rule for a spawned producer.
-6. The ship-loops (0122/0123) already route closes to a producer spawn, so no loop invokes a now-denied
+6. **No live source still asserts the ADR-025 grant.** Re-run the sweep that found the gap and confirm
+   only historical records match (ADRs, closed sprint/task/report files, wiki pages pending 0126):
+   `grep -rniE "any (role|agent)[^.]{0,50}(may|can) (invoke|close|run)" claude/ CLAUDE.md AGENTS.md`
+   — expect **zero** hits in `claude/agents/`, `claude/scaffold/`, and `claude/skills/`.
+7. The ship-loops (0122/0123) already route closes to a producer spawn, so no loop invokes a now-denied
    mover.
+8. **The sanctioned-hand-off carve-out is present in both agent definitions** — `fkit-coder.md` and
+   `fkit-producer.md` each still carry the "a consult is a focused question, not a hand-off" rule
+   **and** an explicit exception for the producer-spawn-to-close (ADR-033 §3/§4). Neither file
+   forbids, without qualification, the hand-off its own ship-loop step performs.
 
 ## Notes
 
@@ -74,6 +115,24 @@ Per ADR-033 §1 and §Consequences:
   `wiki`, 0125's flag is the wiki's only completion signal.
 - **⚠️ Coordinate with 0115 on architecture.md** — 0115 also edits architecture.md (lead prose + §5.2
   lock). This task touches only the mover-ownership mirror rows. Sequence so neither reverts the other.
+- **⚠️ Scope amended 2026-07-25 (producer).** The brief as first written listed only the four
+  `skills-for-role.sh:12-24` mirrors. A sweep this session found **three further live sources** asserting
+  the ADR-025 grant that the checklist does not cover — `claude/scaffold/universal-rules.md:7`,
+  `claude/agents/fkit-producer.md`, `claude/agents/fkit-coder.md` — now added as **item 5** with a
+  verification sweep at step 6. These are **system prompts**, not docs: had they been missed, 0124 would
+  have shipped a runtime where the ADR-018 hook denies the coder a mover while `fkit-coder.md:190-191`
+  still instructs it to invoke one. **The mirror checklist is not a complete inventory** of where a
+  skill-ownership fact is stated; treat that as the finding, not just this instance.
+- **⚠️ Scope amended again 2026-07-25 (producer, on the owner's live ruling during the 0122 ship-loop
+  run).** Task 0122's review surfaced a **hard-rule contradiction that no filed brief owned** — the
+  "a consult is a focused question, not a hand-off" rule at `fkit-coder.md:165` and
+  `fkit-producer.md:67` forbids the producer-spawn-to-close that ADR-033 §3/§4 make the sanctioned
+  terminal act of both ship-loops. The owner ruled it belongs in **item 5**, which already edits these
+  two files for exactly this class of ADR-033 ripple but named the wrong lines. Recorded as an **open
+  dependency on 0122's review ledger** — it closes only because this brief now visibly lists both
+  references. New verification step 8 guards it.
+- **Touches 0130's budget.** Item 5's `universal-rules.md` edit changes the size of the rules block that
+  0130 is trying to reclaim headroom in. Whichever lands second must re-measure.
 - **ADR-033 is honest about the limit:** this restores separation of the closing *identity* (hook-
   enforced), **not** full prevention — a determined doer can still spawn a producer to close. Do not
   "harden" beyond the ADR; that residual is accepted and named (ADR-033 §The limit).

@@ -1,6 +1,6 @@
 ---
 name: fkit-task-ship-loop
-description: The coder's autonomous brief-to-done loop. Takes one backlog task from its brief through plan → build → verify → stateful review → closed, running autonomously by default after a single up-front plan approval and stopping for the owner only at the "important questions". Since ADR-025 it closes the task itself, writing the agent-closed marker. Session-only; refuses a spawned/headless invocation.
+description: The coder's autonomous brief-to-hand-off loop. Takes one backlog task from its brief through plan → build → verify → stateful review → ready to close, running autonomously by default after a single up-front plan approval and stopping for the owner only at the "important questions". Since ADR-033 it closes nothing itself: its terminal act is routing the close to the producer, which writes the agent-closed marker. Session-only; refuses a spawned/headless invocation.
 ---
 
 # Task Ship-Loop (coder side)
@@ -17,33 +17,44 @@ description: The coder's autonomous brief-to-done loop. Takes one backlog task f
 > /fkit-task-ship-loop <brief-path>
 > ```
 
-> ## ⚠️ This skill closes the task itself — and that is the weakest link in fkit.
-> Since [ADR-025](../../../ai-agents/knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)
-> the loop's terminal act is to **invoke `/fkit-task-done` and close the task**, writing
-> `✅ Done (agent-closed — not owner-verified)`. It no longer stops at an owner done-gate.
+> ## ⚠️ This skill closes nothing itself — it hands the close to the producer.
+> **Read what that does and does not fix.**
+> Since [ADR-033](../../../ai-agents/knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)
+> the task movers are **producer-only** and hook-enforced (ADR-018). The loop's terminal act is to
+> **route the close to `fkit-producer`** — it never invokes `/fkit-task-done` itself. The **producer**
+> writes `✅ Done (agent-closed — not owner-verified)`.
 >
-> **Understand what that composes into.** ADR-019 sold this loop's autonomy on **two** human gates:
-> plan approval up front, and an owner-only close at the end. **One of them is now gone.** What remains
-> is: the owner approves a plan, walks away, and the loop builds, reviews, judges and closes its own
-> work with no human between the plan and the green board. That is laundering path **L1 — "the confused
-> optimist"** at full strength, which ADR-025 records as *the normal failure, not an exotic one*, and
-> accepts **unmitigated**.
+> **Understand what that composes into.** ADR-019 sold this loop's autonomy on **two** human gates: plan
+> approval up front, and an owner-only close at the end. ADR-025 removed the second one, and **ADR-033
+> did not restore it** — it moved the close to a different *agent*, not to a human. What ADR-033 buys is
+> separation of the closing **identity**: the coder can no longer flip its own board green under its own
+> identity, and the runtime denies it if it tries. What it does **not** buy is prevention — ADR-033
+> §The limit says so plainly: a coder that spawns a producer to close is still *"the coder marks its own
+> work done with an extra hop"* (ADR-033 §The limit, quoting ADR-025). Laundering path **L1 — "the
+> confused optimist"** survives, one hop longer.
 >
-> **The plan gate is therefore the only human checkpoint left. It is unremovable.** Treat every doubt
-> about scope as a reason to stop, not a reason to proceed — there is no longer a second checkpoint to
-> catch what you get wrong here.
+> **The plan gate is therefore still the only human checkpoint. It is unremovable.** Treat every doubt
+> about scope as a reason to stop, not a reason to proceed — there is no second checkpoint to catch what
+> you get wrong here.
 
 ## Overview
 
-This skill runs one backlog task **from brief to closed** with **minimal owner involvement**. The owner
-starts the loop, approves the plan, and may then **walk away**; the loop ships the task autonomously,
-ending its turn only at an "important question", and closes the task itself. It is the operating model
-settled in
+This skill runs one backlog task **from brief to ready-to-close** with **minimal owner involvement**. The
+owner starts the loop, approves the plan, and may then **walk away**; the loop ships the task
+autonomously, ending its turn only at an "important question", and **routes the close to the producer**.
+It is the operating model settled in
 [ADR-019](../../../ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)
-— **as amended by [ADR-025](../../../ai-agents/knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md),
-which removed the owner-only done-gate** (ADR-019 §Decision 5) — and the owner-approved design spec
+§Decision 5, **twice amended**: by
+[ADR-025](../../../ai-agents/knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)
+(which removed the owner-only done-gate) and then by
+[ADR-033](../../../ai-agents/knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)
+§3 (which turned the coder's self-close into a producer route) — plus the owner-approved design spec
 [`reports/2026-07-17-design-task-ship-loop-skill.md`](../../../ai-agents/knowledge-base/reports/2026-07-17-design-task-ship-loop-skill.md)
 (rev 3, §11).
+
+**Say the cost plainly** (ADR-033 §Consequences): **autonomous shipping now ends at a producer hand-off,
+not a green board.** The loop's autonomy is narrower than ADR-019 first granted — one more hop, one more
+agent, before a task leaves the board.
 
 **Argument:** `$ARGUMENTS` — the path to the **task brief** (e.g.
 `ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`). An **operand** — it selects *which task* the loop
@@ -91,8 +102,9 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
 
 - All three are **git-tracked, left in the working tree; the owner commits — never the loop.** The
   folder already exists (the brief is in it); just write the file beside `brief.md`.
-- They **move with the folder** when `/fkit-task-done` (or `-cancelled`) relocates the task — they are
-  reserved names inside it, not separate top-level records. None is wiki-ingested; none is a task brief.
+- They **move with the folder** when the **producer's** `/fkit-task-done` (or `-cancelled`) relocates the
+  task — they are reserved names inside it, not separate top-level records. None is wiki-ingested; none is
+  a task brief.
 - **Fail-safe on resume:** if the loop cannot establish from these files that a gate was passed, it
   **returns to the nearest owner gate** — it never infers a plan approval it cannot evidence.
 - **Status write = both locations:** every status transition writes the brief's `## Status` **and** the
@@ -103,8 +115,8 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
 ## The loop, numbered
 
 > **⛔ STOP** steps are owner gates. The owner approves the plan (step 3), then may walk away; the loop
-> ships the task and closes it. **Step 3 is the only guaranteed stop** — after it, the loop may run to a
-> green board without the owner returning at all.
+> ships the task and **hands the close to the producer**. **Step 3 is the only guaranteed stop** — after
+> it, the loop may run all the way to that hand-off without the owner returning at all.
 
 1. **Ground.** Read the brief at `$ARGUMENTS`; resolve the task-id. Read the wiki (`/fkit-query`),
    `ai-agents/knowledge-base/architecture.md`, and any ADR whose **"Re-raise only if"** bears on the
@@ -139,26 +151,42 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
      `fkit-coder.md:109-113`).
    - **Partial (no Codex)?** Re-request the review up to **3 attempts total** (absorbing a transient
      outage). If still no model-diverse pass, **proceed** — do not stop and wait — but mark the task
-     **loudly "reviewed — NOT model-diverse"** in the worklog — and, per step 9, **do not self-close**
-     a run that never got a model-diverse pass; put the close to the owner.
+     **loudly "reviewed — NOT model-diverse"** in the worklog — and, per step 9, **do not route the
+     close** for a run that never got a model-diverse pass; put the close to the owner.
 7. **Re-verify & loop.** **If any code changed in step 6, return to step 5.** Repeat steps 6–7 until
    the ledger is **closed-out with the last verify green.** Non-convergence (the loop-check fires) →
    **⛔ STOP** with the convergence call and a `🚧 Blocked — review not converging` worklog.
 8. **Finalize the report.** Complete `<task-folder>/worklog.md` into the close-out
    **evidence packet** (see below) — evidence for the owner to judge, **not** a done-verdict.
-9. **Close the task.** Invoke **`/fkit-task-done`** on the brief. You are an agent, so it writes
-   `✅ Done (agent-closed — not owner-verified)` — in the brief and every board row. **Apply that
-   marker honestly; nothing enforces it, and it is the only signal that no human checked this work.**
-   Report the close, the marker, and the evidence packet to the owner. *(Autonomous.)*
+9. **Route the close to the producer — never close it yourself.** The movers are **producer-only**
+   (ADR-033 §1) and the ADR-018 `PreToolUse` hook **denies** a mover call from the coder identity at any
+   spawn depth, so **do not invoke `/fkit-task-done`**. Instead spawn **@fkit-producer** (**hop 1**, no
+   cycle) and ask it to close the finished task — naming the brief path, the task-id, and the evidence
+   packet. The **producer** runs the mover and writes `✅ Done (agent-closed — not owner-verified)` in
+   the brief and every board row (ADR-033 §5 — a **spawned** producer has no owner channel, so its close
+   is never owner-verified). *(Autonomous.)*
 
-   - **Do not close on a degraded run.** If the review never got a Codex pass (step 6), or any
-     verification is red, or a residual is unresolved — **⛔ STOP** and put the close to the owner
-     instead. The relaxation lets you close work you are *confident* in; it is not a licence to close
-     work you already know is weak.
-   - **Cancelling is different — do not self-serve it.** If the loop concludes the task should be
+   - **Confirm the close landed, then report.** The producer's own close-out report enumerates **every**
+     doc it touched (`fkit-task-done` step 7): board rows, the brief's own `## Status`, any parent epic
+     slice, `backlog.md`, in-body `**Status:**` lines, and every re-pointed href — including under
+     `sprints/done/`, `sprints/reviews/` and the knowledge-base. **Read that report**, and cross-check
+     it against the state you can see (folder now under `done/`; brief `## Status` and sprint row read
+     Done **with** the marker). A three-location spot-check on its own cannot see a partial close —
+     **do not claim a close you did not verify.** Then report the close, the marker, and the evidence
+     packet to the owner.
+   - **If the close half-landed, ask the producer to finish it — never patch a status yourself.**
+     Re-spawn **@fkit-producer** **once**, naming exactly what disagrees, and ask it to reconcile its
+     own close. If it still does not land, write `🚧 Blocked — hand-off incomplete: <what disagrees>` in
+     **both locations** and **⛔ STOP** for the owner. Statuses on a closing task are the producer's to
+     write; the loop writes only its own `🚧 Blocked` marker, and **never** a `✅ Done`.
+   - **Do not route a degraded run.** If the review never got a Codex pass (step 6), or any verification
+     is red, or a residual is unresolved — **⛔ STOP** and put the close to the owner instead. Routing
+     work you already know is weak launders it through the producer; the extra hop is not a second
+     judgment (ADR-033 §The limit).
+   - **Cancelling is different — do not route it either.** If the loop concludes the task should be
      **cancelled** rather than done, **⛔ STOP and ask.** `cancelled/` is audited by nobody, and an
      agent retiring its own unfinishable obligation is the one move with no detection path at all
-     (ADR-025 §Consequences).
+     (ADR-025 §Consequences) — a producer spawn does not fix that.
 
 **Any early exit** (step 3 rejection, step 5 budget, step 7 non-convergence, a consult dead-end): set
 the accurate status (`🔲 Backlog` on rejection, else `🚧 Blocked — <reason>`, **both locations**),
@@ -177,8 +205,9 @@ in silence.
 4. **Review judgment calls** (step 6): a frontier-move / accepting a residual, a regression or review
    oscillation, a disputed severity that changes scope, a broad/behavior-changing fix, or a fix outside
    the approved plan.
-5. **A close the loop should not make itself** (step 9): a degraded run (no Codex pass, red
-   verification, unresolved residual), or a conclusion that the task should be **cancelled**.
+5. **A close the loop should not route itself** (step 9): a degraded run (no Codex pass, red
+   verification, unresolved residual), a conclusion that the task should be **cancelled**, or a producer
+   hand-off that did not land.
 6. **A dead-end** it can't resolve (verification it can't get green within budget; a consult that
    returns nothing usable).
 
@@ -215,40 +244,46 @@ Evidence for the owner to judge, **not** a done-verdict. Contains, at minimum:
 
 | Terminal state | Trigger | The loop does |
 |---|---|---|
-| **Closed** | ledger closed-out **and** last verify green | finalize worklog → invoke `/fkit-task-done` → report the close and its marker |
+| **Handed off to the producer → closed** | ledger closed-out **and** last verify green | finalize worklog → spawn **@fkit-producer** to close (the loop never invokes the mover) → confirm the close landed → report the close and its marker |
 | **Back to Backlog** | owner rejects the plan (step 3) | status stays `🔲 Backlog` (In progress not set); report the rejection (no pre-approval worklog); STOP |
 | **Blocked — verification** | step 5 budget (3 no-progress cycles) hit | `🚧 Blocked — verification: <what fails>` (both locations); finalize worklog; STOP |
 | **Blocked — review non-convergence** | step 7 oscillation (loop-check fires) | surface the convergence call; `🚧 Blocked — review not converging`; STOP |
 | **Blocked — needs a decision** | a fix/plan question beyond the plan | surface; `🚧 Blocked — awaiting decision: <q>`; STOP |
 | **Blocked — consult dead-end** | a hop-2 open question can't be answered | surface; `🚧 Blocked — <q>`; STOP |
-| **Proceeds, flagged — but does NOT self-close** | Codex absent after 3 attempts | finish the work and the report, mark it loudly "reviewed — NOT model-diverse", then **STOP** and put the close to the owner |
+| **Blocked — hand-off didn't land** | the producer spawn failed, was denied, or left the close partial | re-spawn **@fkit-producer** **once** to reconcile its own close; if it still fails, `🚧 Blocked — hand-off incomplete: <what disagrees>` (both locations); STOP |
+| **Proceeds, flagged — but does NOT route the close** | Codex absent after 3 attempts | finish the work and the report, mark it loudly "reviewed — NOT model-diverse", then **STOP** and put the close to the owner |
 
 **Invariants:**
 - `🔄 In progress` is set **only after plan approval** (a pre-approval exit leaves `🔲 Backlog`).
 - On an **early exit, `🔄 In progress` is correct, not stale** — work started, close-out pending.
 - On **resume**, re-derive status from the durable artifacts and correct any status that no longer
   matches reality.
-- Every exit finalizes the worklog. The loop **may set `✅ Done` only via `/fkit-task-done`, only with
-  the agent-closed marker, and never by hand-editing a status.**
+- Every exit finalizes the worklog. The loop **never sets `✅ Done` at all** — only the **producer** it
+  routes to does, via `/fkit-task-done` and always with the agent-closed marker. Hand-editing a status to
+  Done is forbidden on every path.
 
 ---
 
 ## Hard rules
 
 - **Session-only.** Refuse a spawned/headless invocation — return the plan, do not run the loop.
-- **The plan gate is unremovable — and since ADR-025 it is the ONLY human checkpoint.** No code before
-  the owner approves the plan (step 3). There is no second gate to catch a bad plan.
+- **The plan gate is unremovable — and it is still the ONLY human checkpoint.** ADR-025 removed the
+  owner-only close and ADR-033 **did not bring it back** (it moved the close to the producer, another
+  agent). No code before the owner approves the plan (step 3). There is no second gate to catch a bad plan.
 - **Autonomy is bounded by fix shape** (mechanical + in-plan `CORRECT`, or an obvious winner). Every
   judgment call and every direction/scope change **stops**. **When in doubt, stop.**
-- **You may close the task; you may not cancel it.** `/fkit-task-done` is yours (step 9), always with
-  the `(agent-closed — not owner-verified)` marker. `/fkit-task-cancelled` **stops for the owner** —
-  `cancelled/` is audited by nobody, so an agent retiring its own obligation has no detection path.
-- **Never close a degraded run.** No Codex pass, red verification, or an unresolved residual ⇒ finish
-  the report and **hand the close to the owner**. Self-closing work you already know is weak is the
-  exact failure the removed gate used to catch.
+- **You close nothing yourself.** Neither mover is yours — both are producer-only (ADR-033 §1) and
+  hook-denied to the coder identity. Your terminal act is a **producer hand-off** (step 9); the producer
+  writes the `(agent-closed — not owner-verified)` marker. A **cancel** is never routed either: it
+  **stops for the owner** — `cancelled/` is audited by nobody, so an agent retiring its own obligation has
+  no detection path.
+- **Never route a degraded run.** No Codex pass, red verification, or an unresolved residual ⇒ finish
+  the report and **hand the close to the owner**. Pushing work you already know is weak through a
+  producer spawn is the exact failure the removed gate used to catch — the extra hop is not a second
+  judgment (ADR-033 §The limit).
 - **`fkit-process-stateful-review` is used by *method*, not invoked-and-overridden**, and is
   byte-unchanged; the review ledger's *Reviewer findings* section is reviewer-owned — never edit it.
-- **Re-verify after any post-review code change** before closing (step 7).
+- **Re-verify after any post-review code change** before handing the close off (step 7).
 - **Codex second opinion cannot be silently skipped** — retry 3×, then proceed-and-flag loudly.
 - **Do not commit or push** — leave every edit (source, plan, worklog, ledger) in the working tree; the
   owner commits.

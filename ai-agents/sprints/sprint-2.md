@@ -129,12 +129,12 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done (agent-closed — not owner-verified) | 97 | Refresh architecture.md for the lead conductor + fix the stale §5.2 lock description *(architecture half of T6 **plus** the independent §5.2 `skillOverrides`→ADR-018-hook stale-lock fix, design §1.1; coordinates with 94 on the same file; needs 92 + 94; owner: fkit-architect)* | [`0115-refresh-architecture-doc-for-lead-conductor-and-stale-lock`](../tasks/done/0115-refresh-architecture-doc-for-lead-conductor-and-stale-lock/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 98 | Add `fkit-sprint-ship-loop` to the ADR-030 Stop-hook skip set *(one skip-list entry + test; owner: fkit-coder)* | [`0116-add-sprint-ship-loop-to-stop-hook-skip-set`](../tasks/done/0116-add-sprint-ship-loop-to-stop-hook-skip-set/brief.md) |
 | 🔲 Backlog | 99 | Wiki ingest — ADR-031/032, the design report, and the evolved lead role *(vault write — fkit-wiki only; recommend running last, after 96 + 97 land; needs T1 (Done) + 92; owner: fkit-wiki)* | [`0117-wiki-ingest-lead-conductor-and-adrs-031-032`](../tasks/backlog/0117-wiki-ingest-lead-conductor-and-adrs-031-032/brief.md) |
-| 🔲 Backlog | 100 | Record the ADR-032 sprint-ship-loop autonomy amendment — Build carve-out + Process-review autonomy (option b) + accepted cost + do-not-re-raise guard *(**owner is writing this in a `fkit architect` session** — tracking only, not reassigned; blocks 99's ingest of the *amended* ADR-032; owner: fkit-architect)* | [`0118-record-adr-032-sprint-ship-loop-autonomy-amendment`](../tasks/backlog/0118-record-adr-032-sprint-ship-loop-autonomy-amendment/brief.md) |
+| 🔲 Backlog | 100 | Record the ADR-032 sprint-ship-loop autonomy amendment — Build carve-out + Process-review autonomy (option b) + accepted cost + do-not-re-raise guard *(**reassigned 2026-07-25 — owner ruled it stalled**; was parked as "owner is writing it himself", verified never written, blocked 99 for three days unnoticed; the four 2026-07-22 decisions are settled and not reopened; owner: fkit-architect)* | [`0118-record-adr-032-sprint-ship-loop-autonomy-amendment`](../tasks/backlog/0118-record-adr-032-sprint-ship-loop-autonomy-amendment/brief.md) |
 | 🔲 Backlog | 101 | Track the `fkit-coder` declared-approval carve-out — the guarantee-surface change 0111 folded in *(**already implemented in the working tree — done-pending-review, not re-do**; the architect asked it get its own reviewable record; needs 93 + 100; **recommend owner-verify, not agent-close**; owner: fkit-coder)* | [`0119-track-fkit-coder-declared-approval-carve-out`](../tasks/backlog/0119-track-fkit-coder-declared-approval-carve-out/brief.md) |
 | 🔲 Backlog | 102 | Fix the `fkit-sprint-ship-loop` SKILL.md owner-banner format *(cosmetic; bare `# ⛔ Owner:` H1 → sibling-style title; no ADR-018-hook impact; independent; owner: fkit-coder)* | [`0120-fix-sprint-ship-loop-skill-owner-banner-format`](../tasks/backlog/0120-fix-sprint-ship-loop-skill-owner-banner-format/brief.md) |
 | 🔲 Backlog | 103 | Decide whether to drop the numeric prefix from task-folder names *(investigation — **weighs against ADR-029 Decision 5 + the task-76 migration**; the two-numbers confusion, folder-ID `0109` vs sprint priority `91`; blocks 104; owner: fkit-architect)* | [`0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names`](../tasks/backlog/0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names/brief.md) |
 | 🔲 Backlog | 104 | Implement the task-folder-name scheme change from the approved design *(needs 103 incl. approval + any ADR — hard; **may be cancelled if 103 says keep the number**; owner: fkit-coder)* | [`0103-implement-task-folder-name-scheme-change`](../tasks/backlog/0103-implement-task-folder-name-scheme-change/brief.md) |
-| 🔲 Backlog | 105 | Rewrite `fkit-task-ship-loop` step 9 — coder self-close → route close to producer *(ADR-033 §3 ripple, amends ADR-019; ships **before** 0124; owner: fkit-coder)* | [`0122-route-coder-ship-loop-close-to-producer`](../tasks/backlog/0122-route-coder-ship-loop-close-to-producer/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 105 | Rewrite `fkit-task-ship-loop` step 9 — coder self-close → route close to producer *(ADR-033 §3 ripple, amends ADR-019; ships **before** 0124; owner: fkit-coder)* | [`0122-route-coder-ship-loop-close-to-producer`](../tasks/done/0122-route-coder-ship-loop-close-to-producer/brief.md) |
 | 🔲 Backlog | 106 | Rewrite `fkit-sprint-ship-loop` close step — driver self-close → spawn producer to close *(ADR-033 §4 ripple, amends ADR-032; revises 0111's as-first-written close; ships **before** 0124; owner: fkit-coder)* | [`0123-route-sprint-ship-loop-close-to-producer`](../tasks/backlog/0123-route-sprint-ship-loop-close-to-producer/brief.md) |
 | 🔲 Backlog | 107 | Revert the task movers to producer-only — `skills-for-role.sh` + 4 mirrors + hook test + mover SKILL prose *(ADR-033 §1 structural core; needs 105 + 106 — hard; owner: fkit-coder)* | [`0124-revert-task-movers-to-producer-only`](../tasks/backlog/0124-revert-task-movers-to-producer-only/brief.md) |
 | 🔲 Backlog | 108 | Wiki flag-don't-close convention — 3 wiki SKILLs end by flagging "task N ready to close" *(ADR-033 §2 / task 0108's operative fix; recommend co-landing with 107; owner: fkit-coder)* | [`0125-wiki-skills-flag-ready-to-close`](../tasks/backlog/0125-wiki-skills-flag-ready-to-close/brief.md) |
@@ -1610,4 +1610,100 @@ block lands in every agent's context on every turn. The coder presents the optio
 implements the signed choice.
 
 **Priority 113 is appended after the tail, not inserted** — `fkit-task-brief` step 5 forbids renumbering
-the owner's ranking. Flagged for owner confirmation.
+the owner's ranking. Flagged for owner confirmation. **✅ Confirmed by the owner 2026-07-25 — 0130 stays
+at priority 113.** No re-ranking; the question is settled.
+
+## Addendum — 2026-07-25: owner dispositions, and a scope gap found in task 107 (0124)
+
+### OQ8 — ❌ the producer re-raised it in error; it was resolved on 2026-07-17
+
+**No task filed. Nothing to do.** The producer's 2026-07-25 situation briefing listed OQ8 as *"never
+scoped, still awaiting your word"* and the owner ruled on it again. **That was a producer error.** OQ8 was
+ruled *"generalize"* on **2026-07-17**, spawning **task 47**, and the resolution is stated in this plan's
+own §Open questions header — directly above the text the producer read. The convention has existed since
+then:
+[`conventions/one-skill-one-output.md`](../knowledge-base/conventions/one-skill-one-output.md).
+
+**The already-shipped convention satisfies every point raised in the re-ask**, including the one the
+producer flagged as critical — §"The escape hatch" states that a proposed output-variant is *"an owner
+decision at proposal time, never a silent design choice"*, and §"History — recorded honestly" records the
+`/fkit-status full` tradeoff verbatim: the variant *"was correct when written"* and only task 41 retired
+its justification. Its scaffold follow-up also shipped, as task **0086**.
+
+**Cause, for the record:** the producer read the resolution marker and reported the question as open
+anyway — a failure of the standing rule in
+[`conventions/evidence-before-assertion.md`](../knowledge-base/conventions/evidence-before-assertion.md).
+It cost the owner a decision they had already made. **This is the second OQ to be re-raised after
+resolution** — OQ6/task 37 was the first (see §Owner dispositions, item 6, still sitting cancelled-pending
+in `backlog/`). Two instances is a pattern in the briefing procedure, not two slips.
+
+### Three ADR-027 follow-up briefs were never filed — found by sweep, filed 2026-07-25
+
+The OQ8 check above led into the conventions directory, which surfaced a real and larger gap.
+[ADR-027](../knowledge-base/decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test.md)
+(accepted **2026-07-19**) named **three producer-scoped briefs**. A sweep of all three boards found that
+**none had ever been filed** — for six days. Now on the Backlog board:
+
+| ID | Task | ADR-027 ref |
+|---|---|---|
+| **0131** | Add the dual-home scoping check to `/fkit-task-brief` | §Decision 1 |
+| **0132** | Reconcile the dual-homed file drift (blocks 0133) | §Decision 2 |
+| **0133** | Build `test/dual-home-parity.test.js` (needs 0132) | §Decision 2 |
+
+**Confirmed live drift:** `conventions/dependency-declaration-form.md` exists in `ai-agents/` but **not**
+in `claude/scaffold/`, while `conventions/README.md` states *"every other convention here is dual-homed
+and must stay byte-identical."* That file defines the `- **Depends on:**` form `dashboard.sh` parses — so
+consuming projects never receive it and inherit the **task-84 misreport class** (blocked tasks rendering
+as pullable). ADR-027 recorded four prior recurrences of this drift; this is the fifth.
+
+**🚩 The finding that needs the owner, loudly: `test/dual-home-parity.test.js` does not exist, and two
+briefs cite it as a verification step.**
+
+- **Task 0112** — `✅ Done (agent-closed — not owner-verified)` — shipped with verification step 4 reading
+  *"The ADR-027 dual-home parity test passes (live vs scaffold)."* **That step was unrunnable when it was
+  claimed.** Agent-closed, so no human confirmed it either.
+- **Task 0124** (priority 107) — same wording. **Corrected in the brief 2026-07-25** to a hand-run `diff`,
+  with an explicit "do not go looking for that test" warning.
+
+**✅ Owner ruled 2026-07-25: re-verify 0112 by hand once 0133 lands.** It is **not** reopened and **not**
+written off. 0133's brief now carries the obligation as a named deliverable — run the new parity test
+against 0112's five touched files, report pass or fail to the owner, and if it fails, scope the repair as
+its own task rather than fixing it under 0133. **The risk this leaves open, stated plainly:** 0112 stays
+`✅ Done` in the meantime on the strength of a verification nobody ran. That is an accepted, dated,
+tracked exposure — not a resolved one — and it stays exposed until 0132 and 0133 both land.
+
+### Owner dispositions, 2026-07-25 — summary
+
+| Item | Ruling |
+|---|---|
+| 0130 priority 113 | ✅ Confirmed; no re-ranking |
+| OQ8 | ❌ Producer error — already resolved 2026-07-17; no task |
+| Task 100 (0118) | **Stalled → reassigned** to fkit-architect as live work |
+| Task 0112 | Re-verify by hand once 0133 lands; stays closed meanwhile |
+| ADR-033 chain (105–109) | Owner drives it in a `fkit coder` session |
+
+### Task 107 (0124) — scope amended, gap found by sweep
+
+Brief `0124-revert-task-movers-to-producer-only` listed only the **four** `skills-for-role.sh:12-24`
+mirrors. A grep sweep this session found **three further live sources** asserting the reversed ADR-025
+grant that the checklist does not cover:
+
+| File | What it says |
+|---|---|
+| `claude/scaffold/universal-rules.md:7` | *"Any role but the adversarial reviewer may invoke them"* — the rules block in **every agent's context, every turn**; also generates the repo-root `CLAUDE.md`/`AGENTS.md` blocks |
+| `claude/agents/fkit-producer.md:7,37-38,95-96` | three assertions of the ADR-025 grant |
+| `claude/agents/fkit-coder.md:103,190-191` | *"closes the task itself"* + *"you may invoke them yourself"* — the latter in the coder's **hard must-not-do list** |
+
+**Why this mattered:** these are **system prompts**, which outrank a SKILL in the agent's own context. Had
+0124 shipped as written, the ADR-018 hook would deny the coder a mover while `fkit-coder.md:190-191` still
+told it to invoke one — a runtime that argues with itself. Added to the brief as **item 5**, with a
+verification sweep as step 6.
+
+**The generalizable finding — not just this instance:** the `skills-for-role.sh:12-24` mirror checklist is
+**not a complete inventory** of where a skill-ownership fact is stated. It was built for docs and misses the
+agent definitions and the universal rules block. That checklist has shipped false docs once before
+(task 0036); this is the second class of thing it does not see. **Not scoped** — flagged for the owner.
+
+**Ripple onto 0130 (priority 113):** item 5 edits `universal-rules.md`, changing the size of the very block
+0130 is reclaiming headroom in. Producer-only is *shorter* than "any role but the adversarial reviewer", so
+0124 likely returns a few bytes — **measured, not assumed**. Whichever task lands second re-measures.
