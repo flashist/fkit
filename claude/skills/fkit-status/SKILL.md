@@ -123,7 +123,7 @@ When they disagree:
   is a decision, and it's the owner's (see step 5). Surface it; let them call it. In particular `✅ Done`
   and `⛔ Cancelled` are **set only by the movers** (`/fkit-task-done`, `/fkit-task-cancelled`) — this
   skill never concludes them, however obvious the code looks. It is read-only; that is unchanged by
-  ADR-025 letting any role invoke those movers.
+  ADR-033 making those movers producer-only.
 
 ### 3. Emit the seven beats, in order
 

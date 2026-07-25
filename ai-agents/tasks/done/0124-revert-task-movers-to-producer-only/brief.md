@@ -7,7 +7,7 @@
 Sprint 2
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -109,8 +109,29 @@ Per ADR-033 §1 and §Consequences:
 5. Both movers' SKILLs read producer-only, retaining the agent-closed-marker rule for a spawned producer.
 6. **No live source still asserts the ADR-025 grant.** Re-run the sweep that found the gap and confirm
    only historical records match (ADRs, closed sprint/task/report files, wiki pages pending 0126):
-   `grep -rniE "any (role|agent)[^.]{0,50}(may|can) (invoke|close|run)" claude/ CLAUDE.md AGENTS.md`
-   — expect **zero** hits in `claude/agents/`, `claude/scaffold/`, and `claude/skills/`.
+   `grep -rniE "any (role|agent)[^.]{0,50}((may|can) (invoke|close|run)|, via )" claude/ ai-agents/knowledge-base/ CLAUDE.md AGENTS.md`
+   — expect **zero** hits in `claude/agents/`, `claude/scaffold/`, `claude/skills/`, and the
+   **living canon** (`knowledge-base/PROJECT.md`, `architecture.md`, `conventions/`).
+   `knowledge-base/decisions/` and `knowledge-base/reports/` are **historical by design** — ADRs and
+   dated reports record what the rule *was*, so hits there are expected and correct.
+   **Two known false positives** of the widened pattern, both verified benign and neither about the
+   movers: `claude/README.md:86` (*"Wiki READS: any role, directly, via /fkit-query"* — ADR-005) and
+   `reports/2026-07-18-design-fkit-git-agent-and-consent-model.md:27` (a rejected git-agent option).
+   **⚠️ Amended 2026-07-25 (round-1 review of this task, findings R1 + R2).** The original sweep had
+   **two independent blind spots**, and each shipped a real defect into the working tree:
+   - **A PATH gap (R1).** The path was `claude/ CLAUDE.md AGENTS.md`, which excludes
+     `ai-agents/knowledge-base/` entirely — so `PROJECT.md:100-103` kept asserting the ADR-025 grant
+     *and* "nothing structural replaced it", in an ADR-013 living-canon doc linked from root
+     `CLAUDE.md`. **The regex would have matched it; the path never showed it the file.**
+   - **A PHRASING gap (R2).** `task-status-vocabulary.md`'s "Set by" column read
+     `Any agent, via /fkit-task-done` — a **verbless noun phrase**, which a modal+verb regex cannot
+     match, in **both** the live and scaffold copies. The `, via ` alternation above is the patch.
+
+   ⚠️ **This grep is a smoke test, never an inventory — a by-hand sweep is required regardless of a
+   green result.** Recorded as an **accepted residual**: no single regex enumerates every way a
+   permission fact can be phrased, and each amendment has only ever closed the *last* blind spot. A
+   green step 6 is **weak evidence**; the by-hand sweep and an independent reviewer pass are the real
+   ones. This is the **fourth** materialization of this brief's own standing finding (see Notes).
 7. The ship-loops (0122/0123) already route closes to a producer spawn, so no loop invokes a now-denied
    mover.
 8. **The sanctioned-hand-off carve-out is present in both agent definitions** — `fkit-coder.md` and

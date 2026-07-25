@@ -176,8 +176,8 @@ and satisfy the hook regardless — task 0116.)
     rule applies: write `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations.
   - **The folder moved but a status or href is stale:** **no agent can repair this — it is the owner's.**
     `/fkit-task-done` **stops** on a folder already under `ai-agents/tasks/done/`, and its one exception —
-    the owner-verification upgrade — is **owner-only** (`fkit-task-done/SKILL.md:60-64`); `✅ Done` is
-    skill-gated and must **never** be hand-edited (`fkit-task-done/SKILL.md:265-267`). So do **not**
+    the owner-verification upgrade — is **owner-only** (`fkit-task-done/SKILL.md:78-82`); `✅ Done` is
+    skill-gated and must **never** be hand-edited (`fkit-task-done/SKILL.md:283-286`). So do **not**
     re-spawn the producer for this case and do **not** hand-patch anything: write
     `🚧 Blocked — hand-off incomplete: <what disagrees>` **on the location that is still stale**, leave any
     `✅ Done` the producer legitimately wrote **untouched** (only the owner may change a landed Done),
@@ -220,7 +220,7 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 > href stale, a landed `✅ Done` is **the owner's** — the driver marks only the **stale** location
 > `🚧 Blocked — hand-off incomplete`, leaves the `✅ Done` alone, and reports. That is the single sanctioned
 > case where the two locations are knowingly left disagreeing, because no agent can lawfully reconcile them
-> (`fkit-task-done/SKILL.md:60-64`, `:265-267`). It is **reported**, never silent.
+> (`fkit-task-done/SKILL.md:78-82`, `:283-286`). It is **reported**, never silent.
 
 ## Progress reporting (§5.5)
 - **Per task:** surface the coder worker's close-out evidence packet from its `worklog.md` (change

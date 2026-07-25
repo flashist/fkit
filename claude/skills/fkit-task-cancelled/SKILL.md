@@ -5,16 +5,26 @@ description: Mark a task cancelled — move its brief into ai-agents/tasks/cance
 
 # Task Cancelled
 
-> ## ⛔ Owner: the **producer** — but **any agent may invoke it**
-> This is the fkit-producer's procedure and it lives in the producer's namespace. Since
-> [ADR-025](../../../ai-agents/knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)
-> it is **not owner-only**: any spawned fkit role may run it, including on its own task.
-> (The one exception is `fkit-adversarial-reviewer`, whose contract is findings-only.)
+> ## ⛔ Owner: the **producer**
+> This is the fkit-producer's own procedure. Execute it **only** if you are the producer — running as
+> the `fkit-producer` agent or in a `fkit producer` session. Since
+> [ADR-033](../../../ai-agents/knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)
+> this is **structural, not a request**: the ADR-018 `PreToolUse` hook denies a mover call from any
+> non-producer identity at any spawn depth. (ADR-033 reverses
+> [ADR-025](../../../ai-agents/knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md),
+> which had granted this skill to every role but the adversarial reviewer.)
+>
+> **Any other role: do not execute this.** Route the cancellation to the producer instead:
+> ```
+> @fkit-producer Cancel this task: <path> — <reason>
+> ```
 >
 > **⚠️ If you are an agent and not the owner, you MUST write the agent-closed marker** — see
-> *The status vocabulary* below. **Cancelling is the least-audited path in fkit**: nobody reads
-> `cancelled/`. An agent that cannot finish a task can make its own obligation disappear here, and the
-> chance anyone notices is close to zero. Weigh that before you invoke this on your own work.
+> *The status vocabulary* below. **A producer that was SPAWNED to cancel is an agent** (ADR-033 §5):
+> it has no owner channel (ADR-021). **Cancelling is the least-audited path in fkit**: nobody reads
+> `cancelled/`. An agent that cannot finish a task can make its own obligation disappear here — now by
+> spawning a producer to do it — and the chance anyone notices is close to zero. Producer-only changed
+> **who signs** that act, not how invisible it is. Weigh that before you run it on work you were handed.
 
 
 Mark a dropped task cancelled: move its brief into `ai-agents/tasks/cancelled/` and update the sprint
@@ -35,9 +45,11 @@ status marker, and that cancellation records *why* and flags what it leaves behi
 > way to perform the cancel move: it updates every place the task is tracked and records *why*, so the
 > board and the brief never drift apart. Invoking it is the signal that the task was deliberately dropped.
 >
-> **What it no longer is: a gate.** It used to run only when the owner invoked it. ADR-025 removed that
-> **knowingly**. What replaces it is the `(agent-closed — not owner-verified)` marker, and **the marker
-> is prose — nothing enforces it.**
+> **What kind of gate it is.** It once ran only when the owner invoked it; ADR-025 removed that
+> **knowingly**, leaving nothing structural. ADR-033 restores a narrower gate: the hook enforces **who**
+> may cancel — the producer, and no other role. It does **not** restore prevention (§The limit): a doer
+> can still spawn a producer. The `(agent-closed — not owner-verified)` marker carries the only signal
+> there, and **the marker is prose — nothing enforces it.**
 
 ## Resolve the status value FIRST
 
@@ -46,11 +58,13 @@ this resolved value, not the literal string**:
 
 | You are | Marker to write |
 |---|---|
-| The **owner**, invoking this in a session | `⛔ Cancelled (YYYY-MM-DD) — <reason>` |
-| **Any agent** — spawned, in a loop, or cancelling its own work | `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>` |
+| The **owner**, invoking this in an owner-present `fkit producer` session | `⛔ Cancelled (YYYY-MM-DD) — <reason>` |
+| A **producer spawned** to cancel — by a loop, an orchestrator, or any other agent | `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>` |
 
-**If you are unsure which you are, you are an agent.** The date and reason stay mandatory in both
-forms; the qualifier is prepended, never a substitute for them.
+**If you are unsure which you are, you are an agent.** Being the producer is what let you run this
+skill at all (ADR-033 §1); the **owner being present** is what makes a cancellation owner-verified
+(ADR-033 §5). The date and reason stay mandatory in both forms; the qualifier is prepended, never a
+substitute for them.
 
 ---
 
@@ -318,7 +332,8 @@ The canonical status set is documented in **`ai-agents/knowledge-base/convention
 — it is the source of truth, and this skill writes exactly one of its two cancelled values:
 
 > **`⛔ Cancelled (YYYY-MM-DD) — <reason>`** (owner), or
-> **`⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>`** (any agent) — the date
+> **`⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>`** (a **spawned
+> producer**) — the date
 > and the reason are **mandatory** in both forms, not optional decoration. A cancellation with no
 > stated cause cannot be acted on by anyone but the person who wrote it.
 >
@@ -327,18 +342,20 @@ The canonical status set is documented in **`ai-agents/knowledge-base/convention
 > and the dashboard's `cancelled-without-reason` lint cannot catch it. Write a real reason after a
 > final ` — `.
 
-**`Cancelled` is skill-gated, not owner-gated.** It may be set **only** by this skill — never by
-hand-editing a file — but **any agent may run this skill** (ADR-025). Cancelling work is still a
-judgment about whether it will ever be done; what changed is that an agent is now allowed to make that
-judgment, not that the judgment got smaller.
+**`Cancelled` is skill-gated AND role-gated — not owner-gated.** It may be set **only** by this skill —
+never by hand-editing a file — and **only the producer may run this skill** (ADR-033, hook-enforced per
+ADR-018). Cancelling work is still a judgment about whether it will ever be done; what ADR-033 changed
+is **which role signs** that judgment, not that the judgment got smaller.
 
 ⚠️ **The agent-closed marker is the entire residual mechanism, and it is unenforced.** No code path
-checks it. **Apply it whenever you are not the owner.**
+checks it. **Apply it whenever the owner is not present**, spawned producers included.
 
 ⚠️ **The marker does not show up in `/fkit-status`.** The dashboard matches the `⛔` prefix and
 collapses every variant to plain `cancelled`, then filters the row off the open board. Known, accepted,
-recorded in ADR-025's honesty clause — **not** a defect to file.
+recorded in ADR-025's honesty clause and **unchanged by ADR-033** — **not** a defect to file.
 
-⚠️ **`cancelled/` is audited by nobody.** ADR-025 records this as the relaxation's sharpest cost: a
-false `done` is caught when someone uses the feature, but a false `cancelled` may never be caught at
-all. If you are an agent cancelling your own task, that asymmetry is working against the record.
+⚠️ **`cancelled/` is audited by nobody.** ADR-025 recorded this as its relaxation's sharpest cost, and
+**producer-only does not fix it**: a false `done` is caught when someone uses the feature, but a false
+`cancelled` may never be caught at all. If a task is being cancelled because an agent could not finish
+it, that asymmetry is working against the record — route the decision to the owner, not to a producer
+spawn.

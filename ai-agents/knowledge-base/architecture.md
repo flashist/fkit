@@ -97,7 +97,7 @@ inherits the full Claude Code tool set. Only the adversarial reviewer keeps an e
 
 | Agent | `tools` | Authority (prompt-enforced unless noted) |
 |---|---|---|
-| `fkit-producer` | *(none — inherits all)* | product & sprint planning, task briefs. **No source writes.** Owns the task-movers' namespace (any role may invoke them — ADR-025). |
+| `fkit-producer` | *(none — inherits all)* | product & sprint planning, task briefs. **No source writes.** Owns the task movers **exclusively** — only the producer may invoke them (ADR-033, reversing ADR-025). |
 | `fkit-coder` | *(none — inherits all)* | **Sole source-write authority.** Plan-gated. |
 | `fkit-architect` | *(none — inherits all)* | design specs, ADRs, surveys. **Never implements; never writes the wiki.** |
 | `fkit-reviewer` | *(none — inherits all)* | review-only; writes **only** under `ai-agents/reviews/`. |
@@ -291,7 +291,7 @@ contract every role shares (`ai-agents/README.md`).
 | `knowledge-base/reports/YYYY-MM-DD-*.md` | any session; evaluations from the **architect** | dated artifacts of work performed — audits, verifications, evaluations, executed plans. [`reports/README.md`](reports/README.md) |
 | `knowledge-base/history/` | architect | superseded **design docs** — docs that no longer describe reality. **Archive, don't delete** (ADR-002). Narrow, *not* the general archive. [`history/README.md`](history/README.md) |
 | `sprints/sprint-N.md` | producer | sprint plan + status table; completed sprints move to `sprints/done/` |
-| `tasks/{backlog,done,cancelled}/<NNNN>-<slug>/` | producer **writes** the brief; **any role but `adversarial-reviewer` moves the folder**, via `/fkit-task-done` and `/fkit-task-cancelled` (ADR-025; an agent-performed close is marked `(agent-closed — not owner-verified)`) | **A task is a folder, not a file** ([ADR-029](decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md), migrated 2026-07-22). The folder is keyed by a **permanent four-digit global ID** (`0001`…, never reused, never renumbered) and holds `brief.md` plus, when they exist, `plan.md`, `worklog.md`, `review.md`, and an `assets/` dir. The board (`backlog`/`done`/`cancelled`) is the folder's **parent**. |
+| `tasks/{backlog,done,cancelled}/<NNNN>-<slug>/` | producer **writes** the brief and is the **only role that moves the folder**, via `/fkit-task-done` and `/fkit-task-cancelled` (ADR-033, reversing ADR-025; hook-enforced at any spawn depth. Every other role routes its closes through a spawned producer, whose close is marked `(agent-closed — not owner-verified)`) | **A task is a folder, not a file** ([ADR-029](decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md), migrated 2026-07-22). The folder is keyed by a **permanent four-digit global ID** (`0001`…, never reused, never renumbered) and holds `brief.md` plus, when they exist, `plan.md`, `worklog.md`, `review.md`, and an `assets/` dir. The board (`backlog`/`done`/`cancelled`) is the folder's **parent**. |
 | *(within each task folder)* `review.md` | reviewer **and** coder — a two-party ledger | findings + dispositions + **accepted residuals**. The loop-prevention memory: it carries decision state across review rounds so settled tradeoffs are not re-litigated. **Absorbed into the task folder by ADR-029** — the former top-level `reviews/<task-id>.md`, along with `plans/` and `worklogs/` (ADR-020), no longer exist; a task's artifacts now live with its brief. |
 | `wiki-vault/` | **`fkit-wiki` only** | Karpathy LLM-wiki: `schema.md` (conventions), `index.md` (catalog), `log.md` (activity), `wiki/{features,systems,decisions,tasks}/` |
 
@@ -303,9 +303,11 @@ contract every role shares (`ai-agents/README.md`).
 2. **The task status vocabulary is closed**
    (`ai-agents/knowledge-base/conventions/task-status-vocabulary.md:11-21`): Backlog · In progress ·
    Blocked · Done · Cancelled · Moved, plus the `(agent-closed — not owner-verified)` variants of the
-   last two. Nothing else is valid. `Done` and `Cancelled` are **skill-gated, not owner-gated**
-   (ADR-025): any role but `adversarial-reviewer` may invoke the movers, and the agent-closed marker —
-   **prose, unenforced** — is all that replaced the old owner-only gate.
+   last two. Nothing else is valid. `Done` and `Cancelled` are **skill-gated and role-gated, not
+   owner-gated** (ADR-033, reversing ADR-025): **only the producer** may invoke the movers, enforced by
+   the ADR-018 hook at any spawn depth. That restores separation of the closing *identity*, **not**
+   prevention — a doer can still spawn a producer to close (ADR-033 §The limit), and the agent-closed
+   marker — **prose, unenforced** — is still all that signals it.
 3. **The knowledge-base root holds exactly two documents — `PROJECT.md` and `architecture.md`**
    ([ADR-013](decisions/adr-013-knowledge-base-root-holds-the-living-canon.md)). They are the
    project-defining pair: *what we are building* and *how it is built*. **Everything else is filed by
@@ -352,8 +354,9 @@ run `fkit-survey-project`**, and writes `PROJECT.md`.
 units, with dependencies recorded) → coder `/fkit-plan-task` (**Claude Code plan mode** — an owner
 approval gate) → implement → reviewer `/fkit-review` or `/fkit-stateful-review` → coder
 `/fkit-process-stateful-review` (verify each finding; **defect vs frontier-move**; fixes gated on
-the owner) → `/fkit-task-done` — run by the owner, or by an agent writing the agent-closed marker
-(ADR-025). The coder can also run this brief-to-done sequence as **one autonomous loop**,
+the owner) → `/fkit-task-done` — run by the **producer only** (ADR-033): in an owner-present producer
+session, or by a producer **spawned** to close, which writes the agent-closed marker. The coder can
+also run this brief-to-done sequence as **one autonomous loop**,
 `/fkit-task-ship-loop` ([ADR-019](decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)):
 after a single up-front plan approval it runs autonomously, stopping only for the owner's important
 questions, and persists a per-task `plan.md` + `worklog.md` (ADR-020) as its durable memory. A

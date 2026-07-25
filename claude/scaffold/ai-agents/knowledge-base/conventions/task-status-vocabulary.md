@@ -15,9 +15,9 @@
 | **In progress** | `🔄 In progress` | A session owns it and work has started. | Anyone — freely |
 | **Blocked** | `🚧 Blocked — <reason>` | Started, cannot proceed. **A reason is mandatory.** | Anyone — freely |
 | **Done** | `✅ Done` | Reviewed, verified, complete — **closed by the owner**. | Owner, via `/fkit-task-done` |
-| **Done (agent-closed)** | `✅ Done (agent-closed — not owner-verified)` | Closed by an agent. Complete **on the agent's own judgment**; no human checked it. | Any agent, via `/fkit-task-done` |
+| **Done (agent-closed)** | `✅ Done (agent-closed — not owner-verified)` | Closed by an agent. Complete **on the agent's own judgment**; no human checked it. | A **spawned producer**, via `/fkit-task-done` |
 | **Cancelled** | `⛔ Cancelled (YYYY-MM-DD) — <reason>` | Dropped, will not be done. **A reason is mandatory.** | Owner, via `/fkit-task-cancelled` |
-| **Cancelled (agent-closed)** | `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>` | Dropped on an agent's own judgment. **A reason is mandatory.** | Any agent, via `/fkit-task-cancelled` |
+| **Cancelled (agent-closed)** | `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>` | Dropped on an agent's own judgment. **A reason is mandatory.** | A **spawned producer**, via `/fkit-task-cancelled` |
 | **Moved** | `➡️ Moved to [Sprint N](…) — priority M` | Carried to another sprint. Not dead, not done — relocated. | Producer |
 
 **No other value is valid.** Not "Not started", not "WIP", not "Todo", not "Complete". If a status you
@@ -28,23 +28,29 @@ need isn't here, the fix is to amend this doc — not to invent a value inline.
 **`In progress` and `Blocked` are free.** They are simply facts about the world; any session may set
 them without ceremony, and *should*, the moment they become true.
 
-**`Done` and `Cancelled` are skill-gated, not owner-gated.** They may only be set by the
-`/fkit-task-done` and `/fkit-task-cancelled` skills — never by hand-editing a file — but **any spawned
-agent may invoke those skills.**
+**`Done` and `Cancelled` are skill-gated and role-gated — not owner-gated.** They may only be set by
+the `/fkit-task-done` and `/fkit-task-cancelled` skills — never by hand-editing a file — and **only the
+producer may invoke those skills.** That one is enforced rather than asked: a `PreToolUse` hook denies
+a mover call from any non-producer identity, at any spawn depth. Every other role routes its closes
+through the producer and closes nothing itself.
 
-⚠️ **An agent closing a task must write the `(agent-closed — not owner-verified)` variant.** This is
-the *whole* of what replaces an owner-only gate, and it is **prose, not enforcement** — nothing compels
-it. Understand the trade you are inheriting: an agent that marks its own work complete can quietly
-launder unfinished work into a green board, and nothing prevents that. The marker exists so the board
-can at least be *read* honestly by someone who looks.
+⚠️ **A close performed without the owner present must write the `(agent-closed — not owner-verified)`
+variant — including a producer that was SPAWNED to close.** A spawned agent has no channel to you, so
+its close is agent-closed however trustworthy the role. Only an owner-present producer session yields a
+plain owner-verified close.
+
+⚠️ **Role-gating is not prevention.** Understand the trade you are inheriting: restricting the movers
+to one role separates the closing *identity*, but an agent that has decided its work is done can still
+spawn a producer to close — the same act with an extra hop. The marker is **prose, not enforcement**;
+nothing compels it. It exists so the board can at least be *read* honestly by someone who looks.
 
 ⚠️ **The marker does not appear in `/fkit-status`.** The dashboard matches on the marker prefix, so an
 agent-closed row is counted and filtered as an ordinary closed row. To tell the two apart you must open
 the sprint plan or the brief.
 
-**If your team wants the old guarantee back**, the fix is a precondition in
-`claude/skill-ownership-hook.sh` — not stricter prose. Prose does not stop an agent that has already
-decided its work is done.
+**If your team wants a stronger guarantee than this**, the fix is a further precondition in
+`claude/skill-ownership-hook.sh` — closes only from an owner-present session, say — not stricter prose.
+Prose does not stop an agent that has already decided its work is done.
 
 `Moved` is producer-set, because relocating work across sprints is a planning act.
 

@@ -27,10 +27,11 @@ roster and which role you're in.
 | **adversarial-reviewer** | hostile second opinion on Codex, findings only | edit anything | `/fkit-adversarial-review` |
 | **wiki** | the wiki — ingest / lint / sync; **exclusive write gateway** | write outside `ai-agents/wiki-vault/` | `/fkit-wiki-ingest`, `/fkit-wiki-lint`, `/fkit-wiki-sync` |
 
-Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **Every role but
-`adversarial-reviewer` also has the two task movers** `/fkit-task-done` and `/fkit-task-cancelled` —
-they live in the producer's namespace but any role may invoke them, and an agent-performed close must
-carry the `(agent-closed — not owner-verified)` marker. **The six Claude-side roles** — all
+Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **The two task movers**
+`/fkit-task-done` and `/fkit-task-cancelled` **are the producer's alone** — no other role holds them,
+and a `PreToolUse` hook denies a mover call from any non-producer identity at any spawn depth. Every
+other role **routes its closes through the producer** and closes nothing itself; a producer **spawned**
+to close still writes the `(agent-closed — not owner-verified)` marker. **The six Claude-side roles** — all
 but `adversarial-reviewer`, which reviews on Codex under a restricted allowlist — also have
 `/fkit-open-questions-interview` (ask the owner about questions this session left unanswered) and
 `/fkit-dumb-down` (re-explain the last answer in simple terms). The **team room & conductor**

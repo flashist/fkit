@@ -23,24 +23,37 @@
 # If you add a fifth mirror, add it HERE FIRST.
 # (Same caution as before this file existed — see git history on fkit-claude.sh for the original.)
 
-# ⚠️ THE TASK MOVERS ARE OWNED BY EVERY ROLE BUT ONE (ADR-025, 2026-07-19).
-# `fkit-task-done` / `fkit-task-cancelled` used to be producer-only, and that was the anti-laundering
-# gate: an agent could not mark its own work complete. ADR-025 removed the gate knowingly — any spawned
-# role may now close a task. This list is what makes that true; the movers' own prose cannot grant a
-# permission the hook denies (the contradiction Codex found as X1 before task 64 shipped).
+# ⚠️ THE TASK MOVERS ARE PRODUCER-ONLY (ADR-033, 2026-07-23 — REVERSING ADR-025).
+# `fkit-task-done` / `fkit-task-cancelled` belong to `producer` and to NO other role. ADR-025
+# (2026-07-19) had granted them to every role but the adversarial reviewer; ADR-033 reverses that
+# knowingly, re-consolidating close authority in the one role whose job is the task lifecycle. This
+# list is what makes it STRUCTURAL: the ADR-018 PreToolUse hook denies a mover call from any
+# non-producer identity at any spawn depth, so it is no longer the prose ADR-025 relied on.
 #
-# `adversarial-reviewer` is DELIBERATELY EXCLUDED (owner ruling, 2026-07-19). Its contract is
-# findings-only, it never edits anything, and it runs on Codex under a restricted tool allowlist
-# (ADR-022). Excluding it is intentional — do NOT "fix" it by adding the movers here.
+# Every other role ROUTES ITS CLOSES THROUGH THE PRODUCER and closes nothing itself — the coder
+# ship-loop and the lead's sprint ship-loop each spawn `@fkit-producer` to close (ADR-033 §3/§4).
+# A producer SPAWNED to close still writes `(agent-closed — not owner-verified)` (ADR-033 §5).
+#
+# ⚠️ What this does and does NOT buy (ADR-033 §The limit — do not "harden" past it): it restores
+# separation of the closing IDENTITY, not full prevention. A determined doer can still spawn a
+# producer to close. That residual is accepted and named; it is not a defect to file.
+#
+# `adversarial-reviewer` never had the movers and still does not — its contract is findings-only and
+# it runs on Codex under a restricted tool allowlist (ADR-022). It is now one of six roles without
+# them rather than the lone exclusion, but the ruling behind it (owner, 2026-07-19) stands: do NOT
+# "fix" it by adding the movers here.
+#
+# The movers' own prose cannot grant a permission this mapping denies — that contradiction (Codex
+# found it as X1 before task 64 shipped) is why the SKILLs, the mirrors and this file move together.
 skills_for_role() {
   case "$1" in
-    lead)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-task-done fkit-task-cancelled fkit-sprint-ship-loop" ;;
+    lead)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-sprint-ship-loop" ;;
     producer)  echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-initiate-project fkit-task-brief fkit-task-done fkit-task-cancelled fkit-status" ;;
-    coder)     echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-plan-task fkit-process-review fkit-process-stateful-review fkit-task-ship-loop fkit-task-done fkit-task-cancelled" ;;
-    architect) echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-survey-project fkit-inspect fkit-design-spec fkit-evaluate-approach fkit-record-decision fkit-task-done fkit-task-cancelled" ;;
-    reviewer)  echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-review fkit-stateful-review fkit-task-done fkit-task-cancelled" ;;
+    coder)     echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-plan-task fkit-process-review fkit-process-stateful-review fkit-task-ship-loop" ;;
+    architect) echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-survey-project fkit-inspect fkit-design-spec fkit-evaluate-approach fkit-record-decision" ;;
+    reviewer)  echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-review fkit-stateful-review" ;;
     adversarial-reviewer) echo "fkit-team fkit-query fkit-adversarial-review" ;;
-    wiki)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-wiki-ingest fkit-wiki-lint fkit-wiki-sync fkit-task-done fkit-task-cancelled" ;;
+    wiki)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-wiki-ingest fkit-wiki-lint fkit-wiki-sync" ;;
     *)         echo "" ;;
   esac
 }

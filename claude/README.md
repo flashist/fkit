@@ -42,7 +42,7 @@ terminals needs Accessibility permissions that fail worse than pressing Cmd-T.)
 `skills-for-role.sh`, sourced by both `fkit-claude.sh` and the `PreToolUse` skill-ownership hook
 below. That function is the single source of truth.
 
-| Role | Its procedures (plus `/fkit-query` + `/fkit-team`, which everyone has; `/fkit-task-done` + `/fkit-task-cancelled`, which every role but `adversarial-reviewer` has (ADR-025); and `/fkit-open-questions-interview` + `/fkit-dumb-down`, which the six Claude-side roles have — all but `adversarial-reviewer`, which reviews on Codex under a restricted allowlist) |
+| Role | Its procedures (plus `/fkit-query` + `/fkit-team`, which everyone has; and `/fkit-open-questions-interview` + `/fkit-dumb-down`, which the six Claude-side roles have — all but `adversarial-reviewer`, which reviews on Codex under a restricted allowlist). **The two task movers are the producer's alone** (ADR-033, reversing ADR-025's grant to every role but `adversarial-reviewer`) — every other role routes its closes through the producer |
 |---|---|
 | producer | `initiate-project` · `task-brief` · `task-done` · `task-cancelled` · `status` |
 | coder | `plan-task` · `process-review` · `process-stateful-review` · `task-ship-loop` |

@@ -112,7 +112,7 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
   **One carve-out — a half-landed close** (step 9): once the producer has moved the folder, a landed
   `✅ Done` is **the owner's**, so the loop marks only the **stale** location and leaves the `✅ Done`
   alone. That is the single sanctioned disagreement, and only because no agent can lawfully reconcile it
-  (`fkit-task-done/SKILL.md:60-64`, `:265-267`). It is always **reported**, never left silent.
+  (`fkit-task-done/SKILL.md:78-82`, `:283-286`). It is always **reported**, never left silent.
 
 ---
 
@@ -185,8 +185,8 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
        `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations.
      - **The folder moved but a status or href is stale:** **only the owner can repair this.**
        `/fkit-task-done` **stops** on a folder already under `ai-agents/tasks/done/`, and its one
-       exception — the owner-verification upgrade — is **owner-only** (`fkit-task-done/SKILL.md:60-64`);
-       `✅ Done` is skill-gated and must **never** be hand-edited (`:265-267`). Do **not** re-spawn the
+       exception — the owner-verification upgrade — is **owner-only** (`fkit-task-done/SKILL.md:78-82`);
+       `✅ Done` is skill-gated and must **never** be hand-edited (`:283-286`). Do **not** re-spawn the
        producer for this case: write `🚧 Blocked — hand-off incomplete: <what disagrees>` **on the
        location still stale**, leave any `✅ Done` the producer legitimately wrote **untouched**, and
        **⛔ STOP** for the owner.

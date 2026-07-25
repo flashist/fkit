@@ -15,9 +15,9 @@
 | **In progress** | `🔄 In progress` | A session owns it and work has started. | Anyone — freely |
 | **Blocked** | `🚧 Blocked — <reason>` | Started, cannot proceed. **A reason is mandatory.** | Anyone — freely |
 | **Done** | `✅ Done` | Reviewed, verified, complete — **closed by the owner**. | Owner, via `/fkit-task-done` |
-| **Done (agent-closed)** | `✅ Done (agent-closed — not owner-verified)` | Closed by an agent. Complete **on the agent's own judgment**; no human checked it. | Any agent, via `/fkit-task-done` |
+| **Done (agent-closed)** | `✅ Done (agent-closed — not owner-verified)` | Closed by an agent. Complete **on the agent's own judgment**; no human checked it. | A **spawned producer**, via `/fkit-task-done` |
 | **Cancelled** | `⛔ Cancelled (YYYY-MM-DD) — <reason>` | Dropped, will not be done. **A reason is mandatory.** | Owner, via `/fkit-task-cancelled` |
-| **Cancelled (agent-closed)** | `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>` | Dropped on an agent's own judgment. **A reason is mandatory.** | Any agent, via `/fkit-task-cancelled` |
+| **Cancelled (agent-closed)** | `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>` | Dropped on an agent's own judgment. **A reason is mandatory.** | A **spawned producer**, via `/fkit-task-cancelled` |
 | **Moved** | `➡️ Moved to [Sprint N](…) — priority M` | Carried to another sprint. Not dead, not done — relocated. | Producer |
 
 **No other value is valid.** Not "Not started", not "WIP", not "Todo", not "Complete". If a status you
@@ -28,20 +28,29 @@ need isn't here, the fix is to amend this doc — not to invent a value inline.
 **`In progress` and `Blocked` are free.** They are simply facts about the world; any session may set
 them without ceremony, and *should*, the moment they become true.
 
-**`Done` and `Cancelled` are skill-gated, not owner-gated.** They may only be set by the
-`/fkit-task-done` and `/fkit-task-cancelled` skills — never by hand-editing a file — but **any spawned
-agent may invoke those skills** ([ADR-025](../decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)).
+**`Done` and `Cancelled` are skill-gated and role-gated — not owner-gated.** They may only be set by the
+`/fkit-task-done` and `/fkit-task-cancelled` skills — never by hand-editing a file — and **only the
+producer may invoke those skills**
+([ADR-033](../decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md), reversing
+[ADR-025](../decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)). This one is
+**enforced**, not asked: the ADR-018 `PreToolUse` hook denies a mover call from any non-producer
+identity at any spawn depth. Every other role routes its closes through a spawned producer.
 
-⚠️ **An agent closing a task must write the `(agent-closed — not owner-verified)` variant.** This is
-the *whole* of what replaced the old owner-only gate, and it is **prose, not enforcement** — nothing in
-the system compels it. ADR-025 removed the anti-laundering guarantee knowingly: an agent that marks its
-own work complete can quietly launder unfinished work into a green board, and nothing now prevents that.
-The marker exists so the board can at least be *read* honestly by someone who looks.
+⚠️ **A close performed without the owner present must write the `(agent-closed — not owner-verified)`
+variant — and that includes a producer that was SPAWNED to close** (ADR-033 §5): a spawned producer has
+no owner channel, so its close is agent-closed. Only an owner-present producer session yields a plain
+owner-verified close.
+
+⚠️ **Role-gating is not prevention, and must not be read as it** (ADR-033 §The limit). Producer-only
+restores separation of the closing *identity*; a determined doer can still spawn a producer to close,
+which is *"the doer marks its own work done with an extra hop"*. The marker remains **prose, not
+enforcement** — nothing in the system compels it. It exists so the board can at least be *read*
+honestly by someone who looks.
 
 ⚠️ **The marker does not appear in `/fkit-status`.** The dashboard matches on the marker prefix, so
 `✅ Done (agent-closed …)` is counted and filtered as an ordinary `✅ Done` row. To tell an agent-closed
 task from an owner-closed one you must open the sprint plan or the brief. Recorded, accepted, and **not**
-a defect to file — see ADR-025's honesty clause.
+a defect to file — see ADR-025's honesty clause, which ADR-033 §Consequences carries forward unchanged.
 
 `Moved` is producer-set, because relocating work across sprints is a planning act.
 

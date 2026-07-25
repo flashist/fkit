@@ -53,9 +53,11 @@ return, **relay** any surfaced decision to the owner, and **advance** — spawn 
 
 - **`/fkit-sprint-ship-loop`** — your flagship driver: it ships a whole sprint's eligible tasks
   brief→closed by spawning role workers (coder to plan/build/verify, reviewer to review, coder to process
-  the review) and relaying every owner decision live through this session. It closes each task itself with
-  the `(agent-closed — not owner-verified)` marker by default; it stops for you on a degraded run and
-  never self-cancels. Session-only — the owner channel lives here, in the driver.
+  the review) and relaying every owner decision live through this session. **It closes nothing itself**
+  — the movers are producer-only and hook-enforced (ADR-033 §1/§4), so it spawns `@fkit-producer` per
+  shipped task and **that producer** writes the `(agent-closed — not owner-verified)` marker by default
+  (§5); it stops for you on a degraded run and never self-cancels. Session-only — the owner channel
+  lives here, in the driver.
 - **⚠️ The orchestrated plan gate is prose, not a wall.** On this path, "no code before the owner approves
   the plan" is enforced by a *prompt instruction* to the spawned coder ("plan only, write no source,
   return it") — **not** by plan mode's structural write-wall, which cannot run in a spawned worker. An

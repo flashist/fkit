@@ -5,14 +5,24 @@ description: Mark a task complete — move its brief file into ai-agents/tasks/d
 
 # Task Done
 
-> ## ⛔ Owner: the **producer** — but **any agent may invoke it**
-> This is the fkit-producer's procedure and it lives in the producer's namespace. Since
-> [ADR-025](../../../ai-agents/knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)
-> it is **not owner-only**: any spawned fkit role may run it, including the coder closing its own task.
-> (The one exception is `fkit-adversarial-reviewer`, whose contract is findings-only.)
+> ## ⛔ Owner: the **producer**
+> This is the fkit-producer's own procedure. Execute it **only** if you are the producer — running as
+> the `fkit-producer` agent or in a `fkit producer` session. Since
+> [ADR-033](../../../ai-agents/knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)
+> this is **structural, not a request**: the ADR-018 `PreToolUse` hook denies a mover call from any
+> non-producer identity at any spawn depth. (ADR-033 reverses
+> [ADR-025](../../../ai-agents/knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md),
+> which had granted this skill to every role but the adversarial reviewer.)
+>
+> **Any other role: do not execute this.** Route the close to the producer instead:
+> ```
+> @fkit-producer Close this task: <path>
+> ```
 >
 > **⚠️ If you are an agent and not the owner, you MUST write the agent-closed marker** — see
-> *The status vocabulary* below. That marker is the only trace that no human checked this work.
+> *The status vocabulary* below. **A producer that was SPAWNED to close is an agent** (ADR-033 §5): it
+> has no owner channel (ADR-021), so its close is agent-closed. Only an owner-present producer session
+> yields a plain owner-verified close. That marker is the only trace that no human checked this work.
 
 
 Mark a finished task complete: move its brief into `ai-agents/tasks/done/` and update the sprint
@@ -28,11 +38,17 @@ documentation so its status reads **✅ Done**, everywhere the task is tracked.
 > way to perform that move: it updates every place the task is tracked, so the board and the brief never
 > drift apart. Invoking it is the signal that the task is genuinely complete.
 >
-> **What it no longer is: a gate.** It used to run only when the owner invoked it, and that was the
-> whole anti-laundering protection — an agent that can mark its own work complete can quietly launder
-> unfinished work into a green board. ADR-025 removed that protection **knowingly**. What replaces it is
-> the `(agent-closed — not owner-verified)` marker, and **the marker is prose — nothing enforces it.**
-> If you are an agent, applying it honestly is the entire safeguard, and it rests on you.
+> **What kind of gate it is — stated exactly, because the answer changed twice.** It once ran only when
+> the owner invoked it; ADR-025 removed that **knowingly**, leaving nothing structural at all. ADR-033
+> restores a gate, but a **narrower** one than the original: the hook enforces **who** may close — the
+> producer, and no other role — at any spawn depth. That is real, and it is not prose.
+>
+> **What it still is NOT: prevention** (ADR-033 §The limit, and do not "harden" past it). A determined
+> doer can still spawn a producer to close, which is *"the coder marks its own work done with an extra
+> hop"*. Producer-only separates the closing **identity**; it does not make the close a second judgment.
+> The `(agent-closed — not owner-verified)` marker still carries the only signal there, and **the marker
+> is prose — nothing enforces it.** If you are an agent — **including a spawned producer** — applying it
+> honestly is the entire safeguard, and it rests on you.
 
 ## Resolve the status value FIRST
 
@@ -41,10 +57,12 @@ resolved value, not the literal string**:
 
 | You are | Marker to write |
 |---|---|
-| The **owner**, invoking this in a session | `✅ Done` |
-| **Any agent** — spawned, in a loop, or closing its own work | `✅ Done (agent-closed — not owner-verified)` |
+| The **owner**, invoking this in an owner-present `fkit producer` session | `✅ Done` |
+| A **producer spawned** to close — by a ship-loop, an orchestrator, or any other agent | `✅ Done (agent-closed — not owner-verified)` |
 
-**If you are unsure which you are, you are an agent.** The owner does not need to wonder.
+**If you are unsure which you are, you are an agent.** The owner does not need to wonder. Being the
+producer is what let you run this skill at all (ADR-033 §1); it is **not** what makes a close
+owner-verified — the owner being present is (ADR-033 §5).
 
 ---
 
@@ -262,16 +280,18 @@ The canonical status set is documented in **`ai-agents/knowledge-base/convention
 > **`✅ Done (agent-closed — not owner-verified)`**. Nothing else. Not "Complete", not "Finished",
 > not "✔️".
 
-**`Done` is skill-gated, not owner-gated.** It may be set **only** by this skill — never by
-hand-editing a file — but **any agent may run this skill** (ADR-025). The old owner-only gate was the
-anti-laundering protection; it is gone, and nothing structural replaced it.
+**`Done` is skill-gated AND role-gated — not owner-gated.** It may be set **only** by this skill —
+never by hand-editing a file — and **only the producer may run this skill** (ADR-033, hook-enforced
+per ADR-018). Every other role routes its close through a spawned producer. The old **owner**-only
+gate is still gone: role-gating is not owner-gating.
 
 ⚠️ **The agent-closed marker is the entire residual mechanism, and it is unenforced.** No code path
-checks it. The same agent that would wrongly close a task is the agent deciding whether to label the
-close — so the label is worth exactly what your honesty is worth. **Apply it whenever you are not the
-owner.**
+checks it. The same agent that would wrongly close a task can spawn the producer that labels the
+close — so the label is worth exactly what your honesty is worth. **Apply it whenever the owner is not
+present**, spawned producers included.
 
 ⚠️ **The marker does not show up in `/fkit-status`.** The dashboard matches the `✅` prefix and
 collapses every variant to plain `done`, then filters the row off the open board. Distinguishing
 agent-closed from owner-closed means opening the sprint plan or the brief. Known, accepted, recorded in
-ADR-025's honesty clause — **not** a defect to file.
+ADR-025's honesty clause and **unchanged by ADR-033** (§Consequences names it explicitly) — **not** a
+defect to file.

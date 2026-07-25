@@ -194,24 +194,49 @@ test('agent_type present but not an fkit-* agent -> deny for an fkit-* skill', (
 });
 
 // =================================================================================================
-// THE TASK MOVERS (ADR-025, task 64) — the highest-care area in this file.
+// THE TASK MOVERS (ADR-033, task 0124 — REVERSING ADR-025) — the highest-care area in this file.
 //
-// ⚠️ WHAT THESE TESTS DO AND DO NOT PROVE. ADR-025 removed the owner-only gate on the movers and
-// replaced it with NOTHING structural — the `(agent-closed — not owner-verified)` marker is prose in
-// the SKILL.md and no code path enforces it. So there is no "an agent closing its own work is refused"
-// test to write; that refusal no longer exists, by design. What IS testable, and what these pin, is:
-//   1. the relaxation actually took effect (the X1 contradiction cannot come back), and
-//   2. the fail-CLOSED paths still hold for the movers specifically — an unidentifiable caller is
-//      denied even now that almost every identifiable one is allowed.
-// Point 2 matters more after the relaxation than before it: with six of seven roles allowed, the
-// deny paths are the only thing left, and a fail-OPEN there would let an unroled session move files.
+// ⚠️ WHAT THESE TESTS DO AND DO NOT PROVE, AND THE ANSWER CHANGED. Under ADR-025 (task 64) the movers
+// were owned by every role but the adversarial reviewer, and there was NOTHING structural left to
+// test: the `(agent-closed — not owner-verified)` marker is prose and no code path enforces it, so
+// "an agent closing its own work is refused" was not a testable proposition at all. ADR-033 makes it
+// one again, but only in a specific and limited sense that these tests must not overstate:
+//   1. Producer-only ACTUALLY TOOK EFFECT, at any spawn depth. A non-producer identity calling a
+//      mover is denied by the hook, not merely asked not to. That is the assertion the deny cases
+//      below and the exhaustive matrix now carry, and it is what the prose alone never gave us.
+//   2. The fail-CLOSED paths still hold for the movers specifically — an unidentifiable caller is
+//      denied, exactly as before. This mattered most when six of seven roles were allowed; it still
+//      matters, because a fail-OPEN here would let an unroled session move task files.
+//
+// ⚠️ WHAT IS STILL NOT PROVEN, AND MUST NOT BE CLAIMED (ADR-033 §The limit). Producer-only restores
+// separation of the closing IDENTITY, NOT prevention. A determined doer can still spawn a producer
+// to close — "the coder marks its own work done with an extra hop". No test below asserts otherwise,
+// and none should be added that pretends the hook closes that path. The agent-closed marker is still
+// the only signal there, and it is still prose.
+//
+// The X1 contradiction cuts both ways now: before task 64 the movers' PROSE claimed any role could
+// invoke them while this mapping denied every non-producer call. Task 0124 restores the mapping, so
+// the same class of bug reappears if any SKILL, agent definition or mirror is left saying otherwise.
+// The mapping wins; prose that disagrees with it is the bug.
 // =================================================================================================
 
 for (const mover of ['fkit-task-done', 'fkit-task-cancelled']) {
-  test(`coder owns ${mover} -> allow (ADR-025: the coder may close its own task)`, () => {
-    const r = run(payload({ agentType: 'fkit-coder', skill: mover }));
-    assertAllow(r, `coder x ${mover}`);
+  test(`producer owns ${mover} -> allow (ADR-033: the producer is the ONLY role that may close)`, () => {
+    const r = run(payload({ agentType: 'fkit-producer', skill: mover }));
+    assertAllow(r, `producer x ${mover}`);
   });
+
+  // The five roles ADR-025 had granted the movers to and ADR-033 took them back from. The exhaustive
+  // matrix below covers these pairs too; they are spelled out HERE, by name, because the reversal is
+  // the entire point of task 0124 — a future edit that silently re-grants one to a doer role must
+  // break a test that says so in its own title, not only a generated matrix row.
+  for (const role of ['lead', 'coder', 'architect', 'reviewer', 'wiki']) {
+    test(`${role} does NOT own ${mover} -> deny (ADR-033 reverses ADR-025: closes route through the producer)`, () => {
+      const r = run(payload({ agentType: `fkit-${role}`, skill: mover }));
+      assertDeny(r, `${role} x ${mover}`);
+      assert.match(r.err, new RegExp(`does not own skill '${mover}'`));
+    });
+  }
 
   test(`adversarial-reviewer does NOT own ${mover} -> deny (owner ruling: findings-only)`, () => {
     const r = run(payload({ agentType: 'fkit-adversarial-reviewer', skill: mover }));
@@ -277,24 +302,33 @@ const UNIVERSE = [
   'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync',
 ];
 
-// ⚠️ THE TASK MOVERS ARE OWNED BY EVERY ROLE BUT `adversarial-reviewer` (ADR-025, task 64).
-// They were producer-only until 2026-07-19, and that was the anti-laundering gate. ADR-025 removed it
-// knowingly. This mirror is what proves the removal actually took effect: before task 64 the movers'
-// prose claimed any role could invoke them while THIS mapping still denied every non-producer call —
-// the contradiction Codex found as X1. If prose and mapping ever disagree again, the mapping wins and
-// the prose is the bug.
+// ⚠️ THE TASK MOVERS ARE PRODUCER-ONLY (ADR-033, task 0124 — reversing ADR-025, task 64).
+// They were producer-only until 2026-07-19, ADR-025 granted them to every role but the adversarial
+// reviewer, and ADR-033 takes that back knowingly: close authority re-consolidates in the one role
+// whose job is the task lifecycle, and the ADR-018 hook makes it structural rather than prose. Every
+// other role routes its closes through a spawned producer (ADR-033 §3/§4) and closes nothing itself.
+// This mirror is what proves the reversal actually took effect. If prose and mapping ever disagree
+// again — the X1 contradiction, in either direction — the mapping wins and the prose is the bug.
+// ⚠️ `MOVERS` now appears on EXACTLY ONE role. That is the invariant, not an accident of editing:
+// spreading it into a second role's list is the precise mistake this table exists to catch.
 const MOVERS = ['fkit-task-done', 'fkit-task-cancelled'];
 
 const OWNED = {
-  lead: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', ...MOVERS],
-  producer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-initiate-project', 'fkit-task-brief', 'fkit-task-done', 'fkit-task-cancelled', 'fkit-status'],
-  coder: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review', 'fkit-task-ship-loop', ...MOVERS],
-  architect: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-survey-project', 'fkit-inspect', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-record-decision', ...MOVERS],
-  reviewer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-review', 'fkit-stateful-review', ...MOVERS],
+  // No movers: the sprint ship-loop's driver spawns @fkit-producer per shipped task (ADR-033 §4).
+  // (`fkit-sprint-ship-loop` itself is absent from UNIVERSE below, so it is not mirrored here either
+  // — pre-existing gap, not this task's to close; the two spot tests above cover that pair.)
+  lead: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down'],
+  producer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-initiate-project', 'fkit-task-brief', ...MOVERS, 'fkit-status'],
+  // No movers: the coder ship-loop's terminal act is a producer route, not a self-close (ADR-033 §3).
+  coder: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review', 'fkit-task-ship-loop'],
+  architect: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-survey-project', 'fkit-inspect', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-record-decision'],
+  reviewer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-review', 'fkit-stateful-review'],
   // NOT the movers — deliberate owner ruling (2026-07-19), not an omission. Findings-only contract,
-  // restricted Codex allowlist (ADR-022). The matrix below turns this into a real deny assertion.
+  // restricted Codex allowlist (ADR-022). It is now one of six roles without them rather than the
+  // lone exclusion, and the ruling stands. The matrix below turns this into a real deny assertion.
   'adversarial-reviewer': ['fkit-team', 'fkit-query', 'fkit-adversarial-review'],
-  wiki: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync', ...MOVERS],
+  // No movers: the wiki stays wiki-only and FLAGS completion for the producer to close (ADR-033 §2).
+  wiki: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync'],
 };
 
 for (const role of Object.keys(OWNED)) {

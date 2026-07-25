@@ -56,10 +56,12 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
    | adversarial-reviewer | `/fkit-adversarial-review` |
    | wiki | `/fkit-wiki-ingest`, `/fkit-wiki-lint`, `/fkit-wiki-sync` |
 
-   Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **Every role except
-   `adversarial-reviewer` also has `/fkit-task-done` and `/fkit-task-cancelled`** — they sit in the
-   producer's namespace, but since ADR-025 any of those roles may invoke them, and an agent-performed
-   close must carry the `(agent-closed — not owner-verified)` marker. **The six Claude-side roles** —
+   Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **`/fkit-task-done` and
+   `/fkit-task-cancelled` are the producer's alone** — since ADR-033 (reversing ADR-025) no other role
+   holds them, and the ADR-018 hook denies a mover call from any non-producer identity at any spawn
+   depth. Every other role **routes its closes through the producer** and closes nothing itself; a
+   producer **spawned** to close still writes the `(agent-closed — not owner-verified)` marker.
+   **The six Claude-side roles** —
    everyone above **except `adversarial-reviewer`** — also have two more:
    `/fkit-open-questions-interview` (sweep this session for questions the owner never answered, and ask
    them) and `/fkit-dumb-down` (re-explain your last answer in simple terms). The adversarial reviewer

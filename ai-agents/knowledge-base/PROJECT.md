@@ -98,9 +98,12 @@ concerns, and identified risks — is in
 - **No secrets in any artifact** — no DSNs, endpoints, keys, or credentials in task briefs, sprint
   plans, PROJECT.md, or the wiki, since all of it goes to git.
 - **Task lifecycle discipline**: the producer writes/plans; task files move between `backlog/`,
-  `done/`, `cancelled/` only via the `task-done`/`task-cancelled` skills — which, since ADR-025, **any
-  role may invoke**, marking an agent-performed close `(agent-closed — not owner-verified)`. That
-  relaxation removed the anti-laundering guarantee knowingly; nothing structural replaced it.
+  `done/`, `cancelled/` only via the `task-done`/`task-cancelled` skills — which, since ADR-033
+  (reversing ADR-025), **only the producer may invoke**. Every other role routes its closes through a
+  spawned producer, whose close is marked `(agent-closed — not owner-verified)`. This one **is**
+  structural: the ADR-018 hook denies a mover call from any non-producer identity at any spawn depth.
+  It restores separation of the closing *identity*, **not** prevention — a determined doer can still
+  spawn a producer to close (ADR-033 §The limit), and the marker still carries the only signal.
 - **Consult-chain envelope (corrected during initiation)**: the onboarding/startup sequence is
   **interactive**, not headless — `-p` only seeds the first message, the session stays live for the
   owner to answer questions — and initiation only uses **one-hop** consults (producer→architect,
