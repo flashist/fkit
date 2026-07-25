@@ -109,6 +109,10 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
   **returns to the nearest owner gate** — it never infers a plan approval it cannot evidence.
 - **Status write = both locations:** every status transition writes the brief's `## Status` **and** the
   sprint-plan row in the same step; a half-written status is an error to finish, never left disagreeing.
+  **One carve-out — a half-landed close** (step 9): once the producer has moved the folder, a landed
+  `✅ Done` is **the owner's**, so the loop marks only the **stale** location and leaves the `✅ Done`
+  alone. That is the single sanctioned disagreement, and only because no agent can lawfully reconcile it
+  (`fkit-task-done/SKILL.md:60-64`, `:265-267`). It is always **reported**, never left silent.
 
 ---
 
@@ -174,11 +178,20 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
      Done **with** the marker). A three-location spot-check on its own cannot see a partial close —
      **do not claim a close you did not verify.** Then report the close, the marker, and the evidence
      packet to the owner.
-   - **If the close half-landed, ask the producer to finish it — never patch a status yourself.**
-     Re-spawn **@fkit-producer** **once**, naming exactly what disagrees, and ask it to reconcile its
-     own close. If it still does not land, write `🚧 Blocked — hand-off incomplete: <what disagrees>` in
-     **both locations** and **⛔ STOP** for the owner. Statuses on a closing task are the producer's to
-     write; the loop writes only its own `🚧 Blocked` marker, and **never** a `✅ Done`.
+   - **If the close half-landed, work out WHICH half first — only one case is an agent's to fix.**
+     - **The folder never moved** (the producer failed before relocating it): **re-spawn @fkit-producer
+       once**, naming what is missing. The mover runs normally from a `backlog/` folder. If the re-spawn
+       also fails, nothing was closed and no `✅ Done` exists — so the ordinary rule applies: write
+       `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations.
+     - **The folder moved but a status or href is stale:** **only the owner can repair this.**
+       `/fkit-task-done` **stops** on a folder already under `ai-agents/tasks/done/`, and its one
+       exception — the owner-verification upgrade — is **owner-only** (`fkit-task-done/SKILL.md:60-64`);
+       `✅ Done` is skill-gated and must **never** be hand-edited (`:265-267`). Do **not** re-spawn the
+       producer for this case: write `🚧 Blocked — hand-off incomplete: <what disagrees>` **on the
+       location still stale**, leave any `✅ Done` the producer legitimately wrote **untouched**, and
+       **⛔ STOP** for the owner.
+     - Either way the loop writes **only** its own `🚧 Blocked` marker, and **never** a `✅ Done` —
+       statuses on a closing task are the producer's, and a landed close is the owner's.
    - **Do not route a degraded run.** If the review never got a Codex pass (step 6), or any verification
      is red, or a residual is unresolved — **⛔ STOP** and put the close to the owner instead. Routing
      work you already know is weak launders it through the producer; the extra hop is not a second
@@ -189,8 +202,9 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
      (ADR-025 §Consequences) — a producer spawn does not fix that.
 
 **Any early exit** (step 3 rejection, step 5 budget, step 7 non-convergence, a consult dead-end): set
-the accurate status (`🔲 Backlog` on rejection, else `🚧 Blocked — <reason>`, **both locations**),
-finalize the worklog with the reason, and **end the turn** — the owner returns to it. **On resume,
+the accurate status (`🔲 Backlog` on rejection, else `🚧 Blocked — <reason>`, **both locations** — except
+the step-9 half-landed close, where only the stale location is marked and a landed `✅ Done` is left for
+the owner), finalize the worklog with the reason, and **end the turn** — the owner returns to it. **On resume,
 re-derive position from the durable artifacts and fail safe to the nearest owner gate.** No path ends
 in silence.
 
@@ -250,7 +264,7 @@ Evidence for the owner to judge, **not** a done-verdict. Contains, at minimum:
 | **Blocked — review non-convergence** | step 7 oscillation (loop-check fires) | surface the convergence call; `🚧 Blocked — review not converging`; STOP |
 | **Blocked — needs a decision** | a fix/plan question beyond the plan | surface; `🚧 Blocked — awaiting decision: <q>`; STOP |
 | **Blocked — consult dead-end** | a hop-2 open question can't be answered | surface; `🚧 Blocked — <q>`; STOP |
-| **Blocked — hand-off didn't land** | the producer spawn failed, was denied, or left the close partial | re-spawn **@fkit-producer** **once** to reconcile its own close; if it still fails, `🚧 Blocked — hand-off incomplete: <what disagrees>` (both locations); STOP |
+| **Blocked — hand-off didn't land** | the producer spawn failed, was denied, or left the close partial | **folder never moved** → re-spawn **@fkit-producer** once, then if still unresolved `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations; **folder moved, a status/href stale** → owner-only, do not re-spawn, mark **only the stale location** (never over a landed `✅ Done`). Either way: STOP |
 | **Proceeds, flagged — but does NOT route the close** | Codex absent after 3 attempts | finish the work and the report, mark it loudly "reviewed — NOT model-diverse", then **STOP** and put the close to the owner |
 
 **Invariants:**

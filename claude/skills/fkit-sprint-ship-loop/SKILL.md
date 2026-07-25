@@ -1,8 +1,9 @@
 ---
 name: fkit-sprint-ship-loop
 description: The lead's sprint-scope conductor loop — drives eligible tasks brief→closed by spawning
-  role workers, relaying owner decisions live through this session, and closing with the agent-closed
-  marker by default. Session-only; the driver holds the owner channel workers lack.
+  role workers and relaying owner decisions live through this session. Since ADR-033 the driver closes
+  nothing itself — it spawns a producer to close each shipped task, and that producer writes the
+  agent-closed marker. Session-only; the driver holds the owner channel workers lack.
 ---
 
 # ⛔ Owner: the lead
@@ -27,9 +28,13 @@ and the owner-approved design report
 
 **It is a *driver*, not a doer.** For each task it spawns typed `fkit-<role>` workers for discrete,
 bounded steps (coder to plan/build/verify, reviewer to review, coder to process the review), **holds the
-owner channel itself**, and closes the task itself. The **work** runs in fresh spawned contexts — so
-reviewer independence and the coder's sole-source-write authority are preserved; the loop only
-*sequences* the separate contexts.
+owner channel itself**, and — since [ADR-033](../../../ai-agents/knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)
+§4 — **routes each task's close to a spawned `@fkit-producer`** rather than closing it itself. The
+**work** runs in fresh spawned contexts — so reviewer independence and the coder's sole-source-write
+authority are preserved; the loop only *sequences* the separate contexts.
+
+**Say the cost plainly** (ADR-033 §Consequences): that is **one more spawn and one more hop before each
+task leaves the board.** The driver's autonomy is narrower than ADR-032 first specified.
 
 **It models `fkit-task-ship-loop`'s *rigor* at sprint scope — it never *invokes* it.** The coder's task
 loop is **session-only and refuses a spawned invocation** (`fkit-task-ship-loop/SKILL.md:8-18`); it also
@@ -98,7 +103,7 @@ owner rejects the plan** (§5.4), so a rejected task is never stranded `🔄 In 
 | **Verify** | `@fkit-coder` | run tests per [ADR-014](../../../ai-agents/knowledge-base/decisions/adr-014-how-fkit-tests-itself.md) (`node --test`, zero devDeps); return pass/fail + diagnosis | **budget: 3 no-progress cycles** → `🚧 Blocked — verification` |
 | **Review** | `@fkit-reviewer` → `/fkit-stateful-review` | own pass + Codex second opinion; write the *Reviewer findings* ledger section; return the verdict | — |
 | **Process review** | `@fkit-coder` | apply `fkit-process-stateful-review` **method** — verify each finding, classify defect/frontier, write the *Coder response*; **apply verified-`CORRECT`, in-approved-plan fixes autonomously (task-loop discipline, ADR-019)**; return change surface + residuals, and **return `NEEDS-DECISION` for any judgment call** | **⛔ stop for judgment calls** — frontier-move, regression, disputed severity, broad/behavior-changing, or out-of-plan fix |
-| **Close** | **the driver itself** runs `/fkit-task-done` | — | writes `✅ Done (agent-closed — not owner-verified)` **by default**; **stop for the owner only on a degraded run** |
+| **Close** | `@fkit-producer` | run `/fkit-task-done` on the brief; write `✅ Done (agent-closed — not owner-verified)` in the brief and every board row (ADR-033 §5 — a **spawned** producer has no owner channel, so its close is never owner-verified); return the step-7 close-out report | **the driver confirms the close landed** against that report (§4) before counting the task shipped; **stop for the owner on a degraded run** |
 
 **Rules that make this honor the ADRs:**
 - **The Build AND Process-review spawn prompts MUST each carry the approved plan verbatim, state the owner
@@ -114,9 +119,12 @@ owner rejects the plan** (§5.4), so a rejected task is never stranded `🔄 In 
   bounded by the approved plan** — verified-`CORRECT`, mechanical/localized, in-plan fixes proceed without
   per-fix owner approval (a second exception to the per-round gate, `fkit-coder.md`); every judgment call
   returns `NEEDS-DECISION`. **The driver re-verifies after any fix the worker writes.**
-- **Re-verify after any post-review code change** before closing (mirror `fkit-task-ship-loop/SKILL.md`).
-- **The close is the driver's, not a spawned worker's** — the lead already owns `/fkit-task-done`
-  (`skills-for-role.sh:37`), and closing from the live session keeps the owner-relay coherent.
+- **Re-verify after any post-review code change** before handing the close off (mirror
+  `fkit-task-ship-loop/SKILL.md`).
+- **The close is a spawned producer's, never the driver's** — the movers are **producer-only** (ADR-033
+  §1) and the ADR-018 hook **denies** a mover call from the `lead` identity at any spawn depth, so the
+  driver must not invoke one. The owner-relay stays coherent because the driver keeps **holding the
+  channel**, not because it does the closing.
 
 ### 3. Relay every decision live — the load-bearing gate (§5.3, §6.2)
 A spawned worker **never asks the owner** — it **returns** its final message as **exactly one** of:
@@ -145,15 +153,44 @@ turn-taking. The owner returns to the terminal to answer. (When [ADR-030](../../
 mechanical idle turns are not forced to carry a "What's next?" footer; relay turns use `AskUserQuestion`
 and satisfy the hook regardless — task 0116.)
 
-### 4. Close posture (§5.2 Close row, ADR-032 D5/D6, ADR-025)
+### 4. Close posture (§5.2 Close row, ADR-032 D5/D6 **as amended by ADR-033 §4/§5**, ADR-025)
+- **The driver invokes no mover.** It spawns `@fkit-producer` per shipped task; **that producer** runs
+  `/fkit-task-done`. Producer-only is hook-structural (ADR-033 §1 / ADR-018), not a request.
 - **Agent-closed marker by default.** Live-relay checks *decisions*, not *done-ness* — so a loop close
-  carries `✅ Done (agent-closed — not owner-verified)` **unless the loop explicitly stopped and the owner
-  verified.** The marker states exactly what was and was not checked; apply it honestly.
-- **Degraded run → do NOT self-close.** No Codex pass after retries, red verification, or an unresolved
-  residual ⇒ finish the report and **put the close to the owner.** Self-closing work you already know is
-  weak is the exact failure this posture must not commit.
+  carries `✅ Done (agent-closed — not owner-verified)`, written by the **spawned producer**, **unless the
+  loop explicitly stopped and the owner verified.** The marker states exactly what was and was not
+  checked; it is applied honestly. Note the limit ADR-033 names: routing through a producer separates the
+  closing *identity*, it does **not** make the close a second judgment.
+- **Confirm the close landed before counting the task shipped.** The producer's step-7 close-out report
+  enumerates **every** doc it touched — board rows, the brief's own `## Status`, any parent-epic slice,
+  `backlog.md`, in-body `**Status:**` lines, and every re-pointed href including under `sprints/done/`,
+  `sprints/reviews/` and the knowledge-base. **Read that report** and cross-check it against the state
+  you can see (folder now under `done/`; brief `## Status` and sprint row read Done **with** the marker).
+  A three-location spot-check cannot see a partial close — **never report a close you did not verify**,
+  and a sprint roll-up must not carry an unverified one across several tasks.
+- **If a close half-landed, first work out WHICH half — the two cases have different remedies, and only
+  one of them an agent can perform.**
+  - **The folder never moved** (the producer failed before relocating it): **re-spawn `@fkit-producer`
+    once**, naming exactly what is missing. The mover runs normally from a `backlog/` folder, so this is
+    performable. If the re-spawn also fails, nothing was closed and no `✅ Done` exists — so the ordinary
+    rule applies: write `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations.
+  - **The folder moved but a status or href is stale:** **no agent can repair this — it is the owner's.**
+    `/fkit-task-done` **stops** on a folder already under `ai-agents/tasks/done/`, and its one exception —
+    the owner-verification upgrade — is **owner-only** (`fkit-task-done/SKILL.md:60-64`); `✅ Done` is
+    skill-gated and must **never** be hand-edited (`fkit-task-done/SKILL.md:265-267`). So do **not**
+    re-spawn the producer for this case and do **not** hand-patch anything: write
+    `🚧 Blocked — hand-off incomplete: <what disagrees>` **on the location that is still stale**, leave any
+    `✅ Done` the producer legitimately wrote **untouched** (only the owner may change a landed Done),
+    **report it to the owner**, and **do not count the task as shipped** in the roll-up.
+  - Either way the driver writes **only** its own `🚧 Blocked` marker, and **never** a `✅ Done` — statuses
+    on a closing task belong to the producer, and a landed close belongs to the owner.
+- **Degraded run → do NOT route the close.** No Codex pass after retries, red verification, or an
+  unresolved residual ⇒ finish the report and **put the close to the owner.** Pushing work you already
+  know is weak through a producer spawn is the exact failure this posture must not commit — the extra hop
+  is not a second judgment (ADR-033 §The limit).
 - **Never self-cancel.** If a task should be **cancelled** rather than done, **stop and ask the owner** —
-  `cancelled/` is audited by nobody (ADR-025 §Consequences). A cancel always stops.
+  `cancelled/` is audited by nobody (ADR-025 §Consequences). A cancel always stops, and is never routed
+  to a producer either.
 
 ### 5. Advance
 After a task closes (or is skipped/blocked), return to step 1's eligible set — re-derive it (a just-closed
@@ -173,10 +210,17 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 | **Blocked — review non-convergence** | review oscillation on a task | `🚧 Blocked — review not converging`; skip/stop; report |
 | **Owner decision pending** | any judgment call / degraded close / cancel question | **pause**, relay via `AskUserQuestion`, resume on the answer |
 | **Dependency deadlock** | eligible set empty, backlog remains | stop; report the blocking chain |
-| **No Codex, degraded** | Codex absent after retries on a task | proceed-and-flag that task **loudly**; **do not self-close it** — put its close to the owner |
+| **Blocked — hand-off didn't land** | a task's producer spawn failed, was denied, or left the close partial (§4) | **folder never moved** → re-spawn `@fkit-producer` once, then if still unresolved `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations; **folder moved, a status/href stale** → owner-only, do not re-spawn, mark **only the stale location** (never over a landed `✅ Done`). Either way: **report** it — do not pause the sprint; **do not count the task shipped**; next eligible task |
+| **No Codex, degraded** | Codex absent after retries on a task | proceed-and-flag that task **loudly**; **do not route its close** — put its close to the owner |
 
 **Invariant — no path ends in silence.** Every exit writes accurate status in **both** the brief's
 `## Status` **and** the sprint row, and ends in an owner-visible report.
+
+> **The one carve-out: a half-landed close** (§4). When the producer moved the folder but left a status or
+> href stale, a landed `✅ Done` is **the owner's** — the driver marks only the **stale** location
+> `🚧 Blocked — hand-off incomplete`, leaves the `✅ Done` alone, and reports. That is the single sanctioned
+> case where the two locations are knowingly left disagreeing, because no agent can lawfully reconcile them
+> (`fkit-task-done/SKILL.md:60-64`, `:265-267`). It is **reported**, never silent.
 
 ## Progress reporting (§5.5)
 - **Per task:** surface the coder worker's close-out evidence packet from its `worklog.md` (change
@@ -197,8 +241,10 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 - **Spawn typed `fkit-<role>` subagents only** — never a generic helper for a step that runs an fkit skill.
 - **The plan/build split is mandatory** and its gate is **prose-enforced, not structural** (honesty
   clause) — do not present it as plan mode's write-wall.
-- **Close writes the agent-closed marker by default; degraded runs stop; never self-cancel** (ADR-032/ADR-025).
-- **Re-verify after any post-review code change** before closing a task.
+- **The driver invokes no mover — it spawns `@fkit-producer` to close each task**, and that producer
+  writes the agent-closed marker by default (ADR-033 §1/§4/§5). The driver confirms the close landed;
+  degraded runs stop; **never self-cancel** (ADR-032/ADR-025).
+- **Re-verify after any post-review code change** before handing a task's close off.
 - **Do not commit or push** — leave every edit in the working tree; the owner commits.
 - **Never write `ai-agents/wiki-vault/`** — ever.
 

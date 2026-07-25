@@ -68,6 +68,18 @@ Per ADR-033 §1 and §Consequences:
    - `claude/agents/fkit-coder.md` — line 103 (*"closes the task itself via `/fkit-task-done`"*) and
      lines 190–191 (*"since ADR-025 you may invoke them yourself"*, sitting in the coder's **hard
      must-not-do list**). Both directly contradict 0122's rewrite.
+   - **`claude/agents/fkit-lead.md:56-57` — added 2026-07-25 (owner ruling), source: task 0123.** The
+     `/fkit-sprint-ship-loop` bullet (`:54-58`) asserts the driver *"closes each task itself with the
+     `(agent-closed — not owner-verified)` marker by default"*. That is ADR-032-as-first-written, now
+     **reversed by ADR-033 §4** — the driver invokes no mover; it spawns `@fkit-producer` per shipped
+     task and the **spawned producer** writes the marker (ADR-033 §5). Rewrite the clause to the
+     spawn-the-producer shape; keep the rest of the bullet (degraded-run stop, never self-cancels,
+     session-only) as-is. Same class and same owner disposition as the `fkit-coder.md:165` /
+     `fkit-producer.md:67` case below: a **system prompt** outranks the SKILL in the lead's context, so
+     leaving it puts the lead's own definition in contradiction with the loop it drives.
+     ⚠️ **Verification step 6's sweep would likely MISS this line** — that grep targets *"any
+     role/agent may invoke/close"* phrasing, and this line says *"closes each task itself"*. Do not
+     trust the sweep to find it; check the file by hand (new verification step 9).
    - **Sanctioned-hand-off carve-out — added 2026-07-25 (owner ruling), source: task 0122's review
      ledger finding R4 (raised by Codex, verified by the coder against both files).** Two further
      lines — **not** among those listed above — state a **hard rule** that ADR-033 now contradicts:
@@ -105,6 +117,12 @@ Per ADR-033 §1 and §Consequences:
    `fkit-producer.md` each still carry the "a consult is a focused question, not a hand-off" rule
    **and** an explicit exception for the producer-spawn-to-close (ADR-033 §3/§4). Neither file
    forbids, without qualification, the hand-off its own ship-loop step performs.
+9. **`claude/agents/fkit-lead.md` no longer says the driver closes tasks itself.** Read the
+   `/fkit-sprint-ship-loop` bullet (`:54-58`) **by hand** and confirm it describes a spawned-producer
+   close with the marker attributed to the producer. ⚠️ **Step 6's grep does not cover this** — its
+   regex targets *"any role may invoke/close"*, not *"closes each task itself"*. A green step 6 is
+   **not** evidence for this step. Also grep `claude/agents/` and `claude/skills/` for
+   `closes? (each )?(the )?task itself` and confirm no live source still asserts a self-close.
 
 ## Notes
 
@@ -131,6 +149,17 @@ Per ADR-033 §1 and §Consequences:
   two files for exactly this class of ADR-033 ripple but named the wrong lines. Recorded as an **open
   dependency on 0122's review ledger** — it closes only because this brief now visibly lists both
   references. New verification step 8 guards it.
+- **⚠️ Scope amended a third time 2026-07-25 (producer, on the owner's live ruling during the 0123
+  ship-loop run).** Task 0123 found a **fourth** system prompt asserting the reversed posture —
+  `claude/agents/fkit-lead.md:56-57`, *"closes each task itself with the `(agent-closed — not
+  owner-verified)` marker by default"*. Item 5 named `universal-rules.md`, `fkit-producer.md` and
+  `fkit-coder.md` but **not** `fkit-lead.md`; the owner ruled it the same disposition as the
+  `fkit-coder.md:165` / `fkit-producer.md:67` case, so it is now listed in item 5 with new
+  verification step 9. **This is the second time the inventory was found incomplete** — and this one
+  would have slipped step 6's sweep entirely, because the sweep matches phrasing, not meaning.
+  Treat *"a grep for one phrasing is not an inventory"* as the standing finding.
+  Recorded as an **open dependency on 0123's review ledger** (`Open dependencies` section) — it closes
+  only because this brief now visibly lists the reference.
 - **Touches 0130's budget.** Item 5's `universal-rules.md` edit changes the size of the rules block that
   0130 is trying to reclaim headroom in. Whichever lands second must re-measure.
 - **ADR-033 is honest about the limit:** this restores separation of the closing *identity* (hook-

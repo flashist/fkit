@@ -17,6 +17,40 @@ newly-written *failure* branches of step 9, or a documentation-accuracy fix.
 and OPEN.** No second review pass was needed or run. The one open item (R4) is **outside this task's
 file scope** and does not block 0122; it blocks nothing until 0124.
 
+> ## ⚠️ Post-closeout amendment — this ledger's verified state is NO LONGER current
+> **Added by the reviewer 2026-07-25, during task 0123's review. 0122 stays closed; this is a pointer,
+> not a re-opening.**
+>
+> **`claude/skills/fkit-task-ship-loop/SKILL.md` was edited after this ledger closed out**, under an
+> explicit owner disposition taken during **task 0123**'s review, and disclosed by the coder rather than
+> quietly applied. What changed: the **R1 fix recorded above is itself defective**, and the same defect
+> shipped here.
+>
+> R1's remedy — *"re-spawn `@fkit-producer` once … and ask it to reconcile its own close"* (recorded above
+> as ✅ verified at `SKILL.md:177-181`) — is **unperformable in the case it targets.** `/fkit-task-done`
+> **stops** on a folder already under `ai-agents/tasks/done/`, and its only exception (the
+> owner-verification upgrade) is **owner-only** — *"An agent hitting this case still stops"*
+> (`fkit-task-done/SKILL.md:60-64`); and `✅ Done` is skill-gated, never hand-editable (`:265-267`). So
+> once the producer has moved the folder, **no agent** can finish a partial close. **Neither the coder nor
+> this reviewer caught it when 0122 closed** — it was found by the Codex pass on 0123 and verified there.
+> Recorded plainly because a review that closed out on a defective fix should say so.
+>
+> **The file now reads** (`:177-188`): split the two cases — *folder never moved* → re-spawn the producer
+> once (performable); *folder moved, a status/href stale* → **owner-only**, do not re-spawn, mark only the
+> stale location `🚧 Blocked — hand-off incomplete`, leave any landed `✅ Done` untouched, and STOP.
+>
+> **Follow-on, now RESOLVED (0123 round 3, 2026-07-25):** that first rewrite contradicted this file's own
+> `:110-111` (*"a half-written status is an error to finish, never left disagreeing"*) and the
+> "Any early exit … **both locations**" paragraph, neither of which had been amended — tracked as **R6 in
+> [0123's ledger](../../done/0123-route-sprint-ship-loop-close-to-producer/review.md)**. The owner
+> ruled a carve-out at every invariant site, and it landed: `:110-115` now admits the exception inline
+> against the "never left disagreeing" clause, and `:205-207` carves it out of the early-exit rule.
+> **Verified by the reviewer site by site.** One low tidy-up remains — the stop-table row at `:267` still
+> carries the pre-carve-out wording (**R8** in 0123's ledger).
+>
+> **Do not re-raise R6 or R8 here, and do not treat 0122's `✅ Done` as evidence about this file's current
+> text** — for the live state of `fkit-task-ship-loop/SKILL.md`, read 0123's ledger, not this one.
+
 ## Reviewer findings
 
 | #  | Round | Sev | file:line | Claim |
