@@ -32,3 +32,4 @@ This is the second time a brief's stated premise shipped false and was caught on
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the dual-home concern the brief invoked; the real structure is a single generated source
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/compress-universal-rules-output-style-section]] — task 79, the universal-rules compression
+- [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively

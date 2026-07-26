@@ -28,3 +28,6 @@ A **Codex adversarial pass** (model diversity intact) was decisive: it killed re
 - [[systems/review-and-model-diversity]] — the Codex adversarial pass that reshaped the design
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] — the consult envelope the loop fits within
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/build-fkit-sprint-ship-loop-skill]] — Build the `fkit-sprint-ship-loop` skill (the lead's sprint-scope conductor loop)
+- [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill
+- [[tasks/route-coder-ship-loop-close-to-producer]] — Rewrite `fkit-task-ship-loop` step 9 — self-close → route the close to the producer

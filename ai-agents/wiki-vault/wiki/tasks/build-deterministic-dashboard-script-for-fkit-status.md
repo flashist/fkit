@@ -33,3 +33,5 @@ Implement the "deterministic layer" the owner asked for on `/fkit-status`: a scr
 - [[tasks/design-task-folder-structure-and-id-scheme]] — task 74: three of the folder migration's silent breaks live in `dashboard.sh`, and it gains an `id-mismatch` drift kind
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75: the `## ID` stamp had to leave `dashboard.sh`'s `## Status` parsing undisturbed
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
+- [[tasks/render-owner-column-in-fkit-status]] — Render the Owner column in `/fkit-status`, just before Next step
+- [[tasks/teach-dashboard-to-resolve-notes-dependencies]] — Make a task's dependency visible to `dashboard.sh` when it's written in `## Notes` prose

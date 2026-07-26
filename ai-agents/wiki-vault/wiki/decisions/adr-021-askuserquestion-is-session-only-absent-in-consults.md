@@ -40,3 +40,8 @@ On Claude Code 2.1.212, `AskUserQuestion` functions in a top-level `fkit <role>`
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — this seam makes that hook's consult skip **safety-critical**: blocking a consult for a missing `AskUserQuestion` call would demand a tool that cannot be called
 - [[tasks/build-adr-030-stop-hook]] — task 0127: the build closed that hazard **structurally** — the `Stop` hook registers on `Stop` only, never `SubagentStop`, so it never fires in a consult where `AskUserQuestion` is absent
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63: no owner channel in a consult is why relayed consent is unverifiable
+- [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — ADR-031: `fkit-lead` becomes the orchestrating front door — the "not a doer" stance is reversed
+- [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — ADR-032: The `fkit-sprint-ship-loop` autonomy & consent model — the conductor at sprint scope
+- [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — ADR-033: The task movers are producer-only again — ADR-025's "any role" grant is reversed
+- [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill
+- [[tasks/evolve-fkit-lead-into-orchestrating-conductor]] — Evolve `fkit-lead` into the orchestrating conductor (reverse the non-doer stance)

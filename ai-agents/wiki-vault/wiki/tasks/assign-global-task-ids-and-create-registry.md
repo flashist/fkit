@@ -39,3 +39,4 @@ Done. **Independently re-verified by the wiki on 2026-07-20 rather than taken fr
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]] · [[systems/knowledge-base-structure]]
 - [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
+- [[tasks/backfill-owner-field-into-existing-briefs]] — Backfill the `## Owner` field into all existing briefs

@@ -42,3 +42,4 @@
 - [[decisions/adr-014-how-fkit-tests-itself]]
 - [[systems/testing-and-verification]]
 - [[systems/fkit]]
+- [[tasks/reorder-launcher-menu-lead-first-and-rename-label]] — Reorder the `fkit` launcher menu so lead is option 1, and rename its label to "lead"

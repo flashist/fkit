@@ -50,3 +50,8 @@ fkit stores some documents twice: `ai-agents/…` (the tree fkit dogfoods on its
 - [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58; the fifth convention is among what `architecture.md` still does not record
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — parity holds for free (its Decision 9): the scaffold and its `.gitkeep` files do not change under the task-folder migration
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
+- [[tasks/reorder-launcher-menu-lead-first-and-rename-label]] — Reorder the `fkit` launcher menu so lead is option 1, and rename its label to "lead"
+- [[tasks/retire-team-room-in-docs-and-agent-definitions]] — Retire "team room" in the docs and agent definitions, and fix the stale "menu 7" citations
+- [[tasks/revert-task-movers-to-producer-only]] — Revert the task movers to producer-only — ownership, mirrors, hook test, and mover prose
+- [[tasks/teach-dashboard-to-resolve-notes-dependencies]] — Make a task's dependency visible to `dashboard.sh` when it's written in `## Notes` prose
+- [[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]] — Wire `fkit-sprint-ship-loop` into `skills_for_role()` + the four mirrors (same commit)

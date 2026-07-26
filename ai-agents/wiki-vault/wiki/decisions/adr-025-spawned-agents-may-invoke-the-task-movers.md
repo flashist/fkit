@@ -1,7 +1,14 @@
 # ADR-025: Spawned agents may invoke `/fkit-task-done` and `/fkit-task-cancelled` — the owner-only gate is removed, and the anti-laundering guarantee is removed with it
 
 **Date**: 2026-07-18
-**Status**: accepted
+**Status**: ⚠️ **REVERSED (Decisions 1–2)** — superseded by [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]], 2026-07-23
+
+> # ⛔ DO NOT FOLLOW DECISIONS 1–2 — THE GRANT IS GONE
+> **The movers are `fkit-producer`-only again**, and that rule is now **hook-enforced at any spawn depth** — the thing this ADR said could not be had. Read [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] for the current rule. The trigger was [[tasks/investigate-making-wiki-task-completion-visible-to-the-board]]; the landing sequence was [[tasks/route-coder-ship-loop-close-to-producer]] → [[tasks/route-sprint-ship-loop-close-to-producer]] → [[tasks/revert-task-movers-to-producer-only]].
+>
+> **What ADR-033 kept from this ADR, deliberately:** its **forgeability analysis** and its finding that *"a doer spawns a producer to close"* is *"the doer closes its own work with an extra hop"* — **re-used, not re-derived**. Producer-only restores separation of the closing **identity**; it does **not** restore prevention. The `(agent-closed — not owner-verified)` marker rule survives unchanged, including its invisibility in `/fkit-status`.
+>
+> **The rest of this page is kept as the record of what was decided on 2026-07-18 and why** — including the owner ruling against the architect's recommendation. It is history, not instruction.
 
 > **⚠️ This reverses a universal hard rule.** *"Task files move between `backlog/`, `done/`, `cancelled/` only via the owner-invoked movers"* (`CLAUDE.md:55`, `claude/scaffold/universal-rules.md:6`, `AGENTS.md:41`) **no longer holds**, and it **amends [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] §Decision 5** (the owner-only done-gate). Any wiki page or prose still asserting the owner-only rule is stale.
 
@@ -97,3 +104,6 @@ A spawned producer has **no owner channel** — its `⛔ Owner:` banner is advis
 - [[tasks/implement-task-ship-loop-skill]] — the loop whose terminal act this ADR changed: it now closes its own task
 - [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58; `architecture.md` is current on this ADR (it is that file's **highest** cited ADR) but records **none of ADR-026, 027, 028, 029 or 030** — nor the 023/024 tombstones. *(Corrected 2026-07-19 by lint: this line previously named only 028 and 030.)*
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the task-folder migration **rewrites the movers this ADR changed**, and names task 64's unverified output as an accepted risk
+- [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — ADR-031: `fkit-lead` becomes the orchestrating front door — the "not a doer" stance is reversed
+- [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — ADR-032: The `fkit-sprint-ship-loop` autonomy & consent model — the conductor at sprint scope
+- [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill

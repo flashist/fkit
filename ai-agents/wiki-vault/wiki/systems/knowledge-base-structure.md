@@ -41,7 +41,16 @@ This principle caught a real error: the knowledge-base hygiene pass had improvis
 - **`ls knowledge-base/*.md` returns exactly two names.**
 - **A dated filename never lives at the root or in `conventions/`** — a dated name means "a record of a moment".
 
-### The conventions in force
+### Two more conventions, added 2026-07-22 — seven now (verified against the tree 2026-07-26)
+
+The section below describes the **five** in force to 2026-07-19. Two were added with the brief-schema and board work:
+
+- **`task-owner-vocabulary.md`** — the sibling of `task-status-vocabulary.md` for the *other* mandatory brief field. **`## Owner` is mandatory, exactly one fkit role, populated at creation**, positioned immediately after `## Status`, and drawn from a **closed set of the seven live roles**. ⚠️ It carries an explicit guard: the **not-yet-built eighth role is not a valid owner** — *"do not assign a task to a role that does not exist."* The owner is a **role, not a session**, and it does not change because another role consulted. *"If a value you need isn't here, amend this doc — not invent one inline."* See [[tasks/add-owner-field-to-brief-schema-and-task-brief-skill]].
+- **`dependency-declaration-form.md`** — one home, one form for a brief's dependencies: `- **Depends on:** …` in `## Notes`, **nothing between the `**` and the label**. Written because decoration in that position made a real dependency **invisible to `dashboard.sh`**, which rendered a false **`ready`** that the producer hand-corrected for seven consecutive status runs. `dashboard.sh` now emits a LOUD `⟨derive: UNPARSEABLE — see brief⟩` rather than fabricating readiness — **a safety net, not a licence**, and explicitly **not prose-proof**. See [[tasks/teach-dashboard-to-resolve-notes-dependencies]].
+
+> ⚠️ **`dependency-declaration-form.md` is MISSING from `claude/scaffold/`** — verified 2026-07-26. That is a live [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] violation of the second kind (a convention governing how the *agents* work should be dual-homed), so **consuming projects inherit the exact misreport class the convention exists to prevent.** `dual-home-parity.md` is correctly absent from the scaffold — it is the fkit-repo-only one. Reconciliation is scoped, still-open work.
+
+### The conventions in force *(the original five)*
 `conventions/README.md` indexes **five**: **`task-status-vocabulary.md`** (the six valid statuses, and who may set each), **`status-report-format.md`** (the shape of a status briefing), **`evidence-before-assertion.md`** (added 2026-07-16 — *a claim about repo/project state must come from a check made this turn*), **`one-skill-one-output.md`** (added 2026-07-17 — *for any subject a skill produces one complete output; arguments select subjects and inputs, never output variants*, [[tasks/record-one-skill-one-output-convention]]; litmus — does the argument change *what the skill works on* (a parameter, allowed) or *what the same work looks like when reported* (a variant, forbidden)?), and — added 2026-07-19 — **`dual-home-parity.md`**.
 
 **`dual-home-parity.md` is the first fkit-repo-only convention**, created by [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]: *an fkit-authored file living in both `ai-agents/` and `claude/scaffold/ai-agents/` must be edited in both, in the same change.* It carries the **fkit-authored vs project-specific** litmus — `PROJECT.md`, `wiki-vault/index.md` and `wiki-vault/log.md` have deliberately-placeholder scaffold copies and **must never be synced**, since copying them would ship fkit's own project data into someone else's repo.
@@ -88,8 +97,14 @@ This principle caught a real error: the knowledge-base hygiene pass had improvis
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — the convention's scaffold delivery
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the fifth convention, and the drift it records
-- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — why `Done`/`Cancelled` are no longer owner-only
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — why `Done`/`Cancelled` stopped being owner-only; ⚠️ **since reversed**
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which shipped that reversal and added the agent-closed vocabulary rows
+- [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — ⚠️ **`Done`/`Cancelled` are producer-only again**, hook-enforced. `task-status-vocabulary.md`'s "Set by" column was one of the sites the revert's regex sweep **could not match** (a verbless noun phrase) — see [[tasks/revert-task-movers-to-producer-only]]
+- [[tasks/add-owner-field-to-brief-schema-and-task-brief-skill]] · [[tasks/backfill-owner-field-into-existing-briefs]] · [[tasks/render-owner-column-in-fkit-status]] — the sixth convention, `task-owner-vocabulary.md`, and its rollout
+- [[tasks/teach-dashboard-to-resolve-notes-dependencies]] — the seventh convention, `dependency-declaration-form.md`; ⚠️ **missing from the scaffold**
+- [[tasks/investigate-making-wiki-task-completion-visible-to-the-board]] — the report that produced ADR-033; a `reports/` record whose recommendation the owner overruled
+- [[tasks/refresh-architecture-doc-for-lead-conductor-and-stale-lock]] · [[tasks/amend-project-brief-for-lead-conductor]] — the architect/producer split over the KB's two root docs, ADR-013 style
+- [[tasks/retire-team-room-in-docs-and-agent-definitions]] — why ADR-010's now-false text was **deliberately not rewritten**: a decision record holds history, and the sanctioned fix is a dated correction note
 - [[tasks/filter-fkit-status-board-to-open-tasks]] — the 2026-07-18 amendment to `status-report-format.md`
 - [[tasks/report-backlog-board-in-fkit-status-on-request-only]] · [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the Backlog board these conventions now also govern
 - [[tasks/restructure-coder-report-summary-then-interview]] — the coder's report shape, aligned to `status-report-format`

@@ -21,3 +21,4 @@ Done, agent-closed. **Owner asked for it explicitly (2026-07-19) and asked that 
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — the shared-instructions block this section lives in
 - [[systems/testing-and-verification]] — `rules-block-budget.test.js`, the guard on this cap
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively

@@ -27,10 +27,20 @@ fkit                                  (run in any project directory)
    ├─ preflight:  claude REQUIRED (exit 127)  ·  codex required-but-WARNED
    ├─ fresh project? → skip the menu, seed the PRODUCER into /fkit-initiate-project
    ├─ deterministic role MENU (1-7 — an if/else; no LLM in the routing)
+   │    ⚠️ reordered 2026-07-25: 1) lead  2) producer  3) coder  4) architect
+   │                             5) reviewer  6) adversarial  7) wiki
    └─ exec claude --agent fkit-<role> --settings .fkit/settings/<role>.json
 ```
 
 **Claude Code is a hard requirement** — the launcher exits **127** without it. **Codex is required but warned, never walled** (owner ruling): a Codex outage must not lock the owner out of their own team.
+
+### The menu reordered — lead first, "team room" retired (2026-07-25)
+
+The lead moved from **option 7 to option 1** and its label from *"team room"* to **`lead`**, on an owner ruling made from seeing the menu on screen: since [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] the lead is the orchestrating front door — the natural first stop for someone who does not know which role they need — and it was listed last. **The `1-7` range is unchanged**, so the prompt and the invalid-pick error needed no edit. Landed by [[tasks/reorder-launcher-menu-lead-first-and-rename-label]] (launcher) and [[tasks/retire-team-room-in-docs-and-agent-definitions]] (every other file).
+
+- **The tests needed no change**, and that is a design property: the launcher-contract and skill-ownership suites assert roles **by name, never by menu number**.
+- ⚠️ **Accepted cost, ruled on knowingly: renumbering moved every other role down one, and the mis-pick is silent** — you land in a working session of the wrong role rather than getting an error. The word-alias path (`fkit coder`) is unaffected and is the mitigation.
+- ⚠️ **The `team` / `"team room"` word aliases were REMOVED, not kept** — the brief originally required keeping them, and review finding R1 overturned it. **The menu reads a whole line, so `"team room"` matched there; the CLI reads argv already whitespace-split**, so `fkit team room` launched a lead session and passed the stray word `room` through to `claude`, where it had previously been a loud `exit 2`. The words are now accepted on **neither** path; `fkit team` exits 2. *(A residual note on that task still claims otherwise — the owner ruled 2026-07-26 that **the text is wrong and the code is right**; the docs-only correction is still open.)*
 
 ### Fresh-project onboarding
 Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an existing one → `.fkit/interview` asks 6 questions **on the terminal, before any LLM starts**, writing `.fkit/intake.md` (tty-safe; skips cleanly when headless) → the launcher detects the uninitialized `PROJECT.md`, **skips the menu**, and seeds the producer straight into `/fkit-initiate-project` → the producer interviews the owner, **spawns the architect to run `fkit-survey-project`**, and writes `PROJECT.md`.
@@ -83,3 +93,9 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/wiki-sync-post-omnigent]]
 - [[tasks/merge-fkit-rules-block-into-existing-root-context-files]]
+- [[tasks/reorder-launcher-menu-lead-first-and-rename-label]] — lead becomes menu option **1**; the alias removal and its silent-mis-pick cost
+- [[tasks/retire-team-room-in-docs-and-agent-definitions]] — the project-wide rename outside the launcher, and the stale "menu 7" citations
+- [[tasks/update-launcher-menu-help-for-conductor]] — the earlier text-only pass that dropped "does no work itself"
+- [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — why lead belongs first
+- [[tasks/add-adr-030-prose-half-to-universal-rules]] — the managed rules block the launcher re-injects on every run, now at **91.1%** of its 4096-byte cap
+- [[tasks/transcript-independent-ship-loop-skip-signal]] — `build_settings()` now wires a **third** hook event

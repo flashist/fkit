@@ -65,3 +65,8 @@ The owner's scope ruling (Q3) triggers precisely that condition. **The seat is e
 - [[tasks/decide-whether-fkit-needs-a-tester-agent]] — task 0024, the decision task that produced this ADR (**Done, agent-closed — not owner-verified**)
 - [[tasks/amend-project-brief-for-the-eighth-role]] — task 83, the PROJECT.md eighth-role amendment
 - [[tasks/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role]] — task 82, the architecture.md refresh for ADRs 026–030 + the eighth role
+- [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — ADR-031: `fkit-lead` becomes the orchestrating front door — the "not a doer" stance is reversed
+- [[tasks/add-owner-field-to-brief-schema-and-task-brief-skill]] — Add a structured `## Owner` field to the brief schema and the task-brief skill
+- [[tasks/amend-project-brief-for-lead-conductor]] — Amend PROJECT.md for the evolved `fkit-lead` conductor
+- [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill
+- [[tasks/wiki-resync-eighth-role-after-source-docs-land]] — Wiki resync for the eighth role — after the source docs land

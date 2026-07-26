@@ -92,3 +92,4 @@ and no artifact makes an agent-closed row visible to someone reading the dashboa
 - [[systems/knowledge-base-structure]] · [[systems/fkit]] · [[systems/role-locked-sessions]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/design-task-folder-structure-and-id-scheme]] — task 64 is the task 74's brief wrongly instructed the design to sequence against; it was already Done, so **there is no collision**
+- [[tasks/revert-task-movers-to-producer-only]] — Revert the task movers to producer-only — ownership, mirrors, hook test, and mover prose

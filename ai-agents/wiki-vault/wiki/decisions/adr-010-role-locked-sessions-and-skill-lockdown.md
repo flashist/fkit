@@ -8,7 +8,13 @@
 > ⚠️ **Two of its decisions were themselves corrected** by
 > [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]]: the lock is
 > **session-scoped, not universal**, and the `skills:` frontmatter was **dropped, not generated**.
+> *(ADR-012 §2 was in turn superseded by [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the lock is now structural on the consult path too.)*
 > The core decision — role-locked sessions — stands.
+
+> ⚠️ **Decision 3 is REVERSED — do not follow it.** *"`fkit-lead` (the team room) is a router, not a doer… no Write or Edit tools, deliberately"* was reversed on 2026-07-22 by
+> [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]]: lead is now an **orchestrating conductor** that spawns and drives typed peers. **Decisions 1, 2, 4 and 5 are unaffected.** *(The "no Write or Edit tools" half had already gone stale earlier, via [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]].)*
+>
+> ⚠️ **Two further factual claims in this ADR are now false, and are deliberately left in place**: the lead is described as *"the 'team room' (menu option 7)"* — the label was **retired project-wide** and the role moved to **menu option 1** on 2026-07-25 ([[tasks/reorder-launcher-menu-lead-first-and-rename-label]], [[tasks/retire-team-room-in-docs-and-agent-definitions]]). **The ADR body was not rewritten on purpose:** silently editing a decision record to match today's reality erases the history the record exists to hold. The sanctioned fix is a **dated one-line correction note appended** to the ADR — an architect call, owner-flagged and **still open**.
 
 ## Context
 ADR-008 designed the Claude flavor around a **single interactive lead session** that was the team lead *and* the coder by default, and that could **"wear a hat"** — `/fkit-agent-<role>` skills that made the current session adopt a role.
@@ -56,3 +62,5 @@ Plus:
 - [[systems/testing-and-verification]]
 - [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — measured confirmation of the consult envelope
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — relaxes this ADR's tool-allowlist half; the skill half stands
+- [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill
+- [[tasks/evolve-fkit-lead-into-orchestrating-conductor]] — Evolve `fkit-lead` into the orchestrating conductor (reverse the non-doer stance)

@@ -31,7 +31,9 @@ Settled by ADR-014 §2 (*"exactly two things… and it stays this size"*):
 
 [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]] rule 4 **widens the fence** further: the **stdout contract of a shipped skill executable** (`test/dashboard-contract.test.js`).
 
-**The suite has grown past ADR-014's "exactly two things… and it stays this size".** Seven files now sit under `test/`: the launcher contract, the hook contract, the dashboard contract, plus `converge-contract`, `orphan-cleanup`, `rules-block-budget` and `prove-red.sh`. Each addition traces to a decision (ADR-017, ADR-018, the convergence and orphan-cleanup work), so this is **growth by ruling, not drift** — but ADR-014's size claim no longer describes the tree.
+**The suite has grown past ADR-014's "exactly two things… and it stays this size".** *(Re-counted against the tree 2026-07-26: **twelve `*.test.js` files** plus `harness.mjs` and `prove-red.sh`.)* The launcher, hook, dashboard and convergence contracts; `orphan-cleanup`; `rules-block-budget`; the `adr-number-uniqueness` and `task-id-uniqueness` guards; and **three hook-script suites** — `turn-completion-hook`, `askuserquestion-marker-hook` and `shiploop-marker-hook`. Each addition traces to a decision (ADR-017, ADR-018, ADR-029, ADR-030, the convergence and orphan-cleanup work), so this is **growth by ruling, not drift** — but ADR-014's size claim describes the tree less every sprint.
+
+**Measured suite sizes, as the tasks reported them:** 494 pass ([[tasks/add-sprint-ship-loop-to-stop-hook-skip-set]]) → 511 pass ([[tasks/transcript-independent-ship-loop-skip-signal]]) → **521 tests + the `prove-red.sh` hard gate**, the figure the 2026-07-25 launcher work measured. `prove-red.sh` now carries **seven mutations**.
 
 **Out of scope, deliberately:** shell internals (no sourcing/mocking individual functions — which is why bats-core and shellspec were rejected) and LLM behavior (no model, no auth, no network).
 
@@ -95,6 +97,12 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the investigation behind ADR-027
 - [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a second hook whose session-scoped behaviour fkit **cannot fully test itself**; automated coverage reaches its script logic against synthetic payloads only
+- [[tasks/transcript-independent-ship-loop-skip-signal]] — the hook's skip signal moved off the transcript onto an authoritative `UserPromptExpansion` `command_name` marker; **511 pass, mutation-proven**. ⚠️ It fixed a residual that had made the Stop hook **effectively non-enforcing in this dogfooding repo** — the transcript scan matched the command text as *content*, which fkit-self-maintenance sessions routinely read
+- [[tasks/add-sprint-ship-loop-to-stop-hook-skip-set]] — 0 defects, and the reviewer **mutation-proved** the new test is a real gate
+- [[tasks/revert-task-movers-to-producer-only]] — ⚠️ its verification sweep's **path gap and phrasing gap** each shipped a real defect: *a grep is a smoke test, never an inventory*. The by-hand sweep and an independent reviewer pass are the real evidence
+- [[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]] — ⚠️ shipped claiming the **ADR-027 dual-home parity test passed; that test does not exist**. An unrunnable verification step, corrected later in [[tasks/revert-task-movers-to-producer-only]]'s brief
+- [[tasks/reorder-launcher-menu-lead-first-and-rename-label]] — the launcher-contract suite asserts roles **by name, never by menu number**, which is why a full menu renumber needed no test edit
+- [[tasks/build-fkit-sprint-ship-loop-skill]] · [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — the sprint loop, whose live-relay path is likewise hand-verified only
 - [[tasks/build-adr-030-stop-hook]] — task 0127, the build that proved that limit live: `node --test` (493 pass) + `prove-red.sh` cover the script logic and real marker files, but the live `AskUserQuestion`→marker→block path stayed hand-verified (ADR-021)
 - [[tasks/decide-whether-fkit-needs-a-tester-agent]] — the decision task that closed the tester question (ID 0024); the static-review gap it names is recorded on this page
 - [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard

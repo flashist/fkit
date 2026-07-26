@@ -94,7 +94,18 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 - **The `.fkit/` orphan-cleanup consent model → announce-only** (2026-07-17), unblocking task 36.
 
 ## Outcome
-**79 done · 6 backlog · 0 in progress · 5 cancelled — of 90.** *(Updated 2026-07-22, re-derived from `ai-agents/sprints/sprint-2.md`: **+4 done** since the last sync — the owner closed the two fkit-wiki tasks (**78** the migration sync, **80** the adr-029-stop-hook repair) and the two eighth-role doc tasks (**82** `architecture.md`, **83** `PROJECT.md`). The sprint grew 85 → 90 with a **new dashboard/schema cluster (86–90)**: a structured `## Owner` field + backfill + Owner column, a `## Notes`-prose dependency the dashboard should resolve, and an investigation into making fkit-wiki task completion visible to the board.)* ⚠️ **Many Done rows remain agent-closed and not owner-verified** — the whole task-folder migration (74, 75, 76) among them.
+**101 done · 18 backlog · 5 cancelled — of 124.** *(Updated 2026-07-26, re-derived from `bash claude/skills/fkit-status/dashboard.sh` — the deterministic board, not a hand count. **+22 done** since the last sync; the sprint grew 90 → 124.)*
+
+**What the sprint absorbed since 2026-07-22 — none of it Omnigent removal:**
+- the **dashboard/schema cluster** (0104–0107) — the `## Owner` field, its 108-brief backfill, the Owner column, and the dependency-parse guard;
+- the **lead-conductor chain** (0109–0116) — ADR-031 + ADR-032, the agent rewrite, the `fkit-sprint-ship-loop` build and wiring, launcher text, both doc halves, and the Stop-hook skip;
+- the **ADR-033 mover reversal** (0108, 0122–0124) — producer-only closes, hook-enforced;
+- the **ADR-030 completion** (0127 hook, 0128 prose, 0129 the transcript-independent skip signal);
+- the **launcher menu reorder** (0139–0140) — lead to option 1, "team room" retired project-wide.
+
+> **The sprint's stated theme died some time ago.** Sprint 2 was scoped as *"remove Omnigent, land Claude-native as the only runtime"* and grew from **22 tasks to 124**. Almost everything above is new-feature or authority work with no relation to that goal. Recorded as an observation for the producer, not a defect — but a reader should not take the sprint title as a description of its contents.
+
+⚠️ **Many Done rows remain agent-closed and not owner-verified** — the whole task-folder migration (74, 75, 76) among them, and most of the clusters listed above. ⚠️ **`/fkit-status` cannot surface which** — `dashboard.sh` collapses the marker to a plain `done` (see [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]], which did **not** change this).
 
 ⚠️ **Task 85 is filed at priority 85 but must run BEFORE task 76** — owner-ruled 2026-07-20. It is ADR-029 Decision 3's duplicate-ID detection, the *sole* mitigation for the accepted cross-branch ID race. **Priority here is append rank, not run order**, and reading the board as a queue would run the migration before its own guard. Omnigent is gone; the release gate passed on a clean install; fkit has automated verification for the first time; Codex finally receives the universal hard rules; **"the migration" (additive convergence) landed**; the coder→reviewer consult path is structurally enforced; the coder's autonomous ship-loop is **built and live**; the `.fkit/` orphan residue is cleaned; the tool-allowlist posture was deliberately reversed (ADR-022) leaving one structural tool wall; the `/fkit-status` board now shows open work only and unsprinted briefs finally have a board; and two six-role skills landed.
 

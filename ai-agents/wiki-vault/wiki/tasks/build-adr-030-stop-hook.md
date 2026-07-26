@@ -65,3 +65,6 @@ real marker files against synthetic payloads. Unblocks task 0116.
   cannot fully test a session-scoped hook
 - [[systems/role-locked-sessions]] — the hook layer this adds two members to
 - [[systems/testing-and-verification]] — the `node --test` + `prove-red.sh` suite this extended
+- [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively
+- [[tasks/add-sprint-ship-loop-to-stop-hook-skip-set]] — Add `fkit-sprint-ship-loop` to the ADR-030 Stop-hook skip set
+- [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook

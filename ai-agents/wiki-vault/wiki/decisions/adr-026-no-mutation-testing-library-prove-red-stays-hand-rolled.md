@@ -45,3 +45,4 @@ The ADR states: `prove-red.sh` is **not in `npm test`**, and there is **no `.git
 - [[systems/knowledge-base-structure]]
 - [[tasks/investigate-mutation-testing-library-adoption]] — task 46, the investigation that produced this ruling (**Done**)
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — Decision 4's gate is one of the two unfinished pieces the planned tester seat waits behind
+- [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook

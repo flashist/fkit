@@ -29,3 +29,4 @@ On a **no-role, no-args invocation of an initiated project with no controlling t
 - [[systems/install-and-self-update]]
 - [[systems/launch-convergence-and-init]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/reorder-launcher-menu-lead-first-and-rename-label]] — Reorder the `fkit` launcher menu so lead is option 1, and rename its label to "lead"

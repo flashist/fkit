@@ -5,6 +5,14 @@
 
 **Amends (does not supersede)**: the coder's "owner present for the fix gate" contract in `claude/agents/fkit-coder.md` — narrowed for this one skill's context, unchanged everywhere else.
 
+> ⚠️ **§Decision 5 has now been amended TWICE, and the loop no longer closes anything.**
+> 1. [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] (2026-07-18) removed the **owner-only done-gate**, letting the loop close its own task — so of the two human gates this ADR sold its autonomy on, only the **plan gate** remained.
+> 2. [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] §3 (2026-07-23) then made the movers **producer-only**, so the loop's terminal act is **no longer a self-close at all** — it routes the close to the producer (spawn `@fkit-producer`, or hand it to the owner). Landed by [[tasks/route-coder-ship-loop-close-to-producer]].
+>
+> **Autonomous shipping now ends at a producer hand-off, not a green board** — a narrowing of this ADR's autonomy, recorded as a cost rather than hidden. **The plan gate is untouched by both amendments and remains the one unremovable checkpoint.**
+>
+> ⚠️ **On the *orchestrated* path that plan gate is weaker than it is here.** [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]]'s honesty clause: plan mode is a **session** write-wall and cannot function in a spawned worker, so the sprint loop enforces plan-before-code by **prose in the worker prompt**. This ADR's loop, run the old way (`fkit coder` + `/fkit-task-ship-loop`), still carries the structural wall.
+
 ## Context
 The owner asked for a coder skill that takes a task from brief to *done* with **minimal owner involvement** — *"I want to run the loop, get away from the computer, and be sure the coder makes their own decisions while I am absent — only important questions can and should be asked from me."* That collides with three settled facts: the coder's contract is **owner-present** (`fkit-coder.md`); the review fix gate is **per-round owner-approved** (`fkit-process-stateful-review`); and **done is owner-gated, anti-laundering** (task files move to `done/` only via the owner-invoked `/fkit-task-done`).
 
@@ -48,3 +56,6 @@ Task 53 applies the single contract edit this requires: a scoped note in `fkit-c
 - [[decisions/adr-023-fkit-git-agent-is-not-built]]
 - [[tasks/design-fkit-git-agent-and-consent-model]]
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, the design that amended this ADR's Decision 5
+- [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — ADR-032: The `fkit-sprint-ship-loop` autonomy & consent model — the conductor at sprint scope
+- [[systems/role-locked-sessions]] — Role-Locked Sessions & the Skill Lockdown
+- [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook

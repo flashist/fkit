@@ -39,3 +39,6 @@ The safe design surviving all four: a dedicated launch arming the timer for that
 - [[tasks/investigate-askuserquestion-availability-for-agents]]
 - [[tasks/restructure-coder-report-summary-then-interview]]
 - [[tasks/stop-agents-asserting-unchecked-repo-state]]
+- [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — ADR-031: `fkit-lead` becomes the orchestrating front door — the "not a doer" stance is reversed
+- [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — ADR-032: The `fkit-sprint-ship-loop` autonomy & consent model — the conductor at sprint scope
+- [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill

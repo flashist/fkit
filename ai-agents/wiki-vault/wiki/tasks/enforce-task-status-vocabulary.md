@@ -37,3 +37,5 @@ Done. `conventions/task-status-vocabulary.md` is the canonical set, and the sour
 - [[systems/knowledge-base-structure]]
 - [[tasks/stop-agents-asserting-unchecked-repo-state]]
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which added the two agent-closed variants and made the movers skill-gated rather than owner-gated
+- [[tasks/add-owner-field-to-brief-schema-and-task-brief-skill]] — Add a structured `## Owner` field to the brief schema and the task-brief skill
+- [[tasks/revert-task-movers-to-producer-only]] — Revert the task movers to producer-only — ownership, mirrors, hook test, and mover prose

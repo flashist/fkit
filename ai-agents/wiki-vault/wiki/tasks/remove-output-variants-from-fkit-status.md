@@ -26,3 +26,4 @@ Make `/fkit-status` render **one output — the complete briefing with the full 
 - [[tasks/filter-fkit-status-board-to-open-tasks]] — why the filtered board replaces rather than toggles
 - [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — the target-selector argument that survived this removal
 - [[tasks/wiki-sync-fkit-status-output-variant-removal]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/render-owner-column-in-fkit-status]] — Render the Owner column in `/fkit-status`, just before Next step

@@ -13,7 +13,7 @@ This is what makes *"the coder cannot run the reviewer's procedure"* a **fact ra
 A session is locked **two ways**:
 
 1. **`--agent fkit-<role>`** — the role's system prompt (and, for the adversarial reviewer only, a tool allowlist). Harness-enforced.
-2. **`--settings` carrying `skillOverrides`** — `build_settings()` writes `{"skillOverrides":{"<not-owned>":"off",…}}` to `.fkit/settings/<role>.json`. Every `fkit-*` skill the role does not own is hidden from the `/` menu **and unrunnable by name**. Non-fkit skills (the project's own, the user's own) are never touched.
+2. **`--settings` wiring the hooks** — `build_settings()` writes a `hooks` block to `.fkit/settings/<role>.json` pointing at `claude/skill-ownership-hook.sh` (`PreToolUse` on the `Skill` tool). Every `fkit-*` skill the role does not own is **denied on invocation**, at any spawn depth. Non-fkit skills (the project's own, the user's own) are never touched. *(This **replaced** the older `skillOverrides` off-list — see the two eras below. The settings file now also wires the ADR-030 hooks: `turn-completion-hook.sh` (`Stop`), `askuserquestion-marker-hook.sh` (`PreToolUse`) and `shiploop-marker-hook.sh` (`UserPromptExpansion`) — **four hook scripts in total**, verified against the tree 2026-07-26.)*
 
 ### The scope of the lock — now structural at any depth (2026-07-16)
 
@@ -49,9 +49,28 @@ Cross-role work is a **consult**, never a role switch. `@fkit-<role> <question>`
 
 **[[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]** (implemented by [[tasks/relax-tool-allowlists-except-adversarial-reviewer]]) relaxed the **tool-allowlist** half of the role lock: the six Claude-side agents carry **no `tools:` line** and inherit every Claude Code tool. Rationale: the capability tools were excluded by accident; the wall was never a real sandbox (every agent holds `Bash`); and only one wall protects a checkable invariant. **The adversarial reviewer keeps `tools: Read, Grep, Glob, Bash, Skill` byte-identical** — an agent's own `tools:` line governs it at any spawn depth, so its independence survives even when spawned by an unrestricted reviewer. **The skill lockdown (the ADR-018 hook) is deliberately untouched** — capabilities are free, procedures stay role-locked. Related: [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — `AskUserQuestion` works in a session but is `TOOL_ABSENT` in any spawned consult regardless of the grant (measured, Claude Code 2.1.212), so the consult "return open questions" contract is the only option a consult has.
 
-### What the lock does NOT cover — the task movers (2026-07-18, shipped 2026-07-19)
+### The lock and the conductor — an orchestrating role, not a broken lock (2026-07-22)
 
-**[[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] removed the owner-only gate on `/fkit-task-done` and `/fkit-task-cancelled`**, and [[tasks/implement-spawned-invocation-for-task-movers]] shipped it. Any spawned agent may now move task files, including **the coder closing its own task**.
+**[[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] reversed [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] §Decision 3**: `fkit-lead` grew from a router into a **conductor** that spawns and drives typed peers. **The lock is what made this feasible, not what it broke.**
+
+- **ADR-018's real-caller enforcement is the enabling fact.** Because the hook keys on the *spawned* subagent's own `agent_type`, a worker spawned as `@fkit-coder` **may run coder-owned skills**. Under Era 1's inheritance model it would have inherited the *lead's* off-list and been unable to run its own procedures at all.
+- **The corollary is binding, and it is a real constraint on the conductor.** A **non-fkit** subagent carries no fkit identity and is denied **every** `fkit-*` skill — so the conductor must spawn **typed `fkit-<role>` workers, never generic helpers**, for any step that runs an fkit procedure.
+- **ADR-010's other decisions still hold.** Sessions stay role-locked; the conductor **spawns consults**, it does not role-switch; `skills_for_role()` stays the single source of truth. Reviewer independence survives because each role's work runs in **its own fresh spawned context** — orchestration *sequences* separate contexts rather than merging them.
+- **The one accepted cost is the plan gate.** Plan mode is a *session* write-wall and cannot function in a spawned worker, so on the orchestrated path *"write no source until the owner approves"* is **prose in the worker prompt, not a runtime wall** (ADR-031's honesty clause). Owners who want the structural wall ship the task the old way: `fkit coder` + `/fkit-task-ship-loop`. **Do not re-raise this as a defect** — it is stated knowingly; a finding must show it *failing in practice*.
+
+Lead's one owned skill, `fkit-sprint-ship-loop`, was registered through `skills_for_role()` like any other ([[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]]) — the hook then allows lead and denies every other role.
+
+### The task movers — reversed, then reversed back (2026-07-18 → 2026-07-23)
+
+> ⚠️ **This section previously read "what the lock does NOT cover." That is no longer true — the lock covers it.**
+
+**[[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] removed the owner-only gate** and [[tasks/implement-spawned-invocation-for-task-movers]] shipped it: any spawned agent could move task files, including the coder closing its own task. **[[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] reversed that on 2026-07-23** — `/fkit-task-done` and `/fkit-task-cancelled` are **`fkit-producer`-only**, and the ADR-018 hook now **denies** a mover call from any non-producer identity **at any spawn depth**.
+
+**So the movers are now governed by exactly the mechanism this page describes**, and *"a role cannot close its own task under its own identity"* is a **fact of the runtime**, not prose. Landed by [[tasks/route-coder-ship-loop-close-to-producer]] → [[tasks/route-sprint-ship-loop-close-to-producer]] → [[tasks/revert-task-movers-to-producer-only]]; verified against the tree 2026-07-26.
+
+⚠️ **What it does *not* do — read this before treating the board as trustworthy.** It restores separation of the closing **identity**, **not prevention**: a determined doer can still spawn a producer to close. The ADR-025 analysis below is **why**, and ADR-033 re-uses it rather than re-deriving it. The `(agent-closed — not owner-verified)` marker still carries the only signal, and it is still invisible in `/fkit-status`.
+
+**The historical record of ADR-025's era, kept because ADR-033 depends on its reasoning:**
 
 **The change landed in `skills_for_role()` itself** — the single source of truth this page describes. `claude/skills-for-role.sh` now lists both movers under `lead`, `producer`, `coder`, `architect`, `reviewer` and `wiki`; **`adversarial-reviewer` is the one role without them**, deliberately (findings-only contract, never edits, restricted Codex allowlist per [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]), and `test/skill-ownership-hook.test.js` pins that as a **deny** assertion. ⚠️ **This is worth understanding precisely: the lock did not fail here, it was reconfigured.** The mandatory adversarial pass found ADR-025 unbuildable as written — its Decision 5 forbade touching the hook, but the hook's data source still said `producer` only, so **every non-producer mover call would have been denied before the relaxed prose was read.** The owner ruled to change the mapping. `skill-ownership-hook.sh` itself is unchanged.
 
@@ -62,7 +81,7 @@ Two facts about how this interacts with the lock:
 
 The ADR's own honesty clause is the thing to read: **prevention is gone, and the replacement — an `(agent-closed — not owner-verified)` marker — is prose written by the same agent that performs the move, with no code path able to enforce it.** Git does not backstop it either: agents cannot commit, so the commit landing an agent-closed move is authored by the **owner**, and history carries no authenticated trace.
 
-**This is the one place where a universal hard rule was reversed rather than reaffirmed** — contrast [[decisions/adr-023-fkit-git-agent-is-not-built]], which kept commit/push owner-only the same week. The owner's stated distinction is **blast radius**.
+**ADR-025 was the one place where a universal hard rule was reversed rather than reaffirmed** — contrast [[decisions/adr-023-fkit-git-agent-is-not-built]], which kept commit/push owner-only the same week; the owner's stated distinction was **blast radius**. **Five days later the owner reversed the reversal**, on evidence from the wiki's side: a finished wiki task sat unclosed on the board for about a week because the wiki never used the authority it had ([[tasks/investigate-making-wiki-task-completion-visible-to-the-board]]). Offered three readings, the owner chose the **strictest** — producer-only — knowing it would unwind the coder ship-loop's self-close and the orchestrator's direct close. **The commit/push ruling has never moved.**
 
 ## Gotchas / Known Issues
 - **There is no `skills:` frontmatter.** It was dropped from all 7 agents: Claude Code treats it as a *preload hint*, not an allowlist, so it enforced nothing. Keeping it — even generated — would have preserved a field that *looks* like the invariant and isn't. **Do not re-add it.**
@@ -98,8 +117,18 @@ The ADR's own honesty clause is the thing to read: **prevention is gone, and the
 - [[tasks/add-no-secrets-rule-to-fkit-lead]]
 - [[tasks/add-full-board-switch-to-fkit-status]]
 - [[tasks/add-shared-instructions-layer-for-all-agents]]
-- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the owner-only mover gate, removed
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the owner-only mover gate removed; ⚠️ **Decisions 1–2 since reversed**
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64: the mover grant written into `skills_for_role()`, with the adversarial reviewer excluded
+- [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — ⚠️ **the movers are producer-only again, and hook-enforced**; the current rule
+- [[tasks/revert-task-movers-to-producer-only]] · [[tasks/route-coder-ship-loop-close-to-producer]] · [[tasks/route-sprint-ship-loop-close-to-producer]] — the landing sequence
+- [[tasks/investigate-making-wiki-task-completion-visible-to-the-board]] — the evidence that triggered the reversal
+- [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — lead becomes a conductor; the lock is the **enabling fact**, and the plan-gate downgrade is its accepted cost
+- [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — the lead-owned sprint loop
+- [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] · [[tasks/evolve-fkit-lead-into-orchestrating-conductor]] · [[tasks/build-fkit-sprint-ship-loop-skill]] · [[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]] — the conductor chain
+- [[tasks/refresh-architecture-doc-for-lead-conductor-and-stale-lock]] — the task that corrected `architecture.md`'s **stale `skillOverrides` description**, the same Era-1/Era-2 confusion this page warns about
+- [[tasks/transcript-independent-ship-loop-skip-signal]] · [[tasks/add-sprint-ship-loop-to-stop-hook-skip-set]] — the hook layer's third and fourth scripts
+- [[tasks/add-adr-030-prose-half-to-universal-rules]] — the prose half of the turn-completion contract
+- [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — the loop whose terminal act the mover reversal changed
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — a **second** hook (`Stop`) decided 2026-07-19, extending this hook layer to end-of-turn behaviour. **Built 2026-07-23** (task 0127) — and it added **two** members to the layer: the `Stop` hook plus a `PreToolUse` `AskUserQuestion` **marker** hook that supplies check A's signal. Its consult skip is safety-critical because `AskUserQuestion` is absent in spawned consults — as built the skip is **structural** (`Stop`-only, never `SubagentStop`)
 - [[tasks/build-adr-030-stop-hook]] — task 0127: the ADR-030 hooks built (the `Stop` + `PreToolUse` marker pair) and reviewed model-diverse; check A moved off the transcript onto the marker
 - [[decisions/adr-023-fkit-git-agent-is-not-built]] — the same week's opposite ruling for commit/push

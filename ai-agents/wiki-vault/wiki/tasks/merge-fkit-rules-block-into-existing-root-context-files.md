@@ -37,3 +37,4 @@
 - [[tasks/add-no-secrets-rule-to-fkit-lead]]
 - [[tasks/add-speak-in-simple-terms-output-style]] — a preference deliberately NOT routed through this marker-managed block, and the generated-file trap that discovery exposed
 - [[tasks/record-shared-instructions-reversal-adr]]
+- [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively

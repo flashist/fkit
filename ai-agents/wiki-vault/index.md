@@ -8,8 +8,8 @@ Add an entry here whenever a page is created (see `schema.md`).
 _(none yet — fkit's user-facing surface is documented as systems)_
 
 ## Systems
-- [[systems/fkit]] — The Claude Code native + Codex agent team: **seven roles built, an eighth authorized** (ADR-028) — roles, skills, topology, data model
-- [[systems/role-locked-sessions]] — The skill lockdown: structural in a session, advisory in a consult
+- [[systems/fkit]] — The Claude Code native + Codex agent team: **seven roles built, an eighth authorized** (ADR-028) — roles, skills, topology, data model. **The lead is now an orchestrating conductor and menu option 1** (ADR-031); **the task movers are producer-only again** (ADR-033)
+- [[systems/role-locked-sessions]] — The skill lockdown: **structural in a session *and* in a consult** (ADR-018); the conductor is built on it, and the movers are back inside it
 - [[systems/install-and-self-update]] — `install.sh`, the `fkit` launcher, preflight, onboarding, self-update, release
 - [[systems/review-and-model-diversity]] — The Codex adversarial pass, loud degradation, and the review ledger
 - [[systems/knowledge-base-structure]] — How `ai-agents/knowledge-base/` is filed: conventions vs decisions vs records
@@ -27,7 +27,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-007-plain-copies-plus-sync-script-and-drift-check-for-vendored-query-skill]] — ⚠️ Superseded: plain copies + a drift-check
 - [[decisions/adr-008-claude-code-native-port-alongside-omnigent]] — ⚠️ Superseded; kept as the record of *why fkit left Omnigent*
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]] — **Claude Code + Codex is the only runtime; Omnigent removed**
-- [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] — Role-locked sessions replace lead-session "hat" skills
+- [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] — Role-locked sessions replace lead-session "hat" skills. ⚠️ **Decision 3 reversed by ADR-031**; its "team room / menu option 7" text is now false and deliberately left as history
 - [[decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name]] — `package.json` stays with its `scripts`; version bumping is load-bearing
 - [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]] — The lockdown follows the *launching session*; `skills:` frontmatter dropped
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]] — The KB root holds only `PROJECT.md` + `architecture.md`
@@ -42,18 +42,21 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — **Tool allowlists relaxed for six roles; the adversarial reviewer's wall is the sole structural tool restriction**
 - [[decisions/adr-023-fkit-git-agent-is-not-built]] — Tombstone: no commit/push agent; **the "never commit unprompted" hard rule reaffirmed, not amended**
 - [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — Tombstone: the AFK timeout **is** real (2.1.214) — declined on **cost, not feasibility**
-- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — ⚠️ **Reverses a universal hard rule**: spawned agents may close tasks; the anti-laundering guarantee is **removed**, not downgraded. **Shipped 2026-07-19; amended three times in the building** (hook data source, adversarial-reviewer exclusion, marker invisible in `/fkit-status`)
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — ⚠️ **REVERSED by ADR-033 — do not follow Decisions 1–2.** It reversed a universal hard rule (spawned agents may close tasks; the anti-laundering guarantee **removed**), shipped 2026-07-19 and was amended three times in the building. Kept for its forgeability analysis, which ADR-033 re-uses
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — Tombstone: no library mutates shell; **ADR-014 Decision 4 unamended**; the real gap was gating
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — The 5th convention + a parity test; the consuming-project drift decision **stays deferred despite its fired trigger**
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — ⚠️ **Reverses the owner's own "not breadth" constraint**: an eighth **tester** seat on *sandbox authority*, against the architect's and producer's recommendation. **Decided, not built**
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — A task becomes a **folder** `tasks/<board>/<NNNN>-<slug>/` under a **permanent global ID**; `plans/`, `worklogs/` and `reviews/` are absorbed. **The largest structural change in the project's history** — 94 folders, ~309 links. **Decided, not built**
+- [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — ⚠️ **Reverses ADR-010 §Decision 3**: `fkit-lead` grows from router into an **orchestrating conductor** that spawns and drives typed peers. Feasible *because* of the ADR-018 hook, safe *because* the driver keeps the owner channel while workers **return** questions. **Its one accepted cost: on the orchestrated path the plan gate is prose, not a write-wall**
+- [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — The lead-owned `fkit-sprint-ship-loop`: ships a sprint by spawning bounded workers, **live owner-relay with no timer and no guess**, agent-closed marker by default. **Amplifies ADR-025's `/fkit-status` invisibility across a whole board**
+- [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — ⚠️ **Reverses ADR-025**: only `fkit-producer` may run the movers, **hook-enforced at any spawn depth**. Amends ADR-019 (coder self-close) and ADR-032 (orchestrator close). **Restores separation of the closing *identity*, not prevention.** Triggered by task 0108, whose own recommendation the owner overruled
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — A **second hook** (`Stop`) enforces interactive questions + a "What's next?" close, because the prose rule **demonstrably did not fire**. Larger blast radius than ADR-018's — it can stop a turn completing. **Built 2026-07-23** (task 0127); **Addendum — 2026-07-23**: check A's "no `AskUserQuestion` this turn" signal comes from a **PreToolUse marker**, not the transcript (transcript presupposition proved false in review)
 
 ## Tasks
 
 ### Sprints
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — 🔒 Closed: the Omnigent-era onboarding sprint, and how its 12 tickets were dispositioned
-- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**79 done · 6 backlog · 0 in progress · 5 cancelled — of 90**; grew 22 → 90)
+- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**101 done · 18 backlog · 5 cancelled — of 124**, re-derived from `dashboard.sh` 2026-07-26; grew 22 → 124, and long since past its original theme)
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — 🆕 The **Backlog board** (`sprints/backlog.md`) — the standing home for unsprinted briefs
 
 ### Sprint 2 — the removal chain
@@ -134,6 +137,37 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 
 ### Sprint 2 — the ADR-030 turn-completion hook
 - [[tasks/build-adr-030-stop-hook]] — Task 0127 (ID 0127) → the ADR-030 hook half **built 2026-07-23, agent-closed**: a `Stop` hook (checks A + B) plus a `PreToolUse` `AskUserQuestion` **marker** hook. The model-diverse review forced **Path 2** — check A's signal moved off the transcript (a proven fail-open violation, R1) onto the marker; consult skip made **structural** (`Stop`-only). Unblocks task 0116
+
+### Sprint 2 — the lead becomes an orchestrating conductor (ADR-031/032, tasks 0109–0116)
+- [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Task 0109 → **ADR-031 + ADR-032**. Design-only; named **six locked-decision collisions** and required each be resolved, not planned around. Owner overrode its own Sprint-3-fit flag
+- [[tasks/evolve-fkit-lead-into-orchestrating-conductor]] — Task 0110: the agent definition rewritten — conductor remit + three driver disciplines (**delegate never substitute · hold the owner channel · typed subagents only**). Both a stance reversal *and* a correction of ADR-022-era stale prose
+- [[tasks/build-fkit-sprint-ship-loop-skill]] — Task 0111: the skill built — selection via `dashboard.sh`, the six-row drive table, the relay envelope, the stop table. ⚠️ **Built to ADR-032-as-first-written; its close step is superseded by ADR-033**
+- [[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]] — Task 0112: registered lead-owned in `skills_for_role()` + four mirrors. ⚠️ **Shipped claiming a dual-home parity test passed — that test does not exist**
+- [[tasks/update-launcher-menu-help-for-conductor]] — Task 0113: launcher text only; "does no work itself" retired. No control-flow change
+- [[tasks/amend-project-brief-for-lead-conductor]] — Task 0114 (producer half) → `PROJECT.md`; **owner-verified close**
+- [[tasks/refresh-architecture-doc-for-lead-conductor-and-stale-lock]] — Task 0115 (architect half) → `architecture.md`, **plus the independent §5.2 stale-lock fix**: the doc still described the retired `skillOverrides` mechanism — the very fact that decided the conductor's feasibility
+- [[tasks/add-sprint-ship-loop-to-stop-hook-skip-set]] — Task 0116: filed **deliberately blocked** on ADR-030's hook; landed after it, 0 defects, mutation-proved
+
+### Sprint 2 — the movers reversed back to producer-only (ADR-033, tasks 0108 · 0122–0124)
+- [[tasks/investigate-making-wiki-task-completion-visible-to-the-board]] — Task 0108 → the trigger: a finished wiki task stuck on the board for **a week**. It recommended the wiki self-close; **the owner ruled the opposite, for every role**
+- [[tasks/route-coder-ship-loop-close-to-producer]] — Task 0122: the coder loop's terminal act becomes a producer hand-off, **not a green board**. Also surfaced the "a consult is not a hand-off" hard-rule contradiction
+- [[tasks/route-sprint-ship-loop-close-to-producer]] — Task 0123: the driver spawns `@fkit-producer` per shipped task. Found a **fourth** system prompt asserting the reversed posture — one the verification grep could not match
+- [[tasks/revert-task-movers-to-producer-only]] — Task 0124: the structural core. **Scope amended three times mid-build**; its sweep had a **path gap and a phrasing gap**, each shipping a real defect. *A grep is a smoke test, never an inventory*
+
+### Sprint 2 — the brief schema gains Owner, and the board learns to read dependencies (0104–0107)
+- [[tasks/add-owner-field-to-brief-schema-and-task-brief-skill]] — Task 0104: `## Owner` becomes a mandatory structured field → the `task-owner-vocabulary` convention; the unbuilt eighth role is explicitly **not** a valid owner
+- [[tasks/backfill-owner-field-into-existing-briefs]] — Task 0105: **108 briefs, 108 fields**, values 72 coder / 24 architect / 10 wiki / 2 producer. The unrecoverable residual was **handed to the owner, never inferred**
+- [[tasks/render-owner-column-in-fkit-status]] — Task 0106: the Owner column, between Filename and Next step exactly as instructed
+- [[tasks/teach-dashboard-to-resolve-notes-dependencies]] — Task 0107 → the `dependency-declaration-form` convention + a LOUD `UNPARSEABLE` guard replacing a **fabricated `ready`**. ⚠️ The convention is **missing from the scaffold**
+- [[tasks/wiki-resync-eighth-role-after-source-docs-land]] — Task 84 (ID 0092): the brief whose **premise was wrong** — the vault was already right. *An ADR is a dated record, not a status board*
+
+### Sprint 2 — the launcher menu reordered, "team room" retired (0139–0140)
+- [[tasks/reorder-launcher-menu-lead-first-and-rename-label]] — Task 0139: lead becomes **option 1**. The `team`/`team room` aliases were **removed, not kept** — the brief said keep, review R1 overturned it, and the reviewer **deliberately left the failed criterion visible** so the owner could rule with full information
+- [[tasks/retire-team-room-in-docs-and-agent-definitions]] — Task 0140: the rename everywhere else, plus three stale "menu option 7" claims. **ADR-010 deliberately left alone** — a dated correction note is the sanctioned fix, and it is still open
+
+### Sprint 2 — the ADR-030 prose half and the hook layer's fourth script
+- [[tasks/add-adr-030-prose-half-to-universal-rules]] — Task 0128: "What's next?" + ask-interactively into the managed rules block. ⚠️ Leaves it at **91.1% of the 4096-byte cap**
+- [[tasks/transcript-independent-ship-loop-skip-signal]] — Task 0129: the Stop hook's skip moved off the transcript onto an authoritative `UserPromptExpansion` `command_name` marker. ⚠️ **The bug it fixed had made the hook effectively non-enforcing in this repo**
 
 ### Sprint 2 — the coder's autonomous ship-loop
 - [[tasks/design-task-ship-loop-skill]] — Owner-approved design → ADR-019 + ADR-020; brief→done with minimal owner involvement

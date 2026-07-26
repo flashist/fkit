@@ -33,3 +33,5 @@ Wrote `ai-agents/knowledge-base/conventions/one-skill-one-output.md`, and added 
 - [[tasks/filter-fkit-status-board-to-open-tasks]] — the "replace, don't switch" ruling this convention forced
 - [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — a target selector, not an output variant; conforms with no reversal ADR
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]
+- [[tasks/render-owner-column-in-fkit-status]] — Render the Owner column in `/fkit-status`, just before Next step
+- [[tasks/teach-dashboard-to-resolve-notes-dependencies]] — Make a task's dependency visible to `dashboard.sh` when it's written in `## Notes` prose

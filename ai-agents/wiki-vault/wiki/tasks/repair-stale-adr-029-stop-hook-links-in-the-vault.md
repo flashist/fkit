@@ -24,3 +24,4 @@ Done — this was **fkit-wiki's own work** (2026-07-19), closed by the owner 202
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, whose scope this repair was deliberately carved out of (its stale links failed silently and could not wait out the migration)
 - [[systems/testing-and-verification]] — the ADR-number/slug cross-check that makes this class mechanically detectable
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/investigate-making-wiki-task-completion-visible-to-the-board]] — Investigate making fkit-wiki task completion visible to the board

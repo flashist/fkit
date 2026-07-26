@@ -98,3 +98,4 @@ Init runs under `set -euo pipefail` and was called **unguarded** from a launcher
 - [[tasks/remove-fkit-omnigent-orphan-residue]] — the one-time destructive cleanup kept out of the every-launch pass
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the drift convergence cannot repair
+- [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively

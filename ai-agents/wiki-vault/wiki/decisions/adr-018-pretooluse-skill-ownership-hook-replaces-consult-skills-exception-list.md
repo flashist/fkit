@@ -56,3 +56,10 @@ ADR-012 established — empirically — that the fkit skill lockdown is **sessio
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which had to change this hook's **data source** (`skills-for-role.sh`) to make ADR-025 workable; the hook script itself is unchanged
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63: the hook gates *role*, so it could not carry the mover gate
 - [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58, which had to state plainly that **tools opened and skills did not** — this hook is the boundary that stayed
+- [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — ADR-031: `fkit-lead` becomes the orchestrating front door — the "not a doer" stance is reversed
+- [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — ADR-033: The task movers are producer-only again — ADR-025's "any role" grant is reversed
+- [[tasks/evolve-fkit-lead-into-orchestrating-conductor]] — Evolve `fkit-lead` into the orchestrating conductor (reverse the non-doer stance)
+- [[tasks/refresh-architecture-doc-for-lead-conductor-and-stale-lock]] — Refresh architecture.md for the lead conductor + fix the stale §5.2 lock description
+- [[tasks/revert-task-movers-to-producer-only]] — Revert the task movers to producer-only — ownership, mirrors, hook test, and mover prose
+- [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook
+- [[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]] — Wire `fkit-sprint-ship-loop` into `skills_for_role()` + the four mirrors (same commit)

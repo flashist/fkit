@@ -13,6 +13,8 @@ Six of the seven agent files carried a "no secrets / no sensitive information" r
 
 **The brief openly refuses to oversell itself, and that is the point:** a rule present in **6 of 7** files is **copy-paste hygiene, not a systemic drift crisis** — and it **materially weakens** the case for building any mechanism, *which is part of why the `AGENTS-COMMON.md` splice was rejected*. The lead also holds **no `Write`/`Edit` tools**, so it is the agent **least** able to leak a secret into an artifact.
 
+> ⚠️ **That last clause is no longer true, and the rule it argued about matters more now.** [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] removed the lead's `tools:` line, so it inherits `Write`/`Edit`; [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] then made it a **conductor** that drives the whole team. The lead is no longer the agent least able to leak a secret. **The rule this task added is what still holds** — corrected 2026-07-26; the argument above is kept as the reasoning of its moment.
+
 **"It is still one missing line in a hard-rules list, and it costs one line to fix. That is the entire justification, and it is enough."**
 
 ## Outcome

@@ -41,3 +41,4 @@ The owner wants a **deterministic layer** for `/fkit-status`: a script that rend
 - [[systems/testing-and-verification]]
 - [[systems/knowledge-base-structure]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/teach-dashboard-to-resolve-notes-dependencies]] — Make a task's dependency visible to `dashboard.sh` when it's written in `## Notes` prose

@@ -153,3 +153,4 @@ re-raise the dual-format transition, content-hash IDs, numbering only open tasks
 - [[tasks/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role]] — task 82, the architecture.md refresh for ADRs 026–030 + the eighth role
 - [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — task 80, the ADR-029/030 vault link repair
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
+- [[tasks/add-owner-field-to-brief-schema-and-task-brief-skill]] — Add a structured `## Owner` field to the brief schema and the task-brief skill

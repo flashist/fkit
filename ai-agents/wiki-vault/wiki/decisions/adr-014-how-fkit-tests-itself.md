@@ -78,3 +78,4 @@ The ADR deliberately **declined to pick the runner**, on the owner's explicit ru
 - [[tasks/design-task-folder-structure-and-id-scheme]] — task 74; the duplicate-ID guard it defers must fit this ADR's constraints
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75; its guard is filed as task 85 against this suite
 - [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard
+- [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook

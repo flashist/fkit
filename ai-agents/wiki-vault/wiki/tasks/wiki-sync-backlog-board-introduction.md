@@ -18,3 +18,4 @@ Done. **Its subject is present in the vault** on [[tasks/add-backlog-board-defau
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the migration these six waited on
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — §9.2, the batching ruling
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/fkit]]
+- [[tasks/investigate-making-wiki-task-completion-visible-to-the-board]] — Investigate making fkit-wiki task completion visible to the board

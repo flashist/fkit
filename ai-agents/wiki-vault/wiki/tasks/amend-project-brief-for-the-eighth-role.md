@@ -23,3 +23,5 @@ Done. **Closes the wiki's longest-standing carried flag** — that `PROJECT.md:8
 - [[tasks/decide-whether-fkit-needs-a-tester-agent]] — the ruling (ADR-028) behind all three doc fixes
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/refresh-architecture-docs-for-tool-relaxation]] — related
+- [[tasks/amend-project-brief-for-lead-conductor]] — Amend PROJECT.md for the evolved `fkit-lead` conductor
+- [[tasks/wiki-resync-eighth-role-after-source-docs-land]] — Wiki resync for the eighth role — after the source docs land

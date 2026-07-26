@@ -24,3 +24,5 @@ Done. **Closes a flag the wiki carried across four consecutive syncs** — that 
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] · [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — among the ADRs newly cited
 - [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — task 81, which carried the installer role-count half (Part D)
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/refresh-architecture-doc-for-lead-conductor-and-stale-lock]] — Refresh architecture.md for the lead conductor + fix the stale §5.2 lock description
+- [[tasks/wiki-resync-eighth-role-after-source-docs-land]] — Wiki resync for the eighth role — after the source docs land
