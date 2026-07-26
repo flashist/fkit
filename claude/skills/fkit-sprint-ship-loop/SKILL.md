@@ -6,7 +6,7 @@ description: The lead's sprint-scope conductor loop — drives eligible tasks br
   agent-closed marker. Session-only; the driver holds the owner channel workers lack.
 ---
 
-# ⛔ Owner: the lead
+# Sprint Ship-Loop (lead side)
 
 > ## ⛔ Owner: the **lead**
 > This is the fkit-lead's own procedure. Execute it **only** if you are the lead — running in a

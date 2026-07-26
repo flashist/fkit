@@ -63,3 +63,4 @@ The owner wanted **one agent per terminal** — a single point of interaction aw
 - [[tasks/retire-team-room-in-docs-and-agent-definitions]] — Retire "team room" in the docs and agent definitions, and fix the stale "menu 7" citations
 - [[tasks/route-sprint-ship-loop-close-to-producer]] — Rewrite the `fkit-sprint-ship-loop` close step — driver self-close → spawn the producer
 - [[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]] — Wire `fkit-sprint-ship-loop` into `skills_for_role()` + the four mirrors (same commit)
+- [[tasks/add-no-secrets-rule-to-fkit-lead]] — making lead the conductor is the second reason that task's *"least able to leak a secret"* argument no longer holds; the no-secrets rule it added matters more, not less

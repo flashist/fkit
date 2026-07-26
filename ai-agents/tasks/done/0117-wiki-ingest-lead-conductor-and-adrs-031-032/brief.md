@@ -10,7 +10,7 @@ Sprint 2
 99
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki

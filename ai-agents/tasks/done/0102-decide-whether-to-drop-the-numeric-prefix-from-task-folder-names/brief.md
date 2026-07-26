@@ -10,7 +10,7 @@ Sprint 2
 103
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect

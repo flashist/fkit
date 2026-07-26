@@ -93,6 +93,18 @@ Answer these, with evidence, and recommend one path:
   and incomplete inventories). **0137 teaches; this task fixes the specific mechanism.** The owner
   considered folding this into 0137 and chose to keep it separate for that reason. Read 0137's brief
   before starting so the two do not contradict each other.
+- **A third candidate specimen — task 0151** (priority 121, *correct `CLAUDE.md`'s stale
+  `skills_for_role()` location*, owner fkit-coder), **added as a pointer 2026-07-26; this task's status,
+  priority and scope are unchanged.** `CLAUDE.md:43` says `skills_for_role()` is declared in
+  `claude/fkit-claude.sh`; it moved to `claude/skills-for-role.sh` under **task 43 / ADR-018**, and
+  `fkit-claude.sh:257` merely sources it. Verified 2026-07-26: this is the **only live site** still
+  asserting the old location — `claude/README.md:41-42` and `architecture.md:154-156` are already
+  correct. **Note the shape, it is the point:** item 1 above already names *"the generated
+  `CLAUDE.md`/`AGENTS.md` blocks"*, but this line is **hand-written prose OUTSIDE** the generated block
+  (which begins at `CLAUDE.md:45`) — **a class the inventory does not currently name**. Treat it as a
+  **candidate** third instance of the checklist's blind spot, alongside 0036 and 0124's three sites, and
+  say in the report whether the recommended approach would have caught it. **If 0151 lands first the
+  line will already be corrected** — `git log -- CLAUDE.md` and 0151's brief preserve the evidence.
 - **Do not re-derive the 0124 sweep from scratch** — its three sites are given above. **Do verify each
   one still reads as stated**, since 0124 has since shipped and may have changed them. A citation that
   no longer resolves is itself a finding.

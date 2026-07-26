@@ -10,7 +10,7 @@ Sprint 2
 102
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -52,4 +52,10 @@ Bring the SKILL.md header into line with the sibling convention:
 - **Independent:** no dependency on 0118 or 0119 — a standalone cosmetic fix. Can ship any time.
 - **Low priority / cosmetic** — filed as its own small unit because no existing arc task touches this
   file's banner; fold it into any batched doc-consistency pass if the owner prefers.
+- **Two follow-ups were surfaced by this task's plan step and filed separately on 2026-07-26, both
+  owner-approved — they are NOT this task's scope and do not gate its close:**
+  - **0152** (priority 129) — a guard test so this H1 drift cannot recur. The decision **not** to fold
+    it in here was correct: it is a new enforcement surface on a one-file cosmetic fix.
+  - **0151** (priority 121) — `CLAUDE.md:43` names the wrong file for `skills_for_role()`, spotted
+    while reading the skill tree. Unrelated to the banner; pointered into 0142.
 - No commit — leave the edit in the working tree.

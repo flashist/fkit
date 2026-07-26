@@ -6,6 +6,8 @@
 **Source**: `ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md`
 **Depends on**: [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]]
 
+> ⚠️ **STALE — a SECOND amendment is missing from this ADR.** Beyond the ADR-033 close-step amendment noted above, the drive sequence now depends on a **2026-07-22 autonomy amendment that was never written**: the `fkit-coder.md` **declared-approval-marker carve-out** letting the loop's Build **and** Process-review workers write source, the latter applying verified-`CORRECT` in-plan fixes **without per-fix owner approval**. `claude/agents/fkit-coder.md` already **cites** *"[ADR-032] Decision 3 + its 2026-07-22 autonomy amendment"* — **a citation to text that does not exist here.** Task `0118` will land it (still 🔲 Backlog); the substance is recorded meanwhile on [[tasks/build-fkit-sprint-ship-loop-skill]].
+
 > **In one line:** `fkit-sprint-ship-loop` is a **lead-owned driver** that ships a sprint's eligible tasks brief→closed by spawning role workers for bounded steps, relaying every owner decision **live** through the lead session, and closing with the agent-closed marker **by default** — and it **never** invokes the coder's session-only `fkit-task-ship-loop`.
 
 ## Context

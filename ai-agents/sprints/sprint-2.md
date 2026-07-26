@@ -128,12 +128,12 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done | 96 | Amend PROJECT.md for the evolved `fkit-lead` conductor *(product-brief half of design §11 T6; owner-signed-off stance wording; needs 92 + 94; owner: fkit-producer)* | [`0114-amend-project-brief-for-lead-conductor`](../tasks/done/0114-amend-project-brief-for-lead-conductor/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 97 | Refresh architecture.md for the lead conductor + fix the stale §5.2 lock description *(architecture half of T6 **plus** the independent §5.2 `skillOverrides`→ADR-018-hook stale-lock fix, design §1.1; coordinates with 94 on the same file; needs 92 + 94; owner: fkit-architect)* | [`0115-refresh-architecture-doc-for-lead-conductor-and-stale-lock`](../tasks/done/0115-refresh-architecture-doc-for-lead-conductor-and-stale-lock/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 98 | Add `fkit-sprint-ship-loop` to the ADR-030 Stop-hook skip set *(one skip-list entry + test; owner: fkit-coder)* | [`0116-add-sprint-ship-loop-to-stop-hook-skip-set`](../tasks/done/0116-add-sprint-ship-loop-to-stop-hook-skip-set/brief.md) |
-| 🔲 Backlog | 99 | Wiki ingest — ADR-031/032, the design report, and the evolved lead role *(vault write — fkit-wiki only; recommend running last, after 96 + 97 land; needs T1 (Done) + 92; owner: fkit-wiki)* | [`0117-wiki-ingest-lead-conductor-and-adrs-031-032`](../tasks/backlog/0117-wiki-ingest-lead-conductor-and-adrs-031-032/brief.md) |
-| 🔲 Backlog | 100 | Record the ADR-032 sprint-ship-loop autonomy amendment — Build carve-out + Process-review autonomy (option b) + accepted cost + do-not-re-raise guard *(**reassigned 2026-07-25 — owner ruled it stalled**; was parked as "owner is writing it himself", verified never written, blocked 99 for three days unnoticed; the four 2026-07-22 decisions are settled and not reopened; owner: fkit-architect)* | [`0118-record-adr-032-sprint-ship-loop-autonomy-amendment`](../tasks/backlog/0118-record-adr-032-sprint-ship-loop-autonomy-amendment/brief.md) |
-| 🔲 Backlog | 101 | Track the `fkit-coder` declared-approval carve-out — the guarantee-surface change 0111 folded in *(**already implemented in the working tree — done-pending-review, not re-do**; the architect asked it get its own reviewable record; needs 93 + 100; **recommend owner-verify, not agent-close**; owner: fkit-coder)* | [`0119-track-fkit-coder-declared-approval-carve-out`](../tasks/backlog/0119-track-fkit-coder-declared-approval-carve-out/brief.md) |
-| 🔲 Backlog | 102 | Fix the `fkit-sprint-ship-loop` SKILL.md owner-banner format *(cosmetic; bare `# ⛔ Owner:` H1 → sibling-style title; no ADR-018-hook impact; independent; owner: fkit-coder)* | [`0120-fix-sprint-ship-loop-skill-owner-banner-format`](../tasks/backlog/0120-fix-sprint-ship-loop-skill-owner-banner-format/brief.md) |
-| 🔲 Backlog | 103 | Decide whether to drop the numeric prefix from task-folder names *(investigation — **weighs against ADR-029 Decision 5 + the task-76 migration**; the two-numbers confusion, folder-ID `0109` vs sprint priority `91`; blocks 104; owner: fkit-architect)* | [`0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names`](../tasks/backlog/0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names/brief.md) |
-| 🔲 Backlog | 104 | Implement the task-folder-name scheme change from the approved design *(needs 103 incl. approval + any ADR — hard; **may be cancelled if 103 says keep the number**; owner: fkit-coder)* | [`0103-implement-task-folder-name-scheme-change`](../tasks/backlog/0103-implement-task-folder-name-scheme-change/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 99 | Wiki ingest — ADR-031/032, the design report, and the evolved lead role *(vault write — fkit-wiki only; needs T1 (Done) + 92; owner: fkit-wiki)* | [`0117-wiki-ingest-lead-conductor-and-adrs-031-032`](../tasks/done/0117-wiki-ingest-lead-conductor-and-adrs-031-032/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 100 | Record the ADR-032 sprint-ship-loop autonomy amendment — Build carve-out + Process-review autonomy (option b) + accepted cost + do-not-re-raise guard *(**reassigned 2026-07-25 — owner ruled it stalled**; was parked as "owner is writing it himself", verified never written, blocked 99 for three days unnoticed; the four 2026-07-22 decisions are settled and not reopened; owner: fkit-architect)* | [`0118-record-adr-032-sprint-ship-loop-autonomy-amendment`](../tasks/done/0118-record-adr-032-sprint-ship-loop-autonomy-amendment/brief.md) |
+| 🔄 In progress | 101 | Track the `fkit-coder` declared-approval carve-out — the guarantee-surface change 0111 folded in *(**already implemented and committed — done-pending-review, not re-do**; **corrected 2026-07-26**, this cell and the brief previously said "in the working tree (uncommitted)" — false: the carve-out is in `a89c917`, and **both commits touching the file were authored by the owner, so no agent breached the no-commit rule**; the architect asked it get its own reviewable record; needs 93 + 100; **recommend owner-verify, not agent-close**; owner: fkit-coder)* | [`0119-track-fkit-coder-declared-approval-carve-out`](../tasks/backlog/0119-track-fkit-coder-declared-approval-carve-out/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 102 | Fix the `fkit-sprint-ship-loop` SKILL.md owner-banner format *(cosmetic; bare `# ⛔ Owner:` H1 → sibling-style title; no ADR-018-hook impact; independent; owner: fkit-coder)* | [`0120-fix-sprint-ship-loop-skill-owner-banner-format`](../tasks/done/0120-fix-sprint-ship-loop-skill-owner-banner-format/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 103 | Decide whether to drop the numeric prefix from task-folder names *(investigation — **weighs against ADR-029 Decision 5 + the task-76 migration**; the two-numbers confusion, folder-ID `0109` vs sprint priority `91`; blocks 104; owner: fkit-architect. **Deliverable: [decision report](../knowledge-base/reports/2026-07-26-decide-task-folder-name-numeric-prefix.md)** — owner ruled **Option C**: keep the prefix, fix the priority side; 104 rescoped, not cancelled)* | [`0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names`](../tasks/done/0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names/brief.md) |
+| 🔲 Backlog | 104 | Implement the task-folder-name scheme change from the approved design *(**RESCOPED 2026-07-26, NOT a cancellation candidate** — 103 ruled **Option C**, owner-approved: keep the prefix, fix the priority side. Scope = folder ID primary in `dashboard.sh` + priority cell renders `P<n>` + Option D label normalisation (owner-ruled complement) + the convention page. **No folder renames, no href rewrites, no wiki churn** — ~1/10 the old blast radius. Spec = [decision report §8](../knowledge-base/reports/2026-07-26-decide-task-folder-name-numeric-prefix.md); dep on 103 satisfied; owner: fkit-coder)* | [`0103-implement-task-folder-name-scheme-change`](../tasks/backlog/0103-implement-task-folder-name-scheme-change/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 105 | Rewrite `fkit-task-ship-loop` step 9 — coder self-close → route close to producer *(ADR-033 §3 ripple, amends ADR-019; ships **before** 0124; owner: fkit-coder)* | [`0122-route-coder-ship-loop-close-to-producer`](../tasks/done/0122-route-coder-ship-loop-close-to-producer/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 106 | Rewrite `fkit-sprint-ship-loop` close step — driver self-close → spawn producer to close *(ADR-033 §4 ripple, amends ADR-032; revises 0111's as-first-written close; ships **before** 0124; owner: fkit-coder)* | [`0123-route-sprint-ship-loop-close-to-producer`](../tasks/done/0123-route-sprint-ship-loop-close-to-producer/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | 107 | Revert the task movers to producer-only — `skills-for-role.sh` + 4 mirrors + hook test + mover SKILL prose *(ADR-033 §1 structural core; owner: fkit-coder)* | [`0124-revert-task-movers-to-producer-only`](../tasks/done/0124-revert-task-movers-to-producer-only/brief.md) |
@@ -150,12 +150,213 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | 118 | Reconcile the dual-homed file drift — byte-align live `ai-agents/` vs `claude/scaffold/ai-agents/` *(**pulled from the Backlog board 2026-07-25 by owner ruling**; ADR-027 §2 follow-up, never filed for six days; `dependency-declaration-form.md` is missing from the scaffold — consuming projects inherit the **task-84 misreport class**; the exception list is the real deliverable; blocks 119; owner: fkit-coder)* | [`0132-reconcile-dual-homed-file-drift-live-vs-scaffold`](../tasks/backlog/0132-reconcile-dual-homed-file-drift-live-vs-scaffold/brief.md) |
 | 🔲 Backlog | 119 | Build `test/dual-home-parity.test.js` *(**pulled from the Backlog board 2026-07-25 by owner ruling**; **task 0112 shipped claiming this test passed — it does not exist**; carries the named obligation to re-verify 0112's five touched files and report pass/fail to the owner; needs 118 — ADR-027 §3 makes the order binding; owner: fkit-coder)* | [`0133-build-dual-home-parity-test`](../tasks/backlog/0133-build-dual-home-parity-test/brief.md) |
 | 🔲 Backlog | 120 | Investigate the skill-ownership fact-inventory gap — the mirror checklist does not see every site *(**investigation, not implementation** — fix shape unknown; the `skills-for-role.sh:12-24` checklist has failed **twice** (0036, then 0124's three missed sites); the missed sites are **system prompts + the universal rules block**, which outrank a SKILL in an agent's own context; coordinates with 0137; independent; owner: fkit-architect)* | [`0142-investigate-the-skill-ownership-fact-inventory-gap`](../tasks/backlog/0142-investigate-the-skill-ownership-fact-inventory-gap/brief.md) |
-| 🔲 Backlog | 121 | Append a dated correction note to ADR-010 for the menu reorder *(owner ruled 2026-07-25 — **note, not a rewrite**; ADR-010:26's "menu option 7" + "team room" go stale when 115/116 land, and its "routes rather than does" was already reversed by ADR-031; **establishes the form**, this being the first; ADR stays `accepted`; soft-needs 115 + 116; owner: fkit-architect)* | [`0143-append-a-dated-correction-note-to-adr-010`](../tasks/backlog/0143-append-a-dated-correction-note-to-adr-010/brief.md) |
-| 🔲 Backlog | 122 | Pin the `team` / `team room` rejection with launcher-contract CLI tests *(**0139's standing residual, re-raise-triggered by 0140's close**; `rc=2` + **`claude` never exec'd** — the exit code alone would have passed while the real 0139 bug shipped; needs **no new harness**; adds a 3rd `prove-red.sh` mutation; independent; owner: fkit-coder)* | [`0144-pin-the-team-team-room-rejection-with-cli-contract-tests`](../tasks/backlog/0144-pin-the-team-team-room-rejection-with-cli-contract-tests/brief.md) |
-| 🔲 Backlog | 123 | Give the launcher-contract suite a pty, and pin the menu picks 1-7 *(**partly reverses a recorded acceptance** — `architecture.md:453` says the tty menu stays manual; needs **new pty infrastructure** — `runFkit` is detached by design and must not change; **two documented false-result traps**; portability is an owner decision if it bites; independent; owner: fkit-coder)* | [`0145-pty-driven-menu-pick-coverage-for-the-launcher`](../tasks/backlog/0145-pty-driven-menu-pick-coverage-for-the-launcher/brief.md) |
-| 🔲 Backlog | 124 | Correct the false "menu-pick alias" claim in 0139's accepted residual *(**a do-not-re-litigate residual describes behavior the code does not have** — it says `team`/`team room` still work as menu picks "exactly as before this task"; the menu arm is `1\|lead)` and the launcher's own comment agrees with the code, so the residual is the lone outlier; **owner ruled 2026-07-26: the text is wrong, the code is right — NO launcher change**; docs-only, `review.md` is the reviewer's ledger; feeds 0142; owner: fkit-reviewer)* | [`0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual`](../tasks/backlog/0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual/brief.md) |
+| 🔲 Backlog | 121 | Correct `CLAUDE.md`'s stale `skills_for_role()` location *(**`CLAUDE.md` is injected into every fkit session**, so every role in every session is currently told the wrong file; `:43` says the function is declared in `claude/fkit-claude.sh` — it **moved to `claude/skills-for-role.sh`** under task 43 / ADR-018 and `fkit-claude.sh:257` merely sources it; **one-hop misdirection, not a wrong edit** — `fkit-claude.sh:253-254` documents the move right above the source line; **the only live stale site** — `claude/README.md:41` and `architecture.md:154` are already correct, and ADRs are dated records, out of scope; the line sits **outside** the generated rules block, so a normal one-line edit; **plausible live specimen for 0142** (120) and pointered there; owner: fkit-coder)* | [`0151-correct-claude-mds-stale-skills-for-role-location`](../tasks/backlog/0151-correct-claude-mds-stale-skills-for-role-location/brief.md) |
+| 🔲 Backlog | 122 | Append a dated correction note to ADR-010 for the menu reorder *(owner ruled 2026-07-25 — **note, not a rewrite**; ADR-010:26's "menu option 7" + "team room" go stale when 115/116 land, and its "routes rather than does" was already reversed by ADR-031; **establishes the form**, this being the first; ADR stays `accepted`; soft-needs 115 + 116; owner: fkit-architect)* | [`0143-append-a-dated-correction-note-to-adr-010`](../tasks/backlog/0143-append-a-dated-correction-note-to-adr-010/brief.md) |
+| 🔲 Backlog | 123 | Implement ADR-032 A2's worklog audit obligation in the sprint-ship-loop *(**the amendment requires it; nothing implements it** — `fkit-sprint-ship-loop/SKILL.md:105` asks the Process-review worker only for "change surface + residuals" and `fkit-coder.md:73-82` imposes no worklog duty; **consequence: ADR-032 A4 bullet 2's reopening condition is unsatisfiable in practice** — the guard points at evidence nothing requires anyone to write; adds an **obligation, not a permission**; owner-ruled 2026-07-26; **land with 0150 (124) in ONE `fkit-coder` session — different clauses of the same file**; owner: fkit-coder)* | [`0147-implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop`](../tasks/backlog/0147-implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop/brief.md) |
+| 🔲 Backlog | 124 | Add the missing **verbatim** to `fkit-coder.md`'s declared-approval marker, condition (b) *(0119 review **R1**, medium, raised **independently by both reviewers**; `fkit-coder.md:65-66` says the marker carries *"a concrete **approved plan**"* while ADR-032 **A1** `:97` and the driver `SKILL.md:109` both require it **verbatim** — a paraphrased plan satisfies the worker-side check, so the worker's **scope boundary** can silently become the driver's summary; **medium not high**: the driver's own verbatim rule must fail first, so this is a **missing second line of defence, not the primary control**; one-word prose fix on a **guarantee surface**, owner-ruled 2026-07-26 to be tracked rather than slipped in; **promoted 128 → 124 by owner ruling 2026-07-26, now adjacent to 0147 (123) — land the two in ONE `fkit-coder` session**; owner: fkit-coder)* | [`0150-add-verbatim-to-fkit-coder-declared-approval-marker`](../tasks/backlog/0150-add-verbatim-to-fkit-coder-declared-approval-marker/brief.md) |
+| 🔲 Backlog | 125 | Wiki re-ingest the amended ADR-032 and clear its now-wrong `⚠️ STALE` banner *(**merged from two candidates — one page, one edit**; vault `grep -c "Amendment — 2026-07-22"` = **0**, and the page's banner still says the amendment "was never written" and "0118 … still 🔲 Backlog" — **false on both counts** since 0118 closed; the banner was 0117's authorized stand-in and has outlived it; no overlap with 0126 (ADR-033) or 0141 (lead rename); owner: fkit-wiki)* | [`0148-wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner`](../tasks/backlog/0148-wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner/brief.md) |
+| 🔲 Backlog | 126 | Pin the `team` / `team room` rejection with launcher-contract CLI tests *(**0139's standing residual, re-raise-triggered by 0140's close**; `rc=2` + **`claude` never exec'd** — the exit code alone would have passed while the real 0139 bug shipped; needs **no new harness**; adds a 3rd `prove-red.sh` mutation; independent; owner: fkit-coder)* | [`0144-pin-the-team-team-room-rejection-with-cli-contract-tests`](../tasks/backlog/0144-pin-the-team-team-room-rejection-with-cli-contract-tests/brief.md) |
+| 🔲 Backlog | 127 | Give the launcher-contract suite a pty, and pin the menu picks 1-7 *(**partly reverses a recorded acceptance** — `architecture.md:453` says the tty menu stays manual; needs **new pty infrastructure** — `runFkit` is detached by design and must not change; **two documented false-result traps**; portability is an owner decision if it bites; independent; owner: fkit-coder)* | [`0145-pty-driven-menu-pick-coverage-for-the-launcher`](../tasks/backlog/0145-pty-driven-menu-pick-coverage-for-the-launcher/brief.md) |
+| 🔲 Backlog | 128 | Correct the false "menu-pick alias" claim in 0139's accepted residual *(**a do-not-re-litigate residual describes behavior the code does not have** — it says `team`/`team room` still work as menu picks "exactly as before this task"; the menu arm is `1\|lead)` and the launcher's own comment agrees with the code, so the residual is the lone outlier; **owner ruled 2026-07-26: the text is wrong, the code is right — NO launcher change**; docs-only, `review.md` is the reviewer's ledger; feeds 0142; owner: fkit-reviewer)* | [`0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual`](../tasks/backlog/0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual/brief.md) |
+| 🔲 Backlog | 129 | Guard test for the `SKILL.md` H1 house style — no skill may use the owner banner as its title *(0120 follow-up; **skill-file content is an entirely untested surface** — **no test in the repo reads any `SKILL.md`'s content**; **25** files, not 26: before 0120, 24 descriptive + **1 sole outlier**, after it 25/25, so the guard is green day one with **nothing grandfathered**; ADR-014 zero devDeps ⇒ hand-rolled; **⚠️ must reuse 0136's (114) `SKILL.md` walk, never add a second**; **low severity** — the original defect was cosmetic and the ADR-018 hook keys off `skills_for_role()`, not banner text; the coder's refusal to fold this into 0120 was correct; owner: fkit-coder)* | [`0152-guard-test-for-skill-md-h1-house-style`](../tasks/backlog/0152-guard-test-for-skill-md-h1-house-style/brief.md) |
+| 🔲 Backlog | 130 | Record that 0118's block on 0117 was discharged by another route *(0118's brief `:84` still predicts "the amendment lands before 0117 runs" — **0117 shipped first** under an owner ruling with a staleness pointer standing in; architect ruled **record the discharge, do not delete the line** — a stale claim that already cost a three-day silent block is history worth keeping visible; edits a brief in `done/`; **must preserve the canonical `- **Blocks:**` form** or `dashboard.sh` reads UNPARSEABLE; owner: fkit-producer)* | [`0149-record-that-0118s-block-on-0117-was-discharged-by-another-route`](../tasks/backlog/0149-record-that-0118s-block-on-0117-was-discharged-by-another-route/brief.md) |
 
-### Addendum — tasks 122–123 added out of band (2026-07-26): the launcher coverage 0139 deferred and never filed
+### Re-ranked 2026-07-26 (second re-rank of the day) by owner ruling — 0150 promoted beside 0147, and two 0120 follow-ups placed on merit
+
+**This table is authoritative for every priority from 120 down.** Earlier addendum headings and tables
+in this plan cite the numbers as they stood **before** this ruling; they are kept as dated records of
+their own reasoning and were not rewritten. Where a heading names a task by priority, the parenthetical
+now carries the new number too.
+
+**The owner's ruling (Unit 1).** 0150 was filed at **128** — append rank, which the filing producer
+correctly flagged as *not* merit (`/fkit-task-brief` step 5 forbids a spawned producer inserting into
+the owner's ranking without a ruling). The owner ruled: **promote it beside 0147**, because the two
+touch **different clauses of the same file** (`claude/agents/fkit-coder.md`) and should be **landable in
+one `fkit-coder` session** — one read of the guarantee surface and one review pass instead of two.
+
+**Two follow-ups filed at the same time (Unit 2)**, both surfaced during **task 0120's plan step** by
+the `fkit-coder` worker and **verified against the repo** before filing, both owner-approved, both
+**ranked on merit here rather than appended**.
+
+| Task | Was | Now | Why |
+|---|---|---|---|
+| **0151** — correct `CLAUDE.md`'s stale `skills_for_role()` location | *(new)* | **121** | Immediately **below 0142**, the investigation of this exact failure class, so the specimen sits next to it on the board. Ranked this high because **`CLAUDE.md` is injected into every fkit session** — every role, every turn, is currently told the wrong file, for a one-line fix at zero risk. Not ranked higher, because the misdirection is **one hop**: `fkit-claude.sh:253-254` documents the move in a comment right above the `source` line, so a reader who follows the stale pointer lands next to the correction. **Adjacency is not a dependency** — 0151 does not wait on 0142. |
+| **0147** | 122 | **123** | Displaced one place by 0151. **Nothing re-judged** — its relative position to everything except 0151 is unchanged. |
+| **0150** | 128 | **124** | **The ruling.** Directly below 0147: same file, same already-settled ADR-032 clause work, and R1 (0150's source finding) is graded **medium** against 0147's **low**. It sits *below* rather than above 0147 because 0150 is a **second line of defence** — the driver's own verbatim rule must fail first — while 0147 closes a gap that makes ADR-032 **A4 bullet 2 unsatisfiable today**. **Run order: land 0150 with 0147 in one session.** |
+| **0148** | 123 | **125** | Displaced two places (0151 + 0150). Its own reason for sitting **immediately after 0147** — one wiki pass over the ADR-032 page instead of two — is **still satisfied**: 0150 between them is a coder task and touches no vault page. |
+| **0144** | 124 | **126** | Displaced two places. Not re-judged. |
+| **0145** | 125 | **127** | Displaced two places. Not re-judged; still directly after 0144, which is the order its own addendum sets ("124 first only because it is cheap"). |
+| **0146** | 126 | **128** | Displaced two places. Not re-judged. |
+| **0152** — guard test for the `SKILL.md` H1 house style | *(new)* | **129** | Below the launcher pin-guards (0144/0145) and below 0146, because it is the **same class** — pinning behavior **already verified correct** — with the **lowest recurrence risk of the four**: the convention held in **24 of 25** files with no enforcement at all, and the defect it prevents is cosmetic (0120's own words). Above 0149 because 0149's cost of waiting is **archival only**. **Not** ranked near 0136 (114) despite the shared surface: doing that would have meant renumbering the two ✅ Done rows at 115/116, and the merit case does not justify rewriting closed history. |
+| **0149** | 127 | **130** | Displaced three places. Its "the append order was right here" reasoning from the earlier re-rank is **unchanged** — it stays last. |
+
+**Existing rows moved, and why: seven, all of them displacement, none re-judged** — 0147 +1, 0148 +2,
+0144 +2, 0145 +2, 0146 +2, 0149 +3, and 0150 itself 128 → 124 by the ruling. Every relative order among
+the displaced tasks is preserved. **Nothing above 120 moved**, and **no ✅ Done or ⛔ Cancelled row was
+renumbered** — closed history is not re-ranked to make room for new work.
+
+**Correction to the earlier re-rank's observation.** That addendum noted **0146** sits below **0142**
+despite *feeding* it, and counted it as *"six places below"*. After this re-rank it is **eight places**
+(120 → 128). The inversion is still **pre-existing and deliberately untouched** — it was not part of
+either ruling. **Still worth a decision if 0142 is picked up first**, and this re-rank widened the gap.
+
+**Two things this re-rank did NOT do:** no task's **status** changed — **101 (0119)** and **102 (0120)**
+remain `🔄 In progress` and mid-flight, and 0119 in particular still awaits an **owner-verified** close,
+not an agent close. And **0142 was not re-scoped**: its status, priority (120) and scope are untouched;
+only a **pointer** to 0151 was added to its brief.
+
+### Addendum — tasks 121 and 129 (0151/0152) added 2026-07-26: the two follow-ups task 0120's plan step surfaced
+
+Both were found by the **`fkit-coder` worker while planning 0120**, not by a review — the worker read
+the whole skill tree to place a one-file cosmetic fix and saw two things next to it. Both premises were
+**re-verified against the tree by the producer before filing**; two of the worker's reported numbers did
+not survive that check and are corrected below, because a brief that repeats a wrong count teaches it.
+
+**0151 — `CLAUDE.md:43` names the wrong file.** It says `skills_for_role()` is declared in
+`claude/fkit-claude.sh`. It **moved to `claude/skills-for-role.sh`** under **task 43 / ADR-018**;
+`fkit-claude.sh:257` now merely sources it (`. "$here/skills-for-role.sh"`), and `:253-254` says so in a
+comment. Verified: **`CLAUDE.md:43` is the only live site still asserting the old location** —
+`claude/README.md:41-42` and `ai-agents/knowledge-base/architecture.md:154-156` are both already
+correct, `grep -rn skills_for_role claude/scaffold/` returns nothing (no dual-home twin), and the ADRs
+that cite the old path (010, 012, 014) are dated records, deliberately out of scope.
+
+- **Why it is worth a task at all:** `CLAUDE.md` is injected into **every fkit session**, so this
+  misdirects **every role in every session** — including the lead session that found it.
+- **Why it is not urgent:** one hop, not a wrong edit (see the ranking table).
+- **It is pointered into 0142** (priority 120, the fact-inventory investigation) as a **plausible live
+  specimen** of the failure that investigation exists to characterise — the mirror checklist at
+  `claude/skills-for-role.sh:12-24` has now missed a skill-ownership assertion **twice** (0036, then
+  0124's three sites). Note the **shape**: 0142's inventory question already names *"the generated
+  `CLAUDE.md`/`AGENTS.md` blocks"*, but this line is **hand-written prose outside** the generated block
+  (which starts at `CLAUDE.md:45`) — a class the inventory does not currently name. **0142's status,
+  priority and scope were not changed**; a pointer was added to its Notes.
+
+**0152 — nothing stops the `SKILL.md` H1 drift 0120 just fixed from recurring.** The load-bearing fact
+is not the H1 at all: **no test in this repo reads any `SKILL.md` file's content**, so skill-file
+content is an **entirely untested surface**. Opening it is the larger part of this task's value.
+
+- **Two corrections to the worker's report, made after re-verification.** There are **25**
+  `claude/skills/*/SKILL.md` files, **not 26** (matching 0136's independently-verified count) — so the
+  split was **24 descriptive + 1 outlier** before 0120, and 25/25 after. And
+  `grep -rn "claude/skills" test/*.js` returns **two** hits, not zero: `dashboard-contract.test.js:28`
+  **executes** `claude/skills/fkit-status/dashboard.sh`, and `harness.mjs:212-217` lists `.claude/skills`
+  **directory names**. Neither opens a `SKILL.md`. **The conclusion survives; the grep that was cited
+  for it does not.**
+- **⚠️ The surface-opening credit is contingent on run order.** Task **0136** (priority 114, above this)
+  already commits to *"the first automated reader"* of `SKILL.md` frontmatter. If 0136 lands first, 0152
+  is one more assertion on an existing walk, **not** a surface-opener — and it must **reuse** that walk.
+  The two must not end up with two independent `SKILL.md` readers; 0152's brief makes that a
+  verification step.
+- **The coder deliberately declined to fold this into 0120** — new scope with a new enforcement surface
+  on a one-file cosmetic fix. **That judgment was correct**, and is recorded here so it is not
+  re-litigated as a miss. It is the same fold-it-in pattern 0119 exists to correct.
+
+### Addendum — task 128 → **124** (0150) added out of band (2026-07-26): the one-word marker drift 0119's review found
+
+Filed during the same sprint-loop run, from **0119's round-1 review ledger** — finding **R1**
+(`ai-agents/tasks/backlog/0119-track-fkit-coder-declared-approval-carve-out/review.md:18`), graded
+**medium** and reached **independently by fkit-reviewer (Claude) and the Codex adversarial pass**
+(`codex-cli 0.145.0`, exit 0 — full model-diverse coverage, not degraded). The ledger's convergence call
+is explicit: *"Act on R1 — this is not a review loop."*
+
+**All three cited sites re-verified against the tree on 2026-07-26** before filing, not copied from the
+ledger — this tree moved repeatedly during the run.
+
+- **Why it is tracked and not slipped in.** The edit is **one word**, but it lands on the clause that
+  defines a spawned coder's **scope boundary** (`fkit-coder.md:68-69`). Owner-ruled during the run that a
+  guarantee-surface change gets its own reviewable record — the same reasoning that produced 0119 itself.
+- **Why medium and not high, kept as the reviewer graded it.** The driver's own verbatim rule
+  (`fkit-sprint-ship-loop/SKILL.md:109`) has to fail first. This is a **second line of defence**, not the
+  primary control. Recorded here so the severity is not re-argued upward or downward later.
+- **Deliberately NOT folded into 0147** (priority 122), despite both editing `claude/agents/fkit-coder.md`.
+  0147's verification step 4 forbids any diff touching the declared-approval marker's three signals — and
+  this fix touches signal (b). Folding would mean weakening the exact guard that keeps 0147 off settled
+  ground, and would repeat the fold-a-guarantee-surface-change-into-another-task mistake that 0119 exists
+  to correct.
+
+**⚠️ Priority 128 is append rank, NOT a merit ranking — flagged for owner confirmation.** Filed by a
+**spawned** producer with no owner channel; `/fkit-task-brief` step 5 forbids inserting into or
+renumbering the owner's ranking, so appending was the only sanctioned option. **On merit it belongs
+adjacent to 0147** (122) — same file, same settled-ADR-clause work, and by the same reasoning the owner
+used on 2026-07-26 to lift 0147 above the launcher-test pair, it closes a gap in a control the project is
+**exercising right now**. Note R1 is graded **medium** while 0147's source finding R2 is **low**.
+**A re-rank is the owner's call.** **Run-order recommendation regardless of number: land 0150 with 0147
+in one `fkit-coder` session** — different clauses of one file, so one read of the guarantee surface and
+one review pass over it.
+
+**✅ RESOLVED, same day.** The owner ruled on **2026-07-26**: **promote 0150 to priority 124**, directly
+below **0147 (123)**. The flag above did its job and is kept as the record of why the number was
+questioned. **The run-order recommendation is now the plan's instruction, not a suggestion — land 0150
+and 0147 in ONE `fkit-coder` session.** Full table: *Re-ranked 2026-07-26 (second re-rank of the day)*,
+above.
+
+**Dependency shape:** independent — depends on nothing, blocks nothing. **Filing it does not close
+0119**, which stays `🔄 In progress` for the owner to verify and close personally.
+
+### Addendum — tasks 122, 123 and 127 → **123, 125 and 130** (0147–0149) added out of band (2026-07-26): follow-ups surfaced by the sprint-loop run that closed 0118
+
+Filed at **0118's close** by the spawned producer, from gaps workers surfaced during the run that no
+existing task owned. Each premise was **re-verified against the tree** before filing — this tree moved
+twice mid-run (commit `fd3bc61`, plus a vault re-lint), so cited `path:line` claims were checked, not
+copied.
+
+- **122 (0147)** — the audit-log gap. ADR-032's own amendment text flags it in a blockquote; the point of
+  the task is that **A4 bullet 2 is unsatisfiable until it lands**.
+- **123 (0148)** — the vault re-ingest **and** the stale-banner removal, deliberately **merged into one
+  task**: same file, same edit. Two tasks would have raced over one page.
+- **127 (0149)** — the producer-side correction to 0118's own `Blocks:` claim.
+
+**Two candidate follow-ups were declined, not filed** — see the *Declined follow-ups* note below.
+
+**Dependency shape:** all three are **independent**; none blocks another.
+
+#### Re-ranked 2026-07-26 by owner ruling — the three were appended, not ranked
+
+They were first filed at **125–127**, i.e. appended below everything. The owner ruled during the same run
+that they be **placed on merit** against the existing ranking. The producer's ruling:
+
+| Task | Was | Now | Why |
+|---|---|---|---|
+| **0147** | 125 | **122** | Above the launcher-test pair (0144/0145). Those pin behavior that is **already verified correct** against a hypothetical future re-addition; 0147 closes a hole in a control the project is **exercising right now**. Every sprint-loop run that applies an autonomous post-review fix while this is open produces evidence that is never written and cannot be reconstructed later, and ADR-032 **A4 bullet 2's reopening condition stays unsatisfiable** meanwhile. Cost is two prose edits to two named files — no new infrastructure, no design call. |
+| **0148** | 126 | **123** | Immediately **after** 0147, deliberately. 0148's own brief says the ingest reads differently depending on whether 0147 has landed (*"if 0147 lands first, ingest the amended reality; if not, ingest the gap as the ADR records it"*). Running it second means **one wiki pass over that page instead of two**. Not ranked higher than 0141/0132/0133 because the stale banner is **self-describing** — it announces itself as a staleness pointer, so a reader is warned rather than silently misled. Wrong in its specifics, still doing its job. |
+| **0149** | 127 | **127 (unchanged)** | **The append order was right here.** Both 0117 and 0118 are closed, so the false `Blocks:` prediction schedules nothing and misleads no live decision — the cost of waiting is archival only. It also **soft-follows 0143** (priority 121), which establishes the dated-correction-note form 0149 says it is copying. The current order already satisfies that; keeping 0149 last preserves it. |
+
+**Existing rows moved, and why:** only the three the insert displaced — **0144 122→124**, **0145
+123→125**, **0146 124→126**. Each keeps its **relative** order to the others and to everything else on
+the board; nothing was re-judged, they were pushed down two places by the insert. No other priority on
+the sprint changed.
+
+**⚠️ Three wiki tasks now share one vault — sequence them as a batch.** **109 (0126)** owns the ADR-033
+pages, **117 (0141)** the lead-rename pages, **123 (0148)** the ADR-032 amendment page. Each brief
+declares a scope boundary and by declaration they do not overlap — **but each also ends in a re-sweep**,
+and **0141 and 0148 both defer to an unsettled rule about historical vault pages that neither of them
+owns settling** (0148 says so explicitly, citing 0141). The mitigation is not a priority number: the wiki
+role should take **0126 → 0141 → 0148 in that order, ideally in one session**, and **whichever runs first
+states the historical-page rule** for the ones after it to follow.
+
+**Observation, not a change — pre-existing and left alone:** **126 (0146)** is recorded as *feeding*
+**120 (0142)**, yet sits six places below it *(**correction 2026-07-26: eight places** — 0146 moved
+126 → 128 in the second re-rank later the same day, while 0142 stayed at 120; the inversion is
+unchanged, the gap is wider)*.
+That inversion predates this re-rank and was not part of
+the owner's ruling, so it was not touched. Worth a decision if 0142 is picked up first.
+
+### Declined follow-ups from the same run (2026-07-26) — recorded so they are not re-raised as drops
+
+- **"0119 must be owner-verified, not agent-closed" — NO TASK FILED, deliberately.** The requirement is
+  **already written into 0119's own brief** at `:76-78` (*"Recommend the owner verify this one rather than
+  agent-close it — … an `agent-closed — not owner-verified` close would defeat the reason it got its own
+  brief"*), and again in this plan's 2026-07-22 addendum for task 101. A new task would have duplicated an
+  instruction that is already in the only place that acts on it. A dated note was added to 0119's brief
+  instead, recording that its 0118 dependency is now discharged **and** re-affirming the owner-verify
+  requirement. **This is a live constraint on 0119, not a dropped item.**
+
+### Addendum — tasks 124–125 → **126–127** (0144/0145) added out of band (2026-07-26): the launcher coverage 0139 deferred and never filed
+
+*(Filed at priorities 122–123; **re-ranked to 124–125 on 2026-07-26** when 0147/0148 were placed above
+them — see the re-rank table in the 0147–0149 addendum — then **displaced again to 126–127 the same
+day** by the second re-rank (0151 + 0150's promotion). Nothing about these two was re-judged in either
+pass; the table numbers below are the first-re-rank numbers.)*
 
 Filed at **0140's close**, by owner ruling relayed from the coder session. These two exist because a
 follow-up **fell through the gap once already**: 0139's review ledger routed the launcher alias-coverage
@@ -173,12 +374,12 @@ right call **and** left a real gap. The gap is now a dated row, not a memory.
 
 | # | ID | Unit | Why separate |
 |---|---|---|---|
-| 122 | **0144** | `fkit team` / `fkit team room` → `rc=2`, `claude` never exec'd, + a 3rd `prove-red.sh` mutation | reachable by the **existing** harness — cheap, ships on its own today |
-| 123 | **0145** | a **pty** helper + menu picks 1-7 and the menu-level `team` rejection | needs test infrastructure that does not exist; carries all the risk |
+| 124 | **0144** | `fkit team` / `fkit team room` → `rc=2`, `claude` never exec'd, + a 3rd `prove-red.sh` mutation | reachable by the **existing** harness — cheap, ships on its own today |
+| 125 | **0145** | a **pty** helper + menu picks 1-7 and the menu-level `team` rejection | needs test infrastructure that does not exist; carries all the risk |
 
-Neither depends on the other; 122 first only because it is cheap.
+Neither depends on the other; 124 first only because it is cheap.
 
-**⚠️ 123 partly reverses a recorded acceptance**, and that is deliberate:
+**⚠️ 125 partly reverses a recorded acceptance**, and that is deliberate:
 `architecture.md:453` says the real tty menu *"stays manual"*. 0139 renumbered every pick and this
 sprint's own note calls the accepted cost *"a mis-pick is silent"* — silent mis-picks are what tests
 catch and humans do not. The brief includes updating that sentence once the coverage lands.
@@ -187,7 +388,7 @@ catch and humans do not. The brief includes updating that sentence once the cove
 pty run and by reading the source. What is missing is the *guard against re-addition*, and 0139 proved
 the need for one the hard way: it **added** `team` / `team room`, the two-word form silently handed
 `room` to Claude Code as an initial prompt, and it was reverted. **Nothing in the suite would catch that
-happening again**, which is exactly what 122 fixes.
+happening again**, which is exactly what 124 fixes.
 
 ### Addendum — tasks 118–121 added 2026-07-25: three questions the producer had left unanswered, now ruled
 
@@ -369,6 +570,12 @@ whether to drop the folder-name number, weighing cheaper alternatives against AD
 days-old task-76 migration. **104** (was `0103`) implements the scheme change **only if** 103 approves it,
 and is a cancellation candidate otherwise. Priorities appended after 102, dependency order preserved
 (103 blocks 104); the existing ranking is untouched. **Ranking is for the owner to confirm.**
+
+> **Correction (2026-07-26) — the "cancellation candidate" clause above is void.** 103 ruled and the
+> owner approved **Option C**: keep the folder prefix, fix the confusion on the *priority* side. **104
+> is RESCOPED, not cancelled** — `dashboard.sh` folder-ID-primary, `P<n>` priority rendering, Option D
+> label normalisation, and the convention page. The 2026-07-23 sentence is left as written because it
+> was true when written; this note records that it no longer is.
 
 ### Addendum — tasks 100–102 added out of band (2026-07-22): fkit-lead-conductor arc follow-ups
 
