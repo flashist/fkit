@@ -16,7 +16,7 @@ A task's owner is a single fkit **role**. The seven live roles are the only vali
 | `fkit-reviewer` | Independent code review (plus a Codex second opinion) |
 | `fkit-adversarial-reviewer` | Adversarial second-opinion reviewer, run on Codex |
 | `fkit-wiki` | The wiki librarian — the exclusive write gateway for `wiki-vault/` |
-| `fkit-lead` | The team room — routes questions; does not itself do the work |
+| `fkit-lead` | Routes questions, and drives the work when handed a goal (ADR-031) |
 
 **No other value is valid.** Not a person's name, not a team, not "unassigned", not two roles. The owner
 is the role whose seat the work sits in — most often `fkit-coder` for build tasks, `fkit-producer` for

@@ -144,6 +144,132 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done (agent-closed — not owner-verified) | 112 | Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively *(ADR-030 Decision 8; two clauses added to `universal-rules.md`; block at 91% → follow-up 0130; owner: fkit-coder)* | [`0128-add-adr-030-prose-half-to-universal-rules`](../tasks/done/0128-add-adr-030-prose-half-to-universal-rules/brief.md) |
 | 🔲 Backlog | 113 | Reclaim universal-rules-block budget headroom — compression pass **or** a signed `RULES_MAX` bump *(0128 left the block at 91.1% / 363 B; measure-and-propose then implement the owner-signed option; a cap bump is an owner/architect call; owner: fkit-coder)* | [`0130-reclaim-rules-block-budget-headroom`](../tasks/backlog/0130-reclaim-rules-block-budget-headroom/brief.md) |
 | 🔲 Backlog | 114 | Convert every skill `description:` to a `>-` block scalar, then add a frontmatter-parse guard test *(0123 R4/R5; **all 25 skills use plain scalars, 3 are invalid strict YAML**; a broken frontmatter fails **silently** — the listing falls back to the H1 and no test reads any `SKILL.md`; convert-then-guard is one unit, order binding; ADR-014 zero devDeps ⇒ hand-rolled reader; independent; owner: fkit-coder)* | [`0136-convert-skill-descriptions-to-block-scalars-and-guard`](../tasks/backlog/0136-convert-skill-descriptions-to-block-scalars-and-guard/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 115 | Reorder the `fkit` launcher menu so lead is option 1, and rename its label to "lead" *(owner ruling 2026-07-25; menu block + case arms + `--help` + init.sh role list; **word aliases `team`/`team room` are kept**; **accepted cost — every other role shifts down one and a mis-pick is silent**; independent; owner: fkit-coder)* | [`0139-reorder-launcher-menu-lead-first-and-rename-label`](../tasks/done/0139-reorder-launcher-menu-lead-first-and-rename-label/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | 116 | Retire "team room" in the docs and agent definitions, and fix the stale "menu 7" citations *(**two kinds of edit — a rename, and a correctness fix**: 3 live files say "menu option 7" and become FALSE when 115 lands, incl. `fkit-lead.md`, a **system prompt**; ADR-010 + 2 dated reports deliberately OUT of scope; soft-depends 115 — ship together; owner: fkit-coder)* | [`0140-retire-team-room-in-docs-and-agent-definitions`](../tasks/done/0140-retire-team-room-in-docs-and-agent-definitions/brief.md) |
+| 🔲 Backlog | 117 | Wiki resync for the lead rename and menu reorder *(vault write — **fkit-wiki only**; 2 pages assert the retired facts; also carries a **stale claim of substance** — `systems/fkit.md:28` still says the lead "does no work", which ADR-031 reversed; overlaps task 99 (0117) — check its state first; needs 115 + 116 — hard; owner: fkit-wiki)* | [`0141-wiki-resync-for-the-lead-rename-and-menu-reorder`](../tasks/backlog/0141-wiki-resync-for-the-lead-rename-and-menu-reorder/brief.md) |
+| 🔲 Backlog | 118 | Reconcile the dual-homed file drift — byte-align live `ai-agents/` vs `claude/scaffold/ai-agents/` *(**pulled from the Backlog board 2026-07-25 by owner ruling**; ADR-027 §2 follow-up, never filed for six days; `dependency-declaration-form.md` is missing from the scaffold — consuming projects inherit the **task-84 misreport class**; the exception list is the real deliverable; blocks 119; owner: fkit-coder)* | [`0132-reconcile-dual-homed-file-drift-live-vs-scaffold`](../tasks/backlog/0132-reconcile-dual-homed-file-drift-live-vs-scaffold/brief.md) |
+| 🔲 Backlog | 119 | Build `test/dual-home-parity.test.js` *(**pulled from the Backlog board 2026-07-25 by owner ruling**; **task 0112 shipped claiming this test passed — it does not exist**; carries the named obligation to re-verify 0112's five touched files and report pass/fail to the owner; needs 118 — ADR-027 §3 makes the order binding; owner: fkit-coder)* | [`0133-build-dual-home-parity-test`](../tasks/backlog/0133-build-dual-home-parity-test/brief.md) |
+| 🔲 Backlog | 120 | Investigate the skill-ownership fact-inventory gap — the mirror checklist does not see every site *(**investigation, not implementation** — fix shape unknown; the `skills-for-role.sh:12-24` checklist has failed **twice** (0036, then 0124's three missed sites); the missed sites are **system prompts + the universal rules block**, which outrank a SKILL in an agent's own context; coordinates with 0137; independent; owner: fkit-architect)* | [`0142-investigate-the-skill-ownership-fact-inventory-gap`](../tasks/backlog/0142-investigate-the-skill-ownership-fact-inventory-gap/brief.md) |
+| 🔲 Backlog | 121 | Append a dated correction note to ADR-010 for the menu reorder *(owner ruled 2026-07-25 — **note, not a rewrite**; ADR-010:26's "menu option 7" + "team room" go stale when 115/116 land, and its "routes rather than does" was already reversed by ADR-031; **establishes the form**, this being the first; ADR stays `accepted`; soft-needs 115 + 116; owner: fkit-architect)* | [`0143-append-a-dated-correction-note-to-adr-010`](../tasks/backlog/0143-append-a-dated-correction-note-to-adr-010/brief.md) |
+| 🔲 Backlog | 122 | Pin the `team` / `team room` rejection with launcher-contract CLI tests *(**0139's standing residual, re-raise-triggered by 0140's close**; `rc=2` + **`claude` never exec'd** — the exit code alone would have passed while the real 0139 bug shipped; needs **no new harness**; adds a 3rd `prove-red.sh` mutation; independent; owner: fkit-coder)* | [`0144-pin-the-team-team-room-rejection-with-cli-contract-tests`](../tasks/backlog/0144-pin-the-team-team-room-rejection-with-cli-contract-tests/brief.md) |
+| 🔲 Backlog | 123 | Give the launcher-contract suite a pty, and pin the menu picks 1-7 *(**partly reverses a recorded acceptance** — `architecture.md:453` says the tty menu stays manual; needs **new pty infrastructure** — `runFkit` is detached by design and must not change; **two documented false-result traps**; portability is an owner decision if it bites; independent; owner: fkit-coder)* | [`0145-pty-driven-menu-pick-coverage-for-the-launcher`](../tasks/backlog/0145-pty-driven-menu-pick-coverage-for-the-launcher/brief.md) |
+
+### Addendum — tasks 122–123 added out of band (2026-07-26): the launcher coverage 0139 deferred and never filed
+
+Filed at **0140's close**, by owner ruling relayed from the coder session. These two exist because a
+follow-up **fell through the gap once already**: 0139's review ledger routed the launcher alias-coverage
+to *"a separately named follow-up task"* that **was never created** (0141 is the wiki resync, 0142 the
+inventory investigation, 0143 the ADR-010 note — none of them this). 0140's reviewer carried the
+residual forward with an explicit re-raise trigger — *"or 0140 closes without the producer filing the
+brief"* — which is what put these on the board rather than a fourth silent drop.
+
+**Why the suppression in 0140 was legitimate and still needed this.** Codex raised the missing coverage
+in 0140 round 1; it was suppressed as matching 0139's accepted residual, whose re-raise condition
+(*"hides a demonstrable defect"*) was **not** met — the removal is verified working. Suppression was the
+right call **and** left a real gap. The gap is now a dated row, not a memory.
+
+**Split at the infrastructure seam, not by size:**
+
+| # | ID | Unit | Why separate |
+|---|---|---|---|
+| 122 | **0144** | `fkit team` / `fkit team room` → `rc=2`, `claude` never exec'd, + a 3rd `prove-red.sh` mutation | reachable by the **existing** harness — cheap, ships on its own today |
+| 123 | **0145** | a **pty** helper + menu picks 1-7 and the menu-level `team` rejection | needs test infrastructure that does not exist; carries all the risk |
+
+Neither depends on the other; 122 first only because it is cheap.
+
+**⚠️ 123 partly reverses a recorded acceptance**, and that is deliberate:
+`architecture.md:453` says the real tty menu *"stays manual"*. 0139 renumbered every pick and this
+sprint's own note calls the accepted cost *"a mis-pick is silent"* — silent mis-picks are what tests
+catch and humans do not. The brief includes updating that sentence once the coverage lands.
+
+**Why 0139 was right not to grow this into its own scope.** The alias removal is verified — by a manual
+pty run and by reading the source. What is missing is the *guard against re-addition*, and 0139 proved
+the need for one the hard way: it **added** `team` / `team room`, the two-word form silently handed
+`room` to Claude Code as an initial prompt, and it was reverted. **Nothing in the suite would catch that
+happening again**, which is exactly what 122 fixes.
+
+### Addendum — tasks 118–121 added 2026-07-25: three questions the producer had left unanswered, now ruled
+
+Filed after an open-questions sweep of the 2026-07-25 producer session found **three questions put to
+the owner that never got an answer** — each raised, then dropped when the session was redirected. All
+three are now ruled. **The pattern is worth naming: this is the third time this project has lost a
+question by moving on from it** (OQ6/task 37, OQ8, and now these three), and the first two were lost by
+*re-asking* something settled while these were lost by *never re-asking*. Both are the same failure of
+follow-through.
+
+| Ruling | Result |
+|---|---|
+| **Pull 0132 + 0133 into Sprint 2** — ✅ yes | priorities **118**, **119** |
+| **File the mirror-checklist gap** — ✅ yes, as an investigation | task **120** (`0142`) |
+| **ADR-010's stale "menu option 7"** — ✅ dated correction note, by the architect | task **121** (`0143`) |
+
+**On 118/119 — what the pull actually buys.** These are two of the three ADR-027 follow-ups that sat
+unfiled for six days. They were filed to the Backlog board on 2026-07-25 and left unscheduled, which
+meant **the owner's own ruling that day — "re-verify 0112 by hand once 0133 lands" — had no date on
+it.** Scheduling them puts a date on it. Until 119 lands, task **0112** remains
+`✅ Done (agent-closed — not owner-verified)` on the strength of a verification step that was
+**unrunnable when it was claimed** — an accepted, dated, tracked exposure, still open.
+
+**On 120 — why an investigation and not a fix.** The checklist has failed twice and the *shape* of the
+remedy is genuinely unknown: a grep-based test must detect free-form prose assertions, and generating
+the sentences instead collides with the rules-block byte budget task 113 says is at **91.1%**. Scoping
+an implementation now would be scoping a guess. The owner was offered folding it into 0137 and declined
+— **0137 teaches a convention; 120 fixes the specific mechanism.**
+
+**On 121 — the precedent, not just the note.** This is the first correction note this project will
+write, so the task's real deliverable is **the form**: where it goes, how it is marked, how a reader
+tells it from the original decision. ADR-010 stays `accepted` — the decision it records is still in
+force; only incidental facts in its prose went stale. The brief also flags a **third** stale claim in
+the same sentence — *"routes rather than does"*, reversed by ADR-031 — which must be addressed or
+explicitly deferred, never passed over.
+
+### Addendum — tasks 115–117 added out of band (2026-07-25): lead goes to the top of the menu, and "team room" is retired
+
+**Owner ruling, 2026-07-25**, from seeing the menu on screen: the lead should be **option 1**, not option
+7, and **"team room" should be retired project-wide** in favor of the role's real name. The owner was
+offered a menu-label-only option and **chose the project-wide retirement** explicitly.
+
+**Why lead moves first:** since [ADR-031](../knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)
+the lead *is* the front door — the role you pick when you don't yet know which role you need, and the one
+that drives a whole sprint via `/fkit-sprint-ship-loop`. Listing it last contradicts the decision.
+
+**Why "team room" is a label, not an alias.** The producer checked before scoping: `lead` is the
+canonical name in `--help`, the case arms, `skills_for_role()`, the agent file, and **both test suites,
+which assert roles by name and never by menu number** (`launcher-contract.test.js:29`,
+`skill-ownership-hook.test.js:139`). "team room" appears only in prose — in **15 places**, which is what
+turned a one-line change into three briefs.
+
+**Split at the authority seams, not by size:**
+
+| # | ID | Unit | Owner | Why separate |
+|---|---|---|---|---|
+| 115 | **0139** | the launcher — menu, case arms, `--help`, init.sh list | fkit-coder | shell source; independently runnable and verifiable on its own |
+| 116 | **0140** | docs + agent definitions + the stale "menu 7" citations | fkit-coder | different file class, and **`fkit-lead.md` is a system prompt** — the exact site 0124's checklist missed |
+| 117 | **0141** | the wiki vault | **fkit-wiki** | `wiki-vault/` writes are the wiki role's **exclusively** (ADR-005) — this could not be folded into 116 at any size |
+
+**⚠️ The accepted cost, recorded rather than discovered later.** Renumbering shifts every other role
+down one: producer 1→2, coder 2→3, architect 3→4, reviewer 4→5, adversarial 5→6, wiki 6→7. **A mis-pick
+is silent** — you land in a working session of the wrong role, with no error. The word-alias path
+(`fkit coder`) is unaffected and is the mitigation to tell users about. The `team` and `"team room"`
+word aliases are **deliberately kept** in the case arms even though the label is retired from the
+display, so nobody's habit breaks.
+
+**Deliberately out of scope, and the reason matters.**
+[ADR-010](../knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)`:26` says *"the
+'team room' (menu option 7)"*, and two dated design reports say similar. Those statements were **true
+when written**. Silently rewriting a decision record to match today erases the history the record exists
+to hold. **Producer's recommendation: a dated one-line correction note on ADR-010, added by the
+architect — not a coder edit, and not a rewrite.** Left as an open question below; the briefs instruct
+the coder to touch none of it.
+
+**Dual-home checked at scoping time** (ADR-027 §Decision 1, the check task 0131 will automate): **no
+parity surface here.** `architecture.md` is not in `claude/scaffold/`, `decisions/` is `⛔ never sync`,
+and the repo-root `CLAUDE.md` vs `claude/scaffold/CLAUDE.md` are independent files rather than copies —
+both need editing, neither is a pair.
+
+**Open question for the owner:** ADR-010's now-false "menu option 7" — dated correction note (producer's
+recommendation), leave it as a historical statement, or something else? **Nothing in 115–117 touches it
+until you rule.**
 
 ### Addendum — task 0129 added out of band (2026-07-23), then pulled forward to priority 111: the transcript-independent ship-loop skip signal (0127 residuals R6 + R8)
 

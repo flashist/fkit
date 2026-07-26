@@ -6,7 +6,7 @@ Guidance for Codex (the codex fkit agents) in this repository. Edit freely.
 
 fkit is a team of **seven** role-scoped AI agents for software development — a producer, a coder, a
 reviewer (with an **adversarial second opinion that runs on Codex**), an architect, a wiki librarian,
-and a team-room lead — operating on a shared `ai-agents/` working structure inside a consuming
+and a lead — operating on a shared `ai-agents/` working structure inside a consuming
 project. An **eighth** role, a sandboxed e2e tester, is authorized ([ADR-028](ai-agents/knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
 but **not yet built** — the team is seven today. It's built for software developers, vibe coders, and anyone using AI to build software who
 wants a structured multi-agent workflow instead of one undifferentiated coding assistant.

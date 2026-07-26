@@ -100,7 +100,7 @@ interactive init.
 | fkit-adversarial-reviewer | Read, Grep, Glob, Bash | findings-only hostile pass on Codex. **Structurally write-free; a leaf.** |
 | fkit-architect | Read, Grep, Glob, Bash, Write, Edit, **Agent**, AskUserQuestion | architecture, design specs, ADRs, surveys. Consults the producer for product context. |
 | fkit-wiki | Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion | the wiki role — **exclusive write gateway** (ingest / lint / sync). **A leaf.** |
-| fkit-lead | Read, Grep, Glob, Bash, **Agent**, AskUserQuestion | the team room & conductor — routes, and drives the team when asked (owns `/fkit-sprint-ship-loop`). |
+| fkit-lead | Read, Grep, Glob, Bash, **Agent**, AskUserQuestion | the lead & conductor — routes, and drives the team when asked (owns `/fkit-sprint-ship-loop`). |
 
 **Two honest limits** on the tool lock: an agent with Bash can technically still write files, and
 Claude Code **ignores** `Agent(type)` allowlists inside subagent definitions (they only work for a

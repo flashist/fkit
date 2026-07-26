@@ -135,8 +135,8 @@ describe('Group A — argv contract', () => {
     ]);
   });
 
-  // 7. No-args, no-tty, INITIATED project → the team room (fkit-lead), per the launcher's own comment
-  //    at the lead default ("No role and no tty (piped / CI) → the team room is the safe default").
+  // 7. No-args, no-tty, INITIATED project → the lead (fkit-lead), per the launcher's own comment
+  //    at the lead default ("No role and no tty (piped / CI) → lead is the safe default").
   //    This started life as a `todo`: the suite caught a real launcher bug — the menu guard gated on
   //    `[ -r /dev/tty ]`, TRUE even with no controlling terminal, so a headless run entered the menu
   //    and died at `exec 3</dev/tty` instead of falling through to lead. The launcher now probes actual

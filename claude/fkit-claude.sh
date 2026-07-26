@@ -6,7 +6,7 @@
 #
 #   fkit                    # menu → pick a role
 #   fkit coder              # skip the menu, straight to the coder
-#   fkit producer|architect|reviewer|wiki|adv|lead
+#   fkit lead|producer|architect|reviewer|wiki|adv
 #   fkit update             # update fkit itself
 #
 # A first argument that is not a role and not a known verb is a USAGE ERROR, not a session. It used
@@ -47,7 +47,7 @@ if [ "${FKIT_NO_SELF_HOST:-0}" != 1 ] \
   exec "$proj/claude/fkit-claude.sh" "$@"
 fi
 
-ROLES="producer coder architect reviewer adversarial-reviewer wiki lead"
+ROLES="lead producer coder architect reviewer adversarial-reviewer wiki"
 
 # --- Self-update ------------------------------------------------------------------------------
 # `fkit` (bare) runs THIS script, which until now had no update logic at all — so everyone on the
@@ -156,13 +156,13 @@ With no role you get a menu. Pick a role and it opens IN THIS TAB, locked to tha
 that role's skills and tools. For two roles at once, open another terminal tab and run `fkit` again.
 
 Roles:
+  lead         the conductor — routes you to a role, or drives the team for you
   producer     product & sprint planning, task briefs, task lifecycle
   coder        implementation — the only role that writes source
   architect    architecture, design specs, ADRs, feasibility
   reviewer     code review — its own pass + a Codex second opinion
   adv          adversarial reviewer — hostile pass, findings only
   wiki         the wiki — ingest / lint / sync (the exclusive write gateway)
-  lead         the team room & conductor — routes you to a role, or drives the team for you
 
 Within a session, `@fkit-<role> <question>` asks another role and brings the answer back.
 
@@ -179,6 +179,21 @@ esac
 
 # An explicit role as the first bare word skips the menu.
 role=""
+# ⚠️ `team` / `team room` are NOT accepted — not here, and not at the menu either. They were lead's
+# old display label; task 0140 retired it from the launcher and the live docs, so `lead` is the only
+# word this program accepts on any path. (Accepted ADRs and dated reports keep the old label on
+# purpose — they record what was true when written.)
+# Task 0139 had briefly accepted them here and REVERTED it, owner-ruled 2026-07-25. Why that
+# revert matters if you are tempted to bring the words back: the menu reads a whole LINE, so
+# `"team room"` matches there; this path reads ARGV, already whitespace-split, so `fkit team room`
+# fell into a `team` arm and left `room` behind as a positional — Claude Code's initial prompt —
+# where it had been a loud `exit 2`.
+#
+# The leftover word is NOT the alias's bug: `fkit lead room` and `fkit coder room` do the same thing
+# and always have — args after a named role pass through by design (see the guard below). A `team` arm
+# that consumed a following `room` was weighed and REJECTED for exactly that reason: it would make one
+# spelling stricter than all seven real role words. Re-adding the alias means answering that first;
+# do not re-add it casually.
 case "${1:-}" in
   producer|coder|architect|reviewer|wiki|adversarial-reviewer|lead)
     role="$1"; shift ;;
@@ -441,7 +456,7 @@ fi
 # `exec 3</dev/tty` below (ENXIO "Device not configured") under `set -e`, never reaching the lead
 # default at the bottom. The subshell `( exec 3</dev/tty )` returns 0 only if open() genuinely succeeds
 # (non-fatal on failure inside this `||` test; 2>/dev/null swallows the ENXIO noise), so a headless run
-# correctly falls through to the team-room default instead of crashing.
+# correctly falls through to the lead default instead of crashing.
 if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || ( exec 3</dev/tty ) 2>/dev/null; }; then
   if [ -t 0 ]; then exec 3<&0; else exec 3</dev/tty; fi
   proj_name="$(basename "$proj")"
@@ -450,26 +465,26 @@ if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || ( exec 3</dev/tty ) 2>/dev/
   git -C "$proj" diff --quiet 2>/dev/null || dirty=" · uncommitted changes"
 
   printf '\n  \033[1mfkit\033[0m — %s  (%s%s)\n\n' "$proj_name" "$branch" "$dirty"
-  printf '   1) producer     product & sprint planning, task briefs\n'
-  printf '   2) coder        implementation — the only role that writes source\n'
-  printf '   3) architect    design specs, ADRs, feasibility\n'
-  printf '   4) reviewer     code review (own pass + Codex second opinion)\n'
-  printf '   5) adversarial  hostile pass, findings only\n'
-  printf '   6) wiki         the wiki — ingest / lint / sync\n'
-  printf '   7) team room    route to a role, or have it drive the work for you\n\n'
+  printf '   1) lead         route to a role, or have it drive the work for you\n'
+  printf '   2) producer     product & sprint planning, task briefs\n'
+  printf '   3) coder        implementation — the only role that writes source\n'
+  printf '   4) architect    design specs, ADRs, feasibility\n'
+  printf '   5) reviewer     code review (own pass + Codex second opinion)\n'
+  printf '   6) adversarial  hostile pass, findings only\n'
+  printf '   7) wiki         the wiki — ingest / lint / sync\n\n'
   printf '  Two roles at once? Open another terminal tab and run fkit again.\n\n'
 
   while [ -z "$role" ]; do
     printf '  role [1-7, q to quit]: '
     IFS= read -r pick <&3 || { echo; exit 0; }
     case "$pick" in
-      1|producer)            role="producer" ;;
-      2|coder)               role="coder" ;;
-      3|architect)           role="architect" ;;
-      4|reviewer)            role="reviewer" ;;
-      5|adv|adversarial)     role="adversarial-reviewer" ;;
-      6|wiki)                role="wiki" ;;
-      7|lead|team|"team room") role="lead" ;;
+      1|lead)                role="lead" ;;
+      2|producer)            role="producer" ;;
+      3|coder)               role="coder" ;;
+      4|architect)           role="architect" ;;
+      5|reviewer)            role="reviewer" ;;
+      6|adv|adversarial)     role="adversarial-reviewer" ;;
+      7|wiki)                role="wiki" ;;
       q|Q|quit|exit)         echo; exit 0 ;;
       "")                    : ;;
       *)                     printf '  ? "%s" is not one of 1-7.\n' "$pick" ;;
@@ -478,12 +493,12 @@ if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || ( exec 3</dev/tty ) 2>/dev/
   exec 3<&-
 fi
 
-# No role and no tty (piped / CI) → the team room is the safe default. Reaching here with no role now
+# No role and no tty (piped / CI) → lead is the safe default. Reaching here with no role now
 # implies no args too — the guard above rejected those — so this is the no-args, no-tty case only.
 [ -n "$role" ] || role="lead"
 
 if [ "$role" = lead ]; then
-  printf '\n  → team room. It routes and answers wiki questions, and can drive the team (spawn and sequence roles) when you hand it a goal.\n\n'
+  printf '\n  → lead. It routes and answers wiki questions, and can drive the team (spawn and sequence roles) when you hand it a goal.\n\n'
 else
   # "...are runnable here", not "...exist here": a foreign skill still shows up in the / menu
   # (ADR-018 Decision 5) — the hook denies invoking it, it doesn't hide it. Round-1 review R5.

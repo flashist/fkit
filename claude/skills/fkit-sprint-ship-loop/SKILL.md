@@ -10,7 +10,7 @@ description: The lead's sprint-scope conductor loop — drives eligible tasks br
 
 > ## ⛔ Owner: the **lead**
 > This is the fkit-lead's own procedure. Execute it **only** if you are the lead — running in a
-> `fkit lead` **session** (menu 7) with the owner reachable.
+> `fkit lead` **session** with the owner reachable.
 >
 > **Any other role: do not execute this.** The ADR-018 skill-ownership hook denies it to every role but
 > `lead`. It is also **session-only**: it drives by spawning workers and relaying owner decisions, and

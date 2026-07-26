@@ -1,7 +1,7 @@
 # fkit
 
 **An agent team for software projects** — a producer, a coder, a reviewer (with an adversarial
-second opinion from a *different model*), an architect, a wiki librarian, and a team room. Each is a
+second opinion from a *different model*), an architect, a wiki librarian, and a lead. Each is a
 **role-locked session**: it sees only its own procedures and its own tools, so the coder *cannot*
 review its own code, and the wiki has a single writer.
 
@@ -42,7 +42,7 @@ out — it never updates itself behind your back. Run `fkit update` when you wan
 | **fkit-adversarial-reviewer** | the hostile pass — runs on Codex, a *different* model, on purpose |
 | **fkit-architect** | architecture, design specs, ADRs, feasibility |
 | **fkit-wiki** | the project wiki — the **exclusive** gateway for writes (reads are direct, via `/fkit-query`) |
-| **fkit-lead** | the team room — routing help and wiki questions; does no work itself |
+| **fkit-lead** | routing help and wiki questions; drives the work when you hand it a goal |
 
 **Sessions are role-locked.** `fkit <role>` pins the session to that role's system prompt, tool
 allowlist, and **only its own `/fkit-*` skills** — every other fkit skill is turned off: invisible and

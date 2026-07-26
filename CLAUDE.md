@@ -5,7 +5,7 @@ Guidance for Claude Code in this repository. Edit freely.
 ## Project Overview
 
 fkit is a team of **seven** role-scoped AI agents for software development — a producer, a coder, a
-reviewer (with an adversarial second opinion), an architect, a wiki librarian, and a team-room lead —
+reviewer (with an adversarial second opinion), an architect, a wiki librarian, and a lead —
 operating on a shared `ai-agents/` working structure inside a consuming project. An **eighth** role, a
 sandboxed e2e tester, is authorized ([ADR-028](ai-agents/knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
 but **not yet built** — the team is seven today.

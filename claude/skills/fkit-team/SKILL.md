@@ -17,7 +17,7 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
 
    | Role | Does | Must not |
    |---|---|---|
-   | **lead** (the team room) | routes you to a role; reads the wiki | plan, code, design, review, or write the wiki |
+   | **lead** (the conductor) | routes you to a role; drives the work when you hand it a goal; reads the wiki | plan, code, design, review, or write the wiki |
    | **producer** | product & sprint planning, task briefs, task lifecycle | write code |
    | **coder** | implementation — sole source-write authority | commit unprompted; make product calls; settle new architecture; review its own work |
    | **architect** | architecture, design specs, ADRs, feasibility | implement features; write the wiki |
@@ -48,7 +48,7 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
 
    | Role | Its procedures |
    |---|---|
-   | lead (team room) | `/fkit-sprint-ship-loop` — drives a whole sprint; plus `/fkit-team`, `/fkit-query` — it routes, and conducts when asked |
+   | lead (the conductor) | `/fkit-sprint-ship-loop` — drives a whole sprint; plus `/fkit-team`, `/fkit-query` — it routes, and conducts when asked |
    | producer | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-brief`, `/fkit-task-done`, `/fkit-task-cancelled` |
    | coder | `/fkit-plan-task`, `/fkit-process-review`, `/fkit-process-stateful-review`, `/fkit-task-ship-loop` |
    | architect | `/fkit-survey-project`, `/fkit-inspect`, `/fkit-design-spec`, `/fkit-evaluate-approach`, `/fkit-record-decision` |

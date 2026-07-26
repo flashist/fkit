@@ -14,7 +14,7 @@ Every claim carries a `path:line` reference. Anything the code could not answer 
 
 fkit is **not an application.** It is a **distributable team of role-scoped AI agents for software
 development** — producer, coder, reviewer, adversarial reviewer, architect, wiki librarian, and a
-"team room" lead — that a developer installs once and then runs inside *their own* project. That is
+lead — that a developer installs once and then runs inside *their own* project. That is
 **seven roles as built**; an eighth, a sandboxed e2e tester, is a decision taken
 ([ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)) and **not yet
 built** — described where the roles are (§4.1), not counted among them.
@@ -102,7 +102,7 @@ inherits the full Claude Code tool set. Only the adversarial reviewer keeps an e
 | `fkit-architect` | *(none — inherits all)* | design specs, ADRs, surveys. **Never implements; never writes the wiki.** |
 | `fkit-reviewer` | *(none — inherits all)* | review-only; writes **only** under `ai-agents/reviews/`. |
 | `fkit-wiki` | *(none — inherits all)* | **exclusive write gateway** for `ai-agents/wiki-vault/` (ADR-005). |
-| `fkit-lead` | *(none — inherits all)* | the **team room + orchestrating conductor** (menu 7; ADR-031). **Routes** ("who do I need?") **and drives**: spawns/sequences peers, holds the owner channel, relays owner decisions live. Owns `sprint-ship-loop` (ADR-032). **Writes no source, never reviews** — each role's work runs in its own fresh spawned context, so separation-of-authority holds. |
+| `fkit-lead` | *(none — inherits all)* | the **lead + orchestrating conductor** (ADR-031). **Routes** ("who do I need?") **and drives**: spawns/sequences peers, holds the owner channel, relays owner decisions live. Owns `sprint-ship-loop` (ADR-032). **Writes no source, never reviews** — each role's work runs in its own fresh spawned context, so separation-of-authority holds. |
 | `fkit-adversarial-reviewer` | `Read, Grep, Glob, Bash, Skill` | findings only. **Structurally write-free — a leaf, and the one deliberate tool wall.** |
 
 Evidence: `claude/agents/fkit-adversarial-reviewer.md:9` (the sole surviving `tools:` line); the other
