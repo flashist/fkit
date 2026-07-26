@@ -18,13 +18,29 @@ fkit-wiki
 ## Context
 
 Tasks 0139 and 0140 retire the label **"team room"** in favor of **lead**, and move lead from menu
-option 7 to option **1**. Two wiki-vault pages assert the old facts and become **false** once those
-land:
+option 7 to option **1**. Both have now **shipped** (owner-verified 2026-07-26), so the vault is
+asserting false facts *today*, not prospectively.
+
+**⚠️ Inventory corrected 2026-07-26 — this brief originally said "two pages". It is FOUR pages, FIVE sites** (`systems/fkit.md` carries two). The
+original count came from a partial sweep and was wrong; the corrected list is below. Treat even this
+one as a floor, not a ceiling, and re-sweep — see §What to build step 4.
 
 | Page | What it says |
 |---|---|
-| `ai-agents/wiki-vault/wiki/systems/fkit.md:28` | *"`fkit-lead` \| The **team room** (menu 7). Routes; **does no work**…"* |
-| `ai-agents/wiki-vault/wiki/systems/install-and-self-update.md:29` | *"deterministic role MENU (1-7 — an if/else; no LLM in the routing)"* |
+| `wiki/systems/fkit.md:28` | *"`fkit-lead` \| The **team room** (menu 7). Routes; **does no work**…"* — carries **all three** stale claims at once |
+| `wiki/systems/fkit.md:7` | *"…and a "team room" lead"* — **missed by the original inventory** |
+| `wiki/tasks/fix-headless-menu-guard-crash.md:8` | *"crashed instead of defaulting to the team room"* — **missed**; a task page, i.e. a historical record |
+| `wiki/tasks/remove-fkit-resume-passthrough.md:12` | *"the 'no role, not interactive → team room' default"* — **missed**; also historical |
+| `wiki/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md:28` | the vault's mirror of ADR-010 — **missed** |
+
+**⚠️ Three of the five sites are the vault's copies of *historical records*** (two task pages, one ADR
+mirror). The live-tree rule for those, set by 0140 and 0143, is **do not rewrite history — the claims
+are frozen, only stale-fact corrections get a dated note.** Whether the vault mirrors that rule or
+treats its pages as always-current is **the wiki role's call and is not settled here** — but it must be
+**decided and stated**, not resolved silently in either direction.
+
+`wiki/systems/install-and-self-update.md:29` (*"deterministic role MENU (1-7 …)"*) states the **range**,
+which 0139 did not change. Listed only so it is not mistaken for a miss — **verify, then leave it.**
 
 **`ai-agents/wiki-vault/` is written by the `fkit-wiki` role and nobody else** — that is why this is a
 separate task rather than a fourth bullet on 0140. Per
@@ -53,13 +69,13 @@ role's call) — over the delta from 0139 + 0140, so the vault stops asserting t
    re-pin a menu number that can move again.
 2. `systems/install-and-self-update.md:29` — confirm the `1-7` range statement. **The range is unchanged
    by 0139**, so this line may well still be correct; verify rather than editing reflexively.
-3. Sweep the rest of the vault for the retired phrase and for any other menu-position claim — the two
-   pages above came from a 2026-07-25 sweep, but **verify rather than trusting the inventory**.
-4. Report the *"does no work"* staleness whether or not you fix it under this task.
+3. **Every site in the corrected Context table**, not just `fkit.md` — including the three historical-record pages, whose disposition you must state either way (see the ⚠️ above).
+4. Sweep the rest of the vault for the retired phrase and for any other menu-position claim. **The Context inventory has ALREADY been wrong once** (it said two pages; it is four) — treat it as a floor, not a ceiling, and verify rather than trusting it.
+5. Report the *"does no work"* staleness whether or not you fix it under this task.
 
 ## Verification steps
 
-1. `grep -rn "team room\|team-room" ai-agents/wiki-vault/` returns nothing.
+1. `grep -rn "team room|team-room" ai-agents/wiki-vault/` returns nothing — OR every remaining hit is a historical-record page you explicitly ruled should keep it, named individually in the report. A bare "returns nothing" is not the only passing result; an unexplained remainder is.
 2. `grep -rn "menu 7\|menu option 7" ai-agents/wiki-vault/` returns nothing.
 3. Every edited page still validates against `ai-agents/wiki-vault/schema.md`, and its back-links and
    index entries still resolve (the standard lint conditions).

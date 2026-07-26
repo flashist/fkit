@@ -10,7 +10,7 @@ Sprint 2
 116
 
 ## Status
-✅ Done (agent-closed — not owner-verified)
+✅ Done
 
 ## Owner
 fkit-coder

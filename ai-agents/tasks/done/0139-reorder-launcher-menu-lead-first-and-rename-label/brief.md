@@ -10,7 +10,7 @@ Sprint 2
 115
 
 ## Status
-✅ Done (agent-closed — not owner-verified)
+✅ Done
 
 ## Owner
 fkit-coder
@@ -65,6 +65,11 @@ stay as-is or be lightly reworded, but must not reintroduce "team room".
 **2. The case arms — `claude/fkit-claude.sh:466-472`.** Renumber to match. **Keep every existing word
 alias**, including the ones being retired from the *display*:
 
+> **⛔ SUPERSEDED 2026-07-26 — do not follow this bullet.** The `team` / `team room` aliases were
+> **removed**, not kept, by owner ruling on review finding R1 (2026-07-25). They are accepted on
+> **neither** the menu nor the CLI path. The original text below is left as written so the history is
+> visible. **See the amendment note under §Verification steps for the full reasoning.**
+
 - `1|lead|team|"team room")` → `role="lead"` — the `team` and `"team room"` aliases stay, so anyone who
   learned the old word still lands correctly.
 - `2|producer)`, `3|coder)`, `4|architect)`, `5|adv|adversarial)`, `6|reviewer)`, `7|wiki)` — preserving
@@ -96,11 +101,34 @@ that is 0141, and it is wiki-role-only.
 2. Run `fkit` with no arguments in a terminal: the menu renders with `1) lead` first, `7) wiki` last,
    and **no occurrence of the string "team room"**.
 3. Every pick still resolves to the right role. Check at minimum: `1` → lead, `2` → producer, `7` → wiki,
-   and the word aliases `lead`, `team`, `team room`, `producer`, `wiki`.
-4. `fkit lead` and `fkit team` (the explicit-role path, which skips the menu entirely) both still open a
-   lead session.
+   and the word aliases `lead`, `producer`, `wiki`. **⚠️ Amended 2026-07-26 — see the note below:
+   `team` and `team room` were removed from this list.**
+4. `fkit lead` opens a lead session. **⚠️ Amended 2026-07-26 — this step originally also required
+   `fkit team` to open a lead session; it no longer does, and must not.** `fkit team` exits 2.
 5. `fkit --help` lists `lead` first under `Roles:` with no "team room" text.
 6. An invalid pick (e.g. `9`) still prints the `is not one of 1-7` error.
+
+> **⚠️ Amendment, 2026-07-26 — steps 3 and 4 were changed AFTER this task shipped. Read this before
+> trusting either step.**
+>
+> **What changed.** As written, this brief required the `team` / `team room` word aliases to be
+> **kept**. Review finding **R1** showed that keeping them on the CLI path was a regression: the menu
+> reads a whole line, so `"team room"` matches there, but the CLI reads argv already split on
+> whitespace — so `fkit team room` launched a lead session and passed the stray word `room` through to
+> `claude`, where at HEAD it had been a loud `exit 2`. **The owner ruled on 2026-07-25: revert the
+> alias entirely.** The words are now accepted on **neither** path.
+>
+> **Why the brief was not amended at the time, and why it is now.** The reviewer deliberately left
+> steps 3 and 4 asserting the old requirement, on the principle that *a brief's acceptance criteria
+> belong to the producer and the owner, and the author of the change that failed a criterion must not
+> quietly rewrite that criterion.* Leaving it visibly unmet is what let the owner rule with full
+> information. **The owner so ruled on 2026-07-26** — ship with the deviation, and amend the brief —
+> and the producer, who owns this brief, made the amendment. That satisfies the review's stated
+> re-raise condition; the deviation is settled, not outstanding.
+>
+> **Do not read this as the criteria having always said this.** They did not. The original wording is
+> quoted above in this note precisely so the history is not lost, per
+> [`conventions/evidence-before-assertion.md`](../../../knowledge-base/conventions/evidence-before-assertion.md).
 
 ## Notes
 
