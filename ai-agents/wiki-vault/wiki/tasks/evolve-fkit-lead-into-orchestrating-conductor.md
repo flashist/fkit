@@ -36,3 +36,5 @@ The router remit was **kept**: lead drives when asked to *do*, points when asked
 - [[tasks/retire-team-room-in-docs-and-agent-definitions]] — later rewrites the same file's "team room" framing
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] · [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] · [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] · [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]]
 - [[systems/fkit]] · [[systems/role-locked-sessions]]
+- [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, which verified this page rather than rewriting it, and left it **deliberately byte-unchanged**
+- [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, which followed this task's agent-def-edit ownership precedent

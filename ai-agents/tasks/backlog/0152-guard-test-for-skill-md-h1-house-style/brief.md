@@ -7,7 +7,7 @@
 Sprint 2
 
 ## Priority
-129
+133
 
 ## Status
 🔲 Backlog
@@ -129,6 +129,14 @@ A hand-rolled guard test.
   guard can go green with no skip list, and as of that close it is (the H1 fix is in the working
   tree, uncommitted).
 - **Blocks:** nothing.
+- **⚠️ Added 2026-07-27 — there is now a THIRD claimant on the `SKILL.md` walk.** Task **0154** (rank
+  127, `test/wiki-flag-convention.test.js`) also reads `SKILL.md` bodies. The *"the two must not end up
+  with two independent readers"* warning above now covers **three** tasks — 0136 (P114), 0154 (127) and
+  this one (131) — and the same rule applies: read whichever has landed and **reuse its walk**. Whether
+  the three should share one harness file, or 0154 and this task should co-land in one `fkit-coder`
+  session, is an **open question for the owner**, recorded in the sprint plan's 2026-07-27 re-rank
+  addendum. This task was **not** promoted beside 0154 — that would be re-ranking existing work on
+  producer judgment.
 - **Source:** surfaced during **task 0120**'s plan step by the `fkit-coder` worker, which read all 25
   `SKILL.md` files and verified the test-coverage gap against the repo; owner-approved for filing
   2026-07-26 during the sprint-loop run that shipped 0120.

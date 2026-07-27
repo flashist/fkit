@@ -110,3 +110,6 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[tasks/compress-universal-rules-output-style-section]] — task 79, the universal-rules compression
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
 - [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — task 80, the ADR-029/030 vault link repair
+- [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102: `test/dashboard-contract.test.js:1655-1664` must be **deliberately re-pointed** by task 0103, and going red there is the change working
+- [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, which filed probe 2 here as an outstanding obligation
+- [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — task 0120, whose follow-up `0152` would close the **entirely untested `SKILL.md`-content surface**

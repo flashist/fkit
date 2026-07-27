@@ -30,6 +30,7 @@ The three are easy to confuse and the distinction is the whole point of this fol
 | [`status-report-format.md`](status-report-format.md) | the shape of a status briefing — six beats, then the board |
 | [`evidence-before-assertion.md`](evidence-before-assertion.md) | a claim about repo/project state must come from a check made this turn |
 | [`one-skill-one-output.md`](one-skill-one-output.md) | a skill yields one complete output per subject — arguments select subjects, never output variants |
+| [`priority-is-rank-not-identity.md`](priority-is-rank-not-identity.md) | the board's Priority cell is rank (`P<n>`); a task's identity is its folder-name ID |
 | [`dual-home-parity.md`](dual-home-parity.md) † | fkit-authored files living in both `ai-agents/` and `claude/scaffold/ai-agents/` must be edited in both |
 
 † **fkit-repo-only** — governs development of the framework itself, not how the agents work. It is

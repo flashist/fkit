@@ -274,6 +274,9 @@ ai-agents/tasks/backlog/<NNNN>-<kebab-case-title>/brief.md
   - **The Priority cell is `—`, always.** This board is unranked by design; the briefs read
     `## Priority: Unscheduled` to match. **Do not number backlog rows** — a number here is a
     commitment nobody made. Needing a rank is the signal to pull the task into a sprint.
+    **Contrast a SPRINT board, which writes the rank token `P<n>`** (task 0103) — the cell is board
+    rank, never identity, and a task's identity is its folder-name `NNNN` prefix. See
+    [`priority-is-rank-not-identity.md`](../../../ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md).
   - **No dated addendum note** — that convention exists to explain an out-of-band addition to a
     *planned* sprint. The backlog is where unplanned work is supposed to go, so there is nothing out
     of band to explain.
@@ -284,7 +287,9 @@ ai-agents/tasks/backlog/<NNNN>-<kebab-case-title>/brief.md
   active sprint.
 - **Pulling a backlog task into a sprint is the producer's act, not this skill's.** It takes **three**
   edits, and **all three are mandatory** — see the warning below:
-  1. Add the row to the sprint plan, with a real priority number.
+  1. Add the row to the sprint plan, with the rank token `P<n>`, where `<n>` is the sprint priority.
+     The cell is board rank, never identity — see
+     [`priority-is-rank-not-identity.md`](../../../ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md).
   2. Flip the backlog row to `➡️ Moved to [Sprint N](sprint-N.md) — priority M`, the canonical marker
      from [`task-status-vocabulary.md`](../../../ai-agents/knowledge-base/conventions/task-status-vocabulary.md).
      **`— priority M` is mandatory and is not dropped just because this board is unranked** — `M` is

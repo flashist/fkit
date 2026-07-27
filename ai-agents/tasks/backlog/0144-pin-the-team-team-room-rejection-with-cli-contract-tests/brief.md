@@ -7,7 +7,7 @@
 Sprint 2
 
 ## Priority
-126
+130
 
 ## Status
 🔲 Backlog

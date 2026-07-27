@@ -68,3 +68,6 @@ Two of these would have slipped the verification sweep entirely, because **the s
 - [[tasks/build-fkit-sprint-ship-loop-skill]] — Build the `fkit-sprint-ship-loop` skill (the lead's sprint-scope conductor loop)
 - [[tasks/refresh-architecture-doc-for-lead-conductor-and-stale-lock]] — Refresh architecture.md for the lead conductor + fix the stale §5.2 lock description
 - [[tasks/sprint-2-remove-omnigent]] — Sprint 2 — Remove Omnigent, land Claude-native as the only runtime
+- [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117: the wiki flagged its own task *ready to close* under §2 rather than closing it
+- [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — task 0118: its §A3 contrasts the **unenforced** approval marker with this ADR's **hook-enforced** §Decision 1
+- [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, closed through an **owner-present producer session** — the marker deliberately refused

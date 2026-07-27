@@ -1,6 +1,6 @@
 # Review — 0119-track-fkit-coder-declared-approval-carve-out
 
-Task: `ai-agents/tasks/backlog/0119-track-fkit-coder-declared-approval-carve-out/brief.md`
+Task: `ai-agents/tasks/done/0119-track-fkit-coder-declared-approval-carve-out/brief.md`
 File(s) under review: `claude/agents/fkit-coder.md` (the declared-approval carve-out, `:38-91`)
 Scope resolved: commit `a89c917` (2026-07-22) — the carve-out. `ed4122f` (2026-07-25) also touches this
 file but is **ADR-033 mover work, out of 0119's scope**; it does not alter `:60-91`.

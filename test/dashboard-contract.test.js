@@ -176,8 +176,8 @@ test('disagreement drift: waiting on owner override, fact, and roll-up clause', 
   });
   const { out } = run(p);
   assert.match(boardRows(out)[0], /\| waiting on owner \|$/, 'a drifted ✅ row reads waiting on owner, not closed');
-  assert.ok(facts(out).some((f) => f.startsWith('drift disagreement 1 ')), 'the fact must be emitted');
-  assert.match(rollup(out), /drift on tasks 1 — see above\./);
+  assert.ok(facts(out).some((f) => f.startsWith('drift disagreement 0001 ')), 'the fact must be emitted');
+  assert.match(rollup(out), /drift on tasks 0001 — see above\./);
   assert.equal(rollupSum(out), 1, 'drift does not break the sum');
 });
 
@@ -190,7 +190,7 @@ test('nonconformance (⛔ without a reason): fact emitted, next step STAYS dead'
   });
   const { out } = run(p);
   assert.ok(
-    facts(out).some((f) => f.includes('drift nonconformance 1 kind="cancelled-without-reason"')),
+    facts(out).some((f) => f.includes('drift nonconformance 0001 kind="cancelled-without-reason"')),
     'a ⛔ cell with no — reason is nonconformance',
   );
   assert.match(boardRows(out)[0], /\| dead \|$/, 'nonconformance must NOT take the waiting-on-owner override');
@@ -224,7 +224,7 @@ test('➡️ Moved whose target disagrees with the brief ## Sprint: IS drift', (
   });
   const { out } = run(p);
   assert.ok(
-    facts(out).some((f) => f.includes('drift disagreement 1') && f.includes('moved_target="Sprint 2"') && f.includes('brief_sprint="Sprint 5"')),
+    facts(out).some((f) => f.includes('drift disagreement 0001') && f.includes('moved_target="Sprint 2"') && f.includes('brief_sprint="Sprint 5"')),
     'plan says moved to Sprint 2, brief claims Sprint 5 — real drift',
   );
   assert.match(boardRows(out)[0], /\| waiting on owner \|$/);
@@ -260,7 +260,7 @@ test('link rot: brief resolved by filename, relocated fact, corrected link rende
   });
   const { out } = run(p);
   assert.ok(
-    facts(out).some((f) => f.includes('drift relocated 1') && f.includes('found="../tasks/done/0001-a/brief.md"')),
+    facts(out).some((f) => f.includes('drift relocated 0001') && f.includes('found="../tasks/done/0001-a/brief.md"')),
     'the relocation is reported',
   );
   assert.match(boardRows(out)[0], /\(\.\.\/tasks\/done\/0001-a\/brief\.md\)/, 'the board renders the corrected link');
@@ -271,7 +271,9 @@ test('missing brief: fact emitted, row still renders', () => {
   // Folder-shape href to a folder that does not exist → missing-brief (not malformed: nothing is there).
   const p = fixture({ plan: plan(['| 🔲 Backlog | 1 | Ghost | [`gone`](../tasks/backlog/0099-gone/brief.md) |']), briefs: {} });
   const { out } = run(p);
-  assert.ok(facts(out).some((f) => f.includes('drift missing-brief 1')));
+  // ⚠️ `0099`, NOT the priority `1` — task 0103. `tid` is derived SYNTACTICALLY from the href, with no
+  // filesystem requirement, so an unresolvable row still names the task the reader must go and find.
+  assert.ok(facts(out).some((f) => f.includes('drift missing-brief 0099')));
   assert.equal(boardRows(out).length, 1, 'the row still renders');
   assert.equal(rollupSum(out), 1);
 });
@@ -285,7 +287,7 @@ test('🔲 with a Depends on: line → ⟨derive: …⟩ carrying the raw text, 
   });
   const { out } = run(p);
   assert.match(boardRows(out)[0], /⟨derive: task 26 and task 27\.⟩/, 'raw text, verbatim');
-  assert.ok(facts(out).some((f) => f === 'derive 1 depends="task 26 and task 27."'));
+  assert.ok(facts(out).some((f) => f === 'derive 0001 depends="task 26 and task 27."'));
   assert.doesNotMatch(boardRows(out)[0], /after 26|ready/, 'the script must never resolve the dependency itself');
 });
 
@@ -315,7 +317,7 @@ test('decorated Depends-on (⚠️ before the label) → LOUD ⟨UNPARSEABLE⟩ 
   assert.match(boardRows(out)[0], /⟨derive: UNPARSEABLE — see brief⟩/, 'the decorated declaration is read LOUD');
   assert.doesNotMatch(boardRows(out)[0], /none recorded|ready|after/, 'never a fabricated absence');
   assert.ok(
-    facts(out).some((f) => /^drift depends-unparseable 1 /.test(f) && /form="U"/.test(f)),
+    facts(out).some((f) => /^drift depends-unparseable 0001 /.test(f) && /form="U"/.test(f)),
     'a drift fact is emitted so the LOUD row reaches the owner',
   );
 });
@@ -461,7 +463,7 @@ test('a marker outside the six: reported as nonconformance and still counted', (
     },
   });
   const { out } = run(p);
-  assert.ok(facts(out).some((f) => f.includes('drift nonconformance 2 kind="unknown-marker"')));
+  assert.ok(facts(out).some((f) => f.includes('drift nonconformance 0002 kind="unknown-marker"')));
   assert.equal(rollupSum(out), 2, 'an unrecognized marker must not vanish from the sum');
   assert.match(rollup(out), /1 unrecognized/);
 });
@@ -504,7 +506,7 @@ test('R10: exact stdout — the full contract, pinned byte for byte', () => {
     'total 2',
     'count done 1',
     'count backlog 1',
-    'derive 2 depends="none recorded"',
+    'derive 0002 depends="none recorded"',
     '⟦END⟧',
     '',
   ].join('\n'));
@@ -527,7 +529,7 @@ test('R1: a brief that discusses `Depends on:` in prose does not poison the sent
   });
   const { out } = run(p);
   assert.ok(
-    facts(out).includes('derive 1 depends="task 26 and task 27."'),
+    facts(out).includes('derive 0001 depends="task 26 and task 27."'),
     'the bold declaration wins over the earlier code-span prose',
   );
 });
@@ -539,7 +541,7 @@ test('R1: a mid-line bold declaration is still found', () => {
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\nSome lead-in prose. **Depends on: task 5.**\n' }) },
   });
   const { out } = run(p);
-  assert.ok(facts(out).includes('derive 1 depends="task 5."'));
+  assert.ok(facts(out).includes('derive 0001 depends="task 5."'));
 });
 
 // R2 — ⚠️ §9's flagship invariant. A row that does not parse must NOT vanish: `M` is the table's row
@@ -593,7 +595,7 @@ test('R4: a long dependency list is not truncated — no task number is lost', (
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: `\n- **Depends on: ${dep}**\n` }) },
   });
   const { out } = run(p);
-  assert.ok(facts(out).includes(`derive 1 depends="${dep}"`), 'raw, whole, uncapped');
+  assert.ok(facts(out).includes(`derive 0001 depends="${dep}"`), 'raw, whole, uncapped');
   assert.match(boardRows(out)[0], /task 99/, 'the last dependency survives into the cell');
 });
 
@@ -617,7 +619,7 @@ test('R6: a ➡️ Moved brief with no ## Sprint is reported, not rendered clean
     briefs: { 'backlog/a.md': '# Alpha\n\n## Priority\n3\n\n## Status\n🔲 Backlog\n\n## Context\nNo sprint heading.\n' },
   });
   const { out } = run(p);
-  assert.ok(facts(out).some((f) => f.startsWith('drift missing-sprint 1')), 'fail loud, not silent');
+  assert.ok(facts(out).some((f) => f.startsWith('drift missing-sprint 0001')), 'fail loud, not silent');
 });
 
 // R7 — tab is IFS whitespace and `read` collapses it, so an empty cell shifted every later field
@@ -745,7 +747,7 @@ test('R18: a nonconforming marker does not suppress genuine drift detection', ()
   const { out } = run(p);
   assert.ok(facts(out).some((f) => f.includes('kind="blocked-without-reason"')), 'the cosmetic defect is reported');
   assert.ok(
-    facts(out).some((f) => f.startsWith('drift disagreement 1')),
+    facts(out).some((f) => f.startsWith('drift disagreement 0001')),
     'AND the real contradiction is still found — the whole point of the skill',
   );
   assert.match(boardRows(out)[0], /\| waiting on owner \|$/, 'a genuine disagreement still takes the override');
@@ -773,7 +775,7 @@ test('R19: the unbolded form fkit-task-brief prescribes is parsed', () => {
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n## Notes\n\n- Depends on: task 12.\n' }) },
   });
   const { out } = run(p);
-  assert.ok(facts(out).includes('derive 1 depends="task 12."'), "the repo's own prescribed form must parse");
+  assert.ok(facts(out).includes('derive 0001 depends="task 12."'), "the repo's own prescribed form must parse");
 });
 
 test('R19: a `## Depends on` section is parsed', () => {
@@ -782,7 +784,7 @@ test('R19: a `## Depends on` section is parsed', () => {
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n## Depends on\ntask 7\n' }) },
   });
   const { out } = run(p);
-  assert.ok(facts(out).includes('derive 1 depends="task 7"'));
+  assert.ok(facts(out).includes('derive 0001 depends="task 7"'));
 });
 
 // The loud fallback: a brief that MENTIONS a dependency but declares none we can locate must not be
@@ -798,7 +800,7 @@ test('R19: a declaration that yields nothing fails loud, never as `none recorded
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n- **Depends on:**\n' }) },
   });
   const { out } = run(p);
-  assert.ok(facts(out).some((f) => f.startsWith('drift depends-unparseable 1')), 'reported, not guessed');
+  assert.ok(facts(out).some((f) => f.startsWith('drift depends-unparseable 0001')), 'reported, not guessed');
   assert.doesNotMatch(boardRows(out)[0], /none recorded/, 'must never claim there is no dependency');
 });
 
@@ -818,7 +820,7 @@ test('R20: a wrapped declaration keeps every dependency across the line break', 
   });
   const { out } = run(p);
   assert.ok(
-    facts(out).includes('derive 1 depends="task 11 (the scaffold extraction) and task 99."'),
+    facts(out).includes('derive 0001 depends="task 11 (the scaffold extraction) and task 99."'),
     'the wrap is joined; no dependency is lost',
   );
   assert.match(boardRows(out)[0], /task 99/);
@@ -831,7 +833,7 @@ test('R20: `**Depends on:** <content>` (bold closed early) keeps its content', (
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n- **Depends on:** [`other-task`](../done/other-task.md) **(hard).**\n' }) },
   });
   const { out } = run(p);
-  const f = facts(out).find((l) => l.startsWith('derive 1'));
+  const f = facts(out).find((l) => l.startsWith('derive 0001'));
   assert.match(f, /other-task/, 'the content after an immediately-closed bold must survive');
 });
 
@@ -841,7 +843,7 @@ test('R20: `**Depends on: x.** trailing prose` stops at the bold close', () => {
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n- **Depends on: nothing.** Some trailing rationale that is not a dependency.\n' }) },
   });
   const { out } = run(p);
-  assert.ok(facts(out).includes('derive 1 depends="nothing."'), 'trailing prose is not part of the declaration');
+  assert.ok(facts(out).includes('derive 0001 depends="nothing."'), 'trailing prose is not part of the declaration');
 });
 
 // R21 — ⚠️ REGRESSION GUARD. Presentation must never rewrite semantics. The clause trim ran before
@@ -987,7 +989,7 @@ for (const [name, extra] of Object.entries(FORMS)) {
       briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra }) },
     });
     const { out } = run(p);
-    const f = facts(out).find((l) => l.startsWith('derive 1')) || '';
+    const f = facts(out).find((l) => l.startsWith('derive 0001')) || '';
     assert.match(f, /task 12|t12/, `${name}: the dependency must be found`);
     assert.equal(facts(out).filter((l) => l.includes('depends-unparseable')).length, 0, `${name}: not unparseable`);
   });
@@ -1021,7 +1023,7 @@ for (const [name, { extra, must }] of Object.entries(HAZARDS)) {
       briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra }) },
     });
     const { out } = run(p);
-    const f = facts(out).find((l) => l.startsWith('derive 1')) || '';
+    const f = facts(out).find((l) => l.startsWith('derive 0001')) || '';
     for (const re of must) assert.match(f, re, `${name}: ${re} must survive`);
   });
 }
@@ -1042,9 +1044,9 @@ test('grammar hazard: a second declaration in continuation prose does not hijack
     },
   });
   const { out } = run(p);
-  const f = facts(out).find((l) => l.startsWith('derive 1')) || '';
+  const f = facts(out).find((l) => l.startsWith('derive 0001')) || '';
   assert.match(f, /tasks 25, 26, 27, 28/, 'the FIRST declaration is the dependency');
-  assert.doesNotMatch(f, /^derive 1 depends="28 \(hard\)/, 'the later mention must not hijack it');
+  assert.doesNotMatch(f, /^derive 0001 depends="28 \(hard\)/, 'the later mention must not hijack it');
 });
 
 // R34 — GFM escapes a literal pipe in a cell as `\|`. It is CONTENT. Splitting on it shifted every
@@ -1110,8 +1112,8 @@ test('task 0106: the Owner column renders the brief owner; a missing owner is `�
   assert.ok(beta, 'the missing-owner Done row is force-rendered by its drift, not silently dropped');
   assert.equal(beta.split(' | ')[4], '—', 'a missing owner renders `—`, not a blank/broken row');
   // mandatory-field enforcement + the fused mark_drift effects: the FACT and the roll-up drift clause
-  assert.ok(facts(out).includes('drift nonconformance 2 kind="brief-missing-owner"'), 'missing owner is a drift fact');
-  assert.match(rollup(out), /drift on tasks .*\b2\b/, 'brief-missing-owner reaches the roll-up drift clause');
+  assert.ok(facts(out).includes('drift nonconformance 0002 kind="brief-missing-owner"'), 'missing owner is a drift fact');
+  assert.match(rollup(out), /drift on tasks .*\b0002\b/, 'brief-missing-owner reaches the roll-up drift clause');
   assert.equal(
     facts(out).filter((f) => f.includes('brief-missing-owner')).length,
     1,
@@ -1168,7 +1170,7 @@ for (const [name, extra] of Object.entries({
       briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra }) },
     });
     const { out } = run(p);
-    assert.match(facts(out).find((l) => l.startsWith('derive 1')) || '', /task 12/, `${name}: the real declaration must win`);
+    assert.match(facts(out).find((l) => l.startsWith('derive 0001')) || '', /task 12/, `${name}: the real declaration must win`);
   });
 }
 
@@ -1180,7 +1182,7 @@ test('negative: a declaration with no content is LOUD, never `none recorded`', (
       briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra }) },
     });
     const { out } = run(p);
-    assert.ok(facts(out).some((f) => f.startsWith('drift depends-unparseable 1')), 'a broken declaration must be loud');
+    assert.ok(facts(out).some((f) => f.startsWith('drift depends-unparseable 0001')), 'a broken declaration must be loud');
     assert.doesNotMatch(boardRows(out)[0], /none recorded/, 'and must never read as "there is no dependency"');
   }
 });
@@ -1194,7 +1196,7 @@ test('negative: a label whose dependencies are sub-bullets keeps them', () => {
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n- **Depends on:** hard prerequisites:\n  - task 12\n  - task 13\n' }) },
   });
   const { out } = run(p);
-  const f = facts(out).find((l) => l.startsWith('derive 1')) || '';
+  const f = facts(out).find((l) => l.startsWith('derive 0001')) || '';
   assert.match(f, /task 12/, 'sub-bullet 1 survives');
   assert.match(f, /task 13/, 'sub-bullet 2 survives');
 });
@@ -1258,7 +1260,7 @@ test('R46: a span mention does not veto a real declaration on the same line', ()
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n- **Depends on: task 42.** See the `Depends on:` note for format.\n' }) },
   });
   const { out } = run(p);
-  assert.ok(facts(out).includes('derive 1 depends="task 42."'), 'the declaration wins; the span is masked, not fatal');
+  assert.ok(facts(out).includes('derive 0001 depends="task 42."'), 'the declaration wins; the span is masked, not fatal');
   assert.doesNotMatch(boardRows(out)[0], /none recorded/, 'a fabricated absence is the worst direction');
 });
 
@@ -1290,7 +1292,7 @@ test('R48: a fenced example does not shadow a real declaration after it', () => 
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n## Context\n```\n- **Depends on: task 99.**\n```\n\n- **Depends on: task 12.**\n' }) },
   });
   const { out } = run(p);
-  assert.ok(facts(out).includes('derive 1 depends="task 12."'), 'the real declaration, not the example');
+  assert.ok(facts(out).includes('derive 0001 depends="task 12."'), 'the real declaration, not the example');
 });
 
 // ⚠️ THE INVERSE OF MASKING. A dependency may legitimately BE a code span. Masking must preserve
@@ -1301,7 +1303,7 @@ test('R46/R47: a dependency that IS a code span survives masking', () => {
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n- **Depends on:** [`design-x`](../done/design-x.md) **(hard).**\n' }) },
   });
   const { out } = run(p);
-  assert.match(facts(out).find((l) => l.startsWith('derive 1')) || '', /design-x/, 'masking must not eat real content');
+  assert.match(facts(out).find((l) => l.startsWith('derive 0001')) || '', /design-x/, 'masking must not eat real content');
 });
 
 // R51 — ONE grammar for "is this the ## Status heading?". Three variants (two prefix, one exact) made
@@ -1370,11 +1372,11 @@ test('R50/R53: exact stdout on the LOUD path — the fact is pinned in full', ()
     '|---|---|---|---|---|---|',
     '| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/0001-a/brief.md) | fkit-coder | ⟨derive: UNPARSEABLE — see brief⟩ |',
     '',
-    '1 backlog  —  of 1  — as recorded; drift on tasks 1 — see above.',
+    '1 backlog  —  of 1  — as recorded; drift on tasks 0001 — see above.',
     '⟦FACTS⟧',
     'total 1',
     'count backlog 1',
-    'drift depends-unparseable 1 brief="../tasks/backlog/0001-a/brief.md" form="BL"',
+    'drift depends-unparseable 0001 brief="../tasks/backlog/0001-a/brief.md" form="BL"',
     '⟦END⟧',
     '',
   ].join('\n'));
@@ -1388,7 +1390,7 @@ test('R31: `**Depends on nothing.**` declares no dependency — it is not drift'
   });
   const { out } = run(p);
   assert.equal(facts(out).filter((f) => f.includes('depends-unparseable')).length, 0, 'a live form must not be called unparseable');
-  assert.match(facts(out).find((l) => l.startsWith('derive 1')) || '', /nothing/);
+  assert.match(facts(out).find((l) => l.startsWith('derive 0001')) || '', /nothing/);
 });
 
 // ...and ordinary prose using the words must not trip the loud fallback either.
@@ -1436,7 +1438,7 @@ test('a quote inside a Depends on: line cannot break the key="value" grammar', (
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1, extra: '\n- **Depends on: the owner said "after 25 lands".**\n' }) },
   });
   const { out } = run(p);
-  const f = facts(out).find((l) => l.startsWith('derive 1'));
+  const f = facts(out).find((l) => l.startsWith('derive 0001'));
   assert.equal((f.match(/"/g) || []).length, 2, 'exactly the two delimiting quotes survive');
 });
 
@@ -1510,7 +1512,7 @@ test('task 65: a drift fact on a closed-marked row survives into ⟦FACTS⟧ and
   });
   const { out } = run(p);
   assert.ok(facts(out).some((f) => f.includes('kind="cancelled-without-date"')), 'the fact survives the board filter');
-  assert.match(rollup(out), /drift on tasks 1\b/, 'and it reaches the roll-up drift clause');
+  assert.match(rollup(out), /drift on tasks 0001\b/, 'and it reaches the roll-up drift clause');
 });
 
 // PROPERTY 3 — THE SAFETY VALVE, and the reason we filter on RECONCILED state rather than the raw
@@ -1526,7 +1528,7 @@ test('task 65: a done-marked row WITH drift still renders, and says waiting on o
   const { out } = run(p);
   assert.equal(boardRows(out).length, 1, 'a drifted row renders whatever its marker claims');
   assert.match(boardRows(out)[0], /\| waiting on owner \|$/);
-  assert.ok(facts(out).some((f) => f.startsWith('drift disagreement 1')));
+  assert.ok(facts(out).some((f) => f.startsWith('drift disagreement 0001')));
 });
 
 // The `closed` and `dead` next-step shapes are still reachable — on rows a NONCONFORMANCE forced back
@@ -1631,7 +1633,10 @@ test('task 68: rule 1 does NOT skip on the backlog board — real status drift i
   );
 });
 
-test('task 68: FACTS records key by brief filename stem when the priority is `—`', () => {
+// Re-pointed by task 0103: the id is now the folder's bare `NNNN` prefix, not the whole folder name.
+// The POINT of the test is unchanged and still load-bearing — an unranked board must not collapse
+// every drifted row to a single unattributable `?`.
+test('task 0103: FACTS records key by the FOLDER ID even when the priority cell is `—`', () => {
   const p = backlogFixture(
     [
       '| 🔲 Backlog | — | Alpha | [`alpha.md`](../tasks/backlog/alpha.md) |',
@@ -1645,22 +1650,26 @@ test('task 68: FACTS records key by brief filename stem when the priority is `�
   );
   const { out } = run(p);
   assert.ok(
-    facts(out).some((f) => /^drift nonconformance \d{4}-zeta /.test(f)),
-    'keyed by the folder name (`<ID>-<slug>`), not `?`',
+    facts(out).some((f) => /^drift nonconformance \d{4} /.test(f)),
+    'keyed by the folder ID prefix, not `?`',
   );
   assert.doesNotMatch(rollup(out), /drift on tasks \?/, 'an unattributable `?` is the failure mode');
-  assert.match(rollup(out), /drift on tasks \d{4}-zeta/);
+  assert.match(rollup(out), /drift on tasks \d{4}/);
 });
 
-// ⚠️ THE FALLBACK IS A FALLBACK. A numbered plan must keep numbering — the skill narrates
-// `drift on tasks 59, 60`, and switching sprint plans to filename ids would break every such reference.
-test('task 68: a numbered sprint plan still keys FACTS by number, not by filename', () => {
+// ⚠️ THE FOLDER ID WINS, AND THIS TEST WAS DELIBERATELY INVERTED (task 0103; decision report
+// 2026-07-26-decide-task-folder-name-numeric-prefix.md §8 item 5). It used to assert the PRIORITY won
+// (`drift nonconformance 7`) — the pre-Option-C contract, and the reason a red bar here on the day
+// item 1 landed was the change WORKING. Priority is mutable board rank; the folder ID is permanent
+// identity (ADR-029 Decisions 3 and 6). Do NOT "restore" the old assertion or revert step 1.
+test('task 0103: a numbered sprint plan keys FACTS by the FOLDER ID, not by the priority', () => {
   const p = fixture({
     plan: plan(['| 🔲 Backlog | 7 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
     briefs: { 'backlog/a.md': '# Alpha\n\n## Sprint\nSprint 1\n\n## Priority\n7\n\n## Context\n\nB.\n' },
   });
   const { out } = run(p);
-  assert.ok(facts(out).some((f) => f.startsWith('drift nonconformance 7 ')), 'numbers win where they exist');
+  assert.ok(facts(out).some((f) => f.startsWith('drift nonconformance 0001 ')), 'the folder ID wins');
+  assert.doesNotMatch(out, /drift nonconformance 7 /, 'the priority must not be the id');
   assert.doesNotMatch(out, /drift nonconformance a /);
 });
 
@@ -1693,7 +1702,7 @@ test('task 68: a free-text ## Priority qualifier does not leak into the board or
   const { code, out } = run(p);
   assert.equal(code, 0);
   assert.match(boardRows(out)[0], /\| — \|/, 'the board shows the plan cell, never the brief field');
-  assert.ok(facts(out).some((f) => /^drift nonconformance \d{4}-a /.test(f)), 'folder-name fallback still applies');
+  assert.ok(facts(out).some((f) => /^drift nonconformance \d{4} /.test(f)), 'the folder ID still keys the record');
   // ⚠️ THE DISTINGUISHING ASSERTION (review R5). Without this the test passes for ANY brief priority,
   // so it proved nothing about the free-text qualifier it exists to test. The qualifier must not reach
   // the board cell, the FACTS id, or anywhere else in the output.
@@ -1734,11 +1743,19 @@ test('task 68: a genuinely unidentifiable plan still reports unresolved-plan-spr
 // R2 — the stem is NOT always a single token. Reproduced live before the guard: two rows yielded
 // `drift on tasks my, re[a]d, task` — a phantom third task, and a broken positional FACTS grammar.
 // ⚠️ Glob metacharacters matter as much as spaces: `$DRIFT_TASKS` is word-split UNQUOTED.
-test('task 68: a filename with spaces or glob metacharacters cannot break the FACTS grammar', () => {
+// ⚠️ TASK 0103 ADDED THE THIRD ROW, AND WITHOUT IT THIS TEST PROVES NOTHING. Once the folder ID
+// became the primary id, the first two fixtures key on their SAFE numeric prefixes (`0001`, `0002`)
+// and never reach the sanitiser this test exists to guard — it would have stayed GREEN while its
+// coverage silently vanished, which is worse than a red bar. The third row's folder carries NO
+// numeric prefix, so the ladder falls through to arm 3 and the sanitiser is exercised for real.
+test('task 0103: a folder with spaces or glob metacharacters cannot break the FACTS grammar', () => {
   const p = backlogFixture(
     [
       '| 🔲 Backlog | — | Spaced | [`my task.md`](../tasks/backlog/my task.md) |',
       '| 🔲 Backlog | — | Globby | [`re[a]d.md`](../tasks/backlog/re[a]d.md) |',
+      // Written raw: its slug is absent from `briefs`, so the ID fold leaves the href alone and the
+      // folder name reaches the ladder unprefixed — `raw name` → arm 3 → sanitised `raw-name`.
+      '| 🔲 Backlog | — | Raw | [`raw name`](../tasks/backlog/raw name/brief.md) |',
     ],
     {
       'backlog/my task.md': '# S\n\n## Sprint\nBacklog\n\n## Priority\nUnscheduled\n\n## Context\n\nB.\n',
@@ -1746,14 +1763,19 @@ test('task 68: a filename with spaces or glob metacharacters cannot break the FA
     },
   );
   const { out } = run(p);
-  const ids = facts(out).filter((f) => f.startsWith('drift nonconformance')).map((f) => f.split(' ')[2]);
-  assert.equal(ids.length, 2, 'two rows, two records');
+  // Every ROW-LEVEL drift record carries its id POSITIONALLY in field 3 — the hazard is the id itself,
+  // not the kind, so collect across kinds (the unprefixed row reports `missing-brief`, not nonconformance).
+  const ids = facts(out)
+    .filter((f) => /^drift (nonconformance|missing-brief) /.test(f))
+    .map((f) => f.split(' ')[2]);
+  assert.equal(ids.length, 3, 'three rows, three records');
   for (const id of ids) {
     assert.doesNotMatch(id, /[^A-Za-z0-9._-]/, `id ${id} must be a single safe token`);
   }
-  // The roll-up must name exactly the two real tasks — not three, and not a phantom.
+  assert.ok(ids.includes('raw-name'), 'the unprefixed folder reached the sanitiser (arm 3), not a raw space');
+  // The roll-up must name exactly the three real tasks — not four, and not a phantom.
   const named = rollup(out).replace(/^.*drift on tasks /, '').replace(/ — see above\..*$/, '').split(', ');
-  assert.equal(named.length, 2, `roll-up invented a task: ${JSON.stringify(named)}`);
+  assert.equal(named.length, 3, `roll-up invented a task: ${JSON.stringify(named)}`);
 });
 
 // R1 — THE REGRESSION GUARD. Giving `backlog.md` a `Backlog` identity activated drift rule 1's skip,
@@ -1797,7 +1819,10 @@ test('task 68 / R1: rule 1 still skips normally on a numbered sprint board', () 
 
 // Build a single-task tree at tasks/done/<folderName>/ with a caller-controlled brief body (no `## ID`
 // auto-injection — these tests deliberately control the ID carrier), plus optional companion files.
-function folderTree({ folderName, briefBody = null, companions = [] }) {
+// `priority` is the PLAN ROW's Priority cell, defaulted to `1` so every existing caller is unchanged.
+// It is a parameter at all so task 0103's red-proof can HOLD the folder and MOVE the priority — the
+// only way to show the FACTS id follows the folder rather than merely correlating with it.
+function folderTree({ folderName, briefBody = null, companions = [], priority = '1' }) {
   const root = mkdtempSync(join(tmpdir(), 'fkit-dash-'));
   MADE.push(root);
   const agents = join(root, 'ai-agents');
@@ -1807,7 +1832,7 @@ function folderTree({ folderName, briefBody = null, companions = [] }) {
   if (briefBody !== null) writeFileSync(join(folder, 'brief.md'), briefBody);
   for (const c of companions) writeFileSync(join(folder, c), 'reserved companion\n');
   const planPath = join(agents, 'sprints', 'sprint-1.md');
-  writeFileSync(planPath, plan([`| ✅ Done | 1 | Alpha | [\`alpha\`](../tasks/done/${folderName}/brief.md) |`]));
+  writeFileSync(planPath, plan([`| ✅ Done | ${priority} | Alpha | [\`alpha\`](../tasks/done/${folderName}/brief.md) |`]));
   return run(planPath);
 }
 
@@ -1819,7 +1844,7 @@ test('task 76: id-mismatch — brief ## ID disagrees with folder prefix → drif
   const bad = folderTree({ folderName: '0042-alpha', briefBody: doneBrief('0099') });
   assert.equal(bad.code, 0, 'a disagreement is a drift record, not a hard failure');
   assert.ok(
-    facts(bad.out).some((f) => /^drift id-mismatch 1 brief_id="0099" folder="0042-alpha"/.test(f)),
+    facts(bad.out).some((f) => /^drift id-mismatch 0042 brief_id="0099" folder="0042-alpha"/.test(f)),
     'the record names BOTH carriers (folder authoritative), like the status cross-check',
   );
   // RED-PROVE: make the ID match the folder — the record MUST disappear. A check that fired regardless
@@ -1837,7 +1862,7 @@ test('task 76: malformed-folder — a folder without brief.md is drift; adding b
   const bad = folderTree({ folderName: '0042-alpha', briefBody: null });
   assert.equal(bad.code, 0, 'malformed is reported, not fatal');
   assert.ok(
-    facts(bad.out).some((f) => /^drift malformed-folder 1 folder="0042-alpha" location="done\/"/.test(f)),
+    facts(bad.out).some((f) => /^drift malformed-folder 0042 folder="0042-alpha" location="done\/"/.test(f)),
     'a task folder lacking brief.md is reported as malformed',
   );
   // RED-PROVE: add brief.md — the malformed record MUST disappear.
@@ -1864,7 +1889,7 @@ test('task 76: brief-missing-id — a brief with no ## ID is nonconformance; add
   const bad = folderTree({ folderName: '0042-alpha', briefBody: noIdBrief });
   assert.equal(bad.code, 0, 'a missing ## ID is a drift record, not a hard failure');
   assert.ok(
-    facts(bad.out).some((f) => /^drift nonconformance 1 kind="brief-missing-id" folder="0042-alpha"/.test(f)),
+    facts(bad.out).some((f) => /^drift nonconformance 0042 kind="brief-missing-id" folder="0042-alpha"/.test(f)),
     'a brief lacking ## ID is reported as brief-missing-id, naming the folder',
   );
   // RED-PROVE: add ## ID matching the folder — the record MUST disappear.
@@ -1873,4 +1898,38 @@ test('task 76: brief-missing-id — a brief with no ## ID is nonconformance; add
     facts(good.out).filter((f) => f.includes('brief-missing-id')).length, 0,
     'a brief carrying ## ID has no missing-id nonconformance — the guard bites',
   );
+});
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────
+// TASK 0103 — the FACTS id comes from the FOLDER, not the priority (ADR-029 Decision 6, completed;
+// decision report 2026-07-26-decide-task-folder-name-numeric-prefix.md §8 item 1). RED-PROVED in
+// BOTH directions: hold one variable, move the other, and watch which one the id follows. One leg
+// alone is satisfiable by coincidence — leg 1 passes if the id merely CORRELATES with the folder,
+// and leg 2 is what rules the priority out as the carrier.
+// ─────────────────────────────────────────────────────────────────────────────────────────────────
+test('task 0103: the FACTS id follows the FOLDER ID, and does not follow the priority', () => {
+  const idOf = (r) => facts(r.out).find((f) => f.startsWith('drift nonconformance ')).split(' ')[2];
+
+  // Leg 1 — HOLD the priority (both rows write `1`), MOVE the folder. The id must move.
+  const a = folderTree({ folderName: '0042-alpha', briefBody: noIdBrief });
+  const b = folderTree({ folderName: '0055-alpha', briefBody: noIdBrief });
+  assert.equal(idOf(a), '0042');
+  assert.equal(idOf(b), '0055', 'same priority, different folder → different id: the id is the FOLDER');
+
+  // Leg 2 — HOLD the folder, MOVE the priority. The id must NOT move.
+  const c = folderTree({ folderName: '0042-alpha', briefBody: noIdBrief, priority: '9' });
+  assert.equal(idOf(c), '0042', 'same folder, different priority → same id: the priority is NOT the id');
+  assert.doesNotMatch(c.out, /drift nonconformance 9 /, 'the priority must not surface as an id anywhere');
+});
+
+// The same inversion, proved through the `P<n>` rank token the board now renders (report §8 item 2).
+// `task_id()` already strips the `P` (verified by execution), so the token is inert to the id — but
+// nothing asserted it, and a parser change that broke it would otherwise ship silently.
+test('task 0103: a `P<n>` priority cell parses cleanly and still does not become the id', () => {
+  const r = folderTree({ folderName: '0042-alpha', briefBody: noIdBrief, priority: 'P9' });
+  assert.equal(r.code, 0, 'a P-prefixed rank cell is not a parse failure');
+  const id = facts(r.out).find((f) => f.startsWith('drift nonconformance ')).split(' ')[2];
+  assert.equal(id, '0042', 'the folder ID wins over a P-prefixed rank cell too');
+  assert.doesNotMatch(r.out, /drift nonconformance 9 /, 'the stripped rank number must not surface as an id');
+  assert.match(boardRows(r.out)[0], /\| P9 \|/, 'and the board renders the rank cell verbatim, `P` and all');
 });

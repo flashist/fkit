@@ -213,3 +213,5 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[tasks/wiki-sync-task-plan-rename]] — a batched wiki-sync task (discharged by the migration sync)
 - [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — task 80, the ADR-029/030 vault link repair
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
+- [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102: the `<NNNN>-<slug>` folder model **re-examined and kept**; the priority cell is the number that changes
+- [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, which verified this page's conductor description rather than rewriting it

@@ -482,6 +482,26 @@ task_id() {
   printf '%s' "$1" | sed -n 's/^[^0-9]*\([0-9][0-9]*\).*/\1/p' | head -1
 }
 
+# The task-folder ID PREFIX — `0102` from `0102-decide-…`. This is the task's PERMANENT identity
+# (ADR-029 Decision 3); the Priority cell is mutable board rank and never was identity.
+#
+# ⚠️ NUMERIC-ONLY, AND THE GUARD IS NOT COSMETIC. `${f%%-*}` returns the WHOLE string when the name
+# contains no hyphen, so a folder called `0042 alpha` yields `0042 alpha` — a SPACE in a POSITIONAL
+# FACTS field, which is exactly the `drift on tasks my, re[a]d, task` phantom-task failure the
+# sanitiser below exists to prevent. The same guard rejects two other fabricated identities: a stale
+# flat href (`tasks/backlog/x.md` → folder `backlog` → `backlog`) and a legacy unprefixed folder
+# (`extract-scaffold-into-claude` → `extract`). Both must fall through to the ladder, not become an id.
+#
+# ⚠️ THIS IS NOT THE SAME PARSE AS the `id-mismatch` check's `folder_id=${folder%%-*}` below, AND THE
+# DIFFERENCE IS DELIBERATE — do not "unify" them. That check must compare the RAW prefix even when it
+# is non-numeric, so an unprefixed folder still reports a mismatch naming the real folder.
+folder_id_prefix() {
+  case "${1%%-*}" in
+    ''|*[!0-9]*) printf '' ;;
+    *)           printf '%s' "${1%%-*}" ;;
+  esac
+}
+
 # --- pass 1: parse rows, resolve briefs, compute drift + next step ---------------------------------
 
 c_done=0; c_inprogress=0; c_blocked=0; c_backlog=0; c_cancelled=0; c_moved=0; c_unknown=0
@@ -516,7 +536,6 @@ while IFS=$'\037' read -r rtype st pr task br; do
   # and then reported as `cancelled-without-reason` — drift manufactured out of formatting.
   st_cell=$(one_line_cell "$st")
   key=$(marker_key "$st")
-  tid=$(task_id "$pr")
 
   case "$key" in
     done)       c_done=$((c_done + 1)) ;;
@@ -537,27 +556,29 @@ while IFS=$'\037' read -r rtype st pr task br; do
   folder=$(basename "$(dirname "$linked")" 2>/dev/null)
   [ -n "$folder" ] && [ "$folder" != "/" ] && [ "$folder" != "." ] || folder=""
 
-  # -- the FACTS id ---------------------------------------------------------------------------------
-  # Normally the Priority number. **The BACKLOG BOARD (task 67) has no numbers** — its Priority cells
-  # are `—` by design, because the board is unranked — so every record would key `?`, and the roll-up
-  # drift clause would `uniq` several distinct drifted rows down to a single useless `?`. The owner
-  # would be told drift exists and given no way to find it.
+  # -- the FACTS id (ADR-029 Decision 6, COMPLETED by task 0103) -------------------------------------
+  # THE FOLDER-NAME ID PREFIX IS PRIMARY. The Priority cell is MUTABLE BOARD RANK — re-ranked twice in
+  # a single day — and only became the id because site 5 of the task-76 migration was dropped between
+  # design and plan (decision report 2026-07-26-decide-task-folder-name-numeric-prefix.md §3.1, §6
+  # step 1). This completes ADR-029 Decision 6, which already authorised it. Spec: report §8 item 1.
   #
-  # Fall back to the TASK-FOLDER NAME (`<NNNN>-<slug>`), a single token (so the positional
-  # `key="value"` grammar is unaffected) and the identifier every other part of fkit uses for a task —
-  # it is what the reader would go and open. Post-migration `brief.md` is a SHARED basename and would
-  # collapse every unnumbered task to one id, so the folder name is the only usable fallback. `?`
-  # survives only when there is neither a number nor a resolvable folder — a genuinely unidentifiable row.
+  # ⚠️ ORDER MATTERS, AND IT IS NOW THE OPPOSITE OF WHAT IT WAS. The comment this replaces warned that
+  # "a numbered plan keeps numbering" because `drift on tasks 59, 60` is what SKILL.md narrates. That
+  # hazard was about substituting a non-numeric FILENAME STEM. The folder ID is numeric, a single
+  # token and already sanitised, so the `key="value"` grammar, the positional FACTS emission and the
+  # `sort -n | uniq` roll-up are all unaffected — but the NARRATION genuinely changes
+  # (`59, 60` → `0044, 0051`), which is why SKILL.md:299-304 is rewritten in the same change and the
+  # guard test at dashboard-contract.test.js is deliberately re-pointed rather than reverted.
   #
-  # ⚠️ ORDER MATTERS: a numbered plan keeps numbering. This is a fallback, not a replacement — changing
-  # sprint plans to filename ids would break every `drift on tasks 59, 60` reference the skill narrates.
-  # ⚠️ SANITISED, and the sanitising is NOT optional. `tid` is emitted POSITIONALLY into FACTS
-  # (`drift nonconformance <tid> kind="…"`) and is later word-split out of `$DRIFT_TASKS`. A filename
-  # containing a space therefore becomes TWO task names, and the roll-up invents a task that does not
-  # exist — reproduced live before this guard: two rows yielded `drift on tasks my, re[a]d, task`.
-  # Glob metacharacters are the same class of hazard through the unquoted split below.
-  # This mirrors the invariant `task_id()` already enforces for the Priority cell; a fallback that
-  # skipped it was inconsistent with a rule this file established deliberately.
+  # THE LADDER: folder ID prefix → Priority number → sanitised folder name → `?`.
+  # Arm 3 is a LIVE FALLBACK, not dead code: it catches a folder whose name carries no numeric prefix
+  # (a stale flat href, a legacy unprefixed folder). Its sanitising is NOT optional — `tid` is emitted
+  # POSITIONALLY into FACTS and later word-split UNQUOTED out of `$DRIFT_TASKS`, so a space or a glob
+  # metacharacter invents a task that does not exist (reproduced live before the guard: two rows
+  # yielded `drift on tasks my, re[a]d, task`). The `?` sentinel and the `set -f` glob guard
+  # (:34-40) both STAY, per report §8 item 1.
+  tid=$(folder_id_prefix "$folder")
+  [ -n "$tid" ] || tid=$(task_id "$pr")
   if [ -z "$tid" ] && [ -n "$folder" ]; then
     tid=$(printf '%s' "$folder" | sed -e 's/[^A-Za-z0-9._-]/-/g')
   fi

@@ -63,3 +63,4 @@ ADR-012 established — empirically — that the fkit skill lockdown is **sessio
 - [[tasks/revert-task-movers-to-producer-only]] — Revert the task movers to producer-only — ownership, mirrors, hook test, and mover prose
 - [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook
 - [[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]] — Wire `fkit-sprint-ship-loop` into `skills_for_role()` + the four mirrors (same commit)
+- [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — task 0120: a cosmetic banner fix that this hook is **unaffected by** — ownership keys off `skills_for_role()`, never banner text

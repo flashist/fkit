@@ -42,3 +42,4 @@ Notable rulings the design carried:
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which the brief wrongly told this design to sequence against
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]] · [[systems/review-and-model-diversity]]
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
+- [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102, which found this design's **site 5 of five** `dashboard.sh` changes was dropped between design and plan, exactly as predicted, **silently**

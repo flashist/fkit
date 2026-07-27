@@ -59,3 +59,5 @@ Task 53 applies the single contract edit this requires: a scoped note in `fkit-c
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — ADR-032: The `fkit-sprint-ship-loop` autonomy & consent model — the conductor at sprint scope
 - [[systems/role-locked-sessions]] — Role-Locked Sessions & the Skill Lockdown
 - [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook
+- [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — task 0118: ADR-032 §A2 mirrors this ADR's discipline **and inherits its worklog audit obligation** — an obligation nothing yet implements (task 0147)
+- [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, the carve-out whose Process-review path runs on exactly this discipline

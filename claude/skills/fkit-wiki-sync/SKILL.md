@@ -50,7 +50,10 @@ its `brief.md`, not the sibling `plan.md` / `worklog.md` / `review.md`.
 (working artifacts, not sources); files only renamed, not modified.
 
 If the filtered list is empty → report *"Wiki is up to date — no ingest-worthy changes since
-`<since>`."* and stop.
+`<since>`."*, then **skip Steps 4–8 and go straight to Step 9.** Do **not** stop here: an idle sync
+still runs the flag step, so it still emits a flag line (normally the "no tracked task" line). Stopping
+at this line instead is the exact path task 0108 arose from — six batched syncs whose completion was
+never surfaced anywhere the board could see.
 
 ## Step 4 — Read the schema and index
 
@@ -87,8 +90,51 @@ line) — the precise resume point for the next sync. Then append to `log.md`, u
 The sync window checked; N source files changed, M pages created, K pages updated; the pages touched;
 anything needing human review (⚠️).
 
+## Step 9 — Flag any completed tracked task — close nothing
+
+**The wiki closes nothing and moves no task file.** Since **ADR-033** the task movers
+(`/fkit-task-done`, `/fkit-task-cancelled`) are the **producer's alone** — the wiki does not hold
+them, and the ADR-018 hook denies a mover call from a wiki identity at any spawn depth. The wiki's
+completion signal is a **flag in this report**, and nothing else. (`log.md` is not a signal: no board
+tool reads it. That is exactly why task 80's vault work sat `🔄 In progress` on the board for a week.)
+
+**Which tasks to consider** — any tracked task this operation may have completed:
+- one the caller named when invoking this procedure; **and**
+- any brief under `ai-agents/tasks/backlog/*/brief.md` whose `## Owner` is `fkit-wiki` and whose
+  `## Status` is not `✅ Done` — read each and apply the rule below.
+
+**The rule: is that brief's deliverable *this* vault work?** Three outcomes, and the third is the
+common one:
+- **Fully** → complete.
+- **In part, or this run served it and you cannot tell whether that finished it** → **partial**.
+  Never resolve that doubt as complete.
+- **Unrelated to this run** → **say nothing about it at all.** Most considered briefs land here, and
+  they produce no line. A brief is not "uncertain" merely because you read it: uncertainty means this
+  run *touched* its deliverable and you cannot tell whether that completed it.
+
+**End the report with one line per task that came out complete or partial, in exactly this form:**
+- complete → `Task <NNNN>'s vault work is complete — ready to close (producer runs /fkit-task-done on ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md)`
+- partial or uncertain → `Task <NNNN>: partial — not ready to close (ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md)`
+
+**`<NNNN>` is the task folder name's four-digit prefix** (equivalently the brief's `## ID`) — the same
+four digits that open the path you emit, and the task's only identity. It is **never** the sprint
+board's rank / `P<n>` Priority cell, which is mutable and re-ranked; see
+`ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md`. Substitute real values.
+
+**If that produced no lines at all**, write the single line `No tracked task completed by this run.`
+**Never invent a task to have something to flag.**
+
+These lines are the **last** thing in the report. A caller who summarizes this report **carries them
+verbatim** — a dropped flag is the whole bug this exists to fix.
+
+**Then stop.** Do not invoke a mover, do not edit the brief, do not touch the sprint plan, and do not
+spawn the producer to close it yourself. Routing the close is the **caller's** next move, not yours:
+`@fkit-producer Run /fkit-task-done on <brief path>`.
+
 ## Hard rules
 
 - **`schema.md` is ground truth.** **Never invent knowledge** — flag gaps.
 - **Write only inside `ai-agents/wiki-vault/`** (the watermark lives there too).
+- **Close nothing.** The wiki does not hold the task movers (ADR-033) and never invokes one, never
+  moves a task file, and never edits a brief or the sprint plan. It **flags**; the producer closes.
 - No secrets in any page. **Never commit or push.**

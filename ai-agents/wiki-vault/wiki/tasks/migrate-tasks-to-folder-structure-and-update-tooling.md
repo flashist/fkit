@@ -40,3 +40,4 @@ Done, agent-closed. **Worklog records the full verification walk**, self-checked
 - [[tasks/wiki-sync-open-questions-interview-skill]] — a batched wiki-sync task (discharged by the migration sync)
 - [[tasks/wiki-sync-task-plan-rename]] — a batched wiki-sync task (discharged by the migration sync)
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
+- [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102: the 2026-07-26 question of partially undoing this migration, priced at **1.6× its folders**; ruled **keep the prefix**

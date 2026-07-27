@@ -60,3 +60,7 @@ Codex's adversarial pass found (finding **R1**, high, verified) that `claude/age
 - [[systems/role-locked-sessions]] — Role-Locked Sessions & the Skill Lockdown
 - [[systems/testing-and-verification]] — Testing & Verification
 - [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill
+- [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — task 0118: the ADR-032 amendment recording this task's R1/R4 carve-outs — **landed 2026-07-26, four days after the ruling**
+- [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, the `fkit-coder.md` change that landed folded inside this task and was later split out for its own review
+- [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — task 0120, the H1 house-style fix to the SKILL.md this task built
+- [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, whose gap analysis found the carve-out absent from the vault entirely

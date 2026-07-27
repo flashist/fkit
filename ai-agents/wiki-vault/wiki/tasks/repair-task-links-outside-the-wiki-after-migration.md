@@ -27,3 +27,4 @@ Done, agent-closed. **The wiki is the last mile:** task 76 fixed the executable 
 - [[tasks/harden-task-movers-against-closed-sprint-link-rot]] · [[tasks/repair-broken-links-in-closed-sprint-plans]] — the same link-rot class, one sprint earlier
 - [[systems/fkit]] · [[systems/knowledge-base-structure]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
+- [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102: this task's four artifacts were searched for a Decision-6 ruling; none exists

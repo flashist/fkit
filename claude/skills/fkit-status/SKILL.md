@@ -296,12 +296,22 @@ drift unresolved-plan-sprint h1="…"
       means any drift below may be phantom. Say so; don't pretend the board is fully reconciled.
 ```
 
-> **⚠️ `<task>` is not always a number.** It is the Priority number when the board has one, and the
-> **brief's filename stem** when it does not — which is every row of the **Backlog board**, whose
-> Priority cells are `—` by design. Both forms are a single token, so the `key="value"` grammar is
-> unchanged. **Narrate whichever form you were given**: on the backlog board the roll-up's drift clause
-> reads `drift on tasks gate-read-side-symlink-hazard-in-init`, and that *is* the task's identifier —
-> do not translate it into a number, and do not report it as a malformed record.
+> **⚠️ `<task>` is the FOLDER ID, not the priority.** It is the task-folder name's `NNNN` prefix —
+> `0102` from `0102-decide-…` — which is the task's **permanent identity** (ADR-029 Decision 3). The
+> **Priority cell is mutable board rank, not identity** — it is never what a task *is*, and it keys a
+> record only as the fallback described below, when the href yields no folder ID. The board renders it
+> as `P<n>` precisely so the two number-spaces cannot be mistaken for one another. See
+> [`priority-is-rank-not-identity.md`](../../../ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md).
+>
+> So the roll-up's drift clause reads `drift on tasks 0044, 0051` — **zero-padded folder IDs, not
+> priorities.** This is a deliberate change (task 0103, decision report §8 item 1) from the earlier
+> contract in which `<task>` was the board's rank number: **do not translate a `0044` back into a
+> priority, and do not report a padded id as a malformed record.**
+>
+> Two fallbacks survive and you may still be handed either: the **priority number**, when a row's href
+> yields no numeric folder prefix; and a **sanitised folder name**, when there is neither. `?` means a
+> genuinely unidentifiable row. All forms are a single token, so the `key="value"` grammar is unchanged.
+> **Narrate whichever form you were given.**
 
 **This list is a mirror of the script's output and has drifted from it six times** (review rounds 1–6;
 twice it was recorded as fixed when it was not). **If you see a `drift` record whose kind is not listed

@@ -94,7 +94,17 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 - **The `.fkit/` orphan-cleanup consent model → announce-only** (2026-07-17), unblocking task 36.
 
 ## Outcome
-**101 done · 18 backlog · 5 cancelled — of 124.** *(Updated 2026-07-26, re-derived from `bash claude/skills/fkit-status/dashboard.sh` — the deterministic board, not a hand count. **+22 done** since the last sync; the sprint grew 90 → 124.)*
+**106 done · 19 backlog · 5 cancelled — of 130.** *(Updated 2026-07-26 (second sync of the day), re-derived from `bash claude/skills/fkit-status/dashboard.sh` — the deterministic board, not a hand count. **+5 done** and **+6 rows** since earlier the same day; the sprint grew 90 → 124 → 130.)*
+
+### The five closed in the second 2026-07-26 batch — the lead-conductor arc's paperwork, and one design question
+
+- [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — **0102**: the owner asked whether the `<NNNN>-` folder prefix could go. **Ruled keep it** (Option C) — the confusion is real but its cause is the **mutable priority**, not the permanent ID. Found that **ADR-029 Decision 6 never landed**, so `dashboard.sh` still treats board rank as identity. **0103 is rescoped, not cancelled.**
+- [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — **0118**: the ADR-032 amendment the coder's own contract had been **citing for four days without it existing**. Its unwritten state had silently blocked 0117 for three days, *because the brief said the owner was handling it himself.*
+- [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — **0117**: shipped **ahead of its own hard precondition** under an owner ruling, with a vault staleness banner standing in. Scope narrowed before any write because an earlier sync had already done the stated work.
+- [[tasks/track-fkit-coder-declared-approval-carve-out]] — **0119**: the guarantee-surface change split out for its own review, and **the one row in this batch closed owner-verified** — the `agent-closed` marker was deliberately refused, twice over.
+- [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — **0120**: a one-heading cosmetic fix whose real output was two **correctly refused** follow-ups (`0151`, `0152`).
+
+> **The pattern in this batch: four of the five rows are the paperwork the lead-conductor arc shipped without.** An amendment cited before it was written, a wiki ingest run ahead of its blocker, a guarantee-surface edit folded inside another task, and a banner the build got wrong. None of it changed behavior; all of it was record-keeping catching up to code that already shipped.
 
 **What the sprint absorbed since 2026-07-22 — none of it Omnigent removal:**
 - the **dashboard/schema cluster** (0104–0107) — the `## Owner` field, its 108-brief backfill, the Owner column, and the dependency-parse guard;
@@ -169,3 +179,8 @@ Its sibling: **a count of a *semantic* rule cannot be established by grepping on
 - [[tasks/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role]] — task 82, the architecture.md refresh for ADRs 026–030 + the eighth role
 - [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — task 80, the ADR-029/030 vault link repair
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
+- [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102, the folder-prefix ruling (keep it; fix the priority side)
+- [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, the lead-conductor vault ingest
+- [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — task 0118, the ADR-032 autonomy amendment
+- [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, the declared-approval carve-out record (**owner-verified**)
+- [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — task 0120, the sprint-loop SKILL.md H1 fix

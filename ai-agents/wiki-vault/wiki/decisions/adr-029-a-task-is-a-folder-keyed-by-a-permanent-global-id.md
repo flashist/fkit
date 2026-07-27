@@ -7,8 +7,26 @@
 > `ai-agents/tasks/<board>/<NNNN>-<slug>/` holding the brief and every artifact, keyed by a **permanent
 > four-digit global ID** that is never reused and never renumbered.
 
-⚠️ **Decided, not built.** As of ingest this is a ruling plus a design; the migration is task 76 and the
-tree is still one-file-per-task.
+✅ **Built.** The migration shipped **2026-07-21** (task 76 / folder `0062` — ~186 files, three artifact
+directories absorbed, the point of no return), and the tree is folder-per-task today. *(This line replaced
+a stale "Decided, not built" banner on 2026-07-26 — accurate at first ingest, falsified by the migration
+days later.)*
+
+⚠️ **Decision 6 was never implemented, and this ADR still describes it in the past tense.** It says
+`dashboard.sh` drops the ~24 lines that reverse-engineer an identifier out of the **Priority cell**; the
+script still reads the id from that cell (`:519`), consulting the folder name only as a fallback. Found by
+[[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — it was **site 5 of five** in
+the design report, predicted to fail *silently*, and is absent from the migration's plan, worklog, brief and
+review. **No ruling dropped it; it fell between design and plan.** Task `0103` implements it as already
+written — **no new ADR needed**. The ADR body is deliberately left uncorrected here (editing an accepted
+ADR was out of that task's scope); task `0143`'s dated-correction-note form is the sanctioned vehicle.
+
+✅ **Decision 5 was re-examined in 2026-07-26 and UPHELD, not amended.** The owner asked whether the
+`<NNNN>-` folder prefix could be dropped, which would have left `## ID` as the **sole** carrier and deleted
+the `id-mismatch` drift check. **Ruled: keep the prefix** (Option C) — the confusion was real but its cause
+is the **mutable priority**, not the permanent ID. The prefix carries **four** things `## ID` cannot, three
+with no replacement mechanism proposed. See
+[[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]].
 
 ⚠️ **Number collision, repaired 2026-07-19.** This number was briefly held by the `Stop`-hook ADR, now
 [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]]. Any reference to "ADR-029" written
@@ -111,7 +129,10 @@ reopened by this ADR**. The accepted cost, named so it is a decision rather than
 follow-up is open, a project installing fkit gets skills expecting the new layout against a tree in the
 old one.
 
-**Re-raise only if:** the folder layout is proposed to change again (Decisions 1, 2 and 7 are settled);
+**Re-raise only if:** the folder layout is proposed to change again (Decisions 1, 2 and 7 are settled) —
+**this clause fired once, legitimately, and the answer was to keep the layout**
+([[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]], 2026-07-26; a reversal would
+have needed a **superseding** ADR, not an amendment, since it deletes a drift check);
 the ID format or never-reuse rule is questioned — and the one thing that justifies that is **a duplicate
 ID actually occurring**, which would be evidence Decision 3's accepted risk was mispriced; or a registry
 is proposed again **with a concrete consumer** that must read an index the tree cannot answer. Do **not**
@@ -154,3 +175,4 @@ re-raise the dual-format transition, content-hash IDs, numbering only open tasks
 - [[tasks/repair-stale-adr-029-stop-hook-links-in-the-vault]] — task 80, the ADR-029/030 vault link repair
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
 - [[tasks/add-owner-field-to-brief-schema-and-task-brief-skill]] — Add a structured `## Owner` field to the brief schema and the task-brief skill
+- [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102: Decision 5 **upheld**, Decision 6 found **never landed**; the re-raise clause firing and being answered

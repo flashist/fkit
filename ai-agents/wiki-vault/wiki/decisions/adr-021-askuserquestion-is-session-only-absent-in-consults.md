@@ -45,3 +45,5 @@ On Claude Code 2.1.212, `AskUserQuestion` functions in a top-level `fkit <role>`
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — ADR-033: The task movers are producer-only again — ADR-025's "any role" grant is reversed
 - [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill
 - [[tasks/evolve-fkit-lead-into-orchestrating-conductor]] — Evolve `fkit-lead` into the orchestrating conductor (reverse the non-doer stance)
+- [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — task 0118: the session-only channel this ADR measured is **why ADR-032's declared-approval marker has no verifiable token** (§A3)
+- [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, the carve-out that exists because a spawned coder cannot reach the owner

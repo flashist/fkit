@@ -7,7 +7,7 @@
 Sprint 2
 
 ## Priority
-124
+126
 
 ## Status
 🔲 Backlog
@@ -21,7 +21,7 @@ Task **0119**'s round-1 review found a one-word drift between the owner's record
 that implements it. The finding (**R1**, medium) was raised **independently by both reviewers** —
 fkit-reviewer (Claude) and the Codex adversarial pass (`codex-cli 0.145.0`, exit 0, full model-diverse
 coverage, no degradation). Ledger:
-[`0119/review.md:18`](../0119-track-fkit-coder-declared-approval-carve-out/review.md).
+[`0119/review.md:18`](../../done/0119-track-fkit-coder-declared-approval-carve-out/review.md).
 
 **The drift, re-verified against the tree 2026-07-26:**
 
@@ -91,7 +91,7 @@ A prose fix to **one clause** in **one canonical file**.
   already real ADR text.
 - **Blocks:** nothing.
 - **Source:** 0119 review ledger finding **R1**,
-  [`0119/review.md:18`](../0119-track-fkit-coder-declared-approval-carve-out/review.md), convergence call
+  [`0119/review.md:18`](../../done/0119-track-fkit-coder-declared-approval-carve-out/review.md), convergence call
   at `:90-96` (*"Act on R1 — this is not a review loop"*). **Filing this does not close 0119** — 0119
   remains `🔄 In progress` and is the owner's to verify and close personally.
 - **✅ Priority ruled 2026-07-26 — 128 → 124, adjacent to 0147 (123).** The owner ruled on the flag

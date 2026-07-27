@@ -19,7 +19,7 @@
   across the repo and in ADR-029 as *"task 76"*
   ([`0062-migrate-tasks-to-folder-structure-and-update-tooling`](../../tasks/done/0062-migrate-tasks-to-folder-structure-and-update-tooling/brief.md)).
 - **Blocks / feeds:** folder **`0103`** (priority **104**)
-  ([`0103-implement-task-folder-name-scheme-change`](../../tasks/backlog/0103-implement-task-folder-name-scheme-change/brief.md))
+  ([`0103-implement-task-folder-name-scheme-change`](../../tasks/done/0103-implement-task-folder-name-scheme-change/brief.md))
   — **rescoped, not cancelled.** See §8.
 
 > **Citation convention used in this report** *(added in round 1, review finding R5)*

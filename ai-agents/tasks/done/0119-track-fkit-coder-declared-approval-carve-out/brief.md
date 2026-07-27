@@ -10,7 +10,7 @@ Sprint 2
 101
 
 ## Status
-🔄 In progress
+✅ Done
 
 ## Owner
 fkit-coder

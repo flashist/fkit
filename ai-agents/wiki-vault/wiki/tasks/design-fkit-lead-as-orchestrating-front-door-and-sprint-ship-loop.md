@@ -66,3 +66,4 @@ The design said this plainly and it remains true: **fkit cannot fully test its o
 - [[tasks/design-task-ship-loop-skill]] — the task-scope precedent
 - [[systems/fkit]] · [[systems/role-locked-sessions]]
 - [[systems/testing-and-verification]] — where this design's two binary probes are tracked: probe 1 answered **NO**, probe 2 **never run**
+- [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, which ingested this report's §12 declined alternative and §13 probes after finding them absent vault-wide
