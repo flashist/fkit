@@ -36,7 +36,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — The layer already exists; **delivery structural, compliance advisory**
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]] — Shipped skill executables: `bash <path>`, never the exec bit
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — **`PreToolUse` hook enforces skill ownership by the real caller at any depth; `CONSULT_SKILLS` retired.** Supersedes ADR-012 Decisions 3&4
-- [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — The coder's ship-loop runs autonomously by default. ⚠️ **Its done-gate is gone** (ADR-025, shipped by task 64 — the loop now closes its own task); **only the plan gate remains**
+- [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — The coder's ship-loop runs autonomously by default. ⚠️ **Its done-gate is gone** (ADR-025) and its terminal act is **no longer a self-close at all** — ADR-033 §3 makes it a **producer hand-off, not a green board**; **only the plan gate remains** as a human checkpoint
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — Per-task `plans/` + `worklogs/` dirs, keyed by task-id, mirroring `reviews/`
 - [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — Tombstone: `AskUserQuestion` measured session-only (2.1.212); the consult "return open questions" contract is the only option
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — **Tool allowlists relaxed for six roles; the adversarial reviewer's wall is the sole structural tool restriction**
@@ -107,7 +107,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/investigate-mutation-testing-library-adoption]] — Task 46 → ADR-026: **no library mutates shell**, so the zero-devDeps tension never existed; the real defect was gating
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — Task 49 → ADR-027: the **cause** of a four-instance defect class; the enumeration corrected itself from five drifted files to **six**
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — Task 63 → ADR-025: **no fabrication-resistant precondition exists**; prevention removed, an unenforced prose marker in its place
-- [[tasks/implement-spawned-invocation-for-task-movers]] — Task 64: the reversal **built** (2026-07-19) and the sprint's **first agent-closed row — not owner-verified**; the adversarial pass forced three ADR amendments
+- [[tasks/implement-spawned-invocation-for-task-movers]] — Task 64: the reversal **built** (2026-07-19) and the sprint's **first agent-closed row — not owner-verified**; the adversarial pass forced three ADR amendments. ⚠️ **The grant it built is itself reversed** (ADR-033) — kept as the record of 2026-07-19
 - [[tasks/refresh-architecture-docs-for-tool-relaxation]] — Task 58 → the ADR-022 doc follow-up, Done; `architecture.md` is nonetheless **behind again** (cites no ADR past **025**; 023, 024, 026–030 absent)
 
 ### Sprint 2 — the migration investigation (and its "build nothing" answer)

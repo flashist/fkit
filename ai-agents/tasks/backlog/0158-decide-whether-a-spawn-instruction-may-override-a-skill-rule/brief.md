@@ -47,6 +47,48 @@ about priorities and not about the producer: **any** driver instruction can land
 for **any** spawned worker. Priorities are just where it surfaced first, and it surfaced benignly —
 the owner accepted the outcome.
 
+### A worked example in the other direction — a spawn instruction the owner ruled SHOULD win (2026-07-29)
+
+**⚠️ Read the scope limit first. The owner ruled this INSTANCE only. It is not the general rule, and
+this task exists precisely because the general rule has not been decided.** The example is recorded here
+because a ruling on question 1 that cannot accommodate it is probably the wrong ruling.
+
+**The collision.** At `0141`'s close on **2026-07-29**, a spawned `fkit-producer` running
+`/fkit-task-done` hit a direct conflict:
+
+- **The skill rule:** `/fkit-task-done` **step 5** instructs the closing producer to **re-point
+  review-ledger references** from `tasks/backlog/…` to `tasks/done/…`.
+- **The spawn instruction:** the driver's prompt instructed it **not to touch the ledger**.
+
+**What the worker did — and this part is the behavior most worth codifying.** It **took the
+conservative branch and escalated**, rather than resolving precedence silently in either direction. It
+did not quietly re-point the ledger on the skill's authority, and it did not quietly skip the step on
+the driver's. It surfaced the conflict.
+
+**The owner's ruling, 2026-07-29, for this instance only: the spawn instruction wins — the ledger stays
+frozen.** The reasoning, which the general ruling should engage with:
+
+- **A review ledger records where the files sat when the findings were raised.** Re-pointing it
+  **rewrites evidence**, which is a different act from repairing a broken link.
+- **Every ledger produced during this run carries stale `backlog/` paths by design** — `0103`, `0125`,
+  `0147`, `0150`, `0126`, `0141`. The staleness is the record, not a defect in it.
+
+**Why this belongs in this brief.** The 2026-07-27 instance (above) is a spawn instruction displacing a
+skill rule where the **outcome** was accepted but the **authority** was never established. This one is a
+spawn instruction the owner **affirmatively** ruled correct. **A ruling of the form "the skill rule
+always wins, full stop" would have produced the wrong answer here** — it would have re-pointed a ledger
+the owner ruled must stay frozen. Any answer to question 1 has to survive both instances.
+
+**It also supplies a candidate answer to question 2.** On both occasions the worker **complied-and-
+flagged** or **escalated rather than resolving silently**, and on both occasions the owner accepted the
+result. That is evidence for *comply-and-flag* / *surface-the-collision*, not proof of it — **the
+architect decides.**
+
+⚠️ **What the owner did NOT rule on 2026-07-29:** whether spawn instructions win generally; whether
+`/fkit-task-done` step 5 should be amended; whether the ledger-freezing reasoning generalizes past
+review ledgers. **Do not read any of those out of this instance.** If the ruling concludes step 5 needs
+changing, name it as a follow-up for the producer to file — this task still implements nothing.
+
 ### Nothing anywhere answers it
 
 Verified 2026-07-27 by reading the files:
@@ -120,6 +162,12 @@ not write the clause into any skill under this task.
    `/fkit-record-decision`.
 7. **No skill, agent definition, or source file was edited.** `git diff --stat` shows only the new
    knowledge-base file (plus this brief's own status if closed). This task rules; it does not implement.
+8. **The 2026-07-29 `/fkit-task-done` step-5 instance is adjudicated by name, alongside the 2026-07-27
+   one.** Apply the ruling to it and state the verdict. **A ruling that decides one instance and breaks
+   the other is not usable** — the two point in opposite directions, which is the whole reason both are
+   recorded. State explicitly whether the owner's instance-only ruling (*"the spawn instruction wins,
+   the ledger stays frozen"*) is **consistent with, an exception to, or superseded by** the general
+   answer.
 
 ## Notes
 

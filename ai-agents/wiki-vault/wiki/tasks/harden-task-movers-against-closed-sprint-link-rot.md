@@ -33,6 +33,7 @@ Done. *(The one-off repair of Sprint 1's 6 existing broken links — [[tasks/rep
 - [[tasks/repair-broken-links-in-closed-sprint-plans]]
 - [[tasks/stop-agents-asserting-unchecked-repo-state]]
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the recursive `sprints/` sweep this task established is what lets the movers find backlog-board rows unchanged
-- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the movers are no longer owner-only
+- [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — removed the owner-only gate; ⚠️ **since reversed**
+- [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — the movers are **`fkit-producer`-only** again (2026-07-23), hook-enforced at any spawn depth
 - [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — task 81, the mover KB-sweep fix + ADR-number guard
 - [[tasks/repair-task-links-outside-the-wiki-after-migration]] — task 77, the post-migration doc-link repair

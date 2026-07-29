@@ -32,3 +32,4 @@ The change is deliberately narrow: one producer-spawn per shipped task added to 
 - [[systems/fkit]]
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — ADR-025: Spawned agents may invoke `/fkit-task-done` and `/fkit-task-cancelled` — the owner-only gate is removed, and the anti-laundering guarantee is removed with it
 - [[systems/role-locked-sessions]] — Role-Locked Sessions & the Skill Lockdown
+- [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which built the grant this reroute unwinds on the orchestrator side

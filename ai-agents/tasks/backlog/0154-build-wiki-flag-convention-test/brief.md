@@ -7,7 +7,7 @@
 Sprint 2
 
 ## Priority
-129
+128
 
 ## Status
 🔲 Backlog
@@ -143,4 +143,25 @@ harness file or co-land in one `fkit-coder` session is an open call for the owne
   behavior already verified correct, and 0152's convention held in 24 of 25 files with no enforcement
   whatsoever. Placed **below** 0148 and the 0147/0150 pair because those close gaps in controls the
   project is exercising right now. **The ranking is producer judgment, not an owner ruling.**
+- **⚠️ Dated correction, 2026-07-29 — the Ranking note above is superseded. It is left in place, not
+  rewritten, per this project's dated-correction practice.** Two of its statements are now wrong:
+  - **The rank is `128`, not `127`.** It was appended-displaced to 130 and then to 131 during the
+    2026-07-27 and 2026-07-29 passes, and promoted to **128** by the ruling below.
+  - **The current rank IS an owner ruling.** **Authority: the owner, 2026-07-29, via `AskUserQuestion`
+    in the live `/fkit-sprint-ship-loop` driver session**, executed by a spawned `fkit-producer` with no
+    owner channel and no merit judgment of its own. **Merit as ruled:** this run produced **direct
+    evidence** for the task — the consumer that would have to enforce the flag form, a spawned
+    `fkit-producer` asked at `0141`'s close, stated on the record **"No. I would have acted on it
+    without noticing"** and concluded ***"on this run 'carried verbatim' was decorative, not a
+    control"***. This task is the only filed work that can make the form a real control.
+  - **Placed at 128, not 127**, because P127 is 0162's owner-ruled placement of the same day and P126 is
+    `✅ Done`. Raising this task was ruled; lowering 0162 was not. See the sprint plan's *"Promoted by
+    OWNER RULING 2026-07-29"* addendum for the full authority note and the open question left for the
+    owner.
+- **⚠️ This task does not cover the failure that produced its promotion — see `0165` (P143).** This test
+  asserts the five required strings are **present in the three wiki `SKILL.md` files**. They were present
+  throughout the 2026-07-29 `0141` deviation (`ai-agents/wiki-vault/log.md:623`), so **this test would
+  have been green for its entire duration**. It guards the **source text**; `0165` decides where a check
+  on the **emitted form** can live. **Adjacency, not a dependency, and deliberately not a merge** — the
+  producer judged them distinct on 2026-07-29 and recorded the argument on the sprint board.
 - No commit — leave the test in the working tree.

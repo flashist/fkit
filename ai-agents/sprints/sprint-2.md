@@ -138,7 +138,7 @@ Omnigent-side doc drift** — its output would be a deletion.
 | ✅ Done (agent-closed — not owner-verified) | P106 | Rewrite `fkit-sprint-ship-loop` close step — driver self-close → spawn producer to close *(ADR-033 §4 ripple, amends ADR-032; revises 0111's as-first-written close; ships **before** 0124; owner: fkit-coder)* | [`0123-route-sprint-ship-loop-close-to-producer`](../tasks/done/0123-route-sprint-ship-loop-close-to-producer/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P107 | Revert the task movers to producer-only — `skills-for-role.sh` + 4 mirrors + hook test + mover SKILL prose *(ADR-033 §1 structural core; owner: fkit-coder)* | [`0124-revert-task-movers-to-producer-only`](../tasks/done/0124-revert-task-movers-to-producer-only/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P108 | Wiki flag-don't-close convention — 3 wiki SKILLs end by flagging "task N ready to close" *(ADR-033 §2 / task 0108's operative fix; recommend co-landing with 107; owner: fkit-coder)* | [`0125-wiki-skills-flag-ready-to-close`](../tasks/done/0125-wiki-skills-flag-ready-to-close/brief.md) |
-| 🔲 Backlog | P109 | Wiki resync for ADR-033 — ingest the ADR + resync vault pages asserting the ADR-025 "any role may close" rule *(needs 107 — hard; owner: fkit-wiki)* | [`0126-wiki-resync-for-adr-033`](../tasks/backlog/0126-wiki-resync-for-adr-033/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P109 | Wiki resync for ADR-033 — ingest the ADR + resync vault pages asserting the ADR-025 "any role may close" rule *(needs 107 — hard; owner: fkit-wiki)* | [`0126-wiki-resync-for-adr-033`](../tasks/done/0126-wiki-resync-for-adr-033/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P110 | Build the ADR-030 `Stop` hook — turn-completion contract enforcement *(Path 2 marker; owner live-verified check B end-to-end; R8 over-skip residual accepted → fix in 0129; owner: fkit-coder)* | [`0127-build-adr-030-stop-hook`](../tasks/done/0127-build-adr-030-stop-hook/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P111 | Give the fkit ship-loop(s) a transcript-independent skip signal for the ADR-030 Stop hook *(`UserPromptExpansion` marker replaces the transcript scan; fixes R8 over-skip + R6 under-skip for both loops; owner: fkit-coder)* | [`0129-transcript-independent-ship-loop-skip-signal`](../tasks/done/0129-transcript-independent-ship-loop-skip-signal/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P112 | Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively *(ADR-030 Decision 8; two clauses added to `universal-rules.md`; block at 91% → follow-up 0130; owner: fkit-coder)* | [`0128-add-adr-030-prose-half-to-universal-rules`](../tasks/done/0128-add-adr-030-prose-half-to-universal-rules/brief.md) |
@@ -146,26 +146,624 @@ Omnigent-side doc drift** — its output would be a deletion.
 | 🔲 Backlog | P114 | Convert every skill `description:` to a `>-` block scalar, then add a frontmatter-parse guard test *(0123 R4/R5; **all 25 skills use plain scalars, 3 are invalid strict YAML**; a broken frontmatter fails **silently** — the listing falls back to the H1 and no test reads any `SKILL.md`; convert-then-guard is one unit, order binding; ADR-014 zero devDeps ⇒ hand-rolled reader; independent; owner: fkit-coder)* | [`0136-convert-skill-descriptions-to-block-scalars-and-guard`](../tasks/backlog/0136-convert-skill-descriptions-to-block-scalars-and-guard/brief.md) |
 | ✅ Done | P115 | Reorder the `fkit` launcher menu so lead is option 1, and rename its label to "lead" *(owner ruling 2026-07-25; menu block + case arms + `--help` + init.sh role list; **word aliases `team`/`team room` are kept**; **accepted cost — every other role shifts down one and a mis-pick is silent**; independent; owner: fkit-coder)* | [`0139-reorder-launcher-menu-lead-first-and-rename-label`](../tasks/done/0139-reorder-launcher-menu-lead-first-and-rename-label/brief.md) |
 | ✅ Done | P116 | Retire "team room" in the docs and agent definitions, and fix the stale "menu 7" citations *(**two kinds of edit — a rename, and a correctness fix**: 3 live files say "menu option 7" and become FALSE when 115 lands, incl. `fkit-lead.md`, a **system prompt**; ADR-010 + 2 dated reports deliberately OUT of scope; soft-depends 115 — ship together; owner: fkit-coder)* | [`0140-retire-team-room-in-docs-and-agent-definitions`](../tasks/done/0140-retire-team-room-in-docs-and-agent-definitions/brief.md) |
-| 🔲 Backlog | P117 | The wiki completion flag must carry the task's **folder ID** and the **brief path** — `Task N` is undefined *(0125 follow-up, **found by the role that consumes the flag**; `N` is never defined and the two number-spaces collide on a **live specimen** — 0125 is rank **P108** and folder `0108` is a real task, the very investigation 0125 implements; the flag is the one line carried **verbatim** and carries **no path**, though the scan step already read `backlog/*/brief.md`; a wrong resolution points `/fkit-task-done` at the wrong task; cites `conventions/priority-is-rank-not-identity.md`; **land before 0154**; owner: fkit-coder)* | [`0153-wiki-flag-carries-folder-id-and-brief-path`](../tasks/backlog/0153-wiki-flag-carries-folder-id-and-brief-path/brief.md) |
-| 🔲 Backlog | P118 | Wiki resync for the lead rename and menu reorder *(vault write — **fkit-wiki only**; 2 pages assert the retired facts; also carries a **stale claim of substance** — `systems/fkit.md:28` still says the lead "does no work", which ADR-031 reversed; overlaps task 99 (0117) — check its state first; needs 115 + 116 — hard; owner: fkit-wiki)* | [`0141-wiki-resync-for-the-lead-rename-and-menu-reorder`](../tasks/backlog/0141-wiki-resync-for-the-lead-rename-and-menu-reorder/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P117 | The wiki completion flag must carry the task's **folder ID** and the **brief path** — `Task N` is undefined *(0125 follow-up, **found by the role that consumes the flag**; `N` is never defined and the two number-spaces collide on a **live specimen** — 0125 is rank **P108** and folder `0108` is a real task, the very investigation 0125 implements; the flag is the one line carried **verbatim** and carries **no path**, though the scan step already read `backlog/*/brief.md`; a wrong resolution points `/fkit-task-done` at the wrong task; cites `conventions/priority-is-rank-not-identity.md`; **land before 0154**; owner: fkit-coder)* | [`0153-wiki-flag-carries-folder-id-and-brief-path`](../tasks/done/0153-wiki-flag-carries-folder-id-and-brief-path/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P118 | Wiki resync for the lead rename and menu reorder *(vault write — **fkit-wiki only**; 2 pages assert the retired facts; also carries a **stale claim of substance** — `systems/fkit.md:28` still says the lead "does no work", which ADR-031 reversed; overlaps task 99 (0117) — check its state first; needs 115 + 116 — hard; owner: fkit-wiki)* | [`0141-wiki-resync-for-the-lead-rename-and-menu-reorder`](../tasks/done/0141-wiki-resync-for-the-lead-rename-and-menu-reorder/brief.md) |
 | 🔲 Backlog | P119 | Reconcile the dual-homed file drift — byte-align live `ai-agents/` vs `claude/scaffold/ai-agents/` *(**pulled from the Backlog board 2026-07-25 by owner ruling**; ADR-027 §2 follow-up, never filed for six days; `dependency-declaration-form.md` is missing from the scaffold — consuming projects inherit the **task-84 misreport class**; the exception list is the real deliverable; blocks 119; owner: fkit-coder)* | [`0132-reconcile-dual-homed-file-drift-live-vs-scaffold`](../tasks/backlog/0132-reconcile-dual-homed-file-drift-live-vs-scaffold/brief.md) |
 | 🔲 Backlog | P120 | Build `test/dual-home-parity.test.js` *(**pulled from the Backlog board 2026-07-25 by owner ruling**; **task 0112 shipped claiming this test passed — it does not exist**; carries the named obligation to re-verify 0112's five touched files and report pass/fail to the owner; needs 118 — ADR-027 §3 makes the order binding; owner: fkit-coder)* | [`0133-build-dual-home-parity-test`](../tasks/backlog/0133-build-dual-home-parity-test/brief.md) |
 | 🔲 Backlog | P121 | Investigate the skill-ownership fact-inventory gap — the mirror checklist does not see every site *(**investigation, not implementation** — fix shape unknown; the `skills-for-role.sh:12-24` checklist has failed **twice** (0036, then 0124's three missed sites); the missed sites are **system prompts + the universal rules block**, which outrank a SKILL in an agent's own context; coordinates with 0137; independent; owner: fkit-architect)* | [`0142-investigate-the-skill-ownership-fact-inventory-gap`](../tasks/backlog/0142-investigate-the-skill-ownership-fact-inventory-gap/brief.md) |
 | 🔲 Backlog | P122 | Decide whether a spawn-time instruction may override a rule in the skill the spawned worker is running *(**investigation + ruling, fix shape unknown** — not implementation; a worker **cited step 5's rule, then followed the spawn prompt instead, and recorded that it did** (`sprint-2.md:245-249`); the instruction is **not in `fkit-sprint-ship-loop`** — it is ad-hoc spawn-prompt text from the live lead session, which is what makes it invisible to review; surface is **every spawned worker of every role**, not priorities; `universal-rules.md` carries fkit's only precedence vocabulary (hard rule vs preference) and **skill rules are classified as neither**; ADR-010/012/018 govern *which* skill may be invoked, never whether a rule *inside* one binds — a different axis; must face the *"a launching agent's messages direct your work"* tension by name; **a one-paragraph ruling is a legitimate outcome** — the point is a producer must not make the call; coordinates with 0142 (P121), adjacency not dependency; independent; owner: fkit-architect)* | [`0158-decide-whether-a-spawn-instruction-may-override-a-skill-rule`](../tasks/backlog/0158-decide-whether-a-spawn-instruction-may-override-a-skill-rule/brief.md) |
 | 🔲 Backlog | P123 | Correct `CLAUDE.md`'s stale `skills_for_role()` location *(**`CLAUDE.md` is injected into every fkit session**, so every role in every session is currently told the wrong file; `:43` says the function is declared in `claude/fkit-claude.sh` — it **moved to `claude/skills-for-role.sh`** under task 43 / ADR-018 and `fkit-claude.sh:257` merely sources it; **one-hop misdirection, not a wrong edit** — `fkit-claude.sh:253-254` documents the move right above the source line; **the only live stale site** — `claude/README.md:41` and `architecture.md:154` are already correct, and ADRs are dated records, out of scope; the line sits **outside** the generated rules block, so a normal one-line edit; **plausible live specimen for 0142** (120) and pointered there; owner: fkit-coder)* | [`0151-correct-claude-mds-stale-skills-for-role-location`](../tasks/backlog/0151-correct-claude-mds-stale-skills-for-role-location/brief.md) |
 | 🔲 Backlog | P124 | Append a dated correction note to ADR-010 for the menu reorder *(owner ruled 2026-07-25 — **note, not a rewrite**; ADR-010:26's "menu option 7" + "team room" go stale when 115/116 land, and its "routes rather than does" was already reversed by ADR-031; **establishes the form**, this being the first; ADR stays `accepted`; soft-needs 115 + 116; owner: fkit-architect)* | [`0143-append-a-dated-correction-note-to-adr-010`](../tasks/backlog/0143-append-a-dated-correction-note-to-adr-010/brief.md) |
-| 🔲 Backlog | P125 | Implement ADR-032 A2's worklog audit obligation in the sprint-ship-loop *(**the amendment requires it; nothing implements it** — `fkit-sprint-ship-loop/SKILL.md:105` asks the Process-review worker only for "change surface + residuals" and `fkit-coder.md:73-82` imposes no worklog duty; **consequence: ADR-032 A4 bullet 2's reopening condition is unsatisfiable in practice** — the guard points at evidence nothing requires anyone to write; adds an **obligation, not a permission**; owner-ruled 2026-07-26; **land with 0150 (124) in ONE `fkit-coder` session — different clauses of the same file**; owner: fkit-coder)* | [`0147-implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop`](../tasks/backlog/0147-implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop/brief.md) |
-| 🔲 Backlog | P126 | Add the missing **verbatim** to `fkit-coder.md`'s declared-approval marker, condition (b) *(0119 review **R1**, medium, raised **independently by both reviewers**; `fkit-coder.md:65-66` says the marker carries *"a concrete **approved plan**"* while ADR-032 **A1** `:97` and the driver `SKILL.md:109` both require it **verbatim** — a paraphrased plan satisfies the worker-side check, so the worker's **scope boundary** can silently become the driver's summary; **medium not high**: the driver's own verbatim rule must fail first, so this is a **missing second line of defence, not the primary control**; one-word prose fix on a **guarantee surface**, owner-ruled 2026-07-26 to be tracked rather than slipped in; **promoted 128 → 124 by owner ruling 2026-07-26, now adjacent to 0147 (123) — land the two in ONE `fkit-coder` session**; owner: fkit-coder)* | [`0150-add-verbatim-to-fkit-coder-declared-approval-marker`](../tasks/backlog/0150-add-verbatim-to-fkit-coder-declared-approval-marker/brief.md) |
-| 🔲 Backlog | P127 | State `/fkit-task-brief` step 5's append rule in full — the owner-ruled exception, the merit-flag obligation, the closed-row carve-out *(two spawned producers placed briefs **oppositely** on 2026-07-27 and the owner accepted **both**; step 5 read firsthand is **not ambiguous** on the default — it says append and forbids inserting, reinforced twice more in the same file — but it is **silent on the sanctioned exception**, so the two owner-ruled re-ranks the board records look like producer precedent, which is exactly how one was misread; also codifies the two things both producers reached independently and no file states — **never renumber `✅ Done`/`⛔ Cancelled` rows**, and **say where merit would have put it**; **prose only, one file, unenforced** — no test reads any `SKILL.md` today and **adding a guard is out of scope** (0154's third-claimant warning); the spawn-instruction half is deliberately excluded → 0158; independent; owner: fkit-coder)* | [`0157-state-task-brief-step-5s-append-rule-in-full`](../tasks/backlog/0157-state-task-brief-step-5s-append-rule-in-full/brief.md) |
-| 🔲 Backlog | P128 | Wiki re-ingest the amended ADR-032 and clear its now-wrong `⚠️ STALE` banner *(**merged from two candidates — one page, one edit**; vault `grep -c "Amendment — 2026-07-22"` = **0**, and the page's banner still says the amendment "was never written" and "0118 … still 🔲 Backlog" — **false on both counts** since 0118 closed; the banner was 0117's authorized stand-in and has outlived it; no overlap with 0126 (ADR-033) or 0141 (lead rename); owner: fkit-wiki)* | [`0148-wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner`](../tasks/backlog/0148-wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner/brief.md) |
-| 🔲 Backlog | P129 | Build `test/wiki-flag-convention.test.js` — the wiki flag block is prose only and wholly unenforced *(named as a residual by **both** the coder and the reviewer on 0125; the ADR-018 hook reads only stdin + `skills_for_role()` and **never opens a `SKILL.md`**, and every `SKILL.md` mention under `test/` is a **comment** — deleting the block would red **nothing**; asserts **five** things in all three wiki SKILLs — complete flag, partial flag, hard-rule bullet, the **R2 "unrelated → say nothing"** branch and the **R5 "do not spawn the producer"** clause — plus a **fail-closed** uniformity check; **closes 0125's SUBSUME'd R3 residual** (`plan.md` check 4 is fail-open); ADR-014 zero devDeps + a `prove-red.sh` mutation; **⚠️ third claimant on the `SKILL.md` walk** after 0136 (P114) and 0152 — exactly one walk; soft-follows 0153; owner: fkit-coder)* | [`0154-build-wiki-flag-convention-test`](../tasks/backlog/0154-build-wiki-flag-convention-test/brief.md) |
-| 🔲 Backlog | P130 | Pin the `team` / `team room` rejection with launcher-contract CLI tests *(**0139's standing residual, re-raise-triggered by 0140's close**; `rc=2` + **`claude` never exec'd** — the exit code alone would have passed while the real 0139 bug shipped; needs **no new harness**; adds a 3rd `prove-red.sh` mutation; independent; owner: fkit-coder)* | [`0144-pin-the-team-team-room-rejection-with-cli-contract-tests`](../tasks/backlog/0144-pin-the-team-team-room-rejection-with-cli-contract-tests/brief.md) |
-| 🔲 Backlog | P131 | Give the launcher-contract suite a pty, and pin the menu picks 1-7 *(**partly reverses a recorded acceptance** — `architecture.md:453` says the tty menu stays manual; needs **new pty infrastructure** — `runFkit` is detached by design and must not change; **two documented false-result traps**; portability is an owner decision if it bites; independent; owner: fkit-coder)* | [`0145-pty-driven-menu-pick-coverage-for-the-launcher`](../tasks/backlog/0145-pty-driven-menu-pick-coverage-for-the-launcher/brief.md) |
-| 🔲 Backlog | P132 | Correct the false "menu-pick alias" claim in 0139's accepted residual *(**a do-not-re-litigate residual describes behavior the code does not have** — it says `team`/`team room` still work as menu picks "exactly as before this task"; the menu arm is `1\|lead)` and the launcher's own comment agrees with the code, so the residual is the lone outlier; **owner ruled 2026-07-26: the text is wrong, the code is right — NO launcher change**; docs-only, `review.md` is the reviewer's ledger; feeds 0142; owner: fkit-reviewer)* | [`0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual`](../tasks/backlog/0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual/brief.md) |
-| 🔲 Backlog | P133 | Guard test for the `SKILL.md` H1 house style — no skill may use the owner banner as its title *(0120 follow-up; **skill-file content is an entirely untested surface** — **no test in the repo reads any `SKILL.md`'s content**; **25** files, not 26: before 0120, 24 descriptive + **1 sole outlier**, after it 25/25, so the guard is green day one with **nothing grandfathered**; ADR-014 zero devDeps ⇒ hand-rolled; **⚠️ must reuse 0136's (114) `SKILL.md` walk, never add a second**; **low severity** — the original defect was cosmetic and the ADR-018 hook keys off `skills_for_role()`, not banner text; the coder's refusal to fold this into 0120 was correct; owner: fkit-coder)* | [`0152-guard-test-for-skill-md-h1-house-style`](../tasks/backlog/0152-guard-test-for-skill-md-h1-house-style/brief.md) |
-| 🔲 Backlog | P134 | Record that 0118's block on 0117 was discharged by another route *(0118's brief `:84` still predicts "the amendment lands before 0117 runs" — **0117 shipped first** under an owner ruling with a staleness pointer standing in; architect ruled **record the discharge, do not delete the line** — a stale claim that already cost a three-day silent block is history worth keeping visible; edits a brief in `done/`; **must preserve the canonical `- **Blocks:**` form** or `dashboard.sh` reads UNPARSEABLE; owner: fkit-producer)* | [`0149-record-that-0118s-block-on-0117-was-discharged-by-another-route`](../tasks/backlog/0149-record-that-0118s-block-on-0117-was-discharged-by-another-route/brief.md) |
-| 🔲 Backlog | P135 | Backfill the missing `## Priority` field into the six briefs that lack it *(a **full sweep** found **6 of 154** briefs (≈4%) with the heading absent entirely — 0122–0126 and 0136, not just the two noticed incidentally; `fkit-sprint-ship-loop:81` orders eligible tasks by the **brief's `## Priority` field**, so a brief without it is **invisible to the driver's own ordering rule**, and two of the six are live sprint rows at **P109** and **P114**; **no mis-ordering is in flight** — the driver falls back to the board cell and the cell agrees — so this is a conformance fix on a live rule, not an outage; 6 one-line inserts, values already known; touches four `✅ Done` briefs deliberately, because they are live P105–P108 rows the 0156 guard would otherwise fire on; **0105's shape**; blocks 0156 — hard; owner: fkit-coder)* | [`0155-backfill-the-missing-priority-field-into-six-briefs`](../tasks/backlog/0155-backfill-the-missing-priority-field-into-six-briefs/brief.md) |
-| 🔲 Backlog | P136 | Make `## Priority` a required brief field — **nothing enforces it today** *(all three candidate sites checked 2026-07-27: `/fkit-task-brief`'s skeleton lists the field but its mandatory-field callouts name **only** `## Status` and `## Owner`; `dashboard.sh` has **no** `brief-missing-priority` kind — only `-id`, `-status`, `-owner` — and renders 0126/0136 with **zero** drift when run; **no test asserts presence**, `grep -rn "missing-priority" test/ claude/` returns nothing; **not an architect call** — the three-site pattern was walked end-to-end for `## Owner` by **0104 + 0105** this same sprint, so this is 0104's shape with no novel design; `Unscheduled` counts as **present** per the approved convention; ⚠️ existing raw test fixtures will trip it — use the `:62` default-injection precedent, **never a skip list**; brief-vs-board comparison **explicitly out of scope**; ADR-014 zero devDeps; **low severity** — ≈4% incidence, currently harmless, same class as 0152; needs 0155 — hard; owner: fkit-coder)* | [`0156-make-priority-a-required-brief-field-with-a-guard`](../tasks/backlog/0156-make-priority-a-required-brief-field-with-a-guard/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P125 | Implement ADR-032 A2's worklog audit obligation in the sprint-ship-loop *(**the amendment requires it; nothing implements it** — `fkit-sprint-ship-loop/SKILL.md:105` asks the Process-review worker only for "change surface + residuals" and `fkit-coder.md:73-82` imposes no worklog duty; **consequence: ADR-032 A4 bullet 2's reopening condition is unsatisfiable in practice** — the guard points at evidence nothing requires anyone to write; adds an **obligation, not a permission**; owner-ruled 2026-07-26; **land with 0150 (124) in ONE `fkit-coder` session — different clauses of the same file**; owner: fkit-coder)* | [`0147-implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop`](../tasks/done/0147-implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P126 | Add the missing **verbatim** to `fkit-coder.md`'s declared-approval marker, condition (b) *(0119 review **R1**, medium, raised **independently by both reviewers**; `fkit-coder.md:65-66` says the marker carries *"a concrete **approved plan**"* while ADR-032 **A1** `:97` and the driver `SKILL.md:109` both require it **verbatim** — a paraphrased plan satisfies the worker-side check, so the worker's **scope boundary** can silently become the driver's summary; **medium not high**: the driver's own verbatim rule must fail first, so this is a **missing second line of defence, not the primary control**; one-word prose fix on a **guarantee surface**, owner-ruled 2026-07-26 to be tracked rather than slipped in; **promoted 128 → 124 by owner ruling 2026-07-26, now adjacent to 0147 (123) — land the two in ONE `fkit-coder` session**; owner: fkit-coder)* | [`0150-add-verbatim-to-fkit-coder-declared-approval-marker`](../tasks/done/0150-add-verbatim-to-fkit-coder-declared-approval-marker/brief.md) |
+| 🔲 Backlog | P127 | Decide the construction that satisfies the sprint-loop's verbatim-carry requirement — **an investigation, no implementation** *(**⚠️ ranked here by OWNER RULING 2026-07-29, not appended — see the placement note directly below the table**; `claude/skills/fkit-sprint-ship-loop/SKILL.md:109` states the Build and Process-review spawn prompts *"MUST each carry the approved plan verbatim"* and gives **no construction for satisfying it**; the driver violated it **twice in consecutive rounds** of the run that shipped 0147/0150 — round 1 carried the plan **by reference** (*"the plan text you returned in your previous message"*), round 2 pasted it but **silently truncated ~10 passages — one of them an actual instruction — while asserting *"everything else is byte-for-byte"***; **both caught by the worker, never by any check**; **⚠️ those two failures are the driver's self-report of its own conduct and are NOT verifiable from disk** — no transcript is stored — the checkable third data point is `0147`'s worklog **§13**; **⚠️ worker-side detection is impossible**: `claude/agents/fkit-coder.md:93-100` + [ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md) leave the worker nothing to compare a paste against, so this is **driver-side discipline by construction** and any proposal claiming worker-side detection is wrong on its face; **do not presuppose literal pasting is the fix** — carry-by-reference to a `plan.md` on disk may be the right answer, **that is the question, not the answer**; may reopen condition **(b)**, the word `0150` just landed, so reconciliation with 0163's clause must be **one** follow-up, not two; **report-only — files no briefs, names its follow-ups**; owner judged **fkit-architect** on the `0160` precedent — it decides, it does not edit, and the eventual `SKILL.md` wording is fkit-coder's follow-up; owner: fkit-architect)* | [`0162-decide-the-construction-that-satisfies-the-verbatim-carry-requirement`](../tasks/backlog/0162-decide-the-construction-that-satisfies-the-verbatim-carry-requirement/brief.md) |
+| 🔲 Backlog | P128 | Build `test/wiki-flag-convention.test.js` — the wiki flag block is prose only and wholly unenforced *(named as a residual by **both** the coder and the reviewer on 0125; the ADR-018 hook reads only stdin + `skills_for_role()` and **never opens a `SKILL.md`**, and every `SKILL.md` mention under `test/` is a **comment** — deleting the block would red **nothing**; asserts **five** things in all three wiki SKILLs — complete flag, partial flag, hard-rule bullet, the **R2 "unrelated → say nothing"** branch and the **R5 "do not spawn the producer"** clause — plus a **fail-closed** uniformity check; **closes 0125's SUBSUME'd R3 residual** (`plan.md` check 4 is fail-open); ADR-014 zero devDeps + a `prove-red.sh` mutation; **⚠️ third claimant on the `SKILL.md` walk** after 0136 (P114) and 0152 — exactly one walk; soft-follows 0153; owner: fkit-coder)* | [`0154-build-wiki-flag-convention-test`](../tasks/backlog/0154-build-wiki-flag-convention-test/brief.md) |
+| 🔲 Backlog | P129 | Decide where a real check on the wiki completion flag's **emitted form** can live *(**investigation + ruling, fix shape unknown** — not implementation; tasks 0125/0153 landed a **prescribed, verbatim** flag line, present and identical today in all three wiki SKILLs (`fkit-wiki-ingest/SKILL.md:72`, `fkit-wiki-sync/SKILL.md:116`, `fkit-wiki-lint/SKILL.md:81`) — **and it failed on its second live use**: `ai-agents/wiki-vault/log.md:623` records `0141`'s run emitting *"task 0141 ready to close…"*, **not the prescribed line**, with **all the required facts present** — the failure was **the form, not the content**; **⚠️ the plan-side account is NOT verifiable from disk** — neither `0126` nor `0141` left a `plan.md`, so *"the plan specified the non-conforming act"* and *"`0126` conformed only by luck of drafting"* are **testimony**, same honesty flag `0162` carries; **the decisive evidence is the consumer's own testimony** — a spawned `fkit-producer` asked whether it would have caught the deviation answered **"No. I would have acted on it without noticing"**, because it never opens the wiki SKILL during a close and matches on **the facts it needs, not string shape**, concluding *"on this run 'carried verbatim' was decorative, not a control"* and *"the party that caught the deviation is the party that specified it — self-correction, not independent verification"*; **⚠️ distinct from `0154` (P128), judged and not merged** — `0154` asserts the five strings are **in the three files**, and they were, so **`0154` would have been green for the entire duration of this failure**: it guards the **source**, nothing guards the **emission**; **distinct from `0158` (P122)** too — that asks *which wins*, this asks *whether a deviation is detected at all*; must rule **four candidate sites in or out by name** — consumer-side, a test, the plan gate, or **no mechanical check** (a legitimate outcome, to be argued not defaulted to); must say **what "verbatim" means modulo the `<NNNN>`/`<slug>` slots**, and whether the obligation sits on the right party (the SKILL states it on the **caller who summarizes**, the failure was in the **emitter**); **report-only — files no briefs, names its follow-ups**; **appended under `/fkit-task-brief` step 5, flagged for owner confirmation**; independent; owner: fkit-architect)* | [`0165-decide-where-a-check-on-the-wiki-flags-emitted-form-can-live`](../tasks/backlog/0165-decide-where-a-check-on-the-wiki-flags-emitted-form-can-live/brief.md) |
+| 🔲 Backlog | P130 | State `/fkit-task-brief` step 5's append rule in full — the owner-ruled exception, the merit-flag obligation, the closed-row carve-out *(two spawned producers placed briefs **oppositely** on 2026-07-27 and the owner accepted **both**; step 5 read firsthand is **not ambiguous** on the default — it says append and forbids inserting, reinforced twice more in the same file — but it is **silent on the sanctioned exception**, so the two owner-ruled re-ranks the board records look like producer precedent, which is exactly how one was misread; also codifies the two things both producers reached independently and no file states — **never renumber `✅ Done`/`⛔ Cancelled` rows**, and **say where merit would have put it**; **also adds the *cite the folder ID, not the board rank* clause** — in the SKILL file, **not** the dual-homed convention page; **prose only, one file, unenforced** — no test reads any `SKILL.md` today and **adding a guard is out of scope** (0154's third-claimant warning); **narrowed 2026-07-27 by owner ruling — the stale-citation sweep and the 0149 correction split out to 0159** (`fkit-producer` artifacts; a brief has one `## Owner`), **rank unchanged at P127, owner-confirmed**; the spawn-instruction half is deliberately excluded → 0158; independent of 0159, soft-prefer landing first; owner: fkit-coder)* | [`0157-state-task-brief-step-5s-append-rule-in-full`](../tasks/backlog/0157-state-task-brief-step-5s-append-rule-in-full/brief.md) |
+| 🔲 Backlog | P131 | Disambiguate the frozen-history clause in `priority-is-rank-not-identity.md` *(**0159's flagged-not-filed item, owner approved filing 2026-07-27**; the page **shipped this morning** as 0103 and **already required an owner ruling to read** — its `## What NOT to rewrite` second bullet calls `priority (folderID)` notations *"frozen history … never mass-edited"* and **never says which form**: board-cell `124 (0150)` or prose `0150 (124)`, **one character apart**; the owner ruled **board-cell only**, which unblocked 0159 — this task just makes `:38` say so in its own words, **nothing is being decided**; **two hard constraints, both already on the page**: it is **dual-homed** and must stay byte-identical with the `claude/scaffold/` copy — verified identical today, **0133's parity test is NOT landed yet so check by hand** — and it must use **bare citations, never relative links** into the ⛔ never-sync `decisions/`/`reports/`, a constraint the page itself states — **do not let an implementer "helpfully" add links**; **must not contradict 0159's recorded Ruling 2**; no change-surface conflict with 0159; cheapest item on the board — **merit says immediately below 0157**; owner: fkit-coder)* | [`0161-disambiguate-the-frozen-history-clause-in-priority-is-rank-not-identity`](../tasks/backlog/0161-disambiguate-the-frozen-history-clause-in-priority-is-rank-not-identity/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P132 | Wiki re-ingest the amended ADR-032 and clear its now-wrong `⚠️ STALE` banner *(**merged from two candidates — one page, one edit**; vault `grep -c "Amendment — 2026-07-22"` was **0** at filing and is **2** measured at close 2026-07-29; the page's banner said the amendment "was never written" and "0118 … still 🔲 Backlog" — **false on both counts** since 0118 closed, and **the banner had already been replaced on 2026-07-26** by the sync entry at `wiki-vault/log.md:416`, before this task ran; the banner was 0117's authorized stand-in and has outlived it; no overlap with 0126 (ADR-033) or 0141 (lead rename); owner: fkit-wiki)* | [`0148-wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner`](../tasks/done/0148-wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner/brief.md) |
+| 🔲 Backlog | P133 | Pin the `team` / `team room` rejection with launcher-contract CLI tests *(**0139's standing residual, re-raise-triggered by 0140's close**; `rc=2` + **`claude` never exec'd** — the exit code alone would have passed while the real 0139 bug shipped; needs **no new harness**; adds a 3rd `prove-red.sh` mutation; independent; owner: fkit-coder)* | [`0144-pin-the-team-team-room-rejection-with-cli-contract-tests`](../tasks/backlog/0144-pin-the-team-team-room-rejection-with-cli-contract-tests/brief.md) |
+| 🔲 Backlog | P134 | Give the launcher-contract suite a pty, and pin the menu picks 1-7 *(**partly reverses a recorded acceptance** — `architecture.md:453` says the tty menu stays manual; needs **new pty infrastructure** — `runFkit` is detached by design and must not change; **two documented false-result traps**; portability is an owner decision if it bites; independent; owner: fkit-coder)* | [`0145-pty-driven-menu-pick-coverage-for-the-launcher`](../tasks/backlog/0145-pty-driven-menu-pick-coverage-for-the-launcher/brief.md) |
+| 🔲 Backlog | P135 | Correct the false "menu-pick alias" claim in 0139's accepted residual *(**a do-not-re-litigate residual describes behavior the code does not have** — it says `team`/`team room` still work as menu picks "exactly as before this task"; the menu arm is `1\|lead)` and the launcher's own comment agrees with the code, so the residual is the lone outlier; **owner ruled 2026-07-26: the text is wrong, the code is right — NO launcher change**; docs-only, `review.md` is the reviewer's ledger; feeds 0142; owner: fkit-reviewer)* | [`0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual`](../tasks/backlog/0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual/brief.md) |
+| 🔲 Backlog | P136 | Guard test for the `SKILL.md` H1 house style — no skill may use the owner banner as its title *(0120 follow-up; **skill-file content is an entirely untested surface** — **no test in the repo reads any `SKILL.md`'s content**; **25** files, not 26: before 0120, 24 descriptive + **1 sole outlier**, after it 25/25, so the guard is green day one with **nothing grandfathered**; ADR-014 zero devDeps ⇒ hand-rolled; **⚠️ must reuse 0136's (114) `SKILL.md` walk, never add a second**; **low severity** — the original defect was cosmetic and the ADR-018 hook keys off `skills_for_role()`, not banner text; the coder's refusal to fold this into 0120 was correct; owner: fkit-coder)* | [`0152-guard-test-for-skill-md-h1-house-style`](../tasks/backlog/0152-guard-test-for-skill-md-h1-house-style/brief.md) |
+| 🔲 Backlog | P137 | Record that 0118's block on 0117 was discharged by another route *(0118's brief `:84` still predicts "the amendment lands before 0117 runs" — **0117 shipped first** under an owner ruling with a staleness pointer standing in; architect ruled **record the discharge, do not delete the line** — a stale claim that already cost a three-day silent block is history worth keeping visible; edits a brief in `done/`; **must preserve the canonical `- **Blocks:**` form** or `dashboard.sh` reads UNPARSEABLE; owner: fkit-producer)* | [`0149-record-that-0118s-block-on-0117-was-discharged-by-another-route`](../tasks/backlog/0149-record-that-0118s-block-on-0117-was-discharged-by-another-route/brief.md) |
+| 🔲 Backlog | P138 | Backfill the missing `## Priority` field into the six briefs that lack it *(a **full sweep** found **6 of 154** briefs (≈4%) with the heading absent entirely — 0122–0126 and 0136, not just the two noticed incidentally; `fkit-sprint-ship-loop:81` orders eligible tasks by the **brief's `## Priority` field**, so a brief without it is **invisible to the driver's own ordering rule**, and two of the six are live sprint rows at **P109** and **P114**; **no mis-ordering is in flight** — the driver falls back to the board cell and the cell agrees — so this is a conformance fix on a live rule, not an outage; 6 one-line inserts, values already known; touches four `✅ Done` briefs deliberately, because they are live P105–P108 rows the 0156 guard would otherwise fire on; **0105's shape**; blocks 0156 — hard; owner: fkit-coder)* | [`0155-backfill-the-missing-priority-field-into-six-briefs`](../tasks/backlog/0155-backfill-the-missing-priority-field-into-six-briefs/brief.md) |
+| 🔲 Backlog | P139 | Make `## Priority` a required brief field — **nothing enforces it today** *(all three candidate sites checked 2026-07-27: `/fkit-task-brief`'s skeleton lists the field but its mandatory-field callouts name **only** `## Status` and `## Owner`; `dashboard.sh` has **no** `brief-missing-priority` kind — only `-id`, `-status`, `-owner` — and renders 0126/0136 with **zero** drift when run; **no test asserts presence**, `grep -rn "missing-priority" test/ claude/` returns nothing; **not an architect call** — the three-site pattern was walked end-to-end for `## Owner` by **0104 + 0105** this same sprint, so this is 0104's shape with no novel design; `Unscheduled` counts as **present** per the approved convention; ⚠️ existing raw test fixtures will trip it — use the `:62` default-injection precedent, **never a skip list**; brief-vs-board comparison **explicitly out of scope**; ADR-014 zero devDeps; **low severity** — ≈4% incidence, currently harmless, same class as 0152; needs 0155 — hard; owner: fkit-coder)* | [`0156-make-priority-a-required-brief-field-with-a-guard`](../tasks/backlog/0156-make-priority-a-required-brief-field-with-a-guard/brief.md) |
+| 🔲 Backlog | P140 | Sweep the stale board-rank citations out of the briefs and the sprint board, and correct 0149's *"it stays last"* claim *(**the producer half of the 0157 split, owner-ruled 2026-07-27**; 0157 keeps the rule, this takes the repair — a brief has one `## Owner` and the sweep edits **task briefs + the sprint plan**, which are producer artifacts; owner ruled the convention's frozen-history clause covers the **board-cell** form `124 (0150)` only, **not** the prose form `0150 (124)`, so the sweep proceeds; verified firsthand 2026-07-27: **21 stale rank numbers, 19 sites, 11 files** — including **two nobody had found**, `0158`'s append flag (says 136, field is **122**, and still reads **unresolved** though the owner ruled it) and the `0151` board row; the *"it stays last"* claim is at **three** board sites (`:417`, `:466`, `:597`), not one, and **`:417`'s addendum is dated 2026-07-27, not 2026-07-26** as previously stated; **dated corrections appended, never rewrites**; **⚠️ this brief decays — re-verify every rank at implementation time, and run it late**; no rank changes, no file moves; independent of 0157, soft-prefer 0157 first; owner: fkit-producer)* | [`0159-sweep-the-stale-rank-citations-and-correct-0149s-stays-last-claim`](../tasks/backlog/0159-sweep-the-stale-rank-citations-and-correct-0149s-stays-last-claim/brief.md) |
+| 🔲 Backlog | P141 | Decide the durable citation form for mutable coordinates — **an investigation, no implementation** *(the **class** behind 0157/0159, scoped as a class on owner approval 2026-07-27; three artifact classes cite coordinates that move and **may not want the same answer**: **case 1** board ranks in prose — **already 0157 + 0159, hard out of scope**; **case 2** `:NNN` line numbers — one appended row shifted `sprint-2.md` **+70 lines** and silently broke **11** pointers in one edit, repaired by hand, nothing flagged them; **case 3** `tasks/backlog/…` paths in review ledgers that die on close — **30 closed tasks carry one**, not 3, and **"just repair it" is NOT obviously right**: it means editing a document the ledger rule freezes by design; **⚠️ must reconcile `fkit-architect.md`'s `## Output format`, which actively mandates `path:line`**; enforcement checked firsthand — `dashboard.sh`'s `drift relocated` is the **only** existing stale-path catcher and covers **board rows only**, `test/` reads no citations, **no lint exists**, so a guard is only **partly** possible even in principle; same unenforced-prose class as 0154/0157; ADR-014 zero devDeps; **report-only — files no briefs, names its follow-ups**; owner: fkit-architect)* | [`0160-decide-the-durable-citation-form-for-mutable-coordinates`](../tasks/backlog/0160-decide-the-durable-citation-form-for-mutable-coordinates/brief.md) |
+| 🔲 Backlog | P142 | Name the defective-marker refusal case in `fkit-coder.md` *(found by a spawned `fkit-producer` at `0150`'s close, testing the clause `0150` had just landed against the two failures it was exercised on — verdict **"inferable, yes; stated, no"**; condition **(b)** now requires `verbatim` and the marker is framed as **all** of (a)(b)(c) granting the write permission *"only under"* it, so a worker **reasoning from the conjunction** refuses a by-reference carry — but the refusal clause at `claude/agents/fkit-coder.md:98-100` enumerates **exactly two** cases, *"any other spawned 'implement this'"* and *"this loop's own **plan-only** spawn"*, and **neither of them is "a genuine sprint-loop spawn whose marker is defective"** — the named failure is *no* approved plan, not a plan carried by reference, so a worker pattern-matching on the examples rather than the *"all of"* can conclude a real driver's defective carry is still inside the carve-out; **there is no clause anywhere of the form "if the plan is not carried verbatim, refuse / return `NEEDS-DECISION` and ask the driver to re-send it"** — verified 2026-07-29 across both files, and this is **the gap that let both driver defects through**; **⚠️ edits the same guarantee surface `0150` just closed** — read `0150`'s [review ledger](../tasks/done/0150-add-verbatim-to-fkit-coder-declared-approval-marker/review.md) accepted-residuals section first and leave condition (b) **byte-identical**; **key the clause on the marker's conditions, not on a restated test**, so a later (b) change cannot silently diverge; unenforced prose — **no test in `test/` reads `fkit-coder.md` content** (`0147`'s C8c/C8d guards were never landed), **do not add a guard**, 0152/0154 own that walk; soft-coupled to 0162 in one direction only and **does not wait for it**; recommend co-landing with 0164 — same untested file, non-overlapping regions; owner: fkit-coder)* | [`0163-name-the-defective-marker-refusal-case-in-fkit-coder`](../tasks/backlog/0163-name-the-defective-marker-refusal-case-in-fkit-coder/brief.md) |
+| 🔲 Backlog | P143 | Close the build-phase logging hole — or state on the record why build choices need no log *(**⚠️ this is NOT a defect in `0147` as delivered** — both its briefs were scoped to **ADR-032 A2** and the **Process-review** worker, ADR-032`:129-133` named exactly those two sites as the outstanding gap, and `0147` closed both in full; this is a newly surfaced **adjacent** hole and must not be reported or reviewed as a miss; `claude/agents/fkit-coder.md:71-72`'s **Build**-worker bullet imposes **no logging duty of any kind**, and `claude/skills/fkit-sprint-ship-loop/SKILL.md:102`'s Build row asks only for *"write source + `plan.md`/`worklog.md`; return change surface + any decision surfaced"* — **no per-decision content requirement**, unlike the Process-review row at `:105` which spells all three out; **consequence: A4 bullet 2's reopening condition has no evidence base for build-phase choices**, since it turns on *"A2's worklog record is what makes that checkable"* — **whether A4 bullet 2 reaches build-phase choices at all is itself part of what this task settles**, its own words say *post-review*; **live proof on disk**: `0147`'s worklog **§13** records three out-of-plan verification-harness additions (`C8c`, `C8d`, `NC4`) made **during build** and logged **nowhere**, caught only because the author **voluntarily applied an obligation that did not cover them** — *"the obligation's own author breached it within one round of writing it"*; **two acceptable outcomes** — extend the duty (2 files, reuse `0147`'s wording, scope the trigger to plan-undetermined choices) **or** write down why none is needed, **addressing §13 by name**; unenforced prose, **no guard** (0152/0154); **recommend co-landing with 0163**; owner: fkit-coder)* | [`0164-close-the-build-phase-logging-hole-in-the-sprint-loop`](../tasks/backlog/0164-close-the-build-phase-logging-hole-in-the-sprint-loop/brief.md) |
+| 🔲 Backlog | P144 | Decide the enforcement point for *"run every command you print"* — the rule already exists and did not bind *(**investigation + ruling, fix shape unknown** — not implementation; a reviewer named **three same-class defects in `0141`'s record and three in `0126`'s — six across two tasks, all in `ai-agents/wiki-vault/log.md`**, while the vault **content** passed every review with **zero** findings: **an unrun command** (both printed `grep -rn "not a doer" ai-agents/knowledge-base/` as returning *nothing*; it returns **9** — claim at `log.md:547`, correction at `:646`, **re-verified 9 hits 2026-07-29** — a one-file result generalized to a whole-directory claim, broadened form never re-run), **shifted citations** (`adr-022:44`→`:45`, stale **by the act of writing the entry that cited it**, plus `0126`'s `:314`), and **claims wider than their measurement** (*"vault-wide"* over 166 content pages + `index.md` with `log.md` itself unchecked, plus `0126`'s *"staged"*); **the same class reached the owner** — the driver relayed the unrun-command finding as a headline result **without running it**, recorded at `log.md:657`, whose blast radius is *"a reader who runs the printed command gets 9 hits and has direct evidence to discount a genuinely valuable method finding"*; **⚠️ the load-bearing finding: this is NOT a missing rule** — `conventions/evidence-before-assertion.md` already says *"a claim about repository state requires a check, in the same turn"* and *"applies to every role"*, so question 1 is **why an existing, on-point, already-linked rule failed to bind**, and an answer that adds more prose to a page that already has the right prose has not answered it; **`0013` (Backlog board) already owns worked examples on that page** and already records this counter-argument **and** a length risk at three examples — **a fourth example is likely the wrong deliverable, do not collide**; **nothing machine-checks any of this today** and **all six were caught by an independent reviewer, never the author**, and only because these tasks were reviewed at all — so the ruling must also say whether the honest control is **review coverage**; a genuine mechanical option exists that `0013`'s example 2 lacked — these are **printed shell commands with stated results**, extractable and re-runnable — feasibility/side-effects/false-positives are the architect's call; must adjudicate **the relay instance by name** (author vs relayer); **must re-run the grep rather than copy "9 hits" from the brief** — copying it would reproduce the defect inside the ruling; **report-only — files no briefs, names its follow-ups**; **appended under `/fkit-task-brief` step 5, flagged for owner confirmation**; independent; owner: fkit-architect)* | [`0166-decide-the-enforcement-point-for-run-every-command-you-print`](../tasks/backlog/0166-decide-the-enforcement-point-for-run-every-command-you-print/brief.md) |
+
+### Promoted by OWNER RULING 2026-07-29 — 0165 raised from P143 to P129
+
+**Authority, stated first and in full — before any outcome.** This promotion was **ruled by the owner**,
+on **2026-07-29**, via **`AskUserQuestion` in the live `/fkit-sprint-ship-loop` driver session**. It was
+executed by a spawned `fkit-producer` **on that instruction**. The producer had **no owner channel** and
+contributed **no merit judgment of its own** about whether 0165 deserved raising. **This is not producer
+precedent for re-ranking.**
+
+The authority goes before the outcome for a reason this board has already paid for: an earlier addendum
+recorded a placement's *outcome* more visibly than its *authority*, and that omission was later read as
+licence to re-rank unbidden — the failure that produced tasks **0157** and **0158**.
+`/fkit-task-brief` step 5's *"do not renumber or insert into the owner's ranking"* protects **the
+owner's** ranking from an agent acting alone; **it is not a bar on the owner re-ranking their own
+board.** This is the owner doing exactly that.
+
+**What was ruled, and the owner's reasoning in the owner's own terms.** Move **0165**
+(`decide-where-a-check-on-the-wiki-flags-emitted-form-can-live`) from its appended rank to sit
+**immediately below 0154**, adjacent to the `0162`/`0154` pair at the top of the open region. The
+reasoning: of the three tasks on this surface, **0165 is the only one that addresses the emission rather
+than the source text — and therefore the only one that would have caught the `0141` flag failure.** A
+previous producer established, checkable on disk, that **`0154` would have been green throughout that
+failure**, because the required strings were present in all three wiki `SKILL.md` files the whole time
+(`fkit-wiki-ingest/SKILL.md:72`, `fkit-wiki-sync/SKILL.md:116`, `fkit-wiki-lint/SKILL.md:81`), while the
+deviation on disk at `ai-agents/wiki-vault/log.md:623` was in the **emitted** form. Leaving 0165 fifteen
+slots below two tasks that would not have caught the defect **inverts their actual value**.
+
+**0162 stays at P127 and 0154 stays at P128 — neither was touched.** The owner **confirmed the previous
+producer's refusal** to infer *"lower 0162"* from *"raise 0154"*; that judgment was correct and is
+upheld here. **0166 stays where it was appended, at P144** — no change was ruled, and none was made. Its
+own append-confirmation flag **stands, undischarged**.
+
+**No `✅ Done`, `⛔ Cancelled` or `➡️ Moved` row was renumbered.** Verified after the edit: the whole
+affected region **P129–P143 is contiguous `🔲 Backlog`**; the closed rows at P125/P126 sit above it and
+were not reached. The two owner-ruled ranks above the region (P127, P128) were not reached either.
+
+| Task | Was | Now | Why |
+|---|---|---|---|
+| **0162** | 127 | **127** | **Untouched.** Owner-ruled placement of 2026-07-29 preserved, and the refusal to lower it explicitly upheld by the owner. |
+| **0154** | 128 | **128** | **Untouched.** Owner-ruled promotion of 2026-07-29 preserved. |
+| **0165** — decide where a check on the wiki flag's **emitted form** can live | 143 | **129** | **Owner-ruled promotion, 2026-07-29.** The only one of the three that guards the emission, and so the only one that would have caught the `0141` failure. See the reasoning above. |
+| **0157** | 129 | **130** | Displaced one place. **Nothing re-judged.** |
+| **0161** | 130 | **131** | Displaced one place. Not re-judged; **still immediately below 0157**. |
+| **0148** | 131 | **132** | Displaced one place. Not re-judged. Still **after 0147**. ⚠️ **Only its `## Priority` field was edited** — a concurrent wiki worker was active, so nothing else in that task folder was touched. |
+| **0144** | 132 | **133** | Displaced one place. Not re-judged. |
+| **0145** | 133 | **134** | Displaced one place. Not re-judged; **still after 0144**. |
+| **0146** | 134 | **135** | Displaced one place. Not re-judged. |
+| **0152** | 135 | **136** | Displaced one place. Not re-judged. |
+| **0149** | 136 | **137** | Displaced one place. Not re-judged. |
+| **0155** | 137 | **138** | Displaced one place. Not re-judged. |
+| **0156** | 138 | **139** | Displaced one place. Not re-judged; **still adjacent to 0155**. |
+| **0159** | 139 | **140** | Displaced one place. Not re-judged. |
+| **0160** | 140 | **141** | Displaced one place. Not re-judged. |
+| **0163** | 141 | **142** | Displaced one place. Not re-judged. |
+| **0164** | 142 | **143** | Displaced one place. Not re-judged; **still adjacent to 0163**. |
+| **0166** | 144 | **144** | **Untouched.** Ruled to stay where it was appended. |
+
+**Existing rows moved, and why: fourteen, all pure displacement, none re-judged** — each +1. **Every
+relative order among the displaced tasks is preserved.** The protected orderings were checked by name
+after the edit: 0163/0164 adjacent ✅, 0148 after 0147 ✅, 0144 before 0145 ✅, 0155/0156 adjacent ✅,
+0161 immediately below 0157 ✅.
+
+**Each moved brief's own `## Priority` field was updated to match** — fifteen briefs (0165 plus the
+fourteen displaced), board rank and brief field verified to agree 1:1. Board cells render `P<n>`; the
+brief field stays a plain number, per `conventions/priority-is-rank-not-identity.md`. **No row's status,
+description, href or link label was touched** — only rank cells moved, plus the one row reordered.
+
+⚠️ **Line-number citations elsewhere in the repo may now be stale, and were deliberately NOT repaired.**
+This edit reordered the region and grew `sprint-2.md` by the length of this addendum, so any
+`sprint-2.md:NNN` pointer aimed at or below the board may now name the wrong line. Per the owner's
+standing rulings, **`0159` re-verifies its own citations at implementation time and `0160` decides the
+durable fix** — this pass measured and reported the impact rather than repairing it.
+
+### Promoted by OWNER RULING 2026-07-29 — 0154 raised from P131 to P128
+
+**Authority, stated first and in full — before any outcome.** This promotion was **ruled by the owner**,
+on **2026-07-29**, via **`AskUserQuestion` in the live `/fkit-sprint-ship-loop` driver session**. It was
+executed by a spawned `fkit-producer` **on that instruction**. The producer had **no owner channel** and
+contributed **no merit judgment of its own** about whether 0154 deserved raising. **This is not producer
+precedent for re-ranking.**
+
+The authority is stated before the outcome deliberately, and for a reason this board has already paid
+for once: an earlier addendum here recorded a placement's *outcome* far more visibly than its
+*authority*, and that omission was later read as licence to re-rank without one — the failure that
+produced tasks **0157** and **0158**. `/fkit-task-brief` step 5's *"do not renumber or insert into the
+owner's ranking"* protects **the owner's** ranking from an agent acting alone; it is not a bar on the
+owner ranking their own board. **A re-rank is the owner's call.** This is that call.
+
+**What was ruled, and the merit stated.** Raise **0154** (`build-wiki-flag-convention-test`) to a rank
+reflecting that **this run has now produced direct evidence for it**. The evidence is the consumer's own
+testimony: a spawned `fkit-producer`, asked at `0141`'s close whether it would have caught the
+non-conforming wiki flag, answered **"No. I would have acted on it without noticing"**, and concluded
+***"on this run 'carried verbatim' was decorative, not a control"***. **0154 is the only filed work that
+can make the flag form a real control.** The deviation itself is on disk at
+`ai-agents/wiki-vault/log.md:623`.
+
+**⚠️ Placed at P128, immediately BELOW 0162 — not at P127. Read why before treating this as a ceiling.**
+Three constraints bounded the placement, and the producer applied all three rather than resolving any of
+them on its own judgment:
+
+1. **`✅ Done`, `⛔ Cancelled` and `➡️ Moved` rows are never renumbered**, not even under an owner ruling.
+   **P126 is `✅ Done`** (0150) and **P125 is `✅ Done`** (0147), so the top of the contiguous open region
+   is **P127** — the same wall 0162's placement hit hours earlier, and the same one this placement
+   respects.
+2. **P127 is an owner-ruled placement made today** (0162). Promoting 0154 *into* P127 would have pushed
+   an owner-ruled rank down **on producer judgment**. The owner ruled that 0154 be raised; the owner did
+   **not** rule that 0162 be lowered. **The producer declined to infer the second from the first.**
+3. The two tasks are the **same class** — a *"carry this verbatim"* requirement with no construction and
+   no check behind it, 0162 for the driver→worker plan, 0154 for the worker→caller flag. **P128 puts
+   them adjacent**, which is the outcome the merit argument actually supports.
+
+**Open for the owner: if the intent was 0154 at the top of the open region, that means P127 and 0162
+moves to P128.** Say so and it will be done. **It was not assumed.**
+
+**No `✅ Done`, `⛔ Cancelled` or `➡️ Moved` row was renumbered.** Verified after the edit: the whole
+affected region (P127–P131) is `🔲 Backlog`, and the closed rows sit above it and were not reached.
+
+| Task | Was | Now | Why |
+|---|---|---|---|
+| **0162** | 127 | **127** | **Untouched.** Owner-ruled placement of 2026-07-29 preserved — see constraint 2 above. |
+| **0154** — build `test/wiki-flag-convention.test.js` | 131 | **128** | **Owner-ruled promotion, 2026-07-29.** Merit: the consumer that would have to enforce the flag form has stated on the record that it cannot. See the authority note above. |
+| **0157** | 128 | **129** | Displaced one place. **Nothing re-judged.** |
+| **0161** | 129 | **130** | Displaced one place. Not re-judged; **still immediately below 0157**, the protected ordering from the 2026-07-27 fourth re-rank. |
+| **0148** | 130 | **131** | Displaced one place. Not re-judged. Still **after 0147** — one wiki pass over the ADR-032 page, not two. ⚠️ **Only its `## Priority` field was edited**; a concurrent worker was reading that task folder, so nothing else in its brief was touched. |
+
+**Existing rows moved, and why: three, all pure displacement, none re-judged** — each +1. **Every
+relative order among the displaced tasks is preserved.** The orderings this board protects were checked
+by name after the edit: 0161 immediately below 0157 ✅, 0148 after 0147 ✅, 0144 before 0145 ✅, 0155
+before 0156 ✅, 0163 adjacent to 0164 ✅.
+
+**Each moved brief's own `## Priority` field was updated to match** — four briefs (0154, 0157, 0161,
+0148), board rank and brief field verified to agree 1:1. Board cells render the rank token `P<n>`; the
+brief field stays a plain number, per `conventions/priority-is-rank-not-identity.md`. **No row's status,
+description, href or link label was touched** — only rank cells moved, plus the one row reordered.
+
+⚠️ **0154's brief carries a stale self-description in its own `## Notes`** — a *"Ranking note"* that says
+*"Placed at **127** … The ranking is producer judgment, not an owner ruling."* That was true when
+written on 2026-07-27 and is now wrong twice over: the rank is **128**, and the current rank **is** an
+owner ruling. **A dated correction has been appended to that brief rather than rewriting the original
+line**, per this board's standing practice. The stale *number* is also in `0159`'s sweep territory.
+
+### Addendum — tasks 0165 and 0166 added out of band (2026-07-29)
+
+**Both appended under `/fkit-task-brief` step 5 as written — no placement instruction was given, and
+none was invented.** They sit at **P143** and **P144**, after the existing highest priority. **Flagged
+for owner confirmation.** Merit, stated so the owner can rank them if they choose:
+
+- **0165** — decide where a real check on the wiki flag's **emitted form** can live. **Merit: the same
+  class as 0162 (P127) and 0154 (P128)** — a *"verbatim"* requirement with no control behind it — and
+  it is the **only** one of the three that addresses the emission rather than the source text. On merit
+  it belongs beside them. **It was appended anyway**, because ranking it there is a placement judgment
+  the producer was not authorised to make. **The merit/append gap is roughly fifteen slots.**
+- **0166** — decide the enforcement point for *"run every command you print"*. **Merit: lower.** The
+  rule it concerns **already exists and is already linked** (`conventions/evidence-before-assertion.md`),
+  the defective claims were all in **records** rather than in shipped work, and every instance was caught
+  by review. **Append rank is close to merit rank here.**
+
+**Judgment recorded, because it was asked for and could have gone the other way: 0165 was judged
+DISTINCT from 0154 and filed separately, rather than merged into it.** The deciding argument is
+checkable and is on disk: **0154 asserts the five required strings are present in the three wiki
+`SKILL.md` files — and they were present throughout the `0141` failure** (verified 2026-07-29 at
+`fkit-wiki-ingest/SKILL.md:72`, `fkit-wiki-sync/SKILL.md:116`, `fkit-wiki-lint/SKILL.md:81`). **0154
+would have been green for the entire duration.** Guarding the source text and detecting a non-conforming
+emission are different surfaces needing different controls. 0165 is likewise **not** a duplicate of 0158
+(P122): that rules on *which authority wins*, this on *whether a deviation is detected at all*.
+
+⚠️ **One claim behind 0165 is NOT verifiable from disk and is recorded as testimony, not fact.** That
+`0141`'s plan specified the non-conforming terminal act, that the driver approved it without checking it
+against the live SKILL, and that `0126` conformed only because its plan quoted the SKILL correctly, all
+come from the live driver session. **Neither `ai-agents/tasks/done/0141-…/` nor `…/0126-…/` contains a
+`plan.md`** — checked 2026-07-29. This is the same honesty flag 0162's row carries about the driver's
+self-reported verbatim failures. **What is on disk is `log.md:623` — the deviation itself.**
+
+### Placed by OWNER RULING 2026-07-29 — 0162 filed directly at P127, not appended
+
+**Authority, stated first and in full — before any outcome.** This placement was **ruled by the owner**,
+on **2026-07-29**, via **`AskUserQuestion` in the live `/fkit-sprint-ship-loop` driver session**. It was
+executed by a spawned `fkit-producer` **on that instruction**. The producer had **no owner channel** and
+contributed **no placement judgment of its own**. **This is not producer precedent for re-ranking at
+filing time.**
+
+The authority is stated before the outcome deliberately, for the reason the third and fourth re-ranks
+both gave: an earlier addendum on this board recorded a placement's *outcome* far more visibly than its
+*authority*, and that omission was later read as licence to re-rank without one — the failure that
+produced tasks **0157** and **0158**. `/fkit-task-brief` step 5's *"do not renumber or insert into the
+owner's ranking"* protects **the owner's** ranking from an agent acting alone; it is not a bar on the
+owner ranking their own board. **A re-rank is the owner's call.** This is that call.
+
+**What was ruled.** The owner approved filing all three briefs below, and ruled **0162 specifically** to
+be ranked **HIGH — above the remaining polish work**, rather than appended. The owner's stated argument:
+**a prose control that failed twice in two consecutive rounds, during the very run installing its own
+backup, is not a polish item.** **0163 and 0164 were given no placement instruction** and were appended
+under step 5 as written — see the addendum below.
+
+**⚠️ The ruling was executed as far as the closed-row rule allows, and no further — read this before
+treating P127 as "the top".** `✅ Done`, `⛔ Cancelled` and `➡️ Moved` rows are **never renumbered**, not
+even under an owner ruling. **P127 is the highest rank 0162 could receive without renumbering closed
+history**, because the region **P127–P139 was contiguous `🔲 Backlog`** and the row immediately above it,
+**P126, is `✅ Done`**. **Ten open rows therefore remain above 0162** — P109, P113, P114, P118, P119,
+P120, P121, P122, P123, P124 — every one of them separated from P127 by at least one closed row.
+**Four of those are arguably the "polish work" the ruling meant to place 0162 above**: `0136` (P114),
+`0141` (P118), `0151` (P123), `0143` (P124). **Putting 0162 above any of them was not available**, and
+the producer did not attempt it. **Open question for the owner — see the addendum's last section.**
+
+**No `✅ Done`, `⛔ Cancelled` or `➡️ Moved` row was renumbered.** Verified after the edit: the whole
+affected region is `🔲 Backlog`, and the closed rows all sit above it and were not reached.
+
+| Task | Was | Now | Why |
+|---|---|---|---|
+| **0162** — decide the construction that satisfies the verbatim-carry requirement | *(new)* | **127** | **Owner-ruled placement, 2026-07-29.** Not appended. See the authority note above. |
+| **0157** | 127 | **128** | Displaced one place. **Nothing re-judged.** |
+| **0161** | 128 | **129** | Displaced one place. Not re-judged; **still immediately below 0157**, which is the whole point of the 2026-07-27 fourth re-rank and is preserved. |
+| **0148** | 129 | **130** | Displaced one place. Not re-judged. Its reason for sitting **after 0147** — one wiki pass over the ADR-032 page instead of two — is still satisfied. |
+| **0154** | 130 | **131** | Displaced one place. Not re-judged. |
+| **0144** | 131 | **132** | Displaced one place. Not re-judged. |
+| **0145** | 132 | **133** | Displaced one place. Not re-judged; **still directly after 0144**. |
+| **0146** | 133 | **134** | Displaced one place. Not re-judged. |
+| **0152** | 134 | **135** | Displaced one place. Not re-judged. |
+| **0149** | 135 | **136** | Displaced one place. Not re-judged. ⚠️ Its *"it stays last"* reasoning was already untrue before this pass and remains so; the repair is **0159's**, by owner ruling. |
+| **0155** | 136 | **137** | Displaced one place. Not re-judged. |
+| **0156** | 137 | **138** | Displaced one place. Not re-judged; **still directly after 0155**, which it hard-needs. |
+| **0159** | 138 | **139** | Displaced one place. Not re-judged. |
+| **0160** | 139 | **140** | Displaced one place. Not re-judged. Its append-confirmation flag **still stands, undischarged**. |
+
+**Existing rows moved, and why: thirteen, all of them pure displacement, none re-judged** — each +1.
+**Every relative order among the displaced tasks is preserved.** The orderings this board protects were
+checked by name after the edit: 0161 immediately below 0157 ✅, 0148 after 0147 ✅, 0144 before 0145 ✅,
+0156 directly after 0155 ✅.
+
+**Each displaced brief's own `## Priority` field was updated to match** — 13 briefs, board rank and brief
+field verified to agree 1:1 across every open row afterward. Board cells render the rank token `P<n>`;
+the brief field stays a plain number, per `conventions/priority-is-rank-not-identity.md`. **No row's
+status, description, href or link label was touched** — only rank cells moved.
+
+**Every re-rank table below stays authoritative exactly as written.** They record what was true on their
+own dates and are **not** rewritten to match today's ranks.
+
+**⚠️ Prose this displacement just made stale, recorded rather than repaired — it is 0159's change
+surface, not this pass's.** `0157`'s brief states *"This task's own rank is unchanged at **P127**"* and
+*"Priority: ruled to 127 by the owner on 2026-07-27"*; both now read one short. `0157`'s brief
+**explicitly forbids** repairing its own rank citations here (they are `0159`'s worked example), so
+nothing was touched. **0159 must pick these up at implementation time**, along with everything else its
+findings table already names — and its own brief already warns that it decays and must be re-verified
+when it runs.
+
+### Addendum — tasks 0162, 0163 and 0164 added out of band (2026-07-29): the verbatim-carry construction, the unnamed refusal case, and the build-phase logging hole
+
+**Authority.** The owner approved **filing all three briefs** on **2026-07-29** via `AskUserQuestion` in
+the live `/fkit-sprint-ship-loop` driver session. **0162's rank is an owner ruling** — see the placement
+note directly above. **0163 and 0164 were given no placement instruction**: they are appended at P141 and
+P142 under `/fkit-task-brief` step 5 as written, and **both are flagged for owner confirmation with merit
+stated** below.
+
+**Where all three came from.** The `/fkit-sprint-ship-loop` run that shipped `0147` and `0150` produced
+three findings about its own guarantees. All three are about the same thing from different sides: **the
+sprint loop's declared-approval marker is prose, and nothing anywhere checks it.**
+
+**Why three briefs and not one.** They share a subject and nothing else — different owners, different
+files, different kinds of work, and each is worth shipping if the others are deferred.
+
+| | 0162 | 0163 | 0164 |
+|---|---|---|---|
+| **Kind** | decides something nobody has decided | states a rule that is currently only inferable | closes a scope gap, or writes down why it is not one |
+| **Owner** | `fkit-architect` | `fkit-coder` | `fkit-coder` |
+| **Files** | 1 new report; **no source** | 1 — `claude/agents/fkit-coder.md` | ≤2 — `fkit-coder.md` + `fkit-sprint-ship-loop/SKILL.md` |
+| **Blocked on anything?** | no | no | no |
+
+Folding a decision task with an unknown answer together with two prose edits whose answers are known
+would hold both edits behind a ruling that needs the owner. That is the `0157`/`0159` and `0160`/`0161`
+shape, applied again.
+
+**Why 0162 is owned by `fkit-architect`, not `fkit-coder`** — the driver asked for this judgment
+explicitly, so it is recorded rather than assumed:
+
+| | |
+|---|---|
+| **It decides, it does not edit.** | The deliverable is a decision report; the eventual `SKILL.md` wording is a **follow-up**, and that follow-up is `fkit-coder` work. Precedent: `0160`, ruled the same way on the same grounds. |
+| **It may move a guarantee surface.** | If carry-by-reference is sanctioned, condition **(b)** of the declared-approval marker — the word `0150` landed one round ago — no longer says the right thing. Reopening a just-closed guarantee is an ADR-altitude call. |
+| **It must be reconciled against three ADRs.** | ADR-021 (owner channel is session-only), ADR-031's honesty clause, ADR-032 D3/D7's **accepted** prose-enforced cost. Deciding whether a new construction changes that accepted cost — or needs an ADR-032 amendment — is architect work by definition. |
+
+**It would be wrong to default this to `fkit-coder` because the eventual fix is a prose edit.** The prose
+edit is the follow-up. The task is the ruling.
+
+**Dependency direction among the three — asked for explicitly, and the answer is: none is hard.**
+
+- **0162 → 0163 is a soft coupling, one way.** `0163`'s clause is written against condition **(b)** as it
+  stands today. If `0162` rules a different carry form sanctioned, **(b)** changes and `0163`'s clause
+  must change with it — **in one reconciling edit, not two independent ones**. `0162`'s brief carries
+  that obligation. **`0163` does not wait for `0162`:** it is the safety net that works today, today's
+  (b) says `verbatim`, and `0163` is required to key its clause on the marker's *conditions* rather than
+  restate the test — which is what keeps the later reconciliation cheap.
+- **0164 is independent of both.**
+- **0163 and 0164 should co-land, or land back to back in one session.** Not because either depends on
+  the other — neither does — but because they edit **different, non-overlapping regions of the same
+  file** (`claude/agents/fkit-coder.md`: the refusal clause at `:98-100`, the Build-worker bullet at
+  `:71-72`), and **no live test reads that file's content at all**, so each edit's only real check is a
+  careful read of the whole clause set. Splitting them pays that read twice. If they are split, the
+  second to land must **re-read** the first's region rather than assume it.
+- **0164 and 0162's eventual follow-up share `fkit-sprint-ship-loop/SKILL.md`** — the Build row at `:102`
+  and the verbatim-carry rule at `:109`. Independent regions; coordinate on the file only.
+
+**What was checked firsthand on 2026-07-29, and found to enforce nothing.**
+
+| Site | Verdict |
+|---|---|
+| `test/` (13 files) | **Nothing reads `claude/agents/fkit-coder.md`'s content.** `grep -rn 'fkit-coder.md' test/` returns exactly **one** hit — an `existsSync` path check at `converge-contract.test.js:357`. |
+| `0147`'s `C8c` / `C8d` byte-unchanged guards | **Never landed.** They lived in that task's worklog harness only; nothing in `test/` carries them. The Build-worker bullet `0164` edits is protected by **no** live guard. |
+| `claude/scaffold/` | **Not dual-homed.** Ships `AGENTS.md`, `CLAUDE.md`, `universal-rules.md`, `ai-agents/` — **no `agents/`, no `skills/`**. None of the three briefs is a scaffold change. |
+| `claude/agents/fkit-coder.md:93-100` (trust-not-proof) | **Forecloses worker-side detection.** *"not a verifiable token"*, *"you cannot verify the approval from your context"*. Any proposal requiring the worker to compare a carried plan against the owner's real plan is wrong on its face. |
+
+**This is the same unenforced-prose class as `0152`, `0154`, `0157` and `0161`, and all three briefs are
+required to say so plainly rather than imply a guard exists.** None of them adds one — `0152` and `0154`
+are already contending for the first reader of agent/skill file content, and a third claimant is what
+`0154`'s brief warns against.
+
+**⚠️ Two of the three failures behind 0162 are NOT verifiable from disk.** The round-1 by-reference carry
+and the round-2 silent truncation are the **driver's own report of its own conduct** in a live session;
+**no transcript is stored in this repo.** The **third** data point is on disk and checkable — `0147`'s
+worklog **§13**, three out-of-plan verification checks made during build and logged nowhere, found only
+because the author voluntarily audited itself against an obligation that did not cover it. The briefs
+mark the distinction, and the architect is told not to present the self-report as file evidence.
+
+**Merit statements — both appended rows flagged for owner confirmation.**
+
+- **P141 (0163) — merit says materially higher, immediately below 0162.** It is the **cheaper half of the
+  same defect** (one prose clause, one file, no design call, no infrastructure), it **works today
+  regardless of how 0162 rules**, and **0162 is a decision task whose implementation is a further
+  follow-up** — so the edit that actually closes the hole is this one, and appending puts it last.
+  **This is the one of the two with a real cost of waiting:** until it lands, the only thing between a
+  defective carry and an unauthorized source write is a worker volunteering an inference, which is
+  exactly what the `0150`-close review found is nowhere written down.
+- **P142 (0164) — merit says immediately below 0163**, on the co-landing argument above: the two edits
+  share an untested file, and the read that verifies either verifies both. **Not higher than that** — no
+  wrong action is in flight. The build phase has been unlogged for the whole life of the loop, the one
+  known instance was caught and retroactively recorded by the worker itself, and this buys back
+  **auditability of a path already running**, not correctness of something shipping wrong today.
+
+**⚠️ Open question the owner must settle — the ruling could not be executed in full.** The owner ruled
+0162 **"HIGH — above the remaining polish work."** It was placed at **P127**, which is **the highest rank
+available without renumbering `✅ Done` rows** — and closed rows are never renumbered, not even under an
+owner ruling. **Four arguably-lighter open items still sit above it: `0136` (P114), `0141` (P118), `0151`
+(P123), `0143` (P124)**, each separated from P127 by at least one closed row. **If the owner intended
+0162 above those too, that placement is not reachable under the closed-row rule**, and the owner should
+say how to resolve it — accept P127, or rule something the current rules do not provide for. **Nothing
+was assumed either way.**
+
+**Raised, not filed.** No new investigation was spawned out of this filing. `0162` is **report-only**: it
+files no briefs and names its own follow-ups, which the producer files afterwards.
+
+**⚠️ This edit shifted `sprint-2.md` by +188 lines and no `:NNN` citation anywhere was repaired.**
+Measured firsthand after the edit: **2,555 → 2,743** lines. The shift is not uniform — old `:159`–`:171`
+moved **+1** (the 0162 row insert), old `:172` moved **+3** (the two appended rows), and **everything at
+old `:173` and beyond moved +188** (this addendum and the placement note above it). Across the repo
+**56** `sprint-2.md:NNN` pointers exist in **24** files; **29 of them point at old `:173`+ and are now
+off by 188**, and **27 point below `:159` and are unaffected**. Per the standing owner ruling, **0159
+re-verifies its own citations at implementation time** rather than being repaired by hand, and **0160**
+is the task filed to decide the durable fix. **Nothing here was fixed on purpose** — this is the third
+consecutive filing to demonstrate the defect 0160 exists to solve.
+
+### Re-ranked 2026-07-27 (fourth re-rank of the day) **by owner ruling** — 0161 moved from append rank to its merit position
+
+**Authority, stated first and in full.** This re-rank was **ruled by the owner**, on **2026-07-27**, via
+**`AskUserQuestion` in the live `/fkit-sprint-ship-loop` driver session**. It was executed by a spawned
+`fkit-producer` **on that instruction** — the producer contributed no placement judgment of its own, and
+had no owner channel to acquire any. **This is not producer precedent for re-ranking at filing time.**
+
+The authority is stated before the outcome deliberately, for the same reason the third re-rank did. An
+earlier addendum on this board recorded a placement's *outcome* far more visibly than its *authority*,
+and that omission was later read as licence to re-rank without one — the failure that produced tasks
+**0157** and **0158**. `/fkit-task-brief` step 5's *"do not renumber or insert into the owner's ranking"*
+protects **the owner's** ranking from an agent acting alone; it is not a bar on the owner re-ranking
+their own board. The governing principle is already on this board — **"A re-rank is the owner's call."**
+This is that call.
+
+**What was ruled.** The addendum immediately below appended **0160** and **0161** at P138/P139 and
+**flagged both for owner confirmation**. The owner ruled on them separately:
+
+- **0161** → **immediately below 0157**. The owner accepted the filing producer's merit argument: it is
+  the cheapest item on the board (one bullet, two files, no design call, no infrastructure), the
+  decision it records is **already made**, and its cost of waiting is a **recurring owner adjudication**.
+  **Its append-confirmation flag is now discharged** — in this board and in its brief.
+- **0160** → **stays where it was appended.** The owner ruled its merit is roughly where it sits. Its
+  rank number moves 138 → 139 as pure displacement; it remains the last row on the board.
+  **Its append-confirmation flag stands, undischarged.**
+
+**No `✅ Done`, `⛔ Cancelled` or `➡️ Moved` row was renumbered.** The whole affected region **P128–P139
+is contiguous `🔲 Backlog`** — the closed rows all sit above it and were not reached. The two `🔄 In
+progress` rows (0147 at 125, 0150 at 126) sit above the region and were not touched either.
+
+| Task | Was | Now | Why |
+|---|---|---|---|
+| **0157** | 127 | **127** | Unchanged. Anchor for 0161. |
+| **0161** — disambiguate the frozen-history clause in `priority-is-rank-not-identity.md` | 139 | **128** | **Owner-ruled merit placement.** Immediately below 0157: cheapest open item on the board, the decision is already made, and the cost of waiting is a recurring owner adjudication. |
+| **0148** | 128 | **129** | Displaced one place. **Nothing re-judged.** Its reason for sitting **after 0147** — one wiki pass over the ADR-032 page instead of two — is **still satisfied**. |
+| **0154** | 129 | **130** | Displaced one place. Not re-judged. |
+| **0144** | 130 | **131** | Displaced one place. Not re-judged. |
+| **0145** | 131 | **132** | Displaced one place. Not re-judged; still directly after 0144. |
+| **0146** | 132 | **133** | Displaced one place. Not re-judged. |
+| **0152** | 133 | **134** | Displaced one place. Not re-judged. The open question about sharing a `SKILL.md` walk with 0136 and 0154 is **still open**. |
+| **0149** | 134 | **135** | Displaced one place. Not re-judged. ⚠️ **Its *"it stays last"* reasoning was already untrue before this re-rank** and remains so; this pass did not change its position relative to any other row, and did not fix that. The repair is 0159's, by owner ruling. |
+| **0155** | 135 | **136** | Displaced one place. Not re-judged. |
+| **0156** | 136 | **137** | Displaced one place. Not re-judged; still directly after 0155, which it hard-needs. |
+| **0159** | 137 | **138** | Displaced one place. Not re-judged. |
+| **0160** | 138 | **139** | Displaced one place — **the owner ruled it stays where it was appended**, and it is still the last row. Its append-confirmation flag **stands**. |
+
+**Existing rows moved, and why: eleven, all of them displacement, none re-judged** — 0148, 0154, 0144,
+0145, 0146, 0152, 0149, 0155, 0156, 0159 and 0160, each +1. **Every relative order among the displaced
+tasks is preserved.** The orderings this board protects were checked by name after the edit:
+0147/0150 adjacent ✅ (125/126, untouched — they are being built right now in one session),
+0148 after 0147 ✅, 0144 before 0145 ✅.
+
+**Each displaced brief's own `## Priority` field was updated to match** — 12 briefs (the 11 displaced
+plus 0161 itself), board rank and brief field verified to agree 1:1 across every open row afterward.
+Board cells render the rank token `P<n>`; the brief field stays a plain number, per
+`conventions/priority-is-rank-not-identity.md`. **No row's status, description, href or link label was
+touched** — only rank cells moved, and the 0161 row was relocated to match.
+
+**⚠️ This edit shifted `sprint-2.md` by +70 lines and no `:NNN` citation anywhere was repaired.**
+Measured firsthand after the edit: the row relocation itself was net-zero on file length — it only
+re-ordered the 12-line region **P128–P139**, so a pointer aimed *inside* that region may now name the
+wrong row (none was found to be). **This addendum is what moved the file**: 2,484 → **2,554** lines, and
+**everything at old line `:173` and beyond shifted +70** (old `:173` → `:243`, old `:257` → `:327`,
+old `:335` → `:405`). Across the repo **56** `sprint-2.md:NNN` pointers exist in **23** other files;
+**29 of them point at old `:173`+ and are now off by 65** — concentrated in
+`0102`'s `review.md` (8), `0159`'s brief (4), the 2026-07-26 folder-prefix report (4), `0157`'s
+brief (3), and singles in `0013`/`0158`/`0160`/`0092`/`0001`/`0082`/`0122` and this plan itself. Per
+owner ruling, **0159 re-verifies its own citations at implementation time** rather than being repaired
+by hand, and **0160** is the task filed to decide the durable fix. **Nothing here was fixed on purpose.**
+
+### Addendum — tasks 0160 and 0161 added out of band (2026-07-27): the citation-form class, and the clause that needed a ruling to read
+
+**Appended at P138 and P139, after the existing highest priority (0159 at P137). Nothing was renumbered
+and no existing row moved** — so every re-rank table below stays authoritative exactly as written.
+
+> **⚠️ The placement is `/fkit-task-brief` step 5's default, applied deliberately.** The spawning driver
+> gave **no** placement instruction and explicitly required step 5 as written — appending after the
+> existing highest priority, no renumbering, no insertion, flagged for owner confirmation with merit
+> stated. A driver prompt overriding step 5 is what produced tasks **0157** and **0158**; it did not
+> happen here. **Both merit statements are below, and both rows are unconfirmed until the owner rules.**
+
+**Authority.** The owner approved **filing both briefs** on 2026-07-27 via `AskUserQuestion` in the live
+`/fkit-sprint-ship-loop` driver session. The owner approved **filing**; the **ranking is the append
+default**, not an owner ruling — see the merit statements.
+
+**Why two briefs and not one.** They share a subject and nothing else. **0161** transcribes a ruling the
+owner has **already made** into the page that should have carried it — one bullet, two files, no design
+call. **0160** decides something **nobody has decided**, across two cases whose answers may differ and one
+of which collides with a standing design rule. Folding a settled transcription into an open investigation
+would hold a five-minute fix behind a decision that needs the owner. Neither blocks the other; **soft
+preference is 0161 first**, so 0160's case-3 reasoning reads a clause that already says what it means.
+
+**Why 0160 is an investigation and files no briefs.** The defect is measured; the fix is not known. Its
+case 3 — dead `tasks/backlog/…` paths in review ledgers — has **no obvious right answer**, because
+repairing them means editing a document the ledger rule freezes on purpose. Per investigation-first, the
+implementation briefs are **not** written until its findings are reviewed with the owner. 0160 **names**
+its follow-ups; the producer files them afterwards.
+
+**Why 0160 is owned by `fkit-architect`, not `fkit-coder`** — the driver asked for this judgment
+explicitly, so it is recorded rather than assumed:
+
+| | |
+|---|---|
+| **It decides, it does not edit.** | Its deliverable is a decision report. There is nothing to implement until the anchor form is chosen; the convention page, the wording edits, the repair sweep and any guard are all **follow-ups**, and those will be `fkit-coder` work. |
+| **Case 3 is an authority question.** | "A frozen document contains a pointer that has become false" is a design ruling against a rule fkit holds deliberately — not a text edit. |
+| **Case 2 contradicts the architect's own instructions.** | `claude/agents/fkit-architect.md`'s `## Output format` **mandates** `path:line` citations. Reconciling a new rule against that is architect work by definition. |
+| **The precision/durability line is a design call.** | A review finding at `plan.md:106` is precise in a way no heading anchor is. "Never cite a line number" is **not** obviously right, and deciding where the line falls is the task. |
+
+**It would be wrong to default this to `fkit-coder` because parts of the eventual fix are text edits.**
+The text edits are the follow-ups. The task is the ruling.
+
+**What was checked firsthand today, and found to enforce nothing.**
+
+| Site | Verdict |
+|---|---|
+| `claude/skills/fkit-status/dashboard.sh` | **Partial, and board-rows only.** `drift relocated` / `drift missing-brief` resolve a **sprint-board row's** brief link against the folder's real location — the one existing stale-path catcher in the repo. It never reads a `review.md`, a brief's prose, or any `:NNN`. |
+| `test/` (13 files) | **Nothing.** No test reads any `.md` for citation validity. 0152 and 0154 are building the first two readers of `SKILL.md` *content*; neither reads citations. |
+| Any markdown lint | **Does not exist.** There is no lint step in this repo. |
+| `ai-agents/wiki-vault/` | **Nothing.** No page records a citation convention — flagged as a wiki gap. |
+
+**A guard is only partly possible even in principle.** A hand-rolled check could verify a `path:NNN`
+resolves to a file with at least N lines — cheap, and it catches the deleted-file case. It **cannot**
+verify the line still says what the citer meant, which is the actual failure. **This is the same
+unenforced-prose class as 0154 and 0157, and 0160's report is required to say so plainly.**
+
+**Measured firsthand, 2026-07-27 — these decay, re-measure at implementation time.**
+
+| Measure | Count |
+|---|---|
+| `path:NNN` citations in open briefs under `tasks/backlog/` | **113** |
+| of those, pointing into `sprint-2.md` (2,398 lines, grows every addendum) | **12** |
+| closed tasks whose `review.md` carries a dead `tasks/backlog/…` path | **30** |
+
+The trigger instance: appending **one** Status-table row on 2026-07-27 shifted `sprint-2.md` **+70 lines**
+and silently invalidated **11** `:NNN` pointers — 2 in the plan, 3 in 0157's brief, 6 in 0159's. Found and
+repaired by hand by the producer that caused it. **Nothing flagged them.**
+
+**Merit statements — both rows flagged for owner confirmation.**
+
+- **P139 (0161) — merit says materially higher, immediately below 0157.** It is the cheapest open item on
+  the board: one bullet, two files, no design call, no infrastructure, and **the decision it records is
+  already made**. Its cost of waiting is a **recurring owner adjudication** — the ambiguity cost one
+  ruling on the day the page shipped and will cost another the next time anyone reads the clause. **Not
+  ranked higher, because appending is the rule and no wrong action is in flight** — 0159 is already
+  unblocked by the ruling given.
+- **P138 (0160) — merit says roughly where it is.** An investigation with nothing blocked behind it; its
+  cost of waiting is that new stale citations keep accruing at the observed rate, not that anything wrong
+  ships. **The one argument for moving it up:** 0157 and 0159 are solving one third of this class right
+  now, and deciding the other two thirds while that context is live is cheaper than re-acquiring it.
+
+**Raised, not filed.** 0160's case 1 is deliberately out of scope and stays with 0157/0159. 0160 must not
+touch `claude/skills/fkit-task-brief/SKILL.md`, any task brief, or this board — doing so re-creates the
+two-owner collision the 0157/0159 split resolved.
+
+### Addendum — task 0159 added out of band (2026-07-27): the producer half of the 0157 split
+
+**Appended at P137, after the existing highest priority (0156 at P136). Nothing was renumbered and no
+existing row moved** — so every re-rank table below stays authoritative exactly as written. **0157's own
+rank is unchanged at P127**, owner-confirmed today.
+
+**Authority.** The owner ruled **twice** on 2026-07-27, via `AskUserQuestion` in the live
+`/fkit-sprint-ship-loop` driver session:
+
+1. **Split 0157 on the role seam.** 0157 had been widened that morning to carry three items. The owner
+   ruled it split: **0157 keeps the rule** — state step 5's append rule in full, plus the *cite the folder
+   ID, not the board rank* clause — a `fkit-coder` edit to **one** file,
+   `claude/skills/fkit-task-brief/SKILL.md`. **0159 takes the sweep** — the stale-citation repair and the
+   0149 correction — a `fkit-producer` edit to **task briefs and this sprint plan**. A brief has one
+   `## Owner` field and cannot express two role owners; the widened task also broke its own verification
+   step (*"`git diff --stat` shows exactly one file"*), which is the mechanical sign a second unit was
+   present. **Neither half blocks the other.**
+2. **The frozen-history clause does not block the sweep.**
+   `conventions/priority-is-rank-not-identity.md:38` calls existing `priority (folderID)` notations
+   *"frozen history … never mass-edited"*. The owner ruled that clause covers the **board-cell** form
+   (`124 (0150)`) **only** — not the prose form (`0150 (124)`) inside a brief's reasoning. The reasoning:
+   *a board cell records what a row meant on the day it was written; prose inside a brief is a live
+   cross-reference that misdirects a reader today.*
+
+**What verification found, and how it moved.** The scope was re-derived firsthand against this board
+today, after 0153 closed and after the split:
+
+| | List the owner first ruled on | Earlier pass (pre-split) | **This pass** |
+|---|---|---|---|
+| Stale numbers | 11 | 24 | **21** |
+| Sites | 11 | 18 | **19** |
+| Files | — | 10 | **11** |
+
+The site count rose while the number count fell — **two sites nobody had found** (`0158/brief.md`'s
+append flag and the `0151` board row), several earlier entries **re-classified as carve-outs**
+(quotations inside `>` blocks, dated records of completed actions), and 0157's narrowing removed others.
+**That instability is the argument for 0157's rule, and it is why 0159's brief instructs its own
+implementer not to trust its tables.**
+
+**Two premise corrections carried into the brief**, both verified by reading the files:
+
+- The *"it stays last"* claim about 0149 is **not in 0149's brief** — that brief carries no rank citation
+  at all. It is in **this plan, at three sites**: `:597` (its origin), `:466` and `:417`.
+- **`:417` sits in a 2026-07-27 addendum** (heading at `:374`), **not** the 2026-07-26 one, as both the
+  driver prompt and 0157's earlier brief stated. All three claims were **true when written** and became
+  false at the same moment — when 0155 and 0156 were appended below 0149 (`:312`).
+
+**No re-rank, no move, no close.** No `✅ Done`, `⛔ Cancelled` or `➡️ Moved` row was touched, no existing
+row was renumbered, and no task file moved between `backlog/`, `done/` and `cancelled/`. The one edit to
+an existing row is **0157's row parenthetical**, which was extended to name the split and the rule clause
+the owner kept in it — **its `P127` cell is untouched.**
+
+**⚠️ Priority 137 is append rank, NOT a merit ranking — flagged for owner confirmation.** Step 5 requires
+appending after the existing highest priority and forbids inserting; this was filed by a spawned producer
+with no owner channel, so appending was the only sanctioned option. **On merit 0159 belongs immediately
+below 0157** — the two are halves of one ruling and read as one decision, and 0159 is the **only item on
+this board whose own brief decays while it waits**: every re-rank re-stales its findings tables, so nine
+slots of waiting is nine slots of drift to re-verify before it can start. **Not ranked higher, because no
+wrong action is in flight** — a stale rank citation misdirects a *reader*, costing them a board lookup;
+nothing is scheduled or moved wrongly as a result. On that axis it is the same class as the
+archival-correction cluster (0146, 0149), and the decay property is the only thing separating it.
+**The merit/append gap is nine slots.**
+
+**⚠️ Raised for the owner, deliberately NOT filed.**
+`conventions/priority-is-rank-not-identity.md:38` never says **which notation form** its frozen-history
+clause means. Ruling 2 settled the reading for 0159; the clause itself is still ambiguous and the next
+reader hits the same question. Making `:38` explicit would be a **separate, dual-homed** task (that page
+must stay byte-identical with its `claude/scaffold/` copy — 0131/0132/0133 territory). Not filed unasked.
+
+**⚠️ Also raised, also NOT filed: `sprint-2.md` line numbers are as mutable as board ranks.** Appending
+this row and addendum shifted the plan by **+70 lines** and silently invalidated **eleven** `:NNN`
+pointers in one edit — **two inside this plan** (both dated addenda cite *"A re-rank is the owner's
+call."* as `:414`; **repaired here to `:628`**), **three in 0157's brief** (**repaired**), and six in
+0159's own brief (repaired before filing). Same defect *shape* as the stale rank citations — a
+precise-looking pointer into a mutable coordinate — but a **different coordinate system** that neither
+ruling covers, and a real fix means a durable addressing scheme rather than a number. **Flagged for the
+owner.**
 
 ### Re-ranked 2026-07-27 (third re-rank of the day) **by owner ruling** — 0157 and 0158 moved from append rank to their merit positions
 
@@ -179,7 +777,7 @@ placement's *outcome* far more visibly than its *authority*, and that omission w
 producer as licence to re-rank without one — the failure that produced tasks **0157** and **0158**.
 `/fkit-task-brief` step 5's *"do not renumber or insert into the owner's ranking"* protects **the
 owner's** ranking from an agent acting alone; it is not a bar on the owner re-ranking their own board.
-The governing principle is already on this board at **`:414`** — **"A re-rank is the owner's call."**
+The governing principle is already on this board at **`:628`** — **"A re-rank is the owner's call."**
 This is that call.
 
 **What was ruled.** The two rows the addendum below appended at P135/P136 and **flagged for owner
@@ -271,7 +869,7 @@ the 2026-07-26 addendum as precedent.
 **On the cited precedent.** The 2026-07-26 merit placement of 0151 (121) and 0152 (129) was **not** a
 producer acting alone. It sits inside an owner ruling — *"The owner ruled: **promote it beside
 0147**"* (`:302`) — in a pass whose own words are *"both owner-approved"*, and the same addendum states
-the principle step 5 never does: **"A re-rank is the owner's call."** (`:414`). The producer's write-up
+the principle step 5 never does: **"A re-rank is the owner's call."** (`:628`). The producer's write-up
 recorded the *outcome* far more prominently than the *authority*, and a later producer with no owner
 channel read the outcome as the precedent. **An addendum that does not name its authority becomes
 tomorrow's precedent for acting without one** — 0157 makes naming it mandatory.

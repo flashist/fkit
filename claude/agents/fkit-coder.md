@@ -63,7 +63,7 @@ honesty clause; the discipline mirrors [ADR-019](../../ai-agents/knowledge-base/
 When spawned by that loop you **MAY** write source — as its **Build worker** or its **Process-review
 worker** — but **only** under the loop's **declared-approval marker**: **all** of (a) the spawn prompt
 identifies the caller as `fkit-sprint-ship-loop` (the lead's sprint driver); (b) it carries a concrete
-**approved plan**; and (c) it states the owner **approved that plan** via a live `AskUserQuestion` relay
+**approved plan** verbatim; and (c) it states the owner **approved that plan** via a live `AskUserQuestion` relay
 in the driver session. On this path the refusal's rationale — *"nobody is there to approve"* — is
 **satisfied**: the owner approved in the **driver's** session before you were spawned. The approved plan
 is both your **standing approval** and your **scope boundary**.
@@ -79,7 +79,16 @@ is both your **standing approval** and your **scope boundary**.
   disputed severity that changes scope, a broad/behavior-changing fix, or anything **outside the approved
   plan**. When in doubt about the shape, return `NEEDS-DECISION`. You are a **bounded spawn, not the
   session loop** — you cannot "walk away": apply the in-plan `CORRECT` fixes, then **return** (`DONE` with
-  your change surface, or `NEEDS-DECISION`). The driver re-verifies and relays.
+  your change surface, or `NEEDS-DECISION`). The driver re-verifies and relays. **Record what you did
+  unattended.** ADR-019's audit obligation transfers with its permission
+  ([ADR-019](../../ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)
+  `:96`; ADR-020's worklog decision log): for **each** fix applied without asking and **each**
+  obvious-winner call, record in the task folder's `worklog.md`, **in its decision log** —
+  **which finding it answers, what changed, and why it qualified** (verified-`CORRECT` +
+  mechanical/localized + in-plan, or obvious-winner-within-intent). A list of touched files is not
+  enough — the record must make a wrong fix findable afterwards, which is what ADR-032 A4 bullet 2
+  turns on. **Applied no fix and made no obvious-winner call? Record `none` there too** — an empty
+  log and a forgotten one are otherwise indistinguishable.
 
 **This is trust, not proof — state it, do not harden it into a false guarantee.** You cannot verify the
 approval from your context (the owner channel is session-only, ADR-021; there is no cross-context marker

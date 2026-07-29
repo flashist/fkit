@@ -105,6 +105,13 @@ New text: the two strings from §2 plus the paragraph from §3, then the untouch
 
 Full runnable commands are reproduced in `worklog.md` §5 alongside their observed output.
 
+> **Corrected 2026-07-27 (review finding R1, owner ruled FIX NOW).** As first written this sentence was
+> **aspirational, not a description**: `worklog.md` §5 recorded **outputs only** — no command body for
+> any of CHECK1/2/3 or NC1–NC5. The sentence is now true: `worklog.md` §5.0–§5.2 carry the actual
+> `norm()` awk program, the three check bodies, and all five negative controls as executed. Recording
+> the correction rather than quietly editing the claim, because the gap is the point — **NC1's own false
+> pass had the bug inside a control**, and outcomes without implementations are exactly what hides that.
+
 - **CHECK1** — each new string appears exactly **1×** per file and **3×** in total; literal `Task N`
   count is **0**. Fails closed: `grep -c -F` returns 0 on a missing string and the equality tests
   reject 0.

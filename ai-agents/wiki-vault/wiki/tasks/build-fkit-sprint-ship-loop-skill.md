@@ -42,6 +42,8 @@ Codex's adversarial pass found (finding **R1**, high, verified) that `claude/age
 > ⚠️ **The marker is trust, not proof.** It is three prose signals in the driver's spawn prompt — caller identity, the concrete approved plan, and a statement that the owner approved it — **not a verifiable token**. It is the exact mirror of the plan-step's "write nothing yet" and carries the same accepted, prose-enforced cost. **Do not read it as a structural guarantee.**
 >
 > **Traceability is filed but still open:** task `0118` (record the ADR-032 amendment covering the Build + Process-review carve-out) and task `0119` (track the `fkit-coder.md` guarantee-surface change). Both are backlog. **Until 0118 lands, [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] does not record the carve-out its own drive sequence now depends on.**
+>
+> ✅ **Dated correction 2026-07-29 — both closed; the paragraph above is this task's record as of 2026-07-22 and is no longer current.** `0118` closed **2026-07-26** *(agent-closed — not owner-verified)* and its `## Amendment — 2026-07-22` is on the ADR-032 page in full (A1–A4). `0119` closed **2026-07-26 owner-verified**, with the agent-closed marker deliberately refused. **So the ADR does now record the carve-out its drive sequence depends on.** *(This page's Related list already said "landed 2026-07-26" — but 19 lines below this claim, which a reader reaches first. The marker is placed here for that reason.)*
 
 ### Two accepted residuals, both owner-ruled 2026-07-22 — do not re-litigate
 

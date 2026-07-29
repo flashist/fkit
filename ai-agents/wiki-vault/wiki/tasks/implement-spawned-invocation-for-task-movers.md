@@ -34,7 +34,7 @@ perform it on.**
 - **`conventions/task-status-vocabulary.md`** gained two rows — `Done (agent-closed)` and
   `Cancelled (agent-closed)` — and its gating paragraph now reads *"skill-gated, not owner-gated."*
   `conventions/status-report-format.md` gained the matching variants.
-- **`/fkit-task-ship-loop`** now closes its own task.
+- **`/fkit-task-ship-loop`** now closes its own task. ⚠️ *Reverted by ADR-033 — see the banner under Outcome.*
 - **`knowledge-base/architecture.md`** and **`PROJECT.md`** updated off the owner-only language.
 - **`test/skill-ownership-hook.test.js`** pins the adversarial reviewer's exclusion as a deny assertion.
 
@@ -57,6 +57,8 @@ it found the ADR self-contradictory, and all three findings became owner rulings
   board, and is counted in the roll-up as an ordinary close. **Accepted and recorded, not fixed.**
 
 ## Outcome
+
+> ⚠️ **Superseded in part by [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] (2026-07-23).** Everything on this page is the record of what this task shipped on **2026-07-19** and is kept for that reason. **The grant it built is gone:** the movers are `fkit-producer`-only again, the `claude/skills-for-role.sh` change described under Key Changes was **reverted** for `lead, coder, architect, reviewer, wiki`, and `/fkit-task-ship-loop` **no longer closes its own task** — it routes the close to the producer. The rule is now **hook-structural** at any spawn depth, which is the thing this task's ADR said could not be had. **This task stays Done.** The reversal landed via [[tasks/route-coder-ship-loop-close-to-producer]] → [[tasks/route-sprint-ship-loop-close-to-producer]] → [[tasks/revert-task-movers-to-producer-only]], in that order. **What survives unchanged:** amendment **A2** (the adversarial reviewer is still excluded — it never had the movers and still does not), amendment **A3** (the marker is still invisible in `/fkit-status`), the two agent-closed vocabulary rows, and the forgeability analysis, which ADR-033 **re-uses rather than re-derives**. *(ADR-033 resync, 2026-07-29.)*
 
 Done — agent-closed. The close-out session switch is gone, which is the ergonomics the owner asked for.
 
@@ -82,7 +84,8 @@ and no artifact makes an agent-closed row visible to someone reading the dashboa
   this one and overrode its brief
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — the loop whose
   done-gate this removed; the plan-gate survives
-- [[tasks/implement-task-ship-loop-skill]] — the loop, now self-closing
+- [[tasks/implement-task-ship-loop-skill]] — the loop; its self-close is since reverted to a producer route (ADR-033 §3)
+- [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — ⚠️ **reverses the grant this task built**; producer-only again, hook-enforced at any spawn depth
 - [[tasks/enforce-task-status-vocabulary]] — the vocabulary this task extended with the agent-closed
   variants
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the

@@ -90,10 +90,26 @@ wording verbatim anyway.
 
 | #  | Verdict | Defect / Frontier | Action | Status |
 |----|---------|-------------------|--------|--------|
-| R1 |         |                   |        |        |
-| R2 |         |                   |        |        |
-| R3 |         |                   |        |        |
-| R4 |         |                   |        |        |
+| R1 | **CORRECT** | Defect (documentation) | Recorded the actual runnable implementations in `worklog.md` **§5.0** (`norm()` extractor + its four load-bearing properties), **§5.1** (CHECK1/2/3 bodies) and **§5.2** (all five negative controls). Corrected `plan.md:106` in place with a dated note stating the claim was aspirational. Rewrote the §6 pointer so 0154's author is sent to §5.0–§5.2 rather than to outcomes. | **Fixed** (owner ruled FIX NOW) |
+| R2 | **CORRECT** | Defect (documentation) | **Not fixed here** — owner ruled it folds into 0154, which pins this wording verbatim. Verified firsthand: `<slug>` appears in both flag lines in all three files and is defined nowhere in any of them; the rule paragraph spends four lines on `<NNNN>` and leaves `<slug>` to "Substitute real values". Recorded as an accepted residual below. | **Deferred to 0154** |
+| R3 | **CORRECT — and spec-conformant** | Defect (brief-level gap, not a deviation) | **Not fixed here** — owner ruled. Verified firsthand: `ingest:58` ("one the caller named") carries no location or status guard; `ingest:30` resolves `all tasks` over `{backlog,done}`; `sync:44` keeps `{done,cancelled}` briefs — so a caller-named brief already in `done/`/`cancelled/` yields a `backlog/…` path that does not exist. **But `brief.md:95-97` mandates exactly this path form**, so emitting it is compliance, not a miss. Recorded below with that framing explicit. | **Deferred — brief-level** |
+| R4 | **CORRECT** | Defect (documentation) | **Not fixed by adding evidence** — owner ruled it largely discharged by the reviewer's reversal. Verified the reviewer's method firsthand rather than taking it on trust: reversing the documented edit reproduces **33 lines / 2296 bytes**, matching `brief.md:73`'s independently-recorded pre-state, with **0** `0153` artifacts left. Added a dated correction at `worklog.md` §5 CHECK5 conceding the checksums prove only stash round-trip integrity, and recorded the reversal method (with its command) as the better one. | **Fixed** (claim corrected, method recorded) |
+
+### Coder-initiated correction — the driver's `git diff` premise is wrong
+
+Not a reviewer finding; surfaced while re-checking the two claims the driver asked me to re-check. The
+process-review prompt stated: *"The working tree is now CLEAN and committed at `994e3e3` … **`git diff`
+is now a usable attribution tool again**."* **It is not.** Verified by execution: `994e3e3` ("Tasks
+update") added **0125's block and 0153's change in a single commit** (`ingest +42`, `lint +42`,
+`sync +48/-1`), and its parent `b86e5eb` contains **no block at all** (block-anchor count 0 → 1 across
+the pair). Committing did not restore attribution — it **removed the last chance** to separate the two
+tasks by diff. The reviewer's reversal method is unaffected (it works off current content, not history)
+and remains the only working attribution. Recorded at `worklog.md` §5 CHECK5.
+
+*(One of my own readings on the way to this was also wrong and is worth flagging: an early loop wrote
+`$r:claude/…`, which zsh mangled, making every `git show` return empty and briefly suggesting `994e3e3`
+had no block. Caught by re-running without the loop. Third self-inflicted false reading this task — see
+`worklog.md` §4.)*
 
 ## Accepted residuals (shared, do-not-re-litigate)
 
@@ -105,3 +121,28 @@ wording verbatim anyway.
   identical modulo one uniform indent offset; nothing mechanical holds that today. · Why (structural):
   same as above — 0154's job. · Re-raise only if: a fourth wiki SKILL gains the block, or 0154 ships
   without covering cross-file uniformity.
+- **R2 — `<slug>` is an undefined placeholder in the emitted path** — What: both flag lines emit
+  `ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md`; the rule paragraph defines `<NNNN>` in four lines
+  and never defines `<slug>`, which is covered only by "Substitute real values". Verified: `<slug>`
+  occurs in all three files and is defined in none. · Why deferred (owner ruling, 2026-07-27): **0154
+  pins this wording verbatim**, so defining `<slug>` now would mean 0154 re-pinning text that just
+  changed; folding it in there costs one edit instead of two. The severity is genuinely low — unlike
+  `N`, `<slug>` has exactly one plausible referent and no colliding second number-space, and the
+  `<NNNN>` prefix alone already resolves the task unambiguously. · Re-raise only if: 0154 lands without
+  defining it, or a consumer is observed mis-substituting `<slug>`.
+- **R3 — the emitted path hardcodes `backlog/` with no location guard** — What: `ingest:58`'s
+  "one the caller named" branch has neither a location nor a status guard, while `ingest:30` resolves
+  `all tasks` over `{backlog,done}` and `sync:44` keeps `{done,cancelled}` briefs — so a caller-named
+  brief already in `done/` or `cancelled/` yields a `backlog/…` path that does not exist. Verified at
+  all three sites. · Why deferred (owner ruling, 2026-07-27): **this is spec-conformant, not a
+  deviation.** `brief.md:95-97` mandates the path form `ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md`
+  in those exact words; emitting it is compliance. **Read this as a brief-level gap, not as something
+  the implementation missed.** · Re-raise only if: a flag is observed emitting a non-existent path in
+  practice, or a future brief revisits the path form — at which point the fix belongs with whoever owns
+  the guard, not with this task.
+- **R4 — attribution now rests on reversal, not on checksums, and not on `git diff`** — What: the
+  SHA-256 checksums in `worklog.md` §5 prove stash round-trip integrity only. The working method is the
+  reviewer's reversal (reproduces 33 lines / 2296 bytes against `brief.md:73`'s pre-state). · Why
+  structural: `git diff` **cannot** attribute this change and never will — `994e3e3` fused 0125's block
+  and 0153's change into one commit, so no diff separates them. · Re-raise only if: someone proposes a
+  diff-based attribution for this task, or the reversal is found not to reproduce the pre-state.

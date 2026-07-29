@@ -43,7 +43,11 @@ ADR-032 now carries the amendment; **0119's citation of "the 2026-07-22 autonomy
 
 ⚠️ **The amendment states one requirement that is not yet true of the implementation, and says so.** A2's worklog audit obligation is unimplemented: `fkit-sprint-ship-loop/SKILL.md:105` asks the Process-review worker only for *"change surface + residuals"*, and `fkit-coder.md:73-82` imposes no worklog duty. **Consequence: A4 bullet 2's reopening condition is unsatisfiable in practice** — the guard points at evidence nothing requires anyone to write. Tracked as task `0147`.
 
+✅ **Dated correction 2026-07-29 — `0147` landed, and the paragraph above is this task's record as of 2026-07-26.** `claude/skills/fkit-sprint-ship-loop/SKILL.md:105` now requires the Process-review worker to record each autonomously-applied fix and each obvious-winner call in the task folder's `worklog.md` **decision log** (which finding, what changed, why it qualified; **`none` if none**), and `claude/agents/fkit-coder.md:82-91` imposes the same duty. **A4 bullet 2's reopening condition is now satisfiable.** The paragraph above is left byte-identical. ⚠️ **The knowledge-base ADR source still states the gap as live** at `ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md:129-133` — routed to task `0143`'s architect pass; **the wiki role never writes `knowledge-base/`.**
+
 ⚠️ **A second gap on the same guarantee surface, found by 0119's review:** `fkit-coder.md` says the marker carries *"a concrete approved plan"* while A1 and the driver SKILL both require it **verbatim**. Tracked as task `0150`.
+
+✅ **Dated correction 2026-07-29 — `0150` landed.** `claude/agents/fkit-coder.md:65-66` now reads *"(b) it carries a concrete **approved plan** verbatim"*. The claim above is left byte-identical. ⚠️ **Not fully closed** — backlog task `0163` records that the refusal clause names no *defective-marker* case, so a by-reference carry is refused only by inference from A1's *"all three"* conjunction.
 
 ## Related
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — the ADR this amends

@@ -33,3 +33,5 @@ The rewrite: the loop no longer invokes the mover; its terminal act is spawning 
 - [[tasks/implement-task-ship-loop-skill]] · [[tasks/design-task-ship-loop-skill]]
 - [[systems/fkit]] · [[systems/review-and-model-diversity]]
 - [[systems/role-locked-sessions]] — Role-Locked Sessions & the Skill Lockdown
+- [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which built the self-close this task unwinds
+- [[tasks/sprint-2-remove-omnigent]] — the sprint whose rows 63/64 record the grant this task helps reverse

@@ -150,7 +150,142 @@ nesting — and NC3 confirms it catches exactly the mutation blanket-stripping w
 is not closed by this task**; it is closed by task **0154**, per the owner's SUBSUME ruling of
 2026-07-27.
 
-## 5. Verification — every check, with observed output
+## 5. Verification — the runnable implementations, then every check with its observed output
+
+> **Added in the review round (finding R1).** The first version of this section recorded **outputs
+> only** — for every check and every negative control — while `plan.md` claimed "full runnable commands
+> are reproduced in `worklog.md` §5" and §6 below pointed 0154's author at "CHECK3's
+> normalize-by-own-min-indent approach and its four negative controls". Neither was true: an outcome is
+> not an implementation, and **NC1's own false pass had the bug *inside a control*** (§4b). Recording
+> outcomes without the code that produced them reproduces exactly that opacity — a reader cannot audit a
+> control they cannot see. The implementations below are the ones actually executed. `plan.md:106` has
+> been corrected in the same round.
+
+### 5.0 The shared extractor — `norm()`
+
+Every uniformity check and three of the five controls run through this. It reads a `SKILL.md` on
+**stdin**, writes the block normalised by its **own** minimum indent to stdout, writes
+`MININDENT=<n> LINES=<n>` to stderr, and **exits 3 on any gate failure**.
+
+```sh
+norm() {
+  awk '
+    !started && /\*\*The wiki closes nothing/ { started=1; inb=1 }
+    inb { buf[++n]=$0 }
+    inb && /Run \/fkit-task-done on/ { ended=1; inb=0 }
+    END {
+      if (!started) { print "GATE-FAIL: start anchor never matched" > "/dev/stderr"; exit 3 }
+      if (!ended)   { print "GATE-FAIL: end anchor never matched"   > "/dev/stderr"; exit 3 }
+      if (n < 36)   { print "GATE-FAIL: only " n " lines (< 36)"     > "/dev/stderr"; exit 3 }
+      if (n > 45)   { print "GATE-FAIL: " n " lines (> 45)"          > "/dev/stderr"; exit 3 }
+      m = 9999
+      for (i=1;i<=n;i++) { if (length(buf[i])==0) continue; match(buf[i], /^ */); if (RLENGTH < m) m = RLENGTH }
+      if (m == 9999) { print "GATE-FAIL: no non-blank lines" > "/dev/stderr"; exit 3 }
+      print "MININDENT=" m " LINES=" n > "/dev/stderr"
+      for (i=1;i<=n;i++) { if (length(buf[i])==0) print ""; else print substr(buf[i], m+1) }
+    }'
+}
+```
+
+**Four properties are load-bearing, and 0154 should carry all four:**
+
+1. **Both anchors are gated, not just the start.** A start-only gate slurps the rest of the file.
+2. **A line-count floor *and* ceiling** (36 / 45). The floor is what stops an empty extraction reading
+   as a pass; the ceiling catches a runaway end anchor.
+3. **Subtract each block's own minimum indent** — never `sed 's/^ *//'`. This is what preserves relative
+   nesting (§4c).
+4. **The anchor is a literal regex inside the program.** Passing it via `-v` silently breaks it (§4b).
+
+### 5.1 The check bodies, as executed
+
+```sh
+# --- CHECK1: flag strings, counts, and `Task N` removal ---
+C='Task <NNNN>'"'"'s vault work is complete — ready to close (producer runs /fkit-task-done on ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md)'
+P='Task <NNNN>: partial — not ready to close (ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md)'
+fail=0
+for f in ingest lint sync; do
+  p=claude/skills/fkit-wiki-$f/SKILL.md
+  nc=$(grep -c -F -- "$C" "$p"); np=$(grep -c -F -- "$P" "$p")
+  [ "$nc" = 1 ] || { echo "FAIL $f: complete-flag count=$nc (want 1)"; fail=1; }
+  [ "$np" = 1 ] || { echo "FAIL $f: partial-flag  count=$np (want 1)"; fail=1; }
+  if grep -qn 'Task N' "$p"; then echo "FAIL $f: literal 'Task N' still present"; fail=1; fi
+done
+tot=$(grep -c -F -- "$C" claude/skills/fkit-wiki-*/SKILL.md | awk -F: '{s+=$2} END{print s+0}')
+[ "$tot" = 3 ] || { echo "FAIL: complete-flag total=$tot (want 3)"; fail=1; }
+[ "$fail" = 0 ] && echo "CHECK1 PASS" || { echo "CHECK1 FAIL"; exit 1; }
+
+# --- CHECK2: the identity rule and its explicit negative ---
+fail=0
+for f in ingest lint sync; do
+  p=claude/skills/fkit-wiki-$f/SKILL.md
+  grep -q -F -- 'task folder name'"'"'s four-digit prefix' "$p" || { echo "FAIL $f: no folder-ID definition"; fail=1; }
+  grep -q -F -- 'never** the sprint'                        "$p" || { echo "FAIL $f: no explicit negative"; fail=1; }
+  grep -q -F -- 'P<n>` Priority cell'                       "$p" || { echo "FAIL $f: P<n> Priority cell unnamed"; fail=1; }
+  grep -q -F -- 'priority-is-rank-not-identity.md'          "$p" || { echo "FAIL $f: convention not cited"; fail=1; }
+done
+[ "$fail" = 0 ] && echo "CHECK2 PASS" || { echo "CHECK2 FAIL"; exit 1; }
+
+# --- CHECK3: uniformity, fail-closed, relative nesting preserved ---
+fail=0
+for f in ingest lint sync; do
+  printf '%-7s ' "$f"; norm < claude/skills/fkit-wiki-$f/SKILL.md > /dev/null || { echo "  (exit $?)"; fail=1; }
+done
+[ "$fail" = 0 ] || { echo "CHECK3 FAIL: a gate fired"; exit 1; }
+a=$(norm < claude/skills/fkit-wiki-ingest/SKILL.md 2>/dev/null)
+b=$(norm < claude/skills/fkit-wiki-lint/SKILL.md   2>/dev/null)
+c=$(norm < claude/skills/fkit-wiki-sync/SKILL.md   2>/dev/null)
+[ -n "$a" ] && [ "$a" = "$b" ] && [ "$b" = "$c" ] \
+  && echo "CHECK3 PASS: uniform modulo one uniform offset" \
+  || { echo "CHECK3 FAIL"; diff <(printf '%s\n' "$a") <(printf '%s\n' "$c"); exit 1; }
+```
+
+⚠️ **Read the stderr line, not just the verdict.** CHECK3's normalized diff is clean whether or not
+`sync` was wrongly re-indented — only the `MININDENT` values (**3 / 3 / 0**) catch that.
+
+### 5.2 The five negative controls, as executed
+
+```sh
+# NC1 — 0125's real near-miss anchor, hardcoded literally. MUST exit 3.
+awk '
+  !started && /The wiki \*\*closes nothing/ { started=1; inb=1 }
+  inb { buf[++n]=$0 }
+  inb && /Run \/fkit-task-done on/ { ended=1; inb=0 }
+  END { if (!started) { print "GATE-FAIL: start anchor never matched" > "/dev/stderr"; exit 3 }
+        if (!ended)   { print "GATE-FAIL: end anchor never matched"   > "/dev/stderr"; exit 3 }
+        if (n < 36)   { print "GATE-FAIL: only " n " lines"           > "/dev/stderr"; exit 3 }
+        print "REACHED — NC1 DID NOT FIRE (bug)" }' claude/skills/fkit-wiki-ingest/SKILL.md
+echo "NC1 exit=$?"
+
+# NC2 — empty input. MUST exit 3.
+printf '' | norm > /dev/null; echo "NC2 exit=$?"
+
+# NC3 — break ONE list item's relative indent (stream only, no file written). MUST differ.
+x=$(sed 's|^   - \*\*Fully\*\* → complete\.|    - **Fully** → complete.|' claude/skills/fkit-wiki-ingest/SKILL.md | norm 2>/dev/null)
+y=$(norm < claude/skills/fkit-wiki-lint/SKILL.md 2>/dev/null)
+[ -n "$x" ] || echo "  (NC3 sanity: mutated extraction was EMPTY — control invalid)"
+[ "$x" = "$y" ] && echo "NC3 MISS — check accepted a broken indent (bug)" || echo "NC3 FIRED"
+
+# NC4 — shift the WHOLE sync block by a uniform +2. MUST stay identical (legitimate state).
+S=$(grep -n '\*\*The wiki closes nothing' claude/skills/fkit-wiki-sync/SKILL.md | cut -d: -f1)
+E=$(grep -n 'Run /fkit-task-done on'      claude/skills/fkit-wiki-sync/SKILL.md | cut -d: -f1)
+z=$(awk -v s="$S" -v e="$E" 'NR>=s && NR<=e && length($0)>0 {print "  " $0; next} {print}' claude/skills/fkit-wiki-sync/SKILL.md | norm 2>/dev/null)
+[ "$z" = "$y" ] && echo "NC4 GREEN" || echo "NC4 RED (bug: rejected a legal uniform offset)"
+
+# NC5 — does the blanket-strip (0125's R3 defect) still MISS NC3's bug?
+p=$(sed 's|^   - \*\*Fully\*\* → complete\.|    - **Fully** → complete.|' claude/skills/fkit-wiki-ingest/SKILL.md | sed -n '51,88p' | sed 's/^ *//')
+q=$(sed -n '60,97p' claude/skills/fkit-wiki-lint/SKILL.md | sed 's/^ *//')
+[ "$p" = "$q" ] && echo "NC5: blanket-strip says UNIFORM despite broken indent -> R3 fail-open reproduced" \
+                || echo "NC5: blanket-strip caught it"
+```
+
+**NC1 and NC3 are the two that matter most to a re-user.** NC1 is the control that was itself broken
+the first time (§4b) — if it does not exit 3, nothing else in the suite can be trusted. NC3 is the only
+control that distinguishes this check from the fail-open one it replaces; NC5 exists purely to show the
+old approach still waves NC3's mutation through.
+
+**⚠️ NC5's `sed -n '51,88p'` / `'60,97p'` line ranges are hardcoded to the post-0153 block positions.**
+They will drift the moment either file changes above the block. 0154 should derive them from the anchors
+instead — this is a known sharp edge in the one-shot form, not a pattern to copy verbatim.
 
 ### CHECK1 — flag strings, counts, and `Task N` removal
 
@@ -241,6 +376,54 @@ fa61197b5be4b7d2007d4dd5740f5d16697458bdb5119199cd12e29130778a84  fkit-wiki-lint
 b2947fc774934acdebe4c0a7971e80dd4069c6340aeb8d743e78cd2ce162a4c8  fkit-wiki-sync/SKILL.md
 ```
 
+> **Corrected 2026-07-27 (review finding R4).** **Those checksums prove stash round-trip integrity and
+> nothing more.** They were taken *before* the CHECK6 stash and re-verified *after* the pop, so they
+> establish that the stash did not corrupt the files — they say nothing about whether the edits are
+> confined to the intended lines. Presenting them as "what replaces the diff-based check" overstated
+> them. The reviewer supplied the method that actually does the job, below.
+
+#### The attribution that actually works — reversal (reviewer's method, reproduced firsthand)
+
+Reverse *exactly* the documented edit on the current block — swap the two flag lines back to their
+`Task N` forms, then delete the four rule lines and the single blank that precedes them — and measure
+what is left:
+
+```sh
+sed -n '51,88p' claude/skills/fkit-wiki-ingest/SKILL.md \
+ | sed "s|Task <NNNN>'s vault work is complete — ready to close (producer runs /fkit-task-done on ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md)|Task N's vault work is complete — ready to close (producer runs /fkit-task-done)|" \
+ | sed "s|Task <NNNN>: partial — not ready to close (ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md)|Task N: partial — not ready to close|" \
+ | awk '
+     /^   \*\*`<NNNN>` is the task folder/ { drop=4 }
+     drop>0 { drop--; if(drop==0) eat_blank=1; next }
+     eat_blank && $0=="" { eat_blank=0; next }
+     { eat_blank=0; print }
+   '
+```
+
+```
+REVERSED: count=33  bytes=2296
+TARGET  : count=33  bytes=2296   (brief.md:73, recorded before this task began)
+0153 artifacts remaining in the reversed block (<NNNN> / <slug> / priority-is-rank): 0
+original flag lines restored at relative lines 22 and 23
+```
+
+**Why this is stronger than the checksums.** It lands on a number recorded *independently and before the
+task started* — `brief.md:73`'s "2296 bytes, 33 lines each". Reversing the documented edit and hitting
+that pre-state exactly proves the in-block change surface is **exactly** the two flag lines plus the
+rule paragraph, and nothing else. **I had both numbers in §2 and never closed the loop between them.**
+Credit to the reviewer.
+
+> **⚠️ The "0125 is uncommitted" reason above is now stale — and the replacement reason is *not* better.**
+> Re-checked 2026-07-27 after the owner committed at **`994e3e3`**: the working tree is clean and the
+> three SKILLs are identical to `HEAD`. But `git diff` **still cannot attribute this change**, for a new
+> reason — `994e3e3` ("Tasks update") added **0125's block and 0153's change in a single commit**
+> (`ingest +42`, `lint +42`, `sync +48/-1`), and its parent `b86e5eb` has **no block at all**
+> (block-anchor count 0 → 1 across the pair). So the driver's statement that "`git diff` is now a usable
+> attribution tool again" is **incorrect**: fusing the two tasks into one commit removed the last
+> opportunity to separate them by diff. **The reversal method above remains the only working
+> attribution**, and it is unaffected by any of this because it works off the file's current content,
+> not its history.
+
 `git stash list` is empty afterwards — no stash left behind. `.claude/` mirrors untouched;
 `claude/fkit-claude-init.sh` was **not** run, per plan §6.8. `ai-agents/wiki-vault/` was **not** written
 by me — the vault modifications in `git status` are the wiki role's own in-flight work.
@@ -274,9 +457,10 @@ a green suite here means "nothing guards this text", not "the guard agrees".
 
 **This is the free ordering the brief hoped for.** 0154 asserts the flag lines verbatim; landing 0153
 first means 0154 now pins the *final* wording, with no rewrite of a brand-new test and no red window in
-between. **0154's author should assert the strings exactly as reproduced in §3** — and can reuse
-CHECK3's normalize-by-own-min-indent approach and its four negative controls, all of which are recorded
-above with their required outcomes.
+between. **0154's author should assert the strings exactly as reproduced in §3** — and can lift
+CHECK3's normalize-by-own-min-indent extractor and all five negative controls directly: the runnable
+implementations are in **§5.0–§5.2**, each with its required outcome, plus the two sharp edges (the
+`awk -v` trap, and NC5's hardcoded line ranges) called out in place.
 
 ## 7. The 0126 hazard — recorded, and discharged by an owner ruling
 
@@ -291,6 +475,18 @@ hand against both number-spaces.
 record of the hazard and its disposition, so a later reader does not mistake it for an open risk — but
 also does not conclude the board expressed something it could not.
 
+## 7b. Why this task's status read `🔲 Backlog` for the whole build — a driver bookkeeping lapse
+
+For the entire build **and** the whole review round, `0153`'s `## Status` field and its sprint-2 board
+row both read **`🔲 Backlog`**. The driver should have moved both to `🔄 In progress` before driving the
+task and did not; it corrected them at the start of the process-review round. Both now read
+`🔄 In progress` (verified: `brief.md:13`, and the board row at `sprint-2.md:149`).
+
+**Nothing produced here is affected** — no check, measurement, edit or verdict read the status field.
+Recorded only so the record is accurate about *why* the status lagged reality, rather than leaving a
+future reader to infer that the work started without the board knowing. The lapse is the driver's, not
+the coder's, and the fix was the driver's too.
+
 ## 8. Residuals and what is deliberately left open
 
 1. **The block is still prose enforced by nothing.** The ADR-018 hook never opens a `SKILL.md`
@@ -299,10 +495,10 @@ also does not conclude the board expressed something it could not.
    one's** — building a test here would have widened scope past the approved plan.
 2. **0125's R3 residual is not closed by this task.** The fail-closed check in §5 was run by hand; it is
    not committed anywhere. Only 0154 discharges R3, per the owner's SUBSUME ruling.
-3. **The convention file this text cites is itself uncommitted.** Both homes of
-   `priority-is-rank-not-identity.md` — the live copy and the `claude/scaffold/` copy — are **untracked**
-   in git right now (task 0103's work, in flight in this same sprint run). The citation resolves on disk
-   today and will ship correctly once 0103 commits, but a reader checking out `HEAD` alone would not
-   find it. Not a defect in this change; flagged so nobody re-derives it.
+3. ~~**The convention file this text cites is itself uncommitted.**~~ **RESOLVED 2026-07-27.** Both homes
+   of `priority-is-rank-not-identity.md` — the live copy and the `claude/scaffold/` copy — are now
+   **TRACKED**, verified by `git ls-files --error-unmatch` on both paths after the owner's commit
+   `994e3e3`. The citation resolves from `HEAD` and ships to consuming projects. The residual is closed,
+   not merely aged out; recorded rather than deleted so the earlier caveat is not left dangling.
 4. **Uniformity across the three files remains a human obligation.** The three blocks must be kept
    identical modulo the indentation offset; nothing mechanical holds that today.

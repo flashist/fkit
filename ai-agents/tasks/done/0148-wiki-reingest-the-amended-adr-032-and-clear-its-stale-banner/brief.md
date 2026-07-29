@@ -7,10 +7,10 @@
 Sprint 2
 
 ## Priority
-128
+132
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki

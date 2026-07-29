@@ -33,6 +33,15 @@ ADR-025 established that *"the coder spawns the producer and asks it to mark don
 
 Producer-only re-establishes **separation of the closing *identity*** — the doer role can no longer flip its own board green **under its own identity**, and that part is hook-enforced. It does **not** restore *prevention*: a determined doer can still spawn a producer to close. The win is structural role-separation at the mover, **not a laundering-proof gate**. Do not "harden" beyond the ADR — that residual is accepted and named.
 
+## Options considered
+
+Recorded because this page's re-raise clause points at *"the rejected 'producer + orchestrator' option"* without saying what it was.
+
+- **Producer-only, strict — chosen.** Re-consolidates close authority in the lifecycle role and makes it hook-structural. Cost: unwinds the coder ship-loop's self-close and the orchestrator's direct close; both gain a producer-spawn hop. Does not fully prevent extra-hop laundering (see §The limit).
+- **No self-close; the spawner or producer may close.** The doer never closes its own task, but the orchestrator may close work it delegated. Offered; **rejected by the owner** in favor of the stricter rule.
+- **Producer + orchestrator only.** An explicit two-role allowlist. Offered; **rejected** — the owner wanted the single lifecycle role, not two. *This is the option the re-raise clause names as the fallback if the added spawn hop proves clunky enough to hurt.*
+- **Keep ADR-025 (any role + marker).** The status quo. Rejected: the owner was re-consolidating close authority — the wiki's stuck marker (task 0108) was the trigger, the general preference the reason.
+
 ## Consequences
 
 - **Positive:** close authority is one role again **and hook-structural**, not prose — *"a role cannot close its own task under its own identity"* becomes a fact of the runtime; the wiki is cleanly wiki-only and 0108's stuck marker gets a real owner; the lifecycle is coherent (the role that plans and files also closes).
@@ -63,7 +72,7 @@ Two of these would have slipped the verification sweep entirely, because **the s
 - [[tasks/investigate-making-wiki-task-completion-visible-to-the-board]] — task 0108, the trigger; its recommendation was overruled
 - [[tasks/route-coder-ship-loop-close-to-producer]] · [[tasks/route-sprint-ship-loop-close-to-producer]] · [[tasks/revert-task-movers-to-producer-only]] — the three-task landing sequence
 - [[systems/fkit]] · [[systems/role-locked-sessions]]
-- [[systems/knowledge-base-structure]] — Knowledge-Base Structure
+- [[systems/knowledge-base-structure]] — the status-vocabulary page, which carries this producer-only rule as the current one
 - [[tasks/amend-project-brief-for-lead-conductor]] — Amend PROJECT.md for the evolved `fkit-lead` conductor
 - [[tasks/build-fkit-sprint-ship-loop-skill]] — Build the `fkit-sprint-ship-loop` skill (the lead's sprint-scope conductor loop)
 - [[tasks/refresh-architecture-doc-for-lead-conductor-and-stale-lock]] — Refresh architecture.md for the lead conductor + fix the stale §5.2 lock description
@@ -71,3 +80,8 @@ Two of these would have slipped the verification sweep entirely, because **the s
 - [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117: the wiki flagged its own task *ready to close* under §2 rather than closing it
 - [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — task 0118: its §A3 contrasts the **unenforced** approval marker with this ADR's **hook-enforced** §Decision 1
 - [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, closed through an **owner-present producer session** — the marker deliberately refused
+- [[tasks/enforce-task-status-vocabulary]] — the status vocabulary whose `Done`/`Cancelled` gating rule this ADR narrows back to one role
+- [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which **built** ADR-025's grant; this ADR reverses it while keeping its A2/A3 amendments and its forgeability analysis
+- [[tasks/implement-task-ship-loop-skill]] — the coder loop whose self-close §3 removes, replacing it with a producer hand-off
+- [[tasks/harden-task-movers-against-closed-sprint-link-rot]] — earlier mover hardening; its "no longer owner-only" gloss is corrected by this ADR
+- [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — **not amended by this ADR**; only an incidental "owner-only move rule" modifier in its body needed a dated correction

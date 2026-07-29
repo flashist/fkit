@@ -7,7 +7,7 @@
 Sprint 2
 
 ## Priority
-135
+138
 
 ## Status
 🔲 Backlog
@@ -85,7 +85,7 @@ number.
 | `ai-agents/tasks/done/0123-route-sprint-ship-loop-close-to-producer/brief.md` | P106 | `106` |
 | `ai-agents/tasks/done/0124-revert-task-movers-to-producer-only/brief.md` | P107 | `107` |
 | `ai-agents/tasks/done/0125-wiki-skills-flag-ready-to-close/brief.md` | P108 | `108` |
-| `ai-agents/tasks/backlog/0126-wiki-resync-for-adr-033/brief.md` | P109 | `109` |
+| `ai-agents/tasks/done/0126-wiki-resync-for-adr-033/brief.md` | P109 | `109` |
 | `ai-agents/tasks/backlog/0136-convert-skill-descriptions-to-block-scalars-and-guard/brief.md` | P114 | `114` |
 
 - **Re-derive the six from the sweep, do not trust this table's membership blindly.** Re-run the sweep
