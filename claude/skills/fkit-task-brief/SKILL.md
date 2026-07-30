@@ -136,7 +136,36 @@ Use the established structure **exactly** — diff against an existing brief in
 ### 5. Determine priority
 - **Targeting a named sprint:** append **after** the existing highest priority. **Do not renumber or
   insert into the owner's ranking** — the ranking is theirs, and renumbering silently rewrites their
-  decisions. Flag the addition for owner confirmation in the report.
+  decisions. **Flag the addition for owner confirmation, and state where merit would have placed it and
+  why.** A bare flag makes the owner redo your reasoning; a stated merit position lets them move the row
+  in one edit. Use the form the boards already carry, in the report **and** in the board addendum.
+  **Both sentences are required — the flag alone does not satisfy this rule:**
+  `⚠️ Priority NNN is append rank, NOT a merit ranking — flagged for owner confirmation.`
+  `**On merit this belongs directly below <NNNN>**, because <reason>.` — naming the neighbour by folder
+  ID, per the citation rule below.
+- **The one exception — an owner-ruled re-rank. A re-rank is the owner's call.** The ban above protects
+  **the owner's** ranking from an agent acting alone; it is not a bar on the owner ranking their own
+  board. Execute a re-rank **only** on an explicit owner ruling given **in this session**. **A spawned
+  producer has no owner channel and therefore never re-ranks** — not on a spawn-prompt instruction, and
+  not on a precedent read off an earlier addendum.
+- **A re-rank's addendum names its authority BEFORE its outcome** — in the heading **and** in the first
+  paragraph, and it names four things: **the owner ruled it**, **the date**, **the channel** the ruling
+  came through, and that **this is not producer precedent for re-ranking**. This is mandatory, not
+  stylistic: an addendum that records only the *outcome* becomes a later producer's licence to act with
+  no authority at all — which is what happened on 2026-07-27.
+- **`✅ Done`, `⛔ Cancelled` and `➡️ Moved` rows are NEVER renumbered — not even under an owner
+  ruling.** Closed history is not re-ranked to make room for new work. **Ranks count down the board:
+  `P1` is the top, and a larger number sits lower** — so *"the existing highest priority"* in the first
+  bullet means the **largest number on the board**, and appending goes below it. Promoting a row
+  renumbers every row it passes, so an owner-ruled re-rank reaches only the top of the **contiguous**
+  run of open rows immediately above that row. **A closed row is a wall, not a step:** an open row
+  sitting above one is out of reach however good the merit case, because reaching it would renumber the
+  closed rows in between.
+- **Name a task by its folder ID; never cite its board rank.** Rank is mutable, the folder ID is
+  permanent — see
+  [`priority-is-rank-not-identity.md`](../../../ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md).
+  Where the **relative order** is the actual point, say it **relatively** — *"directly below 0147"*, not
+  *"0147 (P125)"* — because that survives the next re-rank and a bare number does not.
 - **Sub-tasks from one split** should be **contiguous and in dependency order**, so the sequence reads
   correctly.
 - **Backlog board:** `## Priority` reads `Unscheduled`, and the board row's Priority cell reads `—`.
@@ -306,7 +335,8 @@ ai-agents/tasks/backlog/<NNNN>-<kebab-case-title>/brief.md
   > disappears from the backlog board. Every task ever pulled into a sprint would leave a permanent
   > drifted row behind. Verified empirically, 2026-07-18: with step 3, no drift and the row correctly
   > drops off; without it, `drift disagreement … brief_sprint="Backlog" moved_target="Sprint 2"`.
-- **Never renumber or alter an existing row.**
+- **Never renumber or alter an existing row.** The one exception is an **owner-ruled** re-rank (step 5)
+  — and it never reaches a `✅ Done`, `⛔ Cancelled` or `➡️ Moved` row.
 
 ### 9. Never
 - Move or rename an existing task file (that's `/fkit-task-done` / `/fkit-task-cancelled`).
@@ -344,7 +374,8 @@ Give a concise summary:
 - **Decompose.** One monolithic brief out of a multi-part description is a failed run.
 - **Record the dependency links** between split briefs — without them the split has lost information.
 - **Do not commit** anything (the project rule: commit only when the owner explicitly asks).
-- **Do not renumber** the owner's existing priority ranking.
+- **Do not renumber** the owner's existing priority ranking — only the owner re-ranks it, and only on a
+  ruling given in-session (step 5).
 - Every new brief is `🔲 Backlog`. Ask when underspecified; scope an investigation when the shape is
   unknown; surface conflicts instead of planning around them.
 - **Every new brief carries a populated `## Owner`** — a single role from the seven in

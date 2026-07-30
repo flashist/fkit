@@ -40,7 +40,9 @@ the skill lock above is unchanged.) Within a session,
 **calling** session's skill settings, not its own — so the skill boundary there is advisory, carried
 by each skill's `⛔ Owner:` banner. See
 [`ADR-012`](ai-agents/knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md).
-Role→skill ownership is declared in exactly one place: `skills_for_role()` in `claude/fkit-claude.sh`.
+Role→skill ownership is declared in exactly one place: `skills_for_role()` in
+`claude/skills-for-role.sh`, sourced by both `claude/fkit-claude.sh` and the `PreToolUse`
+skill-ownership hook.
 
 <!-- fkit:begin-rules -->
 <!-- fkit-managed: this block is REPLACED on every `fkit` launch. Edits inside these two markers

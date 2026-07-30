@@ -35,8 +35,13 @@ rank as `P<n>` is what makes the two number-spaces impossible to confuse at a gl
 - **The `➡️ Moved to [Sprint N](…) — priority M` marker.** That `priority M` is prose inside the
   **Status** cell and is the canonical form in
   [`task-status-vocabulary.md`](task-status-vocabulary.md). Leave it byte-identical.
-- **Existing `priority (folderID)` notations are frozen history.** They record what a row meant on the
-  day it was written. The notation simply becomes unnecessary going forward — it is never mass-edited.
+- **Existing `priority (folderID)` notations are frozen history — the board-cell form only.** A sprint
+  board's Priority cell like `124 (0150)` records what that row meant on the day it was written; the
+  notation simply becomes unnecessary going forward, and is never mass-edited. The **prose** form
+  `0150 (124)` in a brief's reasoning — the same two numbers, reversed — is **not** covered: it is a
+  live cross-reference that misdirects a reader today. Owner ruling, 2026-07-27. A stale one is
+  rewritten to **name the folder ID and drop the rank**; updating it to today's number only reproduces
+  the defect with a fresher date.
 - **Closed sprint plans under `sprints/done/`.** A closed plan's claims stay byte-identical.
 
 ## Where this is enforced
