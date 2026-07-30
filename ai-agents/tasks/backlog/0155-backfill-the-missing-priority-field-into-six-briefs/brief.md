@@ -137,9 +137,14 @@ number.
   `claude/skills/fkit-task-brief/SKILL.md`), and task briefs are not synced into
   `claude/scaffold/`. No scaffold copy changes.
 - **⚠️ Priority 133 is append rank, NOT a merit ranking — flagged for owner confirmation.**
+  *(as filed. **⚠️ Stale number reconciled 2026-07-30 by 0159's sweep — owner confirmation is still
+  outstanding.** The append rank named above was superseded by displacement in later re-ranks; this
+  brief's own `## Priority` field and its board row carry the live rank. **Nothing was re-ranked, and
+  this flag is NOT discharged** — only its stale number was reconciled. The merit argument below is
+  still awaiting an owner ruling, and is kept as the record of what was reasoned on the day.)*
   `/fkit-task-brief` step 5 requires appending after the existing highest priority and forbids
-  renumbering or inserting into the owner's ranking. On merit this belongs **immediately above 0146
-  (currently P130)** — above the archival-correction cluster (0146, 0149) because it touches a rule the
+  renumbering or inserting into the owner's ranking. On merit this belongs **immediately above 0146**
+  — above the archival-correction cluster (0146, 0149) because it touches a rule the
   sprint driver reads live rather than a closed record, and it is among the cheapest items on the
-  board; below 0151 (P122) and everything above it, because 0151 fixes a pointer that misdirects an
+  board; below 0151 and everything above it, because 0151 fixes a pointer that misdirects an
   agent **today** whereas this one is latent. The merit/append gap is about three slots.

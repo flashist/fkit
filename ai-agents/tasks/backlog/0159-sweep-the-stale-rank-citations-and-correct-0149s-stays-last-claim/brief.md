@@ -10,7 +10,7 @@ Sprint 2
 140
 
 ## Status
-🔲 Backlog
+🔄 In progress
 
 ## Owner
 fkit-producer
@@ -91,67 +91,110 @@ Rewrite each site below to **name the folder ID and drop the rank**, or — wher
 the actual point — to **say the order relatively** (*"directly below 0147"*), which survives a re-rank.
 Do **not** simply update the number to today's value: that reproduces the defect with a fresher date.
 
-**Live ranks read from `ai-agents/sprints/sprint-2.md` on 2026-07-27**, for reference only:
-`0126` P109 · `0136` P114 · `0142` P121 · `0146` P132 · `0147` P125 · `0148` P128 · `0149` P134 ·
-`0150` P126 · `0151` P123 · `0152` P133 · `0153` P117 (`✅ Done`) · `0154` P129 · `0155` P135 ·
-`0156` P136 · `0157` P127 · `0158` P122.
+**Live ranks re-derived mechanically from `ai-agents/sprints/sprint-2.md` on 2026-07-30** (all 145 rows
+parsed off the link column, 0 unparsed). **The 2026-07-27 list this brief was filed with is superseded —
+it was wrong for almost every entry by execution time:**
+`0136` P114 · `0142` P121 · `0143` P124 · `0146` P135 · `0148` P132 (`✅ Done`) · `0149` P137 ·
+`0150` P126 (`✅ Done`) · `0151` P123 (`✅ Done`) · `0152` P136 · `0154` P128 · `0155` P138 ·
+`0156` P139 · `0157` P130 (`✅ Done`) · `0158` P122 · `0159` P140 · `0160` P141 · `0161` P131
+(`✅ Done`) · `0162` P127 · `0163` P142 · `0164` P143 · `0165` P129 · `0166` P144 · `0167` P145.
 
-#### A1. Cross-references to another task's rank
+**⚠️ Findings table rebuilt in place at implementation time, 2026-07-30 — this is what was actually
+swept, and it replaces the table filed on 2026-07-27.** Between filing and execution the board was
+re-ranked at least twice more and **seven new briefs were filed (0160, 0162–0167)**. The totals barely
+moved but **the composition changed almost entirely**: filed as *21 stale numbers / 19 sites / 11 files*,
+executed as **20 stale numbers / 19 sites / 12 files**. Seven of the original fifteen A1 sites **left
+scope by closing**, four new A1 sites appeared, and A2 grew from 3 to 7. **Every `sprint-2.md:NNN`
+pointer in the original table was wrong by execution time.** This decay is the finding, not a footnote.
+
+#### A1. Cross-references to another task's rank — 12 sites, 13 stale numbers, 6 files
 
 | # | Site | Cited as | Live | Note |
 |---|---|---|---|---|
-| 1 | `0142/brief.md:96` — *"task 0151 (priority 121)"* | 121 | **123** | |
-| 2 | `0147/brief.md:99` — *"task 0150 (priority 124, directly below this one)"* | 124 | **126** | the *"directly below"* half is still true — keep it, drop the number |
-| 3 | `0150/brief.md:97` — *"adjacent to 0147 (123)"* | 123 | **125** | see A3 for the *"128 → 124"* fragment on the same line |
-| 4 | `0150/brief.md:104` — *"adjacent to 0147 (then priority 122, now **123**)"* | 123 | **125** | *"then priority 122"* is dated history; *"now 123"* is the live claim that is wrong |
-| 5 | `0152/brief.md:134` — *"0136 (P114), 0154 (127) and"* | 127 | **129** | **0136 (P114) is correct — do not touch it** |
-| 6 | `0152/brief.md:135` — *"this one (131)"* | 131 | **133** | self-reference |
-| 7 | `0154/brief.md:135` — *"this at 127, 0152 at 131, 0136 at P114"* | 127 / 131 | **129** / **133** | **0136 at P114 is correct — do not touch it** |
-| 8 | `0155/brief.md:142` — *"immediately above 0146 (currently P130)"* | 130 | **132** | *"currently"* makes it explicitly a live claim |
-| 9 | `0155/brief.md:144` — *"below 0151 (P122)"* | 122 | **123** | |
-| 10 | `0156/brief.md:58` — *"the same class as 0152 (P131)"* | 131 | **133** | |
-| 11 | `0156/brief.md:155` — *"the same class as 0152 (P131)"* | 131 | **133** | a **second, separate** line — both must be fixed |
-| 12 | `0157/brief.md` — *"0152 (P131) and 0154 (P127) are building the first two"* | 131 / 127 | **133** / **129** | in `## Notes`; survives 0157's narrowing |
-| 13 | `sprint-2.md` — the **0151** board row: *"plausible live specimen for 0142 (120)"* | 120 | **121** | ⚠️ **not on any earlier list** |
-| 14 | `sprint-2.md` — the **0147** board row: *"land with 0150 (124) in ONE `fkit-coder` session"* | 124 | **126** | the *"land together"* point is what matters — say it relatively |
-| 15 | `sprint-2.md` — the **0150** board row: *"now adjacent to 0147 (123)"* | 123 | **125** | *"now"* makes it a live claim; the *"promoted 128 → 124"* fragment on the same line is dated history — see A3 |
+| 1 | `0142/brief.md:96` — *"task 0151** (priority 121"* | 121 | **123** | rank dropped, folder ID kept |
+| 2 | `0152/brief.md:132-133` — *"Task **0154** (rank / 127"* | 127 | **128** | ⚠️ **NEW — found only by a wrap-aware scan.** The citation is **split across a line break**, so both of the plan's greps and every earlier pass missed it |
+| 3 | `0152/brief.md:134` — *"0136 (P114), 0154 (127) and"* | 127 | **128** | **`0136 (P114)` is correct — left byte-identical** |
+| 4 | `0152/brief.md:135` — *"this one (131)"* | 131 | **136** | self-reference → *"this task"* |
+| 5 | `0154/brief.md:135` — *"this at 127, 0152 at 131, 0136 at P114"* | 127 / 131 | **128** / **136** | reworded relatively. **`0136 at P114` correct — left byte-identical** |
+| 6 | `0154/brief.md:161` — *"see `0165` (P143)"* | 143 | **129** | ⚠️ **NEW** — 0165 was owner-promoted P143 → P129 on 2026-07-29 |
+| 7 | `0155/brief.md:141-142` — *"immediately above 0146 / (currently P130)"* | 130 | **135** | also **line-wrapped**; *"immediately above 0146"* kept, rank dropped |
+| 8 | `0155/brief.md:144` — *"below 0151 (P122)"* | 122 | **123** | |
+| 9 | `0156/brief.md:58` — *"the same class as 0152 (P131)"* | 131 | **136** | |
+| 10 | `0156/brief.md:155` — *"the same class as 0152 (P131)"* | 131 | **136** | a **second, separate** line — both fixed |
+| 11 | `0166/brief.md:174` — *"Coordinates with `0160`** (P140,"* | 140 | **141** | ⚠️ **NEW** |
+| 12 | `0166/brief.md:178` — *"Coordinates with `0165`** (P143)"* | 143 | **129** | ⚠️ **NEW** |
 
-#### A2. Append flags citing a priority the brief no longer carries
+#### A2. Append flags citing a priority the brief no longer carries — 7 sites, 7 files
 
-Four briefs carry a `⚠️ Priority NNN is append rank` flag whose number no longer matches their own
-`## Priority` field, because the owner re-ranked them afterwards.
+**Seven** briefs carry a `⚠️ Priority NNN is append rank` flag whose number no longer matches their own
+`## Priority` field — four more than at filing, because every brief filed since inherited the same shape.
 
 | # | Site | Flag says | `## Priority` is | Note |
 |---|---|---|---|---|
-| 16 | `0155/brief.md:139` | 133 | **135** | |
-| 17 | `0156/brief.md:152` | 134 | **136** | |
-| 18 | `0158/brief.md:141` | 136 | **122** | ⚠️ **not on any earlier list, and the worst of the four** — see below |
-| — | `0157/brief.md` | 135 | 127 | **already annotated as resolved — do not touch.** This is the shape to copy. |
+| 13 | `0155/brief.md:139` | 133 | **138** | superseded by later re-ranks |
+| 14 | `0156/brief.md:152` | 134 | **139** | superseded by later re-ranks |
+| 15 | `0158/brief.md:189` | 136 | **122** | **owner-ruled to 122 on 2026-07-27** — the flag still read *unresolved* |
+| 16 | `0159/brief.md:301` | 137 | **140** | ⚠️ **this task's own brief** |
+| 17 | `0160/brief.md:364` | 138 | **141** | ⚠️ `0160:347-348` already flagged this and deliberately left it — explicitly handed here |
+| 18 | `0163/brief.md:156` | 141 | **142** | ⚠️ **NEW** |
+| 19 | `0164/brief.md:166` | 142 | **143** | ⚠️ **NEW** |
+| — | `0157/brief.md` | 135 | 127 | `✅ Done` — **already annotated as resolved, untouched.** This is the shape that was copied. |
 
-**Site 18 is more than a stale number.** `0158`'s flag still reads as an **open, unresolved** request for
-owner confirmation (*"flagged for owner confirmation … On merit this belongs at 122"*) — but **the owner
-already ruled it, to exactly 122, on 2026-07-27**. A reader today sees an outstanding decision that was
-settled. Fix it the way `0157` was fixed: keep the flag as the record of why the number was questioned,
-and annotate it resolved with the date and the authority.
+**Site 15 was more than a stale number.** `0158`'s flag still read as an **open, unresolved** request for
+owner confirmation — but **the owner already ruled it, to exactly 122, on 2026-07-27**, verified firsthand
+at the sprint plan's *"Re-ranked 2026-07-27 (third re-rank of the day) **by owner ruling**"* addendum.
 
-**The shape for all four:** keep the original flag text (it records the reasoning), append the dated
-resolution — *"✅ resolved: owner ruled to N, 2026-07-27"* — and remove any live rank citation inside the
-flag's merit argument in favour of a relative form.
+**⚠️ Deviation from the approved plan's wording, on the record — corrected at review round 1.** The plan
+prescribed appending *"✅ resolved: owner ruled to N"* to **all seven** flags. Only `0158` was genuinely
+resolved by an owner ruling to a named rank. Writing *"owner ruled"* on the rest would have fabricated
+rulings that never happened, which is the exact `evidence-before-assertion` failure this task exists to
+fight — so the deviation itself was right, and the owner ratified it on 2026-07-30.
 
-#### A3. Judgment calls — decide, then state the decision in the report
+**The substituted wording was wrong twice over, and both were fixed in round 1:**
 
-These three fragments sit on lines that also carry an A1 finding, so the implementer will meet them:
+1. **It read *"✅ Resolved"*, which over-claimed.** Each flag's own text asks for *owner confirmation*;
+   no owner confirmed these six. What the sweep reconciled is the **stale number**; the **request is
+   untouched** and each brief still carries its unanswered merit argument. The six now say so plainly:
+   *stale number reconciled, owner confirmation still outstanding, flag not discharged.*
+2. **It re-introduced a live rank** — *"the live board rank is **P<N>**"* — present-tense prose that goes
+   stale at the very next re-rank, inside the briefs just swept. The six now point at each brief's own
+   `## Priority` field and board row instead, the durable form used throughout Part A.
 
-- `0150/brief.md:97` and the `0150` board row — *"promoted 128 → 124 by owner ruling 2026-07-26"*. This
-  records **what the owner ruled on a stated date**, so it reads as dated history under ruling 2. **The
-  recommendation is to leave it and fix only the live `(123)` half of the same line** — but say in the
-  report which way you went, because it sits inside a live row rather than a dated addendum.
-- `0157/brief.md` `## Context` — *"Producer A merit-ranked 0153/0154 into the middle of the board (P117
-  and P127)"* and *"appended 0155/0156 at P133/P134"*. These narrate **what two producers did on a stated
-  date**. Recommendation: **leave them**, they are the record of an action; if anything, add the folder
-  IDs beside them. 0157's narrowed brief already cites those specimens by folder ID elsewhere.
-- `0150/brief.md:101` — *"priority 128 was append rank"*. Same class: a dated record of the flag as filed.
-  Recommendation: **leave it.**
+**⚠️ `0160` is not a displacement-only case, and the earlier blanket claim that none of the six moved by
+owner ruling was false for it.** The sprint plan's **fourth re-rank of 2026-07-27** expressly adjudicated
+`0160`'s placement — ruling it **stays where it was appended** — and in the same breath **left its
+append-confirmation flag standing, undischarged**. Its marker records that specifically.
+
+**The plan's intent** (reconcile the stale number, keep the original text as the record) is honoured in
+full; the false attribution, the over-claim and the fresh live rank are all gone.
+
+**The shape used for all seven:** keep the original flag text (it records the reasoning), append a dated
+resolution marker, and leave the merit argument as the record of what was reasoned on the day.
+
+#### A3. Sites that left scope by closing — the carve-out, per owner ruling Q1, 2026-07-30
+
+**Seven of the original fifteen A1 sites and all three original board-row sites are `✅ Done` today and
+were deliberately NOT swept:** `0147/brief.md:99` · `0150/brief.md:97, :101, :104` · `0157/brief.md`
+`## Notes` and `## Context` · the `0151`, `0147` and `0150` board rows · `0161/brief.md:168`
+(*"128, immediately below 0157 (127)"* — **both numbers stale**). The owner ruled on 2026-07-30 that the
+brief's own carve-out — *"the historical prose inside `✅ Done` / `⛔ Cancelled` briefs and rows"* — wins
+over its findings table wherever the two conflict. **Cost accepted knowingly: a reader of a closed brief
+still meets a stale number.** The closed-artifact class was routed to `0160` rather than fixed here.
+
+**Also left byte-identical, verified correct today** (checked by name, not spot-checked): every
+*"0136 (P114)"* · `0154:90/122/124/157` · `0155:39-40/61/84-89/130` · `0156:30/135` · `0158:182/191` ·
+`0160:35/87-88/106/170-186/345/354` · `0162:148-158` · `0163:67` · `0165:105/136-137/208-240` ·
+`0166:153` · `0167:172/186`, and all **23 open board rows**, which carry **zero** stale rank citations.
+
+**Deliberately not folded in, flagged only:**
+- `0133:37` — *"0124 (`🔲 Backlog`, priority 107)"*: the **rank is correct** (0124 is P107), the **status
+  is stale** (0124 is `✅ Done`). A different defect class; not filed.
+- `sprint-2.md:1238` — *"**soft-follows 0143** (priority 121)"*, live rank **P124**. Sits inside a frozen
+  re-rank table cell, which this task's scope bounds exclude.
+- `0162:155` — *"Ten open rows still sit above it (P109, P113, P114, P118–P124)"*. **Only seven open rows
+  sit above P127 today** (P113, P114, P119, P120, P121, P122, P124); P109, P118 and P123 have since
+  closed. A stale **count**, not a stale citation — out of this task's class, and worth its own decision.
+- The `:NNN` line-number citation defect generally — that is `0160`'s.
 
 ---
 
@@ -254,11 +297,16 @@ before writing.
    contain their **original** claim text, and each carries a visible dated correction (or a visible
    pointer to one) naming *owner ruling, 2026-07-27*. **The correction states 2026-07-27 as the date of
    `:487`'s addendum, not 2026-07-26.**
-6. **0149 did not move.** 0149 is `P134`, appears in the board's Status table exactly once, and
+6. **0149 did not move.** 0149 is `P137` *(this step said `P134` as filed — itself an instance of the
+   defect this task sweeps; corrected 2026-07-30 against the live board)*, appears in the board's Status table exactly once, and
    `ai-agents/tasks/backlog/0149-.../brief.md` is **byte-identical** — it was never the site of the claim.
 7. **No rank changed anywhere.** `grep -oE '\| P[0-9]+ \|' ai-agents/sprints/sprint-2.md` returns the
-   identical sequence before and after, and every open brief's `## Priority` field still equals its board
-   cell. **Any difference is a failed task, not a fix.**
+   identical sequence before and after, and every open brief that **has** a `## Priority` field still has
+   it equal to its board cell. **Any difference is a failed task, not a fix.** ⚠️ *Corrected 2026-07-30
+   at review round 1: the original wording said "every open brief's `## Priority` field", which is not
+   true and never was — `0136` is an open row (`P114`) carrying **no `## Priority` heading at all**.
+   Backfilling it is `0155`'s deliverable, not this task's; the check is narrowed to what it can
+   actually verify rather than left asserting something false.*
 8. **The change surface is exactly the 11 files named** — the briefs for `0142`, `0147`, `0150`, `0151`,
    `0152`, `0154`, `0155`, `0156`, `0157`, `0158`, plus `ai-agents/sprints/sprint-2.md`. Nothing else. In
    particular **no task file moved** between `backlog/`, `done/` and `cancelled/`, and
@@ -299,7 +347,15 @@ before writing.
   honestly in the closing report** rather than left implied.
 
 - **⚠️ Priority 137 is append rank, NOT a merit ranking — flagged for owner confirmation.**
-  `/fkit-task-brief` step 5 requires appending after the existing highest priority (0156 at P136) and
+  *(as filed. **⚠️ Stale number reconciled 2026-07-30 by this task's own sweep — owner confirmation is
+  still outstanding.** The append rank named above was superseded by displacement in later re-ranks;
+  this brief's own `## Priority` field and its board row carry the live rank. **Nothing was re-ranked,
+  and this flag is NOT discharged** — only its stale number was reconciled. The merit argument below,
+  including its nine-slot merit/append gap, is still awaiting an owner ruling, and is kept as the
+  record of what was reasoned on the day.)*
+  `/fkit-task-brief` step 5 requires appending after the existing highest priority (0156, which was at
+  P136 **on the filing date, 2026-07-27** — kept as the dated arithmetic that produced this task's
+  append rank of 137, not as a live citation; for 0156's rank today, read its board row) and
   forbids renumbering or inserting into the owner's ranking. Filed by a spawned producer with no owner
   channel, so appending was the only sanctioned option.
   **On merit this belongs immediately below 0157** — the two are the halves of a single owner ruling and

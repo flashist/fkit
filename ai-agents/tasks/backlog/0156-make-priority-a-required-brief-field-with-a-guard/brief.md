@@ -55,7 +55,7 @@ heading**, never the shape of the value.
 **6 of 154 briefs, ≈4%** — not widespread. All six share one shape (heading omitted entirely, between
 `## Sprint` and `## Status`), and they cluster in two batch-filing sessions. And no mis-ordering is in
 flight: `fkit-sprint-ship-loop` falls back to the board cell, which agrees. **This is a low-severity,
-low-incidence, currently-harmless nonconformance** — the same class as 0152 (P131), and ranked with it
+low-incidence, currently-harmless nonconformance** — the same class as 0152, and ranked with it
 in mind. It is worth a guard because the guard is cheap and the pattern is already built, not because
 the defect is dangerous.
 
@@ -150,7 +150,12 @@ neighbouring callouts; the rules-block budget is under pressure (task 0130).
   `ai-agents/tasks/README.md` nor `ai-agents/README.md` documents the brief schema (all verified
   2026-07-27). No `claude/scaffold/` change.
 - **⚠️ Priority 134 is append rank, NOT a merit ranking — flagged for owner confirmation.**
+  *(as filed. **⚠️ Stale number reconciled 2026-07-30 by 0159's sweep — owner confirmation is still
+  outstanding.** The append rank named above was superseded by displacement in later re-ranks; this
+  brief's own `## Priority` field and its board row carry the live rank. **Nothing was re-ranked, and
+  this flag is NOT discharged** — only its stale number was reconciled. The merit argument below is
+  still awaiting an owner ruling, and is kept as the record of what was reasoned on the day.)*
   `/fkit-task-brief` step 5 requires appending and forbids renumbering the owner's ranking. On merit
   this belongs **immediately below 0155**, both because of the hard dependency and because on its own
-  it is the same class as 0152 (P131) — a guard against a low-severity, ≈4%-incidence, currently-
+  it is the same class as 0152 — a guard against a low-severity, ≈4%-incidence, currently-
   harmless nonconformance. The merit/append gap is about three slots.

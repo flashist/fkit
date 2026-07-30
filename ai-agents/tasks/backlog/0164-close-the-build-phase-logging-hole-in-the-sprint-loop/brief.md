@@ -163,7 +163,12 @@ paragraph. **Do not** re-open A2 — `0147` satisfies it.
 - **Not a dual-home concern.** Verified 2026-07-29: `claude/scaffold/` ships no `agents/` and no
   `skills/`. No scaffold change.
 - **Prose only, and unenforced — say so in the report.** Do not add a guard.
-- **⚠️ Priority 142 is append rank, NOT a merit ranking — flagged for owner confirmation.** Filed by a
+- **⚠️ Priority 142 is append rank, NOT a merit ranking — flagged for owner confirmation.**
+  *(as filed. **⚠️ Stale number reconciled 2026-07-30 by 0159's sweep — owner confirmation is still
+  outstanding.** The append rank named above was superseded by displacement in later re-ranks; this
+  brief's own `## Priority` field and its board row carry the live rank. **Nothing was re-ranked, and
+  this flag is NOT discharged** — only its stale number was reconciled. The merit argument below is
+  still awaiting an owner ruling, and is kept as the record of what was reasoned on the day.)* Filed by a
   spawned producer with **no owner channel**; appending after the existing highest priority was the only
   sanctioned option under `/fkit-task-brief` step 5 as written, which the spawning driver explicitly
   required for this brief. **On merit this belongs immediately below `0163`**, on the co-landing argument

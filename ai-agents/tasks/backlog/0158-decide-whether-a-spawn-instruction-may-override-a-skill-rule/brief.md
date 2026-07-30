@@ -186,7 +186,11 @@ not write the clause into any skill under this task.
 - **The cheap outcome is a legitimate outcome.** The architect may rule in a paragraph that the skill
   always wins and the deliverable is one convention page. That is a fine result. The point is that a
   *producer* must not make the call, not that the call is necessarily hard.
-- **⚠️ Priority 136 is append rank, NOT a merit ranking — flagged for owner confirmation.** Filed by a
+- **⚠️ Priority 136 is append rank, NOT a merit ranking — flagged for owner confirmation.**
+  *(as filed. **✅ Resolved — the owner ruled it to P122 on 2026-07-27**, accepting the merit argument
+  below in full; see the sprint plan's *"Re-ranked 2026-07-27 (third re-rank of the day) **by owner
+  ruling** — 0157 and 0158 moved from append rank to their merit positions"* addendum. The flag no
+  longer reads unresolved. Reconciled 2026-07-30 by 0159's sweep; nothing was re-ranked.)* Filed by a
   spawned producer with no owner channel; per the owner's ruling of 2026-07-27, appending was the only
   sanctioned option. **On merit this belongs at 122** — immediately below 0142 (P121), for the class
   adjacency above: same investigator, overlapping surface, and an investigation whose cost of waiting is

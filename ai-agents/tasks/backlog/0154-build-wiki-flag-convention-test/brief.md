@@ -132,7 +132,7 @@ harness file or co-land in one `fkit-coder` session is an open call for the owne
   `AskUserQuestion`.
 - **⚠️ Open call for the owner — harness sharing with 0152 and 0136.** All three read `SKILL.md`
   bodies, all three are hand-rolled under ADR-014, and all three would benefit from one walk. On merit
-  they rank apart (this at 127, 0152 at 131, 0136 at P114). The producer did **not** re-rank 0152 to sit
+  they rank apart (0152 sits below this task, 0136 at P114). The producer did **not** re-rank 0152 to sit
   beside this task, because that is a re-ranking of existing work on producer judgment rather than an
   owner ruling. **If the owner prefers one session over three, the cheapest form is co-landing this
   task with 0152.**
@@ -158,7 +158,7 @@ harness file or co-land in one `fkit-coder` session is an open call for the owne
     `✅ Done`. Raising this task was ruled; lowering 0162 was not. See the sprint plan's *"Promoted by
     OWNER RULING 2026-07-29"* addendum for the full authority note and the open question left for the
     owner.
-- **⚠️ This task does not cover the failure that produced its promotion — see `0165` (P143).** This test
+- **⚠️ This task does not cover the failure that produced its promotion — see `0165`.** This test
   asserts the five required strings are **present in the three wiki `SKILL.md` files**. They were present
   throughout the 2026-07-29 `0141` deviation (`ai-agents/wiki-vault/log.md:623`), so **this test would
   have been green for its entire duration**. It guards the **source text**; `0165` decides where a check

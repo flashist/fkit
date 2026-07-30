@@ -171,11 +171,11 @@ not edit `evidence-before-assertion.md`, any SKILL, or any agent definition unde
   deliverable. `0013` adds worked examples; this decides the enforcement point `0013` recorded as its
   own unresolved counter-argument. **Do not merge.** If this rules that a fourth example is wanted,
   `0013` is where it goes.
-- **Coordinates with `0160`** (P140, durable citation form). The **shifted-citation** class above is
+- **Coordinates with `0160`** (durable citation form). The **shifted-citation** class above is
   `0160`'s territory — `log.md:648` names this instance as a live specimen for `0160`. **Scope
   boundary: this task rules on the *unrun-claim* class; `0160` rules on the *mutable-coordinate*
   class.** Cite the specimen, do not re-decide it.
-- **Coordinates with `0165`** (P143) — same run, adjacent class. `0165` is about the **form** of a
+- **Coordinates with `0165`** — same run, adjacent class. `0165` is about the **form** of a
   prescribed output; this is about the **truth** of a claim in a record. Both are *"unenforced prose
   about what an agent does at runtime, caught only by an independent reviewer."* Adjacency, not
   dependency.

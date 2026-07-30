@@ -93,7 +93,7 @@ Answer these, with evidence, and recommend one path:
   and incomplete inventories). **0137 teaches; this task fixes the specific mechanism.** The owner
   considered folding this into 0137 and chose to keep it separate for that reason. Read 0137's brief
   before starting so the two do not contradict each other.
-- **A third candidate specimen — task 0151** (priority 121, *correct `CLAUDE.md`'s stale
+- **A third candidate specimen — task 0151** (*correct `CLAUDE.md`'s stale
   `skills_for_role()` location*, owner fkit-coder), **added as a pointer 2026-07-26; this task's status,
   priority and scope are unchanged.** `CLAUDE.md:43` says `skills_for_role()` is declared in
   `claude/fkit-claude.sh`; it moved to `claude/skills-for-role.sh` under **task 43 / ADR-018**, and

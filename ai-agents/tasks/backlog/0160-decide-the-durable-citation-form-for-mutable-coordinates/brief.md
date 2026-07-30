@@ -346,6 +346,10 @@ No convention page, no skill edit, no guard, and no repair sweep in this task.**
   re-ranked.** The closing producer had recommended a separate task; the owner ruled against it.
   **⚠️ The rank note directly below says "Priority 138" while the `## Priority` field and the board row
   both read `P141` — a pre-existing inconsistency, observed 2026-07-29, deliberately NOT edited here.**
+  — swept by 0159, 2026-07-30: the flag's stale number now carries a reconciliation marker pointing at
+  this brief's own `## Priority` field and board row rather than repeating a rank. **The flag itself
+  still stands, undischarged.** The observation above stands as the dated record of what was found on
+  2026-07-29.
 - **🆕 2026-07-30 — case 5 added; scope, `## Owner` and rank unchanged.** The `0157` close routed its
   wall-clause finding here rather than opening a new task (**owner ruling 2026-07-30, via
   `AskUserQuestion` in the live `/fkit-sprint-ship-loop` driver session**). The owner considered filing
@@ -361,7 +365,15 @@ No convention page, no skill edit, no guard, and no repair sweep in this task.**
   **Verification step 10 exists precisely so the architect can rule it out and hand it back** without
   that reading as a dropped finding. **Recorded as a dissent, not a ruling — the owner's routing
   stands.**
-- **⚠️ Priority 138 is append rank, NOT a merit ranking — flagged for owner confirmation.** Filed by a
+- **⚠️ Priority 138 is append rank, NOT a merit ranking — flagged for owner confirmation.**
+  *(as filed. **⚠️ Stale number reconciled 2026-07-30 by 0159's sweep — but this flag itself STANDS,
+  UNDISCHARGED.** The append rank named above was superseded by displacement in later re-ranks; this
+  brief's own `## Priority` field and its board row carry the live rank. **Unlike the other briefs
+  swept, this task's placement WAS adjudicated by the owner** — the sprint plan's fourth re-rank of
+  **2026-07-27** ruled that `0160` **stays where it was appended**, and in the same breath **expressly
+  left this append-confirmation flag standing, undischarged**. **Nothing was re-ranked, and nothing
+  here discharges the flag** — only its stale number was reconciled. The merit argument below is kept
+  as the record of what was reasoned on the day.)* Filed by a
   spawned producer with no owner channel; per `/fkit-task-brief` step 5 appending was the only sanctioned
   option. **On merit this belongs below 0161 and above the 0157/0159 pair is *not* claimed** — it is an
   investigation with no work blocked behind it, and its cost of waiting is that new stale citations keep
