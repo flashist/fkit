@@ -176,3 +176,4 @@ re-raise the dual-format transition, content-hash IDs, numbering only open tasks
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
 - [[tasks/add-owner-field-to-brief-schema-and-task-brief-skill]] — Add a structured `## Owner` field to the brief schema and the task-brief skill
 - [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102: Decision 5 **upheld**, Decision 6 found **never landed**; the re-raise clause firing and being answered
+- [[decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record]] — the folder model here is what makes *"the task's own record"* (`brief.md`, `worklog.md`, `review.md`) a **well-defined set of files**, so a review close-bar can be drawn against it. ⚠️ That bar splits at the **site, not the file** — one file can be both the task's own record and swept work product

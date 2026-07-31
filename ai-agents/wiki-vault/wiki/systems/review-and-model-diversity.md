@@ -38,6 +38,16 @@ The reviewer's independence is a property of a **fresh context**, not of a promp
 ### The review ledger — loop prevention
 The **review ledger** — `review.md` inside the task folder (`tasks/<board>/<NNNN>-<slug>/review.md`; formerly the top-level `ai-agents/reviews/<task-id>.md`, absorbed 2026-07-21 by [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]]) — is a **two-party ledger** written by reviewer **and** coder: findings, dispositions, and **accepted residuals**. It carries decision state across review rounds so settled tradeoffs are **not re-litigated**. It is the memory that stops the review loop from cycling. *(Two sprint-keyed ledgers had no task folder and live at `ai-agents/sprints/reviews/`.)*
 
+#### When the ledger closes — the bar (ADR-034, 2026-07-31)
+
+**The ledger closes once the SWEPT WORK PRODUCT is clean.** A defect in the **work product** — the artifact the task exists to change — **still blocks and still drives another round**. A residual defect in the task's **own record** (`brief.md`, `worklog.md`, the ledger's own bookkeeping) is **recorded as an accepted residual** with a *Re-raise only if*, instead of driving another round. See [[decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record]].
+
+> ⚠️ **The split is drawn at the SITE, not the file.** One file can be **both** the task's own brief **and** one of the swept files — a swept site inside the task's own brief is **work product**. A file-level reading closes over real defects. **The classification belongs to the reviewer**, who owns the findings section.
+
+**The accepted cost, stated because a benefit-only reading misrepresents the ruling:** a closing task's own worklog **may carry known low-severity defects**, and **genuine finds are forgone** — those rounds do not run, so their equivalents are **not found at all, not merely deferred**. Task `0159` is the evidence and the precedent: four of its Codex-raised findings (R8, R10, R11, R12) sat in exactly that surface, and it **closed with two own-record residuals standing**. **"Closed-out" therefore means clean to a *work-product* standard, not a *record-perfect* one** — reading a closed ledger as "everything about this task is clean" is wrong.
+
+⚠️ **The bar binds three roles' skills** — `fkit-stateful-review` (reviewer), `fkit-process-stateful-review` (coder) and `fkit-task-ship-loop` (the loop's termination) — but **ADR-034 edited none of them**. Until pointer tasks land, the ADR is the **only** durable home for the rule and each role must reach it there.
+
 ### Review notes are inputs, not instructions
 A project-wide rule: review comments are **inputs to evaluate**, not instructions to apply blindly. Reviewers miss context and reason from outdated assumptions. The coder verifies each claim against the actual codebase — fixing the *real* problem rather than the literal wording, addressing the valid part of a partially-correct note, and **saying so with concrete evidence** when a note is simply wrong. Speculative fixes added only to satisfy a comment are not acceptable.
 
@@ -72,3 +82,5 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - [[tasks/design-task-folder-structure-and-id-scheme]] — the adversarial pass on task 74 produced **18 findings** and forced revision 2's three substantive changes
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
 - [[tasks/route-coder-ship-loop-close-to-producer]] — Rewrite `fkit-task-ship-loop` step 9 — self-close → route the close to the producer
+- [[decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record]] — **the ledger's close condition**: clean on the swept work product; own-record residuals recorded, not re-reviewed. Split at the **site**, not the file
+- [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the folder model that absorbed `review.md` into the task folder

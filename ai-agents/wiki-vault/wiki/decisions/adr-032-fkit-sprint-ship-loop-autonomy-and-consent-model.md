@@ -105,3 +105,4 @@ R4 offered a **narrower alternative** — the driver relays every accepted fix f
 - [[systems/fkit]] · [[systems/role-locked-sessions]]
 - [[systems/testing-and-verification]] — Testing & Verification
 - [[tasks/refresh-architecture-doc-for-lead-conductor-and-stale-lock]] — Refresh architecture.md for the lead conductor + fix the stale §5.2 lock description
+- [[decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record]] — ruled during a run of **this** loop. ⚠️ The driver proposed filing the review close-bar as a step **in this skill's SKILL**; the owner **rejected that** and took the reviewer's side — it is a cross-role rule, so it lives in an ADR, not here

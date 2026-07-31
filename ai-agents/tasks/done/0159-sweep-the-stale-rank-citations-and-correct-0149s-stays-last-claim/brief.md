@@ -10,7 +10,7 @@ Sprint 2
 140
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-producer
@@ -169,7 +169,10 @@ append-confirmation flag standing, undischarged**. Its marker records that speci
 full; the false attribution, the over-claim and the fresh live rank are all gone.
 
 **The shape used for all seven:** keep the original flag text (it records the reasoning), append a dated
-resolution marker, and leave the merit argument as the record of what was reasoned on the day.
+**reconciliation** marker, and leave the merit argument as the record of what was reasoned on the day.
+**Only `0158`'s marker records a genuine resolution** — an owner ruling to a named rank. The other six
+record that the **stale number** was reconciled and that **owner confirmation is still outstanding**;
+none of them discharges its flag.
 
 #### A3. Sites that left scope by closing — the carve-out, per owner ruling Q1, 2026-07-30
 
@@ -297,9 +300,17 @@ before writing.
    contain their **original** claim text, and each carries a visible dated correction (or a visible
    pointer to one) naming *owner ruling, 2026-07-27*. **The correction states 2026-07-27 as the date of
    `:487`'s addendum, not 2026-07-26.**
-6. **0149 did not move.** 0149 is `P137` *(this step said `P134` as filed — itself an instance of the
-   defect this task sweeps; corrected 2026-07-30 against the live board)*, appears in the board's Status table exactly once, and
-   `ai-agents/tasks/backlog/0149-.../brief.md` is **byte-identical** — it was never the site of the claim.
+6. **0149 did not move.** `0149`'s board rank is **unchanged across this task's diff**, proved by the
+   **rank→ID→folder mapping being identical across all 145 board rows** before and after — *not* by the
+   `| P<n> |` sequence alone, which two rows swapping IDs would leave identical, and not by naming a
+   number. Step 7's *"every open brief that has a `## Priority` field equals its board cell"* clause is a
+   second, independent proof, since `0149/brief.md` is **byte-identical**. `0149` appears in the board's
+   Status table exactly once; it was never the site of the claim. ⚠️ *Corrected 2026-07-30 at review round 2: this step used to name a
+   rank — `P134` as filed, refreshed to `P137` in round 1. **Both were wrong in kind.**
+   `priority-is-rank-not-identity.md:42-44` requires a stale citation be rewritten to **name the folder
+   ID and drop the rank**, because "updating it to today's number only reproduces the defect with a
+   fresher date" — and this one sat inside an **operative verification criterion**, so every re-run
+   would have had to re-check a decaying number. The rank was never load-bearing here.*
 7. **No rank changed anywhere.** `grep -oE '\| P[0-9]+ \|' ai-agents/sprints/sprint-2.md` returns the
    identical sequence before and after, and every open brief that **has** a `## Priority` field still has
    it equal to its board cell. **Any difference is a failed task, not a fix.** ⚠️ *Corrected 2026-07-30

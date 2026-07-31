@@ -170,7 +170,15 @@ do not write the number.
 - **Depends on:** nothing
 - **Blocks:** nothing yet — its follow-ups are named by the ruling itself, not pre-declared.
 - **Priority `145` was appended after the existing highest (`P144`, task `0166`) per `/fkit-task-brief`
-  step 5. Nothing was renumbered or inserted. ⚠️ Flagged for owner confirmation.** Merit for the rank, so
+  step 5. Nothing was renumbered or inserted. ⚠️ Flagged for owner confirmation.**
+  *(as filed. **✅ Resolved — the owner confirmed the appended rank on 2026-07-30**, via
+  `AskUserQuestion` at the start of the 2026-07-30/31 `/fkit-sprint-ship-loop` run. The rank is
+  **owner-confirmed**, no longer merely appended; the row did not move and nothing was renumbered, so
+  the merit alternative stated below — a rank above the tail — was **not** taken. The flag no longer
+  reads unresolved. ⚠️ **Recorded here and on the board only on 2026-07-31, a day after the ruling** —
+  the driver never routed the confirmation to a producer on the day it was given, so both records
+  asserted an unresolved flag for a day after the owner had in fact ruled. The delay is a record-keeping
+  defect, not a second ruling.)* Merit for the rank, so
   the owner can move it deliberately: the gap has fired **twice in two consecutive runs** and both times
   cost live owner attention, which argues for a higher rank than a tail append; against that, both
   recoveries **succeeded**, no work was lost, and the class was **already owner-ruled as an accepted
