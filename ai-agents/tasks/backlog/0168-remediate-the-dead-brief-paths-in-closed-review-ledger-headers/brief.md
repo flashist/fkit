@@ -49,11 +49,27 @@ A task folder's `review.md` opens with a self-header naming the brief under revi
 Task: `ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md`
 ```
 
-`/fkit-task-done` then `git mv`s the folder to `done/`, and that path points at nothing. It is a
-**code span, not a markdown href** — nothing resolves through it, no navigation breaks, and
-**severity is low**. It sits in the task's own record, which the owner's close bar (ruled
-2026-07-31) accepts as residual. It is filed as a class because it belongs to no single task: it is a
-bounded, mechanical, repo-wide condition that stays invisible precisely because nobody owns it.
+`/fkit-task-done` then `git mv`s the folder to `done/`, and that path points at nothing. For the
+**large majority** it is a **code span or a bare path, not a markdown href** — nothing resolves
+through it, no navigation breaks, and **severity is low**. It sits in the task's own record, which
+the owner's close bar (ruled 2026-07-31) accepts as residual. It is filed as a class because it
+belongs to no single task: it is a bounded, mechanical, repo-wide condition that stays invisible
+precisely because nobody owns it.
+
+> **🆕 2026-08-01 — corrected: "0 of 60 are hrefs" was wrong. 4 are, and their links work.**
+> **What this brief said:** that the header is *"a code span, not a markdown href"*, stated flatly for
+> the whole population — i.e. **0 of 60** headers in href form. The figure reached this brief from a
+> decision report that has since been corrected; it was not re-derived here.
+> **What it actually is: 4 of 60 headers ARE markdown hrefs, and all 4 hrefs resolve.** Their target
+> is the relative, location-free `./brief.md`, which survives the `git mv` intact — so **navigation
+> does not break for these 4**. What is stale in them is only the **link text**, a code span naming a
+> dead pre-migration flat path. All 4 sit inside **Variant 3** (the 9 `done/<slug>.md` cases) and are
+> already inside the dead-header count; **no count in the table below changes.**
+> **Consequence for this task:** the sweep needs a **fourth case** — see `## What to build` item 1 —
+> and the mover explanation further below is **incomplete for these 4**.
+> *Provenance: reviewer re-measurement during the `0160` stateful review; owner ruling 2026-08-01 via
+> `AskUserQuestion` in the live `/fkit-sprint-ship-loop` driver session. Re-verified firsthand here on
+> 2026-08-01 — see the form table below.*
 
 ### Measurement — re-derived firsthand 2026-07-31, and the reported figure is wrong
 
@@ -89,6 +105,28 @@ are in the reported figure at once.
 Variants 2 and 3 are not "re-point the path" cases even if 0160 rules repair — there is no live path
 to re-point to without also translating the pre-0062 flat name to its `NNNN` folder.
 
+**🆕 2026-08-01 — a second axis the original measurement never took: the *form* the header is written
+in.** The variants above classify *which path* is named; they say nothing about *how*. Classifying
+every `^Task: ` header in `ai-agents/tasks/done/*/review.md` by markdown form — measured firsthand
+2026-08-01, same 60-file population:
+
+| Header form | Count | Named path dead | Named path resolves |
+|---|---|---|---|
+| Backtick code span | 30 | 26 | 4 |
+| Bare path, no markup | 25 | 10 | 15 |
+| **Markdown href `[text](target)`** | **4** | **4** | 0 |
+| No `^Task: ` header at all | 1 | — | — |
+
+**All 4 hrefs point at `./brief.md`** — relative and location-free — **and all 4 resolve on disk.**
+All 4 are Variant 3. So a header can be *dead in its displayed text and live in its link at the same
+time*, and this brief's earlier flat "code span, not a markdown href" hid that case entirely. The
+dead/resolves totals are unchanged: **40 dead, 19 resolve**, re-derived 2026-08-01 and matching the
+2026-07-31 table exactly.
+
+⚠️ **"Dead" in the table above means the path the header *names* does not exist.** For the 4 hrefs
+that is the link **text** only; the link **target** works. Do not collapse the two — a sweep that
+treats these 4 as broken navigation will "fix" a link that was never broken.
+
 **0160's own count was 30, measured 2026-07-27**; 31 today is consistent with two tasks closing since.
 There is no contradiction between 0160 and this brief — only between both of them and the 39.
 
@@ -106,6 +144,20 @@ the moved folder's own files — *"The moved folder's OWN outbound links"* — i
 folder makes **to a sibling task**, and gives sibling-shaped examples only. A self-referential code
 span is neither an href nor a sibling link. **The mover does not touch it, by the design of its own
 wording, not by oversight.** `/fkit-task-cancelled` carries the same rule and the same gap.
+
+**🆕 2026-08-01 — this explanation is incomplete for 4 of the 60, and the gap there is a different
+gap.** The reasoning above assumes no header is an href. **4 are.** For those the mover's href rule
+*is* in principle in range — but there is **nothing for it to re-point**: the target is already the
+relative `./brief.md`, which the `git mv` carries along unbroken. The mover's non-action on these 4
+is therefore **correct behaviour, not a miss**. What the mover still does not reach is the href's
+**link text**, which is a code span naming a dead path — and no rule in either mover speaks to link
+text. So there are **two distinct mover gaps**, not one:
+- **Gap A (56 headers)** — code-span / bare self-references the href rule never reaches at all.
+- **Gap B (4 headers)** — href targets that are already correct, wrapped in **stale link text** no
+  rule governs. Repairing A's pattern here would be wrong; only the text is stale.
+
+*Provenance: reviewer re-measurement during the `0160` stateful review; owner ruling 2026-08-01 via
+`AskUserQuestion` in the live `/fkit-sprint-ship-loop` driver session.*
 
 ### What writes the header
 
@@ -127,13 +179,23 @@ half cannot be scoped ahead of 0160 either.
 1. **The ledger population** — apply 0160's ruled treatment to the **40** dead headers in
    `ai-agents/tasks/done/*/review.md`, handling all **three** variants above explicitly. If the ruling
    is "leave them dead and accept it", the deliverable is the written acceptance, not an edit.
+   **🆕 2026-08-01 — plus a fourth case, cutting across the three variants: the 4 href-form headers.**
+   Their link **target** (`./brief.md`) already resolves and **must not be re-pointed or unwrapped**;
+   only their link **text** carries the dead path. Whatever 0160 rules, state its treatment for these
+   4 **separately** from the 56, and preserve a working relative link wherever one already exists. A
+   sweep written against "every header is a code span" will either skip these 4 or mangle a link that
+   works — say which of the two your implementation does, and why it is right.
+   ⚠️ **Do not classify by variant alone.** Variant (which path is named) and form (how it is written)
+   are **independent axes**; all 4 hrefs hide inside Variant 3's 9.
 2. **The generator** — apply 0160's ruled treatment to the schema line in
    `claude/skills/fkit-stateful-review/SKILL.md` and `claude/skills/fkit-process-stateful-review/SKILL.md`.
    ⚠️ **The two schemas are declared shared and must stay byte-identical** — changing one alone breaks
    the interop the skills promise each other.
 3. **The movers** — state whether `/fkit-task-done` and `/fkit-task-cancelled` gain any duty here, or
    explicitly do not. Their current href-only scope is deliberate; widening it is a decision, not a
-   tidy-up.
+   tidy-up. **🆕 2026-08-01 — answer for *both* mover gaps named above**: Gap A (56 code-span/bare
+   headers the href rule never reaches) and Gap B (4 hrefs whose target is already right but whose
+   link text is stale). They may well be ruled differently; do not answer only Gap A.
 4. **`cancelled/`** — cover it in whatever rule lands, and record that it holds zero `review.md`
    files today so a later reader does not re-measure.
 5. **`0080`'s missing header** — decide whether a `review.md` with no `Task:` line at all is in scope
@@ -153,14 +215,23 @@ skill-file walk.
 2. **Classify positively.** A `grep` returning nothing is a failure mode, not a proof. Every file in
    `done/` must land in exactly one bucket — resolves / dead-backlog / dead-done / no-header — and the
    buckets must sum to the folder count.
-3. ⚠️ **Never run a `.{0,80}(…)` context regex over `ai-agents/sprints/sprint-2.md`** — its rows are
+3. **🆕 2026-08-01 — classify on the second axis too, and report both tables.** Every header must also
+   land in exactly one **form** bucket — href / code span / bare / no-header — summing to the same
+   folder count. **Report the href count explicitly even if it is zero**; a re-derivation that omits
+   the form axis has not re-derived the corrected claim, only the old one. For every href found,
+   report its target and whether that target resolves.
+4. **🆕 2026-08-01 — prove no working link was broken.** After any edit, re-resolve every href target
+   in the population. Any href that resolved before **must still resolve**, byte-identical target
+   unless the ruling explicitly changed it. A diff that turns a working `[…](./brief.md)` into a code
+   span is a regression, not a repair — even if the ruling's headline is "make them all code spans".
+5. ⚠️ **Never run a `.{0,80}(…)` context regex over `ai-agents/sprints/sprint-2.md`** — its rows are
    multi-thousand-character single lines and it backtracks catastrophically. Use `grep -n` and slice.
-4. If the ruling is an edit: show the before/after of one file per variant, and prove no `review.md`
-   section other than the header line changed (the Reviewer, Coder-response and Accepted-residuals
-   sections are owned by their parties).
-5. If the ruling touches the schema: diff both skill files against each other and show the shared
+6. If the ruling is an edit: show the before/after of one file per variant **and one per form** —
+   including at least one of the 4 hrefs — and prove no `review.md` section other than the header line
+   changed (the Reviewer, Coder-response and Accepted-residuals sections are owned by their parties).
+7. If the ruling touches the schema: diff both skill files against each other and show the shared
    block is byte-identical.
-6. Full test suite green.
+8. Full test suite green.
 
 ## Notes
 
@@ -186,7 +257,20 @@ skill-file walk.
   apply here** — a task's own record stops being residual when it *"becomes load-bearing for another
   consumer — e.g. a guard, a report generator"*. Whether 40 dead paths across the corpus meet that
   bar is a question for 0160, not an assumption for this brief.
-- **Low severity, deliberately.** Nothing resolves through a code span. The producer closing 0159
+- **🆕 2026-08-01 — one factual correction landed in this brief, recorded rather than overwritten.**
+  It previously asserted, flatly, that the header is *"a code span, not a markdown href"* — i.e.
+  **0 of 60** in href form. **4 of 60 are hrefs, and all 4 hrefs resolve** (`./brief.md`, relative and
+  move-proof); only their link text names a dead path. Measured firsthand 2026-08-01 by taking the
+  first `^Task: ` line of every `ai-agents/tasks/done/*/review.md`, classifying its markdown form, and
+  testing both the named path **and** the href target for existence on disk. **No count changed** —
+  40 dead / 19 resolve / 60 files / 17-14-9 variants all re-derived identical. Scope **did** change:
+  `## What to build` item 1 gained a fourth case, item 3 now answers two mover gaps, and two
+  verification steps were added. The bad figure came in from a decision report that has since been
+  corrected. *Provenance: reviewer re-measurement during the `0160` stateful review; owner ruling
+  2026-08-01 via `AskUserQuestion` in the live `/fkit-sprint-ship-loop` driver session.*
+- **Low severity, deliberately.** Nothing resolves through a code span **or a bare path — 56 of the
+  60.** *(🆕 2026-08-01 — the remaining **4** are hrefs whose links **do** resolve; for them the
+  severity is lower still, since navigation works and only the displayed text is stale.)* The producer closing 0159
   found 0159's own `review.md:3` carrying this and correctly declined to repair it alone — repairing
   one instance would have made it the odd one out among the majority.
 - **Cite tasks by folder ID, never by board rank** —

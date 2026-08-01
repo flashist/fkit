@@ -98,8 +98,15 @@ claim in two registers, and fixing them differently is its own defect.
 
 ### Open scope question the implementer must NOT settle alone
 
+> **✅ RULED — 2026-07-30, executed 2026-07-31. This block's question is answered.** Read the
+> *"🆕 2026-07-31 — scope widened by owner ruling"* section immediately below **before** acting on
+> anything in this block. The owner ruled ADR-032 **in scope**, by **dated append only**. The block is
+> kept as written because its reasoning — *append, never rewrite* — is exactly what the ruling adopted;
+> only its *"do not act without a ruling"* instruction is spent, the ruling having arrived.
+
 **ADR-032 itself carries the same claim**, in its Decision 1: `fkit-task-ship-loop` *"stays
-byte-unchanged and session-only."*
+byte-unchanged and session-only."* *(🆕 2026-07-31 — re-verified firsthand. This paraphrase is exact;
+full quotation and location by heading in the new section below.)*
 
 **Do not edit it as part of this task without a ruling.** An accepted ADR is a dated historical record;
 this repo's convention is to correct one with an **appended dated note**, never a rewrite (see task
@@ -112,8 +119,71 @@ just not at the sentence.
 ADR-032. That is a **separate** back-link gap, out of scope here, and should be raised rather than
 silently fixed inside this task.
 
+> **⛔ FALSE — SUPERSEDED 2026-07-31.** The paragraph above is kept as the accurate record of what this
+> brief asserted when filed, but **it is wrong and was wrong at filing.** ADR-032's header **does** list
+> ADR-033 under *"Amended by:"*, and has since 2026-07-26. **There is no back-link gap.** Evidence and
+> the exact header text are in *Item B* of the new section below. **Do not act on this paragraph.**
+
 **Route this to the owner as an open question. Ship the two `fkit-sprint-ship-loop` sites regardless** —
 they are unblocked by it.
+
+### 🆕 2026-07-31 — scope widened by owner ruling
+
+**Provenance:** owner ruling **2026-07-30** via `AskUserQuestion` in the live `/fkit-sprint-ship-loop`
+driver session, deferred the same day by a second owner ruling (*"defer to next run — commit now"*),
+**executed 2026-07-31** by a spawned `fkit-producer` with **no owner channel**. Every claim below was
+re-derived firsthand from the files, not inherited from the driver's relay.
+
+The ruling widened this task with **two** items. **One survived verification; one did not.**
+
+#### ✅ Item A — IN SCOPE: ADR-032 Decision 1 carries the same falsified claim
+
+**Verified firsthand 2026-07-31.** In `ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md`,
+under the heading `## Decision`, numbered item **1** — the one beginning *"`fkit-sprint-ship-loop` is a
+new skill owned by `lead`"* — ends with this sentence, quoted exactly:
+
+> It **does not invoke** `fkit-task-ship-loop`, which stays byte-unchanged and session-only.
+
+This is the **identical defect** the task already fixes at the two `fkit-sprint-ship-loop/SKILL.md`
+sites: the *"byte-unchanged"* half is falsified by **ADR-033 §Decision 3**, whose step-9 rewrite is
+present in `claude/skills/fkit-task-ship-loop/SKILL.md` today. **The *"session-only"* half is still
+true and must survive** — the task loop genuinely does refuse a spawned invocation.
+
+**🆕 Adjacent site in the same ADR, folded into this item.** ADR-032's `## Consequences` → **Positive**
+list carries the same falsified claim in different words — the bullet reading, exactly:
+
+> `fkit-task-ship-loop` and every role stay untouched; the change is additive and opt-in by name.
+
+Same subject, same staleness, same remedy. **One dated note covers both sites — do not write two.**
+
+**⛔ THE REMEDY IS A DATED APPEND, NEVER A REWRITE.** ADR-032's status is **accepted**, which makes it
+frozen historical record. **Do not edit Decision 1's sentence. Do not edit the Consequences bullet.
+Do not reword, scope, date, or delete either in place** — the three wording options offered earlier in
+this brief apply to the **skill file only**, not to the ADR. The remedy is to **append a dated note** to
+ADR-032 (repo precedent: task `0143`, which appends exactly such a note to ADR-010) recording that:
+ADR-033 §Decision 3 falsified the *"byte-unchanged"* half; the *"session-only"* half stands; and both
+the Decision 1 sentence and the Consequences bullet are covered. **The note must not restate the claim
+in a fresher permanent tense** — that reproduces the defect one layer down.
+
+**⛔ Do not sweep ADR-032's third `byte-unchanged` hit.** Its §Amendment states that
+`fkit-process-stateful-review` is *"byte-unchanged"* — a **different subject**, not this defect. Its
+truth is **not assessed** by this task either way. Leave it untouched.
+
+#### ⛔ Item B — NOT IN SCOPE: the *"missing `Amended by: ADR-033`"* back-link does not exist
+
+**The ruling's premise is false, verified firsthand 2026-07-31.** ADR-032's header **already carries**
+the back-link, and has carried it since **2026-07-26** (commit `b86e5eb`) — five days *before* this
+brief was filed. The header's `**Amended by:**` entry reads, in part:
+
+> and [ADR-033](adr-033-task-movers-are-producer-only-reversing-adr-025.md) (Decision 3/5 close step —
+> the driver spawns `@fkit-producer` to close and does **not** run the movers itself).
+
+A **second** back-link sits in the body, closing the §Amendment's *"What this amendment does not
+change"* paragraph. ADR-033's own header reciprocates (*"**Amends:** … ADR-032 §Decision 3/5"*).
+
+**There is nothing to fix.** Item B is therefore **not** written into `## What to build` and **not**
+verification-tested. It is recorded here only so the false *"Adjacent finding"* paragraph above cannot
+be read as live, and so a future reader can see the claim was checked rather than skipped.
 
 ## What to build
 
@@ -129,6 +199,29 @@ they are unblocked by it.
    options was taken and why. The decision is the deliverable as much as the edit.
 4. **Raise the ADR-032 question to the owner** rather than acting on it. Do not edit
    `ai-agents/knowledge-base/decisions/adr-032-*.md` in this task without an explicit ruling.
+   > **⛔ SUPERSEDED 2026-07-31 — the ruling arrived; item 5 replaces this.** Kept as the record of what
+   > was required before 2026-07-30. **The explicit ruling this item demanded now exists**, so ADR-032
+   > *is* edited by this task — **append-only**, per item 5. Nothing else about item 4 survives.
+
+5. **🆕 Append a dated note to `ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md`**
+   correcting the same stale claim there. *(Added 2026-07-31 under the owner ruling of 2026-07-30 — see
+   the 🆕 section in Context for the ruling's provenance and the verified quotations.)*
+   - **Append only. Never rewrite.** ADR-032 is an **accepted** ADR and therefore frozen record.
+     **Do not edit the text of `## Decision` item 1, and do not edit the `## Consequences` → Positive
+     bullet** — not to reword, scope, date, or delete. The three wording options in this brief apply to
+     the **skill file only**.
+   - **One note, covering both sites.** It must record that ADR-033 §Decision 3 falsified the
+     *"byte-unchanged"* half of Decision 1's closing sentence; that the *"session-only"* half **stands**;
+     and that the Consequences bullet *"`fkit-task-ship-loop` and every role stay untouched"* is stale
+     for the same reason. Cite ADR-033 by name.
+   - **Locate both sites by heading + quoted phrase** (`## Decision` item 1; `## Consequences` → Positive),
+     **never by `:NNN`** — the `0160` constraint binds here too.
+   - **Do not touch** ADR-032's §Amendment sentence about `fkit-process-stateful-review` being
+     *"byte-unchanged"* — different subject, not this defect.
+   - **Do not touch ADR-033** at all.
+   - **Do not add an `Amended by: ADR-033` back-link** — ADR-032 already has one (Context, Item B). If
+     the implementer finds it genuinely absent, that contradicts this brief: **stop and raise it**, do
+     not add it silently.
 
 **Dual-home:** `claude/scaffold/` holds **no skills tree** (verified — it contains only `AGENTS.md`,
 `CLAUDE.md`, `ai-agents/` and `universal-rules.md`). `fkit-sprint-ship-loop/SKILL.md` is single-homed
@@ -153,7 +246,25 @@ refreshed by `claude/fkit-claude-init.sh .` — **edit the canonical source in `
 5. **No new `:NNN` line-number citation appears in the diff.** Check the diff directly, not the files
    (`0160` Case 2 surface).
 6. `worklog.md` records which wording option was taken and why.
-7. `npm test` green. ⚠️ **the suite exceeds two minutes** — give it a generous timeout. **A run killed at
+7. **🆕 ADR-032's frozen text is byte-identical to `HEAD`.** `git diff` on
+   `ai-agents/knowledge-base/decisions/adr-032-*.md` must show **additions only** — zero deleted or
+   modified lines (`git diff --numstat` on that file shows a deletion count of **0**). **Any deletion
+   fails this task**, whatever it improves. *(added 2026-07-31)*
+8. **🆕 The appended note is present and correct.** It must, in one place: name **ADR-033** and its
+   **§Decision 3**; say the *"byte-unchanged"* claim is **falsified**; say the *"session-only"* claim
+   **stands**; and cover **both** sites — Decision 1's closing sentence *and* the `## Consequences` →
+   Positive bullet *"`fkit-task-ship-loop` and every role stay untouched"*. A note covering only
+   Decision 1 **fails**. Two separate notes **fail**. *(added 2026-07-31)*
+9. **🆕 Read the appended note in isolation: it must not restate the claim in permanent tense.** No new
+   unscoped *"stays / remains / is byte-unchanged"* assertion about `fkit-task-ship-loop` may appear in
+   the note. Reproducing the defect in a fresher tense **fails**. *(added 2026-07-31)*
+10. **🆕 Untouched-by-design checks on ADR-032 and ADR-033.** The §Amendment sentence calling
+    `fkit-process-stateful-review` *"byte-unchanged"* is unchanged; ADR-032's `**Amended by:**` header
+    is unchanged (it already lists ADR-033 — nothing was added); `git diff --stat` shows **no change at
+    all** to `adr-033-*.md`. *(added 2026-07-31)*
+11. **🆕 Step 5 applies to the ADR too:** no new `:NNN` line-number citation appears anywhere in the
+    diff, including the appended ADR note. *(added 2026-07-31)*
+12. `npm test` green. ⚠️ **the suite exceeds two minutes** — give it a generous timeout. **A run killed at
    the two-minute mark is not a green run and must not be reported as one.**
 
 ## Notes
@@ -198,8 +309,14 @@ refreshed by `claude/fkit-claude-init.sh .` — **edit the canonical source in `
 
 - **⛔ Out of scope, hard:**
   - **Editing ADR-032**, or any accepted ADR, without an explicit owner ruling — open question above.
+    > **🆕 2026-07-31 — narrowed, not lifted.** The owner ruling of 2026-07-30 brings ADR-032 **in
+    > scope for an append only** (What to build item 5). **Rewriting any accepted ADR remains hard
+    > out of scope**, ADR-032 included: appending is permitted, editing existing text is not.
   - **ADR-032's missing *"Amended by: ADR-033"* header back-link** — a real, separate gap; raise it, do
     not fix it here.
+    > **⛔ MOOT 2026-07-31 — the gap does not exist.** ADR-032 has carried the ADR-033 back-link since
+    > 2026-07-26 (Context, Item B). Nothing to fix and nothing to raise. **Adding one is out of scope**;
+    > if it is ever found absent, stop and raise it rather than adding it.
   - The other two `byte-unchanged` uses in `fkit-task-ship-loop/SKILL.md` — different subjects, not
     stale.
   - **Any behavioral change to either loop.** This is a documentation-accuracy fix; the never-invoke and
