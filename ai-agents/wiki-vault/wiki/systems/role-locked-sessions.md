@@ -138,3 +138,5 @@ The ADR's own honesty clause is the thing to read: **prevention is gone, and the
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, the design behind *what the lock does NOT cover*
 - [[tasks/refresh-architecture-docs-for-tool-relaxation]] — task 58: the doc refresh that corrected the superseded "tool allowlist is the strongest boundary" claim
 - [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — task 0120, the sprint-loop SKILL's owner-banner H1 fix (cosmetic; the advisory-banner half of the lock, not the structural half)
+- [[tasks/wiki-skills-flag-ready-to-close]] — `0125`: the wiki's own SKILL sources are **coder**-editable; its exclusivity is over the vault, not its procedures
+- [[tasks/correct-claude-mds-stale-skills-for-role-location]] — `0151`, which fixed `CLAUDE.md`'s wrong pointer to `skills_for_role()`

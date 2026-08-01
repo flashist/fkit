@@ -31,3 +31,4 @@ This produced [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-d
 - [[systems/role-locked-sessions]]
 - [[tasks/add-full-board-switch-to-fkit-status]]
 - [[tasks/rename-task-plan-skill-to-task-brief]] — a later atomic flip of the ownership source of truth
+- [[tasks/correct-claude-mds-stale-skills-for-role-location]] — `0151`, which repaired the most-read stale pointer at the single source of truth

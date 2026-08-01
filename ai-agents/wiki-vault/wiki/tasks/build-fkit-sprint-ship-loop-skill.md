@@ -66,3 +66,5 @@ Codex's adversarial pass found (finding **R1**, high, verified) that `claude/age
 - [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, the `fkit-coder.md` change that landed folded inside this task and was later split out for its own review
 - [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — task 0120, the H1 house-style fix to the SKILL.md this task built
 - [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, whose gap analysis found the carve-out absent from the vault entirely
+- [[tasks/implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop]] — `0147`, which added the Process-review row's worklog duty
+- [[tasks/add-verbatim-to-fkit-coder-declared-approval-marker]] — `0150`; this skill's verbatim rule was already correct and is the primary control

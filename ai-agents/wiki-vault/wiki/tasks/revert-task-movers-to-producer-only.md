@@ -49,3 +49,5 @@ Each amendment added a live source asserting the ADR-025 grant that the `skills-
 - [[systems/fkit]] · [[systems/role-locked-sessions]]
 - [[systems/knowledge-base-structure]] — Knowledge-Base Structure
 - [[systems/testing-and-verification]] — Testing & Verification
+- [[tasks/wiki-skills-flag-ready-to-close]] — `0125`, landed alongside this so the 0108 gap was not re-opened
+- [[tasks/wiki-resync-for-adr-033]] — `0126`, the vault resync that deliberately followed this

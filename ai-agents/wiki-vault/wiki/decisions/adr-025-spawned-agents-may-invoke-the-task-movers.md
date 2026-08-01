@@ -106,3 +106,4 @@ A spawned producer has **no owner channel** — its `⛔ Owner:` banner is advis
 - [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — ADR-031: `fkit-lead` becomes the orchestrating front door — the "not a doer" stance is reversed
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — ADR-032: The `fkit-sprint-ship-loop` autonomy & consent model — the conductor at sprint scope
 - [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill
+- [[tasks/wiki-resync-for-adr-033]] — `0126`, which swept this ADR's reversed posture out of the vault

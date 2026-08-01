@@ -50,6 +50,18 @@ The section below describes the **five** in force to 2026-07-19. Two were added 
 
 > ⚠️ **`dependency-declaration-form.md` is MISSING from `claude/scaffold/`** — verified 2026-07-26. That is a live [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] violation of the second kind (a convention governing how the *agents* work should be dual-homed), so **consuming projects inherit the exact misreport class the convention exists to prevent.** `dual-home-parity.md` is correctly absent from the scaffold — it is the fkit-repo-only one. Reconciliation is scoped, still-open work.
 
+### An eighth convention, added 2026-07-27 — `priority-is-rank-not-identity.md` *(re-measured 2026-08-01)*
+
+**`priority-is-rank-not-identity.md`** — *A sprint board's Priority cell is board **rank**, written `P<n>`. A task's identity is its task-folder name's `NNNN` prefix, and nothing else.* Filed by [[tasks/implement-task-folder-name-scheme-change]] (`0103`) as part of the Option C ruling, **dual-homed**, and needing the owner's **explicit separate sign-off** — a convention is a standing rule on every future run, which is a different consent from the ruling that produced it. It was deliberately **not** written earlier: filing it before `P<n>` existed would have put every board row in violation of a rule on the day it was filed.
+
+It is **enforced in three places**: `dashboard.sh`'s `⟦FACTS⟧` id ladder (folder ID first, Priority cell only as fallback), a `dashboard-contract` red-proof that holds one variable and moves the other in both directions so an implementation whose id merely *correlated* with the folder fails, and `fkit-task-brief` at write time.
+
+⚠️ **It shipped ambiguous and needed an owner ruling to read on the day it shipped.** Its `## What NOT to rewrite` frozen-history clause never said which of two notations it governed — the **board-cell** form `124 (0150)` or the **prose** form `0150 (124)`, which differ only in ordering. The ruling (board-cell only) was transcribed into the page by [[tasks/disambiguate-the-frozen-history-clause]] (`0161`). **Prose only and unenforced — nothing tests a convention page's wording for clarity.**
+
+> ⚠️ **A NEW gap, measured 2026-08-01 and not previously recorded: `dependency-declaration-form.md` is absent from `conventions/README.md` entirely.** The live tree holds **8** convention documents; the README's index table lists **7**, and `dependency-declaration-form` is not named anywhere in that file — not in the table, not in the prose. So the convention created by [[tasks/teach-dashboard-to-resolve-notes-dependencies]] is **missing from the scaffold *and* from its own index**, which is how a reader arriving at `conventions/` would learn it exists. **`ai-agents/knowledge-base/` is outside the wiki role's write scope — flagged, not touched.** *(Counted by enumerating both directories and the README's table rows, then classifying each; not inferred from a subtraction.)*
+
+**Scaffold parity, re-measured 2026-08-01:** live holds 8 conventions, the scaffold 6. `dual-home-parity.md` is correctly absent (fkit-repo-only). `priority-is-rank-not-identity.md` **is** present in both. **`dependency-declaration-form.md` remains the one genuine drift** — unchanged since 2026-07-26.
+
 ### The conventions in force *(the original five)*
 `conventions/README.md` indexes **five**: **`task-status-vocabulary.md`** (the six valid statuses, and who may set each), **`status-report-format.md`** (the shape of a status briefing), **`evidence-before-assertion.md`** (added 2026-07-16 — *a claim about repo/project state must come from a check made this turn*), **`one-skill-one-output.md`** (added 2026-07-17 — *for any subject a skill produces one complete output; arguments select subjects and inputs, never output variants*, [[tasks/record-one-skill-one-output-convention]]; litmus — does the argument change *what the skill works on* (a parameter, allowed) or *what the same work looks like when reported* (a variant, forbidden)?), and — added 2026-07-19 — **`dual-home-parity.md`**.
 
@@ -115,3 +127,6 @@ The section below describes the **five** in force to 2026-07-19. Two were added 
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75: where the ID allocation procedure is written down
 - [[tasks/extend-mover-reference-sweep-to-the-knowledge-base]] — task 81, the mover KB-sweep fix + ADR-number guard
 - [[tasks/repair-task-links-outside-the-wiki-after-migration]] — task 77, the post-migration doc-link repair
+- [[tasks/implement-task-folder-name-scheme-change]] — `0103`, which filed the `priority-is-rank-not-identity` convention
+- [[tasks/disambiguate-the-frozen-history-clause]] — `0161`, the same convention page's own ambiguity
+- [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160`, whose follow-up 1 adds a dual-homed `durable-citation-anchors` convention

@@ -85,3 +85,6 @@ Two of these would have slipped the verification sweep entirely, because **the s
 - [[tasks/implement-task-ship-loop-skill]] — the coder loop whose self-close §3 removes, replacing it with a producer hand-off
 - [[tasks/harden-task-movers-against-closed-sprint-link-rot]] — earlier mover hardening; its "no longer owner-only" gloss is corrected by this ADR
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — **not amended by this ADR**; only an incidental "owner-only move rule" modifier in its body needed a dated correction
+- [[tasks/wiki-skills-flag-ready-to-close]] — `0125`, the flag-don't-close mechanism §2 requires
+- [[tasks/wiki-resync-for-adr-033]] — `0126`, the vault's ingest of this decision
+- [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`, which made the flag's task identity unambiguous

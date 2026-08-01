@@ -59,3 +59,5 @@ ADR-032 now carries the amendment; **0119's citation of "the 2026-07-22 autonomy
 - [[tasks/build-fkit-sprint-ship-loop-skill]] — task 0111, whose R1/R4 rounds produced the two carve-outs
 - [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, which this was meant to unblock and which shipped first instead
 - [[tasks/sprint-2-remove-omnigent]] — the sprint carrying this task
+- [[tasks/implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop]] — `0147`, the implementation of the A2 obligation this amendment wrote
+- [[tasks/wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner]] — `0148`, the vault's catch-up on this amendment

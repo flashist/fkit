@@ -42,3 +42,4 @@ Verification steps 1–3 were satisfied **by the earlier sync, not by this task*
 - [[systems/fkit]] — the lead-role description this task verified rather than rewrote
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — why the wiki flagged its own task ready to close instead of closing it
 - [[tasks/sprint-2-remove-omnigent]] — the sprint carrying this task
+- [[tasks/wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner]] — `0148`, which finished what this task's stand-in banner deferred

@@ -66,3 +66,4 @@ ADR-012 established — empirically — that the fkit skill lockdown is **sessio
 - [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — task 0120: a cosmetic banner fix that this hook is **unaffected by** — ownership keys off `skills_for_role()`, never banner text
 - [[tasks/enforce-task-status-vocabulary]] — the status vocabulary whose `Done`/`Cancelled` gate this hook now enforces: producer-only, at any spawn depth
 - [[systems/knowledge-base-structure]] — where that producer-only gate is documented as the current rule
+- [[tasks/correct-claude-mds-stale-skills-for-role-location]] — `0151`; `CLAUDE.md` still named the pre-move home of `skills_for_role()`

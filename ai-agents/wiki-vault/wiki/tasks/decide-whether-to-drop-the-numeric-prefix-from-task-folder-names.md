@@ -94,3 +94,4 @@ Round 1: `fkit-reviewer` + Codex (`codex-cli 0.145.0`, both passes complete) —
 - [[systems/testing-and-verification]] — `test/dashboard-contract.test.js`, which 0103 must deliberately re-point
 - [[systems/fkit]] — the `ai-agents/` data model this decision leaves unchanged
 - [[tasks/sprint-2-remove-omnigent]] — the sprint carrying this task
+- [[tasks/implement-task-folder-name-scheme-change]] — `0103`, the implementation half of this ruling

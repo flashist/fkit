@@ -94,7 +94,9 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 - **The `.fkit/` orphan-cleanup consent model → announce-only** (2026-07-17), unblocking task 36.
 
 ## Outcome
-**106 done · 19 backlog · 5 cancelled — of 130.** *(Updated 2026-07-26 (second sync of the day), re-derived from `bash claude/skills/fkit-status/dashboard.sh` — the deterministic board, not a hand count. **+5 done** and **+6 rows** since earlier the same day; the sprint grew 90 → 124 → 130.)*
+**119 done · 24 backlog · 5 cancelled — of 148.** *(Updated **2026-08-01**, re-derived from `bash .claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md` — the deterministic board, not a hand count. **+13 done** and **+18 rows** since 2026-07-26; the sprint grew 90 → 124 → 130 → 148.)*
+
+> ⚠️ **A green board is still no evidence a human verified any of it.** Of the 13 tasks closed since 2026-07-26 — `0103`, `0125`, `0126`, `0141`, `0147`, `0148`, `0150`, `0151`, `0153`, `0157`, `0159`, `0160`, `0161` — **every one carries `(agent-closed — not owner-verified)`.** The board cannot show which closes were agent-performed; that gap is unchanged.
 
 ### The five closed in the second 2026-07-26 batch — the lead-conductor arc's paperwork, and one design question
 

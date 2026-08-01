@@ -215,3 +215,4 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
 - [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102: the `<NNNN>-<slug>` folder model **re-examined and kept**; the priority cell is the number that changes
 - [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, which verified this page's conductor description rather than rewriting it
+- [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — `0141`, which corrected this page's "team room / menu 7" claims

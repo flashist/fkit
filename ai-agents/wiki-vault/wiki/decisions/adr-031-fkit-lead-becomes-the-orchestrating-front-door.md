@@ -67,3 +67,4 @@ The owner wanted **one agent per terminal** — a single point of interaction aw
 - [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, the vault ingest of this conductor reversal (and of the design's declined **"split"** alternative, which would have kept plan mode's write-wall)
 - [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — task 0118: the ADR-032 amendment whose accepted cost is **this ADR's honesty clause applied one step later**
 - [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, the `fkit-coder.md` guarantee-surface change that made the orchestrated Build step possible — **owner-verified, marker deliberately refused**
+- [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — `0141`, which had to judge the vault's stale *"does no work"* claim

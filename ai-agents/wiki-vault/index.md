@@ -57,7 +57,7 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 
 ### Sprints
 - [[tasks/sprint-1-ship-the-onboarding-sequence]] — 🔒 Closed: the Omnigent-era onboarding sprint, and how its 12 tickets were dispositioned
-- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**106 done · 19 backlog · 5 cancelled — of 130**, re-derived from `dashboard.sh` 2026-07-26; grew 22 → 130, and long since past its original theme)
+- [[tasks/sprint-2-remove-omnigent]] — Remove Omnigent, land Claude-native as the only runtime (**119 done · 24 backlog · 5 cancelled — of 148**, re-derived from `dashboard.sh` 2026-08-01; grew 22 → 148, and long since past its original theme)
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — 🆕 The **Backlog board** (`sprints/backlog.md`) — the standing home for unsprinted briefs
 
 ### Sprint 2 — the removal chain
@@ -209,6 +209,27 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[tasks/task-cancelled-flips-brief-own-status-header]] — Same fix for `/fkit-task-cancelled`, reproducing the mandatory date+reason
 - [[tasks/bake-architecture-pointer-into-scaffold-templates]] — Scaffold points at `architecture.md` instead of a placeholder
 - [[tasks/extend-initiate-project-fill-overview]] — Initiation fills the CLAUDE.md/AGENTS.md Project Overview
+
+### Sprint 2 — the Option C ruling built, and the rank-vs-identity convention (0103)
+- [[tasks/implement-task-folder-name-scheme-change]] — Task 0103 → **Option C built**: the folder ID becomes `dashboard.sh`'s primary identity (ADR-029 **Decision 6**, authorised and never landed, finally fulfilled), the board's Priority cell renders `P<n>`, and the `priority-is-rank-not-identity` convention is filed **dual-homed**. ⚠️ **Nearly cancelled by reflex** — a `⛔ RESCOPED` banner had to be put at the top of its own brief. The convention it wrote **shipped ambiguous and needed an owner ruling to read on the same day**
+
+### Sprint 2 — the wiki completion flag, and the three-link wiki resync chain (0125 · 0126 · 0141 · 0148 · 0153)
+- [[tasks/wiki-skills-flag-ready-to-close]] — Task 0125 → the **flag-don't-close** convention in all three wiki SKILLs: the operative fix for 0108's week-long stuck marker. ⚠️ Shipped naming its task `Task N` with **`N` never defined** — found by the **producer that consumes the flag**, after five rounds of coder/reviewer/Codex findings missed it
+- [[tasks/wiki-resync-for-adr-033]] — Task 0126 → ADR-033 ingested and the ADR-025 posture swept out. ⚠️ **First of three** instances of the chain's most reliable finding: *a completeness claim made by the run that would benefit from it has been wrong every time*
+- [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — Task 0141 → the "team room / menu 7" sweep, and the run that **settled the vault's historical-page rule**: a `wiki/tasks/*` body is frozen at its ship date, corrected by a dated note **placed at the claim**, never 19 lines below it. Its brief's own inventory was **2 of 5 false**
+- [[tasks/wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner]] — Task 0148 → the 2026-07-22 amendment ingested and the stand-in banner cleared. ⚠️ **The brief was wrong on BOTH headline claims before the task started.** Its own completion flag cited **a different task's board row twice** — the near-miss that became 0160's Case 4
+- [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — Task 0153 → `Task N` becomes the **folder ID**, plus a path and an explicit *never the `P<n>` rank* negative. ⚠️ The path form it mandated is itself a **dead-path generator**, ruled by 0160
+
+### Sprint 2 — the ADR-032 guarantee surface closed (0147 · 0150) and the most-read stale pointer (0151)
+- [[tasks/implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop]] — Task 0147 → A2's worklog obligation made real in driver **and** worker. Until it landed, **A4 bullet 2's reopening condition was unsatisfiable**: the autonomy was non-reopenable *not because it was proven safe, but because the proof surface did not exist*
+- [[tasks/add-verbatim-to-fkit-coder-declared-approval-marker]] — Task 0150 → **one word** on a guarantee surface: without `verbatim`, the scope boundary a spawned coder enforces could silently become *the driver's summary of what the owner approved*. ⚠️ **Still not fully closed** — no clause anywhere refuses a defective marker
+- [[tasks/correct-claude-mds-stale-skills-for-role-location]] — Task 0151 → one line in `CLAUDE.md`, **injected into every fkit session**, naming the wrong home for `skills_for_role()`. Severity deliberately **not inflated**: a one-hop misdirection, not a wrong edit
+
+### Sprint 2 — the mutable-coordinate arc (0157 · 0159 · 0160 · 0161)
+- [[tasks/state-task-brief-step-5s-append-rule-in-full]] — Task 0157 → the **rule** half: two spawned producers ranked oppositely an hour apart and the owner accepted **both**. The rule was never ambiguous — **the sanctioned exception was missing**. *An addendum that does not name its authority becomes tomorrow's precedent for acting without one*
+- [[tasks/sweep-the-stale-rank-citations]] — Task 0159 → the **sweep** half: 20 stale rank numbers across 19 sites and 12 files. ⚠️ **The decay is the finding** — every `sprint-2.md:NNN` pointer in the filed table was wrong by execution time. Its **deliberate deviation from the approved plan was right**: the plan would have fabricated owner rulings that never happened. Its ledger is ADR-034's evidentiary base
+- [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — Task 0160 → the class ruled: **line numbers are for findings against a revision; names are for cross-references into living documents**, plus the rider that matters more than any ban — *never cite a line number naked*. Five cases, four ruled, one handed back out of class; **eight follow-ups named, none written**. ⚠️ Rules that the wiki's own completion-flag template **manufactures a dead path by construction**
+- [[tasks/disambiguate-the-frozen-history-clause]] — Task 0161 → a convention page whose job is to stop two number-spaces being confused **was itself ambiguous about which notation it governs**, and needed an owner ruling to read on the day it shipped. Prose only, and **nothing stops the next ambiguous clause**
 
 ### Sprint 1 — completed
 - [[tasks/fix-claude-agents-md-placeholder-text]] — Replace placeholder prose in `CLAUDE.md` and `AGENTS.md`

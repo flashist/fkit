@@ -35,3 +35,4 @@ Implement the "deterministic layer" the owner asked for on `/fkit-status`: a scr
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
 - [[tasks/render-owner-column-in-fkit-status]] — Render the Owner column in `/fkit-status`, just before Next step
 - [[tasks/teach-dashboard-to-resolve-notes-dependencies]] — Make a task's dependency visible to `dashboard.sh` when it's written in `## Notes` prose
+- [[tasks/implement-task-folder-name-scheme-change]] — `0103`, which inverted this script's id ladder to folder-ID-first

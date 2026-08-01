@@ -43,3 +43,4 @@
 - [[decisions/adr-024-ship-loop-owner-question-timeout-is-not-built]] — an investigation that reasoned a feasibility verdict instead of measuring it, then corrected
 - [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively
 - [[tasks/retire-team-room-in-docs-and-agent-definitions]] — Retire "team room" in the docs and agent definitions, and fix the stale "menu 7" citations
+- [[tasks/sweep-the-stale-rank-citations]] — `0159`, which refused to fabricate owner rulings and cited this convention as the reason

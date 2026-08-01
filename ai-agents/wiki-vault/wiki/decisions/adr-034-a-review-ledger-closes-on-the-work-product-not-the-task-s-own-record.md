@@ -102,3 +102,5 @@ Re-raise **only** if one of these holds:
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the task-folder model that makes "the task's own record" (`brief.md`, `worklog.md`, `review.md`) a **well-defined set of files**
 - Evidence: `ai-agents/tasks/done/0159-sweep-the-stale-rank-citations-and-correct-0149s-stays-last-claim/review.md` — the ledger this was ruled from (the bar at `:406-421`, the two close-out residuals at `:466-493`, the ADR-over-skill recommendation at `:495-499`). ⚠️ **`0159` has no wiki page yet** — see the standing task-page debt in `log.md`
 - Convention: `ai-agents/knowledge-base/conventions/evidence-before-assertion.md` — the convention the own-record residuals are recorded under rather than being silently dropped
+- [[tasks/sweep-the-stale-rank-citations]] — `0159`, the task whose ledger is this decision's entire evidentiary base
+- [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160` §4.5, which states this ADR's bearing on the dead-ledger-path guard in both directions

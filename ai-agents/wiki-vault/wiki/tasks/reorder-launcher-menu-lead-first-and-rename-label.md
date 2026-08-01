@@ -43,3 +43,4 @@ As written, the brief required the `team` / `"team room"` word aliases be **kept
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — checked, not applicable
 - [[tasks/remove-fkit-resume-passthrough]] · [[tasks/fix-headless-menu-guard-crash]] — prior launcher argv/menu work
 - [[systems/install-and-self-update]] · [[systems/fkit]] · [[systems/testing-and-verification]]
+- [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — `0141`, the vault half of this rename

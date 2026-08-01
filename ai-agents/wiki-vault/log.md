@@ -854,3 +854,88 @@ This entry justified correcting `track-…:17` while freezing the other two by c
 2. **The task-page debt is unchanged and untouched: `0151`, `0152`, and the `0141`–`0164` chain still have no vault pages.** ⚠️ **`0159` is now the most conspicuous instance** — this ADR's entire evidentiary base is `0159`'s ledger, and the new page has to cite that task **by path in backticks because no wiki-link target under `tasks/` exists for it.** A scoped ingest cannot fix that; **a sync still owes it.**
 3. **A third pointer surface may now exist.** ADR-034 lists three skill close-conditions to be re-pointed at it and says **no skill is edited by the ADR**. A concurrent producer filed **task `0169-point-the-stateful-review-close-conditions-at-adr-034` (Owner `fkit-coder`, Backlog)** during this run. **Deliberately NOT written into any vault page:** it is an untracked, in-flight artifact owned by another worker and may still be renumbered or rewritten. **Recorded here only, so it is not re-discovered as new.**
 4. **The 20 `**Sprint/Tag**` `priority NNN` metadata fields remain frozen record and were not touched** — owner-ruled 2026-07-30, not re-litigated here.
+
+## 2026-08-01 — ingest (sync) — the deferred delta ingested in full, and the watermark ADVANCED
+
+- **Sync window:** `b86e5eb8fa8f26c25d0104ed5772c51414721685` → HEAD **`aa62e6de92d00cc284ccf932ab58cfa3f9798714`** — **6 commits** (`994e3e3`, `db863be`, `7616585`, `e927a38`, `afe4fae`, `aa62e6d`). Working tree **clean at session start** (0 entries, verified).
+- **Changed source files detected: 85.** Every one classified **positively**, not by subtraction — the residue bucket was printed and is **empty**: 6 `knowledge-base/` · 2 `sprints/` · 14 `done`/`cancelled` `brief.md` (**ingest-worthy: 22**) · 32 `backlog/*/brief.md` (skipped per the procedure — not done yet) · 31 in-folder `plan.md`/`worklog.md`/`review.md` (working artifacts, skipped). **6+2+14+32+31 = 85, exact.**
+
+### ✅ THE WATERMARK IS ADVANCED — and this entry states why, because three entries deferred it
+
+**Advanced to `aa62e6d`.** The three prior deferrals (2026-07-29, 2026-07-30, 2026-07-31) each gave the same reason: *HEAD carries real un-ingested source, and advancing would open the next sync's window **after** those files and silently swallow them.* **That reason no longer holds, because this run ingested them.** The 2026-07-29 entry stated the resolution itself — *"the watermark should be advanced by the run that actually ingests the delta, in the same run"* — and **this is that run.**
+
+**The deferral was correct every time it was made, and it is being closed on the condition it named, not waived.** The delta had grown at every checkpoint: `7616585` → `e927a38` → `afe4fae` → `aa62e6d`. It is now discharged:
+
+| The debt each deferral named | State after this run |
+|---|---|
+| `0103`, `0125`, `0126`, `0141`, `0147`, `0148`, `0150`, `0151`, `0153`, `0157`, `0159`, `0160`, `0161` have no vault page | **All 13 pages created.** |
+| the `priority-is-rank-not-identity` convention is un-ingested | **Ingested** onto [[systems/knowledge-base-structure]] as the eighth convention, and onto the `0103` and `0161` pages. |
+| `0152` is owed a page | **Not owed. `0152` is in `ai-agents/tasks/backlog/`, not `done/`** — the procedure skips backlog briefs, so no page is due. The 2026-07-30 flag listing it alongside `0151` was **wrong on that half**; recorded here rather than left to be re-discovered. |
+| the ADR-034 source was untracked at its 2026-07-31 ingest | **Now committed and inside this window** — the page written then is confirmed covered by the advance. |
+
+⚠️ **What advancing costs, stated rather than buried.** The next sync's window opens at `aa62e6d`, so **anything in the 6 commits this run did not ingest is now outside every future window** and will only be found by a `force` re-ingest. The two skipped classes are skipped **by the procedure's own rule**, not by this run's judgement: 32 backlog briefs (a page for an unfinished task is premature) and 31 in-folder working artifacts. **They are recoverable — a backlog brief becomes ingest-worthy the day it closes, and it will be a `done/` brief in a later window.** The in-folder artifacts never become ingest-worthy. **Nothing ingest-worthy in this window is being left behind.**
+
+### Ingested — 13 new task pages *(vault 167 → 180)*
+
+Each maps one `done/*/brief.md` to `wiki/tasks/`, per the schema's Task template.
+
+- `ai-agents/tasks/done/0103-…/brief.md` → created [[tasks/implement-task-folder-name-scheme-change]]
+- `…/0125-…/brief.md` → created [[tasks/wiki-skills-flag-ready-to-close]]
+- `…/0126-…/brief.md` → created [[tasks/wiki-resync-for-adr-033]]
+- `…/0141-…/brief.md` → created [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]]
+- `…/0147-…/brief.md` → created [[tasks/implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop]]
+- `…/0148-…/brief.md` → created [[tasks/wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner]]
+- `…/0150-…/brief.md` → created [[tasks/add-verbatim-to-fkit-coder-declared-approval-marker]]
+- `…/0151-…/brief.md` → created [[tasks/correct-claude-mds-stale-skills-for-role-location]]
+- `…/0153-…/brief.md` → created [[tasks/wiki-flag-carries-folder-id-and-brief-path]]
+- `…/0157-…/brief.md` → created [[tasks/state-task-brief-step-5s-append-rule-in-full]]
+- `…/0159-…/brief.md` → created [[tasks/sweep-the-stale-rank-citations]]
+- `…/0160-…/brief.md` + `knowledge-base/reports/2026-08-01-durable-citation-form-for-mutable-coordinates.md` → created [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]]
+- `…/0161-…/brief.md` → created [[tasks/disambiguate-the-frozen-history-clause]]
+
+**`0119` was in the window and got no new page** — [[tasks/track-fkit-coder-declared-approval-carve-out]] already exists and was updated instead. **That is the only one of the 14 done briefs without a new page**, and it is deliberate.
+
+### Updated — 4 system/decision pages carrying real content, not only back-links
+
+- [[systems/knowledge-base-structure]] — a new section for the **eighth convention**, `priority-is-rank-not-identity.md`: the rule, its three enforcement sites, the owner's separate sign-off, and the fact that it **shipped ambiguous and needed a ruling on the day it shipped**. Scaffold parity re-measured.
+- [[systems/review-and-model-diversity]] — a new block on the ledger's **`Task:` header becoming a folder ID** (owner-ruled 2026-08-01), the 40/42/55 measurements, why it is a *pointer* fix and not a rewrite of frozen claims, and the parity warning that the two stateful-review schema blocks are **not** byte-identical.
+- [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — two dated amendments to its own 2026-07-29 correction notes: *"landed in the working tree, uncommitted"* is out of date (`0147`/`0150` are committed), and `0159`/`0160` are **no longer open**. Both original notes left byte-identical.
+- [[tasks/sprint-2-remove-omnigent]] + `index.md` — roll-up re-derived from `dashboard.sh` on 2026-08-01: **148 total · 119 done · 24 backlog · 5 cancelled** (was `130 / 106 / 19 / 5` on 2026-07-26). With the flag that **all 13 tasks closed since carry `(agent-closed — not owner-verified)`**.
+
+### Two recorded debts discharged, and the `backlog/0160` link question answered
+
+- ⚠️ **The dead-`backlog/0160`-path repair the routing anticipated: THERE WAS NOTHING TO REPAIR.** `0160` moved `backlog/` → `done/` this run and is heavily cross-referenced, so dead vault paths were expected. **Measured: zero.** A wrap-normalised (`s/\s+/ /g`) scan for `tasks/backlog/0160` over all 167 pre-existing pages plus `index.md` and `schema.md` returned **0 hits**. The vault's three `0160` mentions are **bare task IDs in prose**, never paths. **The one `tasks/backlog/NNNN` path in the whole vault is `tasks/backlog/0045`, and `0045` is still in `backlog/` — verified on disk, so it resolves.** Recorded as a measured negative, not as an absent grep: the scan was run wrap-normalised precisely because this log has recorded a bare `grep` reading falsely clean twice.
+- **But the `0160` mentions were stale in a different way, and those were repaired.** Three sites called `0159`/`0160` *"open task"*; both are now closed. Dated corrections placed **at the claim** (never in a footer), originals byte-identical: [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] ×2 and [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] ×1. The last of these also carries **what `0160` actually ruled about its own `CLAUDE.md:43` citation** — `path:NNN` into `claude/` was never the defect; the missing **rider** (never cite a line number naked) was.
+- **The 2026-07-30 flag 3 debt is discharged.** [[tasks/track-fkit-coder-declared-approval-carve-out]] carried *"`0150` (priority 124, promoted from 128)"* — a stale prose rank. Repaired per `priority-is-rank-not-identity.md`: **the folder ID kept, the rank dropped, no replacement number written.** Refreshing it *"only reproduces the defect with a fresher date."*
+
+### A NEW finding, measured this run and not previously recorded
+
+⚠️ **`dependency-declaration-form.md` is absent from `conventions/README.md` entirely** — not in the index table, not in the prose, nowhere in the file. The live tree holds **8** convention documents; the README indexes **7**. So that convention is missing from the scaffold **and** from its own index, which is where a reader arriving at `conventions/` would learn it exists. Counted by enumerating both directories and the README's table rows and classifying each — **not by subtraction**. **`ai-agents/knowledge-base/` is outside the wiki role's write scope: flagged on [[systems/knowledge-base-structure]], source untouched.**
+
+### This run's own completion flag — the template is defective and I did not use it verbatim
+
+**Stated loudly because it is a deliberate departure from my own procedure's mandated text.** `claude/skills/fkit-wiki-sync/SKILL.md`'s flag template hardcodes `ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md`. [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] §5.2(ii) proves that form **manufactures a dead path by construction** — a `complete` flag says *ready to close*, so the folder leaves `backlog/` in the same session. **The owner ruled the replacement on 2026-08-01 via `AskUserQuestion`: folder ID only, no path at all.**
+
+- **What I did:** no task qualified for a flag this run (see below), so **no path was emitted and the departure is moot in practice** — but had one qualified, I would have emitted **folder ID only**, per the ruling, not the template.
+- **What I did NOT do: I did not edit any `claude/skills/fkit-wiki-*/SKILL.md`.** That is `0160`'s follow-up 5 — an unfiled producer-then-coder task — and **a role may not self-implement a rule about its own procedures.** The three files still carry the defective form.
+- ⚠️ **The report at `HEAD` still records this as open question 7, awaiting the owner.** The ruling is **relayed from the driver session and is not in the report's own text.** Recorded that way on the `0160` page too, rather than presented as if the report says it.
+
+### Verification — measured, with `/usr/bin/grep`, and re-measured after writing
+
+- **V1 — integrity, before → after.** Before: **167 pages** (0 features · 8 systems · **34** decisions · **125** tasks) · 167 unique index targets · **0 broken · 0 one-way · 0 dangling · 0 index gaps**. After: **180 pages** (0 features · 8 systems · **34** decisions · **138** tasks) · **180 unique index targets · 0 broken · 0 broken index targets · 0 one-way · 0 dangling · 0 index gaps** · 2930 link tokens. **+13 pages, all in `tasks/`, +13 index targets — exactly this run's new pages; the decisions and systems counts are unchanged, and nothing was created or deleted beyond the 13.** *(⚠️ The first draft of this bullet printed the before-split as `33 decisions · 126 tasks`. **Both were wrong** — transposed from the after-figures rather than read off the baseline measurement, which is the self-invalidating-record defect this log has now recorded five times. Corrected against the recorded baseline before this entry was returned; the totals `167 → 180` were right throughout.)*
+- **V2 — reciprocity fixed, not assumed.** The first post-write scan found **1 one-way link** (`wiki-flag-carries-folder-id-and-brief-path` → `implement-task-folder-name-scheme-change`, unreciprocated). Repaired, re-scanned, **0**. ⚠️ **Recorded because the run that finds its own one-way link is the run that would otherwise have reported "0 one-way" without ever measuring it.**
+- **V3 — the link scan is wrap-normalised** (`replace('\n',' ')` before matching), per the standing 2026-07-29 warning that a target split across a line break defeats a naive matcher.
+- **V4 — template conformance on all 13 new pages**, checked mechanically: `**Source**`, `**Status**`, `**Sprint/Tag**`, `## Goal`, `## Key Changes`, `## Outcome`, `## Related` all present on all 13. **0 YAML frontmatter** anywhere in `wiki/` (all 180 pages checked). **0 secrets** in any line written.
+- **V5 — no board rank on any new page.** The `**Sprint/Tag**` field reads `Sprint 2 · ID <NNNN> · owner <role>` on all 13 — **deliberately no `priority NNN`**, which is what the pages' own subject matter (`0103`/`0159`/`0160`/`0161`) rules. The **20 pre-existing** `**Sprint/Tag**` `priority NNN` fields are **untouched**, owner-ruled frozen record on 2026-07-30 and not re-litigated here.
+- **V6 — write scope.** `git status --porcelain` with the vault path excluded returns **nothing**: this run wrote **only** inside `ai-agents/wiki-vault/`. 31 tracked files modified (**+102 / −3**) plus 13 new untracked pages, plus this `log.md` append and the watermark. **No task folder moved. No mover invoked. Nothing under `claude/`, `ai-agents/tasks/`, `ai-agents/sprints/` or `ai-agents/knowledge-base/` was touched.**
+- **V7 — nothing committed, nothing staged.**
+- **V8 — `log.md` remains append-only:** no past entry edited. *(This entry uses `[[…]]` tokens as the log's long-standing convention; the V1 integrity scan covers `wiki/**` and `index.md` only and does not read `log.md`, so this append cannot invalidate the counts above — they were taken after every page write.)*
+
+### ⚠️ Flagged for human review
+
+1. **`dependency-declaration-form.md` is missing from `conventions/README.md`** — new, measured above. Source is outside the wiki's write scope.
+2. **The three wiki `SKILL.md` files still emit a `backlog/` path in their completion flag.** `0160` follow-up 5 is **named but unfiled**. Until it lands, **every wiki flag this project emits manufactures a dead path**, and any review ledger quoting one preserves it permanently.
+3. **Open question 7's ruling is not in the report.** `2026-08-01-durable-citation-form-for-mutable-coordinates.md` §11 still reads *"⏳ Awaits the owner"*. The ruling exists; the record does not carry it. **An architect owns that correction — the wiki never writes `knowledge-base/`.**
+4. **ADR-032's knowledge-base source was NOT re-checked this run** and its `0143` routing note is carried forward as written, unverified. The vault copy is corrected; the source's state is unknown here.
+5. **The board still cannot show which closes were agent-performed.** All 13 tasks ingested this run are `(agent-closed — not owner-verified)`. `dashboard.sh` collapses that to a plain `Done`. **119 done on a green Sprint 2 board is not 119 owner-verified.**
+6. **The 20 pre-existing `**Sprint/Tag**` `priority NNN` fields remain frozen record**, owner-ruled 2026-07-30 — not re-litigated, and now inconsistent with the 13 new pages that carry no rank at all. **That inconsistency is deliberate and is recorded here so a later sweep does not read it as drift.**

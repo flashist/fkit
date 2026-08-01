@@ -29,3 +29,4 @@ The rule it encodes is visible in Sprint 2's own shape — most clearly in the *
 - [[tasks/harden-task-movers-against-closed-sprint-link-rot]]
 - [[systems/fkit]]
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the skill's no-sprint path rewritten to file onto a real board
+- [[tasks/state-task-brief-step-5s-append-rule-in-full]] — `0157`, the append-rule gap that let two producers act oppositely

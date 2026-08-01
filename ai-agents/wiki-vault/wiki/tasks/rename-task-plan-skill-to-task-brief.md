@@ -24,3 +24,4 @@ Rename the producer's `/fkit-task-plan` (scope a description into backlog briefs
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — a later edit to the same skill, under its new name
 - [[tasks/wiki-sync-task-plan-rename]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/state-task-brief-step-5s-append-rule-in-full]] — `0157`, which filled step 5's missing re-rank exception

@@ -41,3 +41,4 @@ The proposal reversed a stated, checked-in project rule: root `CLAUDE.md` said *
 - [[systems/subagent-runner-connectivity]]
 - [[tasks/knowledge-base-hygiene-post-omnigent]]
 - [[tasks/wiki-sync-post-omnigent]]
+- [[tasks/wiki-resync-for-adr-033]] — `0126`, filed as its own task precisely because only `fkit-wiki` may write the vault

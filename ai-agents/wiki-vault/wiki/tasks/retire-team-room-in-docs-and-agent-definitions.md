@@ -42,3 +42,4 @@ Carry the owner's project-wide "team room" retirement everywhere outside the lau
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — checked at scoping; the two `CLAUDE.md` files are independent, **not** a parity pair
 - [[systems/install-and-self-update]] · [[systems/fkit]] · [[systems/knowledge-base-structure]]
 - [[tasks/update-launcher-menu-help-for-conductor]] — Update the launcher menu/help text — "does no work itself" → accurate to a conductor
+- [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — `0141`, the same sweep inside the vault

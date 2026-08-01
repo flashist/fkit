@@ -37,3 +37,5 @@ That ruling became [[decisions/adr-033-task-movers-are-producer-only-reversing-a
 - [[systems/fkit]] · [[systems/knowledge-base-structure]]
 - [[systems/role-locked-sessions]] — Role-Locked Sessions & the Skill Lockdown
 - [[tasks/wiki-resync-eighth-role-after-source-docs-land]] — Wiki resync for the eighth role — after the source docs land
+- [[tasks/wiki-skills-flag-ready-to-close]] — `0125`, the operative fix this investigation produced
+- [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`; this task's folder ID `0108` collided with `0125`'s board rank P108 in the very flag it produced
