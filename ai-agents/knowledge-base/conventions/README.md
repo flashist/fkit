@@ -31,11 +31,17 @@ The three are easy to confuse and the distinction is the whole point of this fol
 | [`evidence-before-assertion.md`](evidence-before-assertion.md) | a claim about repo/project state must come from a check made this turn |
 | [`one-skill-one-output.md`](one-skill-one-output.md) | a skill yields one complete output per subject — arguments select subjects, never output variants |
 | [`priority-is-rank-not-identity.md`](priority-is-rank-not-identity.md) | the board's Priority cell is rank (`P<n>`); a task's identity is its folder-name ID |
+| [`dependency-declaration-form.md`](dependency-declaration-form.md) | the one `- **Depends on:**` form a brief may use — the form `dashboard.sh` parses |
 | [`dual-home-parity.md`](dual-home-parity.md) † | fkit-authored files living in both `ai-agents/` and `claude/scaffold/ai-agents/` must be edited in both |
 
 † **fkit-repo-only** — governs development of the framework itself, not how the agents work. It is
 deliberately **not** shipped in `claude/scaffold/`, since a consuming project has no `claude/scaffold/`
-tree. Every other convention here is dual-homed and must stay byte-identical across both copies.
+tree. Every other convention here is **dual-homed**. Two of them — `task-owner-vocabulary.md` and
+`priority-is-rank-not-identity.md` — must stay **byte-identical** across both copies; the rest ship a
+deliberately de-fkit-ified **audience-adapted** copy in the scaffold and must stay in step in
+**substance**, not byte for byte. Which is which, and why, is recorded per path in
+[`test/dual-home-parity-exceptions.mjs`](../../../test/dual-home-parity-exceptions.mjs); the rule
+itself is [`dual-home-parity.md`](dual-home-parity.md).
 
 ## Naming
 

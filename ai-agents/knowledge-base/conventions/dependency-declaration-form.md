@@ -13,7 +13,7 @@ Examples that parse:
 ```
 - **Depends on: nothing.**
 - **Depends on:** 0110 (evolved lead) and 0112 (wiring).
-- **Depends on: task 36** — soft, not hard.
+- **Depends on: task 0072** — soft, not hard.
 ```
 
 ## Why this exists

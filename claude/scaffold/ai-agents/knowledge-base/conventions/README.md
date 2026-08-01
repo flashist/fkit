@@ -22,7 +22,7 @@ The three are easy to confuse, and the distinction is the whole point of this fo
 
 ## What's here
 
-Six conventions ship with the scaffold. They are **yours to amend** — but amend them *here*. A
+Seven conventions ship with the scaffold. They are **yours to amend** — but amend them *here*. A
 convention has exactly one home; a second copy of a rule is how the two drift apart and the project
 stops knowing which one is law.
 
@@ -34,6 +34,7 @@ stops knowing which one is law.
 | [`evidence-before-assertion.md`](evidence-before-assertion.md) | a claim about repo/project state must come from a check made this turn |
 | [`one-skill-one-output.md`](one-skill-one-output.md) | a skill yields one complete output per subject — arguments select subjects, never output variants |
 | [`priority-is-rank-not-identity.md`](priority-is-rank-not-identity.md) | the board's Priority cell is rank (`P<n>`); a task's identity is its folder-name ID |
+| [`dependency-declaration-form.md`](dependency-declaration-form.md) | the one `- **Depends on:**` form a brief may use — the form `dashboard.sh` parses |
 
 ## Naming
 

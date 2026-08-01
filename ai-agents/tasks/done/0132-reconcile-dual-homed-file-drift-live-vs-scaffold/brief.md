@@ -10,7 +10,7 @@ Sprint 2
 119
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -92,3 +92,63 @@ directory only; other dual-homed trees are not yet swept.
 - **Do not fold this into 0133.** ADR-027 §3 separates them on purpose, and they are independently
   shippable: reconciliation is verifiable by `diff` today, with or without a test.
 - No commit — leave the edits in the working tree.
+
+## Close-out (2026-08-01) — read before "fixing" anything below
+
+Closed by a **spawned producer with no owner channel** — `✅ Done (agent-closed — not owner-verified)`
+(ADR-033 §5). The owner ruled on the parity model and on every review finding; that is **not** a
+verification of done-ness.
+
+**⚠️ Verification step 2 above is SUPERSEDED BY OWNER RULING, NOT MET — and must stay that way.** It
+demands the scaffold copy of `dependency-declaration-form.md` be byte-identical to the live copy. It is
+**deliberately not**: the owner ruled (2026-08-01) that it ships **GENERALIZED**. **Do not copy the live
+file over the scaffold copy** — that would re-introduce the regression this task exists to prevent.
+
+**⚠️ The sweep disproved ADR-027's core premise.** The drifted scaffold `conventions/*` files are **not**
+stale copies left behind; five of the six are deliberate, de-fkit-ified, **audience-adapted** rewrites for
+a consuming project. Byte-aligning them (which ADR-027 §Decision 2 mandates) would ship fkit's own
+incident narrative and **4 verified-broken relative links** into every new project. Owner ruling
+(2026-08-01), **Option B**: "audience-adapted" is a legitimate **third kind** alongside fkit-authored
+✅ must-match and project-specific ⛔ never-sync; byte-aligning live → scaffold is **rejected as a product
+regression**. **ADR-027 is NOT amended by this task** — amending it is an architect act, filed as `0186`.
+Its "six drifted files" figure is stale **in kind, not in count**: all six still differ, and **none** were
+fixed by `0043`/`0077`/`0086`, so this brief's own guess that two may have been fixed is **wrong**.
+
+**Deliverable:** `test/dual-home-parity-exceptions.mjs` — **26 entries, each with its own specific
+reason**. A full classifier run maps **456 of 456** `diff -rq` lines to an entry: **0 unmatched, 0 dead
+entries**, and no over-broad blanket entry (the 10 `Files … differ` lines and every file-level `Only in`
+line map to **specific file** entries; directory entries absorb only the 440 lines of fkit's own project
+content).
+
+**Other findings recorded:**
+- `decisions/` and `reports/` are **NOT** part of the dual-homed surface — ADR-035 and `0174`'s report are
+  not drift events, and **no ADR ever will be**.
+- `reviews/README.md` is gone from **both** homes (absorbed into `tasks/README.md` by ADR-029's migration,
+  commit `331f298`); its stale row is fixed.
+- The convention's own prescribed check command was **structurally blind** to missing-from-scaffold drift
+  and is now fixed.
+- `claude/scaffold/universal-rules.md` is single-homed and outside the surface — task `0130` created no drift.
+- `knowledge-base/reports/README.md` is an fkit-authored folder-purpose doc with no scaffold counterpart,
+  inside a ⛔ never-sync directory. Covered by the directory entry, **not** drift. Whether it *should*
+  ship is a separate scoping question, unfiled.
+- Task `0178`'s contested home page resolves **in its favour**: `priority-is-rank-not-identity.md` is
+  byte-identical in both homes today. `0178`'s brief is deliberately **not** edited.
+- `/fkit-task-brief` scoping enforcement is **still pending** — `dual-home-parity.md`'s "Where this is
+  enforced" section records that skill edit as outstanding. Untouched by this task.
+
+**Verification:** `node --test test/*.test.js` → **551 pass / 0 fail / 17 suites**; `bash test/prove-red.sh`
+→ hard gate PASSED. **No existing test file was modified** — this task adds no test by design; `0133` is
+the one that adds it. Step 3 re-confirmed: `dual-home-parity.md` is still **ABSENT** from the scaffold.
+
+**Review:** stateful, ledger in this folder. Verdict *changes requested — 6 defects, none blocking*.
+**Codex coverage FULL, not degraded** (`codex-cli 0.145.0`, exit 0; R1 and R2 raised independently by both
+reviewers). All six verified CORRECT by the coder; five fixed, one (R1) handed onward by owner ruling.
+
+**⚠️ OUTSTANDING — R1 handed to task
+[`0133`](../../backlog/0133-build-dual-home-parity-test/brief.md).** The 10 directory entries match
+**bidirectionally**, so a real dual-homed file later added under one would silently escape `0133`'s
+enforcement. **The assertion `0133` must add: no directory exception may cover a non-`.gitkeep` file
+present in BOTH homes.** The `.gitkeep` carve-out is **required, not cosmetic** — 9 such files sit in both
+homes today and would otherwise fire it immediately. Named near-miss: `knowledge-base/reports/README.md`,
+same species as the enforced `tasks/README.md`. Recorded in the review ledger, the worklog, and as a
+comment in the module `0133` imports.

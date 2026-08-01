@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# NINE mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# THIRTEEN mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -33,6 +33,10 @@
 #   7. Remove the ship-loop marker's command gate   → "a NON-ship-loop command"           (task 0129)
 #   8. One `description: >-` back to a plain scalar → "live corpus: every skill SKILL"    (task 0136)
 #   9. De-indent a description continuation line    → "live corpus: every skill SKILL"    (task 0136)
+#  10. Delete a scaffold copy of a dual-homed file  → "present in BOTH homes"             (task 0133)
+#  11. Add a scaffold file with no live counterpart → "present in BOTH homes"             (task 0133)
+#  12. Append one byte to a scaffold copy           → "byte-identical"                    (task 0133)
+#  13. Co-present file under a prune point          → "no prune point hides a file"       (task 0133)
 #
 # Exit 0 only if: real launcher green, unmutated copy green, AND each mutation reds its NAMED assertion.
 set -eu
@@ -107,6 +111,27 @@ run_frontmatter_suite() {   # <claude-tree-root>
   fi
 }
 
+# Run ONLY the dual-home-parity suite against a copy of the SCAFFOLD home (task 0133); redirected via
+# FKIT_PARITY_SCAFFOLD_ROOT, its own tree seam. Like run_frontmatter_suite() this points at a whole
+# directory, not one script — the suite walks it against the real, untouched `ai-agents/` live home.
+# ⚠️ SCAFFOLD-SIDE ONLY, ON PURPOSE. All four parity mutations are expressible by editing the scaffold
+# copy (delete / add / alter / plant-under-a-prune-point), so the live tree needs no seam at all and a
+# stale env var can never redirect fkit's own working tree.
+run_parity_suite() {   # <scaffold-home-root>
+  if FKIT_PARITY_SCAFFOLD_ROOT="$1" node --test "$repo/test/dual-home-parity.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
+# An independent copy of the SCAFFOLD home we can mutate. $1 = name; echoes the copy's root.
+make_scaffold_copy() {
+  dst="$work/$1"
+  cp -R "$repo/claude/scaffold/ai-agents" "$dst"
+  echo "$dst"
+}
+
 # A full, independent copy of claude/ whose launcher we can mutate. $1 = name; echoes the launcher path.
 make_claude_copy() {
   dst="$work/$1"
@@ -160,6 +185,15 @@ clean_tree="$(dirname "$clean_copy")"
 printf '0g. unmutated copy skill-frontmatter suite should be green ... '
 fc="$(run_frontmatter_suite "$clean_tree")"; echo "$fc"
 [ "$fc" = green ] || { echo "   ✗ an UNMUTATED copy's frontmatter suite is red — mutations 8/9 below would be false."; fail=1; }
+
+# --- 0h. An UNMUTATED copy of the scaffold home must ALSO be green (task 0133; same reasoning as 0b
+#     and 0g — without this, a red below could be red-because-the-copy-is-broken and would prove
+#     nothing). Note this also proves `cp -R` of the scaffold home is faithful: if the copy dropped a
+#     file, mutation 10's red would be indistinguishable from a copy artifact. -----------------------
+clean_scaffold="$(make_scaffold_copy scaffold-clean)"
+printf '0h. unmutated copy of the scaffold home should be green ... '
+pc="$(run_parity_suite "$clean_scaffold")"; echo "$pc"
+[ "$pc" = green ] || { echo "   ✗ an UNMUTATED scaffold copy is red — mutations 10-13 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -389,6 +423,114 @@ if [ "$r9" != red ]; then
   fail=1
 elif ! grep -Eq '(✖|not ok|fail).*live corpus: every skill SKILL' "$out"; then
   echo "   ✗ suite went red but NOT at the live-corpus skills assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 10: DELETE a dual-homed file from the scaffold home → the presence assertion must go red
+#     (task 0133). This is the `dependency-declaration-form.md` shape, which sat undetected for weeks:
+#     a live file that was never shipped to the scaffold. A naive "for each scaffold file, compare to
+#     live" loop is structurally blind to it — there is nothing in the scaffold to iterate over — so
+#     this mutation is the one that proves the walk is over the UNION, not over one side. ------------
+m10="$(make_scaffold_copy scaffold-mutant-missing)"
+m10_file="$m10/tasks/README.md"
+if [ ! -e "$m10_file" ]; then
+  echo "10. deleted a scaffold copy ... ✗ MUTATION WAS A NO-OP — tasks/README.md is not in the copy."
+  echo "   This gate is disarmed: it would report success while proving nothing. Point the mutation at"
+  echo "   a file that IS on the enforced set (derive it: the union walk minus the exception list)."
+  fail=1
+fi
+rm -f "$m10_file"
+printf '10. deleted a dual-homed scaffold copy — parity "present in BOTH homes" should go RED ... '
+r10="$(run_parity_suite "$m10")"; echo "$r10"
+if [ "$r10" != red ]; then
+  echo "   ✗ the suite did NOT catch a file missing from the scaffold — the union walk is not load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*present in BOTH homes' "$out"; then
+  echo "   ✗ suite went red but NOT at the presence assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 11: ADD a scaffold file with no live counterpart → the SAME named assertion, by the
+#     OPPOSITE violation (task 0133; brief verification step 3). Both directions matter: a file the
+#     scaffold ships and the live tree does not have is one nobody here maintains and no test covers. -
+m11="$(make_scaffold_copy scaffold-mutant-extra)"
+m11_rel="knowledge-base/conventions/ghost-parity-probe.md"
+if [ -e "$repo/ai-agents/$m11_rel" ]; then
+  echo "11. added a scaffold-only file ... ✗ MUTATION WAS A NO-OP — a LIVE counterpart now exists at"
+  echo "   ai-agents/$m11_rel, so this is no longer the scaffold-only case. Rename the probe file."
+  fail=1
+fi
+printf 'a file the live tree does not have\n' > "$m11/$m11_rel"
+printf '11. added a scaffold-only file — parity "present in BOTH homes" should go RED ... '
+r11="$(run_parity_suite "$m11")"; echo "$r11"
+if [ "$r11" != red ]; then
+  echo "   ✗ the suite did NOT catch a scaffold-only file — the reverse direction is not enforced."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*present in BOTH homes' "$out"; then
+  echo "   ✗ suite went red but NOT at the presence assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 12: APPEND ONE BYTE to a dual-homed scaffold copy → the byte assertion must go red
+#     (task 0133; brief verification step 4).
+#
+#     ⚠️ APPEND, NOT `sed`. An anchored `sed` on prose is exactly how mutation 1 silently disarmed
+#     itself for a whole task: the file's wording changed, the pattern stopped matching, the "mutant"
+#     became byte-identical to the original, and the gate reported success while proving nothing.
+#     `>>` cannot stop matching — it has no pattern. The no-op guard below is still kept, because a
+#     read-only or vanished file would make even an append a no-op. ---------------------------------
+m12="$(make_scaffold_copy scaffold-mutant-drift)"
+m12_file="$m12/knowledge-base/conventions/task-owner-vocabulary.md"
+# ⚠️ THE EXISTENCE CHECK IS THE REAL GUARD HERE, and it is not redundant with the `cmp` below.
+# `>>` CREATES a missing file. So if this path is ever renamed, the append silently manufactures a
+# brand-new scaffold-only file instead of drifting an enforced one — the suite still goes red, but at
+# the PRESENCE assertion, not the byte one, and the mutation has stopped testing what it claims to.
+# Verified by disarming the probe by hand: without this check the run reported "red for the wrong
+# reason" and never named the no-op.
+if [ ! -e "$m12_file" ]; then
+  echo "12. appended a byte ... ✗ MUTATION WAS A NO-OP — task-owner-vocabulary.md is not in the copy."
+  echo "   \`>>\` would CREATE it, turning this into a scaffold-only-file mutation by accident. Point"
+  echo "   the mutation at a file that IS on the enforced set."
+  fail=1
+fi
+cp "$m12_file" "$m12_file.orig" 2>/dev/null || :
+printf 'x' >> "$m12_file" 2>/dev/null || :
+if cmp -s "$m12_file" "$m12_file.orig"; then
+  echo "12. appended a byte ... ✗ MUTATION WAS A NO-OP — the append did not change the file."
+  echo "   Fix the mutation in test/prove-red.sh before trusting any result below."
+  fail=1
+fi
+rm -f "$m12_file.orig"
+printf '12. appended one byte to a dual-homed scaffold copy — parity "byte-identical" should go RED ... '
+r12="$(run_parity_suite "$m12")"; echo "$r12"
+if [ "$r12" != red ]; then
+  echo "   ✗ the suite did NOT catch byte drift — the parity assertion is not load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*byte-identical' "$out"; then
+  echo "   ✗ suite went red but NOT at the byte-identical assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 13: plant a CO-PRESENT file under a prune point → the tripwire must go red (task 0133,
+#     from task 0132's hand-off note). The prune points are blankets: `knowledge-base/reports/` and
+#     friends excuse everything beneath them so the bulk `Only in` noise is classifiable. The hole that
+#     opens is a genuinely dual-homed file added under one of them LATER — silently exempt from
+#     byte-parity instead of enforced by it.
+#
+#     The probe is 0132's OWN NAMED NEAR-MISS, not a synthetic name: `knowledge-base/reports/README.md`
+#     is a folder-purpose doc of the same species as `tasks/README.md` (which IS dual-homed and IS
+#     enforced). It exists live today and does not exist in the scaffold; ship it, and it lands under
+#     the blanket. Copying it into the mutant scaffold makes exactly that future real, today. --------
+m13="$(make_scaffold_copy scaffold-mutant-tripwire)"
+m13_rel="knowledge-base/reports/README.md"
+if [ ! -e "$repo/ai-agents/$m13_rel" ] || [ -e "$repo/claude/scaffold/ai-agents/$m13_rel" ]; then
+  echo "13. planted a co-present file under a prune point ... ✗ MUTATION WAS A NO-OP — the probe needs"
+  echo "   ai-agents/$m13_rel to exist and claude/scaffold/ai-agents/$m13_rel NOT to. If the file was"
+  echo "   genuinely shipped to the scaffold, it is now really co-present under a blanket: that is a"
+  echo "   LIVE tripwire hit, not a mutation — fix the exception list, then repoint this probe."
+  fail=1
+fi
+cp "$repo/ai-agents/$m13_rel" "$m13/$m13_rel" 2>/dev/null || :
+printf '13. co-present file under a prune point — parity "no prune point hides a file" should go RED ... '
+r13="$(run_parity_suite "$m13")"; echo "$r13"
+if [ "$r13" != red ]; then
+  echo "   ✗ the suite did NOT catch a dual-homed file hiding under a blanket directory exception —"
+  echo "     0132's hand-off tripwire is not load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*no prune point hides a file' "$out"; then
+  echo "   ✗ suite went red but NOT at the tripwire assertion — red for the wrong reason."; fail=1
 fi
 
 echo
