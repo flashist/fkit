@@ -1,6 +1,10 @@
 ---
 name: fkit-review
-description: The reviewer's one-shot review procedure. Runs two independent reviewers on a diff (its own pass plus a Codex adversarial second opinion via the codex CLI), dedupes, verifies each finding against the code, classifies defect vs frontier-move, and reports leading with a one-line decision verdict. Ephemeral — writes no persistent file. REVIEW-ONLY — never edits code.
+description: >-
+  The reviewer's one-shot review procedure. Runs two independent reviewers on a diff (its own pass
+  plus a Codex adversarial second opinion via the codex CLI), dedupes, verifies each finding against
+  the code, classifies defect vs frontier-move, and reports leading with a one-line decision
+  verdict. Ephemeral — writes no persistent file. REVIEW-ONLY — never edits code.
 ---
 
 # Review (ephemeral) — the reviewer's procedure

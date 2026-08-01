@@ -1,6 +1,9 @@
 ---
 name: fkit-inspect
-description: Deeply research the current project architecture and write the findings to ai-agents/knowledge-base/architecture.md, combining evidence-first code investigation with liberal questioning of the owner. Writes only to knowledge-base — never the wiki. Makes no commits.
+description: >-
+  Deeply research the current project architecture and write the findings to
+  ai-agents/knowledge-base/architecture.md, combining evidence-first code investigation with liberal
+  questioning of the owner. Writes only to knowledge-base — never the wiki. Makes no commits.
 ---
 
 # Inspect (architecture investigation)

@@ -1,6 +1,10 @@
 ---
 name: fkit-task-cancelled
-description: Mark a task cancelled — move its brief into ai-agents/tasks/cancelled/ and update the sprint plan (and parent epic, if any) so the task's status reads Cancelled, with a recorded reason. Takes two arguments — the task file path, then the cancellation-reason text (everything after the path). Use when a task has been dropped/abandoned and will not be done.
+description: >-
+  Mark a task cancelled — move its brief into ai-agents/tasks/cancelled/ and update the sprint plan
+  (and parent epic, if any) so the task's status reads Cancelled, with a recorded reason. Takes two
+  arguments — the task file path, then the cancellation-reason text (everything after the path). Use
+  when a task has been dropped/abandoned and will not be done.
 ---
 
 # Task Cancelled

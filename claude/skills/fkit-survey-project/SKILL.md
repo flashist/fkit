@@ -1,6 +1,10 @@
 ---
 name: fkit-survey-project
-description: The architect's initiation codebase survey — a non-interactive, evidence-first pass over the code that writes ai-agents/knowledge-base/architecture.md and returns a technical overview plus open questions. Run when the producer's project initiation asks for it. Does not interview the owner and makes no commits.
+description: >-
+  The architect's initiation codebase survey — a non-interactive, evidence-first pass over the code
+  that writes ai-agents/knowledge-base/architecture.md and returns a technical overview plus open
+  questions. Run when the producer's project initiation asks for it. Does not interview the owner
+  and makes no commits.
 ---
 
 # Survey Project (initiation codebase survey) — the architect's procedure

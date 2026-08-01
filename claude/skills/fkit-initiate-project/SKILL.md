@@ -1,6 +1,10 @@
 ---
 name: fkit-initiate-project
-description: Guided first-run onboarding for a fresh fkit project. Interview the owner about the product, have the fkit-architect agent survey the codebase, then write PROJECT.md and the architecture doc into the knowledge-base so the project is ready for real work. Run once, at the very start of a new project. Makes no commits.
+description: >-
+  Guided first-run onboarding for a fresh fkit project. Interview the owner about the product, have
+  the fkit-architect agent survey the codebase, then write PROJECT.md and the architecture doc into
+  the knowledge-base so the project is ready for real work. Run once, at the very start of a new
+  project. Makes no commits.
 ---
 
 # Initiate project (first-run onboarding)

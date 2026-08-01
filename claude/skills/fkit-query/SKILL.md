@@ -1,6 +1,9 @@
 ---
 name: fkit-query
-description: Answer a question about the project using the wiki at ai-agents/wiki-vault/. Use when asked to look something up in the wiki, find information about a feature or system, or answer a project question. Read-only — never creates or edits wiki pages.
+description: >-
+  Answer a question about the project using the wiki at ai-agents/wiki-vault/. Use when asked to
+  look something up in the wiki, find information about a feature or system, or answer a project
+  question. Read-only — never creates or edits wiki pages.
 ---
 
 # Wiki Query

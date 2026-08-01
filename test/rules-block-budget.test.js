@@ -11,8 +11,20 @@
 // cap after one bullet was added. The next contributor to add a paragraph would find out from a user.
 //
 // ⚠️ THIS ASSERTS THE EMITTED BLOCK, NOT THE SOURCE FILE. `emit_block()` wraps the source in two
-// markers plus a five-line explanatory comment, so the source is meaningfully smaller than what the
+// markers plus a four-line explanatory comment, so the source is meaningfully smaller than what the
 // guard measures. Testing the source alone would under-count and pass a block that init rejects.
+// (Structure figures like that one drift: this test measures, it does not trust the number.)
+//
+// WHY THE CAP EXISTS (owner ruling, task 0130): BOTH reasons — (1) DISCIPLINE, primary: nothing new
+// enters the shared block without something leaving or an owner-signed bump (ADR-016); (2) ATTENTION
+// DILUTION, SUSPECTED BUT UNMEASURED — never been tested, so do not cite it as established.
+// Standing budget target (same ruling): keep >= 400 B free.
+//
+// ⚠️ THE "injected into every agent's context on every turn" LINE BELOW IS TRUE OF THE RULES BODY,
+// NOT OF THE WRAPPER COMMENT. Re-run first-hand 2026-08-01, Claude Code 2.1.220: HTML comments are
+// stripped from CLAUDE.md before it reaches the agent context — the body arrived, the marker and
+// comment lines did not. The wrapper costs cap budget without costing Claude-side context. The codex
+// side (AGENTS.md, codex-cli 0.145.0) was NOT re-measured; assume it still pays.
 //
 // NOTE ON DISAGREEMENT, recorded because the finding was contested: Codex scored this "no finding";
 // fkit-reviewer kept it at medium and the owner ruled to add the guard. Both reviewers computed the
@@ -42,8 +54,12 @@ function rulesMax() {
 //
 // It used to reproduce the function in JavaScript, and the reproduction was wrong by 107 B in two
 // independent ways:
-//   1. It measured the preamble as the *JavaScript source text* of the seven `printf` lines — 568
-//      chars of script, not the 443 bytes those printfs actually emit.
+//   1. It measured the preamble as the *JavaScript source text* of the `printf` lines — 568 chars of
+//      script, not the bytes those printfs actually emitted. (Figures are AS OF THAT BUG: seven
+//      printfs emitting 443 B of comment. Today it is six emitting 354 B — task 0130 compressed the
+//      wrapper. Kept at the old values on purpose: 568 − 443 = the 125 B divergence, less the 18 B
+//      below, is exactly the 107 B net error described. Re-stating them in today's bytes would make
+//      the arithmetic false.)
 //   2. It used `src.length`, which counts UTF-16 code units (2521), not UTF-8 bytes (2539). This file
 //      is dense with `—`, `⚠️` and `⛔`, so that gap grows with every symbol added.
 //

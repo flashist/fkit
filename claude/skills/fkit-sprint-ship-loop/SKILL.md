@@ -1,7 +1,8 @@
 ---
 name: fkit-sprint-ship-loop
-description: The lead's sprint-scope conductor loop — drives eligible tasks brief→closed by spawning
-  role workers and relaying owner decisions live through this session. Since ADR-033 the driver closes
+description: >-
+  The lead's sprint-scope conductor loop — drives eligible tasks brief→closed by spawning role
+  workers and relaying owner decisions live through this session. Since ADR-033 the driver closes
   nothing itself — it spawns a producer to close each shipped task, and that producer writes the
   agent-closed marker. Session-only; the driver holds the owner channel workers lack.
 ---

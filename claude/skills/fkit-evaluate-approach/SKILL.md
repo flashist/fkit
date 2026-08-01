@@ -1,6 +1,10 @@
 ---
 name: fkit-evaluate-approach
-description: Compare 2–3 candidate technical approaches for a problem with explicit trade-offs and a clear recommendation, grounded in the existing codebase and the owner's priorities. A decision aid that often feeds the record-decision skill. Saved to ai-agents/knowledge-base/reports/ — never the wiki. Makes no commits and writes no implementation.
+description: >-
+  Compare 2–3 candidate technical approaches for a problem with explicit trade-offs and a clear
+  recommendation, grounded in the existing codebase and the owner's priorities. A decision aid that
+  often feeds the record-decision skill. Saved to ai-agents/knowledge-base/reports/ — never the
+  wiki. Makes no commits and writes no implementation.
 ---
 
 # Evaluate Approach

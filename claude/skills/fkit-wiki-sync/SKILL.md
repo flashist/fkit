@@ -1,6 +1,10 @@
 ---
 name: fkit-wiki-sync
-description: The wiki librarian's sync procedure — detect what changed under ai-agents/ since the last sync (via the .wiki-watermark commit SHA) and ingest only the delta. Optional argument — a date (YYYY-MM-DD) overriding the since-point, or 'force' to re-ingest everything. The wiki role is the exclusive write gateway for the vault.
+description: >-
+  The wiki librarian's sync procedure — detect what changed under ai-agents/ since the last sync
+  (via the .wiki-watermark commit SHA) and ingest only the delta. Optional argument — a date
+  (YYYY-MM-DD) overriding the since-point, or 'force' to re-ingest everything. The wiki role is the
+  exclusive write gateway for the vault.
 ---
 
 # Wiki Sync — the wiki librarian's procedure

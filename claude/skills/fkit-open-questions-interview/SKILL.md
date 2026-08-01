@@ -1,6 +1,9 @@
 ---
 name: fkit-open-questions-interview
-description: Sweep this session's history for questions put to the owner that were never answered, then interview the owner about them. Interview-only — reads nothing from disk, writes nothing, and never invents a question. Available to the six Claude-side roles.
+description: >-
+  Sweep this session's history for questions put to the owner that were never answered, then
+  interview the owner about them. Interview-only — reads nothing from disk, writes nothing, and
+  never invents a question. Available to the six Claude-side roles.
 ---
 
 # Open Questions Interview

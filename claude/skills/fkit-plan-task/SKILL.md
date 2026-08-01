@@ -1,6 +1,9 @@
 ---
 name: fkit-plan-task
-description: Read a task file and produce a concrete implementation plan before any code is written. The plan should account for realistic edge cases, including non-obvious but plausible failure modes, where they could materially affect implementation, correctness, or testing.
+description: >-
+  Read a task file and produce a concrete implementation plan before any code is written. The plan
+  should account for realistic edge cases, including non-obvious but plausible failure modes, where
+  they could materially affect implementation, correctness, or testing.
 ---
 
 # Plan Task

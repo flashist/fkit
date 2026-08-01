@@ -17,12 +17,22 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# Two mutations, each caught by a NAMED assertion:
+# NINE mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
+# whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
+# block below is the authority on what it does and why; this is the index.
 #   1. Break a skills_for_role() entry             → the matrix test for that (role, skill) pair in
 #      skill-ownership-hook.test.js must go red (task 43 / ADR-018 — role↔skill correctness moved
 #      out of the launcher-contract suite into that file's own exhaustive matrix; round-1 review R2).
 #   2. Restore the pre-task-18 --resume passthrough → Group A assertion 2 must go red
 #      (proof the suite would have caught the exact bug task 18 removed).
+#   3. Disable the Stop hook's check B              → "B: message with no ..."            (task 0127)
+#   4. A present marker stops suppressing check A   → "A/R1 regression: marker present"   (task 0127)
+#   5. Remove the marker hook's tool gate           → "a non-AskUserQuestion tool"        (task 0127)
+#   6. Disable the ship-loop marker read            → "SKIP: a ship-loop session marker"  (task 0129)
+#   7. Remove the ship-loop marker's command gate   → "a NON-ship-loop command"           (task 0129)
+#   8. One `description: >-` back to a plain scalar → "live corpus: every skill SKILL"    (task 0136)
+#   9. De-indent a description continuation line    → "live corpus: every skill SKILL"    (task 0136)
 #
 # Exit 0 only if: real launcher green, unmutated copy green, AND each mutation reds its NAMED assertion.
 set -eu
@@ -86,6 +96,17 @@ run_shiploop_marker_suite() {   # <hook-script-path>
   fi
 }
 
+# Run ONLY the skill-frontmatter suite against a COPY of claude/ (task 0136); redirected via
+# FKIT_FRONTMATTER_ROOT, its own tree seam. Unlike the hook seams above this points at a whole
+# directory, not one script — the suite audits every skills/*/SKILL.md and agents/*.md under it.
+run_frontmatter_suite() {   # <claude-tree-root>
+  if FKIT_FRONTMATTER_ROOT="$1" node --test "$repo/test/skill-frontmatter.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
 # A full, independent copy of claude/ whose launcher we can mutate. $1 = name; echoes the launcher path.
 make_claude_copy() {
   dst="$work/$1"
@@ -131,6 +152,14 @@ clean_shiploop_hook="$(dirname "$clean_copy")/shiploop-marker-hook.sh"
 printf '0f. unmutated copy ship-loop-marker-hook suite should be green ... '
 sc="$(run_shiploop_marker_suite "$clean_shiploop_hook")"; echo "$sc"
 [ "$sc" = green ] || { echo "   ✗ an UNMUTATED copy's ship-loop-marker suite is red — mutation 7 below would be false."; fail=1; }
+
+# --- 0g. An UNMUTATED copy's skill-frontmatter suite must ALSO be green (task 0136; same reasoning
+#     as 0b — without this, a red below could be red-via-setup and would prove nothing). The root is
+#     the copied claude/ tree itself, which is what $clean_copy sits inside. -------------------------
+clean_tree="$(dirname "$clean_copy")"
+printf '0g. unmutated copy skill-frontmatter suite should be green ... '
+fc="$(run_frontmatter_suite "$clean_tree")"; echo "$fc"
+[ "$fc" = green ] || { echo "   ✗ an UNMUTATED copy's frontmatter suite is red — mutations 8/9 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -287,6 +316,79 @@ if [ "$r7" != red ]; then
   echo "   ✗ the suite did NOT catch a removed command_name gate (the R8 fix is not mutation-covered)."; fail=1
 elif ! grep -Eq '(✖|not ok|fail).*a NON-ship-loop command' "$out"; then
   echo "   ✗ suite went red but NOT at the command-gate assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 8: turn one skill's `description: >-` back into a PLAIN scalar → the live-corpus skills
+#     assertion in skill-frontmatter.test.js must go red (task 0136). This is the state ALL 25 skills
+#     were in before 0136, and the shape 0123 broke by putting a colon on a continuation line. Proves
+#     the STRUCTURAL rule (R5) is actually enforced by the suite rather than merely present. ---------
+m8_tree="$work/claude-mutant-plainscalar"
+cp -R "$repo/claude" "$m8_tree"
+m8_file="$m8_tree/skills/fkit-team/SKILL.md"
+cp "$m8_file" "$m8_file.orig"
+# Splice the first content line up onto the key line and drop the `>-`, i.e. exactly the plain-scalar
+# shape the conversion replaced. awk rather than sed because this is a two-line join.
+awk '
+  BEGIN { done = 0 }
+  /^description: >-$/ && done == 0 {
+    done = 1
+    getline nxt
+    sub(/^[ \t]+/, "", nxt)
+    print "description: " nxt
+    next
+  }
+  { print }
+' "$m8_file.orig" > "$m8_file"
+if cmp -s "$m8_file" "$m8_file.orig"; then
+  echo "8. plain-scalar description ... ✗ MUTATION WAS A NO-OP — the awk no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result below."
+  fail=1
+fi
+printf '8. one description back to a PLAIN scalar — "live corpus: every skill SKILL" should go RED ... '
+r8="$(run_frontmatter_suite "$m8_tree")"; echo "$r8"
+if [ "$r8" != red ]; then
+  echo "   ✗ the suite did NOT catch a plain-scalar description — the structural rule is not load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*live corpus: every skill SKILL' "$out"; then
+  echo "   ✗ suite went red but NOT at the live-corpus skills assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 9: de-indent a continuation line of fkit-sprint-ship-loop's description → the SAME
+#     named assertion must go red, by a DIFFERENT violation (task 0136). This is the one hazard a
+#     block scalar does not absorb: a de-indented line still ends the scalar, silently truncating the
+#     description. fkit-sprint-ship-loop is deliberately the target — it is the file 0123 broke. -----
+m9_tree="$work/claude-mutant-deindent"
+cp -R "$repo/claude" "$m9_tree"
+m9_file="$m9_tree/skills/fkit-sprint-ship-loop/SKILL.md"
+cp "$m9_file" "$m9_file.orig"
+# Strip the indent from the SECOND content line of the block scalar (anchored on structure, not on the
+# description's wording, so a future rewrap cannot silently disarm this).
+awk '
+  BEGIN { infold = 0; n = 0 }
+  {
+    if (infold == 1) {
+      n++
+      if (n == 2) { sub(/^[ \t]+/, ""); print; next }
+    }
+    if ($0 == "description: >-") { infold = 1 }
+    print
+  }
+' "$m9_file.orig" > "$m9_file"
+if cmp -s "$m9_file" "$m9_file.orig"; then
+  echo "9. de-indented continuation line ... ✗ MUTATION WAS A NO-OP — the awk no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result below."
+  fail=1
+fi
+printf '9. de-indented continuation line — "live corpus: every skill SKILL" should go RED ... '
+r9="$(run_frontmatter_suite "$m9_tree")"; echo "$r9"
+if [ "$r9" != red ]; then
+  echo "   ✗ the suite did NOT catch a de-indented continuation line. NOTE: if the de-indented line"
+  echo "     now happens to read as \`word: value\`, it is indistinguishable from a real frontmatter"
+  echo "     key — see skill-frontmatter.test.js's documented residual — and the mutation must move."
+  fail=1
+elif ! grep -Eq '(✖|not ok|fail).*live corpus: every skill SKILL' "$out"; then
+  echo "   ✗ suite went red but NOT at the live-corpus skills assertion — red for the wrong reason."; fail=1
 fi
 
 echo

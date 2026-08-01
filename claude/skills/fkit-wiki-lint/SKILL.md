@@ -1,6 +1,9 @@
 ---
 name: fkit-wiki-lint
-description: The wiki librarian's lint procedure — health-check ai-agents/wiki-vault/ (broken links, stale claims, missing back-links, template drift), fix what's safe, and flag what needs judgment. The wiki role is the exclusive write gateway for the vault.
+description: >-
+  The wiki librarian's lint procedure — health-check ai-agents/wiki-vault/ (broken links, stale
+  claims, missing back-links, template drift), fix what's safe, and flag what needs judgment. The
+  wiki role is the exclusive write gateway for the vault.
 ---
 
 # Wiki Lint — the wiki librarian's procedure

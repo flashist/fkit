@@ -315,7 +315,23 @@ fi
 #    had no channel to ship a correction to them either.
 RULES_BEGIN='<!-- fkit:begin-rules -->'
 RULES_END='<!-- fkit:end-rules -->'
-RULES_MAX=4096   # the block lands in every agent's context on every turn; cap fkit's own verbosity
+# WHY THERE IS A CAP AT ALL (owner ruling, task 0130): BOTH reasons, in this order.
+#   1. DISCIPLINE — the primary and operative reason. The cap forces an eviction conversation: nothing
+#      new enters the shared block without something leaving, or an owner-signed bump (ADR-016).
+#   2. ATTENTION DILUTION — SUSPECTED BUT UNMEASURED. Nobody has measured whether a longer block
+#      actually degrades adherence. Do not cite it as established; it is a hunch, recorded as one.
+# Standing budget target (owner ruling, task 0130): keep >= 400 B free. 526 B free at time of writing
+# — a snapshot, not a guarantee; test/rules-block-budget.test.js measures the live number.
+#
+# The cap measures the EMITTED block (markers + comment + source) — confirmed unchanged, task 0130.
+#
+# ⚠️ "injected into every agent's context on every turn" (the over-budget error below) is true of the
+# RULES BODY, not of this wrapper comment. Re-run first-hand 2026-08-01 on Claude Code 2.1.220: HTML
+# comments are STRIPPED from CLAUDE.md before it reaches the agent context — the body arrived, these
+# marker/comment lines did not. So the wrapper costs cap budget without costing Claude-side context.
+# UNVERIFIED: the codex side (AGENTS.md, codex-cli 0.145.0) was not re-measured here; assume it
+# still pays.
+RULES_MAX=4096
 
 RULES_TAG='fkit-managed:'   # appears in the block header; how we recognize a region we wrote
 
@@ -324,11 +340,10 @@ rules_src="$scaffold/universal-rules.md"
 
 emit_block() {   # the fkit-managed block, markers included
   printf '%s\n' "$RULES_BEGIN"
-  printf '<!-- %s this block is REPLACED on every `fkit` launch. Edits inside these two markers\n' "$RULES_TAG"
+  printf '<!-- %s this block is REPLACED on every `fkit` launch. Edits inside the markers\n' "$RULES_TAG"
   printf '     are overwritten. Put your own standing instructions OUTSIDE them — everything outside\n'
-  printf '     is yours and fkit never touches it. Note the markers are recognized only when a marker\n'
-  printf '     is ALONE on its line, so quoting one inline in your prose is safe; a bare marker line\n'
-  printf '     inside a code fence, however, still reads as a real marker. -->\n\n'
+  printf '     is yours and fkit never touches it. A marker is recognized only alone on its line, so a\n'
+  printf '     bare marker line inside a code fence still reads as a real marker. -->\n\n'
   cat "$rules_src"
   printf '%s\n' "$RULES_END"
 }

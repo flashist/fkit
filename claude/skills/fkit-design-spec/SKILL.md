@@ -1,6 +1,10 @@
 ---
 name: fkit-design-spec
-description: Produce a technical design spec for a feature or change — components, interfaces, data flow, trade-offs, and (optionally) interface stubs — grounded in the existing codebase. This is the design the coder implements from. Saved to ai-agents/knowledge-base/reports/ — never the wiki. Makes no commits and writes no full implementation.
+description: >-
+  Produce a technical design spec for a feature or change — components, interfaces, data flow,
+  trade-offs, and (optionally) interface stubs — grounded in the existing codebase. This is the
+  design the coder implements from. Saved to ai-agents/knowledge-base/reports/ — never the wiki.
+  Makes no commits and writes no full implementation.
 ---
 
 # Design Spec

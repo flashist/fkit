@@ -1,6 +1,11 @@
 ---
 name: fkit-task-brief
-description: Turn a raw task description into one or more task briefs under ai-agents/tasks/backlog/ — decomposing it into the smallest independently shippable units, with dependency links recorded. Takes the task description as its argument, which may name a sprint inline ("for Sprint 2: …"); with no sprint named the briefs are filed on the Backlog board. Use when scoping new work into the backlog.
+description: >-
+  Turn a raw task description into one or more task briefs under ai-agents/tasks/backlog/ —
+  decomposing it into the smallest independently shippable units, with dependency links recorded.
+  Takes the task description as its argument, which may name a sprint inline ("for Sprint 2: …");
+  with no sprint named the briefs are filed on the Backlog board. Use when scoping new work into the
+  backlog.
 ---
 
 # Task Brief

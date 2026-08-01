@@ -10,7 +10,7 @@ Sprint 2
 113
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -105,3 +105,39 @@ one task; the proposal is not a separately shippable artifact.
 - A **review pass is warranted** — this edits the shared rules block (option a) or its enforcement cap
   (option b), both of which govern every agent's context on every turn.
 - No commit — leave the change in the working tree.
+
+## Close-out (2026-08-01) — agent-closed, not owner-verified
+
+**Outcome: owner signed option (a), tier a3** — a compression pass on the universal rules block. **No
+`RULES_MAX` bump; the cap stays 4096.**
+
+**Result, measured:** emitted block **3717 B → 3570 B** (net **−147 B**). 3570 B = 3166 B source +
+404 B wrapper. **526 B headroom**, meeting the owner's new **≥400 B standing target** with 126 B
+spare. **87% of cap**, **219 B** clear of the 92% warning gate (which trips at 3789 B).
+
+**Verification:** `node --test test/*.test.js` → **523 pass / 0 fail**. `bash test/prove-red.sh` →
+**hard gate PASSED**. Re-injection proven by extracting the block from `CLAUDE.md` and `AGENTS.md` and
+`cmp`-ing byte-identical against live `emit_block()` output — not by the markers-only test.
+
+**Review:** stateful, ledger at [`review.md`](review.md). Verdict *changes requested — 3 defects, none
+blocking*. **Codex coverage FULL, not degraded** (`codex-cli 0.145.0` ran to completion; two
+independent reviewers converged on the same three findings). R1 and R3 fixed; R2 fixed in part.
+Re-verified green after every fix.
+
+**Owner rulings recorded 2026-08-01** (as code comments, no ADR):
+- Option (a), tier a3.
+- Standing headroom target **≥400 B**.
+- The cap **keeps measuring the emitted block**, unchanged.
+- Cap rationale in writing: **discipline primary** (ADR-016's eviction conversation), with attention
+  dilution **suspected but unmeasured, flagged as such**.
+
+**Accepted residual — owner-dispositioned 2026-08-01, do not re-litigate.** The coder **refused** the
+second half of finding R2 (renumbering `test/rules-block-budget.test.js:56-57` from 443 B / "seven
+`printf` lines" to the new figures), on the evidence that the passage is a **dated account of a past
+107 B bug whose arithmetic only closes at the old values**. **The owner accepted the refusal.**
+
+**Carried-forward residual:** the **codex half of the HTML-comment-stripping canary is still
+unverified** — filed as task
+[`0177-verify-the-codex-half-of-the-comment-stripping-canary`](../../backlog/0177-verify-the-codex-half-of-the-comment-stripping-canary/brief.md).
+
+**Not committed** — the change is in the working tree; the owner commits.

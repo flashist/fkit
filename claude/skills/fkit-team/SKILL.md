@@ -1,6 +1,8 @@
 ---
 name: fkit-team
-description: Show the fkit agent team — who's on it, what each role may and may not do, how to reach each one, and which role this session is locked to. Use when you're not sure who to talk to or how.
+description: >-
+  Show the fkit agent team — who's on it, what each role may and may not do, how to reach each one,
+  and which role this session is locked to. Use when you're not sure who to talk to or how.
 ---
 
 # The fkit team

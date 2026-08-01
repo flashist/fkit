@@ -1,6 +1,10 @@
 ---
 name: fkit-status
-description: Answer "what's the status?" the way a producer would — read the live sprint plan and task briefs, reconcile any drift between them, and deliver a seven-beat briefing that ends in the task dashboard. Takes an optional sprint name as its argument (e.g. "Sprint 1"); empty means the active sprint. Read-only — it reports, it never changes a status, moves a file, or edits a plan.
+description: >-
+  Answer "what's the status?" the way a producer would — read the live sprint plan and task briefs,
+  reconcile any drift between them, and deliver a seven-beat briefing that ends in the task
+  dashboard. Takes an optional sprint name as its argument (e.g. "Sprint 1"); empty means the active
+  sprint. Read-only — it reports, it never changes a status, moves a file, or edits a plan.
 ---
 
 # Status

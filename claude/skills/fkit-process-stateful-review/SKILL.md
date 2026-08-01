@@ -1,6 +1,12 @@
 ---
 name: fkit-process-stateful-review
-description: The coder's side of a stateful, loop-resistant review. Reads the reviewer's findings from a shared review .md file (source of truth), verifies each against the codebase, classifies defect vs frontier-move, assigns verdicts, gates code changes on your approval, applies approved fixes, and records the outcome back into the shared file. Reviewer and coder each own a section and round-trip in place. Use when a review is tracked in a shared review.md ledger inside the task folder.
+description: >-
+  The coder's side of a stateful, loop-resistant review. Reads the reviewer's findings from a shared
+  review .md file (source of truth), verifies each against the codebase, classifies defect vs
+  frontier-move, assigns verdicts, gates code changes on your approval, applies approved fixes, and
+  records the outcome back into the shared file. Reviewer and coder each own a section and
+  round-trip in place. Use when a review is tracked in a shared review.md ledger inside the task
+  folder.
 ---
 
 # Process Stateful Review (coder side)

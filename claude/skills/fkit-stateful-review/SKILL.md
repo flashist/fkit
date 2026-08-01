@@ -1,6 +1,11 @@
 ---
 name: fkit-stateful-review
-description: The reviewer's side of a stateful, loop-resistant review. Runs its own pass plus a Codex adversarial second opinion, dedupes against the shared ledger so settled tradeoffs aren't re-litigated, verifies each finding against the code, and writes the Reviewer findings section of the task folder's review.md ledger — which the coder's fkit-process-stateful-review reads and responds to. REVIEW-ONLY — writes documents, never source code.
+description: >-
+  The reviewer's side of a stateful, loop-resistant review. Runs its own pass plus a Codex
+  adversarial second opinion, dedupes against the shared ledger so settled tradeoffs aren't
+  re-litigated, verifies each finding against the code, and writes the Reviewer findings section of
+  the task folder's review.md ledger — which the coder's fkit-process-stateful-review reads and
+  responds to. REVIEW-ONLY — writes documents, never source code.
 ---
 
 # Stateful Review (reviewer side) — the reviewer's procedure

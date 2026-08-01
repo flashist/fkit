@@ -1,6 +1,9 @@
 ---
 name: fkit-wiki-ingest
-description: The wiki librarian's ingest procedure — add or update wiki pages in ai-agents/wiki-vault/ from a named source. Accepts a file path, a directory, or a keyword ('all tasks', 'knowledge-base', 'architecture'). The wiki role is the exclusive write gateway for the vault.
+description: >-
+  The wiki librarian's ingest procedure — add or update wiki pages in ai-agents/wiki-vault/ from a
+  named source. Accepts a file path, a directory, or a keyword ('all tasks', 'knowledge-base',
+  'architecture'). The wiki role is the exclusive write gateway for the vault.
 ---
 
 # Wiki Ingest — the wiki librarian's procedure

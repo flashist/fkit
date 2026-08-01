@@ -1,6 +1,11 @@
 ---
 name: fkit-process-review
-description: Critically evaluate pasted-in reviewer feedback before acting — verify every claim against the codebase, classify each finding (defect vs frontier-move), assign a verdict, gate any code change on your explicit approval, then apply approved fixes. Ephemeral — works only from copied review text and never reads or writes a stateful review .md file. Use for a one-shot review of pasted comments (Codex output, a GitHub review, ad-hoc feedback).
+description: >-
+  Critically evaluate pasted-in reviewer feedback before acting — verify every claim against the
+  codebase, classify each finding (defect vs frontier-move), assign a verdict, gate any code change
+  on your explicit approval, then apply approved fixes. Ephemeral — works only from copied review
+  text and never reads or writes a stateful review .md file. Use for a one-shot review of pasted
+  comments (Codex output, a GitHub review, ad-hoc feedback).
 ---
 
 # Process Review (ephemeral)

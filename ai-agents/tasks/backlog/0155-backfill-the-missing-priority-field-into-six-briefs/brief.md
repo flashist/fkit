@@ -86,7 +86,7 @@ number.
 | `ai-agents/tasks/done/0124-revert-task-movers-to-producer-only/brief.md` | P107 | `107` |
 | `ai-agents/tasks/done/0125-wiki-skills-flag-ready-to-close/brief.md` | P108 | `108` |
 | `ai-agents/tasks/done/0126-wiki-resync-for-adr-033/brief.md` | P109 | `109` |
-| `ai-agents/tasks/backlog/0136-convert-skill-descriptions-to-block-scalars-and-guard/brief.md` | P114 | `114` |
+| `ai-agents/tasks/done/0136-convert-skill-descriptions-to-block-scalars-and-guard/brief.md` | P114 | `114` |
 
 - **Re-derive the six from the sweep, do not trust this table's membership blindly.** Re-run the sweep
   in *Verification steps* first. Briefs filed between this brief and the implementation would not

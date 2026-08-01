@@ -1,6 +1,10 @@
 ---
 name: fkit-adversarial-review
-description: The adversarial reviewer's procedure — an independent hostile pass over a diff that hunts bugs, edge cases, security holes, races, regressions, and missing tests, run on Codex (via the codex CLI) for genuine model diversity, with a loudly-flagged Claude fallback. Returns FINDINGS ONLY — never edits code, never commits.
+description: >-
+  The adversarial reviewer's procedure — an independent hostile pass over a diff that hunts bugs,
+  edge cases, security holes, races, regressions, and missing tests, run on Codex (via the codex
+  CLI) for genuine model diversity, with a loudly-flagged Claude fallback. Returns FINDINGS ONLY —
+  never edits code, never commits.
 ---
 
 # Adversarial Review — the adversarial reviewer's procedure

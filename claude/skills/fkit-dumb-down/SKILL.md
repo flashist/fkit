@@ -1,6 +1,10 @@
 ---
 name: fkit-dumb-down
-description: Re-explain your own previous answer in plain, non-specialist language — shorter sentences, everyday words, jargon glossed. Content-preserving: it never drops a caveat, a failure, or an unverified-claim flag. Rewrites your last answer only; reads no files and writes none. Available to the six Claude-side roles.
+description: >-
+  Re-explain your own previous answer in plain, non-specialist language — shorter sentences,
+  everyday words, jargon glossed. Content-preserving: it never drops a caveat, a failure, or an
+  unverified-claim flag. Rewrites your last answer only; reads no files and writes none. Available
+  to the six Claude-side roles.
 ---
 
 # Dumb Down

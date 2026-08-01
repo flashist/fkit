@@ -1,6 +1,11 @@
 ---
 name: fkit-task-ship-loop
-description: The coder's autonomous brief-to-hand-off loop. Takes one backlog task from its brief through plan → build → verify → stateful review → ready to close, running autonomously by default after a single up-front plan approval and stopping for the owner only at the "important questions". Since ADR-033 it closes nothing itself: its terminal act is routing the close to the producer, which writes the agent-closed marker. Session-only; refuses a spawned/headless invocation.
+description: >-
+  The coder's autonomous brief-to-hand-off loop. Takes one backlog task from its brief through plan
+  → build → verify → stateful review → ready to close, running autonomously by default after a
+  single up-front plan approval and stopping for the owner only at the "important questions". Since
+  ADR-033 it closes nothing itself: its terminal act is routing the close to the producer, which
+  writes the agent-closed marker. Session-only; refuses a spawned/headless invocation.
 ---
 
 # Task Ship-Loop (coder side)
