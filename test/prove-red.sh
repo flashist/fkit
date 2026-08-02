@@ -490,8 +490,13 @@ if [ ! -e "$m12_file" ]; then
 fi
 cp "$m12_file" "$m12_file.orig" 2>/dev/null || :
 printf 'x' >> "$m12_file" 2>/dev/null || :
-if cmp -s "$m12_file" "$m12_file.orig"; then
-  echo "12. appended a byte ... ✗ MUTATION WAS A NO-OP — the append did not change the file."
+# ⚠️ THE `.orig` EXISTENCE TEST IS PART OF THE GUARD, not belt-and-braces (round-1 review R5). Both
+# commands above swallow their own failure, and if the COPY is the one that failed there is no `.orig`
+# to compare against: `cmp` then exits non-zero as an ERROR, so a bare `cmp -s` reads it as "not a
+# no-op" and the run reports "red for the wrong reason" instead of naming the disarmed mutation.
+if [ ! -e "$m12_file.orig" ] || cmp -s "$m12_file" "$m12_file.orig"; then
+  echo "12. appended a byte ... ✗ MUTATION WAS A NO-OP — the append did not change the file, or the"
+  echo "   \`.orig\` snapshot could not be written, so the mutation cannot be verified at all."
   echo "   Fix the mutation in test/prove-red.sh before trusting any result below."
   fail=1
 fi
@@ -524,6 +529,20 @@ if [ ! -e "$repo/ai-agents/$m13_rel" ] || [ -e "$repo/claude/scaffold/ai-agents/
   fail=1
 fi
 cp "$repo/ai-agents/$m13_rel" "$m13/$m13_rel" 2>/dev/null || :
+# ⚠️ THE POST-CONDITION, WHICH THE PRE-CHECK ABOVE CANNOT STAND IN FOR (round-1 review R2). The check
+# above inspects the REPO; this one inspects the MUTANT COPY, and only this one can see that the `cp`
+# above swallowed its own failure. `cp` fails when the destination directory is absent from the copy —
+# e.g. `claude/scaffold/ai-agents/knowledge-base/reports/.gitkeep` is removed, so git stops tracking
+# the directory and `make_scaffold_copy` has nothing to copy. Nothing would then be co-present, the
+# suite would be RIGHTLY green, and the failure text below would accuse a WORKING test of not catching
+# a file that was never planted. This is the same silent-disarm this script's own header records, with
+# the sign reversed. (`cmp -s` reports non-zero for a missing destination too, which is the case here.)
+if ! cmp -s "$repo/ai-agents/$m13_rel" "$m13/$m13_rel"; then
+  echo "13. planted a co-present file under a prune point ... ✗ MUTATION WAS A NO-OP — the copy into"
+  echo "   the mutant scaffold did not land at $m13_rel (is its parent directory missing from the"
+  echo "   copy?). Nothing is co-present, so the result below proves nothing about the tripwire."
+  fail=1
+fi
 printf '13. co-present file under a prune point — parity "no prune point hides a file" should go RED ... '
 r13="$(run_parity_suite "$m13")"; echo "$r13"
 if [ "$r13" != red ]; then

@@ -145,7 +145,7 @@ the one that adds it. Step 3 re-confirmed: `dual-home-parity.md` is still **ABSE
 reviewers). All six verified CORRECT by the coder; five fixed, one (R1) handed onward by owner ruling.
 
 **⚠️ OUTSTANDING — R1 handed to task
-[`0133`](../../backlog/0133-build-dual-home-parity-test/brief.md).** The 10 directory entries match
+[`0133`](../0133-build-dual-home-parity-test/brief.md).** The 10 directory entries match
 **bidirectionally**, so a real dual-homed file later added under one would silently escape `0133`'s
 enforcement. **The assertion `0133` must add: no directory exception may cover a non-`.gitkeep` file
 present in BOTH homes.** The `.gitkeep` carve-out is **required, not cosmetic** — 9 such files sit in both

@@ -113,8 +113,25 @@ Task 0133 mechanized this as `test/dual-home-parity.test.js`, which reads the sa
   [ADR-014](../decisions/adr-014-how-fkit-tests-itself.md) (`node --test`, zero devDeps): asserts every
   dual-homed file not covered by the exceptions module is byte-identical. **Built — task 0133,
   2026-08-01.** It walks the **union** of both homes (so a file missing from either side fails), derives
-  the enforced set rather than hard-coding it, and carries a **tripwire**: no blanket directory
-  exception may hide a non-`.gitkeep` file that is in fact present in both homes. Its four mutations
+  the enforced set rather than hard-coding it, and carries a **tripwire** keyed on **prune points** —
+  every directory the walk stopped at, whether the exception spelled it with a trailing slash
+  (`knowledge-base/reports/`) or named it exactly (`wiki-vault/.fkit`) — under
+  which no non-`.gitkeep` file that is in fact present in both homes may hide: such a file is **put on
+  the enforced set**, and is excused only by an exception entry of its own, with a reason, at a path
+  strictly beneath the prune point. *(The narrower "blanket **directory** exception" wording this
+  paragraph first carried is the reading the test deliberately generalized away from — an exact entry
+  naming a directory on disk prunes identically, and a file under it would escape by the same
+  mechanism. Owner ruling, 2026-08-01; the own-entry and enforced-set halves are round-1 review R1.)*
+
+  > ⚠️ **`tasks/backlog/.fkit` is NOT an exact-named prune point, and this paragraph wrongly listed it
+  > as one** (round-2 review R9, corrected 2026-08-02). It is an exact entry naming a directory, but the
+  > covering `tasks/backlog/` blanket prunes one level **above** it, so the walk never reaches it.
+  > Measured: the live prune points are `.fkit` · `knowledge-base/{decisions,history,incidents,reports}`
+  > · `sprints` · `tasks/{backlog,cancelled,done}` · `wiki-vault/.fkit` · `wiki-vault/wiki` —
+  > **`wiki-vault/.fkit` is the only exact-entry prune point in the tree today.** `tasks/backlog/.fkit`
+  > plays the **opposite** role in this mechanism: it is the entry strictly **beneath** a prune point
+  > that **excuses** a hit, which is the remedy the sentence above prescribes.
+  Its four mutations
   (10–13) are proved red in `test/prove-red.sh`. The reconciliation it depended on (ADR-027 §Decision
   3's binding order) was **task 0132**, which landed the exceptions module and shipped
   `dependency-declaration-form.md` to the scaffold. *(Both were producer-scoped briefs, owner:

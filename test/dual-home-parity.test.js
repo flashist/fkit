@@ -54,12 +54,47 @@
 //    ⚠️ THE CHECK IS ON PRUNE POINTS, NOT ON "DIRECTORY EXCEPTIONS" (owner-approved generalization,
 //    2026-08-01). 0132's hand-off note says "directory exception", meaning an entry whose `path` ends
 //    in `/`. That wording is too narrow for the tree as it actually is: `wiki-vault/.fkit` is an EXACT
-//    entry (no trailing slash) that names a DIRECTORY on disk, and so is `tasks/backlog/.fkit`. A
-//    co-present file under either would escape by the identical mechanism. Keying on "the walk stopped
-//    here and the thing is a directory" costs nothing at this shape and closes both spellings.
+//    entry (no trailing slash) that names a DIRECTORY on disk, so the walk stops there and a co-present
+//    file under it would escape by the identical mechanism. Keying on "the walk stopped here and the
+//    thing is a directory" costs nothing at this shape and closes both spellings.
+//
+//    ⚠️ `tasks/backlog/.fkit` IS NOT A SECOND INSTANCE, and an earlier draft of this comment wrongly
+//    offered it as one (round-2 review R9). It is an exact entry naming a directory, but the walk never
+//    reaches it: the covering `tasks/backlog/` blanket prunes one level above. Measured 2026-08-02, the
+//    live prune points are `.fkit · knowledge-base/{decisions,history,incidents,reports} · sprints ·
+//    tasks/{backlog,cancelled,done} · wiki-vault/.fkit · wiki-vault/wiki` — `wiki-vault/.fkit` is the
+//    ONLY exact-entry prune point. In this file `tasks/backlog/.fkit` plays the OPPOSITE role: the
+//    entry strictly BENEATH a prune point that EXCUSES a hit, which the test below pins exactly.
 //
 //    `.gitkeep` is carved out rather than banning co-presence outright because 9 `.gitkeep` files sit
 //    in both homes under these prune points today — they are structural placeholders, not content.
+//
+//    ⚠️ AN OWN EXCEPTION UNDER THE PRUNE POINT SILENCES THE TRIPWIRE, AND THE TRIPWIRE PUTS EVERYTHING
+//    ELSE ON THE ENFORCED SET (round-1 review R1, owner-approved 2026-08-01). Both halves fix a message
+//    that promised what the code did not do. The message said "give it its own exception entry (with a
+//    reason)" while the tripwire never consulted the exception list at all — proven with a REAL entry:
+//    `tasks/backlog/.fkit` has its own exact `runtime-state` exception and still fired, co-present under
+//    the `tasks/backlog/` prune point. So: a hit is excused when the exception list CONTAINS an entry
+//    STRICTLY BENEATH the prune point (an exact path, or a nested directory path ending in `/`) — an
+//    entry AT or ABOVE the prune point is the blanket itself and excuses nothing. Descendants of an
+//    exact entry naming a directory are still tripwired, exactly as `wiki-vault/.fkit`'s test below
+//    pins; only the named path itself is excused.
+//
+//    ⚠️ "THE LIST CONTAINS", NOT "`findException` RESOLVES TO" (round-2 review R10). `excusedBeneath`
+//    scans `exceptions` itself and deliberately does NOT call `findException` — the function's own
+//    docstring says so below, and this sentence used to contradict it. `findException` returns ONE
+//    winner, and its most-specific-wins rule is guaranteed for exact-beats-directory only: between two
+//    DIRECTORY entries it returns whichever the array lists FIRST, so a nested directory entry could
+//    lose to the blanket above it and the second remedy would silently depend on array order. That
+//    reasoning is the load-bearing part: do NOT "simplify" this back into a `findException` call.
+//    (Latent, not live — no directory entry is nested inside another today.)
+//    And the other half: 0132's hand-off says such a file "belongs on the enforced set", but nothing
+//    could put it there — physically relocating the file was the only remedy that worked. Now the
+//    tripwire's own hits are ADDED to the enforced set, so the blanket stops exempting them the moment
+//    they are found, and the tripwire's job narrows to demanding an explicit decision. Cost: one
+//    condition can red two assertions (the tripwire, and byte-parity if the two copies also differ).
+//    That is the intended reading of both, not double-reporting of one. Live effect today: NONE — the
+//    co-present class under a prune point is empty, measured 2026-08-01.
 //
 // ── THE SEAM ────────────────────────────────────────────────────────────────────────────────────
 // FKIT_PARITY_SCAFFOLD_ROOT redirects the SCAFFOLD home only, so test/prove-red.sh can point this
@@ -173,6 +208,39 @@ function collectAll(root, rel) {
 }
 
 /**
+ * Does `p` carry an exception of its OWN, beneath the prune point that already covers it?
+ *
+ * An entry STRICTLY BENEATH the prune point is a deliberate, reasoned statement about this path
+ * (`tasks/backlog/.fkit` under `tasks/backlog/`); an entry at or above it is the blanket itself, which
+ * is what the tripwire exists to distrust. Without this, the tripwire's own advice — "give it its own
+ * exception entry" — did nothing, because it never consulted the list.
+ *
+ * ⚠️ IT SCANS THE LIST RATHER THAN CALLING `findException`, on purpose. The prune point covers `p`
+ * too, so `findException` is never undefined here — the question is not "is there an exception" but
+ * "is there one BENEATH this prune point", and `findException` answers only with its own winner. Its
+ * MOST-SPECIFIC-WINS rule is guaranteed for exact-beats-directory only; between two DIRECTORY entries
+ * it returns whichever the array lists first, so a nested directory entry could lose to the blanket
+ * above it and the tripwire's second remedy would silently depend on array order. (Latent, not live:
+ * no directory entry is nested inside another today.) Paths come from `collectAll`, which builds them
+ * by joining real directory entries, so there is nothing to normalize.
+ * @param {string} prunePoint home-relative path of the directory the walk stopped at
+ * @param {string} p home-relative path of a file underneath it
+ * @returns {boolean}
+ */
+export function excusedBeneath(prunePoint, p) {
+  const under = `${prunePoint}/`;
+  return exceptions.some((e) => {
+    // Compare the entry WITHOUT its trailing slash, or the prune point's own entry
+    // (`knowledge-base/reports/`) reads as "beneath itself" and excuses everything it covers — which
+    // would disarm the tripwire completely. Caught by the two fixtures below going empty.
+    const entry = e.path.endsWith('/') ? e.path.slice(0, -1) : e.path;
+    if (!entry.startsWith(under)) return false;
+    if (!e.path.endsWith('/')) return p === entry;
+    return p === entry || p.startsWith(e.path);
+  });
+}
+
+/**
  * Sanity-check the exception list itself. Returns one complaint string per problem, so a list with
  * three bad entries reports all three rather than one per run.
  * @param {import('./dual-home-parity-exceptions.mjs').ParityException[]} list
@@ -223,7 +291,30 @@ export function checkExceptionList(list) {
 export function compareHomes(liveRoot, scaffoldRoot) {
   const live = walkHome(liveRoot);
   const scaffold = walkHome(scaffoldRoot);
-  const enforced = [...new Set([...live.files, ...scaffold.files])].sort();
+
+  // RULE 2: the tripwire, over the prune points of BOTH homes (a prune point can exist on one side
+  // only — `.fkit/` is live-only — and the file it hides still has to be co-present to count).
+  // Runs BEFORE the comparison because its hits JOIN the enforced set — see header rule 2.
+  const prunePoints = [...new Set([...live.prunePoints, ...scaffold.prunePoints])].sort();
+  const hidden = [];
+  for (const dir of prunePoints) {
+    const inLive = collectAll(liveRoot, dir);
+    const inScaffold = collectAll(scaffoldRoot, dir);
+    for (const p of [...inLive].sort()) {
+      if (!inScaffold.has(p)) continue;
+      if (basename(p) === '.gitkeep') continue;
+      if (excusedBeneath(dir, p)) continue;
+      hidden.push({ prunePoint: dir, path: p });
+    }
+  }
+
+  // A tripwire hit JOINS the enforced set. ⚠️ It must also count as PRESENT in both homes: the walk
+  // sets do not contain it (that is the whole point — it was pruned away), so testing membership in
+  // them alone reports a file sitting in BOTH homes as "MISSING from ai-agents/". Caught by running
+  // mutation 13 against this change, not by reading it. Co-presence is not an assumption here — it is
+  // the condition `hidden` is built on, checked against the two homes on disk just above.
+  const promoted = new Set(hidden.map((h) => h.path));
+  const enforced = [...new Set([...live.files, ...scaffold.files, ...promoted])].sort();
 
   const onlyInLive = [];
   const onlyInScaffold = [];
@@ -231,8 +322,8 @@ export function compareHomes(liveRoot, scaffoldRoot) {
   const unreadable = [];
 
   for (const p of enforced) {
-    const inLive = live.files.has(p);
-    const inScaffold = scaffold.files.has(p);
+    const inLive = live.files.has(p) || promoted.has(p);
+    const inScaffold = scaffold.files.has(p) || promoted.has(p);
     if (!inScaffold) { onlyInLive.push(p); continue; }
     if (!inLive) { onlyInScaffold.push(p); continue; }
     let a, b;
@@ -244,20 +335,6 @@ export function compareHomes(liveRoot, scaffoldRoot) {
       continue;
     }
     if (!a.equals(b)) differing.push({ path: p, live: a, scaffold: b });
-  }
-
-  // RULE 2: the tripwire, over the prune points of BOTH homes (a prune point can exist on one side
-  // only — `.fkit/` is live-only — and the file it hides still has to be co-present to count).
-  const prunePoints = [...new Set([...live.prunePoints, ...scaffold.prunePoints])].sort();
-  const hidden = [];
-  for (const dir of prunePoints) {
-    const inLive = collectAll(liveRoot, dir);
-    const inScaffold = collectAll(scaffoldRoot, dir);
-    for (const p of [...inLive].sort()) {
-      if (!inScaffold.has(p)) continue;
-      if (basename(p) === '.gitkeep') continue;
-      hidden.push({ prunePoint: dir, path: p });
-    }
   }
 
   return { enforced, onlyInLive, onlyInScaffold, differing, unreadable, prunePoints, hidden };
@@ -407,13 +484,23 @@ test('live corpus: no prune point hides a file that is dual-homed in fact', () =
     'the walk pruned nothing — the directory exceptions are not being applied, so this tripwire is ' +
     'vacuous' + FOOTER);
 
+  // ⚠️ EVERY REMEDY BELOW IS ONE THE CODE ACTUALLY HONORS (round-1 review R1). The first draft told
+  // the reader to add an exception entry while the tripwire never consulted the exception list, so
+  // following the advice changed nothing. A failure message that prescribes an unavailable remedy is
+  // worse than none: it sends the reader to do work that leaves the suite exactly as red.
   const hits = RESULT.hidden.map(({ prunePoint, path }) =>
-    `${path} — present in BOTH homes, but excused by the prune point \`${prunePoint}\`.\n` +
-    '  A file that exists in both homes is dual-homed BY CONSTRUCTION and belongs on the enforced ' +
-    'set, not under a blanket directory exception. Either give it its own exception entry (with a ' +
-    'reason), or move it out from under the blanket.');
+    `${path} — present in BOTH homes, under the prune point \`${prunePoint}\`.\n` +
+    '  A file that exists in both homes is dual-homed BY CONSTRUCTION, so this suite has already PUT ' +
+    'IT ON the enforced set: the blanket no longer exempts it, and the two copies were compared above.' +
+    '\n  Now say which it is, explicitly:\n' +
+    `    • it IS dual-homed → move it out from under \`${prunePoint}\`, so the walk reaches it ` +
+    'directly instead of the tripwire having to promote it; or\n' +
+    '    • it is NOT → give it its own exception entry WITH A REASON, at a path strictly BENEATH the ' +
+    `prune point (an exact path, or a directory path ending in \`/\`). An entry at \`${prunePoint}\` ` +
+    'itself or above it is the blanket, and will not silence this.');
   assert.ok(hits.length === 0,
-    `${hits.length} file(s) are silently exempt from byte-parity:\n\n` + hits.join('\n\n') + FOOTER);
+    `${hits.length} file(s) sit under a blanket that was never meant to cover them:\n\n` +
+    hits.join('\n\n') + FOOTER);
 });
 
 // ── Synthetic tests — the mechanism, on fixtures, in both directions ─────────────────────────────
@@ -518,10 +605,46 @@ test('synthetic: a prune point hides a co-present file, but never a bare .gitkee
   });
   const r = compareHomes(liveRoot, scaffoldRoot);
   assert.ok(r.prunePoints.includes('knowledge-base/reports'), 'the walk must have pruned there');
-  assert.deepEqual(r.enforced, [], 'everything under the prune point is outside the enforced set');
   assert.deepEqual(r.hidden.map((h) => h.path), ['knowledge-base/reports/README.md'],
     'the co-present README is caught; the co-present .gitkeep is carved out; the live-only audit ' +
     'is genuinely excused (it is not dual-homed)');
+  // The promotion half of R1's fix: the hit does not merely get REPORTED, it joins the enforced set,
+  // so its two copies are byte-compared from this run on. `.gitkeep` and the live-only audit do not.
+  assert.deepEqual(r.enforced, ['knowledge-base/reports/README.md'],
+    'a tripwire hit is put ON the enforced set — before this, nothing under a blanket could get there ' +
+    'except by physically moving the file');
+  // ⚠️ AND IT IS PRESENT IN BOTH HOMES, which is not automatic: the promoted path is in NEITHER walk
+  // set (the walk pruned it), so a membership test against those alone reports a file that is sitting
+  // in both trees as "MISSING from ai-agents/". A first cut of the promotion did exactly that.
+  assert.deepEqual([r.onlyInLive, r.onlyInScaffold, r.differing], [[], [], []],
+    'a promoted file that is co-present and identical must produce NO presence or drift report');
+});
+
+// R1's other half, pinned on the REAL entry that disproved the old message: `tasks/backlog/.fkit` has
+// its own exact `runtime-state` exception AND sits under the `tasks/backlog/` blanket. Adding that
+// entry is exactly what the old message told the reader to do, and it did not work.
+test('synthetic: an own exception BENEATH a prune point excuses a co-present file; the blanket does not', () => {
+  const { liveRoot, scaffoldRoot } = fixtureHomes({
+    'tasks/backlog/.fkit': ['launcher bookkeeping\n', 'launcher bookkeeping\n'],
+    'tasks/backlog/0001-a-task/brief.md': ['co-present\n', 'co-present\n'],
+  });
+  const r = compareHomes(liveRoot, scaffoldRoot);
+  assert.ok(r.prunePoints.includes('tasks/backlog'), 'the walk must have pruned at the blanket');
+  assert.deepEqual(r.hidden.map((h) => h.path), ['tasks/backlog/0001-a-task/brief.md'],
+    '`tasks/backlog/.fkit` has an exact entry of its own BENEATH the prune point and is excused; the ' +
+    'brief has only the blanket `tasks/backlog/` above it, which excuses nothing here');
+  assert.deepEqual(r.enforced, ['tasks/backlog/0001-a-task/brief.md'],
+    'the excused path stays OFF the enforced set — an exception with a reason is a real decision');
+
+  // The message also offers a DIRECTORY entry beneath the prune point as a remedy. No directory entry
+  // is nested inside another in the real list today, so the branch is exercised here against a real
+  // entry (`knowledge-base/decisions/`) under a hypothetical prune point one level above it — rather
+  // than left as an untested promise, which is the species of defect R1 was.
+  assert.equal(excusedBeneath('knowledge-base', 'knowledge-base/decisions/adr-001-x.md'), true);
+  assert.equal(excusedBeneath('knowledge-base', 'knowledge-base/decisions'), true);
+  assert.equal(excusedBeneath('knowledge-base/decisions', 'knowledge-base/decisions/adr-001-x.md'),
+    false, 'the entry AT the prune point is the blanket itself and excuses nothing');
+  assert.equal(excusedBeneath('knowledge-base/reports', 'knowledge-base/reports/README.md'), false);
 });
 
 // The generalization owner-approved on 2026-08-01: an EXACT entry naming a directory on disk prunes
@@ -535,4 +658,20 @@ test('synthetic: an exact exception naming a DIRECTORY is a prune point, and is 
     '`wiki-vault/.fkit` has NO trailing slash in the exception list, but names a directory on disk — ' +
     'keying the tripwire on "entry ends in /" would miss it');
   assert.deepEqual(r.hidden.map((h) => h.path), ['wiki-vault/.fkit/session-state']);
+
+  // ⚠️ AND THIS FIXTURE IS WHAT PINS THE PROMOTION'S BYTE-COMPARISON (round-2 review R8). The tripwire
+  // message tells the reader "the two copies were compared above" — before this assertion NOTHING made
+  // that true: the other promotion fixture uses two IDENTICAL copies, so `differing` is `[]` whether or
+  // not a promoted path is ever compared, and `if (promoted.has(p)) continue;` in `compareHomes` kept
+  // all nine tests green while silently voiding the promotion's whole purpose (measured 2026-08-02).
+  // That is the same species of defect R1 was — a message promising what nothing proves — so it is
+  // pinned rather than promised. The two copies here genuinely DIFFER (`live\n` vs `scaffold\n`).
+  assert.deepEqual(r.enforced, ['wiki-vault/.fkit/session-state'],
+    'the tripwire hit joins the enforced set');
+  assert.deepEqual(r.differing.map((d) => d.path), ['wiki-vault/.fkit/session-state'],
+    'a PROMOTED file whose two copies differ must be REPORTED as drifted — this is the assertion that ' +
+    'makes the tripwire message\'s "the two copies were compared above" a fact rather than a promise');
+  assert.deepEqual([r.onlyInLive, r.onlyInScaffold], [[], []],
+    'and it is co-present, so neither presence direction may fire');
+  assert.match(describeDrift(r.differing[0]), /^wiki-vault\/\.fkit\/session-state — the two copies DIFFER\./);
 });
