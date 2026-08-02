@@ -31,7 +31,9 @@ as **the first thing a reader sees**. Per the owner's Sprint 2 ruling, Codex's a
 The older `[claude-fallback — NOT model-diverse]` path is no longer a supported mode.
 
 ### Reviewer independence rests on the session lock
-The reviewer's independence is a property of a **fresh context**, not of a prompt. `fkit reviewer` *is* a fresh context, and a coder session **cannot execute `/fkit-review`** because the skill does not exist in it — see [[systems/role-locked-sessions]].
+The reviewer's independence is a property of a **fresh context**, not of a prompt. `fkit reviewer` *is* a fresh context, and a coder session **cannot execute `/fkit-review`** — see [[systems/role-locked-sessions]].
+
+> ✅ **Corrected 2026-08-02 — the outcome holds, the stated mechanism was Era-1 and is retired.** This line previously read *"because the skill does not exist in it"*. That was the `skillOverrides` off-list, **retired at task 43 / [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]**. Today every `fkit-*` skill is left **enabled and visible** everywhere — a coder session's `/` autocomplete **does list `/fkit-review`** — and the `PreToolUse` skill-ownership hook **denies the invocation** by the real caller's role, at any spawn depth. **ADR-018 §Decision 5 records that menu visibility as an accepted cost, explicitly.** The independence property is unchanged and is now *stronger* (it holds in a consult too); only the reason is different. Do not restate this as "invisible" or "does not exist".
 
 > **Deviation, flagged:** the lead reviewer *keeps* Write/Edit, because it must write the *Reviewer findings* section of the shared ledger. Its write boundary — the `review.md` ledger inside a task folder (formerly `ai-agents/reviews/`, absorbed by [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] 2026-07-21), plus `ai-agents/sprints/reviews/` for the two sprint-keyed ledgers — stays **prompt-enforced**.
 

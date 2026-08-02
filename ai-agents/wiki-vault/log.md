@@ -1014,3 +1014,56 @@ A broader dead-path scan over all pages found **7 dead paths, all pre-existing a
 7. **Sprint 2 is 81% closed with 16 of 29 open rows unreachable by rank.** The rollover decision (`0185`) is ruled the **highest-leverage** of its batch and is **deferred by the owner** as of 2026-08-01. Nothing may be rolled without a signed ruling.
 
 **No tracked task completed by this run.**
+
+## 2026-08-02 — lint
+
+- Issues found: 7
+- Issues fixed: 7
+- Issues flagged for human review: 0 new (7 standing flags from the 2026-08-02 sync re-verified and carried forward, not re-raised)
+- **The whole finding is one stale mechanism in two places: the retired `skillOverrides` off-list.** [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] still described the lock as *"hidden from the `/` menu"* and named `skills_for_role()`'s home as `claude/fkit-claude.sh`; [[systems/review-and-model-diversity]] still said a coder session cannot run `/fkit-review` *"because the skill does not exist in it."* **Role-locking makes a non-owned skill VISIBLE BUT BLOCKED — ADR-018 §Decision 5 accepts the menu visibility explicitly.** Corrected on both pages.
+
+### What was checked, and the counts
+
+- **Integrity, unchanged by this run: 188 pages** (0 features · 8 systems · 36 decisions · 144 tasks) · 188 index targets · **0 broken · 0 index→missing · 0 page-not-indexed · 0 duplicate index entries.**
+- **Links: 0 broken page→page, 0 one-way, 0 orphans, 0 pages with no inbound link** — re-measured after writing (the run's own edits introduced 2 one-way links; both repaired, see below). Scan is **wrap-normalised** (`\n`→space) per the standing warning.
+- **Template conformance: 0 drift across all 188 pages; 0 YAML frontmatter.** Every page carries its schema-mandated inline bold fields and section headings.
+- **ADR number/slug cross-check: fully clean.** 36 vault ADR pages ↔ 36 knowledge-base ADR files, matched **case-insensitively** and compared **numerically** (leading zeros stripped), **regular files only**. 0 missing counterparts · 0 slug divergences · 0 heading/filename mismatches · **0 knowledge-base number collisions** (separate pass over `knowledge-base/decisions/`, not nested in the vault loop) · 0 vault-side duplicate numbers. Numbers run 1–36 contiguously in both homes.
+- **Secrets: 0 credential-pattern hits** across the vault, on a pattern scan (keys, tokens, bearer strings, PEM headers, DSNs, userinfo-in-URL) **stricter than the sync's word-match**. The sync's 5 flagged files were all the word *"secret(s)"* in rule text; this scan does not match that word at all and returned **zero**. **Confirmed: no credentials in any page.**
+- **Dead source paths: no new ones.** A broad scan returned 14 candidates; 7 are regex artifacts (`…` ellipsis placeholders, shell brace-expansion notation, and ADR-036's `test/skill-ownership-sites.mjs`, which is a **prescribed-but-unbuilt** module, correctly future-tense). The remaining 7 are the **pre-existing, already-triaged** set — 6 deliberate, 1 fixed below.
+
+### Fixed
+
+1. **[[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] §Decision 2 — the mechanism no longer exists and "hidden from the `/` menu" is FALSE.** The `skillOverrides` off-list was retired at task 43 / [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] ([[tasks/implement-pretooluse-skill-ownership-hook]]); verified in live code — `claude/fkit-claude.sh:263` reads *"Retired here (task 43 / ADR-018 …)"*. **Dated correction placed at the claim; the decided sentence left byte-identical.**
+2. **The same page's 2026-07-22 note said *"Decisions 1, 2, 4 and 5 are unaffected."* That is false for Decision 2.** Corrected inside the new note rather than by editing the older dated note.
+3. **The same page's Consequences — *"the skill does not exist in it"*** — the retired Era-1 framing, in the section most likely to be quoted. Inline pointer added to the Decision 2 correction. The independence *property* holds and is unchanged; only the stated reason was wrong.
+4. **The same page named `skills_for_role()`'s home as `claude/fkit-claude.sh`.** It moved to `claude/skills-for-role.sh` under task 43 / ADR-018. **Verified against live code: declared at `claude/skills-for-role.sh:48`; `claude/fkit-claude.sh` only sources it.** Dated correction placed at the claim. This is the same stale pointer [[tasks/correct-claude-mds-stale-skills-for-role-location]] (`0151`) fixed in the repo-root `CLAUDE.md`.
+5. **[[systems/review-and-model-diversity]] said a coder session cannot run `/fkit-review` *"because the skill does not exist in it."*** A **living system page** stating a retired mechanism — not a dated record, so the sentence was corrected outright and the old wording preserved in a note. [[systems/role-locked-sessions]] was checked and is **entirely correct** (Era 1 / Era 2 and the accepted visibility cost); the defect was a contradiction *against* it, not in it.
+6. **[[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] cited `claude/dashboard.sh` — corrected, not annotated, and the reasoning matters.** The 2026-08-02 sync left this alone as a frozen dated record and **explicitly handed the call to this lint.** ⚠️ **It is not history: `claude/dashboard.sh` has NEVER existed in git history**, and **both source documents** — the ADR and its evidence report — cite the script as bare **`dashboard.sh`**. The `claude/` prefix was **introduced by the vault ingest that wrote the page**. A dated-record freeze protects what a source actually said; **no source ever said this**, so freezing it would preserve a vault typo as if it were evidence. Corrected to `claude/skills/fkit-status/dashboard.sh`, with the reasoning recorded on the page. *(The sibling `ai-agents/reviews/README.md:24-30` citation in the same line IS genuine frozen history — that file existed when cited and was absorbed by this very ADR's migration — and is left untouched, deliberately.)*
+7. **Two one-way links, both created by this run's own fixes 1 and 4**, repaired with tailored back-links on [[tasks/implement-pretooluse-skill-ownership-hook]] and [[tasks/correct-claude-mds-stale-skills-for-role-location]]. ⚠️ **Recorded because a run that does not re-measure its own reciprocity reports "0 one-way" without having looked.**
+
+### Measured negatives — the stale claims hunted for and NOT found
+
+Each was searched across all 188 pages plus `index.md`; recorded as a measured negative rather than an unexamined gap.
+
+- **No vault page repeats the *"invisible and unrunnable"* claim** that task `0142` found in the repo-root `CLAUDE.md`. Every one of the 12 `invisible` hits is a **true** statement about a different subject — the agent-closed marker being invisible in `/fkit-status`, a decorated dependency line invisible to `dashboard.sh`, an unsprinted brief with no board row. The vault's *skill-visibility* defect was the two pages fixed above, and their wording was never the word "invisible".
+- **No vault page asserts FOUR mirrors as current fact.** Every hit is the **title of task `0112`** — *"…`skills_for_role()` + the four mirrors"* — the name of a dated record of what that task wired, not a completeness claim. The vault's newest page on the subject, [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]], **already records the fifth mirror** (`test/skill-ownership-hook.test.js`, by its own admission) **and a sixth** (`claude/fkit-claude-init.sh`). The FOUR-claim is a **source-side** defect (task `0188`); the vault does not carry it.
+- **The three-vs-four site correction landed consistently, and there is no third wrong page.** All three carriers — [[systems/fkit]], [[tasks/revert-task-movers-to-producer-only]], [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — plus `index.md` state **four sites: three agent system prompts (`fkit-producer`, `fkit-coder`, `fkit-lead`) plus the universal rules block.** **No page still says five, and none says three.**
+- **No page still frames dual-home parity as byte-identity across the board.** ADR-027's page carries the overrule at §Decision 2; [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]], [[systems/testing-and-verification]], [[systems/knowledge-base-structure]] and [[tasks/teach-dashboard-to-resolve-notes-dependencies]] all carry the *audience-adapted* third kind. ⚠️ **One page needed a second look and passed**: [[tasks/disambiguate-the-frozen-history-clause]] opens *"Byte-identical dual-home parity"* as a frozen 2026-07-27 constraint, but its dated correction already carries the rider **and** correctly notes that page's own convention pair **is** genuinely byte-identical, so the blanket reading is closed off.
+- **`decisions/` and `reports/` are recorded as outside the dual-homed surface** — no page treats an ADR as a drift event.
+- **No page asserts the reversed ADR-025 posture as current.** Every mention is flagged reversed by ADR-033, or is ADR-025's own title.
+- **No page contradicts ADR-035 or ADR-036.** The mid-board-insertion ruling is stated identically on all 8 pages citing it; ADR-036's *no completeness licence* is carried without exception.
+- **No page names `claude/fkit-claude.sh` as `skills_for_role()`'s home except as flagged history.** After fix 4, the two remaining mentions ([[tasks/reconcile-skill-ownership-source-of-truth]], [[tasks/implement-pretooluse-skill-ownership-hook]]) are both **correct**: they describe the pre-move state as the thing that was changed.
+
+### Verification
+
+- **Write scope:** `git status --porcelain` with the vault path excluded returns **nothing** — this run wrote **only** inside `ai-agents/wiki-vault/`. No source, skill, agent definition, task file, brief, sprint plan, ADR or report was touched. **No task moved, no mover invoked.**
+- **Nothing committed, nothing staged.** `log.md` remains **append-only** — no past entry edited.
+- All checks above were **re-run after writing**, not before.
+
+### ⚠️ Standing flags — carried forward from the 2026-08-02 sync, re-verified, NOT re-raised as new
+
+All seven remain open and are **source-side, owned by open tasks the wiki may not touch**: ADR-027 unamended on disk (`0186`); the `0112` re-verification permanently undischargeable (`0187`); `0142`'s five live ownership-fact defects including the FOUR-mirror claim and root `CLAUDE.md`'s *"invisible and unrunnable"* (`0188`); `0142`'s report Part 7 still recording the three-vs-four discrepancy as open though it is settled and the vault is corrected; **19 consecutive agent-closed rows** invisible in `/fkit-status`; and Sprint 2 at 81% closed with **16 of 29 open rows unreachable by rank** (`0185`, owner-deferred).
+
+⚠️ **One note for the next lint:** a dead-path scan will still report `claude/dashboard.sh` on the ADR-029 page. That is the **correction note quoting the error it fixed**, not a live pointer — the citation itself now reads `claude/skills/fkit-status/dashboard.sh`. **Do not "re-fix" it.**
+
+**No tracked task completed by this run.**

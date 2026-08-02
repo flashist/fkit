@@ -155,8 +155,9 @@ re-raise the dual-format transition, content-hash IDs, numbering only open tasks
 - [[tasks/sprint-2-remove-omnigent]] — the sprint carrying the migration cluster (74–78)
 - Source: `knowledge-base/decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md`;
   evidence `knowledge-base/reports/2026-07-19-design-task-folder-structure-and-id-scheme.md` (revision 2,
-  post-adversarial); code cited `claude/dashboard.sh:111-126,308-313,535-546,667,681`,
+  post-adversarial); code cited `claude/skills/fkit-status/dashboard.sh:111-126,308-313,535-546,667,681`,
   `ai-agents/reviews/README.md:24-30`, `claude/skills/fkit-stateful-review/SKILL.md:23-33`
+  > ✅ **Path corrected by lint 2026-08-02 — this was a vault transcription error, not a stale record.** This line read `claude/dashboard.sh`, **a path that has never existed in git history**. Both source documents — the ADR and its evidence report — cite the script as bare **`dashboard.sh`**; the wrong `claude/` prefix was added by the ingest that wrote this page. The script's only home is `claude/skills/fkit-status/dashboard.sh`. **Corrected rather than annotated precisely because it is not history:** a dated-record freeze protects what a source actually said, and no source ever said `claude/dashboard.sh`. *(The sibling `ai-agents/reviews/README.md` citation is a genuine frozen reference — that file existed when cited and was absorbed by this very ADR's migration. It is left untouched, deliberately.)*
 - [[tasks/design-task-folder-structure-and-id-scheme]] — task 74, the design task that produced this ADR (**Done, agent-closed — not owner-verified**)
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75, the ID backfill: Decision 4's SHA pin and Decision 8's no-registry ruling, both verified reproducible
 - [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard

@@ -31,3 +31,4 @@ Build the hook that [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the hook gates the Skill tool only, and cannot answer *is the work done*
 - [[tasks/investigate-mutation-testing-library-adoption]] — task 43, where the R2 no-op-mutation gap was found
 - [[tasks/refresh-architecture-doc-for-lead-conductor-and-stale-lock]] — Refresh architecture.md for the lead conductor + fix the stale §5.2 lock description
+- [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] — the ADR whose Decision 2 (`skillOverrides` "off" list, skills hidden from the `/` menu) this task **retired**; its vault page carries the dated correction
