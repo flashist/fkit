@@ -67,3 +67,5 @@ ADR-012 established — empirically — that the fkit skill lockdown is **sessio
 - [[tasks/enforce-task-status-vocabulary]] — the status vocabulary whose `Done`/`Cancelled` gate this hook now enforces: producer-only, at any spawn depth
 - [[systems/knowledge-base-structure]] — where that producer-only gate is documented as the current rule
 - [[tasks/correct-claude-mds-stale-skills-for-role-location]] — `0151`; `CLAUDE.md` still named the pre-move home of `skills_for_role()`
+- [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — **the skill-ownership site inventory is a declared registry**, not a remembered checklist
+- [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**

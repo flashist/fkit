@@ -39,3 +39,5 @@ Done, **agent-closed — not owner-verified**. Verified in the vault on **2026-0
 - [[tasks/reconcile-skill-ownership-source-of-truth]] — the original single-source-of-truth work
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160`, the coordinate-drift class
 - [[systems/role-locked-sessions]]
+- [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — **the skill-ownership site inventory is a declared registry**, not a remembered checklist
+- [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**

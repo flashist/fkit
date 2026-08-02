@@ -39,3 +39,5 @@ Done, **agent-closed — not owner-verified**.
 - [[tasks/rename-task-plan-skill-to-task-brief]] — the skill this edits
 - [[tasks/add-task-plan-skill-to-producer]]
 - [[tasks/disambiguate-the-frozen-history-clause]] — `0161`, which disambiguated the convention clause this arc rests on
+- [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — **a mid-board insertion is NOT the owner-ruled re-rank exception** — forced by arithmetic, not policy
+- [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**

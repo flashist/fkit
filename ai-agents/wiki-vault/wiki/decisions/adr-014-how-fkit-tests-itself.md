@@ -79,3 +79,7 @@ The ADR deliberately **declined to pick the runner**, on the owner's explicit ru
 - [[tasks/assign-global-task-ids-and-create-registry]] — task 75; its guard is filed as task 85 against this suite
 - [[tasks/assert-task-ids-are-unique-in-the-test-suite]] — task 85, the duplicate-ID guard
 - [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook
+- [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — **the skill-ownership site inventory is a declared registry**, not a remembered checklist
+- [[tasks/build-dual-home-parity-test]] — task `0133` — the mechanical parity test, built 2026-08-02
+- [[tasks/convert-skill-descriptions-to-block-scalars-and-guard]] — task `0136` — every skill `description:` to a `>-` block scalar, plus the repo's first `SKILL.md` frontmatter guard
+- [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**

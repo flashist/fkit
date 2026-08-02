@@ -26,6 +26,7 @@ One bullet, applied identically to **two files** — the page is dual-homed into
 **Two hard constraints, both already written on the page being edited:**
 
 1. **Byte-identical dual-home parity.** Any edit lands in both copies; an edit to one is drift. The parity test that would catch it (`0133`) was **not landed**, so parity had to be checked by hand.
+   > ✅ **Dated correction 2026-08-02 — `0133` has landed**, so this file's parity is now machine-checked rather than hand-checked: [[tasks/build-dual-home-parity-test]]. The sentence above is left byte-identical as the record of what was true at ship date. ⚠️ **But "byte-identical" is no longer the blanket rule it reads as here** — [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] (task `0132`) established a **third kind**, *audience-adapted*, by owner ruling 2026-08-01. It applies to files rewritten for a consuming project's reader; **this page's own convention pair is genuinely byte-identical in both homes** and is unaffected.
 2. **Bare citations only — never a relative link — into `knowledge-base/{decisions,reports}/`.** Those directories are **never synced** into the scaffold and ship empty, so a relative link would be **dead in every project fkit sets up**. ⚠️ The page's own closing callout already says so and says *"Do not 'fix' this"* — the trap is a helpful instinct adding links back.
 
 ## Outcome
@@ -45,3 +46,4 @@ Done, **agent-closed — not owner-verified**.
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160`, the sibling class
 - [[tasks/state-task-brief-step-5s-append-rule-in-full]] — `0157`, the rule half of the same arc
 - [[systems/knowledge-base-structure]] — the conventions folder and its dual-home rule
+- [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**

@@ -33,3 +33,4 @@ No implementation — the deliverable is `knowledge-base/reports/2026-07-18-dual
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — why launch-time convergence cannot fix content drift by invariant
 - [[systems/fkit]] — the dual-home drift recorded as a standing gap
 - [[systems/testing-and-verification]] — where the parity test this investigation scoped would live; **scoped, not built**
+- [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132` — the dual-home reconciliation, and the sweep that **disproved ADR-027's premise**

@@ -939,3 +939,78 @@ Each maps one `done/*/brief.md` to `wiki/tasks/`, per the schema's Task template
 4. **ADR-032's knowledge-base source was NOT re-checked this run** and its `0143` routing note is carried forward as written, unverified. The vault copy is corrected; the source's state is unknown here.
 5. **The board still cannot show which closes were agent-performed.** All 13 tasks ingested this run are `(agent-closed — not owner-verified)`. `dashboard.sh` collapses that to a plain `Done`. **119 done on a green Sprint 2 board is not 119 owner-verified.**
 6. **The 20 pre-existing `**Sprint/Tag**` `priority NNN` fields remain frozen record**, owner-ruled 2026-07-30 — not re-litigated, and now inconsistent with the 13 new pages that carry no rank at all. **That inconsistency is deliberate and is recorded here so a later sweep does not read it as drift.**
+
+## 2026-08-02 — sync
+
+- **Sync window:** `aa62e6d` → HEAD (`7db6403`) — 5 commits (`ba36196` `8540d03` `eb68c58` `7a444c5` `7db6403`).
+- **Working tree CLEAN at sync time.** The routing warned that tasks `0133`/`0142`'s work — ADR-036, the 2026-08-02 report, briefs `0187`–`0189` and both `done/` moves — was **uncommitted and therefore out of scope**. It had landed in `7db6403` before this run started, **so all of it is inside the committed delta and every one of those items was ingested.** The "sync committed only" instruction was followed and cost nothing.
+- **Changed source files detected: 55**, filtered to **17 ingest-worthy** (6 `done/*/brief.md`, 2 ADRs, 2 reports, 3 conventions, 2 sprint boards; skipped: 31 backlog briefs not yet done, and every in-folder `plan.md`/`worklog.md`/`review.md`).
+
+### Ingested — 8 new pages
+
+- `knowledge-base/decisions/adr-035-…` → created [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]]
+- `knowledge-base/decisions/adr-036-…` → created [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]]
+- `tasks/done/0130-…/brief.md` → created [[tasks/reclaim-rules-block-budget-headroom]]
+- `tasks/done/0132-…/brief.md` → created [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]]
+- `tasks/done/0133-…/brief.md` + worklog → created [[tasks/build-dual-home-parity-test]]
+- `tasks/done/0136-…/brief.md` → created [[tasks/convert-skill-descriptions-to-block-scalars-and-guard]]
+- `tasks/done/0142-…/brief.md` + `reports/2026-08-02-skill-ownership-fact-inventory-gap.md` → created [[tasks/investigate-the-skill-ownership-fact-inventory-gap]]
+- `tasks/done/0174-…/brief.md` + `reports/2026-08-01-merit-ordering-record-when-board-rank-cannot-carry-it.md` → created [[tasks/decide-how-an-owner-records-a-merit-ordering]]
+
+### ⚠️ THE THREE-VS-FOUR DISCREPANCY IS SETTLED — the vault was the wrong record
+
+`0142`'s report Part 7 recorded it as **open**: the vault said the checklist *"missed **four system prompts** and the universal rules block"*, while `0142`'s brief and `sprint-2.md` said **three**. The architect **did not settle it**, reading it as requiring the `0124` sweep its brief forbade, and noting `0124`'s folder has **no `worklog.md`**.
+
+**It did not require the sweep.** `0124`'s **brief's own amendment history** is the primary record of what the sweep found, and reading it is not re-deriving it:
+
+- **`0124`'s final inventory is FOUR SITES** — `claude/scaffold/universal-rules.md` (the rules block) plus **three** agent system prompts: `fkit-producer.md`, `fkit-coder.md`, `fkit-lead.md`.
+- **"Three" is stale, not wrong** — it is the count after the **first** scope amendment (2026-07-25). `fkit-lead.md` was added by the **third** the same day, found by task `0123`.
+- **The vault overcounted by one.** An independent enumeration of every `claude/agents/fkit-*.md` path named anywhere in `0124`'s folder returns **exactly three files** (coder, lead, producer) — there is no fourth agent definition. The likely mechanism: the brief's phrase *"a **fourth** system prompt"* already counted the rules block among the "system prompts", and the vault then **added the rules block a second time**.
+
+**Corrected at the claim on [[systems/fkit]] and [[tasks/revert-task-movers-to-producer-only]]**, originals left byte-identical, and recorded on [[tasks/investigate-the-skill-ownership-fact-inventory-gap]]. ⚠️ **Residual, stated rather than resolved:** with no `worklog.md`, if `0124`'s sweep found a site it never wrote into its brief, **no record of it survives** — the brief is the operative record and nothing can be checked against it. *(Task `0189`'s brief bars the **coder** from settling this; it is the wiki's call and is made here, which does not advance `0189` itself.)*
+
+### ⚠️ ADR-027's premise was overruled — swept across every page asserting blanket byte-identity
+
+Task `0132`'s sweep disproved ADR-027's core premise and the owner ruled **Option B** (2026-08-01): the drifted scaffold `conventions/*` files are **audience-adapted rewrites, not stale copies**, and **byte-aligning live → scaffold is rejected as a product regression**. **ADR-027 still says otherwise on disk; task `0186` is open.** Dated corrections placed **at the claim**, originals byte-identical, on: [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] (§Decision 2 + Related), [[systems/fkit]], [[systems/knowledge-base-structure]] (×4 sites), [[systems/testing-and-verification]] (×2), [[tasks/teach-dashboard-to-resolve-notes-dependencies]], [[tasks/disambiguate-the-frozen-history-clause]]. Also newly recorded everywhere it matters: **`decisions/` and `reports/` are OUTSIDE the dual-homed surface — no ADR is ever a drift event.**
+
+### Two recorded debts discharged, and one proved permanently undischargeable
+
+- **The 2026-08-01 flag 1 is discharged.** `dependency-declaration-form.md` is **no longer absent from `conventions/README.md`** — `0132` indexed it in both homes, and shipped the file itself to the scaffold (**generalized, deliberately not byte-identical**). Live holds 8 conventions, scaffold 7; the only absence is `dual-home-parity.md`, which is **correctly** absent. **Every convention that should be dual-homed now is.**
+- **`0112`'s phantom verification is now proved undischargeable, not merely open.** [[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]] shipped claiming a parity test passed that did not exist. **The test now exists — and its surface can NEVER intersect `0112`'s**, which lives under `claude/`. So the owner's *"re-verify once `0133` lands"* ruling is **permanently undischargeable as written**. ⚠️ **`0133` refused to report a pass rather than launder an unrunnable step into a runnable-looking green** — the same failure `0112`'s close already committed once. A substitute check passed 5/5: **a signal, not a discharge.** Producer task `0187` is open.
+
+### The rotted-`backlog/` link sweep the routing anticipated: MEASURED ZERO, again
+
+Six tasks moved `backlog/` → `done/` this window and every producer flagged that vault links to the old paths may have rotted. **Measured, wrap-normalised (`\n`→space) across all 180 pre-existing pages plus `index.md` and `schema.md`: the only `tasks/backlog/NNNN` path in any wiki page is `tasks/backlog/0045`, and `0045` is still in `backlog/` — verified on disk, so it resolves.** None of `0130`/`0132`/`0133`/`0136`/`0142`/`0174` was cited by path anywhere, because **none of them had a vault page before this run**. The four `tasks/backlog/…` strings in `log.md` are frozen history and are not repaired. **Recorded as a measured negative, not as an absent grep — the second consecutive sync to expect this rot and find none.**
+
+A broader dead-path scan over all pages found **7 dead paths, all pre-existing and all deliberate**: `AGENTS-COMMON.md` (rejected by ADR-016), `ai-agents/reviews/*` (absorbed by ADR-029's migration), `claude/agents/fkit-git.md` (never built, ADR-023), `claude/dashboard.sh` on the ADR-029 page (**genuine stale pointer — the script lives at `claude/skills/fkit-status/dashboard.sh`; left as-is, flagged below**), and two `schema.md` template placeholders. **None introduced by this run.**
+
+### Updated — pages carrying real content, not only back-links
+
+- [[systems/fkit]] — the three-vs-four correction; the *"six drifted files … scoped, not built"* gotcha rewritten to **built, and the premise overruled**
+- [[systems/knowledge-base-structure]] — the 2026-08-01 README gap **discharged**; scaffold parity re-measured 8/7; the *audience-adapted* third kind recorded
+- [[systems/testing-and-verification]] — the parity-test section's heading changed from *"scoped, not built"*; suite growth 521 → 523 → 551 → **560 pass / 17 suites**, **thirteen `*.test.js` files**, thirteen mutations plus `0133`'s **six-variant disarm proof**; `skill-frontmatter.test.js` recorded as **the first thing in the repo that ever parsed a `SKILL.md` — frontmatter only**
+- [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — two dated corrections at §Decision 2
+- [[tasks/sprint-2-remove-omnigent]] + `index.md` — roll-up re-derived from `dashboard.sh` 2026-08-02: **125 done · 37 backlog · 5 cancelled — of 167** (was `119 / 24 / 5 — of 148` on 2026-08-01). With the board-health note: **81% closed, 16 of 29 open rows unreachable by rank**, and *the unreachability share improved for a reason that is not progress — no open row moved from unreachable to reachable, not one.*
+
+### Verification — measured, and re-measured after writing
+
+- **V1 — integrity, before → after.** Before: **180 pages** (0 features · 8 systems · 34 decisions · 138 tasks) · 180 index targets · 0 broken · 0 one-way. After: **188 pages** (0 features · **8** systems · **36** decisions · **144** tasks) · **188 index targets · 0 broken · 0 index→missing · 0 page-not-indexed**. **+8 pages, +2 decisions and +6 tasks — exactly this run's new pages; systems unchanged, nothing created or deleted beyond the 8.**
+- **V2 — reciprocity fixed, not assumed.** The first post-write scan found **58 one-way links**, every one created by this run's new pages linking outward. Back-links added to **31 target pages** with a tailored descriptor each. Re-scanned: **0 one-way, 0 duplicate back-link lines.** ⚠️ **Recorded because the run that does not measure its own reciprocity is the run that reports "0 one-way" without having looked.**
+- **V3 — the link scan is wrap-normalised** (`\n`→space before matching), per the standing warning that a target split across a line break defeats a naive matcher.
+- **V4 — template conformance, checked mechanically.** All 6 new task pages carry `**Source**`, `**Status**`, `**Sprint/Tag**`, `## Goal`, `## Key Changes`, `## Outcome`, `## Related`; both new decision pages carry `**Date**`, `**Status**`, `## Context`, `## Decision`, `## Consequences`, `## Related`. **0 YAML frontmatter across all 188 pages.**
+- **V5 — no board rank on any new page.** `**Sprint/Tag**` reads `Sprint 2 · ID <NNNN> · owner <role>` on all six — **deliberately no `priority NNN`**, which is what `priority-is-rank-not-identity.md` and this batch's own subject matter require. Pre-existing `priority NNN` fields are **untouched** (owner-ruled frozen record 2026-07-30).
+- **V6 — secrets.** A credential-pattern scan over every changed vault file returned **5 files**, inspected individually: **every hit is the word "secret(s)" inside the no-secrets rule text itself. Zero credentials, endpoints, DSNs or keys written.**
+- **V7 — write scope.** `git status --porcelain` with the vault path excluded returns **nothing**: this run wrote **only** inside `ai-agents/wiki-vault/`. 32 tracked files modified (**+115 / −9**), 8 new pages, plus this append and the watermark. **No task folder moved, no mover invoked, nothing under `claude/`, `ai-agents/tasks/`, `ai-agents/sprints/` or `ai-agents/knowledge-base/` touched.**
+- **V8 — nothing committed, nothing staged. `log.md` remains append-only** — no past entry edited.
+
+### ⚠️ Flagged for human review
+
+1. **ADR-027 is unamended on disk and instructs a future implementer to ship a regression.** §Decision 2's byte-align mandate was overruled 2026-08-01; the ADR still says it. **Task `0186` (fkit-architect) is open.** The vault is corrected; the source is not, and **the wiki never writes `knowledge-base/`.**
+2. **The `0112` re-verification ruling is permanently undischargeable as written** and has no covering check written down anywhere. **Task `0187` (fkit-producer) is open.**
+3. **`0142` found five live ownership-fact defects and left every one live by design** — including two in `architecture.md`, one in the scaffold's `CLAUDE.md` shipping into every consuming project, and the FOUR-mirror claim whose repair **must touch two byte-identical files**. **Task `0188` is open**, and sequenced before `0189` **on the owner's ruling alone** — *"do not let the build quietly repair its own corpus."* ⚠️ **Do not re-derive a mechanism for that ordering: two were asserted, found false and withdrawn.**
+4. **`0142`'s report Part 7 still records the three-vs-four discrepancy as OPEN.** It is settled above, and the vault is corrected — **but the report's own text does not carry the resolution**, and the wiki cannot edit it. An architect owns that correction.
+5. **[[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] cites `claude/dashboard.sh`, which does not exist** — the script is at `claude/skills/fkit-status/dashboard.sh`. **Pre-existing, not introduced here; left as-is** because that page is a frozen dated record and the fix is a dated correction, not a silent rewrite. Named so the next lint does not rediscover it as new.
+6. **The board still cannot show which closes were agent-performed.** All six tasks ingested this run are `(agent-closed — not owner-verified)` — **19 consecutive agent-closed rows** now. `dashboard.sh` collapses the marker to a plain `Done`. **125 done on a green Sprint 2 board is not 125 owner-verified.**
+7. **Sprint 2 is 81% closed with 16 of 29 open rows unreachable by rank.** The rollover decision (`0185`) is ruled the **highest-leverage** of its batch and is **deferred by the owner** as of 2026-08-01. Nothing may be rolled without a signed ruling.
+
+**No tracked task completed by this run.**

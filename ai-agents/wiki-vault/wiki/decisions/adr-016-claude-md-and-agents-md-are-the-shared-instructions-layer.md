@@ -98,3 +98,4 @@ The "Positive" section read **"Codex finally gets a floor."** Fifteen lines abov
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — §6 *delivery structural, compliance advisory* **observed live**: a well-written rule in this layer did not fire, which is that ADR's entire premise. It also spends most of the managed block's remaining ~561 bytes
 - [[tasks/compress-universal-rules-output-style-section]] — task 79, the universal-rules compression
 - [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively
+- [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target

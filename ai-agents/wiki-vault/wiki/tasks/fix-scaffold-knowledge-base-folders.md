@@ -37,3 +37,4 @@ The verification that mattered was the comparison, not the tree-walk: **scaffold
 - [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — the fourth parity instance
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — one of the four prior point-fixes this ADR generalizes
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, same drift class
+- [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132` — the dual-home reconciliation, and the sweep that **disproved ADR-027's premise**

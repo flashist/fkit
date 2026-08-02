@@ -93,3 +93,5 @@ Done, **agent-closed — not owner-verified**. Four review rounds, Codex coverag
 - [[tasks/correct-claude-mds-stale-skills-for-role-location]] — `0151`, a live specimen: its fix turned one line into three and invalidated every `CLAUDE.md:43` citation
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — whose dated correction notes carry `:NNN` tree coordinates this ruling governs
 - [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — `0120`, whose `CLAUDE.md:43` citation is a naked-pointer specimen
+- [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — **a mid-board insertion is NOT the owner-ruled re-rank exception** — forced by arithmetic, not policy
+- [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**

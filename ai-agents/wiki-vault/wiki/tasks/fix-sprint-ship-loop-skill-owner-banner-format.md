@@ -36,3 +36,4 @@ Done, agent-closed. The change is one heading in one file.
 - [[systems/testing-and-verification]] — the untested `SKILL.md`-content surface this fix's follow-up would close
 - [[tasks/sprint-2-remove-omnigent]] — the sprint carrying this task
 - [[tasks/correct-claude-mds-stale-skills-for-role-location]] — `0151`, one of the two follow-ups this task correctly refused to fold in
+- [[tasks/convert-skill-descriptions-to-block-scalars-and-guard]] — task `0136` — every skill `description:` to a `>-` block scalar, plus the repo's first `SKILL.md` frontmatter guard

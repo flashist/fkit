@@ -94,9 +94,13 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 - **The `.fkit/` orphan-cleanup consent model → announce-only** (2026-07-17), unblocking task 36.
 
 ## Outcome
-**119 done · 24 backlog · 5 cancelled — of 148.** *(Updated **2026-08-01**, re-derived from `bash .claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md` — the deterministic board, not a hand count. **+13 done** and **+18 rows** since 2026-07-26; the sprint grew 90 → 124 → 130 → 148.)*
+**125 done · 37 backlog · 5 cancelled — of 167.** *(Updated **2026-08-02**, re-derived from `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md` — the deterministic board, not a hand count. **+6 done** and **+19 rows** since 2026-08-01; the sprint grew 90 → 124 → 130 → 148 → 167. The previous reading was `119 / 24 / 5 — of 148`.)*
+
+> ⚠️ **The board is 81% closed, and that is now a structural problem, not a milestone.** Measured 2026-08-01 by [[tasks/decide-how-an-owner-records-a-merit-ordering]]: **126 of 155 ranked rows closed, in five disjoint open segments, with 16 of 29 open rows unreachable** — their merit position no longer expressible as a rank, because a closed row above them is a wall nothing may move past. **The headline share improved for a reason that is not progress:** unreachability fell 68% → 55% while **no open row moved from unreachable to reachable — not one**; the movement was two unreachable rows *closing* plus fresh rows inflating the denominator. **Read the absolute count, not the share.** Whether Sprint 2 rolls onto a fresh board is task `0185` — ruled the **highest-leverage** of its batch and **deferred by the owner** 2026-08-01.
 
 > ⚠️ **A green board is still no evidence a human verified any of it.** Of the 13 tasks closed since 2026-07-26 — `0103`, `0125`, `0126`, `0141`, `0147`, `0148`, `0150`, `0151`, `0153`, `0157`, `0159`, `0160`, `0161` — **every one carries `(agent-closed — not owner-verified)`.** The board cannot show which closes were agent-performed; that gap is unchanged.
+>
+> ✅ *Extended 2026-08-02:* the **six** closed since — `0130`, `0132`, `0133`, `0136`, `0142`, `0174` — **also every one agent-closed, not owner-verified**. That is **19 consecutive agent-closed rows**. `dashboard.sh` still collapses the marker to a plain `Done`, so **nothing counts them**.
 
 ### The five closed in the second 2026-07-26 batch — the lead-conductor arc's paperwork, and one design question
 
@@ -186,3 +190,10 @@ Its sibling: **a count of a *semantic* rule cannot be established by grepping on
 - [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — task 0118, the ADR-032 autonomy amendment
 - [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, the declared-approval carve-out record (**owner-verified**)
 - [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — task 0120, the sprint-loop SKILL.md H1 fix
+- [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — **a mid-board insertion is NOT the owner-ruled re-rank exception** — forced by arithmetic, not policy
+- [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — **the skill-ownership site inventory is a declared registry**, not a remembered checklist
+- [[tasks/build-dual-home-parity-test]] — task `0133` — the mechanical parity test, built 2026-08-02
+- [[tasks/convert-skill-descriptions-to-block-scalars-and-guard]] — task `0136` — every skill `description:` to a `>-` block scalar, plus the repo's first `SKILL.md` frontmatter guard
+- [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
+- [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target
+- [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132` — the dual-home reconciliation, and the sweep that **disproved ADR-027's premise**

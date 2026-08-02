@@ -183,3 +183,4 @@ Only 2A's *mechanism assumption* (transcript-derivable) changed; the check itsel
 - [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively
 - [[tasks/add-sprint-ship-loop-to-stop-hook-skip-set]] — Add `fkit-sprint-ship-loop` to the ADR-030 Stop-hook skip set
 - [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook
+- [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target

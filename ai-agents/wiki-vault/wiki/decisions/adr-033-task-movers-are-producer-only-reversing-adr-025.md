@@ -88,3 +88,4 @@ Two of these would have slipped the verification sweep entirely, because **the s
 - [[tasks/wiki-skills-flag-ready-to-close]] — `0125`, the flag-don't-close mechanism §2 requires
 - [[tasks/wiki-resync-for-adr-033]] — `0126`, the vault's ingest of this decision
 - [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`, which made the flag's task identity unambiguous
+- [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — **the skill-ownership site inventory is a declared registry**, not a remembered checklist

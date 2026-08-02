@@ -180,3 +180,5 @@ re-raise the dual-format transition, content-hash IDs, numbering only open tasks
 - [[tasks/implement-task-folder-name-scheme-change]] — `0103`, which finally landed **Decision 6** (the folder ID becomes `dashboard.sh`'s primary identity)
 - [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`, which applies Decision 3's permanent ID to the wiki completion flag
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160`, which makes the folder ID the durable anchor for review ledgers too
+- [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — **a mid-board insertion is NOT the owner-ruled re-rank exception** — forced by arithmetic, not policy
+- [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**

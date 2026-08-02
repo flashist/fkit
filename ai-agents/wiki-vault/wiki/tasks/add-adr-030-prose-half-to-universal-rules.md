@@ -38,3 +38,4 @@ Land [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] Decision 
 - [[systems/install-and-self-update]] — Install, Launcher & Self-Update
 - [[systems/role-locked-sessions]] — Role-Locked Sessions & the Skill Lockdown
 - [[tasks/revert-task-movers-to-producer-only]] — Revert the task movers to producer-only — ownership, mirrors, hook test, and mover prose
+- [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target

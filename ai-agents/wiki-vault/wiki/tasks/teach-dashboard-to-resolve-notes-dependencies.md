@@ -33,6 +33,8 @@ Prior art the convention cites: the dashboard's own design review established th
 
 ⚠️ **Known dual-home gap, recorded at the source:** `dependency-declaration-form.md` is **missing from `claude/scaffold/`**, so consuming projects inherit the task-84 misreport class — the subject of a separate reconciliation task.
 
+✅ **Dated correction 2026-08-02 — the gap is CLOSED, but not by byte-alignment.** The sentence above is left byte-identical as the record of what was true when this page shipped. [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] (task `0132`) shipped the convention into `claude/scaffold/ai-agents/knowledge-base/conventions/` on 2026-08-01, so consuming projects now receive it. ⚠️ **The scaffold copy is deliberately NOT byte-identical to the live one** — the owner ruled 2026-08-01 that it ships **GENERALIZED**, and `0132`'s own verification step demanding byte-identity is **superseded by that ruling, not met, and must stay that way**. *"Fixing" it by copying the live file over the scaffold copy re-introduces the regression. Separately, the convention is now indexed in `conventions/README.md`, closing a second gap flagged by the 2026-08-01 sync.*
+
 ## Related
 - [[tasks/wiki-resync-eighth-role-after-source-docs-land]] — task 84, the acceptance fixture
 - [[tasks/build-deterministic-dashboard-script-for-fkit-status]] · [[tasks/design-deterministic-dashboard-for-fkit-status]] — the dashboard's origin and the R19/R40 prior art
@@ -41,3 +43,4 @@ Prior art the convention cites: the dashboard's own design review established th
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the missing scaffold copy
 - [[tasks/record-one-skill-one-output-convention]] · [[systems/knowledge-base-structure]]
 - [[systems/fkit]] — fkit
+- [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**

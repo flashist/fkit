@@ -45,3 +45,5 @@ The substitute wording was then **wrong twice over**, and both were fixed in rev
 - [[decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record]] — ruled on this task's ledger
 - [[tasks/stop-agents-asserting-unchecked-repo-state]] — the `evidence-before-assertion` convention
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — whose vault page carried two of the stale-coordinate notes this class covers
+- [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — **a mid-board insertion is NOT the owner-ruled re-rank exception** — forced by arithmetic, not policy
+- [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**

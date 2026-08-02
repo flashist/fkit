@@ -23,3 +23,4 @@ Task 47 recorded the "one skill, one output" convention — but only in this rep
 - [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the convention that generalizes this and three sibling point-fixes
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49: this was the fourth instance, and deliberately did not wait for it
+- [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132` — the dual-home reconciliation, and the sweep that **disproved ADR-027's premise**
