@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# THIRTEEN mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# FOURTEEN mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -37,6 +37,18 @@
 #  11. Add a scaffold file with no live counterpart → "present in BOTH homes"             (task 0133)
 #  12. Append one byte to a scaffold copy           → "byte-identical"                    (task 0133)
 #  13. Co-present file under a prune point          → "no prune point hides a file"       (task 0133)
+#  14. Revert dashboard.sh's move-target extractor  → "0210/A"                            (task 0210)
+#
+# ⚠️ MUTATION 14 REACHES ITS TARGET WITHOUT AN ENV SEAM, and that is deliberate — it is the one
+# exception to the "pointed at via FKIT_LAUNCHER" phrasing above. dashboard-contract.test.js resolves
+# the script under test as `join(REPO, 'claude', 'skills', 'fkit-status', 'dashboard.sh')`, and
+# harness.mjs derives REPO as the parent of its OWN directory. So copying `claude/` AND `test/` into one
+# throwaway root and running the COPIED test file makes the copied test hit the copied script — no env
+# var, no edit to either file. 0210's plan recorded the opposite (that covering this "requires
+# introducing a `dashboard.sh` path override into both the suite and prove-red.sh — a test-architecture
+# change"); its round-1 review refuted that by execution, and this mutation is the correction. The
+# never-touch-the-real-file invariant is untouched: the mutation still only ever edits a copy under
+# $work.
 #
 # Exit 0 only if: real launcher green, unmutated copy green, AND each mutation reds its NAMED assertion.
 set -eu
@@ -125,6 +137,20 @@ run_parity_suite() {   # <scaffold-home-root>
   fi
 }
 
+# Run ONLY the dashboard-contract suite FROM a copied repo root (task 0210). ⚠️ THE ODD ONE OUT: it
+# runs the COPY's test file, not this repo's, and passes NO env var at all. That is the whole seam —
+# harness.mjs derives REPO from its own location, and dashboard-contract.test.js joins REPO with
+# `claude/skills/fkit-status/dashboard.sh`, so a test file sitting in the copy resolves the copy's
+# script by construction. Deliberately NOT exported: FKIT_LAUNCHER must stay unset here, or the copy's
+# harness would announce and use some other launcher (harmless for this suite, misleading in the log).
+run_dashboard_suite() {   # <repo-copy-root>
+  if node --test "$1/test/dashboard-contract.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
 # An independent copy of the SCAFFOLD home we can mutate. $1 = name; echoes the copy's root.
 make_scaffold_copy() {
   dst="$work/$1"
@@ -137,6 +163,28 @@ make_claude_copy() {
   dst="$work/$1"
   cp -R "$repo/claude" "$dst"
   echo "$dst/fkit-claude.sh"
+}
+
+# A copy of BOTH `claude/` and `test/` under one root — the seam run_dashboard_suite() needs (task
+# 0210). Copying `claude/` alone is not enough and copying `test/` alone is not enough: it is the two
+# living under a common parent that makes the copied harness's REPO point at the copied script.
+# $1 = name; echoes the copy root.
+#
+# ⚠️ THE package.json COPY IS LOAD-BEARING, NOT TIDINESS. $work carries an EMPTY package.json (the
+# source-checkout marker written at the top of this script), and node resolves a `.js` file's module
+# type from the NEAREST PARENT package.json. Without a valid one in the copy root, node walks up to
+# that empty file and dies with ERR_INVALID_PACKAGE_CONFIG before loading anything — every test in the
+# copy fails at import, so the suite is red no matter what the mutation did. Caught by step 0i on the
+# first run of this mutation, which is exactly what 0i is for. The repo's own package.json is copied
+# rather than a synthetic `{}` so the copy resolves modules identically to a real `npm test` run (no
+# `"type"` field → node's syntax detection treats the ESM test files as ESM, same as here).
+make_repo_copy() {
+  dst="$work/$1"
+  mkdir -p "$dst"
+  cp -R "$repo/claude" "$dst/claude"
+  cp -R "$repo/test" "$dst/test"
+  cp "$repo/package.json" "$dst/package.json"
+  echo "$dst"
 }
 
 fail=0
@@ -194,6 +242,15 @@ clean_scaffold="$(make_scaffold_copy scaffold-clean)"
 printf '0h. unmutated copy of the scaffold home should be green ... '
 pc="$(run_parity_suite "$clean_scaffold")"; echo "$pc"
 [ "$pc" = green ] || { echo "   ✗ an UNMUTATED scaffold copy is red — mutations 10-13 below would be false."; fail=1; }
+
+# --- 0i. An UNMUTATED repo copy's dashboard suite must ALSO be green (task 0210; same reasoning as 0b
+#     and 0h). This one carries EXTRA weight: it is the only proof that the copy-root seam works at
+#     all. If `test/` and `claude/` did not land side by side, the copied test would resolve some other
+#     path, and mutation 14's red would be red-because-the-copy-is-wrong. ---------------------------
+clean_repo="$(make_repo_copy repo-clean)"
+printf '0i. unmutated repo copy dashboard suite should be green ... '
+dc="$(run_dashboard_suite "$clean_repo")"; echo "$dc"
+[ "$dc" = green ] || { echo "   ✗ an UNMUTATED repo copy's dashboard suite is red — mutation 14 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -550,6 +607,48 @@ if [ "$r13" != red ]; then
   echo "     0132's hand-off tripwire is not load-bearing."; fail=1
 elif ! grep -Eq '(✖|not ok|fail).*no prune point hides a file' "$out"; then
   echo "   ✗ suite went red but NOT at the tripwire assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 14: revert dashboard.sh's ➡️ Moved target extractor to the PRE-0210 `Sprint`-only BRE →
+#     the 0210/A assertion in dashboard-contract.test.js must go red (task 0210). This is the exact
+#     state the file was in before 0210: `Backlog` was not in the vocabulary, so a correctly-written
+#     reverse-move row resolved to NO target and was reported `moved-without-target`. It proves the six
+#     0210 cases are load-bearing rather than merely present — the thing 0210's own plan said could not
+#     be proven here without a test-architecture change. See the header note on this mutation's seam. --
+m14="$(make_repo_copy repo-mutant-dashboard)"
+m14_file="$m14/claude/skills/fkit-status/dashboard.sh"
+cp "$m14_file" "$m14_file.orig"
+# ⚠️ THE REPLACEMENT LINE COMES FROM A FILE, VIA getline — NOT from `awk -v`. awk processes escape
+# sequences in a -v assignment, so `\[` and `\1` arrive stripped and the "mutation" is a mangled regex
+# that breaks the script outright: every test reds, including ones the mutation has nothing to do with,
+# and the named-assertion check below would still pass. Red for the wrong reason, disguised as success.
+cat > "$work/m14-line.txt" <<'MUTANT_LINE'
+    moved_target=$(printf '%s' "$st" | sed -n 's/.*Moved to \[*\(Sprint [0-9][0-9]*\).*/\1/p' | head -1)
+MUTANT_LINE
+awk -v repl="$work/m14-line.txt" '
+  BEGIN { swapped = 0 }
+  /moved_target=\$\(printf/ && swapped == 0 {
+    while ((getline line < repl) > 0) print line
+    close(repl)
+    swapped = 1
+    next
+  }
+  { print }
+' "$m14_file.orig" > "$m14_file"
+if cmp -s "$m14_file" "$m14_file.orig"; then
+  echo "14. reverted move-target extractor ... ✗ MUTATION WAS A NO-OP — the awk no longer matches the"
+  echo '   extractor line (has the `moved_target=$(printf` prefix been reworded?). This gate is'
+  echo "   disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+fi
+printf '14. move-target extractor reverted to Sprint-only — "0210/A" should go RED ... '
+r14="$(run_dashboard_suite "$m14")"; echo "$r14"
+if [ "$r14" != red ]; then
+  echo "   ✗ the suite did NOT catch a dashboard.sh that cannot parse the reverse move — 0210's"
+  echo "     reverse-move cases are not load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0210/A' "$out"; then
+  echo "   ✗ suite went red but NOT at 0210/A — red for the wrong reason."; fail=1
 fi
 
 echo

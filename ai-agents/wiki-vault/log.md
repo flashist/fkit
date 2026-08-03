@@ -1153,3 +1153,61 @@ All source-side and owned by open tasks the wiki may not touch: ADR-027 unamende
 - **Write scope:** only `ai-agents/wiki-vault/` touched — 4 content pages plus this log. **Nothing committed, nothing staged. No task moved, no mover invoked. No source, ADR, brief or sprint plan edited.**
 
 Task 0199: partial — not ready to close (ai-agents/tasks/backlog/0199-wiki-resync-adr-010s-vault-page-after-the-correction-notes/brief.md)
+
+## 2026-08-03 — correction (task `0211`: the three old-form completion flags in this log)
+
+**Not an ingest, not a lint, not a sync.** No page was created or updated, `index.md` is untouched, and `.wiki-watermark` is unchanged. This entry exists only to record a correction about three earlier entries in this file. Task `0211`, owner `fkit-wiki`; the vault is this role's exclusive write surface under ADR-005.
+
+### What is being corrected
+
+Three completion-flag lines already written into this log use the **pre-`0173` flag form**, which hardcoded a `backlog/` path into the flag text. Task `0173` (closed 2026-08-03) changed the generator in all three `claude/skills/fkit-wiki-*/SKILL.md` files: the flag now carries a **task folder ID only, with no path at all**, plus an explicit prohibition on `:NNN` line-number coordinates, and the caller resolves `<NNNN>` to its folder by globbing `ai-agents/tasks/*/<NNNN>-*/`. **`0173` fixed the generator; it could not reach what had already been emitted.** These three are what had already been emitted.
+
+Located by **dated entry and durable anchor** — deliberately no line numbers:
+
+1. **The `2026-08-03 — sync` entry, the first of its two run-ending flag lines** — names task **`0199`**, in the `partial — not ready to close` form.
+2. **The same `2026-08-03 — sync` entry, the second of its two run-ending flag lines** — names task **`0206`**, in the `vault work is complete — ready to close` form.
+3. **The `2026-08-03 — lint` entry, its single run-ending flag line** — names task **`0199`**, in the `partial — not ready to close` form.
+
+**Three emissions, two distinct tasks: `0199` twice, `0206` once.** Re-verified against this file immediately before this entry was written: a scan of the whole log for flag lines carrying a *substituted* `ai-agents/tasks/backlog/…/brief.md` path returns these three and no others. The other `tasks/backlog/…` strings in this file are not completion flags — they are unsubstituted templates, grep-record prose already recorded as frozen history by the `2026-08-02 — sync` entry, and one reference to `0045`, which is genuinely still in `backlog/`.
+
+### The status of those three paths — stated as of 2026-08-03, not as a fixed fact
+
+**Verified on disk 2026-08-03: both `0199` and `0206` are in `ai-agents/tasks/backlog/`. All three paths resolve. Nothing is broken today.**
+
+They stop resolving as each named task closes or is cancelled and its folder moves out of `backlog/`, and they do so unevenly: `0199` is named by two of the three flags, `0206` by one, so closing `0199` kills two of these paths and closing `0206` kills the third. Each is dead pointing at a folder that has moved, inside one of the **two** frozen, append-only entries that hold the three flag lines.
+
+This is the *"correct at emission, dead later"* profile that task `0160`'s decision report singles out (§5.2) as the harder of the two to detect: the `partial` form says in so many words *"not ready to close"*, so the task genuinely **is** in `backlog/` when the flag is written, and the path is **true at the time**. A reader who checks these paths today finds them correct and concludes there is nothing to record. **That conclusion is right about today and wrong about next week.** The ruling and its reasoning are summarized at [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]].
+
+⚠️ **Read this whole section as dated** — the disk check that opens it, the closure consequence, and the detection-profile note alike. Each states what was true on 2026-08-03. None is a claim about the day you are reading it. Resolve `0199` and `0206` by glob — `ai-agents/tasks/*/0199-*/`, `ai-agents/tasks/*/0206-*/` — to see where they are now.
+
+### Why no path from those three flags is reproduced here
+
+The three flags are **described, not quoted**. Writing out the substituted path from any of them would make this entry a **fourth and fifth instance of the very defect it records** — a live-today, dead-later pointer, sitting in an append-only file, unrepairable by construction.
+
+What is quoted instead is the **form**, with the ID and slug left as unsubstituted placeholders. A template resolves to nothing and points at nothing; the literal `backlog` inside it is the defect being described, not a claim about where any task is.
+
+- old form, `partial`: `Task <NNNN>: partial — not ready to close (ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md)`
+- old form, `complete`: `Task <NNNN>'s vault work is complete — ready to close (producer runs /fkit-task-done on ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md)`
+- **current form, post-`0173`, `partial`: `Task <NNNN>: partial — not ready to close`**
+- **current form, post-`0173`, `complete`: `Task <NNNN>'s vault work is complete — ready to close`**
+
+**What this costs, stated plainly:** a reader of this entry alone cannot see the two exact slugs that were written. That is deliberate, and it is the only thing given up. The anchor above — dated entry, which run-ending flag line, and folder ID — lands a reader on the original with certainty, and the originals are append-only, so they are always there to be read. A correction entry needs to be a signpost, not a replacement for the text it points at.
+
+⚠️ **Note for the next lint — a dead-path scan will report the two old-form templates above.** They are **specimens quoted to describe a defect, with nothing substituted into them** — the same category as the `claude/dashboard.sh` specimen on the ADR-029 page that the `2026-08-03 — lint` entry already carries forward. **Do not "re-fix" them, and do not substitute real IDs into them.**
+
+### The three originals are unchanged
+
+Per the **owner's ruling of 2026-08-03**, given live via `AskUserQuestion` in a `/fkit-sprint-ship-loop` driver session: **a wiki run may never edit or annotate a past `log.md` entry in place.** A correction lands as a new dated entry — this one — naming what it corrects by folder ID and durable anchor, with the originals left **byte-identical**. That matches this file's own header (*"Never edit or rewrite existing entries; only append"*), `schema.md`'s *"Append-only chronological activity log"*, and the knowledge-base correction-note form established by task `0143`. The ruling was made **once, for this task and `0199` together**.
+
+Verified for this write: the file's entire pre-existing prefix is byte-identical to its state at the previous commit, and this file's diff carries **zero deletions**.
+
+### Deliberately not done
+
+- **`0148`'s closed review ledger is untouched.** It carries a `backlog/` path for a task now in `done/`; that is correct content in a frozen ledger, not a defect.
+- **The further prose rank citations in this log are untouched.** Task `0160`'s report (§5.3) lists them and records, in its own words, that it has *"not classified which are live claims and which are frozen history"*, flagging that as unverified. Different defect class — board-rank citations in prose, not the completion-flag path form — and an unverified inventory. Named as a follow-up, not filed. Its own line-number citations in that list were taken against an 857-line version of this file and no longer resolve, which is the same class over again.
+- **The *"still open"*-framing correction is not absorbed here.** It belongs to `0199`, and on the owner's ruling of 2026-08-03 it gets its own separate row. This entry covers the old-form flag paths only.
+- **No task was moved and no mover was invoked.** `0199` and `0206` staying open is a precondition of this correction, not an oversight.
+
+- **Write scope:** only `ai-agents/wiki-vault/log.md` touched — this entry appended; no page created or updated; `index.md` and `.wiki-watermark` unchanged. **Nothing committed, nothing staged. No task moved, no mover invoked. No source, skill, agent definition, brief, sprint plan, ADR or report edited.**
+
+Task 0211's vault work is complete — ready to close

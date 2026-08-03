@@ -4,10 +4,10 @@
 0170
 
 ## Sprint
-Sprint 2
+Backlog
 
 ## Priority
-148
+Unscheduled
 
 ## Status
 🔲 Backlog

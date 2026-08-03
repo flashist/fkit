@@ -4,10 +4,10 @@
 0146
 
 ## Sprint
-Sprint 2
+Backlog
 
 ## Priority
-135
+Unscheduled
 
 ## Status
 🔲 Backlog
@@ -98,6 +98,20 @@ ends in a launcher edit has misread this one.
   this, and the reason it was not caught is that no test asserts the menu path's rejection. The owner
   considered folding this into 0144 and chose to keep it separate so the false sentence is corrected
   now rather than whenever 0144 runs.
+- ⛔ **Dated ruling 2026-08-03 — the merge was proposed a SECOND time and REFUSED again: this task and
+  0144 stay two separate Backlog rows. Do not merge them.** Owner ruling, given live via
+  `AskUserQuestion` in an `fkit-lead` session on **2026-08-03**. The bullet above is **left
+  byte-identical**; this is an append below it, in the `0149` shape — a separate bullet, never inside
+  the label.
+  - **What was proposed:** the 2026-08-03 sprint-2 open-row triage classified both rows as movers to
+    the Backlog board and proposed folding this task into 0144.
+  - **Why it was refused:** the merge's rationale was **schedule pressure inside Sprint 2**. Both rows
+    are now **unranked on the Backlog board**, so that pressure is gone. The owner also accepted this
+    brief's own standing argument — **"0144 is the durable fix and this is not a substitute for it"**.
+  - **What executed instead:** both rows moved to the Backlog board on 2026-08-03 with the other 43
+    movers, **separately**. Neither was cancelled or closed.
+  - ⛔ **Do not re-derive or re-propose this merge.** Also recorded in the 2026-08-03 triage addendum
+    in `ai-agents/sprints/sprint-2.md`, under *"Two owner rulings recorded, awaiting the unblock"*.
 - **Feeds task 0142** (the fact-inventory investigation) as a worked example: a claim stated in a
   decision record, marked do-not-re-litigate, contradicted by the code, and caught only by a human
   checking it by hand.

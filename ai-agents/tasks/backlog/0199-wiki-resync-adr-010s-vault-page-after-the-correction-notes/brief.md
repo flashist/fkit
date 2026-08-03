@@ -4,10 +4,10 @@
 0199
 
 ## Sprint
-Sprint 2
+Backlog
 
 ## Priority
-177
+Unscheduled
 
 ## Status
 🔲 Backlog
@@ -82,9 +82,84 @@ The updated page must:
 4. **Record the live self-contradiction** at §Decision 5 as a ⚠️ gotcha, naming `0195` as its repair.
 5. **Clear the vault-wide *"still open"* framing** wherever it refers to `0143`'s fix — `index.md` and
    the `log.md` entries included.
+   ⚠️ **PARTLY OVERTAKEN BY THE OWNER'S 2026-08-03 APPEND-ONLY RULING — read the ruling block in
+   *Constraints* below before performing this item.** The `index.md` half stands unchanged. **The
+   `log.md` half is no longer this task's at all**: those entries are frozen and must stay
+   byte-identical, and the owner ruled on 2026-08-03 that the correcting append is **its own row —
+   task `0212`**, not folded into this task and not folded into `0211`. **Perform the ordinary-vault-
+   page half only.**
 6. **State that ADR-010's `**Status:**` remains `accepted`** — the notes did not supersede it.
 
 ### Constraints
+
+#### ✅ OWNER RULING 2026-08-03 — `log.md` is append-only. This unblocks the task and reshapes item 5.
+
+**This settles the standing flag that blocked this task.** The 2026-08-03 wiki **sync** raised it
+against this brief's *"clear the `still open` framing from `log.md`"* instruction and did not resolve
+it; the 2026-08-03 wiki **lint** hit it and did not resolve it either. It is now ruled:
+
+> **A wiki run may NEVER edit or annotate a past `log.md` entry in place.** A correction lands as a
+> **new dated entry** that names what it corrects by **folder ID and durable anchor**. The original
+> entries stay **byte-identical**.
+>
+> **Rationale as ruled:** it matches the append-only guarantee in `log.md`'s own header and in
+> `schema.md`, and it matches the form the knowledge-base correction-note already uses.
+>
+> **Provenance:** given live via `AskUserQuestion` in a `/fkit-sprint-ship-loop` driver session on
+> **2026-08-03**, and relayed here by a spawned producer with no owner channel. **Ruled once, for both
+> tasks** — the identical ruling is recorded in `0211`'s brief.
+
+**Where the flag actually points, corrected — the sync mislabelled it.** The sync's flag calls this
+*"`0199`'s verification step 5"*. On disk, the instruction it means is **item 5 of *What to build***
+(clear the `"still open"` framing, `log.md` included) and its check is **verification step 1**.
+*Verification step 5* is a different thing entirely — the §Decision 5 gotcha. **Read the ruling against
+items 5/1, not against verification step 5.**
+
+**What the ruling settles, precisely:**
+
+- **The `index.md` half of item 5 is untouched and still required.** `index.md` is an ordinary vault
+  page, not an append-only log. Its `0140` entry (*"a dated correction note is the sanctioned fix, and
+  it is still open"*) is edited in place as before.
+- **The `log.md` half of item 5 is unperformable as written, and is NOT this task's any more — it is
+  task `0212`** (Backlog board, rank `—`, owner `fkit-wiki`), filed 2026-08-03 on the owner's ruling.
+  Those entries stay byte-identical. At
+  least two of them carry the `0143` framing and **will still carry it after this task ships** — the
+  ADR-010 stale-text item (*"the sanctioned fix is a dated correction note, an architect call, still
+  open"*) and the ADR-029 §Decision 6 item (*"the sanctioned fix is task `0143`'s
+  dated-correction-note form, still open"*).
+- **Verification step 1 was therefore unsatisfiable as written** — it required `grep -rn "still open"`
+  to return *no hit that refers to `0143`'s correction note*, and those two `log.md` hits must survive.
+  **✅ Settled 2026-08-03: step 1 now carves out `log.md`** and asserts the clear against ordinary vault
+  pages only. **⛔ Never satisfy it by editing the frozen entries.** The `log.md` correction is task
+  `0212`, not this one.
+- **Verification step 2 is NOT affected — it still stands as written.** Checked on disk 2026-08-03:
+  the only `"one-line correction note"` hit in the vault is in
+  `ai-agents/wiki-vault/wiki/tasks/retire-team-room-in-docs-and-agent-definitions.md`, an ordinary
+  vault page. Nothing in `log.md` carries that phrase.
+
+**✅ BOTH OPEN QUESTIONS RULED BY THE OWNER — 2026-08-03.** They were raised above as (a) and (b) and
+are no longer open. Both were given live via `AskUserQuestion` in a `/fkit-sprint-ship-loop` driver
+session on **2026-08-03** and relayed here by a spawned producer with no owner channel.
+
+- **(a) What verification step 1 asserts now: `log.md` is carved out.** Step 1 asserts the clear
+  against **ordinary vault pages only**; `ai-agents/wiki-vault/log.md` is excluded, by the append-only
+  ruling. The step is rewritten accordingly in *Verification steps*, with its provenance and a
+  satisfiability check recorded there. **Verified on disk 2026-08-03 that the carve-out actually makes
+  the step true** — both remaining non-`log.md` hits are ordinary pages this task already owns.
+- **(b) The `log.md` correction gets its OWN row — task `0212`.** It is **not** folded into this task,
+  and **not** folded into `0211`. `0211` appends a new dated `log.md` entry for a **different defect
+  class** (old-form completion-flag paths, not the `"still open"` framing), and the owner ruled that
+  each log entry should be about one thing. **This task therefore does not append anything to
+  `log.md`** beyond whatever its own run report normally records.
+
+**✅ ALSO RULED 2026-08-03 — verification step 9 carried the pre-`0173` flag form and is corrected.**
+Step 9 required the wiki run's completion flag to carry this task's folder ID **and brief path**. Task
+`0173` closed 2026-08-03 and changed the emitted flag to a **folder ID only, with no path**, plus a
+prohibition on `:NNN` coordinates, in all three `claude/skills/fkit-wiki-*/SKILL.md`. Performing step 9
+as written would have emitted a **fourth** old-form flag into the very `log.md` that `0211` exists to
+annotate. **Owner ruling: correct step 9 to the shipped folder-ID-only form — one line, scope not
+widened.** The owner **declined** a broader sweep of every open brief for stale flag-form assertions;
+**do not perform that sweep as part of this task.**
 
 - ⛔ **`ai-agents/wiki-vault/` writes are `fkit-wiki`'s exclusively** (ADR-005). No other role runs this.
 - ⛔ **Do not edit `ai-agents/knowledge-base/`.** The knowledge-base copy is not the wiki role's, and
@@ -100,8 +175,28 @@ The updated page must:
 
 ## Verification steps
 
-1. `grep -rn "still open" ai-agents/wiki-vault/` returns **no hit that refers to `0143`'s correction
-   note** — other unrelated "still open" flags are untouched and must remain.
+1. ✅ **RULED 2026-08-03 — the assertion covers ordinary vault pages only; `log.md` is carved out.**
+   `grep -rn "still open" ai-agents/wiki-vault/ --exclude=log.md` returns **no hit that refers to
+   `0143`'s correction note** — other unrelated `"still open"` flags are untouched and must remain.
+   **`ai-agents/wiki-vault/log.md` is excluded from this step**, by the append-only ruling: at least
+   two frozen entries carry the framing (the ADR-010 stale-text item and the ADR-029 §Decision 6 item)
+   and must stay byte-identical. **Their survival is the expected result, not a failure.**
+   - ⛔ **The `log.md` correction is NOT dropped — it is now task `0212`**, filed on the Backlog board
+     at rank `—`. See *Notes*.
+   - **Why this step changed:** it originally asserted the clear across the **whole vault, `log.md`
+     included**, and a prior spawn marked it `⚠️ UNSATISFIABLE AS WRITTEN` on 2026-08-03 because the
+     append-only ruling freezes those two entries. The carve-out is the smallest change that makes the
+     step true while keeping its original intent — clear the stale framing wherever it can be cleared.
+     **Owner-ruled** 2026-08-03, live via `AskUserQuestion` in a `/fkit-sprint-ship-loop` driver
+     session, relayed by a spawned producer with no owner channel.
+   - **Verified satisfiable, on disk 2026-08-03.** Outside `log.md` exactly two hits refer to `0143`'s
+     correction note, and both are ordinary vault pages this task already owns: `index.md`'s `0140`
+     entry (*"a dated correction note is the sanctioned fix, and it is still open"*) and the ADR-010
+     vault page's own ⚠️ *"this page is NOT the full resync"* block (which names *"clearing the
+     vault-wide `still open` framing elsewhere"* as `0199`'s outstanding work — it is rewritten when
+     this task completes the resync). Every other non-`log.md` hit is a genuinely unrelated open item
+     (ADR-003's CI gap, `0186`, `0118`/`0119`, `prove-red`'s R2 no-op mode, the `architecture.md`
+     flag) and **must remain**.
 2. `grep -rn "one-line correction note" ai-agents/wiki-vault/` returns nothing.
 3. The ADR-010 vault page names task `0143`, the date 2026-08-02, and the shipped shape (three note
    blocks plus a header bullet).
@@ -113,13 +208,29 @@ The updated page must:
 7. The page does not assert ADR-010 is superseded or deprecated.
 8. **No file under `ai-agents/knowledge-base/` or `ai-agents/tasks/` is modified.** Verify by
    `git status`, not by intention.
-9. The wiki run's own completion flag is emitted per the wiki skills' convention, carrying this task's
-   folder ID and brief path.
+9. The wiki run's own completion flag is emitted per the wiki skills' convention **as tightened by
+   `0173` (closed 2026-08-03)**: it carries this task's **folder ID only** — `0199` — in one of the two
+   exact forms the skills prescribe (`Task 0199's vault work is complete — ready to close` or
+   `Task 0199: partial — not ready to close`), with **no brief path** and **no `:NNN` line-number
+   coordinate**. Resolving `0199` to its task folder is the **caller's** lookup, not the flag's.
+   **Corrected 2026-08-03 by owner ruling.** This step previously required `this task's folder ID
+   **and brief path**` — the **pre-`0173` old form**. Performing it as written would have emitted a
+   fourth old-form flag into the very `log.md` that task `0211` exists to annotate. One-line
+   correction, scope deliberately not widened; see the ruling note in *Constraints*.
 
 ## Notes
 
 - **Depends on:** nothing. `0143` is closed and the vault claims are false today.
 - **Blocks:** nothing.
+- **⛔ THE `log.md` HALF IS NOW A SEPARATE ROW — task `0212`, filed 2026-08-03 on owner ruling.**
+  `0212` (Backlog board, rank `—`, owner `fkit-wiki`) appends the new dated `log.md` entry correcting
+  the `"still open"` framing on the two frozen entries, naming them by folder ID and durable anchor,
+  originals byte-identical. **This task does not inherit it.** `0199` keeps the ordinary-vault-page
+  half (`index.md`'s `0140` entry and the ADR-010 vault page); `0212` keeps `log.md`. **Neither blocks
+  the other and either order works** — so this is a scope split, not a `Depends on:`. `0212` is also
+  deliberately **not** merged into `0211`: `0211` owns the old-form completion-flag paths, `0212` owns
+  the `"still open"` framing — two defect classes, two entries, because the owner ruled each log entry
+  should be about one thing.
 - **⛔ SERIALIZATION — THIS TASK RUNS LAST. Recorded 2026-08-02 at `0195`'s close.** Order:
   **`0195` (✅ landed 2026-08-02, `+53 / −0`) → `0196` → `0197` → `0171` → `0199` (this task).** Run it
   earlier and the vault page describes an ADR still being appended to, which is the exact defect this

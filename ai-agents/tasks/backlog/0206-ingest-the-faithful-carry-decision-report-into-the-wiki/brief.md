@@ -4,10 +4,10 @@
 0206
 
 ## Sprint
-Sprint 2
+Backlog
 
 ## Priority
-184
+Unscheduled
 
 ## Status
 🔲 Backlog

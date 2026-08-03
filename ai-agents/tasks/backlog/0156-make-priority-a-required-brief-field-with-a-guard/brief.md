@@ -4,10 +4,10 @@
 0156
 
 ## Sprint
-Sprint 2
+Backlog
 
 ## Priority
-139
+Unscheduled
 
 ## Status
 🔲 Backlog

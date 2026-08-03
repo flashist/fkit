@@ -4,10 +4,10 @@
 0144
 
 ## Sprint
-Sprint 2
+Backlog
 
 ## Priority
-133
+Unscheduled
 
 ## Status
 🔲 Backlog
@@ -82,4 +82,21 @@ this test exists precisely to catch a re-addition, so the mutation *is* the proo
 - **Related:** 0145 (the pty-driven menu-pick coverage) — independent, no ordering constraint, but the
   two together are what actually close 0139's residual. Landing only one leaves half the surface open.
 - **Owner:** fkit-coder — test files only.
+- ⛔ **Dated ruling 2026-08-03 — task 0146 must NOT be folded into this one. They stay two separate
+  Backlog rows.** Owner ruling, given live via `AskUserQuestion` in an `fkit-lead` session on
+  **2026-08-03**. ⚠️ **This is a new record, not a correction — no line of this brief was wrong and
+  nothing above was edited.** It is written here because the merge proposal named *both* rows, and a
+  ruling recorded on only one side invites the same proposal from this side.
+  - **What was proposed:** the 2026-08-03 sprint-2 open-row triage classified both rows as movers to
+    the Backlog board and proposed folding
+    [0146](../0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual/brief.md) — which
+    corrects the false "menu-pick alias" claim in 0139's accepted residual — into this task.
+  - **Why it was refused:** the rationale was **schedule pressure inside Sprint 2**, and both rows are
+    now **unranked on the Backlog board**, so that pressure is gone. 0146's own brief also argues
+    against folding: **this task is the durable fix, and 0146 is not a substitute for it** — but the
+    reverse holds too, and correcting the false sentence should not wait on this task running.
+  - **What executed instead:** both rows moved to the Backlog board on 2026-08-03, **separately**.
+    Neither was cancelled or closed.
+  - ⛔ **Do not re-derive or re-propose this merge.** Also recorded in 0146's brief and in the
+    2026-08-03 triage addendum in `ai-agents/sprints/sprint-2.md`.
 - No commit — leave the changes in the working tree.

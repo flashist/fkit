@@ -66,6 +66,45 @@ No frontier-move, no regression, no scope widening, no owner-gate skipped.
 
 ---
 
+## Decision log — round 1 review response (ADR-032 A2 / ADR-019)
+
+`fkit-coder` as the **Process-review worker** of `fkit-sprint-ship-loop`, 2026-08-03, under the driver's
+declared-approval marker. Two acts recorded; **neither was an unattended judgment call** — both trace to
+an explicit live owner ruling relayed in the spawn prompt.
+
+1. **R1 fix — routing line rewritten in all three wiki skills. Answers finding R1** (defect, medium,
+   verified CORRECT first-hand).
+   **What changed:** the block's closing line, in
+   `claude/skills/fkit-wiki-{ingest,lint,sync}/SKILL.md`, step *"Flag any completed tracked task — close
+   nothing"*. Was *"`@fkit-producer Run /fkit-task-done on <brief path>`"* with `<brief path>` unbound;
+   now instructs the caller to resolve `<NNNN>` to its folder via `ai-agents/tasks/*/<NNNN>-*/` and pass
+   `<that folder>/brief.md`.
+   **Why it qualified:** **not** an autonomy call at all — the owner ruled it live (`AskUserQuestion`,
+   2026-08-03, option **(A) "rewrite the routing line only"**) and the ruling was carried into the spawn
+   prompt. Mechanical and localized: one line per file, same text in all three, indentation preserved.
+   Inside scope: the flag stays pathless, so the 2026-08-01 folder-ID-only ruling is untouched, and
+   option (B) — adding bare `<NNNN>` to `/fkit-task-done`'s accepted inputs — was **declined**, so
+   `claude/skills/fkit-task-done/SKILL.md` was **not touched**.
+   **Correctness, not just wording:** the lookup yields a **brief path**, already the mover's first
+   accepted input, so no mover change is needed. The glob is `tasks/*/`, not `tasks/backlog/` — it
+   survives the folder's move to `done/`, so the fix does not re-introduce the board-hardcoding this
+   task struck.
+
+2. **Mirror refresh — `claude/fkit-claude-init.sh .` rerun after the R1 edits.**
+   **Why it qualified:** same live owner ruling. `.claude/` is gitignored — not a source write, not a
+   commit. Measured drift before (mirrors: `:NNN` 0/3, old dead-path template 2 hits each, old routing
+   line 1 each) and after (all three mirrors match canonical; `diff`-clean). This discharges the
+   *Accepted residuals* entry *".claude/ mirror drift"* and its ⚠️ consequence-of-record — the fix now
+   has runtime effect.
+   **Flagged, not resolved silently:** approved `plan.md` §6 says *"No `.claude/` mirror edit."* The
+   later owner ruling supersedes it for this refresh. `plan.md` was **not** edited.
+
+**R2 — no fix applied** (frontier-move, reviewer recommends no action; disposition recorded in
+`review.md`). **No obvious-winner call was made this round** — both acts above were owner-ruled, not
+autonomous.
+
+---
+
 ## Two inaccuracies found in the approved plan — reported, not inherited
 
 Neither changed the edit; both are quoting slips, not measurement errors.
@@ -87,10 +126,12 @@ genuinely absent from all three before this change (grep for `line number` and `
 
 ## Residuals
 
-- **`.claude/skills/fkit-wiki-{ingest,lint,sync}/SKILL.md` now drift from `claude/`** and still carry the
+- ~~**`.claude/skills/fkit-wiki-{ingest,lint,sync}/SKILL.md` now drift from `claude/`** and still carry the
   old dead-path template. Verified drifted after the edit. Regenerating them is
   `claude/fkit-claude-init.sh`, which the plan put out of scope and I did not run. **A wiki run started
-  from the current mirrors will still emit the old form.**
+  from the current mirrors will still emit the old form.**~~
+  **RESOLVED in the round-1 review response, 2026-08-03** — owner ruled the init rerun; mirrors
+  re-measured `diff`-clean against canonical. See Decision log item 2 above.
 - **Four existing emissions left frozen, nothing repaired or annotated.** One dead, in
   `ai-agents/tasks/done/0148-wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner/review.md`
   (closed ledger). Three in `ai-agents/wiki-vault/log.md` (`0206` complete, `0199` partial ×2) — still
@@ -109,6 +150,6 @@ genuinely absent from all three before this change (grep for `line number` and `
 
 ## Follow-ups (not filed by me)
 
-- Rerun `claude/fkit-claude-init.sh .` to refresh the `.claude/` mirrors.
+- ~~Rerun `claude/fkit-claude-init.sh .` to refresh the `.claude/` mirrors.~~ **Done** 2026-08-03, owner-ruled.
 - A `fkit-wiki` task for the three live `log.md` emissions before they rot.
 - `0154` must now assert the **new** verbatim strings; `0165` is unblocked on content.

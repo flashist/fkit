@@ -1933,3 +1933,126 @@ test('task 0103: a `P<n>` priority cell parses cleanly and still does not become
   assert.doesNotMatch(r.out, /drift nonconformance 9 /, 'the stripped rank number must not surface as an id');
   assert.match(boardRows(r.out)[0], /\| P9 \|/, 'and the board renders the rank cell verbatim, `P` and all');
 });
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────
+// task 0210 — THE REVERSE MOVE: `➡️ Moved to [Backlog](backlog.md)`.
+//
+// The target extractor only ever knew the word `Sprint`, so a row de-scoped back onto the backlog
+// board parsed as target-less and was reported `moved-without-target` — a correctly-written marker
+// flagged as malformed.
+//
+// ⚠️ THE FIX IS `sed -nE`, AND THAT IS NOT COSMETIC. The obvious repair — a BRE alternation
+// `\(Sprint [0-9][0-9]*\|Backlog\)` — is a REGRESSION on BSD sed, which reads `\|` as a literal pipe:
+// neither branch then matches, so the FORWARD form breaks too and every live `➡️ Moved to [Sprint N]`
+// row becomes drift. It passes on GNU/Linux CI and fails on the consumer's Mac. Case E below is the
+// forward-form regression guard that catches exactly that; do not delete it as redundant.
+// ─────────────────────────────────────────────────────────────────────────────────────────────────
+
+// A — the happy path the task exists for.
+test('0210/A: ➡️ Moved to [Backlog] with a matching brief ## Sprint: parsed, no drift, off the board', () => {
+  const p = fixture({
+    plan: plan(['| ➡️ Moved to [Backlog](backlog.md) | P12 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Backlog', status: '🔲 Backlog', priority: 'Unscheduled' }) },
+  });
+  const { out } = run(p);
+  assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'a correctly-written reverse move is not drift');
+  assert.ok(facts(out).includes('count moved 1'), 'it still counts as moved');
+  assert.equal(boardRows(out).length, 0, 'moved is inert: the row is filtered off the board');
+});
+
+// B — rule 2 still bites in this direction: the brief must be updated to `Backlog` too.
+test('0210/B: ➡️ Moved to [Backlog] whose brief still names a sprint: IS drift', () => {
+  const p = fixture({
+    plan: plan(['| ➡️ Moved to [Backlog](backlog.md) | P12 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 2', status: '🔲 Backlog' }) },
+  });
+  const { out } = run(p);
+  assert.ok(
+    facts(out).some((f) => f.includes('drift disagreement 0001') && f.includes('moved_target="Backlog"') && f.includes('brief_sprint="Sprint 2"')),
+    'plan says moved to Backlog, brief still claims Sprint 2 — real drift',
+  );
+  assert.match(boardRows(out)[0], /\| waiting on owner \|$/);
+});
+
+// C — the R6 shape, with a Backlog target: unresolvable, so reported, not rendered clean.
+test('0210/C: ➡️ Moved to [Backlog] with a brief that has no ## Sprint is reported', () => {
+  const p = fixture({
+    plan: plan(['| ➡️ Moved to [Backlog](backlog.md) | P12 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': '# Alpha\n\n## Priority\nUnscheduled\n\n## Status\n🔲 Backlog\n\n## Context\nNo sprint heading.\n' },
+  });
+  const { out } = run(p);
+  assert.ok(
+    facts(out).some((f) => f.startsWith('drift missing-sprint 0001') && f.includes('moved_target="Backlog"')),
+    'fail loud, and name the target it DID resolve',
+  );
+});
+
+// D — the genuinely target-less marker must STILL be caught, AND the widened vocabulary must not have
+// widened to "anything". TWO fixtures, because they are two different guards and only one of them was
+// here before 0210's round-1 review (finding R3): the bare `➡️ Moved` row exercises the no-`Moved to`
+// path only, so an OVER-WIDE repair — `s/.*Moved to \[*([A-Za-z]+ ?[0-9]*).*/\1/p`, which happily
+// resolves `➡️ Moved to Narnia` to the target `Narnia` — left every other case in this file green and
+// would have shipped silently. The second row is what makes this test guard what its name claims.
+test('0210/D: a bare ➡️ Moved AND a ➡️ Moved to a non-target are both still moved-without-target', () => {
+  const p = fixture({
+    plan: plan([
+      '| ➡️ Moved | P12 | Alpha | [`a.md`](../tasks/backlog/a.md) |',
+      '| ➡️ Moved to Narnia | P12 | Beta | [`b.md`](../tasks/backlog/b.md) |',
+    ]),
+    briefs: {
+      'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 1', status: '🔲 Backlog' }),
+      'backlog/b.md': brief({ title: 'Beta', sprint: 'Sprint 1', status: '🔲 Backlog' }),
+    },
+  });
+  const { out } = run(p);
+  assert.ok(
+    facts(out).some((f) => f.includes('drift nonconformance 0001') && f.includes('kind="moved-without-target"')),
+    'no target is still no target',
+  );
+  assert.ok(
+    facts(out).some((f) => f.includes('drift nonconformance 0002') && f.includes('kind="moved-without-target"')),
+    'the vocabulary is `Sprint N` and `Backlog` — nothing else. An over-wide parser reads `Narnia` as a target and must go red here',
+  );
+});
+
+// E — ⚠️ THE BSD REGRESSION GUARD. Two digits, so a `[0-9][0-9]*`-to-ERE slip that dropped the `+`
+// would read `Sprint 1`; and an alternation written as a BSD-hostile `\|` would read NOTHING here.
+test('0210/E: the forward form still parses, multi-digit and all (BSD \\| regression guard)', () => {
+  const p = fixture({
+    plan: plan(['| ➡️ Moved to [Sprint 12](../sprint-12.md) — priority 3 | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 12', status: '🔲 Backlog', priority: 3 }) },
+  });
+  const { out } = run(p);
+  assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'the forward form must not regress: `Sprint 12`, not `Sprint 1`, not empty');
+  assert.ok(facts(out).includes('count moved 1'));
+  assert.equal(boardRows(out).length, 0);
+});
+
+// F — the archived href. A sprint plan moves to `sprints/done/` and its marker becomes `../backlog.md`
+// (the link-rot class tasks 0050/0076 repaired). The parse is href-agnostic; pin that it stays so.
+test('0210/F: the archived `../backlog.md` href parses identically — the label is what is read', () => {
+  const p = fixture({
+    planDir: 'sprints/done',
+    plan: plan(['| ➡️ Moved to [Backlog](../backlog.md) | P12 | Alpha | [`a.md`](../../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Backlog', status: '🔲 Backlog', priority: 'Unscheduled' }) },
+  });
+  const { out } = run(p);
+  assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'the href is swallowed by `.*`; only the label is read');
+  assert.ok(facts(out).includes('count moved 1'));
+});
+
+// G — ⚠️ THE `\[*` GUARD (round-1 review, finding R4). The extractor's `\[*` is zero-or-more ON
+// PURPOSE: historic rows recorded the move as UNLINKED PROSE (`➡️ Moved to Sprint 2 — priority 7`,
+// live in ai-agents/sprints/done/sprint-1.md), and those must keep parsing. Nothing pinned that `*`
+// — every other `Moved to` fixture in this file is bracketed — so tightening it to a mandatory `\[`
+// left the ENTIRE suite green while turning every legacy unlinked row into `moved-without-target`
+// drift. The comment above the extractor in dashboard.sh asserts this behavior; this is the test.
+test('0210/G: the legacy UNLINKED prose form still parses — `\\[*` is zero-or-more by design', () => {
+  const p = fixture({
+    plan: plan(['| ➡️ Moved to Sprint 2 — priority 7 | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 2', status: '🔲 Backlog', priority: 7 }) },
+  });
+  const { out } = run(p);
+  assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'an unbracketed legacy move row is well-formed, not drift');
+  assert.ok(facts(out).includes('count moved 1'), 'and it resolves to `Sprint 2`, so rule 2 agrees with the brief');
+});

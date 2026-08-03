@@ -675,10 +675,21 @@ while IFS=$'\037' read -r rtype st pr task br; do
     b_key=$(marker_key "$b_status")
   fi
 
-  # -- the ➡️ Moved target sprint --------------------------------------------------------------
+  # -- the ➡️ Moved target: a sprint, or the Backlog board (the reverse move) --------------------
+  # ⚠️ `-E` IS REQUIRED. Do not "simplify" this to a BRE with `\|`. BSD sed (what a consumer actually
+  # has, and what this repo's own machine runs) reads `\|` in a BRE as the LITERAL pipe character, not
+  # alternation — proven: `Moved to [Sprint 2|Backlog](x)` captures `Sprint 2|Backlog`. The damage is
+  # not merely that `Backlog` fails to match: with `\|` in the pattern NEITHER branch matches, so the
+  # existing FORWARD form breaks too and every live `➡️ Moved to [Sprint N]` row becomes
+  # `moved-without-target` drift. GNU sed and ugrep-style dialects accept `\|`, so this regresses only
+  # on the consumer's Mac — invisible to a Linux CI run. ERE is already this file's established
+  # dialect (`grep -qE` in the status-heading guard and the cancelled-date check), so `-nE` adds none.
+  # `\[*` is zero-or-more by design: historic unlinked prose (`➡️ Moved to Sprint 2 — priority 7`)
+  # must keep parsing. The href is deliberately unmatched — `.*` swallows it — so `backlog.md` and the
+  # archived `../backlog.md` parse identically.
   moved_target=""
   if [ "$key" = "moved" ]; then
-    moved_target=$(printf '%s' "$st" | sed -n 's/.*Moved to \[*\(Sprint [0-9][0-9]*\).*/\1/p' | head -1)
+    moved_target=$(printf '%s' "$st" | sed -nE 's/.*Moved to \[*(Sprint [0-9]+|Backlog).*/\1/p' | head -1)
   fi
 
   # -- nonconformance: sources agree, the marker is written wrong (SKILL.md:90-99) ---------------

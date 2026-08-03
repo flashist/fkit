@@ -19,6 +19,7 @@
 | **Cancelled** | `⛔ Cancelled (YYYY-MM-DD) — <reason>` | Dropped, will not be done. **A reason is mandatory.** | Owner, via `/fkit-task-cancelled` |
 | **Cancelled (agent-closed)** | `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>` | Dropped on an agent's own judgment. **A reason is mandatory.** | A **spawned producer**, via `/fkit-task-cancelled` |
 | **Moved** | `➡️ Moved to [Sprint N](…) — priority M` | Carried to another sprint. Not dead, not done — relocated. | Producer |
+| **Moved (to backlog)** | `➡️ Moved to [Backlog](backlog.md)` | De-scoped from a sprint back to the unranked backlog board. Not dead, not done — unscheduled. **No `— priority M` suffix**: the board is unranked. The href is relative to the file holding the row (`../backlog.md` once the plan is archived). | Producer |
 
 **No other value is valid.** Not "Not started", not "WIP", not "Todo", not "Complete". If a status you
 need isn't here, the fix is to amend this doc — not to invent a value inline.

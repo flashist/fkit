@@ -340,6 +340,48 @@ ai-agents/tasks/backlog/<NNNN>-<kebab-case-title>/brief.md
   > disappears from the backlog board. Every task ever pulled into a sprint would leave a permanent
   > drifted row behind. Verified empirically, 2026-07-18: with step 3, no drift and the row correctly
   > drops off; without it, `drift disagreement … brief_sprint="Backlog" moved_target="Sprint 2"`.
+- **De-scoping a task out of a sprint and back onto the Backlog board is also the producer's act, not
+  this skill's.** It takes **five** edits, and **all five are mandatory** — see the warning below:
+  1. Flip the **sprint plan's** row to `➡️ Moved to [Backlog](backlog.md)`, the canonical marker from
+     [`task-status-vocabulary.md`](../../../ai-agents/knowledge-base/conventions/task-status-vocabulary.md).
+     **There is no `— priority M` suffix here** — the backlog board is unranked, so there is no
+     destination rank to name. The href is **relative to the file holding the row**: `backlog.md` from
+     `ai-agents/sprints/`, and `../backlog.md` once that plan is archived under `sprints/done/`.
+     **Do not delete the sprint row**, and **leave its `P<n>` Priority cell alone** — a closed-out row
+     is frozen history, and that is where the surrendered rank stays readable.
+  2. Add the row to [`backlog.md`](../../../ai-agents/sprints/backlog.md) with Status `🔲 Backlog` and
+     Priority cell `—`. The board is unranked by design; see its own *Priority* section.
+  3. **Update the brief's own `## Sprint` field to `Backlog`.**
+  4. **Update the brief's own `## Status` field to `🔲 Backlog`.** A task de-scoped mid-flight still
+     reads `🔄 In progress` or `🚧 Blocked`; on an unscheduled board it is neither.
+  5. **Update the brief's own `## Priority` field to `Unscheduled`.** The rank is **surrendered**, not
+     parked — a rank is a position on one specific board, and ADR-035's append-never-insert rule means
+     a parked number could never be re-honored anyway.
+
+  > **⚠️ Step 3 is the one that gets forgotten here too, and it manufactures the same permanent drift**
+  > as the forward move's step 3 — drift rule 2 compares the `➡️ Moved` target (`Backlog`) against the
+  > brief's `## Sprint`, and a drifted row always renders.
+  >
+  > **⚠️ Step 4 manufactures the same drift, one field over, on the row you just added.** The backlog
+  > board cross-checks its own `🔲 Backlog` cell against the brief's `## Status` — rule 1's
+  > "brief names another sprint, skip the check" excuse is deliberately disabled on that board — so a
+  > brief left mid-flight renders `waiting on owner` there forever. Verified empirically, 2026-08-03,
+  > on a fixture built by following these steps exactly: `drift disagreement 0001 plan="🔲 Backlog"
+  > brief="🔄 In progress" brief_sprint="Backlog" location="backlog/"`.
+  >
+  > **⚠️ Step 5 is UNENFORCED. Nothing in the repo checks it.** `dashboard.sh` reads a brief's
+  > `Status`, `Sprint` and `Owner` only — `## Priority` is never read as a field. A brief left reading
+  > `## Priority: 152` on the unranked backlog board is invisible to every control we have.
+  >
+  > **On the counts — five here, three above, and that is not an inconsistency.** Two separate reasons,
+  > and they are different in kind. (a) The forward move needs **no `## Status` edit at all**: a brief
+  > being pulled into a sprint already reads `🔲 Backlog`, and the row it gains in the sprint plan reads
+  > `🔲 Backlog` too, so the two carriers already agree. The reverse move starts from a brief that may
+  > read `🔄 In progress`, so it must be brought down. (b) The forward move's `## Priority` edit **does**
+  > exist; it is folded into its step 3 as the parenthetical *"(and give `## Priority` the real
+  > number)"* rather than numbered. It is elevated to its own numbered step on the reverse side because
+  > surrendering a rank leaves a **stale number behind** if skipped, where gaining one merely leaves a
+  > placeholder — and because, per the warning above, neither direction is enforced by anything.
 - **Never renumber or alter an existing row.** The one exception is an **owner-ruled** re-rank (step 5)
   — and it never reaches a `✅ Done`, `⛔ Cancelled` or `➡️ Moved` row.
 

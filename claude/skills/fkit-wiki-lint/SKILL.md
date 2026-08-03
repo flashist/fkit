@@ -98,7 +98,9 @@ Health-check the whole wiki and fix what's safely fixable.
 
    **Then stop.** Do not invoke a mover, do not edit the brief, do not touch the sprint plan, and do not
    spawn the producer to close it yourself. Routing the close is the **caller's** next move, not yours:
-   `@fkit-producer Run /fkit-task-done on <brief path>`.
+   resolve `<NNNN>` to its task folder — the single match for `ai-agents/tasks/*/<NNNN>-*/` — then
+   `@fkit-producer Run /fkit-task-done on <that folder>/brief.md`. The flag carries the ID only; that one
+   lookup is the caller's, and it is what stops the flag rotting when the folder moves boards.
 
 ---
 
