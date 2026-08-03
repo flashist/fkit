@@ -69,3 +69,7 @@ ADR-012 established — empirically — that the fkit skill lockdown is **sessio
 - [[tasks/correct-claude-mds-stale-skills-for-role-location]] — `0151`; `CLAUDE.md` still named the pre-move home of `skills_for_role()`
 - [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — **the skill-ownership site inventory is a declared registry**, not a remembered checklist
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the **content** axis; verified 2026-08-02 that this ADR decides only the **invocation** axis and says nothing about rule-content precedence
+- [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158` — whose Process-review routing this hook **denied**, leaving two record defects in its ledger (`0200`, `0201`)
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — the same denial, and a ledger claim the artifacts cannot confirm or refute
+- [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — task `0195` — the hook as `skills_for_role()`'s **second consumer**, recorded in ADR-010's §Decision 5 correction note

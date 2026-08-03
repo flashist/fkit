@@ -59,3 +59,4 @@ Two constraints bound the options: **ADR-014** keeps devDependencies at zero, so
 - [[tasks/convert-skill-descriptions-to-block-scalars-and-guard]] — task `0136` — every skill `description:` to a `>-` block scalar, plus the repo's first `SKILL.md` frontmatter guard
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**
 - [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132` — the dual-home reconciliation, and the sweep that **disproved ADR-027's premise**
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — one of the three ADRs that touch the precedence axis without deciding it; its registry must also assess ADR-037's two new clause sites (task `0194`)

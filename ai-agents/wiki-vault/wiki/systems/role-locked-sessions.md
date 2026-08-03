@@ -142,3 +142,7 @@ The ADR's own honesty clause is the thing to read: **prevention is gone, and the
 - [[tasks/correct-claude-mds-stale-skills-for-role-location]] — `0151`, which fixed `CLAUDE.md`'s wrong pointer to `skills_for_role()`
 - [[tasks/convert-skill-descriptions-to-block-scalars-and-guard]] — task `0136` — every skill `description:` to a `>-` block scalar, plus the repo's first `SKILL.md` frontmatter guard
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the **content** axis — which text wins when a spawn instruction lands on a skill rule. The lock on this page is the **invocation** axis, and ADR-037 leaves it untouched
+- [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158`, the investigation behind ADR-037
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` · 
+- [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — task `0195` — the dated correction notes on ADR-010, this page's founding decision record

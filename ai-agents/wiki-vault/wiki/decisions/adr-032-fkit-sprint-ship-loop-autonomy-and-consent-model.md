@@ -113,3 +113,6 @@ R4 offered a **narrower alternative** — the driver relays every accepted fix f
 - [[tasks/implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop]] — `0147`, which made A2's worklog obligation real and A4 bullet 2's reopening condition satisfiable
 - [[tasks/wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner]] — `0148`, the vault's ingest of the 2026-07-22 amendment
 - [[tasks/add-verbatim-to-fkit-coder-declared-approval-marker]] — `0150`, which aligned the worker's condition (b) to A1's `verbatim`
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the declared-approval marker generalized from one skill and one role to **every spawned worker**
+- [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — the construction that makes the marker's condition (b) true by copy rather than by recall
+- [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — task `0202` — the loop's `plan.md` write moved to plan approval, plus the artifact table it lacked

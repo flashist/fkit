@@ -104,3 +104,4 @@ Re-raise **only** if one of these holds:
 - Convention: `ai-agents/knowledge-base/conventions/evidence-before-assertion.md` — the convention the own-record residuals are recorded under rather than being silently dropped
 - [[tasks/sweep-the-stale-rank-citations]] — `0159`, the task whose ledger is this decision's entire evidentiary base
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160` §4.5, which states this ADR's bearing on the dead-ledger-path guard in both directions
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — one of the three ADRs that touch the precedence axis without deciding it; also the rule under which `0158`'s own-record citation defects are an accepted residual

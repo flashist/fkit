@@ -47,3 +47,4 @@ Done, **agent-closed — not owner-verified**.
 - [[tasks/state-task-brief-step-5s-append-rule-in-full]] — `0157`, the rule half of the same arc
 - [[systems/knowledge-base-structure]] — the conventions folder and its dual-home rule
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — the knowledge-base correction-note form (⚠️ drift / ⛔ reversal, below the claim, left byte-identical) that sits under this convention

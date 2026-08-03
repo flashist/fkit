@@ -40,3 +40,4 @@ Build exactly the owner-approved design from task 52 ([[tasks/design-task-ship-l
 - [[tasks/design-spawned-invocation-consent-model-for-task-movers]] — task 63, whose ruling removed this loop's done-gate
 - [[tasks/build-fkit-sprint-ship-loop-skill]] — Build the `fkit-sprint-ship-loop` skill (the lead's sprint-scope conductor loop)
 - [[tasks/route-coder-ship-loop-close-to-producer]] — Rewrite `fkit-task-ship-loop` step 9 — self-close → route the close to the producer
+- [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — task `0202` — the sprint loop's artifact table, mirrored from this loop's

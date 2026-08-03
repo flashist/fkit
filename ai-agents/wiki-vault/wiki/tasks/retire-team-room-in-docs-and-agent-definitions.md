@@ -43,3 +43,4 @@ Carry the owner's project-wide "team room" retirement everywhere outside the lau
 - [[systems/install-and-self-update]] · [[systems/fkit]] · [[systems/knowledge-base-structure]]
 - [[tasks/update-launcher-menu-help-for-conductor]] — Update the launcher menu/help text — "does no work itself" → accurate to a conductor
 - [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — `0141`, the same sweep inside the vault
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — **the dated correction note this task deliberately left open has now SHIPPED** (2026-08-02, +71/−0)

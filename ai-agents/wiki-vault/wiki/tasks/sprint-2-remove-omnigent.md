@@ -94,7 +94,9 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 - **The `.fkit/` orphan-cleanup consent model → announce-only** (2026-07-17), unblocking task 36.
 
 ## Outcome
-**125 done · 37 backlog · 5 cancelled — of 167.** *(Updated **2026-08-02**, re-derived from `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md` — the deterministic board, not a hand count. **+6 done** and **+19 rows** since 2026-08-01; the sprint grew 90 → 124 → 130 → 148 → 167. The previous reading was `119 / 24 / 5 — of 148`.)*
+**130 done · 52 backlog · 5 cancelled — of 187.** *(Updated **2026-08-03**, re-derived by counting the board's own status cells against `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md`, which reports `total 187` — the deterministic board, not a hand count. **+5 done** and **+20 rows** since 2026-08-02; the sprint grew 90 → 124 → 130 → 148 → 167 → 187. The previous reading was `125 / 37 / 5 — of 167`.)*
+
+> ⚠️ **The board is growing faster than it closes.** This run shipped **5** tasks and filed **~20** new ones. Backlog went **37 → 52** while done went **125 → 130**. Every one of the five closed rows is `(agent-closed — not owner-verified)`, so the vault's previously recorded **19 consecutive agent-closed rows is now 24**, and `dashboard.sh` still collapses the marker to a plain `Done` — **nothing counts them.**
 
 > ⚠️ **The board is 81% closed, and that is now a structural problem, not a milestone.** Measured 2026-08-01 by [[tasks/decide-how-an-owner-records-a-merit-ordering]]: **126 of 155 ranked rows closed, in five disjoint open segments, with 16 of 29 open rows unreachable** — their merit position no longer expressible as a rank, because a closed row above them is a wall nothing may move past. **The headline share improved for a reason that is not progress:** unreachability fell 68% → 55% while **no open row moved from unreachable to reachable — not one**; the movement was two unreachable rows *closing* plus fresh rows inflating the denominator. **Read the absolute count, not the share.** Whether Sprint 2 rolls onto a fresh board is task `0185` — ruled the **highest-leverage** of its batch and **deferred by the owner** 2026-08-01.
 
@@ -144,6 +146,23 @@ Scoped 2026-07-19: give tasks a folder structure and a **global task-ID scheme**
 ⚠️ **A new instance of the same shape, on the Backlog board rather than this one:** `decide-whether-fkit-needs-a-tester-agent` still reads `🔲 Backlog` on `sprints/backlog.md`, but it has been **ruled on** — [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]], dated 2026-07-19, cites its evaluation report as evidence and answers all seven of its open questions. **The wiki role does not move task files;** the owner may want to close it. **This is the recurring pattern, not a one-off:** an investigation task's real output is an ADR, and recording the ADR does not close the row.
 
 **Owner dispositions (2026-07-15) — all seven original open questions ruled** (OQ8 added later, ruled 2026-07-17 → "generalize", spawning task 47).
+
+### The spawn-precedence and faithful-carry arc (0143 · 0158 · 0162 · 0195 · 0202, closed 2026-08-02)
+
+Five rows, one theme: **what a spawned worker is bound by, and whether the thing it was handed is what the owner approved.**
+
+- [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — **`0158`** → [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]]. Skill rules get a place in the precedence ladder for the first time. **Generalizes the declared-approval marker from one skill and one role to every spawned worker**, and — on the owner's Q2 ruling — **binds the driver as well.**
+- [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — **`0162`** → a decision report. *"Carry the approved plan verbatim"* means **a copy operation over a durable artifact, never a recall over conversation state.** ⚠️ **Its own Build worker then authored a re-rendering of the approved plan instead of copying it — a confirmed live production failure, on the task that named it, within hours.**
+- [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — **`0202`**, the only follow-up shipped: the **driver** now writes `<task-folder>/plan.md` at plan approval, and the loop gains the `## Durable artifacts` section it never had. ⛔ **It closes the reconstruction route only — the `carried-not-approved` class stays open, structurally.**
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — **`0143`**, which **established the knowledge-base correction-note form** (⚠️ drift / ⛔ reversal, below the claim, byte-identical original, additions only) and **knowingly shipped a self-contradiction** in ADR-010.
+- [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — **`0195`**, which repaired it. ADR-010 now carries **five** correction blocks and a two-list header item.
+
+> ⚠️ **Three findings this arc leaves live on the board, none of them closed by it.**
+> 1. **ADR-037 §5 overstates its own enforcement claim** — *"none is possible"* is true of the marker's signals but **false of a driver-side carry-fidelity proxy**. **The ADR on disk still says the stronger thing;** task `0205` owes the dated correction note.
+> 2. **`carried-not-approved` is an accepted, structural residual.** A hash pins *which bytes were carried*, not *which were approved*. Approval happens in a session channel that leaves **no artifact** — the `AskUserQuestion` marker hook writes an **empty** file, and no transcripts are stored in-repo.
+> 3. **A driver routing error.** The Process-review step — a **coder-owned** skill — was routed to `@fkit-architect` on three consecutive tasks and **denied by the ADR-018 hook**. `0200` owns the routing question; `0201` owns the two closed ledgers' record defects and is **gated on explicit owner authorization** because both folders sit in `done/`.
+>
+> ⚠️ **A fourth, from `0141`'s close on 2026-07-29 and codified nowhere yet:** the owner ruled — **for that instance only** — that a review ledger's recorded paths **stay frozen**, because re-pointing them **rewrites evidence** rather than repairing a link. Several closed ledgers now carry knowingly-dead `tasks/backlog/…` paths **by design**. Task `0192` decides whether `/fkit-task-done` step 5 is amended. **ADR-037 deliberately does not decide it.**
 
 ### The recurring lesson of this sprint
 **Three false claims reached briefs without anyone running the command.** Both investigation reports lost claims to an adversarial Codex pass; a third — that `cp -R` writes through a dangling symlink *"outside the project"* — survived into task 27's brief and was caught only at implementation and review.
@@ -197,3 +216,4 @@ Its sibling: **a count of a *semantic* rule cannot be established by grepping on
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
 - [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target
 - [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132` — the dual-home reconciliation, and the sweep that **disproved ADR-027's premise**
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — **a skill rule binds a spawned worker unless the instruction relays a named owner ruling**; the precedence ladder, complete, for the first time

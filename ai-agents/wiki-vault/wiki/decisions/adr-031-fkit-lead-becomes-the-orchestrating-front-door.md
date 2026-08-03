@@ -68,3 +68,7 @@ The owner wanted **one agent per terminal** — a single point of interaction aw
 - [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — task 0118: the ADR-032 amendment whose accepted cost is **this ADR's honesty clause applied one step later**
 - [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, the `fkit-coder.md` guarantee-surface change that made the orchestrated Build step possible — **owner-verified, marker deliberately refused**
 - [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — `0141`, which had to judge the vault's stale *"does no work"* claim
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the honesty clause, and the prose-enforced-consent posture ADR-037 inherits deliberately
+- [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — the plan gate's carry construction, and the confirmed live failure of it
+- [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — task `0202` — why the driver writing `plan.md` is **not** a breach of Decision 2's *delegate, never substitute*
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — the ⛔ reversal notice this ADR's §Decision 1 earned on ADR-010

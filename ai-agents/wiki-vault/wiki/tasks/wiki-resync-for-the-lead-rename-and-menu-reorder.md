@@ -16,6 +16,16 @@ Recorded in the vault's `log.md` entry of **2026-07-29**. Six vault files change
 
 **Placement, not word count, was the recurring error.** Corrections were repeatedly written 19–25 lines below the claim they corrected, where a reader reaches the false sentence first. The rule adopted — *banner above claim* — is now the vault's convention.
 
+> ⚠️ **Dated correction 2026-08-03 (lint) — *"banner above claim"* does not describe what the vault does, and a second, differently-worded rule now governs the knowledge-base. The sentence above is left byte-identical as this task's record of what it settled on 2026-07-29.**
+>
+> **Measured this lint, across all 194 pages:** **21 correction notes on 14 pages** sit **below** the claim they correct — they say so in their own words (*"the sentence above is left byte-identical"*). **Zero sit above it.** The practice includes every note written since, and the notes on this vault's own [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] page.
+>
+> **Meanwhile [[tasks/append-a-dated-correction-note-to-adr-010]] (`0143`, 2026-08-02) ruled the opposite wording for the knowledge-base**, on an owner ruling: *"the note goes **below** the claim it corrects, at the claim — **not in a header banner**, not nineteen lines away."* That form also carries the ⚠️/⛔ legend, the *"left byte-identical"* clause and the no-`:NNN`-into-mutable-files rule, and was extended by [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] (`0195`).
+>
+> **The two rules are each correctly scoped where they are stated** — this page says *the vault's* convention, `0143`'s page says *the knowledge-base* form — **but they oppose on the above/below axis, neither page referenced the other until this note, and `0143`'s wording rules out by name the word this one adopts.**
+>
+> ⚠️ **NOT settled here, deliberately.** Both readings survive the artifacts: *"banner"* may have meant a visually distinct block **adjacent to** the claim (in which case the vault's practice conforms and only the word *above* is wrong), or it may have meant literally above (in which case the stated rule has never once been followed). **Nothing on disk distinguishes them**, and no owner ruling extends `0143`'s form to the vault. **No open task owns the vault-wide question** — `0199` owes only ADR-010's page the below-the-claim rule *with its rationale*, which is narrower. Flagged for the owner or an architect.
+
 ## Outcome
 
 Done, **agent-closed — not owner-verified**.
@@ -31,4 +41,7 @@ Three record defects were found in review — an **unrun command printed as thou
 - [[tasks/wiki-resync-for-adr-033]] — `0126`, the first link in the wiki chain
 - [[tasks/wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner]] — `0148`, the third
 - [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — the *"does no work"* claim this had to judge
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — `0143`, the **knowledge-base** correction-note form, which words placement **opposite** to this page's vault convention (see the 2026-08-03 note above)
+- [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — `0195`, which extended `0143`'s form
+- [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] — the ADR mirror this task treated as a historical record, and whose vault page carries notes **below** their claims
 - [[systems/fkit]]

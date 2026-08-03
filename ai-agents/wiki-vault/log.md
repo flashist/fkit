@@ -1067,3 +1067,89 @@ All seven remain open and are **source-side, owned by open tasks the wiki may no
 ⚠️ **One note for the next lint:** a dead-path scan will still report `claude/dashboard.sh` on the ADR-029 page. That is the **correction note quoting the error it fixed**, not a live pointer — the citation itself now reads `claude/skills/fkit-status/dashboard.sh`. **Do not "re-fix" it.**
 
 **No tracked task completed by this run.**
+
+## 2026-08-03 — sync
+
+- **Sync window:** `7db6403` → HEAD (`75663a8`), 3 commits (`ef717e5` Wiki sync · `d89885c` Wiki lint · `75663a8` Tasks update). Watermark and HEAD both re-verified against live `git` before ingesting, not taken from the caller's summary.
+- **Changed source files detected under `ai-agents/` (excluding the vault): 44.** Filtered to **8 ingest-worthy** — 3 knowledge-base files, 1 sprint plan, 5 `done/*/brief.md`. *(One file is both: `sprint-2.md`.)*
+- **Skipped, with reason:** 21 `backlog/*/brief.md` (not done — a page would be premature); 15 in-folder `plan.md` / `worklog.md` / `review.md` (working artifacts, read as evidence, not ingested as sources per ADR-029); the vault itself.
+
+### Ingested
+
+- `ai-agents/knowledge-base/decisions/adr-037-…-relays-an-owner-ruling.md` → **created** [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]]
+- `ai-agents/tasks/done/0158-…/brief.md` → **created** [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]]
+- `ai-agents/knowledge-base/reports/2026-08-02-faithful-carry-of-an-approved-plan.md` + `ai-agents/tasks/done/0162-…/brief.md` → **created** [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] *(the report and its task on one page, per this vault's standing treatment of decision reports)*
+- `ai-agents/tasks/done/0202-…/brief.md` → **created** [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]]
+- `ai-agents/tasks/done/0143-…/brief.md` → **created** [[tasks/append-a-dated-correction-note-to-adr-010]]
+- `ai-agents/tasks/done/0195-…/brief.md` → **created** [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]]
+- `ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md` (+124/−0 across the window) → **updated** [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] — **delta-from-the-ADR only** (see the scope note below)
+- `ai-agents/sprints/sprint-2.md` (+645/−5) → **updated** [[tasks/sprint-2-remove-omnigent]] — counts re-derived, new arc section
+- `index.md` — 1 decision entry, 1 new task group of 5, sprint counts corrected
+- **29 pages given tailored reciprocal back-links** (52 lines): 13 decision pages, 12 task pages, 4 system pages.
+
+### ⚠️ Scope call recorded: the ADR-010 vault page was updated FROM the ADR and NOT resynced
+
+Task `0199` (owner `fkit-wiki`, open) carries an **⛔ explicit serialization constraint — it runs LAST**, after `0196`, `0197` and `0171`, all open. Its own brief draws the division of labor this run followed verbatim: *"a delta ingest updates the page from the ADR — it would not on its own know to clear the 'still open' framing in `index.md` and `log.md`, nor to record the `0195` contradiction."*
+
+**Done here:** the page's *"the fix is a one-line note … still open"* claim was **false on both halves** and is replaced with what actually landed — 2026-08-02, tasks `0143` (+71/−0) and `0195` (+53/−0), **five** correction blocks, a **two-list** header item, `Status` still `accepted` — plus an explicit note that this is **not** the full resync.
+
+**Deliberately NOT done, and left to `0199`:** carrying the ⚠️/⛔ legend with both glosses, the *"left byte-identical"* clause and the below-the-claim placement rule **with its recorded rationale**; recording the §Decision 5 contradiction as **history** rather than a live gotcha; and the vault-wide *"still open"* sweep.
+
+### ⚠️ Flagged for human review — new this run
+
+1. **`0199`'s verification step 5 instructs clearing *"still open"* framing from `log.md`.** `log.md` is **append-only** by this vault's own schema and by every prior run's stated discipline. **The two instructions conflict**, and this run did not resolve it. An architect or the owner should rule whether `0199` may edit past log entries or must instead record the correction in a new entry.
+2. **ADR-037 §5 and `0162`'s report disagree on disk, and the vault now records the disagreement rather than settling it.** §5 says *"no mechanical enforcement, and none is possible"*; the report establishes that is too strong about a **carry-fidelity proxy** for condition (b). Task `0205` owes the dated correction note. **Not harmonized in the vault — deliberately.**
+3. **`carried-not-approved` recorded as an open, structural residual on three pages**, each stating that `0202` closes the reconstruction route **only**. Flagged because a later reader summarizing any one of them could easily drop the qualifier, which is the whole failure mode the residual documents.
+4. **Two of the five closed tasks (`0143`, `0158`) carry unrepaired review-ledger record defects**, owner-gated to `0201` because both folders sit in `tasks/done/`. Recorded on their pages; the wiki repairs nothing outside the vault.
+
+### ⚠️ Standing flags carried forward, re-verified, NOT re-raised as new
+
+All seven from the 2026-08-02 sync/lint remain open and source-side: ADR-027 unamended on disk (`0186`); the `0112` re-verification permanently undischargeable (`0187`); `0142`'s five live ownership-fact defects (`0188`); `0142`'s report Part 7 still recording a settled discrepancy as open; the agent-closed marker invisible in `/fkit-status`; and Sprint 2's rank-unreachability (`0185`, owner-deferred). ⚠️ **The agent-closed count moved: 19 → 24 consecutive rows.** ⚠️ **Sprint 2 is now 187 rows, up from 167 — it is growing faster than it closes** (this run: 5 shipped, ~20 filed).
+
+### What was checked, and how
+
+- **Integrity: 194 pages** (0 features · 8 systems · 37 decisions · 149 tasks) · 194 index targets · **0 broken page→page links · 0 index→missing · 0 page-not-indexed.** Measured by walking every `.md` under `wiki/`, extracting every `[[…]]` target with the scan **wrap-normalised** (`\n`→space), and set-comparing against the page inventory and `index.md`.
+- **Reciprocity: 0 one-way links** involving the 8 created/updated pages, measured in **both** directions (outbound targets that do not link back, and inbound linkers this run's pages do not acknowledge). **The first measurement found 2** — both created by this run, both a duplicate of one missing back-link on the new ADR-037 page — **repaired, then re-measured.**
+- **Template conformance: 0 drift** on the 6 new pages — every schema-mandated **bold inline** field (`**Date**`/`**Status**` for decisions; `**Source**`/`**Status**`/`**Sprint/Tag**` for tasks) and every mandated heading present; **0 YAML frontmatter**.
+- **Board counts re-derived**, not inherited: `dashboard.sh` reports `total 187`; counting the board's own status cells gives **130 done (53 of them agent-closed) · 52 backlog · 5 cancelled = 187**.
+- **Secrets: 0 credentials.** A pattern scan (keys, bearer strings, PEM headers, DSNs, userinfo-in-URL, AWS/OpenAI key shapes) over the whole vault returns **one** hit — the previous lint's own prose *describing* its scan. No DSN, endpoint, key or credential in any page.
+- **Write scope:** `git status --porcelain` with the vault path excluded returns **nothing** — this run wrote **only** inside `ai-agents/wiki-vault/`. No source, skill, agent definition, task file, brief, sprint plan, ADR or report touched. **Nothing committed, nothing staged. No task moved, no mover invoked.**
+
+Task 0199: partial — not ready to close (ai-agents/tasks/backlog/0199-wiki-resync-adr-010s-vault-page-after-the-correction-notes/brief.md)
+Task 0206's vault work is complete — ready to close (producer runs /fkit-task-done on ai-agents/tasks/backlog/0206-ingest-the-faithful-carry-decision-report-into-the-wiki/brief.md)
+
+## 2026-08-03 — lint
+
+- Issues found: 1
+- Issues fixed: 1 (a dated annotation, not a rewrite) + 4 reciprocal back-links added to keep the new cross-references two-way
+- Issues flagged for human review: 1 (the same one — recorded, deliberately **not** settled)
+- **The finding: the vault's stated correction-note convention does not describe the vault's practice, and a second, opposite wording now governs the knowledge-base.** [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] (`0141`) states *"banner above claim"* as the vault's convention. **Measured across all 194 pages: 21 correction notes on 14 pages sit BELOW their claim; zero sit above.** Separately, [[tasks/append-a-dated-correction-note-to-adr-010]] (`0143`, owner-ruled 2026-08-02) set the knowledge-base form as *"below the claim … not in a header banner"* — **ruling out by name the word the vault's own convention adopts.** Each rule is correctly scoped where it is stated; **neither page referenced the other** until this lint. A ⚠️ dated correction note was placed **below** the claim on `0141`'s page (its text left **byte-identical**, no `:NNN` into mutable files), recording both readings — *"banner"* as *adjacent-and-distinct* vs literally *above* — and **choosing neither**, because nothing on disk distinguishes them and **no owner ruling extends `0143`'s form to the vault**. **No open task owns the vault-wide question**; `0199` owes only ADR-010's page the below-the-claim rule with its rationale, which is narrower.
+
+### Re-measured independently — not inherited from the 2026-08-03 sync
+
+- **Structure: 194 pages** (0 features · 8 systems · 37 decisions · 149 tasks) · 194 index targets · **0 broken page→page · 0 index→missing · 0 page-not-indexed.**
+- **Reciprocity: 0 one-way links measured over ALL 194 pages** — a wider surface than the sync's 8-page sample. **0 orphans** (no page lacks both inbound and outbound links). Re-measured **after** this lint's own writes: still 0.
+- **ADR number/slug cross-check: clean.** 37 vault ADR pages ↔ 37 knowledge-base ADRs, matched **case-insensitively** on **regular files only** and compared **numerically** (leading zeros stripped): **0 missing counterparts · 0 slug divergences · 0 heading/filename mismatches.** Separate pass over `knowledge-base/decisions/`: **0 duplicate numbers.**
+- **Board counts re-derived from `dashboard.sh` and the plan's own status cells: `total 187`; 130 done · 52 backlog · 5 cancelled = 187.** Matches the vault exactly. ⚠️ **The `53 agent-closed` sub-count was NOT independently confirmed to the row** — a naive string count gives **54**, and at least one Done row *discusses* the marker rather than carrying it (`0119` closed owner-verified with the marker deliberately refused). The vault's 53 is the more careful figure; the discrepancy is a measurement caveat, not a finding.
+- **Secrets: 0.** Own pattern scan (AWS/OpenAI key shapes, PEM headers, bearer strings, DSN schemes, userinfo-in-URL, quoted api-key assignments) over every page plus `index.md` and `log.md` — **zero hits**, including zero on the previous lint's own prose. **Not inherited from the sync's scan.**
+- **Template: 0 YAML frontmatter** across all 194 pages; schema-mandated **bold inline** fields present on the pages touched.
+- **`log.md` append-only held** — this entry appended, no prior entry edited.
+
+### Measured negatives — checked for, NOT found (so the next lint need not re-derive them)
+
+- **ADR-037 §5 vs `0162` is recorded on both sides and settled on neither.** The ADR page carries a header ⚠️ plus a §5 block naming the over-claim, and `0162`'s page carries the reciprocal narrowing; both name `0205` as unstarted and both say *"the ADR on disk still says the stronger thing."* **Confirmed against source: `adr-037-….md` still contains *"none is possible."*** No page states either side as the settled one.
+- **`carried-not-approved` is not implied closed anywhere.** All **10** pages mentioning `0202` were read: the 5 that make a closure claim ([[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]], [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]], [[tasks/sprint-2-remove-omnigent]], [[decisions/adr-020-per-task-plan-and-worklog-artifacts]], [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]]) **each carry the reconstruction-route-only qualifier**; the other 5 describe what `0202` did without claiming what it closed. **No dropped qualifier.**
+- **ADR-010's vault page says plainly it is not the full resync** and does not read as current. **Its factual claims verified against the source ADR: FIVE correction blocks** (§Context ⚠️, §Context ⛔, §Context *"One real inconsistency"* ⚠️, §Decision 3 ⛔, §Decision 5 ⚠️) and a `- **Corrections:**` header item carrying **TWO site lists**, `Status` still `accepted`. *(A first count of "3" came from grepping `Dated correction` — two blocks read `Dated reversal notice`. The vault was right and the instrument was wrong.)*
+- **The frozen-ledger ruling is dated 2026-07-29 everywhere it appears** — ADR-037's vault page and [[tasks/sprint-2-remove-omnigent]], both at `0141`'s close, matching the source ADR. **No page presents a later re-affirmation as the origin**; a grep for re-affirmation wording returns nothing touching the ledger.
+- **The `/fkit-process-stateful-review` routing question is stated as open on every page that raises it** — `0200` named as owner on `0158`'s, `0143`'s and `0195`'s pages. [[systems/fkit]] correctly lists the skill as **coder-owned**. No page states it settled.
+- **`0158`'s and `0143`'s ledger states are not blurred.** The un-flipped `Status: in-review` is attributed to `0158` **only**, on its page and in `index.md`. `0143`'s page names only its authorship-claim defect and **states both readings without choosing** — *"the artifacts cannot distinguish whether the ledger overstates what happened or a denial went unrecorded."*
+
+### ⚠️ Standing flags — re-verified, NOT re-raised as new
+
+All source-side and owned by open tasks the wiki may not touch: ADR-027 unamended on disk (`0186`); the `0112` re-verification permanently undischargeable (`0187`); `0142`'s live ownership-fact defects (`0188`); `0142`'s report Part 7 recording a settled discrepancy as open; **24 consecutive agent-closed rows** invisible in `/fkit-status`; Sprint 2 at **81% closed with 16 of 29 open rows unreachable by rank** (`0185`, owner-deferred); and the sync's own flag that `0199`'s step 5 instructs clearing *"still open"* framing from **append-only** `log.md` — **unresolved, and this lint did not resolve it either.**
+
+⚠️ **Note for the next lint, carried forward and re-confirmed:** a dead-path scan will still report `claude/dashboard.sh` on the ADR-029 page. That is the **correction note quoting the error it fixed**, not a live pointer. **Do not "re-fix" it.**
+
+- **Write scope:** only `ai-agents/wiki-vault/` touched — 4 content pages plus this log. **Nothing committed, nothing staged. No task moved, no mover invoked. No source, ADR, brief or sprint plan edited.**
+
+Task 0199: partial — not ready to close (ai-agents/tasks/backlog/0199-wiki-resync-adr-010s-vault-page-after-the-correction-notes/brief.md)

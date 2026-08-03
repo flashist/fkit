@@ -55,3 +55,5 @@ The requirement was raised twice — once in the brief itself, then again during
 - [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, whose gap analysis found this carve-out missing from the vault
 - [[tasks/sprint-2-remove-omnigent]] — the sprint carrying this task
 - [[tasks/add-verbatim-to-fkit-coder-declared-approval-marker]] — `0150`, the fix for this task's review finding R1
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the carve-out ADR-037 turns from a one-role exception into an instance of a general rule
+- [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158`, the investigation behind it

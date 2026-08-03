@@ -99,3 +99,4 @@ The "Positive" section read **"Codex finally gets a floor."** Fifteen lines abov
 - [[tasks/compress-universal-rules-output-style-section]] — task 79, the universal-rules compression
 - [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively
 - [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the rules-block budget discipline ADR-037 §4 is priced against — nothing enters without something leaving or a signed bump

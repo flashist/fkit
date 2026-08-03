@@ -44,3 +44,4 @@ As written, the brief required the `team` / `"team room"` word aliases be **kept
 - [[tasks/remove-fkit-resume-passthrough]] · [[tasks/fix-headless-menu-guard-crash]] — prior launcher argv/menu work
 - [[systems/install-and-self-update]] · [[systems/fkit]] · [[systems/testing-and-verification]]
 - [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — `0141`, the vault half of this rename
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — the ADR-010 correction note recording that the lead moved to menu option 1

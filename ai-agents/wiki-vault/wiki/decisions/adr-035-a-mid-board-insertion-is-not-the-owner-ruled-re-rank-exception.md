@@ -60,3 +60,4 @@ The closed-row rule is **absolute and outranks the exception**, exactly as it al
 - [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — the sibling ADR accepted out of the same sprint run; both follow `0160`'s citation form
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/fkit]]
 - Source: `ai-agents/knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md`, `ai-agents/knowledge-base/reports/2026-08-01-merit-ordering-record-when-board-rank-cannot-carry-it.md`
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — forbids ADR-037's **instance A** on a separate axis — the two agree, and neither does the other's work

@@ -42,3 +42,4 @@ Done, **agent-closed — not owner-verified**. Verified in the vault on **2026-0
 - [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — **the skill-ownership site inventory is a declared registry**, not a remembered checklist
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] — the ADR that named `claude/fkit-claude.sh` as `skills_for_role()`'s home; the **same stale pointer** this task fixed in `CLAUDE.md`, now carrying a dated correction on its vault page
+- [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — task `0195` — the same stale `skills_for_role()` pointer, corrected in ADR-010 rather than in `CLAUDE.md`

@@ -95,3 +95,8 @@ Done, **agent-closed — not owner-verified**. Four review rounds, Codex coverag
 - [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — `0120`, whose `CLAUDE.md:43` citation is a naked-pointer specimen
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — **a mid-board insertion is NOT the owner-ruled re-rank exception** — forced by arithmetic, not policy
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — ADR-037 follows this citation form throughout — heading plus quoted phrase, never a naked `:NNN`
+- [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158` — whose own brief broke it in two places, one of them the exact stale-pointer failure ruled on here
+- [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — two more instances of the stale-coordinate arc, both off by one line
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — the no-`:NNN` note form, whose own citations survived an append that broke **12** sibling pointers
+- [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — task `0195` — the same form carried forward as an accepted residual (**permitted, not mandated**)

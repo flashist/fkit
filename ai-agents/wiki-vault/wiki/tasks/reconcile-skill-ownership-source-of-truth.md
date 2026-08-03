@@ -32,3 +32,4 @@ This produced [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-d
 - [[tasks/add-full-board-switch-to-fkit-status]]
 - [[tasks/rename-task-plan-skill-to-task-brief]] — a later atomic flip of the ownership source of truth
 - [[tasks/correct-claude-mds-stale-skills-for-role-location]] — `0151`, which repaired the most-read stale pointer at the single source of truth
+- [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — task `0195` — ADR-010 §Decision 5's *one source of truth* invariant, honored but naming the wrong file since the ADR-018 extraction

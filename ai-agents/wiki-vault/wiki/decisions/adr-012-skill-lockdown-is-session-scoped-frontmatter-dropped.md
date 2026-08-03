@@ -64,3 +64,5 @@ This matches the Claude Code docs: `skills:` controls **preloading only** — *"
 - [[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]] — Wire `fkit-sprint-ship-loop` into `skills_for_role()` + the four mirrors (same commit)
 - [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — **the skill-ownership site inventory is a declared registry**, not a remembered checklist
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the **content** axis (which text wins inside a spawn), which explicitly leaves this ADR's **invocation** axis untouched
+- [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — task `0195` — §1's *dropped, not generated* ruling, cited into ADR-010's §Decision 5 correction note

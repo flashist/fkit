@@ -45,3 +45,4 @@ Every fkit agent carried an explicit `tools:` allowlist — ADR-008's "structura
 - [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — ADR-031: `fkit-lead` becomes the orchestrating front door — the "not a doer" stance is reversed
 - [[tasks/evolve-fkit-lead-into-orchestrating-conductor]] — Evolve `fkit-lead` into the orchestrating conductor (reverse the non-doer stance)
 - [[tasks/add-no-secrets-rule-to-fkit-lead]] — this ADR falsified that task's *"the lead is least able to leak a secret"* argument: removing lead's `tools:` line gave it `Write`/`Edit`
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — this ADR falsified ADR-010's *no Write or Edit tools* claim earlier and independently of the ADR-031 reversal

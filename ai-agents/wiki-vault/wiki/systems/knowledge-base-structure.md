@@ -140,3 +140,5 @@ It is **enforced in three places**: `dashboard.sh`'s `⟦FACTS⟧` id ladder (fo
 - [[tasks/implement-task-folder-name-scheme-change]] — `0103`, which filed the `priority-is-rank-not-identity` convention
 - [[tasks/disambiguate-the-frozen-history-clause]] — `0161`, the same convention page's own ambiguity
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160`, whose follow-up 1 adds a dual-homed `durable-citation-anchors` convention
+- [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — **the knowledge-base correction-note form**: ⚠️ drift / ⛔ reversal, placed **below** the claim, original left byte-identical, additions only, no `:NNN` into a mutable file, legend in a `- **Corrections:**` header item
+- [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — task `0195` — the same form extended, and the owner's ruling that the header item gains a **continuation line** rather than being edited in place

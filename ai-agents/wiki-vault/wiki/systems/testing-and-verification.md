@@ -133,3 +133,4 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102: `test/dashboard-contract.test.js:1655-1664` must be **deliberately re-pointed** by task 0103, and going red there is the change working
 - [[tasks/wiki-ingest-lead-conductor-and-adrs-031-032]] — task 0117, which filed probe 2 here as an outstanding obligation
 - [[tasks/fix-sprint-ship-loop-skill-owner-banner-format]] — task 0120, whose follow-up `0152` would close the **entirely untested `SKILL.md`-content surface**
+- [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — the precise test-surface split: the **frontmatter** of every skill and agent file is machine-checked over a pinned corpus (25 skills, 7 agents); the **body** of none of them is, and that is where every rule at issue lives

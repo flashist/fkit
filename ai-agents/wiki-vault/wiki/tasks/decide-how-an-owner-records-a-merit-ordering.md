@@ -44,3 +44,5 @@ A second, quieter finding: the filing note called P119 the head of the earliest 
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — permanent folder IDs make the merit statement durable
 - [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — the sibling ADR from the same sprint run
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/fkit]]
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — ADR-035 and ADR-037 forbid the same mid-board insertion on **two separate axes**
+- [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158` — the precedence axis: the instruction relayed no named owner ruling on placement

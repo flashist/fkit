@@ -222,3 +222,7 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[tasks/convert-skill-descriptions-to-block-scalars-and-guard]] — task `0136` — every skill `description:` to a `>-` block scalar, plus the repo's first `SKILL.md` frontmatter guard
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**
 - [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — **ADR-037** — a skill rule binds a spawned worker unless the instruction relays a named owner ruling; the precedence ladder, complete, for the first time
+- [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158`, the investigation behind ADR-037
+- [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — what *carry the approved plan verbatim* means: a **copy over a durable artifact**, never a recall over conversation state
+- [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — task `0202` — the sprint driver now writes `<task-folder>/plan.md` at plan approval

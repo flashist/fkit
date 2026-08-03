@@ -47,3 +47,6 @@ On Claude Code 2.1.212, `AskUserQuestion` functions in a top-level `fkit <role>`
 - [[tasks/evolve-fkit-lead-into-orchestrating-conductor]] — Evolve `fkit-lead` into the orchestrating conductor (reverse the non-doer stance)
 - [[tasks/record-adr-032-sprint-ship-loop-autonomy-amendment]] — task 0118: the session-only channel this ADR measured is **why ADR-032's declared-approval marker has no verifiable token** (§A3)
 - [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, the carve-out that exists because a spawned coder cannot reach the owner
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — why a spawned worker cannot verify the named-owner-ruling marker
+- [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — why worker-side carry detection is **impossible**, and why the `carried-not-approved` residual is **structural** rather than provisional
+- [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — task `0202` — approval leaves no artifact, which is why the driver's `plan.md` write narrows the hazard without closing it

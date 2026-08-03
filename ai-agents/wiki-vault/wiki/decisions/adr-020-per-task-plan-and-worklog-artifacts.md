@@ -46,3 +46,5 @@ fkit already has the precedent: `ai-agents/reviews/<task-id>.md` — a git-track
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the folder migration
 - [[tasks/wiki-sync-task-folder-migration]] — task 78, the post-migration vault re-description
 - [[tasks/implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop]] — `0147`, which gave the `worklog.md` decision log its first enforced writer
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the worklog decision log ADR-037 clause 2 reuses for the collision audit
+- [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — task `0202` — the sprint loop's artifact table, and the **driver** becoming a sanctioned `plan.md` writer (a dated correction note to this ADR is owed: task `0207`)

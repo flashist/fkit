@@ -39,3 +39,6 @@ Done, **agent-closed — not owner-verified**. Landed in one `fkit-coder` sessio
 - [[tasks/implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop]] — `0147`, its session partner
 - [[tasks/build-fkit-sprint-ship-loop-skill]] — the driver whose verbatim rule is the primary control
 - [[systems/review-and-model-diversity]]
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the marker ADR-037 generalizes to every spawned worker
+- [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158` — the generalization itself
+- [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — condition (b) **stands byte-unchanged** under the ruled construction; this guarantee is not reopened

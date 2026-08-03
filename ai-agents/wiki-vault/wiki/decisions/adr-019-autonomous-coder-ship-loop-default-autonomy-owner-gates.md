@@ -63,3 +63,4 @@ Task 53 applies the single contract edit this requires: a scoped note in `fkit-c
 - [[tasks/track-fkit-coder-declared-approval-carve-out]] — task 0119, the carve-out whose Process-review path runs on exactly this discipline
 - [[decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record]] — **defines the termination condition of this loop's review sub-loop** (step 7, `fkit-task-ship-loop/SKILL.md:160-162`): the ledger closes on the **swept work product**, and own-record residuals stop driving further rounds. **No skill edited** — the pointer is a separate unranked task
 - [[tasks/implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop]] — `0147`, which carried this ADR's audit obligation into the sprint loop
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the audit obligation ADR-037 clause 2 reuses for recording a rule/instruction collision

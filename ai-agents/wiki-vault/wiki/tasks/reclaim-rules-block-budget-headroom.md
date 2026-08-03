@@ -38,3 +38,5 @@ Re-injection was proven by extracting the block from `CLAUDE.md` and `AGENTS.md`
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — the eviction conversation the cap's *discipline primary* rationale cites
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142`, which re-measured this block and spent its headroom argument
 - [[systems/testing-and-verification]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the standing ≥ 400 B-free target that gates ADR-037's worker-side clause — **126 B usable**, against three drafted wordings measuring 174–212 B
+- [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158` — which re-measured the block independently (3570 B / 526 B free) and corrected its own ADR's test-gate arithmetic
