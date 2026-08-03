@@ -81,13 +81,14 @@ Health-check the whole wiki and fix what's safely fixable.
      run *touched* its deliverable and you cannot tell whether that completed it.
 
    **End the report with one line per task that came out complete or partial, in exactly this form:**
-   - complete → `Task <NNNN>'s vault work is complete — ready to close (producer runs /fkit-task-done on ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md)`
-   - partial or uncertain → `Task <NNNN>: partial — not ready to close (ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md)`
+   - complete → `Task <NNNN>'s vault work is complete — ready to close`
+   - partial or uncertain → `Task <NNNN>: partial — not ready to close`
 
-   **`<NNNN>` is the task folder name's four-digit prefix** (equivalently the brief's `## ID`) — the same
-   four digits that open the path you emit, and the task's only identity. It is **never** the sprint
+   **`<NNNN>` is the task folder name's four-digit prefix** (equivalently the brief's `## ID`) — and the
+   task's only identity. It is **never** the sprint
    board's rank / `P<n>` Priority cell, which is mutable and re-ranked; see
-   `ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md`. Substitute real values.
+   `ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md`. It is also **never** a line
+   number — write no `:NNN` coordinate in a flag. Substitute real values.
 
    **If that produced no lines at all**, write the single line `No tracked task completed by this run.`
    **Never invent a task to have something to flag.**

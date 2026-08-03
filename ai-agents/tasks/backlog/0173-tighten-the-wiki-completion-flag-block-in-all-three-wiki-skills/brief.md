@@ -10,7 +10,7 @@ Sprint 2
 152
 
 ## Status
-🔲 Backlog
+🔄 In progress
 
 ## Owner
 fkit-coder
