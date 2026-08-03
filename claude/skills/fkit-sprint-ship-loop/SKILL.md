@@ -69,6 +69,24 @@ for a given task ship it the old way: `fkit coder` + `/fkit-task-ship-loop`.
 
 ---
 
+## Durable artifacts
+
+`<task-folder>` = `ai-agents/tasks/<board>/<NNNN>-<slug>/` — the folder that holds `brief.md` (ADR-029).
+All of these are **git-tracked and left in the working tree; the owner commits — never the loop.** They
+**move with the folder** when the producer's `/fkit-task-done` relocates it.
+
+| File | Written by | When, and what it holds |
+|---|---|---|
+| `<task-folder>/plan.md` | **the driver** | **at plan approval, before the Build spawn** — the approved plan, copied verbatim; the artifact every later carry points at |
+| `<task-folder>/worklog.md` | the **Build** worker, grown by Process-review | worklog + decision log — every autonomously-applied fix and obvious-winner call, `none` if none (ADR-032 A2 / ADR-019) → what the close-out packet surfaces per task (*Progress reporting*, §5.5) |
+| `<task-folder>/review.md` | the **spawned reviewer** (*Reviewer findings*) + the **Process-review** worker (*Coder response*) | the two-party ledger — separate ownership, never merged into the worklog. ⚠️ **The Review row passes no task-id, so the key falls to rule 2 — the task folder name, in scope here via this folder's `plan.md`/`worklog.md`; rule 3's branch-name ledger is only the *neither-resolves* case.** Still pass the task-id: mid-run, several tasks' uncommitted artifacts can leave rule 2 ambiguous (→ rule 4), and rule 1 settles it. |
+
+Task **statuses** are deliberately **not** in this table: they live in the brief's `## Status` and the
+sprint row, and are governed by §2 (mark `🔄 In progress`) and §4 (close posture), not by an artifact
+write.
+
+---
+
 ## The loop, numbered
 
 ### 1. Select & order the sprint's tasks (§5.1)
@@ -99,12 +117,34 @@ owner rejects the plan** (§5.4), so a rejected task is never stranded `🔄 In 
 
 | Step | Driver spawns | Worker does (bounded, then returns) | Owner gate (driver-held) |
 |---|---|---|---|
-| **Plan** | `@fkit-coder` | run `/fkit-plan-task`; **write no source**; return the plan + open questions | **⛔ present plan → `AskUserQuestion` approve/reject** — the unremovable checkpoint (prose-enforced here, see honesty clause) |
-| **Build** | `@fkit-coder` | implement the **approved** plan; write source + `plan.md`/`worklog.md`; return change surface + any decision surfaced | stop only if the worker returns `NEEDS-DECISION` |
+| **Plan** | `@fkit-coder` | run `/fkit-plan-task`; **write no source**; return the plan + open questions | **⛔ present plan → `AskUserQuestion` approve/reject** — the unremovable checkpoint (prose-enforced here, see honesty clause); **on approval the DRIVER writes the approved text to `<task-folder>/plan.md` verbatim — copied, not re-rendered — BEFORE spawning Build** (ADR-020; mirrors `fkit-task-ship-loop` step 4) |
+| **Build** | `@fkit-coder` | implement the **approved** plan; write source + `worklog.md` (**`plan.md` already exists — the driver wrote it at approval; never re-author it**); return change surface + any decision surfaced | stop only if the worker returns `NEEDS-DECISION` |
 | **Verify** | `@fkit-coder` | run tests per [ADR-014](../../../ai-agents/knowledge-base/decisions/adr-014-how-fkit-tests-itself.md) (`node --test`, zero devDeps); return pass/fail + diagnosis | **budget: 3 no-progress cycles** → `🚧 Blocked — verification` |
 | **Review** | `@fkit-reviewer` → `/fkit-stateful-review` | own pass + Codex second opinion; write the *Reviewer findings* ledger section; return the verdict | — |
 | **Process review** | `@fkit-coder` | apply `fkit-process-stateful-review` **method** — verify each finding, classify defect/frontier, write the *Coder response*; **apply verified-`CORRECT`, in-approved-plan fixes autonomously (task-loop discipline, ADR-019)**; **record each autonomously-applied fix and each obvious-winner call in the task folder's `worklog.md` decision log — per entry: which finding it answers, what changed, and why it qualified; record `none` if none** (ADR-032 A2 / ADR-019 `:96`); return change surface + residuals, and **return `NEEDS-DECISION` for any judgment call** | **⛔ stop for judgment calls** — frontier-move, regression, disputed severity, broad/behavior-changing, or out-of-plan fix |
 | **Close** | `@fkit-producer` | run `/fkit-task-done` on the brief; write `✅ Done (agent-closed — not owner-verified)` in the brief and every board row (ADR-033 §5 — a **spawned** producer has no owner channel, so its close is never owner-verified); return the step-7 close-out report | **the driver confirms the close landed** against that report (§4) before counting the task shipped; **stop for the owner on a degraded run** |
+
+**Why the driver writes `plan.md`, and what that does and does not fix.** The approved plan exists only
+in **this session's** `AskUserQuestion` exchange, so the driver is the only actor holding the approved
+bytes at the moment of approval. It writes `<task-folder>/plan.md` itself, in the same turn as the
+approval and **before** the Build spawn — **copying the approved text, never re-rendering or summarising
+it.** This is not a breach of *"the driver delegates, never substitutes"*: that rule forbids the driver
+**writing source** and **reviewing** (ADR-031 Decision 2), and the driver already writes the
+`🔄 In progress` and `🚧 Blocked` statuses itself (§2, §4). Delegating this copy would put a **context
+boundary** in the middle of it — the exact operation that failed.
+
+- ⛔ **What it closes:** the **reconstruction route** — no worker is ever asked to reconstruct the plan,
+  which is how `0162/plan.md` came to be a re-rendering of a plan approved hours earlier (blob
+  `2458a57e`).
+- ⛔ **What it does NOT close:** the **`carried-not-approved` class.** A hash pins *which bytes were
+  carried*, not *which were approved*; a driver that persists a plan the owner never approved and carries
+  it faithfully still verifies green over bytes the owner never saw. **Structural** — approval leaves no
+  artifact (ADR-021) — and an **accepted residual** in `0162`'s review ledger. The driver doing the copy
+  **narrows** the transcription hazard (one copy, no spawn boundary); it does not remove it, it relocates
+  it to this session.
+
+⚠️ **Do not delete this write as redundant.** A path + `git hash-object` pointer needs a file to point
+at, and a `PreToolUse` carry-check needs one at spawn time.
 
 **Rules that make this honor the ADRs:**
 - **The Build AND Process-review spawn prompts MUST each carry the approved plan verbatim, state the owner

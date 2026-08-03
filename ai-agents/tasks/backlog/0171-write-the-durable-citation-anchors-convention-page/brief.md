@@ -69,7 +69,39 @@ the moment this page lands. Verified 2026-08-01: the scaffold conventions folder
 tree's 9 pages; `dependency-declaration-form.md` and `dual-home-parity.md` are fkit-only, and
 `dual-home-parity.md`'s fkit-only status is stated in the live README's footnote.
 
+### 🆕 Scope widened by owner ruling 2026-08-02 — this task also REPAIRS 12 displaced pointers
+
+> **✅ Owner-ruled 2026-08-02** (`AskUserQuestion`, in the live `/fkit-sprint-ship-loop` driver session,
+> at task `0143`'s close): the **12 displaced `adr-010:NNN` pointers** produced by `0143` are **folded
+> into this task** — *"fold into the durable-citation-anchors work (`0171`) — do NOT file standalone."*
+
+**What happened.** Task [`0143`](../../done/0143-append-a-dated-correction-note-to-adr-010/brief.md)
+appended `+71 / −0` lines to
+`ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md` on 2026-08-02.
+Every line number below the insertion points moved. **12 `adr-010:NNN` citations across ADR-012,
+ADR-018 and ADR-031 now point at different text than they did** — count re-derived at filing 2026-08-02
+by `grep -rno "adr-010:[0-9,-]*" ai-agents/knowledge-base/decisions/`.
+
+- **10 self-correct in practice**, because they are paired with a quoted phrase — a reader who follows
+  the number and finds the wrong text can still recover the claim from the quote. That pairing is
+  §1.1's rider, and this is it working.
+- **2 are naked** — `adr-012:87` and `adr-012:105` — and **now land on unrelated text with nothing to
+  recover the intent from.** These are the failure case the rider exists to prevent.
+- **None was repaired by `0143`**, whose *"note, not a rewrite"* constraint kept it inside ADR-010.
+
+**Why this belongs here rather than in its own brief.** The 12 pointers are this convention's first
+real specimen: repairing them **using the form the page defines**, in the same change that defines it,
+is what proves the form is applicable rather than merely stated. Split apart, the page ships with no
+worked application and the repair ships with no settled form.
+
+**Cost of the fold, stated rather than buried:** this task is no longer a single-act write. It now has
+two deliverables that can fail independently, and the repair half touches three files the page half
+never would. If the owner would rather have the page ship alone, that is a live option — but it is a
+change to the 2026-08-02 ruling, not a producer call.
+
 ## What to build
+
+### Deliverable A — the convention page
 
 **One new convention page, written twice, byte-identical:**
 
@@ -141,6 +173,33 @@ section, do not work from this list alone.
   lifecycle rule says it is maintained in place and carries no changelog.
 - **Do not date the filename.** `conventions/README.md`'s naming rule: *"Never dated."*
 
+### Deliverable B — repair the 12 displaced `adr-010:NNN` pointers
+
+**Three files, all under `ai-agents/knowledge-base/decisions/`:** `adr-012-…`, `adr-018-…`,
+`adr-031-…`. Re-derive the inventory first-hand — do **not** inherit the count or the coordinates from
+this brief.
+
+For each of the 12 citations:
+
+- **Re-anchor it in the form Deliverable A defines** — file plus quoted fragment or heading, per §1.1's
+  rider. Where a quoted phrase is already present and still matches ADR-010's live text, the citation
+  is already durable in substance; the ruling on whether to strip the now-wrong `:NNN` beside it is the
+  architect's, and must be **stated once and applied consistently**, not decided per line.
+- **The two naked ones — `adr-012:87` and `adr-012:105` — are the priority.** They carry no quote, so
+  the original intent is only recoverable by reading what ADR-010 said at those lines **before**
+  `0143`'s append. Recover it from git history, not by guessing at what the current lines say.
+
+**Constraints on Deliverable B:**
+
+- ⛔ **These are `accepted` ADRs. Repair the pointer; change nothing else on the line.** No prose, no
+  status, no date, no decision text. This is the same rule `/fkit-task-done` applies to a
+  knowledge-base back-link: *a historical record's claims are frozen; its pointers are not.*
+- ⛔ **Do not touch ADR-010 itself.** Its outbound citations are task `0197`; its content corrections
+  are `0195` and `0196`.
+- ⛔ **Do not touch `ai-agents/wiki-vault/`.**
+- ⚠️ **If `0195`, `0196` or `0197` land first, the line numbers shift again.** Re-derive at
+  implementation time; that recurrence is itself the argument the convention page makes.
+
 ## Verification steps
 
 1. `ai-agents/knowledge-base/conventions/durable-citation-anchors.md` exists and
@@ -158,12 +217,35 @@ section, do not work from this list alone.
    it must be green on the new pair; if it does not exist, say so rather than claiming it passed.
 8. No file under `ai-agents/tasks/`, `ai-agents/sprints/` or `ai-agents/wiki-vault/` is modified.
 
+**Deliverable B:**
+
+9. `grep -rno "adr-010:[0-9,-]*" ai-agents/knowledge-base/decisions/` is run **before and after**, and
+   both results are recorded in the worklog with the date. A count asserted without both readings fails
+   this step.
+10. **No naked `adr-010:NNN` remains** — every surviving one is paired with a quoted fragment or a
+    heading. Check each by opening the target, not by pattern alone.
+11. `adr-012:87` and `adr-012:105` each carry a recovered statement of what they originally cited, and
+    the worklog records **how it was recovered** (the git revision consulted).
+12. ADR-012's, ADR-018's and ADR-031's prose, `**Status:**` lines, dates and decision text are
+    **unchanged** — verify by `git diff`, and expect the diff to touch citation text only.
+13. The repaired citations use the form Deliverable A's page defines. If they diverge, **the page is
+    what is wrong** — say so rather than repairing the citations to match a page you did not follow.
+
 ## Notes
 
 - **Depends on:** nothing. The ruling it carries is already made — `0160` is closed and the report is
   final.
 - **Blocks:** 0172 (the architect `## Output format` bullet narrows to point at this page), 0176 (the
   coordination-citation guard is this page's enforcement point).
+- **⛔ SERIALIZATION — recorded 2026-08-02 at `0195`'s close, and it affects this task's *folded-in*
+  half only.** The 12 displaced `adr-010:NNN` pointers in ADR-012 / ADR-018 / ADR-031 were owner-ruled
+  into this task on 2026-08-02. **That half must run AFTER all three ADR-010 appends** —
+  **`0195` (✅ landed 2026-08-02) → `0196` → `0197` → `0171` (this task) → `0199`.** Every append shifts
+  ADR-010's line numbering, so re-anchoring the 12 pointers any earlier measures against a **moving
+  baseline** and the new anchors re-rot on the next append. The **convention-page** half of this task
+  has no such constraint and may be written at any time. **This is an ordering constraint on file
+  writes, not a `Depends on:`** — nothing here waits on another task's *outcome*, and the `## Priority`
+  ranks are append ranks that do not encode it (ADR-035).
 - **Owner is `fkit-architect`**, as named in report §8. A new convention is a rule imposed on every
   future run; per `conventions/README.md` it needs the **owner's** sign-off. The owner has ruled the
   page exists and is dual-homed — they have **not** signed off on its wording.
@@ -173,3 +255,10 @@ section, do not work from this list alone.
 - **Rank 150 is APPEND rank, not merit rank**, assigned under `/fkit-task-brief` step 5 by a spawned
   producer with no owner channel. **Flagged for owner confirmation.** No existing row was renumbered
   by this brief.
+- **🆕 Scope widened 2026-08-02 by owner ruling** — Deliverable B, the 12 displaced `adr-010:NNN`
+  pointers from task `0143`. **The rank did not change** and no row was renumbered by the widening.
+  ⚠️ **If the owner reconsiders the fold**, Deliverable B splits cleanly into its own brief; the ruling
+  is what keeps it here.
+- **Soft-relationship with `0197`.** `0197` repairs ADR-010's **outbound** `path:NNN` citations using
+  this page's form; Deliverable B repairs the **inbound** `adr-010:NNN` citations. Different direction,
+  same rule, two tasks. `0197` records this task as a soft dependency; this task is not blocked by it.

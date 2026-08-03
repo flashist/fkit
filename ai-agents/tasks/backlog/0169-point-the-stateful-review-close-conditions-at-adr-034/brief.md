@@ -192,6 +192,25 @@ canonical sources in `claude/`, never the copies.
   It was appended under `/fkit-task-brief` step 5 by a **spawned** producer with no owner channel,
   which that step forbids from re-ranking. No existing row was renumbered.
 
+- **⚠️ THE PREDICTED FAILURE HAS NOW HAPPENED — evidence added 2026-08-02 at `0195`'s close. This is a
+  live incident, not a hypothetical.** ADR-034 §Binds warned that *"until those pointers exist, this ADR
+  is the only durable home for the bar and each role must reach it here."* On task
+  [`0195`](../../done/0195-correct-adr-010s-skills-for-role-source-of-truth-claim/brief.md) that is
+  exactly what went wrong: the Process-review worker **skipped the Step-0 ADR skim**, and so **did not
+  find ADR-034** — the decision that set that review's close bar. The gap was caught only because the
+  owner ordered the step **re-run** by a coder, which read the real procedure, ran the skim, and surfaced
+  ADR-034 as *"binding and missed"*. It is recorded in
+  `ai-agents/tasks/done/0195-correct-adr-010s-skills-for-role-source-of-truth-claim/review.md`, in the
+  Step-0 row of its process-gap table.
+  **What this changes for this task: nothing in scope, everything in urgency.** The four sites, three
+  files and the edits below are unchanged and already correct. What is new is that the cost is now
+  **observed** rather than predicted — a review reached its close bar by re-deriving it from scratch,
+  and the next multi-round review will do the same until these pointers exist. **Re-measure the four
+  line numbers at implementation time** (`fkit-task-ship-loop`'s step-7 close line measured at `:166` on
+  2026-08-02, against the ADR's cited `:160-162` — the file has moved since ADR-034 was written).
+  ⚠️ **Do not file a second task for this.** A follow-up naming *"the ADR-034 pointer gap"* was
+  considered at `0195`'s close on 2026-08-02 and **rejected as a duplicate of this row.**
+
 - **⛔ Out of scope, hard:**
   - The ledger **schema** lines (`Status: in-review | closed-out`) — format, not close condition.
   - The **ADR-links-ship-dead** class in `fkit-task-ship-loop` (relative links into

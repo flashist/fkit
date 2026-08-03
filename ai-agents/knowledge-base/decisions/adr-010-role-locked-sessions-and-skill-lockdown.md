@@ -5,6 +5,13 @@
 - **Deciders:** owner (Mark Dolbyrev), with fkit-architect
 - **Supersedes:** [ADR-008](adr-008-claude-code-native-port-alongside-omnigent.md) §"Role access —
   three explicit paths" (`adr-008:106-120`)
+- **Corrections:** 2026-08-02 — this ADR carries dated notes inline at **§Context** and **§Decision 3**.
+  Marker legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
+  overturned** (do not follow it). No existing line of this ADR was edited; the notes are appends, and
+  the Status stays `accepted`.
+  **Extended 2026-08-02 by a second append:** dated ⚠️ notes now also sit at **§Decision 5** and at
+  §Context's *"One real inconsistency"* passage. The site list in the first line of this item is left
+  byte-identical and is superseded by this line; the same append-only rule and the same legend apply.
 
 ## Context
 
@@ -25,6 +32,47 @@ hat skills are deleted; `claude/skills/fkit-agent-*` no longer exists. What repl
      (`claude/fkit-claude.sh:75-103`, `skills_for_role()` + `build_settings()`).
 - **A 7th agent, `fkit-lead`** — the "team room" (menu option 7) — routes rather than does. It has no
   Write or Edit tools, deliberately (`claude/agents/fkit-lead.md:22-26`).
+
+  > ⚠️ **Dated correction 2026-08-02 — three factual claims in the sentence above are now false: the
+  > "team room" label, "menu option 7", and "no Write or Edit tools".** The sentence is **left
+  > byte-identical** as the record of what was decided on 2026-07-11.
+  >
+  > **What is true today**, verified against live code 2026-08-02:
+  > - **The "team room" label is retired project-wide.** `claude/fkit-claude.sh` accepts neither `team`
+  >   nor `team room` on any path — its own comment reads *"`team` / `team room` are NOT accepted — not
+  >   here, and not at the menu either … `lead` is the only word this program accepts on any path"*. The
+  >   label survives in the launcher **only inside that rejection comment**.
+  > - **The lead is menu option 1, not 7.** The menu prints *"1) lead"* and its case arm is `1|lead)`.
+  >   **Option 7 is `wiki`.**
+  > - **Lead does hold Write and Edit.** [ADR-022](adr-022-tools-unrestricted-except-adversarial-reviewer.md)
+  >   relaxed the allowlists for every Claude-side role, and `claude/agents/fkit-lead.md` carries **no
+  >   `tools:` key at all**. That file's own stance note says the line *"was also already stale: ADR-022
+  >   gave every Claude-side role Write/Edit."*
+  > - The bullet's pointer `claude/agents/fkit-lead.md:22-26` **no longer lands on any tools claim** — it
+  >   is the conductor intro today, and the ADR-031 stance note that corrects the tools line begins
+  >   immediately below that range. It is left as written, as the record of what was cited in 2026-07.
+  >
+  > **Cause:** tasks [`0139`](../../tasks/done/0139-reorder-launcher-menu-lead-first-and-rename-label/brief.md)
+  > (menu order) and [`0140`](../../tasks/done/0140-retire-team-room-in-docs-and-agent-definitions/brief.md)
+  > (label), both owner-ruled 2026-07-25. The tools claim went stale earlier and independently, via
+  > ADR-022 (2026-07-18). **These are drifted facts, not overturned decisions: this ADR's decision is
+  > unaffected and its Status stays `accepted`.**
+
+  > ⛔ **Dated reversal notice 2026-08-02 — the fourth claim in that same sentence, *"routes rather than
+  > does"*, is REVERSED. Do not follow it.** Reversed on 2026-07-22 by
+  > [ADR-031](adr-031-fkit-lead-becomes-the-orchestrating-front-door.md) §Decision 1: `fkit-lead` is now
+  > an **orchestrating conductor** that, given a goal, spawns typed `fkit-<role>` workers, gives each a
+  > bounded unit of work, relays surfaced decisions to the owner, and advances. It keeps the routing
+  > remit and still **never writes source and never reviews**. ADR-031 calls this out as *"a real
+  > decision, not a drift"* — which is why it is marked ⛔ here and the three claims above are marked ⚠️.
+  > The sentence above is **left byte-identical** as the 2026-07-11 record.
+  >
+  > This is the §Context half of the claim; the **binding** statement is **§Decision 3**, which carries
+  > its own notice. **No other ADR-010 decision is reversed by ADR-031** — Decisions 1, 2, 4 and 5 stand
+  > as decisions. *(Separately, and deliberately **not** corrected in this pass: Decision 2's
+  > `skillOverrides` off-list mechanism was retired by
+  > [ADR-018](adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md) — a
+  > drift, not a reversal, and filed as a follow-up so this pass does not mix two unrelated causes.)*
 
 The driver for the change was that the hat model was **prompt-enforced**: a session "wearing" the
 reviewer hat was the same context that had just written the code, and nothing but instructions stopped
@@ -54,6 +102,25 @@ despite not appearing in `fkit-architect.md`'s `skills:`. Nothing is broken toda
 signpost skill nobody misses in a consult), but two hand-synced lists for one invariant is precisely
 the drift class this project keeps paying for.
 
+> ⚠️ **Dated correction 2026-08-02 — the "One real inconsistency" passage above is spent.** The
+> inconsistency it names was resolved, in one of the two ways this ADR itself prescribed. The passage
+> is **left byte-identical** as the record of what the 2026-07-11 drift audit found.
+>
+> **What is true today**, verified against live code 2026-08-02: **there are no longer two lists.** The
+> `skills:` frontmatter was **dropped**, so nothing remains that could disagree with `skills_for_role()`
+> — which has also moved file since this passage was written. The passage's *"settled here"* promise was
+> **kept**.
+>
+> **The binding statement is §Decision 5, which carries its own ⚠️ notice** — the current file name, the
+> two consumers, and the ADR-012 citation live there and are deliberately **not** restated here, so
+> there is one place to keep true rather than two.
+>
+> **Still true in substance:** **every** role owns `fkit-team` — all seven arms of `skills_for_role()`
+> begin with it. **The mechanism is no longer the shell, though:** since
+> [ADR-018](adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md) the
+> launcher grants nothing — `build_settings()` emits only hooks, and ownership is enforced by a
+> `PreToolUse` **deny** hook that reads `skills_for_role()` at call time.
+
 ## Decision
 
 1. **Every fkit session is locked to exactly one role.** `fkit` shows a deterministic menu; `fkit
@@ -66,6 +133,32 @@ the drift class this project keeps paying for.
 3. **`fkit-lead` (the team room) is a router, not a doer.** It has no Write/Edit tools and owns only
    `/fkit-team` and `/fkit-query`. It is the safe default when no role is named
    (`claude/fkit-claude.sh:190`).
+
+   > ⛔ **Dated reversal notice 2026-08-02 — this decision is REVERSED. Do not follow it.** Reversed on
+   > 2026-07-22 by [ADR-031](adr-031-fkit-lead-becomes-the-orchestrating-front-door.md) §Decision 1,
+   > which names **this exact site** as what it reverses. The text above is **left byte-identical** as
+   > the record of what was decided on 2026-07-11.
+   >
+   > **In force today**, verified against live code 2026-08-02:
+   > - **`fkit-lead` is an orchestrating conductor, not a router only.** Given a goal it spawns typed
+   >   `fkit-<role>` workers, assigns each one bounded unit of work, relays surfaced decisions to the
+   >   owner, and advances. Its flagship driver is `/fkit-sprint-ship-loop`. It keeps the routing remit,
+   >   and it still **never writes source and never reviews** (ADR-031 §Decision 2).
+   > - **It does hold Write and Edit** — [ADR-022](adr-022-tools-unrestricted-except-adversarial-reviewer.md),
+   >   which falsified the "no Write/Edit tools" half earlier and independently of the reversal.
+   > - **It owns five skills, not two.** `skills_for_role()` in `claude/skills-for-role.sh` grants lead
+   >   `fkit-team`, `fkit-query`, `fkit-open-questions-interview`, `fkit-dumb-down` and
+   >   `fkit-sprint-ship-loop`.
+   > - The **"team room" label is retired** and the lead is **menu option 1** — see the ⚠️ correction at
+   >   §Context.
+   >
+   > **Still true:** lead is the safe default when no role is named — `claude/fkit-claude.sh` today reads
+   > *"No role and no tty (piped / CI) → lead is the safe default"* over `[ -n "$role" ] || role="lead"`.
+   > Only the bullet's pointer `claude/fkit-claude.sh:190` is stale; it is left as written, as the record
+   > of what was cited in 2026-07.
+   >
+   > **No other ADR-010 decision is reversed** — Decisions 1, 2, 4 and 5 stand as decisions, and this ADR
+   > remains `accepted`.
 4. **Cross-role work happens by consult, not by role-switching:** `@fkit-<role> <question>` — a
    one-off question answered in a fresh context, returned to the asker. Bounded by a **two-hop
    budget**, no cycles, and the rule that the asker keeps the decision that is theirs. Genuinely new
@@ -74,6 +167,37 @@ the drift class this project keeps paying for.
    ownership. The `skills:` frontmatter in `claude/agents/*.md` must be **generated from it or
    dropped** — it may not be a second hand-maintained list. (Implementation choice left to the coder;
    the invariant is *one* source of truth.)
+
+   > ⚠️ **Dated correction 2026-08-02 — two factual claims in this decision are now false: the file it
+   > names as `skills_for_role()`'s home, and its description of the `skills:` frontmatter as a second
+   > hand-maintained list.** The text above is **left byte-identical** as the record of what was decided
+   > on 2026-07-11.
+   >
+   > **What is true today**, verified against live code 2026-08-02:
+   > - **`skills_for_role()` lives in `claude/skills-for-role.sh`, not `claude/fkit-claude.sh`.** That
+   >   file's own header calls it *"the single source of truth for fkit role → skill ownership"* and
+   >   records that it was *"Extracted from fkit-claude.sh (task 43 / ADR-018)"*. `claude/fkit-claude.sh`
+   >   defines no `skills_for_role()` of its own — it only sources it. (It does still define other
+   >   functions, `build_settings()` among them; this claim is scoped to `skills_for_role()` alone.)
+   > - **It has two consumers now, not one.** `claude/fkit-claude.sh` sources it to build a `fkit <role>`
+   >   session, and `claude/skill-ownership-hook.sh` — the `PreToolUse` gate from
+   >   [ADR-018](adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md) —
+   >   sources it to deny a `Skill` call whose invoking role does not own the skill.
+   > - **The `skills:` frontmatter was DROPPED, not generated.**
+   >   [ADR-012](adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md) §Decision 1: *"The
+   >   `skills:` frontmatter is inert and is therefore DROPPED, not generated. ADR-010 §5 offered
+   >   'generated from it **or** dropped'; that choice is now settled as **dropped**."* No file under
+   >   `claude/agents/` carries a `skills:` key today.
+   >
+   > **Why ⚠️ and not ⛔ — this decision was not overturned, it was HONORED.** Its invariant, *one*
+   > source of truth for role→skill ownership, is in force; the frontmatter question was settled by
+   > taking the second of the two branches this decision itself offered. Only the file it names and its
+   > sentence about the frontmatter went stale. **Status stays `accepted`.**
+   >
+   > **Named, not repaired here:** §Context's second lock bullet still names `claude/fkit-claude.sh` as
+   > `skills_for_role()`'s home — a third occurrence of the same stale file name. That site is reserved
+   > to the follow-ups covering Decision 2's retired `skillOverrides` mechanism and this ADR's stale
+   > line-ranges, so it is flagged here rather than annotated there.
 
 ## Options considered
 

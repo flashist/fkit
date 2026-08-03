@@ -10,15 +10,15 @@ Sprint 2
 127
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
 
 ## Context
 
-`claude/skills/fkit-sprint-ship-loop/SKILL.md:109` states a requirement and gives **no construction for
-satisfying it**. Quoted firsthand and in full (`:109-115`):
+`claude/skills/fkit-sprint-ship-loop/SKILL.md:110` states a requirement and gives **no construction for
+satisfying it**. Quoted firsthand and in full (`:110-116`):
 
 > - **The Build AND Process-review spawn prompts MUST each carry the approved plan verbatim, state the owner
 >   approved it via `AskUserQuestion`, and identify the caller as `fkit-sprint-ship-loop`.** These three
@@ -50,10 +50,21 @@ that installed its own backup.
 **The third data point is verifiable firsthand, and it is on disk.** `0147`'s worklog §13 (*"Retroactive
 entries — round 1 calls I made unattended and never logged"*) records the coder executing three
 verification checks — `C8c`, `C8d`, `NC4` — that its approved plan never listed, and logging none of
-them. Read together with the fact that **no test in `test/` reads `claude/agents/fkit-coder.md` or any
-`SKILL.md` content at all** (verified 2026-07-29: `grep -rn 'fkit-coder.md' test/` returns one hit, an
-`existsSync` path check in `converge-contract.test.js:357`), the pattern is broader than the relay:
-**nothing in this area is machine-checked, at any point.**
+them. Read together with the fact that **no test in `test/` reads the *body* of `claude/agents/fkit-coder.md`
+or of any `SKILL.md`**, the pattern is broader than the relay: **nothing in this area is machine-checked,
+at any point.**
+
+> **⚠️ Correction, 2026-08-02 (this task's own close, follow-up 7).** This paragraph originally read *"no
+> test in `test/` reads `claude/agents/fkit-coder.md` or any `SKILL.md` content **at all**"*. **That was
+> too strong and is corrected above.** `test/skill-frontmatter.test.js` **does** read every
+> `claude/skills/*/SKILL.md` and every `claude/agents/*.md` over a discovered-then-pinned corpus
+> (the two live-corpus tests at `skill-frontmatter.test.js@2026-08-02:577` and `:597`, pinned to
+> `EXPECTED_SKILLS = 25` / `EXPECTED_AGENTS = 7` at `:574-575`; the `readFileSync` is at `:323`) — but it
+> audits **frontmatter only**, so
+> **no test reads the prose body**, which is the claim this task actually rests on and which still holds.
+> Established by the reviewer sweeping all 16 files in `test/`. The narrower supporting check also still
+> holds, re-verified 2026-08-02: `grep -rn 'fkit-coder.md' test/` returns one hit, an `existsSync` path
+> check in `converge-contract.test.js@2026-08-02:357`.
 
 ### The hard constraint any answer must respect
 

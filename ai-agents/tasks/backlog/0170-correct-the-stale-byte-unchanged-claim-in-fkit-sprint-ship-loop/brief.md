@@ -165,6 +165,38 @@ ADR-033 §Decision 3 falsified the *"byte-unchanged"* half; the *"session-only"*
 the Decision 1 sentence and the Consequences bullet are covered. **The note must not restate the claim
 in a fresher permanent tense** — that reproduces the defect one layer down.
 
+#### 🆕 The ADR-032 note's FORM is now settled — four binding decisions inherited from `0143` (2026-08-02)
+
+**This brief already names `0143` as its model. `0143` has now shipped, and its form is no longer a
+sketch — four decisions are settled and this task is bound by them.** Read `0143`'s `worklog.md` and
+`review.md` for the reasoning; this list is an index, not a substitute. **Do not re-derive the form and
+do not re-litigate these four** — a second note in a second shape is exactly the fork the precedent
+exists to prevent.
+
+| # | Binding decision | Source in `0143` |
+|---|---|---|
+| 1 | **Placement: the note goes BELOW the claim it corrects.** This **departs from the wiki vault's *"banner above claim"* convention**, deliberately, with a recorded rationale. Follow it and cite it. | Residual `R1-placement`, kept-as-shipped with recorded rationale |
+| 2 | **The header `- **Corrections:**` bullet** — one metadata *item* that **may wrap**, carrying the ⚠️/⛔ legend and the list of annotated sites. It is the one part of an `accepted` ADR an append-only correction may extend, because it is metadata about the notes rather than body text. | Owner ruling Q3 (2026-08-02); residual `R5-header-form`, ratified |
+| 3 | **Citation form: no `:NNN` into a mutable file.** Anchor by file plus quoted phrase. **Permitted, not mandated** — but where this task writes a new pointer, this is the form. | `0143` accepted residual, owner-permitted |
+| 4 | **Two markers, and only two: ⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow it). **Do not invent a third.** | Owner ruling Q1 (2026-08-02); shipped legend on ADR-010 |
+
+**Which marker this task writes: ⚠️, not ⛔** — and the note must say why. ADR-033 falsified a **fact**
+inside ADR-032's Decision 1 (*"byte-unchanged"*); it did **not** overturn ADR-032's decision, and the
+*"session-only"* half stands. Marking it ⛔ would tell readers to stop following a decision that is in
+force. This is the exact distinction decision 4 exists to carry.
+
+**Also inherited: the proof obligation.** `0143`'s load-bearing constraint was **`+N / −0`**, verified by
+`git diff --numstat` (deletions must read `0`) and `git diff -U0 | grep '^-'` returning nothing — **not
+by eye**. Apply the same proof to ADR-032, with the same single exception for the header bullet
+(decision 2), justified in the worklog.
+
+⚠️ **One caveat this task must not import silently.** `0143` shipped a **knowing self-contradiction** —
+ADR-010's new header bullet names `claude/skills-for-role.sh` while §Decision 5, out of scope, still
+names `claude/fkit-claude.sh`. Task `0195` repairs it. **The lesson for this task is the opposite of
+reassuring:** a scoped append can leave a document contradicting itself on one screen, so check ADR-032
+for a **neighbouring** site the note's own wording will contradict, and say what you found — including
+if the answer is "none".
+
 **⛔ Do not sweep ADR-032's third `byte-unchanged` hit.** Its §Amendment states that
 `fkit-process-stateful-review` is *"byte-unchanged"* — a **different subject**, not this defect. Its
 truth is **not assessed** by this task either way. Leave it untouched.
