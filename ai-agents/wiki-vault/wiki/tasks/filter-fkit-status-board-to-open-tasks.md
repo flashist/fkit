@@ -35,3 +35,4 @@ The **`status-report-format` convention was amended to match** — its *"show th
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]
 - [[tasks/add-status-skill-to-producer]]
 - [[tasks/wiki-sync-filtered-fkit-status-board]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — `0210`: because a drifted row is **never** filtered off, an unparsed move target rendered forever — the concrete cost of this page's always-render rule

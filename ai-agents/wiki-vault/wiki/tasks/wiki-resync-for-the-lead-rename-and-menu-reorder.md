@@ -26,6 +26,24 @@ Recorded in the vault's `log.md` entry of **2026-07-29**. Six vault files change
 >
 > ⚠️ **NOT settled here, deliberately.** Both readings survive the artifacts: *"banner"* may have meant a visually distinct block **adjacent to** the claim (in which case the vault's practice conforms and only the word *above* is wrong), or it may have meant literally above (in which case the stated rule has never once been followed). **Nothing on disk distinguishes them**, and no owner ruling extends `0143`'s form to the vault. **No open task owns the vault-wide question** — `0199` owes only ADR-010's page the below-the-claim rule *with its rationale*, which is narrower. Flagged for the owner or an architect.
 
+> ⛔ **SETTLED — owner ruling 2026-08-03. The vault's correction-note placement rule is now `0143`'s form: the note goes BELOW the claim, at the claim — not in a header banner.** The rule stated in the sentence at the top of this block — *"banner above claim"* — **no longer governs from this date.** Given live via `AskUserQuestion` in a `/fkit-sprint-ship-loop` driver session, in answer to the question the ⚠️ note directly above returned to the owner. **Both the 2026-07-29 sentence and the 2026-08-03 lint note above are left byte-identical.** Nothing on disk moved.
+>
+> **What changed is a decision, not a discovery of error.** The 2026-07-29 wording was a stated convention adopted on real evidence — corrections written 19–25 lines from their claim — and the note above records that **nothing on disk could distinguish its two readings**. It still cannot. The ruling picks which reading governs **going forward**; it does **not** make the original wording retroactively wrong, and it is not a finding that anyone erred.
+>
+> **The owner's stated grounds for choosing this form:** it matches **31 of 31** correction notes already in the vault (re-derived across all 197 pages by the 2026-08-03 lint); **one ruling then governs both surfaces** — the knowledge-base and the vault — instead of two rules opposed on the above/below axis; and **nothing has to move.**
+>
+> **The rule as it now reads on both surfaces**, from [[tasks/append-a-dated-correction-note-to-adr-010]] (`0143`, owner-ruled 2026-08-02) as extended by [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] (`0195`): **⚠️ = a fact that drifted · ⛔ = a decision that was overturned**; the note sits **below the claim, at the claim** — not in a header banner, not nineteen lines away; the corrected sentence is left **byte-identical** and the note says so in those words; **additions only**; **no `:NNN` line numbers into a mutable file**.
+>
+> ⚠️ **One surface this ruling does NOT reach: the vault's `log.md`.** That file is **append-only with no exceptions** — a correction there is a **new dated entry** naming its target by folder ID and durable anchor, never a note placed at the claim, because there is no editing a past entry at all. Separate owner ruling, same day; see [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] (`0211`).
+
+> ✅ **ACCEPTED, RULED — the word *"banner"* names two different things in this vault, and that is deliberate. Owner ruling 2026-08-03. A later lint should recognise this as settled and move on; do NOT re-raise it, and do NOT sweep.**
+>
+> **The collision.** *"Banner"* is (a) the **superseded** correction-note placement above, and (b) a **live and still-used device** — the page-top `⚠️ STALE` / supersession / collision blocks on ADR mirror pages, and the `⛔ Owner:` banners in the skills. The ruling: **the two uses are distinguishable in context**, and the placement notes on this page already say which form governs a correction note. **No rename. No vault-wide sweep.**
+>
+> ⛔ **Exact scope — read this before acting on it.** The ruling accepts the **naming** overlap and nothing else. It does **not** re-open the placement ruling above, and it does **not** bless *"banner above claim"* as a correction-note form. **That form stays superseded.** A page-top banner remains a legitimate device for *page-level staleness*; it is still **not** how a correction note is placed.
+>
+> **Why this is written down at all:** it was flagged as a loose end with **no open task owning it**, and an accepted decision that leaves no artifact gets re-discovered every run — the cost pattern the placement question itself demonstrated across three lints. **This note is the artifact.** Provenance: the **owner**, live via `AskUserQuestion`, **2026-08-03**, in the `/fkit-sprint-ship-loop` driver session.
+
 ## Outcome
 
 Done, **agent-closed — not owner-verified**.
@@ -44,4 +62,6 @@ Three record defects were found in review — an **unrun command printed as thou
 - [[tasks/append-a-dated-correction-note-to-adr-010]] — `0143`, the **knowledge-base** correction-note form, which words placement **opposite** to this page's vault convention (see the 2026-08-03 note above)
 - [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — `0195`, which extended `0143`'s form
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] — the ADR mirror this task treated as a historical record, and whose vault page carries notes **below** their claims
+- [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] — `0211`, the **append-only `log.md`** carve-out the 2026-08-03 ruling does not reach
+- [[systems/knowledge-base-structure]] — where the correction-note form is catalogued, now recorded as governing the vault too
 - [[systems/fkit]]

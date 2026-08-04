@@ -1211,3 +1211,304 @@ Verified for this write: the file's entire pre-existing prefix is byte-identical
 - **Write scope:** only `ai-agents/wiki-vault/log.md` touched — this entry appended; no page created or updated; `index.md` and `.wiki-watermark` unchanged. **Nothing committed, nothing staged. No task moved, no mover invoked. No source, skill, agent definition, brief, sprint plan, ADR or report edited.**
 
 Task 0211's vault work is complete — ready to close
+
+## 2026-08-03 — sync
+
+- Sync window: `75663a8` → HEAD (`48c5be0`) — three commits: `f707ae5`, `34b3071`, `48c5be0`.
+- Changed source files detected under `ai-agents/` (excluding the vault): **68**. Ingest-worthy after the Step 3 filter: **6**.
+
+⚠️ **Read the middle commit's contents, not its message.** `34b3071` is titled *"Wiki sync + lint"* but is **not** a vault-only commit — it carries three `claude/skills/fkit-wiki-*/SKILL.md` files, sprint-plan edits and task artifacts. This run derived its delta from the diff, not the subject lines.
+
+### Ingested
+
+- `ai-agents/tasks/done/0173-…/brief.md` → created [[tasks/tighten-the-wiki-completion-flag-block]]
+- `ai-agents/tasks/done/0210-…/brief.md` → created [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]]
+- `ai-agents/tasks/done/0211-…/brief.md` → created [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]]
+- `ai-agents/sprints/sprint-2.md` → updated [[tasks/sprint-2-remove-omnigent]] — board tally re-derived and the 45-row de-scope recorded
+- `ai-agents/sprints/backlog.md` → covered by the same two pages (the reverse move's destination board); no separate page
+- `ai-agents/knowledge-base/conventions/task-status-vocabulary.md` → the new **Moved (to backlog)** registry row, folded into [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] and back-linked from [[tasks/enforce-task-status-vocabulary]]
+
+**Updated for accuracy (not new sources):** [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — its closing claim that *"the three `SKILL.md` files still carry the defective form"* became false when `0173` shipped; corrected in place with a dated note, and the page's own title flagged as now half-historical. Back-links added to [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]], [[tasks/wiki-skills-flag-ready-to-close]], [[tasks/append-a-dated-correction-note-to-adr-010]], [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]], [[tasks/enforce-task-status-vocabulary]], [[tasks/build-deterministic-dashboard-script-for-fkit-status]], [[tasks/filter-fkit-status-board-to-open-tasks]], [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]], [[decisions/adr-014-how-fkit-tests-itself]], [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]], [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]], [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]], [[systems/knowledge-base-structure]], [[systems/testing-and-verification]].
+
+### Skipped, with reason
+
+- **~50 `ai-agents/tasks/backlog/*/brief.md`** — open tasks; a page would be premature (Step 3).
+- **`plan.md` / `worklog.md` / `review.md`** in the three closed folders — working artifacts, not sources (Step 3). Read for outcome accuracy; not ingested.
+- **ADR-037 and tasks `0143`, `0158`, `0162`, `0195`, `0202`** — ⚠️ **already ingested; they sit OUTSIDE this window.** All six landed in commit `75663a8`, which **is** the watermark, and `<sha>..HEAD` excludes it. Verified present in the vault before skipping: ADR-037 has its page, and each of the five has a task page and an index entry. A caller's orientation described them as part of this delta; **the disk says otherwise, and the disk was followed.**
+
+### Board state, re-derived rather than carried
+
+`bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md` → `total 188 · done 132 · backlog 6 · cancelled 5 · moved 45`, **zero drift records**. The previous vault reading was `130 / 52 / 5 — of 187`.
+
+⚠️ **The open count fell 52 → 6 by de-scoping, not by shipping.** 45 rows were reverse-moved to the Backlog board. Recorded on the sprint page so the 6 is not read as *"6 left to do"*.
+
+### ⚠️ Flagged for human review
+
+- **All three closed review ledgers still read `Status: in-review`** — `0173`, `0210`, `0211`. The work shipped in each case; the ledger's own status field was never flipped. This is the same record defect already recorded against `0158`, now on three more rows, so it is a **recurring pattern rather than a one-off**. The vault does not write ledgers; noted here for whoever owns that surface.
+- **`0210`'s prove-red follow-up is named but not filed** — the brief deliberately refused to build a `dashboard.sh` path override into `test/prove-red.sh`, calling it *"a change to the test architecture, not a test addition"*, and required it be handed back. No brief for it was found on either board in this run's delta.
+- **Three `fkit-wiki`-owned briefs remain open and were NOT served by this run** — `0199`, `0206`, `0212`. Each names a specific vault deliverable this sync did not touch: `0199` the ADR-010 vault page and an `index.md` entry, `0206` the faithful-carry decision report, `0212` the `"still open"` framing correction in this log. **Recorded so the next run does not mistake this sync for their discharge.**
+
+### Write scope
+
+Only `ai-agents/wiki-vault/` touched: 3 pages created, 15 pages updated, `index.md` updated, `.wiki-watermark` advanced `75663a8` → `48c5be0`, this entry appended. **Append-only preserved — this file's diff carries zero deletions and no past entry was edited or annotated in place**, per the owner's ruling of 2026-08-03. **Nothing committed, nothing staged. No task moved, no mover invoked. No brief, sprint plan, ADR, report, skill, agent definition or source file edited.** No `:NNN` coordinate written anywhere in this run's diff.
+
+No tracked task completed by this run.
+
+## 2026-08-03 — lint (vault-wide, second of the day — follows the `48c5be0` sync)
+
+- Issues found: 7
+- Issues fixed: 5 (4 dated correction notes placed at their claims + 4 reciprocal back-links, restoring two-way linking on every page this run and the sync touched)
+- Issues flagged for human review: 2 (one carried forward and re-measured; one correction to the entry immediately above, recorded here because this file is append-only)
+- **The headline: `0173` changed the wiki completion-flag form today, and the sync that ingested it corrected ONE of the three vault pages asserting the old form as current.** The other two were repaired here.
+
+### Scope note — what was being linted
+
+The sync's output was **uncommitted in the working tree** when this ran, so this lint covered the vault **including** 3 new pages, 16 updated content pages and `index.md`. `HEAD` is `48c5be0`, which is also the watermark: the vault's uncommitted diff is exactly the sync's work plus this lint's.
+
+### Fixed
+
+1. **[[tasks/wiki-skills-flag-ready-to-close]] (`0125`) still described the hardcoded-`backlog/` flag template as a live defect** — present tense, no repair note at the claim. The sync added only a `## Related` line, seven lines below the false sentence. A dated ✅ note now sits **at the claim**; the original paragraph is **byte-identical**.
+2. **[[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] (`0160`) asserted *"the three files still carry the defective form today"*** — **false since `0173` shipped**, and the strongest form of the claim anywhere in the vault. Its follow-up table's row 5 also still read `producer to file`. A dated ✅ note now sits at the claim covering both; originals **byte-identical**. The note deliberately **preserves** one clause that is still true: the report's own §11 records open question 7 as *"⏳ Awaits the owner"*, because the owner ruled after the report was finalised.
+3. **[[tasks/tighten-the-wiki-completion-flag-block]] (`0173`) cited two board ranks that stopped existing hours after the page was written.** Its ordering paragraph says `0154` sat at P129 and `0165` at P130 — and both were among the 45 rows [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] (`0210`) reverse-moved onto the unranked Backlog board the same day. A reverse move **surrenders** the rank. Dated ⚠️ note at the claim, original byte-identical, both tasks re-anchored by folder ID with a glob.
+4. **[[tasks/sprint-2-remove-omnigent]] counted `0211` as a Sprint 2 row.** Verified on disk: **`0211` has no row in `sprint-2.md` at all** — its row is on `backlog.md`, exactly as `index.md` and `0211`'s own page say. The run closed eight tasks; **seven were Sprint 2 rows**, which is what this board's `130 → 132` Done movement shows. Dated ⚠️ note at the claim; the sentence, the eight IDs and the agent-closed marker are left byte-identical. *(This was a contradiction between three vault surfaces, and two of the three were right.)*
+5. **Two one-way links** left by the sync — [[tasks/sprint-2-remove-omnigent]] → [[tasks/tighten-the-wiki-completion-flag-block]] and → [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]]. Back-links added. **Two further reciprocals were added for links this lint's own notes introduced**, and reciprocity was re-measured **after** every write.
+
+### ⚠️ Flagged — the carried-forward finding, RE-MEASURED, still not settled
+
+**The vault's stated correction-note convention still does not describe the vault's practice, and the gap widened today.** [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] (`0141`) states *"banner above claim"* as the vault's rule.
+
+**Re-derived from scratch over all 197 pages** — not inherited from the previous lint's 194-page measurement: **31 dated in-page correction notes across 23 pages. 25 self-locate their claim as being above them; the remaining 6 were resolved structurally and are also below. Zero sit above. The stated rule has still never once been followed.**
+
+**The gap is wider than when it was raised.** The previous lint measured 21 notes on 14 pages. Ten notes have been added since — the sync's one and this lint's four among them — and **every one went below the claim**, including the four written by the run that is reporting the discrepancy. Practice is not drifting toward the stated rule; it is consolidating against it.
+
+**Still unresolved for the same reason as before, and this lint again declines to settle it.** Both readings survive the artifacts — *"banner"* may have meant *adjacent-and-visually-distinct* (in which case practice conforms and only the word *above* is wrong) or literally *above* (in which case the rule has never been followed). Separately, [[tasks/append-a-dated-correction-note-to-adr-010]] (`0143`, owner-ruled 2026-08-02) fixed the **knowledge-base** form as *"below the claim, at the claim — not in a header banner"*, ruling out by name the word the vault's own rule adopts. **Nothing on disk distinguishes the two readings, and no owner ruling extends `0143`'s form to the vault.** **No open task owns the vault-wide question**; `0199` owes only ADR-010's page the below-the-claim rule, which is narrower. **Returned to the driver as an open question for the owner.**
+
+### ⚠️ Flagged — a correction to the `2026-08-03 — sync` entry above, appended not edited
+
+**Anchored by durable anchor, per the owner's ruling of 2026-08-03: the `2026-08-03 — sync` entry immediately preceding this one — its `### Write scope` section, the page-count sentence.** It records **15 pages updated**. The measured working-tree diff shows **16 updated content pages** plus `index.md`. The undercount comes from the entry's own structure, not from a missed write: [[tasks/sprint-2-remove-omnigent]] was updated and reported under `### Ingested`, then not carried into the write-scope tally. **Every page the sync touched is named somewhere in that entry — the roll-up is short by one, the inventory is complete.** The original entry is **untouched and byte-identical**; `log.md` is append-only with no exceptions.
+
+### Re-measured independently this run — not inherited from the sync
+
+- **Structure: 197 pages** (0 features · 8 systems · 37 decisions · 152 tasks) · 197 index targets, all unique · **0 broken page→page · 0 index→missing · 0 page-not-indexed.**
+- **Reciprocity: 0 one-way links over all 197 pages**, re-measured after this lint's own writes. **0 orphans.**
+- **ADR number/slug cross-check: clean.** 37 vault ADR pages ↔ 37 knowledge-base ADRs, matched **case-insensitively**, over **regular files only**, compared **numerically** with leading zeros stripped: **0 missing counterparts · 0 slug divergences · 0 heading/filename mismatches.** Separate pass over `knowledge-base/decisions/`: **0 duplicate numbers.** *(0 knowledge-base ADRs lack a vault page — informational, and not a finding in either direction.)*
+- **Board counts re-derived from `dashboard.sh` and from the board's own status cells, parsed by the brief-link column rather than by first-token match:** `total 188 · done 132 · backlog 6 · cancelled 5 · moved 45`. **45 distinct moved rows, no duplicates.** The vault's sprint page matches exactly.
+- **Secrets: 0.** Own pattern scan (AWS/OpenAI/Anthropic/GitHub/Slack key shapes, PEM headers, JWTs, bearer strings, DSN userinfo, quoted credential assignments) over all 197 pages plus `index.md`, `log.md` and `schema.md` — **zero hits**, including zero in this entry.
+- **Template: 0 YAML frontmatter** across all 197 pages; every page carries its schema-mandated **bold inline** fields.
+- **Dead source paths: 938 path-like tokens checked, 16 non-resolving, and every one classified as deliberate** — absorbed directories (`ai-agents/plans/`, `worklogs/`, `reviews/`), rejected or never-built artifacts (`AGENTS-COMMON.md`, `claude/agents/fkit-git.md`, `.fkit-keep-out`), proposed-but-unbuilt tests owned by open tasks (`test/closed-rank-immutability.test.js`, `test/skill-ownership-sites.mjs`), quoted defect specimens, and ellipsis placeholders. **0 live dead pointers.**
+- **`log.md` append-only held** — this entry appended; **no prior entry edited or annotated in place.**
+
+### Both carried-forward specimens re-confirmed, and NOT re-fixed
+
+- **`claude/dashboard.sh` on the ADR-029 page** is the 2026-08-02 correction note **quoting the error it fixed**. Left alone.
+- **The two old-form flag templates in the `2026-08-03 — correction` entry** are **unsubstituted** specimens (`<NNNN>-<slug>`) quoted by `0211` to describe the defect `0173` fixed at source. They resolve to nothing and point at nothing. **Not re-fixed, and no real ID substituted into them.** This note is their second carry-forward — keep carrying it.
+- **`0211`'s use of `correction` as an operation word** is not template drift. `schema.md`'s log form is `## YYYY-MM-DD — <operation>`, and the slot is generic.
+
+### Checked for and NOT found — so the next lint need not re-derive them
+
+- **No vault page's subject is one of the 45 moved tasks**, and no page's `**Sprint/Tag**:` field cites a `P<n>` rank. The moved rows are referenced only as *"open"* or *"backlog task"* — folder-location statements that the move left **true**.
+- **No vault page carries a completion flag in the old path-bearing form**, and none describes that form as current after the two repairs above.
+- **The four closed ledgers reading `Status: in-review` are reported accurately and are not over-claimed.** Four pages mention it — `0158`'s, `0173`'s, `0210`'s and `0211`'s — each scoped to its own task, none asserting it fixed. **A review ledger is not a vault surface; this lint did not touch one.** The sync's flag that this is now a recurring pattern rather than a one-off stands, and is owned elsewhere.
+
+### Write scope
+
+Only `ai-agents/wiki-vault/` touched — 5 content pages plus this entry. `index.md` unchanged, `.wiki-watermark` unchanged (a lint does not advance it). **All edits additive: 4 dated correction notes and 4 back-links; no page body rewritten, no sentence deleted.** **Nothing committed, nothing staged. No task moved, no mover invoked. No brief, sprint plan, ADR, report, skill, agent definition or source file edited.** No `:NNN` coordinate written anywhere in this run's diff.
+
+No tracked task completed by this run.
+
+## 2026-08-03 — correction (owner ruling: the vault's correction-note placement rule)
+
+**One thing only:** the owner settled which correction-note placement rule governs the vault, and this
+run applied it to the pages that state the rule. **This entry does not restate, revise or extend the
+`2026-08-03 — sync` or either `2026-08-03 — lint` entry above; all past entries are byte-identical.**
+
+### The ruling
+
+> **`0143`'s owner-ruled form governs BOTH surfaces — the knowledge-base and the vault: a correction
+> note goes BELOW the claim, at the claim, not in a header banner.** The vault page stating the rule as
+> *"banner above the claim"* is corrected to match.
+
+**Provenance:** the **owner**, live via `AskUserQuestion`, **2026-08-03**, in the
+`/fkit-sprint-ship-loop` driver session. It answers the question the **second 2026-08-03 lint** entry
+above returned to the driver under its `⚠️ Flagged — the carried-forward finding, RE-MEASURED, still
+not settled` heading — the same finding the first 2026-08-03 lint of the day had raised.
+
+**The owner's stated grounds, as relayed:** the below-the-claim form matches **31 of 31** correction
+notes already in the vault; **one ruling then governs both surfaces** instead of two rules opposed on
+the above/below axis; and **nothing on disk has to move.**
+
+### What this ruling does and does not say
+
+- **It settles which reading governs going forward.** It does **not** make the 2026-07-29 wording
+  retroactively wrong, and **no correction note written by this run says anyone erred.** *"Banner above
+  claim"* was a stated convention adopted on real evidence, whose two readings — *adjacent-and-visually-
+  distinct* versus literally *above* — **nothing on disk distinguished then and nothing distinguishes
+  now.** What changed is a decision, and the notes say when.
+- **It does not reach this file.** `log.md` stays **append-only with no exceptions** (owner ruling,
+  same day, recorded in the `2026-08-03 — correction` entry above): a correction here is a **new dated
+  entry** naming its target by folder ID and durable anchor, never a note placed at the claim. Every
+  note this run wrote at a claim was written on an ordinary vault page, never here.
+
+### Corrected — 5 pages, additions only
+
+Named by **task folder ID and durable anchor**; no line numbers written anywhere in this run.
+
+1. **[[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] (`0141`) — the page that states the
+   rule.** Its `## Key Changes` paragraph beginning *"Placement, not word count, was the recurring
+   error"* ends *"The rule adopted — banner above claim — is now the vault's convention."* A dated ⛔
+   note now sits **below** it, after the 2026-08-03 lint note already there, recording the ruling, its
+   provenance, the owner's grounds, the restated rule and the `log.md` carve-out. **The 2026-07-29
+   sentence and the lint note above it are both left byte-identical** — a reader sees the rule change,
+   not a silent rewrite.
+2. **[[tasks/append-a-dated-correction-note-to-adr-010]] (`0143`) — the form now governing both
+   surfaces.** Two dated notes, each below its claim: one under the `## Key Changes` bullet *"The note
+   goes below the claim it corrects"*, recording that the clause now governs the vault too; one under
+   the `## Related` bullet for `0141`, whose *"the contradiction is recorded there and **not settled**"*
+   is **no longer true**. Both originals byte-identical.
+3. **[[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] (`0195`).** Its `## Related`
+   bullet for `0141` describes the vault convention as *"worded opposite on the above/below axis"* — a
+   live opposition that has ended. Dated ⛔ note below it; original byte-identical.
+4. **[[systems/knowledge-base-structure]].** Its `## Related` bullet cataloguing `0143`'s form as *"the
+   knowledge-base correction-note form"* now carries a dated ✅ note recording the widened scope and the
+   `log.md` carve-out. Original byte-identical.
+5. **[[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] (`0211`).** Reciprocal
+   `## Related` back-link added for the new link from `0141`'s page — `0211` is the append-only carve-out
+   the ruling does not reach.
+
+**Two-way linking:** this run introduced **two new page pairs** — `0141` ↔ `0211` and `0141` ↔
+[[systems/knowledge-base-structure]] — as **four** link instances, all reciprocal. Every other page
+named above already linked `0141` and was already linked back. **Re-measured after the writes, over all
+197 pages: 0 one-way links, 0 broken page→page links.**
+
+### ⚠️ Loose end — the word *"banner"*, checked and reported, not fixed
+
+`0143`'s form **rules out the word "banner" by name**, so the standing question was whether *"banner"*
+survives anywhere as **current correction-note guidance**. Measured over all vault pages plus
+`index.md` this run:
+
+- **As current correction-note guidance: one occurrence, and it is deliberate.** `0141`'s
+  *"banner above claim"* sentence, left **byte-identical on purpose** under the ⛔ note that supersedes
+  it. **That is the form the ruling itself mandates** — the superseded rule stays legible. It is not a
+  loose end to fix, and **must not** be deleted by a later lint.
+- **`index.md`'s `0141` catalog line does not need correcting.** It already describes the rule as *"a
+  dated note **placed at the claim**, never 19 lines below it"* — **compatible with the new rule**, and
+  it never uses the word *banner*. Left untouched. `index.md` is unchanged by this run.
+- ⚠️ **A genuinely open item, reported not fixed: *"banner"* is also the vault's name for a different
+  device** — page-top `⚠️ STALE` / supersession / collision blocks on ADR mirror pages, and the
+  `⛔ Owner:` banners in skills. **The ruling governs correction-note placement and says nothing about
+  those**, and this run did not touch them. But the vault now uses one word for a form it has ruled out
+  and a device it still uses. **Naming the page-top device something else is a judgment call and a
+  vault-wide sweep — no open task owns it, and this run did not file one.** Flagged for the owner or an
+  architect.
+
+### Carried forward, re-confirmed, and NOT re-fixed
+
+- **The two old-form flag templates in the `2026-08-03 — correction` entry** are deliberate
+  **unsubstituted** specimens (`<NNNN>-<slug>`). **Not touched, and no real ID substituted into them.**
+  This is their **third** carry-forward — keep carrying it.
+- **`claude/dashboard.sh` on the ADR-029 page** is a correction note **quoting the error it fixed**.
+  Left alone.
+
+### Write scope
+
+Only `ai-agents/wiki-vault/` touched — 5 content pages plus this entry. `index.md` unchanged,
+`.wiki-watermark` unchanged. **All edits additive: 5 dated correction notes at their claims and 3
+`## Related` link lines; no page body rewritten, no sentence deleted, no original sentence moved.**
+**`log.md` append-only preserved — this entry appended, no past entry edited or annotated in place;
+this file's diff carries zero deletions.** **Nothing committed, nothing staged. No task moved, no mover
+invoked. No brief, sprint plan, ADR, report, skill, agent definition or source file edited.** No `:NNN`
+coordinate written anywhere in this run's diff.
+
+⚠️ **The working tree is NOT clean outside the vault, and none of it is this run's.** A **producer
+running concurrently** modified `ai-agents/sprints/backlog.md` and added two untracked task folders
+(`0214`, `0215`) while this run was in progress. **This run read no brief it changed and wrote nothing
+outside `ai-agents/wiki-vault/`.** Recorded so a later reader does not attribute those writes here.
+
+No tracked task completed by this run.
+
+## 2026-08-03 — correction (owner ruling: the "banner" naming collision is accepted)
+
+**One thing only:** the owner accepted the naming collision this vault's previous entry flagged as a
+loose end, and this run recorded it where a lint will find it. **No past entry is edited or annotated
+in place; every entry above is byte-identical.**
+
+### The ruling
+
+> **The word *"banner"* naming two different things in this vault is ACCEPTED. The two uses are
+> distinguishable in context, and the placement ruling's own notes already say which form governs a
+> correction note. No rename of the page-top device. No vault-wide sweep.**
+
+**Provenance:** the **owner**, live via `AskUserQuestion`, **2026-08-03**, in the
+`/fkit-sprint-ship-loop` driver session. It answers the loose end returned by the entry immediately
+above this one — the `⚠️ Loose end — the word "banner", checked and reported, not fixed` item, third
+bullet.
+
+**The two uses, stated so a later run need not re-derive them:** (a) the **superseded** correction-note
+placement *"banner above claim"*, and (b) a **live, still-used** device — the page-top `⚠️ STALE` /
+supersession / collision blocks on ADR mirror pages, and the `⛔ Owner:` banners in the skills.
+
+### ⛔ Exact scope — what this ruling does NOT do
+
+- It accepts the **naming** overlap and nothing else.
+- It does **not** re-open the placement ruling recorded in the entry above.
+- It does **not** bless *"banner above claim"* as a correction-note form. **That form stays
+  superseded**, and `0141`'s original sentence stays byte-identical under the notes that supersede it.
+- A page-top banner remains legitimate for **page-level staleness**. It is still **not** how a
+  correction note is placed.
+
+### Recorded — 3 surfaces, chosen because a LINT ACTUALLY READS THEM
+
+The lint procedure's own steps are: read `schema.md`, read `index.md`, read every page in the index.
+**It has no step that reads this file.** So `log.md` is where the ruling is *logged*, not where it is
+*enforced* — the enforcing copies are on surfaces the lint provably opens:
+
+1. **[[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] (`0141`)** — read at the lint's
+   read-every-page step, and the page any run investigating *"banner"* lands on, since the superseded
+   wording lives there. A dated ✅ note now sits below the placement notes, carrying the ruling, its
+   exact scope, its provenance, and an explicit **do not re-raise, do not sweep**.
+2. **`index.md`** — read at the lint's step 2, **before** any page. The `0141` catalog line now carries
+   both 2026-08-03 rulings in short form, including the accepted collision and the *no sweep*
+   instruction. *(This is the run that changed `index.md`; the entry above left it untouched.)*
+3. **[[systems/knowledge-base-structure]]** — where the correction-note form is catalogued, so a run
+   arriving at the form rather than at `0141` meets the same ruling and the same scope limit.
+
+**No new page→page links introduced**, so reciprocity is unchanged by this run.
+
+### ⚠️ Flagged — the record is on the right surfaces, but one better surface was out of reach
+
+**`schema.md` is the lint's step 1 — its stated rulebook — and would be the strongest home for a
+standing "accepted, do not re-raise" rule. This run did not write it, deliberately.** `wiki-vault/schema.md`
+is **dual-homed and parity-ENFORCED**: `test/dual-home-parity-exceptions.mjs` states in its own words
+that it *"IS dual-homed and byte-identical, and is enforced, not excepted."* Editing the vault copy
+alone would **break that test**, and the scaffold copy is **outside the wiki role's write scope**.
+**Recording this in `schema.md` therefore needs a change outside `ai-agents/wiki-vault/`, which this
+role may not make.** Reported, not attempted, and **no task filed** — the wiki role cannot file one.
+
+⚠️ **A related gap, already owned:** task `0213` (owner-ruled remedy **A**, 2026-08-03, unstarted) adds
+a `log.md` read step to the lint skill. Until it ships, **anything parked only in this file has no
+procedural readership** — which is exactly why the three surfaces above carry the ruling and this entry
+does not rely on being read.
+
+### Carried forward, re-confirmed, and NOT re-fixed
+
+- **The two old-form flag templates** in the `2026-08-03 — correction` entry are deliberate
+  **unsubstituted** specimens. **Untouched; no real ID substituted.** Fourth carry-forward.
+- **`claude/dashboard.sh` on the ADR-029 page** is a correction note **quoting the error it fixed**.
+  Left alone.
+- **`0141`'s original *"banner above claim"* sentence** is byte-identical **on purpose**. A later lint
+  **must not** delete it.
+
+### Write scope
+
+Only `ai-agents/wiki-vault/` touched — 2 content pages, `index.md`, and this entry. `.wiki-watermark`
+unchanged. **All edits additive: 2 dated notes and one extended `index.md` catalog line; no page body
+rewritten, no sentence deleted.** **`log.md` append-only preserved — appended only, zero deletions.**
+**Nothing committed, nothing staged. No task moved, no mover invoked. No brief, sprint plan, ADR,
+report, skill, agent definition, test or source file edited.** No `:NNN` coordinate anywhere in this
+run's diff.
+
+⚠️ **Still not this run's, and still in the tree:** the concurrent producer's `ai-agents/sprints/backlog.md`
+edit and its untracked `0214` / `0215` task folders. Named again so neither entry's write scope is
+misread.
+
+No tracked task completed by this run.

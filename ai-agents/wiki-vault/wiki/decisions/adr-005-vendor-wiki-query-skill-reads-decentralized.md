@@ -42,3 +42,4 @@ The proposal reversed a stated, checked-in project rule: root `CLAUDE.md` said *
 - [[tasks/knowledge-base-hygiene-post-omnigent]]
 - [[tasks/wiki-sync-post-omnigent]]
 - [[tasks/wiki-resync-for-adr-033]] — `0126`, filed as its own task precisely because only `fkit-wiki` may write the vault
+- [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] — `0211`, whose brief ruled that **this exclusive-surface rule outranks the sprint loop's step table**: a driver spawning a coder for a vault write is asking it to break a hard rule

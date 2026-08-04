@@ -31,7 +31,9 @@ Done, **agent-closed — not owner-verified**.
 
 **Provenance is the finding.** Found by a spawned `fkit-producer` during `0125`'s close — **the role that actually consumes the flag.** Neither the coder, the reviewer, nor the Codex adversarial pass caught it across five rounds.
 
-⚠️ **A defect this task did not fix, and which it could not have seen as a defect.** The path form it mandated hardcodes `ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md`. A `complete` flag says *ready to close*, so the folder leaves `backlog/` in the same working session — **the template manufactures a dead path by construction**, and a review ledger quoting the flag verbatim preserves it forever. Ruled in [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] (`0160`) §5.2 as Case 4. **The owner ruled the replacement on 2026-08-01: folder ID only, no path at all.** The skill edit is an unfiled follow-up; the three `SKILL.md` files still carry the defective form.
+⚠️ **A defect this task did not fix, and which it could not have seen as a defect.** The path form it mandated hardcodes `ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md`. A `complete` flag says *ready to close*, so the folder leaves `backlog/` in the same working session — **the template manufactures a dead path by construction**, and a review ledger quoting the flag verbatim preserves it forever. Ruled in [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] (`0160`) §5.2 as Case 4. **The owner ruled the replacement on 2026-08-01: folder ID only, no path at all.**
+
+✅ **Repaired 2026-08-03 by [[tasks/tighten-the-wiki-completion-flag-block]] (`0173`)** — the path is gone from **both** template lines in all three `SKILL.md` files, a `:NNN` prohibition was added, and the routing line now tells the caller to resolve `<NNNN>` to its folder by glob. **So this page's title is now half-historical: the flag carries the folder ID, and no longer the brief path.** The already-emitted old-form flags frozen in the vault's `log.md` were a separate job — [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] (`0211`).
 
 ## Related
 
@@ -40,4 +42,6 @@ Done, **agent-closed — not owner-verified**.
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — Decision 3, the permanent ID
 - [[tasks/implement-task-folder-name-scheme-change]] — `0103`, which wrote the rank-vs-identity convention
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160`, which found the hardcoded `backlog/`
+- [[tasks/tighten-the-wiki-completion-flag-block]] — `0173`, which removed the path this task added
+- [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] — `0211`, the flags emitted in this form before the fix
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — why the flag routes to the producer

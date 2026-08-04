@@ -42,3 +42,4 @@ Done. `conventions/task-status-vocabulary.md` is the canonical set, and the sour
 - [[tasks/revert-task-movers-to-producer-only]] — Revert the task movers to producer-only — ownership, mirrors, hook test, and mover prose
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — ⚠️ **the gating rule above is reversed**: `Done`/`Cancelled` are `fkit-producer`-only again, hook-enforced at any spawn depth
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the hook that makes producer-only structural rather than prose
+- [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — `0210`, which added the **Moved (to backlog)** row — `➡️ Moved to [Backlog](backlog.md)`, no `— priority M` suffix

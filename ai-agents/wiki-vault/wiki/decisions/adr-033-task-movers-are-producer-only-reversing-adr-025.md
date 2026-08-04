@@ -89,3 +89,5 @@ Two of these would have slipped the verification sweep entirely, because **the s
 - [[tasks/wiki-resync-for-adr-033]] — `0126`, the vault's ingest of this decision
 - [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`, which made the flag's task identity unambiguous
 - [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — **the skill-ownership site inventory is a declared registry**, not a remembered checklist
+- [[tasks/tighten-the-wiki-completion-flag-block]] — `0173`, which made the flag pathless; the caller now resolves the ID to a folder before calling the mover
+- [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] — `0211`, a wiki-owned task whose close still routed here, as every close does

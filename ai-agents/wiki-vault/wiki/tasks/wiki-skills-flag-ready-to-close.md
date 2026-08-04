@@ -28,6 +28,8 @@ Done, **agent-closed — not owner-verified**. Landed alongside `0124`, which re
 
 ⚠️ **A second defect outlived `0153`.** The corrected template hardcodes `ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md` — so the flag **manufactures a dead path by construction**, since a `complete` flag says *ready to close* and the folder leaves `backlog/` almost immediately. Ruled in [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] (`0160`) §5.2.
 
+> ✅ **Dated correction 2026-08-03 (lint) — that second defect is REPAIRED; the paragraph above is left byte-identical as this page's record of the 2026-07-23 state.** [[tasks/tighten-the-wiki-completion-flag-block]] (`0173`, closed 2026-08-03) removed the path from **both** template lines in all three wiki `SKILL.md` files on the owner's *folder-ID-only* ruling, added a `:NNN` prohibition, and rewrote the closing routing line to resolve `<NNNN>` to its folder by glob. **The block this task landed no longer generates a dead path.** The flags already emitted in the old form were out of `0173`'s reach and were handled separately by [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] (`0211`).
+
 ## Related
 
 - [[tasks/investigate-making-wiki-task-completion-visible-to-the-board]] — `0108`, the investigation this implements
@@ -35,4 +37,5 @@ Done, **agent-closed — not owner-verified**. Landed alongside `0124`, which re
 - [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`, the `Task N` fix
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160`, the hardcoded-`backlog/` finding
 - [[tasks/revert-task-movers-to-producer-only]] — `0124`, landed with this
+- [[tasks/tighten-the-wiki-completion-flag-block]] — `0173`, which stripped the path back out of this block and banned `:NNN`
 - [[systems/role-locked-sessions]]

@@ -54,6 +54,8 @@ The candidate rule was *"folder ID and brief path only; no board rank, no `P<n>`
 - **The brief-path half was NOT ruled by the report** — it was raised as open question 7 and left for the owner. ✅ **The owner ruled it on 2026-08-01, via `AskUserQuestion`: folder ID only, no path at all** (e.g. *"Task 0148's vault work is complete — ready to close"*). ⚠️ **The report at `HEAD` still records this question as open** — it was written before the ruling; the ruling is relayed here from the driver session and is not yet in the report's own text.
 - **Ownership boundary:** the flag block lives in `claude/skills/fkit-wiki-*/SKILL.md`. **The wiki role may not edit it** — it is a producer-then-coder follow-up, and the three files still carry the defective form today.
 
+> ✅ **Dated correction 2026-08-03 (lint) — *"the three files still carry the defective form today"* is FALSIFIED, and Case 4 is implemented.** The bullets above are left byte-identical as this page's record of its 2026-08-01 ship date. [[tasks/tighten-the-wiki-completion-flag-block]] (`0173`, closed 2026-08-03) landed the producer-then-coder follow-up: the path is gone from **both** template lines in all three wiki `SKILL.md` files, the `:NNN` prohibition is in, and the routing line resolves `<NNNN>` by glob. **This also discharges follow-up 5 in the table below** — its `producer to file` cell is likewise history. ⚠️ **One clause above is NOT superseded and still holds:** the report's own §11 still records open question 7 as *"⏳ Awaits the owner"*, because the owner ruled after the report was finalised and the ruling travelled in `0173`'s brief instead — a reader who consults §11 alone still finds this unruled.
+
 ## Outcome
 
 Done, **agent-closed — not owner-verified**. Four review rounds, Codex coverage FULL throughout.
@@ -83,6 +85,8 @@ Done, **agent-closed — not owner-verified**. Four review rounds, Codex coverag
 - [[tasks/state-task-brief-step-5s-append-rule-in-full]] — `0157`, Case 1's rule half
 - [[tasks/disambiguate-the-frozen-history-clause]] — `0161`, the sibling that lands first by preference
 - [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`, whose template Case 4 corrects
+- [[tasks/tighten-the-wiki-completion-flag-block]] — `0173`, which implements Case 4 — **on a ruling that is not in this report**: §11 still reads *"⏳ Awaits the owner"*, and the owner ruled after the report was finalised
+- [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] — `0211`, which records the flags already emitted in the old form, and establishes **"describe, don't quote"** as the standing form for vault corrections
 - [[tasks/wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner]] — `0148`, the near-miss that produced Case 4
 - [[tasks/implement-task-folder-name-scheme-change]] — `0103`, the rank-vs-identity convention
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — Decision 3, the permanent ID

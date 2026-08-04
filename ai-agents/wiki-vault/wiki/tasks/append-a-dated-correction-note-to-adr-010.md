@@ -18,6 +18,9 @@
 
 - **Two markers, with a legend in the ADR header.** **⚠️ = a fact that drifted** (the decision is untouched) · **⛔ = a decision that was overturned** (do not follow it).
 - **The note goes *below* the claim it corrects**, at the claim — not in a header banner, not nineteen lines away.
+
+  > ✅ **Dated note 2026-08-03 — this clause now governs the VAULT as well as the knowledge-base.** Owner ruling, given live via `AskUserQuestion` in a `/fkit-sprint-ship-loop` driver session: `0143`'s form governs **both surfaces**, and the vault's own opposite wording — *"banner above claim"*, stated by [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] (`0141`) — is superseded from that date. **The bullet above is left byte-identical**; only its scope widened. ⚠️ **Except the vault's `log.md`**, which is append-only with no exceptions — a correction there is a new dated entry, not a note at the claim ([[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]], `0211`).
+
 - **Every corrected sentence is left byte-identical**, and the note says so in those words.
 - **Additions only.** No existing line was edited; `Status` stays `accepted`.
 - **No `:NNN` line numbers into mutable files** — anchor by file plus heading plus quoted phrase.
@@ -46,5 +49,7 @@
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — task `0160`, the citation ruling the note form applies
 - [[tasks/disambiguate-the-frozen-history-clause]] — task `0161`, the frozen-history convention this sits under
 - [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — task `0141`, which settled the **vault's** correction-note convention as *"banner above claim"* — **worded opposite to this task's below-the-claim form**, on a different surface; the contradiction is recorded there and **not settled**
+  > ⛔ **Dated correction 2026-08-03 — it IS settled now, in this task's favour.** The owner ruled live via `AskUserQuestion` in a `/fkit-sprint-ship-loop` driver session that **`0143`'s form governs both surfaces**; `0141`'s *"banner above claim"* no longer governs the vault. The bullet above is left **byte-identical** as the record of the contradiction while it stood. The ruling **does not** call the 2026-07-29 wording retroactively wrong — it chooses which of its two surviving readings governs from now on.
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the hook behind its ledger's record defect
+- [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] — task `0211`, which carries this correction-note form into the **vault's append-only `log.md`**, and adds **"describe, don't quote"**
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/role-locked-sessions]] · [[systems/knowledge-base-structure]]

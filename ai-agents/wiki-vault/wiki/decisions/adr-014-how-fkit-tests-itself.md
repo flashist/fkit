@@ -83,3 +83,4 @@ The ADR deliberately **declined to pick the runner**, on the owner's explicit ru
 - [[tasks/build-dual-home-parity-test]] — task `0133` — the mechanical parity test, built 2026-08-02
 - [[tasks/convert-skill-descriptions-to-block-scalars-and-guard]] — task `0136` — every skill `description:` to a `>-` block scalar, plus the repo's first `SKILL.md` frontmatter guard
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
+- [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — task `0210` — extended the dashboard contract suite and wired a new `prove-red.sh` mutation; ⚠️ a **GNU-only regex passes CI and fails on the owner's Mac with no signal either way**

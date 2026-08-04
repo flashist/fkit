@@ -61,3 +61,5 @@ The closed-row rule is **absolute and outranks the exception**, exactly as it al
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/fkit]]
 - Source: `ai-agents/knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md`, `ai-agents/knowledge-base/reports/2026-08-01-merit-ordering-record-when-board-rank-cannot-carry-it.md`
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — forbids ADR-037's **instance A** on a separate axis — the two agree, and neither does the other's work
+- [[tasks/tighten-the-wiki-completion-flag-block]] — task `0173` — a live case where **append rank contradicted the dependency links**, and the links were the binding record
+- [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — task `0210` — a reverse-moved sprint row **keeps its `P<n>` as frozen history**; rewriting it would be a renumber

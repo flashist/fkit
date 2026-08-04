@@ -46,4 +46,5 @@
 - [[tasks/correct-claude-mds-stale-skills-for-role-location]] — task `0151`, the same stale pointer fixed in the repo-root `CLAUDE.md`
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — task `0160`, the citation form both notes follow
 - [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — task `0141`, the **vault's** own correction-note convention, worded opposite on the above/below axis
+  > ⛔ **Dated correction 2026-08-03 — the opposition is over.** Owner ruling, live via `AskUserQuestion` in a `/fkit-sprint-ship-loop` driver session: **`0143`'s below-the-claim form governs the vault too**, so `0141`'s *"banner above claim"* no longer governs. `0141`'s page still carries that wording, **byte-identical**, under a dated note recording the change — so the bullet above stays true of what is written there, and is left byte-identical itself.
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/role-locked-sessions]] · [[systems/knowledge-base-structure]]

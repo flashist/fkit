@@ -35,3 +35,4 @@ The read-side half — making `/fkit-status` report this board **only on request
 - [[tasks/build-deterministic-dashboard-script-for-fkit-status]]
 - [[tasks/decide-whether-fkit-needs-a-tester-agent]] — a Backlog-board task whose ruling produced ADR-028; **its close does not move Sprint 2's count**
 - [[tasks/wiki-sync-backlog-board-introduction]] — a batched wiki-sync task (discharged by the migration sync)
+- [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — `0210`, which specified the **reverse** move onto this board and made its unranked rule a mandatory edit
