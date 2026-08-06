@@ -67,8 +67,37 @@ the `plan.md` it names, at the `git hash-object` blob it names.
 - **Prove-red:** each new test must be shown to fail without the hook (`test/prove-red.sh` is the
   existing harness for this).
 
+- **Delete the `unverified` marker text from `claude/skills/fkit-sprint-ship-loop/SKILL.md`, in the same
+  change that lands the hook.** See the carve-out below — this is `0204`'s to make.
+
 ⛔ **Out of scope:** condition (b)'s wording (unchanged), `claude/agents/fkit-coder.md`, the SKILL.md rule
 text (`0203`), and `ai-agents/wiki-vault/`.
+
+### ✅ ONE CARVE-OUT from that exclusion — the `unverified` marker removal IS in scope
+
+**Owner ruling, `AskUserQuestion`, live driver session, 2026-08-05: the removal of `0203`'s `unverified`
+marker text is `0204`'s to make, in the same change that lands the hook — not a separate task.**
+`0203` shipped a clause into `claude/skills/fkit-sprint-ship-loop/SKILL.md` naming `0204` explicitly and
+saying so in its own words: *"Who removes this marker, and when: `0204`, in the same change that lands the
+hook — the removal is `0204`'s to make, not a separate task."* The day the hook ships, that marker text
+becomes **false** in every spawn prompt still carrying it — an honesty marker inverted into a false one.
+
+**The exclusion above otherwise stands unchanged.** `0203`'s *rule text* — the paste-and-pointer
+construction, the degraded form, the two governing sentences, the step ordering — is still out of scope.
+The carve-out is **the marker sentences only**.
+
+⚠️ **Re-read the live file before deleting anything; do not work from line numbers.** A separate task is
+**concurrently editing this same clause** to enumerate every stale site, so the count and the exact
+surrounding text will have moved. Locate the sites by searching the file for `0204` and for `unverified`,
+and read what is actually there that turn.
+
+⛔ **ONE SITE IS PROTECTED — surgical deletion only.** One stale mention sits inside the paragraph headed
+**"The honest bound on 'true by construction' — do not rewrite this into a guarantee."** Two reviewers
+flagged that paragraph as **load-bearing** — it is the ADR-031 honesty clause for this whole construction.
+Delete **only** the now-false clause *"and until `0204`'s carry-check hook lands, nothing does"* (and the
+minimum punctuation needed to leave a grammatical sentence). **Every other byte of that paragraph must be
+unchanged** — including *"This construction narrows the hazard; it does not remove it"*. Do not rewrite,
+compress, re-flow, or "improve" it while you are in there. Diff it to prove it.
 
 ## Verification steps
 
@@ -81,16 +110,22 @@ text (`0203`), and `ai-agents/wiki-vault/`.
 4. No new runtime dependency is added — `package.json` dependencies/devDependencies unchanged (ADR-014).
 5. The hook's own documentation/comments state the **proxy-not-(b)**, **TOCTOU**, and **launcher-sessions-only**
    limits. A future reader must not be able to mistake green for "the marker held".
-6. `git status` shows changes confined to `claude/` (hook + settings) and `test/`. No `ai-agents/` source
-   of truth rewritten, no `wiki-vault/`.
+6. `git status` shows changes confined to `claude/` (hook + settings + the sprint-ship-loop `SKILL.md`
+   marker deletion, and nothing else in that file) and `test/`. No `ai-agents/` source of truth rewritten,
+   no `wiki-vault/`.
+7. **The marker removal is done, and it is surgical.** No `unverified — no hook checks it until 0204`
+   text survives anywhere in `claude/skills/fkit-sprint-ship-loop/SKILL.md` — grep to confirm. **And**
+   `git diff` on that file shows the *"honest bound on 'true by construction'"* paragraph changed by the
+   removal of the stale clause **only**; every other byte of that paragraph is identical. A diff touching
+   more of it fails this step.
 
 ## Notes
 
 - **Depends on:** `0202` — **hard gate**, see caveat 2. Also reads `0203`'s emitted pointer form, but does
   not require `0203` to have landed (`0203` ships first, carrying its `unverified — no hook checks it
   until follow-up 3 lands` marker; landing this task is what makes that marker removable).
-- **Blocks:** nothing. Removing `0203`'s `unverified` marker is a small follow-on the implementer should
-  name in the worklog, not a separate dependency.
+- **Blocks:** nothing. Removing `0203`'s `unverified` marker is **in this task's scope** (see the carve-out
+  in *What to build*), not a separate dependency and not follow-on tidying.
 - **⚠️ Priority 182 is append rank, NOT a merit ranking — flagged for owner confirmation.**
   **On merit this belongs directly below `0203`**, wherever the owner places that row — the three are one
   fix in dependency order, and this is the only member of the trio that turns prose into a check.

@@ -10,7 +10,7 @@ Sprint 2
 186
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder

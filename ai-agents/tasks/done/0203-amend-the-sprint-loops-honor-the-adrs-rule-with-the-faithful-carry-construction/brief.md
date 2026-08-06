@@ -10,7 +10,7 @@ Sprint 2
 181
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -83,9 +83,22 @@ So the rule must additionally require:
      that the degraded form was declared. Degraded is a state to announce, not a gap to leave silent.
 
 **⚠️ MANDATORY, in the rule text itself — not in a footnote, not in the worklog:** the emitted pointer
-must be marked **`unverified — no hook checks it until follow-up 3 lands`**. This is an **owner ruling**:
-this amendment **ships without waiting for `0204`**, and that wording is what stops a self-computed,
-self-reported hash from being mistaken for a checked one in the window between the two.
+must be marked **`unverified — no hook checks it until 0204's carry-check hook lands`**. This is an
+**owner ruling**: this amendment **ships without waiting for `0204`**, and that wording is what stops a
+self-computed, self-reported hash from being mistaken for a checked one in the window between the two.
+
+⛔ **AMENDED 2026-08-05 — the literal above changed; the mandate did NOT.** This clause originally
+required the ordinal form *"follow-up 3 lands"*. That form is **superseded and deliberately absent from
+the shipped file — a grep returning 0 for it is this requirement working, not failing.** *"Follow-up 3"*
+is an ordinal a **receiving worker cannot resolve**: it is meaningful only against `0162`'s report
+ordering, which the worker reading the shipped rule does not have. Review finding **`R3`** fixed it by
+naming `0204` directly. **The owner ruled the change right and the earlier literal superseded**
+(`AskUserQuestion`, live driver session, 2026-08-05), and the **Round 2 reviewer independently ruled the
+same**, adding that restoring the old ordinal *"would re-introduce the defect `R3` fixed while citing a
+superseded brief step — the `0218` pattern exactly."* Two independent rulings, same direction. **This
+remains an owner ruling and a MANDATORY requirement — only the string it names is different.** Verified
+against the shipped file: **exactly 2 hits** in `claude/skills/fkit-sprint-ship-loop/SKILL.md`. See also
+verification step 6, which greps this same literal.
 
 ⛔ **Out of scope:** condition **(b)** of the declared-approval marker — it **stands byte-unchanged**
 (`claude/agents/fkit-coder.md@2026-08-02:65-66`), and `0163` needs no edit as a result. Do not touch
@@ -108,8 +121,20 @@ time** — `0202` and `0164` both edit this same file and will move these lines.
    in the prompt before spawning**, and to state the result — including, in the degraded form, that the
    degradation was declared. A rule that only *describes* a two-legged carry without requiring the check
    has **not** landed element 7.
-6. **The `unverified — no hook checks it until follow-up 3 lands` marker is present in the rule text
-   itself.** Grep for it. Absent = this task failed.
+6. **The `unverified — no hook checks it until 0204's carry-check hook lands` marker is present in the
+   rule text itself.** Grep for it — **expect exactly 2 hits** in
+   `claude/skills/fkit-sprint-ship-loop/SKILL.md`. Absent = this task failed.
+
+   ⛔ **AMENDED 2026-08-05 — do NOT restore the earlier literal.** This step originally grepped for
+   `unverified — no hook checks it until follow-up 3 lands`. That string is **deliberately gone — 0
+   hits is CORRECT.** *"Follow-up 3"* is an ordinal a **receiving worker cannot resolve**: it is
+   meaningful only against `0162`'s report ordering, which the worker reading the shipped rule does not
+   have. Review finding **`R3`** fixed it by naming `0204` directly. **The owner ruled the change right
+   and this step's literal superseded** (`AskUserQuestion`, live driver session, 2026-08-05), and the
+   **Round 2 reviewer independently ruled the same**, adding that restoring the old ordinal *"would
+   re-introduce the defect `R3` fixed while citing a superseded brief step — the `0218` pattern
+   exactly."* Two independent rulings, same direction. **A grep returning 0 for the old string is this
+   step working, not this step failing.**
 7. **Change surface is exactly one file** — `claude/skills/fkit-sprint-ship-loop/SKILL.md`. `git status`
    and `git diff --stat` show nothing else.
 8. `node --test test/skill-frontmatter.test.js` passes (frontmatter undisturbed), and `npm test` is green.

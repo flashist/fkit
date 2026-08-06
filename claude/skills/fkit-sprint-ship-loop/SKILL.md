@@ -154,6 +154,98 @@ at, and a `PreToolUse` carry-check needs one at spawn time.
   is **trust, not proof** — a prose
   mirror of the plan-step's "write nothing yet", carrying the same accepted prose-enforced cost (ADR-031
   honesty clause / ADR-032 D3/D7), not a verifiable token.
+
+  **How to carry it — the construction, not an exhortation** (ADR-032 D3; `0162`'s decision report
+  §2/§4, owner-ruled 2026-08-02). **A faithful carry is a copy over a durable artifact, executed in the
+  spawning turn — never recall over conversation state.** The requirement above shipped without one, and
+  per `0162` it then fired zero times in the run that installed it: once by pointing at conversation
+  state, once by pasting with silent truncations under an explicit *"everything else is byte-for-byte"*
+  claim. **A language model restating a long text from its own context cannot be relied on to reproduce
+  it byte-for-byte, nor to detect its own failure to do so** — so run these six steps, in order, in the
+  turn you spawn.
+
+  1. **Read `<task-folder>/plan.md` byte-exactly — `Bash(cat <path>)`, NOT the `Read` tool.** Two
+     reasons, both fatal. `Read` returns **`cat -n` framing** — a line number and a tab prepended to
+     **every** line — so the bytes you hold are not the file's bytes and their `git hash-object` can
+     never equal its blob hash; and `Read` **caps at 2000 lines by default**, silently truncating a long
+     plan *before* you have formed any judgment about it. Stripping the framing by hand re-introduces the
+     exact transformation this construction exists to remove.
+     ⚠️ **`Bash` is not exempt from truncation — it caps oversized output too, and says so when it
+     does.** A large plan can be cut by the **tool** rather than by the file, which is why step 2 leads
+     with that notice. No byte figure is pinned here on purpose: the cap is a harness
+     constant that moves, and a stale number in this text would be worse than none.
+  2. **Check the read was whole — before pasting anything.** ⚠️ **The tell is the truncation notice,
+     not an arithmetic comparison.** `Bash` announces when it caps output, so **if it said it truncated,
+     the read failed — stop there and take step 5.** Do not go hunting for a second number to check that
+     against: the byte count of what `cat` actually handed you is **not exposed to you**, so *"compare
+     the two figures"* is not an operation you can perform, and a step demanding it would be theatre. Run
+     `wc -c <path>` in the same turn regardless — it is the **corroborating** figure that the pointer and
+     step 5 both want, and it tells a later reader how large the plan was. What it is **not** is the
+     guard: it measures the **file**, which reads identically whether or not your read stopped short. A
+     read that stopped short is a **failed** carry, not a carry to patch up: take step 5's degraded form
+     and say so.
+  3. **Paste those bytes into the spawn prompt, unaltered.**
+  4. **Cite a pointer beside the paste** — the path plus `git hash-object <path>` (it works on untracked
+     files, which is what these are). One line, in this form:
+     ```
+     plan: ai-agents/tasks/<board>/<task>/plan.md  blob c0ffee… (git hash-object)
+           — unverified — no hook checks it until 0204's carry-check hook lands
+     ```
+     ⚠️ **Emit that `unverified — no hook checks it until 0204's carry-check hook lands` text every
+     time**, naming the task and not an ordinal — the worker receiving the marker is the reader who most
+     needs it and has no way to resolve "follow-up 3". The hash is **self-computed and self-reported**;
+     nothing checks it until `0204`'s `PreToolUse`/`Task` carry-check hook lands, and a reader must never
+     mistake it for a checked one.
+     ⛔ **Who removes this marker, and when: `0204`, in the same change that lands the hook — the removal
+     is `0204`'s to make, not a separate task.** The day the hook ships, this text becomes **false** in
+     every spawn prompt still carrying it, inverting an honesty marker into a false one; the deletion is
+     part of landing the hook, not follow-on tidying. **`0204` may never open this file, so its sites are
+     enumerated here rather than left to be discovered — there are FIVE, not the two most visible:**
+     1. the `unverified …` line inside the fenced pointer form above;
+     2. the ⚠️ instruction directly above, to emit that literal every time;
+     3. *"The hash is self-computed and self-reported; nothing checks it until `0204`'s … hook lands, and
+        a reader must never mistake it for a checked one"*;
+     4. ⛔ **the clause inside the closing "honest bound" paragraph** — *"and until `0204`'s carry-check
+        hook lands, nothing does"*. ⚠️ **Delete THAT CLAUSE ONLY; leave every other byte of that
+        paragraph untouched.** It is what keeps *"True by construction, or forbidden."* from being a false
+        claim, and trimming anything else there turns a correct document into an overstated one;
+     5. **this list and the sentence introducing it** — remove them last, once 1–4 are gone.
+     **Paste AND pointer — both, never either/or** (owner ruling, 2026-08-02, `0162` OQ-1; pure
+     by-reference was rejected) — **except step 5's declared degraded form**, which is the only either/or
+     this construction licenses. The paste is what the worker acts on and is what satisfies condition (b)
+     of the marker as written; the pointer is what makes the paste checkable at all. **A paste alone is
+     unfalsifiable — which is exactly why the truncate-and-certify round went undetected.**
+  5. **If — and only if — you cannot carry the plan whole, carry by reference only, and say so in the
+     spawn prompt in those words.** Pointer alone, degradation declared, and state the `wc -c` byte count
+     and why it could not be carried. **Truncation is never permissible** — not with a declaration, not
+     with an ellipsis, not "omitting rationale only": **never a partial paste, and never a completeness
+     claim over bytes that were cut.** A truncation that announces itself is a defect a reader can act
+     on; one that certifies itself is a claim the reader cannot check. A pointer-only spawn **fails
+     condition (b) as written**, so the spawned coder **must refuse it** — the refusal is mandatory, not
+     discretionary (`fkit-coder.md` gates the write on **all** of (a)(b)(c); this file's own rule above
+     says a spawned coder **refuses to write source**). That is the correct outcome, and it is why this
+     is the exception and not the routine.
+  6. **Before you send: look at the prompt and confirm both legs are actually in it — then state the
+     result.** Pasted bytes present **and** path + hash pointer present. In the degraded form: pointer
+     present **and** the degradation declared. **A driver may not describe a carry as two-legged on the
+     strength of intending it** — on 2026-08-03, on `0202`'s own run, a driver announced a plan carried
+     *"BOTH ways — paste and pointer"* and shipped the pointer only. That is the same shape as the false
+     certification this construction exists to prevent, and **the pointer is what made it detectable**.
+
+  **Two words this construction governs. They bind the same way:**
+  > **"Verbatim" is a word a driver may apply only to bytes it read from a file that turn.**
+  >
+  > **"Both ways" is a phrase a driver may use only after looking at what it wrote.**
+
+  True by construction, or forbidden.
+
+  **The honest bound on "true by construction" — do not rewrite this into a guarantee.** `cat` puts the
+  file's bytes in your context *this turn*, which is strictly better than recall of a message written
+  hours earlier, and that is the whole of the gain. It does **not** make the paste a mechanical copy: you
+  still emit those bytes token by token. Step 4's pointer is what would let anyone notice a divergence —
+  and until `0204`'s carry-check hook lands, nothing does. **This construction
+  narrows the hazard; it does not remove it** (ADR-031 honesty clause; `0162` §9).
+
 - **The plan/build split (honesty clause) is mandatory** — it is the only thing standing in for plan
   mode's write-wall on this path.
 - **The Process-review worker applies fixes on ADR-019's discipline under the declared-approval marker,
@@ -251,7 +343,8 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 | **Blocked — review non-convergence** | review oscillation on a task | `🚧 Blocked — review not converging`; skip/stop; report |
 | **Owner decision pending** | any judgment call / degraded close / cancel question | **pause**, relay via `AskUserQuestion`, resume on the answer |
 | **Dependency deadlock** | eligible set empty, backlog remains | stop; report the blocking chain |
-| **Blocked — hand-off didn't land** | a task's producer spawn failed, was denied, or left the close partial (§4) | **folder never moved** → re-spawn `@fkit-producer` once, then if still unresolved `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations; **folder moved, a status/href stale** → owner-only, do not re-spawn, mark **only the stale location** (never over a landed `✅ Done`). Either way: **report** it — do not pause the sprint; **do not count the task shipped**; next eligible task |
+| **Worker spawn didn't land** | a task's **Plan, Build, Verify, Review or Process-review** spawn failed, was denied, or returned nothing — **not** the producer spawn, which is the row below — **and the driver is not continuing this task in this run**: if **every** path the spawn instruction named was discharged, the drive continues and **this row does not fire** | **Read disk before deciding, and read the paths the spawn instruction named** — wherever they live, never the task folder as a proxy, and never `git status` for an untracked path (it reads `??` before the write and after it): compare **content**. Then: **nothing landed** → reset `🔄 In progress` → `🔲 Backlog` in **both** locations, add it to the per-run skip set (§1), **and put the choice to the owner** — do not decide alone; the reset parks the task accurately, but **how many re-spawns are allowed is unruled and the driver must not settle it**; **something landed and everything that landed stands on its own with the missing paths never arriving — nothing is half-written, and nothing on disk depends on a path that is missing** → `🚧 Blocked — <step> spawn didn't land: <what landed, what is outstanding>` in **both** locations; **something landed but a file is half-written, or the unit is torn across paths** → **stop and put it to the owner** (`Owner decision pending`) — no agent may guess whether torn state is safe to build on; **the task stays `🔄 In progress` while the owner is asked — a pause is not an exit, so no terminal status is written**. **`plan.md` is left in place — see the note below the invariant.** **On the first two branches:** **report** it — do not pause the sprint; **do not count the task shipped**; next eligible task. **On the third the sprint pauses** until the owner answers. Branch 1 both asks and moves on: `🔲 Backlog` is an accurate **terminal** status for it, so the task is safely parked and the drive can exit with the question outstanding — §1's skip memory is **this-run only**, so the answer lands on a later run. Branch 3 has no **terminal** status to write — a pause is not an exit — so it waits |
+| **Blocked — hand-off didn't land** | a task's producer spawn failed, was denied, or left the close partial (§4) — **close-step only; its single re-spawn is not a general worker-retry rule** | **folder never moved** → re-spawn `@fkit-producer` once, then if still unresolved `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations; **folder moved, a status/href stale** → owner-only, do not re-spawn, mark **only the stale location** (never over a landed `✅ Done`). Either way: **report** it — do not pause the sprint; **do not count the task shipped**; next eligible task |
 | **No Codex, degraded** | Codex absent after retries on a task | proceed-and-flag that task **loudly**; **do not route its close** — put its close to the owner |
 
 **Invariant — no path ends in silence.** Every exit writes accurate status in **both** the brief's
@@ -262,6 +355,16 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 > `🚧 Blocked — hand-off incomplete`, leaves the `✅ Done` alone, and reports. That is the single sanctioned
 > case where the two locations are knowingly left disagreeing, because no agent can lawfully reconcile them
 > (`fkit-task-done/SKILL.md:78-82`, `:283-286`). It is **reported**, never silent.
+
+> **The orphaned `plan.md`.** `<task-folder>/plan.md` is written **at plan approval, before the Build
+> spawn** (§*Durable artifacts*), so **every** exit past the plan gate — `Worker spawn didn't land`, both
+> `Blocked` rows above, `Blocked — hand-off didn't land`, and `No Codex, degraded` — leaves an approved-plan
+> artifact on disk for a task nobody is driving. **Leave it in place: never delete it, never re-author it.**
+> It is the approved bytes, and re-rendering them is the hazard writing it early exists to remove. **A later
+> run that finds a `plan.md` it did not itself approve this run must not read it as a live approval** —
+> re-present it at the plan gate and re-approve before spawning Build. The mirror case is the same rule from
+> the other side: a task **past** the plan gate with **no** `plan.md` → return to the plan gate pre-Build;
+> **past Build, treat the run as degraded and put the close to the owner.**
 
 ## Progress reporting (§5.5)
 - **Per task:** surface the coder worker's close-out evidence packet from its `worklog.md` (change
@@ -282,6 +385,19 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 - **Spawn typed `fkit-<role>` subagents only** — never a generic helper for a step that runs an fkit skill.
 - **The plan/build split is mandatory** and its gate is **prose-enforced, not structural** (honesty
   clause) — do not present it as plan mode's write-wall.
+- **Never instruct into the territory of a rule in the skill a worker will run without naming the owner
+  ruling you relay** (ADR-037 §3 — the driver-side half of the owner's Q2 ruling; this ADR binds the
+  driver, not only the worker). Exactly one of three is permitted:
+  - **Name the ruling** — what the owner ruled, when, on what point — and the instruction binds.
+  - **Get the ruling first.** You hold the owner channel the worker lacks (ADR-021); if the point
+    matters, ask before spawning.
+  - **Do not issue it.** Let the skill rule stand.
+
+  **A bare directive into a rule's territory is a defective instruction, and the worker's conservative
+  branch is the correct response to it, not an obstruction** — do not read a worker's escalation here as
+  a failure to follow orders. **This clause is weaker than its worker-side twin** and ADR-037 §3 records
+  that deliberately: the worker-side clause reaches every spawn through the universal rules block, while
+  this one binds you only because *you* load this file, and it reaches no worker.
 - **The driver invokes no mover — it spawns `@fkit-producer` to close each task**, and that producer
   writes the agent-closed marker by default (ADR-033 §1/§4/§5). The driver confirms the close landed;
   degraded runs stop; **never self-cancel** (ADR-032/ADR-025).

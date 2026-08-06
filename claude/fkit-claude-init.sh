@@ -320,7 +320,7 @@ RULES_END='<!-- fkit:end-rules -->'
 #      new enters the shared block without something leaving, or an owner-signed bump (ADR-016).
 #   2. ATTENTION DILUTION — SUSPECTED BUT UNMEASURED. Nobody has measured whether a longer block
 #      actually degrades adherence. Do not cite it as established; it is a hunch, recorded as one.
-# Standing budget target (owner ruling, task 0130): keep >= 400 B free. 526 B free at time of writing
+# Standing budget target (owner ruling, task 0130): keep >= 400 B free. 515 B free at time of writing
 # — a snapshot, not a guarantee; test/rules-block-budget.test.js measures the live number.
 #
 # The cap measures the EMITTED block (markers + comment + source) — confirmed unchanged, task 0130.
@@ -331,7 +331,10 @@ RULES_END='<!-- fkit:end-rules -->'
 # marker/comment lines did not. So the wrapper costs cap budget without costing Claude-side context.
 # UNVERIFIED: the codex side (AGENTS.md, codex-cli 0.145.0) was not re-measured here; assume it
 # still pays.
-RULES_MAX=4096
+#
+# Raised 4096 → 4352 by owner ruling, task 0190, 2026-08-04 — the ADR-016 signed bump reason 1 above
+# requires. It bought room for ADR-037's worker-side precedence clause, which does not fit under 4096.
+RULES_MAX=4352
 
 RULES_TAG='fkit-managed:'   # appears in the block header; how we recognize a region we wrote
 

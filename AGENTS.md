@@ -43,6 +43,9 @@ The full project brief — domain, architecture, conventions — lives in
   closes MUST carry the `(agent-closed — not owner-verified)` marker.
 - **No secrets in any artifact** — no DSNs, endpoints, keys, or credentials in findings, reports,
   docs, or wiki pages; it all goes to git.
+- **A skill rule beats a contrary spawn instruction** unless that instruction names an owner ruling
+  on that point. With no such ruling: take the cheapest-to-reverse branch (usually the rule's),
+  escalate if it changes the outcome, never silently comply or refuse.
 
 ## Output style (every role, every session)
 
