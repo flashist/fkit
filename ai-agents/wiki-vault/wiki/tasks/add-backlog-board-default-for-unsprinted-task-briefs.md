@@ -23,6 +23,10 @@ Mover compatibility was **verified, not assumed** — the movers already sweep `
 
 The read-side half — making `/fkit-status` report this board **only on request** — is [[tasks/report-backlog-board-in-fkit-status-on-request-only]] (task 68).
 
+> ⚠️ **This board is now where Sprint 2's open work actually lives — 2026-08-06.** After `0210`'s 45-row reverse move and the 2026-08-04/05 ship-loop run, **Sprint 2 shows `1 backlog` while this board carries the overwhelming majority of open rows.** The **request-only** design that made this board invisible to a default `/fkit-status` call is unchanged and still correct — but its consequence has inverted: **a reader who runs only the default status call now sees almost none of the open work.** Recorded as a fact about the boards, not as a defect in either.
+>
+> **Fourteen rows were added in that run alone**, including both halves of the unfiled `0210` follow-ups (`0214`, `0215`), the `/fkit-wiki-update` sequencer pair (`0216`, `0217`), and **seven of the eight follow-ups [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] named** — deliberately **held for the owner and NOT filed** except the one he authorized. The rows arrive **unranked**, exactly as the board's design requires.
+
 ## Related
 - [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — task 68, the status read-side; depends on this board's format
 - [[tasks/filter-fkit-status-board-to-open-tasks]] — task 65; its open-work filter applies to the backlog board too, with no special-casing
@@ -36,3 +40,5 @@ The read-side half — making `/fkit-status` report this board **only on request
 - [[tasks/decide-whether-fkit-needs-a-tester-agent]] — a Backlog-board task whose ruling produced ADR-028; **its close does not move Sprint 2's count**
 - [[tasks/wiki-sync-backlog-board-introduction]] — a batched wiki-sync task (discharged by the migration sync)
 - [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — `0210`, which specified the **reverse** move onto this board and made its unranked rule a mandatory edit
+- [[tasks/sprint-2-remove-omnigent]] — the board whose open work now sits here: **`1 backlog` on Sprint 2 is not one task left**
+- [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200`, whose eight named follow-ups were **held for the owner**; seven landed here unfiled-by-design, one (`0222`) took a Sprint 2 row

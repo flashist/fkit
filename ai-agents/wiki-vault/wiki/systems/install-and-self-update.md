@@ -97,5 +97,5 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 - [[tasks/retire-team-room-in-docs-and-agent-definitions]] — the project-wide rename outside the launcher, and the stale "menu 7" citations
 - [[tasks/update-launcher-menu-help-for-conductor]] — the earlier text-only pass that dropped "does no work itself"
 - [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — why lead belongs first
-- [[tasks/add-adr-030-prose-half-to-universal-rules]] — the managed rules block the launcher re-injects on every run, now at **91.1%** of its 4096-byte cap
+- [[tasks/add-adr-030-prose-half-to-universal-rules]] — the managed rules block the launcher re-injects on every run. ⚠️ **The `91.1% of 4096` figure that stood here was superseded on 2026-08-04** by `0190`'s owner-signed bump: `RULES_MAX` is **4352**, and the emitted block measures **3837 B — 88.2%, 515 B free** (re-measured by running the real `emit_block()`, lint 2026-08-06). The **≥ 400 B standing headroom target still holds, cleared by 115 B — and is guarded by no assertion at all** (task `0219`)
 - [[tasks/transcript-independent-ship-loop-skip-signal]] — `build_settings()` now wires a **third** hook event

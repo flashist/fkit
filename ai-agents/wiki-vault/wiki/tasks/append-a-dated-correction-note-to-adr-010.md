@@ -53,3 +53,4 @@
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the hook behind its ledger's record defect
 - [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] — task `0211`, which carries this correction-note form into the **vault's append-only `log.md`**, and adds **"describe, don't quote"**
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/role-locked-sessions]] · [[systems/knowledge-base-structure]]
+- [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200`, which **audited this task's Process-review routing read-only and did not reopen it**: its ledger asserts the architect was *"running `fkit-process-stateful-review`"*, which the ADR-018 hook denies at any depth, and **no denial is recorded in the folder**. That record defect belongs to `0201`

@@ -105,3 +105,4 @@ Re-raise **only** if one of these holds:
 - [[tasks/sweep-the-stale-rank-citations]] — `0159`, the task whose ledger is this decision's entire evidentiary base
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160` §4.5, which states this ADR's bearing on the dead-ledger-path guard in both directions
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — one of the three ADRs that touch the precedence axis without deciding it; also the rule under which `0158`'s own-record citation defects are an accepted residual
+- [[tasks/add-an-exit-table-row-for-a-failed-build-verify-review-spawn-in-the-sprint-loop]] — task `0208`, a live case for this ADR's stopping rule: **every round introduced a new finding through its own fixes**, and one cosmetic under-specification was **deliberately accepted rather than repaired**

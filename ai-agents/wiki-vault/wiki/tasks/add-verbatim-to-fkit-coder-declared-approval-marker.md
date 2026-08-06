@@ -42,3 +42,4 @@ Done, **agent-closed — not owner-verified**. Landed in one `fkit-coder` sessio
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the marker ADR-037 generalizes to every spawned worker
 - [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158` — the generalization itself
 - [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — condition (b) **stands byte-unchanged** under the ruled construction; this guarantee is not reopened
+- [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203`, which gives this task's *verbatim* an operational meaning: ***a word a driver may apply only to bytes it read from a file that turn***

@@ -94,6 +94,14 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 - **The `.fkit/` orphan-cleanup consent model → announce-only** (2026-07-17), unblocking task 36.
 
 ## Outcome
+> ✅ **CURRENT COUNT — 2026-08-06: `138 done · 1 backlog · 5 cancelled · 45 moved — of 189`.** Re-derived from `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md`, **zero drift records**. The 2026-08-03 reading below is left byte-identical as the record of that day.
+>
+> **The 2026-08-04/05 `/fkit-sprint-ship-loop` run shipped SIX rows** — `0167`, `0190`, `0191`, `0200`, `0203`, `0208` — and **filed eleven new briefs** (`0218`–`0228`), of which **one** (`0222`, the ADR-038 record) took a Sprint 2 row and the rest went to the Backlog board. **Total grew 188 → 189; done grew 132 → 138.**
+>
+> ⚠️ **`1 backlog` is not "one task left."** It is one row **still scoped to Sprint 2** — `0222`. The board's open work now lives almost entirely on `ai-agents/sprints/backlog.md`, which the default `/fkit-status` run does not report. **Read this number with [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] open, never alone.**
+>
+> ⚠️ **All six are `(agent-closed — not owner-verified)`. That is 25 consecutive agent-closed rows**, and `dashboard.sh` still collapses the marker to a plain `Done` — **nothing counts them.**
+
 **132 done · 6 backlog · 5 cancelled · 45 moved to the Backlog board — of 188.** *(Updated **2026-08-03**, re-derived from `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md` — the deterministic board, not a hand count — which reports `total 188 · done 132 · backlog 6 · cancelled 5 · moved 45`, **zero drift records**. The previous reading was `130 / 52 / 5 — of 187`.)*
 
 > ⚠️ **The open count fell 52 → 6 by de-scoping, not by shipping.** A single owner-authorized cleanup **reverse-moved 45 rows** off this board onto `ai-agents/sprints/backlog.md`, using the marker [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] (`0210`) shipped the same day. **The rows are relocated, not done and not dead** — each keeps its `P<n>` on this board as frozen history, and arrives on the backlog board unranked. **Read the 6 as "still scoped to Sprint 2", never as "only 6 left to do".**
@@ -177,6 +185,24 @@ Five rows, one theme: **what a spawned worker is bound by, and whether the thing
 
 **This is also the run that de-scoped 45 rows off this board.** See the Outcome counts above — and read the 6 remaining open rows as *"still scoped to Sprint 2"*, not as *"6 left to do"*.
 
+### The dead-worker ruling and ADR-037's two clauses (0167 · 0190 · 0191 · 0200 · 0203 · 0208, closed 2026-08-05)
+
+Six rows, one theme: **what the driver does when the thing it spawned does not come back, and what binds it when it does.**
+
+- [[tasks/decide-what-the-sprint-driver-does-when-a-spawned-worker-dies]] — **`0167`** → the ruling. **Read disk first — the only oracle — then classify into THREE states, not two**, and a *partial* landing goes to the owner. ⛔ **A third instance of the failure occurred during this task's own ship**: the driver read disk, called a partial landing *"nothing landed"*, and re-spawned. **The rule this yields is that *"read disk first"* must say WHICH disk** — enumerate the deliverable wherever it lives, never `git status` over an untracked path, never a structural probe for a content question. **And "partial" is defined over the UNIT, not the file.**
+- [[tasks/add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block]] — **`0190`** → ADR-037's rule finally reaches a spawned worker, on an **owner-signed `RULES_MAX` bump 4096 → 4352**. Until it landed, every spawn ran under the same silence the ADR was written to close.
+- [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — **`0191`** → the driver-side half. ⚠️ **On disk and reaching no driver** — the `.claude/` refresh was owner-ruled deferred, so the clause binds nobody until an init run.
+- [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — **`0200`** → **the Process-review step's role is fixed by the skill the step runs, not by who wrote the deliverable.** Rejects granting the coder's skill to the architect; requires an ADR (`0222`) and a **paired** detector. ⚠️ **The brief's own framing was wrong** — prose and hook never disagreed; **the driver departed from both.**
+- [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — **`0203`** → `0162`'s construction written into the loop, plus a seventh element: **confirm both legs are actually in the prompt before spawning.** ⚠️ **The defect bit on this very task's spawn** — a ~60 % condensed paste under a both-legs-confirmed claim.
+- [[tasks/add-an-exit-table-row-for-a-failed-build-verify-review-spawn-in-the-sprint-loop]] — **`0208`** → the exit row, covering **five** non-producer spawns rather than the brief's three. ⛔ **Three defects were found in the APPROVED PLAN's own bytes and survived the plan gate**; the owner ruled on all three and the shipped row **deliberately diverges from `plan.md`**.
+
+> ⚠️ **Three things this arc leaves open, all recorded rather than closed.**
+> 1. **`0167` §5 is DEFERRED, not met.** It ruled the exit row and a `## Resume doctrine` section **must ship together** and **explicitly rejected row-alone**; the owner ruled row-alone. The doctrine half is `0228`, unstarted — and **`0167`'s follow-up 1 had never been filed as a brief at all** until then.
+> 2. **`0191`'s clause reaches no driver**, measured independently the next day at 296 lines in the runtime copy.
+> 3. **The ≥ 400 B rules-block target is still guarded by nothing** — `0190` narrowed the hole and filed `0219`; **it must never be described as guarded.**
+>
+> ⚠️ **The recurring shape of this run: the artifact that was supposed to be authoritative was defective, three separate times** — a brief whose central claim was false (`0167`), a spawn prompt that certified a carry it had condensed (`0203`), and an **owner-approved plan** carrying three defects through the gate (`0208`). **Each was caught by an independent re-measurement, and by nothing else.**
+
 ### The recurring lesson of this sprint
 **Three false claims reached briefs without anyone running the command.** Both investigation reports lost claims to an adversarial Codex pass; a third — that `cp -R` writes through a dangling symlink *"outside the project"* — survived into task 27's brief and was caught only at implementation and review.
 
@@ -229,4 +255,10 @@ Its sibling: **a count of a *semantic* rule cannot be established by grepping on
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
 - [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target
 - [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132` — the dual-home reconciliation, and the sweep that **disproved ADR-027's premise**
-- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — **a skill rule binds a spawned worker unless the instruction relays a named owner ruling**; the precedence ladder, complete, for the first time
+- [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — **a skill rule binds a spawned worker unless the instruction relays a named owner ruling**; the precedence ladder, complete, for the first time. ✅ **Both clauses landed 2026-08-04/05** (`0190` · `0191`) — ⚠️ **the driver-side one reaching no driver**
+- [[tasks/decide-what-the-sprint-driver-does-when-a-spawned-worker-dies]] — task `0167` — the dead-worker ruling, and the third instance that happened during its own ship
+- [[tasks/add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block]] — task `0190` — the rules-block clause and the signed cap bump to 4352
+- [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — task `0191` — the driver-side clause, **on disk and unreached**
+- [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200` — the routing ruling and the paired detector; **ADR-038 is `0222`, filed and unwritten**
+- [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203` — the faithful-carry construction, and element 7's both-legs presence check
+- [[tasks/add-an-exit-table-row-for-a-failed-build-verify-review-spawn-in-the-sprint-loop]] — task `0208` — the exit row, and three defects that survived the plan gate

@@ -38,4 +38,7 @@ Follow-up 1 of [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the declared-approval marker this carry feeds
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the `<task-folder>` the artifact table is keyed on
 - [[tasks/implement-task-ship-loop-skill]] — `/fkit-task-ship-loop`, whose artifact table this mirrors
+- [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203`, which **depends on this**: the construction points at a `plan.md` that must exist at spawn time. ⚠️ Its element 7 was added because **this task's own run announced a two-legged carry and shipped one leg**
+- [[tasks/add-an-exit-table-row-for-a-failed-build-verify-review-spawn-in-the-sprint-loop]] — task `0208`, from **this task's review row `R5`**: writing `plan.md` before the Build spawn **opened an orphaned-artifact window** that the exit table had no row for, and the guidance for it sat only in this task's `worklog.md`
+- [[tasks/decide-what-the-sprint-driver-does-when-a-spawned-worker-dies]] — task `0167`, the ruling behind that row
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/fkit]]

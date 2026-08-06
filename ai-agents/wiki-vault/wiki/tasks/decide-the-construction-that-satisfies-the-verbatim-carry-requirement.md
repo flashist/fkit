@@ -74,12 +74,22 @@ Both halves matter and **the second is the dangerous one**. The failure that sco
 ### It narrows ADR-037 §5 — and the ADR still says the stronger thing
 The report establishes that ADR-037 §5's *"none is possible"* is **too strong, but only about a proxy**. See [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]]. The correction is task **`0205`**, unstarted. **This is a narrowing, not a reversal**, and it does not trip the ADR's pre-registered re-raise trigger — *a file on disk is not a cross-context token*.
 
+### ✅ Follow-up 2 shipped 2026-08-05 — the construction is now IN the loop, with a seventh element
+[[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] (`0203`) wrote all four steps above, the *"verbatim"*-word discipline, and the pointer-only degraded form into `fkit-sprint-ship-loop/SKILL.md`. **A seventh element was added that this report did not name:** a **presence check on both legs before the spawn** — the driver confirms the pasted bytes **and** the pointer are actually in the prompt, and states the result. ***"Both ways" is a phrase a driver may use only after looking at what it wrote.***
+
+> ⛔ **Element 7 exists because a driver announced a two-legged carry and shipped one leg** — on `0202`'s own run. **And the pointer is what made it detectable:** with a paste and no pointer, nothing would have surfaced it. **The two-legged construction produced the evidence of its own first failure** — support for the paste-and-pointer ruling, never a case for dropping either leg.
+
+⚠️ **`0203`'s own spawn then demonstrated the defect a third time** — the paste leg was a **~60 % condensation** carried under a both-legs-confirmed claim, while the pointer leg was correct. The worker **implemented from the file's bytes** and surfaced it rather than blocking.
+
+⚠️ **A new residual this construction cannot reach — `AR-1`:** every element checks the paste is **present** and **provenanced**; **none checks that the pasted bytes MATCH the file.** The construction **prevents the recall route outright, repairs the truncation route, and is detect-only on emission fidelity.** Deliberately **not** "fixed" — both reviewers warned that softening the honest bound would convert a correct document into an overstated one. The fidelity leg is task `0227`.
+
 ### Corrections to its own brief
 The brief's `SKILL.md` line citations are **off by one** in two places (`0206`-adjacent cleanup, task `0207`-adjacent). And its claim that *"no test reads … any `SKILL.md` content at all"* is **half wrong**: the **frontmatter** of every skill and agent file *is* machine-checked over a pinned corpus of 25 skills and 7 agents. **The accurate claim is that no test reads the *body* of any of them** — which is where every rule at issue lives. The conclusion survives, narrowly, and was corrected rather than inherited.
 
 ## Related
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — §5's enforcement claim, **narrowed by this report**; correction owed (`0205`)
 - [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — task `0202`, follow-up 1, the only follow-up shipped so far
+- [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203`, **follow-up 2, shipped 2026-08-05**: the construction written into the loop, plus element 7's both-legs presence check and the `AR-1` fidelity residual
 - [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158`, the sibling ruling from the same run
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — D3/D7, the declared-approval marker's home
 - [[tasks/add-verbatim-to-fkit-coder-declared-approval-marker]] — task `0150`, condition (b)'s *verbatim*; **not reopened by this ruling**

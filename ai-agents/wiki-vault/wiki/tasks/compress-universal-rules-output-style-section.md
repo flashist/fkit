@@ -23,3 +23,4 @@ Done, agent-closed. **Owner asked for it explicitly (2026-07-19) and asked that 
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively
 - [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target
+- [[tasks/add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block]] — task `0190`, which applied this task's inherited rule — ***a cut that saves bytes by dropping a qualifier is a regression, not a compression*** — to refuse the cheaper 212 B draft that collapsed ADR-037 §2's two named failure modes into a dangling adverb

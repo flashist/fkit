@@ -70,3 +70,7 @@ Codex's adversarial pass found (finding **R1**, high, verified) that `claude/age
 - [[tasks/add-verbatim-to-fkit-coder-declared-approval-marker]] — `0150`; this skill's verbatim rule was already correct and is the primary control
 - [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — the construction that satisfies this loop's verbatim-carry rule
 - [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — task `0202` — the loop's `plan.md` write moved to plan approval, plus a new `## Durable artifacts` section
+- [[tasks/decide-what-the-sprint-driver-does-when-a-spawned-worker-dies]] — task `0167`, which adjudicates this task's review residual **R6** as an *adjacent uncovered failure* — **not** its re-raise — and rules what the driver does when a spawned worker returns nothing
+- [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — task `0191`, which adds ADR-037's driver-side clause to this skill's `## Hard rules`
+- [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203`, which gives this skill's verbatim-carry rule an actual construction
+- [[tasks/add-an-exit-table-row-for-a-failed-build-verify-review-spawn-in-the-sprint-loop]] — task `0208`, the tenth row in this skill's exit table — the first covering a **non-producer** spawn that does not land

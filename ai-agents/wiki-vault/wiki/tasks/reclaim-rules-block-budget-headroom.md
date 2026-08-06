@@ -31,6 +31,12 @@ Re-injection was proven by extracting the block from `CLAUDE.md` and `AGENTS.md`
 
 ⚠️ **The headroom this reclaimed is already spoken for.** [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] re-measured the block at 3570 B on 2026-08-02 and used the **126 B of usable growth** as one of the two grounds for rejecting ADR-036's generate-the-prose option.
 
+> ⚠️ **DATED CORRECTION — 2026-08-04. The `RULES_MAX=4096` figure above is SUPERSEDED; the ruling that produced it is not.** *(Every line above is left byte-identical.)* This task's outcome was *"no `RULES_MAX` bump; the cap stays 4096"* — **correct on its own day, and reversed four days later by the owner on a different question.** [[tasks/add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block]] (`0190`) put the three options this task had priced back in front of the owner, who signed **branch (b) — a bump to `RULES_MAX=4352` (+256 B)** to land ADR-037's worker-side clause.
+>
+> **What moved:** cap **4096 → 4352**; emitted block **3570 B → 3837 B**. **What did NOT move:** the **≥ 400 B standing target**, which still holds and is cleared by **115 B**; the cap's discipline-primary rationale; and the rule that a bump is the **owner's** call, which is exactly the route `0190` took (an ADR-016 signed bump, cost stated and accepted — *every turn in every consuming project pays the extra bytes*).
+>
+> ⚠️ **And the target this task set is still guarded by NOTHING** — it lives only in a header comment; **no assertion enforces it**, and the `<= 92 %` gate is **relative to `RULES_MAX`**, so the bump moved the warning line outward too. `0190` leaves the hole **narrower** than it found it (silent-growth headroom **219 B → 189 B**) and filed the fix as task `0219`. **The ≥ 400 B target must never be described as guarded.**
+
 ## Related
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — the hook whose prose half (`0128`) consumed the headroom
 - [[tasks/add-adr-030-prose-half-to-universal-rules]] — task `0128`, which brought the block to 91.1% and flagged this as its follow-up; **not a defect in it**
@@ -39,4 +45,5 @@ Re-injection was proven by extracting the block from `CLAUDE.md` and `AGENTS.md`
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142`, which re-measured this block and spent its headroom argument
 - [[systems/testing-and-verification]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the standing ≥ 400 B-free target that gates ADR-037's worker-side clause — **126 B usable**, against three drafted wordings measuring 174–212 B
+- [[tasks/add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block]] — task `0190`, which **spent that budget by an owner-signed bump to 4352** rather than by compression, and left the ≥ 400 B target held but still unguarded
 - [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158` — which re-measured the block independently (3570 B / 526 B free) and corrected its own ADR's test-gate arithmetic

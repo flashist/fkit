@@ -63,3 +63,4 @@ The closed-row rule is **absolute and outranks the exception**, exactly as it al
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — forbids ADR-037's **instance A** on a separate axis — the two agree, and neither does the other's work
 - [[tasks/tighten-the-wiki-completion-flag-block]] — task `0173` — a live case where **append rank contradicted the dependency links**, and the links were the binding record
 - [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — task `0210` — a reverse-moved sprint row **keeps its `P<n>` as frozen history**; rewriting it would be a renumber
+- [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — task `0191`, whose clause governs the **instruction** side of the same 2026-07-27 act this ADR forbids on the **arithmetic** side. **The two agree and neither does the other's work**

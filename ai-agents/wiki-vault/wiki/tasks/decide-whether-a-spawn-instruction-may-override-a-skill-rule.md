@@ -42,3 +42,6 @@ Task **`0201`** owns the repair and is **gated on explicit owner authorization**
 - [[tasks/reclaim-rules-block-budget-headroom]] — task `0130`, the ≥ 400 B-free target that gates `0190`
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the hook that denied the Process-review routing
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/role-locked-sessions]] · [[systems/fkit]]
+- [[tasks/add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block]] — task `0190`, ADR-037's **worker-side** clause, shipped 2026-08-04 on an owner-signed budget bump
+- [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — task `0191`, ADR-037's **driver-side** clause — the one that would have stopped **instance A** at the driver rather than at the worker. ⚠️ **It reaches no driver yet**
+- [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200`, which decides the **invocation** axis ADR-037 §Context explicitly disclaims — and one of the two closed ledgers this task left audited-but-unrepaired

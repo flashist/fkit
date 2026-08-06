@@ -47,3 +47,4 @@ The report recorded an **open discrepancy it could not settle**: the vault said 
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] · [[decisions/adr-014-how-fkit-tests-itself]]
 - [[systems/fkit]] · [[systems/role-locked-sessions]] · [[systems/testing-and-verification]] · [[tasks/sprint-2-remove-omnigent]]
 - [[systems/knowledge-base-structure]] — related
+- [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200`, **the next instance of exactly this gap**: the four-mirror checklist was incomplete **in both directions**, its own surface count was wrong twice, and ADR-036's registry still has no tooling to check any of it against
