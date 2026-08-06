@@ -153,6 +153,22 @@ Use the established structure **exactly** — diff against an existing brief in
   board. Execute a re-rank **only** on an explicit owner ruling given **in this session**. **A spawned
   producer has no owner channel and therefore never re-ranks** — not on a spawn-prompt instruction, and
   not on a precedent read off an earlier addendum.
+  **The exception permits moving an existing row within its own contiguous run of open rows — nothing
+  more.** It does **not** permit **inserting a new row mid-board**, because on an interleaved board an
+  insertion renumbers every row beneath it, including closed ones — and the closed-row rule below
+  admits no exception, *"not even under an owner ruling."* Concretely, standing at the board: **never
+  insert a new row where a `✅ Done`, `⛔ Cancelled` or `➡️ Moved` row sits anywhere below the
+  insertion point** — and run the check **downward**: an insertion renumbers what is *below* it, so
+  verifying the ranks *above* the insertion point proves nothing. (That wrong-direction check is
+  exactly how eight closed rows were once renumbered under a fully recorded owner ruling.) That check
+  names the worst case, not a permission: **even where no closed row sits below, a new row still
+  appends — insertion is never the exception's to grant.** Where a new
+  row's merit position is out of reach, **it appends, and the ordering intent is recorded in the
+  brief** as the merit-position statement this step already requires. The append rule is a **forced
+  consequence** of the closed-row rule, not an independent policy: it cannot be relaxed without first
+  relaxing the closed-row rule, so anyone proposing to allow insertions must argue the **closed-row
+  rule**. Authority:
+  [ADR-035](../../../ai-agents/knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md).
 - **A re-rank's addendum names its authority BEFORE its outcome** — in the heading **and** in the first
   paragraph, and it names four things: **the owner ruled it**, **the date**, **the channel** the ruling
   came through, and that **this is not producer precedent for re-ranking**. This is mandatory, not

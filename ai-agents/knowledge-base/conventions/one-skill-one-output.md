@@ -79,4 +79,4 @@ the fact.
 
 - Task 44 — the instance: [`remove-output-variants-from-fkit-status.md`](../../tasks/done/0074-remove-output-variants-from-fkit-status/brief.md)
 - Task 38 — the honest history: [`add-full-board-switch-to-fkit-status.md`](../../tasks/done/0005-add-full-board-switch-to-fkit-status/brief.md)
-- Sprint 2 plan — the OQ8 ruling and the tasks-44/45 and task-47 addenda: [`sprint-2.md`](../../sprints/sprint-2.md)
+- Sprint 2 plan — the OQ8 ruling and the tasks-44/45 and task-47 addenda: [`sprint-2.md`](../../sprints/done/sprint-2.md)

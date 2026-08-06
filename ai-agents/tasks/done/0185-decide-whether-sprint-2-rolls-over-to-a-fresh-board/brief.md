@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-producer
@@ -143,3 +143,69 @@ reference in the corpus ambiguous between two boards; continuing leaves a board 
 - **Merit form used here** is the canonical `**On merit:**` shape from report §3.1 / ADR-035. Flagged so
   it is not read as drift.
 - No existing row was renumbered by this brief.
+
+## Resolution — 2026-08-06
+
+### The ruling, recorded with its date and channel (verification step 4)
+
+**The owner signed. Three rulings, all given 2026-08-06 via `AskUserQuestion` in a live `fkit lead`
+session:**
+
+1. **"Roll over to Sprint 3."**
+2. **"Follow the Sprint 1 precedent"** — for the archival shape.
+3. **"Pull it into Sprint 3"** — naming task `0182`, having been told `0181` is its gate and would come
+   with it.
+
+**The gate this brief set is therefore discharged.** The `## Out of scope` prohibitions above
+(*"⛔ Do not roll the board"*, *"⛔ Do not create a `sprint-3.md`"*) were **conditional on the absence of a
+ruling**, and they held for five days. They are now spent, not violated.
+
+### ⚠️ Reconciling this brief's own status contradiction, honestly
+
+**This brief has been internally inconsistent since it was written, and a prior status run surfaced it.**
+Its `## Status` cell read `🔲 Backlog` while its `## Notes` dependency line read
+*"🚧 **Blocked on an owner ruling** — deferred 2026-08-01."* Those are two different states. The
+dependency line was the accurate one for 2026-08-01 → 2026-08-05; the `## Status` cell was wrong for
+that whole window and **nothing caught it**, because `🚧 Blocked` is free for any session to set and no
+control cross-checks a status cell against prose in the same file.
+
+**It is not being retroactively corrected** — the original line is left byte-identical above, per this
+project's dated-correction convention. **It is corrected forward:** as of 2026-08-06 the block is
+discharged, the work is done, and the task closes. Recording the contradiction is the point; silently
+overwriting the older line would erase the evidence that a status cell and its own brief can disagree
+for five days undetected. **That is worth its own task and does not have one.**
+
+### What was executed, and by whom
+
+Executed by a **spawned `fkit-producer` with no owner channel**, acting on the three rulings above.
+
+| Act | Result |
+|---|---|
+| Archive the board | `ai-agents/sprints/sprint-2.md` → `ai-agents/sprints/done/sprint-2.md` (`git mv`), with a `🔒 CLOSED` banner in the Sprint 1 shape |
+| Re-point links | **341** internal links in the archived board + **12** inbound links in 5 other files |
+| Create the fresh board | [`ai-agents/sprints/sprint-3.md`](../../../sprints/sprint-3.md) — ranks restart at `P1` |
+| Carry the one open row | `0222` → Sprint 3 `P3`; its Sprint 2 row keeps the frozen `P189` |
+| Pull in the named work | `0181` → `P1`, `0182` → `P2`, from the Backlog board |
+| Renumber a closed row | **None. Not one, on any board.** |
+
+### The four scope questions this brief required — all answered
+
+Answered in full on the new board under §"Rollover record". In short: **(1) in-flight tasks** — none
+existed, so the case is **unexercised and still unspecified**; **(2) citations** — they point at a frozen
+board, not at nothing, and every broken *link* was re-pointed, while **107 files of prose citations were
+deliberately left** for a dedicated task, per the Sprint 1 precedent (`0076`); **(3) dashboard discovery**
+— verified first-hand **before** the roll, not after: `/fkit-status` globs `sprint-*.md` at the top of
+`ai-agents/sprints/` and treats `done/` as closed, so the archival is exactly what makes Sprint 3 active;
+**(4) rank numbering** — **restarts at `P1`**, with the resulting `P<n>` ambiguity between two boards
+stated as an accepted cost.
+
+### ⚠️ Three things this task did NOT do — none of them silent
+
+1. **The prose-citation sweep** — 107 files still carry the literal string `ai-agents/sprints/sprint-2.md`.
+2. **The wiki re-sync** — `ai-agents/wiki-vault/` still calls Sprint 2 active. **Only `fkit-wiki` may
+   write the vault (ADR-005).** This session wrote nothing there.
+3. **`0182`'s glob defect** — its brief globs `sprints/sprint-*.md`, which no longer reaches the archived
+   board. A separate unit is queued; it was deliberately not repaired here.
+
+**Plus one defect this rollover exposed:** the **round-trip drift**, ceiling **45 rows** — see the new
+board's §"Known follow-ups this rollover created". **None of the four has a filed task yet.**

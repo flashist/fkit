@@ -151,6 +151,20 @@ second re-verifies its coordinates.**
 ## Notes
 
 - **Depends on:** `0222` (records ADR-038 — the rule this detector guards).
+  - **⚠️ DATED CORRECTION 2026-08-06 — THIS DEPENDENCY IS RELAXED. The line above is left
+    byte-identical and is no longer binding.** **Owner ruling, verbatim: *"Relax 0224 and 0225."***
+    Given 2026-08-06 via `AskUserQuestion` in a live `fkit lead` session. **Current dependency:
+    `Depends on: nothing`.**
+    **Why.** This task builds a *mechanism* — the paired denial log and worklog `**Role:**` line. The
+    mechanism is the same whichever way ADR-038 words the rule it detects departures from, so it does
+    not need ADR-038 to exist before it can be built. `0222` remains the right place for the rule to
+    be *recorded*; it is not a gate on this build. Of the three briefs that declared `Depends on:
+    0222`, only `0223`'s survived the owner's review, and only for its **reason clause** — see the
+    `0222` row on [Sprint 3](../../../sprints/sprint-3.md).
+    **What this does NOT change.** Nothing about scope, the two open questions below (the denial-log
+    path is still unruled and still blocks the coder), the residuals, or the owner field. Relaxing a
+    dependency makes this task *runnable*, not *ready* — the denial-log path question is still the
+    first thing to settle.
 - **Blocks:** nothing.
 - **Owner:** fkit-architect — the task opens with a design decision to frame for the owner (the log
   path, its shape, and who is obliged to read it). ⚠️ **It then hands off to `fkit-coder` for the hook

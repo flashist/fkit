@@ -94,4 +94,19 @@ An ADR under `ai-agents/knowledge-base/decisions/` via `/fkit-record-decision`, 
   producer files them).
 - **⚠️ Do not begin 0135 before this ADR is approved by the owner.** The unknown here is a governance
   boundary, not a technical one — the implementation is small and the decision is the hard part.
+- **⚠️ RELATIONSHIP TO `0229`, added 2026-08-06 — read this before writing question 3's answer.**
+  Task [`0229`](../0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)
+  (*widen `/fkit-task-done` to repair a brief whose `## Status` contradicts a landed close*) covers a
+  **subset of this ADR's question 3** — question 3's candidate set already names *"the brief's own
+  `## Status` when the board is the side that landed"*, which is precisely `0229`'s `0021`/`0041`
+  case.
+  **Owner ruling 2026-08-06, verbatim: *"Ship 0229 standalone."*** (`AskUserQuestion`, live `fkit
+  lead` session.) **This brief is deliberately NOT narrowed** — the owner rejected the *"narrow 0134"*
+  option by name. Question 3 stays exactly as written and this ADR still rules on the full case.
+  **What that means for the architect writing this ADR:** by the time it is written, a narrow
+  owner-gated exception for that one case may **already be shipped** in
+  `claude/skills/fkit-task-done/SKILL.md`. **Read the file before assuming the ground is clear**, and
+  rule explicitly on whether the wider mode **subsumes, keeps, or replaces** that exception. Ruling
+  on it silently is the failure mode. **This is a scope overlap the owner accepted, not a defect to
+  report.**
 - No commit — leave the ADR in the working tree.

@@ -106,6 +106,42 @@ chosen — the report notes the 28-brief size *"may change who decides it"*.
 (a). And `0155`'s line (*"On merit this belongs **immediately above 0146**"*) is the closest existing
 brief to the canonical shape and is the natural template for the reshape.
 
+> ### ✅ DECIDED 2026-08-06 — option 2, exempt existing briefs. THIS SECTION NO LONGER BLOCKS.
+>
+> **Owner ruling, verbatim: *"Grandfather existing briefs."*** Given via `AskUserQuestion` in a live
+> `fkit lead` session, 2026-08-06. **Everything above is left byte-identical** so the options weighed
+> stay readable — but the heading's `🚧` no longer describes reality. **This task is unblocked on the
+> grandfathering axis. Do not re-open it.**
+>
+> **The decision.** The guard **binds only briefs written from the merit-statement convention's date
+> forward.** Briefs filed before that date are **exempt** — they are never flagged for a missing merit
+> statement. The **backfill option is NOT taken**: the 28-brief job does not happen, `0158`'s line is
+> **not** reshaped by this task, and no ninth brief is owed. The **advisory option is NOT taken**
+> either — for in-scope briefs the guard **fails**, it does not merely report.
+>
+> **⚠️ THE ACCEPTED COST, RECORDED IN THE OWNER'S OWN TERMS — a permanent two-tier record.** The
+> owner was shown this before ruling and accepted it:
+> - **Old briefs will never carry merit statements.** Not "not yet" — **never**. Nothing is queued to
+>   backfill them and nothing is expected to.
+> - **The guard cannot tell you which tier a brief is in.** It reports conformance for the briefs it
+>   binds and silence for the rest, and **silence from this guard means "exempt" and "conformant"
+>   equally**. Anyone auditing merit coverage across the whole corpus must date-filter by hand.
+> - This is a **permanent** property of the record, not a transitional state. ⛔ **Do not present the
+>   board going green as "the corpus conforms"** — it means "no in-scope brief violates". Say the
+>   second thing.
+>
+> **⚠️ THE BOUNDARY DATE IS NOT YET FIXED, AND THIS TASK MUST NOT INVENT ONE.** The ruling names *the
+> merit-statement convention's date*. That convention page is **`0178`'s deliverable and `0178` has
+> not shipped**, so the date does not exist on disk today. **Derive the cut-off from the convention
+> page once `0178` lands** — do not pick a date, and do not silently use this ruling's date
+> (2026-08-06) as a stand-in. If `0178` lands without a stated date, that is a gap to raise, not to
+> fill. The dependency on `0178` in `## Notes` therefore now carries **two** reasons, not one.
+>
+> **⚠️ How the exemption must be built — the same lesson `0176`'s closed-ledger exemption records.**
+> The cut-off belongs in the guard's **definition** (which briefs it selects), **not** in a
+> post-filter that drops flagged rows after the fact. A guard that flags and then discards has a
+> failure mode a guard that never selects does not.
+
 ### Out of scope
 
 - **⛔ Do not extend the shape check to bare integers.** Named as a separate decision; see cost (a).
@@ -138,6 +174,12 @@ brief to the canonical shape and is the natural template for the reshape.
 
 - **Depends on:** `0178`, `0179`. **And a grandfathering decision that is not yet made** — see above.
   **Sequencing this before `0178`/`0179` ships it red on 28 of 36 open briefs.**
+  - **⚠️ DATED CORRECTION 2026-08-06 — the grandfathering clause above is DISCHARGED. Line left
+    byte-identical.** Owner ruling, verbatim ***"Grandfather existing briefs."*** (`AskUserQuestion`,
+    live `fkit lead` session, 2026-08-06) — see §"The blocking decision" above for the decision, its
+    accepted cost, and the unfixed boundary date. **Current dependency: `0178`, `0179` — no
+    outstanding decision.** ⚠️ `0178` is now a **doubly** hard gate: it supplies the canonical merit
+    form *and* the date the exemption is measured from.
 - **Blocks:** nothing.
 - **⚠️ Priority 158 is append rank, NOT a merit ranking — flagged for owner confirmation.**
 - **On merit:** immediately below `0179` — it is the last of the three-task grammar chain and must land

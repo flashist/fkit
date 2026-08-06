@@ -67,7 +67,7 @@ Report §7.2 is precise about which half is which:
 > ### ⚠️ The cost the owner accepted — say it plainly, and never let "literal" read as "complete"
 >
 > **The guard is knowingly incomplete on day one.** The literal condition **misses §7.2's own lead
-> specimen** — `0013`'s brief writes ``[`sprint-2.md:354`](../../../sprints/sprint-2.md)``, where the
+> specimen** — `0013`'s brief writes ``[`sprint-2.md:354`](../../../sprints/done/sprint-2.md)``, where the
 > visible label is bare shorthand that does not match `ai-agents/sprints/*.md` — and it misses
 > `0160`'s own brief the same way, in **three** places. **Those violations are real and the shipped
 > guard will not flag them.**
@@ -182,10 +182,33 @@ work makes the case for it, **name it as a follow-up** — the producer files it
 
 ## Notes
 
-- **Depends on:** nothing hard. Sequenced **after the residual cleanup** — the 11 citations across 8
-  files must be clean before the guard goes green, and **shipping it red is not an option.** The
-  cleanup is not owned by any task today; **flagged for the owner** as either a prerequisite task or
-  in-scope work for this one.
+- **Depends on:** `0237` — hard. The residual citations must be clean before the guard goes green, and
+  **shipping it red is not an option.**
+
+  > **📅 DATED CORRECTION 2026-08-06 — the cleanup now has an owner.** This line previously read
+  > *"nothing hard … the cleanup is not owned by any task today; flagged for the owner as either a
+  > prerequisite task or in-scope work for this one."* **The owner ruled on 2026-08-06** via
+  > `AskUserQuestion` in a live `fkit lead` session — verbatim **"File the cleanup as its own task."**
+  > It is [`0237`](../0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md), and
+  > it is a **hard** dependency: until it lands, this task is unshippable and the board was advertising
+  > it as pullable.
+  >
+  > **⚠️ Two things `0237` will hand back, both of which change this brief's numbers:**
+  > 1. **The `11 across 8` figure did not reproduce on 2026-08-06.** A re-measurement at `0237`'s
+  >    filing returned **19 across 15** under a broader condition. Neither reading is endorsed here —
+  >    `0237` settles the exact condition and reports it. **Take the figure from `0237`, not from the
+  >    §"The red set" table above**, which is left byte-identical as the record of what was measured
+  >    on 2026-08-01.
+  > 2. **⚠️ THE SCANNED SET MOVED.** This brief's scanned set is `ai-agents/tasks/*/*/*.md` **+
+  >    `ai-agents/sprints/*.md`**, and its residual list names `ai-agents/sprints/sprint-2.md` — a path
+  >    that **no longer exists.** The Sprint 2 → Sprint 3 rollover of 2026-08-06 archived that board to
+  >    `ai-agents/sprints/done/sprint-2.md`, **outside the `sprints/*.md` glob.** Whether the guard's
+  >    scanned set should reach `sprints/done/` and `sprints/reviews/` is an **open scoping decision**
+  >    `0237` is tasked with settling; **do not implement this guard against the glob as written
+  >    without reading `0237`'s answer.** This is the same defect class already flagged against
+  >    `0182`'s glob by the same rollover.
+  >
+  > The task's decision, its two owner rulings and its four scoping decisions are otherwise unaffected.
 - **Blocks:** nothing.
 - **🔗 Kept SEPARATE from task `0175` (follow-up 7) — a producer judgement.** Report §8 left it open:
   *"Whoever files them should consider one task with two conditions rather than two tasks — noted as a

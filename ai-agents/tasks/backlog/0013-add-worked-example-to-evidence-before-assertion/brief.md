@@ -25,7 +25,7 @@ showing what it costs when the convention is ignored. The reviewer's words, at
 
 **Why prose is being asked to do more work than prose usually does.** The rule was already written
 down. It was already **stated in the words that fit this exact failure** — task 27's Correction in
-[`sprint-2.md:354`](../../../sprints/sprint-2.md): *"a behavioral claim about a shell builtin or coreutil
+[`sprint-2.md:354`](../../../sprints/done/sprint-2.md): *"a behavioral claim about a shell builtin or coreutil
 is a claim to run, not to reason about."* It was still broken **four times in one task, by the
 fkit-coder, who read the convention at the start of that task.** The reviewer's framing: *"Naming a
 pattern doesn't stop it; a red-first test does."* A stated principle demonstrably did not survive

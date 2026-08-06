@@ -4,13 +4,13 @@
 0181
 
 ## Sprint
-Backlog
+Sprint 3
 
 ## Priority
-Unscheduled
+1
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -125,3 +125,14 @@ counterpart carrying the same text (check; do not assume).
 - **Merit form used here** is the canonical `**On merit:**` shape from report §3.1 / ADR-035. Flagged so
   it is not read as drift.
 - No existing row was renumbered by this brief.
+
+- **⚠️ DATED CORRECTION 2026-08-06 — pulled onto Sprint 3 by the rollover.** The append-rank and
+  merit-divergence notes above describe this brief's position on the board it came from and **no longer
+  describe its position today**. Sprint 3 is a **fresh board with no closed rows**, so its `P1`–`P3` were
+  assigned **on merit, freely** — ADR-035's closed-row wall does not apply there yet, and no append/merit
+  divergence exists on that board. **The original notes are left byte-identical**; scope, dependencies and
+  prohibitions are unaffected. Ranking rationale: `ai-agents/sprints/sprint-3.md`, §"How this board was
+  ranked". Pulled by owner ruling, `AskUserQuestion`, live `fkit lead` session 2026-08-06.
+- **Ranked `P1` on Sprint 3** — top of the board. It gates `0182` (hard), it is the only item of its
+  batch whose absence has already caused a **verified** breach, and it governs `/fkit-task-brief` step 5,
+  the path every future brief filing on the new board passes through.

@@ -97,6 +97,19 @@ this drift).
   [0123's ledger](../../done/0123-route-sprint-ship-loop-close-to-producer/review.md) whose *"re-raise
   only if"* condition is **this task landing**.
 - **Filed 2026-07-25** by the producer on the 0123 ship-loop's hand-off. Sibling: **0134** (the ADR).
+- **⚠️ FILE COLLISION WITH `0229`, added 2026-08-06 — the owner accepted it knowingly.**
+  Task [`0229`](../0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)
+  edits **the same file and the same step-1 branch** this task edits — it adds a narrow, owner-gated
+  second exception to `/fkit-task-done`'s step-1 stop so a brief reading `🔲 Backlog` inside `done/`
+  can be repaired. **Owner ruling 2026-08-06, verbatim: *"Ship 0229 standalone."*** (`AskUserQuestion`,
+  live `fkit lead` session), on the reasoning that `0134` has no scheduled date.
+  **The accepted tradeoff, stated so this task is not surprised by it: two overlapping edits to one
+  branch, landing at different times, and this one is the second.** `0229` is expected to land first.
+  **Obligations on this task:** read what `0229` actually wrote before editing; decide whether the
+  wider reconcile mode **subsumes, keeps, or replaces** that narrow exception; and **record the answer
+  in the worklog**. ⛔ **Do not silently overwrite it** — a branch that disappears without a stated
+  reason is exactly the laundering this file's rules exist to prevent. This does **not** change this
+  task's hard dependency on `0134`, which still rules the wider question.
 - **⚠️ This is a four-file doctrine change, not a one-file edit.** 0123's R1 was a defect in shared
   doctrine that had *already shipped* into the closed task 0122's file. The same class of mistake here
   means one loop reconciles and the other still escalates. Review the set together or not at all.

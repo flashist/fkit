@@ -214,7 +214,7 @@ and blockquote lines. Three separable problems:
    head-on with §4.3's own frozen-ledger rule and with ADR-034. §7.2's stated purpose is *"stated now so
    they are not discovered late"*; this is the single largest thing it does not state.
 3. **The condition misses its own lead specimen.** `0013/brief.md:28` reads
-   ``[`sprint-2.md:354`](../../../sprints/sprint-2.md)`` — the bare `sprint-2.md:354` does not match
+   ``[`sprint-2.md:354`](../../../sprints/done/sprint-2.md)`` — the bare `sprint-2.md:354` does not match
    `ai-agents/sprints/*.md`, so the guard as written would not flag the first violation §7.2 lists.
    Codex found the same shorthand gap independently and adds that `0160`'s own brief cites the same way
    at `:40`, `:89`, `:113`. The condition must say whether *"names"* means literal full-path syntax or
@@ -961,7 +961,7 @@ R18's three substantive claims all hold.
    citing file. Rewritten.
 2. **The frozen-ledger collision is real and I never named it** — 27 of the 38 sit in closed ledgers.
 3. **The condition misses its own lead specimen** — confirmed by running both patterns against
-   `0013/brief.md:28`, ``[`sprint-2.md:354`](../../../sprints/sprint-2.md)``: the literal
+   `0013/brief.md:28`, ``[`sprint-2.md:354`](../../../sprints/done/sprint-2.md)``: the literal
    `ai-agents/sprints/*.md` pattern does **not** match, the shorthand-admitting one does. This is the
    grep-returned-nothing failure mode, and it hit the first violation §7.2 lists.
 
