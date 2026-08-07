@@ -121,7 +121,7 @@ role and an fkit skill: assert that role owns that skill according to `skills_fo
     whichever way ADR-038 words the rule, so the test does not need ADR-038 to exist before it can be
     written. Of the three briefs that declared `Depends on: 0222`, only `0223`'s survived the owner's
     review, and only for its **reason clause** — see the `0222` row on
-    [Sprint 3](../../../sprints/sprint-3.md).
+    [Sprint 3](../../../sprints/done/sprint-3.md).
     **What this does NOT change.** Scope, the merit position below (still the lowest-merit of the
     four — do not run it ahead of `0224`), and the **ordering note** immediately below, which was
     never a hard dependency and stays exactly as written.

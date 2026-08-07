@@ -160,7 +160,7 @@ second re-verifies its coordinates.**
     not need ADR-038 to exist before it can be built. `0222` remains the right place for the rule to
     be *recorded*; it is not a gate on this build. Of the three briefs that declared `Depends on:
     0222`, only `0223`'s survived the owner's review, and only for its **reason clause** — see the
-    `0222` row on [Sprint 3](../../../sprints/sprint-3.md).
+    `0222` row on [Sprint 3](../../../sprints/done/sprint-3.md).
     **What this does NOT change.** Nothing about scope, the two open questions below (the denial-log
     path is still unruled and still blocks the coder), the residuals, or the owner field. Relaxing a
     dependency makes this task *runnable*, not *ready* — the denial-log path question is still the

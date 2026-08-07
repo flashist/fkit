@@ -4,10 +4,10 @@
 0247
 
 ## Sprint
-Backlog
+Sprint 4
 
 ## Priority
-Unscheduled
+Sprint 4 P6
 
 ## Status
 🔲 Backlog

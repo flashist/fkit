@@ -183,7 +183,7 @@ Executed by a **spawned `fkit-producer` with no owner channel**, acting on the t
 |---|---|
 | Archive the board | `ai-agents/sprints/sprint-2.md` → `ai-agents/sprints/done/sprint-2.md` (`git mv`), with a `🔒 CLOSED` banner in the Sprint 1 shape |
 | Re-point links | **341** internal links in the archived board + **12** inbound links in 5 other files |
-| Create the fresh board | [`ai-agents/sprints/sprint-3.md`](../../../sprints/sprint-3.md) — ranks restart at `P1` |
+| Create the fresh board | [`ai-agents/sprints/sprint-3.md`](../../../sprints/done/sprint-3.md) — ranks restart at `P1` |
 | Carry the one open row | `0222` → Sprint 3 `P3`; its Sprint 2 row keeps the frozen `P189` |
 | Pull in the named work | `0181` → `P1`, `0182` → `P2`, from the Backlog board |
 | Renumber a closed row | **None. Not one, on any board.** |
