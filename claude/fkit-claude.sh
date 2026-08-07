@@ -370,6 +370,112 @@ if [ "$setup_ok" = 0 ] && ! ls "$proj"/.claude/agents/fkit-*.md >/dev/null 2>&1;
   exit 1
 fi
 
+# --- Launch-time structure notice (task 0247, unit 6 of the 0241 design; ADR-039 / Q3 "Yes + yes") --
+# ONE stderr line when the project's fkit-managed structure diverges from what the installed version
+# ships — awareness only: nobody runs what nobody is told to run. The repair's only entry point stays
+# the on-demand /fkit-heal check (0245/0246). Runs on every path to a session (fresh-project, menu,
+# named role), including under FKIT_SETUP_ONLY — deliberate: a structure notice at setup time is
+# coherent, and it is what makes this pass testable through the existing harness.
+#
+# READ-ONLY, NO MEMORY, NON-FATAL — each a contract, not a preference:
+#   * It REUSES the shipped checker (skills/fkit-heal/check.sh) and parses its pinned stdout row
+#     contract (`<outcome>\t<path>\t<detail>`; ADR-017 rule 4, pinned by test/structure-check.test.js).
+#     A second, lighter classification pass would be a hand-maintained mirror of check.sh's semantics
+#     (hashing pipeline, marker elision, precedence, keep-out fail-closed) — and a notice that
+#     disagrees with the on-demand check is worse than no notice. The SHARE's copy, always
+#     ($here/skills/…): the project's .claude/skills/ copy can be stale.
+#   * A row is notice-relevant iff its outcome is in check.sh's exit-1 set (missing, untouched-stale,
+#     owner-edited, wrong-type, wiki-routed, refused: symlink, refused: malformed-markers,
+#     unreadable). `conforming` and `kept-out` never are. Keyed off ROWS, not the exit code — so the
+#     fail-closed keep-out path (exit 1, loud init warning already given, no ai-agents rows printed)
+#     comes out silent here unless a root file also diverges, with no special-casing.
+#   * Zero relevant rows → COMPLETE silence (init's output-trap rule, carried verbatim: the happy
+#     path runs on every launch of every project forever).
+#   * No stamp, no throttle, no cursor, no .fkit/ state — the notice prints while the mismatch exists
+#     and stops when it is fixed (ADR-015 Context §3's rejected cursor stays rejected). And NO env
+#     kill-switch: that would be the global mute Q3 explicitly forbade, one layer down.
+#   * Never a repair, never a prompt, never stdout. check.sh's own stderr is discarded — its warnings
+#     would duplicate init's, which already announced symlinks etc. on this same launch.
+#   * Every failure is a silent `return 0`: check.sh absent from the share (older install), bash
+#     absent, the check exiting with anything but 0/1, awk failing. This launcher runs `set -eu`; a
+#     notice failure must never cost the session (task-26 bar).
+#
+# Suppression — ai-agents/.fkit-accepted-drift, the intent file. A SIBLING of .fkit-keep-out, not
+# entries in it: keep-out means "never create this path"; drift-acceptance means "divergence at this
+# path is deliberate". Two intents, two files.
+#   * TRACKED (lives in ai-agents/, never .fkit/) — survives a clone, shared with teammates; records
+#     INTENT, not progress. One PROJECT-ROOT-relative path per line (`CLAUDE.md`,
+#     `ai-agents/README.md`) — root-relative, unlike keep-out's ai-agents-relative form, because the
+#     notice's scope includes CLAUDE.md/AGENTS.md, which sit outside ai-agents/. An entry covers the
+#     path AND everything beneath it (keep-out's subtree rule). Parser semantics carried from the
+#     keep-out parser: `#` comments, blank lines, CRLF trim, strip leading `./`/`/` and trailing `/`,
+#     LITERAL matching only — never globbed (init's R3 lesson; the matching runs in awk, no shell
+#     expansion touches an entry).
+#   * No global switch; no per-mismatch keying (path + content identity would record a POSITION — the
+#     rejected cursor by the back door). An entry suppresses the path whatever the outcome and
+#     whatever the content. OWNED CONSEQUENCE: a suppressed path stays silent even when a future fkit
+#     version changes what ships there — consistent with the recorded intent ("this path is mine
+#     now"); reversible by deleting the entry.
+#   * ⚠️ FAILURE DIRECTION — INVERTED FROM KEEP-OUT, DELIBERATELY. An intent file that is a symlink /
+#     directory / unreadable (or sits under a symlinked ai-agents/, which fkit never probes through)
+#     is IGNORED: nothing suppressed, the notice prints. Keep-out gates a WRITE, so failing closed
+#     means don't write; this gates SILENCE, so failing closed means don't silence — the worst case
+#     is one extra stderr line, never hidden drift and never a write. Do not "fix" this into
+#     keep-out's direction.
+#   * Suppression applies to THIS notice only. The on-demand /fkit-heal check still reports
+#     suppressed paths in full — it is the diagnostic, and hiding rows from an explicit request would
+#     be suppressing evidence.
+structure_notice() {
+  sn_ck="$here/skills/fkit-heal/check.sh"
+  [ -f "$sn_ck" ] || return 0
+  command -v bash >/dev/null 2>&1 || return 0
+  sn_rc=0
+  sn_out="$(bash "$sn_ck" --share "$share" "$proj" 2>/dev/null)" || sn_rc=$?
+  case "$sn_rc" in 0|1) ;; *) return 0 ;; esac
+  # The intent file counts only as a readable regular file reached without probing through a symlink.
+  sn_intent="$proj/ai-agents/.fkit-accepted-drift"
+  sn_have=0
+  if [ ! -L "$proj/ai-agents" ] && [ ! -L "$sn_intent" ] && [ -f "$sn_intent" ] && [ -r "$sn_intent" ]; then
+    sn_have=1
+  fi
+  sn_line="$(printf '%s\n' "$sn_out" | awk -F'\t' -v intent="$sn_intent" -v have="$sn_have" '
+    BEGIN {
+      n_acc = 0
+      if (have == 1) {
+        while ((getline l < intent) > 0) {
+          sub(/\r$/, "", l)
+          if (l ~ /^[ \t]*$/ || l ~ /^#/) continue
+          sub(/^\.\//, "", l)
+          sub(/^\//, "", l)
+          while (l ~ /\/$/) sub(/\/$/, "", l)
+          if (l != "") acc[++n_acc] = l
+        }
+        close(intent)
+      }
+    }
+    /^#/ { next }
+    NF < 2 { next }
+    $1 == "missing" || $1 == "untouched-stale" || $1 == "owner-edited" || $1 == "wrong-type" ||
+    $1 == "wiki-routed" || $1 == "refused: symlink" || $1 == "refused: malformed-markers" ||
+    $1 == "unreadable" {
+      bare = $2
+      sub(/\/$/, "", bare)
+      for (i = 1; i <= n_acc; i++)
+        if (bare == acc[i] || index(bare, acc[i] "/") == 1) next
+      n++
+      if (n <= 3) names = (n == 1 ? bare : names ", " bare)
+    }
+    END {
+      if (n == 0) exit 0
+      more = (n > 3 ? sprintf(" +%d more", n - 3) : "")
+      printf "⚠ fkit: %d path(s) diverge from what the installed fkit version ships (%s%s) — run /fkit-heal in a producer session to see and repair; nothing was changed. Deliberate? List the path in ai-agents/.fkit-accepted-drift.\n", n, names, more
+    }
+  ')" || return 0
+  [ -n "$sn_line" ] && printf '%s\n' "$sn_line" >&2
+  return 0
+}
+structure_notice || :
+
 # FKIT_SETUP_ONLY is a setup CHECK. A check that reports success on a failed setup is worse than no
 # check at all — so it exits non-zero when setup failed, rather than the blanket `exit 0` it used to.
 if [ "${FKIT_SETUP_ONLY:-0}" = 1 ]; then

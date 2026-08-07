@@ -10,7 +10,7 @@ Sprint 4
 Sprint 4 P6
 
 ## Status
-🔲 Backlog
+🔄 In progress
 
 ## Owner
 fkit-coder

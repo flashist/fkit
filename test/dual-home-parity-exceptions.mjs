@@ -99,6 +99,18 @@ export const exceptions = [
       'because the brief requires a reason per path, not just a path.',
   },
 
+  {
+    path: '.fkit-accepted-drift',
+    kind: 'live-only',
+    reason:
+      'The launch-notice intent file (task 0247): it records THIS project\'s deliberate divergences ' +
+      'from what the installed fkit version ships — per-project intent by definition, like ' +
+      '`.fkit-keep-out`. The scaffold must never ship one: a shipped copy would pre-suppress launch ' +
+      'notices in every consuming project, which is exactly the global mute the owner\'s Q3 ruling ' +
+      'forbade. The live copy exists because this repo dogfoods fkit and accepts its own known drift ' +
+      '(owner-ruled 2026-08-07, task 0247 Q3 "Seed it").',
+  },
+
   // ─── audience-adapted (same document, deliberately de-fkit-ified for a consuming reader) ───────
   // Each entry names what is ACTUALLY different in that file. A shared boilerplate reason across five
   // paths is exactly the unfalsifiable hole the 0132 brief warns against.

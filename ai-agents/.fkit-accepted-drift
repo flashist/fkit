@@ -1,0 +1,27 @@
+# ai-agents/.fkit-accepted-drift — accepted structure drift (task 0247; owner-ruled 2026-08-07).
+#
+# One project-root-relative path per line. An entry means "divergence at this path from what the
+# installed fkit version ships is DELIBERATE — stop telling me about it at launch." An entry covers
+# the path and everything beneath it. Literal matching only; `#` comments and blank lines allowed.
+#
+# Owned consequence: a listed path stays notice-silent even when a future fkit version changes what
+# ships there. Delete a line to start being notified about that path again. The on-demand
+# /fkit-heal check still reports these paths in full — this file silences only the launch notice.
+#
+# Seeded with this repo's own known dogfood drift, verified by a live check.sh run 2026-08-07
+# (9 owner-edited paths). This repo IS fkit: its root context files and several conventions docs
+# have evolved here ahead of (and apart from) what the shipped scaffold carries.
+
+# Root context files — carry fkit's own project guidance, far beyond the shipped seed.
+CLAUDE.md
+AGENTS.md
+
+# ai-agents docs evolved in this repo (fkit-internal history, ADR links, provenance sections the
+# scaffold copies deliberately drop — see test/dual-home-parity-exceptions.mjs for the same story).
+ai-agents/README.md
+ai-agents/knowledge-base/conventions/README.md
+ai-agents/knowledge-base/conventions/dependency-declaration-form.md
+ai-agents/knowledge-base/conventions/evidence-before-assertion.md
+ai-agents/knowledge-base/conventions/one-skill-one-output.md
+ai-agents/knowledge-base/conventions/status-report-format.md
+ai-agents/knowledge-base/conventions/task-status-vocabulary.md

@@ -51,7 +51,7 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
    | Role | Its procedures |
    |---|---|
    | lead (the conductor) | `/fkit-sprint-ship-loop` — drives a whole sprint; plus `/fkit-team`, `/fkit-query` — it routes, and conducts when asked |
-   | producer | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-brief`, `/fkit-task-done`, `/fkit-task-cancelled` |
+   | producer | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-brief`, `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-heal` |
    | coder | `/fkit-plan-task`, `/fkit-process-review`, `/fkit-process-stateful-review`, `/fkit-task-ship-loop` |
    | architect | `/fkit-survey-project`, `/fkit-inspect`, `/fkit-design-spec`, `/fkit-evaluate-approach`, `/fkit-record-decision` |
    | reviewer | `/fkit-review`, `/fkit-stateful-review` |

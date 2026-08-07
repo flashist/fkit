@@ -354,3 +354,4 @@ it works.** **Not** a trigger: the number of released versions growing.
   **destructive** act still on the table. It is **out of scope for this ADR**, needs its own consent
   gate, and **`.fkit/settings` is NOT a target** — it is live current-runtime state
   (`claude/fkit-claude.sh:257-268`).
+- [ADR-039](adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged.md) — **2026-08-06 (evidence, not decision):** both re-raise triggers have since fired and were ruled on by the owner; a consent-gated, in-session repair capability is licensed there. Nothing in this ADR's Decision changes; the invariant above is unchanged for the unattended launch path.

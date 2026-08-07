@@ -22,7 +22,7 @@ built** — described where the roles are (§4.1), not counted among them.
 This repository **is the framework**. Its "source" is:
 
 - **agent definitions** — markdown + YAML frontmatter (`claude/agents/fkit-*.md`, 7 files)
-- **skill playbooks** — markdown procedures (`claude/skills/fkit-*/SKILL.md`, 25 dirs)
+- **skill playbooks** — markdown procedures (`claude/skills/fkit-*/SKILL.md`, 26 dirs)
 - **POSIX shell** — the installer, the launcher, the per-project setup
 - **one small Node script** — `bin/release.mjs`, to cut a release
 - **a scaffold** — `claude/scaffold/`, the `ai-agents/` tree a consuming project receives
@@ -65,7 +65,7 @@ knowingly** — [ADR-009](decisions/adr-009-claude-code-native-is-the-only-runti
 fkit/
 ├── claude/                        THE RUNTIME
 │   ├── agents/fkit-*.md             7 Claude Code subagent definitions (frontmatter + system prompt)
-│   ├── skills/fkit-*/SKILL.md       25 /fkit-* skills — the role procedures
+│   ├── skills/fkit-*/SKILL.md       26 /fkit-* skills — the role procedures
 │   ├── scaffold/                    what a consuming project gets: ai-agents/, CLAUDE.md, AGENTS.md
 │   ├── fkit-claude.sh               the `fkit` command: self-update, preflight, role menu, launch
 │   ├── fkit-claude-init.sh          idempotent per-project setup (scaffold + .claude/ refresh + intake)
@@ -132,7 +132,7 @@ role still cannot run another role's *procedure*.
 > the whole built team; this note is the plan. When the tester ships, it becomes an eighth table row —
 > until then, "seven roles" is the fact and "eight" would be a claim about code that is not there.
 
-### 4.2 The 25 skills — where the procedures live
+### 4.2 The 26 skills — where the procedures live
 
 Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedures**; the agent
 prompts are the role's *character*. Every role-specific skill opens with a `⛔ Owner:` banner naming
@@ -142,7 +142,7 @@ carries no banner — it is universal by design.
 | Owner | Skills |
 |---|---|
 | lead | `sprint-ship-loop` (the conductor loop — ADR-031/032) |
-| producer | `initiate-project`, `task-brief`, `task-done`, `task-cancelled`, `status` |
+| producer | `initiate-project`, `task-brief`, `task-done`, `task-cancelled`, `status`, `heal` (read-only structure check — task 0245, ADR-039) |
 | coder | `plan-task`, `process-review`, `process-stateful-review`, `task-ship-loop` |
 | architect | `survey-project`, `inspect`, `design-spec`, `evaluate-approach`, `record-decision` |
 | reviewer | `review`, `stateful-review` |

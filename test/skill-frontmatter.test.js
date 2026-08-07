@@ -571,7 +571,7 @@ test('discovery: a missing tree is empty (the non-vacuity assertions are what ma
 
 // The corpus size, pinned. See the NON-VACUITY note in the header for why these are exact rather than
 // `> 0`. ⚠️ THESE ARE NOT TRIPWIRES TO BUMP UNTIL GREEN — see the failure messages below.
-const EXPECTED_SKILLS = 25;
+const EXPECTED_SKILLS = 26;
 const EXPECTED_AGENTS = 7;
 
 test('live corpus: every skill SKILL.md frontmatter conforms', () => {

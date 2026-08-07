@@ -10,7 +10,7 @@ Sprint 4
 Sprint 4 P1
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect

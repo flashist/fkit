@@ -293,7 +293,8 @@ test('a tool_name other than Skill reaching this hook -> deny, defensively (matc
 // =================================================================================================
 
 const UNIVERSE = [
-  'fkit-adversarial-review', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-initiate-project',
+  'fkit-adversarial-review', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-heal',
+  'fkit-initiate-project',
   'fkit-inspect', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review',
   'fkit-dumb-down', 'fkit-open-questions-interview',
   'fkit-query', 'fkit-record-decision', 'fkit-review', 'fkit-stateful-review', 'fkit-status',
@@ -318,7 +319,9 @@ const OWNED = {
   // (`fkit-sprint-ship-loop` itself is absent from UNIVERSE below, so it is not mirrored here either
   // — pre-existing gap, not this task's to close; the two spot tests above cover that pair.)
   lead: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down'],
-  producer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-initiate-project', 'fkit-task-brief', ...MOVERS, 'fkit-status'],
+  // fkit-heal: the read-only structure check (task 0245) — producer-owned per the owner's 2026-08-06
+  // Q4 ruling ("Yes, producer"); the same custodianship as the task lifecycle and board hygiene.
+  producer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-initiate-project', 'fkit-task-brief', ...MOVERS, 'fkit-status', 'fkit-heal'],
   // No movers: the coder ship-loop's terminal act is a producer route, not a self-close (ADR-033 §3).
   coder: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review', 'fkit-task-ship-loop'],
   architect: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-survey-project', 'fkit-inspect', 'fkit-design-spec', 'fkit-evaluate-approach', 'fkit-record-decision'],

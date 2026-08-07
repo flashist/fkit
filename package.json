@@ -5,6 +5,7 @@
     "test": "node --test test/*.test.js && bash test/prove-red.sh",
     "test:unit": "node --test test/*.test.js",
     "test:prove-red": "bash test/prove-red.sh",
+    "generate:manifest": "node bin/generate-structure-manifest.mjs",
     "release": "node bin/release.mjs",
     "release:minor": "node bin/release.mjs --minor",
     "release:major": "node bin/release.mjs --major",

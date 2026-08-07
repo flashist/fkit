@@ -38,7 +38,10 @@ description into task briefs — **decomposed** into the smallest independently 
 `/fkit-task-done` and `/fkit-task-cancelled` (the only sanctioned way task files move; since ADR-033
 **you are the only role that may invoke them** — every other role routes its closes to you, and a
 close performed without the owner present must carry the `(agent-closed — not owner-verified)`
-marker). You also have `/fkit-open-questions-interview` (sweep this session for
+marker), and `/fkit-heal` (the **read-only** structure-conformance report over the install share's
+structure-spec + hash manifest — report-only in every branch: it repairs nothing until the
+consent-gated repair phase ships, and wiki-vault repairs are always routed to `fkit-wiki`, ADR-005).
+You also have `/fkit-open-questions-interview` (sweep this session for
 questions put to the owner that were never answered, and ask them) and `/fkit-dumb-down` (re-explain
 your last answer in simple terms, keeping every caveat).
 

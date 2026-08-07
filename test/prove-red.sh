@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# FOURTEEN mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# FIFTEEN mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -38,6 +38,7 @@
 #  12. Append one byte to a scaffold copy           → "byte-identical"                    (task 0133)
 #  13. Co-present file under a prune point          → "no prune point hides a file"       (task 0133)
 #  14. Revert dashboard.sh's move-target extractor  → "0210/A"                            (task 0210)
+#  15. Remove the launcher's structure_notice call  → "0247/drifted"                      (task 0247)
 #
 # ⚠️ MUTATION 14 REACHES ITS TARGET WITHOUT AN ENV SEAM, and that is deliberate — it is the one
 # exception to the "pointed at via FKIT_LAUNCHER" phrasing above. dashboard-contract.test.js resolves
@@ -159,10 +160,21 @@ make_scaffold_copy() {
 }
 
 # A full, independent copy of claude/ whose launcher we can mutate. $1 = name; echoes the launcher path.
+#
+# ⚠️ THE COPY IS NESTED AS $work/$1/claude — THE DIRECTORY NAME `claude` IS LOAD-BEARING (task 0247).
+# The launcher derives its share as `$here/..`, and check.sh resolves the spec at
+# `$share/claude/structure-spec.md` — a literal `claude` segment. The old flat layout
+# ($work/$1/fkit-claude.sh) made every copy's share $work, which has no `claude/`, so the
+# structure-notice pass silently self-disarmed (check.sh exit 2 → guard → silence) in every copied
+# launcher: step 0b would red on the notice suite's drifted case, red-via-layout, proving nothing.
+# make_repo_copy below already nests for the same reason. The per-copy package.json is the
+# source-checkout marker for the copy's OWN share ($work/$1) — $work's marker no longer covers it.
 make_claude_copy() {
   dst="$work/$1"
-  cp -R "$repo/claude" "$dst"
-  echo "$dst/fkit-claude.sh"
+  mkdir -p "$dst"
+  cp -R "$repo/claude" "$dst/claude"
+  : > "$dst/package.json"
+  echo "$dst/claude/fkit-claude.sh"
 }
 
 # A copy of BOTH `claude/` and `test/` under one root — the seam run_dashboard_suite() needs (task
@@ -649,6 +661,29 @@ if [ "$r14" != red ]; then
   echo "     reverse-move cases are not load-bearing."; fail=1
 elif ! grep -Eq '(✖|not ok|fail).*0210/A' "$out"; then
   echo "   ✗ suite went red but NOT at 0210/A — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 15: remove the launcher's structure_notice call → the 0247/drifted assertion in
+#     structure-notice.test.js must go red (task 0247). The notice pass is launcher code — squarely
+#     ADR-026 prove-red scope (unlike check.sh itself, whose 0245 suite recorded the opposite as a
+#     stated assumption). The mutation removes the CALL, not the function: a launcher that still
+#     defines structure_notice() but never runs it is exactly the silent regression this gate exists
+#     to catch — every notice test's fixture would launch clean and quiet, green forever. ------------
+m15="$(make_claude_copy claude-mutant-notice)"
+cp "$m15" "$m15.orig"
+sed -i.bak 's/^structure_notice || :$/: # mutation: structure notice pass removed (was: structure_notice || :)/' "$m15"
+if cmp -s "$m15" "$m15.orig"; then
+  echo "15. removed the structure_notice call ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+fi
+printf '15. structure_notice call removed — "0247/drifted" should go RED ... '
+r15="$(run_suite "$m15")"; echo "$r15"
+if [ "$r15" != red ]; then
+  echo "   ✗ the suite did NOT catch a launcher that never runs the structure notice."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0247/drifted' "$out"; then
+  echo "   ✗ suite went red but NOT at 0247/drifted — red for the wrong reason."; fail=1
 fi
 
 echo
