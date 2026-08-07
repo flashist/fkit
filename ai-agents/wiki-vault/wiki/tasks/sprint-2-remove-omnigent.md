@@ -1,8 +1,18 @@
 # Sprint 2 — Remove Omnigent, land Claude-native as the only runtime
 
-**Source**: `ai-agents/sprints/sprint-2.md`
-**Status**: in-progress
+**Source**: `ai-agents/sprints/done/sprint-2.md` *(archived 2026-08-06; was `ai-agents/sprints/sprint-2.md`)*
+**Status**: done — `🔒 CLOSED 2026-08-06`, rolled over to Sprint 3 by owner ruling
 **Sprint/Tag**: Sprint 2
+
+> ## 🔒 CLOSED — 2026-08-06. Superseded by [[tasks/sprint-3-close-the-rank-integrity-loop]].
+> **Rolled over by owner ruling** (verbatim *"Roll over to Sprint 3."*, `AskUserQuestion`, live
+> `fkit lead` session), archival shape per the Sprint 1 precedent, executed by a spawned producer
+> under [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]] (`0185`). The board file moved
+> to `ai-agents/sprints/done/sprint-2.md` — **moved, not frozen**: dated corrections may still be
+> appended there, and every `P<n>` on it is unchanged from before the roll. Final disposition:
+> **138 done · 5 cancelled · 45 moved to the Backlog board · 1 moved to Sprint 3 (`0222`, its row
+> frozen at `P189`) — of 189. Not one closed rank was renumbered, on any board.** Everything below
+> this banner describes the board as it was while open and is kept as history.
 
 ## Goal
 Execute the removal of the Omnigent runtime **end to end**: extract what the Claude flavor still depends on, build the one piece genuinely missing, rewrite the installer, delete `omnigent/`, and only *then* rewrite the docs and the wiki against the reality that's left.
@@ -94,7 +104,7 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 - **The `.fkit/` orphan-cleanup consent model → announce-only** (2026-07-17), unblocking task 36.
 
 ## Outcome
-> ✅ **CURRENT COUNT — 2026-08-06: `138 done · 1 backlog · 5 cancelled · 45 moved — of 189`.** Re-derived from `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md`, **zero drift records**. The 2026-08-03 reading below is left byte-identical as the record of that day.
+> ✅ **CURRENT COUNT — 2026-08-06: `138 done · 1 backlog · 5 cancelled · 45 moved — of 189`.** Re-derived from `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md`, **zero drift records**. The 2026-08-03 reading below is left byte-identical as the record of that day. *(Dated note 2026-08-07: this was the last pre-rollover reading — the same day the board was archived and its `1 backlog` row, `0222`, moved to Sprint 3. The closure banner at the top of this page carries the final disposition; the path in the command above is the pre-archival one.)*
 >
 > **The 2026-08-04/05 `/fkit-sprint-ship-loop` run shipped SIX rows** — `0167`, `0190`, `0191`, `0200`, `0203`, `0208` — and **filed eleven new briefs** (`0218`–`0228`), of which **one** (`0222`, the ADR-038 record) took a Sprint 2 row and the rest went to the Backlog board. **Total grew 188 → 189; done grew 132 → 138.**
 >
@@ -112,7 +122,7 @@ The owner reverted the `full` switch — *"there should be 1 version of the outp
 
 > ⚠️ **The board was growing faster than it closed, and the 45-row move did not change that — it only moved the queue.** Before the cleanup, one run shipped **5** tasks and filed **~20** new ones; backlog went **37 → 52** while done went **125 → 130**. Every closed row is `(agent-closed — not owner-verified)`, and `dashboard.sh` still collapses the marker to a plain `Done` — **nothing counts them.**
 
-> ⚠️ **The board is 81% closed, and that is now a structural problem, not a milestone.** Measured 2026-08-01 by [[tasks/decide-how-an-owner-records-a-merit-ordering]]: **126 of 155 ranked rows closed, in five disjoint open segments, with 16 of 29 open rows unreachable** — their merit position no longer expressible as a rank, because a closed row above them is a wall nothing may move past. **The headline share improved for a reason that is not progress:** unreachability fell 68% → 55% while **no open row moved from unreachable to reachable — not one**; the movement was two unreachable rows *closing* plus fresh rows inflating the denominator. **Read the absolute count, not the share.** Whether Sprint 2 rolls onto a fresh board is task `0185` — ruled the **highest-leverage** of its batch and **deferred by the owner** 2026-08-01.
+> ⚠️ **The board is 81% closed, and that is now a structural problem, not a milestone.** Measured 2026-08-01 by [[tasks/decide-how-an-owner-records-a-merit-ordering]]: **126 of 155 ranked rows closed, in five disjoint open segments, with 16 of 29 open rows unreachable** — their merit position no longer expressible as a rank, because a closed row above them is a wall nothing may move past. **The headline share improved for a reason that is not progress:** unreachability fell 68% → 55% while **no open row moved from unreachable to reachable — not one**; the movement was two unreachable rows *closing* plus fresh rows inflating the denominator. **Read the absolute count, not the share.** Whether Sprint 2 rolls onto a fresh board is task `0185` — ruled the **highest-leverage** of its batch and **deferred by the owner** 2026-08-01. *(✅ Dated update 2026-08-06: the owner signed — the board rolled to Sprint 3; see the closure banner at the top of this page and [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]].)*
 
 > ⚠️ **A green board is still no evidence a human verified any of it.** Of the 13 tasks closed since 2026-07-26 — `0103`, `0125`, `0126`, `0141`, `0147`, `0148`, `0150`, `0151`, `0153`, `0157`, `0159`, `0160`, `0161` — **every one carries `(agent-closed — not owner-verified)`.** The board cannot show which closes were agent-performed; that gap is unchanged.
 >
@@ -211,6 +221,8 @@ Six rows, one theme: **what the driver does when the thing it spawned does not c
 Its sibling: **a count of a *semantic* rule cannot be established by grepping one of its phrasings.** Both are now standing rules in `conventions/evidence-before-assertion.md` ([[tasks/stop-agents-asserting-unchecked-repo-state]]).
 
 ## Related
+- [[tasks/sprint-3-close-the-rank-integrity-loop]] — the successor board, opened by the 2026-08-06 rollover
+- [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]] — task `0185`, the rollover decision and its execution
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
 - [[systems/fkit]] · [[systems/install-and-self-update]] · [[systems/role-locked-sessions]] · [[systems/knowledge-base-structure]]
 - [[systems/testing-and-verification]] · [[systems/launch-convergence-and-init]] · [[systems/review-and-model-diversity]]
@@ -259,6 +271,6 @@ Its sibling: **a count of a *semantic* rule cannot be established by grepping on
 - [[tasks/decide-what-the-sprint-driver-does-when-a-spawned-worker-dies]] — task `0167` — the dead-worker ruling, and the third instance that happened during its own ship
 - [[tasks/add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block]] — task `0190` — the rules-block clause and the signed cap bump to 4352
 - [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — task `0191` — the driver-side clause, **on disk and unreached**
-- [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200` — the routing ruling and the paired detector; **ADR-038 is `0222`, filed and unwritten**
+- [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200` — the routing ruling and the paired detector; **ADR-038 is `0222`, filed and unwritten** *(✅ dated correction 2026-08-06: now written — [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]], recorded by [[tasks/record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] on Sprint 3)*
 - [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203` — the faithful-carry construction, and element 7's both-legs presence check
 - [[tasks/add-an-exit-table-row-for-a-failed-build-verify-review-spawn-in-the-sprint-loop]] — task `0208` — the exit row, and three defects that survived the plan gate

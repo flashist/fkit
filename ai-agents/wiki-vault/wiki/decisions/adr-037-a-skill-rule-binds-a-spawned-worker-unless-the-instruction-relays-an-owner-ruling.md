@@ -15,6 +15,11 @@
 
 **Not decided — the *invocation* axis:** *which* skill a role may run at all. That stays [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]], [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]] and [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]. **Verified 2026-08-02: none of the three mentions rule-content precedence.**
 
+> *✅ Dated update 2026-08-06 (recorded by the 2026-08-07 sync; sentence above byte-identical):* the
+> open axis is now **closed for loop steps** by
+> [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — a loop step's role is
+> derived from the skill the step runs, never from the deliverable's author.
+
 ### Two recorded instances pointing opposite ways — and why neither extreme is available
 
 - **Instance A — 2026-07-27, the merit-rank.** A spawned `fkit-producer` merit-ranked two briefs into the middle of `ai-agents/sprints/sprint-2.md`, renumbering 14 rows, against `/fkit-task-brief` step 5's *"Do not renumber or insert into the owner's ranking"*. **It cited the rule, followed the spawn prompt anyway, and recorded that it did.** Its own addendum called the placement *"producer judgment, not an owner ruling."*
@@ -126,8 +131,10 @@ The ADR states: ***"Prose is proportionate. There is no mechanical enforcement, 
 - [[tasks/decide-what-the-sprint-driver-does-when-a-spawned-worker-dies]] — task `0167`, whose resume doctrine may **not** tell a worker to skip its own fail-safe — that would be an instruction into skill-rule territory, forbidden by §3
 - [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203`, which installs the faithful-carry construction §5's proxy discussion turns on
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] · [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]] · [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the **invocation** axis, untouched
+- [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — recorded 2026-08-06: closes the invocation axis **for loop steps** (see the dated update in §Context)
 - [[decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record]] · [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] · [[decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry]] — the three ADRs that touch this axis without deciding it
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — task `0160`, whose citation form this ADR follows
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` / ADR-035, instance A's other axis
 - [[systems/role-locked-sessions]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — task `0222`, the recording of ADR-038 — the closure of this ADR's open invocation axis for loop steps
 - Source: `ai-agents/knowledge-base/decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling.md`

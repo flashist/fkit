@@ -33,6 +33,14 @@ A second, quieter finding: the filing note called P119 the head of the earliest 
 
 **Eight follow-ups named, none filed** (`0178`–`0185`), the highest-leverage of which — rolling Sprint 2 onto a fresh board — the report ruled **in as a mechanism** while stating in the same breath that **its execution is a separate decision it does not authorize**. **The owner deferred it 2026-08-01.** *A deferral is an outcome, not a failure.*
 
+> *✅ Dated update 2026-08-06 (recorded by the 2026-08-07 sync; paragraph above byte-identical):*
+> three of the eight have now shipped — follow-up 4 as
+> [[tasks/narrow-the-re-rank-exception-an-insertion-is-not-a-re-rank]] (`0181`, the step-5 edit),
+> follow-up 5 as [[tasks/build-the-closed-rank-immutability-guard]] (`0182`, the guard), and
+> follow-up 8 as [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]] (`0185`): **the owner
+> signed the rollover** and Sprint 2 archived to `sprints/done/sprint-2.md`, succeeded by
+> [[tasks/sprint-3-close-the-rank-integrity-loop]] — with not one closed rank renumbered.
+
 ## Related
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — the decision this report produced (its §4.2)
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — task `0160`, which ruled this **out of class** and handed it back; this task is its follow-up 6

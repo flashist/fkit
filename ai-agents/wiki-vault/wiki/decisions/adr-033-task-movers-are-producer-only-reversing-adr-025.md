@@ -93,3 +93,4 @@ Two of these would have slipped the verification sweep entirely, because **the s
 - [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] — `0211`, a wiki-owned task whose close still routed here, as every close does
 - [[tasks/decide-what-the-sprint-driver-does-when-a-spawned-worker-dies]] — task `0167`, whose own close followed this route: **the wiki and the architect flag; the producer closes**
 - [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200`, which reuses this ADR's **route-don't-widen** pattern for a second step, and copies its honesty about the residual: **the fix restores routing, not prevention**
+- [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — the `0200` ruling recorded (2026-08-06): reuses this ADR's *route-don't-widen* precedent and its prose-plus-detector honesty for loop-step roles

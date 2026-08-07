@@ -47,3 +47,4 @@ Stateful review, verdict *changes requested — 6 defects, none blocking*; **Cod
 - [[systems/testing-and-verification]] — related
 - [[tasks/disambiguate-the-frozen-history-clause]] — related
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
+- [[tasks/design-the-post-update-structure-check]] — task `0241` (2026-08-06): the structure-check design, whose hash manifest exists precisely because this sweep proved drift can be deliberate adaptation

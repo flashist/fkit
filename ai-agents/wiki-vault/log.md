@@ -1730,3 +1730,114 @@ moved, no mover invoked. No brief, sprint plan, ADR, report, skill, agent defini
 file edited.** No `:NNN` coordinate written anywhere in this run's diff.
 
 No tracked task completed by this run.
+
+## 2026-08-07 — ingest (sync)
+
+**Sync window: `302c16148c404f444e3f32060cf098668d9b3d92` → HEAD (`c3e7ba10b2c6483bae729561a45fdde47c82fc22`).** Working tree under `ai-agents/` clean at run time — the whole delta was committed. Changed source files detected: **54** (deduplicated); **12 ingest-worthy** after the filter.
+
+- Ingested: `ai-agents/sprints/sprint-3.md` → **created** [[tasks/sprint-3-close-the-rank-integrity-loop]] — the active board since the 2026-08-06 owner-ruled rollover; ranks restart at `P1`; all four rows shipped 2026-08-06, every close `(agent-closed — not owner-verified)`
+- Ingested: `ai-agents/sprints/done/sprint-2.md` (renamed from `ai-agents/sprints/sprint-2.md` **with content edits** — the `🔒 CLOSED` banner and the rollover addendum) → **updated** [[tasks/sprint-2-remove-omnigent]] — closure banner added, Source/Status flipped, final disposition recorded (**138 done · 5 cancelled · 45 moved to Backlog · 1 moved to Sprint 3 — of 189; no closed rank renumbered**), the "ADR-038 unwritten" and "0185 deferred" claims given dated corrections
+- Ingested: `ai-agents/tasks/done/0185-decide-whether-sprint-2-rolls-over-to-a-fresh-board/brief.md` → **created** [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]]
+- Ingested: `ai-agents/tasks/done/0181-narrow-the-re-rank-exception-an-insertion-is-not-a-re-rank/brief.md` → **created** [[tasks/narrow-the-re-rank-exception-an-insertion-is-not-a-re-rank]]
+- Ingested: `ai-agents/tasks/done/0182-build-the-closed-rank-immutability-guard/brief.md` → **created** [[tasks/build-the-closed-rank-immutability-guard]]
+- Ingested: `ai-agents/tasks/done/0222-record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs/brief.md` → **created** [[tasks/record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]]
+- Ingested: `ai-agents/tasks/done/0241-design-the-post-update-structure-check-against-a-shipped-spec/brief.md` **+** `ai-agents/knowledge-base/reports/2026-08-06-design-post-update-structure-check.md` (one page for task + deliverable) → **created** [[tasks/design-the-post-update-structure-check]] — this also discharges item 1 of task `0249`'s scope (the report half; the `0242` companion ADR does not exist on disk yet)
+- Ingested: `ai-agents/knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md` → **created** [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]]
+- Updated with dated notes (bidirectional links + falsified claims): [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] (invocation axis now closed for loop steps), [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] (guard built — baseline **dissolved**, not answered; step-5 edit landed; rollover ruled), [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] (both re-raise triggers fired; `0241` is the sanctioned re-raise; companion ADR `0242` pending), [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] (ADR-038 recorded), [[tasks/decide-how-an-owner-records-a-merit-ordering]] (follow-ups 4/5/8 shipped)
+- Back-link lines appended: [[systems/fkit]], [[systems/testing-and-verification]], [[systems/launch-convergence-and-init]], [[systems/install-and-self-update]], [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]], [[tasks/state-task-brief-step-5s-append-rule-in-full]], [[tasks/converge-ai-agents-additively-on-launch]], [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]], [[tasks/assert-task-ids-are-unique-in-the-test-suite]], [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]]
+- `index.md`: Sprint 3 entry added as the active board; Sprint 2 entry rewritten closed/archived; ADR-038 entry added; the `0200` entry's "unwritten" struck with a dated correction; new section "Sprint 3 — the rank-integrity loop closed" (5 task entries)
+- Skipped (per the filter, with reasons): **22 backlog briefs** (`0013`, `0134`, `0135`, `0176`, `0180`, `0224`, `0225`, `0229`–`0240`, `0242`–`0249` — not done; a page would be premature; the `0242`–`0249` structure-check follow-ups are recorded as pending on the `0241` page and index entry); **13 in-folder working artifacts** (`plan.md`/`worklog.md`/`review.md` of `0160`, `0181`, `0182`, `0222`, `0241` — not sources per ADR-029 filter); `ai-agents/sprints/backlog.md`, `ai-agents/sprints/done/sprint-1.md`, `ai-agents/knowledge-base/conventions/one-skill-one-output.md` (changes are link re-points after the archival rename, plus new backlog rows — no knowledge change; the Backlog-board page needed no edit)
+
+**Task `0238` verification (the vault-staleness resync this run performs).** Before: **5 vault files** carried the literal pre-archival path `ai-agents/sprints/sprint-2.md` (re-measured, matching the brief's filing count), and 2 asserted Sprint 2 current (`index.md`, the sprint-2 page's `Status: in-progress`). After: **zero live claims that Sprint 2 is active or that the board lives at the old path.** Remaining literal instances of the old path, each deliberate, named: (1) `log.md` — 23 instances, all inside frozen dated entries (append-only, no exceptions — owner-ruled, task `0211`); (2) [[tasks/sprint-2-remove-omnigent]] — 3, all inside dated historical readings or the "was `…`" archival note; (3) [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — 1, inside a dated 2026-08-03 verification record (frozen task-page body); (4) [[decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record]] — 1, historical narrative of the `0159` sweep deliverable; (5) [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — 1, historical narrative of instance A (2026-07-27). The two new pages ([[tasks/sprint-3-close-the-rank-integrity-loop]], [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]]) also name the old path — deliberately, as the literal string the 107-file prose sweep (`0236`) targets. ⚠️ **Note for the next lint: a dead-path scan WILL report these named instances — do not "re-fix" them.**
+
+**Watermark advanced: `302c161…` → `c3e7ba10b2c6483bae729561a45fdde47c82fc22` (HEAD).**
+
+## 2026-08-07 — lint
+
+**Run directly after the 2026-08-07 sync (watermark `c3e7ba10b2c6483bae729561a45fdde47c82fc22`, not
+advanced by this run — a lint never advances it).** Full pass over all 210 pages.
+
+- Issues found: 14
+- Issues fixed: 14
+- Issues flagged for human review: 0
+- Most significant: the sync's own two misses — twelve one-way links around its seven new pages, and
+  two stale claims on living surfaces that the same sync had corrected elsewhere (the three-of-four
+  incomplete-sweep shape again, now with the sync as the sweeper).
+
+| Check | Result |
+|---|---|
+| Pages on disk vs `index.md` | **210 ↔ 210**, zero missing, zero dangling |
+| Broken `[[wiki-links]]` | **0** across all 210 pages |
+| Orphan pages (no links in or out) | **0** |
+| Required inline metadata / template sections per `schema.md` | **210 / 210 conform**; no YAML frontmatter anywhere |
+| `**Source**:` paths on task pages | **164 / 164 resolve** (the sprint-2 page's *"was `ai-agents/sprints/sprint-2.md`"* is a deliberate archival note, not rot) |
+| ADR number/slug cross-check (case-insensitive, numeric compare, regular files only) | **38 vault ↔ 38 knowledge-base, 1:1** — no slug divergence, no missing counterpart, no heading/filename disagreement |
+| Two knowledge-base ADRs sharing a number (separate directory pass) | **none** |
+| One-way links | **12 found → 12 fixed → re-measured 0** |
+| Stale claims on living surfaces | **2 found → 2 fixed** (below) |
+
+### Fixed (14)
+
+1. **Twelve one-way links closed**, all created by the 2026-08-07 sync's seven new pages. Reciprocal
+   `## Related` bullets appended (pure additions) to seven target pages:
+   - `systems/fkit` ← the five new task pages (`0181`, `0182`, `0185`, `0222`, `0241`)
+   - `decisions/adr-038…` ← [[tasks/sprint-2-remove-omnigent]] and [[tasks/design-the-post-update-structure-check]]
+   - `decisions/adr-037…` ← [[tasks/record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]]
+   - `decisions/adr-033…` ← [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]]
+   - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]], [[tasks/build-the-closed-rank-immutability-guard]], [[tasks/narrow-the-re-rank-exception-an-insertion-is-not-a-re-rank]] ← [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]]
+2. **A stale claim on a living systems page.** [[systems/fkit]]'s `## Related` bullet for task `0200`
+   still read *"the ADR (`0222`) still unwritten"* — false since ADR-038 was recorded 2026-08-06.
+   Rewritten in place (living-page precedent, lint 2026-08-06): the bullet now says the ADR was
+   recorded 2026-08-06 as ADR-038. The sync corrected this same fact on the index's `0200` entry and
+   on the sprint-2 page's `0200` row, and missed this third site.
+3. **A self-contradiction inside `index.md`.** The task-`0158` entry still said *"both clauses are
+   still unwritten"* while the ADR-037 entry in the same catalog says both clauses landed
+   2026-08-04/05. Corrected in the catalog's own established form (strikethrough + ✅ dated note,
+   matching the `0200` entry's precedent), pointing at the ADR-037 entry including its reach caveats.
+
+### Deliberate residuals, classified — NOT defects, do not "re-fix"
+
+Every dead-path hit this run's scan produced was classified against the 2026-08-07 sync entry and the
+standing rulings; **zero genuine**:
+
+- **The pre-archival board path `ai-agents/sprints/sprint-2.md`** — all instances named in the sync
+  entry's task-`0238` verification block (23 frozen `log.md` instances; the sprint-2, sprint-3,
+  rollover, reverse-move, ADR-034 and ADR-037 pages' dated/historical mentions). Frozen history and
+  deliberate specimens for the `0236` prose sweep. Untouched.
+- **The two unsubstituted old-form flag templates** in the 2026-08-03 correction entry — `0211`'s
+  quoted specimens, explicitly exempted by that entry. Untouched.
+- **`claude/dashboard.sh` on the ADR-029 page** — a correction note quoting the error it fixed.
+- **`test/skill-ownership-sites.mjs`** (ADR-036 page, [[systems/testing-and-verification]]) — both
+  pages state the file is absent; still true, re-verified on disk.
+- **`claude/universal-rules.md`** on the `0158` page — the page itself calls it *"a path that does
+  not exist"*; that is the finding, not rot.
+- **`ai-agents/.fkit-keep-out`** — the convergence opt-out exists only in a consuming project that
+  creates it; correctly absent here.
+- **`claude/agents/fkit-git.md`** — never built (ADR-023); pages describe the declined design.
+- **Pre-ADR-029 paths** (`ai-agents/plans` / `reviews` / `worklogs`, `ai-agents/AGENTS-COMMON.md`) —
+  historical structure absorbed by the folder migration, or a rejected design's name.
+
+### Re-confirmed carry-forwards (unchanged, correctly still true)
+
+- `0191`'s driver-side clause is on disk and reaches no driver — `.claude/` refresh owner-deferred.
+- `0167` §5's resume doctrine has not landed — `0228` unstarted.
+- The ≥ 400 B rules-block headroom target is guarded by no assertion (`0219`).
+- ADR-036's site registry has no tooling; the `0242` companion ADR is not recorded (no ADR numbered
+  039 exists in the knowledge-base).
+- The review-ledger `Task:` schema change is still unbuilt — both stateful-review skills carry the
+  path form; `0168`/`0175` sit in Backlog. [[systems/review-and-model-diversity]]'s *"Not yet
+  built"* is correct as written.
+- `0213` is still unstarted — this run read the log's correction notes by practice, not procedure.
+
+### Write scope
+
+Only `ai-agents/wiki-vault/` touched — **9 files edited, plus this entry**: seven pages gained
+appended `## Related` bullets (pure additions), [[systems/fkit]] carries one rewritten annotation
+clause (living page, in-place per the 2026-08-06 lint precedent), `index.md` carries one
+strikethrough-plus-dated-note correction on its `0158` entry. No page created, deleted or renamed; no
+page body prose removed. `log.md` appended only — no past entry edited or annotated in place.
+`.wiki-watermark` untouched. Nothing committed, nothing staged. No task moved, no mover invoked; no
+brief, sprint plan, ADR, report, skill, agent definition, test or source file edited. No `:NNN`
+coordinate written anywhere in this run's diff.
+
+Task 0238: partial — not ready to close

@@ -99,3 +99,4 @@ Init runs under `set -euo pipefail` and was called **unguarded** from a launcher
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the drift convergence cannot repair
 - [[tasks/add-adr-030-prose-half-to-universal-rules]] — Add the ADR-030 prose half to the universal rules block — "What's next?" + ask-interactively
+- [[tasks/design-the-post-update-structure-check]] — task `0241` (2026-08-06): the owner-ruled design for a consent-gated structure check + repair beside this convergence pass — the unattended launch path's invariant stays unchanged; at most a read-only stderr notice is proposed for launch (owner-ruled follow-ups `0242`–`0249`, not yet built)

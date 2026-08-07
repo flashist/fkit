@@ -54,6 +54,14 @@ The brief says the loop's prose and the hook **disagreed** for three tasks. **Th
 
 **An ADR is required and was deliberately not written here** — owner-ruled at plan approval. Proposed: ***"A loop step's role is fixed by the skill the step runs, not by the deliverable's author."*** It is task `0222`, filed as **the only one of the eight named follow-ups the owner authorized**. ⚠️ **Its number must not be taken on trust** — the ADR-029 precedent is a number claimed everywhere **except** `decisions/`, so the sweep must cover `decisions/`, `reports/`, the boards **and** this vault.
 
+> *✅ Dated update 2026-08-06 (recorded by the 2026-08-07 sync; paragraph above byte-identical):*
+> **the ADR is now recorded** — [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]],
+> shipped by [[tasks/record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] (`0222`,
+> Sprint 3 P4) with the four-way number sweep run and evidenced (zero rival claimants). The remaining
+> follow-ups have all since been filed (`0223`–`0226`, `0232`–`0233`); the owner relaxed
+> `0224`/`0225`'s dependency on the ADR the same day, leaving `0223`'s reason clause as the only
+> thing it blocks.
+
 ### The undeclared change surface — the task-70 failure recurring in the checklist that documents task 70
 `claude/skills-for-role.sh`'s header declares **four** hand-maintained mirrors. An option-(b) change would also have had to touch the skill's own **⛔ Owner: the coder** banner and `claude/agents/fkit-architect.md`, plus a **second site inside an already-declared file**; and **three further shipped sentences** would go stale. ⚠️ **The report's own count was wrong twice in opposite directions**, and the accepted figure is **7 files / 8 sites** — the `8 / 9` printed in the report is a **recorded residual, left as written**. **Every count in it is a hand grep**, because ADR-036's site registry has no tooling.
 
@@ -65,6 +73,7 @@ The brief says the loop's prose and the hook **disagreed** for three tasks. **Th
 - **`/fkit-evaluate-approach` Step 1's owner interview could not be executed** (ADR-021). The driver pre-supplied the owner-ruled priority ordering; **everything else Step 1 would have elicited was not obtained, and the report says so rather than assuming.**
 
 ## Related
+- [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — the ADR this task's ruling became (recorded 2026-08-06 by [[tasks/record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]])
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the hook, which **performed correctly**; this is not a bug report against it
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — the *route-don't-widen* precedent this ruling follows
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — ⚠️ **it does NOT already answer this**: §Context explicitly disclaims the **invocation** axis, which is where role selection lives

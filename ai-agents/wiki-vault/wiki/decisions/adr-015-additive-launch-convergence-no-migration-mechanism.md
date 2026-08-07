@@ -50,7 +50,20 @@ The safety bar asserted, as verified, that `cp -R` **writes through a symlinked 
 
 *Not* a trigger: adding a folder, README, or file to the scaffold — **that is convergence, and it works.**
 
+> *⚠️ Dated update 2026-08-06 (recorded by the 2026-08-07 sync; text above byte-identical):* **both
+> triggers have now fired.** Trigger 1 fired on the owner's own 2026-08-06 structure-check proposal
+> (*"if needed updated the structure"* — the trigger fires on the proposal), and the sanctioned
+> re-raise ran as [[tasks/design-the-post-update-structure-check]] (`0241`): the design returned to
+> the owner with this ADR's record in front of them, recommending a **companion ADR** licensing an
+> in-session, consent-gated, propose-then-apply repair of **untouched-stale files only** — with the
+> unattended launch path's invariant here **unchanged and in force**. Trigger 2 was measured fired
+> the same day: **seven** fkit-authored files drift in fkit's own checkout (≥ 3), so the deferred
+> hash manifest is the design's determination layer. The owner ruled all the design's open questions
+> 2026-08-06; **the companion ADR is not yet recorded** (task `0242`, Backlog) — until it lands,
+> this ADR remains the last word on disk.
+
 ## Related
+- [[tasks/design-the-post-update-structure-check]] — task `0241` (2026-08-06): the sanctioned re-raise — spec + hash-manifest hybrid, consent-gated repair, companion-ADR recommendation
 - [[tasks/converge-ai-agents-additively-on-launch]]
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — the root-file seam, deliberately **not** dependent on this one's parked work
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]] — its Consequences section already does `migration-current.md`'s authoring job; also the amend-in-place precedent

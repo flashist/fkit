@@ -42,3 +42,5 @@ The read-side half — making `/fkit-status` report this board **only on request
 - [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — `0210`, which specified the **reverse** move onto this board and made its unranked rule a mandatory edit
 - [[tasks/sprint-2-remove-omnigent]] — the board whose open work now sits here: **`1 backlog` on Sprint 2 is not one task left**
 - [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200`, whose eight named follow-ups were **held for the owner**; seven landed here unfiled-by-design, one (`0222`) took a Sprint 2 row
+- [[tasks/sprint-3-close-the-rank-integrity-loop]] — the active board since 2026-08-06; `0181`/`0182` were pulled from here onto it by owner ruling, and the structure-check follow-ups (`0242`–`0249`) landed here
+- [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]] — task `0185`, the rollover: its own brief lived on this board unranked by design, and the 45 open Sprint 2 rows moved here

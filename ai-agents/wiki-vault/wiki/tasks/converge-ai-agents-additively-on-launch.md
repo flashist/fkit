@@ -28,3 +28,4 @@ Replaced the all-or-nothing guard with a **per-path create-if-absent top-up**:
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/remove-fkit-omnigent-orphan-residue]] — the destructive sibling deliberately kept out of this additive pass
 - [[tasks/ship-one-skill-one-output-convention-in-scaffold]] — a new-file delivery this convergence carries to existing projects
+- [[tasks/design-the-post-update-structure-check]] — task `0241` (2026-08-06): the consent-gated capability designed to close the content-drift gap this pass deliberately cannot touch

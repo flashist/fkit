@@ -24,3 +24,4 @@ Done, agent-closed. **Owner-ruled to land BEFORE task 76** despite its append-ra
 - [[tasks/migrate-tasks-to-folder-structure-and-update-tooling]] — task 76, the merge this guards, gated to wait for this
 - [[systems/testing-and-verification]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102: had the folder prefix been dropped, this guard would have become the **only** duplicate-ID detector, invisible to a human reading the tree
+- [[tasks/build-the-closed-rank-immutability-guard]] — task `0182` (2026-08-06), which reuses this test's vacuous-pass-assertion precedent
