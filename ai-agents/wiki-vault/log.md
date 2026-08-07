@@ -1841,3 +1841,42 @@ brief, sprint plan, ADR, report, skill, agent definition, test or source file ed
 coordinate written anywhere in this run's diff.
 
 Task 0238: partial — not ready to close
+
+## 2026-08-07 — ingest (task `0249`: the structure-check companion ADR, and the report half topped up)
+
+**Source: `ai-agents/knowledge-base/decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged.md`** (task `0242`'s deliverable — the companion ADR the `0241` design recommended; accepted, filed 2026-08-07, all six rulings dated 2026-08-06). The report half of `0249`'s scope (`ai-agents/knowledge-base/reports/2026-08-06-design-post-update-structure-check.md`) was **already ingested by the 2026-08-07 sync** into [[tasks/design-the-post-update-structure-check]] — verified this run and **topped up, not re-ingested**; no duplicate page created.
+
+- Ingested: `ai-agents/knowledge-base/decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged.md` → **created** [[decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged]] — the one-line decision (invariant unchanged for the unattended path; consent-gated in-session repair licensed, v1 = untouched-stale replacement only, no move/rename/delete); the **six owner rulings verbatim** (`AskUserQuestion`, live `fkit lead` session, 2026-08-06); the **Q1–Q6 ↔ report §10 items 1, 2, 4, 5, 6, 7 numbering trap stated** (§10.3 pre-ruled settled scope, not one of the six — and the `0241` page's §Outcome counts in the report's numbering, not the ADR's); both re-raise triggers fired (trigger 2: seven drifting files ≥ 3, dogfood caveat stated); consent model, trigger, owning role (producer, vault repairs routed to `fkit-wiki` per ADR-005), spec maintenance, manifest fold-in; the ADR's own re-raise boundaries; rejected options cited to the report
+- Updated with a dated note: [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — the 2026-08-06 dated update's "the companion ADR is not yet recorded" claim corrected below the claim, text above byte-identical; ADR-015 no longer presented as the last word on content drift; Related bullet to the new page added
+- Updated with a dated note: [[tasks/design-the-post-update-structure-check]] — §Outcome's "The companion ADR is not yet recorded" corrected below the claim, text above byte-identical, including the numbering-trap warning; Related bullet added. Verified still satisfying `0249`'s verification step 1: report cited by path, rulings dated, channel named — the six rulings' verbatim wording lives on the ADR-039 page, **cross-linked, not duplicated** (owner-ratified shape, plan approval 2026-08-07)
+- Back-link lines appended: [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]], [[systems/install-and-self-update]], [[systems/launch-convergence-and-init]] (pure additions, one `## Related` bullet each)
+- `index.md`: ADR-039 row added to Decisions; the `0241` row's ⚠️ "companion ADR not yet recorded" flag struck with a ✅ dated correction (strikethrough + dated-note catalog form)
+
+**Scope ruling honored (approved plan, 2026-08-07):** the four Sprint-3-archival stale spots flagged by the archival producer (`index.md` Sprint-3-as-active line, the matching frozen `log.md` sync line, the sprint-3 page's `Source` path, the rollover page) are **OUT of this ingest's scope** — they stem from the Sprint-3 → Sprint-4 rollover, a different source delta belonging to the next sync or lint. Nothing this run wrote describes Sprint 3 as active. Frozen `log.md` entries above retain their historical "not recorded" wording per the append-only rule (owner-ruled, task `0211`) — a `grep` for "not yet recorded" surviving only in `log.md` history and in struck/annotated originals is expected, not rot. `.wiki-watermark` **not touched** — a targeted ingest does not advance it.
+
+**Write scope:** only `ai-agents/wiki-vault/` touched by this ingest — 1 page created, 5 pages updated (2 dated notes, 3 pure back-link additions), `index.md` (2 spots), plus this entry. `log.md` appended only. Nothing committed, nothing staged by this run. No task moved, no mover invoked; no brief, sprint plan, ADR, report, skill, agent definition, test or source file edited. No `:NNN` coordinate written anywhere in this run's diff.
+
+Task 0249's vault work is complete — ready to close
+
+## 2026-08-07 — correction (target: this date's ingest entry "task `0249`: the structure-check companion ADR, and the report half topped up")
+
+Review Round 1 of task `0249` (ledger rows R1–R2) found three false status claims in that ingest's
+own uncommitted additions, plus one wording drift — all verified against disk and **amended in
+place** (the lines were uncommitted this-run additions; no frozen surface was edited):
+
+- `index.md` ADR-039 row and the [[systems/install-and-self-update]] backlink bullet claimed the
+  capability (`0243`–`0247`) was **"not yet built" — false at write time**: all five briefs sit in
+  `tasks/done/` and the artifacts are on disk (`claude/structure-spec.md`,
+  `claude/structure-manifest.tsv`, the `fkit-heal` check/repair scripts, the launch notice and its
+  test). The clauses were the ingest's own additions, not source ADR-039's — **deleted**. The
+  `0243`–`0247` outcomes remain **not ingested** (out of `0249`'s scope; they land via post-ship
+  sync — this correction removes false claims, nothing more).
+- [[systems/launch-convergence-and-init]] backlink: "the **proposed** read-only notice" → "the
+  read-only notice" (the notice shipped with `0247`).
+- [[decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged]]
+  Related bullet: "(the launch path itself is unchanged)" → "(the unattended launch path gains no
+  new power)" — aligned to the source ADR's own wording.
+
+The ingest entry above is left byte-identical (append-only, no exceptions). Its Write-scope counts
+are unaffected: the same 8 vault files, no new page. The task worklog's own 7-vs-8 miscount (R3)
+was corrected in the worklog, at the claim.

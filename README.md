@@ -32,6 +32,13 @@ run `/fkit-initiate-project`. Want two roles at once? Open another terminal tab.
 out — it never updates itself behind your back. Run `fkit update` when you want it. (Silence it with
 `FKIT_NO_UPDATE_CHECK=1`.) A checkout of this repo is never auto-checked — update it with `git`.
 
+A launch also tells you — one stderr line — when your project's fkit-managed structure diverges from
+what the installed version ships. To see the per-file verdicts and repair, run `/fkit-heal` in a
+producer session: repair is **in-session, consent-gated, diffs in view, and applies only the exact
+list you approve — never silent**, and it never moves, renames, or deletes anything. Divergence
+that's deliberate? List the path in `ai-agents/.fkit-accepted-drift` and the launch line goes quiet
+(`/fkit-heal` still reports it in full).
+
 ## The team
 
 | Agent | Role |

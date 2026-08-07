@@ -67,7 +67,18 @@ wiki ingest of report + companion ADR (`0249`). **The companion ADR is not yet r
 `0242` lands, ADR-015 remains the last word on disk. The 2026-08-06 driver run also applied ADR-038
 live: this task's Build step spawned `@fkit-architect`, its Process-review step `@fkit-coder`.
 
+> *✅ Dated update 2026-08-07 (recorded by the `0249` ingest; text above byte-identical):* `0242`
+> landed — **the companion ADR is now recorded as
+> [[decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged]]**
+> (accepted, filed 2026-08-07; all six rulings dated 2026-08-06). ADR-015 is no longer the last
+> word on content drift; its invariant stays in force for the unattended launch path. ⚠️ The six
+> rulings' **verbatim wording lives on the ADR-039 page** (cross-linked, not duplicated here) —
+> and note the numbering trap: this page's §Outcome counts in **report §10's numbering** (where
+> "Q3" is the pre-ruled in-scope item and the manifest fold is "Q7"); ADR-039 numbers the six
+> **Q1–Q6 as put to the owner**, mapping to report §10 items 1, 2, 4, 5, 6, 7.
+
 ## Related
+- [[decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged]] — the companion ADR this design recommended, recorded 2026-08-07 (`0242`): carries the six rulings verbatim
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — the locked decision this design re-raises by its own sanctioned trigger; invariant kept in force for the unattended path
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] — vault write exclusivity, preserved structurally under every branch
 - [[tasks/sprint-3-close-the-rank-integrity-loop]] — the board (P3, owner-ruled merit rank)

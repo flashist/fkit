@@ -28,7 +28,12 @@ Two consequences follow directly from that rule, and both are deliberate:
 
 - **Content drift is not fixed.** A file you edited (this README included) is a path that already
   exists, so fkit steps over it forever. You will not receive later scaffold improvements to a file you
-  already have. The safety and the limitation are the same property.
+  already have. The safety and the limitation are the same property. Not fixed *unattended*, that is —
+  the sanctioned path exists on demand: the launch notice names diverging paths, and `/fkit-heal` in a
+  producer session shows what diverged and offers the consent-gated repair (untouched-stale files
+  only; never a move, rename, or delete; never silent). Deliberate drift is recorded per path in
+  `ai-agents/.fkit-accepted-drift` — tracked, like the keep-out file — which silences the launch
+  notice only.
 - **A rename gets you both.** fkit compares the scaffold to the disk and keeps no history, so it cannot
   tell a rename from a deletion and recreates the original alongside yours. An inherent limit of any
   stateless mechanism, not a bug.

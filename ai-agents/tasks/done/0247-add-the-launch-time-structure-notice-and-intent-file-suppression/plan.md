@@ -10,7 +10,7 @@
 > presented by the fkit-lead driver, written to this file by the driver in the approval turn
 > (fkit-sprint-ship-loop §Durable artifacts).
 
-Task: `ai-agents/tasks/backlog/0247-add-the-launch-time-structure-notice-and-intent-file-suppression/brief.md`
+Task: `ai-agents/tasks/done/0247-add-the-launch-time-structure-notice-and-intent-file-suppression/brief.md`
 Authority: design report §5 candidate 2 + §9 (implement, do not re-derive); ADR-039 Decision 3 (Q3 "Yes + yes"); ADR-015 invariant untouched (read-only path); ADR-017 (script invocation rules).
 
 ## 0. The one architectural decision: reuse `check.sh`, don't build a lighter probe

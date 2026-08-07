@@ -270,6 +270,46 @@ test('unreadable intent file: ignored — nothing suppressed, notice still print
   assert.equal(noticeLines(r.stderr).length, 1, `an unreadable intent file must suppress nothing:\n${r.stderr}`);
 });
 
+test('R1: latin-1 bytes in the intent file — suppression still works, notice prints, no awk noise', async () => {
+  const dir = project();
+  const a = `${CONVENTIONS}/task-status-vocabulary.md`;
+  const b = `${CONVENTIONS}/evidence-before-assertion.md`;
+  drift(dir, a);
+  drift(dir, b);
+  // A Latin-1 comment (0xE9 — é in Latin-1, invalid as UTF-8) alongside a valid entry for A. macOS
+  // awk under a UTF-8 locale dies on those bytes ("towc: multibyte conversion failure", exit 2) —
+  // pre-fix that silenced the WHOLE notice (hidden drift, the inverted failure direction) and
+  // leaked awk's multi-line error text to the launcher's stderr.
+  writeFileSync(join(dir, 'ai-agents', '.fkit-accepted-drift'), Buffer.concat([
+    Buffer.from('# caf'), Buffer.from([0xe9]), Buffer.from(` latin-1 comment\n${a}\n`),
+  ]));
+  const r = await launch(dir);
+  assert.equal(r.code, 0);
+  const lines = noticeLines(r.stderr);
+  assert.equal(lines.length, 1, `invalid-UTF-8 intent file must not silence the notice:\n${r.stderr}`);
+  const [, count, names] = lines[0].match(NOTICE);
+  assert.equal(count, '1', 'the valid entry beside the latin-1 comment must still suppress A');
+  assert.equal(names, b, 'the remaining notice should name only B');
+  // stderr clean of awk noise: the notice is the ONLY line, and no awk error text anywhere.
+  assert.equal(r.stderr.trim(), lines[0], `awk noise leaked to stderr:\n${r.stderr}`);
+  assert.ok(!/towc|awk/.test(r.stderr), `awk error text on stderr:\n${r.stderr}`);
+});
+
+test('R2: CR handling matches the keep-out template — all CRs stripped, not just one trailing', async () => {
+  const dir = project();
+  const a = `${CONVENTIONS}/task-status-vocabulary.md`;
+  drift(dir, a);
+  drift(dir, 'CLAUDE.md');
+  // keep-out's parser does `tr -d '\r'` — ALL CRs, wherever they sit. A doubled trailing CR and an
+  // embedded CR must both still suppress. (Pre-fix this failed in the SAFE direction — an extra
+  // notice line, never hidden drift.)
+  writeFileSync(join(dir, 'ai-agents', '.fkit-accepted-drift'), `${a}\r\r\nCLA\rUDE.md\n`);
+  const r = await launch(dir);
+  assert.equal(r.code, 0);
+  assert.equal(noticeLines(r.stderr).length, 0,
+    `CR-variant entries must suppress per the keep-out template:\n${r.stderr}`);
+});
+
 test('kept-out rows never trigger the notice', async () => {
   const dir = project();
   // Keep-out is ai-agents-relative (its own file's contract — different from the intent file's

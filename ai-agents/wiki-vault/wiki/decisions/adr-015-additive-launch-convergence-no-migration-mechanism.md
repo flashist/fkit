@@ -62,7 +62,17 @@ The safety bar asserted, as verified, that `cp -R` **writes through a symlinked 
 > 2026-08-06; **the companion ADR is not yet recorded** (task `0242`, Backlog) — until it lands,
 > this ADR remains the last word on disk.
 
+> *✅ Dated update 2026-08-07 (recorded by the `0249` ingest; text above byte-identical):* **the
+> companion ADR is now recorded** —
+> [[decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged]]
+> (`ai-agents/knowledge-base/decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged.md`,
+> accepted, filed 2026-08-07; all six rulings dated 2026-08-06). This ADR is **no longer the last
+> word on content drift**: ADR-039 licenses the in-session, owner-present, consent-gated repair
+> (v1 = replacement of untouched-stale fkit-authored files only — no move, no rename, no delete),
+> while this ADR's invariant stays **unchanged and in force for the unattended launch path**.
+
 ## Related
+- [[decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged]] — the companion ADR (recorded 2026-08-07, rulings 2026-08-06): licenses the consent-gated in-session repair; this ADR's invariant unchanged for the unattended path
 - [[tasks/design-the-post-update-structure-check]] — task `0241` (2026-08-06): the sanctioned re-raise — spec + hash-manifest hybrid, consent-gated repair, companion-ADR recommendation
 - [[tasks/converge-ai-agents-additively-on-launch]]
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] — the root-file seam, deliberately **not** dependent on this one's parked work

@@ -396,9 +396,14 @@ fi
 #     kill-switch: that would be the global mute Q3 explicitly forbade, one layer down.
 #   * Never a repair, never a prompt, never stdout. check.sh's own stderr is discarded — its warnings
 #     would duplicate init's, which already announced symlinks etc. on this same launch.
-#   * Every failure is a silent `return 0`: check.sh absent from the share (older install), bash
-#     absent, the check exiting with anything but 0/1, awk failing. This launcher runs `set -eu`; a
-#     notice failure must never cost the session (task-26 bar).
+#   * Every failure is non-fatal, and picks its direction by what it gates. check.sh absent from
+#     the share (older install), bash absent, the check exiting with anything but 0/1 → a silent
+#     `return 0` (no rows, nothing to report). A failure of the awk FILTER itself instead drops
+#     SUPPRESSION, never the notice — it is re-run with the intent file disabled — because silence
+#     there would hide drift (the inverted failure direction below). The filter runs under LC_ALL=C
+#     (byte semantics: non-UTF-8 bytes in an intent file or a path must not crash a multibyte-aware
+#     awk) with awk's stderr discarded (its noise never leaks around the launcher's one line). This
+#     launcher runs `set -eu`; a notice failure must never cost the session (task-26 bar).
 #
 # Suppression — ai-agents/.fkit-accepted-drift, the intent file. A SIBLING of .fkit-keep-out, not
 # entries in it: keep-out means "never create this path"; drift-acceptance means "divergence at this
@@ -408,7 +413,8 @@ fi
 #     `ai-agents/README.md`) — root-relative, unlike keep-out's ai-agents-relative form, because the
 #     notice's scope includes CLAUDE.md/AGENTS.md, which sit outside ai-agents/. An entry covers the
 #     path AND everything beneath it (keep-out's subtree rule). Parser semantics carried from the
-#     keep-out parser: `#` comments, blank lines, CRLF trim, strip leading `./`/`/` and trailing `/`,
+#     keep-out parser: `#` comments, blank lines, ALL CRs stripped (keep-out's `tr -d '\r'`,
+#     wherever they sit — not just one trailing), strip leading `./`/`/` and trailing `/`,
 #     LITERAL matching only — never globbed (init's R3 lesson; the matching runs in awk, no shell
 #     expansion touches an entry).
 #   * No global switch; no per-mismatch keying (path + content identity would record a POSITION — the
@@ -438,12 +444,12 @@ structure_notice() {
   if [ ! -L "$proj/ai-agents" ] && [ ! -L "$sn_intent" ] && [ -f "$sn_intent" ] && [ -r "$sn_intent" ]; then
     sn_have=1
   fi
-  sn_line="$(printf '%s\n' "$sn_out" | awk -F'\t' -v intent="$sn_intent" -v have="$sn_have" '
+  sn_prog='
     BEGIN {
       n_acc = 0
       if (have == 1) {
         while ((getline l < intent) > 0) {
-          sub(/\r$/, "", l)
+          gsub(/\r/, "", l)
           if (l ~ /^[ \t]*$/ || l ~ /^#/) continue
           sub(/^\.\//, "", l)
           sub(/^\//, "", l)
@@ -470,7 +476,12 @@ structure_notice() {
       more = (n > 3 ? sprintf(" +%d more", n - 3) : "")
       printf "⚠ fkit: %d path(s) diverge from what the installed fkit version ships (%s%s) — run /fkit-heal in a producer session to see and repair; nothing was changed. Deliberate? List the path in ai-agents/.fkit-accepted-drift.\n", n, names, more
     }
-  ')" || return 0
+  '
+  # LC_ALL=C: byte semantics — the awk must not die on non-UTF-8 bytes in an intent file or a path.
+  # A filter failure drops SUPPRESSION, never the notice: retry unsuppressed (have=0), then give up.
+  sn_line="$(printf '%s\n' "$sn_out" | LC_ALL=C awk -F'\t' -v intent="$sn_intent" -v have="$sn_have" "$sn_prog" 2>/dev/null)" ||
+    sn_line="$(printf '%s\n' "$sn_out" | LC_ALL=C awk -F'\t' -v intent="$sn_intent" -v have=0 "$sn_prog" 2>/dev/null)" ||
+    sn_line=""
   [ -n "$sn_line" ] && printf '%s\n' "$sn_line" >&2
   return 0
 }

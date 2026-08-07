@@ -40,7 +40,13 @@ argue. Two consequences follow directly, and both are deliberate:
 
 - **Your edits are never "corrected".** Once a file exists, fkit steps over it forever — including
   this README. If a later fkit improves a scaffold file, you will **not** receive that change to a
-  file you already have. Content is yours; only *absence* is topped up.
+  file you already have. Content is yours; only *absence* is topped up. There **is** a sanctioned
+  way to catch up when you want to: a launch prints one line naming paths that diverge from what
+  the installed fkit ships (the first three, then "+N more"), and `/fkit-heal` in a producer session
+  shows what diverged and offers a consent-gated repair — untouched-stale files only, never a move,
+  rename, or delete, never silent.
+  Divergence that's deliberate goes in `ai-agents/.fkit-accepted-drift` (a tracked sibling of the
+  keep-out file below), which quiets the launch line for that path.
 - **A rename gets you both.** fkit compares the scaffold to your disk and nothing else — it cannot
   tell "renamed `sprints/` to `iterations/`" from "deleted `sprints/`", so it recreates `sprints/`
   alongside yours. This is an inherent limit of any mechanism that keeps no history of your project,

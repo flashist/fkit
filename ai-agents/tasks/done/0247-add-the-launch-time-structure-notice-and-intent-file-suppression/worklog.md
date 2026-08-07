@@ -65,3 +65,25 @@ acted on). Plan: `plan.md` in this folder (driver-written).
 - **D4 — cost over budget: NOT accepted unattended.** Surfaced as NEEDS-DECISION per plan §0/§6's
   explicit stop-and-surface instruction. No other fix was applied without asking beyond D1/D2;
   no other obvious-winner call was made.
+
+## Review round 1 (2026-08-07, processed by a spawned fkit-coder under the same declared-approval marker)
+
+Findings R1 (medium) + R2 (low) — both verified CORRECT, both fixed under the owner's explicit
+ruling **"Fix both now"** (AskUserQuestion, live lead session, 2026-08-07), so neither was an
+unattended fix. Changes: `claude/fkit-claude.sh` (awk filter under `LC_ALL=C` + stderr discarded;
+filter failure retries with `have=0` — drops suppression, never the notice; `sub(/\r$/)` →
+`gsub(/\r/)`; comment block updated to match both), `test/structure-notice.test.js` (+2 red-first
+probes, R1/R2 by name). Evidence: notice suite 14/14; unit 682/682; prove-red hard gate PASSED
+(re-run — the launcher is the mutation surface for mutations 14/15; mutation 15's target line is
+byte-unchanged); write-action grep over the diff clean. Full detail in `review.md` Coder response.
+
+- **D5 — prove-red re-run beyond the spawn's "not expected".** The spawn conditioned a prove-red
+  re-run on touching the mutation surface; the launcher IS that surface (mutations 14/15 sed a copy
+  of it), so the re-run was obligatory by the spawn's own condition, not extra scope. Recorded
+  because the spawn's parenthetical predicted otherwise. Result green; no fix applied from it.
+- **D6 — R1's failure-path shape: retry-unsuppressed then give up.** The ruling fixed the direction
+  ("failure drops suppression, not the notice"); the mechanism (re-run the same awk program with
+  `have=0`, `sn_line=""` only if that also fails) is the minimal in-plan realization — the program
+  is stored once in `sn_prog`, no duplication. The double-failure branch is code-inspected, not
+  test-forced (stubbing awk would break check.sh in the same fixture); stated in the ledger.
+- No other fix applied without asking this round; no other obvious-winner call. **Otherwise: none.**
