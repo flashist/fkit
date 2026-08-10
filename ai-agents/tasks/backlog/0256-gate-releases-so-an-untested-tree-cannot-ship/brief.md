@@ -4,10 +4,10 @@
 0256
 
 ## Sprint
-Backlog
+Sprint 5
 
 ## Priority
-Unscheduled
+Sprint 5 P4
 
 ## Status
 🔲 Backlog
@@ -145,3 +145,16 @@ keeps `prove-red.sh` hand-rolled — whatever gate lands must run it, not replac
 - Verified 2026-08-08: `.github/` absent; `bin/release.mjs` (no test invocation); `package.json:3`
   (`npm test`); `ls test/*.test.js | wc -l` → 19; `architecture.md` §11 OQ2 and §9.1.
 - Filed to the **Backlog** board — no sprint named; no re-rank (ADR-035).
+
+- **⚠️ CARRY CORRECTION, 2026-08-10 — THE CLOSING LINE ABOVE IS NOW FALSE.** *"Filed to the
+  **Backlog** board — no sprint named; no re-rank (ADR-035)"* is left **byte-identical**; it was true
+  when this brief was filed on **2026-08-08**, and was falsified when the brief was **carried onto
+  Sprint 5** by owner ruling of **2026-08-10** (verbatim option label **"Dashboard + all of
+  0252-0258"**). The header fields moved in that same act and are the authority:
+  **`## Sprint: Sprint 5`**, **`## Priority: Sprint 5 P4`**. **Plan this work against
+  [`sprint-5.md`](../../../sprints/sprint-5.md), not the Backlog board.**
+  ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
+  **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
+  bottom-up can. Task
+  [`0235`](../0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
+  class generally and is **neither widened nor closed** by this note.

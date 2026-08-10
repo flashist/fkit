@@ -4,10 +4,10 @@
 0255
 
 ## Sprint
-Backlog
+Sprint 5
 
 ## Priority
-Unscheduled
+Sprint 5 P9
 
 ## Status
 🔲 Backlog
@@ -135,3 +135,28 @@ whether and how `.claude/` conformance is observed. No code.
   `claude/fkit-claude-init.sh:479-490`, `:568-569`; ADR-039 and the 2026-08-06 design report (zero
   `.claude` matches in either).
 - Filed to the **Backlog** board — no sprint named; no re-rank (ADR-035).
+
+- **⚠️ CARRY CORRECTION, 2026-08-10 — THE CLOSING LINE ABOVE IS NOW FALSE.** *"Filed to the
+  **Backlog** board — no sprint named; no re-rank (ADR-035)"* is left **byte-identical**; it was true
+  when this brief was filed on **2026-08-08**, and was falsified when the brief was **carried onto
+  Sprint 5** by owner ruling of **2026-08-10** (verbatim option label **"Dashboard + all of
+  0252-0258"**). The header fields moved in that same act and are the authority:
+  **`## Sprint: Sprint 5`**, **`## Priority: Sprint 5 P9`**. **Plan this work against
+  [`sprint-5.md`](../../../sprints/sprint-5.md), not the Backlog board.**
+  ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
+  **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
+  bottom-up can. Task
+  [`0235`](../0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
+  class generally and is **neither widened nor closed** by this note.
+
+- **⛔ NOT DRIVEN BY `/fkit-sprint-ship-loop` — owner ruling 2026-08-10**, given via
+  `AskUserQuestion` in a live session, **the option label is the verbatim text**:
+  **"0255 — the .claude/ conformance ADR (Rec)"**. This row needs a **second owner beat** the loop
+  does not have: verification step 3 requires the ADR to record *"the owner's sign-off: the ruling,
+  its date, and the channel it came through"*, and the loop's **only** owner gate is plan approval,
+  spent before Build (`claude/skills/fkit-sprint-ship-loop/SKILL.md:120`). It runs in an
+  **owner-present session** instead.
+  ⚠️ **This is an exclusion from that loop run and from nothing else. `## Status` stays
+  `🔲 Backlog`, the row stays in Sprint 5, the rank stays `P9` — NOT blocked, NOT deprioritised, NOT
+  descoped.** Full reasoning is the **first bullet** of
+  [`sprint-5.md`](../../../sprints/sprint-5.md)'s `## Notes`.

@@ -4,10 +4,10 @@
 0257
 
 ## Sprint
-Backlog
+Sprint 5
 
 ## Priority
-Unscheduled
+Sprint 5 P5
 
 ## Status
 🔲 Backlog
@@ -133,3 +133,67 @@ excluded. **None of those may be weakened** — this is a wording/label fix, not
   `git rev-list --count 2055dad..HEAD` → 142; `git log --oneline -- VERSION | wc -l` → 32 of 235;
   no banner assertions in `test/`.
 - Filed to the **Backlog** board — no sprint named; no re-rank (ADR-035).
+
+- **⚠️ EVIDENCE CORRECTION, 2026-08-10 — THE FIGURES ARE STALE. THE DEFECT IS NOT.** Everything above
+  is left **byte-identical**. **⛔ Read the second half of this bullet before the first: the bug has
+  NOT gone away, nothing about it was fixed, and this task is not smaller than it was.** Only the
+  numbers that *illustrate* it moved, because **the `VERSION` bump the brief puts out of scope has
+  already happened.**
+
+  **The stale figures, re-measured on disk 2026-08-10 (not carried from any report):**
+
+  | Brief says (2026-08-08) | Measured 2026-08-10 | Command |
+  |---|---|---|
+  | `VERSION` is `0.1.30` | **`0.2.1`** | `cat VERSION` |
+  | last bump `2055dad Release v0.1.30` | **`692b8e9 Release v0.2.1`** (2026-08-08) | `git log -1 -- VERSION` |
+  | **142** commits since the last `VERSION` change | **0** | `git rev-list --count 692b8e9..HEAD` |
+  | **32 of 235** commits ever touched `VERSION` | **33 of 236** | `git rev-list --count HEAD`; `git log --format='%h' -- VERSION \| wc -l` |
+  | ≈ **86%** of commits produce a same-label banner | **≈ 86%** — *unchanged* | 203 ÷ 236 |
+
+  ⚠️ **The `0` is not evidence of health — it is an artifact of where `HEAD` sits.** `692b8e9` **is**
+  `HEAD`: the release commit is the newest commit, and roughly 25 files of this sprint's work are
+  sitting **uncommitted** in the working tree. The counter reads `0` today and starts climbing with
+  the **first non-bumping commit**. `git diff -- VERSION` is empty — the file's content matches
+  `HEAD`.
+
+  **⛔ THE DEFECT IS UNCHANGED AND STILL REAL — re-verified line by line on disk 2026-08-10.** The
+  launcher still triggers on **sha** inequality and labels **both sides** from `VERSION`, so a
+  same-label banner is still the **steady state**, exactly as the brief argues:
+  `claude/fkit-claude.sh:136-138` (`remote` vs `installed`, both shas), `:139`
+  (`rver`/`curver`, both `VERSION` strings), `:142-143` (the `↑ fkit v%s → v%s is available.`
+  printf). The **second defect is also unchanged**: `_fkit_remote_version` at `:92-98` is still
+  curl-only, gated at `:93`, while `_fkit_remote_sha` at `:79-91` still falls back git → curl — so
+  `v?` is still reachable. `grep -rn "remote_version\|curver\|rver" test/*.test.js` still returns
+  **nothing**. The launcher's last commit is `0bc2b36` (2026-08-07) — it has **not been touched**
+  since this brief was filed.
+
+  **What the bump actually did:** it relabelled the banner correctly for **one cycle**, for anyone
+  installed at `0.1.30`. The brief predicted this at *"A version bump does not fix this"*; that
+  paragraph is now **demonstrated rather than predicted**, and it is the reason the out-of-scope
+  bullet forbidding a `VERSION` edit still stands. (The bump landed as `0.2.1`, not the `0.2.0` the
+  brief names — same act, different number.)
+
+  **Verification step 1 still works exactly as written — it re-derives live.** It builds a
+  `$share/.version` fixture whose `sha` differs from `main`'s head and whose `version` equals
+  `main`'s `VERSION`; it reads no figure from this brief. Today it will print
+  **`↑ fkit v0.2.1 → v0.2.1 is available.`** instead of the `v0.1.30` form. **Record whatever it
+  actually prints on the day, not this string.** It needs network access for `_fkit_remote_sha`,
+  which was already true when the step was written.
+
+  **Line-anchor drift, also re-measured:** the `Verified 2026-08-08` bullet cites `:79-89`, `:91-97`
+  and `:135-142`. Measured 2026-08-10 the true ranges are **`:79-91`**, **`:92-98`** and
+  **`:136-143`**. The file has not changed since, so these were off by one or two when written. **The
+  durable anchors are the quoted text, not the numbers.**
+
+- **⚠️ CARRY CORRECTION, 2026-08-10 — THE CLOSING LINE ABOVE IS NOW FALSE.** *"Filed to the
+  **Backlog** board — no sprint named; no re-rank (ADR-035)"* is left **byte-identical**; it was true
+  when this brief was filed on **2026-08-08**, and was falsified when the brief was **carried onto
+  Sprint 5** by owner ruling of **2026-08-10** (verbatim option label **"Dashboard + all of
+  0252-0258"**). The header fields moved in that same act and are the authority:
+  **`## Sprint: Sprint 5`**, **`## Priority: Sprint 5 P5`**. **Plan this work against
+  [`sprint-5.md`](../../../sprints/sprint-5.md), not the Backlog board.**
+  ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
+  **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
+  bottom-up can. Task
+  [`0235`](../0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
+  class generally and is **neither widened nor closed** by this note.

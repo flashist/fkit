@@ -1,6 +1,6 @@
 # Sprint 3 — Close the rank-integrity loop
 
-> ## 🔒 CLOSED — 2026-08-07. Superseded by [Sprint 4](../sprint-4.md).
+> ## 🔒 CLOSED — 2026-08-07. Superseded by [Sprint 4](sprint-4.md).
 >
 > **Sprint 3 was archived by OWNER RULING, 2026-08-07**, given via `AskUserQuestion` in a live
 > `fkit lead` session — a selection from the question's option list, **the option label is the
@@ -11,12 +11,12 @@
 >
 > **Why it was archived.** The board was drained — **4 done · 0 cancelled · 0 moved · 0 open**, all
 > four rows `✅ Done (agent-closed — not owner-verified)`. Unlike Sprint 2 this is a plain close, not
-> a rollover: no open row moved anywhere. [Sprint 4](../sprint-4.md) was opened by its own three
+> a rollover: no open row moved anywhere. [Sprint 4](sprint-4.md) was opened by its own three
 > owner rulings of 2026-08-07 (recorded on its banner) before this archival was ruled; this archival
 > discharges the two-active-boards ambiguity Sprint 4's banner flagged.
 >
 > **This plan is kept, not deleted — it is the record of what was done.** Everything below is
-> historical. Do not pick up work from this file; see [Sprint 4](../sprint-4.md).
+> historical. Do not pick up work from this file; see [Sprint 4](sprint-4.md).
 >
 > **⚠️ Archived, not frozen.** Sprint 1's and Sprint 2's archived boards were both edited after
 > archiving. A dated correction appended below is legitimate; a silent rewrite of a rank or a status

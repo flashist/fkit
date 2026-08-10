@@ -4,10 +4,10 @@
 0258
 
 ## Sprint
-Backlog
+Sprint 5
 
 ## Priority
-Unscheduled
+Sprint 5 P10
 
 ## Status
 🔲 Backlog
@@ -110,3 +110,33 @@ A re-sync of `ai-agents/wiki-vault/wiki/systems/install-and-self-update.md` agai
   `0238`, `0239`) even though none gates another — one session, several resyncs.
 - **Priority is `—` (unscheduled).** Filed to the Backlog board on the owner's ruling; no sprint was
   named and no row was re-ranked (ADR-035, `/fkit-task-brief` step 5).
+
+- **⚠️ CARRY CORRECTION, 2026-08-10 — THE CLOSING LINE ABOVE IS NOW FALSE.** *"**Priority is `—`
+  (unscheduled).** Filed to the Backlog board on the owner's ruling; no sprint was named and no row
+  was re-ranked (ADR-035, `/fkit-task-brief` step 5)"* is left **byte-identical**; it was true when
+  this brief was filed on **2026-08-08**, and was falsified when the brief was **carried onto
+  Sprint 5** by owner ruling of **2026-08-10** (verbatim option label **"Dashboard + all of
+  0252-0258"**). The header fields moved in that same act and are the authority:
+  **`## Sprint: Sprint 5`**, **`## Priority: Sprint 5 P10`** — it is **no longer unscheduled**.
+  **Plan this work against [`sprint-5.md`](../../../sprints/sprint-5.md), not the Backlog board.**
+  ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
+  **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
+  bottom-up can. Task
+  [`0235`](../0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
+  class generally and is **neither widened nor closed** by this note.
+  ⛔ **Unchanged by this note:** `0252`'s `Blocks: 0258` label, and this brief's own *"do not start
+  before `0252` lands"*.
+
+- **⛔ NOT DRIVEN BY `/fkit-sprint-ship-loop` — owner ruling 2026-08-10**, given via
+  `AskUserQuestion` in a live session, **the option label is the verbatim text**:
+  **"0258 and 0269 — the wiki rows (Rec)"**. This row **cannot execute inside the loop at all.** It
+  is `## Owner: fkit-wiki` and its entire deliverable is a write under `ai-agents/wiki-vault/`, but
+  **the loop never reads `## Owner`** — [ADR-038](../../../knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md)
+  fixes each step's role to the skill that step runs, so its **Build** step spawns `@fkit-coder`
+  (`claude/skills/fkit-sprint-ship-loop/SKILL.md:121`), and `claude/agents/fkit-coder.md:211`
+  forbids that role from writing the vault **ever**. Driven by the loop this row either stalls on a
+  refusal or breaches ADR-005. It runs in a **`fkit wiki` session** instead.
+  ⚠️ **This is an exclusion from that loop run and from nothing else. `## Status` stays
+  `🔲 Backlog`, the row stays in Sprint 5, the rank stays `P10` — NOT blocked, NOT deprioritised,
+  NOT descoped.** Full reasoning is the **first bullet** of
+  [`sprint-5.md`](../../../sprints/sprint-5.md)'s `## Notes`.
