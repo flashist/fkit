@@ -7,7 +7,7 @@
 Sprint 5
 
 ## Priority
-Sprint 5 P14
+Sprint 5 P7
 
 ## Status
 🔲 Backlog
@@ -108,6 +108,15 @@ deliverable, currently Sprint 5 `P7` — and **ADR-041 is accepted and final**. 
 reason goes further than availability: `RELEASING.md` is a **maintainer** doc, so landing the note
 there would satisfy the letter of the honesty condition while failing its purpose. A downstream owner
 upgrading fkit reads the README.
+
+⚠️ **CORRECTED 2026-08-11 — both rank citations of `0252` above are left byte-identical and are now
+stale.** They read *"on Sprint 5 at `P7`"* (line 74) and *"currently Sprint 5 `P7`"* (line 107); `0252`
+now sits at **`Sprint 5 P13`**, moved by the owner-ruled re-rank of 2026-08-11. ✅ **Nothing this brief
+asks of the coder changes.** `0252`'s rank was cited only to show `RELEASING.md` did not exist yet — it
+still does not, and the landing site is **`README.md`** by the ruling recorded above, which carries **no
+sequencing dependency on `0252`** and never did. ⚠️ **This row is now ranked ABOVE `0252` (`P7` vs `P13`),
+so a rank-ordered pass reaches it first** — which the README ruling already made safe. Rank citations are
+mutable; cite `0252` by its ID.
 
 **What the coder must now do — this replaces the "either / or" the paragraph above left open:**
 
@@ -243,5 +252,11 @@ resolved identity is the mechanism"*, per ADR-041 §§1–3.
   ⚠️ **`P14` is an append rank, NOT a merit ranking — flagged for owner confirmation.** A spawned
   producer never re-ranks or inserts mid-board (`/fkit-task-brief` step 5, ADR-035). See Sprint 5's
   dated addendum.
+
+  ✅ **RESOLVED 2026-08-11 — the flag above is left byte-identical and is now DISCHARGED.** The owner
+  confirmed the placement in a live `fkit producer` session and the re-rank was **executed**: this row now
+  sits at **`Sprint 5 P7`**, and the append rank is history. **and it is the merit position the statement above names, exactly.** Authority, the verbatim ruling, its channel, and the full old→new rank map are in Sprint 5's
+  §"Addendum — the owner-ruled re-rank of 2026-08-11". ⛔ **This is not producer precedent for
+  re-ranking** — it was executed only because the owner ruled it in a live session.
 - Filed 2026-08-10 by a spawned `fkit-producer` with no owner channel, on the owner's ruling of the
   same day.

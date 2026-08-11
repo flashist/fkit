@@ -7,7 +7,7 @@
 Sprint 5
 
 ## Priority
-Sprint 5 P10
+Sprint 5 P16
 
 ## Status
 🔲 Backlog
@@ -117,7 +117,7 @@ A re-sync of `ai-agents/wiki-vault/wiki/systems/install-and-self-update.md` agai
   this brief was filed on **2026-08-08**, and was falsified when the brief was **carried onto
   Sprint 5** by owner ruling of **2026-08-10** (verbatim option label **"Dashboard + all of
   0252-0258"**). The header fields moved in that same act and are the authority:
-  **`## Sprint: Sprint 5`**, **`## Priority: Sprint 5 P10`** — it is **no longer unscheduled**.
+  **`## Sprint: Sprint 5`**, **`## Priority: Sprint 5 P16`** — it is **no longer unscheduled**.
   **Plan this work against [`sprint-5.md`](../../../sprints/sprint-5.md), not the Backlog board.**
   ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
   **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
@@ -140,3 +140,10 @@ A re-sync of `ai-agents/wiki-vault/wiki/systems/install-and-self-update.md` agai
   `🔲 Backlog`, the row stays in Sprint 5, the rank stays `P10` — NOT blocked, NOT deprioritised,
   NOT descoped.** Full reasoning is the **first bullet** of
   [`sprint-5.md`](../../../sprints/sprint-5.md)'s `## Notes`.
+  ⚠️ **CORRECTED 2026-08-11 — the sentence above is left byte-identical and one clause of it is now
+  stale.** *"the rank stays `P10`"* was true of the exclusion, and stays true **of the exclusion**: pulling
+  a row out of a loop run still changes no rank. The rank moved anyway, by a **different and later
+  authority** — the owner-ruled re-rank of 2026-08-11. This row now sits at **`Sprint 5 P16`**. ⛔ **Every
+  other word of the sentence is untouched and still binding: still `🔲 Backlog`, still in Sprint 5, still NOT
+  blocked, NOT deprioritised, NOT descoped, and still excluded from the ship-loop run.** See Sprint 5's
+  §"Addendum — the owner-ruled re-rank of 2026-08-11".

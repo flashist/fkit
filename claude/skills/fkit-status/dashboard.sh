@@ -21,11 +21,19 @@
 # knowledge-base/reports/2026-07-16-design-deterministic-dashboard-for-fkit-status.md — this script is
 # built to that contract; §9 lists what it must not reopen.
 #
-# CONTRACT: pure function of (sprint-plan path, the briefs it links) -> (stdout, exit code).
+# CONTRACT: pure function of (sprint-plan path, the briefs it links, the FIRST LINE of the sibling
+# `.md` files in the plan's own directory) -> (stdout, exit code).
 #   - The SKILL resolves the argument to a sprint plan. This script never does; it takes a path.
-#   - Reads the plan and the briefs it links. Nothing else. Not the code, not git.
+#   - Reads the plan and the briefs it links — AND the first line of each `*.md` sitting beside the
+#     plan. ⚠️ THAT THIRD READ IS NEW (ADR-041 §1.5, owner-ruled 2026-08-11 "Accept the widening").
+#     It exists ONLY to detect two plans claiming ONE sprint identity, which §1.5 requires to reach
+#     the roll-up's drift clause — and the roll-up exists only in this board render, so the check has
+#     to live here. It reads first lines, never whole sibling files. Nothing else. Not the code, not git.
 #   - Writes nothing. No network.
 #   - Non-zero exit + stderr on an unparseable plan; the skill then hand-builds a flagged fallback.
+#   - Two further MODES (ADR-041 §5) sit in front of this render: `identity <plan>` prints one plan's
+#     identity, `select-active <sprints-dir>` runs the whole §1 selection rule. Both are additive; the
+#     one-argument invocation is byte-identical to what it always was.
 #
 # PORTABILITY: bash 3.2 (macOS ships 3.2.57). No `declare -A`, no ${v^^}, no mapfile/readarray.
 
@@ -46,7 +54,262 @@ VERSION_MARKER='⟦fkit-dashboard v1⟧'
 
 die() { printf '%s\n' "dashboard.sh: $*" >&2; exit 1; }
 
-[ $# -eq 1 ] || die "usage: bash dashboard.sh <path-to-sprint-plan>"
+# A value safe to place inside a `key="value"` FACTS field. `"` in the source (a quoted phrase in a
+# Depends on: line — live in sprint-2 task 36) would otherwise close the field early and hand the
+# skill an unparseable record. Newlines likewise: FACTS is one record per line.
+fact_value() {
+  printf '%s' "$1" | tr '\n"' " '"
+}
+
+# ADR-040 §1 — THE identity token grammar. ONE definition; every rung and the ➡️ Moved target
+# parser below compose from it. ERE dialect (already this file's established dialect — see the
+# `-E` note on the move-target extractor). ⚠️ NO BACKSLASHES may enter these values: they are
+# passed to awk via -v, which processes escape sequences.
+SPRINT_NUM_RE='[0-9]+[a-z]?'             # DIGITS SUFFIX? — exactly ONE optional lowercase letter
+SPRINT_ID_RE="Sprint ${SPRINT_NUM_RE}"   # the identity token itself: `Sprint 4`, `Sprint 4c`
+
+plan_sprint_from_h1() {   # <plan-file> -> the H1 segment identity, or nothing.  ADR-040 §2.
+  # The identity is a WHOLE, delimiter-bounded segment of the H1 — never a substring. Prose
+  # containment is not identity: `# … — Post-Sprint 2 Hotfix Tasks` is a real plan that is
+  # deliberately NOT Sprint 2, and any "find `Sprint N` anywhere" rule claims it and hands rule 1
+  # a WRONG identity — which is strictly worse than none (ADR-040 §Context).
+  #
+  # ⚠️ awk, NOT sed. BSD sed does not expand `\n` in a replacement (it yields a literal `n`), so a
+  # sed split silently produces one un-split segment on a consumer's Mac and works on Linux CI —
+  # the exact dialect trap `STATUS_HEADING_RE` below already documents. awk also keeps `&` in the
+  # title (`… Monetization & Citizenship`) inert, which a sed replacement would not.
+  # ⚠️ A bare hyphen is NOT a delimiter — only ` - ` with spaces. That is what keeps `Post-Sprint`
+  # one word.
+  # ⚠️ FIRST LINE ONLY (ADR-040 §2.1). The former rule scanned the whole file for `^# Sprint N`;
+  # this is a deliberate narrowing, not a no-op.
+  head -1 "$1" | awk -v tok="$SPRINT_ID_RE" '
+    substr($0, 1, 2) == "# " {
+      t = substr($0, 3)
+      gsub(/ - /, "\n", t); gsub(/—/, "\n", t); gsub(/–/, "\n", t); gsub(/:/, "\n", t)
+      n = split(t, seg, "\n")
+      cnt = 0
+      for (i = 1; i <= n; i++) {
+        s = seg[i]
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", s)
+        # ADR-041 §2 — the SECOND token on this SAME rung. Normalize to `Backlog` BEFORE the distinct
+        # count: `# X — Backlog — Sprint Backlog` names ONE identity twice and must resolve, not refuse.
+        # ⚠️ The value is `Backlog`, never `Sprint Backlog` — that exact string is what briefs carry
+        # (`## Sprint: Backlog`) and what the rule-1 arm compares against; see the divergence warning
+        # on the basename rung in resolve_identity().
+        if (s == "Sprint Backlog") s = "Backlog"
+        if ((s ~ ("^" tok "$") || s == "Backlog") && !(s in seen)) { seen[s] = 1; cnt++; last = s }
+      }
+      # DISTINCT count. Exactly one -> that identity. Zero -> fall through. TWO OR MORE -> refuse
+      # and fall through; do NOT guess (ADR-040 §2.5).
+      if (cnt == 1) print last
+    }
+  '
+}
+
+plan_sprint_from_stem() { # <plan-file> -> the filename identity, or nothing.  ADR-040 §3.
+  # sprint-2.md -> "Sprint 2", plan-sprint-4c.md -> "Sprint 4c". A plan whose H1 is prose
+  # ("# Hardening — the launcher sprint") is otherwise indistinguishable from one with no sprint
+  # identity at all.
+  #
+  # The prefix allowlist is CLOSED and has exactly one entry, `plan-`. An open `.*sprint-<N>` rule
+  # would claim `hotfix-post-sprint-2.md`; the reporter's real file lacks that hyphen, so an open
+  # rule would have been safe only by luck. Owner-ruled 2026-08-10 ("Include `plan-`"), accepted as
+  # forward cover with no observed file behind it — tests T10/T11 are its only coverage.
+  basename "$1" .md | sed -nE "s/^(plan-)?sprint-(${SPRINT_NUM_RE})\$/Sprint \2/p"
+}
+
+resolve_identity() {   # <plan-file> -> the identity, or nothing.  ADR-040 ladder + ADR-041 §2.
+  # THE ONE implementation of the grammar, for every mode (ADR-041 §5: re-stating it anywhere
+  # else — in SKILL.md prose or in a second mode — is the two-grammars defect this file already
+  # documents at STATUS_HEADING_RE). The three rungs below are ADR-040's, moved here UNCHANGED.
+  #
+  # ⚠️ READABILITY IS A PRECONDITION OF THE WHOLE LADDER, not a detail of rung 1. When `head -1` fails
+  # (mode 000, a dangling symlink, an unreadable mount) awk sees EMPTY INPUT and exits 0 — which is
+  # INDISTINGUISHABLE from "an H1 carrying no identity token". The ladder then falls through and the
+  # FILENAME rung answers confidently about a file whose contents were never read.
+  #
+  # Measured before this guard (review R5): `sprint-1.md` at mode 000, whose real H1 said
+  # `# X — Sprint 99`, resolved to `Sprint 1` with exit 0. That is a WRONG identity — which ADR-040
+  # §Context ranks as STRICTLY WORSE than none, and is the entire reason both rungs REFUSE rather than
+  # guess. Unresolved is loud (`unresolved-plan-sprint`); wrong is silent.
+  #
+  # ⚠️ 0265 WIDENED THE BLAST RADIUS, which is why this is fixed here rather than left to 0264's
+  # ladder: `select-active` and `sibling_claimants` now run this ladder over files THE CALLER NEVER
+  # NAMED, so one unreadable file in `sprints/` could mis-select the active sprint for the whole board.
+  [ -r "$1" ] || return 0
+  _id=$(plan_sprint_from_h1 "$1")
+  if [ -z "$_id" ]; then
+    _id=$(plan_sprint_from_stem "$1")
+  fi
+  # ⚠️ BASENAME, NOT A FULL PATH — deliberate (owner-ruled 2026-07-18, review R4). Any `backlog.md`
+  # resolves to the `Backlog` identity, including an archived `sprints/done/backlog.md`. An archived
+  # backlog board is still a backlog board; tightening this to the canonical path would make the archived
+  # copy report false `unresolved-plan-sprint` drift instead.
+  if [ -z "$_id" ] && [ "$(basename "$1" .md)" = "backlog" ]; then
+    # THE BACKLOG BOARD (task 67) has a real identity — it just isn't a numbered sprint. Its H1 is prose
+    # and its filename is deliberately not a `sprint-<N>` stem, so neither rung above resolves it and it
+    # would report `unresolved-plan-sprint` on EVERY run: a permanent false drift record on a board that
+    # is perfectly well-formed.
+    #
+    # ⚠️ THIS IS NOT COSMETIC — it is what makes drift rule 1 work on this board. Rule 1 skips the status
+    # cross-check when a brief's `## Sprint` names a DIFFERENT sprint than the plan. With _id
+    # empty, the rule is inert and every row falls through to the full cross-check; with it set to
+    # `Backlog`, a backlog brief (which reads `## Sprint: Backlog` since task 67) matches, the rule
+    # correctly does NOT skip, and real status drift on backlog rows is still found.
+    #
+    # ⚠️ The value must match what the briefs actually write. Task 67 normalized all of them from
+    # `Backlog (unsprinted)` to `Backlog` for exactly this reason — if they ever diverge again, every
+    # backlog row silently takes rule 1's skip and status drift on this board stops being reported.
+    _id="Backlog"
+  fi
+  printf '%s\n' "$_id"
+}
+
+# --- ADR-041 §1: eligibility and ordering ---------------------------------------------------------
+
+# Eligible = the identity is a `Sprint <N><suffix>` token. `Backlog` is NEVER eligible; neither is an
+# unresolved (empty) identity. ADR-041 §1.3 — and there is deliberately NO fallback: option (a′), the
+# glob kept as a safety net, was put to the owner on 2026-08-10 and REJECTED BY NAME.
+is_eligible() { printf '%s' "$1" | grep -qE "^${SPRINT_ID_RE}\$"; }
+
+id_digits() { printf '%s' "${1#Sprint }" | sed -e 's/[a-z]$//' -e 's/^0*\([0-9]\)/\1/'; }
+id_suffix() { printf '%s' "${1#Sprint }" | sed -n 's/.*[0-9]\([a-z]\)$/\1/p'; }
+
+# 0 (true) iff identity $1 orders strictly ABOVE identity $2.  ADR-041 §1.4.
+#
+# ⚠️ DO NOT "SIMPLIFY" THIS TO `[ "$a" -gt "$b" ]`. Two inputs break that: a leading zero (`sprint-08`
+# is not octal to `test`, but it is one more character of nothing) and a very long `<N>`, where a
+# 30-digit sprint number overflows the shell's integer and compares as garbage. Length-then-bytes has
+# neither failure mode and needs no arithmetic at all.
+#
+# Suffix: absent < `a` < `b` < … falls straight out of `strcmp`, because the empty string sorts before
+# any letter. That is only true under `LC_ALL=C`, which this file sets and exports at the top.
+identity_gt() {
+  _an=$(id_digits "$1"); _bn=$(id_digits "$2")
+  if [ ${#_an} -ne ${#_bn} ]; then [ ${#_an} -gt ${#_bn} ]; return $?; fi          # longer N wins
+  if [ "$_an" != "$_bn" ]; then [ "$_an" \> "$_bn" ]; return $?; fi                # same length: bytes
+  [ "$(id_suffix "$1")" \> "$(id_suffix "$2")" ]                                    # same N: suffix
+}
+
+# Every OTHER `.md` in <plan-file>'s own directory whose identity equals <identity>, comma-space
+# separated, in byte (glob) order. Empty when the plan's identity is unshared. ADR-041 §1.5.
+#
+# ⚠️ `set +f` … `set -f`. Pathname expansion is DISABLED FILE-WIDE at the top as a correctness guard
+# (see the `set -f` comment there), so an unwrapped glob here does not expand — it stays literal, the
+# `[ -f ]` guard rejects it, and the collision check silently finds NOTHING. That failure is invisible:
+# it looks exactly like "no collision". The same `[ -f ]` guard is what handles the genuine no-match
+# case, and it also skips a DIRECTORY named `*.md`.
+sibling_claimants() {
+  _self=$(basename "$1"); _want="$2"; _dir=$(dirname "$1"); _out=""
+  set +f
+  for _f in "$_dir"/*.md; do
+    [ -f "$_f" ] || continue
+    _b=$(basename "$_f")
+    [ "$_b" = "$_self" ] && continue
+    [ "$(resolve_identity "$_f")" = "$_want" ] || continue
+    if [ -z "$_out" ]; then _out="$_b"; else _out="$_out, $_b"; fi
+  done
+  set -f
+  printf '%s' "$_out"
+}
+
+# --- the two non-board modes (ADR-041 §5) ----------------------------------------------------------
+
+USAGE="usage: bash dashboard.sh <plan> | identity <plan> | select-active <sprints-dir>"
+
+# `identity <plan>` — the resolve-identity primitive. Prints the identity on ONE line, or nothing.
+# Exit 0 resolved · 3 readable but unresolved · 1 usage / no such file.
+#
+# ⚠️ NO `⟦…⟧` MARKERS, deliberately. This emits a VALUE, not a rendering, so a caller reads it with a
+# single command substitution. It is not a second briefing and does not reopen
+# conventions/one-skill-one-output.md — ADR-041 §5 says so explicitly.
+mode_identity() {
+  [ -f "$1" ] || die "no such sprint plan: $1"
+  _v=$(resolve_identity "$1")
+  [ -n "$_v" ] || exit 3
+  printf '%s\n' "$_v"
+  exit 0
+}
+
+# `select-active <sprints-dir>` — ADR-041 §1 in full, executed in shell rather than described in
+# prose. The candidate list is printed ALWAYS, not only in the empty case: one code path, and §1.6's
+# report then needs no second mode.
+mode_select_active() {
+  [ -d "$1" ] || die "no such sprints directory: $1"
+  _recs=""
+  set +f
+  for _f in "$1"/*.md; do          # DEPTH 1 ONLY — `done/` and `reviews/` are excluded by construction
+    [ -f "$_f" ] || continue
+    _recs="${_recs}$(basename "$_f")	$(resolve_identity "$_f")
+"
+  done
+  set -f
+
+  _best_id=""; _chosen=""
+  OLD_IFS=$IFS; IFS='
+'
+  for _r in $_recs; do
+    _b=${_r%%	*}; _i=${_r#*	}
+    is_eligible "$_i" || continue
+    # STRICTLY greater — so on an exact tie the FIRST candidate in glob order is kept, which under
+    # `LC_ALL=C` is byte order. That is ADR-041 §1.5's tie-break, and it needs no `sort`.
+    #
+    # ⚠️ AN EARLIER VERSION OF THIS COMMENT CLAIMED the glob loop "merely carries" a filename
+    # containing a newline, where a `sort` would mangle it. THAT WAS FALSE and is withdrawn (review
+    # R2). `_recs` is NEWLINE-delimited, so an embedded newline splits one candidate into two records:
+    # measured, `sprint-9<LF>x.md` yields `active file="x.md"` — A FILE THAT DOES NOT EXIST — plus a
+    # phantom `candidate file="sprint-9"` and a bogus `also="sprint-9 x.md"`. A TAB is the same class
+    # (`_recs` is TAB-separated): `a<TAB>b.md` silently drops a valid plan out of eligibility.
+    # Both are accepted limits, consistent with every other line-based parser in this file — but they
+    # are limits, not safety, and the record here says so rather than claiming the opposite.
+    if [ -z "$_best_id" ] || identity_gt "$_i" "$_best_id"; then _best_id="$_i"; _chosen="$_b"; fi
+  done
+  IFS=$OLD_IFS
+
+  printf '%s\n' "$VERSION_MARKER"
+  printf '%s\n' '⟦SELECT⟧'
+  if [ -n "$_chosen" ]; then
+    printf 'active file="%s" identity="%s"\n' "$(fact_value "$_chosen")" "$(fact_value "$_best_id")"
+  else
+    # §1.6 — say so, list the candidates, and STOP. Never fall back to a `Backlog`-identity board.
+    printf 'active none\n'
+  fi
+  OLD_IFS=$IFS; IFS='
+'
+  for _r in $_recs; do
+    _b=${_r%%	*}; _i=${_r#*	}
+    [ -n "$_i" ] || _i="unresolved"
+    printf 'candidate file="%s" identity="%s"\n' "$(fact_value "$_b")" "$(fact_value "$_i")"
+  done
+  IFS=$OLD_IFS
+
+  printf '%s\n' '⟦FACTS⟧'
+  if [ -n "$_chosen" ]; then
+    _also=$(sibling_claimants "$1/$_chosen" "$_best_id")
+    # ⚠️ `also=` names EVERY other claimant, not just that there was one. A record that says only
+    # "ambiguous" tells the reader to go and find the other file themselves — ADR-041 §1.5 requires the
+    # choice AND every other claimant to be stated.
+    [ -n "$_also" ] && printf 'drift ambiguous-active-sprint identity="%s" chosen="%s" also="%s"\n' \
+      "$(fact_value "$_best_id")" "$(fact_value "$_chosen")" "$(fact_value "$_also")"
+  fi
+  printf '%s\n' '⟦END⟧'
+  [ -n "$_chosen" ] && exit 0
+  exit 3
+}
+
+# ⚠️ ONE argument = the historic board render, byte-identical. Every existing call site passes exactly
+# one path (SKILL.md:182, fkit-sprint-ship-loop/SKILL.md:96), so nothing changes for them. A subcommand
+# is recognised ONLY in the two-argument form, so a plan file literally named `identity` still renders
+# as a board.
+if [ $# -eq 2 ]; then
+  case "$1" in
+    identity)      mode_identity "$2" ;;
+    select-active) mode_select_active "$2" ;;
+    *)             die "$USAGE" ;;
+  esac
+fi
+
+[ $# -eq 1 ] || die "$USAGE"
 PLAN="$1"
 [ -f "$PLAN" ] || die "no such sprint plan: $PLAN"
 
@@ -80,33 +343,16 @@ fi
 # row falls through to the rule-3 cross-check — failing toward MORE drift, which is exactly the
 # "phantom decisions" §5.2 rule 1 exists to prevent. So: try the H1, then fall back to the filename,
 # and if it is still unresolved REPORT it rather than quietly disabling the rule.
-PLAN_SPRINT=$(sed -n 's/^# \(Sprint [0-9][0-9]*\).*/\1/p' "$PLAN_FILE" | head -1)
-if [ -z "$PLAN_SPRINT" ]; then
-  # sprint-2.md -> "Sprint 2". A plan whose H1 is prose ("# Hardening — the launcher sprint") is
-  # otherwise indistinguishable from one with no sprint identity at all.
-  PLAN_SPRINT=$(basename "$PLAN_FILE" .md | sed -n 's/^sprint-\([0-9][0-9]*\)$/Sprint \1/p')
-fi
-# ⚠️ BASENAME, NOT A FULL PATH — deliberate (owner-ruled 2026-07-18, review R4). Any `backlog.md`
-# resolves to the `Backlog` identity, including an archived `sprints/done/backlog.md`. An archived
-# backlog board is still a backlog board; tightening this to the canonical path would make the archived
-# copy report false `unresolved-plan-sprint` drift instead.
-if [ -z "$PLAN_SPRINT" ] && [ "$(basename "$PLAN_FILE" .md)" = "backlog" ]; then
-  # THE BACKLOG BOARD (task 67) has a real identity — it just isn't a numbered sprint. Its H1 is prose
-  # and its filename is deliberately outside the `sprint-*.md` glob, so both rules above miss it and it
-  # would report `unresolved-plan-sprint` on EVERY run: a permanent false drift record on a board that
-  # is perfectly well-formed.
-  #
-  # ⚠️ THIS IS NOT COSMETIC — it is what makes drift rule 1 work on this board. Rule 1 skips the status
-  # cross-check when a brief's `## Sprint` names a DIFFERENT sprint than the plan. With PLAN_SPRINT
-  # empty, the rule is inert and every row falls through to the full cross-check; with it set to
-  # `Backlog`, a backlog brief (which reads `## Sprint: Backlog` since task 67) matches, the rule
-  # correctly does NOT skip, and real status drift on backlog rows is still found.
-  #
-  # ⚠️ The value must match what the briefs actually write. Task 67 normalized all of them from
-  # `Backlog (unsprinted)` to `Backlog` for exactly this reason — if they ever diverge again, every
-  # backlog row silently takes rule 1's skip and status drift on this board stops being reported.
-  PLAN_SPRINT="Backlog"
-fi
+#
+# ⚠️ And the converse failure is WORSE: a WRONG identity makes rule 1 live and wrong — a SILENT
+# failure — where no identity at all is reported as `unresolved-plan-sprint`, a LOUD one. That is
+# ADR-040's hard constraint, and it is why both rungs below REFUSE rather than guess.
+#
+# ⚠️ THE RUNGS THEMSELVES NOW SIT ABOVE `die()`, not here — they were relocated so the ADR-041 modes
+# can resolve an identity WITHOUT a `tasks/` tree above the plan (the `AGENTS` walk-up above would
+# otherwise `die` first). See `plan_sprint_from_h1` / `plan_sprint_from_stem` / `resolve_identity`.
+
+PLAN_SPRINT=$(resolve_identity "$PLAN_FILE")
 
 # --- "is this the ## Status heading?" — ONE definition, used everywhere ----------------------------
 # ⚠️ There were THREE grammars for this: `grep -c '^## Status'` (prefix), the awk rule (exact), and the
@@ -468,12 +714,6 @@ one_line_cell() {
       }'
 }
 
-# A value safe to place inside a `key="value"` FACTS field. `"` in the source (a quoted phrase in a
-# Depends on: line — live in sprint-2 task 36) would otherwise close the field early and hand the
-# skill an unparseable record. Newlines likewise: FACTS is one record per line.
-fact_value() {
-  printf '%s' "$1" | tr '\n"' " '"
-}
 
 # The numeric task id for a FACTS record. The plan's Priority cell is not always a bare number —
 # sprint-1 writes `8 (optional)` — and FACTS records the id POSITIONALLY, so an unstripped cell puts a
@@ -687,9 +927,15 @@ while IFS=$'\037' read -r rtype st pr task br; do
   # `\[*` is zero-or-more by design: historic unlinked prose (`➡️ Moved to Sprint 2 — priority 7`)
   # must keep parsing. The href is deliberately unmatched — `.*` swallows it — so `backlog.md` and the
   # archived `../backlog.md` parse identically.
+  # ⚠️ The sprint token here is `$SPRINT_ID_RE` — THE one grammar defined at the identity ladder above
+  # (ADR-040 §6, binding). `moved_target` is NOT one of the three PLAN_SPRINT consumers; it is an
+  # independent parser of the same vocabulary, and drift rule 2 compares it to the brief's `## Sprint`.
+  # Give `Sprint 4c` a first-class identity WITHOUT giving it a first-class move target and every
+  # `➡️ Moved to [Sprint 4c]` row parses as `Sprint 4`, disagrees with its brief, and fires a phantom
+  # `drift disagreement`. Same vocabulary, same fix, one definition.
   moved_target=""
   if [ "$key" = "moved" ]; then
-    moved_target=$(printf '%s' "$st" | sed -nE 's/.*Moved to \[*(Sprint [0-9]+|Backlog).*/\1/p' | head -1)
+    moved_target=$(printf '%s' "$st" | sed -nE "s/.*Moved to \[*(${SPRINT_ID_RE}|Backlog).*/\1/p" | head -1)
   fi
 
   # -- nonconformance: sources agree, the marker is written wrong (SKILL.md:90-99) ---------------
@@ -906,6 +1152,26 @@ if [ -z "$PLAN_SPRINT" ]; then
   add_fact "drift unresolved-plan-sprint h1=\"$(fact_value "$(head -1 "$PLAN_FILE")")\""
 fi
 
+# ADR-041 §1.5 — two plans claiming ONE identity. Detected HERE, in board mode, rather than passed in
+# by the caller: the only caller is SKILL.md, which is prose an LLM executes, and a flag it can forget
+# to pass is exactly the "prose discipline" §1.5 refuses. Self-contained, so one invocation surfaces it.
+#
+# ⚠️ THIS IS THE READ THAT WIDENED THE CONTRACT AT THE TOP OF THIS FILE — see it, it was amended in the
+# same change. Owner-ruled 2026-08-11 ("Accept the widening").
+#
+# ⚠️ ELIGIBLE IDENTITIES ONLY, deliberately. Two files both resolving `Backlog` cannot mis-select
+# anything (Backlog is never eligible), so that collision is out of ADR-041's scope, not overlooked.
+ambiguous_plan=""
+if [ -n "$PLAN_SPRINT" ] && is_eligible "$PLAN_SPRINT"; then
+  plan_also=$(sibling_claimants "$PLAN_FILE" "$PLAN_SPRINT")
+  if [ -n "$plan_also" ]; then
+    # `plan=`, NOT `chosen=` — board mode renders whatever path it was handed and must not imply it did
+    # the choosing. `select-active` is what chooses, and its record says `chosen=`.
+    add_fact "drift ambiguous-plan-identity identity=\"$(fact_value "$PLAN_SPRINT")\" plan=\"$(fact_value "$(basename "$PLAN_FILE")")\" also=\"$(fact_value "$plan_also")\""
+    ambiguous_plan=1
+  fi
+fi
+
 # Drift clause — templated, deterministic, deliberately generic. It points at beat 6; it does not try
 # to be beat 6. Templating each drift kind into English is prose-generation, not this script's job.
 # ⚠️ EVERY drift record must reach this clause, or SKILL.md's "every drift record is an owner
@@ -915,6 +1181,7 @@ drift_clause=""
 plan_level_drift=""
 [ "$STATUS_SECTIONS" -gt 1 ] && plan_level_drift=1
 [ -z "$PLAN_SPRINT" ] && plan_level_drift=1
+[ -n "$ambiguous_plan" ] && plan_level_drift=1
 if [ -n "$DRIFT_TASKS" ]; then
   uniq_tasks=$(printf '%s\n' $DRIFT_TASKS | sort -n | uniq | tr '\n' ',' | sed -e 's/,$//' -e 's/,/, /g')
   drift_clause="  — as recorded; drift on tasks ${uniq_tasks} — see above."

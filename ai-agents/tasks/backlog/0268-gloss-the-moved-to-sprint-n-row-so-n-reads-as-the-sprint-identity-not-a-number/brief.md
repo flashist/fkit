@@ -7,7 +7,7 @@
 Sprint 5
 
 ## Priority
-Sprint 5 P15
+Sprint 5 P8
 
 ## Status
 🔲 Backlog
@@ -105,6 +105,16 @@ Verified 2026-08-10:
   ⚠️ **`P15` is an append rank, NOT a merit ranking — flagged for owner confirmation.** A spawned
   producer never re-ranks or inserts mid-board (`/fkit-task-brief` step 5, ADR-035). See Sprint 5's
   dated addendum.
+
+  ✅ **RESOLVED 2026-08-11 — the flag above is left byte-identical and is now DISCHARGED.** The owner
+  confirmed the placement in a live `fkit producer` session and the re-rank was **executed**: this row now
+  sits at **`Sprint 5 P8`**, and the append rank is history. ⚠️ **This is NOT the merit position above, and the difference is recorded rather than smoothed over.**
+  The merit statement asks for *immediately below `0264`* — that is `P5`. `0265` holds it, because
+  `0265`'s merit statement claims the same slot and **both cannot have it**. The owner's ruling fixed the
+  six-row order as `0264`→`0269`, which places this row three below its merit position. The dependency
+  edge that actually matters is intact: `0264` still lands before this row. Authority, the verbatim ruling, its channel, and the full old→new rank map are in Sprint 5's
+  §"Addendum — the owner-ruled re-rank of 2026-08-11". ⛔ **This is not producer precedent for
+  re-ranking** — it was executed only because the owner ruled it in a live session.
 - **Line-number citations are dated anchors of convenience** (verified 2026-08-10); the durable anchor
   is the `**Moved**` row's quoted text.
 - Filed 2026-08-10 by a spawned `fkit-producer` with no owner channel, on the owner's ruling of the

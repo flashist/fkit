@@ -7,7 +7,7 @@
 Sprint 5
 
 ## Priority
-Sprint 5 P16
+Sprint 5 P9
 
 ## Status
 🔲 Backlog
@@ -140,6 +140,12 @@ Vault pages for **ADR-040** and **ADR-041**, following the vault's own decisions
   ⚠️ **`P16` is an append rank, NOT a merit ranking — flagged for owner confirmation.** A spawned
   producer never re-ranks or inserts mid-board (`/fkit-task-brief` step 5, ADR-035). See Sprint 5's
   dated addendum. **This row is the one whose append rank and merit rank agree.**
+
+  ✅ **RESOLVED 2026-08-11 — the flag above is left byte-identical and is now DISCHARGED.** The owner
+  confirmed the placement in a live `fkit producer` session and the re-rank was **executed**: this row now
+  sits at **`Sprint 5 P9`**, and the append rank is history. **and it is the merit position the statement above names, exactly.** Authority, the verbatim ruling, its channel, and the full old→new rank map are in Sprint 5's
+  §"Addendum — the owner-ruled re-rank of 2026-08-11". ⛔ **This is not producer precedent for
+  re-ranking** — it was executed only because the owner ruled it in a live session.
 - Filed 2026-08-10 by a spawned `fkit-producer` with no owner channel, on the owner's ruling of the
   same day.
 
@@ -156,5 +162,12 @@ Vault pages for **ADR-040** and **ADR-041**, following the vault's own decisions
   `🔲 Backlog`, the row stays in Sprint 5, the rank stays `P16` — NOT blocked, NOT deprioritised,
   NOT descoped.** Full reasoning is the **first bullet** of
   [`sprint-5.md`](../../../sprints/sprint-5.md)'s `## Notes`.
+  ⚠️ **CORRECTED 2026-08-11 — the sentence above is left byte-identical and one clause of it is now
+  stale.** *"the rank stays `P16`"* was true of the exclusion, and stays true **of the exclusion**: pulling
+  a row out of a loop run still changes no rank. The rank moved anyway, by a **different and later
+  authority** — the owner-ruled re-rank of 2026-08-11. This row now sits at **`Sprint 5 P9`**. ⛔ **Every
+  other word of the sentence is untouched and still binding: still `🔲 Backlog`, still in Sprint 5, still NOT
+  blocked, NOT deprioritised, NOT descoped, and still excluded from the ship-loop run.** See Sprint 5's
+  §"Addendum — the owner-ruled re-rank of 2026-08-11".
   ⛔ **Unchanged by this note:** the *"do not start before BOTH ADRs read `accepted`"* gate — both
   read `accepted` as of 2026-08-10, verified on disk.

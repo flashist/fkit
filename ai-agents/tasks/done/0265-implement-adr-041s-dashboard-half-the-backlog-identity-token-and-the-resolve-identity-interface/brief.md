@@ -7,10 +7,10 @@
 Sprint 5
 
 ## Priority
-Sprint 5 P12
+Sprint 5 P5
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -97,7 +97,7 @@ building** — do not ship an untested contract and call it pinned.
 ### Constraints
 
 - ⛔ **Do not edit `claude/skills/fkit-status/SKILL.md`** — the selector rewrite is
-  [`0266`](../0266-retire-the-sprint-glob-in-fkit-status-skill-md-and-select-by-resolved-identity/brief.md).
+  [`0266`](../../backlog/0266-retire-the-sprint-glob-in-fkit-status-skill-md-and-select-by-resolved-identity/brief.md).
   This brief builds the interface; `0266` consumes it.
 - ⛔ **Do not touch the `backlog` basename special case** (`dashboard.sh:93`) or `STATUS_HEADING_RE`.
 - ⛔ **Do not rename `ai-agents/sprints/backlog.md`.** ADR-041 §3 is explicit: its name stays, and its
@@ -142,6 +142,12 @@ building** — do not ship an untested contract and call it pinned.
   ⚠️ **`P12` is an append rank, NOT a merit ranking — flagged for owner confirmation.** A spawned
   producer never re-ranks or inserts mid-board (`/fkit-task-brief` step 5, ADR-035); the owner's
   placement ruling is recorded as a merit statement instead. See Sprint 5's dated addendum.
+
+  ✅ **RESOLVED 2026-08-11 — the flag above is left byte-identical and is now DISCHARGED.** The owner
+  confirmed the placement in a live `fkit producer` session and the re-rank was **executed**: this row now
+  sits at **`Sprint 5 P5`**, and the append rank is history. **and it is the merit position the statement above names, exactly.** Authority, the verbatim ruling, its channel, and the full old→new rank map are in Sprint 5's
+  §"Addendum — the owner-ruled re-rank of 2026-08-11". ⛔ **This is not producer precedent for
+  re-ranking** — it was executed only because the owner ruled it in a live session.
 - **Line-number citations are dated anchors of convenience** (measured 2026-08-10); the durable
   anchors are the quoted text, and `0264` will have moved every line in `dashboard.sh` before you
   start.

@@ -391,7 +391,7 @@ the companion ADR in the same act.**
   rows)
 - Task: `ai-agents/tasks/done/0260-decide-the-plan-sprint-resolution-strategy-under-the-letter-suffix-constraint/brief.md`
 - Companion decision: `adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md`
-- Red fixture task: `ai-agents/tasks/backlog/0259-add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename/brief.md`
+- Red fixture task: `ai-agents/tasks/done/0259-add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename/brief.md`
 - Resolution ladder: `claude/skills/fkit-status/dashboard.sh:78-109`
 - Drift rules: `claude/skills/fkit-status/dashboard.sh:772` (Backlog arm), `:796` (the highest-value
   backlog check), `:802` (rule 1 skip), `:805-814` (rule 3)

@@ -7,7 +7,7 @@
 Sprint 5
 
 ## Priority
-Sprint 5 P5
+Sprint 5 P11
 
 ## Status
 🔲 Backlog
@@ -190,7 +190,7 @@ excluded. **None of those may be weakened** — this is a wording/label fix, not
   when this brief was filed on **2026-08-08**, and was falsified when the brief was **carried onto
   Sprint 5** by owner ruling of **2026-08-10** (verbatim option label **"Dashboard + all of
   0252-0258"**). The header fields moved in that same act and are the authority:
-  **`## Sprint: Sprint 5`**, **`## Priority: Sprint 5 P5`**. **Plan this work against
+  **`## Sprint: Sprint 5`**, **`## Priority: Sprint 5 P11`**. **Plan this work against
   [`sprint-5.md`](../../../sprints/sprint-5.md), not the Backlog board.**
   ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
   **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working

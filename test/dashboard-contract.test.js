@@ -20,7 +20,7 @@
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, chmodSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { REPO, cleanup } from './harness.mjs';
@@ -77,7 +77,9 @@ function foldBriefsAndPlan(agents, briefs, planText) {
   return out;
 }
 
-function fixture({ plan, briefs = {}, planDir = 'sprints' }) {
+// `planName` exists because for ADR-040's T2–T11 THE FILENAME IS THE THING UNDER TEST (rung 2).
+// Defaulted to the historic `sprint-1.md`, so every pre-existing caller is unaffected.
+function fixture({ plan, briefs = {}, planDir = 'sprints', planName = 'sprint-1.md' }) {
   const root = mkdtempSync(join(tmpdir(), 'fkit-dash-'));
   MADE.push(root);
   const agents = join(root, 'ai-agents');
@@ -85,7 +87,7 @@ function fixture({ plan, briefs = {}, planDir = 'sprints' }) {
     mkdirSync(join(agents, d), { recursive: true });
   }
   const planText = foldBriefsAndPlan(agents, briefs, plan);
-  const planPath = join(agents, planDir, 'sprint-1.md');
+  const planPath = join(agents, planDir, planName);
   writeFileSync(planPath, planText);
   return planPath;
 }
@@ -668,6 +670,423 @@ test('R8: an entirely unresolvable plan sprint is REPORTED, not silently ignored
     'rule 1 being inert must itself be a reported fact',
   );
 });
+
+// R8 (third case) — ⛔ KNOWN-RED, ON PURPOSE. THIS TEST IS EXPECTED TO FAIL on today's dashboard.sh.
+// If you are staring at a red suite: this is a filed, known defect, not a break you just caused.
+//
+// The defect — reported by a downstream fkit project running 0.2.1, against the same 945-line
+// dashboard.sh we ship:
+//   ai-agents/knowledge-base/reports/fkit-dashboard-plan-sprint-resolution-defect-2026-08-10.md
+// Task 0259 files this fixture · task 0260 decided the fix shape → ADR-040 (accepted), where this
+// case is required test T1 · task 0264 is the implementation follow-on, and landing ADR-040's
+// identity grammar there is what turns this green.
+//
+// ⚠️ WHAT THIS CASE DOES *NOT* PROVE: it goes green under ANY identity that is not `Sprint 9` —
+// including ADR-040's REJECTED numeric-only widening, which resolves `plan-sprint-4.md` → `Sprint 4`
+// correctly by luck on this one filename. T1 alone cannot tell a correct grammar from a lucky one.
+// ADR-040's T2 (`plan-sprint-4c.md`) is the discriminator, and it belongs to 0264, not here.
+//
+// ⛔ Do NOT make it pass by widening either matcher ad hoc. ADR-040's hard constraint: a WRONG
+// identity is strictly WORSE than NO identity — `plan-sprint-4c.md` naively resolving to "Sprint 4"
+// makes rule 1 live and wrong, turning today's LOUD failure into a SILENT one.
+//
+// Why the two R8 cases above do not catch it: :641 proves the filename fallback works when the
+// filename ALREADY matches `^sprint-[0-9]+$`; :654 uses `hardening.md` and pins the REPORTING path.
+// Neither asserts the shape real projects actually use — a `plan-`prefixed filename AND a
+// product-prefixed H1 — where BOTH rungs miss and rule 1 goes inert. Green for a fixture-shaped
+// reason. Filename and H1 are taken verbatim from the report's §7 table of 12 real plan names.
+//
+// Built by hand like the :654 case rather than through fixture(): that helper names the plan file
+// `sprint-1.md`, and THE FILENAME IS THE THING UNDER TEST.
+//
+// ⚠️ ONE DELIBERATE DEVIATION FROM §7: the status heading here is `## Status`, not the reporter's
+// `## Sprint 4 Status`. Theirs dies at dashboard.sh:206 before any drift logic runs — their own data
+// defect, report §7 note 2, which they explicitly asked us not to fix. This fixture has to REACH
+// rule 1 to say anything about it.
+test('R8: a product-prefixed H1 on a `plan-sprint-N.md` filename must keep rule 1 alive', () => {
+  const root = mkdtempSync(join(tmpdir(), 'fkit-dash-'));
+  MADE.push(root);
+  const agents = join(root, 'ai-agents');
+  for (const d of ['tasks/backlog', 'tasks/done', 'tasks/cancelled', 'sprints', 'sprints/done']) {
+    mkdirSync(join(agents, d), { recursive: true });
+  }
+  const planText = foldBriefsAndPlan(
+    agents,
+    { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 9', status: '🔲 Backlog', priority: 1 }) },
+    plan(['| ✅ Done | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |'], {
+      title: '# Geoconflict — Sprint 4 — In-App Monetization & Citizenship',
+    }),
+  );
+  const planPath = join(agents, 'sprints', 'plan-sprint-4.md');
+  writeFileSync(planPath, planText);
+  const { out } = run(planPath);
+  // The drift facts ride the assertion message on purpose: the red output must show
+  // `drift unresolved-plan-sprint` — the identity failing to resolve — so a reader can see it is red
+  // for THE STATED REASON and not some other one, without a second assertion that would itself
+  // invert to red the moment 0264 lands.
+  const drift = facts(out).filter((f) => f.startsWith('drift '));
+  // Fixture-integrity guard. The assertion below is an ABSENCE check, so an unresolved plan→brief
+  // link satisfies it while the defect is fully intact — dashboard.sh emits `drift missing-brief`
+  // instead of `drift disagreement`, `unresolved-plan-sprint` still fires, and the case flips green
+  // for a reason that has nothing to do with what it pins (verified by A/B). This guard holds both
+  // today and once 0264 lands — the link resolves in both — so it never inverts.
+  assert.equal(
+    drift.filter((f) => f.includes('missing-brief')).length,
+    0,
+    `the plan→brief link must resolve, or the absence check below proves nothing. Drift facts: ${JSON.stringify(drift)}`,
+  );
+  assert.equal(
+    drift.filter((f) => f.startsWith('drift disagreement')).length,
+    0,
+    `rule 1 must still skip: the brief belongs to Sprint 9, not to this plan. Drift facts: ${JSON.stringify(drift)}`,
+  );
+});
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────
+// ADR-040 T2–T11 — the identity grammar (task 0264). T1 is the case immediately above (task 0259);
+// it is NOT duplicated here. ADR-040:
+//   ai-agents/knowledge-base/decisions/adr-040-a-plan-s-sprint-identity-is-a-whole-h1-segment-never-a-substring.md
+//
+// The grammar's hard constraint, in ADR-040's words: a WRONG identity is strictly worse than NO
+// identity. A wrong one makes drift rule 1 live and wrong — a silent failure; no identity at all is
+// reported as `unresolved-plan-sprint` — a loud one. Most cases below therefore pin a REFUSAL.
+//
+// ⛔ T8 is deliberately absent: ADR-040's T8 is the existing R7 test `task 68: the backlog identity
+// also silences the plan-level drift clause, not just the fact`. Its obligation is that it stays
+// GREEN BYTE-UNCHANGED, not that it be duplicated here.
+
+// Every case below asserts an ABSENCE, or a presence that a broken fixture would also produce, so
+// each one first proves the plan→brief link resolved — the same guard T1's own comment explains. A
+// fixture whose link is broken emits `drift missing-brief` instead, and the real assertions then
+// pass (or fail) for a reason that has nothing to do with the identity grammar.
+function adr040Drift(out, where) {
+  const drift = facts(out).filter((f) => f.startsWith('drift '));
+  assert.equal(
+    drift.filter((f) => f.includes('missing-brief')).length,
+    0,
+    `${where}: the plan→brief link must resolve, or these assertions prove nothing. Drift facts: ${JSON.stringify(drift)}`,
+  );
+  return drift;
+}
+
+const ADR040_ROW = '| ✅ Done | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |';
+
+// T2 — THE DISCRIMINATOR T1 cannot be. T1 goes green under ADR-040's REJECTED numeric-only widening,
+// which resolves `plan-sprint-4.md` → `Sprint 4` correctly by luck. This case does not.
+//
+// ⚠️ Under that rejected widening — an UNANCHORED numeric match, which finds `Sprint 4` inside the
+// segment `Sprint 4c` — BOTH assertions below invert: (A) identity `Sprint 4` would equal the
+// brief's, rule 1 would stop skipping, and a disagreement would fire; (B) identity `Sprint 4` would
+// differ from the brief's `Sprint 4c`, rule 1 would skip, and the real disagreement would vanish.
+// That two-way inversion is the whole point of the case — do not drop either sub-case.
+test('ADR-040 T2: a letter-suffixed H1 segment resolves as `Sprint 4c`, never as `Sprint 4`', () => {
+  const title = '# Geoconflict — Sprint 4c — Production Stabilization';
+
+  // A) the brief belongs to `Sprint 4` — a DIFFERENT sprint. Rule 1 must skip the cross-check.
+  const a = fixture({
+    planName: 'plan-sprint-4c.md',
+    plan: plan([ADR040_ROW], { title }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 4', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const driftA = adr040Drift(run(a).out, 'T2a');
+  assert.equal(
+    driftA.filter((f) => f.startsWith('drift disagreement')).length,
+    0,
+    `rule 1 must skip: Sprint 4 is not this plan's Sprint 4c. Drift facts: ${JSON.stringify(driftA)}`,
+  );
+
+  // B) the brief belongs to `Sprint 4c` — THIS plan. Rule 1 must NOT skip, and the full rule-3
+  //    cross-check must find the plan's `✅ Done` against the brief's `🔲 Backlog`.
+  const b = fixture({
+    planName: 'plan-sprint-4c.md',
+    plan: plan([ADR040_ROW], { title }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 4c', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const driftB = adr040Drift(run(b).out, 'T2b');
+  assert.equal(
+    driftB.filter((f) => f.startsWith('drift disagreement')).length,
+    1,
+    `rule 1 must NOT skip: the brief names this very plan. Drift facts: ${JSON.stringify(driftB)}`,
+  );
+});
+
+// T3 — CONTAINMENT IS NOT IDENTITY. `Post-Sprint 2 Hotfix Tasks` is a real plan name from the
+// downstream report's §7 table, and it is deliberately NOT Sprint 2. A "find `Sprint N` anywhere"
+// rule claims it and hands rule 1 a WRONG identity. Asserting all three consumers, per R7's
+// precedent: the fact, the rule-1 behaviour, and the roll-up clause.
+test('ADR-040 T3: `Post-Sprint 2` is prose containment, not the Sprint 2 identity', () => {
+  const p = fixture({
+    planName: 'hotfix-post-sprint2.md',
+    plan: plan([ADR040_ROW], { title: '# Geoconflict — Post-Sprint 2 Hotfix Tasks' }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 9', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const { out } = run(p);
+  const drift = adr040Drift(out, 'T3');
+  // consumer 1 — the identity is empty, so rule 1 must NOT skip and the cross-check must run.
+  assert.equal(
+    drift.filter((f) => f.startsWith('drift disagreement')).length,
+    1,
+    `an unresolved identity must not silently activate rule 1's skip. Drift facts: ${JSON.stringify(drift)}`,
+  );
+  // consumer 2 — and the unresolved identity is itself reported.
+  assert.ok(
+    drift.some((f) => f.startsWith('drift unresolved-plan-sprint')),
+    `the refusal must be LOUD. Drift facts: ${JSON.stringify(drift)}`,
+  );
+  // consumer 3 — and it reaches the roll-up.
+  assert.match(rollup(out), /on the plan itself/);
+});
+
+// T4 — a plan with no sprint identity anywhere: prose H1, prose filename.
+test('ADR-040 T4: `plan-index.md` with a prose H1 resolves EMPTY and is reported', () => {
+  const p = fixture({
+    planName: 'plan-index.md',
+    plan: plan([ADR040_ROW], { title: '# Geoconflict — Execution Plan Index' }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 9', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const { out } = run(p);
+  const drift = adr040Drift(out, 'T4');
+  assert.ok(
+    drift.some((f) => f.startsWith('drift unresolved-plan-sprint')),
+    `Drift facts: ${JSON.stringify(drift)}`,
+  );
+  assert.match(rollup(out), /on the plan itself/);
+});
+
+// T5 — THE BINDING REGRESSION GUARD. ADR-040 §7: "A genuinely unidentifiable plan MUST still report
+// `unresolved-plan-sprint`." An implementation that drops this case does not satisfy ADR-040,
+// however well it resolves the other eleven rows. The pressure this guard is under is that every
+// other case pushes toward resolving MORE plans; this one pins the floor.
+test('ADR-040 T5: a genuinely unidentifiable plan is still REPORTED, not silently ignored', () => {
+  for (const [where, title] of [
+    // (a) ADR-040's own named fixture shape — no `Sprint` token at all.
+    ['T5a', '# Hardening'],
+    // (b) new coverage the widened rung 1 makes possible: a COLON-delimited segment that contains
+    //     `Sprint 4` as prose. The segment is `Sprint 4 carryover`, which is not the token.
+    ['T5b', '# Roadmap: Sprint 4 carryover'],
+  ]) {
+    const p = fixture({
+      planName: 'hardening.md',
+      plan: plan([ADR040_ROW], { title }),
+      briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 9', status: '🔲 Backlog', priority: 1 }) },
+    });
+    const { out } = run(p);
+    const drift = adr040Drift(out, where);
+    assert.ok(
+      drift.some((f) => f.startsWith('drift unresolved-plan-sprint')),
+      `${where} (${title}): the refusal must be reported. Drift facts: ${JSON.stringify(drift)}`,
+    );
+    assert.match(rollup(out), /on the plan itself/, `${where} (${title}): and it must reach the roll-up`);
+  }
+});
+
+// T6 — TWO DIFFERENT identity tokens in one H1: refuse, do not guess. ADR-040 §2.5. Both sub-cases
+// below use `# Sprint 5 — Sprint 6`, so what they pin is the REFUSAL on two different tokens, and
+// where the identity comes from once rung 1 has refused.
+//
+// ⚠️ WHAT THIS TEST DOES **NOT** COVER (0264 review R3, deferred by owner ruling 2026-08-11).
+// The rule counts DISTINCT tokens, not total, so `# Sprint 5 — Sprint 5` names one sprint twice and
+// still RESOLVES. That behavior is implemented (the `seen` de-dup at `dashboard.sh:118`) but **no
+// test pins it**: dropping `seen` entirely leaves the whole suite green (measured). Both fixtures
+// here use two DIFFERENT identities, so neither exercises the de-dup. An earlier version of this
+// comment claimed that coverage; it did not exist. Adding the guard is filed as follow-up work —
+// see residual A2 item 1 in this task's `review.md`. Do not read this test as covering it.
+test('ADR-040 T6: an H1 naming two different sprints refuses at rung 1', () => {
+  const title = '# Sprint 5 — Sprint 6';
+
+  // (a) rung 1 refuses, so the FILENAME decides. Discriminated on purpose: a brief reading
+  //     `## Sprint: Sprint 5` plus a status mismatch fires a disagreement only if the identity is
+  //     `Sprint 5`. It would NOT fire if rung 1 had guessed `Sprint 6`.
+  const a = fixture({
+    planName: 'sprint-5.md',
+    plan: plan([ADR040_ROW], { title }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 5', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const driftA = adr040Drift(run(a).out, 'T6a');
+  assert.equal(
+    driftA.filter((f) => f.startsWith('drift disagreement')).length,
+    1,
+    `the identity must be the filename's Sprint 5, not a guess at Sprint 6. Drift facts: ${JSON.stringify(driftA)}`,
+  );
+
+  // (b) with no filename to fall back on, the refusal stands and is reported.
+  const b = fixture({
+    planName: 'hardening.md',
+    plan: plan([ADR040_ROW], { title }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 9', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const outB = run(b).out;
+  const driftB = adr040Drift(outB, 'T6b');
+  assert.ok(
+    driftB.some((f) => f.startsWith('drift unresolved-plan-sprint')),
+    `an ambiguous H1 must resolve EMPTY and say so. Drift facts: ${JSON.stringify(driftB)}`,
+  );
+  assert.match(rollup(outB), /on the plan itself/);
+});
+
+// T7 — the suffix bound is exactly ONE lowercase letter (owner-ruled 2026-08-10, verbatim option
+// label "One letter (Recommended)").
+//   `Sprint 4th` — ADR-040's own T7 row: two letters, refused.
+//   `Sprint 4C`  — uppercase, refused. Not an ADR row; it is coverage for ADR-040 §5's refusal list,
+//                  added here because it is the same fixture shape and costs one loop iteration.
+test('ADR-040 T7: the suffix is one LOWERCASE letter — `Sprint 4th` and `Sprint 4C` are refused', () => {
+  for (const [where, title] of [
+    ['T7a', '# Foo — Sprint 4th — bar'],
+    ['T7b', '# Foo — Sprint 4C — bar'],
+  ]) {
+    const p = fixture({
+      planName: 'hardening.md',
+      plan: plan([ADR040_ROW], { title }),
+      briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 9', status: '🔲 Backlog', priority: 1 }) },
+    });
+    const { out } = run(p);
+    const drift = adr040Drift(out, where);
+    assert.ok(
+      drift.some((f) => f.startsWith('drift unresolved-plan-sprint')),
+      `${where} (${title}): must resolve EMPTY and be reported. Drift facts: ${JSON.stringify(drift)}`,
+    );
+    assert.match(rollup(out), /on the plan itself/, `${where} (${title}): and it must reach the roll-up`);
+  }
+});
+
+// T9 — THE `moved_target` COMPANION (ADR-040 §6). `moved_target` is NOT one of the three
+// PLAN_SPRINT consumers — it is an independent parser of the same sprint vocabulary, and drift
+// rule 2 compares it against the brief's `## Sprint`. Making `Sprint 4c` a first-class identity
+// without making it a first-class MOVE TARGET arms a phantom `drift disagreement` on every moved
+// row: `[Sprint 4c]` parses as `Sprint 4`, which disagrees with a brief reading `Sprint 4c`.
+// ⚠️ RED before the companion change, by construction.
+test('ADR-040 T9: a `➡️ Moved to [Sprint 4c]` target keeps its suffix', () => {
+  const p = fixture({
+    plan: plan(['| ➡️ Moved to [Sprint 4c](../sprint-4c.md) — priority 3 | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 4c', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const { out } = run(p);
+  const drift = adr040Drift(out, 'T9');
+  assert.equal(
+    drift.filter((f) => f.startsWith('drift disagreement')).length,
+    0,
+    `the move target IS the brief's sprint — a phantom disagreement here is the new defect. Drift facts: ${JSON.stringify(drift)}`,
+  );
+  assert.equal(
+    drift.filter((f) => f.includes('missing-sprint')).length,
+    0,
+    `Drift facts: ${JSON.stringify(drift)}`,
+  );
+  assert.equal(
+    facts(out).filter((f) => f.includes('moved-without-target')).length,
+    0,
+    `the target must still parse at all. Facts: ${JSON.stringify(facts(out))}`,
+  );
+});
+
+// T10 — THE ONLY TEST THAT EXERCISES RUNG 2's `plan-` PREFIX AT ALL. The prefix was owner-ruled in
+// on 2026-08-10 ("Include `plan-` (Recommended)") KNOWING no observed file requires it — every row
+// in the downstream report's §7 table resolves at rung 1. ADR-040 §3 marks the rung a deliberate
+// forward bet, and ADR-040:158-160 states the consequence: "an unevidenced rung that no test
+// exercises can ship broken and stay broken."
+//
+// ⚠️ Sub-case B is NOT optional. Sub-case A alone goes green under ANY resolved identity that is
+// not `Sprint 9` — including a broken one — which is precisely the weakness T1's own comment names
+// about itself. B pins the VALUE `Sprint 7`.
+test('ADR-040 T10: rung 2 resolves `plan-sprint-7.md` to `Sprint 7` through the `plan-` prefix', () => {
+  const title = '# Hardening push'; // genuinely prose — rung 1 must find nothing here.
+
+  // A) the rung is reached at all: nothing is reported unresolved, and rule 1 skips a foreign brief.
+  const a = fixture({
+    planName: 'plan-sprint-7.md',
+    plan: plan([ADR040_ROW], { title }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 9', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const driftA = adr040Drift(run(a).out, 'T10a');
+  assert.equal(
+    driftA.filter((f) => f.startsWith('drift unresolved-plan-sprint')).length,
+    0,
+    `rung 2 must resolve this filename. Drift facts: ${JSON.stringify(driftA)}`,
+  );
+  assert.equal(
+    driftA.filter((f) => f.startsWith('drift disagreement')).length,
+    0,
+    `rule 1 must skip: Sprint 9 is not this plan. Drift facts: ${JSON.stringify(driftA)}`,
+  );
+
+  // B) and the resolved value is `Sprint 7` specifically — a brief naming it must NOT be skipped.
+  const b = fixture({
+    planName: 'plan-sprint-7.md',
+    plan: plan([ADR040_ROW], { title }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 7', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const driftB = adr040Drift(run(b).out, 'T10b');
+  assert.equal(
+    driftB.filter((f) => f.startsWith('drift disagreement')).length,
+    1,
+    `the identity must be Sprint 7 exactly, not merely "something". Drift facts: ${JSON.stringify(driftB)}`,
+  );
+});
+
+// T11 — THE ALLOWLIST IS CLOSED. An open `.*sprint-<N>` rung would claim this filename as
+// `Sprint 2` — a WRONG identity, the failure mode ADR-040 exists to prevent.
+//
+// ⚠️ THE FIXTURE IS `hotfix-post-sprint-2.md`, WITH A HYPHEN BEFORE THE DIGIT. It is deliberately
+// NOT the downstream reporter's real `hotfix-post-sprint2.md` — that file is T3 above. The real
+// file's MISSING hyphen means an open rung would not claim it, so the real file would have hidden
+// this failure by luck. These are two tests, not a typo of one. Do not "correct" the filename.
+test('ADR-040 T11: the `plan-` allowlist is closed — `hotfix-post-sprint-2.md` resolves EMPTY', () => {
+  const p = fixture({
+    planName: 'hotfix-post-sprint-2.md',
+    plan: plan([ADR040_ROW], { title: '# Hardening push' }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 9', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const { out } = run(p);
+  const drift = adr040Drift(out, 'T11');
+  assert.ok(
+    drift.some((f) => f.startsWith('drift unresolved-plan-sprint')),
+    `an open rung would wrongly claim this as Sprint 2. Drift facts: ${JSON.stringify(drift)}`,
+  );
+  assert.match(rollup(out), /on the plan itself/);
+});
+
+// §2.2 — THE DELIMITER LIST IS NORMATIVE, AND THREE QUARTERS OF IT WAS UNGUARDED (0264 review R1).
+// Every other H1 fixture in this file — the ten ADR-040 cases above and every pre-existing one —
+// uses the EM DASH. Collapsing the split to em-dash-only therefore left the whole suite green
+// (measured), so an edit dropping the colon, en dash or spaced hyphen would ship silently and
+// `# Roadmap: Sprint 4`, `# Product – Sprint 4 – theme` and `# Product - Sprint 4 - theme` would
+// quietly stop resolving. T5b's `# Roadmap: Sprint 4 carryover` does not cover this: it is a
+// REFUSAL case, and it refuses whether or not colon splitting works.
+//
+// Each sub-case below is therefore a POSITIVE one — the split is what MANUFACTURES the matching
+// segment, so deleting that one `gsub` reds that one sub-case and no other.
+//
+// ⚠️ Both assertions are needed to pin the VALUE, and neither does it alone (the trap T10's comment
+// names). The plan cell is `✅ Done`, the brief is `🔲 Backlog`, and the brief names `Sprint 4`:
+//   · identity `Sprint 4`  -> rule 1 does NOT skip -> disagreement 1, unresolved 0   <- the only pass
+//   · identity EMPTY       -> rule 1 inert         -> disagreement 1, unresolved 1   <- reds on #1
+//   · identity `Sprint 9`  -> rule 1 SKIPS         -> disagreement 0, unresolved 0   <- reds on #2
+// The em dash is deliberately NOT re-tested here — it is exercised by T2, T3, T5, T6 and T7 above.
+for (const [delim, h1] of [
+  ['a colon', '# Geoconflict: Sprint 4: Monetization'],
+  ['an en dash', '# Geoconflict – Sprint 4 – Monetization'],
+  ['a spaced hyphen', '# Geoconflict - Sprint 4 - Monetization'],
+]) {
+  test(`ADR-040 §2.2: ${delim} bounds a segment — \`${h1}\` resolves as \`Sprint 4\``, () => {
+    // `hardening.md` is a prose stem, so rung 2 resolves nothing: the H1 split is the ONLY source.
+    const p = fixture({
+      planName: 'hardening.md',
+      plan: plan([ADR040_ROW], { title: h1 }),
+      briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 4', status: '🔲 Backlog', priority: 1 }) },
+    });
+    const drift = adr040Drift(run(p).out, `§2.2 ${delim}`);
+    assert.equal(
+      drift.filter((f) => f.startsWith('drift unresolved-plan-sprint')).length,
+      0,
+      `${delim} must split the H1, or rung 1 finds no whole segment. Drift facts: ${JSON.stringify(drift)}`,
+    );
+    assert.equal(
+      drift.filter((f) => f.startsWith('drift disagreement')).length,
+      1,
+      `the resolved identity must be Sprint 4 exactly, not merely "something". Drift facts: ${JSON.stringify(drift)}`,
+    );
+  });
+}
 
 // R14 — `grep -c` prints 0 AND exits 1, so `|| echo 0` emitted both and yielded "0\n0", which would
 // throw "integer expression expected". Unreachable today; pinned so it cannot arm itself later.
@@ -2055,4 +2474,318 @@ test('0210/G: the legacy UNLINKED prose form still parses — `\\[*` is zero-or-
   const { out } = run(p);
   assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0, 'an unbracketed legacy move row is well-formed, not drift');
   assert.ok(facts(out).includes('count moved 1'), 'and it resolves to `Sprint 2`, so rule 2 agrees with the brief');
+});
+
+// ===================================================================================================
+// ADR-041 — selection by resolved identity (task 0265). S1–S8 plus the §2 `Backlog` token cases.
+//
+// ⚠️ WHY THESE TEST A MODE AND NOT JUST A FUNCTION. ADR-041 §1.4 (ordering) and §1.5 (the
+// same-identity tie-break) are SELECTION-level rules. If `dashboard.sh` only answered "what is THIS
+// file's identity?", both would live in `fkit-status/SKILL.md` prose — LLM-executed, untestable, and
+// exactly the gap §1.4 names when it says the ordering is "pinned by no test". `select-active` exists
+// so S1–S8 are mechanically assertable. See ADR-041 §5.
+//
+// ⚠️ ON S1, STATED HONESTLY. This is A CONTRACT BEING WRITTEN FOR THE FIRST TIME, not a bug being
+// fixed. ADR-041 §1.4 explicitly WITHDRAWS the earlier claim that today's code text-sorts
+// `sprint-9` above `sprint-10` — there is no sort anywhere in the code; SKILL.md:26-28 is prose
+// instructing a model, and a model asked for the highest N will most likely answer 10. The real
+// defect was weaker and still sufficient: nothing pinned the ordering. Do not restate the withdrawn
+// claim in a test name or a comment.
+
+function runMode(args, env = {}) {
+  const r = spawnSync('bash', [SCRIPT, ...args], { encoding: 'utf8', env: { ...process.env, ...env } });
+  return { code: r.status, out: r.stdout || '', err: r.stderr || '' };
+}
+
+// Several plans in one `sprints/`. `plans` maps filename -> full plan text.
+//
+// ⚠️ `foldBriefsAndPlan` is called once PER PLAN and is idempotent: it restarts its sequence each
+// call, so every plan gets the same brief ids and the shared brief files are rewritten identically.
+function sprintsFixture({ plans, briefs = {} }) {
+  const root = mkdtempSync(join(tmpdir(), 'fkit-dash-'));
+  MADE.push(root);
+  const agents = join(root, 'ai-agents');
+  for (const d of ['tasks/backlog', 'tasks/done', 'tasks/cancelled', 'sprints', 'sprints/done']) {
+    mkdirSync(join(agents, d), { recursive: true });
+  }
+  for (const [name, text] of Object.entries(plans)) {
+    writeFileSync(join(agents, 'sprints', name), foldBriefsAndPlan(agents, briefs, text));
+  }
+  return { sprintsDir: join(agents, 'sprints'), planPath: (n) => join(agents, 'sprints', n) };
+}
+
+// A plan whose H1 carries no identity — the filename rung is then the thing under test.
+const prosePlan = (h1 = '# Hardening — the launcher sprint') => `${h1}\n\nBody prose.\n`;
+
+function selectLines(out) {
+  return out.split('⟦SELECT⟧')[1].split('⟦FACTS⟧')[0].trim().split('\n').filter(Boolean);
+}
+const activeLine = (out) => selectLines(out).find((l) => l.startsWith('active'));
+const candidates = (out) => selectLines(out).filter((l) => l.startsWith('candidate'));
+
+// S1 — §1.4 integer ordering. `Sprint 10` > `Sprint 9`, which a byte/text comparison gets backwards.
+test('ADR-041 S1: `Sprint 10` outranks `Sprint 9` — the ordering is a pinned contract, not prose', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'plan-sprint-9.md': prosePlan('# P — Sprint 9 — a'),
+      'plan-sprint-10.md': prosePlan('# P — Sprint 10 — b'),
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  assert.equal(activeLine(out), 'active file="plan-sprint-10.md" identity="Sprint 10"');
+});
+
+// S1b — the leading-zero normalization. `test -gt` would also get this right; the length-then-bytes
+// comparison must too, and this is what pins it when someone "simplifies" the comparison.
+test('ADR-041 S1b: a leading zero does not outrank — `sprint-9` beats `sprint-08`', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: { 'sprint-08.md': prosePlan(), 'sprint-9.md': prosePlan() },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  assert.equal(activeLine(out), 'active file="sprint-9.md" identity="Sprint 9"');
+});
+
+// S2 — suffix ordering: absent < `a` < `b` < …
+test('ADR-041 S2: `Sprint 4c` > `Sprint 4b` > `Sprint 4` — the suffix orders after the number', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'plan-sprint-4.md': prosePlan(),
+      'plan-sprint-4b.md': prosePlan(),
+      'plan-sprint-4c.md': prosePlan(),
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  assert.equal(activeLine(out), 'active file="plan-sprint-4c.md" identity="Sprint 4c"');
+});
+
+// S3 — the compounded defect, half 1. Under the retired glob `sprint-backlog.md` was the ONLY
+// `sprint-*.md` match on the reporter's repo, so a bare /fkit-status called it the active sprint.
+test('ADR-041 S3: `sprint-backlog.md` resolves `Backlog` and is never the active sprint', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-backlog.md': prosePlan('# Geoconflict — Sprint Backlog'),
+      'plan-sprint-6.md': prosePlan(),
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  assert.equal(activeLine(out), 'active file="plan-sprint-6.md" identity="Sprint 6"');
+  assert.ok(candidates(out).includes('candidate file="sprint-backlog.md" identity="Backlog"'),
+    'it must still be listed — §1.6 wants every candidate and its identity');
+  assert.ok(!activeLine(out).includes('sprint-backlog.md'), 'Backlog is never eligible');
+});
+
+// S4 — the compounded defect, half 2, and the REGAINED CHECK. `sprint-backlog.md` used to resolve
+// EMPTY (its basename is not `backlog`), so it never reached the `[ "$PLAN_SPRINT" = "Backlog" ]` arm
+// and lost that arm's "scheduled but still parked on the unscheduled board" test — which the script's
+// own comment calls the single highest-value drift this board can surface.
+//
+// ⚠️ THE FIXTURE'S STATUS AND LOCATION MUST AGREE WITH THE PLAN CELL. If they disagree, rule 3 fires
+// for an unrelated reason and the test proves nothing about the regained check. Measured against the
+// pre-0265 script, this exact fixture was SILENT.
+test('ADR-041 S4: a `sprint-backlog.md` row whose brief names a real sprint is drift — the regained check', () => {
+  const p = fixture({
+    planName: 'sprint-backlog.md',
+    plan: plan(['| 🔲 Backlog | — | Alpha | [`a.md`](../tasks/backlog/a.md) |'],
+      { title: '# Geoconflict — Sprint Backlog' }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 2', status: '🔲 Backlog', priority: 'Unscheduled' }) },
+  });
+  const { code, out } = run(p);
+  assert.equal(code, 0);
+  assert.ok(facts(out).some((f) => f.startsWith('drift disagreement')),
+    'scheduled into Sprint 2 but still on the unscheduled board — that is the check');
+  assert.equal(facts(out).filter((f) => f.includes('unresolved-plan-sprint')).length, 0,
+    'and the identity resolved, so the plan-level fact must not fire');
+
+  // A/B twin — the ONLY difference is the brief's ## Sprint. It must go silent.
+  const q = fixture({
+    planName: 'sprint-backlog.md',
+    plan: plan(['| 🔲 Backlog | — | Alpha | [`a.md`](../tasks/backlog/a.md) |'],
+      { title: '# Geoconflict — Sprint Backlog' }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Backlog', status: '🔲 Backlog', priority: 'Unscheduled' }) },
+  });
+  assert.equal(facts(run(q).out).filter((f) => f.startsWith('drift')).length, 0,
+    'a genuinely unscheduled row on the unscheduled board is not drift');
+});
+
+// S5 — §1.6. An empty eligible set says so and stops. NEVER a `Backlog` fallback.
+test('ADR-041 S5: an all-ineligible candidate set reports and stops — no fallback to the backlog board', () => {
+  const { sprintsDir } = sprintsFixture({ plans: { 'backlog.md': prosePlan('# Backlog — the unsprinted board') } });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 3, 'exit 3 — no answer, and the caller must be able to tell');
+  assert.equal(activeLine(out), 'active none');
+  assert.ok(candidates(out).includes('candidate file="backlog.md" identity="Backlog"'));
+  assert.ok(!out.includes('active file='), 'a `Backlog` board must never be selected as active');
+});
+
+// S6 — §1.5's tie-break, all three halves. The ruling is worthless if the flag can be dropped.
+test('ADR-041 S6: same identity → byte-order pick, AND both claimants named, AND the roll-up says so', () => {
+  const { sprintsDir, planPath } = sprintsFixture({
+    plans: {
+      'sprint-6.md': prosePlan(),
+      'plan-sprint-6.md': plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |'],
+        { title: '# Sprint 6 — Test' }),
+    },
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 6', status: '🔲 Backlog' }) },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  // 1 — the pick: `p` < `s` in byte order.
+  assert.equal(activeLine(out), 'active file="plan-sprint-6.md" identity="Sprint 6"');
+  // 2 — the flag names EVERY claimant, not just that there was a collision.
+  assert.ok(facts(out).includes('drift ambiguous-active-sprint identity="Sprint 6" chosen="plan-sprint-6.md" also="sprint-6.md"'),
+    'the chosen file AND the other claimant must both be named');
+  // 3 — and in board mode the collision reaches the ROLL-UP, by the same route unresolved-plan-sprint takes.
+  const b = run(planPath('plan-sprint-6.md'));
+  assert.equal(b.code, 0);
+  assert.ok(facts(b.out).includes('drift ambiguous-plan-identity identity="Sprint 6" plan="plan-sprint-6.md" also="sprint-6.md"'));
+  assert.ok(rollup(b.out).includes('on the plan itself'),
+    'a drift kind that does not reach the roll-up clause is invisible to beat 6');
+});
+
+// S7 — §1.5's locale independence. The script sets and exports LC_ALL=C; this pins that it actually
+// governs glob order for a caller running under a collating locale.
+//
+// ⚠️ IF THIS EVER FAILS, the fix is an explicit byte-order sort of the basenames — NOT relaxing the
+// assertion. Board selection must not depend on the reader's locale.
+test('ADR-041 S7: the selection is byte-identical under a non-C locale', () => {
+  // ⚠️ THE FIXTURE NAMES ARE THE THING UNDER TEST — do not "tidy" them to `sprint-6`/`plan-sprint-6`.
+  // That pair orders `p` < `s` in BOTH byte order and locale collation, so it can never discriminate;
+  // review R1 measured the whole suite staying green (141/141) with the `LC_ALL=C` pin deleted.
+  //
+  // `Qlan-` vs `plan-` DOES discriminate: byte order puts `Q` (0x51) before `p` (0x70), while
+  // en_US.UTF-8 collation sorts alphabetically and case-insensitively, putting `plan` before `Qlan`.
+  // Measured on this machine, bash glob expansion honours the difference.
+  //
+  // ⚠️ AND IT CANNOT USE `Plan-`/`plan-` — the ADR's own illustration. macOS filesystems are
+  // case-insensitive by default, so those two names COLLIDE and only one file survives.
+  const mk = () => sprintsFixture({
+    plans: { 'Qlan-sprint-6.md': prosePlan('# Sprint 6 — Q variant'), 'plan-sprint-6.md': prosePlan() },
+  }).sprintsDir;
+  const c = runMode(['select-active', mk()], { LC_ALL: 'C', LANG: 'C' });
+  const u = runMode(['select-active', mk()], { LC_ALL: 'en_US.UTF-8', LANG: 'en_US.UTF-8' });
+  assert.equal(u.code, c.code);
+  assert.equal(u.out, c.out, 'same repo, two locales, one answer');
+  assert.equal(activeLine(c.out), 'active file="Qlan-sprint-6.md" identity="Sprint 6"',
+    'byte order, not collation: `Q` precedes `p`');
+});
+
+// R1 — THE PORTABLE HALF OF THE LOCALE GUARD, and the one that always reds.
+//
+// ⚠️ S7 above is a BEHAVIORAL test and is only as strong as the environment it runs in: where the
+// `en_US.UTF-8` locale is not installed (minimal CI images), setting it falls back to C, both runs
+// agree trivially, and S7 stops discriminating WITHOUT FAILING. This assertion has no such hole — it
+// reads the script and reds the moment the pin is deleted, on every machine.
+//
+// ADR-041 §1.5: "Board selection must not depend on the reader's locale. `LC_ALL=C` is the only
+// setting that makes the rule a fact." A source assertion is the honest way to pin a claim about the
+// script's own configuration.
+test('ADR-041 R1: dashboard.sh pins and exports `LC_ALL=C` — locale independence is structural', () => {
+  const src = readFileSync(SCRIPT, 'utf8');
+  assert.match(src, /^LC_ALL=C$/m, 'the LC_ALL=C pin is what makes byte-order selection a fact');
+  assert.match(src, /^export LC_ALL$/m, 'and it must be EXPORTED, or the subshells and `sort` below drift');
+});
+
+// S8 — §2's stated RESIDUAL, accepted as a loud failure. An unscheduled board carrying neither token
+// resolves EMPTY: not eligible (safe), but it loses the regained check and says so on every run.
+test('ADR-041 S8: `sprint-backlog.md` with neither token resolves EMPTY, is ineligible, and stays loud', () => {
+  const { sprintsDir } = sprintsFixture({ plans: { 'sprint-backlog.md': prosePlan('# Unscheduled work') } });
+  const id = runMode(['identity', join(sprintsDir, 'sprint-backlog.md')]);
+  assert.equal(id.code, 3);
+  assert.equal(id.out, '', 'unresolved prints NOTHING — it never guesses');
+
+  const sel = runMode(['select-active', sprintsDir]);
+  assert.equal(sel.code, 3);
+  assert.equal(activeLine(sel.out), 'active none');
+  assert.ok(candidates(sel.out).includes('candidate file="sprint-backlog.md" identity="unresolved"'));
+
+  const b = run(fixture({
+    planName: 'sprint-backlog.md',
+    plan: plan(['| 🔲 Backlog | — | Alpha | [`a.md`](../tasks/backlog/a.md) |'], { title: '# Unscheduled work' }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Backlog', status: '🔲 Backlog', priority: 'Unscheduled' }) },
+  }));
+  assert.ok(facts(b.out).some((f) => f.startsWith('drift unresolved-plan-sprint')), 'ADR-040 §7 guard');
+  assert.ok(rollup(b.out).includes('on the plan itself'));
+});
+
+// §2-a — the `Backlog` token itself, and its NORMALIZATION. The value is `Backlog`, never
+// `Sprint Backlog`: that exact string is what briefs carry and what the rule-1 arm compares against.
+test('ADR-041 §2: both `Backlog` and `Sprint Backlog` resolve to the value `Backlog`', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'backlog.md': prosePlan('# Backlog — the default home for unsprinted task briefs'),
+      'a.md': prosePlan('# X — Sprint Backlog'),
+      // Normalize-BEFORE-dedupe: one identity named twice must resolve, not trip the two-token refusal.
+      'b.md': prosePlan('# Backlog — Sprint Backlog'),
+    },
+  });
+  for (const f of ['backlog.md', 'a.md', 'b.md']) {
+    const r = runMode(['identity', join(sprintsDir, f)]);
+    assert.equal(r.code, 0, f);
+    assert.equal(r.out, 'Backlog\n', `${f} must resolve to Backlog — never "Sprint Backlog"`);
+  }
+});
+
+// §2-b — ADR-040's two-distinct-tokens refusal EARNS ITS PLACE here (ADR-041 §2, required outcome).
+test('ADR-041 §2: `# Sprint 5 — Backlog` refuses at the H1 rung and the filename rung decides', () => {
+  const { sprintsDir } = sprintsFixture({ plans: { 'sprint-5.md': prosePlan('# Sprint 5 — Backlog') } });
+  const r = runMode(['identity', join(sprintsDir, 'sprint-5.md')]);
+  assert.equal(r.code, 0);
+  assert.equal(r.out, 'Sprint 5\n', 'two distinct tokens → refuse, fall through, resolve by filename');
+});
+
+// compat — the one-argument form is untouched, and a subcommand is recognised ONLY in the two-argument
+// form (so a plan file literally named `identity` still renders as a board).
+test('ADR-041: the historic one-argument board render is unchanged; a bad subcommand is a usage error', () => {
+  const p = fixture({
+    plan: plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha' }) },
+  });
+  const { code, out } = run(p);
+  assert.equal(code, 0);
+  assert.ok(out.startsWith('⟦fkit-dashboard v1⟧\n⟦BOARD⟧'));
+  assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0);
+  // The new sibling read must stay silent when the plan's identity is unshared — otherwise every
+  // exact-stdout fixture in this file would have moved.
+  assert.equal(facts(out).filter((f) => f.includes('ambiguous-plan-identity')).length, 0);
+
+  const bad = runMode(['bogus', p]);
+  assert.equal(bad.code, 1);
+  assert.match(bad.err, /usage: bash dashboard\.sh <plan> \| identity <plan> \| select-active <sprints-dir>/);
+});
+
+// R5 — AN UNREADABLE CANDIDATE MUST NEVER RESOLVE TO A WRONG IDENTITY.
+//
+// `head -1` fails on an unreadable file, awk exits 0 on the resulting empty input, and that is
+// indistinguishable from "an H1 with no identity token" — so the FILENAME rung answers about a file
+// whose contents were never read. Measured before the `[ -r ]` guard: this exact fixture printed
+// `Sprint 1` with exit 0 while the real H1 said `Sprint 99`.
+//
+// ADR-040 §Context: a WRONG identity is STRICTLY WORSE than none, because unresolved is loud and
+// wrong is silent. 0265 is where this had to be fixed rather than left to 0264's ladder: only 0265
+// runs the ladder over files the caller never named (`select-active`, `sibling_claimants`), so one
+// unreadable file could mis-select the active sprint for the whole board.
+test('ADR-041 R5: an unreadable candidate resolves to `unresolved`, never to a wrong identity', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: { 'sprint-1.md': prosePlan('# X — Sprint 99'), 'sprint-3.md': prosePlan('# Sprint 3 — real') },
+  });
+  const victim = join(sprintsDir, 'sprint-1.md');
+  chmodSync(victim, 0o000);
+  try {
+    const id = runMode(['identity', victim]);
+    assert.notEqual(id.out.trim(), 'Sprint 1', 'the filename rung must not answer for a file it could not read');
+    assert.equal(id.out, '', 'unresolved prints NOTHING');
+    assert.equal(id.code, 3);
+
+    const sel = runMode(['select-active', sprintsDir]);
+    assert.ok(candidates(sel.out).includes('candidate file="sprint-1.md" identity="unresolved"'),
+      'and it is listed as unresolved, so §1.6 still names it');
+    assert.equal(activeLine(sel.out), 'active file="sprint-3.md" identity="Sprint 3"',
+      'an unreadable file must not be able to win the selection');
+  } finally {
+    chmodSync(victim, 0o644);   // or the harness cleanup cannot remove it
+  }
 });

@@ -10,7 +10,7 @@ Sprint 5
 Sprint 5 P1
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -20,7 +20,7 @@ fkit-coder
 **A downstream fkit user filed a defect report against `claude/skills/fkit-status/dashboard.sh`, and
 our test suite is green for a fixture-shaped reason.** The report is copied into this repo verbatim
 and is the citation anchor for this task and for
-[`0260`](../../done/0260-decide-the-plan-sprint-resolution-strategy-under-the-letter-suffix-constraint/brief.md):
+[`0260`](../0260-decide-the-plan-sprint-resolution-strategy-under-the-letter-suffix-constraint/brief.md):
 
 [`ai-agents/knowledge-base/reports/fkit-dashboard-plan-sprint-resolution-defect-2026-08-10.md`](../../../knowledge-base/reports/fkit-dashboard-plan-sprint-resolution-defect-2026-08-10.md)
 
@@ -71,7 +71,7 @@ pins the **reporting** path, not the naming gap.
 
 **⚠️ This task adds a failing test and stops there.** It does not touch `dashboard.sh`. The
 resolution strategy is a genuine design call under a hard constraint (a wrong identity is strictly
-worse than no identity) and is [`0260`](../../done/0260-decide-the-plan-sprint-resolution-strategy-under-the-letter-suffix-constraint/brief.md).
+worse than no identity) and is [`0260`](../0260-decide-the-plan-sprint-resolution-strategy-under-the-letter-suffix-constraint/brief.md).
 Landing a fix here would be scoping implementation ahead of that decision.
 
 ## What to build
@@ -107,7 +107,7 @@ existing R8 tests so the three read as a set.
   not fix it. The fix shape is undecided — see `0260`.
 - ⛔ **Any change to `claude/skills/fkit-status/SKILL.md`**, including its `sprint-*.md`
   active-sprint glob — that is
-  [`0261`](../../done/0261-decide-whether-the-active-sprint-glob-widens-or-projects-are-told-to-name-plans-sprint-n/brief.md).
+  [`0261`](../0261-decide-whether-the-active-sprint-glob-widens-or-projects-are-told-to-name-plans-sprint-n/brief.md).
 - ⛔ **Do not "fix" the two existing R8 tests.** Both are correct for what they assert; the gap is
   that neither asserts this case.
 - ⛔ Do not widen either matcher's regex "just to make it green".
@@ -138,7 +138,7 @@ existing R8 tests so the three read as a set.
   third-party report into a failing test this project owns, and it makes `0260`'s decision concrete
   instead of hypothetical. The reporter's own suggested order (§9) puts it first for the same reason.
 - **Scheduling preference, not a dependency:** land this **before**
-  [`0260`](../../done/0260-decide-the-plan-sprint-resolution-strategy-under-the-letter-suffix-constraint/brief.md).
+  [`0260`](../0260-decide-the-plan-sprint-resolution-strategy-under-the-letter-suffix-constraint/brief.md).
   **Owner-ruled 2026-08-10** (relayed through the coordinating session as part of the Sprint 5 scope
   ruling). ⚠️ **Deliberately NOT a `Depends on` / `Blocks` declaration** — the architect can reach
   `0260`'s decision from the report alone, so neither task blocks the other at build time, and a
@@ -152,6 +152,6 @@ existing R8 tests so the three read as a set.
   it.
 - **Line-number citations above are dated (2026-08-10) and are anchors of convenience.** The durable
   anchors are the quoted patterns and test names. The durable-citation convention page does not exist
-  yet — that is [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md).
+  yet — that is [`0171`](../../backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md).
 - Filed 2026-08-10 by a spawned `fkit-producer` with no owner channel, onto the Sprint 5 board, under
   the owner's Sprint 5 scope ruling of the same day.

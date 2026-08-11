@@ -32,7 +32,7 @@ directions, with the evidence:
 convention.** Kept byte-identical, name included, because it is a foreign artifact we did not author.
 Flagged, not hidden.
 
-[`0259`](../../backlog/0259-add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename/brief.md)
+[`0259`](../0259-add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename/brief.md)
 turns the report into a failing test. **This task decides what makes it pass.**
 
 ### ⚠️ The hard constraint — a wrong identity is strictly worse than no identity
@@ -150,7 +150,7 @@ An ADR under `ai-agents/knowledge-base/decisions/`, via `/fkit-record-decision`.
   turns on; it ranks below `0259` only because the fixture is cheaper and makes this decision
   concrete.
 - **Scheduling preference, not a dependency:** land after
-  [`0259`](../../backlog/0259-add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename/brief.md).
+  [`0259`](../0259-add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename/brief.md).
   **Owner-ruled 2026-08-10.** ⚠️ **Deliberately NOT a `Depends on` declaration** — the architect can
   reach this decision from the report alone, so a label would make the board render this row
   `after 0259`, which is false. Form per

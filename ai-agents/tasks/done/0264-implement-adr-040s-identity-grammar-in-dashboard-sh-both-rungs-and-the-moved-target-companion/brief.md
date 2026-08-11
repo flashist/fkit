@@ -7,10 +7,10 @@
 Sprint 5
 
 ## Priority
-Sprint 5 P11
+Sprint 5 P4
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -25,7 +25,7 @@ and ranked into Sprint 5**. That ruling widens a sprint scope that was itself an
 addendum rather than silently.
 
 **The hole it closes, stated plainly.** Sprint 5 as it stood decided the downstream dashboard defect
-and never fixed it: [`0259`](../0259-add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename/brief.md)
+and never fixed it: [`0259`](../../done/0259-add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename/brief.md)
 is a red fixture, [`0260`](../../done/0260-decide-the-plan-sprint-resolution-strategy-under-the-letter-suffix-constraint/brief.md)
 and [`0261`](../../done/0261-decide-whether-the-active-sprint-glob-widens-or-projects-are-told-to-name-plans-sprint-n/brief.md)
 are ADRs. No row turned either decision into working code — while Sprint 5's `## Notes` carries an
@@ -211,7 +211,7 @@ landed, T1 exists and this change is what turns it green.
   anyway** — a fix proven red-first is the project's own discipline (ADR-026).
 - **⚠️ A cross-row interaction no board records, surfaced here rather than left to be discovered.**
   `0259` ships `npm test` **RED on purpose**, and
-  [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md) builds a gate that
+  [`0256`](../../backlog/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md) builds a gate that
   **blocks** a release on a red tree. Between `0259` landing and this brief landing, **no release can
   be cut** — by design, and correctly, but it means this row sits on the release path whatever its
   rank. `0256`'s own verification (a demonstrated block, then revert) is unaffected.
@@ -222,6 +222,12 @@ landed, T1 exists and this change is what turns it green.
   [ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)),
   so the owner's placement ruling is recorded here as a merit statement rather than executed as an
   insertion. See Sprint 5's dated addendum.
+
+  ✅ **RESOLVED 2026-08-11 — the flag above is left byte-identical and is now DISCHARGED.** The owner
+  confirmed the placement in a live `fkit producer` session and the re-rank was **executed**: this row now
+  sits at **`Sprint 5 P4`**, and the append rank is history. **and it is the merit position the statement above names, exactly.** Authority, the verbatim ruling, its channel, and the full old→new rank map are in Sprint 5's
+  §"Addendum — the owner-ruled re-rank of 2026-08-11". ⛔ **This is not producer precedent for
+  re-ranking** — it was executed only because the owner ruled it in a live session.
 - **Line-number citations are dated anchors of convenience** (measured 2026-08-10); the durable
   anchors are the quoted text.
 - Filed 2026-08-10 by a spawned `fkit-producer` with no owner channel, on the owner's ruling of the
