@@ -10,7 +10,7 @@ Sprint 5
 Sprint 5 P10
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -95,7 +95,7 @@ keeps `prove-red.sh` hand-rolled — whatever gate lands must run it, not replac
 - ⛔ Any new npm dependency (ADR-014, zero devDependencies).
 - ⛔ Replacing or restructuring `prove-red.sh` (ADR-026).
 - ⛔ Rewriting `architecture.md` §9.1's suite inventory — that is
-  [`0251`](../0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md). If both are
+  [`0251`](../../backlog/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md). If both are
   open, coordinate; they touch different sentences in the same section.
 - ⛔ Any `ai-agents/wiki-vault/` write (ADR-005).
 - ⛔ No commit, no re-rank, no task-file move.
@@ -122,7 +122,7 @@ keeps `prove-red.sh` hand-rolled — whatever gate lands must run it, not replac
 - **Depends on:** nothing
 - **Blocks:** nothing
 - **Scheduling preference, not a dependency:** land this **before**
-  [`0252`](../0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md).
+  [`0252`](../../backlog/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md).
   `0252` writes a releaser checklist that currently has to say *"run `npm test`, because nothing
   else will"*; if this lands first that sentence describes the gate instead of a gap. Either order
   works — the later one just re-reads `bin/release.mjs` before writing.
@@ -156,5 +156,5 @@ keeps `prove-red.sh` hand-rolled — whatever gate lands must run it, not replac
   ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
   **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
   bottom-up can. Task
-  [`0235`](../0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
+  [`0235`](../../backlog/0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
   class generally and is **neither widened nor closed** by this note.

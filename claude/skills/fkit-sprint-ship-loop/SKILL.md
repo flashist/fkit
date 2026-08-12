@@ -44,8 +44,9 @@ loop's shape (stateful review, verify budget, degraded-run conservatism), never 
 machinery. `fkit-task-ship-loop` stays **byte-unchanged.**
 
 **Argument:** `$ARGUMENTS` — a sprint plan path (e.g. `ai-agents/sprints/sprint-2.md`); **empty = the
-active sprint** (the `sprint-*.md` the project is working). One operand — no output-variant flags
-(`conventions/one-skill-one-output.md`).
+active sprint, as `/fkit-status` resolves it** — see `fkit-status/SKILL.md`'s empty-argument rule.
+**Do not re-derive that rule here** (ADR-041 §5: one grammar, one implementation). One operand — no
+output-variant flags (`conventions/one-skill-one-output.md`).
 
 ---
 
@@ -90,7 +91,8 @@ write.
 ## The loop, numbered
 
 ### 1. Select & order the sprint's tasks (§5.1)
-- Read the sprint plan (`$ARGUMENTS`, or the active `sprint-*.md`) and the briefs it links.
+- Read the sprint plan (`$ARGUMENTS`, or the active sprint as `/fkit-status` resolves it) and the
+  briefs it links.
 - Get the board **via the deterministic reader** — never hand-derive status:
   ```
   bash claude/skills/fkit-status/dashboard.sh <plan>

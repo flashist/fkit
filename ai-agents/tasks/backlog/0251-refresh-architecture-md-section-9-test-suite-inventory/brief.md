@@ -58,6 +58,38 @@ Docs-only refresh of `ai-agents/knowledge-base/architecture.md` §9 — nothing 
 3. **Keep §9.1's thesis intact** — the section's point is "a suite exists, no CI runs it". The
    inventory refresh must not soften or restate that risk framing.
 
+   > **⚠️ DATED CORRECTION 2026-08-12 — THE THESIS QUOTED ABOVE IS DEAD. FOLLOWING THIS STEP AS WRITTEN
+   > WOULD RE-BREAK §9.1. Text above left byte-identical.**
+   >
+   > **`0256` landed CI on 2026-08-12** — `.github/workflows/test.yml` runs `npm test` on every push to
+   > `main` and every pull request — **plus an in-release `npm test` gate in `bin/release.mjs`**, and it
+   > **already corrected §9.1** in the same act: the heading, the opening sentence, the old
+   > `- **No CI.**` bullet and the closing residual paragraph. §11 OQ2 is closed. Provenance: the owner
+   > reversed their 2026-08-06 *"No CI planned"* ruling themselves on 2026-08-08 and confirmed it
+   > 2026-08-12 at `0256`'s plan gate, verbatim option label **"Approve — both gate and CI
+   > (Recommended)"**; this amendment is filed on the owner ruling **"Amend both briefs now
+   > (Recommended)"** (`AskUserQuestion`, 2026-08-12).
+   >
+   > **⛔ Do NOT restore "no CI runs it" anywhere in §9.** Do not reintroduce a `No CI` bullet. Do not
+   > reword the heading back.
+   >
+   > **What this step now requires instead — the thesis to preserve is the one on disk:** *the suite now
+   > runs automatically (CI plus the in-release gate), and what remains is **coverage, not automation** —
+   > `install.sh` is still verified by nothing.* Read §9.1 as it stands before editing and keep that
+   > framing. In particular, **leave these byte-identical unless a count inside them drifted**:
+   > - the §9.1 heading and its opening sentence;
+   > - the two `landed (task 0256)` bullets (CI, and the in-release gate);
+   > - ⚠️ the **"Neither has been observed green on a runner yet"** bullet — **CI has never run**; this
+   >   loop does not push, so the workflow is verified by static review only. **Do not soften, shorten,
+   >   or delete that caveat, and never write that CI is working.**
+   > - the closing "residual risk narrowed but did not close" paragraph.
+   >
+   > **⚠️ THIS TASK'S REAL JOB IS UNCHANGED AND STILL OUTSTANDING.** `0256` deliberately left §9.1's
+   > **suite inventory** alone: the *"eight `node --test` contract suites"* sentence and its eight-name
+   > list are **byte-identical and unreflowed on disk** (§9.1, around line 480 as of 2026-08-12 —
+   > re-derive, do not cite). `ls test/*.test.js | wc -l` still returns **19**. Items 1 and 2 above stand
+   > exactly as written; only item 3's thesis quote is corrected.
+
 ### ⛔ Out of scope
 
 - ⛔ Any file other than `ai-agents/knowledge-base/architecture.md` — no README, no scaffold, no
@@ -85,3 +117,12 @@ Docs-only refresh of `ai-agents/knowledge-base/architecture.md` §9 — nothing 
 - Provenance: `0248` open question 2, owner-ruled 2026-08-07 ("File separate task (Recommended)",
   `AskUserQuestion` via the live `fkit lead` driver session).
 - Filed to the **Backlog** board — no sprint named; no re-rank (ADR-035).
+- **⚠️ AMENDED 2026-08-12 — §9.1's thesis changed under this brief; `## What to build` item 3 is
+  corrected in place.** `0256` landed CI (`.github/workflows/test.yml`) and an in-release `npm test`
+  gate (`bin/release.mjs`) on 2026-08-12 and corrected §9.1's framing in the same act, so the *"a suite
+  exists, no CI runs it"* thesis item 3 tells you to preserve **would now re-break the section**. Owner
+  provenance: reversal taken by the owner 2026-08-08, confirmed 2026-08-12 (**"Approve — both gate and
+  CI (Recommended)"**); this amendment ruled **"Amend both briefs now (Recommended)"**, 2026-08-12.
+  **The count-and-enumeration job — this task's actual scope — is untouched and still outstanding:**
+  `0256` left the *"eight `node --test` contract suites"* sentence byte-identical; disk says **19**.
+  ⛔ CI has never run; do not let the refresh claim it works.

@@ -23,9 +23,35 @@ Answer *"what's the status?"* — grounded in the files, in the conventional sha
 a status briefing.
 
 **Argument:** `$ARGUMENTS` — **optional**.
-- **Empty** — the **active sprint**: the `sprint-*.md` at the top of `ai-agents/sprints/` (the ones in
-  `ai-agents/sprints/done/` are closed). If there is more than one, take the highest N **and flag the
-  ambiguity** in the report.
+- **Empty** — the **active sprint**, and **you do not work it out yourself**. Run:
+
+  ```sh
+  bash .claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints
+  ```
+
+  It considers every `.md` **directly** in `ai-agents/sprints/` — **no pattern on the filename** —
+  and resolves each one's identity for you. `ai-agents/sprints/done/` is closed and is not
+  considered. **Do not re-derive any of that here.** This file is prose executed by a model and
+  `dashboard.sh` is the one implementation; two implementations of one question is the defect
+  [ADR-041 §5](../../../ai-agents/knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md)
+  forbids. Read its answer:
+
+  - `active file="…" identity="…"` — **that file is the active sprint.** It has already ordered the
+    eligible candidates and taken the highest. **`file=` is a basename, not a path** — join it to the
+    `ai-agents/sprints` you passed in, and pass *that* to step 4.
+  - `candidate file="…" identity="…"` — every file it looked at and what it resolved to, `unresolved`
+    included. A **`Backlog` identity is never eligible; `unresolved` is never eligible.**
+  - `drift ambiguous-active-sprint identity="…" chosen="…" also="…"` — two plans claim the **same**
+    identity. The script has already chosen; **your job is to report it** — name the one chosen and
+    every other file that claimed it. Do not pass over it silently.
+  - `active none` — **there is no eligible sprint plan. Say so, list every `candidate` line with its
+    identity or `unresolved`, and stop.** Never fall back to the `Backlog` board. Do not guess.
+
+  **`active none` exits 3, and that is an answer, not a failure** — do the bullet above and stop. A
+  real failure exits 1 and prints no `⟦SELECT⟧` block at all. **Step 4's hand-build fallback does not
+  apply to this call**: there is no board to hand-build when no plan was selected. If the call really
+  fails, or the version marker is not `⟦fkit-dashboard v1⟧`, say so rather than guessing at the
+  shape. **`bash <path>`, never `./dashboard.sh`** — same reason as step 4 below.
 - **A sprint name** (e.g. `Sprint 1`) — resolve it against `ai-agents/sprints/` **and**
   `ai-agents/sprints/done/`. If nothing matches, say so and list what's there. Do not guess.
 - **`Backlog`** (case-insensitive) — the **Backlog board**, `ai-agents/sprints/backlog.md`: the
@@ -44,10 +70,12 @@ resolve as board names — so `/fkit-status full` correctly fails with *"no spri
 > `Sprint 1` does — one board in, one briefing out. It does not ask for a different rendering of the
 > same board, which is what
 > [`one-skill-one-output`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)
-> (task 44) forbids. **The default run never includes it:** an empty argument resolves the active
-> sprint by globbing `sprint-*.md`, and `backlog.md` is deliberately outside that glob — so
-> unscheduled work is reported **only when asked for by name**, by construction rather than by a rule
-> anyone has to remember.
+> (task 44) forbids. **The default run never includes it:** an empty argument selects the active
+> sprint by **resolved identity**, and this board's identity is `Backlog` — which is **never
+> eligible** — so unscheduled work is reported **only when asked for by name**, by construction
+> rather than by a rule anyone has to remember. **The exclusion is stronger than the filename rule it
+> replaced** ([ADR-041 §3](../../../ai-agents/knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md)):
+> it no longer depends on what the file is called, so renaming it could not make it the active sprint.
 
 > **The standard being aimed at.** *"As if I ask the producer of the project what the status is, and
 > they provide it in a simple yet informative way."* **Answer like a producer being asked in person,
@@ -186,8 +214,8 @@ bash .claude/skills/fkit-status/dashboard.sh <path-to-the-sprint-plan-you-resolv
 > (`install.sh:44-46` chmods a hardcoded list of two other files). Running it directly works on some
 > machines and fails on others. See [ADR-017](../../../ai-agents/knowledge-base/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit.md).
 
-You pass it a **path**; it does not resolve sprints. Resolving the argument to a sprint plan stays
-yours.
+You pass it a **path** — *this* invocation renders a board, it does not resolve one. Resolving an
+**empty** argument is the separate `select-active` call in the argument contract above.
 
 Its stdout has two delimited sections:
 

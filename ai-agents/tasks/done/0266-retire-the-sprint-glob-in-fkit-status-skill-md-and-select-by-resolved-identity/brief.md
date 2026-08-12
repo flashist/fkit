@@ -10,7 +10,7 @@ Sprint 5
 Sprint 5 P6
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -40,7 +40,7 @@ reconciliation.
 
 After ADR-041 both are **false as written**, not merely stale. They are sites **1** and **2** of
 ADR-041 §6's seven. The remaining five are
-[`0267`](../0267-correct-the-five-remaining-prose-sites-that-state-the-glob-as-the-mechanism/brief.md).
+[`0267`](../../done/0267-correct-the-five-remaining-prose-sites-that-state-the-glob-as-the-mechanism/brief.md).
 
 ⚠️ **Site 2's conclusion survives; its mechanism does not.** `backlog.md` **stays** out of the default
 status run — ADR-041 §3 makes that exclusion **stronger**: it is now *"the identity is `Backlog`"*

@@ -21,6 +21,9 @@
 | **Moved** | `➡️ Moved to [Sprint N](…) — priority M` | Carried to another sprint. Not dead, not done — relocated. | Producer |
 | **Moved (to backlog)** | `➡️ Moved to [Backlog](backlog.md)` | De-scoped from a sprint back to the unranked backlog board. Not dead, not done — unscheduled. **No `— priority M` suffix**: the board is unranked. The href is relative to the file holding the row (`../backlog.md` once the plan is archived). | Producer |
 
+⚠️ **`N` in the `Moved to [Sprint N]` marker is the target sprint's *identity*, not a number** — `4`,
+or `4c`. `Sprint 4` and `Sprint 4c` are different sprints.
+
 **No other value is valid.** Not "Not started", not "WIP", not "Todo", not "Complete". If a status you
 need isn't here, the fix is to amend this doc — not to invent a value inline.
 

@@ -1,0 +1,50 @@
+# fkit — run the test suite on every push to main and every pull request (task 0256).
+#
+# Why this exists alongside the in-release test gate in bin/release.mjs: the gate protects the
+# TAGGED release, but install.sh defaults to `main`'s HEAD (install.sh:19, REF="${FKIT_REF:-main}"),
+# so the default `curl | sh` install and the self-update path track main, not a tag. Every commit on
+# main is live to every new install the moment it is pushed. The gate alone would protect the
+# artifact almost nobody installs by default.
+#
+# The reverse is also true — CI cannot replace the gate. CI's verdict is asynchronous (release.mjs
+# pushes the branch and the tag in one uninterrupted run), and CI never sees the working tree that
+# `git add -A` actually ships.
+
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # So the first (possibly dash-red) run can be triggered on demand, without pushing to main.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # `npm test` measured locally at ~5m30s-6m20s across four runs (328 / 380 / 347 / 344 s — same
+    # machine, unchanged suite; the spread is machine load, not a regression), i.e. the "~6 min"
+    # quoted elsewhere. That is ~55s unit plus prove-red.sh, which re-runs the suites against 15
+    # mutants plus 9 clean-copy baselines. 20 minutes leaves ~3x headroom over the slowest local
+    # run while stopping a hung prove-red.sh from burning a runner for six hours.
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # ⚠️ MANDATORY, not tidiness. test/structure-manifest.test.js hard-refuses a shallow clone
+          # (it checks `git rev-parse --is-shallow-repository`) because its manifest walk reads git
+          # history ∪ the working tree. actions/checkout defaults to fetch-depth: 1, so without this
+          # the suite dies at module load on every run.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          # No `cache: npm` and no `npm ci` on purpose: fkit has zero dependencies and no lockfile
+          # (ADR-014 §4). There is nothing to install and nothing to cache.
+
+      - run: npm test

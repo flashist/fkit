@@ -17,6 +17,58 @@ fkit-coder
 
 ## Context
 
+> # ⚠️ READ FIRST — DATED CORRECTION 2026-08-12: `0256` HAS LANDED. THE "NO CI" TEXT BELOW IS FALSE.
+>
+> **The contingency this brief was written around has fired.** All original text is left
+> **byte-identical**; three sites are corrected in place and **the corrections govern**:
+> **Fact 3's enforcement-timing bullet**, **`## What to build` item 1's pre-release checklist**, and the
+> **⛔ out-of-scope bullet on CI**.
+>
+> **What `0256` landed on 2026-08-12** — verified on disk by the producer that wrote this block;
+> **re-verify before writing `RELEASING.md`**, per verification step 2:
+> - **`bin/release.mjs`** — a `runTests()` gate immediately before the version-bump block, the script's
+>   first mutating line. Red `npm test` → exit 1. **No warn-and-continue path.** Runs under `--dry-run`
+>   too. A `--no-test` escape hatch exists, behind an unconditional stderr banner.
+> - **`.github/workflows/test.yml`** — `npm test` on every push to `main` and every pull request;
+>   `ubuntu-latest`, Node 24, `fetch-depth: 0`, `timeout-minutes: 20`. **`.github/` now exists.**
+> - **Measured:** `npm test` takes **328 s (5 m 28 s)**. `RELEASING.md` may state that; it is the number
+>   `bin/release.mjs` itself prints as `~5m30s`.
+>   - > **⚠️ RUNTIME-FIGURE CORRECTION 2026-08-12 (same day, later in the same ship run) — the two
+>     > bullets above are left byte-identical; the two details below are now more precise, and THIS
+>     > text governs.** Filed on the owner ruling, verbatim option label
+>     > **"Producer amends it now (Recommended)"** (`AskUserQuestion`, 2026-08-12).
+>     > **(a) The runtime figure is now a range, not `328 s`.** `bin/release.mjs` no longer prints
+>     > `~5m30s` — it prints **`~6 min`**, at three sites (`:71` in `--help`, `:173` in a comment,
+>     > `:190` in the console line), and `.github/workflows/test.yml:28-32` states the range with all
+>     > four numbers. **328 s was one measurement, not "the runtime."** Four runs, same machine, same
+>     > suite, node v24.13.0: **328 / 380 / 346.9 / 343.8 s.** All four are real; the spread is machine
+>     > load, **not a regression**. So `RELEASING.md` should say **"~6 min"** — ⛔ **not a single
+>     > second-count**, and ⛔ **not `~5m30s`**. `0256` widened this prose on **2026-08-12**.
+>     > **(b) The CI trigger list above is correct but incomplete.** `test.yml` also carries
+>     > **`workflow_dispatch:`** (`:20`) — on-demand runs, so the first (possibly red) run can be
+>     > triggered without pushing to `main`. Push-to-`main` and pull-request stand as written.
+>     > **(c) New fact, and worth a line in the releaser checklist: a refusal is far cheaper than a
+>     > pass — about 1 minute, not ~6.** `npm test` is
+>     > `node --test test/*.test.js && bash test/prove-red.sh` (`package.json:5`), so a red unit suite
+>     > **short-circuits at the `&&`** and `prove-red.sh` never runs. The ~6 min is the *green* cost;
+>     > a maintainer waiting on a failure waits about a minute.
+>     > ⛔ **Nothing else in this banner changes.** The gate, the `--no-test` escape hatch, `.github/`
+>     > existing, the provenance, and **"CI HAS NEVER RUN"** all stand exactly as written below.
+>
+> **⚠️ CI HAS NEVER RUN.** The loop that landed it neither commits nor pushes, so the workflow is
+> verified by static review only. **`RELEASING.md` must not claim CI is proven working** — the honest
+> wording is *wired, not yet observed green on a runner*.
+>
+> **Provenance.** This reverses the owner's 2026-08-06 *"No CI planned"* ruling. The reversal is the
+> owner's own — taken 2026-08-08 (*"fix it, not just record it"*) and confirmed 2026-08-12 at `0256`'s
+> plan gate, verbatim option label **"Approve — both gate and CI (Recommended)"**. This amendment is
+> filed on the owner ruling **"Amend both briefs now (Recommended)"** (`AskUserQuestion`, 2026-08-12).
+>
+> **⛔ Scope is UNCHANGED.** This task still writes one maintainer document and one cross-reference, and
+> still changes no behavior. What changes is that it now **describes a gate that exists** instead of
+> **recording an absence**. Facts 1 and 2, the placement ruling, and the `Blocks: 0258` dependency are
+> all untouched.
+
 **Nobody cutting a release has one place to read what a release actually is in fkit.** The three
 facts below are all true and all verified on disk (2026-08-08); each is either recorded nowhere, or
 recorded only somewhere a releaser would never look.
@@ -60,6 +112,17 @@ It is also **not tribal knowledge** — `claude/structure-manifest.tsv:3`, the g
   byte-equality guard, but **there is no CI** — `.github/workflows/` does not exist (verified
   2026-08-08) — and `bin/release.mjs` **runs no tests before committing and tagging**. A stale
   manifest can therefore be released by anyone who did not run `npm test` locally.
+  - > **⚠️ DATED CORRECTION 2026-08-12 — THE BULLET ABOVE IS NOW FALSE IN BOTH CLAUSES. Left
+    > byte-identical; it was true when verified 2026-08-08.** `.github/workflows/` **does** exist
+    > (`test.yml` — push to `main` and every PR), and `bin/release.mjs` **does** run `npm test` before
+    > committing and tagging: a `runTests()` gate before its first mutating line, aborting on red. Both
+    > landed with `0256` on 2026-08-12.
+    > **What to write instead:** enforcement timing is **no longer the gap** — state the duty, then
+    > state that two mechanisms now enforce it: the **in-release gate** covers the working tree about to
+    > be committed, and **CI** covers `main` HEAD, which is what `install.sh` actually installs
+    > (`install.sh:19`). ⚠️ **The one residual worth a sentence, and only stated precisely:** `--no-test`
+    > can still ship an unverified tree — loud, but not blocked. ⛔ **Do not write that no CI exists.
+    > ⛔ Do not write that CI is proven working — it has never run.**
 
 **Conflict to respect, not plan around:** this document is **fkit-repo-only maintainer guidance**.
 It must **not** be created under `ai-agents/knowledge-base/conventions/` — every file there is
@@ -88,9 +151,31 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
      `claude/scaffold/` content changed (name the exact covered set from Fact 3), commit the
      regenerated `claude/structure-manifest.tsv` in the same change, and run `npm test` before
      `npm run release`, **because nothing else will** (no CI; the release script runs no tests).
-     ⚠️ **Owner ruled 2026-08-08 that [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)
+     ⚠️ **Owner ruled 2026-08-08 that [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)
      lands first**, so expect this sentence to describe the gate that exists rather than the gap —
      **re-read `bin/release.mjs` before writing it**. See the dated ruling bullet in `## Notes`.
+     > **⚠️ DATED CORRECTION 2026-08-12 — `0256` HAS LANDED; the quoted words *"because nothing else
+     > will"* and *"(no CI; the release script runs no tests)"* are now FALSE. Left byte-identical.**
+     > **Write the checklist against the gate that exists:** `npm run release` **runs `npm test` itself**
+     > before its first write and refuses to release on red, so the maintainer's own `npm test` is now a
+     > **fast-feedback** step (it takes **328 s**, and you would rather fail before the release run than
+     > during it), **not the only thing standing between a red tree and a shipped release**. Say plainly
+     > that **the gate cannot be forgotten**, and that **`--no-test` is the one way past it** — loud, and
+     > never a default. ⛔ **Do not write "no CI".** ⛔ **Do not write that CI is proven working — it has
+     > never run** (see the READ FIRST banner at the top of `## Context`). The manifest-regen half of
+     > this checklist item is **unaffected and unchanged**.
+     > - > **⚠️ RUNTIME-FIGURE CORRECTION 2026-08-12 (same day, later) — the figure *"it takes 328 s"*
+     >   > above is left byte-identical but is now WRONG AS A SINGLE NUMBER.** Write **`~6 min`**
+     >   > instead. Four measured runs, same machine and suite: **328 / 380 / 346.9 / 343.8 s** —
+     >   > spread is machine load, not a regression — and `bin/release.mjs` itself now prints
+     >   > **`~6 min`** (`:71`, `:173`, `:190`), matching `.github/workflows/test.yml:28-32`. See the
+     >   > full correction under the READ FIRST banner's **Measured** bullet.
+     >   > **Add one sentence to the checklist while you are here:** a **failing** `npm test` costs
+     >   > only about **1 minute**, because the script is `node --test … && bash test/prove-red.sh`
+     >   > (`package.json:5`) and a red unit suite short-circuits before `prove-red.sh` ever runs. That
+     >   > is precisely why running it yourself first is cheap fast feedback — the ~6 min is the price
+     >   > of a *green* run, not of finding a break. **Everything else in this block stands**, including
+     >   > the `--no-test` wording and both ⛔ prohibitions.
 2. **Add one pointer from `ai-agents/knowledge-base/architecture.md` §6** to the new document — one
    sentence, no rewrite of §6, and **leave the "Version bumping is load-bearing" sentence
    byte-identical** (Fact 2).
@@ -102,12 +187,19 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
 - ⛔ Any behavior change: no edit to `install.sh`, `claude/fkit-claude.sh`, `bin/release.mjs`, or
   `bin/generate-structure-manifest.mjs`. This task documents what is; it changes nothing.
 - ⛔ Adding CI, or adding a test gate to `bin/release.mjs`. **The owner ruled 2026-08-08 that the
-  gate gets built — as [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md), not
+  gate gets built — as [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md), not
   here.** This task keeps *recording* the absence, exactly as scoped. ⚠️ If `0256` lands first, the
   releaser checklist written here must describe the gate that exists rather than "run `npm test`,
   because nothing else will" — re-read `bin/release.mjs` before writing that sentence.
   **Dated note 2026-08-08: the owner ruled that `0256` does land first, so treat this as the expected
   case, not a contingency.** The instruction itself is unchanged.
+  - > **⚠️ DATED CORRECTION 2026-08-12 — `0256` LANDED TODAY. Text above left byte-identical.**
+    > **The prohibition stands, unchanged and still binding: this task adds no CI and adds no test gate
+    > to `bin/release.mjs`.** Both already exist; there is nothing here to add. **What is falsified is
+    > only the clause *"This task keeps recording the absence, exactly as scoped"* — there is no absence
+    > left to record.** This task now **documents the gate and CI as they are**, which is the same scope
+    > (a maintainer document, no behavior change), pointed at reality. **Re-read `bin/release.mjs` and
+    > `.github/workflows/test.yml` on the day of writing** rather than citing this brief.
 - ⛔ Any `ai-agents/wiki-vault/` write (ADR-005). The resync of
   `wiki/systems/install-and-self-update.md` §Release is
   [`0258`](../0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md),
@@ -131,13 +223,16 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
 5. `git status --porcelain` shows nothing under `ai-agents/wiki-vault/` and nothing under
    `claude/scaffold/`.
 6. `npm test` is green (the change is docs-only, so it must not move a single suite).
+   - > **Note added 2026-08-12:** budget **~6 min** for this step and do not read the silence as a
+     > hang — measured at **328 / 380 / 346.9 / 343.8 s** across four runs. A *failure* returns in
+     > about a minute (`&&` short-circuit before `prove-red.sh`).
 
 ## Notes
 
 - **Depends on:** nothing
 - **Blocks:** `0258` — hard. The vault page cannot be re-synced against a document that has not
   landed.
-- **✅ OWNER RULING 2026-08-08 — sequencing: [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)
+- **✅ OWNER RULING 2026-08-08 — sequencing: [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)
   lands BEFORE this task.** Ruled live, accepting this producer's recommendation on its stated
   reasoning: otherwise the releaser checklist here has to say *"run `npm test`, because nothing else
   will"*, which `0256` obsoletes. This upgrades the "scheduling preference" noted below from producer
@@ -165,7 +260,7 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
   missing post-update step),
   [`0254`](../0254-fix-the-unrunnable-verify-command-release-mjs-prints/brief.md) (the broken verify
   line `bin/release.mjs` prints),
-  [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md) (builds the gate whose
+  [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md) (builds the gate whose
   absence this task records — **scheduling preference: land `0256` first**, so the checklist here
   describes reality rather than being obsoleted a week later) and
   [`0257`](../0257-fix-the-version-labeled-sha-triggered-update-banner/brief.md) (the update banner's
@@ -184,3 +279,27 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
   bottom-up can. Task
   [`0235`](../0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
   class generally and is **neither widened nor closed** by this note.
+
+- **⚠️ AMENDED 2026-08-12 — `0256` HAS LANDED; the "no CI" premise is gone. See the READ FIRST banner
+  at the top of `## Context`.** For a reader working bottom-up: `.github/workflows/test.yml` and an
+  in-release `runTests()` gate in `bin/release.mjs` both exist as of **2026-08-12**, reversing the
+  owner's 2026-08-06 *"No CI planned"* ruling. The reversal is the owner's own (2026-08-08; confirmed
+  2026-08-12, verbatim **"Approve — both gate and CI (Recommended)"**); this amendment is filed on
+  **"Amend both briefs now (Recommended)"** (2026-08-12). Corrections sit at **Fact 3's
+  enforcement-timing bullet**, **`## What to build` item 1's checklist**, and the **⛔ CI out-of-scope
+  bullet**. **Scope, placement ruling, and `Blocks: 0258` are unchanged** — this task now describes a
+  gate that exists instead of recording an absence. ⛔ **CI has never run; do not write that it works.**
+
+- **⚠️ AMENDED AGAIN 2026-08-12 (same day, later in the same ship run) — the runtime figures only.**
+  The amendment above is **not reversed and not weakened**; it is made **more precise in two places**,
+  and this bullet is only a pointer for a reader working bottom-up. **Write `~6 min`. ⛔ Never
+  `328 s`, ⛔ never `~5m30s`.** `npm test` measured **328 / 380 / 346.9 / 343.8 s** over four runs
+  (same machine, same suite, node v24.13.0 — the spread is machine load, **not a regression**), and
+  `0256` widened `bin/release.mjs`'s own prose to **`~6 min`** at `:71`, `:173`, `:190`, matching
+  `.github/workflows/test.yml:28-32`. Two further details: `test.yml` also carries
+  **`workflow_dispatch:`** (`:20`, on-demand runs), and a **failing** `npm test` costs only **~1 min**
+  because the script short-circuits at the `&&` before `prove-red.sh` (`package.json:5`) — worth one
+  sentence in the releaser checklist. The corrections sit under the **READ FIRST banner's `Measured`
+  bullet**, inside **`## What to build` item 1's correction block**, and as a note on **verification
+  step 6**. Owner ruling, verbatim option label **"Producer amends it now (Recommended)"**.
+  ⛔ **Scope, status, priority, placement, and `Blocks: 0258` untouched. CI still has never run.**

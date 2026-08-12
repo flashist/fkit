@@ -20,6 +20,9 @@
 | **Cancelled (agent-closed)** | `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD) — <reason>` | Dropped on an agent's own judgment. **A reason is mandatory.** | A **spawned producer**, via `/fkit-task-cancelled` |
 | **Moved** | `➡️ Moved to [Sprint N](…) — priority M` | Carried to another sprint. Not dead, not done — relocated. | Producer |
 
+⚠️ **`N` in the `Moved to [Sprint N]` marker is the target sprint's *identity*, not a number** — `4`,
+or `4c`. `Sprint 4` and `Sprint 4c` are different sprints.
+
 **No other value is valid.** Not "Not started", not "WIP", not "Todo", not "Complete". If a status you
 need isn't here, the fix is to amend this doc — not to invent a value inline.
 

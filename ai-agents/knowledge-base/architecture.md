@@ -28,8 +28,11 @@ This repository **is the framework**. Its "source" is:
 - **a scaffold** — `claude/scaffold/`, the `ai-agents/` tree a consuming project receives
 
 There is no build step, no server, no database, and no runtime state outside files. There **is** a
-zero-dependency test suite (`node --test` + a hand-rolled mutation gate) but **no CI to run it** — see
-§9.1.
+zero-dependency test suite (`node --test` + a hand-rolled mutation gate), and since task 0256 it runs
+**automatically** — GitHub Actions on every push to `main` and every pull request, plus a gate inside
+`npm run release` that refuses to release a red tree — see §9.1. ⚠️ **The CI half has never actually
+run**: the workflow is verified by review, not by a run. The release gate *has* been watched refusing
+a red tree.
 
 The product thesis (`ai-agents/knowledge-base/PROJECT.md:18-24`): AI coding assistants collapse
 product decisions, implementation, and review into one undifferentiated chat loop with **no
@@ -472,9 +475,10 @@ is actually removed (ADR-009 §Related; tracked by
 
 ## 9. Risks and technical debt — the live ones
 
-### 9.1 A test suite exists, but nothing runs it automatically — no CI
+### 9.1 The suite now runs automatically — CI plus an in-release gate; `install.sh` is still uncovered
 
-**There is a test suite; there is no CI.** [ADR-014](decisions/adr-014-how-fkit-tests-itself.md)
+**There is a test suite, and since task 0256 two mechanisms run it without anyone remembering to.**
+[ADR-014](decisions/adr-014-how-fkit-tests-itself.md)
 established how fkit tests itself, and `test/` now holds a real one: **eight `node --test` contract
 suites** (`launcher-contract`, `converge-contract`, `dashboard-contract`, `skill-ownership-hook`,
 `orphan-cleanup`, `rules-block-budget`, `adr-number-uniqueness`, `task-id-uniqueness`) plus
@@ -484,12 +488,27 @@ deliberately-broken copy. The mutation gate is **hand-rolled by decision, not by
 mutation-testing library and declined it; do not read `prove-red.sh` as a stopgap awaiting one. **Zero
 npm dependencies**, run via `npm test` (`node --test test/*.test.js && bash test/prove-red.sh`).
 
-**What the suite does not cover, and what that leaves at risk:**
+**What runs it, and what that still leaves at risk:**
 
-- **No CI.** `.github/workflows/` does not exist, so the suite runs **only when someone remembers to
-  run it** ([ADR-003](decisions/adr-003-ci-runs-validate-bundles.md)'s CI never landed; the
-  `omnigent/validate-bundles.sh` it mandated died with the Omnigent removal). Green on a laptop is not
-  green in the pipeline, because there is no pipeline.
+- **CI — landed (task 0256).** `.github/workflows/test.yml` runs `npm test` on every push to `main`
+  and every pull request, plus a manual `workflow_dispatch` trigger, on `ubuntu-latest`, Node 24,
+  with `fetch-depth: 0` (the manifest suite hard-refuses a shallow clone). This replaces
+  [ADR-003](decisions/adr-003-ci-runs-validate-bundles.md)'s CI, which never landed — the
+  `omnigent/validate-bundles.sh` it mandated died with the Omnigent removal.
+  **CI is what covers `main` HEAD**, which is what `install.sh:19` (`REF="${FKIT_REF:-main}"`)
+  actually installs by default — not the tag.
+- **In-release gate — landed (task 0256).** `bin/release.mjs` runs `npm test` before its first write
+  and aborts on red; there is no warn-and-continue path, only an explicit, loudly-announced
+  `--no-test`. **The gate is what covers the working tree** — it tests the tree as it stood when the
+  suite started, uncommitted and untracked work included. Not the exact committed bytes: the version
+  bump writes `VERSION` and `package.json` after the suite, and ~6 min separate the gate from
+  `git add -A`. **CI structurally cannot do this**: it never sees the laptop's tree, and its verdict
+  arrives after the tag is already on origin.
+- **Neither has been observed green on a runner yet.** The workflow is verified by review, not by a
+  run — it lands unpushed. **The suite has only ever run on darwin**; on `ubuntu-latest` `/bin/sh` is
+  dash, and a first run could go red on a genuine dash divergence in the shell under test. That risk
+  was accepted knowingly when CI was approved; a portability repair is a separate brief, not a reason
+  to distrust the workflow.
 - **`install.sh`** — the `curl | sh` entry point — has **no automated coverage**. A bad landing breaks
   installation *including the self-update path that would ship the fix*; it cannot be verified by
   reading a diff, and must be installed from a ref into a clean `$HOME`.
@@ -497,10 +516,11 @@ npm dependencies**, run via `npm test` (`node --test test/*.test.js && bash test
   `prove-red.sh`), but that harness exercises the launcher's contract, not a real self-update over the
   network or a real menu on a tty — those edges stay manual.
 
-**The residual risk shifted rather than closed:** the highest-blast-radius file (`install.sh`) is
-still unverified, and the suite that covers the rest is not wired to run on its own. A `shellcheck`
-pass, a smoke install into a temp `$HOME`, and a `.github/workflows/` that runs `npm test` would close
-most of what remains, cheaply.
+**The residual risk narrowed but did not close:** the suite is now wired to run on its own, so the
+"green on a laptop only" half is gone. What remains is **coverage, not automation** — the
+highest-blast-radius file (`install.sh`) is still unverified by anything, and automating a suite that
+never touches it does not change that. A `shellcheck` pass and a smoke install into a temp `$HOME`
+are what would close most of the rest, cheaply; both are now in CI's reach and neither is wired up.
 
 ### 9.2 Single-vendor concentration — accepted, not a defect
 
@@ -574,8 +594,11 @@ is the test.
 1. **~~Does the `PreToolUse` hook payload expose the calling subagent's identity?~~ — RESOLVED (ADR-018).**
    It does, at any spawn depth; the skill-ownership hook is built on it and the consult-path boundary is
    now structural (§5.2, §9.3). Kept as a closed pointer so the once-open question is not re-opened.
-2. **Is the test suite going to CI?** (§9.1.) The suite now exists (ADR-014; contract tests +
-   `prove-red.sh` mutation gate, ADR-026) — the open part is that **nothing runs it automatically**.
-   ADR-003's CI died with its subject and never landed. Is a `.github/workflows/` that runs `npm test`
-   (plus `shellcheck` + a smoke install for `install.sh`) in scope, or is run-it-yourself the accepted
-   posture for a prototype? An owner call, not an architect's.
+2. **~~Is the test suite going to CI?~~ — RESOLVED (owner ruling, 2026-08-08; landed in task 0256).**
+   Yes, and **both** halves: a `.github/workflows/test.yml` running `npm test` on every push to `main`
+   and every pull request, **and** a test gate inside `npm run release` that refuses a red tree. Each
+   closes a hole the other structurally cannot — CI covers `main` HEAD (what `install.sh` installs by
+   default), the gate covers the working tree (which CI never sees). Run-it-yourself is **not** the
+   accepted posture. The `shellcheck` pass and the `install.sh` smoke install were **not** taken and
+   remain open coverage gaps (§9.1). Kept as a closed pointer so the once-open question is not
+   re-opened.

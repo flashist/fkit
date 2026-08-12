@@ -32,6 +32,18 @@ run `/fkit-initiate-project`. Want two roles at once? Open another terminal tab.
 out — it never updates itself behind your back. Run `fkit update` when you want it. (Silence it with
 `FKIT_NO_UPDATE_CHECK=1`.) A checkout of this repo is never auto-checked — update it with `git`.
 
+**One thing an update does not repair.** `fkit update` and a launch refresh replace the agents and
+skills under `.claude/` — they never rewrite your project's own content under `ai-agents/`. If your
+project filed an unsprinted brief before this correction shipped, the header `/fkit-task-brief`
+generated into `ai-agents/sprints/backlog.md` says the backlog is excluded from `/fkit-status`
+because its filename sits outside a `sprint-*.md` glob. **That sentence is stale prose, not broken
+behaviour.** Since
+[ADR-041](ai-agents/knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md)
+the active sprint is selected by each plan's resolved **identity**, and the backlog is excluded
+because its identity is `Backlog`, which is never eligible — a stronger rule, not a weaker one. Your
+board works correctly; only its header sentence is wrong. Correct it by hand if you want it accurate;
+nothing depends on it.
+
 A launch also tells you — one stderr line — when your project's fkit-managed structure diverges from
 what the installed version ships. To see the per-file verdicts and repair, run `/fkit-heal` in a
 producer session: repair is **in-session, consent-gated, diffs in view, and applies only the exact

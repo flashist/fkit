@@ -29,6 +29,39 @@ All taken via `AskUserQuestion` in a live `fkit lead` session on **2026-08-06**:
 This task records the resulting decision as an ADR. **The decision has been taken. This task does not
 re-open it.**
 
+> ### ⚠️ DATED CORRECTION 2026-08-12 — RULING 2 ABOVE IS REVERSED. CI EXISTS. Text above left byte-identical.
+>
+> **"No CI planned" is dead as a premise.** The owner reversed it themselves — first on **2026-08-08**
+> (*"fix it, not just record it"*), then confirmed on **2026-08-12** at
+> [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)'s plan gate, verbatim option
+> label **"Approve — both gate and CI (Recommended)"**. This correction is filed on the owner ruling
+> **"Spawn a producer to amend 0240 now (Recommended)"** (`AskUserQuestion`, 2026-08-12, live `fkit lead`
+> session). Ruling 2 above is now **history, dated and superseded** — it is not a live premise and must
+> not be written into a permanent record as one.
+>
+> **What `0256` landed on 2026-08-12** — verified on disk by the producer that wrote this block;
+> **re-verify before writing the ADR** rather than citing this list:
+> - **`.github/workflows/test.yml`** — `npm test` on every push to `main` and every pull request;
+>   `ubuntu-latest`, Node 24, `fetch-depth: 0`, `timeout-minutes: 20`.
+> - **`bin/release.mjs`** — a `runTests()` gate immediately before the version-bump block, the script's
+>   first mutating line. Red suite → exit 1. No warn-and-continue path. Runs under `--dry-run` too. A
+>   `--no-test` escape hatch exists, behind an unconditional stderr banner.
+> - **`architecture.md`** — §9.1's heading, opening sentence, its `- **No CI.**` bullet and its closing
+>   residual paragraph corrected; §11 OQ2 closed.
+>
+> **⚠️ CI HAS NEVER RUN.** The loop that landed it neither commits nor pushes, so the workflow is
+> verified by static review only. **The ADR must not claim CI is proven working** — the honest wording is
+> *wired, not yet observed green on a runner*.
+>
+> **Three sites in this brief are corrected — none of them changes what the ADR decides:** ruling 2
+> above; the premise bullet in `## What to build`; verification step 7. Corrections are filed at each.
+>
+> **⛔ The decision itself is UNCHANGED and still not re-openable here:** baseline `HEAD`, scope = the
+> transition in progress, the `HEAD` ↔ `HEAD^` second leg, the criterion, and the by-name rejection of a
+> committed snapshot/manifest. **None of those rests on CI.** They rest on *a baseline must be a record
+> you cannot rewrite in the same act that breaks the invariant* — a property of the baseline, which CI
+> does not touch.
+
 ### What the architect recommended
 
 **Baseline = `HEAD`. Scope = the transition currently in progress, not a history range.**
@@ -89,6 +122,42 @@ An ADR in `ai-agents/knowledge-base/decisions/`, via `/fkit-record-decision`.
   - **Re-raise only if the closed-row rule itself is revised** — this decision is downstream of it, as
     ADR-035 records of its own narrowing.
 
+  > **⚠️ DATED CORRECTION 2026-08-12 — the two bullets above are FALSIFIED BY CI. Both left
+  > byte-identical.** Provenance: `0256` landed CI and the in-release gate on 2026-08-12; owner rulings
+  > **"Approve — both gate and CI (Recommended)"** (2026-08-12, `0256`'s plan gate) and **"Spawn a
+  > producer to amend 0240 now (Recommended)"** (2026-08-12). See the master correction in `## Context`.
+  >
+  > **1. The premise bullet — "The owner's CI ruling — *No CI planned*".** Record the CI position as a
+  > **dated history, not a live premise**: ruled *"No CI planned"* on 2026-08-06, **reversed by the owner
+  > on 2026-08-08 and confirmed 2026-08-12; CI landed the same day as `0256`.** Its stated consequence —
+  > *"with no CI, 'run on every commit' is not available and the residual cannot be closed by
+  > automation"* — **no longer holds as written.**
+  >
+  > **2. The residual must be re-reasoned, not deleted.** It narrows; on the evidence available it does
+  > **not** close. The ADR must state where it now stands, and the architect must **derive this from the
+  > guard as built (`test/closed-rank-immutability.test.js`) — the producer did not read it.** The
+  > shape to test, not to copy: CI checks out a clean tree, so a working-tree-vs-`HEAD` comparison is
+  > **vacuously green under CI**; it is the `HEAD` ↔ `HEAD^` leg that CI actually exercises, and a push
+  > of N commits runs CI once at the tip. If that holds, CI catches the **tip commit of each push** and
+  > leaves non-tip commits and never-pushed work uncovered. **An ADR that reads "CI closes the residual"
+  > is a defect of this task**, exactly as an ADR implying full coverage already was.
+  >
+  > **3. The first `Re-raise only if` trigger is spent.** *"Re-raise only if CI is introduced"* **has
+  > already fired** — writing it into a new ADR dated after CI landed files a dead trigger. Replace it
+  > with a live one, chosen by the architect and stated with its reasoning. Candidate, not a ruling:
+  > *re-raise only if the guard is made to assert over committed history.* **The second trigger — "if the
+  > closed-row rule itself is revised" — is untouched by CI and stands verbatim.**
+  >
+  > **⛔ ONE QUESTION THIS BRIEF DOES NOT SETTLE — put it to the owner at this task's plan gate.** The
+  > spent trigger claims that on CI *"the residual becomes closeable and **the range question genuinely
+  > reopens**"*. **The producer filing this correction is deliberately not resolving the second half.**
+  > The producer's reading, offered as input and **not as a ruling**: CI changes *when* the guard runs,
+  > not *what history contains* — the permanently-red-run problem came from commit `0174` renumbering
+  > eight closed rows, that commit is still in history, and a history-range guard would still be
+  > permanently red. On that reading the dissolution holds and **nothing reopens**. If the architect
+  > reaches the opposite conclusion, **that is an owner decision, not an ADR paragraph** — surface it
+  > and stop, exactly as ⛔ *"Do not re-open the decision"* below still requires.
+
 ### ⛔ Out of scope
 
 - **⛔ No implementation.** Do not write `test/closed-rank-immutability.test.js`, do not edit anything
@@ -131,6 +200,20 @@ reports, and the vault — none of which is a `decisions/` file.
 6. The ADR carries a `Re-raise only if` clause containing both named triggers.
 7. The ADR records **"No CI planned"** as a dated premise attributed to the owner ruling of
    2026-08-06.
+
+   > **⚠️ DATED CORRECTION 2026-08-12 — THIS STEP AS WRITTEN NOW FAILS THE TASK. Left byte-identical.**
+   > An ADR that records *"No CI planned"* as a **live** premise records a dead ruling permanently.
+   > **What this step now requires instead:**
+   > - The ADR records the CI position as **dated history**: *"No CI planned"* (owner, 2026-08-06),
+   >   **reversed by the owner 2026-08-08, confirmed 2026-08-12, CI landed 2026-08-12 with `0256`.**
+   > - The ADR **nowhere asserts that no CI exists**, and **nowhere asserts CI is proven working** —
+   >   `.github/workflows/test.yml` has never run (see the master correction in `## Context`).
+   > - The ADR states where the residual now stands **with CI in the picture**, and does **not** claim
+   >   CI closes it.
+   > - The `Re-raise only if` clause carries **two live triggers**; *"if CI is introduced"* is spent and
+   >   must not be one of them.
+   >
+   > Grep check: the ADR must contain **no undated, present-tense claim that this project has no CI.**
 8. `git diff --stat` shows **one new file under `ai-agents/knowledge-base/decisions/`** plus, at most,
    board/brief rows the producer adds. **Nothing under `test/`, `claude/`, or `ai-agents/wiki-vault/`.**
 9. `0182`'s blocking status is addressed in the close report: state explicitly that the blocking
@@ -169,6 +252,16 @@ reports, and the vault — none of which is a `decisions/` file.
     **excludes `backlog.md` with a stated reason**. ⛔ **Both prohibitions still stand** — do not fold
     it in here, and build `0182` only against its corrected specification, never against its
     §"The condition" glob.
+- **⚠️ AMENDED 2026-08-12 — the `No CI planned` premise is dead; three corrections filed in-place.**
+  For a reader working bottom-up: `0256` landed CI (`.github/workflows/test.yml`) and an in-release
+  `npm test` gate (`bin/release.mjs`) on **2026-08-12**, reversing the owner's 2026-08-06 ruling. The
+  owner took the reversal themselves (2026-08-08; confirmed 2026-08-12, verbatim **"Approve — both gate
+  and CI (Recommended)"**) and ordered this amendment (verbatim **"Spawn a producer to amend 0240
+  now (Recommended)"**, 2026-08-12). Corrections sit at: the Authority list in `## Context` (master),
+  the `Re-raise only if` bullets in `## What to build`, and verification step 7. **The ADR's decision is
+  unchanged; only its premise, its residual reasoning and one re-raise trigger move.** ⛔ CI has never
+  run — do not write that it works. **One open question is deliberately left for the owner at this
+  task's plan gate** — whether the range question reopens; see the correction in `## What to build`.
 - **Priority is `—` (unscheduled).** Filed to the Backlog board on the owner's rulings; no sprint was
   named and no row was re-ranked (ADR-035, `/fkit-task-brief` step 5). **Sequencing after `0222` is a
   dependency, not a rank** — `0222` sits on Sprint 3 at `P3` and this row is unscheduled, so nothing

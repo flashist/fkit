@@ -13,6 +13,10 @@
 // committed tree is skipped). A default (bumping) run always cuts a NEW version,
 // so after a partial failure re-run with --no-bump to finish the same one.
 //
+// Test gate: every run executes `npm test` first and ABORTS on red — an untested
+// tree cannot be released (task 0256). It runs before the first write, and under
+// --dry-run too. --no-test skips it and is never a default.
+//
 // Zero dependencies. Usage:
 //   node bin/release.mjs [options]
 //   npm run release -- [options]
@@ -27,6 +31,7 @@
 //   --dry-run           Print the plan; touch nothing
 //   --no-tag            Commit + push, but don't create/push a tag
 //   --no-push           Commit + tag locally, but don't push anything
+//   --no-test           Skip the test gate — SHIPS AN UNVERIFIED TREE
 //   -h, --help          Show this help
 
 import { spawnSync } from "node:child_process";
@@ -60,7 +65,13 @@ Options:
   --dry-run           Print the plan; touch nothing
   --no-tag            Commit + push, but don't create/push a tag
   --no-push           Commit + tag locally, but don't push anything
+  --no-test           Skip the test gate — SHIPS AN UNVERIFIED TREE
   -h, --help          Show this help
+
+Every run runs \`npm test\` first (~6 min) and refuses to release if it fails —
+including under --dry-run. The suite reads the working tree, so it checks the tree
+as it stood when the suite started — uncommitted and untracked work included, but
+not the version bump written after it. --no-test skips that; it is never a default.
 
 VERSION is the single source of truth (package.json kept in sync); the tag is v<VERSION>.
 Makes no npm-registry publish.`);
@@ -70,6 +81,7 @@ Makes no npm-registry publish.`);
 const dryRun = has("--dry-run");
 const doTag = !has("--no-tag");
 const doPush = !has("--no-push");
+const doTest = !has("--no-test");
 const bumpTo = getArg("--version", null);
 const branchArg = getArg("--branch", null);
 const messageArg = getArg("-m", getArg("--message", null));
@@ -139,6 +151,50 @@ if (bumpTo !== null) {
   else if (has("--major")) target = bumpPart(version, "major");
   else if (has("--minor")) target = bumpPart(version, "minor");
   else target = bumpPart(version, "patch"); // default: bump patch every run
+}
+
+// --- test gate --------------------------------------------------------------
+// Refuse to release an untested tree (task 0256). There is deliberately no
+// warn-and-continue path: a red suite exits 1.
+//
+// ⚠️ POSITION IS LOAD-BEARING. This sits immediately before the first mutating
+// line (the writeFileSync bump below). At this point nothing has been written,
+// staged, committed or tagged, so a red suite is a clean abort with the tree
+// exactly as the user left it. Gating any LATER would leave VERSION and
+// package.json bumped and dirty, and the next default run would bump AGAIN —
+// silently skipping a version, recoverable only via --no-bump.
+//
+// ⚠️ IT DOES NOT REQUIRE A CLEAN TREE, and must not. `npm test` reads the
+// WORKING TREE (harness.mjs derives REPO from its own location; the structure
+// manifest walks git history ∪ the on-disk claude/scaffold/), and so does
+// `git add -A` below. Both read the working tree — so gating here tests the
+// tree as it stood when the suite started, uncommitted and untracked work
+// included. NOT the exact committed bytes: the bump below writes VERSION and
+// package.json after the suite, and ~6 min separate this gate from
+// `git add -A`. That is the point: CI cannot cover this, it never sees the tree.
+function runTests() {
+  const npmBin = process.platform === "win32" ? "npm.cmd" : "npm";
+  const r = spawnSync(npmBin, ["test"], { cwd: KIT, stdio: "inherit" });
+  if (r.error) fail(`could not run \`npm test\`: ${r.error.message}`);
+  if (r.status !== 0) {
+    fail(
+      `npm test failed (exit ${r.status}) — refusing to release an untested tree.\n` +
+        `  Nothing was changed: no bump, no commit, no tag.\n` +
+        `  Fix the suite and re-run. To release anyway: --no-test (ships unverified).`,
+    );
+  }
+}
+
+if (doTest) {
+  // stdio: "inherit" so the suite streams live — 5+ minutes of silence reads as a hang.
+  console.log(`\n• running \`npm test\` before release v${target} (~6 min; includes prove-red.sh)`);
+  runTests();
+  console.log(`✓ npm test green\n`);
+} else {
+  console.error(
+    `\n⚠ --no-test: releasing WITHOUT running the suite.\n` +
+      `⚠ The tree about to ship is UNVERIFIED — nothing has checked it.\n`,
+  );
 }
 
 if (target !== version) {

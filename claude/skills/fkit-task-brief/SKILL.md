@@ -307,9 +307,11 @@ ai-agents/tasks/backlog/<NNNN>-<kebab-case-title>/brief.md
     ```markdown
     # Backlog — the default home for unsprinted task briefs
 
-    <short header: this is not a sprint; the filename is deliberately `backlog.md`, NOT
-    `sprint-backlog.md`, because /fkit-status globs `sprint-*.md` to find the active sprint;
-    the Priority column reads `—` because this board is unranked by design.>
+    <short header: this is not a sprint; /fkit-status ignores this board because its identity
+    resolves to `Backlog`, which is never eligible as the active sprint — not because of what the
+    file is called; the filename is deliberately `backlog.md` because that href is written into
+    every `➡️ Moved to [Backlog](backlog.md)` marker; the Priority column reads `—` because this
+    board is unranked by design.>
 
     ## Status
 
@@ -331,10 +333,16 @@ ai-agents/tasks/backlog/<NNNN>-<kebab-case-title>/brief.md
     *planned* sprint. The backlog is where unplanned work is supposed to go, so there is nothing out
     of band to explain.
   - **Still do not add rows to a sprint the owner didn't name.**
-- **⚠️ Never file against `backlog.md` by writing a `sprint-backlog.md`.** `/fkit-status` finds the
-  active sprint by globbing `sprint-*.md`; the backlog is excluded from the default status run purely
-  because its filename does not match. A name inside the glob turns unscheduled work into the reported
-  active sprint.
+- **⚠️ Never file against `backlog.md` by writing a `sprint-backlog.md`.** There is **one** backlog
+  board and it is `backlog.md`. A second one splits unsprinted work across two files and breaks every
+  `➡️ Moved to [Backlog](backlog.md)` href in the repo. It would **not** become the reported active
+  sprint either way — **but the filename is not what decides that.** If its H1 carries `Backlog` (or
+  `Sprint Backlog`), `/fkit-status` resolves it to the identity `Backlog`, which is never eligible. If
+  the H1 carries neither token, it resolves to **nothing at all** — the name `sprint-backlog` supplies
+  no identity of its own — and that board then reports `unresolved-plan-sprint` drift on **every**
+  status run
+  ([ADR-041 §2](../../../ai-agents/knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md))
+  — so neither case is a licence to write one.
 - **Pulling a backlog task into a sprint is the producer's act, not this skill's.** It takes **three**
   edits, and **all three are mandatory** — see the warning below:
   1. Add the row to the sprint plan, with the rank token `P<n>`, where `<n>` is the sprint priority.

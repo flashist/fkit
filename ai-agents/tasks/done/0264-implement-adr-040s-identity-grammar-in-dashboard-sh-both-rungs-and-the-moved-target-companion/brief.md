@@ -211,7 +211,7 @@ landed, T1 exists and this change is what turns it green.
   anyway** — a fix proven red-first is the project's own discipline (ADR-026).
 - **⚠️ A cross-row interaction no board records, surfaced here rather than left to be discovered.**
   `0259` ships `npm test` **RED on purpose**, and
-  [`0256`](../../backlog/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md) builds a gate that
+  [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md) builds a gate that
   **blocks** a release on a red tree. Between `0259` landing and this brief landing, **no release can
   be cut** — by design, and correctly, but it means this row sits on the release path whatever its
   rank. `0256`'s own verification (a demonstrated block, then revert) is unaffected.

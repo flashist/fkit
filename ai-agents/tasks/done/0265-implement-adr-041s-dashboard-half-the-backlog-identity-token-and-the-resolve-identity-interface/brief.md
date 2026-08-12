@@ -97,7 +97,7 @@ building** — do not ship an untested contract and call it pinned.
 ### Constraints
 
 - ⛔ **Do not edit `claude/skills/fkit-status/SKILL.md`** — the selector rewrite is
-  [`0266`](../../backlog/0266-retire-the-sprint-glob-in-fkit-status-skill-md-and-select-by-resolved-identity/brief.md).
+  [`0266`](../0266-retire-the-sprint-glob-in-fkit-status-skill-md-and-select-by-resolved-identity/brief.md).
   This brief builds the interface; `0266` consumes it.
 - ⛔ **Do not touch the `backlog` basename special case** (`dashboard.sh:93`) or `STATUS_HEADING_RE`.
 - ⛔ **Do not rename `ai-agents/sprints/backlog.md`.** ADR-041 §3 is explicit: its name stays, and its

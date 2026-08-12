@@ -135,6 +135,29 @@ Vault pages for **ADR-040** and **ADR-041**, following the vault's own decisions
   preconditions for no gain — the same reasoning `0239` recorded when it declined to merge with `0238`.
   **If some of `0264`–`0268` have landed by the time this runs, say so in the worklog and record it;
   do not silently widen scope.**
+- **✅ OWNER RULING 2026-08-12 — scheduling preference, not a dependency: land this AFTER
+  [`0276`](../0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md).**
+  Ruled live via `AskUserQuestion` and relayed through the `/fkit-sprint-ship-loop` driver session —
+  **the option label is the verbatim text**: **"Record the ordering, don't gate it (Recommended)."**
+  Reasoning as ruled: `0276` corrects a claim **in ADR-041**, which is this task's ingest source. Run
+  first, the vault ingests the **uncorrected drift claim** and then owes a re-sync; run second, it
+  ingests the corrected text once. Either order works — the later one just **re-reads ADR-041 before
+  writing**, which verification step 7 already requires.
+  - ⚠️ **Recorded as a SOFT ordering, deliberately NOT as a `Depends on` / `Blocks` declaration.**
+    Neither task blocks the other at build time; this ingest is runnable today. The declaration
+    labels above therefore stay `nothing`, so the board keeps rendering both rows `ready` — a task
+    named inside a `Depends on` label renders **`after <N>`**, which would be false here. Form per
+    [`conventions/dependency-declaration-form.md`](../../../knowledge-base/conventions/dependency-declaration-form.md);
+    separate-bullet shape per the `0149` / `0184` precedent (**annotate beside the label, never
+    inside it**), and per this board's own `0256` → `0252` soft ordering, whose shape this follows.
+  - ⛔ **Nothing else about this row moved on this ruling.** Still `🔲 Backlog`, still **Sprint 5**,
+    still **`P9`**, same board position — and **still excluded from the `/fkit-sprint-ship-loop`
+    run** per the standing owner ruling of 2026-08-10 recorded in the final bullet below. This note
+    changes **when it is preferable to run**, nothing about **whether** or **where**.
+  - ⚠️ **`0276` is on the Backlog board, unscheduled; this row is Sprint 5 `P9`.** The two boards do
+    not order each other, which is precisely why this is a note and not an edge. If `0276` has not
+    landed when this row comes up, **that is not a blocker** — run the ingest, re-read ADR-041 as
+    step 7 requires, and record in the worklog that the correction had not landed.
 - **On merit:** immediately below `0268` — it is the last act on this decision cluster and nothing
   waits on it, which is where it would rank on a freely-ranked board too.
   ⚠️ **`P16` is an append rank, NOT a merit ranking — flagged for owner confirmation.** A spawned
