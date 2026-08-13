@@ -19,9 +19,13 @@ fkit-wiki
 
 ### Authority
 
-**Owner ruling 2026-08-13**, given live via `AskUserQuestion` and relayed through the
-`/fkit-sprint-ship-loop` driver session — **the option label is the verbatim text**:
-**"File a new resync task (Recommended)"**.
+**Two owner rulings, both 2026-08-13**, both given live via `AskUserQuestion` and relayed through the
+`/fkit-sprint-ship-loop` driver session — **the option labels are the verbatim texts**:
+
+1. **"File a new resync task (Recommended)"** — this row exists, and it is **not** a widening of
+   `0258`.
+2. **"Keep it folded in (Recommended)."** — the vault's *"time-boxed to 5 s"* claim is **in scope for
+   this row**, alongside the banner-string resync. See *"✅ THE 5 s TIME-BOX IS IN SCOPE"* below.
 
 **Provenance:** [`0257`](../../done/0257-fix-the-version-labeled-sha-triggered-update-banner/brief.md),
 closed 2026-08-13, changed the launcher's update-banner text. `0257`'s own brief predicted this
@@ -88,12 +92,21 @@ entry**, never by editing the old one.
 - ⚠️ **Note the double space in `Run:  fkit update`** in both renderings. The page's current text has
   a single space. **Quote what the code prints.**
 
-### ⚠️ THE PAGE IS STALE ON A SECOND FACT IN THE SAME SENTENCE — the 5 s time-box
+### ✅ THE 5 s TIME-BOX IS IN SCOPE — SETTLED BY OWNER RULING, NOT A JUDGMENT CALL
 
-⚠️ **This is a producer judgment that goes beyond the words of the ruling, and it is flagged as such
-so it can be narrowed.** The ruling names the banner string. **The same sentence on the same page
-carries a second claim `0257` also corrected**, and correcting one while leaving the other would
-leave the page half-resynced against the same source task.
+**Second owner ruling 2026-08-13**, given live via `AskUserQuestion` and relayed through the
+`/fkit-sprint-ship-loop` driver session — **the option label is the verbatim text**:
+**"Keep it folded in (Recommended)."**
+
+The producer had flagged the 5 s claim as a scope extension beyond the first ruling's words and
+offered to narrow it. **The owner ruled it stays folded in**, reasoning: **same page, same resync,
+same session** — and **the vault is the one place still asserting a claim `0257` corrected
+everywhere else**.
+
+⛔ **This is settled. The scope question is closed** — the first ruling names the banner string, the
+second adds the time-box claim, and **both are this task's**. The same sentence on the same page
+carries both, and correcting one while leaving the other would leave the page half-resynced against
+the same source task.
 
 `0257` corrected four false *"time-boxed to 5 s"* claims in
 [`architecture.md`](../../../knowledge-base/architecture.md) and the launcher comments. **The vault
@@ -108,12 +121,14 @@ was not touched and still carries the old claim.** Measured on disk 2026-08-13:
 **The truth on disk, per `architecture.md:54`:** only the **curl** paths carry `--max-time 5`; the
 **preferred `git ls-remote` path has no outer deadline at all** and was **measured at 12 s** with a
 sleeping stub. ⚠️ **`wiki/tasks/build-claude-self-update.md` is a historical task page** — whether a
-task page's record of what a task *built* should be corrected, annotated, or left as history is
-**the librarian's call under the vault's own conventions. Surface the verdict either way; do not
-skip it silently.**
+task page's record of what a task *built* should be **corrected in place, annotated with a dated
+note, or left as history with the correction carried elsewhere** is **the librarian's call under the
+vault's own conventions**. ⛔ **That is a choice of METHOD, not of scope** — the ruling put the claim
+in scope on all three sites. **Record the verdict for each; ⛔ "left as history" is a permitted
+verdict, "not mentioned" is not.**
 
-⛔ **If the librarian judges the 5 s half out of this task's scope, say so explicitly in the close and
-report it as a residual** — do not correct the banner and leave the timeout claim unmentioned.
+⛔ **All three sites must carry a recorded verdict in the close.** ⚠️ **"Out of this task's scope" is
+no longer an available verdict for the 5 s claim** — the owner closed that option on 2026-08-13.
 
 ### ⚠️ RE-DERIVE THE CARRYING SET — DO NOT TRUST THE TABLE ABOVE
 
@@ -166,8 +181,12 @@ librarian's call which fits**).
 3. **Say why there are two renderings** — the check triggers on **shas** and a remote *version* is not
    always knowable (`git ls-remote` returns refs, not file content). One sentence; the page is a
    systems page, not a changelog.
-4. **Correct or annotate the `time-boxed to 5 s` claims** per the judgment above — or record
-   explicitly why they were left. ⛔ **Not silently skipped.**
+4. **Correct or annotate the `time-boxed to 5 s` claims — all three sites.** **Owner ruling
+   2026-08-13, "Keep it folded in (Recommended)."** ⛔ **Not optional, not narrowable, not silently
+   skipped.** The *method* per site is the librarian's call (correct in place / dated annotation /
+   left as history with the correction carried elsewhere); ⛔ **the scope is not.** ⚠️ **Write what
+   the code does, not "5 s"**: only the **curl** paths carry `--max-time`; the preferred
+   `git ls-remote` path has **no outer deadline** and was measured at **12 s**.
 5. **`log.md`: append one new dated entry.** ⛔ **No existing entry edited.**
 6. **Record one verdict per hit.**
 7. **Keep the page's own cross-links intact** and leave every claim `0257` did not falsify
@@ -198,8 +217,10 @@ librarian's call which fits**).
    conditional `v`-prefix case and the double space in `Run:  fkit update`.**
 4. **No page asserts the banner is verified on Linux or by CI.** Quote the landed wording and show the
    never-executed caveat is present.
-5. **The 5 s claims are resolved** — corrected, annotated, or explicitly reported as out of scope,
-   with a verdict for each of the three sites named above.
+5. **The 5 s claims are resolved on all three sites** — corrected, annotated, or (for the historical
+   task page only) recorded as left-as-history with the correction carried elsewhere. **One verdict
+   per site.** ⛔ **"Out of scope" is not an available verdict** — the owner ruled the claim in scope
+   on 2026-08-13, verbatim label **"Keep it folded in (Recommended)."**
 6. **`log.md`: `git diff` shows additions only.** ⛔ **Zero modified or deleted lines.** Show the diff
    stat for that file specifically. ⚠️ **This is the constraint most likely to be violated by a
    well-meaning sweep** — prove it, do not assert it.
@@ -221,6 +242,13 @@ librarian's call which fits**).
   2026-08-13), which named it in its own out-of-scope list. Filed 2026-08-13 on the owner's ruling of
   the same day, verbatim option label **"File a new resync task (Recommended)"**. The
   **not-a-widening-of-`0258`** call is the owner's own, same date, same session.
+- **Amended 2026-08-13** on a **second owner ruling of the same date and session**, verbatim option
+  label **"Keep it folded in (Recommended)."** The producer's flagged scope extension — the
+  *"time-boxed to 5 s"* claim — **was confirmed in scope**, and the *"may want narrowing / producer
+  judgment"* hedge was **removed as settled**. The owner's reasoning, recorded: *same page, same
+  resync, same session*, and **the vault is the one place still asserting a claim `0257` corrected
+  everywhere else**. ⚠️ **What remains the librarian's judgment is the METHOD per site, never the
+  scope.**
 - **⚠️ ORDERING — recorded as a dated note, deliberately NOT a `Depends on:` edge** (the convention
   this board uses for soft ordering; see `0256`→`0252`, and `0282`'s own note). **Three interactions,
   measured 2026-08-13:**
@@ -229,9 +257,16 @@ librarian's call which fits**).
     a different section (§Release + the `**Key files**` line), and running this row first would leave
     it editing a page that moved under it. ⛔ **Never concurrently.**
   - **[`0284`](../0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)** —
-    fixes the unbounded git path. ⚠️ **If `0284` lands first, the correct page text is "bounded", not
-    "unbounded", and writing the gap here would be stale on arrival.** ✅ Prefer `0284` before this
-    row **if it is close**; otherwise record the gap as it stands and accept a second pass.
+    fixes the unbounded git path — **and, since the owner's 2026-08-13 "Fold into 0284 (Recommended)"
+    ruling, `_fkit_reinstall`'s missing `--max-time` as well.** ⚠️ **If `0284` lands first, the correct
+    page text is "bounded", not "unbounded", and writing the gap here would be stale on arrival.**
+    ✅ Prefer `0284` before this row **if it is close**; otherwise record the gap as it stands and
+    accept a second pass.
+    ⛔ **But do NOT pre-write the post-`0284` wording, and do NOT restore "every network call is
+    time-boxed" even after `0284` lands.** `0284` fences `install.sh` out of its own scope, and
+    `install.sh:32` / `:59` carry no deadline — so **even a fully successful `0284` leaves `fkit
+    update`'s actual download unbounded**. ⚠️ **Write only what the launcher on disk does on the day
+    this runs.** Measured 2026-08-13.
   - **[`0286`](../0286-mechanical-citation-sweep-of-architecture-md/brief.md)** — corrects
     `architecture.md`'s citations. Unrelated subject, **same hazard**: this resync reads
     `architecture.md` as a source, and reading it before its citations are repaired means ingesting
@@ -251,3 +286,9 @@ librarian's call which fits**).
 - Filed 2026-08-13 by a spawned `fkit-producer` with **no owner channel**, on the owner's ruling of
   the same day. It asked nothing, wrote nothing under `ai-agents/wiki-vault/`, moved no task file,
   changed no existing task's status, priority or location, and committed nothing.
+- **Amended 2026-08-13** by a spawned `fkit-producer` (again **no owner channel**), relaying the
+  owner's second ruling of that date via the `/fkit-sprint-ship-loop` driver. It **changed no status,
+  priority, sprint field or location**, **moved no task file**, **invoked no mover**, **edited no
+  source file and no sprint plan**, **wrote nothing under `ai-agents/wiki-vault/`** (⛔ ADR-005 — this
+  row's own corrections are still the `fkit-wiki` role's to write, in a `fkit wiki` session), and
+  **committed nothing**.
