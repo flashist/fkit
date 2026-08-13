@@ -28,6 +28,8 @@ Executed by a spawned `fkit-producer` with no owner channel:
 | Archive the board | `sprints/sprint-2.md` → `sprints/done/sprint-2.md` (`git mv`), `🔒 CLOSED` banner in the Sprint 1 shape |
 | Re-point links | **341** internal links in the archived board + **12** inbound links in 5 other files |
 | Create the fresh board | `ai-agents/sprints/sprint-3.md` — ranks **restart at `P1`** |
+
+> ⚠️ **LINT 2026-08-13 — the path in the row above is a DATED RECORD of where the board was created on 2026-08-06, and the table is left byte-identical.** Sprint 3 was archived on **2026-08-07** and the file now lives at **`ai-agents/sprints/done/sprint-3.md`**. **This is not link rot — it is what this task did on the day** — but a dead-path scan will report it, so it is annotated rather than repaired. ⚠️ **Note for the next lint: do not "fix" this path.**
 | Carry the one open row | `0222` → Sprint 3 `P3` (later `P4`); its Sprint 2 row keeps the frozen `P189` |
 | Pull in the named work | `0181` → `P1`, `0182` → `P2`, from the Backlog board |
 | Renumber a closed row | **None. Not one, on any board.** |
@@ -61,4 +63,5 @@ correction in that brief). Plus one defect the rollover **exposed**: the **round
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — why a rollover is the *only* mechanism that restores reachability without renumbering closed history
 - [[tasks/narrow-the-re-rank-exception-an-insertion-is-not-a-re-rank]] · [[tasks/build-the-closed-rank-immutability-guard]] — the two rows the owner pulled onto the new board
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board this brief lived on, unranked by design
+- [[tasks/sprint-4-ship-the-use-ready-self-healing-update]] · [[tasks/sprint-5-fix-what-a-real-project-found]] — ⚠️ *Added 2026-08-13 (the `0263` resync):* **the board this task created was itself archived on 2026-08-07, and two further boards have opened since.** Sprint 4 was a **plain close, not a rollover** (drained 8/8, no open row moved, no rank renumbered) — so the rollover machinery this task built has **not** been exercised a second time, and the in-flight-row case it left unspecified is **still unexercised**
 - [[systems/fkit]]

@@ -128,7 +128,7 @@ One edit to one file: `claude/skills/fkit-wiki-lint/SKILL.md`, the parenthetical
   of scope — report them, do not fix them.** ⚠️ `ADR-014:18` in particular reads as a *Context*
   section describing the state at decision time, which may be correct as history; do not assume.
 - ⛔ **No `ai-agents/wiki-vault/` write** (ADR-005) — the vault's copies are
-  [`0282`](../0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md).
+  [`0282`](../../done/0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md).
 - ⛔ No task-file move (ADR-033), no re-rank, no board-row edit beyond this task's own close.
 - ⛔ No commit. ⛔ No new devDependency (ADR-014).
 - ⚠️ **Every `:NNN` in this brief is a dated anchor measured 2026-08-12; the durable anchor is the
@@ -165,7 +165,7 @@ One edit to one file: `claude/skills/fkit-wiki-lint/SKILL.md`, the parenthetical
   **"fkit-wiki-lint SKILL.md — sharpest (Recommended)"**.
 - **⚠️ Sibling rows filed from the same ruling:**
   [`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) (ADR-003) and
-  [`0282`](../0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md) (vault
+  [`0282`](../../done/0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md) (vault
   resync). **No shared file with `0281`. `0282` should run last** — see its own note.
 - **⚠️ ONE ROW, NOT TWO.** D1/D2 (the false facts) and D3 (the fabricated citation) sit in the same
   two lines and cannot be fixed independently without one edit stomping the other. They land

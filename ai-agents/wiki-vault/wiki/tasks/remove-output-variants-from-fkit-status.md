@@ -27,3 +27,4 @@ Make `/fkit-status` render **one output — the complete briefing with the full 
 - [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — the target-selector argument that survived this removal
 - [[tasks/wiki-sync-fkit-status-output-variant-removal]] — a batched wiki-sync task (discharged by the migration sync)
 - [[tasks/render-owner-column-in-fkit-status]] — Render the Owner column in `/fkit-status`, just before Next step
+- [[tasks/retire-the-sprint-glob-in-fkit-status-skill]] — task `0266` (2026-08-13): the selection rule now calls `dashboard.sh`. ✅ **ADR-041 §5 states explicitly that this does NOT reopen the one-skill-one-output convention** — `dashboard.sh` is a helper program, not a skill, and an identity line is not a second rendering of the briefing

@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -34,8 +34,8 @@ was written against the pre-`0256` world and states, across many pages, that fki
 exclusively** ([ADR-005](../../../knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)).
 
 ⚠️ **The sprint loop cannot run this row**, for the same reason recorded on
-[`0269`](../0269-wiki-ingest-of-adr-040-and-adr-041-the-sprint-identity-decisions/brief.md) and
-[`0258`](../0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md): **the loop
+[`0269`](../../done/0269-wiki-ingest-of-adr-040-and-adr-041-the-sprint-identity-decisions/brief.md) and
+[`0258`](../../backlog/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md): **the loop
 never reads `## Owner`** — [ADR-038](../../../knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md)
 fixes each step's role to the skill that step runs, so its **Build** step spawns `@fkit-coder`
 (`claude/skills/fkit-sprint-ship-loop/SKILL.md:121`), and `claude/agents/fkit-coder.md:211` forbids
@@ -140,8 +140,8 @@ librarian's call which fits**).
 
 - ⛔ **`log.md` is APPEND-ONLY** (owner ruling 2026-08-03, `0211`).
 - ⛔ **Vault writes only.** ⛔ Do not edit `ai-agents/knowledge-base/`, `claude/`, or any source file
-  — including ADR-003 (that is [`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md))
-  and `fkit-wiki-lint/SKILL.md` (that is [`0280`](../0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md)).
+  — including ADR-003 (that is [`0281`](../../backlog/0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md))
+  and `fkit-wiki-lint/SKILL.md` (that is [`0280`](../../backlog/0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md)).
   ⚠️ **If the librarian notices a knowledge-base page needing the same fix, report it — do not fix
   it.**
 - ⛔ **No task-file move** (ADR-033), no re-rank, no board-row edit beyond this task's own close.
@@ -183,14 +183,14 @@ librarian's call which fits**).
 - **⚠️ ORDERING — recorded as a dated note, deliberately NOT a `Depends on:` edge.** This is the
   convention this board uses for soft ordering (see `0256`→`0252`, and `0269`'s own note added
   2026-08-12). **Measured 2026-08-12, this resync interacts with three open rows:**
-  - **[`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md)** —
+  - **[`0281`](../../backlog/0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md)** —
     corrects ADR-003's status line, which the vault's `wiki/decisions/adr-003-…md:7-8` mirrors and
     `index.md:23` summarises. **Running this resync first means ingesting the uncorrected ADR and
     owing a second pass.**
-  - **[`0276`](../0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md)**
+  - **[`0276`](../../backlog/0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md)**
     — corrects a drift-mechanism claim in ADR-041. Unrelated subject, **same hazard**: a resync that
     runs before it ingests an uncorrected claim.
-  - **[`0269`](../0269-wiki-ingest-of-adr-040-and-adr-041-the-sprint-identity-decisions/brief.md)** —
+  - **[`0269`](../../done/0269-wiki-ingest-of-adr-040-and-adr-041-the-sprint-identity-decisions/brief.md)** —
     the pending ADR-040/041 ingest, itself already noted as wanting to run **after** `0276`.
   - ✅ **The better order is `0281` → `0276` → `0269` → this row.** Say so to whoever schedules them.
     ⚠️ **It is a preference, not a gate** — this row is runnable at any time and the cost of running

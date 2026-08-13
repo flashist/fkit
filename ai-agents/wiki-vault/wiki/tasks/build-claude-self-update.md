@@ -28,3 +28,4 @@ The design deliberately **never auto-updates and never re-execs itself** — a d
 - [[decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name]]
 - [[tasks/design-version-to-version-migration-mechanism]]
 - [[tasks/remove-fkit-resume-passthrough]]
+- [[tasks/fix-the-version-labeled-sha-triggered-update-banner]] — task `0257` (2026-08-13): the update check this task built **triggered on sha and labelled from `VERSION`**, so ~86% of commits rendered `vX → vX`. ⚠️ **The trigger was always correct** — sha is right for a sha-keyed distribution — **only the wording was wrong**

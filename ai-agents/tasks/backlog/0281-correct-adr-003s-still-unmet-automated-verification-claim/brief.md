@@ -137,7 +137,7 @@ posture is written.
   false. **The owner ruled neither filed. Report them; do not fix them.** ⚠️ Widening this row into a
   knowledge-base-wide CI-claim audit is out of scope.
 - ⛔ **No `ai-agents/wiki-vault/` write** (ADR-005) — the vault's copy of ADR-003 is
-  [`0282`](../0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md).
+  [`0282`](../../done/0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md).
 - ⛔ **Do not edit any closed task's `brief.md`, `plan.md`, `worklog.md` or `review.md`** — including
   `0256`'s. Amending a closed ledger is `0274`'s shape and needs its own ruling.
 - ⛔ No task-file move (ADR-033), no re-rank, no board-row edit beyond this task's own close.
@@ -176,7 +176,7 @@ posture is written.
   **"ADR-003 contradiction (Recommended)"**.
 - **⚠️ Sibling rows filed from the same ruling:**
   [`0280`](../0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md)
-  and [`0282`](../0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md).
+  and [`0282`](../../done/0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md).
   **No shared file with `0280`; either order is safe. `0282` should run last** — see its own note.
 - **⚠️ The reviewer's report was second-hand and this brief does not rest on it.** Every clause above
   was read off `adr-003-ci-runs-validate-bundles.md` on disk at filing. ⚠️ **The reviewer's framing

@@ -20,6 +20,8 @@ name** (*"Pull it into Sprint 3"*).
 **The blocking baseline decision was DISSOLVED, not answered** — owner rulings 2026-08-06 (*"Have the
 architect decide it."* → architect delivered → *"No CI planned."* / *"Include it."*):
 
+> ⚠️ **Dated correction 2026-08-13 (the `0282` resync; the quoted rulings above are left byte-identical and stand as an accurate record of what was said on 2026-08-06).** ***The `"No CI planned."` ruling was REVERSED.*** On **2026-08-08** the owner ruled *"fix it, not just record it"* on the release-gate question, and on **2026-08-12** [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] (`0256`) landed **`.github/workflows/test.yml`** — `npm test` on every push to `main` and every pull request. **Do not read the 2026-08-06 quote as fkit's current CI posture.** What that changes for *this* guard is worked through at the ceiling paragraph below.
+
 - **Baseline = `HEAD`; scope = the transition currently in progress, not a history range.** The guard
   compares each board file's working tree against its `HEAD` blob, plus a second leg `HEAD`↔`HEAD^`
   (skips cleanly at depth 1). Criterion: *"A baseline must be a record you cannot rewrite in the same
@@ -47,6 +49,11 @@ at least one commit (works at `--depth 1`; non-git trees skip with a stated reas
 **transition, not a state**; it sees **only the current uncommitted transition plus the last committed
 one** — a breach committed with no test run in that window is never caught, and **there is no CI, so
 nothing runs it automatically**. ⛔ **Never present this guard as continuous protection.**
+
+> ✅ **Dated correction 2026-08-13 (the `0282` resync; the paragraph above is left byte-identical). One clause is now false; the verdict it supports SURVIVES on a narrower reading, and the two must not be collapsed.**
+>
+> - ❌ ***"there is no CI, so nothing runs it automatically"* is FALSE.** This is a `test/*.test.js` file, so `npm test` runs it, and `.github/workflows/test.yml` runs `npm test` on every push to `main` and every pull request (`0256`, 2026-08-12). **It now runs automatically.**
+> - ✅ **⛔ *"Never present this guard as continuous protection"* STANDS.** It still asserts **a transition, not a state**, and leg 2 compares **`HEAD` against `HEAD^` only** — so a CI run over a **multi-commit push inspects exactly one transition**, and a breach in a middle commit is still never caught. **CI closed the "nobody ran it" hole. It did not widen the guard's scope.**
 ⚠️ Prove-red gap flagged at spec time: none of `prove-red.sh`'s 14 mutations reaches `ai-agents/`,
 and prove-red must never edit the real boards — the pure-function fixture shape supplies the mutation
 seam; tasks `0214`/`0215` sit on that ground.

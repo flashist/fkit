@@ -21,6 +21,10 @@ The ADR states: `prove-red.sh` is **not in `npm test`**, and there is **no `.git
 > **⚠️ LINT WARNING (2026-07-19) — this ADR's Context is falsified by the tree, and Decision 4 is already done.**
 > `package.json` reads `"test": "node --test test/*.test.js && bash test/prove-red.sh"` — **the gate shipped in commit `0ad055a` on 2026-07-18 at 21:34**, the evening *before* this ADR's date. So the claim *"not in `npm test`"* was false at authoring, and **Decision 4 approves work that had already landed** (in the inner-loop `npm test`, not the `test:full`/CI lane it floated as likelier).
 > **The `.github/workflows/` half is still true** — there is no CI, verified 2026-07-19.
+>
+> ✅ **Dated correction 2026-08-13 (the `0282` resync; the warning above is left byte-identical and its 2026-07-19 verification stands as a dated record). The `.github/workflows/` half is NO LONGER TRUE.** `.github/workflows/test.yml` landed with [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] (`0256`, 2026-08-12) and runs `npm test` on every push to `main` and every pull request. **Since `npm test` is `node --test test/*.test.js && bash test/prove-red.sh`, `prove-red.sh` now runs in CI** — the *"only when a human types it"* gating problem this ADR diagnosed is **closed on both halves**.
+>
+> ⛔ **Decision 5's no-op-mutation gap is UNCHANGED and still open.** A mutation that changes nothing produces a passing suite either way, so it still reads as a healthy check — **and now does so on every CI run as well.** *Automating a check does not make it sound.* ⚠️ **One real limit of the new lane, measured 2026-08-13:** `package.json`'s `&&` **short-circuits**, so a red unit suite means `prove-red.sh` **never runs at all** — which is exactly how a `prove-red.sh` failure stayed hidden inside fkit's first CI run (see [[tasks/make-the-lockdown-guard-case-test-filesystem-independent]]).
 > **This ADR is architect-owned; the wiki does not edit it.** Its Context and Decision 4 need revisiting. **Nothing else in the ruling is affected** — the library survey, the SUT reasoning, ADR-014 Decision 4 standing unamended, and Decision 5's still-open no-op-mutation gap are all unchanged.
 
 ## Decision
@@ -37,7 +41,9 @@ The ADR states: `prove-red.sh` is **not in `npm test`**, and there is **no `.git
 
 ## Related
 - [[decisions/adr-014-how-fkit-tests-itself]] — **unamended.** Decision 3 already rejected bats/shellspec on the same "no tool fits this shape" finding, reached independently; Decision 4 is the zero-devDeps posture upheld here.
-- [[decisions/adr-003-ci-runs-validate-bundles]] — the CI posture whose subject died with the Omnigent removal; **no `.github/workflows/` exists today**, which is why Decision 4's gate has no CI lane to land in yet
+- [[decisions/adr-003-ci-runs-validate-bundles]] — the CI posture whose subject died with the Omnigent removal; **no `.github/workflows/` exists today**, which is why Decision 4's gate has no CI lane to land in yet. ✅ *Corrected 2026-08-13: the lane exists (`0256`) and Decision 4's gate runs in it.*
+- [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] — task `0256` (2026-08-12): the CI lane, and a blocking `npm test` gate in `bin/release.mjs`. ⚠️ **`prove-red.sh`'s ~6-minute runtime is now paid on every release**, and is the stated cost the owner accepted
+- [[tasks/make-the-lockdown-guard-case-test-filesystem-independent]] — task `0283`: ⚠️ `package.json`'s `&&` short-circuit hid a `prove-red.sh` failure behind a red unit suite in fkit's first CI run
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the sibling ruling of the same week: turn a manual audit into an automated gate
 - [[systems/testing-and-verification]] — fkit's verification posture, of which `prove-red.sh` is part
 - [[tasks/implement-pretooluse-skill-ownership-hook]] — task 43, whose review finding R2 triggered this investigation

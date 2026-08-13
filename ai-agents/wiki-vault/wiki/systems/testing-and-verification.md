@@ -1,7 +1,9 @@
 # Testing & Verification
 
 **Layer**: shared
-**Key files**: `test/harness.mjs`, `test/launcher-contract.test.js`, `test/skill-ownership-hook.test.js`, `test/dashboard-contract.test.js`, `test/converge-contract.test.js`, `test/orphan-cleanup.test.js`, `test/rules-block-budget.test.js`, `test/prove-red.sh`, `package.json` (`"test": "node --test test/*.test.js && bash test/prove-red.sh"`), `claude/fkit-claude.sh` (the subject), `install.sh:43`
+**Key files**: `test/harness.mjs`, `test/prove-red.sh`, `test/*.test.js` (**20 files, measured 2026-08-13** — the seven this line named until now, plus `adr-number-uniqueness`, `askuserquestion-marker-hook`, `closed-rank-immutability`, `dual-home-parity`, `shiploop-marker-hook`, `skill-frontmatter`, `structure-check`, `structure-manifest`, `structure-notice`, `structure-repair`, `structure-spec`, `task-id-uniqueness`, `turn-completion-hook`, `update-banner`), `test/dual-home-parity-exceptions.mjs`, `package.json` (`"test": "node --test test/*.test.js && bash test/prove-red.sh"`), **`.github/workflows/test.yml`** *(added 2026-08-12, task `0256`)*, `bin/release.mjs` (the in-release gate), `claude/fkit-claude.sh` (the subject), `install.sh`
+
+> ⚠️ **LINT 2026-08-13 — this `**Key files**` line was stale and has been rewritten in place** (a living systems page, per the 2026-08-06 lint precedent). It named **7 of the then-20** `*.test.js` files and neither of the two gates. The **enumerated count is the risk this line carries**: it goes stale on the next test file, and nothing checks it.
 
 ## Summary
 
@@ -69,6 +71,43 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 >
 > ⚠️ **Two findings about the test's own guards, both worth keeping.** Task `0132` handed over **R1**: the 10 **directory** exception entries match bidirectionally, so a dual-homed file later added under one would **silently escape** enforcement — closed by a tripwire asserting *no directory exception may cover a non-`.gitkeep` file present in both homes*. Then review round 2 found **R8** by the same species of defect **inside the fix**: voiding the promotion's byte-comparison left **all nine tests green**, so the tripwire's promise that *"the two copies were compared above"* pinned nothing. **The new pin was falsified rather than trusted** — with the comparison voided it reds 8/1. *An unpinned promise was not replaced by an unpinned test.*
 
+### CI and the release gate — BOTH LANDED 2026-08-12 *(task `0256`)*
+
+⚠️ **This reverses the owner's earlier `"No CI planned."` ruling.** For most of fkit's life *nothing*
+ran the suite automatically. **Two gates now do, and neither replaces the other** — the reasoning is
+recorded in the workflow file itself:
+
+| Gate | What it is | Why the other one cannot replace it |
+|---|---|---|
+| **`.github/workflows/test.yml`** | `npm test` on every push to `main`, every PR, plus `workflow_dispatch`. `ubuntu-latest`, Node 24, `timeout-minutes: 20` | `install.sh` defaults to `main`'s HEAD, so the default `curl \| sh` install and self-update **track `main`, not a tag**. **The release gate alone would protect the artifact almost nobody installs by default.** |
+| **The `npm test` gate in `bin/release.mjs`** | Runs before the bump; **blocks on red, no warn-and-continue**. `--no-test` is loud and *"never a default"* | CI's verdict is **asynchronous**, and **CI never sees the working tree that `git add -A` actually ships.** |
+
+⚠️ **Two implementation facts that are load-bearing, not tidiness:**
+
+- **`fetch-depth: 0` is mandatory.** `test/structure-manifest.test.js` **hard-refuses a shallow clone**
+  — its walk reads git history ∪ the working tree — so the default depth-1 checkout would kill the
+  suite at module load **on every run**.
+- **The release gate sits immediately before the first mutating line.** A red suite is then a clean
+  abort with the tree exactly as the user left it. **Gating any later would leave `VERSION` and
+  `package.json` bumped and dirty, and the next default run would bump again — silently skipping a
+  version.** It also **deliberately does not require a clean tree**, because both `npm test` and
+  `git add -A` read the working tree.
+
+**Measured suite runtime: ~5m30s–6m20s** (328 / 380 / 347 / 344 s, same machine) — ~55 s of unit tests
+plus `prove-red.sh` re-running the suites against 15 mutants and 9 clean baselines. **That number is
+the cost the owner accepted, stated rather than implied.**
+
+**fkit's first-ever CI run went RED and found a real defect** — Actions run `31634593615`, **708/709,
+1 fail**. A **test** defect, not a product defect: an assertion that was really asserting *"the
+filesystem folded case for me"*, invisible on macOS. Fixed by
+[[tasks/make-the-lockdown-guard-case-test-filesystem-independent]] (`0283`). ⚠️ **`prove-red.sh` also
+went red on a case-sensitive filesystem, at two baselines, from the same single root cause — hidden in
+the CI run because `package.json`'s `&&` short-circuited past it.**
+
+⚠️ **What CI does NOT close:** `install.sh` still has **zero automated coverage** and was explicitly
+out of `0256`'s scope, as its own brief — along with `shellcheck`. **CI landing is not the e2e gap
+closing.**
+
 ## Gotchas / Known Issues
 
 - **Environment traps that make the suite test the wrong thing:** `FKIT_NO_SELF_HOST=1` (the launcher otherwise re-execs into the checkout); `FKIT_NO_UPDATE_CHECK=1`; the temp project's `PROJECT.md` must **not** read as fresh, or the launcher **hijacks every role into `producer`**; `FKIT_SETUP_ONLY=1` exits **before** `build_settings()` runs, so settings-file assertions require actually reaching `exec claude` with the stub on `PATH`.
@@ -84,9 +123,12 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - **This is why the sync filter's blind spot matters:** `package.json` lives outside `ai-agents/`, so a delta sync scoped to `ai-agents/` **cannot see product-code changes that falsify a knowledge-base claim.** The gate shipped inside the very window that was synced, and the sync had no way to notice.
 - ⚠️ **R2's no-op-mutation failure mode is still open — and now it is the *only* unmitigated half.** ADR-026 Decision 5 records a ~3-line zero-dep guard (assert each mutation actually changed the file) as **offered and not taken** — one of two hardenings, only the first chosen. **Decision 4's gate, now shipped, does not help it**: a no-op mutation produces a passing suite either way, so it still reads as a healthy check *and now does so on every `npm test`*. Cheap to re-offer.
 - **Still uncovered, and named:** `install.sh` e2e (the `curl | sh` entry point — *it cannot be verified by reading a diff*), a CI workflow (there is no `.github/`), and the **static drift check** across the three hand-maintained mirrors of `skills_for_role()`, which needs a **normalizer** because they use three different naming conventions. All deferred to Sprint 3.
+
+  > ✅ **Dated correction 2026-08-13 (the `0282` resync; the bullet above is left byte-identical).** **The CI item is DISCHARGED — `.github/workflows/test.yml` exists**, landed by [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] (`0256`, closed 2026-08-12): `npm test` on every push to `main`, every pull request, and `workflow_dispatch`; `ubuntu-latest`, Node 24, 20-minute timeout. See §"CI and the release gate" above. ⚠️ **The other two items are UNCHANGED and still open** — `install.sh` was **explicitly out of `0256`'s scope** as its own brief, and still has zero automated coverage.
 - **Not the tester-agent question.** *"Building the script will teach us almost nothing about whether the tester earns its seat."* The two must not be bundled.
   > **The tester question is now RULED — and the separation above held.** [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] (2026-07-19) authorizes an eighth **tester** seat on **sandbox authority**, over the architect's and producer's recommendation. It was decided on its own merits, **not** as a conclusion drawn from the smoke script — exactly as the producer insisted. **What the two questions genuinely share is sequencing:** ADR-028 Decision 7 puts fkit's own regression gate **first**, *"the bigger risk and it's cheap — full stop, not as an experiment."*
   > **Verified 2026-07-19, and the picture is better than ADR-028 assumed:** the task it sequenced against, [[tasks/add-e2e-smoke-script-for-fkit-itself]], is **cancelled** — superseded by task 23, which is **Done**. **The two things the tester actually waits behind are the two named on this page:** ADR-026 Decision 4's automated gate *(shipped 2026-07-18 — see above; ADR-028 did not know this either)* and **the still-absent `.github/` workflow** ([[decisions/adr-003-ci-runs-validate-bundles]]).
+  > ✅ **Dated correction 2026-08-13 (the `0282` resync; the line above is left byte-identical).** **The `.github/` workflow is no longer absent** — `.github/workflows/test.yml` landed with `0256` on 2026-08-12 (§"CI and the release gate"). **So both of the two things ADR-028 sequenced the tester behind are now discharged.** ⚠️ **That does not mean the tester's own case changed:** ADR-028 remains **decided, not built**, and the `install.sh` e2e gap it was partly about is still open — CI runs the suite, and the suite does not cover `install.sh`.
   > ⚠️ **And this page is where the tester's own limit is recorded:** per [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]] a tester **subagent cannot verify fkit's session lockdown** — it inherits the caller's overrides and would green the caller's settings. **On fkit's single most important invariant, an agent is strictly worse than a script.**
 
 ## Related
@@ -144,3 +186,5 @@ ADR-014 deliberately **declined to choose**, on the owner's explicit ruling to s
 - [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — task `0210` — ⚠️ **a portability hole no test could see**: BSD `sed` rejects BRE `\|` alternation by matching nothing and **exiting 0**, so the broken and patched scripts produced byte-identical output. Its review also **refuted the plan's own justification** for skipping prove-red coverage, and wired the mutation anyway
 - [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200` — ⚠️ **it corrects its own approved plan on a test's value:** a test asserting each loop-table row's role owns that row's skill **passes today and would have passed on the day of the defect** — the row and `skills_for_role()` never disagreed. **Kept and re-scoped honestly:** it guards a *future* edit orphaning the row, not a driver departure. ⚠️ It also records that **the ADR-036 site registry still has no tooling** (`test/skill-ownership-sites.mjs` absent), so every surface count in its report is a hand grep
 - [[tasks/build-the-closed-rank-immutability-guard]] — task `0182` (2026-08-06) — `test/closed-rank-immutability.test.js`, the suite's first board-history guard: scope = the transition in progress (`HEAD` vs working tree, plus `HEAD`↔`HEAD^`), header-anchored parser, fail-loud on field count. ⛔ **Not continuous protection** — no CI runs it, and a breach committed with no test run in the window is never caught. ⚠️ Its prove-red mutation seam waits on `0214`/`0215` (prove-red must never edit the real boards)
+  - ✅ **Dated correction 2026-08-13 (the `0282` resync; the line above is left byte-identical).** **"No CI runs it" is now false** — it is a `test/*.test.js` file, so `npm test` runs it, and `.github/workflows/test.yml` runs `npm test` on every push to `main` and every PR (`0256`, 2026-08-12). ⚠️ **But the `⛔ Not continuous protection` verdict SURVIVES, on a narrower and still-correct reading**: the guard's leg 2 compares **`HEAD` against `HEAD^` only**, so a CI run over a **multi-commit push** inspects **one** transition and a breach in a middle commit is still never caught. **CI closed the "nobody ran it" hole; it did not widen the guard's scope.**
+- **The 2026-08-13 sync — the suite's newest surfaces:** [[tasks/add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename]] (`0259` — ⚠️ **the finding that outlives it: the old R8 test was *green for a fixture-shaped reason***) · [[tasks/implement-adr-040s-identity-grammar-in-dashboard-sh]] and [[tasks/implement-adr-041s-dashboard-half]] (`0264`/`0265`, the T1–T11 and S1–S8 sets; ⚠️ **a `sed` H1 split silently produces one un-split segment on macOS and works on Linux CI**) · [[tasks/author-the-structure-spec-and-its-scaffold-inventory-drift-test]] and [[tasks/build-the-hash-manifest-generator-and-completeness-test]] (`0243`/`0244`, the drift and completeness tests, **both run red first**) · [[tasks/fix-the-version-labeled-sha-triggered-update-banner]] (`0257`, `test/update-banner.test.js` — closing a gap measured as **zero** coverage) · [[tasks/sprint-5-fix-what-a-real-project-found]] (the board)

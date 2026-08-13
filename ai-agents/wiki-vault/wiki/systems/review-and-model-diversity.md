@@ -19,6 +19,30 @@ codex exec --sandbox read-only --cd "$PWD" -
 
 `fkit-adversarial-reviewer` has **no Write or Edit tools at all** — it is structurally write-free, a leaf that returns findings and nothing else. That is enforced by its tool allowlist, not by instruction — and since [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] (2026-07-18) it is **the only structural tool wall left in fkit**: every other role's allowlist was relaxed, deliberately, because this is the one wall protecting a checkable invariant (the second opinion never had write authority over the code it judges). Its `tools:` line holds at any spawn depth and is not to be "tidied up" to match the others.
 
+### ⚠️ What the second opinion actually guarantees — reasoning, not measurement (ADR-042, 2026-08-11)
+
+*Added by the 2026-08-13 sync. This was never written down, and measured, it guarantees less than the reports had been claiming.*
+
+**The `read-only` sandbox above blocks all filesystem writes, and `mkdtemp` is a write.** So the Codex reviewer **cannot run the test suite, build a fixture, or execute a mutation — and never could.** This is fkit's own prescribed flag, not a broken environment and not new. `test/prove-red.sh` opens with `mktemp -d`, so **fkit's own red-proof harness is among the things Codex cannot run.**
+
+**It is not a total loss.** On task `0265` the read-only pass *originated* three findings — including an ADR-040 breach where an unreadable file resolved to a confidently *wrong* identity — all independently verified correct. ***Static reasoning finds real defects.***
+
+**D1 — in force as a rule.** The coverage vocabulary gains a **third state**, replacing the ran/unavailable binary:
+
+| State | Meaning |
+|---|---|
+| **both reviewers measured** | both executed tests/mutations |
+| **reasoning-only second opinion** | Codex ran and reasoned; **all execution evidence is the Claude reviewer's**. Under the current sandbox this is the **normal, expected** state — *not a degradation event* |
+| **Codex unavailable** | the existing loud failure banner |
+
+⛔ **No review report may state or imply "FULL coverage" on the strength of a reasoning-only pass.** ⚠️ **This is a reporting-honesty rule, not a degradation flag** — it must not inherit the fallback banner's alarm tone, because *treating the normal case as a failure trains readers to ignore the banner that does signal failure.*
+
+**Why the rule exists, measured:** three reviews in one sprint, **same flag and same capability each time**, produced three different coverage claims — one *"FULL"*, one *"not partial"* while the same file recorded that Codex could not run the suite, and one correctly **PARTIAL**. *"FULL coverage" had been quietly meaning both reviewers **read** it, never both reviewers **measured** it.*
+
+**D2 — decided, NOT built.** The owner ruled 2026-08-11, **against the architect's recommendation, knowingly and provisionally**, that all four executable call sites move to `--sandbox workspace-write` at the repo root. ⚠️ **Verified on disk 2026-08-13: all five sites under `claude/` still read `read-only`; task `0273` is open in the Backlog.** The block above is therefore **accurate today**.
+
+⚠️ **What D2 gives up when it ships, stated because it bears directly on the paragraph above this section:** ADR-022's wall stops being structural — *"the independent second opinion never touched the code it is judging"* becomes **a promise again**, held only by prompt instruction — and `ai-agents/wiki-vault/` becomes writable by a non-wiki role for the duration of a review. **A violation would likely be invisible**: no hook sees the write, no test watches the tree, and the review's own output would not mention it. ***Absence of reported violations is not evidence of none.*** See [[decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so]].
+
 ### Degradation is loud
 With no Codex available, the review **leads with**:
 
@@ -102,3 +126,6 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the folder model that absorbed `review.md` into the task folder
 - [[tasks/add-verbatim-to-fkit-coder-declared-approval-marker]] — `0150`, raised independently by both reviewers (Codex FULL) in `0119`'s ledger
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160`, which changes the ledger's `Task:` header to a folder-ID anchor
+- [[decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so]] — **what the second opinion guarantees, bounded**: D1's three-state coverage vocabulary (in force); D2's `workspace-write` ruling (decided 2026-08-11, **not built** — `0273` open)
+- [[tasks/implement-adr-041s-dashboard-half]] — `0265`, whose ledger is ADR-042's one *accurate* coverage claim, and where the read-only pass originated three verified findings
+- [[tasks/implement-adr-040s-identity-grammar-in-dashboard-sh]] — `0264`, whose ledger contradicted itself on coverage in one file

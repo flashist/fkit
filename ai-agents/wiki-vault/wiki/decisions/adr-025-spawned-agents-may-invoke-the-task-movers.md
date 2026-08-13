@@ -107,3 +107,4 @@ A spawned producer has **no owner channel** — its `⛔ Owner:` banner is advis
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — ADR-032: The `fkit-sprint-ship-loop` autonomy & consent model — the conductor at sprint scope
 - [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill
 - [[tasks/wiki-resync-for-adr-033]] — `0126`, which swept this ADR's reversed posture out of the vault
+- [[tasks/sprint-4-ship-the-use-ready-self-healing-update]] — ⚠️ *Added 2026-08-13:* **an entire board archived with this ADR's honesty marker on all 8 of 8 rows.** The owner ruled the markers stay verbatim — *"the record stays honest about what was never checked"* — and ⛔ **explicitly forbade "cleaning them up"**. The clearest evidence yet that the marker ADR-033 §5 kept is load-bearing rather than clutter

@@ -74,3 +74,4 @@ Codex's adversarial pass found (finding **R1**, high, verified) that `claude/age
 - [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — task `0191`, which adds ADR-037's driver-side clause to this skill's `## Hard rules`
 - [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203`, which gives this skill's verbatim-carry rule an actual construction
 - [[tasks/add-an-exit-table-row-for-a-failed-build-verify-review-spawn-in-the-sprint-loop]] — task `0208`, the tenth row in this skill's exit table — the first covering a **non-producer** spawn that does not land
+- [[tasks/correct-the-five-remaining-prose-sites-that-state-the-glob-as-the-mechanism]] — task `0267` (2026-08-13): **two of this skill's own lines were among the seven sites ADR-041 falsified** — both said *"the active `sprint-*.md`"*, a mechanism that no longer exists

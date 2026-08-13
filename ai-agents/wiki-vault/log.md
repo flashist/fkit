@@ -1880,3 +1880,136 @@ place** (the lines were uncommitted this-run additions; no frozen surface was ed
 The ingest entry above is left byte-identical (append-only, no exceptions). Its Write-scope counts
 are unaffected: the same 8 vault files, no new page. The task worklog's own 7-vs-8 miscount (R3)
 was corrected in the worklog, at the claim.
+
+## 2026-08-13 — ingest (sync)
+
+- **Sync window:** `c3e7ba10b2c6483bae729561a45fdde47c82fc22` (2026-08-07) → HEAD `c071c3f40b8903cc50d113004dac7690dbe274d8` (2026-08-13). **12 commits, 6 days.** Working tree clean at start, so the delta is honest.
+- **Changed files under `ai-agents/` (excl. the vault): 134.** Filtered to **34 ingest-worthy**: 6 sprint boards, 8 knowledge-base files, 20 `done/` briefs. Skipped per the procedure: **45 backlog briefs** (not done — a page would be premature), **17 each** of `plan.md`/`worklog.md`/`review.md` (working artifacts, not sources), `ai-agents/README.md`, `.fkit-accepted-drift`.
+- **Vault: 211 → 235 pages.** 24 created, 40 updated, `index.md`, this entry, and the watermark.
+
+### Created — decisions (3)
+
+- `knowledge-base/decisions/adr-040-…` → **created** [[decisions/adr-040-a-plan-s-sprint-identity-is-a-whole-h1-segment-never-a-substring]] — the whole-segment grammar, the one-letter suffix bound, the closed `plan-` allowlist **recorded as an unevidenced owner-ruled forward bet**, the binding `moved_target` companion, §7's `unresolved-plan-sprint` regression guard, and the 12/12 validation with two rows empty *by design*. Carried and not softened, per `0269`'s explicit instruction: ***a wrong identity is strictly worse than no identity***, ***prose containment is not identity***, and the four rejected options with their named counter-examples. *(A page recording only "the regex was widened" is a worse record than no page — the brief's words.)*
+- `knowledge-base/decisions/adr-041-…` → **created** [[decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob]] — the compounded defect (**one file, both halves**), `Backlog` never eligible, the normalized `Backlog` token, §4's *"no filename enforcement point, and that is the point"*, §5's one-grammar constraint, the byte-order/`LC_ALL=C` tie-break, the seven falsified prose sites, the ADR's **withdrawal of its own draft over-claim**, and the **"highest N" residual — retained, not endorsed, ruled by the architect and flagged as such**.
+- `knowledge-base/decisions/adr-042-…` → **created** [[decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so]] — D1's three-state coverage vocabulary and its *"reporting-honesty rule, not a degradation flag"* qualifier; the three-review evidence table; **D2 preserved as what it is — an owner ruling against the architect's recommendation, taken knowingly and provisionally, with the objection kept as argued rather than rewritten into an endorsement**; the invariants it gives up; the mirror-image trap; the *"harden later"* correction that widens the owner's exit (Codex-side hooks, **four points unverified**); and the five-not-four correction note with its **executable-vs-documentation** distinction unflattened.
+
+### Created — sprint boards (2)
+
+- `sprints/done/sprint-4.md` → **created** [[tasks/sprint-4-ship-the-use-ready-self-healing-update]] — 8/8, a **plain close not a rollover**, ⛔ **archived unverified with the `(agent-closed — not owner-verified)` marker owner-ruled onto every row and explicitly not to be cleaned up**, the lifted-not-met stale-install gate, and `0262` carrying the discharge.
+- `sprints/sprint-5.md` → **created** [[tasks/sprint-5-fix-what-a-real-project-found]] — 🟢 the active board, 17 rows, both halves, **the founding scope's own hole (decided the defect, never fixed it)**, and **all three rank events with what each one is *not***.
+
+### Created — task pages (19)
+
+Sprint 4 chain: [[tasks/record-the-companion-adr-licensing-the-consent-gated-structure-repair]] · [[tasks/author-the-structure-spec-and-its-scaffold-inventory-drift-test]] · [[tasks/build-the-hash-manifest-generator-and-completeness-test]] · [[tasks/build-the-producer-owned-structure-check-skill]] · [[tasks/build-the-consent-gated-repair-path-inside-the-check-skill]] · [[tasks/add-the-launch-time-structure-notice-and-intent-file-suppression]] · [[tasks/update-the-docs-for-the-structure-check-capability]] · [[tasks/wiki-ingest-of-the-structure-check-design-report-and-companion-adr]] (`0242`–`0249`).
+
+Sprint 5: [[tasks/add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename]] · [[tasks/decide-the-plan-sprint-resolution-strategy]] · [[tasks/decide-whether-the-active-sprint-glob-widens]] · [[tasks/implement-adr-040s-identity-grammar-in-dashboard-sh]] · [[tasks/implement-adr-041s-dashboard-half]] · [[tasks/retire-the-sprint-glob-in-fkit-status-skill]] · [[tasks/correct-the-five-remaining-prose-sites-that-state-the-glob-as-the-mechanism]] · [[tasks/gloss-the-moved-to-sprint-n-row]] · [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] · [[tasks/fix-the-version-labeled-sha-triggered-update-banner]] · [[tasks/make-the-lockdown-guard-case-test-filesystem-independent]] (`0259`–`0261`, `0264`–`0268`, `0256`, `0257`, `0283`).
+
+### The known-false claims — re-derived, then judged one by one
+
+⚠️ **The set handed to this run was NOT trusted, and re-deriving it was right: it was wrong in both directions.** The `grep` was re-run and every hit classified **use vs mention**.
+
+**Corrected (present-tense assertions, now false).** Original left byte-identical, dated correction placed **at the claim** (the `0141`/`0143` form): [[systems/testing-and-verification]] (3 spots) · [[systems/fkit]] (2) · [[decisions/adr-003-ci-runs-validate-bundles]] (2) · [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] (2) · [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] · [[tasks/build-the-closed-rank-immutability-guard]] (2) · [[tasks/add-ci-validate-bundles]] · [[tasks/add-e2e-smoke-script-for-fkit-itself]] · `index.md` (2, strikethrough + dated note).
+
+**Left alone — correct as written, and re-verified as such:**
+- [[decisions/adr-014-how-fkit-tests-itself]]'s *"no CI, no test suite, no `.github/`"* — **the STARTING condition, past tense**, and `0256`'s own brief confirms ADR-014 states it that way. Given a forward pointer in `## Related` instead of an edit.
+- [[systems/testing-and-verification]]'s *"For most of its life the answer was nothing"* — past tense.
+- [[decisions/adr-026-…]]'s quotation of the ADR's own text — a mention, not an assertion.
+- **`log.md`'s hits — append-only, no exceptions** (owner-ruled 2026-08-03, task `0211`). Frozen history.
+- ⚠️ **The `"No CI planned."` quote on the `0182` page is a DATED OWNER RULING and is accurate as a record.** It was **not** edited; a note beneath it records that the ruling was **reversed on 2026-08-08**.
+
+**Two judgements worth stating, because the flat correction would have been wrong:**
+1. **The closed-rank guard's `⛔ not continuous protection` verdict SURVIVES.** *"No CI runs it"* is now false — it is a `test/*.test.js` file and CI runs `npm test`. But leg 2 compares **`HEAD` against `HEAD^` only**, so a CI run over a **multi-commit push inspects one transition** and a middle-commit breach is still missed. **CI closed the "nobody ran it" hole; it did not widen the guard's scope.** Recorded that way in all four places the claim appears.
+2. **`systems/fkit`'s sentence is half-false and half-true, and the halves are not collapsed.** *"there is still no `.github/`"* is false; ***"`install.sh` still has none" is STILL TRUE*** — `install.sh` coverage and `shellcheck` were **explicitly out of `0256`'s scope as their own briefs**. **CI landing is not the e2e gap closing.**
+
+### `systems/install-and-self-update` — the banner and the 5 s claim (task `0285`)
+
+- **The banner quote was the OLD text.** Corrected with **both** live forms, the ~86 %/142-commit measurement, the `v?` removal, ⚠️ **the "no git fallback exists to add" reason**, and ⚠️ **the fix's own stated non-goal: it is NOT validation** — a garbage remote `VERSION` still renders verbatim.
+- ⚠️ **"Time-boxed to 5 s" is FALSE on the git path, in BOTH places it appears** (§Summary and §Self-update). `FKIT_NET_TIMEOUT=5` is a real deadline **only for the curl branches**; `_fkit_remote_sha`'s git branch sets only `GIT_HTTP_LOW_SPEED_*`, which bounds a **stalled transfer, not DNS or connect** — **measured 12 s**. Verified on disk this run; the launcher's own comment says *"the git path is NOT deadlined."* `architecture.md` already carried this; **the vault did not until now.**
+- **§Release updated** for `0256`'s pre-bump gate, with the position-is-load-bearing and does-not-require-a-clean-tree reasons, and the still-open `0254` verify-command defect named.
+
+### ⚠️ Ten filed wiki tasks — overlap report, per task
+
+⛔ **No task file was moved, edited, or closed** (ADR-033 — the movers are the producer's, and this is the wiki). This run **flags**; the producer closes.
+
+| Task | Verdict | Basis |
+|---|---|---|
+| `0199` — ADR-010 page after the correction notes | **Untouched** | Its source (`adr-010…md`, changed by `0143`/`0195` on 2026-08-02) is **outside this sync window**. No work done, none owed by this run. |
+| `0206` — ingest the faithful-carry report | **Untouched** | `reports/2026-08-02-faithful-carry-…md` is **unchanged since the watermark** — not in the delta. |
+| `0212` — dated `log.md` entry correcting the *"still open"* framing | **Untouched** | Vault-internal; no source in this delta triggers it. **This entry does not discharge it** — it corrects nothing in the two frozen 2026-07-26 entries `0212` names. |
+| `0238` — resync after the Sprint 2 archival | **Untouched by this run; already partial from 2026-08-07** | `sprints/done/sprint-2.md` is in the delta, but nothing this run wrote touched its remaining scope. **Its prior "partial — not ready to close" flag stands unchanged.** |
+| `0239` — ADR-012 page after `0232` | **Untouched — precondition unmet** | `0232` is still in `tasks/backlog/`; `adr-012…md` is **not in this delta**. Verified on disk. |
+| `0258` — install-and-self-update after `0252` | **Untouched — precondition unmet** | `0252` is `🔲 Backlog` and **`RELEASING.md` does not exist** (verified). ⚠️ **This run DID edit that page, for `0285`'s and `0256`'s scope — not `0258`'s.** The channel/tag distinction and the `RELEASING.md` pointer are **still owed**. **Do not close `0258`.** |
+| `0263` — resync after the Sprint 4 archival / Sprint 5 open | **DONE by this run** | Sprint 4 and Sprint 5 pages created; `index.md` no longer calls Sprint 3 active; the sprint-3 page's `Source` re-pointed to `done/` and its close recorded; the `0185` page given the two-boards-since note. |
+| `0269` — ingest ADR-040 and ADR-041 | **DONE by this run** | Both read `accepted` (⛔ its hard precondition — checked). Both pages created carrying every element the brief enumerated. |
+| `0282` — resync the no-CI claims after `0256` | **DONE by this run** | Set re-derived rather than trusted; 13 sites corrected, 5 deliberately left with the reason recorded, 2 verdicts narrowed rather than reversed. |
+| `0285` — resync after `0257`, incl. the 5 s time-box | **DONE by this run** | Both halves — the banner string **and** the owner-ruled folded-in 5 s claim (⚠️ **corrected in both places it appeared, not just the one the brief named**). |
+
+⚠️ **Note for the producer:** `0263`, `0269`, `0282` and `0285` are the four whose vault work this run completed. `0238` and `0258` were **NOT** done and their preconditions are named above. `0199`, `0206`, `0212` and `0239` are untouched and out of this delta.
+
+### Verification
+
+- **235 pages · 235 distinct wiki-links · 0 broken.** Every link target resolves to a file on disk.
+- **0 pages uncatalogued** — every page under `wiki/` has an `index.md` entry.
+- **192 `**Source**:` paths checked, 0 dead.** ⚠️ **Note for the next lint:** the sprint-2 and sprint-3 pages each carry a *"was `<old path>`"* archival parenthetical containing a path that no longer exists. **Both are deliberate archival notes, not rot — do not "repair" them.** A naive greedy-match dead-path scan reports them.
+- **Every factual claim written this run was checked against disk**, not carried from the spawn prompt: `.github/workflows/test.yml` and its contents; `bin/release.mjs`'s gate and its position; the banner's two `printf` branches; `FKIT_NET_TIMEOUT`'s git-vs-curl asymmetry; `dashboard.sh`'s `SPRINT_ID_RE` / `resolve_identity` / `select-active` / `identity` / `moved_target`; `fkit-status/SKILL.md`'s selection prose; **all five `--sandbox` sites still reading `read-only`**; `0273`, `0232`, `0252` all still in `backlog/`; `RELEASING.md` absent; 20 `test/*.test.js`.
+- ⛔ **CI is NOT asserted green anywhere in this run's output.** The only CI result recorded is the **measured red one** — Actions run `31634593615`, 708/709 — and `0283`'s own *"do not claim CI is green without a run ID"* instruction is carried onto its page. **`0257`'s and `0283`'s changes landed after that run; no later run was observed by this session.**
+- **No secrets, endpoints, keys or credentials in any page written.**
+
+### Write scope
+
+Only `ai-agents/wiki-vault/` — **24 files created, 40 updated, plus `index.md`, `.wiki-watermark` and this entry.** `log.md` **appended only**; no past entry edited or annotated in place. Nothing committed, nothing staged. No task moved, no mover invoked; no brief, sprint plan, ADR, report, skill, agent definition, test or source file edited. **No `:NNN` coordinate written anywhere in this run's diff.**
+
+Task 0263's vault work is complete — ready to close
+Task 0269's vault work is complete — ready to close
+Task 0282's vault work is complete — ready to close
+Task 0285's vault work is complete — ready to close
+Task 0238: partial — not ready to close
+Task 0258: partial — not ready to close
+
+## 2026-08-13 — lint
+
+Run immediately after the same day's sync, over all **235** pages.
+
+- **Issues found: 62** · **fixed: 59** · **flagged for human review: 3**
+
+### Fixed
+
+- **54 one-way links** created by the sync's own new pages, plus **24 pre-existing** — **78 → 0**. Every back-link is a substantive bullet naming *why* the two pages relate, not a bare token. Hub pages (`adr-005`, `adr-015`, `adr-035`, `adr-040`, `adr-041`, `adr-042`, [[systems/testing-and-verification]]) received one **grouped** bullet rather than seven separate ones.
+- **[[systems/fkit]] — *"no test suite"*, in the Summary's opening sentence. FALSE, and pre-dating this sync.** Measured: **20 `test/*.test.js` + `prove-red.sh`**, run by `npm test` and, since 2026-08-12, by CI. Sentence left byte-identical, corrected beneath. ✅ The rest of the clause (no build step, no server, no database, no runtime state outside files) is correct and was **not** disturbed.
+- **[[systems/fkit]] — the skill census is stale by one.** Heading and count say **25**; **measured 26 on disk.** The addition is **`fkit-heal`** (`0245`/`0246`), and it was **missing from the ownership table** — row added under `producer`, with the ADR-005 vault-routing carve-out named. Heading and the 2026-07-26 count left byte-identical with a dated note. ⚠️ *A hard-coded census in a heading goes stale on the next skill and nothing checks it* — the same class this page already records about the agent-count literal, which was **removed** for exactly that reason.
+- **[[systems/testing-and-verification]] — the `**Key files**` line was stale.** It named **7 of 20** `*.test.js` files and **neither gate**. Rewritten in place (living systems page, 2026-08-06 lint precedent) to the full enumeration plus `.github/workflows/test.yml` and `bin/release.mjs`, dated. ⚠️ **The enumerated count is itself the risk the new line carries** — flagged in place.
+- **[[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]] — a dated-record path a future scan will re-report.** Its execution table names `ai-agents/sprints/sprint-3.md`, which moved to `done/` on 2026-08-07. **That is what the task did on the day, not link rot** — annotated with ⚠️ *"do not fix this path"*, table left byte-identical.
+
+### Checked clean
+
+| Check | Result |
+|---|---|
+| Broken wiki-links | **0** of 235 distinct targets |
+| Pages missing from `index.md` | **0** of 235 |
+| Orphans (no inbound link from any page) | **0** |
+| Required metadata (`**Layer**`/`**Key files**`, `**Date**`/`**Status**`, `**Source**`/`**Status**`) | **0 missing**, all 235 |
+| Missing `## Related` | **0** |
+| `**Source**:` paths resolving on disk | **192 checked, 0 dead** |
+| **ADR number/slug cross-check** | **0 missing counterparts · 0 slug divergences · 0 heading/filename mismatches** across 42 vault ADR pages |
+| **Duplicate ADR numbers in `knowledge-base/decisions/`** (separate pass, numeric compare, regular files only) | **0** |
+| Agent-count claim (*seven*) vs disk | **matches** — 7 files |
+
+⚠️ **The ADR cross-check was run to the skill's own rules**: regular files only, case-insensitive filename match, numeric comparison with leading zeros stripped, slugs compared **exactly**, and step 5 as a **separate pass over the knowledge-base** rather than nested in the vault loop.
+
+### Dead source paths — 10 distinct, ALL deliberate, none repaired
+
+Re-derived this run and each re-confirmed against the standing list: `ai-agents/.fkit-keep-out` (exists only in a consuming project that creates it) · `ai-agents/AGENTS-COMMON.md` (a rejected design's name) · `ai-agents/reviews/README.md`, `ai-agents/reviews/brief.md` (pre-ADR-029 structure) · `ai-agents/sprints/sprint-2.md` (pre-archival, frozen history and the `0236` sweep's deliberate specimens) · **`ai-agents/sprints/sprint-3.md` — NEW this cycle**, both instances now annotated · `claude/agents/fkit-git.md` (never built, ADR-023) · `claude/dashboard.sh` (a correction note quoting the error it fixed) · `claude/universal-rules.md` (**the page itself calls it "a path that does not exist" — that is the finding**) · `test/skill-ownership-sites.mjs` (**both pages state the file is absent**; re-verified still absent).
+
+⚠️ **Note for the next lint, carried forward and extended:** a dead-path scan **will** report all ten, plus `0211`'s two quoted flag specimens in `log.md`, plus the sprint-2 and sprint-3 pages' *"was `<old path>`"* archival parentheticals. ⛔ **Do not "re-fix" any of them.**
+
+### ⚠️ Flagged for human review — 3
+
+1. ⛔ **`claude/skills/fkit-wiki-lint/SKILL.md` ships a FALSE claim to every consuming project, and it is this very procedure's own text.** It reads: *"nothing runs that automatically — **this project has no CI** (`architecture.md:390`: 'There is no CI and no test suite'; there is no `.github/`)"*. **Both halves are wrong as of 2026-08-12:** `.github/workflows/test.yml` exists and runs `npm test`, which includes `test/adr-number-uniqueness.test.js` — the very guard the passage claims nothing runs. **And the citation is dead**: `architecture.md:390` now sits in the update-banner section and contains no such sentence. ⚠️ **The passage's *conclusion* still holds and must not be dropped** — *this lint step is still not redundant*, because CI covers only committed pushes and a vault-only collision can exist unpushed. **Fix the premise, keep the step.** ⛔ **Outside the wiki's write scope — this is `claude/` source, and the wiki writes only `ai-agents/wiki-vault/`.** It also carries a `:NNN` into a mutable file, which the house citation form forbids. **Owner/producer to route.**
+2. ⚠️ **The Codex sandbox flag is described in three vault pages and ADR-042's D2 will falsify all three when it ships.** [[systems/review-and-model-diversity]], [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]] and [[tasks/give-codex-the-universal-hard-rules]] each state `--sandbox read-only`. **Verified 2026-08-13: all five sites under `claude/` still read `read-only` and task `0273` is open, so the three pages are ACCURATE TODAY** and were annotated rather than corrected. ⚠️ **`0273` landing makes them false the same day** — and [[tasks/give-codex-the-universal-hard-rules]]'s rule-3 wording rests on the premise *"Codex cannot move a file anyway"*, which D2 retires. **A vault resync should be filed against `0273`; the wiki does not file tasks.**
+3. ⚠️ **The suite-size prose chain on [[systems/testing-and-verification]] records dated readings (eleven → thirteen → 560/17 suites → 567) and now understates the tree by a wide margin.** Each reading is **correct as a dated record** and none was edited. The current figure (**20 `*.test.js`**) lives only in the newly-corrected `**Key files**` line. **Whether the prose chain gets a current-state entry is a judgement about how much census a living page should carry** — the page already argues that ADR-014's *"it stays this size"* describes the tree less every sprint. **Not resolved by this lint.**
+
+### Write scope
+
+Only `ai-agents/wiki-vault/` — pages edited in place or annotated, plus this entry. `log.md` **appended only**; no past entry edited. `.wiki-watermark` **not touched by the lint** (the sync already advanced it to `c071c3f`). Nothing committed, nothing staged. No task moved, no mover invoked; no brief, sprint plan, ADR, report, skill, agent definition, test or source file edited. **No `:NNN` coordinate written into any vault page by this lint** — the one `:NNN` above appears inside a quotation of the defect being reported.
+
+No tracked task completed by this run.

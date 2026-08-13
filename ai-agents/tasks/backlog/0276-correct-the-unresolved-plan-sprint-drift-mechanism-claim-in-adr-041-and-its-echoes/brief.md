@@ -206,7 +206,7 @@ right.** Assessed at filing, 2026-08-12:
   out of step"*. Splitting would manufacture exactly the out-of-step state the residual forbids, and
   AR4's recorded reasoning says so directly: *"a skill that says one thing and its cited ADR another
   is worse than the current single consistent imprecision."* **They land together.**
-- **⚠️ WIKI INTERACTION with [`0269`](../0269-wiki-ingest-of-adr-040-and-adr-041-the-sprint-identity-decisions/brief.md)
+- **⚠️ WIKI INTERACTION with [`0269`](../../done/0269-wiki-ingest-of-adr-040-and-adr-041-the-sprint-identity-decisions/brief.md)
   — a real ordering effect, recorded as a note and deliberately NOT a `Depends on:`.** `0269` is the
   pending wiki ingest of ADR-040/041. Measured at filing 2026-08-12: `ai-agents/wiki-vault/` contains
   **zero** occurrences of `unresolved-plan-sprint`, so **nothing in the vault carries the false claim

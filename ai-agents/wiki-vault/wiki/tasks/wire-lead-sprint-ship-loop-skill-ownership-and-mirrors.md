@@ -39,3 +39,4 @@ The test asserts **allow for lead, deny for every other role**, pinning the JSON
 - [[systems/testing-and-verification]] — Testing & Verification
 - [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill
 - [[tasks/evolve-fkit-lead-into-orchestrating-conductor]] — Evolve `fkit-lead` into the orchestrating conductor (reverse the non-doer stance)
+- [[tasks/build-the-producer-owned-structure-check-skill]] — task `0245` (2026-08-07): **applied this task's lesson deliberately** — the new skill was declared to the producer in `skills_for_role()` *and* on every surface that ownership fact touches, including the hook's test matrix. *An unwired skill exists and the hook denies it to everyone*

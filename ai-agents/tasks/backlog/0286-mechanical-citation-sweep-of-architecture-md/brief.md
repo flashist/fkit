@@ -28,7 +28,7 @@ The driver folded `0257`'s own line-shift residual into this task **rather than 
 sibling rows —
 [`0284`](../0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)
 (*"New task + correct the false claims now (Recommended)"*) and
-[`0285`](../0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md) (*"File a new
+[`0285`](../../done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md) (*"File a new
 resync task (Recommended)"*) — **do not cover this one.** It is a driver-filed row. **Say so if
 anyone asks what authorized it.**
 

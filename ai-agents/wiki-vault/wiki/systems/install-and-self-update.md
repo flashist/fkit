@@ -8,6 +8,8 @@ How fkit gets onto a machine and stays current. `curl … install.sh | sh` insta
 
 **fkit opens no ports, exposes no API, and stores no data outside the project's own files.** Every network call is optional, time-boxed to 5 s, and silent on failure — offline `fkit` must cost nothing and print nothing.
 
+> ⚠️ **Dated correction 2026-08-13 (the `0285` resync; the sentence above is left byte-identical). *"Time-boxed to 5 s"* is FALSE on the git path.** `FKIT_NET_TIMEOUT=5` is a **real deadline only for the curl branches** (`--max-time 5`). The `git ls-remote` branch sets **only `GIT_HTTP_LOW_SPEED_LIMIT` / `GIT_HTTP_LOW_SPEED_TIME`**, which bound a **stalled transfer** — **not DNS, not connect**. So the git path **has no deadline and can outlive 5 s: measured 12 s** against a sleeping `ls-remote` stub. The launcher's own comment says so in the source: *"the git path is NOT deadlined."* ✅ `ai-agents/knowledge-base/architecture.md` already carries this correction; **the vault did not until now.** ✅ **The rest of the sentence is unaffected and still true** — every network call is optional and silent on failure.
+
 ## Architecture
 
 ### Install
@@ -49,10 +51,32 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 - **`fkit update`** — an **explicit verb**. Re-runs the canonical `install.sh` for `$repo@$ref`. Refuses to run in a source checkout ("update it with `git pull`").
 - **the automatic check** — throttled (60 min default), **time-boxed to 5 s**, silent when current and silent when offline, and it **only ever prints**: `↑ fkit vX → vY is available. Run: fkit update`.
 
+> ⚠️ **Dated correction 2026-08-13 (the `0285` resync; the bullet above is left byte-identical). TWO of its claims are now wrong, for two unrelated reasons.**
+>
+> **1. The banner text quoted above is the OLD text.** [[tasks/fix-the-version-labeled-sha-triggered-update-banner]] (`0257`, closed 2026-08-13) changed it, because the check **triggers on commit sha** and **labelled both sides from `VERSION`** — so every commit that did not bump `VERSION` rendered `↑ fkit v0.2.1 → v0.2.1 is available`. ⚠️ **Not an edge case: the steady state.** Measured — **~86% of all commits** produce a same-label banner, and one install sat on that line for **142 consecutive commits**. *The banner was correct — there really was newer content, because distribution is sha-keyed — but its wording told the reader nothing had changed.* **A true signal that reads as noise.** The two live forms:
+>
+> ```
+>   ↑ fkit v0.2.1 — newer content on main (1111111 → deadbee). Run:  fkit update
+>   ↑ fkit v0.1.30 → v0.2.1 is available. Run:  fkit update      ← unchanged when versions differ
+> ```
+>
+> The `vA → vB` form is now emitted **only when there really are two distinct known versions**. This also removed the reachable **`v?`** that appeared on a git-only box, where `_fkit_remote_sha` falls back git → curl but `_fkit_remote_version` is **curl-only**. ⚠️ **There is no git fallback to add**: `git ls-remote` returns refs, not file content, and GitHub refuses `git archive --remote`. ⚠️ **The fix is NOT validation** — both sides are only tested for non-emptiness, so a garbage remote `VERSION` still renders verbatim; that is a separate call, deliberately left open. **Coverage now exists** (`test/update-banner.test.js`), closing a gap `0257` measured as zero.
+>
+> **2. *"Time-boxed to 5 s"* is FALSE on the git path** — see the correction under §Summary. **Trigger semantics are unchanged** (sha comparison stays, correct for a sha-keyed distribution), as are the throttle, the silent-when-current and silent-when-offline behaviour, and the source-checkout exclusion.
+
 **It never auto-updates and never re-execs itself** — deliberately unlike the Omnigent launcher it replaces, which had no timeout and no `GIT_TERMINAL_PROMPT` guard (a credential-prompting repo would hang the launcher indefinitely). Source checkouts are excluded entirely.
 
 ### Release
 `npm run release` → `bin/release.mjs`: bump `VERSION` + `package.json` (patch by default), `git add -A`, commit, push, annotated tag `v<version>`, push the tag. **No npm-registry publish.**
+
+> ✅ **Updated 2026-08-13 (the `0285` resync; the line above is left byte-identical and is now INCOMPLETE — it describes a sequence that gained a step in front of it).** [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] (`0256`, closed 2026-08-12) put a **blocking `npm test` gate before the bump**, and landed **CI** alongside it. ⚠️ **This reverses the owner's earlier `"No CI planned."` ruling.**
+>
+> - **The gate blocks on red — there is deliberately no warn-and-continue path.** `--no-test` exists, prints a loud unverified-tree warning, and *"is never a default"*.
+> - ⚠️ **Its position is load-bearing.** It sits **immediately before the first mutating line**, so a red suite aborts cleanly with the tree as the user left it. **Gating any later would leave `VERSION` and `package.json` bumped and dirty, and the next default run would bump AGAIN — silently skipping a version.**
+> - ⚠️ **It deliberately does NOT require a clean tree**, and must not: `npm test` and `git add -A` both read the **working tree**, so the gate tests the tree as it stood when the suite started — uncommitted work included. It does **not** test the exact committed bytes; ~6 min separate the gate from `git add -A`. **That is precisely what CI cannot cover, because CI never sees that tree.**
+> - **Measured cost: ~5m30s–6m20s per release.**
+>
+> ⚠️ **The unrunnable verify command `bin/release.mjs` prints after a release is a SEPARATE, still-open defect** (task `0254`, Sprint 5): it prints an `npx github:…` line, but `package.json` has **no `bin` field**, so the command fails with *"could not determine executable to run"*. ⛔ **The fix is not to add a `bin` field** (no npm publish). ⚠️ **`RELEASING.md` does not exist yet** — task `0252` is still open, which is why the `0258` resync of this page has **not** run.
 
 **Version bumping is load-bearing** — self-update compares the installed sha against the remote head and reports the version from `VERSION`. This is precisely why [[decisions/adr-001-package-json-stays-metadata-only]]'s "stop bumping the version" instruction had to be superseded: following it would have broken self-update.
 
@@ -101,3 +125,10 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 - [[tasks/transcript-independent-ship-loop-skip-signal]] — `build_settings()` now wires a **third** hook event
 - [[tasks/design-the-post-update-structure-check]] — task `0241` (2026-08-06): the structure-spec `.md` + hash manifest are designed to live **in the install share** beside the scaffold — refreshed wholesale, so they are by construction the installed sha's spec (a project-local copy would be stepped over forever). Design only; follow-ups `0242`–`0249` filed
 - [[decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged]] — the companion ADR recorded 2026-08-07 (`0242`): the consent-gated repair licence, its six verbatim rulings, and the manifest as determination layer
+- [[tasks/fix-the-version-labeled-sha-triggered-update-banner]] — task `0257` (2026-08-13): the banner triggered on **sha** and labelled from **`VERSION`**, so ~86% of commits rendered `vX → vX`. New wording + the `v?` path removed + the repo's first banner test
+- [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] — task `0256` (2026-08-12): the blocking pre-release `npm test` gate **and** `.github/workflows/test.yml`. ⚠️ Reverses the owner's earlier *"No CI planned."* ruling
+- [[tasks/build-the-producer-owned-structure-check-skill]] — the producer-owned conformance check over the install share's spec + manifest
+- [[tasks/build-the-consent-gated-repair-path-inside-the-check-skill]] — the self-heal path: propose-then-apply, **never announce-only, never stored**
+- [[tasks/add-the-launch-time-structure-notice-and-intent-file-suppression]] — the read-only launch notice; the launch path gains **no new power**
+- [[tasks/sprint-4-ship-the-use-ready-self-healing-update]] — the board that shipped the structure-check capability, **archived unverified**
+- [[tasks/sprint-5-fix-what-a-real-project-found]] — the release-hygiene cluster's live board

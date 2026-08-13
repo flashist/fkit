@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -33,7 +33,7 @@ This answers the open question left in [Sprint 5](../../../sprints/sprint-5.md)'
 
 ### ⚠️ This task does NOT subsume `0238`, and the reason is the ruling's own reason
 
-[`0238`](../0238-wiki-resync-after-the-sprint-2-archival-and-sprint-3-open/brief.md) re-syncs the
+[`0238`](../../backlog/0238-wiki-resync-after-the-sprint-2-archival-and-sprint-3-open/brief.md) re-syncs the
 vault after the **Sprint 2 → Sprint 3** rollover of 2026-08-06. **This task re-syncs it after the
 Sprint 4 archival and Sprint 5 open of 2026-08-10.** Different archival, different source delta,
 different set of false claims. Neither is a superset of the other:
@@ -128,7 +128,7 @@ A vault re-sync that makes `ai-agents/wiki-vault/` describe board reality as of 
    must carry it too.** The two facts above are left **byte-identical** and both still hold. A second
    owner ruling of 2026-08-10 (verbatim option label **"0262 replaces it — record that
    (Recommended)"**) records that
-   [`0262`](../0262-run-the-real-project-stale-install-test-outside-this-repo/brief.md) **carries the
+   [`0262`](../../backlog/0262-run-the-real-project-stale-install-test-outside-this-repo/brief.md) **carries the
    2026-08-08 promise to personally verify `0245`/`0246` and discharges it on completion** — so the
    promise is being **met by a different route**, not abandoned. ⛔ **It does NOT make anything
    verified:** all eight closes keep `(agent-closed — not owner-verified)` **permanently**, and ⛔ **a
@@ -238,7 +238,7 @@ A vault re-sync that makes `ai-agents/wiki-vault/` describe board reality as of 
 - **⚠️ This brief decays.** Every count and line number was measured **2026-08-10**. Re-measure at
   implementation time.
 - **Line-number citations are dated anchors of convenience**; the durable anchors are the quoted text.
-  [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) is the open task for
+  [`0171`](../../backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md) is the open task for
   the convention page.
 - **Priority is `—` (unscheduled).** Filed to the **Backlog** board; no sprint was named by the owner
   and no row was re-ranked (ADR-035, `/fkit-task-brief` step 5).

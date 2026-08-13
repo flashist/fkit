@@ -269,7 +269,7 @@ kind of call the architect exists for. **Do not guess between the rows above.**
   `architecture.md` prose it may shift that file's own line numbers again** — see `## Notes`.
 - ⛔ **Any `ai-agents/wiki-vault/` write** (ADR-005). The vault's `systems/install-and-self-update`
   page still asserts a 5 s box; correcting it is
-  [`0285`](../0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md)'s, and it
+  [`0285`](../../done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md)'s, and it
   will need a **further** pass after this lands. **Report, do not write.**
 - ⛔ No commit, no re-rank, no task-file move (ADR-033).
 
@@ -330,7 +330,7 @@ kind of call the architect exists for. **Do not guess between the rows above.**
   for that function was also corrected: `:99-103`, not `:99-104`** — re-read from disk during the
   amendment. **That is the sixth recorded instance in this file's history of a cited line number
   being wrong**; the durable anchor is the quoted text.
-- **⚠️ ORDERING against [`0285`](../0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md)
+- **⚠️ ORDERING against [`0285`](../../done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md)
   — recorded as a dated note, deliberately NOT a `Depends on:` edge** (the convention this board uses
   for soft ordering). `0285` corrects the vault page to say the git path is **unbounded**, which is
   true today. **If this task lands first, `0285` should describe the bound instead of the gap** —

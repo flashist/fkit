@@ -10,7 +10,7 @@ Sprint 5
 Sprint 5 P9
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -36,7 +36,7 @@ the vault; neither wrote anything there.
 
 Stated either way, as required, and checked **before** filing rather than assumed:
 
-- **[`0258`](../0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md)** — re-syncs
+- **[`0258`](../../backlog/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md)** — re-syncs
   `systems/install-and-self-update` after `0252` lands `RELEASING.md`. Different page, different
   source, hard-gated on `0252`. **No overlap.**
 - **[`0263`](../0263-wiki-resync-after-the-sprint-4-archival-and-sprint-5-open/brief.md)** — re-syncs
@@ -136,7 +136,7 @@ Vault pages for **ADR-040** and **ADR-041**, following the vault's own decisions
   **If some of `0264`–`0268` have landed by the time this runs, say so in the worklog and record it;
   do not silently widen scope.**
 - **✅ OWNER RULING 2026-08-12 — scheduling preference, not a dependency: land this AFTER
-  [`0276`](../0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md).**
+  [`0276`](../../backlog/0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md).**
   Ruled live via `AskUserQuestion` and relayed through the `/fkit-sprint-ship-loop` driver session —
   **the option label is the verbatim text**: **"Record the ordering, don't gate it (Recommended)."**
   Reasoning as ruled: `0276` corrects a claim **in ADR-041**, which is this task's ingest source. Run
@@ -194,3 +194,22 @@ Vault pages for **ADR-040** and **ADR-041**, following the vault's own decisions
   §"Addendum — the owner-ruled re-rank of 2026-08-11".
   ⛔ **Unchanged by this note:** the *"do not start before BOTH ADRs read `accepted`"* gate — both
   read `accepted` as of 2026-08-10, verified on disk.
+  ✅ **NOTE 2026-08-13 — THIS TASK HAS SHIPPED. The exclusion sentence above is left byte-identical,
+  a SECOND clause of it is now stale, and the exclusion it records was NEVER VIOLATED.** This task
+  closed **2026-08-13** as `✅ Done (agent-closed — not owner-verified)` — which is what `## Status`
+  at the top of this brief now reads, and **that header is the live state**. *"`## Status` stays
+  `🔲 Backlog`"* was true **of the exclusion** and stays true of it: pulling a row out of a loop run
+  still closes nothing. The status moved anyway, by a **different and later authority** — the close
+  described in this note. ⛔ **Every other word of that sentence is untouched and was never breached:
+  it was NOT blocked, NOT deprioritised, NOT descoped, and it never ran inside the loop.**
+  ⚠️ **How it ran, because that is the whole point.** It did **not** run through
+  `/fkit-sprint-ship-loop`. It ran via a **spawned `@fkit-wiki` librarian** during an
+  owner-requested wiki sync + lint — **exactly the `fkit wiki` route the 2026-08-10 ruling above
+  itself names**. The ruling said the loop could not drive this row; **the loop never drove it.** A
+  different, sanctioned route did the work. The exclusion was honoured, not spent.
+  ✅ **The `accepted` gate was checked and met before ingest** — ADR-040 and ADR-041 **both read
+  `accepted`** on disk, re-verified at close rather than carried from the 2026-08-10 line above.
+  ⛔ **This reopens nothing.** `0255` and `0258` remain excluded from a loop run and their rulings
+  stand word for word — both still `🔲 Backlog`, both still Sprint 5, neither blocked, deprioritised
+  nor descoped. Only this row left the open set, and it left by **shipping**. Matching notes are on
+  [`sprint-5.md`](../../../sprints/sprint-5.md) — this row's board cell and both `## Notes` sites.

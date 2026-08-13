@@ -1,0 +1,125 @@
+# Sprint 5 — Fix what a real project found, and make a release safe to cut
+
+**Source**: `ai-agents/sprints/sprint-5.md`
+**Status**: in-progress — 🟢 **THE ACTIVE BOARD**, opened 2026-08-10 by owner ruling
+**Sprint/Tag**: Sprint 5 · **17 rows** · ranks restart at `P1` — *cite a rank with its board; a bare `P4` is ambiguous*
+
+## Goal
+
+Two halves, one sprint:
+
+1. **The dashboard defect** (`0259`–`0261`, then `0264`–`0269`) — **the first defect a real downstream
+   project ever reported in shipped fkit code.** `PLAN_SPRINT` resolved empty for every sprint-plan
+   naming convention they use, making drift rule 1 inert.
+2. **Release hygiene** (`0252`–`0258`) — nothing gated a release on a green tree, the update banner
+   told every installed user `vX → vX`, the verify command the releaser is handed does not run, and
+   the release story is written down nowhere.
+
+## Key Changes
+
+**Shipped (11 of 17 rows, all `✅ Done (agent-closed — not owner-verified)`):**
+
+| Rank | Task | What landed |
+|---|---|---|
+| P1 | `0259` | The **red fixture** — shipped `npm test` RED **on purpose** |
+| P2 | `0260` | → [[decisions/adr-040-a-plan-s-sprint-identity-is-a-whole-h1-segment-never-a-substring]] |
+| P3 | `0261` | → [[decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob]] |
+| P4 | `0264` | ADR-040's identity grammar in `dashboard.sh` — both rungs **and** the `moved_target` companion |
+| P5 | `0265` | ADR-041's dashboard half — the `Backlog` token and the resolve-identity interface |
+| P6 | `0266` | The `sprint-*.md` glob **retired** in `fkit-status/SKILL.md` |
+| P7 | `0267` | The five remaining prose sites that stated the glob as the mechanism |
+| P8 | `0268` | The `➡️ Moved to [Sprint N]` gloss — `N` reads as **the identity**, not a number |
+| P10 | `0256` | **CI** (`.github/workflows/test.yml`) **and** an in-release `npm test` gate |
+| P11 | `0257` | The version-labeled, sha-triggered **update banner** |
+| P17 | `0283` | The case-sensitivity test defect **found by fkit's first-ever CI run** |
+
+**Still open:** `0269` (P9, wiki), `0254` (P12), `0252` (P13), `0253` (P14), `0255` (P15), `0258`
+(P16, wiki).
+
+## Outcome
+
+### ⚠️ This board supersedes a gate the owner set two days earlier — and both halves were unsatisfied
+
+The 2026-08-08 ruling held the release-hygiene cluster off any sprint on two stated reasons. **The
+stale-install test was NOT run**, and **neither `0245` nor `0246` was owner-verified.** *The gate was
+lifted, not met* — because a real user filed a real defect in shipped code and the fix became the
+priority. **What that costs, stated rather than implied: this board is built on an unverified Sprint
+4, so if a regression surfaces, which board it came from is genuinely ambiguous.** The owner accepted
+that knowingly.
+
+### ⚠️ The founding scope DECIDED the downstream defect and never FIXED it
+
+Sprint 5 opened on the owner's verbatim ruling **"Dashboard + all of 0252-0258"** — ten tasks. But
+`0259` is a red fixture and `0260`/`0261` are ADRs: **no row turned either decision into working
+code**, while the board's own `## Notes` carried an owner-ruled **release gate testing `0260`'s
+landed pattern**. *So the release waited on work no board scheduled, and the downstream project's bug
+would have survived the sprint that exists to fix it.* `0264`–`0269` were added by a second owner
+ruling to close that hole.
+
+### The three rank events, and what each one is *not*
+
+1. **The out-of-band append (2026-08-10).** The owner's ruling placed the six new rows at `P4`–`P9` —
+   a **mid-board insertion**. The spawned producer **declined to perform it** and appended at
+   `P11`–`P16` instead, recording the ordering intent as per-brief merit statements.
+   [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] and
+   `/fkit-task-brief` step 5 both state that a spawned producer **never re-ranks, not even on a
+   spawn-prompt instruction**. ⚠️ **The append changed the outcome**: `0264` — the row that returns
+   `npm test` to green — would have been reached **last** by a rank-ordered pass. ⛔ **Not producer
+   precedent for re-ranking; it is the record of a producer declining to insert.**
+2. **The owner-ruled re-rank (2026-08-11).** The owner answered in prose in a live `fkit producer`
+   session — **verbatim `let's do it`** — and `0264`–`0269` moved to `P4`–`P9`, displacing seven rows
+   down six places. ⚠️ **This was permitted because it is a MOVE of existing rows, not an insertion**:
+   nothing entered the numbering, no closed row was renumbered (the only closed rows, `P2`/`P3`, sit
+   **above** the move), and the move reached exactly the top of its contiguous open run — `0264` to
+   `P4`, *not one place further*. Had the ruling named `P2` or `P3` it would have been **refused**.
+   ⛔ **Still not producer precedent.**
+3. **The `0283` append (2026-08-13).** Appended at `P17`. ⚠️ **On merit it belongs at the TOP of the
+   board, above `0259`** — it was the only red on `main`. **That position is unreachable**: nine
+   closed rows sit below every position above `P11`. *The append is a forced consequence of the
+   closed-row rule, not a judgement about importance.* **Flagged for owner confirmation.**
+
+⚠️ **One merit position was NOT satisfied and is recorded rather than smoothed over:** `0265` and
+`0268` both carry *"immediately below `0264`"* and only one row can hold `P5`. No dependency is
+violated, but `0268` sits three below its stated merit position and **its brief says so**.
+
+### Three rows are OUT of the `/fkit-sprint-ship-loop` run — and it is not a block
+
+`0255`, `0258`, `0269`, by owner rulings of 2026-08-10. The two wiki rows are excluded because **the
+loop never reads `## Owner`** ([[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]]):
+its Build step spawns `@fkit-coder`, which is forbidden from writing the vault, so the loop would
+stall on a refusal or breach ADR-005. `0255` is excluded because it needs a **second** owner beat the
+loop has no gate for. ⚠️ **They stay `🔲 Backlog`, stay in Sprint 5, and keep their ranks — an
+exclusion from *this loop run*, not a block, deprioritisation, or descope.** ⚠️ **Cite them by ID,
+never by rank**: the 2026-08-11 re-rank moved all three, and `0269` in particular is **no longer the
+bottom row — it is `P9`**, so a rank-ordered pass now reaches it early and must still exclude it.
+
+### The board's own accumulated staleness, deliberately left
+
+Every superseded paragraph on this board is left **byte-identical** with a dated correction appended
+beneath it — the house form. The result is that the `## Status` banner says *"Ten tasks"*, the
+2026-08-10 addendum says *"sixteen rows"*, and **the board carries seventeen**. Each was true when
+written. ⚠️ **`backlog.md`'s seven `➡️ Moved to [Sprint 5] — priority P<n>` rows were deliberately NOT
+edited** — they are closed rows and the never-renumber rule admits no exception, so their destination
+ranks are **stale by design**.
+
+## Related
+- [[tasks/sprint-4-ship-the-use-ready-self-healing-update]] — the board this one follows
+- [[decisions/adr-040-a-plan-s-sprint-identity-is-a-whole-h1-segment-never-a-substring]]
+- [[decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob]]
+- [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — the wall all three rank events were checked against
+- [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — why the loop cannot run the wiki rows
+- [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — where the release-hygiene cluster was carried from
+- [[tasks/gate-releases-so-an-untested-tree-cannot-ship]]
+- [[tasks/fix-the-version-labeled-sha-triggered-update-banner]]
+- [[tasks/make-the-lockdown-guard-case-test-filesystem-independent]]
+- [[tasks/implement-adr-040s-identity-grammar-in-dashboard-sh]]
+- [[tasks/implement-adr-041s-dashboard-half]]
+- [[tasks/retire-the-sprint-glob-in-fkit-status-skill]]
+- [[tasks/correct-the-five-remaining-prose-sites-that-state-the-glob-as-the-mechanism]]
+- [[tasks/gloss-the-moved-to-sprint-n-row]]
+- [[tasks/add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename]]
+- [[tasks/decide-the-plan-sprint-resolution-strategy]]
+- [[tasks/decide-whether-the-active-sprint-glob-widens]]
+- [[systems/testing-and-verification]]
+- [[systems/install-and-self-update]]
+- [[systems/fkit]] · [[tasks/sprint-3-close-the-rank-integrity-loop]] · [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]] — the board lineage

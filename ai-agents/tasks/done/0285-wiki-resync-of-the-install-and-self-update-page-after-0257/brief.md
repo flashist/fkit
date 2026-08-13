@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -35,7 +35,7 @@ banner text verbatim and will need a resync — file it as a follow-up, do not w
 ### ⛔ THIS IS A NEW TASK. IT IS NOT A WIDENING OF `0258`.
 
 **The owner ruled this explicitly on 2026-08-13.**
-[`0258`](../0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md) resyncs the
+[`0258`](../../backlog/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md) resyncs the
 **same page**, and its scope is **deliberately `0252`-only**. That narrowing is itself an owner
 ruling, recorded on the Backlog board row for `0258`
 ([`backlog.md:185`](../../../sprints/backlog.md), verbatim: *"scope is `0252` only — `0256`/`0257`
@@ -53,9 +53,9 @@ see `## Notes` for the ordering note.
 exclusively** ([ADR-005](../../../knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)).
 
 ⚠️ **The sprint loop cannot run this row**, for the same reason recorded on
-[`0258`](../0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md),
-[`0269`](../0269-wiki-ingest-of-adr-040-and-adr-041-the-sprint-identity-decisions/brief.md) and
-[`0282`](../0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md): **the loop never
+[`0258`](../../backlog/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md),
+[`0269`](../../done/0269-wiki-ingest-of-adr-040-and-adr-041-the-sprint-identity-decisions/brief.md) and
+[`0282`](../../done/0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md): **the loop never
 reads `## Owner`** — [ADR-038](../../../knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md)
 fixes each step's role to the skill that step runs, so its **Build** step spawns `@fkit-coder`, and
 `claude/agents/fkit-coder.md` forbids that role from writing the vault **ever**. Driven by the loop,
@@ -252,11 +252,11 @@ librarian's call which fits**).
 - **⚠️ ORDERING — recorded as a dated note, deliberately NOT a `Depends on:` edge** (the convention
   this board uses for soft ordering; see `0256`→`0252`, and `0282`'s own note). **Three interactions,
   measured 2026-08-13:**
-  - **[`0258`](../0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md)** — same
+  - **[`0258`](../../backlog/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md)** — same
     page, currently ranked **Sprint 5 P10**. ✅ **Run `0258` first.** It is scheduled, it is scoped to
     a different section (§Release + the `**Key files**` line), and running this row first would leave
     it editing a page that moved under it. ⛔ **Never concurrently.**
-  - **[`0284`](../0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)** —
+  - **[`0284`](../../backlog/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)** —
     fixes the unbounded git path — **and, since the owner's 2026-08-13 "Fold into 0284 (Recommended)"
     ruling, `_fkit_reinstall`'s missing `--max-time` as well.** ⚠️ **If `0284` lands first, the correct
     page text is "bounded", not "unbounded", and writing the gap here would be stale on arrival.**
@@ -267,7 +267,7 @@ librarian's call which fits**).
     `install.sh:32` / `:59` carry no deadline — so **even a fully successful `0284` leaves `fkit
     update`'s actual download unbounded**. ⚠️ **Write only what the launcher on disk does on the day
     this runs.** Measured 2026-08-13.
-  - **[`0286`](../0286-mechanical-citation-sweep-of-architecture-md/brief.md)** — corrects
+  - **[`0286`](../../backlog/0286-mechanical-citation-sweep-of-architecture-md/brief.md)** — corrects
     `architecture.md`'s citations. Unrelated subject, **same hazard**: this resync reads
     `architecture.md` as a source, and reading it before its citations are repaired means ingesting
     coordinates that are already wrong. ⚠️ **The prose claims this task ingests are correct today; it

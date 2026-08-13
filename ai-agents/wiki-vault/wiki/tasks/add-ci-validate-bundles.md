@@ -17,6 +17,13 @@ There was no CI in the repo. `omnigent/validate-bundles.sh` already existed and 
 
 **Open question for the owner:** is a `shellcheck` + smoke-install CI in scope, or is manual verification the accepted permanent posture for a prototype? *(The nominated home for that question, [[tasks/add-e2e-smoke-script-for-fkit-itself]], has since been cancelled — superseded by [[tasks/add-launcher-contract-smoke-script]], which does not cover `install.sh`. The question itself is still unresolved.)*
 
+> ✅ **Dated correction 2026-08-13 (the `0282` resync; both paragraphs above are left byte-identical). PARTLY ANSWERED — and the split matters.**
+>
+> - ✅ ***"there is still no `.github/`"* is FALSE.** [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] (`0256`, closed 2026-08-12) landed `.github/workflows/test.yml` — `npm test` on every push to `main`, every pull request, plus on demand — alongside a blocking `npm test` gate in `bin/release.mjs`. ⚠️ **This reverses the owner's later `"No CI planned."` ruling of 2026-08-06.**
+> - ⛔ ***"`install.sh` still has zero automated coverage"* is STILL TRUE, and so is the open question's `shellcheck` + smoke-install half.** Both were **explicitly out of `0256`'s scope, named as their own briefs** — the owner's ruling was *"build a gate"*, not the broader wording. **An `install.sh` e2e needs a clean `$HOME` and is a materially different piece of work.**
+>
+> ***So the gap this cancelled task named is now partly closed on the CI axis and untouched on the `install.sh` axis.*** The `curl | sh` entry point, the highest-blast-radius file in the repo, is still verified by nothing.
+
 ## Related
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
 - [[decisions/adr-003-ci-runs-validate-bundles]]

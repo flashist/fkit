@@ -1,8 +1,10 @@
 # Sprint 3 — Close the rank-integrity loop
 
-**Source**: `ai-agents/sprints/sprint-3.md`
-**Status**: done — all four rows `✅ Done (agent-closed — not owner-verified)` as of 2026-08-06
-**Sprint/Tag**: Sprint 3 · opened 2026-08-06 by owner ruling
+**Source**: `ai-agents/sprints/done/sprint-3.md` *(was `ai-agents/sprints/sprint-3.md` until the archival of 2026-08-07)*
+**Status**: done — 🔒 **CLOSED and ARCHIVED 2026-08-07 by owner ruling**; all four rows `✅ Done (agent-closed — not owner-verified)` as of 2026-08-06
+**Sprint/Tag**: Sprint 3 · opened 2026-08-06 by owner ruling · **superseded by [[tasks/sprint-4-ship-the-use-ready-self-healing-update]]**
+
+> ✅ **Dated correction 2026-08-13 (the `0263` resync). The `Source` and `Status` lines above are the CORRECTED ones — this page previously named the pre-archival path and did not record the close.** Sprint 3 was archived on **2026-08-07** by owner ruling, verbatim option label **"Follow Sprint 1/2 precedent (Recommended)"**: banner → `🔒 CLOSED`, file → `sprints/done/sprint-3.md`, links repointed. **Two boards have opened since** — Sprint 4 (opened 2026-08-07, archived 2026-08-10) and [[tasks/sprint-5-fix-what-a-real-project-found]] (🟢 the active board). ⚠️ **Sprint 3 has not been the active board since 2026-08-07; the vault said otherwise until this sync.**
 
 ## Goal
 
@@ -74,4 +76,7 @@ structure-check design with its owner rulings — plus the eight structure-check
 - [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — the ADR this sprint recorded
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174`, whose follow-ups 4/5/8 became `0181`/`0182`/`0185`
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the Backlog board, unranked by design, where unsprinted work continues to land
+- [[tasks/sprint-4-ship-the-use-ready-self-healing-update]] — the successor board, which built the `0241` design's eight follow-ups and was itself archived unverified
+- [[tasks/sprint-5-fix-what-a-real-project-found]] — 🟢 **the ACTIVE board** since 2026-08-10
+- [[tasks/design-the-post-update-structure-check]] — `0241`, this board's out-of-band row, whose follow-ups became the whole of Sprint 4
 - [[systems/fkit]]
