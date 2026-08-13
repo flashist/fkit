@@ -261,16 +261,77 @@ describe('E. the reference-check gate', () => {
 describe('G. the list is data, and the code does not trust it', () => {
   // C5 — macOS filesystems are case-insensitive; the guards were not. A list line of `.Fkit/Settings`
   // would sail past a case-sensitive `*settings*` check and then match the real lockdown state on disk.
+  // That hazard is real, it is why the guard lower-cases before matching, and it stays covered here.
+  //
+  // 0283 — but as first written this test only PROVED the guard on a case-INSENSITIVE filesystem, and
+  // so went red on the first Linux CI run. The refusal DECISION is filesystem-independent — `tr` plus a
+  // glob over the line's TEXT, not a lookup on disk. (Not "no stat", as this comment first said:
+  // reaching that decision lstats the parent chain in `orphan_contained`, and `exists` is stat'd just
+  // before it. Neither can turn a refusal into a deletion — that is the sense in which the decision is
+  // filesystem-independent. ⚠️ They CAN change the refusal REASON, which is a different thing and the
+  // one this test cares about: make `.fkit` a symlink and `orphan_contained` refuses this very line as
+  // `'.fkit' is a symlink — fkit will not delete through one`, BEFORE the `*settings*` guard is ever
+  // reached, so the lockdown-state sentence never renders at all. Measured, not reasoned.)
+  // The ANNOUNCEMENT, though, is gated on the path existing,
+  // deliberately, so a list line naming nothing does not nag on every launch forever with nothing at
+  // stake. On macOS `.Fkit/Settings` resolved onto the real lockdown state, so
+  // it existed and the guard spoke; on Linux it named nothing, so the guard stayed silent and
+  // `assert.match(stderr, /lockdown state/)` got ''. The test was asserting "the filesystem folded case
+  // for me", not the guard. Two changes make it filesystem-independent:
+  //   1. seed `.Fkit/Settings` so it exists either way — a genuinely distinct directory where case
+  //      matters, and the very same object as `.fkit/settings` where it does not, which is exactly how
+  //      the original macOS hazard stays covered on macOS;
+  //   2. list the REAL `.fkit/settings` alongside it. ⚠️ NOT — as this comment first claimed — "so the
+  //      survival assertion bites everywhere". That was measured FALSE. The second line does make
+  //      `.fkit/settings` a deletion CANDIDATE on either filesystem, but `claude/fkit-claude.sh:311-312`
+  //      writes `.fkit/settings/<role>.json` on every launch, so `orphan_refs` always finds the path
+  //      referenced in fkit's own sources and refuses it there too. Remove the whole `*settings*` guard
+  //      and `coder.json` STILL survives (measured); the survival assertion fires only when BOTH gates
+  //      are down. ⚠️ And be exact about what the second line buys, because the obvious answer is also
+  //      measured FALSE: it is NOT what lets the per-line assertion below tell "refused AS lockdown
+  //      state" apart from "refused for some other reason". That power is intrinsic — the assertion
+  //      pins the reason TO the line — and with the cased line ALONE and no second line, the per-line
+  //      assertion still goes red under the C5 regression. So does the broad `/lockdown state/` match,
+  //      because with nothing else listed that string is absent from stderr entirely. What the second
+  //      line measurably DOES is put a lowercase line on either filesystem that is refused as lockdown
+  //      state — and that is precisely why the broad match STOPS detecting C5 (it finds its substring
+  //      on THIS line) and why the per-line assertion below is left as the SOLE detector. That per-line
+  //      assertion is what carries this test.
+  // Proved on both kinds of filesystem, for the two lines this test seeds — both of which exist on disk
+  // with no symlink anywhere in their parent chain: a `*settings*` line, however cased, is refused FOR
+  // BEING LOCKDOWN STATE (named as that, on its own line — not refused incidentally), is announced, and
+  // the lockdown state is still on disk afterwards. ⚠️ Those two conditions are the claim's limits, not
+  // decoration — earlier text spells out both exceptions and both are measured: symlink a parent and
+  // that line is refused by containment first, with no lockdown-state sentence for it at all; point a
+  // `*settings*` line at nothing and it is still never deleted, but nothing is announced for it either.
+  // Neither is a hole — the deletion is refused either way — and neither is what this test measures.
   test('the never-delete-lockdown-state guard is case-insensitive', () => {
     const claudeDir = copyClaude();
-    writeFileSync(join(claudeDir, 'orphan-targets'), '.Fkit/Settings\n');
+    writeFileSync(join(claudeDir, 'orphan-targets'), '.Fkit/Settings\n.fkit/settings\n');
     const p = makeResidueProject();
+    mkdirSync(join(p, '.Fkit', 'Settings'), { recursive: true });
 
     const r = runInitFrom(claudeDir, p);
     assert.ok(r.code === 0 || r.code === 3);
     assert.ok(existsSync(join(p, '.fkit', 'settings', 'coder.json')),
       'lockdown state must survive a differently-cased list line');
     assert.match(r.stderr, /lockdown state/);
+    // Each line refused on the strength of the *settings* match — the reason is named per line, so a
+    // pass cannot come from the guard doing something else that happens to leave coder.json alone.
+    // ⛔ DO NOT loosen or delete this loop. Measured in the 0283 review: with the C5 lowercasing
+    // regression live, this is the ONLY assertion in the suite that goes red — delete it and the suite
+    // reports a clean 23/23 on BOTH filesystems while the guard is defeated. Any replacement must still
+    // name the refusal reason AND bind it to the line — IN ONE RENDERED LINE. That last clause is the
+    // whole floor, not pedantry: a replacement that names the reason and the line with a regex allowed
+    // to span lines meets the floor literally and measured 23/23 GREEN with the regression live, which
+    // is the same false pass by another route. The broad `/lockdown state/` match just above is
+    // the second layer (it is what fires when the whole guard is removed) — never weaken the two in the
+    // same edit. Expected to go red only if the refusal text in `claude/fkit-claude-init.sh` is
+    // deliberately changed; then update it in that same commit, never loosen it.
+    for (const line of ['.Fkit/Settings', '.fkit/settings']) {
+      assert.ok(r.stderr.includes(`${line} — refused: fkit will never delete lockdown state`),
+        `${line} must be refused as lockdown state, got:\n${r.stderr}`);
+    }
   });
 
   // R8 — the absolute-path refusal existed but could never fire: the leading `/` was stripped during
