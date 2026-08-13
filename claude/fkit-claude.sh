@@ -57,16 +57,16 @@ ROLES="lead producer coder architect reviewer adversarial-reviewer wiki"
 #   - it NOTIFIES; it never auto-updates and never re-execs itself. Silently swapping the code out
 #     from under a running invocation is exactly the behavior we don't want back.
 #   - `fkit update` stays an explicit verb the user chooses to run.
-#   - the check is throttled, TIME-BOXED, and silent on failure. This sits in the startup path of
-#     every single `fkit`, so offline / proxied / captive-portal must cost nothing and print nothing.
-#     (Omnigent's check had no timeout and no GIT_TERMINAL_PROMPT guard — a repo that asks for
-#     credentials would hang the launcher indefinitely. Both are fixed here.)
+#   - the check is throttled, PARTLY time-boxed, and silent on failure. This sits in the startup path
+#     of every single `fkit`, so offline / proxied / captive-portal must cost nothing and print nothing.
+#     (Omnigent's check had no timeout and no GIT_TERMINAL_PROMPT guard. The prompt guard is fixed
+#     here; the timeout only partly — see FKIT_NET_TIMEOUT below, the git path is NOT deadlined.)
 #
 # Env: FKIT_NO_UPDATE_CHECK=1     never touch the network.
 #      FKIT_UPDATE_INTERVAL_MIN   throttle window, minutes (default 60; 0 = check every launch).
 #      FKIT_REPO / FKIT_REF       update source (default flashist/fkit@main).
 share="$(cd "$here/.." && pwd)"        # install root (~/.local/share/fkit), or the repo root in a checkout
-FKIT_NET_TIMEOUT=5                     # seconds — hard ceiling on any update-check network call
+FKIT_NET_TIMEOUT=5                     # seconds — a real deadline for curl (--max-time), but for git only a low-speed STALL bound, so ls-remote can outlive it
 
 _fkit_verfield() {   # <key> → its value from the installed .version (empty if absent)
   [ -f "$share/.version" ] || return 0
@@ -139,8 +139,27 @@ if [ "${FKIT_NO_UPDATE_CHECK:-0}" != 1 ] && ! _fkit_is_source_checkout; then
       rver="$(_fkit_remote_version)"; curver="$(_fkit_verfield version)"
       { printf 'version=%s\n' "${rver:-unknown}"; printf 'sha=%s\n' "$remote"; } \
         > "$share/.latest" 2>/dev/null || true
-      printf '\n  ↑ fkit v%s → v%s is available. Run:  fkit update\n\n' \
-        "${curver:-?}" "${rver:-?}"
+      # LABEL WHAT ACTUALLY TRIGGERED (task 0257). The trigger above is a SHA comparison, but this
+      # line used to be worded as a version upgrade — so whenever content moved without a version
+      # bump (the normal case: 33 of 241 commits have ever touched VERSION) it read
+      # "v0.2.1 → v0.2.1 is available", and with no curl, "v0.2.1 → v? is available". Both are
+      # nonsense to a reader, and both told them to run an update they could not evaluate.
+      # A remote version is not always knowable — `git ls-remote` returns refs, not file content, and
+      # GitHub refuses `git archive --remote` (HTTP 422) — so there is no git fallback to add here.
+      # Only say "vA → vB" when there really are two DISTINCT known versions; otherwise say the thing
+      # that is actually true, with the shas as the evidence (the `fkit update` success line above
+      # already prints an abbreviated sha, so the idiom is this file's own).
+      # SCOPE, precisely: this removes the "v?" the EMPTY-version paths produced (absent curl, failed
+      # fetch, no version= line). It is NOT validation — both sides are only tested for non-emptiness,
+      # so a garbage remote VERSION still renders verbatim ("?" → "v?"; an intercepted HTML error page
+      # → "v<!DOCTYPEhtml>"). Deliberate: validating version strings is a separate call, not 0257's.
+      if [ -n "$rver" ] && [ -n "$curver" ] && [ "$rver" != "$curver" ]; then
+        printf '\n  ↑ fkit v%s → v%s is available. Run:  fkit update\n\n' "$curver" "$rver"
+      else
+        printf '\n  ↑ fkit %s— newer content on %s (%s → %s). Run:  fkit update\n\n' \
+          "${curver:+v$curver }" "$fkit_ref" \
+          "$(printf %s "$installed" | cut -c1-7)" "$(printf %s "$remote" | cut -c1-7)"
+      fi
     fi
   fi
 fi

@@ -99,7 +99,7 @@ A re-sync of `ai-agents/wiki-vault/wiki/systems/install-and-self-update.md` agai
 - **Blocks:** nothing.
 - **⚠️ Scope is `0252` only — deliberately, and here is the judgement rather than a silent choice.**
   Two sibling tasks touch the same vault page's subject matter and are **not** folded in:
-  [`0257`](../0257-fix-the-version-labeled-sha-triggered-update-banner/brief.md) changes the update
+  [`0257`](../../done/0257-fix-the-version-labeled-sha-triggered-update-banner/brief.md) changes the update
   banner's wording, which the page **quotes verbatim** in its "Self-update — two paths" section; and
   [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md) may change the release
   sequence the §Release paragraph describes. Merging would take the **union of three preconditions**

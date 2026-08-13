@@ -263,7 +263,7 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
   [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md) (builds the gate whose
   absence this task records — **scheduling preference: land `0256` first**, so the checklist here
   describes reality rather than being obsoleted a week later) and
-  [`0257`](../0257-fix-the-version-labeled-sha-triggered-update-banner/brief.md) (the update banner's
+  [`0257`](../../done/0257-fix-the-version-labeled-sha-triggered-update-banner/brief.md) (the update banner's
   label logic — the same `VERSION`-vs-sha distinction this task documents).
 - Filed to the **Backlog** board — no sprint named; no re-rank (ADR-035).
 

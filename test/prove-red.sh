@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# FIFTEEN mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# SEVENTEEN mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -39,6 +39,8 @@
 #  13. Co-present file under a prune point          → "no prune point hides a file"       (task 0133)
 #  14. Revert dashboard.sh's move-target extractor  → "0210/A"                            (task 0210)
 #  15. Remove the launcher's structure_notice call  → "0247/drifted"                      (task 0247)
+#  16. Neuter the update banner's version guard     → "0257/equal-versions"                (task 0257)
+#  17. Restore the banner's ${rver:-?} placeholder  → "0257/no-curl"                       (task 0257)
 #
 # ⚠️ MUTATION 14 REACHES ITS TARGET WITHOUT AN ENV SEAM, and that is deliberate — it is the one
 # exception to the "pointed at via FKIT_LAUNCHER" phrasing above. dashboard-contract.test.js resolves
@@ -146,6 +148,25 @@ run_parity_suite() {   # <scaffold-home-root>
 # harness would announce and use some other launcher (harmless for this suite, misleading in the log).
 run_dashboard_suite() {   # <repo-copy-root>
   if node --test "$1/test/dashboard-contract.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
+# Run ONLY the update-banner suite against a copy of the claude/ tree (task 0257); redirected via
+# FKIT_BANNER_ROOT, its own tree seam — the FKIT_FRONTMATTER_ROOT pattern (a whole directory, not one
+# script), because that suite copies the tree into a fake INSTALL ROOT of its own rather than running
+# the launcher in place.
+# ⚠️ NOT run_suite(). Two reasons, and both matter: (1) the banner suite is the only file that must
+# NOT inherit FKIT_NO_UPDATE_CHECK=1, so it builds its own fixture and ignores FKIT_LAUNCHER
+# entirely — run_suite() would leave it testing the REAL launcher and report a false green; (2) it
+# keeps `fkit update`'s network path out of this seam altogether.
+# ⚠️ The `: > "$dst/package.json"` that make_claude_copy writes sits OUTSIDE the copied claude/ dir,
+# so the banner suite's own install root never inherits that source-checkout marker — which is what
+# it needs, since a source checkout skips the whole update check and would silence every case.
+run_banner_suite() {   # <claude-tree-root>
+  if FKIT_BANNER_ROOT="$1" node --test "$repo/test/update-banner.test.js" >"$out" 2>&1; then
     echo green
   else
     echo red
@@ -263,6 +284,12 @@ clean_repo="$(make_repo_copy repo-clean)"
 printf '0i. unmutated repo copy dashboard suite should be green ... '
 dc="$(run_dashboard_suite "$clean_repo")"; echo "$dc"
 [ "$dc" = green ] || { echo "   ✗ an UNMUTATED repo copy's dashboard suite is red — mutation 14 below would be false."; fail=1; }
+
+# --- 0j. An UNMUTATED copy's update-banner suite must ALSO be green (task 0257; same reasoning as 0b
+#     and 0g). The root is the copied claude/ tree — the same $clean_tree 0g uses. ------------------
+printf '0j. unmutated copy update-banner suite should be green ... '
+bc="$(run_banner_suite "$clean_tree")"; echo "$bc"
+[ "$bc" = green ] || { echo "   ✗ an UNMUTATED copy's banner suite is red — mutations 16/17 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -684,6 +711,76 @@ if [ "$r15" != red ]; then
   echo "   ✗ the suite did NOT catch a launcher that never runs the structure notice."; fail=1
 elif ! grep -Eq '(✖|not ok|fail).*0247/drifted' "$out"; then
   echo "   ✗ suite went red but NOT at 0247/drifted — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 16: neuter the update banner's version-vs-version guard → the 0257/equal-versions
+#     assertion in update-banner.test.js must go red (task 0257). `if : ; then` makes the vA → vB
+#     branch unconditional, which is EXACTLY the pre-0257 launcher: a sha-triggered notice wearing a
+#     version label, printing "v0.2.1 → v0.2.1 is available" whenever content moved without a bump. --
+m16="$(make_claude_copy claude-mutant-banner-guard)"
+cp "$m16" "$m16.orig"
+sed -i.bak 's/^      if \[ -n "\$rver" \] && \[ -n "\$curver" \] && \[ "\$rver" != "\$curver" \]; then$/      if : ; then # mutation: banner guard neutered/' "$m16"
+if cmp -s "$m16" "$m16.orig"; then
+  echo "16. neutered the banner's version guard ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+fi
+printf '16. banner version guard neutered — "0257/equal-versions" should go RED ... '
+r16="$(run_banner_suite "$(dirname "$m16")")"; echo "$r16"
+if [ "$r16" != red ]; then
+  echo "   ✗ the suite did NOT catch a banner that claims an upgrade from a version to itself."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0257/equal-versions' "$out"; then
+  echo "   ✗ suite went red but NOT at 0257/equal-versions — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 17: restore the `${rver:-?}` placeholder in the banner's fallback branch → the
+#     0257/no-curl assertion in update-banner.test.js must go red (task 0257). An install with no
+#     curl can never learn the remote version (git ls-remote returns refs, not file content, and
+#     GitHub refuses git archive --remote), so the old line rendered a literal "v?" at the reader.
+#     This is the half of the defect the guard above does NOT cover: mutation 16 lives in the
+#     condition, this one in the branch it falls through to. -----------------------------------------
+m17="$(make_claude_copy claude-mutant-banner-placeholder)"
+cp "$m17" "$m17.orig"
+# ⚠️ THE REPLACEMENT LINE COMES FROM A FILE, VIA getline — the mutation-14 rule. awk processes escape
+# sequences in a `-v` assignment, so the `\n`s in this printf format would arrive as real newlines and
+# the "mutation" would be a broken launcher: every case reds, including ones this has nothing to do
+# with, and the named-assertion check below would still pass. Red for the wrong reason, disguised as
+# success. The three-line fallback branch is replaced by the single pre-0257 line.
+cat > "$work/m17-line.txt" <<'MUTANT_LINE'
+        printf '\n  ↑ fkit v%s → v%s is available. Run:  fkit update\n\n' "${curver:-?}" "${rver:-?}"
+MUTANT_LINE
+awk -v repl="$work/m17-line.txt" '
+  BEGIN { swapped = 0; skip = 0 }
+  skip > 0 { skip--; next }
+  /newer content on %s/ && swapped == 0 {
+    while ((getline line < repl) > 0) print line
+    close(repl)
+    swapped = 1
+    skip = 2                 # drop the two continuation lines of the printf being replaced
+    next
+  }
+  { print }
+' "$m17.orig" > "$m17"
+if cmp -s "$m17" "$m17.orig"; then
+  echo "17. restored the v? placeholder ... ✗ MUTATION WAS A NO-OP — the awk no longer matches the"
+  echo "   fallback printf (has the 'newer content on' wording changed?). This gate is disarmed: it"
+  echo "   would report success while proving nothing. Fix the mutation in test/prove-red.sh."
+  fail=1
+elif grep -q 'newer content on' "$m17"; then
+  echo "17. restored the v? placeholder ... ✗ MUTATION IS HALF-APPLIED — the fallback printf is still"
+  echo "   in the mutant. The awk matched something else; the red below would prove nothing."
+  fail=1
+elif ! grep -q 'rver:-?' "$m17"; then
+  echo "17. restored the v? placeholder ... ✗ MUTATION DID NOT LAND — no \${rver:-?} in the mutant."
+  fail=1
+fi
+printf '17. v? placeholder restored — "0257/no-curl" should go RED ... '
+r17="$(run_banner_suite "$(dirname "$m17")")"; echo "$r17"
+if [ "$r17" != red ]; then
+  echo "   ✗ the suite did NOT catch a banner that renders 'v?' at an install with no curl."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0257/no-curl' "$out"; then
+  echo "   ✗ suite went red but NOT at 0257/no-curl — red for the wrong reason."; fail=1
 fi
 
 echo

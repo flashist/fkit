@@ -51,7 +51,7 @@ over **files in git** rather than shared runtime state.
 | **Claude Code CLI (`claude`)** | **The runtime.** Every role session is `claude --agent fkit-<role> --settings <role>.json`. Hard requirement — the launcher exits **127** without it. | `claude/fkit-claude.sh:257-262,357` |
 | **Codex CLI (`codex`)** | The adversarial second opinion, for genuine **model diversity**: `codex exec --sandbox read-only --cd "$PWD" -`. **Required, but warned — never walled** (owner ruling, Sprint 2 task 3): a Codex outage must not lock the owner out of their own team. | `claude/fkit-claude.sh:274-285`; `claude/skills/fkit-review/SKILL.md:57` |
 | **git** | The substrate every agent reads. Agents are barred from committing/pushing unprompted — a **prompt rule, not a sandbox** (`CLAUDE.md:26-30`). | — |
-| **GitHub, over the network** | (a) install: tarball from `codeload.github.com`; (b) self-update **check**: throttled `git ls-remote` or the commits API; (c) the version string: raw `VERSION`. All time-boxed to 5 s and silent on failure. | `install.sh:32,55-62`; `claude/fkit-claude.sh:64,74-93` |
+| **GitHub, over the network** | (a) install: tarball from `codeload.github.com`; (b) self-update **check**: throttled `git ls-remote` or the commits API; (c) the version string: raw `VERSION`. All silent on failure. **Only the curl paths are time-boxed** (`--max-time 5`); the `git ls-remote` path sets only `GIT_HTTP_LOW_SPEED_*`, which bounds a stalled transfer, **not** DNS/connect — so it has no deadline and can outlive 5 s (measured: 12 s). | `install.sh:32,55-62`; `claude/fkit-claude.sh:69,79-98` |
 | **Node (ESM)** | Only to cut a release (`npm run release`). **Zero npm dependencies.** | `package.json:3-9`, `bin/release.mjs` |
 
 **fkit opens no ports, exposes no API, and stores no data outside the project's own files.**
@@ -330,7 +330,7 @@ Codex prompt), and the fkit-managed `.claude/agents/fkit-*.md` + `.claude/skills
 **edit `claude/`, never these** (`claude/fkit-claude-init.sh:49-60`).
 
 **Global, per install:** `~/.local/share/fkit/.version` (`version`/`sha`/`repo`/`ref`),
-`.update-check` (throttle stamp), `.latest` (`install.sh:55-72`, `claude/fkit-claude.sh:66-72`).
+`.update-check` (throttle stamp), `.latest` (`install.sh:55-72`, `claude/fkit-claude.sh:68-74`).
 
 ---
 
@@ -383,16 +383,30 @@ the *unearned confidence* that produces.
 Two paths, and the split is the design:
 
 - **`fkit update`** — an **explicit verb**. Re-runs the canonical `install.sh` for `$repo@$ref`
-  (`claude/fkit-claude.sh:104-118`). Refuses to run in a source checkout ("update it with `git
+  (`claude/fkit-claude.sh:99-123`). Refuses to run in a source checkout ("update it with `git
   pull`").
-- **the automatic check** — throttled (60 min default), **time-boxed to 5 s**, silent when current
-  and silent when offline, and it **only ever prints**:
-  `↑ fkit vX → vY is available. Run: fkit update` (`:121-141`).
+- **the automatic check** — throttled (60 min default), **only partly time-boxed** (the curl paths
+  get `--max-time 5`; the preferred `git ls-remote` path gets no deadline at all — see `:69`), silent
+  when current and silent when offline, and it **only ever prints** (`:125-165`). It **triggers on shas**
+  (`[ "$remote" != "$installed" ]`) but has **two** renderings, because a remote *version* is not
+  always knowable — task 0257:
+  - two distinct known versions → `↑ fkit vX → vY is available. Run:  fkit update`
+  - otherwise (same version both sides, or no remote version — there is no curl, and `git ls-remote`
+    returns refs rather than file content) →
+    `↑ fkit vX — newer content on main (1111111 → deadbee). Run:  fkit update`
+
+  Before 0257 there was one rendering, worded as a version upgrade, so a sha-triggered notice
+  routinely read `v0.2.1 → v0.2.1` or `v0.2.1 → v?`. **No path substitutes a `?` for a version it does
+  not have** — the empty-version paths (absent curl, failed fetch, no `version=` line) are gone; pinned
+  by `test/update-banner.test.js` and prove-red mutations 16-17. This is narrower than "`v?` never
+  reaches the reader": neither side is validated, only tested for non-emptiness, so a remote or
+  installed `VERSION` whose content is literally `?` still renders verbatim, on either side and in
+  either rendering (version validation was declined for 0257).
 
 **It never auto-updates and never re-execs itself** — deliberately unlike the Omnigent launcher it
 replaces, which had no timeout and no `GIT_TERMINAL_PROMPT` guard (a credential-prompting repo would
 hang the launcher indefinitely). Source checkouts are excluded entirely
-(`_fkit_is_source_checkout`, `:72`), keyed only on markers `install.sh` never copies (`.git`, the
+(`_fkit_is_source_checkout`, `:77`), keyed only on markers `install.sh` never copies (`.git`, the
 repo-root `package.json`).
 
 **6 — Release** ([ADR-011](decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md)).
@@ -426,7 +440,7 @@ version ships — and how it gets repaired, **with consent, never silently**.
   delete.** Owner present; explicit `AskUserQuestion` approval of the **exact enumerated list** with
   diffs in view; consent **never stored** — per-run, in the session where it is given; each write
   behind an **apply-time freshness re-check** (`repair.sh:406`); never silent.
-- **The launch notice** (task 0247 — landed; `structure_notice()`, `claude/fkit-claude.sh:434`):
+- **The launch notice** (task 0247 — landed; `structure_notice()`, `claude/fkit-claude.sh:453`):
   **one stderr line** when paths diverge, on every launch including `FKIT_SETUP_ONLY` — awareness
   only, pointing at `/fkit-heal`; never a repair, never a prompt. **Best-effort by contract** — a
   notice failure never costs the session: `check.sh` absent from the share, bash unavailable, or the
@@ -574,7 +588,9 @@ is the test.
 - **Secrets.** No credential is read, written, or stored by any part of fkit. No agent may put a
   secret in any artifact. `GIT_TERMINAL_PROMPT=0` on the update check
   (`claude/fkit-claude.sh:76`) exists so a credential-prompting remote can never hang the launcher.
-- **Network.** Every network call is optional, time-boxed to 5 s, and silent on failure. Offline
+- **Network.** Every network call is optional and silent on failure. Time-boxing is **not** uniform:
+  curl calls carry `--max-time 5`, but `_fkit_remote_sha`'s `git ls-remote` has no outer deadline
+  (`GIT_HTTP_LOW_SPEED_*` bounds a stalled transfer, not DNS/connect) — an unbounded hang. Offline
   `fkit` must cost nothing and print nothing (`claude/fkit-claude.sh:56-58,64`).
 - **Idempotence.** Both the installer and the per-project init are safe to re-run; init never
   clobbers an existing `ai-agents/`, `CLAUDE.md`, or `AGENTS.md`.
