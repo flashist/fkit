@@ -2105,3 +2105,121 @@ plan, board, ADR, report, skill, agent definition, test or source file edited �
 **untouched**. **No secrets, endpoints, keys or credentials written.**
 
 Task 0258's vault work is complete — ready to close
+
+---
+
+## 2026-08-13 — ingest (task `0289`: re-sync the *"still-open `0254`"* claim on [[systems/install-and-self-update]])
+
+Run as a spawned `fkit-wiki` librarian, driven by the fkit lead. **Authority:** owner ruling
+2026-08-13, verbatim option label **"File a vault resync task"** (which filed `0289`), plus the
+owner's approval to run it now. **Route:** a spawned librarian, not `/fkit-sprint-ship-loop` — that
+loop's Build step spawns `@fkit-coder`, which may never write the vault (ADR-005). Same route `0258`
+took earlier today.
+
+- Ingested: `bin/release.mjs` (the landed summary block) + `ai-agents/tasks/done/0254-…/brief.md` and
+  its `review.md` + `ai-agents/tasks/backlog/0288-…/brief.md` + `ai-agents/sprints/backlog.md` →
+  updated [[systems/install-and-self-update]] (**one page; no page created**)
+
+### The debt this discharges
+
+The `0258` entry above flagged, in place on the page and here, that the same-day `0285` block calls
+the unrunnable post-release verify command *"a **SEPARATE, still-open** defect (task `0254`)"*, and
+correctly declined to fix it as outside `0258`'s owner-ruled `0252`-only scope — *"the wiki does not
+file tasks."* **`0289` is the resync that clause was owed.** ✅ That declining sentence is accurate
+history and stays **byte-identical**.
+
+### Facts re-derived from disk this run — not inherited from the brief
+
+| # | Measured | How |
+|---|---|---|
+| 1 | `bin/release.mjs` prints `` Verify tag on origin: git ls-remote --exit-code --tags origin ${tag} `` — **the `npx github:…` line is gone** | `grep -n "Verify tag on origin" bin/release.mjs` → one hit; summary block read in full |
+| 2 | **`0254` is CLOSED** — folder `ai-agents/tasks/done/0254-fix-the-unrunnable-verify-command-release-mjs-prints/`, `## Status` = `✅ Done (agent-closed — not owner-verified)`; its brief landed in `done/` on **2026-08-13** | `ls -d`, `grep -n -A2 "^## Status"`, `git log --diff-filter=A --date=short` |
+| 3 | **`0288` is OPEN** — `ai-agents/tasks/backlog/0288-fix-the-post-release-verify-lines-failing-and-false-green-cases/`, `## Status` = `🔲 Backlog`, priority `—` (unranked) on the Backlog board | `ls -d`, `grep -n -A2 "^## Status"`, `grep -n "0288" ai-agents/sprints/backlog.md` |
+| 4 | **The three `0288` findings, and the two corrections that must not be re-lost** — R1 reaches **`--no-tag` alone**, a run that genuinely publishes commits; R5's *"conflates absent with unreachable"* wording is **false** (2 and 128 are distinct; 128 prints `fatal:`) | `0254`'s `review.md`, **both** the *Reviewer findings* and the *Coder response* sections |
+| 5 | ⛔ **R4 (unquoted `${tag}`) is NOT an open defect** — owner-ruled 2026-08-13, verbatim **"Unactioned — pre-existing"** | `0254`'s `review.md` verdict table; `0288`'s ⛔ *Out of scope* |
+| 6 | ✅ **ADR-011's filename verified before citing** — `adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md`, and the vault page of that slug exists and **already back-links** to this page | `ls` + `grep -n "install-and-self-update"` on the ADR page |
+
+⚠️ **No measurement contradicted the brief, in either direction.** Every `:NNN` in `0289`'s brief that
+was checked still resolved to the text it quoted. Stated because the brief required the disagreement
+to be reported if it existed.
+
+### ⛔ The failure mode this run was filed to avoid
+
+**"Still open" is wrong; "fixed" would have been wrong too.** The landed text carries all three of:
+the **unrunnable-`npx`** defect is **fixed and closed** (`0254`); the **replacement line**, quoted from
+the code; and a **narrower, separate, still-OPEN** set of flag-combination defects on that replacement
+line (`0288`). ⚠️ It states explicitly that **`--no-tag` alone fires the failing case on a run that
+genuinely pushes commits**, so the page does **not** imply the defect is confined to runs that publish
+nothing.
+
+### A SECOND correction, added on an owner ruling after the brief was filed
+
+**Finding R1 of an independent review of `0258`'s work**, owner-routed to this run: the `0258`
+correction asserts *"Everything else in the block above still stands"*, while **its own item 2, inside
+the same block**, declares the `0285` block's `~5m30s–6m20s` figure **SUPERSEDED**. A reader who stops
+at the assurance gets a false all-clear about text the same block later corrects. **Bounded, not
+re-litigated:** the new note names the three claims that sentence actually enumerates (the pre-bump
+gate, its load-bearing position, its clean-tree refusal) and says the assurance reaches neither the
+runtime figure nor the `0254` clause. ⛔ **The `0258` correction itself is untouched.**
+
+### Verdict per site touched
+
+| Site | Verdict |
+|---|---|
+| `wiki/systems/install-and-self-update.md` — the `0285` block's `0254` clause | **Corrected** — by a new dated `0289` correction block appended below the existing correction layer. ⛔ The clause itself left **byte-identical**; the history is dated, not deleted |
+| Same page — the `0258` correction's *"Everything else … still stands"* | **Corrected** — bounded by the same new block. ⛔ The `0258` correction left **byte-identical** |
+| Same page — the ⛔ no-`bin`-field ruling, `0256`'s pre-bump gate, its load-bearing position, its clean-tree refusal | **Correct as-is**, because all four are still true; explicitly re-affirmed in the new block, and **byte-identical** |
+| Same page — `**Key files**`, `## Related`, every other block | **Correct as-is** — not read as in scope; untouched |
+| `index.md` | **Correct as-is** — its one-line entry for this page (*"…, self-update, release"*) is still accurate; no new page, no new link target, **no edit** |
+| `log.md` | **Append-only, new entry written** (this one). ⛔ No past entry edited — in particular the `0285` sync entry's *"the still-open `0254` verify-command defect named"*, **true as believed when written**, stays byte-identical, and so does the `0258` entry's flag |
+| `.wiki-watermark` | **Correct as-is** — untouched; this is a targeted ingest, not a sync |
+| `index.md`'s *"Measured cost `~6 min per release`"* line | **Out of scope, reported** — real and superseded by the owner's *"roughly 6–8 minutes, machine-dependent"* ruling, but **owner-assigned to its own task**. Not touched |
+| This log's *"a follow-up `0288`"* in the `0258` entry, where it means `0289` | **Out of scope, reported** — same owner-assigned task, and append-only means it can only ever be a **new entry**, never an edit. Not touched |
+| `~6 min` in `bin/release.mjs` and `.github/workflows/test.yml` | **Out of scope, reported** — an accepted residual from `0252`, and outside the vault entirely. Not touched |
+| The pre-pipe `FKIT_REF=… curl … \| sh` form, 3× in the vault | **Correct as-is** — **owner-ruled sound 2026-08-13, verbatim "Sound — counter-examples stay"**; each instance is a ⛔-labelled counter-example the warning needs. Not touched |
+
+### Known follow-up, recorded so it is not rediscovered
+
+⚠️ **This page will need one more look when `0288` lands** — at that point the still-open paragraph
+written this run becomes history in its turn. **Accepted and stated on the page itself**; not a defect
+in this correction, and the wiki does not file tasks. ✅ The broader question this page's **three
+resyncs in one day** raises is already tracked as `0290` on the Backlog board — ⛔ deliberately **not**
+run here.
+
+### Write scope
+
+Only `ai-agents/wiki-vault/` — **0 pages created, 1 page updated, plus this log entry.** `index.md`
+**not touched** (no new page, no new link target). `log.md` **appended only**; no past entry edited or
+annotated in place. `.wiki-watermark` **not touched**. **Additions only** on the page — nothing
+deleted, nothing reflowed, both prior correction blocks and the `0285` block byte-identical.
+⛔ **No `:NNN` line numbers into a mutable file** — every coordinate written this run is a file path
+plus a quoted fragment or a heading. Nothing committed, nothing staged. **No task moved, no mover
+invoked** (ADR-033). No brief, sprint plan, board, ADR, report, skill, agent definition, test or source
+file edited — in particular `bin/release.mjs`, `sprint-5.md`, `backlog.md`, and `0254`'s, `0258`'s,
+`0285`'s, `0288`'s and `0289`'s own briefs are **untouched**. **No secrets, endpoints, keys or
+credentials written.**
+
+⚠️ **`npm test` proves nothing about this change** — no test in this repo reads vault page content.
+Stated rather than implied.
+
+Task 0289's vault work is complete — ready to close
+
+### ⚠️ Addendum, same run — a source claim re-measured and found FALSE, so it was not carried
+
+While re-deriving finding R1 the librarian checked the mechanism sentence rather than copying it.
+**`0288`'s brief and `0254`'s review body both state that `doTag` and `doPush` are "read at `:82-83`
+and never consulted again."** ⛔ **That is false as a description of `bin/release.mjs`** — re-measured
+2026-08-13, `grep -n "doTag\|doPush" bin/release.mjs` returns **seven** sites: the two declarations,
+plus the tag-exists check, the branch push, the tag creation, the tag push and the `skip tag
+(--no-tag)` branch. **The two flags are consulted repeatedly.**
+
+✅ **The defect itself is real and unchanged** — it is the **summary block** that never consults
+either flag, being guarded only by `dryRun`, which is what `0254`'s review says in its own
+summary-block wording. **Only the "never consulted again" gloss is wrong.** The page therefore states
+the narrow, true mechanism and **flags the false gloss in place**, so the next reader does not
+re-inherit it. ⛔ **No brief and no review ledger was edited** — those are outside the vault.
+
+**Suite measured this run:** `npm test` **green — 723 tests, 17 suites, 723 pass, 0 fail, 0 skipped**
+(88.2 s), plus `test/prove-red.sh`'s hard gate **PASSED** (10 unmutated-green checks, 17 mutations
+each redding its named assertion). ⚠️ **It says nothing about the correction above** — no test in this
+repo reads vault page content. Recorded as a tree-health datum, ⛔ not as coverage.

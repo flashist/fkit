@@ -313,6 +313,17 @@ integrity afterwards and record it** — `HEAD`, the local tag count, `VERSION`,
   raise this at the plan gate rather than deciding it** — and if the answer is (b), the close must
   state the gap out loud, not omit it.
 
+> ✅ **ANSWERED 2026-08-13 — the owner chose (a). ⛔ The coder no longer raises this at the plan gate.**
+> Owner ruling, `fkit lead` session, `AskUserQuestion`, verbatim option label **"(a) Add a test +
+> extend prove-red.sh"** — *"add a test and extend `test/prove-red.sh` so it is red-provable"*.
+> **This LIFTS the ⛔ *"no added test gate"* — for `0288` ONLY**, and the `## Out of scope` fence's
+> own condition (*"except a test, and only if the owner answers the open question below in the
+> affirmative"*) is now **met**. ⛔ The (b) branch of the bullet above does **not** apply. ⚠️ The
+> widening is **bounded** and does **not** unfence tag/push logic. **Full ruling, its reasoning, and
+> its consequences: see the dated block at the END of this file.** *(Inserted 2026-08-13 by a spawned
+> `fkit-producer` with no owner channel, ADR-021 — an **addition only**; no existing byte altered, the
+> question itself left standing verbatim because it is **answered, not deleted**.)*
+
 ### On the board and the rank
 
 - **Filed to the [Backlog](../../../sprints/backlog.md) board — deliberately, and here is the
@@ -341,3 +352,457 @@ integrity afterwards and record it** — `HEAD`, the local tag count, `VERSION`,
   writing. It **closed, moved and re-statused nothing**, **invoked no mover**, **edited no source file
   and no other task's brief**, **wrote nothing under `ai-agents/wiki-vault/`**, and **committed
   nothing**.
+
+---
+
+## ⚠️ Correction, 2026-08-13 — R1's stated mechanism is wrong. The defect is not.
+
+**Owner-authorized**, `fkit lead` session, verbatim option label **"Correct it now"**. Appended by a
+spawned `fkit-producer` with no owner channel (ADR-021). ⛔ **Nothing above this line was altered** —
+the superseded sentence is left standing on purpose. It was written in good faith; it is
+**superseded, not deleted**.
+
+### What the brief says
+
+Under **R1** (`:75-77` of this file, before this block was appended):
+
+> The summary block (`:271-277`) is guarded **only** by `dryRun`. `doTag` and `doPush` are read at
+> `:82-83` and never consulted again, so `:276` prints on every non-dry path — including the paths that
+> declined to create the tag it names.
+
+### Why the middle clause is false
+
+**"`doTag` and `doPush` are … never consulted again" is false as a description of the file.**
+Re-measured on disk 2026-08-13 — `grep -n 'doTag\|doPush' bin/release.mjs` returns **seven** sites:
+
+```
+82:const doTag = !has("--no-tag");
+83:const doPush = !has("--no-push");
+227:if (doTag && (localTagExists || remoteTagExists)) {
+250:if (doPush) {
+258:if (doTag && !localTagExists && !remoteTagExists) {
+261:  if (doPush) {
+267:} else if (!doTag) {
+```
+
+Both flags **are** consulted, five times after their declaration: the tag-exists check (`:227`), the
+branch push (`:250`), the tag creation (`:258`), the tag push (`:261`), and the skip-tag branch
+(`:267`). The flag plumbing in the **execute** section is correct and does what it says.
+
+### The true, narrower mechanism
+
+**It is the summary block that never consults `doTag`/`doPush` — not the file.** The block's only
+guard is `if (dryRun)` at `:272`, running to `:277` (`:271` is the `// --- summary ---` comment). So
+on any non-dry run it prints `✓ Released <tag>` and the tag-verify line **including on a run that just
+declined to create that tag** — because the summary was written as if the default path were the only
+path.
+
+The first sentence of the quoted passage — *"The summary block (`:271-277`) is guarded **only** by
+`dryRun`"* — **was and is correct.** Only the generalization from it to the whole file is wrong.
+
+### ⛔ The finding is unchanged. The task did not shrink.
+
+Only the **explanation** was wrong. **All three defects still stand exactly as written above**, and
+none of the measured reproductions in this brief are affected — every one of them was produced by
+**running** the script, not by reading it:
+
+- **R1** — `--no-tag` / `--no-push` prints a verify that exits 2, **including `--no-tag` alone, which
+  does publish commits to origin**. Still real, still reaching the publishing case.
+- **R2** — `--no-bump` over an existing origin tag verifies **exit 0** against a stale tag: a false
+  green. Still real, and still the worst of the three.
+- **R5** — the tag-absent failure is **silent on both streams**. Still real, and the "conflates 2 with
+  128" wording is still false (see the ⛔ note under R5).
+
+⛔ **A planner must not read this correction as narrowing the remedy.** *What to build* is unchanged:
+the guard still belongs on the summary block, and all four numbered requirements still hold.
+
+### Where the gloss came from — and ⛔ do not go edit it
+
+The `:82-83` citation and the "guarded only by `dryRun`" framing were inherited from
+[`0254`'s `review.md`](../../done/0254-fix-the-unrunnable-verify-command-release-mjs-prints/review.md)
+(*Reviewer findings* R1 at `:51-52`, *Coder response* R1 at `:250-252`). ⚠️ **Read on disk
+2026-08-13: that ledger does NOT contain the false clause.** Both of its passages say the flags are
+*read at `:82-83`, **but the summary block** is guarded only by `dryRun`* — which is correct and
+narrow. The overreaching *"and never consulted again"* was introduced **here, in this brief**, when
+the ledger's wording was compressed. (The ledger cites the block as `:272-277`; this brief cites
+`:271-277`, including the comment line. Both point at the same code.)
+
+⛔ **Do not edit `0254`'s `review.md`.** `0254` is closed and its ledger is a frozen record of what
+was reviewed — and in this instance it is also **not** the thing in error. Noted only so a reader
+following the evidence trail knows what they will find there.
+
+> ⚠️ **Same standing caution as the note above:** every `:NNN` here was read from disk on 2026-08-13
+> against a 277-line `bin/release.mjs`. **The durable anchor is the quoted text, not the number** —
+> and this task edits the very block it cites.
+>
+> ⛔ **Nothing else was touched:** no status, priority, board or owner change (still `🔲 Backlog`,
+> unranked); no mover invoked; no other file edited; no `ai-agents/wiki-vault/` write; no commit.
+
+---
+
+## ⚠️ Amendment, 2026-08-13 — a FOURTH in-scope defect: `--no-bump` cannot finish a release when the tag is local-only
+
+**Owner-authorized**, `fkit lead` session, verbatim option label **"Fold into 0288"**. Appended by a
+spawned `fkit-producer` with no owner channel (ADR-021). ⛔ **Nothing above this line was altered** —
+this block **adds** a defect; it does not re-scope, narrow, or replace the three already recorded.
+
+### ⚠️ The count is now FOUR, not three
+
+**R1, R2 and R5 all still stand exactly as written above.** Wherever this brief says *"the three
+defects"*, read **four**:
+
+- **R1** — `--no-tag` / `--no-push` prints a verify that exits 2, **including `--no-tag` alone, which
+  does publish commits to origin**. Unchanged.
+- **R2** — `--no-bump` over a tag **already on origin** verifies **exit 0** against a stale tag: a
+  false green. Unchanged.
+- **R5** — the tag-absent failure is **silent on both streams**. Unchanged.
+- **N1 (new, below)** — `--no-bump` over a tag that exists **locally but not on origin** silently
+  fails to finish the release.
+
+**N1 is deliberately NOT numbered in `0254`'s R-series** — it did not come from that ledger, and a
+reader must not go looking for it there. It was surfaced by an independent review of
+[`0289`](../../done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md)'s vault output and **confirmed against the source by the `fkit lead` session**,
+then **re-derived from disk a third time by this producer before being written here**.
+
+### N1 (high) — tag local-only: the tag push never runs, nothing says so, and the printed check fails
+
+**Measured on disk 2026-08-13, `bin/release.mjs`, 277 lines.** Preconditions: `doTag` true (no
+`--no-tag`), `doPush` true (no `--no-push`), `localTagExists` **true**, `remoteTagExists` **false**.
+This is what `--no-bump` sees after a release that died between `git tag -a` and
+`git push origin <tag>`.
+
+| line | code | what happens in this state |
+|---|---|---|
+| `:227` | `if (doTag && (localTagExists \|\| remoteTagExists)) {` | **true** — prints `• tag <tag> already exists locally — will skip tag creation`. `step()` (`:103-105`) is `console.log` only — **informational, it does not exit or change control flow.** |
+| `:250` | `if (doPush) {` | **true** — **the branch is pushed.** The commit is published. |
+| `:258` | `if (doTag && !localTagExists && !remoteTagExists) {` | **FALSE**, because `localTagExists` is true. **The whole tag block is skipped — so `:261-263`'s `git push origin <tag>` never runs.** |
+| `:267` | `} else if (!doTag) {` | **FALSE** too, because `doTag` is true. **So nothing whatsoever is printed about the tag not being pushed.** |
+| `:276` | the verify line | prints — and the check **exits 2**, because the tag is not on origin. |
+
+**The net effect: the run publishes the commit, never pushes the tag it was run to push, says nothing
+about that, and prints a check that fails.**
+
+### ⚠️ Why this is worse than a print bug — it breaks the script's own documented recovery
+
+`bin/release.mjs:12-14`, quoted verbatim from disk:
+
+```
+// Re-run safety: a --no-bump run is idempotent (an existing tag or an already-
+// committed tree is skipped). A default (bumping) run always cuts a NEW version,
+// so after a partial failure re-run with --no-bump to finish the same one.
+```
+
+**A release that dies between `git tag -a` (`:260`) and `git push origin <tag>` (`:263`) leaves
+exactly the local-tag-only state above.** The script's own header sends the maintainer to `--no-bump`
+to finish it. **`--no-bump` then declines to push the tag, prints nothing about declining, and ends on
+a failing check.** ⛔ **The documented recovery path cannot recover, and is silent while failing.**
+
+⚠️ **"Idempotent" in that header is doing work it cannot support.** Skipping tag *creation* is
+idempotent; skipping the tag *push* is not — it leaves the release unfinished. The remedy must not be
+read as licence to rewrite the header comment instead of the behaviour (and ⛔ any change to tag or
+push **logic** remains out of scope — see below).
+
+### ⚠️ This is new ground drawn from lines the brief already cites — not something the brief missed
+
+**Say it this way, and do not restate it as an oversight.** This brief already cites `:227` and
+`:258` — at `:119`, under **R2**:
+
+> - `:227-229` and `:258` — tag creation is skipped when `localTagExists || remoteTagExists`.
+
+That sentence is **correct**. What was never drawn from it is the **consequence in the
+local-only branch**: that with `localTagExists` true and `remoteTagExists` false, the `:258` block —
+**which is also where the tag push lives** — is skipped whole, and `:267`'s `else if` does not cover
+it. **The lines were cited; this consequence was not derived.** That is a genuinely new finding on
+ground the brief already touches.
+
+⛔ **This is NOT a defect in [`0289`](../../done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md) and must not be recorded as one.** `0289`'s page
+never claimed to enumerate this file's failure modes exhaustively, so it stated nothing false. It was
+the review **of** that output that surfaced N1. Do not open a correction against `0289`.
+
+### ⚠️ Evidence status: source-confirmed, NOT executed
+
+**Neither the reviewer, nor Codex, nor the lead, nor this producer ran `bin/release.mjs` under these
+flags.** N1 was established by reading the branch structure at `:227`, `:250`, `:258`, `:261`, `:267`
+and `:276` — three times, independently — and reasoning over which branches are true in the
+local-tag-only state. ✅ **Every line number and quote in this block was re-read from disk
+2026-08-13 by the producer appending it.**
+
+⛔ **Do not carry N1 into a close as "verified".** It is **source-confirmed, not executed** —
+weaker evidence than R1/R2/R5, every one of which was produced by **running** the script. ✅ **The
+first thing the implementer does is turn that into an execution**, per the verification requirement
+below. ⚠️ **If the run does not reproduce it, say so out loud and do not quietly drop N1** — a
+non-reproduction is itself a finding and belongs in the close.
+
+### ⚠️ N1 and R2 are DIFFERENT bugs — do not merge them
+
+Both fire under `--no-bump`, and that resemblance is a trap:
+
+| | **R2** | **N1** |
+|---|---|---|
+| tag state | exists **on origin** (`remoteTagExists` true) | exists **locally only** (`remoteTagExists` false) |
+| tag push | correctly not needed — it is already there | **needed, and silently skipped** |
+| printed check | **exits 0** — a false **green** over a stale tag | **exits 2** — a **red** with no explanation |
+| what is wrong | the check passes without being true | the release did not finish, and nothing says so |
+
+⛔ **A single guard on `localTagExists || remoteTagExists` may fix one and leave the other.** Whoever
+plans this must state, per state, what the run does and what it prints. ✅ **The plan must address
+R2 and N1 separately, and say so explicitly** — even if one change happens to answer both.
+
+## What to build — additional requirement (extends `## What to build` above; requirements 1–4 unchanged)
+
+5. **Answer N1 — a `--no-bump` run whose tag exists locally but not on origin must either push that
+   tag, or say plainly that it did not and that the release is unfinished.** ⚠️ **Which of the two is
+   a real decision, and the plan must make it explicitly and argue it**, because pushing the tag is a
+   change to tag/push behaviour rather than to the summary block. ⛔ **The `## Out of scope` fence
+   above still stands** — *"any change to bump logic, tag logic, push logic"* is excluded. ✅ **If the
+   plan concludes the honest fix requires touching the tag-push branch (`:258-266`), it must NOT do it
+   under this fence — it must raise it as a scope question at the plan gate and get the owner's
+   answer.** ⚠️ **The summary-block-only remedy — printing the truth about an unpushed tag — is
+   inside the fence and needs no ruling.**
+
+> ⚠️ **RULED 2026-08-13 — the scope question this requirement routes to the plan gate is CLOSED. ⛔ A
+> coder planning `0288` must NOT re-raise it.** Owner ruling, `fkit lead` session, `AskUserQuestion`,
+> verbatim option label **"Report truthfully only — stay inside the fence"**. Requirement 5's
+> *"either push that tag, or say plainly that it did not"* collapses to the **second** branch.
+> ⛔ **Do NOT lift the fence. Do NOT make `--no-bump` push the existing local tag under this task.**
+> **The full ruling, its accepted residual, and what it does NOT solve: see the dated block at the END
+> of this file.** *(Inserted 2026-08-13 by a later spawned `fkit-producer` with no owner channel,
+> ADR-021 — an **addition only**; not one byte of the amendment this pointer sits inside was altered,
+> and no requirement was renumbered.)*
+
+## Verification steps — additional requirement (steps 1–11 above unchanged)
+
+⚠️ **This also extends step 1's list of paths.** Step 1 requires `--no-bump` over a tag that already
+exists **on origin**; N1 requires the **local-only** state as a separate, additional path.
+
+12. **N1 is closed, and PROVEN by execution — not by reading.** ⛔ **A reasoned argument does not
+    close N1; N1 was itself found by reasoning and that is exactly why it must be run.**
+    1. Build the local-tag-only state: a throwaway clone with a **local bare** `origin`, an annotated
+       tag present **locally** and **absent on origin** (`git tag --list <tag>` prints it;
+       `git ls-remote --tags origin <tag>` prints nothing).
+    2. **Show the failure first, on the code as it stands today** — run `--no-test --no-bump`, paste
+       the full output verbatim, and show that no `push origin <tag>` step appears, that no line says
+       the tag was not pushed, and that the printed verify command exits **2**.
+    3. **Then show it fixed** — same setup, same command, on the changed code. Paste the output
+       verbatim and show the new behaviour: either the tag is on origin afterwards
+       (`git ls-remote --tags origin <tag>` non-empty, exit 0), or the summary states the release is
+       unfinished and the tag unpushed. ⚠️ **Show the verify command's exit code either way.**
+    4. **Show R2's state is still handled** — re-run the step-1 `--no-bump`-over-an-origin-tag case
+       **after** the N1 fix and paste it, so a fix for one state is not silently a regression in the
+       other.
+
+**⚠️ The safety rule is the same one stated at the top of `## Verification steps`, and it is
+non-negotiable here too:** reproduce **only** against a **throwaway clone whose `origin` is a local
+bare repository** (`git init --bare`). ⛔ **Never push to `flashist/fkit`. Never create, push or
+delete a tag on the real origin.** ✅ **Re-check the real repo's integrity afterwards and record it**
+— `HEAD`, local tag count, `VERSION`, `git status --porcelain`. **This is the same ~10-second
+technique that found R1 and R2** (`git clone` to a throwaway, `cp bin/release.mjs` in, run the flag
+combination); it is established in this task family and there is no excuse for reasoning instead.
+
+> ⚠️ **Same standing caution as the notes above:** every `:NNN` in this amendment was read from disk
+> on 2026-08-13 against a 277-line `bin/release.mjs`. **The durable anchor is the quoted text, not the
+> number** — and this task edits the very block it cites.
+>
+> ⛔ **Nothing else was touched:** no status, priority, board or owner change (still `🔲 Backlog`,
+> unranked, owner `fkit-coder`); no mover invoked; no re-rank (ADR-035); no other file edited — not
+> `bin/release.mjs`, not `0289`, not `0254`'s `review.md`, not `sprint-5.md`, not `backlog.md`; no
+> `ai-agents/wiki-vault/` write; no commit, no push.
+
+---
+
+## ⚠️ Ruling, 2026-08-13 — N1's scope question is ANSWERED: stay inside the fence, report truthfully
+
+**Owner ruling**, `fkit lead` session, `AskUserQuestion`, verbatim option label **"Report truthfully
+only — stay inside the fence"**. Appended by a spawned `fkit-producer` with no owner channel
+(ADR-021). ⛔ **Nothing above this line was altered**, with one stated exception: a **pointer-only
+blockquote was inserted** directly after requirement 5's text, under the heading quoted verbatim
+below, so this ruling is discoverable from where the question was routed. That insertion **added**
+lines; it rewrote none, renumbered nothing, and altered no existing byte.
+
+### The heading this ruling closes — quoted verbatim so a `grep` finds it from either direction
+
+```
+## What to build — additional requirement (extends `## What to build` above; requirements 1–4 unchanged)
+```
+
+…specifically its **requirement 5**, which read (and still reads) *"Answer N1 — a `--no-bump` run
+whose tag exists locally but not on origin must either push that tag, or say plainly that it did not
+and that the release is unfinished"*, and which **routed the choice between those two branches to the
+plan gate**.
+
+### The question that was routed
+
+Under `--no-bump`, with the tag existing **locally but not on origin**, the run pushes the branch
+(`:250`), **silently never pushes the tag** — `:258` is false, so the tag push at `:261-263` inside
+that block never runs, and the `:267` `else if (!doTag)` does not fire either — and then prints a
+verify that exits **2**. `bin/release.mjs:12-14` documents `--no-bump` as **the recovery path** for
+exactly that partial failure. **Actually pushing the tag would touch tag/push logic — which this
+task's own ⛔ fence excludes** (`## Out of scope`: *"Any change to bump logic, tag logic, push logic,
+or the `--dry-run` branch"*).
+
+### The ruling
+
+**Stay inside the fence.** The remedy under `0288` is that **the summary block stops claiming a
+release landed when the tag was not pushed, and says so.**
+
+- ⛔ **Do NOT lift the fence.**
+- ⛔ **Do NOT make `--no-bump` push the existing local tag under this task.**
+- ✅ Requirement 5's two-branch choice is **decided**: the **summary-block-only** branch — the one
+  requirement 5 itself already marks as *"inside the fence and needs no ruling"*.
+
+### ⚠️ The accepted residual — record it honestly, it is the whole point of the ruling
+
+**After `0288` ships, the documented recovery path still cannot recover.** It will simply **stop lying
+about it**: the script will report the true state instead of announcing a release that did not fully
+land. A maintainer whose release died between `git tag -a` and `git push origin <tag>` will still have
+to push that tag by hand — `0288` tells them so instead of leaving them to discover it from a silent
+red check.
+
+⚠️ **That residual is ACCEPTED, not solved.** ⛔ **Do not record it as fixed, and do not let a close
+report N1 as "recovery restored".** The close must state the residual out loud. If the owner later
+wants the real fix, **it needs its own task** — ⛔ **no such task has been filed, and none was
+authorized**; the owner did not ask for one.
+
+### ⛔ This closes the plan gate on N1. Do not re-raise it.
+
+A coder planning `0288` **must not** put this question to the owner again — it has been asked and
+answered. The pointer inserted at requirement 5 says the same thing from the other direction.
+
+### ⛔ What this ruling does NOT change
+
+- **The defect count stays FOUR.** R1, R2, R5 and N1 all stand exactly as written above. ⛔ N1 is
+  **not** weakened, deferred, or downgraded — only its *remedy* is now bounded.
+- **N1's evidence status is unchanged:** still **source-confirmed, NOT executed**. ✅ Verification
+  step 12 still stands in full, including 12.2 (show the failure on today's code) and 12.3 (show it
+  fixed) — under this ruling 12.3's "fixed" is the **second** branch it already allows: *"the summary
+  states the release is unfinished and the tag unpushed"*, with the verify command's exit code shown.
+- **No requirement was renumbered and no verification step was removed.**
+
+> ⚠️ **Line-citation check, run because this note inserted lines mid-file.** This brief contains
+> exactly **two** citations to its **own** line numbers — `:75-77` (in the 2026-08-13 *Correction*
+> block) and `:119` (in the 2026-08-13 *Amendment* block). **Both point ABOVE the insertion point**,
+> so **neither shifted**; re-read on disk after the insert, `:75-77` still holds R1's superseded
+> mechanism sentence and `:119` still holds the `` `:227-229` and `:258` `` bullet under R2. **Every
+> other `:NNN` in this brief cites `bin/release.mjs`, not this file, and is untouched by a brief
+> edit.** ⚠️ Those `bin/release.mjs` citations were re-read from disk 2026-08-13 against a **277-line**
+> file: `:12-14`, `:250`, `:258`, `:261-263`, `:267` and `:271-277` all match their quoted text.
+> **The durable anchor remains the quoted text, not the number.**
+>
+> ⛔ **Nothing else was touched:** no status, priority, board or owner change (still `🔲 Backlog`,
+> unranked, owner `fkit-coder`); no mover invoked, nothing closed, nothing moved, nothing filed; no
+> re-rank (ADR-035); no other file edited — not `bin/release.mjs`, not `sprint-5.md`, not
+> `backlog.md`, not any other brief; no `ai-agents/wiki-vault/` write; no commit, no push.
+
+---
+
+## ⚠️ Ruling, 2026-08-13 — the test-coverage question is ANSWERED: (a) add a test AND extend `prove-red.sh`
+
+**Owner ruling**, `fkit lead` session, `AskUserQuestion`, verbatim option label **"(a) Add a test +
+extend prove-red.sh"**. Appended by a spawned `fkit-producer` with no owner channel (ADR-021).
+⛔ **Nothing above this line was altered**, with one stated exception: a **pointer-only blockquote was
+inserted** at the end of the question block named below, so this ruling is discoverable from where the
+question was asked. That insertion **added** lines; it rewrote none and altered no existing byte.
+⚠️ **The question itself is left standing verbatim — it is ANSWERED, not deleted.**
+
+### The heading this ruling closes — quoted verbatim so a `grep` finds it from either direction
+
+```
+### ❓ Open question for the owner — does this task add test coverage?
+```
+
+Its three offered answers were **(a)** *"add a test and extend `test/prove-red.sh` so it is
+red-provable"*, **(b)** add no test and record the gap as an accepted residual, **(c)** file coverage
+as its own separate task. **The owner chose (a).**
+
+### ⚠️ What this lifts — and how narrowly
+
+**It lifts the ⛔ *"no added test gate"* — for `0288` ONLY.** That boundary was **`0254`'s**, and
+`0254`'s reviewer suppressed a Codex finding on exactly that ground, recording *"Re-raise only if the
+owner lifts it."* **The owner has now lifted it here.** ⛔ **Do not read or restate this as a general
+lifting.** `0254` is closed; its boundary stands as **history**, and nothing about this ruling reaches
+back into it.
+
+### The owner's reasoning — recorded, because it is what makes the widening defensible
+
+- **`0288` is the second attempt at the same printed line**, and it now carries **four** defects — R1,
+  R2, R5 and N1 — **every one of which a single execution would have caught.** An untested line is how
+  all four arrived.
+- **The technique is already established and cheap:** a throwaway clone plus
+  `node bin/release.mjs --no-test --no-push` executes that branch in roughly ten seconds, and it is how
+  R1 and R2 were originally found.
+- **`prove-red.sh` is this project's hard gate.** An assertion that cannot be proven red is not trusted
+  here — which is why the ruling is *"test **and** red-provable"*, not merely *"test"*.
+
+### What the owner weighed against it — recorded so a later reader sees a judgment, not an oversight
+
+`bin/` sits outside `claude/structure-manifest.tsv`; the summary block is maintainer-facing output that
+nothing parses; and this is **new ground — the suite has never touched `bin/release.mjs`.**
+
+### Consequences — state these explicitly
+
+- **`## Out of scope` widens, and its own condition is now met.** That fence already reads
+  ⛔ *"Any file other than `bin/release.mjs`* — **except a test, and only if the owner answers the open
+  question below in the affirmative**.*"* ✅ **The owner answered in the affirmative.** The task may now
+  also touch **one new test file** and **an extension to `test/prove-red.sh`**. ⛔ **`## Out of scope`
+  was NOT rewritten** — this dated note is the record, as with everything else in this brief.
+- **Verification step 8 follows automatically.** It already admits *"a test file **only** if the owner
+  answered the open question below in the affirmative"* — so `git diff --stat` may now legitimately
+  show `bin/release.mjs`, the new test, and `test/prove-red.sh`, and **nothing else**. ⛔ Still no
+  `package.json`, no `VERSION`, nothing under `ai-agents/wiki-vault/`.
+- ⛔ **The coder no longer raises this at the plan gate.** The bullet at the end of the question block
+  instructs exactly that; it is superseded by this ruling, and the inserted pointer says so from the
+  other direction.
+- ⛔ **The (b) branch does not apply.** The close does **not** record an accepted test-coverage
+  residual — it reports the test that was written and the mutation(s) that proved it red.
+- ⚠️ **Step 11 needs care, and is NOT cancelled.** Its measurement — *no test in this repo executes the
+  summary block, verified 2026-08-13* — was true of the suite **as it stood** and remains the reason
+  this ruling exists. ⛔ Its prohibition still holds for the **pre-existing** suite: a green `npm test`
+  from the tests that already existed says **nothing** about this change. ✅ What the close reports
+  instead is the **new** test's own measured result **and** its `prove-red.sh` mutation(s) going red at
+  the named assertion. **Do not quietly delete step 11; satisfy it by naming what does and does not
+  cover this line.**
+
+### ⚠️ The widening is BOUNDED — and both of today's rulings hold at once
+
+- ✅ It authorizes coverage **for `0288`'s four defects on the summary/tag path**.
+- ⛔ **Not a general test suite for `bin/`.**
+- ⛔ **Not a licence to touch tag or push logic** — the separate ruling above (*"Report truthfully only
+  — stay inside the fence"*) keeps that fenced. **The two rulings do not conflict:** the test proves
+  the summary block **reports truthfully**; it does not authorize changing what the tag logic **does**.
+- ⛔ **The defect count stays FOUR.** R1, R2, R5, N1 all stand exactly as written above; none is
+  weakened by this ruling.
+
+### ⚠️ Mutation coverage — the plan's call, deliberately NOT decided here
+
+`test/prove-red.sh` requires each mutation to red its **NAMED** assertion, not merely "some failure".
+⛔ **How many mutations the four defects warrant is NOT decided in this brief** — ✅ **the plan must
+decide it and argue it.**
+
+**Two facts about that file the planner should have before deciding, read from disk 2026-08-13:**
+
+- Its own header calls it *"the hard gate for the **launcher-contract** suite (task 23 / ADR-014)"*,
+  and every one of its **seventeen** current mutations targets a copied **launcher** tree, pointed at
+  via the `FKIT_LAUNCHER` env var. **A `bin/release.mjs` mutation is new ground in that script too** —
+  ⚠️ it is not a one-line addition, and the plan should say how the mutant is built and pointed at.
+- The header carries an explicit standing instruction: *"SEVENTEEN mutations, each caught by a NAMED
+  assertion. ⚠️ **KEEP THIS LIST IN STEP WHEN YOU ADD ONE**"* — the index drifted once before (task
+  `0136` round-1 review R5). ✅ **Any mutation added under `0288` must update that count and index.**
+- `package.json`'s test script is `node --test test/*.test.js && bash test/prove-red.sh`, so a new
+  `test/*.test.js` file is picked up by `npm test` automatically. ⛔ **This is context, not permission
+  to edit `package.json`** — that remains out of scope.
+
+> ⚠️ **Line-citation check, re-derived from scratch after this note inserted lines mid-file** (not
+> reused from the previous check). Re-grepped on disk: this brief still contains exactly **two**
+> citations to its **own** line numbers — `:75-77` and `:119`, both in earlier blocks, and the
+> previous ruling block's check restates the same two. **Every target sits above BOTH of tonight's
+> insertion points**, so **no target shifted**; re-read after the insert, `:75-77` still holds R1's
+> superseded mechanism sentence and `:119` still holds the `` `:227-229` and `:258` `` bullet under R2.
+> ⚠️ The **citing** sentences moved down by the inserted lines, but they cite targets, and the targets
+> are unmoved. **Every other `:NNN` in this brief cites `bin/release.mjs`, not this file**, and no
+> brief edit can shift those — that 277-line file was not touched.
+>
+> ⛔ **Nothing else was touched:** no status, priority, board or owner change (still `🔲 Backlog`,
+> unranked, owner `fkit-coder`); no mover invoked, nothing closed, moved or filed; no re-rank
+> (ADR-035); no other file edited — not `bin/release.mjs`, not `test/prove-red.sh`, not any test, not
+> `sprint-5.md`, not `backlog.md`, not any other brief; no `ai-agents/wiki-vault/` write; no commit, no
+> push.

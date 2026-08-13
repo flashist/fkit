@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -64,7 +64,7 @@ here … and **owes its own resync** — the wiki does not file tasks."* ⛔ **D
      console.log(`  Verify tag on origin: git ls-remote --exit-code --tags origin ${tag}`);
    ```
 3. **A narrower, separate defect set on the REPLACEMENT line is OPEN** as
-   [`0288`](../0288-fix-the-post-release-verify-lines-failing-and-false-green-cases/brief.md)
+   [`0288`](../../backlog/0288-fix-the-post-release-verify-lines-failing-and-false-green-cases/brief.md)
    (`🔲 Backlog`, `## Owner: fkit-coder`), by owner ruling of the same day (verbatim labels
    **"File a follow-up task, ship 0254 now"** and **"Fold into the R1/R2 follow-up"**). It carries
    `0254`'s review findings **R1**, **R2** and **R5**:
@@ -120,7 +120,7 @@ and **this project has been bitten repeatedly by corrections that were themselve
 ⚠️ **The sprint loop cannot run this row** — the same exclusion recorded on
 [`0258`](../../done/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md),
 [`0285`](../../done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md) and
-[`0287`](../0287-wiki-resync-of-the-codex-sandbox-read-only-pages-after-0273/brief.md): **the loop
+[`0287`](../../backlog/0287-wiki-resync-of-the-codex-sandbox-read-only-pages-after-0273/brief.md): **the loop
 never reads `## Owner`**
 ([ADR-038](../../../knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md)
 fixes each step's role to the skill that step runs), so its **Build** step spawns `@fkit-coder`, and
@@ -243,7 +243,7 @@ Each step is runnable. **Paste the command and its output; do not assert.**
 - ⚠️ **Whichever order they run, the page will need another look if `0288` lands** — that second pass
   is a **known, accepted** future row, not a defect in this one. **Say so in the close** so the next
   producer files it rather than rediscovering it.
-- ⚠️ **Ordering against [`0286`](../0286-mechanical-citation-sweep-of-architecture-md/brief.md)**:
+- ⚠️ **Ordering against [`0286`](../../backlog/0286-mechanical-citation-sweep-of-architecture-md/brief.md)**:
   same hazard `0285` recorded — a resync that reads `architecture.md` as a source before its
   citations are repaired ingests coordinates that are already wrong. ⚠️ **This row should not need
   `architecture.md` at all**; if it does, **do not copy its `:NNN` pointers.**

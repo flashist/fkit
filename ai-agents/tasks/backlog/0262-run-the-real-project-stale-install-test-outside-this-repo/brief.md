@@ -113,7 +113,7 @@ the tool a producer session is holding.**
 
 That is exactly the gap
 [`0253`](../../done/0253-state-the-per-project-relaunch-step-fkit-update-requires/brief.md) documents and
-[`0255`](../0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md) decides:
+[`0255`](../../done/0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md) decides:
 `.claude/` is refreshed **only on launch**, with **no diagnostic of any kind** when it is stale. It
 is now observed, not hypothesized — and it is the strongest available argument for running this test
 against a project that is not this one. **⛔ Do not "fix" it as part of this task** (see Out of

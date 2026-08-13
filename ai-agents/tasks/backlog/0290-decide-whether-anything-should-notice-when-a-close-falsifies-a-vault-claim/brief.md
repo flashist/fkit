@@ -39,7 +39,7 @@ falsifying a claim written on that page. **Measured on disk 2026-08-13:**
 |---|---|---|---|---|---|
 | 1 | `0285` | [`ai-agents/tasks/done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md`](../../done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md) | `✅ Done (agent-closed — not owner-verified)` | `Backlog` / `Unscheduled` | `0257` — the update-banner fix |
 | 2 | `0258` | [`ai-agents/tasks/done/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md`](../../done/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md) | `✅ Done (agent-closed — not owner-verified)` | `Sprint 5` / `Sprint 5 P16` | `0252` — `RELEASING.md` |
-| 3 | `0289` | [`ai-agents/tasks/backlog/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md`](../0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md) | `🔲 Backlog` | `Backlog` / `Unscheduled` | `0254` closing |
+| 3 | `0289` | [`ai-agents/tasks/backlog/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md`](../../done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md) | `🔲 Backlog` | `Backlog` / `Unscheduled` | `0254` closing |
 
 **All three are `## Owner: fkit-wiki`.** All three record the same standing exclusion from
 `/fkit-sprint-ship-loop` (ADR-005 + ADR-038). **Each was correct work.** ⚠️ **The question is
@@ -180,7 +180,7 @@ sign-off** — and if it does, say so plainly rather than implying the recommend
 only owner gate is plan approval**, spent before Build
 (`claude/skills/fkit-sprint-ship-loop/SKILL.md`) — so the loop has **no beat left** at which a
 sign-off ruling could be taken. **The precedent is
-[`0255`](../0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md)**, excluded
+[`0255`](../../done/0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md)**, excluded
 from loop runs by **standing owner ruling of 2026-08-10**, recorded in
 [`sprint-5.md`](../../../sprints/sprint-5.md)'s `## Notes` in exactly these terms:
 
@@ -291,6 +291,11 @@ vault write.**
    ls -d ai-agents/tasks/done/0285-* ai-agents/tasks/done/0258-* ai-agents/tasks/backlog/0289-*
    grep -A1 '^## Status' ai-agents/tasks/done/0285-*/brief.md ai-agents/tasks/done/0258-*/brief.md ai-agents/tasks/backlog/0289-*/brief.md
    ```
+   ⚠️ **DO NOT RUN THE TWO LINES ABOVE AS WRITTEN — see the dated correction in `## Notes`, item 3.**
+   The `ai-agents/tasks/backlog/0289-*` glob **matches nothing and fails SILENTLY** — `0289` closed and
+   its folder is now under `done/`. A silent no-match reads as *"nothing to see here"* rather than
+   *"your command is broken"*, so it will hand you a false conclusion. The corrected commands are in
+   that note; the lines above are left as filed, deliberately not repaired in place.
    ⚠️ **State explicitly where the measurement differs from this brief, in both directions.**
 2. **The page's real state is quoted.** Show which resync blocks the page carries and confirm — or
    disprove — that **no `0289` block exists yet**:
@@ -320,7 +325,7 @@ vault write.**
 
 - **Depends on:** nothing.
 - **Blocks:** nothing. ⚠️ **In particular it does NOT block
-  [`0289`](../0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md)** —
+  [`0289`](../../done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md)** —
   that row corrects the page and is runnable today, whatever this one concludes. **They are
   independent.**
 - **Provenance:** the pattern was noticed by the `fkit lead` session on 2026-08-13 while `0289` was
@@ -363,3 +368,112 @@ vault write.**
   **changed no existing task's status, priority, sprint field or location**, **re-ranked nothing**
   (⛔ ADR-035), **edited no existing brief, no source file and no sprint plan other than adding this
   row to the Backlog board**, and **committed nothing**.
+
+- **⚠️ Dated correction, 2026-08-13 — `0289` CLOSED, and its close falsified three statements written
+  above. Every prior byte is left identical, per this project's dated-correction practice. Those
+  statements were TRUE WHEN WRITTEN; they are SUPERSEDED, NOT DELETED.** **Authority:** the owner,
+  2026-08-13, `fkit lead` session, verbatim option label **"Correct both, and record it IN 0290 as
+  evidence"**. Appended by a spawned `fkit-producer` with **no owner channel**. ⛔ **Nothing else
+  about this row changed** — `## Status` stays `🔲 Backlog`, `## Priority` stays `Unscheduled`,
+  `## Sprint` stays `Backlog`, `## Owner` stays `fkit-architect`. **No board row was touched, nothing
+  was re-ranked** ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)),
+  **no mover ran** ([ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)),
+  **nothing was written under `ai-agents/wiki-vault/`** (⛔ [ADR-005](../../../knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)),
+  and **nothing was committed.**
+
+  **What is now false — each re-measured on disk 2026-08-13, not inherited:**
+
+  1. **`:236-237` — the "third resync is still owed" paragraph. ⛔ NOW FALSE, both sentences.** It
+     asserts the page carries the `0285` blocks and the `0258` corrections *"but **NOT** a `0289`
+     block — because **`0289` has not run**"*, and that *"Two of the three resyncs have landed on the
+     page; the third is still owed."* **`0289` has run.**
+     `ai-agents/wiki-vault/wiki/systems/install-and-self-update.md` now carries a **third** dated
+     block, at **`:99`**, opening *"⚠️ **Dated correction 2026-08-13 (the `0289` resync; BOTH blocks
+     above are left byte-identical — the `0285` block *and* the `0258` correction stacked under
+     it).**"* ✅ **All three resyncs have now landed on the page.**
+     ⚠️ **The ⛔ instruction attached to that paragraph — *"Do not write or repeat 'the page carries
+     all three'"* — is SPENT and MUST NOT be honoured.** The page carries all three, and saying so is
+     now the accurate statement. ⛔ **Re-measure the page yourself; inherit neither version of this
+     claim.**
+
+  2. **`:42`, instance table row 3 — TWO stale cells. ⚠️ This was NOT in the correction request; this
+     producer measured it and is recording it rather than leaving it.** The row's `## Status` cell
+     reads `🔲 Backlog`; `0289`'s actual `## Status` is **`✅ Done (agent-closed — not
+     owner-verified)`** (`ai-agents/tasks/done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md:12-13`).
+     The row's Location cell **display text** still reads `ai-agents/tasks/backlog/0289-…`, which no
+     longer exists. ✅ **That cell's markdown LINK TARGET resolves correctly today** — only the
+     visible path text and the status cell are stale.
+     ⚠️ **And HOW the link target came to be correct is itself evidence — recorded rather than
+     smoothed over.** It was **NOT** correct at filing. `git diff` against the last commit shows the
+     closing producer's own **href repair** rewrote **three** link targets in this brief from
+     `../0289-…` / `../0255-…` to `../../done/…` (row 3's target, the `0255` link, and the `0289`
+     link in `## Notes`). ⚠️ **So the mover reached INTO this brief, repaired exactly what its duty
+     covered, and left the display text, the status cell and the two dead globs untouched — which
+     was correct, because none of those are hrefs.** ⛔ **Do not read this as the mover erring.**
+     ⚠️ **Consequence for the investigation: all three rows in that table are now `✅ Done`, so the
+     "three resyncs" set is complete and closed.** That does not change the table's point, but the
+     analysis must not describe row 3 as pending work.
+
+  3. **`:291-292`, verification step 1 — the glob `ai-agents/tasks/backlog/0289-*` MATCHES NOTHING**
+     (confirmed: `zsh: no matches found`). **The working path, verbatim:**
+     `ai-agents/tasks/done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/`
+     — so step 1's two commands should be run as:
+     ```
+     ls -d ai-agents/tasks/done/0285-* ai-agents/tasks/done/0258-* ai-agents/tasks/done/0289-*
+     grep -A1 '^## Status' ai-agents/tasks/done/0285-*/brief.md ai-agents/tasks/done/0258-*/brief.md ai-agents/tasks/done/0289-*/brief.md
+     ```
+     ✅ **Those two lines and `:42`'s display text are the ONLY dead `backlog/0289-*` paths in this
+     brief** — every other `0289` reference here is prose or a link already pointing at `done/`.
+     Enumerated with `grep -rn "backlog/0289"` over this file, not taken on report.
+
+- **⚠️ Dated EVIDENCE entry, 2026-08-13 — A FOURTH INSTANCE OF THIS ROW'S OWN SUBJECT, AND IT LANDED
+  INSIDE THIS BRIEF. ⛔ RECORDED AS EVIDENCE FOR THE INVESTIGATION. IT DECIDES NOTHING.**
+  This row asks whether anything should notice when closing a task falsifies a claim written
+  elsewhere. **Closing `0289` falsified three statements inside this row's own brief (above) and two
+  more inside [`0291`](../0291-correct-two-stale-vault-claims-surfaced-by-0258s-review/brief.md)'s —
+  in the same working session, the same day both were filed.** ⚠️ *(This producer measured the
+  falsification itself; it did not independently measure the elapsed interval, which the `fkit lead`
+  session reported as roughly an hour.)*
+  ⛔ **The investigation must weigh this as evidence and MUST NOT read it as an argument for any
+  particular candidate** — including candidate 1 (*"nothing changes — three in one day is an artifact
+  of one sprint"*), which *What to build* step 4 requires be tested against evidence and which
+  ✅ **remains a legitimate outcome of this task.**
+
+  **Two things make this instance different in kind from the three in the table. ⛔ State both; do not
+  flatten them into a fourth tally mark:**
+  1. **It happened in the TASK SYSTEM, where the noticing step ALREADY EXISTS — and it fired.**
+     `/fkit-task-done`'s step-7 report enumerates every document the close touched, and the closing
+     producer **did** flag these two briefs as newly stale — and **correctly** declined to repair
+     them, as outside its href-repair duty. ⚠️ **So the gap this row is investigating is NOT "nobody
+     noticed."** In this instance it is **"noticing produces a report nobody is obliged to act
+     on."** ⚠️ **That is a materially different failure from the vault cases**, where the open
+     question is still whether anything notices *at all*. ⛔ **Do not merge the two** — a
+     recommendation that fixes detection would not have prevented this instance.
+     ⚠️ **Sharper still, and measurable in `git diff`:** the mover did not merely report — it
+     **edited this brief**, repairing three link targets under its href duty (see correction item 2
+     above), then stopped at the boundary of that duty. **So the task system already has a mover with
+     a narrow, working repair mandate reaching into other documents on close.** ⚠️ **Whether that
+     mandate's EDGE is the right edge is a question the investigation may find worth asking — ⛔ but
+     this note does not ask it, and the vault has no equivalent mandate at all, so the analogy does
+     not transfer without argument.**
+  2. **Different subsystem, different clock.** The three table instances are **one vault page, one
+     day, one sprint's fallout** — which is precisely the ground candidate 1 stands on. This instance
+     is a **different subsystem**, on briefs authored the same session, by a producer explicitly
+     instructed to re-derive everything from disk. ⚠️ **It is evidence bearing directly on candidate
+     1. It is NOT a refutation of it** — a single cross-subsystem instance is a data point, and
+     ⛔ **the weighing is this investigation's job, not this note's.**
+
+- **⚠️ Dated EVIDENCE entry, 2026-08-13 — a FIFTH specimen, in the vault, on a DIFFERENT page,
+  verified by this producer today.**
+  `ai-agents/wiki-vault/wiki/tasks/sprint-5-fix-what-a-real-project-found.md:36-37` reads **"Still
+  open:"** and lists `0269` (P9, wiki), `0254` (P12), `0252` (P13), `0253` (P14), `0255` (P15),
+  `0258` (P16, wiki). ⚠️ **Measured 2026-08-13: ALL SIX are now under `ai-agents/tasks/done/` — not
+  some of them, all of them.** (Checked per ID with `ls -d ai-agents/tasks/*/<ID>-*`; `0255` moved
+  today and still shows as a staged rename.) It is a clean specimen of exactly this row's pattern —
+  closes falsified a vault claim, and nothing acted on it.
+  ⚠️ **Why it is recorded here:** it is a **vault** instance that is **NOT** on
+  `install-and-self-update.md`, so it bears directly on whether the three in the table above are one
+  page's artifact. ⛔ **DO NOT FIX IT and DO NOT FILE FOR IT** — reporting this exact site is already
+  owed by [`0293`](../0293-wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface/brief.md)
+  (see its `brief.md:173` and `:211`). ⚠️ **Re-measure it before relying on it** — `0293` may have
+  landed by the time this row runs.

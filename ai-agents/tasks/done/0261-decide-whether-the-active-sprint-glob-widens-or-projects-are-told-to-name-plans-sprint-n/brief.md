@@ -126,7 +126,7 @@ An ADR under `ai-agents/knowledge-base/decisions/`, via `/fkit-record-decision`.
   [`conventions/dependency-declaration-form.md`](../../../knowledge-base/conventions/dependency-declaration-form.md);
   separate-bullet shape per the `0149` / `0184` precedent.
 - ⚠️ **This decision may need owner sign-off before it is actionable**, like
-  [`0255`](../../backlog/0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md): "tell
+  [`0255`](../0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md): "tell
   projects how to name their files" is a product posture, not an implementation detail. Flagged for
   the owner; the architect should return the recommendation rather than assume the posture.
 

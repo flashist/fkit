@@ -10,7 +10,7 @@ Sprint 5
 Sprint 5 P15
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
@@ -146,7 +146,7 @@ whether and how `.claude/` conformance is observed. No code.
   ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
   **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
   bottom-up can. Task
-  [`0235`](../0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
+  [`0235`](../../backlog/0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
   class generally and is **neither widened nor closed** by this note.
 
 - **⛔ NOT DRIVEN BY `/fkit-sprint-ship-loop` — owner ruling 2026-08-10**, given via

@@ -30,7 +30,7 @@ divergence cannot help — the launch *is* the event that refreshes them.
 
 **Scope note — this task states the step; it does not build a detector.** The structural gap behind
 the missing signal (nothing checks `.claude/` conformance at all) is
-[`0255`](../../backlog/0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md), which is a
+[`0255`](../0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md), which is a
 decision task, not an implementation one. This brief is a docs fix that is correct and useful
 whatever `0255` decides.
 
@@ -73,7 +73,7 @@ A minimal edit to `README.md`'s "Staying current" paragraph — nothing else in 
 
 - **Depends on:** nothing
 - **Blocks:** nothing
-- Related: [`0255`](../../backlog/0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md)
+- Related: [`0255`](../0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md)
   is the decision task for the *detector* this README line is the manual substitute for; and
   [`0252`](../0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md)
   is the maintainer-side release-hygiene record. Neither is a hard dependency in either direction.
