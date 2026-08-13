@@ -2013,3 +2013,95 @@ Re-derived this run and each re-confirmed against the standing list: `ai-agents/
 Only `ai-agents/wiki-vault/` — pages edited in place or annotated, plus this entry. `log.md` **appended only**; no past entry edited. `.wiki-watermark` **not touched by the lint** (the sync already advanced it to `c071c3f`). Nothing committed, nothing staged. No task moved, no mover invoked; no brief, sprint plan, ADR, report, skill, agent definition, test or source file edited. **No `:NNN` coordinate written into any vault page by this lint** — the one `:NNN` above appears inside a quotation of the defect being reported.
 
 No tracked task completed by this run.
+
+## 2026-08-13 — ingest (task `0258`: re-sync [[systems/install-and-self-update]] against the landed `RELEASING.md`)
+
+Run as a spawned `fkit-wiki` librarian, driven by the fkit lead. **Authority:** owner ruling
+2026-08-13, verbatim option label **"Spawn a wiki librarian for it now"** — the route the standing
+`/fkit-sprint-ship-loop` exclusion had already named as the correct one, because that loop's Build
+step spawns `@fkit-coder`, which may never write the vault (ADR-005).
+
+**Precondition met.** `0252` closed **2026-08-13** and `RELEASING.md` exists at the repo root,
+**201 lines**, verified before any write. The earlier same-day sync recorded `0258` as *"Untouched —
+precondition unmet"*; that precondition is now satisfied and this entry discharges it.
+
+- Ingested: `RELEASING.md` (landed, repo root) + `ai-agents/knowledge-base/architecture.md` §6 →
+  updated [[systems/install-and-self-update]], created
+  [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]]
+
+### The claim list derived from the LANDED document — not the one the brief anticipated
+
+| # | Claim taken from `RELEASING.md` / the tree | Where it landed | Verified how |
+|---|---|---|---|
+| 1 | **`main` is the release channel; merging to `main` IS the act of shipping.** No staging channel, no promotion step. | §Release, new dated block, item 1 | `install.sh` `REF="${FKIT_REF:-main}"` and the `codeload.github.com/$REPO/tar.gz/$REF` fetch; `claude/fkit-claude.sh` resolves the same default when `.version` names no ref — all read on disk |
+| 2 | ⚠️ **"No install path resolves a tag" is FALSE.** `$REF` is interpolated **without inspection**, so a tag **is** reachable. The true, weaker claim: **nothing in the release flow, the README, or `fkit update` puts an install onto a tag on its own.** **Reachable, not supported.** | §Release, item 1 | Read the interpolation site directly. `RELEASING.md`'s own wording followed rather than reinvented |
+| 3 | ⛔ **The `FKIT_REF=` assignment must come AFTER the pipe.** `curl … \| FKIT_REF=v0.2.1 sh` works; `FKIT_REF=v0.2.1 curl … \| sh` does **not** — the prefix binds to `curl`, which never reads it. **Silently installs `main` while looking like it pins a tag.** | §Release, item 1 | POSIX pipeline semantics + `RELEASING.md`. ✅ **The vault contained NO instance of either form before this run** (`grep -rn FKIT_REF` over the vault → 0 hits), so there was nothing to correct — only something to add |
+| 4 | **Pinning is a way to FREEZE, not to subscribe — and not a reliable way to go quiet.** Two named break paths: `sha=unknown` makes the notice fire forever (both sides tested only for non-emptiness); and `git ls-remote` on an **annotated** tag returns the **tag object's** sha while the curl fallback returns the **commit's**. | §Release, item 1 | `install.sh`'s `.version` writer and `claude/fkit-claude.sh`'s `_fkit_remote_sha` / non-emptiness check, read on disk |
+| 5 | **What `VERSION` does** — names the release in the notice; bumping buys a **version delta** instead of a **sha delta**. **What it does not do** — select, gate or identify installed content; distribution is **sha-keyed** and `VERSION` is fetched separately, afterwards, purely to word the message. | New dated note under the "load-bearing" paragraph | `claude/fkit-claude.sh`'s two-branch printf and the separate `_fkit_remote_version` fetch, read on disk |
+| 6 | ⚠️ **The runtime figure is a RANGE.** Owner-ruled **"roughly 6–8 minutes, machine-dependent"** on 2026-08-13, **superseding their own earlier `~6 min` ruling**; observed span **328–463 s**. A **red** run returns in ~1 minute because `npm test` short-circuits at the `&&`. | §Release, item 2 | `RELEASING.md` §3; `package.json`'s `node --test test/*.test.js && bash test/prove-red.sh`; the 328/380/347/344 s runs quoted in `.github/workflows/test.yml` plus the 435/448/463 s runs in `0252`/`0254` worklogs |
+| 7 | ✅ **CI has RUN.** **5 runs — 4 success, 1 failure**; the 2026-08-12 failure was a **real catch**; the newest success is on the current `main` HEAD. | §Release, item 3 | `gh run list --json conclusion,headSha,createdAt` this run, cross-checked against `git rev-parse HEAD` (`1c82cbf`) |
+| 8 | **The `npm run generate:manifest` duty**, and the negative people get wrong: `claude/skills/`, `claude/agents/`, `claude/fkit-claude.sh` **owe no regen**. | §Release, item 4 — **summarised and pointed at `RELEASING.md`, deliberately not duplicated** | `RELEASING.md` §3 |
+| 9 | **A release gate exists**: `npm test` runs before the first mutating line and refuses on red; `--no-test` bypasses behind an **unconditional** stderr banner. | ✅ **Already correct on the page** from the same-day `0285`/`0256` block — **not rewritten** | `bin/release.mjs` `runTests()` and the `else` branch's `console.error`, read on disk |
+
+### Before / after — the "load-bearing" conclusion SURVIVES, sharpened not reversed
+
+**Before** (left **byte-identical**, untouched): *"**Version bumping is load-bearing** — self-update
+compares the installed sha against the remote head and reports the version from `VERSION`. This is
+precisely why [[decisions/adr-001-package-json-stays-metadata-only]]'s "stop bumping the version"
+instruction had to be superseded: following it would have broken self-update."*
+
+**After** — the paragraph above plus a dated note beneath it whose operative lines are: *"Bumping is
+what buys the version wording — it is what lets the notice name a **version delta** instead of
+falling back to a **sha delta**"*; *"It does **not select, gate, or identify installed content**"*;
+and ✅ *"**The supersession of ADR-001 is unaffected**: bumping still buys something real."*
+⛔ **`VERSION` is NOT relabelled cosmetic anywhere.**
+
+⚠️ **The retired reason is named as retired.** *"An unbumped `VERSION` makes the notice read
+`v0.1.30 → v0.1.30`"* was true before `0257` and is **false now** — that branch prints a coherent sha
+delta. The conclusion is carried on the sharper reason instead.
+
+### Correction form — matches `0143`/`0199`, which is what `0258`'s brief means by "`0239`'s form"
+
+⚠️ **`0239` has not run** (still `🔲 Backlog`, verified on disk), so it has no executed form of its
+own. Its brief defines its form **by reference to `0199`**, which in turn follows the
+knowledge-base correction-note form established by
+[[tasks/append-a-dated-correction-note-to-adr-010]] (`0143`, owner-ruled 2026-08-02) as extended by
+[[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] (`0195`). **That is the form used
+here, and it is the same one this page's own same-day `0285` blocks use** — so the vault gains **no
+second convention**:
+
+- **⚠️ = a fact that drifted · ⛔ = a decision that was overturned · ✅ = a claim now confirmed.**
+- The note sits **below the claim, at the claim** — not in a header banner.
+- The corrected text is left **byte-identical** and each note **says so in those words**.
+- **Additions only.** Nothing was deleted from this page.
+- ⛔ **No `:NNN` line numbers into a mutable file** — every coordinate written this run is a **file
+  path plus a quoted fragment or a heading**. `RELEASING.md`'s own `file:line` citations were
+  **deliberately not copied into the vault**.
+- **One deviation, stated rather than made silently:** the `**Key files**` line was edited **in
+  place** (with a dated parenthetical) rather than annotated beneath. That follows the 2026-08-06 /
+  2026-08-13 lint precedent for **metadata lines on living systems pages** — a `**Key files**` list
+  is an index, not a claim, and a correction note under it would not be read as part of the list.
+
+### Scope — `0252` only, as the brief required
+
+⛔ **`0256` and `0257` were NOT folded in.** Both had already been ingested by the same day's earlier
+sync and their §Release / self-update blocks were left **byte-identical**; this run cites them only
+where `0252`'s own facts depend on them (the retired bumping reason, and the CI evidence).
+
+⚠️ **Found already-wrong on the page and deliberately NOT repaired — outside `0252`'s scope, owed
+its own resync:** the same-day `0285` block calls the unrunnable post-release verify command *"a
+SEPARATE, still-open defect (task `0254`)"*. **`0254` is no longer open** — its brief now sits in
+`ai-agents/tasks/done/`, and a follow-up `0288` has been filed. **Flagged in place on the page and
+here; the wiki does not file tasks.**
+
+### Write scope
+
+Only `ai-agents/wiki-vault/` — **1 page created, 8 updated, plus `index.md` and this entry.**
+`log.md` **appended only**; no past entry edited or annotated in place. `.wiki-watermark`
+**not touched** (this is a targeted ingest, not a sync; the sync already advanced it to `c071c3f`).
+Nothing committed, nothing staged. **No task moved, no mover invoked** (ADR-033). No brief, sprint
+plan, board, ADR, report, skill, agent definition, test or source file edited — in particular
+`RELEASING.md`, `architecture.md`, `sprint-5.md`, `backlog.md` and `0258`'s own brief are
+**untouched**. **No secrets, endpoints, keys or credentials written.**
+
+Task 0258's vault work is complete — ready to close

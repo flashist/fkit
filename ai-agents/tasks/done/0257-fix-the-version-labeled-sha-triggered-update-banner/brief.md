@@ -126,7 +126,7 @@ excluded. **None of those may be weakened** — this is a wording/label fix, not
   version-labeled, and the bump treating the symptom — is confirmed exactly as stated.
 - **New finding not in the description:** the curl-only `_fkit_remote_version` asymmetry (`v?`),
   folded into scope above because it lives in the same six lines and shares the fix's test setup.
-- Related: [`0252`](../../backlog/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md)
+- Related: [`0252`](../0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md)
   documents the same `VERSION`-vs-sha distinction on the maintainer side. No dependency either way —
   but if both land, they should not end up describing the banner differently.
 - Verified 2026-08-08: `claude/fkit-claude.sh:79-89`, `:91-97`, `:135-142`; `install.sh:52-70`;

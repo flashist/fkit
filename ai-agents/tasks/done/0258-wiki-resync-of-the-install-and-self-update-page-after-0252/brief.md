@@ -10,7 +10,7 @@ Sprint 5
 Sprint 5 P16
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -23,7 +23,7 @@ answer to this producer's open question 3 on the 0252–0255 filing — verbatim
 
 ### What makes the vault page stale
 
-[`0252`](../0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md)
+[`0252`](../../done/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md)
 creates a repo-root `RELEASING.md` recording three facts about how fkit ships — that `main` HEAD is
 the release channel and the `v<x.y.z>` tag is not an install target; what `VERSION` does (names the
 release in the update notice) and does not do (select, gate, or identify installed content); and the
@@ -45,8 +45,8 @@ is exactly why this exists as a separate task with a different owner — the sam
 
 ### The precedent
 
-[`0238`](../0238-wiki-resync-after-the-sprint-2-archival-and-sprint-3-open/brief.md) and
-[`0239`](../0239-wiki-resync-adr-012s-vault-page-after-0232/brief.md) are the named precedent: a
+[`0238`](../../backlog/0238-wiki-resync-after-the-sprint-2-archival-and-sprint-3-open/brief.md) and
+[`0239`](../../backlog/0239-wiki-resync-adr-012s-vault-page-after-0232/brief.md) are the named precedent: a
 source document changed, its vault page went stale, and the resync was filed rather than performed.
 **Read `0239` and follow its shape** — in particular its answer to whether the vault page is edited
 in place or gains its own dated note, so the vault does not accumulate two correction conventions.
@@ -122,7 +122,7 @@ A re-sync of `ai-agents/wiki-vault/wiki/systems/install-and-self-update.md` agai
   ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
   **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
   bottom-up can. Task
-  [`0235`](../0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
+  [`0235`](../../backlog/0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
   class generally and is **neither widened nor closed** by this note.
   ⛔ **Unchanged by this note:** `0252`'s `Blocks: 0258` label, and this brief's own *"do not start
   before `0252` lands"*.

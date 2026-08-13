@@ -70,7 +70,7 @@ note must land in **project documentation**.
 **⚠️ WHERE it lands is a decision this brief deliberately does NOT make for you.** The ruling names
 *"RELEASING.md or the ADR"*. **`RELEASING.md` does not exist yet** — verified on disk 2026-08-10, this
 repo has no `RELEASING.md`;
-[`0252`](../../backlog/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md) is the
+[`0252`](../0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md) is the
 task that creates it, and it is on Sprint 5 at `P7`. So the coder must **either** land the note
 somewhere that **exists today** (ADR-041 is the obvious candidate, but that is the coder's call, not a
 prescription) **or** flag the dependency on `0252` and say so explicitly in the close.
@@ -103,7 +103,7 @@ one moved:
 
 **Why the site moved, stated rather than implied.** Both sites the earlier ruling named were
 unavailable: **`RELEASING.md` does not exist** — it is
-[`0252`](../../backlog/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md)'s
+[`0252`](../0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md)'s
 deliverable, currently Sprint 5 `P7` — and **ADR-041 is accepted and final**. The owner's stated
 reason goes further than availability: `RELEASING.md` is a **maintainer** doc, so landing the note
 there would satisfy the letter of the honesty condition while failing its purpose. A downstream owner

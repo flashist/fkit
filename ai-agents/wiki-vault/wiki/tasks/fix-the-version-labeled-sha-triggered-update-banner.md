@@ -74,3 +74,4 @@ separately as `0285` and is **discharged by the 2026-08-13 sync**.
 - [[tasks/build-claude-self-update]] — where the update check came from
 - [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] — the sibling release-hygiene row
 - [[systems/testing-and-verification]]
+- [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252` (2026-08-13): `RELEASING.md` §2 names **this task** as what retired the old justification for calling version bumping load-bearing. ⚠️ The stale reason — *"an unbumped `VERSION` makes the notice read `v0.1.30 → v0.1.30`"* — is dead; the **conclusion** survives on a sharper reason (**version delta vs sha delta**)

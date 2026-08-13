@@ -71,6 +71,53 @@ today.** Re-verified line by line on disk 2026-08-13:
 bullet was **`HEAD:577`**. ⚠️ **A reviewer whose entire finding was "this citation is wrong" got its
 own citation wrong in the same paragraph.** Nine errors, not eight.
 
+> **⚠️ DATED ADDITION 2026-08-13 — A TENTH MEASURED HIT, AND IT IS THE DELICATE ONE.
+> Text above left byte-identical.**
+>
+> **`architecture.md:415`** attributes *"No npm-registry publish"* to **`bin/release.mjs:66`**.
+> Independently re-measured from disk 2026-08-13:
+> - `bin/release.mjs:66` is `  --no-tag            Commit + push, but don't create/push a tag` — a
+>   `--help` output line.
+> - The correct site is **`bin/release.mjs:77`**: `Makes no npm-registry publish.`
+> - `architecture.md` contains **exactly one** `bin/release.mjs:NNN` citation — this is it.
+>   Machine-derived: `grep -noE 'bin/release\.mjs:[0-9]+([,-][0-9]+)*'` → a single hit,
+>   `415:bin/release.mjs:66`.
+>
+> ⚠️ **A sixth instance of this task's own pattern — a correction that was itself wrong.** `0252`'s
+> `review.md` describes `bin/release.mjs:66` as `const doTag = !has("--no-tag")`. **That description
+> is wrong**: `const doTag` is at **`bin/release.mjs:82`**; `:66` is the help-text line quoted above.
+> The *substance* of the residual holds either way — `:66` is not the npm-registry site and `:77` is —
+> but ⛔ **re-measure every coordinate here rather than inheriting it, including these.**
+>
+> ⛔ **THE DELICATE PART — READ BEFORE TOUCHING `:415`.** That stale citation sits on the **same
+> line** as **`**Version bumping is load-bearing**`** — a sentence deliberately preserved
+> **byte-identical across several tasks**, most recently proven so by
+> [`0252`](../../done/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md),
+> whose **verification step 4** reads *"`grep -n "Version bumping is load-bearing"
+> ai-agents/knowledge-base/architecture.md` still returns its hit, unmodified"*. Verified 2026-08-13:
+> `0252`'s shipped diff to this file is **`+2 / -0`** (`git diff --numstat` → `2  0`) — **it removed
+> no line.** ✅ **The correction must change the citation string and leave that sentence's bytes
+> untouched.**
+>
+> ✅ **The guard already exists — use it, do not invent one.** This task's own **verification step 6**
+> (*"No prose sentence changed. Show the diff and confirm every hunk is a citation string only"*) is
+> exactly the right check for this hit.
+>
+> **Why this row and not `0252`:** `0252` **could not** fix it. Its own step 4 protected that
+> sentence from any removed line, and the stale citation shares the line — so correcting it would
+> have produced a removed line and failed `0252`'s own gate. It was surfaced as a `0252` residual
+> instead; the evidence trail is that task's `review.md` (its *"Accepted residuals"* section and the
+> reviewer's out-of-scope list), now closed at
+> `ai-agents/tasks/done/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/`.
+>
+> ✅ **In scope for this row:** the `:415` **citation string only**. It is a `bin/release.mjs:NNN`
+> coordinate — section A's job exactly.
+> ⛔ **The §9 fence below is UNCHANGED and this note does not widen it.** The **suite count at
+> `:498`** stays [`0251`](../0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md)'s
+> (measured 2026-08-13: `:498`'s §9.1 still says *"eight `node --test` contract suites"*, disk says
+> **20** — ⛔ **report it, do not fix it**). **A citation fix at `:415` is not licence to touch a
+> count in §9.**
+
 ### The second half: `0257` shifted this file's OWN line numbers — and by more than was recorded
 
 **⛔ READ THIS BEFORE USING ANY NUMBER FROM ANYWHERE. THE RECORDED SHIFT FIGURE IS WRONG.**
@@ -264,3 +311,15 @@ task** — spot-checking is exactly what produced nine misses.
 - Filed 2026-08-13 by a spawned `fkit-producer` with **no owner channel**. It asked nothing, wrote
   nothing under `ai-agents/wiki-vault/`, moved no task file, changed no existing task's status,
   priority or location, and committed nothing.
+- **⚠️ AMENDED 2026-08-13 — a tenth measured hit added to `## Context`; all prior text left
+  byte-identical.** `architecture.md:415` cites `bin/release.mjs:66` for *"No npm-registry publish"*;
+  the correct site is `bin/release.mjs:77`. ⛔ **It shares its line with the byte-preserved
+  `**Version bumping is load-bearing**` sentence** — verification step 6 is the guard. Surfaced as a
+  residual of `0252` (closed 2026-08-13), which could not fix it without failing its own gate. Owner
+  provenance: ruled **"Amend 0251 and 0286, file nothing"** (`AskUserQuestion`, 2026-08-13, live
+  `fkit lead` session) — an earlier producer spawn had been told to file a **new** brief for this and
+  **refused, correctly**, because both facts were already owned by open rows and a third concurrent
+  writer on `architecture.md` would have crossed a fence. ⛔ **No new task id was claimed.** The §9
+  fence is unchanged: the count at `:498` remains `0251`'s. Written by a spawned `fkit-producer` with
+  **no owner channel** — it changed no status, priority, board or owner, moved no file, wrote nothing
+  under `ai-agents/wiki-vault/`, and committed nothing.

@@ -273,5 +273,5 @@ if (dryRun) {
   console.log(`\n${"─".repeat(48)}\nDry run — nothing was changed. Re-run without --dry-run to release.`);
 } else {
   console.log(`\n${"─".repeat(48)}\n✓ Released ${tag}`);
-  console.log(`  Verify: npx github:flashist/fkit#${tag} --version`);
+  console.log(`  Verify tag on origin: git ls-remote --exit-code --tags origin ${tag}`);
 }

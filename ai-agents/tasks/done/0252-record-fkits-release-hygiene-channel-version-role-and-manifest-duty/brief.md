@@ -10,7 +10,7 @@ Sprint 5
 Sprint 5 P13
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -151,7 +151,7 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
      `claude/scaffold/` content changed (name the exact covered set from Fact 3), commit the
      regenerated `claude/structure-manifest.tsv` in the same change, and run `npm test` before
      `npm run release`, **because nothing else will** (no CI; the release script runs no tests).
-     ⚠️ **Owner ruled 2026-08-08 that [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)
+     ⚠️ **Owner ruled 2026-08-08 that [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)
      lands first**, so expect this sentence to describe the gate that exists rather than the gap —
      **re-read `bin/release.mjs` before writing it**. See the dated ruling bullet in `## Notes`.
      > **⚠️ DATED CORRECTION 2026-08-12 — `0256` HAS LANDED; the quoted words *"because nothing else
@@ -187,7 +187,7 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
 - ⛔ Any behavior change: no edit to `install.sh`, `claude/fkit-claude.sh`, `bin/release.mjs`, or
   `bin/generate-structure-manifest.mjs`. This task documents what is; it changes nothing.
 - ⛔ Adding CI, or adding a test gate to `bin/release.mjs`. **The owner ruled 2026-08-08 that the
-  gate gets built — as [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md), not
+  gate gets built — as [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md), not
   here.** This task keeps *recording* the absence, exactly as scoped. ⚠️ If `0256` lands first, the
   releaser checklist written here must describe the gate that exists rather than "run `npm test`,
   because nothing else will" — re-read `bin/release.mjs` before writing that sentence.
@@ -202,7 +202,7 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
     > `.github/workflows/test.yml` on the day of writing** rather than citing this brief.
 - ⛔ Any `ai-agents/wiki-vault/` write (ADR-005). The resync of
   `wiki/systems/install-and-self-update.md` §Release is
-  [`0258`](../0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md),
+  [`0258`](../../done/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md),
   `fkit-wiki`-owned.
 - ⛔ No commit, no re-rank, no task-file move.
 
@@ -232,7 +232,7 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
 - **Depends on:** nothing
 - **Blocks:** `0258` — hard. The vault page cannot be re-synced against a document that has not
   landed.
-- **✅ OWNER RULING 2026-08-08 — sequencing: [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)
+- **✅ OWNER RULING 2026-08-08 — sequencing: [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)
   lands BEFORE this task.** Ruled live, accepting this producer's recommendation on its stated
   reasoning: otherwise the releaser checklist here has to say *"run `npm test`, because nothing else
   will"*, which `0256` obsoletes. This upgrades the "scheduling preference" noted below from producer
@@ -260,10 +260,10 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
   missing post-update step),
   [`0254`](../0254-fix-the-unrunnable-verify-command-release-mjs-prints/brief.md) (the broken verify
   line `bin/release.mjs` prints),
-  [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md) (builds the gate whose
+  [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md) (builds the gate whose
   absence this task records — **scheduling preference: land `0256` first**, so the checklist here
   describes reality rather than being obsoleted a week later) and
-  [`0257`](../../done/0257-fix-the-version-labeled-sha-triggered-update-banner/brief.md) (the update banner's
+  [`0257`](../0257-fix-the-version-labeled-sha-triggered-update-banner/brief.md) (the update banner's
   label logic — the same `VERSION`-vs-sha distinction this task documents).
 - Filed to the **Backlog** board — no sprint named; no re-rank (ADR-035).
 
@@ -277,7 +277,7 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
   ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
   **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
   bottom-up can. Task
-  [`0235`](../0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
+  [`0235`](../../backlog/0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) covers this
   class generally and is **neither widened nor closed** by this note.
 
 - **⚠️ AMENDED 2026-08-12 — `0256` HAS LANDED; the "no CI" premise is gone. See the READ FIRST banner
@@ -303,3 +303,35 @@ A single maintainer-facing release-hygiene document, plus one cross-reference.
   bullet**, inside **`## What to build` item 1's correction block**, and as a note on **verification
   step 6**. Owner ruling, verbatim option label **"Producer amends it now (Recommended)"**.
   ⛔ **Scope, status, priority, placement, and `Blocks: 0258` untouched. CI still has never run.**
+
+- **⚠️ SUPERSESSION 2026-08-13 — the `~6 min` instruction is SUPERSEDED. `RELEASING.md` says a range,
+  and that is correct.** Everything above is left **byte-identical**, including the two 2026-08-12
+  **RUNTIME-FIGURE CORRECTION** blocks that instruct **`~6 min`** and mark it ⛔ *"not a single
+  second-count"*. **Those were right when written** — they were the honest reading of the four runs
+  that existed on 2026-08-12. They are superseded, **not wrong-at-the-time**.
+  - **What the shipped document actually says.** `RELEASING.md:128` (landed, 201 lines, repo root)
+    reads **"A green run takes **roughly 6–8 minutes, machine-dependent**"** — a range, not `~6 min`.
+    Verified on disk 2026-08-13.
+  - **Owner ruling, 2026-08-13, `AskUserQuestion`, verbatim option label
+    "Range: 'roughly 6–8 minutes, machine-dependent'".** ⚠️ **The conflict was put to the owner
+    explicitly and in those terms** — that choosing anything but `~6 min` would override their own
+    2026-08-12 ruling. They chose the range anyway. This bullet records that choice; it does not
+    reinterpret it.
+  - **Why: the measurement series outgrew the figure.** `~6 min` came from four runs
+    (**328 / 380 / 346.9 / 343.8 s**). Two further runs on **2026-08-13** measured **463 s** and
+    **448 s** — **both outside** the `~6 min` reading. **Six** measurements now span **328–463 s**,
+    which a range describes and a single figure does not.
+  - **Why this note exists at all.** No brief edit was in scope during the task, so the supersession
+    was recorded only in this folder's `plan.md` and `worklog.md`. A reader opening the brief alone
+    reached the stale conclusion, and the brief contradicted the document it produced. That is what
+    this bullet closes.
+  - ⚠️ **KNOWN-UNFIXED GAP, accepted knowingly — not an oversight.** The range in `RELEASING.md` now
+    **disagrees by design** with four sites that still say **`~6 min`**: `bin/release.mjs:71`
+    (`--help`), `:173` (comment), `:190` (console line), and `.github/workflows/test.yml:28-32` (the
+    `timeout-minutes` rationale comment, which also still quotes the four-run series). All four were
+    **out of `0252`'s scope** — the ⛔ out-of-scope bullet forbids any edit to `bin/release.mjs`, and
+    CI was never this task's to touch — and **none was changed**. The owner accepted the disagreement
+    with this stated. **Reconciling those sites wants its own brief.** ⛔ **No such brief has been
+    filed, and this note does not file one.**
+  - ⛔ **Nothing else changes: status, scope, priority, placement, and `Blocks: 0258` all stand
+    exactly as written. CI still has never run.**

@@ -32,8 +32,15 @@ run `/fkit-initiate-project`. Want two roles at once? Open another terminal tab.
 out — it never updates itself behind your back. Run `fkit update` when you want it. (Silence it with
 `FKIT_NO_UPDATE_CHECK=1`.) A checkout of this repo is never auto-checked — update it with `git`.
 
-**One thing an update does not repair.** `fkit update` and a launch refresh replace the agents and
-skills under `.claude/` — they never rewrite your project's own content under `ai-agents/`. If your
+**`fkit update` updates fkit, not your projects.** It refreshes the installed copy and stops there.
+(In a checkout of this repo it refuses and points you at `git pull`.) Each project picks up the
+new agents and skills the **next time you launch `fkit` in that project** — that launch is what
+rewrites its `.claude/agents/fkit-*.md` and `.claude/skills/fkit-*/`. A project you updated but
+never re-launched in keeps its **old agents and skills, and nothing tells you**. Want the refresh
+without opening a session? Run `FKIT_SETUP_ONLY=1 fkit` in the project.
+
+**One thing an update does not repair.** A launch refresh replaces the agents and
+skills under `.claude/` — it never rewrites your project's own content under `ai-agents/`. If your
 project filed an unsprinted brief before this correction shipped, the header `/fkit-task-brief`
 generated into `ai-agents/sprints/backlog.md` says the backlog is excluded from `/fkit-status`
 because its filename sits outside a `sprint-*.md` glob. **That sentence is stale prose, not broken

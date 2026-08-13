@@ -90,6 +90,43 @@ Docs-only refresh of `ai-agents/knowledge-base/architecture.md` §9 — nothing 
    > re-derive, do not cite). `ls test/*.test.js | wc -l` still returns **19**. Items 1 and 2 above stand
    > exactly as written; only item 3's thesis quote is corrected.
 
+> **⚠️ DATED ADDITION 2026-08-13 — TWO ITEMS: A DRIFT-RATE DATA POINT, AND AN OPEN DECISION THE
+> OWNER DEFERRED TO THIS TASK'S OWN RUN. All text above left byte-identical.**
+>
+> **(a) The figure moved again — and this note is evidence of the drift rate, NOT a number to copy.**
+> Measured independently 2026-08-13:
+> - `architecture.md:498` (§9.1) still reads **"eight `node --test` contract suites"** and still names
+>   eight by hand — byte-identical, unreflowed.
+> - `ls test/*.test.js | wc -l` → **20**.
+> - ⚠️ **This brief's own body says 19** (measured 2026-08-07). Disk is now **20**:
+>   `test/update-banner.test.js` landed since, from task
+>   [`0257`](../../done/0257-fix-the-version-labeled-sha-triggered-update-banner/brief.md).
+> - ⚠️ **Task `0252`'s `worklog.md` says 21. That figure is WRONG — one high. ⛔ Do not propagate it.**
+>
+> ⛔ **Do not copy `20` into §9.1 from this note.** Items 1 and 2 above already require re-derivation
+> from `ls test/*.test.js` **on the day the change is made**, so this task self-corrects — that
+> instruction is the fix, and it stands unchanged. **The point of recording 8 → 19 → 20 → (and a
+> wrong 21) is the drift rate**: three different figures inside six days, one of them a correction
+> that was itself wrong. ⚠️ **This brief must never become a place where someone reads a number
+> instead of measuring one.**
+>
+> **(b) OPEN DECISION — deliberately NOT pre-decided: should §9.1 stop enumerating suite names by
+> hand at all?**
+> A hand-maintained list of twenty filenames is precisely what rotted here in the first place, and it
+> will rot again on the next suite. The alternative — state the count and the derivation command, drop
+> the name list, or name only the notable groups — trades discoverability for durability.
+> **Owner ruling 2026-08-13, verbatim option label "Leave it for 0251's own run"** (`AskUserQuestion`,
+> live `fkit lead` session). ⛔ **It is not settled here.** It belongs to whoever plans this task,
+> **with the owner present**, at the plan gate.
+>
+> ⚠️ **Whoever plans it must know this is not a wording choice — it changes this brief's own
+> verification.** **Verification step 1 below currently *requires* a full enumeration**: *"every
+> filename in §9.1's enumeration exists on disk (and vice versa — no suite on disk is missing from the
+> enumeration)"*. Choosing *"stop enumerating"* means **amending verification step 1 in the same
+> change**, not only the prose. ⛔ **Do not change §9.1's prose and leave step 1 contradicting it** —
+> a verification step that cannot pass is worse than a stale count, because it silently converts every
+> later run into a judgement call.
+
 ### ⛔ Out of scope
 
 - ⛔ Any file other than `ai-agents/knowledge-base/architecture.md` — no README, no scaffold, no
@@ -126,3 +163,18 @@ Docs-only refresh of `ai-agents/knowledge-base/architecture.md` §9 — nothing 
   **The count-and-enumeration job — this task's actual scope — is untouched and still outstanding:**
   `0256` left the *"eight `node --test` contract suites"* sentence byte-identical; disk says **19**.
   ⛔ CI has never run; do not let the refresh claim it works.
+- **⚠️ AMENDED 2026-08-13 — a dated addition sits at the end of `## What to build`; all prior text
+  left byte-identical.** Two things. **(1) The count drifted again**: measured 2026-08-13,
+  `ls test/*.test.js | wc -l` → **20**, not the **19** this brief's body records from 2026-08-07
+  (`test/update-banner.test.js` landed from `0257`). ⚠️ **`0252`'s worklog says 21 — wrong, one
+  high.** ⛔ **Do not copy 20 either** — items 1 and 2 already require re-derivation on the day of
+  the change; the figures are recorded as **evidence of the drift rate**, nothing more.
+  **(2) An open decision**, owner-deferred: *should §9.1 stop enumerating suite names by hand?*
+  Owner ruling 2026-08-13, verbatim option label **"Leave it for 0251's own run"** (`AskUserQuestion`,
+  live `fkit lead` session) — to be taken at this task's plan gate, **with the owner present**.
+  ⛔ **Choosing "stop enumerating" also requires amending verification step 1**, which currently
+  mandates a full enumeration. Owner provenance for the amendment itself: **"Amend 0251 and 0286,
+  file nothing"** (same session, same day) — a new brief was **not** filed, because this fact was
+  already this row's. Written by a spawned `fkit-producer` with **no owner channel** — it changed no
+  status, priority, board or owner, moved no file, wrote nothing under `ai-agents/wiki-vault/`, and
+  committed nothing.

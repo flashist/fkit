@@ -37,3 +37,4 @@
 - [[tasks/sprint-2-remove-omnigent]]
 - [[decisions/adr-014-how-fkit-tests-itself]]
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]]
+- [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252` (2026-08-13): `RELEASING.md`, the maintainer document that finally writes down what `VERSION` does (**names the release in the update notice**) and does **not** do (**select, gate or identify installed content** — distribution is sha-keyed). ✅ It reaffirms this ADR rather than reopening it: bumping buys a **version delta** instead of a **sha delta**, and ⛔ **was never the delivery mechanism**

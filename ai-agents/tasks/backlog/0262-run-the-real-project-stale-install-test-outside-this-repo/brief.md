@@ -112,7 +112,7 @@ disk (`claude/skills/fkit-heal/repair.sh`), so **the copy is stale and states so
 the tool a producer session is holding.**
 
 That is exactly the gap
-[`0253`](../0253-state-the-per-project-relaunch-step-fkit-update-requires/brief.md) documents and
+[`0253`](../../done/0253-state-the-per-project-relaunch-step-fkit-update-requires/brief.md) documents and
 [`0255`](../0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md) decides:
 `.claude/` is refreshed **only on launch**, with **no diagnostic of any kind** when it is stale. It
 is now observed, not hypothesized — and it is the strongest available argument for running this test

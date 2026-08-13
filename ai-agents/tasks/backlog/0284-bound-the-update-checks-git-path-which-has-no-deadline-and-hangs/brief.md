@@ -38,6 +38,16 @@ on `_fkit_reinstall`.** The reasoning behind that exclusion was sound and **surv
 note** — see *"⚠️ Two call sites, possibly two answers"* below. ⛔ **It is a design note now, not a
 fence: do not re-exclude the call site.**
 
+**Third owner ruling 2026-08-13**, same session, same channel — **the option label is the verbatim
+text**: **"Fold into 0284"**.
+
+**A second, independent defect lives on the very same line (`:101-102`) — the environment assignments
+never reach the `sh` behind the pipe — and the owner ruled it IN SCOPE for this task**, for the same
+reason as the second ruling: **one line, one task, no ordering to invent.** ⚠️ **This task now owns
+THREE defects across two call sites** — see *"### Two distinct defects on ONE line"* below. ⛔ **They
+are independent: a `--max-time` fix that leaves `| sh` unchanged still ships the propagation bug, and
+a propagation fix that leaves the line undeadlined still ships the hang.**
+
 ### ⛔ THIS IS NOT A DOC FIX. THE DOCS ARE ALREADY CORRECT.
 
 **Read this before scoping anything.** `0257` corrected every false "5 s hard ceiling" claim. Verified
@@ -142,6 +152,64 @@ Two measured reasons, both verified on disk 2026-08-13:
    script from executing** (download-to-file-then-run, a completeness check, or a reasoned argument
    that the risk is acceptable). ⛔ **Do not add the flag and move on.**
 
+### Two distinct defects on ONE line — the env vars never reach the `sh` (folded in 2026-08-13)
+
+**Owner ruling 2026-08-13, verbatim label "Fold into 0284".** ⚠️ **This is a second, real, shipped bug
+on the same line the `--max-time` work above already edits.** It was found by a coder grounding task
+[`0252`](../../done/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md) and routed here rather than
+filed as its own row, **because two tasks editing one line would need an ordering and one task does
+not.**
+
+**⛔ The two defects are INDEPENDENT. This task owns both.**
+
+| # | Defect on `claude/fkit-claude.sh:101-102` | Fixing the other one does NOT fix it |
+|---|---|---|
+| 1 | **No `--max-time`** — the fetch of `install.sh` has no deadline | A propagation fix leaves the line unbounded; the hang ships |
+| 2 | **The `FKIT_REPO=… FKIT_REF=…` prefix never reaches the `sh`** | A `--max-time` fix that leaves `\| sh` unchanged still ships the wrong-ref reinstall |
+
+**The mechanism.** The function as it stands on disk (`claude/fkit-claude.sh:99-103`):
+
+```sh
+_fkit_reinstall() {   # run the canonical installer for $repo@$ref (refreshes resources + .version)
+  command -v curl >/dev/null 2>&1 || { echo "fkit: curl is required to update" >&2; return 1; }
+  FKIT_REPO="$fkit_repo" FKIT_REF="$fkit_ref" \
+    curl -fsSL "https://raw.githubusercontent.com/$fkit_repo/$fkit_ref/install.sh" | sh
+}
+```
+
+**In a POSIX pipeline an assignment prefix binds to the FIRST command only** — here `curl` — **not to
+the `sh` on the right of the pipe.** So the `sh` that actually executes `install.sh` never receives
+`FKIT_REPO` or `FKIT_REF`.
+
+**Measured by the `/fkit-sprint-ship-loop` driver, 2026-08-13.** ⚠️ **A first attempt at this test was
+malformed and measured nothing; the numbers below are the corrected run** — the same false-negative
+class the section below warns about, hit again:
+
+```
+sh -c 'FKIT_REF=vTAG printf "" | sh -c '\''echo inner sees [$FKIT_REF]'\'''   → inner sees []
+sh -c 'printf "" | FKIT_REF=vTAG sh -c '\''echo inner sees [$FKIT_REF]'\'''   → inner sees [vTAG]
+```
+
+**The consequence.** `fkit update` on an install pinned to a non-default repo/ref **fetches the pinned
+ref's `install.sh` but then runs it under `install.sh`'s own defaults** — reinstalling
+`flashist/fkit@main` and writing `ref=main` into `$SHARE/.version` (`install.sh:69`). ⛔ **The pin
+erases itself on the first update.**
+
+**⚠️ Scope of impact — state it precisely, do NOT inflate it:**
+
+- **Invisible in the default case** (`flashist/fkit@main`), because the defaults and the intended
+  values coincide. **That is why it has survived.**
+- **Only bites an install whose repo/ref came from `.version`** rather than from the caller's
+  environment. ✅ **An *exported* `FKIT_REF` in the user's shell IS inherited by `sh` normally and DOES
+  propagate** — so a user who exports it sees correct behaviour and will not reproduce this.
+
+**Candidate fix shapes — the plan picks, this brief does not:** `| sh` → `| FKIT_REF=… FKIT_REPO=… sh`,
+or `| env FKIT_REPO=… FKIT_REF=… sh`. ⚠️ **Whichever is chosen must survive the `--max-time` work on
+the same line** — they land together, in one edit, in one plan.
+
+⛔ **`install.sh` stays out of scope** (see `## Out of scope`). The fix is confined to how
+`fkit-claude.sh` invokes it.
+
 ### ⚠️ THE FIRST PROBE OF THIS WAS A FALSE NEGATIVE. DO NOT REPEAT IT.
 
 **A first attempt read 1 s and nearly became a "refuted".** Recorded verbatim in `0257`'s `review.md`:
@@ -214,6 +282,15 @@ kind of call the architect exists for. **Do not guess between the rows above.**
    deadline as the startup probe or a different one, the same silent failure or a visible one, per
    *"⚠️ Two call sites, possibly two answers"* above. ⛔ **And handle the `curl … | sh` truncation
    hazard** named above, or argue explicitly why it is acceptable.
+2b. **Fix the env-propagation defect on that SAME line (`:101-102`)** — **owner ruling 2026-08-13,
+   verbatim label "Fold into 0284."** The assignment prefix binds to `curl`, not to the `sh` behind the
+   pipe, so the installer runs under its own defaults and **the pin erases itself** (`install.sh:69`
+   writes `ref=main`). ⛔ **This is a separate defect from item 2, not a consequence of it** — item 2
+   done alone still ships this bug, and this done alone still ships the hang. ✅ **Both land in one
+   edit to one line.** See *"### Two distinct defects on ONE line"* for the mechanism, the driver's
+   2026-08-13 measurement and the precise impact scope. ⚠️ **Do not widen the claim** — the default
+   `flashist/fkit@main` install is unaffected, and an **exported** `FKIT_REF` already propagates.
+
 3. **State the ceiling(s), each in one place.** `FKIT_NET_TIMEOUT=5` at `:69` is the existing knob and
    its comment currently documents the *absence* of the bound. If the new mechanism honours it, say
    so there; if either call site needs its own value, explain why two knobs are better than one.
@@ -291,6 +368,17 @@ kind of call the architect exists for. **Do not guess between the rows above.**
    `install.sh` fetch; show the elapsed seconds and the ceiling. ⚠️ **Prove the stub held** (the same
    sealed-`PATH` discipline as step 2) and ⛔ **prove no real install ran** — show
    `~/.local/share/fkit` untouched, or that the run never had a real install root at all.
+5b. **The env-propagation fix is PROVEN, not asserted** — **added 2026-08-13, owner ruling "Fold into
+   0284."** ⛔ **"I moved the assignments to the right of the pipe" is not evidence.** Show a run in
+   which the **inner `sh` demonstrably receives `FKIT_REPO` and `FKIT_REF`** with the pinned values
+   from `.version` — e.g. a stub standing in for the fetched `install.sh` that **prints what it sees**,
+   asserted red before the fix (`inner sees []`) and green after. ⚠️ **Prove the stub held**, per the
+   sealed-`PATH` discipline of step 2 — the driver's own first attempt at this measurement was
+   malformed and measured nothing. ⛔ **The proof must NOT hit the network and must NOT touch a real
+   install** — no `raw.githubusercontent.com`, and `~/.local/share/fkit` untouched (step 5's rule).
+   ✅ **The precedent is `test/update-banner.test.js`'s sealed-`PATH` stub technique**, which already
+   asserts on its own seal.
+
 6. **State the `fkit update` bound's REAL extent, in the close, in plain words.** ⚠️ **Bounding `:102`
    bounds fetching `install.sh`, not running it** — `install.sh:32` and `:59` remain unbounded and are
    ⛔ out of scope. ⛔ **The close may not say `fkit update` is deadlined.** Say which call it bounds.
@@ -330,6 +418,17 @@ kind of call the architect exists for. **Do not guess between the rows above.**
   for that function was also corrected: `:99-103`, not `:99-104`** — re-read from disk during the
   amendment. **That is the sixth recorded instance in this file's history of a cited line number
   being wrong**; the durable anchor is the quoted text.
+- **Amended 2026-08-13 (second amendment of the same date)** on a **third owner ruling of the same
+  date and session**, verbatim option label **"Fold into 0284."** — a **second, independent defect on
+  the same line** was folded in: the `FKIT_REPO=… FKIT_REF=…` prefix at `:101` binds to `curl`, not to
+  the `sh` behind the pipe, so `fkit update` on a non-default pin reinstalls `flashist/fkit@main` and
+  **erases its own pin** (`install.sh:69`). Added as *"### Two distinct defects on ONE line"* in
+  `## Context`, **item 2b** in `## What to build` and **step 5b** in `## Verification steps`. ⛔ **All
+  prior text was left byte-identical** — nothing was rewritten, only added. **Provenance:** found by a
+  coder grounding [`0252`](../../done/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md);
+  measured by the `/fkit-sprint-ship-loop` driver on 2026-08-13, **after a first malformed attempt that
+  measured nothing.** ⚠️ **The task now owns three defects across two call sites** — read `## What to
+  build`, not the title.
 - **⚠️ ORDERING against [`0285`](../../done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md)
   — recorded as a dated note, deliberately NOT a `Depends on:` edge** (the convention this board uses
   for soft ordering). `0285` corrects the vault page to say the git path is **unbounded**, which is
@@ -367,3 +466,10 @@ kind of call the architect exists for. **Do not guess between the rows above.**
   `claude/fkit-claude.sh` and `install.sh` from disk before writing. It **changed no status, priority,
   sprint field or location**, **moved no task file**, **invoked no mover**, **edited no source file
   and no sprint plan**, **wrote nothing under `ai-agents/wiki-vault/`**, and **committed nothing**.
+- **Amended again 2026-08-13** by a spawned `fkit-producer` (**no owner channel**, ADR-021), relaying
+  the owner's third ruling of that date via the `/fkit-sprint-ship-loop` driver. It **changed no
+  status, priority, sprint field, board, owner or location**, **moved no task file**, **invoked no
+  mover**, **edited no source file**, **touched no other task's brief, `sprint-5.md` or `backlog.md`**,
+  **wrote nothing under `ai-agents/wiki-vault/`**, and **committed nothing**. ⚠️ **It did not re-read
+  `claude/fkit-claude.sh` from disk** — the quoted `:99-103` body and the pipeline measurement are the
+  driver's, dated 2026-08-13. **Re-measure before you cite.**

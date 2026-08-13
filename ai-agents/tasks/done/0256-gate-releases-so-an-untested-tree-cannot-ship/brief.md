@@ -122,7 +122,7 @@ keeps `prove-red.sh` hand-rolled — whatever gate lands must run it, not replac
 - **Depends on:** nothing
 - **Blocks:** nothing
 - **Scheduling preference, not a dependency:** land this **before**
-  [`0252`](../../backlog/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md).
+  [`0252`](../0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md).
   `0252` writes a releaser checklist that currently has to say *"run `npm test`, because nothing
   else will"*; if this lands first that sentence describes the gate instead of a gap. Either order
   works — the later one just re-reads `bin/release.mjs` before writing.

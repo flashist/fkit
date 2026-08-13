@@ -78,3 +78,4 @@ and the team learns to ignore it — which retires the value `0256` was filed to
 - [[systems/testing-and-verification]]
 - [[systems/launch-convergence-and-init]] — the orphan-cleanup guard under test
 - [[systems/fkit]]
+- [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252` (2026-08-13): `RELEASING.md` §4 cites **this red run** as evidence that CI *"has already caught a failure that a local run had not"*, and it is what falsified `0252`'s own *"CI HAS NEVER RUN"* banner

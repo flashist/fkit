@@ -121,7 +121,7 @@ again at execution time — the claim can be phrased without the literal string 
 ([ADR-005](../../../knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)).
 
 ⚠️ **The sprint loop cannot run this row**, for the same reason recorded on
-[`0258`](../0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md),
+[`0258`](../../done/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md),
 [`0269`](../../done/0269-wiki-ingest-of-adr-040-and-adr-041-the-sprint-identity-decisions/brief.md),
 [`0282`](../../done/0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md) and
 [`0285`](../../done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md):

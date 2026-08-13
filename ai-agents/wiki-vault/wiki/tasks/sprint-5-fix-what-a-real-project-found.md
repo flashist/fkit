@@ -123,3 +123,4 @@ ranks are **stale by design**.
 - [[systems/testing-and-verification]]
 - [[systems/install-and-self-update]]
 - [[systems/fkit]] · [[tasks/sprint-3-close-the-rank-integrity-loop]] · [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]] — the board lineage
+- [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252` (P13, closed 2026-08-13), the release-hygiene half's documentation row, and the hard precondition of `0258`

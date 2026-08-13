@@ -36,7 +36,7 @@ the vault; neither wrote anything there.
 
 Stated either way, as required, and checked **before** filing rather than assumed:
 
-- **[`0258`](../../backlog/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md)** — re-syncs
+- **[`0258`](../../done/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md)** — re-syncs
   `systems/install-and-self-update` after `0252` lands `RELEASING.md`. Different page, different
   source, hard-gated on `0252`. **No overlap.**
 - **[`0263`](../0263-wiki-resync-after-the-sprint-4-archival-and-sprint-5-open/brief.md)** — re-syncs

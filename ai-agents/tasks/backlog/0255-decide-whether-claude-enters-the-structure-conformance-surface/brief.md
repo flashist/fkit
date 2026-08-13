@@ -82,7 +82,7 @@ whether and how `.claude/` conformance is observed. No code.
    - **Decide it is not a conformance surface at all** — the unconditional refresh *is* the
      guarantee, and the real gap is that the owner is never told to re-launch. That gap is already
      being closed by
-     [`0253`](../0253-state-the-per-project-relaunch-step-fkit-update-requires/brief.md); this option
+     [`0253`](../../done/0253-state-the-per-project-relaunch-step-fkit-update-requires/brief.md); this option
      says the docs fix is the whole answer. **This must be weighed seriously, not listed to be
      dismissed.**
 3. **Record the consequences for the existing apparatus** — whether the spec's pinned machine-read
@@ -124,7 +124,7 @@ whether and how `.claude/` conformance is observed. No code.
 - **Depends on:** nothing
 - **Blocks:** the (unwritten) implementation brief for `.claude/` conformance — deliberately not
   filed, because scoping it before this decision lands would be scoping before findings.
-- Related: [`0253`](../0253-state-the-per-project-relaunch-step-fkit-update-requires/brief.md)
+- Related: [`0253`](../../done/0253-state-the-per-project-relaunch-step-fkit-update-requires/brief.md)
   documents the manual re-launch step that is today's only mitigation, and is option 4's whole
   premise. It ships independently and is useful whatever this ADR decides.
 - Provenance: raised by `fkit-architect` as a genuine, unanticipated architecture question, with the

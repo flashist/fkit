@@ -81,3 +81,4 @@ the highest-blast-radius file in the repo. **CI landing does not close that gap.
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — this row was displaced six places by the owner-ruled re-rank of 2026-08-11 (a **move**, not an insertion)
 - [[tasks/build-the-closed-rank-immutability-guard]] · [[tasks/add-e2e-smoke-script-for-fkit-itself]] — two pages whose *"no CI"* claims this task falsified; ⚠️ **the second's `install.sh` e2e half is still open**
 - [[systems/fkit]]
+- [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252` (2026-08-13): the document that **records** this gate and its CI half. ⚠️ Its §4 corrects `0252`'s own brief, which asserts *"CI HAS NEVER RUN"* — measured 2026-08-13, **5 runs, 4 success, 1 failure**, and the failure was a real catch

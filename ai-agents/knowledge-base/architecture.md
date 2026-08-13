@@ -414,6 +414,8 @@ repo-root `package.json`).
 -A`, commit, push, annotated tag `v<version>`, push the tag. **No npm-registry publish**
 (`bin/release.mjs:66`). **Version bumping is load-bearing** — self-update compares the installed sha
 against the remote head and reports the version from `VERSION`.
+The maintainer-facing procedure for cutting a release — the channel, the pre-release checklist, and
+what the test gate does and does not cover — is [`RELEASING.md`](../../RELEASING.md) at the repo root.
 
 **7 — Structure conformance**
 ([ADR-039](decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged.md);

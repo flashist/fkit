@@ -35,7 +35,7 @@ exclusively** ([ADR-005](../../../knowledge-base/decisions/adr-005-vendor-wiki-q
 
 ⚠️ **The sprint loop cannot run this row**, for the same reason recorded on
 [`0269`](../../done/0269-wiki-ingest-of-adr-040-and-adr-041-the-sprint-identity-decisions/brief.md) and
-[`0258`](../../backlog/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md): **the loop
+[`0258`](../../done/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md): **the loop
 never reads `## Owner`** — [ADR-038](../../../knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md)
 fixes each step's role to the skill that step runs, so its **Build** step spawns `@fkit-coder`
 (`claude/skills/fkit-sprint-ship-loop/SKILL.md:121`), and `claude/agents/fkit-coder.md:211` forbids
