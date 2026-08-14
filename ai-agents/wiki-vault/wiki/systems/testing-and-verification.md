@@ -4,6 +4,8 @@
 **Key files**: `test/harness.mjs`, `test/prove-red.sh`, `test/*.test.js` (**20 files, measured 2026-08-13** — the seven this line named until now, plus `adr-number-uniqueness`, `askuserquestion-marker-hook`, `closed-rank-immutability`, `dual-home-parity`, `shiploop-marker-hook`, `skill-frontmatter`, `structure-check`, `structure-manifest`, `structure-notice`, `structure-repair`, `structure-spec`, `task-id-uniqueness`, `turn-completion-hook`, `update-banner`), `test/dual-home-parity-exceptions.mjs`, `package.json` (`"test": "node --test test/*.test.js && bash test/prove-red.sh"`), **`.github/workflows/test.yml`** *(added 2026-08-12, task `0256`)*, `bin/release.mjs` (the in-release gate), `claude/fkit-claude.sh` (the subject), `install.sh`
 
 > ⚠️ **LINT 2026-08-13 — this `**Key files**` line was stale and has been rewritten in place** (a living systems page, per the 2026-08-06 lint precedent). It named **7 of the then-20** `*.test.js` files and neither of the two gates. The **enumerated count is the risk this line carries**: it goes stale on the next test file, and nothing checks it.
+>
+> ⚠️ **And it went stale on the next test file, exactly as predicted — 2026-08-14, one day later.** `test/release-summary.test.js` landed with task `0288`: **21 `*.test.js` files**, measured on disk this sync. ⛔ **The count above is left byte-identical as the record of the prediction**; the current number is here. *Nothing detected the drift — a sync noticed it.*
 
 ## Summary
 
@@ -93,9 +95,34 @@ recorded in the workflow file itself:
   version.** It also **deliberately does not require a clean tree**, because both `npm test` and
   `git add -A` read the working tree.
 
-**Measured suite runtime: ~5m30s–6m20s** (328 / 380 / 347 / 344 s, same machine) — ~55 s of unit tests
-plus `prove-red.sh` re-running the suites against 15 mutants and 9 clean baselines. **That number is
-the cost the owner accepted, stated rather than implied.**
+**Suite runtime: roughly 6–8 minutes, machine-dependent.** The cost is a short unit-test phase plus
+`prove-red.sh` re-running the suites against every mutant and clean baseline. **That is the cost the
+owner accepted, stated rather than implied.**
+
+> ⚠️ **CORRECTED IN PLACE 2026-08-14 by the post-`0288` sync — this paragraph carried BOTH defects
+> `0291` and `0297` were about, and `0297`'s sweep did not reach this page.** It read *"Measured suite
+> runtime: **~5m30s–6m20s** (328 / 380 / 347 / 344 s, same machine)… against **15 mutants and 9 clean
+> baselines**"*.
+>
+> - **The figure was superseded** by the owner's ruling of 2026-08-13, verbatim ***"Range: 'roughly
+>   6–8 minutes, machine-dependent'"***, which **overrode an earlier `~6 min` ruling of the owner's
+>   own**. Live wording: `RELEASING.md:128`.
+> - ⛔ **The four-run tally was a per-run duration list, which `0291` BARRED** — a 2026-08-13 sweep
+>   could not reproduce the set from disk, and that unreproducibility became a standing constraint:
+>   **echo the ruled range, cite evidence by anchor, never publish a set.** ⛔ It was **not** replaced
+>   with fresher numbers; that would be the same defect with better data.
+> - **The mutant/baseline counts were stale too.** Measured on disk 2026-08-14: `test/prove-red.sh`'s
+>   header declares **TWENTY-TWO mutations**, and ⚠️ **mutations 18–22 are the first in the file's
+>   history to target `bin/` rather than a copied launcher tree** (task `0288`). The counts are
+>   deliberately left out of the sentence above rather than re-pinned — an enumerated count on a
+>   living page is what went stale here twice.
+> - ⚠️ **`0288` increased this cost and the owner accepted a measured ~+40%** (verbatim *"Accept the
+>   +40%"*). ⛔ **No measured absolute figure is written here:** three wall-clock figures exist for the
+>   same code and **every worker that reported one said it was moving with MACHINE LOAD** (last
+>   recorded load average **8.72** on 14 cores); ⛔ **no new range was derived by applying the
+>   percentage to the ruled figure.** **A clean idle-machine measurement is still owed**, and ⚠️ **the
+>   ruled range predates `0288`, so it may now understate** — ⛔ **reported, not fixed**, because
+>   `RELEASING.md` is outside this vault and re-ruling it is the owner's act.
 
 **fkit's first-ever CI run went RED and found a real defect** — Actions run `31634593615`, **708/709,
 1 fail**. A **test** defect, not a product defect: an assertion that was really asserting *"the
@@ -188,3 +215,5 @@ closing.**
 - [[tasks/build-the-closed-rank-immutability-guard]] — task `0182` (2026-08-06) — `test/closed-rank-immutability.test.js`, the suite's first board-history guard: scope = the transition in progress (`HEAD` vs working tree, plus `HEAD`↔`HEAD^`), header-anchored parser, fail-loud on field count. ⛔ **Not continuous protection** — no CI runs it, and a breach committed with no test run in the window is never caught. ⚠️ Its prove-red mutation seam waits on `0214`/`0215` (prove-red must never edit the real boards)
   - ✅ **Dated correction 2026-08-13 (the `0282` resync; the line above is left byte-identical).** **"No CI runs it" is now false** — it is a `test/*.test.js` file, so `npm test` runs it, and `.github/workflows/test.yml` runs `npm test` on every push to `main` and every PR (`0256`, 2026-08-12). ⚠️ **But the `⛔ Not continuous protection` verdict SURVIVES, on a narrower and still-correct reading**: the guard's leg 2 compares **`HEAD` against `HEAD^` only**, so a CI run over a **multi-commit push** inspects **one** transition and a breach in a middle commit is still never caught. **CI closed the "nobody ran it" hole; it did not widen the guard's scope.**
 - **The 2026-08-13 sync — the suite's newest surfaces:** [[tasks/add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename]] (`0259` — ⚠️ **the finding that outlives it: the old R8 test was *green for a fixture-shaped reason***) · [[tasks/implement-adr-040s-identity-grammar-in-dashboard-sh]] and [[tasks/implement-adr-041s-dashboard-half]] (`0264`/`0265`, the T1–T11 and S1–S8 sets; ⚠️ **a `sed` H1 split silently produces one un-split segment on macOS and works on Linux CI**) · [[tasks/author-the-structure-spec-and-its-scaffold-inventory-drift-test]] and [[tasks/build-the-hash-manifest-generator-and-completeness-test]] (`0243`/`0244`, the drift and completeness tests, **both run red first**) · [[tasks/fix-the-version-labeled-sha-triggered-update-banner]] (`0257`, `test/update-banner.test.js` — closing a gap measured as **zero** coverage) · [[tasks/sprint-5-fix-what-a-real-project-found]] (the board)
+- **The 2026-08-14 sync — `bin/` enters the suite for the first time:** [[tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]] (`0288`) added `test/release-summary.test.js` (**seven named assertions**, every fixture a throwaway clone with a **local bare origin**) and prove-red mutations **18–22** — ⚠️ **the first mutations in this project's history to target `bin/` rather than a copied launcher tree**. ⚠️ Its owner-ruled residuals are testing residuals as much as product ones: **mutation isolation is documented, not gated**; two assertions have **no mutation at all**; and **mutation 22 has no wrong-target guard**, saved today only by a two-space indent. ⚠️ It also measured a cost the plan under-estimated — `prove-red.sh`'s `run_suite()` runs the **whole** `node --test` glob and is called four times, so a new test file is executed **eleven** times per `npm test`
+- [[tasks/correct-the-superseded-runtime-figure-on-the-gate-releases-page]] — ⚠️ *Added 2026-08-14:* task `0297`, whose incidental sweep for the superseded runtime figure **did not reach this page**; the occurrence it missed — and the barred four-run duration list beside it — were corrected above by the post-`0288` sync

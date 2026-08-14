@@ -77,6 +77,22 @@ summary block alone that never reads them.**
 returns **0**. *A claim about a document survived several retellings without anyone opening the
 document.* Correcting the vault pages that mis-attribute it is task **`0295`**, open.
 
+> ✅ **Dated correction 2026-08-14 (the post-`0288` sync; the two sections above are left
+> byte-identical — each was true when written).** Two of their claims have moved:
+>
+> - **`0288` is CLOSED**, `✅ Done (agent-closed — not owner-verified)`, committed in `9e61f9b`. The
+>   *"still open"* framing above is now **history**. ⛔ **But *"the replacement line is fixed"* is
+>   still the wrong summary** — `0288` shipped **five owner-ruled accepted residuals**, including a
+>   recovery path that **still cannot recover** (it only stops lying about it) and a runtime case left
+>   open **by design**. Read
+>   [[tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]] before citing this line
+>   as correct. ⚠️ And `0288`'s review surfaced a **new** open defect on the same file — task `0300`,
+>   `--branch <other>`, above the summary block and untouched by `0288`.
+> - **`0295` is CLOSED** (2026-08-14) — the mis-attribution sweep it names has run; see
+>   [[tasks/the-2026-08-14-retroactive-review-corrections]]. ✅ **The finding itself is unchanged and
+>   still worth carrying:** the gloss lives in `0288`'s brief, not in this task's review, and *a claim
+>   about a document survived several retellings without anyone opening the document.*
+
 ## Related
 - [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252`, which records *why* a tag is not an install target
 - [[tasks/state-the-per-project-relaunch-step-fkit-update-requires]] — `0253`, shipped the same day off the same board
@@ -85,3 +101,5 @@ document.* Correcting the vault pages that mis-attribute it is task **`0295`**, 
 - [[systems/install-and-self-update]] — the release flow, and where `0288`'s open defects are recorded in detail
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board it closed on
 - [[tasks/the-2026-08-13-vault-resync-chain]] — task `0289`, the vault re-sync this task's close triggered, and where the false "never consulted again" attribution was caught
+- [[tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]] — ⚠️ *Added 2026-08-14:* task `0288`, the successor that fixed all four defects on this replacement line — **and shipped five owner-ruled residuals**, plus a newly-found open defect (`0300`)
+- [[tasks/the-2026-08-14-retroactive-review-corrections]] — ⚠️ *Added 2026-08-14:* tasks `0291` and `0295`; `0295` is the row that removed the false attribution to **this** task's review from the vault

@@ -3044,3 +3044,54 @@ staged nothing.**
 **Task `0297`'s vault work is complete — ready to close.** ⚠️ Its brief reads `🔄 In progress`; a
 **producer** closes it, with the `(agent-closed — not owner-verified)` marker if the owner is not
 present.
+
+## 2026-08-14 — ingest (sync)
+
+- **Sync window:** `ce6bf5495c5fd57d0153cba3cece84721343fd43` → HEAD (`9e61f9bd2086c5901187bde568f883fa9facf7ee`, *"Sprint push"*, the owner's own commit). **One commit in the delta.** Working tree **clean** at start.
+- **Changed source files detected:** 12 ingest-worthy (4 done-task briefs, 3 new backlog briefs, 2 modified backlog briefs, `sprints/backlog.md`, and 2 product files — `bin/release.mjs`, `test/release-summary.test.js` — which fall outside the `ai-agents/` sync filter but whose landing is the delta's substance).
+- ⛔ **The 17 vault files in this commit were NOT re-ingested.** They are this vault's own output, written earlier the same day; the commit merely persists them. `wiki-vault/**` is excluded from the source filter by the sync procedure, and treating them as inputs would have re-ingested the vault into itself.
+
+### Ingested — created
+
+- `ai-agents/tasks/done/0288-fix-the-post-release-verify-lines-failing-and-false-green-cases/brief.md` (+ its `worklog.md` and `review.md`) → created [[wiki/tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]]
+- `ai-agents/tasks/done/0292-scope-readme-54s-fkit-managed-structure-sentence-to-what-the-check-actually-covers/brief.md` (+ `review.md`) → created [[wiki/tasks/scope-readme-54s-fkit-managed-structure-sentence-to-what-the-check-covers]]
+- `ai-agents/tasks/done/0294-archive-sprint-5-move-the-plan-into-sprints-done-and-repoint-every-link/brief.md` → created [[wiki/tasks/archive-sprint-5-move-the-plan-into-sprints-done]]
+- `ai-agents/tasks/done/0297-correct-the-superseded-runtime-figure-and-forbidden-duration-list-on-the-gate-releases-page/brief.md` → created [[wiki/tasks/correct-the-superseded-runtime-figure-on-the-gate-releases-page]]
+
+### Ingested — updated (each page written ONCE this run, all of its changes worked out first)
+
+- [[wiki/tasks/gate-releases-so-an-untested-tree-cannot-ship]] — the `0297` block's *"`0288` has not landed"* flag **fired and is discharged** by a new dated note; two Related entries added.
+- [[wiki/systems/install-and-self-update]] — the *"this page owes ONE MORE look when `0288` lands"* flag **discharged**; the open-defect paragraph re-framed as history (its quoted `tasks/backlog/…` path and `🔲 Backlog` status are stale **by design**); all five residuals recorded; task `0300` recorded; two Related entries added.
+- [[wiki/systems/testing-and-verification]] — **the occurrence `0297`'s sweep missed.** Its runtime paragraph carried **both** defects at once: the superseded `~5m30s–6m20s` figure **and** the barred four-run tally `(328 / 380 / 347 / 344 s)`. Corrected in place (living systems page) with a dated note; the `15 mutants / 9 baselines` counts were stale too (**22 mutations** on disk). The 2026-08-13 lint's own prediction — *"it goes stale on the next test file"* — **came true one day later**: **21 `*.test.js` files**.
+- [[wiki/tasks/fix-the-unrunnable-verify-command-release-mjs-prints]] — `0288` and `0295` both closed; dated note added, ⛔ **explicitly refusing the summary *"the replacement line is fixed"***.
+- [[wiki/tasks/sprint-5-fix-what-a-real-project-found]] — `0294`'s *"brief close staged but not committed"* gap **closed**; archival re-verified on disk; the `P12` row's *"still open as `0288`"* claim dated.
+- [[wiki/tasks/the-2026-08-14-retroactive-review-corrections]] — `0288` landed, `0297` closed and now has its own page, and the CI-run-count occurrence is **still open, now reported a third time**; three Related entries added, one of them reciprocating a previously prose-only reference to `0254`.
+- [[wiki/tasks/decide-whether-claude-enters-the-structure-conformance-surface]] · [[wiki/tasks/state-the-per-project-relaunch-step-fkit-update-requires]] · [[wiki/decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]] — the three *"`0292`'s brief close is staged but not committed"* flags **discharged**; each now points at the ingested `0292` page and names residual AR-2's follow-on, task `0298`.
+- [[wiki/tasks/correct-the-five-remaining-prose-sites-that-state-the-glob-as-the-mechanism]] — dated addition recording task `0299`: **five more glob-mechanism claims survive in the archived Sprint 2–5 plans**. ⚠️ Its folder slug says *"the two … Sprint 4 and 5"* while its scope is **five sites across Sprints 2–5** — widened by owner ruling after filing, slug deliberately not renamed (ADR-033).
+- `index.md` — four new entries; five existing rows corrected (`0256` runtime, `0254`/`0288`, ADR-043 and `0253` on `0292`'s commit, `0267` on `0299`).
+
+### Skipped, and why
+
+- `ai-agents/wiki-vault/**` (17 files) — **this vault's own output, not a source.**
+- `ai-agents/tasks/backlog/0298…`, `0299…`, `0300…` — new briefs, **not done**: no page created (the procedure holds a page for an open brief premature). ✅ **All three are recorded as open follow-ups on the pages whose claims they bear on**, with their real scope.
+- `ai-agents/tasks/backlog/0272…`, `0296…` — modified open briefs, no page.
+- `ai-agents/sprints/backlog.md` — row updates only; the statuses are recorded on the pages above.
+
+### ⚠️ The runtime figure — what was written, and what was deliberately NOT
+
+`0288` increased the suite's cost and the owner **accepted a measured ~+40%** (verbatim *"Accept the +40%"*, 2026-08-14). ⛔ **No measured absolute figure was written to any page.** Three wall-clock figures exist for the same code and **every worker that reported one stated it was moving with MACHINE LOAD, not merit** (last recorded load average **8.72** on 14 cores, with other fkit workers running). ⛔ **No new range was derived by applying the accepted percentage to the ruled figure** — that would publish a number nobody measured, which is exactly what `0291`'s bar exists to prevent. The vault's standing figure remains `RELEASING.md:128`'s owner-ruled *"roughly 6–8 minutes, machine-dependent"*.
+
+### ⚠️ Flagged for human review — found, NOT fixed here
+
+- **`RELEASING.md:128`'s ruled figure was ruled BEFORE `0288` added its cost, so it may now understate.** ⛔ `RELEASING.md` is outside the vault and re-ruling an owner-ruled figure is the owner's act. **This needs an owner decision or a task; a librarian cannot close it.**
+- **A clean idle-machine measurement of `npm test` is still owed.** Every worker that measured said so.
+- **`systems/install-and-self-update`'s CI run count is still stale** (*"5 runs — 4 success, 1 failure"*, 2026-08-13). ⛔ **Third report.** It sits in a dated block where a dated measurement is correct-as-of-its-date, so it needs a task or an explicit decision to leave it — not a fourth report.
+- **`0288`'s residual 2 is a live product limitation**, not just paperwork: under a maintainer's global `push.followTags=true`, `release.mjs` still cannot see a tag its own branch push published. The fixture is pinned; the script is not fixed.
+- **Task `0300` is open and its severity argument is a false green** — `--branch <other>` announces `✓ Released` and **passes `0288`'s own verify command** while publishing a tag no origin branch reaches. Unranked; the rank is the owner's.
+- **One pre-existing one-way link, NOT introduced here and NOT fixed here:** `wiki/tasks/correct-the-five-remaining-prose-sites-…` links [[wiki/tasks/gate-releases-so-an-untested-tree-cannot-ship]] with no back-link. ⛔ Reciprocating it would have been a second write to a page this run had already settled; it belongs to the next lint.
+- **54 bare-path prose mentions of `ai-agents/sprints/sprint-5.md`** remain outside the vault (briefs, plans, worklogs, ledgers). ✅ **Zero markdown links** point at the old path. The bare mentions are dated records; **reported, not fixed.**
+- **Nothing detected any of this run's stale claims.** Every one was found because a close falsified a page — the pattern task `0290` is investigating. ⛔ This run answers none of `0290`'s question; it is one more instance of it.
+
+### What this run did NOT do
+
+⛔ Wrote nothing outside `ai-agents/wiki-vault/` — no `RELEASING.md`, no `bin/`, no `test/`, no `claude/`, no knowledge-base, no task brief, no sprint file. ⛔ **Edited no existing `log.md` entry** — this is a new appended entry, per `log.md:3-5`. ⛔ **Invoked no mover and closed no task** (ADR-033). ⛔ **Committed and staged nothing.** ✅ Watermark advanced to `9e61f9bd2086c5901187bde568f883fa9facf7ee` **after** the ingest completed.

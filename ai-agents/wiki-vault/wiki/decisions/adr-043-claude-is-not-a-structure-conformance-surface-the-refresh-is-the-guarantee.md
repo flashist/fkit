@@ -120,6 +120,15 @@ and is cheaper as **provenance than as conformance**.
   > ⚠️ **`0292`'s brief close is staged in the working tree but NOT committed** at the time of this
   > write, so this sync did **not** ingest `0292` as a done task; only its landed effect on `README.md`
   > is recorded. The row is flagged for the next sync.
+  > > ✅ **That next sync ran, 2026-08-14 (post-`0288`), and the flag is discharged.** `0292`'s brief
+  > > close is **committed** (`9e61f9b`) — `✅ Done (agent-closed — not owner-verified)` — and the row
+  > > is ingested as
+  > > [[tasks/scope-readme-54s-fkit-managed-structure-sentence-to-what-the-check-covers]].
+  > > ⚠️ **Two accepted residuals came with it**, both owner-ruled: the sentence still reads **broader
+  > > than the check it summarizes** (48 pinned paths, only 10 content-compared, owner files under
+  > > `ai-agents/` never reported) — ruled **the intended shape**, partly *because it is byte-identical
+  > > to this ADR's §C6 text* — and it can go **stale silently**, since ⛔ **no test reads the README's
+  > > prose**. The tripwire for that is task `0298`, filed 2026-08-14 and **open**.
 - **C7 — A refresh *receipt* is PERMITTED, not required.** The ruling rules out `.claude/` as a
   **conformance surface**; it does **not** forbid init recording what it refreshed *from*, as
   **provenance rather than classification**. ⛔ **Nothing is being built and nothing is filed** — the
@@ -173,3 +182,4 @@ working as ruled.**
   decision draws a boundary against
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board `0255` closed on
 - [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — ⚠️ *Added 2026-08-14:* task `0293`, the row that carried this ADR into the vault. Filed rather than run on an owner ruling (**"Batch it — file it, run later"**) to avoid a fourth same-day write to one page; ⛔ **its own "do not touch" constraint was then breached and reverted** by the sync that discharged it
+- [[tasks/scope-readme-54s-fkit-managed-structure-sentence-to-what-the-check-covers]] — ⚠️ *Added 2026-08-14:* task `0292`, the follow-on brief §C6 ruled for — landed, closed, and carrying two owner-ruled residuals, one of which (silent staleness) is now task `0298`, open

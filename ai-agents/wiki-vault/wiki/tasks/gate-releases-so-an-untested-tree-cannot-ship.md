@@ -76,6 +76,31 @@ owner accepted, stated rather than implied.
 > CPU contention and **`0288` has not landed**. Until it does, the ruled range above is the vault's
 > figure. **Flagged, not pre-empted.**
 
+> ⚠️ **Dated correction 2026-08-14 (the post-`0288` sync; the block above is left byte-identical —
+> its last paragraph was true when written and is now the record of a flag that fired).**
+> **`0288` HAS LANDED** (committed in `9e61f9b`) — see
+> [[tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]].
+>
+> **What changed, and what deliberately did not:**
+>
+> - ✅ **The suite got more expensive, and the owner accepted it** — verbatim option label
+>   ***"Accept the +40% (Recommended)"***, 2026-08-14, against a plan that had estimated ~1–2 minutes.
+>   `0288` added one test file and five `prove-red.sh` mutations, and `prove-red.sh` re-runs the whole
+>   `node --test` glob four times, so a new test file is executed **eleven** times per `npm test`.
+> - ⛔ **No measured number is written here, on purpose.** Three wall-clock figures exist for the same
+>   code, and **every worker that reported one stated it was moving with MACHINE LOAD, not merit** —
+>   the last recorded load average was **8.72** on a 14-core machine, with other fkit workers running.
+>   ⛔ **A clean idle-machine measurement is still owed**, and ⛔ **no new range was computed by
+>   applying the accepted percentage to the ruled figure** — that would publish a number nobody
+>   measured, which is the same defect `0291`'s bar exists to prevent.
+> - **The ruled range above STANDS as the vault's figure**, because `RELEASING.md:128` is the standing
+>   authority and it has not been re-ruled. ⚠️ **But it was ruled BEFORE `0288` added its cost, so it
+>   may now understate.** ⛔ **Reported, NOT fixed:** `RELEASING.md` is outside the vault's write
+>   surface, and re-ruling an owner-ruled figure is the owner's act, not a librarian's.
+> - ⚠️ **The paragraph's other half is now discharged**: the *"newer measurement… `0288` has not
+>   landed"* caveat described a pending row. The row is closed — `✅ Done (agent-closed — not
+>   owner-verified)`.
+
 ### ⚠️ fkit's first-ever CI run went RED — and found a real defect
 
 GitHub Actions run `31634593615` returned **708 pass / 709, 1 fail**. That was a **test** defect, not
@@ -104,3 +129,5 @@ the highest-blast-radius file in the repo. **CI landing does not close that gap.
 - [[tasks/fix-the-unrunnable-verify-command-release-mjs-prints]] — `0254`, the post-release verify line printed after this gate passes
 - [[tasks/the-2026-08-13-vault-resync-chain]] — task `0282`, the vault re-sync of the **no-CI claims** this task falsified
 - [[tasks/the-2026-08-14-retroactive-review-corrections]] — ⚠️ *Added 2026-08-14:* tasks `0291` and `0295`. `0291` fixed the same superseded runtime figure on `index.md` and **barred the per-run duration list**; the surviving occurrences on **this** page were reported-not-fixed there, and became task `0297`, which corrected them above
+- [[tasks/correct-the-superseded-runtime-figure-on-the-gate-releases-page]] — ⚠️ *Added 2026-08-14:* task `0297` itself — the row that made the correction above, and whose incidental sweep **missed one more occurrence**, found and fixed on [[systems/testing-and-verification]] by the post-`0288` sync
+- [[tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]] — ⚠️ *Added 2026-08-14:* task `0288`, which landed after `0297` and **increased the cost this page's gate pays**. The owner accepted a measured ~+40%; ⛔ no measured absolute figure is recorded in this vault, and the ruled range — which predates `0288` — may now understate

@@ -60,6 +60,24 @@
 > from `tasks/backlog/` to `tasks/done/` is not. Recorded so a later reader is not surprised by the
 > gap.
 
+> ✅ **Dated correction 2026-08-14 (the post-`0288` sync; the block above is left byte-identical).**
+> **The gap it recorded is closed: `0294`'s brief close is COMMITTED** (`9e61f9b`), the folder now sits
+> at `ai-agents/tasks/done/0294-archive-sprint-5-move-the-plan-into-sprints-done-and-repoint-every-link/`,
+> and the row is ingested as [[tasks/archive-sprint-5-move-the-plan-into-sprints-done]].
+> **Re-verified on disk this sync:** the plan is at `ai-agents/sprints/done/sprint-5.md`, its banner
+> reads `## 🔒 CLOSED — 2026-08-13.`, and `select-active` still returns **`active none`**.
+> ✅ **Link integrity holds** — `grep -rnE "\]\([^)]*sprints/sprint-5\.md"` over `ai-agents/` returns
+> **0**: no markdown link points at the pre-archival path. ⚠️ **54 bare-path prose mentions of the old
+> path do remain** in briefs, plans, worklogs and ledgers; those are **dated records of where the file
+> was when they were written**, not link rot, and repointing them would make a past record claim
+> something it never saw. **Reported, not fixed.**
+>
+> ⚠️ **One claim in the closed-rows table below has also moved:** the `P12` row says a narrower set of
+> defects on `0254`'s replacement line is **"STILL OPEN as `0288`"**. **`0288` closed 2026-08-14** —
+> ⛔ **but "fixed" is still the wrong word:** it shipped **five owner-ruled accepted residuals** and
+> its review surfaced a **new** open defect, task `0300`. See
+> [[tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]].
+
 ## Goal
 
 Two halves, one sprint:
@@ -207,3 +225,5 @@ ranks are **stale by design**.
 - [[tasks/the-2026-08-13-vault-resync-chain]] — the six vault-maintenance rows closed 2026-08-13 (`0269` and `0258` from this board; `0263`, `0282`, `0285`, `0289` from Backlog), and the churn they exposed
 - [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — ⚠️ *Added 2026-08-14:* task `0293`, which recorded this board as **unarchived** hours before `0294` archived it
 - [[tasks/the-2026-08-14-retroactive-review-corrections]] — ⚠️ *Added 2026-08-14:* tasks `0291` and `0295`, the retroactive-review corrections to two of this board's own vault outputs (`0258`'s and `0289`'s)
+- [[tasks/archive-sprint-5-move-the-plan-into-sprints-done]] — ⚠️ *Added 2026-08-14:* task `0294`, the row that archived this board — the banner ruling, the 57-link move, and the `active none` end state
+- [[tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]] — ⚠️ *Added 2026-08-14:* task `0288`, the Backlog follow-up to this board's `P12` row (`0254`); **closed with five owner-ruled residuals**, and it surfaced task `0300`

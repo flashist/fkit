@@ -123,8 +123,28 @@ all five reciprocate.**
   falsifying a vault claim — the pattern `0290` is investigating — and **nothing detected either; a
   human or an agent noticed.** ⛔ Neither row answers `0290`'s question.
 
+> ✅ **Dated correction 2026-08-14 (the post-`0288` sync; everything above is left byte-identical —
+> each claim was true when written).** Three of them have moved:
+>
+> - **`0288` has LANDED and closed** (`✅ Done (agent-closed — not owner-verified)`, committed in
+>   `9e61f9b`). Wherever this page calls it *"still open"* or says `0254`'s *"successor defects `0288`
+>   still carries"*, read **history**. ⛔ **"Fixed" is still the wrong summary** — five owner-ruled
+>   residuals shipped with it, and its review surfaced a **new** open defect, task `0300`. Full
+>   record: [[tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]].
+> - **`0297` is CLOSED** and now has its own page,
+>   [[tasks/correct-the-superseded-runtime-figure-on-the-gate-releases-page]]. ⚠️ **Its sweep was
+>   incidental, and it missed one occurrence** — the same superseded figure **and** a barred four-run
+>   duration list survived on [[systems/testing-and-verification]] until this sync corrected them.
+>   ✅ **`0291`'s bar held where it was applied**; what failed was the width of the search.
+> - **The CI-run-count occurrence flagged above is STILL open and still unfixed** — now reported a
+>   third time. ⛔ It needs a task or an explicit decision to leave it; a librarian reporting it again
+>   is not a fix.
+
 ## Related
 - [[systems/install-and-self-update]] — the page both rows corrected, in one shared write
+- [[tasks/fix-the-unrunnable-verify-command-release-mjs-prints]] — ⚠️ *Linked 2026-08-14:* task `0254`, whose review `0295` proved was **falsely cited**; previously referenced here in prose only, now reciprocated because that page links here
+- [[tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]] — ⚠️ *Added 2026-08-14:* task `0288`, the row whose landing turned this page's *"still open"* references into history
+- [[tasks/correct-the-superseded-runtime-figure-on-the-gate-releases-page]] — ⚠️ *Added 2026-08-14:* task `0297`, the row `0291`'s report-don't-fix boundary produced
 - [[tasks/the-2026-08-13-vault-resync-chain]] — the six-row chain and the three-writes-in-one-day churn that produced the owner's batching ruling
 - [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — task `0293`, the batching partner whose deferred link debt these two discharged
 - [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] — `0256`, whose vault page carried the same superseded figure; reported here, fixed by `0297`

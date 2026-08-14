@@ -79,3 +79,4 @@ by `0235`, neither widened nor closed by that note.
 - [[systems/install-and-self-update]] — the self-update and launcher behaviour this documents
 - [[systems/launch-convergence-and-init]] — what a launch actually rewrites
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board it closed on
+- [[tasks/scope-readme-54s-fkit-managed-structure-sentence-to-what-the-check-covers]] — ⚠️ *Added 2026-08-14:* task `0292`, which discharged this task's R2 residual on `README.md:54` — closed, with the follow-on tripwire filed as `0298`

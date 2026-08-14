@@ -48,6 +48,23 @@ defect.* The brief carries a dated correction recording it.
 is the same class of problem the structure-check capability was built for, and it is not covered by
 this task.
 
+> ⚠️ **Dated addition 2026-08-14 (the post-`0288` sync; everything above is left byte-identical).**
+> **This sweep was not complete: FIVE more sites state the retired glob as the mechanism**, all in
+> **archived sprint plans** — `sprints/done/sprint-4.md` (×2), `done/sprint-5.md`, `done/sprint-3.md`
+> and `done/sprint-2.md`. They were found after this row closed and filed 2026-08-14 as task **`0299`**
+> (Backlog, `🔲 Backlog`, **unranked**, owner `fkit-coder`), on four owner rulings of that date.
+> ⛔ **This is an addition, not a repudiation** — every one of sites 3–7 above was genuinely corrected;
+> the archived boards were simply outside the sweep. *A sweep is only as wide as the command that ran
+> it.*
+>
+> ⚠️ **Two things about `0299` a later reader will otherwise get wrong.** **(1)** Its folder slug says
+> *"the two … Sprint 4 and 5"*, but its scope is **FIVE sites across Sprints 2–5** — the scope was
+> widened by owner ruling **after** filing, and the slug is **deliberately not renamed** (task files
+> move only via the producer's movers, ADR-033). **The brief's `## What to build` is the scope; the
+> slug is a stale name.** **(2)** Site 5 states the retired mechanism twice, and its *conclusion* —
+> that `backlog.md` is invisible to `/fkit-status`'s default run — **remains true under ADR-041, by
+> identity rather than by filename**. ⛔ **Correct the mechanism; do not negate the conclusion.**
+
 ## Related
 - [[tasks/sprint-5-fix-what-a-real-project-found]]
 - [[decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob]] — §6 sites 3–7, and §4's "not the enforcement site" ruling

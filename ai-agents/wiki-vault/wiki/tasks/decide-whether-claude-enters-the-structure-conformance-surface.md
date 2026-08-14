@@ -70,6 +70,12 @@ receipt).
   > launch rewrites it outright. ✅ **The wrong remedy warned about here was avoided.** Committed in
   > `ce6bf54`; ⚠️ **`0292`'s own brief close is staged but not committed**, so this sync recorded the
   > landed effect only and flagged the row for the next sync.
+  > > ✅ **The flag is discharged, 2026-08-14 (the post-`0288` sync).** `0292`'s brief close is now
+  > > **committed** (`9e61f9b`) and the row is ingested as
+  > > [[tasks/scope-readme-54s-fkit-managed-structure-sentence-to-what-the-check-covers]] — including
+  > > its two accepted residuals and the follow-on it produced, task `0298` (open): a **tripwire**
+  > > that fires if the spec inventory ever gains a path outside `ai-agents/`, because ⚠️ **nothing in
+  > > `test/` reads the README's prose, so this sentence can go stale silently.**
 - **ADR-015 and ADR-039 are neither touched nor amended** — the ADR says so explicitly in two numbered
   consequences, so a later reader does not go hunting for edits that were never made.
 
@@ -89,3 +95,4 @@ exclusion held: it shipped through a route that has that gate.
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board it closed on
 - [[systems/launch-convergence-and-init]] · [[systems/install-and-self-update]]
 - [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — ⚠️ *Added 2026-08-14:* task `0293`, the separately-filed row that carried this task's output into the vault. ⛔ **`0255`'s Notes listed an unwritten `.claude/`-conformance implementation brief as blocked on it; under ADR-043 that brief is never written — the thread ENDS rather than defers**
+- [[tasks/scope-readme-54s-fkit-managed-structure-sentence-to-what-the-check-covers]] — ⚠️ *Added 2026-08-14:* task `0292`, the follow-on brief this decision ruled for, now landed and closed — it avoided the wrong remedy this page warned about, and left the sentence's silent-staleness gap to task `0298`
