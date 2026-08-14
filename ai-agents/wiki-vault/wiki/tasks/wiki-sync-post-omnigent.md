@@ -31,3 +31,4 @@ The vault described a runtime that no longer existed. **9 vault files referenced
 - [[systems/knowledge-base-structure]]
 - [[systems/fkit]]
 - [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/the-2026-08-13-vault-resync-chain]] — a much later link in the same chain of vault re-syncs

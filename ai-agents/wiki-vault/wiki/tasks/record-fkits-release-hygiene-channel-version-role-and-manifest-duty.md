@@ -97,3 +97,6 @@ whole distribution.
 - [[tasks/make-the-lockdown-guard-case-test-filesystem-independent]] — task `0283`, the one red CI run
   this document cites as CI having caught something a local run had not
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board this row shipped on
+- [[tasks/state-the-per-project-relaunch-step-fkit-update-requires]] — `0253`, the README-side half of the same release-hygiene cluster
+- [[tasks/fix-the-unrunnable-verify-command-release-mjs-prints]] — `0254`, which relies on this task's **weaker, true** claim: a tag is **reachable, not supported**
+- [[tasks/the-2026-08-13-vault-resync-chain]] — task `0258`, the vault re-sync this task's `RELEASING.md` triggered

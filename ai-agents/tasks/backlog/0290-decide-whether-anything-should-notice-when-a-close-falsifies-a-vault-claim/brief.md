@@ -474,6 +474,6 @@ vault write.**
   ⚠️ **Why it is recorded here:** it is a **vault** instance that is **NOT** on
   `install-and-self-update.md`, so it bears directly on whether the three in the table above are one
   page's artifact. ⛔ **DO NOT FIX IT and DO NOT FILE FOR IT** — reporting this exact site is already
-  owed by [`0293`](../0293-wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface/brief.md)
+  owed by [`0293`](../../done/0293-wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface/brief.md)
   (see its `brief.md:173` and `:211`). ⚠️ **Re-measure it before relying on it** — `0293` may have
   landed by the time this row runs.

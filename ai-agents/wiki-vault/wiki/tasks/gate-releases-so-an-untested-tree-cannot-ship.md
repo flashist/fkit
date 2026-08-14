@@ -82,3 +82,5 @@ the highest-blast-radius file in the repo. **CI landing does not close that gap.
 - [[tasks/build-the-closed-rank-immutability-guard]] · [[tasks/add-e2e-smoke-script-for-fkit-itself]] — two pages whose *"no CI"* claims this task falsified; ⚠️ **the second's `install.sh` e2e half is still open**
 - [[systems/fkit]]
 - [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252` (2026-08-13): the document that **records** this gate and its CI half. ⚠️ Its §4 corrects `0252`'s own brief, which asserts *"CI HAS NEVER RUN"* — measured 2026-08-13, **5 runs, 4 success, 1 failure**, and the failure was a real catch
+- [[tasks/fix-the-unrunnable-verify-command-release-mjs-prints]] — `0254`, the post-release verify line printed after this gate passes
+- [[tasks/the-2026-08-13-vault-resync-chain]] — task `0282`, the vault re-sync of the **no-CI claims** this task falsified

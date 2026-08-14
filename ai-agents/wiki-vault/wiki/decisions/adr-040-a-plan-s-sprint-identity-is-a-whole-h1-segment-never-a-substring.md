@@ -174,3 +174,4 @@ produces one un-split segment on macOS and works on Linux CI).
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board this shipped on
 - [[systems/fkit]]
 - **Its task chain:** [[tasks/decide-the-plan-sprint-resolution-strategy]] (`0260`, the decision) · [[tasks/add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename]] (`0259`, test T1 — ⚠️ **shipped `npm test` RED on purpose**) · [[tasks/implement-adr-040s-identity-grammar-in-dashboard-sh]] (`0264`, both rungs **and** the binding `moved_target` companion) · [[tasks/implement-adr-041s-dashboard-half]] (`0265`, which extends this grammar with the `Backlog` token) · [[tasks/gloss-the-moved-to-sprint-n-row]] (`0268`, the vocabulary follow-up this ADR named as the producer's to file) · [[tasks/decide-whether-the-active-sprint-glob-widens]] (`0261`, the companion decision)
+- [[tasks/the-2026-08-13-vault-resync-chain]] — task `0269`, the ingest that brought this ADR into the vault

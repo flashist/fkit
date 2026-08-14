@@ -76,3 +76,4 @@ Plus:
 - [[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]] — task `0195`, which added two more and repaired the `skills_for_role()` self-contradiction
 - [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — task `0141`, which treated this page as a historical record and set the vault's own correction-note convention
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the **content** axis (which text wins inside a spawn); this ADR is the **invocation** axis, and ADR-037 leaves it untouched
+- [[decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]] — cites this role lock as why an unroled `claude` session is **unsupported**, which is what makes its residual R1 a known cost rather than a conformance gap

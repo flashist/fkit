@@ -65,3 +65,4 @@ Done, **agent-closed — not owner-verified**. Append-only preserved: the file's
 - [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — `0141`, whose *"banner above claim"* rule the owner replaced on 2026-08-03 with `0143`'s below-the-claim form **for ordinary vault pages**; this task's append-only ruling is the carve-out that rule does not reach
 - [[systems/knowledge-base-structure]] — the vault and its append-only log
 - [[tasks/wiki-ingest-of-the-structure-check-design-report-and-companion-adr]] — task `0249` (2026-08-07): the append-only ruling this task settled, **obeyed under pressure** — the ingest's own three false status claims were corrected by a **new dated entry**, never an in-place edit, leaving the entry above byte-identical
+- [[tasks/the-2026-08-13-vault-resync-chain]] — the chain that re-applied this task's ruling: `log.md` is append-only with **no exceptions**, so every correction is a new dated entry

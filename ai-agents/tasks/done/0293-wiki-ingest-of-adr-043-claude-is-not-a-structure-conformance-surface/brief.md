@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -32,7 +32,7 @@ a one-off librarian session, discards the ruling's stated purpose.**
 [ADR-043](../../../knowledge-base/decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee.md)
 (`ai-agents/knowledge-base/decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee.md`,
 status **accepted**, dated **2026-08-13**), which discharges task
-[`0255`](../../done/0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md).
+[`0255`](../0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md).
 
 **The ruling in one line:** `.claude/` is **deliberately NOT** a structure-conformance surface. The
 unconditional launch refresh is the guarantee. No spec row, no manifest row, no new class, no new
@@ -76,7 +76,7 @@ ADR-042 — one page per ADR, and ADR-043 has none.** `grep -rl "ADR-043" ai-age
 
 ### ⛔⛔ THE BATCHING REQUIREMENT — RUN THIS IN ONE LIBRARIAN SESSION WITH `0291`
 
-[`0291`](../0291-correct-two-stale-vault-claims-surfaced-by-0258s-review/brief.md) — *Correct two
+[`0291`](../../backlog/0291-correct-two-stale-vault-claims-surfaced-by-0258s-review/brief.md) — *Correct two
 stale vault claims surfaced by `0258`'s review* — is **already filed, `🔲 Backlog`, `## Owner:
 fkit-wiki`, and unrun** (verified 2026-08-13). It edits `index.md` and appends to `log.md`.
 
@@ -177,7 +177,7 @@ lists several other now-closed rows**, so the staleness is broader than `0255`.
 ⛔ **Fixing it is NOT in this row's owner-ruled scope** (ingest + the link hygiene that ingest
 requires), and widening into it would make this the general vault sweep the ruling excludes. ✅
 **Report it as a finding with what you measured.** ⚠️ It is also a **clean concrete instance of exactly
-what [`0290`](../0290-decide-whether-anything-should-notice-when-a-close-falsifies-a-vault-claim/brief.md)
+what [`0290`](../../backlog/0290-decide-whether-anything-should-notice-when-a-close-falsifies-a-vault-claim/brief.md)
 is investigating** — a close falsifying a vault claim — and is useful evidence there. ⛔ **This row does
 not answer `0290` and must not try to:** no mechanism, no lint rule, no skill edit.
 

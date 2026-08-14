@@ -36,3 +36,4 @@ The task's own review also had to correct its survivor list, a citation, and a w
 - [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — `0141`, the second link in the wiki chain
 - [[tasks/wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner]] — `0148`, the third
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] — why only this role may do it
+- [[tasks/the-2026-08-13-vault-resync-chain]] — a later link in the same chain of vault re-syncs

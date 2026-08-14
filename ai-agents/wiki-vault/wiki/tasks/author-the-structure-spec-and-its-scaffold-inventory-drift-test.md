@@ -58,3 +58,4 @@ reason a hand-authored document is acceptable here.**
 - [[systems/testing-and-verification]]
 - [[tasks/add-the-launch-time-structure-notice-and-intent-file-suppression]] — `0247`, a consumer of this spec at launch time
 - [[systems/launch-convergence-and-init]] · [[tasks/design-the-post-update-structure-check]]
+- [[tasks/decide-whether-claude-enters-the-structure-conformance-surface]] — ⛔ ruled that this spec keeps **zero `.claude` rows BY DECISION**; absence here is now evidence of a ruling, not an omission to correct

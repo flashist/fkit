@@ -65,3 +65,4 @@ Three record defects were found in review — an **unrun command printed as thou
 - [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] — `0211`, the **append-only `log.md`** carve-out the 2026-08-03 ruling does not reach
 - [[systems/knowledge-base-structure]] — where the correction-note form is catalogued, now recorded as governing the vault too
 - [[systems/fkit]]
+- [[tasks/the-2026-08-13-vault-resync-chain]] — a later link in the same chain of vault re-syncs

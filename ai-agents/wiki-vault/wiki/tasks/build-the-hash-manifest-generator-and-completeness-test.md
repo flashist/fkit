@@ -62,3 +62,4 @@ under `npm test`, which `.github/workflows/test.yml` runs on every push to `main
 - [[systems/testing-and-verification]]
 - [[tasks/add-the-launch-time-structure-notice-and-intent-file-suppression]] — `0247`, a consumer of this manifest at launch time
 - [[systems/launch-convergence-and-init]] · [[tasks/design-the-post-update-structure-check]]
+- [[tasks/decide-whether-claude-enters-the-structure-conformance-surface]] — why the manifest is **not** extended to `.claude/`: it exists to separate `untouched-stale` from `owner-edited`, and **"owner-edited" is not a state that survives a launch**

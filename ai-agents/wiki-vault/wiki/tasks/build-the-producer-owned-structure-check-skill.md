@@ -69,3 +69,4 @@ is now carried and discharged by task `0262` — see
 - [[decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged]] — the licence recording the producer-custodian ruling this skill implements
 - [[systems/install-and-self-update]] · [[systems/launch-convergence-and-init]] · [[tasks/design-the-post-update-structure-check]] — the surfaces this check reads and the design it implements
 - [[systems/fkit]] — where `fkit-heal` sits in the role→skill ownership table
+- [[tasks/decide-whether-claude-enters-the-structure-conformance-surface]] — the tree this check deliberately **cannot see**, and why that is ruled rather than a gap

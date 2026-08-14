@@ -4,6 +4,19 @@
 **Status**: in-progress — 🟢 **THE ACTIVE BOARD**, opened 2026-08-10 by owner ruling
 **Sprint/Tag**: Sprint 5 · **17 rows** · ranks restart at `P1` — *cite a rank with its board; a bare `P4` is ambiguous*
 
+> ✅ **CORRECTED 2026-08-13 by the wiki sync — ALL 17 ROWS ARE NOW CLOSED.** The `**Status**` line
+> above is left **byte-identical**; it was true when written. Measured this run against
+> `ai-agents/sprints/sprint-5.md`: **17 of 17 board rows read
+> `✅ Done (agent-closed — not owner-verified)`** — 0 open, 0 in progress.
+> ⚠️ **The board is NOT archived, and this page stays `in-progress` for that reason.** `sprint-5.md`'s
+> own banner still reads **`🟢 ACTIVE`**, unchanged. Archiving it — moving the plan into
+> `sprints/done/` and re-pointing every link — is task **`0294`**, filed 2026-08-13 and **not yet
+> run**. ⛔ **A closed row set is not a closed board**; do not read this page as an archival record
+> until `0294` lands.
+> ⚠️ **Every one of the 17 carries `(agent-closed — not owner-verified)` — no human has checked any of
+> them.** Stated here because the same flag on Sprint 4 is what makes this board's own foundation
+> ambiguous (see below).
+
 ## Goal
 
 Two halves, one sprint:
@@ -35,6 +48,26 @@ Two halves, one sprint:
 
 **Still open:** `0269` (P9, wiki), `0254` (P12), `0252` (P13), `0253` (P14), `0255` (P15), `0258`
 (P16, wiki).
+
+> ✅ **CORRECTED 2026-08-13 by the wiki sync — THE "STILL OPEN" LIST ABOVE IS NOW EMPTY.** Both
+> paragraphs above are left **byte-identical**; each was true when written. **All six of those rows
+> closed on 2026-08-13**, every one `✅ Done (agent-closed — not owner-verified)`:
+>
+> | Rank | Task | What landed |
+> |---|---|---|
+> | P9 | `0269` | Wiki ingest of ADR-040 / ADR-041 — ran via a spawned `@fkit-wiki` librarian, **not** through `/fkit-sprint-ship-loop`; the 2026-08-10 exclusion was never violated |
+> | P12 | `0254` | [[tasks/fix-the-unrunnable-verify-command-release-mjs-prints]] — the `npx` verify line replaced with `git ls-remote`. ⚠️ **A narrower set of defects on the replacement line is STILL OPEN as `0288`** |
+> | P13 | `0252` | [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `RELEASING.md`, the maintainer document nobody had |
+> | P14 | `0253` | [[tasks/state-the-per-project-relaunch-step-fkit-update-requires]] — the README re-launch prose, which then became **ADR-043's premise** |
+> | P15 | `0255` | [[tasks/decide-whether-claude-enters-the-structure-conformance-surface]] → [[decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]], owner-signed |
+> | P16 | `0258` | Wiki re-sync of `systems/install-and-self-update` after `RELEASING.md` landed |
+>
+> ⛔ **So the count in the heading above — "Shipped (11 of 17 rows)" — is superseded: it is 17 of 17.**
+> ⚠️ **All three loop-excluded rows (`0255`, `0258`, `0269`) shipped without the loop ever driving
+> them**, which is the exclusion working as ruled, not a breach.
+> ⚠️ **`systems/install-and-self-update` was rewritten THREE times on 2026-08-13** — by `0285`, `0258`
+> and `0289` — and now carries three stacked correction layers. Whether anything should notice when a
+> close falsifies a vault claim is task **`0290`**, open.
 
 ## Outcome
 
@@ -124,3 +157,8 @@ ranks are **stale by design**.
 - [[systems/install-and-self-update]]
 - [[systems/fkit]] · [[tasks/sprint-3-close-the-rank-integrity-loop]] · [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]] — the board lineage
 - [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252` (P13, closed 2026-08-13), the release-hygiene half's documentation row, and the hard precondition of `0258`
+- [[tasks/state-the-per-project-relaunch-step-fkit-update-requires]] — `0253` (P14, closed 2026-08-13)
+- [[tasks/fix-the-unrunnable-verify-command-release-mjs-prints]] — `0254` (P12, closed 2026-08-13)
+- [[tasks/decide-whether-claude-enters-the-structure-conformance-surface]] — `0255` (P15, closed 2026-08-13), the board's only owner-signed decision row
+- [[decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]] — `0255`'s output
+- [[tasks/the-2026-08-13-vault-resync-chain]] — the six vault-maintenance rows closed 2026-08-13 (`0269` and `0258` from this board; `0263`, `0282`, `0285`, `0289` from Backlog), and the churn they exposed

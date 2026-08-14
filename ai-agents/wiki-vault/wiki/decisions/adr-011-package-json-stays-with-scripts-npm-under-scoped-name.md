@@ -38,3 +38,5 @@
 - [[decisions/adr-014-how-fkit-tests-itself]]
 - [[decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]]
 - [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252` (2026-08-13): `RELEASING.md`, the maintainer document that finally writes down what `VERSION` does (**names the release in the update notice**) and does **not** do (**select, gate or identify installed content** — distribution is sha-keyed). ✅ It reaffirms this ADR rather than reopening it: bumping buys a **version delta** instead of a **sha delta**, and ⛔ **was never the delivery mechanism**
+- [[decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]] — the same distribution model (gitignored, sha-keyed, refreshed on launch) that makes `.claude/` a non-conformance surface
+- [[tasks/fix-the-unrunnable-verify-command-release-mjs-prints]] — ⛔ adding a `bin` field to make the printed `npx` verify line work was a **stop-and-escalate condition**, on this ADR's authority
