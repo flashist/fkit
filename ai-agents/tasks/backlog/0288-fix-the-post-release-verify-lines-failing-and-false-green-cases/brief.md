@@ -329,7 +329,7 @@ integrity afterwards and record it** — `HEAD`, the local tag count, `VERSION`,
 - **Filed to the [Backlog](../../../sprints/backlog.md) board — deliberately, and here is the
   reasoning.** The owner's rulings settled **what** this task contains; **none of them said when it
   ships.** `ai-agents/sprints/backlog.md` is unranked, so filing there assigns no merit rank and makes
-  no claim the owner did not make. [Sprint 5](../../../sprints/sprint-5.md) **is** ranked — a row
+  no claim the owner did not make. [Sprint 5](../../../sprints/done/sprint-5.md) **is** ranked — a row
   there would be a real merit statement, and with nine closed rows sitting below `P11` a new row could
   only **append** below the board's largest rank (ADR-035, `/fkit-task-brief` step 5), which is a
   position no one believes reflects its merit. **A rank nobody meant is worse than no rank.**

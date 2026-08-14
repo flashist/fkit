@@ -182,7 +182,7 @@ only owner gate is plan approval**, spent before Build
 sign-off ruling could be taken. **The precedent is
 [`0255`](../../done/0255-decide-whether-claude-enters-the-structure-conformance-surface/brief.md)**, excluded
 from loop runs by **standing owner ruling of 2026-08-10**, recorded in
-[`sprint-5.md`](../../../sprints/sprint-5.md)'s `## Notes` in exactly these terms:
+[`sprint-5.md`](../../../sprints/done/sprint-5.md)'s `## Notes` in exactly these terms:
 
 > **`0255` needs a second owner beat the loop does not have.** Its title says **owner sign-off is
 > required** … **The loop's only owner gate is plan approval**, spent before Build … so the loop has

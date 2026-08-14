@@ -152,7 +152,7 @@ keeps `prove-red.sh` hand-rolled — whatever gate lands must run it, not replac
   Sprint 5** by owner ruling of **2026-08-10** (verbatim option label **"Dashboard + all of
   0252-0258"**). The header fields moved in that same act and are the authority:
   **`## Sprint: Sprint 5`**, **`## Priority: Sprint 5 P10`**. **Plan this work against
-  [`sprint-5.md`](../../../sprints/sprint-5.md), not the Backlog board.**
+  [`sprint-5.md`](../../../sprints/done/sprint-5.md), not the Backlog board.**
   ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
   **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
   bottom-up can. Task

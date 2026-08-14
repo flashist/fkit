@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# SEVENTEEN mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# TWENTY-TWO mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -41,6 +41,23 @@
 #  15. Remove the launcher's structure_notice call  → "0247/drifted"                      (task 0247)
 #  16. Neuter the update banner's version guard     → "0257/equal-versions"                (task 0257)
 #  17. Restore the banner's ${rver:-?} placeholder  → "0257/no-curl"                       (task 0257)
+#  18. Make the --no-tag summary branch unreachable → "0288/no-tag"                        (task 0288)
+#  19. tagOnOrigin → the naive `doTag && doPush`    → "0288/local-only-tag"                (task 0288)
+#  20. Peel comparison → a plain existence check    → "0288/stale-origin-tag"              (task 0288)
+#  21. Strip the verify command's speaking tail     → "0288/failure-speaks"                (task 0288)
+#  22. Make the ✓ Released headline unreachable     → "0288/default-released"              (task 0288)
+#
+# ⚠️ MUTATIONS 18-22 ARE THE FIRST TO TARGET `bin/`, NOT A COPIED LAUNCHER TREE (task 0288). Their seam
+# is FKIT_RELEASE_MJS — a SINGLE-FILE redirect (the FKIT_LAUNCHER pattern, not the whole-tree
+# FKIT_FRONTMATTER_ROOT one), because test/release-summary.test.js copies the script into a throwaway
+# git fixture of its own and runs it there, so a mutant needs no surrounding tree. The real
+# bin/release.mjs is never touched — every mutation edits a bare copy under $work.
+#
+# ⚠️ MUTATION 18 IS SCOPED TO THE SUMMARY BLOCK ON PURPOSE, and that is not fussiness: the string
+# `} else if (!doTag) {` occurs TWICE in bin/release.mjs — once in the EXECUTE section (the skip-tag
+# step) and once in the summary. A plain `sed` hits the execute one, mutating the tag logic that task
+# 0288 is fenced away from and proving nothing about the summary. The awk below only fires after the
+# `// --- summary ---` marker line. The other four anchors were verified unique before being used.
 #
 # ⚠️ MUTATION 14 REACHES ITS TARGET WITHOUT AN ENV SEAM, and that is deliberate — it is the one
 # exception to the "pointed at via FKIT_LAUNCHER" phrasing above. dashboard-contract.test.js resolves
@@ -173,6 +190,30 @@ run_banner_suite() {   # <claude-tree-root>
   fi
 }
 
+# Run ONLY the release-summary suite against a bin/release.mjs path (task 0288); redirected via
+# FKIT_RELEASE_MJS, its own standalone-script seam — the run_hook_suite() pattern (ONE file, not a
+# tree). ⚠️ NOT run_suite(): that file is about bin/release.mjs, not the launcher, and passing
+# FKIT_LAUNCHER would leave it testing the real release.mjs and report a false green.
+# ⚠️ Each run builds seven throwaway git fixtures (a bare origin + a working clone each), so it is the
+# slowest seam here — ~25s. Six runs below (baseline + five mutants) is the cost the owner accepted.
+run_release_suite() {   # <release.mjs path>
+  if FKIT_RELEASE_MJS="$1" node --test "$repo/test/release-summary.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
+# An independent copy of bin/release.mjs we can mutate. $1 = name; echoes the copy's path.
+# ⚠️ A BARE FILE COPY IS CORRECT HERE, unlike make_claude_copy()'s whole-tree copy: release-summary's
+# fixtures copy the script into a throwaway repo of their own and run it there, and release.mjs derives
+# its KIT as `resolve(__dirname, "..")` — i.e. that fixture, never this repo. Nothing else is needed.
+make_release_copy() {
+  dst="$work/$1.mjs"
+  cp "$repo/bin/release.mjs" "$dst"
+  echo "$dst"
+}
+
 # An independent copy of the SCAFFOLD home we can mutate. $1 = name; echoes the copy's root.
 make_scaffold_copy() {
   dst="$work/$1"
@@ -290,6 +331,17 @@ dc="$(run_dashboard_suite "$clean_repo")"; echo "$dc"
 printf '0j. unmutated copy update-banner suite should be green ... '
 bc="$(run_banner_suite "$clean_tree")"; echo "$bc"
 [ "$bc" = green ] || { echo "   ✗ an UNMUTATED copy's banner suite is red — mutations 16/17 below would be false."; fail=1; }
+
+# --- 0k. An UNMUTATED copy of bin/release.mjs must ALSO be green (task 0288; same reasoning as 0b and
+#     0h). This one carries the usual extra weight for a NEW seam: it is the only proof that
+#     FKIT_RELEASE_MJS is honoured at all. If the env var were ignored, every mutation below would run
+#     against the REAL release.mjs, all five would come back green, and the gate would report five
+#     disarmed mutations as five failures to catch — or, worse, a later refactor could make them pass
+#     for the wrong reason. ---------------------------------------------------------------------------
+clean_release="$(make_release_copy release-clean)"
+printf '0k. unmutated copy of bin/release.mjs should be green ... '
+rlc="$(run_release_suite "$clean_release")"; echo "$rlc"
+[ "$rlc" = green ] || { echo "   ✗ an UNMUTATED release.mjs copy is red — mutations 18-22 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -781,6 +833,205 @@ if [ "$r17" != red ]; then
   echo "   ✗ the suite did NOT catch a banner that renders 'v?' at an install with no curl."; fail=1
 elif ! grep -Eq '(✖|not ok|fail).*0257/no-curl' "$out"; then
   echo "   ✗ suite went red but NOT at 0257/no-curl — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 18: make the `--no-tag` SUMMARY branch unreachable → the 0288/no-tag assertion in
+#     release-summary.test.js must go red (task 0288). A `--no-tag` run then falls through to a branch
+#     describing some other state, and the maintainer is told something untrue about a run that DID
+#     publish commits. This is R1's publishing half — the case the original review missed.
+#
+#     ⚠️ SCOPED TO THE SUMMARY BLOCK. `} else if (!doTag) {` appears TWICE in the file; the first is the
+#     execute section's skip-tag step, which 0288's fence puts out of bounds. The awk arms only after
+#     the `// --- summary ---` marker. See the header note on this mutation. -------------------------
+m18="$(make_release_copy release-mutant-notag)"
+cp "$m18" "$m18.orig"
+awk '
+  BEGIN { insum = 0; done = 0 }
+  /^\/\/ --- summary ---/ { insum = 1 }
+  insum == 1 && done == 0 && /^} else if \(!doTag\) \{$/ {
+    print "} else if (false) { // mutation: the --no-tag summary branch made unreachable"
+    done = 1
+    next
+  }
+  { print }
+' "$m18.orig" > "$m18"
+if cmp -s "$m18" "$m18.orig"; then
+  echo "18. --no-tag summary branch disabled ... ✗ MUTATION WAS A NO-OP — the awk no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif ! grep -q 'the --no-tag summary branch made unreachable' "$m18"; then
+  echo "18. --no-tag summary branch disabled ... ✗ MUTATION DID NOT LAND — marker absent from the mutant."
+  fail=1
+elif [ "$(grep -c '^} else if (!doTag) {$' "$m18")" != 1 ]; then
+  echo "18. --no-tag summary branch disabled ... ✗ WRONG TARGET — the mutant should keep exactly ONE"
+  echo "   \`} else if (!doTag) {\` (the EXECUTE section's). The awk hit the wrong occurrence, so the"
+  echo "   red below would be about tag logic, not the summary. Fix the mutation in test/prove-red.sh."
+  fail=1
+fi
+printf '18. --no-tag summary branch unreachable — "0288/no-tag" should go RED ... '
+r18="$(run_release_suite "$m18")"; echo "$r18"
+if [ "$r18" != red ]; then
+  echo "   ✗ the suite did NOT catch a --no-tag run that misreports itself — R1's publishing case is"
+  echo "     not load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0288/no-tag' "$out"; then
+  echo "   ✗ suite went red but NOT at 0288/no-tag — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 19: replace `tagOnOrigin` with the naive `doTag && doPush` guard → the
+#     0288/local-only-tag assertion must go red (task 0288). ⚠️ THIS IS THE MUTATION THE BRIEF ASKED
+#     FOR BY NAME: both flags are TRUE in the local-tag-only state, so the naive guard falls through
+#     and the summary reports the tag as already on origin when it is not there at all. It is the
+#     precise trap the brief warned of — "a single guard may fix one and leave the other" — made
+#     executable. N1 was found by reasoning; this is what stops it being re-lost by a refactor.
+#
+#     ⚠️ THE REPLACEMENT LINE COMES FROM A FILE, VIA getline — the mutation-14 rule, and it is not
+#     optional here: the replacement contains `&&`, and in a `sed` replacement `&` means THE WHOLE
+#     MATCH. A sed would splice the matched line into itself twice, producing a syntax error rather
+#     than a mutant — every test reds, the named-assertion grep still passes, and the gate reports a
+#     broken file as a successful catch. ------------------------------------------------------------
+m19="$(make_release_copy release-mutant-naive-guard)"
+cp "$m19" "$m19.orig"
+cat > "$work/m19-line.txt" <<'MUTANT_LINE'
+} else if (!(doTag && doPush)) { // mutation: tagOnOrigin replaced by the naive flag guard
+MUTANT_LINE
+awk -v repl="$work/m19-line.txt" '
+  BEGIN { swapped = 0 }
+  /^} else if \(!tagOnOrigin\) \{$/ && swapped == 0 {
+    while ((getline line < repl) > 0) print line
+    close(repl)
+    swapped = 1
+    next
+  }
+  { print }
+' "$m19.orig" > "$m19"
+if cmp -s "$m19" "$m19.orig"; then
+  echo "19. tagOnOrigin → naive guard ... ✗ MUTATION WAS A NO-OP — the awk no longer matches"
+  echo "   \`} else if (!tagOnOrigin) {\` (has the guard been renamed or reshaped?). This gate is"
+  echo "   disarmed: it would report success while proving nothing. Fix it in test/prove-red.sh."
+  fail=1
+elif grep -q 'tagOnOrigin) {' "$m19"; then
+  echo "19. tagOnOrigin → naive guard ... ✗ MUTATION IS HALF-APPLIED — the mutant still branches on"
+  echo "   tagOnOrigin. The red below would prove nothing."
+  fail=1
+fi
+printf '19. tagOnOrigin → the naive `doTag && doPush` — "0288/local-only-tag" should go RED ... '
+r19="$(run_release_suite "$m19")"; echo "$r19"
+if [ "$r19" != red ]; then
+  echo "   ✗ the suite did NOT catch the naive two-flag guard — N1 is not load-bearing, and the exact"
+  echo "     mistake the brief warned about would ship silently."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0288/local-only-tag' "$out"; then
+  echo "   ✗ suite went red but NOT at 0288/local-only-tag — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 20: replace the PEEL comparison with a plain existence check → the
+#     0288/stale-origin-tag assertion must go red (task 0288). This is R2 restored exactly: an
+#     existence check passes whether or not the tag names this release, and `git ls-remote` prints the
+#     TAG OBJECT sha rather than the peeled commit, so a reader cannot tell by eye either. Replacement
+#     via getline (mutation-14 rule) — the line carries backticks, `${tag}`, `^{}` and single quotes,
+#     none of which survive a sed or an `awk -v` intact. ------------------------------------------
+m20="$(make_release_copy release-mutant-existence-check)"
+cp "$m20" "$m20.orig"
+cat > "$work/m20-line.txt" <<'MUTANT_LINE'
+  console.log(`  Which commit the tag names:   git ls-remote --exit-code --tags origin ${tag}`);
+MUTANT_LINE
+awk -v repl="$work/m20-line.txt" '
+  BEGIN { swapped = 0 }
+  /Which commit the tag names/ && swapped == 0 {
+    while ((getline line < repl) > 0) print line
+    close(repl)
+    swapped = 1
+    next
+  }
+  { print }
+' "$m20.orig" > "$m20"
+if cmp -s "$m20" "$m20.orig"; then
+  echo "20. peel → existence check ... ✗ MUTATION WAS A NO-OP — the awk no longer matches the"
+  echo "   'Which commit the tag names' line. Fix the mutation in test/prove-red.sh."
+  fail=1
+elif grep -q 'refs/tags/${tag}\^{}' "$m20"; then
+  echo "20. peel → existence check ... ✗ MUTATION IS HALF-APPLIED — the peeled ref is still in the"
+  echo "   mutant, so the printed command can still answer R2. The red below would prove nothing."
+  fail=1
+fi
+printf '20. peel comparison → a plain existence check — "0288/stale-origin-tag" should go RED ... '
+r20="$(run_release_suite "$m20")"; echo "$r20"
+if [ "$r20" != red ]; then
+  echo "   ✗ the suite did NOT catch a summary that prints an existence check for the stale-tag state —"
+  echo "     R2's false green is not load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0288/stale-origin-tag' "$out"; then
+  echo "   ✗ suite went red but NOT at 0288/stale-origin-tag — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 21: strip the speaking-failure tail from the printed verify command → the
+#     0288/failure-speaks assertion must go red (task 0288). That restores R5 exactly: the check goes
+#     back to printing NOTHING on either stream when the tag is absent. ⚠️ Note the mutant still exits
+#     non-zero (git's own 2) — which is why 0288/failure-speaks asserts on OUTPUT, not just status. A
+#     test that only checked `$?` would stay green here and prove nothing.
+#
+#     Two lines are replaced by one (the `+` continuation goes with the tail), so getline + skip —
+#     the mutation-17 shape. ------------------------------------------------------------------------
+m21="$(make_release_copy release-mutant-silent-fail)"
+cp "$m21" "$m21.orig"
+cat > "$work/m21-line.txt" <<'MUTANT_LINE'
+    `  Verify tag on origin: git ls-remote --exit-code --tags origin ${tag}`,
+MUTANT_LINE
+awk -v repl="$work/m21-line.txt" '
+  BEGIN { swapped = 0; skip = 0 }
+  skip > 0 { skip--; next }
+  /Verify tag on origin/ && swapped == 0 {
+    while ((getline line < repl) > 0) print line
+    close(repl)
+    swapped = 1
+    skip = 1                 # drop the ` || { echo …; false; }` continuation line
+    next
+  }
+  { print }
+' "$m21.orig" > "$m21"
+if cmp -s "$m21" "$m21.orig"; then
+  echo "21. stripped the speaking tail ... ✗ MUTATION WAS A NO-OP — the awk no longer matches the"
+  echo "   'Verify tag on origin' line. Fix the mutation in test/prove-red.sh."
+  fail=1
+elif grep -q 'not confirmed on origin' "$m21"; then
+  echo "21. stripped the speaking tail ... ✗ MUTATION IS HALF-APPLIED — the failure message is still"
+  echo "   in the mutant, so the check can still speak. The red below would prove nothing."
+  fail=1
+fi
+printf '21. verify command loses its speaking tail — "0288/failure-speaks" should go RED ... '
+r21="$(run_release_suite "$m21")"; echo "$r21"
+if [ "$r21" != red ]; then
+  echo "   ✗ the suite did NOT catch a silently-failing verify command — R5 is not load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0288/failure-speaks' "$out"; then
+  echo "   ✗ suite went red but NOT at 0288/failure-speaks — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 22: make the `✓ Released` headline unreachable → the 0288/default-released assertion
+#     must go red (task 0288). ⚠️ THIS ONE GUARDS THE CONSTRAINT THE BRIEF SHOUTED LOUDEST — "the
+#     default path is correct today, do not regress it". Every other mutation here proves a FIX is
+#     load-bearing; this proves the thing that was already right cannot be broken silently. A default
+#     release cut is the case a maintainer actually runs, and it is the one with no second chance.
+#
+#     ⚠️ IT ALSO REDS 0288/failure-speaks, and that is inherent, not sloppy: that assertion executes
+#     the command the DEFAULT path printed, so a mutation stopping the default path printing it takes
+#     both. The named-assertion check below is what this gate requires, and it holds. Mutations 18-21
+#     each leave 0288/default-released GREEN — that isolation is itself evidence the default branch is
+#     independent of the four fixes. -----------------------------------------------------------------
+m22="$(make_release_copy release-mutant-no-headline)"
+cp "$m22" "$m22.orig"
+sed -i.bak 's/^} else if (tagCreated) {$/} else if (false) { \/\/ mutation: the released headline made unreachable/' "$m22"
+if cmp -s "$m22" "$m22.orig"; then
+  echo "22. released headline unreachable ... ✗ MUTATION WAS A NO-OP — the sed no longer matches"
+  echo "   \`} else if (tagCreated) {\`. This gate is disarmed: it would report success while proving"
+  echo "   nothing. Fix the mutation in test/prove-red.sh before trusting any result above."
+  fail=1
+fi
+printf '22. ✓ Released headline unreachable — "0288/default-released" should go RED ... '
+r22="$(run_release_suite "$m22")"; echo "$r22"
+if [ "$r22" != red ]; then
+  echo "   ✗ the suite did NOT catch a default path that stopped announcing the release — the one case"
+  echo "     the brief forbids regressing is not covered."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0288/default-released' "$out"; then
+  echo "   ✗ suite went red but NOT at 0288/default-released — red for the wrong reason."; fail=1
 fi
 
 echo

@@ -184,7 +184,7 @@ Vault pages for **ADR-040** and **ADR-041**, following the vault's own decisions
   ⚠️ **This is an exclusion from that loop run and from nothing else. `## Status` stays
   `🔲 Backlog`, the row stays in Sprint 5, the rank stays `P16` — NOT blocked, NOT deprioritised,
   NOT descoped.** Full reasoning is the **first bullet** of
-  [`sprint-5.md`](../../../sprints/sprint-5.md)'s `## Notes`.
+  [`sprint-5.md`](../../../sprints/done/sprint-5.md)'s `## Notes`.
   ⚠️ **CORRECTED 2026-08-11 — the sentence above is left byte-identical and one clause of it is now
   stale.** *"the rank stays `P16`"* was true of the exclusion, and stays true **of the exclusion**: pulling
   a row out of a loop run still changes no rank. The rank moved anyway, by a **different and later
@@ -212,4 +212,4 @@ Vault pages for **ADR-040** and **ADR-041**, following the vault's own decisions
   ⛔ **This reopens nothing.** `0255` and `0258` remain excluded from a loop run and their rulings
   stand word for word — both still `🔲 Backlog`, both still Sprint 5, neither blocked, deprioritised
   nor descoped. Only this row left the open set, and it left by **shipping**. Matching notes are on
-  [`sprint-5.md`](../../../sprints/sprint-5.md) — this row's board cell and both `## Notes` sites.
+  [`sprint-5.md`](../../../sprints/done/sprint-5.md) — this row's board cell and both `## Notes` sites.

@@ -27,7 +27,7 @@ The option description as presented to the owner, verbatim:
 > 0238 unasked, which was right — different delta, different source. Keeps each wiki task's scope
 > honest.*
 
-This answers the open question left in [Sprint 5](../../../sprints/sprint-5.md)'s `## Notes` and on
+This answers the open question left in [Sprint 5](../../../sprints/done/sprint-5.md)'s `## Notes` and on
 [Sprint 4](../../../sprints/done/sprint-4.md)'s archival banner: **a new brief, not a widening of
 `0238`.**
 
@@ -134,7 +134,7 @@ A vault re-sync that makes `ai-agents/wiki-vault/` describe board reality as of 
    verified:** all eight closes keep `(agent-closed — not owner-verified)` **permanently**, and ⛔ **a
    vault page must not describe `0262` as verifying Sprint 4** or as scheduled — it is on the Backlog,
    unscheduled, and not a release gate. Sources: [`backlog.md`](../../../sprints/backlog.md)'s
-   `## Notes`, [Sprint 5](../../../sprints/sprint-5.md)'s banner and open question 2, and
+   `## Notes`, [Sprint 5](../../../sprints/done/sprint-5.md)'s banner and open question 2, and
    [`done/sprint-4.md`](../../../sprints/done/sprint-4.md)'s banner.
 3. **Sprint 5 is the active board** at `ai-agents/sprints/sprint-5.md` — ten rows, ranks restarting at
    `P1`, opened 2026-08-10 by owner ruling (verbatim **"Dashboard + all of 0252-0258"**), and it is

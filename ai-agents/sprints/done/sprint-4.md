@@ -1,6 +1,6 @@
 # Sprint 4 — Ship the use-ready self-healing update
 
-> ## 🔒 CLOSED — 2026-08-10. Superseded by [Sprint 5](../sprint-5.md).
+> ## 🔒 CLOSED — 2026-08-10. Superseded by [Sprint 5](sprint-5.md).
 >
 > **Sprint 4 was archived by OWNER RULING, 2026-08-10**, given via `AskUserQuestion` in a live
 > session — a selection from the question's option list, **the option label is the verbatim text**:
@@ -27,7 +27,7 @@
 > it**, because a downstream project running fkit `0.2.1` filed a real defect and the fix became the
 > priority. So **nothing this board shipped has been exercised outside this repo.** The superseding
 > note is in [`backlog.md`](../backlog.md)'s `## Notes`, beneath the original ruling, which is left
-> byte-identical; the reason is restated in [Sprint 5](../sprint-5.md)'s banner.
+> byte-identical; the reason is restated in [Sprint 5](sprint-5.md)'s banner.
 >
 > **✅ AMENDED 2026-08-10 — the paragraph above is left byte-identical and is now INCOMPLETE.** Its
 > facts still hold: the stale-install test **has not been run** and **nothing this board shipped has
@@ -51,13 +51,13 @@
 >
 > **Why it was archived.** The board was drained — **8 done · 0 cancelled · 0 moved · 0 open**. A
 > plain close, not a rollover: no open row moved anywhere, and not one `P<n>` was renumbered.
-> Archiving it before [Sprint 5](../sprint-5.md) opens is what keeps exactly **one** `sprint-*.md` in
+> Archiving it before [Sprint 5](sprint-5.md) opens is what keeps exactly **one** `sprint-*.md` in
 > `/fkit-status`'s active-sprint glob. That matters more than usual here: two active boards is the
 > same ambiguity class this board's own banner flagged about Sprint 3, **and it is the exact class of
 > defect Sprint 5 exists to fix.**
 >
 > **This plan is kept, not deleted — it is the record of what was done.** Everything below is
-> historical. Do not pick up work from this file; see [Sprint 5](../sprint-5.md).
+> historical. Do not pick up work from this file; see [Sprint 5](sprint-5.md).
 >
 > **⚠️ Archived, not frozen.** Sprint 1's, Sprint 2's and Sprint 3's archived boards were each edited
 > after archiving. A dated correction appended below is legitimate; a silent rewrite of a rank or a

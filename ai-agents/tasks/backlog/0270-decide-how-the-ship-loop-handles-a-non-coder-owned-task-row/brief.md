@@ -86,7 +86,7 @@ On **2026-08-10** the problem was hit on **Sprint 5**, on **three rows**, verifi
 
 The owner ruled all three out of that loop run (two rulings, both via `AskUserQuestion` in a live
 session), and the exclusion is recorded on
-[`sprint-5.md`](../../../sprints/sprint-5.md) — a `⛔` block above the `## Status` table plus the
+[`sprint-5.md`](../../../sprints/done/sprint-5.md) — a `⛔` block above the `## Status` table plus the
 first bullet of `## Notes`, which already records *"teaching the loop to route each step by the
 brief's `## Owner` field"* as **the rejected-for-now alternative, an ADR-038 re-raise, not a quick
 fix**.

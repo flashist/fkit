@@ -29,7 +29,7 @@ backlog"**. The option description as presented to the owner, verbatim:
 **⚠️ This task is deliberately unscheduled and it does NOT gate the release.** That is the substance
 of the ruling, not an omission — it is filed to the **Backlog** board on purpose, and pulling it into
 Sprint 5 would reverse the ruling rather than honor it. It answers
-[Sprint 5](../../../sprints/sprint-5.md)'s **open question 1** (*"Was the stale-install test dropped,
+[Sprint 5](../../../sprints/done/sprint-5.md)'s **open question 1** (*"Was the stale-install test dropped,
 or deferred?"*): **deferred, with a filed home.**
 
 ### Why it exists — a gate that was lifted, not met
@@ -257,7 +257,7 @@ install — or **[R]** — an in-repo assertion a field run can only partially s
 - **Depends on:** nothing. Everything it exercises is already on disk and shipped in `0.2.x`.
 - **Blocks:** nothing.
 - **⚠️ Deliberately unscheduled, by owner ruling 2026-08-10 — verbatim "File a brief, leave on
-  backlog". It does NOT gate the release**, and nothing on [Sprint 5](../../../sprints/sprint-5.md)
+  backlog". It does NOT gate the release**, and nothing on [Sprint 5](../../../sprints/done/sprint-5.md)
   waits on it. Recorded here because "unscheduled" is this board's default and needs no note, while
   *"unscheduled on purpose, and not a release gate"* is information that lives nowhere else.
 - **It also does not gate `0245`/`0246`.** Both are closed and archived; running this does not reopen

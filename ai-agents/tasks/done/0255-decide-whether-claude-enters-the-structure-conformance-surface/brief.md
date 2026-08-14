@@ -142,7 +142,7 @@ whether and how `.claude/` conformance is observed. No code.
   Sprint 5** by owner ruling of **2026-08-10** (verbatim option label **"Dashboard + all of
   0252-0258"**). The header fields moved in that same act and are the authority:
   **`## Sprint: Sprint 5`**, **`## Priority: Sprint 5 P15`**. **Plan this work against
-  [`sprint-5.md`](../../../sprints/sprint-5.md), not the Backlog board.**
+  [`sprint-5.md`](../../../sprints/done/sprint-5.md), not the Backlog board.**
   ⚠️ **No drift check fires on this, and none will:** `dashboard.sh` reads the `## Priority`
   **field**, not brief prose, so the machine cannot see a stale closing line — only a reader working
   bottom-up can. Task
@@ -159,7 +159,7 @@ whether and how `.claude/` conformance is observed. No code.
   ⚠️ **This is an exclusion from that loop run and from nothing else. `## Status` stays
   `🔲 Backlog`, the row stays in Sprint 5, the rank stays `P9` — NOT blocked, NOT deprioritised, NOT
   descoped.** Full reasoning is the **first bullet** of
-  [`sprint-5.md`](../../../sprints/sprint-5.md)'s `## Notes`.
+  [`sprint-5.md`](../../../sprints/done/sprint-5.md)'s `## Notes`.
   ⚠️ **CORRECTED 2026-08-11 — the sentence above is left byte-identical and one clause of it is now
   stale.** *"the rank stays `P9`"* was true of the exclusion, and stays true **of the exclusion**: pulling
   a row out of a loop run still changes no rank. The rank moved anyway, by a **different and later

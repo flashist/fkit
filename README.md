@@ -51,8 +51,10 @@ because its identity is `Backlog`, which is never eligible — a stronger rule, 
 board works correctly; only its header sentence is wrong. Correct it by hand if you want it accurate;
 nothing depends on it.
 
-A launch also tells you — one stderr line — when your project's fkit-managed structure diverges from
-what the installed version ships. To see the per-file verdicts and repair, run `/fkit-heal` in a
+A launch also tells you — one stderr line — when your project's `ai-agents/` tree, or its root
+`CLAUDE.md` / `AGENTS.md`, diverges from what the installed version ships. (The fkit agents and
+skills under `.claude/` are not part of that check: a launch rewrites them outright, so there is
+nothing to diverge.) To see the per-file verdicts and repair, run `/fkit-heal` in a
 producer session: repair is **in-session, consent-gated, diffs in view, and applies only the exact
 list you approve — never silent**, and it never moves, renames, or deletes anything. Divergence
 that's deliberate? List the path in `ai-agents/.fkit-accepted-drift` and the launch line goes quiet

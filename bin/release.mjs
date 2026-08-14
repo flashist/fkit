@@ -269,9 +269,78 @@ if (doTag && !localTagExists && !remoteTagExists) {
 }
 
 // --- summary ----------------------------------------------------------------
+// ⚠️ THIS BLOCK DESCRIBES THE RUN THAT HAPPENED, NOT THE DEFAULT PATH (task 0288).
+// All four defects 0288 fixed had one root cause: the summary was written as if the
+// default path were the only path, so it announced `✓ Released` and printed a tag-verify
+// command on runs that created no tag, pushed no tag, or did not move an existing one.
+//
+// ⛔ DO NOT RE-DERIVE THIS FROM `doTag`/`doPush` ALONE. Both are TRUE in the state where
+// the tag already existed locally and was therefore never pushed (N1) — a guard on the
+// two flags fixes R1 and leaves N1 exactly as it was. The end state needs the pre-run tag
+// measurements at :218-220 as well.
+//
+// Deriving end state from flags is sound here because every git call above runs with
+// `check: true`: a failed push calls fail() and exits 1, so this block is reached only
+// when every git command succeeded. And nothing in the run can change remoteTagExists
+// except our own tag push, which tagPushed already accounts for.
+const tagCreated = doTag && !localTagExists && !remoteTagExists; // the tag block at :258 ran
+const tagPushed = tagCreated && doPush; //                          its `git push origin <tag>` ran
+const tagOnOrigin = remoteTagExists || tagPushed; //                the tag is on origin now
+
+const rule = `\n${"─".repeat(48)}`;
 if (dryRun) {
-  console.log(`\n${"─".repeat(48)}\nDry run — nothing was changed. Re-run without --dry-run to release.`);
+  console.log(`${rule}\nDry run — nothing was changed. Re-run without --dry-run to release.`);
+} else if (!doPush) {
+  // Nothing left this machine — so nothing on origin can be verified.
+  console.log(`${rule}\n⚠ NOT released — nothing was pushed${doTag ? " (--no-push)" : ", no tag created"}`);
+  if (doTag) {
+    console.log(`  ${tag} is committed and tagged locally only.`);
+    console.log(`  Finish it with: git push origin ${branch} && git push origin ${tag}`);
+  } else {
+    console.log(`  ${tag} is committed locally only.`);
+  }
+} else if (!doTag) {
+  // Commits WERE published — say so. `--no-tag` is not a no-op release.
+  console.log(`${rule}\n✓ Pushed ${branch} (${tag}) — no tag was created (--no-tag)`);
+  console.log(`  Nothing to verify on origin: this run created no tag.`);
+} else if (!tagOnOrigin) {
+  // N1. Tag exists locally, not on origin — so the tag push never ran and, before 0288,
+  // nothing said so. ⛔ 0288 does NOT push it (owner-ruled 2026-08-13, "Report truthfully
+  // only — stay inside the fence"); the release genuinely is unfinished, and this says so.
+  //
+  // ⚠️ `tagOnOrigin` IS THE LOAD-BEARING GUARD HERE, and it must not be simplified to
+  // `doTag && doPush` — that is true in this exact state, so the naive form falls through
+  // and reports the tag as already on origin when it is not there at all.
+  console.log(`${rule}\n⚠ UNFINISHED — ${branch} was pushed, but tag ${tag} was NOT pushed`);
+  console.log(`  The tag already existed locally, so tag creation was skipped — and the tag push`);
+  console.log(`  lives inside that same skipped step, so it never ran.`);
+  console.log(`  Finish it by hand:  git push origin ${tag}`);
+  console.log(`  ⚠ Check what it names first: git rev-parse '${tag}^{}'  vs  git rev-parse HEAD`);
+} else if (tagCreated) {
+  // The default path. The headline is byte-identical to pre-0288; the verify command
+  // gains a speaking failure branch (R5) — see the owner's OQ1(A) ruling, 2026-08-14.
+  // On success it is byte-identical too: git prints the sha and exits 0, and the `||`
+  // group never runs. `$?` inside that group is git's own code (arguments expand before
+  // `echo` runs), so 2 and 128 stay distinguishable; the trailing `false` keeps the
+  // compound non-zero so `$?` remains usable as pass/fail.
+  console.log(`${rule}\n✓ Released ${tag}`);
+  console.log(
+    `  Verify tag on origin: git ls-remote --exit-code --tags origin ${tag}` +
+      ` || { echo "✗ ${tag} not confirmed on origin (git exit $?)"; false; }`,
+  );
 } else {
-  console.log(`\n${"─".repeat(48)}\n✓ Released ${tag}`);
-  console.log(`  Verify tag on origin: git ls-remote --exit-code --tags origin ${tag}`);
+  // R2. The tag was already on origin and this run did not move it. Whether it names
+  // THIS release is unknowable from here, so claim neither — print the comparison.
+  // ⛔ Deliberately two plain commands, not a one-line `[ x = y ] && echo ✓` verdict: a
+  // pipeline discards git's exit status, so origin-unreachable (128) would render as
+  // "the tag does not name this commit" — manufacturing the absent/unreachable
+  // conflation. Two commands keep 2 and 128 distinct, and 128 still prints its `fatal:`.
+  // ⚠️ The single quotes around the ref are required for the command to RUN (`^` and `{}`
+  // are shell-special in zsh); they are not claimed as a fix for the unquoted-${tag}
+  // exposure, which is owner-ruled unactioned and unchanged on the line above.
+  console.log(`${rule}\n✓ Pushed ${branch} — tag ${tag} was already on origin; this run did NOT move it`);
+  console.log(`  ⚠ An existence check would pass here whether or not the tag names this release.`);
+  console.log(`  Which commit the tag names:   git ls-remote --exit-code origin 'refs/tags/${tag}^{}'`);
+  console.log(`  Which commit this run pushed: git rev-parse HEAD`);
+  console.log(`  (that peel exits 2 for a lightweight tag; this script only ever makes annotated ones)`);
 }
