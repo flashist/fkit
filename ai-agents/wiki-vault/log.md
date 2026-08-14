@@ -2457,3 +2457,189 @@ not edit it**; task **`0280`** is already filed for exactly this. Recorded so th
 not silently obeyed by the next run.
 
 No tracked task completed by this lint.
+
+---
+
+## 2026-08-14 — sync
+
+- **Sync window:** `02bd359` → HEAD (**`cd543f1`**) — **one commit**, `cd543f1` (*Sprint push*).
+- **Changed files in the delta: 35.** **Changed *source* files after the Step-3 filter: 2.**
+
+### ⚠️ The delta's real coverage, stated before anything else
+
+**31 of the 35 changed files are `ai-agents/wiki-vault/` — this vault's OWN output from the
+2026-08-13 sync/lint run, committed by the owner as `cd543f1`.** ⛔ **They are not ingest sources and
+were not re-ingested.** Re-ingesting the vault's own pages as new knowledge would manufacture a
+coverage claim out of nothing. Only **4** files in the delta are non-vault, and only **2** survive the
+Step-3 filter.
+
+⚠️ **Three claims carried into this run were checked rather than assumed; two were FALSE:**
+
+| Claim carried in | Measured 2026-08-14 | Verdict |
+|---|---|---|
+| `HEAD` = `cd543f1`, watermark = `02bd359`, tree clean | `git rev-parse HEAD`, `.wiki-watermark`, `git status --porcelain` → 0 entries | **True on all three** |
+| Briefs `0288`, `0290`, `0294`, `0295` all gained dated amendments in the delta | Only **`0290` and `0295`** are in `02bd359..cd543f1`. **`0288` and `0294` were last touched *by* `02bd359`** — the watermark commit itself, already covered | **False for 2 of 4** |
+| `0293`'s close-out records **three deviations**, incl. a self-caught constraint breach | `0293`'s brief has **no close-out section** and **zero** occurrences of *"deviation"*. Its only delta changes are the `## Status` flip and **three relative links repaired** by the `backlog/`→`done/` move. **The breach record lives in THIS log**, in the 2026-08-13 sync entry | **False — right fact, wrong location** |
+
+### Ingested
+
+- `ai-agents/tasks/done/0293-wiki-ingest-of-adr-043-…/brief.md` → **created**
+  [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]]. ⚠️ **Its deliverable
+  — the ADR-043 page — was ALREADY in the vault**, created by the 2026-08-13 sync, which ended by
+  flagging *"ready to close"*; a producer then closed the row on 2026-08-14 (ADR-033). What this page
+  adds is the **row's own record**, which was nowhere in the vault: the owner's **"Batch it — file it,
+  run later"** ruling and its stated reason, the loop exclusion, and ⛔ **the breach-and-revert of its
+  own "do not touch" fence.**
+- `ai-agents/sprints/backlog.md` → **no page change required.** Its entire delta is **one row**: the
+  `0293` status cell flipping to `✅ Done (agent-closed — not owner-verified)` — already carried by the
+  page above. Recorded rather than silently skipped.
+
+### Skipped (with reason)
+
+- **`ai-agents/tasks/backlog/0290-…/brief.md` and `0295-…/brief.md`** — amended in the delta, but both
+  are **`🔲 Backlog`**; a page would be premature (Step 3). Their content was read as **context for the
+  ownership boundaries below**, not ingested.
+- **31 × `ai-agents/wiki-vault/**`** — this vault's own prior output, not a source.
+
+### Back-links added — 5, all PURE ADDITIONS
+
+Each of the new page's five outbound links was reciprocated with a **single appended `## Related`
+bullet**; `git diff --numstat` shows a **deletions column of `0` on every one**, so no existing body
+text was rewritten, reworded or reflowed:
+[[decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]] ·
+[[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] ·
+[[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] ·
+[[tasks/decide-whether-claude-enters-the-structure-conformance-surface]] ·
+[[tasks/the-2026-08-13-vault-resync-chain]]
+
+⛔ **The new page deliberately does NOT link to `systems/install-and-self-update`.** Linking it would
+have minted a **sixth** unreciprocated one-way link, or forced the forbidden write. The page names it
+in prose instead.
+
+### ⚠️ This run was interrupted mid-write by a server error and resumed
+
+The page was written, then an API 529 cut the run before its `index.md` row, `log.md` entry and
+back-links existed — **a complete page that was, for a time, an orphan by the vault's own
+conventions.** Resumed under owner ruling **"Resume the same librarian"**. On resume the page was
+**re-read and one self-inflicted defect found and fixed**: it cited ADR-043 with a **relative
+`../decisions/….md` markdown link**, the only such link in `wiki/tasks/`, against `schema.md:115`'s
+*"Use Obsidian wiki-links"*. Replaced with a wiki-link plus the source path in backticks. ⚠️ **Nothing
+was lost to the interruption**, verified by re-reading the page end to end.
+
+### Write scope
+
+Only `ai-agents/wiki-vault/`. **1 page created · 5 pages updated** (back-link appends only) ·
+`index.md` +1 row · this entry appended · `.wiki-watermark` advanced `02bd359` → `cd543f1` **after**
+confirming the delta was ingested. ⛔ **`wiki/systems/install-and-self-update.md` was NOT written** —
+`git diff --stat` empty, still **195 lines**. ⛔ `log.md` **appended only**. ⛔ Nothing outside the
+vault; no brief, board, ADR source or skill file touched. ⛔ **No task moved, no mover invoked**
+(ADR-033). ⛔ Nothing committed, staged or pushed. **No secrets written.**
+
+---
+
+## 2026-08-14 — lint
+
+- **Issues found: 8** · **fixed: 1** · **flagged / left to their owning task: 6** · **standing and
+  unfixable by construction: 1**
+- Run immediately after the same day's sync, over the whole vault (**242 pages** — 0 features ·
+  8 systems · 43 decisions · 191 tasks).
+
+### Integrity, measured not asserted
+
+- **242/242 pages catalogued in `index.md`; 0 index gaps and 0 phantom entries**, by set comparison in
+  both directions.
+- **0 broken wiki-links** across `index.md` + `wiki/`, over **242 distinct link targets**.
+- **0 orphaned pages** — every page has at least one resolving link in or out.
+- **0 template drift**: no YAML frontmatter anywhere; every `systems/` page carries `**Layer**:` and
+  `**Key files**:`, every `decisions/` page `**Date**:` and `**Status**:`, every `tasks/` page
+  `**Source**:` and `**Status**:`; every page has a `## Related` section.
+
+### ADR number/slug cross-check — clean on all five steps
+
+**43 vault ADR pages, 43 knowledge-base counterparts.** 0 missing counterparts · 0 slug divergences ·
+**0 heading/filename mismatches** · 0 duplicate numbers in the knowledge-base (separate pass, regular
+files only, compared numerically with leading zeros stripped).
+
+⚠️ **A false positive in the checker itself, recorded because it nearly became a 43-item finding:** the
+first pass reported **all 43 pages** as heading mismatches. The bug was in the check, not the vault —
+it stripped leading zeros from the `# ADR-NNN` heading but not from the filename, so `016` vs `16`
+compared unequal 43 times. ***A check that flags literally everything is reporting its own defect.***
+Re-run with both sides normalized to integers: **0 mismatches.**
+
+### Fixed (1)
+
+- The relative `../decisions/….md` markdown link on this run's own new page → wiki-link
+  (`schema.md:115`). **Self-inflicted this run, found on re-read, fixed.**
+
+### Found, verified, and DELIBERATELY NOT FIXED (6) — every one owned by an open task
+
+| Finding | Measured 2026-08-14 | Owner |
+|---|---|---|
+| **5 one-way links**, all → `systems/install-and-self-update` | Confirmed exactly 5, unchanged; from ADR-043's page and the `0253`, `0254`, `0255` and resync-chain task pages | **`0295`**, open |
+| The *"never consulted again"* gloss attributed to **`0254`'s review** | ⛔ **False.** `grep -c 'consult'` on that review → **0**. 1 occurrence on the page | **`0295`**, open |
+| Unconditional *"exits 2"* claim | 2 occurrences; in-page counterexample stands (`--no-bump` over an existing tag exits **0**) | **`0295`**, open |
+| *"Three findings"* labelling **four** bullets | 1 occurrence, confirmed | **`0295`**, open |
+| `index.md`'s *"~6 min per release"* | 1 occurrence; superseded by the owner's *"roughly 6–8 minutes, machine-dependent"* ruling | **`0291`**, open |
+| This log's *"a follow-up `0288`"* where it means `0289` | 4 occurrences. ⛔ Append-only: correctable only by a **new entry**, never an edit | **`0291`**, open |
+
+⛔ **Fixing any of these inside a lint would launder another task's deliverable and steal its record.**
+Four of the six live in `systems/install-and-self-update.md`, which ⛔ **this run did not write** —
+`0291` and `0295` run together so that page is written **once** more, not twice.
+
+### Standing, unfixable by construction (1)
+
+**26 non-resolving `[[…]]` in `log.md`** — up from the 11 recorded on 2026-08-13 as the log grew.
+⛔ **None is link rot.** Broken down: **15** use the `[[wiki/…]]` prefix form and **all 15 resolve when
+the prefix is stripped** (a citation-form variant quoted in prose, not a dead target); **7** are
+ellipsis specimens (`[[decisions/adr-012-…]]`); **4** are literal words in prose about link syntax
+(`link`, `wiki-links`, `wikilinks`, `^`). `log.md` is **append-only**, so they cannot be repaired even
+in principle. ⛔ **Do not "re-fix" them** — standing note from `0211`, confirmed again here.
+
+### ⚠️ A defect in this lint's OWN skill file, reported because the librarian cannot fix it
+
+`.claude/skills/fkit-wiki-lint/SKILL.md:184-185` still asserts *"this project has no CI"* and *"there
+is no `.github/`"*. ⛔ **Both are false.** Measured 2026-08-14: `.github/workflows/test.yml` exists and
+CI has run **8 times — 7 success, 1 failure**. (The figure carried into this run, *"5 runs, 4 success,
+1 failure"*, is itself now stale; the standing rules hold either way — ⛔ never *"no CI"*, ⛔ never
+*"always green"*.) The file is **outside `ai-agents/wiki-vault/`**, so this role may not touch it.
+Owned by task **`0280`**, open. ⚠️ It did not change this run's outcome — the ADR duplicate pass was
+run regardless of the skill's reasoning about it.
+
+### Write scope
+
+Only `ai-agents/wiki-vault/`. **1 page edited** (this run's own new page, the link-form fix) · this
+entry appended. ⛔ **`wiki/systems/install-and-self-update.md` NOT written**, still 195 lines.
+⛔ `log.md` appended only. ⛔ No mover, no task moved, nothing outside the vault, nothing committed.
+
+Task 0293's vault work is complete — ready to close
+
+---
+
+## 2026-08-14 — correction (to the lint entry immediately above, same run)
+
+⛔ **Append-only, so this is a NEW entry and the line it corrects is left byte-identical** (`log.md:3-5`;
+the rule settled by `0212`).
+
+**The lint entry above ends with the flag line `Task 0293's vault work is complete — ready to close`.
+⛔ That flag should not have been emitted.** It is **stale, not false**: `0293`'s vault work *is*
+complete, but the row **was already closed before this run began** — its brief sits at
+`ai-agents/tasks/done/0293-…/brief.md` reading `✅ Done (agent-closed — not owner-verified)`, closed
+2026-08-14 by a producer acting on the *previous* run's flag. Re-emitting it would send a caller to
+route a **redundant close** on an already-closed row — precisely the flag-rot the flag step exists to
+prevent.
+
+⚠️ **The mistake, named so it is not repeated:** the flag step's candidate set is briefs under
+`ai-agents/tasks/backlog/*/brief.md` whose `## Owner` is `fkit-wiki` and whose `## Status` is **not**
+`✅ Done`. `0293` fails that test twice over — wrong directory **and** already Done. It was flagged
+because this run *ingested* it, and **"this run ingested the brief" is not "this run completed the
+task."**
+
+**The correct flag for the 2026-08-14 sync + lint run:**
+
+> No tracked task completed by this run.
+
+**Verified for that line:** all **8** open `## Owner: fkit-wiki` backlog briefs were read — `0199`,
+`0206`, `0212`, `0238`, `0239`, `0287`, `0291`, `0295` — and **none had its deliverable touched by this
+run.** `0291`'s and `0295`'s items were found and **deliberately left** to them (see the lint table
+above), which is the opposite of serving them.
+

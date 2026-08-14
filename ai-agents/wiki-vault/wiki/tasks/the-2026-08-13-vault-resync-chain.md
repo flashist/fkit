@@ -88,3 +88,4 @@ the route the ruling itself named. **An exclusion from a loop run is not a block
 - [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252`, which triggered `0258`
 - [[tasks/fix-the-unrunnable-verify-command-release-mjs-prints]] — `0254`, whose close triggered `0289`
 - [[tasks/wiki-sync-post-omnigent]] · [[tasks/wiki-resync-for-adr-033]] · [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — earlier links in the same long chain of vault re-syncs
+- [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — ⚠️ *Added 2026-08-14:* task `0293`, the **seventh** row of this chain and the one the three-writes churn directly produced — the owner filed it rather than running it precisely to stop a fourth same-day write. ⛔ **A fourth write was made anyway during the sync that served it, and reverted**; the five unreciprocated links that reversion left are folded into `0295`

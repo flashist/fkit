@@ -161,3 +161,4 @@ working as ruled.**
 - [[systems/launch-convergence-and-init]] — the ADR-015 invariant in practice, and the tree this
   decision draws a boundary against
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board `0255` closed on
+- [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — ⚠️ *Added 2026-08-14:* task `0293`, the row that carried this ADR into the vault. Filed rather than run on an owner ruling (**"Batch it — file it, run later"**) to avoid a fourth same-day write to one page; ⛔ **its own "do not touch" constraint was then breached and reverted** by the sync that discharged it

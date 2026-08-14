@@ -81,3 +81,4 @@ exclusion held: it shipped through a route that has that gate.
 - [[tasks/build-the-producer-owned-structure-check-skill]] · [[tasks/build-the-hash-manifest-generator-and-completeness-test]] · [[tasks/author-the-structure-spec-and-its-scaffold-inventory-drift-test]] — the machinery this ruling declines to extend
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board it closed on
 - [[systems/launch-convergence-and-init]] · [[systems/install-and-self-update]]
+- [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — ⚠️ *Added 2026-08-14:* task `0293`, the separately-filed row that carried this task's output into the vault. ⛔ **`0255`'s Notes listed an unwritten `.claude/`-conformance implementation brief as blocked on it; under ADR-043 that brief is never written — the thread ENDS rather than defers**
