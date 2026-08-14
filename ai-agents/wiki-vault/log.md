@@ -3095,3 +3095,62 @@ present.
 ### What this run did NOT do
 
 ⛔ Wrote nothing outside `ai-agents/wiki-vault/` — no `RELEASING.md`, no `bin/`, no `test/`, no `claude/`, no knowledge-base, no task brief, no sprint file. ⛔ **Edited no existing `log.md` entry** — this is a new appended entry, per `log.md:3-5`. ⛔ **Invoked no mover and closed no task** (ADR-033). ⛔ **Committed and staged nothing.** ✅ Watermark advanced to `9e61f9bd2086c5901187bde568f883fa9facf7ee` **after** the ingest completed.
+
+---
+
+## 2026-08-14 — ingest (sync; no-op by measurement)
+
+- **Sync window:** `9e61f9bd2086c5901187bde568f883fa9facf7ee` → HEAD (`20f431fded0b9032ca0d44ed5030f21e802cff59`), a single commit (`20f431f "Sprint push"`).
+- **Changed source files detected: 0.** The window carries **17 changed files and all 17 are under `ai-agents/wiki-vault/`** — verified independently, not taken on the caller's word:
+  `git diff --name-only <wm> <head> | grep -v '^ai-agents/wiki-vault/'` returns **nothing**, and the procedure's own Step 2 command (which excludes the vault) returns **0 lines**.
+- **Ingested: nothing, deliberately.** `20f431f` is the commit in which the owner persisted the **previous sync's own output**. ⛔ Those 17 files are the vault's product, not its sources; ingesting them would ingest the vault into itself. The predecessor declined for the same reason and was right to.
+- **Skipped (already covered):** all 17 vault files — wiki output, excluded by Step 3.
+- ⚠️ **Uncommitted work is invisible to a sync and was left alone**: `ai-agents/sprints/backlog.md` and the new brief `0301` are unstaged, so committed history does not see them. ⛔ The working tree was **not** read to compensate — a sync reads committed history, and reaching past that is how a sync starts reporting things no commit contains.
+- ✅ **Watermark advanced** `9e61f9b` → `20f431f`, **after** the window was verified vault-only. It was trailing by one commit and now is not.
+
+## 2026-08-14 — lint
+
+- **Issues found: 3**
+- **Issues fixed: 2**
+- **Issues flagged for human review: 0** — the third is a correction to this log, recorded below.
+- **Most significant issue: a previous entry in this log misreports a link that does not exist.** See the correction note below.
+
+### Scope
+
+Full-vault pass over **247 wiki pages** plus `index.md`, `schema.md` and the ADR cross-check. The vault had taken **two large writes on 2026-08-14** (17 pages, then 15) and **had not been linted since before either** — that concentration is what this run existed to check.
+
+### Clean
+
+- **Broken `[[…]]` targets inside `wiki/`: 0.** *(`schema.md`'s template examples — `[[features/user-auth]]`, `[[systems/job-queue]]` — are placeholders and are supposed to dangle; they are not scanned and are not a defect.)*
+- **Orphans: 0.** Every page has links out **and** at least one inbound link.
+- **`index.md` ↔ files: exact.** 0 pages missing from the index; 0 index entries with no file.
+- **Template drift: 0** across all 247 pages, the four newest included — every page carries its schema-mandated **bold inline** fields and all four section headings.
+- **ADR number/slug cross-check: 0 issues.** 43 knowledge-base ADRs, 43 vault ADR pages; numbers compared **numerically** (leading zeros stripped) over **regular files only**, filenames matched **case-insensitively**, slugs compared **exactly**. No missing counterpart, no slug divergence, no heading/filename mismatch. The separate knowledge-base pass found **no two regular files sharing a number**.
+- **Cited source paths:** a first naive pass flagged 75 paths as missing and was **discarded as false positives** — the vault cites knowledge-base files by relative fragment (`conventions/…`), and cites removed or archived paths (`omnigent/…`, `ai-agents/sprints/sprint-N.md`) **as deliberate dated history**. Re-resolved against real prefixes, the 21 remaining are all either that recorded history or claims the vault already states as absent (`test/skill-ownership-sites.mjs`). ⚠️ **The 54 bare-path `sprints/sprint-5.md` prose mentions are a residual this vault has already recorded and ruled on** ([[tasks/archive-sprint-5-move-the-plan-into-sprints-done]], and the `0236`/`0076` precedent). **Not re-reported.**
+
+### Fixed — 2 one-way links, both minted by 2026-08-14's own writes
+
+Both were reciprocated by appending **one bullet to the target page**, one write per page:
+
+- `wiki/systems/install-and-self-update.md` ← now back-links [[tasks/correct-the-superseded-runtime-figure-on-the-gate-releases-page]] (`0297`). The back-link also carries `0297`'s standing bar forward: cite `.github/workflows/test.yml` and `0252`'s ledger **by anchor**, never re-publish a per-run duration list.
+- `wiki/systems/testing-and-verification.md` ← now back-links [[tasks/the-2026-08-14-retroactive-review-corrections]] (`0291`/`0295`). `0291`'s **report-don't-fix** boundary is why the superseded runtime figure and the barred duration list survived on that page until the post-`0288` sync caught them.
+
+✅ **Re-verified after the writes: 0 broken links, 0 one-way links, 0 orphans across all 247 pages.**
+
+### ⛔ Correction to an earlier entry in this log — appended, never edited
+
+**`log.md:3091` (the 2026-08-14 post-`0288` sync entry) reports a one-way link that does not exist**, and deferred it to this lint. Its wording:
+
+> *"One pre-existing one-way link, NOT introduced here and NOT fixed here: `wiki/tasks/correct-the-five-remaining-prose-sites-…` links [[wiki/tasks/gate-releases-so-an-untested-tree-cannot-ship]] with no back-link."*
+
+⛔ **There is no such link, and there never was one.** `wiki/tasks/correct-the-five-remaining-prose-sites-that-state-the-glob-as-the-mechanism.md` contains **seven** wiki-links and `gate-releases` is not among them; the string `gate-releases` appears in that file **zero** times — **in the current file and in the `9e61f9b` version that predates the entry**, so the entry was wrong when written, not overtaken by a later edit. The reverse direction is absent too.
+
+⚠️ **The likely origin, offered as the probable cause and not as established fact:** `log.md:1905` lists Sprint 5's task pages, and `[[tasks/correct-the-five-remaining-prose-sites-…]]` and `[[tasks/gate-releases-…]]` sit **adjacent on that one line**. An adjacency in a log inventory is not an edge in the link graph.
+
+✅ **Nothing was edited to fix this.** `log.md:3091` stands byte-identical per `log.md:3-5`; this note is the correction. ⛔ **Nothing was "reciprocated" on the strength of the report** — creating the link to make the report true would have manufactured an edge the vault never had, which is worse than the error it was meant to repair.
+
+⚠️ **The lesson, since this vault keeps paying for it:** the 2026-08-13 false attribution that needed task `0295` to remove, and this one, are the **same failure** — a page-relationship asserted from reading rather than from a graph. **A link claim must come from a scan, and a deferred finding must be re-verified by whoever inherits it, never carried forward on trust.**
+
+### What this run did NOT do
+
+⛔ Wrote nothing outside `ai-agents/wiki-vault/`. ⛔ **Edited no existing `log.md` entry** — this is a new appended entry, per `log.md:3-5`. ⛔ Touched `index.md` **not at all** (no page was created or renamed, so it needed no change). ⛔ **Invoked no mover and closed no task** (ADR-033). ⛔ **Committed and staged nothing.**
