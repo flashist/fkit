@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -148,7 +148,7 @@ The `0258` reviewer graded this **partially correct**, and that nuance must surv
 > (see `schema.md` for the format).
 
 **And it is an owner ruling, recorded on
-[`0212`](../0212-append-a-dated-log-entry-correcting-the-still-open-framing/brief.md) (owner ruling
+[`0212`](../../backlog/0212-append-a-dated-log-entry-correcting-the-still-open-framing/brief.md) (owner ruling
 2026-08-03), quoted verbatim from that brief:**
 
 > **A wiki run may NEVER edit or annotate a past `log.md` entry in place.** A correction lands as a
@@ -183,7 +183,7 @@ inside owner-approved plan text and inside a review ledger. Every `:NNN` above i
 ⚠️ **The sprint loop cannot run this row** — the same exclusion recorded on
 [`0258`](../../done/0258-wiki-resync-of-the-install-and-self-update-page-after-0252/brief.md),
 [`0285`](../../done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md),
-[`0287`](../0287-wiki-resync-of-the-codex-sandbox-read-only-pages-after-0273/brief.md) and
+[`0287`](../../backlog/0287-wiki-resync-of-the-codex-sandbox-read-only-pages-after-0273/brief.md) and
 [`0289`](../../done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md):
 **the loop never reads `## Owner`**
 ([ADR-038](../../../knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md)
@@ -400,7 +400,7 @@ Each step is a runnable command. **Paste the command and its output; do not asse
 - **⚠️ Dated note, 2026-08-13 — this row's own brief became an instance of `0290`'s subject.** Closing
   `0289` falsified the two statements corrected above, in the same working session this row was
   filed. **The evidence is recorded in
-  [`0290`](../0290-decide-whether-anything-should-notice-when-a-close-falsifies-a-vault-claim/brief.md)'s
+  [`0290`](../../backlog/0290-decide-whether-anything-should-notice-when-a-close-falsifies-a-vault-claim/brief.md)'s
   `## Notes`, where it belongs.** ⛔ **Nothing about it changes this row's scope, which remains the two
   vault sites named above** — and ⛔ **this row still must not try to answer `0290`'s question**, per
   the *"Relationship to `0290`"* note above, which is unaffected.

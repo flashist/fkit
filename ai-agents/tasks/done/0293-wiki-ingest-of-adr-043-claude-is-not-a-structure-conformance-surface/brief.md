@@ -76,7 +76,7 @@ ADR-042 — one page per ADR, and ADR-043 has none.** `grep -rl "ADR-043" ai-age
 
 ### ⛔⛔ THE BATCHING REQUIREMENT — RUN THIS IN ONE LIBRARIAN SESSION WITH `0291`
 
-[`0291`](../../backlog/0291-correct-two-stale-vault-claims-surfaced-by-0258s-review/brief.md) — *Correct two
+[`0291`](../0291-correct-two-stale-vault-claims-surfaced-by-0258s-review/brief.md) — *Correct two
 stale vault claims surfaced by `0258`'s review* — is **already filed, `🔲 Backlog`, `## Owner:
 fkit-wiki`, and unrun** (verified 2026-08-13). It edits `index.md` and appends to `log.md`.
 

@@ -2643,3 +2643,193 @@ task."**
 run.** `0291`'s and `0295`'s items were found and **deliberately left** to them (see the lint table
 above), which is the opposite of serving them.
 
+## 2026-08-14 — ingest (tasks `0291` + `0295`, one librarian session, ONE write to `systems/install-and-self-update`)
+
+Two owner-ruled correction rows run together in a single `fkit-wiki` pass, deliberately batched:
+`wiki/systems/install-and-self-update.md` had been written **three times on 2026-08-13** (`0285`,
+`0258`, `0289`) and a **fourth write was made and reverted** during the 2026-08-13 sync + lint. This
+run made **exactly one** write to that page, carrying every one of `0295`'s three scope items at once.
+⚠️ **That is the fourth write to the page and the first on 2026-08-14.** Task `0290` is investigating
+that churn; ⛔ **this run answers none of `0290`'s question.**
+
+### Verdict per site
+
+| Site | Verdict |
+|---|---|
+| `index.md` — the `0256` roll-up line (`0291` item 1) | **Corrected in place** |
+| `log.md` — the `0258` ingest entry's `0288` sentence (`0291` item 2) | **Append-only, new entry written** (this one) |
+| `wiki/systems/install-and-self-update.md` — `0289` block, F1 + F2 + count nit + 5 back-links (`0295`) | **Corrected in place, ONE write** |
+| `log.md` — the `0289` ingest entry's `### ⚠️ Addendum, same run` (`0295` F1, log half) | **Append-only, new entry written** (this one) |
+| `wiki/tasks/gate-releases-so-an-untested-tree-cannot-ship.md` — same superseded figure + a duration list | **Out of scope, reported** — see *Flagged* below |
+| `bin/release.mjs`, `.github/workflows/test.yml`, `RELEASING.md` | **Out of scope, untouched** — live accepted residual on `0252` (`review.md:68`) |
+
+---
+
+### `0291` item 1 — `index.md`'s `~6 min per release` was superseded
+
+`index.md` carried *"Measured cost **~6 min per release**"* in the `0256` roll-up line
+([[tasks/gate-releases-so-an-untested-tree-cannot-ship]]). ⚠️ **Measured on disk 2026-08-14 it is at
+`:324`, not `:323` as `0291`'s brief states** — the brief's anchor was one line stale; the quoted text
+is the durable anchor and it matched exactly.
+
+**Superseded by owner ruling 2026-08-13**, verbatim option label **"Range: 'roughly 6–8 minutes,
+machine-dependent'"**, which itself **overrode the owner's own earlier `~6 min` ruling**. The ruled
+wording is on disk at `RELEASING.md:128`, verified this run. The line now reads that range, attributed
+as the ruling it is.
+
+⛔ **No duration list was published**, deliberately. `0291`'s brief forbids it: a previous producer
+could locate `328 / 344 / 347 / 380 / 404 / 448` s on disk but **could not reproduce** several other
+figures quoted to it, and made that unreproducibility a constraint. **The owner ruled a wording; the
+wording is what the vault echoes.** ⛔ Nothing else on that roll-up line changed — the two gates,
+`fetch-depth: 0`, the load-bearing gate position and the `install.sh`-uncovered flag are all
+byte-identical.
+
+### `0291` item 2 — the `0258` ingest entry named `0288` where the owed work is `0289`
+
+⛔ **This is a NEW entry. The line it corrects is left byte-identical** (`log.md:3-5`; the rule settled
+by `0212`, owner ruling 2026-08-03).
+
+**What it corrects, quoted as the durable anchor** — inside the `0258` ingest entry, in the paragraph
+beginning *"⚠️ **Found already-wrong on the page and deliberately NOT repaired — outside `0252`'s
+scope, owed its own resync**"*:
+
+> **`0254` is no longer open** — its brief now sits in `ai-agents/tasks/done/`, and a follow-up `0288`
+> has been filed.
+
+⚠️ **Measured 2026-08-14: that sentence is at `log.md:2094`**, matching `0291`'s own re-measurement
+(the brief's `:2091-2095` range is the paragraph, not the line).
+
+✅ **The grade is PARTIALLY CORRECT, and the correction is an ADDITION, not a reversal.**
+
+- ✅ **`0288` really was filed, really is a same-day follow-up, and really is still open** — verified
+  this run: `ai-agents/tasks/backlog/0288-fix-the-post-release-verify-lines-failing-and-false-green-cases/brief.md`,
+  `## Status` **`🔲 Backlog`**. ⛔ **The old sentence is not false.**
+- ⚠️ **But it misdirects in context.** The paragraph is about an **owed resync of the vault page**.
+  `0288` is the **code-fix** row (`## Owner: fkit-coder`). The **resync** is **`0289`**
+  (`## Owner: fkit-wiki`), which **did not yet exist** when the `0258` entry was written. `0289` is now
+  closed — `ai-agents/tasks/done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md`,
+  `## Status` **`✅ Done (agent-closed — not owner-verified)`**, verified this run — and its correction
+  block is on the page.
+- ⛔ **The old entry was not "wrong".** It named the follow-up it knew about; a second, differently
+  owned follow-up now carries the resync debt it was describing.
+
+---
+
+### `0295` F1 — a FALSE ATTRIBUTION to `0254`'s review, corrected at both of its sites
+
+⛔ **This is a NEW entry. `log.md`'s `:2210-2211` are left byte-identical.**
+
+**What it corrects, quoted as the durable anchor** — inside the `## 2026-08-13 — ingest (task 0289 …)`
+entry, under the sub-heading `### ⚠️ Addendum, same run — a source claim re-measured and found FALSE,
+so it was not carried`:
+
+> **`0288`'s brief and `0254`'s review body both state that `doTag` and `doPush` are "read at `:82-83`
+> and never consulted again."**
+
+The same claim stood on `wiki/systems/install-and-self-update.md` in the `0289` block's first bullet
+(measured `:113` this run, matching `0295`'s brief).
+
+⛔ **`0254`'s review body contains no such clause.** Re-measured 2026-08-14:
+`grep -c 'consult' ai-agents/tasks/done/0254-fix-the-unrunnable-verify-command-release-mjs-prints/review.md`
+→ **`0`**. The word *"consult"* does not occur in that file at all. What that review actually says is
+**narrow and correct**: the flags are set at `bin/release.mjs:82-83` and the **summary block** is
+guarded **only** by `dryRun` — which is true.
+
+#### ⛔ Two over-corrections this entry does NOT make
+
+1. ✅ **The false gloss is REAL.** Its home is **`0288`'s brief** — `grep -c 'consult'` on it returns
+   **6** (re-measured 2026-08-14), and that brief now carries its own dated correction disowning the
+   gloss and explicitly warning readers off `0254`'s ledger. **`0289` blamed `0254` anyway, in the very
+   sentence whose job was to correct a false gloss.** ⛔ **Only the attribution was wrong** — this is
+   not a claim that no false gloss existed.
+2. ✅ **`0289`'s core mechanism sentence was CORRECT and is untouched.** Re-measured this run from
+   `bin/release.mjs`: the summary block is guarded **only** by `dryRun` (the `else` arm of
+   `if (dryRun)` at `:274-277`); `grep -n 'doTag\|doPush' bin/release.mjs` returns **seven** sites —
+   `:82`, `:83`, `:227`, `:250`, `:258`, `:261`, `:267` — and the page's enumeration of them
+   (tag-exists check, branch push, tag creation, tag push, skip-tag branch) is **exact**. ⛔ Nothing
+   here implies that sentence was wrong.
+
+⚠️ **Two mechanisms for one claim, applied as such:** the page half was an ordinary dated in-place
+correction following that page's own convention; the `log.md` half is **this new appended entry**. The
+2026-08-13 text stays standing and wrong-but-dated, exactly as the append-only rule intends.
+
+### `0295` F2 — an unconditional `exits 2` claim, and a count nit
+
+**The claim, on the page:** *"Under `--no-tag` or `--no-push` the script prints `✓ Released <tag>` and
+then a check that **exits 2**"*, sitting beside *"prints on **every** non-dry path"* — which reads as
+covering every non-default path. **It does not.** Re-measured from `bin/release.mjs` this run,
+`--no-bump` over a tag already on origin runs the same check and it **exits 0**:
+
+- `:227` — the already-exists branch only prints *"will skip tag creation"*
+- `:258` — creation is guarded `if (doTag && !localTagExists && !remoteTagExists)`, so none is made
+- `:250` — `if (doPush)` pushes the **branch** regardless
+- `:276` — the verify line prints, and passes against the **stale** tag
+
+The sentence is now scoped to the two flags it belongs to and points at the next bullet.
+✅ **Low severity, and stated as such:** the `--no-bump` false-green bullet immediately follows, so a
+reader of both bullets was never misled — the defect was that the first bullet read as unconditional
+alone.
+
+**Count nit, same block:** the lead-in said *"Three findings"* above **four** bullets. The fourth is a
+deliberate **non-finding** — the `${tag}` exclusion, owner-ruled *"Unactioned — pre-existing"*. The
+wording now says so. ⛔ **The fourth bullet was not deleted**; it exists to stop a reader treating
+`${tag}` as open.
+
+### `0295` third item — five one-way links reciprocated, in the SAME write
+
+A 2026-08-13 sync + lint created five wiki-links pointing **at**
+[[systems/install-and-self-update]] with **no reciprocal back-link**, breaking the vault's
+bidirectional-link convention. ⚠️ **That lint found the gap, fixed it, and then reverted its own fix**
+rather than make a fourth same-day write to that page, recording the reversion as a breach. The
+back-links land here instead. **All five re-verified from disk 2026-08-14 — every source line matched
+`0295`'s enumeration exactly:**
+
+| # | Source page (under `wiki/`) | Line | Verified |
+|---|---|---|---|
+| 1 | `decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee.md` | `:160` | ✅ |
+| 2 | `tasks/decide-whether-claude-enters-the-structure-conformance-surface.md` (task `0255`) | `:83` | ✅ |
+| 3 | `tasks/fix-the-unrunnable-verify-command-release-mjs-prints.md` (task `0254`) | `:85` | ✅ |
+| 4 | `tasks/state-the-per-project-relaunch-step-fkit-update-requires.md` (task `0253`) | `:70` | ✅ |
+| 5 | `tasks/the-2026-08-13-vault-resync-chain.md` | `:84` | ✅ |
+
+**Before:** the target's `## Related` carried **0 of 5**. ⚠️ A `grep -c` for the five slugs returned
+**1**, but that hit is the prose folder path `…/0254-fix-the-unrunnable-verify-command-release-mjs-prints/`
+at `:103` — **not** a wiki-link, and it does not satisfy the back-link. **After:** all five reciprocate.
+
+---
+
+### ⚠️ Flagged for human review — found, NOT fixed here
+
+- **`wiki/tasks/gate-releases-so-an-untested-tree-cannot-ship.md:54` and `:56` carry the same
+  superseded figure — and the duration list `0291` forbids.** `:54` reads *"~6 minutes separate the
+  gate from `git add -A`"*; `:56` reads *"**Measured suite runtime: ~5m30s–6m20s** across four local
+  runs (328 / 380 / 347 / 344 s)"*. ⛔ **Out of scope, reported not fixed** — `0291` scopes item 1 to
+  `index.md` and explicitly directs a content-page occurrence to be **reported** as a separate row's
+  call. ⚠️ **It is not covered by `0252`'s accepted residual either**, which is scoped to
+  `bin/release.mjs` and `.github/workflows/test.yml` only. **This needs a task.**
+- **`systems/install-and-self-update.md:95` — the CI run count is stale.** It reads *"**5 runs — 4
+  success, 1 failure**"*, measured 2026-08-13. Measured 2026-08-14 via `gh run list`: **9 runs — 7
+  success, 1 failure, 1 in progress.** ⛔ **Not fixed** — it sits inside the `0258` **dated** block,
+  where a dated measurement is correct-as-of-its-date by this page's own convention, and it is outside
+  both rows' owner-ruled scope. ✅ **The claim it exists to defeat is unaffected and still true**:
+  neither *"there is no CI"* nor *"CI is always green"* holds — one red run exists.
+- **`.wiki-watermark` is BEHIND `HEAD`.** It reads `cd543f1f9a3cc187cf6049c727367c6095a907e9`; `HEAD`
+  is `e706b0c` (*"Wiki update"*). ⛔ **Deliberately NOT advanced** — this was a targeted correction
+  pass, not a sync. **A sync is owed.**
+- **`0295`'s brief describes the vault as dirty; it is not.** Its 2026-08-14 amendment records *"31
+  uncommitted vault files"* and the five source pages as untracked (`??`). Measured this run,
+  `git status --porcelain ai-agents/wiki-vault/` was **empty before this run began** — commit
+  `e706b0c` landed them. **Superseded by a commit, not an error in the brief.**
+
+### What this run did NOT do
+
+⛔ Wrote nothing outside `ai-agents/wiki-vault/`. ⛔ Did not edit either brief, `backlog.md`,
+`sprint-5.md`, `0288`'s brief, `0254`'s review ledger, `0289`'s brief, or anything under
+`ai-agents/tasks/done/`. ⛔ Did not touch `bin/release.mjs`, `.github/workflows/test.yml` or
+`RELEASING.md`. ⛔ Did not advance `.wiki-watermark`. ⛔ **Invoked no mover, closed no task**
+(ADR-033 — movers are producer-only). ⛔ **Committed and staged nothing.**
+
+**Tasks `0291` and `0295`: vault work complete — ready to close.** ⚠️ Both still read
+`🔄 In progress`; a **producer** closes them, with the `(agent-closed — not owner-verified)` marker if
+the owner is not present.
+

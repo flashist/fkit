@@ -430,7 +430,7 @@ vault write.**
   INSIDE THIS BRIEF. ⛔ RECORDED AS EVIDENCE FOR THE INVESTIGATION. IT DECIDES NOTHING.**
   This row asks whether anything should notice when closing a task falsifies a claim written
   elsewhere. **Closing `0289` falsified three statements inside this row's own brief (above) and two
-  more inside [`0291`](../0291-correct-two-stale-vault-claims-surfaced-by-0258s-review/brief.md)'s —
+  more inside [`0291`](../../done/0291-correct-two-stale-vault-claims-surfaced-by-0258s-review/brief.md)'s —
   in the same working session, the same day both were filed.** ⚠️ *(This producer measured the
   falsification itself; it did not independently measure the elapsed interval, which the `fkit lead`
   session reported as roughly an hour.)*

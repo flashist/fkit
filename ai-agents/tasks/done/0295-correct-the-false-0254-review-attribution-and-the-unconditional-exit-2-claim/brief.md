@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -169,7 +169,7 @@ Two other vault rows are **filed and unrun**:
 
 - [`0291`](../0291-correct-two-stale-vault-claims-surfaced-by-0258s-review/brief.md) — two stale vault
   claims
-- [`0293`](../../done/0293-wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface/brief.md) —
+- [`0293`](../0293-wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface/brief.md) —
   ADR-043 ingest
 
 > ⚠️⚠️ **SUPERSEDED IN PART, 2026-08-14 — `0293` HAS CLOSED.** The heading above and the *"filed and
@@ -183,7 +183,7 @@ Two other vault rows are **filed and unrun**:
 
 ⚠️ **`wiki/systems/install-and-self-update.md` has been written THREE TIMES in one day** — by `0285`,
 `0258` and `0289`. That churn is itself under investigation as
-[`0290`](../0290-decide-whether-anything-should-notice-when-a-close-falsifies-a-vault-claim/brief.md),
+[`0290`](../../backlog/0290-decide-whether-anything-should-notice-when-a-close-falsifies-a-vault-claim/brief.md),
 and `0293`'s brief records the owner's stated reason for batching: **to avoid a fourth vault write in
 a single day.**
 
@@ -331,7 +331,7 @@ not write the vault. Route it to a `fkit wiki` session.
   rows**, so there is no open sprint to file into and Backlog is where an unsprinted brief lands by
   construction. ⚠️ **Measured caveat: the plan's header at `sprint-5.md:3` still reads `🟢 ACTIVE`** —
   the board is finished by row status but not yet marked closed; archiving it is task
-  [`0294`](../0294-archive-sprint-5-move-the-plan-into-sprints-done-and-repoint-every-link/brief.md).
+  [`0294`](../../backlog/0294-archive-sprint-5-move-the-plan-into-sprints-done-and-repoint-every-link/brief.md).
   ⛔ **Not this row's job to fix.** On merit it also belongs on the Backlog: this is
   **synthesized-knowledge maintenance** — no shipped behavior is broken, no other row is blocked on
   it, and F2 is explicitly **low** because the adjacent bullet already supplies its exception.
@@ -385,7 +385,7 @@ convention.
 The librarian **found them, reciprocated them, and then reverted the fix.** Adding the back-links
 would have made the **lint itself a FOURTH write to that page in a single day** — precisely the churn
 the owner's 2026-08-13 batching ruling exists to limit, and precisely what task
-[`0290`](../0290-decide-whether-anything-should-notice-when-a-close-falsifies-a-vault-claim/brief.md)
+[`0290`](../../backlog/0290-decide-whether-anything-should-notice-when-a-close-falsifies-a-vault-claim/brief.md)
 is investigating. The run recorded the reversion as a **breach, not a near-miss**, in
 `ai-agents/wiki-vault/log.md` (the `### ⛔ A FOURTH write to \`systems/install-and-self-update\` was
 MADE AND THEN REVERTED` section).
