@@ -281,23 +281,53 @@ if (doTag && !localTagExists && !remoteTagExists) {
 //
 // Deriving end state from flags is sound here because every git call above runs with
 // `check: true`: a failed push calls fail() and exits 1, so this block is reached only
-// when every git command succeeded. And nothing in the run can change remoteTagExists
-// except our own tag push, which tagPushed already accounts for.
+// when every git command succeeded.
+//
+// ⚠️ THE ONE ASSUMPTION, STATED HONESTLY (review R2, 2026-08-14): `tagOnOrigin` assumes the
+// branch push at :250-252 moves no tags. That is git's DEFAULT, not a guarantee. Under a
+// maintainer's global `push.followTags=true`, `git push origin <branch>` also publishes any
+// annotated tag reachable from the pushed ref — MEASURED: a local-only v0.1.0 lands on origin
+// during step 2, before the :258 block is skipped. `remoteTagExists` was read pre-run at :219,
+// so it cannot see that, and the UNFINISHED branch below then says "NOT pushed" of a tag that
+// WAS pushed (its recovery command becomes a harmless no-op, not a wrong-tag push).
+// ⛔ It is not fixed here by re-reading origin: that would add a network round-trip to every
+// run, and 0288 is fenced to this block. The fixture pins `push.followTags=false` so the suite
+// measures the documented default rather than the machine it happens to run on.
 const tagCreated = doTag && !localTagExists && !remoteTagExists; // the tag block at :258 ran
 const tagPushed = tagCreated && doPush; //                          its `git push origin <tag>` ran
-const tagOnOrigin = remoteTagExists || tagPushed; //                the tag is on origin now
+const tagOnOrigin = remoteTagExists || tagPushed; //                the tag is on origin now (see ⚠️ above)
 
 const rule = `\n${"─".repeat(48)}`;
 if (dryRun) {
   console.log(`${rule}\nDry run — nothing was changed. Re-run without --dry-run to release.`);
 } else if (!doPush) {
   // Nothing left this machine — so nothing on origin can be verified.
+  //
+  // ⛔ THE TAG SUB-BRANCHES READ THE MEASURED STATE (:218-220), NOT `doTag` ALONE — the same ⛔ the
+  // top of this block states, which this branch used to violate (review R1, 2026-08-14). With a tag
+  // that already existed, this run created NOTHING, so "committed and tagged locally only" is false
+  // and a recovery derived from the flags is actively harmful. Both cases measured:
+  //   * tag already here at an OLDER commit → `git push origin <tag>` publishes a tag naming some
+  //     other commit, manufacturing the exact R2 false green this task exists to prevent;
+  //   * tag on origin with no local ref → that same command exits 1, `src refspec … does not match any`.
+  //
+  // ⚠️ HEAD, not ${branch}, is the right comparison HERE. The other branches compare against
+  // ${branch} because that is the ref they pushed; this one pushed nothing, and the commit this run
+  // made — and any tag it created — is at HEAD.
   console.log(`${rule}\n⚠ NOT released — nothing was pushed${doTag ? " (--no-push)" : ", no tag created"}`);
-  if (doTag) {
+  if (!doTag) {
+    console.log(`  ${tag} is committed locally only.`);
+  } else if (tagCreated) {
     console.log(`  ${tag} is committed and tagged locally only.`);
     console.log(`  Finish it with: git push origin ${branch} && git push origin ${tag}`);
+  } else if (remoteTagExists) {
+    console.log(`  ${tag} is committed locally; no tag was created — ${tag} is already on origin.`);
+    console.log(`  ⚠ Nothing here moved it, and an existence check passes whether or not it names this release.`);
+    console.log(`  Push the branch when ready: git push origin ${branch}`);
   } else {
-    console.log(`  ${tag} is committed locally only.`);
+    console.log(`  ${tag} is committed locally; no tag was created — ${tag} already existed locally.`);
+    console.log(`  ⚠ Check what it names before pushing it: git rev-parse '${tag}^{}'  vs  git rev-parse HEAD`);
+    console.log(`  Then: git push origin ${branch} && git push origin ${tag}`);
   }
 } else if (!doTag) {
   // Commits WERE published — say so. `--no-tag` is not a no-op release.
@@ -315,7 +345,9 @@ if (dryRun) {
   console.log(`  The tag already existed locally, so tag creation was skipped — and the tag push`);
   console.log(`  lives inside that same skipped step, so it never ran.`);
   console.log(`  Finish it by hand:  git push origin ${tag}`);
-  console.log(`  ⚠ Check what it names first: git rev-parse '${tag}^{}'  vs  git rev-parse HEAD`);
+  // ⚠️ `${branch}`, NOT HEAD (review R5): :252 pushed ${branch}, and under `--branch <other>` HEAD is
+  // still on the current branch — so HEAD compares the tag against a commit this run did not publish.
+  console.log(`  ⚠ Check what it names first: git rev-parse '${tag}^{}'  vs  git rev-parse ${branch}`);
 } else if (tagCreated) {
   // The default path. The headline is byte-identical to pre-0288; the verify command
   // gains a speaking failure branch (R5) — see the owner's OQ1(A) ruling, 2026-08-14.
@@ -340,7 +372,14 @@ if (dryRun) {
   // exposure, which is owner-ruled unactioned and unchanged on the line above.
   console.log(`${rule}\n✓ Pushed ${branch} — tag ${tag} was already on origin; this run did NOT move it`);
   console.log(`  ⚠ An existence check would pass here whether or not the tag names this release.`);
-  console.log(`  Which commit the tag names:   git ls-remote --exit-code origin 'refs/tags/${tag}^{}'`);
-  console.log(`  Which commit this run pushed: git rev-parse HEAD`);
-  console.log(`  (that peel exits 2 for a lightweight tag; this script only ever makes annotated ones)`);
+  // ⚠️ THE PEEL GETS THE SAME SPEAKING TAIL AS THE DEFAULT PATH (review R3): a foreign LIGHTWEIGHT
+  // tag has no peeled ref, so this exits 2 with EMPTY stdout AND stderr — measured, and R5's exact
+  // defect signature in code 0288 itself added. ⛔ Keep this ONE source line: prove-red mutation 20
+  // replaces the whole line, and a `+` continuation would be orphaned into a syntax error.
+  console.log(`  Which commit the tag names:   git ls-remote --exit-code origin 'refs/tags/${tag}^{}' || { echo "✗ could not resolve what ${tag} names on origin (git exit $?)"; false; }`);
+  // ⚠️ `${branch}`, NOT HEAD (review R5): :252 pushed ${branch}; under `--branch <other>` HEAD is not it.
+  console.log(`  Which commit this run pushed: git rev-parse ${branch}`);
+  // ⛔ The old caveat here justified itself with "this script only ever makes annotated tags" — a
+  // non-sequitur on the one branch that fires for a tag THIS RUN DID NOT CREATE. Say what happens.
+  console.log(`  (a lightweight tag has no peeled ref: the peel exits 2, and the ✗ line above says so)`);
 }

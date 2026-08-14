@@ -77,6 +77,6 @@ structure-check design with its owner rulings — plus the eight structure-check
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174`, whose follow-ups 4/5/8 became `0181`/`0182`/`0185`
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the Backlog board, unranked by design, where unsprinted work continues to land
 - [[tasks/sprint-4-ship-the-use-ready-self-healing-update]] — the successor board, which built the `0241` design's eight follow-ups and was itself archived unverified
-- [[tasks/sprint-5-fix-what-a-real-project-found]] — 🟢 **the ACTIVE board** since 2026-08-10
+- [[tasks/sprint-5-fix-what-a-real-project-found]] — ⚠️ *Corrected 2026-08-14:* this read *"🟢 **the ACTIVE board** since 2026-08-10"*. Sprint 5 opened 2026-08-10 and is now 🔒 **CLOSED and archived** at `ai-agents/sprints/done/sprint-5.md` (task `0294`). ⚠️ **There is no active board at all right now** — `dashboard.sh select-active ai-agents/sprints` returns `active none`
 - [[tasks/design-the-post-update-structure-check]] — `0241`, this board's out-of-band row, whose follow-ups became the whole of Sprint 4
 - [[systems/fkit]]

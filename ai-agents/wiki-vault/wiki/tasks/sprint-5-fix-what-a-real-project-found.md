@@ -1,7 +1,7 @@
 # Sprint 5 — Fix what a real project found, and make a release safe to cut
 
-**Source**: `ai-agents/sprints/sprint-5.md`
-**Status**: in-progress — 🟢 **THE ACTIVE BOARD**, opened 2026-08-10 by owner ruling
+**Source**: `ai-agents/sprints/done/sprint-5.md`
+**Status**: done — 🔒 **CLOSED and ARCHIVED**, opened 2026-08-10 by owner ruling, archived by owner ruling 2026-08-13 and executed 2026-08-14
 **Sprint/Tag**: Sprint 5 · **17 rows** · ranks restart at `P1` — *cite a rank with its board; a bare `P4` is ambiguous*
 
 > ✅ **CORRECTED 2026-08-13 by the wiki sync — ALL 17 ROWS ARE NOW CLOSED.** The `**Status**` line
@@ -16,6 +16,49 @@
 > ⚠️ **Every one of the 17 carries `(agent-closed — not owner-verified)` — no human has checked any of
 > them.** Stated here because the same flag on Sprint 4 is what makes this board's own foundation
 > ambiguous (see below).
+
+> ## 🔒 **SUPERSEDED 2026-08-14 — THE BOARD IS NOW ARCHIVED. `0294` HAS RUN.**
+>
+> The 2026-08-13 block above is left **byte-identical** and is now **false in its central claim**. It
+> said *"The board is NOT archived, and this page stays `in-progress` for that reason"* and named
+> `0294` **not yet run**. ⚠️ **The stated reason no longer holds**, so the page no longer stays
+> `in-progress`.
+>
+> ⛔ **The `**Source**` and `**Status**` header fields WERE changed in this run — deliberately, and
+> against the 2026-08-13 block's own sentence *"The `**Status**` line above is left byte-identical."***
+> Those two are **schema metadata fields**, not dated prose: `schema.md` defines them as the page's
+> current `Source` / `Status`, and a metadata field that records a false current state is a defect, not
+> history. The dated **prose** blocks stay byte-identical; the **fields** track today. That sentence in
+> the 2026-08-13 block is therefore superseded by this one.
+>
+> **Verified on disk 2026-08-14:**
+> - The plan now lives at **`ai-agents/sprints/done/sprint-5.md`** — the move is committed (`ce6bf54`),
+>   detected as a rename of `ai-agents/sprints/sprint-5.md`.
+> - Its banner now reads **`## 🔒 CLOSED — 2026-08-13.`** — no longer `🟢 ACTIVE`.
+> - `bash claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints` returns
+>   **`active none`**, with `backlog.md` (identity `Backlog`) the only candidate — and `Backlog` is
+>   never eligible. ⚠️ **There is no active board at all right now.**
+> - `0294`'s brief reads **`✅ Done (agent-closed — not owner-verified)`**.
+>
+> **The archival's authority, both halves, quoted rather than paraphrased.** Owner ruling **2026-08-13**
+> via `AskUserQuestion` in a live `fkit lead` session — the option label is the verbatim text:
+> **"Move it — as its own scoped task"**, which ruled the archival be done as its own scoped brief
+> (`0294`) rather than inline, *because the move is far larger than a banner edit looks*. A **second
+> ruling of the same session**, same channel, ruled the banner's wording: verbatim
+> **"Omit the successor clause"**. ⚠️ **There is no Sprint 6 and none was opened at archival**, so the
+> banner names no successor. ⛔ **That is the no-successor case ruled on its own facts and it
+> establishes NO convention** — the four earlier archives each rolled into a real successor, and that
+> remains the normal case. Executed **2026-08-14** by a spawned `fkit-producer` with no owner channel,
+> which asked nothing and decided nothing beyond the mechanics.
+>
+> ⛔ **Archival changes nothing about verification.** All 17 rows keep
+> `(agent-closed — not owner-verified)`; **no human has checked any of them**, and closing the board
+> does not retroactively verify one row.
+>
+> ⚠️ **`0294`'s own brief close is staged in the working tree but NOT committed** at the time of this
+> write. The *effect* — the plan's move and the link repointing — **is** committed; the brief's move
+> from `tasks/backlog/` to `tasks/done/` is not. Recorded so a later reader is not surprised by the
+> gap.
 
 ## Goal
 
@@ -162,3 +205,5 @@ ranks are **stale by design**.
 - [[tasks/decide-whether-claude-enters-the-structure-conformance-surface]] — `0255` (P15, closed 2026-08-13), the board's only owner-signed decision row
 - [[decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]] — `0255`'s output
 - [[tasks/the-2026-08-13-vault-resync-chain]] — the six vault-maintenance rows closed 2026-08-13 (`0269` and `0258` from this board; `0263`, `0282`, `0285`, `0289` from Backlog), and the churn they exposed
+- [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — ⚠️ *Added 2026-08-14:* task `0293`, which recorded this board as **unarchived** hours before `0294` archived it
+- [[tasks/the-2026-08-14-retroactive-review-corrections]] — ⚠️ *Added 2026-08-14:* tasks `0291` and `0295`, the retroactive-review corrections to two of this board's own vault outputs (`0258`'s and `0289`'s)

@@ -94,7 +94,7 @@ them — which is true.
 #### ⚠️ The sharpest part — carry it, it is why this is medium and not low
 
 The false gloss exists **only** in `0288`'s brief. And **`0288`'s brief now says so itself**, in a
-dated correction at `ai-agents/tasks/backlog/0288-fix-the-post-release-verify-lines-failing-and-false-green-cases/brief.md:350-375`,
+dated correction at `ai-agents/tasks/done/0288-fix-the-post-release-verify-lines-failing-and-false-green-cases/brief.md:350-375`,
 which quotes the superseded R1 sentence and explicitly warns readers **not** to go blame `0254`'s
 ledger.
 
@@ -331,7 +331,7 @@ not write the vault. Route it to a `fkit wiki` session.
   rows**, so there is no open sprint to file into and Backlog is where an unsprinted brief lands by
   construction. ⚠️ **Measured caveat: the plan's header at `sprint-5.md:3` still reads `🟢 ACTIVE`** —
   the board is finished by row status but not yet marked closed; archiving it is task
-  [`0294`](../../backlog/0294-archive-sprint-5-move-the-plan-into-sprints-done-and-repoint-every-link/brief.md).
+  [`0294`](../0294-archive-sprint-5-move-the-plan-into-sprints-done-and-repoint-every-link/brief.md).
   ⛔ **Not this row's job to fix.** On merit it also belongs on the Backlog: this is
   **synthesized-knowledge maintenance** — no shipped behavior is broken, no other row is blocked on
   it, and F2 is explicitly **low** because the adjacent bullet already supplies its exception.

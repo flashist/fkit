@@ -109,6 +109,17 @@ and is cheaper as **provenance than as conformance**.
   would **under-describe** the check, because **Table B includes the root `CLAUDE.md` and
   `AGENTS.md`**, which are not under `ai-agents/`. ⛔ **Not applied in the ADR** (`0255`'s
   no-implementation fence); owner-ruled **"Its own follow-on brief"**.
+  > ✅ **DISCHARGED 2026-08-14 — `README.md:54` is NO LONGER WRONG.** The bullet above is left
+  > **byte-identical** as the record of the decision. The follow-on brief it ruled for is **`0292`**,
+  > and its edit is committed in `ce6bf54`. The line now scopes the signal to *"your project's
+  > `ai-agents/` tree, or its root `CLAUDE.md` / `AGENTS.md`"* and adds an explicit parenthetical that
+  > **the fkit agents and skills under `.claude/` are not part of that check, because a launch rewrites
+  > them outright, so there is nothing to diverge.** ✅ **It avoided the wrong remedy this bullet warned
+  > about** — it did **not** scope the line to `ai-agents/` alone, so Table B's root `CLAUDE.md` /
+  > `AGENTS.md` are still described.
+  > ⚠️ **`0292`'s brief close is staged in the working tree but NOT committed** at the time of this
+  > write, so this sync did **not** ingest `0292` as a done task; only its landed effect on `README.md`
+  > is recorded. The row is flagged for the next sync.
 - **C7 — A refresh *receipt* is PERMITTED, not required.** The ruling rules out `.claude/` as a
   **conformance surface**; it does **not** forbid init recording what it refreshed *from*, as
   **provenance rather than classification**. ⛔ **Nothing is being built and nothing is filed** — the

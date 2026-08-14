@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -141,7 +141,7 @@ All runnable from the repo root.
   [`0291`](../../done/0291-correct-two-stale-vault-claims-surfaced-by-0258s-review/brief.md)'s
   content-page **reporting** instruction (`:220`, `:246`). **Owner ruling 2026-08-14, verbatim option
   label: *"Fold into the mechanism task's filing run"*** — meaning filed in the **same run** as
-  [`0296`](../0296-decide-what-catches-a-task-brief-that-has-no-board-row/brief.md), as its **own
+  [`0296`](../../backlog/0296-decide-what-catches-a-task-brief-that-has-no-board-row/brief.md), as its **own
   separate brief**. ⛔ The two tasks are **unrelated in substance** and share nothing but a filing run;
   do not treat `0296` as context for this work.
 - **⛔ RUNS IN A `fkit wiki` SESSION, NOT `/fkit-sprint-ship-loop`.** Vault writes are `fkit-wiki`'s

@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -35,9 +35,9 @@ pre-existing"** — finding **R4** (unquoted `${tag}` interpolation) is **out**.
 ### The origin, and the evidence trail
 
 Every fact below comes from
-[`0254`](../../done/0254-fix-the-unrunnable-verify-command-release-mjs-prints/brief.md)'s two-party
+[`0254`](../0254-fix-the-unrunnable-verify-command-release-mjs-prints/brief.md)'s two-party
 review ledger,
-[`review.md`](../../done/0254-fix-the-unrunnable-verify-command-release-mjs-prints/review.md) — the
+[`review.md`](../0254-fix-the-unrunnable-verify-command-release-mjs-prints/review.md) — the
 reviewer's *Reviewer findings* section **and** the coder's *Coder response*, which independently
 re-measured every finding and **corrected the reviewer in two places**. ⚠️ **This brief is written
 against the corrected facts.** Where the ledger's findings table and its body disagree, the body and
@@ -204,7 +204,7 @@ and it must leave the default path exactly as it is.
   fkit makes no npm-registry publish. Settled under `0254` and **not reopened here**.
 - ⛔ **A second printed line explaining that installs track `main` rather than the tag** —
   owner-ruled 2026-08-13, verbatim *"No — leave it out"*. That is
-  [`0252`](../../done/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md)'s
+  [`0252`](../0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md)'s
   deliverable. **Settled under `0254` and not reopened here.**
 - ⛔ **Any change to bump logic, tag logic, push logic, or the `--dry-run` branch.** This task owns the
   **summary block** and whatever guard the fix needs, nothing else in the file.
@@ -274,9 +274,9 @@ integrity afterwards and record it** — `HEAD`, the local tag count, `VERSION`,
 - **Depends on:** nothing
 - **Blocks:** nothing
 - **Origin:** findings **R1**, **R2** and **R5** of
-  [`0254`](../../done/0254-fix-the-unrunnable-verify-command-release-mjs-prints/brief.md)'s stateful
+  [`0254`](../0254-fix-the-unrunnable-verify-command-release-mjs-prints/brief.md)'s stateful
   review. **Evidence trail:**
-  [`0254`'s `review.md`](../../done/0254-fix-the-unrunnable-verify-command-release-mjs-prints/review.md)
+  [`0254`'s `review.md`](../0254-fix-the-unrunnable-verify-command-release-mjs-prints/review.md)
   — read **both** the *Reviewer findings* and the *Coder response* sections; the latter carries the
   independent re-measurement, and it corrects the former in two places (R1's reach, R5's wording).
   Build evidence is in that folder's `worklog.md`. ⚠️ **See the path note in `## Context`** — `0254`
@@ -334,7 +334,7 @@ integrity afterwards and record it** — `HEAD`, the local tag count, `VERSION`,
   only **append** below the board's largest rank (ADR-035, `/fkit-task-brief` step 5), which is a
   position no one believes reflects its merit. **A rank nobody meant is worse than no rank.**
 - **Precedent, same day, same loop:**
-  [`0284`](../0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md) — also a
+  [`0284`](../../backlog/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md) — also a
   deferred review finding from a Sprint 5 task, also filed by a spawned producer on an owner ruling —
   went to the **Backlog** board on the same reasoning.
 - **⚠️ On merit, flagged for the owner — there is a real argument for pulling this into Sprint 5.**
@@ -419,7 +419,7 @@ the guard still belongs on the summary block, and all four numbered requirements
 ### Where the gloss came from — and ⛔ do not go edit it
 
 The `:82-83` citation and the "guarded only by `dryRun`" framing were inherited from
-[`0254`'s `review.md`](../../done/0254-fix-the-unrunnable-verify-command-release-mjs-prints/review.md)
+[`0254`'s `review.md`](../0254-fix-the-unrunnable-verify-command-release-mjs-prints/review.md)
 (*Reviewer findings* R1 at `:51-52`, *Coder response* R1 at `:250-252`). ⚠️ **Read on disk
 2026-08-13: that ledger does NOT contain the false clause.** Both of its passages say the flags are
 *read at `:82-83`, **but the summary block** is guarded only by `dryRun`* — which is correct and
@@ -461,7 +461,7 @@ defects"*, read **four**:
 
 **N1 is deliberately NOT numbered in `0254`'s R-series** — it did not come from that ledger, and a
 reader must not go looking for it there. It was surfaced by an independent review of
-[`0289`](../../done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md)'s vault output and **confirmed against the source by the `fkit lead` session**,
+[`0289`](../0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md)'s vault output and **confirmed against the source by the `fkit lead` session**,
 then **re-derived from disk a third time by this producer before being written here**.
 
 ### N1 (high) — tag local-only: the tag push never runs, nothing says so, and the printed check fails
@@ -515,7 +515,7 @@ local-only branch**: that with `localTagExists` true and `remoteTagExists` false
 it. **The lines were cited; this consequence was not derived.** That is a genuinely new finding on
 ground the brief already touches.
 
-⛔ **This is NOT a defect in [`0289`](../../done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md) and must not be recorded as one.** `0289`'s page
+⛔ **This is NOT a defect in [`0289`](../0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md) and must not be recorded as one.** `0289`'s page
 never claimed to enumerate this file's failure modes exhaustively, so it stated nothing false. It was
 the review **of** that output that surfaced N1. Do not open a correction against `0289`.
 

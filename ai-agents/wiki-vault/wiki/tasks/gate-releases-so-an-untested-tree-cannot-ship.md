@@ -51,11 +51,30 @@ exactly as the user left it. Gating any later would leave `VERSION` and `package
 dirty, and the next default run would **bump again — silently skipping a version.** And it
 **deliberately does not require a clean tree**, because both `npm test` and `git add -A` read the
 working tree; gating here tests **the tree as it stood when the suite started, uncommitted work
-included** — *not the exact committed bytes*, since ~6 minutes separate the gate from `git add -A`.
+included** — *not the exact committed bytes*, since **roughly 6–8 minutes, machine-dependent**
+separate the gate from `git add -A`.
 
-**Measured suite runtime: ~5m30s–6m20s** across four local runs (328 / 380 / 347 / 344 s), i.e. ~55 s
-of unit tests plus `prove-red.sh` re-running the suites against 15 mutants and 9 clean baselines. That
-number is the cost the owner accepted, stated rather than implied.
+**Suite runtime: roughly 6–8 minutes, machine-dependent.** The cost is ~55 s of unit tests plus
+`prove-red.sh` re-running the suites against 15 mutants and 9 clean baselines. That is the cost the
+owner accepted, stated rather than implied.
+
+> ✅ **CORRECTED 2026-08-14 by task `0297` — the two paragraphs above carry the RULED figure now, and
+> the earlier text is replaced rather than annotated, because that is what the row required.**
+> **Authority: owner ruling 2026-08-13**, verbatim option label ***"Range: 'roughly 6–8 minutes,
+> machine-dependent'"*** — which **overrode an earlier `~6 min` ruling of the owner's own**. The ruled
+> wording is live at `RELEASING.md:128` (verified 2026-08-14): *"A green run takes **roughly 6–8
+> minutes, machine-dependent**."*
+> ⛔ **No per-run duration list is published here, and one must not be added back.**
+> [[tasks/the-2026-08-14-retroactive-review-corrections]] (`0291`) **barred** publishing a tally of
+> measured seconds: a 2026-08-13 sweep could locate only some of the figures on disk and **could not
+> reproduce the rest**, and `0291` turned that unreproducibility into a **constraint, not a footnote**.
+> ⛔ **Replacing four numbers with six better-sourced numbers is not the fix** — it is the same defect
+> with fresher data. To cite evidence, cite `.github/workflows/test.yml` and `0252`'s review ledger
+> **by anchor**, never as a set.
+> ⚠️ **A newer measurement exists and is deliberately NOT recorded here as current fact.** Task `0288`
+> measured a longer `npm test` today; the owner accepted that cost, but the figures were taken under
+> CPU contention and **`0288` has not landed**. Until it does, the ruled range above is the vault's
+> figure. **Flagged, not pre-empted.**
 
 ### ⚠️ fkit's first-ever CI run went RED — and found a real defect
 
@@ -84,3 +103,4 @@ the highest-blast-radius file in the repo. **CI landing does not close that gap.
 - [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252` (2026-08-13): the document that **records** this gate and its CI half. ⚠️ Its §4 corrects `0252`'s own brief, which asserts *"CI HAS NEVER RUN"* — measured 2026-08-13, **5 runs, 4 success, 1 failure**, and the failure was a real catch
 - [[tasks/fix-the-unrunnable-verify-command-release-mjs-prints]] — `0254`, the post-release verify line printed after this gate passes
 - [[tasks/the-2026-08-13-vault-resync-chain]] — task `0282`, the vault re-sync of the **no-CI claims** this task falsified
+- [[tasks/the-2026-08-14-retroactive-review-corrections]] — ⚠️ *Added 2026-08-14:* tasks `0291` and `0295`. `0291` fixed the same superseded runtime figure on `index.md` and **barred the per-run duration list**; the surviving occurrences on **this** page were reported-not-fixed there, and became task `0297`, which corrected them above

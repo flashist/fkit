@@ -63,6 +63,13 @@ receipt).
   records the fix and **refuses to apply it**; a follow-on docs brief owns it (`0292`). ⚠️ **The
   obvious remedy is itself wrong** — scoping the line to `ai-agents/` would **under-describe** the
   check, because the spec's Table B includes the root `CLAUDE.md` and `AGENTS.md`.
+  > ✅ **NO LONGER TRUE AS OF 2026-08-14 — `README.md:54` has been fixed by `0292`.** The bullet above
+  > is left **byte-identical**; it correctly records what **this** task deliberately did not settle.
+  > The follow-on brief landed: the line now reads *"your project's `ai-agents/` tree, or its root
+  > `CLAUDE.md` / `AGENTS.md`"*, with an explicit note that `.claude/` is out of the check because a
+  > launch rewrites it outright. ✅ **The wrong remedy warned about here was avoided.** Committed in
+  > `ce6bf54`; ⚠️ **`0292`'s own brief close is staged but not committed**, so this sync recorded the
+  > landed effect only and flagged the row for the next sync.
 - **ADR-015 and ADR-039 are neither touched nor amended** — the ADR says so explicitly in two numbered
   consequences, so a later reader does not go hunting for edits that were never made.
 

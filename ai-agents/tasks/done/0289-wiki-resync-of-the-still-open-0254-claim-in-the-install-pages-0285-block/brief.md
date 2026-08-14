@@ -64,7 +64,7 @@ here … and **owes its own resync** — the wiki does not file tasks."* ⛔ **D
      console.log(`  Verify tag on origin: git ls-remote --exit-code --tags origin ${tag}`);
    ```
 3. **A narrower, separate defect set on the REPLACEMENT line is OPEN** as
-   [`0288`](../../backlog/0288-fix-the-post-release-verify-lines-failing-and-false-green-cases/brief.md)
+   [`0288`](../0288-fix-the-post-release-verify-lines-failing-and-false-green-cases/brief.md)
    (`🔲 Backlog`, `## Owner: fkit-coder`), by owner ruling of the same day (verbatim labels
    **"File a follow-up task, ship 0254 now"** and **"Fold into the R1/R2 follow-up"**). It carries
    `0254`'s review findings **R1**, **R2** and **R5**:

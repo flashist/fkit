@@ -2833,3 +2833,214 @@ at `:103` — **not** a wiki-link, and it does not satisfy the back-link. **Afte
 `🔄 In progress`; a **producer** closes them, with the `(agent-closed — not owner-verified)` marker if
 the owner is not present.
 
+---
+
+## 2026-08-14 — sync + ingest (batched: `/fkit-wiki-sync` delta, task `0297`, and the claims falsified by `0294`'s close)
+
+⛔ **This is a NEW entry. Every earlier entry is left byte-identical**, including `:1899`, `:2274`,
+`:2353`, `:2441-2442` and `:2481`, all of which this entry supersedes in substance. `log.md:3-5` —
+*"Never edit or rewrite existing entries; only append"* — admits no exception, and the rule was
+re-affirmed as an owner ruling on `0212` (2026-08-03).
+
+**Run shape:** one librarian pass, batched **deliberately** by the caller so that no page is rewritten
+twice in a day. Prior history on this vault: `wiki/systems/install-and-self-update.md` was written
+**three times on 2026-08-13** by three separate passes, and a fourth attempt was reverted mid-run.
+**Every page below was written exactly once in this pass.**
+
+- **Sync window:** `cd543f1f9a3cc187cf6049c727367c6095a907e9` → HEAD
+  (`ce6bf5495c5fd57d0153cba3cece84721343fd43`), three commits: `e706b0c` (*"Wiki update"*), `c23e322`
+  and `ce6bf54` (both *"Sprint push"*).
+- **Changed source files detected** under `ai-agents/`, excluding the vault: **26**.
+- ⚠️ **Synced from COMMITTED HISTORY, not the working tree.** The tree was dirty and being written by
+  another agent during this run.
+
+---
+
+### Job 1 — the delta
+
+#### Ingested
+
+- `ai-agents/sprints/done/sprint-5.md` (renamed from `ai-agents/sprints/sprint-5.md` in `ce6bf54`) →
+  **updated** [[tasks/sprint-5-fix-what-a-real-project-found]] — the archival. `**Source**` and
+  `**Status**` fields repointed and reopened as `done`; a new dated block records the two owner
+  rulings, the no-successor case, and that **archival verifies nothing**.
+- `ai-agents/tasks/done/0291-…/brief.md` and `ai-agents/tasks/done/0295-…/brief.md` → **created**
+  [[tasks/the-2026-08-14-retroactive-review-corrections]]. ⚠️ **Two tasks, one page, on this vault's
+  own precedent** ([[tasks/the-2026-08-13-vault-resync-chain]] records six rows together *because the
+  chain is the finding*): both rows exist because a vault page shipped **unreviewed**, both retroactive
+  reviews left **no artifact on disk**, and both ran as **one write**. ⛔ They remain two tasks; neither
+  ID substitutes for the other.
+- `README.md`'s rescope (`ce6bf54`, task `0292`) → **four vault sites corrected**, because the landing
+  falsified a claim each of them carried. ⚠️ **`README.md` is outside `ai-agents/`, so the sync's own
+  path filter never surfaces it** — it was carried in on the caller's instruction, and is recorded here
+  so a future sync does not assume the filter covered it.
+
+#### Skipped, with the reason
+
+- `ai-agents/tasks/backlog/0288-…/{brief,plan,worklog}.md` — ⛔ **`0288` IS IN FLIGHT AND WAS NOT
+  INGESTED AS FINISHED.** A coder was mid-task on it during this run; its review ledger is open with
+  **7 findings**; `bin/release.mjs`, `test/release-summary.test.js` and `test/prove-red.sh` were being
+  edited in the working tree. Its brief is `🔲 Backlog` in committed history, which Step 3 skips
+  anyway. **Decision: skipped, not ingested as in-progress** — a page written from a half-finished row
+  would have to be rewritten the moment it lands, which is the exact churn this batched run exists to
+  avoid.
+- ⛔ **`0288`'s measured runtime figures were NOT written into the vault.** It measured `npm test` at
+  **10:19 → 14:27** today and the owner accepted the cost, **but those absolutes were taken under CPU
+  contention and `0288` has not landed.** The vault keeps the **owner-ruled** `RELEASING.md:128`
+  figure. **Flagged on the page, not pre-empted.**
+- `ai-agents/tasks/backlog/{0262,0270,0290,0296,0297}/brief.md` — not done; a page would be premature.
+- `ai-agents/tasks/backlog/0292-…/{plan,review,worklog}.md` — working artifacts, never sources.
+- Nine `ai-agents/tasks/done/*/brief.md` (`0252`, `0253`, `0254`, `0255`, `0256`, `0257`, `0258`,
+  `0263`, `0269`) — **already covered; the delta on every one of them is `0294`'s link repointing**
+  (`sprints/sprint-5.md` → `sprints/done/sprint-5.md`) and nothing else. **No new synthesized
+  knowledge, so no page changed on their account.**
+- `ai-agents/sprints/done/sprint-4.md` — same: four relative links repointed by the archival.
+- `ai-agents/sprints/backlog.md` — board-row churn from the closes above; already reflected.
+- `ai-agents/wiki-vault/**` — vault output, not a source. (`e706b0c` is the vault's own prior commit.)
+
+#### ⚠️ Two tasks NOT ingested as done, and the reason is the same for both
+
+**`0292`** (README rescope) and **`0294`** (Sprint 5 archival) have their **effects committed** in
+`ce6bf54` but their **brief closes staged and uncommitted** at the time of this write. This run
+therefore recorded **what landed**, and did **not** create a task page for either. ⛔ **`0294`'s
+archival is still recorded in full** — on [[tasks/sprint-5-fix-what-a-real-project-found]] and across
+the corrections below — because the archival itself is committed and Job 3 turned on it. **Both rows
+are flagged for the next sync.**
+
+---
+
+### Job 2 — task `0297`, on [[tasks/gate-releases-so-an-untested-tree-cannot-ship]]
+
+**The brief is the authority.** Both sites re-verified on disk before editing; the brief's line numbers
+held.
+
+- **`:54`** — *"since **~6 minutes** separate the gate from `git add -A`"* → the ruled
+  **"roughly 6–8 minutes, machine-dependent"**.
+- **`:56`** — *"**Measured suite runtime: ~5m30s–6m20s** across four local runs (328 / 380 / 347 /
+  344 s)"* → the ruled range, and ⛔ **the per-run duration list REMOVED, not replaced.** Replacing four
+  numbers with six better-sourced numbers is **the same defect with fresher data**; `0291` barred the
+  shape, not the values, because a 2026-08-13 sweep **could not reproduce** the set from disk.
+- ✅ **The surviving content was kept:** the ~55 s of unit tests, the **15 mutants / 9 clean baselines**,
+  and *"the cost the owner accepted, stated rather than implied"*.
+- ✅ **The authority is now cited on the page** — owner ruling **2026-08-13**, verbatim option label
+  ***"Range: 'roughly 6–8 minutes, machine-dependent'"***, which **overrode an earlier `~6 min` ruling
+  of the owner's own**; live wording at `RELEASING.md:128`, verified 2026-08-14.
+- ⛔ **Nothing outside the vault was touched** — no `RELEASING.md`, no `bin/release.mjs`, no
+  `.github/workflows/test.yml`, no knowledge-base, and **not `0297`'s brief or its board row**.
+
+**Further occurrences of the superseded figure or a duration list, reported and NOT fixed** (the brief
+required reporting, and reporting is not fixing):
+
+| File | Line | What is there | Disposition |
+|---|---|---|---|
+| `ai-agents/wiki-vault/index.md` | `:324` | Already carries the ruled range — `0291` fixed it | ✅ Nothing owed |
+| `ai-agents/wiki-vault/log.md` | `:2804-2806` | Quotes both superseded strings **inside a dated entry**, as the record of what was reported | ⛔ Append-only; left standing |
+| `ai-agents/wiki-vault/log.md` | `:2680` | Records the duration-list bar itself | ⛔ Correct as written |
+
+⚠️ **No other occurrence of `~6 minutes`, `5m30s`/`6m20s`, or a per-run second-tally was found on any
+vault content page.** The sweep was incidental to this work, as the brief scoped it — ⛔ **it was not a
+vault-wide hunt and should not be read as one.**
+
+⚠️ **`npm test` proves nothing about this row** and was not run for it: no test in `test/*.test.js`
+reads vault prose.
+
+⚠️ **A scope note the brief raises and this run had to rule on.** `0297`'s `## Notes` say
+***"RUNS IN A `fkit wiki` SESSION, NOT `/fkit-sprint-ship-loop`"***, on the ground that the loop's Build
+step is fixed to `@fkit-coder` (ADR-038), which may not write the vault (ADR-005). **This run was
+performed by `fkit-wiki`**, spawned directly by the loop's driver rather than through its Build step —
+so **the substance of the fence held: a librarian wrote the vault, and no coder did.** Recorded rather
+than assumed, because the brief's wording is about the *session*, and this was a spawned consult.
+
+---
+
+### Job 3 — claims falsified by `0294`'s close
+
+**Re-verified on disk 2026-08-14, all four:** `ai-agents/sprints/done/sprint-5.md` exists and
+`ai-agents/sprints/sprint-5.md` does not; its banner reads `## 🔒 CLOSED — 2026-08-13.`;
+`bash claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints` prints **`active none`**
+with `backlog.md` (identity `Backlog`) the only candidate; `0294`'s brief reads
+`✅ Done (agent-closed — not owner-verified)`.
+
+| File | What was false | What it says now |
+|---|---|---|
+| `index.md` (Sprint 5 row) | 🟢 **THE ACTIVE BOARD**; *"The board is NOT archived"*; *"`0294`, **unrun***"; path `sprints/sprint-5.md` | Struck through and replaced: 🔒 **CLOSED and ARCHIVED at `sprints/done/sprint-5.md`**, both archival rulings quoted, ⛔ **no active board at all** |
+| `index.md` (`0293` row) | *"Its batching partner `0291` is **still open**"* | Struck; both `0291` and `0295` closed, pointing at the new page |
+| `index.md` (ADR-043 row, `0253` row) | *"C6 leaves `README.md:54` knowingly wrong"* / *"R2 residual deliberately left `README.md:54` wrong"* | Struck; ✅ **discharged by `0292`**, with the warned-against wrong remedy explicitly avoided |
+| `wiki/tasks/sprint-5-fix-what-a-real-project-found.md` `:3`/`:4` | `**Source**` named the pre-archival path; `**Status**` read `in-progress — 🟢 THE ACTIVE BOARD` | Both fields repointed and reopened as `done — 🔒 CLOSED and ARCHIVED` |
+| same page, the 2026-08-13 block | *"The board is NOT archived, and this page stays `in-progress` for that reason"* | Block left **byte-identical**; a new dated block records that the stated reason no longer holds |
+| `wiki/tasks/wiki-ingest-of-adr-043-….md` `:72-73` | *"`sprint-5.md:3` still reads `🟢 ACTIVE`… `0294`, **unrun***" | Bullet left **byte-identical**; a same-day *"SUPERSEDED"* block beneath it. ⛔ **Its general principle — *a closed row set is not a closed board* — is UNAFFECTED and still true** |
+| `wiki/systems/fkit.md` `:247` | 🟢 **the ACTIVE board** | 🔒 CLOSED and archived; ⛔ no active board at all |
+| `wiki/systems/install-and-self-update.md` `:207` | *"the release-hygiene cluster's **live** board"* | Corrected in place, dated |
+| `wiki/tasks/sprint-3-close-the-rank-integrity-loop.md` `:80` | 🟢 **the ACTIVE board** since 2026-08-10 | Corrected in place, dated |
+
+**⚠️ Three sites found beyond the ones this run was handed** — none of them a broken link, all of them
+prose a link-checker cannot see:
+
+1. `wiki/systems/fkit.md:240` and 2. `wiki/tasks/add-backlog-board-default-for-unsprinted-task-briefs.md:45`
+both called **Sprint 3** *"the active board"* — false since **2026-08-07**, i.e. stale for a week and
+**not caused by `0294`**. ⚠️ **Fixed anyway**, because both sit on pages this pass was already writing
+once and leaving a verified-false claim standing would have been the worse call. 3. The same pages'
+Sprint 5 references, corrected above.
+
+**⛔ `log.md`'s dated entries — the call, stated because it was asked for.** `:1899` and `:2274` cite
+`sprints/sprint-5.md`, and `:2104`, `:2198`, `:2363`, `:2827` mention `sprint-5.md` bare. **All are
+left exactly as they are.** Two independent reasons, and either alone is sufficient: **(1)** they are
+**dated historical records** of where the file was *at the time of writing*, and repointing them would
+make the log claim a past run saw something it did not; **(2)** `log.md` is **append-only**, so
+repointing is not an available operation regardless of whether it were desirable. The current path is
+recorded **here**, in this new entry, which is the mechanism the log provides. ⚠️ Likewise `:2353` and
+`:2441-2442`, which assert Sprint 5 is the active board and `0294` unrun — **byte-identical, and
+superseded by this entry**.
+
+**⚠️ Not a link problem, and a link-checker will not find any of it.**
+`grep -rn '](.*sprint-5\.md)' ai-agents/wiki-vault` returns **zero hits** — the vault holds no
+markdown link to Sprint 5 at all. What it held was **stale prose paths and false claims**, which is a
+different failure class and needs a reader, not a tool.
+
+---
+
+### Link hygiene on the pages touched
+
+Every wiki-link added this run is reciprocated. New back-links to
+[[tasks/the-2026-08-14-retroactive-review-corrections]] were added on
+[[systems/install-and-self-update]], [[tasks/the-2026-08-13-vault-resync-chain]],
+[[tasks/gate-releases-so-an-untested-tree-cannot-ship]],
+[[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]],
+[[tasks/sprint-5-fix-what-a-real-project-found]],
+[[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] and
+[[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — **each inside the single write
+that page already needed**, never as a separate pass. ⚠️ Three further references on the new page
+(`0254`, `0252`, `0211`) are written as **plain prose with backticked IDs rather than wiki-links, on
+purpose**, so the page adds no back-link debt to three pages this run had no other reason to open.
+
+---
+
+### ⚠️ Flagged for human review — found, NOT fixed here
+
+- **`systems/install-and-self-update.md`'s CI run count is still stale.** It reads *"**5 runs — 4
+  success, 1 failure**"*, measured 2026-08-13; a 2026-08-14 measurement recorded **9 runs — 7 success,
+  1 failure, 1 in progress**. ⛔ **Still not fixed** — it sits inside a **dated** block where a dated
+  measurement is correct-as-of-its-date by that page's own convention, and it is outside every row this
+  run carried. ✅ **The claim it exists to defeat is unaffected**: neither *"there is no CI"* nor *"CI is
+  always green"* holds. **This has now been reported twice and needs a task or an explicit decision to
+  leave it.**
+- **`0288` is in flight and its landing will falsify things this run wrote.** When it lands, the
+  runtime figures and the `bin/release.mjs` behaviour recorded on
+  [[tasks/gate-releases-so-an-untested-tree-cannot-ship]], [[systems/install-and-self-update]] and
+  [[tasks/the-2026-08-14-retroactive-review-corrections]] will need a re-sync.
+- **`0292` and `0294` need ingesting as done tasks once their brief closes are committed.**
+- **Nothing detected any of this run's stale claims.** Every one was found because a human or an agent
+  noticed a close had falsified a page — the pattern task `0290` is investigating. ⛔ This run answers
+  none of `0290`'s question; it is one more instance of it, now the fourth on the record.
+
+### What this run did NOT do
+
+⛔ Wrote nothing outside `ai-agents/wiki-vault/`. ⛔ Did not edit any task brief — including `0297`'s
+`## Status` and its board row, which the driver set. ⛔ Did not touch `ai-agents/sprints/`,
+`ai-agents/knowledge-base/`, `claude/`, `bin/`, `test/`, `README.md` or `RELEASING.md`. ⛔ **Edited no
+existing `log.md` entry.** ⛔ **Invoked no mover and closed no task** (ADR-033). ⛔ **Committed and
+staged nothing.**
+
+**Task `0297`'s vault work is complete — ready to close.** ⚠️ Its brief reads `🔄 In progress`; a
+**producer** closes it, with the `(agent-closed — not owner-verified)` marker if the owner is not
+present.

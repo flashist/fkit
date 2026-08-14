@@ -80,13 +80,33 @@ function makeFixture() {
   git(root, ['init', '-q', '-b', 'main', repo]);
   // Config is written into the FIXTURE only — never --global. Signing is forced off because a
   // maintainer machine with commit.gpgsign/tag.gpgsign on would otherwise prompt, hang, or fail.
+  // ⚠️ `push.followTags` is pinned for a DIFFERENT and sharper reason (review R2, MEASURED): with it
+  // on globally, `git push origin main` also publishes any annotated tag reachable from the pushed
+  // ref — so 0288/local-only-tag's fence assertion fired on a maintainer's own machine and accused
+  // release.mjs of pushing a tag it never touched. Because release.mjs gates every release on
+  // `npm test`, that false red meant such a maintainer could not cut a release AT ALL. The pin makes
+  // `push.followTags` read git's documented DEFAULT here whatever the host is configured to — it pins
+  // that ONE setting, not the fixture as a whole. ⚠️ Known remaining host dependency (review R8,
+  // MEASURED): a global `core.hooksPath` with a rejecting `pre-commit` still reds all 7 tests.
+  // Pre-existing and outside 0288's fence — hook isolation is deliberately NOT added here.
   for (const [k, v] of [
     ['user.name', 'fkit fixture'],
     ['user.email', 'fixture@example.invalid'],
     ['commit.gpgsign', 'false'],
     ['tag.gpgsign', 'false'],
+    ['push.followTags', 'false'],
   ]) git(repo, ['config', k, v]);
   git(repo, ['remote', 'add', 'origin', origin]);
+
+  // ⛔ SEAL 1, ASSERTED NOT ASSUMED, AND ASSERTED BEFORE THE FIRST PUSH: this fixture's origin must
+  // live inside its own tmp dir. The brief's non-negotiable safety rule ("never push to flashist/fkit,
+  // never create or delete a tag on the real origin") is worth nothing as an intention; this is it
+  // made structural. A fixture that ever resolved origin to the real repo dies HERE instead of
+  // pushing to it — which is only true because this runs before the `git push` below (review R4:
+  // it used to sit after it, so its own comment was false by ordering).
+  const url = git(repo, ['remote', 'get-url', 'origin']).out;
+  assert.ok(url.startsWith(root), `fixture origin is OUTSIDE the tmp dir — refusing to run: ${url}`);
+  assert.ok(!url.startsWith(REPO), `fixture origin points into the real repo — refusing to run: ${url}`);
 
   writeFileSync(join(repo, 'VERSION'), '0.1.0\n');
   writeFileSync(join(repo, 'package.json'), '{\n  "version": "0.1.0"\n}\n');
@@ -96,14 +116,6 @@ function makeFixture() {
   git(repo, ['add', '-A']);
   git(repo, ['commit', '-q', '-m', 'initial']);
   git(repo, ['push', '-q', 'origin', 'main']);
-
-  // ⛔ SEAL 1, ASSERTED NOT ASSUMED: this fixture's origin must live inside its own tmp dir. The
-  // brief's non-negotiable safety rule ("never push to flashist/fkit, never create or delete a tag on
-  // the real origin") is worth nothing as an intention; this is it made structural. A fixture that
-  // ever resolved origin to the real repo dies here instead of pushing to it.
-  const url = git(repo, ['remote', 'get-url', 'origin']).out;
-  assert.ok(url.startsWith(root), `fixture origin is OUTSIDE the tmp dir — refusing to run: ${url}`);
-  assert.ok(!url.startsWith(REPO), `fixture origin points into the real repo — refusing to run: ${url}`);
   return { root, origin, repo };
 }
 

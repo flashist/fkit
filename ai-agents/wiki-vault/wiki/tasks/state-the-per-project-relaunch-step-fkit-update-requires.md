@@ -51,6 +51,15 @@ decision**. ⚠️ **And the obvious fix was independently wrong**: scoping `:54
 *under-describe* the check, since the spec's Table B includes the root `CLAUDE.md` and `AGENTS.md`.
 The reconciliation is settled in ADR-043 §C6 and filed as its own brief (`0292`).
 
+> ✅ **THE RESIDUAL IS DISCHARGED — 2026-08-14.** The paragraph above is left **byte-identical**; it
+> records why the residual was held, and that reasoning stands. **`0292` has landed** (committed in
+> `ce6bf54`): `README.md:54` now scopes the divergence signal to *"your project's `ai-agents/` tree, or
+> its root `CLAUDE.md` / `AGENTS.md`"* and states that `.claude/` is excluded because a launch rewrites
+> it outright. ✅ **The independently-wrong obvious fix was avoided** — the root `CLAUDE.md` /
+> `AGENTS.md` are still described, so the check is not under-described. ⚠️ **`0292`'s brief close is
+> staged but not committed** at the time of this write, so only the landed `README.md` effect is
+> recorded here; the row is flagged for the next sync.
+
 *A residual held for a decision that had not been made yet turned out to be right twice over — once
 for the reason it was held, and once for a reason nobody had noticed.*
 

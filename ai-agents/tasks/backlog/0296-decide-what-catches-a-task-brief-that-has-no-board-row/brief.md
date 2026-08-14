@@ -208,7 +208,7 @@ the figures in `## Context`.**
      positives**: the string is literal descriptive text inside
      [`0149`](../0149-record-that-0118s-block-on-0117-was-discharged-by-another-route/brief.md)'s row
      (`backlog.md:104`) and
-     [`0294`](../0294-archive-sprint-5-move-the-plan-into-sprints-done-and-repoint-every-link/brief.md)'s
+     [`0294`](../../done/0294-archive-sprint-5-move-the-plan-into-sprints-done-and-repoint-every-link/brief.md)'s
      row (`backlog.md:211`). **A check whose pattern matches prose it did not mean is a check that
      reports phantoms.**
    - **Trap 2 — a sweep that reports EVERYTHING as broken.** The first run of step 1 on 2026-08-14

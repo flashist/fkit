@@ -232,7 +232,7 @@ the rest, that is the right instinct — say where, and why.
   - ✅ **The owner's intent IS reachable, as TWO acts in one owner-present `fkit producer` session** —
     and the order matters:
     1. **Pull into Sprint 5 at the APPEND rank `P17`** (step 8's three-edit act: add the Sprint 5 row;
-       flip this task's `backlog.md` row to `➡️ Moved to [Sprint 5](sprint-5.md) — priority P<n>`;
+       flip this task's `backlog.md` row to `➡️ Moved to [Sprint 5](done/sprint-5.md) — priority P<n>`;
        set this brief's `## Sprint` → `Sprint 5` and `## Priority`). An append renumbers nothing.
        ⛔ **Filing it straight in at `P6` is the banned insertion.**
     2. **Then an owner-ruled MOVE, `P17` → `P6`.** The row now exists, `P6`–`P17` is a contiguous run
@@ -244,3 +244,24 @@ the rest, that is the right instinct — say where, and why.
   are the quoted text.
 - Filed 2026-08-11 by a spawned `fkit-producer` with no owner channel, on ADR-042 D1. It asked nothing,
   decided nothing beyond the split and the board placement, and committed nothing.
+
+### Dated correction + an unruled question — 2026-08-14
+
+**1. Path corrected (owner-ruled, verbatim option label "Fix the path in place (Recommended)").**
+The step-1 instruction above told a future agent to write `➡️ Moved to [Sprint 5](sprint-5.md)` into
+`ai-agents/sprints/backlog.md`. **Sprint 5 was archived on 2026-08-14** to
+`ai-agents/sprints/done/sprint-5.md`, so that href — which is relative to `backlog.md` — no longer
+resolves. Corrected to `](done/sprint-5.md)`. ⚠️ **Nothing was broken by this**: it is a prose
+instruction, not a live link. It would have produced a broken link when acted on. **The path was the
+only thing changed** — this task's scope, status, premise and ranking argument are untouched.
+
+**2. ⚠️ OPEN QUESTION — RECORDED, NOT ACTED ON. NO OWNER RULING EXISTS.**
+The whole *"pull into Sprint 5"* plan above **may now be incoherent**. **Sprint 5 is CLOSED, with no
+successor** — as of 2026-08-14 there is **no active sprint** (`select-active` returns `active none`).
+Moving a task *into* a closed board is not obviously a meaningful act, and the append-rank/re-rank
+argument in step 1–2 assumes a live board with a contiguous run of open rows.
+⛔ **Do not act on this note.** ⛔ **Do not "fix" the plan above on your own judgement.** If you are
+about to execute step 1, **STOP and put the question to the owner first**: *should `0272` still be
+pulled into Sprint 5, or should it wait for a new sprint, or stay on the Backlog board?*
+Surfaced by a spawned `fkit-producer` on 2026-08-14 while making correction 1; the owner ruled on the
+path only and was not asked this.
