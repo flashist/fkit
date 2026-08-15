@@ -4,10 +4,10 @@
 0272
 
 ## Sprint
-Backlog
+Sprint 6
 
 ## Priority
-Unscheduled
+Sprint 6 P18
 
 ## Status
 🔲 Backlog
@@ -265,3 +265,42 @@ about to execute step 1, **STOP and put the question to the owner first**: *shou
 pulled into Sprint 5, or should it wait for a new sprint, or stay on the Backlog board?*
 Surfaced by a spawned `fkit-producer` on 2026-08-14 while making correction 1; the owner ruled on the
 path only and was not asked this.
+
+### ✅ RULED 2026-08-14 — the open question above is ANSWERED, and the placement plan is SPENT
+
+**Everything above is left byte-identical.** The paragraph numbered **2** was true when written and is
+now **answered**, not deleted.
+
+**Owner ruling, 2026-08-14**, given via `AskUserQuestion` in a live `fkit lead` session driving
+`/fkit-sprint-ship-loop` and relayed to a spawned `fkit-producer` with no owner channel — **the option
+label is the verbatim text**: **"Re-target it to Sprint 6 (Recommended)"**.
+
+**What follows from it:**
+
+- **This task is re-targeted to [Sprint 6](../../../sprints/sprint-6.md)**, opened the same day by a
+  separate owner ruling of the same session (verbatim **"Accept as proposed (Recommended)"**). Its
+  `## Sprint` field now reads `Sprint 6`, and its `backlog.md` row reads
+  `➡️ Moved to [Sprint 6](sprint-6.md)`.
+- ⛔ **The step-1 / step-2 placement plan above is SPENT and was NEVER EXECUTED.** *"Pull into Sprint 5
+  at the APPEND rank `P17`"* and *"then an owner-ruled MOVE, `P17` → `P6`"* both named **Sprint 5**,
+  which is closed, and both are **rank** instructions. ⛔ **Nothing was pulled into Sprint 5, and no
+  rank was assigned anywhere.**
+- ⛔ **Sprint 6 is UNRANKED.** Every Priority cell on that board reads `—`, by the owner's ruling and
+  [ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md).
+  **This brief's `## Priority` is deliberately UNTOUCHED and still reads `Unscheduled`** — there is no
+  destination rank to move it to. That is a departure from the ordinary forward move, and it is
+  recorded on Sprint 6's board at §"⛔ This board is UNRANKED".
+- **This row's position on Sprint 6 — last, 18 of 18 in the owner-accepted recommended sequence — comes
+  from that ordering, NOT from the spent `P6` instruction.** ⚠️ **The sequence is prose on that board,
+  not a rank**, so *"last"* is a reading order, not a deprioritisation.
+- ⛔ **The `## Priority` / merit argument at §"On merit" above is left byte-identical and is now
+  HISTORICAL.** It reasons about Sprint 5's closed-row wall and its `P6`–`P17` contiguous run; **none
+  of that board's geometry applies to Sprint 6**, which has no closed rows and no ranks at all. **Do
+  not act on it.**
+- ⭐ **The underlying work is UNAFFECTED.** ADR-042 D1 has **not** landed (zero `reasoning-only` hits
+  across its five named files, measured 2026-08-14), and this task is still the **only unblocked head**
+  of the `0272` → `0273` → `0287` chain. Scope, deliverables and verification steps are untouched.
+
+Recorded by a spawned `fkit-producer` with no owner channel
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+which asked nothing and decided nothing beyond the mechanics of that ruling.

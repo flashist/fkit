@@ -33,7 +33,7 @@ This answers the open question left in [Sprint 5](../../../sprints/done/sprint-5
 
 ### ⚠️ This task does NOT subsume `0238`, and the reason is the ruling's own reason
 
-[`0238`](../../backlog/0238-wiki-resync-after-the-sprint-2-archival-and-sprint-3-open/brief.md) re-syncs the
+[`0238`](../../done/0238-wiki-resync-after-the-sprint-2-archival-and-sprint-3-open/brief.md) re-syncs the
 vault after the **Sprint 2 → Sprint 3** rollover of 2026-08-06. **This task re-syncs it after the
 Sprint 4 archival and Sprint 5 open of 2026-08-10.** Different archival, different source delta,
 different set of false claims. Neither is a superset of the other:

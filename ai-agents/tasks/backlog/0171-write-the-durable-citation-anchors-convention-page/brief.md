@@ -4,10 +4,10 @@
 0171
 
 ## Sprint
-Backlog
+Sprint 6
 
 ## Priority
-Unscheduled
+Sprint 6 P2
 
 ## Status
 🔲 Backlog
@@ -99,6 +99,28 @@ two deliverables that can fail independently, and the repair half touches three 
 never would. If the owner would rather have the page ship alone, that is a live option — but it is a
 change to the 2026-08-02 ruling, not a producer call.
 
+### 🆕 Scope widened by owner ruling 2026-08-14 — the page ALSO records how to CHECK a claim about text
+
+> **✅ Owner-ruled 2026-08-14** (`AskUserQuestion`, given live in a `fkit lead` session driving
+> `/fkit-sprint-ship-loop`) — **verbatim option label: *"Fold it into `0171` (Recommended)"***.
+>
+> ⚠️ **This is a scope widening, recorded as one.** ⛔ It does **not** change this task's rank, status,
+> `## Sprint`, `## Owner`, or either existing deliverable. It adds one required section to
+> Deliverable A's page.
+
+**Why it belongs here rather than in its own brief.** This page's subject is *how to make a claim about
+text durable and checkable*. The rule below is the **checking** half of that same subject: a citation
+form is worth nothing if the reader's verification command lies to them.
+
+**What happened, and it is this page's second real specimen.** The 2026-08-14 backlog triage judged
+task `0154` `STALE-PREMISE` because a single-line `grep -c "do not spawn the producer"` returned **0**
+across the three wiki skills. **The clause is live in all three.** It wraps across a line break with an
+indented continuation, so a single-line `grep` cannot see it. Measured 2026-08-14, naive / normalised:
+**`0/1` in `fkit-wiki-ingest`, `fkit-wiki-sync` and `fkit-wiki-lint`.** Acting on that verdict would
+have deleted a live rule from three files that ship into every consuming project. The full targeted
+re-check of all 41 absence claims is the 2026-08-14 backlog-triage re-check report — **cited by name,
+not linked** (this page is dual-homed; see accepted cost 2 above).
+
 ## What to build
 
 ### Deliverable A — the convention page
@@ -162,6 +184,38 @@ section, do not work from this list alone.
    > including when that citation is wrapped in a link. **The ban belongs to forwarding links into
    > living documents.** A label that is a claim about a revision the writer read is governed by §1,
    > not by this rule.
+
+### 🆕 Piece 7 — verifying a claim about text. Added 2026-08-14 by the owner ruling above; NOT from report §8
+
+**A required section of the page.** It is prescriptive, it is short, and its five points are all
+measured facts, not advice.
+
+1. **A single-line `grep` cannot see a phrase that wraps.** An **absence** claim over prose therefore
+   needs **whitespace-normalised** matching before it may be asserted.
+2. **The squeeze is load-bearing.** The form is `tr '\n\t' '  ' | tr -s ' '`, then match.
+   ⚠️ **A bare `tr '\n' ' '` still misses it** — the continuation line's indent survives the join and
+   becomes internal whitespace. Measured on the `0154` specimen: bare-join reads **0** in
+   `fkit-wiki-ingest` and `fkit-wiki-lint` and **1** in `fkit-wiki-sync`, whose continuation happens to
+   be flush-left. **Two of three is a false negative, not a near miss.**
+3. **`grep -c` counts matching LINES, not occurrences.** Where a **count** is load-bearing — *"the
+   file's only occurrence"*, *"exactly three sites"* — derive it with `grep -o … | wc -l`.
+4. ⭐ **Direction matters, and this is what keeps the rule cheap. A PRESENCE claim cannot fail this
+   way** — if a `grep` found the text, the text is there. **Only ABSENCE claims need the expensive
+   form.** State this explicitly; without it a reader will over-apply the rule to every match they run.
+5. **Record the known limits honestly, as the re-check recorded its own.** The normalised form is
+   strong against wrapping and weak against these, all of which read as absence:
+   - a phrase split across **markdown table cells** — a `|` between the halves survives every transform
+     here;
+   - **wording drift** — a rule reworded survives in different words and no matcher finds it; only the
+     exact phrase chosen is tested;
+   - **code fences are treated as prose** — a phrase found may be an illustrative example rather than a
+     binding rule;
+   - **hyphenation across a line break is not modelled** — a token broken as `task-\nbrief` joins to
+     `task- brief` and is still missed.
+
+⚠️ **Do not carry the measurements as the rule.** The `0/1` figures and the three filenames are a dated
+specimen and belong in the *Provenance* or an example block, exactly as this page's "no measurements"
+constraint below requires — the **rule** is points 1–5.
 
 ### What the page must NOT do
 
@@ -231,6 +285,17 @@ For each of the 12 citations:
 13. The repaired citations use the form Deliverable A's page defines. If they diverge, **the page is
     what is wrong** — say so rather than repairing the citations to match a page you did not follow.
 
+**🆕 Piece 7 (added 2026-08-14):**
+
+14. The page carries all five points of piece 7, including **point 4 — that presence claims are exempt.**
+    A page that requires normalised matching for every claim has widened the rule beyond what the owner
+    ruled and is wrong.
+15. The **squeeze** appears in the prescribed form (`tr -s ' '`), and the page states that a bare
+    `tr '\n' ' '` is insufficient. `grep -F "tr -s" ` on both copies returns **≥1**.
+16. All four known limits are listed. ⛔ **A page that presents the normalised form as a clean sweep
+    fails this step** — the honesty about what it still misses is the point, not a footnote.
+17. Both copies remain byte-identical after this section is added (re-run step 2).
+
 ## Notes
 
 - **Depends on:** nothing. The ruling it carries is already made — `0160` is closed and the report is
@@ -259,6 +324,16 @@ For each of the 12 citations:
   pointers from task `0143`. **The rank did not change** and no row was renumbered by the widening.
   ⚠️ **If the owner reconsiders the fold**, Deliverable B splits cleanly into its own brief; the ruling
   is what keeps it here.
+- **🆕 Scope widened again 2026-08-14 by owner ruling** — verbatim option label
+  ***"Fold it into `0171` (Recommended)"***, given live via `AskUserQuestion` in a `fkit lead` session
+  driving `/fkit-sprint-ship-loop`, recorded by a spawned `fkit-producer` with no owner channel
+  ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+  **Piece 7 — the wrap-tolerant verification rule — is now a required section of Deliverable A's page.**
+  ⛔ **The rank did not change, no row was renumbered** (ADR-035), `## Status`, `## Sprint`, `## Priority`
+  and `## Owner` are untouched, and **neither existing deliverable changed.** ⚠️ **Cost, stated rather
+  than buried:** Deliverable A's page grows by one section and its dual-home parity obligation grows with
+  it — the section must land in **both** copies, byte-identical, like everything else on the page.
+  ⚠️ The widening's own specimen (task `0154`) is **not** in Sprint 6 and this task does not touch it.
 - **Soft-relationship with `0197`.** `0197` repairs ADR-010's **outbound** `path:NNN` citations using
   this page's form; Deliverable B repairs the **inbound** `adr-010:NNN` citations. Different direction,
   same rule, two tasks. `0197` records this task as a soft dependency; this task is not blocked by it.

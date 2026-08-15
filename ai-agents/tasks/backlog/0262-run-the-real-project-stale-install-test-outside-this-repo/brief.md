@@ -47,6 +47,84 @@ those eight closes carries `(agent-closed — not owner-verified)`**. The whole 
 consent-gated-repair capability (`0243`–`0248`) has only ever run against fixtures in its own
 codebase. This task is the only planned thing that would change that.
 
+> ## ⚠️ DATED CORRECTION 2026-08-14 — THE PARAGRAPH ABOVE IS FALSIFIED IN PART. It is left byte-identical.
+>
+> ⚠️ **FRAMING ONLY.** ⛔ **This task's scope, intent and deliverable are UNCHANGED** — all fifteen
+> acceptance criteria, the field report, the honesty bound and the `[F]`/`[R]` tagging stand exactly as
+> written. **No scope change, no status change, no re-rank, no file move.** Written by a spawned
+> `fkit-producer` with no owner channel.
+>
+> ⛔⛔ **DO NOT READ THIS AS DISCHARGING THE TASK. The owner did not rule that, and this note does not.**
+>
+> ### What actually happened, and what it did NOT touch
+>
+> **On 2026-08-14 the owner updated to `v0.2.2` and ran `fkit` in a real consuming project
+> (`geoconflict`).** Recorded, with the output quoted verbatim, in
+> [`0303`](../0303-give-the-lead-a-trigger-for-the-structure-notice-so-it-can-offer-the-heal/brief.md)'s
+> `## Provenance`. **The launch-time structure notice fired on 5 diverging paths:**
+>
+> ```
+> ⚠ fkit: 5 path(s) diverge from what the installed fkit version ships (CLAUDE.md, AGENTS.md,
+>   ai-agents/knowledge-base/conventions/README.md +2 more) — run /fkit-heal in a producer session
+>   to see and repair; nothing was changed. Deliberate? List the path in ai-agents/.fkit-accepted-drift.
+> ```
+>
+> ⭐ **That is a genuine, first-ever exercise of Sprint 4 work outside this repo**, and the sentence
+> *"nothing Sprint 4 shipped has ever been exercised outside this repo"* is **no longer true as an
+> absolute**. ⚠️ **It is also the narrowest possible slice of what this task exists to do.**
+>
+> ### ⛔ THE LEDGER, STATED PRECISELY — because "partly falsified" is exactly where a run over-claims
+>
+> **✅ EXERCISED by the `geoconflict` run:**
+> - the **launch-time structure notice** — it fired, in a real project, on real drift;
+> - that the notice **classifies and counts** (5 paths, three named plus *"+2 more"*);
+> - that it is **non-mutating** — *"nothing was changed"*;
+> - that it **routes** the reader to `/fkit-heal` in a producer session, and names the
+>   `ai-agents/.fkit-accepted-drift` escape.
+>
+> **⛔ NOT EXERCISED — every one of these is still owed, and they are the bulk of this task:**
+> - ⛔ **`/fkit-heal`'s CHECK phase** — no per-file verdicts were ever produced or captured;
+> - ⛔⛔ **THE ENTIRE REPAIR LEG** — propose → `AskUserQuestion` consent → apply. **Nothing was
+>   repaired, so criteria 8–14 are wholly untouched**, including dry-run/apply parity (8), the
+>   **freshness refusal** (9, which the brief already says must be *deliberately staged*), the v1
+>   boundary (10), ADR-005 non-writing under repair (11), the consent shape and no-persisted-consent
+>   check (12), and per-path announce output (14);
+> - ⛔ **`FKIT_CLEANUP_DRY_RUN=1`** — the orphan-cleanup dry run (procedure step 2) never ran;
+> - ⛔ **The `fkit update` → **re-launch inside the project** sequence** and its
+>   `• refreshed N agents … M skills …` line (procedure step 3, verification 4);
+> - ⛔ **The four `git status --porcelain` readings** the report must carry (verification 2);
+> - ⛔ **THE FIELD REPORT ITSELF** — the deliverable. **Nothing was written under
+>   `ai-agents/knowledge-base/reports/`.**
+>
+> ⭐⭐ **So the `0245`/`0246` verification promise this task carries is NOT discharged.** Criteria
+> **8–15 are the `0246` half and none of them was reached.** ⚠️ **The 2026-08-10 sentence *"Until this
+> task actually runs, the promise is ASSIGNED, not met"* is STILL TRUE** — only its supporting sentence
+> *"nothing Sprint 4 shipped has been exercised outside this repo"* has moved.
+>
+> ⛔ **The `(agent-closed — not owner-verified)` markers on all eight Sprint 4 rows are UNAFFECTED and
+> stay on permanently.** Nothing in this note may be read as changing one.
+>
+> ### ⚠️ Two smaller facts that also moved
+>
+> - **`VERSION` reads `0.2.2`** (measured 2026-08-14). The target-project paragraph names *"already
+>   running fkit `0.2.1`"* and *"any real consuming project on `0.2.x`"*. ✅ **The `0.2.x` criterion is
+>   unaffected**; only the specific `0.2.1` figure is dated. ⛔ Re-measure at pickup.
+> - ⭐ **`geoconflict` is now a candidate target in its own right** — it is already updated to `v0.2.2`,
+>   already has real drift on 5 paths, and the owner already has the working directory. ⛔ **This is
+>   input, NOT a selection**: the brief requires the run to **say which project was used**, and the
+>   batching caution about a second ask of the downstream reporter is untouched.
+>
+> ⚠️ **Consequence for the `## What to build` procedure, stated because it is easy to get backwards:**
+> a project already showing 5 diverging paths is the **drifted-untouched** case criterion 3 calls
+> *"the criterion the whole test exists for"* — ⛔ **but only if the check phase is actually run and
+> its verdicts captured.** A notice count is not a classification.
+>
+> ⛔ **Nothing else about this row changed.** `## Status` `🔲 Backlog`, `## Priority` `Unscheduled`,
+> `## Sprint` `Backlog`, `## Owner` `fkit-producer` — all untouched. ⛔ **It stays deliberately
+> unscheduled and is still not a release gate** (owner ruling 2026-08-10, *"File a brief, leave on
+> backlog"*). No board row edited, nothing re-ranked (ADR-035), no mover run (ADR-033), nothing written
+> under `ai-agents/wiki-vault/` (ADR-005), nothing committed.
+
 ### ✅ AMENDED 2026-08-10 — this task now CARRIES the `0245`/`0246` verification promise and DISCHARGES it
 
 Everything above is left **byte-identical** and still true. This section records a **second owner

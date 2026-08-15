@@ -66,6 +66,84 @@ denied, the skill it tried to invoke, and a timestamp.
 > defeats the whole point. **The task must surface the path choice as an owner decision and stop for
 > it.** Do not settle it between agents.
 
+> ## ✅ DATED CORRECTION 2026-08-14 — THE LOCATION IS NOW OWNER-RULED. The block above is left byte-identical.
+>
+> **Owner ruling, 2026-08-14**, given live via `AskUserQuestion` in a `fkit lead` session driving
+> `/fkit-sprint-ship-loop` and relayed to a spawned producer with no owner channel. **The option label
+> is the verbatim text:**
+>
+> > **"Rule the path now — under ai-agents/ (Recommended)"**
+>
+> **What is now ruled: the denial log lives under `ai-agents/`.** Together with the 2026-08-05 ruling
+> the shape is: **git-tracked, append-only, under `ai-agents/`.**
+>
+> ⭐ **Why this matters more than it looks.** The ruled shape previously had **nowhere to live**:
+> `.fkit/` is gitignored, so *"git-tracked"* and *"the existing hook persistence home"* were in direct
+> contradiction. **That contradiction is what blocked this task entirely**, and it is also what held
+> [`0233`](../0233-assess-the-denial-log-as-an-adr-036-registry-site/brief.md) shut, since `0233`
+> assesses an artifact that could not be built. ✅ **The contradiction is resolved.**
+>
+> ### ⛔⛔ THE OWNER RULED THE LOCATION. THEY DID NOT RULE THE FILENAME.
+>
+> ⛔ **Do not read a specific path out of this block, and do not treat any filename as ruled.** The
+> ruling names the **directory tree** — `ai-agents/` — and nothing finer. **The exact path and
+> filename remain an open design choice for this task's plan gate**, where the architect proposes and
+> the owner confirms.
+>
+> ⛔ **This producer deliberately did NOT invent one.** Pinning a filename here would convert an
+> agent's guess into something a later reader takes for an owner ruling — precisely the failure this
+> brief's whole *"THE SHAPE IS OWNER-RULED. THE PATH IS NOT."* block exists to prevent. **The block
+> above is narrowed by this ruling, not retired**: what must still be put to the owner is the exact
+> path; what no longer needs asking is which tree it sits in.
+>
+> ⚠️ **Verification step 1 still governs, unchanged in force.** If the plan gate produces no owner
+> confirmation of the exact path, the task is `🚧 Blocked — awaiting owner decision on the denial-log
+> filename`, **not shipped with a guessed one**. ✅ What changes is only that the block is now
+> narrower and answerable in one question rather than open-ended.
+>
+> ### ⚠️ A CONSEQUENCE THE PLAN GATE MUST CARRY: this file is INHERITED BY EVERY CONSUMING PROJECT
+>
+> `claude/skill-ownership-hook.sh` runs **inside a consuming project**, so a log it writes under
+> `ai-agents/` appears in **every project that installs fkit** — not just this repo. ⚠️ **That is a
+> distribution decision, not just a path decision, and it belongs in the plan put to the owner.**
+> ⛔ Do not let it be discovered after the hook ships.
+>
+> ### ✅ THE STRUCTURE-SPEC FINDING — REPORTED, NOT ACTED ON
+>
+> **Asked:** does a new tracked file under `ai-agents/` need a row in `claude/structure-spec.md`'s
+> inventory? **Measured on disk 2026-08-14; ⛔ no row was added and no spec file was touched.**
+>
+> **The answer turns on one thing: whether fkit SHIPS the file, or the hook CREATES it at runtime.**
+>
+> - **Inventory Table B is *"Every file the installed version requires, project-relative"*, and
+>   `test/structure-spec.test.js` asserts SET EQUALITY IN BOTH DIRECTIONS** between the two inventory
+>   tables and `claude/scaffold/` (assertions A and B; a violation reports either *"spec missing
+>   file X"* or *"spec lists file X the scaffold does not ship"*).
+> - ⛔ **So if the log is created at runtime by the hook and NOT shipped from
+>   `claude/scaffold/ai-agents/`, it must NOT get an inventory row** — adding one **fails the build**
+>   on the *"the scaffold does not ship"* half. ⭐ **The cautious instinct here is the wrong one.**
+> - ✅ **If instead the design chooses to SHIP a seed file** (an empty log, or a `.gitkeep` for a new
+>   directory) from `claude/scaffold/ai-agents/`, then it needs **both** a Table B row **and**
+>   `npm run generate:manifest` — `RELEASING.md` §3, since `claude/scaffold/ai-agents/` is exactly
+>   what the manifest covers. ⚠️ **And a NEW top-level entry under `claude/scaffold/` is more than a
+>   regen**: the generator refuses loudly until it is taught the path, by design, because whether a
+>   file ships to a project is a decision rather than a derivation.
+>
+> ⚠️ **Which branch applies is undecided, because it follows from the filename/shape question the plan
+> gate still owes the owner.** ⛔ **Neither branch is chosen here.** Whichever is taken, the choice and
+> its spec/manifest consequence go in the plan the owner approves — not into the implementation
+> quietly.
+>
+> ⛔ **Nothing else about this row changed.** `## Status` stays `🔲 Backlog`, `## Priority` stays
+> `Unscheduled`, `## Sprint` stays `Backlog`, `## Owner` stays `fkit-architect`. No board row was
+> touched, nothing was re-ranked
+> ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)),
+> no mover ran
+> ([ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)),
+> nothing was written under `ai-agents/wiki-vault/`
+> ([ADR-005](../../../knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)),
+> and nothing was committed.
+
 **Persistence itself is not new ground** (report R6). `claude/askuserquestion-marker-hook.sh:57` and
 `claude/shiploop-marker-hook.sh:64` already write under `$cwd/.fkit/state/`, and
 `claude/turn-completion-hook.sh` reads them back. **The only new part is the git-tracked location.**
@@ -176,6 +254,25 @@ second re-verifies its coordinates.**
   one that supplies detection; `0223` and `0225` are prose and a guard against a different failure.
 - ⚠️ **OPEN QUESTION FOR THE OWNER — the denial-log path.** Owner-ruled: git-tracked and append-only.
   **Not ruled:** where. `.fkit/` is out (gitignored). This must be answered before the coder starts.
+  - ✅ **DATED CORRECTION 2026-08-14 — PARTLY ANSWERED. The bullet above is left byte-identical.**
+    **Owner ruling, verbatim option label: "Rule the path now — under ai-agents/ (Recommended)"**
+    (`AskUserQuestion`, 2026-08-14, live `fkit lead` session driving `/fkit-sprint-ship-loop`, relayed
+    to a spawned producer with no owner channel). **The shape is now: git-tracked, append-only, under
+    `ai-agents/`.** ⭐ **The contradiction that blocked this task — a ruled *"git-tracked"* shape whose
+    only known home was gitignored — is resolved**, and with it the reason
+    [`0233`](../0233-assess-the-denial-log-as-an-adr-036-registry-site/brief.md) was held shut at the
+    decision level.
+    ⛔⛔ **STILL OPEN, DELIBERATELY: the exact path and filename.** The owner ruled the **location**,
+    not the file. ⛔ **No filename is pinned here and none may be inferred from this note** — it goes
+    to this task's **plan gate** as one focused question. ⚠️ **Verification step 1 is unchanged in
+    force:** no owner confirmation of the exact path → `🚧 Blocked`, never a guessed path.
+    ⚠️ **Two consequences the plan gate must carry, reported and not decided:** the hook runs in a
+    consuming project, so this file is **inherited by every project that installs fkit**; and whether
+    it needs a `claude/structure-spec.md` inventory row depends on whether fkit **ships** it or the
+    hook **creates** it — ⛔ **the cautious answer is the wrong one here**, because
+    `test/structure-spec.test.js` asserts set equality against `claude/scaffold/` in both directions,
+    so a row for a runtime-created file **fails the build**. **Full reasoning in the master correction
+    in `## What to build`.** ⛔ **No spec row was added and no spec file was touched by this note.**
 - ⚠️ **Second open question, from the report:** *who is obliged to read the log, and what asserts that
   the log itself has not silently stopped being written.* Report §5 names this as the remaining open
   piece. Answering it may be in scope or may be its own task — the owner's call.

@@ -833,7 +833,7 @@ ranking failed to honor. Each brief records `**On merit:** as ranked` with its r
   as the active board, has no page for Sprint 4 or Sprint 5, and does not know this board exists.
   **Only `fkit-wiki` may write the vault (ADR-005)** — this producer wrote nothing there. The full
   stale-page list is on [`done/sprint-4.md`](sprint-4.md)'s banner. ⚠️ Whether the existing
-  [`0238`](../../tasks/backlog/0238-wiki-resync-after-the-sprint-2-archival-and-sprint-3-open/brief.md)
+  [`0238`](../../tasks/done/0238-wiki-resync-after-the-sprint-2-archival-and-sprint-3-open/brief.md)
   widens to cover this archival, or a new brief is filed, is an **open question deliberately left to
   the owner** — a producer does not widen another task's scope unasked.
 - This board was created by a **spawned producer with no owner channel**. Every ruling it acted on is

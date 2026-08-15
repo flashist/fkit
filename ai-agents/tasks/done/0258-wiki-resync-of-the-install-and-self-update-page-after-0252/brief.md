@@ -45,7 +45,7 @@ is exactly why this exists as a separate task with a different owner — the sam
 
 ### The precedent
 
-[`0238`](../../backlog/0238-wiki-resync-after-the-sprint-2-archival-and-sprint-3-open/brief.md) and
+[`0238`](../../done/0238-wiki-resync-after-the-sprint-2-archival-and-sprint-3-open/brief.md) and
 [`0239`](../../backlog/0239-wiki-resync-adr-012s-vault-page-after-0232/brief.md) are the named precedent: a
 source document changed, its vault page went stale, and the resync was filed rather than performed.
 **Read `0239` and follow its shape** — in particular its answer to whether the vault page is edited

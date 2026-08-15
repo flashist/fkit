@@ -44,6 +44,64 @@ reads:
 | 2. `0190`'s clause does not exist | **NOW FALSE** — clause shipped 2026-08-04; `0190` in `done/` |
 | 3. `0191`'s clause does not exist | **Still true** — no such wording in `claude/skills/fkit-sprint-ship-loop/SKILL.md`; `0191` open in `backlog/` |
 
+> ## ⚠️ DATED CORRECTION 2026-08-14 — THE COUNT IS NOW WRONG: **TWO** premises are false, not one. Every prior byte left identical.
+>
+> ⚠️ **FRAMING ONLY.** ⛔ **This task's scope, intent and deliverable are unchanged by this note** —
+> the widening question it raises is put to the owner below, ⛔ **not decided here.** No scope change,
+> no status change, no re-rank, no file move. Written by a spawned `fkit-producer` with no owner
+> channel.
+>
+> **Re-measured on disk 2026-08-14** — ⛔ **and this table is itself a dated reading; step 1 already
+> requires re-deriving all three, which is now doubly the point:**
+>
+> | `0194`'s premise | State on **2026-08-05** (above) | State on **2026-08-14** |
+> |---|---|---|
+> | 1. `test/skill-ownership-sites.mjs` does not exist (`0189`) | Still true | ✅ **STILL TRUE** — `ls` returns *No such file or directory*; `0189` still open in `ai-agents/tasks/backlog/` |
+> | 2. `0190`'s clause does not exist | NOW FALSE | ⛔ **STILL FALSE** — clause present at `claude/scaffold/universal-rules.md`; `0190` in `done/` |
+> | 3. `0191`'s clause does not exist | Still true | ⛔⛔ **NOW ALSO FALSE** — the driver-side clause **is** in `claude/skills/fkit-sprint-ship-loop/SKILL.md`, citing **ADR-037 §3** by name and recording that it is *"weaker than its worker-side twin"*; `0191` is in `ai-agents/tasks/done/` |
+>
+> ⛔⛔ **So the bolded instruction above — *"Exactly ONE of the three premises is false — do not
+> 'repair' the other two"* — now names the WRONG COUNT and would tell a run to leave a false premise
+> standing.** ✅ **Its underlying rule is UNCHANGED and still binding: repair only what is measured
+> false, and premise 1 is genuinely still true.**
+>
+> ⭐ **`0194` remains genuinely blocked, on `0189` alone.** ⛔ **Do not read *"two of three are now
+> false"* as *"`0194` is ready"*** — it is not, and nothing here changes its `## Status`.
+>
+> ⚠️ **This is the very decay this row exists to fix, recurring on this row.** `0221`'s own `## Notes`
+> already predicted it: *"Note for whoever closes `0191` and `0189` — each will falsify one more of
+> `0194`'s premises."* **`0191` closed and the premise was not repaired.** ⭐ The prediction was right
+> and the mechanism behind it does not exist, which is the argument for `0171`'s durable-citation work
+> and for `0306`'s sweep — ⛔ **neither of which this row waits on.**
+>
+> ### ⛔ ONE QUESTION THIS NOTE DOES NOT SETTLE — it goes to the owner
+>
+> `## What to build` step 2 reads **"Correct premise 2 only"**. With premise 3 now false as well, that
+> instruction **under-covers**: a run following it literally repairs one false premise and leaves the
+> other. ⛔ **A spawned producer with no owner channel does not widen a filed task's deliverable**, so
+> the instruction is **left exactly as written** and the choice is surfaced instead:
+>
+> - **(a)** widen this task to repair premises 2 **and** 3 in one pass — cheaper, one edit to `0194`,
+>   and the count in step 3 and step 4 comes out right either way; **or**
+> - **(b)** hold this task to premise 2 and let `0191`'s own follow-up carry premise 3.
+>
+> ⭐ **The producer's input, offered and NOT a ruling: (a).** The two repairs touch the same three
+> sentences of the same file, the deliverable class is identical, and splitting them guarantees a
+> second pass over a brief that will have decayed again. ⚠️ **The title and `## ID` would then name
+> only `0190`; that is cosmetic and no reason to choose (b).** ⛔ **Until the owner rules, a run takes
+> the narrower branch (b) and REPORTS premise 3 as an unrepaired measured falsehood** — never silently
+> widens, never silently leaves it unmentioned.
+>
+> ⚠️ **Steps 3, 4 and verification 5 are count-driven and self-correct under either branch** —
+> *"how many remain open and which"* is derived from step 1's re-measurement, so they do not need
+> amending. **Under either branch the answer today is: ONE open prerequisite, `0189`.**
+>
+> ⛔ **Nothing else about this row changed.** `## Status` `🔲 Backlog`, `## Priority` `Unscheduled`,
+> `## Sprint` `Backlog`, `## Owner` `fkit-producer` — all untouched. ⛔ **`0194`'s brief was NOT edited
+> by this note** — that is this task's own deliverable, not a correction's. No board row edited,
+> nothing re-ranked (ADR-035), no mover run (ADR-033), nothing written under `ai-agents/wiki-vault/`
+> (ADR-005), nothing committed.
+
 **Why it matters.** `0194` is a **`🔲 Backlog`** row that will be planned and pulled off its own stated
 premises. Two of them still hold, so `0194` is genuinely not yet pullable — but a reader who checks
 premise 2 and finds it false has no reason to trust premises 1 and 3, and a reader who does not check
@@ -85,6 +143,73 @@ No source change, no scope change, no status change.
 6. **Change nothing else in `0194`.** Not its `## Status` (it stays `🔲 Backlog`), not its `## Owner`,
    not its `## Priority`, not its scope, not its trigger-scoring instructions, not its append-rank flag,
    and not its *"Why it is a row and not a verification step"* rationale.
+
+> ## ⭐ DATED CORRECTION 2026-08-14 (second) — OWNER RULING: **step 2 widens to premise 3.** Every prior byte left identical.
+>
+> **The owner ruled, live via `AskUserQuestion` in an `fkit lead` session — verbatim option label:
+> *"Widen to premise 3 (Recommended)"*.** That is **branch (a)** of the fork the first dated correction
+> (above, in `## Context`) put to the owner and deliberately did not settle. ⛔ **Step 2 above is left
+> byte-identical on purpose** — this note is the amendment, per the superseded-text convention.
+>
+> ### What changes
+>
+> **Step 2's *"Correct premise 2 only"* now reads, in effect, "correct premises 2 and 3".** A run
+> repairs **both** measured-false premises in one pass, in the same edit to the same file. ⛔ The first
+> correction's interim instruction — *"Until the owner rules, a run takes the narrower branch (b) and
+> REPORTS premise 3 as an unrepaired measured falsehood"* — is **spent and no longer applies.** The
+> owner has ruled; take branch (a).
+>
+> ### ⭐ Premise 3 re-verified on disk 2026-08-14 before this note was written
+>
+> ⚠️ **Verified independently, not inherited** — the triage that first reported it also produced a
+> confirmed false negative elsewhere, so nothing from it was taken on trust. Measured with
+> wrap-tolerant matching (a single-line `grep` cannot see a phrase broken across a line break):
+>
+> | premise | measured state 2026-08-14 |
+> |---|---|
+> | 1. `test/skill-ownership-sites.mjs` does not exist (`0189`) | ✅ **STILL TRUE** — `ls` returns *No such file or directory*; `0189` is in `ai-agents/tasks/backlog/0189-build-the-skill-ownership-site-registry-and-completeness-tripwire/` |
+> | 2. `0190`'s clause does not exist | ⛔ **FALSE** — the clause is present in `claude/scaffold/universal-rules.md`; `0190` is in `ai-agents/tasks/done/` |
+> | 3. `0191`'s clause does not exist | ⛔ **FALSE** — the driver-side clause **is** in `claude/skills/fkit-sprint-ship-loop/SKILL.md`, under `## Hard rules`, citing **ADR-037 §3** by name **twice**; `0191` is in `ai-agents/tasks/done/0191-add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules/` |
+>
+> **The clause `0194` must assess, quoted so the assessment has its subject in hand.** ⚠️ **Locate it by
+> this wording, never by line number** — it sat at `claude/skills/fkit-sprint-ship-loop/SKILL.md:390-401`
+> on 2026-08-14 and that coordinate is mutable:
+>
+> > - **Never instruct into the territory of a rule in the skill a worker will run without naming the owner
+> >   ruling you relay** (ADR-037 §3 — the driver-side half of the owner's Q2 ruling; this ADR binds the
+> >   driver, not only the worker). Exactly one of three is permitted:
+> >   - **Name the ruling** — what the owner ruled, when, on what point — and the instruction binds.
+> >   - **Get the ruling first.** You hold the owner channel the worker lacks (ADR-021); if the point
+> >     matters, ask before spawning.
+> >   - **Do not issue it.** Let the skill rule stand.
+> >
+> >   **A bare directive into a rule's territory is a defective instruction, and the worker's conservative
+> >   branch is the correct response to it, not an obstruction** — do not read a worker's escalation here as
+> >   a failure to follow orders. **This clause is weaker than its worker-side twin** and ADR-037 §3 records
+> >   that deliberately: the worker-side clause reaches every spawn through the universal rules block, while
+> >   this one binds you only because *you* load this file, and it reaches no worker.
+>
+> ### ⛔ What this ruling does NOT change
+>
+> - ⛔ **Step 1 still governs.** All three premises are re-derived **on disk at pickup**, not copied from
+>   this table. This table is a dated reading and will decay like every other one.
+> - ⛔ **Premise 1 is genuinely still true** — repair only what is measured false. Widening to premise 3
+>   is **not** a licence to touch premise 1.
+> - ⭐ **`0194` remains genuinely blocked, on `0189` alone.** *"Two of three are now false"* is **not**
+>   *"`0194` is ready"*. `0194`'s `## Status` stays `🔲 Backlog`.
+> - **Steps 3, 4 and verification 5 are count-driven and self-correct** — they derive from step 1's
+>   re-measurement. **Under this ruling the answer today is: ONE open prerequisite, `0189`.**
+> - **Verification step 3 still holds and is now sharper:** `grep -n "clause does not exist"` on the
+>   repaired `0194` brief must return **only premise 1's hit**, not two.
+> - ⚠️ **The title and `## ID` still name only `0190`.** Cosmetic, and the first correction already ruled
+>   it no reason to choose otherwise. **Left unchanged.**
+> - ⛔ **Unchanged:** `## Status` `🔲 Backlog`, `## Priority` `Unscheduled`, `## Sprint` `Backlog`,
+>   `## Owner` `fkit-producer`. **`0194`'s brief was NOT edited by this note** — that is this task's own
+>   deliverable. No board row edited, nothing re-ranked (ADR-035), no mover run (ADR-033), nothing
+>   written under `ai-agents/wiki-vault/` (ADR-005), no commit.
+>
+> **Written by a spawned `fkit-producer` with no owner channel** (ADR-021), relaying a ruling the live
+> `fkit lead` session obtained from the owner.
 
 ## Verification steps
 

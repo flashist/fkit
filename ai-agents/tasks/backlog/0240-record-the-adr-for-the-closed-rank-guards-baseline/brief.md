@@ -186,6 +186,52 @@ alone is exactly the check that has already failed once in this repo. Measured a
 2026-08-06, the strings `adr-038` / `adr-039` already appear across **17 files** — boards, briefs,
 reports, and the vault — none of which is a `decisions/` file.
 
+> ## ⚠️ DATED CORRECTION 2026-08-14 — THIS SECTION'S SPECIFIC WARNING IS SPENT. Its rule is not. Every prior byte left identical.
+>
+> ⚠️ **FRAMING ONLY.** ⛔ **This task's scope, intent and deliverable are unchanged** — it still records
+> the baseline decision as an ADR, and ⛔ **the decision is still not re-openable here.** No scope
+> change, no status change, no re-rank, no file move. Written by a spawned `fkit-producer` with no
+> owner channel.
+>
+> **1. ⛔ *"Do NOT pre-allocate 039"* is MOOT. `039` is taken — and so are `040`–`043`.** Measured on
+> disk 2026-08-14, `ai-agents/knowledge-base/decisions/` holds ADR-001 through **ADR-043**; `adr-037`
+> is no longer the highest, and `adr-038` landed with `0222`. **The lowest free number today is `044`**
+> — ⛔ **and that figure is a dated reading, not an allocation.** Re-derive it.
+>
+> ✅ **The four-way sweep this section mandates is UNCHANGED and still mandatory** — `decisions/`,
+> `reports/`, the sprint boards, and `ai-agents/wiki-vault/` (read-only, ADR-005). ⚠️ **The ADR-029
+> precedent behind it is if anything stronger now**: five more numbers have been claimed since the
+> figure above was measured, so the *"claimed everywhere except `decisions/`"* failure has more surface
+> than it did. ⛔ **Sweeping `decisions/` alone still fails verification step 2.** The `17 files`
+> figure is a 2026-08-06 reading — re-measure it.
+>
+> **2. ✅ `0222` HAS LANDED**, at `ai-agents/tasks/done/0222-record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs/`.
+> The *"`0222` has not landed"* clause above is history. ⚠️ **Verification step 1 still applies as
+> written** — state its close date and the ADR number it took; that is now a lookup rather than a wait.
+>
+> **3. ⛔ THE `Blocks: 0182 — soft` EDGE IN `## Notes` IS DEAD. `0182` SHIPPED.**
+> `ai-agents/tasks/done/0182-build-the-closed-rank-immutability-guard/` exists and
+> **`test/closed-rank-immutability.test.js` is on disk (37,782 bytes)**, implementing the ruled two-leg
+> design — the `HEAD` comparison and the `HEAD` ↔ `HEAD^` leg the owner ruled *"Include it"*.
+> ⭐ **The guard did not wait for this ADR.** ⚠️ **That does NOT discharge this task:** its deliverable
+> is the durable, citable *record* of the decision, and `0182`'s brief carries that decision as a
+> §"✅ DECIDED 2026-08-06" correction rather than as an ADR. **What is discharged is the framing that
+> this task gates `0182`** — it does not, and never did after 2026-08-06.
+> ⚠️ **Consequence for verification step 9, which the reader reaches later:** its *"do not edit
+> `0182`'s brief"* prohibition **stands**, and its own 2026-08-06 correction already recorded that the
+> follow-up landed. ⭐ **What is new here is that the guard itself now EXISTS** — so the ADR's residual
+> reasoning must be derived **from the code as built**, exactly as the 2026-08-12 correction in
+> `## What to build` already demands. ✅ **That instruction is now satisfiable; it was speculative when
+> written.**
+>
+> **4. ✅ `Depends on: 0222` is DISCHARGED** — see the nested correction on that line in `## Notes`.
+>
+> ⛔ **Nothing else about this row changed.** `## Status` `🔲 Backlog`, `## Priority` `Unscheduled`,
+> `## Sprint` `Backlog`, `## Owner` `fkit-architect` — all untouched. No board row edited, nothing
+> re-ranked ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)),
+> no mover run ([ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)),
+> nothing written under `ai-agents/wiki-vault/` (ADR-005), nothing committed.
+
 ## Verification steps
 
 1. `0222` is closed before this starts — state its close date and the ADR number it took.
@@ -236,9 +282,34 @@ reports, and the vault — none of which is a `decisions/` file.
 - **Depends on:** `0222` — hard, for the ADR number only. `0222` files ADR-038 and runs the number
   sweep; allocating before it lands risks a collision that is permanent once anything links to it.
   **The decision itself does not depend on `0222` in any way** — the two ADRs are unrelated in subject.
+  - ✅ **DATED CORRECTION 2026-08-14 — THIS DEPENDENCY IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0222` closed; its folder is
+    `ai-agents/tasks/done/0222-record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs/`
+    and **ADR-038 is on disk**. **Current dependency: nothing.** ⚠️ **What survives is the *reason*,
+    not the wait:** the four-way number sweep is still mandatory before allocating (verification step
+    2), and `039`–`043` are now all taken — see the dated correction at §"The number hazard".
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
 - **Blocks:** `0182` — soft. `0182` is currently recorded as blocked on this baseline decision, and this
   ADR is what discharges that block. It is soft rather than hard because the ruling already exists in
   the session record; the ADR is what makes it durable and citable.
+  - ⛔ **DATED CORRECTION 2026-08-14 — THIS EDGE IS DEAD. `0182` SHIPPED. The line above is left
+    byte-identical.** `ai-agents/tasks/done/0182-build-the-closed-rank-immutability-guard/` exists and
+    **`test/closed-rank-immutability.test.js` is on disk**, implementing the ruled two-leg design.
+    ⭐ **`0182` was never actually held by this row** — the owner's 2026-08-06 rulings were applied
+    straight into `0182`'s brief as its §"✅ DECIDED 2026-08-06" correction, and it built from that.
+    **Current: this task blocks nothing.**
+    ⚠️ **It does NOT follow that this task is discharged.** Its deliverable is the **durable, citable
+    record** of a decision that today lives only inside a closed task's brief and a session log.
+    ⭐ **What changes is the value proposition, and the plan should say so plainly:** the ADR is no
+    longer an unblock, it is a record — ⛔ **and a run that writes it up as unblocking `0182` is
+    reporting something that stopped being true on 2026-08-06.**
+- ⚠️ **Overlap with [`0306`](../0306-repair-the-three-decay-shapes-across-the-open-backlog-briefs/brief.md),
+  stated so the work is not done twice.** `0306`'s Step 4 names `0240` as one of five rows owing a
+  discharged-dependency correction, **including the dead `Blocks: 0182` edge**. ✅ **Both are now
+  appended, above, in `0306`'s own prescribed form** — nested bullets, originals byte-identical, the
+  canonical flush-`**` `- **Depends on:**` line untouched so `dashboard.sh` still parses it.
+  ⛔ **`0306`'s run must NOT append a second pair here** — it should verify these and record `0240` as
+  already-correct, the way it already treats `0224`, `0225`, `0229` and `0271`.
 - **Related, not blocking:** `0181` (narrows the re-rank exception — the rule `0182` enforces), `0183`
   (corrects the two live records that claimed no closed row was renumbered), ADR-035 (whose
   §"Left undone, deliberately" this ADR closes).

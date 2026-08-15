@@ -237,6 +237,22 @@ page carries the **`0285`** blocks and the **`0258`** corrections, but **NOT** a
 because **`0289` has not run**. **Two of the three resyncs have landed on the page; the third is
 still owed.** ⛔ **Do not write or repeat "the page carries all three."**
 
+> ⛔⛔ **SIGNPOST ONLY, added 2026-08-14 — THE PARAGRAPH ABOVE IS ALREADY SUPERSEDED, AND ITS ⛔
+> INSTRUCTION MUST NOT BE HONOURED. Every prior byte left identical, and NO NEW CLAIM IS MADE HERE.**
+>
+> **`0289` HAS RUN.** The full dated correction — authority, evidence and all three falsified
+> statements — was appended to this brief's **`## Notes`** on **2026-08-13** and **governs**; it is
+> **not** repeated here. ⚠️ **This signpost exists only because that correction sits ~130 lines below
+> the paragraph it corrects**, so a reader working top-down reaches the ⛔ instruction first and would
+> obey a spent one. ✅ **Re-verified on disk 2026-08-14: `0289` is in `ai-agents/tasks/done/`, and
+> `ai-agents/wiki-vault/wiki/systems/install-and-self-update.md` carries its dated block.** ⛔ **Go read
+> the `## Notes` correction before acting on anything in this section** — it also corrects `:42`'s
+> table row and verification step 1's dead glob.
+>
+> ⚠️ **The investigation question itself is UNTOUCHED by all of this**, and so is every candidate
+> outcome including *"change nothing"*. ⛔ **Only the framing was misleading.** Scope, intent and
+> deliverable unchanged; no status change, no re-rank, no file move.
+
 ## What to build
 
 An **investigation and a written recommendation**. ⛔ **No code, no skill edit, no lint check, no
