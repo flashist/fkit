@@ -97,7 +97,7 @@ No code. This is a scoping-and-verification act, owned by the producer.
 4. If it failed anywhere, a separate follow-up brief exists for the repair and **no fix was applied
    under this task**.
 5. The `2026-07-25` ruling is annotated as not-applicable, with the reason, wherever it is recorded in
-   `ai-agents/sprints/sprint-2.md`.
+   `ai-agents/sprints/done/sprint-2.md`.
 6. `0112`'s own brief and its `done/` folder are **unchanged** — this task does not edit them, and does
    not invoke `/fkit-task-done` on `0112`.
 7. The owner has one clearly-stated decision put to them, with a recommendation.

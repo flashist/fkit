@@ -74,7 +74,7 @@ stands"* — **an appended, dated amendment with the original text left byte-ide
 
 - `adr-015-…md:220` — *"Amendment — 2026-07-14: a supporting fact was falsified by implementation;
   **the decision stands**"*
-- `adr-016-…md:292` — same shape
+- `adr-016 §Amendment — 2026-07-14` — same shape
 - `adr-042-…md:317` — *"Correction note — 2026-08-11: the site count is five under `claude/`, not
   four"*
 
@@ -151,7 +151,7 @@ right.** Assessed at filing, 2026-08-12:
   where the line is already being rewritten.** ADR-041 carries other cites (`:796`, `:772`, `:917`,
   `:922-923`) that may also be stale. **Report them; do not sweep them.** Widening this row into a
   general ADR-041 citation audit is out of scope.
-- ⛔ **Do not edit `ai-agents/sprints/sprint-5.md`** — the hit at `:491` is inside a frozen sprint-plan
+- ⛔ **Do not edit `ai-agents/sprints/done/sprint-5.md`** — the hit at `:491` is inside a frozen sprint-plan
   note recording what a decision *was told to preserve*. It is history. **Report, do not fix.**
 - ⛔ **Do not edit `0267`'s or any other closed task's `review.md`, `worklog.md`, `plan.md` or
   `brief.md`.** Amending a closed ledger is `0274`'s shape and needs its own ruling.

@@ -73,6 +73,91 @@ The report's 29 became 36 by two movements: `0174` closed (−1), and the eight 
 report were filed (+8). **These figures are a snapshot. Re-measure at implementation time and report
 against this table rather than quoting it as current.**
 
+> **⚠️ DATED CORRECTION 2026-08-21 — the sizing figures above have drifted materially. Every line
+> above is left byte-identical.**
+>
+> **Re-measured first-hand 2026-08-21** by a spawned `fkit-producer`, under an owner ruling given
+> live via `AskUserQuestion` in the driving `fkit lead` session (verbatim option label:
+> ***"0180's cost figure (Recommended)"***). Method: `find ai-agents/tasks -name brief.md -type f`
+> piped into `grep -l` / `grep -lF`. These are **file-level string matches, not parsed merit
+> fields** — see the caveats below before quoting them.
+>
+> | Set, measured 2026-08-21 | Briefs | Carry `On merit` in any form | Canonical `**On merit:**` | Legacy `On merit this belongs` |
+> |---|---|---|---|---|
+> | Whole corpus (`backlog/` + `done/` + `cancelled/`) | 314 | 91 | 40 | 38 |
+> | Open only (`backlog/`) | 110 | 49 | 23 | 22 |
+>
+> **The load-bearing figure is neither of those rows.** This guard binds **ranked boards only** —
+> part 1 above excludes the unranked Backlog board. Of the 110 open briefs, **96 carry
+> `## Sprint: Backlog` and are out of scope**; **14 carry `## Sprint: Sprint 6`** and are the set
+> the guard would actually select. Across those 14, measured 2026-08-21: **2 canonical, 4 carry a
+> merit line in a non-canonical shape, 8 carry none** — **red on 12 of 14**, not 28 of 36.
+>
+> **⚠️ Three caveats, so the counts are not over-read.** (1) **5 briefs match both shapes**, so
+> 40 + 38 double-counts by 5. (2) **18 briefs contain `On merit` but neither exact shape** —
+> inspection shows these are mostly the legacy sentence wrapped across two physical lines, plus
+> negative mentions of the form *"No `On merit` statement, by design"*, plus `0178`'s illustrative
+> examples; they are **not** a fourth shape. (3) **3 canonical merit lines corpus-wide carry a
+> `P<n>` token** and so fail the **shape** half despite being in the canonical form — a presence
+> count is not a pass count.
+>
+> **What moved, and why the decision this brief frames is a materially different size.** The
+> canonical `**On merit:**` shape **spread through the corpus ahead of the convention page that
+> defines it**: 40 briefs already use the form, while `0178` — verified on disk 2026-08-21 — reads
+> `🔄 In progress` and no merit-statement convention page exists under
+> `ai-agents/knowledge-base/conventions/`. At filing (2026-08-01) the canonical form existed in
+> **8** briefs, all from a single batch. The backfill this brief sized at **28** briefs is, on the
+> ranked board today, a **12**-brief job, and cost (b)'s framing — *"the guard is red on the whole
+> open board on day one"* — no longer describes reality.
+>
+> **This note decides nothing.** The grandfathering question was settled 2026-08-06 (option 2,
+> exempt existing briefs — see §"DECIDED 2026-08-06" above) and **that ruling is untouched**; this
+> correction re-sizes only the facts that framed it. **The boundary date is still not fixed** and
+> still depends on `0178`, so how many briefs the exemption actually spares **cannot be computed
+> today** — the 12 of 14 above is the red set with **no exemption applied**. ⚠️ **Re-measure again
+> at implementation time.** The drift between 2026-08-01 and 2026-08-21 is itself the evidence that
+> these figures do not keep.
+
+> **⚠️ DATED CORRECTION 2026-08-21 (later the same day) — the "no merit-statement convention page
+> exists" sentence in the correction immediately above has gone stale. That sentence is left
+> byte-identical: it was true when written. This is drift, not an error.**
+>
+> **Verified first-hand on disk 2026-08-21** by a spawned `fkit-producer`: task `0178`'s Build landed
+> the canonical merit-statement form **as a `## The merit statement — recording an ordering rank
+> cannot carry` section inside
+> [`ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md`](../../../knowledge-base/conventions/priority-is-rank-not-identity.md)**
+> — **not** as a page of its own. It is present in **both homes** (`ai-agents/knowledge-base/
+> conventions/` and `claude/scaffold/ai-agents/knowledge-base/conventions/`), and the two copies are
+> **byte-identical** (`diff` clean; 7909 bytes each), as `dual-home-parity.md` requires.
+>
+> **So the sentence above is literally still true and materially misleading.** True: no *standalone*
+> merit-statement page exists under `ai-agents/knowledge-base/conventions/`, and none is coming — the
+> form was never going to get its own file. Misleading: the form it reports as absent **is on disk**,
+> and `0180` will be read against `0178`.
+>
+> **`0178` itself still reads `🔄 In progress`** (verified on disk 2026-08-21). The section shipped
+> ahead of the task's close, so *"`0178` is in progress"* and *"the form is on disk"* are both true at
+> the same time. Do not treat `0178`'s open status as evidence the text is missing.
+>
+> **The re-sized figures are deliberately not restated here, so there is one place to keep true
+> rather than two** — they are in the 2026-08-21 correction immediately above. This note re-sizes
+> nothing.
+>
+> **⚠️ The same drift touches §"The blocking decision" below**, which reads *"That convention page is
+> `0178`'s deliverable and `0178` has not shipped, so the date does not exist on disk today."* The
+> **text** now exists; **the boundary date still does not** — the shipped section states no date of
+> its own and cites report
+> `2026-08-01-merit-ordering-record-when-board-rank-cannot-carry-it.md` §3.1 for the form. So that
+> paragraph's instruction — **derive the cut-off from the convention page, never invent one** — stands
+> unchanged, and the gap it names (*"if `0178` lands without a stated date, that is a gap to raise,
+> not to fill"*) is now **live rather than hypothetical**. ⛔ Raising it is not this note's job and is
+> not done here.
+>
+> **This note decides nothing and changes no field.** No `## Status`, `## Priority`, `## Owner` or
+> rank was touched. The 2026-08-06 grandfathering ruling (option 2, exempt existing briefs) is
+> **untouched and not re-opened** — the owner re-confirmed it live via `AskUserQuestion` on
+> 2026-08-21, verbatim option label ***"Leave option 2 standing (Recommended)"***.
+
 **⚠️ Do not close the gap by loosening the condition to accept the legacy shape.** That re-opens exactly
 what §3.1 ruled — *"the practice is right and its form is wrong"* — and defeats the **shape** half,
 which is the half that stops the merit field becoming the next host for the bare-rank citation problem
@@ -187,3 +272,8 @@ brief to the canonical shape and is the natural template for the reshape.
 - **Merit form used here** is the canonical `**On merit:**` shape from report §3.1 / ADR-035 — the shape
   this guard checks for. Flagged so it is not read as drift.
 - No existing row was renumbered by this brief.
+- **⚠️ DATED CORRECTION 2026-08-21 — the cost-(b) sizing figures in `## Context` are stale.** The
+  re-measured corpus figures, the ranked-board red set, and the caveats on all of them live in the
+  dated correction under §"Two accepted costs" above — **deliberately not restated here, so there is
+  one place to keep true rather than two.** The 2026-08-06 grandfathering ruling is untouched; only
+  the sizing moved.

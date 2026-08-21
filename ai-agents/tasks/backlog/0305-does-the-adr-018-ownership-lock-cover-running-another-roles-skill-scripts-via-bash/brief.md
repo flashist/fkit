@@ -253,6 +253,26 @@ The document must:
 
 ## Notes
 
+- **⚠️ DATED NOTE 2026-08-15 (`0306`) — THE BLOCKQUOTE IN EVIDENCE ITEM 1 HAS SINCE BEEN REWRITTEN
+  AND REWRAPPED. It is DELIBERATELY LEFT byte-identical; it is now a quotation of text that no longer
+  exists.** `0306` repaired the stale pre-ADR-029 numeral `task 43` across `claude/`.
+  - **What this brief quotes** (`claude/fkit-claude.sh`, as it read before 2026-08-15):
+    *"`--settings` wiring a `PreToolUse` hook (skill-ownership-hook.sh, task 43 / ADR-018) that
+    denies any `Skill` call whose REAL invoking agent's role doesn't own it, per skills_for_role() —
+    at any spawn depth, not just this session."*
+  - **What that header says today** — same three claims, `task 43` → `` `0052` ``, and the first
+    line split in two to stay inside the file's comment width:
+    *"`--settings` wiring a `PreToolUse` hook (skill-ownership-hook.sh, `0052`
+    (`implement-pretooluse-skill-ownership-hook`) / ADR-018) that denies any `Skill` call whose REAL
+    invoking agent's role doesn't own it, per skills_for_role() — at any spawn depth, not just this
+    session."*
+  - **`task 43` = `ai-agents/tasks/done/0052-implement-pretooluse-skill-ownership-hook/`.**
+    ⛔ Not `0043-fix-scaffold-knowledge-base-folders`, which the bare numeral lands on by coincidence.
+  ⛔ **The finding this evidence supports is unaffected** — the wording change is the numeral and the
+  line break; **"denies any `Skill` call … at any spawn depth" is unchanged**, so the question this
+  task asks (does the lock reach a skill script run via `Bash`?) is exactly as open as it was.
+  ⚠️ **Re-read the header first-hand before reasoning from it**, as this brief's own preamble
+  instructs.
 - **Depends on:** nothing
 - **Blocks:** nothing
 

@@ -98,5 +98,5 @@ this test exists precisely to catch a re-addition, so the mutation *is* the proo
   - **What executed instead:** both rows moved to the Backlog board on 2026-08-03, **separately**.
     Neither was cancelled or closed.
   - ⛔ **Do not re-derive or re-propose this merge.** Also recorded in 0146's brief and in the
-    2026-08-03 triage addendum in `ai-agents/sprints/sprint-2.md`.
+    2026-08-03 triage addendum in `ai-agents/sprints/done/sprint-2.md`.
 - No commit — leave the changes in the working tree.

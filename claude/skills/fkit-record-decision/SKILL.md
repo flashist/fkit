@@ -29,6 +29,9 @@ reviewers' reviewers) start from the decision instead of re-litigating it.
 > `ai-agents/wiki-vault/` is the **fkit-wiki** agent's job. When an ADR should appear in the wiki,
 > recommend the owner run fkit-wiki's `ingest` on it. Never write the wiki yourself.
 
+> **Correcting an existing ADR, not recording a new one?** Skip Steps 1–4 — they assume a new ADR —
+> and use §"Correcting an accepted ADR — the dated correction note" below.
+
 ## Step 1 — Establish the decision and its grounding
 
 - Confirm what decision is being recorded and that it is actually **settled** (an ADR records a
@@ -163,3 +166,111 @@ Keep it tight and honest — the value is the *why* and the rejected alternative
 State the ADR written (path + number + status) and its one-line decision. **Make no commits.** Note
 that **fkit-wiki** should ingest this into the wiki's decisions pages if it belongs there — you do not
 write the wiki.
+
+## Correcting an accepted ADR — the dated correction note
+
+Use this when a **claim inside** an accepted ADR has drifted — code moved, a count changed, a named
+mechanism was replaced — but the decision itself still stands.
+
+**When to use, and when not:**
+
+- A correction annotates a stale claim inside an ADR whose **Status stays `accepted`**. The single
+  most likely wrong move is marking it `superseded` — `superseded` says the *decision* was replaced,
+  and a drifted fact does not replace a decision.
+- It is NOT for a genuine reversal of the whole ADR. A reversal is a **new ADR plus a ⛔ notice**
+  in the old one pointing at it.
+- It is **not a licence to edit** ADR prose. The recorded text is history; corrections are appended
+  next to it, never written over it.
+
+**Piece by piece — the form has three parts:**
+
+1. A **drift note** — a dated ⚠️ blockquote placed next to the stale claim.
+2. A **reversal notice** — a dated ⛔ blockquote, used only when a specific decision inside the ADR
+   was overturned.
+3. A header **`- **Corrections:**`** metadata bullet, listing the annotated sites.
+
+**The two-marker legend — and only two:**
+
+- ⚠️ = a fact that drifted (the decision is untouched)
+- ⛔ = a decision that was overturned (do not follow it)
+
+There is **no third marker**. Mismarking matters: a drift marked ⛔ tells readers to stop following a
+decision that in fact stands.
+
+**Append-only, proved by diff — not by eye:**
+
+Every note states that the corrected text is **left byte-identical**. Prove the `+N / −0` shape with
+these two commands, not by re-reading:
+
+```
+git diff --numstat -- <adr-file>                        # expect "N  0  <adr-file>"
+git diff -U0 -- <adr-file> | grep '^-' | grep -v '^---' # expect no output
+```
+
+⚠️ **Use that deletion filter exactly.** The shorter-looking `grep '^-[^-]'` is **wrong**: a deleted
+markdown list line `- text` appears in the diff as `-- text`, so its second character is also `-` and
+the pattern skips it — including every `- **Status:**` and `- **Corrections:**` header bullet, which
+is the one line this form tells you to extend. `grep -v '^---'` drops only the diff's own
+`--- a/<file>` header line.
+
+**When earlier uncommitted appends already sit on the same file** (task `0195`), the working-tree
+diff cannot isolate your change: it is measured against the last commit, so deleting a line that an
+*earlier* uncommitted append added still reports `N  0` and still passes the filter above. Copy the
+file **before you edit**, then run both of these as well:
+
+```
+git diff --no-index --numstat <snapshot> <adr-file>   # expect "N  0"
+diff <snapshot> <adr-file> | grep '^<'                # expect no output
+```
+
+**Placement — below the claim, deliberately:**
+
+The note goes **below** the claim it corrects. This deliberately departs from the wiki vault's
+"banner above claim" convention: a block above a bullet visually **detaches** from the claim it
+annotates and reads as section preamble, breaking the narrative — and the reader is already
+**warned** first by the header `- **Corrections:**` bullet, so below-placement costs no warning.
+
+**The header bullet's form:**
+
+`- **Corrections:**` is **one metadata item** that **may wrap** across physical lines. It carries the
+⚠️/⛔ **legend** and the list of annotated sites. It is the stated **append-only exception**: the one
+part of an `accepted` ADR a correction may extend, because it is metadata *about* the notes, not body
+text. When a later correction pass extends it (as task `0195` did), **append** continuation lines to
+the same item, leave the prior lines byte-identical, and name **which part** of them the new lines
+supersede — in the shipped form, only the **site list**: *"The site list in the first line of this
+item is left byte-identical and is superseded by this line; the same append-only rule and the same
+legend apply."* Do not declare the whole prior item superseded: its ⚠️/⛔ legend, its no-edit
+assertion and its *"Status stays `accepted`"* statement are all still binding.
+
+**Indentation follows the claim it annotates:**
+
+The note's **indentation matches** the block it sits under. A claim inside a list item takes the
+item's continuation indent; a claim in **top-level prose** takes **column 0**. An indented note under
+prose renders inside the wrong list; an indent-0 note is not sloppy — it is the correct form for
+prose.
+
+**Cross-reference, do not restate:**
+
+When two sites share a corrected fact, **one site carries the fact** and every other site points at
+it — and the pointing note says it is pointing **on purpose**, in the shipped wording: *"deliberately
+not restated here, so there is one place to keep true rather than two."* Restating creates two copies
+to keep true; one of them will drift.
+
+**Worked example, by name:** ADR-010 (`adr-010-role-locked-sessions-and-skill-lockdown.md` under the
+knowledge-base decisions directory) carries all five shipped notes. Task `0143` established the form
+(first application); task `0195` generalized it (second application — the indent-0 note under
+top-level prose, and the cross-reference note). In this repository, read ADR-010 before writing your
+first correction.
+
+**Two auxiliary form rules (ratified with the form, task `0143`):**
+
+- Notes are **dated** and written **present-tense with a verification date** — "verified against live
+  code YYYY-MM-DD" — not past-tense narration.
+- **Citation form:** cite mutable files by **file + quoted phrase, never `:NNN`** line numbers — on
+  `0143`'s own append, 12 sibling line-number pointers broke while its quote-anchored citations
+  survived.
+
+**Hand off when you are done.** Report which sites you annotated and state the proof figures above.
+The Boundaries note at the top of this skill covers a **new** ADR; a **corrected** ADR whose wiki page
+already exists leaves that page stale — so also recommend the owner have **fkit-wiki** re-ingest the
+ADR. You do not write the wiki yourself, and you **make no commits**.

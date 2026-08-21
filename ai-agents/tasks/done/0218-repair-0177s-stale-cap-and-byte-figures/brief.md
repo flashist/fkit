@@ -10,7 +10,7 @@ Sprint 6
 Sprint 6 P3
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-producer

@@ -159,6 +159,21 @@ and did not notice.
 
 ## Notes
 
+- **📌 DATED NOTE 2026-08-15 (`0306`) — the quoted *"Task 70"* in `## Context` means `0008`, not
+  `0070`, and the quotation is DELIBERATELY LEFT byte-identical.** `0306` swept stale pre-ADR-029 task
+  numerals out of the open briefs. This site is a **verbatim quotation** of the warning block in
+  `claude/skills-for-role.sh`, so it is never edited to make it accurate — the key goes beside it:
+  - **`Task 70` = `ai-agents/tasks/done/0008-add-open-questions-interview-skill-for-six-roles/`**
+    (pre-migration `task NN` is the brief's old `## Priority` value; `0008` carries Priority 70).
+  - ⛔ **It is NOT `0070-relax-tool-allowlists-except-adversarial-reviewer`**, which the bare numeral
+    lands on by coincidence. Evidence: the quoted incident is a **skill-mirror** failure —
+    `scaffold/CLAUDE.md` asserting the lead had "only two skills" once that stopped being true — and
+    `0008` is what added a skill to the lead. `0070`'s own brief rules the skill mirrors out of its
+    scope in terms (*"No `skills-for-role.sh` diff and no `fkit-team` / `README.md` mirror-table
+    diff"*), so it cannot be the task that followed the mirror checklist and shipped the false count.
+  - ⚠️ **This overrides `0306`'s own brief**, which listed `task 70` as a verified-correct
+    counter-example. Overridden by **owner ruling at `0306`'s plan gate, 2026-08-15**, on this
+    evidence.
 - **Depends on:** nothing.
 - **Blocks:** 0189 — by owner ruling, not by any mechanism. See `## Context`.
 - **Owner:** fkit-coder.

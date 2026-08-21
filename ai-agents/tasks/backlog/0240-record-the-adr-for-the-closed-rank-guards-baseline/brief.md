@@ -303,7 +303,7 @@ reports, and the vault — none of which is a `decisions/` file.
     ⭐ **What changes is the value proposition, and the plan should say so plainly:** the ADR is no
     longer an unblock, it is a record — ⛔ **and a run that writes it up as unblocking `0182` is
     reporting something that stopped being true on 2026-08-06.**
-- ⚠️ **Overlap with [`0306`](../0306-repair-the-three-decay-shapes-across-the-open-backlog-briefs/brief.md),
+- ⚠️ **Overlap with [`0306`](../../done/0306-repair-the-three-decay-shapes-across-the-open-backlog-briefs/brief.md),
   stated so the work is not done twice.** `0306`'s Step 4 names `0240` as one of five rows owing a
   discharged-dependency correction, **including the dead `Blocks: 0182` edge**. ✅ **Both are now
   appended, above, in `0306`'s own prescribed form** — nested bullets, originals byte-identical, the

@@ -4,7 +4,7 @@
 - **Date:** 2026-07-22
 - **Deciders:** owner (Mark Dolbyrev), with fkit-architect
 - **Reverses:** [ADR-010](adr-010-role-locked-sessions-and-skill-lockdown.md) §Decision 3
-  (*"`fkit-lead` (the team room) is a router, not a doer"*, `adr-010:66-68`). ADR-010 Decisions 1, 2, 4,
+  (*"`fkit-lead` (the team room) is a router, not a doer"*). ADR-010 Decisions 1, 2, 4,
   5 are **unaffected**.
 - **Evidence:** [`reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md`](../reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md)
   — the feasibility analysis, the per-conflict resolution, and the plan-gate honesty clause reproduced
@@ -24,7 +24,7 @@ spawn **anybody** it needs — producer, architect, coder, reviewer, wiki, and f
 task, wait for completion, then push the process further."
 
 This **reverses** ADR-010 §Decision 3, and reversal is a real decision, not a drift: ADR-010 made lead a
-router *"with no Write or Edit tools, deliberately"* (`adr-010:66-68`, `fkit-lead.md:20-24`) precisely
+router *"with no Write or Edit tools, deliberately"* (ADR-010 §Context, `fkit-lead.md:20-24`) precisely
 because a long-lived session that *does everything* is the context-accumulation failure role-locking was
 built to kill (ADR-010 §Options).
 

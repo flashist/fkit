@@ -121,6 +121,20 @@ half-done moves pass. **Name that residual explicitly rather than implying the f
 
 ## Notes
 
+- **📌 DATED NOTE 2026-08-15 (`0306`) — verification step 4's *"all four live boards"* list carries a
+  DEAD PATH, and it is DELIBERATELY LEFT byte-identical.** `0306` swept dead board paths out of the
+  open briefs and stopped at this one, because **re-pointing the path alone would leave the sentence
+  wrong in two other ways.** Owner ruling, verbatim option label:
+  **"Leave it, dated note beside (Recommended)"** — `AskUserQuestion`, live `fkit lead` session
+  driving `/fkit-sprint-ship-loop`.
+  - **The dead path:** `sprints/sprint-3.md`. **It is now `ai-agents/sprints/done/sprint-3.md`** —
+    Sprint 3 was archived after this brief was written.
+  - ⛔ **Re-pointing it would leave the word "live" FALSE** (an archived board is not a live board)
+    **and the count "four" UNVERIFIED.** Both are this step's substance, not incidental wording, so
+    correcting them is a change to what the step asserts — **`0234`'s call, not a sweep's.**
+  - **Whoever runs this step: resolve the board list against `ai-agents/sprints/` first.** At
+    2026-08-15 the live boards are `backlog.md` and `sprint-6.md`; `sprint-1.md`…`sprint-5.md` are all
+    under `sprints/done/`.
 - **Depends on:** nothing.
 - **Blocks:** nothing.
 - **Related, not blocking:** `0210` (specifies and supports the reverse move `Sprint → Backlog`) — this

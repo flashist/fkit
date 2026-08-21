@@ -48,11 +48,11 @@ const SCAFFOLD = join(REPO, 'claude', 'scaffold');
 const BEGIN = '<!-- fkit:begin-rules -->';
 const END = '<!-- fkit:end-rules -->';
 
-// 19 Table A dirs + 29 Table B files, as claude/structure-spec.md ships today. Exact on purpose
+// 19 Table A dirs + 30 Table B files, as claude/structure-spec.md ships today. Exact on purpose
 // (the non-vacuity discipline of skill-frontmatter.test.js): a report quietly covering fewer rows
 // than the spec's inventory is a checker bug, not a smaller project. If the spec inventory
 // legitimately grows or shrinks, update this count as a DELIBERATE part of that same change.
-const EXPECTED_ROWS = 48;
+const EXPECTED_ROWS = 49;
 
 const MADE = [];
 after(() => MADE.forEach(cleanup));
@@ -140,7 +140,7 @@ test('scaffold-verbatim project: every row conforming, exit 0, zero mutation', (
   for (const [path, { outcome }] of rows) {
     assert.equal(outcome, 'conforming', `${path} should be conforming on a scaffold-verbatim project`);
   }
-  assert.match(r.out, /# summary: conforming=48 missing=0 untouched-stale=0 owner-edited=0 /,
+  assert.match(r.out, /# summary: conforming=49 missing=0 untouched-stale=0 owner-edited=0 /,
     'summary counts are computed by the script and must match the rows');
   assert.equal(snapshot(dir), before, 'the check MUST NOT mutate the project (read-only in every branch)');
 });

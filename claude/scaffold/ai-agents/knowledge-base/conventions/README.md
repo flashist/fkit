@@ -22,7 +22,7 @@ The three are easy to confuse, and the distinction is the whole point of this fo
 
 ## What's here
 
-Seven conventions ship with the scaffold. They are **yours to amend** — but amend them *here*. A
+Eight conventions ship with the scaffold. They are **yours to amend** — but amend them *here*. A
 convention has exactly one home; a second copy of a rule is how the two drift apart and the project
 stops knowing which one is law.
 
@@ -35,6 +35,7 @@ stops knowing which one is law.
 | [`one-skill-one-output.md`](one-skill-one-output.md) | a skill yields one complete output per subject — arguments select subjects, never output variants |
 | [`priority-is-rank-not-identity.md`](priority-is-rank-not-identity.md) | the board's Priority cell is rank (`P<n>`); a task's identity is its folder-name ID |
 | [`dependency-declaration-form.md`](dependency-declaration-form.md) | the one `- **Depends on:**` form a brief may use — the form `dashboard.sh` parses |
+| [`durable-citation-anchors.md`](durable-citation-anchors.md) | when a coordinate is safe to cite — line numbers for findings, names for living documents |
 
 ## Naming
 

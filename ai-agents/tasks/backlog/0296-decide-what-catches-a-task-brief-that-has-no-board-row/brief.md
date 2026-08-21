@@ -240,6 +240,41 @@ the figures in `## Context`.**
 
 ## Notes
 
+- **📌 DATED NOTE 2026-08-15 (`0306`) — the quoted *"Sprint 2 task 23"* in Specimen 3 means `0006`,
+  and the quotation is DELIBERATELY LEFT byte-identical.** `0306` swept stale pre-ADR-029 task
+  numerals out of the open briefs. That string is a **verbatim quotation of `0004`'s frozen
+  cancellation reason** (`⛔ Cancelled (2026-07-14) — superseded by Sprint 2 task 23`), so it is never
+  edited to make it accurate — the key goes beside it:
+  - **`task 23` = `ai-agents/tasks/done/0006-add-launcher-contract-smoke-script/`** (pre-migration
+    `task NN` is the brief's old `## Priority` value; `0006` carries Priority 23, and its H1 is
+    *"Add the launcher-contract test suite"* — the thing that superseded `0004`'s e2e smoke script).
+  - ⛔ **It is NOT `0023-converge-ai-agents-additively-on-launch`**, which the bare numeral lands on
+    by coincidence.
+- **📌 DATED NOTE 2026-08-15 (`0306`) — the reverse-sweep loop in §"What to build" carries a DEAD
+  PATH, and it is DELIBERATELY LEFT byte-identical.** `0306` swept dead board paths out of the open
+  briefs and stopped at this one. Owner ruling, verbatim option label:
+  **"Leave it, dated note beside (Recommended)"** — `AskUserQuestion`, live `fkit lead` session
+  driving `/fkit-sprint-ship-loop`.
+  - **The dead term:** `ai-agents/sprints/sprint-5.md`, in
+    `for b in ai-agents/sprints/backlog.md ai-agents/sprints/sprint-5.md ai-agents/sprints/done/sprint-*.md`.
+    Sprint 5 was archived to `ai-agents/sprints/done/sprint-5.md` after this brief was written.
+  - ⭐ **The loop still scans every board the author meant to scan** — the `done/sprint-*.md` glob in
+    the same loop **already matches `done/sprint-5.md`**, so no board is missed and no false `DEAD:`
+    line is produced (the resolution test is `[ -f ]`, which is never reached for the dead term).
+  - ⚠️ **But the dead term is NOT silent, and an earlier version of this note wrongly said it
+    "simply contributes nothing"** — corrected 2026-08-15 (`0306` review round 1, R2). Running the
+    loop, `grep` on the missing file **warns on stderr and exits `2`**; that `2` is then **discarded**,
+    because it is not the last command in the pipeline. **This brief's own Trap 2 (§"What to build",
+    step 3) is exactly that shape** — *"`grep` … errored with exit `2`, and the `! grep -q` test read
+    every error as 'no match'"*. It does not corrupt the result **here**, but a runner sees a warning
+    that looks like a failed sweep, and whoever ships the mechanism must fail **loudly on error**
+    rather than inherit this pattern.
+  - ⛔ **That is exactly why it was not "repaired":** re-pointing the term would make the loop scan
+    `done/sprint-5.md` **twice**, and deleting the term is a semantic edit to someone else's
+    verification command. **`0296`'s call, not a sweep's.**
+  - ⚠️ **`ai-agents/sprints/sprint-6.md` is missing from the loop entirely** — it did not exist when
+    this was written. Whoever ships the mechanism must add it, or the reverse sweep will not cover the
+    active board.
 - **Depends on:** nothing
 - **Blocks:** nothing
 - **Provenance:** a backlog sweep run 2026-08-14 in a `fkit lead` session, which resolved all 295 task

@@ -150,7 +150,7 @@ implementation.**
 - ⛔ No amendment to ADR-005 or ADR-038 under this task.
 - ⛔ No `ai-agents/wiki-vault/` write (ADR-005) — the vault ingest of any resulting ADR is
   `fkit-wiki`'s, filed separately once the ADR is accepted.
-- ⛔ No edit to `ai-agents/sprints/sprint-5.md` — its exclusion record is correct for that board and
+- ⛔ No edit to `ai-agents/sprints/done/sprint-5.md` — its exclusion record is correct for that board and
   that run. This task exists because that record is perishable, not because it is wrong.
 - ⛔ No commit, no re-rank, no task-file move (ADR-033).
 
@@ -174,7 +174,7 @@ implementation.**
 8. The ADR records the owner's sign-off: the ruling, its date, and the channel it came through.
 9. `git status --porcelain` shows changes **only** under `ai-agents/knowledge-base/decisions/` plus
    this task's own folder — no `claude/` path, no `ai-agents/wiki-vault/` path, no
-   `ai-agents/sprints/sprint-5.md`.
+   `ai-agents/sprints/done/sprint-5.md`.
 10. `git diff --stat -- claude/skills/fkit-sprint-ship-loop/SKILL.md` is empty (the decision-only
     boundary held).
 

@@ -50,7 +50,7 @@ not exempt.
 **The same defect as 3, in a different closed brief.** `0162` closed on 2026-08-02 with its rank field
 and its board row disagreeing; the close deliberately did **not** repair it and recorded why. The owner
 was asked whether to extend this task or leave it, and **ruled: extend `0193`'s scope to cover `0162`'s
-brief.** The board addendum that flagged it is `ai-agents/sprints/sprint-2.md` §*Addendum — task `0162`
+brief.** The board addendum that flagged it is `ai-agents/sprints/done/sprint-2.md` §*Addendum — task `0162`
 closed and its follow-ups `0202`–`0206` added out of band (2026-08-02)*, final bullet.
 
 | # | Defect | Verified state (re-verified first-hand 2026-08-03) |
@@ -116,7 +116,7 @@ files, no re-ranks, no moves.
 1. Repair defects 1, 3, 4, 5 and 6 in
    `ai-agents/tasks/done/0158-…/brief.md`. **Corrections are appended or marked as dated corrections —
    never silent rewrites** (the convention `0159` established and the board records).
-2. Repair defect 2 in the `0158` row of `ai-agents/sprints/sprint-2.md` — the stale pointer only. **Do
+2. Repair defect 2 in the `0158` row of `ai-agents/sprints/done/sprint-2.md` — the stale pointer only. **Do
    not touch the row's status cell, its rank, or any other row.**
 3. For defect 3, state which value is authoritative. **The board rank binds; `## Priority` follows it.**
 4. For defect 6, replace the bare-rank citation with a **relative, non-numeric merit statement** naming
@@ -151,18 +151,18 @@ correction of one.
 2. **Every repair is a dated correction, not a silent rewrite** — a reader can see what the brief said
    before and when it changed.
 3. **The board diff touches exactly one row** — `0158`'s — and changes only its description text. `git
-   diff ai-agents/sprints/sprint-2.md` shows no status cell, no `P<n>` cell, and no other row altered.
+   diff ai-agents/sprints/done/sprint-2.md` shows no status cell, no `P<n>` cell, and no other row altered.
 4. **No `✅ Done` or `⛔ Cancelled` row was renumbered** — confirmed by the same diff.
 5. **`0180`'s brief still documents the bare-integer trap** and names a specimen that exists on disk.
 6. **`npm test` stays green** — this touches no source, so a red suite means something else broke.
-7. **The diff touches only** `ai-agents/tasks/done/0158-…/brief.md`, `ai-agents/sprints/sprint-2.md`,
+7. **The diff touches only** `ai-agents/tasks/done/0158-…/brief.md`, `ai-agents/sprints/done/sprint-2.md`,
    `ai-agents/tasks/backlog/0180-…/brief.md`, and — since the scope extension —
    `ai-agents/tasks/done/0162-decide-the-construction-that-satisfies-the-verbatim-carry-requirement/brief.md`.
 8. **Defect 7:** `0162`'s `## Priority` matches its board row (**128**); the two P127 bullets at
    `…/0162-…/brief.md` are **byte-unchanged**; a dated correction note sits beside them; and
    `sprint-2.md`'s *"⚠️ DISCREPANCY, unrepaired"* addendum bullet no longer claims it is unrepaired.
 9. **`0162`'s board row is byte-unchanged** — status cell, `P128` cell and description all untouched.
-   Confirmed by `git diff ai-agents/sprints/sprint-2.md`.
+   Confirmed by `git diff ai-agents/sprints/done/sprint-2.md`.
 
 ## Notes
 

@@ -141,7 +141,7 @@ librarian's call which fits**).
 - ⛔ **`log.md` is APPEND-ONLY** (owner ruling 2026-08-03, `0211`).
 - ⛔ **Vault writes only.** ⛔ Do not edit `ai-agents/knowledge-base/`, `claude/`, or any source file
   — including ADR-003 (that is [`0281`](../../backlog/0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md))
-  and `fkit-wiki-lint/SKILL.md` (that is [`0280`](../../backlog/0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md)).
+  and `fkit-wiki-lint/SKILL.md` (that is [`0280`](../0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md)).
   ⚠️ **If the librarian notices a knowledge-base page needing the same fix, report it — do not fix
   it.**
 - ⛔ **No task-file move** (ADR-033), no re-rank, no board-row edit beyond this task's own close.

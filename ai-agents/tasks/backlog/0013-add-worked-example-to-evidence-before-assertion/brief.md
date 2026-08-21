@@ -1,4 +1,4 @@
-# Add two worked examples to `evidence-before-assertion.md` — task 36, and the ADR-029/030 vault repair
+# Add two worked examples to `evidence-before-assertion.md` — `0072` (`remove-fkit-omnigent-orphan-residue`), and the ADR-029/030 vault repair
 
 ## ID
 0013
@@ -17,14 +17,14 @@ fkit-producer
 
 ## Context
 
-**The ask, from the fkit-reviewer's Round 2 closeout of task 36, owner-approved 2026-07-17:** add a
+**The ask, from the fkit-reviewer's Round 2 closeout of `0072`, owner-approved 2026-07-17:** add a
 **worked example** to [`ai-agents/knowledge-base/conventions/evidence-before-assertion.md`](../../../knowledge-base/conventions/evidence-before-assertion.md)
 showing what it costs when the convention is ignored. The reviewer's words, at
 `ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md:160`: *"That belongs in
 `conventions/evidence-before-assertion.md` as a worked example."*
 
 **Why prose is being asked to do more work than prose usually does.** The rule was already written
-down. It was already **stated in the words that fit this exact failure** — task 27's Correction in
+down. It was already **stated in the words that fit this exact failure** — `0069` (`refuse-init-on-weird-ai-agents-state`)'s Correction in
 [`sprint-2.md:354`](../../../sprints/done/sprint-2.md): *"a behavioral claim about a shell builtin or coreutil
 is a claim to run, not to reason about."* It was still broken **four times in one task, by the
 fkit-coder, who read the convention at the start of that task.** The reviewer's framing: *"Naming a
@@ -39,13 +39,13 @@ one cannot: *this happens to every role, and being told the rule does not stop i
 
 **Scope widened by owner ruling, 2026-07-19: this task now carries TWO new worked examples**, not one.
 The second is drawn from the ADR-029/030 vault repair of 2026-07-19 and is recorded in full below. It
-earns its own entry rather than padding the first because it is a **different failure mode**: task 36
+earns its own entry rather than padding the first because it is a **different failure mode**: `0072`
 is one agent reasoning about a fact instead of running it, one hop. The second is an agent **trusting a
 peer agent's correction** instead of verifying it, where the false claim then **travelled onward to the
-owner as fact**. **Neither the convention's existing preamble nor the task 36 example covers the
+owner as fact**. **Neither the convention's existing preamble nor the `0072` example covers the
 multi-hop case** — a claim that is wrong at hop 1 and unchecked at hop 2.
 
-## The evidence — task 36, ledger [`ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md`](../../done/0072-remove-fkit-omnigent-orphan-residue/review.md)
+## The evidence — `0072`, ledger [`ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md`](../../done/0072-remove-fkit-omnigent-orphan-residue/review.md)
 
 **Verified against the ledger while scoping this brief** — every claim below has a line reference, per
 the convention this task is about.
@@ -71,7 +71,7 @@ the convention this task is about.
 ## The evidence — example 2, the ADR-029/030 vault repair, 2026-07-19
 
 **Source of this account: the owner's own ruling of 2026-07-19, relayed via fkit-architect, plus the
-blockquote already standing in task 80's brief** ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](../../done/0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md), lines 40-45).
+blockquote already standing in `0078` (`repair-stale-adr-029-stop-hook-links-in-the-vault`)'s brief** ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](../../done/0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md), lines 40-45).
 **The two git checks below were re-run while scoping this widening and are confirmed**, per the
 convention this task is about.
 
@@ -92,9 +92,9 @@ convention this task is about.
   claim propagating through two hops** — producer → architect, architect → owner — **with neither hop
   verifying**. It was **not** "two claims propagated on trust." The brief is required to be accurate
   rather than dramatic; the imprecise version was corrected by the owner and must not be reintroduced.
-- **The cost was real and traceable.** A false statement **landed in task 80's brief and reached the
+- **The cost was real and traceable.** A false statement **landed in `0078`'s brief and reached the
   owner**. It was caught **only because a third agent (fkit-wiki) dissented** — not by any check either
-  of the two hops ran. **The urgency conclusion in task 80 was correct under either mechanism and was
+  of the two hops ran. **The urgency conclusion in `0078` was correct under either mechanism and was
   unchanged**; only the mechanism was misdescribed. Say that too — overstating the damage is its own
   unchecked assertion.
 - **The counter-example, which is what makes this a rule rather than a scolding — do not omit it.**
@@ -114,7 +114,7 @@ convention this task is about.
   a short, specific, blockquoted-or-sectioned account, then the rule it generalizes to. **Keep them as
   two entries** — they are two different failure modes and merging them loses the second.
 
-### Example 1 — task 36 (the original scope, unchanged)
+### Example 1 — `0072` (the original scope, unchanged)
 
 - **Write it from the ledger, not from anyone's account of the ledger.** Read
   `ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md` directly — the whole *Coder response*
@@ -126,12 +126,12 @@ convention this task is about.
   that is evidence rather than storytelling, and it is what makes the example a rule.
 - **Extend "The rule" with the generalization the example earns**, rather than only appending a story.
   Candidate wording, for the author to judge, drawn from the ledger's own conclusion (:221): *red-prove
-  the test, or do not claim the fix.* Plus task 27's already-written form: *a behavioral claim about a
+  the test, or do not claim the fix.* Plus `0069`'s already-written form: *a behavioral claim about a
   shell builtin or coreutil is a claim to run, not to reason about.*
 ### Example 2 — the ADR-029/030 vault repair (added by owner ruling, 2026-07-19)
 
 - **Write it from the two sources named above**, both of which the author can read directly: the
-  material in "The evidence — example 2" in this brief, and **task 80's own blockquote**
+  material in "The evidence — example 2" in this brief, and **`0078`'s own blockquote**
   ([`repair-stale-adr-029-stop-hook-links-in-the-vault.md`](../../done/0078-repair-stale-adr-029-stop-hook-links-in-the-vault/brief.md) :40-45),
   which records the incident independently. **Re-run the two `git cat-file -e HEAD:` checks** rather
   than copying their results on trust — writing this example from an unverified account would reproduce
@@ -146,7 +146,7 @@ convention this task is about.
   lesson is: the check was known, demonstrated, and then not applied.**
 - **Include that the third agent's dissent was the only thing that caught it** — no check either hop
   ran would have.
-- **Do not overstate the damage.** Task 80's conclusion was correct under either mechanism; only the
+- **Do not overstate the damage.** `0078`'s conclusion was correct under either mechanism; only the
   mechanism was wrong. Say so.
 - **The rule this one earns**, for the author to word: *a peer agent's correction is a claim, not a
   fact — verify it before you repeat it, and especially before you repeat it to the owner.* Plus the
@@ -162,12 +162,12 @@ convention this task is about.
   the part that is evidence rather than storytelling, and it is what makes the example a rule.
 - **Do not touch the existing 2026-07-13 preamble example.** It carries the producer-side lesson; these
   add the coder/test-side one and the cross-agent/multi-hop one.
-- **Update the Provenance section** to name task 36, the 2026-07-19 ADR-029/030 repair, and this brief
+- **Update the Provenance section** to name `0072`, the 2026-07-19 ADR-029/030 repair, and this brief
   alongside the 2026-07-13 incident.
 
 ## Verification steps
 
-- Every quoted claim in **example 1** resolves to a line in the task 36 ledger. **No claim written
+- Every quoted claim in **example 1** resolves to a line in the `0072` ledger. **No claim written
   from memory** — this document, of all documents, cannot contain an unchecked assertion.
 - **Example 2's two git facts are re-run, not copied**: `git cat-file -e HEAD:` on the `adr-029-` and
   `adr-030-` stop-hook vault paths, confirming the first exists at `HEAD` and the second does not.
@@ -236,8 +236,8 @@ convention this task is about.
 - **🔴 The real counter-argument, recorded not buried: the rule was already stated and still broken, so
   the lesson may be that it needs an *enforcement point*, not more prose.** This brief does not settle
   that and must not pretend to. Two facts sharpen it beyond how it was handed to me:
-  - **An enforcement point already exists — and its scope excludes exactly where task 36 failed.**
-    `test/prove-red.sh` (task 23 / [ADR-014](../../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md))
+  - **An enforcement point already exists — and its scope excludes exactly where `0072` failed.**
+    `test/prove-red.sh` (`0006` (`add-launcher-contract-smoke-script`) / [ADR-014](../../../knowledge-base/decisions/adr-014-how-fkit-tests-itself.md))
     is this project's hard mutation gate, built on *"a test that has never failed has not been
     tested"* — which **is** "red-prove or don't claim the fix", already mechanized. But its header
     (`test/prove-red.sh:20-25`) declares **two mutations, both against the launcher**. It does not
@@ -269,7 +269,7 @@ convention this task is about.
 - **Evidence sources:** `ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md` (*Coder response*
   section — "Findings I have to own" :206-223, R6/R7/R8 rows :91-93, reviewer closeout :156-160);
   `ai-agents/knowledge-base/conventions/evidence-before-assertion.md`;
-  `ai-agents/sprints/sprint-2.md` §Correction (:330-354) — task 27's identical lesson;
+  `ai-agents/sprints/done/sprint-2.md` §Correction (:330-354) — `0069`'s identical lesson;
   `test/prove-red.sh:1-25` — the existing gate and its declared scope.
 - **Evidence sources, example 2:** this brief's §"The evidence — example 2";
   `ai-agents/tasks/backlog/repair-stale-adr-029-stop-hook-links-in-the-vault.md:40-45` — the blockquote

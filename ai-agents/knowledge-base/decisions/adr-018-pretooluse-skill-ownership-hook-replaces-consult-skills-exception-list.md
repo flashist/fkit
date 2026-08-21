@@ -4,7 +4,8 @@
 - **Date:** 2026-07-16
 - **Deciders:** owner (Mark Dolbyrev), with fkit-architect
 - **Reopens:** [ADR-012](adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md) Decisions 3
-  and 4, together, per that ADR's own re-raise trigger (`adr-012:139-141`)
+  and 4, together, per that ADR's own re-raise trigger (ADR-012 §Consequences, *"reopen Decisions 3
+  and 4 together"*)
 - **Supersedes (in part):** [ADR-012](adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md)
   Decision 3 (retired) and the "advisory in a consult" half of Decision 2 (superseded once the hook
   lands — see §Decision below)
@@ -17,10 +18,10 @@ It patched the one known instance of this (producer → architect, `fkit-survey-
 hand-maintained always-on exception list, `CONSULT_SKILLS="fkit-survey-project fkit-query"`
 (`claude/fkit-claude.sh:252`), and explicitly **priced** rather than fixed the underlying problem —
 Decision 4 deferred the only real fix, a `PreToolUse` gate on the `Skill` tool, pending one open
-question: *"does the hook payload even expose the calling subagent's identity?"* (`adr-012:95-98`).
+question: *"does the hook payload even expose the calling subagent's identity?"* (ADR-012 §Decision 4).
 ADR-012 pre-registered its own re-raise condition, verbatim: *"the `PreToolUse` hook payload is
 confirmed to expose the calling subagent's identity and someone is prepared to build the gate →
-reopen Decisions 3 and 4 together"* (`adr-012:139-141`).
+reopen Decisions 3 and 4 together"* (ADR-012 §Consequences).
 
 **Both conditions are now met.**
 
@@ -66,7 +67,8 @@ analysis:**
    no remaining purpose — every role reaches exactly its own skills via the hook, with no
    hand-maintained "leave this on for everyone" carve-out. This also retires the accepted leak
    Decision 3 named: `fkit-survey-project` was reachable from every role session by name
-   (`adr-012:130`); under the hook it is reachable only by a role that actually owns it, or by a
+   (ADR-012 §Consequences, *"`fkit-survey-project` is reachable from every role session"*);
+   under the hook it is reachable only by a role that actually owns it, or by a
    consult chain whose real innermost caller does.
 
 3. **Decision 4 moves from "deferred, priced" to ADOPTED: the `PreToolUse` `Skill`-tool gate.**
@@ -85,8 +87,9 @@ analysis:**
 
 4. **Net effect on ADR-010 and ADR-012's claims — reconciled here, not left stale:**
    - ADR-010's claim *"role separation is enforced structurally, not by instruction"*
-     (`adr-010:63-65`) — which ADR-012 had to concede was true only of a plain top-level session
-     (`adr-012:67-76`) — now **extends to a spawned consult at any depth**, once this hook lands. The
+     (ADR-010 §Decision 2) — which ADR-012 had to concede was true only of a plain top-level session
+     (ADR-012 §Decision 2, *"structural in a role session, advisory in a consult"*) — now **extends to
+     a spawned consult at any depth**, once this hook lands. The
      structural/advisory split ADR-012 drew between "in a session" and "in a consult" no longer holds
      as a permanent architectural fact; it holds only until the hook ships.
    - **ADR-012 Decision 2's wording is superseded, not merely reinterpreted**: "structural in a role
@@ -126,7 +129,7 @@ analysis:**
 - **Keep `CONSULT_SKILLS`, add a second member for the coder → reviewer case (status quo, patched
   again).** Rejected: this is the exact anti-pattern ADR-012 Decision 3 already warned against — "do
   not add [a second member] silently — that is a new decision and re-opens Decision 3, because each
-  addition widens the leak" (`adr-012:142-143`). It does not fix the bug class, only adds a third
+  addition widens the leak" (ADR-012 §Consequences). It does not fix the bug class, only adds a third
   known instance to a list that will keep needing new entries indefinitely.
 - **Prose-only self-refusal, no hook (rejected — see Decision 6).** Defeatable by prompt injection;
   leaves ADR-010's structural claim false for the consult path permanently rather than temporarily.
@@ -174,8 +177,9 @@ analysis:**
   - Two prior ADRs (010, 012) now carry language ("advisory in a consult") that is accurate as
     *history* but not as *current truth* once this hook ships — readers must follow this ADR's pointer
     rather than trusting ADR-012's Decision 2 prose in isolation. Neither file is edited or
-    renumbered; this ADR is the correction layered on top, per project convention (`adr-012:154-156`
-    keeping ADR-010 intact after being superseded in part).
+    renumbered; this ADR is the correction layered on top, per project convention (ADR-012 §Related,
+    *"Its file is kept intact (honest numbering)"*, keeping ADR-010 intact after being superseded in
+    part).
   - `claude/skills/fkit-team/SKILL.md` and `claude/scaffold/CLAUDE.md`, corrected by ADR-012 to say
     non-owned skills are advisory-only in a consult, must be corrected **again**, in the other
     direction, once the hook lands and is verified (tracked in the sibling implementation task, not

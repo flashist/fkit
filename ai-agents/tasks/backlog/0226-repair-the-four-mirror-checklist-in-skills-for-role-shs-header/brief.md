@@ -38,8 +38,17 @@ words:
 > consuming project… A checklist that is itself incomplete is worse than no checklist: it is followed,
 > and it fails. If you add a fifth mirror, add it HERE FIRST."*
 
-**This is the task-70 failure mode recurring inside the very checklist that documents task 70.** The
-list now says FOUR and is still incomplete.
+**This is the task-70 failure mode recurring inside the very checklist that documents `0008`
+(`add-open-questions-interview-skill-for-six-roles`).** The list now says FOUR and is still
+incomplete.
+
+> 📌 **2026-08-15 (`0306`) — one referent, two names in that sentence, on purpose.** *"task-70"* and
+> *"`0008`"* are **the same task**: `ai-agents/tasks/done/0008-add-open-questions-interview-skill-for-six-roles/`.
+> `0306` repaired the spaced `task 70` here and left the **hyphenated** `task-70` alone — the
+> hyphenated form was outside every measurement that task was defined on, so sweeping it would have
+> inferred a rule the owner never made. ⛔ It is **not** `0070-relax-tool-allowlists-except-adversarial-reviewer`.
+> Full reasoning, and the other two hyphenated sites in this brief, in the dated note under `## Notes`.
+> *(Added at `0306` review round 1, R5: the disclosure existed but sat ~170 lines below this sentence.)*
 
 ---
 
@@ -196,6 +205,34 @@ The shape:
 
 ## Notes
 
+- **📌 DATED NOTE 2026-08-15 (`0306`) — every *"Task 70"* / *"task-70"* mention in `## Context` means
+  `0008`, not `0070`. ONE was repaired; the rest were deliberately left byte-identical.** `0306` swept
+  stale pre-ADR-029 task numerals out of the open briefs. In `## Context` it changed exactly one site:
+  - the blockquote is a **verbatim quotation** of the warning block in `claude/skills-for-role.sh` —
+    never edited to make it accurate;
+  - ✅ **the live-prose sentence immediately below it WAS repaired** — *"…the very checklist that
+    documents `0008` (`add-open-questions-interview-skill-for-six-roles`)"*. `0306`'s first ruling had
+    enumerated only `0217`'s two prose sites, so the Build step left this one and surfaced it rather
+    than widening the enumeration itself; **the owner then extended the repair to cover it**, verbatim
+    option label: **"Repair it to `0008`, consistent with the ruling (Recommended)"**, 2026-08-15.
+  - ⚠️ **The HYPHENATED `task-70` form was NOT swept and is still stale here** — *"the task-70 failure
+    mode"* (same sentence), *"the task-70 warning"* at §"What to build", and *"The task-70 warning
+    block"* at §"Verification steps". `task-70` never matched the `\btask NN\b` class the brief, the
+    plan and every measurement in this task were defined on, so sweeping it would have been inferring
+    a pattern the owner did not rule on. **It also means `0008`.**
+  - **`Task 70` = `ai-agents/tasks/done/0008-add-open-questions-interview-skill-for-six-roles/`**
+    (pre-migration `task NN` is the brief's old `## Priority` value; `0008` carries Priority 70).
+  - ⛔ **It is NOT `0070-relax-tool-allowlists-except-adversarial-reviewer`**, which the bare numeral
+    lands on by coincidence. `0070`'s own brief rules the skill mirrors out of scope in terms (*"No
+    `skills-for-role.sh` diff and no `fkit-team` / `README.md` mirror-table diff"*), so it cannot be
+    the task that followed this very checklist and shipped a false skill count.
+  ⚠️ **This task rewrites that header block.** When it does, repair the numeral in the same pass —
+  the quotation is only frozen while it is a quotation.
+  📌 **This note's headline was corrected 2026-08-15 (`0306` review round 1, R1).** It first read
+  *"both **"Task 70"** mentions … are DELIBERATELY LEFT byte-identical"*, which the second bullet above
+  contradicts. **A dated correction that misstates what it corrected is the defect class `0306` exists
+  to remove.** A pointer to this note was also placed **beside the repaired sentence in `## Context`**
+  (review round 1, R5), so a reader there is not 170 lines from the disclosure.
 - **Depends on:** nothing. ⚠️ **Explicitly NOT dependent on `0222`/ADR-038** — see the independence
   banner above.
 - **Blocks:** nothing. **Overlaps `0189`** (the ADR-036 registry) — see the conflict banner; `0189`

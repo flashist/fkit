@@ -154,7 +154,9 @@ not pretend otherwise (see `## Notes`).
   `claude/skills/*/SKILL.md` sources, which are the coder's seat per the task 0081 Part C ruling. The
   **fkit-reviewer cannot own it** (it writes only review ledgers, never the knowledge-base) even though
   the lesson is its own. The rejected alternative — architect writes the convention, coder ships the
-  scaffold half (task 47/48 precedent) — was declined because it costs two more briefs. **No split.**
+  scaffold half (the `0064` (`record-one-skill-one-output-convention`) / `0086`
+  (`ship-one-skill-one-output-convention-in-scaffold`) precedent) — was declined because it costs two
+  more briefs. **No split.**
 - **Depends on:** nothing.
 - **Blocks:** nothing.
 - **Coordinates with 0138** (the disproof-bar convention, same source ledger): both edit the **same two

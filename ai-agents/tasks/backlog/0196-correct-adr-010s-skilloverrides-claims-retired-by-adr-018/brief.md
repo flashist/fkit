@@ -120,6 +120,21 @@ Decide and record the reason.
 
 ## Notes
 
+- **⚠️ DATED NOTE 2026-08-15 (`0306`) — THE QUOTED COMMENT IN `## Context` HAS SINCE BEEN REWRITTEN.
+  The quotation is DELIBERATELY LEFT byte-identical; it is now a quotation of text that no longer
+  exists.** `0306` repaired the stale pre-ADR-029 numeral `task 43` across `claude/`.
+  - **What this brief quotes** (`claude/fkit-claude.sh`, as it read before 2026-08-15):
+    *"Retired here (task 43 / ADR-018, replacing ADR-012 §3): the old `skillOverrides` "off" list …"*
+  - **What that comment says today:**
+    *"Retired here (`0052` / ADR-018, replacing ADR-012 §3): the old `skillOverrides` "off" list and
+    the …"*
+  - **`task 43` = `ai-agents/tasks/done/0052-implement-pretooluse-skill-ownership-hook/`** —
+    pre-migration `task NN` is the brief's old `## Priority` value, and `0052` carries Priority 43.
+    ⛔ **It is NOT `0043-fix-scaffold-knowledge-base-folders`**, which the bare numeral lands on by
+    coincidence.
+  ⛔ **Nothing about this task's substance changes** — `skillOverrides` is still retired, the comment
+  is still the only surviving mention, and ADR-010 still needs the correction. **Re-verify the comment
+  first-hand before quoting it again**; do not re-quote the string above as current.
 - **Depends on:** nothing.
 - **Blocks:** nothing. **Coordinates with:** `0195` and `0197` — all three append to ADR-010; whichever
   lands second or third rebases on what is there, re-runs the `−0` proof against the updated baseline,

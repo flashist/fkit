@@ -32,20 +32,20 @@ the second.
 
 **Precedent for the exact shape already exists in the same file.** `skill-ownership-hook.test.js` is
 mutated via its own `FKIT_SKILL_OWNERSHIP_HOOK` env var (`prove-red.sh:50-52`, `:91-93`) — separate
-from `FKIT_LAUNCHER` precisely because it tests a **standalone script**, not the launcher (task 43 /
+from `FKIT_LAUNCHER` precisely because it tests a **standalone script**, not the launcher (`0052` (`implement-pretooluse-skill-ownership-hook`) /
 ADR-018). **Init is the same case.** This follows an established pattern; it does not invent one.
 
-**Why it matters — this is not hypothetical.** In task 36
+**Why it matters — this is not hypothetical.** In `0072` (`remove-fkit-omnigent-orphan-residue`)
 (`remove-fkit-omnigent-orphan-residue`), the coder shipped fixes where the **red-proved** ones (R1,
 R2, R8) survived review and the **un-red-proved** ones (C2, and C7's own fix) were found broken by two
 independent reviewers. The coder hand-rolled red-proofs by copying `claude/` and neutering fixes — a
 worse reimplementation of what `prove-red.sh` already does — **because the connection did not exist**:
 the gate that encodes this rule *could not have run on the tests that broke it* even if reached for.
-Evidence: task 36 review ledger `ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md`.
+Evidence: `0072` review ledger `ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md`.
 
 **Scoping provenance — owner-ruled 2026-07-17.** The owner ruled this should exist as **its own brief
-rather than folded into task 46** (`investigate-mutation-testing-library-adoption`), on the reasoning
-that extending the existing script is small and concrete and should not wait on task 46's open-ended
+rather than folded into `0058`** (`investigate-mutation-testing-library-adoption`), on the reasoning
+that extending the existing script is small and concrete and should not wait on `0058`'s open-ended
 library investigation. The **broader "should this doctrine have a permanent enforcement point"
 question is owner-parked** ("leave it for later — the answer's the same either way"). This brief is the
 narrow, concrete piece and must not re-open that question. **This is a filing, not a go-ahead** — it
@@ -109,6 +109,6 @@ is not scheduled or approved to start.
   `:86-111`; the `FKIT_SKILL_OWNERSHIP_HOOK` standalone-script precedent `:48-57`, `:91-93`; the
   unmutated-copy-green guards `:73-84`; named-assertion `grep` guards `:98-99`, `:109-110`).
   `test/harness.mjs` (hardcoded `INIT` const `:160`; `runInit()` spawning it with no override
-  `:164-167`). Motivating incident: task 36 review ledger
+  `:164-167`). Motivating incident: `0072` review ledger
   `ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md` (red-proved R1/R2/R8 survived; un-red-proved
   C2 and C7's fix found broken).

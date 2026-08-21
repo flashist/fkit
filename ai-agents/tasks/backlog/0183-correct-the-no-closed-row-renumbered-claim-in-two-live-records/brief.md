@@ -75,7 +75,7 @@ ID**, not by restoring numbers.
 
 Two dated correction notes. **Documentation only. Nothing is re-ranked, reverted or deleted.**
 
-1. **On the sprint-2 filing addendum** (`ai-agents/sprints/sprint-2.md`, the addendum under the heading
+1. **On the sprint-2 filing addendum** (`ai-agents/sprints/done/sprint-2.md`, the addendum under the heading
    *"⚠️ One row was inserted mid-board by owner ruling, and it renumbered the board"*): append a dated
    correction note that
    - names the claim being corrected, quoted;

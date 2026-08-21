@@ -124,6 +124,16 @@ compress, re-flow, or "improve" it while you are in there. Diff it to prove it.
 - **Depends on:** `0202` — **hard gate**, see caveat 2. Also reads `0203`'s emitted pointer form, but does
   not require `0203` to have landed (`0203` ships first, carrying its `unverified — no hook checks it
   until follow-up 3 lands` marker; landing this task is what makes that marker removable).
+  - ✅ **DATED CORRECTION 2026-08-15 — THE `0202` HARD GATE IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0202` closed; its folder is
+    `ai-agents/tasks/done/0202-write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table/`.
+    `0203` has also closed —
+    `ai-agents/tasks/done/0203-amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction/`
+    — which the line above never made a gate anyway. **Current dependency: nothing.**
+    ⚠️ **What survives is the *scope*, not the wait:** removing `0203`'s `unverified` marker is still
+    this task's job, and caveat 2 still governs how the gate's output is read.
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
+    *(Recorded by `0306`.)*
 - **Blocks:** nothing. Removing `0203`'s `unverified` marker is **in this task's scope** (see the carve-out
   in *What to build*), not a separate dependency and not follow-on tidying.
 - **⚠️ Priority 182 is append rank, NOT a merit ranking — flagged for owner confirmation.**

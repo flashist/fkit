@@ -1,5 +1,6 @@
 #!/bin/bash
-# skill-ownership-hook.sh — the PreToolUse skill-ownership gate (task 43 / ADR-018).
+# skill-ownership-hook.sh — the PreToolUse skill-ownership gate
+# (`0052` (`implement-pretooluse-skill-ownership-hook`) / ADR-018).
 #
 # Denies a `Skill` tool call whenever the REAL invoking agent's role does not own the requested
 # skill, per skills_for_role() — the single source of truth (skills-for-role.sh). Reads the hook

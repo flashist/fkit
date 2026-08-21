@@ -23,8 +23,14 @@
 // ⚠️ THE "injected into every agent's context on every turn" LINE BELOW IS TRUE OF THE RULES BODY,
 // NOT OF THE WRAPPER COMMENT. Re-run first-hand 2026-08-01, Claude Code 2.1.220: HTML comments are
 // stripped from CLAUDE.md before it reaches the agent context — the body arrived, the marker and
-// comment lines did not. The wrapper costs cap budget without costing Claude-side context. The codex
-// side (AGENTS.md, codex-cli 0.145.0) was NOT re-measured; assume it still pays.
+// comment lines did not. The wrapper costs cap budget without costing Claude-side context.
+// The codex side IS now measured (task 0177, 2026-08-16, codex-cli 0.145.0): codex does NOT strip —
+// the wrapper reaches the model verbatim in the AGENTS.md payload, so it costs real context there.
+// The conservative assumption was right; it is no longer an assumption. Both figures are
+// harness-specific (ADR-016) and must be re-measured when either build moves.
+// Evidence, method, and the residuals recorded against it: the `worklog.md` in task `0177`'s folder
+// (`0177-verify-the-codex-half-of-the-comment-stripping-canary`) under `ai-agents/tasks/`. Find it by
+// the `0177` prefix, not a pinned path — the folder moves `backlog/` → `done/` when the task closes.
 //
 // NOTE ON DISAGREEMENT, recorded because the finding was contested: Codex scored this "no finding";
 // fkit-reviewer kept it at medium and the owner ruled to add the guard. Both reviewers computed the
@@ -56,8 +62,10 @@ function rulesMax() {
 // independent ways:
 //   1. It measured the preamble as the *JavaScript source text* of the `printf` lines — 568 chars of
 //      script, not the bytes those printfs actually emitted. (Figures are AS OF THAT BUG: seven
-//      printfs emitting 443 B of comment. Today it is six emitting 354 B — task 0130 compressed the
-//      wrapper. Kept at the old values on purpose: 568 − 443 = the 125 B divergence, less the 18 B
+//      printfs emitting 443 B of comment. Task 0130 later compressed the wrapper, so today's printf
+//      count and comment size are both smaller — deliberately NOT pinned here: `emittedBlockSize()`
+//      below measures the live block, and a figure pinned in a comment only invites staleness.
+//      Kept at the old values on purpose: 568 − 443 = the 125 B divergence, less the 18 B
 //      below, is exactly the 107 B net error described. Re-stating them in today's bytes would make
 //      the arithmetic false.)
 //   2. It used `src.length`, which counts UTF-16 code units (2521), not UTF-8 bytes (2539). This file

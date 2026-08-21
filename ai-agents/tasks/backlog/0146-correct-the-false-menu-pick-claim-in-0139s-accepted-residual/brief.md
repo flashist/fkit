@@ -111,7 +111,7 @@ ends in a launcher edit has misread this one.
   - **What executed instead:** both rows moved to the Backlog board on 2026-08-03 with the other 43
     movers, **separately**. Neither was cancelled or closed.
   - ⛔ **Do not re-derive or re-propose this merge.** Also recorded in the 2026-08-03 triage addendum
-    in `ai-agents/sprints/sprint-2.md`, under *"Two owner rulings recorded, awaiting the unblock"*.
+    in `ai-agents/sprints/done/sprint-2.md`, under *"Two owner rulings recorded, awaiting the unblock"*.
 - **Feeds task 0142** (the fact-inventory investigation) as a worked example: a claim stated in a
   decision record, marked do-not-re-litigate, contradicted by the code, and caught only by a human
   checking it by hand.

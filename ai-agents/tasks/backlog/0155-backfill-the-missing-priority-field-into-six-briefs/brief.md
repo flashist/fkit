@@ -75,7 +75,7 @@ Add a `## Priority` heading with its value on the following line to each of the 
 `claude/skills/fkit-task-brief/SKILL.md` step 4.
 
 **The six briefs and their values.** Every value is the board rank the row carries in
-`ai-agents/sprints/sprint-2.md`, re-verified against the live plan on 2026-07-27. **Write the plain
+`ai-agents/sprints/done/sprint-2.md`, re-verified against the live plan on 2026-07-27. **Write the plain
 number — no `P` prefix.** The `P<n>` token is the board cell's form; the brief's field is a bare
 number.
 
@@ -113,11 +113,11 @@ number.
 3. **Placement matches the skeleton.** For each of the six, `grep -n '^## '` shows
    `## Sprint` → `## Priority` → `## Status` in that order.
 4. **Each value equals its live board rank.** For each of the six, read the row's Priority cell out of
-   `ai-agents/sprints/sprint-2.md` and show it beside the value written. State any that had moved since
+   `ai-agents/sprints/done/sprint-2.md` and show it beside the value written. State any that had moved since
    this brief was written.
 5. **Nothing else changed.** `git diff --stat` shows exactly six files, and `git diff` shows only
    added `## Priority` blocks — no deletions, no other additions.
-6. **No new drift.** `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md`
+6. **No new drift.** `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/done/sprint-2.md`
    produces no drift record naming 0122–0126 or 0136 that was not already there before the change.
    (It produced none for 0126/0136 before — that absence is the gap 0156 closes, and this step must
    not be read as proof the backfill was detected.)

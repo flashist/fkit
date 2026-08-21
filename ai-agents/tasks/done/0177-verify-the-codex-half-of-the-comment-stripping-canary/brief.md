@@ -10,7 +10,7 @@ Sprint 6
 Sprint 6 P4
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -19,7 +19,12 @@ fkit-coder
 
 The fkit-managed rules block is wrapped by `emit_block()` in `claude/fkit-claude-init.sh` and
 re-injected into every consuming project's `CLAUDE.md` **and** `AGENTS.md` on every launch. The
-wrapper — HTML comments plus markers — costs **404 B** of the `RULES_MAX=4096` cap.
+wrapper — HTML comments plus markers — costs **404 B** of the `RULES_MAX` cap — **4352 B**,
+re-measured 2026-08-16. (Raised from a superseded 4096 by task `0190`'s owner-signed ADR-016 bump,
+2026-08-04; this brief predated it.) **⚠️ Every absolute byte figure in this brief — the cap figure in
+this very sentence included — is a dated snapshot, not an acceptance criterion: re-measure before
+treating one as a pass/fail. The one exception is the ≥400 B standing headroom target below, which is
+an owner-set criterion, not a snapshot — it does not expire and is not re-measured away.**
 
 **Half of the question of whether that 404 B also costs *agent context* is answered; half is not.**
 
@@ -77,8 +82,12 @@ two hedges. No behavior change, no cap change.
      the conservative default. **An inconclusive result is a valid outcome of this task** — record it,
      do not manufacture a verdict.
 4. **Change nothing else.** No `RULES_MAX` edit, no cap-semantics edit, no wrapper edit, no rules-block
-   content edit. The byte figures established in `0130` (3570 B emitted, 526 B headroom, ≥400 B
-   standing target) stand.
+   content edit. The **≥400 B standing headroom target** from `0130` stands — that is the criterion.
+   The **absolute byte figures are a snapshot, not a criterion**: re-measure them at work time by
+   running the real `emit_block()` (the technique in `test/rules-block-budget.test.js` — run the shell
+   function, count UTF-8 bytes), never by copying a number from this brief. Last measured 2026-08-16:
+   **3837 B emitted, 515 B free**. `0130`'s originals are superseded — task `0190`'s owner-signed cap
+   bump moved them.
 
 ## Verification steps
 
@@ -91,13 +100,19 @@ two hedges. No behavior change, no cap change.
    `test/rules-block-budget.test.js` (header) — and neither still reads as an unresolved assumption
    unless the outcome was genuinely inconclusive, in which case both say *inconclusive* and why.
 4. **No functional change:** `git diff` touches only comment text (plus any new test/canary artifact
-   the work deliberately adds). `RULES_MAX` is unchanged at **4096**; the cap still measures the
-   **emitted** block.
+   the work deliberately adds). `RULES_MAX` is **unchanged by this task** — read the live value from
+   `claude/fkit-claude-init.sh` before and after and confirm they match; do not assume a number (it was
+   **4352** on 2026-08-16, after `0190`'s owner-signed bump). The cap still measures the **emitted**
+   block.
 5. **Suites stay green:** `node --test test/*.test.js` and `bash test/prove-red.sh` both pass, with the
    pass/fail counts reported.
-6. **Byte budget unmoved:** the emitted block still measures **3570 B** with **526 B** headroom (or, if
-   it has legitimately changed since `0130` closed, the new figure is re-measured and reported rather
-   than assumed).
+6. **Byte budget unmoved:** re-measure the emitted block at work time — run the real `emit_block()`
+   (technique: `test/rules-block-budget.test.js`; run the shell function, count UTF-8 bytes) and report
+   the **measured byte count** plus the exact command that produced it — the count, not the emitted
+   block's own text. The criterion is that **this task did not move it**: same figure before and after,
+   free headroom still **≥ 400 B**. Do not compare against any figure printed in this brief — the cap
+   moves when the owner signs a bump. Last measured 2026-08-16: **3837 B** emitted, **515 B** free,
+   `RULES_MAX=4352`.
 7. **The trap was not walked into:** the work product contains **no** change to what the cap measures,
    and no recommendation to cap the source file folded into this task. If the measurement suggests one,
    it appears as a **question for the owner**, not an edit.

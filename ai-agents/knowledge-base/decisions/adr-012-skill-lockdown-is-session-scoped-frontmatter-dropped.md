@@ -6,11 +6,13 @@
 - **Date:** 2026-07-11
 - **Deciders:** owner (Mark Dolbyrev), with fkit-architect
 - **Supersedes (in part):** [ADR-010](adr-010-role-locked-sessions-and-skill-lockdown.md) §Decision 2
-  (`adr-010:63-65`) and §Decision 5 (`adr-010:73-76`)
+  (*"Role separation is enforced structurally, not by instruction"*) and §Decision 5 (*"generated from
+  it or dropped"*)
 
 > ⚠️ **Read this before trusting Decision 2's "advisory in a consult" language below.**
 > [ADR-018](adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md) reopens
-> Decisions 3 and 4 (their own pre-registered re-raise trigger, `adr-012:139-141`, is met) and adopts
+> Decisions 3 and 4 (their own pre-registered re-raise trigger, §Consequences *"reopen Decisions 3
+> and 4 together"*, is met) and adopts
 > the `PreToolUse` skill-ownership hook. Once that hook is implemented and verified (tracked in
 > `ai-agents/tasks/backlog/implement-pretooluse-skill-ownership-hook.md`), the "structural in a
 > session, advisory in a consult" split this file draws in Decision 2 **no longer describes current
@@ -20,9 +22,9 @@
 ## Context
 
 ADR-010 locked every fkit session to one role and claimed the lock was **structural**: "Role
-separation is enforced structurally, not by instruction" (`adr-010:63-65`). It also left one thing
+separation is enforced structurally, not by instruction" (ADR-010 §Decision 2). It also left one thing
 to the coder: `skills_for_role()` is the single source of truth, and the `skills:` frontmatter in
-`claude/agents/*.md` "must be **generated from it or dropped**" (`adr-010:73-76`). Sprint 2 task 6
+`claude/agents/*.md` "must be **generated from it or dropped**" (ADR-010 §Decision 5). Sprint 2 task 6
 went to close that, and in doing so established — empirically, from live spawns — that **the
 mechanism is not what ADR-010 assumed**.
 
@@ -63,7 +65,7 @@ every role consulted from the team room gets **zero procedures**.
 ### Honest note on why ADR-010 is being reopened
 
 ADR-010's re-raise clause says to reopen if Claude Code's `skillOverrides` / `--settings` semantics
-"materially change what is enforceable" (`adr-010:114-116`). The semantics did **not** change — **we
+"materially change what is enforceable" (ADR-010 §Consequences). The semantics did **not** change — **we
 misread them.** The trigger is met on the merits, and the record should show this as a misreading
 corrected by evidence, not a platform regression.
 
@@ -84,7 +86,8 @@ corrected by evidence, not a platform regression.
    - **In a *consult*** (spawned subagent) the boundary is carried by the agent's system prompt and
      the `⛔ Owner:` banner at the top of each skill. It is **advisory**. This is a known, accepted
      limit, of the same family as ADR-010's already-conceded prompt-enforced consult topology
-     (`adr-010:107-110`).
+     (ADR-010 §Consequences, *"The skill lockdown and tool allowlist are real; the consult topology is
+     not"*).
    - **Consequently, two docs currently overclaim and MUST be corrected:**
      `claude/skills/fkit-team/SKILL.md:38` and `claude/scaffold/CLAUDE.md:33` both say non-owned
      skills are "invisible and unrunnable." True of a session; **false of a consult.** They must be
@@ -102,8 +105,10 @@ corrected by evidence, not a platform regression.
 
 4. **The `PreToolUse` hook stays deferred — but the deferral is now priced.** A `PreToolUse` gate on
    the `Skill` tool is the **only** mechanism that could make per-role skill ownership real on the
-   consult path. It remains deferred (as in `adr-010:92-94`), but no longer as a *free* deferral: the
-   named cost is that decisions 2 and 3 above exist only because we don't have it. Open question:
+   consult path. It remains deferred (as in ADR-010 §Options considered, *"Enforce with path-level
+   hooks (e.g. deny writes outside a role's paths)"* — not rejected, deferred), but no longer as
+   a *free* deferral: the named cost is that decisions 2 and 3 above exist only because we don't have
+   it. Open question:
    **does the hook payload even expose the calling subagent's identity?** If it does not, the hook
    cannot discriminate by role and this option is not merely deferred but **unavailable** — that must
    be established before the hook is planned as the fix.
@@ -163,7 +168,8 @@ corrected by evidence, not a platform regression.
 ## Related
 
 - [ADR-010](adr-010-role-locked-sessions-and-skill-lockdown.md) — supersedes §Decision 2
-  (`adr-010:63-65`) and §Decision 5 (`adr-010:73-76`). Its file is kept intact (honest numbering);
+  (*"Role separation is enforced structurally, not by instruction"*) and §Decision 5 (*"generated from
+  it or dropped"*). Its file is kept intact (honest numbering);
   §§1, 3, 4 remain in force.
 - [ADR-008](adr-008-claude-code-native-port-alongside-omnigent.md) — the deferred path-level hooks
   (`adr-008`), of which the `PreToolUse` `Skill` gate in Decision 4 is a sibling.

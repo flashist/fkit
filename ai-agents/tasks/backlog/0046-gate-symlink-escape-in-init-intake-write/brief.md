@@ -23,8 +23,8 @@ The first-run intake section does `mkdir -p "$dest/.fkit"`, then `cat > "$dest/.
 project, `mkdir -p` silently traverses it and the `interview` script is created **outside the project
 fkit was pointed at**.
 
-**Reproduced, not theorized.** Found by the coder while building the test for review finding R1 on task
-36 (`remove-fkit-omnigent-orphan-residue`). With `.fkit → /tmp/outside`, init created
+**Reproduced, not theorized.** Found by the coder while building the test for review finding R1 on
+`0072` (`remove-fkit-omnigent-orphan-residue`). With `.fkit → /tmp/outside`, init created
 `/tmp/outside/interview`.
 
 **This is the third site in one file that needed the same `-L`-before-deref rule.** The rule is already
@@ -33,29 +33,29 @@ written down in this repo, in this very file, in §1's own comment (~:159-172):
 > *"`[ -L ]` FIRST, ALWAYS. -e/-d DEREFERENCE… we would then mkdir/cp straight THROUGH it, outside the
 > project fkit was pointed at. -L is the one test that does not lie."*
 
-That doctrine was applied to **§1 (convergence)** and, as of task 36, to **§6 (orphan cleanup)**. **§4
+That doctrine was applied to **§1 (convergence)** and, as of `0072` (`remove-fkit-omnigent-orphan-residue`), to **§6 (orphan cleanup)**. **§4
 never got it.** A rule stated in a file's own comments and then missed twice is not three bugs — it is
 one doctrine that has no enforcement point. That is what makes this worth more than a one-line patch.
 
 **Why it is not urgent:** the operation is **non-destructive**. It *creates* a file; it never deletes.
-No data loss, no rollback problem. That is precisely why it was correctly kept out of task 36 and why
+No data loss, no rollback problem. That is precisely why it was correctly kept out of `0072` and why
 it is filed unsprinted rather than sprinted.
 
 **Scoping provenance:** the coder and the fkit-reviewer **independently** judged this out of scope for
-task 36 — different function, pre-existing, and fixing unrelated code inside a review round expands a
+`0072` — different function, pre-existing, and fixing unrelated code inside a review round expands a
 diff's blast radius under a review not scoped to it. The reviewer's words: *"cheapness isn't scope."*
 That call stands; this brief is its consequence, not a reversal of it.
 
 ## What to build
 
-- **Extract the containment check once, above its callers.** Task 36 added `orphan_contained()`
+- **Extract the containment check once, above its callers.** `0072` added `orphan_contained()`
   (`fkit-claude-init.sh:647`) — it walks a path's parent chain and refuses on `-L` at any component,
   which is exactly the check §4 needs. **It is defined at :647; §4 writes at :476** — so it must be
   hoisted (or a shared equivalent extracted) above the first caller. Naming should stop implying
   "orphans"/deletion, since it will now guard a write.
 - **Guard §4's intake write with it** — before `mkdir -p "$dest/.fkit"` and before the `cat >`. On
   refusal, **refuse and report**; do not write through the link.
-- **Non-fatal**, consistent with §1 and task 26's bar: a refused intake warns and init carries on. The
+- **Non-fatal**, consistent with §1 and `0088` (`stop-init-failure-bricking-the-launcher`)'s bar: a refused intake warns and init carries on. The
   intake is optional-by-design already (it skips cleanly when headless), so a refusal must not brick
   the launcher.
 - **Message and behavior consistent with §1's existing refusal** — same shape, same tone, names the
@@ -83,7 +83,7 @@ That call stands; this brief is its consequence, not a reversal of it.
   executable, exactly as before — and the fresh-project intake flow still runs.
 - **Non-fatal:** a refused intake warns and init still completes the rest of setup successfully.
 - **No regression at the other two sites:** §1 convergence and §6 cleanup behave exactly as before the
-  extraction. Task 36's cleanup tests must still pass unchanged.
+  extraction. `0072`'s cleanup tests must still pass unchanged.
 
 ## Notes
 
@@ -93,7 +93,7 @@ That call stands; this brief is its consequence, not a reversal of it.
   additional site (§5 appending to `$dest/.gitignore`) may be a case where a symlink is **legitimate
   user setup**, and refusing it would break a real workflow. That is a **product decision, not a
   refactor** — it comes back to the owner. Widening the fix inside this brief would repeat exactly the
-  blast-radius mistake that (correctly) kept this out of task 36.
+  blast-radius mistake that (correctly) kept this out of `0072`.
 - **Relates to: `gate-read-side-symlink-hazard-in-init.md`** — same doctrine, **opposite side**. That
   one is the **read** hazard under `ai-agents/`; this one is the **write** hazard under `.fkit/`.
   **Neither closes the other** — do not mark one done on the strength of the other. If both are picked
@@ -101,12 +101,23 @@ That call stands; this brief is its consequence, not a reversal of it.
 - **Depends on: task 36** (`remove-fkit-omnigent-orphan-residue`) — **soft, not hard.** It supplies
   `orphan_contained()`. If 36 has not landed, this task writes the helper itself and 36 adopts it; the
   sequencing is a convenience, not a blocker.
+  - ✅ **DATED CORRECTION 2026-08-15 — THE NUMERAL IS STALE *AND* THE DEPENDENCY IS DISCHARGED. The
+    line above is left byte-identical and is no longer binding.** ⛔ **`task 36` is a pre-ADR-029
+    priority number, not a folder ID.** It resolves to
+    `ai-agents/tasks/done/0072-remove-fkit-omnigent-orphan-residue/`, which is **closed** — the
+    descriptive name on the line above is the durable half and it still points true.
+    ⚠️ **Read every bare `task 36` in this brief as `0072`**: `ai-agents/tasks/` today also holds an
+    unrelated `ai-agents/tasks/done/0036-extend-mover-reference-sweep-to-the-knowledge-base/`, which
+    the bare numeral lands on **by coincidence**. `orphan_contained()` is on disk at
+    `claude/fkit-claude-init.sh:665`, so this task adopts it rather than writing it.
+    **Current dependency: nothing.** ⛔ **This does not make the row `🔄 In progress`; it makes it
+    runnable.** *(Recorded by `0306`.)*
 - **Risk: low.** Non-destructive (creates, never deletes), and the trigger requires a symlinked `.fkit`
   — not an ordinary state. The **extraction** carries more regression risk than the fix does: it touches
   two working, already-reviewed guards (§1, §6). That is where review attention belongs.
-- **Evidence sources:** `ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md` (task 36 review
+- **Evidence sources:** `ai-agents/reviews/remove-fkit-omnigent-orphan-residue.md` (`0072` review
   ledger — *Coder response* → "Out of scope, surfaced not fixed", and the reviewer's Round 2
-  confirmation of the scoping call). Task 36 brief:
+  confirmation of the scoping call). `0072` brief:
   `ai-agents/tasks/backlog/remove-fkit-omnigent-orphan-residue.md`. In-file doctrine statement:
   `claude/fkit-claude-init.sh` ~:159-172.
 </content>

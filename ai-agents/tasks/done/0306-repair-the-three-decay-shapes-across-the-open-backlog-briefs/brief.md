@@ -10,7 +10,7 @@ Sprint 6
 Sprint 6 P1
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -284,7 +284,7 @@ nowhere agreed to live). ⛔ Do not record it as unblocked.
 
 ### ⚠️ Relationship to `0171` — the owner has NOT ruled on this, and the run must not settle it
 
-[`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) writes the
+[`0171`](../../backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md) writes the
 `durable-citation-anchors` convention page — **the rule that stops this decay recurring**. This task
 is the **cleanup**; `0171` is the **prevention**. They are complements, not alternatives, and neither
 subsumes the other.
@@ -306,7 +306,7 @@ that this cleanup be *"scheduled early"*; they did **not** rule on whether it pa
 ⛔ **Do not add a hard `Depends on: 0171`** — that would convert a producer's scheduling preference
 into a block the owner never authorized. ⚠️ **If this task is picked up while `0171` is still open,
 the run must NAME the anchor form it used and WHY**, so a later pass can reconcile it — the same
-fallback [`0237`](../0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md)
+fallback [`0237`](../../backlog/0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md)
 already carries.
 
 ---
@@ -489,7 +489,7 @@ byte-identical**, exactly as `0224`, `0225` and `0229` already do.
 - **Depends on:** nothing.
 - **Blocks:** nothing hard.
 - ⚠️ **Soft, and deliberately NOT a `Depends on`:** best run **after**
-  [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md), which supplies the
+  [`0171`](../../backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md), which supplies the
   durable anchor form to repair each citation **into**. ⛔ **The owner has not ruled on the pairing** —
   see *Context*. If run first, **name the anchor form used and why**.
 - ⚠️ **File contention is wide by construction** — this task edits briefs across 17+ open task

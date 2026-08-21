@@ -154,7 +154,7 @@ later** is now off. Measured 2026-08-13 with
 | Site | Cites | Note |
 |---|---|---|
 | `claude/skills/fkit-wiki-lint/SKILL.md:184` | `:390` | ⛔ **`0280`'s — the citation is FABRICATED and `0280` deletes it.** See the fence. |
-| `ai-agents/knowledge-base/decisions/adr-016-…md:192` | `:397` | Live ADR. |
+| `ai-agents/knowledge-base/decisions/adr-016-…md` §"Delivery is structural…", *"Zero hooks"* | `:397` | Live ADR. |
 | `ai-agents/sprints/backlog.md:101` | `:453` | Live board row. |
 | `ai-agents/tasks/backlog/0145-…/brief.md:21`, `:81` | `:453` | Live open brief. |
 | `ai-agents/knowledge-base/reports/2026-07-11-…md:84` | `:394` | ⚠️ A **dated report** — a snapshot of one day. **Frozen or correctable? Surface the question.** |
@@ -227,7 +227,7 @@ task** — spot-checking is exactly what produced nine misses.
   [`0273`](../0273-move-the-codex-review-sandbox-to-workspace-write-at-all-call-sites/brief.md)'s.
 - ⛔ **`claude/skills/fkit-wiki-lint/SKILL.md:184`.** Its `architecture.md:390` citation is
   **fabricated** — the quoted string does not exist — and
-  [`0280`](../0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md)
+  [`0280`](../../done/0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md)
   **deletes it**. ⛔ **Do not repair it into a correct citation. That is the one outcome `0280`
   forbids.**
 - ⛔ **`test/fixtures/closed-rank-0174-before.md` and `-after.md`.** ⚠️ **These are test fixtures whose

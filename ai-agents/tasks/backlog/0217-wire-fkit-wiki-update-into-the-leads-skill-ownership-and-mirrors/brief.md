@@ -29,7 +29,7 @@ declaring who owns it are separately verifiable, and the ownership half touches 
 
 `claude/skills-for-role.sh` carries a hand-maintained checklist naming **four** places that mirror the
 role→skill list. **Its own comment records that it said "TWO" until 2026-07-18, and that following it
-precisely still shipped a false statement into every consuming project** (task 70).
+precisely still shipped a false statement into every consuming project** (`0008` (`add-open-questions-interview-skill-for-six-roles`)).
 
 **It has since failed a second time.** Task `0124` (2026-07-25) followed it and a manual grep found
 **three further live sources** it does not cover — `claude/scaffold/universal-rules.md`,
@@ -89,7 +89,7 @@ ceiling** — and report anything it missed, because that is a third data point 
 - **Edit the canonical sources in `claude/` only.** `.claude/skills-for-role.sh` and `.claude/agents/`
   are gitignored copies refreshed by `claude/fkit-claude-init.sh .`.
 - **`claude/scaffold/CLAUDE.md` ships to consuming projects** — a wrong statement there is wrong in
-  every installed copy, which is exactly how task 70 failed. It is the highest-consequence mirror in the
+  every installed copy, which is exactly how `0008` failed. It is the highest-consequence mirror in the
   list; do it deliberately.
 - **No ADR-027 dual-home surface.** `architecture.md` is not in `claude/scaffold/ai-agents/` (it is
   project-specific), and `claude/scaffold/CLAUDE.md` and the repo-root `CLAUDE.md` are independent files

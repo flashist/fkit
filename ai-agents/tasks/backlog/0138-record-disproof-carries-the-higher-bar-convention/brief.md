@@ -121,7 +121,9 @@ standard of proof for a specific recorded act; (3) enforceable somewhere — ✅
 - **Owner:** fkit-coder — **✅ confirmed by owner ruling, 2026-07-25.** The deliverable includes
   `claude/skills/*/SKILL.md` edits, the coder's seat per the task 0081 Part C ruling. The
   **fkit-reviewer cannot own it** (ledgers only, never the knowledge-base). The architect-writes /
-  coder-ships split (task 47/48 precedent) was weighed and declined — it costs two more briefs.
+  coder-ships split (the `0064` (`record-one-skill-one-output-convention`) / `0086`
+  (`ship-one-skill-one-output-convention-in-scaffold`) precedent) was weighed and declined — it costs
+  two more briefs.
   **⚠️ Owner confirmed does NOT dissolve the hazard in the next bullet — it is the reason that bullet
   and verification step 6 exist.**
 - **⚠️ Self-authoring hazard, recorded rather than routed around.** Task 0013 established the principle

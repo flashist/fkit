@@ -180,12 +180,14 @@ re-run the uppercase case against all of them.**
    unreachable exactly when the collision is freshest and cheapest to fix. It iterates the
    knowledge-base directory directly, whether or not any vault page exists.
 
-   *(`test/adr-number-uniqueness.test.js` also asserts this invariant, so `npm test` catches it too.
-   ⚠️ **But nothing runs that automatically — this project has no CI** (`architecture.md:390`: "There
-   is no CI and no test suite"; there is no `.github/`). `npm test` runs when a human runs it. So this
-   lint step is not redundant belt-and-braces over an automated gate; on a repo where nobody has run
-   the suite, it may be the only thing that looks. Do not skip it on the assumption the test covered
-   it.)*
+   *(`test/adr-number-uniqueness.test.js` also asserts this invariant, so `npm test` catches it too —
+   but that test lives in fkit's own repo and ships nowhere else, so in a consuming project nothing
+   runs it, whatever CI that project has, and this lint step may be the only thing that looks. In
+   fkit's own repo it does run — GitHub Actions runs the suite on every push to `main` and every pull
+   request — so there this step is genuine belt-and-braces.
+   ⛔ **Do not skip it in either case.** The check is cheap; the lint cannot know which kind of repo
+   it is running in; and even a green CI gate only ever sees what was already pushed, while a
+   collision sitting uncommitted in the working tree is exactly what this pass exists to catch.)*
 
 **Compare slugs exactly — case-sensitive, no normalization.**
 

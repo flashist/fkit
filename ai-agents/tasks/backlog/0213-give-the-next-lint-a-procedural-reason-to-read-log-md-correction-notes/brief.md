@@ -171,6 +171,17 @@ and more brittle over time. Scope the read step so that guard survives:
 
 ## Notes
 
+- **📌 DATED NOTE 2026-08-15 (`0306`) — the quoted *"task 80"* under Stance 1 means `0078`, and the
+  quotation is DELIBERATELY LEFT byte-identical.** `0306` swept stale pre-ADR-029 task numerals out of
+  the open briefs. That string sits inside a **verbatim quotation of `fkit-wiki-lint/SKILL.md` step
+  8**, so it is never edited to make it accurate — the key goes beside it:
+  - **`task 80` = `ai-agents/tasks/done/0078-repair-stale-adr-029-stop-hook-links-in-the-vault/`**
+    (pre-migration `task NN` is the brief's old `## Priority` value; `0078` carries Priority 80, and
+    it is the vault repair the quotation describes as sitting `🔄 In progress` for a week).
+  - ⛔ **It is NOT `0080-report-backlog-board-in-fkit-status-on-request-only`**, which the bare
+    numeral lands on by coincidence.
+  ⚠️ **If this task's edit rewrites that quoted line for any other reason, repair the numeral in the
+  same pass** — this note exists only because the line is currently quoted, not rewritten.
 - **Owner:** fkit-coder — the write surface is `claude/skills/fkit-wiki-lint/SKILL.md`, a source file,
   not the vault. Prior art: task `0173` edited all three `fkit-wiki-*/SKILL.md` files under
   `fkit-coder`. ADR-005 governs `ai-agents/wiki-vault/` only.

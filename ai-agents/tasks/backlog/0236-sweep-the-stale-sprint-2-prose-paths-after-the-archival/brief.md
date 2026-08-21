@@ -92,7 +92,7 @@ it stated once and applied consistently.
   them makes the record say something the author did not say. **The default for this class is LEAVE,
   and the burden is on the argument to change one, not to keep it.**
 - **⚠️ Named, expected no-ops — verify, do not fix.** Some hits are *supposed* to contain the old
-  string: `ai-agents/sprints/sprint-3.md` and `ai-agents/sprints/done/sprint-2.md` both name the
+  string: `ai-agents/sprints/done/sprint-3.md` and `ai-agents/sprints/done/sprint-2.md` both name the
   literal old path inside dated corrections **that are about the archival itself**, and
   `claude/skills/fkit-task-brief/SKILL.md` may carry it as illustrative template text. Read each,
   confirm, and record the conclusion — **`0076` part B's shape exactly.**
@@ -144,6 +144,31 @@ it stated once and applied consistently.
   `0237` is about a *banned citation form*, and a path can be stale-and-legal or fresh-and-banned
   independently. Whichever lands first should say what it left for the other. `0238` (the wiki re-sync)
   owns the 5 vault hits and is the only task that may touch them.
+- **📌 DATED NOTE 2026-08-15 (`0306`) — this brief's `ai-agents/sprints/sprint-2.md` strings are
+  DELIBERATELY LEFT DEAD.** `0306` swept dead board paths out of the open briefs and left this file's
+  occurrences byte-identical, because **this brief's subject IS that string.** Re-pointing them would
+  erase the task:
+  - **The H1 title** — *"Sweep the stale `ai-agents/sprints/sprint-2.md` prose paths after the
+    archival"*.
+  - **§"What happened" `:26`** — *"moved the Sprint 2 board **from** `ai-agents/sprints/sprint-2.md`
+    **to** `ai-agents/sprints/done/sprint-2.md`"*. Re-pointing the first path makes the sentence say
+    the board moved from where it already is.
+  - **§"What to build" `:100`** — *"16 occurrences are in the `ai-agents/sprints/sprint-2.md:NNN`
+    form"*. That is the name of a **form**, not a path to follow.
+  **Where the board actually is today: `ai-agents/sprints/done/sprint-2.md`** — which is exactly what
+  this task exists to record everywhere else.
+- **✅ RE-POINTED BY OWNER RULING 2026-08-15 (`0306`) — the `sprint-3.md` pointer at §"What to build",
+  the *"Named, expected no-ops"* bullet, now reads `ai-agents/sprints/done/sprint-3.md`.**
+  ⚠️ **This is the ONE site in this file that was re-pointed**; the three above were left.
+  **Why it is not in the leave-class above:** the string there is `sprint-3.md`, a **file the
+  implementer is told to open and read** — not the `sprint-2.md` that this brief's sentences are
+  *about*. `0306`'s approved plan had enumerated it as leave-class; that enumeration never fit its own
+  class definition, so the **owner overturned it** — verbatim option label:
+  **"Re-point to `done/sprint-3.md` (Recommended)"**, given via `AskUserQuestion` in a live
+  `fkit lead` session driving `/fkit-sprint-ship-loop`.
+  **Verified before and after the edit:** `ai-agents/sprints/done/sprint-3.md` exists and **still
+  contains the literal old path (2 occurrences)**, so the bullet's claim is as true as it was, and now
+  resolvable too.
 - **⚠️ An archived board is MOVED, not FROZEN.** Sprint 1's archived board was edited three more times
   after archiving, so `sprints/done/sprint-2.md` is a live editing target, not a sealed one.
 - **⚠️ This brief decays.** Every figure was measured on **2026-08-06** on a tree with concurrent

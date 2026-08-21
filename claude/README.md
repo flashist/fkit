@@ -27,7 +27,7 @@ fkit producer | architect | reviewer | adv | wiki | lead
 Each session is locked **two** ways:
 
 1. **`--agent fkit-<role>`** — the role's system prompt and **tool allowlist** (harness-enforced).
-2. **`--settings` wiring a `PreToolUse` skill-ownership hook** (task 43 / ADR-018) — every `Skill`
+2. **`--settings` wiring a `PreToolUse` skill-ownership hook** (`0052` (`implement-pretooluse-skill-ownership-hook`) / ADR-018) — every `Skill`
    call is checked against the REAL invoking agent's role, and denied if that role doesn't own it.
    A foreign skill stays **visible** in the `/` menu but is **not runnable**. This is what makes
    *"the coder cannot run the reviewer's procedure"* a fact rather than a request — see the "skill
@@ -52,7 +52,7 @@ below. That function is the single source of truth.
 | wiki | `wiki-ingest` · `wiki-lint` · `wiki-sync` |
 | lead | `/fkit-sprint-ship-loop` (drives a sprint) — plus the shared skills; it routes and conducts |
 
-**The lock is a wall in a session AND in a consult** (task 43 /
+**The lock is a wall in a session AND in a consult** (`0052` /
 [ADR-018](../ai-agents/knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md),
 superseding [ADR-012](../ai-agents/knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md)
 §2's "advisory in a consult" half). A `PreToolUse` hook (`skill-ownership-hook.sh`) gates every
@@ -156,5 +156,5 @@ in `claude/`, never the copies.**
   every role (ADR-005; ADR-004/006/007 died with the Omnigent path).
 - **`skills:` frontmatter on agent definitions** — inert for enforcement; dropped (ADR-012).
 - **A hand-maintained `CONSULT_SKILLS` always-on exception list** — superseded by the `PreToolUse`
-  skill-ownership hook (task 43 / ADR-018), which no longer needs one: enforcement follows the real
+  skill-ownership hook (`0052` / ADR-018), which no longer needs one: enforcement follows the real
   caller's identity instead of a list of skills nothing is allowed to turn off.

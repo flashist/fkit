@@ -10,7 +10,7 @@ Sprint 6
 Sprint 6 P7
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -23,7 +23,7 @@ fkit-coder
 `/fkit-sprint-ship-loop` driver session — **the option label is the verbatim text**:
 **"fkit-wiki-lint SKILL.md — sharpest (Recommended)"**.
 
-**Provenance:** surfaced as a follow-up of [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)
+**Provenance:** surfaced as a follow-up of [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)
 (closed 2026-08-12), which landed `.github/workflows/test.yml` and the in-release `npm test` gate.
 The CI landing is what falsified the paragraph's two factual claims. **The fabricated citation
 inside it is older and independent of `0256`** — see below.
@@ -121,14 +121,14 @@ One edit to one file: `claude/skills/fkit-wiki-lint/SKILL.md`, the parenthetical
 - ⛔ **No behavior change to the lint procedure.** No step added, removed, reordered, or made
   conditional. This is a prose repair of one parenthetical.
 - ⛔ **Do not edit `ai-agents/knowledge-base/architecture.md`.** It is already correct.
-- ⛔ **Do not edit ADR-003** — that is [`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md),
+- ⛔ **Do not edit ADR-003** — that is [`0281`](../../backlog/0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md),
   filed the same day from the same ruling.
 - ⛔ **Do not sweep the other no-CI claims in the repo.** Measured at filing, `ADR-014:18` and
   `ADR-026:48`/`:131` also carry no-CI statements, and two knowledge-base reports do. **They are out
   of scope — report them, do not fix them.** ⚠️ `ADR-014:18` in particular reads as a *Context*
   section describing the state at decision time, which may be correct as history; do not assume.
 - ⛔ **No `ai-agents/wiki-vault/` write** (ADR-005) — the vault's copies are
-  [`0282`](../../done/0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md).
+  [`0282`](../0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md).
 - ⛔ No task-file move (ADR-033), no re-rank, no board-row edit beyond this task's own close.
 - ⛔ No commit. ⛔ No new devDependency (ADR-014).
 - ⚠️ **Every `:NNN` in this brief is a dated anchor measured 2026-08-12; the durable anchor is the
@@ -159,13 +159,13 @@ One edit to one file: `claude/skills/fkit-wiki-lint/SKILL.md`, the parenthetical
 
 - **Depends on:** nothing
 - **Blocks:** nothing
-- **Provenance:** follow-up surfaced by [`0256`](../../done/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)'s
+- **Provenance:** follow-up surfaced by [`0256`](../0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md)'s
   CI landing (closed 2026-08-12). **D3, the fabricated citation, is independent of `0256` and
   predates it.** Filed 2026-08-12 on the owner's ruling of the same day, verbatim option label
   **"fkit-wiki-lint SKILL.md — sharpest (Recommended)"**.
 - **⚠️ Sibling rows filed from the same ruling:**
-  [`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) (ADR-003) and
-  [`0282`](../../done/0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md) (vault
+  [`0281`](../../backlog/0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) (ADR-003) and
+  [`0282`](../0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md) (vault
   resync). **No shared file with `0281`. `0282` should run last** — see its own note.
 - **⚠️ ONE ROW, NOT TWO.** D1/D2 (the false facts) and D3 (the fabricated citation) sit in the same
   two lines and cannot be fixed independently without one edit stomping the other. They land

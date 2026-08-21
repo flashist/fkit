@@ -37,7 +37,7 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
      never in a cycle.
 
 4. **Skills belong to roles.** This is structural, not advice, **in a role session and in a spawned
-   consult alike** (task 43 / ADR-018): a `PreToolUse` hook checks the REAL invoking agent's identity
+   consult alike** (`0052` (`implement-pretooluse-skill-ownership-hook`) / ADR-018): a `PreToolUse` hook checks the REAL invoking agent's identity
    — a session's own role, or a spawned subagent's own role, at any consult depth — against
    `skills_for_role()` on every `Skill` call, and denies it if that role doesn't own it. So a
    `fkit coder` session *cannot* run the reviewer's procedure, and neither can a subagent it spawns

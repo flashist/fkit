@@ -129,6 +129,32 @@ comment's actual warnings.**
 - **⚠️ `0177` itself currently carries stale acceptance criteria** — `0218` repairs them. Pulling
   `0177` before `0218` lands means working from a brief that asks its worker to reproduce byte figures
   the repo can no longer produce.
+
+  > ⚠️ **Correction, 2026-08-16 — a fact drifted; the decision is untouched.** (Marker legend, the
+  > only two: **⚠️ = a fact that drifted**; **⛔ = a decision that was overturned**.) The bullet above
+  > is **left byte-identical** as the record of the constraint as it stood when this brief was
+  > written. This note is an append, not an edit.
+  >
+  > **What is true today**, verified first-hand 2026-08-16: **`0218` has landed.** Its folder is
+  > [`ai-agents/tasks/done/0218-repair-0177s-stale-cap-and-byte-figures/`](../../done/0218-repair-0177s-stale-cap-and-byte-figures/brief.md),
+  > its `## Status` reads `✅ Done (agent-closed — not owner-verified)`, and its Sprint 6 P3 row on
+  > [`sprint-6.md`](../../../sprints/sprint-6.md) reads the same. `0177`'s brief is **repaired in the
+  > working tree** — the figures it used to pin as acceptance criteria are replaced by an instruction
+  > to re-measure at work time — so the *"pulling `0177` before `0218` lands"* hazard above is
+  > **discharged**. ⚠️ That repair is **uncommitted**: check out an earlier commit and the old text is
+  > what you get.
+  >
+  > **The dependency itself is untouched.** This task still waits on `0177` for the codex-side
+  > measurement, for exactly the reason the bullet before this one records. Only the trailing
+  > condition expired; nothing here was overturned.
+  >
+  > **Do not re-pin byte figures in this brief.** The live cap, emitted-block and free-headroom values
+  > are **deliberately not restated here, so there is one place to keep true rather than two** — read
+  > them from `0177`'s repaired brief, or re-measure by running the real `emit_block()` (the
+  > `test/rules-block-budget.test.js` technique, UTF-8 bytes), which `## What to build` step 1 already
+  > requires of this task's worker. The figures printed in `## Context` and elsewhere in this brief are
+  > a 2026-08-05 snapshot and are **not** corrected, confirmed or superseded by this note.
+
 - **Merit ordering note (soft, not a hard dependency):** landing `0219` first means this compression
   ships against a guarded >= 400 B floor rather than an unguarded one.
 - **Priority: low.** Nothing is blocked on this. 515 B free clears the standing 400 B target with 115 B

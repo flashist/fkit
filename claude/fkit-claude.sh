@@ -15,7 +15,8 @@
 #
 # Every session is locked two ways:
 #   * `--agent fkit-<role>`  — the role's system prompt and tool allowlist (harness-enforced)
-#   * `--settings` wiring a `PreToolUse` hook (skill-ownership-hook.sh, task 43 / ADR-018) that denies
+#   * `--settings` wiring a `PreToolUse` hook (skill-ownership-hook.sh,
+#     `0052` (`implement-pretooluse-skill-ownership-hook`) / ADR-018) that denies
 #     any `Skill` call whose REAL invoking agent's role doesn't own it, per skills_for_role() — at any
 #     spawn depth, not just this session. That is what makes "the coder cannot run the reviewer's
 #     procedure" a fact rather than a request, and it now holds for a spawned consult too, not only a
@@ -251,7 +252,7 @@ fi
 # preserved a field that LOOKS like the invariant and isn't — worse than no field at all. Don't
 # re-add it.
 #
-# Scope of the lock, precisely (task 43 / ADR-018, superseding ADR-012 §2's "advisory in a consult"
+# Scope of the lock, precisely (`0052` / ADR-018, superseding ADR-012 §2's "advisory in a consult"
 # half): a PreToolUse hook (skill-ownership-hook.sh) now enforces this against the REAL invoking
 # agent's identity, at any spawn depth — structural in a role SESSION *and* in a spawned CONSULT.
 #
@@ -270,7 +271,7 @@ fi
 # This has already bitten once: task 14 added the producer's brief-creation skill here and to the
 # producer's agent file, but not to fkit-team's roster — so /fkit-team under-reported the producer's
 # primary procedure for two days. These are copies FOR READERS, not sources of truth; skills_for_role() is the source of
-# truth (moved to skills-for-role.sh, task 43, so the PreToolUse hook can source it without pulling
+# truth (moved to skills-for-role.sh, `0052`, so the PreToolUse hook can source it without pulling
 # in this script's top-level side effects).
 # ---------------------------------------------------------------------------
 . "$here/skills-for-role.sh"
@@ -279,17 +280,17 @@ fi
 # inline on argv because a terminal with no title yet labels the tab with the command line — and a
 # ~400-byte JSON blob makes every tab look identical. `--settings` takes a file or JSON; we take file.
 #
-# Retired here (task 43 / ADR-018, replacing ADR-012 §3): the old `skillOverrides` "off" list and the
+# Retired here (`0052` / ADR-018, replacing ADR-012 §3): the old `skillOverrides` "off" list and the
 # `CONSULT_SKILLS` always-on exception list it required. Both were a SESSION-scoped mechanism — they
 # governed what the launching process could see, not who was actually calling — so a spawned consult
-# inherited the *launcher's* list, never its own (the bug class task 43 fixes). The PreToolUse hook
+# inherited the *launcher's* list, never its own (the bug class `0052` fixes). The PreToolUse hook
 # below enforces against the REAL invoking agent's identity instead, at any spawn depth, so the
 # per-role off-list is no longer doing any work an unowned-skill call couldn't already be denied by
 # the hook — removing it retires the accepted `fkit-survey-project`-reachable-everywhere leak
 # (ADR-012 §3) as a side effect, not a separately engineered fix. Do not re-add either mechanism —
 # see ADR-018 for the record.
 build_settings() {   # → .fkit/settings/<role>.json containing {"hooks":{…}}
-  # PreToolUse skill-ownership hook (task 43 / ADR-018): denies a Skill call whenever the REAL
+  # PreToolUse skill-ownership hook (`0052` / ADR-018): denies a Skill call whenever the REAL
   # invoking agent's role doesn't own it, at any spawn depth — this is what makes the lockdown hold
   # in a spawned CONSULT, not just a plain session (unlike the retired off-list, which only ever did
   # the latter). `bash "<path>"` — never a bare `"<path>"` — because the shipped file's exec bit is

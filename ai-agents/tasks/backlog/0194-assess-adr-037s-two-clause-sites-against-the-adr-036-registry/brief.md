@@ -86,9 +86,23 @@ triggers or their thresholds; building any part of the registry (`0189`); any AD
 ## Notes
 
 - **Depends on:** `0189`, `0190`, `0191`.
+  - ⚠️ **DATED CORRECTION 2026-08-15 — TWO OF THE THREE ARE DISCHARGED; ONE STILL BLOCKS. The line
+    above is left byte-identical and is now only partly binding.** `0190` closed
+    (`ai-agents/tasks/done/0190-add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block/`)
+    and `0191` closed
+    (`ai-agents/tasks/done/0191-add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules/`).
+    ⛔ **`0189` is still open** — `ai-agents/tasks/backlog/0189-build-the-skill-ownership-site-registry-and-completeness-tripwire/`,
+    `## Status: 🔲 Backlog`. **Current dependency: `0189` alone**, and it is the hard one: this task
+    assesses sites *against the ADR-036 registry*, which `0189` builds. ⛔ **This row is still
+    BLOCKED. Do not mark it ready.** *(Recorded by `0306`.)*
 - **Blocks:** nothing.
 - **⚠️ All three dependencies are open at filing.** This task is not pullable until they land, and
   pulling it early produces a blocked row, not progress.
+  - ⚠️ **DATED CORRECTION 2026-08-15 — THE COUNT IS STALE. The line above is left byte-identical as
+    the record of what was true at filing.** ⛔ **Not three — one.** `0190` and `0191` have landed;
+    **`0189` alone survives as the block**, and the sentence's conclusion is unchanged by that: this
+    task is still not pullable, and pulling it early still produces a blocked row.
+    *(Recorded by `0306`.)*
 - **⚠️ Priority 172 is append rank, NOT a merit ranking — flagged for owner confirmation.**
   **On merit this belongs directly below `0189`** — its heaviest dependency and the one that unblocks it
   — because a registry assessment has no value before the registry exists, and sequencing it anywhere

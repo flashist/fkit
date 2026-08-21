@@ -79,6 +79,52 @@ evidence; the CI half is not.** Say both, and keep them distinguished. **A corre
 is a worse defect than the stale claim it replaces** — it would be the third generation of an
 unverified assertion in this same file.
 
+> **⚠️ DATED CORRECTION 2026-08-15 — THE SECTION HEADING ABOVE AND ITS CENTRAL CLAIM ARE NOW FALSE.
+> CI HAS RUN, 16 TIMES. All text above is left byte-identical as the record of what was written on
+> 2026-08-12.**
+>
+> **What drifted.** The section headed *"⚠️ CI HAS NEVER EXECUTED — nothing this task writes may say
+> otherwise"* rests on a measurement taken 2026-08-12, when `.github/workflows/test.yml` existed but
+> had never been triggered. That was true on its date. It is not true now.
+>
+> **Measured evidence, re-measured first-hand 2026-08-15** — `gh run list` over this repository's full
+> run history, plus `grep -rn 'runs-on' .github/workflows/`:
+>
+> - **16 runs total — 1 failure, 15 success.** All are **`push`** events on **`main`**;
+>   `.github/workflows/test.yml` declares `runs-on: ubuntu-latest`.
+> - **The first run, 2026-08-12 (`31634593615`), went red** — a filesystem case-sensitivity divergence
+>   in `test/orphan-cleanup.test.js`, since repaired by closed task `0283`.
+> - **15 consecutive green runs, 2026-08-13 through 2026-08-15** (latest `31868723307`, 2026-08-15).
+>
+> ⛔ **Do NOT write *"the CI half has never run"* — or any wording of it — into ADR-003.** That
+> instruction is dead. `## What to build` element 3 and `## Verification steps` step 3 both carry it;
+> each has its own dated correction below. The evidence is stated once **here** and deliberately not
+> restated there, so there is one place to keep true rather than two.
+>
+> ⚠️ **What survives unchanged, and matters just as much.** This section's *reason* for existing
+> stands: **a correction that overstates is a worse defect than the stale claim it replaces.** The
+> corrected ADR-003 text must still claim no more than what is measured. What is measured has simply
+> grown. The defensible claim is now *"two mechanisms are wired — an in-release `npm test` gate and a
+> CI workflow — and the CI one has run 16 times on `ubuntu-latest`, 15 of them green"*, **not** *"CI
+> protects the project"*. ⛔ Do not swing from the dead caveat to an unmeasured guarantee.
+>
+> ⚠️ **This note corrects the BRIEF, not the ADR.**
+> `ai-agents/knowledge-base/decisions/adr-003-ci-runs-validate-bundles.md` is untouched by it and is
+> still `0281`'s job to correct.
+>
+> **⚠️ How this row now interacts with task `0312`.**
+> [`0312`](../0312-correct-the-false-ci-has-never-run-claims-in-architecture-md/brief.md), filed
+> 2026-08-15 and **unranked on the Backlog board**, corrects the same falsified posture in the two
+> `architecture.md` passages this brief cites as its authority for the never-run claim — the overview
+> paragraph beginning *"There **is** a zero-dependency test suite"*, and the §9.1 bullet
+> *"Neither has been observed green on a runner yet"*. **Consequence for whoever runs `0281`:** ⛔ do
+> not cite `architecture.md` as evidence that CI has never run — those passages are themselves
+> known-false and awaiting repair. Re-measure with `gh run list` instead. **No shared file with
+> `0312`; either order is safe.**
+> [`0251`](../0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md) is the third row in
+> this cluster — it carries a *"never write that CI is working"* instruction over the same §9.1 bullet
+> `0312` repairs, and it too now carries a 2026-08-15 correction.
+
 ### The form of the correction is an open choice — surfaced, deliberately not pre-decided
 
 This repo has settled precedent for *"a fact in a decision record was falsified; append rather than
@@ -86,7 +132,7 @@ edit in place"* — **an appended, dated note with the original text left byte-i
 
 - `adr-015-…md:220` — *"Amendment — 2026-07-14: a supporting fact was falsified by implementation;
   the decision stands"*
-- `adr-016-…md:292` — same shape
+- `adr-016 §Amendment — 2026-07-14` — same shape
 - `adr-042-…md:317` — *"Correction note — 2026-08-11: the site count is five under `claude/`, not
   four"*
 
@@ -96,7 +142,7 @@ thing an index quotes. An appended note 60 lines below may never be reached by a
 off `:3-7`. **A hybrid — correct the status line in place *and* append a dated note recording what
 changed and why — is a legitimate third option.**
 
-⚠️ **Also relevant:** [`0198`](../0198-teach-record-decision-the-dated-correction-note-form/brief.md)
+⚠️ **Also relevant:** [`0198`](../../done/0198-teach-record-decision-the-dated-correction-note-form/brief.md)
 is an open backlog row to teach `/fkit-record-decision` the dated-correction-note form. **It has not
 shipped**, so there is no canonical procedure to follow yet. ⛔ **Do not treat this row as blocked on
 it** — no `Depends on:` edge; the architect can choose a form and state it.
@@ -123,6 +169,30 @@ The corrected record must carry **all four** of these, or it has not fixed the d
 as the pointer, or is replaced with a pointer to §9.1 specifically, which is where the current
 posture is written.
 
+> **⚠️ DATED CORRECTION 2026-08-15 — ELEMENT 3 OF THE FOUR ABOVE IS FALSIFIED. ⛔ DO NOT IMPLEMENT IT
+> AS WRITTEN. All text above is left byte-identical as the record of what was written on 2026-08-12.**
+>
+> Element 3 — *"**⚠️ The CI half has never run.** Stated, not softened"* — mandates writing into
+> ADR-003 a claim that is now false. **Measured first-hand 2026-08-15 with `gh run list`: 16 CI runs —
+> 1 failure, 15 success — all `push` on `main`, `runs-on: ubuntu-latest`; 15 consecutive green
+> 2026-08-13 → 2026-08-15.** The full evidence and the run IDs are stated once in the
+> ⚠️ **DATED CORRECTION 2026-08-15** note under `## Context`'s *"CI HAS NEVER EXECUTED"* section —
+> deliberately not restated here, so there is one place to keep true rather than two.
+>
+> **What element 3 now requires instead:** state what CI has actually done, in measured terms and no
+> broader — run count, green count, runner, and the date measured — **re-measured on the day the change
+> is made**, never copied from this brief. ⛔ An implementer who follows the original element 3 writes a
+> fresh false claim into a decision record, which is the exact defect this task exists to remove.
+>
+> ⚠️ **Elements 1, 2 and 4 stand exactly as written.** Element 4 in particular is untouched: ADR-003's
+> own decision is still dead and still superseded, and CI having run does not revive it.
+>
+> ⚠️ **The `../architecture.md` pointer question above is now entangled with `0312`.** Both passages
+> that would be pointed at are known-false and awaiting
+> [`0312`](../0312-correct-the-false-ci-has-never-run-claims-in-architecture-md/brief.md) (filed
+> 2026-08-15, unranked on the Backlog board). Deciding the pointer is still the architect's call; ⛔ do
+> not point ADR-003 at a passage you have not read on the day you point at it.
+
 ### Constraints
 
 - ⛔ **No status-value change.** ADR-003 stays **`superseded`**. `0256` did not un-supersede it.
@@ -130,7 +200,7 @@ posture is written.
 - ⛔ **Do not edit `ai-agents/knowledge-base/architecture.md`** — it is already correct and already
   carries the never-run caveat.
 - ⛔ **Do not edit `claude/skills/fkit-wiki-lint/SKILL.md`** — that is
-  [`0280`](../0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md),
+  [`0280`](../../done/0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md),
   filed the same day from the same ruling.
 - ⛔ **Do not sweep other ADRs.** Measured at filing, `ADR-014:18` and `ADR-026:48`/`:131` also carry
   no-CI statements. `ADR-014:18` reads as Context/history. `ADR-026`'s two are present-tense and now
@@ -166,6 +236,27 @@ posture is written.
    ⚠️ `test/adr-number-uniqueness.test.js` reads ADR **filenames**, not content — it is not coverage
    of this change either.
 
+> **⚠️ DATED CORRECTION 2026-08-15 — VERIFICATION STEP 3 ABOVE IS FALSIFIED. ⛔ DO NOT RUN IT AS
+> WRITTEN. All text above is left byte-identical as the record of what was written on 2026-08-12.**
+>
+> Step 3 — *"**The never-run caveat is present and unsoftened.** ⚠️ **Show the exact sentence.**"* —
+> checks for a claim that is no longer true, so **as written it passes only if the implementer wrote a
+> falsehood**. **Measured first-hand 2026-08-15 with `gh run list`: 16 CI runs — 1 failure, 15 success
+> — all `push` on `main`, `runs-on: ubuntu-latest`; 15 consecutive green 2026-08-13 → 2026-08-15.**
+> The evidence is stated once in the ⚠️ **DATED CORRECTION 2026-08-15** note under `## Context`'s
+> *"CI HAS NEVER EXECUTED"* section — deliberately not restated here, so there is one place to keep
+> true rather than two.
+>
+> **What step 3 now requires instead:** the landed ADR-003 text's statement about CI matches a
+> `gh run list` measurement taken **on the day of the change** — run count, green count, runner, date —
+> and asserts nothing broader than that. A correction claiming CI *protects* anything is still a
+> defect of this task; the overstatement bar did not move, only the measurement did.
+>
+> ⚠️ **Steps 1, 2 and 4–8 stand as written.** Step 1's re-measurement mandate now additionally covers
+> `gh run list`, and step 7's ⛔ on touching `architecture.md` is unchanged — those passages are
+> [`0312`](../0312-correct-the-false-ci-has-never-run-claims-in-architecture-md/brief.md)'s, not this
+> row's.
+
 ## Notes
 
 - **Depends on:** nothing
@@ -175,7 +266,7 @@ posture is written.
   2026-08-12 on the owner's ruling of the same day, verbatim option label
   **"ADR-003 contradiction (Recommended)"**.
 - **⚠️ Sibling rows filed from the same ruling:**
-  [`0280`](../0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md)
+  [`0280`](../../done/0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md)
   and [`0282`](../../done/0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md).
   **No shared file with `0280`; either order is safe. `0282` should run last** — see its own note.
 - **⚠️ The reviewer's report was second-hand and this brief does not rest on it.** Every clause above
@@ -200,3 +291,27 @@ posture is written.
 - Filed 2026-08-12 by a spawned `fkit-producer` with **no owner channel**, on the owner's ruling of
   the same day. It asked nothing, edited no ADR line, moved no task file, touched no sprint plan,
   and committed nothing.
+- **⚠️ AMENDED 2026-08-15 — this brief's central premise, *"CI has never executed"*, is falsified.
+  Three dated correction notes are appended (at the `## Context` banner, after `## What to build`'s
+  four elements, and after `## Verification steps`); all prior text is left byte-identical as the
+  record of what was written on 2026-08-12.** Measured first-hand 2026-08-15 with `gh run list` over
+  the full run history and `grep -rn 'runs-on' .github/workflows/`: **16 runs — 1 failure, 15
+  success**, all `push` on `main`, `runs-on: ubuntu-latest`; first run 2026-08-12 (`31634593615`) red
+  on a case-sensitivity divergence in `test/orphan-cleanup.test.js`, repaired by closed task `0283`;
+  **15 consecutive green 2026-08-13 → 2026-08-15** (latest `31868723307`).
+  ⛔ **`## What to build` element 3 and `## Verification steps` step 3 must not be followed as
+  written** — implemented literally, they would write a fresh false claim into a decision record.
+  ⚠️ **Elements 1, 2, 4 and every other constraint stand**, including the ⛔ on editing
+  `architecture.md`, `ADR-014`, `ADR-026`, `fkit-wiki-lint/SKILL.md` and closed task artifacts, and
+  including the standing rule that **overstating is a worse defect than the stale claim**.
+  **⚠️ Interacts with [`0312`](../0312-correct-the-false-ci-has-never-run-claims-in-architecture-md/brief.md)**
+  (filed 2026-08-15, unranked on the Backlog board), which repairs the same falsified posture in
+  `architecture.md` — the passages this brief cited as its authority. **No shared file; either order
+  is safe**, but ⛔ do not cite `architecture.md` as never-run evidence in the meantime.
+  [`0251`](../0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md) is the third row
+  in the cluster and carries its own 2026-08-15 correction. Owner provenance for this amendment:
+  **"Producer amends 0281's brief (Recommended)"** (`AskUserQuestion`, 2026-08-15, relayed through the
+  live `/fkit-sprint-ship-loop` driver session). Written by a spawned `fkit-producer` with **no owner
+  channel** — it changed no status, priority, owner, board or rank, moved no task file, touched no
+  sprint plan, wrote nothing under `ai-agents/knowledge-base/` or `ai-agents/wiki-vault/`, and
+  committed nothing.

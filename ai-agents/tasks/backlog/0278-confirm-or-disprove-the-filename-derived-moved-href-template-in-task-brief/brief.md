@@ -93,7 +93,7 @@ decision.** Selection by resolved identity, the `Backlog` token, never-eligible,
 What is in question is a **supporting completeness claim about a list of prose sites**.
 
 The repo's settled form for *"a supporting fact was falsified; the decision stands"* is an **appended
-dated amendment with the original left byte-identical** — precedents at `adr-015:220`, `adr-016:292`,
+dated amendment with the original left byte-identical** — precedents at `adr-015:220`, `adr-016 §Amendment — 2026-07-14`,
 `adr-042:317` (as cited by `0276`; ⚠️ **re-measure, do not trust these numbers**). Whether that form or
 an in-place edit is right here is **part of this task's judgment**, and the choice must be stated with
 its reason.

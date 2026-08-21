@@ -209,6 +209,18 @@ work makes the case for it, **name it as a follow-up** — the producer files it
   >    `0182`'s glob by the same rollover.
   >
   > The task's decision, its two owner rulings and its four scoping decisions are otherwise unaffected.
+- **📌 DATED NOTE 2026-08-15 (`0306`) — the two `ai-agents/sprints/sprint-2.md` strings in this brief
+  are DELIBERATELY LEFT DEAD.** `0306` swept dead board paths out of the open briefs and left both of
+  this file's occurrences byte-identical, because each is a **frozen record of a measurement**, not a
+  pointer for a reader to follow:
+  - **§"The red set" residual list** — the 8 residual files as measured on **2026-08-01**, when the
+    board genuinely was at that path. Re-pointing it would make the record say something the measurer
+    did not measure. The blockquote above already flags it.
+  - **The `0237` handback blockquote above** — a verbatim quotation, never edited to make it accurate.
+  **Where the board actually is today: `ai-agents/sprints/done/sprint-2.md`.** Archived by the
+  2026-08-06 Sprint 2 → Sprint 3 rollover; it still exists, at that path. ⚠️ **This changes nothing
+  about the scoping question the blockquote raises** — whether this guard's scanned set should reach
+  `sprints/done/` is still `0237`'s to settle, and is still unsettled.
 - **Blocks:** nothing.
 - **🔗 Kept SEPARATE from task `0175` (follow-up 7) — a producer judgement.** Report §8 left it open:
   *"Whoever files them should consider one task with two conditions rather than two tasks — noted as a

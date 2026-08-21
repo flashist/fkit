@@ -127,6 +127,56 @@ Docs-only refresh of `ai-agents/knowledge-base/architecture.md` §9 — nothing 
 > a verification step that cannot pass is worse than a stale count, because it silently converts every
 > later run into a judgement call.
 
+> **⚠️ DATED CORRECTION 2026-08-15 — THE *"NEVER WRITE THAT CI IS WORKING"* INSTRUCTION IN THE
+> 2026-08-12 BLOCK ABOVE IS FALSIFIED. CI HAS RUN, 16 TIMES. All text above is left byte-identical as
+> the record of what was written on its original date.**
+>
+> **What drifted.** The 2026-08-12 correction block under `## What to build` item 3 says, of §9.1's
+> *"**Neither has been observed green on a runner yet**"* bullet: *"⚠️ the **"Neither has been observed
+> green on a runner yet"** bullet — **CI has never run**; this loop does not push, so the workflow is
+> verified by static review only. **Do not soften, shorten, or delete that caveat, and never write that
+> CI is working.**"* The `## Notes` list repeats it: *"⛔ CI has never run; do not let the refresh claim
+> it works."* Both were true on 2026-08-12. Neither is true now.
+>
+> **Measured evidence, first-hand 2026-08-15** — `gh run list` over this repository's full run history,
+> plus `grep -rn 'runs-on' .github/workflows/`:
+>
+> - **16 runs total — 1 failure, 15 success.** All are `push` events on `main`;
+>   `.github/workflows/test.yml` declares `runs-on: ubuntu-latest`.
+> - **The first run, 2026-08-12 (`31634593615`), went red** — a filesystem case-sensitivity divergence
+>   in `test/orphan-cleanup.test.js`, since repaired by closed task `0283`.
+> - **15 consecutive green runs, 2026-08-13 through 2026-08-15** (latest `31868723307`).
+> - ⚠️ The bullet's own stated worry — *"The suite has only ever run on darwin"*, and a first run could
+>   go red on a genuine divergence — **actually happened and is resolved.** It is history now, not a
+>   live risk.
+>
+> ⛔ **Do NOT preserve, restore, or re-word the *"Neither has been observed green on a runner yet"*
+> caveat, and ⛔ do not obey *"never write that CI is working."*** Both instructions now command a
+> falsehood.
+>
+> ⚠️ **The rest of the 2026-08-12 block still binds.** The §9.1 heading, its opening sentence, the two
+> `landed (task 0256)` bullets and the closing *"residual risk narrowed but did not close"* paragraph
+> are still not this task's to rewrite. ⛔ And the *"coverage, not automation"* thesis is **untouched**:
+> `install.sh` is still verified by nothing, and CI running does not close that gap.
+>
+> **⚠️ Who repairs that bullet — not this row.**
+> [`0312`](../0312-correct-the-false-ci-has-never-run-claims-in-architecture-md/brief.md), filed
+> 2026-08-15 and **unranked on the Backlog board**, owns the repair of that exact §9.1 bullet and of the
+> matching overview paragraph beginning *"There **is** a zero-dependency test suite"*. ⚠️ **`0251` and
+> `0312` therefore touch the same file and the same section — the only overlap in this cluster.**
+> **Recommended order: run `0312` first**, so that `0251` re-derives the inventory against a §9.1 whose
+> CI framing is already true. **If `0251` runs first:** leave that bullet's text untouched — repairing
+> it is `0312`'s scope, not this row's — but ⛔ do not treat it as true and ⛔ do not echo its claim
+> anywhere else in §9; say in the close that it was knowingly left standing and false, pending `0312`.
+> [`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) is the third row
+> in the cluster (it corrects ADR-003, no shared file) and carries its own 2026-08-15 correction.
+>
+> ⚠️ **This task's real job is unchanged and still outstanding:** items 1 and 2 — re-derive the count
+> and the enumeration from `ls test/*.test.js` **on the day the change is made**. ⛔ Do not copy a
+> number out of this brief; the 8 → 19 → 20 (and a wrong 21) record above is evidence of the drift
+> rate, not a figure to reuse. The open decision in (b) — whether §9.1 should stop enumerating suite
+> names by hand — is **still open** and still belongs to this task's plan gate with the owner present.
+
 ### ⛔ Out of scope
 
 - ⛔ Any file other than `ai-agents/knowledge-base/architecture.md` — no README, no scaffold, no
@@ -178,3 +228,25 @@ Docs-only refresh of `ai-agents/knowledge-base/architecture.md` §9 — nothing 
   already this row's. Written by a spawned `fkit-producer` with **no owner channel** — it changed no
   status, priority, board or owner, moved no file, wrote nothing under `ai-agents/wiki-vault/`, and
   committed nothing.
+- **⚠️ AMENDED 2026-08-15 — the *"CI has never run"* premise inside the 2026-08-12 correction block is
+  falsified; a dated correction note is appended at the end of `## What to build`, and all prior text
+  is left byte-identical as the record of what was written on its original date.** Measured first-hand
+  2026-08-15 with `gh run list` over the full run history and `grep -rn 'runs-on' .github/workflows/`:
+  **16 runs — 1 failure, 15 success**, all `push` on `main`, `runs-on: ubuntu-latest`; first run
+  2026-08-12 (`31634593615`) red on a case-sensitivity divergence in `test/orphan-cleanup.test.js`,
+  repaired by closed task `0283`; **15 consecutive green 2026-08-13 → 2026-08-15** (latest
+  `31868723307`). ⛔ **The instructions *"never write that CI is working"* (item 3's block) and
+  *"⛔ CI has never run; do not let the refresh claim it works"* (the 2026-08-12 bullet in this same
+  Notes list) must not be followed.** ⚠️ **Repairing the §9.1 *"Neither has been observed green on a
+  runner yet"* bullet is
+  [`0312`](../0312-correct-the-false-ci-has-never-run-claims-in-architecture-md/brief.md)'s scope, not
+  this row's** — `0312` (filed 2026-08-15, **unranked on the Backlog board**) and `0251` touch the same
+  file and the same section, the only overlap in this cluster; **recommended order is `0312` first**.
+  [`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) is the third row
+  and carries its own 2026-08-15 correction. ⚠️ **This row's own job — the suite count and enumeration
+  re-derived from disk on the day of the change — is unchanged and still outstanding**, as is the open
+  *"stop enumerating by hand?"* decision at its plan gate. Owner provenance for this amendment:
+  **"Producer amends 0251 too (Recommended)"** (`AskUserQuestion`, 2026-08-15, relayed through the live
+  `/fkit-sprint-ship-loop` driver session). Written by a spawned `fkit-producer` with **no owner
+  channel** — it changed no status, priority, board, owner or rank, moved no file, wrote nothing under
+  `ai-agents/knowledge-base/` or `ai-agents/wiki-vault/`, and committed nothing.

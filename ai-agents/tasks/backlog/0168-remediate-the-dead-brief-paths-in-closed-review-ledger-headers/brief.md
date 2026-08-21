@@ -224,7 +224,7 @@ skill-file walk.
    in the population. Any href that resolved before **must still resolve**, byte-identical target
    unless the ruling explicitly changed it. A diff that turns a working `[…](./brief.md)` into a code
    span is a regression, not a repair — even if the ruling's headline is "make them all code spans".
-5. ⚠️ **Never run a `.{0,80}(…)` context regex over `ai-agents/sprints/sprint-2.md`** — its rows are
+5. ⚠️ **Never run a `.{0,80}(…)` context regex over `ai-agents/sprints/done/sprint-2.md`** — its rows are
    multi-thousand-character single lines and it backtracks catastrophically. Use `grep -n` and slice.
 6. If the ruling is an edit: show the before/after of one file per variant **and one per form** —
    including at least one of the 4 hrefs — and prove no `review.md` section other than the header line
@@ -247,6 +247,14 @@ skill-file walk.
   appended under `/fkit-task-brief` step 5, which forbids a spawned producer from re-ranking — the
   producer that filed it had no owner channel.
 - **Depends on 0160 — hard.** No other dependency.
+  - ✅ **DATED CORRECTION 2026-08-15 — THIS DEPENDENCY IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0160` closed; its folder is
+    `ai-agents/tasks/done/0160-decide-the-durable-citation-form-for-mutable-coordinates/`.
+    **Current dependency: nothing.** ⚠️ **What survives is the *ruling*, not the wait:** `0160`'s
+    durable-citation form is what this task must rewrite the dead headers into, so it is still
+    binding as a constraint on the output — it is no longer a gate on starting.
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
+    *(Recorded by `0306`.)*
 - **Filed on an owner ruling of 2026-07-31**, relayed through the `/fkit-sprint-ship-loop` driver.
   The reported scale in that ruling was **39 of 60**; this brief corrects it to **31 of 60** for the
   described class and **40 of 60** for the full dead-header population. The correction was made by

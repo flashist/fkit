@@ -150,6 +150,15 @@ re-verifies its coordinates.**
 ## Notes
 
 - **Depends on:** `0222` (records ADR-038 — the row's reason clause cites it).
+  - ✅ **DATED CORRECTION 2026-08-15 — THIS DEPENDENCY IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0222` closed; its folder is
+    `ai-agents/tasks/done/0222-record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs/`
+    and **ADR-038 is on disk** at
+    `ai-agents/knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md`.
+    **Current dependency: nothing.** ⚠️ **What survives is the *reason*, not the wait:** the row's
+    reason clause still has to match ADR-038's wording, so read the ADR before writing the row.
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
+    *(Recorded by `0306`.)*
 - **Blocks:** nothing.
 - **Owner:** fkit-coder — a source edit under `claude/`.
 - **Size: small.** One row in one file.

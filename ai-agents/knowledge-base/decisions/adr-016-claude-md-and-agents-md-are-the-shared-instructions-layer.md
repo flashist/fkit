@@ -143,7 +143,7 @@ a spawned consult** (0/3, then 0/2, under two independent controls — Context a
 
 | What a spawned subagent inherits from the launching session | |
 |---|---|
-| `--settings` (`skillOverrides`) | **INHERITED** — `adr-012:21-23`. This is *why* the skill lock is only advisory in a consult. |
+| `--settings` (`skillOverrides`) | **INHERITED** — ADR-012 §Context → "What the mechanism actually is", *"A spawned subagent inherits the launching session's `--settings` and nothing else"*. This is *why* the skill lock is only advisory in a consult. |
 | System prompt (`--append-system-prompt`) | **NOT inherited** — this ADR. |
 
 **Two opposite inheritance rules. Getting them backwards ships a lie.** A shared-instructions mechanism
@@ -189,7 +189,8 @@ report made it again.
 
 Verified, in this repository:
 
-- **Zero hooks.** `PreToolUse` appears only in prose (`architecture.md:397`, `adr-012:92`, task files)
+- **Zero hooks.** `PreToolUse` appears only in prose (`architecture.md:397`, ADR-012 §Decision 4
+  *"The `PreToolUse` hook stays deferred — but the deferral is now priced"*, task files)
   — **never in a settings file**.
 - **All seven agents hold `Bash`** (`grep -n "^tools:" claude/agents/*.md`).
 - **Five of seven hold `Write`/`Edit`** — architect, producer, coder, reviewer, wiki. *(Not
@@ -331,7 +332,8 @@ project keeps reaching for.
 - [ADR-010](adr-010-role-locked-sessions-and-skill-lockdown.md) — the "structural, not by instruction"
   overclaim that Consequences refuses to repeat.
 - [ADR-012](adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md) — the **mirror image**:
-  `--settings` **is** inherited by a spawn (`adr-012:21-23`); the system prompt is **not**.
+  `--settings` **is** inherited by a spawn (ADR-012 §Context → "What the mechanism actually is", *"A spawned subagent inherits the
+  launching session's `--settings` and nothing else"*); the system prompt is **not**.
 - [ADR-013](adr-013-knowledge-base-root-holds-the-living-canon.md) — why the evidence is a dated report
   and this is the durable document.
 - [ADR-015](adr-015-additive-launch-convergence-no-migration-mechanism.md) — the `ai-agents/`

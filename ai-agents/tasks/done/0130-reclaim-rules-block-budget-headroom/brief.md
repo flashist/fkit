@@ -138,6 +138,6 @@ second half of finding R2 (renumbering `test/rules-block-budget.test.js:56-57` f
 
 **Carried-forward residual:** the **codex half of the HTML-comment-stripping canary is still
 unverified** — filed as task
-[`0177-verify-the-codex-half-of-the-comment-stripping-canary`](../../backlog/0177-verify-the-codex-half-of-the-comment-stripping-canary/brief.md).
+[`0177-verify-the-codex-half-of-the-comment-stripping-canary`](../0177-verify-the-codex-half-of-the-comment-stripping-canary/brief.md).
 
 **Not committed** — the change is in the working tree; the owner commits.

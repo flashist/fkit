@@ -30,6 +30,58 @@ rank as `P<n>` is what makes the two number-spaces impossible to confuse at a gl
 | A **brief's `## Priority` field** | a plain number, or `Unscheduled` | it is a **field, not a board cell** — `fkit-sprint-ship-loop` orders by it and reads it as a number |
 | Anything that **identifies** a task | the folder-name `NNNN` prefix | the only permanent carrier |
 
+## The merit statement — recording an ordering rank cannot carry
+
+Board rank is **append-only against closed history**: a `✅ Done`, `⛔ Cancelled` or `➡️ Moved` row is
+never renumbered, so a new row whose merit position sits above one can never be given that rank. The
+ordering intent is then recorded **in the task's own brief**, as a relative, non-numeric **merit
+statement**.
+
+**Two shapes, and only two:**
+
+```
+- **On merit:** immediately above 0154 — <reason>
+- **On merit:** as ranked
+```
+
+Every brief on a **ranked** board **must** carry exactly one of them. That is the rule, not a description
+of the corpus — much of the existing corpus does not yet meet it. The Backlog board is unranked, so none
+is required there — there is no rank for a statement to be relative to.
+
+### The rules, each chosen against a named failure
+
+- **Relative, never absolute.** Name a neighbour — *"immediately above `0154`"* — never a position,
+  *"belongs at 122"*. A relative statement survives every re-rank; an absolute one is stale the moment
+  anything above it moves. That is this page's own rule, applied to the one place it was not yet binding.
+- **Folder ID only. A merit statement contains no `P<n>` token.** The neighbour is `0154`. Writing
+  `0154 (P129)` pairs an identity with a rank, and reintroduces exactly the defect this page exists to
+  prevent.
+- **Advisory. Board rank still binds execution.** The merit statement records what the owner thinks
+  *should* have been next. It does not redirect a reader picking up the next task, and nothing reads the
+  board differently because of it. Two carriers, two jobs; collapsing them makes the board unreadable.
+- **`as ranked` is required, not optional.** A brief with no merit line is indistinguishable from a
+  brief whose author forgot. The explicit no-op is what makes **absence detectable**, and it is what
+  makes a guard possible at all.
+
+### The three carriers, and which of them binds
+
+The merit statement is unreadable without the division of labour it sits in:
+
+| Carrier | Carries | Binding? |
+|---|---|---|
+| Board rank `P<n>` | reading order — what to pick up next | yes, for picking work |
+| `On merit` statement | the owner's preference the rank cannot express | **no — advisory** |
+| `Depends on` / `Blocks` | correctness order — what must land first | **yes, and it outranks reading order** |
+
+A merit case that is really a **correctness** constraint belongs in the `- **Depends on:**` form of
+[`dependency-declaration-form.md`](dependency-declaration-form.md), where it **binds** — not in a merit
+statement, where it does not.
+
+**Authority.** ADR-035, *"A mid-board insertion is not the owner-ruled re-rank exception"*, and decision
+report `2026-08-01-merit-ordering-record-when-board-rank-cannot-carry-it.md` §3.1, which ruled this form
+in by name alongside six other candidates weighed in the same report. Both are cited bare — see the note
+at the foot of this page.
+
 ## What NOT to rewrite
 
 - **The `➡️ Moved to [Sprint N](…) — priority M` marker.** That `priority M` is prose inside the
@@ -52,6 +104,15 @@ rank as `P<n>` is what makes the two number-spaces impossible to confuse at a gl
    other, in both directions, so an implementation whose id merely *correlated* with the folder fails
    it. A companion test pins that a `P<n>` cell parses cleanly and never becomes the id.
 3. **`claude/skills/fkit-task-brief/SKILL.md`** — at write time, when a task is pulled into a sprint.
+4. **`claude/skills/fkit-status/dashboard.sh` + `test/dashboard-contract.test.js`** — **Specified, not
+   built yet.** A `brief-missing-merit` drift kind, in the same family as `brief-missing-status`,
+   `brief-missing-owner` and `brief-missing-id`. Its condition, in the two parts report
+   `2026-08-01-merit-ordering-record-when-board-rank-cannot-carry-it.md` §5.1 rules: **presence** — every
+   brief on a **ranked** board carries a line reading `**On merit:**` followed by *either* a relative
+   statement naming a neighbour by folder ID *or* the literal `as ranked`, and a brief with neither is
+   drift; and **shape** — that statement contains no `P<n>` token. Its two accepted limits — a bare rank
+   with no `P` is not caught, and the guard is red on the existing corpus until a grandfathering decision
+   is taken — are recorded in the same report, §5.4.
 
 ## Provenance
 

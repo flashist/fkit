@@ -77,7 +77,7 @@ A **dated correction note** in `ai-agents/tasks/done/0118-record-adr-032-sprint-
 - **Owner:** fkit-producer — a task-record correction, which is producer work.
 - **Depends on:** nothing. Both 0117 and 0118 are closed.
 - **Blocks:** nothing.
-- **Related stale wording, decide as part of this:** `ai-agents/sprints/sprint-2.md:132` (0118's board
+- **Related stale wording, decide as part of this:** `ai-agents/sprints/done/sprint-2.md:132` (0118's board
   row) still carries *"blocked 99 for three days unnoticed"* in its description. That is past-tense and
   true, so the default is **leave it**. Confirm rather than assume.
 - **Why not just fix it inline during the close:** the close (0118) was performed by a **spawned**

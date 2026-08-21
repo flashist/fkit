@@ -125,6 +125,12 @@ The residual set clean, so `0176` can ship green.
   other. Also `0193` (repairing stale citations in `0158`'s closed brief) and `0171` (the durable
   citation anchors convention page) — `0171` writes the target form this cleanup converts *to*, so if
   `0171` has not landed, **name the form you used and why**.
+- **📌 DATED NOTE 2026-08-15 (`0306`) — the `ai-agents/sprints/sprint-2.md` string at §"What to
+  build" is DELIBERATELY LEFT DEAD.** `0306` swept dead board paths out of the open briefs and left
+  this one byte-identical. **The sentence is *about* that string being dead** — *"`0176`'s own
+  residual list names `ai-agents/sprints/sprint-2.md` as one of its 8 files, and that file no longer
+  exists at that path"* — so re-pointing it would make the sentence contradict itself.
+  **Where the board actually is today: `ai-agents/sprints/done/sprint-2.md`.**
 - **⚠️ This brief decays.** Every figure was measured on **2026-08-06** on a tree with concurrent
   untracked work. **The inventory is evidence the set is real, not a checklist to execute.**
 - **Priority is `—` (unscheduled).** Filed to the Backlog board on the owner's ruling; no sprint was

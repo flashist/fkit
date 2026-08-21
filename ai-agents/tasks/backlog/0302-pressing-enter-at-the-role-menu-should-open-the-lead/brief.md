@@ -266,6 +266,22 @@ by `claude/fkit-claude-init.sh`, so a stale hit there is not a defect.
 
 ## Notes
 
+- **📌 DATED NOTE 2026-08-15 (`0306`) — the quoted *"task 43"* in the mutation-precedent paragraph is
+  DELIBERATELY LEFT byte-identical, and it is STILL AN ACCURATE QUOTATION.** `0306` repaired that
+  stale numeral across `claude/`, but this brief quotes **`test/prove-red.sh:347`**, not a `claude/`
+  file, and **`test/` was out of `0306`'s scope** — so the source comment still reads exactly as
+  quoted here. ⚠️ **`0306` corrected its own plan on this point**: the plan recorded this site as a
+  quotation of `claude/skills-for-role.sh`, which it is not.
+  - **`task 43` = `ai-agents/tasks/done/0052-implement-pretooluse-skill-ownership-hook/`** —
+    pre-migration `task NN` is the brief's old `## Priority` value, and `0052` carries Priority 43.
+    ⛔ **It is NOT `0043-fix-scaffold-knowledge-base-folders`**, which the bare numeral lands on by
+    coincidence.
+  - ⚠️ **`test/` still carries 25 stale `task 43` occurrences** (`prove-red.sh` ×4,
+    `launcher-contract.test.js` ×4, `skill-ownership-hook.test.js` ×1, and **×16 — 8 each — inside the
+    two frozen `closed-rank-0174-{before,after}.md` fixtures**, which must never be edited).
+    `4 + 4 + 1 + 16 = 25`. **Not `0306`'s scope; recorded so the class is not re-discovered.**
+    📌 **Corrected 2026-08-15 (`0306` review round 1, R3):** this bullet first said *"×14"*, which did
+    not sum to its own total. Re-counted on disk with `grep -oiE '\btask 43\b'` per file.
 - **Depends on:** nothing
 - **Blocks:** nothing
 

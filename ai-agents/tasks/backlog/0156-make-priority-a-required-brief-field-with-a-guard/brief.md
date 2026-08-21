@@ -119,7 +119,7 @@ neighbouring callouts; the rules-block budget is under pressure (task 0130).
    `brief-missing-priority` fact. So does `Unscheduled — high-value (see Context)`, the live free-text
    qualifier already pinned by the task-68 test at :1697.
 5. **Green day one against the real repo.** With 0155 landed,
-   `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/sprint-2.md` emits **zero**
+   `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/done/sprint-2.md` emits **zero**
    `brief-missing-priority` records. **If this step is not zero, 0155 has not landed or has regressed —
    stop and report, do not add a skip list.**
 6. **The whole suite is green.** `node --test test/` passes, with no fixture's assertions weakened to

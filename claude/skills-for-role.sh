@@ -1,6 +1,6 @@
 # skills-for-role.sh — the single source of truth for fkit role → skill ownership.
 #
-# Extracted from fkit-claude.sh (task 43 / ADR-018) so it can be `source`d from the PreToolUse
+# Extracted from fkit-claude.sh (`0052` (`implement-pretooluse-skill-ownership-hook`) / ADR-018) so it can be `source`d from the PreToolUse
 # skill-ownership hook (claude/skill-ownership-hook.sh) WITHOUT pulling in fkit-claude.sh's top-level
 # side effects — the self-hosting re-exec, the network update check, and its `$0`/`$PWD`-dependent
 # logic must never fire just because a hook sourced this file. This file has none: it only defines

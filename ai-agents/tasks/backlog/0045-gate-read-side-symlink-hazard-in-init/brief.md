@@ -17,7 +17,7 @@ fkit-coder
 
 ## Context
 
-**Task 27 gated *writes* through a symlinked `ai-agents/`, but not *reads*.** It added a `[ -L ]` check
+**`0069` (`refuse-init-on-weird-ai-agents-state`) gated *writes* through a symlinked `ai-agents/`, but not *reads*.** It added a `[ -L ]` check
 before `[ -e ]` at `fkit-claude-init.sh:40` so a symlinked `ai-agents/` is refused rather than written
 through. That guard protects the **write** side. It does **not** protect a future init step that
 *reads* from `$dest/ai-agents/…`: such a read would follow the link and pull **off-project content**
@@ -31,18 +31,18 @@ rather than active. Tasks 30–32 do not touch it: they read from the **scaffold
 
 **Owner decision (2026-07-15):** track this independently as its own backlog task — resolving Sprint 2
 open question 7 by taking the counter-argument (track it independently so it cannot be lost with the
-still-parked task 28) rather than folding it into task 28's brief.
+still-parked `0023` (`converge-ai-agents-additively-on-launch`)) rather than folding it into `0023`'s brief.
 
 ## What to build
 
 - **A read-side symlink guard for any init code path that reads inside `$dest/ai-agents/`.** Before init
   reads a path under a project's `ai-agents/`, confirm the containing `ai-agents/` (and, where relevant,
-  the specific path) is **not** a symlink — mirroring task 27's `[ -L ]`-before-`[ -e ]` ordering on the
+  the specific path) is **not** a symlink — mirroring `0069`'s `[ -L ]`-before-`[ -e ]` ordering on the
   read side.
-- **Refuse-and-report on a symlinked read target**, consistent with task 27's write-side refusal, rather
+- **Refuse-and-report on a symlinked read target**, consistent with `0069`'s write-side refusal, rather
   than silently following the link.
 - The guard should be in place **before** the first init step that genuinely reads per-path inside
-  `ai-agents/` — which today is **task 28** (additive convergence walks and reads the tree). If task 28
+  `ai-agents/` — which today is **`0023`** (additive convergence walks and reads the tree). If `0023`
   lands first, that requirement must be carried in its implementation; this task exists so the hazard is
   tracked even if 28 stays parked.
 
@@ -53,14 +53,14 @@ still-parked task 28) rather than folding it into task 28's brief.
   reading off-project content.
 - **A normal (non-symlink) `ai-agents/` is read as before** — the guard does not break the ordinary
   case.
-- **Consistency with task 27:** the read-side refusal behaves the same way (message, non-fatal handling)
-  as the write-side refusal task 27 added.
+- **Consistency with `0069`:** the read-side refusal behaves the same way (message, non-fatal handling)
+  as the write-side refusal `0069` added.
 
 ## Notes
 
 - **Owner: fkit-coder** — an init (`fkit-claude-init.sh`) change.
-- **Relates to: task 28** (`converge-ai-agents-additively-on-launch`) and **task 27**
-  (`refuse-init-on-weird-ai-agents-state`). **If task 28 is implemented first, this guard must be part of
+- **Relates to: `0023`** (`converge-ai-agents-additively-on-launch`) and **`0069`**
+  (`refuse-init-on-weird-ai-agents-state`). **If `0023` is implemented first, this guard must be part of
   it** — this brief is the independent tracking so the requirement is not lost while 28 is parked. **No
   hard code dependency**, but it should not be considered complete separately from whatever first reads
   per-path inside `ai-agents/`.

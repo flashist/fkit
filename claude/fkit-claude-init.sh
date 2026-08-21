@@ -320,8 +320,9 @@ RULES_END='<!-- fkit:end-rules -->'
 #      new enters the shared block without something leaving, or an owner-signed bump (ADR-016).
 #   2. ATTENTION DILUTION — SUSPECTED BUT UNMEASURED. Nobody has measured whether a longer block
 #      actually degrades adherence. Do not cite it as established; it is a hunch, recorded as one.
-# Standing budget target (owner ruling, task 0130): keep >= 400 B free. 515 B free at time of writing
-# — a snapshot, not a guarantee; test/rules-block-budget.test.js measures the live number.
+# Standing budget target (owner ruling, task 0130): keep >= 400 B free. 515 B free — re-verified
+# 2026-08-16 (task 0177), still a snapshot and not a guarantee; test/rules-block-budget.test.js
+# measures the live number.
 #
 # The cap measures the EMITTED block (markers + comment + source) — confirmed unchanged, task 0130.
 #
@@ -329,8 +330,11 @@ RULES_END='<!-- fkit:end-rules -->'
 # RULES BODY, not of this wrapper comment. Re-run first-hand 2026-08-01 on Claude Code 2.1.220: HTML
 # comments are STRIPPED from CLAUDE.md before it reaches the agent context — the body arrived, these
 # marker/comment lines did not. So the wrapper costs cap budget without costing Claude-side context.
-# UNVERIFIED: the codex side (AGENTS.md, codex-cli 0.145.0) was not re-measured here; assume it
-# still pays.
+# MEASURED, codex side (task 0177, 2026-08-16, codex-cli 0.145.0): codex does NOT strip. The markers
+# and this comment reach the model verbatim inside the AGENTS.md payload — observed directly in
+# `codex debug prompt-input`, corroborated by a canary token only a surviving comment could carry.
+# So the wrapper is free on the Claude side and PAID IN FULL on the codex side. Harness-specific
+# (ADR-016): this is a property of these two builds and must be re-measured when either moves.
 #
 # Raised 4096 → 4352 by owner ruling, task 0190, 2026-08-04 — the ADR-016 signed bump reason 1 above
 # requires. It bought room for ADR-037's worker-side precedence clause, which does not fit under 4096.
