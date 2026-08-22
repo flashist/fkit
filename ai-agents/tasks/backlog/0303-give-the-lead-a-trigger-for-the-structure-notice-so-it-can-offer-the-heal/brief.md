@@ -40,7 +40,7 @@ different role, in the middle of the work you just sat down to do.
 
 **Owner ruling, 2026-08-14**, same session and channel — **the option label is the verbatim text**:
 **"Three separate briefs (Recommended)"**. ⛔ This task was explicitly **not** bundled with
-[`0302`](../0302-pressing-enter-at-the-role-menu-should-open-the-lead/brief.md), the owner's stated
+[`0302`](../../done/0302-pressing-enter-at-the-role-menu-should-open-the-lead/brief.md), the owner's stated
 reason being that `0302` is trivial and shippable immediately while **this one needs design**, and
 bundling would gate the one-liner behind the hard one. ⛔ Do not re-merge them.
 
@@ -295,7 +295,7 @@ it and a scheduler does not.**
 two sanctioned orders. ⚠️ **But say so in the plan, and re-check the premise against `0304`'s brief
 before designing**, since `0304` records both futures and can be reasoned about without its own pass
 having run.
-[`0302`](../0302-pressing-enter-at-the-role-menu-should-open-the-lead/brief.md) came from the same
+[`0302`](../../done/0302-pressing-enter-at-the-role-menu-should-open-the-lead/brief.md) came from the same
 session and the same launch but is **wholly independent** — owner-ruled not to be bundled.
 
 ### ✅ The implementation brief is deliberately NOT filed yet — OWNER-ACCEPTED 2026-08-14

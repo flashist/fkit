@@ -66,11 +66,53 @@ is worse than the acknowledged gap this task exists to close.
 
 ### B. The assertions the helper makes possible
 
+- **Corrections:** ⚠️ = a fact that drifted (the decision is untouched); ⛔ = a decision that was
+  overturned (do not follow it). **There is no third marker.** Annotated site: **this §B assertion
+  table**, which gained an `Enter` row on 2026-08-21 — see the dated ⚠️ note directly below the table.
+  Every pre-existing row and every word of surrounding prose is **left byte-identical**; the row is an
+  addition, not a rewrite. This item is **append-only** — a later pass extends it and supersedes only
+  the site list, never this legend.
+
 | Menu input | Expected |
 |---|---|
 | `1` … `7` | `claude` exec'd with the **correct** `--agent fkit-<role>` for that pick |
+| `Enter` (a literal empty line, no digit) | `claude` exec'd with `--agent fkit-lead` — the Enter-default shipped by `0302`. ⚠️ Feed a **junk token first** (see the note below); Ctrl-D is **not** this case |
 | `team` | rejected at the menu — `is not one of 1-7`; `claude` never exec'd |
 | `team room` | rejected at the menu — `is not one of 1-7`; `claude` never exec'd |
+
+> ⚠️ **Correction, 2026-08-21 — the table above gained an eighth input, `Enter`.** The menu now has an
+> Enter-default: an empty line opens the **lead**. Verified against live code 2026-08-21 — the menu's
+> `case` block in `claude/fkit-claude.sh` now carries the arm `"") role="lead"` and the prompt
+> `role [1-7, Enter=lead, q to quit]:`, alongside that file's long-standing comment *"No role and no
+> tty (piped / CI) → lead is the safe default."* ⚠️ **At the moment this note was written that change
+> sat in the working tree, uncommitted** — `0302` was mid-ship. If a reader finds the arm absent, the
+> ship did not land and this row is the target behavior, not the shipped one. The pre-existing rows and
+> the prose around them are left **byte-identical**.
+>
+> **Why this row exists, and who put it here.** Task `0302` ("Pressing Enter at the role menu should
+> open the lead") ships the Enter-default **with no automated test**, on the owner's ruling — verbatim
+> option label **"Approve on 3A"**, following the earlier verbatim label **"Ship 0302 standalone, gap
+> named (Recommended)"** — so the gap is named in `0302`'s close and `0145` is the task that closes
+> it. This row **is** that gap, written down. Added by the producer on **2026-08-21** under the
+> owner's verbatim ruling **"Route to a producer now (Recommended)"**.
+>
+> ⚠️ **The junk-token discriminator — this is the whole difficulty of the `Enter` test. Do not skip
+> it.** §A's trap 1 is **sharper here than for any digit pick**: if the input side closes early, the
+> launcher's first `read` hits EOF and the loop exits **0 having exec'd nothing** — a result that
+> looks like a clean run but proves **nothing was ever delivered**. A pass obtained that way is
+> **vacuous**. The reliable discriminator is a **junk token first**: feed `zzz`, assert stdout carries
+> `? "zzz" is not one of 1-7.` — which proves the pty really delivered input to the menu — and only
+> **then** feed `Enter` and assert the exec. Without that first assertion the `Enter` case is
+> unfalsifiable.
+>
+> ⚠️ **Ctrl-D and `Enter` are two different outcomes; a test that conflates them proves nothing.**
+> After `0302`, **Ctrl-D (EOF)** still exits **0 and opens nothing**, while a **literal `Enter`** opens
+> the **lead**. On a transcript both look like "an empty line". Assert the **exec and its argv**
+> (`--agent fkit-lead`), never the exit code — that is `0` in both cases.
+>
+> ⛔ **Scope of this note.** No status, priority, owner, rank or file location on `0145` was touched,
+> and no dependency or blocking line on either task was added or altered. `0302` records `0145` as a
+> **soft** link, **deliberately not a hard prerequisite** — this note does not change that.
 
 The seven picks are one-per-role, so drive them from the same role list the suite already uses rather
 than seven hand-written cases — a hand-written list drifts the next time the menu is reordered, which

@@ -612,7 +612,7 @@ if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || ( exec 3</dev/tty ) 2>/dev/
   printf '  Two roles at once? Open another terminal tab and run fkit again.\n\n'
 
   while [ -z "$role" ]; do
-    printf '  role [1-7, q to quit]: '
+    printf '  role [1-7, Enter=lead, q to quit]: '
     IFS= read -r pick <&3 || { echo; exit 0; }
     case "$pick" in
       1|lead)                role="lead" ;;
@@ -623,7 +623,13 @@ if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || ( exec 3</dev/tty ) 2>/dev/
       6|adv|adversarial)     role="adversarial-reviewer" ;;
       7|wiki)                role="wiki" ;;
       q|Q|quit|exit)         echo; exit 0 ;;
-      "")                    : ;;
+      # Enter with no input → lead. This does NOT invent a default: for an already-initiated
+      # project the headless fall-through below (`[ -n "$role" ] || role="lead"`) has always opened
+      # the lead for a no-arg, no-tty run — this makes the interactive path agree with it. (An
+      # UNinitiated project is intercepted above and opens the producer on both paths alike.)
+      # ⛔ EMPTY ONLY: the `*)` arm still rejects and re-prompts, because "empty means lead" must
+      # not widen into "anything unmatched means lead" (the header's `fkit --resume` bug).
+      "")                    role="lead" ;;
       *)                     printf '  ? "%s" is not one of 1-7.\n' "$pick" ;;
     esac
   done

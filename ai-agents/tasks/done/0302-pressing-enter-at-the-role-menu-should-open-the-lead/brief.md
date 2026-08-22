@@ -10,7 +10,7 @@ Sprint 6
 Sprint 6 P8
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -30,14 +30,14 @@ menu they were looking at is the one this task changes.
 
 **Owner ruling, 2026-08-14**, same session and channel — **the option label is the verbatim text**:
 **"Three separate briefs (Recommended)"**. ⛔ **This task was explicitly NOT bundled with
-[`0303`](../0303-give-the-lead-a-trigger-for-the-structure-notice-so-it-can-offer-the-heal/brief.md)**,
+[`0303`](../../backlog/0303-give-the-lead-a-trigger-for-the-structure-notice-so-it-can-offer-the-heal/brief.md)**,
 which came out of the same session. The owner's stated reason: **this one is trivial and shippable
 immediately, `0303` needs design, and bundling would gate the one-liner behind the hard one.**
 ⛔ Do not re-merge them.
 
 **Owner ruling, 2026-08-14**, same session and channel — **"Backlog, unranked — rank later
 (Recommended)"**. This row is unranked and belongs to no sprint. ⚠️ **There is no active sprint**:
-[`0294`](../../done/0294-archive-sprint-5-move-the-plan-into-sprints-done-and-repoint-every-link/brief.md)
+[`0294`](../0294-archive-sprint-5-move-the-plan-into-sprints-done-and-repoint-every-link/brief.md)
 archived Sprint 5 on 2026-08-14 and deliberately opened no successor, and `select-active` returns
 `active none` (exit **3**, the documented no-active-sprint code — **not** a failure).
 
@@ -165,7 +165,7 @@ behaviour gets mutation-proved, **not** evidence that the menu is reachable.
 ⚠️ **Found during this filing and recorded so this task does not redo it.** The "no coverage is
 possible" reading above is **too pessimistic**, and acting on it would be a mistake.
 
-[`0145-pty-driven-menu-pick-coverage-for-the-launcher`](../0145-pty-driven-menu-pick-coverage-for-the-launcher/brief.md)
+[`0145-pty-driven-menu-pick-coverage-for-the-launcher`](../../backlog/0145-pty-driven-menu-pick-coverage-for-the-launcher/brief.md)
 — **already on this board, `fkit-coder`, `🔲 Backlog`** — is titled *"Give the launcher-contract suite
 a pty, and pin the menu picks 1-7"* and exists **precisely** to close this gap. It specifies:
 
@@ -290,7 +290,7 @@ same session and the same launch, and the owner **explicitly rejected** folding 
 `0303`. It can be planned, built, reviewed and closed on its own, with nothing else landed first.
 ⛔ **Do not re-bundle it, and do not wait on `0303`'s design.**
 
-⭐ **Soft-follows [`0145`](../0145-pty-driven-menu-pick-coverage-for-the-launcher/brief.md) — a
+⭐ **Soft-follows [`0145`](../../backlog/0145-pty-driven-menu-pick-coverage-for-the-launcher/brief.md) — a
 SOFT dependency, deliberately NOT recorded as a hard one — ✅ and now OWNER-CONFIRMED.** `0145` builds
 the pty helper this task's test needs (see `## Context`). ⛔ **It is not declared under `Depends on:`
 on purpose**: making it hard would gate the owner's one-line ask behind an infrastructure task, which

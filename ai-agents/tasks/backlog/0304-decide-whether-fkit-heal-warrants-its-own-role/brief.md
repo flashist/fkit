@@ -50,7 +50,7 @@ archived Sprint 5 on 2026-08-14 and opened no successor; `select-active` returns
 (exit **3**, the documented no-active-sprint code, **not** a failure).
 
 **Owner ruling, 2026-08-14**, same session and channel — **"Three separate briefs (Recommended)"**.
-This task, [`0302`](../0302-pressing-enter-at-the-role-menu-should-open-the-lead/brief.md) and
+This task, [`0302`](../../done/0302-pressing-enter-at-the-role-menu-should-open-the-lead/brief.md) and
 [`0303`](../0303-give-the-lead-a-trigger-for-the-structure-notice-so-it-can-offer-the-heal/brief.md)
 are **three separate rows, not one bundle**. ⚠️ Recorded here for completeness — the label was already
 carried by `0302` and `0303` and is restated so all three rows agree on their own filing authority.
@@ -108,7 +108,7 @@ A role is not a file. The surfaces a new one touches, each verified as a real de
   [ADR-018](../../../knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md)
   `PreToolUse` skill-ownership hook.
 - **The launcher menu** — the `1-7` prompt, the `case` arms, the role listing.
-  ⚠️ **Note the collision:** [`0302`](../0302-pressing-enter-at-the-role-menu-should-open-the-lead/brief.md)
+  ⚠️ **Note the collision:** [`0302`](../../done/0302-pressing-enter-at-the-role-menu-should-open-the-lead/brief.md)
   also edits that prompt string. ⛔ Not a dependency, but worth naming in the cost.
 - **An agent definition** under `claude/agents/`.
 - **Docs** — `README.md`, `CLAUDE.md`, the scaffold copies, and `ai-agents/knowledge-base/`.
@@ -204,7 +204,7 @@ not.**
 from `0303`'s brief alone**, without `0303`'s design pass having run, while `0303` cannot recover a
 heal-role decision that has not been made.
 
-[`0302`](../0302-pressing-enter-at-the-role-menu-should-open-the-lead/brief.md) came out of the same
+[`0302`](../../done/0302-pressing-enter-at-the-role-menu-should-open-the-lead/brief.md) came out of the same
 session and the same launch. It is **independent** — but ⚠️ note it edits the **same menu prompt
 string** a ninth role would edit. ⛔ Not a dependency; a cost worth naming in §2.
 
