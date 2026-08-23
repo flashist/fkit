@@ -152,6 +152,6 @@ existing R8 tests so the three read as a set.
   it.
 - **Line-number citations above are dated (2026-08-10) and are anchors of convenience.** The durable
   anchors are the quoted patterns and test names. The durable-citation convention page does not exist
-  yet — that is [`0171`](../../backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md).
+  yet — that is [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md).
 - Filed 2026-08-10 by a spawned `fkit-producer` with no owner channel, onto the Sprint 5 board, under
   the owner's Sprint 5 scope ruling of the same day.

@@ -44,6 +44,18 @@ The lead moved from **option 7 to option 1** and its label from *"team room"* to
 - ⚠️ **Accepted cost, ruled on knowingly: renumbering moved every other role down one, and the mis-pick is silent** — you land in a working session of the wrong role rather than getting an error. The word-alias path (`fkit coder`) is unaffected and is the mitigation.
 - ⚠️ **The `team` / `"team room"` word aliases were REMOVED, not kept** — the brief originally required keeping them, and review finding R1 overturned it. **The menu reads a whole line, so `"team room"` matched there; the CLI reads argv already whitespace-split**, so `fkit team room` launched a lead session and passed the stray word `room` through to `claude`, where it had previously been a loud `exit 2`. The words are now accepted on **neither** path; `fkit team` exits 2. *(A residual note on that task still claims otherwise — the owner ruled 2026-07-26 that **the text is wrong and the code is right**; the docs-only correction is still open.)*
 
+### Enter at the menu now opens the lead (2026-08-21)
+
+The prompt reads **`role [1-7, Enter=lead, q to quit]:`** — it was `role [1-7, q to quit]:` — and the empty-input `case` arm flips from a no-op to `role="lead"`. Owner request, made from using the menu; landed by [[tasks/pressing-enter-at-the-role-menu-should-open-the-lead]] (`0302`).
+
+⭐ **It does not invent a default.** The headless fall-through below it (`[ -n "$role" ] || role="lead"`) has **always** opened the lead for a no-arg, no-tty run — this makes the **interactive** path agree with the **headless** one, which [[tasks/fix-headless-menu-guard-crash]] and [[tasks/remove-fkit-resume-passthrough]] established.
+
+⛔ **EMPTY ONLY.** The `*)` arm stays a usage error — *"empty means lead"* must not widen into *"anything unmatched means lead"*, which is the `fkit --resume` bug that was removed.
+
+⚠️ **The change ships with NO automated coverage of the interactive menu.** `npm test` is green, but the launcher-contract assertions pin the **headless** default, not the menu. The alternative test was **designed and declined by owner ruling** — it would have falsified an `architecture.md` line the task could not edit and imported a timing race. The obligation is discharged in writing onto task `0145`. The only positive evidence is three pty runs (**evidence, not acceptance**) plus the owner's own real-terminal confirmation, 2026-08-21.
+
+⚠️ **Accepted residuals, owner-ruled:** `Ctrl-D` (EOF) still exits 0 and opens nothing — *"different events, not different renderings of one event"* — and a **NUL-only line opens the lead**, because `read` cannot carry NUL into a shell variable and no shell-level fence can tell the two apart.
+
 ### Fresh-project onboarding
 Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an existing one → `.fkit/interview` asks 6 questions **on the terminal, before any LLM starts**, writing `.fkit/intake.md` (tty-safe; skips cleanly when headless) → the launcher detects the uninitialized `PROJECT.md`, **skips the menu**, and seeds the producer straight into `/fkit-initiate-project` → the producer interviews the owner, **spawns the architect to run `fkit-survey-project`**, and writes `PROJECT.md`.
 
@@ -221,6 +233,9 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 - [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — task `0252` (2026-08-13): `RELEASING.md`, the maintainer-facing release procedure this page's §Release now points at — the `main`-channel/tag distinction, what `VERSION` does and does not do, and the manifest regeneration duty
 - [[tasks/make-the-lockdown-guard-case-test-filesystem-independent]] — task `0283` (2026-08-13): the one **red** CI run, and why it is a point in CI's favour
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the release-hygiene cluster's board. ⚠️ *Corrected 2026-08-14:* this line read *"the **live** board"*; it is **archived**, at `ai-agents/sprints/done/sprint-5.md`, by task `0294`. ⚠️ **There is no active board at all right now** — `dashboard.sh select-active ai-agents/sprints` returns `active none`
+  > ⚠️ **Dated correction 2026-08-22 — the *"no active board at all"* clause above is FALSE as of 2026-08-14; the line is left byte-identical.** [[tasks/sprint-6-repair-the-record-the-board-rests-on]] opened that day at `ai-agents/sprints/sprint-6.md` and is the active board. **The `active none` reading was true only for the gap between Sprint 5's archival and Sprint 6's opening**; the sentence should be read as dated, not current.
+- [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — ⚠️ *Added 2026-08-22:* the board that carries `0302`'s launcher change and the record-repair half of Sprint 6
+- [[tasks/pressing-enter-at-the-role-menu-should-open-the-lead]] — task `0302` (2026-08-21): the `Enter=lead` menu default and its accepted residuals
 - [[tasks/the-2026-08-14-retroactive-review-corrections]] — ⚠️ *Added 2026-08-14:* tasks `0291` and `0295`, the two retroactive-review rows that corrected this page's `0289` block and reciprocated the five one-way links above — **in one shared write**, which is what the owner's batching ruling existed to achieve
 - [[decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]] — ADR-043 (2026-08-13): the launcher, init refresh and self-update that ADR reasons over. **Back-link added by `0295`**
 - [[tasks/decide-whether-claude-enters-the-structure-conformance-surface]] — task `0255` (closed 2026-08-13): whether `.claude/` enters the structure-conformance surface. **Back-link added by `0295`**

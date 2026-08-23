@@ -155,7 +155,7 @@ rewrite. ⭐ **Do not treat A and B as the whole option space.**
   and is the task that documents the canonical declaration form the board can read. **Option A directly
   reopens ground `0184` was scoped to leave alone.** ⚠️ **Read `0184` before recommending A**, and say in
   the recommendation whether A changes what `0184` must write.
-- **[`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md)** — the
+- **[`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md)** — the
   `durable-citation-anchors` convention page, **in progress as Sprint 6 P2**. ⚠️ **Related but does not
   gate this.** `0171` governs how a *citation* anchors; this task is about how a *declaration's
   correction* reaches a derived cell. **Say explicitly in the recommendation whether the two forms need

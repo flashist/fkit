@@ -62,3 +62,4 @@ The **wrapper-comment compression** (~354 B of the 404 B wrapper overhead, zero 
 - [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158`, the investigation that produced ADR-037
 - [[systems/role-locked-sessions]] — the lockdown this clause routes around: the rules block reaches every spawned worker precisely because a rule in an unloaded `SKILL.md` does not bind
 - [[systems/testing-and-verification]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
+- [[tasks/repair-0177s-stale-cap-and-byte-figures]] — ⚠️ *Added 2026-08-22:* task `0218`, which repaired a downstream brief still naming the pre-bump `4096` cap this task moved to **4352**

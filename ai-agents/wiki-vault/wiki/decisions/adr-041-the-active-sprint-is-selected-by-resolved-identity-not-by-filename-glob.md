@@ -195,3 +195,4 @@ the one-grammar constraint honored at the site it was written for.
 - [[systems/fkit]]
 - **Its task chain:** [[tasks/decide-whether-the-active-sprint-glob-widens]] (`0261`, the decision) · [[tasks/implement-adr-041s-dashboard-half]] (`0265`, the `Backlog` token + the resolve-identity interface §5 requires) · [[tasks/retire-the-sprint-glob-in-fkit-status-skill]] (`0266`, §6 sites 1–2) · [[tasks/correct-the-five-remaining-prose-sites-that-state-the-glob-as-the-mechanism]] (`0267`, §6 sites 3–7 — ⚠️ **including a generator whose emitted copies in downstream repos are unreachable by anything fkit ships**)
 - [[tasks/the-2026-08-13-vault-resync-chain]] — task `0269`, the ingest that brought this ADR into the vault
+- [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — ⚠️ *Added 2026-08-22:* the board `select-active` now resolves to, after a real `active none` interval in which `backlog.md` was the only candidate and was correctly refused

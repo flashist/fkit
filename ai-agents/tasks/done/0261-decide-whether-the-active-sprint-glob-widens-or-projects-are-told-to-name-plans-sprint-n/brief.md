@@ -185,7 +185,7 @@ An ADR under `ai-agents/knowledge-base/decisions/`, via `/fkit-record-decision`.
   it gates the release.
 - **Line-number citations above are dated (2026-08-10) anchors of convenience**; the durable anchors
   are the quoted text and the report's section numbers.
-  [`0171`](../../backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md) is the open task for
+  [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) is the open task for
   the convention page.
 - Filed 2026-08-10 by a spawned `fkit-producer` with no owner channel, onto the Sprint 5 board, under
   the owner's Sprint 5 scope ruling of the same day.

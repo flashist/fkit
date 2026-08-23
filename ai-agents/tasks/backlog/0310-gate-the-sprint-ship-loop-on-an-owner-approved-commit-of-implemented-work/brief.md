@@ -48,7 +48,7 @@ and renumbers nothing
 
 **Today's `/fkit-sprint-ship-loop` run is the evidence.** The run drove Sprint 6 P1
 ([`0306`](../../done/0306-repair-the-three-decay-shapes-across-the-open-backlog-briefs/brief.md),
-closed) and P2 ([`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md), still
+closed) and P2 ([`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md), still
 `🔄 In progress`), and filed four briefs. **Nothing was committed.**
 
 **Figures re-derived firsthand by the filing producer on 2026-08-15**, at `HEAD` = `9360177`

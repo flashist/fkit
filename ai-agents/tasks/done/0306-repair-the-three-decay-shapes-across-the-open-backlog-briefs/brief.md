@@ -284,7 +284,7 @@ nowhere agreed to live). ⛔ Do not record it as unblocked.
 
 ### ⚠️ Relationship to `0171` — the owner has NOT ruled on this, and the run must not settle it
 
-[`0171`](../../backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md) writes the
+[`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) writes the
 `durable-citation-anchors` convention page — **the rule that stops this decay recurring**. This task
 is the **cleanup**; `0171` is the **prevention**. They are complements, not alternatives, and neither
 subsumes the other.
@@ -489,7 +489,7 @@ byte-identical**, exactly as `0224`, `0225` and `0229` already do.
 - **Depends on:** nothing.
 - **Blocks:** nothing hard.
 - ⚠️ **Soft, and deliberately NOT a `Depends on`:** best run **after**
-  [`0171`](../../backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md), which supplies the
+  [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md), which supplies the
   durable anchor form to repair each citation **into**. ⛔ **The owner has not ruled on the pairing** —
   see *Context*. If run first, **name the anchor form used and why**.
 - ⚠️ **File contention is wide by construction** — this task edits briefs across 17+ open task

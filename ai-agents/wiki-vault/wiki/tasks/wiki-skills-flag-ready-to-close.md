@@ -39,3 +39,4 @@ Done, **agent-closed — not owner-verified**. Landed alongside `0124`, which re
 - [[tasks/revert-task-movers-to-producer-only]] — `0124`, landed with this
 - [[tasks/tighten-the-wiki-completion-flag-block]] — `0173`, which stripped the path back out of this block and banned `:NNN`
 - [[systems/role-locked-sessions]]
+- [[tasks/the-2026-08-15-done-in-fact-wiki-closes]] — ⚠️ *Added 2026-08-22:* two rows whose flags read `partial — not ready to close` and were closed anyway. **The flag works; nothing re-reads it**

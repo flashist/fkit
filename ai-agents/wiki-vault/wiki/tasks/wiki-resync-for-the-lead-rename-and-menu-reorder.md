@@ -66,3 +66,4 @@ Three record defects were found in review — an **unrun command printed as thou
 - [[systems/knowledge-base-structure]] — where the correction-note form is catalogued, now recorded as governing the vault too
 - [[systems/fkit]]
 - [[tasks/the-2026-08-13-vault-resync-chain]] — a later link in the same chain of vault re-syncs
+- [[tasks/teach-record-decision-the-dated-correction-note-form]] — ⚠️ *Added 2026-08-22:* task `0198`, which ships the **below-the-claim** placement into the ADR-writing skill, superseding this page's original *"banner above claim"* wording for the knowledge base as well as the vault

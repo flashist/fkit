@@ -67,3 +67,4 @@ seam; tasks `0214`/`0215` sit on that ground.
 - [[systems/testing-and-verification]]
 - [[systems/fkit]]
 - [[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]] — task `0185`, the rollover that pulled this row from the Backlog board onto Sprint 3
+- [[tasks/repair-the-three-decay-shapes-across-the-open-backlog-briefs]] — ⚠️ *Added 2026-08-22:* task `0306` — ⛔ **this task's two frozen replay fixtures hold 16 stale `task 43` numerals that must NEVER be swept.** The binding reason is a contract, not a test outcome: the suite declares them byte-exact copies of two named commits, so editing a numeral **falsifies that declaration even where no assertion trips**

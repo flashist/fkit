@@ -48,3 +48,4 @@ Done, **agent-closed — not owner-verified**.
 - [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`, which applied this task's rank-vs-identity convention to the wiki completion flag
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — **a mid-board insertion is NOT the owner-ruled re-rank exception** — forced by arithmetic, not policy
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**
+- [[tasks/record-the-canonical-merit-statement-form-in-the-convention-page]] — ⚠️ *Added 2026-08-22:* task `0178`, which added the `## The merit statement` section to the convention page this task filed

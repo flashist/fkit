@@ -10,7 +10,7 @@ Sprint 6
 Sprint 6 P2
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
@@ -337,3 +337,53 @@ For each of the 12 citations:
 - **Soft-relationship with `0197`.** `0197` repairs ADR-010's **outbound** `path:NNN` citations using
   this page's form; Deliverable B repairs the **inbound** `adr-010:NNN` citations. Different direction,
   same rule, two tasks. `0197` records this task as a soft dependency; this task is not blocked by it.
+
+## Close note — 2026-08-22
+
+### ⛔ Verification step 8 is SUPERSEDED, not met
+
+**Read this before citing step 8.** Step 8 as written above says verbatim: *"No file under
+`ai-agents/tasks/`, `ai-agents/sprints/` or `ai-agents/wiki-vault/` is modified."* Three facts, all
+three of which a later reader must see together:
+
+1. **Step 8 as written was NOT met literally.** This task's run modified `ai-agents/sprints/backlog.md`
+   at five lines — `:139`, `:186`, `:220`, `:222`, `:225`. That is a real, disclosed deviation from the
+   brief's own text. It is not being marked met.
+2. **Those edits were citation-text-only and zero-net.** No `## Status` value, no rank, no row order and
+   no row count changed — only citation text inside existing cells. The worklog and the review ledger
+   both record them; ledger round **R9** in fact caught the worklog falsely claiming `backlog.md` was
+   untouched and forced that correction. ⚠️ **The five `:NNN` above are mutable coordinates into a
+   living board and will drift** — the durable anchors are this task's own
+   [`worklog.md`](worklog.md) §8 *"Not done — held scope"* (*"`backlog.md` is NOT untouched — corrected
+   by round-2 R9"*) and [`review.md`](review.md) row **R9**, whose disposition cell reads *"§8 now
+   states `backlog.md` carries five citation-only, zero-net edits … under owner ruling, with no
+   `## Status`, rank, row order, or row count change."*
+3. **A later owner ruling superseded the earlier written step, and that ruling governs.** The edits were
+   made under a live owner ruling relayed mid-run, verbatim option label ***"Repair the authorized
+   surfaces only (the worker's recommendation)."*** The supersession itself was then ruled on
+   **2026-08-22**, live via `AskUserQuestion` in a `fkit lead` session driving `/fkit-sprint-ship-loop`,
+   verbatim option label ***"Ruling governs — record it (Recommended)"***, description verbatim:
+
+   > *"Your later live ruling overrides the brief's earlier written step 8. The producer records this at
+   > close: step 8 was superseded by owner ruling, edits were disclosed and zero-net. Task closes as
+   > MEETS."*
+
+⛔ **The five `backlog.md` edits stand — they are not to be reverted.** Step 8 stays written as it was;
+it is superseded, not amended, and this note is the record of that.
+
+### Close basis
+
+- Re-verified this session by a spawned `fkit-coder`: **VERDICT: MEETS** — 17 criteria, 16 met (step 8
+  superseded per above); `node --test` **732/732, 0 fail**; both dual-homed copies byte-identical
+  (`sha256` `2ef1f155…`, 233 lines / 15825 bytes); `structure-manifest.tsv:64` hash matches the live file.
+- Reviewed twice — round 1 `fkit-reviewer` **+ Codex `gpt-5.6-sol`, coverage FULL**, 7 findings resolved;
+  round 2 convergence pass, 5 findings fixed, verdict verbatim: *"Called proactively: `0171` has
+  converged. Recommend closeout after R12."*
+- Closed by a **spawned** `fkit-producer` with **no owner channel**
+  ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+  so per [ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)
+  §5 this close is **not owner-verified** and carries that marker. The MEETS verdict, the two review
+  rounds and the ruling above do **not** upgrade it.
+- ⚠️ This close **recovered an interrupted one**: a previous spawned producer completed the folder move
+  and died on an infrastructure error before sweeping references. The move was not redone; the remaining
+  steps were completed here.

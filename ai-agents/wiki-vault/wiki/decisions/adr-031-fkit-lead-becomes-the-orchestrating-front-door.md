@@ -72,3 +72,4 @@ The owner wanted **one agent per terminal** — a single point of interaction aw
 - [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — the plan gate's carry construction, and the confirmed live failure of it
 - [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — task `0202` — why the driver writing `plan.md` is **not** a breach of Decision 2's *delegate, never substitute*
 - [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — the ⛔ reversal notice this ADR's §Decision 1 earned on ADR-010
+- [[tasks/pressing-enter-at-the-role-menu-should-open-the-lead]] — ⚠️ *Added 2026-08-22:* task `0302` — the front door becomes the launcher's Enter default

@@ -78,6 +78,9 @@ deprioritisation, not a descope.
   > **`active none`**. ⛔ **The general principle the bullet states — *a closed row set is not a closed
   > board* — is UNAFFECTED and still true**; only its measured instance is spent. See
   > [[tasks/sprint-5-fix-what-a-real-project-found]].
+  >
+  > > ⚠️ **Dated correction 2026-08-22 (lint) — the `active none` reading in the block above is a 2026-08-14 measurement, not a current one; the block is left byte-identical.**
+  > > [[tasks/sprint-6-repair-the-record-the-board-rests-on]] opened the same day and is the active board. Everything else in the block still holds.
 - **Its batching partner `0291` is still open** (`🔲 Backlog`, verified 2026-08-14), as is `0295`.
   The batch is now **`0291` + `0295`**, and the reason for batching is **stronger**, not weaker: both
   rows edit `install-and-self-update.md`, and running them together writes that page **once** more

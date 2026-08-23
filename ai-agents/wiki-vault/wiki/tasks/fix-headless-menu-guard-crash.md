@@ -30,3 +30,4 @@ On a **no-role, no-args invocation of an initiated project with no controlling t
 - [[systems/launch-convergence-and-init]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/reorder-launcher-menu-lead-first-and-rename-label]] — Reorder the `fkit` launcher menu so lead is option 1, and rename its label to "lead"
+- [[tasks/pressing-enter-at-the-role-menu-should-open-the-lead]] — ⚠️ *Added 2026-08-22:* task `0302` — ⭐ it **does not invent a default**: it makes the interactive path agree with the headless `lead` fall-through this task's area established

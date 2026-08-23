@@ -43,3 +43,4 @@
 - [[systems/testing-and-verification]]
 - [[systems/fkit]]
 - [[tasks/reorder-launcher-menu-lead-first-and-rename-label]] — Reorder the `fkit` launcher menu so lead is option 1, and rename its label to "lead"
+- [[tasks/pressing-enter-at-the-role-menu-should-open-the-lead]] — ⚠️ *Added 2026-08-22:* task `0302` — ⛔ **EMPTY ONLY.** The `*)` arm stays a usage error precisely so *"empty means lead"* cannot widen into the passthrough bug this task removed

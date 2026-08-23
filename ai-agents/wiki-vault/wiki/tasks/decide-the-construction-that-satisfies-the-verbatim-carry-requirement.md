@@ -99,3 +99,4 @@ The brief's `SKILL.md` line citations are **off by one** in two places (`0206`-a
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — task `0160`, the citation form; its stale-coordinate arc claims two more instances here
 - [[systems/testing-and-verification]] — the frontmatter-vs-body test-surface split
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/fkit]]
+- [[tasks/the-2026-08-15-done-in-fact-wiki-closes]] — ⚠️ *Added 2026-08-22:* task `0206`, the row that owed this page's ingest. It closed 2026-08-15 on a `DONE-IN-FACT` triage verdict — ✅ **the deliverable was already here**, carrying the checkable-vs-testimony split and the open `carried-not-approved` residual

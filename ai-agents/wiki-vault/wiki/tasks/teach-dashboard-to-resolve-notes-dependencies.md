@@ -44,3 +44,4 @@ Prior art the convention cites: the dashboard's own design review established th
 - [[tasks/record-one-skill-one-output-convention]] · [[systems/knowledge-base-structure]]
 - [[systems/fkit]] — fkit
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**
+- [[tasks/record-the-canonical-merit-statement-form-in-the-convention-page]] — ⚠️ *Added 2026-08-22:* task `0178` — ⭐ its three-carrier table rules that a merit case which is really a **correctness** constraint belongs in this convention's `- **Depends on:**` form, **where it binds**

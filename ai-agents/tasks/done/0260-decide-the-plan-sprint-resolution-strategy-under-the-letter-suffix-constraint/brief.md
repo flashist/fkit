@@ -196,6 +196,6 @@ An ADR under `ai-agents/knowledge-base/decisions/`, via `/fkit-record-decision`.
   settles nothing this brief's §"The hard constraint" section forbids.
 - **Line-number citations above are dated (2026-08-10) anchors of convenience**; the durable anchors
   are the quoted patterns and the report's section numbers. The durable-citation convention page does
-  not exist yet — [`0171`](../../backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md).
+  not exist yet — [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md).
 - Filed 2026-08-10 by a spawned `fkit-producer` with no owner channel, onto the Sprint 5 board, under
   the owner's Sprint 5 scope ruling of the same day.

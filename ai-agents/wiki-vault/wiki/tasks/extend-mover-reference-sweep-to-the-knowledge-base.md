@@ -27,3 +27,4 @@ Done, agent-closed. Part A stops *new* knowledge-base rot; the accumulated rot i
 - [[tasks/wiki-resync-eighth-role-after-source-docs-land]] — Wiki resync for the eighth role — after the source docs land
 - [[tasks/wire-lead-sprint-ship-loop-skill-ownership-and-mirrors]] — Wire `fkit-sprint-ship-loop` into `skills_for_role()` + the four mirrors (same commit)
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
+- [[tasks/rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint]] — ⚠️ *Added 2026-08-22:* task `0280`, which repaired the justification attached to the wiki lint's ADR-number-collision check that backs up this task's guard

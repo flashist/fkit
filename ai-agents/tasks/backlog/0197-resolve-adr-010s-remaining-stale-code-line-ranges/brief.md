@@ -71,7 +71,7 @@ would breach `0143`'s append-only rule besides.
 
 ### Its relationship to the citation-anchor work
 
-Task [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) writes the
+Task [`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md) writes the
 `durable-citation-anchors` convention page, which rules **what form** a durable citation takes —
 including §1.1's rider *"never cite a line number naked; pair every `path:NNN` with a quoted fragment or
 the heading it sits under."* **That form is this task's input.** Filing this separately rather than

@@ -39,3 +39,4 @@ That ruling became [[decisions/adr-033-task-movers-are-producer-only-reversing-a
 - [[tasks/wiki-resync-eighth-role-after-source-docs-land]] — Wiki resync for the eighth role — after the source docs land
 - [[tasks/wiki-skills-flag-ready-to-close]] — `0125`, the operative fix this investigation produced
 - [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`; this task's folder ID `0108` collided with `0125`'s board rank P108 in the very flag it produced
+- [[tasks/the-2026-08-15-done-in-fact-wiki-closes]] — ⚠️ *Added 2026-08-22:* tasks `0206` and `0238`, the same failure again — ⛔ **a vault completion flag that nothing re-evaluates**, closed from outside the wiki role by a triage that disagreed with it

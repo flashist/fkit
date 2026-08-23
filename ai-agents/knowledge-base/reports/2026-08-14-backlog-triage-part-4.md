@@ -66,7 +66,7 @@ Two honest limits, recorded rather than hidden:
    (`:97`→`:98`), `0284` (`:99-104`→`:99-103`), `0286` (620→622 lines), `0290` (a fence inverted).
    Not one drift changed a verdict, because **every affected brief already carries a "re-measure at
    implementation time, the durable anchor is the quoted text" instruction.** That convention is
-   working. It is also the strongest live evidence for [`0171`](../../tasks/backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md)
+   working. It is also the strongest live evidence for [`0171`](../../tasks/done/0171-write-the-durable-citation-anchors-convention-page/brief.md)
    (the durable-citation-anchors convention page, outside my range) and for `0286`'s recommendation
    on whether a guard test could catch stale citations mechanically.
 

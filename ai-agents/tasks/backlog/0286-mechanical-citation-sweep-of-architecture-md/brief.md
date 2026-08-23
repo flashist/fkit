@@ -183,7 +183,7 @@ task** — spot-checking is exactly what produced nine misses.
 3. **Correct in the durable form.** The project's own lesson, stated in `0257`'s brief: *"the durable
    anchors are the quoted text, not the numbers."* Where a citation can carry the quoted text or a
    function name alongside the number, **give it one** — see
-   [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) and
+   [`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md) and
    [`0160`](../../done/0160-decide-the-durable-citation-form-for-mutable-coordinates/brief.md), which
    own the convention itself. ⛔ **This task applies whatever convention is on disk; it does not
    invent one.**

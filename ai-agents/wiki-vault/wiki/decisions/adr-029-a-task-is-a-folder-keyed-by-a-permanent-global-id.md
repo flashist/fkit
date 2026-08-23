@@ -185,3 +185,4 @@ re-raise the dual-format transition, content-hash IDs, numbering only open tasks
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**
 - [[tasks/write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table]] — task `0202` — the `<task-folder>` this ADR defines, now declared in the sprint loop's own artifact table
 - [[tasks/tighten-the-wiki-completion-flag-block]] — task `0173` — Decision 3's permanent ID becomes the **whole** of the wiki completion flag, replacing a path that rotted by construction
+- [[tasks/repair-the-three-decay-shapes-across-the-open-backlog-briefs]] — ⚠️ *Added 2026-08-22:* task `0306`, which swept the pre-migration `task NN` numerals this ADR's ID scheme made mis-resolve. ⭐ Its strongest find: *"task 43"* is **actively being reproduced**, because it is copied out of live source comments under `claude/`

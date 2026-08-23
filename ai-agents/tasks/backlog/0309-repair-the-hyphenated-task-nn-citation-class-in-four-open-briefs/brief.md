@@ -155,7 +155,7 @@ covered by [`0308`](../0308-triage-and-repair-claudes-surviving-stale-task-numer
 
 **No — and this brief states that as a considered answer, not an omission.**
 
-[`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) (*the
+[`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md) (*the
 `durable-citation-anchors` convention page*, **in progress as Sprint 6 P2**) writes down a rule that is
 **already ruled**: a task is cited by its folder-name `NNNN` prefix, always — ADR-029 Decision 3,
 restated in `0160`'s decision report. ⭐ **`0171` documents that form; it does not decide it.** So the
@@ -170,6 +170,126 @@ repair form for these six sites is known today and this task is not gated.
   convention page will need to name, and **the fact that three sweeps could not see it is the strongest
   argument for writing the convention at all.** ⚠️ **Surface this to the owner** — whether `0171` should
   pick it up is the owner's call, and this task must not edit `0171`'s brief or its output.
+
+### 🆕 SCOPE ADDITION — OWNER RULING 2026-08-22: `0171` HAS LANDED, AND THE PROSE THAT CALLS IT OPEN IS THIS TASK'S
+
+> ⚠️ **Read this section before the one above it.** The section *"Does this wait on `0171`?"* was
+> written 2026-08-15 and calls `0171` *"in progress as Sprint 6 P2"*. **That is no longer true, and
+> the sentence is deliberately left byte-identical** — it is itself one of the sites this addition
+> covers. Both of its riders are now discharged: `0171` **did** land first, so *"read it and follow
+> it"* is not conditional any more; and the feed-back to `0171` is moot.
+
+**Authority.** Owner ruling **2026-08-22**, given live via `AskUserQuestion` in an `fkit lead`
+session driving `/fkit-sprint-ship-loop` and relayed to a spawned producer — **the option label is
+the verbatim text: "Fold into 0309 (Recommended)"**. Its description, verbatim:
+
+> *"0309 is already open and already repairs stale cross-brief citations — this is its class. 0310's
+> step 9 is a one-line glob fix best made by whoever implements 0310. Tradeoff the producer named: no
+> owner-visible artifact until 0309 runs, so if 0309 slips these stay stale."*
+
+**Provenance.** Residual (a) of `0171`'s close: the closing producer repaired every **href** that
+pointed at `0171`'s old `backlog/` path, but left the surrounding **prose** byte-identical, so seven
+places still describe `0171` as open or in progress.
+
+**Verified on disk 2026-08-22:** `0171`'s folder is
+`ai-agents/tasks/done/0171-write-the-durable-citation-anchors-convention-page/` and its brief's
+`## Status` reads `✅ Done (agent-closed — not owner-verified)`. ⛔ **`0171` is NOT reopened, moved or
+re-statused by this task, and its folder is not edited.**
+
+#### The sites — re-measured firsthand 2026-08-22, anchored on quoted text
+
+⚠️ **The `:NNN` coordinates in the ruling drifted and are NOT reproduced here.** Anchors are file +
+heading + quoted fragment, per
+[`durable-citation-anchors.md`](../../../knowledge-base/conventions/durable-citation-anchors.md)
+row 3 and its *"never cite a line number naked"* rider — which `0171` itself shipped.
+
+**A. Inside `ai-agents/tasks/backlog/` — squarely in this task's existing scope:**
+
+| Brief | Heading / region | Quoted fragment — **the durable anchor** |
+|---|---|---|
+| `0310` | `## Context` → `### ⭐ Why this exists — it stopped being a tidiness problem and became a blocking one` | *"and P2 ([`0171`](…), still `🔄 In progress`), and filed four briefs."* |
+| `0287` | `## Notes` | *"The convention page itself is not yet written — that is [`0171`](…), still open — so this is stated inline rather than cited."* |
+| `0262` | `## Notes` | *"[`0171`](…) is the open task for the convention page."* |
+
+**B. ⭐ FOUND BY RE-MEASUREMENT — NOT IN THE RULING'S LIST, AND ALSO INSIDE `backlog/`:**
+
+| Brief | Heading / region | Quoted fragment |
+|---|---|---|
+| `0307` | `## Context` → the `0171` bullet | *"the `durable-citation-anchors` convention page, **in progress as Sprint 6 P2**"* |
+| `0307` | `## Notes` → `- **Relates to:**` | *"`0171` (the citation convention in progress)"* |
+| `0308` | `## Notes` → `- **Relates to:**` | *"`0171` (the `durable-citation-anchors` convention page, in progress)"* |
+| **`0309` — THIS BRIEF** | `## Context` → `### Does this wait on `0171`?` | *"(*the `durable-citation-anchors` convention page*, **in progress as Sprint 6 P2**)"* |
+| **`0309` — THIS BRIEF** | `## Notes` → `- **Relates to:**` | *"`0171` (the `durable-citation-anchors` convention page, in progress — **this task feeds it and is not gated by it**)"* |
+| `0232` | `## Notes` → the dated **2026-08-15** correction blocks | *"⚠️ **`0171` itself is still open and unclosed**"* and *"⚠️ **`0171` is still open and unclosed** as of this note"* |
+| `0172` | `## Notes` | its dependency-declaration bullet, whose value reads *"0171 (the convention page this bullet points at)."* ⛔ **See the warning below — this one is NOT prose.** |
+
+> ⚠️ **The `0172` row above deliberately DESCRIBES the declaration instead of quoting it verbatim,
+> and that is not sloppiness.** An earlier draft of this brief quoted the bold `Depends on` label
+> literally; `dashboard.sh` matches that label **mid-line**, so the quotation was parsed as **this
+> task's own dependency** and the board rendered `derive 0309 depends="0171 (the convention page this
+> bullet points at)…"`. ⭐ **The `task-84` misreport class, fired by a brief about citation defects,
+> inside the very table listing the defect.** ⛔ **Do not "restore" the verbatim quote.** Per
+> `dashboard.sh`'s own note, a brief may discuss the field in prose or a code span — never as the
+> bold label.
+
+⛔⛔ **`0172`'S SITE IS A LIVE DEPENDENCY DECLARATION, NOT PROSE, AND IS THE MOST DANGEROUS ENTRY IN
+THIS TABLE.** `dashboard.sh` parses the bold dependency label to derive a task's Next-step. `0172` declares
+a hard dependency on a task that is now `✅ Done`. ⚠️ **Editing it changes what the board renders**,
+and `0184` owns the declaration form while `0307` owns the question of how a corrected declaration
+reaches the derive cell. ⛔ **Do not "repair" it as if it were a sentence. Triage it, record what the
+board renders for `0172` before and after, and if the right move is anything other than leaving it
+alone, say why in the worklog.**
+
+⚠️ **Several sites in table B sit inside DATED observations** (`0232`'s two are inside explicitly
+dated 2026-08-15 correction blocks; `0310`'s is inside a *"Today's `/fkit-sprint-ship-loop` run is
+the evidence"* passage). ⛔ **A dated observation that was correct when written is not automatically a
+defect** — that is the open question
+[`0301`](../0301-record-that-a-dated-claim-is-correct-as-of-its-date-and-does-not-become-a-defect-by-ageing/brief.md)
+exists to settle. **Where the claim is dated, the correct repair is a dated note beside it, never a
+rewrite** — the form `0306` and `0143` established, and `## What to build` step 5 above already says
+so.
+
+✅ **Conditional phrasings are NOT sites and must not be swept.** Sentences of the shape *"if `0171`
+lands first, read it and follow it"* or *"if this is picked up while `0171` is still open"* — present
+in `0237`, `0308`, `ai-agents/sprints/backlog.md` and `ai-agents/sprints/sprint-6.md` — are **still
+true as written**; a conditional whose antecedent is now settled is stale *guidance*, not a false
+*claim*. ⛔ **Do not convert them.** ⚠️ **This is a judgement, recorded so it can be overturned, not
+a measurement.**
+
+#### ⛔⛔ FOUR OF THE RULING'S SEVEN SITES COLLIDE WITH THIS BRIEF'S OWN `⛔ Out of scope` LIST — AND THAT IS NOT RESOLVED HERE
+
+**The collision, stated plainly:**
+
+| Site | Where it lives | The rule it hits |
+|---|---|---|
+| `0261`, `## Notes` — *"[`0171`](…) is the open task for the convention page."* | `ai-agents/tasks/done/0261-decide-whether-the-active-sprint-glob-widens-or-projects-are-told-to-name-plans-sprint-n/brief.md` | ⛔ *"any closed brief"* is out of scope; **verification step 7** requires **nothing** under `ai-agents/tasks/done/` |
+| `0263`, `## Notes` — same fragment | `ai-agents/tasks/done/0263-wiki-resync-after-the-sprint-4-archival-and-sprint-5-open/brief.md` | the same two |
+| Backlog board row for `0307` — *"(in progress, Sprint 6 P2) does NOT gate this"* | `ai-agents/sprints/backlog.md` | ⛔ *"No sprint plan edited"*; **verification step 7** requires **nothing** under `ai-agents/sprints/` |
+| Backlog board row for `0310` — *"(still `🔄 In progress`) and filed four briefs with **nothing committed**"* | `ai-agents/sprints/backlog.md` | the same two |
+
+⛔ **The filing producer did NOT widen the `⛔ Out of scope` list or verification step 7 to admit
+them.** Doing so would silently rewrite acceptance criteria that were themselves written under
+earlier rulings, on a spawned agent's judgement, with no owner channel. **The four sites are recorded
+here so nothing is lost; they are NOT authorised work.**
+
+⚠️⚠️ **THE IMPLEMENTER'S INSTRUCTION IS THEREFORE:** repair tables **A** and **B** (all inside
+`ai-agents/tasks/backlog/`, all already in scope). ⛔ **Leave the four colliding sites alone and name
+each of them in the close report as an accepted residual**, so the next reader sees them. **Escalate
+the scope question to the owner; do not decide it in the run.**
+
+#### Residual (b) — `0310`'s verification step 9 now passes vacuously. ⛔ NOT FIXED HERE.
+
+`0310`'s `## Verification steps` step 9 reads, in part: *"`git diff --stat` shows **no change** under
+`ai-agents/tasks/backlog/0171-*/`"*. **That glob now matches nothing** — `0171` is in
+`ai-agents/tasks/done/` — so the guard is **vacuously true** and would pass even if the run trampled
+`0171`'s folder.
+
+⛔ **The owner ruled this fix belongs to whoever implements `0310`, not to this task** — verbatim:
+*"0310's step 9 is a one-line glob fix best made by whoever implements 0310."* ⛔ **Do not edit
+`0310`'s verification step here.** It is recorded in this brief only because this task edits
+`0310`'s `## Context` prose and the implementer will be reading that file anyway. **`0310`'s
+implementer: this is your one-line fix — re-point the glob at `ai-agents/tasks/*/0171-*/`, or
+whatever form re-arms the guard.**
 
 ## What to build
 
@@ -191,6 +311,29 @@ repair form for these six sites is known today and this task is not gated.
    line must stay byte-identical, use a dated correction note beside it** — the form `0306` and `0143`
    established.
 6. **Report the after-state** and state the ceiling: what this run did **not** cover.
+
+**🆕 Steps 7–9 are the 2026-08-22 scope addition** (see `## Context` → *"🆕 SCOPE ADDITION"*). ⚠️
+**They are a SECOND, SEPARATE class from steps 1–6** — steps 1–6 repair a stale *citation form*
+(`task-NN`); steps 7–9 repair a stale *status claim* about `0171`. ⛔ **Do not merge the two
+measurements, the two triage tables, or the two before/after counts.**
+
+7. **Re-derive the stale-`0171`-status population yourself**, across `ai-agents/tasks/backlog/`
+   **only**. ⛔ **Do not carry tables A and B forward unverified** — they were measured 2026-08-22 at
+   `HEAD` `9360177` against a dirty tree. **State your own count and, if it differs, say this brief
+   was wrong.** ⚠️ Use the whitespace-normalised form (`tr '\n\t' '  ' | tr -s ' '`, then match) —
+   several of these phrases wrap across lines — and **record the stated limits of that form**
+   (table cells, wording drift, inline emphasis) alongside the result.
+8. **Triage every site into one of four dispositions, and record which and why for each:**
+   **(a)** plain stale prose → repair to the landed state; **(b)** inside a **dated** observation →
+   ⛔ **leave the text byte-identical and put a dated note beside it** (the `0306`/`0143` form);
+   **(c)** a **conditional** whose antecedent is now settled → ⛔ **leave alone** (still true as
+   written) unless you argue otherwise in the worklog; **(d)** `0172`'s
+   `- **Depends on:** 0171` → ⛔ **a live dashboard declaration, not prose** — see the warning in
+   `## Context`; record what `dashboard.sh` renders for `0172` **before and after**, and justify any
+   change.
+9. **Name, in the close report, each of the four colliding sites** (`0261`, `0263`, and the two
+   `ai-agents/sprints/backlog.md` rows) **as an accepted residual left untouched, with the rule that
+   put it out of scope.** ⛔ **A close report that omits them fails this step.**
 
 **⛔ Out of scope:**
 
@@ -221,6 +364,24 @@ repair form for these six sites is known today and this task is not gated.
    `claude/`, `ai-agents/wiki-vault/`, `ai-agents/sprints/`, `ai-agents/tasks/done/` or `test/`.
 8. **No `## Status` line changed anywhere:** `git diff -U0 | grep -E '^[-+].*## Status' ` is empty.
 
+**🆕 Steps 9–13 verify the 2026-08-22 scope addition** (`## What to build` steps 7–9).
+
+9. The worklog carries a **SECOND, SEPARATE** before/after measurement and triage table for the
+   stale-`0171`-status class, **with one row per site found**, its own commands, and its own count.
+   ⛔ **A single merged table covering both classes fails this step.**
+10. **Every row of that table carries one of the four dispositions** from `## What to build` step 8,
+    **with a reason.** ⛔ *"Repaired"* with no disposition fails.
+11. **`ai-agents/tasks/done/0171-…/` is untouched:** `git status --porcelain` shows nothing under it,
+    and `0171`'s `## Status` is byte-identical.
+12. **`0310`'s verification step 9 is UNCHANGED** — `git diff` over
+    `ai-agents/tasks/backlog/0310-*/brief.md` shows no edit inside `## Verification steps`. ⛔ **Its
+    vacuous glob is the `0310` implementer's fix, by owner ruling; touching it here fails this step.**
+13. **The close report names all four colliding out-of-scope sites** (`0261`, `0263`, and the two
+    `ai-agents/sprints/backlog.md` rows) as residuals left untouched, each with the rule that
+    excluded it — **and `git diff --stat` confirms nothing under `ai-agents/tasks/done/` or
+    `ai-agents/sprints/` changed** (this is step 7, re-stated because the scope addition is exactly
+    where a run would be tempted to break it).
+
 ## Notes
 
 - **Depends on:** nothing.
@@ -233,3 +394,28 @@ repair form for these six sites is known today and this task is not gated.
 - ⚠️ **Figures in this brief were re-derived at `HEAD` = `9360177` on 2026-08-15 against a DIRTY working
   tree.** They are a dated observation, not a permanent fact. **Re-derive before acting.**
 - ⛔ **Do not commit, push, `git add` or `git stash`** unless the owner explicitly asks.
+
+**🆕 Added 2026-08-22 with the scope addition. Nothing above this line was edited.**
+
+- ⚠️ **The `- **Relates to:**` bullet above still calls `0171` *"in progress"*, and that is
+  DELIBERATE.** It is one of the sites listed in table B of the scope addition, left byte-identical
+  so the implementer repairs it under `## What to build` step 8 rather than finding it already gone.
+  The same is true of the `### Does this wait on `0171`?` section. ⛔ **Do not read either as a
+  current statement of `0171`'s status:** `0171` is `✅ Done (agent-closed — not owner-verified)` in
+  `ai-agents/tasks/done/`, verified 2026-08-22.
+- ⚠️ **This task now carries TWO defect classes, folded by owner ruling, not by merit.** The
+  hyphenated-`task-NN` citation class (steps 1–6) and the stale-`0171`-status class (steps 7–9) are
+  independently shippable and would normally be two briefs. ⛔ **The fold is the owner's ruling of
+  2026-08-22, verbatim label "Fold into 0309 (Recommended)" — do NOT re-split it**; a split is a
+  question for the owner, not a decision for the run.
+- ⚠️ **The tradeoff the owner accepted, recorded verbatim so it is not rediscovered as a surprise:**
+  *"no owner-visible artifact until 0309 runs, so if 0309 slips these stay stale."*
+- ⚠️ **Figures for the scope addition were measured 2026-08-22** at `HEAD` = `9360177` against a
+  **dirty working tree with a live `fkit-wiki` worker writing `ai-agents/wiki-vault/`**. Dated
+  observation, not permanent fact. **Re-derive before acting.**
+- ⚠️ **AN OPEN SCOPE QUESTION WAS RAISED AND DELIBERATELY NOT TAKEN — see `## Context` → *"FOUR OF THE
+  RULING'S SEVEN SITES COLLIDE"*.** Whether this task's `⛔ Out of scope` list and verification step 7
+  should widen to admit `ai-agents/tasks/done/` and `ai-agents/sprints/backlog.md` is **the owner's
+  call**. Until they rule, those four sites stay untouched and get named as residuals.
+- ⛔ **`0310`'s vacuous verification-step-9 glob is recorded here but is NOT this task's to fix** —
+  owner ruling 2026-08-22 assigns it to `0310`'s implementer.

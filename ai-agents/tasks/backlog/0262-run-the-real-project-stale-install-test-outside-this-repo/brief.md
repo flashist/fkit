@@ -362,7 +362,7 @@ install — or **[R]** — an in-repo assertion a field run can only partially s
   [`conventions/dependency-declaration-form.md`](../../../knowledge-base/conventions/dependency-declaration-form.md).
 - **Line-number citations are dated (2026-08-10) anchors of convenience**; the durable anchors are the
   quoted code and behavior.
-  [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) is the open task for
+  [`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md) is the open task for
   the convention page.
 - ⚠️ **This brief decays.** The `.claude/` staleness instance was measured 2026-08-10 and a single
   re-launch of this repo erases it. Re-measure before citing it.

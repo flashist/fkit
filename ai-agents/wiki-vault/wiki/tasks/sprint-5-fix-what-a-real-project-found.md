@@ -38,6 +38,7 @@
 > - `bash claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints` returns
 >   **`active none`**, with `backlog.md` (identity `Backlog`) the only candidate — and `Backlog` is
 >   never eligible. ⚠️ **There is no active board at all right now.**
+>   > ⚠️ **Dated correction 2026-08-22 — the clause above is a 2026-08-14 reading and is no longer current; the line is left byte-identical.** [[tasks/sprint-6-repair-the-record-the-board-rests-on]] opened **2026-08-14** at `ai-agents/sprints/sprint-6.md`. The `active none` gap was real and is closed. ⛔ **Sprint 5's banner is deliberately NOT amended to point at Sprint 6** — the owner ruled the successor clause omitted.
 > - `0294`'s brief reads **`✅ Done (agent-closed — not owner-verified)`**.
 >
 > **The archival's authority, both halves, quoted rather than paraphrased.** Owner ruling **2026-08-13**
@@ -66,6 +67,7 @@
 > and the row is ingested as [[tasks/archive-sprint-5-move-the-plan-into-sprints-done]].
 > **Re-verified on disk this sync:** the plan is at `ai-agents/sprints/done/sprint-5.md`, its banner
 > reads `## 🔒 CLOSED — 2026-08-13.`, and `select-active` still returns **`active none`**.
+> > ⚠️ **Dated correction 2026-08-22 — the `select-active` reading above is a 2026-08-14 measurement, not a current one; the line is left byte-identical.** Sprint 6 opened the same day; see the correction at the earlier `active none` claim on this page.
 > ✅ **Link integrity holds** — `grep -rnE "\]\([^)]*sprints/sprint-5\.md"` over `ai-agents/` returns
 > **0**: no markdown link points at the pre-archival path. ⚠️ **54 bare-path prose mentions of the old
 > path do remain** in briefs, plans, worklogs and ledgers; those are **dated records of where the file
@@ -227,3 +229,4 @@ ranks are **stale by design**.
 - [[tasks/the-2026-08-14-retroactive-review-corrections]] — ⚠️ *Added 2026-08-14:* tasks `0291` and `0295`, the retroactive-review corrections to two of this board's own vault outputs (`0258`'s and `0289`'s)
 - [[tasks/archive-sprint-5-move-the-plan-into-sprints-done]] — ⚠️ *Added 2026-08-14:* task `0294`, the row that archived this board — the banner ruling, the 57-link move, and the `active none` end state
 - [[tasks/fix-the-post-release-verify-lines-failing-and-false-green-cases]] — ⚠️ *Added 2026-08-14:* task `0288`, the Backlog follow-up to this board's `P12` row (`0254`); **closed with five owner-ruled residuals**, and it surfaced task `0300`
+- [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — ⚠️ *Added 2026-08-22:* the successor board, opened **2026-08-14**. ⛔ **Not a rollover** — this board's banner names no successor, by owner ruling, and the project had **no active board at all** in the gap between them

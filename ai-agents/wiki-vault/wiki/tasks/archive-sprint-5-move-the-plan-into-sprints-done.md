@@ -41,6 +41,8 @@ select-active ai-agents/sprints` returns **`active none`** (re-run 2026-08-14, t
 candidate is `backlog.md`, whose identity is `Backlog`, and `Backlog` is **never eligible** under
 ADR-041.
 
+> ⚠️ **Dated correction 2026-08-22 — the paragraph above is a 2026-08-14 measurement and is no longer current; it is left byte-identical.** [[tasks/sprint-6-repair-the-record-the-board-rests-on]] opened **2026-08-14** at `ai-agents/sprints/sprint-6.md` and is the active board. ⛔ **This does not amend `0294`'s ruling**: the owner ruled *"Omit the successor clause"*, Sprint 5's banner still names no successor, and **that no-successor case still establishes no convention.** ⭐ The gap this page recorded was real — the project genuinely had no active board between the archival and Sprint 6's opening.
+
 **Link integrity, measured this sync (2026-08-14):** ✅ **zero markdown links to the old path remain**
 anywhere under `ai-agents/` — `grep -rnE "\]\([^)]*sprints/sprint-5\.md"` returns **0**. ⚠️ **54
 bare-path prose mentions of `ai-agents/sprints/sprint-5.md` do remain**, in task briefs, plans,
@@ -54,3 +56,5 @@ owner-verified)`; **no human has checked any of them**, and this row is itself a
 ## Related
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board this archived, and the page that carried the pre-archival claims
 - Referenced without a wiki-link, deliberately, so this page adds no back-link debt to pages this sync had no other reason to open: **ADR-041** (why `Backlog` is never eligible, so archiving leaves `active none`), **ADR-035** (the rank rule under which this row stayed unranked), task `0293` (which recorded this board as still active and already carries its own superseding note), and the **Backlog board** page (the flat board this row sat on)
+- [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — ⚠️ *Added 2026-08-22:* the board opened the same day this archival landed. See the dated correction in `## Outcome` above
+- [[tasks/repair-the-three-decay-shapes-across-the-open-backlog-briefs]] — ⚠️ *Added 2026-08-22:* task `0306` — this archival is what created its **shape 1**, the dead `ai-agents/sprints/sprint-N.md` path scattered across open briefs

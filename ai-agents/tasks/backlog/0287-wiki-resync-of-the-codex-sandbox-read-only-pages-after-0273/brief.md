@@ -239,7 +239,7 @@ actually stands **after `0273`**.
     ✅ prefer `0272` first so a single vault pass can carry both, but **do not implement D1 here**.
 - **⚠️ Every `:NNN` in this brief is a dated anchor measured 2026-08-13 — the durable anchor is the
   quoted text. Re-measure at execution time.** (The convention page itself is not yet written — that
-  is [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md), still open — so
+  is [`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md), still open — so
   this is stated inline rather than cited.)
 - **Owner: `fkit-wiki` — mandatory, not a preference.** ADR-005 makes the vault this role's exclusive
   write gateway; no other role or session may perform this row.

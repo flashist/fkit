@@ -238,7 +238,7 @@ A vault re-sync that makes `ai-agents/wiki-vault/` describe board reality as of 
 - **⚠️ This brief decays.** Every count and line number was measured **2026-08-10**. Re-measure at
   implementation time.
 - **Line-number citations are dated anchors of convenience**; the durable anchors are the quoted text.
-  [`0171`](../../backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md) is the open task for
+  [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) is the open task for
   the convention page.
 - **Priority is `—` (unscheduled).** Filed to the **Backlog** board; no sprint was named by the owner
   and no row was re-ranked (ADR-035, `/fkit-task-brief` step 5).
