@@ -7,7 +7,7 @@
 Sprint 6
 
 ## Priority
-Sprint 6 P15
+Sprint 6 P17
 
 ## Status
 🔲 Backlog

@@ -401,15 +401,14 @@ describe('F. weird state and failure', () => {
 
     const r = runInit(p);
     assert.ok(r.code === 0 || r.code === 3, `init rc=${r.code}\n${r.stderr}`);
-    // Nothing outside was DELETED or MUTATED. Deliberately not a "nothing appeared" freeze: init's §4
-    // creates .fkit/interview, and with .fkit symlinked that write lands outside the project. That is a
-    // real (pre-existing, non-destructive) issue in §4 — see the task note — but it is NOT this
-    // cleanup, and a freeze assertion here would fail for the wrong reason and hide the right one.
+    // Nothing outside was DELETED, MUTATED, or CREATED. This was a one-way check until 0046: init's §4
+    // was itself unguarded, so with .fkit symlinked it created .fkit/interview at the link target and a
+    // "nothing appeared" freeze here would have failed for §4's reason and hidden this cleanup's. 0046
+    // guarded §4 (see test/init-intake-guard.test.js), so the freeze the comment said was blocked is now
+    // the assertion — and a second, independent net over the same escape, written by a different task.
     const outsideAfter = manifest(outside);
-    for (const [rel, fp] of outsideBefore) {
-      assert.equal(outsideAfter.get(rel), fp,
-        `the cleanup escaped the project and touched ${rel} — the parent chain must be checked, not just the leaf`);
-    }
+    assert.deepEqual([...outsideAfter], [...outsideBefore],
+      'nothing outside the project may be deleted, mutated, or created — the parent chain must be checked, not just the leaf');
     assert.match(r.stderr, /symlink/);
     assert.ok(existsSync(join(p, '.fkit')), 'the symlink itself is left alone too');
   });

@@ -7,7 +7,7 @@
 Sprint 6
 
 ## Priority
-Sprint 6 P14
+Sprint 6 P16
 
 ## Status
 🔲 Backlog
@@ -56,6 +56,33 @@ Five repairs. Each is a prose/doc correction — **no behaviour change, no sourc
 The role table's producer row lists *"`/fkit-initiate-project`, `/fkit-status`, `/fkit-task-done`,
 `/fkit-task-cancelled`"*. `skills_for_role(producer)` in `claude/skills-for-role.sh` **also includes
 `fkit-task-brief`**.
+
+> ⚠️ **Dated correction 2026-08-23 — D1 is DISCHARGED, and the repair instruction below it must NOT
+> be executed.** The claim above, and the rest of this D1 section, are **left byte-identical** as the
+> record of what `0142` found. Verified against live code 2026-08-23: the producer row in
+> `claude/scaffold/CLAUDE.md` now reads
+> `` `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-brief`, `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-heal` ``
+> — the omission is gone. It was closed on **2026-08-23** by task
+> `0250` (`0250-fix-the-scaffold-producer-row-fkit-task-brief-omission`).
+>
+> **DO NOT "repair against `skills_for_role()`".** The two carriers order the list differently, and
+> that is deliberate. The `producer)` branch of `skills_for_role()` in `claude/skills-for-role.sh`
+> returns `/fkit-task-brief` **second** among the producer's role-specific skills. The scaffold row
+> puts it **third, after `/fkit-status`** — `0250`'s reasoned choice, recorded in its `plan.md` §1d,
+> made because **this brief's own positional instruction was self-inconsistent**, and chosen because it
+> keeps the scaffold row **character-for-character identical in ordering** to its twin, the producer
+> row in `claude/skills/fkit-team/SKILL.md`. That twin match was **re-verified 2026-08-23** and holds.
+> **Reordering the scaffold row into `skills_for_role()` order would undo that deliberate choice and
+> re-break the twin match — while reporting success.** That is the regression this note exists to
+> prevent.
+>
+> **D1 is one of five, and discharging it does not discharge this task.** It stays `🔲 Backlog` at
+> **P14** on Sprint 6 with **D2–D5 live** — and **D2 still edits `claude/scaffold/CLAUDE.md`**, so this
+> remains a manifest-regen task.
+>
+> **Authority:** task `0324` (`0324-record-that-0250-discharged-0188s-d1-and-warn-off-the-reordering`),
+> on the owner ruling of **2026-08-23**, verbatim option label *"Apply the correction now
+> (Recommended)"*. Written by a spawned `fkit-producer` with no owner channel.
 
 **Severity: highest of the five.** This is a **declared mirror** and it **ships into every consuming
 project's root `CLAUDE.md`**. It is the same failure mode, in the same file, as the incident the
@@ -138,6 +165,21 @@ and did not notice.
 1. **D1** — the producer row in `claude/scaffold/CLAUDE.md` lists exactly the skills
    `skills_for_role(producer)` returns, compared **against the live function output**, not against
    memory. Show the comparison.
+
+   > ⚠️ **Dated correction 2026-08-23 — D1 is discharged; this step now passes with no work done.**
+   > The step above is **left byte-identical**. Verified against live code 2026-08-23: the producer row
+   > in `claude/scaffold/CLAUDE.md` already lists `/fkit-task-brief`, closed by `0250` on 2026-08-23.
+   > **DO NOT satisfy this step by reordering the row.** `skills_for_role()` returns
+   > `/fkit-task-brief` **second**; the scaffold row deliberately puts it **third, after
+   > `/fkit-status`** — `0250`'s reasoned choice (its `plan.md` §1d), made because D1's own positional
+   > instruction was self-inconsistent, and it makes the scaffold row **character-for-character
+   > identical in ordering** to its twin producer row in `claude/skills/fkit-team/SKILL.md` (re-verified
+   > 2026-08-23). **Reordering would undo that choice and re-break the twin match.** The two orderings
+   > are a known, accepted difference — not a defect to repair here. D1 is one of five; **D2–D5 stay
+   > live**, and this task stays `🔲 Backlog`. Authority: task `0324`, owner ruling **2026-08-23**,
+   > verbatim option label *"Apply the correction now (Recommended)"*. See the fuller note under the
+   > `### D1` heading above.
+
 2. **D2** — every skill lacking a `⛔ Owner:` banner is enumerated by **opening each
    `claude/skills/*/SKILL.md`**, not by grep alone (the grep is known to be wrong here). The chosen
    repair is applied to **all three** sentences (`architecture.md`, `fkit-team/SKILL.md`,

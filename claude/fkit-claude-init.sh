@@ -266,6 +266,48 @@ EOF
   return 0
 }
 
+# Is this project-relative path safe to touch — i.e. does it stay inside the project, with no symlink
+# anywhere in the chain? Prints the reason it is NOT, and returns non-zero. The verb is a parameter so
+# each caller's refusal says what it was actually about to do.
+#
+# ⚠️ THE PARENT CHAIN, not just the leaf (review round 1, R1 — the one that mattered). `[ -L "$p" ]` on
+# the target itself is NOT enough: make any PARENT directory in the chain a symlink to somewhere outside
+# the project, and the leaf is then a real directory inside the link target — so -L on the leaf is FALSE,
+# -e is TRUE, and `rm -rf` happily deletes outside the project fkit was pointed at. (Reproduced in
+# review, not theorized.) §1 of this file already wrote that lesson
+# down for convergence ("-L is the one test that does not lie") — but convergence only CREATES. It never
+# got applied to the one operation that DELETES. Walk every component.
+#
+# It now guards a WRITE as well (0046). §4's intake install dereferenced through a symlinked `.fkit` and
+# put the intake script outside the project — and through a symlinked LEAF it OVERWROTE the file already
+# there. That is why this is no longer called `orphan_contained`: that name said "the orphan cleanup's
+# check", and it is the project's containment check. Hoisted here so every section can reach it.
+#
+# Pure string work plus one -L per component: no globbing, no IFS splitting, no normalization. We do NOT
+# resolve `..` and then check — we refuse it outright (R3). Normalizing is how you get talked into a
+# path you did not mean.
+path_contained() {  # path_contained <project-relative-path> <verb> → 0 = safe, non-zero + reason on stdout
+  case "$1" in
+    /*) echo "it is an absolute path"; return 1 ;;
+  esac
+  _rest="$1"
+  _cur="$dest"
+  while [ -n "$_rest" ]; do
+    _seg="${_rest%%/*}"
+    case "$_rest" in */*) _rest="${_rest#*/}" ;; *) _rest="" ;; esac
+    case "$_seg" in
+      ''|.) continue ;;
+      ..) echo "it contains '..' and would escape the project"; return 1 ;;
+    esac
+    _cur="$_cur/$_seg"
+    if [ -L "$_cur" ]; then
+      echo "'$_seg' is a symlink — fkit will not $2 through one"
+      return 1
+    fi
+  done
+  return 0
+}
+
 # 1. ai-agents/ working structure (never clobber an existing one)
 #
 # PREFLIGHT FIRST — `[ -e ]` and `[ -d ]` DEREFERENCE symlinks, so on a symlinked ai-agents/ they
@@ -497,8 +539,26 @@ echo "• refreshed $n_agents agents → .claude/agents/, $n_skills skills → .
 #    owner's answers to .fkit/intake.md, which /fkit-initiate-project reads, so the basics are
 #    captured deterministically. tty-safe: probes the controlling terminal and skips cleanly when
 #    headless (the LLM interviews instead).
-mkdir -p "$dest/.fkit"
-cat > "$dest/.fkit/interview" <<'INTERVIEW'
+#
+# [ -L ] FIRST, ALWAYS — the same doctrine §1 states at :315 and §6 applies at its call site, and the
+# one site that never got it. `mkdir -p` and `cat >` both DEREFERENCE: with .fkit symlinked out of the
+# project this wrote `interview` to the link target (reproduced, 0046), and with the LEAF symlinked it
+# OVERWROTE whatever was there. The whole chain is walked, not just the leaf — a symlinked parent makes
+# the leaf a real path and -L on the leaf alone is false. One call covers both statements.
+# Non-fatal by design (§1's bar, and 0088's): a refusal warns and setup carries on. The intake is
+# optional already — with no .fkit/interview the launcher's `[ -x … ]` probe (fkit-claude.sh:576) just
+# skips it and the LLM interviews instead. STDERR, not stdout: the launcher sends init's stdout to
+# /dev/null on an already-set-up project, which is exactly the case this warning exists for.
+if ! intake_reason="$(path_contained ".fkit/interview" write)"; then
+  {
+    echo "⚠ skipped the .fkit/interview intake: $intake_reason"
+    echo "    $dest/.fkit/interview"
+    echo "  Nothing was written and nothing is broken. The rest of setup continues and your session"
+    echo "  will start; the LLM will interview you instead."
+  } >&2
+else
+  mkdir -p "$dest/.fkit"
+  cat > "$dest/.fkit/interview" <<'INTERVIEW'
 #!/bin/sh
 # fkit first-run intake. Asks a few project questions on the controlling terminal and writes
 # .fkit/intake.md. Exits cleanly (no file) when there is no terminal, so the LLM interviews instead.
@@ -552,9 +612,9 @@ cons=$(ask "6. Key constraints, deadlines, or non-goals?" "optional")
 
 printf '\nThanks — captured to .fkit/intake.md.\n' >&4
 INTERVIEW
-chmod +x "$dest/.fkit/interview"
-
-echo "• created intake .fkit/interview"
+  chmod +x "$dest/.fkit/interview"
+  echo "• created intake .fkit/interview"
+fi
 
 # 5. gitignore the fkit-managed copies (re-created by this script; canonical sources live in the
 #    fkit install/repo). Deliberately NOT the whole .claude/ — a project's own settings.json,
@@ -652,42 +712,6 @@ orphan_refs() {  # orphan_refs <path-token> → prints referencing files; rc 0 =
   return 0
 }
 
-# Is this list line safe to delete — i.e. does it stay inside the project, with no symlink anywhere in
-# the chain? Prints the reason it is NOT, and returns non-zero.
-#
-# ⚠️ THE PARENT CHAIN, not just the leaf (review round 1, R1 — the one that mattered). `[ -L "$p" ]` on
-# the target itself is NOT enough: make any PARENT directory in the chain a symlink to somewhere outside
-# the project, and the leaf is then a real directory inside the link target — so -L on the leaf is FALSE,
-# -e is TRUE, and `rm -rf` happily deletes outside the project fkit was pointed at. (Reproduced in
-# review, not theorized.) §1 of this file already wrote that lesson
-# down for convergence ("-L is the one test that does not lie") — but convergence only CREATES. It never
-# got applied to the one operation that DELETES. Walk every component.
-#
-# Pure string work plus one -L per component: no globbing, no IFS splitting, no normalization. We do NOT
-# resolve `..` and then check — we refuse it outright (R3). Normalizing is how you get talked into a
-# path you did not mean.
-orphan_contained() {  # orphan_contained <relative-line> → 0 = safe, non-zero + reason on stdout
-  case "$1" in
-    /*) echo "it is an absolute path"; return 1 ;;
-  esac
-  _rest="$1"
-  _cur="$dest"
-  while [ -n "$_rest" ]; do
-    _seg="${_rest%%/*}"
-    case "$_rest" in */*) _rest="${_rest#*/}" ;; *) _rest="" ;; esac
-    case "$_seg" in
-      ''|.) continue ;;
-      ..) echo "it contains '..' and would escape the project"; return 1 ;;
-    esac
-    _cur="$_cur/$_seg"
-    if [ -L "$_cur" ]; then
-      echo "'$_seg' is a symlink — fkit will not delete through one"
-      return 1
-    fi
-  done
-  return 0
-}
-
 cleanup_orphans() {
   # Announcement text, assembled as ready-to-print lines. Deliberately NOT a list iterated with
   # `for p in $removed`: that splits on IFS and GLOBS, which is the bug convergence had to pin IFS and
@@ -717,7 +741,7 @@ cleanup_orphans() {
     case "$line" in ''|'#'*) continue ;; esac
     # ⚠️ `./` only. Do NOT strip a leading `/` here (R8): the keep-out parser above does, because for it
     # a leading slash is a harmless way of writing "relative to ai-agents/". Here it is not harmless —
-    # stripping it turns `/tmp/cache` into `tmp/cache` and makes orphan_contained's absolute-path
+    # stripping it turns `/tmp/cache` into `tmp/cache` and makes path_contained's absolute-path
     # refusal UNREACHABLE, so we delete a path inside the project that nobody named. An absolute line is
     # a mistake, and a mistake in this file is a delete: refuse it, do not normalize it into a
     # different, silently-plausible path. Reproduced before fixing — it deleted $dest/tmp/cache and
@@ -728,7 +752,7 @@ cleanup_orphans() {
 
     # Containment + the parent chain. Before ANY stat of the target, before the gate, before everything.
     reason=""
-    if ! reason="$(orphan_contained "$line")"; then
+    if ! reason="$(path_contained "$line" delete)"; then
       refused="$refused    $line — refused: $reason
 "
       continue
@@ -796,7 +820,7 @@ EOF
     # and the nested contents are destroyed while this count is unchanged (1 → 1) — so the branch below
     # reports "left as it is" about a subtree that is gone. That is C2's exact failure, one level down,
     # and it is NOT fixed. It is accepted because the destroyed content is always inside a named target
-    # (orphan_contained keeps the walk in-project), so the harm is the wrong sentence rather than the
+    # (path_contained keeps the walk in-project), so the harm is the wrong sentence rather than the
     # user's data. Do not read the "left as it is" branch as a guarantee — it is a best effort at one
     # level. Re-raise: see the ledger. If you fix it, `find "$p" | wc -l` is the honest count, and the
     # test must use the NESTED fixture and be run red first — the last test written here asserted the

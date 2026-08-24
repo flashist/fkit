@@ -83,7 +83,7 @@ notice.
 **Both briefs are correct on disk.** Each carries a dated correction that supersedes its dependency
 line — and each correction sits in a **nested sub-bullet beneath** the declaration:
 
-`ai-agents/tasks/backlog/0046-gate-symlink-escape-in-init-intake-write/brief.md`, the declaration and
+`ai-agents/tasks/done/0046-gate-symlink-escape-in-init-intake-write/brief.md`, the declaration and
 the first line of its correction:
 
 > `- **Depends on: task 36** (`remove-fkit-omnigent-orphan-residue`) — **soft, not hard.**`
