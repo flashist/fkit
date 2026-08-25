@@ -9,12 +9,16 @@
 #      already has are never touched (create-if-absent only — see converge_ai_agents below).
 #   2. drop project-root CLAUDE.md (Claude-flavored, with the team map) and AGENTS.md (the codex
 #      CLI reads it for the adversarial pass) — skipped if they already exist
-#   3. refresh .claude/agents/fkit-*.md and .claude/skills/fkit-*/ from claude/ (fkit-managed:
-#      removed and re-copied; other files in .claude/ are never touched)
+#   3. refresh .claude/agents/fkit-*.md and .claude/skills/fkit-*/ from claude/ (fkit-managed names:
+#      removed and re-copied — a user path SQUATTING one of those two patterns is removed and NOT put
+#      back; nothing else in .claude/ is ever touched). Each half is guarded on a containment walk and
+#      skipped with a warning if any component — or any fkit-* entry below it — is a symlink.
 #   4. install the .fkit/interview terminal intake; on a fresh project, run it → .fkit/intake.md
 #   5. gitignore the fkit-managed copies
 #   6. delete the Omnigent orphan residue this project may still carry (claude/orphan-targets) — the
-#      one destructive thing fkit does; announced per path, gated on a reference check
+#      only place fkit deletes OUTSIDE the fkit-* namespace it manages (step 3 deletes too, and
+#      unrecoverably for a squatter; it re-copies only its own names); announced per path, gated on a
+#      reference check
 #
 # Usage:  claude/fkit-claude-init.sh <project-root>    # e.g. `claude/fkit-claude-init.sh .`
 # Then:   cd <project-root> && fkit                    # pick a role from the menu
@@ -522,29 +526,120 @@ install_root_file() {   # create from the scaffold when absent, then merge the m
 install_root_file CLAUDE.md
 install_root_file AGENTS.md
 
-# 3. refresh the fkit-managed agents + skills (rm+cp of fkit-managed names ONLY — a user's own
-#    agents/skills in .claude/ are never touched)
-mkdir -p "$dest/.claude/agents" "$dest/.claude/skills"
-rm -f "$dest/.claude/agents/fkit-"*.md
-cp "$here/agents/fkit-"*.md "$dest/.claude/agents/"
-n_agents="$(ls "$here/agents/fkit-"*.md | wc -l | tr -d ' ')"
-for d in "$dest/.claude/skills/fkit-"*/; do
-  [ -d "$d" ] && rm -rf "$d"
-done
-cp -R "$here/skills/fkit-"* "$dest/.claude/skills/"
-n_skills="$(ls -d "$here/skills/fkit-"*/ | wc -l | tr -d ' ')"
-echo "• refreshed $n_agents agents → .claude/agents/, $n_skills skills → .claude/skills/"
+# 3. refresh the fkit-managed agents + skills (rm+cp of the two fkit-* name patterns ONLY — a user's
+#    own NON-fkit- agents/skills in .claude/ are never touched; one that SQUATS those patterns IS
+#    deleted, and is NOT put back, which is why §6 no longer calls itself fkit's only unrecoverable
+#    delete — see the corrected headline there)
+#
+# [ -L ] FIRST, ALWAYS — the doctrine §1 states ("is the one test that does not lie, so it has to come
+# first"), §6 applies at its call site and §4 got it in 0046, and this is the site with the WORST
+# consequence because it is the one that DELETES before it copies.
+# `mkdir -p`, `rm -f`, `rm -rf` and `cp`/`cp -R` ALL DEREFERENCE: with .claude symlinked out of the
+# project this removed a user's agents/fkit-*.md, rm -rf'd their skills/fkit-*/ AT THE LINK TARGET, wrote
+# the whole fkit payload out there, and exited 0 with an empty stderr (reproduced, 0327). A symlinked
+# .claude/agents or .claude/skills does the same one half at a time. Whole chain, not just the leaf.
+#
+# BEFORE the mkdir, not after — not style, a requirement: a DANGLING .claude makes `mkdir -p` fail, and
+# under `set -euo pipefail` that killed init right here, so §4, §5, §6 and the summary never ran. A guard
+# placed after the mkdir never runs at all.
+#
+# TWO calls, not one, because the halves fail independently and are independently survivable: a
+# symlinked .claude/skills must not cost the user their agents. Each call walks .claude too, so a
+# symlinked .claude refuses both — two messages for two skipped steps, which is §1's shape, not noise.
+#
+# Non-fatal, and init's EXIT STATUS IS UNCHANGED (owner ruling, 0327 Q1a): warn and carry on, §1's bar
+# and 0088's. A known and accepted cost of that ruling — on a FRESH project with a symlinked .claude the
+# session start then fails with Claude Code's own "agent not found" rather than fkit's. Nothing is
+# destroyed, which is the point. STDERR, not stdout: the launcher sends init's stdout to /dev/null on an
+# already-set-up project, which is exactly the case this warning exists for.
+#
+# ONE LEVEL BELOW THE LEAF, and the walk above cannot see it (0327 review R1/R2). `path_contained
+# ".claude/skills"` walks `.claude` and `skills` and STOPS — it never walks the `fkit-*` entries the
+# `rm -rf` and the `cp -R` actually name, and both of those dereference an entry that is itself a
+# symlink. Measured, not reasoned about:
+#   • a LIVE one (`fkit-x -> /outside/tree`): the rm loop's glob `fkit-*/` carries a TRAILING SLASH,
+#     which resolves the link before `rm` is ever reached, so the LINK TARGET's whole tree is deleted —
+#     rc 0, empty stderr, and the summary line printed as if the refresh had worked. (An automated
+#     reviewer cleared this on the reasoning that macOS `rm` is FTS_PHYSICAL and would not traverse a
+#     directory symlink. It is the trailing slash, not `rm`, that resolves it. Do not re-adopt that.)
+#   • a DANGLING one, or one pointing at a FILE: `fkit-*/` cannot see it at all (`[ -d ]` is false), so
+#     it survived to the `cp -R` and — when its name collides with a payload skill — killed init with
+#     `cp: …: Not a directory` under `set -euo pipefail`, so §5 and §6 never ran.
+# So the entries get their own walk, with NO trailing slash on the glob: `fkit-*/` is precisely the
+# pattern that cannot see a dangling link.
+#
+# THE WHOLE HALF IS REFUSED, not the one entry, and that is a decision rather than laziness: `cp -R`
+# copies every payload name in a single call, so skipping one colliding destination means unrolling it
+# into a per-skill loop — more moving parts guarding a namespace that is fkit-managed and gitignored,
+# where a symlink is a convention violation to report, not a layout to support. The message names the
+# offending entry so the user knows which one to move. The AGENTS half needs no equivalent: `rm -f`
+# removes a symlink itself rather than its target, and the `cp` that follows lands on a name the `rm`
+# just cleared — verified, live and dangling, no escape and no abort.
+skills_entries_contained() {
+  for _e in "$dest/.claude/skills/fkit-"*; do
+    [ -L "$_e" ] || continue
+    path_contained ".claude/skills/${_e##*/}" refresh
+    return 1
+  done
+  return 0
+}
+
+# n_agents/n_skills start EMPTY on purpose — under `set -u` a skipped half would otherwise leave them
+# unset, and the summary below must report only the halves that actually ran.
+n_agents=""
+n_skills=""
+if ! agents_reason="$(path_contained ".claude/agents" refresh)"; then
+  {
+    echo "⚠ skipped the .claude/agents refresh: $agents_reason"
+    echo "    $dest/.claude/agents"
+    echo "  Nothing was written or deleted and nothing is broken. The rest of setup continues — but"
+    echo "  your fkit agents were NOT installed here, so a session started now may find none."
+    echo "  Replace the symlinked path with a real directory, then re-run: fkit"
+  } >&2
+else
+  mkdir -p "$dest/.claude/agents"
+  rm -f "$dest/.claude/agents/fkit-"*.md
+  cp "$here/agents/fkit-"*.md "$dest/.claude/agents/"
+  n_agents="$(ls "$here/agents/fkit-"*.md | wc -l | tr -d ' ')"
+fi
+if ! skills_reason="$(path_contained ".claude/skills" refresh)" ||
+   ! skills_reason="$(skills_entries_contained)"; then
+  {
+    echo "⚠ skipped the .claude/skills refresh: $skills_reason"
+    echo "    $dest/.claude/skills"
+    echo "  Nothing was written or deleted and nothing is broken. The rest of setup continues — but"
+    echo "  your fkit skills were NOT installed here, so a session started now may find none."
+    echo "  Replace the symlinked path with a real directory, then re-run: fkit"
+  } >&2
+else
+  mkdir -p "$dest/.claude/skills"
+  for d in "$dest/.claude/skills/fkit-"*/; do
+    [ -d "$d" ] && rm -rf "$d"
+  done
+  cp -R "$here/skills/fkit-"* "$dest/.claude/skills/"
+  n_skills="$(ls -d "$here/skills/fkit-"*/ | wc -l | tr -d ' ')"
+fi
+# Announce only what actually happened. Both halves ran → byte-identical to the line this has always
+# printed; one half → that half alone; neither → nothing, because the two warnings above already said so.
+if [ -n "$n_agents" ] && [ -n "$n_skills" ]; then
+  echo "• refreshed $n_agents agents → .claude/agents/, $n_skills skills → .claude/skills/"
+elif [ -n "$n_agents" ]; then
+  echo "• refreshed $n_agents agents → .claude/agents/"
+elif [ -n "$n_skills" ]; then
+  echo "• refreshed $n_skills skills → .claude/skills/"
+fi
 
 # 4. first-run intake — a quick TERMINAL questionnaire asked before any LLM starts. It writes the
 #    owner's answers to .fkit/intake.md, which /fkit-initiate-project reads, so the basics are
 #    captured deterministically. tty-safe: probes the controlling terminal and skips cleanly when
 #    headless (the LLM interviews instead).
 #
-# [ -L ] FIRST, ALWAYS — the same doctrine §1 states at :315 and §6 applies at its call site, and the
-# one site that never got it. `mkdir -p` and `cat >` both DEREFERENCE: with .fkit symlinked out of the
-# project this wrote `interview` to the link target (reproduced, 0046), and with the LEAF symlinked it
-# OVERWROTE whatever was there. The whole chain is walked, not just the leaf — a symlinked parent makes
-# the leaf a real path and -L on the leaf alone is false. One call covers both statements.
+# [ -L ] FIRST, ALWAYS — the same doctrine §1 states ("is the one test that does not lie, so it has to
+# come first") and §6 applies at its call site, and the one site that never got it. `mkdir -p` and
+# `cat >` both DEREFERENCE: with .fkit symlinked out of the project this wrote `interview` to the link
+# target (reproduced, 0046), and with the LEAF symlinked it OVERWROTE whatever was there. The whole
+# chain is walked, not just the leaf — a symlinked parent makes the leaf a real path and -L on the
+# leaf alone is false. One call covers both statements.
 # Non-fatal by design (§1's bar, and 0088's): a refusal warns and setup carries on. The intake is
 # optional already — with no .fkit/interview the launcher's `[ -x … ]` probe (fkit-claude.sh:576) just
 # skips it and the LLM interviews instead. STDERR, not stdout: the launcher sends init's stdout to
@@ -634,7 +729,24 @@ add_ignore '.claude/skills/fkit-*/' 'fkit-managed skills (refreshed by fkit-clau
 
 # ---------- 6. the Omnigent orphan residue ----------
 #
-# ⚠️ THIS IS THE ONLY DESTRUCTIVE OPERATION IN FKIT. Read the whole comment before touching it.
+# ⚠️ THIS IS THE ONLY PLACE FKIT DELETES OUTSIDE THE NAMESPACE IT MANAGES — the only place it removes
+# a path named from a list, rather than one matched by one of its own two fkit-* patterns. Read the
+# whole comment before touching it.
+#
+# ⛔ It is NOT fkit's only `rm`, and NOT its only UNRECOVERABLE one (0327 review R3 — the previous
+# wording claimed both and was false). §3 above deletes too: an `rm -f` over the fkit-managed agent
+# files and an `rm -rf` over each fkit-managed skill directory. Two differences, and only the first
+# holds without exception:
+#   • NAMESPACE — §3 matches only the two fkit-* patterns, which are fkit-managed and gitignored by §5.
+#     §6 names the USER's own paths, outside any pattern fkit owns. That is what the headline claims,
+#     and all it claims.
+#   • RECOVERY — §3 re-copies its OWN names in the next statement, so re-running init restores those.
+#     ⛔ A user path SQUATTING that namespace is deleted and NOT put back: nothing in the payload is
+#     called that, so the `cp` cannot restore it. §3's delete is unrecoverable for it too. Pinned by
+#     D1 in test/init-claude-refresh-guard.test.js so this paragraph cannot go false in silence.
+# That difference is why §6 carries the apparatus below — per-path announcement, a reference-count
+# gate, a containment walk — and §3 carries only the containment walk (twice: once down the chain, once
+# across the fkit-* entries below it).
 #
 # The old Omnigent runtime wrote its own state into the CONSUMING project — vendored agent bundles, a
 # runner, session state, its own config dir. ADR-009 deleted that runtime in Sprint 2 and nothing has

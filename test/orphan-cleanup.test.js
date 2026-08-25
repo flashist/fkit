@@ -1,4 +1,6 @@
-// The orphan-cleanup contract (task 36) — the ONLY destructive operation in fkit.
+// The orphan-cleanup contract (task 36) — the only place fkit deletes OUTSIDE the fkit-* namespace it
+// manages. (Init's §3 refresh deletes too, and unrecoverably where a USER path squats one of its two
+// fkit-* patterns; it re-copies only fkit's own names. 0327.)
 //
 // Everything else init does is additive by invariant; this deletes paths in a user's project with no
 // rollback. So the bar is not "does it delete the four paths" but "can it ever delete anything else":

@@ -166,7 +166,7 @@ scope was the `-L` rule.
 - **Relation to `0327`–`0330`:** same audit class — the sweep of `$dest`-relative writes in
   `fkit-claude-init.sh` and the launcher that `0046`'s plan §6 produced. Those four are symlink-shaped;
   this one is not, and it shares no code path with them.
-  - [`0327-refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim`](../0327-refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim/brief.md)
+  - [`0327-refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim`](../../done/0327-refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim/brief.md)
   - [`0328-make-inits-two-mkdir-p-calls-non-fatal-so-a-weird-fkit-or-claude-cannot-abort-setup`](../0328-make-inits-two-mkdir-p-calls-non-fatal-so-a-weird-fkit-or-claude-cannot-abort-setup/brief.md)
   - [`0329-decide-and-implement-inits-behaviour-when-gitignore-is-a-symlink`](../0329-decide-and-implement-inits-behaviour-when-gitignore-is-a-symlink/brief.md)
   - [`0330-gate-the-launchers-fkit-lockdown-writes-against-a-symlinked-fkit`](../0330-gate-the-launchers-fkit-lockdown-writes-against-a-symlinked-fkit/brief.md)

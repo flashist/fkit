@@ -221,6 +221,46 @@ work makes the case for it, **name it as a follow-up** — the producer files it
   2026-08-06 Sprint 2 → Sprint 3 rollover; it still exists, at that path. ⚠️ **This changes nothing
   about the scoping question the blockquote raises** — whether this guard's scanned set should reach
   `sprints/done/` is still `0237`'s to settle, and is still unsettled.
+- **📌 DATED NOTE 2026-08-24 — THREE KNOWN STALE `path:NNN` INSTANCES RECORDED HERE AS TEST CASES.**
+  ⭐ **Owner-ruled**, live via `AskUserQuestion` in an `fkit lead` session driving
+  `/fkit-sprint-ship-loop` and relayed to a spawned `fkit-producer` with no owner channel
+  ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+  **The option label is the verbatim text: "Fold into 0176 (Recommended)"**, whose description reads
+  *"0176 is the guard for exactly this citation-drift class and is already open. Adding three known
+  instances to it costs nothing and gives its implementer real test cases."* Surfaced by `0327`'s
+  Round-2 stateful review; **already wrong at `HEAD`, not broken by that diff.**
+
+  ⛔ **RECORDED ONLY. This note re-scopes nothing** — `## What to build`, the two owner rulings, the
+  four scoping decisions, `## Status`, `## Priority`, `## Sprint` and `## Owner` are all untouched.
+
+  **All three re-verified firsthand by the filing producer, 2026-08-24** — each coordinate resolved
+  against the file it points into, at `HEAD` and in the working tree. **All three are stale; none was
+  found to be correct.**
+
+  | Citing site (quoted, not `:NNN`) | What it claims | What is actually there |
+  |---|---|---|
+  | `test/structure-manifest.test.js`, header comment item **E** — *"marker recognition is `marker_lines`' contract (claude/fkit-claude-init.sh:374)"* | `fkit-claude-init.sh:374` defines/documents `marker_lines` | `:374` is inside the **rules-block budget** comment — at `HEAD`, *"marker/comment lines did not. So the wrapper costs cap budget…"*; in the working tree, a bare `#`. **Nothing to do with marker recognition.** |
+  | `test/structure-manifest.test.js`, the prose-span assertion message — *"marker_lines exists to prevent (claude/fkit-claude-init.sh:366-372)"* | `:366-372` is the substring-match defect commentary | `:366-372` at `HEAD` is the **budget-target** comment (*"keep >= 400 B free…"*). **Wrong region.** |
+  | `claude/skills/fkit-heal/check.sh`, hashing-pipeline step 2 — *"Marker recognition is marker_lines' contract (fkit-claude-init.sh:374)"* | same claim as row 1 | same as row 1. **Wrong region.** |
+
+  ⭐ **The true target, for whoever repairs them — anchor on this, never on a number**
+  ([durable-citation-anchors](../../../knowledge-base/conventions/durable-citation-anchors.md)): the
+  `marker_lines()` definition (`awk -v m="$2" '{ l = $0; gsub(/^[ \t\r]+|[ \t\r]+$/, "", l); …`) and
+  its comment block opening *"Line numbers where <marker> is the WHOLE line"* and containing *"This
+  MUST NOT be a substring match."* At `HEAD` that sits near `:410-422` — ⚠️ **a dated coordinate,
+  offered to locate the block once, not to be re-cited.**
+
+  ⚠️⚠️ **A SCOPE MISMATCH THE IMPLEMENTER MUST NOT DISCOVER LATE — measured, and flagged rather than
+  resolved.** These three are **citations INTO a source file** (`claude/fkit-claude-init.sh`), made
+  **FROM** `test/` and `claude/skills/`. This guard's condition, as specified above, tests the
+  **target** for being a **coordination document** (`ai-agents/sprints/*.md`, task briefs,
+  `ai-agents/wiki-vault/log.md`), and its scanned set is `ai-agents/tasks/*/*/*.md` +
+  `ai-agents/sprints/*.md`. ⛔ **On both counts — target class and citing-file scope — the guard as
+  specified would NOT flag these three.** They are the **same drift class** (a `path:NNN` that no
+  longer points at what it claims) but **not the same condition**. ⭐ **Take them as red-team fixtures
+  and as evidence of reach, not as an instruction to widen the condition** — widening is a scoping
+  decision this brief explicitly refuses to absorb, and `0237` already owns the open scanned-set
+  question. **Put the widening question to the owner if one is present when this task runs.**
 - **Blocks:** nothing.
 - **🔗 Kept SEPARATE from task `0175` (follow-up 7) — a producer judgement.** Report §8 left it open:
   *"Whoever files them should consider one task with two conditions rather than two tasks — noted as a

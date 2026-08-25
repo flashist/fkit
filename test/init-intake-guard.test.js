@@ -1,10 +1,11 @@
 // The §4 intake-write contract (task 0046) — init must not write .fkit/interview through a symlink.
 //
 // §1 of fkit-claude-init.sh wrote the doctrine down ("`[ -L ]` is the one test that does not lie, so it
-// has to come first") and §6 applies it to the one destructive operation. §4 never got it: `mkdir -p`
-// and `cat >` both DEREFERENCE, so a symlinked `.fkit` put the intake script at the link target and a
-// symlinked `.fkit/interview` OVERWROTE whatever file was there — both outside the project, both
-// silent, both with init still exiting 0. Reproduced, not theorized.
+// has to come first") and §6 applies it to fkit's one delete outside the namespace it manages (0327:
+// it is NOT its only unrecoverable one — §3's refresh is unrecoverable for a squatter). §4 never got
+// it: `mkdir -p` and `cat >` both DEREFERENCE, so a symlinked `.fkit` put the intake script at the
+// link target and a symlinked `.fkit/interview` OVERWROTE whatever file was there — both outside the
+// project, both silent, both with init still exiting 0. Reproduced, not theorized.
 //
 // The interesting assertions here are the NEGATIVE ones, and they are written against a two-way
 // manifest() freeze of the OUTSIDE directory rather than spot checks: manifest() only ever walks the
