@@ -10,7 +10,7 @@ Sprint 6
 Sprint 6 P12
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder

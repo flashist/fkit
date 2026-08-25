@@ -4563,7 +4563,7 @@ read *"the other six"*** even on 2026-08-05.
 
 | §8 item | Task | Filed |
 |---|---|---|
-| 1 — enumerate the Process-review row's method steps | [`0223`](../../tasks/backlog/0223-enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason/brief.md) | 2026-08-05 |
+| 1 — enumerate the Process-review row's method steps | [`0223`](../../tasks/done/0223-enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason/brief.md) | 2026-08-05 |
 | 2 — file ADR-038 | **`0222`** | 2026-08-05 |
 | 3 — the paired misroute detector | [`0224`](../../tasks/backlog/0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md) | 2026-08-05 |
 | 4 — the loop-table row↔ownership test | [`0225`](../../tasks/backlog/0225-add-the-loop-table-row-to-skill-ownership-test/brief.md) | 2026-08-05 |

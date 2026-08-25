@@ -185,7 +185,7 @@ implementation.**
   not filed, because scoping it before this decision lands would be scoping before findings.
 - Related: [`0224`](../0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md)
   (misroute detector — driver-vs-table deviation, a different failure than this one),
-  [`0223`](../0223-enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason/brief.md)
+  [`0223`](../../done/0223-enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason/brief.md)
   and [`0225`](../0225-add-the-loop-table-row-to-skill-ownership-test/brief.md) — the other open
   ADR-038 follow-ups. All three read `🔲 Backlog` as of 2026-08-10.
 - **Provenance — owner ruling, 2026-08-10**, given via `AskUserQuestion` in a live session; a

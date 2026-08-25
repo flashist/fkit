@@ -511,3 +511,108 @@ touched** (ADR-032 byte-unchanged) — all four cited ranges were read, none edi
 the faithful-carry block, the FIVE-site list, `0333`'s deliberately-still-false prose at `:225-229`, and
 the honest-bound paragraph all stand. No board, no `test/`, no `claude/structure-manifest.tsv`, no
 `.claude/` copy refresh. **The *Reviewer findings* section was not edited.**
+
+---
+
+# Round 4 — R6 (round-3 review): the `done` term in Step 6's closeout condition
+
+**Role:** `fkit-coder` (Process-review worker, spawned by `fkit-sprint-ship-loop` — fkit-lead session).
+**Date:** 2026-08-25 · **Tree at:** HEAD **`50cfdb6`** ("Sprint push", 2026-08-25 13:53) — the owner
+committed the whole working tree between the round-3 review and this round. The ledger header's base
+ref `c45ec3d` is therefore stale: every `0223` edit to `:126` is now inside HEAD and
+`git diff HEAD -- claude/skills/fkit-sprint-ship-loop/SKILL.md` is empty. Recorded in the *Coder
+response*; the reviewer's own sections were not rewritten.
+
+## Verdict — R6 re-derived, not inherited
+
+Source read directly: `claude/skills/fkit-process-stateful-review/SKILL.md:206-207` — *"If all novel
+findings are closeout / disproven / accepted and nothing blocking remains, set the document header
+**Status: closed-out**."* Three terms; `done` is not among them.
+
+**The row on disk today does NOT contain `done /`** — `:126` reads *"once every novel finding is
+closeout / disproven / accepted and nothing blocking remains"*, and `git log -S` finds the four-term
+wording in no commit. So the claim was checked against the state the reviewer actually reviewed, not
+the state now:
+
+- the lead's grep at **20:01 local, 2026-08-24** returned *"once every novel finding is done / closeout
+  / disproven / accepted"* — `done /` was on the line when R6 was written (review.md mtime 20:08);
+- a prior `fkit-coder` spawn's `Edit` at **21:28:57 local** has that four-term string as its
+  `old_string` and the three-term string as its `new_string`; `SKILL.md` mtime is **21:29:01**;
+- that spawn ran `node --test` (747/747) and then **died on an API timeout** ("Request timed out")
+  before `prove-red.sh`, before this worklog, and before the ledger — which is why the fix sat in the
+  tree unrecorded until the owner's commit swept it into `50cfdb6`.
+
+**R6 = CORRECT, defect, severity `medium` — agreed and independently reached.** `✅ done` is the one
+disposition that changes the deliverable; putting it in a self-certified close condition collapses the
+two-party round-trip. It is the same reading this worklog's rounds 2 and 3 already applied when they
+refused to close out. Not `high`: the failure needs a worker to follow the row over its source, and
+both workers who faced that choice here followed the source.
+
+**Loop check (Step 2):** no residual or ADR "Re-raise only if" covers it — AR-1/AR-2 are about
+prevention and drift, not an added term; ADR-034 (loaded this round) makes it a work-product defect
+that blocks closeout, not a closeout. **Regression / oscillation check (Step 3.5):** the one-word
+deletion recreates no prior finding's condition; R1's by-outcome mapping and non-overwrite guard sit
+in the sentence before it and are intact.
+
+## The fix — already on disk; nothing edited this round
+
+`done /` removed from Step 6's closeout clause on `:126` (the 21:28 edit, now in HEAD). The clause is
+byte-for-byte the source's term list. `done` occurs **4** times on the line, all elsewhere: `✅ done`
+as a Status value ×3 and *"noted as done on the reviewer's behalf"* ×1.
+
+**A second owner-ruled edit landed in the same 21:28 pass, also in HEAD and also unrecorded:** the
+`0195` claim tightened to *"missed Step 0 entirely, ran Steps 2 and 3.5 only partially, inherited the
+reviewer's severity labels instead of deriving them (Step 3), and used none of Step 4's prescribed
+Status values"* (owner ruling, verbatim label **"Tighten the 0195 claim now; note 0169
+(Recommended)"**). `0169` is **not** named on `:126` (grep: 0). Flagged, not changed — outside this
+round's scope (R6 only).
+
+## Verification — full battery re-run on disk this round
+
+Structural: `wc -l` **414** · `:126` 5 pipes / 4 cells · `0204`'s anchors at `:205` and `:248` present
+and unmoved · `:151-249` untouched · all nine step tokens present exactly once · all six Status values
+present (`pending approval` **1** · `✅ done` 3 · `won't fix (frontier)` 3 · `disproven` 4 ·
+`closeout (re-litigation)` 3 · `blocked` 2) · gate imperatives `wait for` / `explicit approval` /
+`Once I` / `approve specific` all **0** · `closed-out` **1** ·
+`claude/skills/fkit-process-stateful-review/SKILL.md` blob `6b58a29` = HEAD's (byte-unchanged,
+ADR-032) · `.claude/` copy of the ship-loop skill identical to `claude/` (refreshed 2026-08-25 13:50).
+
+Suites: `node --test test/*.test.js` → **747 pass / 0 fail / 0 skipped** (24 suites).
+`bash test/prove-red.sh` → **22/22 mutations red, hard gate PASSED**; mutation 9 (*"de-indented
+continuation line — live corpus: every skill SKILL"*) observed individually `red`. This is the first
+`prove-red` run since the 21:28 edit — the spawn that made it never reached it.
+
+Change surface this round: **none to source.** `git diff --numstat HEAD -- claude/` is empty. Files
+written: this worklog and the ledger's *Coder response* section (+ the R6 row).
+
+## The honest limit — unchanged and still binding
+
+No red-first test asserts this row's content and none was manufactured (`0225` / AR-2). The suites
+prove not-broken; the source-line comparison is what proves the fix correct.
+
+## Decision log — fixes applied unattended / obvious-winner calls
+
+**Fix applied unattended this round: none.** The R6 fix was applied by the earlier spawn under the
+owner's live ruling; this round verified it and recorded it. Nothing was edited in `claude/`.
+
+**Obvious-winner call — record the pre-applied fix as `✅ done` rather than re-open it.** *Answers:*
+R6. *Changed:* ledger row only. *Why it qualified:* the fix is verified CORRECT against the source
+line, mechanical (one word), and explicitly owner-ruled with a verbatim label; the only alternative —
+reverting and re-applying to produce a diff for the record — would change nothing on disk and
+manufacture a change surface. Fully reversible.
+
+**Obvious-winner call — the "cost" of the fix is not a new residual.** *Answers:* the reviewer's
+"disposition is the owner's" on the routes-to-Blocked cost. *Changed:* nothing; the ruling ("no new
+task") is recorded inside the R6 row so the next round does not re-raise it. *Why it qualified:*
+adding an AR requires an owner ruling to record one (AR-1/AR-2 were recorded under "Record both
+formally"); no such ruling exists, so the cheapest-to-reverse branch is to record the ruling in the row
+and let the driver decide whether an AR-3 is wanted.
+
+## Not done, deliberately
+
+No commit. No push. No task-file move. **Ledger header stays `Status: in-review`** — the reviewer
+runs the next round on the fix; R6 is `✅ done`, which the closeout condition does not name.
+`claude/skills/fkit-process-stateful-review/SKILL.md` not touched (ADR-032). `:151-249` untouched. No
+board, no `test/`, no `claude/structure-manifest.tsv`, no `.claude/` copy refresh. **The *Reviewer
+findings* section and the round-3 working record were not edited** — the stale `c45ec3d` base ref in
+them is noted in the *Coder response*, not corrected in place. `0169` not added to `:126`. No AR-3.

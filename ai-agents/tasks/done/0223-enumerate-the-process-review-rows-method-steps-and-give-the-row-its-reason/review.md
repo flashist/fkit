@@ -1,9 +1,13 @@
 # Review — 0223
 
-Task: `ai-agents/tasks/backlog/0223-enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason/brief.md`
+Task: `ai-agents/tasks/done/0223-enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason/brief.md`
 File(s) under review: `claude/skills/fkit-sprint-ship-loop/SKILL.md:126` (the §2 step table's **Process
-review** row — cells 2 and 3), working tree vs `HEAD` `c45ec3d` (`git diff --numstat` = `1 1`)
-Status: in-review
+review** row — cells 2 and 3). **Base ref, updated round 4:** rounds 1–3 reviewed the working tree vs
+`HEAD` `c45ec3d` (`git diff --numstat` = `1 1`). The owner committed the whole tree on 2026-08-25, so
+`HEAD` is now **`50cfdb6`** and every `0223` edit to `:126` is inside it — `git diff HEAD` on this path
+is **empty**; round 4 reviewed **`50cfdb6` vs `c45ec3d`** (`git diff c45ec3d HEAD --numstat` = `1 1`,
+single hunk `@@ -126 +126 @@`; `git log c45ec3d..HEAD -- <file>` = the one commit `50cfdb6`).
+Status: closed-out
 
 **Round 1 verdict:** ⚠️ **Changes requested — 4 defects (none blocking).** Reviewers run: reviewer's
 own pass + Codex (`codex-cli 0.145.0`, `--sandbox read-only` → reasoning-only coverage, ADR-042 D1 —
@@ -43,6 +47,21 @@ never for *additions*.** R6 is a defect in the **work product** itself, so under
 [ADR-034](../../../knowledge-base/decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record.md)
 it **blocks closeout and drives another round** — see the round-3 convergence call for why I am not
 calling this converged despite three rounds on one line.
+
+**Round 4 verdict:** ✅ **Ready to merge.** Reviewers run: reviewer's own pass + Codex (`codex-cli
+0.145.0`, `--sandbox read-only` → **reasoning-only second opinion**, ADR-042 D1 — the normal state, not a
+degradation event; **all execution evidence below is the Claude reviewer's**). **Coverage complete — no
+reviewer skipped.** Scope this round is the **committed** row: `HEAD` `50cfdb6` vs base `c45ec3d` (the
+working tree is clean on this path — see the header).
+
+**R6 is closed, verified first-hand on `HEAD`:** `:126`'s closeout clause now carries the source's three
+terms and only those (`fkit-process-stateful-review/SKILL.md:206-207`); `done /` occurs **0** times. **All
+nine steps re-checked in BOTH directions — omissions and additions — and every step is faithful**; every
+`file:line` citation on the row resolves; the tightened `0195` claim matches `0195`'s ledger clause for
+clause. **Zero novel findings.** Codex raised one (X1 — Step 0 drops the word *"settled"* before *ADRs*);
+verified **PARTIALLY CORRECT, low, below the row bar, not recorded** — the source's own operative
+sentence has the same reach (round-4 working record). **AR-3 recorded** under the owner's ruling. Suites
+re-run: `node --test` **747/747**, `prove-red` **22/22**. **Converged: `Status: closed-out`.**
 
 ## Reviewer findings
 
@@ -104,6 +123,46 @@ recording, and the standing structural risks it touches are already held by **AR
 prose control, not prevention) and **AR-2** (the enumeration drifts silently if the skill changes) —
 both of which cover it exactly. Nothing added below.
 
+**Round 3 — R6 re-derived first-hand. CORRECT, defect, severity `medium` agreed. The fix is already on
+disk and in HEAD: it was applied by an earlier coder spawn on 2026-08-24 21:28 local under the owner's
+live ruling (verbatim label "Drop `done /` only — no new task (Recommended)"), and that spawn died on an
+API timeout before it could record anything here. This round records it; no new edit was needed.**
+
+⚠️ **Base-ref move (not a header rewrite):** the header and the round-3 working record say working
+tree vs `HEAD` `c45ec3d`. The owner committed the whole tree on 2026-08-25 13:53 — **`HEAD` is now
+`50cfdb6`** and every `0223` edit to `:126` (rounds 1–3 plus the R6 fix) is **inside HEAD**, so
+`git diff HEAD -- claude/skills/fkit-sprint-ship-loop/SKILL.md` is now **empty** (`--numstat` prints
+nothing). The reviewer's section is left as written; the next reviewer should read "working tree vs
+`c45ec3d`" as "`50cfdb6` vs `c45ec3d`".
+
+| #  | Verdict | Defect / Frontier | Action | Status |
+|----|---------|-------------------|--------|--------|
+| R6 | **CORRECT** (severity **medium** — agreed) | Defect | **Claim verified against the state the reviewer reviewed, not the state on disk now.** The source's Step 6 closeout bullet, read directly at `fkit-process-stateful-review/SKILL.md:206-207`: *"If all novel findings are closeout / disproven / accepted and nothing blocking remains, set the document header **Status: closed-out**."* — three terms, no `done`. The row at review time carried four terms: the lead's own grep at 20:01 local on 2026-08-24 returned *"once every novel finding is done / closeout / disproven / accepted"*, and the prior coder spawn's `Edit` at 21:28 local has that exact string as its `old_string` — so `done /` was on `:126` when R6 was written. `✅ done` is the one disposition that changes the deliverable, so listing it in a self-certified close condition collapses the two-party round-trip — agreed, and it is the same reading this ledger's round-1 and round-2 *Not closed out* notes applied. **Fix already applied — one word, one line:** `:126` now reads *"once every novel finding is closeout / disproven / accepted and nothing blocking remains"*, byte-for-byte the source's term list; `done /` occurs **0** times on the line (the four remaining `done`s are `✅ done` as a Status value ×3 and *"noted as done on the reviewer's behalf"*). `git show c45ec3d:…:126` has `closed-out` **0** times (clause absent pre-round-1, as the reviewer found); `git show HEAD:…:126` has the fixed clause. **The ADR-034 collision, after the fix:** the clause now restates the source's own bar verbatim rather than a different one; keeping the sentence at all is the owner's "Drop `done /` only" ruling, and the cost the reviewer priced — a round that landed a fix routes to `🚧 Blocked — review not converging` (`:345`) instead of closing, because this loop has no re-Review step — was put to the owner with that correction and answered **no new task**. Recorded here so it is not re-raised as a defect. Severity `medium` reached independently: a document deliverable has no downstream catch (AR-2), but the failure needs a worker to follow the row over its source, and both workers who faced it in this task followed the source. | `✅ done` |
+
+**A second owner-ruled edit landed in the same 21:28 pass and is also in HEAD, unrecorded until now:**
+the `0195` claim on `:126` was tightened from *"skipped Steps 0, 2, 3 and 3.5"* to *"missed Step 0
+entirely, ran Steps 2 and 3.5 only partially, inherited the reviewer's severity labels instead of
+deriving them (Step 3), and used none of Step 4's prescribed Status values"* — matching the reviewer's
+round-3 note (*Raised and dispositioned*, second bullet) and the owner's ruling (verbatim label
+**"Tighten the 0195 claim now; note 0169 (Recommended)"**). ⚠️ `0169` is **not** named on `:126`
+(grepped: 0); whether "note 0169" meant the row or this ledger is for the driver to settle — not
+changed by this round.
+
+**Constraint checks re-run on disk this round** — `wc -l` **414**; row `:126` 5 pipes / 4 cells;
+`0204`'s anchors at `:205` and `:248` present and unmoved; `:151-249` untouched; all nine step tokens
+present exactly once; all six Status values present (`pending approval` **1** · `✅ done` 3 ·
+`won't fix (frontier)` 3 · `disproven` 4 · `closeout (re-litigation)` 3 · `blocked` 2); gate
+imperatives `wait for` / `explicit approval` / `Once I` / `approve specific` all **0**;
+`fkit-process-stateful-review/SKILL.md` blob `6b58a29` identical to HEAD's (byte-unchanged, ADR-032).
+`node --test test/*.test.js` **747 pass / 0 fail** (24 suites); `bash test/prove-red.sh` **22/22
+red, hard gate PASSED**, mutation 9 individually `red`. No test asserts this row's content (AR-2 /
+`0225`) — the source-line comparison above is what proves the fix correct.
+
+**Still not closed out.** Header stays `Status: in-review` — R6 is `✅ done` (**fixed**), which the
+closeout condition does not name, and the fix has not itself been reviewed. The reviewer runs the next
+round on it. **No third residual** — R6 was a fidelity defect in the copy; the accepted cost of its fix
+is recorded in the R6 row under the owner's ruling, not as a new AR.
+
 ## Accepted residuals (shared, do-not-re-litigate)
 
 *(Both recorded under the owner's 2026-08-24 ruling — verbatim label **"Record both formally
@@ -133,6 +192,31 @@ both of which cover it exactly. Nothing added below.
   doing another task's work.
 - **Re-raise only if:** ADR-032's byte-unchanged constraint on `fkit-process-stateful-review/SKILL.md`
   is lifted or that file changes, **and** `0225` has not yet landed a check that catches the drift.
+
+**AR-3 — A fix landing in a late round routes the sprint loop to `🚧 Blocked — review not converging`,
+not to a close.** *(Recorded round 4 under the owner's 2026-08-25 live ruling, verbatim label **"Yes,
+record AR-3 (Recommended)"**. The ruling it rests on — verbatim label **"Drop `done /` only — no new
+task (Recommended)"** — is recorded in the coder's **R6** row above, round 3, which is where the cost
+was first put to the owner and answered.)*
+
+- **What:** `claude/skills/fkit-sprint-ship-loop/SKILL.md:126` Step 6 now restates the source's
+  closeout bar byte-for-byte — *closeout / disproven / accepted and nothing blocking remains*
+  (`fkit-process-stateful-review/SKILL.md:206-207`). `✅ done` is deliberately **not** in that list, so a
+  round in which an authorized fix lands can never end `closed-out`. The sprint loop's step table runs
+  Review (`:125`) → Process review (`:126`) → Close (`:127`) with **no step that re-spawns Review**, so
+  such a task reaches the defined terminal state at `fkit-sprint-ship-loop/SKILL.md:345` —
+  *"**Blocked — review non-convergence** · `🚧 Blocked — review not converging`; skip/stop; report"* —
+  and does not ship through this loop. A visible, defined, non-shipping outcome.
+- **Why (structural):** the three source terms are exactly the dispositions that **change no code**, so
+  they are safe for the responder to self-certify; `✅ done` is the one that changes the deliverable, so
+  it needs the other party's eyes (R6). Restoring fidelity therefore *necessarily* leaves the
+  fix-landed round unclosable inside a loop with no re-Review step. **Rejected alternatives:** keep
+  `done` in the row's list (R6 — collapses the two-party round-trip and files a different close bar
+  inside one skill, which ADR-034 §Options rejected); give the loop an explicit re-Review round (a
+  `fkit-sprint-ship-loop` change outside `0223`'s scope — owner ruled **no new task**).
+- **Re-raise only if:** the sprint loop gains a re-Review step (or any step that re-spawns
+  `fkit-stateful-review` after Process review), **or** a task is observed routing to
+  `🚧 Blocked — review not converging` for this reason and the owner wants it to ship instead.
 
 ---
 
@@ -553,3 +637,137 @@ bar must **not** be filed inside `fkit-sprint-ship-loop`'s SKILL.
 
 **Status stays `in-review`.** One confirmed work-product defect is open and undispositioned. Everything
 else in this ledger — R1 through R5 — is closed on first-hand evidence and does not need revisiting.
+
+---
+
+## Round 4 — reviewer's working record
+
+**Base ref moved, scope unchanged.** `HEAD` is **`50cfdb6`** (the owner committed the whole tree on
+2026-08-25); `git diff HEAD -- claude/skills/fkit-sprint-ship-loop/SKILL.md` is **empty**, so this round
+reviewed the **committed** row `git show HEAD:…:126` against its base `git show c45ec3d:…:126`.
+`git diff c45ec3d HEAD --numstat` on the path = **1 1**, single hunk `@@ -126 +126 @@`; `git log
+c45ec3d..HEAD -- <file>` = exactly one commit, `50cfdb6`. Header updated to say so. All measurements
+below were taken on `HEAD` this round, not carried forward.
+
+**Owner rulings folded in this round (given live 2026-08-25, verbatim labels):**
+1. **"Ledger/worklog only (Recommended)"** on the earlier "Tighten the 0195 claim now; note 0169" ruling
+   — `0169` is **not** to be added to the row. Measured: `0169` occurs **0** times on `:126`. **Not a
+   finding**, by ruling; the coder's round-3 note (*"whether 'note 0169' meant the row or this ledger is
+   for the driver to settle"*) is hereby settled: the ledger.
+2. **"Yes, record AR-3 (Recommended)"** — recorded above as **AR-3**, citing the coder's R6 row where the
+   "Drop `done /` only — no new task" ruling was recorded.
+
+### R6 — verified closed first-hand on `HEAD`
+
+| Source `fkit-process-stateful-review/SKILL.md:206-207` | `HEAD` `:126` Step 6, closing sentence | Verdict |
+|---|---|---|
+| *"If all novel findings are closeout / disproven / accepted and nothing blocking remains, set the document header **Status: closed-out**."* | *"Set the document header **Status: closed-out** once every novel finding is closeout / disproven / accepted and nothing blocking remains"* | ✅ **Closed.** Term list identical — three terms, in source order. `done /` on `:126`: **0** occurrences. `closed-out` on `:126`: **1** (this clause). The four remaining `done`s on the line are `✅ done` as a Status value ×3 and *"noted as done on the reviewer's behalf"* (R4's seeding exception) — none is a closeout term. |
+
+**Provenance of the fix, checked rather than taken from the coder's note:** the R6 row in *Reviewer
+findings* quotes the four-term list as it stood at review time; the coder's R6 response records the
+21:28 edit's `old_string` carrying that exact string; `HEAD` carries the three-term list. The base row
+(`c45ec3d`) has `closed-out` **0** times, consistent with round 3's finding that the whole clause entered
+in round 1. Chain is consistent end to end.
+
+**Blast radius of the fix — nothing else moved with it.** The one-word deletion sits inside Step 6's
+last sentence; the by-outcome mapping, the non-overwrite guard and the apply-discipline opening on either
+side of it read exactly as round 3 verified them. The second 21:28 edit (the tightened `0195` claim) is
+the only other difference between the round-3 text and `HEAD`, and it is checked below.
+
+### Fidelity — every step, BOTH directions (omissions and additions), on `HEAD`
+
+Round 3 named the methodological gap: round 2 checked only what the row **dropped**. This sweep checks
+each step for what it drops **and** for what it **adds** that the source does not say.
+
+| Step | Omissions vs source | Additions vs source | Verdict |
+|---|---|---|---|
+| 0 | none load-bearing (ledger-key resolution: disproven round 1 — the row pins the path). `:98-109`. | *"binds exactly like a residual"* — source `:108` *"Treat an ADR's 'Re-raise only if' exactly like an accepted residual"*. Faithful. | ✅ |
+| 1 | none. `:115`. | none. | ✅ |
+| 2 | none. `:126-131`; naming + do-not-re-fix carried in Step 4's mapping. | none. Polarity correct (**unmet** condition → `closeout`). | ✅ |
+| 3 | none (R5 closed round 3). `:137-138`, `:143-147`. | *"at `file:line`"* for *"at the referenced location"* — same meaning. | ✅ |
+| 3.5 | *"point to it clearly and loudly BEFORE applying anything — let me decide"* (`:159-160`) is not restated in-step — but the **gate column** (*"⛔ stop for judgment calls — frontier-move, regression, …"*) is the loop's form of exactly that stop, and stronger (it returns control). Not a finding. | none. Round-budget clause verbatim in substance (`:162-163`). | ✅ |
+| 4 | none. Four verdicts `:169`; row contents `:172-173`; mappings `:175-176`, `:128-130`. | *"never an ad-hoc label"* — a gloss on the `0195` failure, consistent with `:85`. The `pending approval` negation — owner-ruled (round 2). *"so five of the six apply here"* — the arithmetic of that ruling. No added mapping. | ✅ |
+| 5 | code-change inventory (INCOMPLETE-not-recorded, round 1); the `:191` gate — deliberately excised. | none. | ✅ |
+| 6 | Step 6's own *"Do not commit"* bullet (`:208`) is not restated inside Step 6 — it appears in the row's Step 7 (*"the method itself makes no commit"*) and in the loop's own rule (`fkit-sprint-ship-loop/SKILL.md:407`). Same disposition as R3's no-commit note: covered, not a finding. | *"by outcome, not uniformly"* — a gloss on `:201-205`'s three distinct statuses. The non-overwrite guard — faithful inference (round 2). **Closeout condition — now identical to `:206-207` (R6 closed).** No added term anywhere in the step. | ✅ |
+| 7 | none — all eight elements of `:216-222`. | none. | ✅ |
+| Seeding exception | — | `:103-104` re-read on `HEAD` of the source: *"create it with the schema above: fill the header, seed Reviewer findings from whatever findings you were handed"* ✅; `:119-120` ✅. Closing sentence true per `fkit-sprint-ship-loop/SKILL.md:125`. | ✅ |
+| Cell 2 (ADR-038) | — | ADR-038 `:41-45` re-read: both grounds, the `:195` citation (Step 6's header on the source, re-read), and the closing sentence all match. The row says *"applies code fixes"* where the ADR says *"applies approved code fixes"* — the standing-approval model, noted round 1, not a drift. | ✅ |
+
+**Every `file:line` citation on the row resolves to the claimed content** — re-read on `HEAD` of the
+source this round: `:85` (vocabulary), `:103-104` and `:119-120` (seeding), `:195` (Step 6 header).
+
+### The tightened `0195` claim — verified against `0195`'s own ledger
+
+`HEAD` `:126`: *"missed Step 0 entirely, ran Steps 2 and 3.5 only partially, inherited the reviewer's
+severity labels instead of deriving them (Step 3), and used none of Step 4's prescribed Status values"*.
+`ai-agents/tasks/done/0195-…/review.md:138-143`, re-read: Step 0 **"NOT DONE"** ✅ *missed entirely*;
+Step 2 **"Partial"** ✅; Step 3 **"Inherited"** ✅ (*"identical to the reviewer's labels, with no
+blast-radius trace recorded"*); Step 3.5 **"Partial"** ✅; Step 4 **"Not met. All four cells use ad-hoc
+values"** ✅ *used none*. **Each of the five sub-claims is now exactly what the `0195` ledger records.**
+Round 3's overstatement is gone. ✅
+
+### Constraints, all re-measured on `HEAD`
+
+`wc -l` **414** · `:126` **5 pipes / 4 cells**, no literal `|` · all nine step tokens (`**0** —` …
+`**7** —`) present **exactly once** each · Status values: `pending approval` **1** · `✅ done` 3 ·
+`won't fix (frontier)` 3 · `disproven` 4 · `closeout (re-litigation)` 3 · `blocked` 2 · gate imperatives
+`wait for` / `explicit approval` / `Once I` / `approve specific` all **0** · `done /` **0** · `0169` **0**
+· `0195` **1** · `0204`'s anchors in place at `:205` (*"there are FIVE, not the two most visible"*) and
+`:248` (*"until `0204`'s carry-check hook lands, nothing does"*) · `:151-249` untouched (the only hunk
+between `c45ec3d` and `HEAD` is `:126`).
+
+**Suites re-run by the reviewer this round, not carried forward** (execution evidence is mine — Codex's
+sandbox is read-only, ADR-042 D1): `node --test test/*.test.js` → **747 pass / 0 fail** (24 suites) ·
+`bash test/prove-red.sh` → **22/22 red, hard gate PASSED**. No red-first test asserts this row's content
+and none was manufactured (**AR-2** / `0225`) — the source-line comparison above is what proves correct.
+
+### Raised and dispositioned this round (no row written; do not chase)
+
+- **Codex X1: "Step 0 says an ADR's re-raise condition binds without preserving the source's `settled
+  ADRs` qualifier (`:107`); a superseded ADR with a re-raise condition could suppress a valid defect as
+  `closeout`."** Severity given: medium. **Verified PARTIALLY CORRECT — low — below the row bar, not
+  recorded.** The factual foothold is real: the row says *"skim `decisions/` for ADRs in scope (an ADR's
+  'Re-raise only if' binds exactly like a residual)"* with no status filter, and **seven superseded ADRs
+  carry a *Re-raise only if*** (ADR-001, 003, 004, 005, 006, 007, 008 — grepped this round). **But the
+  omission is of a two-word lead-in the source never operationalizes:** `:107-109` reads *"**Also load
+  settled ADRs:** skim … for **any ADR relevant to the scope**. Treat **an ADR's** 'Re-raise only if'
+  exactly like an accepted residual"* — the operative sentences filter on relevance, not status, exactly
+  as the row does; the reviewer's own skill has the identical shape (`fkit-stateful-review/SKILL.md:88`).
+  So the row is precisely as faithful as its source's instruction, and a row that added the filter would
+  be stricter than its source on a point where the source is loose — the same reasoning that kept
+  round 3's *"for each"* out of the ledger. **Blast radius: low, not medium** — a worker who opens a
+  superseded ADR reads its `Status:` line before its re-raise clause, and the hazard needs a finding
+  that happens to match a superseded decision. **Not a regression:** the base row had no ADR clause at
+  all. Noted for `0224`, which re-derives this line and may add the one word at zero marginal cost —
+  and, more usefully, for whoever next edits `fkit-process-stateful-review/SKILL.md` (frozen today under
+  ADR-032), since the looseness is the source's. Raised by Codex; my own pass passed it.
+- **Suppressed as prior-round / settled, per the ledger's loop-prevention memory:** the `pending
+  approval` = 1 disclaimer (ruled round 2) · the ragged cell-2 column (OQ-2(A)) · OQ-1(A)'s inch of scope
+  · no red-first test (**AR-2** / `0225`) · prose-control-not-prevention (**AR-1** / `0224`) · `0333`'s
+  knowingly-false prose at `:225-229` · `0224` also editing `:126` (sequencing) · Codex's round-1 "Step 0
+  drops ledger-key resolution" (disproven) and "Step 5 omits the code-change inventory"
+  (INCOMPLETE-not-recorded) · round-2's "Step 2/4 omits Verdict `closeout`" (disproven) · round-3's
+  "Step 6's `for each` has no antecedent" (below bar) · **the fix-landed-round-routes-to-blocked cost
+  (now AR-3, owner-ruled "no new task")** · **`0169` absent from the row (owner-ruled "Ledger/worklog
+  only")** · **the row keeping a `Status: closed-out` sentence at all inside `fkit-sprint-ship-loop`'s
+  SKILL** — ADR-034 §Options rejected filing *a bar* there, and R6's collision was that the row stated a
+  *different* bar; on `HEAD` the sentence restates ADR-034's own bar verbatim, and keeping it was the
+  owner's "Drop `done /` only" ruling (coder's R6 row). Codex re-raised **none** of these — the priming
+  and the output-side dedup both held.
+
+### Convergence call — ✅ converged; `Status: closed-out`
+
+**Close out.** Round 4 surfaced **zero** novel findings and **zero** re-litigation. R6 — the one open
+work-product defect that kept round 3 from converging — is closed on first-hand evidence against `HEAD`,
+and the both-directions sweep that round 3 prescribed found nothing the row adds or drops beyond what
+prior rounds already dispositioned. R1–R6 are all `✅ done` in *Coder response* and each has now been
+re-verified by the reviewer, which is the "other party's eyes" the two-party ledger exists to provide;
+the source's close bar (`fkit-process-stateful-review/SKILL.md:206-207`) — *nothing novel open, nothing
+blocking* — is met on the **work product** (ADR-034's surface: `:126` is `0223`'s deliverable, and it is
+clean). This round is **not** the count-based stop `:162-163` forbids: it is a stop on the **nature** of
+what was found — nothing.
+
+**Regression check:** no change was recommended this round, so nothing can regress; the one-word R6 fix
+recreated no condition R1–R5 flagged (each re-read on `HEAD` above).
+
+**Residuals standing at close: AR-1, AR-2, AR-3** — all owner-ruled, none a defect.

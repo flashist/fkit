@@ -188,7 +188,7 @@ here — **do not file them from this task.**
 >
 > | §8 item | Task | Filed |
 > |---|---|---|
-> | 1 — enumerate the Process-review row's method steps, give the row its reason | [`0223`](../../backlog/0223-enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason/brief.md) | 2026-08-05 |
+> | 1 — enumerate the Process-review row's method steps, give the row its reason | [`0223`](../0223-enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason/brief.md) | 2026-08-05 |
 > | 2 — file ADR-038 | **`0222` — this task** | 2026-08-05 |
 > | 3 — the paired misroute detector | [`0224`](../../backlog/0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md) | 2026-08-05 |
 > | 4 — the loop-table row↔ownership test | [`0225`](../../backlog/0225-add-the-loop-table-row-to-skill-ownership-test/brief.md) | 2026-08-05 |
