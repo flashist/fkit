@@ -142,8 +142,9 @@ role still cannot run another role's *procedure*.
 
 Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedures**; the agent
 prompts are the role's *character*. Every role-specific skill opens with a `⛔ Owner:` banner naming
-the one role allowed to execute it (e.g. `claude/skills/fkit-review/SKILL.md:8`). Only `fkit-query`
-carries no banner — it is universal by design.
+the role (or roles) allowed to execute it (e.g. `claude/skills/fkit-review/SKILL.md:12`). Only the two
+universal skills — `fkit-query` and `fkit-team` — carry no banner; both are universal by design (the
+`everyone` row below).
 
 | Owner | Skills |
 |---|---|
@@ -158,7 +159,7 @@ carries no banner — it is universal by design.
 | the six Claude-side roles *(all but `adversarial-reviewer`)* | `open-questions-interview` (ask the owner what this session left unanswered), `dumb-down` (re-explain the last answer simply). Excluded from the adversarial reviewer: it reviews on Codex under a restricted allowlist (ADR-022) and has no owner channel. |
 
 **Ownership is declared in exactly one place: `skills_for_role()` at
-`claude/skills-for-role.sh:35`.** That shell function is the **single source of truth** (ADR-012
+`claude/skills-for-role.sh:51` — `skills_for_role() {`.** That shell function is the **single source of truth** (ADR-012
 §1) and the only place role→skill ownership is expressed anywhere in the codebase.
 
 ---

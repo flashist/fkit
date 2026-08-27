@@ -1,6 +1,6 @@
 # Review — 0162
 
-Task: `ai-agents/tasks/backlog/0162-decide-the-construction-that-satisfies-the-verbatim-carry-requirement/brief.md`
+Task: 0162 — [brief](./brief.md)
 File(s) under review:
 - `ai-agents/knowledge-base/reports/2026-08-02-faithful-carry-of-an-approved-plan.md` (new, untracked)
 - `ai-agents/tasks/backlog/0162-.../plan.md` (new, untracked)

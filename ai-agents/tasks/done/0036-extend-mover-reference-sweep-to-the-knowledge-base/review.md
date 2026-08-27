@@ -1,6 +1,6 @@
 # Review — extend-mover-reference-sweep-to-the-knowledge-base
 
-Task: `ai-agents/tasks/done/extend-mover-reference-sweep-to-the-knowledge-base.md`
+Task: 0036 — [brief](./brief.md)
 File(s) under review:
 - `claude/skills/fkit-task-done/SKILL.md` (Part A)
 - `claude/skills/fkit-task-cancelled/SKILL.md` (Part A, two greps)

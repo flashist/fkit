@@ -1,6 +1,6 @@
 # Review — 0171
 
-Task: `ai-agents/tasks/backlog/0171-write-the-durable-citation-anchors-convention-page/brief.md`
+Task: 0171 — [brief](./brief.md)
 File(s) under review: the working tree vs `HEAD` (`9360177`), restricted to 0171's eleven-path
 change surface — `ai-agents/knowledge-base/conventions/durable-citation-anchors.md`,
 `claude/scaffold/ai-agents/knowledge-base/conventions/durable-citation-anchors.md`, both

@@ -1,6 +1,6 @@
 # Review — 0103-implement-task-folder-name-scheme-change
 
-Task: `ai-agents/tasks/backlog/0103-implement-task-folder-name-scheme-change/brief.md`
+Task: 0103 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-status/dashboard.sh` · `claude/skills/fkit-status/SKILL.md` ·
 `claude/skills/fkit-task-brief/SKILL.md` · `test/dashboard-contract.test.js` ·
 `ai-agents/sprints/sprint-2.md` · `ai-agents/sprints/backlog.md` ·

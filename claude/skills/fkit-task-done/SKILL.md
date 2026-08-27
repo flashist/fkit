@@ -114,8 +114,9 @@ name is the stable token (never grep `brief.md` — every task shares it):
 - **`ai-agents/sprints/done/*.md`** — **closed** sprint plans still *link* to tasks they carried over
 - **`ai-agents/knowledge-base/`** — ADRs and reports routinely back-link the brief that spawned them
 - **`ai-agents/tasks/`** itself — since ADR-029 the plans, worklogs and review ledgers live **inside**
-  the task folders (`plan.md` / `worklog.md` / `review.md`), and briefs cross-link each other; the
-  top-level `plans/` `worklogs/` `reviews/` directories no longer exist
+  the task folders (`plan.md` / `worklog.md` / `review.md`) — **including the moved folder's own
+  record files**, which point at themselves; step 5 rules that self case — and briefs cross-link
+  each other; the top-level `plans/` `worklogs/` `reviews/` directories no longer exist
 - **`ai-agents/sprints/reviews/`** — sprint-keyed review ledgers may reference the task
 - the parent epic file, if step 2 found a `## Parent / Epic`
 
@@ -124,7 +125,8 @@ grep -rn --exclude-dir=wiki-vault "<NNNN>-<slug>" ai-agents/
 ```
 
 This grep is **recursive on purpose** — it reaches `sprints/done/`. Every hit it returns is handled in
-step 5; **none is discarded.** A reference you found and did nothing about is a link you broke.
+step 5; **none is discarded.** A reference you found and did nothing about is a link you broke (a
+self-hit you classified as evidence and *reported* frozen in step 7 is handled, not "nothing").
 
 > **⚠️ Why the whole of `ai-agents/` and not a list of directories.** This sweep used to name
 > `ai-agents/sprints/ ai-agents/tasks/` explicitly. That list was correct when written and **went
@@ -186,6 +188,70 @@ For every reference found in step 4:
   Briefs cross-link each other, so **one move breaks links in both directions**: inbound (handled
   above) *and* outbound (here). Fixing only the inbound half leaves the move half-done.
 
+- **The moved folder's OWN self-locators** — the folder pointing at *itself*, the case the bullet
+  above does not reach (a self-locator is not a sibling link). Its `plan.md`, `review.md` and
+  `worklog.md` open with header lines whose only job is to say where this task's own files are —
+  `Task: ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md` (the review ledger's schema line),
+  `Brief: …/brief.md`, `**Task:** …`, `**Plan:** …/<NNNN>-<slug>/plan.md`, `- **Task file:** …`, and
+  the like. Every one of them went stale the moment step 3 ran. **Re-point the board segment of the
+  path to the folder's new home (`tasks/backlog/` → `tasks/done/`, or from whichever board it left),
+  and change nothing else on the line** — same key, same wrapping (backticks, bold, list marker),
+  same absolute-or-relative form, same file named, line count unchanged. A locator that already
+  names `done/` is left byte-identical (the re-run and owner-upgrade paths must be no-ops here). A
+  locator written as a relative href (`[…](./brief.md)`) needs nothing — the target moved with the
+  folder; its label is not this skill's to rewrite.
+
+  **What a self-locator IS — decide by role, never by string.** It is a *pointer*: a named field in
+  the file's **header block** — above the first heading of level 2 or lower (`## `, `### `, …), or,
+  when the file has no such heading, the leading field block it opens with (the run of `Key:` lines
+  under the `# ` title) — whose value names a path to a file inside this same folder, and whose job
+  is to say where that file is, asserting nothing. That is the whole test: position, then role. The
+  path need not be the whole value — `Task: 0160 — …/brief.md` carries an ID before it and
+  `**Plan:** …/plan.md, approved by …` a clause after it; both are locators: re-point the path, keep
+  the ID and the clause byte-identical. The same old path also appears inside this folder as
+  *evidence*, and evidence is a claim: **a historical record's *claims* are frozen; its *links* are
+  not.**
+
+  ⛔ **Never rewrite the old path where it is evidence.** Not in a fenced block or captured command
+  output — a `git status` that printed `backlog/` that day really printed it, and editing it forges
+  a transcript. Not in a dated measurement or a quoted specimen. Not in a plan step, a findings row,
+  a change-surface table, or body prose recording what was done or seen at the time. Not in any
+  mention of **another** task's path, which may name `backlog/` correctly today. Not in a ledger's
+  `File(s) under review:` line — it sits in the header block, but its job is to record *what was
+  reviewed*, not where the brief is, so it fails the role prong — and not in a forwarding pointer
+  that sits **below** the header block, which fails the position prong: both stay frozen, and each
+  one you *meet* — as a step 4 grep return, or while reading the header block for locators — goes in
+  the step 7 freeze list.
+  ⛔ **This is not "replace `backlog/` with `done/` inside the folder."** No search-and-replace, no
+  added `backlog/`-string sweep. Step 4's folder-name grep already surfaces every self-hit that spells
+  the full folder name — classify each as *locator → repaired* or *evidence → left frozen*, and report
+  both lists (step 7); those two lists are the grep's own returns, plus any `File(s) under review:`
+  self-entry the header block showed you while you read it for locators (an elided `0250-.../plan.md`
+  there is not a grep return, but you met it) — nothing hunted for beyond the grep and the header
+  block. An elided self-path (`0250-.../worklog.md`) or a bare `tasks/backlog/` is not returned by
+  that grep and is not a locator; it stays frozen because of what it is, not because a search missed
+  it.
+
+  **The worked example — the folder of `0250` (`fix-the-scaffold-producer-row-fkit-task-brief-omission`)
+  as it stood at close, seven occurrences, 2 repair / 5 freeze:**
+
+  | Site | Reads (fragment) | Treatment |
+  |---|---|---|
+  | `plan.md` `Brief:` line (`:5`) | `Brief: /…/ai-agents/tasks/backlog/0250-…/brief.md` | **repair** — a header pointer to its own brief |
+  | `review.md` `Task:` line (`:3`) | `Task: ai-agents/tasks/backlog/0250-…/brief.md` | **repair** — the ledger's forwarding address |
+  | `plan.md` fenced block (`:117`) | ` M ai-agents/tasks/backlog/0250-.../brief.md` | **freeze** — captured `git status --porcelain` output |
+  | `plan.md` step 7 (`:188`) | *"Write the task worklog (`…/backlog/0250-.../worklog.md`)"* | **freeze** — the plan's instruction, as written at plan time |
+  | `review.md` (`:86`) | *"`0324`: still under `ai-agents/tasks/backlog/`, holding only `brief.md`"* | **freeze** — a dated measurement, about another task |
+  | `review.md` (`:98`) | *"`0324`'s own folder was still under `ai-agents/tasks/backlog/` at measurement 2"* | **freeze** — same |
+  | `review.md` findings row R1 (`:26`) | *"`ai-agents/tasks/backlog/0188-…/brief.md:54`"* | **freeze** — a findings row, citing another task's path |
+
+  Rows 3–4 name the moved folder in elided form; rows 5–7 name `backlog/` *correctly*, about `0324`
+  (`record-that-0250-discharged-0188s-d1-and-warn-off-the-reordering`) and `0188`
+  (`repair-the-five-live-ownership-fact-defects`). A string rule corrupts rows 5–7 and misses rows 3–4
+  only by luck. The role rule gets all seven. Only rows 1–2 are step 4 hits — they spell the full
+  folder name; rows 3–7 show what the rule says if you meet them, not a list step 7 asks you to
+  compile.
+
 Make the **minimal** edit that flips the status accurately. Do not restructure tables or rewrite
 descriptions beyond removing a fragment that is now false.
 
@@ -226,7 +292,9 @@ brief may still have none. Either way, this step applies:
   here — never a sweep repairing other briefs already sitting in `done/`.
 
 **Then prove it.** Resolve every relative markdown link in the files you touched **and** in the moved
-brief. A move is not finished while a link it broke is still broken.
+brief. A move is not finished while a link it broke is still broken. Every self-locator you re-pointed
+must name a file that now exists — most are code spans, not markdown links, so the link check above
+does not reach them; test the path.
 
 ### 6. Handle ambiguity — never paper over it
 - **No reference found** in any sprint doc: the task may be unsprinted / backlog-only. Complete the
@@ -252,6 +320,14 @@ Give a concise summary:
   `sprints/done/`** (e.g. "`sprints/done/sprint-1.md:37` — href → `tasks/done/`; status cell
   untouched"). A move that rewrote a closed sprint plan must be **visible in this report**, never a
   surprise found later by a link sweep. If none were re-pointed, say so.
+- **Self-locators repaired, and self-hits left frozen:** every header locator in the moved folder's
+  own `plan.md` / `review.md` / `worklog.md` you re-pointed (e.g. "`done/<NNNN>-<slug>/review.md:3` —
+  `Task:` path → `tasks/done/`; rest of line untouched"), and, separately, every other self-hit —
+  a step 4 return, or one met in the header block — you classified as evidence and left
+  byte-identical, with the reason in a phrase (captured output / dated measurement / plan text /
+  findings row / another task's path / `File(s) under review:` line / pointer below the header
+  block). If there were none of either, say so. The freeze calls are judgments, and this list is the
+  only place they can be checked.
 - **Knowledge-base hits, called out separately** — list every href repaired under
   `ai-agents/knowledge-base/` on its own (e.g. "`knowledge-base/decisions/adr-029-….md:88` — href →
   `tasks/done/`; ADR prose untouched"). These are edits to *historical records*, so they get the same

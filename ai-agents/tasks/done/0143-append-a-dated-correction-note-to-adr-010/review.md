@@ -1,6 +1,6 @@
 # Review — 0143-append-a-dated-correction-note-to-adr-010
 
-Task: `ai-agents/tasks/backlog/0143-append-a-dated-correction-note-to-adr-010/brief.md`
+Task: 0143 — [brief](./brief.md)
 File(s) under review: `ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md` (+71/−0)
 Status: closed-out
 <!-- Round 1 dispositioned 2026-08-02: R3 fixed; R1, R2, R4, R5 closed as frontier-moves with owner

@@ -26,7 +26,9 @@ fkit producer | architect | reviewer | adv | wiki | lead
 
 Each session is locked **two** ways:
 
-1. **`--agent fkit-<role>`** — the role's system prompt and **tool allowlist** (harness-enforced).
+1. **`--agent fkit-<role>`** — the role's system prompt (harness-enforced) — plus, for the adversarial
+   reviewer alone, its `tools:` allowlist
+   ([ADR-022](../ai-agents/knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)).
 2. **`--settings` wiring a `PreToolUse` skill-ownership hook** (`0052` (`implement-pretooluse-skill-ownership-hook`) / ADR-018) — every `Skill`
    call is checked against the REAL invoking agent's role, and denied if that role doesn't own it.
    A foreign skill stays **visible** in the `/` menu but is **not runnable**. This is what makes

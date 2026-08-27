@@ -1,6 +1,6 @@
 # Review — 0268
 
-Task: `ai-agents/tasks/backlog/0268-gloss-the-moved-to-sprint-n-row-so-n-reads-as-the-sprint-identity-not-a-number/brief.md`
+Task: 0268 — [brief](./brief.md)
 File(s) under review:
 - `ai-agents/knowledge-base/conventions/task-status-vocabulary.md` (gloss at `:24-25`)
 - `claude/scaffold/ai-agents/knowledge-base/conventions/task-status-vocabulary.md` (gloss at `:23-24`)

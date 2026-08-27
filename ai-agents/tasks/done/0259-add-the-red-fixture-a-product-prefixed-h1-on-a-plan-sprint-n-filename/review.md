@@ -1,6 +1,6 @@
 # Review — 0259
 
-Task: `ai-agents/tasks/backlog/0259-add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename/brief.md`
+Task: 0259 — [brief](./brief.md)
 File(s) under review: `test/dashboard-contract.test.js` (the new R8 block, `:673`–`:723`); the task
 folder's `plan.md` and `worklog.md`
 Status: closed-out

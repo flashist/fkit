@@ -57,6 +57,13 @@ const MARKER_HOOK_COMMAND = `bash "${MARKER_HOOK_SCRIPT}"`;
 const SHIPLOOP_HOOK_SCRIPT = join(dirname(LAUNCHER), 'shiploop-marker-hook.sh');
 const SHIPLOOP_HOOK_COMMAND = `bash "${SHIPLOOP_HOOK_SCRIPT}"`;
 
+// The carry-check hook (task 0204 / `0162` §10 row 3): the THIRD PreToolUse entry, matched on the
+// subagent-spawning tool ("Agent"; "Task" is the legacy alias — hence the regex matcher). Same
+// launcher-relative derivation as the others, and doubly load-bearing here: the .sh resolves its .mjs
+// beside itself, so prove-red's copied tree must point at the COPY's pair.
+const CARRY_HOOK_SCRIPT = join(dirname(LAUNCHER), 'carry-check-hook.sh');
+const CARRY_HOOK_COMMAND = `bash "${CARRY_HOOK_SCRIPT}"`;
+
 // --- shared, initiated project (all assertions below want a non-fresh tree) --------------------
 let PROJECT;
 before(() => { PROJECT = makeProject({ fresh: false }); });
@@ -155,30 +162,36 @@ describe('Group A — argv contract', () => {
 // point of each Skill call, not on which role's settings file launched the process.
 // =================================================================================================
 describe('Group B — hook wiring', () => {
-  // 8. For every role, the generated settings wire TWO PreToolUse hooks, both via `bash "<path>"`
+  // 8. For every role, the generated settings wire THREE PreToolUse hooks, all via `bash "<path>"`
   //    (never a bare path — ADR-017 rule 2, the exec bit is not guaranteed to survive install/copy):
-  //      • matcher "Skill"           → skill-ownership-hook.sh (ADR-018 lockdown), and
-  //      • matcher "AskUserQuestion" → askuserquestion-marker-hook.sh (task 0127 / ADR-030 path 2).
-  //    Matched by matcher, not array index, so a reorder can't silently pass. The AskUserQuestion entry
-  //    must be ADDED alongside the Skill one, never displace it — losing the Skill entry would silently
-  //    unbolt the whole role lockdown, so pin both are present.
+  //      • matcher "Skill"           → skill-ownership-hook.sh (ADR-018 lockdown),
+  //      • matcher "AskUserQuestion" → askuserquestion-marker-hook.sh (task 0127 / ADR-030 path 2), and
+  //      • matcher "Agent|Task"      → carry-check-hook.sh (task 0204).
+  //    Matched by matcher, not array index, so a reorder can't silently pass. Each later entry must be
+  //    ADDED alongside the Skill one, never displace it — losing the Skill entry would silently unbolt
+  //    the whole role lockdown, so pin all three are present.
   for (const role of ROLES) {
-    test(`8. ${role}: settings wire both PreToolUse hooks (Skill lockdown + AskUserQuestion marker)`, async () => {
+    test(`8. ${role}: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check)`, async () => {
       const r = await runFkit([role], { project: PROJECT });
       assert.equal(r.exec, true, `stderr: ${r.stderr}`);
       const settings = readSettings(PROJECT, role);
       const preToolUse = settings.hooks?.PreToolUse;
-      assert.equal(preToolUse?.length, 2, `${role}: expected two PreToolUse entries (Skill + AskUserQuestion)`);
+      assert.equal(preToolUse?.length, 3, `${role}: expected three PreToolUse entries (Skill + AskUserQuestion + Agent|Task)`);
       const skill = preToolUse.find((e) => e.matcher === 'Skill');
       const marker = preToolUse.find((e) => e.matcher === 'AskUserQuestion');
+      const carry = preToolUse.find((e) => e.matcher === 'Agent|Task');
       assert.ok(skill, `${role}: the Skill lockdown PreToolUse entry must still be present`);
       assert.ok(marker, `${role}: the AskUserQuestion marker PreToolUse entry must be present`);
+      assert.ok(carry, `${role}: the Agent|Task carry-check PreToolUse entry must be present`);
       assert.equal(skill.hooks?.[0]?.type, 'command');
       assert.equal(skill.hooks?.[0]?.command, HOOK_COMMAND,
         `${role}: Skill hook must invoke skill-ownership-hook.sh via an explicit interpreter`);
       assert.equal(marker.hooks?.[0]?.type, 'command');
       assert.equal(marker.hooks?.[0]?.command, MARKER_HOOK_COMMAND,
         `${role}: AskUserQuestion hook must invoke askuserquestion-marker-hook.sh via an explicit interpreter`);
+      assert.equal(carry.hooks?.[0]?.type, 'command');
+      assert.equal(carry.hooks?.[0]?.command, CARRY_HOOK_COMMAND,
+        `${role}: Agent|Task hook must invoke carry-check-hook.sh via an explicit interpreter`);
     });
   }
 
@@ -239,6 +252,7 @@ describe('Group B — hook wiring', () => {
     assert.ok(existsSync(STOP_HOOK_SCRIPT), `expected ${STOP_HOOK_SCRIPT} to exist`);
     assert.ok(existsSync(MARKER_HOOK_SCRIPT), `expected ${MARKER_HOOK_SCRIPT} to exist`);
     assert.ok(existsSync(SHIPLOOP_HOOK_SCRIPT), `expected ${SHIPLOOP_HOOK_SCRIPT} to exist`);
+    assert.ok(existsSync(CARRY_HOOK_SCRIPT), `expected ${CARRY_HOOK_SCRIPT} to exist`);
   });
 });
 
@@ -269,6 +283,9 @@ describe('Group C — degradation & fresh-project routing', () => {
         'inline fallback must carry the Skill lockdown hook wiring');
       assert.equal(inlineMarker?.hooks?.[0]?.command, MARKER_HOOK_COMMAND,
         'inline fallback must carry the AskUserQuestion marker hook wiring');
+      const inlineCarry = inline.hooks?.PreToolUse?.find((e) => e.matcher === 'Agent|Task');
+      assert.equal(inlineCarry?.hooks?.[0]?.command, CARRY_HOOK_COMMAND,
+        'inline fallback must carry the Agent|Task carry-check hook wiring');
       assert.equal(inline.hooks?.Stop?.[0]?.hooks?.[0]?.command, STOP_HOOK_COMMAND,
         'inline fallback must also carry the Stop turn-completion hook wiring');
       assert.equal(inline.hooks?.UserPromptExpansion?.[0]?.hooks?.[0]?.command, SHIPLOOP_HOOK_COMMAND,

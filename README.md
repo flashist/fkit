@@ -72,14 +72,17 @@ that's deliberate? List the path in `ai-agents/.fkit-accepted-drift` and the lau
 | **fkit-wiki** | the project wiki — the **exclusive** gateway for writes (reads are direct, via `/fkit-query`) |
 | **fkit-lead** | routing help and wiki questions; drives the work when you hand it a goal |
 
-**Sessions are role-locked.** `fkit <role>` pins the session to that role's system prompt, tool
-allowlist, and **only its own `/fkit-*` skills** — every other fkit skill is turned off: invisible and
-unrunnable, not merely discouraged. That is what makes reviewer independence a fact rather than a
-promise.
+**Sessions are role-locked.** `fkit <role>` pins the session to that role's system prompt and **only its
+own `/fkit-*` skills** (a `tools:` allowlist too, for the adversarial reviewer alone —
+[ADR-022](ai-agents/knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)) — every other fkit skill is denied on invocation:
+still visible in the `/` menu, but unrunnable, not merely discouraged (ADR-018 §Decision 5, an
+accepted cost). That is what makes reviewer independence a fact rather than a promise.
 
 Inside a session, `@fkit-<role> <question>` consults another role and brings the answer back (up to
-two hops, never a cycle). Note that a **consult** inherits the calling session's skill settings, so
-there the role boundary is advisory rather than enforced — see
+two hops, never a cycle). A **consult** is gated the same way: a `PreToolUse` hook checks the spawned
+agent's own role on every skill call, at any depth, so the boundary is enforced there too — see
+[ADR-018](ai-agents/knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md),
+which superseded the "advisory in a consult" half of
 [ADR-012](ai-agents/knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md).
 
 Full topology and the skill-ownership table: [`claude/README.md`](./claude/README.md).

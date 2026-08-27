@@ -1,6 +1,6 @@
 # Review — 0150
 
-Task: `ai-agents/tasks/backlog/0150-add-verbatim-to-fkit-coder-declared-approval-marker/brief.md`
+Task: 0150 — [brief](./brief.md)
 File(s) under review: `claude/agents/fkit-coder.md` (`+1/-1`, condition (b) of the declared-approval marker,
 `:66` — the file's other hunk at `:82-90` belongs to **0147**); `ai-agents/tasks/backlog/0150-…/worklog.md`
 (new). Baseline: HEAD `994e3e3`. Round 1.

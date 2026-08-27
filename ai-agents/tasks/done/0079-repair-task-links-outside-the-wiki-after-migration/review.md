@@ -1,6 +1,6 @@
 # Review — 0079-repair-task-links-outside-the-wiki-after-migration
 
-Task: `ai-agents/tasks/backlog/0079-repair-task-links-outside-the-wiki-after-migration/brief.md`
+Task: 0079 — [brief](./brief.md)
 File(s) under review: working tree on branch `repair-task-links-post-migration` (off `main`) — 107 `.md`
 files, 156 links claimed repaired across `ai-agents/knowledge-base/`, `ai-agents/tasks/`, `ai-agents/sprints/reviews/`.
 Status: closed-out

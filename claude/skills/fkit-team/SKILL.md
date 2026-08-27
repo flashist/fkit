@@ -45,8 +45,9 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
 
    One honest cost: a foreign skill is **visible** in the `/` menu (the old off-list also hid it;
    this mechanism doesn't) but remains **unrunnable** — invoking it is denied regardless. Visible-but-
-   blocked, not invisible-and-blocked. The `⛔ Owner:` banner at the top of every skill is now a
-   courtesy for a well-behaved agent to notice before trying, not the only thing stopping it.
+   blocked, not invisible-and-blocked. The `⛔ Owner:` banner at the top of every role-owned skill
+   (this one and `/fkit-query` carry none — they are universal) is now a courtesy for a well-behaved
+   agent to notice before trying, not the only thing stopping it.
 
    | Role | Its procedures |
    |---|---|

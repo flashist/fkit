@@ -1,6 +1,6 @@
 # Review — remove-output-variants-from-fkit-status
 
-Task: `ai-agents/tasks/backlog/remove-output-variants-from-fkit-status.md`
+Task: 0074 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-status/SKILL.md`, `claude/skills/fkit-status/dashboard.sh` (`:25` comment only)
 Status: **closed-out**
 

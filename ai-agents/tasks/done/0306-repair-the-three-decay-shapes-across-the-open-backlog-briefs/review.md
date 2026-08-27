@@ -1,6 +1,6 @@
 # Review — 0306
 
-Task: `ai-agents/tasks/backlog/0306-repair-the-three-decay-shapes-across-the-open-backlog-briefs/brief.md`
+Task: 0306 — [brief](./brief.md)
 File(s) under review: the working tree vs `HEAD` (`9360177`) — 39 changed paths, **less two that are
 not this task's**: `ai-agents/sprints/sprint-6.md` and this task's own `brief.md` (each a one-line
 `## Status` change written by the sprint driver).

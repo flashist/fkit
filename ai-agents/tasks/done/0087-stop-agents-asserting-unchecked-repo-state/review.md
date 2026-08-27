@@ -1,6 +1,6 @@
 # Review — stop-agents-asserting-unchecked-repo-state
 
-Task: ai-agents/tasks/backlog/stop-agents-asserting-unchecked-repo-state.md
+Task: 0087 — [brief](./brief.md)
 File(s) under review: claude/skills/fkit-task-done/SKILL.md, claude/skills/fkit-task-cancelled/SKILL.md,
 claude/skills/fkit-task-plan/SKILL.md, claude/skills/fkit-process-stateful-review/SKILL.md,
 claude/skills/fkit-status/SKILL.md, claude/skills/fkit-review/SKILL.md,

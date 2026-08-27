@@ -1,6 +1,6 @@
 # Review — assert-task-ids-are-unique-in-the-test-suite
 
-Task: `ai-agents/tasks/backlog/assert-task-ids-are-unique-in-the-test-suite.md` (ID `0101`)
+Task: 0101 — [brief](./brief.md) (ID `0101`)
 File(s) under review: `test/task-id-uniqueness.test.js` (new — the whole review surface)
 Non-substantive in scope: `ai-agents/tasks/backlog/assert-task-ids-are-unique-in-the-test-suite.md` (Status), `ai-agents/sprints/sprint-2.md` (sprint row), `ai-agents/plans/assert-task-ids-are-unique-in-the-test-suite.md` (new plan)
 Status: **closed-out** (reviewer, round 5, 2026-07-20)

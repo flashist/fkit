@@ -1,6 +1,6 @@
 # Review — 0159-sweep-the-stale-rank-citations-and-correct-0149s-stays-last-claim
 
-Task: `ai-agents/tasks/backlog/0159-sweep-the-stale-rank-citations-and-correct-0149s-stays-last-claim/brief.md`
+Task: 0159 — [brief](./brief.md)
 File(s) under review: working tree — `ai-agents/sprints/sprint-2.md` + the `brief.md` of `0142`, `0152`,
 `0154`, `0155`, `0156`, `0158`, `0159`, `0160`, `0163`, `0164`, `0166`, plus the new untracked
 `0159/worklog.md`. **Out of scope, not reviewed:** the three modified `ai-agents/wiki-vault/` files

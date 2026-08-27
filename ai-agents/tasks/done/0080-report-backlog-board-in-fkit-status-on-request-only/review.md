@@ -1,5 +1,6 @@
 # Review — Report the Backlog board in `/fkit-status` on request only
 
+Task: 0080 — [brief](./brief.md)
 **Task-id:** `report-backlog-board-in-fkit-status-on-request-only` · **Sprint 2, priority 68**
 **Scope:** working tree. Tasks 65 and 67 excluded from both passes (already closed out in their own
 ledgers) and not re-litigated.

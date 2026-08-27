@@ -1,6 +1,6 @@
 # Review — grant-askuserquestion-tool-to-six-claude-agents
 
-Task: ai-agents/tasks/backlog/grant-askuserquestion-tool-to-six-claude-agents.md
+Task: 0049 — [brief](./brief.md)
 File(s) under review: claude/agents/fkit-{producer,coder,architect,reviewer,wiki,lead}.md (+ gitignored .claude/ regen)
 Status: closed-out (Round 1) — owner dispositions recorded; only outstanding gate is the owner-session AskUserQuestion spot-check
 

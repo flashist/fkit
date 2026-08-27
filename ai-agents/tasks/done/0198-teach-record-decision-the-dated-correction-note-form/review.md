@@ -1,6 +1,6 @@
 # Review — 0198-teach-record-decision-the-dated-correction-note-form
 
-Task: `ai-agents/tasks/backlog/0198-teach-record-decision-the-dated-correction-note-form/brief.md`
+Task: 0198 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-record-decision/SKILL.md` (+91/−0, pure insertion) and this
 folder's `worklog.md`
 Status: in-review

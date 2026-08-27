@@ -1,6 +1,6 @@
 # Review — 0125
 
-Task: `ai-agents/tasks/backlog/0125-wiki-skills-flag-ready-to-close/brief.md`
+Task: 0125 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-wiki-ingest/SKILL.md`, `claude/skills/fkit-wiki-sync/SKILL.md`,
 `claude/skills/fkit-wiki-lint/SKILL.md`, plus this task folder's `plan.md` and `worklog.md`
 Status: in-review

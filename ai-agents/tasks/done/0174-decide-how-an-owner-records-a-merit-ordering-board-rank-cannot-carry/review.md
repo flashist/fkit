@@ -1,6 +1,6 @@
 # Review — 0174
 
-Task: `ai-agents/tasks/backlog/0174-decide-how-an-owner-records-a-merit-ordering-board-rank-cannot-carry/brief.md`
+Task: 0174 — [brief](./brief.md)
 
 File(s) under review:
 - `ai-agents/knowledge-base/reports/2026-08-01-merit-ordering-record-when-board-rank-cannot-carry-it.md` (new)

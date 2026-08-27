@@ -1,6 +1,6 @@
 # Review — 0126
 
-Task: `ai-agents/tasks/backlog/0126-wiki-resync-for-adr-033/brief.md`
+Task: 0126 — [brief](./brief.md)
 File(s) under review: the 14-file working-tree change under `ai-agents/wiki-vault/` (+90/−14). Worklog
 of record: the `## 2026-07-29 — ingest (task 0126, ADR-033 resync)` entry in
 `ai-agents/wiki-vault/log.md` (no `plan.md` / `worklog.md` exist for this task).

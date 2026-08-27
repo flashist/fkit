@@ -191,27 +191,7 @@ at, and a `PreToolUse` carry-check needs one at spawn time.
      files, which is what these are). One line, in this form:
      ```
      plan: ai-agents/tasks/<board>/<task>/plan.md  blob c0ffee… (git hash-object)
-           — unverified — no hook checks it until 0204's carry-check hook lands
      ```
-     ⚠️ **Emit that `unverified — no hook checks it until 0204's carry-check hook lands` text every
-     time**, naming the task and not an ordinal — the worker receiving the marker is the reader who most
-     needs it and has no way to resolve "follow-up 3". The hash is **self-computed and self-reported**;
-     nothing checks it until `0204`'s `PreToolUse`/`Task` carry-check hook lands, and a reader must never
-     mistake it for a checked one.
-     ⛔ **Who removes this marker, and when: `0204`, in the same change that lands the hook — the removal
-     is `0204`'s to make, not a separate task.** The day the hook ships, this text becomes **false** in
-     every spawn prompt still carrying it, inverting an honesty marker into a false one; the deletion is
-     part of landing the hook, not follow-on tidying. **`0204` may never open this file, so its sites are
-     enumerated here rather than left to be discovered — there are FIVE, not the two most visible:**
-     1. the `unverified …` line inside the fenced pointer form above;
-     2. the ⚠️ instruction directly above, to emit that literal every time;
-     3. *"The hash is self-computed and self-reported; nothing checks it until `0204`'s … hook lands, and
-        a reader must never mistake it for a checked one"*;
-     4. ⛔ **the clause inside the closing "honest bound" paragraph** — *"and until `0204`'s carry-check
-        hook lands, nothing does"*. ⚠️ **Delete THAT CLAUSE ONLY; leave every other byte of that
-        paragraph untouched.** It is what keeps *"True by construction, or forbidden."* from being a false
-        claim, and trimming anything else there turns a correct document into an overstated one;
-     5. **this list and the sentence introducing it** — remove them last, once 1–4 are gone.
      **Paste AND pointer — both, never either/or** (owner ruling, 2026-08-02, `0162` OQ-1; pure
      by-reference was rejected) — **except step 5's declared degraded form**, which is the only either/or
      this construction licenses. The paste is what the worker acts on and is what satisfies condition (b)
@@ -244,8 +224,8 @@ at, and a `PreToolUse` carry-check needs one at spawn time.
   **The honest bound on "true by construction" — do not rewrite this into a guarantee.** `cat` puts the
   file's bytes in your context *this turn*, which is strictly better than recall of a message written
   hours earlier, and that is the whole of the gain. It does **not** make the paste a mechanical copy: you
-  still emit those bytes token by token. Step 4's pointer is what would let anyone notice a divergence —
-  and until `0204`'s carry-check hook lands, nothing does. **This construction
+  still emit those bytes token by token. Step 4's pointer is what would let anyone notice a divergence.
+  **This construction
   narrows the hazard; it does not remove it** (ADR-031 honesty clause; `0162` §9).
 
 - **The plan/build split (honesty clause) is mandatory** — it is the only thing standing in for plan

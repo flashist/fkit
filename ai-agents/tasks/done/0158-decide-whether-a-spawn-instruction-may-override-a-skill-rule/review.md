@@ -1,6 +1,6 @@
 # Review — 0158
 
-Task: `ai-agents/tasks/backlog/0158-decide-whether-a-spawn-instruction-may-override-a-skill-rule/brief.md`
+Task: 0158 — [brief](./brief.md)
 File(s) under review: `ai-agents/knowledge-base/decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling.md` (the deliverable), `<task folder>/plan.md`, `<task folder>/worklog.md`
 Status: in-review
 

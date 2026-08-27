@@ -1,6 +1,6 @@
 # Review — restructure-coder-report-summary-then-interview
 
-Task: ai-agents/tasks/done/restructure-coder-report-summary-then-interview.md
+Task: 0082 — [brief](./brief.md)
 File(s) under review: claude/agents/fkit-coder.md (`## Output format` rewrite + consult pointer at :34-36)
 Status: in-review
 

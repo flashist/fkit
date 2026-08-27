@@ -1,6 +1,6 @@
 # Review — add-open-questions-interview-skill-for-six-roles
 
-Task: `ai-agents/tasks/done/add-open-questions-interview-skill-for-six-roles.md` (Sprint 2, priority 70)
+Task: 0008 — [brief](./brief.md) (Sprint 2, priority 70)
 File(s) under review: `claude/skills/fkit-open-questions-interview/SKILL.md` (new) · `claude/skills-for-role.sh` · `claude/skills/fkit-team/SKILL.md` · `claude/README.md` · `test/skill-ownership-hook.test.js` · `ai-agents/plans/add-open-questions-interview-skill-for-six-roles.md`
 Status: in-review
 

@@ -1,6 +1,6 @@
 # Review — filter-fkit-status-board-to-open-tasks
 
-Task: [`ai-agents/tasks/done/filter-fkit-status-board-to-open-tasks.md`](./brief.md)
+Task: 0039 — [brief](./brief.md)
 Plan: [`ai-agents/plans/filter-fkit-status-board-to-open-tasks.md`](./plan.md)
 File(s) under review: `claude/skills/fkit-status/dashboard.sh` · `claude/skills/fkit-status/SKILL.md` · `test/dashboard-contract.test.js`
 Reviewers (round 1): fkit-reviewer (own pass) + Codex `codex-cli 0.144.4` (adversarial) — **both ran; coverage is full**

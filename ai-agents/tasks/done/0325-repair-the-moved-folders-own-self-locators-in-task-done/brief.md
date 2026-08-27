@@ -10,7 +10,7 @@ Sprint 6
 Sprint 6 P14
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder

@@ -1,6 +1,6 @@
 # Review — 0246
 
-Task: ai-agents/tasks/backlog/0246-build-the-consent-gated-repair-path-inside-the-check-skill/brief.md
+Task: 0246 — [brief](./brief.md)
 File(s) under review: claude/skills/fkit-heal/repair.sh (NEW — the propose/apply write engine),
 claude/skills/fkit-heal/check.sh (EDIT — 0245-residual fixes R1/R3/R5/R6/R8 + header),
 claude/skills/fkit-heal/SKILL.md (REWRITE — consent orchestration),

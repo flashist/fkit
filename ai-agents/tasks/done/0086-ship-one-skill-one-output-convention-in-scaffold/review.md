@@ -1,6 +1,6 @@
 # Review — ship-one-skill-one-output-convention-in-scaffold
 
-Task: ai-agents/tasks/backlog/ship-one-skill-one-output-convention-in-scaffold.md
+Task: 0086 — [brief](./brief.md)
 File(s) under review: claude/scaffold/ai-agents/knowledge-base/conventions/one-skill-one-output.md (new), claude/scaffold/ai-agents/knowledge-base/conventions/README.md (edit)
 Status: in-review
 

@@ -1,6 +1,6 @@
 # Review — 0124
 
-Task: `ai-agents/tasks/backlog/0124-revert-task-movers-to-producer-only/brief.md`
+Task: 0124 — [brief](./brief.md)
 File(s) under review: the uncommitted working-tree change — 18 files (excluding
 `ai-agents/sprints/sprint-2.md` and this task's `brief.md`, which are the sprint driver's own
 bookkeeping), plus the gitignored `.claude/` refresh.

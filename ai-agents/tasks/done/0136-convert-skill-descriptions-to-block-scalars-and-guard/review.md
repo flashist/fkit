@@ -1,6 +1,6 @@
 # Review — 0136
 
-Task: `ai-agents/tasks/backlog/0136-convert-skill-descriptions-to-block-scalars-and-guard/brief.md`
+Task: 0136 — [brief](./brief.md)
 File(s) under review: `claude/skills/*/SKILL.md` (25, frontmatter line 3 only) · `test/skill-frontmatter.test.js` (new) · `test/prove-red.sh` (`run_frontmatter_suite()`, step `0g`, mutations 8–9) · the task's `plan.md` / `worklog.md`
 Status: closed-out
 

@@ -1,6 +1,6 @@
 # Review — 0151
 
-Task: `ai-agents/tasks/backlog/0151-correct-claude-mds-stale-skills-for-role-location/brief.md`
+Task: 0151 — [brief](./brief.md)
 File(s) under review: `CLAUDE.md` (+3/-1, line 43), `ai-agents/tasks/backlog/0151-…/worklog.md` (new)
 Baseline: `db863be`
 Status: in-review

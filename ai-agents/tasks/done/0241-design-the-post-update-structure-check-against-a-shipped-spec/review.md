@@ -1,6 +1,6 @@
 # Review — 0241
 
-Task: ai-agents/tasks/backlog/0241-design-the-post-update-structure-check-against-a-shipped-spec/brief.md
+Task: 0241 — [brief](./brief.md)
 File(s) under review: ai-agents/knowledge-base/reports/2026-08-06-design-post-update-structure-check.md; ai-agents/tasks/backlog/0241-design-the-post-update-structure-check-against-a-shipped-spec/worklog.md (document review — design quality, fidelity, internal consistency)
 Status: in-review
 

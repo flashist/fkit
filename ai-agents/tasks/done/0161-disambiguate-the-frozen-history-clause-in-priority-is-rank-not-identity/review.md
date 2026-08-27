@@ -1,6 +1,6 @@
 # Review — 0161
 
-Task: `ai-agents/tasks/backlog/0161-disambiguate-the-frozen-history-clause-in-priority-is-rank-not-identity/brief.md`
+Task: 0161 — [brief](./brief.md)
 File(s) under review (round 2 state):
 - `ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md` (**+7/-2** — was +6/-2 in round 1)
 - `claude/scaffold/ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md` (**+7/-2**)

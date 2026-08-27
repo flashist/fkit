@@ -1,6 +1,6 @@
 # Review — 0132-reconcile-dual-homed-file-drift-live-vs-scaffold
 
-Task: `ai-agents/tasks/backlog/0132-reconcile-dual-homed-file-drift-live-vs-scaffold/brief.md`
+Task: 0132 — [brief](./brief.md)
 File(s) under review:
 - `test/dual-home-parity-exceptions.mjs` (new — the deliverable)
 - `claude/scaffold/ai-agents/knowledge-base/conventions/dependency-declaration-form.md` (new, generalized)

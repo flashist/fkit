@@ -45,11 +45,15 @@ git rather than a shared runtime state:
 
 **Sessions are role-locked** ([`ADR-010`](decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)):
 `fkit <role>` pins a session to that role's prompt and only its own skills — every other `/fkit-*`
-skill is turned off. (The per-role *tool* allowlist was relaxed for every role except the adversarial
+skill stays technically enabled but is denied on invocation: visible in the `/` menu, unrunnable
+(ADR-018 §Decision 5). (The per-role *tool* allowlist was relaxed for every role except the adversarial
 reviewer — [`ADR-022`](decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md); the skill
 lock is unchanged.) Roles consult each other with the Agent tool, synchronously, up
-to two hops and never in a cycle. (In a *spawned consult* the skill boundary is advisory rather than
-enforced — [`ADR-012`](decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md).)
+to two hops and never in a cycle. (In a *spawned consult* the skill boundary is enforced too — a
+`PreToolUse` hook checks the spawned agent's own role at any depth,
+[`ADR-018`](decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md),
+superseding the "advisory in a consult" half of
+[`ADR-012`](decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md).)
 Coordination state — sprint plans, task briefs, review ledgers, the wiki — lives entirely as files
 under `ai-agents/`, versioned in git.
 
@@ -62,8 +66,8 @@ Not a running application — no build step, no server, no database. The "codeba
 definitions, skills, POSIX shell scaffolding, and Markdown. The team lives in `claude/`: subagent
 definitions (`claude/agents/fkit-*.md`) + `/fkit-*` skills (`claude/skills/`), copied into a consuming
 project's `.claude/` by `claude/fkit-claude-init.sh`. The launcher `claude/fkit-claude.sh` is the
-`fkit` command — it scaffolds the project, generates the per-role `skillOverrides` settings that make
-the lockdown real, and execs `claude --agent fkit-<role>`. Model diversity comes from the `codex` CLI:
+`fkit` command — it scaffolds the project, writes the per-role settings that wire the `PreToolUse`
+skill-ownership hook that makes the lockdown real (ADR-018), and execs `claude --agent fkit-<role>`. Model diversity comes from the `codex` CLI:
 the reviewer shells out to `codex exec` for an independent adversarial pass, and a Codex-less review is
 emitted as a loudly-flagged partial. A consuming project gets fkit via `install.sh` → `fkit` → the
 `initiate-project` onboarding turns the placeholder `PROJECT.md` into a real brief.
@@ -85,16 +89,19 @@ concerns, and identified risks — is in
   Omnigent flavor and supersedes ADR-008's dual-runtime decision). No second runtime is maintained and
   no third is targeted. **Codex is required**, not optional — it is what makes the reviewer's second
   opinion genuinely model-diverse.
-- **Role boundaries: structural in a session, prompt-enforced in a consult.** Per
+- **Role boundaries: structural in a session and in a consult; the rest is prompt-enforced.** Per
   [`ADR-010`](decisions/adr-010-role-locked-sessions-and-skill-lockdown.md), a `fkit <role>` session
-  is locked by the harness — a `skillOverrides` lockdown that makes every non-owned `/fkit-*` skill
-  unrunnable (plus, for the adversarial reviewer alone, a `tools:` wall — the per-role tool allowlist
+  is locked by the harness — a `PreToolUse` skill-ownership hook that denies every non-owned `/fkit-*`
+  skill on invocation, visible in the menu but unrunnable (plus, for the adversarial reviewer alone, a `tools:` wall — the per-role tool allowlist
   was otherwise relaxed,
-  [`ADR-022`](decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)). But per
-  [`ADR-012`](decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md), a *spawned
-  consult* inherits the **caller's** skill settings, so there the boundary is advisory (the `⛔ Owner:`
-  banner). Likewise "never commit/push unprompted" and the two-hop consult cap remain prompt rules.
-  A known, accepted limit — not a claim to overstate.
+  [`ADR-022`](decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)). A *spawned
+  consult* is gated the same way: the `PreToolUse` skill-ownership hook checks the spawned agent's
+  own role at any depth
+  ([`ADR-018`](decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md),
+  superseding the "advisory in a consult" half of
+  [`ADR-012`](decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md)); the
+  `⛔ Owner:` banner is a courtesy, not the enforcement. But "never commit/push unprompted" and the
+  two-hop consult cap remain prompt rules. A known, accepted limit — not a claim to overstate.
 - **No secrets in any artifact** — no DSNs, endpoints, keys, or credentials in task briefs, sprint
   plans, PROJECT.md, or the wiki, since all of it goes to git.
 - **Task lifecycle discipline**: the producer writes/plans; task files move between `backlog/`,

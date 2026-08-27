@@ -9,18 +9,21 @@
 # This is the ONLY place role→skill ownership is expressed. Do not duplicate this mapping anywhere
 # else (not in the hook script, not in a settings-generation helper) — source this file instead.
 #
-# ⚠️ CHANGING A ROLE'S SKILLS? FOUR hand-maintained places MIRROR this list for humans and MUST be
-# updated in the same commit, or the docs lie about what a role can do:
+# ⚠️ CHANGING A ROLE'S SKILLS? SIX hand-maintained places MIRROR this list (or a role fact it carries)
+# for humans and MUST be updated in the same commit, or the docs lie about what a role can do:
 #   * claude/skills/fkit-team/SKILL.md  — the roster the /fkit-team skill prints
 #   * claude/README.md                  — the skill-ownership table
 #   * claude/scaffold/CLAUDE.md         — SHIPS INTO EVERY CONSUMING PROJECT's root CLAUDE.md
 #   * ai-agents/knowledge-base/architecture.md — the skill count and the role/skill table
+#   * test/skill-ownership-hook.test.js — OWNED, the hard-coded mirror the hook test asserts against
+#   * claude/fkit-claude-init.sh        — the printed role roster (mirrors the role list and the lock
+#                                         invariant, not the per-role skill lists; nothing tests it)
 #
 # ⚠️ THIS LIST SAID "TWO" UNTIL 2026-07-18, AND THE OMISSION COST EXACTLY WHAT IT LOOKS LIKE IT WOULD.
 # Task 70 followed the two-item list precisely and still shipped a false statement into every consuming
 # project (scaffold/CLAUDE.md asserted the lead role has "only" two skills, which had just stopped being
 # true). A checklist that is itself incomplete is worse than no checklist: it is followed, and it fails.
-# If you add a fifth mirror, add it HERE FIRST.
+# If you add another mirror, add it HERE FIRST. (It said "FOUR" until 2026-08-27 — incomplete a second time; 0142 D4.)
 # (Same caution as before this file existed — see git history on fkit-claude.sh for the original.)
 
 # ⚠️ THE TASK MOVERS ARE PRODUCER-ONLY (ADR-033, 2026-07-23 — REVERSING ADR-025).

@@ -1,6 +1,6 @@
 # Review — 0133
 
-Task: `ai-agents/tasks/backlog/0133-build-dual-home-parity-test/brief.md`
+Task: 0133 — [brief](./brief.md)
 File(s) under review: `test/dual-home-parity.test.js` (new), `test/prove-red.sh` (step `0h`, mutations
 10–13, header index `NINE`→`THIRTEEN`), `ai-agents/knowledge-base/conventions/dual-home-parity.md`
 (the three "not yet built" retirements only), plus the task's `plan.md` / `worklog.md`.

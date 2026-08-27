@@ -1,6 +1,6 @@
 # Review — rename-task-plan-skill-to-task-brief
 
-Task: ai-agents/tasks/backlog/rename-task-plan-skill-to-task-brief.md
+Task: 0075 — [brief](./brief.md)
 File(s) under review: working tree — `git mv` fkit-task-plan→fkit-task-brief + 15 edited files (skills-for-role.sh, hook test, roster mirrors, producer agent, launcher comment, dashboard.sh, dashboard-contract.test.js, dual-home conventions, ship-loop namespace note)
 Status: in-review
 

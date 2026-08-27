@@ -1,6 +1,6 @@
 # Review — 0200
 
-Task: `ai-agents/tasks/backlog/0200-decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill/brief.md`
+Task: 0200 — [brief](./brief.md)
 File(s) under review: `ai-agents/knowledge-base/reports/2026-08-05-eval-process-review-step-role-ownership.md` (**763 lines** at Round 2; 551 at Round 1 — every Round-1 coordinate was re-derived, not reused)
 Status: **closed-out** (Round 2, 2026-08-05) — **the reviewer lifted the block, which was the gate.**
 Round 1 held this at `in-review` because whether the three high fixes landed was the **reviewer's**

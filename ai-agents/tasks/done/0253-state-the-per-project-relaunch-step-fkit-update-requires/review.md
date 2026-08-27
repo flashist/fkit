@@ -1,6 +1,6 @@
 # Review — 0253
 
-Task: `ai-agents/tasks/backlog/0253-state-the-per-project-relaunch-step-fkit-update-requires/brief.md`
+Task: 0253 — [brief](./brief.md)
 File(s) under review: `README.md` (9 insertions, 2 deletions), `ai-agents/tasks/backlog/0253-…/worklog.md` (new)
 Status: in-review
 

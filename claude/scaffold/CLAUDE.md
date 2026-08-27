@@ -47,8 +47,8 @@ neither can a subagent it spawns pretending to; it asks `@fkit-reviewer` for one
 code you just wrote isn't a review.
 
 One cost, stated plainly: a foreign skill is **visible** in the `/` menu but **not runnable** —
-invoking it is denied regardless of who's asking. The `⛔ Owner:` banner on each skill is a courtesy
-for a well-behaved agent to notice before trying, not the only thing stopping it.
+invoking it is denied regardless of who's asking. The `⛔ Owner:` banner on each role-owned skill is
+a courtesy for a well-behaved agent to notice before trying, not the only thing stopping it.
 
 **Two ways to engage a role:**
 - **`fkit <role>`** *(in a terminal)* — a session locked to that role. Every role session is a fresh

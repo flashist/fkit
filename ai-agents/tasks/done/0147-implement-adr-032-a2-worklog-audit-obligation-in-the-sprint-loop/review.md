@@ -1,6 +1,6 @@
 # Review — 0147
 
-Task: `ai-agents/tasks/backlog/0147-implement-adr-032-a2-worklog-audit-obligation-in-the-sprint-loop/brief.md`
+Task: 0147 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-sprint-ship-loop/SKILL.md` (`+1/-1`, Process-review row `:105`);
 `claude/agents/fkit-coder.md` (`+9/-1`, Process-review-worker bullet `:82-90` — the file's other hunk at
 condition (b) belongs to **0150**); `ai-agents/tasks/backlog/0147-…/worklog.md` (new).

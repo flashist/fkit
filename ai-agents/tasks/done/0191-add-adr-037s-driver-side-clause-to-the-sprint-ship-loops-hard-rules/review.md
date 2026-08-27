@@ -1,6 +1,6 @@
 # Review — 0191
 
-Task: `ai-agents/tasks/backlog/0191-add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules/brief.md`
+Task: 0191 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-sprint-ship-loop/SKILL.md` (working-tree lines 285–297, +13/−0, one hunk);
 task-record artifacts `worklog.md`, `plan.md`, `brief.md` in the same folder.
 Status: closed-out

@@ -1,6 +1,6 @@
 # Review — 0102
 
-Task: `ai-agents/tasks/backlog/0102-decide-whether-to-drop-the-numeric-prefix-from-task-folder-names/brief.md`
+Task: 0102 — [brief](./brief.md)
 File(s) under review: `ai-agents/knowledge-base/reports/2026-07-26-decide-task-folder-name-numeric-prefix.md`
 Status: closed-out
 

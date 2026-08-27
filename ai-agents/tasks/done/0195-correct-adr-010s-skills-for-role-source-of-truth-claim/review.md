@@ -1,6 +1,6 @@
 # Review — 0195
 
-Task: `ai-agents/tasks/backlog/0195-correct-adr-010s-skills-for-role-source-of-truth-claim/brief.md`
+Task: 0195 — [brief](./brief.md)
 File(s) under review: `ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md` (+49 / −0 for this task)
 Status: **closed-out 2026-08-02** — round 1 answered, round-2 fixes applied, round-3 procedural
 conformance pass clean (+53 / −0 for this task after the fixes; was +49 / −0 at round 1).

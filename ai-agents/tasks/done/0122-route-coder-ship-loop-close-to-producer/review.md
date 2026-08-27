@@ -1,6 +1,6 @@
 # Review — 0122-route-coder-ship-loop-close-to-producer
 
-Task: `ai-agents/tasks/backlog/0122-route-coder-ship-loop-close-to-producer/brief.md`
+Task: 0122 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-task-ship-loop/SKILL.md` (whole diff) ·
 `ai-agents/tasks/backlog/0122-route-coder-ship-loop-close-to-producer/brief.md` (status line only) ·
 `ai-agents/sprints/sprint-2.md` (line 137 only) · that task folder's new `plan.md` and `worklog.md`

@@ -1,6 +1,6 @@
 # Review — implement-task-ship-loop-skill
 
-Task: ai-agents/tasks/backlog/implement-task-ship-loop-skill.md
+Task: 0055 — [brief](./brief.md)
 File(s) under review: claude/skills/fkit-task-ship-loop/SKILL.md (new) · claude/skills-for-role.sh · test/skill-ownership-hook.test.js · claude/agents/fkit-coder.md · claude/skills/fkit-team/SKILL.md · claude/README.md · claude/scaffold/CLAUDE.md
 Status: closed-out
 

@@ -1,6 +1,6 @@
 # Review — 0248
 
-Task: ai-agents/tasks/backlog/0248-update-the-docs-for-the-structure-check-capability/brief.md
+Task: 0248 — [brief](./brief.md)
 File(s) under review: ai-agents/knowledge-base/architecture.md · README.md · ai-agents/README.md · claude/scaffold/ai-agents/README.md · claude/README.md · claude/agents/fkit-producer.md · claude/structure-manifest.tsv (+ worklog.md as context)
 Status: closed-out
 

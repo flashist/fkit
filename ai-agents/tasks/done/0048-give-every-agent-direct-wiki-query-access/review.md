@@ -1,6 +1,6 @@
 # Review — give-every-agent-direct-wiki-query-access
 
-Task: ai-agents/tasks/backlog/give-every-agent-direct-wiki-query-access.md
+Task: 0048 — [brief](./brief.md)
 File(s) under review: branch `give-every-agent-direct-wiki-query-access` vs `origin/main` (26 files;
 3 commits: "Sprint update", "Tasks update", "Bringing wiki-query back to all agents") — implements
 ADR-005 (ai-agents/knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)

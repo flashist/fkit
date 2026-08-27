@@ -1,6 +1,6 @@
 # Review — 0142
 
-Task: `ai-agents/tasks/backlog/0142-investigate-the-skill-ownership-fact-inventory-gap/brief.md`
+Task: 0142 — [brief](./brief.md)
 File(s) under review:
 - `ai-agents/knowledge-base/reports/2026-08-02-skill-ownership-fact-inventory-gap.md` (new)
 - `ai-agents/knowledge-base/decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry.md` (new)

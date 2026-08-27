@@ -1,6 +1,6 @@
 # Review — relax-tool-allowlists-except-adversarial-reviewer
 
-Task: ai-agents/tasks/backlog/relax-tool-allowlists-except-adversarial-reviewer.md
+Task: 0070 — [brief](./brief.md)
 File(s) under review: claude/agents/fkit-{producer,coder,architect,reviewer,wiki,lead}.md (one `tools:` line removed each); claude/agents/fkit-adversarial-reviewer.md (must stay byte-identical)
 ADR: ai-agents/knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md
 Status: in-review

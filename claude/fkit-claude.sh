@@ -14,7 +14,7 @@
 # LEAD's lockdown — the role lock bypassed by accident. Args after a named role still pass through.
 #
 # Every session is locked two ways:
-#   * `--agent fkit-<role>`  — the role's system prompt and tool allowlist (harness-enforced)
+#   * `--agent fkit-<role>`  — the role's system prompt (harness-enforced; plus a `tools:` allowlist for the adversarial reviewer alone, ADR-022)
 #   * `--settings` wiring a `PreToolUse` hook (skill-ownership-hook.sh,
 #     `0052` (`implement-pretooluse-skill-ownership-hook`) / ADR-018) that denies
 #     any `Skill` call whose REAL invoking agent's role doesn't own it, per skills_for_role() — at any
@@ -242,9 +242,9 @@ if [ -z "$role" ] && [ "$#" -gt 0 ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Skill ownership — THE single source of truth (ADR-012 §1). A role session sees ONLY these; every
-# other fkit-* skill is turned off. Non-fkit skills (the project's own, the user's own) are never
-# touched.
+# Skill ownership — THE single source of truth (ADR-012 §1). A role session may RUN only these — every
+# other fkit-* skill stays enabled (visible in the menu) but is denied on invocation (ADR-018). Non-fkit
+# skills (the project's own, the user's own) are never touched.
 #
 # This is now the ONLY place role→skill ownership is expressed. The `skills:` frontmatter that used
 # to sit in claude/agents/*.md was DROPPED, not generated: Claude Code treats it as a PRELOAD hint,
@@ -256,18 +256,21 @@ fi
 # half): a PreToolUse hook (skill-ownership-hook.sh) now enforces this against the REAL invoking
 # agent's identity, at any spawn depth — structural in a role SESSION *and* in a spawned CONSULT.
 #
-# ⚠️ CHANGING A ROLE'S SKILLS? FOUR hand-maintained places MIRROR this list for humans and MUST be
-# updated in the same commit, or the docs lie about what a role can do:
+# ⚠️ CHANGING A ROLE'S SKILLS? SIX hand-maintained places MIRROR this list (or a role fact it carries)
+# for humans and MUST be updated in the same commit, or the docs lie about what a role can do:
 #   * claude/skills/fkit-team/SKILL.md  — the roster the /fkit-team skill prints
 #   * claude/README.md                  — the skill-ownership table
 #   * claude/scaffold/CLAUDE.md         — SHIPS INTO EVERY CONSUMING PROJECT's root CLAUDE.md
 #   * ai-agents/knowledge-base/architecture.md — the skill count and the role/skill table
+#   * test/skill-ownership-hook.test.js — OWNED, the hard-coded mirror the hook test asserts against
+#   * claude/fkit-claude-init.sh        — the printed role roster (mirrors the role list and the lock
+#                                         invariant, not the per-role skill lists; nothing tests it)
 #
 # ⚠️ THIS LIST SAID "TWO" UNTIL 2026-07-18, AND THE OMISSION COST EXACTLY WHAT IT LOOKS LIKE IT WOULD.
 # Task 70 followed the two-item list precisely and still shipped a false statement into every consuming
 # project (scaffold/CLAUDE.md asserted the lead role has "only" two skills, which had just stopped being
 # true). A checklist that is itself incomplete is worse than no checklist: it is followed, and it fails.
-# If you add a fifth mirror, add it HERE FIRST.
+# If you add another mirror, add it HERE FIRST. (It said "FOUR" until 2026-08-27 — incomplete a second time; 0142 D4.)
 # This has already bitten once: task 14 added the producer's brief-creation skill here and to the
 # producer's agent file, but not to fkit-team's roster — so /fkit-team under-reported the producer's
 # primary procedure for two days. These are copies FOR READERS, not sources of truth; skills_for_role() is the source of
@@ -313,7 +316,19 @@ build_settings() {   # → .fkit/settings/<role>.json containing {"hooks":{…}}
   # on a direct `/command` invocation with an authoritative `command_name` — records a session marker so
   # the Stop hook knows a ship-loop is driving WITHOUT scanning the transcript (the transcript scan
   # over-skipped on marker-as-content — 0127 R8). No matcher; the hook self-filters on command_name.
-  hooks="\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Skill\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/skill-ownership-hook.sh\\\"\"}]},{\"matcher\":\"AskUserQuestion\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/askuserquestion-marker-hook.sh\\\"\"}]}],\"Stop\":[{\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/turn-completion-hook.sh\\\"\"}]}],\"UserPromptExpansion\":[{\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/shiploop-marker-hook.sh\\\"\"}]}]}"
+  #
+  # Carry-check hook (task 0204 / `0162` §10 row 3): a THIRD PreToolUse entry, matched on the
+  # subagent-spawning tool ("Agent" since Claude Code 2.1.63; "Task" is the legacy alias, so the
+  # matcher is the regex "Agent|Task"). When a spawn prompt carries a `plan: <path>/plan.md  blob <hash>`
+  # pointer line, it denies the spawn unless the file exists, its git blob id starts with the named
+  # hash, and (unless the prompt declares the pointer-only degraded form) the prompt contains the file's
+  # exact bytes. Three limits, each stated in full in carry-check-hook.mjs — never oversell it:
+  #   • PROXY, never condition (b): green = "the prompt contains the bytes of the file it names", NOT
+  #     "the owner approved that file" (approval leaves no artifact — ADR-021).
+  #   • TOCTOU: time-of-check only; plan.md may change after the read.
+  #   • LAUNCHER SESSIONS ONLY: it lives in .fkit/settings/<role>.json, so only `fkit <role>` sessions
+  #     have it — and a running session gets it at its NEXT launch, never mid-session.
+  hooks="\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Skill\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/skill-ownership-hook.sh\\\"\"}]},{\"matcher\":\"AskUserQuestion\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/askuserquestion-marker-hook.sh\\\"\"}]},{\"matcher\":\"Agent|Task\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/carry-check-hook.sh\\\"\"}]}],\"Stop\":[{\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/turn-completion-hook.sh\\\"\"}]}],\"UserPromptExpansion\":[{\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/shiploop-marker-hook.sh\\\"\"}]}]}"
   # Best-effort: ensure the marker state dir exists so the Stop hook's "infra ready" proxy holds from
   # turn 1 (a read-only project simply leaves it absent → Stop fails open, suppressing check A).
   mkdir -p "$proj/.fkit/state" 2>/dev/null || :

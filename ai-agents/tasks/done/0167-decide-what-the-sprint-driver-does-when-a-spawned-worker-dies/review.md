@@ -1,6 +1,6 @@
 # Review — 0167
 
-Task: `ai-agents/tasks/backlog/0167-decide-what-the-sprint-driver-does-when-a-spawned-worker-dies/brief.md`
+Task: 0167 — [brief](./brief.md)
 File(s) under review: `ai-agents/knowledge-base/reports/2026-08-04-sprint-driver-response-to-a-dead-worker.md` (primary, 716 lines, new) · task folder `plan.md` / `worklog.md` (supporting)
 Status: in-review
 

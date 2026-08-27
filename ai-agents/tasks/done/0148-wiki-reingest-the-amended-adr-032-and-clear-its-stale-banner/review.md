@@ -1,6 +1,6 @@
 # Review — 0148
 
-Task: `ai-agents/tasks/backlog/0148-wiki-reingest-the-amended-adr-032-and-clear-its-stale-banner/brief.md`
+Task: 0148 — [brief](./brief.md)
 File(s) under review: 6 vault content pages + the appended `ai-agents/wiki-vault/log.md` entry (from `## 2026-07-29 — ingest (task 0148, …)`, log.md:667-746) — **14 insertions / 3 deletions**, re-measured and confirmed
 Status: round 1 responded — 5 fixed, 1 accepted residual (R5). Fixes applied 2026-07-29; awaiting re-review.
 

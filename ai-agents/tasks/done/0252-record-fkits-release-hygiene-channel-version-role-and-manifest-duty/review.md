@@ -1,6 +1,6 @@
 # Review — 0252
 
-Task: `ai-agents/tasks/backlog/0252-record-fkits-release-hygiene-channel-version-role-and-manifest-duty/brief.md`
+Task: 0252 — [brief](./brief.md)
 File(s) under review: `RELEASING.md` (new, 173 lines) · `ai-agents/knowledge-base/architecture.md` (+2/-0, flow "6 — Release") · this task folder's `worklog.md`
 Status: in-review
 

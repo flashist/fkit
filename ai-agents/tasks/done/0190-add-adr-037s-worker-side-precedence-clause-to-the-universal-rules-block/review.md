@@ -1,6 +1,6 @@
 # Review — 0190
 
-Task: `ai-agents/tasks/backlog/0190-add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block/brief.md`
+Task: 0190 — [brief](./brief.md)
 File(s) under review: `claude/scaffold/universal-rules.md`, `claude/fkit-claude-init.sh`, `CLAUDE.md`, `AGENTS.md` (generated)
 Status: closed-out — every round-1 finding dispositioned; R1 and R4 fixed, R2/R3 accepted as
 residuals, **R5 remains OPEN as a producer-owned follow-up outside `0190`'s change surface**

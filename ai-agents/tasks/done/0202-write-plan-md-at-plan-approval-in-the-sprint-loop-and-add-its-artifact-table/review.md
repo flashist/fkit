@@ -1,6 +1,6 @@
 # Review — 0202
 
-Task: `ai-agents/tasks/backlog/0202-write-plan-md-at-plan-approval-in-the-sprint-loop-and-add-its-artifact-table/brief.md`
+Task: 0202 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-sprint-ship-loop/SKILL.md` (+42/−2, 256→296); `<task-folder>/plan.md`, `<task-folder>/worklog.md` (new)
 Status: closed-out
 

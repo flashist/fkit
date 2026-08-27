@@ -1,6 +1,6 @@
 # Review — assign-global-task-ids-and-create-registry
 
-Task: `ai-agents/tasks/done/assign-global-task-ids-and-create-registry.md` (task 75, ID `0017`) —
+Task: 0017 — [brief](./brief.md) (task 75, ID `0017`) —
 moved to `done/` by `/fkit-task-done` at closeout; marker `✅ Done (agent-closed — not owner-verified)`
 present on both the brief and the sprint-2 row. Post-move re-check: **101 briefs, 101 unique IDs, 0
 duplicates**, and the brief's own `## ID 0017` survived the move intact.

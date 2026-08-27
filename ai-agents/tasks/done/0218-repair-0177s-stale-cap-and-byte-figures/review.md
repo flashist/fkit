@@ -1,6 +1,6 @@
 # Review — 0218
 
-Task: `ai-agents/tasks/backlog/0218-repair-0177s-stale-cap-and-byte-figures/brief.md`
+Task: 0218 — [brief](./brief.md)
 File(s) under review: `ai-agents/tasks/backlog/0177-verify-the-codex-half-of-the-comment-stripping-canary/brief.md` (+20/−8, 4 hunks); `ai-agents/tasks/backlog/0218-repair-0177s-stale-cap-and-byte-figures/worklog.md`
 Status: in-review
 

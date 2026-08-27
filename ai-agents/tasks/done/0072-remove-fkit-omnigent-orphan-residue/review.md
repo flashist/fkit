@@ -1,6 +1,6 @@
 # Review — remove-fkit-omnigent-orphan-residue
 
-Task: ai-agents/tasks/backlog/remove-fkit-omnigent-orphan-residue.md
+Task: 0072 — [brief](./brief.md)
 File(s) under review: claude/orphan-targets, claude/fkit-claude-init.sh (§6), claude/fkit-claude.sh (--help), test/orphan-cleanup.test.js
 Status: closed-out
 

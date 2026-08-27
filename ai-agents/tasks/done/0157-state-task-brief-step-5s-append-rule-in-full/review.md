@@ -1,6 +1,6 @@
 # Review — 0157
 
-Task: `ai-agents/tasks/backlog/0157-state-task-brief-step-5s-append-rule-in-full/brief.md`
+Task: 0157 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-task-brief/SKILL.md` (+34/−3), `ai-agents/tasks/backlog/0157-state-task-brief-step-5s-append-rule-in-full/worklog.md` (new)
 Status: in-review
 

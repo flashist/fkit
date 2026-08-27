@@ -1,6 +1,6 @@
 # Review — converge-ai-agents-additively-on-launch
 
-Task: `ai-agents/tasks/backlog/converge-ai-agents-additively-on-launch.md`
+Task: 0023 — [brief](./brief.md)
 File(s) under review: `claude/fkit-claude-init.sh`, `test/converge-contract.test.js`, `test/harness.mjs`,
 `claude/scaffold/ai-agents/README.md`, `ai-agents/README.md` (uncommitted working tree)
 Status: in-review — R1/R3/R4/R5 fixed and re-verified (28/28 green, full suite 313/313).

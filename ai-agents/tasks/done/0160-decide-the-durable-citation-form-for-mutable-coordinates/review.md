@@ -1,6 +1,6 @@
 # Review — 0160-decide-the-durable-citation-form-for-mutable-coordinates
 
-Task: 0160 — `ai-agents/tasks/backlog/0160-decide-the-durable-citation-form-for-mutable-coordinates/brief.md`
+Task: 0160 — [brief](./brief.md)
 File(s) under review: `ai-agents/knowledge-base/reports/2026-08-01-durable-citation-form-for-mutable-coordinates.md` (755 lines at round 1; 1214 lines at round 2; 1402 lines at round 4; **1472 lines at round 5**, untracked)
 Status: **closed-out** — **round 6 final verification, 2026-08-01. Both ruled remedies (R27, R28) landed and were verified; R30's flagged concern landed; all 30 findings R1–R30 are dispositioned; nine are recorded accepted residuals by direct owner ruling. No round-6 finding. One below-threshold imprecision recorded, not dropped — see the round-6 block.**
 

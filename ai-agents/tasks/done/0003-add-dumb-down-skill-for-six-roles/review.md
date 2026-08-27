@@ -1,6 +1,6 @@
 # Review — add-dumb-down-skill-for-six-roles
 
-Task: `ai-agents/tasks/done/add-dumb-down-skill-for-six-roles.md`
+Task: 0003 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-dumb-down/SKILL.md` (new) · `claude/skills-for-role.sh` ·
 `claude/skills/fkit-team/SKILL.md` · `claude/README.md` · `test/skill-ownership-hook.test.js` ·
 `ai-agents/plans/add-dumb-down-skill-for-six-roles.md`

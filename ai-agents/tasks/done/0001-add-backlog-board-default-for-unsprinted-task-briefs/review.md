@@ -1,6 +1,6 @@
 # Review — add-backlog-board-default-for-unsprinted-task-briefs
 
-Task: [`ai-agents/tasks/done/add-backlog-board-default-for-unsprinted-task-briefs.md`](./brief.md)
+Task: 0001 — [brief](./brief.md)
 Plan: [`ai-agents/plans/add-backlog-board-default-for-unsprinted-task-briefs.md`](./plan.md)
 File(s) under review: `ai-agents/sprints/backlog.md` (new) · `claude/skills/fkit-task-brief/SKILL.md` · `claude/skills/fkit-task-done/SKILL.md` · `claude/skills/fkit-task-cancelled/SKILL.md` · `ai-agents/README.md` · `claude/scaffold/ai-agents/README.md`
 Reviewers (round 1): fkit-reviewer (own pass) + Codex `codex-cli 0.144.4` (adversarial) — **both ran; coverage is full**

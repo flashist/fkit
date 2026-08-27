@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# TWENTY-TWO mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# TWENTY-FOUR mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -46,6 +46,8 @@
 #  20. Peel comparison → a plain existence check    → "0288/stale-origin-tag"              (task 0288)
 #  21. Strip the verify command's speaking tail     → "0288/failure-speaks"                (task 0288)
 #  22. Make the ✓ Released headline unreachable     → "0288/default-released"              (task 0288)
+#  23. Carry-check paste check → always true       → "truncated paste -> deny"             (task 0204)
+#  24. Carry-check hash comparison → always true   → "named hash does not match the file"  (task 0204)
 #
 # ⚠️ MUTATIONS 18-22 ARE THE FIRST TO TARGET `bin/`, NOT A COPIED LAUNCHER TREE (task 0288). Their seam
 # is FKIT_RELEASE_MJS — a SINGLE-FILE redirect (the FKIT_LAUNCHER pattern, not the whole-tree
@@ -126,6 +128,17 @@ run_marker_hook_suite() {   # <hook-script-path>
 # FKIT_SHIPLOOP_MARKER_HOOK, its own standalone-script seam.
 run_shiploop_marker_suite() {   # <hook-script-path>
   if FKIT_SHIPLOOP_MARKER_HOOK="$1" node --test "$repo/test/shiploop-marker-hook.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
+# Run ONLY the carry-check-hook suite against a hook-script path (task 0204); redirected via
+# FKIT_CARRY_CHECK_HOOK, its own standalone-script seam. The .sh execs the .mjs BESIDE ITSELF, so pointing
+# this at a copied tree's .sh exercises the copy's .mjs — which is where mutations 23/24 are made.
+run_carry_check_suite() {   # <hook-script-path>
+  if FKIT_CARRY_CHECK_HOOK="$1" node --test "$repo/test/carry-check-hook.test.js" >"$out" 2>&1; then
     echo green
   else
     echo red
@@ -342,6 +355,16 @@ clean_release="$(make_release_copy release-clean)"
 printf '0k. unmutated copy of bin/release.mjs should be green ... '
 rlc="$(run_release_suite "$clean_release")"; echo "$rlc"
 [ "$rlc" = green ] || { echo "   ✗ an UNMUTATED release.mjs copy is red — mutations 18-22 below would be false."; fail=1; }
+
+# --- 0l. An UNMUTATED copy's carry-check-hook suite must ALSO be green (task 0204; same reasoning as
+#     0f). Extra weight, as for every new seam: this is the only proof that FKIT_CARRY_CHECK_HOOK is
+#     honoured AND that the copied .sh runs the copied .mjs — if either failed, mutations 23/24 would
+#     run against the real hook, come back green, and the gate would report them as two failures to
+#     catch. -------------------------------------------------------------------------------------------
+clean_carry_hook="$(dirname "$clean_copy")/carry-check-hook.sh"
+printf '0l. unmutated copy carry-check-hook suite should be green ... '
+kc="$(run_carry_check_suite "$clean_carry_hook")"; echo "$kc"
+[ "$kc" = green ] || { echo "   ✗ an UNMUTATED copy's carry-check suite is red — mutations 23/24 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -1032,6 +1055,55 @@ if [ "$r22" != red ]; then
   echo "     the brief forbids regressing is not covered."; fail=1
 elif ! grep -Eq '(✖|not ok|fail).*0288/default-released' "$out"; then
   echo "   ✗ suite went red but NOT at 0288/default-released — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 23: make the carry-check's PASTE check always true → "truncated paste -> deny" must go
+#     red (task 0204). Proves the byte-fidelity check — the one thing this hook adds over a hash
+#     comparison — is load-bearing. The mutation lands in the COPY's carry-check-hook.mjs; the copy's
+#     .sh execs it (seam proven by 0l). Isolation: "named hash does not match the file -> deny" must stay
+#     GREEN under this mutation — the two checks are independent, and the named-assertion grep below is
+#     what this gate requires. ----------------------------------------------------------------------
+m23="$(make_claude_copy claude-mutant-carry-paste)"
+m23_hook="$(dirname "$m23")/carry-check-hook.sh"
+m23_mjs="$(dirname "$m23")/carry-check-hook.mjs"
+cp "$m23_mjs" "$m23_mjs.orig"
+sed -i.bak 's/^function containsExactBytes(prompt, bytes) { return prompt.includes(bytes.toString(.utf8.)); }$/function containsExactBytes() { return true; } \/\/ mutation: paste check disabled/' "$m23_mjs"
+if cmp -s "$m23_mjs" "$m23_mjs.orig"; then
+  echo "23. carry-check paste check disabled ... ✗ MUTATION WAS A NO-OP — the sed no longer matches"
+  echo "   \`function containsExactBytes(prompt, bytes) { … }\`. Fix the mutation in test/prove-red.sh before trusting any result."
+  fail=1
+fi
+printf '23. carry-check paste check always true — "truncated paste -> deny" should go RED ... '
+r23="$(run_carry_check_suite "$m23_hook")"; echo "$r23"
+if [ "$r23" != red ]; then
+  echo "   ✗ the suite did NOT catch a disabled paste check — the byte-fidelity proxy is not covered."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*truncated paste -> deny' "$out"; then
+  echo "   ✗ suite went red but NOT at the truncated-paste assertion — red for the wrong reason."; fail=1
+elif grep -Eq '(✖|not ok|fail).*named hash does not match the file -> deny' "$out"; then
+  echo "   ✗ the hash-mismatch assertion ALSO went red — the two checks are not isolated as claimed."; fail=1
+fi
+
+# --- Mutation 24: make the carry-check's HASH comparison always true → "named hash does not match the
+#     file -> deny" must go red (task 0204), while "truncated paste -> deny" stays GREEN (the paste check
+#     is untouched — isolation in the other direction). ---------------------------------------------
+m24="$(make_claude_copy claude-mutant-carry-hash)"
+m24_hook="$(dirname "$m24")/carry-check-hook.sh"
+m24_mjs="$(dirname "$m24")/carry-check-hook.mjs"
+cp "$m24_mjs" "$m24_mjs.orig"
+sed -i.bak 's/^function hashMatches(named, computed) { return computed.startsWith(named); }$/function hashMatches() { return true; } \/\/ mutation: hash comparison disabled/' "$m24_mjs"
+if cmp -s "$m24_mjs" "$m24_mjs.orig"; then
+  echo "24. carry-check hash comparison disabled ... ✗ MUTATION WAS A NO-OP — the sed no longer matches"
+  echo "   \`function hashMatches(named, computed) { … }\`. Fix the mutation in test/prove-red.sh before trusting any result."
+  fail=1
+fi
+printf '24. carry-check hash comparison always true — "named hash does not match the file -> deny" should go RED ... '
+r24="$(run_carry_check_suite "$m24_hook")"; echo "$r24"
+if [ "$r24" != red ]; then
+  echo "   ✗ the suite did NOT catch a disabled hash comparison."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*named hash does not match the file -> deny' "$out"; then
+  echo "   ✗ suite went red but NOT at the hash-mismatch assertion — red for the wrong reason."; fail=1
+elif grep -Eq '(✖|not ok|fail).*truncated paste -> deny' "$out"; then
+  echo "   ✗ the truncated-paste assertion ALSO went red — the two checks are not isolated as claimed."; fail=1
 fi
 
 echo

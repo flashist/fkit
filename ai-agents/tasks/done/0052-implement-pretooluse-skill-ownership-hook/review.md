@@ -1,6 +1,6 @@
 # Review — implement-pretooluse-skill-ownership-hook
 
-Task: ai-agents/tasks/backlog/implement-pretooluse-skill-ownership-hook.md (task 43)
+Task: 0052 — [brief](./brief.md) (task 43)
 Design: ai-agents/knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md
 File(s) under review: claude/skill-ownership-hook.sh (new), claude/skills-for-role.sh (new),
 claude/fkit-claude.sh, claude/README.md, claude/skills/fkit-team/SKILL.md, claude/scaffold/CLAUDE.md,

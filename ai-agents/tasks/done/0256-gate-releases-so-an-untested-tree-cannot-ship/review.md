@@ -1,6 +1,6 @@
 # Review — 0256
 
-Task: `ai-agents/tasks/backlog/0256-gate-releases-so-an-untested-tree-cannot-ship/brief.md`
+Task: 0256 — [brief](./brief.md)
 File(s) under review: `bin/release.mjs` · `.github/workflows/test.yml` (new, untracked) ·
 `ai-agents/knowledge-base/architecture.md`
 Status: closed-out

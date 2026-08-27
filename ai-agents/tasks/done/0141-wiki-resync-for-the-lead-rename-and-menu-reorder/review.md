@@ -1,6 +1,6 @@
 # Review — 0141
 
-Task: `ai-agents/tasks/backlog/0141-wiki-resync-for-the-lead-rename-and-menu-reorder/brief.md`
+Task: 0141 — [brief](./brief.md)
 File(s) under review: `ai-agents/wiki-vault/wiki/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md` (+2/−1) · `ai-agents/wiki-vault/log.md` (+178/−0, pure append)
 Scope note: the vault diff also carries 15 files from task `0126` (closed) and the tree carries ~40 further pre-existing modified paths plus 7 staged task-folder renames. **All out of scope; no finding is reported against them.**
 Worklog: this run writes no `worklog.md`. Its record is the appended `log.md` section `## 2026-07-29 — ingest (task 0141, lead rename + menu reorder resync)` (log.md:552+), reviewed as the worklog.

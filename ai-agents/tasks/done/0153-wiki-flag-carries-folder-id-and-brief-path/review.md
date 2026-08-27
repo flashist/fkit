@@ -1,6 +1,6 @@
 # Review — 0153-wiki-flag-carries-folder-id-and-brief-path
 
-Task: `ai-agents/tasks/backlog/0153-wiki-flag-carries-folder-id-and-brief-path/brief.md`
+Task: 0153 — [brief](./brief.md)
 File(s) under review: `claude/skills/fkit-wiki-ingest/SKILL.md`, `claude/skills/fkit-wiki-lint/SKILL.md`,
 `claude/skills/fkit-wiki-sync/SKILL.md`, plus the task folder's `plan.md` and `worklog.md`
 Status: in-review

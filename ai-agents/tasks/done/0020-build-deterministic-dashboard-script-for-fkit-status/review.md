@@ -1,6 +1,6 @@
 # Review — build-deterministic-dashboard-script-for-fkit-status
 
-Task: `ai-agents/tasks/backlog/build-deterministic-dashboard-script-for-fkit-status.md`
+Task: 0020 — [brief](./brief.md)
 File(s) under review:
 - `claude/skills/fkit-status/dashboard.sh` (new)
 - `claude/skills/fkit-status/SKILL.md` (modified)
