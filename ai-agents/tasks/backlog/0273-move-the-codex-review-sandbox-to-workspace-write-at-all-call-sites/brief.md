@@ -287,7 +287,7 @@ recurring drift into a one-time fix, and it is the point of doing this at all.
   class, it is not on a `--sandbox` line, and a careless sweep would break a right citation. ⛔ **Out of
   this task**, and it wants its own row or an owner ruling that it is not worth one.
 - **On merit:** this belongs on the **Backlog**, and — unlike
-  [`0272`](../0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/brief.md) —
+  [`0272`](../../done/0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/brief.md) —
   that is a merit judgement, not just a mechanical one:
   - **It should not land inside Sprint 5.** Sprint 5's stated theme is *"Fix what a real project found,
     and make a release safe to cut."* Landing this mid-sprint makes the reviews that validate that

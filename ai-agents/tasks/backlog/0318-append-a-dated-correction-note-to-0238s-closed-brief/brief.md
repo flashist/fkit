@@ -105,7 +105,7 @@ established the dated-observation point above. ⛔ **Do not treat `0317` as havi
 
 ### Conflicts and adjacencies — stated, deliberately not resolved
 
-- ⚠️ **[`0229`](../0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)**
+- ⚠️ **[`0229`](../../done/0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)**
   (`## Owner: fkit-coder`, open) would widen `/fkit-task-done` so the **mover itself** repairs a
   brief that contradicts a landed close. ⛔ **This task is the SINGLE INSTANCE and must not
   pre-decide the general case.** It adds no tooling, changes no skill, and its outcome is not a

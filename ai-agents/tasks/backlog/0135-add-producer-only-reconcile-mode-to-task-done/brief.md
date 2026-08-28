@@ -98,7 +98,7 @@ this drift).
   only if"* condition is **this task landing**.
 - **Filed 2026-07-25** by the producer on the 0123 ship-loop's hand-off. Sibling: **0134** (the ADR).
 - **⚠️ FILE COLLISION WITH `0229`, added 2026-08-06 — the owner accepted it knowingly.**
-  Task [`0229`](../0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)
+  Task [`0229`](../../done/0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)
   edits **the same file and the same step-1 branch** this task edits — it adds a narrow, owner-gated
   second exception to `/fkit-task-done`'s step-1 stop so a brief reading `🔲 Backlog` inside `done/`
   can be repaired. **Owner ruling 2026-08-06, verbatim: *"Ship 0229 standalone."*** (`AskUserQuestion`,

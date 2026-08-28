@@ -350,10 +350,12 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 
 ## Progress reporting (§5.5)
 - **Per task:** surface the coder worker's close-out evidence packet from its `worklog.md` (change
-  surface, verification evidence, review verdict + Codex-coverage state, residuals).
+  surface, verification evidence, review verdict + the **coverage state** (one of ADR-042's three —
+  `reasoning-only second opinion` is normal and not a degradation), residuals).
 - **Sprint level:** a roll-up — tasks **shipped / blocked / pending**, each close's marker (agent-closed
-  vs owner-verified), and the Codex-coverage state per task. Loudly flag any task shipped without a
-  model-diverse review.
+  vs owner-verified), and the coverage state per task. Loudly flag any task shipped **`Codex
+  unavailable`** — that is the one state without a model-diverse review. ⚠️ A **reasoning-only second
+  opinion** IS model-diverse (a different model reasoned over the diff); it is reported, not flagged.
 
 ---
 

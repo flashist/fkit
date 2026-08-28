@@ -95,7 +95,7 @@ An ADR under `ai-agents/knowledge-base/decisions/` via `/fkit-record-decision`, 
 - **⚠️ Do not begin 0135 before this ADR is approved by the owner.** The unknown here is a governance
   boundary, not a technical one — the implementation is small and the decision is the hard part.
 - **⚠️ RELATIONSHIP TO `0229`, added 2026-08-06 — read this before writing question 3's answer.**
-  Task [`0229`](../0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)
+  Task [`0229`](../../done/0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)
   (*widen `/fkit-task-done` to repair a brief whose `## Status` contradicts a landed close*) covers a
   **subset of this ADR's question 3** — question 3's candidate set already names *"the brief's own
   `## Status` when the board is the side that landed"*, which is precisely `0229`'s `0021`/`0041`

@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# TWENTY-FOUR mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# TWENTY-EIGHT mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -48,8 +48,12 @@
 #  22. Make the ✓ Released headline unreachable     → "0288/default-released"              (task 0288)
 #  23. Carry-check paste check → always true       → "truncated paste -> deny"             (task 0204)
 #  24. Carry-check hash comparison → always true   → "named hash does not match the file"  (task 0204)
+#  25. Disarm the --branch preflight guard          → "0300/branch-mismatch-refused"      (task 0300)
+#  26. Disarm the post-gate HEAD compare            → "0300/head-moved-during-test-gate-refused" (task 0300)
+#  27. Delete the R5 clause in ONE wiki skill       → "the R5 clause"                    (task 0154)
+#  28. Re-indent ONE list item in a wiki skill      → "uniformity: identical modulo ONE"  (task 0154)
 #
-# ⚠️ MUTATIONS 18-22 ARE THE FIRST TO TARGET `bin/`, NOT A COPIED LAUNCHER TREE (task 0288). Their seam
+# ⚠️ MUTATIONS 18-22, 25 AND 26 ARE THE FIRST TO TARGET `bin/`, NOT A COPIED LAUNCHER TREE (task 0288). Their seam
 # is FKIT_RELEASE_MJS — a SINGLE-FILE redirect (the FKIT_LAUNCHER pattern, not the whole-tree
 # FKIT_FRONTMATTER_ROOT one), because test/release-summary.test.js copies the script into a throwaway
 # git fixture of its own and runs it there, so a mutant needs no surrounding tree. The real
@@ -156,6 +160,17 @@ run_frontmatter_suite() {   # <claude-tree-root>
   fi
 }
 
+# Run ONLY the wiki-flag-convention suite against a COPY of claude/ (task 0154); redirected via
+# FKIT_WIKI_FLAG_ROOT, its own tree seam. Like run_frontmatter_suite() this points at a whole
+# directory, not one script — the suite reads three named skills/fkit-wiki-*/SKILL.md files under it.
+run_wiki_flag_suite() {   # <claude-tree-root>
+  if FKIT_WIKI_FLAG_ROOT="$1" node --test "$repo/test/wiki-flag-convention.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
 # Run ONLY the dual-home-parity suite against a copy of the SCAFFOLD home (task 0133); redirected via
 # FKIT_PARITY_SCAFFOLD_ROOT, its own tree seam. Like run_frontmatter_suite() this points at a whole
 # directory, not one script — the suite walks it against the real, untouched `ai-agents/` live home.
@@ -207,8 +222,8 @@ run_banner_suite() {   # <claude-tree-root>
 # FKIT_RELEASE_MJS, its own standalone-script seam — the run_hook_suite() pattern (ONE file, not a
 # tree). ⚠️ NOT run_suite(): that file is about bin/release.mjs, not the launcher, and passing
 # FKIT_LAUNCHER would leave it testing the real release.mjs and report a false green.
-# ⚠️ Each run builds seven throwaway git fixtures (a bare origin + a working clone each), so it is the
-# slowest seam here — ~25s. Six runs below (baseline + five mutants) is the cost the owner accepted.
+# ⚠️ Each run builds sixteen throwaway git fixtures (a bare origin + a working clone each; 7× 0288,
+# 9× 0300 — 0300/mismatch-under-no-push-and-dry-run builds two), so it is the slowest seam here — ~25s. Eight runs below (baseline + seven mutants) is the cost the owner accepted.
 run_release_suite() {   # <release.mjs path>
   if FKIT_RELEASE_MJS="$1" node --test "$repo/test/release-summary.test.js" >"$out" 2>&1; then
     echo green
@@ -348,13 +363,13 @@ bc="$(run_banner_suite "$clean_tree")"; echo "$bc"
 # --- 0k. An UNMUTATED copy of bin/release.mjs must ALSO be green (task 0288; same reasoning as 0b and
 #     0h). This one carries the usual extra weight for a NEW seam: it is the only proof that
 #     FKIT_RELEASE_MJS is honoured at all. If the env var were ignored, every mutation below would run
-#     against the REAL release.mjs, all five would come back green, and the gate would report five
-#     disarmed mutations as five failures to catch — or, worse, a later refactor could make them pass
+#     against the REAL release.mjs, all seven would come back green, and the gate would report seven
+#     disarmed mutations as seven failures to catch — or, worse, a later refactor could make them pass
 #     for the wrong reason. ---------------------------------------------------------------------------
 clean_release="$(make_release_copy release-clean)"
 printf '0k. unmutated copy of bin/release.mjs should be green ... '
 rlc="$(run_release_suite "$clean_release")"; echo "$rlc"
-[ "$rlc" = green ] || { echo "   ✗ an UNMUTATED release.mjs copy is red — mutations 18-22 below would be false."; fail=1; }
+[ "$rlc" = green ] || { echo "   ✗ an UNMUTATED release.mjs copy is red — mutations 18-22, 25 and 26 below would be false."; fail=1; }
 
 # --- 0l. An UNMUTATED copy's carry-check-hook suite must ALSO be green (task 0204; same reasoning as
 #     0f). Extra weight, as for every new seam: this is the only proof that FKIT_CARRY_CHECK_HOOK is
@@ -365,6 +380,17 @@ clean_carry_hook="$(dirname "$clean_copy")/carry-check-hook.sh"
 printf '0l. unmutated copy carry-check-hook suite should be green ... '
 kc="$(run_carry_check_suite "$clean_carry_hook")"; echo "$kc"
 [ "$kc" = green ] || { echo "   ✗ an UNMUTATED copy's carry-check suite is red — mutations 23/24 below would be false."; fail=1; }
+
+# --- 0m. An UNMUTATED copy's wiki-flag-convention suite must ALSO be green (task 0154; same reasoning
+#     as 0g — without this, a red below could be red-because-the-copy-is-broken and would prove
+#     nothing). ⚠️ THAT IS ALL IT PROVES. It is NOT proof that FKIT_WIKI_FLAG_ROOT is honoured: if the
+#     env var were ignored, 0m would read the real claude/ tree, which is green too, so 0m cannot tell
+#     "honoured" from "ignored" either way. What proves the seam is honoured is mutations 27 and 28
+#     going RED — they only can if the suite actually read the mutated copy. The root is $clean_tree,
+#     the same copied claude/ tree 0g and 0j use. ---------------------------------------------------
+printf '0m. unmutated copy wiki-flag-convention suite should be green ... '
+wc_="$(run_wiki_flag_suite "$clean_tree")"; echo "$wc_"
+[ "$wc_" = green ] || { echo "   ✗ an UNMUTATED copy's wiki-flag suite is red — mutations 27/28 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -1104,6 +1130,155 @@ elif ! grep -Eq '(✖|not ok|fail).*named hash does not match the file -> deny' 
   echo "   ✗ suite went red but NOT at the hash-mismatch assertion — red for the wrong reason."; fail=1
 elif grep -Eq '(✖|not ok|fail).*truncated paste -> deny' "$out"; then
   echo "   ✗ the truncated-paste assertion ALSO went red — the two checks are not isolated as claimed."; fail=1
+fi
+
+# --- Mutation 25: disarm the --branch preflight guard → the 0300/branch-mismatch-refused assertion
+#     must go red (task 0300). With the guard off, `--branch other` commits and tags HEAD, pushes
+#     `other` unchanged, and prints ✓ Released — the measured false green. Anchored on the guard's
+#     column-0 `if` line, which is unique in the file. Two guards below, for two different misfires
+#     (round-1 review R3): the MARKER count `!= 1` catches a second column-0 copy being silently
+#     co-mutated — `sed s///` rewrites EVERY match, so that is 0288 R9's mode, the one mutation 22
+#     lacks a check for; the survivor grep catches a near-miss (a line starting like the anchor that
+#     the full anchor did not match). Isolation, documented not gated (owner declined an isolation
+#     gate in 0288 R6): this mutant also reds 0300/mismatch-under-no-push-and-dry-run,
+#     0300/detached-head-with-branch-refused and 0300/detached-head-with-branch-head-refused — all
+#     four exercise the one guard — and leaves 0300/branch-current-explicit-released,
+#     0300/branch-name-shadowed-by-tag-accepted, 0300/head-moved-during-test-gate-refused (bare run),
+#     0300/unborn-head-refused-in-words (the unborn check sits above the guard) and every 0288/* test
+#     green. ---------------------------------------------------------------------------------------
+m25="$(make_release_copy release-mutant-branch-guard)"
+cp "$m25" "$m25.orig"
+sed -i.bak 's/^if (branchArg != null && branchArg !== onBranch) {$/if (false) { \/\/ mutation: --branch guard disarmed/' "$m25"
+if cmp -s "$m25" "$m25.orig"; then
+  echo "25. --branch guard disarmed ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif ! grep -q 'mutation: --branch guard disarmed' "$m25"; then
+  echo "25. --branch guard disarmed ... ✗ MUTATION DID NOT LAND — marker absent from the mutant."; fail=1
+elif [ "$(grep -c 'mutation: --branch guard disarmed' "$m25")" != 1 ]; then
+  echo "25. --branch guard disarmed ... ✗ WRONG TARGET — the marker landed more than once: a second copy"
+  echo "   of the anchor line was co-mutated (0288 R9's mode). Fix the mutation in test/prove-red.sh."; fail=1
+elif [ "$(grep -c '^if (branchArg != null' "$m25")" != 0 ]; then
+  echo "25. --branch guard disarmed ... ✗ WRONG TARGET — an un-mutated guard line survives."; fail=1
+fi
+printf '25. --branch guard disarmed — "0300/branch-mismatch-refused" should go RED ... '
+r25="$(run_release_suite "$m25")"; echo "$r25"
+if [ "$r25" != red ]; then
+  echo "   ✗ the suite did NOT catch a --branch <other> run that commits HEAD and pushes another ref —"
+  echo "     the 0300 guard is not load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0300/branch-mismatch-refused' "$out"; then
+  echo "   ✗ suite went red but NOT at 0300/branch-mismatch-refused — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 26: disarm the post-gate HEAD compare → the 0300/head-moved-during-test-gate-refused
+#     assertion must go red (task 0300, round-2 review R8). The preflight guard (mutation 25) reads
+#     HEAD BEFORE the ~6-minute test gate; commit and tag act on HEAD AFTER it. With the compare off, a
+#     `git switch` during the gate commits and tags one branch, pushes another, and prints ✓ Released —
+#     the 0300 defect back through a race, on the BARE run, so mutation 25 cannot see it. Same anchor
+#     discipline and the same two guards as 25 (marker count `!= 1` for a co-mutated second copy,
+#     survivor grep for a near-miss). Isolation, documented not gated (0288 R6): this mutant reds
+#     0300/head-moved-during-test-gate-refused ONLY — every other 0300/* test and every 0288/* test
+#     runs with --no-test, where HEAD cannot move between the two reads. ----------------------------
+m26="$(make_release_copy release-mutant-head-moved)"
+cp "$m26" "$m26.orig"
+sed -i.bak 's/^if (nowOn !== onBranch) {$/if (false) { \/\/ mutation: post-gate HEAD compare disarmed/' "$m26"
+if cmp -s "$m26" "$m26.orig"; then
+  echo "26. post-gate HEAD compare disarmed ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif ! grep -q 'mutation: post-gate HEAD compare disarmed' "$m26"; then
+  echo "26. post-gate HEAD compare disarmed ... ✗ MUTATION DID NOT LAND — marker absent from the mutant."; fail=1
+elif [ "$(grep -c 'mutation: post-gate HEAD compare disarmed' "$m26")" != 1 ]; then
+  echo "26. post-gate HEAD compare disarmed ... ✗ WRONG TARGET — the marker landed more than once: a second copy"
+  echo "   of the anchor line was co-mutated (0288 R9's mode). Fix the mutation in test/prove-red.sh."; fail=1
+elif [ "$(grep -c '^if (nowOn !== onBranch' "$m26")" != 0 ]; then
+  echo "26. post-gate HEAD compare disarmed ... ✗ WRONG TARGET — an un-mutated compare line survives."; fail=1
+fi
+printf '26. post-gate HEAD compare disarmed — "0300/head-moved-during-test-gate-refused" should go RED ... '
+r26="$(run_release_suite "$m26")"; echo "$r26"
+if [ "$r26" != red ]; then
+  echo "   ✗ the suite did NOT catch a run whose HEAD moved during the test gate — the post-gate"
+  echo "     compare is not load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0300/head-moved-during-test-gate-refused' "$out"; then
+  echo "   ✗ suite went red but NOT at 0300/head-moved-during-test-gate-refused — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 27: delete the R5 clause from ONE of the three wiki skills → the R5 assertion in
+#     wiki-flag-convention.test.js must go red (task 0154). This is the WRAP-CROSSING clause: it sits
+#     across two source lines, so a raw substring matcher finds it ZERO times even when it IS present.
+#     That makes this the mutation that proves the whitespace-normalized matcher is genuinely
+#     load-bearing rather than incidental — a raw matcher would be red here AND on the unmutated tree,
+#     which is exactly what 0m above would catch. sync is the target because it is the copy at the
+#     smaller indent, so a red here also proves the guard is not quietly indent-sensitive. -----------
+m27_tree="$work/claude-mutant-wikiflag-r5"
+cp -R "$repo/claude" "$m27_tree"
+m27_file="$m27_tree/skills/fkit-wiki-sync/SKILL.md"
+cp "$m27_file" "$m27_file.orig"
+# The clause is the tail of a wrapped sentence; replace it with a harmless one so the line still reads
+# as prose. Anchored on the clause itself, which is unique in the file (verified before use).
+# ⚠️ The replacement carries an INJECTED MARKER, and the exactly-one-site guard counts THAT, not the
+# prose (round-2 review R11). Mutations 25 and 26 count an injected marker for the same reason: a
+# guard that counts natural text can collide with real content a later edit adds, and would then
+# misreport an ordinary edit as a co-mutated second site. `mutation: R5 clause deleted` cannot occur
+# naturally in a SKILL.md; `spawn anyone.` could.
+sed -i.bak 's/spawn the producer to close it yourself\./spawn anyone (mutation: R5 clause deleted)./' "$m27_file"
+if cmp -s "$m27_file" "$m27_file.orig"; then
+  echo "27. deleted the R5 clause ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif [ "$(grep -c 'spawn the producer to close it yourself\.' "$m27_file")" != 0 ]; then
+  echo "27. deleted the R5 clause ... ✗ WRONG TARGET — an un-mutated copy of the clause survives."; fail=1
+elif ! grep -q 'mutation: R5 clause deleted' "$m27_file"; then
+  echo "27. deleted the R5 clause ... ✗ MUTATION DID NOT LAND — marker absent from the mutant."; fail=1
+elif [ "$(grep -c 'mutation: R5 clause deleted' "$m27_file")" != 1 ]; then
+  echo "27. deleted the R5 clause ... ✗ WRONG TARGET — the marker landed more than once: a second"
+  echo "   copy of the clause was co-mutated (0288 R9's mode), so the survivor check above passed while"
+  echo "   the mutation hit two sites. Fix the mutation in test/prove-red.sh."; fail=1
+fi
+printf '27. R5 clause deleted in ONE file — "the R5 clause" should go RED ... '
+r27="$(run_wiki_flag_suite "$m27_tree")"; echo "$r27"
+if [ "$r27" != red ]; then
+  echo "   ✗ the suite did NOT catch a deleted R5 clause. If the matcher was 'simplified' to a raw"
+  echo "     substring it finds this clause zero times ALWAYS, so 0m would be red too — check there"
+  echo "     first. The wrap-tolerant matcher is the thing this mutation exists to keep honest."
+  fail=1
+elif ! grep -Eq '(✖|not ok|fail).*the R5 clause' "$out"; then
+  echo "   ✗ suite went red but NOT at the R5-clause assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 28: push ONE list item's indent out of step in ONE file → the uniformity assertion in
+#     wiki-flag-convention.test.js must go red (task 0154). This is the assertion that closes 0125
+#     review residual R3, and mutation 27 alone would leave the fail-closed/uniformity SHAPE — the
+#     whole reason 0154 exists — permanently unexercised in this gate. It also pins the one thing a
+#     blanket per-line strip cannot see: relative nesting. The whole block may move (that stays green,
+#     and is sync's live state); ONE item moving inside it may not. ---------------------------------
+m28_tree="$work/claude-mutant-wikiflag-indent"
+cp -R "$repo/claude" "$m28_tree"
+m28_file="$m28_tree/skills/fkit-wiki-lint/SKILL.md"
+cp "$m28_file" "$m28_file.orig"
+# Add two leading spaces to the `- **Fully** → complete.` list item, which is unique in the file
+# (verified before use). Anchored on the whole line so a partial match cannot land somewhere else.
+sed -i.bak 's/^\(   \)\(- \*\*Fully\*\* → complete\.\)$/\1  \2/' "$m28_file"
+if cmp -s "$m28_file" "$m28_file.orig"; then
+  echo "28. broke a list item's indent ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif [ "$(diff "$m28_file.orig" "$m28_file" | grep -c '^>')" != 1 ]; then
+  echo "28. broke a list item's indent ... ✗ WRONG TARGET — the re-indent hit more than one line;"
+  echo "   the mutation must move exactly ONE item out of step or it proves the wrong thing."; fail=1
+fi
+printf '28. one list item re-indented — "uniformity: identical modulo ONE uniform offset" should go RED ... '
+r28="$(run_wiki_flag_suite "$m28_tree")"; echo "$r28"
+if [ "$r28" != red ]; then
+  echo "   ✗ the suite did NOT catch a broken relative indent — the uniformity check is blanket-"
+  echo "     stripping, not removing ONE uniform minimum, and 0125 residual R3 is NOT closed."
+  fail=1
+elif ! grep -Eq '(✖|not ok|fail).*uniformity: identical modulo ONE uniform offset' "$out"; then
+  echo "   ✗ suite went red but NOT at the uniformity assertion — red for the wrong reason."; fail=1
 fi
 
 echo

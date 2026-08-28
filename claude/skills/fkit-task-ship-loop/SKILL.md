@@ -158,7 +158,9 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
      review oscillation, a disputed severity that changes scope, a broad/behavior-changing fix, or
      anything **outside the approved plan** (a new architecture/scope decision → owner,
      `fkit-coder.md:109-113`).
-   - **Partial (no Codex)?** Re-request the review up to **3 attempts total** (absorbing a transient
+   - **`Codex unavailable`?** (that state only — **not** `reasoning-only second opinion`;
+     `fkit-review/SKILL.md` §Coverage states)
+     Re-request the review up to **3 attempts total** (absorbing a transient
      outage). If still no model-diverse pass, **proceed** — do not stop and wait — but mark the task
      **loudly "reviewed — NOT model-diverse"** in the worklog — and, per step 9, **do not route the
      close** for a run that never got a model-diverse pass; put the close to the owner.
@@ -247,8 +249,11 @@ Evidence for the owner to judge, **not** a done-verdict. Contains, at minimum:
 - **Task filename · problems encountered · lessons learned · open questions.**
 - **Owner-decision log** — every important question asked and every obvious winner chosen while the
   owner was away (the autonomy audit trail).
-- **Review ledger** — path, verdict line, all findings resolved/dispositioned, **and the Codex-coverage
-  state** (full vs partial — if partial, flagged loudly).
+- **Review ledger** — path, verdict line, all findings resolved/dispositioned, **and the coverage
+  state** — one of ADR-042's three (`fkit-review/SKILL.md` §Coverage states), with its evidence clause.
+  ⚠️ **`reasoning-only second opinion` is NOT partial coverage** and is not a degraded run: it fires no
+  banner, forces no verdict, and does **not** withhold the close. Only **`Codex unavailable`** is the
+  degraded case this loop's close posture keys on.
 - **Verification evidence, concrete** — commands + pass/fail, **from the run after the final code
   change**, not "verification passed."
 - **The brief's `## Verification steps`, walked and ticked** — each criterion met/unmet.

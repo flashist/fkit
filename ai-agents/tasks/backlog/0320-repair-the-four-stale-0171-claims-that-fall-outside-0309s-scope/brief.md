@@ -285,7 +285,7 @@ two tasks may run **in either order or concurrently**; neither gates the other.
   are disjoint by owner ruling**, so the two may run in either order or concurrently. Both may be
   running against the same dirty tree, so **re-measure rather than trusting a captured baseline.**
 - **Related and deliberately NOT pre-decided:**
-  [`0229`](../0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md) (should a
+  [`0229`](../../done/0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md) (should a
   close be able to repair a brief it contradicts) and
   [`0315`](../0315-define-the-corrections-header-warning-equivalent-for-briefs-and-board-rows/brief.md)
   (the corrections header-warning form). Both are **general mechanisms**; this is **two named

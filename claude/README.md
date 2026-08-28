@@ -124,6 +124,11 @@ emitted as a **flagged partial**: the reviewer's verdict is forced to `🟡 Part
 unavailable`, and the output leads with `[NOT model-diverse — INCOMPLETE]` **above the findings**. A
 one-model pass that reads like a full review carries unearned confidence — worse than no review.
 
+Every review report also names **exactly one of three coverage states** (ADR-042 D1 — see §Coverage
+states in `claude/skills/fkit-review/SKILL.md`): **both reviewers measured**, **reasoning-only second
+opinion** (Codex ran and reasoned but measured nothing — the normal state today, not a degradation),
+or **Codex unavailable** (the flagged partial above). Only the last one is a degradation.
+
 Codex reads the project's `AGENTS.md` natively, which is why init drops that file.
 
 ## Install & run

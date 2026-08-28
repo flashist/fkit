@@ -111,8 +111,12 @@ Return a compact findings list and nothing else (no preamble, no plan, no fix di
 - **problem** — one or two sentences: what's wrong and the concrete way it fails (inputs/state → wrong
   outcome). Optionally a one-line suggested direction, but **do NOT write the fix**.
 
-End with a one-line **coverage self-assessment** — including **which mode ran** (`[codex]` or
-`[claude-fallback — NOT model-diverse]`, with the reason) and what you did and didn't get to.
+End with a one-line **coverage self-assessment** stating **three** things: (a) **which mode ran**
+(`[codex]` or `[claude-fallback — NOT model-diverse]`, with the reason); (b) **whether you executed
+anything** bearing on a finding — name the command and its actual result, or say plainly that you only
+read and reasoned; (c) what you did and didn't get to. ⚠️ **(b) is what lets the lead reviewer pick the
+coverage state** ([`fkit-review/SKILL.md` §Coverage states](../fkit-review/SKILL.md)) — **you do not
+pick it yourself**; guessing at it is how a reasoning-only pass gets reported as measurement.
 
 ## Project context
 

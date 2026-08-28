@@ -10,7 +10,7 @@ Sprint 6
 Sprint 6 P19
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
@@ -96,7 +96,7 @@ sprint that carries a non-coder-owned row hits the identical wall, and the next 
 rediscovers the analysis from scratch. That is why this is a brief and not a note.
 
 **Related, and deliberately not conflated:**
-[`0224`](../0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md)
+[`0224`](../../backlog/0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md)
 builds a misroute detector, but it detects a **driver deviating from the loop's step table**. Here the
 driver follows the table exactly and the table's role is still wrong for the row — so on its face
 `0224` does not cover this case. **Confirm that reading against `0224`'s brief rather than taking it
@@ -183,10 +183,10 @@ implementation.**
 - **Depends on:** nothing
 - **Blocks:** the (unwritten) implementation brief for whichever candidate is chosen — deliberately
   not filed, because scoping it before this decision lands would be scoping before findings.
-- Related: [`0224`](../0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md)
+- Related: [`0224`](../../backlog/0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md)
   (misroute detector — driver-vs-table deviation, a different failure than this one),
   [`0223`](../../done/0223-enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason/brief.md)
-  and [`0225`](../0225-add-the-loop-table-row-to-skill-ownership-test/brief.md) — the other open
+  and [`0225`](../../backlog/0225-add-the-loop-table-row-to-skill-ownership-test/brief.md) — the other open
   ADR-038 follow-ups. All three read `🔲 Backlog` as of 2026-08-10.
 - **Provenance — owner ruling, 2026-08-10**, given via `AskUserQuestion` in a live session; a
   selection from the question's option list, so **the option label is the verbatim text**:
@@ -197,7 +197,7 @@ implementation.**
   rediscovering this every sprint."*
 - ⚠️ **Unscheduled by that ruling, and deliberately not in Sprint 5.** Pulling it into Sprint 5
   reverses the ruling. No Sprint 5 row, status or note was touched when this was filed.
-- **No merit statement.** Per [`0179`](../0179-require-a-merit-statement-on-every-ranked-board-brief/brief.md),
+- **No merit statement.** Per [`0179`](../../backlog/0179-require-a-merit-statement-on-every-ranked-board-brief/brief.md),
   the requirement applies to briefs on a **ranked** board; the Backlog board is excluded by
   construction — it is unranked, so there is no rank for a merit statement to be relative to.
 - Verified on disk 2026-08-10, by a spawned producer: `grep -ni 'owner:' claude/skills/fkit-sprint-ship-loop/SKILL.md`

@@ -131,8 +131,8 @@ When the work is ready:
    Use `fkit-review` (ephemeral) instead when no ledger is wanted.
 2. **Relay its report to the owner verbatim** — the verdict line, the findings table, the suppressed
    list, the convergence call, **and its owner-questions**. Do **not** answer the reviewer's questions
-   yourself, pre-filter its findings, or soften the verdict: **you are the author, not the judge.** If
-   it reports partial coverage (Codex unavailable), keep that flag loud.
+   yourself, pre-filter its findings, or soften the verdict: **you are the author, not the judge.** Relay
+   **the coverage state, whatever it is** — and if it is **`Codex unavailable`**, keep that flag loud.
 3. **Owner's dispositions → back to the reviewer.** When the owner answers, re-invoke the reviewer with
    their decisions ("record these dispositions") so it updates *Accepted residuals* / closes the ledger.
 4. **Then do your side**: `fkit-process-stateful-review` — verify each finding against the code, assign

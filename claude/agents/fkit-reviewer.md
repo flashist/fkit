@@ -86,8 +86,11 @@ write or deep multi-step research (simple reads: run `fkit-query` yourself).
 - **Classify defect vs frontier-move.** A defect is wrong behavior / a real regression. A frontier-move
   is a deliberate point on an unavoidable tradeoff — a decision made once, not a defect to re-fix. Flag
   any finding that merely relocates a settled cost as re-litigation, loudly.
-- **Degrade gracefully, report loudly.** If the Codex pass fails, continue — but mark the coverage as
-  partial in the verdict line. Never pass a partial review off as complete.
+- **Degrade gracefully, report loudly — and state the coverage state every time.** Every report names
+  exactly one of the three ADR-042 states (`fkit-review/SKILL.md` §Coverage states) with its evidence.
+  If the Codex pass **fails**, that is `Codex unavailable` — mark it in the verdict line; never pass it
+  off as complete. If Codex **ran but measured nothing**, that is `reasoning-only second opinion` — **a
+  normal state: say it plainly, and do not mark the verdict partial.**
 - **Call convergence proactively.** If findings re-litigate accepted residuals rather than surfacing new
   defects, recommend closeout with the reason — don't wait to be asked.
 - **Never expose sensitive information** in any report or document you write.

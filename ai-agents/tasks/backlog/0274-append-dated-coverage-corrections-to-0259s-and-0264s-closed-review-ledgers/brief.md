@@ -207,7 +207,7 @@ A correct record is not a drift event.
 - **Depends on:** nothing
 - **Blocks:** nothing
 - **Soft ordering, deliberately NOT a `Depends on`:** best run **after**
-  [`0272`](../0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/brief.md),
+  [`0272`](../../done/0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/brief.md),
   so both notes cite the **landed** three-state vocabulary rather than inventing a second wording for
   the same thing. This task is writable without it — the notes could name the reality in plain words —
   so no hard edge was declared. Inventing a `Depends on` to express a preference is what tasks `0184`
@@ -225,6 +225,17 @@ A correct record is not a drift event.
   and had to fix by re-ranking on 2026-08-11.
 - **Line-number citations are dated anchors of convenience** (measured 2026-08-11); the durable anchors
   are the quoted text.
+- ⚠️ **Dated cross-reference appended 2026-08-28 — this task's scope is UNCHANGED.** Two further
+  specimens of the same claim were found at
+  [`0272`](../../done/0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/brief.md)'s
+  close and filed **separately** as
+  [`0348`](../0348-decide-and-if-ruled-correct-the-two-post-adr-042-coverage-full-review-ledgers/brief.md):
+  `0327`'s ledger and `0188`'s ledger, both written **after** ADR-042 was accepted. ⛔ **They are NOT
+  added here** — this task's `## What to build` reads *"Two appended correction notes. Nothing else."*,
+  its per-ledger verification steps are written against those two, and the 2026-08-11 owner ruling that
+  discharged its authority gate named those two. Widening it would stretch that ruling past what it
+  said. `0348` carries its own equivalent gate. **Neither task depends on the other**; running them
+  together is an ordering preference so all four notes share one wording.
 - Filed 2026-08-11 by a spawned `fkit-producer` with no owner channel, on ADR-042's explicit hand-off
   of this follow-up to the producer. It asked nothing, ruled only on the permissibility question above
   — which it was directed to rule on — edited no ledger, and committed nothing.

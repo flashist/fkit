@@ -78,11 +78,36 @@ owner-verified — the owner being present is (ADR-033 §5).
 - **Stop with a clear message if:**
   - the file does not exist, or
   - it is not under `ai-agents/tasks/`, or
-  - it is already in `ai-agents/tasks/done/` (nothing to do — say so). **One exception: the
+  - it is already in `ai-agents/tasks/done/` (nothing to do — say so). **First exception: the
     owner-verification upgrade.** If you are the **owner** and the brief's `## Status` reads
     `✅ Done (agent-closed — not owner-verified)`, do **not** stop — continue, skipping the move (the
     file is already in place) and performing the status updates only, so the qualifier is cleared
-    everywhere it appears. An agent hitting this case still stops: only the owner can upgrade. Or
+    everywhere it appears. An agent hitting this case still stops: only the owner can upgrade.
+    **Second exception: the contradicted-close repair.** If you are the **owner** and the brief's
+    `## Status` reads an *open-work* value — `🔲 Backlog`, `🔄 In progress`, or `🚧 Blocked — …` —
+    while the folder already sits in `done/`, look for a landed close **before deciding**: run step 4's
+    grep now, restricted to `ai-agents/sprints/` (closed plans under `sprints/done/` included), and
+    find a status-table row for this task whose leading cell reads plain `✅ Done`. **"For this task"
+    means the row's Brief cell links this task's folder** — a prose mention, a quoted specimen row, or
+    another task's row that merely cites this folder in its description is not a landed close. If
+    such a row exists, do **not** stop — continue, skipping the move (the folder is already in place)
+    and performing the status updates only. The brief's own `## Status` resolves to plain `✅ Done`:
+    you are present and verifying, which is what the plain value means, and it is what the board
+    already says — brief and board converge. Say which exception fired in the report (step 7). Four
+    things this branch must never do:
+    - **never fire when no board row reads plain `✅ Done`** — with no row at all there is no landed
+      close: this is a *close*, not a repair, and a close starts from `backlog/` through the ordinary
+      path; stop and say so. A row reading `✅ Done (agent-closed — not owner-verified)` beside an
+      open-work brief is also not this branch's case: stop, and report what the row reads;
+    - **never fire for a non-owner identity** — a producer **spawned** to close is an agent
+      (ADR-033 §5) and stops here exactly as it does on the first exception;
+    - **never upgrade an existing `✅ Done (agent-closed — not owner-verified)`** — a brief reading
+      that value is the *first* exception's case and routes there; that exception stays exactly as
+      written;
+    - **never move a folder** in this branch.
+    Any other `## Status` value on a folder already in `done/` — a `⛔ Cancelled …` or `➡️ Moved …`
+    marker, an unrecognised string, a value that already begins `✅ Done` — is not this branch's case:
+    the plain stop above applies, and the report says what was read. Or
   - it is in `ai-agents/tasks/cancelled/` (this skill is for completion, not cancellation — flag it).
 - If `$ARGUMENTS` is empty, ask which task file to mark done. Do not guess.
 
@@ -308,12 +333,14 @@ does not reach them; test the path.
 
 ### 7. Report
 Give a concise summary:
-- **Moved:** `<old folder>` → `ai-agents/tasks/done/<NNNN>-<slug>/`
+- **Moved:** `<old folder>` → `ai-agents/tasks/done/<NNNN>-<slug>/` — or, when a step-1 exception
+  fired, `Moved: none — <first | second> exception; folder already in done/`.
 - **Updated:** each doc touched and how (e.g. "`sprint-4.md` — status row → ✅ Done";
   "`refactor-auth-flow.md` — T4f slice → ✅ Done").
 - **Brief's own status header:** state what happened to the moved brief's `## Status` field — set to
-  `✅ Done`, already read `✅ Done` (no change needed), or the missing-heading flag from step 5, using
-  whichever of its two wordings applies (board updated, or no board reference existed). This runs even
+  `✅ Done`, already read `✅ Done` (no change needed), repaired from `<value read>` to `✅ Done` under
+  the second exception, or the missing-heading flag from step 5, using whichever of its two wordings
+  applies (board updated, or no board reference existed). This runs even
   when step 4 found zero references — say so if it did. The owner should see this happened, not just
   infer it.
 - **Re-pointed links:** every href repaired, and where — **including any closed plan under

@@ -354,7 +354,7 @@ vault write.**
   (lint reading `log.md`'s correction notes),
   [`0231`](../0231-make-wiki-sync-count-and-classify-its-own-diff-before-logging/brief.md) (sync
   counting its own diff),
-  [`0229`](../0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)
+  [`0229`](../../done/0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)
   (`/fkit-task-done` repairing a **brief**, not the vault),
   [`0235`](../0235-cross-check-a-briefs-status-field-against-its-own-prose/brief.md) (a brief's
   `## Status` versus its own prose). ⚠️ **`0229` is the closest and is worth reading alongside this

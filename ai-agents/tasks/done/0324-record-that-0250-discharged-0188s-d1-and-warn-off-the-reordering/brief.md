@@ -106,7 +106,7 @@ your sentence; the file grows under you"*. The line numbers below are **dated co
 
 | # | Target | Anchor — heading plus quoted fragment | Line on 2026-08-23 | Still asserts D1 as open? |
 |---|---|---|---|---|
-| **1** | [`0188`](../../backlog/0188-repair-the-five-live-ownership-fact-defects/brief.md) `brief.md`, under `## What to build` | the sub-heading *"### D1 — `claude/scaffold/CLAUDE.md`: the producer's row omits `/fkit-task-brief`"* and its body *"The role table's producer row lists … `skills_for_role(producer)` … **also includes `fkit-task-brief`**"* | `:54` | ✅ **yes — verified present, and now false** |
+| **1** | [`0188`](../0188-repair-the-five-live-ownership-fact-defects/brief.md) `brief.md`, under `## What to build` | the sub-heading *"### D1 — `claude/scaffold/CLAUDE.md`: the producer's row omits `/fkit-task-brief`"* and its body *"The role table's producer row lists … `skills_for_role(producer)` … **also includes `fkit-task-brief`**"* | `:54` | ✅ **yes — verified present, and now false** |
 | **2** | the same file, under `## Verification steps` | step 1, *"**D1** — the producer row in `claude/scaffold/CLAUDE.md` lists exactly the skills `skills_for_role(producer)` returns, compared **against the live function output**"* | `:138` | ✅ **yes — verified present; it now passes with no work done** |
 | **3** | [`sprint-6.md`](../../../sprints/sprint-6.md), the `## Status` row whose Brief cell links `0188-repair-the-five-live-ownership-fact-defects` | *"**D1** `claude/scaffold/CLAUDE.md`'s producer row omits `/fkit-task-brief` — a **declared mirror that ships into every consuming project's root `CLAUDE.md`**"* | `:241` | ✅ **yes — verified present, and now false** |
 

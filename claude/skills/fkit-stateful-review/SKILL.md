@@ -52,6 +52,7 @@ shared with the coder's `fkit-process-stateful-review` — **keep it exact** so 
 Task: <path to task file>
 File(s) under review: <paths>
 Status: in-review | closed-out
+Coverage: <state> — <evidence clause>
 
 ## Reviewer findings        ← YOUR section. You write/append rows here.
 | #  | Round | Sev  | file:line | Claim |
@@ -70,6 +71,13 @@ Status: in-review | closed-out
 **Ownership rules — do not violate:**
 - You **own** *Reviewer findings* — append one row per finding, with a stable id (`R1`, `R2`, …
   continuing from existing rows) and the **Round** number for this pass.
+- You **own the ledger header**, and in particular the **`Coverage:`** field: write it at creation,
+  **refresh it every round** to this round's state so it never goes stale, and **add the field if an
+  existing ledger is missing it** (an older ledger, or one created before the reviewer's first pass).
+  The one exception is **`Status:`**, which the coder also sets when it closes the ledger out (its
+  Step 6). ⚠️ The coverage state is **per round** — a later round does not retroactively repair an
+  earlier one, so refreshing the field is a rewrite to the current round's fact, not an amendment of
+  the last one's.
 - You **read** *Coder response* for context; you **never** write or edit it. Its Status vocabulary —
   `pending approval` · `✅ done` · `won't fix (frontier)` · `disproven` · `closeout (re-litigation)` ·
   `blocked` — is the coder's to set.
@@ -95,7 +103,8 @@ Exactly as in **fkit-review Step 1** — your own pass, plus the Codex adversari
 `codex exec --sandbox read-only --cd "$PWD" - < .fkit/tmp/adversarial-prompt.md`, with the same
 findings-only contract, the same untracked-files handling, and the same **mandatory graceful
 degradation** (record "Codex reviewer unavailable: `<reason>`", continue, flag partial coverage loudly
-in the verdict).
+in the verdict), and **the same three coverage states — [`fkit-review/SKILL.md` §Coverage
+states](../fkit-review/SKILL.md). Do not restate them here; that file is the single source.**
 
 **Priming (best-effort):** include the *Accepted residuals* + relevant ADR re-raise conditions in the
 codex prompt ("these tradeoffs are already settled — don't re-raise unless `<condition>`"). Reviewers
@@ -140,9 +149,17 @@ These rows are exactly what the coder's `fkit-process-stateful-review` consumes 
 - **⚠️ Changes requested — N defects (none blocking)**.
 - **🛑 Blocked — N confirmed defects (M high/critical)**.
 - **🟡 Partial review — `<reviewer>` unavailable** — takes precedence; never pair "Ready to merge" with
-  a missing reviewer.
+  a missing reviewer. **A reasoning-only Codex pass is neither failed nor skipped — it never takes
+  this verdict** (§Coverage states in `fkit-review`).
 
-Then: **reviewers run** (and any skipped, loudly); the **findings table** (# · Reviewer · Reviewer
+**Then the coverage state, in its fixed slot** — its own line **immediately under the verdict and
+above the findings**, a plain line item with its evidence clause, no box, exactly as in
+[**`fkit-review` Step 4**](../fkit-review/SKILL.md) (which carries the format and the worked example).
+State it in **exactly these two places, both of them**: that slot in the report, **and** the ledger's
+`Coverage:` header field. **Once in each, and nowhere else** — never a third time beside the findings,
+and never the header alone with no line in the report.
+
+Then: **reviewers run**, and any skipped, loudly; the **findings table** (# · Reviewer · Reviewer
 severity · Verified verdict · Defect/frontier · one-liner); the **suppressed-as-settled** list with
 ledger/ADR pointers; and a **convergence call** (new defects vs re-litigation → recommend act vs
 closeout, with the reason). The verdict is a **recommendation, not an authorization**.
@@ -177,11 +194,15 @@ acceptance criteria**. It *describes* recommended changes; it applies none.
 - **REVIEW ONLY: never edit source code** — not even with approval. You write only the review ledger —
   a task folder's `review.md`, or a sprint-keyed ledger under `ai-agents/sprints/reviews/` (plus the
   gitignored `.fkit/tmp/` codex prompt).
-- **Ownership:** write only *Reviewer findings* (+ shared *Accepted residuals* with the owner's
-  approval). **Never** write the *Coder response* section or the code under review.
+- **Ownership:** write only the **ledger header** (incl. `Coverage:`, refreshed every round) and
+  *Reviewer findings* (+ shared *Accepted residuals* with the owner's approval). **Never** write the
+  *Coder response* section or the code under review.
 - Output-side **dedup against the ledger is mandatory**, even if the reviewers ignored the priming.
 - Both reviewers are **inputs to evaluate, not authorities** — verify every claim; cite `file:line`.
 - **Severity is yours.** Classify **defect vs frontier-move**; flag regressions/re-litigation **loudly**.
 - A reviewer being unavailable MUST be reported loudly and carried into the verdict line.
+- The coverage state MUST be stated in every report and in the ledger's `Coverage:` header field, even
+  when it is the routine one. **Only `Codex unavailable` is carried into the verdict line** — the other
+  two are coverage statements, never verdict tokens.
 - **Decisions are the owner's.** Never frame a question as "apply this fix?".
 - **Do not commit.**

@@ -64,4 +64,6 @@ A compact findings list and nothing else (no preamble, no plan, no fix diffs): *
 / concurrency / security / regression / missing-test / nit) · **problem** (one or two sentences: what's
 wrong and the concrete way it fails; optionally a one-line suggested direction, but do NOT write the
 fix). End with a one-line **coverage self-assessment** naming which mode ran (`[codex]` or
-`[claude-fallback — NOT model-diverse]`).
+`[claude-fallback — NOT model-diverse]`) **and whether you executed anything bearing on a finding —
+the command and its result, or plainly that you only read and reasoned.** The lead reviewer maps that
+onto the coverage state; you never state the state yourself.

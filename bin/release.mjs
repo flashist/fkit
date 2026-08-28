@@ -27,7 +27,7 @@
 //   --version <x.y.z>   Set an explicit version (VERSION + package.json)
 //   --no-bump           Release the current version as-is (no bump)
 //   -m, --message <s>   Commit message (default: "Release v<version>")
-//   --branch <name>     Branch to push (default: current branch)
+//   --branch <name>     Branch to push — must be the checked-out branch (default: current branch)
 //   --dry-run           Print the plan; touch nothing
 //   --no-tag            Commit + push, but don't create/push a tag
 //   --no-push           Commit + tag locally, but don't push anything
@@ -61,7 +61,7 @@ Options:
   --version <x.y.z>   Set an explicit version (VERSION + package.json)
   --no-bump           Release the current version as-is (no bump)
   -m, --message <s>   Commit message (default: "Release v<version>")
-  --branch <name>     Branch to push (default: current branch)
+  --branch <name>     Branch to push — must be the checked-out branch (default: current branch)
   --dry-run           Print the plan; touch nothing
   --no-tag            Commit + push, but don't create/push a tag
   --no-push           Commit + tag locally, but don't push anything
@@ -110,6 +110,57 @@ if (git(["rev-parse", "--is-inside-work-tree"], { check: false, quiet: true }).s
 }
 if (!git(["remote"], { quiet: true }).out.split("\n").includes("origin")) {
   fail("no 'origin' remote configured");
+}
+
+// --- --branch must name the CHECKED-OUT branch (task 0300) -------------------
+// `git commit` (step 1) and `git tag -a` (step 3) act on HEAD; only the push (step 2)
+// reads ${branch}. A --branch that is not HEAD's branch therefore commits and tags one
+// ref and publishes another — MEASURED 2026-08-14: the tag lands on origin naming a
+// commit no origin branch reaches, and the summary still prints ✓ Released.
+//
+// ⚠️ POSITION IS LOAD-BEARING, for the test gate's own reason (see below): this runs
+// before the gate and before the first writeFileSync, so a refused run leaves the tree
+// exactly as the user left it — no bump, no `git add`, no commit, no tag.
+// `!= null` on purpose: a bare trailing `--branch` parses as undefined and keeps today's
+// fall-back to the current branch.
+//
+// TWO reads of HEAD, each for its own job (round-1 review R1/R2, both MEASURED):
+//   * `symbolic-ref -q HEAD` is the COMPARE. It prints `refs/heads/<name>` exactly, or exits 1 on a
+//     detached HEAD — so `onBranch` is the branch name or null, never a lookalike.
+//   * `rev-parse --abbrev-ref HEAD` is the PUSH NAME (`branch`, below). It prints git's shortest
+//     UNAMBIGUOUS name, which is what the push refspec needs: with a tag also named `main` it says
+//     `heads/main`, and `git push origin main` fails there ("src refspec main matches more than
+//     one") while `heads/main` pushes. Comparing against it was wrong for the same reason — a tag
+//     named `main` made `--branch main` a false refusal — and on a detached HEAD it prints the
+//     literal `HEAD`, which `--branch HEAD` matched and slipped through.
+const headRef = git(["symbolic-ref", "-q", "HEAD"], { check: false, quiet: true });
+const onBranch = headRef.status === 0 ? headRef.out.replace(/^refs\/heads\//, "") : null;
+// `check: false`: on an UNBORN branch (fresh `git init`, or `checkout --orphan`, no commit yet)
+// `symbolic-ref` still answers `refs/heads/<name>` but `rev-parse HEAD` exits 128 — say so in a
+// sentence instead of git's raw "ambiguous argument 'HEAD'" (round-2 review R9, MEASURED). Nothing
+// is written before this point, so it is a clean abort either way.
+const headName = git(["rev-parse", "--abbrev-ref", "HEAD"], { check: false, quiet: true });
+if (headName.status !== 0) {
+  fail(
+    (onBranch !== null
+      ? `HEAD is unborn — branch ${onBranch} has no commit yet.`
+      : `HEAD does not resolve to a commit.`) +
+      ` Make the first commit before releasing.\n` +
+      `  Nothing was changed: no bump, no commit, no tag.\n` +
+      `  ${headName.err.split("\n")[0]}`,
+  );
+}
+const headBranch = headName.out;
+if (branchArg != null && branchArg !== onBranch) {
+  fail(
+    `--branch ${branchArg}: that is not the checked-out branch` +
+      (onBranch === null ? " (HEAD is detached)" : ` (HEAD is on ${onBranch})`) +
+      `.\n` +
+      `  This script commits and tags HEAD but pushes --branch, so the two must be the same branch;\n` +
+      `  refused on every path, --no-tag / --no-push / --dry-run included. Nothing was changed:\n` +
+      `  no bump, no commit, no tag.\n` +
+      `  Switch to that branch first, then release:  git switch ${branchArg}`,
+  );
 }
 
 const pkgPath = join(KIT, "package.json");
@@ -197,6 +248,30 @@ if (doTest) {
   );
 }
 
+// --- HEAD must not have moved since the preflight (task 0300, round-2 review R8) ------------------
+// The guard above read HEAD BEFORE the ~6-minute gate; the commit and the tag act on HEAD AFTER it,
+// and the push uses the name read before. A `git switch` in another terminal meanwhile puts the
+// commit and tag on one branch and the push on another — the 0300 defect back through a race.
+// MEASURED: a fixture whose test script runs `git switch -q other` → commit + tag on `other`,
+// `push origin main` a no-op, tag on origin naming a commit no origin branch reaches, ✓ Released.
+//
+// ⚠️ COMPARE against the preflight read — never just re-resolve. A bare re-read would push wherever
+// HEAD landed, which under `--branch main` breaks the guard's own promise. Runs on every path (the
+// window is zero under --no-test, and the compare is then a no-op), and sits before the first
+// writeFileSync, so a refused run is still a clean abort.
+const nowRef = git(["symbolic-ref", "-q", "HEAD"], { check: false, quiet: true });
+const nowOn = nowRef.status === 0 ? nowRef.out.replace(/^refs\/heads\//, "") : null;
+if (nowOn !== onBranch) {
+  const was = onBranch === null ? "detached" : `on ${onBranch}`;
+  const is = nowOn === null ? "detached" : `on ${nowOn}`;
+  fail(
+    `HEAD moved after the preflight check${doTest ? " (during npm test)" : ""}: it was ${was}, it is ${is} now.\n` +
+      `  The commit and the tag would land on the new HEAD while the push went to the branch checked\n` +
+      `  out when the run started. Nothing was changed: no bump, no commit, no tag.\n` +
+      `  Switch back and re-run, or release from where HEAD is now.`,
+  );
+}
+
 if (target !== version) {
   step(`bump version ${version} → ${target} (VERSION + package.json)`);
   version = target;
@@ -211,7 +286,10 @@ if (target !== version) {
 const versionChanged = version !== originalVersion;
 
 const tag = `v${version}`;
-const branch = branchArg ?? git(["rev-parse", "--abbrev-ref", "HEAD"], { quiet: true }).out;
+// Always the PUSH NAME from `--abbrev-ref`, never the user's spelling: the guard above has already
+// proved `--branch` names HEAD's branch, and only `--abbrev-ref`'s form is safe as a refspec (with a
+// tag also named `main`, `git push origin main` fails while `heads/main` pushes — measured).
+const branch = headBranch;
 const message = messageArg ?? `Release ${tag}`;
 
 // --- tag existence checks ---------------------------------------------------

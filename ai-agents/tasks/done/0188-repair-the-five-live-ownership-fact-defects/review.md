@@ -23,6 +23,23 @@ Status: closed-out
 - Manifest: fresh (`generate-structure-manifest.mjs --stdout | cmp` clean); +1 row is the only change. `package.json` unchanged. `node --test test/*.test.js` → 774 pass / 0 fail. Wiki-vault and decisions untouched.
 - D1 not reordered (no hunk at `claude/scaffold/CLAUDE.md:23`).
 
+### Round 2 (2026-08-27) — re-verification, no new rows
+Scope: the Round 1 hunks as committed, `493cecd..2a64727` (working tree clean); the `claude/fkit-claude.sh:316+` carry-check hunk is another task's and was ignored. Reviewers run: own pass + Codex (`codex exec --sandbox read-only`, exit 0). Coverage: full.
+
+**Verdict: 🔁 Closeout — no action (loop).** No new defect; `closed-out` stands.
+
+- R1 → `CLAUDE.md:43` reads "Each role-owned skill's `⛔ Owner:` banner" — true (24/26 skills carry one; `fkit-query`/`fkit-team` none). ✅
+- R3 → each rewrite says only what the ADRs say: `PROJECT.md:47-49` "stays technically enabled but is denied on invocation: visible in the `/` menu, unrunnable (ADR-018 §Decision 5)" = ADR-018 §D5 verbatim in substance; `PROJECT.md:69-70` "writes the per-role settings that wire the `PreToolUse` skill-ownership hook" = `build_settings()` (`claude/fkit-claude.sh:295,346-348` writes `.fkit/settings/<role>.json` with the `Skill` `PreToolUse` entry); `PROJECT.md:94-95` hook-denies-non-owned-`/fkit-*`, visible-but-unrunnable = ADR-018 §D3 + §D5 and `claude/skill-ownership-hook.sh:106-109,120-125`; `PROJECT.md:97-98` "gated the same way: the `PreToolUse` skill-ownership hook" now names the hook, not `skillOverrides`. `README.md:75-79` and the owner-ruled extension `claude/fkit-claude.sh:17` / `claude/README.md:29-31` ("`tools:` allowlist for the adversarial reviewer alone, ADR-022") = ADR-022 §D2–3; `grep -l '^tools:' claude/agents/fkit-*.md` → only `fkit-adversarial-reviewer.md`. `claude/README.md:31` relative link resolves. `claude/fkit-claude.sh:17` and `:245-247` are `#` comment lines only; `bash -n` OK on both scripts; `skills_for_role()` body byte-identical to `493cecd`. ✅
+- R4 → `architecture.md:145` "the role (or roles) allowed to execute it (e.g. `claude/skills/fkit-review/SKILL.md:12`)" — `:12` is the `⛔ Owner:` line. ✅
+- R5 → both copies say "until 2026-08-27"; `493cecd` (2026-08-25) still said FOUR, the fix landed in `2a64727` (2026-08-27). `diff <(sed -n 12,26p claude/skills-for-role.sh) <(sed -n 259,273p claude/fkit-claude.sh)` empty. ✅
+- R2 residual → carries What / Why (structural, with rejected alternatives) / Re-raise only if. ✅
+- No new dead line-number: `architecture.md:162` `claude/skills-for-role.sh:51` = `skills_for_role() {`; `architecture.md:145` `fkit-review/SKILL.md:12` correct; the rewritten root/README/PROJECT sentences cite no line numbers. No new decaying count beyond the ruled "SIX" (ND3) and the named pair "the two universal skills" (Round 1, checked). Every ADR link in the five changed Markdown files resolves.
+- Both-directions sweep, changed lines only: no changed line contradicts the hook, `build_settings()`, or the agents' frontmatter; the remaining `skillOverrides` / "tool allowlist" mentions in sibling docs (`claude/README.md:68`, `claude/fkit-claude.sh:286`, `architecture.md:207,239`, `claude/skills-for-role.sh:45`, `PROJECT.md:95`) all describe the mechanism as retired or the allowlist as relaxed/adversarial-only — true.
+- Manifest fresh (`bin/generate-structure-manifest.mjs --stdout | cmp` clean); `node --test test/*.test.js` → 774 pass / 0 fail.
+- Cosmetic only, no row: `PROJECT.md:70` and `:95` are now 144/148-char prose lines in a ~100-col file (pre-existing overlong lines exist; no convention or test enforces width).
+
+**Re-litigates settled decisions (suppressed):** Codex raised two, both against Round 1's own "checked, no finding": (a) "SIX" at `claude/skills-for-role.sh:12` / `claude/fkit-claude.sh:259` is a decaying count — it is the plan-approved ND3 block, the count is the block's pre-existing design (TWO → FOUR → SIX) and its decay hazard is what the block itself warns about; (b) "the two universal skills" at `architecture.md:145-146` — a named pair, not a floating count (Round 1). Neither meets a re-raise condition. Nothing new.
+
 ## Coder response
 | #  | Verdict | Defect / Frontier | Action | Status |
 |----|---------|-------------------|--------|--------|

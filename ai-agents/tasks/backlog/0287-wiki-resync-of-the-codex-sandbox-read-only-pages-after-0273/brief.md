@@ -176,7 +176,7 @@ actually stands **after `0273`**.
    sandbox **permits** writes, not that any run has been observed. **A page that reads "Codex now runs
    the tests" is a worse record than the stale one.**
 6. **⚠️ ADR-042's D1 three-state coverage vocabulary is a SEPARATE row** —
-   [`0272`](../0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/brief.md).
+   [`0272`](../../done/0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/brief.md).
    ⛔ Do not implement it here; if vault pages carry the old ran/unavailable binary, **report it**.
 
 ### ⛔ Hard constraints
@@ -234,7 +234,7 @@ actually stands **after `0273`**.
     early was *a second pass, not a wrong result*. **Here the cost of running early IS a wrong
     result.** It is recorded as a note rather than a `Depends on:` edge only to match the board's
     convention — ⛔ **treat the precondition in *Verification steps* step 1 as the real gate.**
-  - **Interacts with [`0272`](../0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/brief.md)**
+  - **Interacts with [`0272`](../../done/0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/brief.md)**
     (ADR-042's D1 coverage vocabulary) — different subject, same ADR. **Neither gates the other**;
     ✅ prefer `0272` first so a single vault pass can carry both, but **do not implement D1 here**.
 - **⚠️ Every `:NNN` in this brief is a dated anchor measured 2026-08-13 — the durable anchor is the

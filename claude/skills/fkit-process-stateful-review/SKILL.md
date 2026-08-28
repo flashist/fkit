@@ -58,6 +58,7 @@ The task folder's `review.md` ledger has three sections with **explicit ownershi
 Task: <path to task file>
 File(s) under review: <paths>
 Status: in-review | closed-out
+Coverage: <state> — <evidence clause>
 
 ## Reviewer findings        ← REVIEWER-owned. You READ this; never edit its rows.
 | #  | Round | Sev  | file:line | Claim |
@@ -76,6 +77,11 @@ Status: in-review | closed-out
 **Ownership rules — do not violate:**
 - You **read** *Reviewer findings*; you **never** edit, reword, or delete its rows. Refer to findings
   by their stable id (`R1`, `R2`, …).
+- The **ledger header is the reviewer's** — it owns `Coverage:` and refreshes it every round; you
+  never overwrite that field. **Two exceptions:** **`Status:`**, which you set to `closed-out` at
+  Step 6; and **first creation** — if *you* are the one creating a missing `review.md` (Step 0), you
+  write the whole header, leaving `Coverage:` as the schema placeholder for the reviewer to fill on
+  its first pass. Never delete the line; an absent field and a stale one are both invisible.
 - You **own** the *Coder response* table — one row per finding, keyed by the same id.
 - *Accepted residuals* is **shared**: you may add an entry (with the full What / Why / Re-raise
   structure) once I approve treating a finding as a settled tradeoff, but never silently rewrite an
@@ -100,7 +106,8 @@ conclude gets recorded in the shared file so the next round doesn't re-derive it
 - Resolve the **task-id** by the canonical rule above (stop and ask if it doesn't resolve
   unambiguously — never auto-create a ledger from a guessed id).
 - Read the task folder's `review.md`. **If it doesn't exist — and only once the key is
-  resolved — create it** with the schema above: fill the header, seed *Reviewer findings* from
+  resolved — create it** with the schema above: fill the header — **leaving `Coverage:` as its
+  placeholder, which is the reviewer's to set on its first pass** — seed *Reviewer findings* from
   whatever findings you were handed (or leave a note that the reviewer will populate it), and leave
   *Coder response* / *Accepted residuals* ready to fill.
 - Load the **Accepted residuals** into working memory — these are settled; do not re-litigate them.
@@ -225,8 +232,12 @@ report, run `git status` first. (See
 
 ## Hard rules
 
-- **The shared file is the source of truth** — read the reviewer's section, write only your own section
-  (+ shared residuals with approval), never edit the reviewer's rows.
+- **The shared file is the source of truth.** What you may write: the *Coder response* section
+  (yours); shared *Accepted residuals* with approval; the header's **`Status:`** at Step 6, plus the
+  **whole header on first creation** if you are the one creating a missing ledger (Step 0) — leaving
+  `Coverage:` as its placeholder; and, when findings arrived as pasted text, seeding *Reviewer
+  findings* rows on the reviewer's behalf (Step 1, noted as such). **`Coverage:` is the reviewer's —
+  never overwrite it.** Never edit the reviewer's existing rows.
 - Read the code; cite `file:line`. Do not speculate about what the code probably does.
 - Never change code without my explicit approval in this turn; after approval, apply only what I
   approved.

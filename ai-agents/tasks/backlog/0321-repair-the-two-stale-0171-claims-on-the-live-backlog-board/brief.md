@@ -270,7 +270,7 @@ are sites.
   [`0309`](../0309-repair-the-hyphenated-task-nn-citation-class-in-four-open-briefs/brief.md) — scopes
   are disjoint by owner ruling.
 - **Related and deliberately NOT pre-decided:**
-  [`0229`](../0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md) and
+  [`0229`](../../done/0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md) and
   [`0315`](../0315-define-the-corrections-header-warning-equivalent-for-briefs-and-board-rows/brief.md).
   Both are **general mechanisms**; this is **two named instances**. ⛔ This task adds no rule, no check
   and no convention.
