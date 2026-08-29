@@ -112,3 +112,5 @@ Init runs under `set -euo pipefail` and was called **unguarded** from a launcher
 - [[decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]] — ⛔ **`.claude/` is deliberately NOT a conformance surface**: the unconditional launch refresh IS the guarantee, and on deletion it is **stronger** than ADR-015's invariant
 - [[tasks/decide-whether-claude-enters-the-structure-conformance-surface]] — the decision task behind it
 - [[tasks/state-the-per-project-relaunch-step-fkit-update-requires]] — the README prose stating that a launch, not `fkit update`, is what rewrites a project's `.claude/`
+- [[tasks/gate-symlink-escape-in-init-intake-write]] — *added 2026-08-29:* `0046`, which hoisted the `-L` containment walk into `path_contained()` and guarded §4's intake write
+- [[tasks/refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim]] — *added 2026-08-29:* `0327`, which guarded §3's `.claude/` refresh — ⛔ **a measured, destructive escape that deleted a user's files outside the project and exited 0** — and rewrote the false *"ONLY DESTRUCTIVE OPERATION"* claim at six sites

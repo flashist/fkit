@@ -45,3 +45,4 @@ Done, **agent-closed — not owner-verified**.
 - [[tasks/tighten-the-wiki-completion-flag-block]] — `0173`, which removed the path this task added
 - [[tasks/annotate-the-old-form-completion-flags-in-the-vault-log]] — `0211`, the flags emitted in this form before the fix
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — why the flag routes to the producer
+- [[tasks/build-wiki-flag-convention-test]] — *added 2026-08-29:* `0154`, the test that pins the flag block this task rewrote

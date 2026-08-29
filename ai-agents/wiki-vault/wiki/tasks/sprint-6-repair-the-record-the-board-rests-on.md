@@ -1,8 +1,12 @@
 # Sprint 6 — Repair the record the board rests on, and ship what was already ready
 
 **Source**: `ai-agents/sprints/sprint-6.md`
-**Status**: in-progress — 🟢 **THE ACTIVE BOARD**
-**Sprint/Tag**: Sprint 6 · opened 2026-08-14 · 19 rows · ranks restart at `P1`
+**Status**: in-progress — 🟢 **THE ACTIVE BOARD**, and ⚠️ **every row is closed but the board is not**
+**Sprint/Tag**: Sprint 6 · opened 2026-08-14 · **21 rows, 21 closed** *(re-measured 2026-08-29)* · ranks restart at `P1`
+
+> ⚠️ **SYNC 2026-08-29 — the board grew from 19 rows to 21 and every row now reads `✅ Done`. The header above is updated; the body below keeps its dated 19-row record and is left byte-identical where it says so.**
+> ⛔ **It is still `ai-agents/sprints/sprint-6.md`, NOT archived**, it carries **no `🔒 CLOSED` banner**, and `dashboard.sh select-active` still returns it as `active file="sprint-6.md"` — measured this run. ⛔ **A finished board is still being reported as the active one**, which is the exact condition [[tasks/archive-sprint-5-move-the-plan-into-sprints-done]] recorded as *"a banner flip is cosmetic; only the move changes behaviour."*
+> ⛔ **All 21 carry `(agent-closed — not owner-verified)`. No human has verified any of them.**
 
 ## Goal
 
@@ -63,7 +67,7 @@ Form `Sprint N P<n>`, verified against Sprint 4/5 closed briefs. ⚠️ **UNENFO
 
 ## Outcome
 
-**Open. 8 of 19 rows closed as of 2026-08-22**, every one `✅ Done (agent-closed — not owner-verified)` — ⛔ **no human has verified any of them.** *(Re-counted 2026-08-22 from `sprints/sprint-6.md`: 8 rows read `✅ Done`, all eight carrying the agent-closed marker. `P2` closed later the same day — see the row below.)*
+~~**Open. 8 of 19 rows closed as of 2026-08-22**~~ ✅ *Superseded 2026-08-29:* **21 of 21 rows closed**, every one `✅ Done (agent-closed — not owner-verified)` — ⛔ **no human has verified any of them.** ⛔ **The board itself is NOT closed**: no `🔒 CLOSED` banner, not moved to `sprints/done/`, and still returned as the active sprint. *(The 2026-08-22 sentence is left as a dated record of the 8-of-19 state.)*
 
 | rank | task | state |
 |---|---|---|
@@ -75,7 +79,21 @@ Form `Sprint N P<n>`, verified against Sprint 4/5 closed briefs. ⚠️ **UNENFO
 | `P6` | [[tasks/teach-record-decision-the-dated-correction-note-form]] (`0198`) | ✅ agent-closed |
 | `P7` | [[tasks/rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint]] (`0280`) | ✅ agent-closed |
 | `P8` | [[tasks/pressing-enter-at-the-role-menu-should-open-the-lead]] (`0302`) | ✅ agent-closed |
-| `P9`–`P19` | `0250` · `0046` · `0223` · `0204` · `0168` · `0188` · `0229` · `0300` · `0270` · `0272` · `0154` | 🔲 Backlog |
+| `P9` | [[tasks/fix-the-scaffold-producer-row-fkit-task-brief-omission]] (`0250`) | ✅ agent-closed — *2026-08-23* |
+| `P10` | [[tasks/gate-symlink-escape-in-init-intake-write]] (`0046`) | ✅ agent-closed — *2026-08-24* |
+| `P11` | [[tasks/refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim]] (`0327`) | ✅ agent-closed — *2026-08-24* · ⭐ **added to the board after it opened, at `P11`** |
+| `P12` | [[tasks/enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason]] (`0223`) | ✅ agent-closed — *2026-08-25* |
+| `P13` | [[tasks/build-the-pretooluse-task-carry-check-hook-and-its-tests]] (`0204`) | ✅ agent-closed — *2026-08-26* |
+| `P14` | [[tasks/repair-the-moved-folders-own-self-locators-in-task-done]] (`0325`) | ✅ agent-closed — *2026-08-26* · ⭐ **added after the board opened, ranked above `0168` by owner ruling** |
+| `P15` | [[tasks/remediate-the-dead-brief-paths-in-closed-review-ledger-headers]] (`0168`) | ✅ agent-closed — *2026-08-26* |
+| `P16` | [[tasks/repair-the-five-live-ownership-fact-defects]] (`0188`) | ✅ agent-closed — *2026-08-27* |
+| `P17` | [[tasks/widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close]] (`0229`) | ✅ agent-closed — *2026-08-27* |
+| `P18` | [[tasks/release-mjs-with-branch-other-commits-and-tags-head-but-pushes-a-different-ref]] (`0300`) | ✅ agent-closed — *2026-08-27* |
+| `P19` | [[tasks/decide-how-the-ship-loop-handles-a-non-coder-owned-task-row]] (`0270`) | ✅ agent-closed — *2026-08-28* · produced [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] |
+| `P20` | [[tasks/replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary]] (`0272`) | ✅ agent-closed — *2026-08-28* |
+| `P21` | [[tasks/build-wiki-flag-convention-test]] (`0154`) | ✅ agent-closed — *2026-08-28* |
+
+> ⚠️ **SYNC 2026-08-29 — the `P9`–`P19` "🔲 Backlog" row that stood here has been REPLACED by the twelve rows above, because every one of them closed.** ⛔ **The rank list it carried is superseded twice over**: two rows (`0327`, `0325`) were added to the board after it opened, shifting the ranks below them by one each. ⭐ **Neither insertion renumbered a closed row** — the board's closed rows were contiguous at the top in both cases, the narrow shape [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] names by hand in its own residual-risks section. ⚠️ **The `## Key Changes` order sentence below still lists the original 18 + `0154` and is a dated record; read the table above for the live ranks.**
 
 ⚠️ **`P2` is out of sequence with the ranks below it** — the board's own §"four real dependencies" says `0171` runs before the citation repairs, and `P3`–`P8` shipped while it is still open. Recorded, not resolved here.
 
@@ -94,3 +112,5 @@ Form `Sprint N P<n>`, verified against Sprint 4/5 closed briefs. ⚠️ **UNENFO
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — `0160`, whose follow-up `0171` is this board's `P2` — ⚠️ ~~**still `🔄 In progress` while `P3`–`P8` shipped past it**~~ ✅ *Corrected 2026-08-22:* **`P2` is now closed**; ⛔ the out-of-sequence fact stands — `P3`–`P8` shipped past it, against the board's own stated dependency order
 - [[tasks/write-the-durable-citation-anchors-convention-page]] — `0171`, this board's `P2`, closed 2026-08-22 agent-closed
 - [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — `0293`, whose 2026-08-14 `active none` reading this board superseded the same day
+- [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] — *added 2026-08-29:* the ADR this board's `P19` produced; ⭐ **it rules that vault-deliverable rows are skipped at this loop's step 1 and reported**, so a wiki row will never again reach a coder Build worker
+- [[tasks/record-that-0250-discharged-0188s-d1-and-warn-off-the-reordering]] — `0324`, filed off this board's `P9` and closed unranked on the Backlog

@@ -49,3 +49,4 @@ a `Depends on`**, since the architect can reach the decision from the report alo
 - [[tasks/implement-adr-040s-identity-grammar-in-dashboard-sh]] — the change that turned it green
 - [[systems/testing-and-verification]]
 - [[decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so]] — ⚠️ this task's review ledger claimed *"Coverage is FULL — no reviewer skipped, no degradation"* while Codex **measured nothing**; one of ADR-042's three cases. Per ADR-034 it was **not edited**
+- [[tasks/replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary]] — *added 2026-08-29:* `0272`; ⛔ **this task's ledger is one of the three inconsistent coverage claims that motivated ADR-042** — its *"Coverage is FULL"* line while Codex measured nothing

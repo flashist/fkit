@@ -138,3 +138,4 @@ The ADR states: ***"Prose is proportionate. There is no mechanical enforcement, 
 - [[systems/role-locked-sessions]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — task `0222`, the recording of ADR-038 — the closure of this ADR's open invocation axis for loop steps
 - Source: `ai-agents/knowledge-base/decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling.md`
+- [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] — *added 2026-08-29:* ADR-044, whose own architect Build run cleared the spawned-architect bar ⭐ **only because a named owner ruling displaced it for that run** — the mechanism this ADR defines

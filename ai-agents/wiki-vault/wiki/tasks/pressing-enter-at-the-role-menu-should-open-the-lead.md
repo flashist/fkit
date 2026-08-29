@@ -44,6 +44,7 @@ The `""` arm's runtime behaviour is exercised by **no test**. `npm test` is gree
 **Other residuals:**
 
 - **`plan.md`'s blob hash was checked by no hook** — the carry-check hook does not exist until `0204` lands. The plan was taken as given from the driver's prompt.
+  > ⚠️ **Dated note 2026-08-29 (lint) — `0204` has since landed** ([[tasks/build-the-pretooluse-task-carry-check-hook-and-its-tests]], 2026-08-26). ⛔ **Nothing about this task's record changes** — it is a dated statement about its own run, and the hook did not exist then. ⚠️ **And it would not have covered this run anyway:** the hook is registered in `.fkit/settings/<role>.json`, which is regenerated per launch, so **no session gets it until its next `fkit <role>` launch** — and even a green check is a **proxy**, never proof the marker held.
 - ⚠️ **`test/` carries 25 stale `task 43` numerals** (`-i`; 23 case-sensitive) across 5 files, **16 of them in frozen replay fixtures that must never be edited**. Reported, not repaired — `0306`'s out-of-scope residue. ⚠️ **The inventory was wrong twice before it was right** — round 1 corrected the anchors, round 2 corrected the **totals**, and *"no figure here is quotable without its command"* is the lesson recorded in its place.
 
 ## Related

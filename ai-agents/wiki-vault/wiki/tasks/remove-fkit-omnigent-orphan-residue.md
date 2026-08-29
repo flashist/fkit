@@ -22,3 +22,5 @@ Remove the dead Omnigent residue from consuming projects: exactly four paths wit
 - [[tasks/stop-init-failure-bricking-the-launcher]] — the non-fatal bar it reuses
 - [[tasks/sprint-2-remove-omnigent]]
 - [[systems/fkit]]
+- [[tasks/gate-symlink-escape-in-init-intake-write]] — *added 2026-08-29:* `0046`, which correctly stayed out of this task's scope (*"cheapness isn't scope"*) and later hoisted `orphan_contained()` into the shared `path_contained()` guard
+- [[tasks/refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim]] — *added 2026-08-29:* `0327`, which corrected the *"ONLY DESTRUCTIVE OPERATION IN FKIT"* comment heading this task's §6

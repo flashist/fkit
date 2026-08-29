@@ -44,3 +44,5 @@ runnable tasks stopped idling behind an unwritten ADR.
 - [[tasks/sprint-3-close-the-rank-integrity-loop]] — the board, including the carry and both re-rank rulings
 - [[tasks/sprint-2-remove-omnigent]] — the source board (row frozen at `P189`, `➡️ Moved to Sprint 3`)
 - [[systems/fkit]]
+- [[tasks/enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason]] — *added 2026-08-29:* `0223`, whose row reason clause cites this ADR
+- [[tasks/decide-how-the-ship-loop-handles-a-non-coder-owned-task-row]] — *added 2026-08-29:* `0270`, which discharged this ADR's closeout clause and produced [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]]

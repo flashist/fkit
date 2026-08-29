@@ -3345,3 +3345,87 @@ cover — `0196`/`0197` changing ADR-010's *text* rather than appending to it �
 Recorded on [[tasks/write-the-durable-citation-anchors-convention-page]] and returned to the owner.
 
 No tracked task completed by this run.
+
+## 2026-08-29 — ingest (sync)
+
+- **Sync window:** `6f3d9f301e853d2ac5e2f7706ab4bcf69c77e79f` → HEAD (`16754e3bb25add5ac3d16a2411c3013f10ac48e8`), six commits.
+- ⚠️ **Delta window note — the working tree was CLEAN.** The spawn instruction warned that `HEAD` was far behind a large uncommitted tree and that a commit-scoped delta would miss the sprint. **Measured at the start of this run: `git status --porcelain` is empty, for `ai-agents/` and repo-wide.** The owner committed everything between that instruction being written and this run (`HEAD` moved `c45ec3d` → `16754e3`, four further commits). ✅ **The commit-scoped window therefore covers the whole sprint with no gap** — no working-tree scope was needed, and none is missing.
+- **Changed source files detected:** 201 under `ai-agents/` (excluding the vault). **Ingest-worthy after filtering: 28** — 3 sprint files, 4 knowledge-base files, 21 `done/*/brief.md`.
+- **Skipped by the procedure's own filter:** 62 `backlog/*/brief.md` (not done — a page would be premature) and 117 in-folder `plan.md` / `worklog.md` / `review.md` (working artifacts, not sources; read as *evidence* for the pages below, never ingested as pages).
+
+### Created — 14 task pages + 1 decision page
+
+- `ai-agents/tasks/done/0250-…/brief.md` → created [[wiki/tasks/fix-the-scaffold-producer-row-fkit-task-brief-omission]]
+- `ai-agents/tasks/done/0046-…/brief.md` → created [[wiki/tasks/gate-symlink-escape-in-init-intake-write]]
+- `ai-agents/tasks/done/0327-…/brief.md` → created [[wiki/tasks/refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim]]
+- `ai-agents/tasks/done/0223-…/brief.md` → created [[wiki/tasks/enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason]]
+- `ai-agents/tasks/done/0204-…/brief.md` → created [[wiki/tasks/build-the-pretooluse-task-carry-check-hook-and-its-tests]]
+- `ai-agents/tasks/done/0325-…/brief.md` → created [[wiki/tasks/repair-the-moved-folders-own-self-locators-in-task-done]]
+- `ai-agents/tasks/done/0168-…/brief.md` → created [[wiki/tasks/remediate-the-dead-brief-paths-in-closed-review-ledger-headers]]
+- `ai-agents/tasks/done/0188-…/brief.md` → created [[wiki/tasks/repair-the-five-live-ownership-fact-defects]]
+- `ai-agents/tasks/done/0229-…/brief.md` → created [[wiki/tasks/widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close]]
+- `ai-agents/tasks/done/0300-…/brief.md` → created [[wiki/tasks/release-mjs-with-branch-other-commits-and-tags-head-but-pushes-a-different-ref]]
+- `ai-agents/tasks/done/0270-…/brief.md` → created [[wiki/tasks/decide-how-the-ship-loop-handles-a-non-coder-owned-task-row]]
+- `ai-agents/tasks/done/0272-…/brief.md` → created [[wiki/tasks/replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary]]
+- `ai-agents/tasks/done/0154-…/brief.md` → created [[wiki/tasks/build-wiki-flag-convention-test]]
+- `ai-agents/tasks/done/0324-…/brief.md` → created [[wiki/tasks/record-that-0250-discharged-0188s-d1-and-warn-off-the-reordering]]
+- `ai-agents/knowledge-base/decisions/adr-044-…md` → created [[wiki/decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]]
+
+### Updated
+
+- `ai-agents/sprints/sprint-6.md` → updated [[wiki/tasks/sprint-6-repair-the-record-the-board-rests-on]]. **19 rows → 21; 8 closed → 21 closed.** The `P9`–`P19` "🔲 Backlog" row was replaced by twelve dated rows. ⛔ **Recorded as a live condition, not just a count: the board is 21-of-21 closed and is STILL `ai-agents/sprints/sprint-6.md` with no `🔒 CLOSED` banner** — `dashboard.sh select-active ai-agents/sprints` returned `active file="sprint-6.md"` when measured this run.
+- `ai-agents/knowledge-base/architecture.md` → updated [[wiki/systems/fkit]]. ⛔ **Two claims in its §The 25 skills paragraph were falsified by task `0188`** (R4, D2) and are corrected by a dated SYNC block, the paragraph left byte-identical: *"naming the one role allowed to run it"* (false for the two six-role skills) and *"Only `fkit-query` carries no banner"* (`fkit-team` carries none either; **24 of 26**).
+- `ai-agents/sprints/backlog.md` → updated [[wiki/tasks/add-backlog-board-default-for-unsprinted-task-briefs]]. Re-measured this run: **130 `🔲 Backlog` rows, 43 `➡️ Moved`, 17 `✅ Done`.** ⭐ **Sprint 6's 21 closes were not a net drawdown — the run's own reviews filed fifteen new briefs, `0337`–`0351`**, recorded as four clusters.
+- **Back-links added to 23 further pages** (7 systems, 13 decisions, 5 tasks) so every link this sync created resolves in both directions.
+- `index.md` → the ADR-044 row inserted in `## Decisions`; the Sprint 6 sprints row corrected from *"19 rows; 8 closed"* to **21 of 21**; a new `### Sprint 6 — the board finished` section with all 14 new task entries.
+
+### Skipped — already covered, with the reason
+
+- `ai-agents/tasks/done/0263-…/brief.md` — **already ingested** as part of [[wiki/tasks/the-2026-08-13-vault-resync-chain]]; it reappears in this delta only because `0306` repaired citations inside it. No page claim changed.
+- `0171`, `0222`, `0259`, `0260`, `0261`, `0306` briefs — pages already exist; the delta on each is `0306`'s citation repair or a board-move link repoint, not a claim change.
+- `ai-agents/sprints/done/sprint-2.md` and `ai-agents/knowledge-base/reports/2026-08-14-backlog-triage-part-4.md` — **pure link repointing** (`tasks/backlog/…` → `tasks/done/…`, 7 and 1 lines). Inspected line by line; **no claim moved**, so no page updated.
+- `ai-agents/knowledge-base/PROJECT.md` — its `0188` edits are the same corrections already carried by [[wiki/systems/role-locked-sessions]]'s Era-1/Era-2 framing, which was **already correct**. Verified by reading the page, not by grep; nothing to change.
+
+### Targeted lint on the pages this sync touched
+
+- **Wiki-links checked mechanically across the 15 new pages plus the 9 updated ones: 0 broken, 0 one-way.** Every one-way link found on the first pass (23 pages' worth) was repaired by appending a back-link with its own gloss, not a bare pointer.
+
+### ⚠️ Not ingested, deliberately
+
+- **The 15 new briefs `0337`–`0351` have no pages** — they are open backlog rows and the procedure's filter excludes them. They are **summarised** on the Backlog board page instead, with their four clusters and their provenance.
+
+## 2026-08-29 — lint
+
+- **Issues found: 12 · fixed: 12 · flagged for human review: 2.**
+- **Scope: the whole vault** — 272 pages (8 systems, 44 decisions, 220 tasks), `index.md`, `schema.md`.
+
+### Clean, measured — stated so the closeout is not mistaken for a gap
+
+- **Structural: 0.** Every page carries its schema-mandated inline metadata fields and all four of its template sections. Checked mechanically per category, not sampled.
+- **Index: 0.** No index entry points at a missing file; **no page is missing from the index** (272/272).
+- **Links: 0 broken**, vault-wide.
+- **Orphans: 0** — no page with neither an inbound nor an outbound link.
+- **ADR number/slug cross-check: 0 findings on all four legs.** 44 vault ADR pages ↔ 44 knowledge-base ADRs, matched **numerically** (leading zeros stripped) and **case-insensitively**, **regular files only**: no missing counterpart, no slug divergence, **no `# ADR-NNN:` heading disagreeing with its own filename**, and — as the separate pass over `ai-agents/knowledge-base/decisions/` — **no two knowledge-base ADRs bearing the same number.**
+- **Stale source paths: 11 backticked repo paths do not exist, and every one was read in context and is CORRECT as written.** They are the deliberate-history class this check must not cry wolf on: archived sprint plans cited in dated records or in explicit *was-X-now-Y* annotations; `ai-agents/AGENTS-COMMON.md` and `claude/agents/fkit-git.md` (**rejected designs, recorded by name**); `test/skill-ownership-sites.mjs` (**decided, not built** — already carrying its own dated note); `claude/dashboard.sh` (**already corrected by the 2026-08-02 lint**, and surviving only inside that correction's own quotation of the wrong path); and `claude/universal-rules.md`, which the page itself calls *"a path that does not exist"*. ⛔ **Nothing repaired here — repairing any of them would falsify a dated record.**
+- **`wiki/features/` is empty and `sources/` does not exist.** Both are correct: the index states the reason for the first, and `schema.md`'s own ingestion rule 2 prefers referencing project files by path over copying them.
+- **ADR-042 D2 re-verified on disk this run**: every `--sandbox` occurrence under `claude/` still reads `read-only`, and `0273` is still open in the Backlog — so [[wiki/systems/review-and-model-diversity]]'s *"decided, NOT built"* block is **accurate today** and was left alone.
+
+### Fixed — 12
+
+**Cross-reference (4).** Four one-way links, all pre-existing and none created by today's sync: `tasks/write-the-durable-citation-anchors-convention-page` → ADR-021 / ADR-033 / ADR-035, and `tasks/record-adr-038-…` → ADR-044. Each reciprocated with its own gloss, never a bare pointer.
+
+**Stale claims (8) — every one repaired by a dated note with the original left byte-identical, per the locator-vs-claim rule.**
+
+1. ⚠️ **[[wiki/systems/testing-and-verification]] — the suite figures are stale a THIRD time, and this page had predicted it twice.** `test/*.test.js` went **20 → 21 → 25** (Sprint 6 added `init-intake-guard`, `init-claude-refresh-guard`, `carry-check-hook`, `wiki-flag-convention`); `test/prove-red.sh`'s header now declares **TWENTY-EIGHT** mutations against the **TWENTY-TWO** recorded on the page, confirmed by counting **28 numbered rows in its own index**. ⛔ **Recorded as a dated measurement and deliberately NOT re-pinned into the `**Key files**` line** — an enumerated count on a living page is precisely what has gone stale three times, and nothing detected any of the three: a sync or a lint noticed each one.
+2. ⚠️ **[[wiki/systems/install-and-self-update]] — the CI run tally is stale, the third time the vault has reported that.** Item 3's `5 runs — 4 success, 1 failure` was correct on 2026-08-13. **Re-measured this run with `gh run list`: 24 runs — 22 success, 2 failure**, 2026-08-12 → 2026-08-28. ⭐ **A SECOND red run exists (2026-08-21) that no vault page had recorded.** ⛔ Item 3's two load-bearing conclusions are **unchanged and stronger**: neither *"there is no CI"* nor *"CI is always green"* is true of this repo, and a red run is a point in CI's favour. ⛔ The tally is **not** re-pinned into item 3 — a live run count on a living page is what went stale, and the 2026-08-14 sweep already **barred publishing a per-run set** on this page.
+3. ⚠️ **[[wiki/systems/fkit]] — *"7 of 19 rows closed"* on the Sprint 6 entry.** Corrected to **21 rows, all 21 closed**, with the not-archived condition named beside it.
+4. ✅ **[[wiki/systems/review-and-model-diversity]] — ADR-042 **D1** was described as a rule in force, i.e. prose.** It has been **written into the skills** since 2026-08-28 by `0272`, in **per-run form** so it survives both D2 landing and D2 being reverted. The state table is left byte-identical and the shipped skill text named as the authority.
+5. ⚠️ **[[wiki/tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — *"no test reads a `SKILL.md` body"* is no longer true as an unqualified claim.** `0154` landed the first test that reads one. ⛔ **The page's point is untouched and was stated as such:** that test reads **three named files only**, with the list hard-coded and no `SKILL.md` walk, and this task's own file is still read by no test — so *"a green suite proves nothing here"* stands.
+6. ⚠️ **[[wiki/tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — `0204`'s carry-check hook has landed, and it does NOT close the `carried-not-approved` residual.** Recorded so nobody reads the landing as a closure; **none of the three re-raise conditions is met**.
+7. ✅ **[[wiki/tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — the `unverified` marker it shipped has since been removed**, at five sites, by the task it named — surgically, with the ADR-031 honesty paragraph protected.
+8. ⚠️ **[[wiki/tasks/pressing-enter-at-the-role-menu-should-open-the-lead]] — the hook its record says did not exist now does.** ⛔ **Nothing about that dated record changes**, and the note says why it would not have covered that run either: launcher-only registration, regenerated per launch, and a green check is a proxy.
+
+### ⚠️ Flagged for human review — 2
+
+1. ⛔⛔ **Sprint 6 is 21-of-21 closed and is STILL the active board.** No `🔒 CLOSED` banner, not moved to `sprints/done/`, and `dashboard.sh select-active ai-agents/sprints` returns `active file="sprint-6.md"` — measured this run. **This is a repo-state condition, not a vault defect**, and the vault cannot fix it: archiving a board is producer work. It is the exact condition `0294` recorded on Sprint 5 as *"a banner flip is cosmetic; only the move changes behaviour."* ⭐ **The five new briefs `0337`–`0341` are the arc filed to answer it, and all five are open.** Recorded on [[wiki/tasks/sprint-6-repair-the-record-the-board-rests-on]], [[wiki/systems/fkit]] and `index.md`.
+2. ⚠️ **The second CI failure (2026-08-21) is unowned and uninvestigated.** What it caught was **not** determined this run and no task is known to own it. ⛔ **Stated rather than guessed** — the vault records the count, not a cause it did not measure.

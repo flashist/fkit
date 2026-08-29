@@ -69,6 +69,8 @@ Both halves matter and **the second is the dangerous one**. The failure that sco
 
 **Re-raise only if** one of three testable things becomes true: the harness persists the **content** of an `AskUserQuestion` exchange to any readable artifact (concretely, that marker file becomes non-empty); **or** session transcripts become stored in-repo; **or** a **second** carried-vs-approved divergence occurs **after** `0202` has landed — which would mean the diagnosis, not just the gap, needs reopening.
 
+> ⚠️ **LINT 2026-08-29 — `0204`'s carry-check hook HAS NOW LANDED, and it does NOT close this residual.** [[tasks/build-the-pretooluse-task-carry-check-hook-and-its-tests]] shipped 2026-08-26. ⭐ **The hook's own first caveat says so in its shipped code, its plan and its worklog:** it establishes *the prompt contains the bytes of the file at path P whose blob id starts with H*, and ⛔ **it can never establish that P is what the owner approved.** The re-raise conditions above are **unchanged and none is met** — the marker file is still empty, no transcript is stored, and no second divergence has occurred. ⛔ **Do not record `0204` as having closed this class.**
+
 ⛔ **Do NOT re-raise** that the marker is forgeable or that this is unenforced prose — both are fenced by ADR-037 — or that `0202` ought to have closed this.
 
 ### It narrows ADR-037 §5 — and the ADR still says the stronger thing

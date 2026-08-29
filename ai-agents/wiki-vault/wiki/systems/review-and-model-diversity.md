@@ -27,7 +27,7 @@ codex exec --sandbox read-only --cd "$PWD" -
 
 **It is not a total loss.** On task `0265` the read-only pass *originated* three findings — including an ADR-040 breach where an unreadable file resolved to a confidently *wrong* identity — all independently verified correct. ***Static reasoning finds real defects.***
 
-**D1 — in force as a rule.** The coverage vocabulary gains a **third state**, replacing the ran/unavailable binary:
+**D1 — in force as a rule, and since 2026-08-28 written into the skills.** The coverage vocabulary gains a **third state**, replacing the ran/unavailable binary:
 
 | State | Meaning |
 |---|---|
@@ -38,6 +38,8 @@ codex exec --sandbox read-only --cd "$PWD" -
 ⛔ **No review report may state or imply "FULL coverage" on the strength of a reasoning-only pass.** ⚠️ **This is a reporting-honesty rule, not a degradation flag** — it must not inherit the fallback banner's alarm tone, because *treating the normal case as a failure trains readers to ignore the banner that does signal failure.*
 
 **Why the rule exists, measured:** three reviews in one sprint, **same flag and same capability each time**, produced three different coverage claims — one *"FULL"*, one *"not partial"* while the same file recorded that Codex could not run the suite, and one correctly **PARTIAL**. *"FULL coverage" had been quietly meaning both reviewers **read** it, never both reviewers **measured** it.*
+
+> ✅ **LINT 2026-08-29 — D1 is no longer prose-only.** [[tasks/replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary]] (`0272`) put the three states into a canonical `## Coverage states` section across every site that stated the coverage or degradation contract — both review skills, the adversarial and process-review skills, both ship-loops, three agent files and `claude/README.md`. ⭐ **It is written in PER-RUN form deliberately**, so it stays correct after D2 lands **and after any revert of D2** — the owner's reserved disable exit touches nothing in D1. ⛔ **The table above is left byte-identical; the wording that ships differs in detail and the skill text is the authority.**
 
 **D2 — decided, NOT built.** The owner ruled 2026-08-11, **against the architect's recommendation, knowingly and provisionally**, that all four executable call sites move to `--sandbox workspace-write` at the repo root. ⚠️ **Verified on disk 2026-08-13: all five sites under `claude/` still read `read-only`; task `0273` is open in the Backlog.** The block above is therefore **accurate today**.
 
@@ -130,3 +132,5 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - [[tasks/implement-adr-041s-dashboard-half]] — `0265`, whose ledger is ADR-042's one *accurate* coverage claim, and where the read-only pass originated three verified findings
 - [[tasks/implement-adr-040s-identity-grammar-in-dashboard-sh]] — `0264`, whose ledger contradicted itself on coverage in one file
 - [[tasks/verify-the-codex-half-of-the-comment-stripping-canary]] — ⚠️ *Added 2026-08-22:* task `0177` — what the **codex harness itself** does with the shared instructions layer: `codex-cli 0.145.0` passes the fkit markers and wrapper comment through to the model **verbatim**, so codex pays the full 404 B where Claude pays none
+- [[tasks/replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary]] — *added 2026-08-29:* `0272`, which replaced the two-state degradation binary with **both reviewers measured** / **reasoning-only second opinion** / **Codex unavailable**, written in per-run form so a later sandbox change needs no re-edit
+- [[tasks/refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim]] — *added 2026-08-29:* `0327`, where **Codex explicitly CLEARED the area a high-severity defect lived in, and the clearance was disproven by measurement** — ⭐ *"an automated reviewer's 'no finding' is an input, not an authority."*

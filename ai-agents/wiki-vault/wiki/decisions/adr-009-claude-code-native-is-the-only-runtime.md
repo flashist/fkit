@@ -69,3 +69,4 @@ Dependency 3 exposed a **live defect**: `claude/fkit-claude.sh` contained **no u
 - [[tasks/wiki-sync-post-omnigent]]
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]]
 - [[decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so]] — ⚠️ *Added 2026-08-13:* **bounds the model-diversity guarantee this ADR creates.** Codex being *required* buys **independent reasoning by a different model family — and nothing about execution**, because every call site hard-codes a read-only sandbox. ✅ **The purpose survives intact and is explicitly not made decorative**; what is forbidden is a report implying more
+- [[tasks/replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary]] — *added 2026-08-29:* `0272`; ⭐ **the coverage rewrite is a reporting fix, not a capability complaint — this ADR's model-diversity purpose survives intact**

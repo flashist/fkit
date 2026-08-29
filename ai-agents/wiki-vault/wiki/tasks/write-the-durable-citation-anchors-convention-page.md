@@ -185,3 +185,5 @@ as complete as the set of NOTATIONS its pattern knows.**
 - [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] · [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — why the close is agent-closed and not owner-verified
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — why neither
   scope widening changed the rank
+- [[tasks/remediate-the-dead-brief-paths-in-closed-review-ledger-headers]] — *added 2026-08-29:* `0168`, whose 67 header rewrites land in this page's location-free form
+- [[tasks/repair-the-moved-folders-own-self-locators-in-task-done]] — *added 2026-08-29:* `0325`, whose R7 finding turned on this page's *"Citing a task"* rule binding a skill file
