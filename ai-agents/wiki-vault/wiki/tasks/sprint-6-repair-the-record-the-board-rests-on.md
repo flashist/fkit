@@ -1,12 +1,14 @@
 # Sprint 6 — Repair the record the board rests on, and ship what was already ready
 
-**Source**: `ai-agents/sprints/sprint-6.md`
-**Status**: in-progress — 🟢 **THE ACTIVE BOARD**, and ⚠️ **every row is closed but the board is not**
+**Source**: `ai-agents/sprints/done/sprint-6.md` *(repointed 2026-08-29 — the board was archived; this line previously named the pre-archival path `ai-agents/sprints/sprint-6.md`)*
+**Status**: done — 🔒 **CLOSED and ARCHIVED 2026-08-29**, 21 of 21 rows closed *(corrected 2026-08-29; this line previously read `in-progress — 🟢 THE ACTIVE BOARD, and ⚠️ every row is closed but the board is not`)*
 **Sprint/Tag**: Sprint 6 · opened 2026-08-14 · **21 rows, 21 closed** *(re-measured 2026-08-29)* · ranks restart at `P1`
 
 > ⚠️ **SYNC 2026-08-29 — the board grew from 19 rows to 21 and every row now reads `✅ Done`. The header above is updated; the body below keeps its dated 19-row record and is left byte-identical where it says so.**
 > ⛔ **It is still `ai-agents/sprints/sprint-6.md`, NOT archived**, it carries **no `🔒 CLOSED` banner**, and `dashboard.sh select-active` still returns it as `active file="sprint-6.md"` — measured this run. ⛔ **A finished board is still being reported as the active one**, which is the exact condition [[tasks/archive-sprint-5-move-the-plan-into-sprints-done]] recorded as *"a banner flip is cosmetic; only the move changes behaviour."*
 > ⛔ **All 21 carry `(agent-closed — not owner-verified)`. No human has verified any of them.**
+>
+> > ⚠️⚠️ **Dated correction 2026-08-29 (later the same day) — the `NOT archived` block above is SPENT; it is left byte-identical as the record of the condition it caught.** The board **was archived that same day**: `git mv` to `ai-agents/sprints/done/sprint-6.md`, with a line-3 banner reading `## 🔒 CLOSED — 2026-08-29.`, and `dashboard.sh select-active ai-agents/sprints` **no longer returns it** — re-measured this run. ⭐ **The block's finding was real and is what got discharged**, not withdrawn. ⛔ **The archival is itself agent-performed and NOT owner-verified** — the archiving producer had no owner channel ([[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]]), so unlike Sprints 1–5 **no owner ruling authorized it**, and the board's own banner says so. ⛔ **All 21 row closes remain `(agent-closed — not owner-verified)`: archiving verifies nothing.**
 
 ## Goal
 
@@ -68,6 +70,8 @@ Form `Sprint N P<n>`, verified against Sprint 4/5 closed briefs. ⚠️ **UNENFO
 ## Outcome
 
 ~~**Open. 8 of 19 rows closed as of 2026-08-22**~~ ✅ *Superseded 2026-08-29:* **21 of 21 rows closed**, every one `✅ Done (agent-closed — not owner-verified)` — ⛔ **no human has verified any of them.** ⛔ **The board itself is NOT closed**: no `🔒 CLOSED` banner, not moved to `sprints/done/`, and still returned as the active sprint. *(The 2026-08-22 sentence is left as a dated record of the 8-of-19 state.)*
+
+> ✅ **Dated correction 2026-08-29 (later the same day) — the `board itself is NOT closed` clause above is now FALSE; the line is left byte-identical.** The board **is** closed and archived: `ai-agents/sprints/done/sprint-6.md`, banner `## 🔒 CLOSED — 2026-08-29.`, and `select-active` no longer returns it. ⛔ **The 21-of-21 agent-closed fact is UNAFFECTED** — no human has verified any row, and ⛔ **the archival itself carries no owner ruling either** (the archiving producer had no owner channel), so it is agent-performed and not owner-verified.
 
 | rank | task | state |
 |---|---|---|

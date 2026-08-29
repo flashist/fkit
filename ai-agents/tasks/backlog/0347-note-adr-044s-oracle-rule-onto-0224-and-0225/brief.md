@@ -4,7 +4,7 @@
 0347
 
 ## Sprint
-Backlog
+Sprint 7
 
 ## Priority
 Unscheduled
@@ -130,7 +130,11 @@ board status change.
 - **Blocks:** nothing directly — but the notes it writes are what make `0224` and `0225` correct when
   they are eventually pulled. Doing those two tasks **before** this one lands is the failure mode this
   brief exists to prevent.
-- ⚠️ **Priority is `Unscheduled` — the Backlog board is unranked by design.** No merit rank is asserted.
+- ⚠️ **Priority is `Unscheduled` — and stays so on Sprint 7, which opened UNRANKED.**
+  Updated 2026-08-29 (was: *"the Backlog board is unranked by design"* — true when this brief sat on
+  `backlog.md`, stale since the move). **No merit rank is asserted on either board.** The rank is owed if
+  and when the owner ranks Sprint 7; see [`sprint-7.md`](../../../sprints/sprint-7.md)
+  §"⛔ This board is UNRANKED".
 - ⚠️ **Time-sensitivity, stated plainly.** `0224` and `0225` are both `🔲 Backlog` as of 2026-08-28. If
   either is pulled into a sprint before this note lands, it will be built against the old oracle and
   the C6 misroute ships with it. That is a sequencing risk, not a hard dependency — flagged, not solved.
@@ -139,3 +143,50 @@ board status change.
   or closed. If it has moved, write the new number and say when it was measured; do not copy this one
   forward unchecked (`conventions/evidence-before-assertion.md`).
 - **Source:** ADR-044 §C2 (iii), §C3, §C6, §Decision 1; owner ruling ND6.
+
+### ⭐ OWNER RULINGS 2026-08-29 — this task is SCHEDULED, and the board is Sprint 7
+
+**Owner ruling, 2026-08-29, given live via `AskUserQuestion` in a `fkit lead` session: `0347` is
+pulled into a sprint now. Everything else in the `0337`–`0351` range stays `Unscheduled`.** `0347` is
+the single exception the owner named out of that fifteen-task range.
+
+**Why it was singled out — the ordering hazard, re-measured 2026-08-29.** Both
+[`0224`](../0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md) and
+[`0225`](../0225-add-the-loop-table-row-to-skill-ownership-test/brief.md) still read
+`## Sprint` `Backlog`, `## Priority` `Unscheduled`, `## Status` `🔲 Backlog`. ⚠️ **The hazard this
+brief's `## Notes` flags is therefore still live and still preventable:** if either is pulled before
+this note lands, it is built against the old oracle and **ships the 8-of-13 misroute**. Scheduling
+`0347` ahead of them is what closes that window.
+
+> ### ✅ RESOLVED 2026-08-29 — THE BOARD IS SPRINT 7, AND THIS TASK IS ON IT.
+>
+> **Owner ruling, 2026-08-29, given live via `AskUserQuestion` in a `fkit lead` session — the option
+> label is the verbatim text: "One-row Sprint 7, then scope it (Rec)".** It was put to the owner as:
+> *"Open Sprint 7 holding only 0347, honouring your ruling literally, then scope the rest properly in a
+> second pass. … Closes the 0224/0225 ordering window now — both are still 🔲 Backlog, so the misroute is
+> still live."*
+>
+> **Executed in the same act, by a spawned `fkit-producer`:**
+>
+> - [`ai-agents/sprints/sprint-7.md`](../../../sprints/sprint-7.md) was **opened** with this task as its
+>   **single row** — `select-active` now returns `active file="sprint-7.md" identity="Sprint 7"`
+>   (exit 0; it returned `active none`, exit 3, immediately before).
+> - This brief's **`## Sprint` is now `Sprint 7`**.
+> - This brief's **`## Priority` stays `Unscheduled`** — ⛔ **not an oversight.** Sprint 7 opened
+>   **unranked**, and one row is not a rank; inventing a `P1` would spend a decision the owner has not
+>   made ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)).
+>   The same reason the `backlog.md` marker carries **no `— priority M` suffix**.
+> - This brief's **`## Status` is unchanged at `🔲 Backlog`** — the task has not started.
+>
+> ⚠️ **The earlier wording here — *"scheduled by ruling but unplaced in fact"*, and the
+> `NEEDS-DECISION` it described — is OBSOLETE and has been removed.** It is quoted in this sentence
+> only so a reader following a stale citation can tell what happened to it.
+>
+> ⚠️ **What did NOT change: the one-row scope is the ruling, not the finished sprint.** A second
+> pass scopes the rest of Sprint 7, and the other fourteen tasks in `0337`–`0351` stay `Unscheduled`
+> **by ruling** until it runs.
+
+*Recorded 2026-08-29 by a spawned `fkit-producer`, which relayed the first ruling and declined to invent a
+board for it. Resolved the same day by a second spawned `fkit-producer` acting on the owner's
+board-opening ruling above — neither had an owner channel ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+and neither decided anything beyond the mechanics of the ruling it was handed.*

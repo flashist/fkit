@@ -81,6 +81,8 @@ deprioritisation, not a descope.
   >
   > > ⚠️ **Dated correction 2026-08-22 (lint) — the `active none` reading in the block above is a 2026-08-14 measurement, not a current one; the block is left byte-identical.**
   > > [[tasks/sprint-6-repair-the-record-the-board-rests-on]] opened the same day and is the active board. Everything else in the block still holds.
+  > >
+  > > > ⚠️ **Further dated note 2026-08-29 — the 2026-08-22 note above is itself now dated; every line above is left byte-identical.** Sprint 6 has since been **archived** to `ai-agents/sprints/done/sprint-6.md` (banner `## 🔒 CLOSED — 2026-08-29.`), so *"is the active board"* describes 2026-08-22. ⭐ **The general principle the original block states — *a closed row set is not a closed board* — is STILL unaffected, and Sprint 6 has now supplied it a second measured instance**: 21 of 21 rows closed while the board went on being selected as active, until the move landed.
 - **Its batching partner `0291` is still open** (`🔲 Backlog`, verified 2026-08-14), as is `0295`.
   The batch is now **`0291` + `0295`**, and the reason for batching is **stronger**, not weaker: both
   rows edit `install-and-self-update.md`, and running them together writes that page **once** more

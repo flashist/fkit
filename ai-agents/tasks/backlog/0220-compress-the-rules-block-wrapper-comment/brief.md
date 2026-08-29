@@ -138,7 +138,7 @@ comment's actual warnings.**
   > **What is true today**, verified first-hand 2026-08-16: **`0218` has landed.** Its folder is
   > [`ai-agents/tasks/done/0218-repair-0177s-stale-cap-and-byte-figures/`](../../done/0218-repair-0177s-stale-cap-and-byte-figures/brief.md),
   > its `## Status` reads `✅ Done (agent-closed — not owner-verified)`, and its Sprint 6 P3 row on
-  > [`sprint-6.md`](../../../sprints/sprint-6.md) reads the same. `0177`'s brief is **repaired in the
+  > [`sprint-6.md`](../../../sprints/done/sprint-6.md) reads the same. `0177`'s brief is **repaired in the
   > working tree** — the figures it used to pin as acceptance criteria are replaced by an instruction
   > to re-measure at work time — so the *"pulling `0177` before `0218` lands"* hazard above is
   > **discharged**. ⚠️ That repair is **uncommitted**: check out an earlier commit and the old text is

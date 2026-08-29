@@ -156,7 +156,7 @@ chance. That is the failure mode a committed, fail-closed test removes.
 > ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)).
 >
 > **The three edits of the forward move, all done in this act:** the row was added to
-> [`sprint-6.md`](../../../sprints/sprint-6.md) at `P19`; the row on
+> [`sprint-6.md`](../../../sprints/done/sprint-6.md) at `P19`; the row on
 > [`backlog.md`](../../../sprints/backlog.md) was flipped to
 > `➡️ Moved to [Sprint 6](sprint-6.md) — priority P19` and **not deleted** (Task and Brief cells left
 > byte-identical); and this brief's `## Sprint` / `## Priority` were updated. ⚠️ **The `— priority P19`

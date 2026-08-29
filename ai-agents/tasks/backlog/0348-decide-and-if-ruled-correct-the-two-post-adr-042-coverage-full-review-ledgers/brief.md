@@ -1,4 +1,13 @@
-# Decide — and, if ruled, correct — the two post-ADR-042 `Coverage: full` review ledgers
+# Append a dated coverage correction to `0188`'s closed review ledger
+
+> ⚠️ **RETITLED 2026-08-29. The original title was
+> *"Decide — and, if ruled, correct — the two post-ADR-042 `Coverage: full` review ledgers"*.** The
+> decide-half is **discharged** by the owner ruling recorded below, and the scope narrowed from two
+> ledgers to one. ⛔ **The folder slug
+> (`0348-decide-and-if-ruled-correct-the-two-post-adr-042-coverage-full-review-ledgers`) is now stale
+> and was deliberately NOT renamed** — a folder rename is a move, the movers only move between
+> `backlog/` `done/` `cancelled/`, and inbound citations point at the current path. **Cite this task by
+> ID `0348`, not by slug.**
 
 ## ID
 0348
@@ -27,7 +36,46 @@ on the owner's ruling that `0272`'s coder record these for the producer to route
 them in `0272`'s `worklog.md` §*"For the producer — three items to file at close"*, items 1 and 2, and
 **touched neither ledger**.
 
+### ✅ RULED 2026-08-29 — the gate below is DISCHARGED, and the scope is now ONE ledger
+
+**Owner ruling, 2026-08-29, given live via `AskUserQuestion` in a `fkit lead` session — the option
+label is the verbatim text: "Correct 0188 only (Rec)".** That is **disposition B** in
+§*"The decision this brief puts"* below, which is the disposition this brief recommended.
+
+**The ruling authorizes exactly one edit:** an appended, dated correction note beneath specimen 2,
+[`0188`'s ledger](../../done/0188-repair-the-five-live-ownership-fact-defects/review.md) — the bare
+`Coverage: full.` claim. ⛔ **Specimen 1, `0327`'s ledger, stays frozen and MUST NOT BE TOUCHED.**
+
+**⭐ Why `0327` is excluded — the reason, not just the outcome. Record this, do not paraphrase it away.**
+`0327`'s ledger was **written before `0272` landed**. ADR-042 D1 existed, but its three-state coverage
+vocabulary had not yet been written into `claude/skills/fkit-review/SKILL.md`,
+`fkit-stateful-review/SKILL.md`, or the reviewer agent text — the things a reviewer actually reads at
+review time. So that ledger's `full coverage` is **an honest record of what its reviewer knew at the
+time**, written in the only vocabulary then available to them. ⛔ **Correcting it would not fix an
+error; it would rewrite that record** — overwriting a truthful account of a past state of the project
+with a vocabulary that did not yet exist when it was written. The ledger also already tells the truth
+in the same breath (*"reasoning-and-read-only per ADR-042 D1, the normal expected state, not a
+degradation"*), so no reader is misled and no reader rescue is owed.
+
+⚠️ **Re-measured 2026-08-29: `0327`'s ledger carries the banned phrase TWICE, not once** — at
+`review.md:14` and again at `review.md:72` (*"**completed, full coverage** — reasoning-and-…"*). The
+table below records only `:14`. **Both are out of scope**, and this note exists so a later reader does
+not mistake the second one for a missed specimen.
+
+⚠️ **`0188`'s ledger is unchanged as of this ruling** — re-measured 2026-08-29, the claim still sits at
+`review.md:27` and still reads *"Reviewers run: own pass + Codex (`codex exec --sandbox read-only`,
+exit 0). Coverage: full."*
+
+*Ruling relayed and recorded by a spawned `fkit-producer`, 2026-08-29, which had no owner channel of
+its own ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md))
+and decided nothing — the ruling was given live in the lead session and is reproduced here verbatim.*
+
 ### ⚠️ THIS TASK IS NOT AUTHORIZED TO START YET — the same gate `0274` carried
+
+> ✅ **DISCHARGED 2026-08-29 by the ruling above.** The words below are kept, not deleted — they are
+> the reasoning that produced the question. ⛔ **Do not re-put this decision to the owner**, and read
+> the gate as satisfied **for `0188` only**; for `0327` the ruling is a positive instruction to leave
+> it frozen, not an undischarged gate.
 
 The owner ruled that these recurrences be **filed**. Filing is not authorization to edit a closed
 ledger. [ADR-034](../../../knowledge-base/decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record.md)
@@ -74,6 +122,10 @@ fact, and it is a new task.
 
 ## What to build
 
+> ⚠️ **NARROWED 2026-08-29 by the owner ruling above — original words kept.** The gate **is**
+> discharged, and the ruling names **exactly one ledger: `0188`'s.** Read *"whichever ledgers the
+> ruling names"* below as **that one file and no other**. **One note, in one file, and stop.**
+
 **Nothing, until the gate above is discharged.** Then, for whichever ledgers the ruling names:
 
 **One appended, dated correction note per named ledger. Nothing else.**
@@ -98,6 +150,17 @@ sandbox, not a degradation.
   ([ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md))
   and no re-rank.
 - ⛔ **Do not edit ADR-042** — its stale citations are `0349`, not this task.
+  > 🆕 **2026-08-29 — pointer refreshed, original words kept:** `0349` was **cancelled as superseded**
+  > on owner ruling 2026-08-29 (*"One combined pass (Rec)"*) and its scope absorbed into
+  > [`0344`](../0344-refresh-the-stale-line-refs-and-moot-r5-rationale-inside-release-mjss-fenced-summary-block/brief.md).
+  > **The constraint is unchanged and still binding** — ADR-042's stale citations belong to `0344`
+  > now, and remain out of scope here.
+- ⛔⛔ **DO NOT TOUCH `0327`'s LEDGER** (`ai-agents/tasks/done/0327-refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim/review.md`)
+  — **owner ruling 2026-08-29, "Correct 0188 only (Rec)"**. Its `full coverage` at `:14` **and** at
+  `:72` both stay **byte-identical**. ⚠️ **This is not an oversight to helpfully tidy up:** that ledger
+  pre-dates `0272`, so its wording is an honest record of what its reviewer knew, and correcting it
+  would rewrite that record. **`git diff` on that file must be completely empty.** A reviewer of this
+  task should treat any change there as a failure, not a bonus.
 - ⛔ **Do not touch `0259`'s or `0264`'s ledgers** — those are `0274`'s, and doing both here would
   double-correct them.
 - ⛔ No `ai-agents/wiki-vault/` write

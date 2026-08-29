@@ -42,6 +42,8 @@ candidate is `backlog.md`, whose identity is `Backlog`, and `Backlog` is **never
 ADR-041.
 
 > ⚠️ **Dated correction 2026-08-22 — the paragraph above is a 2026-08-14 measurement and is no longer current; it is left byte-identical.** [[tasks/sprint-6-repair-the-record-the-board-rests-on]] opened **2026-08-14** at `ai-agents/sprints/sprint-6.md` and is the active board. ⛔ **This does not amend `0294`'s ruling**: the owner ruled *"Omit the successor clause"*, Sprint 5's banner still names no successor, and **that no-successor case still establishes no convention.** ⭐ The gap this page recorded was real — the project genuinely had no active board between the archival and Sprint 6's opening.
+>
+> > ⚠️ **Further dated note 2026-08-29 — the 2026-08-22 note above is itself now dated; both it and the paragraph it corrects are left byte-identical.** Sprint 6 has since been **archived** to `ai-agents/sprints/done/sprint-6.md` with a `## 🔒 CLOSED — 2026-08-29.` banner, so the path named above is pre-archival and *"is the active board"* describes 2026-08-22. ⭐ **This page's own thesis just got its second confirming instance**: Sprint 6 sat 21-of-21 closed and was still reported as the active sprint until the move landed — *"a banner flip is cosmetic; only the move changes behaviour."* ⚠️ **Unlike `0294`, Sprint 6's archival carries no owner ruling** (the archiving producer had no owner channel, ADR-021).
 
 **Link integrity, measured this sync (2026-08-14):** ✅ **zero markdown links to the old path remain**
 anywhere under `ai-agents/` — `grep -rnE "\]\([^)]*sprints/sprint-5\.md"` returns **0**. ⚠️ **54

@@ -3429,3 +3429,87 @@ No tracked task completed by this run.
 
 1. ⛔⛔ **Sprint 6 is 21-of-21 closed and is STILL the active board.** No `🔒 CLOSED` banner, not moved to `sprints/done/`, and `dashboard.sh select-active ai-agents/sprints` returns `active file="sprint-6.md"` — measured this run. **This is a repo-state condition, not a vault defect**, and the vault cannot fix it: archiving a board is producer work. It is the exact condition `0294` recorded on Sprint 5 as *"a banner flip is cosmetic; only the move changes behaviour."* ⭐ **The five new briefs `0337`–`0341` are the arc filed to answer it, and all five are open.** Recorded on [[wiki/tasks/sprint-6-repair-the-record-the-board-rests-on]], [[wiki/systems/fkit]] and `index.md`.
 2. ⚠️ **The second CI failure (2026-08-21) is unowned and uninvestigated.** What it caught was **not** determined this run and no task is known to own it. ⛔ **Stated rather than guessed** — the vault records the count, not a cause it did not measure.
+
+---
+
+## 2026-08-29 — targeted repair (Sprint 6 archived · `0349` cancelled)
+
+**Not a sync and not a lint.** A narrow follow-up to the sync and lint logged above: the repo moved
+about an hour after they finished, and two of their recorded conditions went stale. **Scope was held to
+those two facts** — no re-ingest of the sprint, no re-walk of the 272 pages.
+
+**What moved.** (1) Sprint 6 was archived — `ai-agents/sprints/sprint-6.md` → `ai-agents/sprints/done/sprint-6.md`,
+with a line-3 `## 🔒 CLOSED — 2026-08-29.` banner, 21 of 21 closed. (2) Task `0349` was **cancelled** to
+`ai-agents/tasks/cancelled/0349-…/` carrying `⛔ Cancelled (agent-closed — not owner-verified) (2026-08-29)`,
+**superseded and absorbed by `0344`** on an owner ruling whose option label is verbatim **"One combined pass (Rec)"**.
+
+### ⭐ The measurement that changed the shape of the work
+
+⛔ **A grep for markdown links to either moved path returned ZERO.** Every one of the vault's references
+is a **backticked path, a `**Source**:` field, or prose** — so *"repair the rotted links"* was, on
+measurement, **almost entirely a stale-claim job instead**. Exactly **one** live locator existed. The
+locator-vs-claim rule from this morning's lint was applied unchanged: **a path inside a historical
+record, a dated note, or captured command output is frozen**; only live locators get repointed.
+
+### Repointed — 1 (the only true locator)
+
+- [[wiki/tasks/sprint-6-repair-the-record-the-board-rests-on]] — `**Source**:` → `ai-agents/sprints/done/sprint-6.md`,
+  and `**Status**:` `in-progress — 🟢 THE ACTIVE BOARD` → `done — 🔒 CLOSED and ARCHIVED`. Both prior values
+  are quoted inline in the fields that replaced them. **Precedent: [[wiki/tasks/sprint-3-close-the-rank-integrity-loop]]**,
+  whose `Source`/`Status` were repointed the same way on its own archival.
+
+### Stale claims repaired — 8 pages, every one by a dated note with the original left byte-identical
+
+1. `index.md` — the Sprint 6 catalog row's *"⛔ The board itself is NOT closed … `select-active` still returns it"*. ⭐ **The row's leading `🟢 THE ACTIVE BOARD` marker was additionally struck through inline** — `index.md`'s own established shape for an archived sprint row (see the Sprint 5 and Sprint 3 rows), chosen here because a catalog row's first token is what a skimming reader acts on. **Nothing was deleted; the struck text is still readable.**
+2. [[wiki/tasks/sprint-6-repair-the-record-the-board-rests-on]] — the header `NOT archived` block **and** the §Outcome clause (2 notes).
+3. [[wiki/systems/fkit]] — *"it is still the ACTIVE board because nothing archived it"*, written by **this morning's lint**; ⭐ **the vault correcting its own same-day measurement.**
+4. [[wiki/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob]] — *"the board `select-active` now resolves to"*. ⭐ Noted that **ADR-041's own mechanism is what made the archival bite**: selection reads resolved identity over the *eligible set*, so the **move** removed it — a banner alone would not have.
+5. [[wiki/tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — both the `0349` chain row and the *"STILL returned as the active board"* clause (2 notes).
+6. [[wiki/tasks/archive-sprint-5-move-the-plan-into-sprints-done]], 7. [[wiki/tasks/sprint-5-fix-what-a-real-project-found]],
+8. [[wiki/systems/install-and-self-update]], and [[wiki/tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]]
+   — four **2026-08-22 dated notes** that named the pre-archival path and said *"is the active board"*. ⛔ **None was edited**:
+   a dated note is a frozen record, so each received a **further** dated note beneath it.
+
+### ⭐ Discharged — the lint's own flag #1
+
+⛔⛔ *"Sprint 6 is 21-of-21 closed and is STILL the active board"* — flagged for human review this morning
+as **a repo-state condition the vault could not fix** — **was fixed by hand the same day.** It is now a
+**worked example rather than a live defect**, and is recorded as **discharged, not withdrawn**: the
+finding was correct when made.
+
+⛔ **The `0337`–`0341` sprint-lifecycle arc is NOT made moot, and none of the five has closed.** This
+archival was a **manual `git mv` plus a hand-written banner** — precisely the unautomated path that arc
+exists to replace. ⭐ It also exposed a **second gap for that arc**: ⚠️ **this is the first sprint archival
+in the project with no owner ruling behind it** (the archiving producer had no owner channel, ADR-021),
+and nothing but banner prose distinguishes an owner-ruled archive from an agent-performed one.
+
+### Deliberately left alone
+
+- **`log.md`'s three prior `sprints/sprint-6.md` mentions** (lines 3166, 3294, 3376) — append-only dated
+  entries recording what was measured then. **Frozen.**
+- **[[wiki/tasks/record-that-0250-discharged-0188s-d1-and-warn-off-the-reordering]]** and
+  **[[wiki/tasks/write-the-durable-citation-anchors-convention-page]]** — bare `sprint-6.md` filenames inside
+  historical findings and a sprint tag. **Frozen; no defect.** *(Both were on the candidate list handed in.)*
+- **ADR-041 lines 93 and 152** — `plan-sprint-6.md` / `Sprint 6` inside **hypothetical worked examples set
+  in a different repo**. Not this project's file at all.
+- **Pre-existing `active none` sentences already dated-corrected to the 2026-08-14 gap** — untouched by
+  this change and not made newly wrong by it.
+
+### ⚠️ Deliberately NOT written: what the active board is now
+
+`dashboard.sh select-active ai-agents/sprints` returned **`active none`** when measured during this
+repair — **and that reading was already expiring as it was taken**: a producer was concurrently opening
+`ai-agents/sprints/sprint-7.md`. ⛔ **No page was given a standing claim about the current active board.**
+Only the durable facts were recorded: Sprint 6 **is** archived, and `select-active` **no longer returns it**.
+⭐ Rationale: a pinned live selection result is the exact shape that has now gone stale on these pages
+**three times** (Sprint 3, Sprint 5, Sprint 6).
+
+### Notes
+
+- ⚠️ **The candidate list handed in was 10 files + 1, and explicitly unverified.** Re-measured
+  independently: **3 of the 10 had no defect** (frozen historical mentions), and ⭐ **one site it missed was
+  found and repaired** — [[wiki/tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]],
+  a nested 2026-08-22 note asserting Sprint 6 as the active board.
+- **No page was created and none deleted; `0349` has no page of its own** — its cancellation and
+  supersession are recorded at the single site that listed it as open work.
+- ⛔ **Nothing committed or pushed. Zero writes outside `ai-agents/wiki-vault/`.**

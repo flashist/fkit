@@ -71,3 +71,37 @@ Plans on disk, checked 2026-08-25:
 - **Blocks:** nothing — but until it lands, `/fkit-status` on this repo reports no active sprint.
 - **Not in scope:** any consuming project's plans — a project that upgrades fkit has the same
   migration to do; `0339`'s README/convention text must say so (flagged to `0339` here).
+
+### 🆕 2026-08-29 — CORRECTED, original words above kept byte-identical: Sprint 6 has been ARCHIVED
+
+⚠️ **This brief was written 2026-08-25, when `sprint-6.md` was the open, live plan. It is not any
+more.** On **2026-08-29** Sprint 6 was archived — **`21 done — of 21`, zero open rows** — by a spawned
+`fkit-producer` following the `0294` procedure, and the file now lives at
+[`ai-agents/sprints/done/sprint-6.md`](../../../sprints/done/sprint-6.md) carrying the legacy line-3
+`> ## 🔒 CLOSED — 2026-08-29.` banner. ⛔ **That archival carried NO owner ruling** — it is recorded on
+the plan's own banner as agent-performed and not owner-verified.
+
+**What that changes here — re-derive all of it at pickup, do not trust the text above:**
+
+1. **`## What to build` step 1 is SPENT as written.** It says *"Insert the line-3 status banner with
+   `🔄 In progress` into `sprint-6.md`"*. There is **no open plan left to backfill** —
+   `ai-agents/sprints/` now holds only `backlog.md` (identity `Backlog`, which the brief above already
+   excludes from getting a sprint status) plus `done/` and `reviews/`. ⚠️ **Do not stamp `🔄 In progress`
+   onto a 21-of-21 board** — that would assert a status the board does not have.
+2. **Step 2 now covers SIX plans, not five** — `sprints/done/sprint-1.md` … `sprint-6.md`. Sprint 6's
+   banner is in the same legacy `🔒 CLOSED` form as the other five, so the same ruling applies: if the
+   `0337` ADR reads that form as `Done`, leave it byte-identical.
+3. **All four `## Verification steps` are STALE.** Step 1 expects `select-active` to return
+   `sprint-6.md` as active; step 3 expects the diff to touch `ai-agents/sprints/sprint-6.md`; step 4
+   expects `/fkit-status` to report Sprint 6. **Measured 2026-08-29 after the archival,
+   `bash claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints` returns `active none`
+   with `backlog.md` as the only candidate (exit 3)** — the same no-active-sprint state that held
+   between Sprint 5's archival and Sprint 6 opening. ⛔ **Rewrite these steps against whatever the board
+   state actually is at pickup**; whether an active sprint exists then depends on the still-open
+   question of opening Sprint 7.
+4. **`## Notes` "Blocks: nothing"** — still true, but the reason has shifted: `/fkit-status` reports no
+   active sprint *today*, before this task lands, because there is no open plan at all.
+
+*Recorded by a spawned `fkit-producer`, 2026-08-29, as part of the Sprint 6 archival. No owner channel
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md));
+nothing here rules on anything — it records measured state and flags what to re-derive.*

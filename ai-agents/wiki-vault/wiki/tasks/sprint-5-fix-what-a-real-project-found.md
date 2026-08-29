@@ -39,6 +39,8 @@
 >   **`active none`**, with `backlog.md` (identity `Backlog`) the only candidate — and `Backlog` is
 >   never eligible. ⚠️ **There is no active board at all right now.**
 >   > ⚠️ **Dated correction 2026-08-22 — the clause above is a 2026-08-14 reading and is no longer current; the line is left byte-identical.** [[tasks/sprint-6-repair-the-record-the-board-rests-on]] opened **2026-08-14** at `ai-agents/sprints/sprint-6.md`. The `active none` gap was real and is closed. ⛔ **Sprint 5's banner is deliberately NOT amended to point at Sprint 6** — the owner ruled the successor clause omitted.
+>   >
+>   > ⚠️ **Further dated note 2026-08-29 — the 2026-08-22 note above is itself now dated; every line above is left byte-identical.** Sprint 6 has since been **archived** to `ai-agents/sprints/done/sprint-6.md` (banner `## 🔒 CLOSED — 2026-08-29.`), so the path named above is pre-archival. ⛔ **Sprint 5's banner is STILL not amended and still names no successor** — that ruling is untouched by any of this, and the no-successor case still establishes **no convention**.
 > - `0294`'s brief reads **`✅ Done (agent-closed — not owner-verified)`**.
 >
 > **The archival's authority, both halves, quoted rather than paraphrased.** Owner ruling **2026-08-13**

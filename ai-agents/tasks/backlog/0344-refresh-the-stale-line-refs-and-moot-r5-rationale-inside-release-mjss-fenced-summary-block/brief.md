@@ -1,4 +1,124 @@
-# Refresh the stale `:NNN` line references and the moot R5 rationale inside `bin/release.mjs`'s fenced summary block — comments only
+# Repair the citation drift in `bin/release.mjs`'s fenced summary block and in ADR-042 — one pass, comments and pointers only
+
+> ⚠️ **RETITLED AND WIDENED 2026-08-29 by owner ruling.** The original title was *"Refresh the stale
+> `:NNN` line references and the moot R5 rationale inside `bin/release.mjs`'s fenced summary block —
+> comments only"*, and the brief below is that task, kept intact. **It has absorbed `0349`** — see
+> §*"🔗 ABSORBED 2026-08-29 — `0349`, ADR-042's two stale citations"* immediately below.
+> ⛔ **The folder slug still reads `0344-refresh-the-stale-line-refs-…-release-mjss-fenced-summary-block`
+> and was deliberately NOT renamed** (a rename is a move; the movers only move between `backlog/`,
+> `done/`, `cancelled/`, and inbound citations point at the current path). **Cite this task by ID
+> `0344`.**
+
+## 🔗 ABSORBED 2026-08-29 — `0349`, ADR-042's two stale citations
+
+**Owner ruling, 2026-08-29, given live via `AskUserQuestion` in a `fkit lead` session — the option
+label is the verbatim text: "One combined pass (Rec)".** It ruled that this task and `0349`
+(*"Correct ADR-042's two stale `test/prove-red.sh:59` citations"*) are **one shippable unit**, not two.
+
+**Shape chosen, and why — a spawned `fkit-producer`'s call, not the owner's.** The owner ruled *that*
+they combine; the producer chose *how*. `0349` was folded **into this brief**, and `0349` itself is
+**cancelled as superseded-and-absorbed**. The alternative — a third new brief with both cancelled —
+was rejected because it would have required re-transcribing this brief's **fence rule**, its
+2026-08-27 owner ruling, its eight-row measurement table and its nine verification steps, and the
+fence is the single most load-bearing constraint here (held three times, owner-ruled twice). Folding
+the small half into the large one preserves both authority trails and risks dropping neither.
+
+**Why one unit is coherent.** Both halves are the same defect class — a `:NNN` citation that drifted
+because the file it points into grew above it — and both are governed by
+[`durable-citation-anchors.md`](../../../knowledge-base/conventions/durable-citation-anchors.md).
+⭐ **They share one open question: anchor-or-number.** `0349`'s brief said so itself — *"Whichever form
+is chosen here is a precedent the next ADR citation will copy. `0349` faces the same question."*
+Shipping them separately invites two different answers to one question. **Answer it once, apply it to
+both, and say so.**
+
+**Role.** `0349` carried `## Owner: fkit-architect`. **Under
+[ADR-044](../../../knowledge-base/decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md)
+§Decision clause 1, the Build role for both halves is the coder** — a citation repair inside an ADR
+runs no skill (it is expressly **not** an amendment, so not `/fkit-record-decision`), and *"a
+deliverable that names no skill — source, tests, scaffold, prose under `claude/`, coordination-doc
+repairs — is the coder's … whatever `## Owner` says."* **This task's `## Owner` stays `fkit-coder`,
+and that is now correct for the whole of it.**
+
+### ⛔⛔ THE TWO HALVES ARE SEPARATELY FENCED — read this before planning
+
+**Widening this task does NOT relax the `bin/release.mjs` fence by one line.** The `0288` summary-block
+fence, the 2026-08-27 comment-only ruling, and every ⛔ in §*"⛔ Out of scope"* below apply to
+`bin/release.mjs` **exactly as they did before this merge**. ADR-042 is a knowledge-base document, is
+inside **no** fence, and grants **no** additional latitude over the source file. ⛔ **Conversely, the
+`prove-red.sh` mutation gate and the comment-only proof are `bin/release.mjs`'s alone** — do not apply
+them to the ADR, and do not report the ADR half as covered by them.
+
+### `0349`'s content, carried over — the drift, measured 2026-08-28
+
+`0349` was filed 2026-08-28 by a spawned `fkit-producer` with **no owner channel**
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md))
+at the close of [`0272`](../../done/0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/brief.md),
+on the owner's ruling that the producer file it. The drift was found and re-verified in `0272`'s
+Round 2 stateful review (R12); `0272` corrected its **own** dated note and deliberately left the ADR
+alone.
+
+[`ADR-042`](../../../knowledge-base/decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so.md)
+cites `test/prove-red.sh:59` for the line `work="$(mktemp -d)"` at **two** sites:
+
+| Site | Reads |
+|---|---|
+| `adr-042-…md:33` | *"`test/prove-red.sh:59` opens with `work="$(mktemp -d)"`, so fkit's own red-proof harness is among the things Codex cannot run."* — inside the §Context paragraph that establishes the whole ADR's premise |
+| `adr-042-…md:313` | the §Evidence list: `· test/prove-red.sh:59` |
+
+⚠️ **The real line is a moving target, and that is the point.** Measured 2026-08-28,
+`work="$(mktemp -d)"` was at **`:80` at `HEAD`** and **`:82` in the working tree**.
+**⛔ Do not write `:82`, `:80`, or any number measured today.** Re-measure and record what you find.
+
+**Why it matters.** `:33` is not a footnote — it is the sentence that establishes *why* a Codex pass
+measures nothing, and ADR-042 D1's *"Re-raise only if"* conditions are load-bearing for every review
+round from here on.
+
+**What to build for this half.** Re-point both citations so they resolve **without a naked line
+number**. Same form question as the `bin/release.mjs` half — **answer it once for both.** The
+recommended default is to name the anchor and drop `:NNN` entirely (e.g. *"`test/prove-red.sh` opens
+its work dir with `work="$(mktemp -d)"`"*); the quoted line is unique in the file and survives every
+renumber. Freezing a revision by SHA is available but heavier, and the exact coordinate is not
+load-bearing here.
+
+**Constraints for this half:**
+
+- ⛔ **ADR-042's Decision, Status, Date, Deciders, and every D1/D2 clause stay byte-identical.** This
+  is a **pointer repair, not an amendment**: a historical record's claims are frozen, its links are
+  not. If the surrounding sentence has become factually wrong beyond the coordinate, **STOP and
+  report** rather than rewriting it here.
+- ⛔ **Change no other citation in the ADR.** Its `claude/skills/…:NN` call-site list and its
+  `tasks/done/…/review.md:NN` evidence list are **out of scope** — same durability problem, separate
+  decision.
+- ⛔ **Do not edit `test/prove-red.sh`.** Nothing is wrong with it; it moved. (Note this sits beside
+  the other half's rule that `prove-red.sh` is *run* as a gate — running it is required, editing it is
+  forbidden.)
+- ⛔ **Do not edit `0272`'s corrected note** — it already cites the right anchor and is in a closed
+  task folder.
+
+**Verification for this half** (in addition to every step in §*"Verification steps"* below, which
+remain `bin/release.mjs`'s):
+
+- **A1.** `grep -n 'prove-red' ai-agents/knowledge-base/decisions/adr-042-*.md` returns **no `:59`**,
+  and no naked `:NNN` for that file at all if the anchor form was chosen.
+- **A2.** `grep -n 'mktemp -d' test/prove-red.sh` is run and its output pasted into the worklog at
+  implementation time, so the record shows what the line actually was that day.
+- **A3.** `git diff` on ADR-042 is confined to `:33` and `:313` — paste it; every other line unchanged.
+- **A4.** Quote the whole rewritten `:33` sentence in the worklog. Its claim — that Codex cannot run
+  the red-proof harness — must be **unchanged in meaning**.
+- **A5.** State which form was chosen and why, against `durable-citation-anchors.md`, **and confirm
+  the same form was used in `bin/release.mjs`** — or, if not, argue why the two targets justify
+  different forms. ⚠️ Silently using two forms is a failure of this task's whole reason for existing.
+- **A6.** `git diff --stat` shows ADR-042, `bin/release.mjs`, and this task folder only. ⛔ Step 8
+  below is superseded by this one.
+
+⚠️ **If Option B (durable anchors) is chosen for `bin/release.mjs`, `0349`'s open question stands and
+is still not decided here:** whether `durable-citation-anchors.md` needs an addendum for **in-code
+comments citing their own file**. Record it in the worklog as an open question for the owner;
+⛔ **do not edit the convention** — it is dual-homed and owner-ruled.
+
+---
+
+## The original `0344` brief follows, unchanged
 
 ## ID
 0344
@@ -232,7 +352,20 @@ follow, and STOP there — those are outside this task.**
 
 - **Depends on:** 0300 — its Process-review round must land before the numbers here are re-derived;
   measured earlier, this task refreshes against a file still moving.
+  > ✅ **DISCHARGED — re-measured 2026-08-29.** `0300` is closed: its folder sits at
+  > `ai-agents/tasks/done/0300-release-mjs-with-branch-other-commits-and-tags-head-but-pushes-a-different-ref-and-reports-released/`
+  > and its brief reads `## Status` `✅ Done (agent-closed — not owner-verified)`. **This task is
+  > unblocked.** ⚠️ The dependency's *reason* survives as a warning, not a wait: the numbers in the
+  > table above were measured 2026-08-27 against a then-moving file, so **verification step 1's
+  > re-derivation is now the only thing standing between this task and a wrong number.**
 - **Blocks:** nothing.
+- **Absorbed `0349`** on owner ruling 2026-08-29 (*"One combined pass (Rec)"*) — see the
+  §*"🔗 ABSORBED"* section at the top. `0349` is **cancelled as superseded**, not abandoned; its scope
+  lives here in full. A reader following a `0349` citation lands in
+  `ai-agents/tasks/cancelled/` on a brief that points here.
+- ⚠️ **This task now has two deliverables in two files.** `## Owner` stays `fkit-coder` and is correct
+  for both under ADR-044 §Decision clause 1. **A close that ships only one half is not a close** —
+  say which halves landed.
 - **Snapshot provenance:** every `:NNN` in this brief was read from disk on **2026-08-27** by a
   spawned `fkit-producer` against a **408-line** `bin/release.mjs` (working tree at spawn time), and
   cross-checked against `0300`'s R4 row, which it matches. Treat as dated.

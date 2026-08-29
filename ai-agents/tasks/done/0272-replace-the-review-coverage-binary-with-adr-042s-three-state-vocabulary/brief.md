@@ -277,7 +277,7 @@ label is the verbatim text**: **"Re-target it to Sprint 6 (Recommended)"**.
 
 **What follows from it:**
 
-- **This task is re-targeted to [Sprint 6](../../../sprints/sprint-6.md)**, opened the same day by a
+- **This task is re-targeted to [Sprint 6](../../../sprints/done/sprint-6.md)**, opened the same day by a
   separate owner ruling of the same session (verbatim **"Accept as proposed (Recommended)"**). Its
   `## Sprint` field now reads `Sprint 6`, and its `backlog.md` row reads
   `➡️ Moved to [Sprint 6](sprint-6.md)`.
