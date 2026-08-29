@@ -7,7 +7,7 @@
 Sprint 7
 
 ## Priority
-Unscheduled
+P1
 
 ## Status
 🔲 Backlog
@@ -130,11 +130,24 @@ board status change.
 - **Blocks:** nothing directly — but the notes it writes are what make `0224` and `0225` correct when
   they are eventually pulled. Doing those two tasks **before** this one lands is the failure mode this
   brief exists to prevent.
-- ⚠️ **Priority is `Unscheduled` — and stays so on Sprint 7, which opened UNRANKED.**
-  Updated 2026-08-29 (was: *"the Backlog board is unranked by design"* — true when this brief sat on
-  `backlog.md`, stale since the move). **No merit rank is asserted on either board.** The rank is owed if
-  and when the owner ranks Sprint 7; see [`sprint-7.md`](../../../sprints/sprint-7.md)
-  §"⛔ This board is UNRANKED".
+- ⭐ **Priority is `P1` on Sprint 7. Updated 2026-08-29 — the rank that was owed has been paid.**
+  **Owner ruling, 2026-08-29, given live via `AskUserQuestion` in a `fkit lead` session; the option
+  label is the verbatim text: "Rank Sprint 7; declare backlog an archive (Rec)".** In the same act the
+  owner approved the full twelve-row board (*"Approve all 12 as proposed (Rec)"*), in which **this row
+  is `P1`**. See [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ THIS BOARD IS RANKED".
+  - ⚠️ **This bullet previously read**, verbatim: *"Priority is `Unscheduled` — and stays so on
+    Sprint 7, which opened UNRANKED. … The rank is owed if and when the owner ranks Sprint 7; see
+    `sprint-7.md` §'⛔ This board is UNRANKED'."* **That was true when written and is now superseded**
+    by the ruling above. It is quoted here so a reader following a stale citation can tell what
+    happened to it, and so the §-name it pointed at is recoverable.
+  - ⭐ **`P1` is not an invented rank.** It is the position the owner approved on a board they ranked,
+    and — the board carrying exactly one row at the time — it is also the only position an append could
+    take. **No row was renumbered and none was inserted above a closed row**
+    ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md));
+    the board held no closed row at all when the rank was written.
+  - **The `backlog.md` marker gained its `— priority P1` suffix in the same act**, exactly as that
+    board's unranked-forward clause instructs: *"when the owner later ranks that board, add every
+    moved row's `— priority M` suffix in the same act."*
 - ⚠️ **Time-sensitivity, stated plainly.** `0224` and `0225` are both `🔲 Backlog` as of 2026-08-28. If
   either is pulled into a sprint before this note lands, it will be built against the old oracle and
   the C6 misroute ships with it. That is a sequencing risk, not a hard dependency — flagged, not solved.
@@ -143,6 +156,63 @@ board status change.
   or closed. If it has moved, write the new number and say when it was measured; do not copy this one
   forward unchecked (`conventions/evidence-before-assertion.md`).
 - **Source:** ADR-044 §C2 (iii), §C3, §C6, §Decision 1; owner ruling ND6.
+
+### ⭐ 2026-08-29 — WHY THIS BRIEF'S `## Owner` READS `fkit-producer` WHILE ADR-044 STAFFS THE BUILD `@fkit-coder`
+
+⭐ **Both are correct, because they answer different questions. This is NOT a routing defect, and a
+reader scanning Sprint 7's board should stop here rather than "fix" the field.**
+
+**Authority for writing this note.** Owner ruling, **2026-08-29**, given live via `AskUserQuestion` in
+a `fkit lead` session — the owner was shown the disagreement and ruled that it be **acted on**, and
+chose neither wording for me: the form (correct the field, or leave it and explain) was left to the
+producer. Relayed by a spawned `fkit-producer` with no owner channel
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+
+**⭐ THE FIELD IS LEFT AS `fkit-producer`, DELIBERATELY. Two rules, two jobs:**
+
+| | What it answers | What it says here |
+|---|---|---|
+| **`## Owner`** | *Which seat is **accountable for the task's delivery**?* — [`task-owner-vocabulary`](../../../knowledge-base/conventions/task-owner-vocabulary.md), §The owners: *"Exactly **one** role name per brief — the role accountable for the task's delivery"*, and *"It records **which seat is accountable**"* | **`fkit-producer`** — this task's own `## What to build` opens *"**Brief edits only** … This is a producer act: no source, no tests, no board status change."* |
+| **ADR-044 §Decision 1** | *Which role does `/fkit-sprint-ship-loop` spawn **for the Build step**?* | **`@fkit-coder`** — a deliverable naming no producing skill *"is the coder's, as sole source-write authority"* |
+
+⛔ **ADR-044 §Decision 1 SETTLES THIS IN ITS OWN WORDS, and the clause is the whole answer:** a
+no-skill deliverable is the coder's **"whatever `## Owner` says."** The rule is written to be
+**indifferent** to this field — so a `## Owner` that differs from the Build role is the rule working,
+not the rule being broken.
+
+⛔ **AND `## Owner` STILL HAS A LIVE JOB THAT `fkit-coder` WOULD BREAK.** ADR-044 **§Decision 4** makes
+the dashboard's Owner column the **step-1 skip predicate for vault rows** — *"the dashboard's Owner
+column … reads `fkit-wiki`"* — with a blank field *"not-eligible-until-repaired, never treated as
+coder."* The field is read; it is simply read for **that**. Overwriting it with a Build role would
+encode the answer to one question into the field that answers another.
+
+**What each mechanism actually does with this row today, measured 2026-08-29:**
+
+- `dashboard.sh` reads `## Owner` and renders it in the Owner column. Running it over Sprint 7 prints
+  **`fkit-producer`** for `P1` — a faithful report of the field.
+- `/fkit-sprint-ship-loop` **does not read `## Owner` at all**, so this field steers no worker. Under
+  ADR-044 §Decision 1 this row's Build step goes to **`@fkit-coder`** regardless of what is written
+  here.
+- ⛔ **Nothing is mis-routed, and nothing was ever mis-routed.**
+
+⛔ **TWO CORRECTIONS TO THE EARLIER RECORD, MEASURED RATHER THAN INHERITED:**
+
+1. ⛔ **This brief does NOT forbid changing its own `## Owner`.** [`sprint-7.md`](../../../sprints/sprint-7.md)
+   §"⭐ RESOLVED — `0347`'s `## Owner` disagreement" gave that as its first reason. **Re-read on
+   2026-08-29, the prohibition names the two TARGET briefs, not this one:** the constraint sits under
+   the `0224` and `0225` sub-headings and reads *"do not change **either brief's** `## Status`,
+   `## Sprint`, `## Priority`, `## ID` or `## Owner`"*, and verification step 1 scopes the diff to
+   *"exactly two existing files — `0224`/`brief.md` and `0225`/`brief.md` — **plus this task's own
+   folder**."* ⭐ **This brief's own fields were in fact already edited** — its `## Sprint` and its
+   `## Priority` both changed on 2026-08-29. The field is left as it is on the **merits above**, not
+   because a rule barred touching it.
+2. ⚠️ **It is not a "documentation-truth defect" either.** That framing assumed the two values are
+   competing answers to one question. They are not.
+
+⛔ **DO NOT "CORRECT" THIS FIELD BY GREPPING THE BRIEF FOR SKILL NAMES.** That is the **8-of-13**
+anti-pattern this very task exists to warn `0224` and `0225` about (ADR-044 §C6). ⭐ **If the
+accountable seat genuinely changes, the vocabulary's own rule applies** — *"If the accountable role
+genuinely changes, edit the field."* It has not changed; this is still a producer act.
 
 ### ⭐ OWNER RULINGS 2026-08-29 — this task is SCHEDULED, and the board is Sprint 7
 
@@ -172,10 +242,15 @@ this note lands, it is built against the old oracle and **ships the 8-of-13 misr
 >   **single row** — `select-active` now returns `active file="sprint-7.md" identity="Sprint 7"`
 >   (exit 0; it returned `active none`, exit 3, immediately before).
 > - This brief's **`## Sprint` is now `Sprint 7`**.
-> - This brief's **`## Priority` stays `Unscheduled`** — ⛔ **not an oversight.** Sprint 7 opened
+> - ~~This brief's **`## Priority` stays `Unscheduled`** — ⛔ **not an oversight.** Sprint 7 opened
 >   **unranked**, and one row is not a rank; inventing a `P1` would spend a decision the owner has not
 >   made ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)).
->   The same reason the `backlog.md` marker carries **no `— priority M` suffix**.
+>   The same reason the `backlog.md` marker carries **no `— priority M` suffix**.~~
+>   ⭐ **SUPERSEDED 2026-08-29 — the owner has since made that decision.** Ruling *"Rank Sprint 7;
+>   declare backlog an archive (Rec)"*, same channel, same day: **`## Priority` is now `P1`** and the
+>   `backlog.md` marker now carries **`— priority P1`**. ⛔ The struck text is left in place, not
+>   deleted, because it is the record of why the field read `Unscheduled` for the hours it did. See
+>   `## Notes` for the full account.
 > - This brief's **`## Status` is unchanged at `🔲 Backlog`** — the task has not started.
 >
 > ⚠️ **The earlier wording here — *"scheduled by ruling but unplaced in fact"*, and the

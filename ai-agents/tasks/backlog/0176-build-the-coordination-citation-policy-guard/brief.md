@@ -4,10 +4,10 @@
 0176
 
 ## Sprint
-Backlog
+Sprint 7
 
 ## Priority
-Unscheduled
+P7
 
 ## Status
 🔲 Backlog
@@ -261,7 +261,7 @@ work makes the case for it, **name it as a follow-up** — the producer files it
   and as evidence of reach, not as an instruction to widen the condition** — widening is a scoping
   decision this brief explicitly refuses to absorb, and `0237` already owns the open scanned-set
   question. **Put the widening question to the owner if one is present when this task runs.**
-- **Blocks:** nothing.
+- **Blocks:** `0356`, `0357`, `0358` — hard. ⚠️ **Corrected in place 2026-08-29**; this line previously read `- **Blocks:** nothing.`, true from filing until Sprint 7 gated its three sweeps on this guard being green. ⛔ It is a machine-parsed field — `dashboard.sh` derives the board Next-step from it ([`dependency-declaration-form`](../../../knowledge-base/conventions/dependency-declaration-form.md)) — so a stale value is drift, not a record; the record of the change is in §"⭐ PULLED ONTO SPRINT 7 AS `P7`".
 - **🔗 Kept SEPARATE from task `0175` (follow-up 7) — a producer judgement.** Report §8 left it open:
   *"Whoever files them should consider one task with two conditions rather than two tasks — noted as a
   producer judgement, not a ruling."* **Decision: two tasks.** The full reasoning is recorded in
@@ -274,3 +274,59 @@ work makes the case for it, **name it as a follow-up** — the producer files it
 - **Rank 154 is APPEND rank**, assigned under `/fkit-task-brief` step 5 by a spawned producer with no
   owner channel. **Flagged for owner confirmation.** On merit it belongs adjacent to `0175`, its pair
   — **so merit and append positions coincide.** No existing row was renumbered by this brief.
+
+### ⭐ PULLED ONTO SPRINT 7 AS `P7` — OWNER RULING 2026-08-29
+
+**Owner ruling, 2026-08-29, given live via `AskUserQuestion` in a `fkit lead` session. The option
+label is the verbatim text: "Approve all 12 as proposed (Rec)"** — the full twelve-row Sprint 7
+board, on which this task is **`P7`**. Ranking authority is the same day's companion ruling,
+**"Rank Sprint 7; declare backlog an archive (Rec)"**.
+
+**The three mandatory edits of a pull, all applied in this act:**
+
+1. The row was added to [`sprint-7.md`](../../../sprints/sprint-7.md) with the rank token `P7`.
+2. The [`backlog.md`](../../../sprints/backlog.md) row was flipped to
+   `➡️ Moved to [Sprint 7](sprint-7.md) — priority P7`. ⛔ **Not deleted.**
+3. This brief's **`## Sprint` is now `Sprint 7`** and **`## Priority` is now `P7`**.
+   **`## Status` is unchanged at `🔲 Backlog`** — the task has not started.
+
+⚠️ **THE `## Notes` BULLET BELOW READING *"Rank 154 is APPEND rank … Flagged for owner confirmation"*
+IS SUPERSEDED AND ITS FLAG IS DISCHARGED.** That rank was an append position on the **Backlog board**,
+assigned by a spawned producer with no owner channel, and it was correctly flagged for confirmation.
+⭐ **`P7` is not that number and does not inherit its provenance:** it is a rank on **Sprint 7**, at a
+position the **owner approved by name**. ⛔ The old bullet is left byte-identical as the record of the
+filing decision; **it is not a live flag any more.**
+
+⛔ **THE HARD DEPENDENCY IS UNCHANGED AND IS NOW ON THE CRITICAL PATH.** `0237` (`P6`) must land before
+this guard can go green — *"shipping it red is not an option"* is this brief's own words and the
+owner's ruling behind it stands. **`0237` in turn now depends on
+[`0353`](../0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md) (`P3`)**,
+which settles the scanned set, the exemption set and the match rule **once**, for both the `path:NNN`
+half and the markdown-link half.
+
+⭐ **WHAT `0353` DISCHARGES FOR THIS BRIEF — read it before implementing.** The `0237` handback
+blockquote in `## Notes` raises two open items and `0353` answers the second one by name:
+
+- **The scanned-set question** — *"Whether the guard's scanned set should reach `sprints/done/` and
+  `sprints/reviews/` is an open scoping decision `0237` is tasked with settling; do not implement this
+  guard against the glob as written without reading `0237`'s answer."* ⭐ **That answer is now
+  `0353`'s deliverable.** Read `0353`'s condition document, not this brief's glob.
+- **The figure** — take it from the re-measurement, never from §"The red set"'s frozen 2026-08-01 table.
+
+⛔ **WHAT `0353` DOES NOT TOUCH, stated so it is not assumed away:** this brief's **two owner rulings**
+(the literal full-path reading; the closed-`done/*/review.md` exemption, both 2026-08-01) and its
+**four scoping decisions** are **unchanged**. `0353` is instructed to **reconcile against them, never
+to re-decide them**, and to publish a reconciliation table saying for each: unchanged / narrowed /
+widened / answered. ⛔ **If `0353`'s document silently changes one of them, stop and surface it.**
+
+⚠️ **THIS GUARD IS NOW A GATE ON THREE OTHER ROWS.** `0356`, `0357` and `0358` — Sprint 7's three
+sweeps — may not start until **this guard AND `0354`'s `test/reference-integrity.test.js` are both
+green.** That is the owner-agreed *"verified, not trusted"* constraint; see
+[`sprint-7.md`](../../../sprints/sprint-7.md) §"⛔ THE FORCED SEQUENCING". ⭐ **The accepted
+incompleteness this brief already declares is unchanged by that promotion** — the guard still does not
+flag `0013`'s bare `sprint-2.md:354` nor `0160`'s brief in three places, and **anyone reporting on it
+must still say so alongside its pass.** ⛔ Being a gate does not make it complete.
+
+*Recorded 2026-08-29 by a spawned `fkit-producer` with no owner channel
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+executing the mechanics of a relayed ruling and deciding nothing beyond them.*

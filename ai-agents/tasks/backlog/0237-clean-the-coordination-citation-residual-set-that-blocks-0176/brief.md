@@ -4,10 +4,10 @@
 0237
 
 ## Sprint
-Backlog
+Sprint 7
 
 ## Priority
-Unscheduled
+P6
 
 ## Status
 🔲 Backlog
@@ -115,7 +115,7 @@ The residual set clean, so `0176` can ship green.
 
 ## Notes
 
-- **Depends on:** nothing.
+- **Depends on:** `0353` — hard (`0353-settle-the-reference-integrity-condition-once-for-both-halves`). ⚠️ **Corrected in place 2026-08-29**; this line previously read `- **Depends on:** nothing.`, true from 2026-08-06 until `0353` was filed. ⛔ It is a machine-parsed field (`dashboard.sh` derives the board Next-step from it), so a stale value renders a false `ready` — it is corrected here rather than annotated, and the record of the change lives in §"⭐ PULLED ONTO SPRINT 7 AS `P6`".
 - **Blocks:** `0176` — hard. `0176` cannot ship green until this lands. `0176`'s brief and its Backlog
   board row have been updated to declare `Depends on: 0237`, so the board stops advertising `0176` as
   pullable.
@@ -135,3 +135,58 @@ The residual set clean, so `0176` can ship green.
   untracked work. **The inventory is evidence the set is real, not a checklist to execute.**
 - **Priority is `—` (unscheduled).** Filed to the Backlog board on the owner's ruling; no sprint was
   named and no row was re-ranked (ADR-035, `/fkit-task-brief` step 5).
+
+### ⭐ PULLED ONTO SPRINT 7 AS `P6` — OWNER RULING 2026-08-29
+
+**Owner ruling, 2026-08-29, given live via `AskUserQuestion` in a `fkit lead` session. The option
+label is the verbatim text: "Approve all 12 as proposed (Rec)"** — the full twelve-row Sprint 7
+board, on which this task is **`P6`**. Ranking authority is the same day's companion ruling,
+**"Rank Sprint 7; declare backlog an archive (Rec)"**.
+
+**The three mandatory edits of a pull, all applied in this act** (`/fkit-task-brief` step 8 / the
+Backlog board's **Off:** rule):
+
+1. The row was added to [`sprint-7.md`](../../../sprints/sprint-7.md) with the rank token `P6`.
+2. The [`backlog.md`](../../../sprints/backlog.md) row was flipped to
+   `➡️ Moved to [Sprint 7](sprint-7.md) — priority P6`. ⛔ **Not deleted** — a deleted row loses the
+   pointer to where the work went.
+3. This brief's **`## Sprint` is now `Sprint 7`** and **`## Priority` is now `P6`**.
+   **`## Status` is unchanged at `🔲 Backlog`** — the task has not started.
+
+⚠️ **The `## Notes` bullet below reading *"Priority is `—` (unscheduled). Filed to the Backlog board
+on the owner's ruling; no sprint was named…"* is SUPERSEDED by this section.** It was true from
+2026-08-06 until 2026-08-29 and is left byte-identical as the record of the filing decision. ⛔ Read
+this section, not that bullet, for the current state.
+
+⭐ **WHAT CHANGED ABOUT THIS TASK'S SHAPE, and it is the reason it was pullable at all.** This brief's
+step 1 (*"Settle the condition first, in writing"*) and step 3 (*"Decide the scanned-set glob question
+and say so"*) have been **lifted out into their own row**:
+[`0353`](../0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md) (`P3`), which
+settles the condition **once**, for both the `path:NNN` half and the markdown-link half, and
+discharges this brief's open scanned-set question.
+
+- ⭐ **`0353` is therefore a HARD dependency of this task**, and it is recorded as one in `## Notes`.
+- ⛔ **Steps 1 and 3 are NOT deleted from this brief.** Run them as a **reconciliation** against
+  `0353`'s document — confirm the condition, name it by filename, and report any divergence — rather
+  than re-deriving it. ⛔ **If this task and `0353` disagree about the condition, stop and surface it;
+  do not pick one.**
+- **Everything else in this brief is unchanged** — `## What to build` steps 2 and 4, all five
+  constraints, all eight verification steps, and the `0306` dead-path note.
+
+⚠️ **This task still hard-blocks [`0176`](../0176-build-the-coordination-citation-policy-guard/brief.md)
+(`P7`), and both now gate Sprint 7's three sweeps** (`0356`, `0357`, `0358`). ⛔ **`0176`'s guard must
+be green before any sweep starts** — the owner-agreed *"verified, not trusted"* constraint. This row
+is on the critical path for five other rows; see [`sprint-7.md`](../../../sprints/sprint-7.md)
+§"⛔ THE FORCED SEQUENCING".
+
+⚠️ **The parsed `Depends on:` field in `## Notes` was CORRECTED IN PLACE, not annotated.** It read
+`- **Depends on:** nothing.` — true from 2026-08-06 until `0353` was filed on 2026-08-29. ⛔ **It is a
+machine-parsed field**, not prose: `dashboard.sh` derives this task's board Next-step from it, and a
+stale value renders the row a false `ready`
+([`dependency-declaration-form`](../../../knowledge-base/conventions/dependency-declaration-form.md)).
+**The old text is preserved in this section and in the corrected line's own inline note** — that is
+where the record lives, because the field itself has to be true.
+
+*Recorded 2026-08-29 by a spawned `fkit-producer` with no owner channel
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+executing the mechanics of a relayed ruling and deciding nothing beyond them.*
