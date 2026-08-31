@@ -136,3 +136,98 @@ role and an fkit skill: assert that role owns that skill according to `skills_fo
 - ⚠️ **Filed on the Backlog board because the owner's ruling named no sprint.** A spawned producer has
   no owner channel and never invents a sprint placement. **Flagged for owner confirmation: Sprint 2
   may be the intended home**, alongside `0222`.
+
+### ⭐ 2026-08-29 — ADR-044: THE PARSER MUST ACCEPT A **RULE-CELL** IN Plan/Build. The assertion gets STRONGER.
+
+**Source:** [ADR-044](../../../knowledge-base/decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md)
+§C3, §C6, §Decision 1 — `Status: accepted` 2026-08-27, the deliverable of
+[`0270`](../../done/0270-decide-how-the-ship-loop-handles-a-non-coder-owned-task-row/brief.md).
+Filed as follow-on (iii) of §C2 on **owner ruling ND6**, verbatim: *"File all three after the ADR is
+accepted (Recommended)"*. Written by
+[`0347`](../../done/0347-note-adr-044s-oracle-rule-onto-0224-and-0225/brief.md).
+
+**A design-note widening, not a re-scope.** Scope, out-of-scope, and the honesty clause above all
+stand unchanged.
+
+⭐ **What widens.** ADR-044 §C3, verbatim: *"its parser must accept a **rule-cell** in Plan/Build (a
+skill→owner expression, not a literal)"*. Today every `Role named` cell the parser meets is a literal
+`@fkit-<role>` token. After ADR-044 lands in the loop text, the **Plan** and **Build** cells each
+become a **rule** — in the same shape `0223` gave the Process-review cell. ⚠️ **But they are two
+different rules, from two different decisions. Do not collapse them into one:**
+
+- **Build — §Decision 1, verbatim:** *"The Build row's role is the owner, in `skills_for_role()`, of
+  the skill the deliverable is produced by."*
+- **Plan — §Decision 2, verbatim:** *"The Plan row's role is the Build role, by hand where that role
+  does not own `/fkit-plan-task`."* ADR-044 records this as an **owner-ruled scoped exception to
+  ADR-038** (ruling ND3, 2026-08-27), not an application of it.
+
+⛔ **A COLLISION THIS NOTE RECORDS AND DELIBERATELY DOES NOT RESOLVE.** `/fkit-plan-task` is
+**coder-exclusive** — `claude/skills-for-role.sh:55`, and no other role's list carries it (verified on
+disk 2026-08-29). So once `0345` lands, the Plan row lawfully pairs a possibly-non-coder role-rule
+with a skill that role does **not** own; §Decision 2's own *"by hand"* clause is the acknowledgement
+of exactly that. **This test's core assertion — "the named role owns the named skill" — is therefore
+deliberately false on a lawful Plan row.** ⛔ **Do not read this note as declaring the Plan row
+exempt.** Whether the parser carves Plan out, asserts something different on it, or handles it another
+way is **`0225`'s own plan-gate decision, not `0347`'s** — **owner ruling 2026-08-29, verbatim option
+label: "Flag the collision only (Rec)"**. What `0347` owes the implementer is that the collision
+exists, before an assertion is written that fails on correct text.
+
+⭐ **THE ASSERTION BECOMES STRONGER, NOT WEAKER. A reader who takes "accept a rule-cell" as a loosening
+has read it backwards.** ADR-044 §C3, verbatim: *"its assertion becomes **stronger**: every named Build
+skill's owner must own it in `skills_for_role()`."* The parser stops asserting *"this literal role owns
+this literal skill"* on a handful of rows and starts asserting the **ownership invariant across every
+skill a rule-cell names**. ⛔ A parser that merely tolerates a rule-cell — matching zero rows on it and
+passing — has implemented the opposite of this note.
+
+⚠️ **AND THE EXISTING ZERO-ROW RULE DOES NOT CATCH THAT.** `## What to build`'s *"fail loudly if it
+matches zero rows"* — and verification step 3 that proves it — guard **whole-table** vacuity only.
+After `0345`, a parser that silently skips both rule-cells still matches Review, Process-review and
+Close: three assertions, non-zero, **green**, with the widening unimplemented and nothing red. ⛔ **The
+guard must become per-cell:** every row the table names must be either **asserted** or **explicitly
+skipped for a named reason**, and a rule-cell that resolves to no skill at all must fail. ⚠️ This
+**replaces** the row-count guard the next paragraph declares stale — it does not drop it.
+
+⚠️ **THE RULE-CELL DOES NOT EXIST YET —
+[`0345`](../0345-carry-adr-044s-build-and-plan-role-rule-into-the-ship-loop-and-agent-text/brief.md)
+WRITES IT.** Verified on disk 2026-08-29: `claude/skills/fkit-sprint-ship-loop/SKILL.md:122-123` — the
+**Plan** and **Build** cells still read the literal `` `@fkit-coder` ``; only the Process-review cell
+(`:126`) is a reasoned rule today. `0345` is `🔲 Backlog` / `Unscheduled`. ⛔ **Do not write a parser
+against text that is not in the file** — either build against the literals today and widen when `0345`
+lands, or sequence this task after it. **This is an ordering note, not a hard block** (the same shape as
+the `0223` ordering note above): whichever lands second re-verifies its coordinates.
+
+⚠️ **Two things `0345` will make stale in `## Verification steps` above — flagged here, NOT edited
+there.** Once the Build cell names skills: (a) step 4's *"the test reports **4** row assertions"* is no
+longer the right count; (b) step 4's *"Build and Verify are skipped"* stops being true of **Build**
+(Verify stays table-fixed and stays skipped — ADR-044 §Decision 3. ⚠️ **Not "Build alone":**
+§Decision 2 moves **Plan** as well, and §C4 names that departure verbatim — *"One clause departs from
+ADR-038, and it is named rather than absorbed: Decision 2 (Plan)"*). ⛔ The implementer must reconcile
+both against the file as it actually reads, and say so in the worklog rather than asserting the stale
+numbers.
+
+⛔ **THE ANTI-PATTERN THIS PARSER MUST NOT IMPLEMENT: grepping a brief for `/fkit-*` skill names.**
+ADR-044 §C6, verbatim: *"A future oracle (`0224`, `0225` — C3) **must read the deliverable's producing
+skill, never grep the brief for skill names.**"* Measured, not stylistic:
+
+- **ADR-044 §C6, measured 2026-08-28:** a grep-for-skill-names oracle would route **8 of the 13**
+  `## Owner: fkit-producer` Backlog rows back to the producer — *"reproducing precisely the `## Owner`
+  staffing Decision 1 replaces."*
+- ⭐ **RE-MEASURED 2026-08-29 by `0347` — the figure has MOVED: it is now 9 of 14**, the new row `0360`
+  adding one to each side. **~64% of producer-owned rows misrouted.**
+- **Method** (`conventions/evidence-before-assertion.md`): population = briefs under
+  `ai-agents/tasks/backlog/` whose **`## Status` is `🔲 Backlog`** — **138** on 2026-08-29 (123 on
+  2026-08-28); `## Owner` matched **anchored** on `^## Owner$`; every `/fkit-[a-z0-9-]+` token per brief
+  checked against `skills_for_role()` in `claude/skills-for-role.sh`. **Ten of the fourteen carry a real
+  skill token; nine of those ten name a producer-*exclusive* skill** (`/fkit-status`,
+  `/fkit-task-brief`, `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-heal`) — `0184`, `0187`,
+  `0262`, `0318`, `0320`, `0321`, `0335`, `0340`, `0360`; only `0221` does not. ⛔ **Live figure —
+  re-measure, do not copy forward.** Full measurement and its stated partial-verification limit:
+  ADR-044 §C6 and `0224`'s companion note of the same date.
+- ⚠️ **Why grep cannot work at all here:** ADR-044 §C6 checked every one of those citations and found
+  *"a mention is not a producing skill … every one is a reference, not an invocation"*. The token in a
+  brief is usually a citation of a skill's **prose as an authority for form**, not a call. **The
+  producing skill is a property of the deliverable, not of the brief's word choice.**
+
+⚠️ **This does not weaken the honesty clause above.** The test still catches a future edit orphaning a
+row from `skills_for_role()`; it still catches **no** driver departure. Detection of a departure remains
+[`0224`](../0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md)'s job.

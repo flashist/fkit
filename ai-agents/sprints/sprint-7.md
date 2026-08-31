@@ -89,6 +89,10 @@ below on **2026-08-29** by ruling 1; the old text is kept beneath as the opening
    reference-integrity condition **once** instead of once per task.
 3. **Build the guards and make them green** — `0354` (`P4`) and `0355` (`P5`) for the markdown-link
    half; `0237` (`P6`) and `0176` (`P7`) for the `path:NNN` half.
+   - ⚠️ **AMENDED 2026-08-30 — `0355` (`P5`) IS CANCELLED and this line is left byte-identical.**
+     ⭐ **`P4` is green on arrival** (0 broken, 6 named-exempt, measured 2026-08-30), so the
+     markdown-link half needs **`0354` alone**. ⛔ The `path:NNN` half is unchanged: `0237` → `0176`.
+     See `## Notes` §"⛔ Addendum — `P5` (`0355`) CANCELLED".
 4. **Sweep the existing class ONCE, behind those guards** — `0356`, `0357`, `0358` (`P8`–`P10`),
    absorbing and closing the individually-filed rows.
 5. **Make the result measurable, then ship it** — `0359` (`P11`) builds the counter Sprint 7's own
@@ -116,7 +120,64 @@ the whole reason this row was singled out. ⛔ **Re-measure before acting on thi
 ([`evidence-before-assertion`](../knowledge-base/conventions/evidence-before-assertion.md)); it is a
 claim about a live board and it will go stale.
 
+⚠️ **SUPERSEDED 2026-08-29 — ONE CLAUSE ONLY: *"The window is therefore still open and still
+preventable"* is now FALSE.** The paragraph above is left **BYTE-IDENTICAL** as the record of why this
+row was singled out; ⛔ **do not read that clause as current.** ⭐ **CURRENT TRUTH, measured on disk
+2026-08-29: the window is CLOSED — and closed the way this row wanted it closed.** `0347` shipped the
+note before either task was pulled; it reads `✅ Done (agent-closed — not owner-verified)` at
+[`tasks/done/0347-…`](../tasks/done/0347-note-adr-044s-oracle-rule-onto-0224-and-0225/brief.md), and
+both notes are on disk:
+[`0224`](../tasks/backlog/0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md)
+carries §"⭐ 2026-08-29 — ADR-044 CHANGES THIS DETECTOR'S **ORACLE**" and
+[`0225`](../tasks/backlog/0225-add-the-loop-table-row-to-skill-ownership-test/brief.md) carries
+§"⭐ 2026-08-29 — ADR-044: THE PARSER MUST ACCEPT A **RULE-CELL** IN Plan/Build", each citing `0347` as
+its source. **Owner ruling 2026-08-29** authorising this marker, given live via `AskUserQuestion` in a
+`fkit lead` session, **the option label is the verbatim text**: **"Mark it, same treatment (Rec)"**.
+
+⛔ **THIS MARKER SUPERSEDES THAT ONE CLAUSE AND NOTHING ELSE.**
+
+- ⭐ **The four measured facts above are STILL TRUE — re-measured on disk 2026-08-29 for this marker.**
+  `0224` and `0225` each still read `## Sprint` **`Backlog`**, `## Priority` **`Unscheduled`**,
+  `## Status` **`🔲 Backlog`**, and both folders still sit in `ai-agents/tasks/backlog/`. ⭐ Closing the
+  window **moved, ranked and re-statused nothing** — `0347` appended notes and did no more.
+- ⭐ **"that is the whole reason this row was singled out" is STILL TRUE.** It states why the row
+  existed; discharging a row does not unmake its reason.
+- ⛔ **The numbered goal above is NOT superseded here.** It is already held as the record by its own
+  *"Goal, as this board opened"* frame, and what changed is that it is **discharged**, not that it was
+  wrong.
+- ⚠️ **This marker deliberately does NOT restate the re-measure instruction above — that line still
+  stands, and it now governs the four facts, which are live and can still move.** It is referenced
+  because it **fired**: it predicted this exact staleness, and the re-measure it demanded is what split
+  this paragraph in two — the **measurements held, the inference drawn from them did not.**
+
+**Why `SUPERSEDED` and not `AMENDED LATER THE SAME DAY` — the two phrasings already on this board.**
+`AMENDED` is used where a conclusion survives and only a figure or range moved (`P1`–`P12` → `P1`–`P13`
+at the opening banner and at §"⭐ THIS BOARD IS RANKED"; the stale closed-row count under `## Notes`).
+This clause has no surviving narrower form — a window is open or it is closed, and this one is closed.
+That is the `SUPERSEDED` shape already in use at §"⛔ This board is UNRANKED", which likewise marks a
+*"still X"* claim that ended when the section's own clause was honoured. ⛔ **No third phrasing is
+minted, and no new marker token is introduced** — `0341` owns that grammar.
+
 ## ⭐ THIS BOARD IS RANKED `P1`–`P12` — OWNER RULING 2026-08-29
+
+⚠️ **AMENDED LATER THE SAME DAY — THE BOARD IS `P1`–`P13`.** The heading above is left
+**BYTE-IDENTICAL** as the record of what the ranking ruling itself produced; ⛔ **do not read its
+`P1`–`P12` as this board's current extent.** ⭐ **CURRENT TRUTH, measured on disk 2026-08-29: this
+board is ranked `P1`–`P13`.** A later owner ruling of the same day — given live via `AskUserQuestion`
+in a `fkit lead` session, **the option label is the verbatim text**: **"File it as a Sprint 7 row
+(Rec)"** — appended a thirteenth row,
+[`0361`](../tasks/backlog/0361-settle-whether-a-sprint-board-may-be-committed-unranked/brief.md)
+(`P13`). See the amendment under this file's opening banner, and `## Notes` §"⭐ Addendum — the
+THIRTEENTH row".
+
+⛔ **THIS MARKER SCOPES THE RANGE AND NOTHING ELSE.** The heading's actual claim — **that this board
+IS ranked** — and its attribution — **OWNER RULING 2026-08-29** — are both still TRUE and are **not**
+superseded. Neither is the section below: every `P1`–`P12` in it describes **the ranking act**, which
+did rank exactly twelve rows, and is correct as written. ⛔ **`P1`–`P12` were not renumbered when
+`0361` arrived** — it is an append, not an insertion
+([ADR-035](../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)).
+⚠️ **This heading is cited from elsewhere in this file by its opening words** (§"⭐ THIS BOARD IS
+RANKED") — a second reason it is annotated here rather than edited in place.
 
 **Owner ruling, 2026-08-29, given live via `AskUserQuestion` in a `fkit lead` session; the option
 label is the verbatim text: "Rank Sprint 7; declare backlog an archive (Rec)".** The row order itself
@@ -226,6 +287,14 @@ TRUSTED" CONSTRAINT.**
                                                                                  0358 (P10)
 ```
 
+> ⚠️ **AMENDED 2026-08-30 — THE DIAGRAM ABOVE IS LEFT BYTE-IDENTICAL AND ONE OF ITS ARROWS IS DEAD.**
+> ⛔ **`0355` (`P5`) is CANCELLED**, so the line *"`0355` (P5) cleans the red set → makes P4 GREEN"*
+> no longer describes anything. ⭐ **`0354` (`P4`) is GREEN ON ARRIVAL without it** — re-measured
+> 2026-08-30 under `0353`'s settled condition: **0 broken, 6 named-exempt, 819 files scanned.**
+> ⛔ **THE GATE ITSELF IS UNCHANGED AND IS NOT WEAKENED:** `P8`–`P10` still wait on `P4` **and** `P7`
+> both green. What changed is only that `P4`'s green needs no cleanup row. See `## Notes`
+> §"⛔ Addendum — `P5` (`0355`) CANCELLED".
+
 **The rule, stated so it cannot be read past:**
 
 - ⛔ **`0356`, `0357` and `0358` DO NOT TOUCH A FILE until `test/reference-integrity.test.js` (`0354`)
@@ -239,6 +308,12 @@ TRUSTED" CONSTRAINT.**
 - ⚠️ **`0176` cannot be green until `0237` lands** (*"shipping it red is not an option"* — `0176`'s
   own words, on its own owner ruling). So the gate on `P8`–`P10` reaches back through `P7` → `P6` →
   `P3`. **`P3` is the critical path for five rows.**
+  - ⚠️ **AMENDED 2026-08-30 — the row count in *"five rows"* is one too high.** `P5` (`0355`) was one
+    of the rows downstream of `P3` and is **cancelled**, so `P3`'s downstream set is one smaller.
+    ⛔ **`P3` is still the critical path and the sentence's point is unchanged**; only the count moved.
+    ⚠️ **The exact membership behind *"five"* was never enumerated in the original line, so this note
+    does not restate it** — it flags the count as stale rather than asserting a new one. The line is
+    left byte-identical as the record of the board as scoped on 2026-08-29.
 - ⚠️ **The gate does not cover everything, and pretending otherwise is worse than no gate.** Both
   guards **exempt `ai-agents/wiki-vault/`** (ADR-005), so **neither verifies `0358`'s output.**
   `/fkit-wiki-lint` is what verifies Sweep C, and `0358`'s verification step 6 is not optional.
@@ -264,7 +339,23 @@ in the same act.
 
 ## ⛔ This board is UNRANKED — and one row is not a rank *(SUPERSEDED 2026-08-29 — see §"⭐ THIS BOARD IS RANKED" above; left byte-identical as the record of why it opened unranked)*
 
+⚠️ **SUPERSEDED 2026-08-29 — the sentence that follows was TRUE when this section was written, and BOTH
+of its claims are now FALSE. It is left BYTE-IDENTICAL as the record of what this board looked like
+while it was unranked; ⛔ do not read it as current instruction.** ⭐ **CURRENT TRUTH, measured on disk
+2026-08-29:** the owner ruled this board **ranked** — live via `AskUserQuestion` in a `fkit lead`
+session, **the option label is the verbatim text**: **"Rank Sprint 7; declare backlog an archive
+(Rec)"**, see §"⭐ THIS BOARD IS RANKED" above — so every row's `Priority` cell now carries a `P<n>`,
+and **`0347`'s brief reads `## Priority` → `P1`**, not `Unscheduled`. `0347` has since **closed**:
+`✅ Done (agent-closed — not owner-verified)`, its folder now at
+[`tasks/done/0347-…`](../tasks/done/0347-note-adr-044s-oracle-rule-onto-0224-and-0225/brief.md).
+⭐ **Both changes are this section's OWN deferral clause being honoured** — *"if and when the owner
+ranks this board, the Priority cell, the brief's `## Priority`, and `backlog.md`'s `— priority P<n>`
+suffix are all added in that one act"* — **not a departure from it.**
+
 **The Priority column is `—`, and `0347`'s brief keeps `## Priority: Unscheduled`.**
+
+⚠️ **(End of the superseded 2026-08-29 sentence. ⛔ This marker scopes ONLY the factual claim above —
+the rest of this section is superseded too, as its own heading says.)**
 
 The owner ruled this row's **placement**, not its **rank**. With one row on the board a rank would be
 arithmetically trivial and **substantively invented** — and it would pre-commit the second pass's
@@ -352,11 +443,11 @@ which is why this file lives at `ai-agents/sprints/sprint-7.md`.
 
 | Status | Priority | Task | Brief |
 |---|---|---|---|
-| 🔲 Backlog | P1 | **⭐ PULLED ONTO THIS BOARD BY OWNER RULING 2026-08-29** — *"One-row Sprint 7, then scope it (Rec)"*, given live via `AskUserQuestion` in a `fkit lead` session; the earlier ruling of the same day made this the **one** exception in `0337`–`0351`. ⚠️ **The cell text that follows is the Backlog board's own filing text, kept BYTE-IDENTICAL.** **Note ADR-044's oracle rule onto `0224` and `0225` — read the producing skill, never grep for skill names** — `0224`'s oracle for the worklog `**Role:**` line becomes ADR-044's rule, not the loop table's literal cell; `0225`'s parser must accept a rule-cell (a skill→owner expression) in the Plan/Build cells, which makes its assertion **stronger** *(**follow-on (iii) of [ADR-044](../knowledge-base/decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md) §C2/§C3**, owner ruling **ND6** 2026-08-27; ⚠️ **measured warning both notes must carry (ADR-044 §C6, measured 2026-08-28)**: a grep-for-skill-names oracle would misroute **8 of the 13** producer-owned Backlog rows back to the producer — the exact `## Owner` staffing Decision 1 replaces; brief edits only, ⛔ no source, no board status change, neither folder moves; depends on `0270`)* | [`0347-note-adr-044s-oracle-rule-onto-0224-and-0225`](../tasks/backlog/0347-note-adr-044s-oracle-rule-onto-0224-and-0225/brief.md) |
-| 🔲 Backlog | P2 | **ADR — the narrow in-flight review-fix lane** — a reviewer's finding on a diff already under review is recorded in the review ledger, not filed as a new task folder. Define the entry condition, the route, and four hard limits *(**owner ruling 2026-08-29**, option label verbatim **"Narrow it — in-flight review fixes only (Rec)"**; ⛔ **NO size floor** and `/fkit-task-brief`'s smallest-shippable rule is **NOT amended** — a prior size-floor proposal was rejected by name; ⛔ **the vault is out of reach** (ADR-005); one ADR file and nothing else; blocks only its own unfiled follow-ups)* | [`0352-adr-the-narrow-in-flight-review-fix-lane`](../tasks/backlog/0352-adr-the-narrow-in-flight-review-fix-lane/brief.md) |
-| 🔲 Backlog | P3 | ⭐ **INVESTIGATION — settle the reference-integrity condition, ONCE** — the exact scanned set, exemption set and match rule, for **both** halves (markdown link **and** `path:NNN` citation), as runnable commands *(⛔ **investigation-first: `P4`, `P5` and `P6` may not start before this lands**; reconciles against `0176`'s four scoping decisions and answers `0237`'s step-3 scanned-set question, open since 2026-08-06; ⛔ **does NOT reopen `0176`'s two owner rulings of 2026-08-01**; measured 2026-08-29 with **two** matchers differing only in whether fenced blocks and inline code spans are skipped — **304 across 96** naive-unexempted, **60 across 26** convention-correct-unexempted, ⭐ **24 across 11** convention-correct with the ADR-034 and ADR-005 exemptions, **17** if `knowledge-base/reports/` is also exempt; ⭐ **the two variables together move the set from 304 to 17 — a factor of eighteen**, which is the whole justification; ⚠️ **`0176` decision 2 already rules fences and blockquotes but is SILENT on inline code spans** — the largest single lever, and unruled)* | [`0353-settle-the-reference-integrity-condition-once-for-both-halves`](../tasks/backlog/0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P1 | **⭐ PULLED ONTO THIS BOARD BY OWNER RULING 2026-08-29** — *"One-row Sprint 7, then scope it (Rec)"*, given live via `AskUserQuestion` in a `fkit lead` session; the earlier ruling of the same day made this the **one** exception in `0337`–`0351`. ⚠️ **The cell text that follows is the Backlog board's own filing text, kept BYTE-IDENTICAL.** **Note ADR-044's oracle rule onto `0224` and `0225` — read the producing skill, never grep for skill names** — `0224`'s oracle for the worklog `**Role:**` line becomes ADR-044's rule, not the loop table's literal cell; `0225`'s parser must accept a rule-cell (a skill→owner expression) in the Plan/Build cells, which makes its assertion **stronger** *(**follow-on (iii) of [ADR-044](../knowledge-base/decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md) §C2/§C3**, owner ruling **ND6** 2026-08-27; ⚠️ **measured warning both notes must carry (ADR-044 §C6, measured 2026-08-28)**: a grep-for-skill-names oracle would misroute **8 of the 13** producer-owned Backlog rows back to the producer — the exact `## Owner` staffing Decision 1 replaces; brief edits only, ⛔ no source, no board status change, neither folder moves; depends on `0270`)* | [`0347-note-adr-044s-oracle-rule-onto-0224-and-0225`](../tasks/done/0347-note-adr-044s-oracle-rule-onto-0224-and-0225/brief.md) |
+| 🔄 In progress | P2 | **ADR — the narrow in-flight review-fix lane** — a reviewer's finding on a diff already under review is recorded in the review ledger, not filed as a new task folder. Define the entry condition, the route, and four hard limits *(**owner ruling 2026-08-29**, option label verbatim **"Narrow it — in-flight review fixes only (Rec)"**; ⛔ **NO size floor** and `/fkit-task-brief`'s smallest-shippable rule is **NOT amended** — a prior size-floor proposal was rejected by name; ⛔ **the vault is out of reach** (ADR-005); one ADR file and nothing else; blocks only its own unfiled follow-ups)* | [`0352-adr-the-narrow-in-flight-review-fix-lane`](../tasks/backlog/0352-adr-the-narrow-in-flight-review-fix-lane/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P3 | ⭐ **INVESTIGATION — settle the reference-integrity condition, ONCE** — the exact scanned set, exemption set and match rule, for **both** halves (markdown link **and** `path:NNN` citation), as runnable commands *(reconciles against `0176`'s four scoping decisions and answers `0237`'s step-3 scanned-set question, open since 2026-08-06; ⛔ **does NOT reopen `0176`'s two owner rulings of 2026-08-01**; measured 2026-08-29 with **two** matchers differing only in whether fenced blocks and inline code spans are skipped — **304 across 96** naive-unexempted, **60 across 26** convention-correct-unexempted, ⭐ **24 across 11** convention-correct with the ADR-034 and ADR-005 exemptions, **17** if `knowledge-base/reports/` is also exempt; ⭐ **the two variables together move the set from 304 to 17 — a factor of eighteen**, which is the whole justification; ⚠️ **`0176` decision 2 already rules fences and blockquotes but is SILENT on inline code spans** — the largest single lever, and unruled)* | [`0353-settle-the-reference-integrity-condition-once-for-both-halves`](../tasks/done/0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md) |
 | 🔲 Backlog | P4 | **Build the link-resolution guard** — `test/reference-integrity.test.js`, with the exemptions **in the definition from day one** *(frozen closed task folders per **ADR-034** — **34 of the 60 convention-correct broken links live under `ai-agents/tasks/done/`** (219 of 304 naive); `wiki-vault/` per **ADR-005** — **13 more live there** and no role but `fkit-wiki` may fix them; ⛔ no new devDependency (ADR-014), no `package.json` change; ⛔ **fixes not one link** — that is `P5`; **depends `0353` — hard**; ⛔ **blocks `P8`, `P9`, `P10` — hard: they do not start until this is GREEN**)* | [`0354-build-the-link-resolution-guard`](../tasks/backlog/0354-build-the-link-resolution-guard/brief.md) |
-| 🔲 Backlog | P5 | **Clean the in-scope broken-link red set** so `P4` goes green *(⛔ **re-measure under `0353`'s settled condition first** — ⛔ **the ~68-across-~24 scope figure this sprint was planned on matches the NAIVE reading**; the **convention-correct** reading that honours `0176` decision 2 returns ⭐ **24 across 11**, roughly a third of it — a **correction, not a re-scope**, since most of the difference is quoted marker text inside backticks; neither is authoritative until `0353` rules; ⛔ **two honest repairs, and picking wrong destroys a record** — a moved target is re-pointed, a **frozen record of a past measurement is left byte-identical and annotated**, per the `0306` precedent `0176` and `0237` both carry; ⚠️ **`backlog.md` holds 11 of them and is a machine-parsed file**; **depends `0353` — hard**)* | [`0355-clean-the-in-scope-broken-link-red-set`](../tasks/backlog/0355-clean-the-in-scope-broken-link-red-set/brief.md) |
+| ⛔ Cancelled (agent-closed — not owner-verified) (2026-08-30) — red set is 0; nothing to clean | P5 | **Clean the in-scope broken-link red set** so `P4` goes green *(⛔ **CANCELLED 2026-08-30 BY OWNER RULING**, given live via `AskUserQuestion` in a `fkit lead` session; option label verbatim **"Cancel it (Rec)"**. **Reason, as recorded:** *"Red set is 0 under `0353`'s settled condition. All six surviving instances are named exemptions with recorded reasons, already carried into `0354`'s guard. There is nothing to clean and nothing this row blocks."* ⭐ **Re-measured 2026-08-30 under `0353`'s settled condition: `BROKEN: 0 across 0 files`, `NAMED-EXEMPT: 6`, `SCANNED: 819 files`** — this row was scoped against 24 across 11, and ⛔ **every figure in the original cell was falsified**, including *"`backlog.md` holds 11 of them"* (**it holds 0**); ⛔ **the alternative of keeping it as a thin verification row was put to the owner and REJECTED as duplicate** — that check is already `0354`'s corrected step 8′; ⭐ **`P4` is GREEN on arrival without this row**, so ⛔ **this row blocks nothing**; ⛔ **rank `P5` is NOT reassigned and nothing was renumbered** (ADR-035) — the board carries a deliberate gap here)* | [`0355-clean-the-in-scope-broken-link-red-set`](../tasks/cancelled/0355-clean-the-in-scope-broken-link-red-set/brief.md) |
 | 🔲 Backlog | P6 | **⭐ PULLED ONTO THIS BOARD BY OWNER RULING 2026-08-29** — *"Approve all 12 as proposed (Rec)"*. Clean the coordination-citation residual set — **the cleanup `0176` needs and nobody owned** *(filed 2026-08-06 on the owner ruling **"File the cleanup as its own task."**; ⛔ **its steps 1 and 3 are now `0353`'s deliverable** — run them as a **reconciliation** against `0353`'s document, never a re-derivation, and **stop and surface any divergence**; ⛔ do not clean the exempt citations inside closed `done/*/review.md` (ADR-034), do not write the vault (ADR-005), do not build the guard; **depends `0353` — hard**; ⛔ **hard-blocks `P7`**)* | [`0237-clean-the-coordination-citation-residual-set-that-blocks-0176`](../tasks/backlog/0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md) |
 | 🔲 Backlog | P7 | **⭐ PULLED ONTO THIS BOARD BY OWNER RULING 2026-08-29** — *"Approve all 12 as proposed (Rec)"*. Build the coordination-citation policy guard — literal reading, closed ledgers grandfathered *(**two owner rulings of 2026-08-01 and four scoping decisions, all unchanged**; ⛔ **hard-depends `P6`** — *"shipping it red is not an option"*, its own words; ⛔ **take the figure from `0237`, never from its frozen 2026-08-01 red-set table**; ⚠️ **its accepted incompleteness stands** — it does not flag `0013`'s bare `sprint-2.md:354` nor `0160`'s brief in three places, and **every report on it must say so alongside its pass**; ⛔ **blocks `P8`, `P9`, `P10` — hard: they do not start until this is GREEN**)* | [`0176-build-the-coordination-citation-policy-guard`](../tasks/backlog/0176-build-the-coordination-citation-policy-guard/brief.md) |
 | 🔲 Backlog | P8 | ⛔ **Sweep A — the citation-rot class, ONE verified pass** *(⭐ **this row ABSORBS existing open rows and CLOSES them — it does not sit beside them**; **13 candidates** measured 2026-08-29 — `0193` `0197` `0232` `0275` `0286` `0298` `0308` `0309` `0320` `0321` `0323` `0343` `0344` — and **step 1 freezes the real membership before any edit**; closes authorized in advance by ruling **"Accept the 25 marked closes (Rec)"**, each carrying **`(agent-closed — not owner-verified)`** (ADR-033 §5); ⛔ **but the movers are producer-only — this row hands the producer a close list and moves nothing** (ADR-033); ⛔ **HARD-GATED: `P4` and `P7` both GREEN before it touches a file**; ⛔ re-anchor, never re-cite — no new `path:NNN`)* | [`0356-sweep-a-the-citation-rot-class-one-verified-pass`](../tasks/backlog/0356-sweep-a-the-citation-rot-class-one-verified-pass/brief.md) |
@@ -367,6 +458,79 @@ which is why this file lives at `ai-agents/sprints/sprint-7.md`.
 | 🔲 Backlog | P13 | ⭐ **FILED ONTO THIS BOARD BY OWNER RULING 2026-08-29** — *"File it as a Sprint 7 row (Rec)"*, given live via `AskUserQuestion` in a `fkit lead` session. **Settle whether a sprint board may be committed UNRANKED — decide which rule wins, then make the other conform** *(⛔ **`npm test` is RED on `main` today**: `test/closed-rank-immutability.test.js`'s `live leg 1` fails at `HEAD` with *"sprint-7.md (earlier) row at line 126: Priority cell `—` is not a rank"* — 34 tests, 33 pass, 1 fail, measured 2026-08-29; ⛔ **PRE-EXISTING** — the failing side is `HEAD`, which no working-tree change reaches, and the working tree is already clean at 12 × `P<n>`; ⭐ **three rules disagree** — `parseBoard` refuses `—` by design, while `backlog.md`'s **unranked-forward clause** and this board's own §"⛔ This board is UNRANKED" both sanction opening one; ⭐ **the symptom clears at the owner's next commit, the CONFLICT does not** — the next board opened unranked reproduces it; **two phases — decide, then conform**, and ⛔ **phase 2 may not start before phase 1 lands**; ⛔ **widening is not weakening** — the garbage-cell throw stays; ⛔ **no rank changed by this row, ADR-035**; **depends on nothing** — ⛔ **but BLOCKS `P12`, hard: `0360` may not archive a board with an open row**; ⚠️ **rank `P13` is an APPEND, so rank order and execution order disagree for this one pair — the binding order lives in `Depends on`/`Blocks`, per ADR-035**)* | [`0361-settle-whether-a-sprint-board-may-be-committed-unranked`](../tasks/backlog/0361-settle-whether-a-sprint-board-may-be-committed-unranked/brief.md) |
 
 ## Notes
+
+### ⛔ Addendum — `P5` (`0355`) CANCELLED, 2026-08-30. ⛔ NOTHING WAS RENUMBERED; THE BOARD CARRIES A GAP AT `P5`.
+
+**Owner ruling, 2026-08-30, given live via `AskUserQuestion` in a `fkit lead` session; the option
+label is the verbatim text: "Cancel it (Rec)".** Executed by a spawned `fkit-producer` running
+`/fkit-task-cancelled`, with **no owner channel**
+([ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)) —
+which is why the marker reads `(agent-closed — not owner-verified)` even though **the owner ruled the
+cancellation itself** ([ADR-033 §5](../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)).
+⭐ **The ruling authorizes the act; it does not make the execution owner-verified.**
+
+**Reason, as recorded on the row and in the brief:** *"Red set is 0 under `0353`'s settled condition.
+All six surviving instances are named exemptions with recorded reasons, already carried into `0354`'s
+guard. There is nothing to clean and nothing this row blocks."*
+
+⛔ **The alternative was put to the owner and REJECTED.** Keeping `0355` as a thin verification row —
+re-measure when `0354`'s guard lands and confirm 0 — was rejected as **duplicate**: that check is
+already `0354`'s corrected verification step 8′.
+
+#### ⛔ RANK: NOTHING WAS RENUMBERED, AND THE GAP IS DELIBERATE
+
+- **The board now reads `P1`–`P4`, ⛔ *(no `P5`)*, `P6`–`P13`.** `0355` keeps `## Priority` **`P5`**
+  and `## Sprint` **`Sprint 7`** in its brief; only `## Status` and the file's location changed.
+- ⛔ **A cancellation is NOT a re-rank**
+  ([ADR-035](../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)),
+  and **no rule requires closing the gap.** Rank is board position, never identity
+  ([`priority-is-rank-not-identity`](../knowledge-base/conventions/priority-is-rank-not-identity.md)).
+  ⛔ **Do not renumber `P6`–`P13` to close it** — that would be a re-rank, it needs an owner ruling
+  naming it, and no such ruling exists.
+- ⚠️ **A second closed row now sits mid-board.** `0347` (`P1`, `✅ Done`) and `0355` (`P5`,
+  `⛔ Cancelled`) are **not contiguous at the top**, so ADR-035's contiguity exemption is **narrower**
+  on this board than it was, not wider. The `0361` addendum's *"one closed row"* note is amended in
+  place for that reason.
+
+#### ⛔ WHAT THIS CANCELLATION FALSIFIED ON THIS BOARD — every site, and how it was treated
+
+**All original text is left BYTE-IDENTICAL.** Each falsified site carries an `⚠️ AMENDED 2026-08-30`
+marker beside it rather than being rewritten — this board's own established convention.
+
+| Site | Claim it made | Treatment |
+|---|---|---|
+| `## Status` table, the `P5` row | `🔲 Backlog`; *"24 across 11"*; *"`backlog.md` holds 11 of them"*; *"depends `0353` — hard"* | ⭐ **Rewritten** — this is the status row the mover owns. Status cell → the cancelled marker; href → `tasks/cancelled/`; the falsified parenthetical replaced with the ruling, the reason and the measured 0 |
+| `## Goal` item 3 | *"Build the guards and make them green — `0354` (`P4`) and `0355` (`P5`)"* | ⚠️ **Marked in place.** `P4` is green on arrival; the markdown-link half needs `0354` alone |
+| The forced-sequencing ASCII diagram | *"`0355` (P5) cleans the red set → makes P4 GREEN"* | ⚠️ **Marked in place.** Dead arrow. ⛔ **The gate itself is unchanged and not weakened** |
+| The forced-sequencing bullet | *"`P3` is the critical path for five rows"* | ⚠️ **Marked in place** — the count is one too high; the membership behind *"five"* was never enumerated, so the note does not restate it |
+| §"⭐ Addendum — the THIRTEENTH row" | *"the board holds **one closed row**"* (its own 2026-08-29 current-truth correction) | ⚠️ **Marked in place** — two closed rows now, and non-contiguous |
+| §"⭐ Addendum — the second pass", the ranking table row `\| P5 \| 0355 \| new brief \|` | What was filed and ranked on 2026-08-29 | ⛔ **UNTOUCHED — a frozen record of the filing act.** `0355` **was** filed as a new brief at `P5`. Cancelling it later does not un-file it |
+| The banner's *"Ruling 1 names all twelve"* and §"📐 Where this board's shape comes from" | How the board was scoped | ⛔ **UNTOUCHED — still true.** The ruling did name twelve rows; one of them has since been cancelled |
+
+#### ⚠️ REPORTED, NOT ACTED ON — two sites of a different species
+
+⛔ **Neither was edited.** They are dated measurement blocks that were **already** superseded by their
+own later text before this cancellation touched them, so amending them here would mix two unrelated
+staleness events into one note.
+
+- **§"⚠️ MEASURED 2026-08-29 …" (the two-matcher figures block, ending *"no figure here is
+  authoritative until `0353` settles the condition"*).** ⭐ **`0353` has now settled it**, and every
+  figure in that block — `~68 / ~24`, `24 across 11`, the vault's `13` — is falsified. The block
+  **self-flags** as non-authoritative, which is why it is reported rather than amended. ⚠️ **The
+  settled figures live in `0353`'s condition document, which was under active review (round 2) on
+  2026-08-30 and may still change.**
+- **§`## Notes`' *"⛔ CURRENT STATE, re-measured 2026-08-29 after `0361` was appended"* bullet
+  (`total 13`, `count backlog 13`).** ⚠️ **Already stale before this cancellation** — the dashboard
+  read `total 13 / done 1 / in-progress 1 / backlog 11` on 2026-08-30 *before* the mover ran. This
+  cancellation moves it again, to `backlog 10 / cancelled 1`. ⛔ **Re-measure; do not read that bullet
+  as current.**
+
+#### Carriers updated outside this file
+
+- [`0360`](../tasks/backlog/0360-cut-the-v0-3-0-release-and-hand-archive-sprint-7/brief.md)'s
+  `- **Depends on:**` bullet — ⚠️ **a machine-parsed field**; `0355` removed, with a dated sub-bullet.
+- Inbound hrefs re-pointed to `tasks/cancelled/` in `0353`'s, `0354`'s and `0356`'s briefs — **href
+  only, no sentence touched.**
 
 ### ⭐ Addendum — the THIRTEENTH row, 2026-08-29: `0361`, appended at `P13`
 
@@ -391,6 +555,23 @@ of the backlog.
   ⛔ **It was still not taken**: the Decision is written flatly, the ADR says *"Do not re-raise"* the
   make-insertions-legal option, and the owner's ruling names a **row**, not a re-rank of the twelve they
   approved row by row.
+  - ⚠️ **AMENDED LATER THE SAME DAY — the measurement in the bullet above is STALE.** It is left
+    **BYTE-IDENTICAL** as the record of the board state this append was reasoned against; ⛔ **do not
+    read *"zero closed rows"* or *"all twelve read `🔲 Backlog`"* as current.** ⭐ **CURRENT TRUTH,
+    measured on disk 2026-08-29 after this addendum was written:** the board holds **thirteen** rows;
+    `0347` reads `✅ Done (agent-closed — not owner-verified)` and `0353` reads `🔄 In progress`, so the
+    board holds **one closed row** and the twelve are no longer uniform. ⛔ **THE CONCLUSION IS NOT
+    REOPENED:** the measurement was correct at the moment of the append, the ADR-035 exemption was **not
+    taken anyway**, and `P12` stays un-renumbered. ⚠️ **What changes is a later reader's arithmetic** —
+    ADR-035's closed-row wall is **up on this board now**, so this bullet's *"would arguably have
+    tolerated"* reasoning ⛔ **must not be re-run against today's board to justify a new insertion.**
+    - ⚠️ **AMENDED 2026-08-30 — the *"one closed row"* figure in the note above is now STALE TOO, and
+      it is left byte-identical.** `0355` (`P5`) was **cancelled 2026-08-30**, so the board holds
+      **two closed rows** — `0347` (`✅ Done`) at `P1` and `0355` (`⛔ Cancelled`) at `P5`. ⛔ **They
+      are NOT contiguous at the top**, which makes ADR-035's *"closed rows all contiguous at the top"*
+      exemption **less** available than when this note was written, not more. ⛔ **THE CONCLUSION IS
+      STILL NOT REOPENED**, and ⛔ **nothing was renumbered by the cancellation** — `P5` is a
+      deliberate gap. See §"⛔ Addendum — `P5` (`0355`) CANCELLED".
 - ⭐ **THE CONSEQUENCE, STATED RATHER THAN LEFT TO BE DISCOVERED: rank order and execution order now
   disagree for one pair.** `0360` (`P12`) sits above `0361` (`P13`) but **must run after it** — its own
   brief forbids archiving while any row is open. ⛔ **The binding order is in the dependency fields, not
@@ -606,6 +787,84 @@ here because this row is the one most likely to tempt it.
   `total 190` unchanged. This board reads `total 1`, `count backlog 1`, **no `drift`**, no
   `⟨derive: UNPARSEABLE⟩`. `select-active` returns `active file="sprint-7.md" identity="Sprint 7"`,
   exit 0 — it returned `active none`, exit 3, immediately before. All measured 2026-08-29.
+
+### ✅ Addendum — `0347` CLOSED 2026-08-29, and the two href rulings taken at its close
+
+**`0347` is closed** — `✅ Done (agent-closed — not owner-verified)`, its folder moved to
+[`tasks/done/0347-…`](../tasks/done/0347-note-adr-044s-oracle-rule-onto-0224-and-0225/brief.md) by
+`/fkit-task-done`, the producer-only mover ([ADR-033](../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)).
+Two owner rulings were given during that close, live via `AskUserQuestion` in a `fkit lead` session
+and relayed to a spawned `fkit-producer` with no owner channel
+([ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+⛔ **Neither ruling changed any row's status, rank, or membership on this board.**
+
+- **The two inbound hrefs were repaired, not deferred** — the option label is the verbatim text:
+  **"Repair both hrefs now (Rec)"**. `0224`'s brief at `:293` and `0225`'s at `:147` now point at
+  `../../done/0347-…/brief.md`. ⭐ That is `/fkit-task-done` **step 5** (repoint every inbound link)
+  completed in the same act as the move. **Verified on disk 2026-08-29**, both lines re-measured.
+- **`0347/plan.md` was deliberately left alone** — the option label is the verbatim text:
+  **"Leave as historical record (Rec)"**. Its two links at `:80` and `:164` keep the older
+  `../0347-…/brief.md` form. ⛔ **They are not broken and must not be "fixed":** `plan.md` now sits
+  inside the moved folder, so `../` is `done/` and both resolve. ⭐ **The plan is the record of what
+  was approved** — it is not rewritten after the fact.
+
+### ✅ Addendum — `0353` (`P3`) CLOSED 2026-08-30, and ⛔ THE PROCESS-REVIEW MISROUTE RECORDED AT ITS CLOSE
+
+**`0353` is closed** — `✅ Done (agent-closed — not owner-verified)`, its folder moved to
+[`tasks/done/0353-…`](../tasks/done/0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md)
+by `/fkit-task-done`, the producer-only mover ([ADR-033](../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)).
+Executed by a spawned `fkit-producer` with **no owner channel**
+([ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+which is why the marker carries the agent-closed qualifier.
+
+**Deliverable:** [`knowledge-base/reports/2026-08-29-the-reference-integrity-condition.md`](../knowledge-base/reports/2026-08-29-the-reference-integrity-condition.md)
+— 1155 lines, one runnable matcher per half. **Final measured state:** Half A **0 broken / 6
+named-exempt / 819 scanned**; Half B **19 across 14 residual / 708 scanned** (182 across 79 total, 163
+across 65 exempt). `npm test` **792/792, 0 fail**; mutation hard gate **PASSED**, re-run in round 2.
+Review ledger `closed-out` — **two rounds, 13 findings (R1–R8, R9–R13), all `✅ done`**, coverage
+**both reviewers measured** in both rounds (ADR-042 D1). ⭐ **Two-sided coverage is the routine state,
+not a degradation** — it withheld nothing.
+
+#### ⛔ The misroute — recorded on the owner's ruling of 2026-08-30, option label verbatim: **"Close it as-is, record the misroute (Rec)"**
+
+- **What the loop prescribes.** `/fkit-sprint-ship-loop`'s step-2 worker table fixes **Process-review**
+  to `@fkit-coder` — *"always, whoever authored the deliverable under review"*
+  ([ADR-038](../knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md)),
+  re-affirmed by [ADR-044](../knowledge-base/decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md)
+  §Decision 3, *"Process-review stays coder"*.
+- **What happened.** The driver spawned an **`fkit-architect`** for that step, **in both rounds**. The
+  [ADR-018](../knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md)
+  `PreToolUse` hook correctly denied the skill — `role 'architect' does not own skill
+  'fkit-process-stateful-review'` — and the worker followed the method by hand and escalated.
+- ⭐ **What this did NOT cost, stated so the record is not read as worse than it is:**
+  - **Reviewer independence held.** A separate `fkit-reviewer` ran **both** rounds, each with a Codex
+    second opinion.
+  - **The method was followed in full** — every step, both rounds. No finding went unverified.
+- ⚠️ **What was actually lost:** the step ran **outside its owning role**, and **round 1's ledger
+  mis-attributed it**. That attribution now carries a dated correction inside the ledger
+  (`tasks/done/0353-…/review.md`, around `:353-385`); round 2's byline was already correct. ⛔ The
+  ledger's `Status: closed-out` was **not** re-opened and its *Reviewer findings* section was **not**
+  touched.
+- **The gap is filed, not merely noticed:** [`0362`](../tasks/backlog/0362-settle-who-runs-process-review-on-an-architect-owned-task/brief.md)
+  — settle by ADR who runs Process-review on an architect-owned task. ⛔ **Owner-ruled Unscheduled**,
+  option label verbatim: **"Leave it unscheduled for now (Rec)"**. It sits on
+  [`backlog.md`](backlog.md), **not on this board**, and nothing here waits on it.
+
+#### What this close unblocks
+
+⭐ **`P6` (`0237`) and, transitively, `P7` (`0176`) are no longer blocked by `P3`.** `0237` records
+`Depends on: 0353 — hard` directly; `0176` records `Depends on: 0237 — hard`, and `0237` in turn
+depended on `0353` — so `0176`'s release is **transitive and still gated on `0237`**, not immediate.
+The condition document is the input `0237` was waiting on. ⛔ **The
+forced-sequencing gate above is UNCHANGED** — `P8`–`P10` still wait on `P4` **and** `P7` both green.
+⚠️ **`P4` (`0354`) also depends on `0353` — hard**, and is likewise released.
+
+⚠️ **One thing this close deliberately did NOT repair.** The `P3` row's own 2026-08-29 figures
+(*"304 across 96 … 60 across 26 … 24 across 11 … 17"*) are **known not to reproduce** — the condition
+document's §6.3 says so of all four. They are left **byte-identical** as the scoping evidence the row
+was written against; the mover's authority extends to trimming a stale note, not to restating a dated
+measurement. ⭐ **Take every link-half figure from the condition document, never from this row.**
+
 
 ## Open questions for the owner
 

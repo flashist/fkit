@@ -282,3 +282,85 @@ second re-verifies its coordinates.**
 - **Possible overlap to check before starting:** `0189` (ADR-036's skill-ownership site registry) and
   `0194`. Report §8 item 8 asks whether this denial record is itself a new site under that registry.
   **That assessment is `0194`/`0189`'s, not this task's** — do not fold it in.
+
+### ⭐ 2026-08-29 — ADR-044 CHANGES THIS DETECTOR'S **ORACLE**. The mechanism is unchanged.
+
+**Source:** [ADR-044](../../../knowledge-base/decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md)
+§C3, §C6, §Decision 1 — `Status: accepted` 2026-08-27, the deliverable of
+[`0270`](../../done/0270-decide-how-the-ship-loop-handles-a-non-coder-owned-task-row/brief.md).
+Filed as follow-on (iii) of §C2 on **owner ruling ND6**, verbatim: *"File all three after the ADR is
+accepted (Recommended)"*. Written by
+[`0347`](../../done/0347-note-adr-044s-oracle-rule-onto-0224-and-0225/brief.md).
+
+⛔ **THE MECHANISM IS UNCHANGED — DO NOT RE-SCOPE THIS TASK.** The pair stands exactly as written
+above: half (i) the git-tracked, append-only denial log, half (ii) the mandatory worklog `**Role:**`
+line, **both in one change surface** (verification step 8). This note touches neither open question
+(the denial-log path/filename, and who is obliged to read the log), neither residual (**R14** presence-
+not-misattribution, **R18** ADR-022 leaves the worker tool-unrestricted), nor the `## Owner` field.
+
+**What changes is the ORACLE — what half (ii)'s `**Role:**` line is checked AGAINST.**
+
+- ⛔ **Old oracle (now wrong for Build):** the **literal role cell** in `/fkit-sprint-ship-loop`'s
+  step-2 table.
+- ⭐ **New oracle — ADR-044 §Decision 1, verbatim:** *"The Build row's role is the owner, in
+  `skills_for_role()`, of the skill the deliverable is produced by."* And for a skill-less deliverable:
+  *"A deliverable that names no skill — source, tests, scaffold, prose under `claude/`,
+  coordination-doc repairs — is the coder's, as sole source-write authority, **whatever `## Owner`
+  says**."* ⚠️ **That last clause is deliberate:** a `## Owner` differing from the Build role is the
+  rule working, not a defect — so the detector must never derive the expected role from `## Owner`.
+  (ADR-044 **§Decision 4** gives `## Owner` its own separate live job — the step-1 vault-row skip
+  predicate. Two fields, two questions.)
+- ⚠️ **Scope of the change, per ADR-044 §C4:** it moves **Build**. **Verify stays table-fixed**, and
+  ADR-038 is *"not amended and not superseded"*. Do not widen this note past Build.
+- ⚠️ **Consequence of NOT carrying this note, in ADR-044 §C3's own words:** *"Without this note the
+  detector flags **every lawful non-coder Build as a misroute**."*
+
+⛔ **THE ANTI-PATTERN THIS DETECTOR MUST NOT IMPLEMENT: grepping the brief for `/fkit-*` skill names.**
+ADR-044 §C6, verbatim: *"A future oracle (`0224`, `0225` — C3) **must read the deliverable's producing
+skill, never grep the brief for skill names.**"* This is measured, not stylistic — a grep oracle
+**reproduces at scale the exact misroute ADR-044 removes**:
+
+- **ADR-044 §C6, measured 2026-08-28:** a grep-for-skill-names oracle would route **8 of the 13**
+  `## Owner: fkit-producer` rows back to the producer — *"reproducing precisely the `## Owner` staffing
+  Decision 1 replaces."*
+- ⭐ **RE-MEASURED 2026-08-29 by `0347` — the figure has MOVED: it is now 9 of 14.** The row `0360`
+  was filed since; it is producer-owned and names `/fkit-status`, `/fkit-task-done` and
+  `/fkit-task-cancelled`, so numerator and denominator each grew by one. **The shape of the failure is
+  unchanged and slightly worse: ~64% of producer-owned rows misrouted.**
+- **Method, so a later reader can re-run it rather than trust it** (`conventions/evidence-before-assertion.md`):
+  population = briefs under `ai-agents/tasks/backlog/` whose **`## Status` is `🔲 Backlog`** — **138**
+  on 2026-08-29 (123 on 2026-08-28); `## Owner` read with an **anchored** `^## Owner$` match (an
+  unanchored one mis-reads `0184`'s second `## Owner rulings on record` heading — ADR-044 §"Unverified
+  this pass"); then every `/fkit-[a-z0-9-]+` token per brief checked against `skills_for_role()` in
+  `claude/skills-for-role.sh`.
+- **The 14 producer-owned rows, 2026-08-29:** `0013`, `0149`, `0183`, `0184`, `0187`, `0193`, `0221`,
+  `0262`, `0318`, `0320`, `0321`, `0335`, `0340`, `0360`. **Ten carry a real `/fkit-*` skill token**;
+  ⛔ **nine of those ten name a producer-*exclusive* skill** — `/fkit-status`, `/fkit-task-brief`,
+  `/fkit-task-done`, `/fkit-task-cancelled` or `/fkit-heal` (`0184`, `0187`, `0262`, `0318`, `0320`,
+  `0321`, `0335`, `0340`, `0360`). Only `0221` does not, naming the lead-owned
+  `/fkit-sprint-ship-loop`. `0013` names the **agent** `/fkit-coder`, not a skill; `0149`, `0183`,
+  `0193` name none.
+- ⚠️ **A mention is not an invocation.** ADR-044 §C6 checked all five `/fkit-record-decision` /
+  `/fkit-task-brief` citations in that set and found *"every one is a reference, not an invocation"* —
+  most of them citing a skill's prose as an **authority for form**. That is precisely why grep cannot
+  serve: it cannot tell a citation from a call.
+- ⛔ **This number is live and will move again.** Re-measure it before relying on it; do not copy it
+  forward unchecked. **Partial verification, stated:** `0347` re-verified the *"names no producing
+  skill"* limb only for the new row `0360` (it runs `npm run release:minor` plus a **hand**-archive;
+  the `/fkit-sprint-done` and `/fkit-sprint-cancelled` tokens it names **do not exist** in
+  `skills_for_role()` — `0341` would build them and is out of `0360`'s scope). The other 13 are
+  inherited from ADR-044's 2026-08-28 per-brief read, **not re-verified on 2026-08-29**.
+
+⭐ **What this means concretely for half (ii)'s implementation.** ⛔ **Half (ii) still compares
+nothing** — it asserts the `**Role:**` line is *present*, and that is all (residual **R14**, restated
+below). What this note fixes is the **oracle any comparison must use if and when one is built**: the
+recorded `**Role:**` would be checked against the role that **ADR-044 §Decision 1's rule** yields for
+that row's deliverable — producing skill → its owner in `skills_for_role()`; no producing skill →
+`fkit-coder`. ⛔ Not against the step table's literal cell, ⛔ not against `## Owner`, and ⛔ **never**
+against a grep of the brief.
+
+⚠️ **R14 is unchanged and is NOT relaxed by this note.** Half (ii) remains a **presence** test:
+nothing compares the recorded role to the row's role, so a worker writing the *wrong* `**Role:**`
+value still passes. ⛔ Do not read "the oracle is now ADR-044's rule" as a claim that half (ii)
+compares anything — that would ship the false guarantee R14 exists to prevent. The oracle stated here
+is what a comparison **must use if and when one is built**.

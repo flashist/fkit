@@ -119,7 +119,7 @@ produced this backlog. The guards are what make the pass verifiable instead of t
 3. **Repair once, using `0353`'s settled condition** for the scanned set and exemptions — the same
    condition `0354` implements. ⛔ Do not re-derive it.
 4. **Classify each repair before making it**, per the rule
-   [`0355`](../0355-clean-the-in-scope-broken-link-red-set/brief.md) inherits from the `0306`
+   [`0355`](../../cancelled/0355-clean-the-in-scope-broken-link-red-set/brief.md) inherits from the `0306`
    precedent: a coordinate that is a **live pointer** is re-anchored; a coordinate that is a **frozen
    record of a past measurement** is left byte-identical and annotated. ⛔ Getting this backwards
    destroys the record.

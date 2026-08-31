@@ -10,7 +10,7 @@ Sprint 7
 P3
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
@@ -20,9 +20,9 @@ fkit-architect
 ### ⭐ This is an INVESTIGATION. It produces a written condition, not a test and not a cleanup.
 
 **Three tasks are blocked on one unanswered question**, and this task is the answer to it:
-[`0354`](../0354-build-the-link-resolution-guard/brief.md) builds the guard,
-[`0355`](../0355-clean-the-in-scope-broken-link-red-set/brief.md) cleans the red set that makes the
-guard green, and [`0237`](../0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md)
+[`0354`](../../backlog/0354-build-the-link-resolution-guard/brief.md) builds the guard,
+[`0355`](../../cancelled/0355-clean-the-in-scope-broken-link-red-set/brief.md) cleans the red set that makes the
+guard green, and [`0237`](../../backlog/0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md)
 already carries the same question in its own step 3 and has carried it, unanswered, since 2026-08-06.
 ⛔ **None of them may start until this lands** — building a guard against an unsettled condition is
 how the project got here.
@@ -170,8 +170,13 @@ Both halves, instances and distinct files, dated, with the command that produced
 ## Notes
 
 - **Depends on:** nothing.
-- **Blocks:** `0354`, `0355`, `0237` — all three hard. `0237` has carried this question unanswered
+- **Blocks:** `0354`, `0237` — both hard. `0237` has carried this question unanswered
   since 2026-08-06; this task discharges it. ⛔ **`0176` is blocked transitively**, through `0237`.
+  ⚠️ **Corrected 2026-08-30: this line read *"`0354`, `0355`, `0237` — all three hard"* and `0355` is
+  no longer among them.** `0355` was **cancelled** on 2026-08-30 (owner ruling *"Cancel it (Rec)"*)
+  once this task's settled condition measured its red set at **0**; its folder is at
+  `ai-agents/tasks/cancelled/0355-clean-the-in-scope-broken-link-red-set/`. **This task blocks two rows
+  hard, not three.**
 - ⚠️ **This task does not close `0237` or change its status.** It answers `0237`'s step 3 so `0237`
   can run. `0237` still does the cleanup. Closes are the producer's act (ADR-033).
 - ⚠️ **The three figures in §Context are one naive matcher's output, not a specification.** They are

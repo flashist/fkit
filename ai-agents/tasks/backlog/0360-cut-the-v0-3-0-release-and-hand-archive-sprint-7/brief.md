@@ -125,8 +125,23 @@ message of its own and cannot serve as the anchor.
 
 ## Notes
 
-- **Depends on:** every other Sprint 7 row — `0347`, `0352`, `0353`, `0354`, `0355`, `0237`, `0176`,
+- **Depends on:** every other **open** Sprint 7 row — `0347`, `0352`, `0353`, `0354`, `0237`, `0176`,
   `0356`, `0357`, `0358`, `0359`, `0361`. ⛔ **Hard: this row archives the board, so it runs last.**
+  - ⛔ **`0355` REMOVED 2026-08-30 — it was CANCELLED and is no longer a row this one waits on.**
+    Owner ruling 2026-08-30, live `AskUserQuestion`, option label verbatim **"Cancel it (Rec)"**;
+    executed by a spawned `fkit-producer`, so the board marker carries
+    `(agent-closed — not owner-verified)` (ADR-033 §5). ⚠️ **Corrected in the field rather than
+    annotated below, for the same reason the `0361` correction was: this is a machine-parsed field**
+    — `dashboard.sh` derives the board's `Next step` from it, and a dependency on a closed row is a
+    stale value. ⛔ **The word *"open"* was added to the lead phrase in the same act**, because
+    *"every other Sprint 7 row"* is no longer the same set as the rows this one waits on — the board
+    still holds thirteen rows, two of them closed. ⛔ **No other name in the list changed**, and
+    ⛔ **rank `P5` was NOT reassigned** (ADR-035) — the board carries a deliberate gap there. The full
+    record lives in [`sprint-7.md`](../../../sprints/sprint-7.md) §"⛔ Addendum — `P5` (`0355`)
+    CANCELLED".
+    - ⚠️ **This does NOT relax step 2's constraint.** *"Do not archive while any Sprint 7 row is
+      open"* still reaches every remaining row. A **cancelled** row is closed, not open — ⛔ but the
+      archival banner must still account for it, because the board it archives contains it.
   - ⚠️ **Corrected in place 2026-08-29, and the change is not cosmetic.** This bullet previously read
     *"… `0358`, `0359`. ⛔ **Hard: this is the last row on the board and it archives it.**"* Two things
     changed: **`0361` was added**, and the claim *"this is the last row on the board"* was replaced,

@@ -10,7 +10,7 @@ Sprint 7
 P1
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-producer
@@ -26,11 +26,11 @@ deliverable of
 **Two open backlog briefs now rest on an oracle ADR-044 changed.** ADR-044 §C3 states the effect on
 each:
 
-- **[`0224`](../0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md)**
+- **[`0224`](../../backlog/0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md)**
   — *"mechanism **unchanged**; its **oracle** for the worklog `Role:` line must be **this rule**, not
   the table's literal cell — widened by reference. Without this note the detector flags every lawful
   non-coder Build as a misroute."*
-- **[`0225`](../0225-add-the-loop-table-row-to-skill-ownership-test/brief.md)** — *"its parser must
+- **[`0225`](../../backlog/0225-add-the-loop-table-row-to-skill-ownership-test/brief.md)** — *"its parser must
   accept a **rule-cell** in Plan/Build (a skill→owner expression, not a literal) — a design-note
   widening; its assertion becomes **stronger**: every named Build skill's owner must own it in
   `skills_for_role()`."*
@@ -221,8 +221,8 @@ pulled into a sprint now. Everything else in the `0337`–`0351` range stays `Un
 the single exception the owner named out of that fifteen-task range.
 
 **Why it was singled out — the ordering hazard, re-measured 2026-08-29.** Both
-[`0224`](../0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md) and
-[`0225`](../0225-add-the-loop-table-row-to-skill-ownership-test/brief.md) still read
+[`0224`](../../backlog/0224-build-the-misroute-detector-as-a-pair-denial-log-and-worklog-role-line/brief.md) and
+[`0225`](../../backlog/0225-add-the-loop-table-row-to-skill-ownership-test/brief.md) still read
 `## Sprint` `Backlog`, `## Priority` `Unscheduled`, `## Status` `🔲 Backlog`. ⚠️ **The hazard this
 brief's `## Notes` flags is therefore still live and still preventable:** if either is pulled before
 this note lands, it is built against the old oracle and **ships the 8-of-13 misroute**. Scheduling

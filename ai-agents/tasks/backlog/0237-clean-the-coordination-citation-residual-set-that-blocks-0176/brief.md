@@ -17,6 +17,28 @@ fkit-coder
 
 ## Context
 
+> # ⛔ READ FIRST — THE WORK LIST IS NO LONGER THIS BRIEF'S (2026-08-30)
+>
+> ⛔ **THE `19 / 15` FIGURE BELOW AND THE SETTLED `19 / 14` FIGURE ARE NOT THE SAME SET. THE MATCHING
+> INSTANCE COUNT IS A COINCIDENCE — DO NOT READ IT AS CONFIRMATION.** The file counts differ (**15**
+> versus **14**), which is the visible edge of two different conditions landing on the same total.
+> ⛔ **Treat the match as suggestive at most, and never as evidence that this brief's list was right.**
+>
+> ⭐ **This task's work list is now the 19-instance table in §6.1 of
+> [`2026-08-29-the-reference-integrity-condition.md`](../../../knowledge-base/reports/2026-08-29-the-reference-integrity-condition.md)** —
+> `0353`'s deliverable — **not** `0176`'s frozen `11 across 8`, **not** the `12 across 9` that document
+> itself reported on 2026-08-29, and **not** this brief's `19 across 15`. **Those 19 rows are the
+> authority.**
+>
+> ⭐ **The job's shape changed materially: the whole list is OPEN briefs plus the live backlog board.
+> ⛔ NO CLOSED RECORD NEEDS EDITING.** Re-measured 2026-08-30: **zero** of the 19 citing sites sit
+> under `ai-agents/tasks/done/` or `cancelled/`. That is the direct consequence of the owner's
+> 2026-08-29 widening of the exemption.
+>
+> **All original text is left byte-identical.** Falsified passages carry a `⚠️ DATED CORRECTION
+> 2026-08-30` block at the end of their own section; the corrected work list is in
+> §**"⭐ RE-SCOPED 2026-08-30 — THE WORK LIST"** at the foot of this brief. ⛔ **Read it before starting.**
+
 **Filed on a named owner ruling** taken via `AskUserQuestion` in a live `fkit lead` session on
 **2026-08-06** — verbatim: **"File the cleanup as its own task."**
 
@@ -64,6 +86,69 @@ can differ:
   **This is the same defect class the rollover already flagged against `0182`'s glob**, and it is
   flagged here so it is not re-discovered a third time.
 
+> ## ⚠️ DATED CORRECTION 2026-08-30 — THE FIGURE TABLE ABOVE IS SUPERSEDED. ⛔ DO NOT WORK FROM IT.
+>
+> **All text above is left byte-identical as the record of what was measured on 2026-08-06.** The
+> condition it was measured under has since been settled by `0353` and changed twice by the owner.
+>
+> ### ⛔ The `19 across 15` / `19 across 14` collision — say this out loud before anything else
+>
+> This brief's re-measurement of 2026-08-06 produced **19 across 15**. The settled condition produces
+> **19 across 14**. ⛔ **They are DIFFERENT SETS that happen to share a total.** The 2026-08-06 figure
+> came from a broader, undocumented condition (it accepted the citation with **and** without the
+> `ai-agents/` prefix, and did not apply `0176` scoping decision 2); the settled figure comes from
+> §4.2's byte-exact matcher under two later owner rulings. ⛔ **A reader who takes the matching 19 as
+> "the old measurement reproduced" will work from the wrong 19 rows.** The differing file counts —
+> 15 versus 14 — are the only visible signal, and this block is here so nobody has to spot it.
+>
+> ### Two owner rulings moved this half, in opposite directions
+>
+> **⏩ 2026-08-29, live `AskUserQuestion`, option label verbatim "Widen to the whole closed folder
+> (Rec)".** The citation half's exemption is no longer `done/*/review.md` only: **`ai-agents/tasks/done/**`
+> and `ai-agents/tasks/cancelled/**` are exempt IN WHOLE** — `brief.md`, `plan.md`, `worklog.md`,
+> `review.md` alike. ⛔ **The 2026-08-01 sentence *"`done/*/brief.md` and `done/*/worklog.md` are NOT
+> exempt"* NO LONGER HOLDS.** Measured effect: residual **42 across 22 → 12 across 9**. ⭐ **This is
+> what removed every closed record from this task's work list.**
+>
+> **⏩ 2026-08-30, live `AskUserQuestion`, option label verbatim "Not a reopening — widen it (Rec)".**
+> The *cited-target* class widened from `brief.md` alone to **`brief.md` · `plan.md` · `worklog.md` ·
+> `review.md`**. Measured effect: residual **12 across 9 → 19 across 14**, and ⭐ **all 7 additions sit
+> in open backlog briefs — none in a frozen record.** ⚠️ **Neither ruling reopens owner ruling 1 of
+> 2026-08-01** (the **literal** full-path reading); that stands, and the resolved-shorthand extension
+> is **still refused, by name**.
+>
+> ### The settled figures, re-measured 2026-08-30
+>
+> | | Settled |
+> |---|---|
+> | Scanned | **708 files** (`ai-agents/tasks/*/*/*.md` + `ai-agents/sprints/*.md` — `0176` decision 1, **unchanged**) |
+> | Total citations | **182 across 79 files** |
+> | Exempt | **163 across 65 files** |
+> | ⭐ **Residual — this task's work list** | ⭐ **19 across 14 files** |
+>
+> **Alternate readings, for the record** ⚠️ *(not guaranteed reproducible — the scanned set contains
+> this project's own live coordination documents, so it measures differently as they are written)*:
+> the 2026-08-01 exemption shape gives **68 across 37**; no fence/quote skipping gives **26 across
+> 15**; widening the scanned set to `sprints/done/` + `sprints/reviews/` gives **25 across 16**.
+>
+> ⛔ **And the one that must never be adopted by accident: skipping inline code spans collapses the
+> total from 182 to 6 and the residual from 19 to 1 — a 30× lever that would gut the guard.** For
+> **this** half backticks are **NOT** skipped: they are the house form for *writing* a coordinate here
+> ([`durable-citation-anchors`](../../../knowledge-base/conventions/durable-citation-anchors.md)), so
+> they are formatting, not quoting. ⚠️ **The link half rules the OPPOSITE way**, deliberately — see
+> the condition document §1.
+>
+> ### 📅 Provenance
+>
+> **Re-measured 2026-08-30 by a spawned `fkit-producer`**, by extracting §4.2's script **verbatim**
+> from the condition document into a session scratchpad (never into the repo) and running it from the
+> repo root against the working tree of that date. Reproduced exactly:
+> `SCANNED: 708 / TOTAL: 182 across 79 / EXEMPT: 163 across 65 / RESIDUAL: 19 across 14`.
+>
+> ⚠️ **THESE FIGURES ARE AS-OF 2026-08-30 AND THEY DECAY.** The condition document was **still under
+> review (round 2) when they were taken** and may change. ⛔ **Re-measure at this task's own plan gate
+> by re-running §4.2's script, and work from the rows you get.**
+
 ## What to build
 
 The residual set clean, so `0176` can ship green.
@@ -97,6 +182,30 @@ The residual set clean, so `0176` can ship green.
 - **⛔ No `:NNN` line-number citations in this task's own artifacts.**
 - **⛔ Do not move any task file.** The movers are producer-only (ADR-033).
 
+> ## ⚠️ DATED CORRECTION 2026-08-30 — STEPS 1–3 ARE DISCHARGED AND CONSTRAINT 1 IS TOO NARROW.
+>
+> **All text above is left byte-identical.** Steps and constraints are corrected here, not rewritten
+> above.
+>
+> - **Step 1 (*"Settle the condition first, in writing"*) and step 3 (*"Decide the scanned-set glob
+>   question"*) are DISCHARGED by `0353`.** ⛔ **Do not re-derive them.** Run them as a
+>   **reconciliation**: name the condition document by filename, confirm §4.2 matches, and report any
+>   divergence. ⛔ **If you and the document disagree, STOP and surface it — do not pick one.**
+>   ⭐ **Step 3's answer, for the record:** `ai-agents/sprints/done/**` and `ai-agents/sprints/reviews/**`
+>   are **OUT** for this half — a closed board's claims are frozen. Measured cost of including them:
+>   **+4 residual** and **0** respectively. **Name that decision in the close report**, as step 3 asks.
+> - **Step 2's target figures are superseded.** Report against the settled **19 across 14**, not the
+>   `11 / 8` or `19 / 15` pair. See the §Context correction for why the matching 19 is a coincidence.
+> - ⛔ **Constraint 1 is NOW TOO NARROW and following it literally would corrupt a frozen record.** It
+>   reads *"Do not clean the exempt citations inside `done/*/review.md`"*. **The exemption is now the
+>   WHOLE closed folder** — `ai-agents/tasks/done/**` **and** `ai-agents/tasks/cancelled/**`, every file
+>   type, on the owner's 2026-08-29 ruling. ⛔ **Edit nothing under either.** ⭐ In practice this costs
+>   nothing: **re-measured 2026-08-30, zero of the 19 citing sites are in a closed folder.**
+> - ⭐ **A distinction worth drawing before someone stalls on it: five of the 19 residual citations
+>   CITE `ai-agents/wiki-vault/log.md`. Repairing them is NOT a vault write.** The edit lands in the
+>   **citing** open brief; `ai-agents/wiki-vault/` itself stays untouched, as constraint 2 requires.
+> - **All other constraints stand**, including the refusal to fold in the resolved-shorthand extension.
+
 ## Verification steps
 
 1. The condition from step 1 exists as a runnable command in the worklog, and re-running it after the
@@ -112,6 +221,25 @@ The residual set clean, so `0176` can ship green.
 7. `npm test` passes.
 8. Run the dashboard over all four live boards; report roll-ups and drift before and after. **No board
    gains a drift record.**
+
+> ## ⚠️ DATED CORRECTION 2026-08-30 — VERIFICATION STEPS 2 AND 4 ARE FALSIFIED. ⛔ DO NOT RUN THEM AS WRITTEN.
+>
+> **All text above is left byte-identical.** Steps 1, 3, 5, 6, 7 and 8 stand exactly as written —
+> step 8 in particular stands **harder**, because `ai-agents/sprints/backlog.md` is on the work list
+> and is a machine-parsed file.
+>
+> - **Step 2′.** Report the re-measurement against the settled **19 across 14**, and explain the
+>   `19 / 15` collision explicitly (see the §Context correction). ⛔ **Do not report "the 2026-08-06
+>   figure reproduced."** It did not; a different condition landed on the same total.
+> - **Step 4′.** The step asserts *"the 55-ish exempt citations inside `done/*/review.md` are
+>   untouched — `git diff --stat` shows no file matching `ai-agents/tasks/done/*/review.md`
+>   modified."* ⛔ **Both the figure and the glob are wrong.** The exemption is now the **whole** closed
+>   folder and the exempt set is **163 citations across 65 files** (re-measured 2026-08-30). **Assert
+>   instead:** `git diff --stat` shows **zero** files modified under `ai-agents/tasks/done/` **or**
+>   `ai-agents/tasks/cancelled/` — any file type, not just `review.md`.
+> - ⭐ **Add a step 9.** `ai-agents/sprints/backlog.md` carries **3** of the 19 residual citations and
+>   is read by `dashboard.sh` and by both task movers. ⛔ **Treat every edit there as touching a parser
+>   contract**, and re-run the dashboard after the pass, not only at the end.
 
 ## Notes
 
@@ -161,7 +289,7 @@ this section, not that bullet, for the current state.
 ⭐ **WHAT CHANGED ABOUT THIS TASK'S SHAPE, and it is the reason it was pullable at all.** This brief's
 step 1 (*"Settle the condition first, in writing"*) and step 3 (*"Decide the scanned-set glob question
 and say so"*) have been **lifted out into their own row**:
-[`0353`](../0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md) (`P3`), which
+[`0353`](../../done/0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md) (`P3`), which
 settles the condition **once**, for both the `path:NNN` half and the markdown-link half, and
 discharges this brief's open scanned-set question.
 
@@ -190,3 +318,111 @@ where the record lives, because the field itself has to be true.
 *Recorded 2026-08-29 by a spawned `fkit-producer` with no owner channel
 ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
 executing the mechanics of a relayed ruling and deciding nothing beyond them.*
+
+---
+
+## ⭐ RE-SCOPED 2026-08-30 — THE WORK LIST
+
+**Authority:** owner ruling **2026-08-29**, live `AskUserQuestion`, option label verbatim
+**"Accept — links in scope, citations exempt (Rec)"**, whose stated cost was that it *"contradicts
+three briefs"*; and its two sharpening rulings, **"Widen to the whole closed folder (Rec)"**
+(2026-08-29) and **"Not a reopening — widen it (Rec)"** (2026-08-30). All three are recorded in full
+in §3.1, §3.2 and §8 (escalation **E2**) of
+[`2026-08-29-the-reference-integrity-condition.md`](../../../knowledge-base/reports/2026-08-29-the-reference-integrity-condition.md),
+which states these re-scopings *"are the producer's to make, not the architect's."*
+
+**This section governs where it disagrees with anything above it.**
+
+### 1. ⛔ Where the work list lives — and why it is NOT copied here
+
+⭐ **The work list is the 19-row table in §6.1 of the condition document.** ⛔ **It is deliberately
+not duplicated into this brief, for two reasons, both binding:**
+
+1. **This brief forbids `:NNN` line-number citations in its own artifacts.** The document renders each
+   coordinate across **two columns** — citing file, then line — precisely so a document defining the
+   ban does not ship carrying the form. Copying the rows in as prose would break this task's own rule.
+2. **One place to keep true.** The figures decay; a copy would rot silently.
+
+⛔ **Read §6.1, and re-run §4.2's script from the repo root before touching anything.** Work from the
+rows the script prints on the day you run it.
+
+### 2. The shape of the job, so it is visible before it starts
+
+**Re-measured 2026-08-30** (provenance in the §Context correction):
+
+| | |
+|---|---|
+| Residual (the work list) | **19 instances across 14 files** |
+| Citing sites | **13 open backlog briefs + `ai-agents/sprints/backlog.md`** |
+| ⭐ Citing sites in a **closed** folder | ⭐ **ZERO** |
+
+**By what each citation points AT:**
+
+| Count | Cited coordination document |
+|---|---|
+| 9 | a file under `ai-agents/tasks/done/**` |
+| 5 | `ai-agents/wiki-vault/log.md` |
+| 3 | `ai-agents/sprints/backlog.md` |
+| 2 | a file under `ai-agents/tasks/backlog/**` |
+
+**By cited filename** — `review.md` **5**, `log.md` **5**, `brief.md` **4**, `backlog.md` **3**,
+`plan.md` **1**, `worklog.md` **1**. ⭐ **The 7 non-`brief.md` task-folder citations (5 + 1 + 1) are
+exactly the additions from the 2026-08-30 target-class widening**, and all 7 sit in open briefs.
+
+⚠️ **A citation pointing INTO a closed folder is still repairable — the exemption is about the CITING
+site, not the cited one.** Nine of the 19 cite a file under `done/`; the edit lands in the open brief
+that wrote the coordinate. Same for the five that cite `ai-agents/wiki-vault/log.md`: repairing them
+is **not** a vault write.
+
+### 3. ⚠️ Two rows carry an elided coordinate — treat them as citations, not as paths
+
+Half B has **no elision rule**, so an elided coordinate like a `…`-abbreviated folder segment **counts
+as a hit**. Two of the 19 are this shape: one citing a `done/` worklog, one citing a `backlog/` brief.
+⛔ **They are genuine citation *claims* against a record and belong in this list** — that is the ruled
+reading (condition document §7 item 10, measured cost 1, arguably 2). ⚠️ **The link half skips elided
+targets; this half does not.** The divergence is deliberate. ⛔ **Do not "resolve" the elision into a
+real path — repair the citation to the durable named form**, which is the whole point of the task.
+
+### 4. What must be disclosed alongside the pass
+
+⛔ **A green guard here is not a complete guard, and the close report must say so.** Both accepted
+incompletenesses are named and must not be silently widened:
+
+- **The resolved-shorthand extension is still refused, by name** (owner ruling 1, 2026-08-01, **not
+  reopened**). A bare board name or a bare `NNNN/brief` followed by a line number is **not** matched.
+  ⛔ **Say so alongside the pass. Being a gate on three other Sprint 7 rows does not make it complete.**
+- **Source-file coordinates are caught by neither guard, and the cost is two orders of magnitude
+  larger than previously stated.** Coordinates like `claude/…` or `test/…` plus a line number, written
+  **inside** the scanned set, are invisible because the *target* prong admits only a coordination
+  document. **Measured 2026-08-30: 250 instances across 46 files** (a second regex for the same
+  question measured 216 across 42 — both refute the "three" this was once thought to be). ⚠️ **That
+  counts coordinates, not verified *stale* coordinates.** ⛔ **The refusal to widen is unchanged and is
+  not reopened — but the figure must be stated, not implied to be three.**
+
+### 5. Unchanged, and still binding
+
+- **`Depends on: 0353` — hard.** Its condition document is the input. Unchanged.
+- **`Blocks: 0176` — hard**, and both gate Sprint 7's three sweeps (`0356`, `0357`, `0358`).
+  ⚠️ **This row is now the expensive half of that gate.** The link guard (`0354`) is green on arrival;
+  ⭐ **the sequencing gate rests almost entirely on `0176`, which rests on this task.**
+- **The `📌 DATED NOTE 2026-08-15 (`0306`)` dead-path note stands** — that string stays byte-identical.
+- **⛔ No status, rank, board membership, dependency field or file location was changed by this act.**
+
+### 📅 Provenance and decay
+
+**Re-measured 2026-08-30 by a spawned `fkit-producer` with no owner channel
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+by extracting §4.2's script verbatim from the condition document into a session scratchpad (never into
+the repo) and running it from the repo root against the working tree of that date.** Reproduced
+exactly: `SCANNED: 708 / TOTAL: 182 across 79 / EXEMPT: 163 across 65 / RESIDUAL: 19 across 14`. The
+per-target breakdowns in §2 above were derived from that same run.
+
+⚠️ **THESE FIGURES ARE AS-OF 2026-08-30 AND THEY DECAY. The condition document was still under review
+(round 2) when they were taken and may change.** Worse, this repo's own live coordination documents
+are **inside the scanned set**, so the tree measures differently as they are written — the document
+caught this happening to itself. ⛔ **Re-measure at this task's own plan gate. Work from what you
+measure, not from what is written here.**
+
+*Recorded 2026-08-30 by a spawned `fkit-producer` executing escalation **E2** of the condition
+document under the owner's 2026-08-29 ruling. Every edit is an append; all prior text is
+byte-identical.*

@@ -10,7 +10,7 @@ Sprint 7
 P2
 
 ## Status
-🔲 Backlog
+🔄 In progress
 
 ## Owner
 fkit-architect
