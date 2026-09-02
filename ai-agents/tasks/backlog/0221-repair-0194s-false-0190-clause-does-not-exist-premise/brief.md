@@ -20,9 +20,8 @@ fkit-producer
 **Task `0194` is open and one of the three prerequisites it declares blocked is no longer blocked.**
 
 `0194` ("Assess ADR-037's two clause sites against the ADR-036 registry") lists three prerequisites
-under *"Why it cannot be done now — three prerequisites, all open"*. Its brief at
-`ai-agents/tasks/backlog/0194-assess-adr-037s-two-clause-sites-against-the-adr-036-registry/brief.md:31`
-reads:
+under *"Why it cannot be done now — three prerequisites, all open"*. Its brief, item 2 of that
+section, reads:
 
 > 2. **`0190`'s clause does not exist** — no wording to assess.
 

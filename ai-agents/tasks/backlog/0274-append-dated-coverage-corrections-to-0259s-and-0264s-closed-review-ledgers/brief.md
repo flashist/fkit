@@ -159,7 +159,7 @@ the ledger's own accurate statement and records which of the two the reader shou
 
 ### ⛔ `0265` is ACCURATE — leave it alone
 
-`ai-agents/tasks/done/0265-implement-adr-041s-dashboard-half-the-backlog-identity-token-and-the-resolve-identity-interface/review.md:10-15`
+`0265`'s review ledger
 already states the reasoning-only reality loudly and correctly (*"COVERAGE IS PARTIAL AND THIS IS NOT
 A FOOTNOTE"*, naming the `mkdtemp` `EPERM` block and *"Every piece of execution evidence in this review
 is the reviewer's"*). ⛔ **Do not touch it, and do not "harmonize" its wording with the new vocabulary.**

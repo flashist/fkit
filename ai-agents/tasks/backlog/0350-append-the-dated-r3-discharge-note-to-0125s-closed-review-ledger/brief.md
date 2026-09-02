@@ -52,8 +52,8 @@ none of that: the residual reads exactly as it did on 2026-07-27.
 
 | Coordinate | Measured | Content |
 |---|---|---|
-| `ai-agents/tasks/done/0125-wiki-skills-flag-ready-to-close/review.md:109-116` | 2026-08-28 | the R3 residual bullet, inside `## Accepted residuals (shared, do-not-re-litigate)` (heading at `:95`); the file is 126 lines and ends with `## Re-litigates settled decisions (suppressed)` |
-| `ai-agents/tasks/done/0125-wiki-skills-flag-ready-to-close/plan.md:127-133` | 2026-08-28 | R3's literal subject — check 4, **unchanged**, still `sed 's/^ *//'` + `diff && diff && echo "UNIFORM"` |
+| `0125`'s review ledger — the R3 residual bullet under `## Accepted residuals (shared, do-not-re-litigate)` | 2026-08-28 | the R3 residual bullet, inside `## Accepted residuals (shared, do-not-re-litigate)` (heading at `:95`); the file is 126 lines and ends with `## Re-litigates settled decisions (suppressed)` |
+| `0125`'s plan — check 4, the uniformity check | 2026-08-28 | R3's literal subject — check 4, **unchanged**, still `sed 's/^ *//'` + `diff && diff && echo "UNIFORM"` |
 | `test/wiki-flag-convention.test.js:275` | 2026-08-28 | `function dedent(block)` — removes **one uniform minimum** per block, never a per-line strip |
 | `test/wiki-flag-convention.test.js:487` | 2026-08-28 | T8 — rejects a broken relative indent, and carries the control asserting a blanket strip is blind to exactly that bug |
 | `test/wiki-flag-convention.test.js:507` | 2026-08-28 | T9 — a whole-block uniform shift still passes (the fix does not over-pin) |

@@ -260,7 +260,7 @@ A broken link has **two** honest repairs, and picking the wrong one destroys a r
 >   it"*) was correct under the condition believed on 2026-08-29 and is void under the settled one.
 >   ⭐ **This row blocks nothing.** The `0356`/`0357`/`0358` sequencing gate still requires `0354` and
 >   `0176` green — `0354` is green already, and the remaining cost sits in `0176`, which depends on
->   [`0237`](../../backlog/0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md).
+>   [`0237`](../../done/0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md).
 > - ⛔ **Verification step 8** asserts *"`ai-agents/sprints/backlog.md` carries **3** of the
 >   convention-correct in-scope broken links (11 under the naive reading)"*. **Re-measured 2026-08-30
 >   under the settled condition: `ai-agents/sprints/backlog.md` carries ZERO broken links.** ⚠️ The

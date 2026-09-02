@@ -28,8 +28,8 @@ Task 0118's brief — now closed and sitting in
 
 **What actually happened.** Under an explicit owner ruling, **0117 shipped ahead anyway** — it ingested
 the **un-amended** ADR-032 and carried a `⚠️ STALE` staleness pointer on the vault page in place of the
-missing text (the one-line authorized widening recorded at
-`ai-agents/tasks/done/0117-wiki-ingest-lead-conductor-and-adrs-031-032/review.md:33`). 0117 is
+missing text (the one-line authorized widening recorded in `0117`'s review ledger,
+§"Coder response", finding `R2`). 0117 is
 `✅ Done (agent-closed — not owner-verified)`. The block was therefore **discharged by a different
 route than the brief predicted**: not by 0118 landing first, but by the owner authorizing a stand-in.
 

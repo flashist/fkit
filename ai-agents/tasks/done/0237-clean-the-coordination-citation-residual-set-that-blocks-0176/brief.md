@@ -10,7 +10,7 @@ Sprint 7
 P6
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -44,7 +44,7 @@ fkit-coder
 
 ### The hole this closes
 
-[`0176`](../0176-build-the-coordination-citation-policy-guard/brief.md) builds
+[`0176`](../../backlog/0176-build-the-coordination-citation-policy-guard/brief.md) builds
 `test/coordination-citation-policy.test.js`, the guard against `path:NNN` citations of coordination
 documents. Its own brief states three things that, together, make it unshippable:
 
@@ -289,7 +289,7 @@ this section, not that bullet, for the current state.
 ⭐ **WHAT CHANGED ABOUT THIS TASK'S SHAPE, and it is the reason it was pullable at all.** This brief's
 step 1 (*"Settle the condition first, in writing"*) and step 3 (*"Decide the scanned-set glob question
 and say so"*) have been **lifted out into their own row**:
-[`0353`](../../done/0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md) (`P3`), which
+[`0353`](../0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md) (`P3`), which
 settles the condition **once**, for both the `path:NNN` half and the markdown-link half, and
 discharges this brief's open scanned-set question.
 
@@ -301,7 +301,7 @@ discharges this brief's open scanned-set question.
 - **Everything else in this brief is unchanged** — `## What to build` steps 2 and 4, all five
   constraints, all eight verification steps, and the `0306` dead-path note.
 
-⚠️ **This task still hard-blocks [`0176`](../0176-build-the-coordination-citation-policy-guard/brief.md)
+⚠️ **This task still hard-blocks [`0176`](../../backlog/0176-build-the-coordination-citation-policy-guard/brief.md)
 (`P7`), and both now gate Sprint 7's three sweeps** (`0356`, `0357`, `0358`). ⛔ **`0176`'s guard must
 be green before any sweep starts** — the owner-agreed *"verified, not trusted"* constraint. This row
 is on the critical path for five other rows; see [`sprint-7.md`](../../../sprints/sprint-7.md)

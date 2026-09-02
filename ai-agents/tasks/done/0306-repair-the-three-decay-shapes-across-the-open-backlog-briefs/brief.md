@@ -306,7 +306,7 @@ that this cleanup be *"scheduled early"*; they did **not** rule on whether it pa
 ⛔ **Do not add a hard `Depends on: 0171`** — that would convert a producer's scheduling preference
 into a block the owner never authorized. ⚠️ **If this task is picked up while `0171` is still open,
 the run must NAME the anchor form it used and WHY**, so a later pass can reconcile it — the same
-fallback [`0237`](../../backlog/0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md)
+fallback [`0237`](../0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md)
 already carries.
 
 ---

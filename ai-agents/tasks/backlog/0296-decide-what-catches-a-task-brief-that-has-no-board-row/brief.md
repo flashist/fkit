@@ -47,7 +47,7 @@ this task has.**
 **Specimen 1 — `0295`, a fresh filing that skipped the append. ⚠️ ALREADY REPAIRED.**
 [`0295`](../../done/0295-correct-the-false-0254-review-attribution-and-the-unconditional-exit-2-claim/brief.md)
 was filed 2026-08-13 and **no board row was created**, so it was invisible for a full day. The row was
-appended 2026-08-14 and now sits at `ai-agents/sprints/backlog.md:212`, which carries the dated
+appended 2026-08-14 and now sits on `ai-agents/sprints/backlog.md` as the `0295` row, which carries the dated
 registration note recording the whole episode — **that row is the durable carrier of this specimen**;
 the task has since closed. ⛔ **Do not re-repair it and do not edit that row.** How it happened is on the
 record: the producer that filed it reported its change surface as *"exactly one new file: the brief
@@ -297,7 +297,7 @@ the figures in `## Context`.**
   which board, given both tasks are closed and `sprint-2.md` is archived — is a **consequence** of this
   decision, not an input to it. A repair before the decision pre-empts the *"nothing changes"* candidate
   by destroying the only two live specimens.
-- **⛔ Do not edit `ai-agents/sprints/backlog.md:212`** (`0295`'s row) or any other existing row. The
+- ⛔ **Do not edit the `0295` row on `ai-agents/sprints/backlog.md`** or any other existing row. The
   dated registration note there is evidence. ⚠️ **Line 212 was the number at filing time**; two rows
   were appended after it in the same run, so **locate the row by its `0295` href, not by line number.**
 - **⛔ No mover** ([ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)

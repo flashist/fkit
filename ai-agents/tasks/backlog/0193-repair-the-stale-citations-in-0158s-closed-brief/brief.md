@@ -55,7 +55,7 @@ closed and its follow-ups `0202`–`0206` added out of band (2026-08-02)*, final
 
 | # | Defect | Verified state (re-verified first-hand 2026-08-03) |
 |---|---|---|
-| 7 | `0162`'s brief `## Priority` reads **127**; the board row reads **P128** | Confirmed. `ai-agents/tasks/done/0162-decide-the-construction-that-satisfies-the-verbatim-carry-requirement/brief.md:10` reads `127`; `sprint-2.md:160` is the `P128` row. **P127 is now held by `0150`** (`sprint-2.md:159` → `tasks/done/0150-add-verbatim-to-fkit-coder-declared-approval-marker/brief.md`) |
+| 7 | `0162`'s brief `## Priority` reads **127**; the board row reads **P128** | Confirmed. `0162`'s brief `## Priority` field reads `127`; `sprint-2.md:160` is the `P128` row. **P127 is now held by `0150`** (`sprint-2.md:159` → `tasks/done/0150-add-verbatim-to-fkit-coder-declared-approval-marker/brief.md`) |
 
 **⛔ Why this is harder than defect 3, and must not be repaired the same way.** `0162`'s brief also
 carries a long dated narrative that **reasons from the number 127**, at

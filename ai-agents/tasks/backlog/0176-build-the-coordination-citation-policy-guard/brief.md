@@ -491,7 +491,7 @@ work makes the case for it, **name it as a follow-up** — the producer files it
   > *"nothing hard … the cleanup is not owned by any task today; flagged for the owner as either a
   > prerequisite task or in-scope work for this one."* **The owner ruled on 2026-08-06** via
   > `AskUserQuestion` in a live `fkit lead` session — verbatim **"File the cleanup as its own task."**
-  > It is [`0237`](../0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md), and
+  > It is [`0237`](../../done/0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md), and
   > it is a **hard** dependency: until it lands, this task is unshippable and the board was advertising
   > it as pullable.
   >

@@ -35,7 +35,8 @@ follow-ups list*. Source:
 **The gap.** A driver spawned the wrong role for the Process-review step on **three consecutive
 tasks** (`0158`, `0143`, `0195`) before anyone noticed. Today a denial reaches the project record
 **only if the denied worker chooses to write it there.** `0195`'s worker volunteered it
-(`ai-agents/tasks/done/0195-…/worklog.md:188-194`, frozen); the other two did not, or had nothing to
+(`0195`'s worklog, §"Round 2 — review processing, 2026-08-02", the ⚠️ Procedural-flag
+paragraph recording the hook denial, frozen); the other two did not, or had nothing to
 volunteer. The hook detects every violation and **records none** — measured at
 `claude/skill-ownership-hook.sh`, `deny()`, which does exactly two things: prints to stderr and emits
 the deny JSON on stdout.

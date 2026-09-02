@@ -93,8 +93,8 @@ reasoning-only Codex pass — and both were written **after** ADR-042 was accept
 
 | # | Ledger | Reads | Severity |
 |---|---|---|---|
-| 1 | `ai-agents/tasks/done/0327-refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim/review.md:12-15` (the phrase at `:14`) | *"the Codex adversarial pass (`codex exec --sandbox read-only`, `gpt-5.6-sol`, completed, **full coverage** — reasoning-and-read-only per ADR-042 D1, the normal expected state, not a degradation)"* | **Lower.** It cites ADR-042 D1 and describes the reality **correctly**; only the two words *"full coverage"* are the banned token. A reader who finishes the sentence is not misled. |
-| 2 | `ai-agents/tasks/done/0188-repair-the-five-live-ownership-fact-defects/review.md:27` (Round 2, dated 2026-08-27) | *"Reviewers run: own pass + Codex (`codex exec --sandbox read-only`, exit 0). **Coverage: full.**"* | **Higher.** A bare, unqualified claim on a `read-only` pass, with nothing beside it to correct the impression. This is the same shape as `0259`'s claim, which `0274` exists to correct. |
+| 1 | `0327`'s review ledger, §"Reviewer findings", the "Round 1 — reviewers run:" paragraph — the coverage line | *"the Codex adversarial pass (`codex exec --sandbox read-only`, `gpt-5.6-sol`, completed, **full coverage** — reasoning-and-read-only per ADR-042 D1, the normal expected state, not a degradation)"* | **Lower.** It cites ADR-042 D1 and describes the reality **correctly**; only the two words *"full coverage"* are the banned token. A reader who finishes the sentence is not misled. |
+| 2 | `0188`'s review ledger, §"Round 2 (2026-08-27) — re-verification, no new rows" | *"Reviewers run: own pass + Codex (`codex exec --sandbox read-only`, exit 0). **Coverage: full.**"* | **Higher.** A bare, unqualified claim on a `read-only` pass, with nothing beside it to correct the impression. This is the same shape as `0259`'s claim, which `0274` exists to correct. |
 
 ⭐ **The one thing that changes how this reads — measure the dates before deciding.** Both ledgers
 were written **before `0272` landed** (`0327` closed 2026-08-24; `0188`'s Round 2 is dated

@@ -40,7 +40,8 @@ All six sit in `ai-agents/wiki-vault/log.md`.** The vault's **content** passed e
 ### The same class reached the owner
 
 **The driver relayed the unrun-command finding to the owner as this task's headline result — without
-running it.** Recorded on disk at `ai-agents/wiki-vault/log.md:657`:
+running it.** Recorded on disk in `ai-agents/wiki-vault/log.md`,
+§"Correction appended 2026-07-29 (round 2, stateful review) — three worklog-accuracy defects in this entry":
 
 > *"⚠️ **It also propagated past the vault** — the driver relayed the wrapped-grep finding to the owner
 > as this task's most valuable product **without running the command**, the same unverified-amplification

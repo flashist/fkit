@@ -35,7 +35,7 @@ correctly absent. **The failure was the form, not the content.**
 |---|---|
 | The prescribed line is present, identical, in all three wiki SKILLs | `claude/skills/fkit-wiki-ingest/SKILL.md:72`, `claude/skills/fkit-wiki-sync/SKILL.md:116`, `claude/skills/fkit-wiki-lint/SKILL.md:81` — the `complete →` form, plus the sibling `partial` form |
 | The SKILL states the verbatim obligation on the **caller**, not the emitter | ingest `SKILL.md:83-84`: *"These lines are the **last** thing in the report. A caller who summarizes this report **carries them verbatim** — a dropped flag is the whole bug this exists to fix."* |
-| The deviation happened, and the vault recorded it | `ai-agents/wiki-vault/log.md:623`: *"This run first emitted its close flag as 'task 0141 ready to close — folder ID `0141`, brief …'. **That is not the prescribed line.** … Re-emitted correctly on the driver's correction."* |
+| The deviation happened, and the vault recorded it | `ai-agents/wiki-vault/log.md` §"Correction appended 2026-07-29 — the terminal flag line was emitted in a non-conforming form": *"This run first emitted its close flag as 'task 0141 ready to close — folder ID `0141`, brief …'. **That is not the prescribed line.** … Re-emitted correctly on the driver's correction."* |
 | Neither live outing left a plan on disk | `ai-agents/tasks/done/0141-wiki-resync-for-the-lead-rename-and-menu-reorder/` holds `brief.md` + `review.md`; `ai-agents/tasks/done/0126-wiki-resync-for-adr-033/` holds `brief.md` + `review.md`. **No `plan.md`, no `worklog.md` in either.** |
 
 > ⚠️ **The plan-side account is NOT verifiable from disk — treat it as testimony, not as a checkable

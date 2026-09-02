@@ -155,8 +155,8 @@ later** is now off. Measured 2026-08-13 with
 |---|---|---|
 | `claude/skills/fkit-wiki-lint/SKILL.md:184` | `:390` | ⛔ **`0280`'s — the citation is FABRICATED and `0280` deletes it.** See the fence. |
 | `ai-agents/knowledge-base/decisions/adr-016-…md` §"Delivery is structural…", *"Zero hooks"* | `:397` | Live ADR. |
-| `ai-agents/sprints/backlog.md:101` | `:453` | Live board row. |
-| `ai-agents/tasks/backlog/0145-…/brief.md:21`, `:81` | `:453` | Live open brief. |
+| `ai-agents/sprints/backlog.md` — the `0145` row | `:453` | Live board row. |
+| `0145`'s brief — two sites, both citing the same `architecture.md` coordinate | `:453` | Live open brief. |
 | `ai-agents/knowledge-base/reports/2026-07-11-…md:84` | `:394` | ⚠️ A **dated report** — a snapshot of one day. **Frozen or correctable? Surface the question.** |
 | `ai-agents/knowledge-base/reports/2026-07-14-…md:275` | `:397` | Same class. |
 | `ai-agents/sprints/done/sprint-2.md:197`, `:1432` | `:453` | ⛔ **Archived sprint — frozen history.** |

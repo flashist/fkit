@@ -24,7 +24,8 @@ fkit-wiki
 **"File a resync task now (Recommended)"**.
 
 **Provenance:** surfaced by the **wiki lint of 2026-08-13**, which flagged the exposure itself in the
-vault log (`ai-agents/wiki-vault/log.md:2008`, anchor measured 2026-08-13):
+vault log (`ai-agents/wiki-vault/log.md` §"⚠️ Flagged for human review — 3", item 2,
+anchor measured 2026-08-13):
 
 > *"The Codex sandbox flag is described in three vault pages and ADR-042's D2 will falsify all three
 > when it ships. … **Verified 2026-08-13: all five sites under `claude/` still read `read-only` and
@@ -219,8 +220,8 @@ actually stands **after `0273`**.
 
 - **Depends on:** nothing
 - **Blocks:** nothing
-- **Provenance:** surfaced by the **wiki lint of 2026-08-13** (recorded at
-  `ai-agents/wiki-vault/log.md:2008`), which correctly **annotated rather than corrected** because the
+- **Provenance:** surfaced by the **wiki lint of 2026-08-13** (recorded in `ai-agents/wiki-vault/log.md`
+  §"⚠️ Flagged for human review — 3", item 2), which correctly **annotated rather than corrected** because the
   pages are true today. Filed **2026-08-13** on the owner's ruling of the same day, verbatim option
   label **"File a resync task now (Recommended)"**.
 - **⚠️ ORDERING — recorded as a dated note, deliberately NOT a `Depends on:` edge** (the convention

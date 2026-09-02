@@ -415,7 +415,7 @@ vault write.**
   2. **`:42`, instance table row 3 — TWO stale cells. ⚠️ This was NOT in the correction request; this
      producer measured it and is recording it rather than leaving it.** The row's `## Status` cell
      reads `🔲 Backlog`; `0289`'s actual `## Status` is **`✅ Done (agent-closed — not
-     owner-verified)`** (`ai-agents/tasks/done/0289-wiki-resync-of-the-still-open-0254-claim-in-the-install-pages-0285-block/brief.md:12-13`).
+     owner-verified)`** (`0289`'s brief `## Status` field).
      The row's Location cell **display text** still reads `ai-agents/tasks/backlog/0289-…`, which no
      longer exists. ✅ **That cell's markdown LINK TARGET resolves correctly today** — only the
      visible path text and the status cell are stale.
