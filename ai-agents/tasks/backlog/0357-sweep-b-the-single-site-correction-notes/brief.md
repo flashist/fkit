@@ -123,6 +123,75 @@ ruling authorizes the closes the sweeps actually perform, not a count
 > - **Expected effect on open work, measured 2026-08-29:** **138** open task folders today
 >   (all `🔲 Backlog`), falling to **~100** if ~38 close. ⛔ Re-measure before quoting.
 
+> ### ⭐ MEMBER ADDED 2026-09-02 — THE NUL BYTE IN `0246`'s CLOSED REVIEW LEDGER
+>
+> **Owner ruling, 2026-09-02, given live via `AskUserQuestion` in a `fkit lead` session; the option
+> label is the verbatim text: "Fold into an existing sweep (Rec)".** Relayed by a spawned
+> `fkit-producer` with no owner channel
+> ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+> It was put to the owner as: *it's a one-character fix in a closed task's ledger. Sweep B (`0357`)
+> already touches correction notes across closed folders — add it there rather than filing a row of
+> its own. Fewer rows, same fix.*
+>
+> **The site.**
+> `ai-agents/tasks/done/0246-build-the-consent-gated-repair-path-inside-the-check-skill/review.md`
+> carries a **literal NUL byte** (`0x00`) — **one** of them, at **byte offset 12107**, on **line 92**.
+> ⭐ **Re-measured firsthand 2026-09-02** by a spawned `fkit-producer`: file size **20966 bytes**, NUL
+> count **1**, offsets `[12107]`. It sits inside a backtick-quoted span in a *Reviewer findings*
+> summary line whose surrounding words read *"escapes in fixtures — good hygiene"* — the span was
+> meant to hold the two-character **text** `\0`, and a real NUL was written instead.
+>
+> **What it breaks, and why it is worth a member of its own.** ⚠️ **This is not one file's cosmetic
+> defect — it made a ledger invisible to the project's own tooling.** Measured the same day on this
+> machine: plain `grep` for `^Status:` returns **nothing, exit 1** — it treats the whole file as
+> binary — while `grep -a`, `sed`, `awk`, Python (strict UTF-8) and Node (`readFileSync … 'utf8'`)
+> **all** read `Status: closed-out` from it without complaint. ⭐ **That single byte is why two
+> reviewers computing the same corpus figure over the review ledgers got different answers**: any
+> count built on a plain `grep` silently omits this ledger, and any count built on the other five
+> readers includes it. A record no tool can see is worse than a record that is wrong, because nothing
+> flags it.
+>
+> ⭐ **It is exactly one site, and that was measured, not assumed.** A byte scan of **every** `.md`
+> file under `ai-agents/` on 2026-09-02 found a NUL in **one** file — this one — with **one**
+> occurrence in it. ⛔ This member is therefore a single-site repair, not the start of a NUL sweep.
+> ⚠️ Re-run the scan when the member runs; if a second site has appeared, ⛔ **surface it rather than
+> absorbing it** — a second site is a new fact and the owner's to route.
+>
+> ⛔ **THIS MEMBER IS A DIFFERENT KIND OF ACT FROM EVERY OTHER ONE — SAY SO BEFORE DOING IT.**
+> The other members **append** a dated note and never touch existing text; `0357` is **append-only by
+> design**, and six of them land inside closed task folders on exactly that basis. **This member is a
+> one-byte repair *inside* a closed record — it edits existing bytes, and it removes one.** It is the
+> single sanctioned exception on this sweep, and it does not widen the append-only rule for anything
+> else.
+>
+> **What authorizes the exception — both halves, because either alone is not enough:**
+> 1. **The owner's ruling above**, which placed this fix on this sweep knowing it is a fix and not a
+>    note.
+> 2. **The byte is a typo *in* the record, not part of it.** ADR-034's frozen-ledger rule and this
+>    brief's append-only constraint protect what a record **says** — its claims, its wording, its
+>    order. A NUL where the author typed `\0` is a transcription fault in the medium: repairing it
+>    changes no claim, no finding, no disposition and no date. ⭐ It is the same class as the
+>    `git mv`-driven href repairs the movers make inside closed folders — the pointer, or here the
+>    byte, is corrected so the record can still be read; the record itself is untouched.
+>
+> ⛔ **How to do it, so it stays a one-byte repair:**
+> - Replace the single `0x00` at offset 12107 with the two characters `\0` — the text the span was
+>   meant to carry. ⛔ **Nothing else on line 92, and nothing anywhere else in the file, changes.**
+> - ⛔ **Re-measure before editing** — the offset is a 2026-09-02 measurement and the file may have
+>   moved on ([`evidence-before-assertion`](../../../knowledge-base/conventions/evidence-before-assertion.md)).
+>   ⚠️ **If the NUL is already gone, this member is closed as not-reproducing** — same rule as step 2's,
+>   and ⛔ do not write a note about a defect that is no longer there.
+> - **Prove it with bytes, not eyeballs:** NUL count **1 → 0**, and `git diff --numstat` on that file
+>   shows **1 line added, 1 removed** and no other file touched by this member. ⚠️ Verification step 4's
+>   `−0` append-only proof **does not apply to this member** — it is the one member expected to show a
+>   removed line, and the report must say so rather than appear to fail the check.
+> - ⛔ **Append no correction note at the site.** There is no false claim to correct; a note would
+>   assert something about the ledger that is not true of it.
+>
+> **⛔ Arithmetic unchanged, stated so this does not read as drift.** This member **absorbs no task
+> row and closes none** — there is no brief behind it. The in-scope candidate count stays **19**, the
+> three-sweep total stays **~38** (`13 + 19 + 6`), and this sweep's close list is unchanged by it.
+
 ### ⛔ THE HARD GATE — this task does not start until two guards are green
 
 ⛔ **`0354`'s `test/reference-integrity.test.js` AND `0176`'s

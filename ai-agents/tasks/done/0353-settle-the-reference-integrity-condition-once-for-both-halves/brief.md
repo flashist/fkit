@@ -20,7 +20,7 @@ fkit-architect
 ### ⭐ This is an INVESTIGATION. It produces a written condition, not a test and not a cleanup.
 
 **Three tasks are blocked on one unanswered question**, and this task is the answer to it:
-[`0354`](../../backlog/0354-build-the-link-resolution-guard/brief.md) builds the guard,
+[`0354`](../../done/0354-build-the-link-resolution-guard/brief.md) builds the guard,
 [`0355`](../../cancelled/0355-clean-the-in-scope-broken-link-red-set/brief.md) cleans the red set that makes the
 guard green, and [`0237`](../../backlog/0237-clean-the-coordination-citation-residual-set-that-blocks-0176/brief.md)
 already carries the same question in its own step 3 and has carried it, unanswered, since 2026-08-06.

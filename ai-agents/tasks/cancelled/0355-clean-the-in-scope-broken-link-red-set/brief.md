@@ -29,7 +29,7 @@ fkit-coder
 > be **named as exempt cases with their reasons**, not left as a red set someone is told to ignore.
 > ⛔ **The disposition already exists** — in §4.1's `NAMED_EXEMPT` and §6.2's reason table of
 > [`2026-08-29-the-reference-integrity-condition.md`](../../../knowledge-base/reports/2026-08-29-the-reference-integrity-condition.md)
-> — and [`0354`](../../backlog/0354-build-the-link-resolution-guard/brief.md) carries it into the guard. **This
+> — and [`0354`](../../done/0354-build-the-link-resolution-guard/brief.md) carries it into the guard. **This
 > task's work is not "clean 24 links", and it is not "ignore 6 false positives" either. It is
 > nothing.**
 >
@@ -52,7 +52,7 @@ fkit-coder
 
 ### The hole this closes
 
-[`0354`](../../backlog/0354-build-the-link-resolution-guard/brief.md) builds `test/reference-integrity.test.js`.
+[`0354`](../../done/0354-build-the-link-resolution-guard/brief.md) builds `test/reference-integrity.test.js`.
 Like [`0176`](../../backlog/0176-build-the-coordination-citation-policy-guard/brief.md) before it, **it is red on
 arrival and shipping it red is not an option.** This task cleans the residual so it goes green. It is
 the exact pairing `0237`/`0176` already are — and it is filed as its own row for the same reason the
@@ -407,7 +407,7 @@ before the ruling:
   machine-parsed `- **Depends on:**` bullet — `0355` removed, with a dated sub-bullet recording it.
 - Inbound hrefs re-pointed to this folder's new path in
   [`0353`](../../done/0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md),
-  [`0354`](../../backlog/0354-build-the-link-resolution-guard/brief.md) and
+  [`0354`](../../done/0354-build-the-link-resolution-guard/brief.md) and
   [`0356`](../../backlog/0356-sweep-a-the-citation-rot-class-one-verified-pass/brief.md) — **href only,
   no sentence touched.**
 - This brief's own outbound sibling links (`0176`, `0237`, `0354`) re-pointed from `../` to

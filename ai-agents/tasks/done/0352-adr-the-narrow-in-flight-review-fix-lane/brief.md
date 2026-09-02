@@ -10,7 +10,7 @@ Sprint 7
 P2
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
