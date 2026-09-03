@@ -53,7 +53,7 @@ fkit-coder
 ### The hole this closes
 
 [`0354`](../../done/0354-build-the-link-resolution-guard/brief.md) builds `test/reference-integrity.test.js`.
-Like [`0176`](../../backlog/0176-build-the-coordination-citation-policy-guard/brief.md) before it, **it is red on
+Like [`0176`](../../done/0176-build-the-coordination-citation-policy-guard/brief.md) before it, **it is red on
 arrival and shipping it red is not an option.** This task cleans the residual so it goes green. It is
 the exact pairing `0237`/`0176` already are — and it is filed as its own row for the same reason the
 owner ruled that one *"File the cleanup as its own task."*

@@ -249,7 +249,7 @@ re-broken by the very next filing. One task, ships once, stays fixed.
   **Neither gates the other**, but ⛔ **do not run them concurrently against the same working tree
   without re-measuring**; line numbers move.
 - ⚠️ **Relates to
-  [`0176`](../0176-build-the-coordination-citation-policy-guard/brief.md)** — another guard over
+  [`0176`](../../done/0176-build-the-coordination-citation-policy-guard/brief.md)** — another guard over
   coordination documents, same owner role. ⭐ **`0176`'s guard would NOT catch this class** (it guards
   citation form, not table shape), and this guard would not catch `0176`'s. **Neither gates the
   other**; ⛔ **do not merge them.**

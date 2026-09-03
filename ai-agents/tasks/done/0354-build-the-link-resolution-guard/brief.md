@@ -51,7 +51,7 @@ point, not any one figure. The project has no automated check for this at all to
 those was written by someone who believed it resolved.
 
 **This is the enforceable half of the reference-integrity problem**, in exactly the sense
-[`0176`](../../backlog/0176-build-the-coordination-citation-policy-guard/brief.md) established for its own
+[`0176`](../../done/0176-build-the-coordination-citation-policy-guard/brief.md) established for its own
 condition: a link either resolves or it does not, so a test can check it. ⚠️ It is **not** the same
 condition as `0176`'s — `0176` tests whether a `path:NNN` **citation names a coordination document**;
 this tests whether a **link target exists**. Two guards, two conditions, one shared scanned set.

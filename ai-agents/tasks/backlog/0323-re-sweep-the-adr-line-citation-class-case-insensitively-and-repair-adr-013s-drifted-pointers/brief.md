@@ -297,7 +297,7 @@ them.**
   2026-08-22), whose Deliverable B sweep is the one that missed this class. ⛔ **This task does not
   reopen, amend or re-close `0171`.** It is the follow-on the miss earned.
 - ⚠️ **Relates to
-  [`0176`](../0176-build-the-coordination-citation-policy-guard/brief.md)** — the coordination-citation
+  [`0176`](../../done/0176-build-the-coordination-citation-policy-guard/brief.md)** — the coordination-citation
   guard. ⭐ **Whether that guard's pattern is case-insensitive is worth checking and reporting**, since
   the same blind spot would live there. ⛔ **Do not edit `0176`'s brief or build its guard here** —
   report the finding.
