@@ -51,6 +51,15 @@ and renumbers nothing
 closed) and P2 ([`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md), still
 `🔄 In progress`), and filed four briefs. **Nothing was committed.**
 
+> ⚠️ **Dated note 2026-09-03 (`0309` step 8 disposition (b), inside sweep `0356`) — the passage above
+> is a DATED 2026-08-15 reading and is LEFT BYTE-IDENTICAL.** It was **true on 2026-08-15**: `0171`
+> really was `🔄 In progress` then. ⛔ **Rewriting it would make a dated observation state something
+> false about its own date.** For a later reader: `0171` closed **2026-08-22**
+> (`✅ Done (agent-closed — not owner-verified)`) and is committed, so the `0232` blocker this section
+> builds its case on is **discharged** — ⚠️ which does **not** weaken the case for the gate, since the
+> point was that nothing was committed for a whole run. ⚠️ The `HEAD` and dirty-path figures below are
+> likewise historical: ⛔ **re-derive, do not quote.**
+
 **Figures re-derived firsthand by the filing producer on 2026-08-15**, at `HEAD` = `9360177`
 (*"Sprint push"*), **not carried on anyone's word:**
 
@@ -69,7 +78,7 @@ because the whole run lives only in the working tree.
 
 **⭐ The blocking half — this is the strongest single piece of evidence.** A spawned producer
 established, and the owner ruled into
-[`0232`](../0232-correct-adr-012s-stale-source-of-truth-and-code-coordinates/brief.md)'s brief on
+[`0232`](../../done/0232-correct-adr-012s-stale-source-of-truth-and-code-coordinates/brief.md)'s brief on
 2026-08-15 (dated correction, *ordering constraint*), that:
 
 - `0171` repaired `adr-012` by **replacement-in-place**, not by appending — hence the **9 deletions**

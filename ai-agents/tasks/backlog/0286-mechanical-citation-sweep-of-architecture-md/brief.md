@@ -219,7 +219,7 @@ task** — spot-checking is exactly what produced nine misses.
   correction note** changing what its own step 3 requires. ⛔ **Do not update a suite count, a
   mutation count, or the §9.1 framing — not even one that is obviously stale. Report it.**
 - ⛔ **`architecture.md:375`'s `fkit-adversarial-review` parenthetical.** That is
-  [`0275`](../0275-correct-the-stale-adversarial-review-citations-in-architecture-mds-review-walkthrough/brief.md)'s,
+  [`0275`](../../done/0275-correct-the-stale-adversarial-review-citations-in-architecture-mds-review-walkthrough/brief.md)'s,
   under its own bright-line rule (*"Do not sweep other citations in `architecture.md`"* — the mirror
   of this fence). ⚠️ **It sits at old line `375`, below the shift boundary, so this task's map does
   not move it.**
@@ -284,7 +284,7 @@ task** — spot-checking is exactly what produced nine misses.
   - **[`0284`](../0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)** —
     its step 3 edits `architecture.md` prose, **shifting these line numbers again**. ✅ **Run this row
     AFTER `0284`, or accept a second pass.** ⛔ **Never concurrently.**
-  - **[`0275`](../0275-correct-the-stale-adversarial-review-citations-in-architecture-mds-review-walkthrough/brief.md)**
+  - **[`0275`](../../done/0275-correct-the-stale-adversarial-review-citations-in-architecture-mds-review-walkthrough/brief.md)**
     and **[`0273`](../0273-move-the-codex-review-sandbox-to-workspace-write-at-all-call-sites/brief.md)**
     — both edit `architecture.md` at lines **below** the shift boundary, so neither moves this task's
     map. ⛔ **Still never concurrently with this row** — three tasks editing one file at once is how a

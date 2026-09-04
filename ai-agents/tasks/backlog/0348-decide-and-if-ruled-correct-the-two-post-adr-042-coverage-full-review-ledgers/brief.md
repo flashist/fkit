@@ -152,7 +152,7 @@ sandbox, not a degradation.
 - ⛔ **Do not edit ADR-042** — its stale citations are `0349`, not this task.
   > 🆕 **2026-08-29 — pointer refreshed, original words kept:** `0349` was **cancelled as superseded**
   > on owner ruling 2026-08-29 (*"One combined pass (Rec)"*) and its scope absorbed into
-  > [`0344`](../0344-refresh-the-stale-line-refs-and-moot-r5-rationale-inside-release-mjss-fenced-summary-block/brief.md).
+  > [`0344`](../../done/0344-refresh-the-stale-line-refs-and-moot-r5-rationale-inside-release-mjss-fenced-summary-block/brief.md).
   > **The constraint is unchanged and still binding** — ADR-042's stale citations belong to `0344`
   > now, and remain out of scope here.
 - ⛔⛔ **DO NOT TOUCH `0327`'s LEDGER** (`ai-agents/tasks/done/0327-refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim/review.md`)

@@ -55,7 +55,7 @@ VERSION_MARKER='⟦fkit-dashboard v1⟧'
 die() { printf '%s\n' "dashboard.sh: $*" >&2; exit 1; }
 
 # A value safe to place inside a `key="value"` FACTS field. `"` in the source (a quoted phrase in a
-# Depends on: line — live in sprint-2 task 36) would otherwise close the field early and hand the
+# Depends on: line — live in sprint-2 `0072`) would otherwise close the field early and hand the
 # skill an unparseable record. Newlines likewise: FACTS is one record per line.
 fact_value() {
   printf '%s' "$1" | tr '\n"' " '"
@@ -146,7 +146,7 @@ resolve_identity() {   # <plan-file> -> the identity, or nothing.  ADR-040 ladde
   # backlog board is still a backlog board; tightening this to the canonical path would make the archived
   # copy report false `unresolved-plan-sprint` drift instead.
   if [ -z "$_id" ] && [ "$(basename "$1" .md)" = "backlog" ]; then
-    # THE BACKLOG BOARD (task 67) has a real identity — it just isn't a numbered sprint. Its H1 is prose
+    # THE BACKLOG BOARD (`0001`) has a real identity — it just isn't a numbered sprint. Its H1 is prose
     # and its filename is deliberately not a `sprint-<N>` stem, so neither rung above resolves it and it
     # would report `unresolved-plan-sprint` on EVERY run: a permanent false drift record on a board that
     # is perfectly well-formed.
@@ -154,10 +154,10 @@ resolve_identity() {   # <plan-file> -> the identity, or nothing.  ADR-040 ladde
     # ⚠️ THIS IS NOT COSMETIC — it is what makes drift rule 1 work on this board. Rule 1 skips the status
     # cross-check when a brief's `## Sprint` names a DIFFERENT sprint than the plan. With _id
     # empty, the rule is inert and every row falls through to the full cross-check; with it set to
-    # `Backlog`, a backlog brief (which reads `## Sprint: Backlog` since task 67) matches, the rule
+    # `Backlog`, a backlog brief (which reads `## Sprint: Backlog` since `0001`) matches, the rule
     # correctly does NOT skip, and real status drift on backlog rows is still found.
     #
-    # ⚠️ The value must match what the briefs actually write. Task 67 normalized all of them from
+    # ⚠️ The value must match what the briefs actually write. `0001` normalized all of them from
     # `Backlog (unsprinted)` to `Backlog` for exactly this reason — if they ever diverge again, every
     # backlog row silently takes rule 1's skip and status drift on this board stops being reported.
     _id="Backlog"
@@ -537,7 +537,7 @@ field_value() {
 #  1. ONE exit. Locate → join → extract → sanitise → emit. No branch may `print` and `exit` on its own
 #     (that dropped a fan-in's second item and skipped `|` sanitising, rendering a 6-column board).
 #  2. NO completion test a LABEL can satisfy. `buf ~ /\*\*Depends on:.*\*\*/` matched `**Depends on:**`
-#     itself, so the wrap-join never fired and live task 41 lost its `(hard)` qualifier.
+#     itself, so the wrap-join never fired and live `0020` lost its `(hard)` qualifier.
 #  3. BI is the ONLY form with an unambiguous in-band terminator. For BL/P/S, OVER-INCLUDE trailing
 #     prose rather than guess where the dependency ends: verbose is a cosmetic cost, a dropped
 #     dependency is a fabrication, and §4.2 asks for the RAW text anyway.
@@ -665,7 +665,12 @@ depends_raw() {
       # Reached ONLY when the four canonical arms above all failed to locate a declaration — each of
       # them exits on a catch. A line whose `Depends on` label is preceded SOLELY by non-letter
       # markup/decoration is declaration-SHAPED but non-canonical: e.g. `- **⚠️ Depends on tasks 82…**`
-      # (the live task-84 misreport — the `⚠️ ` between `**` and the label defeats the BL/BI anchor).
+      # (the live task-84 misreport, named for specimen brief `0092` — the `⚠️ ` between `**` and the label defeats the BL/BI anchor).
+      # ⚠️ HAZARD — AND IT COVERS THE GLOSS ON THE LINE ABOVE, not only the NB two lines up:
+      # every byte of this comment block is STRING DATA inside the single-quoted awk program,
+      # never a shell comment. A single apostrophe anywhere in here closes the quote and breaks
+      # the script. ⛔ Explanatory prose added beside the code carries exactly the same hazard as
+      # the code it explains — check any edit to these lines for apostrophes before saving.
       # Emitting EMPTY content routes the caller to its EXISTING loud path (`⟨UNPARSEABLE — see brief⟩`
       # + `drift depends-unparseable`), NOT the silent `none recorded` that renders a fabricated `ready`
       # — the worst direction, per this function header.
@@ -788,7 +793,7 @@ while IFS=$'\037' read -r rtype st pr task br; do
   esac
 
   # -- resolve the brief -----------------------------------------------------------------------
-  # Post-migration (task 76): the href points at `brief.md` INSIDE a task folder
+  # Post-migration (`0062`): the href points at `brief.md` INSIDE a task folder
   # `tasks/<board>/<NNNN>-<slug>/brief.md`. The FOLDER NAME is the recovery key AND the identity; the
   # board is the folder's PARENT (brief.md's grandparent). `brief.md` is the same basename for every
   # task, so it carries no identity — never key a task on it.
@@ -798,7 +803,7 @@ while IFS=$'\037' read -r rtype st pr task br; do
 
   # -- the FACTS id (ADR-029 Decision 6, COMPLETED by task 0103) -------------------------------------
   # THE FOLDER-NAME ID PREFIX IS PRIMARY. The Priority cell is MUTABLE BOARD RANK — re-ranked twice in
-  # a single day — and only became the id because site 5 of the task-76 migration was dropped between
+  # a single day — and only became the id because site 5 of the `0062` migration was dropped between
   # design and plan (decision report 2026-07-26-decide-task-folder-name-numeric-prefix.md §3.1, §6
   # step 1). This completes ADR-029 Decision 6, which already authorised it. Spec: report §8 item 1.
   #
@@ -948,7 +953,7 @@ while IFS=$'\037' read -r rtype st pr task br; do
       # `A && B || C` chain reported a missing DATE as `cancelled-without-reason`, telling the owner
       # to supply a reason that was already in the cell while never naming the real defect.
       #
-      # ⚠️ STRIP THE AGENT-CLOSED QUALIFIER BEFORE THE REASON TEST (task 64, review R3). The ADR-025
+      # ⚠️ STRIP THE AGENT-CLOSED QUALIFIER BEFORE THE REASON TEST (`0054`, review R3). The ADR-025
       # marker `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD)` carries an em-dash of
       # its OWN, so testing the raw cell for `—` passes a cancellation that has no reason at all — the
       # qualifier satisfies the check meant for the reason. That is worse than a missed lint: it
@@ -1098,7 +1103,7 @@ while IFS=$'\037' read -r rtype st pr task br; do
     esac
   fi
 
-  # --- THE OPEN-WORK FILTER (task 65) ------------------------------------------------------------
+  # --- THE OPEN-WORK FILTER (`0039`) ------------------------------------------------------------
   # The board renders OPEN work only: rows whose reconciled state is `done`, `cancelled` or `moved` are
   # omitted. This is a CONSCIOUS REVERSAL of this script's original "show the dead rows" principle
   # (owner ruling, 2026-07-18) — not drift, and not to be "restored" by a later reader who finds the
@@ -1116,7 +1121,7 @@ while IFS=$'\037' read -r rtype st pr task br; do
   #     actually known to be done, and hiding it would bury the finding. `cancelled-without-date`
   #     counts — which is why live tasks 59/60 still appear.
   #
-  # Deliberately NOT a toggle. One skill, one output (conventions/one-skill-one-output.md, task 44);
+  # Deliberately NOT a toggle. One skill, one output (conventions/one-skill-one-output.md, `0074`);
   # a `full`/`all` switch would reverse that ruling and needs its own ADR first.
   case "$key" in
     done|cancelled|moved) [ -n "$row_drift" ] || continue ;;

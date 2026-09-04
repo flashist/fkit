@@ -34,13 +34,13 @@ zero-dependency test suite (`node --test` + a hand-rolled mutation gate), and si
 run**: the workflow is verified by review, not by a run. The release gate *has* been watched refusing
 a red tree.
 
-The product thesis (`ai-agents/knowledge-base/PROJECT.md:18-24`): AI coding assistants collapse
+The product thesis (`ai-agents/knowledge-base/PROJECT.md` §"Domain & context", **Problem:**): AI coding assistants collapse
 product decisions, implementation, and review into one undifferentiated chat loop with **no
 separation of authority**. fkit's answer is a small **team** with distinct authority, coordinating
 over **files in git** rather than shared runtime state.
 
 **Stage:** prototype, dogfooded — this repo runs its own agents on its own `ai-agents/` tree
-(`CLAUDE.md:16-24`).
+(`CLAUDE.md` §"The fkit team in this repo (dogfooded)").
 
 ---
 
@@ -48,10 +48,10 @@ over **files in git** rather than shared runtime state.
 
 | Dependency | How it's used | Where |
 |---|---|---|
-| **Claude Code CLI (`claude`)** | **The runtime.** Every role session is `claude --agent fkit-<role> --settings <role>.json`. Hard requirement — the launcher exits **127** without it. | `claude/fkit-claude.sh:257-262,357` |
+| **Claude Code CLI (`claude`)** | **The runtime.** Every role session is `claude --agent fkit-<role> --settings <role>.json`. Hard requirement — the launcher exits **127** without it. | `claude/fkit-claude.sh`, the `command -v claude` preflight that ends `exit 127` |
 | **Codex CLI (`codex`)** | The adversarial second opinion, for genuine **model diversity**: `codex exec --sandbox read-only --cd "$PWD" -`. **Required, but warned — never walled** (owner ruling, Sprint 2 task 3): a Codex outage must not lock the owner out of their own team. | `claude/fkit-claude.sh:274-285`; `claude/skills/fkit-review/SKILL.md:57` |
-| **git** | The substrate every agent reads. Agents are barred from committing/pushing unprompted — a **prompt rule, not a sandbox** (`CLAUDE.md:26-30`). | — |
-| **GitHub, over the network** | (a) install: tarball from `codeload.github.com`; (b) self-update **check**: throttled `git ls-remote` or the commits API; (c) the version string: raw `VERSION`. All silent on failure. **Only the curl paths are time-boxed** (`--max-time 5`); the `git ls-remote` path sets only `GIT_HTTP_LOW_SPEED_*`, which bounds a stalled transfer, **not** DNS/connect — so it has no deadline and can outlive 5 s (measured: 12 s). | `install.sh:32,55-62`; `claude/fkit-claude.sh:69,79-98` |
+| **git** | The substrate every agent reads. Agents are barred from committing/pushing unprompted — a **prompt rule, not a sandbox** (`CLAUDE.md` §"Universal hard rules", *"Never commit or push unless the owner explicitly asks."*). | — |
+| **GitHub, over the network** | (a) install: tarball from `codeload.github.com`; (b) self-update **check**: throttled `git ls-remote` or the commits API; (c) the version string: raw `VERSION`. All silent on failure. **Only the curl paths are time-boxed** (`--max-time 5`); the `git ls-remote` path sets only `GIT_HTTP_LOW_SPEED_*`, which bounds a stalled transfer, **not** DNS/connect — so it has no deadline and can outlive 5 s (measured: 12 s). | `install.sh:32,55-62`; `claude/fkit-claude.sh`, `FKIT_NET_TIMEOUT` + `_fkit_remote_sha()` |
 | **Node (ESM)** | Only to cut a release (`npm run release`). **Zero npm dependencies.** | `package.json:3-9`, `bin/release.mjs` |
 
 **fkit opens no ports, exposes no API, and stores no data outside the project's own files.**
@@ -200,7 +200,7 @@ A session is locked **two ways**:
    for them this half of the lock is the system prompt alone; the adversarial reviewer's tool wall
    still binds at any spawn depth.
 2. **`--settings` wiring a `PreToolUse` skill-ownership hook** — `build_settings()`
-   (`claude/fkit-claude.sh:257-265`) writes `{"hooks":{"PreToolUse":[{"matcher":"Skill",…}]}}` pointing
+   (`claude/fkit-claude.sh`, `build_settings()`) writes `{"hooks":{"PreToolUse":[{"matcher":"Skill",…}]}}` pointing
    at `claude/skill-ownership-hook.sh`. The hook **denies** a `Skill` call whenever the **real invoking
    agent's role** — read from the payload's `agent_type` and stripped to a role — does not own the skill
    per `skills_for_role()` (`claude/skill-ownership-hook.sh:110-136`). Non-fkit skills are never touched.
@@ -328,7 +328,7 @@ contract every role shares (`ai-agents/README.md`).
 **Generated, gitignored, per project:** `.fkit/settings/<role>.json` (the skill lockdown),
 `.fkit/interview` + `.fkit/intake.md` (terminal intake), `.fkit/tmp/adversarial-prompt.md` (the
 Codex prompt), and the fkit-managed `.claude/agents/fkit-*.md` + `.claude/skills/fkit-*/` copies —
-**edit `claude/`, never these** (`claude/fkit-claude-init.sh:49-60`).
+**edit `claude/`, never these** (`claude/fkit-claude-init.sh` step 3, *"refresh .claude/agents/fkit-*.md and .claude/skills/fkit-*/ from claude/"*).
 
 **Global, per install:** `~/.local/share/fkit/.version` (`version`/`sha`/`repo`/`ref`),
 `.update-check` (throttle stamp), `.latest` (`install.sh:55-72`, `claude/fkit-claude.sh:68-74`).
@@ -352,9 +352,9 @@ through to `claude` as a stray argument: `omnigent`, `claude`, `reconnect`, `res
 **2 — Fresh-project onboarding.** `fkit` → init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`,
 **never clobbering** an existing one (`claude/fkit-claude-init.sh:26-47`) → `.fkit/interview` asks 6
 questions **on the terminal, before any LLM starts**, writing `.fkit/intake.md`; it is tty-safe and
-skips cleanly when headless (`:62-123`) → the launcher detects the uninitialized `PROJECT.md`
-(`claude/fkit-claude.sh:288-294`), **skips the menu**, and seeds the producer straight into
-`/fkit-initiate-project` (`:295-307`) → the producer interviews the owner, **spawns the architect to
+skips cleanly when headless (`claude/fkit-claude-init.sh`, the `.fkit/interview` intake install) → the launcher detects the uninitialized `PROJECT.md`
+(`claude/fkit-claude.sh`, the `fresh=1` branch), **skips the menu**, and seeds the producer straight into
+`/fkit-initiate-project` (`claude/fkit-claude.sh`, the fresh-project `seed=` text) → the producer interviews the owner, **spawns the architect to
 run `fkit-survey-project`**, and writes `PROJECT.md`.
 
 **3 — Task flow.** producer `/fkit-task-brief` (decompose to the **smallest independently shippable**
@@ -376,7 +376,7 @@ findings-only prompt plus an inline diff into `.fkit/tmp/adversarial-prompt.md` 
 `codex exec --sandbox read-only --cd "$PWD" -` (`claude/skills/fkit-review/SKILL.md:38,57`).
 **Degradation is loud and mandatory:** no Codex → the review **leads with**
 `⚠️ [NOT model-diverse — INCOMPLETE]` as the first thing a reader sees, not a footnote
-(`:128-135`; `claude/skills/fkit-adversarial-review/SKILL.md:57,111`). The failure this guards
+(`claude/skills/fkit-review/SKILL.md`, the degradation template opening **Decision: 🟡 Partial review — Codex unavailable**; `claude/skills/fkit-adversarial-review/SKILL.md`, the `[claude-fallback — NOT model-diverse]` banner line and its one-line **coverage self-assessment**). The failure this guards
 against is a same-model "second opinion" — the model that wrote the code reviewing its own work, and
 the *unearned confidence* that produces.
 
@@ -387,7 +387,7 @@ Two paths, and the split is the design:
   (`claude/fkit-claude.sh:99-123`). Refuses to run in a source checkout ("update it with `git
   pull`").
 - **the automatic check** — throttled (60 min default), **only partly time-boxed** (the curl paths
-  get `--max-time 5`; the preferred `git ls-remote` path gets no deadline at all — see `:69`), silent
+  get `--max-time 5`; the preferred `git ls-remote` path gets no deadline at all — see `FKIT_NET_TIMEOUT` in `claude/fkit-claude.sh`), silent
   when current and silent when offline, and it **only ever prints** (`:125-165`). It **triggers on shas**
   (`[ "$remote" != "$installed" ]`) but has **two** renderings, because a remote *version* is not
   always knowable — task 0257:
@@ -407,13 +407,13 @@ Two paths, and the split is the design:
 **It never auto-updates and never re-execs itself** — deliberately unlike the Omnigent launcher it
 replaces, which had no timeout and no `GIT_TERMINAL_PROMPT` guard (a credential-prompting repo would
 hang the launcher indefinitely). Source checkouts are excluded entirely
-(`_fkit_is_source_checkout`, `:77`), keyed only on markers `install.sh` never copies (`.git`, the
+(`_fkit_is_source_checkout` in `claude/fkit-claude.sh`), keyed only on markers `install.sh` never copies (`.git`, the
 repo-root `package.json`).
 
 **6 — Release** ([ADR-011](decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md)).
 `npm run release` → `bin/release.mjs`: bump `VERSION` + `package.json` (patch by default), `git add
 -A`, commit, push, annotated tag `v<version>`, push the tag. **No npm-registry publish**
-(`bin/release.mjs:66`). **Version bumping is load-bearing** — self-update compares the installed sha
+(`bin/release.mjs`, *"Makes no npm-registry publish."*). **Version bumping is load-bearing** — self-update compares the installed sha
 against the remote head and reports the version from `VERSION`.
 The maintainer-facing procedure for cutting a release — the channel, the pre-release checklist, and
 what the test gate does and does not cover — is [`RELEASING.md`](../../RELEASING.md) at the repo root.
@@ -433,7 +433,7 @@ version ships — and how it gets repaired, **with consent, never silently**.
   `npm run generate:manifest` (`package.json:8`).
 - **The producer-owned `/fkit-heal` check** (`claude/skills/fkit-heal/check.sh`). Verdicts are
   **deterministic script output, presented verbatim** — never recomputed by the model (ADR-017).
-  Outcome vocabulary (`check.sh:25`): `conforming`, `missing`, `untouched-stale`, `owner-edited`
+  Outcome vocabulary (`claude/skills/fkit-heal/check.sh`, its `# Outcomes:` header comment): `conforming`, `missing`, `untouched-stale`, `owner-edited`
   (report-only, **with diffs, never touched**), `wrong-type`, `wiki-routed` (repair is
   `fkit-wiki`'s exclusively — ADR-005), `kept-out`, plus loud refusals (`refused: symlink`,
   `refused: malformed-markers`, `unreadable`) — the check never guesses past a refusal. **Read-only
@@ -442,8 +442,8 @@ version ships — and how it gets repaired, **with consent, never silently**.
   **consent-gated replacement of untouched-stale fkit-authored files only — no move, no rename, no
   delete.** Owner present; explicit `AskUserQuestion` approval of the **exact enumerated list** with
   diffs in view; consent **never stored** — per-run, in the session where it is given; each write
-  behind an **apply-time freshness re-check** (`repair.sh:406`); never silent.
-- **The launch notice** (task 0247 — landed; `structure_notice()`, `claude/fkit-claude.sh:453`):
+  behind an **apply-time freshness re-check** (`claude/skills/fkit-heal/repair.sh`, *"apply-time freshness re-check"*); never silent.
+- **The launch notice** (task 0247 — landed; `structure_notice()` in `claude/fkit-claude.sh`):
   **one stderr line** when paths diverge, on every launch including `FKIT_SETUP_ONLY` — awareness
   only, pointing at `/fkit-heal`; never a repair, never a prompt. **Best-effort by contract** — a
   notice failure never costs the session: `check.sh` absent from the share, bash unavailable, or the
@@ -560,7 +560,7 @@ a third-party hole, accepted and recorded there.
 
 ### 9.4 The `.claude/` copies are gitignored and destroyed on every launch
 
-`claude/fkit-claude-init.sh:51-60` does an `rm -f` + `cp` of `fkit-*` agents and skills on every
+`claude/fkit-claude-init.sh` does an `rm -f "$dest/.claude/agents/fkit-"*.md` + `cp` of `fkit-*` agents and skills on every
 single launch. **An edit made in `.claude/` instead of `claude/` is silently destroyed** — no
 warning, no diff. (The self-hosting re-exec at `claude/fkit-claude.sh:36-43` exists precisely because
 the *installed* snapshot would otherwise overwrite the checkout's own working tree with an older
@@ -590,14 +590,14 @@ is the test.
 
 - **Secrets.** No credential is read, written, or stored by any part of fkit. No agent may put a
   secret in any artifact. `GIT_TERMINAL_PROMPT=0` on the update check
-  (`claude/fkit-claude.sh:76`) exists so a credential-prompting remote can never hang the launcher.
+  (`claude/fkit-claude.sh`, the `GIT_TERMINAL_PROMPT=0` line in `_fkit_remote_sha()`) exists so a credential-prompting remote can never hang the launcher.
 - **Network.** Every network call is optional and silent on failure. Time-boxing is **not** uniform:
   curl calls carry `--max-time 5`, but `_fkit_remote_sha`'s `git ls-remote` has no outer deadline
   (`GIT_HTTP_LOW_SPEED_*` bounds a stalled transfer, not DNS/connect) — an unbounded hang. Offline
-  `fkit` must cost nothing and print nothing (`claude/fkit-claude.sh:56-58,64`).
+  `fkit` must cost nothing and print nothing (`claude/fkit-claude.sh`, *"offline / proxied / captive-portal must cost nothing and print nothing"*).
 - **Idempotence.** Both the installer and the per-project init are safe to re-run; init never
   clobbers an existing `ai-agents/`, `CLAUDE.md`, or `AGENTS.md`.
-- **Determinism where it matters.** Role routing is an `if/else` (`claude/fkit-claude.sh:311-345`).
+- **Determinism where it matters.** Role routing is an `if/else` (`claude/fkit-claude.sh`, *"picking a role is an if/else, not a judgment call"*).
   **No LLM sits in the path that decides which role you get.**
 - **Git authority.** No agent commits or pushes unprompted. This is a prompt rule in every agent
   definition — not a sandbox — and it is the one place fkit's boundaries depend entirely on

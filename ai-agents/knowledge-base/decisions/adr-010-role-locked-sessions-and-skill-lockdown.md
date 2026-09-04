@@ -12,6 +12,10 @@
   **Extended 2026-08-02 by a second append:** dated ⚠️ notes now also sit at **§Decision 5** and at
   §Context's *"One real inconsistency"* passage. The site list in the first line of this item is left
   byte-identical and is superseded by this line; the same append-only rule and the same legend apply.
+  **Extended 2026-09-03 by a third append (`0197`, inside sweep `0356`):** dated ⚠️ notes now also sit
+  at the **end of §Context**, at **§Consequences** (the one-role-per-session bullet) and at the **end of
+  §Related**. They record where code this ADR cites by line has since moved. The two site lists above are
+  left byte-identical and are superseded by this line; the same append-only rule and legend apply.
 
 ## Context
 
@@ -121,6 +125,32 @@ the drift class this project keeps paying for.
 > launcher grants nothing — `build_settings()` emits only hooks, and ownership is enforced by a
 > `PreToolUse` **deny** hook that reads `skills_for_role()` at call time.
 
+> ⚠️ **Dated correction 2026-09-03 (`0197`, inside sweep `0356`) — four code pointers in §Context no
+> longer land where they are aimed.** Every pointer above is **left byte-identical**: it is the record of
+> what was cited in 2026-07. ⛔ **Nothing here reopens a decision** — only the coordinates aged.
+>
+> **Where each claim lives today**, verified against live code 2026-09-03, anchored by name and quoted
+> text rather than by a fresh line number (the form `durable-citation-anchors` prescribes, because
+> `claude/fkit-claude.sh` grows above these sites constantly — which is exactly how they drifted):
+>
+> - **The role menu is still an `if/else`.** The pointer on the menu bullet now lands in the
+>   update-check's sha-reporting comment. The claim lives in `claude/fkit-claude.sh`, whose own header
+>   states it: *"picking a role is an if/else, not a judgment call"*, with the menu's numbered case arms
+>   below it.
+> - **The two-way session lock is intact, and its pointer is HALF right.** The first sub-range still
+>   lands — it is the header comment reading *"Every session is locked two ways"*. ⚠️ **Only the second
+>   sub-range drifted**; it now lands on the env-var help text. ⛔ Recorded as half-correct deliberately:
+>   calling the whole pointer stale would itself be a false claim.
+> - **`skills_for_role()` has MOVED FILE; `build_settings()` has not.** The sub-bullet's pointer now
+>   lands in the self-update helpers. `skills_for_role()` lives in `claude/skills-for-role.sh`;
+>   `build_settings()` is still in `claude/fkit-claude.sh`, further down than when cited.
+>   **§Decision 5's own ⚠️ notice is the binding statement for the file fact** — it is deliberately not
+>   restated here, so there is one place to keep true rather than two.
+> - **The "One real inconsistency" passage's pointer — the RANGE half only.** It no longer lands on the
+>   `skills_for_role()` definition. ⛔ **The file half is NOT re-annotated here**: `0195`'s dated block
+>   above already corrects it and points at §Decision 5, and repeating it would put one fact in two
+>   places — the thing that block exists to prevent.
+
 ## Decision
 
 1. **Every fkit session is locked to exactly one role.** `fkit` shows a deterministic menu; `fkit
@@ -227,6 +257,12 @@ the drift class this project keeps paying for.
   - **One role per session.** Multi-role work means multiple terminal tabs — a deliberate friction
     (automating tab-spawning needs AppleScript/Accessibility permissions that fail badly;
     `claude/fkit-claude.sh:20-22`).
+
+    > ⚠️ **Dated correction 2026-09-03 (`0197`, inside sweep `0356`) — the pointer above drifted; the
+    > rationale it cites is still in the file.** The pointer now lands on the ADR-018 skill-ownership
+    > hook comment. ⭐ **The AppleScript/Accessibility reasoning survives**, in `claude/fkit-claude.sh`'s
+    > header comment block, reading *"spawning terminals needs AppleScript/Accessibility permissions
+    > that fail in ways"*. ⛔ **Target moved, not deleted** — the consequence stands as written.
   - The owner must pick a role before working, rather than drifting into one.
   - **The lock is partial and honestly so:** `Agent(type)` allowlists inside subagent definitions are
     ignored by Claude Code (they only apply to a main-thread `--agent`), so *which peer* an agent may
@@ -255,4 +291,26 @@ the drift class this project keeps paying for.
   question — two sources of truth for the skill lock").
 - Code: `claude/fkit-claude.sh:14-18,29,75-103,151-199`, `claude/agents/fkit-lead.md`,
   `claude/skills/fkit-team/SKILL.md`, `claude/scaffold/CLAUDE.md:12-50`.
+
+> ⚠️ **Dated correction 2026-09-03 (`0197`, inside sweep `0356`) — the `Code:` line's coordinates,
+> assessed for the first time.** The line is **left byte-identical**. A `Code:` bibliography is a pure
+> forwarding pointer with no quoted phrase beside it, so a reader who follows it has nothing to recover
+> the claim from — which is why it earns this note where the paired cites below do not.
+>
+> - `claude/fkit-claude.sh` — of its four sub-ranges, **two still land** (the two-way-lock header
+>   comment, and the `FKIT_SETUP_ONLY` env note) and **two have drifted** (the launcher-internals and
+>   menu ranges). Anchor on the quoted comment text instead.
+> - ⭐ **`claude/scaffold/CLAUDE.md` — CHECKED FOR THE FIRST TIME, and it LANDS.** No prior task had ever
+>   verified this range. The file is 92 lines; the range opens on the heading `## The fkit agent team`
+>   and covers both the role roster and the whole skill-lock passage, including *"a `fkit coder` session
+>   **cannot** run `/fkit-review`"* and the visible-but-not-runnable cost. ⚠️ **Its end clips a sentence
+>   mid-way**, which is cosmetic. ⛔ **This pointer is NOT stale and must not be "corrected"** — its
+>   durable anchor is that heading plus the quoted fragment above, since the heading alone in a long
+>   document locates a region but not a claim.
+> - **The two `adr-008` cites, and the `Supersedes` cite** — the section they name,
+>   §"Role access — three explicit paths", **still exists**, and the verbatim phrase one of them quotes
+>   still exists too, though both sit further down that file than the numbers say. ⚠️ **An accepted ADR
+>   is append-corrected by third parties, so it grows under a citation like any living document** — but
+>   because each of these is paired with a heading or a quoted phrase, the drift is recoverable and
+>   ⛔ **none of them earns a correction note.** Recorded here so the check is visible rather than silent.
 </content>

@@ -47,7 +47,7 @@
 # "fix" it by adding the movers here.
 #
 # The movers' own prose cannot grant a permission this mapping denies — that contradiction (Codex
-# found it as X1 before task 64 shipped) is why the SKILLs, the mirrors and this file move together.
+# found it as X1 before `0054` shipped) is why the SKILLs, the mirrors and this file move together.
 skills_for_role() {
   case "$1" in
     lead)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-sprint-ship-loop" ;;

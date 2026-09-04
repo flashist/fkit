@@ -117,7 +117,8 @@ neighbouring callouts; the rules-block budget is under pressure (task 0130).
    solely because of this drift. Mirrors the assertion at `dashboard-contract.test.js:1110`.
 4. **`Unscheduled` is clean.** A brief reading `## Priority` / `Unscheduled` emits **no**
    `brief-missing-priority` fact. So does `Unscheduled — high-value (see Context)`, the live free-text
-   qualifier already pinned by the task-68 test at :1697.
+   qualifier already pinned in `test/dashboard-contract.test.js` by the free-text-qualifier case, which
+   asserts *"the free-text qualifier leaks nowhere"*.
 5. **Green day one against the real repo.** With 0155 landed,
    `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/done/sprint-2.md` emits **zero**
    `brief-missing-priority` records. **If this step is not zero, 0155 has not landed or has regressed —

@@ -87,7 +87,8 @@ own work and by a later worker, and **re-verified first-hand here** against
   **OVER-INCLUDE** trailing prose rather than guess where the dependency ends."* A `- **Corrections:**`
   bullet written adjacent to a `- **Depends on:**` declaration can therefore be **swallowed into the
   dependency text and rendered into the board's Task cell**. This is the same family as the task-84
-  misreport recorded in
+  misreport (the class originates in `0092`; ⛔ the NAME is a term of art carried by ~20 files, several
+  frozen, and is deliberately not renamed here) recorded in
   [`dependency-declaration-form.md`](../../../knowledge-base/conventions/dependency-declaration-form.md).
 - The brief-side drift kinds `brief-missing-status`, `brief-missing-owner` and `brief-missing-id` all
   key off this same section grammar, so **a structural change here is a dashboard change, not a

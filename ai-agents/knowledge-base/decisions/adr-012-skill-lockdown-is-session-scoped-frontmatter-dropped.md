@@ -62,6 +62,27 @@ architect inherits that override. **Project initiation cannot invoke its own arc
 Symmetrically, a `lead` session grants only `fkit-team fkit-query` (`claude/fkit-claude.sh:94`), so
 every role consulted from the team room gets **zero procedures**.
 
+> ⚠️ **Dated correction 2026-09-03 (`0232`, inside sweep `0356`) — every coordinate in §The live bug has drifted, and one of its CLAIMS is
+> false today.** All wording above is **left byte-identical**. ⛔ **Nothing here reopens a decision.**
+>
+> **The coordinates**, re-resolved 2026-09-03 and anchored by name rather than by a fresh number:
+> - `skills_for_role()` **moved file** — it now lives in `claude/skills-for-role.sh`, not in
+>   `claude/fkit-claude.sh`. Both pointers aimed at it now land in the self-update helper
+>   `_fkit_remote_version()`.
+> - `build_settings()` **did not move file** — it is still in `claude/fkit-claude.sh`, further down.
+>   Its pointer now lands on the `fkit update` case block. ⭐ **Recorded separately on purpose:** a reader
+>   who assumes "the function moved house" would fix one class and miss this one.
+> - The `fkit-initiate-project` pointer has drifted within its own file; the sentence it names,
+>   *"Invoke the **fkit-architect** agent"*, is still there. **The claim is true; only the pointer is off.**
+>
+> ⚠️ **The claim that is FALSE today (not a coordinate — a fact):** *"a `lead` session grants only
+> `fkit-team fkit-query` … so every role consulted from the team room gets **zero procedures**."*
+> The `lead` arm of `skills_for_role()` grants **five** skills today, not two.
+> ⭐ **This was the ASIDE, not the load-bearing bug.** The bug this section exists to document — project
+> initiation being unable to invoke its own architecture survey — is unaffected, and the *mechanism*
+> half of the sentence was superseded by ADR-018 as this ADR's own header banner already records.
+> ⛔ **This is ⚠️, not ⛔: no decision here was overturned.**
+
 ### Honest note on why ADR-010 is being reopened
 
 ADR-010's re-raise clause says to reopen if Claude Code's `skillOverrides` / `--settings` semantics
@@ -76,6 +97,12 @@ corrected by evidence, not a platform regression.
    preserve a field that *looks* like an allowlist and enforces nothing — manufacturing the exact
    false invariant task 6 exists to kill. `skills_for_role()` in `claude/fkit-claude.sh:92-103`
    remains the **single source of truth**, and now the *only* place role→skill ownership is expressed.
+
+   > ⚠️ **Dated correction 2026-09-03 (`0232`, inside sweep `0356`) — the source-of-truth file named above is wrong today.**
+   > `skills_for_role()` lives in **`claude/skills-for-role.sh`**, not `claude/fkit-claude.sh`; it was
+   > split out so the ADR-018 `PreToolUse` hook could source it without pulling in the whole launcher.
+   > The line above is **left byte-identical**. ⭐ **The decision is untouched and still holds** — there
+   > is still exactly one source of truth; only its address changed.
 
 2. **Enforcement is session-scoped by design: structural in a role session, advisory in a consult.**
    This replaces ADR-010 §2's unqualified "enforced structurally, not by instruction."
@@ -112,6 +139,28 @@ corrected by evidence, not a platform regression.
    **does the hook payload even expose the calling subagent's identity?** If it does not, the hook
    cannot discriminate by role and this option is not merely deferred but **unavailable** — that must
    be established before the hook is planned as the fix.
+
+> ⚠️ **Dated correction 2026-09-03 (`0232`, inside sweep `0356`) — §Decision 2's two coordinates drifted, and its "MUST be corrected"
+> directive is now CLOSED.** All wording above is **left byte-identical**.
+>
+> - **The `build_settings()` pointer** now lands on the `fkit update` case block. The function is still
+>   in `claude/fkit-claude.sh`, under its own `build_settings() {` definition line.
+> - ⭐ **The directive is discharged, and its two halves closed DIFFERENTLY — which is why this note does
+>   not summarise them as one.**
+>   - `claude/skills/fkit-team/SKILL.md` — ✅ **SATISFIED.** It now reads *"remains **unrunnable** —
+>     invoking it is denied regardless"*, and, on the next line, *"blocked, not
+>     invisible-and-blocked"*. ⚠️ **Quoted as two single-line fragments on purpose: the phrase
+>     *"Visible-but-blocked"* straddles a line break in the target, so it resolves under neither a
+>     plain search nor the whitespace-normalised form `durable-citation-anchors` prescribes.** Each
+>     fragment above is single-line and unique. The correction ADR-012 demanded has landed.
+>   - `claude/scaffold/CLAUDE.md` — ⭐ **The passage no longer exists in that file at all.** A whole-file
+>     search for *"unrunnable"*, *"invisible"* and *"non-owned"* returns **zero matches**, and the
+>     repository history shows the wording was present and was later removed. **The demand was discharged
+>     by removal, not by rewording.** ⛔ **There is nothing left to correct there** — a reader who goes
+>     looking for a passage to fix in that file will not find one, and that is the expected outcome, not
+>     a miss.
+> - ⛔ **Neither half is still outstanding.** ⚠️ Marked ⚠️ and not ⛔ deliberately: the decision stands,
+>   it is the evidence beside it that aged.
 
 ## Options considered
 
@@ -165,6 +214,11 @@ corrected by evidence, not a platform regression.
   - Do **not** re-raise ADR-010's role-locked session model itself. Only its §§2 and 5 are amended
     here; §§1, 3, 4 stand unchanged.
 
+> ⚠️ **Dated correction 2026-09-03 (`0232`, inside sweep `0356`) — the two doc coordinates in §Consequences drifted, and the rewording they
+> ask for is already done.** The wording above is **left byte-identical**. One doc was reworded and the
+> other's passage was removed outright — see §Decision 2's note, which carries the evidence and the
+> three-way split. ⛔ **No further doc-truth fix is outstanding from this ADR.**
+
 ## Related
 
 - [ADR-010](adr-010-role-locked-sessions-and-skill-lockdown.md) — supersedes §Decision 2
@@ -179,3 +233,10 @@ corrected by evidence, not a platform regression.
   (`build_settings`).
 - Docs to correct: `claude/skills/fkit-team/SKILL.md:38`, `claude/scaffold/CLAUDE.md:33`.
 - Source of truth: `claude/fkit-claude.sh:92-103` (`skills_for_role()`).
+
+> ⚠️ **Dated correction 2026-09-03 (`0232`, inside sweep `0356`) — every coordinate in §Related has drifted.** The bullets are **left
+> byte-identical** as the record of what was cited when this ADR was written. Durable anchors:
+> `skills_for_role()` is in **`claude/skills-for-role.sh`**; `build_settings()` is in
+> `claude/fkit-claude.sh` under its own definition line; the initiation sentence is
+> *"Invoke the **fkit-architect** agent"*; and the two *"Docs to correct"* pointers are **spent** — one
+> doc reworded, the other's passage removed. See §Decision 2's note.

@@ -121,7 +121,7 @@ established the dated-observation point above. ⛔ **Do not treat `0317` as havi
   verdict be cited here, but that is a **scheduling preference, not a dependency**, and this task
   must not be written as blocked on it.
 - **Precedent for a producer editing a brief inside `ai-agents/tasks/done/`:**
-  [`0193`](../0193-repair-the-stale-citations-in-0158s-closed-brief/brief.md) (`## Owner:
+  [`0193`](../../done/0193-repair-the-stale-citations-in-0158s-closed-brief/brief.md) (`## Owner:
   fkit-producer`) does exactly this to `0158`'s closed brief. `0201` and `0274` are the same shape
   against closed **review ledgers**, under different owners. ⭐ **The write is sanctioned by an
   owner-ruled task, not by `/fkit-task-brief`** — that skill's own `### 9. Never` list forbids

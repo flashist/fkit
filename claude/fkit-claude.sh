@@ -271,7 +271,7 @@ fi
 # project (scaffold/CLAUDE.md asserted the lead role has "only" two skills, which had just stopped being
 # true). A checklist that is itself incomplete is worse than no checklist: it is followed, and it fails.
 # If you add another mirror, add it HERE FIRST. (It said "FOUR" until 2026-08-27 — incomplete a second time; 0142 D4.)
-# This has already bitten once: task 14 added the producer's brief-creation skill here and to the
+# This has already bitten once: `0012` added the producer's brief-creation skill here and to the
 # producer's agent file, but not to fkit-team's roster — so /fkit-team under-reported the producer's
 # primary procedure for two days. These are copies FOR READERS, not sources of truth; skills_for_role() is the source of
 # truth (moved to skills-for-role.sh, `0052`, so the PreToolUse hook can source it without pulling
@@ -438,7 +438,7 @@ fi
 #     there would hide drift (the inverted failure direction below). The filter runs under LC_ALL=C
 #     (byte semantics: non-UTF-8 bytes in an intent file or a path must not crash a multibyte-aware
 #     awk) with awk's stderr discarded (its noise never leaks around the launcher's one line). This
-#     launcher runs `set -eu`; a notice failure must never cost the session (task-26 bar).
+#     launcher runs `set -eu`; a notice failure must never cost the session (`0088` bar).
 #
 # Suppression — ai-agents/.fkit-accepted-drift, the intent file. A SIBLING of .fkit-keep-out, not
 # entries in it: keep-out means "never create this path"; drift-acceptance means "divergence at this
@@ -573,8 +573,8 @@ fresh=0
 # `setup_ok` is checked as well as `aa_refused`, and not only as a belt-and-braces: one exit status
 # cannot carry two facts. If init refuses ai-agents/ AND then fails a later step, `set -e` exits with
 # THAT failure (1) and the refusal is never signalled — so `aa_refused` alone would read 0 and the cold
-# start would come straight back. That state is not exotic; it is a read-only checkout (task 26) that
-# also has a weird ai-agents/ (task 27), i.e. the intersection of this work's own two briefs.
+# start would come straight back. That state is not exotic; it is a read-only checkout (`0088`) that
+# also has a weird ai-agents/ (`0069`), i.e. the intersection of this work's own two briefs.
 #
 # It is independently right, too: the producer's initiation exists to WRITE ai-agents/, and a failed
 # setup is direct evidence fkit cannot write this project. Cold-starting into it could only fail.

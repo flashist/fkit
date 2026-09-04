@@ -751,7 +751,7 @@ add_ignore '.claude/skills/fkit-*/' 'fkit-managed skills (refreshed by fkit-clau
 # The old Omnigent runtime wrote its own state into the CONSUMING project — vendored agent bundles, a
 # runner, session state, its own config dir. ADR-009 deleted that runtime in Sprint 2 and nothing has
 # referenced those paths since, but init never cleaned them: every launch of a project that used the old
-# flavor steps over orphaned bundles from a runtime that no longer exists. Task 36 / migration report §9.
+# flavor steps over orphaned bundles from a runtime that no longer exists. `0072` / migration report §9.
 #
 # The paths themselves are in claude/orphan-targets and are NOT repeated here, on purpose. Naming one in
 # this comment is a REFERENCE, and the gate below counts references — prose included. It cannot tell
@@ -942,7 +942,7 @@ EOF
       had="$(ls -A "$p" 2>/dev/null | wc -l | tr -d ' ')" || had=""
     fi
 
-    # Non-fatal, per path — task 26's bar. A cleanup failure must never brick the launcher, and must not
+    # Non-fatal, per path — `0088`'s bar. A cleanup failure must never brick the launcher, and must not
     # cost the user the rest of setup either. Warn, carry on; `set -e` never sees a non-zero.
     if rm -rf "$p" 2>/dev/null; then
       removed="$removed    $line
@@ -1002,7 +1002,7 @@ cleanup_orphans
 # ---------- summary ----------
 printf '\n'
 printf '  fkit is ready in %s\n\n' "$dest"
-# ⚠️ NO ROLE COUNT ON THIS LINE — deliberate, owner-ruled 2026-07-20 (task 81 Part D).
+# ⚠️ NO ROLE COUNT ON THIS LINE — deliberate, owner-ruled 2026-07-20 (`0036` Part D).
 # It used to read "Seven roles, …" directly above the seven-item list below. ADR-028 adds an eighth
 # role (a sandboxed e2e tester) but that role is DECIDED, NOT BUILT — no agent file ships for it. So
 # "Eight" would promise a role that does not exist, and "Seven" goes stale the day it does. Naming no

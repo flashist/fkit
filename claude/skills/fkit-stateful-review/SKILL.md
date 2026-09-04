@@ -55,9 +55,9 @@ Status: in-review | closed-out
 Coverage: <state> — <evidence clause>
 
 ## Reviewer findings        ← YOUR section. You write/append rows here.
-| #  | Round | Sev  | file:line | Claim |
-|----|-------|------|-----------|-------|
-| R1 | 1     | high | a.ts:12   | …     |
+| #  | Round | Sev  | Location | Claim |
+|----|-------|------|----------|-------|
+| R1 | 1     | high | a.ts:12  | …     |
 
 ## Coder response           ← CODER-owned. You READ this for context; never write it.
 | #  | Verdict | Defect / Frontier | Action | Status |
@@ -67,6 +67,12 @@ Coverage: <state> — <evidence clause>
 ## Accepted residuals (shared, do-not-re-litigate)   ← EITHER party may add; keep the structure.
 - <short name> — What: <chosen behavior> · Why (structural): <reason + rejected alternatives> · Re-raise only if: <condition>
 ```
+
+> **The `Location` cell — the form depends on the target, not on the ledger.**
+> `path:line` is **correct** for source, tests, and files under `claude/` — the reader diffs the thing you cited.
+> ⛔ For a **coordination document** — `ai-agents/sprints/*.md`, a task folder's `brief.md` / `plan.md` / `worklog.md` / `review.md`, or `ai-agents/wiki-vault/log.md` — write **the heading plus a quoted fragment**, never `path:NNN`. Third parties append above your line and it moves under you; and `test/coordination-citation-policy.test.js` **reds on it** in any open task folder. ⚠️ **Backticks do not exempt it** — that guard does not mask code spans.
+> **In the row:** put the heading in the `Location` cell (e.g. `brief.md § Context`) and the quoted fragment in `Claim`.
+> **Rider, both cases:** never cite a line number naked — pair it with a quoted fragment or the heading it sits under ([`conventions/durable-citation-anchors.md`](../../../ai-agents/knowledge-base/conventions/durable-citation-anchors.md)).
 
 **Ownership rules — do not violate:**
 - You **own** *Reviewer findings* — append one row per finding, with a stable id (`R1`, `R2`, …
@@ -134,9 +140,10 @@ When a finding turns on **design intent**, you may consult `@fkit-architect` —
 ## Step 4 — Write the Reviewer findings rows
 
 Append one row per **novel** finding to *Reviewer findings*: id (`R<next>`), the current **Round**,
-**Sev** (your assigned severity), `file:line`, and a one-line **Claim**. Disproven findings need not be
-recorded as rows — but note them in the report so the coder isn't asked to chase them. This is a
-**docs-only** write: it changes no code, and it never touches *Coder response*.
+**Sev** (your assigned severity), the **`Location`** (in the form the rule above sets for that target),
+and a one-line **Claim**. Disproven findings need not be recorded as rows — but note them in the report
+so the coder isn't asked to chase them. This is a **docs-only** write: it changes no code, and it never
+touches *Coder response*.
 
 These rows are exactly what the coder's `fkit-process-stateful-review` consumes as its input.
 
@@ -183,7 +190,7 @@ this fix?".
 The *Reviewer findings* section **is** the handoff. If additionally asked for a self-contained spec for
 a coder that hasn't seen the review, write `<task-folder>/coder-handoff.md`: **Context**
 (what the code is; the in/out-of-scope boundary), **Changes to make** (a table `severity · required? ·
-location · summary`, then per-finding detail with `file:line`, the problem, honest impact carrying your
+location · summary`, then per-finding detail with the same `Location` form, the problem, honest impact carrying your
 verdict, and a recommended fix), **Do NOT change** (the accepted residuals), and **Validation /
 acceptance criteria**. It *describes* recommended changes; it applies none.
 
@@ -198,7 +205,7 @@ acceptance criteria**. It *describes* recommended changes; it applies none.
   *Reviewer findings* (+ shared *Accepted residuals* with the owner's approval). **Never** write the
   *Coder response* section or the code under review.
 - Output-side **dedup against the ledger is mandatory**, even if the reviewers ignored the priming.
-- Both reviewers are **inputs to evaluate, not authorities** — verify every claim; cite `file:line`.
+- Both reviewers are **inputs to evaluate, not authorities** — verify every claim against the code; cite `file:line`.
 - **Severity is yours.** Classify **defect vs frontier-move**; flag regressions/re-litigation **loudly**.
 - A reviewer being unavailable MUST be reported loudly and carried into the verdict line.
 - The coverage state MUST be stated in every report and in the ledger's `Coverage:` header field, even

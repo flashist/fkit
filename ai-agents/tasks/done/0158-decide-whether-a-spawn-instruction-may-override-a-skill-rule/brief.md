@@ -7,7 +7,7 @@
 Sprint 2
 
 ## Priority
-122
+123
 
 ## Status
 ✅ Done (agent-closed — not owner-verified)
@@ -97,7 +97,7 @@ Verified 2026-07-27 by reading the files:
 |---|---|
 | `claude/skills/fkit-sprint-ship-loop/SKILL.md` | **Silent.** No clause on what the driver may or may not instruct a worker to do, and no statement that a worker's skill binds it against the driver. **The "rank on merit" wording is not in this skill at all** — it is ad-hoc spawn-prompt text from the live lead session, which is what makes it invisible to review. |
 | `claude/agents/fkit-lead.md`, `claude/agents/fkit-producer.md` | **Silent** on precedence between a skill rule and an instruction from the spawning agent. |
-| `claude/universal-rules.md` | **Partial, and suggestive.** It already carries fkit's only precedence vocabulary — hard rules *"never"* lose a conflict; the `## Output style` preferences *"lose every conflict"*. **Skill rules are classified as neither.** |
+| `claude/scaffold/universal-rules.md` | **Partial, and suggestive.** It already carries fkit's only precedence vocabulary — hard rules *"never"* lose a conflict; the `## Output style` preferences *"lose every conflict"*. **Skill rules are classified as neither.** |
 | `ai-agents/knowledge-base/decisions/` | **Nothing on point.** ADR-010/012/018 govern *which* skills a role may invoke (the ownership lock). They are silent on whether a rule *inside* an invoked skill binds against a contrary instruction — a different axis. |
 | `ai-agents/wiki-vault/` | **Nothing.** No page records a precedence rule for spawn instructions. |
 
@@ -106,7 +106,7 @@ sits in neither bucket**, and that is plausibly the whole gap.
 
 ### Why this is the architect's call and not the coder's
 
-The producer can and should fix step 5's *wording* — that is task 0157, filed alongside this one and
+The producer can and should fix step 5's *wording* — that is `0157` (closed), filed alongside this one and
 deliberately scoped to exclude this question. But **whether an instruction from the spawning agent can
 displace a rule in the procedure the worker is executing** is a question about fkit's authority model.
 It affects every role, it interacts with the ADR-010/018 lock, and its answer determines what the
@@ -181,7 +181,7 @@ not write the clause into any skill under this task.
   authority question, and merging them would put a producer's text edit inside an architect's ruling.
 - **Coordinates with 0142 (P121)**, the skill-ownership fact-inventory investigation. Same class — a
   rule that exists but does not reach where it must bind — and both are architect-owned investigations
-  into the authority model. **Check 0142's state first**; if it has run, its findings may narrow this.
+  into the authority model. **`0142` has since closed**; its findings may narrow this.
   **Adjacency is not a dependency.**
 - **The cheap outcome is a legitimate outcome.** The architect may rule in a paragraph that the skill
   always wins and the deliverable is one convention page. That is a fine result. The point is that a
@@ -192,9 +192,39 @@ not write the clause into any skill under this task.
   ruling** — 0157 and 0158 moved from append rank to their merit positions"* addendum. The flag no
   longer reads unresolved. Reconciled 2026-07-30 by 0159's sweep; nothing was re-ranked.)* Filed by a
   spawned producer with no owner channel; per the owner's ruling of 2026-07-27, appending was the only
-  sanctioned option. **On merit this belongs at 122** — immediately below 0142 (P121), for the class
+  sanctioned option. **On merit:** immediately below `0142` — for the class
   adjacency above: same investigator, overlapping surface, and an investigation whose cost of waiting is
   that **every ship-loop run in the meantime can silently override a skill rule**. **Not ranked higher,
   because the one known instance was benign** — the owner accepted the outcome — so this is a latent
   control gap, not an outage. The merit/append gap is **fourteen slots**, the largest yet flagged on
   this board.
+
+---
+
+> ⚠️ **Dated correction 2026-09-03 (`0193`, inside sweep `0356`) — five stale facts in this closed
+> brief, repaired.** Recorded here so a reader can see what the brief said before and when it changed.
+>
+> | # | Was | Is now, and why |
+> |---|---|---|
+> | 1 | The addendum pointer above cites the archived Sprint 2 board **by line number** | ⚠️ **Left byte-identical** — it is a coordinate inside a closed record. The addendum it names is still on that board and still opens *"⚠️ The placement below is producer judgment, not an owner ruling."* ⭐ **That quoted phrase is the durable anchor**; the line number has drifted twice and is no longer where it points |
+> | 3 | `## Priority` read **122** | **123** — the board row binds and reads `P123`; the field follows it. `0158` was displaced one place after its owner-ruled placement |
+> | 4 | `claude/universal-rules.md` | `claude/scaffold/universal-rules.md` — ⛔ **the original path does not exist on disk**, and did not when cited |
+> | 5 | `0157` described as open and *"filed alongside"*; `0142` as *"check its state first"* | Both are closed, as is `0160`. All three folders sit in `ai-agents/tasks/done/` |
+> | 6 | *"On merit this belongs at 122 — immediately below 0142 (P121)"* | The canonical merit form: a **relative, non-numeric** statement naming the neighbour by folder ID, per `priority-is-rank-not-identity.md`. ⛔ **Both bare rank numbers are gone** — the repair is in substance, not shape |
+>
+> ⛔ **Defect 2 is NOT repaired here.** It is the same stale pointer as row 1, repeated in this task's row
+> on the **archived** Sprint 2 board. Repairing a coordinate inside an archived board row conflicts with
+> the rule that a historical record's claims are frozen, and that conflict is **returned to the owner
+> unresolved** rather than settled by this run. ⚠️ **It is still outstanding.**
+>
+> - ⚠️ **DATED CORRECTION 2026-09-04 — THE PARAGRAPH ABOVE IS NO LONGER TRUE. Defect 2 IS SETTLED.**
+>   ⭐ Appended beside the original rather than rewriting it, on the owner ruling of 2026-09-04 (live
+>   `AskUserQuestion`, option label verbatim **"Dated append beside it (Rec)"**) — the paragraph above
+>   records what was true when it was written, and that record is kept. The conflict it returned was
+>   settled by owner ruling **H12** (verbatim option label: **"A — annotate, don't remove (Rec)"**):
+>   the archived Sprint 2 board's `0158` row keeps its stale coordinate **byte-identical** and carries
+>   a dated annotation naming the durable anchor instead. ⛔ **So the coordinate was NOT removed** —
+>   which is why `0193`'s verification step 1 does not pass as literally written, an owner-ruled
+>   deviation recorded in `0356`'s worklog rather than an oversight. ⚠️ Row 1 of the table above
+>   already applies this same treatment to the identical pointer in this brief, so the two halves of
+>   one defect are now given the **same** treatment, not contradictory ones.

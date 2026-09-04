@@ -22,7 +22,7 @@ fkit-wiki
 
 ### What makes the vault page wrong
 
-Task [`0232`](../0232-correct-adr-012s-stale-source-of-truth-and-code-coordinates/brief.md) corrects
+Task [`0232`](../../done/0232-correct-adr-012s-stale-source-of-truth-and-code-coordinates/brief.md) corrects
 ADR-012's stale source-of-truth claim and its other stale code coordinates in
 `ai-agents/knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md`.
 The best-known instance: ADR-012 names `claude/fkit-claude.sh` as the home of `skills_for_role()`,

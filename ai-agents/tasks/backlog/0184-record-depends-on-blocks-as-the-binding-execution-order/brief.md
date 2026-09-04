@@ -162,7 +162,10 @@ promotion, no status-cell change.**
    - **Preserve the canonical parse-safe flush form** on every declaration line you touch — the label
      flush against the `**`, nothing between `**` and `Depends on` / `Blocks`, per
      [`conventions/dependency-declaration-form.md`](../../../knowledge-base/conventions/dependency-declaration-form.md).
-     A decorated variant is read as *no dependency* (the task-84 misreport class) or renders
+     A decorated variant is read as *no dependency* (the task-84 misreport class — the class recorded in
+     [`dependency-declaration-form.md`](../../../knowledge-base/conventions/dependency-declaration-form.md),
+     originating in `0092`; ⛔ the NAME is a term of art carried by ~20 files, several frozen, and is
+     deliberately not renamed here) or renders
      `⟨derive: UNPARSEABLE — see brief⟩`.
 4. **Discharge the standing flag** on the sprint-2 addendum. The addendum still asks *"the owner should
    decide whether to promote the row"* about `0173`. **Append a dated 2026-08-03 note** recording that

@@ -408,7 +408,7 @@ before the ruling:
 - Inbound hrefs re-pointed to this folder's new path in
   [`0353`](../../done/0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md),
   [`0354`](../../done/0354-build-the-link-resolution-guard/brief.md) and
-  [`0356`](../../backlog/0356-sweep-a-the-citation-rot-class-one-verified-pass/brief.md) — **href only,
+  [`0356`](../../done/0356-sweep-a-the-citation-rot-class-one-verified-pass/brief.md) — **href only,
   no sentence touched.**
 - This brief's own outbound sibling links (`0176`, `0237`, `0354`) re-pointed from `../` to
   `../../backlog/`, which the extra board hop requires.

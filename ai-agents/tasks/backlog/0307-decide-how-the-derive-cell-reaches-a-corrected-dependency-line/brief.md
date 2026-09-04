@@ -121,6 +121,49 @@ The function also states the contract one line above itself:
 separate list item outside the bold span, and the extractor is contractually forbidden to interpret
 what it finds.
 
+> ### ⭐ THIRD INSTANCE ADDED 2026-09-04 — `0172`, BY OWNER RULING H24
+>
+> **Owner ruling H24, given live via `AskUserQuestion` on 2026-09-04; the ruling is a selection from
+> an option list, so the option label is the verbatim text: "Fold 0172 into 0307's instance list, drop
+> 0372 (Rec)".** Relayed to a spawned `fkit-producer` with no owner channel.
+>
+> ⭐ **This task's instance list is now `0046`, `0168` and `0172` — one decision, one row, three
+> instances.** A separate row (`0362`-series `0372`) was filed for `0172` on 2026-09-04 and
+> **cancelled the same day** under this ruling, because a row whose own brief forbids acting before
+> this one lands can only ever wait. ⛔ **This is an APPENDED instance, not a re-scoping** — nothing
+> above or below this note changed, and this task's question is unchanged.
+>
+> **The site.** ⚠️ **Stated precisely, because the relayed summary called it *"`0309`'s site"* and that
+> is not where it lives.** The declaration is in
+> [`0172`](../0172-narrow-the-architect-output-format-path-line-mandate/brief.md)'s own `## Notes`
+> section — its dependency-declaration bullet, which **`0309` merely surfaced and declined to
+> repair**. Verified firsthand 2026-09-04.
+>
+> - It declares a **hard** dependency on `0171`, with the stated rationale that a pointer to a page
+>   which does not exist is the defect class the arc is about.
+> - ⛔ **`0171` closed 2026-08-22 and the convention page exists**, so the rationale is false and the
+>   dependency is discharged — yet the board still derives the stale text for `0172`.
+>
+> **Why it was surfaced and not repaired — owner ruling H2, 2026-09-03**, option label verbatim
+> **"Surface it, hand to producer (Rec)"**, settled as ⛔ *"**Do NOT repair the live
+> dependency-declaration line.** … **Board semantics are the producer's.**"* The reason is this task's
+> own subject: **editing it changes what `dashboard.sh` derives, and can flip a truthful `ready` row
+> false.**
+>
+> ⛔⛔ **THE HAZARD THAT APPLIES TO WHOEVER RUNS THIS TASK.** `dashboard.sh` matches the bold
+> dependency label **mid-line**. When an earlier draft of `0309`'s brief quoted that label literally,
+> the board rendered a false derived dependency **for `0309` itself** — ⭐ the misreport class, fired
+> by a brief about citation defects, inside the table listing the defect. ⛔ **This note therefore
+> DESCRIBES `0172`'s bullet and never quotes its label, and no record written for this task may
+> restore a verbatim quote.**
+>
+> **What `0172` adds to the decision.** ⭐ It is the first instance where the stale declaration is a
+> **hard** dependency on a **closed** row, so the derived cell does not merely print stale prose — it
+> may misstate readiness. ⚠️ **Whatever this task rules must therefore say what happens to readiness,
+> not only to the rendered text.** Its evidence shape is prescribed: capture what `dashboard.sh`
+> renders for `0172` **before and after**, and state whether readiness flipped and whether the flip is
+> truthful.
+
 ### ⛔ The conflict — read this before proposing anything
 
 **Two rules the project holds today point in opposite directions, and nobody has ruled between them.**
@@ -155,8 +198,8 @@ rewrite. ⭐ **Do not treat A and B as the whole option space.**
   and is the task that documents the canonical declaration form the board can read. **Option A directly
   reopens ground `0184` was scoped to leave alone.** ⚠️ **Read `0184` before recommending A**, and say in
   the recommendation whether A changes what `0184` must write.
-- **[`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md)** — the
-  `durable-citation-anchors` convention page, **in progress as Sprint 6 P2**. ⚠️ **Related but does not
+- **[`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md)** (closed 2026-08-22) — the
+  `durable-citation-anchors` convention page. ⚠️ **Related but does not
   gate this.** `0171` governs how a *citation* anchors; this task is about how a *declaration's
   correction* reaches a derived cell. **Say explicitly in the recommendation whether the two forms need
   to agree** — if the answer is "no", say so; if "yes", that is a finding.
@@ -204,8 +247,8 @@ and returns open questions for the owner.
 ## Notes
 
 - **Depends on:** nothing.
-- **Relates to:** `0184` (owns the declaration form and forbids editing `dashboard.sh`), `0171` (the
-  citation convention in progress), `0308` and `0309` (the other two `0306` residuals, filed the same
+- **Relates to:** `0184` (owns the declaration form and forbids editing `dashboard.sh`), `0171` (closed 2026-08-22; the
+  citation convention page), `0308` and `0309` (the other two `0306` residuals, filed the same
   day).
   - ⚠️ **DATED CORRECTION 2026-08-21 — THE NEIGHBOUR LIST IN THE BULLET ABOVE PREDATES `0315` AND IS
     INCOMPLETE. The bullet above is left byte-identical, and everything it says still stands; this note

@@ -30,7 +30,7 @@ codex exec --sandbox read-only --cd "$PWD" - < .fkit/tmp/adversarial-prompt.md
 
 `read-only` blocks all filesystem writes, and `mkdtemp` is a write. So the Codex reviewer **cannot
 run the test suite, build a fixture, or execute a mutation** — and never could. This is fkit's own
-prescribed flag, not a broken environment and not new. `test/prove-red.sh:59` opens with
+prescribed flag, not a broken environment and not new. `test/prove-red.sh` opens its work dir with
 `work="$(mktemp -d)"`, so fkit's own red-proof harness is among the things Codex cannot run.
 
 This is a capability limit, not a bug. It is also not a total loss: on task `0265` the read-only
@@ -310,7 +310,7 @@ widens the owner's fallback.**
   `claude/skills/fkit-stateful-review/SKILL.md:95,97` · `claude/agents/fkit-adversarial-reviewer.md:28`
 - Evidence: `ai-agents/tasks/done/0259-.../review.md:11-12` ·
   `ai-agents/tasks/done/0264-.../review.md:9-10,326-327` ·
-  `ai-agents/tasks/done/0265-.../review.md:10-15,89-90` · `test/prove-red.sh:59`
+  `ai-agents/tasks/done/0265-.../review.md:10-15,89-90` · `test/prove-red.sh`, its `work="$(mktemp -d)"` opening
 
 ---
 

@@ -199,7 +199,7 @@ descriptions beyond removing a fragment that is now false and adding the reason.
 > **Yes, this writes into `ai-agents/sprints/done/`.** That is deliberate and owner-ruled: a closed
 > sprint plan's *claims* are frozen, but its *links* stay live. Repair the href; touch nothing else.
 
-**Now do this regardless of how many references step 4 found — even zero.** Since task 67 every brief
+**Now do this regardless of how many references step 4 found — even zero.** Since `0001` every brief
 should have a row *somewhere* — a sprint plan, or the unranked `backlog.md` board — so **zero
 references is now itself worth reporting**, not the expected case for unsprinted work. A hand-filed
 brief may still have none. Either way, this step applies:

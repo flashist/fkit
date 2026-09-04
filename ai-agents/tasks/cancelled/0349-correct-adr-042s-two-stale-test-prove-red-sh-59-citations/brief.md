@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-⛔ Cancelled (agent-closed — not owner-verified) (2026-08-29) — superseded and absorbed by [`0344`](../../backlog/0344-refresh-the-stale-line-refs-and-moot-r5-rationale-inside-release-mjss-fenced-summary-block/brief.md) on owner ruling 2026-08-29 (`AskUserQuestion`, option label verbatim "One combined pass (Rec)"); the scope is NOT dropped — both ADR-042 citations now live in `0344`'s §"🔗 ABSORBED 2026-08-29" and ship in one pass with the `bin/release.mjs` refresh, so the anchor-or-number form question is answered once for both
+⛔ Cancelled (agent-closed — not owner-verified) (2026-08-29) — superseded and absorbed by [`0344`](../../done/0344-refresh-the-stale-line-refs-and-moot-r5-rationale-inside-release-mjss-fenced-summary-block/brief.md) on owner ruling 2026-08-29 (`AskUserQuestion`, option label verbatim "One combined pass (Rec)"); the scope is NOT dropped — both ADR-042 citations now live in `0344`'s §"🔗 ABSORBED 2026-08-29" and ship in one pass with the `bin/release.mjs` refresh, so the anchor-or-number form question is answered once for both
 
 ## Owner
 fkit-architect
@@ -107,7 +107,7 @@ form**; two that satisfy the convention:
 - **Depends on:** nothing.
 - **Blocks:** nothing.
 - **Sibling, same class:**
-  [`0344`](../../backlog/0344-refresh-the-stale-line-refs-and-moot-r5-rationale-inside-release-mjss-fenced-summary-block/brief.md)
+  [`0344`](../../done/0344-refresh-the-stale-line-refs-and-moot-r5-rationale-inside-release-mjss-fenced-summary-block/brief.md)
   — stale `:NNN` references inside `bin/release.mjs`'s fenced summary block, also a comment-only
   refresh, also governed by `durable-citation-anchors.md`. ⚠️ **Not a dependency in either direction**;
   they touch different files and neither waits on the other. Worth pulling together if a session wants

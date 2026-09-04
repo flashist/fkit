@@ -198,7 +198,7 @@ re-broken by the very next filing. One task, ships once, stays fixed.
 - ⛔ **Any prose, claim, figure or href inside any row.** Escapes only.
 - ⛔ **Any `## Status` value, any rank, any row order, any row count, on any board.**
 - ⛔ **The two `0171` prose sites on `backlog.md`** — the rows linking `0307` and `0310`. Those are
-  [`0321`](../0321-repair-the-two-stale-0171-claims-on-the-live-backlog-board/brief.md)'s, and
+  [`0321`](../../done/0321-repair-the-two-stale-0171-claims-on-the-live-backlog-board/brief.md)'s, and
   ⭐ **neither is among the 4 defective rows**, so the row sets are disjoint.
 - ⛔ **`ai-agents/wiki-vault/`** — `fkit-wiki`'s exclusively
   ([ADR-005](../../../knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)).
@@ -243,7 +243,7 @@ re-broken by the very next filing. One task, ships once, stays fixed.
 - **Depends on:** nothing.
 
 - ⚠️ **Shares a FILE, but not a ROW, with
-  [`0321`](../0321-repair-the-two-stale-0171-claims-on-the-live-backlog-board/brief.md).** Both write
+  [`0321`](../../done/0321-repair-the-two-stale-0171-claims-on-the-live-backlog-board/brief.md).** Both write
   `ai-agents/sprints/backlog.md`. ⭐ **Their row sets are disjoint** — this task touches the 4
   defective rows, `0321` touches the rows linking `0307` and `0310`, neither of which is defective.
   **Neither gates the other**, but ⛔ **do not run them concurrently against the same working tree
@@ -331,7 +331,7 @@ same day the defect was found — so **a repair without the guard is re-broken b
 The ordering dependency is real even though the shippability is independent.
 
 ⚠️ Context worth keeping: **this is the same shape of question the owner answered "Split it" to on
-[`0320`](../0320-repair-the-four-stale-0171-claims-that-fall-outside-0309s-scope/brief.md) the same
+[`0320`](../../done/0320-repair-the-four-stale-0171-claims-that-fall-outside-0309s-scope/brief.md) the same
 day.** The
 opposite answer here is not an inconsistency — it turns on the ground `0320` lacked: **`0320`'s
 defect was not reproducing; this one is.**

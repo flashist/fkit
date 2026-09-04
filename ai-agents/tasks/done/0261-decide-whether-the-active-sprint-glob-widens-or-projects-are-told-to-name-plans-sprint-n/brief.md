@@ -187,5 +187,13 @@ An ADR under `ai-agents/knowledge-base/decisions/`, via `/fkit-record-decision`.
   are the quoted text and the report's section numbers.
   [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) is the open task for
   the convention page.
+
+  > ⚠️ **Dated correction 2026-09-03 (`0320`, inside sweep `0356`) — `0171` is no longer open.** It
+  > closed **2026-08-22**; its `## Status` reads `✅ Done (agent-closed — not owner-verified)` and its
+  > folder now sits in `ai-agents/tasks/done/`. **The sentence above is left byte-identical** as the
+  > record of what was true when this brief was written. ⭐ **The link above still resolves correctly** —
+  > citer and target both sit in `ai-agents/tasks/done/` now, so the relative href still lands and a
+  > reader who follows it goes to the right place. ⛔ **Nothing here changes `0261`'s status, scope
+  > or rank.**
 - Filed 2026-08-10 by a spawned `fkit-producer` with no owner channel, onto the Sprint 5 board, under
   the owner's Sprint 5 scope ruling of the same day.

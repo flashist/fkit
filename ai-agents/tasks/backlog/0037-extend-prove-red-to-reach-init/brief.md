@@ -21,7 +21,7 @@ fkit-coder
 the init-driven tests at all.** The gate makes deliberately-wrong copies and confirms the suite goes
 red **at a NAMED assertion**, not merely "some failure" (header, `test/prove-red.sh:4-8`). Its two
 current mutations are **both against the launcher** (`:86-111`): a `skills_for_role()` entry and the
-pre-task-18 `--resume` passthrough. Neither touches `fkit-claude-init.sh`.
+`0073`-era `--resume` passthrough (`0073` removed it; the mutation restores it). Neither touches `fkit-claude-init.sh`.
 
 **The gap is structural, not an oversight.** `prove-red.sh` reaches the suite by pointing it at a
 mutated launcher through the `FKIT_LAUNCHER` env var (`:41`, honored in `test/harness.mjs`). But the

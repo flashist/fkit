@@ -4,7 +4,7 @@
 # One project-relative path per line. `#` comments and blank lines are ignored. Read by
 # cleanup_orphans() in fkit-claude-init.sh, which deletes each entry — once, announced, per project.
 #
-# ⛔ THIS LIST IS EXHAUSTIVE BY OWNER RULING (task 36), NOT BY CONVENIENCE.
+# ⛔ THIS LIST IS EXHAUSTIVE BY OWNER RULING (`0072`), NOT BY CONVENIENCE.
 #    Adding a line here is a NEW OWNER DECISION — it is an `rm -rf` in someone else's project with no
 #    rollback. It is the only place fkit deletes OUTSIDE the fkit-* namespace it manages — a path is
 #    removed because it is named here, and nothing re-creates it. (Init's step 3 deletes too, and

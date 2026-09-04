@@ -46,8 +46,30 @@ fourth of the same family — the shape of the work is known.
 
 **(a) The shape check reads `P<n>` tokens only, and a bare integer slips through.** Part 2 bans `P<n>`.
 It does **not** catch a merit statement writing a bare rank with no `P`. **This is not hypothetical:**
-`0158`'s brief writes *"On merit this belongs at 122"* — an absolute board rank, exactly the defect.
-As written today that line is caught, but only by the **presence** half, for being in the legacy shape.
+`0158`'s brief **used to write** *"On merit this belongs at 122"* — an absolute board rank, exactly the
+defect. ⚠️ **That specimen was repaired on 2026-09-03 by `0193` (inside sweep `0356`) to the canonical
+relative form, so it is no longer a LIVE defect** — but the original wording is preserved verbatim in
+`0158`'s dated correction table, so the case this guard is measured against is still readable and still
+greppable. ⛔ **It is preserved history, not a live input:** `0158` sits in `ai-agents/tasks/done/`,
+outside this guard's in-scope set, so the check will never fire on it. It is the reference specimen to
+write the **test** against, not a brief the guard will catch. ⛔ **The trap below is unchanged and still
+real** — it is a property of the check, not of any one brief — and ⛔ **do not read the repair as
+evidence the trap is gone.**
+
+⭐ **The bare-rank class IS extinct in live briefs — but the follow-on claim written here by sweep
+`0356` was WRONG, and is corrected in place.** ⚠️ **Re-measured 2026-09-04 over
+`ai-agents/tasks/backlog/*/brief.md`; these are dated figures — re-run them before sizing the
+backfill.** **35** open briefs carry an `**On merit` statement, and **no** bare-rank merit statement
+survives in any of them (the only bare rank left in a live brief is this brief's own illustrative
+example below). ⛔ **What is NOT true is the clause that followed — that "every one names its neighbour
+by folder ID, which is the canonical form."** It fails twice: **14** of the 35 name **no** neighbour at
+all — they read *"the **Backlog**, unranked, and that is honest"*, and one reads *"as ranked"* — and
+**16** still use the legacy `**On merit this belongs …**` shape, which the table below classifies as
+*"fails **shape** — none matches `**On merit:**`"*. ⛔ **So the backfill is not sized at zero, and the
+canonical-form claim must not be used to size it.**
+
+**As preserved in that table the specimen is in the legacy shape**, so the guard as specified would
+catch it by the **presence** half only, never by the **shape** half.
 **Reshape it into the canonical form and keep the bare number — `**On merit:** belongs at 122` — and
 the guard as specified passes it.** So a backfill done to clear cost (b) can extinguish the drift flag
 while leaving the actual defect in the brief. Catching bare integers means flagging every number in a

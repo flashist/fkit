@@ -89,7 +89,7 @@ a part can be developed, tested, and shipped separately, it is its own task.**
   **The label must be flush against the `**` — no emoji, quote, or other decoration between `**` and
   `Depends on`.** `dashboard.sh` parses this exact form to derive each task's Next-step; a decorated
   variant like `- **⚠️ Depends on …**` is read as *no dependency* and the board falsely shows the task
-  as pullable (the task-84 misreport — see
+  as pullable (the task-84 misreport — the class is named for its specimen brief `0092`; ⛔ the NAME is a term of art carried by ~20 files, several frozen, so it is glossed here and NOT renamed — see
   [`conventions/dependency-declaration-form.md`](../../../ai-agents/knowledge-base/conventions/dependency-declaration-form.md)).
   A non-canonical declaration now renders a LOUD `⟨derive: UNPARSEABLE — see brief⟩` on the board rather
   than a silent false `ready`, but the fix is to write the canonical form, not to trip the guard.
@@ -220,7 +220,7 @@ max=$(grep -rhA1 '^## ID' ai-agents/tasks/{backlog,done,cancelled}/ \
 next=$(printf '%04d' $(( 10#$max + 1 )))     # ⚠️ 10# IS MANDATORY — see below
 ```
 
-Once tasks live in ID-prefixed folders (task 76), folder names become ground truth instead:
+Once tasks live in ID-prefixed folders (`0062`), folder names become ground truth instead:
 
 ```sh
 max=$(ls -d ai-agents/tasks/{backlog,done,cancelled}/*/ 2>/dev/null \

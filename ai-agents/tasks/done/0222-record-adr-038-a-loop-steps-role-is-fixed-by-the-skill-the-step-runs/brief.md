@@ -194,7 +194,7 @@ here — **do not file them from this task.**
 > | 4 — the loop-table row↔ownership test | [`0225`](../../backlog/0225-add-the-loop-table-row-to-skill-ownership-test/brief.md) | 2026-08-05 |
 > | 5 — repair the four-mirror checklist | [`0226`](../../backlog/0226-repair-the-four-mirror-checklist-in-skills-for-role-shs-header/brief.md) | 2026-08-05 |
 > | 6 — worklog `**Role:**` line | ⛔ **struck in the report**, folded into item 3 = `0224` half (ii) | n/a |
-> | 7 — correct ADR-012's stale source-of-truth path | [`0232`](../../backlog/0232-correct-adr-012s-stale-source-of-truth-and-code-coordinates/brief.md) | **2026-08-06** |
+> | 7 — correct ADR-012's stale source-of-truth path | [`0232`](../../done/0232-correct-adr-012s-stale-source-of-truth-and-code-coordinates/brief.md) | **2026-08-06** |
 > | 8 — assess the denial record as an ADR-036 registry site | [`0233`](../../backlog/0233-assess-the-denial-log-as-an-adr-036-registry-site/brief.md) | **2026-08-06** |
 >
 > **Zero remain unfiled.** Items 1, 3, 4 and 5 were filed on a named owner ruling of 2026-08-05

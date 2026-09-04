@@ -70,7 +70,7 @@ resolve as board names — so `/fkit-status full` correctly fails with *"no spri
 > `Sprint 1` does — one board in, one briefing out. It does not ask for a different rendering of the
 > same board, which is what
 > [`one-skill-one-output`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)
-> (task 44) forbids. **The default run never includes it:** an empty argument selects the active
+> (`0074`) forbids. **The default run never includes it:** an empty argument selects the active
 > sprint by **resolved identity**, and this board's identity is `Backlog` — which is **never
 > eligible** — so unscheduled work is reported **only when asked for by name**, by construction
 > rather than by a rule anyone has to remember. **The exclusion is stronger than the filename rule it
@@ -259,7 +259,7 @@ must not undo any of them by hand:
 > skill argued a board that hides cancelled and moved tasks lies about scope. The owner reversed it;
 > keeping the roll-up is the mitigation. **It is not a toggle** — there is no `full`/`all` switch, per
 > [`one-skill-one-output`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)
-> (task 44). Adding one would need a reversal ADR first.
+> (`0074`). Adding one would need a reversal ADR first.
 
 **The one thing you must fill: `⟨derive: …⟩` sentinels.** The script emits four of the six Next-step
 shapes itself (`closed`, `dead`, `in Sprint N`, `waiting on owner`). It **cannot** decide `ready` vs

@@ -94,7 +94,7 @@ went. ⛔ **The three-sweep total is unchanged at ~38** — it moves from `13 + 
   - ⛔ **This sweep therefore neither does `0212` nor closes it.** It is **not** on this sweep's close
     list, and its outcome is reported by `0358`. ⚠️ **Sweep C is `fkit-wiki`-owned and this sweep is
     `fkit-coder`-owned** — the routing is the ADR-005 wall, not a scheduling preference.
-- **`0320` and `0321` sit on the boundary with [Sweep A](../0356-sweep-a-the-citation-rot-class-one-verified-pass/brief.md)** —
+- **`0320` and `0321` sit on the boundary with [Sweep A](../../done/0356-sweep-a-the-citation-rot-class-one-verified-pass/brief.md)** —
   both repair a stale claim *by appending a dated note*. ⛔ **Each must land in exactly one sweep.**
   Sweep A's step 1 rules `0320`; whichever runs first records its ruling for the other.
 - **`0351` edits a shell script's wording** (`test/prove-red.sh`), not a markdown record. It is an

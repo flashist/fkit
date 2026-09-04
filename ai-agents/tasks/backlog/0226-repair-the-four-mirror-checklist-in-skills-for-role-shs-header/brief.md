@@ -38,7 +38,7 @@ words:
 > consuming project… A checklist that is itself incomplete is worse than no checklist: it is followed,
 > and it fails. If you add a fifth mirror, add it HERE FIRST."*
 
-**This is the task-70 failure mode recurring inside the very checklist that documents `0008`
+**This is the `0008` failure mode recurring inside the very checklist that documents `0008`
 (`add-open-questions-interview-skill-for-six-roles`).** The list now says FOUR and is still
 incomplete.
 
@@ -167,7 +167,7 @@ The shape:
      **count**, which a role→skill change falsifies
    - **Cross-attributions naming ANOTHER role's ownership**, wherever they sit — e.g. *"the coder's
      `fkit-process-stateful-review`"* inside a reviewer-owned file
-3. **Keep the task-70 warning and its "add it HERE FIRST" instruction verbatim.** They are the reason
+3. **Keep the `0008` warning block — its text opens *"Task 70 followed the two-item list precisely"* — and its "add it HERE FIRST" instruction verbatim.** They are the reason
    this task exists; do not compress them away.
 4. **Add a dated note recording that the list was incomplete a second time**, so the next reader sees a
    pattern rather than a one-off — matching the existing *"THIS LIST SAID TWO UNTIL 2026-07-18"* form.
@@ -192,7 +192,7 @@ The shape:
    with a stated reason**. Silence about a class is a failure.
 3. `/usr/bin/grep -c '⛔ Owner' claude/skills/*/SKILL.md` is re-run and its result matches whatever the
    header claims about banner coverage.
-4. The task-70 warning block and the *"If you add a fifth mirror, add it HERE FIRST"* instruction are
+4. The `0008` warning block (its text opens *"Task 70 followed the two-item list precisely"*) and the *"If you add a fifth mirror, add it HERE FIRST"* instruction are
    present and unweakened. Diff them to confirm.
 5. The header names **ADR-036** and **`0189`** as the durable answer, so a future reader does not treat
    the repaired hand list as the endpoint.

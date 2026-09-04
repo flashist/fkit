@@ -100,7 +100,7 @@ anything needing human review (⚠️).
 (`/fkit-task-done`, `/fkit-task-cancelled`) are the **producer's alone** — the wiki does not hold
 them, and the ADR-018 hook denies a mover call from a wiki identity at any spawn depth. The wiki's
 completion signal is a **flag in this report**, and nothing else. (`log.md` is not a signal: no board
-tool reads it. That is exactly why task 80's vault work sat `🔄 In progress` on the board for a week.)
+tool reads it. That is exactly why `0078`'s vault work sat `🔄 In progress` on the board for a week.)
 
 **Which tasks to consider** — any tracked task this operation may have completed:
 - one the caller named when invoking this procedure; **and**

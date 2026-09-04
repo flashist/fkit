@@ -248,8 +248,8 @@ them.**
   triage and a set of repairs. ⚠️ **Whether the convention page needs a case-insensitivity rider, and
   whether a guard should exist, are questions for the owner** — raise them, do not build them.
 - ⛔ **Widening into the non-`ADR-NNN:LINE` citation classes** — the hyphenated `task NN` class is
-  [`0309`](../0309-repair-the-hyphenated-task-nn-citation-class-in-four-open-briefs/brief.md)'s and
-  [`0308`](../0308-triage-and-repair-claudes-surviving-stale-task-numeral-seeds/brief.md)'s.
+  [`0309`](../../done/0309-repair-the-hyphenated-task-nn-citation-class-in-four-open-briefs/brief.md)'s and
+  [`0308`](../../done/0308-triage-and-repair-claudes-surviving-stale-task-numeral-seeds/brief.md)'s.
 - ⛔ **No commit, no push.** No secrets in any artifact.
 
 ## Verification steps
@@ -288,7 +288,7 @@ them.**
 - ⛔⛔ **`0196` AND `0197` DO NOT GATE THIS TASK, AND THIS TASK DOES NOT GATE THEM. Stated explicitly so
   nobody invents a dependency.**
   [`0196`](../0196-correct-adr-010s-skilloverrides-claims-retired-by-adr-018/brief.md)
-  and [`0197`](../0197-resolve-adr-010s-remaining-stale-code-line-ranges/brief.md) (both `🔲 Backlog`,
+  and [`0197`](../../done/0197-resolve-adr-010s-remaining-stale-code-line-ranges/brief.md) (both `🔲 Backlog`,
   verified 2026-08-22) are **hard append-only (`+N / −0`)** and were measured this session to pose
   **no** text-change risk to any existing anchor — an append cannot move a line above it. ⚠️ **They may
   run in any order relative to this task, or concurrently.**
@@ -302,10 +302,10 @@ them.**
   the same blind spot would live there. ⛔ **Do not edit `0176`'s brief or build its guard here** —
   report the finding.
 - ⚠️ **Relates to, without ordering:**
-  [`0309`](../0309-repair-the-hyphenated-task-nn-citation-class-in-four-open-briefs/brief.md),
-  [`0308`](../0308-triage-and-repair-claudes-surviving-stale-task-numeral-seeds/brief.md),
-  [`0320`](../0320-repair-the-four-stale-0171-claims-that-fall-outside-0309s-scope/brief.md) and
-  [`0321`](../0321-repair-the-two-stale-0171-claims-on-the-live-backlog-board/brief.md) — all
+  [`0309`](../../done/0309-repair-the-hyphenated-task-nn-citation-class-in-four-open-briefs/brief.md),
+  [`0308`](../../done/0308-triage-and-repair-claudes-surviving-stale-task-numeral-seeds/brief.md),
+  [`0320`](../../done/0320-repair-the-four-stale-0171-claims-that-fall-outside-0309s-scope/brief.md) and
+  [`0321`](../../done/0321-repair-the-two-stale-0171-claims-on-the-live-backlog-board/brief.md) — all
   `0171`-descended repairs on **different citation classes**. ⛔ **No shared file is guaranteed; both
   this task and `0321` may touch `ai-agents/sprints/backlog.md`, so re-measure rather than trusting a
   captured line number.**

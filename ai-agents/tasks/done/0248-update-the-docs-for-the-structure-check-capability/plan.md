@@ -9,7 +9,7 @@
 > fkit-coder (`/fkit-plan-task`), presented by the fkit-lead driver, written to this file by the
 > driver in the approval turn (fkit-sprint-ship-loop §Durable artifacts).
 
-**Task:** `ai-agents/tasks/backlog/0248-update-the-docs-for-the-structure-check-capability/brief.md`
+**Task:** `ai-agents/tasks/done/0248-update-the-docs-for-the-structure-check-capability/brief.md`
 **Docs only — no behavior change, no commit, no wiki-vault write, no task-file move.**
 
 ## Ground truth verified on disk (2026-08-07)

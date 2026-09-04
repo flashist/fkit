@@ -240,6 +240,14 @@ A vault re-sync that makes `ai-agents/wiki-vault/` describe board reality as of 
 - **Line-number citations are dated anchors of convenience**; the durable anchors are the quoted text.
   [`0171`](../0171-write-the-durable-citation-anchors-convention-page/brief.md) is the open task for
   the convention page.
+
+  > ⚠️ **Dated correction 2026-09-03 (`0320`, inside sweep `0356`) — `0171` is no longer open.** It
+  > closed **2026-08-22**; its `## Status` reads `✅ Done (agent-closed — not owner-verified)` and its
+  > folder now sits in `ai-agents/tasks/done/`. **The sentence above is left byte-identical** as the
+  > record of what was true when this brief was written. ⭐ **The link above still resolves correctly** —
+  > citer and target both sit in `ai-agents/tasks/done/` now, so the relative href still lands and a
+  > reader who follows it goes to the right place. ⛔ **Nothing here changes `0263`'s status, scope
+  > or rank.**
 - **Priority is `—` (unscheduled).** Filed to the **Backlog** board; no sprint was named by the owner
   and no row was re-ranked (ADR-035, `/fkit-task-brief` step 5).
 - Filed 2026-08-10 by a spawned `fkit-producer` with no owner channel, on the owner's ruling of the

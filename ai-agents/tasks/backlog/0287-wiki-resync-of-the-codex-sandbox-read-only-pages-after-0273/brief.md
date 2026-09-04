@@ -192,7 +192,7 @@ actually stands **after `0273`**.
   fact that the set is **five, not three** — goes in a **new dated entry**.
 - **⛔ Vault writes only.** Do not edit `ai-agents/knowledge-base/`, `claude/`, or any source file.
   ⚠️ **`ai-agents/knowledge-base/architecture.md` carries the same claim at `:52`, `:275` and `:375`
-  — that is [`0275`](../0275-correct-the-stale-adversarial-review-citations-in-architecture-mds-review-walkthrough/brief.md)
+  — that is [`0275`](../../done/0275-correct-the-stale-adversarial-review-citations-in-architecture-mds-review-walkthrough/brief.md)
   and [`0273`](../0273-move-the-codex-review-sandbox-to-workspace-write-at-all-call-sites/brief.md),
   NOT this row.** If a knowledge-base page needs the same fix, **REPORT it, do not fix it.**
 - **⛔ No task-file move** ([ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)).
@@ -239,8 +239,8 @@ actually stands **after `0273`**.
     (ADR-042's D1 coverage vocabulary) — different subject, same ADR. **Neither gates the other**;
     ✅ prefer `0272` first so a single vault pass can carry both, but **do not implement D1 here**.
 - **⚠️ Every `:NNN` in this brief is a dated anchor measured 2026-08-13 — the durable anchor is the
-  quoted text. Re-measure at execution time.** (The convention page itself is not yet written — that
-  is [`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md), still open — so
-  this is stated inline rather than cited.)
+  quoted text. Re-measure at execution time.** (The convention page — [`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md),
+  closed 2026-08-22 — was not yet written when this brief was filed, so this is stated inline rather
+  than cited.)
 - **Owner: `fkit-wiki` — mandatory, not a preference.** ADR-005 makes the vault this role's exclusive
   write gateway; no other role or session may perform this row.

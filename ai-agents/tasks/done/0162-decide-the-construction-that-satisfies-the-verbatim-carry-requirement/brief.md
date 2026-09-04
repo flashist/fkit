@@ -7,7 +7,7 @@
 Sprint 2
 
 ## Priority
-127
+128
 
 ## Status
 ✅ Done (agent-closed — not owner-verified)
@@ -179,3 +179,10 @@ The report must answer, each explicitly:
 - **Deliberately out of scope: build-phase logging → `0164`.** `0164` edits the Build row of the same
   `SKILL.md` this task's follow-up will edit. If both land, they coordinate on that file — but neither
   decision depends on the other.
+
+  > ⚠️ **Dated correction 2026-09-03 (`0193`, inside sweep `0356`) — the rank has drifted since the
+  > 2026-07-29 ruling.** This brief's `## Priority` field has been corrected **127 → 128** to match its
+  > board row, which binds. ⛔ **The two bullets above are LEFT BYTE-IDENTICAL and are not restated as
+  > current fact** — they are the record of what the owner ruled on 2026-07-29, and they were **true when
+  > written**. The drift to P128 happened **afterwards**, by an insertion above this row; `P127` is now
+  > held by `0150`. ⛔ Nothing was re-ranked by this correction.

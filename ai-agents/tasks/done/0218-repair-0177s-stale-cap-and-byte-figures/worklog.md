@@ -5,7 +5,7 @@
 
 **Date of work:** 2026-08-16.
 
-**Plan:** `ai-agents/tasks/backlog/0218-repair-0177s-stale-cap-and-byte-figures/plan.md`, approved by
+**Plan:** `ai-agents/tasks/done/0218-repair-0177s-stale-cap-and-byte-figures/plan.md`, approved by
 the owner via `AskUserQuestion` in that session, 2026-08-16, verbatim option label
 **"Approve (Recommended)"**. Open questions were ruled on in the same round — OQ1 (labelled-historical
 `4096`): **"Keep the one labelled mention (Recommended)"**; OQ2 (`0220`): **"Check 0220 after 0218

@@ -127,6 +127,43 @@ message of its own and cannot serve as the anchor.
 
 - **Depends on:** every other **open** Sprint 7 row — `0347`, `0352`, `0353`, `0354`, `0237`, `0176`,
   `0356`, `0357`, `0358`, `0359`, `0361`. ⛔ **Hard: this row archives the board, so it runs last.**
+  - ⛔ **`0369` (`P14`) REMOVED 2026-09-04 — it is DONE and is no longer a row this one waits on.**
+    Owner ruling **K6**, 2026-09-04, live `AskUserQuestion`, option label verbatim
+    **"Remove 0369 from the list (Rec)."**; relayed to a spawned `fkit-producer` with no owner channel
+    ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+    which had **declined to make this edit on its own authority** — `/fkit-task-done` gives no authority
+    over an ID reference, and both prior corrections to this field were made under a live ruling.
+    ⚠️ **Corrected in the field rather than annotated below, for the same reason the `0369` addition
+    and the `0361` and `0355` corrections were: this is a machine-parsed field** — `dashboard.sh`
+    derives the board's `Next step` from it, and ⛔ **a stale name renders a false `ready`**, which a
+    note underneath does not fix. ⛔ **No other name in the list changed**, and ⛔ **nothing was
+    re-ranked** ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)).
+    `0369` was closed by a spawned `fkit-producer`, so its board marker carries
+    `(agent-closed — not owner-verified)` (ADR-033 §5). The full record lives in
+    [`sprint-7.md`](../../../sprints/sprint-7.md) §"⛔ Addendum — `P14` (`0369`) DONE, removed from
+    `0360`'s `Depends on`".
+    - ⭐ **This SUPERSEDES the `0369` ADDED sub-bullet below**, which is left **byte-identical** as the
+      frozen record of what was done on the day the row was pulled onto the board. ⚠️ Its sentence
+      *"this row waits on it too"* was true when written and is **no longer true**; read it as history,
+      not as the current dependency set.
+    - ⚠️ **The asymmetry with `0355` is recorded, not flattened.** `0355` was **CANCELLED**; `0369` is
+      **DONE**. ⭐ **The distinction does not change this field**, because the constraint it serves is
+      *"Do not archive while any Sprint 7 row is **open**"* — and **cancelled and done are both
+      closed**, so neither is a row this one waits on. ⛔ **But it is not nothing to the archival
+      banner**, which must still account for both: `P12` archives a board holding **one cancelled row
+      and eight done ones**, and ⭐ **a done row and a cancelled row are not the same fact to report.**
+  - ⛔ **`0369` (`P14`) ADDED 2026-09-04 — a fourteenth row was pulled onto the board and this row
+    waits on it too.** Owner ruling 2026-09-04, live `AskUserQuestion`, option label verbatim
+    **"Pull 0369 onto Sprint 7 (Rec)"**; relayed to a spawned `fkit-producer` with no owner channel.
+    ⚠️ **Corrected in the field rather than annotated below, for the same reason the `0361` and `0355`
+    corrections were: this is a machine-parsed field** — `dashboard.sh` derives the board's
+    `Next step` from it, and a missing name renders a false `ready`. ⛔ **`0369` was APPENDED at `P14`
+    under ADR-035, not inserted at merit position, and nothing was re-ranked** — so once again the
+    rank cannot carry the order and ⭐ **this dependency line is what carries it.** ⛔ **No other name
+    in the list changed.** The full record lives in [`sprint-7.md`](../../../sprints/sprint-7.md)
+    §"⭐ Addendum — the FOURTEENTH row".
+    - ⛔ **The constraint *"Do not archive while any Sprint 7 row is open"* reaches `0369` too**, on
+      exactly the reasoning already recorded here for `0361`.
   - ⛔ **`0355` REMOVED 2026-08-30 — it was CANCELLED and is no longer a row this one waits on.**
     Owner ruling 2026-08-30, live `AskUserQuestion`, option label verbatim **"Cancel it (Rec)"**;
     executed by a spawned `fkit-producer`, so the board marker carries
