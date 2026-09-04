@@ -10,7 +10,7 @@ Sprint 7
 P9
 
 ## Status
-🔲 Backlog
+🔄 In progress
 
 ## Owner
 fkit-coder

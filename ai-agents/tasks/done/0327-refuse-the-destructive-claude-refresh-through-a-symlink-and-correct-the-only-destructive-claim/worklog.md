@@ -5,6 +5,13 @@ on the driver's declared-approval marker. `plan.md` (blob `7b6c5b8dd812211e27dd9
 30447 bytes, verified against disk before the first edit) **is the autonomy boundary**.
 Implemented against `HEAD` = `c45ec3d`; `claude/` re-measured clean before the first edit.
 
+- **Corrections:** 2026-09-04 (`0335`, inside sweep `0357`) — this worklog carries **two** dated ⚠️
+  notes inline, one per subject: **A** at the Owner-decision log's accepted-consequence bullet (the
+  *"`ls` … dereferences"* parenthetical), and **B** under *"Two refinements this round adds"* (the
+  *"trips the **hard** fail-safe … No silent success in any shape"* item). Marker legend:
+  **⚠️ = a fact that drifted**; **⛔ = a decision that was overturned** — both notes are ⚠️, no existing
+  line was edited, and **no ruling is reopened**.
+
 ## Owner-decision log
 
 - **Plan gate (2026-08-24, `AskUserQuestion` in the driver session):** approved —
@@ -17,6 +24,29 @@ Implemented against `HEAD` = `c45ec3d`; `claude/` re-measured clean before the f
   rather than fkit's. **Nothing is destroyed, which is the point.** The launcher's own symlink-blind
   fail-safe (`fkit-claude.sh`'s `ls .claude/agents/fkit-*.md` dereferences) is **not** repaired here and
   remains a live, unowned observation.
+
+  > ⚠️ **Dated correction 2026-09-04 (`0335`, inside sweep `0357`) — the parenthetical mechanism above
+  > is wrong; the conclusion around it is right.** The bullet is **left byte-identical**.
+  >
+  > **`ls` does not dereference here — the shell glob escapes before `ls` is reached.** The guard reads:
+  >
+  > ```sh
+  > if [ "$setup_ok" = 0 ] && ! ls "$proj"/.claude/agents/fkit-*.md >/dev/null 2>&1; then
+  > ```
+  >
+  > The pattern is **expanded by the shell first**, and pathname expansion **traverses symlinked
+  > directories**. With `.claude` symlinked outside the project the glob resolves to the escaped copies
+  > and hands `ls` a real existing path, so the guard is skipped. ⛔ **An `ls`-only fix cannot close
+  > this** — measured 2026-09-04, a **dereferencing** `ls -L` on that same case **still exits 0** and the
+  > guard is **still skipped**.
+  >
+  > **A second shape, not mentioned anywhere in this folder: a DANGLING symlink passes too.** The name
+  > matches the glob via a directory read, and plain `ls` on a broken link exits **0**. Measured
+  > 2026-09-04: plain `ls` **rc=0**, `ls -L` **rc=1**. ⭐ **Name existence alone satisfies the guard.**
+  >
+  > **The corrected mechanism lives durably in task `0334`**, which owns the launcher-side fix. The
+  > observation is therefore no longer *unowned*. ⛔ **No ruling of `0327` is reopened and no status
+  > changes.**
 - **Fixes applied unattended, without asking (ADR-019 audit obligation):** `none`. Every step came
   straight from the approved plan; no review round ran in this spawn.
 - **Obvious-winner calls made unattended:** **one**, recorded below.
@@ -362,6 +392,40 @@ ran normally. Coordinates verified: rationale at **`:574`**, function at **`:578
    **`:372`** and the session **starts with a partial skill set**. ⭐ The worst shape is also the
    **loudest** — the wipe is exactly what makes the `ls` fail. **No silent success in any shape**, so
    `low` stands.
+
+   > ⚠️ **Dated correction 2026-09-04 (`0335`, inside sweep `0357`) — the agents shape does NOT trip the
+   > hard fail-safe, there is no `exit 1`, and *"No silent success in any shape"* is false.** The item is
+   > **left byte-identical**.
+   >
+   > **What actually happens with a wrong-type squatter — a real *directory* at
+   > `.claude/agents/fkit-<x>.md` — measured first-hand 2026-09-04 in a throwaway tree** (the launcher
+   > was never executed; the guard expression was evaluated in isolation):
+   >
+   > The squatter **survives the failed `rm -f`** — `rm` refuses it with *"is a directory"* and returns
+   > **rc=1** — while every real `fkit-*.md` agent file has already been deleted (**7 → 0** in the
+   > measurement; the user's own unrelated file survived). The squatter's **name** still satisfies
+   > `"$proj"/.claude/agents/fkit-*.md`, so the glob expands to a real existing path and `ls` exits
+   > **0**. The guard's `! ls …` condition is therefore **false**: the no-agents fail-safe is
+   > **SKIPPED**, and **there is no `exit 1`**. The launcher proceeds and the session **starts with zero
+   > readable fkit agent files** — then dies on Claude Code's own *"agent not found"*, which is exactly
+   > the message the guard's own comment says it prevents. ⭐ **So there IS a silent-success shape.** A
+   > control run on a genuinely empty `agents/` directory showed the guard **firing correctly**, so the
+   > guard is not broken in general — **the surviving squatter defeats it.**
+   >
+   > ⚠️ **State the silence precisely.** The run is **not** output-free: init's `rc=1` sets
+   > `setup_ok=0`, so the **generic** warning *"⚠ fkit could not finish setting up this project."* does
+   > print. What is silent is **the no-agents condition specifically** — the one guard written to catch
+   > *"no fkit agent was ever written to disk"* never fires. ⛔ **This note does not claim the launcher
+   > prints nothing.**
+   >
+   > ⛔ **This does NOT reopen `0327`'s R6 ruling.** R6's re-raise condition is *"or to fail **silently**
+   > (no `rc=1`, no launcher warning)"* — and that condition is **NOT met**: init does return `rc=1` and
+   > the launcher does print the generic warning. **The R6 residual stays settled**, its `low` severity
+   > stands, and task `0336` stays as filed. ⭐ **This corrects the residual's stated EVIDENCE, not its
+   > RULING.**
+   >
+   > **Where the corrected mechanism lives durably:** task `0334` (the launcher-side fix, covering all
+   > three triggers) and task `0336` (the wrong-type-squatter defect itself).
 2. **R7's path line must not simply be re-pointed.** ⛔ **One message block at `:606-612` serves two
    triggers**, and the path is **correct** for the other one — when `.claude/skills` **itself** is the
    symlink, `$dest/.claude/skills` **is** the offending path. A one-line fix would **break the case that

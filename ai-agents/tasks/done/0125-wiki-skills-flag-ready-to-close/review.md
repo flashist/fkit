@@ -114,6 +114,51 @@ negative control firing. No fix in this round broke another check: 1, 2, 3, 5, 6
   What actually closes it: the already-named `test/wiki-flag-convention.test.js` follow-up, for the
   producer to file. · Re-raise only if: that follow-up is dropped, or a third party relies on check 4 as
   a gate rather than as a one-shot aid. *New disposition, made in this review (R3, SUBSUME).*
+
+  > ⚠️ **Dated discharge note 2026-09-04 (`0350`, inside sweep `0357`) — R3's subject matter is
+  > DISCHARGED. The residual bullet above is left byte-identical.**
+  >
+  > **(a) What discharged it.** The follow-up this residual named — *"the already-named
+  > `test/wiki-flag-convention.test.js` follow-up, for the producer to file"* — was filed, built,
+  > reviewed over two rounds, and **closed as task `0154`** (`✅ Done (agent-closed — not
+  > owner-verified)`). Verified on disk **2026-09-04**.
+  >
+  > **(b) Which mechanism discharges which half**, re-verified first-hand 2026-09-04 rather than taken
+  > on the task's word:
+  >
+  > - *"`sed 's/^ *//'` erases relative nesting, so a broken list-item indent is invisible to it"* →
+  >   `dedent()` computes a **single uniform minimum** across the block's non-blank lines and slices
+  >   that from every line — never a per-line strip, so relative nesting survives. **T8** proves a broken
+  >   nested indent is rejected, **and carries a control** asserting that a blanket per-line strip would
+  >   be blind to exactly that bug. **T9** proves a whole-block uniform shift still passes, so the fix
+  >   does not over-pin.
+  > - *"`diff && diff && echo UNIFORM` still prints `UNIFORM` on an empty extraction"* → `extractBlock()`
+  >   **throws** rather than returning empty — **six** `throw new Error` exits, covering a missing START
+  >   anchor, a missing END anchor, duplicated anchors, reversed anchors and a sub-floor extraction.
+  >   **T6** pins the fail-closed behaviour. **Mutation 28** in `test/prove-red.sh` keeps the uniformity
+  >   assertion permanently exercised.
+  >
+  > **(c) ⛔ CHECK 4 ITSELF IS UNCHANGED AND STILL FAIL-OPEN IN SHAPE — DELIBERATELY.** What is
+  > discharged is the residual's **subject matter**: the two fail-open behaviours now have a real,
+  > committed gate. ⛔ **Check 4's own shell text is NOT discharged and nobody promised to harden it.**
+  > The owner's ruling of **2026-07-27 (SUBSUME)** — *"a real test beats a better one-shot grep"* —
+  > **stands**, and that ruling **named `test/wiki-flag-convention.test.js` as what closes this**.
+  > ⛔ **Check 4 is not to be re-raised or hardened, and no task is to be filed to fix it.** This note is
+  > not a promise to.
+  >
+  > **(d) The `Re-raise only if` field is now half spent, not dead.** Its first arm — *"that follow-up is
+  > dropped"* — **can no longer fire**: the follow-up was not dropped, it shipped. ⭐ **Its second arm
+  > stays LIVE**: *"or a third party relies on check 4 as a gate rather than as a one-shot aid."* ⛔ The
+  > residual is **not** declared dead outright.
+  >
+  > **(e) Authority.** This note is written under task `0350`, on the owner's ruling of **2026-08-28**,
+  > given live via `AskUserQuestion` — verbatim option label **"File a task to append a dated discharge
+  > note, gated on R1 (Recommended)"**. The R1 gate that ruling named is **satisfied**, so this note
+  > carries no exception clause.
+  >
+  > **Why ⚠️ and not ⛔.** Nothing was overturned — the 2026-07-27 SUBSUME ruling stands and was carried
+  > out. A defect was discharged. ⛔ **`0125` is not reopened, not re-statused and not moved by this
+  > note.**
 - **Extra-hop laundering (a doer spawns a producer to close)** — What: ADR-033 does not prevent it and says
   so. · Why (structural): ADR-033 §"The limit", owner-chosen knowingly. · Re-raise only if: it *"proves to
   matter in practice"* — then reopen ADR-033, do not patch the mover. **R5 does not re-raise this**; R5 is

@@ -41,7 +41,10 @@ task leaves the board.** The driver's autonomy is narrower than ADR-032 first sp
 loop is **session-only and refuses a spawned invocation** (`fkit-task-ship-loop/SKILL.md:8-18`); it also
 could not reach the owner from a spawn (ADR-021). So this loop is a **new driver** that reuses the task
 loop's shape (stateful review, verify budget, degraded-run conservatism), never its session-bound
-machinery. `fkit-task-ship-loop` stays **byte-unchanged.**
+machinery. **Introducing this driver required no edit to `fkit-task-ship-loop` at all** — ADR-032's own
+ripple left that file alone, which is the design property this sentence exists to record. ⚠️ **That is a
+statement about ADR-032's ripple, not a claim that the file is frozen:** ADR-033 §Decision 3 has since
+rewritten its close step, for reasons unrelated to this loop.
 
 **Argument:** `$ARGUMENTS` — a sprint plan path (e.g. `ai-agents/sprints/sprint-2.md`); **empty = the
 active sprint, as `/fkit-status` resolves it** — see `fkit-status/SKILL.md`'s empty-argument rule.
@@ -362,7 +365,9 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 ## Hard rules
 - **Session-only.** Refuse a spawned/headless invocation — you cannot reach the owner from a spawn.
 - **Never invoke `fkit-task-ship-loop`** — it refuses a spawned invocation and is session-only; reuse its
-  *shape* only. It stays byte-unchanged.
+  *shape* only. **Introducing this driver required no edit to it** — that was ADR-032's ripple, and it is
+  the reason the shape could be reused. ⚠️ **It is not frozen:** ADR-033 §Decision 3 has since rewritten
+  its close step. **The never-invoke rule above is unaffected and still binding.**
 - **The driver delegates, never substitutes.** Spawn typed `fkit-<role>` workers for all real work; the
   driver **never writes source and never reviews.** A driver that reviews or designs "just this once"
   breaks the separation-of-authority thesis (ADR-031 Decision 2).

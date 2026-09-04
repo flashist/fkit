@@ -89,7 +89,7 @@ repair.sh — SOUND: synthesis must know root-context vs reference class; "not u
 would encode an unpromised assumption; the apply→re-check-conforming bridge fixture guards both
 duplications behaviorally. (4) CRLF freshness fixture — precise: hits `changed-since-propose`
 without the eligibility gate masking it. (5) NUL schema.md consequence — stated, vocabulary
-unchanged. (6) ` ` escapes in fixtures — good hygiene.
+unchanged. (6) `\0` escapes in fixtures — good hygiene.
 
 ## Coder response
 

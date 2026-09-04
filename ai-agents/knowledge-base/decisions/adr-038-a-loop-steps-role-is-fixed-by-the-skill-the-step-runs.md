@@ -7,6 +7,14 @@
   closed 2026-08-05); recorded by the architect under task `0222` on a named owner ruling of
   2026-08-05 (*"authorize a producer follow-up to file ADR-038"*), plan approved via
   `AskUserQuestion` in the live lead session 2026-08-06.
+- **Corrections:** 2026-09-04 (`0346`, inside sweep `0357`) — this ADR carries **one** dated note
+  inline, at **§Consequences**, below the first bullet's clause *"their roles come from the loop's
+  enumerated step table, not from this lookup"*. It records that the clause stopped describing the
+  **Build** step once ADR-044 §Decision 1 stood. ⛔ **Scoped to Build**: **Verify** is unchanged and
+  stays table-fixed, and the **Plan** step is out of the note's scope — its departure is recorded in
+  ADR-044 §Decision 2 / §C4 instead. Marker legend: **⚠️ = a fact that drifted** (the decision is
+  untouched); **⛔ = a decision that was overturned** (do not follow it). No existing line of this ADR
+  was edited; the note is an append, and the Status stays `accepted`.
 
 ## Context
 
@@ -90,6 +98,44 @@ row's "apply … method" construction stays. This ADR cites those decisions and 
   Verify) run no skill; their roles come from the loop's enumerated step table, not from this
   lookup. And the rejection of (b) is on the record, so the next architect-authored deliverable
   does not re-open the argument.
+
+  > ⚠️ **Dated correction 2026-09-04 (`0346`, inside sweep `0357`) — the clause *"their roles come from
+  > the loop's enumerated step table, not from this lookup"* no longer describes the BUILD step.** The
+  > bullet above is **left byte-identical** as the record of what was decided on 2026-08-06.
+  >
+  > ⭐ **This is a drift note, not a reversal.** ADR-038's decision — *a loop step's role is fixed by the
+  > skill the step runs* — **stands**. ⛔ **ADR-038 is not amended and not superseded.**
+  > [ADR-044](adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md) is its
+  > **companion**, and says so in those terms.
+  >
+  > **What changed, and only this.** ADR-044 **§Decision 1** makes the **Build** role come from the
+  > **owner, in `skills_for_role()`, of the skill that produces the deliverable** — with a deliverable
+  > naming no skill falling to the coder. So Build's role is now derived from the deliverable's producing
+  > skill rather than read off the loop's enumerated step table.
+  >
+  > ⛔ **VERIFY IS EXPLICITLY EXCLUDED AND IS UNCHANGED.** Verify still takes its role from the loop's
+  > enumerated step table, exactly as the bullet above says. ADR-044 §C2 (ii) states it in terms:
+  > *"Verify is untouched and stays table-fixed."* This is stated rather than left to inference.
+  >
+  > ⛔ **THE PLAN STEP IS EXPLICITLY OUT OF THIS NOTE'S SCOPE, and this note neither annotates, corrects
+  > nor extends ADR-038 with respect to it.** Plan's departure is recorded **elsewhere** — in ADR-044
+  > **§Decision 2 / §C4**, as an owner-ruled scoped exception (ruling ND3, 2026-08-27), bounded to the
+  > Plan step on non-coder rows in `/fkit-sprint-ship-loop`. ADR-044 says twice that the C2 (ii)
+  > correction note is **not** widened to cover Plan. **That instruction is honoured here.**
+  >
+  > ⭐ **The *"Build and Verify run no skill"* half is STILL TRUE and is NOT the corrected claim** —
+  > stated explicitly so a later reader does not annotate it by mistake. The loop's Build cell names no
+  > skill. What moved is where Build's **role** comes from, not whether the step runs a skill.
+  >
+  > ⚠️ **Tense, measured rather than assumed.** ADR-044 §Decision 1 governs Build's role from that ADR's
+  > acceptance (2026-08-27) — but it has **not yet been carried into the loop's own text**. Measured
+  > **2026-09-04**: `claude/skills/fkit-sprint-ship-loop/SKILL.md` contains **zero** occurrences of
+  > "ADR-044", and its Build cell still reads `@fkit-coder`. ADR-044's C2 (i) implementation follow-on is
+  > **unshipped**. ⛔ **Do not read this note as saying the step table already carries the new rule** — it
+  > does not; the *decision* moved and the *text* has not caught up.
+  >
+  > **Why ⚠️ and not ⛔.** ⛔ tells a reader to stop following a decision. Nothing here was overturned; a
+  > consequence bullet stopped describing one of the two steps it named.
 - **Implementation follow-ups are separate, already-filed tasks** (measured on disk 2026-08-06, all
   six filed): `0223` (row enumeration + reason — the one task depending on this ADR, and only for
   its reason clause), `0224` (the paired misroute detector), `0225` (loop-table row↔ownership

@@ -11,6 +11,26 @@ per the owner's "Accept both reds as-is" ruling. `0264` restores both gates.)
 **Reviewers this round:** fkit-reviewer (own pass) + Codex `gpt-5.6-sol` via `codex exec
 --sandbox read-only`. **Both ran. Coverage is FULL — no reviewer skipped, no degradation.**
 
+> ⚠️ **Dated correction 2026-09-04 (`0274`, inside sweep `0357`) — the coverage claim above overstates
+> what happened.** The sentence is **left byte-identical**: it is the record of what was claimed, and
+> [ADR-042](../../../knowledge-base/decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so.md)
+> quotes it at this location as its own evidence.
+>
+> **What it corrects.** *"Coverage is FULL"* was written on the old **binary** coverage vocabulary
+> (full / partial). Under ADR-042's three-state vocabulary — as landed by task `0272` — this pass reads
+> **reasoning-only second opinion**: Codex ran and reasoned, but its `--sandbox read-only` flag blocks
+> `mkdtemp`, so **it measured nothing**. ⭐ **All execution evidence in this review is the Claude
+> reviewer's.**
+>
+> ⛔ **The note does NOT say the review was deficient or its findings unsound.** ADR-042 D1 §2 is
+> explicit that reasoning-only is the **normal, expected** state under the current sandbox, not a
+> degradation, and that static reasoning finds real defects. ⭐ **The claim was wrong; the review was
+> not.**
+>
+> ⛔ **Nothing else in this ledger changes** — not the verdict, not the findings table, not the
+> residuals, not `Status:`. This review is **not reopened**, no round is added, and `0259`'s task status
+> is untouched.
+
 **⛔ Owner-ruled context, not re-litigated here:** a RED suite is the accepted deliverable of `0259`
 (owner ruling 2026-08-11, option label verbatim *"Accept both reds as-is"*), and the plan — including
 §6.1's call that `drift unresolved-plan-sprint` rides the failing assertion's message rather than a

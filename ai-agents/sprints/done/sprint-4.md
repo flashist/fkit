@@ -51,8 +51,12 @@
 >
 > **Why it was archived.** The board was drained — **8 done · 0 cancelled · 0 moved · 0 open**. A
 > plain close, not a rollover: no open row moved anywhere, and not one `P<n>` was renumbered.
-> Archiving it before [Sprint 5](sprint-5.md) opens is what keeps exactly **one** `sprint-*.md` in
-> `/fkit-status`'s active-sprint glob. That matters more than usual here: two active boards is the
+> Archiving it before [Sprint 5](sprint-5.md) opens is what keeps exactly **one** `sprint-*.md`
+> eligible as the active sprint. *(Mechanism corrected 2026-09-04 per
+> [ADR-041](../../knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md):
+> `/fkit-status` selects by each plan's **resolved identity**, not by a `sprint-*.md` filename glob, and
+> an archived plan's identity is no longer eligible. The count above is the archival's own record and is
+> unchanged.)* That matters more than usual here: two active boards is the
 > same ambiguity class this board's own banner flagged about Sprint 3, **and it is the exact class of
 > defect Sprint 5 exists to fix.**
 >
@@ -103,9 +107,12 @@
 > **✅ DISCHARGED same day, 2026-08-07 — the owner ruled and the archival is executed.** The ⚠️
 > paragraph above is left byte-identical as history; it no longer describes reality. Sprint 3 now
 > sits at [`sprints/done/sprint-3.md`](sprint-3.md) with a `🔒 CLOSED` banner, exactly one
-> `sprint-*.md` (this board) matches the `/fkit-status` glob, and the active-sprint resolution is
-> unambiguous. Ruling and execution recorded in §"Open questions for the owner", question 1's
-> answer block.
+> `sprint-*.md` (this board) is eligible as the active sprint, and the active-sprint resolution is
+> unambiguous. *(Mechanism corrected 2026-09-04 per
+> [ADR-041](../../knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md):
+> eligibility is decided by each plan's **resolved identity**, not by matching a `/fkit-status` filename
+> glob. The count above is left unchanged.)* Ruling and execution recorded in §"Open questions for the
+> owner", question 1's answer block.
 
 **Goal:** Ship the use-ready fkit: the post-update structure check and its consent-gated self-heal
 path, per the `0241` design (owner-ruled 2026-08-06) — spec, manifest, check, repair, launch notice,

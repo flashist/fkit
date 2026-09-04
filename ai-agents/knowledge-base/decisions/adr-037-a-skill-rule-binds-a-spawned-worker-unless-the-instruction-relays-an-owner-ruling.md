@@ -15,6 +15,14 @@
     or also the driver?* → **"Bind both."** (the architect's recommendation).
   - **2026-08-02, `AskUserQuestion`, same session:** the plan this ADR executes was approved
     ("Approve as planned").
+- **Corrections:** 2026-09-04 (`0205`, inside sweep `0357`) — this ADR carries **one** dated note
+  inline, at the **end of §5 Enforcement**, below the *"none is possible"* claim. It records that the
+  claim is **narrowed, not reversed**: a *carry-fidelity proxy* for condition (b) is mechanically
+  checked driver-side today, while (a), (c) and **(b) as written** stay unverifiable. Marker legend:
+  **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned**
+  (do not follow it). No existing line of this ADR was edited; the note is an append, and the Status
+  stays `accepted`. ⛔ **§5's adjacent *"only that the clauses exist in their files"* sentence is
+  narrowed by the same fact and is deliberately NOT repaired — reported as a residual inside the note.**
 
 > **Citation form (task `0160`'s ruling, applied as ADR-035 applies it).** Every rule inside a mutable
 > skill or agent file is anchored by its **step heading plus its quoted text**; line numbers appear only
@@ -259,6 +267,63 @@ guarantee"* — and this ADR inherits it deliberately rather than inventing a we
 test. **It is named and not required here:** it would assert that the words are on disk, not that any
 worker obeyed them, and a green test asserting the former reads like the latter. If the follow-up brief
 wants it, it should be filed as a parity check, not as enforcement.
+
+> ⚠️ **Dated correction 2026-09-04 (`0205`, inside sweep `0357`) — §5's *"none is possible"* is too
+> strong, and ONLY about a proxy.** Every line of §5 above is **left byte-identical** as the record of
+> what was decided on 2026-08-02. ⛔ **This is a NARROWING, not a reversal. No decision in this ADR
+> moves.**
+>
+> **What still holds, stated first because it is most of the claim.** *"None is possible"* holds for
+> **condition (a)**, for **condition (c)**, and for **condition (b) as written**. Condition (b) reads
+> *"it carries a concrete **approved** plan verbatim"* — and **(b) asserts that the plan was
+> *approved***. ⛔ **No hook reaches approval**, which lives in a session channel that leaves no
+> artifact (ADR-021).
+>
+> **What it does not hold for is a *carry-fidelity proxy for (b)*** — a strictly weaker proposition:
+> *the spawn prompt contains the bytes of the file at path P whose git blob id is H, as named by the
+> prompt's own pointer line*. **That proxy is mechanically checked today, driver-side**, by the
+> `PreToolUse` carry-check hook registered on the `Agent|Task` matcher — verified against live code
+> **2026-09-04** (`claude/carry-check-hook.sh` / `.mjs`, registered by `build_settings()`).
+>
+> ⛔ **The proxy is not condition (b), and this note does not say it is.** The hook says so about
+> itself, in its own header: *"a carry-fidelity PROXY for the coder's condition (b), NEVER (b)
+> ITSELF"*, and *"It can NEVER establish that P is what the owner approved."* ⚠️ **A green check does
+> not mean the marker held** — conditions (a) and (c) remain forgeable prose, and **the conjunctive
+> marker is only as strong as its weakest signal.**
+>
+> **Four limits, each of them the hook's own statement about itself. Present tense without these
+> overstates:**
+>
+> - **Launcher sessions only.** The hook is written into the per-role settings file that `fkit <role>`
+>   loads. **A spawned or non-launcher session is not covered**; ⛔ do not present it as universal.
+> - **Time-of-check only.** The plan file is read once, at spawn. It may be rewritten between that read
+>   and the worker's use of the carried text, so the check speaks to what the prompt **contained**, never
+>   to what the worker **received**.
+> - **Fail-open.** Infrastructure faults allow, with one loud stderr line. An infra fault degrades the
+>   proxy to nothing — silently to the model, loudly only to a human.
+> - **The ungated limit.** ⚠️ **The trigger is the pointer line alone** (owner ruling, 2026-08-25) — not
+>   the subagent type, not the caller string. **A spawn that omits the pointer entirely is invisible to
+>   the hook and passes ungated.**
+>
+> **The pre-registered re-raise trigger has NOT fired.** That trigger asks for *"a cross-context
+> verification token"* becoming available in the harness. ⛔ **A file on disk is not one** — and the
+> load-bearing reason is **provenance, not medium**: the plan file is written by the **driver**, the
+> same party whose claim is in doubt, so it attests nothing that party could not produce itself. **The
+> hook checks fidelity of carry; it never checks provenance of approval.**
+>
+> ⛔ **This note re-raises none of the three fenced items** — that this is **unenforced prose**, that
+> **the marker is forgeable**, or that **a skill rule should have been marked undisplaceable**. All
+> three were weighed and priced here, and the third is a direct owner ruling of 2026-08-02.
+>
+> ⚠️ **One adjacent fragment in this same section is narrowed by the identical fact and is deliberately
+> NOT repaired by this note** — the sentence beginning *"What **is** mechanically checkable is **only**
+> that the clauses exist in their files"*. Its *"only"* has the same exception as *"none is possible"*.
+> ⛔ **Reported as an unrepaired residual, outside this note's owner-ruled scope** — recorded so the
+> two sentences cannot be read as contradicting each other by accident.
+>
+> **Why ⚠️ and not ⛔.** ADR-037's decision — that a skill rule binds a spawned worker unless the
+> instruction relays a named owner ruling — is untouched. A supporting claim about what is *possible*
+> was narrowed by an implementation that arrived later.
 
 **The audit obligation of clause 2 is the substitute for enforcement**, and it is the only one on
 offer: it does not stop a bad override, it makes one findable afterwards.

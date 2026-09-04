@@ -4,6 +4,16 @@ Task: `ai-agents/tasks/done/0327-refuse-the-destructive-claude-refresh-through-a
 File(s) under review: working tree vs `HEAD` (`c45ec3d`) — `claude/fkit-claude-init.sh`, `claude/orphan-targets`,
 `test/init-claude-refresh-guard.test.js` (new), `test/orphan-cleanup.test.js`, `test/init-intake-guard.test.js`
 Status: closed-out
+- **Corrections:** 2026-09-04 (`0335`, inside sweep `0357`) — this ledger carries a third-party
+  **`## Corrections (record repair — task 0335)`** section at the END of the file, added under the owner
+  ruling of 2026-08-24 (verbatim label *"New third-party Corrections section (Recommended)"*). It holds
+  **four** dated ⚠️ notes across **two separate subjects**: **A** — `## Reviewer findings`' *"`ls` …
+  **dereferences**"* mechanism (site A4); **B** — the *"trips the **hard** fail-safe / exit 1 / no silent
+  success"* claim at three sites, in `## Coder response` (B1), `## Accepted residuals` (B2) and
+  `## Reviewer findings` (B3, narrowed — only half of it is false). ⛔ **All three party sections are
+  byte-identical; nothing was written inside them.** Marker legend: **⚠️ = a fact that drifted**;
+  **⛔ = a decision that was overturned** — every note here is ⚠️, and **no ruling of `0327` is
+  reopened**, in particular not Q1(a) and not R6's.
 
 ---
 
@@ -513,3 +523,137 @@ section, **not** a second one. Nothing above was rewritten, reworded or dropped.
 - **Exit status unchanged on a §3 refusal** — owner ruling **Q1(a)**, with the accepted consequence that a
   **fresh** project with a symlinked `.claude` fails at session start with Claude Code's own *"agent not
   found"* rather than fkit's. Re-raise only with a **new** consequence.
+
+## Corrections (record repair — task `0335`)
+
+⚠️ **Third-party section, added 2026-09-04 by task `0335` under owner ruling of 2026-08-24 — verbatim
+option label "New third-party Corrections section (Recommended)".** This ledger has three party
+sections — `## Reviewer findings` (the reviewer's), `## Coder response` (the coder's) and
+`## Accepted residuals` (shared) — and `0335`'s owner is party to none of them. ⛔ **All three party
+sections above are left byte-identical**; every note that would otherwise sit below its claim sits here
+instead. That departure from the form's below-the-claim placement is deliberate: the section-ownership
+rule and the placement rule genuinely conflict, and ownership was judged the harder constraint — a role
+writing inside another role's ledger section corrupts the round-trip protocol, while the placement
+rule's purpose (warning the reader first) is served by the `- **Corrections:**` header bullet.
+
+**Marker legend:** **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
+overturned** (do not follow it). Every note below is **⚠️** — ⛔ **nothing in `0327` was overturned, no
+ruling is reopened (in particular not Q1(a) and not R6's), no finding is added, and no `## Status`
+changes.**
+
+⚠️ **Two SEPARATE subjects. No note here covers both.** Subject **A** is about **symlinks**; subject
+**B** is about a **real directory squatter** and needs no symlink at all.
+
+### Subject A — "the escape happens because `ls` dereferences"
+
+**A4 · `## Reviewer findings`**, the bullet beginning *"**Confirmed recorded, not re-litigated:**"*,
+whose mechanism clause reads *"the launcher's fail-safe `ls "$proj"/.claude/agents/fkit-*.md`
+**dereferences**, so a project that ran the buggy init once finds the escaped copies"*.
+
+⚠️ **The conclusion is right; the mechanism is wrong, and the difference decides where the fix goes.**
+The guard is this line — anchored on the line itself, not a number, because the number is not durable:
+
+```sh
+if [ "$setup_ok" = 0 ] && ! ls "$proj"/.claude/agents/fkit-*.md >/dev/null 2>&1; then
+```
+
+**The escape is the SHELL GLOB, not `ls`.** `"$proj"/.claude/agents/fkit-*.md` is **expanded by the
+shell before `ls` ever runs**, and pathname expansion **traverses symlinked directories**. With
+`.claude` (or `.claude/agents`) symlinked outside the project, the glob resolves to the escaped copies
+at the link target and hands `ls` a real, already-resolved, existing path — so the guard is skipped and
+the session starts reading agents from outside the project.
+
+⛔ **An `ls`-only fix cannot close this.** Measured first-hand 2026-09-04 in a throwaway tree: with
+`.claude` symlinked to an outside directory holding `agents/fkit-coder.md`, the guard is **skipped** and
+`realpath` confirms resolution outside the project — and a **dereferencing** `ls -L` on that same case
+**still exits 0**, leaving the guard **still skipped**. ⭐ **That is direct evidence the recorded
+explanation is not merely imprecise but actively misleading about where the fix must go.**
+
+🆕 **A second shape no record in this folder mentions: a DANGLING symlink also passes the guard.** An
+`.claude/agents/fkit-<role>.md` symlinked to a **non-existent** target still matches the glob (matching
+is by name, via a directory read), and plain `ls` on a broken link exits **0** because it does not
+dereference the final component. Measured 2026-09-04: plain `ls` **rc=0** (guard skipped), `ls -L`
+**rc=1**. ⭐ **The guard is satisfied by mere name existence.** Unlike the first shape, this one needs
+no buggy init to arise.
+
+**Where the corrected mechanism lives durably:** task `0334`, which owns the launcher-side fix.
+
+### Subject B — "it trips the hard fail-safe, exit 1, no silent success"
+
+⚠️ **All four subject-B notes below are owner-ruled in scope**, ratified 2026-08-24, verbatim option
+label **"Cover all four (Recommended)"**.
+
+**The corrected mechanism, stated once and positively.** With a **wrong-type squatter** — a real
+*directory* at `.claude/agents/fkit-<x>.md` — on an already-installed project, the squatter **survives
+the failed `rm -f`** (`rm` refuses it with *"is a directory"*, **rc=1**) while every real `fkit-*.md`
+agent file has already been deleted. The squatter's **name** still satisfies
+`"$proj"/.claude/agents/fkit-*.md`, so the glob expands to a real existing path and `ls` exits **0**.
+The guard's `! ls …` condition is therefore **false**: ⛔ **the fail-safe is SKIPPED, and there is no
+`exit 1`.** The launcher proceeds and the session **starts with zero readable fkit agent files** — then
+dies on Claude Code's own *"agent not found"*, precisely the message the guard's own comment says it
+prevents. ⭐ **So there IS a silent-success shape.**
+
+**Measured first-hand 2026-09-04** in a throwaway tree; the launcher was **never executed** and the
+guard expression was evaluated in isolation: real agents **7 → 0**, the user's own unrelated file
+**survived**, the squatter **survived**, the guard **SKIPPED** — and a **control** run on a genuinely
+empty `agents/` directory showed the guard **firing correctly**. ⭐ **The guard is not broken in general;
+the surviving squatter defeats it.**
+
+⚠️ **STATE THE SILENCE PRECISELY.** The run is **not** output-free: init's `rc=1` sets `setup_ok=0`, so
+the **generic** warning *"⚠ fkit could not finish setting up this project."* **does** print. What is
+silent is **the no-agents condition specifically** — the one guard written to catch *"no fkit agent was
+ever written to disk"* never fires. ⛔ **No note here claims the launcher prints nothing, that the run is
+silent, or that init returns `rc=0`.**
+
+⛔ **NONE of this reopens `0327`'s R6 ruling.** R6's re-raise condition is *"or to fail **silently** (no
+`rc=1`, no launcher warning)"* — and that condition is **NOT met**: init does return `rc=1`, and the
+launcher does print the generic warning. **The R6 residual stays settled, its `low` severity stands, and
+task `0336` stays as filed.** ⭐ **These notes correct the residual's stated EVIDENCE, not its RULING.**
+
+**B1 · `## Coder response` → R6, round 2** — the passage reading *"so it trips the launcher's **hard**
+fail-safe … **exit 1**. There is **no silent success** in any shape."*
+
+⚠️ **Dated 2026-09-04. The quoted passage is left byte-identical.** False for the agents shape: the claim rests on the agents wipe being *"precisely what makes
+`ls … fail"* — but a surviving squatter keeps the glob matching, so `ls` **succeeds** and the fail-safe
+never fires. See the corrected mechanism above.
+
+⚠️ **The ⚠️ note sitting immediately below that passage — the one beginning *"One disambiguation,
+offered as a refinement rather than a correction"* — is left byte-identical and is NOT itself a
+correction of this.** It says the **skills** shape does not reach the hard exit, which reaffirms the
+agents claim by contrast and so compounds the error rather than fixing it. Corrected here by reference.
+
+**B2 · `## Accepted residuals (shared, do-not-re-litigate)`** → the R6 residual, the clause reading
+*"`rc=1` reaches a `setup_ok`-gated branch in the launcher rather than a silent success — the agents
+shape trips the **hard** fail-safe … the skills shape the loud warning … with a **partial** skill set."*
+
+⚠️ **Dated 2026-09-04. The quoted clause is left byte-identical.** The agents half is false, for the reason above: the fail-safe is skipped and there is no `exit 1`.
+⭐ **This is the site that matters most** — task `0336` inherits this residual verbatim, and a planner
+who reads it prices the defect as loud and self-announcing when the measured behaviour is a session that
+starts with zero agents. **The residual's ruling, its `low` severity and its re-raise condition all
+stand** — only its stated evidence is corrected.
+
+**B3 · `## Reviewer findings`** → the R6 row, the clause reading *"routes to the launcher's own
+`setup_ok` fail-safe rather than a silent success"*.
+
+⚠️ **Dated 2026-09-04. The quoted clause is left byte-identical.** PARTIAL falsehood — narrowed deliberately, and the narrowing is owner-ruled. *"Routes to the
+launcher's own `setup_ok` fail-safe"* is **TRUE**: the generic `setup_ok`-gated warning does fire. ⛔
+**Only the *"rather than a silent success"* half fails** — the **no-agents** fail-safe is skipped, so a
+silent-success shape does exist. ⭐ **The rest of the row stands**, including its `low`-over-medium
+severity call, which this note does **not** re-litigate. ⛔ **A blanket note on B3 would replace one
+false claim with another.**
+
+### Sites deliberately NOT annotated
+
+⛔ Checked and left alone, because annotating them would inject a false correction:
+
+- `plan.md`'s lines stating that `mkdir -p`, `rm -f`, `rm -rf` and `cp`/`cp -R` **all dereference** —
+  ⭐ **a true statement about those commands**, unrelated to the `ls` guard.
+- The finding about the exit-status-unchanged ruling **Q1(a)** — its claim about `setup_ok = 0` gating
+  is correct.
+- `brief.md` in this folder — **re-grepped 2026-09-04 for both subjects: no occurrence of either stale
+  claim.** Confirmed by this run's own grep, not inherited.
+- `review.md`'s *"One disambiguation, offered as a refinement rather than a correction"* note and
+  `worklog.md`'s *"R7's path line must not simply be re-pointed"* — the first is corrected by reference
+  under B1; the second is about R7 and is unrelated.
+- The R6 residual's **re-raise condition** and its **`low` severity ruling** — both stand, both out of
+  scope.

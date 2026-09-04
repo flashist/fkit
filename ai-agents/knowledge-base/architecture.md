@@ -30,8 +30,14 @@ This repository **is the framework**. Its "source" is:
 There is no build step, no server, no database, and no runtime state outside files. There **is** a
 zero-dependency test suite (`node --test` + a hand-rolled mutation gate), and since task 0256 it runs
 **automatically** — GitHub Actions on every push to `main` and every pull request, plus a gate inside
-`npm run release` that refuses to release a red tree — see §9.1. ⚠️ **The CI half has never actually
-run**: the workflow is verified by review, not by a run. The release gate *has* been watched refusing
+`npm run release` that refuses to release a red tree — see §9.1. **Both halves have now been exercised.**
+Measured **2026-09-04** over the workflow's full run history: **33 runs on `ubuntu-latest`, 29 green and
+4 red**, the first on 2026-08-12 and the most recent on 2026-09-04; every one of them a **push to
+`main`** — the workflow also declares `pull_request` and `workflow_dispatch` triggers, but no run has
+been raised through either. ⚠️ **Those are counts on a date, not a standing guarantee** — CI is wired
+and exercised, not proven. The first red run was a **filesystem case-sensitivity** divergence in
+`test/orphan-cleanup.test.js` (macOS is case-insensitive, the runner is not), repaired by task `0283`;
+⛔ **it was not the dash divergence §9.1 predicted.** The release gate *has* been watched refusing
 a red tree.
 
 The product thesis (`ai-agents/knowledge-base/PROJECT.md` §"Domain & context", **Problem:**): AI coding assistants collapse

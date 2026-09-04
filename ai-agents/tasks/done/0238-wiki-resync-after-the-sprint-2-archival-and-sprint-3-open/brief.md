@@ -52,6 +52,26 @@ A vault re-sync that makes `ai-agents/wiki-vault/` describe the board reality as
 
 - Sprint 2 is **closed and archived** at `ai-agents/sprints/done/sprint-2.md`.
 - Sprint 3 is the **active** board at `ai-agents/sprints/sprint-3.md`, with its three rows.
+
+  > ⚠️ **Dated correction 2026-09-04 (`0318`, inside sweep `0357`) — this acceptance criterion names a
+  > board state that no longer exists, and satisfying it literally would write a falsehood.** The line
+  > above is **left byte-identical** as the record of what was accepted on 2026-08-06.
+  >
+  > **Re-measured on disk 2026-09-04:**
+  >
+  > - `ai-agents/sprints/sprint-3.md` **does not exist.** `ai-agents/sprints/` holds `backlog.md`,
+  >   `sprint-7.md`, `done/` and `reviews/`.
+  > - Sprint 3 is archived at `ai-agents/sprints/done/sprint-3.md`; it was archived **2026-08-07**.
+  > - The **active** board is **Sprint 7**, read from its own H1: *"# Sprint 7 — Stop manufacturing
+  >   record-repair rows: settle the reference-integrity condition, build the guards, sweep the class
+  >   once"*.
+  >
+  > ⭐ **So this criterion is unmeetable as written.** A vault asserting Sprint 3 is active would be
+  > asserting something false. That is the precise sense in which the acceptance was **overtaken, not
+  > met** — `0238`'s work was correct on its date; the criterion aged out from under it.
+  >
+  > **`0238` is not reopened, not re-statused and not moved by this note.** Its status stays as it
+  > landed, and this is an appended annotation only.
 - Any vault claim that names Sprint 2 as current, or points at the pre-archival path, is corrected or
   carries a dated correction — **whichever the vault's own conventions prescribe.** The wiki role owns
   that choice; this brief does not prescribe the form.
@@ -76,6 +96,20 @@ A vault re-sync that makes `ai-agents/wiki-vault/` describe the board reality as
    instance is named in the close report.** "Handled by convention" without a list is not verification.
 3. The vault names `ai-agents/sprints/done/sprint-2.md` and `ai-agents/sprints/sprint-3.md` at their
    real paths, and every re-pointed link resolves on the filesystem.
+
+   > ⚠️ **Dated correction 2026-09-04 (`0318`, inside sweep `0357`) — the second path in this step is no
+   > longer a real path, so the step is unmeetable as written.** The step is **left byte-identical** as
+   > the record of what was required on 2026-08-06.
+   >
+   > **Re-measured on disk 2026-09-04:** `ai-agents/sprints/sprint-3.md` **does not exist** — a listing
+   > of `ai-agents/sprints/` returns `backlog.md`, `sprint-7.md`, `done/` and `reviews/`. Sprint 3 was
+   > archived **2026-08-07** and its plan now sits at `ai-agents/sprints/done/sprint-3.md`. The active
+   > board today is **Sprint 7**.
+   >
+   > ⭐ **A vault pointing at `ai-agents/sprints/sprint-3.md` as a real path would now be pointing at
+   > nothing.** The first path in this step, `ai-agents/sprints/done/sprint-2.md`, is still correct.
+   >
+   > **`0238` is not reopened, not re-statused and not moved by this note.**
 4. `log.md` carries the sync entry.
 5. **`git diff --stat` touches `ai-agents/wiki-vault/` and nothing else.**
 6. `/fkit-wiki-lint` is clean, or every finding it raises is listed with a disposition.

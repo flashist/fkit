@@ -11,6 +11,14 @@
   (the two sprint-loop source-write carve-outs, recorded by task 0118), and
   [ADR-033](adr-033-task-movers-are-producer-only-reversing-adr-025.md) (Decision 3/5 close step — the
   driver spawns `@fkit-producer` to close and does **not** run the movers itself).
+- **Corrections:** 2026-09-04 (`0170`, inside sweep `0357`) — this ADR carries **one** dated note
+  inline, under **§Decision item 1**, and that single note covers **two** annotated sites: §Decision
+  item 1's closing sentence and the **§Consequences → Positive** bullet beginning *"`fkit-task-ship-loop`
+  and every role stay untouched"*. Marker legend: **⚠️ = a fact that drifted** (the decision is
+  untouched); **⛔ = a decision that was overturned** (do not follow it). No existing line of this ADR
+  was edited; the note is an append, and the Status stays `accepted`. ⛔ **§Amendment — 2026-07-22's
+  separate *"byte-unchanged"* claim about `fkit-process-stateful-review` is a DIFFERENT subject and is
+  deliberately not annotated.**
 - **Evidence:** [`reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md`](../reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md)
   §5 (the contract), §5.3 (the live-relay gate), §5.4 (stop conditions).
 
@@ -37,6 +45,50 @@ its first named application: a loop that ships a whole sprint. Two constraints s
 1. **`fkit-sprint-ship-loop` is a new skill owned by `lead`** (`skills-for-role.sh:37` gains it; the
    ADR-018 hook then allows lead and denies every other role). It **does not invoke**
    `fkit-task-ship-loop`, which stays byte-unchanged and session-only.
+
+   > ⚠️ **Dated correction 2026-09-04 (`0170`, inside sweep `0357`) — the *"byte-unchanged"* half of
+   > the sentence above is false, and it is false at a second site in this ADR too.** Both passages are
+   > **left byte-identical** as the record of what was decided on 2026-07-22. ⛔ **Nothing here reopens a
+   > decision** — this is a drifted fact, not an overturned ruling.
+   >
+   > **The two sites this one note covers** — anchored by heading and quoted phrase, because both files
+   > involved are actively edited:
+   >
+   > - **`## Decision` item 1** (immediately above): *"It **does not invoke** `fkit-task-ship-loop`,
+   >   which stays byte-unchanged and session-only."*
+   > - **`## Consequences` → Positive**, the bullet reading: *"`fkit-task-ship-loop` and every role stay
+   >   untouched; the change is additive and opt-in by name."*
+   >
+   > **What falsified them.**
+   > [ADR-033](adr-033-task-movers-are-producer-only-reversing-adr-025.md) **§Decision 3** rewrote
+   > `fkit-task-ship-loop`'s close step — from invoking `/fkit-task-done` itself to routing the close to
+   > the producer — and that rewrite is present in `claude/skills/fkit-task-ship-loop/SKILL.md` today.
+   > So the file **was** edited after this ADR was written, and it was edited for a reason unrelated to
+   > this ADR's own ripple.
+   >
+   > **What still stands, and it is the larger half.**
+   >
+   > - **The *"session-only"* claim is TRUE and untouched.** `fkit-task-ship-loop` genuinely refuses a
+   >   spawned or headless invocation.
+   > - **The design fact both sentences were written to carry is TRUE and untouched:** introducing the
+   >   sprint driver required **no** edit to the task loop. ADR-032's own ripple left it alone. What went
+   >   wrong is that a claim with that scope was written in unscoped, permanent-tense words, so a later
+   >   and unrelated ADR made it read false.
+   > - **This ADR's decision is not overturned.** The driver still does not invoke the task loop.
+   >
+   > **Why ⚠️ and not ⛔.** ⛔ marks a decision a reader must stop following. Nothing here was overturned
+   > — a supporting fact aged. Marking this ⛔ would tell readers to stop following a decision that is in
+   > force, which is the failure the two-marker legend exists to prevent.
+   >
+   > **Neighbouring-site check, run deliberately and reported either way** (the `0143` lesson: a scoped
+   > append can leave a document contradicting itself on one screen). ⛔ **One neighbour found, and it is
+   > NOT this defect:** the `## Amendment — 2026-07-22` section calls **`fkit-process-stateful-review`**
+   > *"byte-unchanged"*. That is a **different subject**; its truth is **not assessed here** either way,
+   > and it is deliberately left untouched. **No other passage in this ADR is contradicted by the wording
+   > above.**
+   >
+   > ⛔ **This note deliberately asserts no new permanent-tense claim about `fkit-task-ship-loop`'s
+   > bytes.** Restating the fact in a fresher tense would reproduce the defect one layer down.
 
 2. **Task selection & order.** Read the sprint plan and its briefs; get the board via
    `bash claude/skills/fkit-status/dashboard.sh <plan>` (never re-derive status by hand). Eligible =

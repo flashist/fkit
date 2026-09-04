@@ -39,6 +39,38 @@ top-level directory under `ai-agents/`, mirroring `reviews/`:**
 | `ai-agents/plans/<task-id>.md` | at plan approval | the approved implementation plan — the loop's autonomy boundary | retained by task-id; **not** moved by task-done; not wiki-ingested |
 | `ai-agents/worklogs/<task-id>.md` | opened post-approval, grows during the run, finalized at the done-gate | worklog + owner-decision log (every important question and every "obvious winner" chosen while the owner was away) → finalized ready-for-done report | retained by task-id; **not** moved by task-done; not wiki-ingested |
 
+> ⚠️ **Dated correction 2026-09-04 (`0207`, inside sweep `0357`) — the Decision sentence above is right
+> about the timing and wrong about the writer.** Every line above is **left byte-identical** as the
+> record of what was decided on 2026-07-17. ⛔ **Nothing here reopens a decision.**
+>
+> **What drifted.** The sentence says these artifacts are ***coder-written***. Since task `0202`
+> (2026-08-02), the **`/fkit-sprint-ship-loop` driver is a sanctioned writer of the task folder's
+> `plan.md`** — it writes the approved plan itself, at **plan approval**, **before** the Build worker is
+> spawned. The coder remains a writer of both artifacts on the task-loop path; what changed is that the
+> driver is now **also** a sanctioned writer of the plan, on the sprint-loop path.
+>
+> ⭐ **The timing clause is UNCHANGED and still correct.** The `plan.md` row's **Written** cell reads
+> *"at plan approval"*, and that is exactly when the driver writes it. **Only the writer attribution
+> needed this note.**
+>
+> **Why the driver and not a delegated worker — settled, and not to be reopened.** Having the driver
+> delegate the write to a bounded coder spawn was considered during `0202`'s review and **ruled out by
+> the reviewer, with the owner agreeing**: it recreates the confirmed production failure `0202` exists
+> to fix, in which a spawned worker handed an approved plan **authored a re-rendering of it instead of
+> copying it**. ⛔ **That option is not available and is not open.** Putting any worker between the
+> approved text and the file on disk restores the reconstruction route `0202` closed.
+>
+> **Why ⚠️ and not ⛔.** The decision — two separate git-tracked, task-id-keyed artifacts, the plan
+> written at plan approval as the loop's autonomy boundary — **stands in full**. Only a supporting fact
+> about *who writes* aged.
+>
+> ⚠️ **One neighbouring drift this note does NOT correct, disclosed rather than left for a reader to
+> trip over.** The `plan.md` row's **Path** cell names a top-level `ai-agents/plans/` directory. That
+> directory **does not exist** today and the file this note is about lives **inside the task folder**.
+> That is a **separate** defect from the writer attribution, it is **outside this note's owner-ruled
+> scope**, and it is **reported, not fixed here**. Recorded so the note and the table above cannot be
+> read as contradicting each other by accident.
+
 1. **Two separate files, not one combined document** — the owner's explicit choice over a merged
    plan+report doc. The plan is the (largely static) approved boundary; the worklog is the evolving
    record that ends as the report.

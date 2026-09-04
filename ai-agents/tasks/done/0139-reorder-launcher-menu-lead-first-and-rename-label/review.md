@@ -282,16 +282,53 @@ round 3 for R5.*
   Re-raise only if: the owner rules on the deviation and the brief is amended by whoever owns it, or
   the criterion is met by a later change.
 
-- **`fkit team` is a menu-pick alias only, never a CLI word** *(owner disposition of R1, 2026-07-25)*
+- **`team` / `team room` are accepted on NEITHER path — not the CLI, and not the menu**
+  *(owner disposition of R1, 2026-07-25; text corrected 2026-09-04 — see the note below)*
   — What: the explicit-role path accepts the seven real role words plus `adv` / `adversarial`; `team`
-  and `team room` are accepted **only** as menu picks, exactly as before this task. `fkit team` exits
-  2 · Why (structural): the menu reads a whole line, the CLI reads argv already split on whitespace,
+  and `team room` are accepted on **neither** the CLI path **nor** the menu. `fkit team` exits
+  2, and a `team` input at the menu prompt falls through to the catch-all arm
+  · Why (structural): the menu reads a whole line, the CLI reads argv already split on whitespace,
   so the two-word label cannot behave identically on both paths. Every narrow fix (consuming a
   following `room`) would have made `team` **stricter** than every real role word — verified: `fkit
   lead room` and `fkit coder room` both pass `room` through to `claude` and always have. The owner
   chose to drop the alias rather than introduce that asymmetry. **Knowingly accepted consequence: the
   brief's verification step 4 is unmet as written** · Re-raise only if: the leftover-positional
   behavior is changed for *all* role words, at which point the alias can be re-added consistently.
+
+  > ⚠️ **Dated correction 2026-09-04 (`0146`, inside sweep `0357`) — this residual's title and its
+  > *What* clause described behaviour the code does not have, and have been corrected in place.**
+  >
+  > **The original wording, quoted so the history is not lost.** Title:
+  > *"`fkit team` is a menu-pick alias only, never a CLI word"*. What clause: *"…the explicit-role path
+  > accepts the seven real role words plus `adv` / `adversarial`; `team` and `team room` are accepted
+  > **only** as menu picks, **exactly as before this task**. `fkit team` exits 2"*.
+  >
+  > **Why it was wrong.** *"Exactly as before this task"* is false in the one direction that matters.
+  > Before this task the menu arm read `7|lead|team|"team room")`, so the menu **did** accept them.
+  > It does not now.
+  >
+  > **What shipped, re-verified first-hand 2026-09-04 — three sources, one story:**
+  >
+  > - **The menu `case` block contains no `team` pattern on any arm.** The arm reads `1|lead)`. A `team`
+  >   input at the `role [1-7…]` prompt falls through to the catch-all and is rejected.
+  > - **The launcher's own comment agrees with the code:** *"`team` / `team room` are NOT accepted — not
+  >   here, and not at the menu either."*
+  > - **The CLI path rejects them too**, which the original text already had right.
+  >
+  > ⭐ **The residual text was the lone outlier among the three.**
+  >
+  > **Owner ruled 2026-07-26: the text is wrong, the code is right.** The words were intended gone from
+  > **both** paths. ⛔ **This is a documentation defect in a decision record, not a behavioural
+  > regression — no launcher change is authorised, and none was made.**
+  >
+  > ⛔ **The *Why* clause and the *Re-raise only if* condition above are UNTOUCHED — their WORDS are
+  > byte-identical, verified whitespace-normalised against the pre-edit text.** ⚠️ **One honest
+  > qualification, because this sweep's whole subject is records that overstate about themselves:** the
+  > *line* carrying the Why clause is not byte-identical. The `·` separator reflowed onto it from the
+  > line above when the What clause was rewritten, so `git diff` shows that line removed and re-added.
+  > ⭐ **No word of the Why clause or the re-raise condition changed** — only where the line breaks.
+  > The reasoning for R1 was correct and is not what went wrong; only the description of the resulting
+  > behaviour was. ⛔ **This note reopens nothing and changes no status.**
 - **Stray positional after a real role word** — What: `fkit <role> <word>` passes `<word>` to `claude`
   as the session's initial prompt; there is no rejection of leftover non-flag positionals · Why
   (structural): pre-existing for all seven role words, and the after-a-named-role passthrough is

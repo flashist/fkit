@@ -16,6 +16,13 @@
   at the **end of §Context**, at **§Consequences** (the one-role-per-session bullet) and at the **end of
   §Related**. They record where code this ADR cites by line has since moved. The two site lists above are
   left byte-identical and are superseded by this line; the same append-only rule and legend apply.
+  **Extended 2026-09-04 by a fourth append (`0196`, inside sweep `0357`):** dated ⚠️ notes now also sit
+  at **§Context bullet 2** and at **§Decision 2**. They record that the `skillOverrides` off-list is
+  retired (ADR-018) and that an unowned skill today is **visible but blocked**, not hidden — while
+  §Decision 2's decision itself **stands**. Two notes, not one: the two claims sit in different sections
+  and the form places a note **below** the claim it corrects, so a single block could only warn at one of
+  them. The three site lists above are left byte-identical and are superseded by this line; the same
+  append-only rule and the same legend apply.
 
 ## Context
 
@@ -34,6 +41,35 @@ hat skills are deleted; `claude/skills/fkit-agent-*` no longer exists. What repl
   2. `--settings` carrying **`skillOverrides`** — every `fkit-*` skill the role does *not* own is set
      to `"off"`: hidden from the `/` menu **and unrunnable by name**
      (`claude/fkit-claude.sh:75-103`, `skills_for_role()` + `build_settings()`).
+
+     > ⚠️ **Dated correction 2026-09-04 (`0196`, inside sweep `0357`) — the mechanism named above is
+     > retired, and the user-visible half of the sentence is false today.** The item is **left
+     > byte-identical** as the record of what was decided on 2026-07-11.
+     >
+     > **What is true today**, verified first-hand 2026-09-04 against live code:
+     >
+     > - **The `skillOverrides` off-list is gone.**
+     >   [ADR-018](adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md)
+     >   replaced it with a **`PreToolUse` skill-ownership hook**. A grep of `claude/fkit-claude.sh` for
+     >   `skillOverrides` returns exactly **one** hit today, and it is a comment recording the
+     >   retirement — *"Retired here (`0052` / ADR-018, replacing ADR-012 §3): the old `skillOverrides`
+     >   "off" list and the …"*. `build_settings()`'s own signature comment now describes its output as
+     >   a settings file *"containing `{"hooks":{…}}`"*, and its body emits no such key.
+     > - ⭐ **The sharper half: an unowned skill is VISIBLE BUT BLOCKED, not hidden.** *"Hidden from the
+     >   `/` menu and unrunnable by name"* is false in its first clause. Nothing removes the skill from
+     >   the menu; `claude/skill-ownership-hook.sh` refuses the **invocation**, emitting an explicit
+     >   `permissionDecision: "deny"` — its own `deny()` helper is documented as *"the ONLY mechanism
+     >   that actually blocks the call"*, and the role branch ends
+     >   `deny "role '$role' does not own skill '$skill_name'"`. ADR-018 §Decision 5 records the same
+     >   consequence in the same terms and marks it **Accepted**. **A reader trusting this item expects
+     >   a skill they do not own to be absent from the menu; it is not.**
+     > - **The hook is strictly stronger where it matters.** The retired off-list was **session**-scoped
+     >   — a spawned consult inherited the *launcher's* list, never its own. The hook keys on the **real
+     >   invoking agent's identity at any spawn depth**.
+     >
+     > **Why ⚠️ and not ⛔.** No decision was overturned; a named mechanism and a description of its
+     > user-visible effect went stale. See the note at §Decision 2 for the decision itself, which
+     > **stands**.
 - **A 7th agent, `fkit-lead`** — the "team room" (menu option 7) — routes rather than does. It has no
   Write or Edit tools, deliberately (`claude/agents/fkit-lead.md:22-26`).
 
@@ -160,6 +196,31 @@ the drift class this project keeps paying for.
 2. **Role separation is enforced structurally, not by instruction**, via both the `--agent` tool
    allowlist and the `skillOverrides` skill lockdown. "The coder cannot run the reviewer's procedure"
    is a **fact of the runtime**, not a request in a prompt.
+
+   > ⚠️ **Dated correction 2026-09-04 (`0196`, inside sweep `0357`) — the named mechanism is retired.
+   > ⭐ THE DECISION ITSELF STANDS.** The item is **left byte-identical** as the record of what was
+   > decided on 2026-07-11.
+   >
+   > **What changed, and only this:** the `skillOverrides` skill lockdown was retired by
+   > [ADR-018](adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md) and
+   > replaced by a **`PreToolUse` skill-ownership hook**, which reads `skills_for_role()` at call time
+   > and denies a `Skill` call the invoking role does not own. Evidence and the user-visible
+   > consequence are recorded once, in the note at **§Context bullet 2**, rather than restated here.
+   >
+   > **What did NOT change.** *"Role separation is enforced structurally, not by instruction"* is
+   > **still in force**, and *"the coder cannot run the reviewer's procedure"* is **still a fact of the
+   > runtime**. ⭐ ADR-018 **strengthened** this decision rather than reversing it: a hook is structural
+   > too, and — unlike the session-scoped off-list it replaced — it holds **in a spawned consult at any
+   > depth**, which is precisely where the old mechanism failed open.
+   >
+   > **Why the marker is ⚠️ and not ⛔, stated because the distinction is the point.** ⛔ means *a
+   > decision was overturned — do not follow it*. Nothing here was overturned. Marking this ⛔ would
+   > tell every reader to stop following a decision that is not only in force but better enforced than
+   > when it was written.
+   >
+   > ⛔ **Out of scope of this note, by name:** the §Decision 5 / `skills_for_role()` location
+   > correction (`0195`, landed), this ADR's remaining stale line-ranges (`0197`, landed), and any
+   > change to ADR-018 itself.
 3. **`fkit-lead` (the team room) is a router, not a doer.** It has no Write/Edit tools and owns only
    `/fkit-team` and `/fkit-query`. It is the safe default when no role is named
    (`claude/fkit-claude.sh:190`).

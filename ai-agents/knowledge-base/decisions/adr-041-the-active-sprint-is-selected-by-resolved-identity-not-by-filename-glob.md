@@ -12,6 +12,16 @@
   project"**. A direction, not an approval of this mechanism; the mechanism was ruled separately.
 - **Depends on:** ADR-040 (accepted 2026-08-10). This ADR's selector is a function of ADR-040's
   identity grammar and **cannot ship before it**.
+- **Corrections:** 2026-09-04 (`0276`, inside sweep `0357`) — this ADR carries **two** dated notes
+  inline: at **§2**, below the *"Stated outcome for the residual case"* paragraph (the origin claim,
+  where the evidence is stated), and at **§4**, below the `drift unresolved-plan-sprint` bullet (a
+  pointing note that does not restate the evidence). Both record that the drift line is **board-mode
+  only** and that a **default** run reports the residual case through the
+  `candidate file="…" identity="unresolved"` line instead. ⛔ **Scenarios S4 and S8 are correct as
+  written and are deliberately NOT annotated** — they are by-name fixtures. Marker legend:
+  **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned**
+  (do not follow it). No existing line of this ADR was edited; the notes are appends, and the Status
+  stays `accepted`.
 ## Context
 
 `claude/skills/fkit-status/SKILL.md:26` resolves the **active sprint** by globbing `sprint-*.md` at
@@ -153,6 +163,47 @@ eligible** as the active sprint (safe — unresolved is never eligible), but it 
 check and reports `unresolved-plan-sprint` on every run. Accepted: a loud failure, and exactly the
 failure ADR-040's guard exists to preserve.
 
+> ⚠️ **Dated correction 2026-09-04 (`0276`, inside sweep `0357`) — *"reports `unresolved-plan-sprint`
+> on every run"* names the WRONG CHANNEL.** The paragraph above is **left byte-identical** as the
+> record of what was decided on 2026-08-10. ⛔ **No decision in this ADR moves** — selection by
+> resolved identity, the `Backlog` H1 token, the never-eligible rule and §5's one-grammar constraint
+> all stand. What drifted is a supporting fact about *which output* reports the residual case.
+>
+> **What is actually true, re-measured first-hand 2026-09-04** by running `dashboard.sh` against
+> throwaway fixture trees:
+>
+> 1. **`drift unresolved-plan-sprint` is emitted in BOARD MODE ONLY** — only when the file in question
+>    is the plan being rendered. Its single emitter sits **below** the subcommand dispatch, so the
+>    `identity` and `select-active` subcommands return before ever reaching it.
+> 2. **A DEFAULT status run on a tree holding a stray unresolved board emits ZERO such drift lines — in
+>    both scenarios.** With another sprint active, `select-active` picks the real plan and board mode
+>    renders *that* file, never the stray one. With the stray board alone, the result is `active none`
+>    and exit 3, and per `fkit-status`'s own rule no board is rendered at all — so board mode never runs.
+> 3. ⭐ **The residual case is still LOUD on every run, and the per-run cost is real** — it is simply
+>    carried by a different line. A default run surfaces
+>    `candidate file="…" identity="unresolved"`, which the `/fkit-status` briefing is required to
+>    report. **This correction replaces one channel with another; it does not delete the cost.**
+>
+> ⛔ **Scenarios S4 and S8 elsewhere in this ADR are CORRECT AS WRITTEN and are deliberately NOT
+> annotated.** Both are **by-name** fixtures, and a by-name run **is** board mode, so the drift line
+> genuinely is emitted there. **Named here so the next reader does not sweep them.** The same reasoning
+> makes the two `claude/skills/fkit-status/` mentions correct in their own contexts; they are untouched.
+>
+> **Why ⚠️ and not ⛔ — and this ADR is already consistent with the measurement almost everywhere.**
+> §Consequences already says the check is regained *"when asked for by name"*, and the rejected option
+> (e) already says *"selection emits no equivalent of `unresolved-plan-sprint`"*. **Only the two
+> passages that dropped the by-name qualifier drifted.** The decision stands.
+>
+> ⚠️ **On the coordinates inside the annotated text: they are left byte-identical, deliberately.** They
+> are claims about the revision the writer read on 2026-08-10, not live pointers, and under the append
+> form the annotated lines are never rewritten — so the repo's bright-line rule (*correct a stale
+> line-cite only where the line is already being rewritten*) never fires. ⛔ **This note therefore writes
+> no line numbers of its own**; the durable anchors are the quoted fragments above.
+>
+> **Origin, so the close is not misread as blaming the wrong task.** `0267`'s corrected prose faithfully
+> echoed this ADR. **This ADR is the origin of the wording**, which is precisely why that residual was
+> accepted rather than sent back.
+
 ### 3. fkit's own `backlog.md` — name unchanged, exclusion strengthened
 
 `ai-agents/sprints/backlog.md` **keeps its name and keeps its exclusion from the default status run.**
@@ -173,6 +224,17 @@ it is a **runtime** enforcement point that already exists and stays:
   itself"* clause (`dashboard.sh:917`, `:922-923`) tell the reader, **on the run they just made**,
   that a plan's identity did not resolve — a feedback loop shorter than any document;
 - rule 1's `:796` restoration means a mis-shaped backlog board now fails loudly instead of quietly.
+
+> ⚠️ **Dated correction 2026-09-04 (`0276`, inside sweep `0357`) — the first bullet above carries the
+> SAME wrong channel, and its qualifier is the missing word.** The bullet is **left byte-identical**.
+> `drift unresolved-plan-sprint` reaches a reader *"on the run they just made"* **only when that plan is
+> the board being rendered** — a by-name run. On a **default** run the line that does the work is
+> `candidate file="…" identity="unresolved"`.
+>
+> ⛔ **The evidence is stated once, in the note under §2's *"Stated outcome for the residual case"*
+> paragraph, and deliberately not restated here — so there is one place to keep true rather than two.**
+> ⭐ **The bullet's conclusion survives intact:** the enforcement point is still runtime, still on every
+> run, and still a feedback loop shorter than any document.
 
 **`claude/structure-spec.md` is explicitly NOT the site.** It governs fkit-authored files, and says of
 this directory (`claude/structure-spec.md:174-177`) *"Structural directories only — no required files

@@ -5,6 +5,12 @@
 Brief: `/Users/mark.dolbyrev/Workspace/fkit/ai-agents/tasks/done/0327-refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim/brief.md`
 Planned against `HEAD` = `c45ec3d` ("Ship push"), 2026-08-24. **Planning-only — nothing was written.**
 
+- **Corrections:** 2026-09-04 (`0335`, inside sweep `0357`) — this plan carries **two** dated ⚠️ notes
+  inline, both **subject A** (*"the escape happens because `ls` dereferences"*): at **§6 Q1's ⚠️ note**
+  (the mechanism itself) and at the **Q1(a) accepted-consequence paragraph** (which inherits that
+  mechanism by reference). Marker legend: **⚠️ = a fact that drifted**; **⛔ = a decision that was
+  overturned** — both notes are ⚠️, no existing line was edited, and **no ruling is reopened**.
+
 ---
 
 ## 0. Corrections to what I was told (measured this turn)
@@ -319,6 +325,38 @@ What I will not decide alone is the **exit status**, because it crosses into the
 - So with my recommended exit-0 refusal, `setup_ok` stays 1 and the launcher will `claude --agent fkit-<role>` with **no agent file present**, producing Claude Code's own confusing "agent not found" — the exact failure that comment says it exists to prevent.
 - ⚠️ And note the launcher's fail-safe is *already* symlink-blind: its `ls "$proj"/.claude/agents/fkit-*.md` **dereferences**, so on a project that ran the buggy init once, it finds the escaped copies at the link target and starts a session reading agents from outside the project.
 
+  > ⚠️ **Dated correction 2026-09-04 (`0335`, inside sweep `0357`) — the CONCLUSION above is right and
+  > the MECHANISM is wrong.** The bullet is **left byte-identical**. The fail-safe genuinely is
+  > symlink-blind; it is not `ls` that makes it so, and that distinction decides where the fix must go.
+  >
+  > **What actually happens — the escape is the SHELL GLOB, not `ls`.** The guard is this line:
+  >
+  > ```sh
+  > if [ "$setup_ok" = 0 ] && ! ls "$proj"/.claude/agents/fkit-*.md >/dev/null 2>&1; then
+  > ```
+  >
+  > `"$proj"/.claude/agents/fkit-*.md` is **expanded by the shell before `ls` ever runs**, and pathname
+  > expansion **traverses symlinked directories**. So when `.claude` (or `.claude/agents`) is a symlink
+  > pointing outside the project, the glob resolves to the escaped copies at the link target, hands `ls`
+  > a **real, already-resolved, genuinely existing path**, and the guard is skipped.
+  >
+  > ⛔ **This is why an `ls`-only fix cannot close it:** `ls` has nothing left to detect. **Measured
+  > first-hand 2026-09-04** in a throwaway tree: with `.claude` a symlink to an outside directory
+  > holding `agents/fkit-coder.md`, the guard is **skipped** and `realpath` confirms resolution outside
+  > the project — and running a **dereferencing** `ls -L` on that same case **still exits 0**, so the
+  > guard is **still skipped**. ⭐ A dereferencing `ls` does not close this shape.
+  >
+  > **A second shape this note adds, which no record here mentions: a DANGLING symlink also passes.**
+  > An `.claude/agents/fkit-<role>.md` that is a symlink to a **non-existent** target still matches the
+  > glob (matching is by name, via a directory read), and plain `ls` on a broken link exits **0** because
+  > it does not dereference the final component. Measured 2026-09-04: plain `ls` **rc=0** (guard
+  > skipped), `ls -L` **rc=1**. ⭐ **The guard is satisfied by mere name existence.** This shape needs no
+  > buggy init to arise.
+  >
+  > **Where the corrected mechanism lives durably:** task `0334`, which owns the launcher-side fix.
+  > ⛔ **This note reopens no ruling of `0327`** — including its Q1(a) exit-status ruling — adds no
+  > finding, and changes no status.
+
 | Option | Consequence |
 |---|---|
 | **(a) Warn, continue, exit unchanged (Rec)** | Consistent with every other refusal in the file; no launcher change; no new contract; the stderr warning is loud and names the fix. Cost: on a fresh project with a symlinked `.claude`, the session start fails with Claude Code's message rather than fkit's. **Nothing is destroyed, and that is the whole point of the change.** |
@@ -352,6 +390,22 @@ All given live via `AskUserQuestion` in a `fkit lead` session driving `/fkit-spr
 | **Q2 — how many sites** | **(a) All five.** The claim actually stops being false. | **"(a) All five (Recommended)"** |
 
 ⚠️ **One consequence of Q1(a) that the owner accepted explicitly, recorded so it is not rediscovered as a defect:** on a fresh project with a symlinked `.claude`, the session start will fail with Claude Code's own "agent not found" message rather than fkit's. **Nothing is destroyed — which is the whole point of the change.** The launcher's symlink-blind fail-safe (§6 Q1's ⚠️ note) is **not** repaired by this task and remains a live, unowned observation.
+
+> ⚠️ **Dated correction 2026-09-04 (`0335`, inside sweep `0357`) — the claim this paragraph POINTS AT
+> has been corrected, and this pointer now inherits a wrong mechanism.** The paragraph is **left
+> byte-identical**.
+>
+> This paragraph does not itself state a mechanism — it inherits one **by reference**, pointing at
+> §6 Q1's ⚠️ note. ⭐ **That note's mechanism has been corrected**: the escape is the **shell glob**
+> expanding before `ls` runs and traversing symlinked directories, **not** `ls` dereferencing. A
+> **dangling** symlink is a second shape that also passes the guard, by name alone. **See the dated
+> correction under that note for the measured evidence.**
+>
+> ⭐ **Everything else in this paragraph stands unchanged:** the fail-safe is genuinely symlink-blind,
+> it genuinely is **not** repaired by `0327`, and it genuinely remains a live observation. The
+> observation is no longer *unowned* — task `0334` now owns the launcher-side fix.
+>
+> ⛔ **This note reopens no ruling**, in particular not Q1(a), and changes no status.
 
 ## Driver's note on this file (fkit-sprint-ship-loop, 2026-08-24)
 

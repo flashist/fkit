@@ -26,6 +26,34 @@ Status: closed-out
 ### Round 2 (2026-08-27) — re-verification, no new rows
 Scope: the Round 1 hunks as committed, `493cecd..2a64727` (working tree clean); the `claude/fkit-claude.sh:316+` carry-check hunk is another task's and was ignored. Reviewers run: own pass + Codex (`codex exec --sandbox read-only`, exit 0). Coverage: full.
 
+> ⚠️ **Dated correction 2026-09-04 (`0348`, inside sweep `0357`) — the bare *"Coverage: full."* claim
+> above overstates what happened.** The line is **left byte-identical**: it is the record of what was
+> claimed on 2026-08-27.
+>
+> **What it corrects.** Under
+> [ADR-042](../../../knowledge-base/decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so.md)'s
+> three-state coverage vocabulary — as landed by task `0272` — this pass reads **reasoning-only second
+> opinion**. Codex ran and reasoned, but its `--sandbox read-only` flag blocks `mkdtemp`, so **it
+> measured nothing**. ⭐ **All execution evidence in this review is the Claude reviewer's.**
+>
+> ⚠️ **The note does NOT imply the review was deficient.** ADR-042 D1 §2 states that reasoning-only is
+> the **normal, expected** state under the current sandbox, not a degradation.
+>
+> ⚠️ **Why this ledger and not the other specimen of the same wording.** The claim above is **bare** —
+> nothing beside it corrects the impression a reader forms. The owner ruled on 2026-08-29, verbatim
+> option label **"Correct 0188 only (Rec)"**, that the sibling specimen stays frozen: that ledger was
+> written before `0272` landed, its wording is an honest record of what its reviewer knew at the time,
+> and it already tells the truth in the same breath — so correcting it would rewrite a truthful account
+> rather than fix an error.
+>
+> ⚠️ **This ledger was also written before `0272` landed** (its Round 2 is dated 2026-08-27; `0272`
+> landed 2026-08-28). It is not evidence that `0272` failed — the vocabulary had not yet reached the
+> files a reviewer reads at review time.
+>
+> **Nothing else in this ledger changes** — not `Status:`, not the verdict, not the findings table, not
+> the residuals. This review is **not reopened**, no round is added, and `0188`'s task status is
+> untouched.
+
 **Verdict: 🔁 Closeout — no action (loop).** No new defect; `closed-out` stands.
 
 - R1 → `CLAUDE.md:43` reads "Each role-owned skill's `⛔ Owner:` banner" — true (24/26 skills carry one; `fkit-query`/`fkit-team` none). ✅

@@ -170,9 +170,15 @@ repairing a control that is running today.
    citations of the literal string `ai-agents/sprints/sprint-2.md` were deliberately NOT swept** — see
    §"Known follow-ups".
 3. **Dashboard board discovery.** Verified first-hand before the roll, not discovered afterward:
-   `/fkit-status` resolves the active sprint by globbing `sprint-*.md` **at the top of
-   `ai-agents/sprints/`**, and treats `sprints/done/` as closed. Moving `sprint-2.md` into `done/` and
+   `/fkit-status` resolves the active sprint from the plans **at the top of `ai-agents/sprints/`**, and
+   treats `sprints/done/` as closed. Moving `sprint-2.md` into `done/` and
    creating this file is therefore exactly what makes Sprint 3 active — no tooling change needed.
+   *(Mechanism corrected 2026-09-04 per
+   [ADR-041](../../knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md).
+   What was verified first-hand before the roll was a **filename glob** over `sprint-*.md`; that was the
+   mechanism at the time, and the record of the check stands. Selection is now by each plan's **resolved
+   identity**, with no pattern on the filename — the candidate set and the `done/` exclusion are
+   unchanged, so the conclusion this item drew is unaffected.)*
 4. **Rank numbering.** **Restarts at `P1`.** Ruled and recorded above, with its cost stated.
 
 ## Known follow-ups this rollover created — none of them silent

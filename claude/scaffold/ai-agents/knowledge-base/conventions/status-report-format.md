@@ -51,6 +51,9 @@ A compact table of the sprint's tasks with these columns, in this order:
 | **Filename** | The **task-folder name** (`<NNNN>-<slug>`), linked to its `brief.md` under `backlog/`, `done/`, or `cancelled/`. Not `brief.md` itself — every task shares that basename, so it identifies nothing. |
 | **Next step** | What actually unblocks or advances it — "ready", "after 4", "waiting on owner". |
 
+⚠️ **`N` in the `Moved to [Sprint N]` marker is the target sprint's *identity*, not a number** — `4`,
+or `4c`. `Sprint 4` and `Sprint 4c` are different sprints.
+
 It goes **at the end, after the answer** — it is reference material, not the briefing. The reader who
 wants the summary stops at beat 6; the reader who wants the detail scrolls.
 

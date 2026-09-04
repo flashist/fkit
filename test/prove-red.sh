@@ -361,9 +361,13 @@ bc="$(run_banner_suite "$clean_tree")"; echo "$bc"
 [ "$bc" = green ] || { echo "   ✗ an UNMUTATED copy's banner suite is red — mutations 16/17 below would be false."; fail=1; }
 
 # --- 0k. An UNMUTATED copy of bin/release.mjs must ALSO be green (task 0288; same reasoning as 0b and
-#     0h). This one carries the usual extra weight for a NEW seam: it is the only proof that
-#     FKIT_RELEASE_MJS is honoured at all. If the env var were ignored, every mutation below would run
-#     against the REAL release.mjs, all seven would come back green, and the gate would report seven
+#     0h — without this, a red below could be red-because-the-copy-is-broken and would prove nothing).
+#     ⚠️ THAT IS ALL IT PROVES. It is NOT proof that FKIT_RELEASE_MJS is honoured: if the env var were
+#     ignored, 0k would read the REAL release.mjs, which is green too, so 0k cannot tell "honoured"
+#     from "ignored" either way. What proves the seam is honoured is mutations 18-22, 25 and 26 going
+#     RED — they only can if the suite actually read the mutated copy. The same reasoning the other way
+#     is what makes those mutations load-bearing: if the env var were ignored, every one of them would
+#     run against the REAL release.mjs, all seven would come back green, and the gate would report seven
 #     disarmed mutations as seven failures to catch — or, worse, a later refactor could make them pass
 #     for the wrong reason. ---------------------------------------------------------------------------
 clean_release="$(make_release_copy release-clean)"
@@ -372,9 +376,14 @@ rlc="$(run_release_suite "$clean_release")"; echo "$rlc"
 [ "$rlc" = green ] || { echo "   ✗ an UNMUTATED release.mjs copy is red — mutations 18-22, 25 and 26 below would be false."; fail=1; }
 
 # --- 0l. An UNMUTATED copy's carry-check-hook suite must ALSO be green (task 0204; same reasoning as
-#     0f). Extra weight, as for every new seam: this is the only proof that FKIT_CARRY_CHECK_HOOK is
-#     honoured AND that the copied .sh runs the copied .mjs — if either failed, mutations 23/24 would
-#     run against the real hook, come back green, and the gate would report them as two failures to
+#     0f — without this, a red below could be red-because-the-copy-is-broken and would prove nothing).
+#     ⚠️ THAT IS ALL IT PROVES. It is NOT proof that FKIT_CARRY_CHECK_HOOK is honoured, and NOT proof
+#     that the copied .sh runs the copied .mjs: if either seam failed, 0l would read the real hook,
+#     which is green too, so 0l cannot tell "honoured" from "ignored" on either half. What proves BOTH
+#     halves is mutations 23 and 24 going RED — they only can if the copied .sh actually exec'd the
+#     copied .mjs and the suite actually read it. The same reasoning the other way is what makes those
+#     two load-bearing: if either seam failed, mutations 23/24 would run against the real hook, come
+#     back green, and the gate would report them as two failures to
 #     catch. -------------------------------------------------------------------------------------------
 clean_carry_hook="$(dirname "$clean_copy")/carry-check-hook.sh"
 printf '0l. unmutated copy carry-check-hook suite should be green ... '

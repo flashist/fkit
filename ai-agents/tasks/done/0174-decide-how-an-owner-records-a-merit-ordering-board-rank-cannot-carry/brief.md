@@ -175,6 +175,37 @@ The deliverable is a decision report under `ai-agents/knowledge-base/reports/`, 
   segment, so the task is genuinely the next planning item a reader of the board reaches, and **no
   closed row was renumbered by the insertion.** A position lower in the band would have put a task
   about unreachability behind a wall; a position higher would have renumbered closed rows for no gain.
+
+  > ⚠️ **Dated correction 2026-09-04 (`0183`, inside sweep `0357`) — two claims in the bullet above are
+  > false.** The bullet is **left byte-identical**: deleting it would destroy the evidence that the error
+  > was made and how.
+  >
+  > **1. *"no closed row was renumbered by the insertion"* ⛔ is FALSE. EIGHT closed rows were
+  > renumbered** — each reading `✅ Done` at the time, each moved down exactly one:
+  >
+  > `0151` · `0147` · `0150` · `0157` · `0161` · `0148` · `0159` · `0160`
+  >
+  > **Verified** against the filing commit's own diff by the architect, and **independently re-derived,
+  > exactly, by the reviewer**. Two parties, same eight.
+  >
+  > **The reasoning that produced the error, recorded because it will recur.** The producer checked the
+  > ranks **above** the insertion point — the owner's named band, all closed — and correctly concluded
+  > that none of *them* moved. An insertion renumbers everything **below** it, and below it lay eight
+  > closed rows scattered among the open ones. ⭐ **The check ran in the wrong direction.**
+  >
+  > **2. *"reachable"* here means the highest rank in the band not itself closed.** The measurement's
+  > sense — the one the whole finding rests on — makes a row reachable **only if it sits in the FINAL
+  > segment**. ⛔ **Only the measurement's sense is used going forward.** ⭐ Under it, that segment was
+  > **not reachable at all** — segment 1 of 5 — and **`0174` was itself one of the 16 unreachable rows**:
+  > the task filed to fix unreachability sat in an unreachable slot, described in its own filing note as
+  > reachable.
+  >
+  > ⛔ **CORRECT THE RECORD — DO NOT REVERT.** Owner-ruled, recorded in
+  > [ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)
+  > under *Options considered*: reverting would **renumber the same eight closed rows a second time**,
+  > and it contradicts the `0157` / `0159` precedent that a stale rank reference is repaired by **naming
+  > the folder ID**, not by restoring numbers. ⛔ **This task re-ranks nothing, reverts nothing, changes
+  > no status cell, and does not reopen `0174`.**
 - **⚠️ The insertion renumbered ranks, and that is expected and authorized for this row only.**
   Every rank from the old P119 through the old P148 moved up by one. **No task's identity changed** —
   identity is the folder-name `NNNN` prefix and nothing else, per

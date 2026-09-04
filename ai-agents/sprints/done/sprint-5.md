@@ -21,8 +21,11 @@
 >
 > A **second owner ruling of the same session**, same channel, archived Sprint 4 — verbatim
 > **"Archive it now, unverified"**. That archival is recorded in full on
-> [`done/sprint-4.md`](sprint-4.md)'s banner, and it is what leaves exactly one `sprint-*.md` in
-> `/fkit-status`'s active-sprint glob.
+> [`done/sprint-4.md`](sprint-4.md)'s banner, and it is what leaves exactly one `sprint-*.md`
+> eligible as the active sprint. *(Mechanism corrected 2026-09-04 per
+> [ADR-041](../../knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md):
+> `/fkit-status` selects by each plan's **resolved identity**, not by a `sprint-*.md` filename glob. The
+> count above is left unchanged.)*
 >
 > Executed by a spawned `fkit-producer` with no owner channel, which asked nothing and decided nothing
 > beyond the mechanics of these two rulings **and the ranking** — see §"How this board was ranked".

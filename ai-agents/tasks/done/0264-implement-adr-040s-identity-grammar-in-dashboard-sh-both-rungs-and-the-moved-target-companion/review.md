@@ -9,6 +9,29 @@ Status: in-review
 behavior; three are missing test guards, one is a pre-existing low.** Both reviewers ran — Codex
 (`codex-cli 0.145.0`, `gpt-5.6-sol`) completed; coverage is **not** partial.
 
+> ⚠️ **Dated correction 2026-09-04 (`0274`, inside sweep `0357`) — *"coverage is **not** partial"*
+> overstates what happened, and THIS LEDGER ALREADY SAYS SO FURTHER DOWN.** The sentence is **left
+> byte-identical**: it is the record of what was claimed, and
+> [ADR-042](../../../knowledge-base/decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so.md)
+> quotes it at this location as its own evidence.
+>
+> ⭐ **This note introduces no new fact.** Under the heading recording this review's coverage limits,
+> the same file already states, accurately: *"**Codex could not run the suite** (its read-only sandbox
+> blocked `mkdtemp` with `EPERM`). All execution evidence in this ledger is mine."* ⭐ **That later
+> statement is the one a reader should believe.** This note exists only to point at it, because a reader
+> who stops at the verdict line meets the overstatement first and has no pointer to the correction.
+>
+> **In ADR-042's three-state vocabulary — as landed by task `0272`** — this pass reads **reasoning-only
+> second opinion**: Codex ran and reasoned, and measured nothing.
+>
+> ⛔ **The note does NOT say the review was deficient.** ADR-042 D1 §2 states that reasoning-only is the
+> **normal, expected** state under the current sandbox, not a degradation. ⭐ **The claim was wrong; the
+> review was not.**
+>
+> ⛔ **Nothing else in this ledger changes** — not the verdict, not the findings table, not the
+> residuals, not `Status:`. This review is **not reopened**, no round is added, and `0264`'s task status
+> is untouched.
+
 ---
 
 ## Reviewer findings

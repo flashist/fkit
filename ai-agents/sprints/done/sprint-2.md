@@ -2701,8 +2701,15 @@ board-less `## Sprint: Backlog (unsprinted)` field. Interviewed 2026-07-18; the 
 **Key facts the split rests on:**
 
 - Five unsprinted briefs exist today with no board row anywhere — task 67 backfills them.
-- `/fkit-status`'s default run globs `sprint-*.md`, so `backlog.md` is invisible to it **by
-  construction** — the filename is load-bearing and stays outside the glob.
+- `/fkit-status`'s default run does not report `backlog.md`, so it is invisible to it **by
+  construction** — the exclusion is load-bearing and holds without anyone remembering a rule.
+  *(Mechanism corrected 2026-09-04 per
+  [ADR-041](../../knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md).
+  What this Sprint 2 decision rested on at the time was a **filename glob** over `sprint-*.md`, which is
+  why the filename was called load-bearing. Selection is now by each plan's **resolved identity**:
+  `backlog.md` resolves to the identity `Backlog`, which is **never eligible**. ⭐ **The conclusion is
+  unchanged and in fact stronger** — the exclusion no longer depends on what the file is called, so
+  renaming it could not make it the active sprint.)*
 - The "report on request" half is one more value of the **existing sprint-name argument** — a target
   selector, not an output variant. **Conforms to one-skill-one-output; no reversal ADR.**
 - The task-brief skill's "never invent a sprint" rule gets a **designed, documented exception** for
@@ -3310,6 +3317,42 @@ merit case — **making the filing an instance of the very defect the task exist
 owner's band, **P115–P118 are all `✅ Done`**, so **P119 is the highest rank in the band that is not
 behind a closed row.** It takes the head of the earliest *reachable* open segment, and **no closed row
 was renumbered by the insertion.**
+
+> ⚠️ **Dated correction 2026-09-04 (`0183`, inside sweep `0357`) — two claims in the paragraph above
+> are false.** The paragraph is **left byte-identical**: deleting it would destroy the evidence that the
+> error was made and how, which is the more useful record.
+>
+> **1. The claim: *"no closed row was renumbered by the insertion."* ⛔ FALSE. The insertion renumbered
+> EIGHT closed rows** — each reading `✅ Done` at the time, each moved down exactly one:
+>
+> `0151` · `0147` · `0150` · `0157` · `0161` · `0148` · `0159` · `0160`
+>
+> **How it was verified:** against the filing commit's own diff, by the architect, and **independently
+> re-derived, exactly, by the reviewer**. Two parties, same eight. ⛔ This is not a rounding error or a
+> matter of interpretation.
+>
+> **Why the error was made — recorded because the reasoning will recur.** The producer checked the band
+> the owner named — the four ranks immediately **above** the insertion point — found them all closed,
+> and correctly concluded that placing the row below them renumbered none of *them*. That is true, and
+> it is the wrong test: **an insertion renumbers everything BELOW it**, and below it lay eight closed
+> rows scattered among the open ones. ⭐ **The check ran in the wrong direction.**
+>
+> **2. The word *"reachable"* is used here in a sense the measurement does not share.** This paragraph
+> means *the highest rank in the owner's band not itself occupied by a closed row*. The measurement —
+> the one the entire finding is built on — makes an open row reachable **only if it sits in the FINAL
+> segment**, the append zone. ⛔ **Only the measurement's sense is used going forward.**
+>
+> ⭐ **Under that sense the segment this paragraph calls *"the earliest reachable open segment"* was not
+> reachable at all — it was segment 1 of 5, and `0174` was itself one of the 16 unreachable rows.** The
+> task filed to fix unreachability sat in an unreachable slot, described in its own filing note as
+> reachable.
+>
+> ⛔ **CORRECT THE RECORD — DO NOT REVERT.** Owner-ruled, and recorded in
+> [ADR-035](../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)
+> under *Options considered*. Reverting the insertion to restore the eight ranks would **renumber the
+> same eight closed rows a second time** — committing the breach again in the name of repairing it — and
+> it contradicts the `0157` / `0159` precedent that a stale rank reference is repaired by **naming the
+> folder ID**, not by restoring numbers. ⛔ **Nothing is re-ranked, reverted or deleted by this note.**
 
 **What the insertion did to the board, stated plainly:**
 

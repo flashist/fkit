@@ -339,9 +339,11 @@ ai-agents/tasks/backlog/<NNNN>-<kebab-case-title>/brief.md
   sprint either way — **but the filename is not what decides that.** If its H1 carries `Backlog` (or
   `Sprint Backlog`), `/fkit-status` resolves it to the identity `Backlog`, which is never eligible. If
   the H1 carries neither token, it resolves to **nothing at all** — the name `sprint-backlog` supplies
-  no identity of its own — and that board then reports `unresolved-plan-sprint` drift on **every**
-  status run
-  ([ADR-041 §2](../../../ai-agents/knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md))
+  no identity of its own — and that board then shows up on **every** status run as a
+  `candidate file="…" identity="unresolved"` line the briefing must report
+  ([ADR-041 §2](../../../ai-agents/knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md);
+  the `unresolved-plan-sprint` **drift** line is board-mode only — it fires when that board is rendered
+  by name, not on a default run)
   — so neither case is a licence to write one.
 - **Pulling a backlog task into a sprint is the producer's act, not this skill's.** It takes **three**
   edits, and **all three are mandatory** — see the warning below:
