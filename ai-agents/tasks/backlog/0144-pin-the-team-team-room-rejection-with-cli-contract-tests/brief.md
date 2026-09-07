@@ -89,7 +89,7 @@ this test exists precisely to catch a re-addition, so the mutation *is* the proo
   ruling recorded on only one side invites the same proposal from this side.
   - **What was proposed:** the 2026-08-03 sprint-2 open-row triage classified both rows as movers to
     the Backlog board and proposed folding
-    [0146](../0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual/brief.md) — which
+    [0146](../../done/0146-correct-the-false-menu-pick-claim-in-0139s-accepted-residual/brief.md) — which
     corrects the false "menu-pick alias" claim in 0139's accepted residual — into this task.
   - **Why it was refused:** the rationale was **schedule pressure inside Sprint 2**, and both rows are
     now **unranked on the Backlog board**, so that pressure is gone. 0146's own brief also argues

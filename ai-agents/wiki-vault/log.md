@@ -3513,3 +3513,644 @@ Only the durable facts were recorded: Sprint 6 **is** archived, and `select-acti
 - **No page was created and none deleted; `0349` has no page of its own** — its cancellation and
   supersession are recorded at the single site that listed it as open work.
 - ⛔ **Nothing committed or pushed. Zero writes outside `ai-agents/wiki-vault/`.**
+
+---
+
+## 2026-09-05 — ingest (sync) — sweep C, task `0358`
+
+**Sweep C: the wiki-vault resyncs as ONE pass, six members.** Run by `fkit-wiki` as a spawned Build
+worker under `/fkit-sprint-ship-loop`, against an owner-approved plan (rulings **T0–T5**, given live
+via `AskUserQuestion` in a `fkit lead` session on 2026-09-05).
+
+### Sync window and delta
+
+- Sync window: `16754e3` (2026-08-28) → HEAD `cf289c2`, **10 commits**.
+- Changed source files detected under `ai-agents/`, excluding the vault: **150**. Of those **14**
+  knowledge-base files, **7** sprint files, **29** committed `done/` briefs.
+
+### ⛔ THE BOUND — 45 uningested closed tasks are DELIBERATELY NOT IN THIS PASS
+
+⭐ **Recorded here, in the log itself, and not only in this run's worklog — because the watermark is
+advanced by this pass and a future reader must not read a clean watermark as a clean vault.**
+
+**Measured this run:** **61** closed-task folders were touched since the watermark (committed plus
+working tree); **45 of them have no vault task page** under a slug match.
+
+⛔ **Those 45 were bounded OUT of this row by owner ruling, 2026-09-05, option label verbatim
+"Bound out + filing request (Rec)".** The reasons as ruled: 45 is **7.5× this row's member count**,
+and a task ingest is **a different act** from a resync — a resync reconciles a page with a changed
+truth, whereas a task ingest creates new synthesized knowledge and needs its source read in full.
+Folding them in would make this pass **unauditable against its own member-shaped verification steps**.
+
+⚠️ **THE WATERMARK WAS ADVANCED ANYWAY, AND THAT IS THE HAZARD THIS PARAGRAPH EXISTS TO DEFUSE.** The
+next sync will see a clean watermark. **It must not conclude the closed-task backlog was ingested.**
+It was not. A follow-up row — *delta-ingest the closed-task backlog accumulated 2026-08-29 → present* —
+was handed to the producer as a **filing request**; ⛔ this run does not file it, and no board row was
+created by this pass.
+
+⚠️ Slug matching is a **floor, not a census** — a page may exist under a different slug. The order of
+magnitude is not in doubt.
+
+### Ingested — the 11 ADRs (owner ruling, label verbatim "All 11 (Rec)")
+
+⭐ **Working-tree bytes were ingested, and `git hash-object` of exactly what was read is recorded**
+(owner ruling, label verbatim *"Working-tree bytes + record the hash (Rec)"*). The vault documents the
+project **as it is**, and a committed-only read would have excluded ADR-046 entirely — it is untracked.
+⚠️ **Accepted cost, stated: if that in-flight work is amended or reverted, the page describes a
+revision that never landed. The recorded hash makes that detectable; it does not prevent it.**
+
+**Two pages CREATED — both ADRs had no vault page at all, which is the defect class this sweep closes:**
+
+- `…/decisions/adr-045-…` (blob `fcb99a86c1d5527d070826250a5426fe17e374eb`) → created
+  [[wiki/decisions/adr-045-an-in-flight-review-finding-terminates-in-the-ledger-not-a-new-task]]
+- `…/decisions/adr-046-…` (blob `6093dd4b2a80ab4282ab2fa6c2c3c45712c98b5b`) → created
+  [[wiki/decisions/adr-046-a-sprint-board-may-be-committed-unranked-and-an-erased-rank-flags]]
+
+Both gained **`index.md` catalog rows** and bidirectional links to the eight pages they reference.
+⚠️ ADR-046 was **re-read immediately before ingest**: it carries **three** dated correction passes, all
+2026-09-05, and they nest — the third supersedes the second's site list, the second the first's, and
+**site 3 of the third pass corrects a claim inside the first note itself**. A copy read earlier the
+same day was already stale.
+
+**Nine pages UPDATED with dated resync notes** — `adr-003` (`0281`: the CI clause is false; **33 CI
+runs, 29 success, 4 failure**, all pushes to `main`, and `--no-test` is a real warn-and-continue
+path), `adr-010` (see the `0199` discharge below), `adr-012` (see the `0239` resync below), `adr-020`
+(`0207`: the driver is a sanctioned `plan.md` writer — right about the timing, **wrong about the
+writer**), `adr-032` (`0170`: *"byte-unchanged"* is false at **two** sites, falsified by ADR-033
+§Decision 3), `adr-037` (`0205`: §5's *"none is possible"* is a **narrowing, not a reversal**),
+`adr-038` (`0346`: a **drift note**, ADR-038 not amended and not superseded), `adr-041` (`0276`: the
+**wrong channel** named for one residual), `adr-042` (`0351`/sweep `0356`: citations **de-rotted**, no
+claim changed).
+
+### Members served by this entry
+
+- ⭐ **`0199` — the PAGE half only, and this pass says so per member.** ADR-010's vault page carried
+  *"FIVE dated correction blocks"* and *"TWO site lists"*; **re-measured on disk today: 10 blocks and
+  four site lists.** The page now carries the ⚠️/⛔ legend with both glosses, the *"left
+  byte-identical"* clause, the **below-the-claim placement rule with its recorded `R1-placement`
+  rationale**, and §Decision 5's contradiction **as history** (2026-07-11 → 2026-08-02, repaired by
+  `0195`) rather than as a live gotcha. ADR-010's `Status` on disk remains `accepted`. `index.md`'s
+  `0140` row had its *"still open"* framing cleared. ⛔ **The `log.md` half of the old `0199` scope is
+  NOT here — it is `0212`'s, and it is the separate entry below.**
+- **`0239` — ADR-012's page.** Re-derived from the **landed** ADR, not from the brief. `0232`
+  (2026-09-03, sweep `0356`) appended **five** dated notes the vault page recorded none of. The
+  headline: `skills_for_role()` **moved file** to `claude/skills-for-role.sh`, while
+  `build_settings()` **did not** — both of the ADR's original pointers aimed at the former and now
+  land in the self-update helper. Upstream `0232` re-verified **landed** this run.
+
+### ⛔ `0287` is EXCLUDED BY A BLOCKED UPSTREAM — not by oversight, and it is NOT on the close list
+
+Upstream `0273` re-measured this run: **still `🔲 Backlog`**, and the substance is unshipped — **six
+`--sandbox read-only` call sites under `claude/`, zero `workspace-write`.** ⛔ **`0287`'s vault pages
+were left ALONE.** Resyncing them now would write a page **wrong in a new way**, which is exactly what
+its own brief's step 2 exists to prevent. ⭐ **Five-of-six is the CORRECT outcome of this pass, not a
+partial failure** — the brief prescribes reporting, not closing, a member whose upstream has not
+landed. The measurement was taken **once**, at the start, and not re-taken to reach a closable answer.
+
+### Scope
+
+Only `ai-agents/wiki-vault/` was written, plus this task's own folder records. Nothing committed,
+nothing staged, no task moved, no mover invoked, no board row created or flipped. No knowledge-base
+file, brief, sprint plan, skill, agent definition, test or source file edited. No line-number
+coordinate into any coordination document appears anywhere in this run's diff.
+
+Task 0199's vault work is complete — ready to close
+Task 0239's vault work is complete — ready to close
+Task 0287: partial — not ready to close
+
+---
+
+## 2026-09-05 — correction (task `0212`) — the `"still open"` framing on two frozen 2026-07-26 entries
+
+**One defect class, one entry.** ⛔ This entry does **not** restate `0211`'s subject — the old-form
+completion-flag paths. `0211` has shipped and its entry is already in this log; the two are visibly
+about different things, deliberately.
+
+### What is corrected
+
+Two frozen entries assert that `0143`'s dated-correction-note fix is **`"still open"`**. It is not.
+⛔ **Both original entries are left byte-identical** — `log.md` is append-only, owner-ruled 2026-08-03,
+no exceptions. This new entry is the only instrument.
+
+**The entries, named by durable anchor — re-derived on disk this run, and no line number is written:**
+
+| Entry | The flagged item | The fragment found there |
+|---|---|---|
+| The **2026-07-26 `ingest (sync)`** entry whose roll-up records the vault at **161 pages** (`0 features · 8 systems · 33 decisions · 120 tasks`) | `⚠️ Flagged for human review`, the **ADR-010 stale-text** item | *"The sanctioned fix is a **dated correction note**, an architect call, **still open**."* |
+| The **2026-07-26 `ingest (sync)`** entry whose roll-up records the vault at **166 pages** (`0 features · 8 systems · 33 decisions · 125 tasks`) | `⚠️ Flagged for human review`, the **ADR-029 §Decision 6** item | *"the sanctioned fix is task `0143`'s dated-correction-note form, **still open**."* |
+
+⭐ **There are two 2026-07-26 `ingest (sync)` entries and the date alone does not separate them. The
+page-count roll-up is what does** — a durable property of each entry, unlike a position in an
+append-only file. Both roll-ups reproduced this run, so no fallback was needed and none was taken.
+
+### The fact, plainly
+
+`0143` shipped **2026-08-02** (**+71 / −0**); `0195` the same day (**+53 / −0**), repairing a
+self-contradiction `0143` knowingly shipped. Both are in `ai-agents/tasks/done/`, `✅ Done
+(agent-closed — not owner-verified)`. **The `"still open"` framing was TRUE when written and became
+false on 2026-08-02.**
+
+⚠️ **Re-measured on disk today, and the numbers have moved past what `0212`'s own brief recorded.**
+The brief (2026-08-03) says ADR-010 then carried **five** correction blocks and a `- **Corrections:**`
+header item with **two** site lists. **Today it carries 10 dated blocks and four site lists** —
+`0197` (sweep `0356`) and `0196` (sweep `0357`) each appended more. **Reported as a difference rather
+than smoothed over.** ADR-010's `Status` remains `accepted`.
+
+### ⭐ What is NOT being claimed — and one half that has ALSO changed, stated separately
+
+The ADR-029 §Decision 6 item makes a **second, independent claim with its own lifetime**: that
+`dashboard.sh` *"still derives task identity from the **mutable Priority cell**; the folder ID is only
+a fallback"*, and that *"Until 0103 lands, the tooling's notion of a task's identity is its board
+rank."* ⛔ **That half is not folded into the correction above.** It was re-checked at run time, as
+`0212`'s brief directs, and it has changed — **so it is stated here as its own distinct finding:**
+
+- ⛔ **The claim is now REVERSED.** `claude/skills/fkit-status/dashboard.sh` today declares
+  *"THE FOLDER-NAME ID PREFIX IS PRIMARY. The Priority cell is MUTABLE BOARD RANK"*, and its ladder
+  runs **folder ID prefix → Priority number → sanitised folder name → `?`**. The folder ID is
+  **primary**; the Priority cell is **arm 2**.
+- **`0103` has landed** — `ai-agents/tasks/done/`, `✅ Done`. The *"Until 0103 lands…"* clause is spent.
+
+### The scope of this correction
+
+**Re-derived at run time**, as the brief requires — a scan of this file for the literal
+`still open` returns **23 hits**. ⛔ **Only the two named above are in scope.** The other **21** refer
+to unrelated open items — the sync procedure's structural blind spot, `prove-red`'s R2 no-op mode, the
+missing `dual-home-parity` test, standing earlier-entry flags, and the `0288` / `0300` / `0171` /
+`0176` rows. **They are correct as written and were left alone.**
+
+⚠️ **The two original hits survive this correction. Their survival is the expected result, not a
+failure** — the correction is this entry, not their removal.
+
+### ⭐ THIS RUN'S RECONCILIATION of `0199`'s step-5 conflict — dated and attributed, so the flag stops recurring
+
+**Recorded by this run, 2026-09-05, on the owner's ruling of the same day** (label verbatim
+*"Write the resolution into the log (Rec)"*). ⛔ **This is this pass's reconciliation, not a quoted
+owner sentence.**
+
+**The conflict, as three separate runs carried it:** `0199`'s *What to build* item 5 instructs
+clearing the `"still open"` framing from `log.md`. **`log.md` is append-only.** The 2026-08-03 sync
+raised the contradiction and recorded it *"not resolved"*; the 2026-08-03 lint hit it and did not
+resolve it either; the 2026-08-06 and later syncs carried it forward.
+
+**It is resolved, and this is the resolution:** the owner's routing ruling of **2026-08-29** already
+decided it in substance — **the `log.md` half is `0212`'s and is performed by APPEND** (this entry is
+that append), **and `0199` keeps the ordinary-vault-page half** (`index.md` and the ADR-010 vault
+page), which was performed in this same pass and recorded in the entry above. ⛔ **Neither instruction
+was ever breached: no frozen entry was edited, and item 5 is discharged in full across two rows rather
+than one.**
+
+⭐ **Written down here so no future run re-raises it.** A run that finds this flag in an earlier entry
+should read that entry as **dated**, and read this paragraph as its disposition.
+
+### Scope
+
+Only `ai-agents/wiki-vault/` written. Append-only preserved — appended only, zero deletions, no past
+entry edited or annotated in place. Nothing committed, nothing staged. No task moved, no mover
+invoked. No brief, sprint plan, ADR, report, skill, agent definition, test or source file edited. No
+line-number coordinate anywhere in this run's diff.
+
+Task 0212's vault work is complete — ready to close
+
+---
+
+## 2026-09-05 — reconciliation (task `0317`) — the standing `0238` flag vs its landed close
+
+### ⭐ VERDICT: `0238` is **DISCHARGED**
+
+The substance `0238` existed to produce is **present**, named site by site below, and the standing
+`Task 0238: partial — not ready to close` flag is **SUPERSEDED by this entry**.
+
+⛔ **The standing flag lines are NOT amended.** `log.md` is append-only — owner-ruled, task `0211`, no
+exceptions. Every pre-existing `0238` flag line stays byte-identical; this dated entry is the only
+instrument. ⛔ `0238` is **not** reopened, moved, re-statused or edited; it stays in
+`ai-agents/tasks/done/` as `✅ Done (agent-closed — not owner-verified)`, per the owner ruling of
+2026-08-22, label verbatim **"File a task (Recommended)"**.
+
+⭐ **This is a CONTESTED close reconciled — and that is what distinguishes it from `0206`'s.** The
+2026-08-22 entry recorded that `0238`'s *"literal acceptance text was **overtaken, not met**"*. This
+entry does what that one could not: it reaches a verdict.
+
+### Condition 1 — the literal pre-archival path, EVERY remaining site named with its disposition
+
+⚠️ **A count without a list does not satisfy this**, so here is the list. Re-measured this run:
+**6 files, 26 occurrences** of the literal `ai-agents/sprints/sprint-2.md` inside the vault.
+⭐ **The SAME 6 files measured 2026-08-22 — the count has NOT moved.**
+
+| Site | Occurrences | Disposition |
+|---|---|---|
+| This log | 20 | **Frozen dated entries.** Append-only; corrected by an appended note, never by an edit |
+| [[wiki/decisions/adr-034-a-review-ledger-closes-on-the-work-product-not-the-task-s-own-record]] | 1 | **Historical** — describes a past sweep's 12-file set |
+| [[wiki/decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] | 1 | **Historical** — a dated 2026-07-27 instance |
+| [[wiki/tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] | 1 | **Historical** — a dated 2026-08-03 command transcript |
+| [[wiki/tasks/sprint-2-remove-omnigent]] | 3 | Its `**Source**:` already annotates *"(archived 2026-08-06; was `ai-agents/sprints/sprint-2.md`)"*; the other two are dated command transcripts |
+| [[wiki/tasks/sprint-3-close-the-rank-integrity-loop]] | 1 | **Meta** — names the string as prose, not as a pointer |
+
+⛔ **NONE of the six is a live pointer.** These are the six named pre-archival-path instances the
+2026-08-07 entry already warned about — *"a dead-path scan WILL report these named instances — do not
+'re-fix' them."* ⛔ **They were not re-fixed.** A scan hit here is not a defect.
+
+### Condition 2 — no live claim that Sprint 2 is the active board
+
+Checked in the **whitespace-normalised** form the convention prescribes (`tr '\n\t' '  ' | tr -s ' '`,
+the squeeze included, then match). ⭐ **Result: ZERO live claims.** The single hit is in this log and
+reads *"Sprint 2 is active or that the board lives at the old path"* — **the check's own description
+of itself**, not an assertion.
+
+⚠️ **The stated limits of that form, recorded honestly alongside the result** — it does not catch a
+claim split across **table cells**, one carried by **wording drift**, one broken by **inline
+emphasis**, or one inside a **code fence**. **The result is a floor, and is reported as one.**
+
+### Condition 3 — `0238`'s two acceptance criteria are UNMEETABLE, quoted verbatim
+
+⭐ **Quoted so a later reader neither re-opens the question nor, worse, "satisfies" it by writing the
+false claim.**
+
+> **Step 2 —** *"**After:** both counts are zero, or every remaining instance is inside a frozen entry
+> that the vault's conventions say is corrected by an appended dated note rather than an edit — **and
+> each such instance is named in the close report.** 'Handled by convention' without a list is not
+> verification."*
+
+⛔ **The *"both counts are zero"* limb is unmeetable and always was.** 20 occurrences sit in frozen
+append-only entries that may never be edited. **The second limb IS met** — every remaining instance is
+inside a frozen entry or is dated historical prose, and each is named in the table above.
+
+> **Step 3 —** *"The vault names `ai-agents/sprints/done/sprint-2.md` and `ai-agents/sprints/sprint-3.md`
+> at their real paths, and every re-pointed link resolves on the filesystem."*
+
+⛔ **Unmeetable: `ai-agents/sprints/sprint-3.md` DOES NOT EXIST.** Provable by listing
+`ai-agents/sprints/`, which returns `backlog.md`, `sprint-7.md`, `done/` and `reviews/`. Sprint 3 was
+archived 2026-08-07 and its plan sits at `ai-agents/sprints/done/sprint-3.md`. ⭐ **A vault pointing at
+`ai-agents/sprints/sprint-3.md` as a real path would now be pointing at nothing.** The first path in
+that step is still correct.
+
+⚠️ **The active board today is Sprint 7** — not Sprint 6, which is what was true when `0317`'s brief
+was written. Re-measured this run and recorded as a difference rather than carried forward.
+
+### What this entry does NOT do
+
+⛔ It adds **no** check, **no** tooling and **no** convention. Whether anything *should* automatically
+notice when a close falsifies a vault claim is the general question owned by `0290`, which is open.
+**This is a single instance, settled on its own facts.**
+
+### Scope
+
+Only `ai-agents/wiki-vault/` written. Append-only preserved — zero deletions, no past entry edited or
+annotated in place. `0238`'s brief is byte-identical and untouched. Nothing committed, nothing staged,
+no task moved, no mover invoked, no board row altered. No line-number coordinate in this run's diff.
+
+Task 0317's vault work is complete — ready to close
+
+---
+
+## 2026-09-05 — discharge (task `0319`) — the standing `0206` flag
+
+### ⭐ VERDICT: `0206` is **DISCHARGED**
+
+`0206`'s deliverable is **present**, verified site by site below against `0206`'s own five checks, and
+the standing `Task 0206: partial — not ready to close` flag is **SUPERSEDED by this entry**.
+
+⛔ **Both standing `0206` flag lines are left byte-identical.** `log.md` is append-only — owner-ruled,
+task `0211`, no exceptions. ⛔ `0206` is not reopened, moved, re-statused or edited.
+
+### ⭐ THIS FLAG IS **STALE**, NOT CONTESTED — and that is why this is a separate row from `0317`
+
+**Stated in words, because this sentence is the deliverable as much as the verdict is.**
+
+⭐ **`0206`'s flag is stale: the deliverable was recorded VERIFIED PRESENT, and the flag simply
+outlived the fact.** The 2026-08-22 entry says so in its own words — *"`0206`'s deliverable was
+verified present this run"* — and this run re-verified it independently, today, site by site. Nothing
+about `0206` is in dispute. The flag stands only because no run had yet been chartered to withdraw it.
+
+⛔ **`0238`'s flag is a different animal and must not be read as the same.** The same 2026-08-22 entry
+records that `0238`'s *"literal acceptance text was **overtaken, not met**"* — its acceptance criteria
+are **unmeetable as written**, and reconciling it required quoting them and ruling on them (this run
+did that in the separate `0317` entry above). ⭐ **One flag outlived a satisfied condition; the other
+named a condition that can never be satisfied. Those are different in kind, which is exactly why the
+owner ruled them two rows and why this run wrote two entries.**
+
+### The 2026-08-03 / 2026-08-06 contradiction, reconciled
+
+Two entries in this log say opposite things about `0206`, and **neither is amended**:
+
+| Entry | Its flag line |
+|---|---|
+| The **`2026-08-03 — sync`** entry, at the second of its two run-ending flag lines | *"Task 0206's vault work is complete — ready to close"* |
+| The **`2026-08-06 — ingest (sync)`** entry, at its run-ending flag line | *"Task 0206: partial — not ready to close"* |
+
+⭐ **THE 2026-08-03 LINE STANDS.** On today's evidence the deliverable is present and complete, so the
+`complete — ready to close` reading is the correct one and the 2026-08-06 `partial` line is
+**superseded by this entry**.
+
+**Why the 2026-08-06 run reached the other answer, without impugning it:** it was a delta sync, and
+the faithful-carry report was *"unchanged since the watermark — not in the delta"*, so that run did
+not re-examine the deliverable and correctly declined to resolve a doubt it had not measured. ⛔ **It
+was right to flag rather than close.** ⛔ **Neither line is amended, reworded or deleted** — both stay
+byte-identical, and this dated entry is the reconciliation.
+
+⚠️ **`0206` has since CLOSED** — it sits in `ai-agents/tasks/done/`. That is what makes the surviving
+flag stale rather than live.
+
+### `0206`'s five verification steps, answered INDIVIDUALLY, site by site
+
+⚠️ **A count or a "looks covered" does not satisfy this.** The covering page is
+[[wiki/tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]].
+
+| # | `0206`'s check | Measured 2026-09-05 | Verdict |
+|---|---|---|---|
+| 1 | A vault page covers the faithful-carry report | The page exists and cites `ai-agents/knowledge-base/reports/2026-08-02-faithful-carry-of-an-approved-plan.md` | ✅ **present** |
+| 2 | Carries the **checkable vs testimony** separation explicitly | Found under normalisation — *"checkable-vs-testimony"*, and *"checkable detail inside the testimony"* | ✅ **present** |
+| 3 | States the **`carried-not-approved`** residual and that `0202` does not close it | Its own heading reads *"⛔ The accepted residual `carried-not-approved` — open, structural, and NOT closed by `0202`"* | ✅ **present** |
+| 4 | Back-links `0162`'s brief at its **current** `tasks/done/` path | Its `**Source**:` field reads `ai-agents/tasks/done/0162-decide-the-construction-…/brief.md` | ✅ **present** |
+| 5 | Any pre-existing vault link to `0162`'s old `backlog/` path is repaired or reported | Raw scan of the vault: **0 hits.** Whitespace-normalised scan across every vault file naming `0162`: **0 hits** | ✅ **absent** |
+
+⚠️ **The absence half was done in the whitespace-normalised form** (`tr '\n\t' '  ' | tr -s ' '`, the
+squeeze included) **and its stated limits are recorded alongside the result**: it does not catch a
+reference split across **table cells**, one carried by **wording drift**, one broken by **inline
+emphasis**, or one inside a **code fence**. **A floor, reported as a floor.**
+
+⭐ **All five reproduce. That is the whole basis of the `discharged` verdict.**
+
+### What this entry does NOT do
+
+⛔ It does **not** pre-decide `0290` — the general question of whether anything *should* automatically
+notice when a close falsifies a vault claim. This pass adds **no check, no tooling and no convention**;
+it settles **one instance**. ⛔ It does not annotate `0206`'s brief — nothing under `ai-agents/tasks/`
+was touched by this run.
+
+### Scope
+
+Only `ai-agents/wiki-vault/` written. Append-only preserved — zero deletions, no past entry edited or
+annotated in place. `0206`'s brief is byte-identical and untouched. Nothing committed, nothing staged,
+no task moved, no mover invoked, no board row altered. No line-number coordinate in this run's diff.
+
+Task 0319's vault work is complete — ready to close
+
+---
+
+## 2026-09-05 — lint (vault-wide) + watermark advance — sweep C, task `0358`
+
+- **Issues found: 1**
+- **Issues fixed: 1**
+- **Issues flagged for human review: 0 new**
+
+### Integrity, measured before and after
+
+| Measure | Before this pass | After |
+|---|---|---|
+| Content pages | **272** (0 features · 8 systems · 44 decisions · 220 tasks) | **274** (0 features · 8 systems · **46** decisions · 220 tasks) |
+| Index entries covering those pages | 272 | **274** |
+| Pages missing from `index.md` | 0 | **0** |
+| Broken wiki-links (elided log forms excluded by convention) | 0 | **0** |
+| Genuine broken markdown links | 0 | **0** |
+| YAML frontmatter (schema forbids it) | 0 | **0** |
+| Vault ADR pages ↔ knowledge-base ADRs | 44 ↔ 46 | **46 ↔ 46** |
+
+### ⭐ The one issue found and fixed — and it is the reason this sweep existed
+
+**Two shipped, accepted ADRs had NO vault page at all.** `adr-045` (accepted 2026-08-30) and `adr-046`
+(accepted 2026-09-04) were absent from `wiki/decisions/` and from `index.md`. ⭐ **Fixed** — both pages
+created to `schema.md`'s decision template with bold inline metadata, both catalogued in `index.md`,
+and all ten of their cross-links made **bidirectional**.
+
+⭐ **Cross-check result: `knowledge-base` ADRs with no vault page is now ZERO.** Numeric comparison
+(leading zeros stripped), case-insensitive filename match, regular files only: **46 vault ↔ 46
+knowledge-base, exact slug match, no duplicate numbers, and every `# ADR-NNN:` heading agrees with its
+own filename.** No slug divergence and no missing counterpart.
+
+### ⚠️ Re-measurement that does NOT reconcile with a figure this row inherited — reported, not smoothed
+
+`0358`'s brief routes in a finding of **13** vault-internal broken links. **This run measures 12** raw
+unresolved relative markdown links — and **all 12 sit inside inline code spans**: they are quoted
+marker text, not links. ⛔ **Genuine broken markdown links: 0.**
+
+Likewise **51** unresolved `[[…]]` wiki-link forms, every one of them conventional rather than broken —
+`schema.md`'s own template placeholders, **elided** targets carrying `…` inside this log's prose (a
+long-standing `log.md` convention, and not a defect), and meta-references to the notation itself.
+⛔ **Genuine broken wiki-links: 0.**
+
+⚠️ **The 13 → 12 difference is NOT reconciled.** It is a matcher difference or a site that changed
+since 2026-08-29. **Either way the convention-correct answer is unchanged at zero, and no work was
+scoped against the 12.**
+
+### ⛔ WATERMARK ADVANCED — and what that must NOT be read to mean
+
+`.wiki-watermark` advanced `16754e3` → **`cf289c2`**.
+
+⛔ **THIS DOES NOT MEAN THE CLOSED-TASK BACKLOG WAS INGESTED.** It was not. **45 closed-task folders
+touched since the old watermark still have no vault page**, and they were **bounded out of this pass by
+owner ruling** — the full reasoning is in this run's `ingest (sync)` entry above, under its
+*"THE BOUND"* heading. A follow-up row was handed to the producer as a **filing request**; ⛔ this run
+filed nothing and created no board row. ⭐ **A future sync must treat the closed-task backlog as
+OUTSTANDING despite a clean watermark.**
+
+⚠️ **One further consequence of ingesting working-tree bytes.** `adr-003`, `adr-037` and `adr-046` were
+ingested from **uncommitted** bytes, but the watermark names a **commit**. When that work is committed,
+the next sync will surface those three files as delta again and may re-ingest pages this run already
+wrote. ⭐ **That is a safe over-report, not an under-report** — but it is recorded so the next run knows
+why it is seeing them.
+
+### Standing flags from earlier entries
+
+Unchanged, except the two this run deliberately superseded by dated entry — `0238`'s and `0206`'s, both
+reconciled above with an explicit verdict. ⛔ **Neither original flag line was amended**; both remain
+byte-identical, along with every other byte of this file that predates this run.
+
+### Scope
+
+Only `ai-agents/wiki-vault/` written (the watermark included), plus this task's own folder records.
+Append-only preserved across all five of this run's entries — **zero deletions**, proved per entry and
+again against a pre-run snapshot of the whole file. Nothing committed, nothing staged, no task moved,
+no mover invoked, no board row created or flipped, no knowledge-base file or brief edited.
+
+Task 0199's vault work is complete — ready to close
+Task 0212's vault work is complete — ready to close
+Task 0239's vault work is complete — ready to close
+Task 0317's vault work is complete — ready to close
+Task 0319's vault work is complete — ready to close
+Task 0287: partial — not ready to close
+
+### Addendum to the 2026-09-05 lint — the vault's own citation rule, checked
+
+⭐ **Run because this rule has NO test underneath it.** The vault is exempt from both repo guards —
+`test/reference-integrity.test.js` asserts positively that no vault file is ever scanned, and
+`test/coordination-citation-policy.test.js` never walks the vault, carrying `log.md` in its target
+regex **as a cited class, never a citing one**. But `conventions/durable-citation-anchors` row 3 rules
+a line number into a coordination document **wrong categorically**. ⛔ **An exemption from a check is
+not an exemption from the rule.**
+
+**Scanned the whole vault for a coordination-document path followed by a line number. Found 4. Added
+by this run: ZERO.** All four triaged, and ⛔ **none is a defect to repair:**
+
+- **Three sit in frozen dated entries of this log** — all concerning task `0148`'s Sprint 2 board row.
+  Append-only; unfixable by edit **by rule**. ⭐ **And they are already self-corrected in place**: the
+  third of them is a dated note recording that the first two rotted, measuring the row's true position
+  at the time and noting it had **already moved again by HEAD** — the vault documenting its own
+  coordinate rot, which is the argument for the durable-anchor convention rather than a breach of it.
+- **One sits on [[wiki/tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]]**,
+  inside a bullet that is **left byte-identical and immediately superseded by a dated ✅ block directly
+  beneath it** — which names the real path (`ai-agents/sprints/done/sprint-5.md`), quotes the archived
+  banner, and records `select-active` returning `active none`. ⛔ **Editing it would destroy the record
+  its own correction block exists to preserve.**
+
+⭐ **Genuine live coordinate defects in the vault: ZERO.** Recorded so a future scan's four hits are
+recognised as triaged history rather than rediscovered as new work.
+
+---
+
+## 2026-09-05 — correction (task `0358`, round 1 review) — five frozen numbers in this run's own entries
+
+**Appended on owner ruling of 2026-09-05, option label verbatim "One further dated append in this
+row (Rec)."** Round 1 of `0358`'s review found five numeric defects in the entries this same run
+appended earlier today. ⛔ **Those entries are left byte-identical** — `log.md` is append-only,
+owner-ruled task `0211`, and that rule binds a run correcting itself exactly as it binds any other.
+
+⭐ **The owner's stated reason for spending an append on this: R3's number is the evidence base for a
+`DISCHARGED` verdict.** A self-invalidating count left standing undermines the verdict it supports.
+
+⛔ **No verdict in this pass changes.** `0238` stays **discharged**, `0206` stays **discharged**,
+`0287` stays **open**. Every correction below is to a *number* or a *word*, never to a finding.
+
+### R3 — the `0317` entry's occurrence arithmetic is wrong three ways
+
+The `2026-09-05 — reconciliation (task 0317)` entry, at its *"Condition 1"* section, says
+*"**6 files, 26 occurrences**"* over a table whose rows read 20 · 1 · 1 · 1 · 3 · 1.
+
+- **(a) The rows sum to 27, not 26.** Arithmetic error.
+- **(b) The `20` matches neither state.** At `HEAD` this file held **19** occurrences (vault total
+  **26**); on delivery it holds **21** (vault total **28**).
+- **(c) ⛔ The measurement is self-invalidating.** That entry's own table quotes the literal
+  `ai-agents/sprints/sprint-2.md` repeatedly, so the count was false the moment the entry landed, and
+  this correction adds more still.
+
+⭐ **The verdict is untouched and the LIST is correct.** `0238`'s step 2 asks for a **named list with
+dispositions**, not a total; the six files and their dispositions were re-verified and none is a live
+pointer. ⚠️ **A total occurrence count is the wrong instrument for this file** — any entry that
+quotes the string changes it. **Cite the six files; do not cite a number.**
+
+### R4 — ⛔ NOT CORRECTED: re-measured, the reported figures REPRODUCE
+
+⭐ **This finding does not hold, and writing a "correction" for it would put a false statement into an
+append-only file.** The owner's ruling named R4 among the five; this append therefore *addresses* it —
+by recording the measurement rather than by amending a figure that is right.
+
+The `ingest (sync)` entry reports **150** changed source files and **7** sprint files. Re-measured
+today with the command `/fkit-wiki-sync` step 2 itself prescribes:
+
+```
+$ git log 16754e3..HEAD --diff-filter=AMR --name-only --format="" \
+      -- ai-agents/ ':!ai-agents/wiki-vault/' | sort -u | wc -l
+150
+$ # and again with --no-renames
+150
+$ git log 16754e3..HEAD --diff-filter=AMR --name-only --format="" -- ai-agents/sprints/ | sort -u
+ai-agents/sprints/backlog.md
+ai-agents/sprints/done/sprint-2.md
+ai-agents/sprints/done/sprint-3.md
+ai-agents/sprints/done/sprint-4.md
+ai-agents/sprints/done/sprint-5.md
+ai-agents/sprints/done/sprint-6.md
+ai-agents/sprints/sprint-7.md
+```
+
+**150 under both rename settings; 7 sprint files under both.** ⚠️ A **tree-to-tree** `git diff` over
+the same range gives **137** — a different question (net change between two trees) from the one the
+procedure asks (paths touched by commits in the window). ⭐ **The figures stand as written. The
+divergence is a command difference, and it is recorded here so it is not rediscovered as a defect a
+third time.**
+
+### R6 — the `0212` entry's `still open` count is a pre-append baseline
+
+That entry says a scan *"returns **23 hits**"* and calls it *"re-derived at run time"*. **23 was the
+count before this run appended anything.** On delivery the file holds **31** — this run's own entries
+add 8 while quoting and discussing the two targets.
+
+⭐ **The scoping conclusion is unaffected and correct**: exactly two hits assert `0143`'s fix is
+unshipped, and both were named by durable anchor. The other hits refer to unrelated open items and
+were left alone. ⚠️ **What is wrong is calling a pre-write baseline a run-time re-derivation** — a
+future reader re-running the scan cannot reconcile 31 against 23. **Read 23 as: measured before this
+run's appends.**
+
+### R7 — ADR-046 is not "shipped"
+
+The lint entry says *"**Two shipped, accepted ADRs had NO vault page at all.**"* ⛔ **ADR-046 is not
+shipped.** It is **untracked on disk — never committed** — and this same run says so twice, in the
+ingest entry and in the ADR-046 page's own banner. `Status: accepted` is true; *shipped* is not.
+
+**Read that sentence as: two ADRs — one committed (ADR-045), one untracked (ADR-046) — both
+`Status: accepted`, neither with a vault page.** ⭐ The justification for creating both pages is
+unaffected: an accepted ADR with no catalogued page is the gap this sweep closed.
+
+### R8 — the addendum's "Found 4" is matcher-bound, and hands a future scan the wrong number
+
+The lint addendum reports **4** coordinates and invites a future scan to recognise *"a future scan's
+four hits"* as triaged history. ⛔ **That number is an artifact of scanning for the FULL-PATH form
+only.** A filename-relative matcher finds many more across this file and the content pages — forms
+like a bare `sprint-2.md`, `sprint-5.md`, `review.md` or `log.md` followed by a line number — all
+**pre-existing**, all inside frozen or dated-and-superseded entries.
+
+⚠️ **`durable-citation-anchors` row 3 rules the form wrong CATEGORICALLY — not only when the path is
+absolute.** So the addendum's own framing under-counts the class it names.
+
+⭐ **The load-bearing half is re-verified and TRUE: this run added ZERO**, under the guard's own
+`TARGET` regex and under a deliberately looser filename-relative matcher alike. **Read the addendum
+as: zero added by this run; the pre-existing population is larger than four and is bounded by the
+matcher you choose.** ⛔ A future sweep of that class needs its own row and its own stated matcher —
+this run does not scope one.
+
+### Scope
+
+Only `ai-agents/wiki-vault/log.md` written by this append. Append-only preserved — zero deletions, no
+past entry edited or annotated in place. Nothing committed, nothing staged, no task moved, no mover
+invoked, no board row altered. No line-number coordinate into any coordination document.
+
+Task 0358: partial — not ready to close
+
+---
+
+## 2026-09-06 — correction (task `0358`, round 1 review, R5) — the `0287` exclusion claim
+
+**Appended on owner ruling of 2026-09-06, option label verbatim "One more fkit-wiki append (Rec)."**
+
+⛔ **This append exists because a previous one claimed a repair it did not perform.** `0358`'s round-1
+disposition table recorded R5 as *"corrected below and in the append"*. **It was corrected in the
+worker's `worklog.md` only.** The 2026-09-05 correction entry carries sections for R3, R4, R6, R7 and
+R8 — **and no R5 section at all**. The defective sentence therefore stood in the **work product**,
+uncorrected, while a record asserted otherwise.
+
+⚠️ **Recorded plainly because the class matters more than the instance: a record row describing a
+repair is not evidence the repair happened.** This one passed the worker's own worklog and the
+driver's briefing before an independent verification against the artifact caught it. **The check that
+works is grepping the work product for the corrected wording** — here, searching the vault for
+*"sandbox claims"* returned nothing, which is what exposed it.
+
+### The correction
+
+The `2026-09-05 — ingest (sync)` entry, at its section *"⛔ `0287` is EXCLUDED BY A BLOCKED UPSTREAM"*,
+asserts:
+
+> ⛔ **`0287`'s vault pages were left ALONE.**
+
+⛔ **That is overbroad and falsifiable by one `git status`.** `0287`'s brief enumerates the vault pages
+carrying its subject, and **three of them were touched by that same pass** — `index.md` (two catalog
+rows added and the `0140` row rewritten), ADR-042's vault page (a dated resync note and an ADR-045
+back-link), and [[wiki/systems/review-and-model-diversity]] (an ADR-045 back-link).
+
+⭐ **Read it instead as the true and load-bearing statement:**
+
+> ⭐ **`0287`'s SANDBOX CLAIMS were left alone.**
+
+**That is what T3's substance actually rests on, and it is re-verified today:** no `read-only` sandbox
+sentence moved on any page; **6** `--sandbox read-only` occurrences and **0** `--sandbox
+workspace-write` remain under `claude/`; `0273` is still `🔲 Backlog`; and `0287` is on neither close
+list. ⛔ **The original sentence is left byte-identical** — append-only, owner-ruled task `0211`.
+
+⭐ **`0287`'s verdict does not move: it stays OPEN.** Nothing in this correction touches the exclusion
+itself, only the width of the sentence describing it. **Five-of-six remains the correct outcome.**
+
+### Scope
+
+Only `ai-agents/wiki-vault/log.md` written by this append. Append-only preserved — zero deletions, no
+past entry edited or annotated in place. Nothing committed, nothing staged, no task moved, no mover
+invoked, no board row altered. No line-number coordinate into any coordination document.
+
+Task 0358: partial — not ready to close

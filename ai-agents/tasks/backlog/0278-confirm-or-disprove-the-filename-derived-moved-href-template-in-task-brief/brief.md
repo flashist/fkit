@@ -19,7 +19,7 @@ fkit-architect
 ADR's completeness claim**, not a prose edit. If the finding confirms, `claude/skills/fkit-task-brief/SKILL.md:351`
 is an **eighth** ADR-041 §6 site — which means §6's *"all seven must be corrected"* was **wrong as
 written**, and amending an accepted ADR is the architect's call. This is the same reasoning that put
-[`0276`](../0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md)
+[`0276`](../../done/0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md)
 with the architect. The SKILL.md edit, if one is owed at all, is one line and rides with the verdict.
 
 ## Context
@@ -202,7 +202,7 @@ fresh project, which is a different act from stating a **mechanism**.
   brief on purpose. The reported defect may not exist. **Concluding that it does not, and recording
   why, is a full and successful outcome of this task** — not a failure, and not a reason to
   manufacture a change.
-- **⚠️ CONCURRENCY HAZARD WITH [`0276`](../0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md)
+- **⚠️ CONCURRENCY HAZARD WITH [`0276`](../../done/0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md)
   — recorded as a note, deliberately NOT a `Depends on:`.** The two rows overlap on **both** of their
   files: `0276` corrects `claude/skills/fkit-task-brief/SKILL.md:341-343`, this one looks at `:351` —
   **ten lines apart in the same section**; and **both** may append an amendment to **ADR-041**
@@ -215,7 +215,7 @@ fresh project, which is a different act from stating a **mechanism**.
 - **⚠️ NOT one row with `0276`.** They read like neighbours but are different claims in different ADR
   sections, and `0276` carries a residual's re-raise trigger this row does not share. Merging them
   would put an unconfirmed finding inside a row that must ship.
-- **Independent of [`0279`](../0279-gloss-the-undefined-n-in-status-report-formats-moved-value-in-both-homes/brief.md)**,
+- **Independent of [`0279`](../../done/0279-gloss-the-undefined-n-in-status-report-formats-moved-value-in-both-homes/brief.md)**,
   its sibling filed the same day from the same source. No shared file, no ordering. Recorded so nobody
   invents an edge between two rows filed together.
 - **On merit:** the **Backlog**, unranked, and that is honest. The reported defect is **unconfirmed**,

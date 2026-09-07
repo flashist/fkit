@@ -73,3 +73,4 @@ Sites touched: `fkit-review`, `fkit-stateful-review`, `fkit-adversarial-review`,
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]] — the model-diversity purpose this preserves
 - [[tasks/add-the-red-fixture-a-product-prefixed-h1-on-a-plan-sprint-n-filename]] — `0259`, one of the three inconsistent ledgers that motivated the ADR
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — the board this ran on
+- [[decisions/adr-045-an-in-flight-review-finding-terminates-in-the-ledger-not-a-new-task]] — ⭐ *Added 2026-09-05 (`0358`, sweep C):* the ledger status vocabulary this task shipped is what ADR-045's limit-3 terminal set is built from

@@ -10,6 +10,17 @@
 
 > **In one line:** `fkit-sprint-ship-loop` is a **lead-owned driver** that ships a sprint's eligible tasks brief→closed by spawning role workers for bounded steps, relaying every owner decision **live** through the lead session, and closing with the agent-closed marker **by default** — and it **never** invokes the coder's session-only `fkit-task-ship-loop`.
 
+> ⭐ **Dated resync note 2026-09-05 (`0358`, sweep C) — the source ADR's *"byte-unchanged"* claim is FALSE, at TWO sites.** The page below is left **byte-identical**. ⛔ **Nothing here reopens a decision — a drifted fact, not an overturned ruling.**
+>
+> Task `0170` (2026-09-04, inside sweep `0357`) appended one note covering both, anchored by heading and quoted phrase:
+>
+> - **§Decision item 1** — *"It **does not invoke** `fkit-task-ship-loop`, which stays byte-unchanged and session-only."*
+> - **§Consequences → Positive** — *"`fkit-task-ship-loop` and every role stay untouched; the change is additive and opt-in by name."*
+>
+> **What falsified them.** [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] §Decision 3 rewrote `fkit-task-ship-loop`'s close step — from invoking `/fkit-task-done` itself to **routing the close to the producer** — and that rewrite is in `claude/skills/fkit-task-ship-loop/SKILL.md` today. The file **was** edited after this ADR was written, for a reason unrelated to this ADR's own ripple.
+>
+> ⭐ **What still stands is the larger half.** The ***"session-only"*** claim is **TRUE and untouched** — the task loop genuinely refuses a spawned or headless invocation. And the design fact both sentences were written to carry is **TRUE and untouched**: introducing the sprint driver required **no** edit to the task loop.
+
 ## Context
 
 ADR-031 established that `fkit-lead` can drive the team. This records the behaviour of its first named application: a loop that ships a whole sprint. Two constraints shaped it:

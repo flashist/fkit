@@ -7,6 +7,18 @@
 
 > ⚠️ **Read this before trusting Decision 2's "advisory in a consult" language below.** [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] reopened Decisions 3 and 4 (their own pre-registered re-raise trigger was met) and adopted the `PreToolUse` skill-ownership hook — now **implemented and verified** ([[tasks/implement-pretooluse-skill-ownership-hook]]). Enforcement now follows the **real caller at any spawn depth**, so the "structural in a session, advisory in a consult" split this page draws **no longer describes current truth**. `CONSULT_SKILLS` (Decision 3) is retired. This file is kept intact as the historical record; **ADR-018 is the current ground truth for the consult-path question.**
 
+> ⭐ **Dated resync note 2026-09-05 (`0239`, inside sweep `0358`) — the SOURCE ADR's coordinates were corrected by `0232`, and this page was the last place the corrected error was still asserted as current.** Every line below is left **byte-identical**. ⛔ **ADR-012's decision is NOT reopened** — this is a coordinate repair following a coordinate repair.
+>
+> ⚠️ **Re-derived from the LANDED ADR, not from `0239`'s brief** (its own constraint: *"what `0232` actually changed is the input; what it planned to change is not"*). Working-tree bytes read, blob `c7d5ac9be5b660e35bed947a3b4c8a435ec39a62`.
+>
+> **`0232` (2026-09-03, inside sweep `0356`) appended FIVE dated correction notes to the knowledge-base ADR** — at **§The live bug**, **§Decision 1**, **§Decision 2**, **§Consequences** and **§Related**. This page recorded none of them until now. What they establish:
+>
+> - ⛔ **`skills_for_role()` MOVED FILE.** It lives in **`claude/skills-for-role.sh`**, *not* `claude/fkit-claude.sh`. **§Decision 1 below still names the old file** — that sentence is left byte-identical as the 2026-07-11 record; **the home is `claude/skills-for-role.sh` today.** *"Single source of truth" is still exactly right — only the filename changed.*
+> - ⭐ **`build_settings()` did NOT move file.** It is still in `claude/fkit-claude.sh`, further down. ⚠️ **The two functions moved differently, and conflating them is the trap** — both of the ADR's original pointers aimed at `skills_for_role()` and now land in the self-update helper instead.
+> - **Every coordinate in §The live bug, §Consequences and §Related had drifted**, and each is now anchored by name rather than by position on the source side.
+>
+> ⭐ **Why the split happened:** the function was extracted at task 43 / [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] so both the launcher **and** the `PreToolUse` hook could read it without sourcing `fkit-claude.sh`, whose top-level side effects make it unsafe to source.
+
 ## Context
 ADR-010 locked every session to one role and claimed the lock was **structural**: *"Role separation is enforced structurally, not by instruction."* It also left one thing to the coder: `skills_for_role()` is the single source of truth, and the `skills:` frontmatter *"must be generated from it or dropped."*
 

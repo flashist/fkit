@@ -559,7 +559,17 @@ codex_preflight() {
 }
 codex_preflight
 
-# --- Fresh project: skip the menu, go straight to the producer's cold start -------------------
+# --- Fresh project: run the producer's cold start, THEN open the lead -------------------------
+# The producer is where the cold start lives (`fkit-initiate-project` is producer-only, and the
+# ADR-018 hook denies it to every other role), so it still goes first — with the live owner channel
+# the initiation is written for. But the producer is not where you want to LAND: once the project is
+# initiated, the lead is the front door (ADR-031). So the cold start is no longer an `exec`: it RUNS,
+# and if it succeeded the launcher falls through to its own tail and opens the lead in this tab.
+#
+# ⛔ The fall-through is GATED on the initiation actually landing — exit 0 AND a tree that is no longer
+# fresh. A Ctrl-C, a "skip setup", or a half-finished initiation exits exactly as it did before. Being
+# force-dropped into a session you did not ask for is worse than being dropped back to the shell.
+#
 # "Fresh" is only a meaningful question when init actually manages ai-agents/. When it REFUSED the tree
 # (symlink, a file where the dir belongs, a directory it cannot read), PROJECT.md is missing for a
 # reason that has nothing to do with being new — and force-starting the producer's cold start would
@@ -569,6 +579,16 @@ codex_preflight
 # `aa_refused` comes from init's exit status (3). Do NOT re-derive it here — an earlier version tested
 # `[ -d ] && [ ! -L ]` and silently disagreed with init about a chmod-000 directory.
 pm="$proj/ai-agents/knowledge-base/PROJECT.md"
+# The freshness question, asked in exactly one place. It is asked TWICE now — once to decide whether
+# to cold-start, and again afterwards to decide whether the cold start actually landed — and the whole
+# value of the second ask is that it is the SAME question. Two hand-copied greps would drift, and the
+# drift would be silent in the direction that hurts: a stricter second test never opens the lead, a
+# looser one opens it on a half-written PROJECT.md.
+pm_is_fresh() {
+  [ ! -f "$pm" ] \
+    || grep -q 'fkit:uninitialized' "$pm" 2>/dev/null \
+    || grep -qF '# <Project name>' "$pm" 2>/dev/null
+}
 fresh=0
 # `setup_ok` is checked as well as `aa_refused`, and not only as a belt-and-braces: one exit status
 # cannot carry two facts. If init refuses ai-agents/ AND then fails a later step, `set -e` exits with
@@ -579,14 +599,13 @@ fresh=0
 # It is independently right, too: the producer's initiation exists to WRITE ai-agents/, and a failed
 # setup is direct evidence fkit cannot write this project. Cold-starting into it could only fail.
 if [ "$aa_refused" = 0 ] && [ "$setup_ok" = 1 ]; then
-  if [ ! -f "$pm" ] \
-     || grep -q 'fkit:uninitialized' "$pm" 2>/dev/null \
-     || grep -qF '# <Project name>' "$pm" 2>/dev/null; then
+  if pm_is_fresh; then
     fresh=1
   fi
 fi
 if [ "$fresh" = 1 ] && [ -z "$role" ]; then
   printf '\n  This project is not initiated yet — starting the producer to set it up.\n'
+  printf '  When the initiation is done, this tab opens the lead.\n'
   role="producer"
   [ -x "$proj/.fkit/interview" ] && { "$proj/.fkit/interview" || true; }
   if [ -f "$proj/.fkit/intake.md" ]; then
@@ -596,7 +615,27 @@ if [ "$fresh" = 1 ] && [ -z "$role" ]; then
   fi
   settings="$(build_settings producer)"
   set_tab_title producer
-  exec claude --agent fkit-producer --settings "$settings" "$@" "$seed"
+  # ⛔ NOT `exec` any more, and the `|| cold_rc=$?` is not optional politeness: under `set -e` a
+  # non-zero exit from a bare `claude` would kill the launcher HERE, before the transition below ever
+  # runs — i.e. exactly on the Ctrl-C path the gate exists to handle, and silently.
+  cold_rc=0
+  claude --agent fkit-producer --settings "$settings" "$@" "$seed" || cold_rc=$?
+  # Did the initiation actually land? Both halves are load-bearing. The exit code alone would open the
+  # lead after a Ctrl-C that happened to leave a PROJECT.md behind; the tree state alone would open it
+  # after a producer that crashed at the last step. Only "exited clean AND no longer fresh" is proof.
+  if [ "$cold_rc" = 0 ] && ! pm_is_fresh; then
+    # Fall through to the tail with role=lead. Deliberately NO new `exec` and NO seed: the tail below
+    # already prints the lead line, builds the lead's settings, retitles the tab and execs it.
+    role="lead"
+  else
+    # The owner was PROMISED the lead two screens ago ("this tab opens the lead"), and the gate above
+    # has just decided not to keep that promise. Exiting silently here leaves them staring at a shell
+    # prompt with no idea whether fkit broke or simply declined — so say which. ⛔ This is a message
+    # ONLY: the exit code is still the cold start's own and no session is opened, because being
+    # force-dropped into a session you did not ask for is the thing the gate exists to prevent.
+    printf '\n  Setup did not complete — run `fkit` again when you are ready.\n'
+    exit "$cold_rc"
+  fi
 fi
 
 # --- The menu (deterministic; no LLM) ----------------------------------------------------------

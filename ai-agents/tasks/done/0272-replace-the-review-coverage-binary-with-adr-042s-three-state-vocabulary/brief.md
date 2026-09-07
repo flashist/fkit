@@ -84,7 +84,7 @@ ADR-040 breach. ADR-009's model-diversity purpose survives intact. What is not p
 implying more than reasoning.
 
 ⛔ **Correcting the two overstating ledgers is NOT this task** — it is
-[`0274`](../../backlog/0274-append-dated-coverage-corrections-to-0259s-and-0264s-closed-review-ledgers/brief.md).
+[`0274`](../0274-append-dated-coverage-corrections-to-0259s-and-0264s-closed-review-ledgers/brief.md).
 
 ## What to build
 
@@ -190,7 +190,7 @@ the rest, that is the right instinct — say where, and why.
 - **Depends on:** nothing
 - **Blocks:** `0273`
 - **Soft ordering, deliberately NOT a `Depends on`:** best run before
-  [`0274`](../../backlog/0274-append-dated-coverage-corrections-to-0259s-and-0264s-closed-review-ledgers/brief.md),
+  [`0274`](../0274-append-dated-coverage-corrections-to-0259s-and-0264s-closed-review-ledgers/brief.md),
   so its correction notes cite this landed vocabulary instead of inventing a second one. `0274` is
   writable without it, so no hard edge was declared — inventing one to express a preference is what
   tasks `0184` and `0149` warn against.

@@ -20,6 +20,40 @@
 >
 > ⚠️ **This page is NOT the full resync, and must not be read as one.** Task **`0199`** (owner `fkit-wiki`, open) still owes: carrying the ⚠️/⛔ legend with both glosses, the *"left byte-identical"* clause and the **below-the-claim** placement rule **with its recorded rationale**; recording the §Decision 5 contradiction as **history** (contradicted 2026-07-11 → 2026-08-02, repaired by `0195`) rather than as a live gotcha; and clearing the vault-wide *"still open"* framing elsewhere. `0199` carries an **⛔ ordering constraint — it runs LAST**, after `0196`, `0197` and `0171`, so it describes an ADR that has stopped being appended to. Two of ADR-010's stale `claude/fkit-claude.sh` pointers remain un-annotated on the source, fenced to `0196` and `0197`.
 
+> ⭐ **THE FULL RESYNC — 2026-09-05, task `0199`, inside sweep `0358` (sweep C). The block directly above is DISCHARGED and is left byte-identical as the record of what was owed.** `0196`, `0197` and `0171` have all landed, so the ordering constraint is satisfied and this page now describes an ADR that has stopped being appended to. ⛔ **ADR-010's `**Status:**` on disk remains `accepted`** — the notes never superseded it.
+>
+> ⚠️ **The counts in the ✅ SHIPPED block above are now STALE, and they are superseded by this line.** That block is left byte-identical as the 2026-08-02 record. **Re-measured on disk 2026-09-05** against the working-tree ADR (blob `3ced65a930e80e512221f3d2ebfa4bb7888e6f15`):
+>
+> | The block above says | Measured today |
+> |---|---|
+> | *"FIVE dated correction blocks"* | **10** |
+> | *"a `- **Corrections:**` header item that carries TWO site lists"* | **four** site lists |
+>
+> **What grew it:** `0197` (2026-09-03, inside sweep `0356`) appended a **third** site list — notes at the end of §Context, at §Consequences' one-role-per-session bullet, and at the end of §Related, recording where code the ADR cites by line has since moved. `0196` (2026-09-04, inside sweep `0357`) appended a **fourth** — notes at §Context bullet 2 and at §Decision 2, recording that the `skillOverrides` off-list is retired and that an unowned skill today is **visible but blocked**, not hidden. ⭐ **Each new list supersedes its predecessors and leaves them byte-identical**, so *a reader who stops at the first line still under-reports the annotated sites* — now by three lists rather than one.
+>
+> ### ⭐ The correction-note FORM, carried here because the vault is where the next reader looks it up
+>
+> **The two-marker legend, both glosses, verbatim from the ADR's own header item:**
+>
+> - **⚠️ = a fact that drifted** — *the decision is untouched*.
+> - **⛔ = a decision that was overturned** — *do not follow it*.
+>
+> **The *"left byte-identical"* clause.** No existing line of the ADR is ever edited. *"No existing line of this ADR was edited; the notes are appends, and the Status stays `accepted`."* Each later append repeats it, and each supersedes the prior site list **without touching it**.
+>
+> ### ⚠️ The below-the-claim placement rule — a DELIBERATE departure from this vault's own convention, with its recorded rationale
+>
+> ⛔ **In a knowledge-base ADR a dated note is placed DIRECTLY AFTER the bullet or decision item it corrects**, indented to that item's continuation level. **The vault's own *"banner above claim"* convention is NOT carried over to the knowledge-base side.** Recorded as `0143` residual **`R1-placement`**, owner-ruled *"keep as shipped"* over the convention the plan had cited.
+>
+> **Why (structural, as recorded):** a block placed *above* a bullet **visually detaches from the thing it corrects** — it reads as a preamble to the section rather than as an annotation on one claim — and **it breaks the §Context narrative**, which is continuous prose the reader is moving through. The reader is already warned before any body text by the header `- **Corrections:**` bullet, which names every annotated site and carries the legend, **so below-placement costs no warning**.
+>
+> **Both alternatives were rejected by name:** *banner-above-claim* (this vault's convention) on the two grounds above; and *a single end-of-file "Corrections" section*, rejected in planning because **it reproduces the exact placement error the vault's own lint named**.
+>
+> ⭐ **The reviewer was right that the departure shipped unreasoned.** The rationale was written down afterwards, and this is the vault's copy of it.
+>
+> ### §Decision 5's self-contradiction is HISTORY, not a live gotcha
+>
+> ⚠️ **Recorded here as a closed episode with both dates, per `0199`'s item 4.** ADR-010 §Decision 5 named `claude/fkit-claude.sh` as the home of `skills_for_role()`. **Contradicted 2026-07-11 → 2026-08-02**: `0143` appended a correction note pointing at the real home while the decision text still named the old one, so for that window the ADR asserted both. **Repaired 2026-08-02 by `0195`** ([[tasks/correct-adr-010s-skills-for-role-source-of-truth-claim]]), which added the §Decision 5 note that resolves it. ⛔ **Do not read this as a defect standing today** — it is a dated episode in how the correction-note form matured, and it is why `0195` exists.
+
 ## Context
 ADR-008 designed the Claude flavor around a **single interactive lead session** that was the team lead *and* the coder by default, and that could **"wear a hat"** — `/fkit-agent-<role>` skills that made the current session adopt a role.
 

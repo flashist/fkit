@@ -9,6 +9,10 @@ verbatim **"Accept — selection by identity (Recommended)"**; recorded by the a
 **Depends on**: [[decisions/adr-040-a-plan-s-sprint-identity-is-a-whole-h1-segment-never-a-substring]] — **cannot ship before it**
 **Implemented by**: tasks `0265` (dashboard half), `0266` (the selection site), `0267` (five prose sites)
 
+> ⭐ **Dated resync note 2026-09-05 (`0358`, sweep C) — the source ADR named the WRONG CHANNEL for one residual.** The page below is left **byte-identical**. ⛔ **No decision in this ADR moves** — selection by resolved identity, the `Backlog` H1 token, the never-eligible rule and §5's one-grammar constraint **all stand**.
+>
+> Task `0276` (2026-09-04, inside sweep `0357`) records that *"reports `unresolved-plan-sprint` on every run"* names the wrong output. ⭐ **Re-measured first-hand 2026-09-04** by running `dashboard.sh` against throwaway fixture trees — the drift is in *which output* carries the residual case, not in what the selection rule does.
+
 ## Context
 
 `/fkit-status` resolved the **active sprint** by globbing `sprint-*.md` at the top of

@@ -287,7 +287,7 @@ them.**
 
 - ⛔⛔ **`0196` AND `0197` DO NOT GATE THIS TASK, AND THIS TASK DOES NOT GATE THEM. Stated explicitly so
   nobody invents a dependency.**
-  [`0196`](../0196-correct-adr-010s-skilloverrides-claims-retired-by-adr-018/brief.md)
+  [`0196`](../../done/0196-correct-adr-010s-skilloverrides-claims-retired-by-adr-018/brief.md)
   and [`0197`](../../done/0197-resolve-adr-010s-remaining-stale-code-line-ranges/brief.md) (both `🔲 Backlog`,
   verified 2026-08-22) are **hard append-only (`+N / −0`)** and were measured this session to pose
   **no** text-change risk to any existing anchor — an append cannot move a line above it. ⚠️ **They may

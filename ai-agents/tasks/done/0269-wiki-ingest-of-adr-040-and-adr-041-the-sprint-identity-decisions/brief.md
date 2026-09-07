@@ -136,7 +136,7 @@ Vault pages for **ADR-040** and **ADR-041**, following the vault's own decisions
   **If some of `0264`–`0268` have landed by the time this runs, say so in the worklog and record it;
   do not silently widen scope.**
 - **✅ OWNER RULING 2026-08-12 — scheduling preference, not a dependency: land this AFTER
-  [`0276`](../../backlog/0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md).**
+  [`0276`](../0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md).**
   Ruled live via `AskUserQuestion` and relayed through the `/fkit-sprint-ship-loop` driver session —
   **the option label is the verbatim text**: **"Record the ordering, don't gate it (Recommended)."**
   Reasoning as ruled: `0276` corrects a claim **in ADR-041**, which is this task's ingest source. Run

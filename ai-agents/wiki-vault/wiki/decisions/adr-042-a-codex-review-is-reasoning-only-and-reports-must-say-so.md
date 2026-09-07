@@ -7,6 +7,10 @@
 **Decided by**: the architect (D1, and the D2 recommendation); **the owner — D2, ruled 2026-08-11
 against the architect's recommendation, knowingly and provisionally**
 
+> ⭐ **Dated resync note 2026-09-05 (`0358`, sweep C) — the source ADR's own citations were DE-ROTTED, and no claim changed.** Task `0351` / sweep `0356` replaced two line-number coordinates into `test/prove-red.sh` with durable anchors: the text now reads *"`test/prove-red.sh` opens its work dir with `work="$(mktemp -d)"`"* and, in §Evidence, *"`test/prove-red.sh`, its `work="$(mktemp -d)"` opening"*.
+>
+> ⭐ **Recorded because the SUBSTANCE is unchanged and a reader should not go looking for a decision that moved.** The reasoning-only finding stands exactly as decided: `--sandbox read-only` blocks all filesystem writes, `mkdtemp` is a write, so the Codex reviewer **cannot run the suite, build a fixture, or execute a mutation** — and never could. ⛔ **This ADR carries NO dated correction blocks**; the change was a citation repair, which is why it needs a note here rather than one there.
+
 ## Context
 
 fkit's thesis rests on a genuinely model-diverse second opinion:
@@ -179,3 +183,4 @@ not retro-edited; **this note is itself the pattern***); dated reports and close
 - [[tasks/give-codex-the-universal-hard-rules]] — ⚠️ **whose rule-3 wording rests on *"Codex cannot move a file anyway"* — a premise D2 retires when it ships**
 - [[tasks/replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary]] — *added 2026-08-29:* `0272`, the implementation of **D1** across every site that states the coverage contract
 - *Added 2026-08-29 — the Sprint 6 runs whose ledgers declare a coverage state under this ADR:* [[tasks/gate-symlink-escape-in-init-intake-write]] (⛔ **Codex did not reproduce the finding it raised as HIGH**), [[tasks/build-the-pretooluse-task-carry-check-hook-and-its-tests]], [[tasks/refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim]] (⭐ **a Codex clearance disproven by measurement** — *"an automated reviewer's 'no finding' is an input, not an authority"*), [[tasks/enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason]], [[tasks/remediate-the-dead-brief-paths-in-closed-review-ledger-headers]] (⭐ **reasoning-only in round 1, measured in round 2**), [[tasks/release-mjs-with-branch-other-commits-and-tags-head-but-pushes-a-different-ref]]
+- [[decisions/adr-045-an-in-flight-review-finding-terminates-in-the-ledger-not-a-new-task]] — ⭐ *Added 2026-09-05 (`0358`, sweep C):* the other live constraint on where a review's finding may terminate

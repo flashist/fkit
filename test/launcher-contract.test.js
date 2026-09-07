@@ -22,7 +22,7 @@
 
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { chmodSync, existsSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { makeProject, runFkit, readSettings, cleanup, cleanupStub, LAUNCHER } from './harness.mjs';
 
@@ -296,17 +296,117 @@ describe('Group C — degradation & fresh-project routing', () => {
     }
   });
 
-  // 12. Fresh (uninitiated) project, no role → the producer cold-start (launcher :402-413), NOT lead
-  //     and NOT the menu. Pins the agent, the settings file, and that the initiation seed is appended.
-  test('12. fresh project, no role → producer cold-start with seed', async () => {
+  // The absolute PROJECT.md path the launcher's freshness predicate reads. Handing it to the stub as
+  // FKIT_STUB_INITIATE is how a test says "the initiation succeeded" — the only way to reach the
+  // lead hand-off, since a stub that writes nothing leaves the tree fresh forever.
+  const pmPath = (proj) => join(proj, 'ai-agents', 'knowledge-base', 'PROJECT.md');
+
+  // 12. Fresh (uninitiated) project, no role → TWO phases: the producer cold-start (with its seed),
+  //     and then, once the initiation has actually landed, the lead — in the same tab, NOT the menu.
+  //     Still pins all four of the things it always pinned about the cold start (which agent, which
+  //     settings file, that a seed is appended, what the seed says); the lead phase is additive.
+  //     ⚠️ Only visible via r.argvs: r.argv alone shows the lead and would pass even if the producer
+  //     had never run at all.
+  test('12. fresh project, no role → producer cold-start, then the lead', async () => {
     const proj = makeProject({ fresh: true });
     try {
-      const r = await runFkit([], { project: proj });
+      const r = await runFkit([], { project: proj, extraEnv: { FKIT_STUB_INITIATE: pmPath(proj) } });
       assert.equal(r.exec, true, `stderr: ${r.stderr}`);
-      assert.deepEqual(r.argv.slice(0, 4),
+      assert.equal(r.argvs.length, 2,
+        `expected the producer cold start THEN the lead, got ${r.argvs.length} claude invocation(s)`);
+
+      const [producer, lead] = r.argvs;
+      assert.deepEqual(producer.slice(0, 4),
         ['--agent', 'fkit-producer', '--settings', '.fkit/settings/producer.json']);
-      assert.equal(r.argv.length, 5, 'expected a trailing seed prompt arg');
-      assert.match(r.argv[4], /fresh fkit project/i, 'the cold-start seed must be passed to claude');
+      assert.equal(producer.length, 5, 'expected a trailing seed prompt arg');
+      assert.match(producer[4], /fresh fkit project/i, 'the cold-start seed must be passed to claude');
+
+      // The lead is opened by the launcher's ordinary tail — its own settings file, and NO seed.
+      assert.deepEqual(lead,
+        ['--agent', 'fkit-lead', '--settings', '.fkit/settings/lead.json']);
+    } finally {
+      cleanup(proj);
+    }
+  });
+
+  // 12b. The OTHER cold-start seed — the one used when the terminal intake captured answers. Nothing
+  //      tested it before this: test 12 runs headless, so .fkit/interview exits without writing
+  //      .fkit/intake.md and only the no-intake branch was ever exercised. Pre-creating intake.md is
+  //      exactly what a completed intake leaves behind, and interview's own `[ -f "$out" ] && exit 0`
+  //      guard means it survives the run untouched.
+  test('12b. fresh project with a completed intake → the intake-aware seed', async () => {
+    const proj = makeProject({ fresh: true });
+    try {
+      mkdirSync(join(proj, '.fkit'), { recursive: true });
+      writeFileSync(join(proj, '.fkit', 'intake.md'), '# intake\n\n1. Project name?\n> Test\n');
+      const r = await runFkit([], { project: proj, extraEnv: { FKIT_STUB_INITIATE: pmPath(proj) } });
+      assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+
+      // ⚠️ THE LEAD HAND-OFF IS ASSERTED HERE TOO, NOT ONLY IN TEST 12 — and this is the copy that
+      // matters. Test 12 covers the headless/no-intake path (CI, no tty); an owner sitting at a real
+      // terminal completes .fkit/interview and therefore walks THIS one. While 12b asserted argvs[0]
+      // alone, a launcher that restored `exec` on the intake-present branch only — deleting the lead
+      // hand-off for every human who answers the intake, and for nobody else — passed the whole suite
+      // 43/43 green (measured). The seed assertions below cannot see it: the producer phase is
+      // byte-identical under that mutant. Only the second invocation is.
+      assert.equal(r.argvs.length, 2,
+        `expected the intake cold start THEN the lead, got ${r.argvs.length} claude invocation(s)`);
+
+      const [producer, lead] = r.argvs;
+      assert.deepEqual(producer.slice(0, 4),
+        ['--agent', 'fkit-producer', '--settings', '.fkit/settings/producer.json']);
+      assert.equal(producer.length, 5, 'expected a trailing seed prompt arg');
+      assert.match(producer[4], /intake\.md/i,
+        'with an intake on disk the seed must point the producer at it');
+      assert.match(producer[4], /READ THAT FILE FIRST/,
+        'the intake seed must tell the producer not to re-ask what the intake already answers');
+
+      // Same tail as test 12's: the lead's own settings file, and NO seed.
+      assert.deepEqual(lead,
+        ['--agent', 'fkit-lead', '--settings', '.fkit/settings/lead.json']);
+    } finally {
+      cleanup(proj);
+    }
+  });
+
+  // 12c. The hand-off is GATED, half one: the producer exited clean but the tree is STILL FRESH — the
+  //      owner said "skip setup", or the initiation never finished. Landing them in a lead session
+  //      they did not ask for, on a project that was never initiated, is worse than the shell prompt.
+  //      So: exactly ONE invocation, and no lead.
+  test('12c. cold start that does not initiate → no lead hand-off', async () => {
+    const proj = makeProject({ fresh: true });
+    try {
+      const r = await runFkit([], { project: proj });     // stub writes nothing → tree stays fresh
+      assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+      assert.equal(r.argvs.length, 1,
+        'a cold start that did not initiate the project must NOT open a second session');
+      assert.equal(r.argvs[0][1], 'fkit-producer');
+      // "Exit exactly as today" makes the CLEAN bail's 0 contractual, not incidental — pre-0379 the
+      // `exec`'d producer returned exactly this. 12d pins the non-zero side (130), so without this a
+      // change that only altered the zero case would stay green: measured, a bail rewritten to exit 7
+      // passed 43/43. The bail is the owner declining setup; it is not an error.
+      assert.equal(r.code, 0, 'a clean bail must exit 0 — the owner declining setup is not a failure');
+    } finally {
+      cleanup(proj);
+    }
+  });
+
+  // 12d. The hand-off is GATED, half two: the tree IS initiated but the producer exited non-zero —
+  //      a Ctrl-C partway through, after PROJECT.md had already been written. The exit code is its
+  //      own fact; without it the launcher would cheerfully open the lead on an interrupted run. Also
+  //      pins that the launcher exits WITH the cold start's code rather than swallowing it, which is
+  //      what `exec` used to give for free.
+  test('12d. initiated tree but a non-zero cold start → no lead hand-off, code propagated', async () => {
+    const proj = makeProject({ fresh: true });
+    try {
+      const r = await runFkit([], {
+        project: proj,
+        extraEnv: { FKIT_STUB_INITIATE: pmPath(proj), FKIT_STUB_EXIT: '130' },
+      });
+      assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+      assert.equal(r.argvs.length, 1,
+        'an interrupted cold start must NOT open a second session, even if the tree now looks initiated');
+      assert.equal(r.code, 130, 'the launcher must exit with the cold start\'s own exit code');
     } finally {
       cleanup(proj);
     }

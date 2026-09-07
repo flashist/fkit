@@ -4,6 +4,9 @@
 // Once a row's Status starts with ✅ Done, ⛔ Cancelled, or ➡️ Moved, its Priority cell (`P<n>`) is
 // frozen: history, not plan. The 0174 filing renumbered EIGHT closed rows in one commit and nothing
 // caught it; this suite is what catches the next one.
+// ⚠️ ONE EXCEPTION since ADR-046, stated here because this is where a reader starts: a row closed
+// while UNRANKED (`—`) has no rank to freeze, so `—`→`P<n>` is ALLOWED. Erasing a rank (`P<n>`→`—`)
+// is still a violation. Full rule in the second widening note below, and at findRankViolations.
 //
 // SCOPE CATEGORY: an invariant over the repo's own `ai-agents/` CONTENT, the category
 // test/task-id-uniqueness.test.js declared and recorded (see its header: ADR-014 §2 fenced the scope,
@@ -51,7 +54,31 @@
 // `P?<digits>`, optionally followed by one parenthesized annotation — and is compared VERBATIM as a
 // string, so immutability semantics are unchanged: any movement (`1`→`2`, `P1`→`P2`, or even
 // stripping the annotation from a frozen cell) is still a difference and still flags, which is the
-// fail-safe direction. `—` / empty / prose still throw.
+// fail-safe direction. Empty / prose still throw.
+//
+// ⚠️ A SECOND DELIBERATE WIDENING — task 0361, ADR-046 (owner-ruled 2026-09-04): a sprint board MAY
+// be committed UNRANKED, so the Priority cell also accepts `—` (EM DASH U+2014, bytes e2 80 94,
+// byte-verified against a live Backlog cell). Two boards opened that way — Sprint 6 on 2026-08-14
+// and Sprint 7 on 2026-08-29 — and backlog.md's "Off:" rule instructs it, so refusing the marker
+// made a twice-precedented, owner-reviewed state uncommittable. ⛔ WIDENING IS NOT WEAKENING: the
+// accept is an ALLOWLIST of two named forms, so empty, prose, `P`, `—5` and the near-identical
+// wrong-codepoint dashes `–` (U+2013) and `-` (U+002D) all still throw.
+//
+// Because an unranked row has no rank to freeze, ADR-046 also ruled the CLOSED-ROW TRANSITIONS, and
+// findRankViolations implements exactly that table: `—`→`—` and `—`→`P<n>` are ALLOWED (the second
+// is the deferral clause being honoured), while `P<n>`→`—` FLAGS — the erase direction is the half
+// that closes the two-commit launder — and `P<n>`→`P<m>` flags as before. Open rows are unchanged.
+// ⛔ NO NUMERIC COERCION: `—` is compared VERBATIM as a string like every other rank, because an
+// unranked row genuinely has no order. ⛔ Per the suite's standing prove-red gap above, this rule
+// gains NO prove-red mutation either; its red proof is IN-SUITE, and these are the mutants each test
+// actually kills (measured by isolation 2026-09-05, review R3 — the earlier claim that it was "the
+// four ADR-046 comparator tests" was wrong in both halves):
+//   · revert the widened regex  → reds `an unranked (—) Priority cell parses` + comparator rows 1-3
+//   · drop the guarded continue → reds comparator row 2 alone
+//   · literal `—` swapped for a character class `[—–-]` (ADR-046's named residual risk)
+//                               → reds `a garbage Priority cell throws`, the SOLE killer of it
+// ⚠️ Comparator row 4 kills none of the three: it re-asserts behavior this change does not touch,
+// and is kept deliberately so all four ruled transitions read as one table. See its own comment.
 //
 // READ-ONLY: the repo is never written. Every fixture repo lives under os.tmpdir().
 
@@ -77,6 +104,11 @@ const SEPARATOR = /^\|[\s\-:|]+\|$/;
 // Closed ⇔ Status STARTS WITH one of these — live rows carry suffixes ("✅ Done (agent-closed — not
 // owner-verified)", "➡️ Moved to [Backlog](../backlog.md)"), so prefix match is the correct reading.
 const CLOSED_MARKERS = ['✅ Done', '⛔ Cancelled', '➡️ Moved'];
+
+// The unranked marker (ADR-046). EM DASH U+2014 — bytes e2 80 94, byte-verified against a live
+// Backlog Priority cell. ⛔ NOT the en-dash `–` U+2013 nor the ASCII hyphen `-` U+002D, which render
+// almost identically and must keep throwing; the parser tests pin this constant's codepoint.
+const UNRANKED = '—';
 
 // Neither placeholder can appear in board text: they are control characters.
 const ESC = '\u0000\u0000'; // masks the two-character sequence `\|`
@@ -170,12 +202,16 @@ function parseBoard(text, sourceName) {
     }
     const status = unmask(cells[1]).trim();
     const rank = unmask(cells[2]).trim();
-    // Sprint boards are ranked. `P<n>` is the current era; done/sprint-1.md's first era used bare
-    // `<n>`, once with an annotation ("8 (optional)") — see the file-header widening note. `—` —
-    // the Backlog board's unranked marker — never appears on a sprint board and throws.
-    if (!/^P?\d+(?: \([^()]*\))?$/.test(rank)) {
+    // `P<n>` is the current era; done/sprint-1.md's first era used bare `<n>`, once with an
+    // annotation ("8 (optional)") — see the file-header widening note. `—` (U+2014), the unranked
+    // marker, is ALSO accepted on a sprint board (ADR-046): a board may be committed unranked, and
+    // two boards have been. ⛔ An ALLOWLIST of two named forms, never a loosened character class —
+    // `–` (U+2013) and `-` (U+002D) render almost identically and must keep throwing, as must
+    // empty, prose, `P` and `—5`. See the file-header widening notes.
+    if (!/^(?:—|P?\d+(?: \([^()]*\))?)$/.test(rank)) {
       throw new Error(`${rowName}: Priority cell ${JSON.stringify(rank)} is not a rank ` +
-        '(expected P<n>, or the first-era bare <n> with an optional parenthesized annotation).');
+        '(expected P<n>, the first-era bare <n> with an optional parenthesized annotation, or the ' +
+        'unranked marker —).');
     }
     const idMatch = unmask(cells[4]).match(/\/(\d{4})-[^/]*\/brief\.md/);
     if (!idMatch) {
@@ -201,7 +237,9 @@ function parseBoard(text, sourceName) {
 
 // The comparator — the pure function the fixtures feed. Joins strictly WITHIN one basename on folder
 // ID (rank is never a key): a row closed in `earlier` that appears in `later` with a different
-// Priority cell is a violation.
+// Priority cell is a violation — ⚠️ EXCEPT where `earlier` holds the unranked marker `—`. Such a row
+// has no rank to freeze, so `—`→`—` and `—`→`P<n>` both return no violation (ADR-046 part 2; the
+// guarded `continue` below). The erase direction `P<n>`→`—` IS a violation, like any other change.
 //
 // ➡️ Moved rule: a moved row is closed on its SOURCE board, so its source rank is frozen by this
 // ordinary same-board comparison; the destination board's row lives under a different basename and
@@ -221,6 +259,12 @@ function findRankViolations(earlierText, laterText, boardBasename) {
   for (const r of later) {
     const prev = byId.get(r.id);
     if (!prev || !prev.closed) continue;
+    // ADR-046: a closed row that was UNRANKED has no frozen rank to keep, so `—`→`—` and `—`→`P<n>`
+    // are both allowed — the latter is the deferral clause being honoured, the act both boards
+    // instruct and Sprint 7 performed on 2026-08-29. ⛔ The ERASE direction `P<n>`→`—` still flags
+    // below, and must: it destroys the history the invariant exists to keep, and it is the half
+    // that closes the two-commit launder (`P5`→`—`, then `—`→`P9` — step one already flags).
+    if (prev.rank === UNRANKED) continue;
     if (prev.rank !== r.rank) {
       violations.push({ id: r.id, board: boardBasename, oldRank: prev.rank, newRank: r.rank });
     }
@@ -400,11 +444,43 @@ test('parseBoard: a genuinely mis-fielded row THROWS naming board and row — ne
     /bad row at line \d+: expected the 4-cell/);
 });
 
-test('parseBoard: an unranked (—) or garbage Priority cell throws', () => {
-  assert.throws(() => parseBoard(boardText([row('0001', { rank: '—' })]), 'dash'),
-    /Priority cell "—" is not a rank/);
+// ADR-046 split this test in two. The garbage half below KEEPS the original `'high'` assertion; the
+// unranked half that follows it inverts, because a sprint board may now be committed unranked.
+test('parseBoard: a garbage Priority cell throws', () => {
   assert.throws(() => parseBoard(boardText([row('0001', { rank: 'high' })]), 'prose'),
     /Priority cell "high" is not a rank/);
+  // The accept is an ALLOWLIST of two named forms, so every near-miss still throws. The two dashes
+  // below are the point: `–` U+2013 and `-` U+002D render almost identically to the accepted `—`
+  // U+2014, and a character class rather than the literal alternative would silently take all three.
+  for (const [rank, label] of [
+    ['', 'empty'],
+    ['P', 'P with no digits'],
+    ['-', 'ASCII hyphen U+002D'],
+    ['–', 'en-dash U+2013'],
+    ['——', 'two em-dashes'],
+    ['—5', 'em-dash with a digit glued on'],
+    // ⚠️ Pinned deliberately (review R1/R2, 2026-09-05). The first-era widening accepts at most ONE
+    // parenthesized annotation, and nothing asserted that "at most one" until now: flipping the
+    // annotation quantifier `?`→`*` in the rank regex accepted `'P1 (a) (b)'` and the whole suite
+    // stayed green. This row is what kills that mutant.
+    ['P1 (a) (b)', 'two parenthesized annotations — the first-era widening allows at most one'],
+  ]) {
+    assert.throws(() => parseBoard(boardText([row('0001', { rank })]), 'bad'),
+      /is not a rank/, `${label} must still throw`);
+  }
+  // ⚠️ ADR-046 also lists `'— '` (trailing space) as a must-throw. It is UNREACHABLE through this
+  // parser and is deliberately not asserted: the Priority cell is `.trim()`ed before the rank check,
+  // so `| —  |` arrives as `'—'` and is the unranked marker. The ADR's list describes the regex; the
+  // parser trims first. Recorded rather than quietly dropped.
+});
+
+test('parseBoard: an unranked (—) Priority cell parses on a sprint board (ADR-046)', () => {
+  const rows = parseBoard(boardText([row('0001', { status: '✅ Done', rank: UNRANKED })]), 'unranked');
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].rank, UNRANKED, 'the marker is kept verbatim — no coercion, no ordering');
+  assert.equal(UNRANKED.codePointAt(0), 0x2014,
+    'the accepted marker is EM DASH U+2014 — pinned here so a wrong-codepoint paste into the ' +
+    'constant cannot silently widen the allowlist');
 });
 
 test('parseBoard: first-era rank forms are accepted (the done/sprint-1.md widening)', () => {
@@ -519,6 +595,47 @@ test('findRankViolations: a closed row DELETED from the later revision is not fl
   const b = boardText([row('0002', { rank: 'P2' })]);
   assert.deepEqual(findRankViolations(a, b, B), [],
     'deletion is a different breach and a different guard');
+});
+
+// ── ADR-046's closed-row transition table, one test per row ──────────────────────────────────────
+//
+// A row that was UNRANKED has no frozen rank to keep, so the two `—`→… transitions are allowed and
+// the two `P<n>`→… ones flag. ⭐ The obvious objection — that allowing `—`→`P<n>` lets a renumber
+// launder itself across two commits (`P5`→`—`, then `—`→`P9`) — is answered by row 3: step one
+// already flags. That is why the erase direction must flag even though it loses no ordering itself.
+// (Open rows are the table's fifth row and are unconstrained — covered above, unchanged.)
+
+test('findRankViolations: ADR-046 row 1 — an unranked closed row that stays unranked is no violation', () => {
+  const a = boardText([row('0001', { status: '✅ Done', rank: UNRANKED })]);
+  const b = boardText([row('0001', { status: '✅ Done', rank: UNRANKED })]);
+  assert.deepEqual(findRankViolations(a, b, B), []);
+});
+
+test('findRankViolations: ADR-046 row 2 — a closed row ranked from — to P<n> is ALLOWED', () => {
+  // The deferral clause being honoured: both boards instruct exactly this act, and Sprint 7
+  // performed it on 2026-08-29. There was no rank to freeze.
+  const a = boardText([row('0001', { status: '✅ Done', rank: UNRANKED })]);
+  const b = boardText([row('0001', { status: '✅ Done', rank: 'P3' })]);
+  assert.deepEqual(findRankViolations(a, b, B), [],
+    'ranking a previously unranked closed row is lawful, not a renumber');
+});
+
+test('findRankViolations: ADR-046 row 3 — ERASING a closed row\'s rank (P<n> → —) is FLAGGED', () => {
+  const a = boardText([row('0001', { status: '✅ Done', rank: 'P3' })]);
+  const b = boardText([row('0001', { status: '✅ Done', rank: UNRANKED })]);
+  assert.deepEqual(findRankViolations(a, b, B),
+    [{ id: '0001', board: B, oldRank: 'P3', newRank: UNRANKED }],
+    'erasing a frozen rank destroys the history the invariant exists to keep');
+});
+
+test('findRankViolations: ADR-046 row 4 — P<n> → P<m> on a closed row still FLAGS', () => {
+  // ⚠️ Re-asserts what 'a re-ranked closed row is flagged with old and new rank' already covers.
+  // Kept deliberately: the widening must be shown not to have loosened the row it does not touch,
+  // and the table reads as a table only if all four of its closed-row rows are present here.
+  const a = boardText([row('0001', { status: '✅ Done', rank: 'P1' })]);
+  const b = boardText([row('0001', { status: '✅ Done', rank: 'P7' })]);
+  assert.deepEqual(findRankViolations(a, b, B),
+    [{ id: '0001', board: B, oldRank: 'P1', newRank: 'P7' }]);
 });
 
 test('runLeg: the same ID on two basenames at different ranks is no violation (the Moved rule)', () => {

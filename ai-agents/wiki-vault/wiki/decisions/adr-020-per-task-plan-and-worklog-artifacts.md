@@ -5,6 +5,12 @@
 
 > ⚠️ **The "each in its own top-level directory" mechanism below is no longer how it works.** ADR-029 folded `ai-agents/plans/`, `ai-agents/worklogs/` **and** `ai-agents/reviews/` *into the task folder* — they are now `plan.md`, `worklog.md`, `review.md` inside `tasks/<board>/<NNNN>-<slug>/`, keyed by the folder, not by a slug in a separate directory. **ADR-029 explicitly executes this ADR's own §Decision-6 end-state** (*"collapse the brief, plan, worklog and review ledger into a single per-task folder … today's separate top-level dirs are a known stepping stone toward that"*). The *artifacts, their contents, their lifecycle and the "coder writes them, owner commits, not wiki-ingested" rules below are all still current* — **only their location moved.** Read every `ai-agents/{plans,worklogs,reviews}/<task-id>.md` path below as `…/<task folder>/{plan,worklog,review}.md`.
 
+> ⭐ **Dated resync note 2026-09-05 (`0358`, sweep C) — the source ADR gained a correction about WHO WRITES these artifacts.** The page below is left **byte-identical**. ⛔ **Nothing reopens a decision.**
+>
+> Task `0207` (2026-09-04, inside sweep `0357`) records that the Decision sentence is **right about the timing and wrong about the writer**. It calls the artifacts ***coder-written***. Since task `0202` (2026-08-02) the **`/fkit-sprint-ship-loop` driver is a sanctioned writer of the task folder's `plan.md`** — it writes the approved plan itself, at **plan approval**, **before** the Build worker is spawned.
+>
+> ⭐ **The coder remains a writer of both artifacts on the task-loop path.** What changed is that it is **no longer the only** sanctioned writer of `plan.md`.
+
 ## Context
 The autonomous ship-loop ([[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]]) runs a long autonomous stretch after the owner approves the plan and walks away. Two problems fall out of that:
 

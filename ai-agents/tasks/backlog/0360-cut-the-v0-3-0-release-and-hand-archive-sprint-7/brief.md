@@ -33,7 +33,7 @@ verbatim text.
 
 ### Why the tag is a measurement anchor, not just a version
 
-[`0359`](../0359-the-throughput-counter-created-vs-closed-per-iso-week-and-record-repair-share/brief.md)
+[`0359`](../../done/0359-the-throughput-counter-created-vs-closed-per-iso-week-and-record-repair-share/brief.md)
 counts created-vs-closed per ISO week from git history. **An annotated tag is a durable, dated point
 in that history** that a later measurement can anchor to — *"since v0.3.0"* is checkable in a way that
 *"since Sprint 7"* is not. ⭐ **Annotated, not lightweight**: a lightweight tag carries no date or
@@ -126,7 +126,21 @@ message of its own and cannot serve as the anchor.
 ## Notes
 
 - **Depends on:** every other **open** Sprint 7 row — `0347`, `0352`, `0353`, `0354`, `0237`, `0176`,
-  `0356`, `0357`, `0358`, `0359`, `0361`. ⛔ **Hard: this row archives the board, so it runs last.**
+  `0356`, `0357`, `0358`, `0359`, `0361`, `0379`. ⛔ **Hard: this row archives the board, so it runs last.**
+  - ⭐ **`0379` (`P15`) ADDED 2026-09-05 — a new row was filed onto this board, so this row waits on
+    it too.** Filed by an owner instruction given live in a `fkit lead` session on 2026-09-05 and
+    relayed to a spawned `fkit-producer` with no owner channel
+    ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md));
+    the owner named *"the current sprint"* explicitly. `0379` starts the **lead** session rather than
+    the producer once a fresh project's cold start has been answered.
+    ⚠️ **Added to the field rather than annotated below, for the same reason the `0369` addition and
+    removal and the `0361` and `0355` corrections were: this is a machine-parsed field** —
+    `dashboard.sh` derives the board's `Next step` from it, and ⛔ **a missing name renders a false
+    `ready`**, which a note underneath does not fix. ⛔ **No other name in the list changed**, and
+    ⛔ **nothing was re-ranked**
+    ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md))
+    — `0379` **appended** at `P15`. The full record lives in
+    [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ Addendum — the FIFTEENTH row".
   - ⛔ **`0369` (`P14`) REMOVED 2026-09-04 — it is DONE and is no longer a row this one waits on.**
     Owner ruling **K6**, 2026-09-04, live `AskUserQuestion`, option label verbatim
     **"Remove 0369 from the list (Rec)."**; relayed to a spawned `fkit-producer` with no owner channel

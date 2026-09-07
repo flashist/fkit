@@ -188,7 +188,7 @@ two tasks may run **in either order or concurrently**; neither gates the other.
    brief-shaped equivalent of one.** That is
    [`0315`](../../backlog/0315-define-the-corrections-header-warning-equivalent-for-briefs-and-board-rows/brief.md)'s
    open question and this task must not pre-decide it.
-   **Follow the precedent [`0318`](../../backlog/0318-append-a-dated-correction-note-to-0238s-closed-brief/brief.md)
+   **Follow the precedent [`0318`](../0318-append-a-dated-correction-note-to-0238s-closed-brief/brief.md)
    set on 2026-08-22:** omit the bullet, and ⚠️ **state the consequence honestly in the worklog** —
    the ADR form warns the reader **first**, via that header bullet; a brief has no such carrier today,
    so a reader who does not reach the annotated claim gets **no warning at all**.

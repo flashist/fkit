@@ -69,7 +69,7 @@ the open board, and each one re-derives the same scanned set, the same exemption
 ⛔ **THIS IS A CANDIDATE LIST, NOT THE MEMBERSHIP.** Step 1 below freezes the real one. Two known
 boundary cases, flagged rather than decided here:
 
-- **`0320` is also a candidate for [Sweep B](../../backlog/0357-sweep-b-the-single-site-correction-notes/brief.md)** —
+- **`0320` is also a candidate for [Sweep B](../0357-sweep-b-the-single-site-correction-notes/brief.md)** —
   it repairs a stale claim *by appending a dated note*, which is Sweep B's shape. ⛔ **It must land in
   exactly one sweep.** Step 1 rules which.
 - **`0307` was considered and excluded** — it is a *decision* about how a corrected dependency line
@@ -168,7 +168,7 @@ produced this backlog. The guards are what make the pass verifiable instead of t
   settled exemption explicitly permits, and only where a member brief's own owner ruling already
   authorized it (`0176`'s ruling exempts `done/*/review.md` **by name and only that**).
 - **⛔ Edit nothing under `ai-agents/wiki-vault/`** (ADR-005). Report anything found there and route it
-  to `fkit-wiki` via [Sweep C](../../backlog/0358-sweep-c-the-wiki-vault-resyncs-as-one-pass/brief.md).
+  to `fkit-wiki` via [Sweep C](../../done/0358-sweep-c-the-wiki-vault-resyncs-as-one-pass/brief.md).
 - **⛔ Do not absorb a row from Sweep B or Sweep C.** Three sweeps, disjoint membership.
 - **⛔ Do not weaken or re-open `0353`'s condition** to make the pass easier.
 - **⛔ No `path:NNN` citations in this task's own artifacts.**

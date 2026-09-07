@@ -13,8 +13,13 @@
   >
   > **What landed.** Task `0256` (2026-08-12) wired **two** mechanisms, and they are different in kind:
   >
-  > 1. **An in-release gate** — `bin/release.mjs` runs `npm test` before every release and **refuses to
-  >    release a red tree**; there is no warn-and-continue path.
+  > 1. **An in-release gate** — `bin/release.mjs` runs `npm test` **by default** before a release and
+  >    **aborts on red**. ⚠️ **It is a default, not an absolute:** the `--no-test` flag skips the gate
+  >    entirely — the script's own help calls it *"Skip the test gate — **SHIPS AN UNVERIFIED TREE**"* —
+  >    and on that path it prints a loud *"releasing WITHOUT running the suite … the tree about to ship
+  >    is UNVERIFIED"* warning and **proceeds**. ⛔ **So the suite does not run before *every* release,
+  >    and a warn-and-continue path does exist.** `--no-test` is never a default and must be asked for
+  >    by name.
   > 2. **A CI workflow** — `.github/workflows/test.yml`, declaring `push` to `main`, `pull_request` and
   >    `workflow_dispatch` triggers.
   >

@@ -550,6 +550,8 @@ changes.**
 whose mechanism clause reads *"the launcher's fail-safe `ls "$proj"/.claude/agents/fkit-*.md`
 **dereferences**, so a project that ran the buggy init once finds the escaped copies"*.
 
+⚠️ **Dated 2026-09-04. The quoted bullet is left byte-identical.**
+
 ⚠️ **The conclusion is right; the mechanism is wrong, and the difference decides where the fix goes.**
 The guard is this line — anchored on the line itself, not a number, because the number is not durable:
 
@@ -580,8 +582,12 @@ no buggy init to arise.
 
 ### Subject B — "it trips the hard fail-safe, exit 1, no silent success"
 
-⚠️ **All four subject-B notes below are owner-ruled in scope**, ratified 2026-08-24, verbatim option
-label **"Cover all four (Recommended)"**.
+⚠️ **All four subject-B sites are owner-ruled in scope**, ratified 2026-08-24, verbatim option
+label **"Cover all four (Recommended)"**. ⛔ **Three of the four notes are below — B1, B2 and B3.**
+**The fourth is NOT in this file:** it sits in `0327`'s `worklog.md`, under the heading *"Two
+refinements this round adds"*, and carries its own date and byte-identity statement there. Said
+precisely because an inventory that miscounts its own contents is the defect class this sweep exists
+to remove.
 
 **The corrected mechanism, stated once and positively.** With a **wrong-type squatter** — a real
 *directory* at `.claude/agents/fkit-<x>.md` — on an already-installed project, the squatter **survives
@@ -592,6 +598,14 @@ The guard's `! ls …` condition is therefore **false**: ⛔ **the fail-safe is 
 `exit 1`.** The launcher proceeds and the session **starts with zero readable fkit agent files** — then
 dies on Claude Code's own *"agent not found"*, precisely the message the guard's own comment says it
 prevents. ⭐ **So there IS a silent-success shape.**
+
+⚠️ **Attribution, stated because the two bases are different and the next paragraph could be misread
+as covering both.** The **guard being skipped** is what the fixture below measures. The **session start
+and the downstream *"agent not found"*** are NOT reachable by that fixture — the launcher was never
+executed. They rest instead on this ledger's own `## Reviewer findings`, which records a fresh project
+with a symlinked `.claude` failing at session start with Claude Code's own message, marked **confirmed
+on the code**, with the `setup_ok` gating as the mechanism. ⛔ **Neither basis is asserted by the
+other.**
 
 **Measured first-hand 2026-09-04** in a throwaway tree; the launcher was **never executed** and the
 guard expression was evaluated in isolation: real agents **7 → 0**, the user's own unrelated file

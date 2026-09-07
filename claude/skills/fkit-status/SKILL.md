@@ -190,7 +190,7 @@ different set of beats, because the backlog is *unscheduled*, not *finished*:
 
 | Beat | On the Backlog board |
 |---|---|
-| 1 · Headline | **How much unscheduled work is sitting here** — the count, and what kind of work it is. Not "progress": there is none to report. **Do not say whether the backlog is growing or shrinking** — you are reading one snapshot, and the source set has no history to ground a trend in. |
+| 1 · Headline | **How much unscheduled work is sitting here** — the count, and what kind of work it is. Not "progress": there is none to report. **Do not say whether the backlog is growing or shrinking from this snapshot** — one board render has no history to ground a trend in. **You may state a measured trend, and only a measured one**: run `node .claude/skills/fkit-status/throughput.mjs`, quote its per-week created/closed figures, and name it as the source in the same sentence. An unsourced growth or shrink claim stays forbidden. |
 | 2 · Drift | **Applies in full.** Report it exactly as for a sprint. |
 | 3 · What's moving | **Moot — say so in one line.** Nothing on this board is in progress by definition; work that has started belongs in a sprint. If a row *does* read `🔄 In progress`, that is a **finding**, not a status: say so. |
 | 4 · What's next | **Not "the one thing to pick up"** — nothing here is scheduled, and recommending one would be a planning act this skill doesn't own. Instead, report what the board already computed: **which rows have no unmet dependency** (Next step `ready`) and are therefore pullable into a sprint whenever the owner wants. **Do not call anything "stale"** — no brief carries a date, so age is not in the source set. |

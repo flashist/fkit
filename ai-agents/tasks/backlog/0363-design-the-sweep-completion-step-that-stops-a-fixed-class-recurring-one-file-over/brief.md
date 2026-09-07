@@ -102,3 +102,94 @@ this belongs above the individual repair rows it would govern, because a rule th
   **Source-file line coordinates are used where load-bearing** — row 1 rules them correct, and
   `0176`'s owner ruling **G3** (*"No, refuse — file follow-up if wanted (Rec)"*, 2026-09-02) keeps
   them legal.
+
+---
+
+## ⭐ AMENDED 2026-09-05 — THIS ROW ALSO COVERS THE DRIVER-RELAY CHANNEL
+
+**Owner ruling, 2026-09-05, given live via `AskUserQuestion` in an `fkit lead` session driving
+`/fkit-sprint-ship-loop`. The ruling is a selection from an option list, so the option label is the
+verbatim text: "Widen 0363 to cover it (Rec)".** Relayed to a spawned `fkit-producer` with no owner
+channel ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+
+⛔ **This is an APPEND. Nothing above it is restructured, re-scoped, renumbered or re-ranked.** The row
+stays **unranked** (`## Priority` `Unscheduled`, Backlog board), its `## Owner` stays
+`fkit-architect`, and the core scope above — the `0356` sweep-completion signal — is untouched.
+⚠️ **The H1 title still names only the `0356` signal and is left byte-identical**; read this section as
+the second half of the scope, exactly as `0358`'s row title still says "five".
+⛔ **The owner refused a separate row for this by name.** It belongs here.
+
+### Same defect class, seen from the driver's side
+
+This row's core class is **a loose claim propagating into a decision record**. The amendment adds a
+**second channel by which that happens: the DRIVER'S RELAY.** ⛔ **Not a new class** — the same one
+from the other end. Where the core signal is *a sweep fixing per-site and generalising nothing*, this
+is *a conductor summarising a worker's output, and the summary hardening into fact downstream*.
+
+### The evidence — two false claims, one task, both reached durable records
+
+Both originated in task
+[`0361`](../../done/0361-settle-whether-a-sprint-board-may-be-committed-unranked/brief.md) and both landed in
+**ADR-046**.
+
+| # | The claim as relayed | Where it went | What is actually true | What caught it |
+|---|---|---|---|---|
+| 1 | *"`dashboard.sh` never reads the Priority column at all"* | Originated in `0361`'s `plan.md`; **relayed by the driver into the owner's stated reason at the plan gate**; reached **ADR-046** | ⛔ **False.** `dashboard.sh`'s `extract_rows` emits `priority=$3`, and `task_id "$pr"` is **arm 2** of the FACTS-id ladder — folder ID prefix → **Priority number** → sanitised folder name → `?` | The **phase-1 architect re-measuring a claim it had been handed as settled** |
+| 2 | *"`'P1 (a) (b)'` IS asserted"* | The driver relayed **a list of must-throw items to the architect as fully asserted**; it was not | ⛔ **False as relayed** — the list was not fully asserted | `0361`'s **round-1 review**, confirmed by **Codex** via a `?`→`*` quantifier mutant that passed **39/39** |
+
+⭐ **Both originated in the DRIVER'S SUMMARISING, not in worker error.** Neither worker was wrong; the
+compression between them was.
+⭐ **Both were caught only by a worker RE-MEASURING rather than inheriting.** ⛔ **No test reaches
+either claim** — they live in prose, a plan, a stated reason and an ADR.
+⚠️ **ADR-046 now carries THREE dated correction passes, two of them from this channel** — counted
+firsthand 2026-09-05, read-only.
+
+⚠️ **Provenance of the two rows, stated because this row is about exactly that failure.**
+
+- **Row 1 was re-measured firsthand 2026-09-05** by the spawned `fkit-producer` writing this
+  amendment, against `claude/skills/fkit-status/dashboard.sh`: the `priority=$3` emit in
+  `extract_rows` and the two-line ladder (`tid=$(folder_id_prefix "$folder")` then
+  `[ -n "$tid" ] || tid=$(task_id "$pr")`) were **read, not inherited**.
+- ⛔ **Row 2 was NOT re-measured.** A coder was live on `0361`'s test file and its ledger on
+  2026-09-05, so a measurement taken then would have been of a moving file. It is carried on the
+  authority of `0361`'s round-1 review and the Codex mutant run **as relayed** — ⛔ and this brief
+  says so rather than presenting it as verified
+  ([`evidence-before-assertion`](../../../knowledge-base/conventions/evidence-before-assertion.md)).
+  **Re-measure it before quoting it.**
+
+### What this adds to "What to build" — ⛔ the ANSWER is the architect's, not this brief's
+
+⛔ **This section frames a question. It does not design a remedy, name a mechanism, or prefer one** —
+the same discipline the core applies to the reviewer's suggested sentence.
+
+6. **Characterise the relay channel before proposing anything.** Read the two rows above at their
+   sources and state, in your own words, what a driver's summary does to a claim's evidential status.
+   ⛔ A proposal that does not first name the mechanism has skipped the work.
+7. **Answer the open question, both halves: what may a DRIVER assert to a WORKER as settled, and how
+   should a WORKER treat a HANDED claim?** ⛔ A rule on only one side leaves the channel open.
+8. **Say whether the two channels take ONE remedy or TWO.** ⛔ Do not assume one rule covers both
+   because they share a class — the core's step 4 applies here: a rule scoped too wide is its own
+   defect.
+
+### What this adds to "Verification steps"
+
+6. The two relayed claims are **re-read at their sources firsthand** (⚠️ row 2 only once `0361`'s
+   records are settled), and the mechanism they share with the core signal is stated in the
+   deliverable's own words.
+7. The deliverable **answers both halves** of the driver/worker question, or says explicitly why one
+   side needs no rule.
+8. It states **whether the relay channel and the sweep channel take one remedy or two**, with the
+   reason.
+
+### Notes on this amendment
+
+- **Depends on:** nothing new. ⚠️ **Reading `0361`'s records is a timing constraint, not a
+  dependency** — a coder was live on them 2026-09-05.
+- ⛔ **Out of scope — the core's list, unchanged and extended:** implementing any guard or test;
+  editing `0356`'s or `0361`'s folders; editing **ADR-046**; re-opening any closed finding; editing
+  `ai-agents/wiki-vault/`
+  ([ADR-005](../../../knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)).
+- ⚠️ **Rank unchanged — still `Unscheduled`, still on the unranked Backlog board.** The widening adds
+  scope, not priority, and ⛔ **nothing was renumbered**
+  ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)).
+- ⚠️ **Citation form, as above:** file + heading + quoted fragment, never `path:NNN`.

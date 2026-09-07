@@ -288,6 +288,26 @@ export const NAMED_EXEMPT = new Set([
   // Proposed replacement text for claude/skills/fkit-stateful-review/SKILL.md, quoted in
   // an edit table. The ../ depth is correct AT THAT TARGET. Two occurrences, one pair.
   'ai-agents/tasks/done/0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/plan.md::../fkit-review/SKILL.md',
+  // ── Sweep C. 0358's review.md R1 row quotes three other documents verbatim, in italics, as
+  // the specimens of the sibling-relative link shape the finding is ABOUT. On 2026-09-06 those
+  // three (0199, 0212, 0317) were briefly exempted here, while 0358 was still in `backlog/` and
+  // the targets had already moved to `done/`. Closing 0358 into `done/` made it their SIBLING,
+  // so `../<name>/brief.md` RESOLVES again and all three exemptions became dead weight — L4's
+  // `targetIsBack` branch — and were deleted. ⭐ THE LESSON, because it cost two rounds in one
+  // day: "../../done/X survives, ../X does not" is right about a POINTER and INVERTS for an
+  // exemption KEY. A sibling-relative link HEALS when its citer moves into `done/` alongside a
+  // target already there, and its exemption must then be removed, not repointed.
+  //
+  // What survives that move is the opposite case — a quoted target that is still OPEN. The same
+  // R1 row quotes 0319's brief § Related, *"[0290](../0290-…/brief.md)"*, which resolved while
+  // 0358 sat in `backlog/` next to 0290 and broke the moment 0358 moved. 0319's brief has since
+  // been repointed and now literally reads `../../backlog/0290-…`, so the row quotes SUPERSEDED
+  // text: rewriting it would forge a quotation of a document as it no longer reads, and the row
+  // exists to record the pre-sweep wording.
+  // ⚠️ TRIP-WIRE: if 0290 ever closes into `done/`, this target resolves from 0358's `done/`
+  // folder, L4's `targetIsBack` reds, and the fix is DELETION of this key — exactly what just
+  // happened to the three above. That is the guard working, not a regression.
+  'ai-agents/tasks/done/0358-sweep-c-the-wiki-vault-resyncs-as-one-pass/review.md::../0290-decide-whether-anything-should-notice-when-a-close-falsifies-a-vault-claim/brief.md',
 ]);
 
 // ── D2 — case-exact resolution with §4.1's containment test ──────────────────────────────────────
@@ -420,12 +440,16 @@ test('L2 live corpus: BROKEN is 0 under the settled condition', () => {
     'and update the L3 count in the same edit.');
 });
 
-test('L3 live corpus: NAMED-EXEMPT is exactly 6 instances', () => {
+test('L3 live corpus: NAMED-EXEMPT is exactly 7 instances', () => {
   // §7 item 9(b), and it costs one line. ⛔ A test asserting only `broken.length === 0` reads just as
-  // green if the exemption list silently swallows a SEVENTH instance. Six instances from five keys —
-  // task 0272's pair matches twice.
-  assert.equal(LIVE.namedExemptCount, 6,
-    `NAMED_EXEMPT suppressed ${LIVE.namedExemptCount} instances, expected 6. A RISE means a new ` +
+  // green if the exemption list silently swallows an EIGHTH instance. Seven instances from six keys —
+  // task 0272's pair matches twice. Measured 2026-09-06, twice in one day: 6 -> 9 when Sweep C's
+  // three refused-repoint quotations were exempted by name (owner ruling, "NAMED_EXEMPT via a
+  // coder"), then 9 -> 7 when closing 0358 healed those three sibling-relative links and left one
+  // new one (0290) broken in their place. ⭐ THE FALL IS WHY THIS ARM IS AN EQUALITY, NOT A CEILING:
+  // it is the assertion that caught the three dead keys.
+  assert.equal(LIVE.namedExemptCount, 7,
+    `NAMED_EXEMPT suppressed ${LIVE.namedExemptCount} instances, expected 7. A RISE means a new ` +
     'unresolved link happens to match an existing (file, target) key and is being silently ' +
     'swallowed — read it before changing this number. A FALL means an exemption stopped applying; ' +
     'L4 should say which.');
@@ -433,9 +457,13 @@ test('L3 live corpus: NAMED-EXEMPT is exactly 6 instances', () => {
 
 test('L4 named exemptions: no stale key — citing file still exists, target still missing', () => {
   // §7 item 9(a). An exemption is only ever consulted to SUPPRESS; nothing notices one that has
-  // stopped applying. ⚠️ Not hypothetical here — 4 of the 5 keys are `ai-agents/tasks/done/` paths,
-  // and this repo moves task folders between boards as routine work, so an ordinary close can orphan
-  // a key. The failure is silent when it comes, which is why it is asserted rather than trusted.
+  // stopped applying. ⚠️ NOT hypothetical, and no longer merely a worry — 5 of the 6 keys are
+  // `ai-agents/tasks/done/` paths, and this repo moves task folders between boards as routine work.
+  // ⭐ THIS ARM HAS NOW FIRED FOR REAL: closing 0358 on 2026-09-06 orphaned three keys at once, and
+  // BOTH branches were implicated — the citer path `tasks/backlog/0358-…` stopped existing
+  // (`missingCiter`), and repointing it to `tasks/done/` would only have moved the failure to
+  // `targetIsBack`, because the move healed the links. The answer was deletion. The failure is
+  // silent when it comes, which is why it is asserted rather than trusted.
   const cache = new Map();
   const missingCiter = [];
   const targetIsBack = [];
@@ -500,7 +528,7 @@ test('L6 scope: the closed and archival folders WERE scanned — their absence i
                                            //       today's count. Removing a sprint review ledger
                                            //       is not ordinary work; if it ever happens, lower
                                            //       this deliberately and with a measurement, the
-                                           //       same discipline L3's exact 6 is held to.
+                                           //       same discipline L3's exact count is held to.
     ['ai-agents/knowledge-base/', 80],     // 102
   ];
   const thin = required

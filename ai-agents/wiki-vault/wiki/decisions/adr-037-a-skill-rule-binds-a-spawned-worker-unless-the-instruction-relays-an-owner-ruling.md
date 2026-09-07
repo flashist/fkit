@@ -7,6 +7,12 @@
 
 > ⚠️ **§5's enforcement sentence is known to overstate, and it is still uncorrected on disk.** See §"The §5 over-claim" below. Task `0205` is filed to append the dated correction note. **This page records the disagreement; it does not settle it.**
 
+> ⭐ **Dated resync note 2026-09-05 (`0358`, sweep C) — §5's over-claim is now CORRECTED ON DISK.** ⚠️ The note above this one says the over-claim *"is still uncorrected on disk"* and names `0205` as filed to fix it. **`0205` has since landed** — it is in `ai-agents/tasks/done/`. The earlier note is left **byte-identical** as the record of what was true when written; **read it as dated.**
+>
+> Task `0205` (2026-09-04, inside sweep `0357`) appended the correction: §5's *"none is possible"* is **too strong, and ONLY about a proxy**. ⛔ **This is a NARROWING, not a reversal. No decision in this ADR moves.**
+>
+> **What still holds — stated first, because it is most of the claim.** *"None is possible"* holds for **condition (a)**, for **condition (c)**, and for **condition (b) as written** — (b) reads *"it carries a concrete **approved** plan verbatim"*, and (b) asserts that the plan **was approved**, which no proxy can establish.
+
 ## Context
 
 ### The axis it decides, and the axis it does not

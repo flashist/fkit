@@ -160,7 +160,7 @@ Docs-only refresh of `ai-agents/knowledge-base/architecture.md` §9 — nothing 
 > `install.sh` is still verified by nothing, and CI running does not close that gap.
 >
 > **⚠️ Who repairs that bullet — not this row.**
-> [`0312`](../0312-correct-the-false-ci-has-never-run-claims-in-architecture-md/brief.md), filed
+> [`0312`](../../done/0312-correct-the-false-ci-has-never-run-claims-in-architecture-md/brief.md), filed
 > 2026-08-15 and **unranked on the Backlog board**, owns the repair of that exact §9.1 bullet and of the
 > matching overview paragraph beginning *"There **is** a zero-dependency test suite"*. ⚠️ **`0251` and
 > `0312` therefore touch the same file and the same section — the only overlap in this cluster.**
@@ -168,7 +168,7 @@ Docs-only refresh of `ai-agents/knowledge-base/architecture.md` §9 — nothing 
 > CI framing is already true. **If `0251` runs first:** leave that bullet's text untouched — repairing
 > it is `0312`'s scope, not this row's — but ⛔ do not treat it as true and ⛔ do not echo its claim
 > anywhere else in §9; say in the close that it was knowingly left standing and false, pending `0312`.
-> [`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) is the third row
+> [`0281`](../../done/0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) is the third row
 > in the cluster (it corrects ADR-003, no shared file) and carries its own 2026-08-15 correction.
 >
 > ⚠️ **This task's real job is unchanged and still outstanding:** items 1 and 2 — re-derive the count
@@ -239,10 +239,10 @@ Docs-only refresh of `ai-agents/knowledge-base/architecture.md` §9 — nothing 
   *"⛔ CI has never run; do not let the refresh claim it works"* (the 2026-08-12 bullet in this same
   Notes list) must not be followed.** ⚠️ **Repairing the §9.1 *"Neither has been observed green on a
   runner yet"* bullet is
-  [`0312`](../0312-correct-the-false-ci-has-never-run-claims-in-architecture-md/brief.md)'s scope, not
+  [`0312`](../../done/0312-correct-the-false-ci-has-never-run-claims-in-architecture-md/brief.md)'s scope, not
   this row's** — `0312` (filed 2026-08-15, **unranked on the Backlog board**) and `0251` touch the same
   file and the same section, the only overlap in this cluster; **recommended order is `0312` first**.
-  [`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) is the third row
+  [`0281`](../../done/0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) is the third row
   and carries its own 2026-08-15 correction. ⚠️ **This row's own job — the suite count and enumeration
   re-derived from disk on the day of the change — is unchanged and still outstanding**, as is the open
   *"stop enumerating by hand?"* decision at its plan gate. Owner provenance for this amendment:

@@ -121,7 +121,7 @@ One edit to one file: `claude/skills/fkit-wiki-lint/SKILL.md`, the parenthetical
 - ⛔ **No behavior change to the lint procedure.** No step added, removed, reordered, or made
   conditional. This is a prose repair of one parenthetical.
 - ⛔ **Do not edit `ai-agents/knowledge-base/architecture.md`.** It is already correct.
-- ⛔ **Do not edit ADR-003** — that is [`0281`](../../backlog/0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md),
+- ⛔ **Do not edit ADR-003** — that is [`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md),
   filed the same day from the same ruling.
 - ⛔ **Do not sweep the other no-CI claims in the repo.** Measured at filing, `ADR-014:18` and
   `ADR-026:48`/`:131` also carry no-CI statements, and two knowledge-base reports do. **They are out
@@ -164,7 +164,7 @@ One edit to one file: `claude/skills/fkit-wiki-lint/SKILL.md`, the parenthetical
   predates it.** Filed 2026-08-12 on the owner's ruling of the same day, verbatim option label
   **"fkit-wiki-lint SKILL.md — sharpest (Recommended)"**.
 - **⚠️ Sibling rows filed from the same ruling:**
-  [`0281`](../../backlog/0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) (ADR-003) and
+  [`0281`](../0281-correct-adr-003s-still-unmet-automated-verification-claim/brief.md) (ADR-003) and
   [`0282`](../0282-wiki-resync-of-the-no-ci-claims-after-the-0256-ci-landing/brief.md) (vault
   resync). **No shared file with `0281`. `0282` should run last** — see its own note.
 - **⚠️ ONE ROW, NOT TWO.** D1/D2 (the false facts) and D3 (the fabricated citation) sit in the same

@@ -218,7 +218,7 @@ repo only because this repo is also fkit's source tree.
 - **⚠️ THIS IS A BEHAVIOR CHANGE, and that framing matters to the close.** `0267` was a prose-accuracy
   task with a hard ⛔ no-behavior-change constraint; this row exists **because** the fix crosses that
   line. ⛔ Do not describe this as a documentation cleanup.
-- **Independent of [`0276`](../0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md)**,
+- **Independent of [`0276`](../../done/0276-correct-the-unresolved-plan-sprint-drift-mechanism-claim-in-adr-041-and-its-echoes/brief.md)**,
   the sibling residual filed the same day. **No shared file, no ordering, either order is safe** —
   `0276` edits ADR-041 and `fkit-task-brief/SKILL.md`; this edits `fkit-sprint-ship-loop/SKILL.md`.
   Recorded so nobody invents a dependency edge between two rows filed together.

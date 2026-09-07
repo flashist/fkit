@@ -80,3 +80,4 @@ structure-check design with its owner rulings — plus the eight structure-check
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — ⚠️ *Corrected 2026-08-14:* this read *"🟢 **the ACTIVE board** since 2026-08-10"*. Sprint 5 opened 2026-08-10 and is now 🔒 **CLOSED and archived** at `ai-agents/sprints/done/sprint-5.md` (task `0294`). ⚠️ **There is no active board at all right now** — `dashboard.sh select-active ai-agents/sprints` returns `active none`
 - [[tasks/design-the-post-update-structure-check]] — `0241`, this board's out-of-band row, whose follow-ups became the whole of Sprint 4
 - [[systems/fkit]]
+- [[decisions/adr-046-a-sprint-board-may-be-committed-unranked-and-an-erased-rank-flags]] — ⭐ *Added 2026-09-05 (`0358`, sweep C):* the rank-integrity lineage this board opened, continued — the unranked-cell gap it left

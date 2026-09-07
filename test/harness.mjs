@@ -28,8 +28,21 @@ if (LAUNCHER !== DEFAULT_LAUNCHER) {
 }
 
 // A stub dir with `claude`, `codex`, and `curl`, created once and reused.
-//   claude — records the exact argv it was handed (one line per arg) to $FKIT_STUB_ARGV_FILE, so "was
-//            claude exec'd at all?" is "does that file exist?" and "with what argv?" is its contents.
+//   claude — records the exact argv it was handed (one line per arg), ONE FILE PER INVOCATION:
+//            $FKIT_STUB_ARGV_FILE.1, .2, … So "was claude run at all?" is "does .1 exist?" and "with
+//            what argv?" is each file's contents, in call order.
+//            ⚠️ WHY NOT ONE FILE. It used to truncate a single $FKIT_STUB_ARGV_FILE on every call
+//            (`: > …`), which was fine while the launcher only ever `exec`'d claude once. The fresh-
+//            project cold start now RUNS the producer and then execs the lead — two invocations in one
+//            launcher run — and under the old stub the second silently erased the first, so the
+//            producer phase was unobservable and a test could only ever see the session it landed in.
+//            Numbering the files is what makes both phases assertable at once.
+//            Two knobs let a test drive the cold start's outcome, which is otherwise unreachable
+//            (a stub that writes nothing can only ever simulate an initiation that did NOT land):
+//              FKIT_STUB_INITIATE — absolute path; write a non-fresh PROJECT.md there, i.e. simulate
+//                                   an initiation that succeeded. Absolute, not cwd-relative, so it
+//                                   cannot silently miss if the launcher's cwd ever changes.
+//              FKIT_STUB_EXIT     — exit with this code instead of 0 (e.g. 130 for a Ctrl-C).
 //   codex  — exits 0 for anything so the launcher's Codex preflight stays quiet and deterministic.
 //   curl   — ⚠️ THE HERMETIC SEAL. `fkit update` (assertion 5) routes through _fkit_reinstall, which
 //            runs `curl … | sh` against the REAL installer whenever the launcher's install root is not
@@ -44,8 +57,20 @@ let STUB_DIR;
 function stubDir() {
   if (STUB_DIR) return STUB_DIR;
   STUB_DIR = mkdtempSync(join(tmpdir(), 'fkit-stub-'));
-  writeFileSync(join(STUB_DIR, 'claude'),
-    '#!/bin/sh\n: > "$FKIT_STUB_ARGV_FILE"\nfor a in "$@"; do printf \'%s\\n\' "$a" >> "$FKIT_STUB_ARGV_FILE"; done\nexit 0\n');
+  writeFileSync(join(STUB_DIR, 'claude'), [
+    '#!/bin/sh',
+    'n=1',
+    'while [ -e "$FKIT_STUB_ARGV_FILE.$n" ]; do n=$((n+1)); done',
+    // Create the file BEFORE the loop: a zero-arg invocation must still be recorded as an invocation.
+    ': > "$FKIT_STUB_ARGV_FILE.$n"',
+    'for a in "$@"; do printf \'%s\\n\' "$a" >> "$FKIT_STUB_ARGV_FILE.$n"; done',
+    'if [ -n "${FKIT_STUB_INITIATE:-}" ]; then',
+    '  mkdir -p "$(dirname "$FKIT_STUB_INITIATE")"',
+    '  printf \'# Stub-initiated project\\n\' > "$FKIT_STUB_INITIATE"',
+    'fi',
+    'exit "${FKIT_STUB_EXIT:-0}"',
+    '',
+  ].join('\n'));
   writeFileSync(join(STUB_DIR, 'codex'), '#!/bin/sh\nexit 0\n');
   // No network, ever. Record the call (if any) and fail like an offline curl — never fetch.
   writeFileSync(join(STUB_DIR, 'curl'),
@@ -83,9 +108,13 @@ function spawnLauncherSetup(project) {
   return runSync(['producer'], { project, extraEnv: { FKIT_SETUP_ONLY: '1' } });
 }
 
-// Run the launcher and resolve to { code, stdout, stderr, exec, argv }.
-//   exec  — did the launcher reach `exec claude` (i.e. did the stub run)?
-//   argv  — the argv handed to `claude`, or null if it never exec'd.
+// Run the launcher and resolve to { code, stdout, stderr, exec, argv, argvs }.
+//   exec  — did the launcher reach `claude` at all (i.e. did the stub run)?
+//   argv  — the argv of the LAST claude invocation, or null if it never ran. For every path that
+//           launches one session this is "the argv handed to claude", unchanged.
+//   argvs — every invocation's argv, in call order. ⚠️ A run with two phases (the fresh-project cold
+//           start: producer, then lead) is only fully visible here — `argv` shows the session you
+//           LAND in and says nothing about what ran before it. Assert on argvs when the count matters.
 // detached:true puts the child in a new session with NO controlling terminal, so the launcher's
 // menu / fresh-tty branches are deterministic regardless of how `npm test` itself was started.
 export function runFkit(args, { project, extraEnv = {} } = {}) {
@@ -113,22 +142,30 @@ export function runFkit(args, { project, extraEnv = {} } = {}) {
     child.stderr.on('data', (d) => { stderr += d; });
     child.on('error', reject);
     child.on('close', (code) => {
-      const { exec, argv } = readArgv(argvFile);
+      const { exec, argv, argvs } = readArgv(argvFile);
       const curlReached = existsSync(curlMarker);    // did the run hit the (stubbed, no-network) curl?
       cleanup(argvDir);                              // don't leak a temp dir per launcher run
-      resolve({ code, stdout, stderr, exec, argv, curlReached });
+      resolve({ code, stdout, stderr, exec, argv, argvs, curlReached });
     });
   });
 }
 
-// Reconstruct the argv the stub recorded. The stub writes one line per arg (`printf '%s\n'`), so the
-// split yields a trailing "" from the final newline — drop exactly that one, NOT every empty line, so
-// a legitimately empty argument ("") in the middle survives round-trip.
+// Reconstruct the argv of every claude invocation the stub recorded, in call order. The stub writes
+// one file per invocation (argvFile.1, .2, …), one line per arg (`printf '%s\n'`), so each split
+// yields a trailing "" from the final newline — drop exactly that one, NOT every empty line, so a
+// legitimately empty argument ("") in the middle survives round-trip.
+//
+// Walking `.1, .2, …` until one is missing (rather than globbing the dir) keeps the ORDER exact: the
+// stub allocates numbers by probing upward, so the sequence is dense and the first gap is the end.
 function readArgv(argvFile) {
-  if (!existsSync(argvFile)) return { exec: false, argv: null };
-  const lines = readFileSync(argvFile, 'utf8').split('\n');
-  if (lines.length && lines[lines.length - 1] === '') lines.pop();
-  return { exec: true, argv: lines };
+  const argvs = [];
+  for (let n = 1; existsSync(`${argvFile}.${n}`); n++) {
+    const lines = readFileSync(`${argvFile}.${n}`, 'utf8').split('\n');
+    if (lines.length && lines[lines.length - 1] === '') lines.pop();
+    argvs.push(lines);
+  }
+  if (argvs.length === 0) return { exec: false, argv: null, argvs: [] };
+  return { exec: true, argv: argvs[argvs.length - 1], argvs };
 }
 
 // Synchronous sibling used only for setup; keeps makeProject simple.

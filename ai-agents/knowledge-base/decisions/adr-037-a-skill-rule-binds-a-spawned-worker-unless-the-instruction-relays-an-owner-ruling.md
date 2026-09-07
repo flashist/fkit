@@ -281,7 +281,8 @@ wants it, it should be filed as a parity check, not as enforcement.
 >
 > **What it does not hold for is a *carry-fidelity proxy for (b)*** — a strictly weaker proposition:
 > *the spawn prompt contains the bytes of the file at path P whose git blob id is H, as named by the
-> prompt's own pointer line*. **That proxy is mechanically checked today, driver-side**, by the
+> prompt's own pointer line*. ⚠️ **Read "contains the bytes" as the proxy's FULL form; the
+> fifth limit below records when only its hash half is enforced.** **That proxy is mechanically checked today, driver-side**, by the
 > `PreToolUse` carry-check hook registered on the `Agent|Task` matcher — verified against live code
 > **2026-09-04** (`claude/carry-check-hook.sh` / `.mjs`, registered by `build_settings()`).
 >
@@ -291,7 +292,7 @@ wants it, it should be filed as a parity check, not as enforcement.
 > not mean the marker held** — conditions (a) and (c) remain forgeable prose, and **the conjunctive
 > marker is only as strong as its weakest signal.**
 >
-> **Four limits, each of them the hook's own statement about itself. Present tense without these
+> **Five limits, each of them the hook's own statement about itself. Present tense without these
 > overstates:**
 >
 > - **Launcher sessions only.** The hook is written into the per-role settings file that `fkit <role>`
@@ -304,6 +305,13 @@ wants it, it should be filed as a parity check, not as enforcement.
 > - **The ungated limit.** ⚠️ **The trigger is the pointer line alone** (owner ruling, 2026-08-25) — not
 >   the subagent type, not the caller string. **A spawn that omits the pointer entirely is invisible to
 >   the hook and passes ungated.**
+> - ⛔ **The byte-containment half is SKIPPED on a declared pointer-only spawn — so the proxy as defined
+>   above is not always the proposition actually checked.** The hook tests whether the prompt declares
+>   itself *"by reference only"* / *"pointer-only"*, and gates the byte test on that: a declared
+>   pointer-only spawn with a matching hash is **allowed without any byte-containment check**. Its own
+>   comment says so — *"A declared pointer-only spawn with a matching hash is ALLOWED here … This hook
+>   does not enforce (b)."* ⚠️ **On that path what is checked is the hash alone, not that the prompt
+>   carried the bytes.** The refusal that covers it is the spawned coder's own, in prose — not this hook.
 >
 > **The pre-registered re-raise trigger has NOT fired.** That trigger asks for *"a cross-context
 > verification token"* becoming available in the harness. ⛔ **A file on disk is not one** — and the

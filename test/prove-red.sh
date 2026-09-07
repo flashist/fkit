@@ -52,6 +52,9 @@
 #  26. Disarm the post-gate HEAD compare            → "0300/head-moved-during-test-gate-refused" (task 0300)
 #  27. Delete the R5 clause in ONE wiki skill       → "the R5 clause"                    (task 0154)
 #  28. Re-indent ONE list item in a wiki skill      → "uniformity: identical modulo ONE"  (task 0154)
+#  29. Delete throughput.mjs's same-segment check   → "migration-is-not-a-close"           (task 0359)
+#  30. Put `exec` back on the cold start            → "12. fresh project ... then the lead" (task 0379)
+#  31. The same, but on the INTAKE path ONLY        → "12b. fresh project with a completed intake" (0379)
 #
 # ⚠️ MUTATIONS 18-22, 25 AND 26 ARE THE FIRST TO TARGET `bin/`, NOT A COPIED LAUNCHER TREE (task 0288). Their seam
 # is FKIT_RELEASE_MJS — a SINGLE-FILE redirect (the FKIT_LAUNCHER pattern, not the whole-tree
@@ -193,6 +196,21 @@ run_parity_suite() {   # <scaffold-home-root>
 # harness would announce and use some other launcher (harmless for this suite, misleading in the log).
 run_dashboard_suite() {   # <repo-copy-root>
   if node --test "$1/test/dashboard-contract.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
+# Run ONLY the throughput-counter suite FROM a copied repo root (task 0359) — the SAME seam mutation
+# 14 rides, for a sibling script in the SAME skill directory. throughput-counter.test.js resolves the
+# script as REPO + `claude/skills/fkit-status/throughput.mjs`, and harness.mjs derives REPO from its
+# own location, so the copy's test hits the copy's script with no env var and no path override.
+# ⚠️ The copy has NO `.git`, so the suite's pinned-baseline test SKIPS there (it says so, loudly,
+# rather than passing). That is fine for this gate: the assertion the mutation targets lives in the
+# hermetic os.tmpdir() git fixture, which the copy builds for itself.
+run_throughput_suite() {   # <repo-copy-root>
+  if node --test "$1/test/throughput-counter.test.js" >"$out" 2>&1; then
     echo green
   else
     echo red
@@ -400,6 +418,15 @@ kc="$(run_carry_check_suite "$clean_carry_hook")"; echo "$kc"
 printf '0m. unmutated copy wiki-flag-convention suite should be green ... '
 wc_="$(run_wiki_flag_suite "$clean_tree")"; echo "$wc_"
 [ "$wc_" = green ] || { echo "   ✗ an UNMUTATED copy's wiki-flag suite is red — mutations 27/28 below would be false."; fail=1; }
+
+# --- 0n. An UNMUTATED repo copy's throughput suite must ALSO be green (task 0359; same reasoning as
+#     0i — without this, mutation 29's red could be red-because-the-copy-is-broken). ⚠️ THIS ONE HAS A
+#     SPECIFIC WAY TO BE BROKEN: the copy has no `.git`, so the suite's pinned-baseline and
+#     live-corpus tests SKIP there. They are written to skip loudly rather than pass silently, and a
+#     skip does not red a suite — so this check confirms the OTHER 23 tests really ran. -------------
+printf '0n. unmutated repo copy throughput suite should be green ... '
+tp_="$(run_throughput_suite "$(make_repo_copy repo-clean-throughput)")"; echo "$tp_"
+[ "$tp_" = green ] || { echo "   ✗ an UNMUTATED copy's throughput suite is red — mutation 29 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -1288,6 +1315,126 @@ if [ "$r28" != red ]; then
   fail=1
 elif ! grep -Eq '(✖|not ok|fail).*uniformity: identical modulo ONE uniform offset' "$out"; then
   echo "   ✗ suite went red but NOT at the uniformity assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 29: delete throughput.mjs's same-segment guard, so a rename that only RESHAPES a task
+#     inside one board segment is treated as a transition → the "migration-is-not-a-close" assertion
+#     in throughput-counter.test.js must go red (task 0359). ⚠️ WHY THE UNIT FIXTURE AND NOT THE
+#     WEEK COUNTS: the counter carries a task's identity across a rename, so a reshaped task is
+#     ALREADY closed under its old name and first-close-wins refuses the double count — deleting this
+#     guard leaves the per-week numbers byte-identical on the real corpus (measured). The guard earns
+#     its place only where the carry cannot fire (a shallow or grafted history, where the rename's
+#     source side was never walked), and the unit fixture is exactly that case. Mutating against the
+#     week counts instead would be a gate that proves nothing. -----------------------------------
+m29="$(make_repo_copy repo-mutant-throughput)"
+m29_file="$m29/claude/skills/fkit-status/throughput.mjs"
+cp "$m29_file" "$m29_file.orig"
+# Anchored on the whole line, so a partial match cannot land on some other segment comparison.
+sed -i.bak 's/^      if (from\.segment === to\.segment) {$/      if (false) {/' "$m29_file"
+rm -f "$m29_file.bak"
+if cmp -s "$m29_file" "$m29_file.orig"; then
+  echo "29. deleted the same-segment guard ... ✗ MUTATION WAS A NO-OP — the sed no longer matches the"
+  echo "   guard line (has \`from.segment === to.segment\` been reworded or re-indented?). This gate is"
+  echo "   disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif [ "$(diff "$m29_file.orig" "$m29_file" | grep -c '^>')" != 1 ]; then
+  echo "29. deleted the same-segment guard ... ✗ WRONG TARGET — the sed changed more than one line."
+  fail=1
+fi
+printf '29. same-segment reshape guard deleted — "migration-is-not-a-close" should go RED ... '
+r29="$(run_throughput_suite "$m29")"; echo "$r29"
+if [ "$r29" != red ]; then
+  echo "   ✗ the suite did NOT catch a counter that treats a pure reshape as a close — the"
+  echo "     migration-week exclusion is not load-bearing, and the per-week closes cannot be trusted."
+  fail=1
+elif ! grep -Eq '(✖|not ok|fail).*migration-is-not-a-close' "$out"; then
+  echo "   ✗ suite went red but NOT at migration-is-not-a-close — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 30: put `exec` back in front of the fresh-project cold start, i.e. restore the
+#     pre-0379 launcher exactly — the producer replaces the shell and the lead hand-off can never
+#     happen → assertion 12 in launcher-contract.test.js must go red (task 0379). This is the whole
+#     regression in one word: `exec` is invisible in a diff read quickly, costs nothing at runtime,
+#     and silently deletes the second phase. Note the mutant keeps the producer phase byte-identical,
+#     so 12b/12c/12d stay GREEN — only the "then the lead" assertion moves, which is what makes this
+#     a proof about the hand-off rather than about the cold start in general. ---------------------
+m30="$(make_claude_copy claude-mutant-coldstart-exec)"
+cp "$m30" "$m30.orig"
+# Anchored on the whole line so a partial match cannot land on the tail's `exec claude --agent
+# "fkit-$role"`, which is a DIFFERENT exec and must not be touched. ⚠️ `%` is the delimiter, not the
+# usual `/` or `|`: the target line ENDS in `|| cold_rc=$?`, and a `|`-delimited s/// would terminate
+# on it. The line carries no `%`.
+sed -i.bak 's%^  claude --agent fkit-producer --settings "\$settings" "\$@" "\$seed" || cold_rc=\$?$%  exec claude --agent fkit-producer --settings "$settings" "$@" "$seed" # mutation: cold start execs the producer (pre-0379)%' "$m30"
+rm -f "$m30.bak"
+if cmp -s "$m30" "$m30.orig"; then
+  echo "30. the cold start execs the producer again ... ✗ MUTATION WAS A NO-OP — the sed no longer matches"
+  echo "   the cold-start run line (has it been reworded or re-indented?). This gate is disarmed: it"
+  echo "   would report success while proving nothing. Fix the mutation in test/prove-red.sh before"
+  echo "   trusting any result above."
+  fail=1
+elif [ "$(diff "$m30.orig" "$m30" | grep -c '^>')" != 1 ]; then
+  echo "30. the cold start execs the producer again ... ✗ WRONG TARGET — the sed changed more than one"
+  echo "   line; it must not touch the launcher's own tail exec."; fail=1
+fi
+printf '30. cold start execs the producer — "12. fresh project ... then the lead" should go RED ... '
+r30="$(run_suite "$m30")"; echo "$r30"
+if [ "$r30" != red ]; then
+  echo "   ✗ the suite did NOT catch a cold start that execs the producer and never opens the lead —"
+  echo "     the fresh-project hand-off is not pinned, and 0379 could regress silently."
+  fail=1
+elif ! grep -Eq '(✖|not ok|fail).*12\. fresh project' "$out"; then
+  echo "   ✗ suite went red but NOT at assertion 12 — red for the wrong reason."; fail=1
+elif grep -Eq '(✖|not ok|fail).*12(c|d)\.' "$out"; then
+  echo "   ✗ 12c/12d also went red — the mutation is broader than the hand-off it is meant to"
+  echo "     prove, so a red here would not be evidence about the lead hand-off specifically."; fail=1
+fi
+# ⚠️ 12b IS EXPECTED TO RED HERE and is deliberately absent from the narrowness check above. It pins
+# the same hand-off as 12 (on the intake-present path), so an UNCONDITIONAL `exec` must take both
+# down; requiring 12b to stay green would be requiring the hole mutation 31 exists to close. 12c/12d
+# are about the GATE, not the hand-off, and must still be green — they stay in the check.
+
+# --- Mutation 31: restore `exec` on the INTAKE-PRESENT branch ONLY — the escaping mutant. It deletes
+#     the lead hand-off for every owner who completes the terminal intake (i.e. every human at a real
+#     terminal) and for nobody else → assertion 12b must go red (task 0379).
+#
+#     ⚠️ WHY THIS EXISTS ON TOP OF MUTATION 30. Mutation 30 is caught by test 12, which runs HEADLESS:
+#     no tty → .fkit/interview writes no intake.md → the no-intake branch. That is the CI path, not the
+#     path a person walks. This mutation is the one mutation 30 cannot see, and it was not hypothetical:
+#     while 12b asserted only argvs[0], this exact mutant passed the whole launcher suite 43/43 GREEN.
+#     A gate that only proves the headless path pins the hand-off proves it where nobody lives.
+#
+#     Its narrowness is the mirror of 30's: 12 / 12c / 12d must stay GREEN (they never create an
+#     intake.md, so they run the unmutated branch), and ONLY 12b moves. -------------------------------
+m31="$(make_claude_copy claude-mutant-coldstart-exec-intake)"
+cp "$m31" "$m31.orig"
+# One line replaced by one line, so the >1-line check below stays meaningful. Anchored on the whole
+# line for the same reason as mutation 30 — it must not land on the tail's own `exec claude --agent
+# "fkit-$role"`. Same `%` delimiter, and for the same reason: the line ends in `|| cold_rc=$?`.
+sed -i.bak 's%^  claude --agent fkit-producer --settings "\$settings" "\$@" "\$seed" || cold_rc=\$?$%  if [ -f "$proj/.fkit/intake.md" ]; then exec claude --agent fkit-producer --settings "$settings" "$@" "$seed"; fi; claude --agent fkit-producer --settings "$settings" "$@" "$seed" || cold_rc=$? # mutation: exec on the intake path only%' "$m31"
+rm -f "$m31.bak"
+if cmp -s "$m31" "$m31.orig"; then
+  echo "31. the cold start execs the producer on the intake path ... ✗ MUTATION WAS A NO-OP — the sed no"
+  echo "   longer matches the cold-start run line (has it been reworded or re-indented?). This gate is"
+  echo "   disarmed: it would report success while proving nothing. Fix the mutation in test/prove-red.sh"
+  echo "   before trusting any result above."
+  fail=1
+elif [ "$(diff "$m31.orig" "$m31" | grep -c '^>')" != 1 ]; then
+  echo "31. the cold start execs the producer on the intake path ... ✗ WRONG TARGET — the sed changed more"
+  echo "   than one line; it must not touch the launcher's own tail exec."; fail=1
+fi
+printf '31. exec on the intake path only — "12b. fresh project with a completed intake" should go RED ... '
+r31="$(run_suite "$m31")"; echo "$r31"
+if [ "$r31" != red ]; then
+  echo "   ✗ the suite did NOT catch a cold start that skips the lead hand-off for every owner who"
+  echo "     completes the intake — the hand-off is pinned only on the headless path, which is the one"
+  echo "     path no human takes. This is exactly the hole 0379's review found green at 43/43."
+  fail=1
+elif ! grep -Eq '(✖|not ok|fail).*12b\.' "$out"; then
+  echo "   ✗ suite went red but NOT at assertion 12b — red for the wrong reason."; fail=1
+elif grep -Eq '(✖|not ok|fail).*12(c|d)\.' "$out" || grep -Eq '(✖|not ok|fail).*12\. fresh project' "$out"; then
+  echo "   ✗ 12 / 12c / 12d also went red — the mutation is meant to touch ONLY the intake-present"
+  echo "     branch, so a red elsewhere means it is not isolating the path it claims to."; fail=1
 fi
 
 echo

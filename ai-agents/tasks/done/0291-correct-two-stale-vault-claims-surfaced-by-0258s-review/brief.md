@@ -148,7 +148,7 @@ The `0258` reviewer graded this **partially correct**, and that nuance must surv
 > (see `schema.md` for the format).
 
 **And it is an owner ruling, recorded on
-[`0212`](../../backlog/0212-append-a-dated-log-entry-correcting-the-still-open-framing/brief.md) (owner ruling
+[`0212`](../../done/0212-append-a-dated-log-entry-correcting-the-still-open-framing/brief.md) (owner ruling
 2026-08-03), quoted verbatim from that brief:**
 
 > **A wiki run may NEVER edit or annotate a past `log.md` entry in place.** A correction lands as a

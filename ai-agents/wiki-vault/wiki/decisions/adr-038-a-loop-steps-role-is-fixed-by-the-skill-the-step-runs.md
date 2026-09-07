@@ -7,6 +7,12 @@
 > step runs** — never from who authored the deliverable under that step. Concretely: the sprint loop's
 > Process-review step is **always `@fkit-coder`**, whoever wrote the work product.
 
+> ⭐ **Dated resync note 2026-09-05 (`0358`, sweep C) — the source ADR gained a drift note scoped to the BUILD step.** The page below is left **byte-identical**.
+>
+> Task `0346` (2026-09-04, inside sweep `0357`) records that the clause *"their roles come from the loop's enumerated step table, not from this lookup"* **no longer describes the Build step**.
+>
+> ⭐ **A drift note, not a reversal.** ADR-038's decision — *a loop step's role is fixed by the skill the step runs* — **stands**. ⛔ **ADR-038 is not amended and not superseded.** [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] is its **companion**, and says so in those terms.
+
 ## Context
 
 ADR-037 settled how a skill rule binds a *spawned* worker and **explicitly left the invocation axis
