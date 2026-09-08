@@ -10,7 +10,7 @@ Sprint 7
 P12
 
 ## Status
-🔲 Backlog
+🔄 In progress
 
 ## Owner
 fkit-producer
