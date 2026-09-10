@@ -140,7 +140,7 @@ against, and it must survive the edit.
   smallest-shippable split here, because a script whose claim the skill forbids is not independently
   shippable. Stated so a later reader does not read it as a missed decomposition.
 - **Priority `P11` is a rank on Sprint 7's board, assigned in the same act that ranked the board on the
-  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ THIS BOARD IS
+  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ THIS BOARD IS
   RANKED". Rank is board position, never identity
   ([`priority-is-rank-not-identity`](../../../knowledge-base/conventions/priority-is-rank-not-identity.md)).
 - **Source:** Sprint 7 scope, owner rulings *"Approve all 12 as proposed (Rec)"* and *"Cap record

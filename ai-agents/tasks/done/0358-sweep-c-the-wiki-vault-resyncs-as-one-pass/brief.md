@@ -205,7 +205,7 @@ a licence to collapse two different acts into one.**
 - ⛔ **THE HARD GATE.** `0354`'s `test/reference-integrity.test.js` and `0176`'s
   `test/coordination-citation-policy.test.js` must both be **green before this pass starts** — the
   owner-agreed *"verified, not trusted"* constraint. See
-  [`sprint-7.md`](../../../sprints/sprint-7.md) §"⛔ THE FORCED SEQUENCING".
+  [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⛔ THE FORCED SEQUENCING".
   ⚠️ **Note the honest edge:** both guards **exempt `ai-agents/wiki-vault/`** (ADR-005), so neither
   guard verifies this pass's own output. **`/fkit-wiki-lint` is what verifies this pass**, and step 6
   is not optional. Stated so the gate is not mistaken for coverage it does not give.
@@ -217,7 +217,7 @@ a licence to collapse two different acts into one.**
   `## Context`. Sweep B (`0357`) routed it out and its brief now names this task as the destination and
   the ruling as the authority. ⛔ **It is on THIS task's close list, and on no other.**
 - **Priority `P10` is a rank on Sprint 7's board, assigned in the same act that ranked the board on the
-  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ THIS BOARD IS
+  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ THIS BOARD IS
   RANKED". Rank is board position, never identity
   ([`priority-is-rank-not-identity`](../../../knowledge-base/conventions/priority-is-rank-not-identity.md)).
 - **Source:** Sprint 7 scope, owner rulings *"Approve all 12 as proposed (Rec)"*, *"Accept the 25

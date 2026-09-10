@@ -10,7 +10,7 @@ Sprint 7
 P12
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-producer
@@ -27,7 +27,7 @@ verbatim text.
    — Sprint 7 may cut a patch in flight
    ([`evidence-before-assertion`](../../../knowledge-base/conventions/evidence-before-assertion.md)).
 2. **Sprint 7's archival: "Hand-archive again, with the caveat (Rec)."** Manual, and the archived board
-   carries the **agent-performed / not-owner-verified** caveat. ⛔ **[`0341`](../0341-build-the-producer-only-sprint-movers-fkit-sprint-done-and-fkit-sprint-cancelled/brief.md)
+   carries the **agent-performed / not-owner-verified** caveat. ⛔ **[`0341`](../../backlog/0341-build-the-producer-only-sprint-movers-fkit-sprint-done-and-fkit-sprint-cancelled/brief.md)
    — which would build `/fkit-sprint-done` and `/fkit-sprint-cancelled` — stays `Unscheduled` by that
    same ruling.** It is deliberately not on this board; ⛔ do not pull it in to "do this properly".
 
@@ -140,7 +140,7 @@ message of its own and cannot serve as the anchor.
     ⛔ **nothing was re-ranked**
     ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md))
     — `0379` **appended** at `P15`. The full record lives in
-    [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ Addendum — the FIFTEENTH row".
+    [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ Addendum — the FIFTEENTH row".
   - ⛔ **`0369` (`P14`) REMOVED 2026-09-04 — it is DONE and is no longer a row this one waits on.**
     Owner ruling **K6**, 2026-09-04, live `AskUserQuestion`, option label verbatim
     **"Remove 0369 from the list (Rec)."**; relayed to a spawned `fkit-producer` with no owner channel
@@ -154,7 +154,7 @@ message of its own and cannot serve as the anchor.
     re-ranked** ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)).
     `0369` was closed by a spawned `fkit-producer`, so its board marker carries
     `(agent-closed — not owner-verified)` (ADR-033 §5). The full record lives in
-    [`sprint-7.md`](../../../sprints/sprint-7.md) §"⛔ Addendum — `P14` (`0369`) DONE, removed from
+    [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⛔ Addendum — `P14` (`0369`) DONE, removed from
     `0360`'s `Depends on`".
     - ⭐ **This SUPERSEDES the `0369` ADDED sub-bullet below**, which is left **byte-identical** as the
       frozen record of what was done on the day the row was pulled onto the board. ⚠️ Its sentence
@@ -174,7 +174,7 @@ message of its own and cannot serve as the anchor.
     `Next step` from it, and a missing name renders a false `ready`. ⛔ **`0369` was APPENDED at `P14`
     under ADR-035, not inserted at merit position, and nothing was re-ranked** — so once again the
     rank cannot carry the order and ⭐ **this dependency line is what carries it.** ⛔ **No other name
-    in the list changed.** The full record lives in [`sprint-7.md`](../../../sprints/sprint-7.md)
+    in the list changed.** The full record lives in [`sprint-7.md`](../../../sprints/done/sprint-7.md)
     §"⭐ Addendum — the FOURTEENTH row".
     - ⛔ **The constraint *"Do not archive while any Sprint 7 row is open"* reaches `0369` too**, on
       exactly the reasoning already recorded here for `0361`.
@@ -188,7 +188,7 @@ message of its own and cannot serve as the anchor.
     *"every other Sprint 7 row"* is no longer the same set as the rows this one waits on — the board
     still holds thirteen rows, two of them closed. ⛔ **No other name in the list changed**, and
     ⛔ **rank `P5` was NOT reassigned** (ADR-035) — the board carries a deliberate gap there. The full
-    record lives in [`sprint-7.md`](../../../sprints/sprint-7.md) §"⛔ Addendum — `P5` (`0355`)
+    record lives in [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⛔ Addendum — `P5` (`0355`)
     CANCELLED".
     - ⚠️ **This does NOT relax step 2's constraint.** *"Do not archive while any Sprint 7 row is
       open"* still reaches every remaining row. A **cancelled** row is closed, not open — ⛔ but the
@@ -207,7 +207,7 @@ message of its own and cannot serve as the anchor.
     ⚠️ **Rank order is not run order on this board any more; check the board, not the numbers.**
   - ⚠️ **It is a machine-parsed field** — `dashboard.sh` derives the board's `Next step` from it, so a
     stale value renders a false `ready`. Corrected here rather than annotated below, for that reason;
-    the full record lives in [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ Addendum — the
+    the full record lives in [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ Addendum — the
     THIRTEENTH row".
 - **Blocks:** nothing.
 - ⭐ **`0359` is what makes step 2's success-criterion line honest.** If `0359` has not landed, ⛔ **do
@@ -218,7 +218,7 @@ message of its own and cannot serve as the anchor.
   plan has no mover skill at all** — `0341` would build one and is `Unscheduled` by ruling. **That is
   exactly why the archival is hand-done and carries the caveat.**
 - **Priority `P12` is a rank on Sprint 7's board, assigned in the same act that ranked the board on the
-  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ THIS BOARD IS
+  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ THIS BOARD IS
   RANKED". Rank is board position, never identity
   ([`priority-is-rank-not-identity`](../../../knowledge-base/conventions/priority-is-rank-not-identity.md)).
 - **Source:** Sprint 7 scope, owner rulings *"Approve all 12 as proposed (Rec)"*, *"Minor — v0.3.0

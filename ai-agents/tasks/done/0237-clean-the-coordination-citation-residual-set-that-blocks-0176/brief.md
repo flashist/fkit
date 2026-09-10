@@ -274,10 +274,17 @@ board, on which this task is **`P6`**. Ranking authority is the same day's compa
 **The three mandatory edits of a pull, all applied in this act** (`/fkit-task-brief` step 8 / the
 Backlog board's **Off:** rule):
 
-1. The row was added to [`sprint-7.md`](../../../sprints/sprint-7.md) with the rank token `P6`.
+1. The row was added to [`sprint-7.md`](../../../sprints/done/sprint-7.md) with the rank token `P6`.
 2. The [`backlog.md`](../../../sprints/backlog.md) row was flipped to
    `➡️ Moved to [Sprint 7](sprint-7.md) — priority P6`. ⛔ **Not deleted** — a deleted row loses the
    pointer to where the work went.
+   ⚠️ **ANNOTATION 2026-09-08 — the marker quoted above is FROZEN and is left byte-identical;
+   the live [`backlog.md`](../../../sprints/backlog.md) row NO LONGER READS THIS WAY.** Sprint 7
+   was archived on 2026-09-08 and the archival re-pointed every `➡️ Moved to [Sprint 7]` marker
+   on that board to `done/sprint-7.md`. ⛔ **The quotation is annotated, never rewritten** — the
+   repo's standing *annotate, don't rewrite* treatment (`0306`), applied here by owner ruling of
+   2026-09-08, option label verbatim **"Annotate, don't rewrite (Rec)"**. ⭐ Read the quote as the
+   record of what the row said at the pull, ⛔ not as its current text.
 3. This brief's **`## Sprint` is now `Sprint 7`** and **`## Priority` is now `P6`**.
    **`## Status` is unchanged at `🔲 Backlog`** — the task has not started.
 
@@ -304,7 +311,7 @@ discharges this brief's open scanned-set question.
 ⚠️ **This task still hard-blocks [`0176`](../../done/0176-build-the-coordination-citation-policy-guard/brief.md)
 (`P7`), and both now gate Sprint 7's three sweeps** (`0356`, `0357`, `0358`). ⛔ **`0176`'s guard must
 be green before any sweep starts** — the owner-agreed *"verified, not trusted"* constraint. This row
-is on the critical path for five other rows; see [`sprint-7.md`](../../../sprints/sprint-7.md)
+is on the critical path for five other rows; see [`sprint-7.md`](../../../sprints/done/sprint-7.md)
 §"⛔ THE FORCED SEQUENCING".
 
 ⚠️ **The parsed `Depends on:` field in `## Notes` was CORRECTED IN PLACE, not annotated.** It read

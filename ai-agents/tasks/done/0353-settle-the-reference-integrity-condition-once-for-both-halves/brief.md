@@ -182,7 +182,7 @@ Both halves, instances and distinct files, dated, with the command that produced
 - ⚠️ **The three figures in §Context are one naive matcher's output, not a specification.** They are
   evidence that the condition is load-bearing, not a target to hit.
 - **Priority `P3` is a rank on Sprint 7's board, assigned in the same act that ranked the board on the
-  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ THIS BOARD IS
+  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ THIS BOARD IS
   RANKED". Rank is board position, never identity
   ([`priority-is-rank-not-identity`](../../../knowledge-base/conventions/priority-is-rank-not-identity.md)).
 - **Source:** Sprint 7 scope, owner ruling *"Approve all 12 as proposed (Rec)"*, 2026-08-29,

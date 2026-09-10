@@ -31,7 +31,7 @@ Relayed by a spawned `fkit-producer` with **no owner channel**
 ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
 which asked nothing and decided nothing beyond the mechanics of the ruling.
 
-⭐ **[`sprint-7.md`](../../../sprints/sprint-7.md)'s one-row rule is HONOURED, not broken.** That rule
+⭐ **[`sprint-7.md`](../../../sprints/done/sprint-7.md)'s one-row rule is HONOURED, not broken.** That rule
 reads *"a row arrives here the way this one did: by an owner ruling that names it"*, and its second-pass
 block adds *"**A thirteenth row needs a thirteenth ruling.**"* **This is that ruling.** ⛔ No agent added
 this row on its own judgement.
@@ -54,7 +54,7 @@ Measured 2026-08-29 by running `node --test test/closed-rank-immutability.test.j
 |---|---|---|---|
 | **A** | `test/closed-rank-immutability.test.js`, function **`parseBoard`** | A Priority cell must match `P<n>` (or the first-era bare `<n>`) — anything else **throws**, and the code comment states the assumption outright: *"`—` — the Backlog board's unranked marker — **never appears on a sprint board** and throws."* Its own unit test **`parseBoard: an unranked (—) or garbage Priority cell throws`** asserts the behaviour deliberately | function name + quoted fragment |
 | **B** | [`backlog.md`](../../../sprints/backlog.md), the **"Off:"** rule's **unranked-forward clause** | Presupposes the opposite: *"When the destination sprint board is **unranked** (its Priority column is all `—`, no `P<n>` assigned to anything), write the marker as `➡️ Moved to [Sprint N](sprint-N.md)` with **no `— priority M` suffix**"* — and *"⛔ **Never write `— priority —`, and never invent a number**"* | heading + quoted fragment |
-| **C** | [`sprint-7.md`](../../../sprints/sprint-7.md) §**"⛔ This board is UNRANKED — and one row is not a rank"** | *"**This is the ordinary path, not a deviation.**"* — and names Sprint 6 as *"the worked precedent that clause was written from"*. The section is superseded as a description of today's board but is **the reasoning**, not merely a record | heading + quoted fragment |
+| **C** | [`sprint-7.md`](../../../sprints/done/sprint-7.md) §**"⛔ This board is UNRANKED — and one row is not a rank"** | *"**This is the ordinary path, not a deviation.**"* — and names Sprint 6 as *"the worked precedent that clause was written from"*. The section is superseded as a description of today's board but is **the reasoning**, not merely a record | heading + quoted fragment |
 
 ⛔ **B and C sanction committing an all-`—` sprint board. A shipped test makes doing so go red. Both
 cannot stand.**
@@ -85,7 +85,7 @@ cannot stand.**
 ⛔ **Nine of Sprint 7's other twelve rows verify with *"`npm test` passes"* or *"both guards still
 green"*.** A permanently red leg means every one of those workers has to tell a **known** red from a
 **new** one by hand — which is the *"the sweep was careful" is the only evidence there is* failure that
-[`sprint-7.md`](../../../sprints/sprint-7.md) §"⛔ THE FORCED SEQUENCING" exists to stop. ⭐ **A red
+[`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⛔ THE FORCED SEQUENCING" exists to stop. ⭐ **A red
 baseline is not a small cost on a board whose whole thesis is "verified, not trusted".**
 
 ## What to build
@@ -95,7 +95,7 @@ baseline is not a small cost on a board whose whole thesis is "verified, not tru
 ### Phase 1 — decide which rule wins
 
 **Re-measure all three sites and the failure first** (the tables above are dated and will go stale),
-then rule between exactly these three, which are [`sprint-7.md`](../../../sprints/sprint-7.md)'s own
+then rule between exactly these three, which are [`sprint-7.md`](../../../sprints/done/sprint-7.md)'s own
 open question 4 verbatim: *"rule that boards are never committed unranked; widen the test to accept `—`;
 or accept the red leg as a known state."*
 
@@ -245,6 +245,6 @@ goes green** with the command output pasted.
   stop manufacturing task folders**, and a second folder to hold a possible one-line edit is the exact
   ratio the sprint is capping. ⚠️ **The gate is kept as a phase order inside this brief, not lost:**
   phase 2 may not start before phase 1 lands.
-- **Source:** [`sprint-7.md`](../../../sprints/sprint-7.md) §"Open questions for the owner" question 4,
+- **Source:** [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"Open questions for the owner" question 4,
   and its `## Notes` bullet *"⛔ ONE TEST IS RED, IT WAS RED BEFORE THIS PASS, AND IT IS NOT CAUSED BY
   IT."* Filed 2026-08-29 on the owner ruling *"File it as a Sprint 7 row (Rec)"*.

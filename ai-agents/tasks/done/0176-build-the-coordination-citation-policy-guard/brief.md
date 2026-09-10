@@ -641,9 +641,16 @@ board, on which this task is **`P7`**. Ranking authority is the same day's compa
 
 **The three mandatory edits of a pull, all applied in this act:**
 
-1. The row was added to [`sprint-7.md`](../../../sprints/sprint-7.md) with the rank token `P7`.
+1. The row was added to [`sprint-7.md`](../../../sprints/done/sprint-7.md) with the rank token `P7`.
 2. The [`backlog.md`](../../../sprints/backlog.md) row was flipped to
    `➡️ Moved to [Sprint 7](sprint-7.md) — priority P7`. ⛔ **Not deleted.**
+   ⚠️ **ANNOTATION 2026-09-08 — the marker quoted above is FROZEN and is left byte-identical;
+   the live [`backlog.md`](../../../sprints/backlog.md) row NO LONGER READS THIS WAY.** Sprint 7
+   was archived on 2026-09-08 and the archival re-pointed every `➡️ Moved to [Sprint 7]` marker
+   on that board to `done/sprint-7.md`. ⛔ **The quotation is annotated, never rewritten** — the
+   repo's standing *annotate, don't rewrite* treatment (`0306`), applied here by owner ruling of
+   2026-09-08, option label verbatim **"Annotate, don't rewrite (Rec)"**. ⭐ Read the quote as the
+   record of what the row said at the pull, ⛔ not as its current text.
 3. This brief's **`## Sprint` is now `Sprint 7`** and **`## Priority` is now `P7`**.
    **`## Status` is unchanged at `🔲 Backlog`** — the task has not started.
 
@@ -679,7 +686,7 @@ widened / answered. ⛔ **If `0353`'s document silently changes one of them, sto
 ⚠️ **THIS GUARD IS NOW A GATE ON THREE OTHER ROWS.** `0356`, `0357` and `0358` — Sprint 7's three
 sweeps — may not start until **this guard AND `0354`'s `test/reference-integrity.test.js` are both
 green.** That is the owner-agreed *"verified, not trusted"* constraint; see
-[`sprint-7.md`](../../../sprints/sprint-7.md) §"⛔ THE FORCED SEQUENCING". ⭐ **The accepted
+[`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⛔ THE FORCED SEQUENCING". ⭐ **The accepted
 incompleteness this brief already declares is unchanged by that promotion** — the guard still does not
 flag `0013`'s bare `sprint-2.md:354` nor `0160`'s brief in three places, and **anyone reporting on it
 must still say so alongside its pass.** ⛔ Being a gate does not make it complete.

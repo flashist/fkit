@@ -259,13 +259,13 @@ change to `package.json`.
   The three sweeps do not start until **this guard and `0176` are both green**. The constraint is the
   owner-agreed *"verified, not trusted"* rule: a sweep that edits many records without a guard
   underneath it is exactly the act that produced the record-repair backlog. See
-  [`sprint-7.md`](../../../sprints/sprint-7.md) §"⛔ THE FORCED SEQUENCING".
+  [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⛔ THE FORCED SEQUENCING".
 - ⚠️ **This guard may legitimately ship red** if it lands before `0355`. That is a stated,
   bounded state — not a defect and not a licence to weaken the condition. `0355` makes it green.
 - ⚠️ **`0176`'s guard is a sibling, not a duplicate.** Different condition, different failure. Keep
   the two test files separate — `0176` records the producer judgement behind two files rather than one.
 - **Priority `P4` is a rank on Sprint 7's board, assigned in the same act that ranked the board on the
-  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ THIS BOARD IS
+  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ THIS BOARD IS
   RANKED". Rank is board position, never identity
   ([`priority-is-rank-not-identity`](../../../knowledge-base/conventions/priority-is-rank-not-identity.md)).
 - **Source:** Sprint 7 scope, owner ruling *"Approve all 12 as proposed (Rec)"*, 2026-08-29,

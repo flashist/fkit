@@ -140,7 +140,7 @@ into `ai-agents/knowledge-base/decisions/`. It allocates the next free ADR numbe
   owner, and rejected by name. It is written down so the next reader can tell a rejected option from
   an unconsidered one.
 - **Priority `P2` is a rank on Sprint 7's board, assigned in the same act that ranked the board on the
-  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ THIS BOARD IS
+  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ THIS BOARD IS
   RANKED". It is **not** an append-rank flagged for confirmation: the owner approved this row at this
   position. Rank is board position, never identity — the identity is `0352`
   ([`priority-is-rank-not-identity`](../../../knowledge-base/conventions/priority-is-rank-not-identity.md)).

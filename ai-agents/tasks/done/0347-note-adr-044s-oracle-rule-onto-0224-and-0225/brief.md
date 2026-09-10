@@ -134,7 +134,7 @@ board status change.
   **Owner ruling, 2026-08-29, given live via `AskUserQuestion` in a `fkit lead` session; the option
   label is the verbatim text: "Rank Sprint 7; declare backlog an archive (Rec)".** In the same act the
   owner approved the full twelve-row board (*"Approve all 12 as proposed (Rec)"*), in which **this row
-  is `P1`**. See [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ THIS BOARD IS RANKED".
+  is `P1`**. See [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ THIS BOARD IS RANKED".
   - ⚠️ **This bullet previously read**, verbatim: *"Priority is `Unscheduled` — and stays so on
     Sprint 7, which opened UNRANKED. … The rank is owed if and when the owner ranks Sprint 7; see
     `sprint-7.md` §'⛔ This board is UNRANKED'."* **That was true when written and is now superseded**
@@ -197,7 +197,7 @@ encode the answer to one question into the field that answers another.
 
 ⛔ **TWO CORRECTIONS TO THE EARLIER RECORD, MEASURED RATHER THAN INHERITED:**
 
-1. ⛔ **This brief does NOT forbid changing its own `## Owner`.** [`sprint-7.md`](../../../sprints/sprint-7.md)
+1. ⛔ **This brief does NOT forbid changing its own `## Owner`.** [`sprint-7.md`](../../../sprints/done/sprint-7.md)
    §"⭐ RESOLVED — `0347`'s `## Owner` disagreement" gave that as its first reason. **Re-read on
    2026-08-29, the prohibition names the two TARGET briefs, not this one:** the constraint sits under
    the `0224` and `0225` sub-headings and reads *"do not change **either brief's** `## Status`,
@@ -238,7 +238,7 @@ this note lands, it is built against the old oracle and **ships the 8-of-13 misr
 >
 > **Executed in the same act, by a spawned `fkit-producer`:**
 >
-> - [`ai-agents/sprints/sprint-7.md`](../../../sprints/sprint-7.md) was **opened** with this task as its
+> - [`ai-agents/sprints/sprint-7.md`](../../../sprints/done/sprint-7.md) was **opened** with this task as its
 >   **single row** — `select-active` now returns `active file="sprint-7.md" identity="Sprint 7"`
 >   (exit 0; it returned `active none`, exit 3, immediately before).
 > - This brief's **`## Sprint` is now `Sprint 7`**.

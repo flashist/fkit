@@ -281,7 +281,7 @@ with no guard underneath it cannot demonstrate it left the tree consistent.
   ⛔ **Do not restate an ADR's decision, narrow it, or mark it superseded** — the note says what is no
   longer true and nothing more.
 - **Priority `P9` is a rank on Sprint 7's board, assigned in the same act that ranked the board on the
-  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ THIS BOARD IS
+  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ THIS BOARD IS
   RANKED". Rank is board position, never identity
   ([`priority-is-rank-not-identity`](../../../knowledge-base/conventions/priority-is-rank-not-identity.md)).
 - **Source:** Sprint 7 scope, owner rulings *"Approve all 12 as proposed (Rec)"* and *"Accept the 25

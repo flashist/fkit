@@ -163,7 +163,7 @@ the seed says. A test that stops checking the settings file has lost half its va
 ## Notes
 
 - **Depends on:** nothing. ⛔ **But it BLOCKS
-  [`0360`](../../backlog/0360-cut-the-v0-3-0-release-and-hand-archive-sprint-7/brief.md), hard** — that row
+  [`0360`](../../done/0360-cut-the-v0-3-0-release-and-hand-archive-sprint-7/brief.md), hard** — that row
   archives Sprint 7 and may not run while any row on the board is open. `0379` has been added to
   `0360`'s `Depends on` field **in place**, because that field is **machine-parsed**: `dashboard.sh`
   derives the board's `Next step` from it, and a note underneath does not fix what the parser reads.

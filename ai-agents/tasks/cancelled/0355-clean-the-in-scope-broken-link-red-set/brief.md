@@ -244,7 +244,7 @@ A broken link has **two** honest repairs, and picking the wrong one destroys a r
 - ⚠️ **This brief's figures decay.** They are two matchers' output on 2026-08-29, taken on a tree with
   concurrent untracked work. **The inventory is evidence the set is real, not a checklist to execute.**
 - **Priority `P5` is a rank on Sprint 7's board, assigned in the same act that ranked the board on the
-  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/sprint-7.md) §"⭐ THIS BOARD IS
+  owner's ruling of 2026-08-29** — see [`sprint-7.md`](../../../sprints/done/sprint-7.md) §"⭐ THIS BOARD IS
   RANKED". Rank is board position, never identity
   ([`priority-is-rank-not-identity`](../../../knowledge-base/conventions/priority-is-rank-not-identity.md)).
 - **Source:** Sprint 7 scope, owner ruling *"Approve all 12 as proposed (Rec)"*, 2026-08-29,
@@ -401,9 +401,9 @@ before the ruling:
 
 ### What this close changed outside this folder
 
-- [`sprint-7.md`](../../../sprints/sprint-7.md) — the `P5` row's status cell and brief href, plus a
+- [`sprint-7.md`](../../../sprints/done/sprint-7.md) — the `P5` row's status cell and brief href, plus a
   dated addendum in `## Notes` enumerating the board prose this cancellation falsifies.
-- [`0360`](../../backlog/0360-cut-the-v0-3-0-release-and-hand-archive-sprint-7/brief.md)'s
+- [`0360`](../../done/0360-cut-the-v0-3-0-release-and-hand-archive-sprint-7/brief.md)'s
   machine-parsed `- **Depends on:**` bullet — `0355` removed, with a dated sub-bullet recording it.
 - Inbound hrefs re-pointed to this folder's new path in
   [`0353`](../../done/0353-settle-the-reference-integrity-condition-once-for-both-halves/brief.md),
