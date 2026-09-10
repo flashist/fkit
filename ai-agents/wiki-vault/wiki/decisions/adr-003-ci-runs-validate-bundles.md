@@ -21,6 +21,8 @@
 > 2. **A CI workflow** — `.github/workflows/test.yml`, on `push` to `main`, `pull_request` and `workflow_dispatch`.
 >
 > ⭐ **What CI has actually done, measured 2026-09-04: 33 runs on `ubuntu-latest` — 29 success, 4 failure.** Every one a **push to `main`**; **no run has ever been raised through the `pull_request` or `workflow_dispatch` triggers.** First run 2026-08-12 (red — a filesystem case-sensitivity divergence, repaired by `0283`); most recent 2026-09-04, green; the other three reds on 2026-08-21 and 2026-08-29 (×2). ⛔ **These are counts on a date, not a standing property, and nothing here claims CI protects, guards or ensures anything.**
+>
+> ✅ **Dated resync 2026-09-10 (sync `cf289c2`→`b4a1a52`) — provenance only, no claim changes.** The 2026-09-05 note above was written from **working-tree bytes**; `0281`'s correction to the source ADR is now **committed in `5ed0b91`**, and the committed text is what this page describes. ⛔ **The run counts are NOT re-measured** — they remain a 2026-09-04 figure and must be re-taken before being quoted.
 
 ## Context
 There was no CI workflow in the repo. The only existing validation step was `omnigent/validate-bundles.sh`, which already catches bad `SKILL.md` frontmatter and degrades gracefully when a local Omnigent Python install is unavailable.
@@ -46,3 +48,4 @@ The initial workflow does not need to install Omnigent, because the script still
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — **no `.github/workflows/` exists today**, which is why its approved gate has no CI lane to land in yet. ✅ *Corrected 2026-08-13: the lane exists (`0256`) and `prove-red.sh` runs in it, inside `npm test`.*
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — the CI gap this ADR's tester seat would finally address. ✅ *Corrected 2026-08-13: the CI half is closed; the `install.sh` **e2e** half — the part the tester seat was actually about — is **not**.*
 - [[tasks/gate-releases-so-an-untested-tree-cannot-ship]] — task `0256` (2026-08-12): **the CI this ADR asked for, finally landed** — for `npm test` rather than the dead `validate-bundles.sh`, and paired with a blocking in-release gate
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sweep-b-the-single-site-correction-notes]] — task `0357`, Sweep B — the single-site correction notes

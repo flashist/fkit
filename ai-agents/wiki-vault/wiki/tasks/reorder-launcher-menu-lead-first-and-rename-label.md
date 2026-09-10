@@ -46,3 +46,4 @@ As written, the brief required the `team` / `"team room"` word aliases be **kept
 - [[tasks/wiki-resync-for-the-lead-rename-and-menu-reorder]] — `0141`, the vault half of this rename
 - [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — the ADR-010 correction note recording that the lead moved to menu option 1
 - [[tasks/pressing-enter-at-the-role-menu-should-open-the-lead]] — ⚠️ *Added 2026-08-22:* task `0302` (2026-08-21) — pressing **Enter** now opens option 1. The prompt reads `role [1-7, Enter=lead, q to quit]`; the `1-7` range this task left unchanged is still unchanged
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/start-the-lead-session-not-the-producer-after-a-fresh-projects-cold-start]] — task `0379`, the cold-start lead routing

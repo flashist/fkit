@@ -187,3 +187,4 @@ as complete as the set of NOTATIONS its pattern knows.**
   scope widening changed the rank
 - [[tasks/remediate-the-dead-brief-paths-in-closed-review-ledger-headers]] — *added 2026-08-29:* `0168`, whose 67 header rewrites land in this page's location-free form
 - [[tasks/repair-the-moved-folders-own-self-locators-in-task-done]] — *added 2026-08-29:* `0325`, whose R7 finding turned on this page's *"Citing a task"* rule binding a skill file
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/build-the-coordination-citation-policy-guard]] — task `0176`, the coordination-citation policy guard · [[tasks/clean-the-coordination-citation-residual-set-that-blocks-0176]] — task `0237`, the citation-residual cleanup · [[tasks/settle-the-reference-integrity-condition-once-for-both-halves]] — task `0353`, the settled reference-integrity condition · [[tasks/sweep-a-the-citation-rot-class-one-verified-pass]] — task `0356`, Sweep A — the citation-rot class in one pass

@@ -36,3 +36,4 @@ So a permissions problem on `.claude/`, a read-only checkout, ENOSPC, or one fai
 - [[systems/install-and-self-update]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/remove-fkit-omnigent-orphan-residue]] — reuses this task's non-fatal bar
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/start-the-lead-session-not-the-producer-after-a-fresh-projects-cold-start]] — task `0379`, the cold-start lead routing

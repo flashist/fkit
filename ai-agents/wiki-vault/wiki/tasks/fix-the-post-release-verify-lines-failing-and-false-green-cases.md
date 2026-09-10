@@ -156,3 +156,4 @@ rather than engineered away**.
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the archived board carrying `0254`, the `P12` row this task follows from
 - Referenced without a wiki-link, deliberately, so this page adds no back-link debt: task `0252` (`RELEASING.md`, which carries the ruled runtime figure this page defers to), **ADR-042 D1** (the *reasoning-only* Codex coverage vocabulary both review rounds used), **ADR-026** (`prove-red.sh` stays hand-rolled), and **ADR-011** (why no `bin` field was ever the answer)
 - [[tasks/release-mjs-with-branch-other-commits-and-tags-head-but-pushes-a-different-ref]] — *added 2026-08-29:* `0300`, the defect this task's own review surfaced and which neither reviewer raised; its guard sits entirely above this task's frozen summary fence
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/cut-the-v0-3-0-release-and-hand-archive-sprint-7]] — task `0360`, the v0.3.0 cut and Sprint 7's hand-archive

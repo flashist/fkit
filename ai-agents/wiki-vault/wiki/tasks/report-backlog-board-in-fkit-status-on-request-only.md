@@ -27,3 +27,4 @@ If [[tasks/filter-fkit-status-board-to-open-tasks]] (task 65) applies, its open-
 - [[tasks/add-status-skill-to-producer]] — the skill's origin
 - [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[systems/knowledge-base-structure]]
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/the-throughput-counter-created-vs-closed-per-iso-week]] — task `0359`, the throughput counter

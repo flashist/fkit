@@ -4154,3 +4154,149 @@ past entry edited or annotated in place. Nothing committed, nothing staged, no t
 invoked, no board row altered. No line-number coordinate into any coordination document.
 
 Task 0358: partial — not ready to close
+
+---
+
+## 2026-09-10 — ingest (sync)
+
+**Watermark-driven delta sync**, run by `fkit-wiki` spawned from an `fkit lead` session on the owner's
+`/fkit-wiki-sync` with no argument. ⛔ **Not a `force` run** — the watermark was present and was used.
+
+### Sync window and delta
+
+- **Sync window: `cf289c2` → HEAD `b4a1a52`** ("Sprint push"), **three commits**: `5ed0b91`
+  ("Sprint push"), `b677fa0` ("Release v0.3.0"), `b4a1a52`.
+- ⚠️ **HEAD MOVED BEFORE THIS RUN STARTED, AND THE RUN SAYS SO RATHER THAN SYNCING A MOVING TARGET.**
+  The invoking session's context named HEAD as `b677fa0` and stated that **Sprint 7's archive was
+  uncommitted in the working tree**. ⛔ **Both were already out of date when this run measured them:**
+  the owner had committed `b4a1a52`, which **contains the archival** — the `sprints/sprint-7.md` →
+  `sprints/done/sprint-7.md` rename plus the modified briefs. ⭐ **HEAD was re-checked at the end of the
+  run and had not moved again.**
+- ⭐ **INGESTED FROM COMMITTED HISTORY ONLY.** ⛔ Nothing was read out of the working tree to compensate
+  for anything, and the watermark was not advanced past what was actually ingested.
+- **Changed source files under `ai-agents/`, excluding the vault: 84.** After the skill's step-3
+  filter — ⛔ open `backlog/*/brief.md` skipped as premature, in-folder `plan.md` / `worklog.md` /
+  `review.md` skipped as working artifacts, the rename *source* path dropped — **50 ingest-worthy
+  files**: 3 knowledge-base ADRs, 3 sprint boards, **44 closed / cancelled task briefs**.
+
+### Created — 15 pages
+
+**The Sprint 7 board and its rows.** Sprint 7 was archived inside this window, so this is the first
+sync that could ingest it.
+
+- `ai-agents/sprints/done/sprint-7.md` → created [[wiki/tasks/sprint-7-stop-manufacturing-record-repair-rows]]
+- `…/done/0347-…/brief.md` → created [[wiki/tasks/note-adr-044s-oracle-rule-onto-0224-and-0225]]
+- `…/done/0352-…/brief.md` → created [[wiki/tasks/adr-the-narrow-in-flight-review-fix-lane]]
+- `…/done/0353-…/brief.md` → created [[wiki/tasks/settle-the-reference-integrity-condition-once-for-both-halves]]
+- `…/done/0354-…/brief.md` → created [[wiki/tasks/build-the-link-resolution-guard]]
+- `…/cancelled/0355-…/brief.md` → created [[wiki/tasks/clean-the-in-scope-broken-link-red-set]]
+- `…/done/0237-…/brief.md` → created [[wiki/tasks/clean-the-coordination-citation-residual-set-that-blocks-0176]]
+- `…/done/0176-…/brief.md` → created [[wiki/tasks/build-the-coordination-citation-policy-guard]]
+- `…/done/0356-…/brief.md` → created [[wiki/tasks/sweep-a-the-citation-rot-class-one-verified-pass]]
+- `…/done/0357-…/brief.md` → created [[wiki/tasks/sweep-b-the-single-site-correction-notes]]
+- `…/done/0358-…/brief.md` → created [[wiki/tasks/sweep-c-the-wiki-vault-resyncs-as-one-pass]]
+- `…/done/0359-…/brief.md` → created [[wiki/tasks/the-throughput-counter-created-vs-closed-per-iso-week]]
+- `…/done/0360-…/brief.md` → created [[wiki/tasks/cut-the-v0-3-0-release-and-hand-archive-sprint-7]]
+- `…/done/0361-…/brief.md` → created [[wiki/tasks/settle-whether-a-sprint-board-may-be-committed-unranked]]
+- `…/done/0379-…/brief.md` → created [[wiki/tasks/start-the-lead-session-not-the-producer-after-a-fresh-projects-cold-start]]
+
+### ⚠️ THE PAGE SHAPE CHOSEN FOR THE 24 SWEEP MEMBERS — GROUPED, NOT ONE PAGE EACH
+
+⭐ **Stated here rather than left to be inferred, because it is the one judgement call in this run.**
+
+**24 of the 44 closed briefs in this delta are members of Sprint 7's three sweeps** — the
+citation-rot rows, the single-site correction-note rows, and the vault resyncs. **They were recorded
+as per-member rows on their own sweep's page**, each carrying the site, what the record claimed and the
+outcome — ⛔ **not as 24 separate pages.** (The other 20: **14** took a page of their own, and **6**
+were skipped as already-covered href-only changes — both listed below.)
+
+**Why:** the vault already files correction chains this way ([[wiki/tasks/the-2026-08-13-vault-resync-chain]],
+[[wiki/tasks/the-2026-08-14-retroactive-review-corrections]], [[wiki/tasks/the-2026-08-15-done-in-fact-wiki-closes]]),
+and it matches the sources' own framing — Sweep B's brief says the class is *"individually correct and
+collectively the problem."*
+
+⛔ **THE COST, NAMED: none of the 24 has a page whose `**Source**:` line points at its own brief.**
+⚠️ **Task `0380`'s step 3 asks for exactly that — *"one page per task, each carrying its `**Date**:` /
+`**Status**:` / `**Source**:` inline metadata"*.** ⛔ **This run therefore does not satisfy that step,
+and the `0380` flag below is `partial` on that basis among others.**
+
+### Updated
+
+- `…/decisions/adr-046-…` → [[wiki/decisions/adr-046-a-sprint-board-may-be-committed-unranked-and-an-erased-rank-flags]].
+  ⭐ **The page's `⚠️ UNTRACKED on disk` clause is SPENT** — the ADR was **committed in `5ed0b91`**, and
+  ⭐ **the committed blob is `6093dd4b2a80ab4282ab2fa6c2c3c45712c98b5b`, byte-for-byte the hash Sweep C
+  recorded**, so **the risk that hash existed to detect did not materialise.** ⛔ The old clause is left
+  byte-identical; no claim below it changes.
+- `…/decisions/adr-037-…` → [[wiki/decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]].
+  ⛔ **Substantive: the source ADR's limit list grew from FOUR to FIVE.** The fifth limit records that
+  **the carry-check hook SKIPS the byte-containment half on a declared pointer-only spawn** — the
+  hook's own comment says *"A declared pointer-only spawn with a matching hash is ALLOWED here … This
+  hook does not enforce (b)."* ⚠️ **On that path what is checked is the hash alone, not that the prompt
+  carried the bytes**, and the refusal that covers it is the spawned coder's own prose, ⛔ not the hook.
+- `…/decisions/adr-003-…` → [[wiki/decisions/adr-003-ci-runs-validate-bundles]]. **Provenance only.**
+  Sweep C wrote its note from working-tree bytes; `0281`'s correction is now committed in `5ed0b91`.
+  ⛔ **The 33-runs / 29-success / 4-failure CI figures were NOT re-measured** — they remain a 2026-09-04
+  count and must be re-taken before being quoted.
+- `index.md` — a Sprint 7 row in `## Tasks` › `### Sprints`, a new
+  `### Sprint 7 — …` group of 14 catalog rows, and the Backlog-board row updated for the ten rows filed
+  onto `backlog.md` in this window (including **`0380`**). ⛔ **Open backlog rows are named, not
+  catalogued** — they have no pages, deliberately.
+- **47 pages gained reciprocal back-links** (dated `*Added 2026-09-10 (sync cf289c2→b4a1a52)*` bullets
+  in their `## Related` sections), so every link this run wrote is bidirectional.
+
+### Skipped (already covered)
+
+- `ai-agents/sprints/done/sprint-2.md` — **link repair only** (a `➡️ Moved` marker's href re-pointed).
+  No knowledge change; [[wiki/tasks/sprint-2-remove-omnigent]] stands.
+- **`0258`, `0269`, `0272`, `0280`, `0282`, `0291`** — six closed briefs whose only change in this
+  window is **mover-driven href repair** (`../../backlog/…` → `../…` or `../../done/…`) as their
+  siblings moved boards. ⛔ **Zero content changed.** All six are already recorded — `0272` and `0280`
+  on their own pages, the other four on
+  [[wiki/tasks/the-2026-08-13-vault-resync-chain]] and [[wiki/tasks/the-2026-08-14-retroactive-review-corrections]].
+- `ai-agents/sprints/sprint-7.md` — the **rename source**, gone at HEAD; the destination was ingested.
+
+### Lint — vault-wide, after the writes
+
+**289 pages. Broken wiki-links: 0. One-way links: 0. Pages missing an `index.md` catalog row: 0.**
+Measured by walking every `[[…]]` in `wiki/` and `index.md` against the page inventory.
+
+### ⛔ THE CLOSED-TASK INGEST GAP — MEASURED FROM THE INVENTORY, NOT FROM THE WATERMARK
+
+⭐ **Recorded here because Sweep C's own bound entry demands it: a clean watermark is not a clean
+vault, and this entry advances the watermark again.**
+
+**Measured on disk 2026-09-10, after this run's writes:**
+
+| Measure | Value |
+|---|---|
+| Closed / cancelled task folders on disk | **271** |
+| …with **no page whose `**Source**:` names their own brief** | **36** |
+| …of those 36, now **named on a sweep page written by this run** | **33** |
+| …**not named on any sweep page**: `0349`, `0369`, `0372` | **3** |
+| …**not mentioned anywhere in the vault at all**: `0372` | **1** |
+
+⚠️ **This is a different matcher from Sweep C's** — it keys on the `**Source**:` line rather than on a
+slug, so it is **not comparable to the 45 / 48 figures** without re-deriving both. ⛔ **Neither number
+supersedes the other; they answer different questions.**
+
+⛔ **WHAT THIS RUN DID NOT DO, so the next reader is not misled by an advanced watermark a second
+time:** it did **not** run task `0380`. `0380` requires the set to be **re-derived from the inventory,
+not the watermark**, a bound recorded **before writing**, **one page per task** with its own inline
+metadata, and an explicit written answer to the watermark question. ⛔ **This run's set came from the
+watermark**, so ⛔ **any closed task whose brief did not change inside `cf289c2..b4a1a52` was never in
+its reach.**
+
+### Scope
+
+Only `ai-agents/wiki-vault/` was written — **15 pages created, 46 modified** (45 pages plus
+`index.md`), **plus this `log.md` entry and `.wiki-watermark`**, advanced to
+`b4a1a52c8b3890d56a5795a5da03a461f5287539` — **48 modified files in total.** ⛔ **Zero files outside the
+vault**, verified by `git status`: no brief, no board, no source, no test, no knowledge-base file.
+Append-only preserved — ⛔ **zero deletions in `log.md`**, no past entry edited or annotated in place.
+Nothing committed, nothing staged, no task moved, no mover invoked, no board row created or flipped.
+⛔ **No line-number coordinate into any coordination document appears in this run's diff.** No secrets.
+
+⚠️ **The working tree already carried a large uncommitted `0360` change surface when this run started.
+⛔ None of it was altered.**
+
+Task 0380: partial — not ready to close

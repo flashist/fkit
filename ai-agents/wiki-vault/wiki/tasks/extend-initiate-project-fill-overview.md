@@ -27,3 +27,4 @@ Done. Initiation now writes the Project Overview into `CLAUDE.md`/`AGENTS.md` as
 - [[tasks/fix-claude-agents-md-placeholder-text]]
 - [[tasks/bake-architecture-pointer-into-scaffold-templates]]
 - [[systems/install-and-self-update]]
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/start-the-lead-session-not-the-producer-after-a-fresh-projects-cold-start]] — task `0379`, the cold-start lead routing

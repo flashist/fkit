@@ -13,6 +13,14 @@
 >
 > **What still holds — stated first, because it is most of the claim.** *"None is possible"* holds for **condition (a)**, for **condition (c)**, and for **condition (b) as written** — (b) reads *"it carries a concrete **approved** plan verbatim"*, and (b) asserts that the plan **was approved**, which no proxy can establish.
 
+> ⭐ **Dated resync 2026-09-10 (sync `cf289c2`→`b4a1a52`) — the source ADR's limit list grew from FOUR to FIVE, and the fifth one weakens what the carry-check hook actually checks.** Everything above is left **byte-identical**. ⛔ **No decision moves; `Status` is untouched.** Landed in `5ed0b91`.
+>
+> ⛔ **The new fifth limit: the byte-containment half is SKIPPED on a declared pointer-only spawn — so the proxy as defined is not always the proposition actually checked.** The hook tests whether the prompt declares itself *"by reference only"* / *"pointer-only"*, and **gates the byte test on that**: a declared pointer-only spawn with a matching hash is **allowed with no byte-containment check at all**. The hook's own comment says so — *"A declared pointer-only spawn with a matching hash is ALLOWED here … This hook does not enforce (b)."*
+>
+> ⚠️ **On that path what is checked is the HASH ALONE, not that the prompt carried the bytes.** The refusal that covers it is **the spawned coder's own, in prose** — ⛔ not this hook. ⭐ Read *"contains the bytes"* as the proxy's **full** form, of which only the hash half is enforced on the pointer-only path.
+>
+> ⭐ **The list is now FIVE limits, each the hook's own statement about itself** — **launcher sessions only**, **time-of-check only** (the plan file is read once, at spawn), **fail-open** (infrastructure faults allow, with one loud stderr line), **the ungated limit** (⚠️ the trigger is the pointer line alone, owner ruling 2026-08-25 — a spawn that omits the pointer entirely is invisible to the hook and passes ungated), **plus this new one**. ⛔ **Present tense without all five overstates.**
+
 ## Context
 
 ### The axis it decides, and the axis it does not
@@ -145,3 +153,4 @@ The ADR states: ***"Prose is proportionate. There is no mechanical enforcement, 
 - [[tasks/record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — task `0222`, the recording of ADR-038 — the closure of this ADR's open invocation axis for loop steps
 - Source: `ai-agents/knowledge-base/decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling.md`
 - [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] — *added 2026-08-29:* ADR-044, whose own architect Build run cleared the spawned-architect bar ⭐ **only because a named owner ruling displaced it for that run** — the mechanism this ADR defines
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sweep-b-the-single-site-correction-notes]] — task `0357`, Sweep B — the single-site correction notes

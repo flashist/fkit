@@ -42,3 +42,4 @@ The owner wants a **deterministic layer** for `/fkit-status`: a script that rend
 - [[systems/knowledge-base-structure]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/teach-dashboard-to-resolve-notes-dependencies]] — Make a task's dependency visible to `dashboard.sh` when it's written in `## Notes` prose
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/note-adr-044s-oracle-rule-onto-0224-and-0225]] — task `0347`, ADR-044's oracle rule noted onto `0224`/`0225` · [[tasks/the-throughput-counter-created-vs-closed-per-iso-week]] — task `0359`, the throughput counter

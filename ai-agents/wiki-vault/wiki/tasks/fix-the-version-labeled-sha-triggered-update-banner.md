@@ -76,3 +76,4 @@ separately as `0285` and is **discharged by the 2026-08-13 sync**.
 - [[systems/testing-and-verification]]
 - [[tasks/record-fkits-release-hygiene-channel-version-role-and-manifest-duty]] — `0252` (2026-08-13): `RELEASING.md` §2 names **this task** as what retired the old justification for calling version bumping load-bearing. ⚠️ The stale reason — *"an unbumped `VERSION` makes the notice read `v0.1.30 → v0.1.30`"* — is dead; the **conclusion** survives on a sharper reason (**version delta vs sha delta**)
 - [[tasks/the-2026-08-13-vault-resync-chain]] — task `0285`, the vault re-sync this task's banner change triggered
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/cut-the-v0-3-0-release-and-hand-archive-sprint-7]] — task `0360`, the v0.3.0 cut and Sprint 7's hand-archive

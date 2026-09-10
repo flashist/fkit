@@ -37,3 +37,4 @@ Implement the "deterministic layer" the owner asked for on `/fkit-status`: a scr
 - [[tasks/teach-dashboard-to-resolve-notes-dependencies]] — Make a task's dependency visible to `dashboard.sh` when it's written in `## Notes` prose
 - [[tasks/implement-task-folder-name-scheme-change]] — `0103`, which inverted this script's id ladder to folder-ID-first
 - [[tasks/specify-and-support-the-reverse-move-sprint-to-backlog]] — `0210`, which taught the move-target parser to accept `Backlog` — ⚠️ **the naive BRE fix silently does nothing on BSD `sed`**
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/the-throughput-counter-created-vs-closed-per-iso-week]] — task `0359`, the throughput counter

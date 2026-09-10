@@ -114,3 +114,4 @@ precedent"*, and a stored decision cannot survive a clone).
 - [[tasks/wiki-ingest-of-the-structure-check-design-report-and-companion-adr]] — `0249`, the ingest that created this page — ⚠️ **and whose own additions carried three false status claims, caught in review and deleted**
 - [[decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]] — ⛔ **does NOT touch or amend this ADR** (its C3). ⚠️ This ADR contains **zero** `.claude` matches: the tree was **never considered** here, which is the finding that let ADR-043 rule cleanly rather than amend
 - [[tasks/decide-whether-claude-enters-the-structure-conformance-surface]] — the task that asked whether `.claude/` joins the surface this ADR licensed, and answered **no**
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/the-throughput-counter-created-vs-closed-per-iso-week]] — task `0359`, the throughput counter

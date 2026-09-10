@@ -10,6 +10,13 @@
 > working tree's, blob `6093dd4b2a80ab4282ab2fa6c2c3c45712c98b5b`. If that work is amended or
 > reverted, this page describes a revision that never landed; the hash makes that **detectable, not
 > impossible**.
+>
+> ✅ **Dated resync 2026-09-10 (sync `cf289c2`→`b4a1a52`) — the UNTRACKED clause above is SPENT, and
+> the line is left byte-identical.** The ADR was **committed in `5ed0b91`** ("Sprint push"), added as a
+> new file. ⭐ **The bytes ingested on 2026-09-05 are the bytes that landed** — the committed blob is
+> `6093dd4b2a80ab4282ab2fa6c2c3c45712c98b5b`, byte-for-byte the hash recorded above, so **the risk that
+> hash existed to detect did not materialise** and nothing on this page describes a revision that never
+> landed. ⛔ **No claim below changes on this account**; only the tracked/untracked fact does.
 
 > ⚠️ **This ADR carries THREE dated correction passes, all 2026-09-05** — and they nest: the second
 > supersedes the first's site list, the third supersedes the second's, and **site 3 of the third pass
@@ -92,3 +99,4 @@ it would flag a lawful act both boards instruct.
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — why the Priority cell is **mutable board rank and never identity**
 - [[decisions/adr-045-an-in-flight-review-finding-terminates-in-the-ledger-not-a-new-task]] — the other Sprint 7 decision ingested in the same 2026-09-05 pass
 - [[tasks/sprint-3-close-the-rank-integrity-loop]] — the rank-integrity lineage this closes a gap in
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/settle-whether-a-sprint-board-may-be-committed-unranked]] — task `0361`, which produced ADR-046 · [[tasks/sprint-7-stop-manufacturing-record-repair-rows]] — Sprint 7, the board that attacked the record-repair rate (archived 2026-09-08) · [[tasks/sweep-c-the-wiki-vault-resyncs-as-one-pass]] — task `0358`, Sweep C — the wiki-vault pass that advanced the watermark over a bounded-out backlog

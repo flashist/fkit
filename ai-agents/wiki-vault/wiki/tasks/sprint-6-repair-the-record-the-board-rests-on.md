@@ -118,3 +118,4 @@ Form `Sprint N P<n>`, verified against Sprint 4/5 closed briefs. ⚠️ **UNENFO
 - [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — `0293`, whose 2026-08-14 `active none` reading this board superseded the same day
 - [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] — *added 2026-08-29:* the ADR this board's `P19` produced; ⭐ **it rules that vault-deliverable rows are skipped at this loop's step 1 and reported**, so a wiki row will never again reach a coder Build worker
 - [[tasks/record-that-0250-discharged-0188s-d1-and-warn-off-the-reordering]] — `0324`, filed off this board's `P9` and closed unranked on the Backlog
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sprint-7-stop-manufacturing-record-repair-rows]] — Sprint 7, the board that attacked the record-repair rate (archived 2026-09-08)

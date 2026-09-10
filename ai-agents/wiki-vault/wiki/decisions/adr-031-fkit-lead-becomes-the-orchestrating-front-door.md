@@ -74,3 +74,4 @@ The owner wanted **one agent per terminal** — a single point of interaction aw
 - [[tasks/append-a-dated-correction-note-to-adr-010]] — task `0143` — the ⛔ reversal notice this ADR's §Decision 1 earned on ADR-010
 - [[tasks/pressing-enter-at-the-role-menu-should-open-the-lead]] — ⚠️ *Added 2026-08-22:* task `0302` — the front door becomes the launcher's Enter default
 - [[tasks/build-the-pretooluse-task-carry-check-hook-and-its-tests]] — *added 2026-08-29:* `0204`, whose marker removal ⛔ **protected this ADR's honesty clause paragraph, deleting only the one now-false sub-clause**
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/start-the-lead-session-not-the-producer-after-a-fresh-projects-cold-start]] — task `0379`, the cold-start lead routing

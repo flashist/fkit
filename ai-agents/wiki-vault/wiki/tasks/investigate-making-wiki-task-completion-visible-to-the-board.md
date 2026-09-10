@@ -40,3 +40,4 @@ That ruling became [[decisions/adr-033-task-movers-are-producer-only-reversing-a
 - [[tasks/wiki-skills-flag-ready-to-close]] — `0125`, the operative fix this investigation produced
 - [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`; this task's folder ID `0108` collided with `0125`'s board rank P108 in the very flag it produced
 - [[tasks/the-2026-08-15-done-in-fact-wiki-closes]] — ⚠️ *Added 2026-08-22:* tasks `0206` and `0238`, the same failure again — ⛔ **a vault completion flag that nothing re-evaluates**, closed from outside the wiki role by a triage that disagreed with it
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sweep-c-the-wiki-vault-resyncs-as-one-pass]] — task `0358`, Sweep C — the wiki-vault pass that advanced the watermark over a bounded-out backlog

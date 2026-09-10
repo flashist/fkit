@@ -63,3 +63,4 @@ The worklog claimed no board edit; ⛔ **the `0270` row had flipped `🔲 Backlo
 - [[tasks/enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason]] — `0223`, the sibling ADR-038 follow-up
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — the board this ran on
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — *added 2026-08-29:* the board carrying ADR-044's four carry follow-ups, `0345`–`0348`
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/note-adr-044s-oracle-rule-onto-0224-and-0225]] — task `0347`, ADR-044's oracle rule noted onto `0224`/`0225`

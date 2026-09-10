@@ -111,3 +111,4 @@ in the task folder that carried the diff); the `Action` cell makes the lane's fo
 - [[systems/review-and-model-diversity]] — the review system this lane routes through
 - [[decisions/adr-046-a-sprint-board-may-be-committed-unranked-and-an-erased-rank-flags]] — the other Sprint 7 decision ingested in the same 2026-09-05 pass
 - [[tasks/replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary]] — the ledger vocabulary this ADR's terminal set builds on
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/adr-the-narrow-in-flight-review-fix-lane]] — task `0352`, which produced ADR-045 · [[tasks/sprint-7-stop-manufacturing-record-repair-rows]] — Sprint 7, the board that attacked the record-repair rate (archived 2026-09-08) · [[tasks/sweep-c-the-wiki-vault-resyncs-as-one-pass]] — task `0358`, Sweep C — the wiki-vault pass that advanced the watermark over a bounded-out backlog

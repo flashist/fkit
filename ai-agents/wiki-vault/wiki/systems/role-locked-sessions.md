@@ -154,3 +154,4 @@ The ADR's own honesty clause is the thing to read: **prevention is gone, and the
 - [[tasks/build-the-pretooluse-task-carry-check-hook-and-its-tests]] — *added 2026-08-29:* `0204`, a third `PreToolUse` entry in the same per-role settings — ⛔ **launcher sessions only, and no session gets it until its next launch**
 - [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] — *added 2026-08-29:* the ADR that keys a loop step's Build role on `skills_for_role()` ownership of the deliverable's skill
 - [[tasks/fix-the-scaffold-producer-row-fkit-task-brief-omission]] — *added 2026-08-29:* `0250`, the scaffold mirror of `skills_for_role()`'s producer row; ⛔ **nothing mechanically binds the two, so the omission class can recur undetected**
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/start-the-lead-session-not-the-producer-after-a-fresh-projects-cold-start]] — task `0379`, the cold-start lead routing

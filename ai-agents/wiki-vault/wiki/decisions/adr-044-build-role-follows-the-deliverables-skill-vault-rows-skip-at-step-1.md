@@ -71,3 +71,4 @@ Owner ruling, verbatim label: **"A: Build role follows the deliverable's skill +
 - [[systems/role-locked-sessions]] — `skills_for_role()`, the lookup Decision 1 keys on
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — *added 2026-08-29:* the board this ADR was decided on, and the loop it changes
 - [[tasks/record-adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — *added 2026-08-29 (lint):* `0222`, the task that recorded ADR-038 — the rule this ADR is the companion to and does **not** amend
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/note-adr-044s-oracle-rule-onto-0224-and-0225]] — task `0347`, ADR-044's oracle rule noted onto `0224`/`0225`

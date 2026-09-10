@@ -56,3 +56,4 @@ The `""` arm's runtime behaviour is exercised by **no test**. `npm test` is gree
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — `P8`
 - [[systems/install-and-self-update]] — the launcher and its menu
 - [[systems/fkit]] — the seven roles and the menu that picks between them
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/start-the-lead-session-not-the-producer-after-a-fresh-projects-cold-start]] — task `0379`, the cold-start lead routing

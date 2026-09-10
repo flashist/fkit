@@ -112,3 +112,4 @@ Plus:
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the **content** axis (which text wins inside a spawn); this ADR is the **invocation** axis, and ADR-037 leaves it untouched
 - [[decisions/adr-043-claude-is-not-a-structure-conformance-surface-the-refresh-is-the-guarantee]] — cites this role lock as why an unroled `claude` session is **unsupported**, which is what makes its residual R1 a known cost rather than a conformance gap
 - [[tasks/teach-record-decision-the-dated-correction-note-form]] — ⚠️ *Added 2026-08-22:* task `0198` — this ADR is the **worked example** the shipped correction-note section names, and the source of the site-list wording its supersession clause quotes
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sweep-b-the-single-site-correction-notes]] — task `0357`, Sweep B — the single-site correction notes

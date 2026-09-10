@@ -33,3 +33,4 @@ The sibling of [[tasks/add-task-plan-skill-to-producer]], on the same logic: **f
 - [[tasks/remove-output-variants-from-fkit-status]] — the one-output reversion applied to this skill
 - [[tasks/filter-fkit-status-board-to-open-tasks]] — the board filtered to open work
 - [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — `Backlog` added as a resolvable named target
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/the-throughput-counter-created-vs-closed-per-iso-week]] — task `0359`, the throughput counter

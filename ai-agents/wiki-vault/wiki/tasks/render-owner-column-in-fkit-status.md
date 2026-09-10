@@ -31,3 +31,4 @@ A missing `## Owner` renders an agreed placeholder rather than a blank cell or a
 - [[tasks/remove-output-variants-from-fkit-status]] · [[tasks/record-one-skill-one-output-convention]]
 - [[systems/fkit]]
 - [[systems/knowledge-base-structure]] — Knowledge-Base Structure
+- *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/note-adr-044s-oracle-rule-onto-0224-and-0225]] — task `0347`, ADR-044's oracle rule noted onto `0224`/`0225`
