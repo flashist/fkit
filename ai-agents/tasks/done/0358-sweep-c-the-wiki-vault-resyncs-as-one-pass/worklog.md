@@ -747,3 +747,76 @@ The 2026-09-05 correction append freezes `21` / `28` for R3 and `31` for R6, and
 contains both literals** — the delivered file is now higher again. ⭐ **This recursion was already
 named in that entry, which concluded: *"cite the six files; do not cite a number."*** Appending
 another correction would re-enter the same loop. ⛔ **Recorded as a frontier, not a defect to fix.**
+
+---
+
+# 2026-09-10 — review ledger CLOSED OUT (records only)
+
+⛔ **Written by a spawned `fkit-coder` on the owner's ruling of 2026-09-10, option label verbatim
+"Close out 0358's review ledger (Rec)."** ⛔ **`0358` is NOT reopened.** It stays in
+`ai-agents/tasks/done/`. No mover was invoked, no folder moved, no board row flipped, no brief
+re-statused, no source or test edited, nothing committed or staged by me.
+
+**Surface written:** this file, and `review.md`'s `## Coder response` section plus its header
+`Status:` and its `## Accepted residuals`. ⛔ **`## Reviewer findings` was not touched.**
+
+## What changed in the ledger
+
+| | Was | Now | Why |
+|---|---|---|---|
+| Header | `Status: in-review` | **`Status: closed-out`** | All eight findings dispositioned — 7 `✅ done`, 1 `disproven`. Nothing blocking remains |
+| **R1** | `blocked` | **`✅ done`** | The gap the row named — *"the corrected worklist is still short by 3"* — is closed on disk and the worklist was **acted on** |
+| **R5** | `blocked` | **`✅ done`** | Discharged in the **work product**, not merely in a record |
+
+⭐ **Neither Status was set by inheriting a claim.** I was handed both as discharged and told
+explicitly not to take it on trust; both were re-measured here first. Severity and disposition on both
+rows are derived from what I measured, never from the briefing.
+
+## The measurements this closeout rests on
+
+**R5 — the check that works, reused.** ⭐ **Grep the work product for the corrected wording, never the
+record for a claim of correction** — this task's own recorded lesson.
+
+- `ai-agents/wiki-vault/log.md` § *"2026-09-06 — correction (task `0358`, round 1 review, R5) — the
+  `0287` exclusion claim"` is **on disk**, and reads the sentence instead as *"⭐ **`0287`'s SANDBOX
+  CLAIMS were left alone.**"*
+- `grep -c "sandbox claims\|SANDBOX CLAIMS"` on `log.md` → **3**. The signature of the defect was **0**.
+  ⚠️ **My 3 is not this file's earlier 2** — the third hit is the wiki's 2026-09-10 withdrawal entry,
+  written after that count was taken. Reported as measured rather than reconciled to the record.
+- The original overbroad sentence is **still present byte-identical** in the frozen ingest entry
+  § *"⛔ `0287` is EXCLUDED BY A BLOCKED UPSTREAM — not by oversight, and it is NOT on the close list"*.
+  ⭐ Append-only honoured: annotated, never rewritten.
+
+**R1 — the record is corrected AND the worklist was acted on.**
+
+- § *"2026-09-06 — R1, the FINAL corrected worklist"* supersedes both earlier figures at **18
+  unconditional + 3 order-sensitive, 17 guard-visible**, and its table carries the row the ledger said
+  was missing — `review.md`'s own R1 row citing `0212` · `0199` · `0317`.
+- **All five members are in `ai-agents/tasks/done/` today**, and `reference-integrity` measures **0
+  broken over 3391 resolved targets**, with `done/` folders provably in scope (its arm *"M2 mutation: a
+  broken link in ai-agents/tasks/done/ REDS"*).
+- ⭐ **The three sibling links out of `review.md` HEALED rather than needing a repoint** — `../<name>/brief.md`
+  resolves again once citer and target are both in `done/`. That is the inversion `test/reference-integrity.test.js`
+  already records in its `NAMED_EXEMPT` comment, and it is why three exemptions added on 2026-09-06
+  were deleted again the same day.
+- ⚠️ **One link out of `review.md` genuinely does not resolve** — the R1 row's quotation of `0319`'s
+  brief citing `0290`, whose target is still open. It is a **`NAMED_EXEMPT` pair**, deliberate, with a
+  trip-wire comment for the day `0290` closes. ⛔ **I added no exemption. Exempt count measured 7,
+  before and after my write.**
+
+**Guards, re-measured after my write** (not carried over from the briefing — this write adds links, so
+a stale count would be worthless): `reference-integrity` **20/20 pass**, 0 broken, exempt 7 ·
+`coordination-citation-policy` **21/21 pass**, residual 0.
+
+## What I did NOT do
+
+- ⛔ **No vault write.** The wiki's two withdrawal writes were **uncommitted in the working tree** when
+  I read them; I left them exactly as found — ADR-005.
+- ⛔ **No full suite.** Two guards only, named above.
+- ⚠️ **R2's residual carried forward unchanged**: § *"Stage 3 — the three member `log.md` appends, PLUS
+  the pass entry"* still reads *"Four appends"* over a table ending `455  0`, with no forward pointer
+  to the corrected 7-append table. **Left alone deliberately** — R2 is discharged, the ruling scoped
+  this write to the ledger, and rewriting a run record to tidy it is the exact failure mode this task
+  spent two rounds learning.
+- ⛔ **`0287` is not closed and must not be read as `0358` residue.** Recorded in full What / Why /
+  Re-raise-only-if shape in the ledger's `## Accepted residuals`.

@@ -27,7 +27,7 @@
 //     per-week counts come from, so a worktree headline would mix two different corpora in one
 //     report. Uncommitted closes are counted once they are committed.
 //   - Emits its OWN markers (⟦fkit-throughput v1⟧ / ⟦WEEKS⟧ / ⟦REPAIR⟧ / ⟦END⟧). Nothing that parses
-//     `dashboard.sh`'s ⟦fkit-dashboard v1⟧ / ⟦BOARD⟧ / ⟦FACTS⟧ sees a new token. `dashboard.sh` is
+//     `dashboard.sh`'s ⟦fkit-dashboard v2⟧ / ⟦BOARD⟧ / ⟦FACTS⟧ sees a new token. `dashboard.sh` is
 //     not touched by this file's existence; it remains the sole producer of the board.
 //   - This script COUNTS. It never closes a task, never moves a folder, never edits a `## Status`.
 //

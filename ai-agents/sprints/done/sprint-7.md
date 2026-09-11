@@ -598,7 +598,7 @@ it"* is still the rule. **A thirteenth row needs a thirteenth ruling.**
 | ⭐ This table itself | ⭐ **INVENTED.** Sprint 6 declared its **one deviation** in a section; declaring the whole provenance of the shape is a step past that, done because this board had to invent something |
 | ⭐ The one-row `**Goal:**` list, and a title naming the window rather than a sprint theme | ⭐ **INVENTED** in the sense that no precedent covers a one-row board. Prior goals summarize a many-row theme; this one states the single hazard, so it will not read as a false theme when rows are appended |
 
-⛔ **No `## Sprint Status` field, and no banner token.** [`0340`](../../tasks/backlog/0340-backfill-a-sprint-status-onto-every-existing-sprint-plan-in-this-repo/brief.md)
+⛔ **No `## Sprint Status` field, and no banner token.** [`0340`](../../tasks/done/0340-backfill-a-sprint-status-onto-every-existing-sprint-plan-in-this-repo/brief.md)
 would introduce one; it is `Unscheduled` and **not** on this board, so inventing the field here would
 pre-empt an unshipped design. ⚠️ **Nothing reads a banner as data anyway** — a board is active because
 of **where its file sits and what identity it resolves to**

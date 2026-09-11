@@ -11,13 +11,13 @@
 0271
 
 ## Sprint
-Backlog
+Sprint 8
 
 ## Priority
-Unscheduled
+P2
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder

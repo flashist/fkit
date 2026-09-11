@@ -455,6 +455,44 @@ test('L3 live corpus: NAMED-EXEMPT is exactly 7 instances', () => {
     'L4 should say which.');
 });
 
+// ── The stale-exemption computation, extracted so it can be exercised against a FIXTURE ──────────
+//
+// ⚠️ THIS IS A BEHAVIOUR-PRESERVING EXTRACTION (task 0381). It was lifted verbatim out of L4's body;
+// L4 below is now a call plus its two original assertions, whose messages are BYTE-IDENTICAL to what
+// they were inline. Those messages are what carry the rule to a mover operator — the task movers now
+// instruct a close to run this file and OBEY what it says — so rewording them silently changes an
+// instruction that is quoted nowhere and enforced by nothing else.
+//
+// ⭐ WHY EXTRACT AT ALL. Inline, this logic could only ever be exercised by the live corpus, which is
+// green by construction: the arms below could not be proven to fire without planting a stale key in
+// the repo's own NAMED_EXEMPT set. `root` and `keys` are parameters for exactly the reason `scan()`'s
+// `root` is one — it is the whole fixture strategy, and it keeps every proof under os.tmpdir().
+// It is NOT an escape hatch on the live condition, which is always run against REPO.
+//
+// The two directions are deliberately NOT collapsed into one list. They call for OPPOSITE repairs —
+// repoint vs delete — and the caller's messages depend on telling them apart.
+export function staleExemptions(root, keys) {
+  const cache = new Map();
+  const missingCiter = [];
+  const targetIsBack = [];
+  for (const key of keys) {
+    const cut = key.indexOf('::');
+    const rel = key.slice(0, cut);
+    const target = key.slice(cut + 2);
+    // ⛔ CASE-EXACT ON BOTH HALVES. This was `fs.existsSync` while the target check below was
+    // already case-exact, so on a case-insensitive volume a citing file renamed in case ONLY read
+    // as present here and as stale on a case-sensitive runner — the "the result depends on who runs
+    // it" failure D2 was adopted to remove, reintroduced in the one assertion that watches D2's own
+    // exemption list. `resolveExact` applies D2's rule to the citer too.
+    if (!resolveExact(root, path.join(root, rel), cache)) { missingCiter.push(key); continue; }
+    const abs = target.startsWith('/')
+      ? path.join(root, target)
+      : path.resolve(root, path.dirname(rel), target);
+    if (resolveExact(root, abs, cache)) targetIsBack.push(key);
+  }
+  return { missingCiter, targetIsBack };
+}
+
 test('L4 named exemptions: no stale key — citing file still exists, target still missing', () => {
   // §7 item 9(a). An exemption is only ever consulted to SUPPRESS; nothing notices one that has
   // stopped applying. ⚠️ NOT hypothetical, and no longer merely a worry — 5 of the 6 keys are
@@ -464,24 +502,12 @@ test('L4 named exemptions: no stale key — citing file still exists, target sti
   // (`missingCiter`), and repointing it to `tasks/done/` would only have moved the failure to
   // `targetIsBack`, because the move healed the links. The answer was deletion. The failure is
   // silent when it comes, which is why it is asserted rather than trusted.
-  const cache = new Map();
-  const missingCiter = [];
-  const targetIsBack = [];
-  for (const key of NAMED_EXEMPT) {
-    const cut = key.indexOf('::');
-    const rel = key.slice(0, cut);
-    const target = key.slice(cut + 2);
-    // ⛔ CASE-EXACT ON BOTH HALVES. This was `fs.existsSync` while the target check below was
-    // already case-exact, so on a case-insensitive volume a citing file renamed in case ONLY read
-    // as present here and as stale on a case-sensitive runner — the "the result depends on who runs
-    // it" failure D2 was adopted to remove, reintroduced in the one assertion that watches D2's own
-    // exemption list. `resolveExact` applies D2's rule to the citer too.
-    if (!resolveExact(REPO, path.join(REPO, rel), cache)) { missingCiter.push(key); continue; }
-    const abs = target.startsWith('/')
-      ? path.join(REPO, target)
-      : path.resolve(REPO, path.dirname(rel), target);
-    if (resolveExact(REPO, abs, cache)) targetIsBack.push(key);
-  }
+  // ⚠️ The two assertions below run IN SEQUENCE, and the first one to fail masks the second — a key
+  // that is stale in BOTH directions at once reports only `missingCiter`. Measured 2026-09-11 while
+  // proving these arms red. That is not a defect (the repair order is repoint-then-re-run anyway,
+  // and the movers' clause says to re-run), but it IS why the fixture arms below exercise each
+  // direction on its own rather than trusting a live red to name both.
+  const { missingCiter, targetIsBack } = staleExemptions(REPO, NAMED_EXEMPT);
   assert.deepEqual(missingCiter, [],
     'NAMED_EXEMPT keys whose CITING FILE no longer exists — it was renamed, moved between boards, ' +
     'or deleted. The exemption now suppresses nothing and hides the next rot at its new path:\n' +
@@ -661,6 +687,71 @@ test('M4 mutation: a broken link under ai-agents/wiki-vault/ is skipped and neve
   assert.equal(exempt('ai-agents/wiki-vault/nested/deep/x.md'), true);
   assert.equal(exempt('ai-agents/tasks/done/0001-a/brief.md'), false);
   assert.equal(exempt('ai-agents/knowledge-base/architecture.md'), false);
+});
+
+// ── M5/M6 — the stale-exemption directions, each proven on its own (task 0381) ────────────────────
+//
+// ⚠️ NUMBERED M5/M6, NOT M4/M5 as task 0381's plan wrote it: `M4` was already taken by the wiki-vault
+// arm above. Two arms sharing a number would break the one thing prove-red.sh relies on — grepping a
+// red run for a NAMED assertion.
+//
+// ⭐ WHY THESE EXIST. L3 and L4 above run against the LIVE corpus, which is green by construction, so
+// nothing proved the stale-key detection actually fires. The one-shot way to prove it — plant a stale
+// key in NAMED_EXEMPT, watch it red, revert — was done once by hand (recorded in 0381's worklog) and
+// leaves nothing behind: a step nothing tests is a step that silently stops happening. These arms are
+// the durable half. Both run against os.tmpdir(), so the repo's own exemption set is never touched.
+//
+// ⛔ THE DIRECTIONS CALL FOR OPPOSITE REPAIRS, which is the whole reason they are separate arms:
+// `missingCiter` → repoint the citer, re-run, delete if it then heals. `targetIsBack` → DELETE, never
+// repoint. Getting that backwards is the documented failure mode of this area — see the Sweep C note
+// on NAMED_EXEMPT above, where closing 0358 healed three keys and the fix was deletion.
+
+test('M5 mutation: a key whose CITING FILE is gone reports missingCiter, and only that', () => {
+  const citer = 'ai-agents/tasks/done/0001-a/review.md';
+  const root = fixture({ ...ANCHOR, [citer]: 'quoted [X](../0002-b/brief.md) here.\n' });
+  const gone = 'ai-agents/tasks/backlog/0001-a/review.md::../0002-b/brief.md';
+
+  const r = staleExemptions(root, [gone]);
+  assert.deepEqual(r.missingCiter, [gone],
+    'a key whose citing file does not exist was NOT reported as missingCiter. This is the direction ' +
+    'a close produces when the CITER moves boards with it — the 0358 case, three keys at once. ' +
+    'Undetected, the exemption suppresses nothing and hides the next rot at the citer\'s new path.');
+  assert.deepEqual(r.targetIsBack, [],
+    'a missing citer must NOT also be reported as targetIsBack — the two call for OPPOSITE repairs, ' +
+    'and a key reported in both directions tells an operator to repoint and delete the same key');
+
+  // Non-vacuity, in both senses. The SAME key with its citer present is not reported at all, so the
+  // arm above is not passing merely because every key looks stale to this fixture.
+  const present = staleExemptions(root, [`${citer}::../0002-b/brief.md`]);
+  assert.deepEqual(present, { missingCiter: [], targetIsBack: [] },
+    'a key whose citer EXISTS and whose target is still missing is a HEALTHY exemption and must be ' +
+    'reported in neither direction — otherwise every live key would red');
+});
+
+test('M6 mutation: a key whose TARGET resolves again reports targetIsBack, and only that', () => {
+  // The heal: citer and target end up as siblings, so `../<name>/brief.md` resolves once more.
+  const citer = 'ai-agents/tasks/done/0358-sweep/review.md';
+  const root = fixture({
+    ...ANCHOR,
+    [citer]: 'quoted [X](../0199-x/brief.md) here.\n',
+    'ai-agents/tasks/done/0199-x/brief.md': '# 0199\n',
+  });
+  const healed = `${citer}::../0199-x/brief.md`;
+
+  const r = staleExemptions(root, [healed]);
+  assert.deepEqual(r.targetIsBack, [healed],
+    'a key whose target RESOLVES again was not reported as targetIsBack. ⛔ This is the direction ' +
+    'that INVERTS: the exemption is now dead weight and must be DELETED, not repointed, and until it ' +
+    'is, a FUTURE genuine rot on the same (file, target) pair is silently suppressed.');
+  assert.deepEqual(r.missingCiter, [],
+    'a healed key must NOT also be reported as missingCiter — its citer plainly exists, and the two ' +
+    'directions call for OPPOSITE repairs');
+
+  // Non-vacuity: remove the target and the same key stops being reported at all.
+  const stillBroken = staleExemptions(fixture({ ...ANCHOR, [citer]: 'quoted [X](../0199-x/brief.md) here.\n' }), [healed]);
+  assert.deepEqual(stillBroken, { missingCiter: [], targetIsBack: [] },
+    'with the target absent the key is a HEALTHY exemption and must be reported in neither ' +
+    'direction — otherwise the arm above proves nothing about the target resolving');
 });
 
 // ── C — condition-fidelity units ─────────────────────────────────────────────────────────────────

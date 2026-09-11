@@ -4300,3 +4300,120 @@ Nothing committed, nothing staged, no task moved, no mover invoked, no board row
 ⛔ None of it was altered.**
 
 Task 0380: partial — not ready to close
+
+---
+
+## 2026-09-10 — withdrawal (task `0358`) — the standing `partial — not ready to close` flag, discharged
+
+### ⭐ VERDICT: `0358`'s vault deliverable is **FINISHED**. The standing flag is **SPENT and is WITHDRAWN by this entry.**
+
+**Written on owner ruling of 2026-09-10, option label verbatim "Investigate — is the gap real? (Rec)"**,
+given live via `AskUserQuestion` in an `fkit lead` session and relayed to this spawned `fkit-wiki` run,
+which holds no owner channel
+([ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+The ruling's stated shape: *check whether `0358`'s vault deliverable was actually finished — if it was
+not, the close was premature; if it was, the flag should be withdrawn. Either way the contradiction
+ends.*
+
+⛔ **BOTH STANDING FLAG LINES ARE LEFT BYTE-IDENTICAL.** `log.md` is append-only on a standing owner
+ruling of 2026-08-03 (task `0211`), and that rule binds a withdrawal exactly as it binds a correction.
+This dated entry is the only instrument. ⛔ `0358` is not reopened, moved, re-statused or edited — it
+stays in `ai-agents/tasks/done/`, `✅ Done (agent-closed — not owner-verified)`, verified on disk this
+run.
+
+### The two flags being withdrawn, named by durable anchor
+
+⛔ **No line-number coordinate is written**
+([`durable-citation-anchors`](../knowledge-base/conventions/durable-citation-anchors.md)).
+
+| Entry carrying the flag | Its run-ending line |
+|---|---|
+| **`2026-09-05 — correction (task 0358, round 1 review) — five frozen numbers in this run's own entries`** | *"Task 0358: partial — not ready to close"* |
+| **`2026-09-06 — correction (task 0358, round 1 review, R5) — the 0287 exclusion claim`** | *"Task 0358: partial — not ready to close"* |
+
+⚠️ **Neither flag stated a reason, and that is the defect this entry also records.** A `partial` flag
+that names no outstanding item cannot be discharged by reading it — the deliverable has to be
+re-measured from the brief. ⭐ **A future `partial` flag should name what is still owed.**
+
+⚠️ **The main pass never flagged `0358` at all.** The `2026-09-05 — ingest (sync) — sweep C, task 0358`
+entry and the `2026-09-05 — lint (vault-wide) + watermark advance — sweep C, task 0358` entry both
+carry **per-member** flags — five `complete — ready to close`, one `Task 0287: partial`. **The two
+`Task 0358: partial` lines are the run-ending flags of the two later *correction* appends**, each
+written while round 1 of the review was still open. ⛔ **They are flags on those appends' moment, not a
+verdict on the sweep.**
+
+### What was measured, deliverable by deliverable — the work product, never a record of it
+
+⭐ **Checked by grepping the vault for the substance owed, per `0358`'s own recorded lesson:** *"grep
+the work product for the corrected wording, not the record for a claim of correction."*
+
+| Member | What the brief owed the vault | Measured on disk 2026-09-10 |
+|---|---|---|
+| `0199` | resync ADR-010's page — the *"still open"* and *"one-line note"* claims | ⭐ **PRESENT** — [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] carries the dated block *"THE FULL RESYNC — 2026-09-05, task `0199`, inside sweep `0358`"*, the superseded-counts note, and the §Decision 5 contradiction recorded as a closed episode with both dates. The earlier *"still owes"* block is left byte-identical as the record of what was owed. |
+| `0212` | one **new dated `log.md` entry** correcting the *"still open"* framing on two frozen 2026-07-26 entries | ⭐ **PRESENT** — the `2026-09-05 — correction (task 0212)` entry, with both targets disambiguated by **page-count roll-up** (161 vs 166 pages), no line number, and the ADR-029 §Decision 6 half stated as its own separate finding. |
+| `0239` | resync ADR-012's page after `0232` | ⭐ **PRESENT** — [[decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped]] carries the dated note *"Dated resync note 2026-09-05 (`0239`, inside sweep `0358`)"*, re-derived from the landed ADR's bytes with the blob hash recorded. |
+| `0317` | **reconcile** the flag on `0238` against its landed close | ⭐ **PRESENT** — the `2026-09-05 — reconciliation (task 0317)` entry, its own verdict, its own reasoning, its own flag line. |
+| `0319` | **discharge** the flag on `0206` — stale, not contested | ⭐ **PRESENT** — the `2026-09-05 — discharge (task 0319)` entry, separately reasoned and separately flagged. ⭐ **The owner's *"DIFFER IN KIND"* ruling was honoured: two entries, two acts, two flag lines — never a shared "cleared both flags" step.** |
+| `0287` | resync the Codex-sandbox `read-only` pages after `0273` | ⛔ **CORRECTLY NOT DONE — upstream still unlanded.** Re-measured today: `0273` is `🔲 Backlog`, `0287` is `🔲 Backlog`, and **6** `--sandbox read-only` / **0** `--sandbox workspace-write` remain under `claude/`. ⭐ **The brief prescribes *reporting* — not closing — a member whose upstream has not landed. Five-of-six is the specified outcome, not a shortfall.** |
+
+**The pass's other obligations, re-checked:** the `sync` / `ingest` / `lint` stages each have their own
+dated entry; the lint reports counts before and after (**272 → 274** content pages, **0** genuine broken
+links, **0** pages missing an index row); the routed-in figure of 13 broken links is reported with a
+current re-measurement (**12** raw, **all** inside inline code spans, **0** genuine); and the close list
+was handed to the producer rather than executed — **`0199`, `0212`, `0239`, `0317`, `0319` are in
+`ai-agents/tasks/done/` and `0287` is still in `ai-agents/tasks/backlog/`**, exactly the hand-off's
+shape.
+
+### ⭐ What finished it, and when
+
+⭐ **The last vault write `0358` owed landed on 2026-09-06.** At the moment the first flag was written
+(2026-09-05), it was **CORRECT**: review finding R5 — the overbroad sentence *"`0287`'s vault pages
+were left ALONE"* — stood uncorrected in the **work product** while two records claimed it had been
+repaired. The corrected wording was absent from the vault entirely.
+
+**The `2026-09-06 — correction (task 0358, round 1 review, R5) — the 0287 exclusion claim` entry closed
+that hole**, and the corrected wording is on disk today — the phrase *"SANDBOX CLAIMS were left alone"*
+and the account of the check that exposed the gap, **2 lines, measured this run**. ⭐ **That append is
+the act that finished the deliverable; the flag it carried was already spent as it was written.**
+
+⭐ **Nothing owed to `ai-agents/wiki-vault/` by `0358` is missing. The contradiction ends here.**
+
+### ⚠️ Two things this entry does NOT claim — stated so neither is read as settled
+
+- ⛔ **`0358`'s review ledger was never closed out.** Its `review.md` still reads `Status: in-review`
+  with findings **R1** and **R5** marked `blocked`, though the worklog records both discharged on
+  2026-09-06 (R5 in this log, R1 as a corrected **18 unconditional + 3 order-sensitive** producer
+  worklist). ⚠️ **That is a record-hygiene gap in the task folder, not a vault gap** — it is outside the
+  wiki role's write surface (ADR-005) and is left for whoever owns that ledger. ⛔ **It does not reopen
+  this verdict:** the ledger's two blocked rows are the same two items measured as landed above.
+- ⛔ **`0287` remains genuinely owed.** It is open, its upstream `0273` is open, and the vault's
+  Codex-sandbox pages still describe `read-only`. ⭐ **That is a live, correctly-recorded gap — not a
+  residue of `0358`, which was never permitted to close it.**
+- ⛔ **The closed-task ingest bound is untouched by this entry.** Task `0380` remains open and this run
+  did not run it. ⚠️ **The 24 sweep members recorded as rows on a sweep page rather than as their own
+  pages, and the 3 closed folders with no page (`0349`, `0369`, `0372`), are the 2026-09-10 sync's
+  finding — measured against a `**Source**:`-line matcher — and belong to `0380`'s territory.** ⛔ **None
+  of them is `0358`'s owed deliverable:** `0358`'s brief never scoped a page per member, and the closed-
+  task ingest was bounded out of it by the owner's ruling *"Bound out + filing request (Rec)"* of
+  2026-09-05.
+
+### Scope
+
+Only `ai-agents/wiki-vault/` written by this run — **this `log.md` entry** plus a dated note on
+[[wiki/tasks/sweep-c-the-wiki-vault-resyncs-as-one-pass]]. ⛔ **Zero files outside the vault.** The
+watermark was **not** advanced — this is a withdrawal, not a sync. Append-only preserved — **zero
+deletions in `log.md`**, no past entry edited or annotated in place, both standing flag lines
+byte-identical. Nothing committed, nothing staged, no task moved, no mover invoked, no board row
+touched. ⛔ **No line-number coordinate into any coordination document.** No secrets.
+
+⚠️ **Measured, and it corrects the premise this run was handed:** the invoking session's context stated
+the working tree still carried this run's own earlier 2026-09-10 sync writes, uncommitted. ⛔ **It does
+not.** The owner committed them as `9943dcf` ("Sprint push"), and `git status` over
+`ai-agents/wiki-vault/` shows **exactly one** modified file — `log.md`, this entry. ⛔ Nothing else in
+the vault was altered or tidied.
+
+⚠️ **`.wiki-watermark` is deliberately left at `b4a1a52`, one commit behind HEAD `9943dcf`.** ⛔ **A
+withdrawal is not a sync** — this run ingested nothing from the delta and must not advance a watermark
+past work it did not read.
+
+No tracked task completed by this run.

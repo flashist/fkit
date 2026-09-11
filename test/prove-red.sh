@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# TWENTY-EIGHT mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# THIRTY-FOUR mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -55,6 +55,9 @@
 #  29. Delete throughput.mjs's same-segment check   → "migration-is-not-a-close"           (task 0359)
 #  30. Put `exec` back on the cold start            → "12. fresh project ... then the lead" (task 0379)
 #  31. The same, but on the INTAKE path ONLY        → "12b. fresh project with a completed intake" (0379)
+#  32. Drop the DISTINCT-token de-dup from the H1 rung → "0271/1"                            (task 0271)
+#  33. INVERT the targetIsBack delete rule in ONE mover → "T3 both movers: the targetIsBack"  (task 0381)
+#  34. Leave the OTHER mover's board word un-swapped   → "T11 both movers: the board-dependent" (0381)
 #
 # ⚠️ MUTATIONS 18-22, 25 AND 26 ARE THE FIRST TO TARGET `bin/`, NOT A COPIED LAUNCHER TREE (task 0288). Their seam
 # is FKIT_RELEASE_MJS — a SINGLE-FILE redirect (the FKIT_LAUNCHER pattern, not the whole-tree
@@ -168,6 +171,17 @@ run_frontmatter_suite() {   # <claude-tree-root>
 # directory, not one script — the suite reads three named skills/fkit-wiki-*/SKILL.md files under it.
 run_wiki_flag_suite() {   # <claude-tree-root>
   if FKIT_WIKI_FLAG_ROOT="$1" node --test "$repo/test/wiki-flag-convention.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
+# FKIT_MOVER_STEP_ROOT, the task movers' exemption-step suite (task 0381). Another whole-TREE seam,
+# for the same reason as FKIT_WIKI_FLAG_ROOT: two SKILL.md files are read, and the suite's T0 walks
+# the skills directory to prove the mover roster is complete.
+run_mover_step_suite() {   # <claude-tree-root>
+  if FKIT_MOVER_STEP_ROOT="$1" node --test "$repo/test/mover-exemption-step.test.js" >"$out" 2>&1; then
     echo green
   else
     echo red
@@ -427,6 +441,17 @@ wc_="$(run_wiki_flag_suite "$clean_tree")"; echo "$wc_"
 printf '0n. unmutated repo copy throughput suite should be green ... '
 tp_="$(run_throughput_suite "$(make_repo_copy repo-clean-throughput)")"; echo "$tp_"
 [ "$tp_" = green ] || { echo "   ✗ an UNMUTATED copy's throughput suite is red — mutation 29 below would be false."; fail=1; }
+
+# --- 0o. An UNMUTATED copy's mover-exemption-step suite must ALSO be green (task 0381; same reasoning
+#     as 0m — without this, a red below could be red-because-the-copy-is-broken and would prove
+#     nothing). ⚠️ THAT IS ALL IT PROVES. It is NOT proof that FKIT_MOVER_STEP_ROOT is honoured: if
+#     the env var were ignored, 0o would read the real claude/ tree, which is green too, so 0o cannot
+#     tell "honoured" from "ignored" either way. What proves the seam is honoured is mutations 33 and
+#     34 going RED — they only can if the suite actually read the mutated copy. The root is
+#     $clean_tree, the same copied claude/ tree 0g, 0j and 0m use. -----------------------------------
+printf '0o. unmutated copy mover-exemption-step suite should be green ... '
+mx_="$(run_mover_step_suite "$clean_tree")"; echo "$mx_"
+[ "$mx_" = green ] || { echo "   ✗ an UNMUTATED copy's mover-exemption-step suite is red — mutations 33/34 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -1435,6 +1460,138 @@ elif ! grep -Eq '(✖|not ok|fail).*12b\.' "$out"; then
 elif grep -Eq '(✖|not ok|fail).*12(c|d)\.' "$out" || grep -Eq '(✖|not ok|fail).*12\. fresh project' "$out"; then
   echo "   ✗ 12 / 12c / 12d also went red — the mutation is meant to touch ONLY the intake-present"
   echo "     branch, so a red elsewhere means it is not isolating the path it claims to."; fail=1
+fi
+
+# --- Mutation 32: drop the DISTINCT-token de-dup from dashboard.sh's H1 rung → the 0271/1 assertion
+#     in dashboard-contract.test.js must go red (task 0271). ADR-040 §2.5 refuses on two or more
+#     DISTINCT identity tokens, so `# Sprint 5 — Sprint 5` names ONE sprint twice and must RESOLVE.
+#     The `seen` array is what makes the count distinct rather than total; without it that H1 refuses,
+#     the plan falls through to a filename that cannot answer, and the board reports
+#     `unresolved-plan-sprint`. Measured in 0264: dropping `seen` left the whole suite GREEN at
+#     129/129 — this mutation is what stops that from being true again.
+#
+#     ⚠️ 0271 re-measured the collateral and it has MOVED since 0264: this mutant now also reds the
+#     0265-era `ADR-041 §2` test, whose `# Backlog — Sprint Backlog` fixture exercises the same de-dup
+#     through the NORMALIZE-BEFORE-DEDUPE path. That is a second red, not a wrong one — the named
+#     check below is on 0271/1, the ADR-040 §2.5 numbered-token case, which nothing else pins.
+#
+#     Rides mutation 14's seam (make_repo_copy + run_dashboard_suite). ------------------------------
+m32="$(make_repo_copy repo-mutant-dashboard-dedupe)"
+m32_file="$m32/claude/skills/fkit-status/dashboard.sh"
+cp "$m32_file" "$m32_file.orig"
+# ⚠️ THE REPLACEMENT LINE COMES FROM A FILE, VIA getline — NOT from `awk -v`, for mutation 14's reason:
+# awk processes escape sequences in a -v assignment, so the quoting in this awk-inside-awk line would
+# arrive mangled and break the script outright. Every test would then red, including ones this
+# mutation has nothing to do with, and the named-assertion check below would still pass — red for the
+# wrong reason, disguised as success.
+cat > "$work/m32-line.txt" <<'MUTANT_LINE'
+        if (s ~ ("^" tok "$") || s == "Backlog") { cnt++; last = s }
+MUTANT_LINE
+awk -v repl="$work/m32-line.txt" '
+  BEGIN { swapped = 0 }
+  /!\(s in seen\)/ && swapped == 0 {
+    while ((getline line < repl) > 0) print line
+    close(repl)
+    swapped = 1
+    next
+  }
+  { print }
+' "$m32_file.orig" > "$m32_file"
+if cmp -s "$m32_file" "$m32_file.orig"; then
+  echo "32. distinct-token de-dup dropped ... ✗ MUTATION WAS A NO-OP — the awk no longer matches the"
+  echo '   de-dup line (has the `!(s in seen)` guard been reworded?). This gate is disarmed: it would'
+  echo "   report success while proving nothing. Fix the mutation in test/prove-red.sh before trusting"
+  echo "   any result above."
+  fail=1
+fi
+printf '32. DISTINCT-token de-dup dropped — "0271/1" should go RED ... '
+r32="$(run_dashboard_suite "$m32")"; echo "$r32"
+if [ "$r32" != red ]; then
+  echo "   ✗ the suite did NOT catch a grammar that refuses an H1 naming ONE sprint twice — ADR-040"
+  echo "     §2.5's DISTINCT count is not load-bearing. This is the exact 129/129-green hole 0271"
+  echo "     exists to close."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0271/1' "$out"; then
+  echo "   ✗ suite went red but NOT at 0271/1 — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 33: INVERT the `targetIsBack` delete rule in ONE mover → the T3 assertion in
+#     mover-exemption-step.test.js must go red (task 0381). ⛔ THIS IS THE DOCUMENTED FAILURE MODE OF
+#     THE WHOLE AREA, not an invented one: "`../../done/X` survives, `../X` does not" is right about a
+#     POINTER and INVERTS for an exemption KEY, and a producer told the opposite repointed keys that
+#     should have been deleted. The mutation writes exactly that plausible-but-wrong instruction, so a
+#     green run here would mean the guard cannot tell the right rule from its inversion.
+#     `fkit-task-done` is the target because it is the mover that fires on the common path. -----------
+m33_tree="$work/claude-mutant-mover-invert"
+cp -R "$repo/claude" "$m33_tree"
+m33_file="$m33_tree/skills/fkit-task-done/SKILL.md"
+cp "$m33_file" "$m33_file.orig"
+# ⚠️ The replacement carries an INJECTED MARKER, and the exactly-one-site guard counts THAT, not the
+# prose (round-2 review R11, the same discipline as mutations 25-27): a guard that counts natural text
+# can collide with real content a later edit adds and would then misreport an ordinary edit as a
+# co-mutated second site. `mutation: delete rule inverted` cannot occur naturally in a SKILL.md;
+# `Repoint the key.` could. The anchor was verified unique in the file before use.
+sed -i.bak 's/\*\*Delete the key — do not repoint it\.\*\*/**Repoint the key (mutation: delete rule inverted).**/' "$m33_file"
+if cmp -s "$m33_file" "$m33_file.orig"; then
+  echo "33. inverted the delete rule ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif [ "$(grep -c 'Delete the key — do not repoint it\.' "$m33_file")" != 0 ]; then
+  echo "33. inverted the delete rule ... ✗ WRONG TARGET — an un-mutated copy of the rule survives."; fail=1
+elif ! grep -q 'mutation: delete rule inverted' "$m33_file"; then
+  echo "33. inverted the delete rule ... ✗ MUTATION DID NOT LAND — marker absent from the mutant."; fail=1
+elif [ "$(grep -c 'mutation: delete rule inverted' "$m33_file")" != 1 ]; then
+  echo "33. inverted the delete rule ... ✗ WRONG TARGET — the marker landed more than once: a second"
+  echo "   copy of the rule was co-mutated (0288 R9's mode), so the survivor check above passed while"
+  echo "   the mutation hit two sites. Fix the mutation in test/prove-red.sh."; fail=1
+fi
+printf '33. targetIsBack delete rule INVERTED in ONE mover — "T3 ... targetIsBack delete rule" should go RED ... '
+r33="$(run_mover_step_suite "$m33_tree")"; echo "$r33"
+if [ "$r33" != red ]; then
+  echo "   ✗ the suite did NOT catch an INVERTED delete rule. The clause would then be free to tell a"
+  echo "     mover to repoint a healed exemption instead of deleting it — the exact repair that cost"
+  echo "     0358 two rounds in one day."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*targetIsBack delete rule' "$out"; then
+  echo "   ✗ suite went red but NOT at the T3 delete-rule assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 34: leave the OTHER mover's board word un-swapped → the T11 assertion in
+#     mover-exemption-step.test.js must go red (task 0381). ⭐ THIS IS THE COPY-PASTE TRAP, and it is
+#     the one task 0341 will walk into: the clause is byte-identical in both movers MODULO ONE WORD
+#     (`done` ⇄ `cancelled`), so a paste that forgets the swap reads perfectly and tells a CANCELLING
+#     operator that a link heals when its citer moves into `done/`. Mutation 33 alone would leave the
+#     uniformity half — the whole reason the clause is shared prose rather than two bespoke variants —
+#     permanently unexercised in this gate. `fkit-task-cancelled` is the target because it is the copy
+#     that carries the non-default board word. ⛔ NO INJECTED MARKER HERE, deliberately: the wrong
+#     board word IS the marker, and injecting prose would red T11 for the wrong reason (a reworded
+#     sentence rather than a wrong board). `../../done/X` was verified to occur ZERO times in the
+#     unmutated file, so its presence afterwards is unambiguous. --------------------------------------
+m34_tree="$work/claude-mutant-mover-board"
+cp -R "$repo/claude" "$m34_tree"
+m34_file="$m34_tree/skills/fkit-task-cancelled/SKILL.md"
+cp "$m34_file" "$m34_file.orig"
+# Anchored on the inversion aphorism's path, which is unique in the file (verified before use).
+sed -i.bak 's|\.\./\.\./cancelled/X|../../done/X|' "$m34_file"
+if cmp -s "$m34_file" "$m34_file.orig"; then
+  echo "34. left the board word un-swapped ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif [ "$(diff "$m34_file.orig" "$m34_file" | grep -c '^>')" != 1 ]; then
+  echo "34. left the board word un-swapped ... ✗ WRONG TARGET — the swap hit more than one line; the"
+  echo "   mutation must leave exactly ONE board word wrong or it proves the wrong thing."; fail=1
+elif [ "$(grep -c '\.\./\.\./done/X' "$m34_file")" != 1 ]; then
+  echo "34. left the board word un-swapped ... ✗ MUTATION DID NOT LAND — the wrong board word is"
+  echo "   absent from the mutant, or landed more than once."; fail=1
+fi
+printf '34. board word left un-swapped in the OTHER mover — "T11 ... board-dependent sentences" should go RED ... '
+r34="$(run_mover_step_suite "$m34_tree")"; echo "$r34"
+if [ "$r34" != red ]; then
+  echo "   ✗ the suite did NOT catch a clause pasted between movers without swapping the board word."
+  echo "     The two copies are then NOT reconciled by anything, which is the hole this contract test"
+  echo "     exists to close before task 0341 pastes the clause a third and fourth time."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*board-dependent sentences' "$out"; then
+  echo "   ✗ suite went red but NOT at the T11 board-dependent assertion — red for the wrong reason."; fail=1
 fi
 
 echo

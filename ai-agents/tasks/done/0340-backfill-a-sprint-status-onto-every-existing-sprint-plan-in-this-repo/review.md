@@ -1,0 +1,59 @@
+# Review — 0340
+
+Task: this task folder's `brief.md`
+File(s) under review: `ai-agents/sprints/sprint-8.md` (+2 −0) · this task folder's `worklog.md` (new, 219 lines)
+Status: closed-out
+Coverage: **round 2 — both reviewers measured.** The Claude reviewer read ADR-047 §1's status table and §4's mover clause directly, measured `plan.md` with `git hash-object`/`wc -c` (`df3844054e5a168354577cb076578d1ab2d2f114`, 9537 bytes), confirmed the round-1 blob `9cdd079c…` is absent from the object store (so the relay was genuinely unverifiable from the worker's context), ran the guard's own `maskFencesAndQuotes`/`maskCodeSpans`/`LINK` exports over `worklog.md` (12 raw links → **0** after masking) and `collectFiles` (worklog **in scope**, 892 files), and ran `npm run test:unit` (**877/877**) and the two guard files (**41/41**; 892 files, 3488 targets, **0 broken**, 7 named-exempt). The Codex pass independently measured the blob and byte count, counted 14 paired fence delimiters and the 12 in-fence links, and read the ADR and `sprint-8.md` bytes itself; its own `node --test` runs hit sandbox `EPERM` on temp-fixture creation only — the live-corpus checks passed there and both suites were run unsandboxed here. ⚠️ Round 1's coverage state is **not** amended by this line; this is round 2's own fact.
+
+## Reviewer findings
+
+| #  | Round | Sev | Location | Claim |
+|----|-------|-----|----------|-------|
+| R1 | 1 | medium | `worklog.md` § Residuals and follow-ups, item 5 | The residual reads *"When Sprint 8 later goes `✅ Done`, the banner's **status word and date must both be rewritten** by hand by a producer (ADR-047 §1: set by producer, by hand)"* — **`✅ Done` is mover-only, and the cited section is what says so.** ADR-047 §1's status table gives `✅ Done` **Set by: mover only**, and §4 states *"Only the two **terminal** states are mover-gated"*, with *"`🔲 Backlog → 🔄 In progress` is free for the producer to set by hand"* as the named exception. The *"set by producer, by hand"* phrase the residual quotes belongs to the `🔲 Backlog` and `🔄 In progress` rows, not the `✅ Done` row. The residual's own next clause (*"The movers do not yet do this; that is `0341`"*) points the right way, which makes the note internally contradictory rather than uniformly wrong. Secondary, same sentence: §1's `✅ Done` banner form is `> ## ✅ Done — <date>. Closed by /fkit-sprint-done.`, so *"status word and date"* is an incomplete description of the rewrite — a trailing `Closed by …` clause is added too (plus ADR-033 §5's agent-closed marker when spawned). Raised by both reviewers. Verified `CORRECT`; **Defect** (a wrong claim about a closed ADR, recorded in a task file a future closer reads), not a frontier-move. Blast radius is record-only: nothing executes it, no test reds, and `0341` — which builds the movers — sits at `P5` on this same board, ahead of any Sprint 8 close. It earns medium rather than low because this board's own success criterion (b) is *"the first sprint closed by a mover instead of by hand"*, and this is the task record telling a reader to close it by hand. |
+
+**Round 2 — 2026-09-11 — no new findings.** Both fixes made under owner rulings **AA1** and **AA2** were
+re-verified against the primary sources, not against the coder's or the reviewer's reading:
+
+- **AA1 (the `R1` correction)** — **verified.** ADR-047 § *1. The sprint status vocabulary — four values*
+  gives `✅ Done` the banner `> ## ✅ Done — <date>. Closed by /fkit-sprint-done.` and **Set by: mover
+  only**, with `producer, **by hand**` on the `🔲 Backlog` and `🔄 In progress` rows; § *4. The movers*
+  reads *"Only the two **terminal** states are mover-gated"* and *"`🔲 Backlog → 🔄 In progress` is free
+  for the producer to set by hand"*; §1's bullet carries ADR-033 §5's
+  `Closed by /fkit-sprint-done (agent-closed — not owner-verified).` inside the `Closed by …` clause.
+  `/fkit-sprint-done` does not exist — zero hits in `claude/skills/` and in `skills_for_role()`.
+  ⭐ **My own round-1 relay error is corrected in the worklog and is not repeated:** *"closed by a mover
+  instead of by hand"* is `sprint-8.md` § *🎯 The goal*, and criterion (b) under § *✅ SUCCESS CRITERION*
+  is the two-half at-close output. The worklog now cites each as what it is.
+- **AA2 (the plan-blob annotation)** — **verified.** The build-time citation `9cdd079c…` / 9229 bytes is
+  **unchanged — nothing was re-pinned.** The annotation's figures are exact. The *reason* for the change
+  is labelled a driver relay rather than a measurement, which is the only honest label available: the
+  round-1 blob is not in the object store, so no worker could have diffed it.
+- **Neither property was broken.** 14 fence delimiters, all paired; the board render stays inside one
+  fence pair; 12 raw links → 0 after the guard's own masker; the annotation adds **0** markdown links and
+  **0** `path:NNN` coordinates.
+
+⛔ **Not filed, deliberately:** residual 5 cites only the second half of criterion (b) (the mover-naming
+banner), not the `active none` / exit-3 half. That is the half its claim turns on and the sentence says
+*requires*, not *only requires* — accurate, not a defect.
+
+**Status set to `closed-out` on the owner's ruling relayed by the driver, verbatim *"Round 2, then close
+(Rec)"*** — round 2 filed no findings, so there is nothing for the coder to respond to.
+
+## Coder response
+
+<!-- CODER-OWNED — the reviewer never writes here. -->
+
+| #  | Verdict | Defect / Frontier | Action | Status |
+|----|---------|-------------------|--------|--------|
+| R1 | **CORRECT** — both halves, verified **independently against the ADR, not inherited**. Read ADR-047 § *1. The sprint status vocabulary — four values*: the `✅ Done` row's `Set by` cell is **`mover only`**, while `producer, **by hand**` is the `🔲 Backlog` and `🔄 In progress` rows — so the residual's parenthetical *"(ADR-047 §1: set by producer, by hand)"* attaches a phrase from two other rows to this one. Read § *4. The movers*: *"Only the two **terminal** states are mover-gated"* and *"`🔲 Backlog → 🔄 In progress` is free for the producer to set by hand"* — the split is confirmed from the other side. **Secondary half also holds:** §1's `✅ Done` banner is `> ## ✅ Done — <date>. Closed by /fkit-sprint-done.` and §1's own bullet carries ADR-033 §5's `Closed by /fkit-sprint-done (agent-closed — not owner-verified).`, so *"status word and date"* under-described a **full-line replacement**. ⭐ **Severity derived here, not inherited: medium**, and by a route the finding did not use. Blast radius is record-only — nothing executes this file, no test reds, and `0341` builds the movers before any Sprint 8 close. What lifts it off `low` is **where** it is read: `sprint-8.md` § *✅ SUCCESS CRITERION* half (b) is satisfied only by a `✅ Done` banner that **names** `/fkit-sprint-done`, and § *🎯 The goal* is *"…closed by a mover instead of by hand"*. A reader who obeyed this residual at close time would **miss the sprint's binary criterion**, not merely write a cosmetically wrong line. ⛔ Not raised to `high`: it is one sentence, in one non-executable record, contradicted by its own next clause. | **Defect** — a false statement about an accepted ADR, recorded where a future closer reads it. ⛔ Not a frontier-move: no tradeoff was chosen here, the note is simply wrong. **Loop check: clean** — matches no *Accepted residuals* entry and no ADR-047 § *Re-raise only if* condition; round 1, so no oscillation and no regression risk (the rewrite touches prose only). | Rewrote `worklog.md` § *Residuals and follow-ups* item 5: the banner is **replaced in full** with `> ## ✅ Done — <date>. Closed by /fkit-sprint-done.` (+ ADR-033 §5's agent-closed marker when an agent closes); `✅ Done` is stated as **mover-only**, citing §1's row and §4's terminal-states rule, with *"by hand"* named as belonging to the other two rows; `/fkit-sprint-done` is recorded as not yet existing (`0341`); and the *why* is anchored to criterion (b) + the goal. ⛔ **Nothing else touched** — the plan-blob citation was **annotated, not re-pinned** (owner ruling **AA2**), and residual 1 was left as written. Owner rulings **AA1** / **AA2**, relayed by the driver, are the authority for both writes; recorded in `worklog.md` § *Decision log* rows 2–3. | ✅ done |
+
+## Accepted residuals (shared, do-not-re-litigate)
+
+- **Banner date `2026-09-10`** — What: the banner carries the date Sprint 8 opened and entered `In progress`, not the date it was typed. · Why (structural): owner ruling **Z1**, option label verbatim *"2026-09-10 — when it opened (Rec)"*; all seven archived banners carry the date of the **state transition**. The value is permanent. · Re-raise only if: the owner reverses Z1.
+- **Bare banner — no `⭐ ACTIVE BOARD`** — What: the banner is the bare `> ## 🔄 In progress — 2026-09-10.` with no trailing marker. · Why (structural): owner ruling **Z2**; ADR-047 §6 makes the marker an **override** of lowest-ordered selection and Sprint 8 is the only eligible board, so it would override nothing; and a leftover marker later fires `drift active-marker-on-non-active` (test P15) with no mover step to strip it. Rejected alternative: adding the marker "for clarity". · Re-raise only if: a second board becomes eligible and the owner wants Sprint 8 to win against lowest-ordered.
+- **`brief.md` not edited; verification steps in `worklog.md` only** — What: the rewritten verification steps live in `worklog.md` and nowhere else. · Why (structural): owner ruling **Z3**; `brief.md` is a producer artifact. **Accepted cost, named by the owner: the brief keeps four stale verification steps at its top, and a future reader meets them before the worklog.** · Re-raise only if: the owner reassigns the brief's maintenance.
+- **The seven archived boards stay byte-identical** — What: `ai-agents/sprints/done/sprint-1.md` … `sprint-7.md` are untouched. · Why (structural): owner ruling **V3** makes legacy `🔒 CLOSED` a permanent, tested compatibility rung read as `✅ Done` — ADR-047 §2, *"Read FOREVER, written NEVER"*. Not a migration window. · Re-raise only if: V3 is reversed.
+- **The brief's stale title and this folder's stale name** — What: both are left as-is. · Why (structural): a rename moves a task folder, which is the exact link hazard `0381` exists to fix, and `0381` has not shipped. · Re-raise only if: `0381` ships.
+- **ADR-047's §2 grammar and recognizer** — What: accepted and closed after three review rounds. · Why (structural): the banner conforms to the ADR, never the reverse. · Re-raise only if: the ADR is formally re-opened.
+- **Success criterion (a) is deferred, not met** — What: *"Sprint 8 chosen BECAUSE its status reads `In progress`"* is not claimed. · Why (structural): eligibility is identity-only (`claude/skills/fkit-status/dashboard.sh:173`, `is_eligible`); the status rung ships with `0338`. Verification step 2's before/after byte-identity is therefore a **no-regression** proof, not a status proof — the worklog states this correctly in three places. · Re-raise only if: `0338` ships and (a) is still unclaimed.
+- **Verification step 5's instrument was substituted, and the plan text was deliberately not corrected** — What: the approved plan's `git diff --stat` cannot measure `ai-agents/sprints/sprint-8.md` because that file is **untracked**, so a literal reading returns empty and reads as "no change" — a false green. The build substituted a byte-level snapshot diff, proved both halves, and declared the substitution instead of passing silently. The plan text was left wrong because re-authoring an approved plan is forbidden. · Why (structural): this is a defect in the approved **plan**, not in the build; correcting it is the owner's call, not the builder's. · Re-raise only if: it is raised as a finding against this build — it is not one.

@@ -22,6 +22,84 @@
   **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned**
   (do not follow it). No existing line of this ADR was edited; the notes are appends, and the Status
   stays `accepted`.
+- **Superseded in part:** 2026-09-10 (`0337`) by
+  [ADR-047](adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint.md).
+  ⛔ **This is a partial REVERSAL, not a drift correction** — so it carries the ⛔ marker under the same
+  two-marker legend as the `Corrections:` item above (⚠️ = a fact that drifted; ⛔ = a decision that was
+  overturned). The scope is stated **once**, in the ⛔ notice immediately below this metadata block, and
+  is deliberately not restated at each affected section — so there is one place to keep true rather than
+  five. ⭐ **The Status of this ADR stays `accepted`:** most of it is untouched and in force, and the
+  notice below names exactly which parts are not. **No existing line of this ADR was edited; this
+  metadata item and the notice below are appends.**
+
+> ## ⛔ Dated supersession-in-part notice — 2026-09-10, task `0337`
+>
+> **Superseding ADR:**
+> [ADR-047 — *A sprint has an explicit status, and "current" means EVERY `In progress` sprint*](adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint.md).
+> Ruled by the owner across two live `AskUserQuestion` rounds (2026-08-25 and 2026-09-10); ADR-047's
+> *§Authority* carries the verbatim labels.
+>
+> ⭐ **This ADR is not being re-argued. It is being EXITED through the exit it wrote for itself.** Its own
+> *Re-raise only if* list, second bullet, reads: *"a project legitimately works two sprints in parallel,
+> or reports being mis-selected within its eligible set (the 'highest N' residual actually biting) —
+> **this is the named exit: option (d), an explicit active-sprint marker.**"* Both halves fired at once,
+> in one owner report on 2026-08-25. ⛔ **A future reviewer must therefore treat this as the trigger
+> being met, not as closeout being ignored.**
+>
+> ⛔ **OVERTURNED — do not follow these:**
+>
+> 1. **§1.3's eligibility rule is now incomplete.** Eligibility gains a second rung: identity is a
+>    `Sprint <N><suffix>` token **AND** the board's status is `In progress`. The identity half is
+>    unchanged; it is no longer sufficient on its own.
+> 2. **§1.4's DIRECTION is reversed.** *"The active sprint is the plan whose resolved identity is the
+>    **highest-ordered** `Sprint <N><suffix>`"* is replaced by the **lowest-ordered** eligible sprint,
+>    overridable by an explicit `⭐ ACTIVE BOARD` marker in the board's status banner. ⭐ **§1.4's
+>    COMPARATOR survives whole** — its integer-then-suffix ordering, and the two hazards its
+>    implementation comment names (a leading zero, and a very long `<N>` overflowing shell integer
+>    arithmetic), are direction-independent, and ADR-047 §6.1 pins them as unchanged.
+> 3. **The one-active-sprint model is replaced.** *"The active sprint"*, singular, throughout this ADR
+>    is now *"every sprint whose status is `In progress`"*, plural. **Two different identities both
+>    `In progress` is LEGAL and emits no drift record.** ⛔ Note the boundary precisely: **§1.5's
+>    same-identity case (two files claiming `Sprint 6`) is STILL DRIFT and is untouched.**
+> 4. **§1.6's empty-set report grows a `status` column** — every candidate is now listed with its
+>    resolved status as well as its identity.
+> 5. **§Consequences' residual bullet — *"Residual — 'highest N' is a RETAINED HEURISTIC WITH A NAMED
+>    EXIT, not an endorsement"* — is spent.** ⭐ The exit has been taken. The heuristic is gone; option
+>    (d) is in, in the form of ADR-047 §2.1's `⭐ ACTIVE BOARD` token.
+> 6. **§Required tests S1, S1b, S2, S3, S5, S6, S7 and S8 must be REPINNED, not merely inherited.** Each
+>    asserts the `active` line by exact string equality and builds its boards without a status banner;
+>    under ADR-047 the wire format gains `status=`, the `active` line becomes plural, and every
+>    banner-less fixture becomes ineligible. ⚠️ **Their INTENT survives in every case** — integer
+>    ordering, suffix ordering, `Backlog` never eligible, the tie-break flag — and it is the assertions,
+>    not the rules they pin, that change.
+> 7. ⛔ **§1.5's tie-break now runs on the STATUS-FILTERED candidate set** — appended 2026-09-10, same
+>    task, under owner ruling W1 (ADR-047 round-1 review, finding R3). ⭐ **Its RULE is untouched** —
+>    byte order under `LC_ALL=C`, first claimant wins, a drift record naming every claimant. ⛔ **What
+>    changed is WHEN it runs:** ADR-047 §5 filters candidates to `In progress` **before** the ordering
+>    and the tie-break, so a `Done`, `Cancelled` or banner-less board can **never** be the file
+>    selected, however early it sorts. ⭐ **This is this ADR's own ordering, not a new one** — §1.3's
+>    eligibility has always preceded §1.5's tie-break; ADR-047 adds a rung to §1.3 and §1.5 keeps
+>    operating exactly where it always did. ⚠️ **`ambiguous-active-sprint` is unaffected: it still fires
+>    on ANY same-identity collision among the candidates, mixed status included.** ADR-047 §6.4 is the
+>    precedence rule and its test **P12** pins it.
+>
+> ⚠️ **Read the `§1.5` entry in the list below together with item 7 above:** its tie-break rule and its
+> drift record are untouched; the SET it runs on is filtered first.
+>
+> ⭐ **IN FORCE AND UNTOUCHED — the majority of this ADR:** §1.1 (the candidate set — every `.md`
+> directly in `ai-agents/sprints/`, no pattern on the stem); §1.2 (the identity ladder); §1.5 (the
+> same-identity tie-break: byte order under `LC_ALL=C`, first, with a drift record naming every
+> claimant); §2 (the `Backlog` H1 token and its normalization to `Backlog`, and the basename special
+> case); §3 (`backlog.md` keeps its name, its exclusion strengthened); §4 (there is no filename
+> enforcement point, and that is the point); **§5 (one grammar, one implementation — ADR-047 inherits
+> this whole and applies it to the new status banner)**; §6 (the seven falsified prose sites); and both
+> 2026-09-04 dated corrections above, which concern a different claim entirely.
+>
+> ⚠️ **On line-number coordinates: this notice deliberately writes NONE of its own**, and every
+> coordinate inside the text it annotates is left byte-identical. Appending this notice shifts every
+> line below it, which is precisely why the durable anchors here are **section numbers and quoted
+> fragments**. The same rule applies to anyone citing this ADR from now on.
+
 ## Context
 
 `claude/skills/fkit-status/SKILL.md:26` resolves the **active sprint** by globbing `sprint-*.md` at

@@ -4,13 +4,13 @@
 0337
 
 ## Sprint
-Backlog
+Sprint 8
 
 ## Priority
-Unscheduled
+P1
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect

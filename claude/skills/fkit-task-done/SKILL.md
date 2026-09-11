@@ -321,6 +321,44 @@ brief. A move is not finished while a link it broke is still broken. Every self-
 must name a file that now exists — most are code spans, not markdown links, so the link check above
 does not reach them; test the path.
 
+**Then check the exemption keys this move may have invalidated.** The sweep above greps `ai-agents/`
+only, so it cannot see `test/reference-integrity.test.js` — which holds a set of named
+`(citing file, target)` keys exempting links that are broken on purpose. Moving a folder into
+`done/` can orphan one of those keys, heal one, or break a fresh link that needs a new one. The guard
+already computes all three directions, and its own failure messages name the right action, so the rule
+here is to run it and obey what it says.
+
+- **Run it unconditionally**, even when the sweep above found nothing to update:
+  `node --test test/reference-integrity.test.js`
+- **Green** → record the guard's measured named-exempt figure in the report and stop. `L8` prints it
+  as the tail of its disclosure line — e.g. `0 broken, 7 named-exempt` — with the **number before the
+  words**, so there is no `named-exempt: N` line to copy. This is the common case, and the step is a
+  no-op.
+- **Red at `L4`** — *"whose CITING FILE no longer exists"* → the citing file moved with this close, so
+  the key names a path that no longer exists. Repoint the citer half to the new board, **re-run the
+  guard**, and if it then reds at *"whose TARGET now resolves"*, delete the key instead of keeping the
+  repointed one.
+- **Red at `L4`** — *"whose TARGET now resolves"* → the link healed. **Delete the key — do not repoint it.**
+  A sibling-relative link *heals* when its citer moves into `done/` alongside a target already there:
+  *"`../../done/X` survives, `../X` does not" is right about a POINTER and INVERTS for an exemption
+  KEY.*
+- **Red at `L2`** — *"unresolved markdown link(s)"* → this move *broke* a link, and that arm's own
+  message names the fork: **repair the link** when it is a pointer offered to a reader, or — *"if it
+  is quoted or illustrative text rather than a pointer"* — add a NEW key carrying its reason. Neither
+  branch is a deletion, and **repair is the default**: a new key on a link that should resolve
+  converts a loud deterministic red into a silent permanent exemption.
+- **The exempt count falls by suppressed INSTANCES, not by keys** — one key can match more than once,
+  so deleting a single key can lower the count by more than one. **Re-run the guard to read the new
+  number; never decrement it by hand.**
+- **You may run this guard. You may not edit it.** `test/reference-integrity.test.js` is a coder
+  surface: stop and return a `NEEDS-DECISION` naming each offending key verbatim and its direction,
+  and treat the close as unfinished until a coder lands that edit.
+- **Attribute before touching anything.** The guard is repo-global, so a red may belong to another
+  change in flight. It is this move's only where the folder just moved is spelled by the named key —
+  or, for an `L2` red, where there is no key yet, by the broken link's own citing file or target;
+  anything else is reported as pre-existing and left alone. Re-running the guard is harmless and must
+  not produce a second `NEEDS-DECISION` for the same key.
+
 ### 6. Handle ambiguity — never paper over it
 - **No reference found** in any sprint doc: the task may be unsprinted / backlog-only. Complete the
   move, then **report that no sprint status row was found** so the owner knows nothing else changed.

@@ -4,7 +4,7 @@ description: >-
   Answer "what's the status?" the way a producer would — read the live sprint plan and task briefs,
   reconcile any drift between them, and deliver a seven-beat briefing that ends in the task
   dashboard. Takes an optional sprint name as its argument (e.g. "Sprint 1"); empty means the active
-  sprint. Read-only — it reports, it never changes a status, moves a file, or edits a plan.
+  sprints, plural. Read-only — it reports, it never changes a status, moves a file, or edits a plan.
 ---
 
 # Status
@@ -23,35 +23,69 @@ Answer *"what's the status?"* — grounded in the files, in the conventional sha
 a status briefing.
 
 **Argument:** `$ARGUMENTS` — **optional**.
-- **Empty** — the **active sprint**, and **you do not work it out yourself**. Run:
+- **Empty** — the **active sprints**, and **you do not work them out yourself**. Run:
 
   ```sh
   bash .claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints
   ```
 
   It considers every `.md` **directly** in `ai-agents/sprints/` — **no pattern on the filename** —
-  and resolves each one's identity for you. `ai-agents/sprints/done/` is closed and is not
-  considered. **Do not re-derive any of that here.** This file is prose executed by a model and
-  `dashboard.sh` is the one implementation; two implementations of one question is the defect
+  and resolves each one's identity **and its sprint status** for you. `ai-agents/sprints/done/` and
+  `ai-agents/sprints/cancelled/` are closed and are not considered. **Do not re-derive any of that
+  here.** This file is prose executed by a model and `dashboard.sh` is the one implementation; two
+  implementations of one question is the defect
   [ADR-041 §5](../../../ai-agents/knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md)
   forbids. Read its answer:
 
-  - `active file="…" identity="…"` — **that file is the active sprint.** It has already ordered the
-    eligible candidates and taken the highest. **`file=` is a basename, not a path** — join it to the
-    `ai-agents/sprints` you passed in, and pass *that* to step 4.
-  - `candidate file="…" identity="…"` — every file it looked at and what it resolved to, `unresolved`
-    included. A **`Backlog` identity is never eligible; `unresolved` is never eligible.**
-  - `drift ambiguous-active-sprint identity="…" chosen="…" also="…"` — two plans claim the **same**
-    identity. The script has already chosen; **your job is to report it** — name the one chosen and
-    every other file that claimed it. Do not pass over it silently.
+  - `active file="…" identity="…" status="In progress"` — **that file is an active sprint.** ⚠️ There
+    may be **more than one**, in ascending identity order: *"current"* is **plural**
+    ([ADR-047](../../../ai-agents/knowledge-base/decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint.md)).
+    **Report every one of them** — see the N-sprint shape in step 3. **`file=` is a basename, not a
+    path** — join it to the `ai-agents/sprints` you passed in, and pass *that* to step 4.
+  - `board file="…" identity="…" status="…" reason="lowest-ordered"|"active-marker"` — ⭐ **THE
+    SINGLE-BOARD ANSWER.** Exactly one, and only when at least one sprint is active. **Any caller that
+    must pick ONE board reads this line and nothing else** — including a caller that reaches this skill
+    by reference rather than by running it. `reason` says why: `lowest-ordered` is the default (the
+    **lowest**-ordered `In progress` sprint), `active-marker` means a board carried an explicit
+    `⭐ ACTIVE BOARD` marker and overrode that default.
+  - `candidate file="…" identity="…" status="…"` — every file it looked at, what it resolved to, and
+    its sprint status. A **`Backlog` identity is never eligible; `unresolved` is never eligible**, and
+    a sprint is eligible **only** while its status is `In progress`.
+    ⚠️ **`unresolved` means two different things and you tell them apart BY POSITION, never by the
+    word** (ADR-047 §1.2): in `identity=` it means the identity ladder returned nothing; in `status=`
+    it means line 3 carried no banner, or a malformed one. **Never infer one from the other.**
   - `active none` — **there is no eligible sprint plan. Say so, list every `candidate` line with its
-    identity or `unresolved`, and stop.** Never fall back to the `Backlog` board. Do not guess.
+    identity and status, and stop.** Never fall back to the `Backlog` board. Do not guess. **No
+    `board` line follows it** — `active none` is a sentinel and carries no fields.
+  - The `⟦FACTS⟧` block's `drift` records — **every one is an owner decision → beat 6.** This mode
+    emits five kinds, and **it has no roll-up**: `⟦FACTS⟧` **is** its complete output, so there is no
+    summary line to read instead of the records.
+    - `drift ambiguous-active-sprint identity="…" chosen="…" also="…"` — two plans claim the **same**
+      identity. The script has already chosen; **your job is to report it** — name the one chosen and
+      every other file that claimed it. Do not pass over it silently.
+    - `drift ambiguous-active-marker chosen="…" also="…"` — **more than one board claimed
+      `⭐ ACTIVE BOARD`.** The script fell back to the lowest-ordered board (that is `chosen=`); name
+      every other claimant. Someone has to withdraw a marker.
+    - `drift sprint-status-missing plan="…"` — a board with a real sprint identity has **no line-3
+      status banner**. It is therefore never active. Someone must write one.
+    - `drift sprint-status-malformed plan="…" line3="…"` — the banner is **there but wrong** (a
+      missing or non-`YYYY-MM-DD` date, or text where the terminating `.` belongs). ⚠️ **Report the
+      one you were given.** *"Typed wrong"* and *"never typed"* are different defects with different
+      fixes, and the record tells you which.
+    - `drift active-marker-on-non-active plan="…" status="…"` — `⭐ ACTIVE BOARD` sits on a banner
+      that is not `In progress`. The marker does nothing there.
 
   **`active none` exits 3, and that is an answer, not a failure** — do the bullet above and stop. A
   real failure exits 1 and prints no `⟦SELECT⟧` block at all. **Step 4's hand-build fallback does not
   apply to this call**: there is no board to hand-build when no plan was selected. If the call really
-  fails, or the version marker is not `⟦fkit-dashboard v1⟧`, say so rather than guessing at the
+  fails, or the version marker is not `⟦fkit-dashboard v2⟧`, say so rather than guessing at the
   shape. **`bash <path>`, never `./dashboard.sh`** — same reason as step 4 below.
+
+  > **One board's status on its own:** `bash .claude/skills/fkit-status/dashboard.sh status <plan>`
+  > prints **one token** — `Backlog` · `In progress` · `Done` · `Cancelled` — or nothing at exit 3
+  > when line 3 has no banner or a malformed one. Like `identity <plan>` it emits a **value, not a
+  > rendering**: no `⟦…⟧` markers, so you read it with a single command substitution. The legacy
+  > `🔒 CLOSED` banner reads as `Done`, **permanently** — it is read forever and written never.
 - **A sprint name** (e.g. `Sprint 1`) — resolve it against `ai-agents/sprints/` **and**
   `ai-agents/sprints/done/`. If nothing matches, say so and list what's there. Do not guess.
 - **`Backlog`** (case-insensitive) — the **Backlog board**, `ai-agents/sprints/backlog.md`: the
@@ -60,22 +94,32 @@ a status briefing.
   `/fkit-task-brief` when the first unsprinted brief is filed.
 
 **That is the whole contract — three targets, and no reserved words.** The argument selects **which
-board you are asked about**; it never selects *which version of the answer you give*. **This skill has
-one output.** There is no keyword, no switch, and no mode: every invocation renders the complete
+board(s) you are asked about**; it never selects *which version of the answer you give*. **This skill
+has one output.** There is no keyword, no switch, and no mode: every invocation renders the complete
 briefing, ending in the full step-4 board. `full`, `all` and `board` are ordinary text and therefore
 resolve as board names — so `/fkit-status full` correctly fails with *"no sprint named `full`"*.
 **That is the intended behavior, not a regression.**
+
+> ⚠️ **An empty argument can now report N sprints, and that is still ONE output.** ADR-047 made
+> *"current"* plural; the briefing grows sections, it does not become N briefings or gain a mode. The
+> per-beat shape is in step 3. **A caller that needs exactly one board does not re-derive it from the
+> `active` lines — it reads the `board` line.**
 
 > **Why `Backlog` is a target and not a mode.** It names **which board to report on**, exactly as
 > `Sprint 1` does — one board in, one briefing out. It does not ask for a different rendering of the
 > same board, which is what
 > [`one-skill-one-output`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)
 > (`0074`) forbids. **The default run never includes it:** an empty argument selects the active
-> sprint by **resolved identity**, and this board's identity is `Backlog` — which is **never
-> eligible** — so unscheduled work is reported **only when asked for by name**, by construction
+> sprints by **resolved identity and sprint status**, and this board's identity is `Backlog` — which is
+> **never eligible** — so unscheduled work is reported **only when asked for by name**, by construction
 > rather than by a rule anyone has to remember. **The exclusion is stronger than the filename rule it
 > replaced** ([ADR-041 §3](../../../ai-agents/knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md)):
-> it no longer depends on what the file is called, so renaming it could not make it the active sprint.
+> it no longer depends on what the file is called, so renaming it could not make it an active sprint.
+>
+> ⚠️ **`Backlog` the identity is not `🔲 Backlog` the sprint status**, and after ADR-047 the word carries
+> both readings. **Tell them apart by POSITION, never by the glyph** (§1.1): a **sprint status** is a
+> blockquoted H2 on **line 3 of a board** and nowhere else; a **sprint identity** is what the script
+> resolves for a file; a **task** status is a brief's `## Status` or a board row's leading cell.
 
 > **The standard being aimed at.** *"As if I ask the producer of the project what the status is, and
 > they provide it in a simple yet informative way."* **Answer like a producer being asked in person,
@@ -178,6 +222,24 @@ When they disagree:
    is theirs to reconcile). **If there are none: "nothing, you're clear."**
 7. **The dashboard** — the board, last. Build it per the dashboard step below.
 
+**When an empty argument returns MORE THAN ONE active sprint**, you still emit **one** briefing. The
+beats do not all repeat — [ADR-047 §5](../../../ai-agents/knowledge-base/decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint.md):
+
+| Beat | Scope for N active sprints |
+|---|---|
+| 1 · The headline | **ONCE, across all boards.** Beat 1 is *"if someone reads only this line"* — there cannot be N of those |
+| 2 · Where we are | **per sprint**, ascending by identity |
+| 3 · What's moving | **per sprint** |
+| 4 · What's next | **ONCE, across all.** Beat 4 is *"the one thing to pick up"*. N recommendations is not a recommendation |
+| 5 · What's in the way | **per sprint** |
+| 6 · What I need from you | **ONCE, across all.** One decision queue — otherwise the owner reads N lists to assemble their own work |
+| 7 · The dashboard | **one table per sprint**, ascending. Run the step-4 script once per board |
+
+Close with **one** cross-sprint line. ⛔ **Do not repeat beats 1, 4 and 6 per sprint** — repeating those
+three destroys exactly what they are for. Name each sprint where a per-sprint beat starts, so the owner
+can tell which board they are reading. **A named sprint, and `Backlog`, are unchanged** — one board in,
+one briefing out, all seven beats once.
+
 **On a closed sprint** (one you found in `sprints/done/`), beats 3–5 are mostly moot and should say so
 in one line each — nothing's moving because it's closed, nothing's next because nothing here should be
 picked up, nothing's in the way because it's dead. **Don't manufacture content to fill them**, and don't
@@ -220,13 +282,15 @@ You pass it a **path** — *this* invocation renders a board, it does not resolv
 Its stdout has two delimited sections:
 
 ```
-⟦fkit-dashboard v1⟧
+⟦fkit-dashboard v2⟧
 ⟦BOARD⟧      ← the finished table + roll-up
 ⟦FACTS⟧      ← the computed facts, one record per line
 ⟦END⟧
 ```
 
-**If the version marker is not `⟦fkit-dashboard v1⟧`, say so rather than guessing at the shape.**
+**If the version marker is not `⟦fkit-dashboard v2⟧`, say so rather than guessing at the shape.**
+The marker went `v1` → `v2` with ADR-047 §9. **There is no `v1` reader and none is coming** — the
+contract is *refuse*, not *translate*.
 
 #### What to do with `⟦BOARD⟧`
 
@@ -326,6 +390,31 @@ drift unresolved-plan-sprint h1="…"
     ↑ the plan has no recoverable `Sprint N` identity, so **drift rule 1** (skip the status
       cross-check when a brief's `## Sprint` names a different sprint) could not be applied — which
       means any drift below may be phantom. Say so; don't pretend the board is fully reconciled.
+drift ambiguous-plan-identity identity="…" plan="…" also="…"
+    ↑ the board you rendered shares its sprint identity with a sibling file. The render path's
+      counterpart to `ambiguous-active-sprint` — and DELIBERATELY a separate name, not a duplicate:
+      `plan=` states a fact about a board, `chosen=` states that a choice was made. Report the one
+      you were given.
+
+── ADR-047, the SPRINT-level records. These are about the BOARD, not about a task, so they carry
+   `plan="<basename>"` instead of a `<task>` id. All four reach the roll-up's drift clause too.
+drift sprint-status-missing plan="…"
+    ↑ this board has a real sprint identity but NO line-3 status banner, so it can never be active.
+      ⚠️ It does NOT fire for the `Backlog` board or for an unresolved identity — those legitimately
+      carry no banner, and firing there would be a false record on every run, forever.
+drift sprint-status-malformed plan="…" line3="…"
+    ↑ the banner is THERE but does not match the grammar — a missing or non-`YYYY-MM-DD` date, or
+      text where the terminating `.` belongs. ⚠️ DIFFERENT from `-missing`: report the one named, or
+      you send the owner to write a banner that is already on the page.
+drift active-marker-on-non-active plan="…" status="…"
+    ↑ `⭐ ACTIVE BOARD` sits on a banner that is not `🔄 In progress`. The marker does nothing there.
+drift sprint-terminal-not-archived plan="…" status="Done|Cancelled"
+    ↑ the board says it is finished but still sits at the top of `ai-agents/sprints/`. The status
+      already disqualified it from being active; the MOVE was never made.
+drift sprint-archived-not-terminal plan="…" location="done/|cancelled/"
+    ↑ the mirror: filed under an archive folder while its banner says it is still open.
+drift sprint-status-location-mismatch plan="…" status="…" location="…"
+    ↑ `Done` filed under `cancelled/`, or `Cancelled` filed under `done/`. The two carriers disagree.
 ```
 
 > **⚠️ `<task>` is the FOLDER ID, not the priority.** It is the task-folder name's `NNNN` prefix —
@@ -408,9 +497,10 @@ paths (`/fkit-task-done`, `/fkit-task-cancelled`, or a deliberate edit) — not 
 ## Usage
 
 ```
-/fkit-status              # the active sprint
+/fkit-status              # every active sprint — there may be more than one
 /fkit-status Sprint 1     # a named sprint, including a closed one in sprints/done/
 ```
 
 **Those are the only two forms, and both render the same, complete output.** The skill has no switches
-and no modes.
+and no modes. The empty form may report **N** sprints (ADR-047) — that changes how many sections beats
+2, 3, 5 and 7 have, not how many outputs there are.

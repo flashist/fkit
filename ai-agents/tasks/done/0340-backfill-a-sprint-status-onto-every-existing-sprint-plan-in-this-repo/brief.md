@@ -4,13 +4,13 @@
 0340
 
 ## Sprint
-Backlog
+Sprint 8
 
 ## Priority
-Unscheduled
+P3
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-producer
@@ -105,3 +105,74 @@ the plan's own banner as agent-performed and not owner-verified.
 *Recorded by a spawned `fkit-producer`, 2026-08-29, as part of the Sprint 6 archival. No owner channel
 ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md));
 nothing here rules on anything — it records measured state and flags what to re-derive.*
+
+## ⭐ NOTE APPENDED 2026-09-10 — RE-RANKED `P6` → `P3`, AND THE SCOPE IS NOW ONE LINE IN ONE FILE
+
+⛔ **Nothing above is rewritten.** This is a dated note appended beside the existing text, per the
+house pattern. ⚠️ **Everything above this line was written 2026-08-25 and corrected once on
+2026-08-29; both are now 16 days stale. Re-derive from HERE, not from the `## Context` above.**
+
+### 1. ⭐ THIS TASK NOW RUNS BEFORE `0338` — OWNER RULING, 2026-09-10
+
+**Authority: owner ruling of 2026-09-10**, given live via `AskUserQuestion` in the `fkit lead` session
+driving `/fkit-sprint-ship-loop` — a selection from the question's option list, and **the option label
+is the verbatim text: "Re-order — 0340 before 0338 (Rec)"**. Recorded as ruling `S6` on
+[Sprint 8](../../../sprints/sprint-8.md), under its heading
+*"⚠️ THE RE-ORDER OF 2026-09-10 — `0340` AND `0338` SWAPPED RANKS, AND WHY"*.
+
+⛔ **The reason is a measured defect, not a preference.** `0338` makes `In progress` a rung of
+eligibility; this task is what puts the banner on the Sprint 8 board; and the owner ruled that board
+opens with **no** banner. ⛔ **So in the window where `0338` has shipped and this task has not, the
+live Sprint 8 board resolves `unresolved` → ineligible → `select-active` returns `active none`,
+exit 3 — and `/fkit-status` and the empty-argument ship-loop lose the board they are driven from.**
+⭐ **Shipping this task first removes the window entirely.**
+
+### 2. ⛔ `## Notes` "Depends on: 0337, 0338" — CORRECTED, AND THE LINE ITSELF IS UNCHANGED
+
+⭐ **Only `0337` is a work dependency.** The existing line names `0338` as *"the reader that verifies
+it — step 1 cannot pass without it"* — ⛔ **read the parenthesis: that is a VERIFIER, not an input.**
+This task's work is inserting a line-3 banner in the grammar `0337`'s ADR fixes; it needs the grammar
+and nothing else.
+
+⚠️ **What that costs, stated plainly: `## Verification steps` step 1 CANNOT PASS AT `P3`.** It runs
+`select-active` and expects the banner read back, and the rung that reads it arrives with `0338` at
+`P6`. ⭐ **This does not block the task — it defers its proof.** Check the banner **by inspection**
+against the accepted `0337` ADR, record in `worklog.md` that the machine-read proof is deferred, and
+⛔ **do not report success criterion (a) as met.** `0338`'s verification is where (a) is demonstrated.
+
+### 3. ⛔ THE SCOPE IS SMALLER THAN THE TITLE — ONE LINE, ONE FILE
+
+**Re-measured on disk 2026-09-10:**
+
+| The `## Context` above says | Measured today |
+|---|---|
+| the top holds `sprint-6.md` + `backlog.md` | ⛔ **`backlog.md` + `sprint-8.md`.** `sprint-6.md` was archived 2026-08-29 |
+| `sprints/done/sprint-1..5.md` — five plans | ⛔ **`sprint-1.md` … `sprint-7.md` — SEVEN**, every one carrying `> ## 🔒 CLOSED — <date>.` at line 3 |
+
+⭐ **`## What to build` step 2's conditional is now CLOSED by owner ruling.** That step says to rewrite
+the archived plans *"only if the accepted ADR's grammar turns out not to admit the legacy form"*. The
+owner ruled 2026-09-10, verbatim option label **"Keep — permanent compat rung (Rec)"**: ⛔ **the legacy
+`> ## 🔒 CLOSED — <date>.` banner reads as `Done` PERMANENTLY.** ⛔ **So this task rewrites NONE of the
+seven** — all seven end byte-identical, and the report records that.
+
+⭐ **THE ENTIRE REMAINING DELIVERABLE:** insert the `🔄 In progress` line-3 banner into
+`ai-agents/sprints/sprint-8.md` — **one line, one file** — then step 3's report. ⛔ **`## What to
+build` step 1's "into `sprint-6.md`" is SPENT; the target is the Sprint 8 board.**
+
+⚠️ **THE TITLE OF THIS TASK OVERSTATES IT AND IS NOT BEING CHANGED.** *"onto every existing sprint
+plan"* is no longer what this does. ⛔ **The folder is deliberately NOT renamed**: a rename moves a
+task folder, which is exactly the link-surface hazard `0381` exists to fix and `0381` has not shipped
+— it would re-point every inbound link and invalidate `NAMED_EXEMPT` keys no mover has a step for.
+⭐ **This brief is the live scope; the title is an identifier, not a specification.**
+
+### 4. ⚠️ ALL FOUR `## Verification steps` REMAIN STALE — REWRITE THEM AT PICKUP
+
+The 2026-08-29 note above already said so; it is still true and the target has changed again. Steps 1,
+3 and 4 name `Sprint 6`/`sprint-6.md`, which is archived. ⛔ **Rewrite all four against `sprint-8.md`
+and the seven-plan `done/` directory**, and honour item 2 above on step 1.
+
+*Recorded by a spawned `fkit-producer`, 2026-09-10, with no owner channel
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+The re-rank and the legacy-banner ruling are the owner's, relayed by the `fkit-lead` session; every
+figure above was re-measured on disk by this producer before being written. Nothing here rules on
+anything the owner did not.*

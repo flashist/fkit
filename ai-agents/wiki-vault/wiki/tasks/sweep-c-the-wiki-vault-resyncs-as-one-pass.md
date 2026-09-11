@@ -85,6 +85,29 @@ twice, in the 2026-09-05 correction entry and again in the 2026-09-06 one. ⛔ *
 This page records both facts and resolves neither; ⛔ **reconciling a standing wiki flag against a
 landed close is exactly the shape `0317` exists for**, and no such reconciliation is recorded here.
 
+> ⭐ **RESOLVED 2026-09-10 — THE FLAG IS WITHDRAWN AND THE CONTRADICTION IS CLOSED. The block directly
+> above is left byte-identical as the record of the tension it found.**
+>
+> **On owner ruling of 2026-09-10, option label verbatim *"Investigate — is the gap real? (Rec)"***, the
+> deliverable was re-measured member by member against the vault's own bytes. ⭐ **VERDICT:
+> `0358`'s vault deliverable is FINISHED; the close was not premature.** The full reasoning and the
+> per-member evidence are in `log.md` § *"2026-09-10 — withdrawal (task `0358`) — the standing
+> `partial — not ready to close` flag, discharged"*.
+>
+> ⭐ **What finished it, and when: the 2026-09-06 `log.md` append that corrected the overbroad
+> *"`0287`'s vault pages were left ALONE"* sentence.** The first flag (2026-09-05) was **correct when
+> written** — that correction was then claimed by two records and absent from the work product. The
+> second flag (2026-09-06) rode the very append that closed the hole, so it was **spent as it was
+> written**. ⛔ **Neither flag named an outstanding item, which is why it could only be settled by
+> re-measuring the brief.**
+>
+> ⛔ **Five-of-six stands, and `0287` stays genuinely owed** — re-measured 2026-09-10: `0273` and `0287`
+> both `🔲 Backlog`, **6** `--sandbox read-only` and **0** `--sandbox workspace-write` under `claude/`.
+>
+> ⚠️ **NOT resolved by that ruling, and outside the wiki role's write surface:** `0358`'s `review.md`
+> still reads `Status: in-review` with **R1** and **R5** marked `blocked`, though the worklog records
+> both discharged on 2026-09-06. **A record-hygiene gap in the task folder, not a vault gap.**
+
 ### ⛔ THE BOUND — 45 uningested closed tasks were DELIBERATELY left out
 
 ⛔ **Bounded out by owner ruling of 2026-09-05, option label verbatim "Bound out + filing request

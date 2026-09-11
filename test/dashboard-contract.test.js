@@ -20,7 +20,7 @@
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, chmodSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, readdirSync, chmodSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { REPO, cleanup } from './harness.mjs';
@@ -97,9 +97,25 @@ function brief({ title = 'T', sprint = 'Sprint 1', status = '🔲 Backlog', prio
   return `# ${title}\n\n${idBlock}## Sprint\n${sprint}\n\n## Priority\n${priority}\n\n## Status\n${status}\n\n## Context\n\nBody.\n${extra}\n`;
 }
 
+// ADR-047 §2 — the line-3 sprint-status banner. ⚠️ THE DEFAULT IS NOT DECORATION: after ADR-047 a
+// board with no banner has status `unresolved`, is never eligible, and (with an eligible identity)
+// emits `drift sprint-status-missing`. Measured on this suite: adding that one drift reds 17
+// render-path tests — exact-stdout, roll-up, `0210/*`, `task 65/*` — none of which is about sprint
+// status. Giving the two shared fixture builders a default banner takes all 17 back to green with NO
+// expected-stdout string touched, because the banner lives in the plan SOURCE and never reaches the
+// rendered board.
+//
+// ⚠️ ACCEPTED COST, NAMED: "no banner" stops being the default fixture state, so a regression where the
+// render path FAILS to emit `sprint-status-missing` is pinned by P3 alone. ⛔ P3 is therefore not
+// optional and must assert both routes.
+//
+// Pass `banner: null` for a fixture that must genuinely carry no status.
+const DEFAULT_BANNER = '> ## 🔄 In progress — 2026-01-01.';
+
 // A plan with the given table rows (each already a `| … |` line).
-function plan(rows, { title = '# Sprint 1 — Test', extraSections = '' } = {}) {
-  return `${title}\n\nIntro prose that claims 99 tickets, which is a lie the script must ignore.\n\n## Status\n\n| Status | Priority | Task | Brief |\n|---|---|---|---|\n${rows.join('\n')}\n\n## Notes\n\nTail.\n${extraSections}\n`;
+function plan(rows, { title = '# Sprint 1 — Test', extraSections = '', banner = DEFAULT_BANNER } = {}) {
+  const head = banner ? `${title}\n\n${banner}\n>\n` : `${title}\n`;
+  return `${head}\nIntro prose that claims 99 tickets, which is a lie the script must ignore.\n\n## Status\n\n| Status | Priority | Task | Brief |\n|---|---|---|---|\n${rows.join('\n')}\n\n## Notes\n\nTail.\n${extraSections}\n`;
 }
 
 function run(planPath) {
@@ -143,7 +159,7 @@ test('clean sprint: board renders; roll-up prints only non-zero terms', () => {
   });
   const { code, out } = run(p);
   assert.equal(code, 0);
-  assert.match(out, /^⟦fkit-dashboard v1⟧/);
+  assert.match(out, /^⟦fkit-dashboard v2⟧/);
   // The board shows OPEN WORK ONLY (task 65) — the clean ✅ row is omitted. The roll-up is unchanged
   // and still counts it, which is the whole mitigation: rows hidden, scope visible.
   assert.equal(boardRows(out).length, 1, 'the done row is filtered out of the board');
@@ -494,7 +510,7 @@ test('R10: exact stdout — the full contract, pinned byte for byte', () => {
   const { code, out } = run(p);
   assert.equal(code, 0);
   assert.equal(out, [
-    '⟦fkit-dashboard v1⟧',
+    '⟦fkit-dashboard v2⟧',
     '⟦BOARD⟧',
     '| Status | # | Task | Filename | Owner | Next step |',
     '|---|---|---|---|---|---|',
@@ -922,6 +938,66 @@ test('ADR-040 T6: an H1 naming two different sprints refuses at rung 1', () => {
     `an ambiguous H1 must resolve EMPTY and say so. Drift facts: ${JSON.stringify(driftB)}`,
   );
   assert.match(rollup(outB), /on the plan itself/);
+});
+
+// 0271/1 — THE DISTINCT-vs-TOTAL COUNT. ADR-040 §2.5 refuses on two or more DISTINCT tokens, so
+// `# Sprint 5 — Sprint 5` names ONE sprint twice and must RESOLVE. The `seen` de-dup at
+// `dashboard.sh:100` is what implements that, and T6 above cannot pin it — both of its fixtures use
+// two DIFFERENT tokens. Measured in 0264: dropping `seen` left the whole suite green at 129/129.
+//
+// ⚠️ `planName: 'hardening.md'` is LOAD-BEARING. Rung 2 must be unable to answer, or a mutant that
+// refuses at rung 1 would fall through to the filename and this test would pass while proving nothing
+// — which is exactly how T6a is built, in the opposite direction.
+//
+// ⚠️ ASSERTION IDIOM (owner ruling 2026-09-10, verbatim "Field-tolerant"): assert on the FIELDS under
+// test, never on whole-line stdout equality. 0338 extends this script's output grammar on purpose; a
+// guard written as exact equality would red it for doing its job. Accepted cost, named by the owner:
+// a stray EXTRA field would not be caught here.
+test('ADR-040 0271/1: an H1 naming the SAME sprint twice resolves — the count is DISTINCT, not total', () => {
+  const p = fixture({
+    planName: 'hardening.md',
+    plan: plan([ADR040_ROW], { title: '# Sprint 5 — Sprint 5' }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 5', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const drift = adr040Drift(run(p).out, '0271/1');
+  assert.equal(
+    drift.filter((f) => f.startsWith('drift unresolved-plan-sprint')).length,
+    0,
+    `one identity named twice must RESOLVE at rung 1, not refuse. Drift facts: ${JSON.stringify(drift)}`,
+  );
+  // The discriminating half: the identity really is `Sprint 5`, so rule 1 does NOT skip, and the row's
+  // `✅ Done` against the brief's `🔲 Backlog` fires exactly one disagreement. Resolve to anything else
+  // — or to nothing — and rule 1 skips, and this count is 0.
+  assert.equal(
+    drift.filter((f) => f.startsWith('drift disagreement')).length,
+    1,
+    `the resolved identity must be Sprint 5, and must be cross-checked. Drift facts: ${JSON.stringify(drift)}`,
+  );
+});
+
+// 0271/2 — FIRST LINE ONLY. ADR-040 §2.1 reads the H1 from line 1, and `dashboard.sh:85` is
+// `head -1 "$1"` — a deliberate narrowing of the former whole-file scan, not a no-op. Measured in
+// 0264: replacing it with `cat "$1"` left the whole suite green at 129/129. Two consequences go
+// unguarded without this test — the owner-approved narrowing can be silently reverted, and a
+// whole-file scan can `print` twice and hand PLAN_SPRINT a MULTI-LINE value, a shape no consumer
+// expects.
+//
+// The fixture puts a decoy H1 on LINE 2. Line 1 carries no identity token, so the landed code resolves
+// EMPTY and reports it; under `cat` the decoy answers instead and the report goes quiet — which is the
+// silent revert this pins. `planName: 'hardening.md'` again keeps rung 2 out of the way.
+test('ADR-040 0271/2: the H1 is read from LINE 1 ONLY — a token on line 2 does not resolve', () => {
+  const p = fixture({
+    planName: 'hardening.md',
+    plan: plan([ADR040_ROW], { title: '# Hardening plan\n# Decoy — Sprint 7 — tail' }),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Sprint 9', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const out = run(p).out;
+  const drift = adr040Drift(out, '0271/2');
+  assert.ok(
+    drift.some((f) => f.startsWith('drift unresolved-plan-sprint')),
+    `a token on line 2 must not resolve the plan's identity. Drift facts: ${JSON.stringify(drift)}`,
+  );
+  assert.match(rollup(out), /on the plan itself/);
 });
 
 // T7 — the suffix bound is exactly ONE lowercase letter (owner-ruled 2026-08-10, verbatim option
@@ -1785,7 +1861,7 @@ test('R50/R53: exact stdout on the LOUD path — the fact is pinned in full', ()
   const { code, out } = run(p);
   assert.equal(code, 0);
   assert.equal(out, [
-    '⟦fkit-dashboard v1⟧',
+    '⟦fkit-dashboard v2⟧',
     '⟦BOARD⟧',
     '| Status | # | Task | Filename | Owner | Next step |',
     '|---|---|---|---|---|---|',
@@ -2450,9 +2526,15 @@ test('0210/E: the forward form still parses, multi-digit and all (BSD \\| regres
 // F — the archived href. A sprint plan moves to `sprints/done/` and its marker becomes `../backlog.md`
 // (the link-rot class tasks 0050/0076 repaired). The parse is href-agnostic; pin that it stays so.
 test('0210/F: the archived `../backlog.md` href parses identically — the label is what is read', () => {
+  // ⚠️ THE BANNER IS PART OF THE FIXTURE, NOT DECORATION (ADR-047 §7). This is the suite's ONLY
+  // `sprints/done/` fixture, and an archived board with a non-terminal status emits
+  // `drift sprint-archived-not-terminal` — which would red the zero-drift assertion below for a reason
+  // that has nothing to do with the href parse under test. A `✅ Done` board under `done/` is the
+  // consistent pair, so both carriers agree and no sprint-level drift fires.
   const p = fixture({
     planDir: 'sprints/done',
-    plan: plan(['| ➡️ Moved to [Backlog](../backlog.md) | P12 | Alpha | [`a.md`](../../tasks/backlog/a.md) |']),
+    plan: plan(['| ➡️ Moved to [Backlog](../backlog.md) | P12 | Alpha | [`a.md`](../../tasks/backlog/a.md) |'],
+      { banner: '> ## ✅ Done — 2026-01-01. Closed by /fkit-sprint-done.' }),
     briefs: { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Backlog', status: '🔲 Backlog', priority: 'Unscheduled' }) },
   });
   const { out } = run(p);
@@ -2515,15 +2597,52 @@ function sprintsFixture({ plans, briefs = {} }) {
 }
 
 // A plan whose H1 carries no identity — the filename rung is then the thing under test.
-const prosePlan = (h1 = '# Hardening — the launcher sprint') => `${h1}\n\nBody prose.\n`;
+// ⭐ It carries the same default line-3 banner as `plan()` (see DEFAULT_BANNER), so the S-scenarios keep
+// testing the IDENTITY ladder instead of silently turning into status tests. `banner: null` suppresses it.
+const prosePlan = (h1 = '# Hardening — the launcher sprint', banner = DEFAULT_BANNER) =>
+  (banner ? `${h1}\n\n${banner}\n>\n\nBody prose.\n` : `${h1}\n\nBody prose.\n`);
 
 function selectLines(out) {
   return out.split('⟦SELECT⟧')[1].split('⟦FACTS⟧')[0].trim().split('\n').filter(Boolean);
 }
-const activeLine = (out) => selectLines(out).find((l) => l.startsWith('active'));
+const activeLines = (out) => selectLines(out).filter((l) => l.startsWith('active'));
+// ⛔ `activeLine` MUST NOT BE `find(l => l.startsWith('active'))` — ADR-047 §2.4 and P17. `active` is
+// PLURAL after ADR-047, and `find` silently returns only the first, so a test asserting one line while
+// the script printed three would stay GREEN. It throws instead: a wrong test can no longer pass quietly.
+// Use `activeLines` for the plural cases.
+const activeLine = (out) => {
+  const ls = activeLines(out);
+  if (ls.length > 1) {
+    throw new Error(`activeLine() on PLURAL output (${ls.length} lines) — use activeLines(): ${JSON.stringify(ls)}`);
+  }
+  return ls[0];
+};
+// ⛔ AND NEITHER MAY `boardLine` BE A `find` — same ADR-047 §2.4 hazard, same reason. `board` is
+// EXACTLY ONE line by contract, so a second one is the script being broken, and `find` is precisely
+// the shape that would let P6/P7 stay green while it printed two. Only P1 and P17 pin board-line
+// cardinality today and NEITHER carries a `⭐ ACTIVE BOARD` marker — so without this, the marker
+// override, the one path that CHOOSES which board line to print, has no cardinality guard at all.
+const boardLine = (out) => {
+  // ⭐ NO TRAILING SPACE in the prefix — `activeLines` and `candidates` both filter without one, and a
+  // bare `board` or a `board\tfile="…"` (the format string itself broken) must NOT slip past the plural
+  // check (review R10). `active`, `board` and `candidate` are the only ⟦SELECT⟧ prefixes, so dropping
+  // the space cannot over-match; it can only make this throw fire more often, which is the point.
+  const ls = selectLines(out).filter((l) => l.startsWith('board'));
+  if (ls.length > 1) {
+    throw new Error(`boardLine() on PLURAL output (${ls.length} lines) — the script must print exactly one: ${JSON.stringify(ls)}`);
+  }
+  return ls[0];
+};
 const candidates = (out) => selectLines(out).filter((l) => l.startsWith('candidate'));
 
 // S1 — §1.4 integer ordering. `Sprint 10` > `Sprint 9`, which a byte/text comparison gets backwards.
+//
+// ⚠️ REPINNED BY ADR-047 §2.4/§8.2, AND THE TEST NAME IS STILL ACCURATE — read it as a statement about
+// ORDERING, not about selection. ADR-047 falsifies §1.4's DIRECTION only: the ordering is unchanged, the
+// selector now takes the LOWEST of it. So `Sprint 10` still orders above `Sprint 9`, which now shows up
+// as the ASCENDING order of the two `active` lines and as `Sprint 9` being the `board`.
+// ⭐ It still discriminates: a byte/text comparison would sort `10` BELOW `9` and name `Sprint 10` the
+// board — the exact inversion of what is asserted here.
 test('ADR-041 S1: `Sprint 10` outranks `Sprint 9` — the ordering is a pinned contract, not prose', () => {
   const { sprintsDir } = sprintsFixture({
     plans: {
@@ -2533,7 +2652,12 @@ test('ADR-041 S1: `Sprint 10` outranks `Sprint 9` — the ordering is a pinned c
   });
   const { code, out } = runMode(['select-active', sprintsDir]);
   assert.equal(code, 0);
-  assert.equal(activeLine(out), 'active file="plan-sprint-10.md" identity="Sprint 10"');
+  assert.deepEqual(activeLines(out), [
+    'active file="plan-sprint-9.md" identity="Sprint 9" status="In progress"',
+    'active file="plan-sprint-10.md" identity="Sprint 10" status="In progress"',
+  ]);
+  assert.equal(boardLine(out),
+    'board file="plan-sprint-9.md" identity="Sprint 9" status="In progress" reason="lowest-ordered"');
 });
 
 // S1b — the leading-zero normalization. `test -gt` would also get this right; the length-then-bytes
@@ -2544,7 +2668,17 @@ test('ADR-041 S1b: a leading zero does not outrank — `sprint-9` beats `sprint-
   });
   const { code, out } = runMode(['select-active', sprintsDir]);
   assert.equal(code, 0);
-  assert.equal(activeLine(out), 'active file="sprint-9.md" identity="Sprint 9"');
+  // ⚠️ REPINNED for ADR-047's flipped direction, and it STILL DISCRIMINATES: unnormalized, `08` is two
+  // characters against `9`'s one, so length-then-bytes would rank `Sprint 08` ABOVE `Sprint 9` and the
+  // lowest-ordered board would come out as `sprint-9.md` — the opposite of what is asserted.
+  // ⚠️ The identity string keeps the leading zero (`Sprint 08`) — normalization lives in `id_digits`,
+  // i.e. in the COMPARISON, never in the identity the ladder reports. Do not "tidy" this to `Sprint 8`.
+  assert.deepEqual(activeLines(out), [
+    'active file="sprint-08.md" identity="Sprint 08" status="In progress"',
+    'active file="sprint-9.md" identity="Sprint 9" status="In progress"',
+  ]);
+  assert.equal(boardLine(out),
+    'board file="sprint-08.md" identity="Sprint 08" status="In progress" reason="lowest-ordered"');
 });
 
 // S2 — suffix ordering: absent < `a` < `b` < …
@@ -2558,7 +2692,16 @@ test('ADR-041 S2: `Sprint 4c` > `Sprint 4b` > `Sprint 4` — the suffix orders a
   });
   const { code, out } = runMode(['select-active', sprintsDir]);
   assert.equal(code, 0);
-  assert.equal(activeLine(out), 'active file="plan-sprint-4c.md" identity="Sprint 4c"');
+  // ⚠️ REPINNED for ADR-047: three DISTINCT identities, all `In progress`, so all three are active and
+  // the suffix order is now read off the ASCENDING sequence. `Sprint 4` (no suffix) sorts first because
+  // the empty string precedes any letter under `LC_ALL=C`, which is the property under test.
+  assert.deepEqual(activeLines(out), [
+    'active file="plan-sprint-4.md" identity="Sprint 4" status="In progress"',
+    'active file="plan-sprint-4b.md" identity="Sprint 4b" status="In progress"',
+    'active file="plan-sprint-4c.md" identity="Sprint 4c" status="In progress"',
+  ]);
+  assert.equal(boardLine(out),
+    'board file="plan-sprint-4.md" identity="Sprint 4" status="In progress" reason="lowest-ordered"');
 });
 
 // S3 — the compounded defect, half 1. Under the retired glob `sprint-backlog.md` was the ONLY
@@ -2566,15 +2709,16 @@ test('ADR-041 S2: `Sprint 4c` > `Sprint 4b` > `Sprint 4` — the suffix orders a
 test('ADR-041 S3: `sprint-backlog.md` resolves `Backlog` and is never the active sprint', () => {
   const { sprintsDir } = sprintsFixture({
     plans: {
-      'sprint-backlog.md': prosePlan('# Geoconflict — Sprint Backlog'),
+      // `banner: null` — a Backlog board carries no sprint banner, and §7 carve-out 1 keeps that quiet.
+      'sprint-backlog.md': prosePlan('# Geoconflict — Sprint Backlog', null),
       'plan-sprint-6.md': prosePlan(),
     },
   });
   const { code, out } = runMode(['select-active', sprintsDir]);
   assert.equal(code, 0);
-  assert.equal(activeLine(out), 'active file="plan-sprint-6.md" identity="Sprint 6"');
-  assert.ok(candidates(out).includes('candidate file="sprint-backlog.md" identity="Backlog"'),
-    'it must still be listed — §1.6 wants every candidate and its identity');
+  assert.equal(activeLine(out), 'active file="plan-sprint-6.md" identity="Sprint 6" status="In progress"');
+  assert.ok(candidates(out).includes('candidate file="sprint-backlog.md" identity="Backlog" status="unresolved"'),
+    'it must still be listed — §1.6 wants every candidate, its identity AND its status');
   assert.ok(!activeLine(out).includes('sprint-backlog.md'), 'Backlog is never eligible');
 });
 
@@ -2613,12 +2757,18 @@ test('ADR-041 S4: a `sprint-backlog.md` row whose brief names a real sprint is d
 
 // S5 — §1.6. An empty eligible set says so and stops. NEVER a `Backlog` fallback.
 test('ADR-041 S5: an all-ineligible candidate set reports and stops — no fallback to the backlog board', () => {
-  const { sprintsDir } = sprintsFixture({ plans: { 'backlog.md': prosePlan('# Backlog — the unsprinted board') } });
+  // ⭐ `banner: null` makes this a LIVE GUARD for ADR-047 §7 carve-out 1 as well: a `Backlog`-identity
+  // board with no line-3 banner must emit NO `sprint-status-missing`, or `ai-agents/sprints/backlog.md`
+  // reports a false drift on every run, forever.
+  const { sprintsDir } = sprintsFixture({ plans: { 'backlog.md': prosePlan('# Backlog — the unsprinted board', null) } });
   const { code, out } = runMode(['select-active', sprintsDir]);
   assert.equal(code, 3, 'exit 3 — no answer, and the caller must be able to tell');
   assert.equal(activeLine(out), 'active none');
-  assert.ok(candidates(out).includes('candidate file="backlog.md" identity="Backlog"'));
+  assert.ok(candidates(out).includes('candidate file="backlog.md" identity="Backlog" status="unresolved"'));
   assert.ok(!out.includes('active file='), 'a `Backlog` board must never be selected as active');
+  assert.ok(!out.includes('board file='), 'no active sprint means no `board` line at all');
+  assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0,
+    'carve-out 1: a banner-less Backlog board is well-formed, not drift');
 });
 
 // S6 — §1.5's tie-break, all three halves. The ruling is worthless if the flag can be dropped.
@@ -2633,8 +2783,9 @@ test('ADR-041 S6: same identity → byte-order pick, AND both claimants named, A
   });
   const { code, out } = runMode(['select-active', sprintsDir]);
   assert.equal(code, 0);
-  // 1 — the pick: `p` < `s` in byte order.
-  assert.equal(activeLine(out), 'active file="plan-sprint-6.md" identity="Sprint 6"');
+  // 1 — the pick: `p` < `s` in byte order. ⭐ ONE `active` line, not two: §2.3a is one line per SPRINT,
+  // and the losing claimant appears only as a `candidate` and in the drift record's `also=`.
+  assert.equal(activeLine(out), 'active file="plan-sprint-6.md" identity="Sprint 6" status="In progress"');
   // 2 — the flag names EVERY claimant, not just that there was a collision.
   assert.ok(facts(out).includes('drift ambiguous-active-sprint identity="Sprint 6" chosen="plan-sprint-6.md" also="sprint-6.md"'),
     'the chosen file AND the other claimant must both be named');
@@ -2669,7 +2820,7 @@ test('ADR-041 S7: the selection is byte-identical under a non-C locale', () => {
   const u = runMode(['select-active', mk()], { LC_ALL: 'en_US.UTF-8', LANG: 'en_US.UTF-8' });
   assert.equal(u.code, c.code);
   assert.equal(u.out, c.out, 'same repo, two locales, one answer');
-  assert.equal(activeLine(c.out), 'active file="Qlan-sprint-6.md" identity="Sprint 6"',
+  assert.equal(activeLine(c.out), 'active file="Qlan-sprint-6.md" identity="Sprint 6" status="In progress"',
     'byte order, not collation: `Q` precedes `p`');
 });
 
@@ -2692,7 +2843,10 @@ test('ADR-041 R1: dashboard.sh pins and exports `LC_ALL=C` — locale independen
 // S8 — §2's stated RESIDUAL, accepted as a loud failure. An unscheduled board carrying neither token
 // resolves EMPTY: not eligible (safe), but it loses the regained check and says so on every run.
 test('ADR-041 S8: `sprint-backlog.md` with neither token resolves EMPTY, is ineligible, and stays loud', () => {
-  const { sprintsDir } = sprintsFixture({ plans: { 'sprint-backlog.md': prosePlan('# Unscheduled work') } });
+  // `banner: null` — and note this is ADR-047 §1.2's BOTH case: `unresolved` in the identity field AND
+  // in the status field, told apart by POSITION and never inferred one from the other. Carve-out 1
+  // covers the unresolved IDENTITY, so `sprint-status-missing` must stay silent here too.
+  const { sprintsDir } = sprintsFixture({ plans: { 'sprint-backlog.md': prosePlan('# Unscheduled work', null) } });
   const id = runMode(['identity', join(sprintsDir, 'sprint-backlog.md')]);
   assert.equal(id.code, 3);
   assert.equal(id.out, '', 'unresolved prints NOTHING — it never guesses');
@@ -2700,7 +2854,9 @@ test('ADR-041 S8: `sprint-backlog.md` with neither token resolves EMPTY, is inel
   const sel = runMode(['select-active', sprintsDir]);
   assert.equal(sel.code, 3);
   assert.equal(activeLine(sel.out), 'active none');
-  assert.ok(candidates(sel.out).includes('candidate file="sprint-backlog.md" identity="unresolved"'));
+  assert.ok(candidates(sel.out).includes('candidate file="sprint-backlog.md" identity="unresolved" status="unresolved"'));
+  assert.equal(facts(sel.out).filter((f) => f.startsWith('drift')).length, 0,
+    'carve-out 1 covers the unresolved IDENTITY as well as the `Backlog` one');
 
   const b = run(fixture({
     planName: 'sprint-backlog.md',
@@ -2746,7 +2902,7 @@ test('ADR-041: the historic one-argument board render is unchanged; a bad subcom
   });
   const { code, out } = run(p);
   assert.equal(code, 0);
-  assert.ok(out.startsWith('⟦fkit-dashboard v1⟧\n⟦BOARD⟧'));
+  assert.ok(out.startsWith('⟦fkit-dashboard v2⟧\n⟦BOARD⟧'));
   assert.equal(facts(out).filter((f) => f.startsWith('drift')).length, 0);
   // The new sibling read must stay silent when the plan's identity is unshared — otherwise every
   // exact-stdout fixture in this file would have moved.
@@ -2781,11 +2937,692 @@ test('ADR-041 R5: an unreadable candidate resolves to `unresolved`, never to a w
     assert.equal(id.code, 3);
 
     const sel = runMode(['select-active', sprintsDir]);
-    assert.ok(candidates(sel.out).includes('candidate file="sprint-1.md" identity="unresolved"'),
+    // ⚠️ REPINNED BY ADR-047, AND THIS SITE IS MISSING FROM §2.4's LIST OF EIGHT — it is the ninth
+    // exact-equality `activeLine` assertion, and it breaks TWICE over: the added `status=` field, and
+    // the fixture going ineligible without a banner. Measured while building `0338`.
+    // ⭐ The unreadable file is `unresolved` in BOTH fields: `[ -r ]` fails ahead of the identity ladder
+    // AND ahead of the line-3 read, so neither invents an answer about a file it could not open.
+    assert.ok(candidates(sel.out).includes('candidate file="sprint-1.md" identity="unresolved" status="unresolved"'),
       'and it is listed as unresolved, so §1.6 still names it');
-    assert.equal(activeLine(sel.out), 'active file="sprint-3.md" identity="Sprint 3"',
+    assert.equal(activeLine(sel.out), 'active file="sprint-3.md" identity="Sprint 3" status="In progress"',
       'an unreadable file must not be able to win the selection');
   } finally {
     chmodSync(victim, 0o644);   // or the harness cleanup cannot remove it
   }
+});
+
+// --- 0271 items 4 / 5a / 5b — select-active's unpinned halves (0265 residuals A1 and A2) -----------
+//
+// ⚠️ ASSERTION IDIOM for all three, and it is NOT the S1–S8 idiom above (owner ruling 2026-09-10,
+// verbatim "Field-tolerant"): match on the FIELDS under test with a prefix or a regex, NEVER on
+// whole-line equality. 0338 extends this mode's output grammar deliberately — `candidate` lines gain a
+// `status=` field, and a separate single-board line appears — and an exact-equality guard would red for
+// that deliberate change. Accepted cost, named by the owner: a stray EXTRA field on a line these tests
+// read would not be caught.
+//
+// ⚠️ CORRECTION, made when 0338 shipped: this note predicted the new line would be `chosen file=`.
+// ADR-047 §2.3a named it `board`, and `chosen=` stayed what it always was — a FIELD on the two
+// ambiguity drift records. The prediction is withdrawn; the idiom it justifies is unchanged, and the
+// three tests below passed untouched.
+
+// 0271/4 — the `[ -f ]` no-match guard on the candidate glob (0265 finding R4, residual A1).
+// With no plan at depth 1, `"$1"/*.md` matches nothing and stays LITERAL; the guard at
+// `dashboard.sh:242` is what stops `<dir>/*.md` becoming a record. Measured in 0265: removing it left
+// the whole suite green at 141/141.
+//
+// ⚠️ DO NOT CONFLATE THE TWO HALVES OF THIS CONSTRUCT, and do not read this test as "globbing is
+// untested". The dangerous half — the `set +f` / `set -f` glob-enable wrapper — IS already pinned:
+// removing it reds 7 tests (re-measured in 0265). Only the `[ -f ]` no-match half is unpinned, and its
+// blast radius when unguarded is COSMETIC NOISE (one phantom candidate line), not a mis-selection: the
+// selection itself stays correct at `active none`, exit 3.
+//
+// ⚠️ The brief additionally claimed the unguarded case emits a `head:` stderr line. That half is STALE:
+// 0265's R5 fix put `[ -r "$1" ] || return 0` ahead of the `head`, so resolve_identity returns before
+// `head` ever runs. The phantom-candidate half stands, and it is what this test pins.
+//
+// (`sprintsFixture` pre-creates `sprints/done/`, so the directory is empty of `.md` AT DEPTH 1 rather
+// than empty outright. That is the right seam — the glob is depth-1.)
+test('ADR-041 0271/4: an empty sprints/ lists NO candidate — the glob no-match guard', () => {
+  const { sprintsDir } = sprintsFixture({ plans: {} });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(
+    candidates(out).length,
+    0,
+    `no plan at depth 1 means no candidate. Candidates: ${JSON.stringify(candidates(out))}`,
+  );
+  assert.ok(
+    !candidates(out).some((l) => l.includes('*.md')),
+    `the UNEXPANDED glob must never be reported as a candidate. Candidates: ${JSON.stringify(candidates(out))}`,
+  );
+  assert.match(activeLine(out), /^active none\b/);
+  assert.equal(code, 3);
+});
+
+// 0271/5a — a plan under `sprints/done/` is never a candidate (ADR-041 §1.1; 0265 finding R7,
+// residual A2, half a).
+//
+// ⚠️ WHAT ACTUALLY IMPLEMENTS THE EXCLUSION — and the brief's account of it is wrong, so this comment
+// is the correction. There is NO exclusion code to neutralize: the exclusion is EMERGENT from the
+// DEPTH-1 glob at `dashboard.sh:241` (`"$1"/*.md`), whose own inline comment says exactly that, and
+// 0338's brief says the same of `cancelled/` ("likewise never seen by construction"). Owner ruling
+// 2026-09-10, verbatim "Widen the glob to depth 2": the red-proof for this test widens that glob to
+// `"$1"/*/*.md`, which is faithful to the real mechanism. The BEHAVIOR pinned here is real and
+// probe-confirmed; only the brief's description of the mechanism was wrong.
+//
+// ⚠️ THIS IS AN ABSENCE-ASSERTION, SO IT CARRIES ITS OWN POSITIVE CONTROL AND ITS OWN FIXTURE CHECK.
+// Round-1 review R1 measured the defect: with `plans: {}` this mode's stdout is BYTE-IDENTICAL whether
+// or not `done/sprint-9.md` exists, so deleting the `writeFileSync` below left all three assertions
+// green and the test collapsed into a duplicate of `0271/4`. Re-measured here before the fix: 148/148
+// green with the write deleted. Two additions answer that, and neither is decoration:
+//
+//   (a) THE DEPTH-1 CONTROL (`control-depth-1.md`) — asserted PRESENT in the candidate list. It proves
+//       the glob, the fixture directory and the candidate printer are all LIVE, so the absence of
+//       `sprint-9.md` means "excluded", not "nothing ran". Owner ruling 2026-09-10, verbatim "Add a
+//       depth-1 sibling".
+//   (b) THE FIXTURE PRECONDITION (`existsSync`) — the ONLY thing that can red on the write being
+//       deleted, precisely BECAUSE the exclusion is invisible to stdout. No assertion on `out` can do
+//       it; that is the behaviour, not a gap in the assertions.
+//
+// ⚠️ THE CONTROL IS DELIBERATELY INELIGIBLE, AND IT GOES ON THE CANDIDATE LINE, NEVER THE ACTIVE ONE.
+// `mode_select_active` prints candidates for EVERY record, eligible or not, so an ineligible control is
+// still a positive control. A control named `sprint-9.md` at depth 1 would instead resolve via the
+// filename rung, become ELIGIBLE, and turn `active none` into `active file="sprint-9.md"` — pinning the
+// wrong thing.
+//
+// ⚠️ CORRECTION, made when 0338 shipped: this note's second half said `prosePlan` carries no status, so
+// the control would stay ineligible under 0338 for a DIFFERENT reason. `prosePlan` now carries the
+// suite's default `🔄 In progress` banner (see DEFAULT_BANNER), so that reason is GONE. The test still
+// holds, on the FIRST reason alone: `control-depth-1` matches neither identity rung, so it is
+// ineligible by IDENTITY and `active none` survives. The status half of the claim is withdrawn.
+//
+// Per residual U1 the control matches the `file="…"` FIELD by prefix — never whole-line equality — so
+// 0338's added `status=` field cannot red it.
+test('ADR-041 0271/5a: a plan under sprints/done/ is never a candidate', () => {
+  const { sprintsDir } = sprintsFixture({ plans: {} });
+  writeFileSync(join(sprintsDir, 'control-depth-1.md'), prosePlan());
+  writeFileSync(join(sprintsDir, 'done', 'sprint-9.md'), prosePlan('# Sprint 9 — a closed sprint'));
+  assert.ok(
+    existsSync(join(sprintsDir, 'done', 'sprint-9.md')),
+    'the excluded plan must actually exist, or this test asserts the absence of a file nobody wrote',
+  );
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.ok(
+    candidates(out).some((l) => /^candidate file="control-depth-1\.md"/.test(l)),
+    `POSITIVE CONTROL: a depth-1 plan MUST be listed, or the absence below proves nothing. Candidates: ${JSON.stringify(candidates(out))}`,
+  );
+  assert.ok(
+    !candidates(out).some((l) => /^candidate file="sprint-9\.md"/.test(l)),
+    `a closed sprint plan must never reach candidacy. Candidates: ${JSON.stringify(candidates(out))}`,
+  );
+  assert.match(activeLine(out), /^active none\b/);
+  assert.equal(code, 3);
+});
+
+// 0271/5b — a plan file literally named `identity.md` still renders as a board (0265 finding R7,
+// residual A2, half b). A subcommand is recognised ONLY in the TWO-argument form (`dashboard.sh:304`),
+// which is what stops the CLI's `identity` MODE WORD and a plan FILE of that name from colliding.
+// Verified correct by probe in 0265; nothing pinned it, because no test used the filename.
+test('ADR-041 0271/5b: a plan file named identity.md still renders as a board, not a mode word', () => {
+  const p = fixture({
+    planName: 'identity.md',
+    plan: plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |']),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha' }) },
+  });
+  const { code, out } = run(p);
+  assert.equal(code, 0, 'one argument is a board render, never a usage error');
+  assert.ok(out.startsWith('⟦fkit-dashboard v2⟧'), 'a board envelope, not a bare identity value');
+  assert.ok(out.includes('⟦BOARD⟧') && out.includes('⟦FACTS⟧'), 'the full board is rendered');
+});
+
+// ===================================================================================================
+// ADR-047 — a sprint has an explicit status, and "current" means EVERY `In progress` sprint (task 0338).
+// P1–P17 are the ADR's own "Required tests — the decision is not satisfied without these".
+//
+// ⚠️ READ THE TWO `unresolved`s BY POSITION (ADR-047 §1.2). `identity="unresolved"` means the identity
+// ladder returned nothing; `status="unresolved"` means line 3 carried no banner, or a malformed one.
+// They are independent, and a board can be one, the other, both, or neither.
+
+// Line-3 banners, written once so a typo cannot make a fixture quietly mean something else.
+const BANNER = {
+  backlog: '> ## 🔲 Backlog — 2026-01-01.',
+  inprogress: '> ## 🔄 In progress — 2026-01-01.',
+  done: '> ## ✅ Done — 2026-01-01. Closed by /fkit-sprint-done.',
+  cancelled: '> ## ⛔ Cancelled — 2026-01-01. Closed by /fkit-sprint-cancelled — no longer needed.',
+  closed: '> ## 🔒 CLOSED — 2026-08-13. Superseded by [Sprint 8](../sprint-8.md).',
+};
+// A RENDERABLE board (it has a `## Status` table) with an explicit banner — needed wherever a test
+// exercises the render path as well as `select-active`.
+const boardPlan = (title, banner) =>
+  plan(['| 🔲 Backlog | 1 | Alpha | [`a.md`](../tasks/backlog/a.md) |'], { title, banner });
+const ALPHA = { 'backlog/a.md': brief({ title: 'Alpha', sprint: 'Backlog', status: '🔲 Backlog' }) };
+
+// P1 — §6.3 row 1: plural-current is LEGAL. Two different identities both `In progress` is not drift.
+test('ADR-047 P1: two `In progress` sprints are both active, ascending, with ONE board line and NO drift', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-8.md': prosePlan('# Eight', BANNER.inprogress),
+      'sprint-9.md': prosePlan('# Nine', BANNER.inprogress),
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  assert.deepEqual(activeLines(out), [
+    'active file="sprint-8.md" identity="Sprint 8" status="In progress"',
+    'active file="sprint-9.md" identity="Sprint 9" status="In progress"',
+  ]);
+  // ⭐ NO TRAILING SPACE in the prefix — same reason as `boardLine` above (review R10, owner ruling
+  // AE1): a bare `board`, or a `board\tfile="…"` if the format string itself broke, must not slip past
+  // THIS cardinality count either. It cannot over-match — see the reason recorded at `boardLine`.
+  assert.equal(selectLines(out).filter((l) => l.startsWith('board')).length, 1, 'EXACTLY one board line');
+  assert.equal(boardLine(out),
+    'board file="sprint-8.md" identity="Sprint 8" status="In progress" reason="lowest-ordered"');
+  assert.equal(facts(out).length, 0, 'plural-current is legal — zero drift facts');
+});
+
+// P2 — OQ-3 + owner ruling V3: `🔒 CLOSED` is a PERMANENT compat rung, read forever and written never.
+test('ADR-047 P2: a legacy `🔒 CLOSED` board reads as `Done`, and is never active and never the board', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-6.md': prosePlan('# Six', BANNER.closed),
+      'sprint-8.md': prosePlan('# Eight', BANNER.inprogress),
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  assert.equal(activeLine(out), 'active file="sprint-8.md" identity="Sprint 8" status="In progress"');
+  assert.equal(boardLine(out),
+    'board file="sprint-8.md" identity="Sprint 8" status="In progress" reason="lowest-ordered"');
+  assert.ok(candidates(out).includes('candidate file="sprint-6.md" identity="Sprint 6" status="Done"'),
+    'the legacy banner resolves to the `Done` TOKEN — it is a grammar member, not a special case');
+});
+
+// P3 — §2 + §7 + §7.2. ⛔ NOT OPTIONAL: the fixture helpers now default to a banner, so this is the ONE
+// test standing between a silent regression and a render path that stops reporting a missing status.
+// ⛔ REACH IS ASSERTED TWICE, by each mode's own route.
+test('ADR-047 P3: an eligible board with NO banner is never active, and `sprint-status-missing` reaches beat 6 by BOTH routes', () => {
+  const { sprintsDir, planPath } = sprintsFixture({
+    plans: { 'sprint-2.md': boardPlan('# Sprint 2 — Test', null) },
+    briefs: ALPHA,
+  });
+  const sel = runMode(['select-active', sprintsDir]);
+  assert.equal(sel.code, 3, 'no banner → never eligible → no active sprint at all');
+  assert.equal(activeLine(sel.out), 'active none');
+  assert.ok(candidates(sel.out).includes('candidate file="sprint-2.md" identity="Sprint 2" status="unresolved"'));
+  // Route 1 — `select-active`: the record appears in ⟦FACTS⟧, and the mode has NO roll-up (§7.2).
+  assert.ok(facts(sel.out).includes('drift sprint-status-missing plan="sprint-2.md"'));
+  assert.ok(!sel.out.includes('—  of '), 'select-active has no roll-up and must not grow one');
+
+  // Route 2 — the render path: ⟦FACTS⟧ *and* the roll-up's drift clause.
+  const b = run(planPath('sprint-2.md'));
+  assert.equal(b.code, 0);
+  assert.ok(facts(b.out).includes('drift sprint-status-missing plan="sprint-2.md"'));
+  assert.ok(rollup(b.out).includes('on the plan itself'),
+    'a drift kind that does not reach the roll-up clause is invisible to beat 6');
+});
+
+// P4 — §7 carve-out 1, the false-drift trap. `ai-agents/sprints/backlog.md` has plain prose at line 3
+// and will NEVER carry a banner; without the carve-out it reports drift on every run, forever.
+// ⚠️ The carve-out is read in IDENTITY-space (§1.2). Read in status-space it would swallow the drift
+// entirely, since every banner-less board has `unresolved` STATUS — P3 above is the backstop for that.
+test('ADR-047 P4: a lone `backlog.md` emits ZERO drift — carve-out 1, in identity-space', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: { 'backlog.md': prosePlan('# Backlog — the default home for unsprinted task briefs', null) },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 3);
+  assert.equal(activeLine(out), 'active none');
+  assert.ok(candidates(out).includes('candidate file="backlog.md" identity="Backlog" status="unresolved"'));
+  assert.equal(facts(out).length, 0, 'ZERO facts — not "no missing-status drift", none at all');
+});
+
+// P5 — §6: the board is the LOWEST-ordered eligible sprint. ⚠️ With the integer comparator unchanged
+// this also proves `10` did not sort below `9` — a byte comparison would make `sprint-10.md` the board.
+test('ADR-047 P5: the `board` is the LOWEST-ordered `In progress` sprint, and 10 does not sort below 9', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-4.md': prosePlan('# Four', BANNER.inprogress),
+      'sprint-9.md': prosePlan('# Nine', BANNER.inprogress),
+      'sprint-10.md': prosePlan('# Ten', BANNER.inprogress),
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  assert.equal(boardLine(out),
+    'board file="sprint-4.md" identity="Sprint 4" status="In progress" reason="lowest-ordered"');
+  assert.deepEqual(activeLines(out).map((l) => l.match(/identity="([^"]+)"/)[1]),
+    ['Sprint 4', 'Sprint 9', 'Sprint 10'], 'ascending by identity, integer not text');
+});
+
+// P6 — §2.1 + OQ-1's override half. The marker moves the BOARD; it does not change the ACTIVE set.
+test('ADR-047 P6: `⭐ ACTIVE BOARD` overrides the lowest-ordered default, and every active line still prints', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-4.md': prosePlan('# Four', BANNER.inprogress),
+      'sprint-9.md': prosePlan('# Nine', `${BANNER.inprogress} ⭐ ACTIVE BOARD`),
+      'sprint-10.md': prosePlan('# Ten', BANNER.inprogress),
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  assert.equal(boardLine(out),
+    'board file="sprint-9.md" identity="Sprint 9" status="In progress" reason="active-marker"');
+  assert.equal(activeLines(out).length, 3, 'the override changes the BOARD, never the active set');
+  assert.equal(facts(out).length, 0, 'one marker on one `In progress` board is the designed case, not drift');
+});
+
+// P7 — §7's `ambiguous-active-marker`. ⚠️ ASSERT ALL THREE: the fallback is worthless if the flag can be
+// dropped, and the flag is worthless if it never reaches beat 6.
+// ⛔ NO ROLL-UP ASSERTION HERE. This is §7.2's ONE `⟦FACTS⟧`-only fact — it has no render-path route at
+// all, because it needs LINE 3 of every sibling board and the render path reads sibling FIRST LINES only.
+test('ADR-047 P7: two `⭐ ACTIVE BOARD` claimants → drift naming every claimant, AND a lowest-ordered fallback', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-4.md': prosePlan('# Four', BANNER.inprogress),
+      'sprint-9.md': prosePlan('# Nine', `${BANNER.inprogress} ⭐ ACTIVE BOARD`),
+      'sprint-10.md': prosePlan('# Ten', `${BANNER.inprogress} ⭐ ACTIVE BOARD`),
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  // 1 — the fallback: an ambiguous marker does NOT win; the lowest-ordered default stands.
+  assert.equal(boardLine(out),
+    'board file="sprint-4.md" identity="Sprint 4" status="In progress" reason="lowest-ordered"');
+  // 2 + 3 — the flag names every claimant, and it reaches beat 6 through ⟦FACTS⟧.
+  assert.ok(facts(out).includes('drift ambiguous-active-marker chosen="sprint-4.md" also="sprint-9.md, sprint-10.md"'),
+    `every claimant must be named, not merely that there was ambiguity. Facts: ${JSON.stringify(facts(out))}`);
+  assert.ok(!out.includes('—  of '), 'and it must NOT invent a roll-up to reach beat 6 through');
+});
+
+// P8 — §2.3's empty case and §5. Every candidate is still listed, WITH its status.
+test('ADR-047 P8: no `In progress` board anywhere → `active none`, exit 3, every candidate with its status', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'backlog.md': prosePlan('# Backlog — unsprinted', null),
+      'sprint-3.md': prosePlan('# Three', BANNER.backlog),
+      'sprint-4.md': prosePlan('# Four', BANNER.done),
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 3);
+  assert.equal(activeLine(out), 'active none');
+  assert.ok(!out.includes('board file='), '`active none` is a sentinel — no board line may follow it');
+  assert.deepEqual(candidates(out), [
+    'candidate file="backlog.md" identity="Backlog" status="unresolved"',
+    'candidate file="sprint-3.md" identity="Sprint 3" status="Backlog"',
+    'candidate file="sprint-4.md" identity="Sprint 4" status="Done"',
+  ]);
+  assert.equal(facts(out).length, 0, 'a scoped-but-unstarted board and a finished one are both well-formed');
+});
+
+// P9 — §2's recognizer and §2.3a's new `status <plan>` mode, one board per banner form.
+// ⚠️ It mirrors `identity`'s value-not-rendering contract: ONE token, NO `⟦…⟧` markers, so a caller
+// reads it with a single command substitution.
+test('ADR-047 P9: `status <plan>` prints one token per banner form; `🔒 CLOSED` → `Done`; no banner → exit 3', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-1.md': prosePlan('# One', BANNER.backlog),
+      'sprint-2.md': prosePlan('# Two', BANNER.inprogress),
+      'sprint-3.md': prosePlan('# Three', BANNER.done),
+      'sprint-4.md': prosePlan('# Four', BANNER.cancelled),
+      'sprint-5.md': prosePlan('# Five', BANNER.closed),
+      'sprint-6.md': prosePlan('# Six', null),
+    },
+  });
+  const expected = {
+    'sprint-1.md': 'Backlog',
+    'sprint-2.md': 'In progress',
+    'sprint-3.md': 'Done',
+    'sprint-4.md': 'Cancelled',
+    'sprint-5.md': 'Done',
+  };
+  for (const [f, want] of Object.entries(expected)) {
+    const r = runMode(['status', join(sprintsDir, f)]);
+    assert.equal(r.code, 0, f);
+    assert.equal(r.out, `${want}\n`, f);
+    assert.ok(!r.out.includes('⟦'), 'a VALUE, not a rendering — no envelope markers');
+  }
+  const none = runMode(['status', join(sprintsDir, 'sprint-6.md')]);
+  assert.equal(none.code, 3, 'unresolved is exit 3');
+  assert.equal(none.out, '', 'and it prints NOTHING — it never guesses');
+  assert.equal(runMode(['status', join(sprintsDir, 'nope.md')]).code, 1, 'no such file is a usage error');
+});
+
+// P10 — §2's STRICT-POSITION rule, and the tolerance it buys. A `> ## ` banner deeper in a board is not
+// a status, does not make the board ambiguous, and emits NO drift. That is the whole reason strict
+// position was chosen over "the first line of the leading blockquote".
+test('ADR-047 P10: only LINE 3 is read — a second banner further down the file is not a status', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-3.md': `# Three\n\n${BANNER.backlog}\n>\n\nBody prose.\n\n${BANNER.inprogress}\n\nMore prose.\n`,
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 3, 'line 3 says `Backlog`, so nothing is active — the deeper line is not read');
+  assert.equal(activeLine(out), 'active none');
+  assert.ok(candidates(out).includes('candidate file="sprint-3.md" identity="Sprint 3" status="Backlog"'));
+  assert.equal(facts(out).length, 0, 'a second `> ## ` line is tolerated, not drift');
+  assert.equal(runMode(['status', join(sprintsDir, 'sprint-3.md')]).out, 'Backlog\n');
+});
+
+// P11 — §7 carve-out 2's assignment. `sprint-terminal-not-archived` is the RENDER PATH's, never
+// `select-active`'s, and it reaches the roll-up because on this path a roll-up exists.
+test('ADR-047 P11: a `Done` board still at the top of sprints/ is `sprint-terminal-not-archived` — render path only', () => {
+  const { sprintsDir, planPath } = sprintsFixture({
+    plans: { 'sprint-8.md': boardPlan('# Sprint 8 — Test', BANNER.done) },
+    briefs: ALPHA,
+  });
+  const b = run(planPath('sprint-8.md'));
+  assert.equal(b.code, 0);
+  assert.ok(facts(b.out).includes('drift sprint-terminal-not-archived plan="sprint-8.md" status="Done"'));
+  assert.ok(rollup(b.out).includes('on the plan itself'), 'render-path drift must reach the roll-up clause');
+
+  const sel = runMode(['select-active', sprintsDir]);
+  assert.equal(facts(sel.out).filter((f) => f.includes('terminal-not-archived')).length, 0,
+    'a depth-1 mode must not emit a fact about archiving — carve-out 2');
+});
+
+// P12 — §6.4's FILTER-FIRST rule and §8.2's rule-survives / set-changes split. Same identity, MIXED
+// status. ⛔ The `Done` board must never win selection, whatever the byte order says — tie-break-first
+// would reintroduce the Sprint 5 failure (a finished board reported as active) through the side door.
+test('ADR-047 P12: mixed-status same-identity → filter first, so the `In progress` board wins even against byte order', () => {
+  const { sprintsDir, planPath } = sprintsFixture({
+    plans: {
+      'plan-sprint-6.md': boardPlan('# Sprint 6 — done twin', BANNER.done),
+      'sprint-6.md': boardPlan('# Sprint 6 — live twin', BANNER.inprogress),
+    },
+    briefs: ALPHA,
+  });
+  const sel = runMode(['select-active', sprintsDir]);
+  assert.equal(sel.code, 0);
+  // `plan-` sorts BEFORE `sprint-` in byte order, so a tie-break-first implementation picks the Done board.
+  assert.equal(activeLine(sel.out), 'active file="sprint-6.md" identity="Sprint 6" status="In progress"');
+  assert.equal(boardLine(sel.out),
+    'board file="sprint-6.md" identity="Sprint 6" status="In progress" reason="lowest-ordered"');
+  // The DRIFT is genuinely untouched: status decides which board is chosen, not whether the collision
+  // is reported. ⛔ And it lands in ⟦FACTS⟧, not a roll-up.
+  assert.ok(facts(sel.out).includes('drift ambiguous-active-sprint identity="Sprint 6" chosen="sprint-6.md" also="plan-sprint-6.md"'),
+    `Facts: ${JSON.stringify(facts(sel.out))}`);
+  assert.ok(!sel.out.includes('—  of '));
+
+  // The render path's SEPARATELY-NAMED counterpart — ⛔ not merged with the record above; `plan=` and
+  // `chosen=` state different facts, and §7's table foot rests on that.
+  const b = run(planPath('sprint-6.md'));
+  assert.ok(facts(b.out).includes('drift ambiguous-plan-identity identity="Sprint 6" plan="sprint-6.md" also="plan-sprint-6.md"'));
+  assert.ok(rollup(b.out).includes('on the plan itself'));
+
+  // ...and the Done twin, sitting at depth 1, additionally trips the archival drift.
+  const d = run(planPath('plan-sprint-6.md'));
+  assert.ok(facts(d.out).includes('drift sprint-terminal-not-archived plan="plan-sprint-6.md" status="Done"'));
+});
+
+// P13 — §7's emitter column and carve-out 2's CORRECTED three-drift list.
+// ⚠️ "or to an explicit sweep" was struck from the ADR: no sweep mode exists and none is created here.
+test('ADR-047 P13: `sprint-archived-not-terminal` and `sprint-status-location-mismatch` are render-path facts', () => {
+  const stale = fixture({
+    planDir: 'sprints/done',
+    planName: 'sprint-5.md',
+    plan: boardPlan('# Sprint 5 — archived but open', BANNER.inprogress),
+    briefs: ALPHA,
+  });
+  const a = run(stale);
+  assert.equal(a.code, 0);
+  assert.ok(facts(a.out).includes('drift sprint-archived-not-terminal plan="sprint-5.md" location="done/"'),
+    `Facts: ${JSON.stringify(facts(a.out))}`);
+  assert.ok(rollup(a.out).includes('on the plan itself'));
+
+  const mismatch = fixture({
+    planDir: 'sprints/done',
+    planName: 'sprint-6.md',
+    plan: boardPlan('# Sprint 6 — cancelled, filed under done', BANNER.cancelled),
+    briefs: ALPHA,
+  });
+  const m = run(mismatch);
+  assert.equal(m.code, 0);
+  assert.ok(facts(m.out).includes('drift sprint-status-location-mismatch plan="sprint-6.md" status="Cancelled" location="done/"'),
+    `Facts: ${JSON.stringify(facts(m.out))}`);
+  assert.ok(rollup(m.out).includes('on the plan itself'));
+  assert.equal(facts(m.out).filter((f) => f.includes('archived-not-terminal')).length, 0,
+    'a Cancelled board IS terminal — the mismatch is the finding, not "not terminal"');
+
+  // ⛔ And neither is `select-active`'s to emit: it is depth-1 and structurally cannot see inside done/.
+  const { sprintsDir } = sprintsFixture({ plans: { 'sprint-8.md': prosePlan('# Eight', BANNER.inprogress) } });
+  writeFileSync(join(sprintsDir, 'done', 'sprint-5.md'), prosePlan('# Five', BANNER.inprogress));
+  assert.ok(existsSync(join(sprintsDir, 'done', 'sprint-5.md')),
+    'the archived board must actually exist, or this asserts the absence of a file nobody wrote');
+  const sel = runMode(['select-active', sprintsDir]);
+  assert.equal(facts(sel.out).length, 0, 'no archival fact, and no phantom candidate from depth 2');
+});
+
+// P14 — ⛔ A SILENT-REGRESSION GUARD FOR §6.1's MECHANICAL CHANGE. ⚠️ IT IS NOT THE ONLY ONE, AND AN
+// EARLIER VERSION OF THIS COMMENT CLAIMED IT WAS — withdrawn (review R8). ⭐ MEASURED: applying the trap
+// below to a scratch copy reds FOUR tests — `ADR-041 S6`, `ADR-041 S7`, this test, and `ADR-047 P18`.
+// ⛔ So none of the four is redundant with this one, and none may be deleted as such.
+//
+// The selection site is a FUNCTION CALL, not an operator, so "invert the comparison" admits two
+// readings and one of them silently breaks ADR-041 §1.5:
+//   ⛔ `! identity_gt "$_i" "$_best_id"`  → `<=` — a tie REPLACES the incumbent → first-wins becomes
+//                                          LAST-wins → this fixture yields `sprint-6.md`.
+//   ⭐ `identity_gt "$_best_id" "$_i"`    → strictly less, ties keep the first → `plan-sprint-6.md`.
+//
+// ⛔ THE DIRECTION FIXTURE (P5) CANNOT DISCRIMINATE — measured: trap and swap BOTH pick `Sprint 4`
+// there, because a tie never arises. A tie only arises when two files claim ONE identity, which is
+// exactly this fixture. And the failure is SILENT, because `also=` still names every claimant either way.
+test('ADR-047 P14: one identity, two files, both `In progress` → the FIRST in byte order wins the tie', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'plan-sprint-6.md': prosePlan('# Six — plan', BANNER.inprogress),
+      'sprint-6.md': prosePlan('# Six — sprint', BANNER.inprogress),
+    },
+  });
+  const { code, out } = runMode(['select-active', sprintsDir]);
+  assert.equal(code, 0);
+  assert.equal(activeLine(out), 'active file="plan-sprint-6.md" identity="Sprint 6" status="In progress"',
+    'ADR-041 §1.5: `p` precedes `s` under LC_ALL=C, and a tie keeps the FIRST candidate');
+  assert.equal(boardLine(out),
+    'board file="plan-sprint-6.md" identity="Sprint 6" status="In progress" reason="lowest-ordered"');
+  assert.equal(activeLines(out).length, 1, 'one identity is ONE active line, however many files claim it');
+  assert.ok(facts(out).includes('drift ambiguous-active-sprint identity="Sprint 6" chosen="plan-sprint-6.md" also="sprint-6.md"'));
+});
+
+// P15 — §7's `active-marker-on-non-active`, which previously had no test at all.
+// ⛔ Reach asserted per §7.2, BOTH routes.
+test('ADR-047 P15: `⭐ ACTIVE BOARD` on a non-`In progress` banner is drift, by both routes, and wins nothing', () => {
+  const { sprintsDir, planPath } = sprintsFixture({
+    plans: {
+      'sprint-3.md': boardPlan('# Sprint 3 — scoped', `${BANNER.backlog} ⭐ ACTIVE BOARD`),
+      'sprint-4.md': boardPlan('# Sprint 4 — finished', `${BANNER.done} ⭐ ACTIVE BOARD`),
+    },
+    briefs: ALPHA,
+  });
+  const sel = runMode(['select-active', sprintsDir]);
+  assert.equal(sel.code, 3, 'a marker cannot promote a board that is not `In progress`');
+  assert.equal(activeLine(sel.out), 'active none');
+  assert.ok(!sel.out.includes('board file='));
+  // Route 1 — ⟦FACTS⟧, no roll-up.
+  assert.ok(facts(sel.out).includes('drift active-marker-on-non-active plan="sprint-3.md" status="Backlog"'));
+  assert.ok(facts(sel.out).includes('drift active-marker-on-non-active plan="sprint-4.md" status="Done"'));
+  assert.ok(!sel.out.includes('—  of '));
+  // Route 2 — the render path: ⟦FACTS⟧ *and* the roll-up's drift clause, for either board.
+  for (const [f, st] of [['sprint-3.md', 'Backlog'], ['sprint-4.md', 'Done']]) {
+    const b = run(planPath(f));
+    assert.ok(facts(b.out).includes(`drift active-marker-on-non-active plan="${f}" status="${st}"`),
+      `Facts for ${f}: ${JSON.stringify(facts(b.out))}`);
+    assert.ok(rollup(b.out).includes('on the plan itself'));
+  }
+});
+
+// P16 — §2's TIGHTENED recognizer. ⚠️ The date is part of the recognizer, not just of the grammar above
+// it: §1 has the producer writing `🔲 Backlog` and `🔄 In progress` BY HAND, the exact path that drops a
+// date, so a loose recognizer silently accepts a banner the grammar forbids.
+// ⛔ `missing` and `malformed` must stay DISTINGUISHABLE — "the producer typed it wrong" must never
+// read as "nobody typed it".
+test('ADR-047 P16: a malformed banner is `unresolved` + `sprint-status-malformed` — never `missing`, and never carved out', () => {
+  const bad = {
+    'sprint-1.md': '> ## 🔄 In progress',
+    'sprint-2.md': '> ## 🔄 In progress arbitrary trailing garbage',
+    'sprint-3.md': '> ## ✅ Done — not-a-date.',
+    'sprint-4.md': '> ## ✅ Done — 2026-09-10',
+  };
+  const plans = {};
+  for (const [f, line3] of Object.entries(bad)) plans[f] = boardPlan(`# ${f}`, line3);
+  // ⛔ AND a `Backlog`-IDENTITY board with a malformed banner DOES emit it — the carve-out is
+  // `sprint-status-missing`-only (§2, §7.1). A malformed banner is not a well-formed board.
+  plans['backlog.md'] = prosePlan('# Backlog — unsprinted', '> ## 🔲 Backlog — nope.');
+  const { sprintsDir, planPath } = sprintsFixture({ plans, briefs: ALPHA });
+
+  const sel = runMode(['select-active', sprintsDir]);
+  assert.equal(sel.code, 3, 'a malformed banner is never eligible');
+  assert.equal(activeLine(sel.out), 'active none');
+  assert.equal(facts(sel.out).filter((f) => f.includes('sprint-status-missing')).length, 0,
+    '⛔ the two must be distinguishable — a typo is not an absence');
+  for (const [f, line3] of Object.entries(bad)) {
+    assert.ok(candidates(sel.out).some((l) => l.startsWith(`candidate file="${f}"`) && l.endsWith('status="unresolved"')), f);
+    assert.ok(facts(sel.out).includes(`drift sprint-status-malformed plan="${f}" line3="${line3}"`),
+      `Facts: ${JSON.stringify(facts(sel.out))}`);
+    assert.equal(runMode(['status', join(sprintsDir, f)]).code, 3, `${f} must not resolve to a status`);
+  }
+  assert.ok(facts(sel.out).includes('drift sprint-status-malformed plan="backlog.md" line3="> ## 🔲 Backlog — nope."'),
+    'the carve-out covers `sprint-status-missing` and NOTHING ELSE');
+
+  // Reach, route 2 — the render path emits it AND sets the roll-up's drift clause.
+  const b = run(planPath('sprint-1.md'));
+  assert.ok(facts(b.out).includes('drift sprint-status-malformed plan="sprint-1.md" line3="> ## 🔄 In progress"'));
+  assert.ok(rollup(b.out).includes('on the plan itself'));
+
+  // ...and the LIVE archived boards — owner ruling V3's permanent compat rung, checked against the real
+  // files rather than a fixture imitating them. ⚠️ `>= 7` not `=== 7`: boards keep being archived, and
+  // the property under test is "every one of them", not "there are exactly seven".
+  //
+  // ⚠️ THE GUARD IS STRUCTURAL, NOT A CONVENIENCE, AND IT IS DELIBERATELY NARROW. `test/prove-red.sh`
+  // runs this whole suite from a COPIED repo root whose `make_repo_copy` copies `claude/`, `test/` and
+  // `package.json` and NOTHING ELSE — there is no `ai-agents/` there by design. Reading the live
+  // archive unguarded throws in that copy, which reds the UNMUTATED copy at gate 0i and disarms
+  // mutations 14 and 32: they would go red for the wrong reason while still reporting success.
+  // ⛔ So the skip is keyed on `ai-agents/` being absent ENTIRELY — the prove-red copy's exact shape.
+  // If `ai-agents/` exists but the archive under it does not, that is a REAL failure and it still reds.
+  const agentsDir = join(REPO, 'ai-agents');
+  if (existsSync(agentsDir)) {
+    const doneDir = join(agentsDir, 'sprints', 'done');
+    assert.ok(existsSync(doneDir), 'ai-agents/ exists but sprints/done/ does not — that is a real defect, not a copy');
+    const archived = readdirSync(doneDir).filter((f) => /^sprint-\d+[a-z]?\.md$/.test(f));
+    assert.ok(archived.length >= 7, `expected the seven archived boards or more, saw ${archived.length}`);
+    for (const f of archived) {
+      const r = runMode(['status', join(doneDir, f)]);
+      assert.equal(r.code, 0, `${f} must parse`);
+      assert.equal(r.out, 'Done\n', `${f}: a legacy 🔒 CLOSED banner reads as Done, forever`);
+    }
+  }
+});
+
+// P17 — ⛔ §2.3's two `⟦SELECT⟧` blocks, BYTE FOR BYTE, envelope included. Exact stdout equality, not a
+// substring match: field order, the single-space separators, `status=` AND `reason=` on the `board`
+// line, and `active none` carrying NO fields at all.
+// ⚠️ The helper this test reads through must not be `find(l => l.startsWith('active'))` — §2.4 — or the
+// plural case passes while returning one line. `activeLine` throws on plural for exactly this reason.
+test('ADR-047 P17: the two `⟦SELECT⟧` blocks of §2.3 are pinned byte for byte', () => {
+  const two = sprintsFixture({
+    plans: {
+      'backlog.md': prosePlan('# Backlog — unsprinted', null),
+      'sprint-8.md': prosePlan('# Eight', BANNER.inprogress),
+      'sprint-9.md': prosePlan('# Nine', BANNER.inprogress),
+    },
+  });
+  const a = runMode(['select-active', two.sprintsDir]);
+  assert.equal(a.code, 0);
+  assert.equal(a.out, [
+    '⟦fkit-dashboard v2⟧',
+    '⟦SELECT⟧',
+    'active file="sprint-8.md" identity="Sprint 8" status="In progress"',
+    'active file="sprint-9.md" identity="Sprint 9" status="In progress"',
+    'board file="sprint-8.md" identity="Sprint 8" status="In progress" reason="lowest-ordered"',
+    'candidate file="backlog.md" identity="Backlog" status="unresolved"',
+    'candidate file="sprint-8.md" identity="Sprint 8" status="In progress"',
+    'candidate file="sprint-9.md" identity="Sprint 9" status="In progress"',
+    '⟦FACTS⟧',
+    '⟦END⟧',
+    '',
+  ].join('\n'));
+
+  const zero = sprintsFixture({
+    plans: {
+      'backlog.md': prosePlan('# Backlog — unsprinted', null),
+      'sprint-7.md': prosePlan('# Seven', BANNER.done),
+    },
+  });
+  const z = runMode(['select-active', zero.sprintsDir]);
+  assert.equal(z.code, 3);
+  assert.equal(z.out, [
+    '⟦fkit-dashboard v2⟧',
+    '⟦SELECT⟧',
+    'active none',
+    'candidate file="backlog.md" identity="Backlog" status="unresolved"',
+    'candidate file="sprint-7.md" identity="Sprint 7" status="Done"',
+    '⟦FACTS⟧',
+    '⟦END⟧',
+    '',
+  ].join('\n'));
+});
+
+// P18 — ⭐ review round 1, finding R6: the `⭐ ACTIVE BOARD` marker crossed with a SAME-IDENTITY
+// collision. Before this test the combination had NO coverage in either direction, which is what R6
+// actually costs — P7 marks two DIFFERENT identities, P14 collides one identity with NO marker.
+//
+// ⛔ DIRECTION A PINS A KNOWN UNDER-COUNT, DELIBERATELY. Two files, one identity, BOTH marked meets
+// §7's literal condition for `ambiguous-active-marker` — "more than one board carries the marker" —
+// and the record does NOT fire. `_n_claim` is counted over `_ordered`, which has already collapsed
+// each identity to one record, so two marked files of one identity count ONCE. ⭐ This is the
+// ACCEPTED RESIDUAL `marker-under-count-on-shared-identity` in this task's review ledger, under the
+// owner's ruling "Residual + add the test (Rec)" — it is recorded behaviour, NOT a bug to fix on
+// sight. Nothing goes unreported: `ambiguous-active-sprint` fires and names BOTH files, and both
+// markers name the SAME sprint, so the answer is unambiguous in a way P7's genuinely is not.
+// ⚠️ If you widen `_n_claim` to count FILES, this assertion is the one that tells you so — re-read the
+// residual's "Re-raise only if" before changing it, and change the residual with it.
+//
+// ⛔ DIRECTION B is the mirror, and it is the build's D7 frontier-move, not a defect: a marker on the
+// file that LOST the byte-order tie is ignored ENTIRELY — claimants are drawn from the printed
+// `active` set, so `_n_claim` is 0 and the board falls back to lowest-ordered.
+test('ADR-047 P18: `⭐ ACTIVE BOARD` on a same-identity collision — the recorded under-count, both directions', () => {
+  // A — BOTH files of the colliding identity are marked.
+  const both = sprintsFixture({
+    plans: {
+      'sprint-4.md': prosePlan('# Four', BANNER.inprogress),
+      'plan-sprint-6.md': prosePlan('# Six — plan', `${BANNER.inprogress} ⭐ ACTIVE BOARD`),
+      'sprint-6.md': prosePlan('# Six — sprint', `${BANNER.inprogress} ⭐ ACTIVE BOARD`),
+    },
+  });
+  const a = runMode(['select-active', both.sprintsDir]);
+  assert.equal(a.code, 0);
+  // The marker still wins the board, and it resolves to the tie WINNER — ADR-041 §1.5's first-in-byte-order.
+  assert.equal(boardLine(a.out),
+    'board file="plan-sprint-6.md" identity="Sprint 6" status="In progress" reason="active-marker"');
+  assert.deepEqual(activeLines(a.out), [
+    'active file="sprint-4.md" identity="Sprint 4" status="In progress"',
+    'active file="plan-sprint-6.md" identity="Sprint 6" status="In progress"',
+  ], 'one identity is ONE active line, however many files claim it — the marker does not change the set');
+  // ⛔ THE UNDER-COUNT ITSELF, asserted positively so it cannot drift silently in either direction.
+  assert.ok(!a.out.includes('ambiguous-active-marker'),
+    'recorded residual `marker-under-count-on-shared-identity`: two marked files of ONE identity count ' +
+    `once, so this record does not fire. Facts: ${JSON.stringify(facts(a.out))}`);
+  // ⭐ AND THE MITIGATION, which is why the under-count is acceptable: the collision IS reported, by name.
+  assert.deepEqual(facts(a.out),
+    ['drift ambiguous-active-sprint identity="Sprint 6" chosen="plan-sprint-6.md" also="sprint-6.md"'],
+    'the collision must still be reported naming both files — nothing about this case is silent');
+
+  // B — the mirror: only the tie LOSER is marked (build decision D7).
+  const loser = sprintsFixture({
+    plans: {
+      'sprint-4.md': prosePlan('# Four', BANNER.inprogress),
+      'plan-sprint-6.md': prosePlan('# Six — plan', BANNER.inprogress),
+      'sprint-6.md': prosePlan('# Six — sprint', `${BANNER.inprogress} ⭐ ACTIVE BOARD`),
+    },
+  });
+  const b = runMode(['select-active', loser.sprintsDir]);
+  assert.equal(b.code, 0);
+  assert.equal(boardLine(b.out),
+    'board file="sprint-4.md" identity="Sprint 4" status="In progress" reason="lowest-ordered"',
+    'D7: a marker on the tie LOSER is ignored — naming it the board would contradict ' +
+    '"the board is one of the active sprints"');
+  assert.deepEqual(facts(b.out),
+    ['drift ambiguous-active-sprint identity="Sprint 6" chosen="plan-sprint-6.md" also="sprint-6.md"'],
+    'the ignored marker is not silent either — the collision that swallowed it is reported');
 });

@@ -493,3 +493,63 @@ vault write.**
   owed by [`0293`](../../done/0293-wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface/brief.md)
   (see its `brief.md:173` and `:211`). ⚠️ **Re-measure it before relying on it** — `0293` may have
   landed by the time this row runs.
+
+## ⛔ TRIP-WIRE APPENDED 2026-09-10 — CLOSING THIS TASK REDS `test/reference-integrity.test.js` UNLESS ONE EXEMPTION KEY IS **DELETED**
+
+⛔ **Nothing above is rewritten, and this row's scope, status, sprint and priority are unchanged.**
+This is a dated note appended beside the existing text, per the house pattern. ⭐ **It is addressed to
+whoever CLOSES this task, not to whoever works it.**
+
+**Authority: owner ruling 2026-09-10**, given live via `AskUserQuestion` in a `fkit lead` session — a
+selection from the question's option list, and **the option label is the verbatim text**:
+**"Note it on 0290's brief (Rec)"**.
+
+### ⚠️ THE KEY — VERIFIED TO EXIST ON DISK 2026-09-10 BEFORE THIS NOTE WAS WRITTEN
+
+`test/reference-integrity.test.js` holds a `NAMED_EXEMPT` set. **One of its keys names this brief as
+the target**, in this exact form:
+
+```
+ai-agents/tasks/done/0358-sweep-c-the-wiki-vault-resyncs-as-one-pass/review.md::../0290-decide-whether-anything-should-notice-when-a-close-falsifies-a-vault-claim/brief.md
+```
+
+⭐ **The citing document is
+[`0358`'s `review.md`](../../done/0358-sweep-c-the-wiki-vault-resyncs-as-one-pass/review.md)**, whose
+`R1` row quotes `0319`'s brief verbatim as a specimen of the sibling-relative link shape it is
+diagnosing. **The quotation is a QUOTATION, not a pointer** — rewriting it would forge a record of how
+a document no longer reads, which is why the key exists at all.
+
+### ⛔ WHAT THE CLOSER MUST DO: **DELETE** THE KEY. ⛔ **DO NOT REPOINT IT.**
+
+⭐ **THE REASON, AND IT IS COUNTER-INTUITIVE: the link HEALS when this task closes.** `0358`'s
+`review.md` already sits in `ai-agents/tasks/done/`. The moment this folder moves into `done/`
+beside it, the key's target `../0290-…/brief.md` **resolves** — the two become siblings. ⛔ **A
+resolved target means the link is no longer broken, so the exemption is dead weight**, and the guard's
+`targetIsBack` arm reds **on the exemption surviving**, not on a link breaking.
+
+⛔ **The durable rule this inverts:** *"`../../done/X` survives, `../X` does not"* is right about a
+**POINTER** and **backwards for an EXEMPTION KEY**. A pointer is repointed; an exemption key whose
+target has healed is **deleted**.
+
+⚠️ **The count is an EQUALITY, not a ceiling.** The guard asserts `NAMED_EXEMPT` suppressed exactly
+**7** instances — **measured 2026-09-10 and currently green**. ⛔ **A FALL reds it just as a rise
+does**, which is precisely how this class was found: closing Sweep C's members made three keys resolve
+and the suite went red **on the fall**.
+
+⛔ **`test/reference-integrity.test.js` is a CODER surface.** A producer running `/fkit-task-done`
+does not edit it. ⭐ **So the close must be sequenced with a coder, or the deletion routed to one** —
+this note does not decide which, and deciding it is not this task's job.
+
+### ⚠️ WHY THIS NOTE EXISTS WHEN A SYSTEMIC FIX IS ALREADY SCHEDULED
+
+[`0381`](../0381-give-the-task-movers-a-step-for-the-named-exempt-keys-a-move-invalidates/brief.md)
+fixes this **whole class** — it gives the task movers the missing step for exemption keys a move
+invalidates — and it is `P4` on [Sprint 8](../../../sprints/sprint-8.md).
+⛔ **But `0290` could close first, and nothing sequences the two.** ⭐ **If `0381` has already landed
+when this task closes, its step handles this key and this note is redundant — check before acting.**
+
+⚠️ **`test/reference-integrity.test.js` already carries its own trip-wire comment beside the key**,
+saying the fix is deletion. ⭐ **This note is the same warning on the surface the CLOSER actually
+reads** — a closer reads the brief, not the test file.
+
+⛔ **NO NEW EXEMPTION IS TO BE ADDED FOR THIS OR ANY OTHER REASON.** The pinned count is 7.

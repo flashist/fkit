@@ -4,10 +4,10 @@
 0339
 
 ## Sprint
-Backlog
+Sprint 8
 
 ## Priority
-Unscheduled
+P7
 
 ## Status
 🔲 Backlog
