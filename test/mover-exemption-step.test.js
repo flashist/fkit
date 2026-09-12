@@ -154,10 +154,16 @@ const UNCONDITIONAL = '- **Run it unconditionally**, even when the sweep above f
 // That is the literal 0358 sequence — repointing alone would only have moved the failure.
 // Same grounding as DELETE_RULE: the arm is named `L4` (a real test name) and the direction is
 // quoted from L4's own message, because `missingCiter` is a JS local the operator never sees.
+// ⛔ THE REPAIR IS NAMED, NOT PERFORMED — and the re-run belongs to the CODER. Both halves of the key
+// live in `test/reference-integrity.test.js`, so repointing IS editing a coder surface, which the
+// authority gate four bullets below forbids. The previous wording ("Repoint the citer half …, re-run
+// the guard, and … delete the key") commanded a post-edit step the producer never reaches, so it read
+// as authorization to edit the guard. Round-2 R8.
 const REPOINT_RULE = '- **Red at `L4`** — *"whose CITING FILE no longer exists"* → the citing file ' +
-  'moved with this close, so the key names a path that no longer exists. Repoint the citer half to ' +
-  'the new board, **re-run the guard**, and if it then reds at *"whose TARGET now resolves"*, delete ' +
-  'the key instead of keeping the repointed one.';
+  'moved with this close, so the key names a path that no longer exists. Name repointing the citer ' +
+  'half to the new board — and name the tail with it: the coder **re-runs the guard** after that ' +
+  'edit, and if it then reds at *"whose TARGET now resolves"*, deletes the key instead of keeping ' +
+  'the repointed one.';
 
 // A6 (flat) — the THIRD direction. The task brief framed this as a two-way fork; there are three. A
 // move can also BREAK a link, which may need a NEW key (the 0290 case: one link broke as three
@@ -176,17 +182,45 @@ const THIRD_DIRECTION = '- **Red at `L2`** — *"unresolved markdown link(s)"* �
 // A7 (flat) — instances, not keys. ⚠️ The single easiest thing in this task to get backwards: the
 // live set is SEVEN suppressed instances from SIX keys, because one key matches twice. Deleting one
 // key can lower the count by more than one, so the number is READ from a re-run, never decremented.
+// ⛔ THE RE-RUN IS THE CODER'S, for the same reason as REPOINT_RULE: the count is `L3`'s
+// `assert.equal(LIVE.namedExemptCount, 7)` inside `test/reference-integrity.test.js`, so changing it
+// is editing a coder surface. The previous wording ("Re-run the guard to read the new number") was a
+// post-edit instruction addressed to a role the authority gate stops before the edit. Round-2 R8.
 const INSTANCES_RULE = '- **The exempt count falls by suppressed INSTANCES, not by keys** — one key ' +
-  'can match more than once, so deleting a single key can lower the count by more than one. ' +
-  '**Re-run the guard to read the new number; never decrement it by hand.**';
+  'can match more than once, so deleting a single key can lower the count by more than one. The new ' +
+  'number is therefore **read from a re-run of the guard once the edit lands, never decremented by ' +
+  'hand** — again the coder\'s step, not yours.';
 
 // A8 (flat) — the authority gate. `test/reference-integrity.test.js` is a CODER surface. A producer
 // running a mover may RUN it (read-only, ADR-022) and must not EDIT it. This settles the brief's
 // item 1, and it is what actually happened in 0358's close-out.
+// ⛔ THE GATE IS SCOPED TO THE GUARD FILE, NOT TO THE RED. The `NEEDS-DECISION` trigger for an `L2`
+// red is the ADD-A-KEY branch only, and the closing sentence says outright that the repair-the-link
+// branch is the producer's own. The previous wording ("for an `L2` red where there is no key yet")
+// routed EVERY `L2` red to a coder, which contradicted the same step's "Then prove it." paragraph
+// four lines above the clause — a producer who obeyed it handed a coder a link THEY broke and left
+// the close unfinished. Round-3 R13; moved in lockstep with FRAMING_RULE, ruling AL1.
+// ⚠️ Ruling AH1's fix is INSIDE this text and untouched: an `L2` red still has a NEEDS-DECISION
+// content item of its own (the broken link's citing file, line text and unresolved target), because
+// there is no key yet to name. Only the TRIGGER narrowed.
+// ⛔ THE CLOSING SENTENCE CARRIES AN ATTRIBUTION QUALIFIER, AND ITS REASON IS NOT "UNDER
+// `ai-agents/`". The R13 wording exempted the repair-the-link branch from the gate unconditionally
+// and justified it with "that edit is under `ai-agents/`" — a test that is ALWAYS TRUE, measured:
+// `collectFiles()` walks `path.join(root, 'ai-agents')` only, and `L7` in the guard pins that
+// `claude/` and `test/` are never walked, so EVERY `L2` red is under `ai-agents/` by construction.
+// An operator applying it literally lands every `L2` repair, including another in-flight change's —
+// which contradicts ATTRIBUTION_RULE three bullets below and the framing paragraph's own first rule.
+// The qualifier is "where THIS MOVE broke the link"; the reason is "Then prove it." Round-4 R17.
 const AUTHORITY_RULE = '- **You may run this guard. You may not edit it.** ' +
   '`test/reference-integrity.test.js` is a coder surface: stop and return a `NEEDS-DECISION` naming ' +
-  'each offending key verbatim and its direction, and treat the close as unfinished until a coder ' +
-  'lands that edit.';
+  'what the red points at verbatim — each offending key and its direction, or, for an `L2` red ' +
+  'taking the add-a-key branch, where there is no key yet, the broken link\'s citing file, its line ' +
+  'text, and its unresolved target — and treat the close as unfinished until a coder lands that ' +
+  'edit. **An `L2` red you answer by repairing the link is not this case:** where **this move** ' +
+  'broke the link, that repair is yours to land — *"Then prove it."* above already requires it of ' +
+  'you — and it does not leave the close unfinished. Not because the edit is under `ai-agents/`: ' +
+  'the guard scans nothing else, so that holds for every `L2` red, this move\'s or not. A red this ' +
+  'move did not cause is still pre-existing, and still left alone.';
 
 // A9 (flat) — attribution and re-run idempotence. The guard is repo-global: a red can belong to
 // another change in flight, and a mover that "fixes" it is editing someone else's work.
@@ -206,8 +240,53 @@ const INVERSION = `*"\`../../${BOARD}/X\` survives, \`../X\` does not" is right 
 
 // A11 (flat) — the board-dependent opening claim. Carries all three directions in one sentence and
 // is the only other place the board word appears in prose.
+// ⛔ THE THIRD DIRECTION IS "NEEDS REPAIRING", NOT "NEEDS A NEW ONE" — and this sentence is the FIRST
+// disposition an operator reads. "a fresh link that needs a new one" (a new NAMED_EXEMPT key) is the
+// exact inversion THIRD_DIRECTION exists to refuse: repair is L2's default, and a new key on a link
+// that should resolve converts a loud deterministic red into a silent permanent exemption. This was
+// the FOURTH instance of that defect — round-1 R2 fixed two, ruling AH1 a third, and all three passes
+// walked past this summary. Round-2 R9.
 const THREE_DIRECTIONS = `Moving a folder into \`${BOARD}/\` can orphan one of those keys, heal one, ` +
-  'or break a fresh link that needs a new one.';
+  'or break a fresh link that needs repairing.';
+
+// A12 (flat) — the framing paragraph: the ONE place the clause says WHO performs a repair.
+// ⛔ IT WAS THE ONLY UNPINNED ELEMENT OF THE CLAUSE, and that is MEASURED, not argued: deleting it
+// from BOTH movers in a copied tree (`FKIT_MOVER_STEP_ROOT`) left the suite **16/16 GREEN** — every
+// subject constant still matched, `T12` uniformity still held because both copies changed together,
+// and the block stayed far above `MIN_BLOCK_LINES`. Only the ONE-SIDED deletion redded, and only
+// `T12`. Round-3 R15.
+// ⚠️ WHY A MISSING PIN MATTERS MORE HERE THAN USUAL: the stated reason `DELETE_RULE`'s "Delete the
+// key — do not repoint it." and `THIRD_DIRECTION`'s imperatives are left unsoftened is that THIS
+// paragraph carries their authority framing. Two byte-exact-pinned imperatives were covered by an
+// unpinned paragraph, so the suite would have stayed green over the exact authority defect round-2
+// R8 was raised to fix.
+// ⛔ BOTH HALVES ARE LOAD-BEARING, AND THEY FAIL IN OPPOSITE DIRECTIONS. The first half stops
+// OVER-authorization — a producer editing `test/reference-integrity.test.js` to turn a red green
+// (R8). The second half, "Exactly one repair below is yours", stops OVER-restriction — routing
+// EVERY `L2` red to a coder, including the repair-the-link branch, which the same step's "Then prove
+// it." paragraph four lines above already makes the producer's own mandatory work (round-3 R13,
+// introduced by R8's own fix). Deleting either half re-creates one of those two defects.
+// ⛔ THE SECOND HALF IS ITSELF QUALIFIED, AND ITS THIRD FAILURE DIRECTION IS THE ONE R13's FIX OPENED.
+// "Exactly one repair below is yours: `L2`'s leading branch, repairing a broken markdown link under
+// `ai-agents/`" carried NO attribution qualifier while the SAME paragraph's first rule says attribute
+// first, and a red that is not this move's is "reported as pre-existing and left alone". Worse, its
+// stated reason was VACUOUS — measured: `collectFiles()` walks `path.join(root, 'ai-agents')` only
+// and `L7` pins that `claude/` and `test/` are never walked, so "under `ai-agents/`" is true of EVERY
+// `L2` red. Read literally it authorized landing another in-flight change's repair. Both halves of
+// the fix are load-bearing: the qualifier ("this move broke"), AND the real reason ("Then prove it.",
+// which is scoped to a link THIS MOVE broke). Round-4 R17; moved in lockstep with AUTHORITY_RULE,
+// ruling AM1. Board-agnostic by construction: no board word appears in it.
+const FRAMING_RULE = '⛔ **Two rules bind every repair below — read them before acting on one.** ' +
+  '**Attribute the red first:** the guard is repo-global, so it may not be this move\'s at all. And ' +
+  '**you may run this guard, you may not edit it** — wherever the repair a red requires is an edit ' +
+  'to `test/reference-integrity.test.js` (repointing a key, deleting one, or adding one), that ' +
+  'repair is what you put in the `NEEDS-DECISION`, not what you do, and a coder lands it. ' +
+  '**Exactly one repair below is yours:** `L2`\'s leading branch, repairing a markdown link **this ' +
+  'move broke**. Attribution binds here too: an `L2` red this move did not cause is pre-existing — ' +
+  'report it, leave it alone. And *"the edit is under `ai-agents/`"* is no test at all: the guard ' +
+  'scans nothing else, so it holds for every `L2` red. What makes this one yours is *"Then prove ' +
+  'it."* above — a move is not finished while a link **it** broke is still broken — so you land it ' +
+  'and the close is not unfinished for it. The last two bullets state both rules in full.';
 
 // Block anchors. BLOCK_START is the lead-in; BLOCK_END is the clause's final sentence, unique in each
 // file (verified before use).
@@ -342,7 +421,8 @@ const extractAndDedent = (text, label) => dedent(extractBlock(text.split('\n'), 
 // ⛔ THE SUBJECT PINS MATCH THE CLAUSE, NEVER THE WHOLE FILE — and the difference is measured, not
 // theoretical. With `readSkill(name)` as the source, deleting the `targetIsBack` delete rule from the
 // clause and re-adding it verbatim under an `## Appendix` heading in BOTH movers left this suite
-// **16/16 pass, 0 fail** (round-1 R3, verified by construction). Presence and uniformity then held
+// **16/16 pass, 0 fail** (round-1 R3, verified by construction — a DATED figure: the suite was 16
+// tests then and is 17 now, since round-3 R15 added `T16`). Presence and uniformity then held
 // over the FILE: every pinned subject could leave the clause and the guard would not notice — which
 // is precisely the claim task 0341 is about to rely on. T12 already extracted the block; T2–T11 now
 // read the same one.
@@ -351,6 +431,18 @@ const extractAndDedent = (text, label) => dedent(extractBlock(text.split('\n'), 
 // A subject that is present in the file but OUTSIDE the clause now reads as found 0 times, and the
 // expectExactlyOnce message says which subject and which file.
 const clauseOf = (name) => extractAndDedent(readSkill(name), labelFor(name));
+
+// T12's normalization, as a named function so T13 can drive the REAL path over synthetic input
+// instead of comparing two hand-written literals. ⛔ Note the direction: each file's OWN board word
+// is folded to the token, so a `done/` left behind in the cancelled copy does NOT fold — it survives
+// into the comparison and reds. That asymmetry is what makes T12 able to see the copy-paste trap,
+// and T13(c) is what proves it still can.
+const foldBoard = (clause, board) => clause.split(board).join(BOARD);
+
+// The synthetic block anchors, shared by T13 and T15. Real anchor text, in-memory fixtures only —
+// nothing here is read from or written to disk.
+const SYNTH_START = '**Then check the exemption keys this move may have invalidated.** The sweep';
+const SYNTH_END = '  produce a second `NEEDS-DECISION` for the same key.';
 
 // ── T0 · The roster pin, first ────────────────────────────────────────────────────────────────────
 //
@@ -484,7 +576,7 @@ test('T6 both movers: the missingCiter rule carries its re-run and delete-if-hea
   }
 });
 
-test('T7 both movers: the THIRD direction — a move can break a link that needs a NEW key', () => {
+test('T7 both movers: the THIRD direction — a move can break a quoted link that needs a NEW key', () => {
   for (const { name } of SKILLS) {
     expectExactlyOnce({
       id: 'T7', skill: name, source: clauseOf(name), needle: THIRD_DIRECTION, mode: 'flat',
@@ -520,7 +612,16 @@ test('T9 both movers: the authority gate — a producer may RUN the guard, never
       why: '`test/reference-integrity.test.js` is a CODER surface. ADR-022 leaves a producer able to ' +
         'RUN it, and nothing but this prose stops the same session from EDITING it to turn a red ' +
         'green — which would delete the evidence instead of the dead key. The `NEEDS-DECISION` hand-' +
-        'off is what actually happened in 0358\'s close-out, and it worked.',
+        'off is what actually happened in 0358\'s close-out, and it worked. ⛔ The closing sentence ' +
+        'is load-bearing in the OTHER direction and must not be dropped as a qualifier: the gate is ' +
+        'scoped to the GUARD FILE, not to the red, so an `L2` red answered by repairing a link THIS ' +
+        'MOVE BROKE is the producer\'s own work — the same step\'s "Then prove it." paragraph ' +
+        'already requires it of them (round-3 R13). ⛔ THAT EXEMPTION IS ITSELF QUALIFIED, and the ' +
+        'qualifier is not "under `ai-agents/`": `collectFiles()` walks only `path.join(root, ' +
+        '"ai-agents")` and `L7` pins that `claude/` and `test/` are never walked, so every `L2` red ' +
+        'is under `ai-agents/` and that reason is always true. Unqualified it authorized landing ' +
+        'another in-flight change\'s repair, against this same clause\'s attribution rule (round-4 ' +
+        'R17).',
       constant: 'AUTHORITY_RULE',
     });
   }
@@ -557,15 +658,44 @@ test('T11 both movers: the board-dependent sentences name THIS mover\'s board', 
   }
 });
 
+// ── T16 · The framing paragraph — who lands each repair ───────────────────────────────────────────
+//
+// ⚠️ NUMBERED `T16`, NOT SLOTTED IN AS A NEW `T5` — deliberately, and the cost is named rather than
+// hidden. `test/prove-red.sh` decides mutations **33** and **34** by grepping a red run for the `T3`
+// and `T11` TITLES, and this task's records cite T-numbers throughout; renumbering `T12`–`T15` to keep
+// the numbering in reading order would disarm a hard gate and stale every citation. So the NUMBER is
+// append-order while the POSITION is subject-order: this pin sits with its siblings `T2`–`T11`,
+// because that is where a reader looks for a clause-subject pin.
+
+test('T16 both movers: the framing paragraph — which repairs a coder lands, and the one that is yours', () => {
+  for (const { name } of SKILLS) {
+    expectExactlyOnce({
+      id: 'T16', skill: name, source: clauseOf(name), needle: FRAMING_RULE, mode: 'flat',
+      subject: 'authority framing paragraph',
+      why: '⛔ This paragraph is the only place the clause says WHO performs a repair, and it has to ' +
+        'get BOTH directions right. Drop its first half and the bullets below read as authorization ' +
+        'for a producer to edit `test/reference-integrity.test.js` (round-2 R8). Drop its second ' +
+        'half and every `L2` red routes to a coder — including the repair-the-link branch, which the ' +
+        'same step\'s "Then prove it." paragraph already makes the producer\'s own mandatory work ' +
+        '(round-3 R13). ⛔ And leave that second half UNQUALIFIED and it swings back the other way: ' +
+        '"repairing a broken markdown link under `ai-agents/`" is no attribution test, because the ' +
+        'guard scans nothing but `ai-agents/` (`collectFiles()` + `L7`), so it reads as authorization ' +
+        'to land another in-flight change\'s repair (round-4 R17). The qualifier "this move broke" ' +
+        'and the real reason ("Then prove it.") are both pinned here. ⚠️ Measured before this pin ' +
+        'existed: deleting the whole paragraph from BOTH movers left the suite 16/16 GREEN, which is ' +
+        'why it is pinned rather than trusted.',
+      constant: 'FRAMING_RULE',
+    });
+  }
+});
+
 // ── T12 · Uniformity — the two copies are the same text modulo the board word ─────────────────────
 
 test('T12 uniformity: the two clauses are identical modulo the board word and ONE uniform offset', () => {
   const blocks = SKILLS.map(({ name, board }) => {
-    const block = extractAndDedent(readSkill(name), labelFor(name));
+    const block = clauseOf(name);
     // Normalize the ONE token that legitimately differs, so what remains must be byte-identical.
-    // ⛔ Note the direction: each file's OWN board word is folded to the token. A `done/` left
-    // behind in the cancelled copy does NOT fold, so it survives into the comparison and reds here.
-    return { name, board, raw: block, normalized: block.split(board).join(BOARD) };
+    return { name, board, raw: block, normalized: foldBoard(block, board) };
   });
 
   const [a, b] = blocks;
@@ -588,20 +718,57 @@ test('T12 uniformity: the two clauses are identical modulo the board word and ON
   }
   // Non-vacuity: dedent() + the floor already guarantee a real block, but assert it explicitly so a
   // future refactor of extractBlock cannot make "identical" mean "identically empty".
-  assert.ok(a.raw.length >= MIN_BLOCK_LINES,
-    `T12: the compared block is ${a.raw.length} lines, under the ${MIN_BLOCK_LINES}-line floor — ` +
+  // ⚠️ COUNT LINES, NOT CHARACTERS. `extractAndDedent` joins to a STRING, so `a.raw.length` was the
+  // CHARACTER count — 3045 against a 22-LINE floor, measured 2026-09-11. That assert could not fail
+  // for any block above 22 characters, so it was vacuous and only the extraction gate inside
+  // extractBlock() was really holding non-vacuity. Found while fixing T13 (round-1 R5).
+  const rawLines = a.raw.split('\n').length;
+  assert.ok(rawLines >= MIN_BLOCK_LINES,
+    `T12: the compared block is ${rawLines} lines, under the ${MIN_BLOCK_LINES}-line floor — ` +
     'two near-empty extractions compare equal and print UNIFORM. That is the exact 0125 failure.');
 });
 
-test('T13 uniformity rejects a one-sided reword (the comparison is not vacuous)', () => {
+test('T13 uniformity rejects a one-sided reword and a missing board swap (the comparison is not vacuous)', () => {
   // In-memory, not on disk: prove the T12 comparison actually discriminates. Without this, a
   // comparison that always passed would look identical to one that never had anything to compare.
-  const base = ['**Then check the exemption keys this move may have invalidated.**', 'x', 'y'];
-  const same = base.join('\n');
-  const reworded = ['**Then check the exemption keys this move may have invalidated.**', 'x', 'z'].join('\n');
-  assert.equal(same, same.split('done').join(BOARD), 'sanity: the fixture carries no board word');
-  assert.notEqual(same, reworded,
-    'T13: a one-sided reword must not compare equal — if this fails the comparison in T12 is vacuous.');
+  //
+  // ⛔ IT MUST DRIVE T12'S REAL PATH — extractAndDedent, then foldBoard, then string comparison. The
+  // previous version compared two hand-written literals differing in one character (`'y'` vs `'z'`)
+  // and never invoked extractBlock, dedent or foldBoard at all, so it proved nothing about T12: it
+  // was vacuous and mis-titled, exactly the 0125 shape this file exists to refuse. Round-1 R5.
+  const clause = (board, tail) => [
+    'padding above',
+    SYNTH_START,
+    ...Array.from({ length: MIN_BLOCK_LINES }, (_, i) => `  - filler bullet ${i}`),
+    `  - a link heals when its citer moves into \`${board}/\` alongside a target already there. ${tail}`,
+    SYNTH_END,
+    'padding below',
+  ].join('\n');
+
+  const fold = (text, board) => foldBoard(extractAndDedent(text, `synthetic:${board}`), board);
+  const done = fold(clause('done', 'Delete the key.'), 'done');
+
+  // (a) THE POSITIVE CONTROL, and it comes first: two clauses differing ONLY in the board word must
+  // compare EQUAL. Without it, a comparison that reds on every pair would satisfy (b) and (c) while
+  // making T12 permanently red for the wrong reason.
+  assert.equal(done, fold(clause('cancelled', 'Delete the key.'), 'cancelled'),
+    'T13(a): two synthetic clauses differing ONLY in the board word did not compare equal through ' +
+    'extractAndDedent + the board fold. T12 would then red on a legitimate pair, and its green runs ' +
+    'could not mean what T12 claims they mean.');
+
+  // (b) A one-sided REWORD must compare UNEQUAL — this is what T12 is for.
+  assert.notEqual(done, fold(clause('cancelled', 'Repoint the key.'), 'cancelled'),
+    'T13(b): a one-sided reword compared EQUAL through T12\'s own path. The comparison in T12 is ' +
+    'then vacuous, and a clause reworded in ONE mover only would ship unnoticed — which is the whole ' +
+    'hole this file closes before task 0341 pastes the clause twice more.');
+
+  // (c) THE COPY-PASTE TRAP from the other side, and it is prove-red mutation 34's exact shape: the
+  // cancelled copy still carrying `done/` must compare UNEQUAL, because only each file's OWN board
+  // word folds.
+  assert.notEqual(done, fold(clause('done', 'Delete the key.'), 'cancelled'),
+    'T13(c): a clause pasted into the cancelled mover WITHOUT swapping the board word compared ' +
+    'EQUAL. The fold must apply each file\'s OWN board word so a stray `done/` survives into the ' +
+    'comparison; if this passes, T12 cannot see the copy-paste trap at all.');
 });
 
 // ── T14 · Placement — the clause runs AFTER the move and AFTER step 5's repairs ───────────────────
@@ -637,8 +804,9 @@ test('T14 placement: the clause sits in step 5\'s tail, after the "Then prove it
 // ── T15 · Extraction fails closed ─────────────────────────────────────────────────────────────────
 
 test('T15 extraction fails closed: missing / duplicated / reversed anchors and a sub-floor block THROW', () => {
-  const START_LINE = '**Then check the exemption keys this move may have invalidated.** The sweep';
-  const END_LINE = '  produce a second `NEEDS-DECISION` for the same key.';
+  // The anchors are module-scope (SYNTH_START / SYNTH_END) so T13 drives the same fixture shape.
+  const START_LINE = SYNTH_START;
+  const END_LINE = SYNTH_END;
   const filler = Array.from({ length: MIN_BLOCK_LINES }, (_, i) => `  - filler bullet ${i}`);
 
   const cases = [

@@ -10,7 +10,7 @@ Sprint 8
 P4
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -80,8 +80,8 @@ reports a clean close most of the time. It reds only when a key happens to name 
 
 | Row | What it is | Why it is NOT this |
 |---|---|---|
-| [`0378`](../0378-decide-how-a-worker-tells-a-concurrent-close-s-transient-link-red-from-its-own/brief.md) | A worker telling a **concurrent** close's transient link-guard red from its own | That is **concurrency / timing** — a red caused by someone else's in-flight move. This row's red is caused by the mover's **own completed** move. |
-| [`0363`](../0363-design-the-sweep-completion-step-that-stops-a-fixed-class-recurring-one-file-over/brief.md) | The sweep-completion step that stops a fixed class recurring one file over | That is **claim propagation** across a class of documents. This is one missing step in one skill. |
+| [`0378`](../../backlog/0378-decide-how-a-worker-tells-a-concurrent-close-s-transient-link-red-from-its-own/brief.md) | A worker telling a **concurrent** close's transient link-guard red from its own | That is **concurrency / timing** — a red caused by someone else's in-flight move. This row's red is caused by the mover's **own completed** move. |
+| [`0363`](../../backlog/0363-design-the-sweep-completion-step-that-stops-a-fixed-class-recurring-one-file-over/brief.md) | The sweep-completion step that stops a fixed class recurring one file over | That is **claim propagation** across a class of documents. This is one missing step in one skill. |
 
 ⭐ **This row reds DETERMINISTICALLY**: given a key that names the moving folder, the suite goes red
 every single time, with no race and no second actor. Say so if anyone proposes folding these three.

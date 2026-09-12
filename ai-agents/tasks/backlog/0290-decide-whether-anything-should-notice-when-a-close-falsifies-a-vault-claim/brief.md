@@ -542,7 +542,7 @@ this note does not decide which, and deciding it is not this task's job.
 
 ### ⚠️ WHY THIS NOTE EXISTS WHEN A SYSTEMIC FIX IS ALREADY SCHEDULED
 
-[`0381`](../0381-give-the-task-movers-a-step-for-the-named-exempt-keys-a-move-invalidates/brief.md)
+[`0381`](../../done/0381-give-the-task-movers-a-step-for-the-named-exempt-keys-a-move-invalidates/brief.md)
 fixes this **whole class** — it gives the task movers the missing step for exemption keys a move
 invalidates — and it is `P4` on [Sprint 8](../../../sprints/sprint-8.md).
 ⛔ **But `0290` could close first, and nothing sequences the two.** ⭐ **If `0381` has already landed

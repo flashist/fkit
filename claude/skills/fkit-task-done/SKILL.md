@@ -324,9 +324,21 @@ does not reach them; test the path.
 **Then check the exemption keys this move may have invalidated.** The sweep above greps `ai-agents/`
 only, so it cannot see `test/reference-integrity.test.js` — which holds a set of named
 `(citing file, target)` keys exempting links that are broken on purpose. Moving a folder into
-`done/` can orphan one of those keys, heal one, or break a fresh link that needs a new one. The guard
-already computes all three directions, and its own failure messages name the right action, so the rule
-here is to run it and obey what it says.
+`done/` can orphan one of those keys, heal one, or break a fresh link that needs repairing. The guard
+already computes all three directions, and its own failure messages name the repair each one needs —
+but never who lands it, which is what the two rules below settle. Run it, then read its red against
+them.
+
+⛔ **Two rules bind every repair below — read them before acting on one.** **Attribute the red first:**
+the guard is repo-global, so it may not be this move's at all. And **you may run this guard, you may
+not edit it** — wherever the repair a red requires is an edit to `test/reference-integrity.test.js`
+(repointing a key, deleting one, or adding one), that repair is what you put in the `NEEDS-DECISION`,
+not what you do, and a coder lands it. **Exactly one repair below is yours:** `L2`'s leading branch,
+repairing a markdown link **this move broke**. Attribution binds here too: an `L2` red this move did
+not cause is pre-existing — report it, leave it alone. And *"the edit is under `ai-agents/`"* is no
+test at all: the guard scans nothing else, so it holds for every `L2` red. What makes this one yours
+is *"Then prove it."* above — a move is not finished while a link **it** broke is still broken — so
+you land it and the close is not unfinished for it. The last two bullets state both rules in full.
 
 - **Run it unconditionally**, even when the sweep above found nothing to update:
   `node --test test/reference-integrity.test.js`
@@ -335,9 +347,9 @@ here is to run it and obey what it says.
   words**, so there is no `named-exempt: N` line to copy. This is the common case, and the step is a
   no-op.
 - **Red at `L4`** — *"whose CITING FILE no longer exists"* → the citing file moved with this close, so
-  the key names a path that no longer exists. Repoint the citer half to the new board, **re-run the
-  guard**, and if it then reds at *"whose TARGET now resolves"*, delete the key instead of keeping the
-  repointed one.
+  the key names a path that no longer exists. Name repointing the citer half to the new board — and
+  name the tail with it: the coder **re-runs the guard** after that edit, and if it then reds at
+  *"whose TARGET now resolves"*, deletes the key instead of keeping the repointed one.
 - **Red at `L4`** — *"whose TARGET now resolves"* → the link healed. **Delete the key — do not repoint it.**
   A sibling-relative link *heals* when its citer moves into `done/` alongside a target already there:
   *"`../../done/X` survives, `../X` does not" is right about a POINTER and INVERTS for an exemption
@@ -348,11 +360,18 @@ here is to run it and obey what it says.
   branch is a deletion, and **repair is the default**: a new key on a link that should resolve
   converts a loud deterministic red into a silent permanent exemption.
 - **The exempt count falls by suppressed INSTANCES, not by keys** — one key can match more than once,
-  so deleting a single key can lower the count by more than one. **Re-run the guard to read the new
-  number; never decrement it by hand.**
+  so deleting a single key can lower the count by more than one. The new number is therefore **read
+  from a re-run of the guard once the edit lands, never decremented by hand** — again the coder's
+  step, not yours.
 - **You may run this guard. You may not edit it.** `test/reference-integrity.test.js` is a coder
-  surface: stop and return a `NEEDS-DECISION` naming each offending key verbatim and its direction,
-  and treat the close as unfinished until a coder lands that edit.
+  surface: stop and return a `NEEDS-DECISION` naming what the red points at verbatim — each offending
+  key and its direction, or, for an `L2` red taking the add-a-key branch, where there is no key yet,
+  the broken link's citing file, its line text, and its unresolved target — and treat the close as
+  unfinished until a coder lands that edit. **An `L2` red you answer by repairing the link is not this
+  case:** where **this move** broke the link, that repair is yours to land — *"Then prove it."* above
+  already requires it of you — and it does not leave the close unfinished. Not because the edit is
+  under `ai-agents/`: the guard scans nothing else, so that holds for every `L2` red, this move's or
+  not. A red this move did not cause is still pre-existing, and still left alone.
 - **Attribute before touching anything.** The guard is repo-global, so a red may belong to another
   change in flight. It is this move's only where the folder just moved is spelled by the named key —
   or, for an `L2` red, where there is no key yet, by the broken link's own citing file or target;
