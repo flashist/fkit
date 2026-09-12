@@ -194,7 +194,8 @@ test('agent_type present but not an fkit-* agent -> deny for an fkit-* skill', (
 });
 
 // =================================================================================================
-// THE TASK MOVERS (ADR-033, task 0124 — REVERSING ADR-025) — the highest-care area in this file.
+// THE FOUR MOVERS (ADR-033, task 0124 — REVERSING ADR-025; the two SPRINT movers added by ADR-047 §4,
+// task 0341) — the highest-care area in this file.
 //
 // ⚠️ WHAT THESE TESTS DO AND DO NOT PROVE, AND THE ANSWER CHANGED. Under ADR-025 (task 64) the movers
 // were owned by every role but the adversarial reviewer, and there was NOTHING structural left to
@@ -220,7 +221,10 @@ test('agent_type present but not an fkit-* agent -> deny for an fkit-* skill', (
 // The mapping wins; prose that disagrees with it is the bug.
 // =================================================================================================
 
-for (const mover of ['fkit-task-done', 'fkit-task-cancelled']) {
+// ⚠️ FOUR MOVERS, not two, since task 0341 (ADR-047 §4). The literal is spelled out here rather than
+// reusing `MOVERS` below because that `const` is in the temporal dead zone at this point in the
+// module — these tests register before it is initialised. Keep the two lists in step by hand.
+for (const mover of ['fkit-task-done', 'fkit-task-cancelled', 'fkit-sprint-done', 'fkit-sprint-cancelled']) {
   test(`producer owns ${mover} -> allow (ADR-033: the producer is the ONLY role that may close)`, () => {
     const r = run(payload({ agentType: 'fkit-producer', skill: mover }));
     assertAllow(r, `producer x ${mover}`);
@@ -298,21 +302,26 @@ const UNIVERSE = [
   'fkit-inspect', 'fkit-plan-task', 'fkit-process-review', 'fkit-process-stateful-review',
   'fkit-dumb-down', 'fkit-open-questions-interview',
   'fkit-query', 'fkit-record-decision', 'fkit-review', 'fkit-stateful-review', 'fkit-status',
+  'fkit-sprint-cancelled', 'fkit-sprint-done',
   'fkit-survey-project', 'fkit-task-cancelled', 'fkit-task-done', 'fkit-task-brief',
   'fkit-task-ship-loop', 'fkit-team',
   'fkit-wiki-ingest', 'fkit-wiki-lint', 'fkit-wiki-sync',
 ];
 
-// ⚠️ THE TASK MOVERS ARE PRODUCER-ONLY (ADR-033, task 0124 — reversing ADR-025, task 64).
-// They were producer-only until 2026-07-19, ADR-025 granted them to every role but the adversarial
-// reviewer, and ADR-033 takes that back knowingly: close authority re-consolidates in the one role
-// whose job is the task lifecycle, and the ADR-018 hook makes it structural rather than prose. Every
-// other role routes its closes through a spawned producer (ADR-033 §3/§4) and closes nothing itself.
-// This mirror is what proves the reversal actually took effect. If prose and mapping ever disagree
-// again — the X1 contradiction, in either direction — the mapping wins and the prose is the bug.
-// ⚠️ `MOVERS` now appears on EXACTLY ONE role. That is the invariant, not an accident of editing:
-// spreading it into a second role's list is the precise mistake this table exists to catch.
-const MOVERS = ['fkit-task-done', 'fkit-task-cancelled'];
+// ⚠️ ALL FOUR MOVERS ARE PRODUCER-ONLY (ADR-033, task 0124 — reversing ADR-025, task 64; extended to
+// the SPRINT movers by ADR-047 §4, task 0341, which applies ADR-033's reasoning verbatim).
+// The TASK movers were producer-only until 2026-07-19, ADR-025 granted them to every role but the
+// adversarial reviewer, and ADR-033 takes that back knowingly: close authority re-consolidates in the
+// one role whose job is the lifecycle, and the ADR-018 hook makes it structural rather than prose.
+// The SPRINT movers have no such history — they shipped producer-only and were never granted to any
+// other role. Every other role routes its closes through a spawned producer (ADR-033 §3/§4) and
+// closes nothing itself. This mirror is what proves the reversal actually took effect. If prose and
+// mapping ever disagree again — the X1 contradiction, in either direction — the mapping wins and the
+// prose is the bug.
+// ⚠️ `MOVERS` is now FOUR names, and it still appears on EXACTLY ONE role. That is the invariant, not
+// an accident of editing: spreading any of the four into a second role's list is the precise mistake
+// this table exists to catch. The count grew; the invariant did not move.
+const MOVERS = ['fkit-task-done', 'fkit-task-cancelled', 'fkit-sprint-done', 'fkit-sprint-cancelled'];
 
 const OWNED = {
   // No movers: the sprint ship-loop's driver spawns @fkit-producer per shipped task (ADR-033 §4).

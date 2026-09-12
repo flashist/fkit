@@ -52,18 +52,19 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
    | Role | Its procedures |
    |---|---|
    | lead (the conductor) | `/fkit-sprint-ship-loop` — drives a whole sprint; plus `/fkit-team`, `/fkit-query` — it routes, and conducts when asked |
-   | producer | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-brief`, `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-heal` |
+   | producer | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-brief`, `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-sprint-done`, `/fkit-sprint-cancelled`, `/fkit-heal` |
    | coder | `/fkit-plan-task`, `/fkit-process-review`, `/fkit-process-stateful-review`, `/fkit-task-ship-loop` |
    | architect | `/fkit-survey-project`, `/fkit-inspect`, `/fkit-design-spec`, `/fkit-evaluate-approach`, `/fkit-record-decision` |
    | reviewer | `/fkit-review`, `/fkit-stateful-review` |
    | adversarial-reviewer | `/fkit-adversarial-review` |
    | wiki | `/fkit-wiki-ingest`, `/fkit-wiki-lint`, `/fkit-wiki-sync` |
 
-   Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **`/fkit-task-done` and
-   `/fkit-task-cancelled` are the producer's alone** — since ADR-033 (reversing ADR-025) no other role
-   holds them, and the ADR-018 hook denies a mover call from any non-producer identity at any spawn
-   depth. Every other role **routes its closes through the producer** and closes nothing itself; a
-   producer **spawned** to close still writes the `(agent-closed — not owner-verified)` marker.
+   Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **All FOUR movers —
+   `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-sprint-done`, `/fkit-sprint-cancelled` — are the
+   producer's alone** (ADR-033, reversing ADR-025; extended to the sprint pair by ADR-047 §4). No other
+   role holds them, and the ADR-018 hook denies a mover call from any non-producer identity at any
+   spawn depth. Every other role **routes its closes through the producer** and closes nothing itself;
+   a producer **spawned** to close still writes the `(agent-closed — not owner-verified)` marker.
    **The six Claude-side roles** —
    everyone above **except `adversarial-reviewer`** — also have two more:
    `/fkit-open-questions-interview` (sweep this session for questions the owner never answered, and ask

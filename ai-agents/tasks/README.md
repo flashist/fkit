@@ -16,7 +16,9 @@ only `brief.md` is the normal case; a folder **without** `brief.md` is malformed
 (ADR-029 Decision 1). The four-digit **ID** is permanent and global — the folder name carries it, and
 the brief's `## ID` field is the redundant second carrier, reconciled by the `id-mismatch` drift check
 (ADR-029 Decision 5). Task folders move between boards only via `/fkit-task-done` and
-`/fkit-task-cancelled`, never by hand. See ADR-029 and the task-folder design spec for the full model.
+`/fkit-task-cancelled`, never by hand — and only the **producer** may invoke them. (A **sprint board**
+under `ai-agents/sprints/` has its own pair, `/fkit-sprint-done` and `/fkit-sprint-cancelled`; same
+rule, different object.) See ADR-029 and the task-folder design spec for the full model.
 
 ---
 

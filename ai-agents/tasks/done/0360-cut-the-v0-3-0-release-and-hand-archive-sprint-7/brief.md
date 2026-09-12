@@ -27,7 +27,7 @@ verbatim text.
    — Sprint 7 may cut a patch in flight
    ([`evidence-before-assertion`](../../../knowledge-base/conventions/evidence-before-assertion.md)).
 2. **Sprint 7's archival: "Hand-archive again, with the caveat (Rec)."** Manual, and the archived board
-   carries the **agent-performed / not-owner-verified** caveat. ⛔ **[`0341`](../../backlog/0341-build-the-producer-only-sprint-movers-fkit-sprint-done-and-fkit-sprint-cancelled/brief.md)
+   carries the **agent-performed / not-owner-verified** caveat. ⛔ **[`0341`](../../done/0341-build-the-producer-only-sprint-movers-fkit-sprint-done-and-fkit-sprint-cancelled/brief.md)
    — which would build `/fkit-sprint-done` and `/fkit-sprint-cancelled` — stays `Unscheduled` by that
    same ruling.** It is deliberately not on this board; ⛔ do not pull it in to "do this properly".
 

@@ -10,7 +10,7 @@ Sprint 8
 P5
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -176,6 +176,33 @@ file's reverse-move block, under the line beginning
 count by asserting the forward move *"folds its `## Priority` edit into its own step 3"* as a
 parenthetical. ⛔ **No such parenthetical exists in the "Off:" bullet** — measured on that file
 2026-09-10. The same annotation is recorded on `backlog.md` itself, beside the rule.
+
+### ⏱ DISCHARGED 2026-09-12 BY OWNER RULING D4 — the parenthetical is now written, and the measurement above is FALSE as of that date
+
+⛔ **Nothing above is rewritten; the 2026-09-10 measurement is left BYTE-IDENTICAL** as the record of
+what was measured then. This is a dated discharge appended beside it, per the house pattern.
+
+**Authority: owner ruling 2026-09-12**, given live via `AskUserQuestion` in the `fkit lead` session
+driving `/fkit-sprint-ship-loop` — **the option label is the verbatim text**:
+**"Append a dated discharge (Rec)"**.
+
+**What changed.** Ruling **D4** of 2026-09-12 amended `ai-agents/sprints/backlog.md`'s **"Off:"**
+bullet, adding the parenthetical *"(and give `## Priority` the real number)"* to its step 3, with the
+unranked carve-out (`Unscheduled` stands when the destination board is unranked) kept in the sentence
+that follows. ⭐ **So the fold that file's reverse-move block claims exists now exists**, and its
+5-vs-3 reconciliation is no longer justified by a fold that was never written.
+
+⚠️ **What this discharges, precisely — and what it does not.** It discharges the **measured claim**:
+the parenthetical, the string `## Priority` and the phrase *"real number"* are all present in the
+**"Off:"** bullet as of 2026-09-12. ⛔ **It does not settle this note's headline count.** The rule
+still enumerates **three** numbered edits and carries the fourth as a parenthetical rather than
+numbering it. ⛔ **This discharge adds no scope and decides nothing** — whether the mover prose this
+task writes mirrors three-plus-a-parenthetical or a numbered four remains the plan-gate question with
+the owner, exactly as the note above already framed it.
+
+*Appended 2026-09-12 by a spawned `fkit-producer` with no owner channel
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+executing the mechanics of a relayed ruling and deciding nothing beyond them.*
 
 ### ⛔ Why this lands on THIS brief and what it does — and does not — ask of it
 

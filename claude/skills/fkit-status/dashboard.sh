@@ -31,10 +31,13 @@
 #     to live here. It reads first lines, never whole sibling files. Nothing else. Not the code, not git.
 #   - Writes nothing. No network.
 #   - Non-zero exit + stderr on an unparseable plan; the skill then hand-builds a flagged fallback.
-#   - Three further MODES sit in front of this render (ADR-041 §5, ADR-047 §2.3a): `identity <plan>`
-#     prints one plan's identity, `status <plan>` prints one plan's SPRINT STATUS, and
-#     `select-active <sprints-dir>` runs the whole selection rule. All are additive; the one-argument
-#     invocation renders the same board it always did — only the version marker on it moved to `v2`.
+#   - Four further MODES sit in front of this render (ADR-041 §5, ADR-047 §2.3a, §3.0.2):
+#     `identity <plan>` prints one plan's identity, `status <plan>` prints one plan's SPRINT STATUS,
+#     `select-active <sprints-dir>` runs the whole selection rule, and
+#     `successor <sprints-dir> <closing-identity>` prints the basename of the lowest-ordered
+#     non-terminal board above a closing sprint (the ordering surface `/fkit-sprint-done` needs).
+#     All are additive; the one-argument invocation renders the same board it always did — only the
+#     version marker on it moved to `v2`.
 #
 # PORTABILITY: bash 3.2 (macOS ships 3.2.57). No `declare -A`, no ${v^^}, no mapfile/readarray.
 
@@ -299,14 +302,14 @@ sibling_claimants() {
   printf '%s' "$_out"
 }
 
-# --- the two non-board modes (ADR-041 §5) ----------------------------------------------------------
+# --- the non-board modes (ADR-041 §5) --------------------------------------------------------------
 
 # ⚠️ `status <plan>` IS APPENDED, AND THE POSITION IS LOAD-BEARING, NOT AESTHETIC. The test
 # 'ADR-041: the historic one-argument board render is unchanged; a bad subcommand is a usage error'
 # asserts this string with an UNANCHORED `assert.match`, whose pattern ends at `select-active
 # <sprints-dir>`. Appending keeps it green; INSERTING the new mode before `select-active` reds it.
-# Measured, not assumed.
-USAGE="usage: bash dashboard.sh <plan> | identity <plan> | select-active <sprints-dir> | status <plan>"
+# Measured, not assumed. ⛔ `successor` is APPENDED FOR THE SAME REASON — after `status <plan>`.
+USAGE="usage: bash dashboard.sh <plan> | identity <plan> | select-active <sprints-dir> | status <plan> | successor <sprints-dir> <closing-identity>"
 
 # `identity <plan>` — the resolve-identity primitive. Prints the identity on ONE line, or nothing.
 # Exit 0 resolved · 3 readable but unresolved · 1 usage / no such file.
@@ -337,6 +340,89 @@ mode_status() {
   _v=${_sr%%	*}
   [ "$_v" != "unresolved" ] || exit 3
   printf '%s\n' "$_v"
+  exit 0
+}
+
+# `successor <sprints-dir> <closing-identity>` — the ordering surface `/fkit-sprint-done` needs
+# (ADR-047 §3.0.2, FOLLOW-UP 2). Prints the BASENAME of the lowest-ordered non-terminal successor
+# board, or nothing.
+# Exit 0 found · 3 no successor exists (the mover then falls to the Backlog board) · 1 usage / bad args.
+#
+# ⛔ WHY IT IS A MODE AND NOT PROSE. §3.0.2 tells the mover to "order by §6.1's comparator", and
+# `/fkit-sprint-done` is a SKILL — markdown an LLM executes. ADR-041 §5 forbids the skill's prose from
+# comparing `Sprint 9` against `Sprint 10` itself ("two grammars for one question"), and that route
+# walks straight into the two hazards `identity_gt`'s own comment names. ADR-047 FOLLOW-UP 2 leaves
+# the CHOICE of surface to the implementing task and this is it — owner ruling D1, 2026-09-12,
+# option label verbatim "New `successor` mode (Rec)".
+#
+# ⛔ NO NEW TRAVERSAL, NO NEW DEPTH (§3.0.2 item 1). The candidate set is depth 1 of `<sprints-dir>` —
+# the SAME `"$1"/*.md` glob `select-active` uses — so `done/` and `cancelled/` are excluded by
+# construction and an archived board can never be a successor.
+#
+# ⛔ `select-active` CANNOT STAND IN FOR THIS. It filters to `In progress` alone (its own
+# `[ "$_st" = "In progress" ] || continue`), so it silently drops every `🔲 Backlog` successor — and
+# §3.0.2's successor set is `Backlog` ∪ `In progress`. Reaching for it is the plausible wrong turn.
+#
+# ⛔ NO `⟦…⟧` MARKERS, exactly as `identity` and `status`: a VALUE, not a rendering.
+#
+# ⭐ BASENAME ONLY, DELIBERATELY. §3.0.1 requires the label and the href to be "two separate lookups,
+# neither derived from the other" — a mover that derived one from the other reintroduces the
+# filename-as-identity bug. So this answers WHICH FILE, and the mover asks `identity <that file>` for
+# the label.
+mode_successor() {
+  [ -d "$1" ] || die "no such sprints directory: $1"
+  # The closing identity must be a real `Sprint <N><suffix>` token. `identity_gt` on anything else
+  # compares garbage silently — `id_digits Backlog` yields `Backlo` — so refuse rather than answer.
+  #
+  # ⛔ THE ONE-LINE CHECK COMES FIRST, AND IT IS NOT REDUNDANT — round-1 R13/R12. `is_eligible` is
+  # `grep -qE "^…\$"`, which anchors to a LINE, so a MULTI-LINE argument whose first line is a valid
+  # identity sails through it. Measured before the fix: `successor <dir> $'Sprint 7\njunk'` returned
+  # exit 3 while the single-line control `'Sprint 7 junk'` correctly returned exit 1. Exit 3 is not a
+  # refusal — the mover reads it as "no successor exists" and falls to the Backlog board, which is
+  # the silent wrong answer this guard exists to prevent. Fail closed on anything but one line.
+  [ "$2" = "$(printf '%s' "$2" | head -1)" ] ||
+    die "not a sprint identity: multi-line value (expected one line, e.g. \`Sprint 8\`)"
+  is_eligible "$2" || die "not a sprint identity: $2 (expected e.g. \`Sprint 8\`)"
+
+  # §3.0's successor filter, replacing §6.4 step 2 (which is `In progress`-only). Steps 3 and 4 of
+  # §6.4 are reused UNCHANGED below.
+  _cands=""
+  set +f
+  for _f in "$1"/*.md; do        # DEPTH 1 ONLY — the same construction `select-active` relies on
+    [ -f "$_f" ] || continue
+    _i=$(resolve_identity "$_f")
+    is_eligible "$_i" || continue
+    identity_gt "$_i" "$2" || continue         # orders strictly ABOVE the closing sprint
+    _sr=$(plan_status_raw "$_f")
+    _st=${_sr%%	*}
+    case "$_st" in
+      'Backlog'|'In progress') ;;
+      *) continue ;;
+    esac
+    _cands="${_cands}$(basename "$_f")	${_i}
+"
+  done
+  set -f
+
+  # §6.4 steps 3 and 4, verbatim: order by §6.1's comparator lowest-first, ties keep the FIRST in glob
+  # (byte, `LC_ALL=C`) order — ADR-041 §1.5.
+  #
+  # ⛔ THE SWAP IS NOT A NEGATION, and this is the same trap `mode_select_active` documents at length.
+  # `! identity_gt "$_i" "$_best_id"` yields `<=`, so a tie REPLACES the incumbent and first-wins
+  # silently becomes last-wins. Copy the swapped-argument form; do not "simplify" it to a negation.
+  _best_b=""; _best_id=""
+  OLD_IFS=$IFS; IFS='
+'
+  for _r in $_cands; do
+    _b=${_r%%	*}; _i=${_r#*	}
+    if [ -z "$_best_id" ] || identity_gt "$_best_id" "$_i"; then
+      _best_id="$_i"; _best_b="$_b"
+    fi
+  done
+  IFS=$OLD_IFS
+
+  [ -n "$_best_b" ] || exit 3
+  printf '%s\n' "$_best_b"
   exit 0
 }
 
@@ -599,6 +685,16 @@ if [ $# -eq 2 ]; then
     status)        mode_status "$2" ;;
     select-active) mode_select_active "$2" ;;
     *)             die "$USAGE" ;;
+  esac
+fi
+
+# `successor` is the only THREE-argument form — it takes a directory AND the closing identity, because
+# "which board is next" is not a property of any one file. Same rule as above: recognised only in its
+# own arity, so nothing here can shadow a one-argument board render.
+if [ $# -eq 3 ]; then
+  case "$1" in
+    successor) mode_successor "$2" "$3" ;;
+    *)         die "$USAGE" ;;
   esac
 fi
 

@@ -27,6 +27,25 @@ or `4c`. `Sprint 4` and `Sprint 4c` are different sprints.
 **No other value is valid.** Not "Not started", not "WIP", not "Todo", not "Complete". If a status you
 need isn't here, the fix is to amend this doc — not to invent a value inline.
 
+## A SPRINT has its own status, and it is not one of these
+
+⛔ **This page is about TASK status.** A sprint board's own status is a different carrier, ruled by
+[ADR-047](../decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint.md)
+§1 and documented in its own sibling page, `sprint-status-vocabulary.md` — which ADR-047 names and a
+separate task writes. The two vocabularies **share their glyphs deliberately**, so one eye reads both
+boards, which is exactly why the boundary has to be stated:
+
+| Reading | Where it lives |
+|---|---|
+| a **task** status | a brief's `## Status` field, or the **leading cell** of a board row |
+| a **sprint** status | a **blockquoted H2 on line 3 of the board**, and nowhere else |
+
+⭐ **Tell them apart by POSITION, never by the glyph** (ADR-047 §1.1). `🔲 Backlog` on line 3 of
+`sprint-9.md` says the *sprint* is scoped but not started; the same glyph in a row's leading cell says
+that *task* is. ⛔ `🚧 Blocked` and `➡️ Moved` are **task-only** — a sprint is never blocked (its tasks
+are), and `Moved` is a row disposition, not a board state. Do not "fix" the shared glyphs by inventing
+a second set; the by-position rule is the fix, and the collision is accepted with its cost named.
+
 ## The authority split — this is the point
 
 **`In progress` and `Blocked` are free.** They are simply facts about the world; any session may set
@@ -39,6 +58,11 @@ producer may invoke those skills**
 [ADR-025](../decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md)). This one is
 **enforced**, not asked: the ADR-018 `PreToolUse` hook denies a mover call from any non-producer
 identity at any spawn depth. Every other role routes its closes through a spawned producer.
+
+⭐ **The sprint vocabulary mirrors this split exactly, and ADR-047 §4 says so by applying ADR-033's
+reasoning verbatim.** A sprint's `🔲 Backlog → 🔄 In progress` is free for the producer to set by hand —
+a planning act, like `➡️ Moved`. Its two **terminal** states are mover-gated, to `/fkit-sprint-done` and
+`/fkit-sprint-cancelled`, and producer-only under the same hook. **Four movers, one rule.**
 
 ⚠️ **A close performed without the owner present must write the `(agent-closed — not owner-verified)`
 variant — and that includes a producer that was SPAWNED to close** (ADR-033 §5): a spawned producer has
@@ -79,6 +103,9 @@ This vocabulary ships to every project fkit scaffolds, so it has to live in the 
 - `claude/skills/fkit-task-done/SKILL.md` — sets `✅ Done`
 - `claude/skills/fkit-task-cancelled/SKILL.md` — sets `⛔ Cancelled`
 - `claude/skills/fkit-task-brief/SKILL.md` — sets `🔲 Backlog` on creation *(Sprint 2, task 14)*
+- `claude/skills/fkit-sprint-done/SKILL.md` and `claude/skills/fkit-sprint-cancelled/SKILL.md` — the
+  **sprint** board's two terminal states, in its line-3 banner. Not this page's values; named here so
+  the enforcement list is complete *(task 0341, ADR-047 §4)*
 - `claude/agents/fkit-producer.md` — the producer reports against these values
 - `claude/scaffold/ai-agents/knowledge-base/conventions/task-status-vocabulary.md` — the scaffold ships
   this convention, so new projects inherit the vocabulary as law rather than as a copy in a README

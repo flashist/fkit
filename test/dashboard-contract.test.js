@@ -3626,3 +3626,211 @@ test('ADR-047 P18: `⭐ ACTIVE BOARD` on a same-identity collision — the recor
     ['drift ambiguous-active-sprint identity="Sprint 6" chosen="plan-sprint-6.md" also="sprint-6.md"'],
     'the ignored marker is not silent either — the collision that swallowed it is reported');
 });
+
+// ===================================================================================================
+// ADR-047 §3.0.2 / FOLLOW-UP 2 — the `successor` mode (task 0341).
+//
+// WHY THE MODE EXISTS. `/fkit-sprint-done` must send every open row to "the lowest-ordered
+// non-terminal successor board", and it is a SKILL — markdown prose an LLM executes. ADR-041 §5
+// forbids that prose from comparing `Sprint 9` against `Sprint 10` itself ("two grammars for one
+// question"), and no existing mode orders the set §3.0.2 hands it. Owner ruling D1, 2026-09-12,
+// option label verbatim "New `successor` mode (Rec)", chose this surface.
+//
+// ⛔ THE ONE THING THESE TESTS EXIST TO CATCH ABOVE ALL OTHERS: `select-active` is NOT a substitute.
+// It filters to `In progress` alone, so it silently DROPS every `🔲 Backlog` successor — and the
+// successor set is `Backlog` ∪ `In progress`. S3 below is that exact case.
+//
+// ⚠️ A VALUE, NOT A RENDERING — no `⟦…⟧` markers, exactly like `identity` and `status`. A caller reads
+// it with one command substitution.
+
+// S1 — the happy path: lowest-ordered successor above the closing identity.
+test('ADR-047 successor S1: prints the BASENAME of the lowest-ordered non-terminal successor', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-4.md': prosePlan('# Four', BANNER.done),
+      'sprint-5.md': prosePlan('# Five', BANNER.inprogress),
+      'sprint-9.md': prosePlan('# Nine', BANNER.inprogress),
+    },
+  });
+  const r = runMode(['successor', sprintsDir, 'Sprint 4']);
+  assert.equal(r.code, 0);
+  assert.equal(r.out, 'sprint-5.md\n',
+    'ONE basename on ONE line, and nothing else — the mover reads this with a command substitution');
+  assert.ok(!r.out.includes('⟦'), 'a VALUE, not a rendering: no version marker, no envelope');
+});
+
+// S2 — a terminal board is never a successor, whichever terminal state it is in.
+test('ADR-047 successor S2: `Done` and `Cancelled` boards are skipped, however low they order', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-5.md': prosePlan('# Five', BANNER.done),
+      'sprint-6.md': prosePlan('# Six', BANNER.cancelled),
+      'sprint-7.md': prosePlan('# Seven', BANNER.closed),   // the legacy rung reads as Done
+      'sprint-8.md': prosePlan('# Eight', BANNER.inprogress),
+    },
+  });
+  const r = runMode(['successor', sprintsDir, 'Sprint 4']);
+  assert.equal(r.code, 0);
+  assert.equal(r.out, 'sprint-8.md\n',
+    'a board that has already reached a terminal state cannot carry work forward — including the ' +
+    'legacy `🔒 CLOSED` rung, which resolves to the `Done` token');
+});
+
+// S3 — ⛔ THE CASE `select-active` DROPS. This is the whole reason the mode is not `select-active`.
+test('ADR-047 successor S3: a `🔲 Backlog` board IS a successor — the case `select-active` silently drops', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-6.md': prosePlan('# Six', BANNER.backlog),
+      'sprint-9.md': prosePlan('# Nine', BANNER.inprogress),
+    },
+  });
+  const r = runMode(['successor', sprintsDir, 'Sprint 5']);
+  assert.equal(r.code, 0);
+  assert.equal(r.out, 'sprint-6.md\n',
+    '⛔ §3.0.2\'s successor set is `Backlog` ∪ `In progress`. Reaching for `select-active` here — ' +
+    'which filters to `In progress` alone — returns `sprint-9.md` and silently skips a scoped board.');
+
+  // And the discriminator, asserted directly so the claim above is not just a comment: the same
+  // fixture through `select-active` really does drop `sprint-6.md`.
+  const sel = runMode(['select-active', sprintsDir]);
+  assert.deepEqual(activeLines(sel.out), [
+    'active file="sprint-9.md" identity="Sprint 9" status="In progress"',
+  ], 'select-active has no notion of a Backlog board — this is the measured drop, not a supposition');
+});
+
+// S4 — strictly ABOVE. The closing board itself, and everything below it, is excluded.
+test('ADR-047 successor S4: the closing identity and everything below it are excluded (strictly above)', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-3.md': prosePlan('# Three', BANNER.inprogress),
+      'sprint-8.md': prosePlan('# Eight', BANNER.inprogress),   // the closing board itself
+      'sprint-9.md': prosePlan('# Nine', BANNER.backlog),
+    },
+  });
+  const r = runMode(['successor', sprintsDir, 'Sprint 8']);
+  assert.equal(r.code, 0);
+  assert.equal(r.out, 'sprint-9.md\n',
+    'a lower-ordered board is not a successor, and a board cannot succeed itself — the test is ' +
+    'strictly greater, exactly as §3.0 words it');
+});
+
+// S5 — §6.1's comparator, unchanged: `Sprint 10` orders ABOVE `Sprint 9`, which a byte sort gets
+// backwards. The mode reuses `identity_gt`; it does not re-implement ordering.
+test('ADR-047 successor S5: `Sprint 9` beats `Sprint 10` as the LOWEST successor (length-then-bytes)', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-10.md': prosePlan('# Ten', BANNER.inprogress),
+      'sprint-9.md': prosePlan('# Nine', BANNER.inprogress),
+    },
+  });
+  const r = runMode(['successor', sprintsDir, 'Sprint 8']);
+  assert.equal(r.code, 0);
+  assert.equal(r.out, 'sprint-9.md\n',
+    '`identity_gt` compares length-then-bytes, so 9 orders below 10. ⛔ A byte/text sort answers ' +
+    '`sprint-10.md` here, and `sprint-10.md` also comes FIRST in glob order — so a broken comparator ' +
+    'would be masked by first-wins if the fixture were written the other way round.');
+});
+
+// S6 — ADR-041 §1.5's tie-break, on the ADR's own fixture shape: two files claiming ONE identity.
+// ⛔ THIS IS THE NEGATION-VS-SWAP TRAP'S DETECTOR. `! identity_gt "$_i" "$_best_id"` yields `<=`, so a
+// tie REPLACES the incumbent and first-wins silently becomes last-wins — picking `sprint-6.md` here.
+test('ADR-047 successor S6: same-identity claimants tie-break by byte order, FIRST wins', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'plan-sprint-6.md': prosePlan('# Six — plan', BANNER.inprogress),
+      'sprint-6.md': prosePlan('# Six — sprint', BANNER.inprogress),
+      'sprint-9.md': prosePlan('# Nine', BANNER.inprogress),
+    },
+  });
+  const r = runMode(['successor', sprintsDir, 'Sprint 4']);
+  assert.equal(r.code, 0);
+  assert.equal(r.out, 'plan-sprint-6.md\n',
+    '⛔ ADR-041 §1.5: first in byte order under `LC_ALL=C` wins a tie. Negating `identity_gt` instead ' +
+    'of SWAPPING its arguments yields `<=`, which makes a tie REPLACE the incumbent — this assertion ' +
+    'is what tells you that happened, and the failure is otherwise silent.');
+});
+
+// S7 — no successor. The mover then falls to the Backlog board, so this exit is a real branch.
+test('ADR-047 successor S7: exit 3 and no output when nothing orders above the closing sprint', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'sprint-7.md': prosePlan('# Seven', BANNER.done),
+      'sprint-8.md': prosePlan('# Eight', BANNER.inprogress),
+    },
+  });
+  const r = runMode(['successor', sprintsDir, 'Sprint 8']);
+  assert.equal(r.code, 3, 'exit 3 is "no successor exists", which the mover answers with the Backlog board');
+  assert.equal(r.out, '', 'nothing on stdout — a command substitution must yield the empty string');
+});
+
+// S8 — the two never-eligible identities, and a banner-less board.
+test('ADR-047 successor S8: `Backlog`, unresolved and banner-less boards are never successors', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: {
+      'backlog.md': prosePlan('# The backlog board', null),
+      'notes.md': prosePlan('# Some notes with no identity token', BANNER.inprogress),
+      'sprint-9.md': prosePlan('# Nine', null),               // eligible identity, NO banner
+    },
+  });
+  const r = runMode(['successor', sprintsDir, 'Sprint 8']);
+  assert.equal(r.code, 3,
+    '`Backlog` and `unresolved` identities are never eligible (ADR-041 §1.3, unchanged), and a board ' +
+    'with no line-3 banner has status `unresolved` — never silently `In progress` (ADR-047 §2)');
+  assert.equal(r.out, '');
+});
+
+// S9 — the argument contract. A garbage closing identity must REFUSE, not answer.
+test('ADR-047 successor S9: a non-sprint closing identity is a usage error, not a silent comparison', () => {
+  const { sprintsDir } = sprintsFixture({
+    plans: { 'sprint-9.md': prosePlan('# Nine', BANNER.inprogress) },
+  });
+  for (const bad of ['Backlog', 'unresolved', 'Sprint', '9', '']) {
+    const r = runMode(['successor', sprintsDir, bad]);
+    assert.equal(r.code, 1,
+      `successor with closing identity ${JSON.stringify(bad)} must exit 1.\n` +
+      '⛔ `identity_gt` on a non-sprint token compares GARBAGE silently — `id_digits Backlog` yields ' +
+      '`Backlo` — so the mode refuses rather than answering confidently about nothing.');
+    assert.match(r.err, /not a sprint identity|usage: bash dashboard\.sh/);
+  }
+  const missing = runMode(['successor', join(sprintsDir, 'nope'), 'Sprint 4']);
+  assert.equal(missing.code, 1);
+  assert.match(missing.err, /no such sprints directory/);
+
+  // ⛔ THE MULTI-LINE ARM — round-1 R12, and the reason S9 was not enough on its own. Every `bad`
+  // value above is SINGLE-LINE, and `is_eligible` is `grep -qE "^…$"`, which anchors to a LINE: a
+  // multi-line value whose FIRST line is a valid identity passed the guard entirely. Measured
+  // before the fix: this returned exit **3**, not 1 — and exit 3 is not a refusal. The mover reads
+  // it as "no successor exists" and falls to the Backlog board, so a malformed argument silently
+  // re-routed every open row. That is strictly worse than the garbage comparison S9 guards, because
+  // it looks like a legitimate answer.
+  for (const bad of ['Sprint 7\njunk', 'Sprint 9\nSprint 4', 'Sprint 9\n']) {
+    const r = runMode(['successor', sprintsDir, bad]);
+    assert.equal(r.code, 1,
+      `successor with the multi-line closing identity ${JSON.stringify(bad)} must exit 1, not 3.\n` +
+      '⛔ Exit 3 means "no successor exists" and the mover falls to the Backlog board — a silent ' +
+      'wrong answer from a malformed argument. The one-line check must run BEFORE `is_eligible`.');
+    assert.match(r.err, /not a sprint identity: multi-line value/);
+  }
+});
+
+// S10 — the dispatch. `successor` is the only three-argument form, and it must not shadow anything.
+test('ADR-047 successor S10: three-argument dispatch, and the one-argument board render is untouched', () => {
+  const { sprintsDir, planPath } = sprintsFixture({
+    plans: { 'sprint-2.md': boardPlan('# Sprint 2 — Test', BANNER.inprogress) },
+    briefs: ALPHA,
+  });
+  const bad = runMode(['nope', sprintsDir, 'Sprint 4']);
+  assert.equal(bad.code, 1, 'an unknown three-argument subcommand is a usage error');
+  assert.match(bad.err, /usage: bash dashboard\.sh/);
+
+  // ⚠️ The usage string GREW; the existing unanchored assertion pins its head. Pin the new tail here
+  // so appending is a deliberate, tested act rather than a thing that happened.
+  assert.match(bad.err, /\| status <plan> \| successor <sprints-dir> <closing-identity>$/m,
+    '`successor` is APPENDED, after `status <plan>`. ⛔ Inserting it earlier reds the ADR-041 usage ' +
+    'assertion, whose unanchored pattern ends at `select-active <sprints-dir>` — measured, not assumed.');
+
+  // And the historic render is still the one-argument form.
+  const b = run(planPath('sprint-2.md'));
+  assert.equal(b.code, 0);
+  assert.ok(b.out.startsWith('⟦fkit-dashboard v2⟧'), 'one argument is still a board render');
+});

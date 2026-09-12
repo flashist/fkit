@@ -144,7 +144,7 @@ role still cannot run another role's *procedure*.
 > the whole built team; this note is the plan. When the tester ships, it becomes an eighth table row —
 > until then, "seven roles" is the fact and "eight" would be a claim about code that is not there.
 
-### 4.2 The 26 skills — where the procedures live
+### 4.2 The 28 skills — where the procedures live
 
 Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedures**; the agent
 prompts are the role's *character*. Every role-specific skill opens with a `⛔ Owner:` banner naming
@@ -155,7 +155,7 @@ universal skills — `fkit-query` and `fkit-team` — carry no banner; both are 
 | Owner | Skills |
 |---|---|
 | lead | `sprint-ship-loop` (the conductor loop — ADR-031/032) |
-| producer | `initiate-project`, `task-brief`, `task-done`, `task-cancelled`, `status`, `heal` (structure check + consent-gated repair — tasks 0245/0246, ADR-039) |
+| producer | `initiate-project`, `task-brief`, `task-done`, `task-cancelled`, `sprint-done`, `sprint-cancelled` (the sprint-board movers — task 0341, ADR-047 §4), `status`, `heal` (structure check + consent-gated repair — tasks 0245/0246, ADR-039) |
 | coder | `plan-task`, `process-review`, `process-stateful-review`, `task-ship-loop` |
 | architect | `survey-project`, `inspect`, `design-spec`, `evaluate-approach`, `record-decision` |
 | reviewer | `review`, `stateful-review` |
@@ -303,8 +303,8 @@ contract every role shares (`ai-agents/README.md`).
 | `knowledge-base/incidents/YYYY-MM-DD-*.md` | any session | postmortems of **fkit's own runtime/tooling** — not product bugs (those are task briefs). [`incidents/README.md`](incidents/README.md) |
 | `knowledge-base/reports/YYYY-MM-DD-*.md` | any session; evaluations from the **architect** | dated artifacts of work performed — audits, verifications, evaluations, executed plans. [`reports/README.md`](reports/README.md) |
 | `knowledge-base/history/` | architect | superseded **design docs** — docs that no longer describe reality. **Archive, don't delete** (ADR-002). Narrow, *not* the general archive. [`history/README.md`](history/README.md) |
-| `sprints/sprint-N.md` | producer | sprint plan + status table; completed sprints move to `sprints/done/` |
-| `tasks/{backlog,done,cancelled}/<NNNN>-<slug>/` | producer **writes** the brief and is the **only role that moves the folder**, via `/fkit-task-done` and `/fkit-task-cancelled` (ADR-033, reversing ADR-025; hook-enforced at any spawn depth. Every other role routes its closes through a spawned producer, whose close is marked `(agent-closed — not owner-verified)`) | **A task is a folder, not a file** ([ADR-029](decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md), migrated 2026-07-22). The folder is keyed by a **permanent four-digit global ID** (`0001`…, never reused, never renumbered) and holds `brief.md` plus, when they exist, `plan.md`, `worklog.md`, `review.md`, and an `assets/` dir. The board (`backlog`/`done`/`cancelled`) is the folder's **parent**. |
+| `sprints/sprint-N.md` | producer — and the **only role that moves a board**, via `/fkit-sprint-done` and `/fkit-sprint-cancelled` (ADR-047 §4, hook-enforced at any spawn depth) | sprint plan + status table. **The sprint's status is an explicit line-3 banner** (ADR-047 §1) — `🔲 Backlog` / `🔄 In progress` / `✅ Done` / `⛔ Cancelled` — mirrored by location: a closed board moves to `sprints/done/`, a dropped one to `sprints/cancelled/`. `sprints/backlog.md` is the standing unranked board and is **never a sprint** — it has no banner and no lifecycle. |
+| `tasks/{backlog,done,cancelled}/<NNNN>-<slug>/` | producer **writes** the brief and is the **only role that moves the folder**, via `/fkit-task-done` and `/fkit-task-cancelled` (ADR-033, reversing ADR-025; hook-enforced at any spawn depth. Every other role routes its closes through a spawned producer, whose close is marked `(agent-closed — not owner-verified)`). ⭐ The producer owns the **sprint** boards' movers on the same terms — see the `sprints/sprint-N.md` row above | **A task is a folder, not a file** ([ADR-029](decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id.md), migrated 2026-07-22). The folder is keyed by a **permanent four-digit global ID** (`0001`…, never reused, never renumbered) and holds `brief.md` plus, when they exist, `plan.md`, `worklog.md`, `review.md`, and an `assets/` dir. The board (`backlog`/`done`/`cancelled`) is the folder's **parent**. |
 | *(within each task folder)* `review.md` | reviewer **and** coder — a two-party ledger | findings + dispositions + **accepted residuals**. The loop-prevention memory: it carries decision state across review rounds so settled tradeoffs are not re-litigated. **Absorbed into the task folder by ADR-029** — the former top-level `reviews/<task-id>.md`, along with `plans/` and `worklogs/` (ADR-020), no longer exist; a task's artifacts now live with its brief. |
 | `wiki-vault/` | **`fkit-wiki` only** | Karpathy LLM-wiki: `schema.md` (conventions), `index.md` (catalog), `log.md` (activity), `wiki/{features,systems,decisions,tasks}/` |
 

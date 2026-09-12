@@ -44,9 +44,9 @@ terminals needs Accessibility permissions that fail worse than pressing Cmd-T.)
 `skills-for-role.sh`, sourced by both `fkit-claude.sh` and the `PreToolUse` skill-ownership hook
 below. That function is the single source of truth.
 
-| Role | Its procedures (plus `/fkit-query` + `/fkit-team`, which everyone has; and `/fkit-open-questions-interview` + `/fkit-dumb-down`, which the six Claude-side roles have — all but `adversarial-reviewer`, which reviews on Codex under a restricted allowlist). **The two task movers are the producer's alone** (ADR-033, reversing ADR-025's grant to every role but `adversarial-reviewer`) — every other role routes its closes through the producer |
+| Role | Its procedures (plus `/fkit-query` + `/fkit-team`, which everyone has; and `/fkit-open-questions-interview` + `/fkit-dumb-down`, which the six Claude-side roles have — all but `adversarial-reviewer`, which reviews on Codex under a restricted allowlist). **The four movers are the producer's alone** — the two task movers (ADR-033, reversing ADR-025's grant to every role but `adversarial-reviewer`) and the two sprint movers (ADR-047 §4) — every other role routes its closes through the producer |
 |---|---|
-| producer | `initiate-project` · `task-brief` · `task-done` · `task-cancelled` · `status` · `heal` (structure check + consent-gated repair) |
+| producer | `initiate-project` · `task-brief` · `task-done` · `task-cancelled` · `sprint-done` · `sprint-cancelled` · `status` · `heal` (structure check + consent-gated repair) |
 | coder | `plan-task` · `process-review` · `process-stateful-review` · `task-ship-loop` |
 | architect | `survey-project` · `inspect` · `design-spec` · `evaluate-approach` · `record-decision` |
 | reviewer | `review` · `stateful-review` |

@@ -107,10 +107,13 @@
 //  3. CITING SITES OUTSIDE THE SCANNED SET are never looked at — `claude/` and `test/` are out of
 //     scope entirely (0176 scoping decision 1). The three known-stale citations living there are
 //     red-team fixtures, not an instruction to widen.
-//  4. `ai-agents/sprints/done/**` AND `ai-agents/sprints/reviews/**` ARE NOT SCANNED — a closed
-//     board's claims are frozen (task 0353, for THIS half). ⚠️ RE-MEASURED COST: +6 residual across 2
-//     files. The brief records +4; it is +6 today, and the cost is growing. ⛔ The LINK half was ruled
-//     the OTHER way on both trees — do not import its answer. Pinned by arm L6.
+//  4. `ai-agents/sprints/done/**`, `ai-agents/sprints/reviews/**` AND `ai-agents/sprints/cancelled/**`
+//     ARE NOT SCANNED — a closed board's claims are frozen (task 0353, for THIS half; `cancelled/`
+//     added by task 0341 under owner ruling V4, ADR-047 §3.1 FOLLOW-UP 1, in the same change that
+//     creates the tree). ⚠️ RE-MEASURED COST: +6 residual across 2 files, all from `done/`;
+//     `cancelled/` holds no board yet, so its own cost today is 0 and is entirely PROSPECTIVE. The
+//     brief records +4; it is +6 today, and the cost is growing. ⛔ The LINK half was ruled the OTHER
+//     way on both trees — do not import its answer. Pinned by arm L6.
 //  5. `ai-agents/knowledge-base/**` IS NOT SCANNED — 0176 scoping decision 1: a report cites a
 //     coordination document AS THE SPECIMEN IT IS DIAGNOSING. Not measured, deliberately.
 //  6. FENCED BLOCKS AND BLOCKQUOTE LINES ARE MASKED — 0176 scoping decision 2 (a quotation is not a
@@ -443,9 +446,17 @@ test('L6 scope: the out-of-scope trees were never walked at all', () => {
   // against task 0353. sprints/done + sprints/reviews: a closed board's claims are frozen, measured
   // cost +6 residual across 2 files. knowledge-base: a report cites a coordination document as the
   // specimen it is diagnosing. wiki-vault: ADR-005. claude/ and test/: 0176 scoping decision 1.
+  // ⭐ `sprints/cancelled/` joins the list under owner ruling V4 (ADR-047 §3.1 FOLLOW-UP 1), landed by
+  // task 0341 in the same change that creates the tree. Same authority as its `done/` sibling — a
+  // closed board's claims are frozen — and ⛔ NOT deferred to "when a sprint is actually cancelled",
+  // because deferring guarantees the red lands on whoever cancels one, at the worst possible moment.
+  // ⚠️ The tree is held open by `ai-agents/sprints/cancelled/.gitkeep`: git cannot carry an empty
+  // directory, and the `existsSync` assertion below would otherwise pass VACUOUSLY-inverted (it fails
+  // loudly instead, which is why the placeholder is part of the same change).
   const forbidden = [
     'ai-agents/sprints/done/',
     'ai-agents/sprints/reviews/',
+    'ai-agents/sprints/cancelled/',
     'ai-agents/knowledge-base/',
     'ai-agents/wiki-vault/',
   ];
@@ -481,8 +492,10 @@ test('L7 disclosure: the working figures, and every named blind spot with its li
     '328 counting exempt folders); counts coordinates, not verified-stale ones; matcher-dependent');
   t.diagnostic('  3. citing sites outside the scanned set never looked at — 3 known-stale in ' +
     'claude/ and test/');
-  t.diagnostic('  4. sprints/done and sprints/reviews not scanned — +6 residual across 2 files ' +
-    '(the brief records +4; the cost has grown)');
+  t.diagnostic('  4. sprints/done, sprints/reviews and sprints/cancelled not scanned — +6 residual ' +
+    'across 2 files (the brief records +4; the cost has grown). sprints/cancelled joined the list ' +
+    'with task 0341 and holds no board yet, so its own residual is 0 today — a PROSPECTIVE blind ' +
+    'spot, disclosed here because L7 discloses every named one, not only the ones already costing');
   t.diagnostic('  6. fences and blockquotes masked — 8 hits across 2 files, both inside the ' +
     'exemption, residual cost 0');
   t.diagnostic('  7. staleness itself is never checked and cannot be — the condition is syntactic');

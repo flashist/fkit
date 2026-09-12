@@ -26,6 +26,25 @@ or `4c`. `Sprint 4` and `Sprint 4c` are different sprints.
 **No other value is valid.** Not "Not started", not "WIP", not "Todo", not "Complete". If a status you
 need isn't here, the fix is to amend this doc — not to invent a value inline.
 
+## A SPRINT has its own status, and it is not one of these
+
+⛔ **This page is about TASK status. A sprint board's own status is a different carrier and lives
+elsewhere** — `sprint-status-vocabulary.md`, its sibling. The two share their glyphs deliberately, so
+one eye reads both boards, which is exactly why the boundary has to be stated:
+
+| Reading | Where it lives |
+|---|---|
+| a **task** status | a brief's `## Status` field, or the **leading cell** of a board row |
+| a **sprint** status | a **blockquoted H2 on line 3 of the board**, and nowhere else |
+
+**Tell them apart by POSITION, never by the glyph.** `🔲 Backlog` on line 3 of `sprint-9.md` says the
+*sprint* is scoped but not started; the same glyph in a row's leading cell says that *task* is. And
+`🚧 Blocked` / `➡️ Moved` are **task-only** — a sprint is never blocked (its tasks are), and `Moved` is
+a row disposition, not a board state.
+
+The **sprint** movers are `/fkit-sprint-done` and `/fkit-sprint-cancelled`, and they are the
+producer's alone on the same rule as the task pair below.
+
 ## The authority split — this is the point
 
 **`In progress` and `Blocked` are free.** They are simply facts about the world; any session may set
@@ -36,6 +55,11 @@ the `/fkit-task-done` and `/fkit-task-cancelled` skills — never by hand-editin
 producer may invoke those skills.** That one is enforced rather than asked: a `PreToolUse` hook denies
 a mover call from any non-producer identity, at any spawn depth. Every other role routes its closes
 through the producer and closes nothing itself.
+
+⭐ **The sprint vocabulary mirrors this split exactly.** A sprint's `🔲 Backlog → 🔄 In progress` is free
+for the producer to set by hand — a planning act, like `➡️ Moved`. Its two **terminal** states are
+mover-gated, to `/fkit-sprint-done` and `/fkit-sprint-cancelled`, and producer-only under the same hook.
+**Four movers, one rule.**
 
 ⚠️ **A close performed without the owner present must write the `(agent-closed — not owner-verified)`
 variant — including a producer that was SPAWNED to close.** A spawned agent has no channel to you, so
@@ -74,6 +98,8 @@ Prose does not stop an agent that has already decided its work is done.
 - `/fkit-task-done` — sets `✅ Done`
 - `/fkit-task-cancelled` — sets `⛔ Cancelled`
 - `/fkit-task-brief` — sets `🔲 Backlog` on creation
+- `/fkit-sprint-done` / `/fkit-sprint-cancelled` — the **sprint** board's terminal states, in its
+  line-3 banner. Not this page's values; named here so the enforcement list is complete
 - `/fkit-status` — the dashboard renders these values and no others
 - The producer reports against these values and no others
 

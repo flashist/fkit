@@ -61,12 +61,17 @@
 // structural signature of a mover (`### 3. Move the task FOLDER to`) across EVERY skill, not by a
 // name prefix: `claude/skills/` also holds `fkit-task-brief` and `fkit-task-ship-loop`, which are
 // not movers, so a `fkit-task-*` prefix pin would have been wrong.
-//   ⚠️ The SPRINT movers are deliberately NOT in this roster and NOT covered here. They move a sprint
-//   plan, not a task folder, so the signature does not match them. Task 0341 is where the clause
-//   reaches them — and one caution for whoever does it: the sprint movers INVERT the order (repoint,
-//   then `git mv`; ADR-047 §4), while the exemption step must still run AFTER the move, because a
-//   HEAL is only observable at the new path. A copy-paste that preserves POSITION instead of
-//   preserving AFTER-THE-MOVE is wrong. T_ORDER below pins after-the-move for the task movers only.
+//
+// ⭐ TWO ROSTERS, NOT ONE — task 0341. The SPRINT movers (`fkit-sprint-done`,
+// `fkit-sprint-cancelled`) now carry the same clause and are pinned by the `S`-series at the foot of
+// this file, under a SECOND roster with its own signature (`### N. Move the board FILE to`). They are
+// deliberately NOT folded into `SKILLS`/T0: T0's signature is `### 3. Move the task FOLDER to`, which
+// a sprint mover must never carry, and folding them in would make T0 unable to say what it says.
+//   ⛔ THE ONE THING THE `S`-SERIES PINS DIFFERENTLY, and it is the trap 0381 wrote down in advance:
+//   the sprint movers INVERT the step order (repoint, THEN `git mv` — ADR-047 §4), so the clause does
+//   NOT sit at the same numbered position. The invariant is AFTER-THE-MOVE, not the position — a heal
+//   is only observable at the new path — so `S3` anchors on the `git mv` step, where `T14` anchors on
+//   step 5's "Then prove it." paragraph. A copy-paste that preserved POSITION would be wrong.
 //
 // THIS TEST READS THE REPO, read-only, and writes nothing anywhere — every fixture below is an
 // in-memory array of strings, so not even os.tmpdir() is touched.
@@ -96,8 +101,8 @@ if (ROOT !== DEFAULT_ROOT) {
 // list is COMPLETE, and never sources the list from it.
 
 const SKILLS = [
-  { name: 'fkit-task-done', board: 'done' },
-  { name: 'fkit-task-cancelled', board: 'cancelled' },
+  { name: 'fkit-task-done', board: 'done', moved: 'folder' },
+  { name: 'fkit-task-cancelled', board: 'cancelled', moved: 'folder' },
 ];
 const pathFor = (name) => join(ROOT, 'skills', name, 'SKILL.md');
 const labelFor = (name) => `claude/skills/${name}/SKILL.md`;
@@ -124,6 +129,19 @@ function readSkill(name) {
 
 const BOARD = 'BOARD';
 const forBoard = (s, board) => s.split(BOARD).join(board);
+
+// `MOVED` is the SECOND substitution token — owner ruling R11, 2026-09-12, option label verbatim
+// "Reword via a 2nd variable (Rec)". A TASK mover moves a task FOLDER; a SPRINT mover moves a board
+// FILE. Two pinned sentences say which, and they are not the same kind of sentence:
+//   - THREE_DIRECTIONS is DESCRIPTIVE — "Moving a <MOVED> into `<board>/` can orphan…".
+//   - ATTRIBUTION_RULE is FUNCTIONAL — it is the test an operator applies to decide whether a red is
+//     theirs at all. Left as "folder" in a sprint mover, a literal reading finds no moved folder,
+//     concludes the red is someone else's, and reports a break IT CAUSED as pre-existing. That is
+//     the whole reason this token exists rather than a note in a comment.
+// ⛔ The shared-constant design is preserved: ONE constant per sentence, substituted per roster, so a
+// reword still cannot land in one family and not the other.
+const MOVED = 'MOVED';
+const forMover = (s, board, moved) => forBoard(s, board).split(MOVED).join(moved);
 
 // R1 (raw) — the guard invocation. This is the line an operator runs; it names ONE path and no
 // assertion internals, which is the whole of the clause's coupling to the test file.
@@ -227,8 +245,10 @@ const AUTHORITY_RULE = '- **You may run this guard. You may not edit it.** ' +
 // ⚠️ THE TEST FOR "THIS MOVE'S" MUST COVER AN `L2` RED TOO. Keyed on the named key alone it has no
 // referent when there is no key yet, and a literal read then routes a FRESH break to "pre-existing
 // and left alone" — contradicting the L2 bullet three lines above it. Round-1 R2, second half.
+// ⛔ BOARD-AGNOSTIC BUT NOT MOVER-AGNOSTIC (owner ruling R11, 2026-09-12). It carries `MOVED`, not
+// `BOARD`: what differs between the families is WHAT MOVED, not where it went.
 const ATTRIBUTION_RULE = '- **Attribute before touching anything.** The guard is repo-global, so a ' +
-  'red may belong to another change in flight. It is this move\'s only where the folder just moved ' +
+  `red may belong to another change in flight. It is this move's only where the ${MOVED} just moved ` +
   'is spelled by the named key — or, for an `L2` red, where there is no key yet, by the broken ' +
   'link\'s own citing file or target; anything else is reported as pre-existing and left alone. ' +
   'Re-running the guard is harmless and must not produce a second `NEEDS-DECISION` for the same key.';
@@ -246,7 +266,7 @@ const INVERSION = `*"\`../../${BOARD}/X\` survives, \`../X\` does not" is right 
 // that should resolve converts a loud deterministic red into a silent permanent exemption. This was
 // the FOURTH instance of that defect — round-1 R2 fixed two, ruling AH1 a third, and all three passes
 // walked past this summary. Round-2 R9.
-const THREE_DIRECTIONS = `Moving a folder into \`${BOARD}/\` can orphan one of those keys, heal one, ` +
+const THREE_DIRECTIONS = `Moving a ${MOVED} into \`${BOARD}/\` can orphan one of those keys, heal one, ` +
   'or break a fresh link that needs repairing.';
 
 // A12 (flat) — the framing paragraph: the ONE place the clause says WHO performs a repair.
@@ -628,25 +648,30 @@ test('T9 both movers: the authority gate — a producer may RUN the guard, never
 });
 
 test('T10 both movers: attribution and re-run idempotence', () => {
-  for (const { name } of SKILLS) {
+  for (const { name, board, moved } of SKILLS) {
     expectExactlyOnce({
-      id: 'T10', skill: name, source: clauseOf(name), needle: ATTRIBUTION_RULE, mode: 'flat',
-      subject: 'attribution / idempotence rule',
+      id: 'T10', skill: name, source: clauseOf(name),
+      needle: forMover(ATTRIBUTION_RULE, board, moved), mode: 'flat',
+      subject: `attribution / idempotence rule (moved subject: \`${moved}\`)`,
       why: 'The guard is REPO-GLOBAL: a red can belong to another change in flight, and a mover that ' +
         '"fixes" it is editing someone else\'s work — a concurrent close\'s transient red is a real ' +
-        'observed case. Attribution by folder name is what keeps this step from widening into a sweep.',
+        'observed case. Attribution by the name of what just moved is what keeps this step from ' +
+        'widening into a sweep. ⛔ THE SUBJECT WORD IS FUNCTIONAL, NOT DECORATIVE (ruling R11): a task ' +
+        'mover moves a `folder`, a sprint mover a `board file`, and an operator told to look for a ' +
+        'moved FOLDER while closing a sprint finds none, concludes the red is someone else\'s, and ' +
+        'reports a break it caused as pre-existing.',
       constant: 'ATTRIBUTION_RULE',
     });
   }
 });
 
 test('T11 both movers: the board-dependent sentences name THIS mover\'s board', () => {
-  for (const { name, board } of SKILLS) {
+  for (const { name, board, moved } of SKILLS) {
     const source = clauseOf(name);
     for (const [constant, template] of [['INVERSION', INVERSION], ['THREE_DIRECTIONS', THREE_DIRECTIONS]]) {
       expectExactlyOnce({
-        id: 'T11', skill: name, source, needle: forBoard(template, board), mode: 'flat',
-        subject: `board-dependent sentence (${constant}, board \`${board}/\`)`,
+        id: 'T11', skill: name, source, needle: forMover(template, board, moved), mode: 'flat',
+        subject: `board-dependent sentence (${constant}, board \`${board}/\`, moved \`${moved}\`)`,
         why: '⚠️ THE COPY-PASTE TRAP. These two sentences are the only prose carrying the board word. ' +
           'A clause pasted from the other mover without swapping the word reads perfectly and is ' +
           'wrong: it would tell a cancelling operator that a link heals when its citer moves into ' +
@@ -839,4 +864,298 @@ test('T15 extraction fails closed: missing / duplicated / reversed anchors and a
   assert.equal(ok.length, MIN_BLOCK_LINES + 2,
     'T15: the positive control did not extract the expected span — the gate cases above may be ' +
     'throwing for a reason unrelated to what each one names.');
+});
+
+// ══════════════════════════════════════════════════════════════════════════════════════════════════
+// S0–S6 · THE SPRINT MOVERS — the second roster (task 0341, ADR-047 §4)
+// ══════════════════════════════════════════════════════════════════════════════════════════════════
+//
+// `/fkit-sprint-done` and `/fkit-sprint-cancelled` carry the SAME clause, for the same reason: they
+// move a file, links change, and the NAMED_EXEMPT keys in `test/reference-integrity.test.js` are
+// invisible to their sweep. Everything the `T`-series pins about the clause's CONTENT is reused here
+// verbatim — the subject constants are shared, deliberately, so a reword in one family cannot drift
+// away from the other without a red.
+//
+// ⛔ TWO THINGS ARE GENUINELY DIFFERENT, and both are pinned rather than assumed.
+//
+//   1. THE OPENING SENTENCE IS REWORDED, and it HAD to be. The task movers' clause opens "The sweep
+//      above greps `ai-agents/` only, so it cannot see `test/reference-integrity.test.js`". That
+//      premise is TRUE of a task mover — its step-4 sweep really is `ai-agents/`-scoped — and FALSE of
+//      a sprint mover, whose sweep also reaches `claude/`, `test/`, `CLAUDE.md`, `README.md` and
+//      `AGENTS.md`. Pasting the false premise would have made the clause's own justification wrong in
+//      a way that reads perfectly.
+//      ⛔ IT NOW CARRIES NO REASON AT ALL, under owner ruling R19 — two replacements were written and
+//      both were false in turn (round-1 R3 over-denied, its own fix over-asserted; round-2 R19). The
+//      causal clause was DELETED rather than rewritten a third time, because the conclusion never
+//      depended on it. See the note on `SPRINT_SWEEP_LEAD` for all three falsehoods, and DO NOT ADD A
+//      FOURTH. `SPRINT_SWEEP_LEAD` pins the reasonless sentence; `S5` pins the ABSENCE of the task
+//      movers' premise, because a future "let's make the four copies uniform" pass is exactly how it
+//      would come back.
+//
+//   2. PLACEMENT ANCHORS ON THE `git mv` STEP, not on a step number. See the header note.
+//
+// ⚠️ WHAT THIS SERIES DOES NOT PROVE, restated because it matters more here than for the task movers:
+// nothing below observes a sprint mover RUNNING. The whole of both skills is prose an LLM executes.
+// A green `S`-series says the clause is present, uniform, and correctly placed IN THE TEXT.
+
+const SPRINT_SKILLS = [
+  { name: 'fkit-sprint-done', board: 'done', moved: 'board file' },
+  { name: 'fkit-sprint-cancelled', board: 'cancelled', moved: 'board file' },
+];
+
+// The structural signature of a SPRINT mover — the `git mv` step's heading. ⛔ Deliberately NOT
+// `MOVER_SIGNATURE`: a sprint mover moves a FILE (the board) and its step number is not 3, because the
+// order is inverted. Two rosters, two signatures, neither able to discover the other's members.
+const SPRINT_MOVER_SIGNATURE = /^### \d+\. Move the board FILE to /;
+
+// ⛔ S3 ANCHORS ON THE `git mv` COMMAND, NOT ON THE STEP HEADING — round-1 R13. Anchored on the
+// heading, the assertion `clauseAt > moveAt` passed for a clause sitting immediately BELOW the
+// heading and ABOVE the `git mv` fence, which violates the very invariant S3's failure message
+// states ("a heal is only observable at the NEW path"). The heading is where the step starts; the
+// `git mv` line is where the move happens, and AFTER-THE-MOVE is the invariant.
+// ⚠️ Both movers' fences read `git mv ai-agents/sprints/<basename> ai-agents/sprints/<board>/<basename>`;
+// the cancelled one is preceded by a `mkdir -p`, which is deliberately NOT matched — creating the
+// destination is not the move.
+const SPRINT_GIT_MV = /^git mv ai-agents\/sprints\/<basename> ai-agents\/sprints\/\w+\/<basename>$/;
+
+// S1 (flat) — the opening, and it CARRIES NO REASON. ⛔ The board word does NOT appear in it, so it is
+// shared by both sprint copies unchanged; `THREE_DIRECTIONS` two sentences later carries the board word.
+//
+// ⛔ THE CAUSAL CLAUSE WAS DELETED 2026-09-12 UNDER OWNER RULING R19, option label verbatim "Delete the
+// causal clause (Rec)". THREE REASONS WERE WRITTEN HERE AND ALL THREE WERE FALSE:
+//   1. the task movers' inherited "the sweep greps `ai-agents/` only" — true of a task mover, FALSE of
+//      a sprint mover, whose sweep also reaches `claude/`, `test/`, `CLAUDE.md`, `README.md`, `AGENTS.md`;
+//   2. round-1 R3's replacement, "a link sweep cannot see the keys" — FALSE by OVER-DENYING: the sweep
+//      is a raw grep, and `NAMED_EXEMPT` holds plain JS string literals, one already spelling a sprint
+//      basename (`…::../sprint-4c.md`);
+//   3. round-1 R3's own fix, "a grep for this board's basename hits them as plain JS string literals" —
+//      FALSE by OVER-ASSERTING: `grep -c "sprint-8.md" test/reference-integrity.test.js` → 0, for the
+//      very board the same step uses as its worked example (round-2 R19).
+// ⭐ The clause's CONCLUSION never depended on any of them and is unchanged: run the guard
+// unconditionally — that rule is pinned separately by `UNCONDITIONAL`.
+// ⛔ DO NOT WRITE A FOURTH EXPLANATION, here or in either skill. The sentence is a locator, not an
+// argument, and that is the fix.
+// ⚠️ `S5` still pins the ABSENCE of the TASK movers' premise ("greps `ai-agents/` only"), which must
+// not come back either.
+const SPRINT_SWEEP_LEAD = '**Then check the exemption keys this move may have invalidated.** They live ' +
+  'in `test/reference-integrity.test.js`, which holds a set of named';
+
+// S5 — the premise that must NOT be here. Byte-exact on the task movers' wording, whitespace-normalized
+// so a re-wrap cannot smuggle it back in.
+const TASK_SWEEP_LEAD_FRAGMENT = 'The sweep above greps `ai-agents/` only, so it cannot see';
+
+// ── S0 · The sprint roster pin ────────────────────────────────────────────────────────────────────
+
+test('S0 roster: exactly two sprint movers exist, and they are the two this file pins', () => {
+  const dir = join(ROOT, 'skills');
+  let entries;
+  try {
+    entries = readdirSync(dir, { withFileTypes: true });
+  } catch (err) {
+    throw new Error(`cannot read ${dir}: ${err.code} — the roster would be silently empty and every ` +
+      'assertion below trivially true', { cause: err });
+  }
+  const found = entries
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+    .filter((name) => {
+      let src;
+      try {
+        src = readFileSync(join(dir, name, 'SKILL.md'), 'utf8');
+      } catch (_) {
+        return false; // a skill directory with no SKILL.md is skill-frontmatter.test.js's business
+      }
+      return src.split('\n').some((l) => SPRINT_MOVER_SIGNATURE.test(l));
+    })
+    .sort();
+
+  const expected = SPRINT_SKILLS.map((s) => s.name).sort();
+  assert.deepEqual(found, expected,
+    `S0: discovered sprint movers [${found.join(', ')}] under ${dir} (by the signature ` +
+    `${SPRINT_MOVER_SIGNATURE}), expected exactly [${expected.join(', ')}].\n` +
+    'A THIRD sprint mover added without the exemption clause would otherwise be SILENTLY UNCOVERED.\n' +
+    '⚠️ If a sprint mover was legitimately ADDED or REMOVED, update SPRINT_SKILLS in this file as a ' +
+    'DELIBERATE part of that same change — and if it was added, make sure it CARRIES the clause first. ' +
+    'Do NOT edit the list merely to turn a red run green.');
+});
+
+// ── S1 · The subjects, in both sprint movers ──────────────────────────────────────────────────────
+//
+// Same constants as T2–T11/T16, driven over the second roster. A single loop rather than one test per
+// subject: the `T`-series already names each subject's reason at length, and duplicating fourteen
+// prose blocks here would invite the two families' explanations to drift apart. `expectExactlyOnce`
+// still names the subject, the file, the mode and the count in its failure message.
+
+test('S1 both sprint movers: every pinned clause subject is present exactly once', () => {
+  const SHARED = [
+    ['INVOCATION', INVOCATION, 'raw', 'guard invocation line'],
+    ['DELETE_RULE', DELETE_RULE, 'raw', 'targetIsBack delete rule'],
+    ['LEAD_IN', LEAD_IN, 'flat', 'bolded lead-in'],
+    ['UNCONDITIONAL', UNCONDITIONAL, 'flat', 'unconditional-run rule'],
+    ['REPOINT_RULE', REPOINT_RULE, 'flat', 'missingCiter repoint rule'],
+    ['THIRD_DIRECTION', THIRD_DIRECTION, 'flat', 'third direction (newly broken link)'],
+    ['INSTANCES_RULE', INSTANCES_RULE, 'flat', 'instances-not-keys rule'],
+    ['AUTHORITY_RULE', AUTHORITY_RULE, 'flat', 'authority gate'],
+    ['FRAMING_RULE', FRAMING_RULE, 'flat', 'authority framing paragraph'],
+    ['SPRINT_SWEEP_LEAD', SPRINT_SWEEP_LEAD, 'flat', 'reworded opening (the sweep premise)'],
+  ];
+  // ⛔ ATTRIBUTION_RULE LEFT THIS LIST UNDER RULING R11 — it is no longer shared byte-identically
+  // across all four copies. It carries `MOVED`, so it is checked in S2 beside the other substituted
+  // sentences. Moving it here rather than dropping it is the point: it stays pinned, per-roster.
+  for (const { name } of SPRINT_SKILLS) {
+    const source = clauseOf(name);
+    for (const [constant, needle, mode, subject] of SHARED) {
+      expectExactlyOnce({
+        id: 'S1', skill: name, source, needle, mode, subject, constant,
+        why: 'The sprint movers carry the SAME clause as the task movers, and the subject constants ' +
+          'are SHARED on purpose: a reword applied to one family and not the other is drift, and ' +
+          'sharing the constant is what makes it red. ⛔ SPRINT_SWEEP_LEAD is the ONE subject that is ' +
+          'sprint-specific — the task movers\' "greps `ai-agents/` only" premise is FALSE here, ' +
+          'because a sprint mover\'s sweep also reaches `claude/`, `test/` and the root docs. ' +
+          '⛔ THE SENTENCE STATES NO REASON, deliberately (owner ruling R19): two replacement reasons ' +
+          'were written and both were false in turn (R3, R19), so the causal clause was deleted ' +
+          'rather than rewritten a third time. The conclusion never depended on it — `UNCONDITIONAL` ' +
+          'is where the rule lives. Do not add a fourth explanation.',
+      });
+    }
+  }
+});
+
+test('S2 both sprint movers: the substituted sentences name THIS mover\'s board AND subject', () => {
+  for (const { name, board, moved } of SPRINT_SKILLS) {
+    const source = clauseOf(name);
+    for (const [constant, template] of [
+      ['INVERSION', INVERSION],
+      ['THREE_DIRECTIONS', THREE_DIRECTIONS],
+      ['ATTRIBUTION_RULE', ATTRIBUTION_RULE],
+    ]) {
+      expectExactlyOnce({
+        id: 'S2', skill: name, source, needle: forMover(template, board, moved), mode: 'flat',
+        subject: `substituted sentence (${constant}, board \`${board}/\`, moved \`${moved}\`)`,
+        why: '⚠️ THE COPY-PASTE TRAP, now with FOUR copies to get wrong instead of two, and TWO tokens ' +
+          'to get wrong in each. A clause pasted from the DONE mover into the CANCELLED one without ' +
+          'swapping the BOARD word reads perfectly and is wrong: it would tell a cancelling operator ' +
+          'that a link heals when its citer moves into `done/`. ⛔ And a clause pasted from a TASK ' +
+          'mover without swapping the MOVED word (ruling R11) is worse, because ATTRIBUTION_RULE is a ' +
+          'FUNCTIONAL instruction: told to attribute the red to "the folder just moved", an operator ' +
+          'closing a sprint finds no moved folder and reports a break IT CAUSED as pre-existing.',
+        constant,
+      });
+    }
+  }
+});
+
+// ── S3 · Placement — AFTER THE MOVE, which here is not the same as "at the same position" ─────────
+
+test('S3 placement: the clause sits AFTER the `git mv` step, in the step that performs the move', () => {
+  for (const { name } of SPRINT_SKILLS) {
+    const label = labelFor(name);
+    const lines = readSkill(name).split('\n');
+    const headAt = linesMatching(lines, SPRINT_MOVER_SIGNATURE);
+    const moveAt = linesMatching(lines, SPRINT_GIT_MV);
+    const clauseAt = linesMatching(lines, BLOCK_START);
+    assert.equal(headAt.length, 1,
+      `S3: ${label} — expected exactly 1 move-step heading matching ${SPRINT_MOVER_SIGNATURE}, ` +
+      `found ${headAt.length}. The clause is anchored inside that step, so the relation cannot be ` +
+      'checked without it.');
+    assert.equal(moveAt.length, 1,
+      `S3: ${label} — expected exactly 1 \`git mv\` command line matching ${SPRINT_GIT_MV}, found ` +
+      `${moveAt.length}.\n` +
+      '⛔ THIS IS THE ANCHOR, NOT THE HEADING (round-1 R13). Anchoring on the heading let a clause ' +
+      'placed between the heading and the `git mv` fence pass while breaking the invariant below.');
+    assert.equal(clauseAt.length, 1,
+      `S3: ${label} — expected exactly 1 exemption-clause lead-in, found ${clauseAt.length}.`);
+    assert.ok(clauseAt[0] > moveAt[0],
+      `S3: ${label} — the exemption clause sits at line ${clauseAt[0] + 1}, BEFORE the \`git mv\` ` +
+      `command at line ${moveAt[0] + 1} (its step heading is at line ${headAt[0] + 1}).\n` +
+      '⛔ AFTER-THE-MOVE IS THE INVARIANT, NOT THE POSITION. A HEAL is only observable at the NEW ' +
+      'path: run the guard while the board is still at its old location and it reports nothing. ' +
+      '⚠️ The sprint movers INVERT the task movers\' order (repoint, THEN `git mv` — ADR-047 §4), so ' +
+      'the clause does NOT sit at the same numbered step it occupies there. Preserving the POSITION ' +
+      'instead of preserving AFTER-THE-MOVE is the documented wrong answer.');
+    // And it must still be inside the move step — no new `### ` heading may open between the two.
+    // ⚠️ `moveAt[0] + 1` simply starts the slice AFTER the anchor line, and nothing turns on it any
+    // more. ⛔ The reason recorded here before round-2 R22 ("the anchor IS a `### ` heading, so
+    // including it would fail unconditionally") is STALE: it was true of the old heading anchor
+    // `SPRINT_MOVER_SIGNATURE`, and round-1 R13 re-anchored this test on `SPRINT_GIT_MV`, a `git mv`
+    // COMMAND line that can never satisfy `startsWith('### ')`. The assertion is unchanged and correct.
+    const between = lines.slice(moveAt[0] + 1, clauseAt[0]).filter((l) => l.startsWith('### '));
+    assert.deepEqual(between, [],
+      `S3: ${label} — a heading opens between the \`git mv\` step and the exemption clause: ` +
+      `${JSON.stringify(between)}.\n` +
+      '⛔ The clause belongs in the move step\'s TAIL, after its "Then prove it." paragraph. Both ' +
+      'movers cross-reference their own step numbers in prose, so adding a numbered step here breaks ' +
+      'those references silently.');
+  }
+});
+
+// ── S4 · Uniformity, and the premise that must not come back ──────────────────────────────────────
+
+test('S4 uniformity: the two sprint clauses are identical modulo the board word', () => {
+  const blocks = SPRINT_SKILLS.map(({ name, board }) => {
+    const block = clauseOf(name);
+    return { name, board, raw: block, normalized: foldBoard(block, board) };
+  });
+
+  const [a, b] = blocks;
+  if (a.normalized !== b.normalized) {
+    const x = a.normalized.split('\n');
+    const y = b.normalized.split('\n');
+    const n = Math.max(x.length, y.length);
+    let first = -1;
+    for (let i = 0; i < n; i += 1) { if (x[i] !== y[i]) { first = i; break; } }
+    assert.fail(
+      `S4: the exemption clause DIFFERS between ${labelFor(a.name)} and ${labelFor(b.name)} beyond ` +
+      `the board word.\nFirst differing line (${first + 1} of the extracted block, board word folded ` +
+      `to ${BOARD}):\n  ${labelFor(a.name)}: ${JSON.stringify(x[first])}\n  ` +
+      `${labelFor(b.name)}: ${JSON.stringify(y[first])}\n` +
+      'This is T12\'s assertion for the second roster — the clause is duplicated prose that nothing ' +
+      'else reconciles. ⚠️ A stray un-swapped board word shows up here as a difference.\n' +
+      '⚠️ If the clause was DELIBERATELY reworded, apply the SAME reword to BOTH sprint movers in the ' +
+      'same change. Do NOT weaken this comparison to tolerate a one-sided edit.');
+  }
+  const rawLines = a.raw.split('\n').length;
+  assert.ok(rawLines >= MIN_BLOCK_LINES,
+    `S4: the compared block is ${rawLines} lines, under the ${MIN_BLOCK_LINES}-line floor — ` +
+    'two near-empty extractions compare equal and print UNIFORM. That is the exact 0125 failure.');
+});
+
+test('S5 the sprint clauses do NOT carry the task movers\' `ai-agents/`-only sweep premise', () => {
+  for (const { name } of SPRINT_SKILLS) {
+    const source = flat(clauseOf(name));
+    assert.equal(countOccurrences(source, flat(TASK_SWEEP_LEAD_FRAGMENT)), 0,
+      `S5: ${labelFor(name)} carries "${TASK_SWEEP_LEAD_FRAGMENT}", which is the TASK movers' ` +
+      'premise and is FALSE for a sprint mover.\n' +
+      '⛔ A sprint mover\'s sweep DOES reach `test/` — it greps `ai-agents/ claude/ test/ CLAUDE.md ' +
+      'README.md AGENTS.md`. The clause\'s conclusion still holds and is now stated WITHOUT a reason: ' +
+      'two replacement reasons were written and both were false in turn (R3, R19), so owner ruling ' +
+      'R19 deleted the causal clause. `SPRINT_SWEEP_LEAD` is that reasonless sentence and ' +
+      '`UNCONDITIONAL` carries the rule. ⛔ Do not restore a reason in either place.\n' +
+      '⚠️ This is a NEGATIVE pin, and the failure it guards against is a well-intentioned one: a ' +
+      'future pass making "all four copies uniform" would paste the false premise straight back in, ' +
+      'and every positive assertion above would stay green while it did.');
+  }
+});
+
+// ── S6 · The two rosters are DISJOINT ─────────────────────────────────────────────────────────────
+
+test('S6 the two rosters are disjoint, and neither signature discovers the other family', () => {
+  const taskNames = SKILLS.map((s) => s.name);
+  const sprintNames = SPRINT_SKILLS.map((s) => s.name);
+  assert.deepEqual(taskNames.filter((n) => sprintNames.includes(n)), [],
+    'S6: a skill appears in BOTH rosters. Each roster\'s completeness pin (T0 / S0) then asserts ' +
+    'something false about the other, and the two signatures are no longer telling the families apart.');
+  for (const { name } of SPRINT_SKILLS) {
+    const lines = readSkill(name).split('\n');
+    assert.deepEqual(linesMatching(lines, MOVER_SIGNATURE), [],
+      `S6: ${labelFor(name)} carries the TASK-mover signature ${MOVER_SIGNATURE}. T0 would then ` +
+      'discover it as a task mover and go red — and, worse, the sprint mover would be claiming to ' +
+      'move a task FOLDER when it moves a board FILE.');
+  }
+  for (const { name } of SKILLS) {
+    const lines = readSkill(name).split('\n');
+    assert.deepEqual(linesMatching(lines, SPRINT_MOVER_SIGNATURE), [],
+      `S6: ${labelFor(name)} carries the SPRINT-mover signature ${SPRINT_MOVER_SIGNATURE}. S0 would ` +
+      'then discover it as a sprint mover and go red.');
+  }
 });

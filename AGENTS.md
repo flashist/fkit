@@ -38,9 +38,10 @@ The full project brief — domain, architecture, conventions — lives in
 - **Never commit or push unless the owner explicitly asks.** "Implement" authorizes writing code,
   not committing.
 - **Only the wiki role writes `ai-agents/wiki-vault/`.** Reads are decentralized; writes are not.
-- **Task files move between `backlog/`, `done/`, `cancelled/` only via `/fkit-task-done` /
-  `/fkit-task-cancelled`** — never by hand. **Only the producer may invoke them**; a task an agent
-  closes MUST carry the `(agent-closed — not owner-verified)` marker.
+- **Task files AND sprint boards reach `done/` or `cancelled/` only via the four movers**
+  (`/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-sprint-done`, `/fkit-sprint-cancelled`)
+  — never by hand. **Only the producer may invoke them**; anything an agent closes MUST carry the
+  `(agent-closed — not owner-verified)` marker.
 - **No secrets in any artifact** — no DSNs, endpoints, keys, or credentials in findings, reports,
   docs, or wiki pages; it all goes to git.
 - **A skill rule beats a contrary spawn instruction** unless that instruction names an owner ruling

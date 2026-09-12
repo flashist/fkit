@@ -20,15 +20,16 @@ roster and which role you're in.
 
 | Role | Does | Must not | **Its own** skills |
 |---|---|---|---|
-| **producer** | product & sprint planning, task briefs, task lifecycle | write code | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-brief`, `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-heal` |
+| **producer** | product & sprint planning, task briefs, the task **and sprint** lifecycle | write code | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-brief`, `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-sprint-done`, `/fkit-sprint-cancelled`, `/fkit-heal` |
 | **coder** | implementation — sole source-write authority | commit unprompted; make product calls; settle new architecture; **review its own work** | `/fkit-plan-task`, `/fkit-process-review`, `/fkit-process-stateful-review`, `/fkit-task-ship-loop` |
 | **architect** | architecture, design specs, ADRs, feasibility | implement features; write the wiki | `/fkit-survey-project`, `/fkit-inspect`, `/fkit-design-spec`, `/fkit-evaluate-approach`, `/fkit-record-decision` |
 | **reviewer** | code review (own pass + Codex second opinion), the review ledger | edit source code — ever | `/fkit-review`, `/fkit-stateful-review` |
 | **adversarial-reviewer** | hostile second opinion on Codex, findings only | edit anything | `/fkit-adversarial-review` |
 | **wiki** | the wiki — ingest / lint / sync; **exclusive write gateway** | write outside `ai-agents/wiki-vault/` | `/fkit-wiki-ingest`, `/fkit-wiki-lint`, `/fkit-wiki-sync` |
 
-Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **The two task movers**
-`/fkit-task-done` and `/fkit-task-cancelled` **are the producer's alone** — no other role holds them,
+Every role also has `/fkit-query` (wiki reads) and `/fkit-team`. **The four movers** —
+`/fkit-task-done` and `/fkit-task-cancelled` for a task folder, `/fkit-sprint-done` and
+`/fkit-sprint-cancelled` for a sprint board — **are the producer's alone**. No other role holds them,
 and a `PreToolUse` hook denies a mover call from any non-producer identity at any spawn depth. Every
 other role **routes its closes through the producer** and closes nothing itself; a producer **spawned**
 to close still writes the `(agent-closed — not owner-verified)` marker. **The six Claude-side roles** — all

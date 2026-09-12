@@ -26,8 +26,11 @@
 # If you add another mirror, add it HERE FIRST. (It said "FOUR" until 2026-08-27 — incomplete a second time; 0142 D4.)
 # (Same caution as before this file existed — see git history on fkit-claude.sh for the original.)
 
-# ⚠️ THE TASK MOVERS ARE PRODUCER-ONLY (ADR-033, 2026-07-23 — REVERSING ADR-025).
-# `fkit-task-done` / `fkit-task-cancelled` belong to `producer` and to NO other role. ADR-025
+# ⚠️ ALL FOUR MOVERS ARE PRODUCER-ONLY (ADR-033, 2026-07-23 — REVERSING ADR-025; extended to the
+# SPRINT movers by ADR-047 §4, which applies ADR-033's reasoning verbatim).
+# `fkit-task-done` / `fkit-task-cancelled` / `fkit-sprint-done` / `fkit-sprint-cancelled` belong to
+# `producer` and to NO other role. The two sprint movers were added by task 0341 and were
+# producer-only from their first line — they were never granted to anyone else. ADR-025
 # (2026-07-19) had granted them to every role but the adversarial reviewer; ADR-033 reverses that
 # knowingly, re-consolidating close authority in the one role whose job is the task lifecycle. This
 # list is what makes it STRUCTURAL: the ADR-018 PreToolUse hook denies a mover call from any
@@ -51,7 +54,7 @@
 skills_for_role() {
   case "$1" in
     lead)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-sprint-ship-loop" ;;
-    producer)  echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-initiate-project fkit-task-brief fkit-task-done fkit-task-cancelled fkit-status fkit-heal" ;;
+    producer)  echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-initiate-project fkit-task-brief fkit-task-done fkit-task-cancelled fkit-sprint-done fkit-sprint-cancelled fkit-status fkit-heal" ;;
     coder)     echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-plan-task fkit-process-review fkit-process-stateful-review fkit-task-ship-loop" ;;
     architect) echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-survey-project fkit-inspect fkit-design-spec fkit-evaluate-approach fkit-record-decision" ;;
     reviewer)  echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-review fkit-stateful-review" ;;

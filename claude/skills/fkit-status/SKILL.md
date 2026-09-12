@@ -86,8 +86,10 @@ a status briefing.
   > when line 3 has no banner or a malformed one. Like `identity <plan>` it emits a **value, not a
   > rendering**: no `⟦…⟧` markers, so you read it with a single command substitution. The legacy
   > `🔒 CLOSED` banner reads as `Done`, **permanently** — it is read forever and written never.
-- **A sprint name** (e.g. `Sprint 1`) — resolve it against `ai-agents/sprints/` **and**
-  `ai-agents/sprints/done/`. If nothing matches, say so and list what's there. Do not guess.
+- **A sprint name** (e.g. `Sprint 1`) — resolve it against `ai-agents/sprints/`, **and**
+  `ai-agents/sprints/done/`, **and `ai-agents/sprints/cancelled/`**. If nothing matches, say so and
+  list what's there. Do not guess. ⚠️ `cancelled/` is created on first use (ADR-047 §3), so it may hold
+  only a `.gitkeep` — an empty tree is not an error, it just contributes nothing.
 - **`Backlog`** (case-insensitive) — the **Backlog board**, `ai-agents/sprints/backlog.md`: the
   standing board for briefs that have been scoped but not scheduled into a sprint. **If the file does
   not exist, say so and stop — do not create it.** This skill is read-only; the board is created by
@@ -240,12 +242,18 @@ three destroys exactly what they are for. Name each sprint where a per-sprint be
 can tell which board they are reading. **A named sprint, and `Backlog`, are unchanged** — one board in,
 one briefing out, all seven beats once.
 
-**On a closed sprint** (one you found in `sprints/done/`), beats 3–5 are mostly moot and should say so
-in one line each — nothing's moving because it's closed, nothing's next because nothing here should be
-picked up, nothing's in the way because it's dead. **Don't manufacture content to fill them**, and don't
-recommend picking up a task from a superseded plan. Its live tasks are the ones marked `➡️ Moved` —
-point at the sprint they moved to. Drift in a closed sprint still gets flagged: a closed record can be
-wrong, and it stays wrong forever if nobody says so.
+**On a closed sprint** (one you found in `sprints/done/` **or `sprints/cancelled/`**), beats 3–5 are
+mostly moot and should say so in one line each — nothing's moving because it's closed, nothing's next
+because nothing here should be picked up, nothing's in the way because it's dead. **Don't manufacture
+content to fill them**, and don't recommend picking up a task from a superseded plan. Its live tasks
+are the ones marked `➡️ Moved` — point at the sprint they moved to. Drift in a closed sprint still gets
+flagged: a closed record can be wrong, and it stays wrong forever if nobody says so.
+
+⚠️ **A CANCELLED board's rows read differently, and saying "moved to the successor" about one is
+wrong.** `/fkit-sprint-done` sends open rows to a successor sprint; `/fkit-sprint-cancelled` sends them
+**always to the Backlog board** (ADR-047 §3.0) — a cancelled sprint's work is de-scoped, not carried.
+So a cancelled board's live rows read `➡️ Moved to [Backlog](../backlog.md)`: point at the **Backlog
+board**, and say the sprint was cancelled rather than finished. Its banner carries the reason; quote it.
 
 **On the Backlog board**, apply the same "say it's moot, don't invent it" discipline — but to a
 different set of beats, because the backlog is *unscheduled*, not *finished*:
@@ -498,7 +506,7 @@ paths (`/fkit-task-done`, `/fkit-task-cancelled`, or a deliberate edit) — not 
 
 ```
 /fkit-status              # every active sprint — there may be more than one
-/fkit-status Sprint 1     # a named sprint, including a closed one in sprints/done/
+/fkit-status Sprint 1     # a named sprint, including a closed one in sprints/done/ or sprints/cancelled/
 ```
 
 **Those are the only two forms, and both render the same, complete output.** The skill has no switches
