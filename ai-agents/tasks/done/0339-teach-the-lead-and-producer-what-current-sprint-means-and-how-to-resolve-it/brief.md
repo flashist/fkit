@@ -10,7 +10,7 @@ Sprint 8
 P7
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder

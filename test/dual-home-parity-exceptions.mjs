@@ -138,6 +138,19 @@ export const exceptions = [
       '`claude/skills/*/SKILL.md` source paths and fkit\'s own tracking brief.',
   },
   {
+    path: 'knowledge-base/conventions/sprint-status-vocabulary.md',
+    kind: 'audience-adapted',
+    reason:
+      'The live copy cites ADR-047, ADR-041 and ADR-033 by relative path — including ADR-041 §5\'s ' +
+      'one-grammar constraint quoted verbatim as the reason the selector is a script — and narrates ' +
+      'fkit\'s own Sprint 5 "stayed active while finished" failure plus the seven legacy `🔒 CLOSED` ' +
+      'boards in this repo\'s `sprints/done/`, which a consuming project does not have. The scaffold ' +
+      'copy states the same four statuses, banner grammar, authority split and selector call with no ADR ' +
+      'links, no `🔒 CLOSED` compat rung (a fresh project has no legacy banners to read), a "starting ' +
+      'convention, yours to amend" frame, and ADDS a paragraph the live copy does not have — how to ' +
+      'harden the mover gate in `claude/skill-ownership-hook.sh` if your team wants more than prose.',
+  },
+  {
     path: 'knowledge-base/conventions/one-skill-one-output.md',
     kind: 'audience-adapted',
     reason:

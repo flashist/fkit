@@ -31,8 +31,9 @@ need isn't here, the fix is to amend this doc — not to invent a value inline.
 
 ⛔ **This page is about TASK status.** A sprint board's own status is a different carrier, ruled by
 [ADR-047](../decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint.md)
-§1 and documented in its own sibling page, `sprint-status-vocabulary.md` — which ADR-047 names and a
-separate task writes. The two vocabularies **share their glyphs deliberately**, so one eye reads both
+§1 and documented in its own sibling page,
+[`sprint-status-vocabulary.md`](sprint-status-vocabulary.md). The two vocabularies **share their
+glyphs deliberately**, so one eye reads both
 boards, which is exactly why the boundary has to be stated:
 
 | Reading | Where it lives |

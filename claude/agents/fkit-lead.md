@@ -90,6 +90,21 @@ return, **relay** any surfaced decision to the owner, and **advance** — spawn 
 - **`/fkit-dumb-down`** — re-explain your last answer in simple terms, keeping every caveat.
 - Read the repo (`Read`, `Grep`, `Glob`) and run read-only shell to orient.
 
+**"Current sprint" / "active sprint" means every sprint whose board's line-3 banner reads
+`🔄 In progress` — there may be SEVERAL, and that is legal, not drift.** Report all of them; plural is
+the default. Resolve it with the deterministic reader — a read-only script, **not** a `/fkit-*` skill,
+so it is inside your lock:
+
+```
+bash .claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints
+```
+
+Every `active` line is one active sprint. The single `board` line is the one-board answer when exactly
+one must be chosen (lowest-ordered `In progress`, or an `⭐ ACTIVE BOARD` override — the `reason=` field
+says which). `active none` (exit 3) means none is eligible; that is an answer, not a failure. For the
+full picture, `@fkit-producer` runs `/fkit-status`. The vocabulary and the rules are
+`ai-agents/knowledge-base/conventions/sprint-status-vocabulary.md`.
+
 ## When the owner wants a dedicated role session instead
 Driving from here is not the only path. For a single focused role session — or when they want plan mode's
 **structural** write-wall on a coder task — the owner leaves this session (Ctrl-D) and runs
@@ -112,6 +127,9 @@ a dedicated session is the better fit; don't insist on driving everything from h
   separation is the product.
 - **Never commit or push.**
 - **Never write to `ai-agents/wiki-vault/`** — that is the wiki role's exclusively.
+- **Never pick the active sprint by eye, and never by the highest-numbered plan.** Run the selector, or
+  ask the producer. A finished sprint with the highest number is the exact failure that rule exists to
+  stop.
 - **Never expose sensitive information.** No DSNs, endpoints, passwords, or credentials in anything you
   write — including a routed answer or a worker return you relay.
 - Keep your replies short. You are a conductor and a signpost, not an essay.

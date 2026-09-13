@@ -49,7 +49,7 @@ are **three** kinds, not two:
 | `knowledge-base/conventions/task-owner-vocabulary.md` | fkit-authored | ✅ must match |
 | `tasks/README.md` | fkit-authored | ✅ must match |
 | `wiki-vault/schema.md` | fkit-authored | ✅ must match |
-| `README.md`, `knowledge-base/conventions/{task-status-vocabulary,one-skill-one-output,evidence-before-assertion,status-report-format,dependency-declaration-form}.md` | **audience-adapted** | ✅ substance must match; ⛔ never byte-aligned |
+| `README.md`, `knowledge-base/conventions/{task-status-vocabulary,sprint-status-vocabulary,one-skill-one-output,evidence-before-assertion,status-report-format,dependency-declaration-form}.md` | **audience-adapted** | ✅ substance must match; ⛔ never byte-aligned |
 | `knowledge-base/conventions/README.md` | **index** | its "What's here" table lists each home's *actual* contents, so the two copies legitimately differ |
 | `knowledge-base/conventions/dual-home-parity.md` (this file) | **fkit-repo-only** | ⛔ never ship — see below |
 | `knowledge-base/architecture.md` | **live-only** | each project generates its own via `/fkit-inspect`; the scaffold ships none |

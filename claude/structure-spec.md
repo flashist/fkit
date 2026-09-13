@@ -96,6 +96,7 @@ repair semantics per the six-class table above.
 | `ai-agents/knowledge-base/conventions/evidence-before-assertion.md` | fkit-authored reference file | convention |
 | `ai-agents/knowledge-base/conventions/one-skill-one-output.md` | fkit-authored reference file | convention |
 | `ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md` | fkit-authored reference file | convention |
+| `ai-agents/knowledge-base/conventions/sprint-status-vocabulary.md` | fkit-authored reference file | convention |
 | `ai-agents/knowledge-base/conventions/status-report-format.md` | fkit-authored reference file | convention |
 | `ai-agents/knowledge-base/conventions/task-owner-vocabulary.md` | fkit-authored reference file | convention |
 | `ai-agents/knowledge-base/conventions/task-status-vocabulary.md` | fkit-authored reference file | convention |
@@ -167,8 +168,8 @@ that matches nothing was owner-edited — report, never touch.
 ### `ai-agents/knowledge-base/conventions/` — the project's standing law
 
 Holds the conventions every role reads before non-trivial work and defers to as law. The installed
-version requires the nine files listed in Table B: the folder's `README.md` (what a convention is)
-plus eight conventions. All are fkit-authored reference files: a missing one is created by launch
+version requires the ten files listed in Table B: the folder's `README.md` (what a convention is)
+plus nine conventions. All are fkit-authored reference files: a missing one is created by launch
 convergence; one whose content matches no version fkit ever shipped was edited by the project
 owner — report it, never touch it.
 

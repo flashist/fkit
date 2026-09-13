@@ -29,7 +29,8 @@ need isn't here, the fix is to amend this doc — not to invent a value inline.
 ## A SPRINT has its own status, and it is not one of these
 
 ⛔ **This page is about TASK status. A sprint board's own status is a different carrier and lives
-elsewhere** — `sprint-status-vocabulary.md`, its sibling. The two share their glyphs deliberately, so
+elsewhere** — [`sprint-status-vocabulary.md`](sprint-status-vocabulary.md), its sibling. The two share
+their glyphs deliberately, so
 one eye reads both boards, which is exactly why the boundary has to be stated:
 
 | Reading | Where it lives |

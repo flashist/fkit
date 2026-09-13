@@ -47,9 +47,11 @@ statement about ADR-032's ripple, not a claim that the file is frozen:** ADR-033
 rewritten its close step, for reasons unrelated to this loop.
 
 **Argument:** `$ARGUMENTS` — a sprint plan path (e.g. `ai-agents/sprints/sprint-2.md`); **empty = the
-active sprint, as `/fkit-status` resolves it** — see `fkit-status/SKILL.md`'s empty-argument rule.
-**Do not re-derive that rule here** (ADR-041 §5: one grammar, one implementation). One operand — no
-output-variant flags (`conventions/one-skill-one-output.md`).
+selector's `board` line — the single chosen board**. **More than one sprint may be `In progress` at once;
+this loop drives exactly one of them.** **Do not re-derive that rule here** (ADR-041 §5: one grammar,
+one implementation) — see `fkit-status/SKILL.md`'s empty-argument rule and
+`conventions/sprint-status-vocabulary.md`. One operand — no output-variant flags
+(`conventions/one-skill-one-output.md`).
 
 ---
 
@@ -94,8 +96,11 @@ write.
 ## The loop, numbered
 
 ### 1. Select & order the sprint's tasks (§5.1)
-- Read the sprint plan (`$ARGUMENTS`, or the active sprint as `/fkit-status` resolves it) and the
-  briefs it links.
+- Read the sprint plan (`$ARGUMENTS`, or — argument empty — the board named by the selector's `board`
+  line) and the briefs it links:
+  ```
+  bash claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints
+  ```
 - Get the board **via the deterministic reader** — never hand-derive status:
   ```
   bash claude/skills/fkit-status/dashboard.sh <plan>
@@ -352,6 +357,10 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 > **past Build, treat the run as degraded and put the close to the owner.**
 
 ## Progress reporting (§5.5)
+- **Opening the run:** name the board you are driving and the selector's `reason=` for it. **If more
+  than one sprint is `🔄 In progress`, say so in the same breath** — name the others and state plainly
+  that they exist and are **not** being driven by this run. Plural-active is legal; a silent single-board
+  report is what makes it look like drift.
 - **Per task:** surface the coder worker's close-out evidence packet from its `worklog.md` (change
   surface, verification evidence, review verdict + the **coverage state** (one of ADR-042's three —
   `reasoning-only second opinion` is normal and not a degradation), residuals).

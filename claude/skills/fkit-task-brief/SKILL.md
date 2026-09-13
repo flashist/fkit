@@ -308,7 +308,7 @@ ai-agents/tasks/backlog/<NNNN>-<kebab-case-title>/brief.md
     # Backlog — the default home for unsprinted task briefs
 
     <short header: this is not a sprint; /fkit-status ignores this board because its identity
-    resolves to `Backlog`, which is never eligible as the active sprint — not because of what the
+    resolves to `Backlog`, which is never eligible as an active sprint — not because of what the
     file is called; the filename is deliberately `backlog.md` because that href is written into
     every `➡️ Moved to [Backlog](backlog.md)` marker; the Priority column reads `—` because this
     board is unranked by design.>
