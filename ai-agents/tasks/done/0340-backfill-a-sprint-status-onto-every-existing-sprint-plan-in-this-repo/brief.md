@@ -117,7 +117,7 @@ house pattern. ⚠️ **Everything above this line was written 2026-08-25 and co
 **Authority: owner ruling of 2026-09-10**, given live via `AskUserQuestion` in the `fkit lead` session
 driving `/fkit-sprint-ship-loop` — a selection from the question's option list, and **the option label
 is the verbatim text: "Re-order — 0340 before 0338 (Rec)"**. Recorded as ruling `S6` on
-[Sprint 8](../../../sprints/sprint-8.md), under its heading
+[Sprint 8](../../../sprints/done/sprint-8.md), under its heading
 *"⚠️ THE RE-ORDER OF 2026-09-10 — `0340` AND `0338` SWAPPED RANKS, AND WHY"*.
 
 ⛔ **The reason is a measured defect, not a preference.** `0338` makes `In progress` a rung of

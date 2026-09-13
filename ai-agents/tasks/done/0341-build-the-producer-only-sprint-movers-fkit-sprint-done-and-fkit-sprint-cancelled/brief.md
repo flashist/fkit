@@ -219,7 +219,7 @@ rule as part of this work or filed separately. ⚠️ **What it must not do is c
 into a mover without noticing.**
 
 ⚠️ **This is the same argument as the `0381`-before-`0341` ordering already recorded on
-[Sprint 8](../../../sprints/sprint-8.md), applied to a second gap:** a hole in the written shape is
+[Sprint 8](../../../sprints/done/sprint-8.md), applied to a second gap:** a hole in the written shape is
 cheapest to close **before** the shape is copied. ⛔ **It is an argument, not a new dependency — no
 `Depends on` line changes, and nothing here is re-ranked**
 ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)).

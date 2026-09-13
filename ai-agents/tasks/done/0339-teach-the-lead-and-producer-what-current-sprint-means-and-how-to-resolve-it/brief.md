@@ -10,7 +10,7 @@ Sprint 8
 P7
 
 ## Status
-✅ Done (agent-closed — not owner-verified)
+✅ Done
 
 ## Owner
 fkit-coder

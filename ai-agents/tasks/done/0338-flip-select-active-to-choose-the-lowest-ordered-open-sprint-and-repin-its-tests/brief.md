@@ -123,7 +123,7 @@ appended beside the existing text, per the house pattern.
 **Authority: owner ruling of 2026-09-10**, given live via `AskUserQuestion` in the `fkit lead` session
 driving `/fkit-sprint-ship-loop` — **the option label is the verbatim text:
 "Re-order — 0340 before 0338 (Rec)"**. Recorded as ruling `S6` on
-[Sprint 8](../../../sprints/sprint-8.md), under its heading
+[Sprint 8](../../../sprints/done/sprint-8.md), under its heading
 *"⚠️ THE RE-ORDER OF 2026-09-10 — `0340` AND `0338` SWAPPED RANKS, AND WHY"*.
 
 ⛔ **THE REASON IS THIS TASK'S OWN BLAST RADIUS, MEASURED — NOT A PREFERENCE.** This task makes
