@@ -149,7 +149,7 @@ artifacts are frozen history and are not rewritten by this task.** Open briefs t
 future run to use the check — at least
 [`0232`](../../done/0232-correct-adr-012s-stale-source-of-truth-and-code-coordinates/brief.md),
 [`0311`](../0311-specify-the-corrections-bullet-own-date-and-metadata-position/brief.md),
-[`0286`](../0286-mechanical-citation-sweep-of-architecture-md/brief.md) — **are in scope for a
+[`0286`](../../cancelled/0286-mechanical-citation-sweep-of-architecture-md/brief.md) — **are in scope for a
 follow-up sweep only if the owner rules the standard changes**, and that sweep should be its own
 brief, not folded in here.
 

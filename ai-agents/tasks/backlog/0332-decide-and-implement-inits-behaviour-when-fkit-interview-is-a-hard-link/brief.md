@@ -178,3 +178,51 @@ scope was the `-L` rule.
 - **Every figure in this brief that is not the filing producer's own measurement is labelled as
   second-hand.** The 22 B → 2780 B pair is the reviewer's; the 19 B → 2780 B pair is this producer's,
   measured 2026-08-24 against the working tree. **Re-measure before relying on either.**
+
+> ## ⭐ DATED CORRECTION 2026-09-13 — OWNER RULING: **step 2 is settled — candidate A ships.** Every prior byte left identical.
+>
+> **The owner ruled, live via `AskUserQuestion` in a live `fkit lead` session with the owner present,
+> on 2026-09-13 — verbatim option label: *"Refuse on st_nlink > 1 (Rec)"*.** This note is the
+> amendment; ⛔ **every byte above is deliberately left byte-identical**, per the superseded-text
+> convention. The *"What to build"* section's framing — *"the decision is deliberately NOT pre-made"* —
+> is **spent**. It is made now.
+>
+> ### What ships
+>
+> **Candidate A.** `claude/fkit-claude-init.sh` §4 must **refuse rather than truncate** when the
+> existing `.fkit/interview` leaf is hard-linked (`st_nlink > 1`). ⛔ **Candidate B — temp file plus
+> `rename()` — is REJECTED.** §4's write shape (`cat >`) stays exactly as it is.
+>
+> ⛔ **Step 2 no longer applies as written.** A run must **not** re-put the A/B choice to the owner and
+> must **not** return it as an open question. Steps 1 and 3–5 are unchanged and still binding — the
+> **red-first reproduction (step 1) and the failing-test-first gate (step 3) are not waived by this
+> ruling.**
+>
+> ### The owner's stated reasoning — recorded because it is the ruling's substance
+>
+> ⭐ **A guard that refuses loudly beats one that repairs silently.** The user is told something is
+> wrong and can act. That is the principle the choice turns on, and it should be visible in the
+> implementation's refusal message.
+>
+> **Why candidate B lost, in the owner's terms:** the temp-file + `rename()` approach **silently
+> detaches the hard link without telling the user**. The victim file survives, but the user's
+> deliberate link is gone and nothing said so. That silence is the defect — not the mechanism. B's
+> genuine advantages (fixes the class, makes the write atomic) were weighed and did not outweigh it.
+>
+> ### ⚠️ The portability cost is accepted, not waived
+>
+> The brief's own *"Against"* for candidate A is **now a work item, not an objection**: the link-count
+> probe needs a **BSD/GNU `stat` shim** — macOS/BSD `stat -f %l` versus GNU/Linux `stat -c %h`. The
+> script runs on both. ⛔ The existing verification bullet stands unchanged: *"the link-count probe
+> must be exercised (or explicitly shown to be shimmed) for both the BSD and GNU `stat` dialects."*
+> `claude/skills/fkit-status/dashboard.sh`'s header documents this exact trap for this repo — read it
+> before inventing a shim.
+>
+> ⚠️ The brief's other named *"Against"* — *"a user with a legitimately hard-linked file gets no
+> intake"* — is the **accepted cost** of the ruling. The refusal is non-fatal (step 4): init warns and
+> setup carries on. ⛔ **The intake must never brick the launcher** — unchanged.
+>
+> ### Status unchanged
+>
+> ⛔ **This row stays `🔲 Backlog`.** The ruling makes the task **implementable**, not implemented.
+> Nothing here is built and nothing here closes anything.

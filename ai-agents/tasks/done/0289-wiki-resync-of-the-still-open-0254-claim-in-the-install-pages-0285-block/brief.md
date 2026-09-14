@@ -243,7 +243,7 @@ Each step is runnable. **Paste the command and its output; do not assert.**
 - ⚠️ **Whichever order they run, the page will need another look if `0288` lands** — that second pass
   is a **known, accepted** future row, not a defect in this one. **Say so in the close** so the next
   producer files it rather than rediscovering it.
-- ⚠️ **Ordering against [`0286`](../../backlog/0286-mechanical-citation-sweep-of-architecture-md/brief.md)**:
+- ⚠️ **Ordering against [`0286`](../../cancelled/0286-mechanical-citation-sweep-of-architecture-md/brief.md)**:
   same hazard `0285` recorded — a resync that reads `architecture.md` as a source before its
   citations are repaired ingests coordinates that are already wrong. ⚠️ **This row should not need
   `architecture.md` at all**; if it does, **do not copy its `:NNN` pointers.**

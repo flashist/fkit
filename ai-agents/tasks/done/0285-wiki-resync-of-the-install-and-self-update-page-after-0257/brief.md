@@ -267,7 +267,7 @@ librarian's call which fits**).
     `install.sh:32` / `:59` carry no deadline — so **even a fully successful `0284` leaves `fkit
     update`'s actual download unbounded**. ⚠️ **Write only what the launcher on disk does on the day
     this runs.** Measured 2026-08-13.
-  - **[`0286`](../../backlog/0286-mechanical-citation-sweep-of-architecture-md/brief.md)** — corrects
+  - **[`0286`](../../cancelled/0286-mechanical-citation-sweep-of-architecture-md/brief.md)** — corrects
     `architecture.md`'s citations. Unrelated subject, **same hazard**: this resync reads
     `architecture.md` as a source, and reading it before its citations are repaired means ingesting
     coordinates that are already wrong. ⚠️ **The prose claims this task ingests are correct today; it

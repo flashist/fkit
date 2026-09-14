@@ -580,7 +580,7 @@ the page already records, firing on the sweep tooling itself.
 |---|---|---|
 | `sprints/reviews/sprint2-shared-instructions-delivery.md:35` | `adr-016:214` | ⛔ **MOVED** — `HEAD:214` was prose, WT `:214` is blank |
 | `sprints/reviews/sprint2-shared-instructions-delivery.md:344` | `adr-016:214` | ⛔ **MOVED** |
-| `tasks/backlog/0286-…/brief.md:157` | `adr-016-…md:192` | ⛔ **MOVED** — `:192` is the line this task rewrote |
+| `tasks/cancelled/0286-…/brief.md:157` | `adr-016-…md:192` | ⛔ **MOVED** — `:192` is the line this task rewrote |
 | `sprints/backlog.md:139` | `adr-012:87`, `adr-012:105` | ⛔ **MOVED** (both) |
 | `sprints/backlog.md:186` | `adr-012:139-141` | ⛔ **MOVED** |
 | `sprints/sprint-6.md:206` | `adr-012:87`, `adr-012:105` | ⛔ **MOVED** (both) |

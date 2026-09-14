@@ -121,7 +121,7 @@ unverified assertion in this same file.
 > not cite `architecture.md` as evidence that CI has never run — those passages are themselves
 > known-false and awaiting repair. Re-measure with `gh run list` instead. **No shared file with
 > `0312`; either order is safe.**
-> [`0251`](../../backlog/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md) is the third row in
+> [`0251`](../../cancelled/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md) is the third row in
 > this cluster — it carries a *"never write that CI is working"* instruction over the same §9.1 bullet
 > `0312` repairs, and it too now carries a 2026-08-15 correction.
 
@@ -308,7 +308,7 @@ posture is written.
   (filed 2026-08-15, unranked on the Backlog board), which repairs the same falsified posture in
   `architecture.md` — the passages this brief cited as its authority. **No shared file; either order
   is safe**, but ⛔ do not cite `architecture.md` as never-run evidence in the meantime.
-  [`0251`](../../backlog/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md) is the third row
+  [`0251`](../../cancelled/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md) is the third row
   in the cluster and carries its own 2026-08-15 correction. Owner provenance for this amendment:
   **"Producer amends 0281's brief (Recommended)"** (`AskUserQuestion`, 2026-08-15, relayed through the
   live `/fkit-sprint-ship-loop` driver session). Written by a spawned `fkit-producer` with **no owner

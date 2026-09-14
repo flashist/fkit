@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (agent-closed — not owner-verified) (2026-09-13) — Consolidated into task `0392` under owner ruling 2026-09-13, verbatim option label "Consolidate into one brief (Rec)" — its scope survives as `0392` Group C (items 1–4) and its decision survives intact as open decision OD2. Re-scoped, ⛔ not done and ⛔ not abandoned.
 
 ## Owner
 fkit-architect

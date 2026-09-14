@@ -155,6 +155,16 @@ enumerating**.
 - **Depends on:** 0188 — by owner ruling (*"do not let the build quietly repair its own corpus"*), not
   by any mechanism. `0142` §D4 records **two** mechanical justifications for this ordering that were
   asserted, found false, and withdrawn. **Do not re-derive one.**
+  - ✅ **DATED CORRECTION 2026-09-13 — THIS DEPENDENCY IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0188` closed; its folder is
+    `ai-agents/tasks/done/0188-repair-the-five-live-ownership-fact-defects/`. The owner ruling that
+    created the ordering (*"do not let the build quietly repair its own corpus"*) is **satisfied**,
+    not overturned — the corpus was repaired first, by `0188`. **Current dependency: nothing.**
+    ⛔ **The withdrawn mechanical justifications stay withdrawn. Do not re-derive one.**
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
+    *(Recorded 2026-09-13 by a spawned `fkit-producer` with no owner channel, under the owner ruling
+    of 2026-09-13, option label verbatim **"One housekeeping pass (Rec)"**. Dependency line untouched;
+    no status, priority or scope change.)*
 - **Blocks:** nothing.
 - **Owner:** fkit-coder.
 

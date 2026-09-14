@@ -342,7 +342,7 @@ kind of call the architect exists for. **Do not guess between the rows above.**
   bound is partial** — `install.sh:32` and `:59` stay unbounded, and no wording may imply otherwise.
   **Report the gap; do not fix it here.**
 - ⛔ **`architecture.md` citation numbers.** A citation sweep of that file is
-  [`0286`](../0286-mechanical-citation-sweep-of-architecture-md/brief.md). ⚠️ **If this task edits
+  [`0286`](../../cancelled/0286-mechanical-citation-sweep-of-architecture-md/brief.md). ⚠️ **If this task edits
   `architecture.md` prose it may shift that file's own line numbers again** — see `## Notes`.
 - ⛔ **Any `ai-agents/wiki-vault/` write** (ADR-005). The vault's `systems/install-and-self-update`
   page still asserts a 5 s box; correcting it is
@@ -436,7 +436,7 @@ kind of call the architect exists for. **Do not guess between the rows above.**
   otherwise the vault gains a correction that is stale on arrival. ✅ **Preferred order: this row,
   then `0285`.** ⚠️ **It is a preference, not a gate** — `0285` is runnable now and the cost of
   running it early is a second pass, not a wrong result. Say so to whoever schedules them.
-- **⚠️ ORDERING against [`0286`](../0286-mechanical-citation-sweep-of-architecture-md/brief.md).** If
+- **⚠️ ORDERING against [`0286`](../../cancelled/0286-mechanical-citation-sweep-of-architecture-md/brief.md).** If
   this task edits `architecture.md` prose (`## What to build` step **4**), it **shifts that file's own
   line numbers again**,
   which is the exact hazard `0286` exists to clear. ✅ **Either run `0286` first, or land this one's

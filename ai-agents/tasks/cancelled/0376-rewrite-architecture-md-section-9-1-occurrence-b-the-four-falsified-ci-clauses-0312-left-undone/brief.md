@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (agent-closed — not owner-verified) (2026-09-13) — Consolidated into task `0392` under owner ruling 2026-09-13, verbatim option label "Consolidate into one brief (Rec)" — its scope survives as `0392` Group B (items 1–5); its item 6 (re-pointing `0251`) is DISCHARGED BY CONSTRUCTION, satisfying owner ruling N5 rather than overturning it. Re-scoped, ⛔ not done and ⛔ not abandoned.
 
 ## Owner
 fkit-coder
@@ -131,7 +131,7 @@ Prose corrections to **one file**: `ai-agents/knowledge-base/architecture.md`.
 2. **Re-derive the run figures at implementation time.** ⛔ **Do not copy any figure from this brief or
    from occurrence A** — both are dated and the count only grows. State the figures **with their
    measurement date** (the convention
-   [`0301`](../0301-record-that-a-dated-claim-is-correct-as-of-its-date-and-does-not-become-a-defect-by-ageing/brief.md)
+   [`0301`](../../backlog/0301-record-that-a-dated-claim-is-correct-as-of-its-date-and-does-not-become-a-defect-by-ageing/brief.md)
    records), so the replacement cannot rot into the defect it replaces.
 3. **Record the red first run honestly** — a **filesystem case-sensitivity** divergence in
    `test/orphan-cleanup.test.js`, repaired by

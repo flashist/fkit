@@ -4,10 +4,10 @@
 0388
 
 ## Sprint
-Backlog
+Sprint 9
 
 ## Priority
-Unscheduled
+P2
 
 ## Status
 🔲 Backlog
@@ -155,6 +155,18 @@ mutations, **~60–120 s** added to an already **~9-minute** red gate.
 - **Depends on:** `0341` — ⛔ **hard, not soft.** Neither surface exists until `0341` lands: the
   `S0`–`S6` sprint-mover roster, the two sprint mover `SKILL.md` copies it mutates, and
   `mode_successor()` all arrive with that task.
+  - ✅ **DATED CORRECTION 2026-09-13 — THIS DEPENDENCY IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0341` closed **2026-09-13**; its folder is
+    `ai-agents/tasks/done/0341-build-the-producer-only-sprint-movers-fkit-sprint-done-and-fkit-sprint-cancelled/`,
+    and it shipped **both** `/fkit-sprint-done` and `/fkit-sprint-cancelled`.
+    ⭐ **Both surfaces this task mutates now EXIST**, so the sentence above — *"Neither surface exists
+    until `0341` lands"* — is **false as of 2026-09-13**. **Current dependency: nothing.**
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
+    ⚠️ **Re-measure the two `S`-series against disk at pickup.** § *Context*'s counts were measured
+    2026-09-12 while `0341` was still in flight; they are a starting point, not a baseline to trust.
+    *(Recorded 2026-09-13 by a spawned `fkit-producer` with no owner channel, under the owner ruling
+    of 2026-09-13, option label verbatim **"One housekeeping pass (Rec)"**. Dependency line untouched;
+    no status, priority or scope change.)*
 - **Blocks:** nothing.
 
 - ⚠️ **The hand-over's `S`-series numbering was wrong and is corrected in § *Context* above, not

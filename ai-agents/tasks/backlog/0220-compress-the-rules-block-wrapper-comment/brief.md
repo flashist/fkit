@@ -119,6 +119,16 @@ comment's actual warnings.**
 
 - **Owner:** fkit-coder.
 - **Depends on:** 0177.
+  - ✅ **DATED CORRECTION 2026-09-13 — THIS DEPENDENCY IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0177` closed; its folder is
+    `ai-agents/tasks/done/0177-verify-the-codex-half-of-the-comment-stripping-canary/`, so the
+    codex-side measurement this task waited on has been made. **Current dependency: nothing.**
+    ⚠️ **Read `0177`'s recorded measurement rather than assuming its outcome** — the bullet below
+    records *why* the wait existed, and that reason is discharged by evidence, not by time passing.
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
+    *(Recorded 2026-09-13 by a spawned `fkit-producer` with no owner channel, under the owner ruling
+    of 2026-09-13, option label verbatim **"One housekeeping pass (Rec)"**. Dependency line untouched;
+    no status, priority or scope change.)*
 - **Blocks:** nothing.
 - **Why the dependency on `0177` rather than a second canary of our own.** `0177` already scopes the
   codex measurement in full, including its version stamp and its three-outcome handling. Running a

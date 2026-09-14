@@ -196,3 +196,64 @@ complete, correct outcome for this task, not an under-delivery.** Say so in the 
   tree was not modified by them.**
 - ⛔ **Filed by a spawned `fkit-producer` with NO owner channel** ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)):
   **appended, unranked; nothing was re-ranked by this filing and no `## Status` was changed anywhere.**
+
+> ## ⭐ DATED CORRECTION 2026-09-13 — OWNER RULING: **step 1 is settled — option (b) wins.** Every prior byte left identical.
+>
+> **The owner ruled, live via `AskUserQuestion` in a live `fkit lead` session with the owner present,
+> on 2026-09-13 — verbatim option label: *"Allow, document why (Rec)"*.** This note is the amendment;
+> ⛔ **every byte above is deliberately left byte-identical**, per the superseded-text convention. The
+> brief's opening — *"THIS TASK OPENS WITH A PRODUCT DECISION THAT IS NOT MADE"* — is **spent.** It is
+> made now.
+>
+> ### What ships
+>
+> **Option (b) — allow it deliberately, and record why in the code.** `init` may follow a symlinked
+> `.gitignore` and append. The behaviour **does not change**; the reasoning goes into the code at
+> `:562`'s comment so the site reads as a decision rather than an oversight.
+>
+> ⛔ **Option (a) — refuse, like every other site — is REJECTED.** ⛔ **The third shape the brief
+> flagged, *allow-but-announce*, is also not what was chosen** — the owner picked (b) as written, with
+> no announcement line. Do not add one.
+>
+> ⛔ **Step 1 no longer applies.** A run must **not** re-put the decision to the owner and must **not**
+> return it as an open question. Go straight to step 2, and implement **(b) only**.
+>
+> ### The owner's stated reasoning — recorded because it is the ruling's substance
+>
+> ⭐ **The write is append-only and idempotent through the link — both measured.** Those are the two
+> properties the brief recorded from the filing producer's own 2026-08-23 reproduction, and they are
+> exactly what the ruling rests on.
+>
+> ⭐ **The no-out-of-project-write doctrine exists to stop DESTRUCTIVE writes — and this one measurably
+> is not.** That is the reconciliation the owner drew: the site is not an exception smuggled past the
+> doctrine, it is outside what the doctrine was built to prevent. ⛔ This reasoning does **not**
+> generalise to `0327`'s §3, which **deletes** through a symlink; the brief's standing warning that the
+> two must never be argued as one case is **reinforced**, not relaxed.
+>
+> ### ⛔ The code comment is the whole deliverable, and it must be STRONG
+>
+> ⚠️ **The owner recorded this as part of the ruling, not as advice.** Because option (b) makes this a
+> **documented exception to an otherwise exceptionless rule**, the comment is the only thing standing
+> between this decision and the next audit re-filing it. The brief's own warning — *"A weak comment
+> gets this task re-opened"* — is now the acceptance bar.
+>
+> The comment must carry, at minimum:
+>
+> - that this site is a **deliberate, owner-ruled exception**, dated **2026-09-13**, citing this task;
+> - **why**: the write is **append-only and idempotent** through the link, both **measured**, and the
+>   doctrine targets destructive writes;
+> - that it is **still an out-of-project write** — intended, not contained;
+> - ⛔ that it **must not be read as licence** for any other `$dest`-relative site, naming `0327`'s
+>   deleting §3 as the contrasting case.
+>
+> ⚠️ **The two premises must be pinned as tests, not left as prose** — the brief's existing "(b) is
+> chosen" verification bullets are unchanged and binding: **append-only** (outside content survives
+> byte-for-byte) and **idempotent** (a second run adds nothing). ⭐ **If either premise ever stops
+> holding, this decision is void and something must go red.**
+>
+> ⚠️ **A comment-only diff with a regression check is the CORRECT complete outcome here** — the brief
+> already says so, and the ruling confirms it. It is not an under-delivery. Say so in the worklog.
+>
+> ### Status unchanged
+>
+> ⛔ **This row stays `🔲 Backlog`.** The ruling makes the task **implementable**, not implemented.

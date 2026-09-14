@@ -140,6 +140,16 @@ Scoping decisions to make and state:
 
 - **Depends on:** 0168. **Hard** — the condition asserts the folder-ID schema that `0168` item 2
   introduces and its item 1 normalizes. Built before `0168`, the guard is red on 40 headers on day one.
+  - ✅ **DATED CORRECTION 2026-09-13 — THIS DEPENDENCY IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0168` closed; its folder is
+    `ai-agents/tasks/done/0168-remediate-the-dead-brief-paths-in-closed-review-ledger-headers/`.
+    **Current dependency: nothing.** ⚠️ **What survives is the *reason*, not the wait:** the guard
+    still asserts the folder-ID schema `0168` introduced, so re-derive that schema against the closed
+    folder rather than against this brief's description of it.
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
+    *(Recorded 2026-09-13 by a spawned `fkit-producer` with no owner channel, under the owner ruling
+    of 2026-09-13, option label verbatim **"One housekeeping pass (Rec)"**. Dependency line untouched;
+    no status, priority or scope change.)*
 - **Blocks:** nothing.
 - **LOW priority is an owner ruling, not a producer judgement.** Do not promote it without one.
 - **🔗 Kept SEPARATE from task `0176` (follow-up 8) — a producer judgement, and the report explicitly

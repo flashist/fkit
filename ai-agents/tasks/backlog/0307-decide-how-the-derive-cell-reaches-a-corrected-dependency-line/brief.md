@@ -274,3 +274,69 @@ and returns open questions for the owner.
 - ⛔ **Frozen — do not modify:** anything under
   `ai-agents/tasks/done/0306-repair-the-three-decay-shapes-across-the-open-backlog-briefs/`.
 - ⛔ **Do not commit, push, `git add` or `git stash`** unless the owner explicitly asks.
+
+> ## ⭐ DATED CORRECTION 2026-09-13 — OWNER RULING on the `0172` instance: **leave it — settle this task first.** Every prior byte left identical.
+>
+> **The owner ruled, live via `AskUserQuestion` in a live `fkit lead` session with the owner present,
+> on 2026-09-13 — verbatim option label: *"Leave it — settle 0307 first (Rec)"*.** This note is the
+> amendment; ⛔ **every byte above is deliberately left byte-identical**, per the superseded-text
+> convention.
+>
+> ### ⛔ Where this ruling is recorded, and why it is recorded HERE
+>
+> ⭐ **The question the owner ruled on was about `0172`, but the ruling is recorded on `0307` —
+> deliberately — because `0307` is what will settle it.** The owner's answer is *"leave `0172` alone
+> until this task rules"*, so the durable home for that answer is the task that does the ruling, not
+> the instance waiting on it.
+>
+> ⛔ **A note on `0172` itself was constrained by the ruling's own substance:** it could be added only
+> if it touched **neither `0172`'s dependency-declaration line nor anything `dashboard.sh` derives from
+> it**. See *"What was written on `0172`"* below for what was actually done.
+>
+> ### What the ruling decides
+>
+> **Nothing about `0172`'s live declaration changes.** It is left exactly as it stands until this task
+> produces a ruling. The **hazard note above is reinforced, not relaxed**: this record continues to
+> DESCRIBE `0172`'s bullet and never quotes its label, and no future record written for this task may
+> restore a verbatim quote.
+>
+> ### ⭐ It UPHOLDS the two standing rulings — it does not replace them
+>
+> | standing ruling | date | what it said | status after 2026-09-13 |
+> |---|---|---|---|
+> | **H2** — *"Surface it, hand to producer (Rec)"* | 2026-09-03 | ⛔ *"Do NOT repair the live dependency-declaration line. … Board semantics are the producer's."* | ⭐ **UPHELD.** The owner declined again to repair it. |
+> | **H24** — *"Fold 0172 into 0307's instance list, drop 0372 (Rec)"* | 2026-09-04 | `0172` is `0307`'s **third instance**; one decision, one row, three instances | ⭐ **UPHELD and CONFIRMED.** `0172` stays as this task's third instance. |
+>
+> ⛔ **No third route was opened.** The owner did not create a new row for `0172`, did not re-open the
+> cancelled `0372`, and did not move `0172` out of this task's instance list.
+>
+> ### ⭐ Why `0172` is the instance that matters most — confirmed by this ruling
+>
+> The section above already records it: `0172` is **the only one of the three instances where the
+> stale declaration is a HARD dependency on a CLOSED row** — so the derived cell does not merely print
+> stale prose, **it can misstate readiness**. That is precisely why the owner declined to touch it
+> ahead of the ruling: editing it changes what `dashboard.sh` derives and can flip a row's readiness,
+> and doing that by hand, one instance at a time, is the thing this task exists to decide properly.
+>
+> ⛔ **The prescribed evidence shape is unchanged and still binding:** capture what `dashboard.sh`
+> renders for `0172` **before and after**, and state whether readiness flipped and whether the flip is
+> truthful.
+>
+> ### What was written on `0172`
+>
+> A pointer note was appended to the **end** of
+> [`0172`](../0172-narrow-the-architect-output-format-path-line-mandate/brief.md)'s brief on
+> 2026-09-13, recording that this ruling exists and that the ruling of record lives here.
+>
+> ⛔ **It touches nothing the extractor reads.** Verified two ways before and after writing it:
+> `dashboard.sh`'s locate sequence takes the **first** match in file order and exits, and `0172`'s
+> existing declaration bullet precedes the appended note — so an appended note cannot displace it. The
+> note also **never writes the label token at all**, so it cannot trip even the loud last-resort arm.
+> **Confirmed empirically:** `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/backlog.md`
+> was captured before and after, and the `derive 0172 depends="…"` line is **byte-identical**, with the
+> board's drift count unchanged.
+>
+> ### Status unchanged
+>
+> ⛔ **This row stays `🔲 Backlog`**, and so does `0172`. The ruling settles **what to do in the
+> meantime** — nothing — not the decision this task owes.

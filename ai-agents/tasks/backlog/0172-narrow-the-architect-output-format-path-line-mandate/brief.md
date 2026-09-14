@@ -125,3 +125,28 @@ that swaps one absolute for another would reproduce the defect in a fresher tens
   producer with no owner channel. **Flagged for owner confirmation.** On merit it belongs directly
   below `0171`, which it depends on — **so merit and append positions coincide** and confirming the
   append costs nothing. No existing row was renumbered by this brief.
+
+> ## ⭐ DATED NOTE 2026-09-13 — OWNER RULING recorded on `0307`, pointer only. Every prior byte left identical.
+>
+> ⛔ **THIS NOTE DELIBERATELY TOUCHES NOTHING THE DASHBOARD READS.** It is appended at the end of the
+> file, it changes no earlier line, and it does not contain the declaration label token in any form —
+> so `dashboard.sh` derives exactly what it derived before. Verified empirically: the board's
+> `derive 0172` line and its drift count are byte-identical before and after this note was written.
+> ⛔ **Do not "tidy" this note upward into the declaration bullet, and do not quote that bullet's label
+> here.** Quoting it once already produced a live misreport on another brief; that hazard is recorded
+> in full on `0307`.
+>
+> **The owner ruled, live via `AskUserQuestion` in a live `fkit lead` session with the owner present,
+> on 2026-09-13 — verbatim option label: *"Leave it — settle 0307 first (Rec)"*.**
+>
+> **What it means for this task:** ⛔ **this brief's dependency declaration is left exactly as it
+> stands** until [`0307`](../0307-decide-how-the-derive-cell-reaches-a-corrected-dependency-line/brief.md)
+> rules. This row remains `0307`'s **third instance** — the ruling confirms that placement rather than
+> changing it. ⭐ It is **the only one of the three instances where a hard dependency on a closed row
+> misstates readiness**, which is why it is the one the owner declined to repair by hand.
+>
+> ⭐ **The ruling of record lives on `0307`, not here** — read that brief's 2026-09-13 dated correction
+> for the full reasoning, the two standing rulings it upholds (**H2**, 2026-09-03, and **H24**,
+> 2026-09-04), and the evidence shape prescribed for the eventual repair.
+>
+> ⛔ **This row stays `🔲 Backlog`.** Nothing here changes its scope, its status, or its position.

@@ -4,10 +4,10 @@
 0134
 
 ## Sprint
-Backlog
+Sprint 9
 
 ## Priority
-Unscheduled
+P5
 
 ## Status
 🔲 Backlog
@@ -110,3 +110,75 @@ An ADR under `ai-agents/knowledge-base/decisions/` via `/fkit-record-decision`, 
   on it silently is the failure mode. **This is a scope overlap the owner accepted, not a defect to
   report.**
 - No commit — leave the ADR in the working tree.
+
+> ## ⭐ DATED CORRECTION 2026-09-13 — OWNER RULING: **question 1 is settled — the mode exists, producer-only.** Every prior byte left identical.
+>
+> **The owner ruled, live via `AskUserQuestion` in a live `fkit lead` session with the owner present,
+> on 2026-09-13 — verbatim option label: *"Producer-only reconcile mode (Rec)"*.** This note is the
+> amendment; ⛔ **the brief's existing text above is deliberately left byte-identical**, per the
+> superseded-text convention. The seven questions are **not** deleted — the ADR still answers all of
+> them. What the ruling settles is the **shape of the answer** to questions 1, 2 and 5.
+>
+> ### What the ruling decides
+>
+> | question | settled by this ruling |
+> |---|---|
+> | **1. Does the mode exist at all?** | **Yes.** The *"keep it owner-only"* alternative is **rejected**. `0135` is therefore **not** cancelled. |
+> | **2. Who may invoke it?** | **Producer-only**, matching ADR-033 §1 — and a **spawned** producer qualifies. That is the whole point of the mode and, as the brief already says, the whole risk. |
+> | **5. Detection rule** | The brief asked *"does it require the disagreement to be present, and refuse when both locations already agree?"* — **yes, it must REFUSE when both locations already agree.** See the two constraints below. |
+>
+> ### ⛔ The two constraints the owner accepted the option **on** — they are part of the ruling, not commentary
+>
+> 1. **The mode MUST REFUSE when both locations already agree.** A run with no live disagreement
+>    between the brief and the board is **not** a half-landed close and the mode must decline it. The
+>    disagreement is the precondition, not merely the motive.
+> 2. **The mode MUST NEVER upgrade the agent-closed marker.** `✅ Done (agent-closed — not
+>    owner-verified)` must never become plain `✅ Done` through this mode. That upgrade is the owner's
+>    single act of verification and stays owner-only.
+>
+> Both belong in the ADR's **must-never** list (question 4), which already names the second; the first
+> is now binding as well. ⚠️ These two are **conditions of the approval** — an ADR that ships the mode
+> without both stated is not what the owner approved.
+>
+> ### The owner's stated reason for preferring this option
+>
+> ⭐ **The value is not the mode itself.** The owner's reason, recorded because it should steer how the
+> ADR is written: preferring this option **forces a written must-never list and a precise detection
+> rule onto the record**. The artifact of worth is the constraint list, not the feature. An ADR that
+> ships the mode but leaves either the must-never list or the detection rule vague has delivered the
+> part the owner did not value and skipped the part they did.
+>
+> ### ⚠️ `0135` is now unblocked
+>
+> [`0135`](../0135-add-producer-only-reconcile-mode-to-task-done/brief.md) — the four-file doctrine
+> change this task blocks — was gated on this ADR being approved. Question 1 no longer threatens to
+> cancel it. ⛔ **The brief's standing instruction *"Do not begin 0135 before this ADR is approved by
+> the owner"* still applies unchanged**: the *decision* is made, the **ADR is still unwritten**. `0135`
+> is unblocked in the sense that its premise is secure, not in the sense that it may start now.
+>
+> ### ⭐ Question 6 re-measured on disk 2026-09-13 — the asymmetry is real
+>
+> ⚠️ **Measured independently for this note, not inherited from the brief.** The brief's question 6
+> asks whether `/fkit-task-cancelled` needs the mirror mode, and says to *verify against the file
+> rather than assuming symmetry*. Verified:
+>
+> | file | repair exceptions found | gated to |
+> |---|---|---|
+> | `claude/skills/fkit-task-done/SKILL.md` | **two** — the *owner-verification upgrade* and the *contradicted-close repair*, both at step 1 (`SKILL.md:81-107`) | **both owner-only.** The second states it explicitly: *"never fire for a non-owner identity — a producer **spawned** to close is an agent (ADR-033 §5) and stops here"* |
+> | `claude/skills/fkit-task-cancelled/SKILL.md` | **none at all** — step 1's *"already in `ai-agents/tasks/cancelled/` (nothing to do — say so)"* (`SKILL.md:85`) has **no exception branch of any kind** | n/a |
+>
+> ⚠️ **Caveat on the measurement:** both skill files carry **uncommitted working-tree edits** from
+> task `0381` at the time of measuring. The figures above are the **on-disk** state of 2026-09-13, not
+> a committed state. Re-measure before writing the ADR.
+>
+> **What this means for the ADR.** The asymmetry is not a symmetry that was overlooked — the two
+> movers are in genuinely different positions today. `/fkit-task-done` already has an owner-only repair
+> door; `/fkit-task-cancelled` has no door at all. Question 6 must rule on whether the mirror mode
+> **opens a first door** in `fkit-task-cancelled`, which is a larger step than widening an existing
+> one. Note that `0342` (*mirror the self-locator repair rule into `fkit-task-cancelled`*) is a
+> separate, already-filed instance of the same asymmetry.
+>
+> ### Status unchanged
+>
+> ⛔ **This row stays `🔲 Backlog`.** The ruling makes the ADR **writable**, not written. Nothing here
+> closes anything.

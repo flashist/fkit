@@ -246,6 +246,18 @@ recurring drift into a one-time fix, and it is the point of doing this at all.
 ## Notes
 
 - **Depends on:** `0272`
+  - ✅ **DATED CORRECTION 2026-09-13 — THIS DEPENDENCY IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0272` closed; its folder is
+    `ai-agents/tasks/done/0272-replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary/`.
+    **Current dependency: nothing.** ⚠️ **The edge was structural, not a preference** (see § *Context*),
+    and the structure is now satisfied: `0272` landed first, as ADR-042's Consequences required.
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
+    ⚠️ **This row's board cell lives on the ARCHIVED [`sprint-6`](../../../sprints/done/sprint-6.md)
+    board, which restates the dependency and was NOT edited** — archived boards are historical record.
+    The brief is the current statement; the archived cell is not.
+    *(Recorded 2026-09-13 by a spawned `fkit-producer` with no owner channel, under the owner ruling
+    of 2026-09-13, option label verbatim **"One housekeeping pass (Rec)"**. Dependency line untouched;
+    no status, priority or scope change.)*
 - **Blocks:** nothing
 - ⚠️ **THIS IS A PROVISIONAL EXPERIMENT WITH TWO NAMED EXITS, and the close must say so.** The owner
   reserved *harden the rules* and *disable write access entirely*. **The disable exit is a one-value

@@ -117,3 +117,30 @@ this drift).
   editing; 0123 corrected the same citations twice (R7, then R9).
 - No commit — leave the coordinated edit in the working tree (the four files must move together when the
   owner does commit).
+
+> ## ⭐ DATED NOTE 2026-09-13 — `0134`'s question 1 is RULED: the mode EXISTS. ⛔ This task is still gated on the ADR. Every prior byte left identical.
+>
+> **The owner ruled `0134` live via `AskUserQuestion` in an `fkit lead` session with the owner present,
+> on 2026-09-13 — verbatim option label: *"Producer-only reconcile mode (Rec)"*.** The ruling of record
+> is on [`0134`](../0134-decide-the-sanctioned-repair-path-for-a-half-landed-close/brief.md)'s
+> 2026-09-13 dated correction.
+>
+> ### What it means here
+>
+> - ⭐ **This task will not be cancelled.** `0134`'s question 1 offered *"keep it owner-only"*, whose
+>   stated consequence was closing this row as cancelled. That option is **rejected**. The mode exists,
+>   and it is **producer-only** — a **spawned** producer qualifies.
+> - ⛔ **TWO CONSTRAINTS THE OWNER ACCEPTED THE OPTION ON, and the implementation must honour both:**
+>   the mode **must REFUSE when both locations already agree**, and **must NEVER upgrade the
+>   agent-closed marker** `✅ Done (agent-closed — not owner-verified)` to plain `✅ Done`.
+> - ⛔ **THIS TASK IS STILL BLOCKED.** Its hard dependency is on **the ADR**, and ⚠️ **the ADR is not
+>   written yet** — only the decision behind it was taken. `0134`'s standing instruction *"Do not begin
+>   0135 before this ADR is approved by the owner"* is **unchanged and still binding**. What the ruling
+>   removes is the risk that the ADR cancels this row, not the requirement that the ADR come first.
+>   ⛔ **No dependency line changed.**
+> - ⚠️ **The `fkit-task-cancelled` mirror (item 2) is still unruled** — `0134`'s question 6. Re-measured
+>   on disk 2026-09-13: `/fkit-task-done` has **two** repair exceptions, **both owner-only**;
+>   `/fkit-task-cancelled` has **none at all**. So the mirror would open a **first** door there, not
+>   widen one — a larger step than symmetry suggests. Wait for the ADR.
+>
+> ⛔ **This row stays `🔲 Backlog`.**

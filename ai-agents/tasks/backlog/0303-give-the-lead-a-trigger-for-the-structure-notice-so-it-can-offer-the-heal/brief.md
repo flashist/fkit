@@ -362,3 +362,31 @@ Measured 2026-08-14 at filing time: `HEAD` is **`4424b44 "Release v0.2.2"`**, ta
 and `git status --porcelain` returned **0 lines — the tree was clean**. This brief, its two siblings,
 and their three board rows are the only uncommitted work introduced by this filing.
 (`conventions/evidence-before-assertion.md` — asserted from a check made this turn.)
+
+> ## ⭐ DATED NOTE 2026-09-13 — `0304` IS RULED. This task's sequencing preference is discharged. Every prior byte left identical.
+>
+> **The owner ruled `0304` live via `AskUserQuestion` in an `fkit lead` session with the owner present,
+> on 2026-09-13 — verbatim option label: *"Move it to the lead (Rec)"*.**
+>
+> ⭐ **`/fkit-heal` moves from the producer to the LEAD. A ninth role was rejected** (ADR-028's eighth
+> role, the sandboxed e2e tester, is still authorised-but-unbuilt). The full ruling of record is on
+> [`0304`](../0304-decide-whether-fkit-heal-warrants-its-own-role/brief.md)'s 2026-09-13 dated
+> correction.
+>
+> ### What it means here
+>
+> - ⭐ **Ruling E's *"0304 first, then 0303"* preference is DISCHARGED.** `0304` is ruled; this task may
+>   proceed. ⛔ **No dependency line changes anywhere** — Ruling E was explicitly a preference, never a
+>   dependency, and this brief's declarations are untouched.
+> - ⭐ **The premise this brief was told to re-check has RESOLVED IN ITS FAVOUR.** `## Context` asked
+>   what happens if *"`0304` lands first and recommends a heal role"*. It did land first, and it
+>   recommended **no such role** — heal comes to the lead instead, which is **the very role this task
+>   puts the trigger on.** ⛔ **`0304` does NOT supersede this task.** The two are **complements**, and
+>   they now sit on the same role.
+> - ⚠️ **Verification step 6 (*"the `0304` interaction — stated explicitly"*) is not waived** — it is
+>   now answerable from the record rather than speculative. State the resolved answer, do not skip it.
+> - ⚠️ **The trigger's design must account for heal being a LEAD skill**, not a cross-role hand-off.
+>   The round trip the notice used to require — *"run `/fkit-heal` in a producer session"* — disappears.
+>   ⛔ Re-read the notice wording before designing; this brief predates the move.
+>
+> ⛔ **This row stays `🔲 Backlog`.** Nothing here is designed or implemented.

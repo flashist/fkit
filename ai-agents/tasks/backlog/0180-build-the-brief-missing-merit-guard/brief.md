@@ -287,6 +287,19 @@ brief to the canonical shape and is the natural template for the reshape.
     accepted cost, and the unfixed boundary date. **Current dependency: `0178`, `0179` — no
     outstanding decision.** ⚠️ `0178` is now a **doubly** hard gate: it supplies the canonical merit
     form *and* the date the exemption is measured from.
+  - ✅ **DATED CORRECTION 2026-09-13 — ONE OF THE TWO REMAINING IS DISCHARGED; ONE STILL BLOCKS. Both
+    the line above and the 2026-08-06 correction beneath it are left byte-identical and are now only
+    partly binding.** `0178` closed; its folder is
+    `ai-agents/tasks/done/0178-record-the-canonical-merit-statement-form-in-the-convention-page/`, so
+    the canonical merit form **and** the boundary date the grandfathering exemption is measured from
+    are **both on disk** — the 2026-08-06 note's *"not on disk yet"* caveat is discharged, and the
+    boundary date must now be **read from the convention page**, ⛔ **not invented**.
+    ⛔ **`0179` is still open** — `ai-agents/tasks/backlog/0179-require-a-merit-statement-on-every-ranked-board-brief/`,
+    `## Status: 🔲 Backlog`. **Current dependency: `0179` alone.** ⛔ **This row is still BLOCKED. Do
+    not mark it ready.**
+    *(Recorded 2026-09-13 by a spawned `fkit-producer` with no owner channel, under the owner ruling
+    of 2026-09-13, option label verbatim **"One housekeeping pass (Rec)"**. Dependency line untouched;
+    no status, priority or scope change.)*
 - **Blocks:** nothing.
 - **⚠️ Priority 158 is append rank, NOT a merit ranking — flagged for owner confirmation.**
 - **On merit:** immediately below `0179` — it is the last of the three-task grammar chain and must land

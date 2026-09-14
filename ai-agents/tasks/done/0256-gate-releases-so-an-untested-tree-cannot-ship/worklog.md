@@ -213,7 +213,7 @@ Landing CI falsifies claims in four other files. **None was edited** — three a
    *"there is no `.github/`"*. Its citation was **already** stale before this task: it quotes
    `architecture.md:390` as saying *"There is no CI and no test suite"*, and no such text exists
    anywhere in `architecture.md` today. Two defects, one pre-existing, one caused here.
-2. **`ai-agents/tasks/backlog/0251-…/brief.md:58`** — instructs *"Keep §9.1's thesis intact — the
+2. **`ai-agents/tasks/cancelled/0251-…/brief.md:58`** — instructs *"Keep §9.1's thesis intact — the
    section's point is 'a suite exists, no CI runs it'."* **That premise is now false**, and `0251`
    executed as written would re-break §9.1. This is a direct collision with the task whose scope
    ruling 4 protected.
@@ -427,7 +427,7 @@ Three files drifted from baseline **during** this run, all task-brief prose writ
 producer worker amending the ripples 0256 surfaced:
 ```
 > M ai-agents/tasks/backlog/0240-…/brief.md   (15:30)
-> M ai-agents/tasks/backlog/0251-…/brief.md   (15:31)
+> M ai-agents/tasks/cancelled/0251-…/brief.md   (15:31)
 > M ai-agents/tasks/backlog/0252-…/brief.md
 ```
 Nothing else drifted. This worker wrote no file except this worklog append. The step-1 revert proof

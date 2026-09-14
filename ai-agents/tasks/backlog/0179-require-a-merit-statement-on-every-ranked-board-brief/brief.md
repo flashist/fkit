@@ -94,6 +94,15 @@ either way.**
 
 - **Depends on:** `0178` — the skill points at the convention page, and pointing at a page that does not
   yet carry the grammar ships a dangling instruction.
+  - ✅ **DATED CORRECTION 2026-09-13 — THIS DEPENDENCY IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0178` closed; its folder is
+    `ai-agents/tasks/done/0178-record-the-canonical-merit-statement-form-in-the-convention-page/`,
+    so the convention page now carries the grammar and the pointer is no longer dangling.
+    **Current dependency: nothing.**
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
+    *(Recorded 2026-09-13 by a spawned `fkit-producer` with no owner channel, under the owner ruling
+    of 2026-09-13, option label verbatim **"One housekeeping pass (Rec)"**. Dependency line untouched;
+    no status, priority or scope change.)*
 - **Blocks:** `0180`.
 - **⚠️ Priority 157 is append rank, NOT a merit ranking — flagged for owner confirmation.**
 - **On merit:** immediately below `0178` — it cites `0178`'s page and must land after it, so append rank

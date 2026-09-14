@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (agent-closed — not owner-verified) (2026-09-13) — Consolidated into task `0392` under owner ruling 2026-09-13, verbatim option label "Consolidate into one brief (Rec)" — its scope survives as `0392` Group D and open decision OD3. ⚠️ Half A had largely landed via `0356`; half B and the per-citation census were outstanding and are carried forward. Re-scoped, ⛔ not done and ⛔ not abandoned.
 
 ## Owner
 fkit-coder
@@ -26,7 +26,7 @@ The driver folded `0257`'s own line-shift residual into this task **rather than 
 
 ⚠️ **No verbatim owner-ruling label attaches to this row.** The two owner rulings quoted on its
 sibling rows —
-[`0284`](../0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)
+[`0284`](../../backlog/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)
 (*"New task + correct the false claims now (Recommended)"*) and
 [`0285`](../../done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md) (*"File a new
 resync task (Recommended)"*) — **do not cover this one.** It is a driver-filed row. **Say so if
@@ -224,7 +224,7 @@ task** — spot-checking is exactly what produced nine misses.
   of this fence). ⚠️ **It sits at old line `375`, below the shift boundary, so this task's map does
   not move it.**
 - ⛔ **`architecture.md:49` and `:372`.** Those are
-  [`0273`](../0273-move-the-codex-review-sandbox-to-workspace-write-at-all-call-sites/brief.md)'s.
+  [`0273`](../../backlog/0273-move-the-codex-review-sandbox-to-workspace-write-at-all-call-sites/brief.md)'s.
 - ⛔ **`claude/skills/fkit-wiki-lint/SKILL.md:184`.** Its `architecture.md:390` citation is
   **fabricated** — the quoted string does not exist — and
   [`0280`](../../done/0280-rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint/brief.md)
@@ -281,11 +281,11 @@ task** — spot-checking is exactly what produced nine misses.
 - **⚠️ ORDERING — recorded as dated notes, deliberately NOT `Depends on:` edges** (the convention this
   board uses for soft ordering). **Measured 2026-08-13, four open rows touch this file or its
   citations:**
-  - **[`0284`](../0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)** —
+  - **[`0284`](../../backlog/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)** —
     its step 3 edits `architecture.md` prose, **shifting these line numbers again**. ✅ **Run this row
     AFTER `0284`, or accept a second pass.** ⛔ **Never concurrently.**
   - **[`0275`](../../done/0275-correct-the-stale-adversarial-review-citations-in-architecture-mds-review-walkthrough/brief.md)**
-    and **[`0273`](../0273-move-the-codex-review-sandbox-to-workspace-write-at-all-call-sites/brief.md)**
+    and **[`0273`](../../backlog/0273-move-the-codex-review-sandbox-to-workspace-write-at-all-call-sites/brief.md)**
     — both edit `architecture.md` at lines **below** the shift boundary, so neither moves this task's
     map. ⛔ **Still never concurrently with this row** — three tasks editing one file at once is how a
     fence gets crossed by accident.

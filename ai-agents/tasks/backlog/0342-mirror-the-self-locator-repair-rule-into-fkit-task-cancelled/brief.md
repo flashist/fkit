@@ -160,6 +160,16 @@ grep for `fkit-task-cancelled` over `ai-agents/tasks/backlog/*/brief.md` at plan
 ## Notes
 
 - **Depends on:** 0325
+  - ✅ **DATED CORRECTION 2026-09-13 — THIS DEPENDENCY IS DISCHARGED. The line above is left
+    byte-identical and is no longer binding.** `0325` closed; its folder is
+    `ai-agents/tasks/done/0325-repair-the-moved-folders-own-self-locators-in-task-done/`, so the four
+    insertions this task mirrors are on disk and reviewable. **Current dependency: nothing.**
+    ⚠️ **Re-read `0325`'s shipped text at pickup rather than this brief's description of it** — the
+    `Sequencing` bullet below said *"ready the moment `0325` closes"*, and that moment has passed.
+    ⛔ **This does not make the row `🔄 In progress`; it makes it runnable.**
+    *(Recorded 2026-09-13 by a spawned `fkit-producer` with no owner channel, under the owner ruling
+    of 2026-09-13, option label verbatim **"One housekeeping pass (Rec)"**. Dependency line untouched;
+    no status, priority or scope change.)*
 - **Blocks:** nothing
 - **Sequencing:** ready the moment `0325` closes. Small — one file, four insertions of already-reviewed
   text.

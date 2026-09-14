@@ -95,7 +95,7 @@ keeps `prove-red.sh` hand-rolled — whatever gate lands must run it, not replac
 - ⛔ Any new npm dependency (ADR-014, zero devDependencies).
 - ⛔ Replacing or restructuring `prove-red.sh` (ADR-026).
 - ⛔ Rewriting `architecture.md` §9.1's suite inventory — that is
-  [`0251`](../../backlog/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md). If both are
+  [`0251`](../../cancelled/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md). If both are
   open, coordinate; they touch different sentences in the same section.
 - ⛔ Any `ai-agents/wiki-vault/` write (ADR-005).
 - ⛔ No commit, no re-rank, no task-file move.

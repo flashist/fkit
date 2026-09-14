@@ -29,7 +29,7 @@ which corrects the same falsified posture in ADR-003.
 
 ⚠️ **Citations in this brief are `file` + quoted phrase, never `:NNN`.** The planning worker
 specifically found `architecture.md`'s line anchors already stale, which is
-[`0286`](../../backlog/0286-mechanical-citation-sweep-of-architecture-md/brief.md)'s whole subject. Anchor on the
+[`0286`](../../cancelled/0286-mechanical-citation-sweep-of-architecture-md/brief.md)'s whole subject. Anchor on the
 quoted text.
 
 ### What is on disk — read first-hand at filing, 2026-08-15
@@ -96,7 +96,7 @@ was discharged a different way — by 15 green runs on `ubuntu-latest`, where `/
    carries the never-run caveat."* **All of that is now false.** Implemented as written, `0281` would
    write a **fresh** false claim into a decision record. ⚠️ **This is the most urgent consequence of
    this finding and it is reported, not fixed by this row.**
-2. ⛔ **[`0251`](../../backlog/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md) is open and
+2. ⛔ **[`0251`](../../cancelled/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md) is open and
    its dated-correction block instructs the implementer to preserve occurrence B byte-identical** —
    *"⚠️ the **'Neither has been observed green on a runner yet'** bullet — **CI has never run** … **Do
    not soften, shorten, or delete that caveat, and never write that CI is working.**"* That instruction
@@ -151,7 +151,7 @@ Prose corrections to **one file**: `ai-agents/knowledge-base/architecture.md`.
   resync sibling is filed. Re-check at implementation time; if one has appeared, **report it**, do not
   write it.
 - ⛔ **Do not fix `:NNN` citations while in the file** — that is
-  [`0286`](../../backlog/0286-mechanical-citation-sweep-of-architecture-md/brief.md). Correct the prose only.
+  [`0286`](../../cancelled/0286-mechanical-citation-sweep-of-architecture-md/brief.md). Correct the prose only.
 - ⛔ No task-file move ([ADR-033](../../../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)),
   no re-rank, no board-row edit beyond this task's own close.
 - ⛔ No commit. ⛔ No source-code change — this is documentation.
@@ -192,10 +192,10 @@ Prose corrections to **one file**: `ai-agents/knowledge-base/architecture.md`.
   in-release gate on 2026-08-12, correctly writing a *"has not run yet"* caveat **that was true that
   day** and was never revisited once runs started the next day.
 - **⚠️ Ordering against the two open architecture.md rows.**
-  [`0251`](../../backlog/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md) edits **§9.1, the
+  [`0251`](../../cancelled/0251-refresh-architecture-md-section-9-test-suite-inventory/brief.md) edits **§9.1, the
   same section as occurrence B**, and its brief currently instructs preserving that bullet — see the
   CONFLICT section. **Whichever runs second must re-read the section rather than apply its brief
-  verbatim.** [`0286`](../../backlog/0286-mechanical-citation-sweep-of-architecture-md/brief.md) is citation-only
+  verbatim.** [`0286`](../../cancelled/0286-mechanical-citation-sweep-of-architecture-md/brief.md) is citation-only
   and explicitly fenced off the prose, so it does not collide in content; either order is safe there.
 - **⚠️ Adjacent, deliberately NOT filed:** ADR-026's two present-tense *"no `.github/workflows/`"*
   claims. **The owner considered them in the same question and did not select them.** Recorded so the
