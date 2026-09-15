@@ -10,7 +10,7 @@ Sprint 9
 P7
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
@@ -135,7 +135,7 @@ fkit-architect
 > repaired; **prose about the defect was reworded.** ⭐⭐ **A census over documents that discuss the
 > defect measures the prose as much as the rot** — which is the strongest argument on this page for
 > **declaring the scope as a command and pinning a commit**, and, for
-> [`0394`](../0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md),
+> [`0394`](../../backlog/0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md),
 > for an **exemption-region list**. ⛔ **Do not cite the −6 as a trend, exactly as the "+8 in one day"
 > figure below must not be cited as one.**
 >
@@ -198,7 +198,7 @@ fkit-architect
 >   and raise it at the plan gate. **A wrong "repair" here is unrecoverable from the diff alone,
 >   because the corrupted text still looks perfectly well-formed.**
 > - ⛔⛔ **THIS BEARS DIRECTLY ON THE GUARD ROW
->   [`0394`](../0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md)
+>   [`0394`](../../backlog/0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md)
 >   — ⚠️ FLAGGED HERE, ⛔ NOT WRITTEN INTO THAT BRIEF, which this producer was fenced from touching.**
 >   A guard that flags this class mechanically **will fire on every fourth-class site**. ⭐ **The fix is
 >   a DECLARED EXEMPTION-REGION LIST, not a cleverer pattern** — and that is a design question `0394`
@@ -221,7 +221,7 @@ fkit-architect
 > ruled on.** **None of the four prior measurements recorded its scope, so none can be checked against
 > another** — and under the closest reproducible scope the count moved the other way. ⛔ **Do not cite
 > it as a measurement in any plan, worklog, report or question produced by this row.** ⭐ **The guard
-> row [`0394`](../0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md)
+> row [`0394`](../../backlog/0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md)
 > stands on the better reason: a class whose census cannot be reproduced across six measurements has
 > no machine-checkable definition.**
 >
@@ -237,7 +237,7 @@ fkit-architect
 >
 > ⛔ **The question put to the owner was whether `adr-013-…md` line ~167 should be named up front as
 > an exemption region in the guard row
-> [`0394`](../0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md).
+> [`0394`](../../backlog/0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md).
 > The owner DECLINED to pre-rule it and returned it here.**
 >
 > ### ⛔ THE OWNER'S STATED REASON, RECORDED BECAUSE IT IS THE POINT
@@ -272,7 +272,7 @@ fkit-architect
 >    case-insensitive class. ⛔ **Its sibling candidate `adr-042-…md:~379` is LOWERCASE** — a
 >    case-sensitive guard would see one and not the other. **Dated; re-measure.**
 >
-> ⭐ **Cross-noted on [`0394`](../0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md)**,
+> ⭐ **Cross-noted on [`0394`](../../backlog/0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md)**,
 > which already names this site in its candidate-exemption table.
 >
 > ⛔ **`OD3`, `OD4` and `OD5` remain OPEN and are NOT discharged by this ruling.** ⚠️ **`OD4` —
@@ -292,7 +292,7 @@ fkit-architect
 present — the option label is the verbatim text: "Split A–C from D–E (Rec)".**
 
 ⭐ **This row is Groups D and E, split out of
-[`0392`](../0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md),
+[`0392`](../../done/0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md),
 which had consolidated five cancelled originals into one five-group row.** `0392` keeps the genuine
 `architecture.md` prose repair — Groups A–C, from `0251`, `0376` and `0366` — plus open decisions
 **OD1** and **OD2**. This row takes the **two citation sweeps**, from `0286` and `0323`, plus **OD3**,
@@ -420,7 +420,7 @@ per
 it.** ⭐ *"Repairing a coordinate that supports a false sentence would make the sentence look
 verified."* ⛔⛔ **AFTER THE 2026-09-13 SPLIT THIS ROW HAS NO PROSE-REPAIR EXCEPTION AT ALL.**
 ⚠️ **The consolidated row's exceptions were Groups A–C, and they are
-[`0392`](../0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md)'s
+[`0392`](../../done/0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md)'s
 now.** ⭐ **D4 therefore binds EVERYWHERE in this row, without exception — the split made this
 instruction stronger, not weaker.** ⛔ In particular, §9.5's stale anchors are **`0392`'s Group C
 alone** (see X3): it repairs the anchor and the false claim it supports **together**, which is the only
@@ -441,8 +441,8 @@ strong form needs a quotable anchor the corpus mostly lacks, and a noisy guard p
 is worse than none. **Reach a recommendation with reasoning; "infeasible" is a legitimate answer —
 say why.** ⛔ **Do not build it without approval at the plan gate**, and if built it needs a
 `prove-red.sh` mutation like everything else. ⚠️ **Check
-[`0371`](../0371-cost-widening-the-citation-guards-target-class-to-source-file-coordinates/brief.md)
-and [`0368`](../0368-give-the-ownerless-source-file-coordinate-rot-class-an-owner-and-measure-it/brief.md)
+[`0371`](../../backlog/0371-cost-widening-the-citation-guards-target-class-to-source-file-coordinates/brief.md)
+and [`0368`](../../backlog/0368-give-the-ownerless-source-file-coordinate-rot-class-an-owner-and-measure-it/brief.md)
 first — both are open and may already own part of this question.**
 
 ---
@@ -557,17 +557,17 @@ owner present**.
 
 | # | Question | Origin | Standing |
 |---|---|---|---|
-| **OD3** | **Should a guard test catch stale line citations mechanically?** | `0286` C8 | ⛔ Open. **Recommendation required; *"infeasible"* is legitimate — say why.** ⚠️ **Check [`0371`](../0371-cost-widening-the-citation-guards-target-class-to-source-file-coordinates/brief.md) and [`0368`](../0368-give-the-ownerless-source-file-coordinate-rot-class-an-owner-and-measure-it/brief.md) FIRST** — both are open and may already own part of this question. ⛔ **Do not build it without approval at the plan gate**, and if built it needs a `prove-red.sh` mutation like everything else |
+| **OD3** | **Should a guard test catch stale line citations mechanically?** | `0286` C8 | ⛔ Open. **Recommendation required; *"infeasible"* is legitimate — say why.** ⚠️ **Check [`0371`](../../backlog/0371-cost-widening-the-citation-guards-target-class-to-source-file-coordinates/brief.md) and [`0368`](../../backlog/0368-give-the-ownerless-source-file-coordinate-rot-class-an-owner-and-measure-it/brief.md) FIRST** — both are open and may already own part of this question. ⛔ **Do not build it without approval at the plan gate**, and if built it needs a `prove-red.sh` mutation like everything else |
 | **OD4** | **Is `ADR-013:167`'s bullet a live pointer or a dated worklist?** | `0323` 4 | ⛔ Open. **Decide in writing with a reason; ⛔ return it to the owner if genuinely contested** |
 | **OD5** | **Should the citation convention page gain a case-insensitivity rider?** | `0323` 5 | ⛔ Open. **Raise it; ⛔ do not write it** |
 
-⚠️ **OD1 and OD2 stayed with [`0392`](../0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md).** ⛔ **Do not answer them here** — but ⚠️ **OD2's answer is an input to this row** (X4).
+⚠️ **OD1 and OD2 stayed with [`0392`](../../done/0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md).** ⛔ **Do not answer them here** — but ⚠️ **OD2's answer is an input to this row** (X4).
 
 ## ⛔ Out of scope
 
 - ⛔ **THE PROSE REPAIR.** Groups A, B and C — §9.1's test-suite inventory, §9.1's occurrence-B
   clauses, and §9.5's residual bullets — are
-  [`0392`](../0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md)'s,
+  [`0392`](../../done/0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md)'s,
   by the 2026-09-13 split ruling. ⛔ **This row has NO prose-repair exception (D4).**
 - ⛔ **Any `ai-agents/wiki-vault/` write** ([ADR-005](../../../knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)). **Report the vault's count and paths for routing to `fkit-wiki`** (E6).
 - ⛔ **Any behaviour change.** Documentation and citations only. ⚠️ Group E may repair **comment text**
@@ -664,7 +664,7 @@ owner present**.
 
 ## Notes
 
-- **Depends on:** [`0392`](../0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md) — **hard.** ⭐ **Not a preference.** This row's deliverable is line arithmetic over a file `0392` rewrites (X1), and it cannot derive a shift map until `0392`'s **OD2** rules on whether §9.5 survives (X4).
+- **Depends on:** [`0392`](../../done/0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md) — **hard.** ⭐ **Not a preference.** This row's deliverable is line arithmetic over a file `0392` rewrites (X1), and it cannot derive a shift map until `0392`'s **OD2** rules on whether §9.5 survives (X4).
 - **Blocks:** nothing.
 
 - ⭐ **Provenance map — where each cancelled original's scope landed. ⛔ Nothing was dropped.**
@@ -684,7 +684,7 @@ owner present**.
 - ⚠️ **`0392`'s two carried-forward flags are recorded on `0392`, not here** — `0366`'s own correction
   being half wrong about the init script's role count, and `0366`'s Backlog board row having seven
   cells instead of six from a stray unescaped pipe (⛔ **left alone**; the escape is
-  [`0322`](../0322-escape-the-stray-pipes-in-the-board-rows-and-guard-against-new-ones/brief.md)'s
+  [`0322`](../../backlog/0322-escape-the-stray-pipes-in-the-board-rows-and-guard-against-new-ones/brief.md)'s
   scope). ⚠️ **The pipe matters to this row too:** a board row with an extra cell is the kind of thing
   a mechanical sweep trips over. ⛔ **Do not repair it here either.**
 

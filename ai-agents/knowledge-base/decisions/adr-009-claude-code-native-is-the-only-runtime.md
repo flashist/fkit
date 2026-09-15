@@ -131,4 +131,39 @@ not merely moved — which makes it a design decision inside this one (see ADR �
 - Evidence: [`2026-07-11-doc-drift-audit.md`](../reports/2026-07-11-doc-drift-audit.md).
 - Code: `install.sh:32-33,87-103`, `claude/fkit-claude-init.sh:20,24,30,46`,
   `claude/fkit-claude.sh`, `omnigent/fkit.sh`.
+
+> ⚠️ **Dated correction 2026-09-15 (`0393`) — three of this ADR's line pointers into ADR-008 and
+> `architecture.md` no longer land on what they cite.** The sentences that carry them are **left
+> byte-identical** as the record of what was cited on 2026-07-11. ⛔ No decision is reopened — only the
+> coordinates aged. ⚠️ **Scope:** only pointers into ADR-008 and `architecture.md` were assessed. The
+> source-file pointers — §Context's `claude/fkit-claude-init.sh` pointers and §Related's `Code:` line —
+> were **not**, and at least the `claude/fkit-claude-init.sh` ones now land on unrelated lines (checked
+> 2026-09-15). Do not read "three" as saying every other pointer here still lands.
+>
+> **Why this note sits here, at the end of §Related, and not beside each claim.** Other files cite lines
+> of this ADR that are **still correct today** — the doc-drift-audit link line in §Context, the §Related
+> *"- Evidence:"* bullet and Decision 2's sandbox-flag statement. A note inserted above them would move
+> them, and so would the header `- **Corrections:**` bullet the correction-note form asks for. **No header
+> bullet is added: a recorded departure from the form**, by owner ruling 2026-09-15 (*"Measured rule
+> (Rec)"*).
+>
+> **The claims this corrects, quoted, and where each cited passage lives today** (verified against the
+> live files 2026-09-15, by heading and quoted text rather than a fresh line number):
+>
+> - §Context: *"It deliberately kept Omnigent as a peer — "no flavor is deleted until the native port
+>   proves itself""*. Its ADR-008 line pointer now lands on an unrelated sentence. The passage meant is
+>   ADR-008 §"Options considered", *"**Port alongside Omnigent (chosen)** — keeps the working Omnigent
+>   path as fallback while the native port proves itself"*. ⚠️ The words in quotation marks in the claim
+>   are a paraphrase of that option, not its wording.
+> - Decision 3: *"(… flagged that as an unverified-integrity trust surface)"*, and §Consequences: *"the
+>   self-update trust risk in … is retired rather than ported"*. On 2026-07-11 the cited `architecture.md`
+>   range held the open risk *"**Self-update has no integrity verification beyond HTTPS.**"* That passage
+>   is **no longer in `architecture.md`** — consistent with this ADR retiring the risk — so there is no
+>   current anchor; the range now lands in §6's knowledge-base layout text. Read both pointers as the
+>   record of what was cited.
+>
+> **Checked and still landing — ⛔ not to be "corrected":** the three lines named in the second paragraph.
+>
+> **Why ⚠️ and not ⛔.** Drifted coordinates, not an overturned decision. **Status stays `accepted`.**
+
 </content>

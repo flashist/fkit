@@ -7,6 +7,11 @@
   — the full discussion (owner, fkit-coder, fkit-architect, fkit-producer), including the five arguments
   that were examined and **killed** and must not be re-raised.
 - **Task:** [`decide-whether-fkit-needs-a-tester-agent.md`](../../tasks/done/0024-decide-whether-fkit-needs-a-tester-agent/brief.md)
+- **Corrections:** 2026-09-15 (`0393`) — this ADR carries a dated note inline below **Required
+  follow-ups item 2**. It records that the item's `architecture.md` line pointers no longer land. Marker
+  legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
+  overturned** (do not follow it). No existing line of this ADR was edited; the note is an append, and
+  the Status stays `accepted`.
 
 > **What this ADR decides, in one line:** fkit adds an **eighth role, a tester**, whose unique authority
 > is a **sandbox** authority — a permission envelope no other role gets — and the owner **knowingly
@@ -168,6 +173,26 @@ criterion.**
    **ADR-023 itself is not superseded** — it declined a *git* agent on its own reasoning, and Decision 3
    there ("the team stays seven role-scoped agents") is a consequence of that ruling, not an independent
    constraint. It should carry a pointer to this ADR so the count claim is not read as still current.
+
+   > ⚠️ **Dated correction 2026-09-15 (`0393`) — the two `architecture.md` line pointers in this item no
+   > longer land.** The item is **left byte-identical** as the record of what was verified on 2026-07-19.
+   > It is a **follow-up list whose work is still pending** — the eighth role is not built — so a reader
+   > acting on it is still sent to those lines. Where each passage lives today, by heading and quoted text
+   > rather than a fresh line number (verified 2026-09-15):
+   >
+   > - **The first pointer** — `architecture.md`'s opening summary sentence. On 2026-07-19 it read
+   >   *"seven roles, no orchestrator"*; today it reads *"One runtime, **seven built roles** (an eighth, a
+   >   sandboxed e2e tester, is authorized in"* this ADR *"but **not yet built**)"* — its count claim has
+   >   since been refreshed.
+   > - **The second pointer** — the heading *"4.1 The seven roles"*, which still exists further down the
+   >   file and now carries the callout *"**An eighth role is decided but not built.**"*
+   >
+   > ⚠️ **Scope:** only the `architecture.md` pointers were assessed. The item's other pointers (the
+   > git-agent report's table, `CLAUDE.md`, `AGENTS.md`, `PROJECT.md`, `README.md`, `claude/README.md`, the
+   > init script and the vault pages) were not, and this note says nothing about whether they still land.
+   > **Why ⚠️ and not ⛔:** moved coordinates; this decision is untouched and the **Status stays
+   > `accepted`**.
+
 3. **Producer-scoped briefs** for the tester's agent definition, its skills, `skills_for_role()` in
    `claude/fkit-claude.sh`, and scaffold dual-homing — **after** the CI smoke script (Decision 7).
 4. **B1 — the bare-subagent investigation** from the task's Dependents is now live: Q1 landed on *seat*,

@@ -99,11 +99,11 @@ write.
 - Read the sprint plan (`$ARGUMENTS`, or — argument empty — the board named by the selector's `board`
   line) and the briefs it links:
   ```
-  bash claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints
+  bash .claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints
   ```
 - Get the board **via the deterministic reader** — never hand-derive status:
   ```
-  bash claude/skills/fkit-status/dashboard.sh <plan>
+  bash .claude/skills/fkit-status/dashboard.sh <plan>
   ```
 - **Eligible** = tasks that are `🔲 Backlog` **and** whose every `Depends on` link is `✅ Done`. Skip
   `🔄 In progress` (someone else owns it), `🚧 Blocked`, `✅ Done`, `⛔ Cancelled`, `➡️ Moved`.

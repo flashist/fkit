@@ -122,7 +122,7 @@ this drift).
 >
 > **The owner ruled `0134` live via `AskUserQuestion` in an `fkit lead` session with the owner present,
 > on 2026-09-13 — verbatim option label: *"Producer-only reconcile mode (Rec)"*.** The ruling of record
-> is on [`0134`](../0134-decide-the-sanctioned-repair-path-for-a-half-landed-close/brief.md)'s
+> is on [`0134`](../../done/0134-decide-the-sanctioned-repair-path-for-a-half-landed-close/brief.md)'s
 > 2026-09-13 dated correction.
 >
 > ### What it means here

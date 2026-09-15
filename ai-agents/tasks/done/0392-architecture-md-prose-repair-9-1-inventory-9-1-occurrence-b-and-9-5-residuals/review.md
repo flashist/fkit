@@ -1,0 +1,19 @@
+# Review — 0392
+
+Task: ai-agents/tasks/done/0392-architecture-md-prose-repair-9-1-inventory-9-1-occurrence-b-and-9-5-residuals/brief.md
+File(s) under review: ai-agents/knowledge-base/architecture.md (working tree vs HEAD, +23/−20; `sprint-9.md` and `0392/brief.md` status flips out of scope)
+Status: closed-out
+Coverage: reasoning-only second opinion — Round 1: Codex (`codex-cli` v0.152.0, exit 0) ran and reasoned, reading the repo with `ls`/`rg`/`git diff --check`/`cmp`, but measured nothing; its `gh run list` failed (`error connecting to api.github.com`), so it could not check the remote CI figures. The CI-history evidence is the Claude reviewer's: `gh run list --workflow test.yml --limit 1000` (43 runs · 39 success · 4 failure · events `push` only · branch `main` only · first 2026-08-12T19:50:01Z · last 2026-09-14T11:07:24Z) and `gh run view <id> --log-failed` on all four red runs.
+
+## Reviewer findings
+| #  | Round | Sev | Location | Claim |
+|----|-------|-----|----------|-------|
+| R1 | 1 | low | `ai-agents/knowledge-base/architecture.md` §9.1, occurrence-B bullet (~:535) | *"(macOS is case-insensitive, the runner is not)"* is slightly too broad: macOS's default APFS is case-insensitive, but case-sensitive APFS exists (0283's own diagnosis reproduced the red run on a case-sensitive APFS image). Nit, not a false claim. ⚠️ The same parenthetical sits **verbatim in fenced occurrence A (§1)** and in `test/orphan-cleanup.test.js`'s comment block *"macOS filesystems are case-insensitive"*. Changing §9.1 alone would make the two occurrences disagree and break the §1 byte-identical fence. Recommend: no action in this row, or a later edit to both sides together. (Raised by Codex; verified PARTIALLY CORRECT.) |
+
+## Coder response
+| #  | Verdict | Defect / Frontier | Action | Status |
+|----|---------|-------------------|--------|--------|
+| R1 | CORRECT (claim) — severity **low / nit**, coder-derived: the aside is a parenthetical gloss on a true cause (a case-sensitivity divergence, confirmed from the red run's log); no reader acts on it, no test reads it, and the load-bearing clause ("repaired by task `0283`") is unaffected. Verified: occurrence B in §9.1 "What runs it" (*"(macOS is case-insensitive, the runner is not)"*, text added by this row) and occurrence A in §1 (same wording, unchanged vs HEAD — no diff hunk in §1) are identical; `test/orphan-cleanup.test.js` group G's comment reads *"macOS filesystems are case-insensitive"*; `0283`'s brief § "The diagnosis — already done" reproduced the red on a *"case-sensitive APFS image"*, so the broadness is real. | Frontier — the wording mirrors fenced occurrence A on purpose (plan §2 B4 keeps A byte-identical); any accuracy gain costs either an A/B desync or an out-of-plan edit to A | none — owner ruled **"Accept as residual (Rec)"** on 2026-09-14 (relayed by `fkit-sprint-ship-loop`); no text change; recorded under Accepted residuals as *"R1 — macOS case-insensitivity aside"* | won't fix (frontier) |
+
+## Accepted residuals (shared, do-not-re-litigate)
+- **R1 — macOS case-insensitivity aside** (owner-ruled 2026-09-14, "Accept as residual (Rec)") — What: the parenthetical *"(macOS is case-insensitive, the runner is not)"* is kept as-is in both §1 (occurrence A) and §9.1's occurrence-B bullet of `ai-agents/knowledge-base/architecture.md`; no text change. · Why (structural): it describes macOS's default filesystem (default APFS is case-insensitive), which is the case that produced the red run; the two occurrences record the same event and must stay identical. Rejected: (a) edit §9.1 only — desyncs A and B and breaks this row's plan §2 B4 fence that keeps occurrence A byte-identical; (b) edit A, B and the `test/orphan-cleanup.test.js` comment together — outside this row's approved plan (a prose-repair row that fences A), for a nit with no reader-facing consequence. · Re-raise only if: a row edits both occurrences together.

@@ -24,12 +24,40 @@ fkit-coder
 [ADR-036](../../../knowledge-base/decisions/adr-036-the-skill-ownership-site-inventory-is-a-declared-registry.md)'s
 declared skill-ownership site registry**, and neither can be assessed today.
 
-### Why it cannot be done now — three prerequisites, all open
+### Why it cannot be done now — three prerequisites, one still open (`0189`)
+
+> ⚠️ **DATED NOTE 2026-09-15 (`0221`) — all three premises re-measured on disk. These are snapshots:
+> re-check every one when this task is pulled.** Item 1 is still true, and its "verified 2026-08-02"
+> stamp is left unchanged. Items 2 and 3 were false and are corrected in place by `0221`.
+> ⛔ **`0194` is still blocked, on `0189` alone. Nothing here makes it ready.**
 
 1. **The registry module does not exist.** `test/skill-ownership-sites.mjs` is **absent from disk,
    verified 2026-08-02**. It is `0142`'s follow-up, filed as `0189`. There is nothing to run.
-2. **`0190`'s clause does not exist** — no wording to assess.
-3. **`0191`'s clause does not exist** — same.
+2. **`0190`'s worker-side clause is shipped** — final bullet of `## Universal hard rules (every role,
+   every session)` in `claude/scaffold/universal-rules.md`. Built 2026-08-04 per `0190`'s worklog;
+   `0190` is in `ai-agents/tasks/done/`. The wording to assess, verbatim:
+
+   > - **A skill rule beats a contrary spawn instruction** unless that instruction names an owner ruling
+   >   on that point. With no such ruling: take the cheapest-to-reverse branch (usually the rule's),
+   >   escalate if it changes the outcome, never silently comply or refuse.
+
+3. **`0191`'s driver-side clause is shipped** — a bullet under `## Hard rules` in
+   `claude/skills/fkit-sprint-ship-loop/SKILL.md`. Built on a plan the owner approved 2026-08-04, per
+   `0191`'s worklog; `0191` is in `ai-agents/tasks/done/`. The wording to assess, verbatim:
+
+   > - **Never instruct into the territory of a rule in the skill a worker will run without naming the owner
+   >   ruling you relay** (ADR-037 §3 — the driver-side half of the owner's Q2 ruling; this ADR binds the
+   >   driver, not only the worker). Exactly one of three is permitted:
+   >   - **Name the ruling** — what the owner ruled, when, on what point — and the instruction binds.
+   >   - **Get the ruling first.** You hold the owner channel the worker lacks (ADR-021); if the point
+   >     matters, ask before spawning.
+   >   - **Do not issue it.** Let the skill rule stand.
+   >
+   >   **A bare directive into a rule's territory is a defective instruction, and the worker's conservative
+   >   branch is the correct response to it, not an obstruction** — do not read a worker's escalation here as
+   >   a failure to follow orders. **This clause is weaker than its worker-side twin** and ADR-037 §3 records
+   >   that deliberately: the worker-side clause reaches every spawn through the universal rules block, while
+   >   this one binds you only because *you* load this file, and it reaches no worker.
 
 ### Why it is a row and not a verification step inside `0190` / `0191`
 

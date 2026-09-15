@@ -182,6 +182,36 @@ The move was made with `git mv`, so both files keep their history.
 - The wiki's `[[systems/fkit]]` page does not know this convention exists and needs an ingest pass
   (already tracked as the wiki-sync task).
 
+> ⚠️ **Dated correction 2026-09-15 (`0393`) — the "Inbound links must be repaired" bullet is a dated
+> worklist, and three of its five line pointers no longer land.** The bullet is **left byte-identical**.
+> ⛔ No decision is reopened.
+>
+> **Why this note sits here, at the end of §Consequences, and not beside the bullet.** This section's own
+> line range is cited from elsewhere and is **still correct**; a note inside it, or the header
+> `- **Corrections:**` bullet the correction-note form asks for, would move it. **No header bullet is added:
+> a recorded departure from the form**, by owner ruling 2026-09-15 (*"Measured rule (Rec)"*).
+>
+> **The claim this corrects:** *"**Inbound links must be repaired**, notably … which cite the six as
+> evidence."* Verified against the live files 2026-09-15, it is a **dated worklist whose work has landed**
+> (owner ruling 2026-09-15, *"Dated worklist + note (Rec)"*): every passage it names now points into
+> `reports/` — by a `../reports/` link in ADR-009 and ADR-010, and by the repo-root
+> `ai-agents/knowledge-base/reports/` path in ADR-007. Its five pointers, one verdict each:
+>
+> - **ADR-007, first pointer — drifted.** The passage is ADR-007 §Context, *"Full investigation,
+>   constraints, and the options comparison behind this decision are recorded in"*, followed by the eval
+>   report path.
+> - **ADR-007, second pointer — drifted.** ADR-007 §Related, the eval-report bullet, *"the full evaluation
+>   this ADR"*.
+> - **ADR-009, first pointer — still lands.** ADR-009 §Context, the doc-drift-audit link line
+>   (*"found the Omnigent-side"*).
+> - **ADR-009, second pointer — still lands.** ADR-009 §Related, *"- Evidence:"* with the doc-drift-audit
+>   link. ⛔ Not to be "corrected".
+> - **ADR-010 pointer — drifted.** ADR-010 §Related, *"- Evidence:"* with the doc-drift-audit link
+>   (§"An open design question — two sources of truth for the skill lock"). It keeps moving as ADR-010
+>   gains dated notes above it.
+>
+> **Why ⚠️ and not ⛔.** A drifted pointer in a finished to-do. **The Status line stays as written.**
+
 ## Re-raise only if
 
 - A genuinely new kind of durable knowledge-base document appears that the **six-way test has no answer

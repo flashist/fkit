@@ -9,6 +9,10 @@
 - **Evidence:** [`reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md`](../reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md)
   — the feasibility analysis, the per-conflict resolution, and the plan-gate honesty clause reproduced
   in §Consequences here.
+- **Corrections:** 2026-09-15 (`0393`) — this ADR carries a dated note inline below the §Context
+  paragraph *"Also already-stale prose, corrected by this ADR"*. Marker legend: **⚠️ = a fact that
+  drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow it). No
+  existing line of this ADR was edited; the note is an append, and the Status stays `accepted`.
 
 > **What this ADR decides, in one line:** `fkit-lead` grows from a router into a **single-point-of-
 > interaction conductor** that spawns and drives any role — feasible because the ADR-018 hook already
@@ -47,6 +51,13 @@ code, because `architecture.md:184-228` still describes the retired `skillOverri
 [ADR-022](adr-022-tools-unrestricted-except-adversarial-reviewer.md) relaxed tools for all six
 Claude-side roles, so lead **already inherits Write/Edit** (`architecture.md:105`). `fkit-lead.md:20-24`'s
 "no Write or Edit tools — deliberately" is a live drift; this reversal corrects it as well as the stance.
+
+> ⚠️ **Dated correction 2026-09-15 (`0393`) — the `architecture.md` line pointer in this paragraph no
+> longer lands.** It is **left byte-identical** as the record of what was cited on 2026-07-22; it now
+> lands on a blank line inside §4.1. The passage is `architecture.md` §4.1 (*"The seven roles"*), the
+> `fkit-lead` row of the tool table, whose tools cell still reads *"(none — inherits all)"* — so the
+> claim it supports, that lead inherits Write/Edit, still holds. **Why ⚠️ and not ⛔:** a moved
+> coordinate; nothing this ADR reverses changes. **Status stays `accepted`.**
 
 ## Decision
 

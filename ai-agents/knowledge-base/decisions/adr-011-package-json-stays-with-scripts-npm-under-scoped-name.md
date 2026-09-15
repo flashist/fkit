@@ -5,6 +5,10 @@
 - **Deciders:** owner (Mark Dolbyrev), relayed via fkit-producer, recorded by fkit-architect
 - **Supersedes:** [ADR-001](adr-001-package-json-stays-metadata-only.md) (`package.json` stays
   metadata-only; stop bumping the version)
+- **Corrections:** 2026-09-15 (`0393`) — this ADR carries dated notes inline below **§Context
+  paragraph 1** and below **§Context fact 1**. Marker legend: **⚠️ = a fact that drifted** (the
+  decision is untouched); **⛔ = a decision that was overturned** (do not follow it). No existing line
+  of this ADR was edited; the notes are appends, and the Status stays `accepted`.
 
 ## Context
 
@@ -14,6 +18,25 @@ consequence, instructed: **"stop bumping/publishing `package.json`'s `version`"*
 stated reason for keeping the file at all was that "keeping the npm listing (name/description/
 keywords) has discoverability value" (`adr-001:40-41`).
 
+> ⚠️ **Dated correction 2026-09-15 (`0393`) — the four ADR-001 line pointers in this ADR no longer
+> land: the three in this paragraph and the one under fact 1 below.** Each is **left byte-identical** as the
+> record of what was cited on 2026-07-11. They drifted because ADR-001 gained its *"Read as history, not
+> as current design"* banner above them, in the same change that recorded this ADR.
+>
+> **Where each quoted passage lives today**, verified against live ADR-001 2026-09-15, by heading and
+> quoted text rather than a fresh line number:
+>
+> - *"no `bin`, no `scripts`, no `dependencies`"* — ADR-001 §Decision, *"`package.json` remains
+>   metadata-only — no `bin`, no `scripts`, no `dependencies`"*.
+> - *"stop bumping/publishing `package.json`'s `version`"* — ADR-001 §Decision, the sentence opening
+>   *"As a consequence of this decision:"*.
+> - *"keeping the npm listing (name/description/keywords) has discoverability value"* — ADR-001
+>   §"Options considered", the *"**Remove `package.json` entirely**"* option (the phrase wraps across two
+>   lines there).
+> - *"mild trap"* (fact 1 below) — ADR-001 §Decision, *"mild trap — it invites `npx fkit`"*.
+>
+> **Why ⚠️ and not ⛔.** Coordinates aged; this ADR's decision is untouched. **Status stays `accepted`.**
+
 Three facts, all verified 2026-07-11, falsify that ADR:
 
 1. **The npm name `fkit` is taken, and always was.** `npm view fkit` resolves to `nullobject/fkit`
@@ -22,6 +45,11 @@ Three facts, all verified 2026-07-11, falsify that ADR:
    rationale describes **an npm listing that does not exist**; there is no discoverability to
    preserve. Worse, `npx fkit` today fetches someone else's package — a sharper form of the exact
    "mild trap" ADR-001 was written to prevent (`adr-001:27-29`).
+
+   > ⚠️ **Dated correction 2026-09-15 (`0393`) — the ADR-001 line pointer on *"mild trap"* no longer
+   > lands.** It is **left byte-identical**. Where the phrase lives today is recorded once, in the note under
+   > §Context paragraph 1 — deliberately not restated here, so there is one place to keep true rather than
+   > two.
 
 2. **`package.json` has a `scripts` block, and it is release tooling — not install semantics.**
    `package.json:3-9` defines `release` / `release:minor` / `release:major` / `release:dry`, all

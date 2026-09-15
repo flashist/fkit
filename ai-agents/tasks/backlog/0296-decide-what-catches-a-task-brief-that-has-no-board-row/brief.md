@@ -75,7 +75,7 @@ having a row.
 **⚠️ `0014` carries a SECOND, separate anomaly, and it is NOT this task's.** Its folder is under
 `done/` while its own brief reads `## Status: 🔲 Backlog` and `## Sprint: Backlog (unsprinted)` —
 verified 2026-08-14. **That mismatch is already owned by
-[`0134`](../0134-decide-the-sanctioned-repair-path-for-a-half-landed-close/brief.md)** — *"Decide the
+[`0134`](../../done/0134-decide-the-sanctioned-repair-path-for-a-half-landed-close/brief.md)** — *"Decide the
 sanctioned repair path for a half-landed close — ADR, then the reconcile mode"*.
 ⛔ **Do not duplicate `0134`, and do not repair `0014`'s status or move its folder here.**
 **This task owns the MISSING ROW. `0134` owns the STATUS/FOLDER DISAGREEMENT.** They meet on one task
@@ -287,7 +287,7 @@ the figures in `## Context`.**
   the filing did not expand scope on its own authority.** It is recorded here because the owner should
   know the evidence base grew, and because *"only two specimens"* was one of the stated reasons the
   *"nothing changes"* candidate is live.
-- **⚠️ Relationship to [`0134`](../0134-decide-the-sanctioned-repair-path-for-a-half-landed-close/brief.md),
+- **⚠️ Relationship to [`0134`](../../done/0134-decide-the-sanctioned-repair-path-for-a-half-landed-close/brief.md),
   stated so nobody merges them:** both touch `0014`. `0134` owns the **status/folder disagreement** (a
   brief reading `🔲 Backlog` inside `done/`); **this task owns the missing board row.** Neither is the
   other's blocker — `0014` can gain a row without its status being resolved, and vice versa.

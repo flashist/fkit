@@ -98,13 +98,13 @@ at the foot of this page.
 
 ## Where this is enforced
 
-1. **`claude/skills/fkit-status/dashboard.sh`** — the `⟦FACTS⟧` id ladder takes the folder-name ID
+1. **`.claude/skills/fkit-status/dashboard.sh`** — the `⟦FACTS⟧` id ladder takes the folder-name ID
    prefix first; the Priority cell is only a fallback. This ships to every project.
 2. **`test/dashboard-contract.test.js`** — the task-0103 red-proof holds one variable and moves the
    other, in both directions, so an implementation whose id merely *correlated* with the folder fails
    it. A companion test pins that a `P<n>` cell parses cleanly and never becomes the id.
-3. **`claude/skills/fkit-task-brief/SKILL.md`** — at write time, when a task is pulled into a sprint.
-4. **`claude/skills/fkit-status/dashboard.sh` + `test/dashboard-contract.test.js`** — **Specified, not
+3. **`.claude/skills/fkit-task-brief/SKILL.md`** — at write time, when a task is pulled into a sprint.
+4. **`.claude/skills/fkit-status/dashboard.sh` + `test/dashboard-contract.test.js`** — **Specified, not
    built yet.** A `brief-missing-merit` drift kind, in the same family as `brief-missing-status`,
    `brief-missing-owner` and `brief-missing-id`. Its condition, in the two parts report
    `2026-08-01-merit-ordering-record-when-board-rank-cannot-carry-it.md` §5.1 rules: **presence** — every

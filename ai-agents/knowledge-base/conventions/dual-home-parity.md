@@ -53,6 +53,7 @@ are **three** kinds, not two:
 | `knowledge-base/conventions/README.md` | **index** | its "What's here" table lists each home's *actual* contents, so the two copies legitimately differ |
 | `knowledge-base/conventions/dual-home-parity.md` (this file) | **fkit-repo-only** | ⛔ never ship — see below |
 | `knowledge-base/architecture.md` | **live-only** | each project generates its own via `/fkit-inspect`; the scaffold ships none |
+| `.fkit-accepted-drift` | **live-only** — this project's launch-notice intent file (task 0247); a shipped copy would pre-mute launch notices in every consuming project, and the live copy exists only because this repo dogfoods fkit | ⛔ never sync |
 | `knowledge-base/PROJECT.md` | **project-specific** — the scaffold copy is the placeholder brief that `/fkit-initiate-project` replaces | ⛔ never sync |
 | `wiki-vault/index.md`, `wiki-vault/log.md` | **project-specific** — the scaffold copies are an empty catalog and an empty activity log | ⛔ never sync |
 | `knowledge-base/{decisions,history,incidents,reports}/`, `sprints/`, `tasks/{backlog,done,cancelled}/`, `wiki-vault/wiki/` | **project-specific** — scaffold holds only `.gitkeep`; the live tree holds fkit's own ADRs, reports, briefs and wiki pages | ⛔ never sync |
@@ -65,7 +66,7 @@ are **three** kinds, not two:
 > [`test/dual-home-parity-exceptions.mjs`](../../../test/dual-home-parity-exceptions.mjs) (task 0132).
 > The parity test reads that module; where the two disagree, the module wins and this table is stale.
 >
-> **The mirror is COMPLETE as of 2026-08-01: all 26 module entries appear above** — 16 file entries and
+> **The mirror is COMPLETE as of 2026-09-14: all 28 module entries appear above** — 18 file entries and
 > 10 directory entries, the latter written with a trailing `/`. The five `runtime-state` rows were
 > missing from the first draft of this table; a partial mirror is worse than none, because a reader who
 > cannot find a path here concludes it is enforced when the module says it is not. **If you add an

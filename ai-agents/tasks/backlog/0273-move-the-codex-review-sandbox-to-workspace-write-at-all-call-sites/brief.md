@@ -104,11 +104,11 @@ filing. **The real count is eight, not four and not five.**
 
 5. **`claude/README.md:116`** — under `## The Codex adversarial pass`, the command printed verbatim as
    the documented behavior of the review.
-6. **`ai-agents/knowledge-base/architecture.md:49`** — the **dependency table**'s Codex CLI row.
-7. **`ai-agents/knowledge-base/architecture.md:272`** — **inside the mermaid runtime diagram**, as the
+6. **`ai-agents/knowledge-base/architecture.md` §2** — the **dependency table**'s Codex CLI row.
+7. **`ai-agents/knowledge-base/architecture.md` §5.3** — **inside the mermaid runtime diagram**, as the
    node label `X[["codex exec --sandbox read-only"]]`. ⚠️ **Easy to miss in a text pass and easy to
    break** — it is diagram syntax, so check the diagram still renders after editing.
-8. **`ai-agents/knowledge-base/architecture.md:372`** — the review-pass walkthrough (§*"4 — Review + the
+8. **`ai-agents/knowledge-base/architecture.md` §7** — the review-pass walkthrough (§*"4 — Review + the
    adversarial pass"*).
 
 **⚠️ Keep the two classes distinct — they fail differently, and the close must report them
@@ -152,8 +152,8 @@ and is **correct as written**, because it is a dated or frozen record of what wa
 ### ⚠️ Two stale citations that sit ON lines this task already rewrites — fix them in passing
 
 **Independent of ADR-042; already stale before 2026-08-11.** `architecture.md` cites
-`claude/skills/fkit-review/SKILL.md:57` for the codex command at **site 6 (`:49`)** and
-`claude/skills/fkit-review/SKILL.md:38,57` at **site 8 (`:372`)**. Measured 2026-08-11: the command is
+`claude/skills/fkit-review/SKILL.md:57` for the codex command at **site 6 (§2's Codex CLI row)** and
+`claude/skills/fkit-review/SKILL.md:38,57` at **site 8 (§7's flow *"4 — Review + the adversarial pass"*)**. Measured 2026-08-11: the command is
 at **`:61`**; `:57` is a bullet about settled tradeoffs and `:38` is a section heading.
 
 **The rule for this task, and it is a bright line — not a judgement call per citation:**
@@ -215,8 +215,8 @@ recurring drift into a one-time fix, and it is the point of doing this at all.
 3. **Site 7's diagram still renders.** It is a mermaid node label, not prose. Confirm the diagram
    parses after the edit and say how you checked.
 4. **The two in-passing citation fixes are correct and separately reported.** Show the corrected
-   citations at `architecture.md:49` and `:372`, **re-measured against the post-`0272` tree** rather
-   than copied from this brief. ⛔ Confirm `:373-375` was **not** touched. ⚠️ **List these two fixes
+   citations at `architecture.md` §2's Codex CLI row and §7's flow *"4 — Review + the adversarial pass"*, **re-measured against the post-`0272` tree** rather
+   than copied from this brief. ⛔ Confirm §7 flow 4's *"**Degradation is loud and mandatory:**"* citation cluster was **not** touched. ⚠️ **List these two fixes
    separately from the eight flag changes in the close** — they are not part of D2, and a later
    *disable exit* revert must be able to tell which half is which.
 5. **Codex can now actually execute something.** Run one real review through a changed path over a

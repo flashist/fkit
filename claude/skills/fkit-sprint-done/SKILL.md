@@ -93,7 +93,7 @@ there. Do not carry the task movers' "the guard catches it" reassurance across; 
 - **Resolve its identity with the deterministic reader — never re-derive it** (ADR-041 §5: one
   grammar, one implementation):
   ```
-  bash claude/skills/fkit-status/dashboard.sh identity <plan>
+  bash .claude/skills/fkit-status/dashboard.sh identity <plan>
   ```
   Exit 0 prints the identity; exit 3 means readable but unresolved.
 - **Stop with a clear message if:**
@@ -129,7 +129,7 @@ Capture, for use in later steps and the final report:
 - **The successor board, resolved by the deterministic reader — never by comparing sprint numbers in
   your head:**
   ```
-  bash claude/skills/fkit-status/dashboard.sh successor ai-agents/sprints "<closing identity>"
+  bash .claude/skills/fkit-status/dashboard.sh successor ai-agents/sprints "<closing identity>"
   ```
   It prints **one basename** and exits 0; it exits **3** when no successor exists. It applies
   ADR-047 §3.0.2 in full: depth 1 of `ai-agents/sprints/` and no other traversal, filtered to boards
@@ -145,7 +145,7 @@ Capture, for use in later steps and the final report:
   garbage.
 - **The successor's LABEL, resolved separately:**
   ```
-  bash claude/skills/fkit-status/dashboard.sh identity ai-agents/sprints/<that basename>
+  bash .claude/skills/fkit-status/dashboard.sh identity ai-agents/sprints/<that basename>
   ```
   ⛔ **Two lookups, neither derived from the other** (ADR-047 §3.0.1). The label is the successor's
   **resolved identity**; the href is its **basename**. Deriving one from the other reintroduces the
@@ -219,7 +219,7 @@ pairing, and getting it wrong manufactures a permanent `drift disagreement` (ADR
 
 | Destination | Procedure to mirror | Fields |
 |---|---|---|
-| a **successor sprint** | *"Pulling a backlog task into a sprint"* in `claude/skills/fkit-task-brief/SKILL.md` | `## Sprint` → `Sprint N` (the successor's **resolved identity**), `## Status` → `🔲 Backlog`, `## Priority` → the real number `M` — **or `Unscheduled` where the successor's own board is UNRANKED and step 4 therefore wrote no `— priority M`** |
+| a **successor sprint** | *"Pulling a backlog task into a sprint"* in `.claude/skills/fkit-task-brief/SKILL.md` | `## Sprint` → `Sprint N` (the successor's **resolved identity**), `## Status` → `🔲 Backlog`, `## Priority` → the real number `M` — **or `Unscheduled` where the successor's own board is UNRANKED and step 4 therefore wrote no `— priority M`** |
 | the **Backlog** fallback | *"De-scoping a task out of a sprint and back onto the Backlog board"* in the same file | `## Sprint` → `Backlog`, `## Status` → `🔲 Backlog`, `## Priority` → `Unscheduled` |
 
 ⛔ **Mirror those procedures' BRIEF-FIELD steps only — never their marker.** The pull-into-a-sprint
@@ -376,7 +376,7 @@ you land it and the close is not unfinished for it. The last two bullets state b
   `identity` and step 2 calls `successor`, and both answer with a value and no drift. So the collision
   is silent on this path: close one of the two boards and it disappears from depth 1 along with the
   evidence. **If two boards might claim one identity, render the board —
-  `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/<basename>` — and read its `⟦FACTS⟧`
+  `bash .claude/skills/fkit-status/dashboard.sh ai-agents/sprints/<basename>` — and read its `⟦FACTS⟧`
   for `drift ambiguous-plan-identity`, which names every other claimant.** That is the check, not a
   hope that step 1 will warn you.
   ⛔ **Not `select-active`.** It filters to `In progress` before its own `ambiguous-active-sprint`

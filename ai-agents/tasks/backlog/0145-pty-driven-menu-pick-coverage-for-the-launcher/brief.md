@@ -18,7 +18,7 @@ fkit-coder
 ## Context
 
 The `fkit` launcher's **interactive menu** has **no automated coverage at all** — not a weak test, none.
-`ai-agents/knowledge-base/architecture.md:453` records this as an **explicitly accepted untested edge**
+`ai-agents/knowledge-base/architecture.md` §9.1 (*"those edges stay manual"*) records this as an **explicitly accepted untested edge**
 (*"not a real self-update over the network or a real menu on a tty; those edges stay manual"*).
 
 **This task partly reverses that recorded acceptance, deliberately.** State that plainly — it is a
@@ -120,7 +120,7 @@ is the exact failure this task is guarding.
 
 ### C. Update the recorded acceptance
 
-Once the coverage lands, `ai-agents/knowledge-base/architecture.md:453` is **stale** — it says the menu
+Once the coverage lands, `ai-agents/knowledge-base/architecture.md` §9.1 (*"those edges stay manual"*) is **stale** — it says the menu
 edge stays manual, and it no longer does. Update that sentence to describe what is now covered and what
 genuinely remains manual (the real network self-update, and `install.sh`). **Verify the line number
 before editing** — this project has a named failure class for stale citations.

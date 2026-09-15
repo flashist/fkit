@@ -106,7 +106,7 @@ there. Do not carry the task movers' "the guard catches it" reassurance across; 
 - **Resolve its identity with the deterministic reader — never re-derive it** (ADR-041 §5: one
   grammar, one implementation):
   ```
-  bash claude/skills/fkit-status/dashboard.sh identity <plan>
+  bash .claude/skills/fkit-status/dashboard.sh identity <plan>
   ```
   Exit 0 prints the identity; exit 3 means readable but unresolved.
 - **Stop with a clear message if:**
@@ -208,7 +208,7 @@ reason from step 2.
 ### 5. Update each de-scoped task's brief fields
 For **every row you relocated in step 4**, update that task's `brief.md`, mirroring
 *"De-scoping a task out of a sprint and back onto the Backlog board"* in
-`claude/skills/fkit-task-brief/SKILL.md`:
+`.claude/skills/fkit-task-brief/SKILL.md`:
 
 | Field | Value |
 |---|---|
@@ -389,7 +389,7 @@ auto-edit) anything now affected:
   `identity` and nothing else reads siblings. So the collision is silent on this path: cancel one of
   the two boards and it disappears from depth 1 along with the evidence — and `cancelled/` is audited
   by nobody. **If two boards might claim one identity, render the board —
-  `bash claude/skills/fkit-status/dashboard.sh ai-agents/sprints/<basename>` — and read its `⟦FACTS⟧`
+  `bash .claude/skills/fkit-status/dashboard.sh ai-agents/sprints/<basename>` — and read its `⟦FACTS⟧`
   for `drift ambiguous-plan-identity`, which names every other claimant.** That is the check, not a
   hope that step 1 will warn you.
   ⛔ **Not `select-active`.** It filters to `In progress` before its own `ambiguous-active-sprint`

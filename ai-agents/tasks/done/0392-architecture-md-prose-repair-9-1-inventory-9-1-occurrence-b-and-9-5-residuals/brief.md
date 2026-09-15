@@ -10,7 +10,7 @@ Sprint 9
 P1
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
@@ -184,7 +184,7 @@ does not close that gap.
 **B2. Re-derive the run figures at implementation time.** ⛔ **Do not copy any figure from this brief
 or from occurrence A** — both are dated and the count only grows. **State the figures with their
 measurement date**, per
-[`0301`](../0301-record-that-a-dated-claim-is-correct-as-of-its-date-and-does-not-become-a-defect-by-ageing/brief.md)'s
+[`0301`](../../backlog/0301-record-that-a-dated-claim-is-correct-as-of-its-date-and-does-not-become-a-defect-by-ageing/brief.md)'s
 convention, so the replacement cannot rot into the defect it replaces.
 
 **B3. Record the red first run honestly** — it was a **filesystem case-sensitivity** divergence in
@@ -413,7 +413,7 @@ owner present**.
   **unescaped pipe** in its description cell adds a column. ⭐ **Measured when this split was filed:**
   the row splits into **5** inner fields where every neighbouring row splits into **4**. ⛔ **It is
   deliberately LEFT ALONE, not repaired** — the escape belongs to
-  [`0322`](../0322-escape-the-stray-pipes-in-the-board-rows-and-guard-against-new-ones/brief.md)'s scope, and repairing a
+  [`0322`](../../backlog/0322-escape-the-stray-pipes-in-the-board-rows-and-guard-against-new-ones/brief.md)'s scope, and repairing a
   board row from this row would be an out-of-scope board edit. **Noted so nobody re-discovers it and
   widens this row's diff.** ⚠️ Check `0322`'s live scope before assuming the pipe is still unfixed.
 

@@ -3834,3 +3834,174 @@ test('ADR-047 successor S10: three-argument dispatch, and the one-argument board
   assert.equal(b.code, 0);
   assert.ok(b.out.startsWith('⟦fkit-dashboard v2⟧'), 'one argument is still a board render');
 });
+
+// ===================================================================================================
+// THE EMITTER MAP — which mode emits which ambiguity record, pinned in PROSE and in BEHAVIOUR (task 0388,
+// Item A; owner ruling 2026-09-14, option label verbatim "Keep; test docs + behaviour (Rec)").
+//
+// ⛔ WHY THIS BLOCK EXISTS. The behaviour below was already pinned (`ADR-041 S6`, `ADR-047 P12` and the
+// select-active marker tests assert the records themselves). What was pinned by NOTHING is the prose that RESTATES
+// it — the two sprint movers' "Handle ambiguity" step and `fkit-status`'s record lists. ADR-047 fences
+// the defect class by name ("§7's emitter assignment sends a drift to a mode that cannot produce it —
+// again"), and task 0341 shipped it four times: a sentence naming the wrong mode or the wrong record
+// reads perfectly, and no test said so.
+//
+// ⭐ ONE TEST PER CLAIM, AND EACH HAS TWO HALVES:
+//   (i)  PROSE — the claim's sentence, whitespace-normalized, occurs EXACTLY ONCE in each SKILL.md that
+//        makes it. Read from REPO, so a copied tree (prove-red.sh's `make_repo_copy`) reads its own copy.
+//   (ii) BEHAVIOUR — `dashboard.sh` really does what the sentence says.
+// A red names which half broke. ⛔ If BEHAVIOUR broke, the script changed: update the prose in every
+// named site in the same change. ⛔ If PROSE broke, re-read the behaviour first — do NOT edit the
+// constant below to turn the run green; the constant is the claim the operator follows.
+//
+// ⚠️ SCOPE, STATED: this file is ADR-017 rule 4's stdout-contract suite, and the (i) halves read
+// SKILL.md text rather than stdout. They sit here, beside the behaviour they restate, because a prose
+// pin in a separate file is exactly the arrangement that let the two drift apart.
+//
+// ⚠️ `dashboard.sh`'s OWN COMMENTS ARE NOT PINNED. They sit beside the code they describe; the SKILL.md
+// text is what an operator executes.
+//
+// ⚠️ THE E3 SENTENCE DIFFERS PER MOVER, AND THAT IS NOT DRIFT: `/fkit-sprint-done` has a step 2 that
+// calls `successor`; `/fkit-sprint-cancelled` has no successor step. Each file is pinned on its own
+// wording of the one claim — that its value modes report no collision.
+
+const flatProse = (s) => s.replace(/\s+/g, ' ');
+const skillText = (name) => readFileSync(join(REPO, 'claude', 'skills', name, 'SKILL.md'), 'utf8');
+
+function countFlat(haystack, needle) {
+  const h = flatProse(haystack);
+  const n = flatProse(needle);
+  let count = 0;
+  let i = 0;
+  while ((i = h.indexOf(n, i)) !== -1) { count += 1; i += n.length; }
+  return count;
+}
+
+// (i) — one helper so every prose failure says the same thing about which half broke.
+function expectProseOnce(claim, skill, needle) {
+  const n = countFlat(skillText(skill), needle);
+  assert.equal(n, 1,
+    `${claim} PROSE half: ${skill}/SKILL.md carries the claim ${JSON.stringify(needle)} ${n} time(s), ` +
+    'expected exactly 1 (whitespace-normalized).\n' +
+    '⛔ The behaviour half is separate — if it is green, the SCRIPT still does what this sentence says, ' +
+    'so the prose moved away from it. Re-read the behaviour before touching anything, and do NOT edit ' +
+    'this needle just to turn the run green: a sentence naming the wrong mode or record is the ' +
+    'ADR-047 emitter-map defect this test exists to catch.');
+}
+
+// (ii) — the behaviour-half failure message, shared.
+const behaviourBroke = (claim, what) =>
+  `${claim} BEHAVIOUR half: ${what}\n` +
+  '⛔ The script no longer does what the SKILL.md prose claims. If that change is deliberate, update ' +
+  'the prose in EVERY named site in the same change — the sprint movers and fkit-status alike.';
+
+const SPRINT_MOVERS = ['fkit-sprint-done', 'fkit-sprint-cancelled'];
+
+// One identity, two boards. `plan-` sorts before `sprint-` in byte order, so `plan-sprint-6.md` is the
+// first claimant everywhere below.
+const twinBoards = (banner) => sprintsFixture({
+  plans: {
+    'plan-sprint-6.md': boardPlan('# Sprint 6 — plan twin', banner),
+    'sprint-6.md': boardPlan('# Sprint 6 — sprint twin', banner),
+  },
+  briefs: ALPHA,
+});
+
+const ambiguityFacts = (out) => facts(out).filter((f) => f.startsWith('drift ambiguous-'));
+
+// E1 — `select-active` cannot report a wholly-Backlog identity collision.
+const E1_PROSE = '⛔ **Not `select-active`.** It filters to `In progress` before its own ' +
+  '`ambiguous-active-sprint` check, so two `🔲 Backlog` boards claiming one identity are dropped and ' +
+  'nothing is reported';
+
+test('emitter map E1: `select-active` stays SILENT on two `🔲 Backlog` boards claiming one identity', () => {
+  for (const skill of SPRINT_MOVERS) expectProseOnce('E1', skill, E1_PROSE);
+
+  const { sprintsDir } = twinBoards(BANNER.backlog);
+  const r = runMode(['select-active', sprintsDir]);
+  assert.equal(r.code, 3, behaviourBroke('E1',
+    `select-active exited ${r.code}, expected 3 — no board is \`In progress\`, so nothing is active.`));
+  assert.deepEqual(ambiguityFacts(r.out), [], behaviourBroke('E1',
+    `select-active reported an ambiguity record on two Backlog boards: ${JSON.stringify(facts(r.out))}. ` +
+    'The movers tell the operator it CANNOT, and send them to the render instead.'));
+});
+
+// E2 — the board render is what reports the collision, and the record is `ambiguous-plan-identity`.
+// ⚠️ The needle carries the MODE as well as the record: "render the board" and its command line. A needle
+// on the record alone stays green when the sentence sends the operator to `select-active` instead.
+const E2_PROSE = 'render the board — `bash .claude/skills/fkit-status/dashboard.sh ai-agents/sprints/<basename>` — ' +
+  'and read its `⟦FACTS⟧` for `drift ambiguous-plan-identity`, which names every other claimant.';
+
+test('emitter map E2: the board render reports the collision as `drift ambiguous-plan-identity`, whatever the status', () => {
+  for (const skill of SPRINT_MOVERS) expectProseOnce('E2', skill, E2_PROSE);
+
+  const { planPath } = twinBoards(BANNER.backlog);
+  for (const [self, other] of [['plan-sprint-6.md', 'sprint-6.md'], ['sprint-6.md', 'plan-sprint-6.md']]) {
+    const b = run(planPath(self));
+    assert.deepEqual(ambiguityFacts(b.out),
+      [`drift ambiguous-plan-identity identity="Sprint 6" plan="${self}" also="${other}"`],
+      behaviourBroke('E2', `rendering ${self} (status Backlog) did not report exactly the ` +
+        `\`ambiguous-plan-identity\` record naming ${other}: ${JSON.stringify(facts(b.out))}.`));
+  }
+});
+
+// E3 — the value modes the movers call answer with a value and NO drift. Per-mover wording (see header).
+// ⚠️ Each needle carries the lead clause and the "silent" conclusion too: the per-mover middle alone stays
+// green when the lead is inverted to "runs a mode that reports it".
+const E3_PROSE = {
+  'fkit-sprint-done': 'This skill runs no mode that reports it — step 1 calls `identity` and step 2 calls ' +
+    '`successor`, and both answer with a value and no drift. So the collision is silent on this path',
+  'fkit-sprint-cancelled': 'This skill runs no mode that reports it — step 1 calls `identity` and nothing ' +
+    'else reads siblings. So the collision is silent on this path',
+};
+
+test('emitter map E3: `identity` and `successor` answer a colliding identity with one value and no drift', () => {
+  for (const skill of SPRINT_MOVERS) expectProseOnce('E3', skill, E3_PROSE[skill]);
+
+  // ⚠️ `In progress` twins, deliberately: with Backlog twins, `successor`'s answer would also hinge on its
+  // status filter, and this test would red on a filter regression that is S3's to catch, not E3's.
+  const { sprintsDir, planPath } = twinBoards(BANNER.inprogress);
+  for (const [mode, args] of [
+    ['identity', ['identity', planPath('sprint-6.md')]],
+    ['successor', ['successor', sprintsDir, 'Sprint 5']],
+  ]) {
+    const r = runMode(args);
+    const lines = r.out.split('\n').filter(Boolean);
+    assert.equal(r.code, 0, behaviourBroke('E3', `\`${mode}\` exited ${r.code}, expected 0.`));
+    assert.equal(lines.length, 1, behaviourBroke('E3',
+      `\`${mode}\` printed ${lines.length} line(s), expected ONE value: ${JSON.stringify(r.out)}.`));
+    assert.ok(!r.out.includes('drift') && !r.out.includes('⟦'), behaviourBroke('E3',
+      `\`${mode}\` carried a drift record or a rendering marker: ${JSON.stringify(r.out)}. The movers ` +
+      'tell the operator this path is SILENT about the collision — which is why they send them to the render.'));
+  }
+});
+
+// E4 — `fkit-status` lists each record under the mode that emits it.
+// ⚠️ The select-active needle starts at that list's lead-in — "**it has no roll-up**", which is true of
+// `select-active` and false of the render (its `⟦BOARD⟧` carries one). A needle on the bullet alone is
+// position-blind: the bullet moved under the render's record list stays green.
+const E4_SELECT_PROSE = '**it has no roll-up**: `⟦FACTS⟧` **is** its complete output, so there is no summary ' +
+  'line to read instead of the records. - `drift ambiguous-active-sprint identity="…" chosen="…" also="…"` — ' +
+  'two plans claim the **same** identity.';
+const E4_RENDER_PROSE = 'drift ambiguous-plan-identity identity="…" plan="…" also="…" ↑ the board you ' +
+  'rendered shares its sprint identity with a sibling file. The render path\'s counterpart to ' +
+  '`ambiguous-active-sprint`';
+
+test('emitter map E4: `fkit-status` lists `ambiguous-active-sprint` under select-active and `ambiguous-plan-identity` under the render', () => {
+  expectProseOnce('E4', 'fkit-status', E4_SELECT_PROSE);
+  expectProseOnce('E4', 'fkit-status', E4_RENDER_PROSE);
+
+  const { sprintsDir, planPath } = twinBoards(BANNER.inprogress);
+  const sel = runMode(['select-active', sprintsDir]);
+  assert.equal(sel.code, 0, behaviourBroke('E4', `select-active exited ${sel.code}, expected 0.`));
+  assert.deepEqual(ambiguityFacts(sel.out),
+    ['drift ambiguous-active-sprint identity="Sprint 6" chosen="plan-sprint-6.md" also="sprint-6.md"'],
+    behaviourBroke('E4', `select-active on two \`In progress\` twins did not emit exactly the ` +
+      `\`ambiguous-active-sprint\` record: ${JSON.stringify(facts(sel.out))}.`));
+
+  const b = run(planPath('plan-sprint-6.md'));
+  assert.deepEqual(ambiguityFacts(b.out),
+    ['drift ambiguous-plan-identity identity="Sprint 6" plan="plan-sprint-6.md" also="sprint-6.md"'],
+    behaviourBroke('E4', `the render of an \`In progress\` twin did not emit exactly the ` +
+      `\`ambiguous-plan-identity\` record: ${JSON.stringify(facts(b.out))}.`));
+});

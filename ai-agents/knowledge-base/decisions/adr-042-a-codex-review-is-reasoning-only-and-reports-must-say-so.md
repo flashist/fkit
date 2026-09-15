@@ -387,3 +387,31 @@ drifted independently of this ADR.)*
 **Net effect on the decision: none.** Only the enumeration was wrong. The `--sandbox` value must still
 be identical across executable sites 1–4, and reverting D2 remains a one-value change across those
 same four.
+
+> ⚠️ **Dated correction 2026-09-15 (`0393`) — the four `architecture.md` line pointers in §"Three further
+> sites, missed by the producer and the lead" no longer land.** That subsection is **left byte-identical**
+> as the record of what was measured on 2026-08-11. ⛔ No decision is reopened.
+>
+> **Why this note sits here, at the end of the file, and not beside the list.** Other files cite lines of
+> this ADR above this point — this correction note's own heading, and the historical-ADRs bullet under
+> §"Sites deliberately NOT to be changed" — and a note inserted above them would move them; so would the
+> header `- **Corrections:**` bullet the correction-note form asks for. **No header bullet is added: a
+> recorded departure from the form**, under the owner's placement rule of 2026-09-15 (*"Measured rule
+> (Rec)"*).
+>
+> **The claims this corrects, and where each cited passage lives today** (verified 2026-09-15, by heading
+> and quoted text rather than a fresh line number). The three sites are still pending — `0273` has not
+> run — so a reader acting on the list is still sent to those lines:
+>
+> - *"the Codex CLI row of the external-dependency table"* — `architecture.md` §2, the **Codex CLI
+>   (`codex`)** row.
+> - *"inside the **mermaid runtime diagram**"* — `architecture.md` §5.3, the review node
+>   `X[["codex exec …"]]` in the mermaid block.
+> - *"the narrative walkthrough of the review pass"*, and the same pointer in the incidental remark that
+>   closes the subsection — `architecture.md` §7, flow *"4 — Review + the adversarial pass"*, the
+>   `codex exec` sentence. It still cites the review skill by the same two stale line numbers.
+>
+> ⚠️ **Scope:** only the `architecture.md` pointers were assessed. The subsection's statement that these
+> sites are **outside `0273`'s scope** is itself dated — `0273` was widened to cover them by owner ruling
+> the same day — and is reported, not corrected, here. **Why ⚠️ and not ⛔.** Drifted coordinates, not an
+> overturned decision. **Status stays `accepted`.**

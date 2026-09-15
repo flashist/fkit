@@ -57,8 +57,8 @@ on disk 2026-08-13, all four sites now state the truth:
 |---|---|
 | `claude/fkit-claude.sh:69` | *"a real deadline for curl (`--max-time`), but for git only a low-speed STALL bound, so `ls-remote` can outlive it"* |
 | `claude/fkit-claude.sh:60-63` | *"throttled, PARTLY time-boxed … the timeout only partly — see `FKIT_NET_TIMEOUT` below, the git path is NOT deadlined"* |
-| [`architecture.md`](../../../knowledge-base/architecture.md)`:54` | *"**Only the curl paths are time-boxed** (`--max-time 5`); the `git ls-remote` path sets only `GIT_HTTP_LOW_SPEED_*` … so it has no deadline and can outlive 5 s (measured: 12 s)"* |
-| `architecture.md:388-389`, `:591-593` | the same, in the self-update section and the Network cross-cutting bullet |
+| [`architecture.md`](../../../knowledge-base/architecture.md) §2, the **GitHub, over the network** row | *"**Only the curl paths are time-boxed** (`--max-time 5`); the `git ls-remote` path sets only `GIT_HTTP_LOW_SPEED_*` … so it has no deadline and can outlive 5 s (measured: 12 s)"* |
+| `architecture.md` §7 flow 5 (*"only partly time-boxed"*), §10 **Network.** bullet (*"has no outer deadline"*) | the same, in the self-update section and the Network cross-cutting bullet |
 
 ⛔ **A change that only edits prose has done nothing this task asked for.** ⚠️ **A change that
 rewrites those four sites back into a "5 s ceiling" claim without actually building the ceiling is
@@ -229,7 +229,7 @@ always passes.** Prove the seal in the same run that measures the elapsed time.
 2. **⚠️ `timeout(1)` is NOT POSIX and is absent on stock macOS.** Verified 2026-08-13 on the owner's
    machine: `command -v timeout` → nothing; `command -v gtimeout` → nothing (exit 1). **This is the
    central design question of the task, and it is deliberately NOT pre-decided here.**
-3. **Silent when offline, silent when current.** `architecture.md:591-593` and the launcher's own
+3. **Silent when offline, silent when current.** `architecture.md` §10's **Network.** bullet (*"optional and silent on failure"*) and the launcher's own
    `:60-61`. A remedy that prints a timeout warning has broken the contract.
 4. **Cheap.** This is startup-path code on every launch.
 5. **Exit 0 on every failure path.** `_fkit_remote_sha` ends `return 0` (`:90`) and every branch is

@@ -10,7 +10,7 @@ Sprint 9
 P5
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
@@ -150,7 +150,7 @@ An ADR under `ai-agents/knowledge-base/decisions/` via `/fkit-record-decision`, 
 >
 > ### ⚠️ `0135` is now unblocked
 >
-> [`0135`](../0135-add-producer-only-reconcile-mode-to-task-done/brief.md) — the four-file doctrine
+> [`0135`](../../backlog/0135-add-producer-only-reconcile-mode-to-task-done/brief.md) — the four-file doctrine
 > change this task blocks — was gated on this ADR being approved. Question 1 no longer threatens to
 > cancel it. ⛔ **The brief's standing instruction *"Do not begin 0135 before this ADR is approved by
 > the owner"* still applies unchanged**: the *decision* is made, the **ADR is still unwritten**. `0135`

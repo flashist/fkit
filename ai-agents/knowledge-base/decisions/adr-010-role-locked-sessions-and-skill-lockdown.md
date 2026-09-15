@@ -23,6 +23,14 @@
   and the form places a note **below** the claim it corrects, so a single block could only warn at one of
   them. The three site lists above are left byte-identical and are superseded by this line; the same
   append-only rule and the same legend apply.
+  **Extended 2026-09-15 by a fifth append (`0393`):** dated ⚠️ notes now also sit below **§Context
+  paragraph 1**, below §Context's *"fresh context"* paragraph, and at the **end of §Related** (after the
+  2026-09-03 note). They record that the ADR-008 line pointers — including the one in the Supersedes
+  bullet above and the one in §Related's first bullet — no longer land, and name where each passage
+  lives today. ⚠️ **They supersede one judgement of the 2026-09-03 note** (that the ADR-008 pointers earn
+  no correction note), by owner ruling; the marker at the end of §Related says so where that note is
+  read. The four site lists above are left byte-identical and are superseded by this line; the same
+  append-only rule and the same legend apply.
 
 ## Context
 
@@ -30,6 +38,34 @@
 **single interactive lead session** that was the team lead *and* the coder by default, and that could
 "wear a hat" — `/fkit-agent-<role>` skills (six of them) that made the current session adopt a role
 by reading `.claude/agents/fkit-<role>.md` (`adr-008:106-108`).
+
+> ⚠️ **Dated correction 2026-09-15 (`0393`) — four ADR-008 line pointers in this ADR no longer land:
+> the one in this paragraph, the one in the header's Supersedes bullet (a metadata bullet cannot carry a
+> note of its own), the one on the *"fresh context"* quote further down §Context, and the bare range in
+> §Related's first bullet.** Each is **left byte-identical** as the record of what was cited on
+> 2026-07-11. ⛔ Nothing here reopens a decision — the coordinates aged because ADR-008 gained nine lines
+> above that section in the same change that recorded this ADR.
+>
+> **Where each cited passage lives today**, verified against live ADR-008 2026-09-15, by heading and
+> quoted text rather than a fresh line number:
+>
+> - **The Supersedes bullet's range, and §Related's first-bullet range (the same range)** — ADR-008
+>   §"Amendment: peer consults and role access (2026-07-11, pre-release)", from *"**Role access — three
+>   explicit paths.**"* through the bullets under *"Consequences of "hats for all six""*.
+> - **This paragraph's pointer** — the same passage's first path, *"(1) **Hat skills**
+>   `/fkit-agent-<role>` for all six roles"*.
+> - **The *"fresh context"* pointer** — the first of those consequences bullets, *"*Reviewer
+>   independence* is a property of a **fresh context**, not of the prompt"*.
+>
+> ⚠️ **This supersedes one judgement in the 2026-09-03 note at the end of §Related**, which assessed the
+> ADR-008 pointers and recorded that *"none of them earns a correction note"* because each is paired with
+> a heading or a quoted phrase. That judgement was an **agent's call, not an owner ruling**: an architect
+> consult ruling inside sweep `0356` (its worklog §"5.1 What it ruled — `0197`", row P8), in a task closed
+> agent-closed. ⚠️ **It was not shown to the owner** when he ruled on 2026-09-15 that a drifted line
+> coordinate in an ADR gets a dated note (*"ADR notes, reports left (Rec)"*). Shown it afterwards, the
+> owner confirmed the same day that this ruling overrides it for these pointers (*"Keep, add back-pointer
+> (Rec)"*). That note is left byte-identical and now carries a back-pointer to this one. **Status stays
+> `accepted`.**
 
 That model has been **replaced in code** and the owner has confirmed the replacement is settled. The
 hat skills are deleted; `claude/skills/fkit-agent-*` no longer exists. What replaced it:
@@ -119,6 +155,11 @@ reviewer hat was the same context that had just written the code, and nothing bu
 it from running the coder's procedures. ADR-008 itself conceded this, noting reviewer independence "is
 a property of a **fresh context**, not of the prompt" (`adr-008:114`) and then relying on an
 in-skill independence *check* to compensate.
+
+> ⚠️ **Dated correction 2026-09-15 (`0393`) — the ADR-008 line pointer on the quote above no longer
+> lands.** It is **left byte-identical**. The quoted phrase still exists in ADR-008; where it lives today
+> is recorded once, in the note under §Context paragraph 1 — deliberately not restated here, so there is
+> one place to keep true rather than two.
 
 Role-locking makes that structural instead: a `fkit reviewer` session **is** a fresh context, and the
 coder's session cannot execute `/fkit-review` because the skill does not exist in it. This is a
@@ -374,4 +415,11 @@ the drift class this project keeps paying for.
 >   is append-corrected by third parties, so it grows under a citation like any living document** — but
 >   because each of these is paired with a heading or a quoted phrase, the drift is recoverable and
 >   ⛔ **none of them earns a correction note.** Recorded here so the check is visible rather than silent.
+
+> ⚠️ **Superseded in part 2026-09-15 (`0393`) — the last bullet of the note above.** Its judgement that
+> the ADR-008 pointers (the Supersedes bullet, the two in §Context, and this section's first bullet) earn
+> no correction note is **superseded by owner ruling**: they now carry one, below §Context paragraph 1,
+> which also says where each passage lives today and why the judgement was set aside. The note above is
+> left byte-identical. Its other bullets are not affected by that ruling, and were not re-verified by
+> `0393`.
 </content>

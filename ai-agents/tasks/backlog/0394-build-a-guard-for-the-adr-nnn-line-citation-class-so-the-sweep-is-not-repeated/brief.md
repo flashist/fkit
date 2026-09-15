@@ -20,7 +20,7 @@ guard under `test/`, and
 [ADR-044](../../../knowledge-base/decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md)
 Decision 1 fixes the role by the deliverable, staffing *source and tests* to the coder as sole
 source-write authority. ⚠️ **The competing reading:** the sibling row
-[`0393`](../0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)
+[`0393`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)
 carries `fkit-architect` and this row's plan gate is a design question. ⛔ **Raise it at the plan gate
 rather than assuming; a design pass by the architect feeding a coder build is a legitimate shape.**
 
@@ -33,7 +33,7 @@ owner present — **the option label is the verbatim text**: **"Sweep now, file 
 (Rec)"**.
 
 ⛔ **The ruling is TWO things in one act, and both halves matter:** the sweep
-([`0393`](../0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md),
+([`0393`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md),
 now `P7` of Sprint 9) runs **now**, and **a guard is filed behind it** so the sweep does not have to be
 repeated. ⛔ **This row is the second half. It is NOT on Sprint 9.**
 
@@ -118,7 +118,7 @@ one day" as measured fact anywhere; cite it as an unreproduced claim whose scope
 > and `git grep -oihE 'adr-[0-9]{3}:[0-9]+' -- .`, plus `':(exclude)…'` pathspecs for the narrower
 > scopes; `-l` for file counts.
 >
-> ⭐ **Related, same day:** [`0393`](../0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)
+> ⭐ **Related, same day:** [`0393`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)
 > gained a dated owner ruling fixing its sweep to **the whole class, case-insensitively** (verbatim
 > option label ***"Whole class, case-insensitive (Rec)"***). ⛔ **This row's `Depends on 0393` is
 > unchanged**, and the ruling does not settle `0393`'s `OD3`, which this brief already flags itself as
@@ -320,7 +320,7 @@ one day" as measured fact anywhere; cite it as an unreproduced claim whose scope
 
 ### ⚠️ This row substantially pre-empts `0393`'s open decision **OD3** — flagged, not hidden
 
-[`0393`](../0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)
+[`0393`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)
 carries an open decision worded **"Should a guard test catch stale line citations mechanically?"**,
 recorded there with *"recommendation required, **infeasible** legitimate"*.
 
@@ -350,7 +350,7 @@ under a scope fence lifted for this edit only.**
 reds on the very documents that describe the defect.**
 
 **The test that separates them, carried in from
-[`0393`](../0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)'s
+[`0393`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)'s
 `E2`, in its own words:**
 
 > **Replace the line number with the correct one. Does the surrounding sentence become FALSE?**
@@ -456,7 +456,7 @@ approved.**
 
 | Site | Occurrences | Why it is a candidate | ⚠️ What complicates it |
 |---|---|---|---|
-| [`0393`](../0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)'s brief | **13** | The sweep row itself; its own ruling makes **mention the default** inside it | ⛔ **untracked** — invisible to a tracked-only guard |
+| [`0393`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)'s brief | **13** | The sweep row itself; its own ruling makes **mention the default** inside it | ⛔ **untracked** — invisible to a tracked-only guard |
 | **This brief** (`0394`) | 2 before this edit | Same class of document | ⛔ **untracked**; ⛔ **self-referential — see below** |
 | `ai-agents/sprints/sprint-9.md`, census section | **4** | Its census section carries a literal specimen list | ⛔ **untracked**; ⛔ **only PART of the file is a mention region** |
 | `ai-agents/sprints/backlog.md` | **32** | Carries the `0393` and `0394` rows, which are mentions | ⛔⛔ **ONLY ~2 OF THE 32 ARE MENTIONS.** A whole-file exemption here **hides ~30 ordinary citations** — this is the case that kills a naive path list |
@@ -581,7 +581,7 @@ edits are the word "five" → "six" here and in verification step 1.**
 
 ## Notes
 
-- **Depends on:** [`0393`](../0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)
+- **Depends on:** [`0393`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)
   — ⛔ **hard.** A guard against re-rot is written **against the swept surface**. Written first it
   either lands red against hundreds of occurrences `0393` is about to remove, or ships with an
   allowlist that `0393` then invalidates. ⛔ **`0393` is `P7` of Sprint 9; this row is not on that

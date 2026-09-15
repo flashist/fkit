@@ -10,7 +10,7 @@ Sprint 9
 P3
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder

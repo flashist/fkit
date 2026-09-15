@@ -77,7 +77,8 @@ agent-closed row is counted and filtered as an ordinary closed row. To tell the 
 the sprint plan or the brief.
 
 **If your team wants a stronger guarantee than this**, the fix is a further precondition in
-`claude/skill-ownership-hook.sh` — closes only from an owner-present session, say — not stricter prose.
+fkit's own `claude/skill-ownership-hook.sh` (in the fkit install, not your project's `.claude/`) —
+closes only from an owner-present session, say — not stricter prose.
 Prose does not stop an agent that has already decided its work is done.
 
 `Moved` is producer-set, because relocating work across sprints is a planning act.

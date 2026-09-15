@@ -6,6 +6,12 @@
 - **Amends (does not supersede):** [ADR-008](adr-008-claude-code-native-port-alongside-omnigent.md)
   and [ADR-010](adr-010-role-locked-sessions-and-skill-lockdown.md) — the **tool-allowlist** half of
   the role lock. The **skill lockdown is untouched** (see Decision 4).
+- **Corrections:** 2026-09-15 (`0393`) — this ADR carries dated notes inline below **§Context
+  paragraph 1**, below **Decision 1**'s lead `Agent(...)` sub-bullet, and below **§Related**'s *"Docs
+  to refresh"* bullet. They record that its `architecture.md` line pointers no longer land. Marker
+  legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
+  overturned** (do not follow it). No existing line of this ADR was edited; the notes are appends, and
+  the Status stays `accepted`.
 
 ## Context
 
@@ -14,6 +20,15 @@ fkit gives every agent an explicit `tools:` frontmatter allowlist. The original 
 authority**: *"Tool allowlists add structural enforcement on top of the prompt rules: the adversarial
 reviewer gets no Write/Edit at all; every agent gets an explicit allowlist."* architecture.md:101 calls
 it *"the strongest boundary in the system."*
+
+> ⚠️ **Dated correction 2026-09-15 (`0393`) — the `architecture.md` line pointer above no longer lands,
+> and the sentence it cited is gone.** The text is **left byte-identical** as the record of what
+> `architecture.md` said on 2026-07-18: *"The **tool allowlist is harness-enforced** — it is the
+> strongest boundary in the system."* That sentence was rewritten by the docs follow-up this ADR asked for
+> (§Consequences), and the pointer now lands on a blank line under the §4.1 heading. Today
+> `architecture.md` §4.1 (*"The seven roles"*) calls the adversarial reviewer's allowlist *"the one
+> deliberate tool wall"*. **Why ⚠️ and not ⛔:** a coordinate into a living document aged as that document
+> was corrected to match this decision; the decision is untouched and the **Status stays `accepted`**.
 
 An audit this session (2026-07-17/18) established three facts that reframe that posture:
 
@@ -60,6 +75,12 @@ consult thread this session; the tool audit is
      exclusions. Accepted, and taken knowingly (the owner's "conscious call" on the lead): the consult
      topology remains **prompt-enforced everywhere else exactly as before**, so nothing that was
      structural elsewhere is lost, and the lead becoming capable of work is an accepted convenience.
+
+     > ⚠️ **Dated correction 2026-09-15 (`0393`) — the `architecture.md` line pointer in this bullet no
+     > longer lands.** It is **left byte-identical**. The passage now reads, in `architecture.md` §5.3
+     > (*"Consultation — the Agent tool, two hops, no cycles"*): *"structural in one place — `fkit-lead`'s own
+     > scoped `Agent(...)` list — but that line was dropped"* — the docs follow-up this ADR asked for, landed.
+     > **Status stays `accepted`.**
 
 2. **The adversarial reviewer keeps its exact current allowlist** — `tools: Read, Grep, Glob, Bash,
    Skill`. No Write/Edit/Agent, and no capability tools (its review runs on **Codex**, not the Claude
@@ -155,4 +176,11 @@ consult thread this session; the tool audit is
   keep); `fkit-lead.md:7,24-25,72-73` (the lead's boundaries and their stated rationale).
 - Docs to refresh (architect follow-up): `architecture.md:101,§4.1,§5.3,:209`; `PROJECT.md`;
   `CLAUDE.md`.
+
+  > ⚠️ **Dated correction 2026-09-15 (`0393`) — this is a dated worklist, and its refresh has landed.**
+  > It is **left byte-identical**. Its two `architecture.md` line pointers no longer land; where each
+  > passage lives today is recorded once, in the notes below §Context paragraph 1 and below Decision 1's
+  > lead `Agent(...)` sub-bullet — deliberately not restated here, so there is one place to keep true
+  > rather than two. Its §4.1 and §5.3 section references still resolve.
+
 - Task: the implementation is a producer-scoped brief (owner: fkit-coder), created alongside this ADR.

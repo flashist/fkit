@@ -4,6 +4,10 @@
 - **Date:** 2026-07-16
 - **Deciders:** owner (Mark Dolbyrev), recorded by fkit-architect in session
 - **Came from:** [`reports/2026-07-16-design-deterministic-dashboard-for-fkit-status.md`](../reports/2026-07-16-design-deterministic-dashboard-for-fkit-status.md)
+- **Corrections:** 2026-09-15 (`0393`) — this ADR carries a dated note inline below **Decision 2**.
+  Marker legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
+  overturned** (do not follow it). No existing line of this ADR was edited; the note is an append, and
+  the Status stays `accepted`.
 
 ## Context
 
@@ -62,6 +66,14 @@ Four forces make this a real decision rather than a file drop:
    **This is the exec-bit mitigation and the only one adopted.** It sidesteps the bit entirely and
    requires **no change to `install.sh`** — the `curl | sh` entry point and the highest-blast-radius
    file in the repo (`architecture.md:374-378`).
+
+   > ⚠️ **Dated correction 2026-09-15 (`0393`) — the `architecture.md` line pointer above no longer
+   > lands.** It is **left byte-identical** as the record of what was cited on 2026-07-16; it now lands in
+   > §7's task-ship-loop passage. The passage it cites is `architecture.md` §9.1 (*"The suite now runs
+   > automatically"*), the bullet *"**`install.sh`** — the `curl | sh` entry point — has **no automated
+   > coverage**"*, which still records that *"A bad landing breaks installation"*. The claim it supports
+   > stands. **Why ⚠️ and not ⛔:** a moved coordinate; this decision is untouched and the **Status stays
+   > `accepted`**.
 
 3. **Consumer runtime assumption: `bash`, and nothing more.** No new PATH assumption may be added by a
    shipped skill executable without a new decision. Node in particular is **not** available to reach

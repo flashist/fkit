@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# THIRTY-FOUR mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# THIRTY-NINE mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -58,6 +58,11 @@
 #  32. Drop the DISTINCT-token de-dup from the H1 rung → "0271/1"                            (task 0271)
 #  33. INVERT the targetIsBack delete rule in ONE mover → "T3 both movers: the targetIsBack"  (task 0381)
 #  34. Leave the OTHER mover's board word un-swapped   → "T11 both movers: the board-dependent" (0381)
+#  35. Leave a SPRINT mover's board word un-swapped    → "S2 both sprint movers: the substituted" (0388)
+#  36. NEGATE the successor tie-break, not swap it     → "ADR-047 successor S6:"                (task 0388)
+#  37. Drop `Backlog` from the successor filter        → "ADR-047 successor S3:"                (task 0388)
+#  38. Make the successor ordering non-strict          → "ADR-047 successor S4:"                (task 0388)
+#  39. Name the wrong drift record in a sprint mover   → "emitter map E2:"                      (task 0388)
 #
 # ⚠️ MUTATIONS 18-22, 25 AND 26 ARE THE FIRST TO TARGET `bin/`, NOT A COPIED LAUNCHER TREE (task 0288). Their seam
 # is FKIT_RELEASE_MJS — a SINGLE-FILE redirect (the FKIT_LAUNCHER pattern, not the whole-tree
@@ -384,7 +389,7 @@ pc="$(run_parity_suite "$clean_scaffold")"; echo "$pc"
 clean_repo="$(make_repo_copy repo-clean)"
 printf '0i. unmutated repo copy dashboard suite should be green ... '
 dc="$(run_dashboard_suite "$clean_repo")"; echo "$dc"
-[ "$dc" = green ] || { echo "   ✗ an UNMUTATED repo copy's dashboard suite is red — mutation 14 below would be false."; fail=1; }
+[ "$dc" = green ] || { echo "   ✗ an UNMUTATED repo copy's dashboard suite is red — mutations 14, 32 and 36-39 below would be false."; fail=1; }
 
 # --- 0j. An UNMUTATED copy's update-banner suite must ALSO be green (task 0257; same reasoning as 0b
 #     and 0g). The root is the copied claude/ tree — the same $clean_tree 0g uses. ------------------
@@ -451,7 +456,7 @@ tp_="$(run_throughput_suite "$(make_repo_copy repo-clean-throughput)")"; echo "$
 #     $clean_tree, the same copied claude/ tree 0g, 0j and 0m use. -----------------------------------
 printf '0o. unmutated copy mover-exemption-step suite should be green ... '
 mx_="$(run_mover_step_suite "$clean_tree")"; echo "$mx_"
-[ "$mx_" = green ] || { echo "   ✗ an UNMUTATED copy's mover-exemption-step suite is red — mutations 33/34 below would be false."; fail=1; }
+[ "$mx_" = green ] || { echo "   ✗ an UNMUTATED copy's mover-exemption-step suite is red — mutations 33-35 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -1592,6 +1597,249 @@ if [ "$r34" != red ]; then
   echo "     exists to close before task 0341 pastes the clause a third and fourth time."; fail=1
 elif ! grep -Eq '(✖|not ok|fail).*board-dependent sentences' "$out"; then
   echo "   ✗ suite went red but NOT at the T11 board-dependent assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 35: leave a SPRINT mover's board word un-swapped → the S2 assertion in
+#     mover-exemption-step.test.js must go red (task 0388). ⭐ THIS CLOSES MUTATION 34'S OWN LOOP. 34
+#     exists so the uniformity half is not left unexercised "before task 0341 pastes the clause a third
+#     and fourth time" — and 0341 did paste it, into the two sprint movers, with a second roster
+#     (`S0`–`S6`) and no mutation. This is 34's copy-paste trap on that roster: a clause pasted from the
+#     DONE sprint mover into the CANCELLED one without the swap reads perfectly and tells a cancelling
+#     operator that a link heals when its citer moves into `done/`. `fkit-sprint-cancelled` is the target
+#     because it carries the non-default board word. ⛔ NO INJECTED MARKER, for 34's reason: the wrong
+#     board word IS the marker, and injected prose would red S2 for the wrong reason.
+#     Anchor uniqueness, verified before use: `../../cancelled/X` occurs ONCE in the unmutated file and
+#     `../../done/X` ZERO times, so the wrong word's presence afterwards is unambiguous.
+#     ⚠️ S4 (uniformity modulo the board word) reds too — measured, and expected: a stray un-swapped
+#     board word is exactly what S4's fold shows as a difference. The named check is S2.
+m35_tree="$work/claude-mutant-sprint-mover-board"
+cp -R "$repo/claude" "$m35_tree"
+m35_file="$m35_tree/skills/fkit-sprint-cancelled/SKILL.md"
+cp "$m35_file" "$m35_file.orig"
+sed -i.bak 's|\.\./\.\./cancelled/X|../../done/X|' "$m35_file"
+if cmp -s "$m35_file" "$m35_file.orig"; then
+  echo "35. left a sprint mover's board word un-swapped ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif [ "$(diff "$m35_file.orig" "$m35_file" | grep -c '^>')" != 1 ]; then
+  echo "35. left a sprint mover's board word un-swapped ... ✗ WRONG TARGET — the swap hit more than one"
+  echo "   line; the mutation must leave exactly ONE board word wrong or it proves the wrong thing."; fail=1
+elif [ "$(grep -c '\.\./\.\./cancelled/X' "$m35_file")" != 0 ]; then
+  echo "35. left a sprint mover's board word un-swapped ... ✗ WRONG TARGET — an un-mutated board word survives."; fail=1
+elif [ "$(grep -c '\.\./\.\./done/X' "$m35_file")" != 1 ]; then
+  echo "35. left a sprint mover's board word un-swapped ... ✗ MUTATION DID NOT LAND — the wrong board"
+  echo "   word is absent from the mutant, or landed more than once."; fail=1
+fi
+printf '35. board word left un-swapped in a SPRINT mover — "S2 ... substituted sentences" should go RED ... '
+r35="$(run_mover_step_suite "$m35_tree")"; echo "$r35"
+if [ "$r35" != red ]; then
+  echo "   ✗ the suite did NOT catch a sprint-mover clause pasted without swapping the board word — the"
+  echo "     third and fourth copies of the clause are reconciled by nothing this gate exercises."; fail=1
+# ⚠️ The pattern stops before the title's apostrophe ("THIS mover's") on purpose: it is matched on a
+# prefix that needs no shell quoting.
+elif ! grep -Eq '(✖|not ok|fail).*S2 both sprint movers: the substituted sentences' "$out"; then
+  echo "   ✗ suite went red but NOT at the S2 substituted-sentences assertion — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 36: NEGATE `mode_successor`'s tie-break instead of swapping its arguments → the
+#     `ADR-047 successor S6` assertion in dashboard-contract.test.js must go red (task 0388). ⛔ THIS IS
+#     THE TRAP BOTH MIN-SCANS DOCUMENT: `! identity_gt "$_i" "$_best_id"` yields `<=`, so a tie REPLACES
+#     the incumbent and ADR-041 §1.5's first-wins silently becomes last-wins. 0341's builder measured it
+#     by hand once; this makes that measurement re-run.
+#
+#     ⚠️ SCOPED TO THE FUNCTION, AND THAT IS NOT FUSSINESS. `|| identity_gt "$_best_id" "$_i"; then`
+#     occurs TWICE in dashboard.sh (verified before use) — once in `mode_successor`, once in
+#     `mode_select_active`. A first-match `sed` hits whichever function comes first, so a reorder would
+#     silently move this mutation onto select-active; and a file-wide survivor count would falsely
+#     report WRONG TARGET, because select-active legitimately keeps its copy. The awk below only fires
+#     between `mode_successor() {` (unique, verified) and that function's closing `}`, and the checks
+#     below count inside the function and across the file separately. The injected marker is counted
+#     rather than the negated text: `! identity_gt "$_i" "$_best_id"` already occurs twice in the file,
+#     in the two comments that warn against it.
+#
+#     Rides mutation 14's seam (make_repo_copy + run_dashboard_suite). Replacement via getline, for
+#     mutation 14's reason (awk escape-processes a -v value).
+m36="$(make_repo_copy repo-mutant-successor-negation)"
+m36_file="$m36/claude/skills/fkit-status/dashboard.sh"
+cp "$m36_file" "$m36_file.orig"
+cat > "$work/m36-line.txt" <<'MUTANT_LINE'
+    if [ -z "$_best_id" ] || ! identity_gt "$_i" "$_best_id"; then # mutation: successor tie-break negated
+MUTANT_LINE
+awk -v repl="$work/m36-line.txt" '
+  BEGIN { in_fn = 0; swapped = 0 }
+  /^mode_successor\(\) \{/ { in_fn = 1 }
+  in_fn == 1 && swapped == 0 && index($0, "|| identity_gt \"$_best_id\" \"$_i\"; then") > 0 {
+    while ((getline line < repl) > 0) print line
+    close(repl)
+    swapped = 1
+    next
+  }
+  in_fn == 1 && /^}/ { in_fn = 0 }
+  { print }
+' "$m36_file.orig" > "$m36_file"
+m36_body="$work/m36-successor-body.txt"
+awk '/^mode_successor\(\) \{/ { f = 1 } f == 1 { print } f == 1 && /^}/ { exit }' "$m36_file" > "$m36_body"
+if cmp -s "$m36_file" "$m36_file.orig"; then
+  echo "36. negated the successor tie-break ... ✗ MUTATION WAS A NO-OP — the awk no longer matches (has"
+  echo "   \`mode_successor() {\` or its tie-break line been reworded?). This gate is disarmed: it would"
+  echo "   report success while proving nothing. Fix the mutation in test/prove-red.sh before trusting any"
+  echo "   result above."
+  fail=1
+elif [ "$(grep -cF '|| identity_gt "$_best_id" "$_i"; then' "$m36_body")" != 0 ]; then
+  echo "36. negated the successor tie-break ... ✗ WRONG TARGET — an un-mutated tie-break survives inside"
+  echo "   mode_successor."; fail=1
+elif [ "$(grep -cF '|| identity_gt "$_best_id" "$_i"; then' "$m36_file")" != 1 ]; then
+  echo "36. negated the successor tie-break ... ✗ WRONG TARGET — select-active's copy of the tie-break is"
+  echo "   gone too (or a third copy appeared). The mutation must touch mode_successor ONLY."; fail=1
+elif ! grep -q 'mutation: successor tie-break negated' "$m36_file"; then
+  echo "36. negated the successor tie-break ... ✗ MUTATION DID NOT LAND — marker absent from the mutant."; fail=1
+elif [ "$(grep -c 'mutation: successor tie-break negated' "$m36_file")" != 1 ]; then
+  echo "36. negated the successor tie-break ... ✗ WRONG TARGET — the marker landed more than once."; fail=1
+fi
+printf '36. successor tie-break NEGATED, not swapped — "ADR-047 successor S6" should go RED ... '
+r36="$(run_dashboard_suite "$m36")"; echo "$r36"
+if [ "$r36" != red ]; then
+  echo "   ✗ the suite did NOT catch a negated tie-break — first-wins can silently become last-wins in the"
+  echo "     mode /fkit-sprint-done uses to choose where every open row goes."; fail=1
+# ⚠️ The trailing colon is load-bearing: without it a check on `S1` would also match `S10`.
+elif ! grep -Eq '(✖|not ok|fail).*ADR-047 successor S6:' "$out"; then
+  echo "   ✗ suite went red but NOT at successor S6 — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 37: drop `🔲 Backlog` from `mode_successor`'s status filter → the `ADR-047 successor S3`
+#     assertion must go red (task 0388). ⛔ THIS IS THE PLAUSIBLE WRONG TURN THE MODE EXISTS TO AVOID:
+#     a filter of `In progress` alone is `select-active`'s, and it silently skips every scoped Backlog
+#     board — ADR-047 §3.0.2's successor set is `Backlog` ∪ `In progress`.
+#     The anchor is the whole case-arm line, `'Backlog'|'In progress') ;;`, verified unique before use.
+#     An injected marker is counted, since `'In progress') ;;` could occur naturally.
+#     ⚠️ `successor S4` reds too — measured, and expected: that fixture's only successor is a Backlog
+#     board. The named check is S3, the case the mode was built for.
+m37="$(make_repo_copy repo-mutant-successor-backlog)"
+m37_file="$m37/claude/skills/fkit-status/dashboard.sh"
+cp "$m37_file" "$m37_file.orig"
+cat > "$work/m37-line.txt" <<'MUTANT_LINE'
+      'In progress') ;; # mutation: Backlog dropped from the successor filter
+MUTANT_LINE
+cat > "$work/m37-anchor.txt" <<'ANCHOR_LINE'
+      'Backlog'|'In progress') ;;
+ANCHOR_LINE
+awk -v repl="$work/m37-line.txt" -v anchorf="$work/m37-anchor.txt" '
+  BEGIN { getline anchor < anchorf; close(anchorf); swapped = 0 }
+  $0 == anchor && swapped == 0 {
+    while ((getline line < repl) > 0) print line
+    close(repl)
+    swapped = 1
+    next
+  }
+  { print }
+' "$m37_file.orig" > "$m37_file"
+if cmp -s "$m37_file" "$m37_file.orig"; then
+  echo "37. dropped Backlog from the successor filter ... ✗ MUTATION WAS A NO-OP — the awk no longer"
+  echo "   matches the case-arm line (reworded or re-indented?). This gate is disarmed: it would report"
+  echo "   success while proving nothing. Fix the mutation in test/prove-red.sh before trusting any result"
+  echo "   above."
+  fail=1
+elif [ "$(grep -cF "'Backlog'|'In progress'" "$m37_file")" != 0 ]; then
+  echo "37. dropped Backlog from the successor filter ... ✗ WRONG TARGET — an un-mutated filter survives."; fail=1
+elif ! grep -q 'mutation: Backlog dropped from the successor filter' "$m37_file"; then
+  echo "37. dropped Backlog from the successor filter ... ✗ MUTATION DID NOT LAND — marker absent."; fail=1
+elif [ "$(grep -c 'mutation: Backlog dropped from the successor filter' "$m37_file")" != 1 ]; then
+  echo "37. dropped Backlog from the successor filter ... ✗ WRONG TARGET — the marker landed more than once."; fail=1
+fi
+printf '37. Backlog dropped from the successor filter — "ADR-047 successor S3" should go RED ... '
+r37="$(run_dashboard_suite "$m37")"; echo "$r37"
+if [ "$r37" != red ]; then
+  echo "   ✗ the suite did NOT catch a successor filter that skips Backlog boards — /fkit-sprint-done could"
+  echo "     send open rows past a scoped board, which is select-active's behaviour, not successor's."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*ADR-047 successor S3:' "$out"; then
+  echo "   ✗ suite went red but NOT at successor S3 — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 38: make `mode_successor`'s ordering NON-STRICT (≥ instead of >) → the
+#     `ADR-047 successor S4` assertion must go red (task 0388). The closing board would then be its own
+#     successor: /fkit-sprint-done would relocate a sprint's open rows onto the board being closed.
+#     The anchor is the line's code — `    identity_gt "$_i" "$2" || continue`, verified unique before use
+#     — matched as a line PREFIX, so its trailing comment is not part of what must stay stable.
+#     An injected marker is counted.
+#     ⚠️ `successor S7` reds too — measured, and expected: its fixture holds the closing board itself,
+#     `In progress`, which now succeeds itself and turns exit 3 into an answer. The named check is S4.
+m38="$(make_repo_copy repo-mutant-successor-nonstrict)"
+m38_file="$m38/claude/skills/fkit-status/dashboard.sh"
+cp "$m38_file" "$m38_file.orig"
+cat > "$work/m38-line.txt" <<'MUTANT_LINE'
+    { identity_gt "$_i" "$2" || [ "$_i" = "$2" ]; } || continue # mutation: successor ordering non-strict
+MUTANT_LINE
+awk -v repl="$work/m38-line.txt" '
+  BEGIN { swapped = 0 }
+  index($0, "    identity_gt \"$_i\" \"$2\" || continue") == 1 && swapped == 0 {
+    while ((getline line < repl) > 0) print line
+    close(repl)
+    swapped = 1
+    next
+  }
+  { print }
+' "$m38_file.orig" > "$m38_file"
+if cmp -s "$m38_file" "$m38_file.orig"; then
+  echo "38. made the successor ordering non-strict ... ✗ MUTATION WAS A NO-OP — the awk no longer matches"
+  echo "   the strictly-above line (reworded or re-indented?). This gate is disarmed: it would report"
+  echo "   success while proving nothing. Fix the mutation in test/prove-red.sh before trusting any result"
+  echo "   above."
+  fail=1
+elif [ "$(grep -cF 'identity_gt "$_i" "$2" || continue' "$m38_file")" != 0 ]; then
+  echo "38. made the successor ordering non-strict ... ✗ WRONG TARGET — an un-mutated ordering line survives."; fail=1
+elif ! grep -q 'mutation: successor ordering non-strict' "$m38_file"; then
+  echo "38. made the successor ordering non-strict ... ✗ MUTATION DID NOT LAND — marker absent."; fail=1
+elif [ "$(grep -c 'mutation: successor ordering non-strict' "$m38_file")" != 1 ]; then
+  echo "38. made the successor ordering non-strict ... ✗ WRONG TARGET — the marker landed more than once."; fail=1
+fi
+printf '38. successor ordering made NON-STRICT — "ADR-047 successor S4" should go RED ... '
+r38="$(run_dashboard_suite "$m38")"; echo "$r38"
+if [ "$r38" != red ]; then
+  echo "   ✗ the suite did NOT catch a closing board that succeeds itself — its open rows would be"
+  echo "     relocated onto the board being closed."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*ADR-047 successor S4:' "$out"; then
+  echo "   ✗ suite went red but NOT at successor S4 — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 39: name the WRONG drift record in a sprint mover's ambiguity step → the `emitter map E2`
+#     assertion in dashboard-contract.test.js must go red (task 0388, Item A). ⛔ THIS IS THE DEFECT
+#     CLASS ITEM A EXISTS FOR, not an invented one: ADR-047 fences "§7's emitter assignment sends a drift
+#     to a mode that cannot produce it — again", and 0341 shipped that sentence four times. Here the
+#     render path is sent to read for `ambiguous-active-sprint` — a record only `select-active` emits —
+#     so an operator checking a collision greps for a line that can never appear and reads silence as
+#     "no collision". The E-tests are a new guard, and a new guard is owed a mutation by this file's own
+#     thesis. `fkit-sprint-done` is the target because it is the mover on the common path.
+#     ⛔ NO INJECTED MARKER: the wrong record name IS the marker, for mutation 34's reason.
+#     Anchor uniqueness, verified before use: ``for `drift ambiguous-plan-identity`, which names`` occurs
+#     ONCE in the unmutated file, and the mutated text ZERO times.
+#     Rides mutation 14's seam: the E-tests read SKILL.md from REPO, which in a copy is the copy.
+m39="$(make_repo_copy repo-mutant-emitter-prose)"
+m39_file="$m39/claude/skills/fkit-sprint-done/SKILL.md"
+cp "$m39_file" "$m39_file.orig"
+sed -i.bak 's/for `drift ambiguous-plan-identity`, which names/for `drift ambiguous-active-sprint`, which names/' "$m39_file"
+rm -f "$m39_file.bak"
+if cmp -s "$m39_file" "$m39_file.orig"; then
+  echo "39. named the wrong drift record in a sprint mover ... ✗ MUTATION WAS A NO-OP — the sed no longer"
+  echo "   matches. This gate is disarmed: it would report success while proving nothing. Fix the mutation"
+  echo "   in test/prove-red.sh before trusting any result above."
+  fail=1
+elif [ "$(diff "$m39_file.orig" "$m39_file" | grep -c '^>')" != 1 ]; then
+  echo "39. named the wrong drift record in a sprint mover ... ✗ WRONG TARGET — the sed changed more than"
+  echo "   one line."; fail=1
+elif [ "$(grep -cF 'for `drift ambiguous-plan-identity`, which names' "$m39_file")" != 0 ]; then
+  echo "39. named the wrong drift record in a sprint mover ... ✗ WRONG TARGET — an un-mutated sentence survives."; fail=1
+elif [ "$(grep -cF 'for `drift ambiguous-active-sprint`, which names' "$m39_file")" != 1 ]; then
+  echo "39. named the wrong drift record in a sprint mover ... ✗ MUTATION DID NOT LAND — the wrong record"
+  echo "   name is absent from the mutant, or landed more than once."; fail=1
+fi
+printf '39. wrong drift record named in a sprint mover — "emitter map E2" should go RED ... '
+r39="$(run_dashboard_suite "$m39")"; echo "$r39"
+if [ "$r39" != red ]; then
+  echo "   ✗ the suite did NOT catch a mover sending the operator to read for a record the render cannot"
+  echo "     emit — the emitter-map prose is still pinned by nothing, which is Item A's whole finding."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*emitter map E2:' "$out"; then
+  echo "   ✗ suite went red but NOT at emitter map E2 — red for the wrong reason."; fail=1
 fi
 
 echo

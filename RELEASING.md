@@ -69,7 +69,7 @@ the message (`claude/fkit-claude.sh:92-98`). The consequence — two installs ca
 `VERSION` and hold different content — is argued in ADR-015 Context §4 and recorded as a design
 constraint at `claude/structure-spec.md:23`.
 
-**This is not an argument for bumping less.** `ai-agents/knowledge-base/architecture.md:415` calls
+**This is not an argument for bumping less.** `ai-agents/knowledge-base/architecture.md` (§7, flow *"6 — Release"*: *"Version bumping is load-bearing"*) calls
 version bumping load-bearing, and it still is — in one specific sense, which is worth naming because
 task `0257` retired the old one. Bumping is what lets the update notice name a **version delta**
 (`v0.2.1 → v0.2.2`) instead of falling back to a **sha delta**. What bumping never was is the
