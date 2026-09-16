@@ -116,3 +116,12 @@ tie-break, `Backlog` token and one-grammar-one-implementation constraint are **u
 - [[tasks/decide-whether-the-active-sprint-glob-widens]] — the lineage question this settles
 - [[tasks/retire-the-sprint-glob-in-fkit-status-skill]] — the glob retirement that preceded it
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — Sprint 5, the board that stayed "active" while finished
+- [[tasks/record-the-sprint-lifecycle-adr-047]] — task `0337`, the row that produced this ADR
+- [[tasks/give-the-selector-a-status-rung-and-a-lowest-first-choice]] — task `0338`, the reader built to it
+- [[tasks/backfill-a-sprint-status-onto-every-existing-sprint-plan]] — task `0340`, the data migration it required
+- [[tasks/build-the-producer-only-sprint-movers]] — task `0341`, SD-3's `/fkit-sprint-done` + `/fkit-sprint-cancelled`
+- [[tasks/teach-the-roles-what-current-sprint-means]] — task `0339`, the convention page and the roles that answer the owner
+- [[tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]] — the board that shipped it, and the first ever closed by a mover
+- [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — ⭐ the first board **created** under this lifecycle
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-sprint-mover-pins-and-successor-mode-durable-prove-red-mutations]] — task `0388`: ⭐ **this ADR's own *"re-raise on a third instance"* fence fired** — the emitter-map class had reached a fourth instance, and item A mechanised it as `prove-red` mutation 39
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sweep-the-repo-only-claude-path-form-out-of-installed-facing-prose]] — task `0390`: ⭐ **this ADR's ~20 `claude/…:NNN` citations were fenced OUT of that sweep** — source coordinates into this repo are a different thing from an installed-facing instruction

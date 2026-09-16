@@ -92,3 +92,4 @@ The governing sentence step 5 already states twice for inbound cases, extended h
 - [[tasks/widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close]] — *added 2026-08-29:* `0229`, the other Sprint 6 edit to this same skill — a **different region** (step 1's stop, not step 5's sweep)
 - [[systems/knowledge-base-structure]] — *added 2026-08-29:* the record structure the locator-vs-evidence rule governs
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — *added 2026-08-29:* the board carrying its follow-ups `0326` (the write-time half) and `0342`
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/decide-the-sanctioned-repair-path-for-a-half-landed-close]] — task `0134` → ADR-048: ⭐ **a link is not a status** — a stale href alone never triggers the reconcile mode, and stays ordinary coder pointer repair

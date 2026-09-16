@@ -157,3 +157,5 @@ release is committed and tagged LOCALLY and was never pushed — the push is the
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — the rank rules
   the archival honoured
 - [[systems/testing-and-verification]] — where the two guards this board built now live
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]] — the successor this board did **not** name; ⭐ its ruling `S2` turned this board's missed criterion into a **reported metric that gates nothing**
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — ⭐ **Sweep A (`0356`) is the Sprint 7 work that partly discharged `0286`**, which `0393` had to re-establish rather than trust

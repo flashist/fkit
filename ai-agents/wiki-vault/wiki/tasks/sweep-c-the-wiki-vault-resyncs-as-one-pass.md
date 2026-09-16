@@ -146,3 +146,4 @@ run reads `log.md` and has no reason to read a task's worklog.** The follow-up i
   `log.md`, is the completion signal
 - [[tasks/append-a-dated-correction-note-to-adr-010]] — the ADR-010 correction chain `0199` resynced
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/adr-the-narrow-in-flight-review-fix-lane]] — task `0352`, which produced ADR-045 · [[tasks/build-the-coordination-citation-policy-guard]] — task `0176`, the coordination-citation policy guard · [[tasks/build-the-link-resolution-guard]] — task `0354`, the link-resolution guard
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-task-movers-a-step-for-the-named-exempt-keys]] — task `0381`: ⭐ **closing this sweep's five members, then this row itself, is the evidence that the gap fires** — three keys healed, `namedExemptCount` fell 9 → 6, and `L3` went red **on the FALL**

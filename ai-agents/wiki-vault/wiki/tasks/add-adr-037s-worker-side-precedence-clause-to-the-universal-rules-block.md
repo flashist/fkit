@@ -63,3 +63,4 @@ The **wrapper-comment compression** (~354 B of the 404 B wrapper overhead, zero 
 - [[systems/role-locked-sessions]] — the lockdown this clause routes around: the rules block reaches every spawned worker precisely because a rule in an unloaded `SKILL.md` does not bind
 - [[systems/testing-and-verification]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/repair-0177s-stale-cap-and-byte-figures]] — ⚠️ *Added 2026-08-22:* task `0218`, which repaired a downstream brief still naming the pre-bump `4096` cap this task moved to **4352**
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/repair-0194s-false-0190-clause-does-not-exist-premise]] — task `0221`: ⛔ **`0194`'s brief asserted this clause did not exist for over a month after it shipped**; it now quotes the wording verbatim

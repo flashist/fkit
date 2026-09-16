@@ -61,3 +61,5 @@ owner-verified)`; **no human has checked any of them**, and this row is itself a
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — ⚠️ *Added 2026-08-22:* the board opened the same day this archival landed. See the dated correction in `## Outcome` above
 - [[tasks/repair-the-three-decay-shapes-across-the-open-backlog-briefs]] — ⚠️ *Added 2026-08-22:* task `0306` — this archival is what created its **shape 1**, the dead `ai-agents/sprints/sprint-N.md` path scattered across open briefs
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/cut-the-v0-3-0-release-and-hand-archive-sprint-7]] — task `0360`, the v0.3.0 cut and Sprint 7's hand-archive
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/build-the-producer-only-sprint-movers]] — task `0341`: ⭐ **this hand archival is the procedure the sprint movers mechanised**, and its measured link surface (57 in-file / 53 files / 177 inbound) is the argument for automating it
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/record-the-sprint-lifecycle-adr-047]] — task `0337`: ⛔ **a finished Sprint 5 reported as active until this ran is the defect the status rung exists to prevent**

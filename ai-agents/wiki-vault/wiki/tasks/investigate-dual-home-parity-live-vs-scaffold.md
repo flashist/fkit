@@ -34,3 +34,4 @@ No implementation — the deliverable is `knowledge-base/reports/2026-07-18-dual
 - [[systems/fkit]] — the dual-home drift recorded as a standing gap
 - [[systems/testing-and-verification]] — where the parity test this investigation scoped would live; **scoped, not built**
 - [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132` — the dual-home reconciliation, and the sweep that **disproved ADR-027's premise**
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/add-dual-home-paritys-missing-accepted-drift-row-and-correct-its-count]] — task `0389`, the mirror's completeness claim corrected to 28 / 18 / 10 and the missing `.fkit-accepted-drift` row added

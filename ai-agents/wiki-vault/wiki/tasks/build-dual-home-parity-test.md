@@ -45,3 +45,4 @@ Ledger **CLOSED 2026-08-02**, final verdict **✅ approved**, with accepted resi
 - [[tasks/disambiguate-the-frozen-history-clause]] — task `0161`, which had to check dual-home parity **by hand** because this test had not landed
 - [[systems/testing-and-verification]] · [[systems/knowledge-base-structure]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/gloss-the-moved-to-sprint-n-row]] — task `0268`: a live case where this test **cannot help** — the edited file is a declared `audience-adapted` exception, subtracted from the check, so its twin edit is **unenforced by anything**
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/add-dual-home-paritys-missing-accepted-drift-row-and-correct-its-count]] — task `0389`: ⚠️ **this suite reads the module and asserts parity BEHAVIOUR — it never asserts the convention page's prose**, which is why a mirror wrong by two stayed green

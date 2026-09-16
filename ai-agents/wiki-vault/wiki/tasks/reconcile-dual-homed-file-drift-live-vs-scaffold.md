@@ -49,3 +49,4 @@ Stateful review, verdict *changes requested — 6 defects, none blocking*; **Cod
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142` — the skill-ownership site inventory, and the report that **shipped incomplete twice**
 - [[tasks/design-the-post-update-structure-check]] — task `0241` (2026-08-06): the structure-check design, whose hash manifest exists precisely because this sweep proved drift can be deliberate adaptation
 - [[tasks/gloss-the-moved-to-sprint-n-row]] — task `0268`: edits a file on this task's own 26-entry exception list — ⚠️ **so the parity test subtracts it and nothing catches a one-sided edit**
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/add-dual-home-paritys-missing-accepted-drift-row-and-correct-its-count]] — task `0389`: ⛔ **`dual-home-parity.md` is itself `fkit-repo-only`** — there is no second copy to keep in step, and adding one to `claude/scaffold/` is a regression the module names by name

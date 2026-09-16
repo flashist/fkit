@@ -65,3 +65,4 @@ unscheduled and not a release gate** — *until it runs, the promise is assigned
 - [[tasks/update-the-docs-for-the-structure-check-capability]] — `0248`, which documents this repair path and its v1 scope
 - [[systems/install-and-self-update]] — the install share this repair replaces files from
 - [[systems/fkit]] — the repair phase of the producer-owned `fkit-heal` skill
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sweep-the-repo-only-claude-path-form-out-of-installed-facing-prose]] — task `0390`: ⛔ **`fkit-heal/SKILL.md`'s one repo-form path is the sweep's MEASURED FALSE POSITIVE** — it deliberately contrasts the repo form against the installed form, and changing it is a regression

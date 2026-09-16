@@ -62,6 +62,18 @@ Lead's one owned skill, `fkit-sprint-ship-loop`, was registered through `skills_
 
 ### The task movers — reversed, then reversed back (2026-07-18 → 2026-07-23)
 
+> ⭐ **SYNC 2026-09-16 (`b4a1a52`→`c59f4d7`) — THE MOVER SET GREW FROM TWO TO FOUR, AND THE MECHANISM IS UNCHANGED.**
+> Everything below is left byte-identical and stays correct. `/fkit-sprint-done` and
+> `/fkit-sprint-cancelled` were built by `0341` in Sprint 8 on owner ruling SD-3
+> (*"Mover skills, producer-only (Recommended)"*, 2026-08-25) and are **producer-only from their first
+> line** — ⭐ **added to the producer's list in `skills_for_role()` and nowhere else**, so the ADR-018
+> hook denies them from any other identity at any spawn depth **with no change to
+> `skill-ownership-hook.sh` itself.** ⭐ **That is this page's whole thesis demonstrated on new ground:
+> granting a skill IS the enforcement.** `test/skill-ownership-hook.test.js`'s `MOVERS` invariant —
+> *"appears on EXACTLY ONE role"* — grew to four. See
+> [[tasks/build-the-producer-only-sprint-movers]] and
+> [[decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint]].
+
 > ⚠️ **This section previously read "what the lock does NOT cover." That is no longer true — the lock covers it.**
 
 **[[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] removed the owner-only gate** and [[tasks/implement-spawned-invocation-for-task-movers]] shipped it: any spawned agent could move task files, including the coder closing its own task. **[[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] reversed that on 2026-07-23** — `/fkit-task-done` and `/fkit-task-cancelled` are **`fkit-producer`-only**, and the ADR-018 hook now **denies** a mover call from any non-producer identity **at any spawn depth**.
@@ -155,3 +167,5 @@ The ADR's own honesty clause is the thing to read: **prevention is gone, and the
 - [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] — *added 2026-08-29:* the ADR that keys a loop step's Build role on `skills_for_role()` ownership of the deliverable's skill
 - [[tasks/fix-the-scaffold-producer-row-fkit-task-brief-omission]] — *added 2026-08-29:* `0250`, the scaffold mirror of `skills_for_role()`'s producer row; ⛔ **nothing mechanically binds the two, so the omission class can recur undetected**
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/start-the-lead-session-not-the-producer-after-a-fresh-projects-cold-start]] — task `0379`, the cold-start lead routing
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]] — the board that added two producer-only skills and proved the grant-is-the-enforcement thesis on new ground
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/decide-the-sanctioned-repair-path-for-a-half-landed-close]] — task `0134` → ADR-048: ⚠️ **a SPAWNED producer qualifies for the reconcile mode** — the identity that left a close half-done is the one allowed to finish it with no owner in the loop

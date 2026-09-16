@@ -84,3 +84,5 @@ quotations the href repair would have rewritten.
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — the move that opened the
   cited-class gap
 - [[systems/testing-and-verification]] — the suite this joined
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]] — task `0393`, the repo-wide sweep of the class this guard polices
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-sprint-mover-pins-and-successor-mode-durable-prove-red-mutations]] — task `0388` item B: ⛔ **blind spot 11's prospective cost stopped being 0** — an open `review.md` under `tasks/backlog/` **is** scanned and **is not** exempt, and option B stays refused

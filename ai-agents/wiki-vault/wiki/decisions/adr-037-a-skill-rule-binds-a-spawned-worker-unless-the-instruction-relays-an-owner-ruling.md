@@ -154,3 +154,4 @@ The ADR states: ***"Prose is proportionate. There is no mechanical enforcement, 
 - Source: `ai-agents/knowledge-base/decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling.md`
 - [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] — *added 2026-08-29:* ADR-044, whose own architect Build run cleared the spawned-architect bar ⭐ **only because a named owner ruling displaced it for that run** — the mechanism this ADR defines
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sweep-b-the-single-site-correction-notes]] — task `0357`, Sweep B — the single-site correction notes
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/repair-0194s-false-0190-clause-does-not-exist-premise]] — task `0221`: ⭐ **both clause sites are now confirmed SHIPPED and quoted verbatim in `0194`'s brief** — the worker-side clause in `universal-rules.md` and the driver-side clause in the ship-loop

@@ -4520,3 +4520,70 @@ line-number coordinate into any coordination document.** No secrets.
 `index.md`**, all new links bidirectional.
 
 Task 0380: partial — not ready to close
+
+## 2026-09-16 — ingest (sync) — SECOND PASS of the `b4a1a52` delta
+
+- **Sync window: `b4a1a52` → HEAD (`c59f4d7`), 10 commits.** ⛔ **The watermark is again deliberately NOT advanced — see § *Deferred*.**
+- **Window chosen: the watermark, not a date and not `force`.** ⭐ **And the reason it is now sufficient is a fact this run measured rather than assumed: the tree is CLEAN.** The previous pass reported 32 uncommitted paths — ADR-048, the nine ADR drift notes, the seven task-folder moves, `sprints/done/sprint-9.md`, and that pass's own vault edits. ⭐ **All of it was committed by the owner in `c59f4d7`, one commit past the `81f1429` the caller measured**, so everything that was outside any git window is inside this one. ⛔ **No separate working-tree sweep was needed, and none was performed.**
+- **Changed source files detected: 147** under `ai-agents/` excluding the vault. **Filtered to ingest-worthy: 25 closed-task briefs + 7 sprint files + 20 knowledge-base files + 2 READMEs.**
+- **Pages created: 16. Pages updated: 51** (`index.md` included). ⛔ **Zero files written outside `ai-agents/wiki-vault/`.**
+
+### ⭐ The two board pages the vault did not have at all
+
+- `ai-agents/sprints/done/sprint-8.md` → created [[wiki/tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]] — ⭐ **the first board in this project's history closed by a mover.** Its criterion (b) verified on disk this run: line 3 reads `> ## ✅ Done — 2026-09-13. Closed by /fkit-sprint-done.`
+- `ai-agents/sprints/done/sprint-9.md` → created [[wiki/tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — ⭐ **the first board ever written under the ADR-047 lifecycle.**
+
+### The fourteen closed-task pages
+
+**Sprint 8 chain** — `0337` → [[wiki/tasks/record-the-sprint-lifecycle-adr-047]] · `0271` → [[wiki/tasks/pin-the-five-unpinned-behaviors-in-the-sprint-identity-grammar]] · `0340` → [[wiki/tasks/backfill-a-sprint-status-onto-every-existing-sprint-plan]] · `0381` → [[wiki/tasks/give-the-task-movers-a-step-for-the-named-exempt-keys]] · `0341` → [[wiki/tasks/build-the-producer-only-sprint-movers]] · `0338` → [[wiki/tasks/give-the-selector-a-status-rung-and-a-lowest-first-choice]] · `0339` → [[wiki/tasks/teach-the-roles-what-current-sprint-means]].
+
+**Sprint 9 rows** — `0392` → [[wiki/tasks/architecture-md-prose-repair-9-1-inventory-occurrence-b-and-9-5]] · `0388` → [[wiki/tasks/give-the-sprint-mover-pins-and-successor-mode-durable-prove-red-mutations]] · `0390` → [[wiki/tasks/sweep-the-repo-only-claude-path-form-out-of-installed-facing-prose]] · `0389` → [[wiki/tasks/add-dual-home-paritys-missing-accepted-drift-row-and-correct-its-count]] · `0134` → [[wiki/tasks/decide-the-sanctioned-repair-path-for-a-half-landed-close]] · `0221` → [[wiki/tasks/repair-0194s-false-0190-clause-does-not-exist-premise]] · `0393` → [[wiki/tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]].
+
+### ⭐ THE `architecture.md` RECONCILIATION — the previous pass's UNVERIFIED flag is RESOLVED
+
+⛔ **The previous entry left every vault page resting on the old §9.1/§9.5 text *"neither asserted stale nor current."* That state is now resolved by measurement, and it resolved BOTH ways.**
+
+| Vault claim | Verdict this run |
+|---|---|
+| [[wiki/systems/testing-and-verification]] — *"`architecture.md` §9.1 is behind the code … it still names 'zero automated verification'"* | ✅ **DISCHARGED.** §9.1 no longer says it. Re-read on disk: the heading is *"The suite now runs automatically"*, the count is *"29 `node --test` suites, counted 2026-09-14"* with its derivation command, and CI reads *"43 runs … 39 green and 4 red"* dated 2026-09-14. ⛔ **The flag is discharged; the `install.sh` GAP is not** |
+| [[wiki/systems/install-and-self-update]] — *"`fkit-claude-init.sh` prints `Seven roles` as a `printf` string"* and *"§9.5 still lists both as open drift"* | ⛔⛔ **FALSE IN BOTH HALVES.** Re-measured on disk: the summary block prints **no role count at all**, under a comment recording that as **deliberate, owner-ruled 2026-07-20**; and §9.5 is now one dated sentence recording the residuals as verified discharged |
+
+⭐ **Both originals are left byte-identical and superseded by a dated block beside them.** ⚠️ **`0366`'s own correction of the second claim was ITSELF half wrong — it said the script prints a *derived* count. It prints none.** That is recorded so nobody inherits it.
+
+### ⛔ `0393`'s `E6` ROUTED THE VAULT'S OWN CITATION SITES HERE — measured and triaged, not swept
+
+⭐ **`0393` could not write the vault (ADR-005), so its `E6` reported the count and paths for routing. This run is where that lands.** **Measured 2026-09-16: 28 `ADR-NNN:LINE` occurrences across 5 vault files.**
+
+| Verdict | Count | Action |
+|---|---|---|
+| ⭐ **`mentioned`** — `E2`'s fourth class, owner-ruled 2026-09-14 | **25** | ⛔ **LEFT BYTE-IDENTICAL.** Triage tables, survivor lists, sweep records, dated measurements. ⭐ **The vault is the archetype of E2's clustering finding: these are documents *about* the defect, and repairing one corrupts the record of the class being swept** |
+| ✅ **correct** | **1** | ⛔ **LEFT ALONE.** `ADR-008:85` on [[wiki/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — re-resolved this run, it **still lands** on *"a tool allowlist without Write/Edit does not stop `Bash` from writing files"*. ⭐ The don't-repair-what-works check |
+| ⛔ **drifted, live** | **2** | **REPAIRED** to heading-plus-quoted-fragment: both cited `ADR-028:154`, which today carries a *"do not re-raise"* bullet. The clause is ADR-028 §*"Required follow-ups"* item 1. Sites: [[wiki/tasks/amend-project-brief-for-the-eighth-role]] and [[wiki/tasks/refresh-architecture-docs-for-adrs-026-030-and-the-eighth-role]] |
+
+### Systems pages brought to the tree
+
+- [[wiki/systems/fkit]] — ⭐ **skill count 25 → 28** (measured `ls -d claude/skills/fkit-*/`), and ⭐ **four movers, not two.** Both originals left byte-identical.
+- [[wiki/systems/role-locked-sessions]] — the two new producer-only skills were enforced **with no change to `skill-ownership-hook.sh`**; ⭐ **the page's own thesis demonstrated on new ground.**
+- [[wiki/systems/testing-and-verification]] — ⚠️ **a FOURTH consecutive stale enumerated count, and the page's own prediction has now held four for four.** `test/*.test.js` **25 → 29**; `prove-red.sh` **28 → 39**. ⭐ **Only one of the four new suites (`mover-exemption-step`, `0381`) arrived inside this window**; the other three are named so the enumeration is complete. ⭐ **Contrasted with `architecture.md`, which was owner-ruled to stop enumerating by hand.**
+
+### ⛔ Deferred — and the watermark is AGAIN deliberately NOT advanced
+
+⚠️ **`.wiki-watermark` stays at `b4a1a52`, ten commits behind HEAD `c59f4d7`.** ⛔ **This run read roughly half its filtered delta and must not advance a watermark past work it did not read** — the standing hazard `0380` was filed to name: *a clean watermark that is not a clean vault.* ⭐ **A third sync re-reading `b4a1a52..HEAD` will re-see everything below, plus a harmless re-verify of what two passes have now ingested.**
+
+**Not ingested, enumerated so a third pass is small and targeted:**
+
+- **Five CANCELLED `architecture.md` rows** — `0251`, `0286`, `0323`, `0366`, `0376`. ⭐ **Their scope is fully traceable** in the provenance maps on [[wiki/tasks/architecture-md-prose-repair-9-1-inventory-occurrence-b-and-9-5]] and [[wiki/tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]], ⛔ **but none has a page of its own and none of their briefs was read this run.**
+- **Four closed briefs with no page** — `0281`, `0285`, `0289`, `0312`. ⚠️ **`0312` matters most**: it is the row that rewrote §9.1 **occurrence A only** and left occurrence B, which is the gap `0392`'s Group B closed.
+- **Two closed briefs whose pages exist but were not re-read against the window** — `0256`, `0360`.
+- **The five conventions pages and both READMEs.** ⭐ **Their CONTENT changes are recorded as task outcomes** — `sprint-status-vocabulary.md`'s creation on [[wiki/tasks/teach-the-roles-what-current-sprint-means]], `dual-home-parity.md`'s repair on [[wiki/tasks/add-dual-home-paritys-missing-accepted-drift-row-and-correct-its-count]], the path-form sweep on [[wiki/tasks/sweep-the-repo-only-claude-path-form-out-of-installed-facing-prose]]. ⛔ **But the pages themselves were not read in full and [[wiki/systems/knowledge-base-structure]] was not rewritten for them.**
+- **`ai-agents/knowledge-base/architecture.md` §1–§7** — only §8 through §11 were read this run. ⚠️ **§4.2's skill count was verified independently against the tree (28); nothing else in §1–§7 was checked.**
+- **Two `reports/` files, `sprints/backlog.md`, and `sprints/done/sprint-7.md`'s in-window modification.**
+- **The open Backlog briefs `0394`–`0399`.** ⛔ **Correctly out of scope** — the sync filter excludes open backlog briefs.
+
+### Scope
+
+Only `ai-agents/wiki-vault/` was written: **16 pages created, 51 updated**, `index.md`, this `log.md` entry. ⛔ **Zero files outside the vault** (`git status --porcelain` verified). Nothing committed, nothing staged, no task moved, no mover invoked, no board row touched. Append-only preserved in `log.md` — no past entry edited or deleted. ⛔ **No line-number coordinate into any coordination document was written by this run.** No secrets.
+
+**Lint after the pass** (whole vault): **0 broken wiki-links**, **0 pages missing from `index.md`**, **0 one-way links out of the 16 new pages** — 13 were found and closed during the pass.
+
+Task 0380: partial — not ready to close

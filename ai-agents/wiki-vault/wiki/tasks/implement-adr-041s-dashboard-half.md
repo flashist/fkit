@@ -60,3 +60,5 @@ inconsistency is the evidentiary base of
 - [[systems/review-and-model-diversity]]
 - [[systems/testing-and-verification]]
 - [[tasks/decide-whether-the-active-sprint-glob-widens]] — `0261`, the decision this implements
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/pin-the-five-unpinned-behaviors-in-the-sprint-identity-grammar]] — task `0271`, which folded in this task's residuals `A1` and `A2` by owner ruling *"Fold into 0271"*
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-selector-a-status-rung-and-a-lowest-first-choice]] — task `0338`, which rewrote this `select-active` half: a status rung, all-active reporting, and lowest-first instead of highest

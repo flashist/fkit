@@ -53,3 +53,7 @@ The ADR states: `prove-red.sh` is **not in `npm test`**, and there is **no `.git
 - [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] — Decision 4's gate is one of the two unfinished pieces the planned tester seat waits behind
 - [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook
 - [[tasks/rewrite-the-false-no-ci-paragraph-and-fabricated-citation-in-fkit-wiki-lint]] — ⚠️ *Added 2026-08-22:* task `0280` — ⛔ **this ADR's two present-tense "no CI" claims were left reported-only and NOT swept**: the owner did not select that option
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-sprint-mover-pins-and-successor-mode-durable-prove-red-mutations]] — task `0388`: ⭐ **`prove-red.sh` 34 → 39 mutations**, converting a one-off by-hand build measurement into a gate that re-runs
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/pin-the-five-unpinned-behaviors-in-the-sprint-identity-grammar]] — task `0271`, the mutation `0264` fenced out of its own scope
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — its criterion **6** requires ≥2 durable mutations that each **PROVE RED**, ⛔ *"a guard nobody has shown can go red is not a guard"*
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-task-movers-a-step-for-the-named-exempt-keys]] — task `0381`, whose mutations 33–34 set the discipline: ⭐ **red at the NAMED assertion**, never merely red

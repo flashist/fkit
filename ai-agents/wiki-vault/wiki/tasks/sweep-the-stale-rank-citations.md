@@ -47,3 +47,4 @@ The substitute wording was then **wrong twice over**, and both were fixed in rev
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — whose vault page carried two of the stale-coordinate notes this class covers
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — **a mid-board insertion is NOT the owner-ruled re-rank exception** — forced by arithmetic, not policy
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/repair-0194s-false-0190-clause-does-not-exist-premise]] — task `0221`, the same decay class on a premise list rather than a rank

@@ -97,3 +97,5 @@ had already failed three times here** — which is why step 1 had to rule on eac
   append-only rule on closed folders
 - [[decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so]] — why *reasoning-only*
   is the normal coverage state, not a failure
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]] — task `0393`: ⚠️ **this pass replaced six of seven named coordinates and made the durable form dominant, but ran a CLASS sweep, not `0286`'s per-citation census** — so `A1`/`A2` were not satisfied and half B had never run
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/architecture-md-prose-repair-9-1-inventory-occurrence-b-and-9-5]] — task `0392`: ⛔ **this pass reported §9.5's false claims rather than repairing their anchors**, which is why Group C had to fix claim and anchor **together**

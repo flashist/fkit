@@ -7,7 +7,9 @@
 ## Goal
 Correct `PROJECT.md`'s two seven-role assertions after [[decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] authorized an eighth: `:8` (*"a team of seven role-scoped AI agents…"*) and `:72` (the *"solid working set of seven roles … not breadth"* constraint under Stage: Prototype).
 
-**Split out of task 82 by owner ruling, per ADR-028:154** — the brief is the **product document**, the producer's to own, not the architect's who owns `architecture.md`.
+**Split out of task 82 by owner ruling, per ADR-028 §*"Required follow-ups — none of them authorized by this ADR"*, item 1** — *"(Owner's or producer's call — the brief is the product document, not the architect's.)"* The brief is the **product document**, the producer's to own, not the architect's who owns `architecture.md`.
+
+> ⚠️ **Dated correction 2026-09-16 (the `b4a1a52`→`c59f4d7` sync). The line above previously cited `ADR-028:154`; that coordinate no longer lands.** ⛔ **Re-resolved on disk this sync: line 154 now carries a *"do not re-raise"* bullet.** ⭐ **Repaired to heading-plus-quoted-fragment**, per [[tasks/write-the-durable-citation-anchors-convention-page]]. **Found by `0393`'s `E6` routing of the vault's `ADR-NNN:LINE` sites to `fkit-wiki`** ([[tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]]).
 
 ## Key Changes
 - **`:8`** now reads seven role-scoped agents **with an eighth (a sandboxed e2e tester) authorized but not yet built — the team is seven today.**

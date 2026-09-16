@@ -65,3 +65,4 @@ The drift was structural, not incidental: `incidents/` was created ad hoc during
 - [[tasks/stop-agents-asserting-unchecked-repo-state]]
 - [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]]
 - [[decisions/adr-016-claude-md-and-agents-md-are-the-shared-instructions-layer]]
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]] — task `0393`: ⛔ **this ADR's five coordinates were triaged INDIVIDUALLY** — at least three drifted, at least one had not, and one had drifted a **second** time. ⛔ **A drifted fact never makes an ADR `superseded`**

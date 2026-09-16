@@ -48,3 +48,4 @@ The report recorded an **open discrepancy it could not settle**: the vault said 
 - [[systems/fkit]] · [[systems/role-locked-sessions]] · [[systems/testing-and-verification]] · [[tasks/sprint-2-remove-omnigent]]
 - [[systems/knowledge-base-structure]] — related
 - [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200`, **the next instance of exactly this gap**: the four-mirror checklist was incomplete **in both directions**, its own surface count was wrong twice, and ADR-036's registry still has no tooling to check any of it against
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/repair-0194s-false-0190-clause-does-not-exist-premise]] — task `0221`: ⭐ **`0189` is the ONE surviving blocker on `0194`** — measured true on 2026-08-05, 2026-08-14 and again 2026-09-15

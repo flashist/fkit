@@ -57,3 +57,4 @@ Additions-only across a single hunk — **direct proof the other nine bullets ar
 - [[systems/role-locked-sessions]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203`, the second of three concurrent edits to the same `SKILL.md` in this run; its hunk sits in the honor-the-ADRs block, well clear of `## Hard rules`
 - [[tasks/add-an-exit-table-row-for-a-failed-build-verify-review-spawn-in-the-sprint-loop]] — task `0208`, the third — which **separated all three deltas by hunk position cross-checked against content**, and closed the arithmetic both ways
+- *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/repair-0194s-false-0190-clause-does-not-exist-premise]] — task `0221`: ⚠️ **closing this task falsified a second of `0194`'s premises and nothing repaired it** — the prediction `0221` had already written down

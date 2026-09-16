@@ -144,3 +144,5 @@ re-raise path is the owner-present sub-path that would close the first residual.
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] — must-never 9's wiki-vault bar
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — the reversed predecessor; its §Consequences is why `cancelled/` is the worst place to open a first agent door
 - [[decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint]] — the other Sprint 9 decision ingested in this pass
+- [[tasks/decide-the-sanctioned-repair-path-for-a-half-landed-close]] — task `0134`, the row that produced this ADR
+- [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — the board that shipped it; its success criterion **9** scores this ADR's three conjuncts
