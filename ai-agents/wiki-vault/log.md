@@ -4417,3 +4417,106 @@ withdrawal is not a sync** — this run ingested nothing from the delta and must
 past work it did not read.
 
 No tracked task completed by this run.
+
+## 2026-09-16 — ingest (partial sync, Sprint 9 wrap-up)
+
+- **Sync window:** `b4a1a52` → HEAD `81f1429` (9 commits), **plus the uncommitted working tree**.
+- ⚠️ **`force` was NOT used, despite being the argument passed.** Re-scoping it was the first act of the
+  run. `force` means re-ingest every eligible `ai-agents/` source against 293 existing vault pages —
+  not safely doable in one pass, and it would have buried the owner-ruled slice. The window actually
+  used is the **watermark delta union the working tree**, which is strictly more precise than `force`
+  and misses nothing `force` would have caught in this delta.
+- ⚠️ **The invoking session's premise was wrong on one measured point, and it is corrected here.** It
+  stated *"HEAD is still `d8ef596`"*. ⛔ It is not: `git rev-parse HEAD` is **`81f1429`**, four commits
+  later. So the Sprint 9 run is **partly committed**, not wholly uncommitted as handed over — ADR-047,
+  the conventions edits, `architecture.md` and most closed task folders are **in** `b4a1a52..81f1429`;
+  ADR-048, the nine ADR drift notes and the seven folder moves are **not**.
+
+### Ingested — the owner-ruled slice
+
+- `ai-agents/knowledge-base/decisions/adr-048-…-reconcile-mode-…md` → **created**
+  [[wiki/decisions/adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker]].
+  ⚠️ **Read from the working tree — uncommitted at ingest.** ⛔ Decided, not built (`0135` implements).
+- `ai-agents/knowledge-base/decisions/adr-047-…-in-progress-sprint.md` → **created**
+  [[wiki/decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint]].
+  ⚠️ **Not named in the owner ruling — found missing during the pass.** It landed committed on
+  2026-09-10 and the **previous sync's scope missed it**; it supersedes ADR-041 in part, so leaving it
+  out would have left the vault's ADR-041 page silently wrong.
+- **Nine ADR pages updated** with their sources' 2026-09-15 (`0393`) dated drift notes:
+  [[wiki/decisions/adr-009-claude-code-native-is-the-only-runtime]] ·
+  [[wiki/decisions/adr-010-role-locked-sessions-and-skill-lockdown]] ·
+  [[wiki/decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name]] ·
+  [[wiki/decisions/adr-013-knowledge-base-root-holds-the-living-canon]] ·
+  [[wiki/decisions/adr-017-skills-may-ship-executables-invoked-via-bash-not-the-exec-bit]] ·
+  [[wiki/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] ·
+  [[wiki/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester]] ·
+  [[wiki/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] ·
+  [[wiki/decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so]].
+  ⛔ **No decision was reopened on any of them; every `Status` line stands.**
+- ⭐ **The known vault defect is fixed.** [[wiki/decisions/adr-009-claude-code-native-is-the-only-runtime]]
+  had repeated ADR-009's misquote of ADR-008 — *"no flavor is deleted until the native port proves
+  itself"* — in quotation marks, with no caveat, since ingest. It now carries the caveat: those words
+  are a **paraphrase**, and ADR-008's actual §"Options considered" wording is quoted beside them.
+  ⭐ **The meaning carried was right; the quotation marks were not earned.** The original sentence is
+  left byte-identical.
+- ⛔ **Two vault pages carry a SPENT clause that this run superseded in place rather than deleted:**
+  ADR-042's page said *"This ADR carries NO dated correction blocks"* (true 2026-09-05, false now), and
+  ADR-028's *"Decided, not built"* was re-confirmed rather than assumed. Both originals left
+  byte-identical.
+- **11 pages gained back-links** so every new link is bidirectional: ADR-005, ADR-025, ADR-033,
+  ADR-040, ADR-041, and the task pages `widen-task-done…`, `route-sprint-ship-loop-close-to-producer`,
+  `route-coder-ship-loop-close-to-producer`, `decide-whether-the-active-sprint-glob-widens`,
+  `retire-the-sprint-glob-in-fkit-status-skill`, `sprint-5-fix-what-a-real-project-found`.
+- `index.md` — two new Decisions entries (ADR-047, ADR-048).
+
+### Measured, and it changes what the owner ruling asked for
+
+⛔ **"Fix vault links to the 7 moved task folders" had NOTHING to fix — measured, not assumed.** Two
+greps over the whole vault: by path (`tasks/backlog/(0392|0388|0390|0389|0134|0221|0393)`) → **zero
+hits, `log.md` included**; by bare task ID → **one hit**, a prose mention of `0134`/`0135` on
+[[wiki/tasks/widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close]] that carries **no
+path** and is therefore unaffected by the move. ⭐ **The 18 vault pages that do contain the string
+`tasks/backlog/` are all discussing the path FORM as a subject** — the dead-path-generator class,
+`0153`/`0160`'s ruling, frozen ledger paths — **not linking any of the seven folders.** ⛔ **Nothing was
+edited on this account**, and a future run should not "fix" them.
+
+✅ **Also measured, also nothing to do:** `0389`'s new `.fkit-accepted-drift` row and its corrected
+28/18/10 counts falsify **no vault claim** — no vault page states a dual-home mirror count.
+
+### ⛔ Deferred — and the watermark is deliberately NOT advanced
+
+⚠️ **`.wiki-watermark` stays at `b4a1a52`, nine commits behind HEAD `81f1429`.** ⛔ **This run ingested
+roughly a sixth of its own delta and must not advance a watermark past work it did not read** — the
+precedent is this log's 2026-09-10 withdrawal entry and the hazard `0380` was filed to name: *a clean
+watermark that is not a clean vault*. A future sync re-reading `b4a1a52..HEAD` will re-see everything
+below, plus a harmless re-verify of what was ingested today.
+
+**Not ingested, enumerated so nothing is lost:**
+
+- **~45 closed task folders** in the committed delta (`tasks/done/**/brief.md`), including `0337`–`0341`
+  (the ADR-047 implementation chain) and the seven Sprint 9 closes `0392`, `0388`, `0390`, `0389`,
+  `0134`, `0221`, `0393`. ⚠️ **This widens `0380`'s scope**, which was already the standing row for the
+  2026-08-29→present closed-task backlog.
+- **`ai-agents/knowledge-base/architecture.md`** — §8, §9.1 (opening paragraph and the CI bullet), §9.5
+  (three bullets collapsed to one dated sentence) and ~16 citation repairs. ⛔ **Untouched here, so any
+  vault page resting on the OLD §9.1/§9.5 text is unverified as of this run** — not asserted stale,
+  **not asserted current**.
+- **`conventions/dual-home-parity.md`**, `conventions/README.md`, the three other conventions pages,
+  `ai-agents/README.md`, `tasks/README.md`, and two `reports/` files.
+- **Sprint boards:** `sprints/done/sprint-8.md`, `sprints/done/sprint-9.md` (Sprint 9 banner
+  `✅ Done — 2026-09-16 … (agent-closed — not owner-verified)`), and `backlog.md`. ⚠️ **The vault has no
+  Sprint 8 or Sprint 9 page at all**, and ⚠️ **no sprint is active now.**
+- **Five new Backlog briefs** `0395`–`0399` (three of them untracked on disk). ⛔ Correctly out of scope
+  — the sync filter excludes open backlog briefs.
+
+### Scope
+
+Only `ai-agents/wiki-vault/` was written: 2 pages created, 20 updated, `index.md`, this `log.md` entry.
+⛔ **Zero files outside the vault.** Nothing committed, nothing staged, no task moved, no mover invoked,
+no board row touched. Append-only preserved in `log.md` — no past entry edited or deleted. ⛔ **No
+line-number coordinate into any coordination document.** No secrets.
+
+**Lint after the pass** (touched pages plus index): **0 broken wiki-links**, **0 pages missing from
+`index.md`**, all new links bidirectional.
+
+Task 0380: partial — not ready to close

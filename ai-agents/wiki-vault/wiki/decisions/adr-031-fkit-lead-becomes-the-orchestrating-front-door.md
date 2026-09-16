@@ -8,6 +8,12 @@
 **Source**: `ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md`
 **Evidence**: `ai-agents/knowledge-base/reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md`
 
+> ⚠️ **Dated resync 2026-09-16 (sync `b4a1a52`→`81f1429`) — the source ADR gained one dated correction on
+> 2026-09-15 (task `0393`)**, sitting inline below its §Context paragraph: **that paragraph's
+> `architecture.md` line pointer no longer lands.** The paragraph is left byte-identical, and the source
+> records where the cited passage lives today by heading and quoted text. ⛔ **No decision here is
+> reopened — only the coordinate aged.** The reversal of ADR-010 §Decision 3 stands as written.
+
 ## Context
 
 The owner wanted **one agent per terminal** — a single point of interaction aware of the whole toolkit, that drives the other roles as needed, so they need not open a session per role until they genuinely need to. The ruling (2026-07-22): **grow the existing `fkit-lead`, keep the name**, into a conductor that can spawn *anybody* — producer, architect, coder, reviewer, wiki, and future roles — give them a task, wait for completion, then push the process further.

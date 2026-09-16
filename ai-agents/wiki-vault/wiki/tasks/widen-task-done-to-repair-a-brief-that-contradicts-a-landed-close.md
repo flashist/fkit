@@ -62,3 +62,4 @@ Two rounds, three findings, all fixed or ruled. Reviewers: own pass + Codex (`co
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — the outside-plan-means-stop rule that kept R3 unedited
 - [[systems/knowledge-base-structure]] — the task-status vocabulary that bars hand-editing
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — the board this ran on
+- *Added 2026-09-16 (sync `b4a1a52`→`81f1429`):* [[decisions/adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker]] — ⭐ **this task's exception 2 is KEPT, unchanged and owner-only**, and explicitly not subsumed. The two branches are complementary: exception 2 covers a **plain** landed value beside an open-work brief; the new mode covers an **agent-closed** landed value beside any open work. ⚠️ The `0134`/`0135` overlap this task's producer put to the owner is what ADR-048 finally settles

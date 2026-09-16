@@ -3,6 +3,12 @@
 **Date**: 2026-07-16
 **Status**: accepted
 
+> ⚠️ **Dated resync 2026-09-16 (sync `b4a1a52`→`81f1429`) — the source ADR gained one dated correction on
+> 2026-09-15 (task `0393`)**, sitting inline below its **Decision 2**: that decision's `architecture.md`
+> line pointer **no longer lands**. The carrying text is left byte-identical, and the source records where
+> the cited passage lives today by heading and quoted text. ⛔ **No decision here is reopened — only the
+> coordinate aged.**
+
 ## Context
 
 `claude/skills/fkit-status/dashboard.sh` will be **the first executable fkit ships to a consuming project for a skill to shell out to.** Verified 2026-07-16: every skill in the tree is, today, **pure markdown**. This is a new class, and it is outside the scope of [[decisions/adr-014-how-fkit-tests-itself]], which governs **repo-root test infrastructure that cannot reach consumers** — the opposite calculus.

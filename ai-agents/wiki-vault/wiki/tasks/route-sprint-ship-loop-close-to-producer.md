@@ -34,3 +34,4 @@ The change is deliberately narrow: one producer-spawn per shipped task added to 
 - [[systems/role-locked-sessions]] — Role-Locked Sessions & the Skill Lockdown
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which built the grant this reroute unwinds on the orchestrator side
 - [[tasks/convert-skill-descriptions-to-block-scalars-and-guard]] — task `0136` — every skill `description:` to a `>-` block scalar, plus the repo's first `SKILL.md` frontmatter guard
+- *Added 2026-09-16 (sync `b4a1a52`→`81f1429`):* [[decisions/adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker]] — ⭐ **this task's review findings R1 and R6 are where the half-landed-close gap came from.** ADR-048 amends the loop's carve-out site, keeping it as the **fallback** when the reconcile spawn refuses or fails

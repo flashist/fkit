@@ -179,3 +179,107 @@ implement only that approved plan"*, anything outside it returns `NEEDS-DECISION
   is the anchor, per `conventions/durable-citation-anchors.md`.
 - **Source:** ADR-044 §C2 (i); §Decision 1–4; owner rulings ND2/ND3/ND4/ND5/ND6, all recorded verbatim
   in that ADR's §Owner sign-off.
+
+---
+
+## ⚠️ Addendum — 2026-09-16 (appended; nothing above is edited)
+
+**Append-only.** Every line above this heading is left byte-identical. ⛔ This addendum changes **no**
+`## Status`, **no** `## Priority`, **no** `## Owner`, and **no** board row. Written by a spawned
+`fkit-producer` with **no owner channel** (ADR-021), on rulings relayed by the `/fkit-sprint-ship-loop`
+driver.
+
+**Owner rulings carried here, verbatim option labels, given live via `AskUserQuestion` in an
+`fkit lead` session, 2026-09-15:**
+
+- ***"Add the addendum (Rec)"*** — a producer appends a dated addendum to this brief; no new brief.
+- ***"Flag for next sprint (Rec)"*** — note it as a candidate for the next sprint's planning; **no board
+  change and no re-ranking now**, which stays with sprint planning.
+- ***"Follow ADR-044 §D2 (Rec)"*** — the standing interim rule below.
+
+### 1. Sprint 9 evidence — the Plan cell was misread twice, in two different directions
+
+Both rows ran during the Sprint 9 `/fkit-sprint-ship-loop` run of **2026-09-14/15**. Both are recorded
+in their own task folders; re-read there, not from this summary.
+
+**`0134` — an architect-**built** row whose Plan step was run by the coder.** Its `plan.md` records the
+departure in its own words: *"This coder-authored plan is the plan of record, recorded as a departure
+from ADR-044 §D2 (the loop table lags ADR-044 C2(i))"*, and the owner accepted it live —
+verbatim label ***"Keep plan, architect builds (Rec)"***. That same ruling supplied the **named Route
+ruling** (ADR-037 §3) the Build spawn needed, since `claude/agents/fkit-architect.md`'s half-blind rule
+still binds a spawned architect. So: the driver followed the **step table** (Plan = `@fkit-coder`), the
+step table contradicts **ADR-044 §Decision 2**, and the owner absorbed the gap by hand.
+→ [`0134`](../../done/0134-decide-the-sanctioned-repair-path-for-a-half-landed-close/plan.md)
+
+**`0221` — a different error, in the opposite direction.** The Build role for that row is the **coder**:
+ADR-044 §Decision 1 states *"coordination-doc repairs and convention-page prose are exactly that class"*
+(i.e. a deliverable naming no producing skill), and its enumeration names `0221` explicitly among the
+*"Eight are coordination-doc repairs"*. The loop's step table also gives Plan to the coder. Yet the plan
+was written by the **producer**. `0221`'s `worklog.md` records it under the heading *"⚠️ Plan-role
+misroute (owner ruling)"*: *"`plan.md` was written by hand by `fkit-producer`. ADR-044 §D2 routes Plan to
+the Build role, `fkit-coder`."* The owner ruled ***"Use it, note the misroute (Rec)"*** — plan of record
+kept, misroute recorded, coder builds. ⚠️ **The record states the misroute, not its motive** — that the
+driver reached it by reading §D2 as *"the `## Owner` role plans"* is the reading reported to this
+producer by the run's architect consult, and is **not** written down in `0221`'s folder. Treat the
+**misroute** as evidence and the **motive** as a hypothesis.
+→ [`0221`](../../done/0221-repair-0194s-false-0190-clause-does-not-exist-premise/worklog.md)
+
+### 2. What this adds to §A.2's Plan-cell rewrite
+
+⭐ **The rewritten Plan cell must say plainly that a row whose Build role is the coder plans exactly as
+today** — spawn `@fkit-coder`, run `/fkit-plan-task`, nothing changes. ADR-044 §Decision 2 reads *"The
+Plan row's role is the Build role"*, and on the overwhelming majority of rows the Build role **is** the
+coder; `0221` shows the cell being read as though the rule moved Plan to the brief's `## Owner`, which it
+never did. The by-hand limb (*"by hand where that role does not own `/fkit-plan-task`"*) is the
+**exception**, and the cell should read that way — default first, exception second — rather than leading
+with the exception. This is a **wording constraint on §A.2**, not new scope.
+
+### 3. Anchors re-measured 2026-09-16
+
+⚠️ Supersedes the 2026-08-28 table above for these rows; **the table above is left byte-identical**. The
+**quoted fragment is the anchor** (`conventions/durable-citation-anchors.md`); line numbers are
+secondary and were re-measured at this date, against the working tree.
+
+| File | Fragment | Line, 2026-08-28 | Line, 2026-09-16 |
+|---|---|---|---|
+| `claude/skills/fkit-sprint-ship-loop/SKILL.md` | *"coder to plan/build/verify"* | `:31` | `:31` (unmoved) |
+| same | **Plan** row of the step table | `:122` | `:130` |
+| same | **Build** row of the step table | `:123` | `:131` |
+| same | **Process review** row (`0223`'s reasoned-cell precedent) | `:126` | `:134` |
+| same | *"Per-run skip memory."* (step 1) | `:103` | `:111` |
+| same | `## Stop conditions — the driver's exit table (§5.4)` | `:317` | `:325` |
+| `claude/agents/fkit-architect.md` | *"don't run a half-blind version of it"* | `:65` | `:65` — **unchanged, and still carries no sprint-loop carve-out**, so §B is still unshipped |
+
+⚠️ **Re-measure again at implementation time.** Four of seven moved in 19 days.
+
+### 4. Sequencing caution — `0387`
+
+[`0387-decide-whether-the-orchestrated-plan-gate-gets-a-structural-wall`](../0387-decide-whether-the-orchestrated-plan-gate-gets-a-structural-wall/brief.md)
+may reopen **the same Plan row**. The Backlog board already records this in its own words —
+*"conflict flagged, NOT a dependency"* — in `0387`'s row, noting that `0387` option A *"re-opens that
+ADR-038/ADR-044 boundary"*. ⛔ **No new dependency is created here, and the `## Notes` *"Blocks: nothing"*
+line above stands.** The consequence is ordering only: shipping both without sequencing rewrites one cell
+twice under two rules. The board also records, on merit, that `0387` *"belongs directly below `0345`"*.
+**Sequencing is the producer's sprint-planning call, not this brief's.**
+
+### 5. Standing interim rule until `0345` ships
+
+⭐ **Owner ruling 2026-09-15, verbatim *"Follow ADR-044 §D2 (Rec)"*.** Until this task ships:
+
+- On an **architect- or producer-built** row, the driver follows **ADR-044 §D2** — the Plan step is the
+  **Build role's**, by hand where that role does not own `/fkit-plan-task` — **not** the loop's current
+  step-table cell. The accepted ADR wins over the lagging table.
+- On a **coder-built** row nothing changes: coder plans, coder builds, as today.
+- ⛔ The driver **still carries a named Route ruling** (ADR-037 §3) on every architect Build spawn,
+  because `claude/agents/fkit-architect.md`'s half-blind rule is unchanged (§3 above). §B is precisely
+  what retires that per-run requirement.
+- ⚠️ This is a **run-time interim rule, not a change to the scope above.** `0345` still ships §A and §B
+  as written; the interim rule is what the driver does in the meantime.
+
+### 6. Next-sprint candidate
+
+⭐ **Flagged as a candidate for the next sprint's planning** (owner ruling ***"Flag for next sprint
+(Rec)"***, 2026-09-15). ⛔ **A note only.** `## Status` stays `🔲 Backlog`, `## Priority` stays
+`Unscheduled`, the Backlog board is unranked by design (ADR-035), and this task is **on no sprint board**.
+Pulling it, ranking it, and sequencing it against `0387` are the producer's sprint-planning acts, taken
+with the owner present.

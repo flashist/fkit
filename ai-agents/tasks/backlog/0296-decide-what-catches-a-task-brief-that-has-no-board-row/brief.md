@@ -81,6 +81,11 @@ sanctioned repair path for a half-landed close — ADR, then the reconcile mode"
 **This task owns the MISSING ROW. `0134` owns the STATUS/FOLDER DISAGREEMENT.** They meet on one task
 folder and nowhere else.
 
+> ⚠️ **DATED NOTE 2026-09-15 — the `0134` ownership claim above is SUPERSEDED; the paragraph is left
+> byte-identical.** `0134` is closed; its ADR-048 (`accepted`, owner sign-off 2026-09-14) hands the
+> reconcile-mode implementation to **`0135`**. See the dated note under the matching `## Notes` bullet
+> for the detail and one caveat (neither ADR-048 nor `0135`'s brief names `0014`).
+
 ### ⚠️ Separate slips, or one under-enforced step? — that is the question, not the premise
 
 The producer that ran the original sweep **explicitly declined to call these one pattern**, and that
@@ -293,6 +298,14 @@ the figures in `## Context`.**
   other's blocker — `0014` can gain a row without its status being resolved, and vice versa.
   ⚠️ **`0004` carries no such second anomaly** — its folder (`cancelled/`) and its `## Status`
   (`⛔ Cancelled (2026-07-14)`) agree, so `0134` does **not** touch it. Its only defect is the missing row.
+  - ⚠️ **DATED NOTE 2026-09-15 — the ownership line above is SUPERSEDED; the bullet is left
+    byte-identical.** `0134` is closed. It produced
+    [ADR-048](../../../knowledge-base/decisions/adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker.md)
+    (status `accepted`, owner sign-off 2026-09-14), which decides the reconcile mode and **hands its
+    implementation to `0135`** (still `🔲 Backlog`). So the status/folder-disagreement repair path now
+    sits with **`0135`**, not `0134`. ⚠️ **Neither ADR-048 nor `0135`'s brief names `0014`** (grepped
+    2026-09-15, 0 hits each) — whether `0135`'s mode is what repairs `0014` is recorded nowhere.
+    ⛔ This task still does not repair `0014`'s status or folder.
 - **⛔ Scope excludes repairing `0014` and `0004`.** Whether the missing rows are backfilled — and onto
   which board, given both tasks are closed and `sprint-2.md` is archived — is a **consequence** of this
   decision, not an input to it. A repair before the decision pre-empts the *"nothing changes"* candidate

@@ -5,6 +5,12 @@
 
 **Supersedes**: [[decisions/adr-001-package-json-stays-metadata-only]]
 
+> ⚠️ **Dated resync 2026-09-16 (sync `b4a1a52`→`81f1429`) — the source ADR gained dated correction notes
+> on 2026-09-15 (task `0393`).** **Four ADR-001 line pointers no longer land**, plus the separate pointer
+> on the *"mild trap"* quotation. Each carrying sentence is **left byte-identical**, and the source
+> records where every quoted passage lives in ADR-001 today, by heading and quoted text. ⛔ **No decision
+> here is reopened — only the coordinates aged**, and the quotations themselves still resolve.
+
 ## Context
 [[decisions/adr-001-package-json-stays-metadata-only]] decided `package.json` stays **metadata-only** — "no `bin`, no `scripts`, no `dependencies`" — and, as a consequence, instructed: **"stop bumping/publishing `package.json`'s `version`."** Its stated reason for keeping the file at all was that *"keeping the npm listing has discoverability value."*
 

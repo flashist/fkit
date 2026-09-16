@@ -11,6 +11,21 @@
 > *(ADR-012 §2 was in turn superseded by [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the lock is now structural on the consult path too.)*
 > The core decision — role-locked sessions — stands.
 
+> ⚠️ **Dated resync 2026-09-16 (sync `b4a1a52`→`81f1429`) — the source ADR gained a FIFTH dated append
+> on 2026-09-15 (task `0393`).** ⛔ **No decision here is reopened**; only coordinates and one earlier
+> judgement moved.
+>
+> - **Four ADR-008 line pointers no longer land** — the `Supersedes` cite and three in §Context. The
+>   section they name, §"Role access — three explicit paths", **still exists**, and the verbatim phrase
+>   one of them quotes still exists too; both sit further down that file than the numbers say.
+>   ⭐ **An accepted ADR is append-corrected by third parties, so it grows under a citation like any
+>   living document** — and because each cite is paired with a heading or a quoted phrase, the drift is
+>   **recoverable**.
+> - ⛔ **A judgement was SUPERSEDED, by owner ruling.** An earlier note in the source had held that these
+>   ADR-008 pointers *"earn no correction note"*. That judgement is **set aside** — they now carry one.
+>   The superseded note is left byte-identical; its other bullets are unaffected and were **not
+>   re-verified** by `0393`.
+
 > ⚠️ **Decision 3 is REVERSED — do not follow it.** *"`fkit-lead` (the team room) is a router, not a doer… no Write or Edit tools, deliberately"* was reversed on 2026-07-22 by
 > [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]]: lead is now an **orchestrating conductor** that spawns and drives typed peers. **Decisions 1, 2, 4 and 5 are unaffected.** *(The "no Write or Edit tools" half had already gone stale earlier, via [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]].)*
 >

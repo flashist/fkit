@@ -61,3 +61,4 @@ as the named future exit.
 - [[tasks/implement-adr-041s-dashboard-half]]
 - [[tasks/retire-the-sprint-glob-in-fkit-status-skill]]
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board whose exclusion the ADR strengthens
+- *Added 2026-09-16 (sync `b4a1a52`→`81f1429`):* [[decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint]] — the decision this lineage ends in: a sprint gains an **explicit status** carried by a line-3 banner, and *current* becomes a stated fact rather than a heuristic

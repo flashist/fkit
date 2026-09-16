@@ -5,8 +5,25 @@
 
 **Supersedes**: [[decisions/adr-008-claude-code-native-port-alongside-omnigent]] (dual-runtime)
 
+> ⚠️ **Dated resync 2026-09-16 (sync `b4a1a52`→`81f1429`) — this page repeated a misquote for two
+> months, and the caveat is now on it.** The source ADR gained a dated note on 2026-09-15 (task `0393`)
+> recording that **three of its line pointers into ADR-008 and `architecture.md` no longer land**, and
+> that ⛔ **the words this page quoted as ADR-008's are a PARAPHRASE, not its wording.** The sentence
+> below is left byte-identical, with the caveat attached. ⛔ **No decision here is reopened** — only the
+> coordinates and the quotation status aged.
+>
+> ⚠️ **Scope limit, carried from the source:** only pointers into ADR-008 and `architecture.md` were
+> assessed. The source-file pointers were **not**, and at least the `claude/fkit-claude-init.sh` ones now
+> land on unrelated lines. **Do not read "three" as saying every other pointer still lands.**
+
 ## Context
 ADR-008 made fkit **dual-runtime**: Omnigent bundles under `omnigent/` plus a Claude Code native port under `claude/`, both on the same `ai-agents/` file contracts. It kept Omnigent as a peer — *"no flavor is deleted until the native port proves itself."*
+
+> ⛔ **That quotation is a paraphrase, not ADR-008's wording** *(corrected 2026-09-16; source note
+> 2026-09-15, `0393`)*. What ADR-008 actually says, under §"Options considered", is:
+> *"**Port alongside Omnigent (chosen)** — keeps the working Omnigent path as fallback while the native
+> port proves itself"*. ⭐ **The meaning carried is right; the quotation marks were not earned.** The
+> sentence above is left unchanged as the record of what this page said.
 
 **The port proved itself, and the cost came due:**
 

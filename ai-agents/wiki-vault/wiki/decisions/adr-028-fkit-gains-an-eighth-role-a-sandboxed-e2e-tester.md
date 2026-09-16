@@ -4,6 +4,26 @@
 **Status**: accepted
 
 > ⚠️ **Decided, not built.** As of 2026-07-19 `claude/agents/` holds **seven** files. This ADR authorizes an eighth seat; no agent file, skill dir, `skills-for-role.sh` entry, hook coverage or launcher wiring exists yet, and Decision 7 sequences all of it behind an unfinished CI gate. **Do not read this page as "fkit has eight roles."**
+>
+> ✅ **Re-confirmed 2026-09-16 (sync `b4a1a52`→`81f1429`): still decided, still not built.**
+
+> ⚠️ **Dated resync 2026-09-16 (sync `b4a1a52`→`81f1429`) — the source ADR gained one dated correction on
+> 2026-09-15 (task `0393`)**, inline in its **Required follow-ups** item: **the two `architecture.md` line
+> pointers in that item no longer land.** The item is left byte-identical. ⛔ **The decision is untouched
+> and the `Status` stays `accepted`.**
+>
+> ⛔ **This one matters more than a stale coordinate, because the follow-up list is STILL PENDING** — the
+> eighth role is not built, so a reader acting on it is **still sent to those dead lines.** Where each
+> passage lives today:
+> - **First pointer** — `architecture.md`'s opening summary sentence. On 2026-07-19 it read *"seven roles,
+>   no orchestrator"*; today it reads *"One runtime, **seven built roles** (an eighth, a sandboxed e2e
+>   tester, is authorized in … but **not yet built**)"* — ⭐ **its count claim has since been refreshed.**
+> - **Second pointer** — the heading *"4.1 The seven roles"*, which still exists further down the file and
+>   now carries the callout *"**An eighth role is decided but not built.**"*
+>
+> ⚠️ **Scope:** only the `architecture.md` pointers were assessed. The item's other pointers (the git-agent
+> report's table, `CLAUDE.md`, `AGENTS.md`, `PROJECT.md`, `README.md`, `claude/README.md`, the init script
+> and the vault pages) were **not** — this note says nothing about whether those still land.
 
 ## Context
 fkit has **two roles that READ code and zero that RUN it — every review is static.** The reviewer admits the hole in its own output vocabulary: `claude/skills/fkit-review/SKILL.md:113` emits **`(validation-gated)`**, meaning *"I read this and it looks right, but somebody has to actually run it."* And `claude/agents/fkit-coder.md:112-113` makes *"did you test it?"* a pure **self-report** — the same *agent-greens-its-own-board* failure the project guards against elsewhere.

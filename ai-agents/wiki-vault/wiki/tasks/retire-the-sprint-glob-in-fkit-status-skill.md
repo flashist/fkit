@@ -47,3 +47,4 @@ guess."** written into the prose.
 - [[tasks/remove-output-variants-from-fkit-status]] — the one-skill-one-output convention ADR-041 §5 explicitly does not reopen
 - [[systems/fkit]]
 - [[tasks/decide-whether-the-active-sprint-glob-widens]] — `0261`, the decision this implements
+- *Added 2026-09-16 (sync `b4a1a52`→`81f1429`):* [[decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint]] — ⚠️ **it re-opens this skill's argument contract**: *"the active sprint"* (singular) becomes plural, and `/fkit-status` with no sprint named reports **every** `In progress` board

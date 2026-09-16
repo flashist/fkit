@@ -112,3 +112,26 @@ this is genuinely optional and belongs low: nothing is broken today, the refusal
   [`durable-citation-anchors.md`](../../../knowledge-base/conventions/durable-citation-anchors.md)).
   **Source-file line coordinates are used where load-bearing** — row 1 rules them correct, and
   `0176`'s owner ruling **G3** keeps them legal.
+- ⭐ **Scope addition — 2026-09-15, owner ruling "Don't build; route to 0371 (Rec)"** (task
+  [`0393`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md)'s
+  OD3, given live via `AskUserQuestion` in an `fkit lead` session; relayed to a spawned producer, which
+  appended this note). Recorded in `0393`'s
+  [`worklog.md`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/worklog.md)
+  §6 *"OD3 (Q4) and OD5 (Q5)"*.
+  **This row's costing now also covers the inbound `architecture.md` + colon + line-number citation
+  form in living documents.** Facts carried from `0393`:
+  - ⛔ **Staleness cannot be checked mechanically.** The convention says so under *"Where this is
+    enforced"*: *"The meaning of a line number cannot be enforced, ever."* `0393` resolved 94 inbound
+    `architecture.md` coordinates and 57 were mentions — lexically identical to uses, told apart only by
+    reading.
+  - ⭐ **A syntactic ban on the form in living documents is feasible and cheap** — the same shape as the
+    existing guard's ban on a coordination-document path + colon + line. Durable replacement: heading +
+    quoted fragment (used for all of `0393`'s inbound repairs). Exemptions would mirror the existing
+    guard (closed folders, fences, blockquotes) plus dated reports and ADRs.
+  - **Measured, 2026-09-15:** 54 match rows in 20 files before `0393`'s sweep; **43 remain** after
+    (the rest are frozen records, mentions, or reported as unresolvable). ⚠️ Dated figures — re-measure.
+  - **Nothing else owns this form:** `0394` owns only the `ADR-NNN` + line class; `0368` owns the
+    `test/` census and the ownerless source-file repairs.
+  - ⛔ This widens **what is costed**, not what ships: still a report, no guard change, and it does not
+    reopen G3 (source-file coordinates stay legal — `architecture.md` is a living knowledge-base
+    document, not a source file).

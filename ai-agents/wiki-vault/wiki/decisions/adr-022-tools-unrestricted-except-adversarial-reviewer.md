@@ -3,6 +3,15 @@
 **Date**: 2026-07-18
 **Status**: accepted
 
+> ⚠️ **Dated resync 2026-09-16 (sync `b4a1a52`→`81f1429`) — the source ADR gained dated corrections on
+> 2026-09-15 (task `0393`)**, below §Context paragraph 1 and below Decision 1's lead `Agent(...)`
+> sub-bullet. **Its `architecture.md` line pointers no longer land.** ⛔ **No decision here is reopened.**
+>
+> ⭐ **Its "Docs to refresh" list is a dated worklist, and the refresh has LANDED.** The list is left
+> byte-identical; its two `architecture.md` line pointers are dead, though its `§4.1` and `§5.3` section
+> references **still resolve**. ⭐ Where each passage lives today is recorded **once** in the source, not
+> restated at the worklist — deliberately, so there is one place to keep true rather than two.
+
 ## Context
 Every fkit agent carried an explicit `tools:` allowlist — ADR-008's "structural role authority", which `architecture.md` called *"the strongest boundary in the system."* An audit (2026-07-17/18) reframed that posture with three facts:
 1. **Useful capability tools (`WebSearch`, `WebFetch`, `LSP`, `NotebookEdit`, …) were excluded by accident, not decision** — never in any commit, zero recorded rationale; collateral of the moment an agent gets *any* `tools:` line (which flips "inherit all" to "only these").

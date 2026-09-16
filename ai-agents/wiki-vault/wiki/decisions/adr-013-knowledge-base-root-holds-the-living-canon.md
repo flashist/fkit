@@ -3,6 +3,18 @@
 **Date**: 2026-07-13
 **Status**: accepted (amended 2026-07-13, before first action)
 
+> ⚠️ **Dated resync 2026-09-16 (sync `b4a1a52`→`81f1429`) — the source ADR gained a dated correction on
+> 2026-09-15 (task `0393`).** Its *"Inbound links must be repaired"* bullet is a **dated worklist whose
+> work has LANDED**, and **three of its five line pointers no longer land**. The bullet is left
+> byte-identical. ⛔ **No decision is reopened; the `Status` line stays as written.**
+>
+> ⭐ **The worklist is finished:** every passage it names now points into `reports/` — by a `../reports/`
+> link in ADR-009 and ADR-010, and by the repo-root path in ADR-007. Verdicts: ADR-007's two pointers
+> **drifted**; ADR-009's two **still land** (⛔ not to be "corrected"); ADR-010's **drifted**, and it keeps
+> moving as ADR-010 gains dated notes above it.
+>
+> ⚠️ **Why ⚠️ and not ⛔:** a drifted pointer inside a finished to-do.
+
 ## Context
 `ai-agents/knowledge-base/` grew organically. Its root held `PROJECT.md`, `architecture.md`, three subfolders — and **eight loose files of at least four different kinds**: two standing conventions, an audit, two verifications, an executed plan, and two evaluations.
 

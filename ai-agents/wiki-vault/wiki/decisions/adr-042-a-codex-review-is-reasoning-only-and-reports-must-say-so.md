@@ -11,6 +11,17 @@ against the architect's recommendation, knowingly and provisionally**
 >
 > ⭐ **Recorded because the SUBSTANCE is unchanged and a reader should not go looking for a decision that moved.** The reasoning-only finding stands exactly as decided: `--sandbox read-only` blocks all filesystem writes, `mkdtemp` is a write, so the Codex reviewer **cannot run the suite, build a fixture, or execute a mutation** — and never could. ⛔ **This ADR carries NO dated correction blocks**; the change was a citation repair, which is why it needs a note here rather than one there.
 
+> ⛔ **The "NO dated correction blocks" clause above is now SPENT — superseded 2026-09-16** (sync
+> `b4a1a52`→`81f1429`). The line above is left byte-identical as the record of what was true on
+> 2026-09-05. **The source ADR gained a dated correction on 2026-09-15 (task `0393`)**, appended to its
+> §"Correction note — 2026-08-11: the site count is five under `claude/`": **the four `architecture.md`
+> line pointers in that note's §"Three further sites" subsection no longer land.**
+>
+> ⭐ **Note the shape — a correction inside a correction note.** The 2026-08-11 correction re-counted the
+> call sites (five under `claude/`, three more outside it); the 2026-09-15 correction says the coordinates
+> of the *three further sites* have since aged. ⛔ **Neither touches D1 or D2.** The reasoning-only
+> guarantee and the `workspace-write` ruling both stand, and the `Status` stays `accepted`.
+
 ## Context
 
 fkit's thesis rests on a genuinely model-diverse second opinion:

@@ -35,3 +35,4 @@ The rewrite: the loop no longer invokes the mover; its terminal act is spawning 
 - [[systems/role-locked-sessions]] — Role-Locked Sessions & the Skill Lockdown
 - [[tasks/implement-spawned-invocation-for-task-movers]] — task 64, which built the self-close this task unwinds
 - [[tasks/sprint-2-remove-omnigent]] — the sprint whose rows 63/64 record the grant this task helps reverse
+- *Added 2026-09-16 (sync `b4a1a52`→`81f1429`):* [[decisions/adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker]] — the task-loop's **two** carve-out sites are amended the same way: fallback only, after the reconcile spawn refuses or fails. ⛔ **Order is load-bearing** — the loop writes its `🚧 Blocked — hand-off incomplete` marker only on the fallback path
