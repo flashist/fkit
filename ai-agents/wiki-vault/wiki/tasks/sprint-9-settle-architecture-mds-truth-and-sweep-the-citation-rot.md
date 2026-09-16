@@ -173,3 +173,6 @@ sprint.**
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]]
 - [[systems/testing-and-verification]]
 - [[systems/knowledge-base-structure]]
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/correct-the-false-ci-has-never-run-claims-in-architecture-md]] — task `0312`, the half-done predecessor whose declined scope extension left the §9.1 occurrence-B gap this board's `P1` finally closed
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[systems/backlog-convergence-and-the-k-measurement]] — the convergence measurement filed three days before this board opened
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`, closing a one-way link):* [[systems/fkit]] — the team page, which now also carries a count defect in **this board's own subject file** that no row on it was scoped to reach

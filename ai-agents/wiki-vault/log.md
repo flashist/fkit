@@ -4587,3 +4587,109 @@ Only `ai-agents/wiki-vault/` was written: **16 pages created, 51 updated**, `ind
 **Lint after the pass** (whole vault): **0 broken wiki-links**, **0 pages missing from `index.md`**, **0 one-way links out of the 16 new pages** — 13 were found and closed during the pass.
 
 Task 0380: partial — not ready to close
+
+## 2026-09-16 — ingest (sync) — THIRD PASS of the `b4a1a52` delta, and the watermark ADVANCES
+
+- **Sync window: `b4a1a52` → HEAD (`a351cb6`), 11 commits.** ⭐ **The watermark is ADVANCED to `a351cb6` — the first time in this three-pass sequence.** Grounds in § *Why the watermark moves*.
+- ⚠️ **The invoking session's measured state was correct when taken and is STALE BY ONE COMMIT; corrected here.** It reported HEAD `c59f4d7` with **68 dirty paths, all under the vault**. ⛔ Re-measured first-hand: **HEAD is `a351cb6`** and `git status --porcelain` is **EMPTY**. The owner committed the second pass's vault output as `a351cb6`, which touches **only `ai-agents/wiki-vault/`** — verified, zero paths outside it. ⭐ **So the 11th commit adds no source to the delta, and the source window is identical to the second pass's.**
+- **Window chosen: the watermark, not a date and not `force`** — the tree is clean, so a git window covers everything and no working-tree sweep was needed or performed.
+- **Changed source files detected: 147** under `ai-agents/` excluding the vault — unchanged from pass 2.
+- **Pages created: 2. Pages updated: 17** (`index.md` included). ⛔ **Zero files written outside `ai-agents/wiki-vault/`** (`git status --porcelain` verified).
+
+### ⭐ The pass's biggest find was a source NO earlier pass had listed at all
+
+`ai-agents/knowledge-base/reports/2026-09-13-does-the-backlog-converge-measuring-k.md` — **380 lines, entirely absent from the vault**, and ⛔ **neither of the two earlier passes named it in their deferred lists**; both wrote only *"two `reports/` files"* without reading either. → **created** [[wiki/systems/backlog-convergence-and-the-k-measurement]].
+
+⭐ **The report routed the decision to this role by name.** Its closing section reads: *"It is **not** filed to the wiki. Whether `ai-agents/wiki-vault/` should carry this is `fkit-wiki`'s call, not a producer's (ADR-005)."* ⭐ **A spawned producer reaching the vault boundary and stopping at it** — the same shape as `0393`'s `E6` and `0356`'s report-don't-repair fence.
+
+⭐ **It is the FIRST `reports/` file ever ingested as a page in its own right.** Measured: no existing page carries a `reports/` path as its `**Source**`; every earlier report reached the vault *through* its originating task page. ⚠️ **This one had no task to hang from.** ⛔ **It does NOT discharge `0380`**, and the report says so itself.
+
+### ⭐⭐ `architecture.md` CONTRADICTS ITSELF ON THE SKILL COUNT — found by reading the exact surface pass 2 deferred
+
+| Site | Says | Verdict |
+|---|---|---|
+| §1 *"What fkit is"* — *"`claude/skills/fkit-*/SKILL.md`, **26 dirs**"* | 26 | ⛔ **STALE AND FALSE** |
+| §3 *"Repository structure"* tree comment — *"**26** `/fkit-*` skills"* | 26 | ⛔ **STALE AND FALSE** |
+| §4.2 heading — *"The **28** skills"* | 28 | ✅ **CORRECT** |
+
+✅ **Ground truth re-measured: `ls -d claude/skills/fkit-*/ | wc -l` = 28.** ⛔ **Neither stale site carries a measurement date**, so the `0301` dated-claim convention does not excuse them.
+
+⚠️ **It survived a whole board that made `architecture.md` its subject, because it was outside every row's scope** — `0392` was §9.1/§9.5, `0393` was citations-not-counts, `0251`'s inventory row was §9.1's suite list. ⛔ **Nobody has swept §1–§7's counts and no open row covers them.** Recorded on [[wiki/systems/fkit]]; ⛔ **reported, not repaired — the vault does not write `knowledge-base/`.**
+
+### ✅ `0376`'s dangling-citation trap — RESOLVED by measurement, and it resolved WELL
+
+⛔ The previous passes left this unexamined. `0376` warned that rewriting §9.1's occurrence B would leave §1's *"it was not the dash divergence §9.1 predicted"* citing a prediction that no longer existed. ⭐ **Measured on disk: `0392` Group B took the FIRST of the two shapes `0376` offered** — the dash prediction survives in §9.1 **as recorded history** (*"When CI was approved, the risk recorded was…"*), so **§1's reference still lands**, ⛔ **with all four falsified clauses still gone** and the narrow A-sentence exception **not needed and not used**.
+
+⚠️ **Also measured: §1 and §9.1 carry DIFFERENT CI figures** — §1 *33 runs / 29 green*, dated 2026-09-04; §9.1 *43 runs / 39 green*, dated 2026-09-14. ⛔ **Neither is false and neither is a defect** — both carry their date and the *"counts on a date"* caveat, which is the convention working. ⚠️ **But the two sections cross-reference each other**, so a reader meets two *"most recent run"* dates ten days apart. ⛔ **Recorded as an observation, NOT as something to "fix"** — flattening them would re-create the undated-single-number failure the whole chain exists to undo.
+
+### The nine deferred briefs — READ FIRSTHAND, and the deferral's premise was WRONG
+
+⛔ **Pass 2 deferred these as *"no page"*. All nine were read in full this run, and the finding is that *"no dedicated page"* ≠ *"not ingested"*.** Measured per ID across the whole `wiki/` tree:
+
+| Briefs | Where they already live |
+|---|---|
+| `0251`, `0366`, `0376` (cancelled) | [[wiki/tasks/architecture-md-prose-repair-9-1-inventory-occurrence-b-and-9-5]] — Groups A/B/C, with the three-layer instruction table |
+| `0286`, `0323` (cancelled) | [[wiki/tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]] — Groups D/E |
+| `0281`, `0312` (closed) | [[wiki/tasks/sweep-b-the-single-site-correction-notes]] rows, plus a dated block on the ADR-003 page |
+| `0285`, `0289` (closed) | [[wiki/tasks/the-2026-08-13-vault-resync-chain]] — named rows in its six-row table |
+
+⭐ **Broader measurement: of the 25 closed/cancelled briefs in the whole delta, 18 have a dedicated page and the other 7 are exactly these** — and every one of the 25 is covered somewhere in `wiki/`. ⛔ **A fourth pass must not re-chase them.**
+
+⭐ **ONE of the nine earned a page anyway, on its content and not its status** — `0312` → **created** [[wiki/tasks/correct-the-false-ci-has-never-run-claims-in-architecture-md]]. ⭐ **It records the fact the rest of the vault states without explaining:** its filing producer **extended** the owner's ruling from occurrence A to A-and-B, **disclosing the extension so it could be reversed in one edit** — ⛔ **and the owner reversed it.** ✅ **`0312`'s close is correct and was never in question**; what it left is **the visible cost of a narrowing nothing downstream inherited.** ⚠️ It also found, and was forbidden to fix, that then-open `0281` **mandated writing the same false claim into ADR-003**.
+
+### The conventions and READMEs — re-measured, and one NEW asymmetry surfaced
+
+**[[wiki/systems/knowledge-base-structure]]** updated with figures taken this run, none inherited: **live 10 / scaffold 9 / README index 10 / exceptions module 28 (18 file + 10 directory)** — against the page's previous 9 / 8 / 9 / 26. ✅ **All three must-match pages re-verified byte-identical on disk.** ⭐ The tenth convention is `sprint-status-vocabulary.md` (`0339`, ADR-047).
+
+> ⚠️ **NEW and recorded nowhere else: `0390`'s path-form sweep lands DIFFERENTLY on the two dual-home kinds.** Measured — the scaffold conventions hold **zero** bare `claude/skills|agents/…` paths; the **live** copies hold **15** across five files. ⭐ **For an *audience-adapted* page that is correct, not drift.** ⛔ **But a *must-match byte-identical* page cannot have it both ways:** `priority-is-rank-not-identity.md`'s live copy now points an fkit developer at `.claude/skills/fkit-status/dashboard.sh` — ✅ **verified to exist but to be gitignored (`.gitignore:17`) and destroyed on every launch**, with the source at `claude/skills/…`. ⛔ **Not asserted a defect and not asserted correct** — the accepted cost of byte-identity meeting a path form that means different things in each home, and ⭐ **no record anywhere says which way it should resolve.** `0390`'s page already records a *third* class it flagged for triage; **this is a fourth.**
+
+### The Backlog board — the third pass's remaining gap, now closed
+
+[[wiki/tasks/add-backlog-board-default-for-unsprinted-task-briefs]] updated for the board's **+106/−31** diff, as three distinct movements: seven Sprint 9 rows closed out; ⛔ **five rows CANCELLED in place on one owner ruling**, each carrying the verbatim *"Re-scoped, ⛔ not done and ⛔ not abandoned"* — **a cancel here does not mean the work was dropped**; and six new rows `0394`–`0399`, ⛔ **open, correctly without pages.**
+
+⭐ **Measured fresh at `a351cb6` by `throughput.mjs` — not inherited:** **open 109 · repair 24 (22.0%) · repair-excluding-source-defects 21 (19.3%)**.
+
+⭐⭐ **A THIRD consecutive week where closes exceed creations** — W36 14/20, W37 16/36, W38 8/12; **the longest such run on record**, one week more than the k-report could see. ⛔ **Its W37 figure (7/28) is not contradicted** — same week, later revision, more commits observed.
+
+⚠️ **But the repair SHARE moved the wrong way while open rows fell** — 113 → 109 open, 15.9% → 19.3% repair-excluding-source-defects. ⛔ **Not asserted to reverse the owner's *"Treat the trend as the pass"* ruling and not asserted to confirm it** — one later measurement is not a trend; recorded so nobody re-derives it.
+
+### ⭐ Why the watermark MOVES this time
+
+⛔ **The two earlier passes held it back because each had read only part of its own delta. That is no longer true, and the reason is measured rather than asserted:**
+
+- **25 closed/cancelled briefs** — 18 pages + 7 verified covered (table above). ✅ **Complete.**
+- **7 sprint files** — Sprints 8 and 9 pages (pass 2); `backlog.md` this pass; `sprint-7.md`'s only in-window change is a **single link repoint** (`backlog/0340` → `done/0340`), no claim touched; `cancelled/.gitkeep` is not prose. ✅ **Complete.**
+- **20 knowledge-base files** — ADR-047/048 and nine drift notes (pass 1); `architecture.md` §8–§11 (pass 2) and **§1–§7 (this pass)**; five conventions + README (this pass); **both `reports/` files** — one ingested here, the other's only in-window change being a **two-path repoint of `0286` from `backlog/` to `cancelled/`**. ✅ **Complete.**
+- **2 READMEs** — both diffed this pass; `ai-agents/README.md`'s ADR-047 sprint row and `tasks/README.md`'s four-movers note are recorded on the sprint-lifecycle and `systems/fkit` pages. ✅ **Complete.**
+
+⛔ **The open Backlog briefs `0394`–`0399` are excluded BY THE FILTER, not deferred** — they are not part of this delta and their absence does not hold the watermark.
+
+⚠️ **One honest limit on the advance:** ⭐ **coverage is not the same as a per-file re-verification.** Several delta files were confirmed complete by a **targeted diff** rather than a full re-read — `sprint-7.md`, the reference-integrity report, and the 18 already-paged briefs. ⛔ **That is stated so the watermark is read for what it is: a claim that this delta has been PROCESSED, not that every page resting on these files was re-proved.**
+
+### ⛔ Reported, not repaired — needs a row, and has none
+
+1. ⛔ **`architecture.md` §1 and §3 say 26 skills; the tree holds 28.** No open row covers §1–§7's counts.
+2. ⚠️ **The must-match vs audience-adapted path-form asymmetry** above — a fourth class beside the third `0390` already flagged for triage.
+3. ⚠️ **`0392`/`0393` both carry `## Owner: fkit-architect`, flagged on their own briefs as an UNSETTLED producer judgement.** ⛔ **Sprint 9 did not settle it and this pass does not either** — it is named here only because it is still open.
+
+### Scope
+
+Only `ai-agents/wiki-vault/` was written: **2 pages created, 17 updated**, `index.md`, `.wiki-watermark`, this `log.md` entry. ⛔ **Zero files outside the vault**, verified. Nothing committed, nothing staged, no task moved, no mover invoked, no board row touched, no brief edited. Append-only preserved in `log.md` — no past entry edited or deleted. ⛔ **No line-number coordinate written into any coordination document.** No secrets.
+
+**Lint after the pass (whole vault, 309 pages):** **0 broken wiki-links**, **0 pages missing from `index.md`**, **0 one-way links** — ⭐ **8 were found and closed, 4 of them pre-dating this pass** (left by the second pass's `systems/fkit` and `systems/knowledge-base-structure` blocks).
+
+Task 0380: partial — not ready to close
+
+> ⛔ **Dated correction 2026-09-16, appended in the SAME run, minutes after the entry above — that entry UNDERCOUNTS its own scope. The text above is left byte-identical.**
+>
+> The entry says *"Pages created: 2. Pages updated: 17 (`index.md` included)"* and repeats **17** in its § *Scope*. ⛔ **Both figures are wrong, measured by `git status --porcelain ai-agents/wiki-vault/` at the end of the run:**
+>
+> | | Stated | **Measured** |
+> |---|---|---|
+> | Pages created | 2 | ✅ **2** — correct |
+> | **Wiki pages updated** | 17 | ⛔ **21** |
+> | Non-page vault files written | *(folded into the 17)* | **3** — `index.md`, `log.md`, `.wiki-watermark` |
+>
+> ⭐ **The undercount is in the BACK-LINK half, not the ingest half** — the four missed pages are reciprocal-link closures, including the **four pre-existing one-way links** the entry itself reports finding and closing. ⛔ **No page went unrecorded and no claim above changes**; the lint result (**0 broken, 0 unindexed, 0 one-way**) and the scope guarantee (**zero files outside the vault**) are re-verified and stand.
+>
+> ⚠️ **Recorded as a correction rather than an edit** because `log.md` is append-only with no exceptions (owner ruling 2026-08-03, task `0211`) — ⭐ **and the rule holds even for an entry this same run wrote.**

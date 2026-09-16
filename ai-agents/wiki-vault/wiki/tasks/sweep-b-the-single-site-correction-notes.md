@@ -119,3 +119,5 @@ brief this page was ingested from.
   [[decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob]] ·
   [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] — the ADRs whose pages this sweep's
   notes changed
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/correct-the-false-ci-has-never-run-claims-in-architecture-md]] — task `0312`, a member of this sweep and now a page of its own. ⭐ **Its close is the sharpest illustration of this sweep's own shape:** the row landed its owner-ruled scope (occurrence **A**) correctly and completely, while its own disclosed-but-declined scope extension (occurrence **B**) was ⛔ **left unrepealed and undone** — retiring the only carrier for four false clauses until `0392` closed it nine days later
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[systems/backlog-convergence-and-the-k-measurement]] — ⭐ **this sweep is one third of the one-time consolidation the k-report warns must not be read as a changed steady state**

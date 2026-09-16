@@ -82,3 +82,16 @@ first two weeks on record where closes exceed creations** — 2026-W36 (14/20) a
   the counter's history horizon
 - [[decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged]] — the
   structure-spec / hash-manifest surface a `claude/` placement would have engaged
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):*
+  [[systems/backlog-convergence-and-the-k-measurement]] — ⭐ **this counter's first major use, and the
+  report that answers a question the counter alone cannot**: the owner reframed *"is the queue
+  growing?"* into *"does the queue have an END?"*, which needs the **regenerative vs latent** split the
+  instrument has no field for. ⚠️ **Two of that report's tables — the per-sprint bucketing and the `k`
+  derivation — are NOT reproducible from this script's output**; they were built over its exported
+  `readHistory` / `briefIdentity` by a throwaway script. ⭐ **And it vindicated the counter against the
+  baseline it reproduces:** W31–W34 match the retro exactly, and where **W30 disagrees (52 created vs
+  the retro's 152) the RETRO is the one with the method artifact** — it attributed the whole
+  task-folder migration to one week, while this script correctly excludes 100 same-segment renames as
+  shape changes. ⚠️ **It also names this instrument's leading-verb rule as *known wrong on at least two
+  rows*** — `0337` and `0340` score as repairs when they write a net-new record, and **both sit inside
+  that report's own 29 record-repair closes**

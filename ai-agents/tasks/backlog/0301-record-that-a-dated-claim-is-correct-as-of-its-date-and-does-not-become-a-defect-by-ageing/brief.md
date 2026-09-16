@@ -336,3 +336,50 @@ The convention page and its scaffold copy are **one shippable unit**: `dual-home
 both be written in the **same change**, and the parity test enforces it. Splitting them would create an
 un-shippable half that **fails `npm test` on its own**. The README index rows and the
 `dual-home-parity-exceptions.mjs` entry are part of the same atomic change for the same reason.
+
+### Next-sprint candidate — added 2026-09-16
+
+⭐ **Owner ruling 2026-09-16**, given live via `AskUserQuestion` in a `fkit lead` session during the
+Sprint 9 wrap-up open-questions interview — **the option label is the verbatim text:
+*"Flag 0301 for next sprint (Rec)"***. The ruling's own words:
+
+> *"Note it as a candidate when Sprint 10 is planned. Briefs keep citing an unwritten rule until then,
+> but nothing is blocked today."*
+
+⛔ **A note only.** `## Status` stays `🔲 Backlog`, `## Priority` stays `Unscheduled`, `## Sprint` stays
+`Backlog`, and this task is **on no sprint board**. Pulling it, ranking it and sequencing it are the
+producer's sprint-planning acts, taken with the owner present.
+
+#### The evidence, re-measured this turn (2026-09-16)
+
+⚠️ **Re-verified before writing, not carried over from the hand-off**
+(`conventions/evidence-before-assertion.md`). Three checks, all run against the tree at `a351cb6`:
+
+| # | Command run | Result |
+|---|---|---|
+| 1 | `ls -1 ai-agents/knowledge-base/conventions/` | **11 entries**, none of them this page. The proposed `correct-as-of-its-date.md` — and any rule-shaped variant of it — is **absent**. |
+| 2 | `grep -ril "as of its date\|true as of\|correct as of" ai-agents/knowledge-base/` | **exit 1, zero hits.** The rule's wording appears **nowhere** in the knowledge-base. |
+| 3 | Every `conventions/<name>.md` cited anywhere under `ai-agents/tasks/backlog/`, compared against the folder listing | **three cited pages do not exist:** this one, plus `disproof-carries-the-higher-bar.md` and `verify-against-the-claim.md`. |
+
+⭐ **Row 3's two extra misses are NOT this task's scope, and they are not the same failure.** Both are
+cited only by **the brief that would write them** —
+[`0138`](../0138-record-disproof-carries-the-higher-bar-convention/brief.md) and
+[`0137`](../0137-record-verify-against-the-claim-convention/brief.md) — i.e. a brief naming its own
+deliverable, which is correct. ⛔ **This page is the one cited by briefs OTHER than its own.**
+
+#### A brief caught itself citing this page today
+
+[`0400`](../0400-sweep-the-stale-count-claims-in-architecture-md-1-7/brief.md), filed 2026-09-16, carries
+the catch in its own words — *"grep for "correct as of its date" over `ai-agents/knowledge-base/`
+returns nothing"* — and names this task as *"its unbuilt home"*. ⚠️ It records the relationship
+honestly as **not a dependency**: `0400`'s two stale sites are **undated**, so the unwritten rule would
+not excuse them either way. **Nothing is blocked today** — which is exactly what the ruling above says.
+
+⚠️ **What the delay actually costs, stated plainly:** briefs go on citing the rule as settled while it
+is written down nowhere, so each agent that meets an aged claim still re-derives the boundary from
+scratch. That is the same cost `## Context` measured as **five re-derivations in one day** — unchanged,
+not worsening, and accepted by the ruling until Sprint 10 is planned.
+
+⛔ **No re-rank** ([ADR-035](../../../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)).
+⛔ **Append-only** — nothing above this section was altered. ⛔ **No commit.**
+⚠️ Written by a **spawned producer with no owner channel**, relaying a ruling the lead session captured.

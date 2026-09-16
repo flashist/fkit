@@ -93,3 +93,4 @@ gate run to discover.
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]]
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]]
 - [[systems/role-locked-sessions]]
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`, closing a one-way link):* [[systems/fkit]] — the team page recording the result: ⭐ **skill count 25 → 28, and four movers rather than two**

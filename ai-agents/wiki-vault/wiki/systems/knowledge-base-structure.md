@@ -78,6 +78,29 @@ It is **enforced in three places**: `dashboard.sh`'s `⟦FACTS⟧` id ladder (fo
 
 Its table rules five target kinds — `path:NNN` is **correct** for a source/test/skill file and for a file under review; **wrong** for a coordination document others append to (sprint plans, task briefs, an append-only log); a **task** is always its folder-name `NNNN`; a **board position** is `P<n>` and only as rank.
 
+### A tenth convention, and the counts re-measured *(2026-09-16, sync `b4a1a52`→`a351cb6`)*
+
+⭐ **`sprint-status-vocabulary.md`** — *the four valid sprint statuses, what "current sprint" means, and the one way to resolve it* — landed from [[tasks/teach-the-roles-what-current-sprint-means]] (`0339`) under ADR-047, as the deliberate sibling of the task vocabulary. **Every measurement below was taken first-hand this run; none is inherited.**
+
+| Measure | 2026-08-22 | **2026-09-16** |
+|---|---|---|
+| Live `conventions/*.md` (excluding `README.md`) | 9 | **10** |
+| Scaffold copies | 8 | **9** |
+| The one legitimate absence | `dual-home-parity.md` | **`dual-home-parity.md`** — still correct, fkit-repo-only |
+| `conventions/README.md` index rows | 9 | **10** |
+| `test/dual-home-parity-exceptions.mjs` entries | 26 | **28** (18 file + 10 directory) |
+| Must-match byte-identical pages | 3 | **3** — ✅ **all three re-verified byte-identical on disk this run** |
+
+✅ **Every convention that should be dual-homed is**, and the index row count now matches the directory. ⭐ **The exceptions module gained `.fkit-accepted-drift`** as a `live-only` row from [[tasks/add-dual-home-paritys-missing-accepted-drift-row-and-correct-its-count]] (`0389`) — *a shipped copy would pre-mute launch notices in every consuming project.*
+
+> ⚠️ **A NEW asymmetry, measured here and recorded nowhere else: the `0390` path-form sweep lands DIFFERENTLY on the two dual-home kinds, and one of them pays for it.**
+>
+> Measured 2026-09-16 — `claude/scaffold/ai-agents/knowledge-base/conventions/` holds **zero** bare `claude/skills/…` or `claude/agents/…` paths, while the **live** copies still hold **15** across five files. ⭐ **For an *audience-adapted* page that is exactly right and is not drift**: the scaffold ships `.claude/…` because that is what a consuming reader has, and the live copy keeps `claude/…` because that is what an fkit developer has. **`task-status-vocabulary.md` is this kind and legitimately differs.**
+>
+> ⛔ **But a *must-match byte-identical* page cannot have it both ways.** `priority-is-rank-not-identity.md` is that kind, so `0390` had to sweep **both** homes — and its live copy now tells an fkit developer that the rule is enforced in **`.claude/skills/fkit-status/dashboard.sh`**. ⚠️ **Verified on disk: that file exists but is gitignored (`.gitignore:17`) and is destroyed and recreated on every launch** (see §9.4 of `architecture.md` and [[systems/launch-convergence-and-init]]); the **source** is `claude/skills/fkit-status/dashboard.sh`.
+>
+> ⛔ **This is not asserted to be a defect, and it is not asserted to be correct** — it is the **accepted cost of byte-identity meeting a path form that means different things in the two homes**, and ⭐ **no record anywhere states which way it should resolve.** `0390`'s own page records a *third* class it flagged for triage and deliberately did not rewrite; **this is a fourth, and it is surfaced here rather than repaired, because the vault does not edit `knowledge-base/`.**
+
 ⚠️ **The page warns that its own one-question shortcut — *"a claim about a read revision, or a pointer for a later reader?"* — is a first cut, not the whole test, and applied alone gets one row wrong in the UNSAFE direction.** Both conditions must be read together; the second (*is the target a document a third party edits under me?*) is the one a writer skips, and it is what makes the coordination-document row categorical.
 
 ⚠️ ~~**Its task, `0171`, is still `🔄 In progress` on [[tasks/sprint-6-repair-the-record-the-board-rests-on]] (`P2`) as of 2026-08-22, although the page is on disk and committed.**~~ ✅ *Corrected 2026-08-22 (later the same day):* **`0171` has CLOSED** — `✅ Done (agent-closed — not owner-verified)`, closed by a spawned producer with no owner channel, so ⛔ **no human has verified it**. See [[tasks/write-the-durable-citation-anchors-convention-page]]. ⛔ **Nothing enforces the form** — [[tasks/repair-the-three-decay-shapes-across-the-open-backlog-briefs]] removed the day's seed and said so plainly: *"the decay can return tomorrow."* ⚠️ **That is unchanged by the close:** the guard is task `0176`, still **open**, and the page's own *Where this is enforced* section says so.
@@ -179,3 +202,5 @@ A new `## The merit statement` section, **dual-homed byte-identically**, recordi
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/teach-the-roles-what-current-sprint-means]] — task `0339`: ⭐ **a new convention page, `sprint-status-vocabulary.md`**, the sibling of the task one
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]] — task `0393`: the repo-wide `ADR-NNN:LINE` sweep across `knowledge-base/`, and ⭐ **the `mentioned` class that must be left byte-identical**
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — the board that made `architecture.md` say only true things
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[systems/backlog-convergence-and-the-k-measurement]] — ⭐ **a `reports/` record ingested for the first time in this vault's history.** No wiki page before it carried a `reports/` file as its `**Source**`; every earlier report reached the vault *through* its originating task page. ⚠️ **This one had no task to hang from** — it was written by a spawned producer on a direct owner ruling — and it demonstrates this page's own rule from the other side: ⛔ **a report is never promoted into `conventions/`**, but it is not thereby unfileable
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/sweep-the-repo-only-claude-path-form-out-of-installed-facing-prose]] — task `0390`, whose sweep produced the must-match vs audience-adapted asymmetry recorded above

@@ -148,3 +148,4 @@ because `0341` mechanizes this procedure and would otherwise mechanize the incom
 - [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]]
 - [[systems/role-locked-sessions]]
 - [[systems/fkit]]
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[systems/backlog-convergence-and-the-k-measurement]] — ⭐ **this board is the k-report's most informative data point**: the **only consolidation-free sprint** in the measured window, and its cut (8 closes) gives total `k` = **1.13** and `k_regen` = **0.63**. ⭐ **Its nine creations (`0383`–`0391`) contain ZERO owner-originated rows** — every one was discovered by doing the work

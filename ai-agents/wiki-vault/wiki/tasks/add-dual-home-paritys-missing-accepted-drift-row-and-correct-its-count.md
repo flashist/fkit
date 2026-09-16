@@ -96,3 +96,5 @@ a guard was explicitly NOT decided by this task.**
 - [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]]
 - [[systems/testing-and-verification]]
 - [[systems/launch-convergence-and-init]]
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[systems/backlog-convergence-and-the-k-measurement]] — ⭐ **this row is one of only THREE in the k-report's 30 with textual proof of its class.** Its brief says in its own words that the defect is *"pre-existing and independent"* of `0339`, which is what places it in the **latent** (finite-pool) class rather than the regenerative one — ⚠️ **and the report's verdict turns on exactly that distinction**
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`, closing a one-way link):* [[systems/knowledge-base-structure]] — where this row's `.fkit-accepted-drift` addition is recorded against the re-measured convention counts (**live 10 / scaffold 9 / module 28**)

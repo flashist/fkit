@@ -95,3 +95,4 @@ overruled the architect on it, and the objection is on the record.**
 - [[tasks/build-the-producer-only-sprint-movers]]
 - [[tasks/teach-the-roles-what-current-sprint-means]]
 - [[tasks/archive-sprint-5-move-the-plan-into-sprints-done]]
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`, closing a one-way link):* [[systems/fkit]] — the team page carrying the `MOVERS` invariant this ADR widened from two movers to four

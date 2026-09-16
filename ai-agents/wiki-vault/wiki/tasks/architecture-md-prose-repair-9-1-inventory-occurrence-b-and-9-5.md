@@ -110,6 +110,46 @@ answer** — a whole-section deletion would have moved every coordinate below it
 judgement** — the three originals disagreed (`0251`/`0376` were `fkit-coder`, `0366` was
 `fkit-architect`), and ⭐ **Group A is mechanical and coder-shaped**. ⛔ **Sprint 9 did not settle it.**
 
+### ✅ The trap `0376` named was AVOIDED — verified 2026-09-16 (sync `b4a1a52`→`a351cb6`)
+
+⛔ **`0376` warned that Group B's most likely self-inflicted defect was a DANGLING CITATION**, and said
+so in terms: occurrence A's corrected text **cites occurrence B's prediction** in order to distinguish
+what happened from what was predicted —
+
+> ⛔ *"A rewrite of B that simply deletes the dash prediction leaves A pointing at a prediction §9.1 no
+> longer makes. That is a fresh defect of exactly this row's own class."*
+
+**It offered two workable shapes and left the choice to the implementer's plan gate.** ⭐ **Measured on
+disk this run: Group B took the FIRST shape — keep the dash prediction in B as recorded history.**
+
+| Site | Text on disk 2026-09-16 |
+|---|---|
+| **§1** (occurrence A) | *"⛔ **it was not the dash divergence §9.1 predicted.**"* — ⭐ **unchanged, and it still resolves** |
+| **§9.1** (occurrence B) | *"When CI was approved, the risk recorded was that a first run could go red on a genuine dash divergence (`/bin/sh` is dash on `ubuntu-latest`); as of 2026-09-14, none of the four red runs was one."* |
+
+✅ **The prediction survives as history, so A's reference lands.** ⛔ **All four falsified clauses are
+still gone** — it was not preserved by restoring any of them. ⭐ **The narrow A-sentence exception
+`0376` permitted was not needed and was not used.**
+
+### ⚠️ §1 and §9.1 now carry DIFFERENT CI figures — both dated, neither a defect, and a reader will notice
+
+Measured first-hand this run:
+
+| Section | Figures | Measured |
+|---|---|---|
+| **§1** | **33 runs, 29 green, 4 red**; most recent **2026-09-04** | 2026-09-04 |
+| **§9.1** | **43 runs, 39 green, 4 red**; most recent **2026-09-14** | 2026-09-14 |
+
+⛔ **Neither is false.** Both carry their measurement date and both carry the *"counts on a date, not a
+standing guarantee"* caveat — ⭐ **exactly what `0312` and `0376` demanded, and it is working as
+designed.** ⚠️ **But the two sections cross-reference each other** (§9.1 ends *"For the release gate's
+record, see §1"*), so a reader moving between them meets two different *"most recent run"* dates ten
+days apart. ⛔ **Recorded as an observation, NOT as a defect and NOT as something to "fix"** — flattening
+them to one figure would re-create the single-undated-number failure this whole chain exists to undo.
+
+⭐ **Group B refreshed §9.1's figures and correctly did not touch §1's**, which were outside its scope
+and were accurate on their own date.
+
 ## Related
 - [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]]
 - [[tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]]
@@ -121,3 +161,5 @@ judgement** — the three originals disagreed (`0251`/`0376` were `fkit-coder`, 
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]
 - [[decisions/adr-003-ci-runs-validate-bundles]]
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]]
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/correct-the-false-ci-has-never-run-claims-in-architecture-md]] — task `0312`, the half-done predecessor this row's Group B finished, now a page of its own. ⭐ **It records the fact this page's *"`0312` closed with occurrence B undone"* line states but does not explain: the OWNER NARROWED `0312` to occurrence A**, declining a scope extension its filing producer had disclosed precisely so it could be reversed in one edit. ⛔ **`0312`'s close is correct and was never in question**
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[systems/fkit]] — ⛔ **a count defect in the SAME file that this board did not reach**: `architecture.md` §1 and §3 both say **26** skills where §4.2 says **28** and the tree holds **28**. ⚠️ **Out of every Sprint 9 row's scope** — this row was §9.1/§9.5, `0393` was citations — so **§1–§7's counts have never been swept, and no open row covers them**

@@ -93,3 +93,5 @@ one** — the identical sentence had shipped in `task-status-vocabulary.md` sinc
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]]
 - [[systems/install-and-self-update]]
 - [[systems/launch-convergence-and-init]]
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[systems/backlog-convergence-and-the-k-measurement]] — ⭐ **one of only three rows in the k-report's 30 with textual proof of its class**: its own words, *"pre-existing, repo-wide, already shipping"*, are what put it in the **latent** finite-pool class. ⭐ **The same sentence did double duty** — it is also the reviewer's stated ground for reducing Codex's `high` severity to `low`
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`, closing a one-way link):* [[systems/knowledge-base-structure]] — where this sweep's **must-match vs audience-adapted asymmetry** is measured and recorded

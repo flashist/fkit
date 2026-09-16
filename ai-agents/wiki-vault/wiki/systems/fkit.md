@@ -47,6 +47,25 @@ Each role is one file — `claude/agents/fkit-<role>.md`: YAML frontmatter (`nam
 > `test/skill-ownership-hook.test.js` — *"appears on EXACTLY ONE role"* — grew from two movers to
 > four.** See [[tasks/record-the-sprint-lifecycle-adr-047]] and
 > [[decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint]].
+
+> ⛔⛔ **SYNC 2026-09-16, THIRD PASS (`b4a1a52`→`a351cb6`) — `architecture.md` CONTRADICTS ITSELF ON THIS COUNT, IN THREE PLACES, AND ONLY ONE IS RIGHT.** The block above is left byte-identical; this **adds** a finding it did not have.
+>
+> ⭐ **The previous pass verified §4.2's count and stopped there. This pass read §1–§7 — the exact surface that pass deferred — and found the other two sites.** Measured first-hand on disk 2026-09-16:
+>
+> | Site in `ai-agents/knowledge-base/architecture.md` | What it says | Verdict |
+> |---|---|---|
+> | **§1 *"What fkit is"*** — *"skill playbooks — markdown procedures (`claude/skills/fkit-*/SKILL.md`, **26 dirs**)"* | **26** | ⛔ **STALE AND FALSE** |
+> | **§3 *"Repository structure"*** — the tree comment *"**26** `/fkit-*` skills — the role procedures"* | **26** | ⛔ **STALE AND FALSE** |
+> | **§4.2** — the section heading *"The **28** skills — where the procedures live"* | **28** | ✅ **CORRECT** |
+>
+> ✅ **Ground truth, re-measured this run: `ls -d claude/skills/fkit-*/ | wc -l` = 28.**
+>
+> ⛔ **Neither stale site carries a measurement date**, so the dated-claim convention (`0301`, *a claim correct as of its date does not become a defect by ageing*) does **not** excuse them — they are undated assertions of a wrong number, which is the defect class Sprint 9 existed to sweep.
+>
+> ⚠️ **And it was out of every Sprint 9 row's scope, which is why it survived a board that made `architecture.md` its subject.** `0392` was scoped to **§9.1 and §9.5**; `0393` to **citations, not counts**; `0251`'s inventory row covered **§9.1's test-suite list**, not §1 or §3. ⛔ **Nobody has swept §1–§7's counts, and no open row covers them.**
+>
+> ⛔ **Reported, not repaired — the vault does not write `ai-agents/knowledge-base/`** ([[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]]). ⚠️ **This needs a task and does not have one.**
+
 Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedures**; the agent prompts are the role's *character*. Every role-specific skill opens with a `⛔ Owner:` banner naming the one role allowed to run it. Only `fkit-query` carries no banner — it is universal by design. *(Count re-verified against the tree 2026-07-26: **25** skill dirs.)*
 
 > ⚠️ **SYNC 2026-08-29 — two further claims in the paragraph above are FALSE, and both are left byte-identical.** Corrected in `ai-agents/knowledge-base/architecture.md` by task `0188` (findings **R4** and **D2**), 2026-08-27, and carried here.
@@ -276,3 +295,4 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[tasks/retire-the-sprint-glob-in-fkit-status-skill]] — `0266`: `/fkit-status` stops globbing filenames and asks `dashboard.sh` for each candidate's identity — **one grammar, one implementation**
 - [[tasks/repair-the-five-live-ownership-fact-defects]] — *added 2026-08-29:* `0188`, whose findings **R4** and **D2** falsified two claims in this page's §The 25 skills paragraph; the correction is the ⚠️ SYNC block there
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]] · [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — the two boards ingested in this pass; ⭐ **the skill count is now 28 and there are four movers, not two**
+- *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/architecture-md-prose-repair-9-1-inventory-occurrence-b-and-9-5]] — task `0392`, which made `architecture.md` §9.1 and §9.5 true. ⛔ **It is also why the §1/§3 count defect above is NOT a criticism of that row**: its scope was §9.1 and §9.5, and **§1–§7 was outside every Sprint 9 row's scope**
