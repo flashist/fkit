@@ -138,3 +138,82 @@ up — the win is structural role-separation at the mover, not a laundering-proo
   `fkit-sprint-ship-loop` build and the 0110–0117 briefs already filed under ADR-032-as-first-written.
 - **Wiki:** **fkit-wiki** should ingest this ADR and resync any vault page asserting the ADR-025 "any
   role may close" rule — an architect never writes the vault.
+
+## Addendum — 2026-09-18: a one-time, two-brief owner grant to bypass the identity gate (NOT a precedent)
+
+- **Status:** accepted as a **scoped, spent grant** — it refines nothing and supersedes nothing. §Decision 5
+  and the `/fkit-task-done` second exception's *"never fire for a non-owner identity"* bullet stand
+  **exactly as written**, for every future run.
+- **Date:** 2026-09-18
+- **Deciders:** owner (Mark Dolbyrev), ruling live in a `fkit lead` session via `AskUserQuestion`; executed
+  by a spawned `fkit-producer`.
+- **Scope — the whole of it:** the briefs of **`0021`** (`build-fkit-reconnect-tooling`) and **`0041`**
+  (`fix-claude-agents-md-placeholder-text`), both already in `ai-agents/tasks/done/`. Nothing else. The
+  grant was **spent on execution** and cannot be re-used.
+
+### What was granted, and why it was needed
+
+Both briefs' `## Status` read `🔲 Backlog` while their folders sat in `done/` and their board rows in
+`sprints/done/sprint-1.md` read plain `✅ Done`. That is precisely the **contradicted-close repair** — the
+second step-1 exception in `claude/skills/fkit-task-done/SKILL.md`, built by task `0229`. Every bar of that
+exception held on the evidence (folder in `done/`; open-work `## Status`; one status row each under
+`ai-agents/sprints/`, leading cell plain `✅ Done`, Brief cell linking the task's own folder; no existing
+agent-closed marker to upgrade; no move required) — **except one**: the exception's must-never bullet
+*"never fire for a non-owner identity — a producer **spawned** to close is an agent (ADR-033 §5) and stops
+here."* No owner-present producer session was being run, so the repair was unreachable without a ruling.
+
+The owner was put the question *"the correct value is plain ✅ Done, but the only skill that writes it
+refuses a spawned agent — how do you want it fixed?"* and chose, in the option's own words, to
+*"[a]uthorise a spawned producer to bypass the gate … citing the git evidence,"* having been shown in that
+same option text that it *"is a real change to a rule that exists to stop agents forging closes"* and that
+*"it sets a precedent an agent can point at later."* This addendum is the record that option called for.
+
+### The git evidence that made plain `✅ Done` — not the marker — the correct value
+
+The **owner himself closed both tasks on 2026-07-10**: commits `f7b23f4` (`0021`) and `6daf3cc` (`0041`),
+both *"Task done"*. So this repair wrote **plain `✅ Done`, with no agent-closed marker**. That is a second
+departure from §Decision 5's literal text (*"[a] producer **spawned** … still writes `✅ Done (agent-closed
+— not owner-verified)`"*), and it is deliberate: the marker asserts *no human checked this work*, which here
+would be **false**, and stamping it would downgrade an owner-closed task —
+[ADR-048](adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker.md)'s
+must-never list bars exactly that. The value written is also the one the exception itself resolves to, and
+the one the board already carried: brief and board converge on what the owner actually did.
+
+**A correction to the record, since a superseded causal story is on file.** An earlier producer spawn
+concluded the two briefs drifted after close. They did not. At close time there was no `## Status` field at
+all — tasks were flat, slug-named files. The field arrived with the folder migration, commit `331f298`
+(2026-07-21, *"task 76: migrate every task into a folder; update all tooling (ADR-029)"*), which **created
+both briefs inside `done/` with `## Status` written as `🔲 Backlog`.** They were born wrong, not drifted.
+This changes nothing about the correct value — the owner still closed them.
+
+### ⛔ What a future agent may NOT take from this
+
+**This is not a licence for a spawned producer to bypass the identity gate.** It authorised two named
+briefs, on evidence an owner had already read, in a session where he was present to rule. Citing it to
+self-authorise is a misreading of every clause above.
+
+- A spawned producer meeting the same shape **stops at the identity bullet and reports**, exactly as the
+  skill says. The route is a `NEEDS-DECISION` to the owner, not this addendum.
+- The grant covered **one gate only**. Every other bar of the second exception was verified to hold on its
+  own merits before anything was written; had one failed, the correct act was to stop.
+- The marker rule is **unchanged**. Plain `✅ Done` was written here only because owner-close commits exist.
+  Absent such evidence, an agent-performed close still carries `(agent-closed — not owner-verified)`.
+- **`0014`** was examined in the same sweep and **deliberately left alone** — no close commit, no board row,
+  and it is a protected specimen under open task `0296`'s recorded scope exclusion. The owner ruled *"Leave
+  it, pending 0296."* It is not covered by this grant and must not be swept in later.
+
+### Related
+
+- [ADR-048](adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker.md)
+  — its **reconcile mode is not built** (task `0135` is still in the backlog), and on its merits it would
+  have refused all three briefs anyway: its detection clause requires the landed value to carry the
+  agent-closed marker, and the landed value here is plain `✅ Done`. This addendum records a manual repair,
+  not an exercise of that mode.
+- [ADR-021](adr-021-askuserquestion-is-session-only-absent-in-consults.md) — why a spawned producer has no
+  owner channel, which is the whole reason a ruling had to be relayed rather than asked.
+- `claude/skills/fkit-task-done/SKILL.md` §*"Steps — do these in order"* → step 1's **second exception** —
+  the procedure followed in full, minus the one bullet named above. **Not edited by this grant.**
+- Task folders repaired: `ai-agents/tasks/done/0021-build-fkit-reconnect-tooling/brief.md`,
+  `ai-agents/tasks/done/0041-fix-claude-agents-md-placeholder-text/brief.md`.
+- **Wiki:** **fkit-wiki** should ingest this addendum if it resyncs pages asserting the spawned-producer
+  marker rule — a producer never writes the vault.

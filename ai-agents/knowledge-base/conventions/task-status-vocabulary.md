@@ -13,7 +13,7 @@
 |---|---|---|---|
 | **Backlog** | `🔲 Backlog` | Scoped and filed, not picked up. The default on creation. | Producer |
 | **In progress** | `🔄 In progress` | A session owns it and work has started. | Anyone — freely |
-| **Blocked** | `🚧 Blocked — <reason>` | Started, cannot proceed. **A reason is mandatory.** | Anyone — freely |
+| **Blocked** | `🚧 Blocked — <reason>` | Cannot proceed — **started or not**. **A reason is mandatory.** | Anyone — freely |
 | **Done** | `✅ Done` | Reviewed, verified, complete — **closed by the owner**. | Owner, via `/fkit-task-done` |
 | **Done (agent-closed)** | `✅ Done (agent-closed — not owner-verified)` | Closed by an agent. Complete **on the agent's own judgment**; no human checked it. | A **spawned producer**, via `/fkit-task-done` |
 | **Cancelled** | `⛔ Cancelled (YYYY-MM-DD) — <reason>` | Dropped, will not be done. **A reason is mandatory.** | Owner, via `/fkit-task-cancelled` |
@@ -90,6 +90,17 @@ a defect to file — see ADR-025's honesty clause, which ADR-033 §Consequences 
   set it; if you put it down, unset it.
 - **`Blocked` and `Cancelled` require a reason, inline, in the status itself.** A blocker with no
   stated cause cannot be acted on by anyone but the person who wrote it.
+- **⭐ The `Blocked` test is *"can the work proceed?"*, NOT *"has it started?"*** *(widened 2026-09-18
+  by owner ruling; the cell previously read "Started, cannot proceed", which left a task held **before**
+  pickup with no honest value.)* A task nobody may pick up yet is `🚧 Blocked` — as `0383` is, held
+  because conflicting work may delete the thing it exists to fix. ⚠️ **But a decision gate INSIDE the
+  task is not a blocker.** If a session could pick the task up today and its *first act* would be to
+  settle that gate, the work can proceed and the row stays `🔲 Backlog` — the case recorded on
+  [`0329`](../../sprints/backlog.md)'s row, verbatim: *"it is BLOCKED ON A DECISION, not on code, a
+  gate INSIDE the task deliberately not declared as a dependency and ⛔ not a reason to set
+  `🚧 Blocked` on this row before it is picked up"*. **The two are not in conflict and neither is
+  wrong:** ask whether **some session could start this today**. No → `Blocked`. Yes, and it would begin
+  by resolving something → not `Blocked`.
 - **The brief and the sprint plan must agree.** Both carry the status; both get updated together. The
   mover skills already do this — do the same by hand.
 - **Report reality, not the template.** If a dashboard shows a distinction this vocabulary can't

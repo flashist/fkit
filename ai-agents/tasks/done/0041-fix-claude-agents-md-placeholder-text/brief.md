@@ -10,7 +10,7 @@ Sprint 1
 3
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Owner
 fkit-coder

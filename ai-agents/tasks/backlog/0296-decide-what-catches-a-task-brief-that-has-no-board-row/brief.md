@@ -320,3 +320,134 @@ the figures in `## Context`.**
   **⛔ no commit.**
 - **Board and priority:** Backlog board, Priority cell `—`, `## Priority: Unscheduled`. **Unranked** —
   the backlog is unranked by design, and a spawned producer with no owner channel ranks nothing.
+
+> ## ⭐ DATED NOTE 2026-09-18 — THE DECISION IS RULED: a test-suite check, keeping the two specimens. ⛔ This task is NOT closed. Every prior byte left identical.
+>
+> ### What was ruled, and in what form
+>
+> ⛔ **THE OWNER SELECTED A PRE-WRITTEN OPTION. HE TYPED NO FREE TEXT.** What follows is the
+> **selected option text** — written by this producer and the architect and chosen by him via
+> `AskUserQuestion` in a live `fkit lead` session on **2026-09-18**. ⛔ **It must never be quoted as
+> the owner's own words**, and a later reader must not turn it into one. This distinction was raised
+> by `fkit-architect` earlier the same day and is honoured here deliberately.
+>
+> **Selected option text, verbatim:**
+>
+> > *"A test-suite check, keeping the two specimens — ~10 lines in the existing node --test suite,
+> > with a named dated allowlist of exactly 0014 and 0004 recording why they stay unrepaired. No ADR,
+> > no contract change, nothing for dashboard.sh to learn. Catches at CI time rather than filing time
+> > — acceptable given zero recurrence in 108 filings, and that latency is the whole price. Closes
+> > 0296 on the finding 'two failure modes, the live one has stopped.'"*
+>
+> ### Which candidate won, and which lost
+>
+> - ⭐ **Candidate 2 — the `node --test` contract-suite assertion — WINS.**
+> - ⛔ **Candidate 1 (a `dashboard.sh` check) is REJECTED**, and with it the contract widening it
+>   required. `dashboard.sh` learns nothing. **No ADR is written for this decision.**
+> - ⛔ **Candidate 3 (a filing-time producer step) is REJECTED.**
+> - ⛔ **Candidate 4 ("nothing changes") is REJECTED** — but only partly: the two specimens are
+>   **kept unrepaired**, which is the "nothing changes" half, while the *recurrence* is guarded.
+> - ⭐ **The `0295` vs `0014`/`0004` split is JUDGED, not assumed: TWO failure modes, and the live one
+>   has stopped.** `0295` was a fresh filing that skipped an append; `0014`/`0004` are old unsprinted
+>   tasks from a convention era that has passed. **That finding is the ruling's own stated basis.**
+> - ⚠️ **The accepted cost, stated in the selected text itself:** the check fires at **CI time, not
+>   filing time**, so a brief can still be invisible until someone runs the suite. **"That latency is
+>   the whole price."**
+>
+> ### The measurement that decided it — re-derived on disk 2026-09-18, not carried forward
+>
+> | Measured | 2026-08-14 (this brief's original sweep) | 2026-09-18 (today) |
+> |---|---|---|
+> | Task folders across `backlog/`+`done/`+`cancelled/` | **297** | **405** |
+> | Tight-form findings (table row's final `Brief` cell) | **2** — `0014`, `0004` | **2** — `0014`, `0004` |
+> | Loose-form findings (id appears anywhere on a board) | **0** | **0** |
+>
+> - ⭐ **108 new task folders in 35 days, and NOT ONE new specimen.** That is the zero-recurrence
+>   figure the selected option text names.
+> - ⭐ **Both figures were re-run today** with the two commands in `## Verification steps` step 1,
+>   unmodified: tight → `total=405 no-row=2`; loose → `total=405 no-row=0`.
+> - ⚠️ **The specimen set is UNCHANGED at 405 folders** — still exactly `0014` and `0004`, still the
+>   same two. Nothing was repaired, and nothing new appeared.
+>
+> ### ⚠️⚠️ THE TRAP, NOW PERMANENT — the loose check is SILENCED FOREVER, and this brief did it
+>
+> ⛔ **`grep`ing the boards for `0014` or `0004` returns hits today, and every one of them is prose.**
+> This brief's own Backlog-board row cites both task folders by href, and `0301`'s row cites `0014`
+> too. **So the loose form now reports a perfectly clean board — `no-row=0` — while both tasks still
+> have no row, and it will keep doing so for as long as those rows exist.**
+>
+> ⭐ **This brief predicted exactly this outcome and named it**: *"A check that a brief can silence by
+> mentioning a task is not a check."* (§"Verification steps", Trap 3). **The prediction has now come
+> true permanently**, which is why the winning candidate's implementation is **not** free to use the
+> loose form. ⛔ **Whatever is built must match on a status-led table row whose `Brief` cell links the
+> task folder — never on the id appearing somewhere in a board file.**
+>
+> ⭐ **Two independently derived rules agree on the answer**, which is the strongest evidence the
+> implementation has: this brief's rule (**the row's final `Brief` cell links the folder**) and
+> `fkit-external-expert`'s rule (**first cell starts with a status glyph, last cell links a task
+> folder**). **Both return exactly `0014` and `0004` at 405 folders.**
+>
+> ### ⚠️ THE WHICH-BOARD QUESTION IS DEFERRED — deferred, NOT dropped
+>
+> The owner was asked, in the same act, **which board would take `0014`'s and `0004`'s rows if they
+> were ever backfilled** — both tasks are closed and `sprint-2.md` is archived. ⛔ **He deferred it.**
+>
+> **Selected option text, verbatim** (⛔ again: selected, not typed):
+>
+> > *"Decide it when they're backfilled — 0014 and 0004 are both closed tasks, and sprint-2.md is
+> > archived — so if their rows are ever written, which board takes them? 0296 names this as a
+> > consequence of the decision, not an input. Leaving it until someone actually backfills it is
+> > legitimate and costs nothing now."*
+>
+> ⭐ **This is a live deferral with a named trigger — "when they're backfilled."** ⛔ It is not a
+> decision that backfilling will never happen, and it is not an answer. **This bullet is the record
+> of the deferral**; if nobody reads it, the deferral is lost. That risk is flagged, not solved.
+>
+> ### ⛔⛔ THIS TASK IS NOT CLOSED, AND THIS NOTE DOES NOT CLOSE IT
+>
+> - ⛔ **This row stays `🔲 Backlog`.** The decision exists; **the deliverable does not.** Nothing in
+>   `test/` checks for a row-less brief as of 2026-09-18.
+> - ⭐ **The implementation is filed as
+>   [`0406`](../0406-build-the-no-board-row-check-in-the-test-suite-with-a-dated-two-task-allowlist/brief.md)**
+>   — a separate brief, owner `fkit-coder`, because this task is a **decision** owned by
+>   `fkit-architect` and the check is **code**. Two owners, two verifications, two shippable units.
+> - ⭐ **This task's close is gated on `0406` landing green**, which satisfies this brief's own
+>   `## Verification steps` step 4 (*"If a mechanism lands, it must be run and its output pasted into
+>   the close"*).
+> - ✅ **A DISCREPANCY, NOW RULED BY THE OWNER — kept on the record, not erased.**
+>   - ⚠️ **The tension was real, and both readings were genuinely on the page.** The earlier selected
+>     option text ends *"Closes 0296 on the finding…"*, which reads as closing this task on the
+>     decision alone. **`fkit-lead` instructed the opposite** — do not close, the deliverable does not
+>     exist yet. A spawned producer with no owner channel took the not-close branch **provisionally**,
+>     because not-closing is the cheaper act to reverse and a close is a mover act, and returned the
+>     conflict as a NEEDS-DECISION rather than settling it between agents.
+>   - ✅ **The owner ruled (b) — stays open — on 2026-09-18**, live in an `fkit lead` session via
+>     `AskUserQuestion`. ⛔ He **selected a pre-written option and typed no free text**; the following
+>     is **selected option text, never a quotation of his own words**:
+>
+>     > *"Stay open until 0406 lands green — What's on disk now, taken provisionally. The producer's
+>     > reasoning: not-closing is the cheaper act to reverse, and 0296's own verification step 4
+>     > demands that if a mechanism lands it must be run and its output pasted into the close — which
+>     > closing now cannot satisfy. Cost: 0296 sits open while 0406 is unstarted."*
+>
+>   - ⭐ **The durable reason (b) won:** this brief's own `## Verification steps` **step 4** requires
+>     that **if a mechanism lands, it must be run and its output pasted into the close.** A
+>     close-on-decision-alone can never satisfy that, because there is no mechanism output to paste
+>     until `0406` lands green. **That is the rule a future reader should reason from**, not the
+>     cheaper-to-reverse tiebreak, which only decided the provisional branch.
+>   - ⭐ **Nothing moved.** The state already on disk — this task open at `🔲 Backlog` in
+>     `ai-agents/tasks/backlog/` — was already the ruled state, so the ruling required **no mover, no
+>     file move, and no status change.**
+>   - ⛔ **This bullet is kept deliberately.** Both readings existed; a reader who sees only the
+>     outcome will re-derive the same conflict from the same words. **The conflict is settled, not
+>     deleted.**
+> - ⛔ **`0014` and `0004` are still NOT repaired**, per this brief's `## Notes` scope exclusion and
+>   the ruling itself (*"keeping the two specimens"*). ⭐ **They are now load-bearing: they are the
+>   only live test data `0406` has.** Repairing either one would make `0406`'s test vacuous.
+> - ⛔ **The second-order lesson** (§"Record the second-order lesson") — an unverified change-surface
+>   report crossing an agent boundary — **was not scoped by this ruling and remains unscoped.**
+>
+> *Recorded 2026-09-18 by a spawned `fkit-producer` with no owner channel
+> ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+> executing the mechanics of rulings relayed by `fkit-lead` and deciding nothing beyond them. ⛔ No
+> mover was run, no commit was made, and nothing was written to `ai-agents/wiki-vault/`.*

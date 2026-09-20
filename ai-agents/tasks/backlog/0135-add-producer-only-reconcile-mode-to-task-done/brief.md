@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+🚧 Blocked — sequenced behind `0408` (ADR-050's mover command). Building this reconcile mode against prose movers means building it twice. Set 2026-09-18; see the dated note at the end of this brief for the condition that lifts it.
 
 ## Owner
 fkit-coder
@@ -91,7 +91,10 @@ this drift).
 - **Owner:** fkit-coder.
 - **Depends on:** **0134** (the ADR — hard; the must-never list is the deliverable and it is not this
   task's to invent) **and 0124** (which rewrites both movers' SKILL prose to producer-only; landing this
-  first would collide in `fkit-task-done/SKILL.md` and `fkit-task-cancelled/SKILL.md`).
+  first would collide in `fkit-task-done/SKILL.md` and `fkit-task-cancelled/SKILL.md`), **and 0408**
+  (added 2026-09-18 — ADR-050's mover command; building this mode against prose movers means building
+  it twice. ⚠️ **Conditional — this term is VOID if ADR-050 is not accepted in a form that moves mover
+  mechanics out of prose.** See the 2026-09-18 dated note at the end of this brief).
 - **Blocks:** nothing.
 - **Source:** task 0123 review findings **R1**/**R6**; recorded as an accepted residual in
   [0123's ledger](../../done/0123-route-sprint-ship-loop-close-to-producer/review.md) whose *"re-raise
@@ -144,3 +147,75 @@ this drift).
 >   widen one — a larger step than symmetry suggests. Wait for the ADR.
 >
 > ⛔ **This row stays `🔲 Backlog`.**
+>
+> ⚠️ **SUPERSEDED 2026-09-18 on the last line only — this row is now `🚧 Blocked`.** Every other byte
+> of this note is left identical. See the note immediately below.
+
+> ## 🚧 DATED NOTE 2026-09-18 — THIS TASK IS HELD, SEQUENCED BEHIND `0408`. A producer decision, not the architect's and not the lead's. Every prior byte left identical.
+>
+> ### The decision
+>
+> ⛔ **`## Status` is now `🚧 Blocked — sequenced behind `0408`.`** Set by the producer on
+> **2026-09-18**. ⭐ **`🔄 In progress` and `🚧 Blocked` are free for any session to set; only `✅ Done`
+> and `⛔ Cancelled` are mover-gated** — so this is an ordinary status change, not a close, and ⛔ **no
+> mover was run.** Both carriers were updated in the same act: this field, and the row on the
+> [Backlog board](../../../sprints/backlog.md).
+>
+> ### Why — the argument, in one line
+>
+> ⭐ **Building this reconcile mode against prose movers means building it twice.**
+>
+> On **2026-09-18** the owner ruled ADR-050
+> (`adr-050-prose-is-not-a-transaction-how-the-four-movers-are-executed`) — ⛔ **selecting a
+> pre-written option, typing no free text**, via `AskUserQuestion` in a live `fkit lead` session. He
+> chose **content option E**: an **outcome verifier first**, **then a real command the four mover
+> skills call**, with **judgement staying in the skill and only mechanics moving**; and **enforcement
+> option B-1**: the skill stays the sanctioned entry, the `PreToolUse` hook unchanged.
+>
+> **This task's entire deliverable is mechanics inside `SKILL.md` prose** — a third branch in
+> `/fkit-task-done`'s already-moved-folder handling, its possible mirror in `/fkit-task-cancelled`, and
+> the routing change in both ship-loops. ⚠️ **ADR-050 moves exactly that layer out of prose.** Land
+> this task first and the branch is written against prose, then rewritten when
+> [`0408`](../0408-build-the-deterministic-mover-command-the-four-mover-skills-call/brief.md) lands —
+> **two implementations of one decision, and the second one done under a deadline nobody chose.**
+>
+> ⭐ **`fkit-architect` raised this point and explicitly declined to decide it**, stating it is the
+> **producer's** call. It is taken here, with reasoning, rather than left to whoever picks the row up.
+>
+> ### Why HOLD and not the two alternatives
+>
+> | Option | Rejected because |
+> |---|---|
+> | **Re-scope it now** — rewrite the brief around the command | ⛔ **The scope is ADR-048's, not the producer's to change**, and `0408`'s shape is unknown until ADR-050 is signed and `0407` has run. Re-scoping against an unread ADR is the speculative brief that investigation-first exists to prevent. |
+> | **Leave it `🔲 Backlog`** | ⛔ **It reads as pullable.** `dashboard.sh` would show it ready the moment `0124` clears, and the next ship-loop could pick it up and pay the build-it-twice cost — which is exactly the outcome this note exists to prevent. ⚠️ Leaving it is the cheapest act today and the most expensive one later. |
+>
+> ### ⚠️ THE BLOCK IS CONDITIONAL, AND THE CONDITION IS NAMED
+>
+> ⛔ **`0408` is itself not authorised to start**, on two counts: **ADR-050 is mid-signature**, and
+> `0408` is hard-blocked behind
+> [`0407`](../0407-build-the-mover-outcome-verifier-which-is-also-the-acceptance-test-for-the-mover-command/brief.md).
+> ⚠️ **So this row is blocked behind a task that is blocked behind an unsigned ADR.** That chain is
+> stated plainly rather than hidden inside a one-line reason:
+>
+> **ADR-050 signed → `0407` lands → `0408` lands → THIS TASK unblocks.**
+>
+> ⭐ **The condition that DISSOLVES the block, not just satisfies it: if ADR-050 is not accepted, or is
+> accepted in a form that does not move mover mechanics out of prose, this block is VOID** and the row
+> reverts to `🔲 Backlog` with its prior dependencies (`0134` — discharged, its ADR-048 is accepted —
+> and `0124`) unchanged. ⛔ **Do not treat the block as permanent, and do not cancel this task on it.**
+>
+> ### ⛔ What this note does NOT change
+>
+> - ⛔ **No dependency line was rewritten.** `## Notes`' `- **Depends on:**` bullet is amended below to
+>   add `0408`; nothing was removed. ⚠️ `0134`'s ADR **has** since been written and accepted
+>   (ADR-048, owner sign-off 2026-09-14), so that half of the dependency is discharged — **the
+>   2026-09-13 note above still says the ADR is unwritten and is left byte-identical as the record of
+>   what was true then.**
+> - ⛔ **The `0229` file collision, the three ADR-033 carve-out sites, and the two constraints the
+>   owner accepted the mode on** (refuse when both locations agree; never upgrade the agent-closed
+>   marker) are **all unchanged and all still binding.**
+> - ⛔ **This is not a cancellation.** `0134`'s ruling that the mode **exists** stands.
+>
+> *Recorded 2026-09-18 by a spawned `fkit-producer` with no owner channel
+> ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+> ⛔ No mover was run, no commit was made, and nothing was written to `ai-agents/wiki-vault/`.*
