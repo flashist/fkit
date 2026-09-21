@@ -344,3 +344,72 @@ session the owner also ruled — **verbatim option label "Leave the slug (Recomm
 Brief-cell href and every inbound citation, and ⭐ **task identity is the `NNNN` prefix, not the
 slug**. ⛔ **Acting on that ruling means doing nothing**; it is recorded here only as the standing
 precedent for any future "the slug no longer matches the scope" impulse on this task.
+
+---
+
+## ⚠️ DATED NOTE 2026-09-20 — RE-CONFIRMED, AND `0409` MASKED THE SYMPTOM WITHOUT FIXING IT
+
+⛔ **Additive. Nothing above this line was changed.** Written by a spawned `fkit-producer` with no
+owner channel ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)),
+during `/fkit-sprint-ship-loop` on Sprint 11.
+
+### 1. The defect was re-confirmed firsthand today. This brief's figures still hold.
+
+Found incidentally by `0409`'s build worker while measuring board renders, confirmed independently by
+`0409`'s reviewer, and **re-measured from scratch here** — without reading this brief's numbers first.
+
+**Counting rule used:** on every line beginning `|`, count `|` characters **not** preceded by `\`,
+and compare against the line's own table separator width. `ai-agents/sprints/backlog.md` `## Status`
+is **4 columns = 5 unescaped pipes**; its addendum table is **3 columns = 4 pipes** and is clean.
+
+**Result on `ai-agents/sprints/backlog.md`, 2026-09-20 — identical to this brief's 2026-08-22 count:**
+
+| Row (Brief cell links…) | Row status today | Stray bare pipes |
+|---|---|---|
+| `0169-point-the-stateful-review-close-conditions-at-adr-034` | `🔲 Backlog` | 1 |
+| `0278-confirm-or-disprove-the-filename-derived-moved-href-template-in-task-brief` | `🔲 Backlog` | 1 |
+| `0318-append-a-dated-correction-note-to-0238s-closed-brief` | `✅ Done` | **2** |
+| `0319-discharge-the-vaults-partial-not-ready-to-close-flag-on-0206` | `✅ Done` | 1 |
+
+**4 defective rows holding 5 stray bare pipes** — unchanged in 29 days, and **identical in `HEAD` and
+in the working tree**. ⚠️ **The two archived-board sites were not re-measured today**; this brief's
+`1` each for `sprints/done/sprint-2.md` and `sprints/done/sprint-5.md` is carried, not re-verified.
+⭐ **All 5 strays sit inside backtick code spans**, which is exactly the intuition this brief already
+warns about under *"Prefer escaping over fencing"*.
+
+⭐ **Every stray sits inside the row's `*( … )*` annotation**, not in its title. That fact is what
+makes §2 below matter.
+
+### 2. ⛔⛔ `0409` DID NOT FIX THIS. Do not let anyone record that it did.
+
+`0409` changed the **renderer** — `claude/skills/fkit-status/dashboard.sh` now truncates each Task
+cell at the annotation opener `*(`. Because all 5 strays live **after** that opener, they **no longer
+reach the rendered output**. ⛔ **The stray characters are still in `backlog.md`, untouched.**
+Anything reading the board raw — a human in an editor, a diff viewer, a markdown preview, GitHub, a
+future tool — still sees a malformed row. **The symptom is masked; the defect is exactly where it
+was.** `dashboard.sh` records this itself, in the comment above the trim: *"the board file is
+untouched and still holds them."*
+
+### 3. ⚠️ THIS WEAKENS THIS BRIEF'S OWN VERIFICATION STEP 4 — READ BEFORE IMPLEMENTING
+
+*"Verification steps"* step 4 requires the `dashboard.sh` renders to be **byte-identical** before and
+after, as proof the repair went no further than escaping. ⛔ **Post-`0409` that check is much weaker
+than when it was written**: the renderer now discards the whole annotation region, so the render stays
+byte-identical **whether or not the annotation text was mangled** — and all 4 defective rows are
+mangled only inside that region.
+
+⭐ **The implementer must not treat a byte-identical render as proof the edit was escapes-only.** Lean
+on step 4's sibling instead — `git diff -U0 -- ai-agents/sprints/` showing that the **only** change on
+every touched line is `|` becoming `\|`. That check is unaffected by `0409` and remains the real one.
+
+### 4. Why no new task was filed for this
+
+⚠️ The finding was put to the owner on 2026-09-20 as if it were unrecorded, and he ruled it filable —
+**verbatim selected option: "File it for the producer"** (a pre-written option, not his own prose),
+whose text stated the finding was *"currently recorded nowhere but this conversation."* ⛔ **That
+premise was wrong: `0322` — this brief — has covered it since 2026-08-22 by an earlier owner ruling.**
+Filing again would have produced a duplicate of an open, owner-ruled task, so the finding was recorded
+here instead. ⭐ **The owner's intent — that the finding not evaporate — is served by this note.**
+
+⛔ **This note rules nothing new and changes no scope.** `0322` is still one task, repair + guard still
+ship together (Q2), the archived boards are still in scope (Q1), and its priority is unchanged.

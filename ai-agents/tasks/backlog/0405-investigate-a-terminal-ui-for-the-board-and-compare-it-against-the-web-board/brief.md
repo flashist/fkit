@@ -7,7 +7,7 @@
 Sprint 11
 
 ## Priority
-Unscheduled
+P4
 
 ## Status
 🔲 Backlog
@@ -238,6 +238,9 @@ argument as considered and closed; do not spend the task's time on it.
   designs is only meaningful once `0404`'s evaluation has established what the board's data shape is
   going to be. ⚠️ **That is a merit statement, not a rank** — it becomes a number when the owner ranks
   the board.
+- ⭐⭐ **SUPERSEDED 2026-09-20 — SPRINT 11 IS NOW RANKED `P1`–`P4` AND THIS TASK IS `P3`.** The bullet above is left byte-identical; where the two disagree, this one governs. Authority: an owner ruling of 2026-09-20 relayed into a spawned `fkit-producer` (no owner channel, ADR-021) — *"rank the four"*. ⭐ **Both merit statements are satisfied literally**: `P3` is directly below `0404` (`P2`) and below `0409` (`P1`).
+- ⭐⭐ **SUPERSEDED LATER ON 2026-09-20 — THIS TASK IS NOW `P4`, NOT `P3`.** The bullet above is left byte-identical; where the two disagree, this note governs. ⛔ **Authority first: the owner ruled it**, **2026-09-20**, **live via `AskUserQuestion` in an `fkit lead` session**, relayed into a spawned `fkit-producer` with no owner channel (ADR-021). ⚠️ **SELECTED OPTION TEXT — a pre-written option he chose; not his own prose.** ⛔⛔ **Not producer precedent for re-ranking.** **What moved and why:** `0404` was closed and the reader it was re-scoped to became its own task, [`0411`](../../done/0411-make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads/brief.md), which the owner ruled runs **ahead of this task** — *"0405's own brief says it belongs directly below 0404 because its web-vs-terminal comparison is only meaningful once a real board exists to compare against."* ⭐ **This task's own merit statement is therefore SATISFIED, not overridden:** `0411` is the live board its comparison needs. ⛔ **Nothing else changed here** — no status, no scope, no `Depends on`, and the prose gate on the comparison step is untouched and still binding.
+- ⛔ **`Depends on: nothing` above is UNCHANGED AND STILL CORRECT, DELIBERATELY.** The owner's option text said *"declare 0409 as a dependency of 0405"*; taken literally that **over-blocks this task** — `0409` gates the **comparison step only**, and this brief already says so at its heading *"WHAT ELSE CHANGED AROUND THIS TASK ON 2026-09-18"*. ⛔ **The prose gate on the comparison step is UNCHANGED and still binding.** ⭐ Rank alone gives the loop the required order without recording a false dependency.
 - ⛔ **All figures attributed to `aiboard-lead` were measured in aiboard's repo on 2026-09-18 and were
   NOT read by this producer.** Two repos are in play; provenance is stated rather than blurred.
 - ⛔ **No commit was made by the act that created this brief**, and nothing was written to
@@ -263,7 +266,7 @@ useful and what he found hard.
 
 ⛔ **PROVENANCE — this is a VERBATIM DUPLICATE, not an independent record.** The canonical copy, with
 the full context, lives on
-[`0404`](../0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
+[`0404`](../../done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
 under its heading *"FIRST REAL USER EVIDENCE"*, because that is where the durability argument was made.
 ⛔ **If the two ever disagree, `0404`'s copy is canonical.** It is duplicated here because the second
 half of what the owner said is **directly about a terminal UI**, and this task must not be worked
@@ -382,7 +385,7 @@ the result **could not tell the two apart.**
 fixes it, the terminal UI was solving a problem with a cheaper answer."*
 
 ⭐ **The confound-remover is
-[`0409`](../0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md)**
+[`0409`](../../done/0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md)**
 — "Make `/fkit-status` report hierarchically — counts and exceptions first, detail on request." ⛔ **The
 mirror of this note is carried in `0409`'s brief**, under its heading *"THIS TASK IS THE
 CONFOUND-REMOVER FOR `0405`"*, so neither task can be picked up without meeting it.
@@ -415,7 +418,7 @@ canonical dependency form has no way to say it**
   order: fix the reporting, then decide.**
 - ⭐ **The convergence decision IS ruled: B as the destination, A as the interim, B gated.** Recorded
   canonically on
-  [`0404`](../0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
+  [`0404`](../../done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
   under its heading *"THE CONVERGENCE DECISION IS RULED"*, and on
   [Sprint 11](../../../sprints/sprint-11.md).
   ⚠️ **What it means here:** the store this task's TUI would render **is now known to be fkit's tree

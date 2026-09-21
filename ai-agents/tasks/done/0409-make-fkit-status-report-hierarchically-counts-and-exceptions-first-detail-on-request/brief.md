@@ -7,10 +7,10 @@
 Sprint 11
 
 ## Priority
-Unscheduled
+P1
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -100,7 +100,7 @@ is the plausible one** — but it is still a hypothesis until measured.
 ### ⭐⭐ THIS TASK IS THE CONFOUND-REMOVER FOR `0405`, AND THAT RELATIONSHIP IS THE REASON IT IS ON THIS SPRINT
 
 ⛔ **Read this together with
-[`0405`](../0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board/brief.md),
+[`0405`](../../backlog/0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board/brief.md),
 which carries the mirror of this note.**
 
 `0405` designs a comparison between a terminal UI and the web board. ⚠️ **A terminal UI scored against
@@ -125,7 +125,7 @@ different owners and different verification, each shippable alone:
 | | Surface | Task | Owner |
 |---|---|---|---|
 | **This one** | **`/fkit-status`** — a shipped skill plus a deterministic shell script with a stdout contract | `0409` | `fkit-coder` |
-| **The sibling** | **Agents' free-prose replies** to the owner across all seven roles — a behavioural convention, not a script | [`0410`](../0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md) | `fkit-producer` |
+| **The sibling** | **Agents' free-prose replies** to the owner across all seven roles — a behavioural convention, not a script | [`0410`](../../backlog/0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md) | `fkit-producer` |
 
 ⛔ **They are not merged**, because a fix to a script is verifiable by running it and a fix to agent
 behaviour is not, and because `0410` touches the owner's own output-style preferences and therefore
@@ -220,7 +220,7 @@ brief or a folder, it has crossed into the freeze and must stop and escalate.**
   this lands** — see the confound section in `## Context`. That is a step-level gate the canonical
   dependency form cannot express.
 - **Sibling:**
-  [`0410`](../0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md)
+  [`0410`](../../backlog/0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md)
   — the same owner sentence, the other surface. ⛔ **Neither subsumes the other.**
 - **Owner: `fkit-coder`** — the deliverable is a shipped skill plus a shell script with a stdout
   contract, which is a source surface.
@@ -243,6 +243,9 @@ brief or a folder, it has crossed into the freeze and must stop and escalate.**
   forbids** — ranking Sprint 11 is an owner act that has not happened. **On merit this belongs above
   `0405`**, because `0405`'s comparison is confounded until this lands. ⚠️ **That is a merit statement,
   not a rank.**
+- ⭐⭐ **SUPERSEDED 2026-09-20 — SPRINT 11 IS NOW RANKED `P1`–`P4` AND THIS TASK IS `P1`.** The bullet above is left byte-identical; where the two disagree, this one governs. Authority: an owner ruling of 2026-09-20 relayed into a spawned `fkit-producer` (no owner channel, ADR-021) — *"rank the four"*. ⭐ The merit statement above is now a number, and it is satisfied. ⛔ **No `Depends on` was added** — see the next bullet.
+- ⛔ **`Depends on: nothing` above is UNCHANGED AND STILL CORRECT.** The owner's option text also said *"declare 0409 as a dependency of 0405 and 0410"*; that was **not** done, because neither relation is a hard dependency — `0405` says so in its own `## Notes`, and `0410` calls it *"a merit statement, not a dependency"*. ⭐ **Rank alone gives `/fkit-sprint-ship-loop` the required order.**
+- ⭐ **A plan for this task is ALREADY APPROVED** — `plan.md` in this folder, approved by the owner 2026-09-20 with a post-approval addendum. ⛔ **Do not write a second plan**; read that one.
 - ⛔ **Filed by a spawned `fkit-producer` with no owner channel** (ADR-021), executing the mechanics of a
   relayed owner ruling. ⛔ **No commit was made by the act that created this brief**, and nothing was
   written to `ai-agents/wiki-vault/`.

@@ -31,6 +31,18 @@
 #     to live here. It reads first lines, never whole sibling files. Nothing else. Not the code, not git.
 #   - Writes nothing. No network.
 #   - Non-zero exit + stderr on an unparseable plan; the skill then hand-builds a flagged fallback.
+#   - ⚠️ THE `⟦BOARD⟧` TASK CELL IS TITLE-ONLY (`0409`, owner-ruled 2026-09-20). It is cut at the first
+#     `*(` — the annotation opener the board writers use — and the cut is marked with ` …`. A cell with
+#     no opener passes through BYTE-IDENTICAL, and a cell the cut would damage — nothing but an
+#     annotation, a head of bare emphasis/code punctuation, or a head left with an ODD asterisk count —
+#     falls back to raw rather than rendering empty or unbalanced markdown. See `title_cell()`, whose
+#     comment records the one residual this does not cover. This CHANGED the board's bytes for 113 of
+#     116 live rows when it shipped; it did NOT change the envelope's shape, which is why the version
+#     marker stayed at `v2` (an agent's call, not an owner ruling — see the `0409` plan's Q4).
+#     ⛔ `⟦FACTS⟧` IS UNAFFECTED, and that is a property of the code rather than a promise: `$task` is
+#     read at exactly one site, the row assembly. No drift check, counter or fact emitter reads it.
+#     The filing prose is not lost — it stays in the board file and in the brief, which the row's own
+#     Filename column links.
 #   - Four further MODES sit in front of this render (ADR-041 §5, ADR-047 §2.3a, §3.0.2):
 #     `identity <plan>` prints one plan's identity, `status <plan>` prints one plan's SPRINT STATUS,
 #     `select-active <sprints-dir>` runs the whole selection rule, and
@@ -1108,6 +1120,72 @@ one_line_cell() {
       }'
 }
 
+# Trim a TASK cell to its title (`0409`). `status-report-format.md` says the Task column is a
+# *"Short title — the same wording the sprint plan uses"* and *"Keep it to one row per task, no wrapped
+# prose in cells"*. Board writers have been using the cell as a document store instead: measured on the
+# live Backlog board 2026-09-20, 113 of 116 Task cells carried a multi-sentence `*( … )*` annotation,
+# 395,533 of the render's 458,446 bytes sat inside Task cells, and the largest ONE cell was 15,375 bytes.
+# The filing prose is not deleted — it stays in the board file and in the brief, which the adjacent
+# Filename column links.
+#
+# ⚠️ A CUT POINT, NOT A BYTE COUNT — the same principle as one_line_cell's clause trim above, and for
+# the same reason. A long single-clause title survives WHOLE; a short annotation is still cut. Do not
+# "improve" this into a length cap: that was tried on the Status cell and sliced sentences in half.
+#
+# ⚠️ NO OPENER → BYTE-IDENTICAL PASSTHROUGH, and that is load-bearing, not an optimisation. The cell is
+# the board's own wording; a trim that tidied an un-annotated title would be rewriting the plan.
+#
+# ⛔ THE EMPTY GUARD IS NOT COSMETIC. A cell that is NOTHING BUT an annotation would cut to nothing, and
+# an empty Task column loses the row its only identifying text — the failure "R7: an empty Task cell
+# holds its position" exists to prevent. No live cell is in this class today; the guard is for the board
+# writer who eventually writes one.
+#
+# ⚠️ `\|` IS CONTENT. The cell arrives already re-escaped by the awk `unesc` above, and nothing here
+# unescapes it — a bare `|` in the cell would shift every later field of the emitted row.
+#
+# ⛔ AND A BARE `|` IS NOT HYPOTHETICAL — do not read the cut as a fix for it. Two live Backlog rows
+# carried a STRAY UNESCAPED pipe inside their annotation on 2026-09-20 and were rendering a 7-cell row
+# into a 6-column table (GFM silently drops the surplus cell). Cutting at the opener means those stray
+# pipes no longer reach the row, so the SYMPTOM stops — but the board file is untouched and still holds
+# them. That is `0383`'s territory, not this trim's, and the owner's Q3 ruling kept `0383` open for
+# exactly this reason: a renderer fix hides the symptom without slowing the cause.
+# ⛔ AND THE EMPTY GUARD IS NOT ENOUGH ON ITS OWN — `*(` IS MATCHED AS TWO LITERAL BYTES, and those two
+# bytes occur in ordinary markdown that is NOT an annotation opener. Measured on this function
+# (`0409` round-1 review R1): `**Title**(note)` cut to `**Title* …`, and `**(P0)** Ship the thing` cut
+# to `* …` — the whole title gone, and an ODD asterisk count left behind. The `-n` guard does not fire,
+# because a surviving `*` is not empty. A row that keeps a cell but loses its only identifying text is
+# the SAME failure R7 exists to prevent; so the head must carry real words AND balanced emphasis, or
+# the cut is refused and the raw cell ships. Latent, not live: 0 of 116 live Backlog cells and 0 of 4
+# Sprint 11 cells were in this class when it shipped. Owner-ruled 2026-09-20: harden it now.
+#
+# ⚠️ THE THREE GUARDS ARE ORDERED AND EACH OWNS ITS OWN CASE — do not merge them. The `?*` / `*)` split
+# below is DELIBERATE: the punctuation-only arm fires only on a NON-EMPTY head, so the empty case still
+# belongs to the `-n` guard above and only to it. Merge them and the `-n` line becomes dead code that
+# no test can red — `0409/opener-at-start` pins that exact line, and a guard nothing exercises is the
+# drift this repo's prove-red thesis is about.
+#
+# ⚠️ KNOWN RESIDUAL, NOT AN OVERSIGHT: an ODD BACKTICK count in a head that DOES carry words is not
+# caught — `` Document Bash `*(pattern)` extglob `` still cuts to `` Document Bash ` …``. The title
+# survives and the row stays identifiable, so this is cosmetic, not the R7 failure. The owner's ruling
+# named backticks only in the punctuation-only arm and specified odd-count balancing for ASTERISKS
+# alone; widening it to backticks would change the ruled shape. Flagged, not fixed.
+title_cell() {
+  case "$1" in
+    *'*('*) : ;;                          # an annotation opener is present — cut
+    *)      printf '%s' "$1"; return 0 ;;  # no opener → byte-identical passthrough
+  esac
+  _title_head=$(printf '%s' "${1%%'*('*}" | sed -e 's/[[:space:]][[:space:]]*$//')
+  [ -n "$_title_head" ] || { printf '%s' "$1"; return 0; }
+  case "$_title_head" in
+    *[!*\`[:space:]]*) : ;;                          # carries real words — safe to cut
+    ?*)                printf '%s' "$1"; return 0 ;;  # emphasis/code punctuation only → raw
+    *)                 : ;;                           # empty — the `-n` guard above owns this case
+  esac
+  _title_stars=$(printf '%s' "$_title_head" | tr -dc '*' | wc -c | tr -d '[:space:]')
+  [ "$(( _title_stars % 2 ))" -eq 0 ] || { printf '%s' "$1"; return 0; }
+  printf '%s …' "$_title_head"
+}
+
 
 # The numeric task id for a FACTS record. The plan's Priority cell is not always a bare number —
 # sprint-1 writes `8 (optional)` — and FACTS records the id POSITIONALLY, so an unstripped cell puts a
@@ -1516,7 +1594,15 @@ while IFS=$'\037' read -r rtype st pr task br; do
     done|cancelled|moved) [ -n "$row_drift" ] || continue ;;
   esac
 
-  BOARD_ROWS="${BOARD_ROWS}| ${st_cell} | ${pr} | ${task} | ${br_cell} | ${b_owner:-—} | ${next} |
+  # ⚠️ SEMANTICS READ `task`; ONLY THE BOARD CELL READS `task_cell` — the same split, and the same
+  # reason, as `st`/`st_cell` above. `$task` is referenced at exactly this one site in the whole script:
+  # no drift check, no counter and no fact emitter reads it, which is WHY trimming it cannot hide an
+  # exception. Pinned by "0409/facts-identical", which renders the same plan with and without
+  # annotations and requires a byte-identical `⟦FACTS⟧`. Do not move the trim upstream of the drift
+  # checks — that is the mistake the `st_cell` comment above records someone already making once.
+  task_cell=$(title_cell "$task")
+
+  BOARD_ROWS="${BOARD_ROWS}| ${st_cell} | ${pr} | ${task_cell} | ${br_cell} | ${b_owner:-—} | ${next} |
 "
 done <<EOF
 $ROWS

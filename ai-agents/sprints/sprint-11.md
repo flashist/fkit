@@ -45,7 +45,7 @@ it, and the two are kept apart deliberately.
 
 | | Shape | Who stores the tasks | Status |
 |---|---|---|---|
-| **A** | fkit's `ai-agents/` tree stays the single store; aiboard reads it through a pluggable reader and renders the board. No migration, no duplication. ⭐ **Already demonstrated** — `fkit-external-expert`'s **129-line** read-only spike, preserved at [`0404`'s `assets/external-expert-spike/`](../tasks/backlog/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/assets/external-expert-spike/README.md). | fkit | ✅ **RULED AS THE INTERIM — RUN IT NOW** |
+| **A** | fkit's `ai-agents/` tree stays the single store; aiboard reads it through a pluggable reader and renders the board. No migration, no duplication. ⭐ **Already demonstrated** — `fkit-external-expert`'s **129-line** read-only spike, preserved at [`0404`'s `assets/external-expert-spike/`](../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/assets/external-expert-spike/README.md). | fkit | ✅ **RULED AS THE INTERIM — RUN IT NOW** |
 | **B** | **aiboard becomes the single store**; fkit reads and writes through it. Means moving all 404 tasks into aiboard's shape and teaching fkit's movers, status tooling and skills to work through aiboard. | aiboard | ⭐ **RULED AS THE DESTINATION — GATED** |
 
 ### ⭐⭐ THE OWNER'S OWN PROSE ON WHY B IS THE DESTINATION — HE TYPED THIS. IT IS NOT SELECTED OPTION TEXT.
@@ -97,7 +97,7 @@ opens, under its heading *"0. The verdict in six lines"*, with:
 ⛔ **Record it that way and no other way.** The verdict is **adopted on the path and overridden on the
 destination**. ⛔ **Its file is not edited** — a report is the record of what its author concluded, and
 editing it would make the record say something its author did not say. ⭐ **This board and
-[`0404`](../tasks/backlog/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
+[`0404`](../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
 are where the supersession lives.**
 
 ⚠️ **The verdict's own sentence under its heading *"6. Where I think each party is wrong"* is worth
@@ -135,10 +135,10 @@ below; its text is left byte-identical.
 
 | Track | What | State | Where it is tracked |
 |---|---|---|---|
-| **T1 — A now** | **The read-only reader/adapter, run for real.** Not a spike in a scratchpad — the way the owner actually reads his board. | ⭐ **STARTABLE.** It writes nothing and changes no stored shape. ⛔ It was never inside the freeze's literal words; what held it was a pending decision, and that is gone. | **This board** — re-scoped [`0404`](../tasks/backlog/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md) |
+| **T1 — A now** | **The read-only reader/adapter, run for real.** Not a spike in a scratchpad — the way the owner actually reads his board. | ⭐ **STARTABLE.** It writes nothing and changes no stored shape. ⛔ It was never inside the freeze's literal words; what held it was a pending decision, and that is gone. | **This board** — re-scoped [`0404`](../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md) |
 | **T2 — B later, gated** | Migrating 404 tasks into aiboard's shape; teaching fkit's movers, status tooling and skills to work through it. | ⛔ **FROZEN — and the reason CHANGED.** See the re-founded freeze below. ~~⚠️ **THE GATE IS UNDEFINED** — open decision **D4**.~~ ⭐⭐ **SUPERSEDED 2026-09-18 — THE GATE IS DEFINED. `D4` IS CLOSED.** Authoritative text: **[ADR-051](../knowledge-base/decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim.md) *§The gate***; this board carries a summary. ⛔ **The freeze STILL STANDS** — a defined gate is not a passed one. | **This board**, once the gate is **passed** and the owner **separately authorises the migration**. ⛔ **Two acts, not one.** ⛔ **Nothing is pre-filed.** |
 | **T3 — aiboard's own preconditions** | The Python→Node port; **T-021** (snapshot cost), **T-022** (cross-origin writes), **T-023** (zero-padded ids destroyed). | ✅ **CONTINUES** — independent of the data-model question. | ⛔ **aiboard's own board, in its own repo.** ⛔ **No fkit task is filed for any of them** — they are external preconditions, referenced, never owned. |
-| **T4 — the reporting fix** | Make status reporting hierarchical — counts and exceptions first, detail on request. | ⭐ **STARTABLE. Never frozen** — it touches no stored shape. | **This board** — [`0409`](../tasks/backlog/0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md), [`0410`](../tasks/backlog/0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md) |
+| **T4 — the reporting fix** | Make status reporting hierarchical — counts and exceptions first, detail on request. | ⭐ **STARTABLE. Never frozen** — it touches no stored shape. | **This board** — [`0409`](../tasks/done/0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md), [`0410`](../tasks/backlog/0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md) |
 
 ⚠️ **`0405` (terminal UI) sits across T4 and its own track:** its comparison step is **confounded** until
 `0409` lands. See the second ruling below.
@@ -1025,10 +1025,101 @@ this paragraph.**
 
 | Status | Priority | Task | Brief |
 |---|---|---|---|
-| 🔲 Backlog | — | **Evaluate aiboard as fkit's human-readable board, and design the fkit↔aiboard integration seam** *(pulled onto this board 2026-09-18 from the Backlog board. ⚠️ **Its brief predates the owner's redirect** — it is written around an adapter-first evaluation, and the redirect puts the port and the structure comparison ahead of the seam. The brief carries a dated annotation saying so; the original text is left byte-identical. ⛔ **Its `## Status` stays `🔲 Backlog` — nothing has started.** Owner `fkit-architect`. Gated on an input the board cannot see — although `aiboard-lead`'s reply to the six questions HAS now landed and is recorded in the brief's reserved section)* — ⭐⭐ **UPDATE 2026-09-18, LATE: RE-SCOPED BY THE CONVERGENCE RULING. The original cell text above is left BYTE-IDENTICAL.** ⛔ **This row is now TRACK 1 — "A now."** The evaluate-or-not half is **discharged**: the owner has ruled **B as the destination, A as the interim, B gated**. ⭐ **What remains on this row is the INTERIM SEAM** — take `fkit-external-expert`'s 129-line read-only spike (preserved in this task's own `assets/`) and make it the way the owner actually reads his board, rather than a scratchpad demo. ⭐ **STARTABLE — it is outside the migration freeze**: it writes nothing and changes no stored shape. ⛔ **It is NOT the migration** — nothing in it may re-key an id, move a folder, or make aiboard the store. ⚠️ **Its "Depends on: nothing" is still not the whole picture** — the reader is only as good as aiboard's Node port, so how much hardening is worth doing before the port lands is a live judgement for the plan gate. ⛔ **Its `## Status` stays `🔲 Backlog` — nothing has started.** Owner `fkit-architect`)* | [`0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam`](../tasks/backlog/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md) |
-| 🔲 Backlog | — | **Investigate a terminal UI for the board, and compare it against the web board** *(**added out of band 2026-09-18** on an owner ruling of the same day — see the addendum below. ⛔ **INVESTIGATION AND COMPARISON ONLY — not a build, not an adoption, and ⛔ the web board is NOT removed**: the owner's sequencing is **build alongside → compare in practice → then decide**, and the decision is his. ⭐ **The decisive framing: a terminal UI is a CHANGE OF PREMISE, not an implementation detail** — for this terminal-resident owner it is plausibly better, but against the never-withdrawn no-framework constraint it **narrows** the audience. ⭐ **Nobody has measured readability for either option**, so the comparison would be **the first usability evidence either project has ever had** — that is the deliverable, not the TUI. ⭐ Feasibility already measured by `aiboard-lead` 2026-09-18 (⛔ **not read by this producer**): a TUI is a **fourth door into the same store** — aiboard's `board` command already renders a kanban from its snapshot in ~28 lines — so it is that renderer plus raw-mode keys, a cursor, scrolling and a detail pane, with **no store work and no data-model work**; honest Node cost **400–700 lines** of plumbing. ⚠️⚠️ **The real cost driver is CHARACTER WIDTH and this is its THIRD appearance on 2026-09-18** — Python counts code points, JS counts UTF-16 units, terminals count display columns, and this project's content is emoji-dense; ⛔ **record it as a RECURRING risk class, not a new one**. ⛔ *"Python has `curses`"* is **moot** under the port ruling — a Python TUI would be throwaway work. ⛔⛔ **A TERMINAL UI DOES NOT SOLVE THE IDENTITY GAP** — argued by `fkit-lead`, **refuted the same day by `aiboard-lead`**: human and agents share one uid here, agents can drive a PTY, and aiboard's CLI already has the same weak env-derived author story; the refutation is recorded in the brief **so the argument is not revived**. ⛔ **Not frozen by the migration freeze** — it touches no stored shape; ⚠️ if it ever proposes to, it stops and escalates. ⚠️ Soft-sequenced behind `fkit-external-expert`, **not declared a dependency**. **Depends on nothing**; owner `fkit-architect`)* — ⭐⭐ **UPDATE 2026-09-18, LATE: THE OWNER RULED "FIX THE REPORTING FIRST, THEN DECIDE." The original cell text above is left BYTE-IDENTICAL.** ⛔ **This row is NOT cancelled, NOT deferred and NOT re-scoped**; its `## Status` stays `🔲 Backlog` and its brief's scope is unchanged. ⭐ **What changed is that its COMPARISON is now known to be CONFOUNDED** — a terminal UI scored against today's verbose reports is scored partly on the UI and partly on how much text this team emits, and the result cannot tell the two apart. ⭐ **[`0409`](../tasks/backlog/0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md) is the confound-remover**, and the relationship is recorded in both briefs. ⚠️ **NOT a hard dependency** — the premise/audience question and the character-width work do not need it — ⛔ **but the COMPARISON STEP must not be RUN before `0409` lands.** ⚠️ **The soft-sequencing behind `fkit-external-expert` is DISCHARGED: it reported.** | [`0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board`](../tasks/backlog/0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board/brief.md) |
-| 🔲 Backlog | — | **Make `/fkit-status` report hierarchically — counts and exceptions first, detail on request** *(**added out of band 2026-09-18** on the owner's second ruling of that day, *"fix the reporting first, then decide"* — see the addendum below. ⭐ **THIS IS THE CONFOUND-REMOVER FOR `0405`** and that is why it sits on this board rather than a fkit-internal one. ⛔ **MEASURE FIRST, DO NOT DESIGN FIRST** — [`status-report-format.md`](../knowledge-base/conventions/status-report-format.md) **already** prescribes *"Short by default… Detail is available on request — lead with the answer, not the evidence"*, already puts the dashboard last, already prints open rows only, and already requires a one-line roll-up. ⭐ **So the first act is scoring the actual output against that convention rule by rule**, and the finding decides the task: **(1)** the output does not obey it → a cheap conformance fix; **(2)** it obeys it and the convention is insufficient at **122 open rows** → ⛔ **the task SPLITS at the plan gate**, because the convention is a producer surface; **(3)** both are fine and the pain is in the 57 KB briefs and prose-stuffed cells the reports quote → report it and change nothing, which is `0383`'s territory. ⚠️⚠️ **THE BIGGEST RISK, named here rather than found in review: a hierarchy that hides a DRIFT finding behind "detail on request" has traded a readability defect for a CORRECTNESS one.** The convention's rule *"A row with drift on it always shows, whatever its marker says"* survives any hierarchy, and the six status values still render verbatim including `(agent-closed — not owner-verified)`. ⛔ **Not frozen** — it renders the store, it does not change it. **Depends on nothing**; ⛔ **blocks nothing as a hard dependency, but gates `0405`'s comparison STEP**; owner `fkit-coder`, splitting to `fkit-producer` under finding (2))* | [`0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request`](../tasks/backlog/0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md) |
-| 🔲 Backlog | — | **Investigate how agents report status to the owner in prose, and put a hierarchical shape to him** *(**added out of band 2026-09-18**, same addendum. ⛔ **INVESTIGATION AND PROPOSAL ONLY — it may NOT change how agents speak to the owner on its own authority.** ⭐ **The reason is ownership:** `CLAUDE.md`'s output-style block is written **outside** the fkit-managed markers and is **the owner's own text**, and the project's own rule says fkit's preferences *"lose every conflict"* against it. ⚠️⚠️ **PROVENANCE IS WEAKER HERE THAN ON `0409` AND IT IS SAID SO PLAINLY:** the ruling names `/fkit-status`, **not** agent prose. What this row rests on is the owner's **own typed prose** — *"When I ask agents in terminal about providing me the status of the sprint/tasks — it's also kind of hard to read when there are a lot of tasks and texts"* — and ⛔ **the inference that he therefore wants THIS surface changed is the producer's, not his.** ⭐ Same three-finding structure as `0409`, and the same trap: `CLAUDE.md` **already** says *"Be extremely concise to the owner"*, so this may be conformance rather than a missing rule. ⛔⛔ **The hard constraint any proposal must survive: hierarchy is a compression, and compression is how a caveat gets lost** — *"Concision is not omission"*, *"Where a shape is prescribed, produce it in full"*, and *"'Loud' is placement, not word count."* ⚠️ **A report that reads well because it stopped saying the uncomfortable part is worse than the wall of text it replaced**, and a proposal that cannot show how it avoids that is not ready to put to him. ⚠️ **Strongest objection, recorded not answered: it may be unmeasurable** — agent prose has no stdout contract and the real-sample corpus may be thin; the brief is written to let the task end honestly on *"not enough evidence"* rather than manufacture a proposal. ⭐ **Sequence AFTER `0409` on merit** — if `0409` returns finding (1) or (3), this gets much cheaper or disappears. ⛔ **Not frozen.** **Depends on nothing**, **blocks nothing**; owner `fkit-producer`)* | [`0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him`](../tasks/backlog/0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P1 | **Make `/fkit-status` report hierarchically — counts and exceptions first, detail on request** *(**added out of band 2026-09-18** on the owner's second ruling of that day, *"fix the reporting first, then decide"* — see the addendum below. ⭐ **THIS IS THE CONFOUND-REMOVER FOR `0405`** and that is why it sits on this board rather than a fkit-internal one. ⛔ **MEASURE FIRST, DO NOT DESIGN FIRST** — [`status-report-format.md`](../knowledge-base/conventions/status-report-format.md) **already** prescribes *"Short by default… Detail is available on request — lead with the answer, not the evidence"*, already puts the dashboard last, already prints open rows only, and already requires a one-line roll-up. ⭐ **So the first act is scoring the actual output against that convention rule by rule**, and the finding decides the task: **(1)** the output does not obey it → a cheap conformance fix; **(2)** it obeys it and the convention is insufficient at **122 open rows** → ⛔ **the task SPLITS at the plan gate**, because the convention is a producer surface; **(3)** both are fine and the pain is in the 57 KB briefs and prose-stuffed cells the reports quote → report it and change nothing, which is `0383`'s territory. ⚠️⚠️ **THE BIGGEST RISK, named here rather than found in review: a hierarchy that hides a DRIFT finding behind "detail on request" has traded a readability defect for a CORRECTNESS one.** The convention's rule *"A row with drift on it always shows, whatever its marker says"* survives any hierarchy, and the six status values still render verbatim including `(agent-closed — not owner-verified)`. ⛔ **Not frozen** — it renders the store, it does not change it. **Depends on nothing**; ⛔ **blocks nothing as a hard dependency, but gates `0405`'s comparison STEP**; owner `fkit-coder`, splitting to `fkit-producer` under finding (2))* — ⭐ **A plan is already approved (2026-09-20, + addendum): `plan.md` sits in the task folder. Do not write a second.** | [`0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request`](../tasks/done/0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P2 | **Evaluate aiboard as fkit's human-readable board, and design the fkit↔aiboard integration seam** *(pulled onto this board 2026-09-18 from the Backlog board. ⚠️ **Its brief predates the owner's redirect** — it is written around an adapter-first evaluation, and the redirect puts the port and the structure comparison ahead of the seam. The brief carries a dated annotation saying so; the original text is left byte-identical. ⛔ **Its `## Status` stays `🔲 Backlog` — nothing has started.** Owner `fkit-architect`. Gated on an input the board cannot see — although `aiboard-lead`'s reply to the six questions HAS now landed and is recorded in the brief's reserved section)* — ⭐⭐ **UPDATE 2026-09-18, LATE: RE-SCOPED BY THE CONVERGENCE RULING. The original cell text above is left BYTE-IDENTICAL.** ⛔ **This row is now TRACK 1 — "A now."** The evaluate-or-not half is **discharged**: the owner has ruled **B as the destination, A as the interim, B gated**. ⭐ **What remains on this row is the INTERIM SEAM** — take `fkit-external-expert`'s 129-line read-only spike (preserved in this task's own `assets/`) and make it the way the owner actually reads his board, rather than a scratchpad demo. ⭐ **STARTABLE — it is outside the migration freeze**: it writes nothing and changes no stored shape. ⛔ **It is NOT the migration** — nothing in it may re-key an id, move a folder, or make aiboard the store. ⚠️ **Its "Depends on: nothing" is still not the whole picture** — the reader is only as good as aiboard's Node port, so how much hardening is worth doing before the port lands is a live judgement for the plan gate. ⛔ **Its `## Status` stays `🔲 Backlog` — nothing has started.** Owner `fkit-architect`)* | [`0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam`](../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P3 | **Make the read-only aiboard reader the board the owner actually reads** *(**added out of band 2026-09-20** — see the addendum below. ⭐ **This is Track 1, "A now", of [ADR-051](../knowledge-base/decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim.md)** — the code half `0404` never authorised. ⛔ **NOT the migration:** no id re-keyed, no folder moved, no write path of any kind, and **outside the migration freeze** because it writes nothing and changes no stored shape. ⛔ **The spike in `0404`'s `assets/` is EVIDENCE, not a codebase** — its README heads itself *"THROWAWAY SPIKE — a demonstration, not a component"*, and deciding what of it survives is this task's first job. ⚠️ **Plan gate:** *"how much hardening is worth doing before the port lands is a live judgement"* — aiboard's Node port is **aiboard's** work and ADR-051's precondition `P1`. ⭐ **RE-RANKED `P5`→`P3` on an OWNER RULING of 2026-09-20** — it was filed at append rank `P5` and the merit position was escalated, not taken; see the re-rank addendum below. ⛔ `P3`, not `P2`: ranks are unique and `0404` holds `P2` as frozen closed history. Owner `fkit-coder`.)* | [`0411-make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads`](../tasks/done/0411-make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads/brief.md) |
+| 🔲 Backlog | P4 | **Investigate a terminal UI for the board, and compare it against the web board** *(**added out of band 2026-09-18** on an owner ruling of the same day — see the addendum below. ⛔ **INVESTIGATION AND COMPARISON ONLY — not a build, not an adoption, and ⛔ the web board is NOT removed**: the owner's sequencing is **build alongside → compare in practice → then decide**, and the decision is his. ⭐ **The decisive framing: a terminal UI is a CHANGE OF PREMISE, not an implementation detail** — for this terminal-resident owner it is plausibly better, but against the never-withdrawn no-framework constraint it **narrows** the audience. ⭐ **Nobody has measured readability for either option**, so the comparison would be **the first usability evidence either project has ever had** — that is the deliverable, not the TUI. ⭐ Feasibility already measured by `aiboard-lead` 2026-09-18 (⛔ **not read by this producer**): a TUI is a **fourth door into the same store** — aiboard's `board` command already renders a kanban from its snapshot in ~28 lines — so it is that renderer plus raw-mode keys, a cursor, scrolling and a detail pane, with **no store work and no data-model work**; honest Node cost **400–700 lines** of plumbing. ⚠️⚠️ **The real cost driver is CHARACTER WIDTH and this is its THIRD appearance on 2026-09-18** — Python counts code points, JS counts UTF-16 units, terminals count display columns, and this project's content is emoji-dense; ⛔ **record it as a RECURRING risk class, not a new one**. ⛔ *"Python has `curses`"* is **moot** under the port ruling — a Python TUI would be throwaway work. ⛔⛔ **A TERMINAL UI DOES NOT SOLVE THE IDENTITY GAP** — argued by `fkit-lead`, **refuted the same day by `aiboard-lead`**: human and agents share one uid here, agents can drive a PTY, and aiboard's CLI already has the same weak env-derived author story; the refutation is recorded in the brief **so the argument is not revived**. ⛔ **Not frozen by the migration freeze** — it touches no stored shape; ⚠️ if it ever proposes to, it stops and escalates. ⚠️ Soft-sequenced behind `fkit-external-expert`, **not declared a dependency**. **Depends on nothing**; owner `fkit-architect`)* — ⭐⭐ **UPDATE 2026-09-18, LATE: THE OWNER RULED "FIX THE REPORTING FIRST, THEN DECIDE." The original cell text above is left BYTE-IDENTICAL.** ⛔ **This row is NOT cancelled, NOT deferred and NOT re-scoped**; its `## Status` stays `🔲 Backlog` and its brief's scope is unchanged. ⭐ **What changed is that its COMPARISON is now known to be CONFOUNDED** — a terminal UI scored against today's verbose reports is scored partly on the UI and partly on how much text this team emits, and the result cannot tell the two apart. ⭐ **[`0409`](../tasks/done/0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md) is the confound-remover**, and the relationship is recorded in both briefs. ⚠️ **NOT a hard dependency** — the premise/audience question and the character-width work do not need it — ⛔ **but the COMPARISON STEP must not be RUN before `0409` lands.** ⚠️ **The soft-sequencing behind `fkit-external-expert` is DISCHARGED: it reported.** | [`0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board`](../tasks/backlog/0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board/brief.md) |
+| 🔲 Backlog | P5 | **Investigate how agents report status to the owner in prose, and put a hierarchical shape to him** *(**added out of band 2026-09-18**, same addendum. ⛔ **INVESTIGATION AND PROPOSAL ONLY — it may NOT change how agents speak to the owner on its own authority.** ⭐ **The reason is ownership:** `CLAUDE.md`'s output-style block is written **outside** the fkit-managed markers and is **the owner's own text**, and the project's own rule says fkit's preferences *"lose every conflict"* against it. ⚠️⚠️ **PROVENANCE IS WEAKER HERE THAN ON `0409` AND IT IS SAID SO PLAINLY:** the ruling names `/fkit-status`, **not** agent prose. What this row rests on is the owner's **own typed prose** — *"When I ask agents in terminal about providing me the status of the sprint/tasks — it's also kind of hard to read when there are a lot of tasks and texts"* — and ⛔ **the inference that he therefore wants THIS surface changed is the producer's, not his.** ⭐ Same three-finding structure as `0409`, and the same trap: `CLAUDE.md` **already** says *"Be extremely concise to the owner"*, so this may be conformance rather than a missing rule. ⛔⛔ **The hard constraint any proposal must survive: hierarchy is a compression, and compression is how a caveat gets lost** — *"Concision is not omission"*, *"Where a shape is prescribed, produce it in full"*, and *"'Loud' is placement, not word count."* ⚠️ **A report that reads well because it stopped saying the uncomfortable part is worse than the wall of text it replaced**, and a proposal that cannot show how it avoids that is not ready to put to him. ⚠️ **Strongest objection, recorded not answered: it may be unmeasurable** — agent prose has no stdout contract and the real-sample corpus may be thin; the brief is written to let the task end honestly on *"not enough evidence"* rather than manufacture a proposal. ⭐ **Sequence AFTER `0409` on merit** — if `0409` returns finding (1) or (3), this gets much cheaper or disappears. ⛔ **Not frozen.** **Depends on nothing**, **blocks nothing**; owner `fkit-producer`)* | [`0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him`](../tasks/backlog/0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md) |
+
+### Addendum — task `0411` added out of band (2026-09-20), and `0404` closed the same day
+
+⭐ **Authority: an owner ruling of 2026-09-20**, given live via `AskUserQuestion` in an `fkit lead`
+session and relayed into a spawned `fkit-producer` which has **no owner channel**
+([ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+⚠️ **SELECTED OPTION TEXT — an option an agent wrote and he chose. It is not his own free prose.**
+
+> *"**Close 0404, file the reader as its own task** — The evaluation happened and produced three
+> reports plus an accepted ADR — 0404's stated deliverable exists. Close it honestly against that
+> evidence, and give the interim reader a brief of its own that actually authorises writing code, with
+> the coder as owner. Cleanest: each task's brief then matches what it is."*
+
+**What was wrong.** [`0404`](../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
+carried **two carriers that disagreed about what the task was**: its `## What to build` said *"⛔ THIS
+IS EVALUATION AND INTEGRATION-DESIGN. IT IS NOT IMPLEMENTATION… A run that arrives having already
+written integration code has failed."*, while its row on this board said the evaluate half was
+discharged and what remained was the reader. Different deliverables take **different `## Owner` roles**
+under [ADR-044](../knowledge-base/decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md)
+— a report is the architect's, source is the coder's. The ruling splits them.
+
+**What changed, and nothing else did:**
+
+| Edit | Value |
+|---|---|
+| `0404`'s row and brief `## Status` | `🔲 Backlog` → **`✅ Done (agent-closed — not owner-verified)`**, via `/fkit-task-done`. ⚠️ **The owner ruled the DISPOSITION; he did not verify the DONE-NESS** — hence the marker ([ADR-033](../knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md) §5). ⛔ **`P2` is left on the closed row** — closed history is not re-ranked. |
+| `0404`'s folder | moved into `ai-agents/tasks/done/`, **its `assets/external-expert-spike/` with it**. Inbound hrefs on this board, the Backlog board, ADR-051, the external-expert verdict and three sibling briefs re-pointed. |
+| New row | **`0411`**, `🔲 Backlog`, **`P5`**, owner `fkit-coder` |
+
+⚠️ **`P5` is APPEND rank, NOT a merit ranking — flagged for owner confirmation.**
+**On merit `0411` belongs directly below `0404`** — it is the continuation of the Track-1 interim
+`0404`'s row was re-scoped to, ADR-051 ruled that interim *"RUN IT NOW"*, and `0405`'s own merit
+statement already places it *"directly below `0404`"* because its comparison is only meaningful once a
+real board exists to compare against. ⛔ **It was appended, not inserted**: a mid-board insertion is not
+the owner-ruled re-rank exception
+([ADR-035](../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)),
+and **a spawned producer has no owner channel and never re-ranks**. ⚠️ **As it stands the drive order is
+`0405` (P3) → `0410` (P4) → `0411` (P5)**; the merit order is `0411` → `0405` → `0410`. ⛔ **Only the
+owner can close that gap.**
+
+⛔ **Nothing else on this board was closed, cancelled, re-scoped or re-ranked by this act.** The
+migration freeze is untouched, the gate is untouched, and no `Depends on` was added anywhere.
+
+#### ⭐⭐ THE OWNER RULED THE RE-RANK — 2026-09-20, LATER THE SAME DAY. `0411` IS NOW `P3`.
+
+⛔ **AUTHORITY FIRST, OUTCOME SECOND.** **The owner ruled this**, on **2026-09-20**, **live via
+`AskUserQuestion` in an `fkit lead` session**, relayed into a spawned `fkit-producer` with **no owner
+channel** ([ADR-021](../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+⛔⛔ **THIS IS NOT PRODUCER PRECEDENT FOR RE-RANKING.** A producer never re-ranks on its own judgement,
+and a spawned one never re-ranks at all without a ruling like this one.
+
+⚠️ **SELECTED OPTION TEXT — a pre-written option he chose. He typed no free text, so it is NOT his own
+prose.**
+
+> *"**Re-rank 0411 to P2** — 0405 → P3, 0410 → P4 shift down. Matches merit: 0411 is ADR-051's ruled
+> interim — 'A now' — and 0405's own brief says it belongs directly below 0404 because its
+> web-vs-terminal comparison is only meaningful once a real board exists to compare against. Drive it
+> at P5 and 0405 runs against no live board, which is the confound its brief warns about. Touches two
+> open rows; no closed row moves."*
+
+⭐⭐ **THE REFUSAL THAT PRODUCED THIS RULING — recorded because the outcome must not erase it.** The
+producer that filed `0411` **declined to insert it at the merit position unasked** and **appended it at
+`P5` instead**, escalating the rank as an open question. ⛔ **That refusal was correct**: a mid-board
+insertion of a **new** row is not the owner-ruled re-rank exception
+([ADR-035](../knowledge-base/decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception.md)),
+and a spawned producer has no owner channel. ⭐ **What the ruling permits is the different act
+ADR-035 does allow — moving rows that already exist.** `0411`'s row already existed when this ran.
+
+**⚠️ THE NUMBERING IS THE PRODUCER'S, AND IT DIFFERS FROM THE OPTION TEXT'S INTEGERS. Stated plainly
+rather than quietly reconciled.** The option says *"Re-rank 0411 to P2 — 0405 → P3, 0410 → P4"*.
+⛔ **`P2` is not available: it is held by `0404`, a CLOSED row, and closed history is not re-ranked** —
+so two rows would have to share a rank, which the board's ranks cannot express. ⭐ **The merit position
+the owner ruled is *"`0411` runs next, ahead of `0405` and `0410`"*, and that is what was executed**;
+the integers land one lower because the two closed ranks are frozen in place.
+
+| Row | Before | After | Note |
+|---|---|---|---|
+| `0409` | `P1` ✅ Done | **`P1` — UNCHANGED** | ⛔ Closed. Not re-ranked. |
+| `0404` | `P2` ✅ Done | **`P2` — UNCHANGED** | ⛔ Closed. Not re-ranked. |
+| `0411` | `P5` | **`P3`** | The merit position — directly below the frozen closed run |
+| `0405` | `P3` | **`P4`** | Shifted down one |
+| `0410` | `P4` | **`P5`** | Shifted down one |
+
+⭐ **Drive order is now `0411` → `0405` → `0410`.** ⚠️ **This supersedes the line in the addendum above
+reading *"As it stands the drive order is `0405` (P3) → `0410` (P4) → `0411` (P5)"*** — that text is
+left **byte-identical** as the record of the board before the ruling.
+
+⛔ **Both carriers were moved together**: these three board rows **and** each moved brief's own
+`## Priority` field. ⛔ **Nothing else changed** — no status value, no `Depends on`, no scope, no close,
+no cancellation, and no closed row.
 
 ### Addendum — tasks `0409` and `0410` added out of band (2026-09-18, late)
 
@@ -1098,6 +1189,47 @@ forbids. **Consequence, per the Backlog board's own "How work moves on and off t
 `➡️ Moved` marker left behind on the Backlog board carries **no `— priority M` suffix**, and `0404`'s
 brief keeps `## Priority: Unscheduled`. ⭐ **Both are owed to a rank that does not exist yet** — when
 the owner ranks this board, the suffix and the brief field are added in that same act.
+
+### ⭐⭐ SUPERSEDED 2026-09-20 — THIS BOARD IS NOW RANKED `P1`–`P4`. The paragraph above is left BYTE-IDENTICAL; where the two disagree, this block governs.
+
+⭐ **Authority: an owner ruling of 2026-09-20**, given via `AskUserQuestion` in a live `fkit lead`
+session and relayed into this spawned `fkit-producer`, which has **no owner channel** (ADR-021).
+Selected option text:
+
+> *"Make the sequencing real, then run the loop — Small producer job first: declare 0409 as a
+> dependency of 0405 and 0410, and rank the four."*
+
+**The rank, and the merit it encodes:**
+
+| # | Task | Why here |
+|---|---|---|
+| `P1` | `0409` | The confound-remover. The owner's second ruling of 2026-09-18 — *"fix the reporting first, then decide"* — names this surface, and its plan is already approved. |
+| `P2` | `0404` | Ruled **"RULED AS THE INTERIM — RUN IT NOW"**; startable, outside the freeze. |
+| `P3` | `0405` | **Directly below `0404`** (its own merit statement) and **below `0409`**, whose landing un-confounds its comparison step. |
+| `P4` | `0410` | *"Sequence AFTER `0409` on merit"* (its own `## Notes`). |
+
+⭐ **All three merit statements already on record are satisfied literally — none was overridden.**
+
+⛔ **RANK ONLY. NO DEPENDENCY WAS DECLARED, AND THAT IS DELIBERATE.** The owner's option text says
+*"declare 0409 as a dependency of 0405 and 0410"*; taken literally it would record **two dependencies
+the record says are false**. `0405`'s brief states *"`## Notes` above still reads 'Depends on: nothing'
+and that remains CORRECT at task granularity"* — `0409` gates its **comparison step**, not the task.
+`0410`'s brief states *"That is a merit statement, not a dependency"*. ⭐ **Rank alone produces the
+required drive order** — `/fkit-sprint-ship-loop` orders by `## Priority` first — **without
+over-blocking `0405` or misstating `0410`.** ⚠️ **The prose gate on `0405`'s comparison step is
+unchanged and still binding**; it is not expressible in the canonical dependency form
+([`dependency-declaration-form.md`](../knowledge-base/conventions/dependency-declaration-form.md)).
+
+⚠️ **The four rows WERE REORDERED in this act** — physically, into `P1`–`P4` order — so the board reads
+top-to-bottom in rank. ⛔ **No cell text was changed by the reorder**; the only in-cell edits were the
+four Priority cells and one short clause on `0409` recording its approved `plan.md`. ⛔ **Nothing was
+closed, cancelled, re-scoped or status-changed.**
+
+⭐ **The two deferrals this paragraph's predecessor named are now DISCHARGED in this same act**, per the
+Backlog board's *"when the owner later ranks that board, add every moved row's `— priority M` suffix in
+the same act"*: `0404`'s `➡️ Moved` marker on [the Backlog board](backlog.md) now carries
+`— priority P2`, and all four briefs' `## Priority` fields now carry their real numbers.
+⚠️ **Only `0404` had a moved row** — `0405`, `0409` and `0410` were filed directly onto this board.
 
 ## Success criteria
 

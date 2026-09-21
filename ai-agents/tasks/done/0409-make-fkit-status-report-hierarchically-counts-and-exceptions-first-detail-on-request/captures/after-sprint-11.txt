@@ -1,0 +1,19 @@
+⟦fkit-dashboard v2⟧
+⟦BOARD⟧
+| Status | # | Task | Filename | Owner | Next step |
+|---|---|---|---|---|---|
+| 🔄 In progress | P1 | **Make `/fkit-status` report hierarchically — counts and exceptions first, detail on request** … | [`0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request`](../tasks/backlog/0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md) | fkit-coder | ⟨derive: nothing⟩ |
+| 🔲 Backlog | P2 | **Evaluate aiboard as fkit's human-readable board, and design the fkit↔aiboard integration seam** … | [`0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam`](../tasks/backlog/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md) | fkit-architect | ⟨derive: nothing⟩ |
+| 🔲 Backlog | P3 | **Investigate a terminal UI for the board, and compare it against the web board** … | [`0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board`](../tasks/backlog/0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board/brief.md) | fkit-architect | ⟨derive: nothing⟩ |
+| 🔲 Backlog | P4 | **Investigate how agents report status to the owner in prose, and put a hierarchical shape to him** … | [`0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him`](../tasks/backlog/0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md) | fkit-producer | ⟨derive: nothing⟩ |
+
+1 in progress · 3 backlog  —  of 4
+⟦FACTS⟧
+total 4
+count in-progress 1
+count backlog 3
+derive 0409 depends="nothing"
+derive 0404 depends="nothing"
+derive 0405 depends="nothing"
+derive 0410 depends="nothing"
+⟦END⟧

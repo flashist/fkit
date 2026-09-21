@@ -7,7 +7,7 @@
 Sprint 11
 
 ## Priority
-Unscheduled
+P5
 
 ## Status
 🔲 Backlog
@@ -42,7 +42,7 @@ with no owner channel
 > answer."*
 
 ⛔ **That names `/fkit-status`. It does not name agent prose.** `/fkit-status` is
-[`0409`](../0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md).
+[`0409`](../../done/0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md).
 
 **What this task rests on instead** — ⭐ **the owner's OWN typed prose**, which is the stronger record of
 the two and is quoted here as his words:
@@ -55,7 +55,7 @@ agent prose changed is THIS PRODUCER'S, not his** — he complained; he did not 
 surface. ⛔ **That is exactly why this task is scoped as a proposal and not as a change.**
 
 ⭐ **The canonical record of his prose lives on
-[`0404`](../0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
+[`0404`](../../done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
 under its heading *"FIRST REAL USER EVIDENCE"*.** ⛔ **The copy above is a duplicate. If the two
 disagree, `0404`'s is canonical.**
 
@@ -183,7 +183,7 @@ boards."* ⛔ **This task touches none of them.** ⚠️ **If it ever proposes t
 - **Depends on:** nothing
 - **Blocks:** nothing
 - **Sibling:**
-  [`0409`](../0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md)
+  [`0409`](../../done/0409-make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request/brief.md)
   — the same owner sentence, the other surface (`/fkit-status`, a shipped script). ⛔ **Neither subsumes
   the other**, and `0409` is the one the ruling names explicitly.
 - ⭐ **Sequence it AFTER `0409` on merit** — if `0409`'s measurement returns finding (1) or (3), the same
@@ -203,6 +203,9 @@ boards."* ⛔ **This task touches none of them.** ⚠️ **If it ever proposes t
 - ⚠️ **Priority: Sprint 11 is UNRANKED and no `P<n>` exists on it.** This brief reads
   `## Priority: Unscheduled` and its board row's Priority cell reads `—`, matching every other row.
   ⛔ **Inventing a rank is the act ADR-035 forbids.**
+- ⭐⭐ **SUPERSEDED 2026-09-20 — SPRINT 11 IS NOW RANKED `P1`–`P4` AND THIS TASK IS `P4`.** The bullet above is left byte-identical; where the two disagree, this one governs. Authority: an owner ruling of 2026-09-20 relayed into a spawned `fkit-producer` (no owner channel, ADR-021) — *"rank the four"*. ⭐ The *"sequence it AFTER `0409`"* merit statement is now a number: `0409` is `P1`, this is `P4`.
+- ⭐⭐ **SUPERSEDED LATER ON 2026-09-20 — THIS TASK IS NOW `P5`, NOT `P4`.** The bullet above is left byte-identical; where the two disagree, this note governs. ⛔ **Authority first: the owner ruled it**, **2026-09-20**, **live via `AskUserQuestion` in an `fkit lead` session**, relayed into a spawned `fkit-producer` with no owner channel (ADR-021). ⚠️ **SELECTED OPTION TEXT — a pre-written option he chose; not his own prose.** ⛔⛔ **Not producer precedent for re-ranking.** **What moved and why:** [`0411`](../../done/0411-make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads/brief.md) — the read-only aiboard reader, ADR-051's ruled interim — was ruled to run ahead of both this task and `0405`, so both shifted down one. ⭐ **This task's own merit statement is UNAFFECTED:** *"sequence it AFTER `0409`"* still holds — `0409` is `P1` and closed. ⛔ **Nothing else changed here** — no status, no scope, no `Depends on`.
+- ⛔ **`Depends on: nothing` above is UNCHANGED AND STILL CORRECT, DELIBERATELY.** The owner's option text said *"declare 0409 as a dependency of … 0410"*; this brief's own words — *"That is a merit statement, not a dependency"* — say it is not one, and recording it as one would be a false `Depends on`. ⭐ Rank alone gives the loop the required order.
 - ⛔ **Filed by a spawned `fkit-producer` with no owner channel** (ADR-021). ⛔ **No commit was made by
   the act that created this brief**, and nothing was written to `ai-agents/wiki-vault/`.
 - **Citations here are durable anchors** — heading plus quoted fragment, never `path:NNN` — per

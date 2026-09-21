@@ -80,7 +80,7 @@ spawned agents that have no owner channel (ADR-021).
 
 | | Shape | Who stores the tasks | Standing |
 |---|---|---|---|
-| **A** | fkit's `ai-agents/` tree stays the **single** store; aiboard reads it through a pluggable reader and renders the board. **No migration, no duplication.** ⭐ Demonstrated 2026-09-18 by a **129-line read-only spike** serving all **405** real tasks with a **37 ms** snapshot, preserved at [`0404`'s `assets/external-expert-spike/`](../../tasks/backlog/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/assets/external-expert-spike/README.md). | fkit | ✅ **THE INTERIM — runs now** |
+| **A** | fkit's `ai-agents/` tree stays the **single** store; aiboard reads it through a pluggable reader and renders the board. **No migration, no duplication.** ⭐ Demonstrated 2026-09-18 by a **129-line read-only spike** serving all **405** real tasks with a **37 ms** snapshot, preserved at [`0404`'s `assets/external-expert-spike/`](../../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/assets/external-expert-spike/README.md). | fkit | ✅ **THE INTERIM — runs now** |
 | **B** | **aiboard becomes the single and only store**; fkit reads **and writes** through it. Means moving every task into aiboard's shape and teaching fkit's movers, status tooling and skills to work through it. | aiboard | ⭐ **THE DESTINATION — GATED** |
 
 ### Ruling 2 — ⭐⭐ THE OWNER'S OWN PROSE. He typed this. It is NOT selected option text
@@ -986,7 +986,7 @@ that lives here**.
 - [`sprints/sprint-11.md`](../../sprints/sprint-11.md) — where the ruling was first recorded, its four
   tracks, and open decisions `D1`–`D5`. ⛔ **Its copy of the gate is a SUMMARY.** This ADR is the
   authoritative text — see *§Read first*, item 3. If they differ, the board is what gets corrected.
-- [`tasks/backlog/0404-…/brief.md`](../../tasks/backlog/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
+- [`tasks/backlog/0404-…/brief.md`](../../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
   — the re-scoped evaluation task (A's reader is what it now is), and the preserved spike under its
   `assets/external-expert-spike/`.
 - [`tasks/backlog/0405-…/brief.md`](../../tasks/backlog/0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board/brief.md)

@@ -501,10 +501,16 @@ test('R10: exact stdout — the full contract, pinned byte for byte', () => {
     plan: plan([
       '| ✅ Done | 1 | Alpha | [`a.md`](../tasks/done/a.md) |',
       '| 🔲 Backlog | 2 | Beta | [`b.md`](../tasks/backlog/b.md) |',
+      // ⚠️ 0409: the THIRD row carries a `*( … )*` annotation, so the Task-cell trim is pinned HERE, in
+      // the byte-exact test, and not only by the 0409/* behaviour tests. Before 0409 no fixture in this
+      // file contained an annotation at all — R10 stayed green through any change to the Task cell,
+      // which is the coverage gap 0409 found and this row closes.
+      '| 🔲 Backlog | 3 | **Gamma** *(filing prose that belongs in the brief, not in a table cell. Owner `fkit-coder`.)* | [`c.md`](../tasks/backlog/c.md) |',
     ]),
     briefs: {
       'done/a.md': brief({ title: 'Alpha', status: '✅ Done', priority: 1 }),
       'backlog/b.md': brief({ title: 'Beta', priority: 2 }),
+      'backlog/c.md': brief({ title: 'Gamma', priority: 3 }),
     },
   });
   const { code, out } = run(p);
@@ -515,16 +521,21 @@ test('R10: exact stdout — the full contract, pinned byte for byte', () => {
     '| Status | # | Task | Filename | Owner | Next step |',
     '|---|---|---|---|---|---|',
     // ⚠️ The ✅ row is ABSENT BY DESIGN (task 65: the board shows open work only). The roll-up below
-    // still reads `1 done · 1 backlog  —  of 2` — that mismatch between rows shown and rows counted
+    // still reads `1 done · 2 backlog  —  of 3` — that mismatch between rows shown and rows counted
     // is the contract, not a bug. Do not "restore" the done row to make them agree.
     '| 🔲 Backlog | 2 | Beta | [`b.md`](../tasks/backlog/0002-b/brief.md) | fkit-coder | ⟨derive: none recorded⟩ |',
+    // ⚠️ `**Gamma** …` — the annotation is GONE and the elision is VISIBLE. The space before the `…`
+    // is the one the board wrote before its `*(`; the trim normalises any trailing whitespace to
+    // exactly one space, so this byte sequence is the contract.
+    '| 🔲 Backlog | 3 | **Gamma** … | [`c.md`](../tasks/backlog/0003-c/brief.md) | fkit-coder | ⟨derive: none recorded⟩ |',
     '',
-    '1 done · 1 backlog  —  of 2',
+    '1 done · 2 backlog  —  of 3',
     '⟦FACTS⟧',
-    'total 2',
+    'total 3',
     'count done 1',
-    'count backlog 1',
+    'count backlog 2',
     'derive 0002 depends="none recorded"',
+    'derive 0003 depends="none recorded"',
     '⟦END⟧',
     '',
   ].join('\n'));
@@ -4004,4 +4015,207 @@ test('emitter map E4: `fkit-status` lists `ambiguous-active-sprint` under select
     ['drift ambiguous-plan-identity identity="Sprint 6" plan="plan-sprint-6.md" also="sprint-6.md"'],
     behaviourBroke('E4', `the render of an \`In progress\` twin did not emit exactly the ` +
       `\`ambiguous-plan-identity\` record: ${JSON.stringify(facts(b.out))}.`));
+});
+
+// --- 0409: the Task cell is a TITLE, not a document store -------------------------------------------
+//
+// `status-report-format.md` says the Task column is a *"Short title — the same wording the sprint plan
+// uses"* and *"Keep it to one row per task, no wrapped prose in cells"*. Measured on the live Backlog
+// board (2026-09-20, captures in the 0409 task folder): 113 of 116 Task cells carried a multi-sentence
+// `*( … )*` annotation, 395,533 of the render's 458,446 bytes sat in Task cells, and the largest single
+// cell was 15,375 bytes. `title_cell()` cuts the cell at the annotation opener.
+//
+// ⚠️ THE RULE IS A CUT POINT, NOT A BYTE COUNT — deliberately, and for the same reason `one_line_cell`'s
+// clause trim is not one (see "the clause trim is not a byte count"). A long single-clause title
+// survives whole; a short annotation is still cut. Do not "improve" this into a length cap.
+//
+// ⛔ WHY THESE TESTS EXIST AT ALL: before 0409 not one fixture in this suite contained an annotation, so
+// the Task cell's entire rendering behaviour was untested. R10 would have stayed green through any
+// change to it. That gap is what 0409's plan called "also the bad news".
+
+// Split a rendered row into cells while honouring GFM's `\|` escape — a naive `.split('|')` shifts
+// every later field on the 9 live rows that carry one, which is the exact bug `unesc` exists to prevent.
+function rowCells(row) {
+  return row.replace(/\\\|/g, '').split('|').map((c) => c.trim().replace(//g, '\\|'));
+}
+
+// A realistic annotation: the live corpus writes multi-sentence filing prose inside `*( … )*`.
+const ANNOTATION = '*(**added out of band 2026-09-18** on the owner\'s ruling. ' +
+  '⛔ **MEASURE FIRST, DO NOT DESIGN FIRST.** Owner `fkit-coder`. Depends on nothing.)*';
+
+// 0409/1 — the span goes, the title stays, and the cut is VISIBLE.
+test('0409/elided: the Task cell is cut at the annotation opener, with a visible ellipsis', () => {
+  const p = fixture({
+    plan: plan([`| 🔲 Backlog | 1 | **Alpha — a real title** ${ANNOTATION} | [\`a.md\`](../tasks/backlog/a.md) |`]),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1 }) },
+  });
+  const { out } = run(p);
+  const cells = rowCells(boardRows(out)[0]);
+  assert.equal(cells[3], '**Alpha — a real title** …', 'title kept, annotation elided, elision marked');
+  assert.doesNotMatch(cells[3], /added out of band/, 'no filing prose survives in the cell');
+  assert.equal(boardRows(out).length, 1, 'still one row per task');
+});
+
+// 0409/2 — ⚠️ THE REGRESSION GUARD. A cell with no annotation must come through BYTE FOR BYTE. Four of
+// the 116 live cells are in this class, and a trim that "tidied" them would be changing the board's
+// wording, which the convention forbids just as plainly as the prose it removes.
+test('0409/no-annotation: a Task cell with no annotation opener is byte-identical', () => {
+  const title = '**Alpha** — a long single-clause title with (parens) and *emphasis* that runs on and on';
+  const p = fixture({
+    plan: plan([`| 🔲 Backlog | 1 | ${title} | [\`a.md\`](../tasks/backlog/a.md) |`]),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1 }) },
+  });
+  const { out } = run(p);
+  assert.equal(rowCells(boardRows(out)[0])[3], title, 'no opener → nothing to cut, however long');
+  assert.doesNotMatch(rowCells(boardRows(out)[0])[3], /…/, 'and no elision marker invented');
+});
+
+// 0409/3 — ⭐ THE DRIFT-SAFETY PROOF, and the reason 0409 is allowed to touch the board at all. The
+// named biggest risk was that shortening the Task cell could hide an exception. `⟦FACTS⟧` is where every
+// exception is reported, so the same plan rendered with and without Task-cell annotations must produce
+// a BYTE-IDENTICAL `⟦FACTS⟧`. Asserted by execution, not argued.
+const FACTS_ROWS = (ann) => [
+  `| ✅ Done | 1 | Alpha${ann} | [\`a.md\`](../tasks/done/a.md) |`,
+  `| 🔲 Backlog | 2 | Beta${ann} | [\`b.md\`](../tasks/backlog/b.md) |`,
+  `| 🚧 Blocked — the owner must rule | 3 | Gamma${ann} | [\`c.md\`](../tasks/backlog/c.md) |`,
+];
+const FACTS_BRIEFS = {
+  // Plan says Done, brief still reads Backlog → `drift disagreement`, the loudest record on the board.
+  'done/a.md': brief({ title: 'Alpha', status: '🔲 Backlog', priority: 1 }),
+  'backlog/b.md': brief({ title: 'Beta', priority: 2, extra: '\n- **Depends on: task 26 and task 27.**\n' }),
+  'backlog/c.md': brief({ title: 'Gamma', status: '🚧 Blocked — the owner must rule', priority: 3 }),
+};
+const factsSection = (out) => out.split('⟦FACTS⟧')[1].split('⟦END⟧')[0];
+
+test('0409/facts-identical: annotations change the board and NOTHING in ⟦FACTS⟧', () => {
+  const plain = run(fixture({ plan: plan(FACTS_ROWS('')), briefs: FACTS_BRIEFS }));
+  const annotated = run(fixture({ plan: plan(FACTS_ROWS(` ${ANNOTATION}`)), briefs: FACTS_BRIEFS }));
+  assert.equal(plain.code, 0);
+  assert.equal(annotated.code, 0);
+  assert.ok(
+    facts(plain.out).some((f) => f.startsWith('drift disagreement 0001 ')),
+    'the fixture must carry real drift, or this proves nothing',
+  );
+  assert.equal(
+    factsSection(annotated.out),
+    factsSection(plain.out),
+    'the Task cell reaches NO fact emitter — a finding cannot be lost by trimming it',
+  );
+  assert.equal(rollup(annotated.out), rollup(plain.out), 'nor the roll-up, drift clause included');
+  assert.notEqual(
+    boardRows(annotated.out)[0],
+    boardRows(plain.out)[0],
+    'the board rows DID differ — otherwise the comparison above is vacuous',
+  );
+});
+
+// 0409/4 — an exception buried under 10 KB of prose still surfaces, unchanged, in all three places it
+// is supposed to: the row renders, the Next step carries the override, and the roll-up names the task.
+test('0409/drift-survives: a drifted row wearing a 10 KB annotation keeps every exception surface', () => {
+  const huge = `*(${'filing prose that nobody reads in a table cell. '.repeat(220)})*`;
+  assert.ok(huge.length > 10000, 'the fixture annotation must actually be ~10 KB');
+  const p = fixture({
+    plan: plan([`| ✅ Done | 1 | **Alpha** ${huge} | [\`a.md\`](../tasks/done/a.md) |`]),
+    briefs: { 'done/a.md': brief({ title: 'Alpha', status: '🔲 Backlog', priority: 1 }) },
+  });
+  const { out } = run(p);
+  assert.equal(boardRows(out).length, 1, 'the drifted ✅ row still renders despite its inert marker');
+  assert.match(boardRows(out)[0], /\| waiting on owner \|$/, 'the override survives the trim');
+  assert.ok(facts(out).some((f) => f.startsWith('drift disagreement 0001 ')), 'the fact survives the trim');
+  assert.match(rollup(out), /drift on tasks 0001 — see above\./, 'the roll-up clause survives the trim');
+  assert.equal(rowCells(boardRows(out)[0])[3], '**Alpha** …', 'and the 10 KB is gone from the cell');
+});
+
+// 0409/5 — the Status column is a DIFFERENT cell with a DIFFERENT rule. All six vocabulary values must
+// render exactly as the plan writes them, marker and all, including the `(agent-closed — not
+// owner-verified)` marker, whatever the Task cell beside them does.
+// ⚠️ NO BRIEFS, deliberately: `✅`/`⛔`/`➡️` rows are filtered off the board when clean (task 65), so the
+// resulting `missing-brief` drift is what forces all six onto it. The Status cells are untouched by it.
+test('0409/vocabulary: all six status values render verbatim beside a trimmed Task cell', () => {
+  const statuses = [
+    '✅ Done (agent-closed — not owner-verified)',
+    '🔄 In progress',
+    '🚧 Blocked — the owner must rule',
+    '🔲 Backlog',
+    '⛔ Cancelled (2026-01-01) — superseded by task 7',
+    '➡️ Moved to [Sprint 2](../sprint-2.md) — priority 12',
+  ];
+  const p = fixture({
+    plan: plan(statuses.map((s, i) => `| ${s} | ${i + 1} | **T${i + 1}** ${ANNOTATION} | [\`t${i + 1}.md\`](../tasks/backlog/t${i + 1}.md) |`)),
+    briefs: {},
+  });
+  const { out } = run(p);
+  const rows = boardRows(out);
+  assert.equal(rows.length, 6, 'all six render — missing-brief drift forces the inert markers on');
+  statuses.forEach((s, i) => {
+    assert.equal(rowCells(rows[i])[1], s, `status ${i + 1} verbatim, marker and all`);
+    assert.equal(rowCells(rows[i])[3], `**T${i + 1}** …`, `task cell ${i + 1} trimmed`);
+  });
+});
+
+// 0409/6 — the guard. A cell that is NOTHING BUT an annotation must fall back to the raw cell: cutting
+// at position 1 would render an empty Task column, losing the row's only identifying text. No live cell
+// is in this class today; the guard is for the board writer who eventually writes one.
+// Pairs with "R7: an empty Task cell holds its position".
+test('0409/opener-at-start: an all-annotation cell falls back to raw — never an empty Task cell', () => {
+  const p = fixture({
+    plan: plan([`| 🔲 Backlog | 1 | ${ANNOTATION} | [\`a.md\`](../tasks/backlog/a.md) |`]),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1 }) },
+  });
+  const { out } = run(p);
+  const cell = rowCells(boardRows(out)[0])[3];
+  assert.equal(cell, ANNOTATION, 'the raw cell survives whole rather than becoming empty');
+  assert.notEqual(cell, '', 'an empty Task cell would lose the row its only text');
+});
+
+// 0409/8 — ⛔ THE SECOND HALF OF THE GUARD (round-1 review R1, owner-ruled 2026-09-20). `*(` is two
+// literal bytes, and they occur in ordinary markdown that is NOT an annotation opener. Cutting there
+// would leave a head with no words (`**(P0)** Ship the thing` → `* …`) or an odd asterisk count
+// (`**Title**(note)` → `**Title* …`) — a row that keeps a cell but loses its only identifying text,
+// which is exactly the failure "R7: an empty Task cell holds its position" exists to prevent. Both
+// must fall back to the RAW cell. Latent when shipped: 0 of 116 live Backlog cells were in this class.
+test('0409/emphasis-head: a `*(` that is markdown, not an annotation, falls back to raw', () => {
+  const cases = [
+    '**Title**(note about filing)',   // odd asterisk count in the head
+    '**(P0)** Ship the thing',        // head is a bare `*` — no words at all
+    '** *(prose goes here)*',         // head is emphasis punctuation only
+  ];
+  const p = fixture({
+    plan: plan(cases.map((t, i) => `| 🔲 Backlog | ${i + 1} | ${t} | [\`t${i + 1}.md\`](../tasks/backlog/t${i + 1}.md) |`)),
+    briefs: Object.fromEntries(cases.map((_, i) => [`backlog/t${i + 1}.md`, brief({ title: `T${i + 1}`, priority: i + 1 })])),
+  });
+  const { out } = run(p);
+  const rows = boardRows(out);
+  assert.equal(rows.length, 3, 'all three rows render');
+  cases.forEach((t, i) => {
+    const cell = rowCells(rows[i])[3];
+    assert.equal(cell, t, `case ${i + 1}: the raw cell ships rather than a mangled head`);
+    assert.doesNotMatch(cell, /…/, `case ${i + 1}: no elision marker on a refused cut`);
+  });
+});
+
+// 0409/9 — the guard must not become a blanket refusal: a REAL annotation whose title carries balanced
+// emphasis is still cut. This is the anti-vacuity partner to 0409/8 — without it, a title_cell() that
+// refused every cut would pass 0409/8 and still be catastrophically wrong.
+test('0409/emphasis-head: balanced emphasis before a real annotation is still cut', () => {
+  const p = fixture({
+    plan: plan([`| 🔲 Backlog | 1 | **Alpha** \`code\` *(filing prose nobody reads)* | [\`a.md\`](../tasks/backlog/a.md) |`]),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1 }) },
+  });
+  const { out } = run(p);
+  assert.equal(rowCells(boardRows(out)[0])[3], '**Alpha** `code` …', 'balanced head, real annotation → cut');
+});
+
+// 0409/7 — a GFM-escaped pipe is CONTENT. It must survive the trim exactly as `unesc` restored it,
+// still escaped, so the emitted table stays valid markdown and no later field shifts.
+test('0409/escaped-pipe: a GFM-escaped pipe in the title survives the trim, still escaped', () => {
+  const p = fixture({
+    plan: plan([`| 🔲 Backlog | 1 | **Alpha \\| Beta** ${ANNOTATION} | [\`a.md\`](../tasks/backlog/a.md) |`]),
+    briefs: { 'backlog/a.md': brief({ title: 'Alpha', priority: 1 }) },
+  });
+  const { out } = run(p);
+  const row = boardRows(out)[0];
+  assert.match(row, /\*\*Alpha \\\| Beta\*\* …/, 'the escape is preserved, not unescaped or dropped');
+  assert.equal(rowCells(row).length, 8, 'six cells plus the two empty ends — no field shifting');
+  assert.equal(rowCells(row)[4], '[`a.md`](../tasks/backlog/0001-a/brief.md)', 'the link stays in Filename');
 });

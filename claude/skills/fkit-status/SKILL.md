@@ -333,6 +333,29 @@ must not undo any of them by hand:
 > [`one-skill-one-output`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)
 > (`0074`). Adding one would need a reversal ADR first.
 
+**The Task cell is a TITLE, and the script has already cut it there** (`0409`, owner-ruled
+2026-09-20). The convention says that column is a *"Short title — the same wording the sprint plan
+uses"* with *"no wrapped prose in cells"*, and board writers had been using it as a document store
+instead — measured on the live Backlog board, **113 of 116 Task cells** carried a multi-sentence
+`*( … )*` annotation and **395,533 of the render's 458,446 bytes** sat inside Task cells. The script
+now cuts each cell at that `*(` opener and marks the cut with ` …`.
+
+- **The prose is not lost, and you must not say it was.** It stays in the board file and in the
+  task's brief — which the **adjacent Filename column already links**. Send the owner there when he
+  wants the detail; that is the convention's *"detail is available on request"* tier.
+- **Do not paste the annotation back in**, and do not re-open the board file to "restore" a title.
+  The cell is what beat 7 shows.
+- **A cell with no `*(` is untouched, byte for byte** — if a title looks long, it is long because the
+  board wrote it that way, not because the script failed.
+- **A cell the cut would damage keeps its full text instead.** If cutting would leave nothing, leave
+  only emphasis/code punctuation, or leave an odd number of `*` (so `**Title**(note)` — markdown, not
+  an annotation), the script ships the **raw cell**. So an occasional untrimmed cell is the guard
+  working, **not** a failure to trim: do not "finish the job" by hand.
+- ⛔ **Nothing about exceptions changed.** `⟦FACTS⟧`, the roll-up and its drift clause are
+  byte-identical whether a cell was annotated or not (pinned by `0409/facts-identical`). **If a
+  finding seems to have gone missing when the board got shorter, that is a bug to report**, not a
+  consequence of the trim.
+
 **The one thing you must fill: `⟨derive: …⟩` sentinels.** The script emits four of the six Next-step
 shapes itself (`closed`, `dead`, `in Sprint N`, `waiting on owner`). It **cannot** decide `ready` vs
 `after <N>`, because `Depends on:` is free text — so it hands you the **raw text it read**, in the cell:

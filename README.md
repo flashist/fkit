@@ -95,6 +95,44 @@ working structure plus project-root `CLAUDE.md` / `AGENTS.md`. A starter for all
 `AGENTS.md` into your project root, then fill in the placeholders. A project that already has an
 `ai-agents/` tree + context files needs nothing from the scaffold.
 
+## Reading the board in a browser (repo-local)
+
+`npm run board` starts a **read-only** web board: it serves
+[aiboard](https://github.com/flashist/aiboard)'s unmodified UI over fkit's unmodified `ai-agents/`
+tree, so the tasks and sprints you'd otherwise read as raw markdown render as cards you can click.
+This is Track 1 ("A now") of
+[ADR-051](ai-agents/knowledge-base/decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim.md):
+**fkit's tree stays the single store.**
+
+```
+npm run board                                   # then open http://127.0.0.1:8585/
+npm run board -- --port 9000                    # a different port
+npm run board -- --aiboard ../aiboard/aiboard/web/index.html
+FKIT_AIBOARD=/path/to/aiboard/web/index.html npm run board
+node bin/fkit-board.mjs --bench                 # snapshot cost at this repo's real corpus
+```
+
+It finds fkit's root itself — there is nothing to edit before running it. It finds aiboard's
+`index.html` in this order: `--aiboard`, then `FKIT_AIBOARD`, then the sibling default
+`../aiboard/aiboard/web/index.html`. If none resolve it **exits non-zero naming all three**, rather
+than starting and serving a 404.
+
+**What it listens on, and what it accepts.** It binds **`127.0.0.1` only** — never `0.0.0.0` — on port
+`8585` by default. It serves six GET paths and nothing else: `/` and its alias `/index.html` (both
+aiboard's `index.html`, byte-for-byte as found), `/api/board`, `/api/tasks/<id>`, `/api/sprints/<id>`
+and `/api/check`.
+**Every other method — POST, PUT, PATCH, DELETE, and anything else that is not GET — is refused with a
+JSON error.** It holds no credentials and reads no environment beyond `FKIT_AIBOARD`.
+
+**It writes nothing, anywhere, in any mode, behind any flag.** It opens no file outside `ai-agents/`
+except the single aiboard `index.html` it was pointed at, and it runs one fkit-local subprocess:
+`claude/skills/fkit-status/dashboard.sh select-active`, which is the project's **one** implementation
+of the sprint-status grammar. `test/board-reader.test.js` pins all of this, including a check that
+`git status --porcelain ai-agents/` is unchanged by a full crawl plus every route.
+
+Repo-local by construction: `install.sh` copies `claude/` only, so this does not ship to projects that
+install fkit, and aiboard is not a dependency of fkit.
+
 ## Layout
 
 ```
@@ -107,6 +145,8 @@ claude/
   agents/                        the seven roles as Claude Code subagent definitions (an 8th, a tester, is authorized — ADR-028 — but not yet built)
   skills/                        the /fkit-* procedures
   scaffold/                      starter ai-agents/ tree + CLAUDE.md / AGENTS.md
+bin/
+  fkit-board.mjs                 read-only web board over ai-agents/ (`npm run board`) — repo-local
 ai-agents/                       fkit's own working structure (it is run on itself)
 ```
 

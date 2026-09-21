@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# THIRTY-NINE mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# FORTY mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -63,6 +63,7 @@
 #  37. Drop `Backlog` from the successor filter        → "ADR-047 successor S3:"                (task 0388)
 #  38. Make the successor ordering non-strict          → "ADR-047 successor S4:"                (task 0388)
 #  39. Name the wrong drift record in a sprint mover   → "emitter map E2:"                      (task 0388)
+#  40. Disable dashboard.sh's Task-cell trim           → "0409/elided:"                         (task 0409)
 #
 # ⚠️ MUTATIONS 18-22, 25 AND 26 ARE THE FIRST TO TARGET `bin/`, NOT A COPIED LAUNCHER TREE (task 0288). Their seam
 # is FKIT_RELEASE_MJS — a SINGLE-FILE redirect (the FKIT_LAUNCHER pattern, not the whole-tree
@@ -1840,6 +1841,42 @@ if [ "$r39" != red ]; then
   echo "     emit — the emitter-map prose is still pinned by nothing, which is Item A's whole finding."; fail=1
 elif ! grep -Eq '(✖|not ok|fail).*emitter map E2:' "$out"; then
   echo "   ✗ suite went red but NOT at emitter map E2 — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 40: turn dashboard.sh's `title_cell()` back into a passthrough → the `0409/elided`
+#     assertion in dashboard-contract.test.js must go red (task 0409). ⭐ THIS IS THE EXACT PRE-0409
+#     STATE, not an invented breakage: before 0409 the row assembly interpolated `${task}` raw, and the
+#     mutant reproduces that byte for byte. A new guard is owed a mutation by this file's own thesis,
+#     and this guard was owed one twice over: 0409's measurement found that NOT ONE fixture in the
+#     dashboard suite contained a `*( … )*` annotation, so the Task cell's whole rendering behaviour —
+#     R10 included — was green against any change to it.
+#     ⛔ NO INJECTED MARKER: the disabled trim IS the marker, for mutation 34's reason.
+#     Anchor uniqueness, verified before use: `title_cell() {` occurs ONCE in the unmutated file (the
+#     call site reads `title_cell "$task"` and does not match), and the mutated text ZERO times.
+#     Rides mutation 14's seam: the copied test file resolves dashboard.sh inside the copy.
+m40="$(make_repo_copy repo-mutant-title-cell)"
+m40_file="$m40/claude/skills/fkit-status/dashboard.sh"
+cp "$m40_file" "$m40_file.orig"
+sed -i.bak 's/^title_cell() {$/title_cell() { printf %s "$1"; return 0 # mutation: Task-cell trim disabled/' "$m40_file"
+rm -f "$m40_file.bak"
+if cmp -s "$m40_file" "$m40_file.orig"; then
+  echo "40. disabled the Task-cell trim ... ✗ MUTATION WAS A NO-OP — the sed no longer matches (has"
+  echo "   title_cell been renamed or reformatted?). This gate is disarmed: it would report success"
+  echo "   while proving nothing. Fix the mutation in test/prove-red.sh before trusting any result above."
+  fail=1
+elif [ "$(diff "$m40_file.orig" "$m40_file" | grep -c '^>')" != 1 ]; then
+  echo "40. disabled the Task-cell trim ... ✗ WRONG TARGET — the sed changed more than one line."; fail=1
+elif [ "$(grep -c 'mutation: Task-cell trim disabled' "$m40_file")" != 1 ]; then
+  echo "40. disabled the Task-cell trim ... ✗ MUTATION DID NOT LAND — the passthrough is absent from the"
+  echo "   mutant, or landed more than once."; fail=1
+fi
+printf '40. Task-cell trim disabled — "0409/elided" should go RED ... '
+r40="$(run_dashboard_suite "$m40")"; echo "$r40"
+if [ "$r40" != red ]; then
+  echo "   ✗ the suite did NOT catch a dashboard.sh that renders the Task cell raw — the 0409 trim is"
+  echo "     pinned by nothing, and the board can silently go back to being a document store."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0409/elided:' "$out"; then
+  echo "   ✗ suite went red but NOT at 0409/elided — red for the wrong reason."; fail=1
 fi
 
 echo

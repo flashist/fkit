@@ -7,10 +7,10 @@
 Sprint 11
 
 ## Priority
-Unscheduled
+P2
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
@@ -63,7 +63,7 @@ The owner, verbatim: **"maybe it's worth creating a separate sprint for that, I'
 ⛔ **Recorded as undecided.** This brief is filed unsprinted on the Backlog board for exactly that
 reason — not as a judgement that it is low value. **Do not read the Backlog board placement as a
 ranking**; that board is an archive of known work, not a queue (owner ruling 2026-08-29, carried in
-[`0383`'s brief](../0383-shrink-the-backlog-board-whose-task-cells-are-being-used-as-a-document-store/brief.md)
+[`0383`'s brief](../../backlog/0383-shrink-the-backlog-board-whose-task-cells-are-being-used-as-a-document-store/brief.md)
 under its heading *"Notes"*).
 
 #### ⏱ DISCHARGED 2026-09-18 BY OWNER RULING — IT IS ITS OWN SPRINT. The text above is left BYTE-IDENTICAL as the record of what was undecided that morning.
@@ -85,6 +85,14 @@ under its heading *"How work moves on and off this board"*:
 | `## Status` | ⛔ **UNCHANGED — `🔲 Backlog`. Nothing has started.** |
 | Backlog board row | flipped to `➡️ Moved to [Sprint 11](../../../sprints/sprint-11.md)`, **no `— priority M` suffix** (unranked destination). The row is **not deleted**. |
 | Sprint 11 board | row added |
+
+⭐⭐ **SUPERSEDED 2026-09-20 — SPRINT 11 IS NOW RANKED `P1`–`P4` AND THIS TASK IS `P2`.** The table above
+is left byte-identical; where the two disagree, this note governs. Authority: an owner ruling of
+2026-09-20 relayed into a spawned `fkit-producer` (no owner channel, ADR-021) — *"rank the four"*.
+Both deferrals the table records are **discharged in that same act**: `## Priority` above now reads
+`P2`, and this task's `➡️ Moved` marker on the Backlog board now carries `— priority P2`.
+⛔ **`## Status` is UNCHANGED — `🔲 Backlog`. Nothing was closed, cancelled or re-scoped, and no
+`Depends on` was added.**
 
 ⚠️ **The sprint is `Sprint 11`, not `Sprint 10`, and `Sprint 10` is deliberately left empty** —
 earmarked by earlier owner rulings for fkit's *own* backlog work. The full reasoning, and the open
@@ -279,7 +287,7 @@ longest-cell discrepancy stays UNRECONCILED. This note does not smooth it.**
 
 ### ⚠️ Relationship to `0383` — cross-reference, NOT a duplicate
 
-[`0383`](../0383-shrink-the-backlog-board-whose-task-cells-are-being-used-as-a-document-store/brief.md)
+[`0383`](../../backlog/0383-shrink-the-backlog-board-whose-task-cells-are-being-used-as-a-document-store/brief.md)
 ("Shrink the Backlog board, whose Task cells are being used as a document store") touches **the same
 pain from the opposite end**:
 
@@ -409,7 +417,7 @@ Work it in this order:
   packaging and the install/run command, **(iv)** an ADR recording the owner's ruling. ⛔ **Do not
   pre-file those** — investigation-first; their shape is unknown until step 3's map exists.
 - ⚠️ **Cross-reference, not a dependency:**
-  [`0383`](../0383-shrink-the-backlog-board-whose-task-cells-are-being-used-as-a-document-store/brief.md).
+  [`0383`](../../backlog/0383-shrink-the-backlog-board-whose-task-cells-are-being-used-as-a-document-store/brief.md).
   Same pain, opposite end — see the Context section under its own heading. ⛔ **They must not run
   concurrently if this task's findings reach the markdown board's shape**, which they only do under
   data-flow shape (d).
@@ -437,7 +445,7 @@ see its own heading *"WHY THIS BRIEF EXISTS AT ALL: IT IS A TRANSCRIPT RESCUE"*.
 **only in a live `fkit lead` session transcript on 2026-09-18** and would have been lost when that
 session ended, which is the exact failure this row was filed to prevent. A **verbatim duplicate** of
 the owner's words is also appended to
-[`0405`](../0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board/brief.md)
+[`0405`](../../backlog/0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board/brief.md)
 under its heading *"FIRST REAL USER EVIDENCE"*, because the second half of what he said is about a
 terminal UI and `0405` must not be worked without it. ⛔ **`0405`'s copy is a duplicate of this
 section, not an independent record. If the two ever disagree, THIS one is canonical.**

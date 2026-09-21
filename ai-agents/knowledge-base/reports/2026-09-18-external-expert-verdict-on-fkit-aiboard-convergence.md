@@ -278,7 +278,7 @@ Owner decisions this *does* raise:
 
 ## 8. Artifacts
 
-> ⏱ **ADDED 2026-09-18, after this section was written — `fkit-external-expert`, at `fkit-lead`'s request.** The three scripts are now preserved durably at [`ai-agents/tasks/backlog/0404-…/assets/external-expert-spike/`](../../tasks/backlog/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/assets/external-expert-spike/README.md), with a README marking them a throwaway demonstration. One edit was made to the copies: `rows.py` now finds `fkit_index.json` beside itself rather than in the working directory; outputs are gitignored. Re-run from the new location reproduces the 403/405 result. The running server is still the scratchpad copy. The text below is left as written.
+> ⏱ **ADDED 2026-09-18, after this section was written — `fkit-external-expert`, at `fkit-lead`'s request.** The three scripts are now preserved durably at [`ai-agents/tasks/backlog/0404-…/assets/external-expert-spike/`](../../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/assets/external-expert-spike/README.md), with a README marking them a throwaway demonstration. One edit was made to the copies: `rows.py` now finds `fkit_index.json` beside itself rather than in the working directory; outputs are gitignored. Re-run from the new location reproduces the 403/405 result. The running server is still the scratchpad copy. The text below is left as written.
 
 All in this session's scratchpad — **`/private/tmp`, will not survive a reboot; copy anything worth keeping**:
 `/private/tmp/claude-501/-Users-mark-dolbyrev-Workspace-fkit/3672ffa6-7c44-44f6-8beb-f7c39611fa1f/scratchpad/`
