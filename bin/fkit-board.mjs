@@ -30,6 +30,11 @@
 // is READ, never extended: its endpoint set and its `read_only: true` flag survive as DESIGN, and the
 // file itself does not. Its hard-coded absolute paths, its second copy of the banner grammar and its
 // `priority: "medium"` flattening are all gone. See this task's plan.md §2.
+//
+// ANOTHER PROJECT'S TREE (task 0412). `--root <path>` points the reader at another fkit-using
+// project's ai-agents/. The rule: TOOLS come from fkit's own checkout, DATA comes from `--root`. So
+// `dashboard.sh` and aiboard's sibling default are always found next to THIS file, and only the
+// ai-agents/ being read moves. The target's own copy of `dashboard.sh` is never run.
 
 import { createServer } from 'node:http';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -131,6 +136,58 @@ export function resolveAiboard({ flag, env, root }) {
   const fallback = resolve(join(root, '..', 'aiboard', 'aiboard', 'web', 'index.html'));
   if (isFile(fallback)) return { path: fallback, how: 'sibling default' };
   throw fail('aiboard\'s web UI was not found.');
+}
+
+// The tree to READ. No flag → `home`, fkit's own root, exactly as before `--root` existed.
+//
+// ⚠️ The same rule as resolveAiboard: an EXPLICIT path that does not resolve is an ERROR, never a
+// fall-through to fkit's own tree — serving one project's board under another's name is the silent
+// wrong answer. isDirectory, not exists: a FILE named like the project must not pass. Every missing
+// piece is named in one message, so a half-built tree is not fixed one error at a time.
+export function resolveRoot({ flag, home }) {
+  if (flag === undefined) return { path: home, how: 'default' };
+  const kind = (p) => {
+    try { return statSync(p).isDirectory() ? 'dir' : 'other'; } catch { return 'missing'; }
+  };
+  const missing = [];
+  if (flag === '') {
+    missing.push('a path (it was given an empty string)');
+  } else if (kind(flag) === 'missing') {
+    missing.push('the directory itself (no such path)');
+  } else if (kind(flag) === 'other') {
+    missing.push('the directory itself (the path is not a directory)');
+  } else {
+    for (const sub of ['tasks', 'sprints']) {
+      if (kind(join(flag, 'ai-agents', sub)) !== 'dir') missing.push(`ai-agents/${sub}/`);
+    }
+  }
+  // ⚠️ A directory that stats as one but cannot be LISTED is not a tree to read either: further down,
+  // existsSync reads it as absent (an empty board, served silently) or readdirSync throws (a crash, or
+  // a 500 per poll). So every directory the reader walks is listed once here, and refused by name.
+  const unreadable = [];
+  if (!missing.length) {
+    const probe = (rel, children) => {
+      let names;
+      try { names = readdirSync(join(flag, rel)); } catch (err) {
+        unreadable.push(`${rel}/ (${err.code})`);
+        return;
+      }
+      for (const c of children) if (names.includes(c)) probe(`${rel}/${c}`, []);
+    };
+    probe('ai-agents/tasks', TASK_BOARDS);
+    probe('ai-agents/sprints', ['done', 'cancelled']);
+  }
+  if (missing.length || unreadable.length) {
+    const e = new Error(
+      `fkit-board: --root ${JSON.stringify(flag)} is not a readable fkit project tree.\n`
+      + (missing.length ? `  missing: ${missing.join(', ')}\n` : '')
+      + (unreadable.length ? `  unreadable: ${unreadable.join(', ')}\n` : '')
+      + 'It must be a directory holding both ai-agents/tasks/ and ai-agents/sprints/. '
+      + 'fkit-board does not fall back to its own tree.');
+    e.code = 'ROOT_UNRESOLVED';
+    throw e;
+  }
+  return { path: resolve(flag), how: '--root' };
 }
 
 // ── Reading fkit's tree ──────────────────────────────────────────────────────────────────────────
@@ -344,7 +401,21 @@ function readBoards(root, dashboard, boardFiles, tasks) {
       },
     };
   });
-  return { boards, problems };
+
+  // ⚠️ Two board FILES can map to one id (`backlog.md` + `sprint-backlog.md` both become BACKLOG). Both
+  // then list the same tasks, and /api/sprints/<id> opens only the first — the other board is silently
+  // shadowed. This SAYS so, as a warning: nothing is merged or renamed, and `ok` on /api/check is not
+  // flipped by it (owner ruling for 0412; 0411's residual R10). Names are sprints-relative — no path.
+  const claims = new Map();
+  boards.forEach((b, i) => {
+    const f = boardFiles[i];
+    const name = f.location === 'open' ? f.name : `${f.location}/${f.name}`;
+    claims.set(b.id, (claims.get(b.id) || []).concat(name));
+  });
+  const warnings = [...claims].filter(([, files]) => files.length > 1).map(([id, files]) =>
+    `board id ${id} is claimed by ${files.length} files (${files.join(', ')}): each lists the same `
+    + `tasks, and /api/sprints/${id} opens only ${files[0]}.`);
+  return { boards, problems, warnings };
 }
 
 // ── The snapshot, and its mtime cache ────────────────────────────────────────────────────────────
@@ -381,7 +452,7 @@ export function makeReader({ root, dashboard }) {
     if (cached && cached.key === key) return cached;
 
     const tasks = taskDirs.map(readTask);
-    const { boards, problems } = readBoards(root, dashboard, boardFiles, tasks);
+    const { boards, problems, warnings } = readBoards(root, dashboard, boardFiles, tasks);
     const data = {
       root: join(root, 'ai-agents'),
       name: `${basename(root)} (read-only)`,
@@ -401,7 +472,7 @@ export function makeReader({ root, dashboard }) {
     // agree by construction rather than by luck.
     const byId = new Map();
     for (const e of taskDirs) if (!byId.has(e.id)) byId.set(e.id, e);
-    cached = { key, data, problems, byId };
+    cached = { key, data, problems, warnings, byId };
     return cached;
   }
 
@@ -451,6 +522,7 @@ export function makeReader({ root, dashboard }) {
   return {
     snapshot: () => snapshot().data,
     problems: () => snapshot().problems,
+    warnings: () => snapshot().warnings,
     taskDetail,
     sprintDetail,
   };
@@ -489,7 +561,8 @@ export function startServer({ root, dashboard, aiboardPath, port = DEFAULT_PORT,
       if (path === '/api/board') return json(200, reader.snapshot());
       if (path === '/api/check') {
         const problems = reader.problems();
-        return json(200, { ok: problems.length === 0, problems });
+        // `ok` still means "sprint status is being read"; `warnings` never flips it.
+        return json(200, { ok: problems.length === 0, problems, warnings: reader.warnings() });
       }
       if (path.startsWith('/api/tasks/')) {
         const id = path.slice('/api/tasks/'.length);
@@ -524,15 +597,61 @@ function arg(argv, name) {
 }
 
 function main(argv) {
-  const root = findRoot();
+  // ⚠️ `arg()` reads neither `--root=<path>` nor a trailing `--root` with no value — both would come
+  // back `undefined` and silently serve fkit's OWN tree. Each is refused here instead. So is a SECOND
+  // `--root`: `arg()` takes the first, so the other would be silently ignored — never validated, and
+  // a trailing bare one would slip past the "needs a path" check below.
+  if (argv.filter((a) => a === '--root').length > 1) {
+    process.stderr.write('fkit-board: --root given more than once; give exactly one --root <path>. '
+      + 'fkit-board does not fall back to its own tree.\n');
+    return 2;
+  }
+  if (argv.some((a) => a.startsWith('--root='))) {
+    process.stderr.write('fkit-board: write --root <path> (a space, not "="). '
+      + 'fkit-board does not fall back to its own tree.\n');
+    return 2;
+  }
+  if (argv.includes('--root') && arg(argv, '--root') === undefined) {
+    process.stderr.write('fkit-board: --root needs a path: --root <path>. '
+      + 'fkit-board does not fall back to its own tree.\n');
+    return 2;
+  }
 
-  let dashboard;
+  // `home` is fkit's own checkout — where the TOOLS live. `root` is the tree being READ.
+  const home = findRoot();
+  let rootInfo;
   try {
-    dashboard = findDashboard(root);
+    rootInfo = resolveRoot({ flag: arg(argv, '--root'), home });
   } catch (err) {
     process.stderr.write(`${err.message}\n`);
     return 2;
   }
+  const root = rootInfo.path;
+  const foreign = rootInfo.how === '--root';
+
+  // ⚠️ ALWAYS fkit's own copy, and ALWAYS absolute. `dashboard.sh` is spawned with `cwd: root`, so a
+  // RELATIVE path would resolve inside the TARGET project — and on a target that carries its own
+  // (possibly older) copy at the same relative path, would silently run THAT one instead.
+  let dashboard;
+  try {
+    dashboard = resolve(findDashboard(home));
+  } catch (err) {
+    process.stderr.write(`${err.message}\n`);
+    return 2;
+  }
+  // Visibility only: does the target carry its own copy that is being passed over? A stat, not a read.
+  let targetCopy = null;
+  if (foreign) {
+    try { targetCopy = resolve(findDashboard(root)); } catch { targetCopy = null; }
+    if (targetCopy === dashboard) targetCopy = null;
+  }
+  const treeLine = `  tree     ${join(root, 'ai-agents')}${foreign ? '  (--root)' : ''}\n`;
+  const statusLine = `  status   ${dashboard}`
+    + `${foreign ? '  (fkit\'s own — the target\'s copy is not used)' : ''}\n`;
+  const noteLine = targetCopy
+    ? '  note     this project carries its own dashboard.sh; it is NOT used. If that install is older '
+      + 'than this fkit,\n           its own /fkit-status may read boards differently from this board.\n'
+    : '';
   // ⚠️ Checked AT STARTUP, loudly. A reader that cannot read sprint status refuses to start rather
   // than serving every board as `unresolved` and letting the owner discover it by eye.
   const probe = spawnSync('bash', [dashboard, 'select-active', join(root, 'ai-agents', 'sprints')],
@@ -549,6 +668,7 @@ function main(argv) {
   // then returns the memo; it is what the 3-second poll actually costs once the tree is quiet.
   // Reporting only the second would be a flattering number measuring the wrong thing.
   if (argv.includes('--bench')) {
+    if (foreign) process.stdout.write(treeLine + statusLine);
     let snap;
     for (let i = 0; i < 3; i++) {
       const fresh = makeReader({ root, dashboard });
@@ -572,7 +692,8 @@ function main(argv) {
 
   let aiboard;
   try {
-    aiboard = resolveAiboard({ flag: arg(argv, '--aiboard'), env: process.env.FKIT_AIBOARD, root });
+    // aiboard is fkit's tool, not the target's data: its sibling default sits next to `home`.
+    aiboard = resolveAiboard({ flag: arg(argv, '--aiboard'), env: process.env.FKIT_AIBOARD, root: home });
   } catch (err) {
     process.stderr.write(`${err.message}\n`);
     return 2;
@@ -589,9 +710,10 @@ function main(argv) {
     const a = server.address();
     process.stdout.write(
       `fkit-board  http://127.0.0.1:${a.port}/   (read-only — Ctrl+C to stop)\n`
-      + `  tree     ${join(root, 'ai-agents')}\n`
+      + treeLine
       + `  aiboard  ${aiboard.path}  (${aiboard.how})\n`
-      + `  status   ${dashboard}\n`);
+      + statusLine
+      + noteLine);
   });
   server.on('error', (err) => {
     process.stderr.write(`fkit-board: ${err.message}\n`);
