@@ -1,0 +1,245 @@
+⟦fkit-dashboard v2⟧
+Status         #    Task                                 Id   Owner     Next step
+────────────────────────────────────────────────────────────────────────────────────────────────────
+🔲 Backlog     —    Add two worked examples to evidence… 0013 producer  none recorded
+🔲 Backlog     —    Extend prove-red.sh to reach fkit-c… 0037 coder     none recorded
+🔲 Backlog     —    Gate the read-side symlink hazard w… 0045 coder     none recorded
+🔲 Backlog     —    Design an observer-agent + notes-dr… 0121 architect nothing — the design can st…
+🔲 Backlog     —    Add the dual-home scoping check to … 0131 coder     nothing. Independent of 013…
+🚧 Blocked     —    Add the sanctioned producer-only re… 0135 coder     0134 (the ADR — hard; the m…
+🔲 Backlog     —    Record the "verify against the clai… 0137 coder     nothing.
+🔲 Backlog     —    Record the "a disproof carries the … 0138 coder     nothing.
+🔲 Backlog     —    Give the next lint a procedural rea… 0213 coder     nothing.
+🔲 Backlog     —    Decide where a real check on the wi… 0165 architect nothing.
+🔲 Backlog     —    Pin the team / team room rejection … 0144 coder     nothing — 0139 and 0140 are…
+🔲 Backlog     —    Give the launcher-contract suite a … 0145 coder     nothing — the launcher beha…
+🔲 Backlog     —    Guard test for the SKILL.md H1 hous… 0152 coder     nothing hard. Soft-follows …
+🔲 Backlog     —    Record that 0118's block on 0117 wa… 0149 producer  nothing. Both 0117 and 0118…
+🔲 Backlog     —    Backfill the missing ## Priority fi… 0155 coder     nothing.
+🔲 Backlog     —    Make ## Priority a required brief f… 0156 coder     0155 — hard.
+🔲 Backlog     —    Name the defective-marker refusal c… 0163 coder     nothing.
+🔲 Backlog     —    Close the build-phase logging hole … 0164 coder     nothing.
+🔲 Backlog     —    Decide the enforcement point for "r… 0166 architect nothing.
+🔲 Backlog     —    Point the stateful-review close con… 0169 coder     nothing hard. ADR-034 is ac…
+🔲 Backlog     —    Narrow the architect's ## Output fo… 0172 coder     0171 (the convention page t…
+🔲 Backlog     —    Build the dead-ledger-path guard — … 0175 coder     0168. Hard — the condition …
+🔲 Backlog     —    Require a merit statement on every … 0179 coder     0178 — the skill points at …
+🔲 Backlog     —    Build the brief-missing-merit guard… 0180 coder     0178, 0179. And a grandfath…
+🔲 Backlog     —    Record Depends on/Blocks as the bin… 0184 producer  nothing. 0173 closed 2026-0…
+🔲 Backlog     —    Amend ADR-027 to record the audienc… 0186 architect nothing.
+🔲 Backlog     —    Re-verify task 0112 by a check that… 0187 producer  nothing. 0133 closed 2026-0…
+🔲 Backlog     —    Build A-i — the declared skill-owne… 0189 coder     0188 — by owner ruling ("do…
+🔲 Backlog     —    Decide whether /fkit-task-done step… 0192 architect nothing.
+🔲 Backlog     —    Assess ADR-037's two clause sites a… 0194 coder     0189, 0190, 0191. - ⚠️ DATE…
+🔲 Backlog     —    Append dated correction notes to 01… 0201 coder     0192
+🔲 Backlog     —    Add an "out of scope by owner rulin… 0209 coder     nothing.
+🔲 Backlog     —    Wire the repaired 0210 R3/R4 guards… 0214 coder     nothing.
+🔲 Backlog     —    Repair the prove-red.sh work-dir pa… 0215 coder     nothing.
+🔲 Backlog     —    Build the /fkit-wiki-update skill —… 0216 coder     nothing.
+🔲 Backlog     —    Wire fkit-wiki-update into the lead… 0217 coder     0216 — hard. Declaring owne…
+🔲 Backlog     —    Assert the ≥ 400 B free budget targ… 0219 coder     nothing.
+🔲 Backlog     —    Compress the rules-block wrapper co… 0220 coder     0177. - ✅ DATED CORRECTION…
+🔲 Backlog     —    Build the misroute detector as a PA… 0224 architect 0222 (records ADR-038 — the…
+🔲 Backlog     —    Add the loop-table row↔ownership te… 0225 coder     0222 (records ADR-038 — the…
+🔲 Backlog     —    Repair the four-mirror checklist in… 0226 coder     nothing. ⚠️ Explicitly NOT …
+🔲 Backlog     —    Add a fidelity leg to the faithful-… 0227 coder     nothing. It lands independe…
+🔲 Backlog     —    Write the ## Resume doctrine sectio… 0228 coder     nothing hard. 0208 has ship…
+🔲 Backlog     —    Repair the self-contradiction in ta… 0230 coder     nothing. This document edit…
+🔲 Backlog     —    Make /fkit-wiki-sync count and clas… 0231 coder     nothing.
+🔲 Backlog     —    Assess 0224's denial log as an ADR-… 0233 architect 0189, 0224.
+🔲 Backlog     —    Fix dashboard.sh drift rule 2 — a t… 0234 coder     nothing.
+🔲 Backlog     —    Cross-check a brief's ## Status fie… 0235 coder     nothing.
+🔲 Backlog     —    Sweep the stale ai-agents/sprints/s… 0236 coder     nothing.
+🔲 Backlog     —    Record the ADR for the closed-rank-… 0240 architect 0222 — hard, for the ADR nu…
+🔲 Backlog     —    Run the real-project stale-install … 0262 producer  nothing. Everything it exer…
+🔲 Backlog     —    Move the Codex review sandbox from … 0273 coder     0272 - ✅ DATED CORRECTION …
+🔲 Backlog     —    Give /fkit-sprint-ship-loop an exec… 0277 coder     nothing
+🔲 Backlog     —    Confirm or disprove the filename-de… 0278 architect nothing
+🔲 Backlog     —    Bound the update check's git path —… 0284 coder     nothing
+🔲 Backlog     —    Wiki resync of the vault's Codex-sa… 0287 wiki      nothing
+🔲 Backlog     —    Decide whether anything should noti… 0290 architect nothing.
+🔲 Backlog     —    Decide what catches a task brief th… 0296 architect nothing
+🔲 Backlog     —    Pin the two non-ai-agents/ inventor… 0298 coder     nothing.
+🔲 Backlog     —    Record the "correct as of its date"… 0301 architect nothing
+🔲 Backlog     —    Design how the lead learns the stru… 0303 architect nothing
+🔲 Backlog     —    Architect decision — does /fkit-hea… 0304 coder     nothing
+🔲 Backlog     —    Architect question — does the ADR-0… 0305 architect nothing
+🔲 Backlog     —    Decide how a corrected dependency l… 0307 architect nothing.
+🔲 Backlog     —    Gate /fkit-sprint-ship-loop on an o… 0310 architect nothing.
+🔲 Backlog     —    Specify the - Corrections: header i… 0311 coder     nothing.
+🔲 Backlog     —    Decide the append-only proof standa… 0313 architect nothing
+🔲 Backlog     —    Fix the ^--- deletion-filter blind … 0314 coder     nothing
+🔲 Backlog     —    Define the - Corrections: header-wa… 0315 architect nothing. It is decidable to…
+🔲 Backlog     —    Record an identifier for the review… 0316 architect nothing
+🔲 Backlog     —    Escape the stray unescaped pipes th… 0322 coder     nothing.
+🔲 Backlog     —    Emit durable self-locators at write… 0326 coder     nothing.
+🔲 Backlog     —    Make init's two mkdir -p calls non-… 0328 coder     nothing.
+🔲 Backlog     —    Decide — and then implement — what … 0329 coder     nothing. ⚠️ It is BLOCKED O…
+🔲 Backlog     —    Gate the launcher's .fkit lockdown … 0330 coder     nothing.
+🔲 Backlog     —    Record the ADR that reverses the 20… 0331 architect nothing. Blocks: 0333 — har…
+🔲 Backlog     —    Decide and implement init's behavio… 0332 coder     nothing.
+🔲 Backlog     —    Amend the ship-loop construction so… 0333 coder     0331 — HARD. Not a soft-fol…
+🔲 Backlog     —    Fix the launcher's symlink-blind ag… 0334 coder     nothing.
+🔲 Backlog     —    Guard init's .claude/ refresh again… 0336 coder     nothing.
+🔲 Backlog     —    Mirror the self-locator repair rule… 0342 coder     0325 - ✅ DATED CORRECTION …
+🔲 Backlog     —    Carry ADR-044's Build/Plan role rul… 0345 coder     0270 (0270-decide-how-the-s…
+🔲 Backlog     —    Settle by ADR who runs Process-revi… 0362 architect none recorded
+🔲 Backlog     —    Design the sweep-completion step th… 0363 architect nothing.
+🔲 Backlog     —    Triage the plural tasks NN numerals… 0364 coder     nothing.
+🔲 Backlog     —    Correct the refuted "IS CORRECT. DO… 0365 producer  nothing.
+🔲 Backlog     —    Disambiguate the colliding record i… 0367 producer  nothing.
+🔲 Backlog     —    Give the ownerless source-file coor… 0368 coder     nothing.
+🔲 Backlog     —    Pin the three unpinned fence-opener… 0370 coder     nothing.
+🔲 Backlog     —    Cost widening the citation guard's … 0371 architect nothing.
+🔲 Backlog     —    Decide whether durable-citation-anc… 0373 architect nothing.
+🔲 Backlog     —    Amend the ledger-schema copies in a… 0374 coder     nothing. 0369 has landed — …
+🔲 Backlog     —    Add a pipe-escaping note to the sta… 0375 coder     nothing. 0369 has landed — …
+🔲 Backlog     —    Reconcile fkit-task-brief's mandato… 0377 coder     nothing.
+🔲 Backlog     —    ⚠️ INVESTIGATION / DECISION ROW —  … 0378 architect nothing.
+🔲 Backlog     —    Delta-ingest the closed-task backlo… 0380 wiki      nothing.
+🔲 Backlog     —    Pin the fresh-tree × explicit-role … 0382 coder     nothing
+🔲 Backlog     —    ⭐⭐ HOLD LIFTED — OWNER RULING 202… 0383 producer  nothing.
+🔲 Backlog     —    ⛔ The record-repair classifier cou… 0384 coder     nothing. Blocks: nothing.
+🔲 Backlog     —    ⛔ Two concurrent Codex reviews sil… 0385 coder     nothing.
+🔲 Backlog     —    ⛔ The stateful-review Status vocab… 0386 coder     nothing
+🔲 Backlog     —    ⛔ The orchestrated plan gate is pr… 0387 architect nothing
+🔲 Backlog     —    ⚠️ The root README.md still describ… 0391 coder     nothing. ⚠️ But note the ca…
+🔲 Backlog     —    ⛔ Build a guard for the ADR-NNN:LI… 0394 coder     0393 — ⛔ hard. A guard aga…
+🔲 Backlog     —    Re-measure the CI test runtime on t… 0395 coder     0388 landing
+🔲 Backlog     —    Repair the bare claude/ directory r… 0396 coder     0390
+🔲 Backlog     —    Correct the four false claims 0393 … 0397 coder     nothing.
+🔲 Backlog     —    Correct the ADR text defects 0393 r… 0398 architect nothing.
+🔲 Backlog     —    Repair the stale claims 0393 report… 0399 coder     nothing.
+🔲 Backlog     —    Sweep the stale count claims in arc… 0400 coder     nothing.
+🔲 Backlog     —    Decide how a must-match dual-homed … 0401 architect nothing.
+🔲 Backlog     —    Settle what ## Owner means when it … 0402 architect nothing.
+🔲 Backlog     —    Guard architecture.md's skill count… 0403 coder     nothing
+🔲 Backlog     —    Build the no-board-row check in the… 0406 coder     nothing. ⭐ The decision it…
+🔲 Backlog     —    Build the mover outcome verifier — … 0407 coder     ADR-050 being signed and ac…
+🔲 Backlog     —    Build the deterministic mover comma… 0408 coder     0407 (hard — ⭐ the orderin…
+
+50 done · 1 blocked · 115 backlog · 7 cancelled · 62 moved  —  of 235
+⟦FACTS⟧
+total 235
+count done 50
+count blocked 1
+count backlog 115
+count cancelled 7
+count moved 62
+derive 0013 depends="none recorded"
+derive 0037 depends="none recorded"
+derive 0045 depends="none recorded"
+derive 0121 depends="nothing — the design can start now."
+derive 0131 depends="nothing. Independent of 0132 and 0133 — it prevents *future* drift where those…
+derive 0135 depends="0134 (the ADR — hard; the must-never list is the deliverable and it is not thi…
+derive 0137 depends="nothing."
+derive 0138 depends="nothing."
+derive 0213 depends="nothing."
+derive 0165 depends="nothing."
+derive 0144 depends="nothing — 0139 and 0140 are both closed and the launcher already behaves corre…
+derive 0145 depends="nothing — the launcher behavior is already correct and closed (0139, 0140)."
+derive 0152 depends="nothing hard. Soft-follows 0136 (priority 114) for the shared `SKILL.md` walk;…
+derive 0149 depends="nothing. Both 0117 and 0118 are closed."
+derive 0155 depends="nothing."
+derive 0156 depends="0155 — hard."
+derive 0163 depends="nothing."
+derive 0164 depends="nothing."
+derive 0166 depends="nothing."
+derive 0169 depends="nothing hard. ADR-034 is accepted and is the authority for the bar. Soft-follo…
+derive 0172 depends="0171 (the convention page this bullet points at). Report §8 records follow-up …
+derive 0175 depends="0168. Hard — the condition asserts the folder-ID schema that `0168` item 2 int…
+derive 0179 depends="`0178` — the skill points at the convention page, and pointing at a page that …
+derive 0180 depends="`0178`, `0179`. And a grandfathering decision that is not yet made — see above…
+derive 0184 depends="nothing. `0173` closed 2026-08-03; nothing else gates this."
+derive 0186 depends="nothing."
+derive 0187 depends="nothing. `0133` closed 2026-08-02 and supplied the evidence this brief rests o…
+derive 0189 depends="0188 — by owner ruling (*'do not let the build quietly repair its own corpus'*…
+derive 0192 depends="nothing."
+derive 0194 depends="`0189`, `0190`, `0191`. - ⚠️ DATED CORRECTION 2026-08-15 — TWO OF THE THREE AR…
+derive 0201 depends="`0192`"
+derive 0209 depends="nothing."
+derive 0214 depends="nothing."
+derive 0215 depends="nothing."
+derive 0216 depends="nothing."
+derive 0217 depends="0216 — hard. Declaring ownership of a skill whose `SKILL.md` does not exist po…
+derive 0219 depends="nothing."
+derive 0220 depends="0177. - ✅ DATED CORRECTION 2026-09-13 — THIS DEPENDENCY IS DISCHARGED. The li…
+derive 0224 depends="`0222` (records ADR-038 — the rule this detector guards). - ⚠️ DATED CORRECTIO…
+derive 0225 depends="`0222` (records ADR-038 — the rule the table row encodes). - ⚠️ DATED CORRECTI…
+derive 0226 depends="nothing. ⚠️ Explicitly NOT dependent on `0222`/ADR-038 — see the independence …
+derive 0227 depends="nothing. It lands independently of `0202`, `0203` and `0204`."
+derive 0228 depends="nothing hard. `0208` has shipped the row, which is what makes this half the re…
+derive 0230 depends="nothing. This document edit is independent of `0229` — the owner ruled the two…
+derive 0231 depends="nothing."
+derive 0233 depends="`0189`, `0224`."
+derive 0234 depends="nothing."
+derive 0235 depends="nothing."
+derive 0236 depends="nothing."
+derive 0240 depends="`0222` — hard, for the ADR number only. `0222` files ADR-038 and runs the numb…
+derive 0262 depends="nothing. Everything it exercises is already on disk and shipped in `0.2.x`."
+derive 0273 depends="`0272` - ✅ DATED CORRECTION 2026-09-13 — THIS DEPENDENCY IS DISCHARGED. The l…
+derive 0277 depends="nothing"
+derive 0278 depends="nothing"
+derive 0284 depends="nothing"
+derive 0287 depends="nothing"
+derive 0290 depends="nothing."
+derive 0296 depends="nothing"
+derive 0298 depends="nothing."
+derive 0301 depends="nothing"
+derive 0303 depends="nothing"
+derive 0304 depends="nothing"
+derive 0305 depends="nothing"
+derive 0307 depends="nothing."
+derive 0310 depends="nothing."
+derive 0311 depends="nothing."
+derive 0313 depends="nothing"
+derive 0314 depends="nothing"
+derive 0315 depends="nothing. It is decidable today; `0311` is adjacent, not a prerequisite."
+derive 0316 depends="nothing"
+derive 0322 depends="nothing."
+derive 0326 depends="nothing."
+derive 0328 depends="nothing."
+derive 0329 depends="nothing. ⚠️ It is BLOCKED ON A DECISION, not on code — that is a gate inside t…
+derive 0330 depends="nothing."
+derive 0331 depends="nothing. Blocks: `0333` — hard."
+derive 0332 depends="nothing."
+derive 0333 depends="[`0331`](../0331-sanction-the-verified-pointer-form-as-a-faithful-plan-carry/b…
+derive 0334 depends="nothing."
+derive 0336 depends="nothing."
+derive 0342 depends="0325 - ✅ DATED CORRECTION 2026-09-13 — THIS DEPENDENCY IS DISCHARGED. The lin…
+derive 0345 depends="`0270` (`0270-decide-how-the-ship-loop-handles-a-non-coder-owned-task-row` — c…
+derive 0362 depends="none recorded"
+derive 0363 depends="nothing."
+derive 0364 depends="nothing."
+derive 0365 depends="nothing."
+derive 0367 depends="nothing."
+derive 0368 depends="nothing."
+derive 0370 depends="nothing."
+derive 0371 depends="nothing."
+derive 0373 depends="nothing."
+derive 0374 depends="nothing. `0369` has landed — verified 2026-09-04, its folder sits in `ai-agent…
+derive 0375 depends="nothing. `0369` has landed — verified 2026-09-04, its folder sits in `ai-agent…
+derive 0377 depends="nothing."
+derive 0378 depends="nothing."
+derive 0380 depends="nothing."
+derive 0382 depends="nothing"
+derive 0383 depends="nothing."
+derive 0384 depends="nothing. Blocks: nothing."
+derive 0385 depends="nothing."
+derive 0386 depends="nothing"
+derive 0387 depends="nothing"
+derive 0391 depends="nothing. ⚠️ But note the causal link: `0339` is what makes this passage stale,…
+derive 0394 depends="[`0393`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbo…
+derive 0395 depends="`0388` landing"
+derive 0396 depends="`0390`"
+derive 0397 depends="nothing."
+derive 0398 depends="nothing."
+derive 0399 depends="nothing."
+derive 0400 depends="nothing."
+derive 0401 depends="nothing."
+derive 0402 depends="nothing."
+derive 0403 depends="nothing"
+derive 0406 depends="nothing. ⭐ The decision it implements is already ruled (`0296`, 2026-09-18); …
+derive 0407 depends="ADR-050 being signed and accepted — hard. ⛔ The ADR is the deliverable's spec…
+derive 0408 depends="[`0407`](../0407-build-the-mover-outcome-verifier-which-is-also-the-acceptance…
+⟦END⟧

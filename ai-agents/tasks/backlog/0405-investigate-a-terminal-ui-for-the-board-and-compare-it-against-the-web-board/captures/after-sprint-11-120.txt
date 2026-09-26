@@ -1,0 +1,15 @@
+⟦fkit-dashboard v2⟧
+Status         #    Task                                            Id   Owner     Next step
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+🔄 In progress P4   Investigate a terminal UI for the board, and c… 0405 architect nothing
+🔲 Backlog     P5   Investigate how agents report status to the ow… 0410 producer  nothing
+
+3 done · 1 in progress · 1 backlog  —  of 5
+⟦FACTS⟧
+total 5
+count done 3
+count in-progress 1
+count backlog 1
+derive 0405 depends="nothing"
+derive 0410 depends="nothing"
+⟦END⟧

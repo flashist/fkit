@@ -215,10 +215,15 @@ export function boardId(identity) {
   return /^\d+$/.test(m[1]) ? `S-${m[1].padStart(3, '0')}` : `S-${m[1]}`;
 }
 
+// ⚠️ `plan-sprint-N.md` is an older board-naming convention, and dashboard.sh's file-name rung accepts
+// exactly that one prefix (ADR-040 §3) — so an ARCHIVED `plan-sprint-4.md` keeps the `S-004` it had
+// while open, when its H1 title and file name agree (an open board's id comes from its H1 first), and
+// its tasks stay attached (task 0415). `plan-` is stripped only before `sprint-`.
+// ⛔ The H1 is deliberately NOT read here: identity has one grammar, in dashboard.sh (ADR-041 §5).
 function boardIdFromFile(file) {
   const stem = basename(file, '.md');
   if (stem === 'backlog') return 'BACKLOG';
-  return boardId(stem.replace(/^sprint-/, 'Sprint ')) || `S-${stem}`;
+  return boardId(stem.replace(/^(?:plan-)?sprint-/, 'Sprint ')) || `S-${stem}`;
 }
 
 // fkit's six-value task vocabulary → aiboard's four columns + its native `blocked` chip.

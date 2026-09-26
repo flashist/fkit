@@ -1,0 +1,19 @@
+board-narrow --calibrate — measure these in YOUR terminal; the table in this file is derived,
+not measured. Five copies of each character, then a `|`. Compare against the reference row.
+
+  reference        ##########|   ← the | here is at column 11
+                   1234567890
+
+  U+26D4           ⛔⛔⛔⛔⛔|   BMP emoji — .length says 1, table says 2
+  U+2705           ✅✅✅✅✅|   BMP emoji — .length says 1, table says 2
+  U+2B50           ⭐⭐⭐⭐⭐|   BMP emoji — .length says 1, table says 2
+  U+1F532          🔲🔲🔲🔲🔲|   astral emoji — .length says 2, table says 2
+  U+1F504          🔄🔄🔄🔄🔄|   astral emoji — .length says 2, table says 2
+  U+1F6A7          🚧🚧🚧🚧🚧|   astral emoji — .length says 2, table says 2
+  U+26A0 FE0F      ⚠️⚠️⚠️⚠️⚠️|   base + VS16 — ⛔ ABSENT FROM THE PLAN'S TABLE; table says 2
+  U+26A0           ⚠⚠⚠⚠⚠|   the SAME base, bare — table says 1. If these two rows differ, VS16 is honoured.
+  U+27E8           ⟨⟨⟨⟨⟨|   table says 1
+  U+2014           —————|   table says 1
+
+  | under column 11 → 2 display columns.  | under column  6 → 1 display column.
+  This build's derived widths: U+26D4=2  U+2705=2  U+2B50=2  U+1F532=2  U+1F504=2  U+1F6A7=2  U+26A0 FE0F=2  U+26A0=1  U+27E8=1  U+2014=1

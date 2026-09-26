@@ -10,7 +10,7 @@ Sprint 11
 P4
 
 ## Status
-🔲 Backlog
+🔄 In progress — driven by `/fkit-sprint-ship-loop` from a `fkit lead` session, started 2026-09-21.
 
 ## Owner
 fkit-architect

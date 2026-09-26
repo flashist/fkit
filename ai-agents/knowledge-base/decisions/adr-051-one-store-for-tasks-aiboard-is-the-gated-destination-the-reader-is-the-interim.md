@@ -441,6 +441,27 @@ that shape.**
 every bar in it is reachable.** ⛔ **No further amendment rounds.** The gate changes only through him,
 via *§Re-raise only if*.
 
+#### ⭐⭐ 2026-09-21 — the one owner-ruled exception. ⛔ THE SERIES IS STILL CLOSED
+
+⚠️ **This ADR was re-opened ONCE, on 2026-09-21, on an OWNER RULING, for a reason this closure did not
+anticipate: EVIDENCE ARRIVED.** ⛔ **It is not an eleventh amendment, not a new decision, and not a
+re-litigation of any of the ten.** ⭐ **It adds a datum the gate had no other record of** — see
+*§Evidence log*, inside *§THE GATE*.
+
+⛔⛔ **NOTHING WAS ALTERED BY IT. No decision (D1–D8), no precondition (P1–P6), no half of the acceptance
+test (A1, A2), no trial bar, and no FAIL condition (F1–F5) moved — not in substance and not in
+wording.** ⭐ **Status stays `accepted`. The amendment series stays CLOSED and the count stays at TEN.**
+⛔ **This is not a precedent for re-opening**, and it does not reopen the series: the gate still changes
+only through him, via *§Re-raise only if*.
+
+**How the ruling was given:** live in an `fkit lead` session via `AskUserQuestion`, 2026-09-21.
+⚠️ **SELECTED OPTION TEXT — an agent wrote the option, he chose it, and he typed no free text.**
+⛔ **Never quote it as his prose.** He selected *"Yes — have the architect amend it"*, on the producer's
+recommendation, on the argument that ⭐ ***"an accepted ADR that the evidence never reached is how a gate
+quietly stops meaning anything."*** ⚠️⚠️ **The evidence-log section inherits the not-owner-verified
+caveat** — a spawned `fkit-architect` with no owner channel (ADR-021) wrote it on a relayed ruling; it is
+stated at the head of that section.
+
 ### ⚠️ Accepted residuals — named, NOT fixed, and deliberately left alone
 
 **1. `A1`'s corpus figure drifts.**
@@ -741,6 +762,11 @@ to being a question only through him.
 | **F4** | **Performance made him avoid it.** |
 | **F5** | **He stopped using it and did not notice.** ⛔ **No metric catches this, so it is ASKED DIRECTLY at the end.** |
 
+⭐ **Pointer for a reader assessing F5 — it adds NOTHING to the table above and changes no condition in
+it.** One datum now exists saying he ever **started**: see *§Evidence log* below. ⛔ **It is not trial
+evidence and does not bear on whether F5 is met** — F5 is still asked directly at the end of a trial
+that has not begun.
+
 ### On a fail
 
 ⛔ **The gate does NOT reopen on a schedule.** **A becomes the standing answer**, and the question
@@ -754,6 +780,71 @@ returns to the owner as ***"is A enough, permanently?"*** ⚠️ That is a quest
 ### Who declares it
 
 ⛔⛔ **Only the owner. No agent.** (D4.)
+
+### ⭐⭐ Evidence log — usage data about the interim reader. ⛔⛔ NOT TRIAL EVIDENCE
+
+⛔ **Read this heading as written. This section is an EVIDENCE LOG, not an amendment.** It records
+observations *about* the interim (Option A) reader so that a reader assessing **F5** is not left with an
+empty record. ⛔⛔ **It settles nothing. It changes nothing.** Every precondition, both halves of the
+acceptance test, all three trial bars and **F1–F5** stand exactly as ruled on 2026-09-18, byte-for-byte.
+
+⚠️ **Why this section exists at all, when *§The amendment series is CLOSED* says the series ends:**
+⭐ **the owner re-opened this ADR once, on 2026-09-21, for a reason the closure did not anticipate —
+evidence arrived.** ⛔ **It adds a datum; it does not change a decision.** See *§The amendment series is
+CLOSED*, the paragraph headed *"the one owner-ruled exception."* ⛔ **This is not a precedent for
+re-opening the gate, and it does not re-open the amendment series**, which remains closed. The gate still
+changes only through him, via *§Re-raise only if*.
+
+⚠️⚠️ **THIS SECTION INHERITS THE NOT-OWNER-VERIFIED CAVEAT.** It was written by a spawned
+`fkit-architect` with **no owner channel** (ADR-021), on a ruling **relayed** through `fkit-lead`. ⛔ **The
+owner has not read these words.** The quoted fragments below are carried verbatim from their canonical
+records; every framing sentence around them is this architect's and is open to correction.
+
+#### Entry 1 — 2026-09-21: the owner ran the interim reader on the live tree and preferred it
+
+⛔ **The canonical record is NOT here.** It is on task `0411`'s brief, under its heading
+*"Outcome — the owner's demo verdict, recorded at close"*
+([`0411`](../../tasks/done/0411-make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads/brief.md)),
+committed and durable. What follows carries that record's provenance and limits **verbatim**; it does not
+replace or restate it, and where the two ever differ, **`0411`'s brief governs**.
+
+**What happened.** He ran `0411`'s read-only reader against the **live tree — 411 tasks across 11
+boards** — and judged it **better than reading the markdown files**.
+
+⚠️⚠️ **PROVENANCE — SELECTED OPTION TEXT, NOT HIS OWN WORDS.** He chose a **pre-written option**
+(*"Yes — I'd use this"*) via `AskUserQuestion` and **typed no free text**. ⛔ **Never quote this as the
+owner's prose.** His genuinely-typed prose about markdown being *"hard to read and too huge to consume"*
+is a **separate, earlier** datum, canonically recorded on `0404` and cross-referenced on `0405` —
+⛔ **do not merge the two into one quotation.**
+
+⛔⛔ **THE LIMITS, CARRIED VERBATIM SO THIS IS NOT READ AS MORE THAN IT IS.** **One session, one user** —
+who is also **the author of both systems** and **knew what he hoped to see**. ⭐ **It is a strong signal
+about one user's workflow. It is NOT a usability finding**, and it does not settle *"which of web and
+terminal is more readable"* — that remains `0405`'s deliverable.
+
+⭐ **Why it is logged in this ADR.** *§Pre-declared FAIL conditions* turns on **usage**, and **F5** is
+*"he stopped using it and did not notice."* ⚠️ **Until now this ADR held no record that he had ever
+STARTED.** This is the first and only such datum. ⛔ **An accepted ADR whose gate is about usage, and
+which the only usage evidence never reached, is how a gate quietly stops meaning anything** — that, and
+nothing more, is what this entry is for.
+
+#### ⛔⛔ What Entry 1 is NOT — read this before citing it for anything
+
+| | ⛔ |
+|---|---|
+| **Not trial evidence** | ⛔⛔ **The trial clock has NOT started.** It begins at **P1**, aiboard's Node port, which **has not landed** (*§Amendment 3*: *"Time on today's Python reader does not count toward the 4 weeks or the work floor."*). ⭐ **Zero of the 4 weeks, zero of the 2 sprints and zero of the 40 transitions have accrued.** |
+| **Not a pass** | ⛔ **It is not an owner declaration that the gate passed.** ⛔⛔ **Only the owner declares that** (*§Who declares it*, D4), and **he has not.** |
+| **Not a partial discharge** | ⛔ It does **not** satisfy, weaken or partially discharge **any precondition (P1–P6)**, **either half of the acceptance test (A1, A2)**, **any trial bar**, or **any FAIL condition (F1–F5)**. |
+| **Not a reason to shorten anything** | ⛔⛔ **It must not become a reason to shorten, soften or skip any part of this gate.** |
+
+⛔⛔ **THE TWO STANDING GUARDS ARE UNTOUCHED BY THIS ENTRY, AND ARE RESTATED BECAUSE EVIDENCE ARRIVING IS
+EXACTLY WHEN AN AGENT WOULD BE TEMPTED:**
+
+1. ⛔ **No agent may drop, lower or waive the work floor** (*§The work floor*: *"The floor is now the
+   owner's own, so no agent may weaken, waive or re-scope it either."*).
+2. ⛔ **No agent may invent a timeout, a deadline, a check-in, a reminder or a review point for this
+   trial** (*§Amendment 9*, *"THE GUARD, and it is now load-bearing"*). ⚠️ **Including one framed as
+   "following up on this evidence."** ⭐ **The gate waits. It returns to him only through him.**
 
 ---
 
