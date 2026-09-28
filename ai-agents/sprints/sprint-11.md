@@ -212,6 +212,12 @@ freeze is spent.
 > possible."* ⛔ **Do not transcribe `F1`–`F5`, `A2` or the no-reopen wording onto this board.** Read
 > them in the ADR. ⭐ **Boards are archived when a sprint closes; the ADR is where a future agent looks
 > first.**
+>
+> **Added 2026-09-26 — evidence log for the eventual B decision:**
+> [`2026-09-26-evidence-log-for-adr-051-aiboard-as-the-store.md`](../knowledge-base/reports/2026-09-26-evidence-log-for-adr-051-aiboard-as-the-store.md)
+> (append-only; evidence, NOT a decision and NOT trial progress; ADR-051 remains the gate's
+> authoritative text). Kept on the owner's request of 2026-09-26, so the reports can be read together
+> when he makes the final decision.
 
 ⛔ **This section supersedes the "THE GATE … IS UNDEFINED" section immediately below it**, whose text is
 left **BYTE-IDENTICAL** as the record of what the gap was. ⚠️ **A reader who stops at that section will
