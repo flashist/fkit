@@ -11,6 +11,12 @@
 - **Origin:** the owner's ruling during the task 0108 open-questions interview (2026-07-23), presented
   with the ship-loop/orchestrator ripple in the option text and chosen knowingly.
 
+> ⛔ **§Decision 5 superseded — 2026-09-30, by [ADR-052](adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md) — in a project only once it is converted to the
+> built-in board.** There, a producer close with the owner present is **no longer** owner-verified;
+> only a close the owner makes himself in the board's web page is. Until conversion — fkit itself
+> included, until ADR-052's phase 6 — §5 applies as written. Decisions 1–4 and *§The limit* are
+> unchanged. ⛔ **Nothing below this notice was changed** — the notice was inserted; no line was deleted.
+
 > **What this ADR decides, in one line:** only **`fkit-producer`** may run the task movers; every other
 > role — wiki, coder, reviewer, architect, and the evolved lead/orchestrator — **routes closes through
 > the producer** and closes nothing itself.

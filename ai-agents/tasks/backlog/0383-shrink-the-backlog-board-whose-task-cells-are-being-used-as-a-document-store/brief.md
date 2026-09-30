@@ -22,7 +22,7 @@ fkit-producer
 > ⛔ **The `HELD 2026-09-18` section immediately below is left BYTE-IDENTICAL as the record of the
 > hold. It is NO LONGER IN FORCE. Do not act on it.** ⭐ **Its own stated lift condition was met and the
 > owner lifted it.** Full record: the last section of this brief, *"THE HOLD IS LIFTED"*, and
-> [Sprint 11](../../../sprints/sprint-11.md) under *"OWNER RULING 2026-09-18 (FOURTH)"*.
+> [Sprint 11](../../../sprints/done/sprint-11.md) under *"OWNER RULING 2026-09-18 (FOURTH)"*.
 
 ### ⛔⛔ HELD 2026-09-18 — READ THIS BEFORE PICKING THE TASK UP
 
@@ -33,7 +33,7 @@ relaying the owner's standing ruling of that morning. ⭐ **Nothing below this s
 it is left byte-identical and is read subject to this hold.**
 
 **The reason:** the fkit↔aiboard convergence effort
-([Sprint 11](../../../sprints/sprint-11.md)) has an external expert session,
+([Sprint 11](../../../sprints/done/sprint-11.md)) has an external expert session,
 `fkit-external-expert`, **reading the architect's evaluation report right now**. ⛔ **That evaluation
 may delete this board's shape entirely** — if fkit's markdown boards are replaced or re-shaped, the
 Task-cell bloat this task exists to fix stops being a problem in the form described here, and any
@@ -237,7 +237,7 @@ under B the prose has nowhere to go **unless** the extraction ran first.
 
 ⛔ **Whether to LIFT the hold is an OWNER act, and the producer did not take it.** Returned to
 `fkit-lead` as a `NEEDS-DECISION` with a recommendation to lift. It is carried as open decision **D5**
-on [Sprint 11](../../../sprints/sprint-11.md). **Three reasons it was not lifted here:**
+on [Sprint 11](../../../sprints/done/sprint-11.md). **Three reasons it was not lifted here:**
 
 - The hold was set relaying **the owner's own standing ruling** of 2026-09-18. ⛔ **An agent does not
   reverse an owner's hold with no owner channel** (ADR-021).

@@ -21,6 +21,13 @@
   ADR-047 §4 (mover order, atomic-by-invocation), ADR-018/ADR-036 (the skill-ownership hook and its
   declared sites), ADR-048 (the unbuilt reconcile mode, task `0135`), ADR-014 (test mechanics).
 
+> ⛔ **Partly overtaken — 2026-09-30, by [ADR-052](adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md).** The deterministic command is **`fkit board`**, part of
+> fkit's built-in board, so the build this ADR authorised (verifier `0407`, then command `0408`) is
+> discharged by the board: `0408` obsolete; `0407` re-scoped into the converter's checker or cancelled
+> (the producer's acts). **D2 / B-1 unchanged.** The B-2 rejection is overtaken **only** for the board's
+> `--by` identity check. ⛔ **Nothing below this notice was changed** — the notice was inserted; no line
+> was deleted.
+
 > **What this ADR decides, in one line:** whether — and how — `/fkit-task-done`,
 > `/fkit-task-cancelled`, `/fkit-sprint-done` and `/fkit-sprint-cancelled` stop being **prose executed
 > by a language model** and become a **deterministic command** the model merely *calls*.

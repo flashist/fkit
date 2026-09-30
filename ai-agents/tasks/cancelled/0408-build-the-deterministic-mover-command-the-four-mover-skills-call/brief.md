@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (agent-closed — not owner-verified) (2026-09-30) — Obsolete under ADR-052 (D11): `fkit board` is the deterministic command this task would have built; ADR-050's authorised build is discharged by the board.
 
 ## Owner
 fkit-coder
@@ -31,7 +31,7 @@ whoever picks this up: read the signed ADR and reconcile this brief against it.*
 
 ### ⛔ AND IT IS BLOCKED BEHIND `0407` — that ordering is the owner's ruling, not a preference
 
-⛔ **[`0407`](../0407-build-the-mover-outcome-verifier-which-is-also-the-acceptance-test-for-the-mover-command/brief.md)
+⛔ **[`0407`](../../backlog/0407-build-the-mover-outcome-verifier-which-is-also-the-acceptance-test-for-the-mover-command/brief.md)
 — the outcome verifier — must land first.** It **is** this task's acceptance test. ⭐ **Building this
 command first would leave it with no acceptance criterion but its own author's reading of the prose it
 replaces** — which is precisely the failure ADR-050 exists to end.
@@ -55,7 +55,7 @@ The four movers — `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-sprint-don
 `/fkit-sprint-cancelled` — are **prose procedures** performing several edits that must all land or none
 should. ⛔ **Prose has no transaction.** A run that performs four of six edits leaves carriers
 disagreeing, and this is the condition ADR-048 had to invent a producer-only repair mode for
-([`0135`](../0135-add-producer-only-reconcile-mode-to-task-done/brief.md), unbuilt).
+([`0135`](../../cancelled/0135-add-producer-only-reconcile-mode-to-task-done/brief.md), unbuilt).
 
 ## What to build
 
@@ -116,11 +116,11 @@ ADR**:
 ## Notes
 
 - **Owner:** fkit-coder.
-- **Depends on:** [`0407`](../0407-build-the-mover-outcome-verifier-which-is-also-the-acceptance-test-for-the-mover-command/brief.md)
+- **Depends on:** [`0407`](../../backlog/0407-build-the-mover-outcome-verifier-which-is-also-the-acceptance-test-for-the-mover-command/brief.md)
   (hard — ⭐ **the ordering is the owner's ruling of 2026-09-18, and `0407`'s output is this task's
   acceptance test**) **and ADR-050 being signed and accepted** (hard — the specification is the ADR's,
   not this task's to invent).
-- **Blocks:** [`0135`](../0135-add-producer-only-reconcile-mode-to-task-done/brief.md) — ⭐ **added
+- **Blocks:** [`0135`](../../cancelled/0135-add-producer-only-reconcile-mode-to-task-done/brief.md) — ⭐ **added
   2026-09-18.** Building `0135`'s reconcile mode against prose movers means building it twice, once
   against the prose and again after the mechanics move here. `0135` is held for that reason; see its
   own dated note.
@@ -144,7 +144,7 @@ ADR**:
     turns on this today. ⚠️ **If the implementation ever proposes to re-key an id, relocate a folder
     tree, or change a board's schema, it STOPS AND ESCALATES** rather than proceeding on this
     paragraph.
-- **⭐ Why this pair is on the Backlog board and NOT on [Sprint 11](../../../sprints/sprint-11.md) —
+- **⭐ Why this pair is on the Backlog board and NOT on [Sprint 11](../../../sprints/done/sprint-11.md) —
   the producer's placement call, covering `0407` and `0408` both.** Sprint 11 is scoped to fkit↔aiboard
   convergence, and its own *"WHAT IS DELIBERATELY NOT ON THIS BOARD YET"* section restricts additions
   to what the aiboard discussions produce (the owner's standing instruction: *"whenever you discuss
@@ -164,7 +164,7 @@ ADR**:
   **⛔ no commit.**
 - **Board and priority:** Backlog board, Priority cell `—`, `## Priority: Unscheduled`. **Unranked.**
   **On merit this belongs directly below
-  [`0407`](../0407-build-the-mover-outcome-verifier-which-is-also-the-acceptance-test-for-the-mover-command/brief.md)**,
+  [`0407`](../../backlog/0407-build-the-mover-outcome-verifier-which-is-also-the-acceptance-test-for-the-mover-command/brief.md)**,
   because the owner ruled that order.
 - **Filed 2026-09-18** by a spawned `fkit-producer` with **no owner channel**
   ([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).

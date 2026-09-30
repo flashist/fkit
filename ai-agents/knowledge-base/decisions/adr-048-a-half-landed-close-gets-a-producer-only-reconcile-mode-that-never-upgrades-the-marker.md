@@ -19,7 +19,7 @@
 - **Recorded under:** task `0134`
   ([brief](../../tasks/done/0134-decide-the-sanctioned-repair-path-for-a-half-landed-close/brief.md)).
   **Implemented by:** task `0135`
-  ([brief](../../tasks/backlog/0135-add-producer-only-reconcile-mode-to-task-done/brief.md)).
+  ([brief](../../tasks/cancelled/0135-add-producer-only-reconcile-mode-to-task-done/brief.md)).
 - **Measured at:** commit **`d8ef596`**, 2026-09-14. The working tree was dirty. Of the files this ADR
   cites by line, only `claude/skills/fkit-sprint-ship-loop/SKILL.md` differs from that commit: a
   2-line swap of two dashboard paths near its top, which moves no line number cited here.
@@ -28,6 +28,12 @@
   other ADRs are cited by heading plus a quoted fragment, never by line
   ([`durable-citation-anchors.md`](../conventions/durable-citation-anchors.md)).
 - **Amends nothing.** ADR-033 is cited, not changed, and gets no dated note (§Consequences).
+
+> ⛔ **Obsolete — 2026-09-30, by [ADR-052](adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md).** With one place for status, a close cannot half-land, so the
+> reconcile mode (task `0135`) is **not to be built**; `0135`'s disposition is the producer's act.
+> ⚠️ Until a project is converted, its closes are still prose and can still half-land; nothing here is
+> built for that window. ⛔ **Nothing below this notice was changed** — the notice was inserted; no line
+> was deleted.
 
 > **In one line:** once a close has moved a task folder into `done/`, a **producer** — spawned or
 > not — may copy a landed **`✅ Done (agent-closed — not owner-verified)`** onto the locations still
@@ -574,7 +580,7 @@ Run 2026-09-14 before allocation, per `/fkit-record-decision` step 2:
   not owner-verified.
 - [`task-status-vocabulary.md`](../conventions/task-status-vocabulary.md): §"The authority split".
 - Task `0134` ([brief](../../tasks/done/0134-decide-the-sanctioned-repair-path-for-a-half-landed-close/brief.md)),
-  task `0135` ([brief](../../tasks/backlog/0135-add-producer-only-reconcile-mode-to-task-done/brief.md)),
+  task `0135` ([brief](../../tasks/cancelled/0135-add-producer-only-reconcile-mode-to-task-done/brief.md)),
   task `0229` ([brief](../../tasks/done/0229-widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close/brief.md)),
   task `0123` ([review ledger](../../tasks/done/0123-route-sprint-ship-loop-close-to-producer/review.md)).
 - Code: `claude/skills/fkit-task-done/SKILL.md` (step 1 `:74-112`, step 5 `:171`, vocabulary `:437`),

@@ -4,10 +4,10 @@
 0410
 
 ## Sprint
-Sprint 11
+Backlog
 
 ## Priority
-P5
+Unscheduled
 
 ## Status
 🔲 Backlog
@@ -112,7 +112,7 @@ gate `0405`.**
 
 ### ⛔ NOT FROZEN
 
-[Sprint 11](../../../sprints/sprint-11.md)'s owner-ruled **migration freeze**, re-founded 2026-09-18 on
+[Sprint 11](../../../sprints/done/sprint-11.md)'s owner-ruled **migration freeze**, re-founded 2026-09-18 on
 the gated-B ruling, covers changes to the **stored shape** — *"re-keying ids, moving folders, rewriting
 boards."* ⛔ **This task touches none of them.** ⚠️ **If it ever proposes to, it stops and escalates.**
 

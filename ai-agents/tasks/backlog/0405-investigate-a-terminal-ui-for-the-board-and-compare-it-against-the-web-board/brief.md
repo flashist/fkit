@@ -4,18 +4,54 @@
 0405
 
 ## Sprint
-Sprint 11
+Backlog
 
 ## Priority
-P4
+Unscheduled
 
 ## Status
-🔄 In progress — driven by `/fkit-sprint-ship-loop` from a `fkit lead` session, started 2026-09-21.
+🚧 Blocked — waiting on 0433, 0434 (ADR-052 phase 3)
 
 ## Owner
 fkit-architect
 
 ## Context
+
+> ## ⭐⭐ RE-SCOPED 2026-09-30 under ADR-052 D11 — this block governs; everything below it is kept byte-identical as history and is SUPERSEDED where it disagrees.
+>
+> **Why.** [ADR-052](../../../knowledge-base/decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md) (accepted 2026-09-30) merges aiboard into fkit as its built-in board, the
+> single store. Its D11: *"`0405` terminal view — Re-scope over `fkit board --json` (aiboard's terminal
+> kanban is ported in v1), or cancel."* The owner's approval (A1, selected option text) authorised
+> *"task re-scopes"*; `fkit-lead` directed **re-scope**.
+>
+> **What changes.**
+> 1. **What is compared.** The web side is the board's own page — the owner door ([`0433`](../0433-build-the-owner-door-the-page-with-a-one-time-key-stamping-every-write-as-the-page-door/brief.md)). The
+>    terminal side is the board's ported terminal kanban view ([`0421`](../0421-port-aiboards-command-line-to-node-including-the-terminal-kanban-view-and-json/brief.md), named `fkit board` by
+>    [`0434`](../0434-name-the-boards-command-fkit-board-throughout-its-own-surface/brief.md)). ⛔ **Any terminal prototype is a thin consumer of `fkit board … --json`** — never a
+>    second reader of the markdown tree, and never `dashboard.sh` output.
+> 2. **Stage 0 is finished and frozen.** Its artifact, `bin/board-narrow.mjs`, filters `dashboard.sh`
+>    output; ADR-052 retires it with the read-only reader at phase 8 ([`0467`](../0467-retire-the-read-only-board-reader/brief.md)). ⭐ Its measurements —
+>    the character-width findings and the uncalibrated-terminal caveat — **are kept as evidence** for
+>    the comparison. No further work on the filter.
+> 3. **`plan.md` Stages 1–2 are superseded** where they target `dashboard.sh` or the reader. ⛔ **A
+>    re-plan, approved by the owner, comes before any further step.**
+> 4. **The audience question narrows — producer's reading, NOT a ruling.** The *"other people … without
+>    any framework"* constraint protected aiboard as a tool of its own. ADR-052 gives that up (ADR-049 C4
+>    dropped; R7). The report must still put the audience question to the owner, now stating that
+>    change.
+> 5. **The confound is removed.** `0409` (hierarchical status reporting) is done, so the comparison
+>    step's prose gate on it is satisfied.
+> 6. ⛔ **The web board is still not removed** — and it is now the only route to an owner-verified close
+>    (ADR-052 Q3, Q15), which settles that independently of this task.
+>
+> **Status — kept `🔄 In progress`, as directed.** ⚠️ Its next step (the comparison) cannot run until
+> `0433` and `0434` exist, and ⛔ **those are ADR-052 phase-3 work, which does not start without the
+> owner's specific word (ADR-052 — each phase starts only on his word).** The truthful value is
+> arguably `🚧 Blocked — waiting on 0433, 0434 (ADR-052 phase 3)`; that change (this field **and** the
+> Sprint 11 row) is left to the owner or lead.
+>
+> *Re-scoped by a spawned `fkit-producer` with no owner channel (ADR-021). No status, priority or owner
+> changed; ⛔ no commit.*
 
 ### ⛔ THIS IS AN INVESTIGATION AND A COMPARISON. IT IS NOT A BUILD, AND IT IS NOT AN ADOPTION.
 
@@ -54,7 +90,7 @@ board is for.**
 - **For *this* owner, a TUI is plausibly BETTER.** He is terminal-resident; fkit is driven entirely
   from a terminal; a board in the same window as the work removes a context switch.
 - ⛔ **For the never-withdrawn constraint, a TUI NARROWS the audience.** The standing constraint on
-  [Sprint 11's board](../../../sprints/sprint-11.md), under its heading *"THE STANDING CONSTRAINT"*,
+  [Sprint 11's board](../../../sprints/done/sprint-11.md), under its heading *"THE STANDING CONSTRAINT"*,
   quotes the owner: *"other people can attach the same module to other projects even if they just
   don't have any framework or system, but it might still be useful for them."* A terminal UI is
   usable by people who live in terminals. That is a **smaller** set than "regular humans."
@@ -226,7 +262,7 @@ argument as considered and closed; do not spend the task's time on it.
 
 ## Notes
 
-- **Depends on:** nothing
+- **Depends on:** [`0433`](../0433-build-the-owner-door-the-page-with-a-one-time-key-stamping-every-write-as-the-page-door/brief.md) and [`0434`](../0434-name-the-boards-command-fkit-board-throughout-its-own-surface/brief.md) (the page and the `fkit board` terminal view it compares — ADR-052 phase 3). Hard for the comparison. *(Re-scoped 2026-09-30; was "nothing" — every later note saying "Depends on: nothing" is correct for the original scope only.)*
 - **Blocks:** nothing
 - ⚠️ **Soft-sequenced behind `fkit-external-expert`'s report** — deliberately **not** declared as a
   dependency above, because the audience question and the width-class work do not need it. See
@@ -420,7 +456,7 @@ canonical dependency form has no way to say it**
   canonically on
   [`0404`](../../done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
   under its heading *"THE CONVERGENCE DECISION IS RULED"*, and on
-  [Sprint 11](../../../sprints/sprint-11.md).
+  [Sprint 11](../../../sprints/done/sprint-11.md).
   ⚠️ **What it means here:** the store this task's TUI would render **is now known to be fkit's tree
   today (A), and aiboard's tree eventually (B, gated).** ⛔ **So a TUI design that hard-codes either
   store has designed for a shape that is scheduled to change** — the verdict's *"a second thin consumer
@@ -434,7 +470,7 @@ canonical dependency form has no way to say it**
   stuffed into table cells"*, and `0383`'s own measurement of 2026-09-10 reads **89%**. ⛔ **The two are
   not reconciled and neither was re-measured here.** ⭐ **Re-measure at pickup; trust neither number in
   this paragraph** — this is the same unreconciled-figure discipline already applied to the longest-cell
-  count on [Sprint 11](../../../sprints/sprint-11.md).
+  count on [Sprint 11](../../../sprints/done/sprint-11.md).
 
 ### ⛔ WHAT THIS RULING DOES *NOT* DO
 

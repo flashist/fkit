@@ -30,9 +30,17 @@
   [ADR-033](adr-033-task-movers-are-producer-only-reversing-adr-025.md) (producer-only movers),
   [ADR-005](adr-005-vendor-wiki-query-skill-reads-decentralized.md) (nothing here writes the vault).
 - **Where the ruling previously lived, and why that was not enough:**
-  [`sprints/sprint-11.md`](../../sprints/sprint-11.md) and the briefs for tasks `0404` and `0405`.
+  [`sprints/sprint-11.md`](../../sprints/done/sprint-11.md) and the briefs for tasks `0404` and `0405`.
   Boards are archived when a sprint closes and briefs move when a task closes. ⭐ **A future agent looks
   in `decisions/` first, so the ruling lives here now.**
+
+> ⛔ **Partly superseded — 2026-09-30, by [ADR-052](adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md)**, recording the owner's approval of merging aiboard
+> into fkit as its built-in board. ⭐ **D1 — one store, never duplicate — is reaffirmed.** Superseded
+> from 2026-09-30: the trial, F1–F5, the work floor and the no-timeout guard (Amendments 1, 3, 5, 6, 8,
+> 9, 10), and **D7** with every assumption that aiboard is a separate project. **Kept as phase gates:**
+> P1–P6, A1–A2 and D5; D4 carries into *each phase on his word*; P5 stands. **D2** (the read-only
+> reader) ends in each project when it is converted. The evidence log is closed, not deleted.
+> ⛔ **Nothing below this notice was changed** — the notice was inserted; no line was deleted.
 
 > **What this ADR decides, in one line:** that **if** fkit ever depends on aiboard, aiboard is the
 > **single and only** store for tasks and sprints — and that fkit does **not** move there until a
@@ -52,7 +60,7 @@
    has its own precondition (a dry run the owner reads). See *§The gate*, **On a pass**.
 3. ⭐⭐ **THIS ADR IS THE AUTHORITATIVE TEXT OF THE GATE.** `P1`–`P6`, `A1`–`A2`, the trial, `F1`–`F5`
    and their wording live **here**. Any copy on a sprint board or in a task brief — including
-   [`sprints/sprint-11.md`](../../sprints/sprint-11.md) — is a **summary for planning**, not the gate.
+   [`sprints/sprint-11.md`](../../sprints/done/sprint-11.md) — is a **summary for planning**, not the gate.
    ⛔ **If a board and this ADR differ, this ADR wins**, and the board is the thing to correct.
    ⚠️ **Why this is spelled out:** on 2026-09-18 a spawned `fkit-producer` that had been scoped out of
    `decisions/` searched everywhere it was permitted, found `A2`, `F1`–`F5`, the no-reopen wording and
@@ -294,7 +302,7 @@ never be met. ⭐ **In force: any status change he SEES on the board counts, how
 
 ### Amendment 7 — housekeeping: the board is a summary, and the producer may now cite this ADR directly
 
-The producer mirroring these rulings onto [`sprints/sprint-11.md`](../../sprints/sprint-11.md) does so
+The producer mirroring these rulings onto [`sprints/sprint-11.md`](../../sprints/done/sprint-11.md) does so
 **as a summary**, carrying across the rule in *§Read first*, item 3: **this ADR is authoritative, the
 board is a summary, and if they differ the ADR wins.**
 
@@ -1074,7 +1082,7 @@ that lives here**.
 
 ## Related
 
-- [`sprints/sprint-11.md`](../../sprints/sprint-11.md) — where the ruling was first recorded, its four
+- [`sprints/sprint-11.md`](../../sprints/done/sprint-11.md) — where the ruling was first recorded, its four
   tracks, and open decisions `D1`–`D5`. ⛔ **Its copy of the gate is a SUMMARY.** This ADR is the
   authoritative text — see *§Read first*, item 3. If they differ, the board is what gets corrected.
 - [`tasks/backlog/0404-…/brief.md`](../../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)

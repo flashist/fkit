@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+⛔ Cancelled (agent-closed — not owner-verified) (2026-09-30) — Obsolete under ADR-052 (D11): the read-only reader (`bin/fkit-board.mjs`) retires at phase 8, so a fix to its snapshot cache is not worth building.
 
 ## Owner
 fkit-coder

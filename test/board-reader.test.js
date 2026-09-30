@@ -8,8 +8,8 @@
 // preserved Python spike got it wrong.
 //
 //   A — snapshot shape: every id is a JSON STRING matching ^\d{4}$, and `0013` survives unmangled.
-//   B — sprint status comes from the ONE recognizer: Sprint 11 reads its true status, an archived
-//       board reads Done FROM LOCATION, backlog.md reads `unresolved` (never `Backlog`), and a board
+//   B — sprint status comes from the ONE recognizer: a fixture open board reads its true status, an
+//       archived board reads Done FROM LOCATION, backlog.md reads `unresolved` (never `Backlog`), and a board
 //       whose banner carries a LATER cancel marker in trailing prose still reads in-progress — the
 //       exact specimen that made the spike's first draft call Sprint 11 cancelled.
 //   C — ⭐ NO SECOND GRAMMAR: the reader's own source carries no sprint-banner marker, no banner
@@ -118,22 +118,58 @@ test('A: every task id is a JSON string of exactly four digits, and 0013 is unma
 
 // ── B — sprint status: one recognizer, location for archives, no false reads ─────────────────────
 
+// ⚠️ A FIXTURE sprint tree, not the repo's live board. B used to pin `sprint-11.md` as "the live
+// board", and went red the day Sprint 11 was closed and moved to `sprints/done/` — a sprint closing is
+// ordinary lifecycle, not a reader regression. The open boards here are built in a temp tree so the
+// "status comes from dashboard.sh" half no longer depends on which sprint happens to be open today.
+// The archived boards deliberately carry an IN-PROGRESS banner: if the reader parsed a banner for an
+// archive instead of reading its LOCATION, they would not come back Done / Cancelled.
+function withSprintFixture(fn) {
+  const dir = mkdtempSync(join(tmpdir(), 'fkit-board-sprints-'));
+  try {
+    for (const b of ['backlog', 'done', 'cancelled']) {
+      mkdirSync(join(dir, 'ai-agents', 'tasks', b), { recursive: true });
+    }
+    const sprints = join(dir, 'ai-agents', 'sprints');
+    for (const sub of ['done', 'cancelled']) mkdirSync(join(sprints, sub), { recursive: true });
+    const board = (title, marker, word) => `# ${title} — a fixture board\n\n> ## ${marker} ${word} — 2026-09-30.\n`;
+    writeFileSync(join(sprints, 'sprint-98.md'), board('Sprint 98', '\u{1F504}', 'In progress'));
+    writeFileSync(join(sprints, 'sprint-97.md'), board('Sprint 97', '\u{1F532}', 'Backlog'));
+    writeFileSync(join(sprints, 'done', 'sprint-96.md'), board('Sprint 96', '\u{1F504}', 'In progress'));
+    writeFileSync(join(sprints, 'cancelled', 'sprint-95.md'), board('Sprint 95', '\u{1F504}', 'In progress'));
+    return fn(dir, makeReader({ root: dir, dashboard: DASHBOARD }).snapshot());
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
 test('B: sprint status comes from dashboard.sh for open boards and from LOCATION for archives', () => {
+  // Open boards: each one's status is whatever dashboard.sh resolves for it — the assertion is that
+  // the reader reports exactly that, not that the value is any particular word. Two open boards with
+  // DIFFERENT banners, so a reader that reported one answer for every board could not pass.
+  withSprintFixture((dir, fixture) => {
+    const byFolder = new Map(fixture.sprints.map((s) => [s.folder, s]));
+    for (const [folder, id] of [['sprint-98.md', 'S-098'], ['sprint-97.md', 'S-097']]) {
+      const open = byFolder.get(folder);
+      assert.ok(open, `${folder} is rendered as a board`);
+      const resolved = spawnSync('bash', [DASHBOARD, 'status', join(dir, 'ai-agents', 'sprints', folder)],
+        { cwd: dir, encoding: 'utf8' });
+      assert.equal(resolved.status, 0, `dashboard.sh resolves ${folder}`);
+      assert.equal(open.status, resolved.stdout.trim(),
+        `${folder}: the reader reports the ONE recognizer's answer, byte for byte`);
+      assert.equal(open.id, id);
+    }
+    assert.notEqual(byFolder.get('sprint-98.md').status, byFolder.get('sprint-97.md').status,
+      'the two open fixture boards resolve to different statuses, so each was read on its own');
+
+    // Archived fixture boards: status from LOCATION, despite an in-progress banner on line 3.
+    assert.equal(byFolder.get('sprint-96.md').status, 'Done', 'done/ means Done, whatever the banner says');
+    assert.equal(byFolder.get('sprint-95.md').status, 'Cancelled',
+      'cancelled/ means Cancelled, whatever the banner says');
+  });
+
   const snap = reader.snapshot();
   const byFolder = new Map(snap.sprints.map((s) => [s.folder, s]));
-
-  // The live board. Its own status is whatever dashboard.sh resolves TODAY — the assertion is that
-  // the reader reports exactly that, not that the value is any particular word.
-  const live = byFolder.get('sprint-11.md');
-  assert.ok(live, 'sprint-11.md is rendered as a board');
-  const resolved = spawnSync('bash', [DASHBOARD, 'status', join(ROOT, 'ai-agents', 'sprints', 'sprint-11.md')],
-    { cwd: ROOT, encoding: 'utf8' });
-  assert.equal(resolved.status, 0, 'dashboard.sh resolves sprint-11.md');
-  assert.equal(live.status, resolved.stdout.trim(),
-    'the reader reports the ONE recognizer\'s answer, byte for byte');
-  assert.notEqual(live.status, 'Cancelled',
-    'Sprint 11 is NOT cancelled — the specimen that broke the spike\'s first draft');
-  assert.equal(live.id, 'S-011');
 
   // Archived: status from location. No banner is parsed and no extra subprocess is spent.
   const archived = snap.sprints.filter((s) => s.path.includes(`${join('sprints', 'done')}`));
@@ -418,10 +454,15 @@ test('H1: a board\'s goal is null — the line-3 status banner is never publishe
       `${s.folder}: fkit boards carry no goal field. Publishing line 3 here put the STATUS in a `
       + 'field aiboard labels "Goal", on every sprint card and in the drawer.');
   }
-  // ...and the status itself is still reported, in its own field, from the one recognizer.
-  const live = snap.sprints.find((s) => s.folder === 'sprint-11.md');
-  assert.ok(live && typeof live.status === 'string' && live.status.length > 0,
-    'dropping goal must not drop status — they are different fields');
+  // ...and the status itself is still reported, in its own field, from the one recognizer — checked
+  // on a fixture OPEN board (see withSprintFixture), not on whichever repo sprint is open today.
+  withSprintFixture((_dir, fixture) => {
+    const open = fixture.sprints.find((s) => s.folder === 'sprint-98.md');
+    assert.ok(open, 'the fixture open board is rendered');
+    assert.equal(open.goal, null, 'an open board carries no goal either');
+    assert.ok(typeof open.status === 'string' && open.status.length > 0,
+      'dropping goal must not drop status — they are different fields');
+  });
 });
 
 test('H2: a truncated sprint description SAYS it was truncated, in text that survives aiboard', () => {

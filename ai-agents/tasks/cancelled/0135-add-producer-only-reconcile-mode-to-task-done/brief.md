@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🚧 Blocked — sequenced behind `0408` (ADR-050's mover command). Building this reconcile mode against prose movers means building it twice. Set 2026-09-18; see the dated note at the end of this brief for the condition that lifts it.
+⛔ Cancelled (agent-closed — not owner-verified) (2026-09-30) — Obsolete under ADR-052 (D11): a close cannot half-land once status has one place (the board's folder); ADR-048's reconcile mode is not to be built.
 
 ## Owner
 fkit-coder
@@ -176,7 +176,7 @@ this drift).
 > `/fkit-task-done`'s already-moved-folder handling, its possible mirror in `/fkit-task-cancelled`, and
 > the routing change in both ship-loops. ⚠️ **ADR-050 moves exactly that layer out of prose.** Land
 > this task first and the branch is written against prose, then rewritten when
-> [`0408`](../0408-build-the-deterministic-mover-command-the-four-mover-skills-call/brief.md) lands —
+> [`0408`](../../cancelled/0408-build-the-deterministic-mover-command-the-four-mover-skills-call/brief.md) lands —
 > **two implementations of one decision, and the second one done under a deadline nobody chose.**
 >
 > ⭐ **`fkit-architect` raised this point and explicitly declined to decide it**, stating it is the
@@ -193,7 +193,7 @@ this drift).
 >
 > ⛔ **`0408` is itself not authorised to start**, on two counts: **ADR-050 is mid-signature**, and
 > `0408` is hard-blocked behind
-> [`0407`](../0407-build-the-mover-outcome-verifier-which-is-also-the-acceptance-test-for-the-mover-command/brief.md).
+> [`0407`](../../backlog/0407-build-the-mover-outcome-verifier-which-is-also-the-acceptance-test-for-the-mover-command/brief.md).
 > ⚠️ **So this row is blocked behind a task that is blocked behind an unsigned ADR.** That chain is
 > stated plainly rather than hidden inside a one-line reason:
 >

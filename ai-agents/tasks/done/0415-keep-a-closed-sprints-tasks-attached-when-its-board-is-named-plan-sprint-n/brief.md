@@ -118,7 +118,7 @@ Probably **out of scope** (the plan says so, or argues otherwise):
 
 - **Depends on:** nothing (`0412` is done).
 - **Blocks:** nothing.
-- ⚠️ **Same file as [`0413`](../../backlog/0413-make-the-board-readers-snapshot-cache-notice-renames/brief.md)**
+- ⚠️ **Same file as [`0413`](../../cancelled/0413-make-the-board-readers-snapshot-cache-notice-renames/brief.md)**
   (`bin/fkit-board.mjs`, still Backlog). Different functions (`boardIdFromFile()` here, `cacheKey()`
   there), so the conflict risk is low, but whichever lands second rebases on the first. Not a hard
   dependency — no ordering is imposed. ⭐ `0413`'s rename tests would be a natural place to also cover a

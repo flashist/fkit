@@ -96,7 +96,7 @@ Both deferrals the table records are **discharged in that same act**: `## Priori
 
 ⚠️ **The sprint is `Sprint 11`, not `Sprint 10`, and `Sprint 10` is deliberately left empty** —
 earmarked by earlier owner rulings for fkit's *own* backlog work. The full reasoning, and the open
-owner decision it leaves behind, are on [Sprint 11's board](../../../sprints/sprint-11.md) under its
+owner decision it leaves behind, are on [Sprint 11's board](../../../sprints/done/sprint-11.md) under its
 heading *"READ THIS FIRST"*.
 
 ### ⛔⛔ 2026-09-18 — THE OWNER REDIRECTED THE APPROACH. THIS BRIEF'S "What to build" NOW SITS BEHIND TWO STEPS IT DOES NOT DESCRIBE.
@@ -220,7 +220,7 @@ any seam. ⚠️ **That survives the Python→Node port**, because the property 
 same cost curve.
 
 ⛔ **Nothing among the six is still open.** What remains open is the owner's, not aiboard's — see the
-open-decision annotation below and [Sprint 11's board](../../../sprints/sprint-11.md).
+open-decision annotation below and [Sprint 11's board](../../../sprints/done/sprint-11.md).
 
 ### ⛔ THE TWO fkit-SIDE CONSTRAINTS ANY WRITE PATH MUST RESPECT — this is the real integration risk
 
@@ -618,7 +618,7 @@ models. Not now, not staged, not as a goal."*
 ⛔ **Record it that way and no other way: adopted on the path, overridden on the destination.** ⛔ **The
 verdict's file is not edited** — a report records what its author concluded, and editing it would make
 the record say something its author did not say. ⭐ **This section and
-[Sprint 11](../../../sprints/sprint-11.md) are where the supersession lives.**
+[Sprint 11](../../../sprints/done/sprint-11.md) are where the supersession lives.**
 
 ⚠️ **Carry the verdict's own self-assessment forward with it**, from its heading *"6. Where I think each
 party is wrong"*: *"I have a bias toward not building, and this verdict is what that bias produces."*
@@ -760,7 +760,7 @@ not evidence either.**
 ⚠️⚠️ **An undefined gate is how "later" becomes "never" or "next week", and this is a migration he will
 only want to do ONCE.** ⛔ **No agent may adopt gate criteria of its own.** ~~Draft criteria were returned
 to `fkit-lead` as a `NEEDS-DECISION` on 2026-09-18 and are carried on
-[Sprint 11](../../../sprints/sprint-11.md) as open decision **D4**. ⛔ **Until the owner rules, the gate
+[Sprint 11](../../../sprints/done/sprint-11.md) as open decision **D4**. ⛔ **Until the owner rules, the gate
 is undefined and B stays frozen.**~~
 
 > ✅ ⭐⭐ **SUPERSEDED 2026-09-18 — THE OWNER RULED, AND ALL THREE CONDITIONS ARE NOW MEASURABLE.**

@@ -284,7 +284,7 @@ question instead.
   is held by `0404`, a **closed** row, and closed history is not re-ranked — so the ruled merit position
   (*"runs next, ahead of `0405` and `0410`"*) lands one integer lower. `0405` → `P4`, `0410` → `P5`;
   ⛔ **no closed row moved.** Full record on
-  [Sprint 11](../../../sprints/sprint-11.md) under its heading *"THE OWNER RULED THE RE-RANK"*.
+  [Sprint 11](../../../sprints/done/sprint-11.md) under its heading *"THE OWNER RULED THE RE-RANK"*.
 - ⚠️ **Priority `P5` is append rank, NOT a merit ranking — flagged for owner confirmation.**
   **On merit this belongs directly below `0404`**, because it is the continuation of the Track-1 interim
   `0404`'s row was re-scoped to, ADR-051 ruled that interim *"RUN IT NOW"*, and

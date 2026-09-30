@@ -23,7 +23,7 @@
 
 **Related documents:**
 - [ADR-051 — one store for tasks; aiboard is the gated destination; the read-only reader is the interim](../decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim.md) — the decision and the gate.
-- [Sprint 11 board](../../sprints/sprint-11.md) — the convergence sprint (a planning summary of the gate, not the gate).
+- [Sprint 11 board](../../sprints/done/sprint-11.md) — the convergence sprint (a planning summary of the gate, not the gate).
 - [2026-09-18 — the two data models, laid out for an external expert](2026-09-18-fkit-aiboard-data-model-evaluation-for-an-external-expert.md)
 - [2026-09-18 — the external expert's verdict](2026-09-18-external-expert-verdict-on-fkit-aiboard-convergence.md) (its endpoint was overridden by ADR-051; its file is unchanged).
 
@@ -160,7 +160,7 @@ Friction met on the way — each one fixed or filed in fkit:
 | The reader could only serve fkit's own `ai-agents/` tree | Fixed — `--root` flag, [task 0412](../../tasks/done/0412-let-the-read-only-board-reader-serve-another-projects-ai-agents-tree-root-flag/brief.md) |
 | The sibling project's installed fkit copy was stale (v0.2.2, dashboard v1); its sprint banners predated the sprint-status vocabulary | Observed; not an fkit code defect |
 | Archived boards named `plan-sprint-N.md` lost their tasks on the board | Fixed — [task 0415](../../tasks/done/0415-keep-a-closed-sprints-tasks-attached-when-its-board-is-named-plan-sprint-n/brief.md) |
-| The reader's snapshot cache does not notice renamed task folders | **Open** — [task 0413](../../tasks/backlog/0413-make-the-board-readers-snapshot-cache-notice-renames/brief.md) |
+| The reader's snapshot cache does not notice renamed task folders | **Open** — [task 0413](../../tasks/cancelled/0413-make-the-board-readers-snapshot-cache-notice-renames/brief.md) |
 
 **Why "mixed" for B.**
 - **Toward B:** it shows a board is genuinely wanted for real work. And it shows the running cost of A:

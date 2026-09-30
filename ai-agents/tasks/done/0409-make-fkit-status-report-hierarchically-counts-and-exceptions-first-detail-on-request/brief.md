@@ -133,7 +133,7 @@ cannot ship without a ruling this one does not need.
 
 ### ⛔ NOT FROZEN — and the reason is stated so nobody has to re-derive it
 
-[Sprint 11](../../../sprints/sprint-11.md) carries an owner-ruled **migration freeze**, re-founded
+[Sprint 11](../../../sprints/done/sprint-11.md) carries an owner-ruled **migration freeze**, re-founded
 2026-09-18 on the gated-B ruling. ⛔ **This task is outside it.** The freeze covers *"re-keying ids,
 moving folders, rewriting boards"* — changes to the **stored shape**. This task changes **how the store
 is rendered to a reader** and touches **no stored file**. ⚠️ **If it ever proposes changing a board, a

@@ -19,6 +19,14 @@
   `fkit-architect`. **[X]** = measured or read by `fkit-external-expert` itself, per its verdict's own
   tag. **[M✓]** = an [X] figure re-checked by `fkit-architect` in this revision.
 
+> ⛔ **Partly superseded — 2026-09-30, by [ADR-052](adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md)** (aiboard merges into fkit as its built-in board).
+> From 2026-09-30: **C4** dropped; **D7** superseded (fkit owns the mechanism); **D8** discharged
+> (`fkit board` is the command). In a project **once it is converted**: **D1 / D3 amended** — the store
+> sets owner-verified **only** for writes through the owner's web page, a label and not proof; every
+> other close is agent-closed — and **D5**'s read-only posture ends. **D2 and D4 unchanged** (D4 is met
+> by building the T-022 fix into the port). Until a project is converted, this ADR applies there as
+> written. ⛔ **Nothing below this notice was changed** — the notice was inserted; no line was deleted.
+
 > ## ⚠️ REVISION NOTICE — THE VERDICT LANDED AND IT CHANGED THE DECISION
 >
 > This ADR's first draft carried a banner saying it was written ahead of `fkit-external-expert`'s
