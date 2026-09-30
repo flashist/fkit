@@ -47,6 +47,7 @@ The ADR deliberately **declined to pick the runner**, on the owner's explicit ru
 - **Re-raise only if:** shell *internals* ever need asserting in isolation (shellspec becomes live again); **Node stops being a de facto prerequisite** (removing the strongest leg of the `node --test` case); or **test infrastructure ever becomes something a consuming project installs** — that inverts the `install.sh:43` fact everything here rests on.
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — test scope **grows from phase 2**: aiboard's **52** non-MCP behaviour tests ported to `node:test` (the 10 MCP tests with phase 9) plus converter fixtures; ⭐ **zero dependencies kept**
 - [[tasks/build-deterministic-dashboard-script-for-fkit-status]]
 - [[tasks/implement-pretooluse-skill-ownership-hook]]
 - [[tasks/task-done-flips-brief-own-status-header]]

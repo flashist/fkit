@@ -15,6 +15,12 @@ Codify the manual recovery recipe for disconnected fkit teammate runners so a re
 ## Outcome
 The team now has a repeatable reconnect command for disconnected runners while the upstream Omnigent bugs remain external to this repo. The task is explicitly a bridge, not the permanent fix.
 
+> ✅ **Sync 2026-09-30 (`a351cb6`→`3915417`) — the brief's own `## Status` was repaired to plain `✅ Done` on
+> 2026-09-18.** It had read `🔲 Backlog` inside `done/` since the 2026-07-21 folder migration created it that
+> way (*born wrong, not drifted*); the owner had closed the task himself on 2026-07-10 (commit `f7b23f4`). The
+> repair was made by a spawned producer under a **one-time, two-brief owner grant** recorded as the 2026-09-18
+> addendum on [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — ⛔ **not a precedent**.
+
 ## Related
 - [[systems/subagent-runner-connectivity]]
 - [[systems/fkit]]

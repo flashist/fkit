@@ -22,6 +22,7 @@ Done. `/fkit-status` is a producer-owned skill reading the two conventions as **
 The sibling of [[tasks/add-task-plan-skill-to-producer]], on the same logic: **formalize what the producer already does by hand into a repeatable, sanctioned procedure.** Its dependence on `conventions/` is exactly why [[tasks/repair-knowledge-base-paths-in-product-source]] mattered — a skill that can't find its contract **silently falls back to an inline copy**.
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[tasks/make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request]] — task `0409`: the Task cell brought into conformance with the report-format convention, **−83.6%** bytes on the Backlog render
 - [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/add-task-plan-skill-to-producer]]
 - [[tasks/enforce-task-status-vocabulary]]

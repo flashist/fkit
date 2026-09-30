@@ -144,3 +144,4 @@ worse than none.**
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]]
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]]
 - [[systems/knowledge-base-structure]]
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]

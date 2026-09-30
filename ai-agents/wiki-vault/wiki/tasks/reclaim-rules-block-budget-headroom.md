@@ -38,6 +38,7 @@ Re-injection was proven by extracting the block from `CLAUDE.md` and `AGENTS.md`
 > ⚠️ **And the target this task set is still guarded by NOTHING** — it lives only in a header comment; **no assertion enforces it**, and the `<= 92 %` gate is **relative to `RULES_MAX`**, so the bump moved the warning line outward too. `0190` leaves the hole **narrower** than it found it (silent-growth headroom **219 B → 189 B**) and filed the fix as task `0219`. **The ≥ 400 B target must never be described as guarded.**
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[tasks/add-an-explain-more-then-ask-again-standing-option-to-fkit-owner-questions]] — task `0414`, cancelled: measured **446 B free** on 2026-09-25, leaving only ~46 B inside this task's ≥400 B headroom target — too little for the proposed rule
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — the hook whose prose half (`0128`) consumed the headroom
 - [[tasks/add-adr-030-prose-half-to-universal-rules]] — task `0128`, which brought the block to 91.1% and flagged this as its follow-up; **not a defect in it**
 - [[tasks/compress-universal-rules-output-style-section]] — task 79 / `0022`, the precedent and the source of the *"dropping a qualifier is a regression"* rule

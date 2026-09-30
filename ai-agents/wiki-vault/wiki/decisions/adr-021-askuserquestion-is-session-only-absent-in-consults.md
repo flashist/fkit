@@ -25,6 +25,7 @@ On Claude Code 2.1.212, `AskUserQuestion` functions in a top-level `fkit <role>`
 - The grant mechanism (explicit `tools:` entries) was later **subsumed by** [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — the capability now arrives by inheritance; the harness fact recorded here still holds.
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[tasks/add-an-explain-more-then-ask-again-standing-option-to-fkit-owner-questions]] — task `0414`, cancelled: a standing *"Explain more, then ask again"* option could not be added by a consult, which has no `AskUserQuestion`
 - [[tasks/investigate-askuserquestion-availability-for-agents]] — the investigation (task 39) that produced this
 - [[tasks/grant-askuserquestion-tool-to-six-claude-agents]] — the grant implementation (task 54)
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — subsumes the grant mechanism; the fact here survives it

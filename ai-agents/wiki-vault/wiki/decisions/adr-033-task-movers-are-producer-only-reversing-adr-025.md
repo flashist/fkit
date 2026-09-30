@@ -9,6 +9,10 @@
 
 > **In one line:** only **`fkit-producer`** may run the task movers; every other role — wiki, coder, reviewer, architect, and the evolved lead/orchestrator — **routes closes through the producer** and closes nothing itself.
 
+> ⛔ **Sync 2026-09-30 (`a351cb6`→`3915417`) — §Decision 5 is superseded, but only in a CONVERTED project.** [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] (accepted 2026-09-30) makes fkit's built-in board the single task store. In a project once it is converted, **a producer close with the owner present is no longer owner-verified** — only a close the owner makes himself in the board's web page is (ADR-052 Q3, ruled against the architect's recommendation). ⭐ **Until conversion — fkit itself included, until ADR-052's phase 6 — §5 applies as written.** Decisions 1–4 and *§The limit* are unchanged; after conversion they are enforced by the store, an identity hook and the skill lock. The source ADR carries an inserted notice; nothing was deleted.
+>
+> ⭐ **Also new in the source: a 2026-09-18 addendum** — a one-time, two-brief owner grant, recorded below under *§Addendum — 2026-09-18*.
+
 ## Context
 
 ADR-025 (2026-07-18/19) removed the owner-only close gate and granted `/fkit-task-done` and `/fkit-task-cancelled` to every role but the adversarial reviewer, accepting knowingly that prevention was gone and only a prose marker remained.
@@ -62,7 +66,34 @@ The implementation ([[tasks/revert-task-movers-to-producer-only]]) had its scope
 
 Two of these would have slipped the verification sweep entirely, because **the sweep matches phrasing, not meaning** (`fkit-lead.md` said *"closes each task itself"*, which no "any role may invoke" regex matches). The grep is **a smoke test, never an inventory** — recorded as an accepted residual, and the reason [[tasks/revert-task-movers-to-producer-only]] fed a follow-up investigation into the fact-inventory gap.
 
+## Addendum — 2026-09-18: a one-time, two-brief owner grant to bypass the identity gate (NOT a precedent)
+
+*Ingested 2026-09-30 (sync `a351cb6`→`3915417`).* A **scoped, spent grant** — it refines and supersedes
+nothing; §Decision 5 and `/fkit-task-done`'s *"never fire for a non-owner identity"* bullet stand exactly
+as written.
+
+- **Scope, the whole of it:** the briefs of **`0021`** and **`0041`**, both already in `tasks/done/`, whose
+  `## Status` read `🔲 Backlog` while their folders sat in `done/` and their Sprint 1 board rows read plain
+  `✅ Done`. That is exactly the **contradicted-close repair** (`/fkit-task-done` step 1's second exception,
+  built by `0229`) — every bar held **except one**: it never fires for a spawned producer, and no
+  owner-present producer session was running.
+- **The owner ruled** (selected option text) to authorise a spawned producer to bypass that one gate,
+  having been shown in the option that it *"is a real change to a rule that exists to stop agents forging
+  closes"* and *"sets a precedent an agent can point at later"*.
+- ⭐ **Plain `✅ Done` was written, with no agent-closed marker, on git evidence:** the owner himself closed
+  both on 2026-07-10 (commits `f7b23f4`, `6daf3cc`). Stamping the marker would have **downgraded** an
+  owner-closed task — which ADR-048's must-never list bars.
+- ⭐ **Correction to the record:** the two briefs did **not** drift after close. The `## Status` field did not
+  exist then; the folder migration (`331f298`, 2026-07-21) **created both briefs inside `done/` with
+  `🔲 Backlog`** — *born wrong, not drifted.*
+- ⛔ **What a future agent may NOT take from this:** it is **not** a licence for a spawned producer to bypass
+  the identity gate. A spawned producer meeting the same shape **stops and reports** a `NEEDS-DECISION`.
+  **`0014`** was examined in the same sweep and **deliberately left alone** (no close commit, no board row;
+  owner: *"Leave it, pending 0296."*).
+- Pages: [[tasks/build-fkit-reconnect-tooling]] (`0021`) · [[tasks/fix-claude-agents-md-placeholder-text]] (`0041`).
+
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — ⛔ **supersedes §5 in converted projects**; keeps Decisions 1–4 and *§The limit*, now store-enforced · [[decisions/adr-049-owner-verified-close-requires-a-verified-human-principal-no-channel-supplies-one]] — cites this ADR's *"not a laundering-proof gate"* as its own honesty standard · [[decisions/adr-050-prose-is-not-a-transaction-how-the-four-movers-are-executed]] — B-1: producer-only is separation of invoking identity, never prevention · [[tasks/build-fkit-reconnect-tooling]] · [[tasks/fix-claude-agents-md-placeholder-text]] — the two briefs the 2026-09-18 addendum repaired
 - [[decisions/adr-025-spawned-agents-may-invoke-the-task-movers]] — **reversed** (Decisions 1–2); its forgeability analysis and spawned-producer limit are re-used here, not re-derived
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — §Decision 5 **amended** (self-close → producer route); plan gate unchanged
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — **amended** (orchestrator spawns the producer to close)

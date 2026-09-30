@@ -191,6 +191,7 @@ reasons do not*, so the instruction is **rewrite the reason, keep the rule**.
 the one-grammar constraint honored at the site it was written for.
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — ⚠️ **amended AT CONVERSION**: a sprint's status becomes its folder, several active sprints stay legal, and the backlog is **not a sprint** (tasks with no sprint). ⭐ Still in force in unconverted projects
 - [[decisions/adr-040-a-plan-s-sprint-identity-is-a-whole-h1-segment-never-a-substring]] — the grammar this selector is a function of
 - [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — the prose-not-prevention residual shape reused here
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] — preserved under every branch

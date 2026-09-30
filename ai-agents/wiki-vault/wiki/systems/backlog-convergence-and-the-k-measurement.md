@@ -211,3 +211,4 @@ rows did.
 NOT asserted to confirm it.** That ruling rested on a **14.5-point fall over 15 days**; this is **one
 later measurement three days on**, and one measurement is not a trend. ⭐ **It is recorded so the next
 reader has it rather than re-deriving it** — which is the whole reason the instrument exists.
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] · [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]

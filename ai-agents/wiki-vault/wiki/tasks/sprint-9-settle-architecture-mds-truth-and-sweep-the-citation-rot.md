@@ -164,6 +164,7 @@ sprint.**
   owner rulings narrowed the declaration — case, then tracking — and neither touched the exemptions.**
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[tasks/sprint-11-fkit-aiboard-convergence]] — ⭐ **the next board opened, and it is Sprint 11, not 10**: `Sprint 10` was deliberately left empty because owner-ruled text (including this board's `0189` deferral) already earmarks it for fkit's own backlog work. Sprint 11 (fkit ↔ aiboard convergence) opened 2026-09-18 and closed 2026-09-30
 - [[tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]]
 - [[tasks/sprint-7-stop-manufacturing-record-repair-rows]]
 - [[decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint]]
@@ -176,3 +177,4 @@ sprint.**
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/correct-the-false-ci-has-never-run-claims-in-architecture-md]] — task `0312`, the half-done predecessor whose declined scope extension left the §9.1 occurrence-B gap this board's `P1` finally closed
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[systems/backlog-convergence-and-the-k-measurement]] — the convergence measurement filed three days before this board opened
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`, closing a one-way link):* [[systems/fkit]] — the team page, which now also carries a count defect in **this board's own subject file** that no row on it was scoped to reach
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board Sprint 9 drew rows off

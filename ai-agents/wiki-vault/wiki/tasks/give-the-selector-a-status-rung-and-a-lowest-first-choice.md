@@ -72,3 +72,4 @@ the shape this task built, reporting correctly that there is no active sprint.
 - [[decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob]]
 - [[decisions/adr-040-a-plan-s-sprint-identity-is-a-whole-h1-segment-never-a-substring]]
 - [[tasks/implement-adr-041s-dashboard-half]]
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/build-the-producer-only-sprint-movers]]

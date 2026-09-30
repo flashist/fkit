@@ -139,6 +139,7 @@ is proposed again **with a concrete consumer** that must read an index the tree 
 re-raise the dual-format transition, content-hash IDs, numbering only open tasks, or the task-64 ordering.
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — ⚠️ **amends this ADR AT CONVERSION** (per project): a task stays a folder with a permanent four-digit id and **`0404` is unchanged** (owner: *"Keep 0404"*); `in-progress/` becomes a fourth status folder; the board allocates ids by the same `1 + max` rule; `## ID` moves into front matter; the cross-branch id race is unchanged and still accepted · [[decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim]] — aiboard's `T-023` silently turned `0013` into `13`, a direct hit on this ADR's identity model
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — §6 recorded this folder as the intended end
   state; this ADR executes it and absorbs all three of its top-level directories
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — the additive invariant that

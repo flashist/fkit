@@ -169,6 +169,7 @@ was implemented in `awk` rather than `sed`, on a recorded portability finding (a
 produces one un-split segment on macOS and works on Linux CI).
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — ⚠️ **the line-3 banner grammar and filename-derived identity retire AT CONVERSION** (a sprint becomes a `sprint-N` folder); ⭐ **still in force in every unconverted project, and still how ADR-052's converter reads old boards** · [[tasks/keep-a-closed-sprints-tasks-attached-when-its-board-is-named-plan-sprint-n]] — `0415`: the read-only reader's archived-board id mapping for `plan-sprint-N.md`, which deliberately does not re-implement this grammar
 - [[decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob]] — the companion; its selector is a function of this grammar
 - [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — precedent for a stated prose-not-prevention residual
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board this shipped on

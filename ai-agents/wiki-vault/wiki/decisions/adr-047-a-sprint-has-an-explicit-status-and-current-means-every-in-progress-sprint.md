@@ -109,6 +109,7 @@ tie-break, `Backlog` token and one-grammar-one-implementation constraint are **u
   a design ruling acquires new gaps.
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — ⚠️ **amended AT CONVERSION**: the line-3 status banner retires and a sprint's status is **which folder it is in** (`sprints/<status>/sprint-N/sprint.md`); multiple active sprints stay legal; `sprint close --carry-to` replaces the prose sprint movers' multi-step close. ⭐ Still in force in unconverted projects — fkit included until ADR-052's phase 6 · [[tasks/sprint-11-fkit-aiboard-convergence]] — the last board closed under this lifecycle before ADR-052 (closed 2026-09-30, agent-closed)
 - [[decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob]] — **superseded in part** by this ADR; its other clauses stand
 - [[decisions/adr-040-a-plan-s-sprint-identity-is-a-whole-h1-segment-never-a-substring]] — the identity grammar this depends on
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — the identity separation the sprint movers inherit
@@ -126,3 +127,4 @@ tie-break, `Backlog` token and one-grammar-one-implementation constraint are **u
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-sprint-mover-pins-and-successor-mode-durable-prove-red-mutations]] — task `0388`: ⭐ **this ADR's own *"re-raise on a third instance"* fence fired** — the emitter-map class had reached a fourth instance, and item A mechanised it as `prove-red` mutation 39
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sweep-the-repo-only-claude-path-form-out-of-installed-facing-prose]] — task `0390`: ⭐ **this ADR's ~20 `claude/…:NNN` citations were fenced OUT of that sweep** — source coordinates into this repo are a different thing from an installed-facing instruction
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`, closing a one-way link):* [[systems/fkit]] — the team page whose mover inventory this ADR grew from **two to four**, under one unchanged `skills_for_role()` rule
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/role-locked-sessions]]

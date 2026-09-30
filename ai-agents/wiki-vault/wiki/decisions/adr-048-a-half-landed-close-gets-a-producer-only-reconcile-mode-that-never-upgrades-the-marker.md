@@ -5,6 +5,17 @@
 
 **Source**: `ai-agents/knowledge-base/decisions/adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker.md`
 
+> ⛔⛔ **OBSOLETE — 2026-09-30, by [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]]**
+> *(sync `a351cb6`→`3915417`).* With one place for status (the board's folder), a close cannot half-land,
+> so **the reconcile mode is not to be built**. Task **`0135` was CANCELLED 2026-09-30** (agent-closed) —
+> see [[tasks/the-2026-09-30-adr-052-task-dispositions]]; its brief now sits under `tasks/cancelled/`, and the
+> source ADR's two links to it were repointed there. ⚠️ **Until a project is converted, its closes are still
+> prose and can still half-land, and nothing is built for that window** — the owner-only exceptions in
+> `/fkit-task-done` step 1 remain the only repair paths. The source ADR carries an inserted notice; nothing
+> was deleted. **Every "once `0135` ships it" below now reads "never".** The **must-never list** (never
+> write plain `✅ Done`, never upgrade the marker) remains a sound statement of intent and is echoed by
+> ADR-052's rule that the board sets the close kind from the door, never the caller.
+
 > ⭐ **Ingested 2026-09-16** (sync pass, Sprint 9 wrap-up). This ADR had **no vault page at all** until
 > this pass. ⚠️ **It is UNCOMMITTED on disk at ingest time** — the bytes read were the working tree's,
 > with `HEAD` at `81f1429`. If this work is amended or reverted before it commits, this page describes a
@@ -137,6 +148,7 @@ changes is **where their agent stop leads**.
 re-raise path is the owner-present sub-path that would close the first residual.
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — ⛔ **makes this ADR obsolete** · [[tasks/the-2026-09-30-adr-052-task-dispositions]] — `0135` cancelled · [[decisions/adr-050-prose-is-not-a-transaction-how-the-four-movers-are-executed]] — would have re-homed this mode inside a deterministic command · [[decisions/adr-049-owner-verified-close-requires-a-verified-human-principal-no-channel-supplies-one]] — cites this ADR as the nearest precedent for *never upgrade the marker*
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — the producer-only rule this inherits, and the limit this ADR **widens by name**
 - [[tasks/widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close]] — task `0229`, exception 2, **kept unchanged and owner-only**
 - [[tasks/route-sprint-ship-loop-close-to-producer]] — task `0123`, whose review findings R1/R6 surfaced the gap

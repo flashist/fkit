@@ -95,7 +95,14 @@ writes the agent-closed value. ⭐ **A link is not a status** — a stale href a
 ⛔ **`/fkit-task-cancelled` gets NO mirror**, because that would open a *first* door onto the board
 nobody audits.
 
-⛔ **DECIDED, NOT BUILT.** `0135` implements it and remains open. ⚠️ **The brief's standing instruction
+⛔ **DECIDED, NOT BUILT.** `0135` implements it and remains open.
+
+> ⛔ **Sync 2026-09-30 (`a351cb6`→`3915417`) — `0135` is CANCELLED and ADR-048 is OBSOLETE; the line above is left
+> byte-identical.** [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]]
+> makes the built-in board the single store, so a close cannot half-land and the reconcile mode is **not to be
+> built** (`0135` cancelled 2026-09-30, agent-closed — [[tasks/the-2026-09-30-adr-052-task-dispositions]]). ⚠️ **The two
+> residuals above stay live in every unconverted project — fkit included until ADR-052's phase 6 — and nothing is
+> built for that window.** This task's own deliverable (the ADR) stands as a correct record of its day. ⚠️ **The brief's standing instruction
 *"Do not begin 0135 before this ADR is approved by the owner"* was unblocked in the sense that its
 premise is secure** — question 1 no longer threatens to cancel it.
 
@@ -108,6 +115,7 @@ exception covering a subset of question 3 (owner ruling 2026-08-06, *"Ship 0229 
 mode subsumes, keeps or replaces it** — *"ruling on it silently is the failure mode."*
 
 ## Related
+- *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[tasks/the-2026-09-30-adr-052-task-dispositions]] — `0135` cancelled · [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — makes ADR-048 obsolete
 - [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]]
 - [[decisions/adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker]]
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]]

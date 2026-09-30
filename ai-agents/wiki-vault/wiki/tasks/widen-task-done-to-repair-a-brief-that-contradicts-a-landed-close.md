@@ -25,6 +25,8 @@ Tasks `0021` and `0041` have briefs reading `🔲 Backlog` while their folders s
 
 ⚠️ **The accepted tradeoff is recorded honestly: `0135` will edit the very same branch again, later.** ⛔ *"It is not a licence for `0135` to silently overwrite this branch"* — the second edit must read what this one wrote and say what happened to this ruling.
 
+> ⛔ **Sync 2026-09-30 (`a351cb6`→`3915417`) — that second edit will NOT happen; the paragraph above is left byte-identical.** `0135` was **cancelled** 2026-09-30 under ADR-052 D11 ([[tasks/the-2026-09-30-adr-052-task-dispositions]]), so **this task's exception stays as shipped** until the close skills are rewired onto the built-in board (ADR-052 phase 5). ⭐ **It was also exercised on 2026-09-18** for `0021` and `0041` — every bar held except its *never for a spawned producer* bullet, which only a one-time owner grant bypassed (the addendum on [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]]). ⛔ *"Until this shipped, `0021` and `0041` stayed drifted"* (above) is therefore **discharged** — both briefs now read plain `✅ Done`.
+
 ## Key Changes
 
 **One file**, `claude/skills/fkit-task-done/SKILL.md`, +32/−5. The existing exception is **byte-unchanged**; the label became `First exception:`.
