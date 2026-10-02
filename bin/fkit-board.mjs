@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// fkit's read-only board reader — task 0411, Track 1 ("A now") of ADR-051.
+// fkit's read-only board reader — task 0411. It began as Track 1 ("A now") of ADR-051.
 //
 // WHAT THIS IS. A local HTTP server that serves aiboard's UNMODIFIED web UI over fkit's UNMODIFIED
 // ai-agents/ tree. fkit's tree stays the single store; aiboard reads it and renders it. It is the
-// interim that runs NOW, while B — aiboard as the single store — sits behind ADR-051's gate.
+// interim read-only reader for a project until that project moves to fkit's built-in board (ADR-052).
 //
 // ⛔ READ-ONLY. There is no write path, in any mode, behind any flag. Every method that is not GET is
 // refused. Nothing here opens a file for writing, renames anything, or shells out to a mover.

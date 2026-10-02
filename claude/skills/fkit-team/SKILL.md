@@ -30,7 +30,7 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
 3. **Explain how to reach a role:**
    - **`fkit <role>`** *(in a terminal)* — starts a session **locked** to that role. Plain `fkit` shows
      a menu. To work in two roles at once, open another terminal tab and run `fkit` there. The lock is
-     real: a session can only see its own skills and tools.
+     real: a session can run only its own skills.
    - **`@fkit-<role> <question>`** *(inside any session)* — asks a role a **one-off question** and
      brings the answer back here. Use for a quick consult. **This is also how roles consult each
      other** — architect ⇄ producer, coder → architect, reviewer → architect — up to **two hops**,

@@ -172,8 +172,8 @@ fkit — the fkit agent team, on Claude Code.
 
 Usage: fkit [role] [claude-args…]
 
-With no role you get a menu. Pick a role and it opens IN THIS TAB, locked to that role: it sees only
-that role's skills and tools. For two roles at once, open another terminal tab and run `fkit` again.
+With no role you get a menu. Pick a role and it opens IN THIS TAB, locked to that role: it can run only
+that role's skills. For two roles at once, open another terminal tab and run `fkit` again.
 
 Roles:
   lead         the conductor — routes you to a role, or drives the team for you
