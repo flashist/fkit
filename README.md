@@ -136,9 +136,9 @@ exported.
 
 ```sh
 rm -rf ~/.local/share/fkit ~/.local/bin/fkit     # fkit itself (or your FKIT_SHARE / FKIT_BIN)
-# in each project (find never follows symlinks; safe when nothing matches):
-find .claude/agents -maxdepth 1 -name 'fkit-*.md' -exec rm -rf {} +
-find .claude/skills -maxdepth 1 -name 'fkit-*' -exec rm -rf {} +
+# in each project (removes symlinked fkit-* entries, not their targets; skipped if .claude is a link):
+[ -L .claude ] || find .claude/agents -maxdepth 1 -name 'fkit-*.md' -exec rm -rf {} +
+[ -L .claude ] || find .claude/skills -maxdepth 1 -name 'fkit-*' -exec rm -rf {} +
 rm -rf .fkit
 ```
 
