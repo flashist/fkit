@@ -14,9 +14,9 @@ an **adversarial reviewer**, an **architect**, a **wiki librarian**, and the **l
 
 When one AI session plans, writes **and** reviews its own code, the review isn't independent — the
 blind spot that wrote a bug is the one that approves it. fkit splits the work into roles that
-**cannot** do each other's jobs: the coder can't review, only the producer can close a task, and the
-reviewer gets a second opinion from a *different* model (Codex). Review stops being a promise and
-becomes a rule — with a review ledger per task, a knowledge base (decisions, design specs, reports)
+**cannot** run each other's procedures: the coder can't review, only the producer can close a task,
+and the reviewer gets a second opinion from a *different* model (Codex). Review stops being a promise
+and becomes a rule — with a review ledger per task, a knowledge base (decisions, design specs, reports)
 and a wiki, all in an `ai-agents/` folder inside your project.
 
 ## Install & run
@@ -56,7 +56,8 @@ In a brand-new project, `fkit`:
    under `ai-agents/tasks/backlog/`.
 6. Build it: `fkit coder`, then `/fkit-task-ship-loop <path-to-brief>`. You approve the plan once; the
    coder builds and tests, the **reviewer** (own pass + Codex) records findings in the task's
-   `review.md`, and the **producer** closes the task into `ai-agents/tasks/done/`.
+   `review.md`, and the **producer** closes the task into `ai-agents/tasks/done/` (without Codex, the
+   loop stops and hands the close to you).
 
 For a whole sprint, ask the lead to run `/fkit-sprint-ship-loop`.
 
@@ -128,13 +129,17 @@ repairs only what you approve, diffs in view, deleting nothing. Changed one on p
 | `FKIT_AIBOARD` | — | Repo-local web board only: path to aiboard's `index.html` |
 
 Installer variables go **after** the pipe (`curl … | FKIT_SHARE=… sh`). `fkit update` re-runs the
-installer with your current environment, so keep custom paths exported.
+installer with your current environment, so keep custom paths **and** `FKIT_REPO` / `FKIT_REF`
+exported.
 
 ## Uninstall
 
 ```sh
 rm -rf ~/.local/share/fkit ~/.local/bin/fkit     # fkit itself (or your FKIT_SHARE / FKIT_BIN)
-rm -rf .claude/agents/fkit-*.md .claude/skills/fkit-*/ .fkit/    # in each project
+# in each project (find never follows symlinks; safe when nothing matches):
+find .claude/agents -maxdepth 1 -name 'fkit-*.md' -exec rm -rf {} +
+find .claude/skills -maxdepth 1 -name 'fkit-*' -exec rm -rf {} +
+rm -rf .fkit
 ```
 
 Per project, also remove fkit's three `.gitignore` entries and the `<!-- fkit:begin-rules -->` …
