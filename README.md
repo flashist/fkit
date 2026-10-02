@@ -1,6 +1,6 @@
 # fkit
 
-[![fkit teaser: in a coder session, /fkit-review is denied, because your coder can't review its own code (click for the full video)](docs/media/fkit-teaser.gif)](https://github.com/user-attachments/assets/9e0a753b-dc74-447c-8089-34f7bf22900b)
+![fkit teaser: in a coder session, /fkit-review is denied, because your coder can't review its own code](docs/media/fkit-teaser.gif)
 
 **An agent team for software projects, with one front door.** Run `fkit`, press Enter, and you're
 talking to the **lead**. It routes you to the right role, answers questions from the project wiki, or
