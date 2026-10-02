@@ -47,9 +47,22 @@ selected option text, relayed to the producer):
 - **R5 — ADR-051 link text (item 4):** *"Include it — ADR-051 is being edited anyway; fix the visible
   text only."*
 
+**Owner rulings added 2026-10-02** (`fkit-lead` session, `AskUserQuestion`, selected option text,
+relayed to a spawned producer) — they add items 6 and 7:
+- **R6 — records that blame the migration** (question: *"Correct fkit's records that blame the
+  migration (2026-09-18 report, and anything citing it)?"*): *"Yes, add to task 0472 — 0472 already
+  tidies documents after ADR-052; add a dated correction note (records stay word-for-word otherwise).
+  Starts on your word."*
+- **R7 — `0014`'s status:** *"Yes, status field only — The test data 0296/0406 rely on is the missing
+  row, which stays; only the wrong status is corrected."* This overrides the ADR-033 addendum's
+  2026-09-18 ruling *"Leave it, pending 0296"* **for `0014`'s `## Status` field only**. The field
+  itself was already corrected to plain `✅ Done` on 2026-10-02 by a producer (see `0014`'s
+  `## Status correction — 2026-10-02` section); item 7 only records it in ADR-033.
+
 ## What to build
 
-Five items. Line numbers are as found on 2026-09-30 — locate by content, not by number.
+Five items. Line numbers are as found on 2026-09-30 — locate by content, not by number. *(Items 6 and
+7 added 2026-10-02 — see below; their line numbers are as found on 2026-10-02.)*
 
 1. **Replace two absolute machine paths (R1).** Each is an absolute path to the owner's local aiboard
    checkout:
@@ -99,8 +112,94 @@ Five items. Line numbers are as found on 2026-09-30 — locate by content, not b
    items "remain his and unanswered" — a dated pointer there to the new note is acceptable; nothing
    more.)
 
+### Added 2026-10-02 — items 6 and 7 (owner rulings R6, R7)
+
+6. **Correct the records that blame commit `331f298` for the wrong `🔲 Backlog` status in the done
+   briefs `0014`, `0021`, `0041` (R6).**
+
+   **What git shows** (verified by `fkit-lead` 2026-10-02; re-checked by the producer the same day):
+   - In `331f298` (2026-07-21, the ADR-029 folder migration) all three files were **pure renames,
+     content unchanged (`R100`)** — e.g. `tasks/done/build-fkit-reconnect-tooling.md` →
+     `tasks/done/0021-…/brief.md`. The files just before the migration already read `## Status`
+     `🔲 Backlog`.
+   - `0021` and `0041`: the `## Status` field already existed while they sat in `backlog/`. The
+     owner's close commits `f7b23f4` and `6daf3cc` (2026-07-10, *"Task done"*) moved each file
+     unchanged (`R100`) and edited the sprint plan; `## Status` stayed `🔲 Backlog`.
+   - `0014`: created directly in `done/` with `🔲 Backlog` at `cd19aef` (2026-07-16).
+
+   **So these claims are wrong:**
+   - the causation — "born wrong at / created by `331f298`", "the migration wrote (or defaulted) the
+     wrong status";
+   - *"at close time there was no `## Status` field"* (2026-09-18 report §4.1.1; ADR-033 addendum) —
+     the field existed at close. The account the report labels *"wrong"* (a human close that changed
+     the brief by zero lines) is the one git supports for `0021`/`0041`;
+   - the **59 days** figure (counted from 2026-07-21). The real spans to 2026-09-18 are **70 days**
+     (`0021`, `0041`) and **64 days** (`0014`). *"Two months"* as a length of time roughly holds; its
+     link to the migration does not;
+   - the **3.75% / 2.97%** "migration error rate" — the migration wrote none of the three.
+
+   **What to do:** in each file below, add **one dated correction note** (2026-10-02, citing R6 and
+   the commits above) at the first passage that makes the claim, and have it name every other line in
+   that file that repeats it (a one-line pointer at a repeat is acceptable). ⛔ **Do not rewrite or
+   delete any original sentence — including quoted text** (the expert's, Codex's or another role's
+   verbatim words stay verbatim).
+   - `knowledge-base/reports/2026-09-18-fkit-aiboard-data-model-evaluation-for-an-external-expert.md` —
+     primary note at **§4.1.1** (~:645–685: the born-wrong story, the 3.75%/2.97% block, "59 days",
+     the attribution paragraph). Repeats: ~:81, ~:693 (§4.1.2), ~:705 (§4.1.3), ~:1475–1485 (Q12),
+     ~:1546, ~:2071 (method table). The same note should say that `0014`'s status was corrected to
+     `✅ Done` on 2026-10-02 (R7), so the report's "one record still wrong" lines (~:79, ~:703,
+     ~:709, ~:1196) are out of date.
+   - `knowledge-base/reports/2026-09-18-external-expert-verdict-on-fkit-aiboard-convergence.md` —
+     ~:51 (*"born wrong in one bulk migration"*), ~:162 (*"born-wrong records"*).
+   - `knowledge-base/reports/2026-09-30-decision-document-merge-aiboard-into-fkit.md` — §6 ~:357–358,
+     and ~:468 (risk table, *"the `331f298` precedent"*).
+   - `knowledge-base/reports/2026-09-30-eval-aiboard-as-fkits-single-task-store.md` — ~:413–414,
+     ~:559.
+   - `knowledge-base/reports/2026-09-30-eval-task-ids-keep-0404-or-rekey.md` — ~:149.
+   - **ADR-033**, the addendum's *"A correction to the record…"* paragraph (~:188–193). The note must
+     name these sentences explicitly as wrong: *"At close time there was no `## Status` field at
+     all"*, *"The field arrived with the folder migration, commit `331f298`"*, and *"which **created
+     both briefs inside `done/` with `## Status` written as `🔲 Backlog`.** They were born wrong, not
+     drifted."* — all three files were `R100` renames. The addendum's conclusion (plain `✅ Done`; the
+     owner closed both) is unaffected.
+   - **ADR-049** ~:247 — it quotes the expert's *"born wrong in one bulk migration"*. Note that the
+     quoted claim is corrected; the quote stays.
+   - **ADR-052** ~:151–152 (*"the reason the converter is paranoid"*) and ~:408 (risk 1, *"the
+     `331f298` precedent"*).
+   - Backlog briefs that repeat the sentence: `0407` (~:46) and `0435`, `0436`, `0437`, `0438`,
+     `0440`, `0441`, `0442` (each ~:28, the *"Trial runs only"* paragraph).
+
+   ⚠️ **The correction reopens no decision.** ADR-052's converter safeguards (D8: trial run,
+   refuse-on-ambiguity, byte-level diff) stand; the notes correct the cited *precedent* only. A true
+   precedent remains and a note may say so: a duplicated status field went wrong at close or creation
+   and nothing caught it for 64–70 days. ⛔ If the architect judges that a decision's reasoning actually
+   rested on the migration story, **stop and put it to the owner** — do not settle it in a note.
+
+   **Leave alone** — these name `331f298` as a commit reference, not as the cause (checked
+   2026-10-02): closed task files under `tasks/done/` (`0079`, `0118`, `0119`, `0132`, `0160`, `0359`),
+   `conventions/dual-home-parity.md`, `reports/2026-08-01-durable-citation-form-for-mutable-coordinates.md`,
+   and the 2026-09-18 verdict's ~:216 (timestamp backfill advice).
+
+   **Wiki — not this task's to edit (`fkit-wiki` only).** Pages that repeat the claim, for a
+   `fkit-wiki` sync after this lands: `wiki/decisions/adr-033-…` ~:87–88; `wiki/decisions/adr-052-…`
+   ~:43–44 and ~:185; `wiki/tasks/build-fkit-reconnect-tooling.md` ~:19–20;
+   `wiki/tasks/fix-claude-agents-md-placeholder-text.md` ~:20. Also
+   `wiki/tasks/align-conventions-readme-enforcement-item-live-vs-scaffold.md` (`0014`'s status is now
+   `✅ Done`).
+
+7. **Record R7 in ADR-033.** The addendum's *"What a future agent may NOT take from this"* bullet on
+   `0014` (~:207–209) says it was *"deliberately left alone … must not be swept in later"*. Leave that
+   text; add a dated note under it: on **2026-10-02** the owner overrode *"Leave it, pending 0296"*
+   **for `0014`'s `## Status` field only** (R7). A producer wrote plain `✅ Done` — **no**
+   `(agent-closed — not owner-verified)` marker — on the owner's confirmation that he closed it himself
+   (*"Yes, I did — Plain '✅ Done' (you committed it along with the work on 2026-07-16)."*, recorded in
+   [`0014`'s brief](../../done/0014-align-conventions-readme-enforcement-item-live-vs-scaffold/brief.md)).
+   **The missing board row stays**, as the specimen for `0296` and `0406`. The note widens the
+   2026-09-18 grant to nothing else.
+
 **Out of scope:** any other file, any other stale pointer, any rewording. Do not touch
-`ai-agents/wiki-vault/` (wiki writes are `fkit-wiki`'s only).
+`ai-agents/wiki-vault/` (wiki writes are `fkit-wiki`'s only). *(2026-10-02: items 6 and 7 add exactly
+the files they list; everything else stays out.)*
 
 ## Verification steps
 
@@ -114,6 +213,15 @@ Five items. Line numbers are as found on 2026-09-30 — locate by content, not b
    additions plus the named single-token/phrase replacements — no reworded lines.
 6. Full suite green (`node --test`), since archived boards and ADRs are parsed by several tests.
 
+*Added 2026-10-02, for items 6 and 7:*
+
+7. Step 5's file list grows by exactly the files item 6 lists, plus ADR-033 (already listed via item
+   6). In each, `git diff` shows **added lines only** — zero removed lines.
+8. Grep `ai-agents/` (excluding `wiki-vault/`) for `331f298`, `born wrong`, `born-wrong`, `59 days`,
+   `two months`: every hit that claims the migration caused the wrong status sits in a file that now
+   has a 2026-10-02 correction note naming it. Hits in item 6's "leave alone" list are untouched.
+9. ADR-033: the `0014` bullet text is unchanged, with a dated note under it citing R7.
+
 ## Notes
 
 - **Depends on:** nothing
@@ -121,6 +229,9 @@ Five items. Line numbers are as found on 2026-09-30 — locate by content, not b
 - ⛔ **Do not start without the owner's specific word** (standing rule, quoted in *Context*).
 - **Owner choice:** `fkit-coder` — pure document edits, but it runs the tests. The ADR notes are
   mechanical transcriptions of owner ruling R2, not new decisions, so no architect pass is needed.
+  *(2026-10-02: for items 6 and 7 the ADR notes — ADR-033, ADR-049, ADR-052 — go through an
+  `fkit-architect` consult, per `fkit-lead`'s direction. They correct an ADR's own causal story and a
+  decision's cited reason, so they are not purely mechanical.)*
 - ✅ **Ruled 2026-09-30 (R3):** item 2's E3 cell. The lead's scoping said *correct the status word to
   Cancelled*; the evidence log declares itself **append-only**. The owner ruled: keep **Open**, append
   a dated annotation.
@@ -134,3 +245,7 @@ Five items. Line numbers are as found on 2026-09-30 — locate by content, not b
 - **Filed 2026-09-30** by a spawned `fkit-producer` at `fkit-lead`'s direction, on owner rulings R1/R2
   relayed from the lead session — no owner channel (ADR-021). Decides nothing beyond the scoping;
   ⛔ no commit.
+- **Extended 2026-10-02** (items 6 and 7) by a spawned `fkit-producer` at `fkit-lead`'s direction, on
+  owner rulings R6/R7 relayed from the lead session — no owner channel (ADR-021). ⛔ **The "do not
+  start without the owner's word" rule still applies to the whole task, items 6 and 7 included** —
+  R6's *"Starts on your word"* means the owner gives that word later; he has not given it yet. No status change; ⛔ no commit.

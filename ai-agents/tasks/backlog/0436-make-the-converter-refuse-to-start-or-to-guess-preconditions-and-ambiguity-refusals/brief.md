@@ -31,6 +31,18 @@ D8 items 1 and 3. **Refuses to start** unless the git tree is clean, no ship loo
 
 ⛔ **This unit refuses; it never repairs** — `0014` and `0004` are reported, not fixed here.
 
+> ⏱ **Note, 2026-10-02 (spawned `fkit-producer`, at `fkit-lead`'s direction; text above unchanged).**
+> `0014`'s example has changed in part:
+> - **The folder/status mismatch is gone.** On the owner's ruling of 2026-10-02 (*"Yes, status field
+>   only — The test data 0296/0406 rely on is the missing row, which stays; only the wrong status is
+>   corrected."*) its `## Status` now reads plain `✅ Done` — see the `## Status correction — 2026-10-02`
+>   section of [`0014`'s brief](../../done/0014-align-conventions-readme-enforcement-item-live-vs-scaffold/brief.md).
+> - **Its missing board row still exists, and stays on purpose** — it is the specimen for
+>   [`0296`](../0296-decide-what-catches-a-task-brief-that-has-no-board-row/brief.md) and
+>   [`0406`](../0406-build-the-no-board-row-check-in-the-test-suite-with-a-dated-two-task-allowlist/brief.md).
+>   So on fkit's tree `0014` now falls under the **no board row** class (like `0004`), not the
+>   brief-vs-folder status class.
+
 ## What to build
 
 1. Precondition checks with clear messages.

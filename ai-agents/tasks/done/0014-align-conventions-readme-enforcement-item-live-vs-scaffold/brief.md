@@ -10,7 +10,7 @@ Backlog (unsprinted)
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done
 
 ## Owner
 fkit-architect
@@ -89,3 +89,32 @@ should not be trimmed to match.
 - **Risk: low** — documentation wording only, no runtime/product code.
 - **Unsprinted / Unscheduled** (producer, 2026-07-16) — filed at the same tier as the other
   out-of-band review residue; ranking is the owner's to confirm.
+
+## Status correction — 2026-10-02 (producer, under owner ruling)
+
+`## Status` changed from `🔲 Backlog` to plain `✅ Done`. **Folder not moved** (already in `done/`).
+**No board row added.**
+
+- **Owner rulings (2026-10-02, `fkit lead` session, `AskUserQuestion`; selected option text,
+  verbatim):**
+  - On lifting the 2026-09-18 *"Leave it, pending 0296"* ruling (ADR-033 addendum) for this field
+    only: *"Yes, status field only — The test data 0296/0406 rely on is the missing row, which stays;
+    only the wrong status is corrected."*
+  - On who closed it: *"Yes, I did — Plain '✅ Done' (you committed it along with the work on
+    2026-07-16)."* The owner closed and verified this task, so there is **no**
+    `(agent-closed — not owner-verified)` marker
+    ([ADR-048](../../../knowledge-base/decisions/adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker.md):
+    never put that marker on an owner-closed task).
+- **Git evidence:**
+  - Commit `cd19aef` (2026-07-16, *"Tasks update"*) **created this brief directly in `done/`** with
+    `## Status` already reading `🔲 Backlog`. The brief was never in `backlog/`, and no commit ever
+    moved it. That same commit also holds the work: it changed item 3 of the scaffold
+    `conventions/README.md` to the generic form (option **(a)**), *"ideally in tooling or code where
+    the check runs automatically, not left to memory."*
+  - Commit `331f298` (2026-07-21, the folder migration, ADR-029) **only renamed** the file into this
+    folder, unchanged (R100). The wrong status came before the migration; the migration did not
+    cause it.
+- **The missing board row stays missing, by ruling.** It is the live specimen for
+  [`0296`](../../backlog/0296-decide-what-catches-a-task-brief-that-has-no-board-row/brief.md) and
+  [`0406`](../../backlog/0406-build-the-no-board-row-check-in-the-test-suite-with-a-dated-two-task-allowlist/brief.md).
+  ⛔ Do not add one.
