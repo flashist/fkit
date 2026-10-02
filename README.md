@@ -8,8 +8,7 @@ the rest for you. Each is a **role-locked session**: it can run only its own pro
 fkit runs on **Claude Code + Codex**, and operates on a shared `ai-agents/` working structure inside
 your project — sprints, task briefs, review ledgers, a knowledge base, and a wiki.
 
-<!-- PROMO-VIDEO: paste the github.com/user-attachments/assets/… URL on the next line -->
-
+https://github.com/user-attachments/assets/9e0a753b-dc74-447c-8089-34f7bf22900b
 
 ## Install & run
 
