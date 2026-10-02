@@ -1,31 +1,23 @@
 # fkit
 
+[![test](https://github.com/flashist/fkit/actions/workflows/test.yml/badge.svg)](https://github.com/flashist/fkit/actions/workflows/test.yml) [![version](https://img.shields.io/github/package-json/v/flashist/fkit?label=version)](VERSION) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 ![fkit teaser: in a coder session, /fkit-review is denied, because your coder can't review its own code](docs/media/fkit-teaser.gif)
 
 **An agent team for software projects, with one front door.** Run `fkit`, press Enter, and you're
 talking to the **lead**. It routes you to the right role, answers questions from the project wiki, or
-drives the team itself — up to shipping a sprint's tasks from brief to closed with
-`/fkit-sprint-ship-loop` — and brings each decision to you as it comes up.
+drives the team itself — up to shipping a sprint's tasks from brief to closed — and brings each
+decision to you as it comes up. Behind it, seven roles: a **producer**, a **coder**, a **reviewer**,
+an **adversarial reviewer**, an **architect**, a **wiki librarian**, and the **lead**.
 
-Behind it, seven roles: a **producer**, a **coder**, a **reviewer**, an **adversarial reviewer**, an
-**architect**, a **wiki librarian**, and the **lead**. Each is a **role-locked session**: it can run
-only its own procedures, so the coder *cannot* review its own code, and the wiki has a single writer.
+## Why fkit
 
-What you get, on a shared `ai-agents/` working structure inside your project:
-
-- **Ship loops** — brief → plan → build → review → closed, for one task (`/fkit-task-ship-loop`) or a
-  whole sprint (`/fkit-sprint-ship-loop`).
-- **Tracked reviews** — a stateful review ledger in each task folder, so settled trade-offs stay
-  settled, with a second opinion from a *different model* when Codex is present.
-- **A knowledge base and a wiki** — ADRs, design specs and reports, plus a wiki only the librarian
-  writes.
-- **A read-only web board** over your tasks and sprints — `npm run board` from a checkout of this
-  repo (see [below](#reading-the-board-in-a-browser-repo-local)).
-
-fkit runs on **Claude Code**. Codex is **optional but recommended** — without it the reviewer's
-second opinion falls back to Claude-only, **loudly flagged**.
-
-https://github.com/user-attachments/assets/9e0a753b-dc74-447c-8089-34f7bf22900b
+When one AI session plans, writes **and** reviews its own code, the review isn't independent — the
+blind spot that wrote a bug is the one that approves it. fkit splits the work into roles that
+**cannot** do each other's jobs: the coder can't review, only the producer can close a task, and the
+reviewer gets a second opinion from a *different* model (Codex). Review stops being a promise and
+becomes a rule — with a review ledger per task, a knowledge base (decisions, design specs, reports)
+and a wiki, all in an `ai-agents/` folder inside your project.
 
 ## Install & run
 
@@ -33,55 +25,44 @@ https://github.com/user-attachments/assets/9e0a753b-dc74-447c-8089-34f7bf22900b
 curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh   # once
 
 cd /path/to/your/project
-fkit            # pick a role from the menu
+fkit            # pick a role from the menu (Enter = lead)
 fkit coder      # …or go straight to one
 ```
 
-**Requires:** [Claude Code](https://claude.com/claude-code). **Optional but recommended:**
-[Codex](https://github.com/openai/codex) (`npm install -g @openai/codex && codex login`). Codex is
-what makes the reviewer's second opinion genuinely independent — without it, reviews still run, on
-Claude only, and are **loudly flagged as not model-diverse**. At launch, `fkit` stops if Claude Code
-is missing, and only warns if Codex is missing or not logged in.
+**Requires:** [Claude Code](https://claude.com/claude-code), `curl`, `tar`, `bash`. **Optional but
+recommended:** [Codex](https://github.com/openai/codex) (`npm install -g @openai/codex && codex
+login`) — without it, reviews run on Claude only and are **loudly flagged as not model-diverse**.
+`fkit` stops if Claude Code is missing; it only warns about Codex. **Platforms:** macOS and Linux;
+Windows via WSL, untested.
 
-`fkit` sets the project up if needed (scaffolds `ai-agents/`, drops `CLAUDE.md`/`AGENTS.md`, installs
-the agents and skills into `.claude/`, runs a short terminal intake on a fresh project), then opens
-the role you picked **in the same tab** (Enter at the menu picks the lead). On a brand-new project it
-goes straight to the producer to run `/fkit-initiate-project`, then opens the lead once that is done.
-Want two roles at once? Open another terminal tab.
+The [installer](install.sh) (read it first if you like) copies fkit to `~/.local/share/fkit` and the
+`fkit` command to `~/.local/bin`, which must be on your `PATH` — it tells you if it isn't. It installs
+from `main`; re-running it is safe. Each launch then sets the project up if needed (`ai-agents/`,
+`CLAUDE.md` / `AGENTS.md`, the agents and skills under `.claude/`) and opens the role **in the same
+tab** — for two roles at once, open another tab. fkit runs several Claude Code sessions and subagents,
+plus Codex, so expect noticeably more model usage than a single session.
 
-**Staying current:** a normal launch does a throttled check and **tells you** when a newer version is
-out — it never updates itself behind your back. Run `fkit update` when you want it. (Silence it with
-`FKIT_NO_UPDATE_CHECK=1`.) A checkout of this repo is never auto-checked — update it with `git`.
-Launched inside such a checkout, `fkit` runs the checkout's own `claude/` instead of the installed
-copy, so your edits are what the agents use (`FKIT_NO_SELF_HOST=1` turns that off).
+## A first session
 
-**`fkit update` updates fkit, not your projects.** It refreshes the installed copy and stops there.
-(In a checkout of this repo it refuses and points you at `git pull`.) Each project picks up the
-new agents and skills the **next time you launch `fkit` in that project** — that launch is what
-rewrites its `.claude/agents/fkit-*.md` and `.claude/skills/fkit-*/`. A project you updated but
-never re-launched in keeps its **old agents and skills, and nothing tells you**. Want the refresh
-without opening a session? Run `FKIT_SETUP_ONLY=1 fkit` in the project.
+In a brand-new project, `fkit`:
 
-**One thing an update does not repair.** A launch refresh replaces the agents and
-skills under `.claude/` — it never rewrites your project's own content under `ai-agents/`. If your
-project filed an unsprinted brief before this correction shipped, the header `/fkit-task-brief`
-generated into `ai-agents/sprints/backlog.md` says the backlog is excluded from `/fkit-status`
-because its filename sits outside a `sprint-*.md` glob. **That sentence is stale prose, not broken
-behaviour.** Since
-[ADR-041](ai-agents/knowledge-base/decisions/adr-041-the-active-sprint-is-selected-by-resolved-identity-not-by-filename-glob.md)
-the active sprint is selected by each plan's resolved **identity**, and the backlog is excluded
-because its identity is `Backlog`, which is never eligible — a stronger rule, not a weaker one. Your
-board works correctly; only its header sentence is wrong. Correct it by hand if you want it accurate;
-nothing depends on it.
+1. sets the project up and says *"This project is not initiated yet — starting the producer to set
+   it up."*
+2. asks six quick questions in the terminal (*fkit — quick project intake*; Enter skips one);
+3. opens the **producer**, which runs `/fkit-initiate-project`: it interviews you, has the
+   **architect** survey the code, and writes `ai-agents/knowledge-base/PROJECT.md` and `architecture.md`;
+4. opens the **lead** in the same tab once you exit the finished producer session.
+5. Give the lead a goal (*"add CSV export to the reports page"*); it has the producer file a **brief**
+   under `ai-agents/tasks/backlog/`.
+6. Build it: `fkit coder`, then `/fkit-task-ship-loop <path-to-brief>`. You approve the plan once; the
+   coder builds and tests, the **reviewer** (own pass + Codex) records findings in the task's
+   `review.md`, and the **producer** closes the task into `ai-agents/tasks/done/`.
 
-A launch also tells you — one stderr line — when your project's `ai-agents/` tree, or its root
-`CLAUDE.md` / `AGENTS.md`, diverges from what the installed version ships. (The fkit agents and
-skills under `.claude/` are not part of that check: a launch rewrites them outright, so there is
-nothing to diverge.) To see the per-file verdicts and repair, run `/fkit-heal` in a
-producer session: repair is **in-session, consent-gated, diffs in view, and applies only the exact
-list you approve — never silent**, and it never moves, renames, or deletes anything. Divergence
-that's deliberate? List the path in `ai-agents/.fkit-accepted-drift` and the launch line goes quiet
-(`/fkit-heal` still reports it in full).
+For a whole sprint, ask the lead to run `/fkit-sprint-ship-loop`.
+
+## See it in action
+
+https://github.com/user-attachments/assets/9e0a753b-dc74-447c-8089-34f7bf22900b
 
 ## The team
 
@@ -93,137 +74,97 @@ that's deliberate? List the path in `ai-agents/.fkit-accepted-drift` and the lau
 | **fkit-adversarial-reviewer** | the hostile pass — runs on Codex, a *different* model, on purpose; without Codex it falls back to Claude, loudly flagged |
 | **fkit-architect** | architecture, design specs, ADRs, feasibility |
 | **fkit-wiki** | the project wiki — the **exclusive** gateway for writes (reads are direct, via `/fkit-query`) |
-| **fkit-lead** | the front door — routes you, answers wiki questions, and **drives the team** when you hand it a goal; `/fkit-sprint-ship-loop` ships a whole sprint ([ADR-031](ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)) |
+| **fkit-lead** | the front door — routes you, answers wiki questions, and **drives the team** when you hand it a goal; `/fkit-sprint-ship-loop` ships a whole sprint |
 
-An eighth role, a sandboxed e2e tester, is authorized
-([ADR-028](ai-agents/knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
-but **not built yet** — the team is seven today. `/fkit-team` in any session shows who does what.
+An eighth role, a sandboxed e2e tester, is authorized but not built yet. `/fkit-team` shows who does what.
 
-**Closing work is the producer's alone.** Every other role routes its closes to the producer
-([ADR-033](ai-agents/knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)),
-and a close made by a spawned agent rather than by you in a `fkit producer` session carries an
-`(agent-closed — not owner-verified)` marker.
+**The role lock is enforced, not advisory.** A session can run only its own role's `/fkit-*`
+commands; the rest still show in the `/` menu but are refused, by a hook that checks every call —
+in a role you consult, too. `@fkit-<role> <question>` consults another role and brings the answer
+back (up to two hops). **Only the producer closes work**; a close made by an agent rather than by you
+is marked `(agent-closed — not owner-verified)`. Details: [`claude/README.md`](claude/README.md).
 
-**Sessions are role-locked.** `fkit <role>` pins the session to that role's system prompt and **only its
-own `/fkit-*` skills** (a `tools:` allowlist too, for the adversarial reviewer alone —
-[ADR-022](ai-agents/knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)) — every other fkit skill is denied on invocation:
-still visible in the `/` menu, but unrunnable, not merely discouraged (ADR-018 §Decision 5, an
-accepted cost). That is what makes reviewer independence a fact rather than a promise.
+## Key terms
 
-Inside a session, `@fkit-<role> <question>` consults another role and brings the answer back (up to
-two hops, never a cycle). A **consult** is gated the same way: a `PreToolUse` hook checks the spawned
-agent's own role on every skill call, at any depth, so the boundary is enforced there too — see
-[ADR-018](ai-agents/knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md),
-which superseded the "advisory in a consult" half of
-[ADR-012](ai-agents/knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md).
+- **Brief** — a task's spec: `ai-agents/tasks/<state>/<id>-<slug>/brief.md`.
+- **Ship loop** — brief → plan → build → review → closed, for one task or a whole sprint.
+- **Sprint** — a board of tasks in `ai-agents/sprints/`; unsprinted tasks sit on the Backlog board.
+- **Review ledger** — the task's `review.md`: findings, responses and accepted trade-offs, kept across
+  rounds so settled points stay settled.
+- **Consult** — `@fkit-<role> <question>` inside a session; the answer comes back to you.
+- **Role-locked session** — `fkit <role>`: a session that can run only that role's skills.
+- **Lead** — the front door: routes you, or drives the other roles toward your goal.
+- **Producer** — plans sprints, writes briefs, and is the only role that closes tasks.
+- **ADR** — an Architecture Decision Record, in `ai-agents/knowledge-base/decisions/`.
+- **Wiki librarian** — `fkit-wiki`, the only role that writes the wiki (`ai-agents/wiki-vault/`).
 
-Full topology and the skill-ownership table: [`claude/README.md`](./claude/README.md).
+## Updating
 
-## Standing up a new project by hand
+| Situation | What happens |
+|---|---|
+| Normal `fkit` launch | A throttled check (hourly by default) **tells** you when a newer version is out; it never updates itself |
+| `fkit update` | Updates the installed fkit only, not your projects |
+| Next `fkit` launch in a project | Rewrites that project's `.claude/agents/fkit-*` and `.claude/skills/fkit-*` |
+| Project not re-launched since the update | Keeps its old agents and skills, and nothing tells you. Run `FKIT_SETUP_ONLY=1 fkit` there |
+| Inside a checkout of the fkit repo | No update check; `fkit update` refuses (use `git pull`); runs the checkout's own `claude/` |
 
-`fkit` does this for you. If you'd rather do it manually: the agents operate on an `ai-agents/`
-working structure plus project-root `CLAUDE.md` / `AGENTS.md`. A starter for all of it ships in
-[`claude/scaffold/`](./claude/scaffold/) — copy `claude/scaffold/ai-agents/` and the `CLAUDE.md` /
-`AGENTS.md` into your project root, then fill in the placeholders. A project that already has an
-`ai-agents/` tree + context files needs nothing from the scaffold. Note that the role lock is wired in
-by the `fkit` launcher at each launch — a session opened with plain `claude` is not role-locked.
+A launch prints one warning line when your `ai-agents/` tree or root `CLAUDE.md` / `AGENTS.md`
+differs from what your fkit version ships. `/fkit-heal` in a producer session shows each file and
+repairs only what you approve, diffs in view, deleting nothing. Changed one on purpose? List it in
+`ai-agents/.fkit-accepted-drift`. Upgrade notes: [`CHANGELOG.md`](CHANGELOG.md).
 
-## Reading the board in a browser (repo-local)
+## Configuration
 
-`npm run board` starts a **read-only** web board: it serves
-[aiboard](https://github.com/flashist/aiboard)'s unmodified UI over fkit's unmodified `ai-agents/`
-tree, so the tasks and sprints you'd otherwise read as raw markdown render as cards you can click.
-It is the **interim** reader: **fkit's tree stays the single store** until a project moves to the
-built-in board (see *Roadmap*), after which this reader retires
-([ADR-052](ai-agents/knowledge-base/decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md);
-it began as Track 1 of
-[ADR-051](ai-agents/knowledge-base/decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim.md)).
+| Variable | Default | What it does |
+|---|---|---|
+| `FKIT_SHARE` | `~/.local/share/fkit` | Installer: where fkit's files go |
+| `FKIT_BIN` | `~/.local/bin` | Installer: where the `fkit` command goes |
+| `FKIT_REPO` / `FKIT_REF` | `flashist/fkit` / `main` | Install and update source |
+| `FKIT_NO_UPDATE_CHECK=1` | off | Never check for updates |
+| `FKIT_UPDATE_INTERVAL_MIN` | `60` | Minutes between update checks (`0` = every launch) |
+| `FKIT_SETUP_ONLY=1` | off | Set the project up, then exit (non-zero if setup failed) |
+| `FKIT_NO_SELF_HOST=1` | off | In a checkout of this repo, use the installed fkit, not the checkout's `claude/` |
+| `FKIT_CLEANUP_DRY_RUN=1` | off | List the old-runtime files fkit would delete from a project; delete nothing |
+| `FKIT_AIBOARD` | — | Repo-local web board only: path to aiboard's `index.html` |
 
+Installer variables go **after** the pipe (`curl … | FKIT_SHARE=… sh`). `fkit update` re-runs the
+installer with your current environment, so keep custom paths exported.
+
+## Uninstall
+
+```sh
+rm -rf ~/.local/share/fkit ~/.local/bin/fkit     # fkit itself (or your FKIT_SHARE / FKIT_BIN)
+rm -rf .claude/agents/fkit-*.md .claude/skills/fkit-*/ .fkit/    # in each project
 ```
-npm run board                                   # then open http://127.0.0.1:8585/
-npm run board -- --port 9000                    # a different port
-npm run board -- --aiboard ../aiboard/aiboard/web/index.html
-FKIT_AIBOARD=/path/to/aiboard/web/index.html npm run board
-node bin/fkit-board.mjs --bench                 # snapshot cost at this repo's real corpus
-npm run board -- --root <other-project> --port 9001     # another fkit-using project's ai-agents/
-node bin/fkit-board.mjs --bench --root <other-project>  # snapshot cost on that project's tree
-```
 
-It finds fkit's root itself — there is nothing to edit before running it. It finds aiboard's
-`index.html` in this order: `--aiboard`, then `FKIT_AIBOARD`, then the sibling default
-`../aiboard/aiboard/web/index.html`. If none resolve it **exits non-zero naming all three**, rather
-than starting and serving a 404.
+Per project, also remove fkit's three `.gitignore` entries and the `<!-- fkit:begin-rules -->` …
+`<!-- fkit:end-rules -->` block in `CLAUDE.md` and `AGENTS.md` (or the whole file, if fkit created
+it). **`ai-agents/` is your own work** — briefs, decisions, the wiki — so keep or delete it as you
+like; fkit never removes it. Drop the `~/.local/bin` `PATH` line if you added it only for fkit.
 
-**Another project's board: `--root <path>`.** It reads that project's `ai-agents/` instead of fkit's,
-still read-only. The path must be a directory holding both `ai-agents/tasks/` and `ai-agents/sprints/`;
-if it is not, the reader **exits non-zero naming what is missing and never falls back to fkit's own
-tree**. A tree whose boards cannot be read (a permission error) is refused the same way, naming the
-unreadable directory. A relative path resolves from where `node` runs — under `npm run board` that is fkit's
-checkout, so from anywhere else pass an absolute path. The startup banner prints the tree it is
-serving, marked `(--root)`.
+## Setting up a project by hand
 
-- **fkit's own `dashboard.sh` reads every tree, a foreign one included; the target's copy is never
-  run.** So the board shows *this* fkit's reading of the target's sprint status. If the target's fkit
-  install is older, its own `/fkit-status` may read some boards differently — the banner adds a `note`
-  line saying so whenever the target carries a `dashboard.sh` of its own.
-- `/api/check` also returns `warnings` — e.g. two board files that map to the same board id, where
-  one would otherwise silently shadow the other. A warning does not flip `ok`.
+`fkit` does this for you. Manually: copy `ai-agents/`, `CLAUDE.md` and `AGENTS.md` from
+[`claude/scaffold/`](claude/scaffold/) into your project and fill in the placeholders (a project that
+already has them needs nothing). The role lock comes from the `fkit` launcher — a session opened with
+plain `claude` is not role-locked.
 
-**What it listens on, and what it accepts.** It binds **`127.0.0.1` only** — never `0.0.0.0` — on port
-`8585` by default. It serves six GET paths and nothing else: `/` and its alias `/index.html` (both
-aiboard's `index.html`, byte-for-byte as found), `/api/board`, `/api/tasks/<id>`, `/api/sprints/<id>`
-and `/api/check`.
-**Every other method — POST, PUT, PATCH, DELETE, and anything else that is not GET — is refused with a
-JSON error.** It holds no credentials and reads no environment beyond `FKIT_AIBOARD`.
+## Web board (repo-local)
 
-**It writes nothing, anywhere, in any mode, behind any flag.** It opens no file outside `ai-agents/`
-except the single aiboard `index.html` it was pointed at, and it runs one fkit-local subprocess:
-`claude/skills/fkit-status/dashboard.sh select-active`, which is the project's **one** implementation
-of the sprint-status grammar. `test/board-reader.test.js` pins all of this, including a check that
-`git status --porcelain ai-agents/` is unchanged by a full crawl plus every route.
+In a checkout of this repo, `npm run board` serves a **read-only** web view of an `ai-agents/` tree at
+`http://127.0.0.1:8585/`. It is not installed with fkit. Details: [`docs/board.md`](docs/board.md).
 
-Repo-local by construction: `install.sh` copies `claude/` only, so this does not ship to projects that
-install fkit, and aiboard is not a dependency of fkit.
+## Contributing
 
-## Layout
-
-```
-install.sh                       curl|sh entry point — installs the global `fkit` command
-VERSION                          fkit's own version (bumped by `npm run release` — see RELEASING.md)
-claude/
-  README.md                      the runtime, in detail (topology + skill lockdown)
-  fkit-claude.sh                 the `fkit` command: role menu, role-locked launch, update notice + `fkit update`
-  fkit-claude-init.sh            idempotent per-project setup (scaffold + context files + agents/skills)
-  skills-for-role.sh             role → skill ownership, declared in exactly one place
-  *-hook.sh, carry-check-hook.mjs  the hooks each launch wires in (skill lock, turn completion, …)
-  structure-spec.md              what a project's structure should be — checked by /fkit-heal
-  structure-manifest.tsv         every file hash fkit has shipped (`npm run generate:manifest`)
-  agents/                        the seven roles as Claude Code subagent definitions (an 8th, a tester, is authorized — ADR-028 — but not yet built)
-  skills/                        the /fkit-* procedures
-  scaffold/                      starter ai-agents/ tree + CLAUDE.md / AGENTS.md
-bin/                             repo-local tools — none of these ship to projects
-  fkit-board.mjs                 read-only web board over ai-agents/ (`npm run board`)
-  board-narrow.mjs               narrow, fixed-width render of a sprint board for the terminal
-  release.mjs                    cuts a release (`npm run release`)
-  generate-structure-manifest.mjs  rebuilds claude/structure-manifest.tsv
-test/                            `npm test` — node:test suites plus test/prove-red.sh
-ai-agents/                       fkit's own working structure (it is run on itself)
-```
+Issues and PRs welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md). fkit is developed with fkit, so
+this repo's own `ai-agents/`, `CLAUDE.md` and `AGENTS.md` are its working files, not part of the
+product. Tests: `npm test`. Releases: [`RELEASING.md`](RELEASING.md). Design decisions are ADRs in
+[`ai-agents/knowledge-base/decisions/`](ai-agents/knowledge-base/decisions/).
 
 ## Roadmap
 
 **Planned, not built yet:** the board becomes fkit's built-in, single store for every project's tasks
-and sprints ([ADR-052](ai-agents/knowledge-base/decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md)).
-Everything above describes fkit as it is today.
-
-## History
-
-fkit originally shipped a second runtime on [Omnigent](https://omnigent.ai). It was removed in
-Sprint 2 — see
-[ADR-009](ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md) for
-why, and
-[ADR-010](ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md) for
-the role-locked model that replaced its team-session topology.
+and sprints. Everything above describes fkit as it is today.
 
 ## License
 

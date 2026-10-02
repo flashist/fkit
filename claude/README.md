@@ -31,9 +31,13 @@ Each session is locked **two** ways:
    ([ADR-022](../ai-agents/knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md)).
 2. **`--settings` wiring a `PreToolUse` skill-ownership hook** (`0052` (`implement-pretooluse-skill-ownership-hook`) / ADR-018) — every `Skill`
    call is checked against the REAL invoking agent's role, and denied if that role doesn't own it.
-   A foreign skill stays **visible** in the `/` menu but is **not runnable**. This is what makes
+   A foreign skill stays **visible** in the `/` menu but is **not runnable** — an accepted cost
+   (ADR-018 §Decision 5). This is what makes
    *"the coder cannot run the reviewer's procedure"* a fact rather than a request — see the "skill
    lockdown" section below for the full detail.
+
+The lock is wired in by the launcher at each launch — a session opened with plain `claude` is not
+role-locked.
 
 Want two roles at once? Open another terminal tab. (We deliberately don't automate that — spawning
 terminals needs Accessibility permissions that fail worse than pressing Cmd-T.)
@@ -53,6 +57,9 @@ below. That function is the single source of truth.
 | adversarial-reviewer | `adversarial-review` |
 | wiki | `wiki-ingest` · `wiki-lint` · `wiki-sync` |
 | lead | `/fkit-sprint-ship-loop` (drives a sprint) — plus the shared skills; it routes and conducts |
+
+A close made by a spawned agent rather than by the owner in a `fkit producer` session carries an
+`(agent-closed — not owner-verified)` marker.
 
 **The lock is a wall in a session AND in a consult** (`0052` /
 [ADR-018](../ai-agents/knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md),
@@ -102,7 +109,7 @@ interactive init.
 | fkit-adversarial-reviewer | Read, Grep, Glob, Bash | findings-only hostile pass on Codex. **Structurally write-free; a leaf.** |
 | fkit-architect | Read, Grep, Glob, Bash, Write, Edit, **Agent**, AskUserQuestion | architecture, design specs, ADRs, surveys. Consults the producer for product context. |
 | fkit-wiki | Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion | the wiki role — **exclusive write gateway** (ingest / lint / sync). **A leaf.** |
-| fkit-lead | Read, Grep, Glob, Bash, **Agent**, AskUserQuestion | the lead & conductor — routes, and drives the team when asked (owns `/fkit-sprint-ship-loop`). |
+| fkit-lead | Read, Grep, Glob, Bash, **Agent**, AskUserQuestion | the lead & conductor — routes, and drives the team when asked (owns `/fkit-sprint-ship-loop`; [ADR-031](../ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)). |
 
 **Two honest limits** on the tool lock: an agent with Bash can technically still write files, and
 Claude Code **ignores** `Agent(type)` allowlists inside subagent definitions (they only work for a
@@ -154,6 +161,13 @@ the menu.
 
 The `.claude/` copies are fkit-managed and refreshed on every init — **edit the canonical sources here
 in `claude/`, never the copies.**
+
+**Drift check.** A launch prints one stderr line when the project's `ai-agents/` tree, or its root
+`CLAUDE.md` / `AGENTS.md`, diverges from what the installed version ships. The `.claude/` copies are
+outside that check: each launch rewrites them, so there is nothing to diverge. `/fkit-heal` (producer)
+shows the per-file verdicts and repairs **in-session, consent-gated, diffs in view**, applying only
+the exact list you approve and never moving, renaming or deleting anything. A path listed in
+`ai-agents/.fkit-accepted-drift` quiets the launch line; `/fkit-heal` still reports it in full.
 
 ## What deliberately does not exist
 

@@ -12,7 +12,7 @@
     "release:major": "node bin/release.mjs --major",
     "release:dry": "node bin/release.mjs --dry-run"
   },
-  "description": "A Claude Code agent team for software projects: producer, coder, reviewer, architect, adversarial-reviewer, and wiki agents in role-locked sessions with scoped skills, plus a project scaffold. Reviews get an independent second opinion from Codex.",
+  "description": "A Claude Code agent team for software projects: seven roles — lead, producer, coder, reviewer, adversarial-reviewer, architect, and wiki — in role-locked sessions with scoped skills, plus a project scaffold. Reviews get an independent second opinion from Codex.",
   "license": "MIT",
   "author": "flashist",
   "repository": {
