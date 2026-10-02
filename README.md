@@ -1,12 +1,29 @@
 # fkit
 
-**An agent team for software projects** — a producer, a coder, a reviewer (with an adversarial
-second opinion from a *different model*), an architect, a wiki librarian, and a lead that can drive
-the rest for you. Each is a **role-locked session**: it can run only its own procedures, so the coder
-*cannot* review its own code, and the wiki has a single writer.
+[![fkit teaser: in a coder session, /fkit-review is denied, because your coder can't review its own code (click for the full video)](docs/media/fkit-teaser.gif)](https://github.com/user-attachments/assets/9e0a753b-dc74-447c-8089-34f7bf22900b)
 
-fkit runs on **Claude Code + Codex**, and operates on a shared `ai-agents/` working structure inside
-your project — sprints, task briefs, review ledgers, a knowledge base, and a wiki.
+**An agent team for software projects, with one front door.** Run `fkit`, press Enter, and you're
+talking to the **lead**. It routes you to the right role, answers questions from the project wiki, or
+drives the team itself — up to shipping a sprint's tasks from brief to closed with
+`/fkit-sprint-ship-loop` — and brings each decision to you as it comes up.
+
+Behind it, seven roles: a **producer**, a **coder**, a **reviewer**, an **adversarial reviewer**, an
+**architect**, a **wiki librarian**, and the **lead**. Each is a **role-locked session**: it can run
+only its own procedures, so the coder *cannot* review its own code, and the wiki has a single writer.
+
+What you get, on a shared `ai-agents/` working structure inside your project:
+
+- **Ship loops** — brief → plan → build → review → closed, for one task (`/fkit-task-ship-loop`) or a
+  whole sprint (`/fkit-sprint-ship-loop`).
+- **Tracked reviews** — a stateful review ledger in each task folder, so settled trade-offs stay
+  settled, with a second opinion from a *different model* when Codex is present.
+- **A knowledge base and a wiki** — ADRs, design specs and reports, plus a wiki only the librarian
+  writes.
+- **A read-only web board** over your tasks and sprints — `npm run board` from a checkout of this
+  repo (see [below](#reading-the-board-in-a-browser-repo-local)).
+
+fkit runs on **Claude Code**. Codex is **optional but recommended** — without it the reviewer's
+second opinion falls back to Claude-only, **loudly flagged**.
 
 https://github.com/user-attachments/assets/9e0a753b-dc74-447c-8089-34f7bf22900b
 
@@ -20,11 +37,11 @@ fkit            # pick a role from the menu
 fkit coder      # …or go straight to one
 ```
 
-**Requires:** [Claude Code](https://claude.com/claude-code) and
+**Requires:** [Claude Code](https://claude.com/claude-code). **Optional but recommended:**
 [Codex](https://github.com/openai/codex) (`npm install -g @openai/codex && codex login`). Codex is
-what makes the reviewer's second opinion genuinely independent — without it, reviews still run but
-are **loudly flagged as not model-diverse**. At launch, `fkit` stops if Claude Code is missing, and
-warns if Codex is missing or not logged in.
+what makes the reviewer's second opinion genuinely independent — without it, reviews still run, on
+Claude only, and are **loudly flagged as not model-diverse**. At launch, `fkit` stops if Claude Code
+is missing, and only warns if Codex is missing or not logged in.
 
 `fkit` sets the project up if needed (scaffolds `ai-agents/`, drops `CLAUDE.md`/`AGENTS.md`, installs
 the agents and skills into `.claude/`, runs a short terminal intake on a fresh project), then opens
@@ -72,8 +89,8 @@ that's deliberate? List the path in `ai-agents/.fkit-accepted-drift` and the lau
 |---|---|
 | **fkit-producer** | product / sprint planning, task briefs, status — and the **only** role that may close tasks and sprints |
 | **fkit-coder** | implementation — the **sole** source-write authority; `/fkit-task-ship-loop` takes one brief to ready-to-close |
-| **fkit-reviewer** | code review — its own pass **plus** a Codex second opinion |
-| **fkit-adversarial-reviewer** | the hostile pass — runs on Codex, a *different* model, on purpose |
+| **fkit-reviewer** | code review — its own pass **plus** a Codex second opinion (Claude-only, loudly flagged, without Codex) |
+| **fkit-adversarial-reviewer** | the hostile pass — runs on Codex, a *different* model, on purpose; without Codex it falls back to Claude, loudly flagged |
 | **fkit-architect** | architecture, design specs, ADRs, feasibility |
 | **fkit-wiki** | the project wiki — the **exclusive** gateway for writes (reads are direct, via `/fkit-query`) |
 | **fkit-lead** | the front door — routes you, answers wiki questions, and **drives the team** when you hand it a goal; `/fkit-sprint-ship-loop` ships a whole sprint ([ADR-031](ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)) |
