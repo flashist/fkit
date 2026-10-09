@@ -69,9 +69,9 @@ ROLES="lead producer coder architect reviewer adversarial-reviewer wiki"
 share="$(cd "$here/.." && pwd)"        # install root (~/.local/share/fkit), or the repo root in a checkout
 FKIT_NET_TIMEOUT=5                     # seconds — a real deadline for curl (--max-time), but for git only a low-speed STALL bound, so ls-remote can outlive it
 
-_fkit_verfield() {   # <key> → its value from the installed .version (empty if absent)
-  [ -f "$share/.version" ] || return 0
-  sed -n "s/^$1=//p" "$share/.version" | head -1
+_fkit_verfield() {   # <key> [<root>] → its value from <root>/.version (default: this install's; empty if absent)
+  [ -f "${2:-$share}/.version" ] || return 0
+  sed -n "s/^$1=//p" "${2:-$share}/.version" | head -1
 }
 # A source checkout is the fkit repo itself. Key this ONLY on markers install.sh never copies into an
 # install (.git, the repo-root package.json) — never on anything inside claude/, which IS copied.
@@ -97,10 +97,27 @@ _fkit_remote_version() {   # → the human version string at $repo@$ref, or empt
     | head -1 | tr -d '[:space:]' || true
   return 0
 }
-_fkit_reinstall() {   # run the canonical installer for $repo@$ref (refreshes resources + .version)
+_fkit_reinstall() {   # run the canonical installer for $repo@$ref into $fkit_share/$fkit_bin (refreshes resources + .version)
   command -v curl >/dev/null 2>&1 || { echo "fkit: curl is required to update" >&2; return 1; }
-  FKIT_REPO="$fkit_repo" FKIT_REF="$fkit_ref" \
-    curl -fsSL "https://raw.githubusercontent.com/$fkit_repo/$fkit_ref/install.sh" | sh
+  # Download FIRST, then run (task 0481). Piped straight into sh, a failed download handed sh an empty
+  # script; sh exited 0, the pipe reported sh's status, and `fkit update` printed "now at v<old>"
+  # after fetching nothing. A download cut off mid-way is never half-run this way either.
+  _fkit_script="$(curl -fsSL "https://raw.githubusercontent.com/$fkit_repo/$fkit_ref/install.sh")" \
+    && [ -n "$_fkit_script" ] \
+    || { echo "fkit: could not download install.sh from $fkit_repo@$fkit_ref" >&2; return 1; }
+  # The installer's variables go AFTER the pipe, on the `sh` that runs it (task 0481). A variable set
+  # in front of a command reaches only that command — `A=1 true | sh -c 'echo ${A:-unset}'` prints
+  # `unset` — so the old `FKIT_REPO=… curl … | sh` gave them to curl, and the installer ran on its
+  # defaults (flashist/fkit@main, ~/.local/share/fkit, ~/.local/bin) whatever "updating from" said.
+  printf '%s\n' "$_fkit_script" \
+    | FKIT_REPO="$fkit_repo" FKIT_REF="$fkit_ref" FKIT_SHARE="$fkit_share" FKIT_BIN="$fkit_bin" sh
+}
+_fkit_wrapper_share() {   # <bin-dir> → the install root its `fkit` wrapper execs, or empty
+  [ -f "$1/fkit" ] || return 0
+  sed -n 's|^exec "\(.*\)/claude/fkit-claude\.sh" "\$@"$|\1|p' "$1/fkit" | head -1
+}
+_fkit_same_dir() {   # <a> <b> → true if both are directories with the same physical path
+  [ -d "$1" ] && [ -d "$2" ] && [ "$(cd "$1" && pwd -P)" = "$(cd "$2" && pwd -P)" ]
 }
 
 fkit_repo="${FKIT_REPO:-$(_fkit_verfield repo)}"; fkit_repo="${fkit_repo:-flashist/fkit}"
@@ -113,8 +130,37 @@ case "${1:-}" in
       echo "fkit: this is a source checkout ($share) — update it with 'git pull'." >&2
       exit 1
     fi
+    # Reinstall into the SAME place this install lives (task 0481). Share: env for this run → this
+    # install's own root, but only if it IS one: reached through a symlink or a copy, `$here/..` is the
+    # link's parent, and install.sh would `rm -rf` under it. An explicit FKIT_SHARE is taken as given,
+    # as install.sh takes it. Bin: env → `bin=` in .version → the default, but ONLY when the default
+    # wrapper provably runs this install → refuse. An older .version has no `bin=`, and a guess here
+    # installs a second copy somewhere else while the one the user runs stays old.
+    if [ -z "${FKIT_SHARE:-}" ] && ! { [ -f "$share/.version" ] && _fkit_same_dir "$here" "$share/claude"; }; then
+      echo "fkit: $share is not an fkit install (is this fkit a symlink or a copy?); run the fkit the installer made, or:  FKIT_SHARE=<its install dir> FKIT_BIN=<its bin dir> fkit update" >&2
+      exit 1
+    fi
+    # An explicit FKIT_SHARE that already holds an install IS the install being updated: its own .version
+    # supplies repo/ref/bin (env still wins), or a symlinked fork/pinned install reverts to flashist/fkit@main.
+    src="$share"
+    if [ -n "${FKIT_SHARE:-}" ] && [ -f "$FKIT_SHARE/.version" ]; then
+      src="$FKIT_SHARE"
+      fkit_repo="${FKIT_REPO:-$(_fkit_verfield repo "$src")}"; fkit_repo="${fkit_repo:-flashist/fkit}"
+      fkit_ref="${FKIT_REF:-$(_fkit_verfield ref "$src")}";    fkit_ref="${fkit_ref:-main}"
+    fi
+    fkit_share="${FKIT_SHARE:-$share}"
+    fkit_bin="${FKIT_BIN:-$(_fkit_verfield bin "$src")}"
+    if [ -z "$fkit_bin" ]; then
+      if [ -n "${HOME:-}" ] && _fkit_same_dir "$(_fkit_wrapper_share "$HOME/.local/bin")" "$src"; then
+        fkit_bin="$HOME/.local/bin"
+      else
+        echo "fkit: cannot tell where your fkit command is installed; run:  FKIT_BIN=<its directory> fkit update" >&2
+        exit 1
+      fi
+    fi
     printf '  fkit: updating from %s@%s...\n' "$fkit_repo" "$fkit_ref"
     if _fkit_reinstall; then
+      share="$fkit_share"            # an env FKIT_SHARE moved the install: read and clean the new copy
       printf '  fkit: now at v%s (%s)\n' \
         "$(_fkit_verfield version)" "$(_fkit_verfield sha | cut -c1-7)"
       rm -f "$share/.latest" "$share/.update-check" 2>/dev/null || true
@@ -536,16 +582,16 @@ command -v claude >/dev/null 2>&1 || {
   exit 127
 }
 
-# --- Codex preflight: required, but a WARNING, not a wall -------------------------------------
-# fkit is Claude Code + Codex. The adversarial reviewer's whole reason to exist is genuine model
-# diversity — a second opinion from a DIFFERENT model. A "Codex" review that silently ran on Claude
-# is a second opinion from the model that wrote the code: not a second opinion, the illusion of one,
-# which is worse than none. So Codex absence has to be loud HERE, where the user can still fix it,
-# rather than only in a flag on the review output.
+# --- Codex preflight: optional but recommended — a WARNING, never a wall ----------------------
+# fkit is Claude Code + (recommended) Codex. The adversarial reviewer's whole reason to exist is
+# genuine model diversity — a second opinion from a DIFFERENT model. A "Codex" review that silently
+# ran on Claude is a second opinion from the model that wrote the code: not a second opinion, the
+# illusion of one, which is worse than none. So Codex absence has to be loud HERE, where the user can
+# still fix it, rather than only in a flag on the review output.
 #
-# Per the owner's 2026-07-11 ruling this warns and continues — a Codex outage mid-session must not
-# wall the user out of their own team. `codex login status` is the check because a binary that cannot
-# authenticate is the same failure from the user's point of view (~70ms; it does not touch the model).
+# Per the owner's 2026-07-11 ruling and ADR-054 this warns and continues — Codex is optional, and an
+# outage mid-session must not wall the user out of their own team. `codex login status` is the check
+# because a binary that cannot authenticate is the same failure to the user (~70ms; no model call).
 codex_preflight() {
   if ! command -v codex >/dev/null 2>&1; then
     printf '\n  ⚠ Codex ('\''codex'\'') is not installed / not on PATH.\n' >&2

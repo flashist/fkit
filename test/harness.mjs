@@ -9,7 +9,7 @@
 // Nothing here writes into the repo: every project lives under os.tmpdir(). `git status` stays clean.
 
 import { spawn } from 'node:child_process';
-import { mkdtempSync, writeFileSync, mkdirSync, chmodSync, readFileSync, readdirSync, existsSync, rmSync, cpSync, readlinkSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, chmodSync, readFileSync, readdirSync, existsSync, rmSync, cpSync, readlinkSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -234,6 +234,34 @@ export function manifest(root) {
   };
   walk(root, '');
   return out;
+}
+
+// The live task folders under <root>/ai-agents/tasks/{backlog,done,cancelled}, as a sorted list of
+// `board/name` — every `NNNN-` DIRECTORY holding a stat-able brief.md. That is the board reader's own
+// rule (`listTaskDirs` in bin/fkit-board.mjs), so a folder another agent has made but not yet written a
+// brief into is not a task on either side of a comparison.
+//
+// ⚠️ FOR THE "BEFORE/AFTER BRACKET" (task 0477). A test that compares this listing with a second,
+// slower read of the same live tree must take it TWICE — once before and once after that read — and
+// accept only what the bracket allows: every folder present in BOTH listings must be in the read, and
+// nothing outside EITHER may be. Other agents file and close tasks while the suite runs; a single
+// listing taken at a different moment from the read is a race, not a check. With no writer the two
+// listings are equal and the bracket is exact equality.
+export function liveTaskFolders(root) {
+  const out = [];
+  for (const board of ['backlog', 'done', 'cancelled']) {
+    const dir = join(root, 'ai-agents', 'tasks', board);
+    if (!existsSync(dir)) continue;
+    for (const name of readdirSync(dir)) {
+      if (!/^\d{4}-/.test(name)) continue;
+      try {
+        if (!statSync(join(dir, name)).isDirectory()) continue;
+        statSync(join(dir, name, 'brief.md'));
+      } catch { continue; }
+      out.push(`${board}/${name}`);
+    }
+  }
+  return out.sort();
 }
 
 // Read a role's generated lockdown settings file from a project.

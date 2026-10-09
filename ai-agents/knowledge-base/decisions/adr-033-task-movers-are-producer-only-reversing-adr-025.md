@@ -192,6 +192,8 @@ all — tasks were flat, slug-named files. The field arrived with the folder mig
 both briefs inside `done/` with `## Status` written as `🔲 Backlog`.** They were born wrong, not drifted.
 This changes nothing about the correct value — the owner still closed them.
 
+> ⏱ **Correction, 2026-10-05 — on task 0472's owner ruling R6 (2026-10-02). The paragraph above is left unchanged; this note states what is wrong in it.** Three passages are wrong: *"At close time there was no `## Status` field at all"*; *"The field arrived with the folder migration, commit `331f298`"*; and *"which **created both briefs inside `done/` with `## Status` written as `🔲 Backlog`.** They were born wrong, not drifted."* What git shows: both briefs were created in `backlog/` with `## Status` already reading `🔲 Backlog` (`54abc8f`, `e9c8575`, 2026-07-10). The owner's close commits `f7b23f4`/`6daf3cc` (2026-07-10, "Task done") moved each file unedited (R100) and edited the sprint plan. `331f298` then renamed both, content unchanged (R100). Nothing changed the field until the 2026-09-18 repair. So the field existed at close and was not updated by it. This does not vindicate the earlier label "drifted after close" either: the value never changed after close. The conclusion is unaffected: plain `✅ Done`; the owner closed both.
+
 ### ⛔ What a future agent may NOT take from this
 
 **This is not a licence for a spawned producer to bypass the identity gate.** It authorised two named
@@ -207,6 +209,7 @@ self-authorise is a misreading of every clause above.
 - **`0014`** was examined in the same sweep and **deliberately left alone** — no close commit, no board row,
   and it is a protected specimen under open task `0296`'s recorded scope exclusion. The owner ruled *"Leave
   it, pending 0296."* It is not covered by this grant and must not be swept in later.
+  - ⏱ 2026-10-05, on task 0472's owner ruling R7 (2026-10-02): a separate owner ruling, not a re-use of the 2026-09-18 grant, which stays spent. It overrides *"Leave it, pending 0296"* for `0014`'s `## Status` field only. On the owner's confirmation that he closed it himself — *"Yes, I did — Plain '✅ Done' (you committed it along with the work on 2026-07-16)."* (recorded in [`0014`'s brief](../../tasks/done/0014-align-conventions-readme-enforcement-item-live-vs-scaffold/brief.md)), which also overtakes "no close commit" above (`cd19aef`) — a producer wrote plain `✅ Done` on 2026-10-02, with no `(agent-closed — not owner-verified)` marker. **The missing board row stays**, as the specimen for `0296` and `0406`. The "may NOT take from this" rules apply to it unchanged.
 
 ### Related
 

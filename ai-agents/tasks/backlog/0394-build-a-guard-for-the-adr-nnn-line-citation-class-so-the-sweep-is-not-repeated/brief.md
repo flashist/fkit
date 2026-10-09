@@ -622,3 +622,8 @@ deciding nothing beyond them and the flagged owner-field judgement above. **Appe
 Backlog board, UNRANKED**, renumbering and inserting nothing. Its id was verified free **both ways** on
 2026-09-14 — **max task-folder id on disk `0393`**, and **max board-referenced id across every board
 under `ai-agents/sprints/` including `done/` and `cancelled/` `0393`** — the two agreeing.
+
+> ⏱ **Note, 2026-10-04 (spawned `fkit-producer`, at `fkit-lead`'s direction, on the owner's ruling of
+> 2026-10-04; text above unchanged).** This brief's dependency [`0393`](../../done/0393-the-two-citation-sweeps-architecture-md-outbound-inbound-and-the-repo-wide-adr-nnn-line-class/brief.md) is now
+> **closed** — `✅ Done (agent-closed — not owner-verified)`, its brief in `tasks/done/` (checked 2026-10-04).
+> Nothing else in this brief changes; the dependency line is left as written.

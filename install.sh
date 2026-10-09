@@ -7,11 +7,11 @@
 # a `fkit` launcher to ~/.local/bin. After that, run `fkit` inside ANY project directory: it sets the
 # project up if needed and opens the team menu. Idempotent — re-run to update.
 #
-# You only need this one-liner ONCE. After that `fkit` keeps itself current: `fkit update` reinstalls
-# now (re-running this script), and a normal `fkit` does a throttled check and tells you when a newer
-# version is published. It never updates itself behind your back.
+# You only need this one-liner ONCE. After that `fkit` keeps itself current: `fkit update` re-runs this
+# script with the source and paths recorded in .version, and a normal `fkit` does a throttled check and
+# tells you when a newer version is published. It never updates itself behind your back.
 #
-# fkit runs on Claude Code (required) + Codex (for the reviewer's independent second opinion).
+# fkit runs on Claude Code (required) + Codex (optional but recommended: the reviewer's 2nd opinion).
 # Overrides: FKIT_REPO (default flashist/fkit), FKIT_REF (default main), FKIT_SHARE, FKIT_BIN.
 set -eu
 
@@ -62,11 +62,16 @@ resolve_sha() {
 }
 sha="$(resolve_sha || true)"
 ver="$(head -1 "$TMP/src/VERSION" 2>/dev/null | tr -d '[:space:]')"
+# BIN is recorded below and `fkit update` reinstalls into its `bin=` (task 0481), so record it ABSOLUTE
+# from the cwd. `CDPATH=`: a CDPATH in the environment can send `cd bin` elsewhere and make it print.
+mkdir -p "$BIN"
+BIN="$(CDPATH= cd -- "$BIN" && pwd)"
 {
   printf 'version=%s\n' "${ver:-unknown}"
   printf 'sha=%s\n' "${sha:-unknown}"
   printf 'repo=%s\n' "$REPO"
   printf 'ref=%s\n' "$REF"
+  printf 'bin=%s\n' "$BIN"
 } > "$SHARE/.version"
 rm -f "$SHARE/.update-check" "$SHARE/.latest" 2>/dev/null || true   # fresh throttle + clear stale "newer" cache
 echo "✓ Installed fkit v${ver:-?} ($(printf %s "${sha:-unknown}" | cut -c1-7))"
@@ -74,6 +79,9 @@ echo "✓ Installed fkit v${ver:-?} ($(printf %s "${sha:-unknown}" | cut -c1-7))
 # 2. install the global `fkit` launcher (a thin wrapper that execs the installed launcher)
 #    One runtime, so this is a direct exec — no flavor dispatch. `update` is NOT intercepted here:
 #    it falls through to fkit-claude.sh, which owns self-update (ADR-009 §3).
+#    The "Reinstall:" hint puts the variables AFTER the pipe, on the `sh` that runs the installer, so a
+#    reinstall keeps this install's source and paths (task 0481). Known limit: a path containing `'`
+#    breaks the printed command (and one with `"` or `$` already breaks the `exec` line below).
 mkdir -p "$BIN"
 cat > "$BIN/fkit" <<EOF
 #!/bin/sh
@@ -95,7 +103,7 @@ case "\${1:-}" in
 esac
 [ -x "$SHARE/claude/fkit-claude.sh" ] || {
   echo "fkit: install looks broken — $SHARE/claude/fkit-claude.sh is missing." >&2
-  echo "      Reinstall:  curl -fsSL https://raw.githubusercontent.com/$REPO/$REF/install.sh | sh" >&2
+  echo "      Reinstall:  curl -fsSL https://raw.githubusercontent.com/$REPO/$REF/install.sh | FKIT_REPO=$REPO FKIT_REF=$REF FKIT_SHARE='$SHARE' FKIT_BIN='$BIN' sh" >&2
   exit 1
 }
 exec "$SHARE/claude/fkit-claude.sh" "\$@"
@@ -117,16 +125,16 @@ case ":$PATH:" in
     ;;
 esac
 
-# 4. Prerequisites. Claude Code is the runtime; Codex is what makes the reviewer's second opinion an
-#    actually-independent one. Both are checked again (and more precisely) at every `fkit` launch —
-#    this is the first-run heads-up, so a new user isn't surprised later. Neither blocks the install.
+# 4. Prerequisites. Claude Code is the runtime (required); Codex is optional but recommended — it makes
+#    the reviewer's second opinion an actually-independent one. Both are checked again (more precisely)
+#    at every `fkit` launch — this is the first-run heads-up. Neither blocks the install.
 if ! command -v claude >/dev/null 2>&1; then
   echo
   echo "⚠ Required: Claude Code — install from https://claude.com/claude-code"
 fi
 if ! command -v codex >/dev/null 2>&1; then
   echo
-  echo "⚠ Required: Codex — it gives the reviewer an independent second opinion from a different"
-  echo "  model. Without it, reviews run on one model and are flagged NOT model-diverse."
+  echo "⚠ Recommended (optional): Codex — it gives the reviewer an independent second opinion from a"
+  echo "  different model. Without it, reviews fall back to Claude only, flagged NOT model-diverse."
   echo "    npm install -g @openai/codex   &&   codex login"
 fi

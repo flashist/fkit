@@ -123,6 +123,7 @@ Probably **out of scope** (the plan says so, or argues otherwise):
   there), so the conflict risk is low, but whichever lands second rebases on the first. Not a hard
   dependency — no ordering is imposed. ⭐ `0413`'s rename tests would be a natural place to also cover a
   board renamed to/from `plan-sprint-N.md`, if it lands second.
+  - ⏱ *2026-10-05, task 0472: `0413` was since **cancelled under ADR-052** (2026-09-30). "still Backlog" above was true when written.*
 - ⚠️ **Trap for the coder — the reader's source is grepped as text.** `test/board-reader.test.js` bans
   needles anywhere in `bin/fkit-board.mjs`, **comments included** — including sprint banner markers.
   Fixture text containing banners belongs in the test file, never in the reader.

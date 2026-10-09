@@ -55,7 +55,7 @@ over **files in git** rather than shared runtime state.
 | Dependency | How it's used | Where |
 |---|---|---|
 | **Claude Code CLI (`claude`)** | **The runtime.** Every role session is `claude --agent fkit-<role> --settings <role>.json`. Hard requirement — the launcher exits **127** without it. | `claude/fkit-claude.sh`, the `command -v claude` preflight that ends `exit 127` |
-| **Codex CLI (`codex`)** | The adversarial second opinion, for genuine **model diversity**: `codex exec --sandbox read-only --cd "$PWD" -`. **Required, but warned — never walled** (owner ruling, Sprint 2 task 3): a Codex outage must not lock the owner out of their own team. | `claude/fkit-claude.sh:539-560` (*"Codex preflight: required, but a WARNING, not a wall"*; `codex_preflight()`); `claude/skills/fkit-review/SKILL.md:57` |
+| **Codex CLI (`codex`)** | The adversarial second opinion, for genuine **model diversity**: `codex exec --sandbox read-only --cd "$PWD" -`. **Optional but recommended — warned, never walled** (owner rulings 2026-07-11, Sprint 2 task 3, and 2026-10-02, [ADR-054](decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md)): a Codex outage must not lock the owner out of their own team; without Codex the second opinion falls back to Claude only, loudly flagged NOT model-diverse. | `claude/fkit-claude.sh:585-606` (*"Codex preflight: optional but recommended — a WARNING, never a wall"*; `codex_preflight()`); `claude/skills/fkit-review/SKILL.md:57` |
 | **git** | The substrate every agent reads. Agents are barred from committing/pushing unprompted — a **prompt rule, not a sandbox** (`CLAUDE.md` §"Universal hard rules", *"Never commit or push unless the owner explicitly asks."*). | — |
 | **GitHub, over the network** | (a) install: tarball from `codeload.github.com`; (b) self-update **check**: throttled `git ls-remote` or the commits API; (c) the version string: raw `VERSION`. All silent on failure. **Only the curl paths are time-boxed** (`--max-time 5`); the `git ls-remote` path sets only `GIT_HTTP_LOW_SPEED_*`, which bounds a stalled transfer, **not** DNS/connect — so it has no deadline and can outlive 5 s (measured: 12 s). | `install.sh:32,55-62`; `claude/fkit-claude.sh`, `FKIT_NET_TIMEOUT` + `_fkit_remote_sha()` |
 | **Node (ESM)** | Only to cut a release (`npm run release`). **Zero npm dependencies.** | `package.json:3-9`, `bin/release.mjs` |
@@ -114,7 +114,7 @@ inherits the full Claude Code tool set. Only the adversarial reviewer keeps an e
 | `fkit-architect` | *(none — inherits all)* | design specs, ADRs, surveys. **Never implements; never writes the wiki.** |
 | `fkit-reviewer` | *(none — inherits all)* | review-only; writes **only** under `ai-agents/reviews/`. |
 | `fkit-wiki` | *(none — inherits all)* | **exclusive write gateway** for `ai-agents/wiki-vault/` (ADR-005). |
-| `fkit-lead` | *(none — inherits all)* | the **lead + orchestrating conductor** (ADR-031). **Routes** ("who do I need?") **and drives**: spawns/sequences peers, holds the owner channel, relays owner decisions live. Owns `sprint-ship-loop` (ADR-032). **Writes no source, never reviews** — each role's work runs in its own fresh spawned context, so separation-of-authority holds. |
+| `fkit-lead` | *(none — inherits all)* | the **lead + orchestrating conductor** (ADR-031). **Routes** ("who do I need?") **and drives**: spawns/sequences peers, holds the owner channel, relays owner decisions live. Owns `sprint-ship-loop` (ADR-032). **Writes no source, never reviews, never diagnoses** — each role's work runs in its own fresh spawned context, so separation-of-authority holds. |
 | `fkit-adversarial-reviewer` | `Read, Grep, Glob, Bash, Skill` | findings only. **Structurally write-free — a leaf, and the one deliberate tool wall.** |
 
 Evidence: `claude/agents/fkit-adversarial-reviewer.md:9` (the sole surviving `tools:` line); the other
@@ -185,13 +185,13 @@ install.sh   (curl | sh — once)
 
 fkit                                    (run in any project directory)
    ├─ self-host re-exec into ./claude/fkit-claude.sh if this IS an fkit checkout   :42-49 (the FKIT_NO_SELF_HOST guard)
-   ├─ `fkit update` → re-run install.sh                                            :110-124 (the update|--update|upgrade case)
-   ├─ else: throttled update CHECK → prints "run fkit update" (never auto-execs)   :126-166 ("Automatic: a throttled check that only ever PRINTS")
-   ├─ fkit-claude-init.sh <proj>  (idempotent: scaffold, .claude/ refresh, intake) :373-377 ("$here/fkit-claude-init.sh" "$proj")
-   ├─ preflight:  claude REQUIRED (exit 127)  ·  codex required-but-WARNED         :532-560 (command -v claude … exit 127; codex_preflight)
-   ├─ fresh project? → skip the menu, seed the PRODUCER into /fkit-initiate-project :581-639 (pm_is_fresh; the fresh=1 branch)
-   ├─ deterministic role MENU (1-7 — an if/else; no LLM anywhere in the routing)   :641-691 ("--- The menu (deterministic; no LLM)")
-   └─ exec claude --agent fkit-<role> --settings .fkit/settings/<role>.json        :706 (exec claude --agent "fkit-$role")
+   ├─ `fkit update` → re-run install.sh                                            :127-170 (the update|--update|upgrade case)
+   ├─ else: throttled update CHECK → prints "run fkit update" (never auto-execs)   :172-212 ("Automatic: a throttled check that only ever PRINTS")
+   ├─ fkit-claude-init.sh <proj>  (idempotent: scaffold, .claude/ refresh, intake) :419-423 ("$here/fkit-claude-init.sh" "$proj")
+   ├─ preflight:  claude REQUIRED (exit 127)  ·  codex optional-but-WARNED         :578-606 (command -v claude … exit 127; codex_preflight)
+   ├─ fresh project? → skip the menu, seed the PRODUCER into /fkit-initiate-project :627-685 (pm_is_fresh; the fresh=1 branch)
+   ├─ deterministic role MENU (1-7 — an if/else; no LLM anywhere in the routing)   :687-737 ("--- The menu (deterministic; no LLM)")
+   └─ exec claude --agent fkit-<role> --settings .fkit/settings/<role>.json        :752 (exec claude --agent "fkit-$role")
 ```
 
 Two roles at once = **two terminal tabs**. Deliberately not automated
@@ -336,8 +336,8 @@ contract every role shares (`ai-agents/README.md`).
 Codex prompt), and the fkit-managed `.claude/agents/fkit-*.md` + `.claude/skills/fkit-*/` copies —
 **edit `claude/`, never these** (`claude/fkit-claude-init.sh` step 3, *"refresh .claude/agents/fkit-*.md and .claude/skills/fkit-*/ from claude/"*).
 
-**Global, per install:** `~/.local/share/fkit/.version` (`version`/`sha`/`repo`/`ref`),
-`.update-check` (throttle stamp), `.latest` (`install.sh:55-72`, `claude/fkit-claude.sh:69-75` `_fkit_verfield()`).
+**Global, per install:** `~/.local/share/fkit/.version` (`version`/`sha`/`repo`/`ref`/`bin`),
+`.update-check` (throttle stamp), `.latest` (`install.sh:55-77`, `claude/fkit-claude.sh:69-75` `_fkit_verfield()`).
 
 ---
 
@@ -347,13 +347,13 @@ Codex prompt), and the fkit-managed `.claude/agents/fkit-*.md` + `.claude/skills
 `claude/fkit-claude.sh`, the one file the installer cannot work without (`install.sh:34-37`) → copy
 **only `claude/`** into `~/.local/share/fkit/` (`:42-43`) → `rm -rf "$SHARE/omnigent"`, which is what
 makes an upgrade from an older fkit clean rather than leaving a dead runtime on disk (`:49`) → write
-`.version` (`:55-72`) → generate `~/.local/bin/fkit`.
+`.version` (`:55-77`) → generate `~/.local/bin/fkit`.
 
-That generated launcher is a **direct `exec`** of `$SHARE/claude/fkit-claude.sh` (`install.sh:101`) —
+That generated launcher is a **direct `exec`** of `$SHARE/claude/fkit-claude.sh` (`install.sh:109`) —
 there is no flavor dispatch and `update` is **not** intercepted; it falls through to the launcher,
 which owns self-update. Four subcommands are **retired and fail loudly** rather than being passed
 through to `claude` as a stray argument: `omnigent`, `claude`, `reconnect`, `restart-team`
-(`install.sh:86-95`).
+(`install.sh:94-103`).
 
 **2 — Fresh-project onboarding.** `fkit` → init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`,
 **never clobbering** an existing one (`claude/fkit-claude-init.sh:26-47`) → `.fkit/interview` asks 6
@@ -389,12 +389,14 @@ the *unearned confidence* that produces.
 **5 — Self-update** ([ADR-009](decisions/adr-009-claude-code-native-is-the-only-runtime.md) §3).
 Two paths, and the split is the design:
 
-- **`fkit update`** — an **explicit verb**. Re-runs the canonical `install.sh` for `$repo@$ref`
-  (`claude/fkit-claude.sh:100-124` `_fkit_reinstall()` and the `update|--update|upgrade` case). Refuses to run in a source checkout ("update it with `git
-  pull`").
+- **`fkit update`** — an **explicit verb**. Re-runs the canonical `install.sh` for `$repo@$ref`, with the
+  recorded source and paths (`claude/fkit-claude.sh:100-170` `_fkit_reinstall()` and the `update|--update|upgrade` case). Refuses to run in a source checkout ("update it with `git
+  pull`"), and, with no `FKIT_SHARE` given, when the launcher's own root is not an install (reached through a
+  symlink or a copy). An explicit `FKIT_SHARE` that already holds an install supplies that install's
+  recorded repo/ref/bin; env values still win.
 - **the automatic check** — throttled (60 min default), **only partly time-boxed** (the curl paths
   get `--max-time 5`; the preferred `git ls-remote` path gets no deadline at all — see `FKIT_NET_TIMEOUT` in `claude/fkit-claude.sh`), silent
-  when current and silent when offline, and it **only ever prints** (`:126-166`, *"Automatic: a throttled check that only ever PRINTS"*). It **triggers on shas**
+  when current and silent when offline, and it **only ever prints** (`:172-212`, *"Automatic: a throttled check that only ever PRINTS"*). It **triggers on shas**
   (`[ "$remote" != "$installed" ]`) but has **two** renderings, because a remote *version* is not
   always knowable — task 0257:
   - two distinct known versions → `↑ fkit vX → vY is available. Run:  fkit update`
@@ -417,7 +419,9 @@ hang the launcher indefinitely). Source checkouts are excluded entirely
 repo-root `package.json`).
 
 **6 — Release** ([ADR-011](decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md)).
-`npm run release` → `bin/release.mjs`: bump `VERSION` + `package.json` (patch by default), `git add
+`npm run release` → `bin/release.mjs`: refuse an empty or missing `## Unreleased` in `CHANGELOG.md`
+(checked before the test gate and again after it; task 0479), bump `VERSION` + `package.json` (patch
+by default) and turn `## Unreleased` into `## v<version> — <date>`, `git add
 -A`, commit, push, annotated tag `v<version>`, push the tag. **No npm-registry publish**
 (`bin/release.mjs`, *"Makes no npm-registry publish."*). **Version bumping is load-bearing** — self-update compares the installed sha
 against the remote head and reports the version from `VERSION`.
@@ -480,7 +484,7 @@ installs.
 
 This is recorded because it explains things that would otherwise look arbitrary:
 
-- **Why the retired verbs fail loudly** (`install.sh:86-95`) instead of being silently dropped —
+- **Why the retired verbs fail loudly** (`install.sh:94-103`) instead of being silently dropped —
   `fkit omnigent`, `fkit claude`, `fkit reconnect`, `fkit restart-team` were all real commands.
   `reconnect` / `restart-team` existed *only* to paper over Omnigent orchestration failures.
 - **Why self-update notifies rather than auto-updates** — a direct reaction to the Omnigent
@@ -525,7 +529,7 @@ npm dependencies**, run via `npm test` (`node --test test/*.test.js && bash test
   and aborts on red; there is no warn-and-continue path, only an explicit, loudly-announced
   `--no-test`. **The gate is what covers the working tree** — it tests the tree as it stood when the
   suite started, uncommitted and untracked work included. Not the exact committed bytes: the version
-  bump writes `VERSION` and `package.json` after the suite, and ~6 min separate the gate from
+  bump writes `VERSION` and `package.json` after the suite, and 10+ min separate the gate from
   `git add -A`. **CI structurally cannot do this**: it never sees the laptop's tree, and its verdict
   arrives after the tag is already on origin.
 - **CI has been exercised on a runner.** Measured **2026-09-14** over the workflow's full run history:

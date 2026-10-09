@@ -3,6 +3,13 @@
 - **Status:** accepted
 - **Date:** 2026-07-17
 - **Deciders:** owner (Mark Dolbyrev), with fkit-architect (fkit-producer consulted for lifecycle fit)
+- **Corrections:** 2026-10-06 (`0473`) — this ADR carries **three** dated notes: the `0207` correction
+  below the §Decision table (it predates this bullet and is unchanged), plus two pointer notes to
+  [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md) — one directly below that
+  `0207` note (it carries the fact) and one under §Consequences → Residual risks, the bullet beginning
+  *"Do **not** re-raise "the coder shouldn't be writing new file types""*. Marker legend: **⚠️ = a fact
+  that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow it).
+  No existing line of this ADR was edited; the notes are appends, and the Status stays `accepted`.
 
 ## Context
 
@@ -71,6 +78,20 @@ top-level directory under `ai-agents/`, mirroring `reviews/`:**
 > scope**, and it is **reported, not fixed here**. Recorded so the note and the table above cannot be
 > read as contradicting each other by accident.
 
+> ⚠️ **Dated pointer note 2026-10-06 (`0473`) — the per-task set gains an optional file,
+> `plan-review.md`, written by the driver; read
+> [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md).** The table and the
+> `0207` note above are **left byte-identical**. Since ADR-056 (owner plan approval 2026-10-06), a task
+> planned in a `/fkit-sprint-ship-loop` run started with `--plan-review` (default off) gets
+> `<task-folder>/plan-review.md`: the agent approvals, revision rounds and Codex findings on its plan,
+> plus the owner's decision. It is **written by the driver**, not the coder — the plan-step coder writes
+> nothing, the same reasoning as the `0207` note — **on approve and on reject**, **append-only** with one
+> `## Attempt N — <date>` section per attempt, and **kept separate from `plan.md`** so review findings
+> are never read as approved scope. Like `plan.md` today, it lives in the task folder (ADR-029), not in
+> a top-level directory. A task planned without the flag never gets one. **Why ⚠️ and not ⛔:** this
+> ADR's decision — separate, durable, task-keyed records — is extended, not overturned. **Status stays
+> `accepted`.**
+
 1. **Two separate files, not one combined document** — the owner's explicit choice over a merged
    plan+report doc. The plan is the (largely static) approved boundary; the worklog is the evolving
    record that ends as the report.
@@ -134,6 +155,13 @@ top-level directory under `ai-agents/`, mirroring `reviews/`:**
   - Do **not** re-raise "the coder shouldn't be writing new file types" as a defect — the two targets
     here are sanctioned by this ADR; a finding must point to a *different* undocumented write, or a
     write into `tasks/{backlog,done,cancelled}/` or the wiki (both still forbidden).
+
+    > ⚠️ **Dated pointer note 2026-10-06 (`0473`).** The bullet above is **left byte-identical**.
+    > `<task-folder>/plan-review.md`, a **driver** write, is sanctioned by
+    > [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md) Decision 6, so it is
+    > not an undocumented write. The fact is carried by the note below the §Decision table —
+    > deliberately not restated here, so there is one place to keep true rather than two. **Status
+    > stays `accepted`.**
 
 ## Related
 

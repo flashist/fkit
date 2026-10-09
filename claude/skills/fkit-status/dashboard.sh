@@ -29,6 +29,15 @@
 #     It exists ONLY to detect two plans claiming ONE sprint identity, which §1.5 requires to reach
 #     the roll-up's drift clause — and the roll-up exists only in this board render, so the check has
 #     to live here. It reads first lines, never whole sibling files. Nothing else. Not the code, not git.
+#   - ⚠️ A SECOND WIDENING (`0492`, the `depends-on-later-sprint` check). In BOARD MODE ON A `Sprint N`
+#     BOARD ONLY — never on the Backlog board, never on an unresolved identity — it also reads:
+#       (a) the briefs named by an open row's HARD dependency IDs, located by globbing
+#           `tasks/{backlog,done,cancelled}/<ID>-*` (their `## Status` and `## Sprint` only), and
+#       (b) the FIRST LINE and LINE 3 of each `ai-agents/sprints/*.md` (one level deep: the live boards),
+#           to learn each sprint's identity and status banner.
+#     Owner-ruled 2026-10-08 (the plan approval was 2026-10-07; the session date rolled over around this
+#     answer), via AskUserQuestion, selected option verbatim: "Allow it (Recommended)" — the widened reads,
+#     sprint boards only. Still: writes nothing, no network, not git.
 #   - Writes nothing. No network.
 #   - Non-zero exit + stderr on an unparseable plan; the skill then hand-builds a flagged fallback.
 #   - ⚠️ THE `⟦BOARD⟧` TASK CELL IS TITLE-ONLY (`0409`, owner-ruled 2026-09-20). It is cut at the first
@@ -958,8 +967,20 @@ field_value() {
 # (3 of the 4 live `Depends on nothing` briefs are PLAIN COLONLESS, which the guard missed), and a
 # non-empty-but-wrong parse never consulted the guard at all. The caller now branches on this
 # function's own answer. Do not reintroduce a second pattern anywhere.
+#
+# ⚠️ OPT-IN `tail` MODE (`0492`, owner-ruled 2026-10-08 via AskUserQuestion, selected option verbatim
+# "Fix it now (Recommended)"). `depends_raw <brief> tail` emits `<form>␟<content>␟<tail>`. <tail> is
+# the text AFTER the closing bold of a BI declaration (empty for every other form). It exists ONLY so
+# the soft/hard check (dep_hard_ids) can see the convention's own canonical soft form,
+# `**Depends on: task 0072** — soft, not hard.`, whose mark the BI cut otherwise drops. ⛔ It never
+# feeds the `⟨derive: …⟩` cell or the `derive` record: the default call (no second argument) is
+# BYTE-IDENTICAL to what it was, and the locate rules above are shared by both modes — one grammar.
 depends_raw() {
-  awk '
+  awk -v tailmode="${2:-}" '
+    function emit(form, c, t) {
+      if (tailmode == "tail") print form "\037" c "\037" t
+      else                    print form "\037" c
+    }
     function sanitise(s) {
       gsub(/\*\*/, "", s); gsub(/\|/, " ", s); gsub(/\037/, " ", s); gsub(/\t/, " ", s)
       while (s ~ /  /) gsub(/  /, " ", s)
@@ -1043,14 +1064,19 @@ depends_raw() {
       # raw text — a mention inside a span becomes a declaration. Never extract from the masked text —
       # a dependency that IS a span gets destroyed. F[] excludes fenced blocks entirely.
       for (i = 1; i <= N; i++)
-        if (!F[i] && M[i] ~ /^##[ \t]+Depends on[.:]?[ \t]*$/) { print "S\037" sanitise(sectionFrom(i)); exit }
+        if (!F[i] && M[i] ~ /^##[ \t]+Depends on[.:]?[ \t]*$/) { emit("S", sanitise(sectionFrom(i)), ""); exit }
       for (i = 1; i <= N; i++)
         if (!F[i] && M[i] ~ /\*\*Depends on[.: ]/) {
           b = joinFrom(i, indent(L[i]))
           s = substr(b, index(maskspans(b), "**Depends on") + 12)
           sub(/^[.:]?[ \t]*/, "", s)
-          if (s ~ /^\*\*/) { sub(/^\*\*[ \t]*/, "", s); print "BL\037" sanitise(s) }
-          else             { sub(/\*\*.*$/, "", s);     print "BI\037" sanitise(s) }
+          if (s ~ /^\*\*/) { sub(/^\*\*[ \t]*/, "", s); emit("BL", sanitise(s), "") }
+          else {
+            # tail: the same cut point, kept instead of dropped (the opt-in mode above).
+            t = ""; j = index(s, "**"); if (j > 0) t = substr(s, j + 2)
+            sub(/\*\*.*$/, "", s)
+            emit("BI", sanitise(s), sanitise(t))
+          }
           exit
         }
       for (i = 1; i <= N; i++)
@@ -1058,7 +1084,7 @@ depends_raw() {
           b = joinFrom(i, indent(L[i]))
           s = substr(b, index(maskspans(b), "Depends on") + 10)
           sub(/^[.:]?[ \t]*/, "", s)
-          print "P\037" sanitise(s)
+          emit("P", sanitise(s), "")
           exit
         }
       # ── U: THE LOUD GUARD (task 0107) ────────────────────────────────────────────────────────────
@@ -1095,7 +1121,7 @@ depends_raw() {
       # direction (a LOUD flag the owner checks, never a fabricated `ready`) and is an accepted residual
       # (task 0107 review R1) — not a defect to "fix" by narrowing further.
       for (i = 1; i <= N; i++)
-        if (!F[i] && M[i] ~ /^[^A-Za-z]*Depends on[.: ]/) { print "U\037"; exit }
+        if (!F[i] && M[i] ~ /^[^A-Za-z]*Depends on[.: ]/) { emit("U", "", ""); exit }
     }
   ' "$1" 2>/dev/null | head -1
 }
@@ -1214,6 +1240,183 @@ folder_id_prefix() {
   esac
 }
 
+# --- 0492: `drift depends-on-later-sprint` -----------------------------------------------------------
+#
+# An open row on a REAL sprint board (`Sprint N`) that hard-depends on an open task sprint N cannot
+# count on: one on the Backlog board, on a sprint not started yet, on a later sprint, on a closed
+# sprint, or on a sprint that cannot be worked out. The record makes the problem VISIBLE; it blocks
+# nothing, and it does NOT change the row's Next step — the record is consistent, the schedule is not,
+# so it is neither disagreement nor nonconformance. `0493` (the ship-loop) and `0494` (filing) read it.
+#
+# ⚠️ 0451 OVERLAP (ADR-052 phase 5): whichever of 0451 and this lands second carries the kind name, its
+# fields, the reason table in `later_sprint_reason` and the `0492/…` tests (they are the spec to port).
+
+# <depends_raw content> [<tail>] -> the HARD 4-digit task IDs the CONTENT names, space-separated,
+# first-appearance order. <tail> is depends_raw's opt-in `tail` field (the text after a BI declaration's
+# closing bold): it is read ONLY to decide soft or hard, so `**Depends on: task 0072** — soft, not
+# hard.` reads soft. ⛔ An ID that appears only in the tail is NEVER returned — it is not part of the
+# declaration — but it still ends the segment of the ID before it, exactly as it would in the content.
+#
+# ⚠️ AN INTERPRETATION STEP ON TOP OF depends_raw, NOT A SECOND GRAMMAR. Where the `Depends on` line is
+# stays depends_raw's one question; this reads only the text it returned. The `⟨derive: …⟩` placeholder
+# still carries that text raw.
+#
+# ID token: exactly 4 digits; the byte before is not a letter, a digit or `-`; the byte after is not a
+# digit, and not `-<digit>`. That drops dates (`2026-09-13`), `ADR-0047`, `T-023` and longer numbers,
+# while `../0331-slug/` and a code-spanned `0331` still count. An ID with no task folder (a year, a stray
+# number) is dropped later, when its folder lookup fails.
+#
+# Soft or hard: an occurrence's SEGMENT runs from that ID up to the next DIFFERENT ID. In it, the first
+# WHOLE-WORD `soft` or `hard` (any case) decides; neither means hard. An ID is soft only if EVERY
+# occurrence is. Whole word = the bytes either side are not a letter, a digit or `_`, so `software`,
+# `Microsoft` and `harden` decide nothing, while `soft-follow` and `(hard)` do (wpos, below).
+#
+# ⚠️ KNOWN MISSES, ACCEPTED IN THE 0492 PLAN (all flag MORE, except the two marked quiet):
+#   - the word written BEFORE the ID (`soft: 0110`) reads as hard;
+#   - a negated `(not soft)` reads as soft (QUIET);
+#   - ranges like `0485–0491` are not expanded;
+#   - prose IDs depends_raw over-includes are counted;
+#   - a mistyped ID with no folder is skipped (QUIET).
+#   - a task-folder SLUG in a link is part of the segment, so a slug carrying `soft` or `hard` can
+#     decide it.
+dep_hard_ids() {
+  printf '%s\n%s\n' "$1" "${2:-}" | awk '
+    # The first position of w in str as a WHOLE word, or 0. Portable: no \< \> or \b in BSD awk.
+    function wpos(str, w,    off, i, L) {
+      L = length(w); off = 0
+      while ((i = index(substr(str, off + 1), w)) > 0) {
+        i += off
+        if ((i == 1 || substr(str, i - 1, 1) !~ /[a-z0-9_]/) && substr(str, i + L, 1) !~ /[a-z0-9_]/) return i
+        off = i
+      }
+      return 0
+    }
+    NR == 1 { c = $0 }
+    NR == 2 { t = $0 }
+    END {
+      lim = length(c); s = c " " t; n = length(s); k = 0
+      for (p = 1; p + 3 <= n; p++) {
+        if (substr(s, p, 4) !~ /^[0-9][0-9][0-9][0-9]$/) continue
+        if (p > 1 && substr(s, p - 1, 1) ~ /[A-Za-z0-9-]/) continue
+        a = substr(s, p + 4, 1)
+        if (a ~ /[0-9]/) continue
+        if (a == "-" && substr(s, p + 5, 1) ~ /[0-9]/) continue
+        k++; pos[k] = p; id[k] = substr(s, p, 4)
+        p += 3
+      }
+      for (i = 1; i <= k; i++) {
+        if (pos[i] + 3 > lim) continue
+        e = n + 1
+        for (j = i + 1; j <= k; j++) if (id[j] != id[i]) { e = pos[j]; break }
+        seg = tolower(substr(s, pos[i], e - pos[i]))
+        si = wpos(seg, "soft"); hi = wpos(seg, "hard")
+        soft = (si > 0 && (hi == 0 || si < hi))
+        if (!(id[i] in seen)) { seen[id[i]] = 1; order[++m] = id[i]; allsoft[id[i]] = 1 }
+        if (!soft) allsoft[id[i]] = 0
+      }
+      out = ""
+      for (i = 1; i <= m; i++) if (!allsoft[order[i]]) out = (out == "" ? order[i] : out " " order[i])
+      print out
+    }
+  '
+}
+
+# <id> -> `closed` | `none` | `open<TAB><the brief's ## Sprint value, as written>`.
+#
+# Closed = the folder is in `tasks/done/` or `tasks/cancelled/`, or the brief's `## Status` is ✅, ⛔ or
+# ➡️ (read with marker_key). `none` = no task folder at all. A folder with no readable brief is OPEN
+# with an empty sprint, which lands on the LOUD `sprint-unresolved` reason, never on silence.
+# ⚠️ `set +f` … `set -f` around the globs — see sibling_claimants for why an unwrapped glob is a silent
+# "found nothing" here.
+blocker_lookup() {
+  _bl_closed=""; _bl_dir=""
+  set +f
+  for _bl_d in "$AGENTS/tasks/done/$1"-* "$AGENTS/tasks/cancelled/$1"-*; do
+    [ -d "$_bl_d" ] && { _bl_closed=1; break; }
+  done
+  if [ -z "$_bl_closed" ]; then
+    for _bl_d in "$AGENTS/tasks/backlog/$1"-*; do
+      [ -d "$_bl_d" ] && { _bl_dir="$_bl_d"; break; }
+    done
+  fi
+  set -f
+  [ -n "$_bl_closed" ] && { printf 'closed'; return 0; }
+  [ -n "$_bl_dir" ] || { printf 'none'; return 0; }
+  _bl_st=""; _bl_sp=""
+  if [ -f "$_bl_dir/brief.md" ]; then
+    _bl_st=$(field_value "$_bl_dir/brief.md" "Status")
+    _bl_sp=$(field_value "$_bl_dir/brief.md" "Sprint")
+  fi
+  case "$(marker_key "$_bl_st")" in
+    done|cancelled|moved) printf 'closed'; return 0 ;;
+  esac
+  printf 'open\t%s' "$_bl_sp"
+}
+
+# The live-board table: `identity<TAB>status`, one line per `$AGENTS/sprints/*.md` (ONE level deep, so
+# an archived render still finds the live boards), in byte order. Built ONCE, and only when some row
+# needs it. ⛔ Called directly, NEVER inside `$( … )` — a subshell would build the table and throw it
+# away, every time. The answer comes back in `LS_BOARD_STATUS`: the status of the FIRST board in byte
+# order whose identity equals $1 (the same first-match tie-break ADR-041 §1.5 uses), or EMPTY when no
+# live board has that identity. A missing or malformed banner reads `unresolved` (plan_status_raw).
+LS_BOARDS=""; LS_BOARDS_BUILT=""
+later_board_status() {
+  if [ -z "$LS_BOARDS_BUILT" ]; then
+    LS_BOARDS_BUILT=1
+    set +f
+    for _lb_f in "$AGENTS/sprints"/*.md; do
+      [ -f "$_lb_f" ] || continue
+      _lb_sr=$(plan_status_raw "$_lb_f")
+      LS_BOARDS="${LS_BOARDS}$(resolve_identity "$_lb_f")	${_lb_sr%%	*}
+"
+    done
+    set -f
+  fi
+  LS_BOARD_STATUS=""
+  _lb_ifs=$IFS; IFS='
+'
+  for _lb_r in $LS_BOARDS; do
+    [ "${_lb_r%%	*}" = "$1" ] || continue
+    LS_BOARD_STATUS=${_lb_r#*	}
+    break
+  done
+  IFS=$_lb_ifs
+}
+
+# <Nst> <M> <Mst> -> the reason, or nothing.  THE 0492 §2 TABLE, in its order — the one place it lives.
+# N is this board's identity ($PLAN_SPRINT); Nst its status; M the blocker's `## Sprint` as written; Mst
+# M's board status (empty = no live board with that identity).
+#   1  M == N                                  → none
+#   2  M == Backlog                            → backlog-board
+#   3  M not an exact `Sprint N` token         → sprint-unresolved
+#   4  no live board, or banner unresolved     → sprint-unresolved
+#   5  Mst Done or Cancelled                   → sprint-closed
+#   6  Mst Backlog: Nst Backlog → later-sprint only if M > N, else none; any other Nst → not-started
+#   7  Mst In progress: later-sprint only if Nst is In progress or unresolved AND M > N; else none
+# ⚠️ Row 6, both 🔲: a not-started Sprint 12 waiting on a not-started Sprint 11 is ordinary forward
+# planning and is NOT flagged (owner Q1, "Planner's rule (Recommended)"). Row 7: an unresolved Nst
+# counts as In progress — the louder direction.
+later_sprint_reason() {
+  [ "$2" = "$PLAN_SPRINT" ] && return 0
+  [ "$2" = "Backlog" ] && { printf 'backlog-board'; return 0; }
+  is_eligible "$2" || { printf 'sprint-unresolved'; return 0; }
+  case "$3" in
+    ''|unresolved)  printf 'sprint-unresolved' ;;
+    Done|Cancelled) printf 'sprint-closed' ;;
+    Backlog)
+      if [ "$1" = "Backlog" ]; then
+        identity_gt "$2" "$PLAN_SPRINT" && printf 'later-sprint'
+      else
+        printf 'not-started'
+      fi ;;
+    'In progress')
+      case "$1" in
+        'In progress'|unresolved) identity_gt "$2" "$PLAN_SPRINT" && printf 'later-sprint' ;;
+      esac ;;
+  esac
+  return 0
+}
+
 # --- pass 1: parse rows, resolve briefs, compute drift + next step ---------------------------------
 
 c_done=0; c_inprogress=0; c_blocked=0; c_backlog=0; c_cancelled=0; c_moved=0; c_unknown=0
@@ -1236,6 +1439,13 @@ add_fact() { FACTS="${FACTS}$1
 # exact failure the always-render rule exists to prevent. Every drift site calls THIS, never the
 # assignment directly.
 mark_drift() { DRIFT_TASKS="$DRIFT_TASKS $tid"; row_drift=1; }
+
+# 0492 — the `depends-on-later-sprint` check runs ONLY on an eligible `Sprint N` identity: never on the
+# Backlog board, never on an unresolved one (that already reports `unresolved-plan-sprint`). The row
+# loop collects `tid<TAB>hard-ids` per open row into LS_COLLECT; the records are worked out after it.
+LS_CHECK=""
+[ -n "$PLAN_SPRINT" ] && is_eligible "$PLAN_SPRINT" && LS_CHECK=1
+LS_COLLECT=""
 
 while IFS=$'\037' read -r rtype st pr task br; do
   [ "$rtype" = "D" ] || continue
@@ -1570,6 +1780,22 @@ while IFS=$'\037' read -r rtype st pr task br; do
     esac
   fi
 
+  # -- 0492: collect this row's HARD dependency IDs for the `depends-on-later-sprint` check ----------
+  # Open = the PLAN CELL is 🔲/🔄/🚧. depends_raw is called again here, deliberately: the Next-step block
+  # above skips it on a `waiting on owner` row, and this must not. Cheap — sprint boards only.
+  if [ -n "$LS_CHECK" ] && [ -n "$brief_path" ]; then
+    case "$key" in
+      backlog|inprogress|blocked)
+        ls_draw=$(depends_raw "$brief_path" tail 2>/dev/null)    # opt-in tail mode: soft/hard only
+        if [ -n "$ls_draw" ]; then
+          ls_x=${ls_draw#*$'\037'}                                  # <content>␟<tail>
+          ls_ids=$(dep_hard_ids "${ls_x%%$'\037'*}" "${ls_x#*$'\037'}")
+          [ -n "$ls_ids" ] && LS_COLLECT="${LS_COLLECT}${tid}	${ls_ids}
+"
+        fi ;;
+    esac
+  fi
+
   # --- THE OPEN-WORK FILTER (`0039`) ------------------------------------------------------------
   # The board renders OPEN work only: rows whose reconciled state is `done`, `cancelled` or `moved` are
   # omitted. This is a CONSCIOUS REVERSAL of this script's original "show the dead rows" principle
@@ -1730,6 +1956,97 @@ case "$PLAN_STATUS" in
       esac
     fi ;;
 esac
+
+# --- 0492: `drift depends-on-later-sprint` — work out the records from LS_COLLECT ------------------
+# Placed HERE because the reason table needs this board's own status ($PLAN_STATUS, above).
+#
+# LS_RECS holds one record per line: dependent<TAB>blocker<TAB>reason<TAB>via<TAB>blocker_sprint.
+# `via` is empty on a direct record. ⚠️ blocker_sprint is LAST on purpose: it is the brief's text as
+# written and may itself hold a tab, so it takes "everything after the 4th tab". Fields are split with
+# `%%`/`#`, never `read` under a tab IFS (tab is IFS whitespace and collapses an empty `via`).
+# ⚠️ Its own IFS save variable (`ls_ifs`), and later_board_status has its own (`_lb_ifs`): it is called
+# from INSIDE these loops, so a shared OLD_IFS would be overwritten mid-loop and the wrong IFS restored.
+LS_RECS=""
+ls_has() {   # <dependent> <blocker> -> 0 iff that pair already has a record. One record per pair.
+  case "
+$LS_RECS" in *"
+$1	$2	"*) return 0 ;; esac
+  return 1
+}
+if [ -n "$LS_COLLECT" ]; then
+  ls_ifs=$IFS
+  # 1. Direct records, in row order, then ID order.
+  IFS='
+'
+  for ls_r in $LS_COLLECT; do
+    ls_t=${ls_r%%	*}; ls_ids=${ls_r#*	}
+    IFS=' '
+    for ls_d in $ls_ids; do
+      [ "$ls_d" = "$ls_t" ] && continue                 # its own ID
+      ls_l=$(blocker_lookup "$ls_d")
+      case "$ls_l" in open*) ;; *) continue ;; esac     # closed, or no task folder
+      ls_m=${ls_l#open	}
+      ls_mst=""
+      if [ "$ls_m" != "$PLAN_SPRINT" ] && [ "$ls_m" != "Backlog" ] && is_eligible "$ls_m"; then
+        later_board_status "$ls_m"; ls_mst=$LS_BOARD_STATUS   # direct call — see its comment
+      fi
+      ls_why=$(later_sprint_reason "$PLAN_STATUS" "$ls_m" "$ls_mst")
+      [ -n "$ls_why" ] || continue
+      ls_has "$ls_t" "$ls_d" && continue
+      LS_RECS="${LS_RECS}${ls_t}	${ls_d}	${ls_why}		${ls_m}
+"
+    done
+    IFS='
+'
+  done
+  # 2. Indirect records (owner Q2, "Flag them all (Recommended)"), WITHIN THIS BOARD ONLY: open row B
+  #    hard-depends on row A of this board, A has a record for blocker V, B has none for V yet → add
+  #    (B, V, A's reason, via=A, A's blocker_sprint). Repeat until nothing changes. It always ends: the
+  #    set only grows and is bounded by rows × blockers, so a dependency cycle is safe.
+  # ⚠️ RESIDUAL, NAMED: chains ACROSS boards are not followed — e.g. a row waiting on a task of an
+  #    earlier, in-progress Sprint 9 board that itself waits on a later sprint gets no record here.
+  ls_changed=1
+  while [ -n "$ls_changed" ]; do
+    ls_changed=""
+    for ls_r in $LS_COLLECT; do
+      ls_b=${ls_r%%	*}; ls_ids=${ls_r#*	}
+      IFS=' '
+      for ls_a in $ls_ids; do
+        [ "$ls_a" = "$ls_b" ] && continue
+        IFS='
+'
+        for ls_rec in $LS_RECS; do
+          [ "${ls_rec%%	*}" = "$ls_a" ] || continue
+          ls_x=${ls_rec#*	};  ls_v=${ls_x%%	*}
+          ls_x=${ls_x#*	};    ls_why=${ls_x%%	*}
+          ls_x=${ls_x#*	};    ls_m=${ls_x#*	}
+          [ "$ls_v" = "$ls_b" ] && continue             # never "B waits on B"
+          ls_has "$ls_b" "$ls_v" && continue
+          LS_RECS="${LS_RECS}${ls_b}	${ls_v}	${ls_why}	${ls_a}	${ls_m}
+"
+          ls_changed=1
+        done
+        IFS=' '
+      done
+      IFS='
+'
+    done
+  done
+  # 3. Emit. Direct records first (row, then ID order), then indirect ones in the order found.
+  #    Each one calls mark_drift, so the dependent joins DRIFT_TASKS and the roll-up's drift clause; the
+  #    row is open, so it already renders.
+  for ls_rec in $LS_RECS; do
+    ls_t=${ls_rec%%	*};  ls_x=${ls_rec#*	}
+    ls_v=${ls_x%%	*};    ls_x=${ls_x#*	}
+    ls_why=${ls_x%%	*};  ls_x=${ls_x#*	}
+    ls_via=${ls_x%%	*};  ls_m=${ls_x#*	}
+    ls_via_f=""
+    [ -n "$ls_via" ] && ls_via_f=" via=\"$(fact_value "$ls_via")\""
+    add_fact "drift depends-on-later-sprint $ls_t blocker=\"$ls_v\" blocker_sprint=\"$(fact_value "$ls_m")\" reason=\"$ls_why\"$ls_via_f"
+    tid="$ls_t"; mark_drift
+  done
+  IFS=$ls_ifs
+fi
 
 # Drift clause — templated, deterministic, deliberately generic. It points at beat 6; it does not try
 # to be beat 6. Templating each drift kind into English is prose-generation, not this script's job.

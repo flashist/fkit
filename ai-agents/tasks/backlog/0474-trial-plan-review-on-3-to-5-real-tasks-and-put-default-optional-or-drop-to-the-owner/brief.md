@@ -4,10 +4,10 @@
 0474
 
 ## Sprint
-Backlog
+Sprint 10
 
 ## Priority
-Unscheduled
+P10
 
 ## Status
 🔲 Backlog
@@ -90,6 +90,18 @@ folder name still carries the old wording; the ID and folder were kept so the li
 
 - **Depends on:** 0473
 - **Blocks:** nothing
+- **Before the first trial run: relaunch `fkit lead`** (added 2026-10-06). After 0473 lands, start the
+  trial from a fresh `fkit lead` launch (exit, then relaunch). Without it, the approvers run on their
+  old agent instructions, and the trial data is not of the shipped feature. Why: 0473's build smoke
+  test found that after the installed `.claude/` copies were refreshed, a hop-2 spawn still got its
+  old agent prompt; skill text was live, agent prompts were not. So the approvers' new "asked to
+  approve a plan" judging guidance, and the coder's new consult bullet for `fkit-adversarial-reviewer`,
+  only reach a relaunched session. The APPROVE / CHANGES REQUESTED reply shape works either way,
+  because the asking prompt carries it, so a stale session would not look broken. Suggested: the first
+  trial log checks it, e.g. the plan-step record shows the approvers judging by the new guidance.
+  Sources: 0473 `review.md`, finding R5 (*"so 0474's trial could start from a stale session and gather
+  mixed-version evidence"*); 0473 `worklog.md`, "Live smoke test (hop 2, installed text)"
+  (*"Agent system prompts: NOT live."* and *"0474's first run must start from a fresh launch."*).
 - ⛔ **Do not start without the owner's specific word.**
 - **Why a separate task from `0473`:** the build ships, and can be used opt-in, without the trial. The
   trial produces something different, evidence plus an owner ruling, over the lifetime of the owner's

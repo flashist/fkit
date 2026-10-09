@@ -13,6 +13,15 @@
   paragraph *"Also already-stale prose, corrected by this ADR"*. Marker legend: **⚠️ = a fact that
   drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow it). No
   existing line of this ADR was edited; the note is an append, and the Status stays `accepted`.
+  ⚠️ 2026-10-06 (`0475`) — this ADR now carries **three** dated notes: the `0393` note above, plus two
+  pointer notes to [ADR-055](adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md)
+  — one below §*"The plan-gate honesty clause"* (it carries the fact) and one under §Consequences →
+  Residual risks, first bullet (*"A spawned worker writes source before the owner approves the plan"*).
+  The site list in the first line of this item is left byte-identical and is superseded by this line;
+  the same append-only rule and the same legend apply.
+  ⚠️ 2026-10-09 (`0498`) — this ADR now carries **four** dated notes: the three listed in the line
+  above, plus one below §Decision 2 (the conductor also never diagnoses). The line above is left
+  byte-identical and is superseded by this line; the same append-only rule and the same legend apply.
 
 > **What this ADR decides, in one line:** `fkit-lead` grows from a router into a **single-point-of-
 > interaction conductor** that spawns and drives any role — feasible because the ADR-018 hook already
@@ -73,6 +82,32 @@ Claude-side roles, so lead **already inherits Write/Edit** (`architecture.md:105
    still happens in a different context than wrote it. Orchestration *sequences* the separate contexts;
    it does not merge proposal, build, and approval into one.
 
+   > ⚠️ **Dated note 2026-10-09 (`0498`) — the never-list above gains a third item: the conductor also
+   > never diagnoses.** Decision 2 is **left byte-identical**. Owner rulings 2026-10-08, via
+   > `AskUserQuestion` in a `fkit lead` session (relayed in task `0498`'s brief): **L1** — the lead
+   > still answers *"is this OK / expected?"* from the spec, a brief, the wiki or an ADR, with at most
+   > 1–2 fact lookups; the first *"why does the code/system do this?"* goes to a spawned `@fkit-coder`
+   > (or the owning role). Tripwire: a second file read to explain a behaviour, or any log read to
+   > explain a failure. **L2** — the hand-off is said to the owner (*"a coder is finding the cause"*).
+   > **L3** — the lead's own hypothesis never goes into a spawn prompt or a brief as fact: left out, or
+   > marked an unverified guess. **L4** — a read approval the owner gave the lead (e.g. read-only
+   > production logs) is relayed to the spawned role quoted verbatim with its date and channel; it
+   > authorises no write and is **not** the ADR-055 declared-approval write marker — a diagnosis spawn
+   > is read-only and carries no marker. Carried by `claude/agents/fkit-lead.md` (a fourth conductor
+   > discipline, *"Hand off the first 'why' — never diagnose"*; a *"Never diagnose, yourself"* hard
+   > rule; a routing line; the orient line narrowed to *"1–2 fact lookups, not diagnosis"*) and by the
+   > role summaries in the `fkit-team` roster, PROJECT.md and `architecture.md`. This **extends**
+   > Decision 2 and reverses nothing. It is **prose-enforced** — the same "trust, not proof" cost as the
+   > honesty clause; no hook or tool changed. It narrows the risk §Consequences names: a driver that
+   > starts *judging* instead of delegating. **Why ⚠️ and not ⛔:** nothing here is overturned; the
+   > never-list grew. **Status stays `accepted`.**
+   > Owner rulings 2026-10-09, same channel: **Q3** — the tripwire wording above (a second file read to
+   > explain a behaviour, or any log read to explain a failure) is this ruling, not L1's; it refines L1.
+   > **Q4** — one owner override: if the owner, told it is a coder's job, still asks the lead to look
+   > itself, it may, labelled as the lead's own unverified look. So "never diagnoses" is the default, not
+   > absolute against an explicit owner ask; the *"Never diagnose, yourself"* hard rule names this one
+   > exception.
+
 3. **The driver session holds the owner channel; workers return questions, never ask them.** A spawned
    worker that hits a decision **returns** it as structured text (`NEEDS-DECISION { question, options,
    recommendation, context }`); the driver — a live session — calls `AskUserQuestion` and **blocks on a
@@ -107,6 +142,19 @@ clause (prevention removed, ordering-by-prose in its place). **The owner accepte
 (2026-07-22).** It is recorded here so no future reader mistakes the orchestrated path for carrying plan
 mode's structural guarantee. Owners who want the structural wall for a given task still ship it the old
 way: `fkit coder` + `/fkit-task-ship-loop`.
+
+> ⚠️ **Dated pointer note 2026-10-06 (`0475`) — the implementing spawn on this path now has a written
+> rule; read [ADR-055](adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md).**
+> This clause is **left byte-identical**. It decides the plan-only → owner approves → implement split; it
+> never said what lets the *implementing* coder write. Until 2026-10-06 only the sprint loop's
+> declared-approval marker did (ADR-032 §Amendment A1), so a lead-driven implement spawn **outside** the
+> sprint loop had no rule to write under. ADR-055 (owner ruling 2026-10-02) extends that one marker to
+> `fkit-lead` on this conductor path: caller, the approved plan verbatim (or the exact approved scope),
+> the owner's approval **quoted verbatim with its date and channel**, and the worker role (Build or
+> Process-review). **The cost this clause states is unchanged and not softened** — ADR-055 records it as
+> the **same accepted cost with wider exposure**, because more spawns now rely on prose. A quote is
+> fidelity, not proof. **Why ⚠️ and not ⛔:** nothing here is overturned; the path this ADR decided gained
+> a written rule. **Status stays `accepted`.**
 
 ## Options considered
 
@@ -145,6 +193,13 @@ way: `fkit coder` + `/fkit-task-ship-loop`.
   - **A spawned worker writes source before the owner approves the plan** — that is the honesty clause's
     named cost becoming concrete, **not** a new defect against the mover or the hook. If it costs real
     quality, reopen the drive-scope decision (revisit the "split" option), do not patch the skill.
+
+    > ⚠️ **Dated pointer note 2026-10-06 (`0475`).** On the lead path this trigger now also reads against
+    > [ADR-055](adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md)'s
+    > marker and its own re-raise conditions. The bullet above is **left byte-identical**. The fact is
+    > carried by the note below §*"The plan-gate honesty clause"* — deliberately not restated here, so
+    > there is one place to keep true rather than two. **Status stays `accepted`.**
+
   - **A future Claude Code exposes `AskUserQuestion` (or plan mode) to spawned subagents** — that would
     let a worker gate its own plan, removing the downgrade; re-measure per ADR-021's discipline and
     reopen the plan-gate clause.

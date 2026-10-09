@@ -19,7 +19,7 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
 
    | Role | Does | Must not |
    |---|---|---|
-   | **lead** (the conductor) | routes you to a role; drives the work when you hand it a goal; reads the wiki | plan, code, design, review, or write the wiki |
+   | **lead** (the conductor) | routes you to a role; drives the work when you hand it a goal; reads the wiki | plan, code, design, review, diagnose a cause, or write the wiki |
    | **producer** | product & sprint planning, task briefs, task lifecycle | write code |
    | **coder** | implementation — sole source-write authority | commit unprompted; make product calls; settle new architecture; review its own work |
    | **architect** | architecture, design specs, ADRs, feasibility | implement features; write the wiki |

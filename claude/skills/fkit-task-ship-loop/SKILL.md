@@ -136,16 +136,25 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
    *(The plan is persisted to `<task-folder>/plan.md` at approval in step 4 — plan mode's write
    wall forbids writing it here, and ADR-020 keys the artifact to plan approval.)* *(Autonomous up to
    the gate.)*
-3. **⛔ STOP — plan approval.** Present the plan (+ any open questions) and wait. **If the owner rejects
-   it, stop** — the task stays `🔲 Backlog` (In progress is *not* set); report the rejection to the
-   owner (no worklog is opened before approval). *After approval, the owner may walk away.*
+3. **⛔ STOP — plan approval.** First render the sprint plan that holds this task's row (the board its
+   `## Sprint` names) with `bash .claude/skills/fkit-status/dashboard.sh <plan>`; if it carries a
+   `drift depends-on-later-sprint` record for this task, present it with the plan — its blocker, that
+   blocker's sprint worded by `reason`, and for a `via=` record the row it waits through — as the
+   owner's decision; do not resolve it. If no sprint plan holds the row, the render fails, or it carries
+   `drift unresolved-plan-sprint`, say the check did not run — never that there is no record. (A task
+   on the Backlog board has nothing to check.) Then present the plan (+ any open questions) and wait.
+   **If the owner rejects it, stop** — the task stays `🔲 Backlog` (In progress is *not* set); report
+   the rejection to the owner (no worklog is opened before approval). *After approval, the owner may
+   walk away.*
 4. **Persist the plan, mark In progress & build.** On approval (plan mode releases the write wall),
    write the approved plan to `<task-folder>/plan.md` — the durable autonomy boundary. Set
    `🔄 In progress` in **both** the brief `## Status` **and** the sprint row. Open
    `<task-folder>/worklog.md`. Implement the approved plan with minimal, idiomatic diffs, logging
    notable decisions and **every obvious winner** chosen. *(Autonomous.)*
-5. **Verify.** Test per project conventions (ADR-014: `node --test`, zero devDeps for this repo),
-   using sub-agents where they help. On failure: diagnose → fix → re-verify. **Budget: 3 no-progress
+5. **Verify.** Run the checks this change needs: map the changed paths to the project's checks (its
+   own "what changed → what to run" table if it has one, e.g. in `CONTRIBUTING.md`), and run the full
+   suite at release, when the tests or test tooling change, or when unsure; name which checks ran and
+   which were skipped, and why — a skipped check is not a passed one. Use sub-agents where they help. On failure: diagnose → fix → re-verify. **Budget: 3 no-progress
    cycles** → **⛔ STOP** with a `🚧 Blocked — verification: <what fails>` worklog. A fix that needs a
    decision beyond the plan → **⛔ STOP**. *(Autonomous within budget.)*
 6. **Review.** Spawn **@fkit-reviewer** → **`/fkit-stateful-review`** (working tree, task-id; **hop
@@ -157,7 +166,7 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
    - **⛔ STOP** for any **judgment call**: a frontier-move / recording a residual, a regression or
      review oscillation, a disputed severity that changes scope, a broad/behavior-changing fix, or
      anything **outside the approved plan** (a new architecture/scope decision → owner,
-     `fkit-coder.md:109-113`).
+     `fkit-coder.md:165`).
    - **`Codex unavailable`?** (that state only — **not** `reasoning-only second opinion`;
      `fkit-review/SKILL.md` §Coverage states)
      Re-request the review up to **3 attempts total** (absorbing a transient
@@ -232,6 +241,11 @@ in silence.
 6. **A dead-end** it can't resolve (verification it can't get green within budget; a consult that
    returns nothing usable).
 
+**A placement or dependency question names its knock-on.** When a stop's options put a task in a
+sprint (or on the Backlog board) — a follow-up, a re-scope — or re-point a `Depends on:`
+link, each option says which open tasks would then wait on which sprint, the recommended option too:
+[`conventions/placement-questions-state-the-knock-on.md`](../../../ai-agents/knowledge-base/conventions/placement-questions-state-the-knock-on.md).
+
 ### The "obvious winner" override
 Do **not** manufacture an important question out of a no-brainer. Where one option **clearly dominates
 on the merits** *and* stays **within the approved plan's intent**, **pick it and proceed** — and
@@ -254,8 +268,8 @@ Evidence for the owner to judge, **not** a done-verdict. Contains, at minimum:
   ⚠️ **`reasoning-only second opinion` is NOT partial coverage** and is not a degraded run: it fires no
   banner, forces no verdict, and does **not** withhold the close. Only **`Codex unavailable`** is the
   degraded case this loop's close posture keys on.
-- **Verification evidence, concrete** — commands + pass/fail, **from the run after the final code
-  change**, not "verification passed."
+- **Verification evidence, concrete** — commands + pass/fail, and which checks were skipped and why,
+  **from the run after the final code change**, not "verification passed."
 - **The brief's `## Verification steps`, walked and ticked** — each criterion met/unmet.
 - **Files touched / change surface** — the diff scope (frames the later wiki sync's delta).
 - **Residuals / deferrals** and **recommended follow-up tasks** — *named only*; the loop does **not**

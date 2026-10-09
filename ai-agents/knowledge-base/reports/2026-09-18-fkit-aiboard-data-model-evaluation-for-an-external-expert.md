@@ -79,6 +79,7 @@ fkit has an open, unstarted task **`0383` — "Shrink the Backlog board, whose T
 - **`0014` still reads `🔲 Backlog` and was deliberately left alone.** One drifted record remains.
 - **The repair required an owner ruling that created a one-time bypass of fkit's own close gate**, recorded as an addendum to ADR-033. ⭐ **That event is itself evidence for §5.5 and for Q1, and it arrived after both were drafted.** See §4.1.3 and §5.5.1.
 - **It independently confirms §4.1.1's born-wrong finding**, in the addendum's own words: *"They were born wrong, not drifted."*
+  - ⏱ *2026-10-05, task 0472: corrected — see the correction at the top of §4.1.1.*
 
 ⚠️ **Every figure in this report carries its counting rule.** This is not pedantry. During this very investigation a chars-vs-bytes confusion produced a false "discrepancy" between two measurements of the same object, and a separate relayed figure of *"51 rows"* could not be reproduced under **three** different counting rules and had to be withdrawn. Two figures that had been flagged as **unreconciled** are **reconciled in §2.4 of this report** — both turned out to be counting-rule differences, not disagreements about the world.
 
@@ -641,6 +642,19 @@ Each point has the same shape:
 - **`0014` has no board row at all** [M] — and fkit already has an open, unstarted task titled *"Decide what catches a task brief that has NO board row — mechanism deliberately OPEN"*, filed on an owner ruling of 2026-08-14. The gap is known and unclosed.
 
 #### ⛔ 4.1.1 The cause of the three drifts — and it is not what it first looks like
+
+> #### ⏱ CORRECTION, 2026-10-05 — on task 0472's owner ruling R6 (2026-10-02). The text below and every block in this report are left unchanged.
+>
+> ⛔ **The born-wrong causation in this section is wrong.** `331f298` did not write these statuses: in it all three briefs (`0014`, `0021`, `0041`) were pure renames (R100, content unchanged). `## Status` read `🔲 Backlog` from each brief's creation (`54abc8f`, `e9c8575`, 2026-07-10; `0014` at `cd19aef`, 2026-07-16). `0021`/`0041` were then closed by the owner's commits `f7b23f4`/`6daf3cc` (2026-07-10, "Task done"), which moved each file unedited and edited the sprint plan. Nothing changed the field until the repair recorded on 2026-09-18 (committed 2026-09-20 in `add6a07`), and that repair fixed `0021`/`0041` only; `0014` was left alone then and corrected on 2026-10-02 (`05d4891`). **What git does support:** a duplicated status field went wrong at close or at creation (`0021`/`0041` were closed without it being updated; `0014` was created inside `done/` with it wrong), and nothing caught it for 64–70 days (counted to 2026-09-18, when they were found).
+>
+> **What that makes wrong here:**
+>
+> - *"At close time there was no `## Status` field to forget"* is wrong: the field existed at close. The account this section labels *"wrong"* (a human close that changed the brief by **zero** lines) is the one git supports for `0021`/`0041`. The attribution paragraph's credit for the "born-wrong causation" is void with it.
+> - **"59 days"** is wrong: **70 days** for `0021`/`0041`, **64 days** for `0014`.
+> - **3.75% / 2.97% are not a migration error rate**, because the migration wrote none of the three. This includes the 2026-09-18 denominator block below.
+> - `0014`'s status was corrected to `✅ Done` on 2026-10-02 (task 0472's owner ruling R7), so the "one record still wrong" statements are out of date.
+>
+> **The same claims repeat elsewhere in this report; this note covers each of them:** §7's bullets ("`0014` still reads `🔲 Backlog`", "independently confirms §4.1.1's born-wrong finding"); §0.8.1's Codex-response table, row "Q12 repeats **3.75%**"; this section's own "nobody noticed for 59 days", "silently mis-populated **3.75%**" and the "One date correction" line; §4.1.2's "unnoticed for 59 days"; §4.1.3 ("It is now one", the table's `0014` row, "independently confirms the born-wrong finding", "one record … still knowingly wrong"); Point 10 — History and auditability's "§4.1.1's *"59 days"*"; §5.5.1's "And one record is still wrong."; Q1's "Weigh in your answer: the born-wrong migration defect"; Q12 ("nobody noticed for 59 days", the rate block, "2.97%-to-3.75%" error rate); §7b item 1's "for 59 days"; Codex's verbatim findings in §8.2, item 7 and "Two were born wrong during migration" (the quotes stay verbatim; the quoted claim is corrected); and the method table row "The born-wrong migration".
 
 ⚠️ **An earlier account of this circulated inside the fkit project and was wrong. It is corrected here, and the correction is the point.**
 

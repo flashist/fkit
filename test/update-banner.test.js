@@ -41,9 +41,9 @@
 // braces: the fixture's repo is a name that does not exist on GitHub, so even a leak fetches nothing.
 //
 // ⚠️ DRIVEN THROUGH `--help`, NOT `FKIT_SETUP_ONLY=1` (a deliberate deviation from the plan's §5).
-// The update check sits at :126-165 and the `--help` arm exits 0 at :168-196, so `--help` reaches
+// The update check sits at :172-211 and the `--help` arm exits 0 at :214-242, so `--help` reaches
 // past the banner and stops — no project setup, no init, nothing written outside the fixture. That
-// is what makes a sealed PATH tractable at all: FKIT_SETUP_ONLY still runs the full init at :511,
+// is what makes a sealed PATH tractable at all: FKIT_SETUP_ONLY still runs the full init at :419-423,
 // which needs a working toolchain the seal deliberately withholds (the plan's own §8 anticipated
 // this: the fixture only needs enough tools to reach the end of the banner block). It is argv-blind, so
 // nothing is lost — and the last test in this file pins that by driving a REAL `fkit coder`
@@ -81,7 +81,7 @@ const INSTALLED_VERSION = '9.9.9';
 // leaked into a run, this is what it would ask for, and it resolves to nothing.
 const FAKE_REPO = 'fkit-test/no-such-repo-0257';
 
-// Every external command the launcher can reach before it exits at :196. Resolved with `command -v`
+// Every external command the launcher can reach before it exits at :242. Resolved with `command -v`
 // rather than hard-coded under /usr/bin, so the sealed PATH is built correctly on CI's ubuntu image
 // as well as on macOS.
 const NEEDED_TOOLS = ['dirname', 'sed', 'head', 'cut', 'tr', 'find', 'awk', 'cat', 'printf', 'test', 'expr'];
@@ -314,7 +314,7 @@ test('installed sha == remote sha: complete silence', () => {
 
   // Silence must come from a probe that RAN and matched — not from a probe that never happened.
   // Without this, a fixture whose git went missing would pass here for the wrong reason (an empty
-  // $remote fails the `[ -n "$remote" ]` guard at :138, which is also silent).
+  // $remote fails the `[ -n "$remote" ]` guard at :185, which is also silent).
   // ⚠️ WHAT THIS DOES NOT CATCH, measured: swapping GIT_SAME→GIT_FAIL still passes. The stub logs
   // its argv BEFORE running its body, so gitCalls is non-empty even when git exits 128 — and a
   // failed probe is genuinely indistinguishable from a match here, since `.latest` is written only

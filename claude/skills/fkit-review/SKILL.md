@@ -117,7 +117,9 @@ a verdict** — it never replaces, forces, or softens the decision verdict.
    `git diff`, `ls`, reading a file) is **reading, not measuring**, whatever tool spells it. Codex
    reporting a **denied** write, or emulating a run in its head, is **reasoning-only**.
    ⚠️ If **Codex** executed and **you** did not, that is not a third answer — **run the relevant check
-   yourself**, then re-answer. **Never claim both measured when only one did.**
+   yourself** — the checks the change needs (map the diff's changed paths to the project's checks — its
+   own table if it has one; the full suite when unsure), named in your evidence clause, skipped ones
+   included — then re-answer. **Never claim both measured when only one did.**
 3. **Cite the evidence for whichever you picked, in one clause** — the codex-cli version (read it from
    the run, e.g. `codex --version`) and the exit status, plus either the command Codex ran, or the
    reason it measured nothing.

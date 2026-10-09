@@ -11,6 +11,11 @@
   clause only.** The tool is now granted ([ADR-022](adr-022-tools-unrestricted-except-adversarial-reviewer.md));
   see the amendment note inside Decision 3. **Every other decision here is unchanged** — including the
   turn-ending/idling behavior itself, which is **not** repealed.
+- **Corrections:** 2026-10-06 (`0473`) — this ADR carries **one** dated pointer note, to
+  [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md), below **§Decision item
+  2** (*"The plan gate stays — the one guaranteed upfront human checkpoint"*). Marker legend: **⚠️ = a
+  fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow
+  it). No existing line of this ADR was edited; the note is an append, and the Status stays `accepted`.
 
 ## Context
 
@@ -59,6 +64,21 @@ owner-only done-gate. It never moves a task file.**
 2. **The plan gate stays — the one guaranteed upfront human checkpoint.** The owner approves the
    implementation plan (also runtime-enforced by plan mode) before any code. Only after approval may the
    owner walk away. Plan **rejection** ends the run with the task left `🔲 Backlog`.
+
+   > ⚠️ **Dated pointer note 2026-10-06 (`0473`) — an opt-in agent review can now run *before* the plan
+   > gate on the sprint-loop path; read
+   > [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md).** This item is **left
+   > byte-identical**, and it **still holds**: the plan gate is the one guaranteed upfront human
+   > checkpoint, and the owner approves last. ADR-056 (owner plan approval 2026-10-06) adds — **only** in
+   > a `/fkit-sprint-ship-loop` run started with `--plan-review`, default off — approver consults (the
+   > producer and/or the architect, by a written classification rule, at most 2 revision rounds) and a
+   > Codex attack on the plan, all **before** the owner's gate. Its only new owner touchpoint is settling
+   > a disagreement still open after round 2. **This loop is not touched:** ADR-056 leaves
+   > `fkit-task-ship-loop`, every `fkit coder` session and plan mode exactly as today (owner ruling
+   > 2026-10-06, *"Sprint-loop runs only (Recommended)"*). **Why ⚠️ and not ⛔:** nothing here is
+   > overturned; a neighbouring path gained an optional step ahead of the same kind of gate. **Status
+   > stays `accepted`.**
+
 3. **"Walk away" is ordinary in-session turn-taking, not background delegation.** The loop stays a
    `fkit coder` **session** with the owner reachable; between gates it proceeds without waiting, and at
    an important question it **ends its turn and idles** until the owner returns to the terminal. It

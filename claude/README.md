@@ -125,11 +125,12 @@ adversarial agent) assemble a findings-only prompt + inline diff into `.fkit/tmp
 codex exec --sandbox read-only --cd "$PWD" - < .fkit/tmp/adversarial-prompt.md
 ```
 
-**Codex is required, not optional.** `fkit` preflights it at launch (installed? logged in?) and warns
-loudly — but does not wall you out. If Codex is unreachable mid-session, the review still runs and is
-emitted as a **flagged partial**: the reviewer's verdict is forced to `🟡 Partial review — Codex
-unavailable`, and the output leads with `[NOT model-diverse — INCOMPLETE]` **above the findings**. A
-one-model pass that reads like a full review carries unearned confidence — worse than no review.
+**Codex is optional but recommended** — it is the reviewer's model-diverse second opinion. `fkit`
+preflights it at launch (installed? logged in?) and warns loudly — but does not wall you out. Without
+Codex, or if it is unreachable mid-session, the review still runs and is emitted as a **flagged
+partial**: the reviewer's verdict is forced to `🟡 Partial review — Codex unavailable`, and the
+output leads with `[NOT model-diverse — INCOMPLETE]` **above the findings**. A one-model pass that
+reads like a full review carries unearned confidence — worse than no review.
 
 Every review report also names **exactly one of three coverage states** (ADR-042 D1 — see §Coverage
 states in `claude/skills/fkit-review/SKILL.md`): **both reviewers measured**, **reasoning-only second

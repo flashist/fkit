@@ -50,8 +50,12 @@ rewritten its close step, for reasons unrelated to this loop.
 selector's `board` line — the single chosen board**. **More than one sprint may be `In progress` at once;
 this loop drives exactly one of them.** **Do not re-derive that rule here** (ADR-041 §5: one grammar,
 one implementation) — see `fkit-status/SKILL.md`'s empty-argument rule and
-`conventions/sprint-status-vocabulary.md`. One operand — no output-variant flags
-(`conventions/one-skill-one-output.md`).
+`conventions/sprint-status-vocabulary.md`. One operand, plus one optional flag — no output-variant flags
+(`conventions/one-skill-one-output.md`). **`--plan-review`** is optional and **default off — absent =
+off**; it turns on the opt-in plan review for every task planned in this run (see *Plan review — only
+in a `--plan-review` run*, under §2; [ADR-056](../../../ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md)).
+It passes that convention's litmus test: it changes *what the plan step does*, not *how the same output
+looks* — a parameter of the work, not an output variant.
 
 ---
 
@@ -105,6 +109,21 @@ write.
   ```
   bash .claude/skills/fkit-status/dashboard.sh <plan>
   ```
+- **A row that waits on a task this sprint cannot count on — say it before driving anything.** That
+  task may sit in a later or not-started sprint, a closed or unplaceable one, or on the Backlog board.
+  If the board's `⟦FACTS⟧` carries any `drift depends-on-later-sprint` record (`fkit-status/SKILL.md`
+  lists its fields), say so in the opening report, **before the first spawn**. Per `blocker`: its
+  sprint, worded by `reason` (below); which of this sprint's open rows wait on it, and how many (the
+  records with that `blocker=`); and that this sprint cannot finish them as planned. For a `via=`
+  record, name the row it waits through ("0003, through 0001") — that blocker is not on the row's own
+  `Depends on:` line. **Read it from the records — never re-derive it from the briefs.** Wording by
+  `reason`: `backlog-board` → "on the Backlog board"; `not-started` → "on Sprint M, not started yet";
+  `later-sprint` → "on Sprint M, a later sprint"; `sprint-closed` → "on Sprint M, which is closed
+  though the task is still open"; `sprint-unresolved` → "on `<blocker_sprint>`, a sprint the board
+  cannot place", or, when `blocker_sprint` is empty, "with no sprint set" — never "later" (a closed
+  sprint already archived reads this way too). **It is the owner's decision — relay it, do not
+  resolve it:** the driver moves no task and re-points no link. Those rows are not eligible (a
+  dependency is not `✅ Done`), so the run drives the rest of the eligible set.
 - **Eligible** = tasks that are `🔲 Backlog` **and** whose every `Depends on` link is `✅ Done`. Skip
   `🔄 In progress` (someone else owns it), `🚧 Blocked`, `✅ Done`, `⛔ Cancelled`, `➡️ Moved`.
 - **Order** by `## Priority`, then by dependency topology (a task never runs before a task it depends on).
@@ -113,6 +132,11 @@ write.
   rejected or one you already drove. This memory is **this-run only**; a later invocation reconsiders them.
 - **Dependency deadlock** — backlog remains but nothing is eligible (every remaining task waits on
   something unfinished) → **stop and report the blocking chain** to the owner. Do not guess an order.
+  **If a `drift depends-on-later-sprint` record in this turn's render names the chain's blocker, the
+  report says so — "waiting" alone is not enough:** the blocker's sprint (worded by `reason`, as above)
+  and how many of this sprint's open rows wait on it. No record → report the chain as before, but do
+  not say nothing waits on a later sprint: the record reads only hard, 4-digit `Depends on:` IDs, and
+  follows an indirect wait only through rows of this board.
 
 ### 2. Drive each eligible task, in order (§5.2)
 Run the **bounded-worker + driver-owns-owner-channel** pattern per task. Each worker is a **typed
@@ -129,7 +153,7 @@ owner rejects the plan** (§5.4), so a rejected task is never stranded `🔄 In 
 |---|---|---|---|
 | **Plan** | `@fkit-coder` | run `/fkit-plan-task`; **write no source**; return the plan + open questions | **⛔ present plan → `AskUserQuestion` approve/reject** — the unremovable checkpoint (prose-enforced here, see honesty clause); **on approval the DRIVER writes the approved text to `<task-folder>/plan.md` verbatim — copied, not re-rendered — BEFORE spawning Build** (ADR-020; mirrors `fkit-task-ship-loop` step 4) |
 | **Build** | `@fkit-coder` | implement the **approved** plan; write source + `worklog.md` (**`plan.md` already exists — the driver wrote it at approval; never re-author it**); return change surface + any decision surfaced | stop only if the worker returns `NEEDS-DECISION` |
-| **Verify** | `@fkit-coder` | run tests per [ADR-014](../../../ai-agents/knowledge-base/decisions/adr-014-how-fkit-tests-itself.md) (`node --test`, zero devDeps); return pass/fail + diagnosis | **budget: 3 no-progress cycles** → `🚧 Blocked — verification` |
+| **Verify** | `@fkit-coder` | run the checks this change needs: map the changed paths to the project's checks (its own "what changed → what to run" table if it has one, e.g. in `CONTRIBUTING.md`), and run the full suite at release, when the tests or test tooling change, or when unsure; name which checks ran and which were skipped, and why — a skipped check is not a passed one; return pass/fail + which checks ran and which were skipped (why) + diagnosis | **budget: 3 no-progress cycles** → `🚧 Blocked — verification` |
 | **Review** | `@fkit-reviewer` → `/fkit-stateful-review` | own pass + Codex second opinion; write the *Reviewer findings* ledger section; return the verdict | — |
 | **Process review** | `@fkit-coder` — **always, whoever authored the deliverable under review** ([ADR-038](../../../ai-agents/knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md)): a loop step's role is fixed by **the skill the step runs**, and this one writes the ledger's **coder-owned *Coder response*** section and **applies code fixes at its Step 6** (`fkit-process-stateful-review/SKILL.md:195`). Neither changes when the deliverable is a document rather than code. | apply `fkit-process-stateful-review` **method** — **all of its steps, none of its per-round owner gate** (this loop's single up-front approval replaces that gate; ADR-019 / ADR-032, and the skill itself stays byte-unchanged). ⚠️ **A subset is not the method:** on `0195` a hand-application **missed Step 0 entirely, ran Steps 2 and 3.5 only partially, inherited the reviewer's severity labels instead of deriving them (Step 3), and used none of Step 4's prescribed Status values** — and looked complete to the worker doing it. Run **every** step: **0** — open or create `<task-folder>/review.md`, load *Accepted residuals* **and skim `ai-agents/knowledge-base/decisions/` for ADRs in scope** (an ADR's *"Re-raise only if"* binds exactly like a residual); **1** — identify the **novel** findings (those with no *Coder response* row yet); **2** — loop-check each against those residuals **and** ADRs, and say **loudly** when an unmet *"Re-raise only if"* makes one `closeout`; **3** — verify each against the actual code at `file:line`, reading **enough surrounding context to understand the full flow, not just the cited line**, and **deriving severity yourself from the blast radius you traced, never inheriting the reviewer's label**; **3.5** — classify **defect vs frontier-move**, and run the **regression / oscillation check** against the prior rounds already in the file — a round budget is a proxy, not the rule, so **a genuine new defect in round 3+ MUST still be acted on: stop on the *nature* of the finding, not the count**; **4** — assign **CORRECT / PARTIALLY CORRECT / INCORRECT / INCOMPLETE** and write **one *Coder response* row per finding id** (verdict, defect/frontier, action, status). The Status cell takes **one of exactly these six prescribed values** (`fkit-process-stateful-review/SKILL.md:85`) and never an ad-hoc label — `pending approval` ⛔ *(the one value this loop never uses: the standing approval above has already replaced the per-round gate that produces it)* · `✅ done` · `won't fix (frontier)` · `disproven` · `closeout (re-litigation)` · `blocked` — so **five of the six apply here**. Map them: **INCORRECT** → `disproven` with Action `none`; a **frontier-move you recommend keeping** → `won't fix (frontier)`; a **Step-2 re-litigation** → `closeout (re-litigation)`, **naming the residual or ADR that settles it**, and **do not re-fix it**; **5** — report the summary table, the **suppressed-as-settled** list, and the **convergence call**; **6** — apply the **minimal, idiomatic fix** for each (smallest correct change; match surrounding style; no unrelated refactors), **add/update tests and run the relevant tests / linter / build — or say plainly you could not**; then set each row's Action to what you actually did, and its Status **by outcome, not uniformly**: `✅ done` for a fix you applied, `blocked` **plus the reason** for one you could not complete, and `won't fix (frontier)` for a confirmed intended tradeoff — which also earns an ***Accepted residuals*** entry in full **What / Why (structural) / Re-raise only if** shape. **Leave the `disproven` and `closeout (re-litigation)` rows exactly as Step 4 set them** — this step revisits only the rows you acted on. Set the document header **Status: closed-out** once every novel finding is closeout / disproven / accepted and nothing blocking remains; **7** — final report: findings dispositioned this round, code changed (files, how tested, result), the *Coder response* rows written, any newly-recorded residual, the document's new Status, and anything flagged — noting that the method itself makes no commit, and **asserting no commit state you did not check this turn**. **Never edit the *Reviewer findings* section** — the sole exception is the skill's own seeding path (`fkit-process-stateful-review/SKILL.md:103-104`, `:119-120`): creating the ledger, or appending findings handed to you as pasted text, each noted as done on the reviewer's behalf. In this loop the **Review** step has already written that section, so in practice you never touch it. Then: **apply verified-`CORRECT`, in-approved-plan fixes autonomously (task-loop discipline, ADR-019)** — **under that standing approval an authorized fix lands at Status `✅ done` in the same round**; **record each autonomously-applied fix and each obvious-winner call in the task folder's `worklog.md` decision log — per entry: which finding it answers, what changed, and why it qualified; record `none` if none** (ADR-032 A2 / ADR-019 `:96`); return change surface + residuals, and **return `NEEDS-DECISION` for any judgment call** | **⛔ stop for judgment calls** — frontier-move, regression, disputed severity, broad/behavior-changing, or out-of-plan fix |
 | **Close** | `@fkit-producer` | run `/fkit-task-done` on the brief; write `✅ Done (agent-closed — not owner-verified)` in the brief and every board row (ADR-033 §5 — a **spawned** producer has no owner channel, so its close is never owner-verified); return the step-7 close-out report | **the driver confirms the close landed** against that report (§4) before counting the task shipped; **stop for the owner on a degraded run** |
@@ -160,7 +184,10 @@ at, and a `PreToolUse` carry-check needs one at spawn time.
 - **The Build AND Process-review spawn prompts MUST each carry the approved plan verbatim, state the owner
   approved it via `AskUserQuestion`, and identify the caller as `fkit-sprint-ship-loop`.** These three
   signals are the **declared-approval marker** that `fkit-coder.md`'s sprint-loop carve-out keys on for
-  **both** worker roles; without them a spawned coder **refuses to write source** and returns the plan. It
+  **both** worker roles; without them a spawned coder **refuses to write source** and returns the plan.
+  This is the sprint-loop form of the one marker shared with the lead's conductor path (ADR-055;
+  driver-side shape in `fkit-lead.md`): (c)'s channel and date and (d)'s worker role are given by the
+  live relay in this session and by the loop step, so this loop need not quote. It
   is **trust, not proof** — a prose
   mirror of the plan-step's "write nothing yet", carrying the same accepted prose-enforced cost (ADR-031
   honesty clause / ADR-032 D3/D7), not a verifiable token.
@@ -249,6 +276,54 @@ at, and a `PreToolUse` carry-check needs one at spawn time.
   driver must not invoke one. The owner-relay stays coherent because the driver keeps **holding the
   channel**, not because it does the closing.
 
+<!-- plan-review:begin -->
+#### Plan review — only in a `--plan-review` run
+
+**A run started without `--plan-review` skips this block entirely** — the Plan row above runs exactly as
+written. With it on ([ADR-056](../../../ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md)),
+agents approve each plan and Codex attacks it **before** the owner's plan gate. The gate itself is
+unchanged: it is still the one human checkpoint, and **the owner approves last**.
+
+- **Run start.** Read the flag once. It holds for **every task planned in this run** and cannot change
+  mid-run — to change it, the owner restarts the run. The opening report says *"Plan review: ON for
+  this run"*.
+- **Plan step.** Add this switch line to the plan-only spawn prompt — it names the owner's run-start
+  ruling (ADR-037, driver side):
+  `Plan review: on — set by the owner for this fkit-sprint-ship-loop run (--plan-review, <date>), run <board> started <UTC>`.
+  The rest of the Plan row is unchanged. The coder runs `fkit-plan-task`'s *Plan review* section inside
+  that one spawn — approver consults, at most 2 revision rounds, then Codex — and returns the plan plus
+  a `===PLAN-REVIEW RECORD BEGIN===` … `===PLAN-REVIEW RECORD END===` block.
+- **Not a new plan step → no plan review.** The rejected-plan path (the task goes back to `🔲 Backlog`
+  and is skipped for the rest of the run — the *Plan rejected* stop row) and the re-presentation of an
+  orphaned, already-approved `plan.md` run no plan review. A task planned afresh in a later
+  `--plan-review` run is a new plan step, and is reviewed.
+- **`NEEDS-DECISION` after round 2** (an approver disagreement still open): relay it via
+  `AskUserQuestion` (§3), then re-spawn a plan-only coder with the switch line, the owner's ruling
+  quoted verbatim with its date and channel, and the draft plan and record pasted, labelled *"draft as
+  returned"*. That coder applies the ruling, runs no further approver rounds, and goes on to Codex.
+- **At the plan gate**, present in this order:
+  1. **Banners first:** the Codex fallback banner (verbatim), `plan review incomplete: <what>`,
+     `plan review not run — hop budget`, and any owner-settled disagreement.
+  2. **The plan**, as today.
+  3. **Three attachments:** who approved and how the task was classified (with the reason); what
+     changed during review and why; Codex's findings verbatim, each with the coder's one-line check.
+  4. **Approve or reject**, as today.
+- **At the owner's decision — approve AND reject:** write `plan.md` exactly as the Plan row says
+  (approve only), and write or append `<task-folder>/plan-review.md`. It is **append-only**, one
+  `## Attempt N — <date>` section per attempt, holding the returned record block copied, then your own
+  lines: the UTC time the plan was presented, and the owner's decision with the selected option quoted,
+  its date and channel. Keep it on reject — rejected attempts are trial evidence. It is **never**
+  carried to Build or Process-review and never part of the plan pointer: the carry stays the approved
+  plan only.
+- **Roll-up.** *"Plan review: on"* for the run, plus each task's Codex plan-pass mode. Flag a plan pass
+  in `claude-fallback — NOT model-diverse` mode **loudly**.
+- **Stop table: no new rows.** A failed plan-step spawn is *Worker spawn didn't land*; an incomplete
+  review goes to the owner at the gate, flagged.
+- **Trust, not proof.** The switch line, the 2-round cap and "write nothing" are prose in spawn prompts,
+  and the record is copied from a return message — the same accepted cost as the honesty clause above.
+  Never call plan review a verification.
+<!-- plan-review:end -->
+
 ### 3. Relay every decision live — the load-bearing gate (§5.3, §6.2)
 A spawned worker **never asks the owner** — it **returns** its final message as **exactly one** of:
 
@@ -260,9 +335,20 @@ BLOCKED        { reason, whatFails }                              → driver rec
 
 This envelope is **prose in the worker's spawn prompt**, not a runtime schema — ADR-021 gives workers no
 structured owner channel and there is no cross-context type system; the driver parses the worker's final
-message. On `NEEDS-DECISION` the driver:
+message.
 
-1. calls **`AskUserQuestion`** with the returned options (recommendation pre-marked), and
+**A placement or dependency question names its knock-on.** Every option that puts a task in a sprint
+(or on the Backlog board) or re-points a `Depends on:` link says which open tasks would then wait on
+which sprint — the recommended option too, and a `NEEDS-DECISION` as much as an `AskUserQuestion`:
+[`conventions/placement-questions-state-the-knock-on.md`](../../../ai-agents/knowledge-base/conventions/placement-questions-state-the-knock-on.md).
+Say so in each worker's spawn prompt, beside the envelope: the worker writes it into each placement
+option of its `NEEDS-DECISION`, or `knock-on: none (checked)` when no open task would wait.
+
+On `NEEDS-DECISION` the driver:
+
+1. calls **`AskUserQuestion`** with the returned options (recommendation pre-marked) — relaying a
+   worker's options, it drops each `knock-on: none (checked)` note, and a placement option with neither
+   that note nor a knock-on is missing one: it adds it from the briefs, checked this turn, before it asks, saying so — and
 2. **blocks on a real owner answer** — **no timer, no guess** — then
 3. spawns the next worker with the decision folded into its prompt.
 
@@ -319,6 +405,8 @@ and satisfy the hook regardless — task 0116.)
 After a task closes (or is skipped/blocked), return to step 1's eligible set — re-derive it (a just-closed
 task may unblock a dependent), **minus the per-run skip set** (attempted / plan-rejected this run, §1) so a
 just-rejected task is not re-selected — and drive the next task, until the eligible set is empty.
+If the re-derived board carries a `drift depends-on-later-sprint` record the owner has not yet been
+told of, say so the same way (step 1) before the next spawn.
 
 ---
 
@@ -332,7 +420,7 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 | **Blocked — verification** | a task's no-progress budget (3 cycles) hit | `🚧 Blocked — verification: <what fails>`; skip to next eligible; report |
 | **Blocked — review non-convergence** | review oscillation on a task | `🚧 Blocked — review not converging`; skip/stop; report |
 | **Owner decision pending** | any judgment call / degraded close / cancel question | **pause**, relay via `AskUserQuestion`, resume on the answer |
-| **Dependency deadlock** | eligible set empty, backlog remains | stop; report the blocking chain |
+| **Dependency deadlock** | eligible set empty, backlog remains | stop; report the blocking chain — plus, per blocker a `drift depends-on-later-sprint` record names, its sprint and how many of this sprint's open rows wait on it (step 1) |
 | **Worker spawn didn't land** | a task's **Plan, Build, Verify, Review or Process-review** spawn failed, was denied, or returned nothing — **not** the producer spawn, which is the row below — **and the driver is not continuing this task in this run**: if **every** path the spawn instruction named was discharged, the drive continues and **this row does not fire** | **Read disk before deciding, and read the paths the spawn instruction named** — wherever they live, never the task folder as a proxy, and never `git status` for an untracked path (it reads `??` before the write and after it): compare **content**. Then: **nothing landed** → reset `🔄 In progress` → `🔲 Backlog` in **both** locations, add it to the per-run skip set (§1), **and put the choice to the owner** — do not decide alone; the reset parks the task accurately, but **how many re-spawns are allowed is unruled and the driver must not settle it**; **something landed and everything that landed stands on its own with the missing paths never arriving — nothing is half-written, and nothing on disk depends on a path that is missing** → `🚧 Blocked — <step> spawn didn't land: <what landed, what is outstanding>` in **both** locations; **something landed but a file is half-written, or the unit is torn across paths** → **stop and put it to the owner** (`Owner decision pending`) — no agent may guess whether torn state is safe to build on; **the task stays `🔄 In progress` while the owner is asked — a pause is not an exit, so no terminal status is written**. **`plan.md` is left in place — see the note below the invariant.** **On the first two branches:** **report** it — do not pause the sprint; **do not count the task shipped**; next eligible task. **On the third the sprint pauses** until the owner answers. Branch 1 both asks and moves on: `🔲 Backlog` is an accurate **terminal** status for it, so the task is safely parked and the drive can exit with the question outstanding — §1's skip memory is **this-run only**, so the answer lands on a later run. Branch 3 has no **terminal** status to write — a pause is not an exit — so it waits |
 | **Blocked — hand-off didn't land** | a task's producer spawn failed, was denied, or left the close partial (§4) — **close-step only; its single re-spawn is not a general worker-retry rule** | **folder never moved** → re-spawn `@fkit-producer` once, then if still unresolved `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations; **folder moved, a status/href stale** → owner-only, do not re-spawn, mark **only the stale location** (never over a landed `✅ Done`). Either way: **report** it — do not pause the sprint; **do not count the task shipped**; next eligible task |
 | **No Codex, degraded** | Codex absent after retries on a task | proceed-and-flag that task **loudly**; **do not route its close** — put its close to the owner |
@@ -360,7 +448,8 @@ just-rejected task is not re-selected — and drive the next task, until the eli
 - **Opening the run:** name the board you are driving and the selector's `reason=` for it. **If more
   than one sprint is `🔄 In progress`, say so in the same breath** — name the others and state plainly
   that they exist and are **not** being driven by this run. Plural-active is legal; a silent single-board
-  report is what makes it look like drift.
+  report is what makes it look like drift. **If the board carries a `drift depends-on-later-sprint`
+  record, the opening says so** (step 1).
 - **Per task:** surface the coder worker's close-out evidence packet from its `worklog.md` (change
   surface, verification evidence, review verdict + the **coverage state** (one of ADR-042's three —
   `reasoning-only second opinion` is normal and not a degradation), residuals).
@@ -368,6 +457,9 @@ just-rejected task is not re-selected — and drive the next task, until the eli
   vs owner-verified), and the coverage state per task. Loudly flag any task shipped **`Codex
   unavailable`** — that is the one state without a model-diverse review. ⚠️ A **reasoning-only second
   opinion** IS model-diverse (a different model reasoned over the diff); it is reported, not flagged.
+- **Plan review — only when the run has it on:** the opening says *"Plan review: ON for this run"* and
+  the roll-up says *"Plan review: on"* with each task's Codex plan-pass mode (see the gated block under
+  §2). A run without `--plan-review` reports exactly as before — no plan-review line at all.
 
 ---
 

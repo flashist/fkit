@@ -152,3 +152,8 @@ so it **cannot match a bare `claude/`**. `0390`'s "zero untriaged" conclusion re
   the owner, producer judgement.
 - Filed by a spawned `fkit-producer` with no owner channel. ID `0396` verified free: max task-folder id
   and max `## ID` across `backlog/`, `done/`, `cancelled/` both `0395` at filing.
+
+> ⏱ **Note, 2026-10-04 (spawned `fkit-producer`, at `fkit-lead`'s direction, on the owner's ruling of
+> 2026-10-04; text above unchanged).** This brief's dependency [`0390`](../../done/0390-sweep-the-repo-only-claude-path-form-out-of-installed-facing-skill-and-scaffold-prose/brief.md) is now
+> **closed** — `✅ Done (agent-closed — not owner-verified)`, its brief in `tasks/done/` (checked 2026-10-04).
+> Nothing else in this brief changes; the dependency lines are left as written.

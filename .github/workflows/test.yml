@@ -25,12 +25,21 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    # `npm test` measured locally at ~5m30s-6m20s across four runs (328 / 380 / 347 / 344 s — same
-    # machine, unchanged suite; the spread is machine load, not a regression), i.e. the "~6 min"
-    # quoted elsewhere. That is ~55s unit plus prove-red.sh, which re-runs the suites against 15
-    # mutants plus 9 clean-copy baselines. 20 minutes leaves ~3x headroom over the slowest local
-    # run while stopping a hung prove-red.sh from burning a runner for six hours.
-    timeout-minutes: 20
+    # Basis: measured on THIS runner (ubuntu-latest), never locally — task 0395. Source: the 20
+    # green `test` push runs from 81f1429 (2026-09-15, where 0388's mutations landed) to 4a21997
+    # (2026-10-02); whole job 344-652 s. Slowest whole job: 652 s (10m52s), run 36984588959,
+    # 2026-10-02 — its `npm test` step took 610 s, i.e. 66 s unit + 544 s prove-red.sh (split read
+    # from the log timestamps). Slowest `npm test` step: 624 s, run 37051231177. Same-day runs of a
+    # near-identical suite spread 7.4-10.9 min, so the basis is the slowest run, not the average.
+    # All 20 carried prove-red.sh baselines 0a-0o and mutations 1-40 (incl. the basis run), except
+    # the 6 before 3027cc7 (2026-09-21), which had 1-39. As of task 0395 the file has 43 mutations
+    # and 16 clean baselines (0a against the real tree, 0b-0p against unmutated copies). Sprint 10's
+    # additions (baseline 0p, mutations 41-43, a larger release suite, a new update-reinstall suite)
+    # were NOT in the measured runs (estimated ~+1 min, unverified until a run carries them).
+    # 33 min = ~3.0x the slowest measured job (33 / 10.87), and still stops a hung prove-red.sh from
+    # burning a runner for six hours. Re-measure when the suite grows: `gh run list --workflow
+    # test.yml`, then `gh run view <id> --json jobs` for the job and step times.
+    timeout-minutes: 33
 
     steps:
       - uses: actions/checkout@v4

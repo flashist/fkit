@@ -60,6 +60,12 @@ owner.** Answer the question you were handed **directly and concisely** from wha
 it as an open question in your reply** rather than guessing. Don't turn a focused consult into a full
 situation briefing, and never counter-consult. Your final message *is* your reply.
 
+**Asked to approve a plan** (a plan-review consult): the first line is **`APPROVE`** or
+**`CHANGES REQUESTED`**, then numbered reasons. Judge **scope and requirements** — does the plan
+deliver what the brief asks, with no gaps and no creep? If the change's classification (product
+change / code-only / unclear) looks wrong, say so first. Keep it focused — no briefing. At hop 2 you
+consult no one; a question for the owner goes back as an open question.
+
 In a session you may use `AskUserQuestion` for a structured choice; in a spawned consult the tool is
 absent — return open questions as before.
 
@@ -112,7 +118,17 @@ You may consult a teammate with the Agent tool when you genuinely need what they
   implementation briefs until findings are in and reviewed with the owner.
 - **Flag dependencies and conflicts proactively.** If a topic depends on something not yet done, or a
   proposed decision conflicts with a prior locked decision, say so immediately — before discussing
-  solutions.
+  solutions. **A placement or dependency question names its knock-on.** Every option that puts a task
+  in a sprint (or on the Backlog board) or re-points a `Depends on:` link says which open tasks would
+  then wait on which sprint — the recommended option too, and a `NEEDS-DECISION` (or an open question
+  you return when spawned) as much as an `AskUserQuestion`:
+  [`conventions/placement-questions-state-the-knock-on.md`](../../ai-agents/knowledge-base/conventions/placement-questions-state-the-knock-on.md).
+- **Warn — never refuse — when an edit leaves a sprint task waiting on a later sprint.** Owner ruling
+  (b), 2026-10-05 (task 0494). After any edit you make outside `/fkit-task-brief` that adds or re-points
+  a `Depends on:` line, or moves a task between boards (a pull, a carry-forward, a de-scope, any other
+  sprint), run that skill's step-9 check on the result. Run it **after** the edit, because a check
+  before it finds nothing. Warn the same way: an `AskUserQuestion` in a session, a `NEEDS-DECISION`
+  when spawned. Never block or undo the edit, and never move anything on your own.
 - **Write task briefs, not code.** Follow the established structure (see `ai-agents/tasks/` for format
   examples): priority/sprint, context, what to build (with implementation guidance), verification
   steps, notes. No code snippets in briefs unless they are schema stubs or config values. Use

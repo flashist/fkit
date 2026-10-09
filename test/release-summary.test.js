@@ -1,7 +1,8 @@
 // The post-release SUMMARY-BLOCK suite — the last block of bin/release.mjs (task 0288).
 //
 // SCOPE: what the summary prints, on each path, and, since task 0300, the `--branch` preflight guard
-// above it plus the post-gate HEAD compare. Nothing else in release.mjs is under test here, and
+// above it plus the post-gate HEAD compare, and, since task 0479, the CHANGELOG.md check and stamp.
+// Nothing else in release.mjs is under test here, and
 // ⛔ nothing in this file may change tag, push or bump BEHAVIOUR — 0288 is fenced to the summary
 // block (owner-ruled 2026-08-13, "Report truthfully only — stay inside the fence").
 //
@@ -36,7 +37,8 @@
 // makeFixture() refuses to proceed unless `git remote get-url origin` resolves inside its own tmp dir.
 //
 // ⚠️ PROVE-RED: mutations 18-22 in test/prove-red.sh break the summary block, mutation 25 the --branch
-// preflight above it and 26 the post-gate HEAD compare, in a COPIED release.mjs (pointed at via FKIT_RELEASE_MJS, this file's seam) and
+// preflight above it, 26 the post-gate HEAD compare and 42/43 the CHANGELOG.md check and write (task
+// 0479), in a COPIED release.mjs (pointed at via FKIT_RELEASE_MJS, this file's seam) and
 // require the named assertions below to go red BY NAME. Note 22 reds 0288/failure-speaks as well as 0288/default-released, and that is inherent
 // rather than sloppy: failure-speaks runs the command the DEFAULT path printed, so a mutation that
 // stops the default path printing it takes both. Mutations 18-21 each leave the default path green.
@@ -52,6 +54,14 @@
 // ~6-minute gate commits and tags one branch and pushes another, the same defect through a race.
 // prove-red mutation 26 disarms that compare and requires 0300/head-moved-during-test-gate-refused
 // to go red by name.
+//
+// ⚠️ TASK 0479 — CHANGELOG.md, tested in the 0479/* section at the end of this file. release.mjs
+// refuses a missing, duplicated or empty `## Unreleased` before the test gate and again after it, and on
+// a release turns that heading into `## v<version> — <date>` inside the release commit. So every
+// fixture now carries a committed CHANGELOG.md with a filled `## Unreleased` (see makeFixture()) —
+// without it every test above would be refused for a reason that has nothing to do with it. prove-red
+// mutation 42 disarms the empty-section refusal and requires 0479/empty-unreleased-refused to go red by
+// name; mutation 43 drops the CHANGELOG.md write and requires 0479/filled-unreleased-stamped to.
 
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -62,7 +72,7 @@ import { join } from 'node:path';
 import { REPO } from './harness.mjs';
 
 // The script under test. FKIT_RELEASE_MJS is this file's prove-red seam — a single-file redirect (the
-// FKIT_LAUNCHER pattern), so mutations 18-22, 25 and 26 can point it at a deliberately-broken copy without ever
+// FKIT_LAUNCHER pattern), so mutations 18-22, 25, 26, 42 and 43 can point it at a deliberately-broken copy without ever
 // touching the real bin/release.mjs.
 // ⚠️ Announce a non-default source to stderr: a STALE inherited FKIT_RELEASE_MJS would otherwise make
 // `npm test` silently test some other file and report green while the real one is broken.
@@ -83,6 +93,8 @@ function git(cwd, args, { check = true } = {}) {
   return { status: r.status, out: (r.stdout || '').trim() };
 }
 
+const FIXTURE_CHANGELOG = '# Changelog\n\n## Unreleased\n\n- fixture change\n\n## Upgrade notes\n\nNone.\n';
+
 // A throwaway repo whose `origin` is a LOCAL BARE repository, with the script under test copied in.
 function makeFixture() {
   const root = mkdtempSync(join(tmpdir(), 'fkit-release-summary-'));
@@ -100,7 +112,8 @@ function makeFixture() {
   // `npm test`, that false red meant such a maintainer could not cut a release AT ALL. The pin makes
   // `push.followTags` read git's documented DEFAULT here whatever the host is configured to — it pins
   // that ONE setting, not the fixture as a whole. ⚠️ Known remaining host dependency (review R8,
-  // MEASURED): a global `core.hooksPath` with a rejecting `pre-commit` still reds all 15 tests.
+  // MEASURED): a global `core.hooksPath` with a rejecting `pre-commit` still reds all 15 tests (the
+  // count when it was measured, before task 0479 added its own).
   // Pre-existing and outside 0288's fence — hook isolation is deliberately NOT added here.
   for (const [k, v] of [
     ['user.name', 'fkit fixture'],
@@ -124,6 +137,9 @@ function makeFixture() {
   writeFileSync(join(repo, 'VERSION'), '0.1.0\n');
   writeFileSync(join(repo, 'package.json'), '{\n  "version": "0.1.0"\n}\n');
   writeFileSync(join(repo, 'file.txt'), 'content\n');
+  // Task 0479: release.mjs refuses a missing or empty `## Unreleased`, so every fixture carries one,
+  // filled. The 0479/* tests replace it where the content is the fact under test.
+  writeFileSync(join(repo, 'CHANGELOG.md'), FIXTURE_CHANGELOG);
   mkdirSync(join(repo, 'bin'));
   cpSync(RELEASE_MJS, join(repo, 'bin', 'release.mjs'));
   git(repo, ['add', '-A']);
@@ -152,8 +168,10 @@ function release(repo, args = []) {
   return { code: r.status, stdout: r.stdout || '', stderr: r.stderr || '' };
 }
 
-// The ONE gate-ON run (0300/head-moved-during-test-gate-refused): the fact under test is what happens
-// AFTER `npm test` has run, so the gate must run. This does not open the hole SEAL 2 is for — that
+// The gate-ON runs (0300/head-moved-during-test-gate-refused, plus 0479/refused-before-the-test-gate,
+// 0479/edit-during-gate-kept and 0479/emptied-during-gate-refused): the fact under test is where the
+// changelog check sits around `npm test`, or what happens AFTER it has run, so the gate must run.
+// None of them opens the hole SEAL 2 is for — that
 // hole is a fixture test script that re-enters this suite (`npm test` → this file → `npm test`). So
 // the seal moves, it does not drop: the fixture's test script is asserted to be present and to name
 // no `npm`, `node` or `release` — a git one-liner can move HEAD but cannot recurse.
@@ -359,7 +377,8 @@ test('0288/dry-run: the dry-run branch is untouched and writes nothing', () => {
 // `other` was already up to date), and still printed ✓ Released. The guard is a PREFLIGHT refusal —
 // it fires before the test gate and before the first write, so a refused run leaves the tree exactly
 // as the user left it. These tests assert that clean abort, not just the exit code.
-// The `other` branch is created INSIDE each test — makeFixture() stays byte-identical for 0288.
+// The `other` branch is created INSIDE each test, so makeFixture() did not change for 0300. (Task 0479
+// later added a committed CHANGELOG.md to it, which every release now needs.)
 
 function fixtureWithOther() {
   const f = makeFixture();
@@ -547,4 +566,357 @@ test('0300/unborn-head-refused-in-words: on an unborn branch the run is refused 
     assert.equal(git(repo, ['rev-parse', '-q', '--verify', 'HEAD'], { check: false }).status, 1, 'a refused run made a commit on the unborn branch');
     assert.equal(git(repo, ['tag', '--list']).out, '', 'a refused run created a tag');
     assert.equal(lsRemote(repo), remote, 'a refused run changed something on origin');
+  });
+
+// ── 0479. CHANGELOG.md — the release notes ─────────────────────────────────────────────────────
+// release.mjs refuses a missing, duplicated or empty `## Unreleased` BEFORE the test gate (so a
+// forgotten changelog costs seconds) and again on a FRESH READ after it (so an edit made during the
+// gate is kept, never overwritten). On a release the heading becomes `## v<version> — <date>`, a new
+// empty `## Unreleased` opens above it, and the change lands in the release commit. On a run that does
+// not bump, a `## v<target>` section that already exists means a partly-failed release already did
+// this step: left as is. A bumping run never takes that skip (review R1).
+// --allow-empty-changelog releases an empty section anyway, loudly.
+
+const changelog = (repo) => readFileSync(join(repo, 'CHANGELOG.md'), 'utf8');
+const porcelainRaw = (repo) =>
+  spawnSync('git', ['status', '--porcelain'], { cwd: repo, encoding: 'utf8' }).stdout.replace(/\n$/, '');
+
+// Replace the fixture's CHANGELOG.md (or delete it, for `null`) and commit, so the tree starts clean.
+function setChangelog(repo, text) {
+  if (text === null) git(repo, ['rm', '-q', 'CHANGELOG.md']);
+  else writeFileSync(join(repo, 'CHANGELOG.md'), text);
+  git(repo, ['add', '-A']);
+  git(repo, ['commit', '-q', '-m', 'changelog']);
+}
+
+// The local date, as release.mjs writes it. Read before AND after a run, so a run that straddles
+// midnight is accepted on either side.
+function today() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+// A gate-ON fixture: the test script is `script` (it must name no npm/node/release — see
+// releaseWithGateOn()). Commits it, so the tree is clean when the release starts.
+function setTestScript(repo, script) {
+  writeFileSync(join(repo, 'package.json'),
+    `${JSON.stringify({ version: '0.1.0', scripts: { test: script } }, null, 2)}\n`);
+  git(repo, ['add', '-A']);
+  git(repo, ['commit', '-q', '-m', 'test script']);
+}
+
+// Everything a refused run must leave alone. `files` = the bytes read before the run.
+function assertUntouched(repo, label, { head, remote, files, porcelain = '' }) {
+  assert.equal(fileVersion(repo, 'VERSION'), files.VERSION, `${label}: a refused run changed VERSION`);
+  assert.equal(fileVersion(repo, 'package.json'), files.pkg, `${label}: a refused run changed package.json`);
+  if (files.changelog !== undefined) {
+    assert.equal(changelog(repo), files.changelog, `${label}: a refused run changed CHANGELOG.md`);
+  }
+  assert.equal(git(repo, ['rev-parse', 'HEAD']).out, head, `${label}: a refused run moved HEAD`);
+  assert.equal(git(repo, ['tag', '--list']).out, '', `${label}: a refused run created a tag`);
+  assert.equal(porcelainRaw(repo), porcelain, `${label}: a refused run left the tree changed or staged`);
+  assert.equal(lsRemote(repo), remote, `${label}: a refused run changed something on origin`);
+}
+function snapshot(repo) {
+  const files = { VERSION: fileVersion(repo, 'VERSION'), pkg: fileVersion(repo, 'package.json') };
+  try { files.changelog = changelog(repo); } catch { /* the no-file case */ }
+  return { head: git(repo, ['rev-parse', 'HEAD']).out, remote: lsRemote(repo), files };
+}
+
+const EMPTY_UNRELEASED = '# Changelog\n\n## Unreleased\n\n## Upgrade notes\n\nNone.\n';
+
+test('0479/empty-unreleased-refused: an empty ## Unreleased exits 1 with a message that says what to do — and changes nothing, under --dry-run too',
+  () => {
+    for (const args of [[], ['--dry-run']]) {
+      const { repo } = makeFixture();
+      setChangelog(repo, EMPTY_UNRELEASED);
+      const before = snapshot(repo);
+      const r = release(repo, args);
+      const label = args.length ? args.join(' ') : '(bare)';
+      assert.equal(r.code, 1, `${label}: an empty ## Unreleased was not refused:\n${r.stdout}\n${r.stderr}`);
+      assert.match(r.stderr, /CHANGELOG\.md/, `${label}: the refusal does not name CHANGELOG.md:\n${r.stderr}`);
+      assert.match(r.stderr, /## Unreleased/, `${label}: the refusal does not name ## Unreleased:\n${r.stderr}`);
+      for (const line of [
+        'Finishing a partly-failed release? re-run with --no-bump',
+        'To release anyway: --allow-empty-changelog',
+        'Nothing was changed: no bump, no commit, no tag.',
+      ]) assert.ok(r.stderr.includes(line), `${label}: the refusal lacks ${JSON.stringify(line)}:\n${r.stderr}`);
+      for (const s of ['• commit', 'push origin', '✓ Released', 'Dry run', '─'.repeat(48)]) {
+        assert.ok(!r.stdout.includes(s), `${label}: a refused run still printed ${JSON.stringify(s)}:\n${r.stdout}`);
+      }
+      assertUntouched(repo, label, before);
+    }
+  });
+
+test('0479/refused-before-the-test-gate: the changelog refusal fires BEFORE npm test runs — a forgotten changelog costs seconds',
+  () => {
+    const { repo } = makeFixture();
+    setTestScript(repo, 'touch gate-ran');
+    setChangelog(repo, EMPTY_UNRELEASED);
+    const before = snapshot(repo);
+    const r = releaseWithGateOn(repo);
+    assert.equal(r.code, 1, `an empty ## Unreleased was not refused with the gate on:\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stderr, /## Unreleased` section is empty/, `refused, but not for the changelog:\n${r.stderr}`);
+    assert.ok(!r.stdout.includes('running `npm test`'), `the gate started before the changelog refusal:\n${r.stdout}`);
+    let ran = true;
+    try { readFileSync(join(repo, 'gate-ran')); } catch { ran = false; }
+    assert.equal(ran, false, 'the fixture test script ran — the refusal came AFTER the test gate');
+    assertUntouched(repo, 'gate on', before);
+  });
+
+test('0479/missing-or-duplicate-unreleased-refused: no file, no heading, or two headings — refused with and without the hatch, tree untouched',
+  () => {
+    const cases = [
+      ['no file', null, /CHANGELOG\.md is missing/],
+      ['no heading', '# Changelog\n\n## Upgrade notes\n\n- something\n', /has no `## Unreleased` heading/],
+      ['two headings', '# Changelog\n\n## Unreleased\n\n- a\n\n## Unreleased\n\n- b\n', /has 2 `## Unreleased` headings/],
+    ];
+    for (const [name, text, msg] of cases) {
+      for (const args of [[], ['--allow-empty-changelog']]) {
+        const label = `${name}${args.length ? ' + hatch' : ''}`;
+        const { repo } = makeFixture();
+        setChangelog(repo, text);
+        const before = snapshot(repo);
+        const r = release(repo, args);
+        assert.equal(r.code, 1, `${label}: not refused:\n${r.stdout}\n${r.stderr}`);
+        assert.match(r.stderr, msg, `${label}: the refusal does not say what is wrong:\n${r.stderr}`);
+        assert.match(r.stderr, /Nothing was changed/, `${label}: the refusal does not say nothing was changed:\n${r.stderr}`);
+        assertUntouched(repo, label, before);
+        if (text === null) {
+          let exists = true;
+          try { changelog(repo); } catch { exists = false; }
+          assert.equal(exists, false, `${label}: a refused run created CHANGELOG.md`);
+        }
+      }
+    }
+  });
+
+test('0479/filled-unreleased-stamped: ## Unreleased becomes ## v<version> — <date> under a fresh empty ## Unreleased, in the tagged release commit',
+  () => {
+    const { repo } = makeFixture();
+    const prefix = '# Changelog\n\nSome header text.\n\n';
+    const body = '\n- first change\n\n### Upgrade\n\nRun this:\n\n```sh\n## not a heading\n```\n\n- last change\n\n';
+    const suffix = '## Upgrade notes\n\n- keep me\n\n## History\n\nold\n';
+    setChangelog(repo, `${prefix}## Unreleased\n${body}${suffix}`);
+    const d0 = today();
+    const r = release(repo);
+    const d1 = today();
+    assert.equal(r.code, 0, `a filled ## Unreleased did not release:\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stdout, /stamp CHANGELOG\.md: ## Unreleased → ## v0\.1\.1 — /, `no stamp step printed:\n${r.stdout}`);
+
+    const committed = git(repo, ['show', 'HEAD:CHANGELOG.md']).out + '\n';   // git() trims the final newline
+    const expected = (d) => `${prefix}## Unreleased\n\n## v0.1.1 — ${d}\n${body}${suffix}`;
+    assert.ok(committed === expected(d0) || committed === expected(d1),
+      `the release commit's CHANGELOG.md is not the stamped file.\n--- got:\n${committed}\n--- expected:\n${expected(d0)}`);
+    assert.equal(changelog(repo), committed, 'the working-tree CHANGELOG.md differs from the committed one');
+    // In the TAGGED release commit, and the tag is that commit.
+    assert.equal(git(repo, ['rev-parse', 'v0.1.1^{}']).out, git(repo, ['rev-parse', 'HEAD']).out, 'the tag does not name HEAD');
+    assert.ok(git(repo, ['show', '--name-only', '--format=', 'HEAD']).out.split('\n').includes('CHANGELOG.md'),
+      'CHANGELOG.md is not part of the release commit');
+    assert.equal(porcelainRaw(repo), '', 'the release left the tree dirty');
+  });
+
+test('0479/escape-hatch-loud: --allow-empty-changelog releases an empty section — exit 0, a stderr banner, and a "No changes were recorded" line',
+  () => {
+    const { repo } = makeFixture();
+    setChangelog(repo, EMPTY_UNRELEASED);
+    const r = release(repo, ['--allow-empty-changelog']);
+    assert.equal(r.code, 0, `the hatch did not release:\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stderr, /⚠ --allow-empty-changelog: releasing v0\.1\.1 with an EMPTY ## Unreleased/,
+      `the hatch is silent — no banner on stderr:\n${r.stderr}`);
+    const committed = git(repo, ['show', 'HEAD:CHANGELOG.md']).out;
+    assert.match(committed, /## Unreleased\n\n## v0\.1\.1 — \d{4}-\d{2}-\d{2}\n\nNo changes were recorded for this release\.\n/,
+      `the version section does not record the empty release:\n${committed}`);
+    assert.ok(summary(r.stdout).includes('✓ Released v0.1.1'), `the hatch run did not release:\n${r.stdout}`);
+  });
+
+test('0479/no-bump-finishes-a-stamped-release: a v<target> section already there → --no-bump leaves CHANGELOG.md as is; a bumping run is refused',
+  () => {
+    const stampedText = '# Changelog\n\n## Unreleased\n\n## v0.1.0 — 2026-01-01\n\n- shipped\n';
+    {
+      const { repo } = makeFixture();
+      setChangelog(repo, stampedText);
+      const r = release(repo, ['--no-bump']);
+      assert.equal(r.code, 0, `--no-bump over an already-stamped v0.1.0 was refused:\n${r.stdout}\n${r.stderr}`);
+      assert.match(r.stdout, /changelog: CHANGELOG\.md already has a v0\.1\.0 section — left as is/,
+        `no "already has" line:\n${r.stdout}`);
+      assert.equal(changelog(repo), stampedText, '--no-bump rewrote an already-stamped CHANGELOG.md');
+      assert.equal(git(repo, ['show', 'HEAD:CHANGELOG.md']).out + '\n', stampedText, 'the committed CHANGELOG.md changed');
+    }
+    {
+      const { repo } = makeFixture();
+      setChangelog(repo, stampedText);
+      const before = snapshot(repo);
+      const r = release(repo);
+      assert.equal(r.code, 1, `a bumping run (target v0.1.1) over an empty ## Unreleased was not refused:\n${r.stdout}\n${r.stderr}`);
+      assert.match(r.stderr, /## Unreleased` section is empty/, `refused, but not for the changelog:\n${r.stderr}`);
+      assertUntouched(repo, 'bumping run', before);
+    }
+  });
+
+test('0479/edit-during-gate-kept: an entry added to ## Unreleased during npm test lands in the stamped section — the file is read again',
+  () => {
+    const { repo } = makeFixture();
+    const edited = FIXTURE_CHANGELOG.replace('- fixture change\n', '- fixture change\n- added during the gate\n');
+    assert.notEqual(edited, FIXTURE_CHANGELOG, 'fixture is wrong: the edit did not apply');
+    writeFileSync(join(repo, 'edited-changelog.md'), edited);
+    setTestScript(repo, 'cp edited-changelog.md CHANGELOG.md');
+    const r = releaseWithGateOn(repo, ['--no-push', '--no-tag']);
+    assert.ok(r.stdout.includes('running `npm test`'), `the gate did not run — this test proves nothing without it:\n${r.stdout}\n${r.stderr}`);
+    assert.equal(r.code, 0, `the release failed:\n${r.stdout}\n${r.stderr}`);
+    const committed = git(repo, ['show', 'HEAD:CHANGELOG.md']).out;
+    assert.match(committed, /## v0\.1\.1 — \d{4}-\d{2}-\d{2}\n\n- fixture change\n- added during the gate\n/,
+      `the entry added during the gate was lost — the pre-gate read was written back:\n${committed}`);
+    assert.equal(porcelainRaw(repo), '', 'the release left the tree dirty');
+  });
+
+test('0479/emptied-during-gate-refused: ## Unreleased emptied during npm test → refused after the gate, before any write',
+  () => {
+    const { repo } = makeFixture();
+    writeFileSync(join(repo, 'empty-changelog.md'), EMPTY_UNRELEASED);
+    setTestScript(repo, 'cp empty-changelog.md CHANGELOG.md');
+    const before = snapshot(repo);
+    const r = releaseWithGateOn(repo);
+    assert.ok(r.stdout.includes('running `npm test`'), `the gate did not run — this test proves nothing without it:\n${r.stdout}\n${r.stderr}`);
+    assert.equal(r.code, 1, `a section emptied during the gate was not refused:\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stderr, /## Unreleased` section is empty \(read again after the test gate\)/,
+      `the refusal does not come from the post-gate re-read:\n${r.stderr}`);
+    // The gate script's OWN edit is the only change: nothing staged, nothing bumped or committed.
+    assertUntouched(repo, 'emptied during gate',
+      { ...before, files: { ...before.files, changelog: EMPTY_UNRELEASED }, porcelain: ' M CHANGELOG.md' });
+  });
+
+test('0479/dry-run-stamps-nothing: --dry-run prints the stamp step and leaves CHANGELOG.md byte-identical', () => {
+  const { repo } = makeFixture();
+  const r = release(repo, ['--dry-run']);
+  assert.equal(r.code, 0, `--dry-run failed:\n${r.stdout}\n${r.stderr}`);
+  assert.match(r.stdout, /\[dry-run\] stamp CHANGELOG\.md: ## Unreleased → ## v0\.1\.1 — /, `no stamp step in the plan:\n${r.stdout}`);
+  assert.equal(changelog(repo), FIXTURE_CHANGELOG, '--dry-run wrote CHANGELOG.md');
+  assert.equal(porcelainRaw(repo), '', '--dry-run left the tree dirty');
+});
+
+// ── 0479, review round 1 — rules the first nine tests could not tell apart from their absence ────────
+// Each test below was seen red against a one-off mutant of the rule it names (worklog.md, review round 1).
+
+test('0479/bumping-run-refuses-a-target-section: a hand-written ## v<target> on a BUMPING run is refused — empty or filled ## Unreleased, hatch or not',
+  () => {
+    // Review R1: the "already has a v<target> section" skip exists to finish a partly-failed release, and
+    // that run never bumps. On a bumping run the heading cannot be this script's own (hand-written,
+    // planned ahead, or a mis-parsed line), so it must not waive the empty check — and, by owner ruling
+    // (2026-10-05, "Refuse it"), it is refused outright rather than stamped into a second v<target> heading.
+    const empty = '# Changelog\n\n## Unreleased\n\n## v0.1.1 — planned\n\n- written ahead by hand\n';
+    const filled = '# Changelog\n\n## Unreleased\n\n- a change\n\n## v0.1.1 — planned\n\n- written ahead by hand\n';
+    for (const [label, text, args] of [
+      ['empty', empty, []],
+      ['empty, --version 0.1.1', empty, ['--version', '0.1.1']],
+      ['empty + hatch', empty, ['--allow-empty-changelog']],
+      ['filled', filled, []],
+    ]) {
+      const { repo } = makeFixture();
+      setChangelog(repo, text);
+      const before = snapshot(repo);
+      const r = release(repo, args);
+      assert.equal(r.code, 1, `${label}: a bumping run was not refused over a hand-written v0.1.1 heading:\n${r.stdout}\n${r.stderr}`);
+      assert.match(r.stderr, /CHANGELOG\.md already has a `## v0\.1\.1` heading/, `${label}: refused, but not for the v0.1.1 heading:\n${r.stderr}`);
+      assert.match(r.stderr, /Remove it, or move its notes under `## Unreleased`/, `${label}: the refusal does not say what to do:\n${r.stderr}`);
+      assert.match(r.stderr, /Nothing was changed/, `${label}: the refusal does not say nothing was changed:\n${r.stderr}`);
+      assert.ok(!r.stdout.includes('already has a v0.1.1 section'), `${label}: a bumping run took the recovery skip:\n${r.stdout}`);
+      assertUntouched(repo, label, before);
+    }
+  });
+
+test('0479/fenced-lines-are-not-headings: ## lines inside ``` and ~~~ fences are neither counted nor taken as a stamped section',
+  () => {
+    // Only the fence rule decides these outcomes: test 4's fenced line sits after real content, so a
+    // parser with no fence handling still passes it.
+    {
+      // Fenced example `## Unreleased` lines, one per fence kind: not duplicates, and not the stamped line.
+      const { repo } = makeFixture();
+      const prefix = '# Changelog\n\nThe format:\n\n```md\n## Unreleased\n```\n\n~~~\n## Unreleased\n~~~\n\n';
+      const body = '\n- a change\n\n';
+      const suffix = '## Upgrade notes\n\nNone.\n';
+      setChangelog(repo, `${prefix}## Unreleased\n${body}${suffix}`);
+      const d0 = today();
+      const r = release(repo);
+      const d1 = today();
+      assert.equal(r.code, 0, `fenced ## Unreleased lines were read as headings:\n${r.stdout}\n${r.stderr}`);
+      const committed = git(repo, ['show', 'HEAD:CHANGELOG.md']).out + '\n';
+      const expected = (d) => `${prefix}## Unreleased\n\n## v0.1.1 — ${d}\n${body}${suffix}`;
+      assert.ok(committed === expected(d0) || committed === expected(d1),
+        `the stamp did not land on the real heading alone.\n--- got:\n${committed}\n--- expected:\n${expected(d0)}`);
+    }
+    {
+      // A fenced `## v0.1.0` is an example, not a stamped section: a --no-bump run still checks.
+      const { repo } = makeFixture();
+      setChangelog(repo, '# Changelog\n\n```md\n## v0.1.0 — 2026-01-01\n```\n\n## Unreleased\n\n## Upgrade notes\n\nNone.\n');
+      const before = snapshot(repo);
+      const r = release(repo, ['--no-bump']);
+      assert.equal(r.code, 1, `a fenced ## v0.1.0 line was taken as a stamped section:\n${r.stdout}\n${r.stderr}`);
+      assert.match(r.stderr, /## Unreleased` section is empty/, `refused, but not for the changelog:\n${r.stderr}`);
+      assertUntouched(repo, 'fenced v0.1.0', before);
+    }
+  });
+
+test('0479/subheading-stays-inside-the-section: a ### line right under ## Unreleased is the section\'s content, not its end',
+  () => {
+    // Only the `## ` (with the space) rule decides this: a section that opens with a `### ` subheading
+    // would read as empty if `###` ended it. Test 4's `### ` line sits after real content, so it cannot tell.
+    const { repo } = makeFixture();
+    setChangelog(repo, '# Changelog\n\n## Unreleased\n### Added\n- a change\n\n## Upgrade notes\n\nNone.\n');
+    const r = release(repo);
+    assert.equal(r.code, 0, `a section opening with ### was read as empty:\n${r.stdout}\n${r.stderr}`);
+    assert.match(git(repo, ['show', 'HEAD:CHANGELOG.md']).out, /## v0\.1\.1 — \d{4}-\d{2}-\d{2}\n### Added\n- a change\n/,
+      'the stamped section lost its subheading');
+  });
+
+test('0479/version-boundary: ## v0.1.10 is not a v0.1.1 section — a --no-bump v0.1.1 run still checks ## Unreleased',
+  () => {
+    const { repo } = makeFixture();
+    writeFileSync(join(repo, 'VERSION'), '0.1.1\n');
+    writeFileSync(join(repo, 'package.json'), '{\n  "version": "0.1.1"\n}\n');
+    setChangelog(repo, '# Changelog\n\n## Unreleased\n\n## v0.1.10 — 2026-01-01\n\n- a later release\n');
+    const before = snapshot(repo);
+    const r = release(repo, ['--no-bump']);
+    assert.equal(r.code, 1, `## v0.1.10 was taken as a v0.1.1 section:\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stderr, /## Unreleased` section is empty/, `refused, but not for the changelog:\n${r.stderr}`);
+    assert.ok(!r.stdout.includes('already has a v0.1.1 section'), `the boundary check let v0.1.10 match:\n${r.stdout}`);
+    assertUntouched(repo, 'v0.1.10', before);
+  });
+
+test('0479/crlf-file-stays-crlf: a CRLF CHANGELOG.md gets CRLF stamp lines — no bare LF is added', () => {
+  const { repo } = makeFixture();
+  git(repo, ['config', 'core.autocrlf', 'false']);   // fixture only: the bytes under test reach git as written
+  const lf = '# Changelog\n\n## Unreleased\n\n- a change\n\n## Upgrade notes\n\nNone.\n';
+  setChangelog(repo, lf.replace(/\n/g, '\r\n'));
+  const d0 = today();
+  const r = release(repo);
+  const d1 = today();
+  assert.equal(r.code, 0, `a CRLF CHANGELOG.md did not release:\n${r.stdout}\n${r.stderr}`);
+  const expected = (d) => lf.replace('## Unreleased\n', `## Unreleased\n\n## v0.1.1 — ${d}\n`).replace(/\n/g, '\r\n');
+  const file = changelog(repo);
+  assert.ok(file === expected(d0) || file === expected(d1),
+    `the stamp mixed line endings.\n--- got:\n${JSON.stringify(file)}\n--- expected:\n${JSON.stringify(expected(d0))}`);
+  const blob = spawnSync('git', ['show', 'HEAD:CHANGELOG.md'], { cwd: repo, encoding: 'utf8' }).stdout;
+  assert.equal(blob, file, 'the committed CHANGELOG.md bytes differ from the working-tree file');
+});
+
+test('0479/no-bump-dry-run-counts-the-stamp: on a clean tree, --no-bump --dry-run plans the commit the stamp will make',
+  () => {
+    // Nothing else is pending here (no bump, clean tree), so only the stamp makes a commit — the plan
+    // must say so, not "nothing to commit".
+    const { repo } = makeFixture();
+    const r = release(repo, ['--no-bump', '--dry-run']);
+    assert.equal(r.code, 0, `--no-bump --dry-run failed:\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stdout, /\[dry-run\] stamp CHANGELOG\.md: ## Unreleased → ## v0\.1\.0 — /, `no stamp step in the plan:\n${r.stdout}`);
+    assert.match(r.stdout, /\[dry-run\] commit: "Release v0\.1\.0"/, `the plan does not count the stamp's commit:\n${r.stdout}`);
+    assert.ok(!r.stdout.includes('nothing to commit'), `the plan says nothing to commit:\n${r.stdout}`);
+    assert.equal(changelog(repo), FIXTURE_CHANGELOG, '--dry-run wrote CHANGELOG.md');
+    assert.equal(porcelainRaw(repo), '', '--dry-run left the tree dirty');
+    // And the real run does what the plan said: one commit, carrying CHANGELOG.md.
+    const head = git(repo, ['rev-parse', 'HEAD']).out;
+    const real = release(repo, ['--no-bump', '--no-push', '--no-tag']);
+    assert.equal(real.code, 0, `the real --no-bump run failed:\n${real.stdout}\n${real.stderr}`);
+    assert.notEqual(git(repo, ['rev-parse', 'HEAD']).out, head, 'the real run made no commit — the plan was wrong');
+    assert.ok(git(repo, ['show', '--name-only', '--format=', 'HEAD']).out.split('\n').includes('CHANGELOG.md'),
+      'the real run\'s commit does not carry CHANGELOG.md');
   });

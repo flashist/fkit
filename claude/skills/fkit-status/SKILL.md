@@ -416,6 +416,23 @@ drift depends-unparseable <task> brief="…" form="S|BL|BI|P"
       matched, so you know what to look for. Pairs with the `⟨derive: UNPARSEABLE — see brief⟩`
       sentinel above — which is the ONE case where you open the brief yourself. Never read it as
       `ready`.
+drift depends-on-later-sprint <task> blocker="…" blocker_sprint="…" reason="…" [via="…"]
+    ↑ an open row on this sprint board waits on an open task this sprint cannot count on — so the
+      board claims work it cannot finish in this sprint. `blocker` is that task; `blocker_sprint` is
+      its brief's `## Sprint`, as written. `reason`: `backlog-board` (the blocker is on the Backlog
+      board) · `not-started` (its sprint is still `🔲 Backlog`) · `later-sprint` (its sprint has a
+      higher number) · `sprint-closed` (its sprint is `✅`/`⛔`, but the blocker is still open) ·
+      `sprint-unresolved` (no live board has that sprint, its banner is missing or malformed, or the
+      `## Sprint` is not `Backlog` or an exact `Sprint N`). Only the live boards (`sprints/*.md`) are read, so
+      a closed sprint already archived to `sprints/done/` or `sprints/cancelled/` shows as
+      `sprint-unresolved`, not `sprint-closed`.
+      `via="…"` appears only when the wait is indirect: this row waits on `via`, an open row on THIS
+      board, which waits on the blocker.
+      Fires only on a real `Sprint N` board, never on the Backlog board. Only 4-digit task IDs on the
+      `Depends on:` line are read, and an ID the line marks soft is skipped.
+      The row KEEPS its Next step: this is a scheduling finding, not disagreement or nonconformance.
+      It is an owner decision in beat 6 — move the dependents forward, move the blocker earlier, or
+      accept it and record why. It blocks nothing by itself.
 drift multiple-status-tables count=<n>
 drift unresolved-plan-sprint h1="…"
     ↑ the plan has no recoverable `Sprint N` identity, so **drift rule 1** (skip the status

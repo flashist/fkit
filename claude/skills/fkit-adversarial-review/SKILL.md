@@ -26,7 +26,9 @@ primary mode runs the pass on **a different model (Codex)**.
 
 **Argument:** `$ARGUMENTS` — the diff / scope (a base ref, a branch, or "the working tree") and
 optionally a **focus** (e.g. "concentrate on concurrency", "the auth path"). If the scope is unclear,
-inspect the working tree / recent diff with `git` and state what you reviewed.
+inspect the working tree / recent diff with `git` and state what you reviewed. **Or a plan:** pasted
+plan text (*"Attack this plan"*, usually with the brief's path) — attacked before it is built, with the
+plan hunt list below.
 
 ---
 
@@ -41,6 +43,8 @@ inspect the working tree / recent diff with `git` and state what you reviewed.
      --staged` for the working tree. **Untracked files produce no diff** — inline their full contents,
      marked as new files. Never `git add` anything to make a diff appear.
    - Any settled-tradeoffs priming you were handed (accepted residuals / ADR "re-raise only if").
+   - **For a plan instead of a diff:** inline the plan text, marked plainly as **a plan, not a diff**,
+     plus the brief's path, the plan hunt list below and its location rule.
 3. **Run it** (expect several minutes; generous Bash timeout, ~600000 ms):
    ```bash
    codex exec --sandbox read-only --cd "$PWD" - < .fkit/tmp/adversarial-prompt.md
@@ -84,6 +88,21 @@ from names or the diff hunk alone. Hunt specifically for:
 - **Security** — injection, authz/authn gaps, unsafe deserialization, secret leakage, SSRF.
 - **Regressions & compatibility** — breaking an existing caller, API/schema/behavior changes.
 - **Missing tests** — behavior changed with no test covering it; the untested edge.
+
+**When the input is a plan**, hunt instead for:
+- **Claims that contradict the code** — cite the code `file:line` that disproves the claim.
+- **Missed edge cases and failure paths** the plan never handles.
+- **Missing or wrong tests** — a changed behavior no planned check covers, or a check that cannot fail.
+- **Sequencing errors** — a step that depends on one scheduled after it.
+- **Security** and **regressions** the planned change would introduce.
+- **Gaps or creep against the brief** — something the brief asks for that the plan drops, or work it
+  adds that the brief never asked for.
+
+Locate a plan finding by **the plan section** plus what it rests on: the code `file:line`, or — for a
+gap or creep against the brief, which has no code line — the brief's heading plus a quoted phrase. Cite
+a coordination document (a brief, a plan, a plan-review record, a worklog, a review ledger, a board) by
+**heading plus a quoted phrase, never `path:line`** — those files change under you. **For a plan, such
+a location is the `file:line` the output contract asks for** — the finding is pointed to; report it.
 
 Trace the **full blast radius** before assigning severity — a mechanism that looks dangerous in
 isolation may be neutralized downstream (and vice versa): `low` / `medium` / `high` / `critical`.

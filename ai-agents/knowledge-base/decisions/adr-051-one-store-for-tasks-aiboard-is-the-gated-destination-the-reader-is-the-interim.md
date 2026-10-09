@@ -51,7 +51,7 @@
 ## ⛔ Read first — the three things most likely to be misread
 
 1. ⭐ **This decides fkit's direction and commits aiboard to NOTHING.** aiboard
-   (`/Users/mark.dolbyrev/Workspace/aiboard`) is a separate project of the same owner, with its own
+   (the sibling aiboard repo) is a separate project of the same owner, with its own
    lead and its own board. **`T-021`, `T-022`, `T-023` and the Python→Node port are aiboard's tasks,
    on aiboard's board.** ⛔ **No fkit task is filed for any of them, and none may be** — they are
    **external preconditions**, referenced, never owned. Nothing in this ADR schedules aiboard's work
@@ -1085,7 +1085,7 @@ that lives here**.
 - [`sprints/sprint-11.md`](../../sprints/done/sprint-11.md) — where the ruling was first recorded, its four
   tracks, and open decisions `D1`–`D5`. ⛔ **Its copy of the gate is a SUMMARY.** This ADR is the
   authoritative text — see *§Read first*, item 3. If they differ, the board is what gets corrected.
-- [`tasks/backlog/0404-…/brief.md`](../../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
+- [`tasks/done/0404-…/brief.md`](../../tasks/done/0404-evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam/brief.md)
   — the re-scoped evaluation task (A's reader is what it now is), and the preserved spike under its
   `assets/external-expert-spike/`.
 - [`tasks/backlog/0405-…/brief.md`](../../tasks/backlog/0405-investigate-a-terminal-ui-for-the-board-and-compare-it-against-the-web-board/brief.md)

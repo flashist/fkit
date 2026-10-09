@@ -5,6 +5,8 @@
 **Written by:** `fkit-architect`, at `fkit-lead`'s direction, on the owner's request (quoted below).
 **For:** the owner, at the moment he makes the final fkit↔aiboard store decision.
 
+> ⏱ **Closed, 2026-10-05 — task 0472.** This log is **closed by ADR-052** (aiboard merges into fkit; ADR-052's *Effect on existing ADRs* table: "The evidence log is **closed, not deleted**"). The decision it gathered evidence for is made. Kept, not deleted; no further entries.
+
 ---
 
 ## ⛔ Read first — what this document is NOT
@@ -160,7 +162,7 @@ Friction met on the way — each one fixed or filed in fkit:
 | The reader could only serve fkit's own `ai-agents/` tree | Fixed — `--root` flag, [task 0412](../../tasks/done/0412-let-the-read-only-board-reader-serve-another-projects-ai-agents-tree-root-flag/brief.md) |
 | The sibling project's installed fkit copy was stale (v0.2.2, dashboard v1); its sprint banners predated the sprint-status vocabulary | Observed; not an fkit code defect |
 | Archived boards named `plan-sprint-N.md` lost their tasks on the board | Fixed — [task 0415](../../tasks/done/0415-keep-a-closed-sprints-tasks-attached-when-its-board-is-named-plan-sprint-n/brief.md) |
-| The reader's snapshot cache does not notice renamed task folders | **Open** — [task 0413](../../tasks/cancelled/0413-make-the-board-readers-snapshot-cache-notice-renames/brief.md) |
+| The reader's snapshot cache does not notice renamed task folders | **Open** — [task 0413](../../tasks/cancelled/0413-make-the-board-readers-snapshot-cache-notice-renames/brief.md) *(⏱ 2026-10-05, task 0472: cancelled 2026-09-30 under ADR-052 — the reader it fixed retires.)* |
 
 **Why "mixed" for B.**
 - **Toward B:** it shows a board is genuinely wanted for real work. And it shows the running cost of A:

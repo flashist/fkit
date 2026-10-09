@@ -27,6 +27,8 @@ fkit-coder
 
 ⭐ **Trial runs only — no project is changed in this phase** (ADR-052 D9 phase 4, D8). The converter's contract is D8, items 1–9; the reason it is paranoid is commit `331f298`, which wrote the wrong status into 3 of ~80 done briefs and went unnoticed for two months (decision document §6). ⛔ Never run anything from this phase with write access against a real project's tree.
 
+⏱ 2026-10-05, on task 0472's owner ruling R6 (2026-10-02): corrected — `331f298` did not write these statuses (pure renames); the `🔲 Backlog` dated from each brief's creation and was not updated at close (`0014` was created inside `done/`), unnoticed 64–70 days. D8 is unchanged. See the correction note under ADR-052's `331f298` bullet.
+
 D8 item 2: a report **the owner reads** — per task: folder, facts, sprint, order, priority, close record; per sprint: folder and body; totals; every refusal; every **decision to confirm** (including A3's default priority). D8 item 9: a trial run on an unchanged tree gives the **same report byte-for-byte**; re-running on a converted project does nothing and says so.
 
 ⭐ Written for a human: counts and exceptions first, detail after (the owner's reporting ruling behind `0409`).

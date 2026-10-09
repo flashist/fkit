@@ -10,6 +10,13 @@
   skip*
 - **Companion to:** [ADR-038](adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md) —
   **not amended, not superseded** (§Consequences C4).
+- **Corrections:** 2026-10-06 (`0475`) — this ADR carries **three** dated pointer notes to
+  [ADR-055](adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md),
+  one under each mention of the *"declared-approval marker"*: §Why this and not the others (the
+  **Main tradeoff** paragraph), §C2 item (i) (it carries the fact), and §C6's **A widening** bullet.
+  Marker legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
+  overturned** (do not follow it). No existing line of this ADR was edited; the notes are appends, and
+  the Status stays `accepted`.
 
 > **Citation form.** Skill and agent files are cited `path:NNN` **paired with a quoted fragment**
 > (row 1 of `conventions/durable-citation-anchors.md`). ADR-038, sprint boards and briefs are
@@ -263,6 +270,13 @@ carve-outs for the architect and producer agent prompts, a widening of what a sp
 write (design docs, briefs) under the declared-approval marker. The owner accepted that widening
 (ND5, §Owner sign-off).
 
+> ⚠️ **Dated pointer note 2026-10-06 (`0475`).** The paragraph above is **left byte-identical**. The
+> marker it names now has a second driver for the **coder only**
+> ([ADR-055](adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md));
+> the architect and producer carve-outs here are **not** widened. The fact is carried by the note under
+> §C2 item (i) — deliberately not restated here, so there is one place to keep true rather than two.
+> **Status stays `accepted`.**
+
 ---
 
 ## Options considered
@@ -357,6 +371,22 @@ is the option to reopen with (§Re-raise only if).
   standing carve-out makes it a rule. **Owner ruling ND5, verbatim: "Yes, both (Recommended)".**
   `claude/agents/fkit-wiki.md` untouched. `claude/skills-for-role.sh` **untouched**;
   `test/skill-ownership-hook.test.js` **untouched**.
+
+  > ⚠️ **Dated pointer note 2026-10-06 (`0475`) — the coder's marker gained a second driver; these
+  > non-coder carve-outs did not.** This item is **left byte-identical**. Since
+  > [ADR-055](adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md)
+  > (owner ruling 2026-10-02), the **coder's** declared-approval marker may be sent by
+  > `fkit-sprint-ship-loop` **or** by `fkit-lead` as conductor, with four fields (caller; plan verbatim
+  > or exact scope; on the lead path the owner's approval quoted verbatim with date and channel; worker
+  > role). ADR-055 is **coder-only** (owner ruling 2026-10-05, OQ6): the architect and producer Build
+  > carve-outs described here **stay sprint-loop-only**, and a lead-spawned architect or producer may
+  > **not** read "the declared-approval marker" as covering it. Verified 2026-10-06: neither
+  > `claude/agents/fkit-architect.md` nor `claude/agents/fkit-producer.md` contains the carve-out yet.
+  > The coder carve-out quoted above is found under `claude/agents/fkit-coder.md` §Mode, *"A second
+  > scoped exception"*; anchor on that phrase, not on `:60-72` — task `0475` rewrites that section, so
+  > its heading may stop naming the sprint loop alone and its lines may move. **Why ⚠️ and not ⛔:**
+  > nothing this ADR decided is overturned. **Status stays `accepted`.**
+
 - **(ii) Dated correction note on ADR-038 (architect)** — on the §Consequences fragment *"their roles
   come from the loop's enumerated step table, not from this lookup"*, in `0205`'s shape and per
   `/fkit-record-decision` §"Correcting an accepted ADR". **The ground is what changed, not what was
@@ -412,6 +442,12 @@ run and is **not edited** (brief ⛔).
   Build workers under the declared-approval marker. It is the same trust-not-proof posture
   `fkit-coder.md` already states for the coder; it is not a new guarantee and must not be described
   as one.
+
+  > ⚠️ **Dated pointer note 2026-10-06 (`0475`).** The bullet above is **left byte-identical**. ADR-055
+  > widens the **coder's** marker to a second driver (`fkit-lead`); it does **not** widen this
+  > two-role widening. The fact is carried by the note under §C2 item (i) — deliberately not restated
+  > here, so there is one place to keep true rather than two. **Status stays `accepted`.**
+
 - **The step-1 predicate is an approximation.** `Owner column = fkit-wiki` is a proxy for "vault
   write"; the Plan-worker `BLOCKED` backstop is what makes it safe, and a driver that skips the
   backstop has a hole.

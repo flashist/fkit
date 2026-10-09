@@ -14,8 +14,9 @@ but **not yet built** — the team is seven today.
 ([`ADR-009`](ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)).
 The agents are Claude Code subagents (`claude/agents/fkit-*.md`) and `/fkit-*` skills
 (`claude/skills/`); the `fkit` launcher (`claude/fkit-claude.sh`) opens a **role-locked session**.
-Codex is **required**, not optional — it is what makes the reviewer's second opinion genuinely
-model-diverse. fkit formerly shipped a second flavor on [Omnigent](https://omnigent.ai); that runtime
+Codex is **optional but recommended** — it is what makes the reviewer's second opinion genuinely
+model-diverse; without it, that opinion falls back to Claude only, loudly flagged as not model-diverse
+([ADR-054](ai-agents/knowledge-base/decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md)). fkit formerly shipped a second flavor on [Omnigent](https://omnigent.ai); that runtime
 was **removed in Sprint 2** (ADR-009). There is nothing to mirror by hand any more.
 
 The full project brief — domain, architecture, conventions — lives in

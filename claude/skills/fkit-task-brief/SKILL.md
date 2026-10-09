@@ -98,6 +98,13 @@ a part can be developed, tested, and shipped separately, it is its own task.**
 - **Do not split for the sake of splitting.** If the description is genuinely one unit, one brief out.
 - **Flag dependencies and conflicts.** If the work depends on unfinished work, or conflicts with a
   locked decision (an ADR, a wiki page), say so in `## Context` — do not quietly plan around it.
+  **A placement or dependency question names its knock-on** — here, and at step 1 (a named sprint is
+  missing), step 5 (an append rank flagged for owner confirmation) and step 9 (the placement warning).
+  Every option that puts a task in a
+  sprint (or on the Backlog board) or re-points a `Depends on:` link says which open tasks would then
+  wait on which sprint — the recommended option too, and a `NEEDS-DECISION` as much as an
+  `AskUserQuestion`:
+  [`conventions/placement-questions-state-the-knock-on.md`](../../../ai-agents/knowledge-base/conventions/placement-questions-state-the-knock-on.md).
 
 ### 4. Draft each brief
 Use the established structure **exactly** — diff against an existing brief in
@@ -411,7 +418,93 @@ ai-agents/tasks/backlog/<NNNN>-<kebab-case-title>/brief.md
 - **Never renumber or alter an existing row.** The one exception is an **owner-ruled** re-rank (step 5)
   — and it never reaches a `✅ Done`, `⛔ Cancelled` or `➡️ Moved` row.
 
-### 9. Never
+### 9. Check where the dependencies landed — warn, never refuse
+Owner ruling (b), 2026-10-05 — *"Warn when filing"* (task 0494). When this run leaves an open task on a
+sprint board waiting on an open task its sprint cannot count on, **warn — never refuse.** Filing still
+happens, and nothing is moved by the check. A refusal would overrule legitimate owner rulings, such as
+*"split build and verify; put the verify task at the top of the next sprint"*; the warning shows the
+knock-on and the owner decides.
+
+- **Run it last — after any re-point.** When a filing comes with a re-point of an existing brief's
+  `Depends on:` line (a producer edit outside this skill), run the check **after** that edit. Before
+  it, no brief names the new task, so the check finds nothing.
+- **The check is `dashboard.sh`'s `drift depends-on-later-sprint` record** (task 0492), read from every
+  live board except the Backlog board (that board never gets the record). Run it from the project root:
+
+  ```sh
+  for b in ai-agents/sprints/*.md; do
+    id=$(bash .claude/skills/fkit-status/dashboard.sh identity "$b"); rc=$?
+    [ "$id" = "Backlog" ] && continue
+    [ "$rc" -eq 0 ] || { echo "placement check not run: $b — identity unresolved (exit $rc)"; continue; }
+    out=$(bash .claude/skills/fkit-status/dashboard.sh "$b"); rc=$?
+    facts=$(printf '%s\n' "$out" | sed -n '/^⟦FACTS⟧$/,/^⟦END⟧$/p')
+    [ "$rc" -eq 0 ] && [ -n "$facts" ] || { echo "placement check not run: $b — render exit $rc, or no ⟦FACTS⟧"; continue; }
+    echo "checked: $b ($id)"
+    printf '%s\n' "$facts" | grep -E '^drift (depends-on-later-sprint|depends-unparseable|ambiguous-plan-identity) ' || true
+  done
+  ```
+- **Which records concern this run.** The *touched* tasks are every brief this run created, and every
+  brief whose `Depends on:` line was added or re-pointed. (A move of a task between boards — a pull, a
+  carry-forward, a de-scope, a move to any other sprint; a producer edit — touches the moved task itself
+  and every open task whose `Depends on:` names it.) A direct `depends-on-later-sprint` record (no
+  `via`) concerns this run when its first field (the dependent) is a touched task. An indirect record
+  (with `via`) concerns it when its dependent **or any task on its `via` chain** is touched: follow
+  `via` to that task's record for the same blocker, and on, until a direct record. Group them by
+  `blocker`. A record about any other task is a wait this run did not cause: leave it to
+  `/fkit-status`.
+- **The outcomes.** No concerning record → `placement check: none (checked: <boards>)` (a same-sprint
+  or closed blocker never produces a record). A `placement check not run` line, or a touched task with a
+  `drift depends-unparseable` record (`not fully checked: <task>'s Depends on: line is unreadable`), is
+  reported as it is — **a check that did not run is never a pass.** An `ambiguous-plan-identity` record
+  (two boards claim one sprint) is relayed as it is, and the result for that sprint is
+  `not fully checked` — never a pass: `dashboard.sh` reads that sprint's status from the first claimant
+  only, so a `none` or a `reason` there may be wrong.
+- **The warning, one per blocker:** the blocker and its `blocker_sprint`; the `reason` in plain words
+  (`backlog-board` → on the Backlog board · `not-started` → in a sprint not started yet ·
+  `later-sprint` → in a later sprint · `sprint-closed` → in a closed sprint · `sprint-unresolved` → in a
+  sprint that could not be worked out); each direct dependent (a record with no `via`) and its board;
+  each indirect one (*"waits through `<via>`"*); and how many open tasks stand behind each dependent.
+  Count those with the *How to find them* search of
+  [`conventions/placement-questions-state-the-knock-on.md`](../../../ai-agents/knowledge-base/conventions/placement-questions-state-the-knock-on.md),
+  across all boards. Every `via` record for that blocker must be in the count; if one is missing, add it
+  and say so. **A touched indirect dependent** (a task filed or moved in behind an existing waiter)
+  counts as a direct dependent whenever no other touched task sits on its `via` chain — in the warning
+  and in all three ways out, still saying which task it waits through. A touched task behind another
+  touched task stays behind it.
+- **Three ways out — each a placement option, so each states its knock-on** under that convention:
+  1. **Move the dependents to the blocker's sprint** — de-scoping them, if the blocker is on the Backlog
+     board. Say which tasks behind them would then wait on which sprint.
+  2. **Place the blocker earlier** — in the dependents' sprint or before it. Say the same-sprint wait
+     that remains (the convention's *"always"* scope).
+  3. **Accept it and record why** — one line in each direct dependent's `## Notes`, and one in the dated
+     addendum of the sprint board this run edited. The Backlog board takes no addendum (step 8): when
+     that is the board this run edited, or the edit touched no board or more than one sprint board (a
+     move between sprints), the addendum line goes on each direct dependent's sprint board instead (one
+     line per board). They keep waiting on `<blocker_sprint>`.
+
+  Mark a recommendation only if you have one; this step does not pick one for you.
+- **Who asks.** In a session: `AskUserQuestion`, one question per blocker, batched (at most four per
+  call). **A spawned producer returns the warning as a `NEEDS-DECISION` in its report**
+  ([ADR-021](../../../ai-agents/knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md))
+  — and asks, moves and records nothing (one exception: *Already ruled*, below).
+- **Already ruled.** If the owner chose this exact placement in this session, from a question whose
+  option stated this knock-on, do not ask again: report the warning as accepted and record it as way 3.
+  **A ruling relayed to a spawned producer counts the same way** — the spawn names it, per
+  [ADR-037](../../../ai-agents/knowledge-base/decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling.md)
+  — **but only if the option it quotes stated this same knock-on.** The spawned producer then returns no
+  `NEEDS-DECISION` for it and moves nothing; it reports the warning as accepted, records way 3 only in
+  files this run already writes (a brief it created, the board it edited), and says what it left
+  unrecorded.
+- **Carrying out the choice.** A move is a producer edit after this skill, by step 8's board procedures
+  (a pull is three edits, a de-scope five). Recording an acceptance writes only a brief this run created
+  and the board this run edited; a note on any other brief or board is a producer edit after the skill.
+- **Limits (inherited from 0492).** Only 4-digit IDs are read. An ID followed by `— soft, not hard` is
+  skipped — **that marking is how to declare a soft dependency** so it is not warned about. A closed
+  sprint's archived board reads as `sprint-unresolved`. **Not flagged: a chain across boards** — a
+  touched task waiting on a task of an earlier board that itself waits on a later sprint gets no record,
+  because 0492's `via` stays on one board.
+
+### 10. Never
 - Move or rename an existing task file (that's `/fkit-task-done` / `/fkit-task-cancelled`).
 - Write to `ai-agents/tasks/done/` or `ai-agents/tasks/cancelled/`.
 - Set a status of `✅ Done` or `⛔ Cancelled` on anything.
@@ -422,9 +515,11 @@ This skill creates **new Markdown briefs** and edits **exactly one board** — t
 `ai-agents/sprints/backlog.md` (creating it if absent) when no sprint was named. **A board edit is not
 optional**: every brief gets a row somewhere, or the work is invisible to every board-driven view,
 which is the gap the Backlog board exists to close. That is its whole write surface — the same
-authority boundary every producer skill respects.
+authority boundary every producer skill respects. Step 9 renders boards read-only; recording an
+accepted warning stays inside this same surface, and anything else it leads to is a producer edit made
+after the skill.
 
-### 10. Report
+### 11. Report
 Give a concise summary:
 - **Created:** every file path written.
 - **Split rationale:** *why N briefs and not 1* — which seams made each piece independently shippable.
@@ -433,6 +528,9 @@ Give a concise summary:
 - **Sprint:** which plan was filed against and the rows added — a named sprint, or the Backlog board (say so explicitly, and say if you created it).
 - **Flagged for owner confirmation:** the appended priorities, anything you had to assume, and any
   dependency or conflict surfaced in step 3.
+- **Placement check (step 9):** each warning and the owner's answer; when spawned, the `NEEDS-DECISION`
+  verbatim; otherwise `none (checked: <boards>)`, or the `not run` / `not fully checked` line with its
+  reason.
 - **Consulted:** if fkit-architect was consulted for the technical scope, say so and summarize what it
   established.
 - Remind that **this skill** made no commit — it leaves the new files + edits in the working tree. Do not

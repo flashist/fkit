@@ -150,3 +150,9 @@ that swaps one absolute for another would reproduce the defect in a fresher tens
 > 2026-09-04), and the evidence shape prescribed for the eventual repair.
 >
 > ⛔ **This row stays `🔲 Backlog`.** Nothing here changes its scope, its status, or its position.
+
+> ⏱ **Note, 2026-10-04 (spawned `fkit-producer`, at `fkit-lead`'s direction, on the owner's ruling of
+> 2026-10-04; text above unchanged).** This brief's dependency [`0171`](../../done/0171-write-the-durable-citation-anchors-convention-page/brief.md) is now
+> **closed** — `✅ Done (agent-closed — not owner-verified)`, its brief in `tasks/done/` (checked 2026-10-04).
+> The dependency line itself is left as it stands, per the owner ruling of 2026-09-13 recorded in the
+> note above (pending `0307`); this note only records that the dependency it names is now met.

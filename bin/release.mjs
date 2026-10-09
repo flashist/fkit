@@ -17,6 +17,12 @@
 // tree cannot be released (task 0256). It runs before the first write, and under
 // --dry-run too. --no-test skips it and is never a default.
 //
+// Release notes (task 0479): CHANGELOG.md must have a non-empty `## Unreleased`
+// section, checked BEFORE the test gate (a refusal costs seconds, not the gate's
+// minutes) and again after it. On a release that heading becomes
+// `## v<version> — <date>`, a new empty `## Unreleased` opens above it, and the
+// change lands in the release commit. --allow-empty-changelog releases anyway, loudly.
+//
 // Zero dependencies. Usage:
 //   node bin/release.mjs [options]
 //   npm run release -- [options]
@@ -32,6 +38,7 @@
 //   --no-tag            Commit + push, but don't create/push a tag
 //   --no-push           Commit + tag locally, but don't push anything
 //   --no-test           Skip the test gate — SHIPS AN UNVERIFIED TREE
+//   --allow-empty-changelog  Release with an empty `## Unreleased` in CHANGELOG.md
 //   -h, --help          Show this help
 
 import { spawnSync } from "node:child_process";
@@ -66,12 +73,17 @@ Options:
   --no-tag            Commit + push, but don't create/push a tag
   --no-push           Commit + tag locally, but don't push anything
   --no-test           Skip the test gate — SHIPS AN UNVERIFIED TREE
+  --allow-empty-changelog  Release with an empty \`## Unreleased\` in CHANGELOG.md
   -h, --help          Show this help
 
-Every run runs \`npm test\` first (~6 min) and refuses to release if it fails —
+Every run runs \`npm test\` first (10+ min) and refuses to release if it fails —
 including under --dry-run. The suite reads the working tree, so it checks the tree
 as it stood when the suite started — uncommitted and untracked work included, but
 not the version bump written after it. --no-test skips that; it is never a default.
+
+CHANGELOG.md must have a non-empty \`## Unreleased\` section — checked before the
+test gate, so a refusal is fast. The release turns it into \`## v<version> — <date>\`
+and opens a new empty \`## Unreleased\` above it, in the release commit.
 
 VERSION is the single source of truth (package.json kept in sync); the tag is v<VERSION>.
 Makes no npm-registry publish.`);
@@ -82,6 +94,7 @@ const dryRun = has("--dry-run");
 const doTag = !has("--no-tag");
 const doPush = !has("--no-push");
 const doTest = !has("--no-test");
+const allowEmptyChangelog = has("--allow-empty-changelog");
 const bumpTo = getArg("--version", null);
 const branchArg = getArg("--branch", null);
 const messageArg = getArg("-m", getArg("--message", null));
@@ -204,6 +217,103 @@ if (bumpTo !== null) {
   else target = bumpPart(version, "patch"); // default: bump patch every run
 }
 
+// --- CHANGELOG.md: the release notes (task 0479) ---------------------------------------------------
+// A release must say what it ships. `## Unreleased` must exist exactly once and hold something; the
+// release turns that heading into `## v<version> — <date>` and opens a new empty `## Unreleased` above it.
+//
+// ⚠️ CHECKED TWICE, AND POSITION IS LOAD-BEARING for the test gate's own reason (see below). The first
+// check runs HERE, before the gate, on every path (--dry-run and --no-test included), so a forgotten
+// changelog costs seconds, not the gate's minutes, and leaves the tree exactly as the user left it.
+// The second runs on a FRESH READ after the gate and the HEAD compare, before the first write — the
+// maintainer may edit the file during the gate, and that edit is kept, never overwritten.
+//
+// On a run that does NOT bump (--no-bump, or --version <current>), a `## v<target>` section means a
+// partly-failed release already stamped it (bump committed, push failed, the header above says --no-bump):
+// nothing is checked or rewritten. A bumping run REFUSES it: that heading cannot be this script's.
+//
+// Parsing, deliberately small: a heading is an exact line (trailing whitespace ignored, case matters);
+// lines inside ``` / ~~~ fences are never headings; a section ends at the next `## ` line, so `### `
+// subheadings stay inside it; "empty" means whitespace only (an HTML comment counts as content).
+const changelogPath = join(KIT, "CHANGELOG.md");
+let warnedEmptyChangelog = false;
+
+function checkChangelog(when) {
+  const nothing = `  Nothing was changed: no bump, no commit, no tag.`;
+  const where = when === "after" ? " (read again after the test gate)" : "";
+  let text;
+  try {
+    text = readFileSync(changelogPath, "utf8");
+  } catch (e) {
+    if (e.code !== "ENOENT") fail(`could not read CHANGELOG.md${where}: ${e.message}`);
+    fail(
+      `CHANGELOG.md is missing${where} — every release needs its notes under a \`## Unreleased\` heading.\n` +
+        `  Create it with a \`## Unreleased\` section, then re-run. --allow-empty-changelog does not skip this.\n` +
+        nothing,
+    );
+  }
+  const eol = text.includes("\r\n") ? "\r\n" : "\n";
+  const lines = text.match(/[^\n]*\n|[^\n]+$/g) ?? [];
+  const bare = (l) => l.replace(/\s+$/, "");
+  let fenced = false;
+  const unreleased = [];
+  let stamped = false;
+  const headingIdx = [];
+  lines.forEach((l, i) => {
+    if (/^(```|~~~)/.test(l)) fenced = !fenced;
+    if (fenced || !l.startsWith("## ")) return;
+    headingIdx.push(i);
+    if (bare(l) === "## Unreleased") unreleased.push(i);
+    const rest = bare(l).slice(`## v${target}`.length);
+    if (bare(l).startsWith(`## v${target}`) && (rest === "" || /^\s/.test(rest))) stamped = true;
+  });
+  if (unreleased.length !== 1) {
+    fail(
+      `CHANGELOG.md has ${unreleased.length === 0 ? "no" : unreleased.length} \`## Unreleased\` heading` +
+        `${unreleased.length === 0 ? "" : "s"}${where} — it needs exactly one.\n` +
+        `  Fix the file, then re-run. --allow-empty-changelog does not skip this.\n` +
+        nothing,
+    );
+  }
+  if (stamped && target === originalVersion) return null; // rule 2: a partly-failed release did this step
+  if (stamped) {
+    fail(
+      `CHANGELOG.md already has a \`## v${target}\` heading${where}, but no release wrote it — this run is the one releasing v${target}.\n` +
+        `  Remove it, or move its notes under \`## Unreleased\`, then re-run. --allow-empty-changelog does not skip this.\n` +
+        nothing,
+    );
+  }
+  const h = unreleased[0];
+  const end = headingIdx.find((i) => i > h) ?? lines.length;
+  const body = lines.slice(h + 1, end).join("");
+  const empty = body.trim() === "";
+  if (empty && !allowEmptyChangelog) {
+    fail(
+      `CHANGELOG.md: the \`## Unreleased\` section is empty${where} — refusing to release v${target} with no release notes.\n` +
+        `  Write what this release changes under \`## Unreleased\`, then re-run.\n` +
+        `  Finishing a partly-failed release? re-run with --no-bump\n` +
+        `  To release anyway: --allow-empty-changelog\n` +
+        nothing,
+    );
+  }
+  if (empty && !warnedEmptyChangelog) {
+    warnedEmptyChangelog = true;
+    console.error(
+      `\n⚠ --allow-empty-changelog: releasing v${target} with an EMPTY ## Unreleased in CHANGELOG.md.\n` +
+        `⚠ This release gets a heading and no notes — nothing describes what it ships.\n`,
+    );
+  }
+  const d = new Date();
+  const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  // The version heading keeps the old heading's own line ending; every byte outside that line stays.
+  const headEol = lines[h].endsWith("\r\n") ? "\r\n" : lines[h].endsWith("\n") ? "\n" : eol;
+  const heading =
+    `## Unreleased${eol}${eol}## v${target} — ${date}${headEol}` +
+    (empty ? `${eol}No changes were recorded for this release.${eol}` : "");
+  return { next: lines.slice(0, h).join("") + heading + lines.slice(h + 1).join(""), date };
+}
+
+checkChangelog("before");
+
 // --- test gate --------------------------------------------------------------
 // Refuse to release an untested tree (task 0256). There is deliberately no
 // warn-and-continue path: a red suite exits 1.
@@ -221,7 +331,7 @@ if (bumpTo !== null) {
 // `git add -A` below. Both read the working tree — so gating here tests the
 // tree as it stood when the suite started, uncommitted and untracked work
 // included. NOT the exact committed bytes: the bump below writes VERSION and
-// package.json after the suite, and ~6 min separate this gate from
+// package.json after the suite, and 10+ min separate this gate from
 // `git add -A`. That is the point: CI cannot cover this, it never sees the tree.
 function runTests() {
   const npmBin = process.platform === "win32" ? "npm.cmd" : "npm";
@@ -238,7 +348,7 @@ function runTests() {
 
 if (doTest) {
   // stdio: "inherit" so the suite streams live — 5+ minutes of silence reads as a hang.
-  console.log(`\n• running \`npm test\` before release v${target} (~6 min; includes prove-red.sh)`);
+  console.log(`\n• running \`npm test\` before release v${target} (10+ min; includes prove-red.sh)`);
   runTests();
   console.log(`✓ npm test green\n`);
 } else {
@@ -272,6 +382,11 @@ if (nowOn !== onBranch) {
   );
 }
 
+// --- CHANGELOG.md, read AGAIN (task 0479) -----------------------------------------------------------
+// A fresh read, not the pre-gate one: an edit made during the gate is kept. A refusal here is still a
+// clean abort — nothing below has run yet. `null`: a non-bumping run found its v<target> section.
+const stamp = checkChangelog("after");
+
 if (target !== version) {
   step(`bump version ${version} → ${target} (VERSION + package.json)`);
   version = target;
@@ -282,6 +397,12 @@ if (target !== version) {
   }
 } else {
   step(`release current version ${version} (no bump)`);
+}
+if (stamp) {
+  step(`stamp CHANGELOG.md: ## Unreleased → ## v${version} — ${stamp.date}`);
+  if (!dryRun) writeFileSync(changelogPath, stamp.next); // 0479: the one CHANGELOG.md write
+} else {
+  step(`changelog: CHANGELOG.md already has a v${version} section — left as is`);
 }
 const versionChanged = version !== originalVersion;
 
@@ -310,9 +431,9 @@ if (doTag && (localTagExists || remoteTagExists)) {
 // 1. stage + commit (only if there is something to commit)
 let willCommit;
 if (dryRun) {
-  // Would `git add -A` stage anything? In dry-run the bump isn't written yet,
-  // so fold in the pending version change explicitly.
-  willCommit = status.length > 0 || versionChanged;
+  // Would `git add -A` stage anything? In dry-run the bump and the CHANGELOG.md
+  // stamp aren't written yet, so fold in both pending changes explicitly.
+  willCommit = status.length > 0 || versionChanged || stamp !== null;
 } else {
   git(["add", "-A"], { quiet: true });
   willCommit = git(["diff", "--cached", "--quiet"], { check: false, quiet: true }).status === 1;

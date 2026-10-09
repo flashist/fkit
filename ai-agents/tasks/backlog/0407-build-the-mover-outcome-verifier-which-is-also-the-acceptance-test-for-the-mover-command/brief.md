@@ -46,6 +46,8 @@ fkit-coder
 > paranoid: commit `331f298` wrote the wrong status into 3 of ~80 done briefs and nobody noticed for two
 > months (decision document §6).
 >
+> ⏱ 2026-10-05, on task 0472's owner ruling R6 (2026-10-02): corrected — `331f298` did not write these statuses (pure renames); the `🔲 Backlog` dated from each brief's creation and was not updated at close (`0014` was created inside `done/`), unnoticed 64–70 days. D8 is unchanged. See the correction note under ADR-052's `331f298` bullet.
+>
 > *Re-scoped by a spawned `fkit-producer` with no owner channel (ADR-021). Status unchanged (`🔲 Backlog`).
 > The folder name keeps its original slug — ids and folders are permanent (ADR-029).*
 

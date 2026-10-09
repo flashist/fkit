@@ -41,7 +41,8 @@ git rather than a shared runtime state:
   routing remit ("who do I need?", wiki questions, one-off `@role` consults). This reverses its old
   router-only "does no work itself" stance
   ([`ADR-031`](decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)): it now conducts
-  the team, but as a conductor, never a performer — it still writes no source and runs no reviews.
+  the team, but as a conductor, never a performer — it still writes no source, runs no reviews, and
+  does no diagnosis — a code-level 'why' goes to a spawned coder.
 
 **Sessions are role-locked** ([`ADR-010`](decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)):
 `fkit <role>` pins a session to that role's prompt and only its own skills — every other `/fkit-*`
@@ -87,8 +88,9 @@ concerns, and identified risks — is in
 - **Single runtime: Claude Code native + Codex** (per
   [`ADR-009`](decisions/adr-009-claude-code-native-is-the-only-runtime.md), which **removed** the
   Omnigent flavor and supersedes ADR-008's dual-runtime decision). No second runtime is maintained and
-  no third is targeted. **Codex is required**, not optional — it is what makes the reviewer's second
-  opinion genuinely model-diverse.
+  no third is targeted. **Codex is optional but recommended** — it is what makes the reviewer's second
+  opinion genuinely model-diverse; without it, that opinion falls back to Claude only, loudly flagged as
+  not model-diverse ([`ADR-054`](decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md), amending ADR-009 §2).
 - **Role boundaries: structural in a session and in a consult; the rest is prompt-enforced.** Per
   [`ADR-010`](decisions/adr-010-role-locked-sessions-and-skill-lockdown.md), a `fkit <role>` session
   is locked by the harness — a `PreToolUse` skill-ownership hook that denies every non-owned `/fkit-*`

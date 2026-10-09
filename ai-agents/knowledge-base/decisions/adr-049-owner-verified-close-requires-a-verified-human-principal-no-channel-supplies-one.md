@@ -3,6 +3,7 @@
 - **Status:** `accepted` — **signed by the owner on 2026-09-18** (see *§Authority*, ruling 3). He had
   already ruled on the **content** (ruling 2); the signature puts it in force. The two items in
   *§Open questions* remain **his and unanswered**, and he was told so before signing.
+  ⏱ *2026-10-05: OQ-1 and OQ-2 since resolved by ADR-052 — see the note in §Open questions.*
 - **Date:** 2026-09-18. ⚠️ **Decision REVISED the same day**, after `fkit-external-expert`'s verdict
   landed and the owner ruled for the expert's content. The pre-verdict Decision is **not deleted** — it
   is preserved, with its reasoning intact, in *§Option F — considered and NOT taken*.
@@ -248,12 +249,15 @@ that has held … The three famous defects were born wrong in one bulk migration
 since."* **That supports Codex's item 6** (the drift evidence condemns the checker's coverage, not
 redundancy) **and weakens an argument `fkit-architect` carried.** It is recorded, not softened.
 
+⏱ **Correction, 2026-10-05 — on task 0472's owner ruling R6 (2026-10-02); the quote stays verbatim.** The quoted claim "born wrong in one bulk migration" is wrong: in that migration (`331f298`) all three briefs (`0014`, `0021`, `0041`) were pure renames (R100, content unchanged). Their `🔲 Backlog` dated from each brief's creation (`54abc8f`, `e9c8575`, `cd19aef`) and was not updated at close (`0014` was created inside `done/`); nothing caught it for 64–70 days. C5's measurements and its conclusion stand; they never depended on the cause.
+
 ⭐ **Reproduced, and the scripts are preserved.** The audit scripts were re-run by the expert from
-their preserved location — `ai-agents/tasks/backlog/0404-evaluate-aiboard-…/assets/external-expert-spike/`,
+their preserved location — `ai-agents/tasks/done/0404-evaluate-aiboard-…/assets/external-expert-spike/`,
 whose README is headed *"THROWAWAY SPIKE — a demonstration, not a component"* — and **reproduced these
 results exactly**: 516 status-led rows, 113 of them `➡️`, **0 disagreements of 403**, and no-live-row on
 exactly `0004` and `0014`. ⚠️ **Cost flagged with the move, so it is not lost:** that folder travels
 when task `0404` closes, and the verdict's §8 links into it — **a link a future mover must repoint.**
+⏱ *Repointed 2026-10-05 (task 0472): `0404` has closed; the path above now names `done/`, and the verdict's §8 link already pointed there. The "future mover must repoint" warning is discharged.*
 
 ⚠️ **Two limits on it, so it is not over-read either:**
 - It is **one run of one model** on one tree on one day; the expert flags its own bias (*§6*: *"I have
@@ -733,6 +737,8 @@ rather than the questions being quietly dropped.**
   — and fkit **already has** a terminal view (`/fkit-status`, 1,687 lines) that you were using when you
   raised the complaint. **Which audience governs?**
 
+> ⏱ **Resolved, 2026-10-05 — on task 0472's owner ruling R2 (2026-09-30).** OQ-1 and OQ-2 are **resolved by [ADR-052](adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md)**. Both arose from C4, which ADR-052 drops: aiboard merges into fkit as `board/` (ADR-052 R7, D1). So there is no separate aiboard core to draw OQ-1's line in, and no "no fkit and no framework at all" audience for OQ-2 to weigh. ADR-052 keeps both views: the web page (D1) and aiboard's terminal kanban view, ported as is (D4). The questions' text above is unchanged.
+
 **Closed, with the reason:**
 
 - **OQ-3 — interim posture — CLOSED.** It asked whether to serve read-only now or keep writes enabled
@@ -773,9 +779,10 @@ rather than the questions being quietly dropped.**
   `Write`, `MultiEdit` or `Bash`**, and emits **no `permissions.deny`** — so **no hook in fkit can see
   a file write into `done/` or an edit to a `## Status` line.** [M✓]
 - ⭐ **The preserved audit spike:**
-  `ai-agents/tasks/backlog/0404-evaluate-aiboard-…/assets/external-expert-spike/` — the scripts behind
+  `ai-agents/tasks/done/0404-evaluate-aiboard-…/assets/external-expert-spike/` — the scripts behind
   C5's figures, reproduced from that location. ⚠️ **It moves when `0404` closes; repoint inbound links
   (this one and the verdict's §8) at that point.**
+  ⏱ *Repointed 2026-10-05 (task 0472) — discharged.*
 - `adr-021-askuserquestion-is-session-only-absent-in-consults.md` — the session-only owner channel that
   **option F depended on**, and the reason this ADR returns open questions instead of asking them.
 - `adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged.md` — the consent-gate

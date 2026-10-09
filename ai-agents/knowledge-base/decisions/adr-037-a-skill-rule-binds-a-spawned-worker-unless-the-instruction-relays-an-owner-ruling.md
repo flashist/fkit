@@ -23,6 +23,11 @@
   (do not follow it). No existing line of this ADR was edited; the note is an append, and the Status
   stays `accepted`. ⛔ **§5's adjacent *"only that the clauses exist in their files"* sentence is
   narrowed by the same fact and is deliberately NOT repaired — reported as a residual inside the note.**
+  ⚠️ 2026-10-06 (`0475`) — this ADR now carries **two** dated notes: the `0205` note above, plus one
+  pointer note to ADR-055 below the §Context paragraph *"The finding that reframes the task"* (it also
+  covers the same *"one skill and one role"* phrase in §Decision 1). The site list in the first line of
+  this item is left byte-identical and is superseded by this line; the same append-only rule and the
+  same legend apply.
 
 > **Citation form (task `0160`'s ruling, applied as ADR-035 applies it).** Every rule inside a mutable
 > skill or agent file is anchored by its **step heading plus its quoted text**; line numbers appear only
@@ -113,6 +118,20 @@ ADRs"*; grounded in ADR-032 D3/D7 and ADR-031's honesty clause. Its accepted cos
 file: ***"This is trust, not proof — state it, do not harden it into a false guarantee."***
 
 That is exactly the shape this ADR generalizes. **The work here is generalization, not invention.**
+
+> ⚠️ **Dated pointer note 2026-10-06 (`0475`) — the coder's marker now has two drivers, not one skill;
+> read [ADR-055](adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md).**
+> The paragraph above, and the same *"one skill and one role"* phrase in §Decision 1, are **left
+> byte-identical** as the record of 2026-08-02; they were true then. Since ADR-055 (owner ruling
+> 2026-10-02) the coder's declared-approval marker may be sent by **two** drivers —
+> `fkit-sprint-ship-loop` or `fkit-lead` as conductor — with four fields, and on the lead path the
+> owner's approval quoted verbatim with date and channel. The carve-out in `claude/agents/fkit-coder.md`
+> is found under §Mode, *"A second scoped exception"*; its heading may no longer name the sprint loop
+> alone. **What this means for this ADR:** the coder's refusal is an agent-prompt rule, not a skill rule,
+> and ADR-055 is the **standing, named owner ruling on that exact point** — so a correctly marked spawn
+> departs from no rule and needs no per-spawn named-ruling argument under §Decision 1. Tier 1 is
+> untouched. **Why ⚠️ and not ⛔:** nothing this ADR decided is overturned; the instance it generalized
+> from gained a second driver. **Status stays `accepted`.**
 
 ### The *"direct your work"* tension, faced by name
 

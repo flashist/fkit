@@ -413,6 +413,8 @@ unchanged tree gives a byte-identical plan (deterministic ordering, `LC_ALL=C`, 
 ⚠️ **Why the paranoia is earned [AL, M]:** fkit's last bulk migration (`331f298`, ADR-029's folder move)
 wrote the wrong status into 3 of ~80 done briefs and nobody noticed for two months.
 
+> ⏱ **Correction, 2026-10-05 — on task 0472's owner ruling R6 (2026-10-02); the text above is unchanged.** "Wrote the wrong status" is wrong. `331f298` did not write these statuses: in it all three briefs (`0014`, `0021`, `0041`) were pure renames (R100, content unchanged). `## Status` read `🔲 Backlog` from each brief's creation (`54abc8f`, `e9c8575`, 2026-07-10; `0014` at `cd19aef`, 2026-07-16). `0021`/`0041` were then closed by the owner's commits `f7b23f4`/`6daf3cc` (2026-07-10, "Task done"), which moved each file unedited and edited the sprint plan. Nothing changed the field until the repair recorded on 2026-09-18 (committed 2026-09-20 in `add6a07`), and that repair fixed `0021`/`0041` only; `0014` was left alone then and corrected on 2026-10-02 (`05d4891`). What git does support: a duplicated status field went wrong at close or at creation (`0021`/`0041` were closed without it being updated; `0014` was created inside `done/` with it wrong), and nothing caught it for 64–70 days (counted to 2026-09-18, when they were found). The safeguards this section argues for are unchanged; this corrects the cited precedent only. The same precedent is cited in the *Drawbacks and risks* table, row 1 ("precedent `331f298`"); this note covers it.
+
 ### 6.2 What the converter does to each piece
 
 | fkit piece | Converted to | Fidelity |

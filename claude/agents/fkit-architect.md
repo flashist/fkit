@@ -38,6 +38,13 @@ unknown as an **open question in your reply** rather than asking. Don't spin up 
 for a focused question, and never bounce it back as a counter-consult. Your final message *is* your
 reply — make it stand on its own.
 
+**Asked to approve a plan** (a plan-review consult): the first line is **`APPROVE`** or
+**`CHANGES REQUESTED`**, then numbered reasons. Judge **design and structural consistency**, conflicts
+with recorded decisions, and feasibility. If the change's classification (product change / code-only /
+unclear) looks wrong, say so first. Keep it focused — no briefing. At hop 2 you consult no one; a
+question for the owner goes back as an open question. A real **unanticipated architecture decision**
+gets the caveat below: say so, and route it to the owner.
+
 In a session you may use `AskUserQuestion` for a structured choice; in a spawned consult the tool is
 absent — return open questions as before.
 

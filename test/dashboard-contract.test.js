@@ -4219,3 +4219,330 @@ test('0409/escaped-pipe: a GFM-escaped pipe in the title survives the trim, stil
   assert.equal(rowCells(row).length, 8, 'six cells plus the two empty ends — no field shifting');
   assert.equal(rowCells(row)[4], '[`a.md`](../tasks/backlog/0001-a/brief.md)', 'the link stays in Filename');
 });
+
+// --- 0492: `drift depends-on-later-sprint` — a sprint row that waits on work this sprint cannot count on
+//
+// The incident: a consuming project's Sprint-7 row was re-pointed at a verify task filed on Sprint 8, and
+// 5 more rows waited behind it. No tool said so. The record makes it VISIBLE; it never blocks anything,
+// and it never changes the row's Next step (it is a scheduling finding, not disagreement).
+//
+// Folder IDs come from `foldBriefsAndPlan`'s insertion order, so a `Depends on:` line names `0001`…
+// directly. Every fixture renders `sprint-<n>.md` from a `sprints/` dir that also holds the OTHER boards,
+// because the blocker's sprint status is read from its own board's line-3 banner.
+//
+// ⚠️ PROVE-RED: only the POSITIVE cases (P1–P7, and the SKILL.md wording pin) fail on the old script.
+// The negative cases pass on it by definition — no record was ever emitted — so they prove nothing about
+// the change on their own; they pin that the new check stays quiet where the §2 table says it must.
+
+const LATER = (out) => facts(out).filter((f) => f.startsWith('drift depends-on-later-sprint '));
+const lsRow = (slug, status = '🔲 Backlog', pr = 1, board = 'backlog') =>
+  `| ${status} | ${pr} | ${slug} | [\`${slug}.md\`](../tasks/${board}/${slug}.md) |`;
+const dependsOn = (text) => `\n## Notes\n\n- **Depends on:** ${text}\n`;
+function lsRender({ rows, briefs, n = '1', banner = BANNER.inprogress, others = {} }) {
+  const name = n === 'backlog' ? 'backlog.md' : `sprint-${n}.md`;
+  const title = n === 'backlog' ? '# Backlog — unsprinted' : `# Sprint ${n} — T`;
+  const { planPath } = sprintsFixture({
+    plans: { [name]: plan(rows, { title, banner: n === 'backlog' ? null : banner }), ...others },
+    briefs,
+  });
+  const r = run(planPath(name));
+  assert.equal(r.code, 0, `render failed: ${r.err}`);
+  return r;
+}
+const board = (n, banner) => ({ [`sprint-${n}.md`]: prosePlan(`# Board ${n}`, banner) });
+
+test('0492/P1: an open row waiting on an open task of a not-started sprint — one record, row renders, roll-up names it', () => {
+  const r = lsRender({
+    rows: [lsRow('dep')],
+    briefs: {
+      'backlog/dep.md': brief({ title: 'Dep', extra: dependsOn('0002 (the verify task).') }),
+      'backlog/blk.md': brief({ title: 'Blk', sprint: 'Sprint 2' }),
+    },
+    others: board(2, BANNER.backlog),
+  });
+  assert.deepEqual(LATER(r.out),
+    ['drift depends-on-later-sprint 0001 blocker="0002" blocker_sprint="Sprint 2" reason="not-started"']);
+  const row = boardRows(r.out).find((l) => l.includes('0001-dep/brief.md'));
+  assert.ok(row, 'the dependent row renders');
+  assert.ok(row.endsWith('| ⟨derive: 0002 (the verify task).⟩ |'), `Next step is untouched: ${row}`);
+  assert.match(rollup(r.out), /drift on tasks 0001 — see above\.$/);
+});
+
+test('0492/P2: the blocker sits on the Backlog board → `backlog-board`', () => {
+  const r = lsRender({
+    rows: [lsRow('dep')],
+    briefs: {
+      'backlog/dep.md': brief({ title: 'Dep', extra: dependsOn('0002.') }),
+      'backlog/blk.md': brief({ title: 'Blk', sprint: 'Backlog' }),
+    },
+  });
+  assert.deepEqual(LATER(r.out),
+    ['drift depends-on-later-sprint 0001 blocker="0002" blocker_sprint="Backlog" reason="backlog-board"']);
+});
+
+test('0492/P3: `later-sprint` — both sprints in progress and the blocker higher; both not started and the blocker higher', () => {
+  for (const banner of [BANNER.inprogress, BANNER.backlog]) {
+    const r = lsRender({
+      banner,
+      rows: [lsRow('dep')],
+      briefs: {
+        'backlog/dep.md': brief({ title: 'Dep', extra: dependsOn('0002.') }),
+        'backlog/blk.md': brief({ title: 'Blk', sprint: 'Sprint 2' }),
+      },
+      others: board(2, banner),
+    });
+    assert.deepEqual(LATER(r.out),
+      ['drift depends-on-later-sprint 0001 blocker="0002" blocker_sprint="Sprint 2" reason="later-sprint"'],
+      `board banner ${banner}`);
+  }
+});
+
+test('0492/P4: `sprint-closed` and the loud `sprint-unresolved` fallback', () => {
+  const cases = [
+    { name: 'blocker sprint ✅', sprint: 'Sprint 2', others: board(2, BANNER.done), want: ['Sprint 2', 'sprint-closed'] },
+    { name: 'blocker sprint ⛔', sprint: 'Sprint 2', others: board(2, BANNER.cancelled), want: ['Sprint 2', 'sprint-closed'] },
+    { name: 'no board for the sprint', sprint: 'Sprint 2', others: {}, want: ['Sprint 2', 'sprint-unresolved'] },
+    { name: 'malformed banner', sprint: 'Sprint 2', others: board(2, '> ## 🔄 In progress'), want: ['Sprint 2', 'sprint-unresolved'] },
+    { name: 'no banner', sprint: 'Sprint 2', others: board(2, null), want: ['Sprint 2', 'sprint-unresolved'] },
+    { name: 'garbage ## Sprint', sprint: 'Sprint "2" (maybe)', others: board(2, BANNER.backlog), want: ["Sprint '2' (maybe)", 'sprint-unresolved'] },
+  ];
+  for (const c of cases) {
+    const r = lsRender({
+      rows: [lsRow('dep')],
+      briefs: {
+        'backlog/dep.md': brief({ title: 'Dep', extra: dependsOn('0002.') }),
+        'backlog/blk.md': brief({ title: 'Blk', sprint: c.sprint }),
+      },
+      others: c.others,
+    });
+    assert.deepEqual(LATER(r.out),
+      [`drift depends-on-later-sprint 0001 blocker="0002" blocker_sprint="${c.want[0]}" reason="${c.want[1]}"`],
+      c.name);
+  }
+});
+
+test('0492/P5: the geoconflict shape — the direct dependent, the 5 behind it (via=), and a deeper chain', () => {
+  const briefs = {
+    'backlog/a.md': brief({ title: 'A', extra: dependsOn('0002 — the verify task.') }),
+    'backlog/v.md': brief({ title: 'V', sprint: 'Sprint 2' }),
+  };
+  const rows = [lsRow('a')];
+  for (const s of ['b1', 'b2', 'b3', 'b4', 'b5']) {
+    briefs[`backlog/${s}.md`] = brief({ title: s, extra: dependsOn('0001.') });
+    rows.push(lsRow(s));
+  }
+  briefs['backlog/c.md'] = brief({ title: 'C', extra: dependsOn('0003.') });   // waits on b1
+  rows.push(lsRow('c'));
+  const r = lsRender({ rows, briefs, others: board(2, BANNER.backlog) });
+  const rec = (t, via) => `drift depends-on-later-sprint ${t} blocker="0002" blocker_sprint="Sprint 2" reason="not-started"${via ? ` via="${via}"` : ''}`;
+  assert.deepEqual(LATER(r.out), [
+    rec('0001'),
+    rec('0003', '0001'), rec('0004', '0001'), rec('0005', '0001'), rec('0006', '0001'), rec('0007', '0001'),
+    rec('0008', '0003'),
+  ]);
+  assert.match(rollup(r.out), /drift on tasks 0001, 0003, 0004, 0005, 0006, 0007, 0008 — see above\.$/);
+});
+
+test('0492/P6: soft vs hard — a soft-marked ID is skipped, a hard one is flagged, a mixed line flags only the hard ID', () => {
+  const r = lsRender({
+    rows: [lsRow('s'), lsRow('h'), lsRow('m'), lsRow('u')],
+    briefs: {
+      'backlog/s.md': brief({ title: 'S', extra: dependsOn('0005 — soft, not hard.') }),
+      'backlog/h.md': brief({ title: 'H', extra: dependsOn('0005 — hard, not soft.') }),
+      'backlog/m.md': brief({ title: 'M', extra: dependsOn('0005 (hard) and 0006 — soft.') }),
+      'backlog/u.md': brief({ title: 'U', extra: dependsOn('0006 — HARD. Not a soft-follow.') }),
+      'backlog/x.md': brief({ title: 'X', sprint: 'Sprint 2' }),
+      'backlog/y.md': brief({ title: 'Y', sprint: 'Sprint 2' }),
+    },
+    others: board(2, BANNER.backlog),
+  });
+  const rec = (t, b) => `drift depends-on-later-sprint ${t} blocker="${b}" blocker_sprint="Sprint 2" reason="not-started"`;
+  assert.deepEqual(LATER(r.out), [rec('0002', '0005'), rec('0003', '0005'), rec('0004', '0006')]);
+});
+
+// The convention's OWN canonical soft form is BI (`- **Depends on: task 0072** — soft, not hard.`), and
+// depends_raw's BI cut drops everything after the closing bold — so the mark is read through its opt-in
+// `tail` mode (owner ruling 2026-10-08, "Fix it now (Recommended)"). The tail decides soft/hard ONLY:
+// an ID that appears only after the bold is not a dependency, and the `derive` text stays the cut one.
+test('0492/P8: the canonical BI soft form is soft, its hard twin is flagged, and the tail adds no IDs', () => {
+  const bi = (text) => `\n## Notes\n\n- **Depends on: task 0005** ${text}\n`;
+  const r = lsRender({
+    rows: [lsRow('s'), lsRow('h'), lsRow('t'), lsRow('n')],
+    briefs: {
+      'backlog/s.md': brief({ title: 'S', extra: bi('— soft, not hard.') }),
+      'backlog/h.md': brief({ title: 'H', extra: bi('— hard, not soft.') }),
+      'backlog/t.md': brief({ title: 'T', extra: bi('— soft, not hard; 0006 is context, not a dependency.') }),
+      'backlog/n.md': brief({ title: 'N', extra: bi('— needed first.') }),
+      'backlog/x.md': brief({ title: 'X', sprint: 'Sprint 2' }),
+      'backlog/y.md': brief({ title: 'Y', sprint: 'Sprint 2' }),
+    },
+    others: board(2, BANNER.backlog),
+  });
+  const rec = (t) => `drift depends-on-later-sprint ${t} blocker="0005" blocker_sprint="Sprint 2" reason="not-started"`;
+  assert.deepEqual(LATER(r.out), [rec('0002'), rec('0004')]);
+  for (const t of ['0001', '0002', '0003', '0004']) {
+    assert.ok(facts(r.out).includes(`derive ${t} depends="task 0005"`),
+      `the derive text is still cut at the closing bold for ${t}: ${JSON.stringify(facts(r.out))}`);
+  }
+});
+
+test('0492/P7: a link naming the ID twice is ONE record; dates, ADR numbers and T-ids are not IDs', () => {
+  const r = lsRender({
+    rows: [lsRow('dep')],
+    briefs: {
+      'backlog/dep.md': brief({
+        title: 'Dep',
+        extra: dependsOn('[`0002`](../0002-blk/brief.md), filed 2026-09-13 under ADR-0047 (see T-023).'),
+      }),
+      'backlog/blk.md': brief({ title: 'Blk', sprint: 'Sprint 2' }),
+    },
+    others: board(2, BANNER.backlog),
+  });
+  assert.deepEqual(LATER(r.out),
+    ['drift depends-on-later-sprint 0001 blocker="0002" blocker_sprint="Sprint 2" reason="not-started"']);
+});
+
+// Review round 1, R1 (owner ruling 2026-10-08, "Whole words only (Recommended)"): `soft`/`hard` count only
+// as WHOLE words. A word that merely contains one (`software`, `Microsoft`, `harden`) decides nothing —
+// before the fix, `software` and `Microsoft` silently dropped a hard record (the quiet direction).
+test('0492/P9: soft and hard count only as whole words — `software`, `Microsoft`, `harden` decide nothing', () => {
+  const r = lsRender({
+    rows: [lsRow('a'), lsRow('b'), lsRow('c'), lsRow('d'), lsRow('e')],
+    briefs: {
+      'backlog/x.md': brief({ title: 'X', sprint: 'Sprint 2' }),
+      'backlog/a.md': brief({ title: 'A', extra: dependsOn('0001 — the software release must ship first.') }),
+      'backlog/b.md': brief({ title: 'B', extra: dependsOn('0001 (the Microsoft login fix).') }),
+      'backlog/c.md': brief({ title: 'C', extra: '\n## Notes\n\n- **Depends on: task 0001** — the software release must ship first.\n' }),
+      'backlog/d.md': brief({ title: 'D', extra: dependsOn('0001 — harden it later; soft.') }),
+      'backlog/e.md': brief({ title: 'E', extra: dependsOn('0001 — a soft-follow.') }),
+    },
+    others: board(2, BANNER.backlog),
+  });
+  const rec = (t) => `drift depends-on-later-sprint ${t} blocker="0001" blocker_sprint="Sprint 2" reason="not-started"`;
+  assert.deepEqual(LATER(r.out), [rec('0002'), rec('0003'), rec('0004')]);
+});
+
+// Review round 1, R2: the §2 table's unresolved-Nst arms. The RENDERED board's banner is malformed, so its
+// status is `unresolved` while its identity (from the H1) is still an eligible `Sprint 1`.
+//   row 7 — Mst In progress: an unresolved Nst counts as In progress (the louder direction) → later-sprint;
+//   row 6 — Mst Backlog: any Nst other than Backlog → not-started.
+test('0492/unresolved-board: an unresolved board status takes the §2 table arms rows 6 and 7 name', () => {
+  const cases = [
+    { name: 'row 7: Mst In progress, Nst unresolved', mst: BANNER.inprogress, want: 'later-sprint' },
+    { name: 'row 6: Mst Backlog, Nst unresolved', mst: BANNER.backlog, want: 'not-started' },
+  ];
+  for (const c of cases) {
+    const r = lsRender({
+      banner: '> ## 🔄 In progress',
+      rows: [lsRow('dep')],
+      briefs: {
+        'backlog/dep.md': brief({ title: 'Dep', extra: dependsOn('0002.') }),
+        'backlog/blk.md': brief({ title: 'Blk', sprint: 'Sprint 2' }),
+      },
+      others: board(2, c.mst),
+    });
+    assert.deepEqual(LATER(r.out),
+      [`drift depends-on-later-sprint 0001 blocker="0002" blocker_sprint="Sprint 2" reason="${c.want}"`], c.name);
+  }
+});
+
+// Review round 1, R2: a blocker task FOLDER with no `brief.md` is open with an empty `## Sprint`, so it lands
+// on the LOUD `sprint-unresolved` reason — never on silence.
+test('0492/no-brief: a blocker folder with no brief.md → `sprint-unresolved`, empty blocker_sprint', () => {
+  const { sprintsDir, planPath } = sprintsFixture({
+    plans: {
+      'sprint-1.md': plan([lsRow('dep')], { title: '# Sprint 1 — T', banner: BANNER.inprogress }),
+      ...board(2, BANNER.backlog),
+    },
+    briefs: { 'backlog/dep.md': brief({ title: 'Dep', extra: dependsOn('0002.') }) },
+  });
+  mkdirSync(join(sprintsDir, '..', 'tasks', 'backlog', '0002-ghost'), { recursive: true });
+  const r = run(planPath('sprint-1.md'));
+  assert.equal(r.code, 0, `render failed: ${r.err}`);
+  assert.deepEqual(LATER(r.out),
+    ['drift depends-on-later-sprint 0001 blocker="0002" blocker_sprint="" reason="sprint-unresolved"']);
+});
+
+test('0492/negatives: no record where the §2 table says none', () => {
+  const dep = (text, extra = {}) => brief({ title: 'Dep', extra: dependsOn(text), ...extra });
+  const cases = [
+    { name: 'blocker ✅, folder in done/', briefs: { 'backlog/dep.md': dep('0002.'), 'done/blk.md': brief({ title: 'B', sprint: 'Sprint 2', status: '✅ Done' }) }, others: board(2, BANNER.backlog) },
+    { name: 'blocker ✅ but still in backlog/', briefs: { 'backlog/dep.md': dep('0002.'), 'backlog/blk.md': brief({ title: 'B', sprint: 'Sprint 2', status: '✅ Done' }) }, others: board(2, BANNER.backlog) },
+    { name: 'blocker ⛔', briefs: { 'backlog/dep.md': dep('0002.'), 'cancelled/blk.md': brief({ title: 'B', sprint: 'Sprint 2', status: '⛔ Cancelled (2026-01-01) — dropped.' }) }, others: board(2, BANNER.backlog) },
+    { name: 'blocker ➡️ Moved', briefs: { 'backlog/dep.md': dep('0002.'), 'backlog/blk.md': brief({ title: 'B', sprint: 'Sprint 2', status: '➡️ Moved to [Sprint 3](../x.md)' }) }, others: board(2, BANNER.backlog) },
+    { name: 'blocker on the same sprint', briefs: { 'backlog/dep.md': dep('0002.'), 'backlog/blk.md': brief({ title: 'B', sprint: 'Sprint 1' }) } },
+    { name: 'blocker on a LOWER in-progress sprint', n: '2', briefs: { 'backlog/dep.md': dep('0002.', { sprint: 'Sprint 2' }), 'backlog/blk.md': brief({ title: 'B', sprint: 'Sprint 1' }) }, others: board(1, BANNER.inprogress) },
+    { name: 'both not started, blocker LOWER (the Q1 exemption)', n: '2', banner: BANNER.backlog, briefs: { 'backlog/dep.md': dep('0002.', { sprint: 'Sprint 2' }), 'backlog/blk.md': brief({ title: 'B', sprint: 'Sprint 1' }) }, others: board(1, BANNER.backlog) },
+    { name: 'dependent row closed', rows: [lsRow('dep', '✅ Done', 1, 'done')], briefs: { 'done/dep.md': dep('0002.', { status: '✅ Done' }), 'backlog/blk.md': brief({ title: 'B', sprint: 'Sprint 2' }) }, others: board(2, BANNER.backlog) },
+    { name: 'rendering the Backlog board', n: 'backlog', briefs: { 'backlog/dep.md': dep('0002.', { sprint: 'Backlog' }), 'backlog/blk.md': brief({ title: 'B', sprint: 'Sprint 2' }) }, others: board(2, BANNER.backlog) },
+    { name: 'depends on its own ID (brief carried from Sprint 2, so only the own-ID guard keeps it quiet)', briefs: { 'backlog/dep.md': dep('0001.', { sprint: 'Sprint 2' }) }, others: board(2, BANNER.backlog) },
+    { name: 'an ID with no task folder', briefs: { 'backlog/dep.md': dep('9999.') } },
+  ];
+  for (const c of cases) {
+    const r = lsRender({ rows: c.rows || [lsRow('dep')], briefs: c.briefs, n: c.n || '1', banner: c.banner || BANNER.inprogress, others: c.others || {} });
+    assert.deepEqual(LATER(r.out), [], `${c.name}: ${JSON.stringify(facts(r.out))}`);
+  }
+});
+
+test('0492/cycle: a dependency cycle on the board still ends, with no duplicate records', () => {
+  const r = lsRender({
+    rows: [lsRow('a'), lsRow('b')],
+    briefs: {
+      'backlog/a.md': brief({ title: 'A', extra: dependsOn('0002 and 0003.') }),
+      'backlog/b.md': brief({ title: 'B', extra: dependsOn('0001.') }),
+      'backlog/v.md': brief({ title: 'V', sprint: 'Sprint 2' }),
+    },
+    others: board(2, BANNER.backlog),
+  });
+  assert.deepEqual(LATER(r.out), [
+    'drift depends-on-later-sprint 0001 blocker="0003" blocker_sprint="Sprint 2" reason="not-started"',
+    'drift depends-on-later-sprint 0002 blocker="0003" blocker_sprint="Sprint 2" reason="not-started" via="0001"',
+  ]);
+});
+
+// A cycle through a row whose OWN brief sits on a later sprint: b waits on a (a direct record, blocker a),
+// and a waits on b. Propagation must not hand a the record "a waits on a".
+test('0492/cycle-self: propagation never produces a record whose blocker is the dependent itself', () => {
+  const r = lsRender({
+    rows: [lsRow('a'), lsRow('b')],
+    briefs: {
+      'backlog/a.md': brief({ title: 'A', sprint: 'Sprint 2', extra: dependsOn('0002.') }),
+      'backlog/b.md': brief({ title: 'B', extra: dependsOn('0001.') }),
+    },
+    others: board(2, BANNER.backlog),
+  });
+  assert.deepEqual(LATER(r.out),
+    ['drift depends-on-later-sprint 0002 blocker="0001" blocker_sprint="Sprint 2" reason="not-started"']);
+});
+
+test('0492/unparseable: a U-form line still emits `depends-unparseable` and no new record', () => {
+  const r = lsRender({
+    rows: [lsRow('dep')],
+    briefs: {
+      'backlog/dep.md': brief({ title: 'Dep', extra: '\n## Notes\n\n- **⚠️ Depends on 0002 first.**\n' }),
+      'backlog/blk.md': brief({ title: 'Blk', sprint: 'Sprint 2' }),
+    },
+    others: board(2, BANNER.backlog),
+  });
+  assert.ok(facts(r.out).some((f) => f.startsWith('drift depends-unparseable 0001 ')), JSON.stringify(facts(r.out)));
+  assert.deepEqual(LATER(r.out), []);
+});
+
+// The SKILL.md grammar list is a hand-kept mirror with no full list-vs-script test; pin the new entry and
+// its beat-6 instruction, next to a behaviour assertion, so the prose and the record cannot part silently.
+const LS_PROSE_RECORD = 'drift depends-on-later-sprint <task> blocker="…" blocker_sprint="…" reason="…" [via="…"]';
+const LS_PROSE_BEAT6 = 'It is an owner decision in beat 6 — move the dependents forward, move the blocker ' +
+  'earlier, or accept it and record why.';
+
+test('0492/skill-grammar: fkit-status lists `depends-on-later-sprint` once, with its beat-6 instruction', () => {
+  expectProseOnce('0492', 'fkit-status', LS_PROSE_RECORD);
+  expectProseOnce('0492', 'fkit-status', LS_PROSE_BEAT6);
+  const r = lsRender({
+    rows: [lsRow('dep')],
+    briefs: {
+      'backlog/dep.md': brief({ title: 'Dep', extra: dependsOn('0002.') }),
+      'backlog/blk.md': brief({ title: 'Blk', sprint: 'Backlog' }),
+    },
+  });
+  assert.equal(LATER(r.out).length, 1, behaviourBroke('0492', `no depends-on-later-sprint record: ${JSON.stringify(facts(r.out))}`));
+});

@@ -11,6 +11,10 @@
   (the two sprint-loop source-write carve-outs, recorded by task 0118), and
   [ADR-033](adr-033-task-movers-are-producer-only-reversing-adr-025.md) (Decision 3/5 close step — the
   driver spawns `@fkit-producer` to close and does **not** run the movers itself).
+  ⚠️ 2026-10-06 (`0475`): **extended, not amended**, by
+  [ADR-055](adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md) —
+  the §Amendment's declared-approval marker is now one marker sent by either driver
+  (`fkit-sprint-ship-loop` or `fkit-lead` as conductor). This loop's behaviour is unchanged.
 - **Corrections:** 2026-09-04 (`0170`, inside sweep `0357`) — this ADR carries **one** dated note
   inline, under **§Decision item 1**, and that single note covers **two** annotated sites: §Decision
   item 1's closing sentence and the **§Consequences → Positive** bullet beginning *"`fkit-task-ship-loop`
@@ -19,6 +23,16 @@
   was edited; the note is an append, and the Status stays `accepted`. ⛔ **§Amendment — 2026-07-22's
   separate *"byte-unchanged"* claim about `fkit-process-stateful-review` is a DIFFERENT subject and is
   deliberately not annotated.**
+  ⚠️ 2026-10-06 (`0475`) — this ADR now carries **three** dated notes: the `0170` note above, plus two
+  pointer notes to ADR-055 — one below §Amendment **A1** (it carries the fact) and one under **A4**'s
+  bullet ending *"without all three marker signals"*. The site list in the first line of this item is
+  left byte-identical and is superseded by this line; the same append-only rule and the same legend
+  apply.
+  ⚠️ 2026-10-06 (`0473`) — this ADR now carries **four** dated notes: the three the `0475` line above
+  lists, plus one pointer note to
+  [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md) below **§Decision item 3**
+  (*"Per-task drive sequence"*). The site list in the `0475` line is left byte-identical and is
+  superseded by this line; the same append-only rule and the same legend apply.
 - **Evidence:** [`reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md`](../reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md)
   §5 (the contract), §5.3 (the live-relay gate), §5.4 (stop conditions).
 
@@ -102,6 +116,20 @@ its first named application: a loop that ships a whole sprint. Two constraints s
    **method** → **driver runs `/fkit-task-done`** to close. Re-verify after any post-review code change
    before closing.
 
+   > ⚠️ **Dated pointer note 2026-10-06 (`0473`) — the plan step can now carry an opt-in agent review;
+   > read [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md).** This item is
+   > **left byte-identical**, and its plan-only → driver `AskUserQuestion` → implement order is
+   > unchanged. In a run started with `--plan-review` (default off, read once at run start, never carried
+   > to another run), the plan-only coder — inside that same spawn — has the plan approved by the
+   > producer and/or the architect (hop 2) under a written classification rule, at most 2 revision
+   > rounds, then has `@fkit-adversarial-reviewer` attack it on Codex. The driver presents the plan with
+   > the approvals, the changes and the Codex findings attached, and **the owner still approves last**;
+   > the only new owner touchpoint is settling a disagreement still open after round 2. The driver also
+   > writes a new `<task-folder>/plan-review.md` record, on approve and on reject. Decision 7's split and
+   > §A3's prose-enforced cost are **unchanged**; ADR-056 Decision 8 records plan review as the same
+   > trust-not-proof cost. A run without the flag behaves exactly as today. **Why ⚠️ and not ⛔:**
+   > nothing here is overturned. **Status stays `accepted`.**
+
 4. **The live owner-relay gate is the load-bearing mechanism, and it differs from ADR-024.** A worker
    surfaces a decision by **returning** it; the driver relays via `AskUserQuestion` and **blocks on a
    real owner answer** — **no timer, no guess.** This is the *opposite* of ADR-024's declined
@@ -153,6 +181,21 @@ session before the worker was spawned. **The approved plan is both the standing 
 boundary** — the Build worker implements only that plan and returns `NEEDS-DECISION` for anything outside
 it. Worker side: `claude/agents/fkit-coder.md:60-72`. Driver side (the obligation to *construct* the
 marker on **both** spawn prompts): `claude/skills/fkit-sprint-ship-loop/SKILL.md:109-115`.
+
+> ⚠️ **Dated pointer note 2026-10-06 (`0475`) — this marker is no longer sprint-loop-only; read
+> [ADR-055](adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md).**
+> A1 above is **left byte-identical** as the record of 2026-07-22. By owner ruling (2026-10-02), the
+> same marker may now be sent by **`fkit-lead` on ADR-031's conductor path** as well as by this loop.
+> ADR-055 states it once with **four** fields: (a) caller — `fkit-sprint-ship-loop` **or** `fkit-lead`;
+> (b) the approved plan verbatim, or for a small job with no plan the exact approved scope; (c) the
+> owner's approval — on the **lead** path **quoted verbatim with its date and channel**; (d) the worker
+> role, Build or Process-review only (commit and push are not covered). **This loop is unchanged:** its
+> three signals here satisfy the four fields by mapping — (c)'s channel is the live `AskUserQuestion` in
+> the driver session, its date is that session's date, and (d) is the loop step. A2's discipline and
+> worklog audit apply on the lead path too, which needs a task folder for it. A3's cost is **the same
+> cost with wider exposure**, not a new one. The coder-only scope means ADR-044's non-coder carve-outs
+> are **not** widened. **Why ⚠️ and not ⛔:** nothing in this amendment is overturned. **Status stays
+> `accepted`.**
 
 **Everything without the marker still refuses** — including **this loop's own plan-only spawn**, which
 carries no approved plan and says *write nothing yet* (`claude/agents/fkit-coder.md:89-91`). That
@@ -261,6 +304,14 @@ is `:75` — *"a finding must show it failing in practice"*). Specifically:
 - Do **not** re-raise *"a spawned coder must never write source"*. Reversed on this **one** path only.
   **Re-raise only if** a spawned coder is found writing source **without all three marker signals** — that
   is a leak of the carve-out and a real defect.
+
+  > ⚠️ **Dated pointer note 2026-10-06 (`0475`).** This trigger now reads against
+  > [ADR-055](adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md)'s
+  > **four** fields, on either driver's path: a spawned coder writing source without all of them is the
+  > leak. The bullet above is **left byte-identical**. The fact is carried by the note below §Amendment
+  > A1 — deliberately not restated here, so there is one place to keep true rather than two. **Status
+  > stays `accepted`.**
+
 - Do **not** re-raise *"(b) widened the coder's authority"* **as a settled-tradeoff complaint** — the
   owner ruled option (b) knowingly and that is not reopenable by argument. **Re-raise with either:**
   (i) a **write that actually occurred** on this path which (b) permitted and the Build carve-out would

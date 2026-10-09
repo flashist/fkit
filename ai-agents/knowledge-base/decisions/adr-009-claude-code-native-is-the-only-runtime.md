@@ -1,6 +1,6 @@
 # ADR-009: Claude Code native + Codex is the only runtime; Omnigent is removed
 
-- **Status:** accepted
+- **Status:** accepted — **Decision 2 amended by [ADR-054](adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md) (2026-10-05)**
 - **Date:** 2026-07-11
 - **Deciders:** owner (Mark Dolbyrev), with fkit-architect
 - **Supersedes:** [ADR-008](adr-008-claude-code-native-port-alongside-omnigent.md) (dual-runtime)
@@ -165,5 +165,19 @@ not merely moved — which makes it a design decision inside this one (see ADR �
 > **Checked and still landing — ⛔ not to be "corrected":** the three lines named in the second paragraph.
 >
 > **Why ⚠️ and not ⛔.** Drifted coordinates, not an overturned decision. **Status stays `accepted`.**
+
+> ⛔ **Dated amendment 2026-10-05 (`0476`) — Decision 2 is amended by
+> [ADR-054](adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md);
+> read it there.** Owner ruling 2026-10-02: Codex is **optional but recommended**; without it there is
+> no model-diverse second opinion, and the review is loudly flagged as not complete. (As shipped: the
+> reviewer's verdict is forced to `🟡 Partial review — Codex unavailable`; the adversarial reviewer's
+> own Claude pass is labelled `[claude-fallback — NOT model-diverse]`.) Overturned here: Decision 2's
+> "required … not a supported degraded mode … no longer a mode fkit offers", the rejected option "Make
+> Codex optional", the consequence "Codex becomes a required install prerequisite", and the matching
+> re-raise trigger. ⛔ **Not overturned:** Decision 2's sandbox clause (governed by ADR-042) and the
+> model-diversity aim — and everything else in this ADR stands. The text above is **left
+> byte-identical** as the record of 2026-07-11. This note sits at the end, and the Status line was
+> changed within its one line, so no line cited elsewhere moves (same reason as the `0393` note above).
+> **Status stays `accepted`.**
 
 </content>

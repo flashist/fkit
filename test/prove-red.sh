@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# FORTY mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# FORTY-THREE mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -64,8 +64,11 @@
 #  38. Make the successor ordering non-strict          → "ADR-047 successor S4:"                (task 0388)
 #  39. Name the wrong drift record in a sprint mover   → "emitter map E2:"                      (task 0388)
 #  40. Disable dashboard.sh's Task-cell trim           → "0409/elided:"                         (task 0409)
+#  41. Strip the installer variables before `sh`       → "0481/version-only"                    (task 0481)
+#  42. Disarm the empty-## Unreleased refusal          → "0479/empty-unreleased-refused"        (task 0479)
+#  43. Drop the CHANGELOG.md write                     → "0479/filled-unreleased-stamped"       (task 0479)
 #
-# ⚠️ MUTATIONS 18-22, 25 AND 26 ARE THE FIRST TO TARGET `bin/`, NOT A COPIED LAUNCHER TREE (task 0288). Their seam
+# ⚠️ MUTATIONS 18-22, 25, 26, 42 AND 43 TARGET `bin/`, NOT A COPIED LAUNCHER TREE (18-22 were the first, task 0288). Their seam
 # is FKIT_RELEASE_MJS — a SINGLE-FILE redirect (the FKIT_LAUNCHER pattern, not the whole-tree
 # FKIT_FRONTMATTER_ROOT one), because test/release-summary.test.js copies the script into a throwaway
 # git fixture of its own and runs it there, so a mutant needs no surrounding tree. The real
@@ -88,20 +91,86 @@
 # never-touch-the-real-file invariant is untouched: the mutation still only ever edits a copy under
 # $work.
 #
+# HOW TO READ A RED (task 0477). Every step block starts with `step <label>` (its printed number: 0a…0p,
+# 1…43), which points $out at that step's OWN output file. When a step fails, the next `step` call
+# copies its output to a `fkit-prove-red-kept.XXXXXX` dir under $TMPDIR (outside $work and outside the
+# repo — the trap deletes $work, and evidence must survive it) and prints `↳ kept this step's output:
+# <path>`. The final ✗ line names every failed step and the kept dir. An abnormal exit keeps the
+# running step's output as `<label>-aborted.txt`. A green run creates no kept dir at all.
+# ⚠️ ADDING A STEP? Give its block its own `step <label>` line FIRST, before any copy or no-op guard
+# (those can set fail=1). Forget it and the run_*() guard echoes "reused", failing the step loudly.
+# ⚠️ Every run_suite() step reads the LIVE ai-agents/ tree (harness.mjs derives REPO from where the test
+# file sits — only the launcher is a copy), so 0a, 0b and every run_suite() mutation see an agent
+# writing into ai-agents/ mid-run. The tests that compare two reads of that tree are written to
+# tolerate it (0477); a single read that lands on a truly inconsistent tree is still a true red.
+#
 # Exit 0 only if: real launcher green, unmutated copy green, AND each mutation reds its NAMED assertion.
 set -eu
 here="$(cd "$(dirname "$0")" && pwd)"
 repo="$(cd "$here/.." && pwd)"
 launcher="$repo/claude/fkit-claude.sh"
 work="$(mktemp -d)"
-trap 'rm -rf "$work"' EXIT
+# Per-step bookkeeping (task 0477) — see "HOW TO READ A RED" in the header. Set BEFORE the trap so
+# `set -u` can never trip inside it.
+keep=""           # the kept-output dir; created on the FIRST failure only, so a green run leaves nothing
+cur_step=""       # the label of the step now running
+failed_steps=""   # the labels of every step that failed, in order
+any_fail=0        # the run's verdict; `fail` is reset per step, so the end reads THIS
+out="$work/out/none.txt"
+mkdir "$work/out"
+
+# Copy a step's suite output OUT of $work (which the trap deletes) and say where it went. <label> <file>
+# ⚠️ OUTSIDE THE REPO ON PURPOSE: keeping evidence must never itself be a write into the ai-agents/
+# tree the suite under test reads (that concurrent-write race is what task 0477 was about).
+keep_output() {
+  if [ -z "$keep" ]; then
+    tmp="${TMPDIR:-/tmp}"
+    keep="$(mktemp -d "${tmp%/}/fkit-prove-red-kept.XXXXXX")"
+  fi
+  cp "$2" "$keep/$1.txt"
+  echo "   ↳ kept this step's output: $keep/$1.txt"
+}
+
+# Start step <label>: finish the previous one (keep its output if it failed), then point $out at this
+# step's OWN file. ⚠️ The `fail=0` reset is what lets a SECOND failing step be recognised — before task
+# 0477 `fail` only ever went 0→1 and every step overwrote one shared output file.
+step() {   # <label>
+  if [ "$fail" != 0 ]; then
+    if [ -e "$out" ]; then
+      keep_output "${cur_step:-setup}" "$out"
+    else
+      echo "   ↳ step ${cur_step:-setup} failed before its suite ran — there is no suite output to keep."
+    fi
+    failed_steps="${failed_steps:+$failed_steps }${cur_step:-setup}"
+    any_fail=1
+    fail=0
+  fi
+  cur_step="$1"
+  out="$work/out/$1.txt"
+}
+
+# On ANY non-zero exit (a `set -e` abort mid-step included), keep the current step's output if it has
+# one — as <label>-aborted.txt — before $work is removed. A normal red ends after `step end`, whose
+# output file never exists, so nothing is kept twice.
+on_exit() {
+  rc=$?
+  if [ "$rc" != 0 ] && [ -n "$cur_step" ] && [ -e "$out" ]; then
+    keep_output "$cur_step-aborted" "$out" || true
+  fi
+  rm -rf "$work"
+}
+trap on_exit EXIT
+fail=0
 # Make every copy under $work read as a source checkout → its `fkit update` exits before the network
 # installer (matches the real launcher's behavior; the harness curl-stub is the second line of defense).
 : > "$work/package.json"
 
-# Run the suite against a launcher path; echo "green"/"red" AND capture output to $out for inspection.
-out="$work/suite-output.txt"
+# Every run_*() below echoes "green"/"red" AND captures the suite's output to $out — the CURRENT step's
+# own file. ⚠️ Each first refuses to overwrite an existing $out and echoes "reused" instead (task 0477):
+# a future step added WITHOUT its own `step` call would otherwise silently overwrite another step's
+# evidence. "reused" is neither green nor red, so every baseline AND every mutation check fails loudly.
 run_suite() {   # <launcher-path>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_LAUNCHER="$1" node --test "$repo"/test/*.test.js >"$out" 2>&1; then
     echo green
   else
@@ -113,6 +182,7 @@ run_suite() {   # <launcher-path>
 # Separate from run_suite() because that file is redirected via FKIT_SKILL_OWNERSHIP_HOOK, not
 # FKIT_LAUNCHER — it tests a standalone script, not the launcher (task 43 / ADR-018; round-1 review R2).
 run_hook_suite() {   # <hook-script-path>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_SKILL_OWNERSHIP_HOOK="$1" node --test "$repo/test/skill-ownership-hook.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -123,6 +193,7 @@ run_hook_suite() {   # <hook-script-path>
 # Run ONLY the turn-completion-hook suite against a hook-script path (task 0127 / ADR-030); redirected
 # via FKIT_TURN_COMPLETION_HOOK, its own standalone-script seam (same pattern as run_hook_suite).
 run_turn_hook_suite() {   # <hook-script-path>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_TURN_COMPLETION_HOOK="$1" node --test "$repo/test/turn-completion-hook.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -133,6 +204,7 @@ run_turn_hook_suite() {   # <hook-script-path>
 # Run ONLY the AskUserQuestion-marker-hook suite against a hook-script path (task 0127 / ADR-030 path 2);
 # redirected via FKIT_ASKUQ_MARKER_HOOK, its own standalone-script seam.
 run_marker_hook_suite() {   # <hook-script-path>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_ASKUQ_MARKER_HOOK="$1" node --test "$repo/test/askuserquestion-marker-hook.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -143,6 +215,7 @@ run_marker_hook_suite() {   # <hook-script-path>
 # Run ONLY the ship-loop-marker-hook suite against a hook-script path (task 0129); redirected via
 # FKIT_SHIPLOOP_MARKER_HOOK, its own standalone-script seam.
 run_shiploop_marker_suite() {   # <hook-script-path>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_SHIPLOOP_MARKER_HOOK="$1" node --test "$repo/test/shiploop-marker-hook.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -154,6 +227,7 @@ run_shiploop_marker_suite() {   # <hook-script-path>
 # FKIT_CARRY_CHECK_HOOK, its own standalone-script seam. The .sh execs the .mjs BESIDE ITSELF, so pointing
 # this at a copied tree's .sh exercises the copy's .mjs — which is where mutations 23/24 are made.
 run_carry_check_suite() {   # <hook-script-path>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_CARRY_CHECK_HOOK="$1" node --test "$repo/test/carry-check-hook.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -165,6 +239,7 @@ run_carry_check_suite() {   # <hook-script-path>
 # FKIT_FRONTMATTER_ROOT, its own tree seam. Unlike the hook seams above this points at a whole
 # directory, not one script — the suite audits every skills/*/SKILL.md and agents/*.md under it.
 run_frontmatter_suite() {   # <claude-tree-root>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_FRONTMATTER_ROOT="$1" node --test "$repo/test/skill-frontmatter.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -176,6 +251,7 @@ run_frontmatter_suite() {   # <claude-tree-root>
 # FKIT_WIKI_FLAG_ROOT, its own tree seam. Like run_frontmatter_suite() this points at a whole
 # directory, not one script — the suite reads three named skills/fkit-wiki-*/SKILL.md files under it.
 run_wiki_flag_suite() {   # <claude-tree-root>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_WIKI_FLAG_ROOT="$1" node --test "$repo/test/wiki-flag-convention.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -187,6 +263,7 @@ run_wiki_flag_suite() {   # <claude-tree-root>
 # for the same reason as FKIT_WIKI_FLAG_ROOT: two SKILL.md files are read, and the suite's T0 walks
 # the skills directory to prove the mover roster is complete.
 run_mover_step_suite() {   # <claude-tree-root>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_MOVER_STEP_ROOT="$1" node --test "$repo/test/mover-exemption-step.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -201,6 +278,7 @@ run_mover_step_suite() {   # <claude-tree-root>
 # copy (delete / add / alter / plant-under-a-prune-point), so the live tree needs no seam at all and a
 # stale env var can never redirect fkit's own working tree.
 run_parity_suite() {   # <scaffold-home-root>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_PARITY_SCAFFOLD_ROOT="$1" node --test "$repo/test/dual-home-parity.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -215,6 +293,7 @@ run_parity_suite() {   # <scaffold-home-root>
 # script by construction. Deliberately NOT exported: FKIT_LAUNCHER must stay unset here, or the copy's
 # harness would announce and use some other launcher (harmless for this suite, misleading in the log).
 run_dashboard_suite() {   # <repo-copy-root>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if node --test "$1/test/dashboard-contract.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -230,6 +309,7 @@ run_dashboard_suite() {   # <repo-copy-root>
 # rather than passing). That is fine for this gate: the assertion the mutation targets lives in the
 # hermetic os.tmpdir() git fixture, which the copy builds for itself.
 run_throughput_suite() {   # <repo-copy-root>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if node --test "$1/test/throughput-counter.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -249,7 +329,21 @@ run_throughput_suite() {   # <repo-copy-root>
 # so the banner suite's own install root never inherits that source-checkout marker — which is what
 # it needs, since a source checkout skips the whole update check and would silence every case.
 run_banner_suite() {   # <claude-tree-root>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_BANNER_ROOT="$1" node --test "$repo/test/update-banner.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
+# Run ONLY the update-reinstall suite against a claude/ tree (task 0481) — run_banner_suite()'s twin,
+# for the same two reasons: that file owns its fixture (it copies the tree into an install root that
+# is NOT a source checkout, with a stub curl on a sealed PATH), so FKIT_LAUNCHER would be ignored and
+# run_suite() would report a false green. FKIT_REINSTALL_ROOT is its whole-tree seam.
+run_reinstall_suite() {   # <claude-tree-root>
+  [ ! -e "$out" ] || { echo reused; return 0; }
+  if FKIT_REINSTALL_ROOT="$1" node --test "$repo/test/update-reinstall.test.js" >"$out" 2>&1; then
     echo green
   else
     echo red
@@ -260,9 +354,13 @@ run_banner_suite() {   # <claude-tree-root>
 # FKIT_RELEASE_MJS, its own standalone-script seam — the run_hook_suite() pattern (ONE file, not a
 # tree). ⚠️ NOT run_suite(): that file is about bin/release.mjs, not the launcher, and passing
 # FKIT_LAUNCHER would leave it testing the real release.mjs and report a false green.
-# ⚠️ Each run builds sixteen throwaway git fixtures (a bare origin + a working clone each; 7× 0288,
-# 9× 0300 — 0300/mismatch-under-no-push-and-dry-run builds two), so it is the slowest seam here — ~25s. Eight runs below (baseline + seven mutants) is the cost the owner accepted.
+# ⚠️ Each run builds forty-two throwaway git fixtures (a bare origin + a working clone each; 7× 0288,
+# 9× 0300 — 0300/mismatch-under-no-push-and-dry-run builds two — and 26× 0479, where five tests build
+# several), so it is the slowest seam here — ~30s (28 s measured on the maintainer's machine, 2026-10-05).
+# Ten runs below (baseline + nine mutants) is the cost the owner accepted — eight before task 0479's
+# plan, approved 2026-10-05, added mutations 42 and 43.
 run_release_suite() {   # <release.mjs path>
+  [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_RELEASE_MJS="$1" node --test "$repo/test/release-summary.test.js" >"$out" 2>&1; then
     echo green
   else
@@ -330,11 +428,13 @@ make_repo_copy() {
 fail=0
 
 # --- 0a. Baseline: the REAL launcher must be green (todo-only) ------------------------------------
+step 0a
 printf '0a. baseline — real launcher should be green ... '
 base="$(run_suite "$launcher")"; echo "$base"
 [ "$base" = green ] || { echo "   ✗ baseline is not green; fix the suite before trusting the gate."; fail=1; }
 
 # --- 0b. An UNMUTATED full copy must ALSO be green (proves setup works from a copy) ---------------
+step 0b
 clean_copy="$(make_claude_copy claude-clean)"
 printf '0b. unmutated full copy should be green (rules out red-via-setup-failure) ... '
 cc="$(run_suite "$clean_copy")"; echo "$cc"
@@ -342,6 +442,7 @@ cc="$(run_suite "$clean_copy")"; echo "$cc"
 
 # --- 0c. An UNMUTATED copy's hook-ownership-matrix suite must ALSO be green (same reasoning as 0b,
 #     for run_hook_suite() rather than run_suite() — task 43 / ADR-018; round-1 review R2) -----------
+step 0c
 clean_hook="$(dirname "$clean_copy")/skill-ownership-hook.sh"
 printf '0c. unmutated copy hook-matrix suite should be green ... '
 hc="$(run_hook_suite "$clean_hook")"; echo "$hc"
@@ -349,18 +450,21 @@ hc="$(run_hook_suite "$clean_hook")"; echo "$hc"
 
 # --- 0d. An UNMUTATED copy's turn-completion-hook suite must ALSO be green (task 0127 / ADR-030;
 #     same reasoning as 0c, for run_turn_hook_suite()) -----------------------------------------------
+step 0d
 clean_turn_hook="$(dirname "$clean_copy")/turn-completion-hook.sh"
 printf '0d. unmutated copy turn-completion-hook suite should be green ... '
 tc="$(run_turn_hook_suite "$clean_turn_hook")"; echo "$tc"
 [ "$tc" = green ] || { echo "   ✗ an UNMUTATED copy's turn-completion suite is red — mutation 3 below would be false."; fail=1; }
 
 # --- 0e. An UNMUTATED copy's AskUserQuestion-marker-hook suite must ALSO be green (task 0127 path 2) --
+step 0e
 clean_marker_hook="$(dirname "$clean_copy")/askuserquestion-marker-hook.sh"
 printf '0e. unmutated copy marker-hook suite should be green ... '
 mc="$(run_marker_hook_suite "$clean_marker_hook")"; echo "$mc"
 [ "$mc" = green ] || { echo "   ✗ an UNMUTATED copy's marker-hook suite is red — mutation 5 below would be false."; fail=1; }
 
 # --- 0f. An UNMUTATED copy's ship-loop-marker-hook suite must ALSO be green (task 0129) --------------
+step 0f
 clean_shiploop_hook="$(dirname "$clean_copy")/shiploop-marker-hook.sh"
 printf '0f. unmutated copy ship-loop-marker-hook suite should be green ... '
 sc="$(run_shiploop_marker_suite "$clean_shiploop_hook")"; echo "$sc"
@@ -369,6 +473,7 @@ sc="$(run_shiploop_marker_suite "$clean_shiploop_hook")"; echo "$sc"
 # --- 0g. An UNMUTATED copy's skill-frontmatter suite must ALSO be green (task 0136; same reasoning
 #     as 0b — without this, a red below could be red-via-setup and would prove nothing). The root is
 #     the copied claude/ tree itself, which is what $clean_copy sits inside. -------------------------
+step 0g
 clean_tree="$(dirname "$clean_copy")"
 printf '0g. unmutated copy skill-frontmatter suite should be green ... '
 fc="$(run_frontmatter_suite "$clean_tree")"; echo "$fc"
@@ -378,6 +483,7 @@ fc="$(run_frontmatter_suite "$clean_tree")"; echo "$fc"
 #     and 0g — without this, a red below could be red-because-the-copy-is-broken and would prove
 #     nothing). Note this also proves `cp -R` of the scaffold home is faithful: if the copy dropped a
 #     file, mutation 10's red would be indistinguishable from a copy artifact. -----------------------
+step 0h
 clean_scaffold="$(make_scaffold_copy scaffold-clean)"
 printf '0h. unmutated copy of the scaffold home should be green ... '
 pc="$(run_parity_suite "$clean_scaffold")"; echo "$pc"
@@ -387,6 +493,7 @@ pc="$(run_parity_suite "$clean_scaffold")"; echo "$pc"
 #     and 0h). This one carries EXTRA weight: it is the only proof that the copy-root seam works at
 #     all. If `test/` and `claude/` did not land side by side, the copied test would resolve some other
 #     path, and mutation 14's red would be red-because-the-copy-is-wrong. ---------------------------
+step 0i
 clean_repo="$(make_repo_copy repo-clean)"
 printf '0i. unmutated repo copy dashboard suite should be green ... '
 dc="$(run_dashboard_suite "$clean_repo")"; echo "$dc"
@@ -394,6 +501,7 @@ dc="$(run_dashboard_suite "$clean_repo")"; echo "$dc"
 
 # --- 0j. An UNMUTATED copy's update-banner suite must ALSO be green (task 0257; same reasoning as 0b
 #     and 0g). The root is the copied claude/ tree — the same $clean_tree 0g uses. ------------------
+step 0j
 printf '0j. unmutated copy update-banner suite should be green ... '
 bc="$(run_banner_suite "$clean_tree")"; echo "$bc"
 [ "$bc" = green ] || { echo "   ✗ an UNMUTATED copy's banner suite is red — mutations 16/17 below would be false."; fail=1; }
@@ -402,16 +510,17 @@ bc="$(run_banner_suite "$clean_tree")"; echo "$bc"
 #     0h — without this, a red below could be red-because-the-copy-is-broken and would prove nothing).
 #     ⚠️ THAT IS ALL IT PROVES. It is NOT proof that FKIT_RELEASE_MJS is honoured: if the env var were
 #     ignored, 0k would read the REAL release.mjs, which is green too, so 0k cannot tell "honoured"
-#     from "ignored" either way. What proves the seam is honoured is mutations 18-22, 25 and 26 going
+#     from "ignored" either way. What proves the seam is honoured is mutations 18-22, 25, 26, 42 and 43 going
 #     RED — they only can if the suite actually read the mutated copy. The same reasoning the other way
 #     is what makes those mutations load-bearing: if the env var were ignored, every one of them would
-#     run against the REAL release.mjs, all seven would come back green, and the gate would report seven
-#     disarmed mutations as seven failures to catch — or, worse, a later refactor could make them pass
+#     run against the REAL release.mjs, all nine would come back green, and the gate would report nine
+#     disarmed mutations as nine failures to catch — or, worse, a later refactor could make them pass
 #     for the wrong reason. ---------------------------------------------------------------------------
+step 0k
 clean_release="$(make_release_copy release-clean)"
 printf '0k. unmutated copy of bin/release.mjs should be green ... '
 rlc="$(run_release_suite "$clean_release")"; echo "$rlc"
-[ "$rlc" = green ] || { echo "   ✗ an UNMUTATED release.mjs copy is red — mutations 18-22, 25 and 26 below would be false."; fail=1; }
+[ "$rlc" = green ] || { echo "   ✗ an UNMUTATED release.mjs copy is red — mutations 18-22, 25, 26, 42 and 43 below would be false."; fail=1; }
 
 # --- 0l. An UNMUTATED copy's carry-check-hook suite must ALSO be green (task 0204; same reasoning as
 #     0f — without this, a red below could be red-because-the-copy-is-broken and would prove nothing).
@@ -423,6 +532,7 @@ rlc="$(run_release_suite "$clean_release")"; echo "$rlc"
 #     two load-bearing: if either seam failed, mutations 23/24 would run against the real hook, come
 #     back green, and the gate would report them as two failures to
 #     catch. -------------------------------------------------------------------------------------------
+step 0l
 clean_carry_hook="$(dirname "$clean_copy")/carry-check-hook.sh"
 printf '0l. unmutated copy carry-check-hook suite should be green ... '
 kc="$(run_carry_check_suite "$clean_carry_hook")"; echo "$kc"
@@ -435,6 +545,7 @@ kc="$(run_carry_check_suite "$clean_carry_hook")"; echo "$kc"
 #     "honoured" from "ignored" either way. What proves the seam is honoured is mutations 27 and 28
 #     going RED — they only can if the suite actually read the mutated copy. The root is $clean_tree,
 #     the same copied claude/ tree 0g and 0j use. ---------------------------------------------------
+step 0m
 printf '0m. unmutated copy wiki-flag-convention suite should be green ... '
 wc_="$(run_wiki_flag_suite "$clean_tree")"; echo "$wc_"
 [ "$wc_" = green ] || { echo "   ✗ an UNMUTATED copy's wiki-flag suite is red — mutations 27/28 below would be false."; fail=1; }
@@ -444,6 +555,7 @@ wc_="$(run_wiki_flag_suite "$clean_tree")"; echo "$wc_"
 #     SPECIFIC WAY TO BE BROKEN: the copy has no `.git`, so the suite's pinned-baseline and
 #     live-corpus tests SKIP there. They are written to skip loudly rather than pass silently, and a
 #     skip does not red a suite — so this check confirms the OTHER 23 tests really ran. -------------
+step 0n
 printf '0n. unmutated repo copy throughput suite should be green ... '
 tp_="$(run_throughput_suite "$(make_repo_copy repo-clean-throughput)")"; echo "$tp_"
 [ "$tp_" = green ] || { echo "   ✗ an UNMUTATED copy's throughput suite is red — mutation 29 below would be false."; fail=1; }
@@ -455,9 +567,19 @@ tp_="$(run_throughput_suite "$(make_repo_copy repo-clean-throughput)")"; echo "$
 #     tell "honoured" from "ignored" either way. What proves the seam is honoured is mutations 33 and
 #     34 going RED — they only can if the suite actually read the mutated copy. The root is
 #     $clean_tree, the same copied claude/ tree 0g, 0j and 0m use. -----------------------------------
+step 0o
 printf '0o. unmutated copy mover-exemption-step suite should be green ... '
 mx_="$(run_mover_step_suite "$clean_tree")"; echo "$mx_"
 [ "$mx_" = green ] || { echo "   ✗ an UNMUTATED copy's mover-exemption-step suite is red — mutations 33-35 below would be false."; fail=1; }
+
+# --- 0p. An UNMUTATED copy's update-reinstall suite must ALSO be green (task 0481; same reasoning as
+#     0j — without this, mutation 41's red could be red-because-the-copy-is-broken). ⚠️ THAT IS ALL IT
+#     PROVES: if FKIT_REINSTALL_ROOT were ignored, 0p would read the real claude/ tree, green too. What
+#     proves the seam is honoured is mutation 41 going RED. The root is $clean_tree, as for 0j. -------
+step 0p
+printf '0p. unmutated copy update-reinstall suite should be green ... '
+ri_="$(run_reinstall_suite "$clean_tree")"; echo "$ri_"
+[ "$ri_" = green ] || { echo "   ✗ an UNMUTATED copy's reinstall suite is red — mutation 41 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -473,6 +595,7 @@ mx_="$(run_mover_step_suite "$clean_tree")"; echo "$mx_"
 # So: anchor on the `reviewer)` arm and delete ONLY the `fkit-review` token from it. Adding, removing
 # or reordering any other skill cannot break this. The post-condition below is the real guard —
 # it FAILS THE RUN if the mutation was a no-op, so this can never again silently prove nothing.
+step 1
 m1="$(make_claude_copy claude-mutant-skills)"
 m1_lib="$(dirname "$m1")/skills-for-role.sh"
 cp "$m1_lib" "$m1_lib.orig"
@@ -496,6 +619,7 @@ elif ! grep -Eq '(✖|not ok|fail).*reviewer × fkit-review' "$out"; then
 fi
 
 # --- Mutation 2: restore the --resume passthrough → assertion 2 red -------------------------------
+step 2
 m2="$(make_claude_copy claude-mutant-resume)"
 sed -i.bak 's/^  exit 2$/  : # mutation: passthrough restored (was: exit 2)/' "$m2"
 printf '2. restored --resume passthrough — assertion 2 (--resume) should go RED ... '
@@ -509,6 +633,7 @@ fi
 # --- Mutation 3: disable check B (force "What's next?" always-present) → the "B missing -> block"
 #     assertion in turn-completion-hook.test.js must go red (task 0127 / ADR-030). Proves the Stop
 #     hook's primary, EXACT check is actually enforced by the suite, not merely present. -------------
+step 3
 m3="$(make_claude_copy claude-mutant-checkb)"
 m3_hook="$(dirname "$m3")/turn-completion-hook.sh"
 cp "$m3_hook" "$m3_hook.orig"
@@ -533,6 +658,7 @@ fi
 #     turn-completion-hook.test.js must go red (task 0127 / ADR-030 path 2). This is THE defect the
 #     path-2 rework fixed (a turn that used AskUserQuestion was being false-blocked) — pin that the
 #     suite actually catches its return. ---------------------------------------------------------------
+step 4
 m4="$(make_claude_copy claude-mutant-marker)"
 m4_hook="$(dirname "$m4")/turn-completion-hook.sh"
 cp "$m4_hook" "$m4_hook.orig"
@@ -554,6 +680,7 @@ fi
 # --- Mutation 5: the marker hook records for EVERY tool, not just AskUserQuestion → the
 #     "non-AskUserQuestion tool → writes NO marker" assertion must go red (task 0127 path 2). Proves the
 #     tool gate is actually enforced by the suite. --------------------------------------------------
+step 5
 m5="$(make_claude_copy claude-mutant-markergate)"
 m5_hook="$(dirname "$m5")/askuserquestion-marker-hook.sh"
 cp "$m5_hook" "$m5_hook.orig"
@@ -576,6 +703,7 @@ fi
 # --- Mutation 6: disable the transcript-independent ship-loop marker read (SKIP 3) → the
 #     "SKIP: a ship-loop session marker present" test must go red (task 0129). Proves the marker-based
 #     skip is actually enforced by the suite, not merely present. ---------------------------------------
+step 6
 m6="$(make_claude_copy claude-mutant-shiploop)"
 m6_hook="$(dirname "$m6")/turn-completion-hook.sh"
 cp "$m6_hook" "$m6_hook.orig"
@@ -597,6 +725,7 @@ fi
 # --- Mutation 7: remove the ship-loop-marker hook's command_name gate (writes the marker for ANY
 #     command) → the "a NON-ship-loop command → writes nothing" assertion must go red (task 0129 review
 #     R3). Proves the WRITER's self-filter — which IS the R8 fix — is load-bearing, not just the reader. -
+step 7
 m7="$(make_claude_copy claude-mutant-shiploopgate)"
 m7_hook="$(dirname "$m7")/shiploop-marker-hook.sh"
 cp "$m7_hook" "$m7_hook.orig"
@@ -620,6 +749,7 @@ fi
 #     assertion in skill-frontmatter.test.js must go red (task 0136). This is the state ALL 25 skills
 #     were in before 0136, and the shape 0123 broke by putting a colon on a continuation line. Proves
 #     the STRUCTURAL rule (R5) is actually enforced by the suite rather than merely present. ---------
+step 8
 m8_tree="$work/claude-mutant-plainscalar"
 cp -R "$repo/claude" "$m8_tree"
 m8_file="$m8_tree/skills/fkit-team/SKILL.md"
@@ -655,6 +785,7 @@ fi
 #     named assertion must go red, by a DIFFERENT violation (task 0136). This is the one hazard a
 #     block scalar does not absorb: a de-indented line still ends the scalar, silently truncating the
 #     description. fkit-sprint-ship-loop is deliberately the target — it is the file 0123 broke. -----
+step 9
 m9_tree="$work/claude-mutant-deindent"
 cp -R "$repo/claude" "$m9_tree"
 m9_file="$m9_tree/skills/fkit-sprint-ship-loop/SKILL.md"
@@ -694,6 +825,7 @@ fi
 #     a live file that was never shipped to the scaffold. A naive "for each scaffold file, compare to
 #     live" loop is structurally blind to it — there is nothing in the scaffold to iterate over — so
 #     this mutation is the one that proves the walk is over the UNION, not over one side. ------------
+step 10
 m10="$(make_scaffold_copy scaffold-mutant-missing)"
 m10_file="$m10/tasks/README.md"
 if [ ! -e "$m10_file" ]; then
@@ -714,6 +846,7 @@ fi
 # --- Mutation 11: ADD a scaffold file with no live counterpart → the SAME named assertion, by the
 #     OPPOSITE violation (task 0133; brief verification step 3). Both directions matter: a file the
 #     scaffold ships and the live tree does not have is one nobody here maintains and no test covers. -
+step 11
 m11="$(make_scaffold_copy scaffold-mutant-extra)"
 m11_rel="knowledge-base/conventions/ghost-parity-probe.md"
 if [ -e "$repo/ai-agents/$m11_rel" ]; then
@@ -738,6 +871,7 @@ fi
 #     became byte-identical to the original, and the gate reported success while proving nothing.
 #     `>>` cannot stop matching — it has no pattern. The no-op guard below is still kept, because a
 #     read-only or vanished file would make even an append a no-op. ---------------------------------
+step 12
 m12="$(make_scaffold_copy scaffold-mutant-drift)"
 m12_file="$m12/knowledge-base/conventions/task-owner-vocabulary.md"
 # ⚠️ THE EXISTENCE CHECK IS THE REAL GUARD HERE, and it is not redundant with the `cmp` below.
@@ -783,6 +917,7 @@ fi
 #     is a folder-purpose doc of the same species as `tasks/README.md` (which IS dual-homed and IS
 #     enforced). It exists live today and does not exist in the scaffold; ship it, and it lands under
 #     the blanket. Copying it into the mutant scaffold makes exactly that future real, today. --------
+step 13
 m13="$(make_scaffold_copy scaffold-mutant-tripwire)"
 m13_rel="knowledge-base/reports/README.md"
 if [ ! -e "$repo/ai-agents/$m13_rel" ] || [ -e "$repo/claude/scaffold/ai-agents/$m13_rel" ]; then
@@ -822,6 +957,7 @@ fi
 #     reverse-move row resolved to NO target and was reported `moved-without-target`. It proves the six
 #     0210 cases are load-bearing rather than merely present — the thing 0210's own plan said could not
 #     be proven here without a test-architecture change. See the header note on this mutation's seam. --
+step 14
 m14="$(make_repo_copy repo-mutant-dashboard)"
 m14_file="$m14/claude/skills/fkit-status/dashboard.sh"
 cp "$m14_file" "$m14_file.orig"
@@ -864,6 +1000,7 @@ fi
 #     stated assumption). The mutation removes the CALL, not the function: a launcher that still
 #     defines structure_notice() but never runs it is exactly the silent regression this gate exists
 #     to catch — every notice test's fixture would launch clean and quiet, green forever. ------------
+step 15
 m15="$(make_claude_copy claude-mutant-notice)"
 cp "$m15" "$m15.orig"
 sed -i.bak 's/^structure_notice || :$/: # mutation: structure notice pass removed (was: structure_notice || :)/' "$m15"
@@ -885,6 +1022,7 @@ fi
 #     assertion in update-banner.test.js must go red (task 0257). `if : ; then` makes the vA → vB
 #     branch unconditional, which is EXACTLY the pre-0257 launcher: a sha-triggered notice wearing a
 #     version label, printing "v0.2.1 → v0.2.1 is available" whenever content moved without a bump. --
+step 16
 m16="$(make_claude_copy claude-mutant-banner-guard)"
 cp "$m16" "$m16.orig"
 sed -i.bak 's/^      if \[ -n "\$rver" \] && \[ -n "\$curver" \] && \[ "\$rver" != "\$curver" \]; then$/      if : ; then # mutation: banner guard neutered/' "$m16"
@@ -908,6 +1046,7 @@ fi
 #     GitHub refuses git archive --remote), so the old line rendered a literal "v?" at the reader.
 #     This is the half of the defect the guard above does NOT cover: mutation 16 lives in the
 #     condition, this one in the branch it falls through to. -----------------------------------------
+step 17
 m17="$(make_claude_copy claude-mutant-banner-placeholder)"
 cp "$m17" "$m17.orig"
 # ⚠️ THE REPLACEMENT LINE COMES FROM A FILE, VIA getline — the mutation-14 rule. awk processes escape
@@ -959,6 +1098,7 @@ fi
 #     ⚠️ SCOPED TO THE SUMMARY BLOCK. `} else if (!doTag) {` appears TWICE in the file; the first is the
 #     execute section's skip-tag step, which 0288's fence puts out of bounds. The awk arms only after
 #     the `// --- summary ---` marker. See the header note on this mutation. -------------------------
+step 18
 m18="$(make_release_copy release-mutant-notag)"
 cp "$m18" "$m18.orig"
 awk '
@@ -1006,6 +1146,7 @@ fi
 #     MATCH. A sed would splice the matched line into itself twice, producing a syntax error rather
 #     than a mutant — every test reds, the named-assertion grep still passes, and the gate reports a
 #     broken file as a successful catch. ------------------------------------------------------------
+step 19
 m19="$(make_release_copy release-mutant-naive-guard)"
 cp "$m19" "$m19.orig"
 cat > "$work/m19-line.txt" <<'MUTANT_LINE'
@@ -1046,6 +1187,7 @@ fi
 #     TAG OBJECT sha rather than the peeled commit, so a reader cannot tell by eye either. Replacement
 #     via getline (mutation-14 rule) — the line carries backticks, `${tag}`, `^{}` and single quotes,
 #     none of which survive a sed or an `awk -v` intact. ------------------------------------------
+step 20
 m20="$(make_release_copy release-mutant-existence-check)"
 cp "$m20" "$m20.orig"
 cat > "$work/m20-line.txt" <<'MUTANT_LINE'
@@ -1087,6 +1229,7 @@ fi
 #
 #     Two lines are replaced by one (the `+` continuation goes with the tail), so getline + skip —
 #     the mutation-17 shape. ------------------------------------------------------------------------
+step 21
 m21="$(make_release_copy release-mutant-silent-fail)"
 cp "$m21" "$m21.orig"
 cat > "$work/m21-line.txt" <<'MUTANT_LINE'
@@ -1132,6 +1275,7 @@ fi
 #     both. The named-assertion check below is what this gate requires, and it holds. Mutations 18-21
 #     each leave 0288/default-released GREEN — that isolation is itself evidence the default branch is
 #     independent of the four fixes. -----------------------------------------------------------------
+step 22
 m22="$(make_release_copy release-mutant-no-headline)"
 cp "$m22" "$m22.orig"
 sed -i.bak 's/^} else if (tagCreated) {$/} else if (false) { \/\/ mutation: the released headline made unreachable/' "$m22"
@@ -1156,6 +1300,7 @@ fi
 #     .sh execs it (seam proven by 0l). Isolation: "named hash does not match the file -> deny" must stay
 #     GREEN under this mutation — the two checks are independent, and the named-assertion grep below is
 #     what this gate requires. ----------------------------------------------------------------------
+step 23
 m23="$(make_claude_copy claude-mutant-carry-paste)"
 m23_hook="$(dirname "$m23")/carry-check-hook.sh"
 m23_mjs="$(dirname "$m23")/carry-check-hook.mjs"
@@ -1179,6 +1324,7 @@ fi
 # --- Mutation 24: make the carry-check's HASH comparison always true → "named hash does not match the
 #     file -> deny" must go red (task 0204), while "truncated paste -> deny" stays GREEN (the paste check
 #     is untouched — isolation in the other direction). ---------------------------------------------
+step 24
 m24="$(make_claude_copy claude-mutant-carry-hash)"
 m24_hook="$(dirname "$m24")/carry-check-hook.sh"
 m24_mjs="$(dirname "$m24")/carry-check-hook.mjs"
@@ -1213,6 +1359,7 @@ fi
 #     0300/branch-name-shadowed-by-tag-accepted, 0300/head-moved-during-test-gate-refused (bare run),
 #     0300/unborn-head-refused-in-words (the unborn check sits above the guard) and every 0288/* test
 #     green. ---------------------------------------------------------------------------------------
+step 25
 m25="$(make_release_copy release-mutant-branch-guard)"
 cp "$m25" "$m25.orig"
 sed -i.bak 's/^if (branchArg != null && branchArg !== onBranch) {$/if (false) { \/\/ mutation: --branch guard disarmed/' "$m25"
@@ -1247,6 +1394,7 @@ fi
 #     survivor grep for a near-miss). Isolation, documented not gated (0288 R6): this mutant reds
 #     0300/head-moved-during-test-gate-refused ONLY — every other 0300/* test and every 0288/* test
 #     runs with --no-test, where HEAD cannot move between the two reads. ----------------------------
+step 26
 m26="$(make_release_copy release-mutant-head-moved)"
 cp "$m26" "$m26.orig"
 sed -i.bak 's/^if (nowOn !== onBranch) {$/if (false) { \/\/ mutation: post-gate HEAD compare disarmed/' "$m26"
@@ -1279,6 +1427,7 @@ fi
 #     load-bearing rather than incidental — a raw matcher would be red here AND on the unmutated tree,
 #     which is exactly what 0m above would catch. sync is the target because it is the copy at the
 #     smaller indent, so a red here also proves the guard is not quietly indent-sensitive. -----------
+step 27
 m27_tree="$work/claude-mutant-wikiflag-r5"
 cp -R "$repo/claude" "$m27_tree"
 m27_file="$m27_tree/skills/fkit-wiki-sync/SKILL.md"
@@ -1322,6 +1471,7 @@ fi
 #     whole reason 0154 exists — permanently unexercised in this gate. It also pins the one thing a
 #     blanket per-line strip cannot see: relative nesting. The whole block may move (that stays green,
 #     and is sync's live state); ONE item moving inside it may not. ---------------------------------
+step 28
 m28_tree="$work/claude-mutant-wikiflag-indent"
 cp -R "$repo/claude" "$m28_tree"
 m28_file="$m28_tree/skills/fkit-wiki-lint/SKILL.md"
@@ -1357,6 +1507,7 @@ fi
 #     its place only where the carry cannot fire (a shallow or grafted history, where the rename's
 #     source side was never walked), and the unit fixture is exactly that case. Mutating against the
 #     week counts instead would be a gate that proves nothing. -----------------------------------
+step 29
 m29="$(make_repo_copy repo-mutant-throughput)"
 m29_file="$m29/claude/skills/fkit-status/throughput.mjs"
 cp "$m29_file" "$m29_file.orig"
@@ -1390,6 +1541,7 @@ fi
 #     and silently deletes the second phase. Note the mutant keeps the producer phase byte-identical,
 #     so 12b/12c/12d stay GREEN — only the "then the lead" assertion moves, which is what makes this
 #     a proof about the hand-off rather than about the cold start in general. ---------------------
+step 30
 m30="$(make_claude_copy claude-mutant-coldstart-exec)"
 cp "$m30" "$m30.orig"
 # Anchored on the whole line so a partial match cannot land on the tail's `exec claude --agent
@@ -1437,6 +1589,7 @@ fi
 #
 #     Its narrowness is the mirror of 30's: 12 / 12c / 12d must stay GREEN (they never create an
 #     intake.md, so they run the unmutated branch), and ONLY 12b moves. -------------------------------
+step 31
 m31="$(make_claude_copy claude-mutant-coldstart-exec-intake)"
 cp "$m31" "$m31.orig"
 # One line replaced by one line, so the >1-line check below stays meaningful. Anchored on the whole
@@ -1482,6 +1635,7 @@ fi
 #     check below is on 0271/1, the ADR-040 §2.5 numbered-token case, which nothing else pins.
 #
 #     Rides mutation 14's seam (make_repo_copy + run_dashboard_suite). ------------------------------
+step 32
 m32="$(make_repo_copy repo-mutant-dashboard-dedupe)"
 m32_file="$m32/claude/skills/fkit-status/dashboard.sh"
 cp "$m32_file" "$m32_file.orig"
@@ -1527,6 +1681,7 @@ fi
 #     should have been deleted. The mutation writes exactly that plausible-but-wrong instruction, so a
 #     green run here would mean the guard cannot tell the right rule from its inversion.
 #     `fkit-task-done` is the target because it is the mover that fires on the common path. -----------
+step 33
 m33_tree="$work/claude-mutant-mover-invert"
 cp -R "$repo/claude" "$m33_tree"
 m33_file="$m33_tree/skills/fkit-task-done/SKILL.md"
@@ -1572,6 +1727,7 @@ fi
 #     board word IS the marker, and injecting prose would red T11 for the wrong reason (a reworded
 #     sentence rather than a wrong board). `../../done/X` was verified to occur ZERO times in the
 #     unmutated file, so its presence afterwards is unambiguous. --------------------------------------
+step 34
 m34_tree="$work/claude-mutant-mover-board"
 cp -R "$repo/claude" "$m34_tree"
 m34_file="$m34_tree/skills/fkit-task-cancelled/SKILL.md"
@@ -1613,6 +1769,7 @@ fi
 #     `../../done/X` ZERO times, so the wrong word's presence afterwards is unambiguous.
 #     ⚠️ S4 (uniformity modulo the board word) reds too — measured, and expected: a stray un-swapped
 #     board word is exactly what S4's fold shows as a difference. The named check is S2.
+step 35
 m35_tree="$work/claude-mutant-sprint-mover-board"
 cp -R "$repo/claude" "$m35_tree"
 m35_file="$m35_tree/skills/fkit-sprint-cancelled/SKILL.md"
@@ -1661,6 +1818,7 @@ fi
 #
 #     Rides mutation 14's seam (make_repo_copy + run_dashboard_suite). Replacement via getline, for
 #     mutation 14's reason (awk escape-processes a -v value).
+step 36
 m36="$(make_repo_copy repo-mutant-successor-negation)"
 m36_file="$m36/claude/skills/fkit-status/dashboard.sh"
 cp "$m36_file" "$m36_file.orig"
@@ -1716,6 +1874,7 @@ fi
 #     An injected marker is counted, since `'In progress') ;;` could occur naturally.
 #     ⚠️ `successor S4` reds too — measured, and expected: that fixture's only successor is a Backlog
 #     board. The named check is S3, the case the mode was built for.
+step 37
 m37="$(make_repo_copy repo-mutant-successor-backlog)"
 m37_file="$m37/claude/skills/fkit-status/dashboard.sh"
 cp "$m37_file" "$m37_file.orig"
@@ -1765,6 +1924,7 @@ fi
 #     An injected marker is counted.
 #     ⚠️ `successor S7` reds too — measured, and expected: its fixture holds the closing board itself,
 #     `In progress`, which now succeeds itself and turns exit 3 into an answer. The named check is S4.
+step 38
 m38="$(make_repo_copy repo-mutant-successor-nonstrict)"
 m38_file="$m38/claude/skills/fkit-status/dashboard.sh"
 cp "$m38_file" "$m38_file.orig"
@@ -1815,6 +1975,7 @@ fi
 #     Anchor uniqueness, verified before use: ``for `drift ambiguous-plan-identity`, which names`` occurs
 #     ONCE in the unmutated file, and the mutated text ZERO times.
 #     Rides mutation 14's seam: the E-tests read SKILL.md from REPO, which in a copy is the copy.
+step 39
 m39="$(make_repo_copy repo-mutant-emitter-prose)"
 m39_file="$m39/claude/skills/fkit-sprint-done/SKILL.md"
 cp "$m39_file" "$m39_file.orig"
@@ -1854,6 +2015,7 @@ fi
 #     Anchor uniqueness, verified before use: `title_cell() {` occurs ONCE in the unmutated file (the
 #     call site reads `title_cell "$task"` and does not match), and the mutated text ZERO times.
 #     Rides mutation 14's seam: the copied test file resolves dashboard.sh inside the copy.
+step 40
 m40="$(make_repo_copy repo-mutant-title-cell)"
 m40_file="$m40/claude/skills/fkit-status/dashboard.sh"
 cp "$m40_file" "$m40_file.orig"
@@ -1879,10 +2041,117 @@ elif ! grep -Eq '(✖|not ok|fail).*0409/elided:' "$out"; then
   echo "   ✗ suite went red but NOT at 0409/elided — red for the wrong reason."; fail=1
 fi
 
+# --- Mutation 41: strip the variables in front of the installer's `sh` → the 0481/version-only
+#     assertion in update-reinstall.test.js must go red (task 0481). ⭐ THIS IS THE PRE-0481 DEFECT:
+#     the downloaded install.sh runs with no FKIT_REPO / FKIT_REF / FKIT_SHARE / FKIT_BIN, so it falls
+#     back to its defaults (flashist/fkit@main, ~/.local/share/fkit, ~/.local/bin) whatever the
+#     launcher resolved and printed. Anchor: the one `    | FKIT_REPO=… sh` line in _fkit_reinstall;
+#     the guards below refuse a no-op, a multi-line change, and a mutation that did not land. --------
+step 41
+m41="$(make_claude_copy claude-mutant-reinstall-vars)"
+cp "$m41" "$m41.orig"
+sed -i.bak 's/^    | FKIT_REPO=.* sh$/    | sh # mutation: installer variables stripped/' "$m41"
+rm -f "$m41.bak"
+if cmp -s "$m41" "$m41.orig"; then
+  echo "41. stripped the installer variables ... ✗ MUTATION WAS A NO-OP — the sed no longer matches (has"
+  echo "   the \`| FKIT_REPO=… sh\` line in _fkit_reinstall been reworded or rewrapped?). This gate is"
+  echo "   disarmed: it would report success while proving nothing. Fix the mutation in test/prove-red.sh."
+  fail=1
+elif [ "$(diff "$m41.orig" "$m41" | grep -c '^>')" != 1 ]; then
+  echo "41. stripped the installer variables ... ✗ WRONG TARGET — the sed changed more than one line."; fail=1
+elif grep -q 'FKIT_REPO="\$fkit_repo"' "$m41"; then
+  echo "41. stripped the installer variables ... ✗ MUTATION DID NOT LAND — the assignments are still in"
+  echo "   the mutant."; fail=1
+fi
+printf '41. installer variables stripped — "0481/version-only" should go RED ... '
+r41="$(run_reinstall_suite "$(dirname "$m41")")"; echo "$r41"
+if [ "$r41" != red ]; then
+  echo "   ✗ the suite did NOT catch an \`fkit update\` that runs the installer on its defaults — a fork,"
+  echo "     a pinned ref or a custom-path install would again be silently reinstalled elsewhere."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0481/version-only' "$out"; then
+  echo "   ✗ suite went red but NOT at 0481/version-only — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 42: disarm the empty-`## Unreleased` refusal → the 0479/empty-unreleased-refused assertion
+#     in release-summary.test.js must go red (task 0479). With it off, a release with no notes goes
+#     through and stamps an empty version section — the stale-changelog defect 0479 exists to stop.
+#     ONE line carries the refusal for both the pre-gate check and the post-gate re-read (one helper,
+#     checkChangelog()), so this one anchor disarms both. Same anchor discipline as 25/26: no-op check,
+#     marker present, marker count 1 (a co-mutated second copy), no surviving original line.
+#     Isolation, documented not gated: this mutant also reds 0479/refused-before-the-test-gate,
+#     0479/no-bump-finishes-a-stamped-release (its bumping half), 0479/emptied-during-gate-refused,
+#     0479/fenced-lines-are-not-headings (its --no-bump half) and 0479/version-boundary — all of them
+#     rely on the same refusal. ---------------------------------------------------------------------
+step 42
+m42="$(make_release_copy release-mutant-empty-changelog)"
+cp "$m42" "$m42.orig"
+sed -i.bak 's/^  if (empty && !allowEmptyChangelog) {$/  if (false) { \/\/ mutation: empty-changelog refusal disarmed/' "$m42"
+if cmp -s "$m42" "$m42.orig"; then
+  echo "42. empty-changelog refusal disarmed ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif ! grep -q 'mutation: empty-changelog refusal disarmed' "$m42"; then
+  echo "42. empty-changelog refusal disarmed ... ✗ MUTATION DID NOT LAND — marker absent from the mutant."; fail=1
+elif [ "$(grep -c 'mutation: empty-changelog refusal disarmed' "$m42")" != 1 ]; then
+  echo "42. empty-changelog refusal disarmed ... ✗ WRONG TARGET — the marker landed more than once: a second copy"
+  echo "   of the anchor line was co-mutated (0288 R9's mode). Fix the mutation in test/prove-red.sh."; fail=1
+elif [ "$(grep -c '^  if (empty && !allowEmptyChangelog' "$m42")" != 0 ]; then
+  echo "42. empty-changelog refusal disarmed ... ✗ WRONG TARGET — an un-mutated refusal line survives."; fail=1
+fi
+printf '42. empty-changelog refusal disarmed — "0479/empty-unreleased-refused" should go RED ... '
+r42="$(run_release_suite "$m42")"; echo "$r42"
+if [ "$r42" != red ]; then
+  echo "   ✗ the suite did NOT catch a release with an empty ## Unreleased — the 0479 refusal is not"
+  echo "     load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0479/empty-unreleased-refused' "$out"; then
+  echo "   ✗ suite went red but NOT at 0479/empty-unreleased-refused — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 43: drop the CHANGELOG.md write → the 0479/filled-unreleased-stamped assertion must go red
+#     (task 0479). With it gone, every check still passes and the plan still PRINTS the stamp step, but
+#     the release commit carries the old `## Unreleased` under a tag that shipped it — the exact
+#     staleness the brief describes. Anchor: the one `writeFileSync(changelogPath, stamp.next)` line,
+#     kept as a single distinctive line for this. Same guards as 42. Isolation, documented not gated:
+#     this mutant also reds 0479/escape-hatch-loud, 0479/edit-during-gate-kept,
+#     0479/fenced-lines-are-not-headings, 0479/subheading-stays-inside-the-section,
+#     0479/crlf-file-stays-crlf and 0479/no-bump-dry-run-counts-the-stamp, which read the stamped file
+#     too. ----------------------------------------------------------------------------------------------
+step 43
+m43="$(make_release_copy release-mutant-no-changelog-write)"
+cp "$m43" "$m43.orig"
+sed -i.bak 's/^  if (!dryRun) writeFileSync(changelogPath, stamp\.next);.*$/  \/\/ mutation: CHANGELOG.md write dropped/' "$m43"
+if cmp -s "$m43" "$m43.orig"; then
+  echo "43. CHANGELOG.md write dropped ... ✗ MUTATION WAS A NO-OP — the sed no longer matches."
+  echo "   This gate is disarmed: it would report success while proving nothing. Fix the mutation in"
+  echo "   test/prove-red.sh before trusting any result above."
+  fail=1
+elif ! grep -q 'mutation: CHANGELOG.md write dropped' "$m43"; then
+  echo "43. CHANGELOG.md write dropped ... ✗ MUTATION DID NOT LAND — marker absent from the mutant."; fail=1
+elif [ "$(grep -c 'mutation: CHANGELOG.md write dropped' "$m43")" != 1 ]; then
+  echo "43. CHANGELOG.md write dropped ... ✗ WRONG TARGET — the marker landed more than once: a second copy"
+  echo "   of the anchor line was co-mutated (0288 R9's mode). Fix the mutation in test/prove-red.sh."; fail=1
+elif [ "$(grep -c 'writeFileSync(changelogPath' "$m43")" != 0 ]; then
+  echo "43. CHANGELOG.md write dropped ... ✗ WRONG TARGET — an un-mutated write line survives."; fail=1
+fi
+printf '43. CHANGELOG.md write dropped — "0479/filled-unreleased-stamped" should go RED ... '
+r43="$(run_release_suite "$m43")"; echo "$r43"
+if [ "$r43" != red ]; then
+  echo "   ✗ the suite did NOT catch a release that never stamps CHANGELOG.md — the 0479 write is not"
+  echo "     load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0479/filled-unreleased-stamped' "$out"; then
+  echo "   ✗ suite went red but NOT at 0479/filled-unreleased-stamped — red for the wrong reason."; fail=1
+fi
+
+step end   # finishes step 43: keeps its output if it failed; `end` itself runs nothing
+
 echo
-if [ "$fail" = 0 ]; then
+if [ "$any_fail" = 0 ]; then
   echo "✓ hard gate PASSED — real + unmutated copy green; each mutation reds its NAMED assertion."
   exit 0
 fi
-echo "✗ hard gate FAILED — see above."
+echo "✗ hard gate FAILED — see above. Failed step(s): $failed_steps"
+if [ -n "$keep" ]; then
+  echo "   each failed step's own suite output is kept in: $keep"
+fi
 exit 1

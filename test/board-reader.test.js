@@ -8,6 +8,8 @@
 // preserved Python spike got it wrong.
 //
 //   A — snapshot shape: every id is a JSON STRING matching ^\d{4}$, and `0013` survives unmangled.
+//       Every live task folder is rendered — checked against a listing taken BEFORE and AFTER the
+//       snapshot, so a task filed or closed by another agent mid-run is no false red (task 0477).
 //   B — sprint status comes from the ONE recognizer: a fixture open board reads its true status, an
 //       archived board reads Done FROM LOCATION, backlog.md reads `unresolved` (never `Backlog`), and a board
 //       whose banner carries a LATER cancel marker in trailing prose still reads in-progress — the
@@ -15,28 +17,28 @@
 //   C — ⭐ NO SECOND GRAMMAR: the reader's own source carries no sprint-banner marker, no banner
 //       prefix, and no in-progress status literal. This is the standing F3 guard.
 //   D — write refusal: every method that is not GET is refused, on a real ephemeral-port server.
-//   E — ⚠️ WRITE-PROOF: `git status --porcelain ai-agents/` is IDENTICAL before and after a full crawl
-//       plus every route. IDENTICAL, not EMPTY — the working tree legitimately carries uncommitted
-//       changes while this task is in flight, so an emptiness assertion would go red for reasons that
-//       have nothing to do with the reader. "Unchanged by the run" is what the verification step says.
+//   E — ⚠️ WRITE-PROOF: a full crawl plus every route, served from a PRIVATE git copy of ai-agents/,
+//       leaves that copy's `git status --porcelain` EMPTY. A copy, not the live tree, since task 0477:
+//       other agents write into the live tree during a run, and the old before/after comparison of
+//       the live tree's status went red on their writes with the reader blameless.
 //   F — path resolution: an aiboard path that does not resolve exits NON-ZERO naming all three ways.
 //   G — unknown id: /api/tasks/9999 is a 404 that leaks no filesystem path.
 //
 // ⚠️ ADR-014's testing law: black-box process contract, zero devDependencies, `node --test`. F runs
 // the CLI as a subprocess; the rest drive the exported functions and a real loopback server.
 //
-// ⚠️ Nothing here writes into the repo. B's fixture tree lives under os.tmpdir(), matching
-// harness.mjs's standing rule ("nothing here writes into the repo"). E READS git state and asserts on
-// it; it changes nothing.
+// ⚠️ Nothing here writes into the repo. B's and E's fixture trees live under os.tmpdir(), matching
+// harness.mjs's standing rule ("nothing here writes into the repo"). E's git repo is its own throwaway
+// copy; the real repo's git state is never read or changed.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readdirSync, readFileSync, writeFileSync, renameSync, rmSync }
+import { cpSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync, renameSync, rmSync }
   from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { REPO } from './harness.mjs';
+import { basename, dirname, join } from 'node:path';
+import { REPO, liveTaskFolders } from './harness.mjs';
 
 import { findRoot, findDashboard, resolveAiboard, boardId, makeReader, startServer }
   from '../bin/fkit-board.mjs';
@@ -57,9 +59,9 @@ function stubUi() {
   return { file, dir };
 }
 
-async function withServer(fn) {
+async function withServer(fn, root = ROOT) {
   const ui = stubUi();
-  const server = startServer({ root: ROOT, dashboard: DASHBOARD, aiboardPath: ui.file, port: 0 });
+  const server = startServer({ root, dashboard: DASHBOARD, aiboardPath: ui.file, port: 0 });
   await new Promise((r) => server.once('listening', r));
   const base = `http://127.0.0.1:${server.address().port}`;
   try {
@@ -73,18 +75,27 @@ async function withServer(fn) {
 // ── A — snapshot shape, ids as strings, 0013 unmangled ───────────────────────────────────────────
 
 test('A: every task id is a JSON string of exactly four digits, and 0013 is unmangled', () => {
+  // The corpus is LISTED here rather than hard-coded: it grows every working day, and a frozen number
+  // would turn ordinary backlog growth into a red test.
+  // ⚠️ LISTED TWICE, BRACKETING THE SNAPSHOT (task 0477). Other agents file and close tasks while the
+  // suite runs, and a snapshot takes seconds; one listing taken before it went red `482 !== 483` on a
+  // brief filed in between. The bracket asserts exactly what the reader can promise: every folder that
+  // existed THROUGHOUT is rendered, and nothing that existed at NEITHER end is. With no writer the two
+  // listings are equal and this is exact equality — today's claim, unweakened.
+  const before = liveTaskFolders(ROOT);
   const snap = reader.snapshot();
-
-  // The corpus size is COUNTED here rather than hard-coded: it grows every working day, and a frozen
-  // number would turn ordinary backlog growth into a red test.
-  let counted = 0;
-  for (const board of ['backlog', 'done', 'cancelled']) {
-    for (const name of readdirSync(join(ROOT, 'ai-agents', 'tasks', board))) {
-      if (/^\d{4}-/.test(name)) counted++;
-    }
-  }
-  assert.equal(snap.tasks.length, counted, 'every task folder is rendered, and nothing else is');
-  assert.ok(counted > 400, `sanity: the corpus is in the hundreds (counted ${counted})`);
+  const after = liveTaskFolders(ROOT);
+  const rendered = snap.tasks.map((t) => `${basename(dirname(t.path))}/${t.folder}`);
+  const renderedSet = new Set(rendered);
+  const either = new Set([...before, ...after]);
+  const afterSet = new Set(after);
+  const dropped = before.filter((k) => afterSet.has(k) && !renderedSet.has(k));
+  const invented = rendered.filter((k) => !either.has(k));
+  assert.deepEqual(dropped, [], 'every task folder present throughout the snapshot is rendered');
+  assert.deepEqual(invented, [], 'nothing but a task folder is rendered');
+  const ids = snap.tasks.map((t) => t.id);
+  assert.equal(new Set(ids).size, ids.length, 'no task id is rendered twice');
+  assert.ok(before.length > 400, `sanity: the corpus is in the hundreds (listed ${before.length})`);
 
   for (const t of snap.tasks) {
     assert.equal(typeof t.id, 'string', `${t.folder}: id must be a STRING, never a number`);
@@ -326,43 +337,80 @@ test('D: every method that is not GET is refused', async () => {
   });
 });
 
-// ── E — ⚠️ write-proof: IDENTICAL, not EMPTY ─────────────────────────────────────────────────────
+// ── E — ⚠️ write-proof: a PRIVATE COPY, and EMPTY ─────────────────────────────────────────────────
+
+// ⚠️ E CRAWLS A PRIVATE GIT COPY OF ai-agents/, NOT THE LIVE TREE (task 0477). It used to compare
+// `git status` of the live tree before and after the crawl, and any OTHER agent filing or closing a task
+// during those seconds turned it red with the reader blameless. A fresh repo committed from a copy has
+// no other writer, so its `git status` must be EMPTY afterwards — which is also STRONGER than the old
+// "identical": an empty status sees a write into ANY file under the root, including the files already
+// showing ` M` and the untracked folders the live-tree comparison was blind to (see E2's note).
+// What E gives up: a reader that ignored its `root` and wrote into the real repo instead. E2's static
+// proof — the reader imports no write-capable API at all — is what covers that.
+const GIT_ID = ['-c', 'user.name=fkit-test', '-c', 'user.email=fkit-test@example.invalid',
+  '-c', 'commit.gpgsign=false'];
+
+// Copy the live ai-agents/ into a throwaway repo and commit it. ⚠️ A folder another agent moves
+// mid-copy makes cpSync throw ENOENT; that is a race in BUILDING the fixture, not a finding, so only
+// that error is retried, from scratch, a bounded number of times.
+function privateCopy() {
+  const dir = mkdtempSync(join(tmpdir(), 'fkit-board-e-'));
+  for (let attempt = 1; ; attempt++) {
+    try {
+      cpSync(join(ROOT, 'ai-agents'), join(dir, 'ai-agents'), { recursive: true });
+      break;
+    } catch (e) {
+      rmSync(join(dir, 'ai-agents'), { recursive: true, force: true });
+      if (e.code !== 'ENOENT' || attempt === 3) { rmSync(dir, { recursive: true, force: true }); throw e; }
+    }
+  }
+  // The caller's try/finally starts only once this returns, so a failing git step (e.g. a host's
+  // global core.hooksPath rejecting the commit) must remove the copy itself (review R1).
+  try {
+    execFileSync('git', ['init', '-q'], { cwd: dir });
+    execFileSync('git', ['add', '-A'], { cwd: dir });
+    execFileSync('git', [...GIT_ID, 'commit', '-q', '-m', 'board-reader E fixture'], { cwd: dir });
+  } catch (e) {
+    rmSync(dir, { recursive: true, force: true });
+    throw e;
+  }
+  return dir;
+}
 
 test('E: a full crawl plus every route leaves ai-agents/ byte-identical in git\'s eyes', async () => {
-  const gitState = () => execFileSync('git', ['status', '--porcelain', '--', 'ai-agents/'],
-    { cwd: REPO, encoding: 'utf8' });
+  const copy = privateCopy();
+  try {
+    const gitState = () => execFileSync('git', ['status', '--porcelain', '--untracked-files=all'],
+      { cwd: copy, encoding: 'utf8' });
+    assert.equal(gitState(), '', 'sanity: the private copy starts clean');
 
-  const before = gitState();
+    await withServer(async (base) => {
+      const board = await (await fetch(`${base}/api/board`)).json();
+      assert.ok(board.tasks.length > 400);
+      // Every route, including a detail read of a real task and a real board.
+      await fetch(`${base}/`);
+      await fetch(`${base}/api/check`);
+      for (const t of board.tasks.slice(0, 25)) {
+        assert.equal((await fetch(`${base}/api/tasks/${t.id}`)).status, 200);
+      }
+      for (const s of board.sprints) {
+        assert.equal((await fetch(`${base}/api/sprints/${s.id}`)).status, 200);
+      }
+    }, copy);
 
-  await withServer(async (base) => {
-    const board = await (await fetch(`${base}/api/board`)).json();
-    assert.ok(board.tasks.length > 400);
-    // Every route, including a detail read of a real task and a real board.
-    await fetch(`${base}/`);
-    await fetch(`${base}/api/check`);
-    for (const t of board.tasks.slice(0, 25)) {
-      assert.equal((await fetch(`${base}/api/tasks/${t.id}`)).status, 200);
-    }
-    for (const s of board.sprints) {
-      assert.equal((await fetch(`${base}/api/sprints/${s.id}`)).status, 200);
-    }
-  });
-
-  const after = gitState();
-
-  // ⚠️ IDENTICAL, NOT EMPTY. The tree legitimately carries uncommitted work while this task is in
-  // flight; asserting emptiness would go red for reasons that are not about the reader. The claim the
-  // task makes is "it writes nothing", and "unchanged by the run" is exactly that claim.
-  assert.equal(after, before,
-    'the reader changed ai-agents/ — it must never write, in any mode, behind any flag');
+    assert.equal(gitState(), '',
+      'the reader changed ai-agents/ — it must never write, in any mode, behind any flag');
+  } finally {
+    rmSync(copy, { recursive: true, force: true });
+  }
 });
 
 // ── E2 — ⭐ the STATIC write-proof, which is the stronger one ─────────────────────────────────────
 
-// ⚠️ E above cannot see every write, and saying so is the point of E2. `git status --porcelain` is
-// blind to a write into a file ALREADY showing ` M`, and to anything created inside an UNTRACKED
-// directory (whose whole contents collapse to one `??` line — this task's own folder is one today).
-// E proves "no change of git STATUS CLASS", which is weaker than "wrote nothing".
+// ⚠️ E above cannot see every write, and saying so is the point of E2. E watches only the ROOT it
+// hands the reader — a private copy since task 0477 — so a reader that ignored its root and wrote into
+// the real repo would leave E green. (Before 0477, E compared the LIVE tree's `git status`, which was
+// blind to a write into a file already showing ` M` and to anything inside an untracked directory.)
 //
 // ⭐ The claim the task actually makes — "no write path, in any mode, behind any flag" — is STATIC,
 // so this asserts it statically: the reader cannot write because it never imports anything that can.

@@ -128,9 +128,8 @@ repairs only what you approve, diffs in view, deleting nothing. Changed one on p
 | `FKIT_CLEANUP_DRY_RUN=1` | off | List the old-runtime files fkit would delete from a project; delete nothing |
 | `FKIT_AIBOARD` | — | Repo-local web board only: path to aiboard's `index.html` |
 
-Installer variables go **after** the pipe (`curl … | FKIT_SHARE=… sh`). `fkit update` re-runs the
-installer with your current environment, so keep custom paths **and** `FKIT_REPO` / `FKIT_REF`
-exported.
+Installer variables go **after** the pipe (`curl … | FKIT_SHARE=… sh`). `fkit update` reuses the
+source and paths you installed with; set a variable on `fkit update` only to change one.
 
 ## Uninstall
 

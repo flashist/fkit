@@ -70,7 +70,7 @@ Coverage: <state> — <evidence clause>
 
 > **The `Location` cell — the form depends on the target, not on the ledger.**
 > `path:line` is **correct** for source, tests, and files under `claude/` — the reader diffs the thing you cited.
-> ⛔ For a **coordination document** — `ai-agents/sprints/*.md`, a task folder's `brief.md` / `plan.md` / `worklog.md` / `review.md`, or `ai-agents/wiki-vault/log.md` — write **the heading plus a quoted fragment**, never `path:NNN`. Third parties append above your line and it moves under you; and `test/coordination-citation-policy.test.js` **reds on it** in any open task folder. ⚠️ **Backticks do not exempt it** — that guard does not mask code spans.
+> ⛔ For a **coordination document** — `ai-agents/sprints/*.md`, a task folder's `brief.md` / `plan.md` / `plan-review.md` / `worklog.md` / `review.md`, or `ai-agents/wiki-vault/log.md` — write **the heading plus a quoted fragment**, never `path:NNN`. Third parties append above your line and it moves under you; and `test/coordination-citation-policy.test.js` **reds on it** in any open task folder. ⚠️ **Backticks do not exempt it** — that guard does not mask code spans.
 > **In the row:** put the heading in the `Location` cell (e.g. `brief.md § Context`) and the quoted fragment in `Claim`.
 > **Rider, both cases:** never cite a line number naked — pair it with a quoted fragment or the heading it sits under ([`conventions/durable-citation-anchors.md`](../../../ai-agents/knowledge-base/conventions/durable-citation-anchors.md)).
 

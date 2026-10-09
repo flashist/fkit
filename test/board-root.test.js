@@ -28,10 +28,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { chmodSync, existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, relative, resolve } from 'node:path';
-import { REPO } from './harness.mjs';
+import { REPO, liveTaskFolders } from './harness.mjs';
 
 import { findRoot, findDashboard, resolveRoot, startServer } from '../bin/fkit-board.mjs';
 
@@ -88,8 +88,21 @@ function stubUi() {
   return { file, dir };
 }
 
+// ⚠️ ONE LIMIT FOR EVERY REAL CLI START IN THIS FILE, and a generous one (task 0502). `node --test`
+// runs up to availableParallelism() − 1 test files at once, and prove-red re-runs that suite again
+// and again, so these calls often run on a loaded machine. The old 20 s (an unrecorded choice from
+// 0412) killed them at load averages of 5–13: R3's bad-root calls (about 30 ms idle) went red as a
+// bare `null !== 2`, R1's `--bench` (about 0.5 s idle) as `null !== 0`. Measured under load: a bare
+// node start took p90 ~336 ms, max ~515 ms, while R3's own refuse path stayed about 10 ms. No 20 s+
+// stall was ever caught, so "the slow tail is in starting the process" is an inference, not a
+// measurement. 120 s is board-narrow.test.js's ceiling for the same reason. It costs nothing on a
+// green run — only a call that never ends uses it up.
+// ⚠️ It MUST stay finite: R3 proves "no listener stayed up" by spawnSync returning at all. A CLI that
+// keeps a server up on a bad --root still times out here, and R3 still goes red — after this limit.
+const CLI_TIMEOUT_MS = 120000;
+
 const cli = (args) => spawnSync(process.execPath, [READER, ...args],
-  { cwd: REPO, encoding: 'utf8', timeout: 20000, env: { ...process.env, FKIT_AIBOARD: '' } });
+  { cwd: REPO, encoding: 'utf8', timeout: CLI_TIMEOUT_MS, env: { ...process.env, FKIT_AIBOARD: '' } });
 
 // Every file under `dir`, sorted, hashed with its relative path — so an edit, a new file, or a
 // removed file all change the digest. Byte-level, unlike git status.
@@ -116,7 +129,8 @@ function serveCli(args, re) {
   let out = '';
   let err = '';
   const ready = new Promise((ok, fail) => {
-    const timer = setTimeout(() => fail(new Error(`no banner in time; stdout=${out} stderr=${err}`)), 20000);
+    const timer = setTimeout(() => fail(new Error(
+      `no banner in time (after ${CLI_TIMEOUT_MS / 1000} s); stdout=${out} stderr=${err}`)), CLI_TIMEOUT_MS);
     child.stdout.on('data', (b) => {
       out += b;
       if (re.test(out)) { clearTimeout(timer); ok(out); }
@@ -140,22 +154,25 @@ function serveCli(args, re) {
 test('R1: with no --root the root resolves exactly as before, and no --root line is printed', () => {
   assert.deepEqual(resolveRoot({ flag: undefined, home: HOME }), { path: HOME, how: 'default' });
 
-  // A task is a `NNNN-` DIRECTORY holding a brief.md — the reader's own rule. Counting bare `NNNN-`
-  // names would turn this red on a folder another agent has made but not yet written a brief into.
-  const isTask = (p) => {
-    try { return statSync(p).isDirectory() && statSync(join(p, 'brief.md')).isFile(); } catch { return false; }
-  };
-  let counted = 0;
-  for (const board of ['backlog', 'done', 'cancelled']) {
-    const dir = join(HOME, 'ai-agents', 'tasks', board);
-    for (const name of readdirSync(dir)) {
-      if (/^\d{4}-/.test(name) && isTask(join(dir, name))) counted++;
-    }
-  }
+  // A task is a `NNNN-` DIRECTORY holding a brief.md — the reader's own rule (liveTaskFolders). Counting
+  // bare `NNNN-` names would turn this red on a folder another agent has made but not yet written a
+  // brief into.
+  // ⚠️ LISTED BEFORE AND AFTER `--bench`, WHICH TAKES SECONDS (task 0477). A single count taken first
+  // went red on a brief another agent filed in between. `--bench` prints only a count, so the bracket
+  // is on the count: at least every folder present at BOTH ends, at most every folder present at
+  // EITHER. With no writer the two listings are equal and this is exact equality, as before.
+  const before = liveTaskFolders(HOME);
   const r = cli(['--bench']);
+  const after = liveTaskFolders(HOME);
   assert.equal(r.status, 0, r.stderr);
-  assert.match(r.stdout, new RegExp(`^corpus: ${counted} tasks, `, 'm'),
-    'no flag reads fkit\'s own tree, every task folder of it');
+  const m = /^corpus: (\d+) tasks, /m.exec(r.stdout);
+  assert.ok(m, `--bench prints its corpus line (stdout: ${r.stdout})`);
+  const afterSet = new Set(after);
+  const both = before.filter((k) => afterSet.has(k)).length;
+  const either = new Set([...before, ...after]).size;
+  const n = Number(m[1]);
+  assert.ok(both <= n && n <= either,
+    `no flag reads fkit's own tree, every task folder of it: bench counted ${n}, expected ${both}..${either}`);
   assert.ok(!r.stdout.includes('(--root)'), 'no --root suffix without the flag');
   assert.ok(!/^ {2}tree /m.test(r.stdout), '--bench output without the flag is unchanged: no tree line');
 });
@@ -214,7 +231,7 @@ test('R3: a bad --root exits 2, names what is missing, starts nothing, and never
       for (const [tail, must, mustNot, flag] of cases) {
         const r = cli(['--aiboard', ui.file, '--port', '0', ...tail]);
         const label = JSON.stringify(tail);
-        assert.equal(r.status, 2, `${label}: exit 2 (stderr: ${r.stderr})`);
+        assert.equal(r.status, 2, `${label}: exit 2 (stderr: ${r.stderr}, error: ${r.error?.code})`);
         for (const re of must) assert.match(r.stderr, re, `${label}: names the missing piece`);
         for (const re of mustNot) assert.doesNotMatch(r.stderr, re, `${label}: names only what is missing`);
         assert.match(r.stderr, /does not fall back to its own tree/, `${label}: says it will not fall back`);
@@ -262,7 +279,7 @@ test('R3: an unreadable --root tree exits 2, names the directory, and never fall
         }
         const r = cli(['--aiboard', ui.file, '--port', '0', '--root', fx]);
         const label = rel;
-        assert.equal(r.status, 2, `${label}: exit 2 (stderr: ${r.stderr})`);
+        assert.equal(r.status, 2, `${label}: exit 2 (stderr: ${r.stderr}, error: ${r.error?.code})`);
         assert.match(r.stderr, must, `${label}: names the unreadable directory`);
         assert.doesNotMatch(r.stderr, /missing:/, `${label}: nothing is missing, only unreadable`);
         assert.match(r.stderr, /does not fall back to its own tree/, `${label}: says it will not fall back`);
@@ -348,7 +365,8 @@ function runUntilBannerOrExit(args) {
   let out = '';
   let err = '';
   return new Promise((ok, fail) => {
-    const timer = setTimeout(() => { child.kill(); fail(new Error(`neither banner nor exit; stderr=${err}`)); }, 20000);
+    const timer = setTimeout(() => { child.kill(); fail(new Error(`neither banner nor exit; stderr=${err}`)); },
+      CLI_TIMEOUT_MS);
     const done = () => { clearTimeout(timer); ok({ out, err }); };
     child.stdout.on('data', (b) => {
       out += b;

@@ -5,6 +5,7 @@
     "test": "node --test test/*.test.js && bash test/prove-red.sh",
     "test:unit": "node --test test/*.test.js",
     "test:prove-red": "bash test/prove-red.sh",
+    "test:docs": "node --test test/adr-number-uniqueness.test.js test/board-narrow.test.js test/board-reader.test.js test/board-root.test.js test/closed-rank-immutability.test.js test/coordination-citation-policy.test.js test/dashboard-contract.test.js test/dual-home-parity.test.js test/reference-integrity.test.js test/task-id-uniqueness.test.js",
     "board": "node bin/fkit-board.mjs",
     "generate:manifest": "node bin/generate-structure-manifest.mjs",
     "release": "node bin/release.mjs",

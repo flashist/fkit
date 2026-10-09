@@ -237,11 +237,14 @@ export function exempt(rel) {
 //    existed because the condition predates ADR-029 moving those files into the task folder.
 //    The leading `(?<![\w./-])` is the LEFT BOUNDARY: it stops a match that is merely the suffix of
 //    a longer token, such as a `claude/scaffold/ai-agents/...` template path. Measured cost 0.
+//    ⭐ plan-review.md joined the class with task 0473 (ADR-056 Decision 6): a fifth reserved
+//    task-folder file, written by the sprint-loop driver, of the same kind as plan.md and review.md.
+//    A deliberate widening, approved with 0473's plan — not a loosening. Arm M5 pins it.
 export const TARGET = new RegExp(
   '(?<![\\w./-])' +
   'ai-agents/(?:' +
     'sprints/[^/\\s`)\\]]+\\.md' +            // ai-agents/sprints/*.md
-    '|tasks/[^/\\s`)\\]]+/[^/\\s`)\\]]+/(?:brief|plan|worklog|review)\\.md' +   // ai-agents/tasks/*/*/brief.md
+    '|tasks/[^/\\s`)\\]]+/[^/\\s`)\\]]+/(?:brief|plan|plan-review|worklog|review)\\.md' +   // ai-agents/tasks/*/*/brief.md
     '|wiki-vault/log\\.md' +                  // ai-agents/wiki-vault/log.md
   '):\\d+', 'g');
 
@@ -587,13 +590,15 @@ test('M4 mutation: ALL FOUR files in a closed folder, and cancelled/, PASS and a
   }
 });
 
-test('M5 mutation: the WIDENED cited class — plan, worklog and review targets all RED', () => {
+test('M5 mutation: the WIDENED cited class — plan, plan-review, worklog and review targets all RED', () => {
   // ⭐ Owner ruling 2026-08-30, option label verbatim "Not a reopening — widen it (Rec)". The
   // condition originally named brief.md alone because it predates ADR-029 moving plan.md, worklog.md
   // and review.md into the task folder. ⛔ The brief's verification step 4 never tested the TARGET
   // prong at all — only the citing prong — so this arm has no counterpart there.
   const targets = {
     plan: 'ai-agents/tasks/backlog/0009-some-task/plan.md:11',
+    // ⭐ Task 0473 (ADR-056): the opt-in plan-review record is a coordination document too.
+    planReview: 'ai-agents/tasks/backlog/0009-some-task/plan-review.md:12',
     worklog: 'ai-agents/tasks/backlog/0009-some-task/worklog.md:22',
     review: 'ai-agents/tasks/backlog/0009-some-task/review.md:33',
     brief: 'ai-agents/tasks/backlog/0009-some-task/brief.md:44',
@@ -609,15 +614,15 @@ test('M5 mutation: the WIDENED cited class — plan, worklog and review targets 
     assert.equal(r.residual[0].hit, hit);
   }
   // ⛔ And the negative that pins the class as a CLOSED alternation rather than a wildcard: a
-  // .md file in a task folder that is none of the four is NOT a coordination document.
+  // .md file in a task folder that is none of the five is NOT a coordination document.
   const other = scan(fixture({
     ...ANCHOR,
     'ai-agents/tasks/backlog/0001-an-open-task/brief.md':
       'Citing ai-agents/tasks/backlog/0009-some-task/notes.md:11 here.\n',
   }));
   assert.deepEqual(other.residual, [],
-    'the cited class matched a file outside the ruled four (brief, plan, worklog, review). That is a ' +
-    'widening nobody ruled — the alternation is closed on purpose.');
+    'the cited class matched a file outside the ruled five (brief, plan, plan-review, worklog, review). ' +
+    'That is a widening nobody ruled — the alternation is closed on purpose.');
 });
 
 test('M6 mutation: RESOLVED SHORTHAND IS NOT MATCHED — owner ruling 1, pinned as an assertion', () => {
@@ -708,6 +713,23 @@ test('M9 mutation: a coordinate in an OPEN review.md REDS — the G1 ruling, pin
   // inside a closed folder IS exempt, and outside one it is not.
   assert.equal(exempt(rel), false);
   assert.equal(exempt('ai-agents/tasks/done/0002-a-closed-task/review.md'), true);
+});
+
+test('M10 mutation: a coordinate in an OPEN plan-review.md REDS — the citing side, pinned', () => {
+  // ⭐ Task 0473 review round 1 (finding R7). M5 pins `plan-review.md` as a CITED target; this arm pins
+  // it as a CITING file. The opt-in plan-review record (ADR-056) holds Codex findings copied verbatim,
+  // so a `path:NNN` there is exactly the risk the guard exists for. Today it is scanned only because
+  // collectFiles() takes every *.md in a task folder; ⛔ narrowing that walk to a fixed list of names
+  // would drop the record silently, with every other arm still green. This arm is what reds then.
+  const rel = 'ai-agents/tasks/backlog/0001-an-open-task/plan-review.md';
+  const r = scan(fixture({ ...ANCHOR, [rel]: `## Attempt 1\n\nCodex: X1 cites ${HIT_SPRINT}.\n` }));
+  assert.ok(r.visited.includes(rel), `${rel} never entered the scanned set — collectFiles() no longer ` +
+    'walks every *.md in a task folder');
+  assert.equal(r.residual.length, 1, 'a coordinate in an OPEN plan-review.md was not reported');
+  assert.equal(r.residual[0].file, rel);
+  assert.equal(r.residual[0].hit, HIT_SPRINT);
+  assert.equal(r.residual[0].line, 3, 'the reported line number is not the line the coordinate is on');
+  assert.equal(r.exemptCount, 0, 'an OPEN plan-review.md must never be exempted — only CLOSED folders are');
 });
 
 // ── C — condition-fidelity units ─────────────────────────────────────────────────────────────────
