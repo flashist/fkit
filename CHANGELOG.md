@@ -35,6 +35,12 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes �
   refuses) when a sprint task would wait on a task in a later or not-started sprint, or on the Backlog
   board. The warning offers three ways out: move the dependents, place the blocker earlier, or accept
   it and record why.
+- `/fkit-status`: the board's Task cell now shows just the task's title. Anything from the first `*(`
+  on — the notes added after a title — is cut and marked ` …`. The full text stays in the board file
+  and the brief, which the row's Filename column links. A cell with no `*(` is unchanged.
+- `/fkit-status` now reports, as a decision for you, a sprint task that waits on a task the sprint
+  cannot count on (the board's new `drift depends-on-later-sprint` record): move the dependents, move
+  the blocker earlier, or accept it and record why. It blocks nothing by itself.
 - `/fkit-sprint-ship-loop` now says when a task on the sprint waits on a task the sprint cannot count
   on — one in a later or not-started sprint, a closed or unplaceable one, or on the Backlog board —
   read from the board's `drift depends-on-later-sprint` record. It says so at the start of a run, when
@@ -43,10 +49,41 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes �
 - The lead now hands a code-level 'why' question (an error's cause, traced in code or logs) to a
   spawned coder instead of tracing code itself; it tells you it delegated, passes no guess as fact, and
   relays any read approval quoted.
+- The coder, `/fkit-plan-task` and both ship loops now run the checks a change needs, not one fixed
+  command. They map the changed files to your project's checks (its own "what changed → what to run"
+  table if it has one, for example in `CONTRIBUTING.md`), and run the full suite at release, when the
+  tests or test tooling change, or when unsure. Plans and reports name the checks that ran and the
+  ones skipped, and why. `/fkit-sprint-ship-loop`'s verify step used to say `node --test`, fkit's own
+  test command, in every project. `/fkit-review` follows the same rule when it runs checks itself.
+- `🚧 Blocked` now means the work cannot proceed, started or not. A task nobody may pick up yet —
+  held for a decision, an outside event, or other work that may remove what it would change — is
+  Blocked. A decision the task itself would settle first is not a blocker: if a session could start
+  it today, it stays `🔲 Backlog`. The rule lives in your project's
+  `ai-agents/knowledge-base/conventions/task-status-vocabulary.md`, so it applies once you take that
+  file's new version (see *Upgrade notes* below).
 
 ## Upgrade notes
 
-### Custom-path or fork installs: reinstall once by hand
+### Every project upgrading from v0.3.1 or earlier: one new file, and a launch warning
+
+This also applies to a `main` install from before this release. fkit ships new versions of four files
+it put in your project, and one new file. After `fkit update`, your project's next `fkit` launch:
+
+- **adds** `ai-agents/knowledge-base/conventions/placement-questions-state-the-knock-on.md` and says
+  so once (unless that path is in `ai-agents/.fkit-keep-out`). It is new and untracked — commit it.
+- **warns on every launch** that these paths diverge from what the installed fkit ships:
+  - `ai-agents/README.md`
+  - `ai-agents/knowledge-base/conventions/README.md`
+  - `ai-agents/knowledge-base/conventions/task-status-vocabulary.md`
+  - `ai-agents/tasks/README.md`
+
+  To clear it, run `/fkit-heal` in a `fkit producer` session. It shows each file's diff and replaces
+  only the ones you approve. A file you edited yourself is shown but never replaced — merge it by hand.
+  To keep your copy instead, list its path in `ai-agents/.fkit-accepted-drift`, one per line. That
+  silences the launch warning for it, though `/fkit-heal` still reports it. Nothing changes until you
+  choose.
+
+### Custom-path, fork or pinned-ref installs upgrading from v0.3.1 or earlier: reinstall once by hand
 
 If you installed with a custom `FKIT_SHARE`, `FKIT_BIN`, `FKIT_REPO` or `FKIT_REF` and did not keep
 them exported, re-run the installer once by hand, with the same variables **after** the pipe:
@@ -55,11 +92,12 @@ them exported, re-run the installer once by hand, with the same variables **afte
 curl -fsSL https://raw.githubusercontent.com/<repo>/<ref>/install.sh | FKIT_REPO=<repo> FKIT_REF=<ref> FKIT_SHARE=<dir> FKIT_BIN=<dir> sh
 ```
 
-Your current fkit's own `fkit update` cannot do this for you: the first update after this change still
-runs the **old** launcher, which hands the new installer nothing, so it installs one last time into
-the defaults. After the hand reinstall, `.version` remembers your source and paths. Then remove any
-copy an earlier `fkit update` left at the default paths (`~/.local/share/fkit`, `~/.local/bin/fkit`)
-if it is not the one you use. Default installs need nothing.
+Your current fkit's own `fkit update` cannot do this for you: an update from v0.3.1 or earlier (or
+from a `main` install older than this release) still runs the **old** launcher, which hands the new
+installer nothing, so it installs one last time into the defaults. After the hand reinstall,
+`.version` remembers your source and paths. Then remove any copy an earlier `fkit update` left at the
+default paths (`~/.local/share/fkit`, `~/.local/bin/fkit`) if it is not the one you use. Default
+installs need no hand reinstall.
 
 ### Projects with unsprinted briefs filed before v0.2.2: a stale backlog-header sentence
 
