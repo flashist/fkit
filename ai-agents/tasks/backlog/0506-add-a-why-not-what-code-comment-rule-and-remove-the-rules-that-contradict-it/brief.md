@@ -21,6 +21,8 @@ fkit-coder
 > The sprint ship-loop's per-task plan approval, given live by the owner, is where that word is given.
 > ⛔ **And not before open question 1 (fkit's own heavily-commented code) is answered** — it decides
 > whether the rule applies to fkit itself.
+> ⏱ **2026-10-10: open question 1 is answered — option (c).** This second gate is lifted; the first
+> (the owner's specific word at plan approval) stands. See *"Owner rulings"* at the end.
 
 **Owner request, 2026-10-10** — typed by the owner in a `fkit lead` session, relayed to a spawned
 `fkit-producer` with no owner channel (ADR-021; ⚠️ the quote is the lead's relay):
@@ -130,6 +132,7 @@ comments" covers prose inside skills is part of the same question.
      exempt; (c) applies to fkit's code (`claude/*.sh`, `bin/`, `test/`) but not to skill and agent
      prose (`SKILL.md`, `claude/agents/*.md`), which are prompts, not code. No recommendation from the
      producer — it is a judgment on fkit's own audit-trail style.
+     → ✅ **ANSWERED 2026-10-10: (c).** See *"Owner rulings"* below.
   2. **Hard rule or preference?** As an `## Output style` preference it yields to every other
      instruction, including *"match surrounding comment density"*. Producer's lean: a short hard-rule-area
      line or a rule in the coder's own prompt, so it does not lose every conflict — the plan should
@@ -139,3 +142,34 @@ comments" covers prose inside skills is part of the same question.
   4. **Cleanup pass.** Want a follow-up task (or a series, one per module) to clean up existing comments?
      For fkit's own tree only after question 1.
 - Merit position: see the board's *"➕ `0504`–`0506`"* section.
+
+## Owner rulings
+
+> ⏱ **2026-10-10 — open question 1 answered.** Given by the owner via `AskUserQuestion` in a `fkit lead`
+> session; relayed to a spawned `fkit-producer` with no owner channel (ADR-021). ⚠️ The quotes are the
+> lead's relay of the selected option, not text this producer saw the owner pick.
+>
+> - **Question:** *"0506: should the 'comment WHY, not WHAT' rule apply to fkit's own files?"*
+> - **Selected:** *"Code yes, prompt texts no (Rec)"* — option text: *"Option (c). Applies fully to
+>   fkit's scripts and tests; decision history moves to ADRs with one-line pointers. Skill and agent
+>   texts are left alone. A medium-sized task."*
+>
+> **What it settles.** Open question 1 → **(c)**: the rule applies to fkit's own code (`claude/*.sh`,
+> `bin/`, `test/`); skill and agent prose (`SKILL.md`, `claude/agents/*.md`) is not held to it. The
+> build gate in the Context banner is lifted. Nothing else in this brief was changed by this ruling;
+> status and rank are unchanged.
+>
+> **Producer's reading, for the plan to confirm (not ruled):**
+> - "Skill and agent texts are left alone" is read as *the rule does not govern the prose inside those
+>   files*. It is **not** read as forbidding the edits "What to build" already names in them — adding the
+>   full rule to `fkit-coder.md` (item 1) and fixing its *"match … comment density"* bullet (item 2).
+>   Those carry the rule; they are not comment cleanup. If the plan reads it otherwise, ask.
+> - ⚠️ **Open — does (c) pull the existing-code cleanup into this task?** The option says *"decision
+>   history moves to ADRs with one-line pointers"* and calls 0506 *"medium-sized"*. That could mean
+>   (i) only new and edited code follows the rule from now on, and moving the existing comment history
+>   in `claude/*.sh`, `bin/` and `test/` stays the separate follow-up of question 4; or (ii) this task
+>   also moves that history now. This brief still lists the cleanup as out of scope. The plan must put
+>   (i) vs (ii) to the owner at plan approval; until then, (i) holds.
+>
+> **Still open:** question 2 (hard rule or preference), question 3 (personal `~/.claude/CLAUDE.md`),
+> question 4 (cleanup follow-up — now including the (i)/(ii) point above). Answer at plan approval.

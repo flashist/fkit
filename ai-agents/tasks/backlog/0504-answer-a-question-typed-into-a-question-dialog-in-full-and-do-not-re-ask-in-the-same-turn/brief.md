@@ -65,6 +65,15 @@ Where those rules live today (verified 2026-10-10):
   new enters the shared block without something leaving or an owner-signed bump, and keep ≥ 400 B
   free. A new bullet must fit, or the plan must say what it trims — or put the detail in the agent
   prompts / a convention page and keep only a one-line pointer in the block.
+  ⏱ **2026-10-10 — this constraint is now larger** (owner ruling on question 2 below brings the
+  "Explain more, then ask again" option into scope). Measured by this producer on 2026-10-10 with
+  `wc -c` over the marker-delimited block in the root `CLAUDE.md`: **3906 B against `RULES_MAX=4352` →
+  446 B free, only ~46 B above the 400 B floor.** ⚠️ A quick measurement, not the test's own figure —
+  the plan re-measures with `test/rules-block-budget.test.js`. The option's label and description alone
+  are ~90 B, so the rules from items 1–2 **plus** the option almost certainly do not fit as new text.
+  The plan must measure and say which it proposes: trim existing text, a one-line pointer in the block
+  with the detail in agent prompts / a convention page, or an owner-signed `RULES_MAX` bump. `0506`
+  spends the same budget — whichever lands first leaves less for the other.
 - **It is a preference, not a hard rule** (same class as *"Ask interactively"*), so it goes in
   `## Output style`, which yields to the owner's own style instructions.
 - **Reconcile with the owner's personal trial rule — do not duplicate it.** The owner's global
@@ -72,6 +81,9 @@ Where those rules live today (verified 2026-10-10):
   explain first, and always offer **"Explain more, then ask again"** as the last option. The report
   proposes a near-identical **"Explain it simply first"** option. fkit's rule must not add a second,
   differently-worded option on top of his — see open question 2.
+  ⏱ **Ruled 2026-10-10:** fkit ships **his exact option** to all users (not the report's "Explain it
+  simply first"), and his personal copy is removed after `0504` ships, so he sees it once. See
+  *"Owner rulings"* at the end and "What to build" item 6.
 - In a spawned consult the tool is absent (ADR-021); this rule concerns sessions only. Spawned workers
   already return questions as text.
 
@@ -97,10 +109,31 @@ Where those rules live today (verified 2026-10-10):
    reconciled with the new rule.
 5. Re-run init so the root `CLAUDE.md` / `AGENTS.md` pick up the regenerated block; the budget test
    stays green.
+6. **Ship the "Explain more, then ask again" option to every fkit user** *(added 2026-10-10 by owner
+   ruling on question 2 — see "Owner rulings")*. Every question an fkit session puts with
+   `AskUserQuestion` includes it:
+   - label exactly `Explain more, then ask again`; description exactly `Give me more context in simple
+     terms, then re-ask the question.`;
+   - it is the **last** option; the recommended option stays **first**; the tool allows at most 4
+     options, so a question with 4 real options merges or drops the weakest one so this option fits;
+   - if the owner picks it: explain in simple terms (more context, plain words, no new jargon), then ask
+     the **same** question again, with the same options plus this one again.
+   **Reference wording** — the owner's personal rule, the model to follow, quoted in *"Owner rulings"*
+   below. Re-word only what must change for all users (his "me / I" becomes "the owner"); keep the label
+   and description byte-exact so his copy and fkit's never differ while both exist. Where the full text
+   lives (block vs agent prompts vs convention page) is the plan's call under the size constraint above.
+   It fits with items 1–3: a picked "Explain more" is a request for more information, so item 1's
+   "answer in chat" rule and this item's "then re-ask" must not contradict each other — the plan says how
+   they read together.
 
 **Out of scope (deliberately):**
 - The owner's personal `~/.claude/CLAUDE.md` and `~/.claude/settings.json` (`askUserQuestionTimeout`
   check). They are outside this repo — see open question 1.
+  ⏱ **2026-10-10:** the owner ruled his personal "Explain more" rule comes out of `~/.claude/CLAUDE.md`
+  once `0504` ships. That edit is **still out of scope for the coder**: it is outside fkit's repo, and it
+  is a **post-ship step for the owner or the lead session**, with the exact change shown to him before
+  saving. It is not a deliverable of this task and not a reason to keep this task open. The
+  `askUserQuestionTimeout` check was **not ruled** — owner-side, out of fkit's scope.
 - The report's *"If the rule isn't enough"* hook/mod on the `AskUserQuestion` result. A possible
   follow-up only if the prose rule proves too weak in use; file separately on the owner's word.
 
@@ -120,6 +153,12 @@ Where those rules live today (verified 2026-10-10):
    a single pass is evidence, not proof.
 6. The project's checks for the changed paths pass (per `CONTRIBUTING.md`'s "what changed → what to
    run" table).
+7. *(Added 2026-10-10, item 6.)* The shipped text carries the label `Explain more, then ask again` and
+   description `Give me more context in simple terms, then re-ask the question.` byte-exact (a search for
+   each string finds the shipped sites), plus the last-option / recommended-first / 4-option rule and
+   the re-ask-on-pick rule. In the step-5 live session, ⚠️ while the owner's personal copy is still in
+   place (it comes out only after ship), check that a question shows the option **once**, not twice;
+   pick it, and expect a plain explanation and the same question again.
 
 ## Notes
 - **Depends on:** nothing
@@ -140,4 +179,63 @@ Where those rules live today (verified 2026-10-10):
      for you and costs no rules-block budget.
   3. **Is your personal rule still on trial?** If the trial is over and it is staying, say so — it
      changes nothing here, but the plan should not treat it as temporary.
+  → ⏱ **2026-10-10:** question 2 ✅ answered (ship it to all users — overrides the recommendation
+  above); question 3 ✅ answered (the trial ends when `0504` ships; the personal copy comes out); question
+  1 ✅ answered **for the personal `~/.claude/CLAUDE.md` "Explain more" rule only** — the
+  `askUserQuestionTimeout` check and any other personal-file change from the report stay **not ruled**.
+  See *"Owner rulings"* below.
 - Merit position: see the board's *"➕ `0504`–`0506`"* section.
+
+## Owner rulings
+
+> ⏱ **2026-10-10 — open questions 1, 2 and 3.** Given by the owner via `AskUserQuestion` in a
+> `fkit lead` session; relayed to a spawned `fkit-producer` with no owner channel (ADR-021). ⚠️ The
+> quotes are the lead's relay of the selected options, not text this producer saw the owner pick.
+> Status and rank unchanged.
+>
+> **Ruling A — answers open question 2.**
+> - **Question:** *"0504: should fkit ship the 'Explain more, then ask again' option to every user?"*
+> - **Selected:** *"Yes, ship it to all users"* — option text: *"Every fkit user gets the option. Costs
+>   space in the size-limited rules file, and you'd need to drop your personal copy to avoid seeing it
+>   twice."*
+> - ⚠️ **This overrides the producer's recommendation** in question 2 (keep the option personal).
+> - **Effect:** the option is in scope — "What to build" item 6, verification step 7; the rules-block
+>   budget is now a larger constraint (see *"Constraints"*).
+>
+> **Ruling B — answers open questions 1 (partly) and 3.**
+> - **Question:** *"Once 0504 ships the option to all users, what should happen to your personal
+>   'Explain more' rule?"*
+> - **Selected:** *"Remove my copy after 0504 (Rec)"* — option text: *"When 0504 ships, the personal
+>   rule comes out of ~/.claude/CLAUDE.md (shown to you before saving) so you don't see the option
+>   twice. The trial ends there."*
+> - **Effect:** the trial ends when `0504` ships. Removing the personal copy is **outside fkit's repo**
+>   and is **a post-ship step for the owner or the lead session**, with the exact change shown to the
+>   owner before saving. **It is not a coder deliverable** and not part of this task's done-ness.
+>
+> **Not ruled:** the `askUserQuestionTimeout` check in `~/.claude/settings.json` (from the source
+> report) — owner-side, out of fkit's scope; and any other personal-file change the report proposed.
+>
+> **Reference wording for item 6 — the owner's personal rule**, as it stood on 2026-10-10 in his
+> `~/.claude/CLAUDE.md` (read from this producer's loaded context; the file was not opened or edited).
+> It is not in `source-report.md`, which proposes a different option ("Explain it simply first").
+> Quoted verbatim:
+>
+> > ## Asking me questions (AskUserQuestion) — trial, added 2026-09-25
+> >
+> > - **Explain first.** Before asking, explain the situation in plain, simple terms: what the choice is,
+> >   why it matters, and what each option would actually change. Assume I have not followed the details.
+> > - **Always offer "Explain more, then ask again".** Every question you put to me with AskUserQuestion
+> >   includes this option, worded exactly:
+> >   - label: `Explain more, then ask again`
+> >   - description: `Give me more context in simple terms, then re-ask the question.`
+> >
+> >   Put it last; your recommended option stays first. The tool allows at most 4 options, so if a
+> >   question needs 4 real options, merge or drop the weakest one so this option always fits.
+> > - **If I pick it:** explain in simple terms — more context, plain words, no new jargon — then ask the
+> >   same question again, with the same options plus this one again.
+> > - **If you cannot ask me directly** (a spawned subagent without AskUserQuestion): return the question
+> >   with enough plain-language context that whoever relays it can put it to me without asking you again.
+>
+> The plan decides which of these four bullets fkit ships. The ruling names the option (bullets 2–3).
+> Bullet 1 overlaps item 2 ("explain before you ask"). Bullet 4 overlaps fkit's existing consult rule
+> (ADR-021: return open questions). Neither is ruled in or out.

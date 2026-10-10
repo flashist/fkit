@@ -67,7 +67,7 @@ is already closed):
 | ✅ Done (agent-closed — not owner-verified) | P17 | **Make test/board-root.test.js reliable under machine load (its 20 s CLI time limit)** *(Added 2026-10-09 by owner ruling R9 — see the `0502` section below. ⚠️ `P17` is append rank, NOT a merit ranking — flagged for owner confirmation; on merit it belongs directly below `0477`, out of reach behind closed rows. No dependency; nothing waits on it. Owner `fkit-coder`)* | [`0502-make-board-root-test-reliable-under-machine-load`](../tasks/done/0502-make-board-root-test-reliable-under-machine-load/brief.md) |
 | 🔲 Backlog | P18 | **Answer a question typed into a question dialog in full, in chat, and do not re-ask in the same turn** *(Added 2026-10-10 by owner ruling R10 — see the `0504`–`0506` section below. ⚠️ `P18` is append rank, NOT a merit ranking — flagged for owner confirmation. Prose rules; shares `universal-rules.md` with `0506` — never alongside it. Owner `fkit-coder`)* | [`0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn`](../tasks/backlog/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/brief.md) |
 | ⛔ Cancelled (agent-closed — not owner-verified) (2026-10-10) — Owner ruling 2026-10-10 (fkit-lead session, relayed by the lead): "Cancel 2-buttons. I agree with you that it's not the fkit core." — a UI convenience mod, not fkit's core; if built, it belongs outside fkit. | P19 | **Build a command-buttons mod that offers the slash-commands Claude suggested as buttons above the prompt** *(Added 2026-10-10, R10. Cancelled the same day — see the `0504`–`0506` section below. Owner `fkit-coder`)* | [`0505-build-a-command-buttons-mod-that-offers-suggested-slash-commands-above-the-prompt`](../tasks/cancelled/0505-build-a-command-buttons-mod-that-offers-suggested-slash-commands-above-the-prompt/brief.md) |
-| 🔲 Backlog | P20 | **Add a "comment WHY, not WHAT" code-comment rule to fkit, and remove the rules that contradict it** *(Added 2026-10-10, R10. ⚠️ `P20` is append rank, NOT a merit ranking — flagged for owner confirmation. ⛔ Whether it applies to fkit's own heavily-commented tree is an open owner question that gates the build. Owner `fkit-coder`)* | [`0506-add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it`](../tasks/backlog/0506-add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it/brief.md) |
+| 🔲 Backlog | P20 | **Add a "comment WHY, not WHAT" code-comment rule to fkit, and remove the rules that contradict it** *(Added 2026-10-10, R10. ⚠️ `P20` is append rank, NOT a merit ranking — flagged for owner confirmation. ~~⛔ Whether it applies to fkit's own heavily-commented tree is an open owner question that gates the build.~~ Answered 2026-10-10: option (c) — code yes, prompt texts no; gate lifted (see the brief). Owner `fkit-coder`)* | [`0506-add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it`](../tasks/backlog/0506-add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it/brief.md) |
 
 ## ➕ `0504`–`0506` — added 2026-10-10 by owner ruling R10; the sprint now has 20 tasks
 
@@ -110,6 +110,14 @@ is already closed):
 - **Count.** 17 rows + 3 = **20 tasks** (as of this edit: 16 `✅ Done`, 4 `🔲 Backlog`).
 - **`0505` cancelled, 2026-10-10** — owner ruling in the `fkit-lead` session, relayed by the lead: *"Cancel 2-buttons. I agree with you that it's not the fkit core."* A UI convenience mod, not fkit's core; if built, it belongs outside fkit. Closed by a spawned producer via `/fkit-task-cancelled` (agent-closed — not owner-verified). Board now: 20 rows — 16 `✅ Done`, 3 `🔲 Backlog` (`0474`, `0504`, `0506`), 1 `⛔ Cancelled`. Ranks unchanged (no re-rank was ruled): `0506` stays `P20`; the `0505`-vs-`0506` swap question above is moot.
 - Every new brief carries *"Do not start without the owner's specific word."*
+- ⏱ **Owner rulings on `0504` and `0506`, 2026-10-10** (via `AskUserQuestion` in the `fkit-lead`
+  session, relayed to a spawned producer; ⚠️ the quotes are the lead's relay). `0506` open question 1 →
+  *"Code yes, prompt texts no (Rec)"* (option (c)) — its build gate is lifted. `0504` → *"Yes, ship it to
+  all users"* (the "Explain more, then ask again" option is now in scope; overrides the producer's lean)
+  and *"Remove my copy after 0504 (Rec)"* (personal-file edit is a post-ship step outside the repo).
+  Recorded in each brief's *"Owner rulings"* section. ⚠️ Both tasks now press harder on the shared
+  rules-block budget (~46 B above the 400 B floor, measured 2026-10-10 — see `0504`'s brief). No status,
+  rank or placement changed.
 
 ## ➕ `0502` — added 2026-10-09 by owner ruling R9; the sprint now has 17 tasks
 
@@ -331,3 +339,10 @@ the `P<n>` above. (Written first as `Sprint 12` / `sprint-12.md`; repointed the 
   committed.
 - ⚠️ **Open for the owner:** whether any of the candidates above (`0301` first) should join this sprint.
   Not asked by this producer — it has no owner channel.
+- ⏱ **Owner ruling, 2026-10-10 — no more pulls for now.** Asked via `AskUserQuestion` in the
+  `fkit-lead` session (relayed to a spawned producer; ⚠️ the quote is the lead's relay): *"Pull more
+  backlog tasks into Sprint 10?"* — selected *"No, finish 0504/0506 first (Rec)"* (option text: *"Keep
+  Sprint 10 small. Decide on more work after these ship."*). This answers the open question above **for
+  now**: none of the candidates (`0301`, `0189`, `0329`, `0332`) joins this sprint; the question comes
+  back after `0504` and `0506` ship. **Knock-on: none** — no placement changed, no `Depends on:` link
+  moved.

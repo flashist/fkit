@@ -179,3 +179,33 @@ measured; measuring before it lands measures the wrong suite.
 > - **Routed, not done here:** the wiki pages that still quote `timeout-minutes: 20` and the old
 >   *"6–8 minutes"* / *"~6 min"* figures need a `fkit-wiki` sync (listed in `worklog.md`
 >   § *Flags for later*).
+
+> ⏱ **Evidence note, 2026-10-10 — V5 (spawned `fkit-producer`, at `fkit-lead`'s direction; status line
+> and text above unchanged).** The owner answered *"Yes, close it (Rec)"* to *"Have the producer record
+> 0395's last check from the green CI runs and close it?"* (via `AskUserQuestion` in the `fkit-lead`
+> session; ⚠️ the lead's relay). The close is moot — this task was already closed
+> `✅ Done (agent-closed — not owner-verified)` on 2026-10-05. Only this evidence is added. The
+> owner-verified upgrade is the owner's alone and is **not** applied here.
+>
+> **V5 as written:** *"the first CI run after the change completes green **inside** the new timeout"*
+> (`timeout-minutes: 33`).
+>
+> - **The change's push.** `git log -- .github/workflows/test.yml`: the last commit touching it is
+>   `acd23a9` (*"Sprint 10: ship 16 tasks; file 0496–0501, 0503"*, 2026-10-09); `timeout-minutes: 33` at
+>   HEAD.
+> - **The first CI run after it** (found by this producer, `gh run list --workflow test.yml` +
+>   `gh run view <id> --json jobs`, 2026-10-10): run `37961366174`, push on `main`, head `acd23a9`, `test`
+>   job `success`, 2026-10-09T16:45:11Z → 16:57:28Z = **12m17s**, inside 33 min.
+> - **Later runs, all green** (the three the lead read with `gh run list`, job times re-read by this
+>   producer): `38031274614` *"Sprint push"* (`47b4e99`) 12m25s; `38033296145` *"Release v0.3.2"*
+>   (`0d1712f`) 9m03s; `38064272969` *"Sprint push"* (`79a7dbf`) 10m13s. Also `37979484507` (`d457593`)
+>   12m26s. The lead's figures (12m30s / 9m05s / 10m16s) are whole-run times; the job times above are a
+>   few seconds shorter.
+>
+> **Verdict: V5 is met as written — by run `37961366174`, not by the lead's three runs.** Those three are
+> not *"the first CI run after the change"* (they are the 3rd–5th after it), so on their own they would
+> not meet V5's wording; they corroborate it. The close note's estimate (*"~12–13 min"*) held.
+>
+> ⚠️ **Observation, not a defect of this task:** the slowest job since the change is 12m26s, so 33 min
+> is now ~2.65x headroom, below the ~3x ruled at the plan gate (3x of the then-slowest 652 s). The
+> comment's figures are correct as of their date. Whether to re-tune is the owner's call; nothing filed.
