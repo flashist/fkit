@@ -184,3 +184,4 @@ Only 2A's *mechanism assumption* (transcript-derivable) changed; the check itsel
 - [[tasks/add-sprint-ship-loop-to-stop-hook-skip-set]] — Add `fkit-sprint-ship-loop` to the ADR-030 Stop-hook skip set
 - [[tasks/transcript-independent-ship-loop-skip-signal]] — Give the ship-loops a transcript-independent skip signal for the ADR-030 Stop hook
 - [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] — ADR-053: Owner-involvement capture — closed-format, launcher-only hook log; a deterministic per-task line; "autonomou…

@@ -51,3 +51,5 @@ and tasks in** — the code half `0404` never authorised.
 - [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — retires it at phase 8
 - [[tasks/make-fkit-status-report-hierarchically-counts-and-exceptions-first-detail-on-request]] — `0409`, the other half of *"fix the reporting first"*; `dashboard.sh`'s stdout is a contract both depend on
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/fkit]] — the team page, whose data-model section now points here as the only board code in the repo
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/find-why-prove-red-step-0a-sometimes-goes-red-and-make-it-deterministic]] — `0477`: tests A/E/R1 read the live tree twice and raced concurrent writers
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/overhaul-the-readme-for-first-time-visitors]] — `0478` moved the README's board section to `docs/board.md`

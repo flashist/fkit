@@ -83,6 +83,11 @@ started), not a pass, not a partial discharge. Canonical record: `0411`'s brief.
 timestamps, a timed status history, and the reader in use on a sibling project) fed the 2026-09-30
 decision; ADR-052 declares it **closed, not deleted**.
 
+> ✅ *Dated 2026-10-10 (sync `3915417`→`79a7dbf`):* the evidence log **now carries its closing note** (2026-10-05, task `0472`) — closed
+> by ADR-052, kept, no further entries; its E3 cell keeps **Open** as the 2026-09-26 reading with a dated annotation
+> that `0413` was cancelled (the log is append-only). The same task replaced this ADR's absolute machine path in
+> §Decision item 1 with *"the sibling aiboard repo"* and fixed the `0404` reference's visible link text.
+
 ### Supersession of the external expert's verdict
 **Adopted on its path, overridden on its endpoint.** The read-only view (A) was the expert's path; the
 owner rejected *"no storage convergence, ever"*. The verdict's file is **not edited**.
@@ -108,3 +113,4 @@ owner rejected *"no storage convergence, ever"*. The verdict's file is **not edi
 - [[tasks/let-the-read-only-board-reader-serve-another-projects-ai-agents-tree-root-flag]] — task `0412`, the reader on another project
 - [[tasks/keep-a-closed-sprints-tasks-attached-when-its-board-is-named-plan-sprint-n]] — task `0415`
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/fkit]] — the team page's data-model note
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`, which closed the evidence log and removed the machine path

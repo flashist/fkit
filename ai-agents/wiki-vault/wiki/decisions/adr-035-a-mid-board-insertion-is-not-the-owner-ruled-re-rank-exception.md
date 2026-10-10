@@ -84,3 +84,4 @@ The closed-row rule is **absolute and outranks the exception**, exactly as it al
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]] — ⭐ **the owner-ruled two-row SWAP of 2026-09-10 (`S6`)**: the five untouched rows keep both their ranks and their relative order, which is what keeps it inside the exception
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/backfill-a-sprint-status-onto-every-existing-sprint-plan]] — task `0340`, the row that moved `P6`→`P3`
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — a board that records its rank/merit disagreement rather than renumbering
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/sprint-10-the-0472-0482-batch]] — Sprint 10 — the `0472`–`0482` batch: steadier and faster checks, a correct `fkit update`, honest docs, opt-in plan re…

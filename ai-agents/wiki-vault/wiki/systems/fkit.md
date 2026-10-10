@@ -153,6 +153,26 @@ Generated and gitignored per project: `.fkit/settings/<role>.json` (the hook wir
 - ⚠️ **A compaction cuts each re-attached skill to ~20,000 characters** *(observed, not documented — `reports/2026-09-27-eval-keeping-ship-loop-conductors-from-bloating.md` §1.3)*. After a 2026-09-18 compaction, `fkit-sprint-ship-loop` (~39.8k chars) lost **~50%** — including **all its Hard rules** — and `fkit-task-ship-loop` (~23.4k) lost ~15%. The universal rules block and the agent's system prompt are not in the summarised conversation, so the **universal** hard rules survive (inferred, not tested); the **loop-specific** ones are at risk. ⛔ **Owner ruling 2026-09-28: he manages context by hand; no fkit change and no brief** — auto-compaction options, a progress file and a self-restarting session were all rejected (his own words: *"it looks like a workaround"*). Usage advice only: prefer `/clear` between tasks, give `/compact` focus instructions, and re-run the loop command after a manual compaction so the full skill text reloads.
 - **No secrets in any artifact.** Nothing fkit produces may carry a credential — all of it goes to git.
 
+> ⭐ **Dated resync 2026-10-10 (sync `3915417`→`79a7dbf`) — Sprint 10 changed five things on this page, without rewriting it** ([[tasks/sprint-10-the-0472-0482-batch]]):
+> - **Codex is optional but recommended** ([[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]], amending ADR-009 §2): without it the second opinion falls back to a
+>   Claude-only pass, **loudly flagged NOT model-diverse**. *"One runtime: Claude Code native + Codex"* above stands;
+>   Codex is no longer a required install.
+> - **The lead never diagnoses** (task `0498`; a dated note on ADR-031): it answers *"is this expected?"* from spec,
+>   brief, wiki or ADR with **1–2 fact lookups**; the first code-level *"why"* goes to a spawned coder (tripwire: a
+>   second file read to explain a behaviour, or any log read to explain a failure). One owner override, labelled.
+>   The lead row in the roles table predates this. → [[tasks/make-the-lead-hand-a-code-level-why-question-to-a-spawned-coder-instead-of-tracing-code-itself]]
+> - **A spawned coder writes under one marker from either driver** ([[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]]) — the sprint loop or the lead as conductor;
+>   four fields; on the lead path the owner's approval quoted verbatim with date and channel. Commit/push never
+>   covered (`0497`, open, asks whether they should be).
+> - **Opt-in plan review** ([[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]]): `/fkit-sprint-ship-loop --plan-review`, default off. The task folder's reserved
+>   names are now `brief.md`, `plan.md`, **`plan-review.md`**, `worklog.md`, `review.md`, `assets/`
+>   (`ai-agents/tasks/README.md`).
+> - **Placement questions name their knock-on** — a new convention (task `0495`): an option that puts a task in a
+>   sprint or re-points a dependency says which open tasks would then wait, and on which sprint; and `dashboard.sh`
+>   now emits `drift depends-on-later-sprint` → [[tasks/make-a-later-sprint-blocker-visible-0492-0495]]
+> - ⚠️ **Proposed, NOT accepted:** [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] (owner-involvement capture). Nothing is built; `0485` (B0, the owner's
+>   acceptance) blocks `0486`–`0491`.
+
 ## History — fkit formerly ran on Omnigent
 fkit originally shipped as [Omnigent](https://omnigent.ai) agent bundles under `omnigent/`. [[decisions/adr-008-claude-code-native-port-alongside-omnigent]] added the Claude Code native port **alongside** it (dual-runtime, hand-mirrored); [[decisions/adr-009-claude-code-native-is-the-only-runtime]] superseded that and made Claude Code native + Codex the **only** runtime. `omnigent/` was deleted in Sprint 2 ([[tasks/sprint-2-remove-omnigent]]).
 
@@ -303,3 +323,6 @@ This is recorded because it explains things that would otherwise look arbitrary:
 - [[tasks/repair-the-five-live-ownership-fact-defects]] — *added 2026-08-29:* `0188`, whose findings **R4** and **D2** falsified two claims in this page's §The 25 skills paragraph; the correction is the ⚠️ SYNC block there
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]] · [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — the two boards ingested in this pass; ⭐ **the skill count is now 28 and there are four movers, not two**
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/architecture-md-prose-repair-9-1-inventory-occurrence-b-and-9-5]] — task `0392`, which made `architecture.md` §9.1 and §9.5 true. ⛔ **It is also why the §1/§3 count defect above is NOT a criticism of that row**: its scope was §9.1 and §9.5, and **§1–§7 was outside every Sprint 9 row's scope**
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] · [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]] · [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] · [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — the four Sprint 10 decisions
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/sprint-10-the-0472-0482-batch]] — the sprint
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-the-lead-hand-a-code-level-why-question-to-a-spawned-coder-instead-of-tracing-code-itself]] · [[tasks/make-a-later-sprint-blocker-visible-0492-0495]] — the lead never diagnoses; later-sprint blockers made visible

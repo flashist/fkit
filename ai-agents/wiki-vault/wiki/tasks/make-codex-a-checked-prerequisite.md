@@ -26,3 +26,5 @@ The architect recommended a **hard preflight fail** when Codex is absent. **The 
 - [[systems/review-and-model-diversity]]
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]]
 - [[systems/install-and-self-update]]
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]] — ⚠️ **moves the line this task's ruling drew**: the flagged partial was *"a last-resort safety net for a Codex outage mid-session, not a supported way to run fkit without Codex installed"*; since 2026-10-05 running with **no Codex at all** is a supported, flagged setup. The "required" wording on this page is history.
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/make-every-document-say-codex-is-optional-but-recommended]] — Make every document say Codex is optional but recommended

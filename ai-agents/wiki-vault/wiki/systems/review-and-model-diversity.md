@@ -97,8 +97,23 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 
 ## Gotchas / Known Issues
 - **Codex is a required dependency, not a nice-to-have.** It is what makes the second opinion genuinely model-diverse — the adversarial reviewer's entire reason to exist.
+  - ⛔ *Dated correction 2026-10-10 (sync `3915417`→`79a7dbf`); the bullet above is left byte-identical.* **Codex is now optional but
+    recommended** ([[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]], amending ADR-009 Decision 2, owner ruling 2026-10-02). Without it there is no model-diverse
+    second opinion: `fkit-review` runs its own pass only, puts `[NOT model-diverse — INCOMPLETE]` above its findings and
+    forces the verdict to `🟡 Partial review — Codex unavailable`; `fkit-adversarial-review`, if run, does a Claude pass
+    itself labelled `[claude-fallback — NOT model-diverse]`. **The aim is unchanged and the flag is not softened** — a
+    document or output that softens or drops it is a defect. What still holds from the bullet: model diversity is the
+    adversarial reviewer's reason to exist.
 - **`AGENTS.md` is read natively by Codex during the adversarial pass.** While it was stale, *every adversarial review was being run by a model that had been told the wrong thing about the project.* That made it the highest-leverage doc in the repo to fix and it is a standing reason to keep it accurate.
 - The adversarial reviewer was formerly eager-spawned at session start under Omnigent's `fkit-team`, which cluttered the agents panel; that root agent is deleted — see [[tasks/remove-adversarial-reviewer-eager-spawn]].
+
+> ⭐ **Dated addition 2026-10-10 (sync `3915417`→`79a7dbf`) — the adversarial reviewer can now attack a PLAN, not only a diff.**
+> [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]]: in a `/fkit-sprint-ship-loop` run started with `--plan-review` (default off), after the producer and/or
+> architect approve a plan, `@fkit-adversarial-reviewer` attacks the **agreed** plan on Codex — findings only, banner
+> relayed first, **the plan not changed afterwards**; each finding reaches the owner verbatim with a one-line coder
+> check, and **the owner still approves last**. Its prompt's *"What you receive"* now reads *"a diff / scope … or a
+> plan"*. A Codex plan pass in fallback mode is flagged loudly in the run's roll-up. ⛔ No document may call plan
+> review a "verification".
 
 ## Related
 - [[tasks/sprint-2-remove-omnigent]]
@@ -136,3 +151,6 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - [[tasks/refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim]] — *added 2026-08-29:* `0327`, where **Codex explicitly CLEARED the area a high-severity defect lived in, and the clearance was disproven by measurement** — ⭐ *"an automated reviewer's 'no finding' is an input, not an authority."*
 - [[decisions/adr-045-an-in-flight-review-finding-terminates-in-the-ledger-not-a-new-task]] — ⭐ *Added 2026-09-05 (`0358`, sweep C):* where an in-flight reviewer finding terminates. ⛔ **Decided, NOT built** — nothing changes behaviour until its follow-ups ship
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/adr-the-narrow-in-flight-review-fix-lane]] — task `0352`, which produced ADR-045
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]] — Codex optional but recommended; the flagged Claude-only fallback is a supported mode
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — the Codex plan pass in opt-in plan review
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-every-document-say-codex-is-optional-but-recommended]] · [[tasks/build-the-opt-in-plan-review-step-off-by-default]] — the Sprint 10 tasks behind them

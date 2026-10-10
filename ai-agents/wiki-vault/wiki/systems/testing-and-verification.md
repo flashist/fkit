@@ -106,6 +106,11 @@ recorded in the workflow file itself:
 `prove-red.sh` re-running the suites against every mutant and clean baseline. **That is the cost the
 owner accepted, stated rather than implied.**
 
+> ⚠️ *Dated note 2026-10-10 (sync `3915417`→`79a7dbf`); the sentence above is left byte-identical.* **"Roughly 6–8 minutes" no longer
+> holds.** Measured in Sprint 10 (`0480`, machine not idle): `test:unit` 55–56 s, `test:prove-red` 651 s, `npm test` ≈
+> 12 min derived; later full runs on the owner's Mac 23.1 min to ~48 min under load. CI's last 20 runs before
+> 2026-10-02: 5.8–10.9 min. **Task `0503` (open) re-measures locally and on CI.** No new ruled range exists yet.
+
 > ⚠️ **CORRECTED IN PLACE 2026-08-14 by the post-`0288` sync — this paragraph carried BOTH defects
 > `0291` and `0297` were about, and `0297`'s sweep did not reach this page.** It read *"Measured suite
 > runtime: **~5m30s–6m20s** (328 / 380 / 347 / 344 s, same machine)… against **15 mutants and 9 clean
@@ -141,6 +146,23 @@ the CI run because `package.json`'s `&&` short-circuited past it.**
 ⚠️ **What CI does NOT close:** `install.sh` still has **zero automated coverage** and was explicitly
 out of `0256`'s scope, as its own brief — along with `shellcheck`. **CI landing is not the e2e gap
 closing.**
+
+### Sprint 10 — the checks made steadier and cheaper *(added 2026-10-10, sync `3915417`→`79a7dbf`)*
+- **CI timeout 20 → 33 min** — `0395`, on ~3× the slowest of 20 post-`0388` runner runs (652 s); the comment
+  rewritten with sourced, dated figures. ⚠️ Its V5 (the first CI run after the owner's push finishes well under 33
+  min) is **pending, not verified**. → [[tasks/re-measure-the-ci-test-runtime-on-the-ubuntu-runner-and-correct-the-workflow-timeout]]
+- **prove-red keeps a red step's output** — `0477`: each of 55 steps writes its own file; a failed step's output is kept
+  in a `fkit-prove-red-kept.*` dir under `$TMPDIR` and named in the `✗` line; green runs leave nothing. ⭐ **Root cause
+  found by reproduction:** tests that read the live tree **twice** raced other agents' writes, phase-locked to when
+  the writer started (1–3 s ahead → red). Two-read tests now bracket their reads; single-read guards stay strict
+  (residual R-a, owner-ruled). → [[tasks/find-why-prove-red-step-0a-sometimes-goes-red-and-make-it-deterministic]]
+- **`npm run test:docs`** — `0480`: the ten files that read the live `ai-agents/` tree (~28 s vs ~55 s unit, ~11 min
+  prove-red). `CONTRIBUTING.md` maps *what changed → which checks*; shipped procedures carry a **generic** version.
+  ⛔ `npm test`, CI and the release gate still run everything (ADR-026 Decision 4); owner: no CI path filters. → [[tasks/run-only-the-checks-a-change-needs-not-the-full-suite-every-time]]
+- **`board-root` CLI limit 20 → 120 s** — `0502`: one named constant `CLI_TIMEOUT_MS` for every CLI call and the
+  banner timer; the R3 "starts nothing" proof still bites. Cost: a real hang takes longer to fail. → [[tasks/make-board-root-test-reliable-under-machine-load]]
+- **Text-presence pins for prose rules** — `test/spawned-write-marker.test.js` (`0475`) and
+  `test/plan-review-switch.test.js` (`0473`). ⚠️ They check **words on disk, never obedience**.
 
 ## Gotchas / Known Issues
 
@@ -253,3 +275,5 @@ closing.**
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/architecture-md-prose-repair-9-1-inventory-occurrence-b-and-9-5]] — task `0392`, which discharged this page's §9.1 staleness flag
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — the board that carried all of the above
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/correct-the-false-ci-has-never-run-claims-in-architecture-md]] — task `0312`, the first link in the chain this page records as *"most of which never landed"*, now a page of its own. ⭐ **It explains WHY occurrence B was left: the owner NARROWED the row to occurrence A**, declining a scope extension the filing producer had disclosed precisely so it could be reversed in one edit. ⛔ **`0312`'s close is correct and was never in question** — what it left behind is the visible cost of a narrowing that nothing downstream inherited
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/find-why-prove-red-step-0a-sometimes-goes-red-and-make-it-deterministic]] · [[tasks/run-only-the-checks-a-change-needs-not-the-full-suite-every-time]] · [[tasks/make-board-root-test-reliable-under-machine-load]] · [[tasks/re-measure-the-ci-test-runtime-on-the-ubuntu-runner-and-correct-the-workflow-timeout]] — Sprint 10's four test-reliability and cost tasks
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/sprint-10-the-0472-0482-batch]] — the sprint that drove them

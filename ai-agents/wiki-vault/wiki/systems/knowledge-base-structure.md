@@ -107,6 +107,29 @@ Its table rules five target kinds — `path:NNN` is **correct** for a source/tes
 
 ⚠️ ~~**Its task, `0171`, is still `🔄 In progress` on [[tasks/sprint-6-repair-the-record-the-board-rests-on]] (`P2`) as of 2026-08-22, although the page is on disk and committed.**~~ ✅ *Corrected 2026-08-22 (later the same day):* **`0171` has CLOSED** — `✅ Done (agent-closed — not owner-verified)`, closed by a spawned producer with no owner channel, so ⛔ **no human has verified it**. See [[tasks/write-the-durable-citation-anchors-convention-page]]. ⛔ **Nothing enforces the form** — [[tasks/repair-the-three-decay-shapes-across-the-open-backlog-briefs]] removed the day's seed and said so plainly: *"the decay can return tomorrow."* ⚠️ **That is unchanged by the close:** the guard is task `0176`, still **open**, and the page's own *Where this is enforced* section says so.
 
+### An eleventh convention — `placement-questions-state-the-knock-on.md` *(measured 2026-10-10, sync `3915417`→`79a7dbf`)*
+
+⭐ **A placement question names its knock-on** — before the owner picks an option that puts a task in a sprint or
+re-points a dependency, **each option's own description** says which open tasks would then wait, and on which sprint:
+*"`<task>` and N tasks behind it would then wait on Sprint M."* Owner ruling 2026-10-05 (*"Say the knock-on in
+questions"*), scope 2026-10-08 (*"Always (Recommended)"* — same-sprint waits included). A spawned worker writes
+`knock-on: none (checked)` so a relayer can tell a checked zero from a forgotten one; "(Recommended)" never excuses
+it. ⛔ **Prose only — nothing checks a question's text mechanically.** From task `0495` → [[tasks/make-a-later-sprint-blocker-visible-0492-0495]].
+
+| Measure | 2026-09-16 | **2026-10-10** |
+|---|---|---|
+| Live `conventions/*.md` (excluding `README.md`) | 10 | **11** |
+| Scaffold copies | 9 | **10** |
+| `conventions/README.md` index rows | 10 | **11** |
+| Must-match byte-identical pages | 3 | **4** — the new page joins `task-owner-vocabulary.md`, `priority-is-rank-not-identity.md`, `durable-citation-anchors.md`; ✅ **all four re-verified byte-identical on disk this run** (`cmp`) |
+
+⚠️ The exceptions-module count (28 on 2026-09-16) was **not** re-measured this run.
+
+> ⭐ **Also in this window (2026-10-10):** a 2026-07-18 producer handoff, stray at the repo root, was **moved — not
+> deleted —** to `reports/2026-07-18-handoff-fkit-status-filtered-board.md` by `0478` (owner ruling: move under
+> `ai-agents/`). And task `0472` added dated correction notes to five `reports/` files and ADRs 033/049/052 — the
+> append-only, text-left-byte-identical pattern this page describes. → [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]]
+
 ### The merit statement — added to `priority-is-rank-not-identity.md`, 2026-08-21
 
 A new `## The merit statement` section, **dual-homed byte-identically**, recording how an owner records an ordering that board rank can no longer carry. **Two shapes only** — `- **On merit:** immediately above 0154 — <reason>` or `- **On merit:** as ranked` — **relative never absolute · folder ID only, no `P<n>` token · advisory, board rank still binds · `as ranked` required, not optional**, because an explicit no-op is what makes **absence detectable**. It also names the **three carriers** and which of them binds: rank carries reading order, the merit statement carries preference (**not binding**), and `Depends on` / `Blocks` carries correctness order (**binding, and it outranks reading order**). ⚠️ Its `brief-missing-merit` guard is recorded as **"Specified, not built yet."** See [[tasks/record-the-canonical-merit-statement-form-in-the-convention-page]].
@@ -209,3 +232,5 @@ A new `## The merit statement` section, **dual-homed byte-identically**, recordi
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — the board that made `architecture.md` say only true things
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[systems/backlog-convergence-and-the-k-measurement]] — ⭐ **a `reports/` record ingested for the first time in this vault's history.** No wiki page before it carried a `reports/` file as its `**Source**`; every earlier report reached the vault *through* its originating task page. ⚠️ **This one had no task to hang from** — it was written by a spawned producer on a direct owner ruling — and it demonstrates this page's own rule from the other side: ⛔ **a report is never promoted into `conventions/`**, but it is not thereby unfileable
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/sweep-the-repo-only-claude-path-form-out-of-installed-facing-prose]] — task `0390`, whose sweep produced the must-match vs audience-adapted asymmetry recorded above
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-a-later-sprint-blocker-visible-0492-0495]] — `0495`, the eleventh convention
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — dated corrections across `reports/` and three ADRs

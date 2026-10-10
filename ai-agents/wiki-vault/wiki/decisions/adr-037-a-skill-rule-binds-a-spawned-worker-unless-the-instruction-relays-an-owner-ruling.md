@@ -127,6 +127,12 @@ The ADR states: ***"Prose is proportionate. There is no mechanical enforcement, 
 
 ⚠️ **What this ADR does NOT do:** it does not decide whether `/fkit-task-done` step 5 should be amended, and it does not generalize the ledger-freezing reasoning past review ledgers. That is task **`0192`**, open.
 
+> ⚠️ **Dated pointer 2026-10-10 (sync `3915417`→`79a7dbf`).** The source gained a note (2026-10-06, `0475`): the coder's
+> declared-approval marker — the instance this ADR generalized from, *"one skill and one role"* — now has **two
+> drivers** ([[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]]). The coder's refusal is an **agent-prompt rule**, not a skill rule, and ADR-055 is **the standing,
+> named owner ruling on that exact point** — so a correctly marked spawn departs from no rule and owes **no**
+> per-spawn named-ruling argument here. Tier 1 untouched. Nothing this ADR decided is overturned.
+
 ## Related
 - [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158`, the investigation that produced this ADR
 - [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162`, which **narrows §5** and owes it a correction note (`0205`)
@@ -155,3 +161,5 @@ The ADR states: ***"Prose is proportionate. There is no mechanical enforcement, 
 - [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] — *added 2026-08-29:* ADR-044, whose own architect Build run cleared the spawned-architect bar ⭐ **only because a named owner ruling displaced it for that run** — the mechanism this ADR defines
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sweep-b-the-single-site-correction-notes]] — task `0357`, Sweep B — the single-site correction notes
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/repair-0194s-false-0190-clause-does-not-exist-premise]] — task `0221`: ⭐ **both clause sites are now confirmed SHIPPED and quoted verbatim in `0194`'s brief** — the worker-side clause in `universal-rules.md` and the driver-side clause in the ship-loop
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — the standing named ruling that makes this ADR's per-spawn argument unnecessary for a marked coder spawn
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — ADR-056: Opt-in plan review — agents approve the plan and Codex attacks it before the owner does, switched per sprint… · [[tasks/let-a-spawned-coder-write-under-a-lead-relayed-owner-approval]] — Let a spawned coder write under a lead-relayed owner approval (one approval marker for both drivers)

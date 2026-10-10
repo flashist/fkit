@@ -60,6 +60,12 @@ Owner ruling, verbatim label: **"A: Build role follows the deliverable's skill +
 
 ⛔ **Do NOT re-raise on:** *"the loop should read `## Owner`"* (answered by deliverable, not field — `0171` is the counter-example); *"the architect row needs a second owner beat"* (the relay is that beat); or anything re-arguing ADR-038's option (b) from authorship.
 
+> ⚠️ **Dated pointer 2026-10-10 (sync `3915417`→`79a7dbf`).** The source gained three pointer notes (2026-10-06, `0475`): the
+> **coder's** marker gained a second driver ([[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]]); **these non-coder Build carve-outs did not** — ADR-055 is
+> coder-only (owner ruling OQ6), so a lead-spawned architect or producer may **not** read "the declared-approval
+> marker" as covering it. ⚠️ Verified by the source 2026-10-06: neither `fkit-architect.md` nor `fkit-producer.md`
+> contains the carve-out yet. Anchor on the coder's §Mode *"A second scoped exception"* phrase, not a line range.
+
 ## Related
 - [[decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs]] — the companion rule, **not amended**, whose closeout clause this discharges explicitly
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] — the vault-write rule that makes the wiki wall hard
@@ -77,3 +83,4 @@ Owner ruling, verbatim label: **"A: Build role follows the deliverable's skill +
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/architecture-md-prose-repair-9-1-inventory-occurrence-b-and-9-5]] — task `0392`: ⚠️ **its `## Owner` is FLAGGED as an unsettled producer judgement** — the three originals disagreed and Group A is coder-shaped
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — the board that left that role question to each row's plan gate
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-sprint-mover-pins-and-successor-mode-durable-prove-red-mutations]] — task `0388`: ⭐ **`## Owner: fkit-coder` fixed BY THE DELIVERABLE** — `test/prove-red.sh` is a coder surface, and Decision 1 says so
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — widens the coder's marker only; these carve-outs stay sprint-loop-only

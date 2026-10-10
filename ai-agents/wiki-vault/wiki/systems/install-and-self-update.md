@@ -36,6 +36,12 @@ fkit                                  (run in any project directory)
 
 **Claude Code is a hard requirement** — the launcher exits **127** without it. **Codex is required but warned, never walled** (owner ruling): a Codex outage must not lock the owner out of their own team.
 
+> ⛔ *Dated correction 2026-10-10 (sync `3915417`→`79a7dbf`); the paragraph and diagram above are left byte-identical.* **Codex is now
+> optional but recommended — warned, never walled** ([[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]], owner ruling 2026-10-02; task `0476`). The diagram's
+> *"codex required-but-WARNED"* now reads *"codex optional-but-WARNED"* in `architecture.md`; `install.sh` no longer
+> prints *"⚠ Required: Codex"* but still says what you lose without it and how to install it. Launcher behaviour is
+> unchanged — `codex_preflight` always only warned.
+
 ### The menu reordered — lead first, "team room" retired (2026-07-25)
 
 The lead moved from **option 7 to option 1** and its label from *"team room"* to **`lead`**, on an owner ruling made from seeing the menu on screen: since [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] the lead is the orchestrating front door — the natural first stop for someone who does not know which role they need — and it was listed last. **The `1-7` range is unchanged**, so the prompt and the invalid-pick error needed no edit. Landed by [[tasks/reorder-launcher-menu-lead-first-and-rename-label]] (launcher) and [[tasks/retire-team-room-in-docs-and-agent-definitions]] (every other file).
@@ -77,6 +83,16 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 > **2. *"Time-boxed to 5 s"* is FALSE on the git path** — see the correction under §Summary. **Trigger semantics are unchanged** (sha comparison stays, correct for a sha-keyed distribution), as are the throttle, the silent-when-current and silent-when-offline behaviour, and the source-checkout exclusion.
 
 **It never auto-updates and never re-execs itself** — deliberately unlike the Omnigent launcher it replaces, which had no timeout and no `GIT_TERMINAL_PROMPT` guard (a credential-prompting repo would hang the launcher indefinitely). Source checkouts are excluded entirely.
+
+> ⛔ **Dated correction 2026-10-10 (sync `3915417`→`79a7dbf`) — `fkit update` did NOT reinstall from your source or into your paths
+> until task `0481`.** `_fkit_reinstall` set `FKIT_REPO`/`FKIT_REF` in front of `curl`, and a variable set before a
+> command reaches **only that command** — not the `sh` across the pipe. So the installer ran with defaults and
+> **silently reinstalled `flashist/fkit@main`**, and custom `FKIT_SHARE`/`FKIT_BIN` installs were "updated" into the
+> **default** dirs as a second install. **Fixed:** the update hands the recorded source and paths to the installer
+> (env for this run → `.version` → default); **`install.sh` now records `bin=`** in `.version`
+> (`version`/`sha`/`repo`/`ref`/`bin`); the update refuses, with no `FKIT_SHARE` given, when the launcher's own root is
+> not an install (reached through a symlink or a copy); an explicit `FKIT_SHARE` holding an install supplies that
+> install's recorded repo/ref/bin. Tested on a sealed PATH with a fake installer. → [[tasks/make-fkit-update-reinstall-from-the-source-and-paths-it-was-installed-from]]
 
 ### Release
 `npm run release` → `bin/release.mjs`: bump `VERSION` + `package.json` (patch by default), `git add -A`, commit, push, annotated tag `v<version>`, push the tag. **No npm-registry publish.**
@@ -181,6 +197,18 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 >
 > ⚠️ **A reason stated elsewhere in this vault's neighbourhood is now FALSIFIED:** *"an unbumped `VERSION` makes the notice read `v0.1.30 → v0.1.30`"* was true before [[tasks/fix-the-version-labeled-sha-triggered-update-banner]] (`0257`, closed 2026-08-13) and is **false now** — that branch prints a coherent sha delta instead. ✅ **The supersession of ADR-001 is unaffected**: bumping still buys something real. ⛔ **What bumping never was is the delivery mechanism — a version number is a *label on* a release, never the thing that ships it.** `RELEASING.md` §2 is the source, and `architecture.md` §6 still calls version bumping load-bearing.
 
+> ⭐ **Dated addition 2026-10-10 (sync `3915417`→`79a7dbf`) — the release now keeps `CHANGELOG.md` true.** `0478` created a root
+> `CHANGELOG.md`; `0479` made `bin/release.mjs` **refuse an empty or missing `## Unreleased`** — checked before the
+> test gate **and again after it**, so a refusal still leaves the tree clean — and on release turn it into
+> `## v<version> — <date>` with a fresh `## Unreleased`, in the version-bump commit. Escape hatch:
+> `--allow-empty-changelog`, loud. → [[tasks/keep-changelog-md-up-to-date-at-every-release]] · [[tasks/overhaul-the-readme-for-first-time-visitors]]
+>
+> ⚠️ **Runtime figures on this page are stale.** CI's `timeout-minutes` is now **33** (task `0395`: ~3× the slowest of
+> 20 post-`0388` runner runs, 652 s), and `architecture.md`'s gap between the release gate and the bump now reads
+> *"10+ min"*, not *"~6 min"*. Local full runs measured 12 min to ~48 min under load during Sprint 10; **task `0503`
+> (open) re-measures locally and on CI.** ⚠️ `0395`'s first-CI-run-after-push check (V5) is **pending the owner's
+> push** — not verified. → [[tasks/re-measure-the-ci-test-runtime-on-the-ubuntu-runner-and-correct-the-workflow-timeout]]
+
 ## Gotchas / Known Issues
 - **`install.sh` is the blast radius of the whole product.** A bad landing breaks installation *including the self-update path that would ship the fix*. It **cannot be verified by reading a diff** — it must be installed from a ref into a clean `$HOME`.
 - **`install.sh` still has zero automated coverage** — and it is the `curl | sh` entry point. `claude/fkit-claude.sh` **is now covered** (argv contract + the `skillOverrides` matrix) by the launcher-contract suite — see [[systems/testing-and-verification]]. *(Updated 2026-07-16: the risk is **reduced, not closed**. `architecture.md` §9.1 still says both files have "no coverage of any kind" — **the doc is behind the code**.)*
@@ -258,3 +286,7 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/cut-the-v0-3-0-release-and-hand-archive-sprint-7]] — task `0360`, the v0.3.0 cut and Sprint 7's hand-archive · [[tasks/start-the-lead-session-not-the-producer-after-a-fresh-projects-cold-start]] — task `0379`, the cold-start lead routing
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sweep-the-repo-only-claude-path-form-out-of-installed-facing-prose]] — task `0390`: ⛔ **a consuming project has only `.claude/`**, and eight runnable command lines in shipped skills used the repo-only form — including in skills that call a script whose own banner declares the installed form
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/architecture-md-prose-repair-9-1-inventory-occurrence-b-and-9-5]] — task `0392`, which falsified this page's `Seven roles` bullet (see the dated correction above)
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-fkit-update-reinstall-from-the-source-and-paths-it-was-installed-from]] — `0481`, `fkit update` reinstalls from the recorded source and paths
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/keep-changelog-md-up-to-date-at-every-release]] · [[tasks/overhaul-the-readme-for-first-time-visitors]] — `CHANGELOG.md` and the release's changelog refusal
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]] · [[tasks/make-every-document-say-codex-is-optional-but-recommended]] — Codex optional but recommended
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/re-measure-the-ci-test-runtime-on-the-ubuntu-runner-and-correct-the-workflow-timeout]] — CI timeout 33 min

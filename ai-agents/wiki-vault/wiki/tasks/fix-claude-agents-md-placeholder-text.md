@@ -22,8 +22,16 @@ The root agent instructions no longer look like unfinished scaffold output, and 
 > under a **one-time, two-brief owner grant** — the 2026-09-18 addendum on
 > [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]]. ⛔ **Not a precedent.**
 
+> ⛔ **Dated correction 2026-10-10 (sync `3915417`→`79a7dbf`) — the 2026-09-30 note above repeats a cause git does not support; it is
+> left byte-identical.** Task `0472` (owner ruling R6, 2026-10-02) corrected the source records: the 2026-07-21
+> folder migration (`331f298`) only **renamed** this brief, content unchanged (R100). It was **created in `backlog/`
+> already reading `🔲 Backlog`** (2026-07-10), and the owner's close commit `6daf3cc` moved it **unedited**. So
+> *"since the 2026-07-21 folder migration created it that way"* is wrong: the field existed at close and the close did
+> not update it. Nothing caught it for **70 days**, not 59. The repair to plain `✅ Done` and its grant stand.
+
 ## Related
 - [[tasks/sprint-1-ship-the-onboarding-sequence]]
 - [[systems/fkit]]
 - [[tasks/bake-architecture-pointer-into-scaffold-templates]]
 - [[tasks/extend-initiate-project-fill-overview]]
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`, the R6 correction of how this brief's status went wrong

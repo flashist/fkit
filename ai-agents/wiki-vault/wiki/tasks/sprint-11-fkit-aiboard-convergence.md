@@ -65,6 +65,12 @@ The board is a **1,413-line** record of one very long day (2026-09-18) plus foll
 - ⭐ The *"adapter"/"seam"* lesson: the owner first read *adapter* as *a second copy of the tasks*. Say
   **what reads what and what writes what**.
 
+> ⭐ **Dated resync 2026-10-10 (sync `3915417`→`79a7dbf`) — Sprint 10 now exists.** On **2026-10-04** the owner ruled (R4, relayed by
+> `fkit-lead`) to renumber a new board to `Sprint 10`, **after being told** the number was reserved by earlier rulings
+> and what taking it would do — so the reservation was set aside by his own choice: [[tasks/sprint-10-the-0472-0482-batch]]. This closed board's
+> *"There is no `sprint-10.md`"* was true as of its date and is not edited. Also (task `0472`, 2026-10-05): row **D3**'s
+> absolute machine path was replaced by *"the sibling aiboard repo"* — the only change to this archived board.
+
 ## Related
 - [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — the decision that concluded this sprint
 - [[decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim]] — the ruling this board first carried
@@ -74,3 +80,5 @@ The board is a **1,413-line** record of one very long day (2026-09-18) plus foll
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the Backlog board that received `0405` and `0410`
 - [[tasks/the-2026-09-30-adr-052-task-dispositions]] — the same-day task re-scopes and cancels
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/fkit]] — the team page's note on the decided replacement of the markdown store
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/sprint-10-the-0472-0482-batch]] — the Sprint 10 that was left empty here, opened 2026-10-04 by owner ruling
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`, which replaced the machine path in row D3

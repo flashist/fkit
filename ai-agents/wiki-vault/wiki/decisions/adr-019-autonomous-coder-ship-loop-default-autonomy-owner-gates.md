@@ -39,6 +39,13 @@ Task 53 applies the single contract edit this requires: a scoped note in `fkit-c
 - **Rejected, named so they aren't re-litigated:** narrowing `fkit-process-stateful-review`'s gate via a cross-skill note (rev 1 — unenforceable, `CORRECT` ≠ mechanical); a per-run *spoken* autonomy grant (rev 2 — owner wants it as the default); **relayed-consent close-out** (loop spawns a producer to run the mover — contradicts "do not tell anyone else to"; needs its own consent ADR); a fully unattended/headless background loop (impossible under the coder contract).
 - **Re-raise only if:** the loop is shown to apply a scope-changing/out-of-plan fix without stopping (defect against the decision, fix the skill); a spawned/headless invocation is found to proceed autonomously; someone proposes making the autonomy reachable by another role or bolting it onto the shared review skill (reopen — that is the unenforceable path); or the owner later wants relayed-consent close-out (a **new** consent ADR, not settled implicitly here).
 
+> ⚠️ **Dated pointer 2026-10-10 (sync `3915417`→`79a7dbf`).** The source ADR gained a dated note under Decision 2 (2026-10-06,
+> task `0473`): an **opt-in** agent review of the plan can now run **before** the plan gate — **only** in a
+> `/fkit-sprint-ship-loop` run started with `--plan-review` ([[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]]). **Decision 2 still holds**: the plan gate is the
+> one guaranteed upfront human checkpoint and the owner approves last. **This loop is untouched** —
+> `fkit-task-ship-loop`, `fkit coder` sessions and plan mode run exactly as before. Also: ADR-019's fix discipline
+> and worklog audit now apply to **lead-path** Process-review too ([[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] Decision 5).
+
 ## Related
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — the `plans/` + `worklogs/` artifacts this loop writes (the autonomy boundary and audit trail)
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the hook that makes "only the coder can run this skill" structural, at any depth
@@ -66,3 +73,6 @@ Task 53 applies the single contract edit this requires: a scoped note in `fkit-c
 - [[decisions/adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling]] — the audit obligation ADR-037 clause 2 reuses for recording a rule/instruction collision
 - [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200`, which establishes that *"apply the `fkit-process-stateful-review` **method**"* is **this ADR's deliberate construction**, not sloppy wording: the loop's standing approval replaces the skill's per-round owner gate **without editing the skill**. ⚠️ **Its Round-1 answer proposed the invocation form and was reversed for exactly that reason.** The real defect is that the method is **named but not enumerated** — `0195` skipped four of its steps
 - [[tasks/enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason]] · [[tasks/widen-task-done-to-repair-a-brief-that-contradicts-a-landed-close]] — *added 2026-08-29:* `0223`, which had to keep the word *"method"* because ⛔ **the invocation form would re-impose the very per-round gate this ADR replaced**; `0229`, whose R3 was left unedited because an out-of-plan edit is a stop
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — opt-in plan review ahead of the same kind of gate, sprint-loop runs only
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — this ADR's fix discipline transfers to the lead-driven Process-review path
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/build-the-opt-in-plan-review-step-off-by-default]] — Build the opt-in plan-review step (off by default)

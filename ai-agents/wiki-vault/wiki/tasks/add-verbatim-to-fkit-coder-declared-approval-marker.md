@@ -43,3 +43,5 @@ Done, **agent-closed — not owner-verified**. Landed in one `fkit-coder` sessio
 - [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158` — the generalization itself
 - [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162` — condition (b) **stands byte-unchanged** under the ruled construction; this guarantee is not reopened
 - [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203`, which gives this task's *verbatim* an operational meaning: ***a word a driver may apply only to bytes it read from a file that turn***
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — the marker this tightened now has two drivers (the sprint loop or the lead), four fields; the lead path quotes the owner's approval verbatim with date and channel
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/let-a-spawned-coder-write-under-a-lead-relayed-owner-approval]] — `0475`

@@ -77,3 +77,18 @@ The read-side half — making `/fkit-status` report this board **only on request
   - **Other new open rows:** `0400`–`0403` (owner ruling 2026-09-16 — the `architecture.md` §1–§7 count sweep, the path-form asymmetry, the `## Owner`-vs-ADR-044 question, and a skill-count guard) and `0406` (the no-board-row check with a dated `0014`/`0004` allowlist). `0383`'s row now leads with *"HOLD LIFTED — OWNER RULING 2026-09-18 (LATE). STARTABLE."*; `0404`'s row reads `➡️ Moved to Sprint 11` and links the archived board.
   > ⭐ **Measured fresh at `3915417` by `node claude/skills/fkit-status/throughput.mjs` this run:** **open 172** · **repair 24 (14.0%)** · **repair-excluding-source-defects 21 (12.2%)**. Weeks: 2026-W38 **19 created / 12 closed**, W39 **5 / 6**, W40 **56 / 3**. ⚠️ **The repair SHARE fell only because the denominator jumped** — the repair count (24 / 21) is unchanged since `a351cb6`; ⛔ **not an improvement in repair work.** ⚠️ **W38's figure moved from the previous sync's 8/12 to 19/12** — the same week measured later, with more commits observed; ⛔ the earlier figure is not contradicted, it was a partial week. ⛔ **The "three consecutive weeks of closes exceeding creations" run ended at W38**; W40 is one decision's plan being filed, not a trend.
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/sprint-11-fkit-aiboard-convergence]] — the board that relocated `0405` and `0410` here on its 2026-09-30 close
+- ⚠️ **SYNC 2026-10-10 (sync `3915417`→`79a7dbf`) — the board fed Sprint 10, and gained 15 open rows.** From the board's own diff:
+  - ➡️ **Eleven rows moved to [[tasks/sprint-10-the-0472-0482-batch]]**, each kept and now leading with `➡️ Moved to Sprint 10 — priority P<n>`: the ten
+    `0472`–`0482` rows filed 2026-09-30 → 10-02 (owner ruling R1, 2026-10-04) and `0395` (R6, 2026-10-05).
+  - ✅ **`0478` closed on this board** → [[tasks/overhaul-the-readme-for-first-time-visitors]].
+  - **15 new open rows, correctly without pages** (the filter excludes open briefs): `0483` (`0477`'s residual R-c),
+    `0484` (`0480` OQ3, links in top-level docs), **`0485`–`0491`** (`0482`'s Phase-B split — ⛔ **`0485` = B0, the
+    owner's acceptance of ADR-053, blocks the rest**), `0496` (`0472` OQ2 — nine stale cites), `0497` (`0475` OQ4 —
+    may a spawned coder commit under a lead relay?), `0499` (a lead "clear handoff"), `0500` (sprint
+    retrospectives), `0501` (`0494` Q2 — how `Depends on:` lines are read), `0503` (re-measure the full test run).
+  > ⭐ **Measured fresh at `79a7dbf` by `node claude/skills/fkit-status/throughput.mjs` this run** (reads git and one
+  > tree listing, writes nothing): **open 189** · **repair 25 (13.2%)** · **repair-excluding-source-defects 22
+  > (11.6%)**. Weeks: W39 5 created / 6 closed; **W40 67 / 4**; W41 24 / 17. ⚠️ The W38 figure the 2026-09-16 entry
+  > recorded as 8 / 12 now reads **19 / 12** — the same week, later revision, more commits observed; not a
+  > contradiction of that entry's date. ⛔ **The run of closes-exceeding-creations ended:** W39 was the last such week.
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/make-a-later-sprint-blocker-visible-0492-0495]] — Make a later-sprint blocker visible — the board flags it, the loop says it, filing warns, questions name the knock-on… · [[tasks/re-measure-the-ci-test-runtime-on-the-ubuntu-runner-and-correct-the-workflow-timeout]] — Re-measure the CI test runtime on the ubuntu runner, and correct the workflow timeout and its comment · [[tasks/record-every-owner-question-and-decision-and-count-autonomous-tasks]] — Record every owner question and decision, and count the tasks done autonomously after plan approval

@@ -111,3 +111,4 @@ here.**
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]]
 - [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]]
 - [[systems/testing-and-verification]]
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/re-measure-the-ci-test-runtime-on-the-ubuntu-runner-and-correct-the-workflow-timeout]] — `0395`, born from this task's review finding R6; CI timeout now 33 min

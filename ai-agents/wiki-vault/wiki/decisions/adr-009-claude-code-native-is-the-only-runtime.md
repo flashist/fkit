@@ -1,7 +1,7 @@
 # ADR-009: Claude Code native + Codex is the only runtime; Omnigent is removed
 
 **Date**: 2026-07-11
-**Status**: accepted
+**Status**: accepted — ⚠️ **Decision 2 amended by [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]] (2026-10-05)**
 
 **Supersedes**: [[decisions/adr-008-claude-code-native-port-alongside-omnigent]] (dual-runtime)
 
@@ -41,6 +41,16 @@ Dependency 3 exposed a **live defect**: `claude/fkit-claude.sh` contained **no u
 
 1. **One flavor.** The team ships as Claude Code subagents + `/fkit-*` skills. The `omnigent` and `claude` subcommands, the `fkit-team` root agent, `.fkit/agents/` vendoring, `.fkit/run`, and the reconnect/restart tooling **all go away with it**.
 2. **Codex is a required dependency, not optional.** It is what makes the adversarial second opinion genuinely model-diverse. Its absence is a **setup problem** — but per the owner's later ruling, it produces a **loudly-flagged partial review, not a hard fail**: an outage must not lock the owner out of their own team.
+
+   > ⛔ **Dated amendment 2026-10-10 (sync `3915417`→`79a7dbf`) — Decision 2 is amended by [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]]; the item above is left
+   > byte-identical.** Owner ruling 2026-10-02: Codex is **optional but recommended**; without it there is no
+   > model-diverse second opinion, and the review is loudly flagged as not complete. **Overturned:** "required …
+   > not a supported degraded mode … no longer a mode fkit offers", the rejected option "Make Codex optional", the
+   > consequence "Codex becomes a required install prerequisite", and the matching re-raise trigger. ⛔ **Not
+   > overturned:** the sandbox clause (governed by ADR-042) and the model-diversity aim — everything else here
+   > stands. The source ADR's body is byte-identical, with a Status-line pointer and a dated end note (task
+   > `0476`). ⚠️ ADR-009's own re-raise rule asked for user evidence; **none was offered** — the reopening is by
+   > owner ruling, and ADR-054 says so.
 3. **Self-update is built for the Claude path.** It **notifies; it never auto-updates and never re-execs itself** — deliberately unlike the Omnigent launcher, which had no timeout and no `GIT_TERMINAL_PROMPT` guard.
 
 **Sequence: extract → build → rewrite → delete.** The phases are genuinely ordered.
@@ -87,3 +97,6 @@ Dependency 3 exposed a **live defect**: `claude/fkit-claude.sh` contained **no u
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]]
 - [[decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so]] — ⚠️ *Added 2026-08-13:* **bounds the model-diversity guarantee this ADR creates.** Codex being *required* buys **independent reasoning by a different model family — and nothing about execution**, because every call site hard-codes a read-only sandbox. ✅ **The purpose survives intact and is explicitly not made decorative**; what is forbidden is a report implying more
 - [[tasks/replace-the-review-coverage-binary-with-adr-042s-three-state-vocabulary]] — *added 2026-08-29:* `0272`; ⭐ **the coverage rewrite is a reporting fix, not a capability complaint — this ADR's model-diversity purpose survives intact**
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]] — **amends Decision 2**: Codex optional but recommended, the Claude-only fallback a supported, loudly flagged mode
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-every-document-say-codex-is-optional-but-recommended]] — `0476`, which recorded ADR-054 and reworded the live documents
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/build-a-command-buttons-mod-that-offers-suggested-slash-commands-above-the-prompt]] — Build a command-buttons mod that offers the slash-commands Claude suggested as buttons above the prompt · [[tasks/make-fkit-update-reinstall-from-the-source-and-paths-it-was-installed-from]] — Make `fkit update` reinstall from the source and paths it was installed from

@@ -49,6 +49,21 @@ The owner wanted **one agent per terminal** — a single point of interaction aw
   - **Doc-drift blast radius:** the four `skills_for_role()` mirrors, launcher text, agent prompt, `PROJECT.md`, the wiki — plus the independent `architecture.md` §5.2 stale-lock fix.
 - **Do not re-raise** *"lead is a router that does no work"* — that is what this ADR reverses. **Do not re-raise** *"the orchestrated plan gate is only prose"* — stated here knowingly; a finding must show it **failing in practice**, not restate its known limit.
 
+> ⚠️ **Dated resync 2026-10-10 (sync `3915417`→`79a7dbf`) — two dated notes landed on the source ADR; nothing is overturned.**
+> - **2026-10-06 (`0475`) — the implementing spawn on the conductor path now has a written rule:** [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]]. This ADR
+>   decided plan-only → owner approves → implement, but never said what lets the *implementing* coder write;
+>   until then only the sprint loop's marker did. The marker now has two drivers and four fields, the owner's
+>   approval **quoted verbatim with date and channel** on the lead path. **The honesty-clause cost is unchanged and
+>   not softened** — the same accepted cost with wider exposure. A quote is fidelity, not proof.
+> - **2026-10-09 (`0498`) — the never-list gains a third item: the conductor never diagnoses.** Owner rulings
+>   2026-10-08 (L1–L4): the lead still answers *"is this OK / expected?"* from spec, brief, wiki or ADR with at most
+>   **1–2 fact lookups**; the first *"why does the code/system do this?"* goes to a spawned `@fkit-coder`. Tripwire
+>   (Q3, 2026-10-09): **a second file read to explain a behaviour, or any log read to explain a failure.** The
+>   hand-off is said to the owner; the lead's own guess never goes into a spawn or brief as fact; a read approval
+>   the owner gave the lead is relayed quoted — and is **not** the ADR-055 write marker. ⚠️ **One owner override
+>   (Q4):** told it is a coder's job, the owner may still ask the lead to look — labelled as the lead's own
+>   unverified look. So "never diagnoses" is the default, not absolute. Prose-enforced; no hook changed.
+
 ## Related
 - [[decisions/adr-010-role-locked-sessions-and-skill-lockdown]] — §Decision 3 **reversed**; 1, 2, 4, 5 unaffected
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — the flagship application of this conductor
@@ -81,3 +96,7 @@ The owner wanted **one agent per terminal** — a single point of interaction aw
 - [[tasks/pressing-enter-at-the-role-menu-should-open-the-lead]] — ⚠️ *Added 2026-08-22:* task `0302` — the front door becomes the launcher's Enter default
 - [[tasks/build-the-pretooluse-task-carry-check-hook-and-its-tests]] — *added 2026-08-29:* `0204`, whose marker removal ⛔ **protected this ADR's honesty clause paragraph, deleting only the one now-false sub-clause**
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/start-the-lead-session-not-the-producer-after-a-fresh-projects-cold-start]] — task `0379`, the cold-start lead routing
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — the conductor path's implement spawn now writes under the shared marker
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-the-lead-hand-a-code-level-why-question-to-a-spawned-coder-instead-of-tracing-code-itself]] — `0498`, the never-diagnose note under Decision 2
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — restates this ADR's honesty clause for plan review
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/let-a-spawned-coder-write-under-a-lead-relayed-owner-approval]] — Let a spawned coder write under a lead-relayed owner approval (one approval marker for both drivers)

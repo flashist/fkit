@@ -40,3 +40,4 @@ names its boards `plan-sprint-N.md` (an older convention). The owner chose to dr
 - [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — the converter that inherits this case
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board it was filed on
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim]] — the interim reader's ADR, whose *one grammar* rule the fix honoured
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472` annotated this brief: `0413` (*"still Backlog"* when written) was since cancelled under ADR-052

@@ -75,3 +75,4 @@ judgement half); D alone (a verifier detects but cannot execute).
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam]] — `0404`, the evaluation this ADR came out of
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/sprint-11-fkit-aiboard-convergence]] — the board it was signed on
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/fkit]] — the team page's note that no hook can see a file write
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] — ADR-053: Owner-involvement capture — closed-format, launcher-only hook log; a deterministic per-task line; "autonomou…

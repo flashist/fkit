@@ -76,6 +76,12 @@ COMMIT … Fix T-022 and stop there."* Ruling 3: he signed (no verbatim text rel
 - **Open, the owner's:** OQ-1 (where aiboard's generic-mechanism line sits) and OQ-2 (whether a TUI's
   change of audience is acceptable). ⚠️ *Largely moot after ADR-052 dropped C4, but the source ADR still
   lists them as open.*
+  - ✅ *Dated 2026-10-10 (sync `3915417`→`79a7dbf`):* **resolved.** The source now carries a 2026-10-05 note (task `0472`, owner ruling
+    R2): OQ-1 and OQ-2 are **resolved by ADR-052** — both rested on C4, which ADR-052 drops (aiboard merges into fkit
+    as `board/`). The questions' text is unchanged. Same task: the two `tasks/backlog/0404-…` spike pointers now name
+    `done/` (its *"a future mover must repoint"* warning discharged), and a dated correction sits under the quoted
+    *"born wrong in one bulk migration"* — **the quote stays verbatim, the claim is corrected**; C5's measurements and
+    conclusion stand.
 
 ## Related
 - [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — amends D1/D3 at conversion; supersedes D7; discharges D8
@@ -86,3 +92,6 @@ COMMIT … Fix T-022 and stop there."* Ruling 3: he signed (no verbatim text rel
 - [[tasks/evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam]] — task `0404`, the evaluation behind it
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/fkit]] — the team page's owner-verified gotcha
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/sprint-11-fkit-aiboard-convergence]] — the board it was signed on
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`: OQ-1/OQ-2 resolved, `0404` pointers repointed, the born-wrong quote corrected
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] — `proposed`: its D6/D12 say owner-involvement capture is **never** a verified human principal and never upgrades the marker
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/record-every-owner-question-and-decision-and-count-autonomous-tasks]] — Record every owner question and decision, and count the tasks done autonomously after plan approval

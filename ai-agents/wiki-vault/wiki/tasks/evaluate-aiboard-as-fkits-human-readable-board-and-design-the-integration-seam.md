@@ -49,3 +49,4 @@ time: **aiboard is a dependency fkit consumes, usable without fkit — the arrow
 - [[decisions/adr-049-owner-verified-close-requires-a-verified-human-principal-no-channel-supplies-one]] · [[decisions/adr-050-prose-is-not-a-transaction-how-the-four-movers-are-executed]]
 - [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — the final decision; keeps `0404`-style ids (R5: *"Keep 0404"*)
 - [[tasks/make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads]] — the code half, split out as `0411`
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472` repointed the stale `tasks/backlog/0404-…` spike pointers in ADR-049 and the verdict to `done/`

@@ -39,6 +39,13 @@ fkit already has the precedent: `ai-agents/reviews/<task-id>.md` — a git-track
 - **Negative / costs:** two new directories in the `ai-agents/` tree and two new coder write targets — a real, if small, widening of the data model; **retention grows unbounded** (one plan + one worklog per task, kept indefinitely, like review ledgers — accepted, cheap text with historical value); a **third** per-task file is mild fragmentation until the per-task folder consolidates them.
 - **Re-raise only if:** the per-task folder layout is adopted (reopen to relocate `plans/`, `worklogs/`, `reviews/` into it — the pre-registered trigger, not a defect). Do **not** re-raise "the coder shouldn't be writing new file types" — these two targets are sanctioned; a finding must point to a *different* undocumented write, or a write into `tasks/{backlog,done,cancelled}/` or the wiki (both still forbidden).
 
+> ⚠️ **Dated pointer 2026-10-10 (sync `3915417`→`79a7dbf`).** The source ADR gained two pointer notes (2026-10-06, task `0473`): the
+> per-task set gains an optional **`<task-folder>/plan-review.md`** ([[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] Decision 6) — **written by the driver**,
+> not the coder (the same reasoning as the `0207` note), on approve **and** on reject, append-only with one
+> `## Attempt N — <date>` section per attempt, and **kept separate from `plan.md`** so review findings are never read
+> as approved scope. A task planned without `--plan-review` never gets one. It is now a reserved name in
+> `ai-agents/tasks/README.md`. Nothing here is overturned.
+
 ## Related
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] — the ship-loop that writes these artifacts; the plan is its autonomy boundary, the worklog its audit trail
 - [[systems/fkit]] — the `ai-agents/` data model these extend
@@ -58,3 +65,6 @@ fkit already has the precedent: `ai-agents/reviews/<task-id>.md` — a git-track
 - [[tasks/add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block]] — task `0190`, whose residual 3 leans on this ADR: ADR-037 §2's audit **venue** was not carried into the rules block, so **the pointer was lost and the duty was not**
 - [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — task `0191`, whose decision log records `none` explicitly — *so an empty log is not mistaken for a forgotten one*
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sweep-b-the-single-site-correction-notes]] — task `0357`, Sweep B — the single-site correction notes
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — adds `plan-review.md` to the per-task set
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] — `proposed`: its plan-approval anchor is the first `plan.md` write this ADR requires, and its per-task line goes in `worklog.md`
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — ADR-055: A spawned coder writes under one declared-approval marker, sent by either driver — the sprint loop or the le… · [[tasks/build-the-opt-in-plan-review-step-off-by-default]] — Build the opt-in plan-review step (off by default)

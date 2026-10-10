@@ -29,3 +29,4 @@ The design deliberately **never auto-updates and never re-execs itself** — a d
 - [[tasks/design-version-to-version-migration-mechanism]]
 - [[tasks/remove-fkit-resume-passthrough]]
 - [[tasks/fix-the-version-labeled-sha-triggered-update-banner]] — task `0257` (2026-08-13): the update check this task built **triggered on sha and labelled from `VERSION`**, so ~86% of commits rendered `vX → vX`. ⚠️ **The trigger was always correct** — sha is right for a sha-keyed distribution — **only the wording was wrong**
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-fkit-update-reinstall-from-the-source-and-paths-it-was-installed-from]] — `0481`: `fkit update` silently reinstalled `flashist/fkit@main` into default dirs for custom installs; fixed, `.version` gains `bin=`

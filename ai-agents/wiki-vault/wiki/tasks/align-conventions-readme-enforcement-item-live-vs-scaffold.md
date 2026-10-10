@@ -1,7 +1,7 @@
 # Align the conventions-README "enforceable somewhere" item: live vs scaffold
 
 **Source**: `ai-agents/tasks/done/0014-align-conventions-readme-enforcement-item-live-vs-scaffold/brief.md`
-**Status**: done
+**Status**: done — brief `## Status` corrected to plain `✅ Done` on 2026-10-02 (owner-closed; no agent-closed marker)
 **Sprint/Tag**: Unsprinted
 
 ## Goal
@@ -28,6 +28,20 @@ The two copies of the conventions-index README diverge on item 3 of **"The bar f
 
 ⚠️ The brief's own `## Status` header still reads `🔲 Backlog` though it sits in `done/` — mover drift. ⚠️ **The wiki records that the task closed; it does not record which option (a or b) was chosen** — that is in the task's close-out, not in the brief. Flagged rather than guessed.
 
+> ✅ **Dated resync 2026-10-10 (sync `3915417`→`79a7dbf`) — both ⚠️ flags in the paragraph above are now answered; it is left
+> byte-identical.**
+> - **The status:** the brief's `## Status` was corrected from `🔲 Backlog` to plain `✅ Done` on 2026-10-02 by a
+>   producer under owner rulings (`fkit lead` session, `AskUserQuestion`, selected option text): *"Yes, status field
+>   only — The test data 0296/0406 rely on is the missing row, which stays; only the wrong status is corrected."* and
+>   *"Yes, I did — Plain '✅ Done' (you committed it along with the work on 2026-07-16)."* The owner closed it, so
+>   **no** `(agent-closed — not owner-verified)` marker (ADR-048: never put that marker on an owner-closed task).
+>   ⛔ **The missing board row stays missing, by ruling** — the live specimen for `0296` and `0406`.
+> - **Which option was chosen — (a), the generic form.** Per the brief's new git-evidence note: commit `cd19aef`
+>   (2026-07-16) **created this brief directly in `done/`** (never in `backlog/`) and **also holds the work** — it
+>   changed item 3 of the scaffold `conventions/README.md` to *"ideally in tooling or code where the check runs
+>   automatically, not left to memory."* The 2026-07-21 migration only renamed the file (R100). ⚠️ So "mover drift"
+>   above is wrong too: the status was wrong from creation.
+
 ## Related
 - [[tasks/record-one-skill-one-output-convention]]
 - [[decisions/adr-013-knowledge-base-root-holds-the-living-canon]] — the architect's ownership of KB structure
@@ -40,3 +54,5 @@ The two copies of the conventions-index README diverge on item 3 of **"The bar f
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the standing rule this point-fix anticipated; `conventions/README.md` is now a named, intentional divergence
 - [[tasks/investigate-dual-home-parity-live-vs-scaffold]] — task 49, the investigation that named this an instance of a class
 - [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132` — the dual-home reconciliation, and the sweep that **disproved ADR-027's premise**
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`, which recorded the R7 status correction in ADR-033
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — its addendum now notes R7 for this task's `## Status` field only

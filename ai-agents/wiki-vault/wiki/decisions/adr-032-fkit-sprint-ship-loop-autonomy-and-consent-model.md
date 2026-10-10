@@ -101,6 +101,18 @@ R4 offered a **narrower alternative** — the driver relays every accepted fix f
   - **Orchestrator context accumulates over a sprint.**
 - **Re-raise only if:** an agent-closed task shipped by the loop is found incomplete; the `/fkit-status` invisibility proves painful at sprint scale; or the live-relay round-trip is *measured* not to deliver a worker's `NEEDS-DECISION` return (that would be an implementation defect, not a model problem). **Do not re-raise** *"the sprint loop should just call `fkit-task-ship-loop`"* (infeasible — recorded here) or *"add a timeout so it doesn't block"* (declined, ADR-024).
 
+> ⚠️ **Dated resync 2026-10-10 (sync `3915417`→`79a7dbf`) — extended twice, amended by neither; this loop's default behaviour is
+> unchanged.**
+> - **[[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] (2026-10-06, `0475`)** — §Amendment A1's declared-approval marker is now **one marker sent by either
+>   driver** (`fkit-sprint-ship-loop` or `fkit-lead` as conductor), four fields. **This loop satisfies them by
+>   mapping** — its three signals stay as they are; only the lead path must quote the owner's approval. A2's
+>   discipline and worklog audit apply on the lead path too; A3's cost is the same cost with wider exposure; A4's
+>   leak trigger now reads *"without all four fields"*. ADR-044's non-coder carve-outs are **not** widened.
+> - **[[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] (2026-10-06, `0473`)** — under Decision 3: in a run started with `--plan-review` (default off), the
+>   plan-only coder has the plan approved by the producer and/or architect and attacked on Codex **before** the
+>   driver's `AskUserQuestion`; **the owner still approves last**; the driver also writes `plan-review.md`. Decision
+>   7's split and A3's cost unchanged.
+
 ## Related
 - [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — the conductor this applies
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — **amends** Decisions 3 & 5's close step
@@ -133,3 +145,7 @@ R4 offered a **narrower alternative** — the driver relays every accepted fix f
 - [[tasks/amend-the-sprint-loops-honor-the-adrs-rule-with-the-faithful-carry-construction]] — task `0203`, which gives the *"carry the approved plan verbatim"* rule a construction; **condition (b) stands byte-unchanged**
 - [[tasks/add-an-exit-table-row-for-a-failed-build-verify-review-spawn-in-the-sprint-loop]] — task `0208`, the tenth exit row. ⛔ **Three defects reached it inside an owner-approved plan and survived the plan gate** — a live limit on what A4's single up-front approval can guarantee
 - [[tasks/build-the-pretooluse-task-carry-check-hook-and-its-tests]] · [[tasks/enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason]] · [[tasks/decide-how-the-ship-loop-handles-a-non-coder-owned-task-row]] · [[decisions/adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1]] — *added 2026-08-29:* `0204` checks a **proxy** for the declared-approval marker (⛔ never the marker itself); `0223` enumerates the Process-review row this loop runs; `0270`/ADR-044 decide what the loop does when a step's fixed role cannot lawfully produce the row's deliverable
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — the marker, now shared with the lead
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — the opt-in plan-review step ahead of Decision 3's gate
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/let-a-spawned-coder-write-under-a-lead-relayed-owner-approval]] · [[tasks/build-the-opt-in-plan-review-step-off-by-default]] — the two Sprint 10 tasks that extended it
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/sprint-10-the-0472-0482-batch]] — Sprint 10 — the `0472`–`0482` batch: steadier and faster checks, a correct `fkit update`, honest docs, opt-in plan re…

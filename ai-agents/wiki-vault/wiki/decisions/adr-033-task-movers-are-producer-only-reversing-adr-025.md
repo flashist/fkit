@@ -86,10 +86,21 @@ as written.
 - ⭐ **Correction to the record:** the two briefs did **not** drift after close. The `## Status` field did not
   exist then; the folder migration (`331f298`, 2026-07-21) **created both briefs inside `done/` with
   `🔲 Backlog`** — *born wrong, not drifted.*
+  - ⛔ *Dated correction 2026-10-10 (sync `3915417`→`79a7dbf`); the bullet above is left byte-identical.* **The source ADR now carries
+    a 2026-10-05 correction (task `0472`, owner ruling R6) naming this exact story as wrong.** Git shows both briefs
+    were **created in `backlog/` already reading `🔲 Backlog`** (`54abc8f`, `e9c8575`, 2026-07-10); the owner's close
+    commits `f7b23f4`/`6daf3cc` moved each **unedited** (R100); `331f298` only **renamed** them (R100). So the field
+    **existed at close** and the close did not update it — not "born wrong" in the migration. The addendum's
+    conclusion (plain `✅ Done`; the owner closed both) is unaffected.
 - ⛔ **What a future agent may NOT take from this:** it is **not** a licence for a spawned producer to bypass
   the identity gate. A spawned producer meeting the same shape **stops and reports** a `NEEDS-DECISION`.
   **`0014`** was examined in the same sweep and **deliberately left alone** (no close commit, no board row;
   owner: *"Leave it, pending 0296."*).
+  - ⏱ *Dated note 2026-10-10 (sync `3915417`→`79a7dbf`):* **`0014`'s `## Status` was corrected to plain `✅ Done` on 2026-10-02** by a
+    **separate** owner ruling (R7 of task `0472`) overriding *"Leave it, pending 0296"* **for that field only** — the
+    owner confirmed he closed it himself (*"Yes, I did — Plain '✅ Done' (you committed it along with the work on
+    2026-07-16)."*). No agent-closed marker. **The missing board row stays**, as the specimen for `0296`/`0406`; the
+    2026-09-18 grant stays spent. Page: [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]].
 - Pages: [[tasks/build-fkit-reconnect-tooling]] (`0021`) · [[tasks/fix-claude-agents-md-placeholder-text]] (`0041`).
 
 ## Related
@@ -143,3 +154,6 @@ as written.
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]] — the board whose four hard rules open with this one
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/record-the-sprint-lifecycle-adr-047]] — task `0337`: ⭐ **SD-3 applied this ADR's reasoning to sprints** — the closing identity separated from the doing identity, role-gating is not prevention, and the marker stays prose
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-task-movers-a-step-for-the-named-exempt-keys]] — task `0381`: ⚠️ **a spawned producer running a mover cannot edit the coder-owned test file the fix needs** — so the option had to say what the producer does instead
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`, the R6 correction of the addendum's causal story and the R7 note on `0014`
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]] — `0014`, whose status R7 corrected
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] — `proposed`: its summary line is written by the producer in `/fkit-task-done`, inside this ADR's producer-only close

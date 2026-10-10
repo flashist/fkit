@@ -43,6 +43,12 @@
   (`bin/fkit-board.mjs`); fkit's last bulk move (commit `331f298`, 184 files) wrote the wrong status into
   3 of ~80 done briefs, unnoticed for two months — **the reason the converter must be paranoid**;
   aiboard's `T-023` turns `0013` into `13` on write, still live until phase 1.
+  - ⛔ *Dated correction 2026-10-10 (sync `3915417`→`79a7dbf`); the bullet above is left byte-identical.* The source now carries a
+    2026-10-05 correction (task `0472`, owner ruling R6): **`331f298` did not write those statuses** — in it all three
+    briefs (`0014`, `0021`, `0041`) were pure renames (R100). `🔲 Backlog` dated from each brief's creation and was not
+    updated at close; nothing caught it for **64–70 days** ("two months" roughly holds; the link to the migration does
+    not). ⚠️ **The converter's paranoia stands on the true precedent** — a duplicated status field went wrong at close
+    or creation and nothing caught it — and **no decision is reopened**; D8's safeguards stand.
 
 **How the rulings were given.** Live via `AskUserQuestion` in `fkit lead` sessions, relayed by
 `fkit-lead`. The ADR keeps the owner's **own words** apart from **option text he selected**, and the
@@ -191,6 +197,10 @@ in any writable `aiboard serve` meanwhile; (8) module-boundary erosion; (9) chur
 against the size-capped rules block; (10) a second door (MCP) later; (11) fidelity changes (move history
 leaves the live view); (12) still no undo — git (P5) is the safety net.
 
+> ⛔ *Dated note 2026-10-10 (sync `3915417`→`79a7dbf`):* risk (1)'s *"the `331f298` precedent"* is corrected the same way at its source
+> (2026-10-05, `0472`) — the precedent is a status field nothing caught, not a migration that wrote it. The risk's
+> rank is not changed by the note.
+
 ### Gotchas
 - ⛔ **The owner's standing rule (his own words, 2026-09-27):** *"if we already have a brief for that task,
   the task shouldn't start, until I specifically approve it (because it might change the way fkit work in
@@ -213,6 +223,8 @@ leaves the live view); (12) still no undo — git (P5) is the safety net.
   ADR says ADR-051's evidence log is *"closed, not deleted"*, but
   `reports/2026-09-26-evidence-log-for-adr-051-aiboard-as-the-store.md` carries **no closing note** and its
   E3 table still lists `0413` as **Open** while linking the task's `cancelled/` path.
+  - ✅ *Discharged 2026-10-05 (task `0472`; recorded sync `3915417`→`79a7dbf`):* the log now carries its closing note, and E3 keeps
+    **Open** with a dated cancelled annotation (append-only, owner ruling R3).
 
 ## Related
 - [[decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim]] — partly superseded; D1 reaffirmed
@@ -231,3 +243,6 @@ leaves the live view); (12) still no undo — git (P5) is the safety net.
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/decide-the-sanctioned-repair-path-for-a-half-landed-close]] — `0134`, whose ADR-048 this makes obsolete
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/let-the-read-only-board-reader-serve-another-projects-ai-agents-tree-root-flag]] · [[tasks/keep-a-closed-sprints-tasks-attached-when-its-board-is-named-plan-sprint-n]] — `0412`/`0415`, the reader fixes whose *tools from fkit, data from the project* rule the converter keeps
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/knowledge-base-structure]] — the status-vocabulary and owner-verified notes this ADR changes at conversion
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`, the loose ends tidied (machine paths, evidence log, `0404` pointers, ADR-049 OQs, the `331f298` story)
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] — `proposed`: D10 says how the owner-involvement line survives the board switch
+- *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — the plan-review switch lives in the run, not the store, so conversion never sees it
