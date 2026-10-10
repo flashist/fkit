@@ -11,6 +11,8 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+## v0.3.2 â€” 2026-10-10
+
 - README rewritten for first-time visitors. The web-board details moved to
   [`docs/board.md`](docs/board.md), the repository layout to [`CONTRIBUTING.md`](CONTRIBUTING.md), and
   the history and upgrade notes below into this file.
