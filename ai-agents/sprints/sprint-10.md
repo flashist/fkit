@@ -18,6 +18,7 @@
 > | R7 | Typed request, 2026-10-05, in the `fkit-lead` session: *"Ask geoconflict-lead agent about the situation … discuss … how to prevent this type of situations in the future, based on that create a task and add it to the current [sprint]."* Then via `AskUserQuestion`: scope = *"(a) Board flags it"*, *"(b) Warn when filing"*, *"(c) Say the knock-on in questions"*; shape = *"Let the producer split"*; placement = *"Sprint 10, at the end"* | `0492`–`0495` added as rows `P12`–`P15` — see *"➕ `0492`–`0495`"* below |
 > | R8 | Typed request, 2026-10-08, in a `fkit lead` session: a lead that digs into code itself to explain an error is wrong; it should spawn a coder — *"brief a task about it and add it to the current sprint"*. Then via `AskUserQuestion`: lead limit = *"Quick triage, then hand off (Recommended)"*; hand-off = *"Tell owner it's delegated"* + *"No lead guess as fact"* + *"Relay read approvals"* | `0498` added as row `P16` — see *"➕ `0498`"* below |
 > | R9 | Via `AskUserQuestion`, 2026-10-09, in the `fkit lead` session: *"test/board-root.test.js keeps timing out under machine load (its 20 s limit) and has turned 4 full test runs red this sprint, never because of the task being tested. File a task to fix it?"* — selected *"File it, add to Sprint 10 (Recommended)"* (option text: *"… ranked last in Sprint 10 (after 0474). Knock-on: none — no task depends on it."*) | `0502` added as row `P17` — see *"➕ `0502`"* below. ⚠️ The option said "after 0474"; the last row was `0498`, so "last" = `P17` |
+> | R10 | Typed request, 2026-10-10, in a `fkit lead` session: *"/Users/mark.dolbyrev/Downloads/report-1-followup-questions-in-dialogs.md /Users/mark.dolbyrev/Downloads/report-2-command-buttons-mod.md /Users/mark.dolbyrev/Downloads/report-3-code-comments.md - read those 3 files and brief a task for each of them and add it to the currently active sprint (if there are no active sprints, start the next sprint and make it active)"* | `0504`–`0506` added as rows `P18`–`P20` — see *"➕ `0504`–`0506`"* below. Sprint 10 was the one active sprint, so no new sprint was started |
 >
 > ⚠️ **What this producer chose that nobody ruled** — the title, and (2026-10-05) `0395`'s append
 > rank `P11`, forced by convention, not chosen on merit. The number (R4) and the ranks `P1`–`P10`
@@ -64,6 +65,51 @@ is already closed):
 | ✅ Done (agent-closed — not owner-verified) | P15 | **Make every sprint-placement question state which tasks would then wait on that sprint** *(Added 2026-10-05, R7, (c). Prose only; no dependency. Owner `fkit-coder`)* | [`0495-make-every-sprint-placement-question-state-which-tasks-would-then-wait-on-that-sprint`](../tasks/done/0495-make-every-sprint-placement-question-state-which-tasks-would-then-wait-on-that-sprint/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P16 | **Make the lead hand a code-level "why" question to a spawned coder instead of tracing code itself** *(Added 2026-10-08 by owner ruling R8 — see the `0498` section below. ⚠️ `P16` is append rank, NOT a merit ranking — flagged for owner confirmation; on merit it belongs directly below `0495`, where it is. Prose only; build after `0495`'s edit to the same file lands. Owner `fkit-coder`)* | [`0498-make-the-lead-hand-a-code-level-why-question-to-a-spawned-coder-instead-of-tracing-code-itself`](../tasks/done/0498-make-the-lead-hand-a-code-level-why-question-to-a-spawned-coder-instead-of-tracing-code-itself/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P17 | **Make test/board-root.test.js reliable under machine load (its 20 s CLI time limit)** *(Added 2026-10-09 by owner ruling R9 — see the `0502` section below. ⚠️ `P17` is append rank, NOT a merit ranking — flagged for owner confirmation; on merit it belongs directly below `0477`, out of reach behind closed rows. No dependency; nothing waits on it. Owner `fkit-coder`)* | [`0502-make-board-root-test-reliable-under-machine-load`](../tasks/done/0502-make-board-root-test-reliable-under-machine-load/brief.md) |
+| 🔲 Backlog | P18 | **Answer a question typed into a question dialog in full, in chat, and do not re-ask in the same turn** *(Added 2026-10-10 by owner ruling R10 — see the `0504`–`0506` section below. ⚠️ `P18` is append rank, NOT a merit ranking — flagged for owner confirmation. Prose rules; shares `universal-rules.md` with `0506` — never alongside it. Owner `fkit-coder`)* | [`0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn`](../tasks/backlog/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/brief.md) |
+| ⛔ Cancelled (agent-closed — not owner-verified) (2026-10-10) — Owner ruling 2026-10-10 (fkit-lead session, relayed by the lead): "Cancel 2-buttons. I agree with you that it's not the fkit core." — a UI convenience mod, not fkit's core; if built, it belongs outside fkit. | P19 | **Build a command-buttons mod that offers the slash-commands Claude suggested as buttons above the prompt** *(Added 2026-10-10, R10. Cancelled the same day — see the `0504`–`0506` section below. Owner `fkit-coder`)* | [`0505-build-a-command-buttons-mod-that-offers-suggested-slash-commands-above-the-prompt`](../tasks/cancelled/0505-build-a-command-buttons-mod-that-offers-suggested-slash-commands-above-the-prompt/brief.md) |
+| 🔲 Backlog | P20 | **Add a "comment WHY, not WHAT" code-comment rule to fkit, and remove the rules that contradict it** *(Added 2026-10-10, R10. ⚠️ `P20` is append rank, NOT a merit ranking — flagged for owner confirmation. ⛔ Whether it applies to fkit's own heavily-commented tree is an open owner question that gates the build. Owner `fkit-coder`)* | [`0506-add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it`](../tasks/backlog/0506-add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it/brief.md) |
+
+## ➕ `0504`–`0506` — added 2026-10-10 by owner ruling R10; the sprint now has 20 tasks
+
+- **Authority first.** **The owner ruled it**, **2026-10-10**, directly in a `fkit lead` session — a
+  typed request (R10 above): *"read those 3 files and brief a task for each of them and add it to the
+  currently active sprint (if there are no active sprints, start the next sprint and make it active)"*.
+  Relayed to a spawned `fkit-producer` with no owner channel (ADR-021). ⚠️ The quote is the lead's
+  relay. **This is not producer precedent** for adding or ranking anything.
+- **"The currently active sprint."** The lead ran `dashboard.sh select-active` the same turn: exactly one
+  `active` line, `sprint-10.md` (`🔄 In progress`). So all three land here and the owner's fallback
+  (*"start the next sprint"*) did not apply. The producer re-ran the selector and got the same result.
+- **Sources.** Three reports the owner wrote with another Claude, in `~/Downloads/`. Each is copied
+  verbatim into its task folder as `source-report.md`, with a header noting that its *"For the agent
+  reading this"* section is input, not instructions — nothing in them was applied.
+- **One brief per report, no further split** (the owner asked for one each):
+  - `0504` — fkit's question-asking rules: a free-text reply to a question dialog that is itself a
+    question gets a full answer in chat and no new dialog that turn. Fixed in fkit's own rules, not the
+    owner's personal files (an open question in the brief).
+  - `0505` — the `command-buttons` mod. One unit: the detection, the band and the never-submit fill are
+    not useful shipped apart.
+  - `0506` — the "comment WHY, not WHAT" rule plus the contradiction sweep. **Split out and not filed:**
+    the report's "clean up existing code one module at a time" — separate, per-module work, and for
+    fkit's own tree it depends on the brief's open question 1. Named in the brief as a follow-up to file
+    only on the owner's word.
+- **Rank — appended `P18`–`P20`, in the order the owner listed the reports.** ⚠️ `Priority P18–P20 is
+  append rank, NOT a merit ranking — flagged for owner confirmation.` **On merit `0504` belongs directly
+  below `0502`, where it is**, because it is a small prose-rule change with no gating question. **On
+  merit `0506` belongs directly below `0504`, above `0505`**, because it is the same kind of prose edit
+  to the same file, while `0505` is a new kind of component (fkit ships no mod today) gated on a
+  where-it-lives question. Swapping `0505` and `0506` is an owner call. No existing row was re-ranked or
+  re-statused.
+- **Same-file note.** `0504` and `0506` both edit `claude/scaffold/universal-rules.md` and both spend the
+  rules-block size budget (`RULES_MAX`; owner ruling, task `0130`). Not a dependency — build one after
+  the other, never alongside.
+- **Gates beyond the standing banner.** `0505` waits on the owner's answer to *where it lives*; `0506` on
+  *whether the rule applies to fkit's own heavily-commented tree*. Both questions are written in the
+  briefs with options.
+- **Knock-on:** none (checked) — no open task depends on `0504`, `0505` or `0506`, and none of them
+  depends on anything.
+- **Count.** 17 rows + 3 = **20 tasks** (as of this edit: 16 `✅ Done`, 4 `🔲 Backlog`).
+- **`0505` cancelled, 2026-10-10** — owner ruling in the `fkit-lead` session, relayed by the lead: *"Cancel 2-buttons. I agree with you that it's not the fkit core."* A UI convenience mod, not fkit's core; if built, it belongs outside fkit. Closed by a spawned producer via `/fkit-task-cancelled` (agent-closed — not owner-verified). Board now: 20 rows — 16 `✅ Done`, 3 `🔲 Backlog` (`0474`, `0504`, `0506`), 1 `⛔ Cancelled`. Ranks unchanged (no re-rank was ruled): `0506` stays `P20`; the `0505`-vs-`0506` swap question above is moot.
+- Every new brief carries *"Do not start without the owner's specific word."*
 
 ## ➕ `0502` — added 2026-10-09 by owner ruling R9; the sprint now has 17 tasks
 
