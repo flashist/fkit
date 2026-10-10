@@ -39,7 +39,7 @@ import { findRoot, findDashboard } from './fkit-board.mjs';
 // here. Do not soften this into a best-effort parse.
 const VERSION_MARKER = '⟦fkit-dashboard v2⟧';
 
-const DASHBOARD_TIMEOUT_MS = 30000;   // matches fkit-board.mjs's guard against a hung render
+const DASHBOARD_TIMEOUT_MS = 120000;  // a CLI: a slow render costs only this run, so the ceiling is generous (same reasoning and value as 0502). fkit-board.mjs keeps 30 s because spawnSync blocks its single-threaded server.
 
 // The elision marker, with its counting rule stated — `0405` plan §3 records a measurement gap traced
 // to "an elision marker that is 4 bytes, not 3", so this file names both numbers rather than leaving
