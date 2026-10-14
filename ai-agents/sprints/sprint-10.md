@@ -19,6 +19,7 @@
 > | R8 | Typed request, 2026-10-08, in a `fkit lead` session: a lead that digs into code itself to explain an error is wrong; it should spawn a coder — *"brief a task about it and add it to the current sprint"*. Then via `AskUserQuestion`: lead limit = *"Quick triage, then hand off (Recommended)"*; hand-off = *"Tell owner it's delegated"* + *"No lead guess as fact"* + *"Relay read approvals"* | `0498` added as row `P16` — see *"➕ `0498`"* below |
 > | R9 | Via `AskUserQuestion`, 2026-10-09, in the `fkit lead` session: *"test/board-root.test.js keeps timing out under machine load (its 20 s limit) and has turned 4 full test runs red this sprint, never because of the task being tested. File a task to fix it?"* — selected *"File it, add to Sprint 10 (Recommended)"* (option text: *"… ranked last in Sprint 10 (after 0474). Knock-on: none — no task depends on it."*) | `0502` added as row `P17` — see *"➕ `0502`"* below. ⚠️ The option said "after 0474"; the last row was `0498`, so "last" = `P17` |
 > | R10 | Typed request, 2026-10-10, in a `fkit lead` session: *"/Users/mark.dolbyrev/Downloads/report-1-followup-questions-in-dialogs.md /Users/mark.dolbyrev/Downloads/report-2-command-buttons-mod.md /Users/mark.dolbyrev/Downloads/report-3-code-comments.md - read those 3 files and brief a task for each of them and add it to the currently active sprint (if there are no active sprints, start the next sprint and make it active)"* | `0504`–`0506` added as rows `P18`–`P20` — see *"➕ `0504`–`0506`"* below. Sprint 10 was the one active sprint, so no new sprint was started |
+> | R11 | Via `AskUserQuestion`, 2026-10-14, in a `fkit lead` session: *"Which tasks should go into Sprint 10 (0506 runs first either way)?"* — selected *"Pull 4 (Recommended)"* (option text: *"0501, 0496, 0484, 0483 as P21–P24, run after 0506. Knock-on: none — nothing waits on another sprint."*) | `0501`, `0496`, `0484`, `0483` pulled from the Backlog board as rows `P21`–`P24` — see *"➕ `0501`, `0496`, `0484`, `0483`"* below. Supersedes the 2026-10-10 *"no more pulls for now"* ruling in *Notes* |
 >
 > ⚠️ **What this producer chose that nobody ruled** — the title, and (2026-10-05) `0395`'s append
 > rank `P11`, forced by convention, not chosen on merit. The number (R4) and the ranks `P1`–`P10`
@@ -68,6 +69,36 @@ is already closed):
 | ✅ Done (agent-closed — not owner-verified) | P18 | **Answer a question typed into a question dialog in full, in chat, and do not re-ask in the same turn** *(Added 2026-10-10 by owner ruling R10 — see the `0504`–`0506` section below. ⚠️ `P18` is append rank, NOT a merit ranking — flagged for owner confirmation. Prose rules; shares `universal-rules.md` with `0506` — never alongside it. Owner `fkit-coder`)* | [`0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn`](../tasks/done/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/brief.md) |
 | ⛔ Cancelled (agent-closed — not owner-verified) (2026-10-10) — Owner ruling 2026-10-10 (fkit-lead session, relayed by the lead): "Cancel 2-buttons. I agree with you that it's not the fkit core." — a UI convenience mod, not fkit's core; if built, it belongs outside fkit. | P19 | **Build a command-buttons mod that offers the slash-commands Claude suggested as buttons above the prompt** *(Added 2026-10-10, R10. Cancelled the same day — see the `0504`–`0506` section below. Owner `fkit-coder`)* | [`0505-build-a-command-buttons-mod-that-offers-suggested-slash-commands-above-the-prompt`](../tasks/cancelled/0505-build-a-command-buttons-mod-that-offers-suggested-slash-commands-above-the-prompt/brief.md) |
 | 🔲 Backlog | P20 | **Add a "comment WHY, not WHAT" code-comment rule to fkit, and remove the rules that contradict it** *(Added 2026-10-10, R10. ⚠️ `P20` is append rank, NOT a merit ranking — flagged for owner confirmation. ~~⛔ Whether it applies to fkit's own heavily-commented tree is an open owner question that gates the build.~~ Answered 2026-10-10: option (c) — code yes, prompt texts no; gate lifted (see the brief). Owner `fkit-coder`)* | [`0506-add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it`](../tasks/backlog/0506-add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it/brief.md) |
+| 🔲 Backlog | P21 | **Document how `Depends on:` lines are read in the dependency-declaration-form page** *(Pulled from the Backlog board 2026-10-14 by owner ruling R11 — see the `0501`, `0496`, `0484`, `0483` section below. Run after `0506`. Its dependencies `0492` and `0494` (soft) are closed. Docs only, both homes; the scaffold copy is hashed, so the manifest is regenerated. Owner `fkit-coder`)* | [`0501-document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page`](../tasks/backlog/0501-document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page/brief.md) |
+| 🔲 Backlog | P22 | **Fix nine stale line cites and claims found during Sprint 10** *(Pulled 2026-10-14, R11. Its `0472` dependency is closed. ⚠️ Run before `0484` — this task edits `RELEASING.md`, which `0484`'s new link check reads; sequencing, not a dependency. Owner `fkit-coder`)* | [`0496-fix-nine-stale-line-cites-and-claims-found-during-sprint-10`](../tasks/backlog/0496-fix-nine-stale-line-cites-and-claims-found-during-sprint-10/brief.md) |
+| 🔲 Backlog | P23 | **Check the links in fkit's top-level docs, not only under `ai-agents/`** *(Pulled 2026-10-14, R11. Its `0480` dependency is closed. Run after `0496` (see above). Owner `fkit-coder`)* | [`0484-check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents`](../tasks/backlog/0484-check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents/brief.md) |
+| 🔲 Backlog | P24 | **Stop the board reader failing when a task folder moves between its check and its read** *(Pulled 2026-10-14, R11. No dependency; low priority. Owner `fkit-coder`)* | [`0483-stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read`](../tasks/backlog/0483-stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read/brief.md) |
+
+## ➕ `0501`, `0496`, `0484`, `0483` — pulled 2026-10-14 by owner ruling R11; the sprint now has 24 tasks
+
+- **Authority first.** **The owner ruled it**, **2026-10-14**, via `AskUserQuestion` in a `fkit lead`
+  session (R11 above): *"Pull 4 (Recommended)"* — *"0501, 0496, 0484, 0483 as P21–P24, run after 0506.
+  Knock-on: none — nothing waits on another sprint."* Relayed to a spawned `fkit-producer` with no owner
+  channel (ADR-021). ⚠️ The quotes are the lead's relay. **This is not producer precedent** for pulling
+  or ranking anything.
+- **It answers the 2026-10-10 hold.** The *Notes* ruling *"No, finish 0504/0506 first"* said the pull
+  question comes back after `0504` and `0506` ship. `0504` is closed; R11 pulls these four now and puts
+  them **after** `0506`. None of the earlier candidates (`0301`, `0189`, `0329`, `0332`) was pulled.
+- **Ranks `P21`–`P24` are the owner's** (the option named them) — append rank and owner placement at
+  once, so no further confirmation is needed. No existing row was re-ranked or re-statused.
+- **Run order:** `0506` (`P20`) → `0501` → `0496` → `0484` → `0483`. ⚠️ **`0496` before `0484`:**
+  `0496` edits `RELEASING.md`, which `0484`'s new link check reads. Sequencing, not a dependency.
+- **Dependencies, checked 2026-10-14:** `0501` ← `0492` ✅, `0494` ✅ (soft); `0496` ← `0472` ✅;
+  `0484` ← `0480` ✅; `0483` ← nothing. All four owned by `fkit-coder`.
+- **Knock-on:** none (checked) — no open brief depends on any of the four, and none of them waits on a
+  later sprint.
+- **Status stays `🔲 Backlog`.** Every brief says *"Do not start without the owner's specific word"*;
+  R11 is a placement ruling, not that word. It is given at each task's plan gate.
+- **Backlog-board edits** (per its *"Off:"* rule): each of the four rows on [`backlog.md`](backlog.md)
+  now leads with `➡️ Moved to [Sprint 10](sprint-10.md) — priority P<n>` (row kept), and each brief's
+  `## Sprint` reads `Sprint 10` and its `## Priority` the `P<n>` above. Task folders stay in
+  `tasks/backlog/`.
+- **Count.** 20 rows + 4 = **24 tasks** (as of this edit: 17 `✅ Done`, 6 `🔲 Backlog`, 1 `⛔ Cancelled`).
 
 ## ➕ `0504`–`0506` — added 2026-10-10 by owner ruling R10; the sprint now has 20 tasks
 
@@ -264,6 +295,8 @@ is already closed):
   board is done.
 - **Order is the rank, then dependencies.** In-board dependencies: `0474` → `0473`; `0493` → `0492`; `0494` → `0492` (the last two added 2026-10-05, R7). (`0395` has no in-board dependency; its brief asks that it start after `0479` closes — they touch neighbouring release files.) `0479` and
   `0481` depended on `0478`, which is closed (`✅ Done (agent-closed — not owner-verified)`).
+  (2026-10-14, R11: `P21`–`P24` have no open in-board dependency; run `0496` before `0484` — see the
+  R11 section above.)
 
 ## ⛔ What is deliberately not on this board
 
@@ -346,3 +379,5 @@ the `P<n>` above. (Written first as `Sprint 12` / `sprint-12.md`; repointed the 
   now**: none of the candidates (`0301`, `0189`, `0329`, `0332`) joins this sprint; the question comes
   back after `0504` and `0506` ship. **Knock-on: none** — no placement changed, no `Depends on:` link
   moved.
+- ⏱ **Superseded 2026-10-14 by owner ruling R11** — `0501`, `0496`, `0484`, `0483` pulled as
+  `P21`–`P24`, after `0506`. See *"➕ `0501`, `0496`, `0484`, `0483`"* above.
