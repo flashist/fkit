@@ -30,4 +30,5 @@ fkit.** Closed by a spawned producer via `/fkit-task-cancelled` (agent-closed). 
 
 ## Related
 - [[tasks/sprint-10-the-0472-0482-batch]] — `P19`, owner ruling R10 (with `0504`, `0506`, both open)
+  > ✅ *Dated note 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* `0504` has since closed → [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]]; `0506` is still open.
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]] — what fkit ships today (no mod component)

@@ -40,6 +40,8 @@ ADR-032); nothing about it may be removed or weakened.
   whichever lands second carries the gated blocks forward.
 - **The trial `0474` is owner-paced and open** on Sprint 10; making plan review the default needs a new owner
   ruling.
+  > ⭐ *Dated note 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* the **first trial log** is
+  > `reports/2026-10-11-plan-review-trial-0504.md` (task `0504`) — summarized on the ADR-056 page. `0474` is still open.
 
 ## Related
 - [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — the decision
@@ -48,3 +50,4 @@ ADR-032); nothing about it may be removed or weakened.
 - [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]] — the Codex fallback flag that must reach the owner
 - [[tasks/sprint-10-the-0472-0482-batch]] — `P9`; `0474` is `P10`
 - [[systems/review-and-model-diversity]]
+- *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`, the first real run of plan review

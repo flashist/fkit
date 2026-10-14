@@ -89,6 +89,29 @@ convert the task store.
   variant"; "plan review should be the default" or "should cover sessions" (owner decisions routed via `0474`).
 - *The 2026-10-06 rulings reached the architect as a relay from `fkit-lead` — trust, not proof.*
 
+> ⭐ **Dated note 2026-10-14 (sync `79a7dbf`→`baf6a4e`) — the first trial log exists.**
+> `ai-agents/knowledge-base/reports/2026-10-11-plan-review-trial-0504.md` records plan review's first real run, on
+> task `0504` (Sprint 10 run, `--plan-review`, started 2026-10-10). It is evidence for `0474`, **not** `0474`'s verdict.
+> - **Time:** 26m15s from "plan ready" to "plan presented to the owner" (approvers 7m42s, Codex 9m45s incl. a
+>   re-spawn, lead to the gate 8m43s) — wall-clock, overlapping owner time. ⚠️ **No baseline was measured.**
+> - **Classification:** product change → producer + architect; judged right.
+> - **Effect on the plan:** 18 adopted changes (11 from approvers, 7 from Codex), 1 pure-noise item, 1 half-noise.
+>   ⚠️ Several Codex findings landed on text the approvers had added — part of the Codex work checked changes the
+>   approvers caused.
+> - **Later code review:** 1 round, 2 low findings; one (an unpinned test site) plan review **could** have caught.
+>   ⚠️ The rough comparison with `0495` (no plan review: 3 rounds, 9 findings) is **not a control** — *"Do not read it
+>   as an effect size."*
+> - **Owner cost:** plan review added 2 of 6 owner questions plus a 7-row Codex table; word count not measured.
+> - **What broke:** the first Codex pass came back late with 2 unchecked findings; a driver spawn prompt told the
+>   continuation coder to revise the plan after Codex, and the coder **correctly refused** (`fkit-plan-task` §5); approver
+>   rounds 2–3 got the plan by file path, not inline (a procedure deviation); the first Codex prompt was shortened;
+>   Codex could not run the hook tests (`EPERM`, read-only sandbox).
+> - **Fresh-launch precondition:** likely met, by the lead's account; the record **fits** the new approver guidance
+>   but **does not prove** it was used.
+> - **The owner's answer** (typed, 2026-10-11, after first asking what he had actually been shown): *"Based on your
+>   explanation, I think it's worth it, but I would like to do a couple of other tasks with it too."* ⛔ **Not a
+>   ruling to make it the default** — Decision 9 still needs a new owner ruling; `0474` stays open.
+
 ## Related
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] · [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] · [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — each carries a pointer note here
 - [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — the honesty clause restated in Decision 8
@@ -101,3 +124,4 @@ convert the task store.
 - [[tasks/build-the-opt-in-plan-review-step-off-by-default]] — `0473`, which recorded and built it
 - [[tasks/sprint-10-the-0472-0482-batch]] — where `0474`, the trial, stays open
 - [[systems/review-and-model-diversity]] · [[systems/fkit]] — the task-folder data model `plan-review.md` joins
+- *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`, the first task planned with plan review on (trial log above)

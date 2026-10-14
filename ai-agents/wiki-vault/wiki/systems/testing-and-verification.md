@@ -151,6 +151,8 @@ closing.**
 - **CI timeout 20 → 33 min** — `0395`, on ~3× the slowest of 20 post-`0388` runner runs (652 s); the comment
   rewritten with sourced, dated figures. ⚠️ Its V5 (the first CI run after the owner's push finishes well under 33
   min) is **pending, not verified**. → [[tasks/re-measure-the-ci-test-runtime-on-the-ubuntu-runner-and-correct-the-workflow-timeout]]
+  > ✅ *Dated note 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* **V5 met** — first CI run after the change green in 12m17s;
+  > later runs 9–12.5 min. ⚠️ Headroom ~2.65×, below the ruled ~3×; the owner's call, nothing filed.
 - **prove-red keeps a red step's output** — `0477`: each of 55 steps writes its own file; a failed step's output is kept
   in a `fkit-prove-red-kept.*` dir under `$TMPDIR` and named in the `✗` line; green runs leave nothing. ⭐ **Root cause
   found by reproduction:** tests that read the live tree **twice** raced other agents' writes, phase-locked to when

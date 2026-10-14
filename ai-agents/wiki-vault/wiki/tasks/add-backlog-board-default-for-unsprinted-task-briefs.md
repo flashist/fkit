@@ -92,3 +92,12 @@ The read-side half — making `/fkit-status` report this board **only on request
   > recorded as 8 / 12 now reads **19 / 12** — the same week, later revision, more commits observed; not a
   > contradiction of that entry's date. ⛔ **The run of closes-exceeding-creations ended:** W39 was the last such week.
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/make-a-later-sprint-blocker-visible-0492-0495]] — Make a later-sprint blocker visible — the board flags it, the loop says it, filing warns, questions name the knock-on… · [[tasks/re-measure-the-ci-test-runtime-on-the-ubuntu-runner-and-correct-the-workflow-timeout]] — Re-measure the CI test runtime on the ubuntu runner, and correct the workflow timeout and its comment · [[tasks/record-every-owner-question-and-decision-and-count-autonomous-tasks]] — Record every owner question and decision, and count the tasks done autonomously after plan approval
+- ⚠️ **SYNC 2026-10-14 (sync `79a7dbf`→`baf6a4e`) — four more rows fed Sprint 10.** From the board's own diff: `0483`,
+  `0484`, `0496`, `0501` now lead with `➡️ Moved to Sprint 10 — priority P24 / P23 / P22 / P21` (rows kept, folders
+  still under `tasks/backlog/`), by owner ruling **R11** (2026-10-14, *"Pull 4 (Recommended)"*) →
+  [[tasks/sprint-10-the-0472-0482-batch]]. No row added, closed or cancelled on this board in the window. ⛔ Still
+  open, so still no pages.
+  > ⭐ **Measured fresh at `baf6a4e` by `node claude/skills/fkit-status/throughput.mjs` this run** (reads git, writes
+  > nothing): **open 188** · **repair 25 (13.3%)** · **repair-excluding-source-defects 22 (11.7%)**. W41 24 created / 17
+  > closed; W42 (partial) 0 / 1. ⚠️ Open fell 189 → 188 with `0504`'s close — the repair share moved 0.1 point
+  > because the denominator shrank, not because repair work changed.

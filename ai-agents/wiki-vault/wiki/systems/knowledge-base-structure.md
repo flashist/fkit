@@ -125,6 +125,26 @@ it. ⛔ **Prose only — nothing checks a question's text mechanically.** From t
 
 ⚠️ The exceptions-module count (28 on 2026-09-16) was **not** re-measured this run.
 
+### A twelfth convention — `asking-the-owner.md` *(measured 2026-10-14, sync `79a7dbf`→`baf6a4e`)*
+
+⭐ **How a question is put to the owner** — explain first, in chat, short enough to stay visible above the dialog;
+every `AskUserQuestion` carries the standing option `Explain more, then ask again` (last, once); and **a reply that
+is not a choice** — a typed question, a request for more information, or a pick of the standing option — **is not
+an answer and not consent**: answer it in full in chat, open no new question that turn, re-ask on the owner's next
+message. Workers return at most 3 options so the relayer can add the standing one. Owner ruling 2026-10-10 (ship
+the option to every user). ⛔ **Prose plus a presence test** (words, not obedience) and a reworded Stop-hook message
+— a heuristic by design. From task `0504` →
+[[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]].
+
+| Measure | 2026-10-10 | **2026-10-14** |
+|---|---|---|
+| Live `conventions/*.md` (excluding `README.md`) | 11 | **12** |
+| Scaffold copies | 10 | **11** |
+| `conventions/README.md` index rows | 11 | **12** |
+| Must-match byte-identical pages | 4 | **5** — the new page joins the four; ✅ **all five re-verified byte-identical on disk this run** (`cmp`) |
+
+⚠️ The exceptions-module count was again **not** re-measured.
+
 > ⭐ **Also in this window (2026-10-10):** a 2026-07-18 producer handoff, stray at the repo root, was **moved — not
 > deleted —** to `reports/2026-07-18-handoff-fkit-status-filtered-board.md` by `0478` (owner ruling: move under
 > `ai-agents/`). And task `0472` added dated correction notes to five `reports/` files and ADRs 033/049/052 — the
@@ -234,3 +254,4 @@ A new `## The merit statement` section, **dual-homed byte-identically**, recordi
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/sweep-the-repo-only-claude-path-form-out-of-installed-facing-prose]] — task `0390`, whose sweep produced the must-match vs audience-adapted asymmetry recorded above
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-a-later-sprint-blocker-visible-0492-0495]] — `0495`, the eleventh convention
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — dated corrections across `reports/` and three ADRs
+- *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`, the twelfth convention (`asking-the-owner.md`)

@@ -4,6 +4,8 @@
 **Status**: done — `✅ Done (agent-closed — not owner-verified)`, closed 2026-10-05 — ⚠️ **with V5 PENDING the owner's push**
 **Sprint/Tag**: Sprint 10 `P11` (append rank; filed on the Backlog board 2026-09-14) · task `0395` · owner `fkit-coder`
 
+> ✅ *Dated note 2026-10-14:* the Status line's *"V5 PENDING"* is **spent** — V5 was met (see *Outcome*). Line left as written.
+
 ## Goal
 Owner ruling 2026-09-14 (verbatim option label **"File follow-up brief (Rec)"**), from review finding **R6** on
 `0388`: `.github/workflows/test.yml` sets `timeout-minutes: 20`, justified by a comment whose figures no longer
@@ -31,6 +33,15 @@ before any push" and "measure on the runner first" cannot both hold — a runner
   2026-10-05): the first CI run after the push must finish green well under 33 min. To confirm: `gh run list
   --workflow test.yml --limit 1`, then `gh run view <id> --json jobs`. The estimate with Sprint 10's additions
   (~12–13 min) is **unverified**.
+  > ✅ **Dated note 2026-10-14 (sync `79a7dbf`→`baf6a4e`) — V5 MET as written; the bullet above is left as
+  > written.** The brief gained an evidence note dated 2026-10-10 (a spawned producer at `fkit-lead`'s direction,
+  > after the owner answered *"Yes, close it (Rec)"* — moot, the task was already closed). The first CI run after
+  > the change — the push of `acd23a9` — had its `test` job finish **green in 12m17s**, inside 33 min. Four later
+  > runs, all green, 9m03s–12m26s, corroborate it; ⚠️ the lead's three runs alone would **not** have met V5's
+  > wording (they were the 3rd–5th after the change, not the first). The ~12–13 min estimate held.
+  > ⚠️ **Observation, not a defect:** the slowest job since is 12m26s, so 33 min is **~2.65× headroom**, below the
+  > ~3× ruled at the plan gate. Re-tuning is the owner's call; nothing filed. ⛔ **Still agent-closed, not
+  > owner-verified** — the upgrade is the owner's alone and was not applied.
 - **Routed to the wiki:** pages still quoting `timeout-minutes: 20` and the old *"6–8 minutes"* / *"~6 min"* —
   updated with dated notes in the 2026-10-10 sync.
 

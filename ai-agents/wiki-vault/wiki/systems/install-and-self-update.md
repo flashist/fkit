@@ -208,6 +208,9 @@ Init scaffolds `ai-agents/` + `CLAUDE.md` + `AGENTS.md`, **never clobbering** an
 > *"10+ min"*, not *"~6 min"*. Local full runs measured 12 min to ~48 min under load during Sprint 10; **task `0503`
 > (open) re-measures locally and on CI.** ⚠️ `0395`'s first-CI-run-after-push check (V5) is **pending the owner's
 > push** — not verified. → [[tasks/re-measure-the-ci-test-runtime-on-the-ubuntu-runner-and-correct-the-workflow-timeout]]
+>
+> ✅ *Dated note 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* **V5 is now met** — the first CI run after the change finished
+> green in 12m17s (evidence note on `0395`'s brief, 2026-10-10). Headroom ~2.65×, below the ruled ~3×; not re-tuned.
 
 ## Gotchas / Known Issues
 - **`install.sh` is the blast radius of the whole product.** A bad landing breaks installation *including the self-update path that would ship the fix*. It **cannot be verified by reading a diff** — it must be installed from a ref into a clean `$HOME`.

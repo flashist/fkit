@@ -63,3 +63,4 @@ which sat close to an option he had not chosen.
 - [[tasks/make-the-lead-hand-a-code-level-why-question-to-a-spawned-coder-instead-of-tracing-code-itself]] — `0498`, built on `0495`'s edit to `fkit-lead.md`
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — where `0501` was filed
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[systems/fkit]] — fkit
+- *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`'s `asking-the-owner.md`, which keeps a placement option's knock-on in its description; and the trial log's rough (not controlled) comparison with `0495`

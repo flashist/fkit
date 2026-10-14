@@ -32,7 +32,14 @@ ask again" rules in his personal global `CLAUDE.md` first**; whether to bring th
 and a new task would be filed then. The open questions (the shared byte cap; what "fkit only" covers) stay
 in the brief for that decision. Not related to the aiboard work that dominated the same weeks.
 
+> ⭐ *Dated note 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* **the decision this page deferred was taken.** On 2026-10-10
+> the owner ruled to ship the standing option to every fkit user, byte-exact with his trial wording, and to end his
+> personal trial once it shipped. Task `0504` built it — closed 2026-10-14, agent-closed. The byte budget was met by
+> a one-line pointer in the rules block to a new convention page (`asking-the-owner.md`), not by new text in the
+> block. → [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]]
+
 ## Related
 - [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — why a consult cannot add the option itself
 - [[tasks/reclaim-rules-block-budget-headroom]] — the ≥400 B headroom target this change could not fit inside
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board it was filed and cancelled on
+- *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`: the cancelled idea, revived — the standing option now ships to every fkit user (owner ruling 2026-10-10)
