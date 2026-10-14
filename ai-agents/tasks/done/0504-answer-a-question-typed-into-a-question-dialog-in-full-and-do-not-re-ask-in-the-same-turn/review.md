@@ -1,6 +1,6 @@
 # Review — 0504
 
-Task: ai-agents/tasks/backlog/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/brief.md
+Task: ai-agents/tasks/done/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/brief.md
 File(s) under review: working tree vs HEAD `1461196` — `claude/agents/fkit-{architect,coder,lead,producer,reviewer,wiki}.md`, `claude/scaffold/universal-rules.md`, `claude/scaffold/ai-agents/knowledge-base/conventions/{asking-the-owner.md,README.md}`, `ai-agents/knowledge-base/conventions/{asking-the-owner.md,README.md}`, `claude/skills/{fkit-sprint-ship-loop,fkit-heal,fkit-open-questions-interview}/SKILL.md`, `claude/turn-completion-hook.sh`, `claude/structure-spec.md`, `claude/structure-manifest.tsv`, `CLAUDE.md`, `AGENTS.md`, `CHANGELOG.md`, `test/{asking-the-owner-rule,turn-completion-hook,structure-check}.test.js`. Driver bookkeeping (`plan.md`, `plan-review.md`, `worklog.md`, the brief's Status, the Sprint 10 row) not under review.
 Status: closed-out
 Coverage: both reviewers measured — Claude ran 6 targeted test files (86/86 pass) and the Stop hook on two answer-turn payloads (no question line → allow; question line → block with the new REASON_A, valid JSON); Codex (`codex-cli 0.157.1`, exit 0) ran `node --test test/asking-the-owner-rule.test.js test/turn-completion-hook.test.js test/structure-check.test.js` → the new guard 8/8 pass, the other two files EPERM on `mkdtemp` (read-only sandbox), and its three findings themselves rest on reading.

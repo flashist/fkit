@@ -98,13 +98,36 @@ While the owner's personal `~/.claude/CLAUDE.md` rule is in place it says "then 
 and the owner's own instructions outrank fkit's Output-style preferences. A same-turn re-ask during the live
 check may come from his rule, not a failure of fkit's. Owner ruled (Q5): accept the overlap, note it here.
 
-### Verifications 5 and 7 — **owner-run, pending**
+### Verifications 5 and 7 — **owner-run, run 2026-10-14 — PASS (owner-ruled)**
 
 The live check in a fresh `fkit lead` session cannot be run by a spawned worker. Not run; unverified. Expected:
 typed follow-up → full chat explanation, no dialog that turn, no "I've explained"; "Explain more" →
 plain explanation, no dialog that turn; "ok, ask again" → same question, same options + the standing option
 shown **once**. 0504 is not routed to close until the owner runs these or explicitly waives them. Record the
 transcript excerpt here when done.
+
+**Result (2026-10-14, owner-run, ~10:54–10:57 local).** Transcript excerpt as observed from the owner's
+screenshots, relayed by the lead session:
+
+- **Setup:** fresh `fkit lead` session; owner prompt "Ask me one test question with AskUserQuestion: should
+  Sprint 10 get more tasks — yes or no? Don't act on my answer; this is a test." Lead explained the choice in
+  chat before the dialog.
+- **Step 1** (typed follow-up "What would pulling tasks actually change?"): full chat explanation, no dialog in
+  that turn, no "I've explained"; turn ended with "What's next?" — "Reply with anything and I'll ask the same
+  Sprint 10 yes/no question again." **PASS.**
+- **Step 2** (owner replied "ok"; question re-put; owner picked "Explain more, then ask again"): plain-terms
+  explanation, no dialog in that turn. **PASS.** The known Q5 confound (owner's personal `~/.claude/CLAUDE.md`
+  re-ask rule) did not produce a same-turn re-ask.
+- **Step 3** (owner typed "ok, ask again"): same question "TEST ONLY — should Sprint 10 get more tasks?"
+  returned with options No / Yes / "Explain more, then ask again" (standing option shown once). **PASS.** The
+  owner confirmed the first dialog had the same options.
+- **Verdict:** pass, ruled by the owner 2026-10-14 via `AskUserQuestion` in the `fkit lead` session — selected
+  option, verbatim: "Pass — close it (Recommended)" (description: "First dialog had the same options. Producer
+  logs the result in the worklog, closes 0504 as agent-closed. Knock-on: none (no open task depends on
+  0504).").
+
+This entry is the evidence plan.md's standing condition requires before close. Recorded by a spawned producer
+(chain `lead → producer`); the close follows via `/fkit-task-done`.
 
 ### Step-9 survey
 

@@ -10,7 +10,7 @@ Sprint 10
 P18
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder

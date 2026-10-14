@@ -4,7 +4,7 @@
 **Kind:** trial log for task `0474` (plan-review trial), one per task planned with plan review on
 **Run:** Sprint 10 run, `--plan-review`, started 2026-10-10T16:23:38Z (`fkit-sprint-ship-loop`, `fkit lead` session)
 **Task:** `0504` — answer a question typed into a question dialog in full, and do not re-ask in the same turn.
-Folder `ai-agents/tasks/backlog/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/`
+Folder `ai-agents/tasks/done/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/`
 (moves to `done/` when closed). Sources: its `plan-review.md`, `plan.md`, `review.md`, `worklog.md`, plus
 facts relayed by the lead (marked "lead").
 **Why this is a trial run:** owner, `AskUserQuestion`, `fkit lead` session, 2026-10-10: "Yes, log it as a
