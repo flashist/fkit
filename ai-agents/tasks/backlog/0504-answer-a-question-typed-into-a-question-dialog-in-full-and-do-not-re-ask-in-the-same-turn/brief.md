@@ -10,7 +10,7 @@ Sprint 10
 P18
 
 ## Status
-🔲 Backlog
+🔄 In progress
 
 ## Owner
 fkit-coder

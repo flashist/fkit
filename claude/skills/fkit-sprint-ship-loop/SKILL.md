@@ -151,7 +151,7 @@ owner rejects the plan** (§5.4), so a rejected task is never stranded `🔄 In 
 
 | Step | Driver spawns | Worker does (bounded, then returns) | Owner gate (driver-held) |
 |---|---|---|---|
-| **Plan** | `@fkit-coder` | run `/fkit-plan-task`; **write no source**; return the plan + open questions | **⛔ present plan → `AskUserQuestion` approve/reject** — the unremovable checkpoint (prose-enforced here, see honesty clause); **on approval the DRIVER writes the approved text to `<task-folder>/plan.md` verbatim — copied, not re-rendered — BEFORE spawning Build** (ADR-020; mirrors `fkit-task-ship-loop` step 4) |
+| **Plan** | `@fkit-coder` | run `/fkit-plan-task`; **write no source**; return the plan + open questions | **⛔ present plan → `AskUserQuestion` approve/reject** — the unremovable checkpoint (prose-enforced here, see honesty clause); a picked "Explain more, then ask again", or a typed question or request for more information, is not an answer and not approval — answer it in chat and re-put the plan (§3 step 2); **on approval the DRIVER writes the approved text to `<task-folder>/plan.md` verbatim — copied, not re-rendered — BEFORE spawning Build** (ADR-020; mirrors `fkit-task-ship-loop` step 4) |
 | **Build** | `@fkit-coder` | implement the **approved** plan; write source + `worklog.md` (**`plan.md` already exists — the driver wrote it at approval; never re-author it**); return change surface + any decision surfaced | stop only if the worker returns `NEEDS-DECISION` |
 | **Verify** | `@fkit-coder` | run the checks this change needs: map the changed paths to the project's checks (its own "what changed → what to run" table if it has one, e.g. in `CONTRIBUTING.md`), and run the full suite at release, when the tests or test tooling change, or when unsure; name which checks ran and which were skipped, and why — a skipped check is not a passed one; return pass/fail + which checks ran and which were skipped (why) + diagnosis | **budget: 3 no-progress cycles** → `🚧 Blocked — verification` |
 | **Review** | `@fkit-reviewer` → `/fkit-stateful-review` | own pass + Codex second opinion; write the *Reviewer findings* ledger section; return the verdict | — |
@@ -344,12 +344,27 @@ which sprint — the recommended option too, and a `NEEDS-DECISION` as much as a
 Say so in each worker's spawn prompt, beside the envelope: the worker writes it into each placement
 option of its `NEEDS-DECISION`, or `knock-on: none (checked)` when no open task would wait.
 
+**A `NEEDS-DECISION` carries at most 3 options**, plus a plain-language `context` with enough for the
+driver to explain the choice without asking the worker back — the driver adds the standing option as
+the 4th ([`conventions/asking-the-owner.md`](../../../ai-agents/knowledge-base/conventions/asking-the-owner.md)).
+Say so in each worker's spawn prompt too, beside the envelope, the same way as the knock-on rule.
+
 On `NEEDS-DECISION` the driver:
 
 1. calls **`AskUserQuestion`** with the returned options (recommendation pre-marked) — relaying a
    worker's options, it drops each `knock-on: none (checked)` note, and a placement option with neither
    that note nor a knock-on is missing one: it adds it from the briefs, checked this turn, before it asks, saying so — and
-2. **blocks on a real owner answer** — **no timer, no guess** — then
+   adds the standing option `Explain more, then ask again` **last**. A worker that returned 4 options
+   anyway: the driver merges the two least-recommended into one, naming both and keeping both knock-ons
+   in its description, and says so in chat — never silently drops an option — and
+2. **blocks on a real owner answer** — **no timer, no guess**. A reply that is not a choice — a picked
+   "Explain more, then ask again", or a typed question or request for more information — is not an
+   answer and not approval: the driver answers it in full, in chat, from the worker's context, the brief
+   or the plan; if it cannot, it asks a read-only consult of the same role carrying the worker's
+   `NEEDS-DECISION` verbatim and the owner's question (no declared-approval marker, never a live plan
+   pointer line). It opens no new question that turn and ends it. Put the same question back on the
+   owner's next message — unless that message is the answer (take it) or another question (answer it
+   the same way). Then
 3. spawns the next worker with the decision folded into its prompt.
 
 **This is the opposite of the declined ADR-024 auto-proceed.** It does not remove the owner via a

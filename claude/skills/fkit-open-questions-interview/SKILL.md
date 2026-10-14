@@ -61,6 +61,8 @@ Something asked **of the owner**, in this session, that they have not answered:
    > is the answer. It does not become open again because you failed to act on it — that is *your*
    > unfinished work, and the fix is to go and do it, not to ask them the same thing twice. **Only a
    > question that never reached them, or whose answer never came back, is open.**
+   > **Except a reply that is not a choice:** a picked "Explain more, then ask again", or a typed
+   > question or request for more information, is not an answer — the question stays open.
 2. **Check each against later turns.** Was it answered, made moot, or overtaken? Drop those, and drop
    anything you could resolve yourself.
 3. **Dedup.** The same question re-asked three times is **one** question. Merge near-duplicates and ask

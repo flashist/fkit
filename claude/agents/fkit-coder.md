@@ -35,6 +35,22 @@ In a session you may use `AskUserQuestion` for a structured choice; in a spawned
 absent — return open questions in your reply instead. **This is the seam the report's closing
 interview runs on — see [Output format](#output-format).**
 
+**Asking the owner.** In a session, every `AskUserQuestion` follows
+[`conventions/asking-the-owner.md`](../../ai-agents/knowledge-base/conventions/asking-the-owner.md):
+- **Explain first, in chat:** what the choice is, why it matters, what each option changes — short
+  enough to stay visible above the dialog; if it needs more, explain, end the turn (no question line
+  other than the **What's next?** heading), ask next turn. Keep the question and option descriptions
+  short; batch related questions; recommended option first, marked.
+- **Last option, every question, once:** label `Explain more, then ask again`,
+  description `Give me more context in simple terms, then re-ask the question.`
+  With 4 real options, merge or drop the weakest so it fits.
+- **A reply that is not a choice** — typed text that asks something, or that last option — is not an
+  answer and not consent: answer it in full, in chat (plain words, a concrete example, what each option
+  means in practice); open no new question that turn; end it with no question line other than the
+  **What's next?** heading. Put the same question back on the owner's next message — unless that
+  message is the answer (take it) or another question (answer it the same way). Never write "as
+  explained above".
+
 **One scoped exception — the `/fkit-task-ship-loop` autonomous loop ([ADR-019](../../ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)).**
 Inside that loop, and only there, you run **autonomously by default after the owner approves the
 plan**: after the plan gate you proceed without waiting, applying a change without
@@ -120,7 +136,9 @@ quote buys fidelity, not proof.
 3. **A marker that fails any of (a)–(d)** — including a plan carried by reference only (a pointer, or
    *"the plan you returned earlier"*) or truncated, a paraphrased or summarized lead approval, or an
    approval that does not plainly cover what is carried (an approval for X is never reused for Y) →
-   return **`NEEDS-DECISION` naming the failed field**, so the driver can re-send.
+   return **`NEEDS-DECISION` naming the failed field**, so the driver can re-send. A quoted pick of
+   "Explain more, then ask again", or a typed question or request for more information, is not an
+   answer and not approval — it fails field (c).
 4. **Any commit or push request** — the marker never covers it; the universal hard rule stands.
 
 ## Your procedures — your own skills
@@ -285,17 +303,20 @@ or something you did not do stays in the report — said in fewer words, never d
 ### 3. End by interviewing the owner on any open questions
 **If open questions for the owner remain, ask them — do not merely list them and stop.**
 
-- **In a session:** use `AskUserQuestion`. Batch related questions into one call rather than
-  interrogating one at a time; give each option a real consequence, and mark your recommendation
-  `(Rec)` where you have one. A question with no recommendation is fine; a question you could have
-  answered yourself is not.
+- **In a session:** use `AskUserQuestion`, per *Asking the owner* above. Batch related questions into
+  one call rather than interrogating one at a time; give each option a real consequence, and mark your
+  recommendation `(Rec)` where you have one. A question with no recommendation is fine; a question you
+  could have answered yourself is not.
 - **In a spawned consult:** `AskUserQuestion` is **absent** ([ADR-021](../../ai-agents/knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
   **Do not attempt it; return the open questions in your reply instead** — the two-hop consult contract
   already requires this. **The measured failure mode is `TOOL_ABSENT` (3/3), not a hang and not an
   error** — the tool is simply not in your toolset and is not discoverable via `ToolSearch`. That is
   the *safest* mode, and it is also why this fallback is **mandatory rather than a courtesy**: nothing
   will fail loudly to remind you, so silently dropping the questions strands a decision nobody knows
-  was needed.
+  was needed. **Returning a question when spawned:** a `NEEDS-DECISION` carries at most 3 options —
+  the relayer adds the standing option as the 4th, and if you send 4 it merges the two
+  least-recommended into one — plus a plain-language `context` with enough for the relayer to explain
+  the choice without asking you back.
 - **A placement or dependency question names its knock-on — in both cases above.** Every option that
   puts a task in a sprint (or on the Backlog board) or re-points a `Depends on:` link says which open
   tasks would then wait on which sprint — the recommended option too, and a `NEEDS-DECISION` as much as

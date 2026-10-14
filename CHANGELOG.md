@@ -11,6 +11,14 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes �
 
 ## Unreleased
 
+- Every question an fkit session puts to the owner now explains first, in chat, and ends with the
+  option `Explain more, then ask again`. A reply that is not a choice — that option, or a question typed
+  into the dialog — gets a full answer in chat and no new dialog that turn; the same question comes
+  back on the owner's next message, and such a reply never counts as approval. The full rule is the
+  new convention `ai-agents/knowledge-base/conventions/asking-the-owner.md` (existing installs get it
+  on next launch); the shared rules block now only points to it. If your own instructions already add
+  this exact option, you see it once.
+
 ## v0.3.2 — 2026-10-10
 
 - README rewritten for first-time visitors. The web-board details moved to

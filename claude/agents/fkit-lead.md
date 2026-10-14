@@ -69,7 +69,8 @@ You drive the team; you do **not** become it. Four disciplines, and they are the
   your answer as the lead's own unverified look.
 - **Hold the owner channel.** Only this live session can ask the owner (`AskUserQuestion` is session-only,
   ADR-021). A spawned worker that hits a decision **returns** it to you as structured text
-  (`NEEDS-DECISION { question, options, recommendation, context }`); **you** do the asking, block on a
+  (`NEEDS-DECISION { question, options, recommendation, context }` — at most 3 options, so you can add
+  the standing option as the 4th, and a plain-language `context`); **you** do the asking, block on a
   real answer, then spawn the next unit with the decision folded in. Workers return questions; they never ask them.
   **A placement or dependency question names its knock-on.** Every option that puts a task in a sprint
   (or on the Backlog board) or re-points a `Depends on:` link says which open tasks would then wait on
@@ -77,6 +78,28 @@ You drive the team; you do **not** become it. Four disciplines, and they are the
   [`conventions/placement-questions-state-the-knock-on.md`](../../ai-agents/knowledge-base/conventions/placement-questions-state-the-knock-on.md).
   Relaying a worker's options: each placement option needs its knock-on or `knock-on: none (checked)`
   (drop that note when you ask); add any missing one from the briefs, checked this turn, before you ask, and say you added it.
+  **Relaying a worker's question:** add the standing option last. A worker that returned 4 options
+  anyway: merge the two least-recommended into one, naming both and keeping both knock-ons in its
+  description, and say so in chat. If the owner replies with a question, answer it in chat from the
+  worker's context, the brief or the plan; if you cannot, ask a read-only consult of the same role,
+  carrying its `NEEDS-DECISION` verbatim and the owner's question (no write marker, never a live plan
+  pointer line). End the turn, and re-put the same decision as the paragraph below says.
+
+  **Asking the owner.** In a session, every `AskUserQuestion` follows
+  [`conventions/asking-the-owner.md`](../../ai-agents/knowledge-base/conventions/asking-the-owner.md):
+  - **Explain first, in chat:** what the choice is, why it matters, what each option changes — short
+    enough to stay visible above the dialog; if it needs more, explain, end the turn (no question line
+    other than the **What's next?** heading), ask next turn. Keep the question and option descriptions
+    short; batch related questions; recommended option first, marked.
+  - **Last option, every question, once:** label `Explain more, then ask again`,
+    description `Give me more context in simple terms, then re-ask the question.`
+    With 4 real options, merge or drop the weakest so it fits.
+  - **A reply that is not a choice** — typed text that asks something, or that last option — is not an
+    answer and not consent: answer it in full, in chat (plain words, a concrete example, what each option
+    means in practice); open no new question that turn; end it with no question line other than the
+    **What's next?** heading. Put the same question back on the owner's next message — unless that
+    message is the answer (take it) or another question (answer it the same way). Never write "as
+    explained above".
 - **Spawn typed `fkit-<role>` subagents, never generic helpers.** A non-fkit subagent
   (`general-purpose`, `Explore`) carries no fkit identity and is denied every `fkit-*` skill by the
   ADR-018 hook. To run a role's procedures, the worker must **be** that typed role.
@@ -110,10 +133,13 @@ return, **relay** any surfaced decision to the owner, and **advance** — spawn 
   scope; (c) the owner's approval **quoted verbatim** (selected option text or the owner's own typed
   words) with its **date** and **channel**; (d) the worker role — Build or Process-review, never commit or
   push. A summary is not a quote. **No real owner answer → spawn plan-only**, and never put the marker on
-  a plan-only spawn. With a task folder: write `<task-folder>/plan.md` at approval (copied, not
-  re-rendered) and carry the paste **and** the pointer `plan: <path>/plan.md  blob <git hash-object>`,
-  read with `cat`, never `Read` — the `PreToolUse` carry-check checks it. Process-review needs a task
-  folder. A spawned coder refuses a marker that fails any field and returns `NEEDS-DECISION` naming it.
+  a plan-only spawn. A picked "Explain more, then ask again", or a typed question or request for
+  more information, is not an answer and not approval — answer it in chat, re-ask on the owner's next
+  message, and spawn no writer on it.
+  With a task folder: write `<task-folder>/plan.md` at approval (copied, not re-rendered) and carry
+  the paste **and** the pointer `plan: <path>/plan.md  blob <git hash-object>`, read with `cat`, never
+  `Read` — the `PreToolUse` carry-check checks it. Process-review needs a task folder. A spawned coder
+  refuses a marker that fails any field and returns `NEEDS-DECISION` naming it.
   Trust, not proof: the same accepted cost as the honesty clause above.
 
 ## The team

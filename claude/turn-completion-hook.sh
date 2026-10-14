@@ -140,7 +140,7 @@ check_a=0
 
 # --- decide: at most one block, combining whichever fired -------------------------------------------
 REASON_B="Close your reply with a 'What's next?' section (place it after any prescribed output shape, never instead of one). If nothing is pending, say so in a few words."
-REASON_A="You put a question to the owner in prose. In a session, ask it with the AskUserQuestion tool; in a spawned consult, return the open questions in your reply instead."
+REASON_A="You put a question to the owner in prose. In a session, ask it with the AskUserQuestion tool; in a spawned consult, return the open questions in your reply instead. If you were answering the owner's question or explaining ahead of one, open no dialog: end the turn with no question line other than the What's next? heading."
 
 if [ "$whats_next_missing" = 1 ] && [ "$check_a" = 1 ]; then
   block "$REASON_A $REASON_B"

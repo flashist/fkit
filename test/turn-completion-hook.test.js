@@ -129,6 +129,18 @@ test('A: marker absent + infra present + prose question -> block', () => {
   assert.match(p.reason, /AskUserQuestion/, 'A reason names the tool');
 });
 
+// Task 0504 (D7): the A reason also tells an agent that was ANSWERING the owner's question, or explaining
+// ahead of one, to open no dialog — so the hook never pushes a dialog over an explanation it just gave.
+// Static text, presence-only (ADR-030 Decision 2); the hook still cannot tell such a turn from a relabelled
+// prose question (accepted residual, conventions/asking-the-owner.md).
+test('A: reason carries the answer/explain guidance (open no dialog, no question line but the heading)', () => {
+  const cwd = newCwd();
+  const p = assertBlock(run(payload({ lastMessage: 'Redis or Postgres?\n\nWhat\'s next?\nAwaiting.', cwd, sessionId: 'sess-1' })), 'A fires');
+  assert.match(p.reason, /AskUserQuestion/, 'A reason still names the tool');
+  assert.match(p.reason, /answering the owner's question or explaining ahead of one, open no dialog/, 'answer/explain guidance');
+  assert.match(p.reason, /no question line other than the What's next\? heading/, 'X1 wording');
+});
+
 test('A: marker consumed after the run (turn-scoped, no leak to next turn)', () => {
   const cwd = newCwd();
   placeMarker(cwd, 'sess-1');
@@ -187,7 +199,7 @@ test('A+B both fire -> single block whose reason mentions both', () => {
   const cwd = newCwd();
   const p = assertBlock(run(payload({ lastMessage: 'Use Redis or Postgres?', cwd, sessionId: 'sess-1' })), 'A+B');
   assert.match(p.reason, /AskUserQuestion/, 'combined reason has A');
-  assert.match(p.reason, /What's next\?/, 'combined reason has B');
+  assert.match(p.reason, /Close your reply with a 'What's next\?' section/, 'combined reason has B');
 });
 
 // =================================================================================================

@@ -114,8 +114,10 @@ moves, no commits, no re-ranks.
 
 4. **One `AskUserQuestion` — plan-level approval of that exact enumerated list** (ADR-039
    Decision 2), asked with the diffs in view. Offer: approve the full list / approve a named subset
-   / not now. No destructive item can exist in v1 — nothing here moves, renames, or deletes; if one
-   somehow appeared it would be a bug to report, not something to confirm individually.
+   / not now. A picked "Explain more, then ask again", or a typed question, is not consent — answer it
+   in chat and re-ask on the owner's next message. No destructive item can exist in v1 — nothing here
+   moves, renames, or deletes; if one somehow appeared it would be a bug to report, not something to
+   confirm individually.
 
 5. **Apply exactly what was approved** — pipe the approved `item` lines, **verbatim and nothing
    else** (the full list, or only the owner's named subset), to:

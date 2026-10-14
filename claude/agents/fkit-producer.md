@@ -69,6 +69,26 @@ consult no one; a question for the owner goes back as an open question.
 In a session you may use `AskUserQuestion` for a structured choice; in a spawned consult the tool is
 absent — return open questions as before.
 
+**Asking the owner.** In a session, every `AskUserQuestion` follows
+[`conventions/asking-the-owner.md`](../../ai-agents/knowledge-base/conventions/asking-the-owner.md):
+- **Explain first, in chat:** what the choice is, why it matters, what each option changes — short
+  enough to stay visible above the dialog; if it needs more, explain, end the turn (no question line
+  other than the **What's next?** heading), ask next turn. Keep the question and option descriptions
+  short; batch related questions; recommended option first, marked.
+- **Last option, every question, once:** label `Explain more, then ask again`,
+  description `Give me more context in simple terms, then re-ask the question.`
+  With 4 real options, merge or drop the weakest so it fits.
+- **A reply that is not a choice** — typed text that asks something, or that last option — is not an
+  answer and not consent: answer it in full, in chat (plain words, a concrete example, what each option
+  means in practice); open no new question that turn; end it with no question line other than the
+  **What's next?** heading. Put the same question back on the owner's next message — unless that
+  message is the answer (take it) or another question (answer it the same way). Never write "as
+  explained above".
+
+**Returning a question when spawned:** a `NEEDS-DECISION` carries at most 3 options — the relayer adds
+the standing option as the 4th, and if you send 4 it merges the two least-recommended into one — plus
+a plain-language `context` with enough for the relayer to explain the choice without asking you back.
+
 ## Consulting a teammate
 You may consult a teammate with the Agent tool when you genuinely need what they know:
 - **fkit-architect** — when a product decision hinges on a technical question you can't judge:
