@@ -45,3 +45,4 @@ Prior art the convention cites: the dashboard's own design review established th
 - [[systems/fkit]] — fkit
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174` — the merit-ordering ruling; **the task that became its own proof case**
 - [[tasks/record-the-canonical-merit-statement-form-in-the-convention-page]] — ⚠️ *Added 2026-08-22:* task `0178` — ⭐ its three-carrier table rules that a merit case which is really a **correctness** constraint belongs in this convention's `- **Depends on:**` form, **where it binds**
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page]] — `0501`, which added how the board reads the IDs to this task's convention page

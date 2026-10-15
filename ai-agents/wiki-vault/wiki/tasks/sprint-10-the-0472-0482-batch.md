@@ -88,6 +88,19 @@ text verified as the owner's verbatim words.**
   > ✅ *Dated note 2026-10-14:* answered **for now** on 2026-10-10 — *"No, finish 0504/0506 first (Rec)"*; then R11
   > (2026-10-14) pulled four **other** rows. **None of `0301`, `0189`, `0329`, `0332` was pulled.**
 
+> ✅ **Dated update 2026-10-15 (sync `baf6a4e`→`96c7263`) — the table and the 2026-10-14 update above are left as written.**
+> State at `96c7263`: **24 rows — 22 ✅ `Done (agent-closed — not owner-verified)`, 1 🔲 `Backlog` (`0474`, owner-paced),
+> 1 ⛔ `Cancelled` (`0505`).** Line-3 banner still `🔄 In progress — 2026-10-04`.
+> - Closed 2026-10-14, all agent-closed: `P20` `0506` → [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]]
+>   (⚠️ its live check — verification step 5 — is **pending, not passed**) · `P21` `0501` →
+>   [[tasks/document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page]] · `P22` `0496` →
+>   [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] · `P23` `0484` →
+>   [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] · `P24` `0483` →
+>   [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]].
+> - Follow-ups filed **on the Backlog board, not this sprint**: `0507`–`0515` (comments-only cleanup of fkit's existing
+>   code, from `0506`) and `0516` (the stale ADR-019 / `fkit-coder.md` cites `0496` found out of scope). Open, no pages.
+> - ⛔ **The sprint is still not closed** — `0474` (the owner's plan-review trial) is the one open row.
+
 ## Outcome
 - ⭐ **The number `10` was taken knowingly (R4).** [[tasks/sprint-11-fkit-aiboard-convergence]] had left `10`
   deliberately empty, reserved by earlier rulings for fkit's own backlog work; the owner set that reservation
@@ -119,3 +132,4 @@ text verified as the owner's verbatim words.**
 - [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] · [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]] · [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] · [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]]
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[systems/fkit]] — fkit · [[systems/testing-and-verification]] — Testing & Verification
 - *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`, `P18`
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]] — `0506`, `P20` · [[tasks/document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page]] — `0501`, `P21` · [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496`, `P22` · [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484`, `P23` · [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — `0483`, `P24`

@@ -64,3 +64,4 @@ which sat close to an option he had not chosen.
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — where `0501` was filed
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[systems/fkit]] — fkit
 - *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`'s `asking-the-owner.md`, which keeps a placement option's knock-on in its description; and the trial log's rough (not controlled) comparison with `0495`
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page]] — `0501` ✅ closed 2026-10-14: `0492`'s reading rules now live in `dependency-declaration-form.md`, plus a wider slug miss found while writing them down

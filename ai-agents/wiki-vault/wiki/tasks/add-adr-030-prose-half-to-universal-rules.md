@@ -27,6 +27,12 @@ Land [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] Decision 
 
 ⚠️ **It landed the block at 91.1% of the cap — roughly 363 bytes of headroom.** Reclaiming that budget (a compression pass, or an owner-signed `RULES_MAX` bump) is separate, still-open backlog work; a cap bump is an owner/architect call. The later ADR-033 rules-block edit returns a few bytes, since "producer-only" is shorter than the "any role but…" clause it replaced — but it must be **measured, not assumed**.
 
+> ⚠️ **Dated note 2026-10-15 (sync `baf6a4e`→`96c7263`) — the bullet's wording changed; this page's quote above is left as
+> written.** Task `0506`'s owner-approved cut C6 reworded the lead-in: *"**Close with "What's next?".** End every reply to
+> the owner with a short **What's next?** — …"* → *"**End every reply to the owner with a short "What's next?"** — …"*. Every
+> qualifier stayed, including both this page's non-negotiables (*never invent a next step*, *never assert repo state not
+> checked this turn*). → [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]]
+
 ## Related
 - [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] — Decision 8, the prose half
 - [[tasks/build-adr-030-stop-hook]] — the hook half; independently shippable, either order
@@ -39,3 +45,4 @@ Land [[decisions/adr-030-stop-hook-enforces-turn-completion-contract]] Decision 
 - [[systems/role-locked-sessions]] — Role-Locked Sessions & the Skill Lockdown
 - [[tasks/revert-task-movers-to-producer-only]] — Revert the task movers to producer-only — ownership, mirrors, hook test, and mover prose
 - [[tasks/reclaim-rules-block-budget-headroom]] — task `0130` — the rules-block compression pass, and the owner's ≥400 B standing headroom target
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]] — `0506`, whose cut C6 reworded the *What's next?* bullet

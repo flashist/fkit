@@ -60,3 +60,4 @@ you transcribe it" warning as a result.
   enforces
 - [[systems/testing-and-verification]] — where both guards landed
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sweep-a-the-citation-rot-class-one-verified-pass]] — task `0356`, Sweep A — the citation-rot class in one pass
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484`, which applies the §4.1 link condition to the top-level docs without widening the guard's scanned set

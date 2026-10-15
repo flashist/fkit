@@ -59,3 +59,4 @@ token replaced; archived and decision text otherwise word for word. Grew from fi
 - [[tasks/align-conventions-readme-enforcement-item-live-vs-scaffold]] · [[tasks/build-fkit-reconnect-tooling]] · [[tasks/fix-claude-agents-md-placeholder-text]] — the three briefs the R6/R7 story is about
 - [[tasks/sprint-10-the-0472-0482-batch]] — `P7`, run after `0476` (same docs)
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[systems/knowledge-base-structure]] — Knowledge-Base Structure
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496` ✅ closed 2026-10-14: the nine-item tidy this task's OQ2 filed

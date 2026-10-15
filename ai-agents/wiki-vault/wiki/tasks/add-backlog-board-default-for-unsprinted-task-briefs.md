@@ -101,3 +101,22 @@ The read-side half — making `/fkit-status` report this board **only on request
   > nothing): **open 188** · **repair 25 (13.3%)** · **repair-excluding-source-defects 22 (11.7%)**. W41 24 created / 17
   > closed; W42 (partial) 0 / 1. ⚠️ Open fell 189 → 188 with `0504`'s close — the repair share moved 0.1 point
   > because the denominator shrank, not because repair work changed.
+- ⚠️ **SYNC 2026-10-15 (sync `baf6a4e`→`96c7263`) — the four R11 rows now link `done/`, and ten open rows were added.** From
+  the board's own diff:
+  - The `➡️ Moved to Sprint 10` rows for `0483`, `0484`, `0496`, `0501` are kept; only their links changed, from
+    `tasks/backlog/` to `tasks/done/` — the four closed on [[tasks/sprint-10-the-0472-0482-batch]] (pages:
+    [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]],
+    [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]],
+    [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]],
+    [[tasks/document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page]]).
+  - **10 new `🔲` rows, all owner `fkit-coder`, open, so no pages:** `0507`–`0515`, the comments-only cleanup of fkit's
+    existing code to `code-comments.md` (owner 2026-10-14: *"#1, but create a brief for cleaning the old code."*;
+    placement *"Backlog board (Rec)"*; pilot `0507` blocks `0508`–`0515`, and `0512` blocks `0513`–`0515`) →
+    [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]]; and `0516`, the stale ADR-019
+    and `fkit-coder.md` cites `0496` found out of scope (owner: *"File a Backlog task (Rec)"*).
+  - Open briefs edited, not on the board: `0328`, `0382`, `0403` (cite fixes by `0496`); `0284` (a producer re-check:
+    defect 2 already fixed by `0481`, two defects open; plus a cite note); `0467` (a note that deleting `docs/board.md`
+    must fix three links, or `0484`'s check reds).
+  > ⭐ **Measured fresh at `96c7263` by `node claude/skills/fkit-status/throughput.mjs` this run** (reads git, writes
+  > nothing): **open 193** · **repair 25 (13.0%)** · **repair-excluding-source-defects 22 (11.4%)**. W41 24 created / 17
+  > closed; W42 (partial) 10 / 6. Open rose 188 → 193: five closed, ten created.

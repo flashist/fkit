@@ -163,6 +163,18 @@ closing.**
   ⛔ `npm test`, CI and the release gate still run everything (ADR-026 Decision 4); owner: no CI path filters. → [[tasks/run-only-the-checks-a-change-needs-not-the-full-suite-every-time]]
 - **`board-root` CLI limit 20 → 120 s** — `0502`: one named constant `CLI_TIMEOUT_MS` for every CLI call and the
   banner timer; the R3 "starts nothing" proof still bites. Cost: a real hang takes longer to fail. → [[tasks/make-board-root-test-reliable-under-machine-load]]
+- **The link condition now covers the top-level docs** — `0484`: `test/top-level-doc-links.test.js` checks every relative
+  link in 7 named files (`README.md`, `CONTRIBUTING.md`, `RELEASING.md`, `CHANGELOG.md`, `claude/README.md`, `CLAUDE.md`,
+  `AGENTS.md`) and every `.md` under `docs/` — **no exemptions**, released `CHANGELOG.md` entries included (accepted
+  residual). The §4.1 functions moved unchanged into `test/link-condition.mjs`; `reference-integrity`'s own scanned set
+  is untouched. In `test:docs`. ⚠️ 3 image/badge targets are not checked (disclosed). → [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]]
+- **The board reader survives a folder moved mid-read** — `0483`: `ENOENT` only is tolerated, the task is skipped for that
+  snapshot and the snapshot is not cached; detail lookups retry once. Tests use a `fs` fake, no hook in product code.
+  → [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]]
+- **`test/code-comment-rule.test.js`** — `0506`: pins the comment rule's wording in the rules block, `fkit-coder.md`,
+  `fkit-design-spec` and the convention itself. → [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]]
+  ⚠️ *Measured 2026-10-15:* `ls test/*.test.js | wc -l` = **40**.
+
 - **Text-presence pins for prose rules** — `test/spawned-write-marker.test.js` (`0475`) and
   `test/plan-review-switch.test.js` (`0473`). ⚠️ They check **words on disk, never obedience**.
 
@@ -279,3 +291,4 @@ closing.**
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[tasks/correct-the-false-ci-has-never-run-claims-in-architecture-md]] — task `0312`, the first link in the chain this page records as *"most of which never landed"*, now a page of its own. ⭐ **It explains WHY occurrence B was left: the owner NARROWED the row to occurrence A**, declining a scope extension the filing producer had disclosed precisely so it could be reversed in one edit. ⛔ **`0312`'s close is correct and was never in question** — what it left behind is the visible cost of a narrowing that nothing downstream inherited
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/find-why-prove-red-step-0a-sometimes-goes-red-and-make-it-deterministic]] · [[tasks/run-only-the-checks-a-change-needs-not-the-full-suite-every-time]] · [[tasks/make-board-root-test-reliable-under-machine-load]] · [[tasks/re-measure-the-ci-test-runtime-on-the-ubuntu-runner-and-correct-the-workflow-timeout]] — Sprint 10's four test-reliability and cost tasks
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/sprint-10-the-0472-0482-batch]] — the sprint that drove them
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484` · [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — `0483` · [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]] — `0506`

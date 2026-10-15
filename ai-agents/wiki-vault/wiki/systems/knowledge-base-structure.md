@@ -150,6 +150,33 @@ the option to every user). ⛔ **Prose plus a presence test** (words, not obedie
 > `ai-agents/`). And task `0472` added dated correction notes to five `reports/` files and ADRs 033/049/052 — the
 > append-only, text-left-byte-identical pattern this page describes. → [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]]
 
+### A thirteenth convention — `code-comments.md` *(measured 2026-10-15, sync `baf6a4e`→`96c7263`)*
+
+⭐ **Code comments say WHY, never WHAT** — at most 1–2 lines; a longer reason goes to the knowledge base with a one-line
+pointer **by name or ID, never by line number**; no history or name-repeating comments; fix or delete a comment your
+change makes wrong, in the same edit; one-line doc comments unless the function is genuinely complex. **Covers code,
+not prose** (Markdown docs and agent/skill prompt files are not held to it); new and edited code only — existing
+comments are separate, comments-only cleanup (Backlog `0507`–`0515`). **A project's own written comment rules win**, and
+*"match the surrounding code"* never means comment density. Owner ruling 2026-10-10, option (c). Also a one-line hard
+rule in the shared rules block and a bullet in `fkit-coder.md`. ⛔ **Prose plus a wording pin** — nothing checks
+obedience. From task `0506` → [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]].
+
+| Measure | 2026-10-14 | **2026-10-15** |
+|---|---|---|
+| Live `conventions/*.md` (excluding `README.md`) | 12 | **13** |
+| Scaffold copies | 11 | **12** |
+| `conventions/README.md` index rows | 12 | **13** |
+| Must-match byte-identical pages | 5 | **6** — the new page joins the five; ✅ **all six re-verified byte-identical on disk this run** (`cmp`) |
+
+⚠️ The exceptions-module count was again **not** re-measured.
+
+> ⭐ **Also in this window:** `dependency-declaration-form.md` gained a section, **`## How the board reads the IDs`**, in
+> both homes (audience-adapted — the scaffold uses neutral IDs): only exact 4-digit IDs are read; `— soft, not hard`
+> after an ID marks it soft; known misses, including a link into a folder whose slug says `soft` → write the ID and its
+> mark, then the link, then the mark again (owner ruling 2026-10-14). → [[tasks/document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page]].
+> And ADR-019, ADR-026 and ADR-052 gained dated notes from task `0496` — the append-only pattern again, with every
+> original line byte-identical. → [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]]
+
 ### The merit statement — added to `priority-is-rank-not-identity.md`, 2026-08-21
 
 A new `## The merit statement` section, **dual-homed byte-identically**, recording how an owner records an ordering that board rank can no longer carry. **Two shapes only** — `- **On merit:** immediately above 0154 — <reason>` or `- **On merit:** as ranked` — **relative never absolute · folder ID only, no `P<n>` token · advisory, board rank still binds · `as ranked` required, not optional**, because an explicit no-op is what makes **absence detectable**. It also names the **three carriers** and which of them binds: rank carries reading order, the merit statement carries preference (**not binding**), and `Depends on` / `Blocks` carries correctness order (**binding, and it outranks reading order**). ⚠️ Its `brief-missing-merit` guard is recorded as **"Specified, not built yet."** See [[tasks/record-the-canonical-merit-statement-form-in-the-convention-page]].
@@ -255,3 +282,4 @@ A new `## The merit statement` section, **dual-homed byte-identically**, recordi
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-a-later-sprint-blocker-visible-0492-0495]] — `0495`, the eleventh convention
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — dated corrections across `reports/` and three ADRs
 - *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`, the twelfth convention (`asking-the-owner.md`)
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]] — `0506`, the thirteenth convention (`code-comments.md`) · [[tasks/document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page]] — `0501`, the reading-rules section in `dependency-declaration-form.md` · [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496`, dated notes on three ADRs

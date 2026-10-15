@@ -226,6 +226,12 @@ leaves the live view); (12) still no undo — git (P5) is the safety net.
   - ✅ *Discharged 2026-10-05 (task `0472`; recorded sync `3915417`→`79a7dbf`):* the log now carries its closing note, and E3 keeps
     **Open** with a dated cancelled annotation (append-only, owner ruling R3).
 
+> ⏱ **Dated pointer 2026-10-15 (sync `baf6a4e`→`96c7263`).** D8 item 3 gained a correction sub-bullet in the source
+> (2026-10-14, task `0496`, on `0472`'s owner ruling R7 of 2026-10-02): `0014` no longer fits *"brief says Backlog, folder
+> says done"* — its `## Status` now reads `✅ Done`. It still has no board row, so on fkit's tree `0014` now belongs to the
+> **no board row** class, like `0004`. **The converter's rule is unchanged**, and the D8 summary above still lists both
+> as examples of refused ambiguity. By architect ruling, the ADR gets **no** `Corrections:` header index.
+
 ## Related
 - [[decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim]] — partly superseded; D1 reaffirmed
 - [[decisions/adr-049-owner-verified-close-requires-a-verified-human-principal-no-channel-supplies-one]] — amended
@@ -246,3 +252,4 @@ leaves the live view); (12) still no undo — git (P5) is the safety net.
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`, the loose ends tidied (machine paths, evidence log, `0404` pointers, ADR-049 OQs, the `331f298` story)
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] — `proposed`: D10 says how the owner-involvement line survives the board switch
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — the plan-review switch lives in the run, not the store, so conversion never sees it
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496` item (i), the `0014` correction · [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — `0483`, which hardened the read-only reader this ADR retires at phase 8

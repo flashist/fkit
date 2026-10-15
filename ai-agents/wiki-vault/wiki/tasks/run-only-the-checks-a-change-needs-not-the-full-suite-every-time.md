@@ -47,3 +47,4 @@ release gate run (`package.json`'s `test`, `.github/workflows/test.yml` and `bin
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — Decision 4, which this deliberately leaves intact
 - [[decisions/adr-014-how-fkit-tests-itself]] — `node --test`, zero dependencies
 - [[systems/testing-and-verification]]
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484` ✅ closed 2026-10-14: the top-level docs now have their own `CONTRIBUTING.md` row naming `test/top-level-doc-links.test.js`, run by `npm run test:docs` · [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496`, one source of whose stale items was this task

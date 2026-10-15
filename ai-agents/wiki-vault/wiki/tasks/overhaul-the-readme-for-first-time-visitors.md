@@ -44,3 +44,4 @@ accepted that). **Stray root file** — move, never delete. **History section** 
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board it closed on
 - [[tasks/sprint-10-the-0472-0482-batch]] — deliberately not on that board (already closed)
 - [[systems/install-and-self-update]]
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484`, whose new check now covers `README.md` and `docs/board.md`'s inbound links, released `CHANGELOG.md` entries included

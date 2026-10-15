@@ -53,3 +53,4 @@ and tasks in** — the code half `0404` never authorised.
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/fkit]] — the team page, whose data-model section now points here as the only board code in the repo
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/find-why-prove-red-step-0a-sometimes-goes-red-and-make-it-deterministic]] — `0477`: tests A/E/R1 read the live tree twice and raced concurrent writers
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/overhaul-the-readme-for-first-time-visitors]] — `0478` moved the README's board section to `docs/board.md`
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — `0483`: the reader no longer throws when a task folder or board file moves between its check and its read

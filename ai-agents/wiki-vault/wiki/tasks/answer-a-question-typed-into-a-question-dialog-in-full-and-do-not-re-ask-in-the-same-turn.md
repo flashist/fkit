@@ -96,3 +96,4 @@ This revives the idea of [[tasks/add-an-explain-more-then-ask-again-standing-opt
 - [[tasks/reclaim-rules-block-budget-headroom]] — the ≥ 400 B headroom target the pointer form kept
 - [[systems/fkit]] — the six role prompts that now carry the paragraph
 - [[tasks/build-a-command-buttons-mod-that-offers-suggested-slash-commands-above-the-prompt]] — `0505`, filed with it from the same owner request (R10), cancelled
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]] — `0506`, which shared the rules-block budget after this task and left 411 B free

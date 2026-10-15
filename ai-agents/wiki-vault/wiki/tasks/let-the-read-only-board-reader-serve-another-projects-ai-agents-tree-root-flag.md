@@ -44,3 +44,4 @@ tree. The lead had already proven the library worked on a sibling project by han
 - [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — keeps the *tools from fkit, data from the project* rule for its converter
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board it was filed on
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-board-root-test-reliable-under-machine-load]] — `0502`: this task's `test/board-root.test.js` 20 s limit (no recorded reason) turned full runs red under load; now 120 s
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — `0483`, a fix to the same reader; its tests run alongside `board-root`

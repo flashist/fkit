@@ -41,3 +41,4 @@ out** — any fix must keep a CLI that wrongly starts a server turning R3 red. �
 - [[tasks/run-only-the-checks-a-change-needs-not-the-full-suite-every-time]] — `0480`; `test:docs` includes this file
 - [[tasks/make-a-later-sprint-blocker-visible-0492-0495]] — the runs it kept turning red
 - [[systems/testing-and-verification]] · [[tasks/sprint-10-the-0472-0482-batch]]
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — `0483`, the other Sprint 10 change to the board reader's tests

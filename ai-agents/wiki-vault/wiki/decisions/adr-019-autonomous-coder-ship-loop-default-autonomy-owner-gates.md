@@ -46,6 +46,14 @@ Task 53 applies the single contract edit this requires: a scoped note in `fkit-c
 > `fkit-task-ship-loop`, `fkit coder` sessions and plan mode run exactly as before. Also: ADR-019's fix discipline
 > and worklog audit now apply to **lead-path** Process-review too ([[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] Decision 5).
 
+> ⚠️ **Dated pointer 2026-10-15 (sync `baf6a4e`→`96c7263`).** The source ADR gained a **second** dated note (2026-10-14,
+> task `0496`), placed after §Decision item 4's last line: its `fkit-coder.md:109-113` cite no longer points at the rule.
+> Find the architecture half **by quote** — *"But: a genuinely NEW architecture decision goes to the OWNER."* under
+> §Consulting a teammate in `claude/agents/fkit-coder.md` — and the scope half under §What you must not do. **Item 4 is
+> unchanged.** The header's `Corrections:` bullet now says the ADR carries **two** notes (its earlier "one" is superseded by
+> that appended line, not edited). ⚠️ The added lines shift ADR-019's later line numbers; other documents' `ADR-019:NN`
+> cites, already stale, are now further off — Backlog task `0516` (open) is filed to fix them.
+
 ## Related
 - [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] — the `plans/` + `worklogs/` artifacts this loop writes (the autonomy boundary and audit trail)
 - [[decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list]] — the hook that makes "only the coder can run this skill" structural, at any depth
@@ -76,3 +84,4 @@ Task 53 applies the single contract edit this requires: a scoped note in `fkit-c
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — opt-in plan review ahead of the same kind of gate, sprint-loop runs only
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — this ADR's fix discipline transfers to the lead-driven Process-review path
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/build-the-opt-in-plan-review-step-off-by-default]] — Build the opt-in plan-review step (off by default)
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496`, which added the item-4 cite note and filed `0516`

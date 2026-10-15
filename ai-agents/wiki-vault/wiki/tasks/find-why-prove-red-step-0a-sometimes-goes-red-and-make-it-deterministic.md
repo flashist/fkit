@@ -52,3 +52,4 @@ different cause meant stop and report.
 - [[systems/testing-and-verification]] — prove-red, the hard gate
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]] — Decision 4 wires prove-red into every gate; this keeps that gate honest
 - [[tasks/make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads]] — `0411`, the reader tests A/E belong to
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — residual **R-c** fixed: `0483` ✅ closed 2026-10-14 — a folder moved mid-read is skipped, not thrown

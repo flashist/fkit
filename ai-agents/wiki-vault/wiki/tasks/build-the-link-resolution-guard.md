@@ -63,3 +63,4 @@ was still under review (round 2).**
 - [[decisions/adr-014-how-fkit-tests-itself]] — the zero-devDependency test contract this obeys
 - [[systems/testing-and-verification]] — the suite this joined
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-task-movers-a-step-for-the-named-exempt-keys]] — task `0381`: ⭐ **the movers had no step for the `NAMED_EXEMPT` keys a move invalidates** — this guard's `L3`/`L4` are what go red when one heals or orphans
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484`: the guard's §4.1 functions moved **unchanged** into the non-test module `test/link-condition.mjs`, shared with a new top-level-docs check; the guard's own scanned set, `L7` and live figures are unchanged

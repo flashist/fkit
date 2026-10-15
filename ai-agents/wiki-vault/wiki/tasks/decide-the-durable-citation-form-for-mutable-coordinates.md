@@ -112,3 +112,4 @@ Done, **agent-closed — not owner-verified**. Four review rounds, Codex coverag
 - [[tasks/remediate-the-dead-brief-paths-in-closed-review-ledger-headers]] — *added 2026-08-29:* `0168`, the execution arm of this decision's **Case 3**
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/clean-the-coordination-citation-residual-set-that-blocks-0176]] — task `0237`, the citation-residual cleanup
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]] — task `0393`: ⭐ **its fourth triage class, `mentioned`, is the case this decision did not have to face** — a coordinate the sentence is *talking about*, where repairing it corrupts the record
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496`, which paired every fixed line cite with a quoted fragment or name

@@ -39,6 +39,16 @@ The ADR states: `prove-red.sh` is **not in `npm test`**, and there is **no `.git
 - **Negative:** `prove-red.sh` remains bespoke shell — no upstream maintenance, its correctness resting on fkit's own tests. **R2's no-op-mutation failure mode is still open** — a mutation whose `sed` target has moved silently produces a passing suite and reads as a healthy check. **This is the known, unmitigated residue**, and now the only one: the gate ships, so a no-op mutation reads as healthy on *every* `npm test`. *(The ADR's own text here — "automated gating is a promise, not a fact, until Decision 4's brief ships" — is superseded by the tree; see the LINT WARNING above.)*
 - **Re-raise only if:** a maintained tool appears that genuinely **mutates POSIX shell** and drives a process-level oracle (then an ADR-014 amendment is required **before** implementation — the trigger has not fired); `prove-red.sh` grows beyond a small shell loop; or a **third** silent-failure mode is found (two were tolerable; a pattern is evidence it is under-engineered). Do **not** re-raise *"use a proper mutation-testing library"* without naming a tool that **mutates shell**, or *"prove-red.sh isn't automated"* as a defect against this ADR — that is Decision 4, already approved and awaiting its brief.
 
+> ✅ **Dated pointer 2026-10-15 (sync `baf6a4e`→`96c7263`) — the source ADR now corrects itself.** Task `0496` (2026-10-14,
+> through an architect consult) appended a dated ⚠️ note at the end of §Context's *"The real defect R2 exposed was not
+> hand-rolling"*, plus a `Corrections:` header bullet: `npm test` has run `prove-red.sh` since `0ad055a` (2026-07-18) —
+> **a commit made a few hours before this ADR's own (`f50a821`, 2026-07-19)** — and `.github/workflows/test.yml` (since
+> `df55b50`, 2026-08-12) runs `npm test` on every push to `main` and every PR. The note names the statements that no longer
+> describe the tree: §Context's *"not in `npm test`"* and *"no `.github/workflows/`"*; §Consequences' *"only when a human
+> types it"* and *"already approved and awaiting its brief"*; §Related's two no-CI lines. **The decision is untouched;
+> no original line was edited.** This is what the LINT WARNING above (2026-07-19) and its 2026-08-13 correction reported
+> and left to the architect. ⚠️ The note does not touch Decision 5: **the no-op-mutation gap is not addressed by it.**
+
 ## Related
 - [[decisions/adr-014-how-fkit-tests-itself]] — **unamended.** Decision 3 already rejected bats/shellspec on the same "no tool fits this shape" finding, reached independently; Decision 4 is the zero-devDeps posture upheld here.
 - [[decisions/adr-003-ci-runs-validate-bundles]] — the CI posture whose subject died with the Omnigent removal; **no `.github/workflows/` exists today**, which is why Decision 4's gate has no CI lane to land in yet. ✅ *Corrected 2026-08-13: the lane exists (`0256`) and Decision 4's gate runs in it.*
@@ -58,3 +68,4 @@ The ADR states: `prove-red.sh` is **not in `npm test`**, and there is **no `.git
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — its criterion **6** requires ≥2 durable mutations that each **PROVE RED**, ⛔ *"a guard nobody has shown can go red is not a guard"*
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-task-movers-a-step-for-the-named-exempt-keys]] — task `0381`, whose mutations 33–34 set the discipline: ⭐ **red at the NAMED assertion**, never merely red
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/find-why-prove-red-step-0a-sometimes-goes-red-and-make-it-deterministic]] — Find why prove-red step 0a sometimes goes red, and make it deterministic · [[tasks/run-only-the-checks-a-change-needs-not-the-full-suite-every-time]] — Run only the checks a change needs, not the full suite every time
+- *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496` item (g), the dated note that retires this ADR's no-CI claims at the source
