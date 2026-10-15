@@ -34,7 +34,7 @@ fkit-coder
 > the tasks at the beginning, so the tasks are not "fully automatic" anyway."*
 
 > ⏱ **Note, 2026-10-04 (spawned `fkit-producer`, at `fkit-lead`'s direction; text above unchanged).**
-> Pulled onto [Sprint 10](../../../sprints/sprint-10.md) as `P3` by the owner's ruling of 2026-10-04
+> Pulled onto [Sprint 10](../../../sprints/done/sprint-10.md) as `P3` by the owner's ruling of 2026-10-04
 > (sprint goal = the `0472`–`0482` batch). **In the same session the owner ruled — as relayed by
 > `fkit-lead` — that Phase B is NOT approved.** The gate above stands unchanged: being on a sprint is
 > not approval. Only Phase A may run. This task is never closed `✅ Done` on Phase A alone; after

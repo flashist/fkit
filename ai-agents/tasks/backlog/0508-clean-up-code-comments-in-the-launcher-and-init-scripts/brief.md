@@ -4,10 +4,10 @@
 0508
 
 ## Sprint
-Backlog
+Sprint 12
 
 ## Priority
-Unscheduled
+P7
 
 ## Status
 🔲 Backlog

@@ -132,7 +132,7 @@ measured; measuring before it lands measures the wrong suite.
 > Nothing else in this brief changes; the dependency lines are left as written.
 
 > ⏱ **Note, 2026-10-05 (spawned `fkit-producer`, at `fkit-lead`'s direction; text above unchanged) —
-> pulled onto [Sprint 10](../../../sprints/sprint-10.md) mid-sprint by owner ruling.** The owner, typing
+> pulled onto [Sprint 10](../../../sprints/done/sprint-10.md) mid-sprint by owner ruling.** The owner, typing
 > directly in the `fkit-lead` session driving `/fkit-sprint-ship-loop` on 2026-10-05, answered the
 > lead's suggestion to pull this task in so a push does not fail CI on timeout with: *"I want that"*.
 > Why now (lead's relay): local full `npm test` runs grew to 19–27 min on a busy machine this sprint as

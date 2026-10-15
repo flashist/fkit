@@ -105,4 +105,4 @@ pullable before then.
 > 2026-10-04; text above unchanged).** This brief's dependency [`0478`](../../done/0478-overhaul-the-readme-for-first-time-visitors/brief.md) is now
 > **closed** — `✅ Done (agent-closed — not owner-verified)`, its brief in `tasks/done/` (checked 2026-10-04).
 > The "still under review" wording in the dependency line is stale as of that close; it is left as
-> written, and nothing else in this brief changes. (This task was pulled onto [Sprint 10](../../../sprints/sprint-10.md) the same day.)
+> written, and nothing else in this brief changes. (This task was pulled onto [Sprint 10](../../../sprints/done/sprint-10.md) the same day.)
