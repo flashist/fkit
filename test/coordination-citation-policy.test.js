@@ -260,8 +260,9 @@ const blank = (s) => ' '.repeat(s.length);
 // `m[2].trim() === ""` enforces. Both copies of this function had that wrong before 2026-08-30, the
 // bug was introduced once and duplicated, and it hid one live instance. Do not "simplify" it back.
 // ⛔ THIS FUNCTION IS UNDER A BYTE-FOR-BYTE PARITY ASSERTION. `test/reference-integrity.test.js`
-// arm C7 (§7 item 14) compares this declaration's source text against its own copy. Three
-// consequences, all of them real and two of them documented there as deliberately-unfixed edges:
+// arm C7 (§7 item 14) compares this declaration's source text against the copy in
+// `test/link-condition.mjs`. Three consequences, all of them real and two of them documented at C7 as
+// deliberately-unfixed edges:
 // ⚠️ ITS BODY'S INDENTATION must match the sibling's — which in practice means leaving the whole
 // declaration at column 0, but the invariant is the BODY, not this line. C7 locates the declaration
 // by its `function` keyword (capturing a leading `async` if present) and slices from that `f`, so
@@ -853,8 +854,9 @@ test('C5 an ELIDED target still counts — the deliberate divergence from the li
 });
 
 // ⛔ NO PARITY ARM HERE. `maskFencesAndQuotes` is duplicated by hand into four places (§4.1, §4.2,
-// the sibling half, and this file), and §7 item 14 asks that the two SHIPPED copies be byte-identical.
-// That assertion already exists as arm C7 of `test/reference-integrity.test.js`, which reads THIS
-// file's source and compares it against its own. Duplicating it from this side would add a second
-// place to maintain and no coverage. ⭐ Note the consequence: the moment this file landed, that arm
-// stopped skipping and became live — an existing test file changed behaviour without being edited.
+// `test/link-condition.mjs`, and this file), and §7 item 14 asks that the two SHIPPED copies be
+// byte-identical. That assertion already exists as arm C7 of `test/reference-integrity.test.js`, which
+// reads THIS file's source and compares it against the `test/link-condition.mjs` copy. Duplicating it
+// from this side would add a second place to maintain and no coverage. ⭐ Note the consequence: the
+// moment this file landed, that arm stopped skipping and became live — an existing test file changed
+// behaviour without being edited.

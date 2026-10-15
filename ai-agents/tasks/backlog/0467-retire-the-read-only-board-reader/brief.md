@@ -47,3 +47,24 @@ D9 phase 8: retire `bin/fkit-board.mjs` (733 lines), `bin/board-narrow.mjs` (458
 - **Phase gate (Phase 8):** Phase 6 passed. A gate met means the next phase may be **put to** the owner — ⛔ not that it starts (D9).
 - **Board and priority:** Backlog board, Priority cell `—`, `## Priority: Unscheduled` — unranked. Sprint planning is the owner's later call.
 - **Filed 2026-09-30** by a spawned `fkit-producer` on the owner's approval of ADR-052 (A1, selected option text: *"Approve — Authorises the new ADR, the phase briefs (1–9) and task re-scopes. No phase or code starts without your word."*), relayed by `fkit-lead` — no owner channel (ADR-021). Decides nothing beyond the scoping; ⛔ no commit.
+- **Note, 2026-10-14 — links to `docs/board.md` will fail a new check.** Sprint 10 task `0484` adds
+  `test/top-level-doc-links.test.js` (in `npm test` and `npm run test:docs`). It checks every relative
+  link in `README.md`, `CONTRIBUTING.md`, `RELEASING.md`, `CHANGELOG.md`, `claude/README.md`,
+  `CLAUDE.md`, `AGENTS.md` and every `.md` under `docs/`, with **no exemption list**. So if this task
+  deletes `docs/board.md` (the page that documents the reader being retired), it must also remove or
+  re-point every link to it, or that check goes red. Links found 2026-10-14:
+  - `README.md` — the line ending ``Details: [`docs/board.md`](docs/board.md).``
+  - `CONTRIBUTING.md` — `` `npm run board` — see [`docs/board.md`](docs/board.md) ``. Its repository
+    layout tree also lists `board.md` as *"the repo-local web board, in detail"* — plain text, not a
+    link, so the check will not catch it; it goes stale all the same.
+  - `CHANGELOG.md`, released `v0.3.2` entry — *"The web-board details moved to"* followed by
+    ``[`docs/board.md`](docs/board.md)``. This is release history, so the plan decides how to handle
+    it (for example: unlink the path, or point it at the page as it stood in that release); the owner
+    approves. The check fails on it too.
+
+  Re-grep at pickup (`grep -rn "docs/board" .`, skipping `.git`): this list can drift. Applies only
+  once `0484` is closed as Done; if `0484` is cancelled or reverted, ignore it. Soft note — it adds no
+  dependency link (`0484` sits in Sprint 10, ahead of this Backlog task). Source: `0484`'s worklog,
+  *"For the producer (not acted on)"*, which names `README.md` and `CONTRIBUTING.md`; the
+  `CHANGELOG.md` link was found by this note's grep. Added by a spawned `fkit-producer` for
+  `fkit-lead` (`/fkit-sprint-ship-loop`) — no owner channel (ADR-021).

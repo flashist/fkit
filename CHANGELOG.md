@@ -18,6 +18,15 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes �
   new convention `ai-agents/knowledge-base/conventions/asking-the-owner.md` (existing installs get it
   on next launch); the shared rules block now only points to it. If your own instructions already add
   this exact option, you see it once.
+- Code comments now follow "say WHY, not WHAT" (new convention `code-comments.md`, new shared
+  rules-block line; the block's wording was tightened to make room — no rule changed). Existing
+  installs get it on next launch.
+- The dependency-form convention (`dependency-declaration-form.md`) now says how the board reads a
+  `Depends on:` line — which task IDs count, how to mark one soft (`— soft, not hard`), and the known
+  misses. Existing installs: `/fkit-heal` offers the updated page.
+- The web board no longer answers a poll, a task's details or a sprint's details with an error when a
+  task or sprint board is closed or moved at that moment. A card that moved mid-poll is missing for
+  one poll and then shows in its new place.
 
 ## v0.3.2 — 2026-10-10
 

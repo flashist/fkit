@@ -20,7 +20,7 @@ fkit-coder
 ### What is unpinned
 
 The launcher's fresh-project cold start is gated on a **two-part** condition
-(`claude/fkit-claude.sh:606`):
+(`claude/fkit-claude.sh:652`):
 
 ```sh
 if [ "$fresh" = 1 ] && [ -z "$role" ]; then

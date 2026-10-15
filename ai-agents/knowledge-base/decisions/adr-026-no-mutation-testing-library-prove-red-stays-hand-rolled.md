@@ -7,6 +7,10 @@
   (task 46). Investigation triggered by the owner's reaction to review finding **R2** on task 43 —
   *"it looks like we need to use a proper library for auto-tests, which handles this specific type of
   tests 'testing negative cases'."*
+- **Corrections:** 2026-10-14 (`0496`) — this ADR carries **one** dated note, at the end of
+  **§Context → "The real defect R2 exposed was not hand-rolling"**. Marker legend: **⚠️ = a fact that
+  drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow it). No
+  existing line of this ADR was edited; the note is an append, and the Status stays `accepted`.
 
 > **What this ADR decides, in one line:** the mutation-testing library question was investigated and
 > **closed** — no candidate fits a shell SUT tested as a black-box subprocess, so there is nothing to
@@ -50,6 +54,18 @@ only when a human types `test/prove-red.sh`.**
 
 That is why R2's two failures were caught by manual audit and nothing else. It is a **gating** problem,
 not a **tooling-sophistication** problem, and no library would have fixed it.
+
+> ⚠️ **Dated note 2026-10-14 (`0496`) — the "nothing runs `prove-red.sh`" facts in this ADR no longer
+> hold; the decision is untouched.** `npm test` runs it: `package.json`'s `"test"` script is
+> `node --test test/*.test.js && bash test/prove-red.sh`, since `0ad055a` (2026-07-18) — a commit made
+> a few hours before this ADR's own (`f50a821`, 2026-07-19), so the two "not in `npm test`" statements
+> were already out of date when this ADR was committed. `.github/workflows/test.yml` (since `df55b50`,
+> 2026-08-12) runs `npm test` on every push to `main` and every pull request. Decision 4's automated
+> gate is therefore in place, and these statements no longer describe the tree: §Context *"is **not in
+> `npm test`**"* and *"no `.github/workflows/` in the tree at all"*; §Consequences *"Today
+> `prove-red.sh` still runs only when a human types it"* and the re-raise bullet's *"already approved
+> and awaiting its brief"*; §Related *"No `.github/workflows/` exists today"* and *"does **not** include
+> `prove-red.sh`"*.
 
 ## Decision
 

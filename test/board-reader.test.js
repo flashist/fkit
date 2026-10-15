@@ -34,8 +34,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { cpSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync, renameSync, rmSync }
+import fs, { cpSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync, renameSync, rmSync }
   from 'node:fs';
+import { syncBuiltinESMExports } from 'node:module';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join } from 'node:path';
 import { REPO, liveTaskFolders } from './harness.mjs';
@@ -612,4 +613,191 @@ test('H6: the snapshot cache notices a task folder RELOCATED between boards', ()
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+// ── H7–H12 — a folder or board moved between the reader's check and its read (task 0483) ─────────
+
+// The reader's named `node:fs` imports are live bindings: patching the default export and syncing
+// reaches them, so the move happens inside the real gap and the ENOENT is genuine, with no test hook.
+function moveOnFirst(api, target, from, to, fn) {
+  const real = fs[api];
+  let fired = false;
+  fs[api] = function (p, ...rest) {
+    if (!fired && p === target) { fired = true; renameSync(from, to); }
+    return real.call(this, p, ...rest);
+  };
+  syncBuiltinESMExports();
+  try {
+    return fn();
+  } finally {
+    fs[api] = real;
+    syncBuiltinESMExports();
+  }
+}
+const moveOnFirstRead = (...a) => moveOnFirst('readFileSync', ...a);
+const moveOnFirstExists = (...a) => moveOnFirst('existsSync', ...a);
+
+function withRaceTree(fn) {
+  const dir = mkdtempSync(join(tmpdir(), 'fkit-board-race-'));
+  try {
+    const tasks = join(dir, 'ai-agents', 'tasks');
+    const sprints = join(dir, 'ai-agents', 'sprints');
+    for (const b of ['backlog', 'done', 'cancelled']) mkdirSync(join(tasks, b), { recursive: true });
+    for (const b of ['done', 'cancelled']) mkdirSync(join(sprints, b), { recursive: true });
+    const task = (board, name, extras = []) => {
+      const p = join(tasks, board, name);
+      mkdirSync(p);
+      writeFileSync(join(p, 'brief.md'), `# Task ${name}\n\n## Status\n\u{1F532} Backlog\n`);
+      for (const x of extras) writeFileSync(join(p, x), `${x} body\n`);
+      return p;
+    };
+    return fn({ dir, tasks, sprints, task, reader: makeReader({ root: dir, dashboard: DASHBOARD }) });
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+test('H7: a task moved across boards between listing and read is left out, then shown in its new place', () => {
+  withRaceTree(({ tasks, task, reader: r }) => {
+    const from = task('backlog', '0001-a');
+    task('backlog', '0002-b');
+    const to = join(tasks, 'done', '0001-a');
+    const snap = moveOnFirstRead(join(from, 'brief.md'), from, to, () => r.snapshot());
+    assert.deepEqual(snap.tasks.map((t) => t.id), ['0002'],
+      'the moved task is shown in neither place, and nothing is invented for it');
+    const t = r.snapshot().tasks.find((x) => x.id === '0001');
+    assert.equal(t?.status, 'done', 'the next poll shows the task where it now is');
+  });
+});
+
+test('H8: a snapshot that skipped a renamed folder is never cached under the unchanged key', () => {
+  withRaceTree(({ tasks, task, reader: r }) => {
+    const from = task('backlog', '0001-a');
+    const to = join(tasks, 'backlog', '0001-renamed');
+    moveOnFirstRead(join(from, 'brief.md'), from, to, () => r.snapshot());
+    // A within-board rename leaves the cache key as it was, so only "not cached" lets this heal.
+    const t = r.snapshot().tasks.find((x) => x.id === '0001');
+    assert.equal(t?.folder, '0001-renamed');
+  });
+});
+
+test('H9: a folder moved after its brief read is left out, not shown with every label missing', () => {
+  withRaceTree(({ tasks, task, reader: r }) => {
+    const from = task('backlog', '0001-a', ['plan.md']);
+    const to = join(tasks, 'done', '0001-a');
+    const snap = moveOnFirstExists(join(from, 'plan.md'), from, to, () => r.snapshot());
+    assert.equal(snap.tasks.find((x) => x.id === '0001'), undefined,
+      'a task whose labels could not be read is not shown as having none');
+    const t = r.snapshot().tasks.find((x) => x.id === '0001');
+    assert.deepEqual(t?.labels, ['plan']);
+  });
+});
+
+test('H10: a board file moved between listing and read is left out, with no false problem', () => {
+  withRaceTree(({ sprints, reader: r }) => {
+    const from = join(sprints, 'sprint-98.md');
+    const to = join(sprints, 'done', 'sprint-98.md');
+    writeFileSync(from, '# Sprint 98 — a fixture board\n\n> ## \u{1F504} In progress — 2026-09-30.\n');
+    writeFileSync(join(sprints, 'sprint-97.md'), '# Sprint 97 — a fixture board\n\n> ## \u{1F532} Backlog — 2026-09-30.\n');
+    const snap = moveOnFirstRead(from, from, to, () => r.snapshot());
+    assert.equal(snap.sprints.find((s) => s.folder === 'sprint-98.md'), undefined);
+    assert.deepEqual(r.problems().filter((p) => p.includes('sprint-98.md')), [],
+      'a vanished board is not reported as missing from dashboard.sh');
+    // Board count and mtime are unchanged by the move, so this also pins the no-cache rule for boards.
+    const s = r.snapshot().sprints.find((x) => x.folder === 'sprint-98.md');
+    assert.equal(s?.status, 'Done');
+  });
+});
+
+test('H11: taskDetail recovers when the cached folder path has gone stale', () => {
+  withRaceTree(({ tasks, task, reader: r }) => {
+    const first = task('backlog', '0001-a', ['worklog.md']);
+    r.snapshot();
+    renameSync(first, join(tasks, 'backlog', '0001-b'));
+    const d = r.taskDetail('0001');
+    assert.equal(d?.folder, '0001-b');
+    assert.match(d.brief, /^# Task 0001-a/);
+    assert.equal(d.worklog[0]?.text, 'worklog.md body\n');
+  });
+});
+
+test('H11b: taskDetail keeps the worklog when the folder moves between the brief and worklog reads', () => {
+  withRaceTree(({ tasks, task, reader: r }) => {
+    const from = task('backlog', '0001-b', ['worklog.md']);
+    const to = join(tasks, 'backlog', '0001-c');
+    r.snapshot();
+    const d2 = moveOnFirstRead(join(from, 'worklog.md'), from, to, () => r.taskDetail('0001'));
+    assert.equal(d2?.folder, '0001-c');
+    assert.equal(d2.worklog[0]?.text, 'worklog.md body\n', 'the worklog is not silently dropped');
+  });
+});
+
+test('H12: sprintDetail recovers when the cached board path has gone stale', () => {
+  withRaceTree(({ sprints, reader: r }) => {
+    const from = join(sprints, 'sprint-98.md');
+    writeFileSync(from, '# Sprint 98 — a fixture board\n\n> ## \u{1F504} In progress — 2026-09-30.\n');
+    const id = r.snapshot().sprints.find((s) => s.folder === 'sprint-98.md').id;
+    renameSync(from, join(sprints, 'done', 'sprint-98.md'));
+    const d = r.sprintDetail(id);
+    assert.equal(d?.status, 'Done');
+    assert.match(d.description, /^# Sprint 98/);
+  });
+});
+
+// ── H13–H15 — review round 1 (task 0483): a once-moved item in the detail call's own recompute,
+// ENOENT-only tolerance, and the two lists that must stay aligned in a snapshot that skipped a file ──
+
+test('H13: taskDetail finds a task moved once inside its own recompute, not a 404', () => {
+  withRaceTree(({ tasks, task, reader: r }) => {
+    const from = task('backlog', '0001-a');
+    const to = join(tasks, 'done', '0001-a');
+    const d = moveOnFirstRead(join(from, 'brief.md'), from, to, () => r.taskDetail('0001'));
+    assert.equal(d?.status, 'done', 'a single move is not "not found"; only a task moved twice may be');
+    assert.match(d.brief, /^# Task 0001-a/);
+  });
+});
+
+test('H13b: sprintDetail finds a board moved once inside its own recompute, not a 404', () => {
+  withRaceTree(({ sprints, reader: r }) => {
+    const from = join(sprints, 'sprint-98.md');
+    writeFileSync(from, '# Sprint 98 — a fixture board\n\n> ## \u{1F504} In progress — 2026-09-30.\n');
+    const d = moveOnFirstRead(from, from, join(sprints, 'done', 'sprint-98.md'), () => r.sprintDetail('S-098'));
+    assert.equal(d?.status, 'Done');
+  });
+});
+
+test('H14: only a vanished file is tolerated; any other read error still throws', () => {
+  withRaceTree(({ tasks, reader: r }) => {
+    // A brief that is a directory lists fine and fails to read with EISDIR, which is not a move.
+    mkdirSync(join(tasks, 'backlog', '0001-a', 'brief.md'), { recursive: true });
+    assert.throws(() => r.snapshot(), { code: 'EISDIR' },
+      'a card is never silently dropped for an error that is not a move');
+  });
+});
+
+test('H15: the duplicate-id warning names the boards actually read when an earlier board vanished', () => {
+  withRaceTree(({ sprints, reader: r }) => {
+    const board = (n) => `# Sprint ${n} — a fixture board\n\n> ## \u{1F504} In progress — 2026-09-30.\n`;
+    const gone = join(sprints, 'sprint-97.md');
+    writeFileSync(gone, board(97));
+    writeFileSync(join(sprints, 'sprint-98.md'), board(98));
+    writeFileSync(join(sprints, 'done', 'sprint-98.md'), board(98));
+    const warnings = moveOnFirstRead(gone, gone, join(sprints, 'done', 'sprint-97.md'), () => r.warnings());
+    const w = warnings.find((x) => x.includes('S-098'));
+    assert.match(w ?? '', /\(sprint-98\.md, done\/sprint-98\.md\)/);
+    assert.ok(!w.includes('sprint-97'), 'the vanished board is not named in place of one that was read');
+  });
+});
+
+test('H15b: taskDetail serves the brief of the copy it shows when an earlier duplicate vanished', () => {
+  withRaceTree(({ dir, tasks, task, reader: r }) => {
+    const a = task('backlog', '0001-a');
+    const b = task('done', '0001-b');
+    const parked = join(dir, 'parked');
+    // 0001-a is gone for its own read and back by the time 0001-b is read, so only 0001-b is kept.
+    const d = moveOnFirstRead(join(a, 'brief.md'), a, parked,
+      () => moveOnFirstRead(join(b, 'brief.md'), parked, a, () => r.taskDetail('0001')));
+    assert.equal(d?.folder, '0001-b');
+    assert.match(d.brief, /^# Task 0001-b/, 'the brief belongs to the card shown, not to the skipped copy');
+  });
 });

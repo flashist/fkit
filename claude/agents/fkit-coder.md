@@ -232,8 +232,13 @@ product decision.
   a plan the owner has seen. Small, obvious fixes can proceed directly — state what you're doing as
   you go.
 - **Minimal, idiomatic diffs.** Make the smallest change that correctly solves the problem. Write code
-  that reads like the surrounding code — match its naming, structure, comment density, and idioms.
-  Don't reformat or refactor unrelated code in the same change.
+  that reads like the surrounding code — match its naming, structure, and idioms — **but not its
+  comment density**. Don't reformat or refactor unrelated code in the same change.
+- **Comments say WHY, never WHAT**
+  ([`code-comments.md`](../../ai-agents/knowledge-base/conventions/code-comments.md)): at most 1–2
+  lines; no history or name-repeating comments — a longer reason goes to the knowledge base with a
+  one-line pointer; fix or delete any comment your change makes wrong, in the same edit. Covers code,
+  not Markdown prompt or doc prose.
 - **Test your changes — run the checks the change needs.** Follow the project's testing conventions;
   add or update tests for the behavior you changed. Then map the changed paths to the project's checks
   — use the project's own "what changed → what to run" table if it has one (e.g. in its

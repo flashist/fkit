@@ -107,7 +107,8 @@ the "silent" framing.**
 - **Warn with the real cause**, naming the path and what was wrong with it. ⛔ **Not a bare
   `mkdir:` line leaking from the shell** — the measured stderr above is what the user gets today.
 - **Decide and STATE what init's exit status becomes** when a section is skipped this way. ⚠️ **This is
-  the load-bearing decision in the task, not a detail.** `claude/fkit-claude.sh:363-367` reads init's
+  the load-bearing decision in the task, not a detail.** `claude/fkit-claude.sh:424-431`
+  (the `case "$setup_rc" in` block) reads init's
   status as a three-way signal — `0` success, `3` "set up, but refused to touch `ai-agents/`", anything
   else a real failure — and its comment warns that *"the two copies drifted the first time we tried"*
   re-testing the condition in the launcher instead. **Choosing `0` here silences a warning the user

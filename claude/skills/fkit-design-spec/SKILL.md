@@ -66,9 +66,10 @@ was done. Adapt these sections:
 
 If — and only if — concrete stubs would anchor the design better than prose, you may write **interface
 / type / signature stubs** into the source tree: interfaces, type definitions, function signatures with
-doc comments, or a skeleton file. Keep them to **contracts, not logic** (`throw new Error("not
-implemented")` / `TODO(coder)` bodies). Never write the working implementation — that's the coder's.
-List every stub file you created in the report.
+one-line doc comments ([`code-comments.md`](../../../ai-agents/knowledge-base/conventions/code-comments.md)),
+or a skeleton file. Keep them to **contracts, not logic**
+(`throw new Error("not implemented")` / `TODO(coder)` bodies). Never write the working implementation —
+that's the coder's. List every stub file you created in the report.
 
 ## Step 5 — Report
 

@@ -259,6 +259,10 @@ It reads old projects with fkit's **current** tools, so it copes with `sprint-N.
 3. **Refuses anything ambiguous; never guesses** (e.g. `0014`: brief says Backlog, folder says done;
    `0004`: no board row; two live rows; two boards claiming one sprint; a status outside the vocabulary).
    Fixed in the old format first, then re-run.
+   - ⏱ **Correction, 2026-10-14 (`0496`) — on task 0472's owner ruling R7 (2026-10-02); item 3 above is
+     unchanged.** The `0014` example no longer fits "brief says Backlog, folder says done": `0014`'s
+     `## Status` now reads `✅ Done`. It still has no board row, so on fkit's tree `0014` now belongs to
+     the **no board row** class, like `0004`. The converter's rule is unchanged.
 4. **Changes no meaning:** brief text kept **byte-for-byte**, only `## ID`, `## Sprint`, `## Priority`,
    `## Status`, `## Owner` move into front matter; each board row's text goes word-for-word into the
    task's `legacy-board-notes.md` with source board, line and hash; each board's non-table text becomes

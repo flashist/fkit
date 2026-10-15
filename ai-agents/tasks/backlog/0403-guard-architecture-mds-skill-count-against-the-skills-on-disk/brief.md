@@ -41,8 +41,8 @@ the checklist has already failed three times, and nothing tests it.**
 `claude/skills-for-role.sh:12` — `# ⚠️ CHANGING A ROLE'S SKILLS? SIX hand-maintained places MIRROR this list`
 opens a six-item list whose fourth entry is
 `claude/skills-for-role.sh:17` — `#   * ai-agents/knowledge-base/architecture.md — the skill count and the role/skill table`.
-**The identical block is duplicated in the launcher** at `claude/fkit-claude.sh:259` and
-`claude/fkit-claude.sh:264`.
+**The identical block is duplicated in the launcher** at `claude/fkit-claude.sh:305` and
+`claude/fkit-claude.sh:310`.
 
 ⭐ **The checklist's own header is the evidence that a checklist is not a guard.** Both copies carry,
 verbatim:

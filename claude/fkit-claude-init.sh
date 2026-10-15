@@ -641,8 +641,8 @@ fi
 # chain is walked, not just the leaf — a symlinked parent makes the leaf a real path and -L on the
 # leaf alone is false. One call covers both statements.
 # Non-fatal by design (§1's bar, and 0088's): a refusal warns and setup carries on. The intake is
-# optional already — with no .fkit/interview the launcher's `[ -x … ]` probe (fkit-claude.sh:576) just
-# skips it and the LLM interviews instead. STDERR, not stdout: the launcher sends init's stdout to
+# optional already — with no .fkit/interview the launcher's `[ -x … ]` probe (fkit-claude.sh, fresh-project
+# start) just skips it and the LLM interviews instead. STDERR, not stdout: the launcher sends init's stdout to
 # /dev/null on an already-set-up project, which is exactly the case this warning exists for.
 if ! intake_reason="$(path_contained ".fkit/interview" write)"; then
   {

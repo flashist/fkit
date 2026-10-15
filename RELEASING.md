@@ -44,7 +44,8 @@ and leaves the `sh` that actually runs the installer on its own default. That fo
 
 Even written correctly it is not a supported configuration. `install.sh:73` records the ref into the
 install's `.version`, and the update path resolves that ref's head with `git ls-remote`
-(`claude/fkit-claude.sh:79-91`). A tag's head never moves, so an install sitting on one normally has
+(`claude/fkit-claude.sh:80-92`, `_fkit_remote_sha()`). A tag's head never moves, so an install
+sitting on one normally has
 nothing to update to and the check stays quiet — but that quiet is a side effect, not a guarantee,
 and it breaks in at least two ways. If `install.sh` could not resolve a sha it writes
 `sha=unknown` (`install.sh:71`); the check only tests both sides for non-emptiness
@@ -60,13 +61,15 @@ subscribe — and it is not even a reliable way to go quiet.
 
 **What it does.** It names the release in the update notice. When an install and the remote report
 two distinct known versions, the notice reads `v0.2.1 → v0.2.2 is available`; otherwise it falls back
-to naming the change by sha (`claude/fkit-claude.sh:202-208`). **Bumping is what buys the version
+to naming the change by sha (`claude/fkit-claude.sh:203-209`, the
+`if [ -n "$rver" ] && [ -n "$curver" ]` block). **Bumping is what buys the version
 wording** — skip the bump and the notice is still correct, just less informative.
 
 **What it does not do.** It does not select, gate, or identify installed content. Distribution is
 **sha-keyed**: the update check compares the installed sha against the remote head
 (`claude/fkit-claude.sh:185`), and `VERSION` is fetched separately, afterwards, purely to word
-the message (`claude/fkit-claude.sh:92-98`). The consequence — two installs can report the same
+the message (`claude/fkit-claude.sh:93-99`, `_fkit_remote_version()`). The consequence — two installs
+can report the same
 `VERSION` and hold different content — is argued in ADR-015 Context §4 and recorded as a design
 constraint at `claude/structure-spec.md:23`.
 

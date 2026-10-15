@@ -10,7 +10,7 @@ Sprint 10
 P24
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder

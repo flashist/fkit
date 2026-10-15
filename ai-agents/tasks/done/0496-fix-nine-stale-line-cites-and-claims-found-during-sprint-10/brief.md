@@ -10,7 +10,7 @@ Sprint 10
 P22
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -60,7 +60,7 @@ by line number.**
   for 0472 to close, then re-check (i) against what 0472 wrote.
 - **0472 item 8** fixes the same wrong `fkit-coder.md:109-113` cite in `claude/skills/fkit-task-ship-loop/SKILL.md`.
   Item (h) here is the **ADR-019** copy of it; it does not touch the skill.
-- **Related, not a dependency: [`0394`](../0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md)**
+- **Related, not a dependency: [`0394`](../../backlog/0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md)**
   (a guard for the `ADR-NNN:LINE` citation class). This task is one more hand sweep of the kind 0394
   wants to make unnecessary. Neither waits for the other.
 

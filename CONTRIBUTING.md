@@ -40,9 +40,10 @@ Changed anything under `claude/scaffold/`? Run `npm run generate:manifest` and c
 
 | What changed | Run | Why |
 |---|---|---|
-| Only `README.md`, `CONTRIBUTING.md`, `RELEASING.md`, `CHANGELOG.md`, `LICENSE`, `docs/`, `claude/README.md`, `ai-agents/wiki-vault/` (except `schema.md`) | **nothing** — report "no automated check covers these files"; check any links you touched by eye | No test reads their contents. `reference-integrity` scans `ai-agents/` minus the wiki vault; in the vault, `dual-home-parity` only checks which files sit outside `wiki/`. |
+| Only `LICENSE`, `ai-agents/wiki-vault/` (except `schema.md`) | **nothing** — report "no automated check covers these files"; check any links you touched by eye | No test reads their contents. `reference-integrity` scans `ai-agents/` minus the wiki vault; in the vault, `dual-home-parity` only checks which files sit outside `wiki/`. |
+| `README.md`, `CONTRIBUTING.md`, `RELEASING.md`, `CHANGELOG.md`, `docs/`, `claude/README.md` | `npm run test:docs` (~30 s); fast path `node --test test/top-level-doc-links.test.js` (under 1 s) | `top-level-doc-links` checks their relative links with `reference-integrity`'s rule; `reference-integrity` scans `ai-agents/` only. The rule skips image links and nested-bracket badge links, so README's teaser gif and its `VERSION` and `LICENSE` badge targets stay unchecked — check those by eye. `CHANGELOG.md` is scanned whole, released entries too, so deleting a file an old entry links to means fixing that entry's link. |
 | `ai-agents/wiki-vault/schema.md`; anything else under `ai-agents/` (briefs, plans, worklogs, review ledgers, sprint boards, knowledge-base, ADRs, conventions) | `npm run test:docs` (~30 s) | Only these tests read the live `ai-agents/` tree: links, citations, task/ADR ids, closed ranks, dual-home parity (`schema.md` is dual-homed and must match its scaffold copy byte for byte), the board readers |
-| `.md` files under `claude/` (skills, agents, specs) **not named in `test/prove-red.sh`**; `bin/` tools other than `release.mjs`; `CLAUDE.md`, `AGENTS.md` | `npm run test:unit` (~1 min) | Frontmatter, ownership, contract and parity checks read these; `rules-block-budget` reads `CLAUDE.md` and `AGENTS.md`. No mutation edits them. |
+| `.md` files under `claude/` (skills, agents, specs) **not named in `test/prove-red.sh`**; `bin/` tools other than `release.mjs`; `CLAUDE.md`, `AGENTS.md` | `npm run test:unit` (~1 min) | Frontmatter, ownership, contract and parity checks read these; `rules-block-budget` reads `CLAUDE.md` and `AGENTS.md`, and `top-level-doc-links` checks their relative links. No mutation edits them. |
 | Any **non-`.md`** file under `claude/` (launcher, init, hooks, `skills-for-role.sh`, `dashboard.sh`, `throughput.mjs`, `structure-manifest.tsv`, `orphan-targets`); anything under `claude/scaffold/`; `bin/release.mjs`; anything under `test/`; `package.json`; `.github/`; **any file `test/prove-red.sh` names** | `npm test` (~12 min) | prove-red mutates these, or they are the test machinery itself |
 | A release, or **unsure** | `npm test` | When in doubt, run more. |
 
@@ -54,7 +55,8 @@ Changed anything under `claude/scaffold/`? Run `npm run generate:manifest` and c
   `skills/fkit-task-cancelled/SKILL.md`, `skills/fkit-sprint-done/SKILL.md`,
   `skills/fkit-sprint-cancelled/SKILL.md`, `structure-spec.md` and the `claude/scaffold` tree. The grep
   is the rule; this list is only an example and will drift.
-- A new test that reads the live `ai-agents/` tree must also be added to `test:docs` in `package.json`.
+- A new test that reads the live `ai-agents/` tree or the top-level docs must also be added to
+  `test:docs` in `package.json`.
 
 ## Releases
 

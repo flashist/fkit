@@ -473,3 +473,33 @@ kind of call the architect exists for. **Do not guess between the rows above.**
   **wrote nothing under `ai-agents/wiki-vault/`**, and **committed nothing**. ⚠️ **It did not re-read
   `claude/fkit-claude.sh` from disk** — the quoted `:99-103` body and the pipeline measurement are the
   driver's, dated 2026-08-13. **Re-measure before you cite.**
+- **⚠️ Re-checked 2026-10-14 — defect 2 (*"the env vars never reach the `sh`"*) is already fixed, by
+  [`0481`](../../done/0481-make-fkit-update-reinstall-from-the-source-and-paths-it-was-installed-from/brief.md)
+  (`✅ Done (agent-closed — not owner-verified)`).** Read from disk by a spawned `fkit-producer`
+  (no owner channel, ADR-021) on an owner ruling relayed by the `fkit-lead` driver (`0496` OQ3, *"File a
+  Backlog task (Rec)"* — *"… + producer re-check of 0284"*). **Nothing above was changed; this note only
+  records what is now true.** What the code says today, in `claude/fkit-claude.sh`'s `_fkit_reinstall()`:
+  - ✅ **Item 2b / step 5b — done by 0481.** The installer's variables now sit **after** the pipe, on the
+    `sh` that runs it: *"`| FKIT_REPO="$fkit_repo" FKIT_REF="$fkit_ref" FKIT_SHARE="$fkit_share"
+    FKIT_BIN="$fkit_bin" sh`"* (line 113 on 2026-10-14), under 0481's comment *"The installer's
+    variables go AFTER the pipe, on the `sh` that runs it (task 0481)."* The proof step 5b asks for
+    exists: `test/update-reinstall.test.js`, test *"0481/version-only: repo/ref from .version reach the
+    installer, not the defaults"* (sealed-`PATH` stub `curl`, a fake installer that prints what it
+    received), red-proven by `test/prove-red.sh` mutation 41 (*"Strip the installer variables before
+    `sh`"*). **Do not redo it; cite it.**
+  - ✅ **Item 2's truncation hazard / step 7 — answered in shape by 0481.** The script is downloaded
+    first into a variable and run only if `curl` succeeded and the result is non-empty (*"Download FIRST,
+    then run (task 0481) … A download cut off mid-way is never half-run this way either."*, lines
+    102–107). So adding a deadline to this download no longer feeds `sh` a half script. ⚠️ The plan
+    should still confirm this holds for a `--max-time` cut-off, but it is a check, not a design problem.
+  - ⛔ **Still open — defect 1 on this call site:** the `install.sh` download carries **no
+    `--max-time`** (line 105: *"`_fkit_script="$(curl -fsSL "https://raw.githubusercontent.com/…/install.sh")"`"*).
+    Only the two probe `curl`s (lines 87 and 95) carry `--max-time "$FKIT_NET_TIMEOUT"`.
+  - ⛔ **Still open — the main defect:** `_fkit_remote_sha`'s git path is still not deadlined. The
+    launcher says so itself: *"for git only a low-speed STALL bound, so ls-remote can outlive it"*
+    (`FKIT_NET_TIMEOUT=5`, line 70).
+  - **So the task now owns two open defects, not three.** Items 1, 2 (deadline half), 3, 4, 5 and 6 stand;
+    the `:99-103` / `:101-102` cites and the quoted function body above are the 2026-08-13 version and no
+    longer match the file. **Re-measure before you cite.** Whether to formally strike item 2b and step 5b
+    from the brief is left to the plan gate; this note does not re-scope the task.
+- **Cite note, 2026-10-14 (owner ruling on `0496` review R1, *"Won't fix + 0284 note (Rec)"*):** the `claude/fkit-claude.sh:126-165` cite under *"The defect, measured"* is the 2026-08-13 measurement — today that range is the explicit `fkit update` branch; the startup check is now `claude/fkit-claude.sh:172-212`, the block opening *"# Automatic: a throttled check that only ever PRINTS. Silent when current; silent when offline."*

@@ -277,8 +277,20 @@ function listBoardFiles(root) {
   return out;
 }
 
+// A mover can relocate a task folder or board between the listing and this read; that gap (ENOENT) is
+// the only failure tolerated, and every other error still throws.
+function readIfPresent(path) {
+  try {
+    return readFileSync(path, 'utf8');
+  } catch (err) {
+    if (err.code === 'ENOENT') return null;
+    throw err;
+  }
+}
+
 function readTask(entry) {
-  const text = readFileSync(entry.brief, 'utf8');
+  const text = readIfPresent(entry.brief);
+  if (text === null) return null;
   const f = fields(text);
   const h1 = /^# (.+)$/m.exec(text);
   const statusField = f.Status || '';
@@ -289,6 +301,8 @@ function readTask(entry) {
   for (const extra of ['plan.md', 'review.md', 'worklog.md']) {
     if (existsSync(join(entry.path, extra))) labels.push(extra.slice(0, -3));
   }
+  // A folder moved after the brief read would show every label as absent; leave it out instead.
+  if (!existsSync(entry.brief)) return null;
   return {
     // ⚠️ The id is the FOLDER's 4-digit key and always a JSON STRING. aiboard's T-023 (all-digit
     // front-matter coerced to an int, `0013` → `13`) fires on aiboard's WRITE path, which this reader
@@ -357,7 +371,12 @@ function selectActive(root, dashboard) {
 
 function readBoards(root, dashboard, boardFiles, tasks) {
   const { byFile, problems } = selectActive(root, dashboard);
-  const boards = boardFiles.map((f) => {
+  const present = [];
+  for (const f of boardFiles) {
+    const text = readIfPresent(f.path);
+    if (text !== null) present.push({ f, text });
+  }
+  const boards = present.map(({ f, text }) => {
     let identity = '';
     let status;
     if (f.location === 'open') {
@@ -370,7 +389,7 @@ function readBoards(root, dashboard, boardFiles, tasks) {
       status = f.location === 'done' ? 'Done' : 'Cancelled';
     }
     const id = (identity && boardId(identity)) || boardIdFromFile(f.name);
-    const lines = readFileSync(f.path, 'utf8').split('\n');
+    const lines = text.split('\n');
     const members = tasks.filter((t) => t.sprint === id);
     const counts = Object.fromEntries(COLUMNS.map((c) => [c, members.filter((t) => t.status === c).length]));
     return {
@@ -413,14 +432,14 @@ function readBoards(root, dashboard, boardFiles, tasks) {
   // flipped by it (owner ruling for 0412; 0411's residual R10). Names are sprints-relative — no path.
   const claims = new Map();
   boards.forEach((b, i) => {
-    const f = boardFiles[i];
+    const { f } = present[i];
     const name = f.location === 'open' ? f.name : `${f.location}/${f.name}`;
     claims.set(b.id, (claims.get(b.id) || []).concat(name));
   });
   const warnings = [...claims].filter(([, files]) => files.length > 1).map(([id, files]) =>
     `board id ${id} is claimed by ${files.length} files (${files.join(', ')}): each lists the same `
     + `tasks, and /api/sprints/${id} opens only ${files[0]}.`);
-  return { boards, problems, warnings };
+  return { boards, problems, warnings, vanished: present.length < boardFiles.length };
 }
 
 // ── The snapshot, and its mtime cache ────────────────────────────────────────────────────────────
@@ -456,8 +475,9 @@ export function makeReader({ root, dashboard }) {
     const key = cacheKey(taskDirs, boardFiles);
     if (cached && cached.key === key) return cached;
 
-    const tasks = taskDirs.map(readTask);
-    const { boards, problems, warnings } = readBoards(root, dashboard, boardFiles, tasks);
+    const read = taskDirs.map((e) => [e, readTask(e)]).filter(([, t]) => t);
+    const tasks = read.map(([, t]) => t);
+    const { boards, problems, warnings, vanished } = readBoards(root, dashboard, boardFiles, tasks);
     const data = {
       root: join(root, 'ai-agents'),
       name: `${basename(root)} (read-only)`,
@@ -476,25 +496,33 @@ export function makeReader({ root, dashboard }) {
     // beside the OTHER task's brief and worklog. Zero duplicates exist today; the two lookups now
     // agree by construction rather than by luck.
     const byId = new Map();
-    for (const e of taskDirs) if (!byId.has(e.id)) byId.set(e.id, e);
-    cached = { key, data, problems, warnings, byId };
-    return cached;
+    for (const [e] of read) if (!byId.has(e.id)) byId.set(e.id, e);
+    const snap = { key, data, problems, warnings, byId };
+    // A snapshot that skipped a moved file is never cached: its key can equal the settled tree's.
+    cached = read.length === taskDirs.length && !vanished ? snap : null;
+    return snap;
   }
 
+  // A cached path can go stale (the key misses a within-board rename), and an uncached snapshot may have
+  // skipped the item mid-move; either way the cache is dropped and the lookup retried once.
   function taskDetail(id) {
-    const snap = snapshot();
-    const task = snap.data.tasks.find((t) => t.id === id);
-    if (!task) return null;
-    const entry = snap.byId.get(id);
-    const worklog = join(entry.path, 'worklog.md');
-    return {
-      ...task,
-      brief: readFileSync(entry.brief, 'utf8'),
-      comments: [],
-      worklog: existsSync(worklog)
-        ? [{ timestamp: '', author: 'worklog.md', text: readFileSync(worklog, 'utf8') }]
-        : [],
-    };
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const snap = snapshot();
+      const task = snap.data.tasks.find((t) => t.id === id);
+      if (!task) { if (cached === snap) return null; continue; }
+      const entry = snap.byId.get(id);
+      const brief = readIfPresent(entry.brief);
+      const worklog = readIfPresent(join(entry.path, 'worklog.md'));
+      // A brief gone after the worklog read means a missing worklog may only be the move, not absence.
+      if (brief === null || !existsSync(entry.brief)) { cached = null; continue; }
+      return {
+        ...task,
+        brief,
+        comments: [],
+        worklog: worklog === null ? [] : [{ timestamp: '', author: 'worklog.md', text: worklog }],
+      };
+    }
+    return null;
   }
 
   // The board markdown is capped, because the biggest board is 855,821 characters and the drawer is
@@ -508,20 +536,24 @@ export function makeReader({ root, dashboard }) {
   const DESCRIPTION_CAP = 20000;
 
   function sprintDetail(id) {
-    const snap = snapshot();
-    const board = snap.data.sprints.find((s) => s.id === id);
-    if (!board) return null;
-    const full = readFileSync(board.path, 'utf8');
-    const cut = full.length > DESCRIPTION_CAP;
     const n = (x) => x.toLocaleString('en-US');
-    return {
-      ...board,
-      description: cut
-        ? `⚠️ … truncated, ${n(DESCRIPTION_CAP)} of ${n(full.length)} characters …\n\n`
-          + full.slice(0, DESCRIPTION_CAP)
-        : full,
-      tasks_detail: snap.data.tasks.filter((t) => t.sprint === id),
-    };
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const snap = snapshot();
+      const board = snap.data.sprints.find((s) => s.id === id);
+      if (!board) { if (cached === snap) return null; continue; }
+      const full = readIfPresent(board.path);
+      if (full === null) { cached = null; continue; }
+      const cut = full.length > DESCRIPTION_CAP;
+      return {
+        ...board,
+        description: cut
+          ? `⚠️ … truncated, ${n(DESCRIPTION_CAP)} of ${n(full.length)} characters …\n\n`
+            + full.slice(0, DESCRIPTION_CAP)
+          : full,
+        tasks_detail: snap.data.tasks.filter((t) => t.sprint === id),
+      };
+    }
+    return null;
   }
 
   return {

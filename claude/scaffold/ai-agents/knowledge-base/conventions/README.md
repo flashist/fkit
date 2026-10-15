@@ -22,7 +22,7 @@ The three are easy to confuse, and the distinction is the whole point of this fo
 
 ## What's here
 
-Eleven conventions ship with the scaffold. They are **yours to amend** — but amend them *here*. A
+Twelve conventions ship with the scaffold. They are **yours to amend** — but amend them *here*. A
 convention has exactly one home; a second copy of a rule is how the two drift apart and the project
 stops knowing which one is law.
 
@@ -39,6 +39,7 @@ stops knowing which one is law.
 | [`durable-citation-anchors.md`](durable-citation-anchors.md) | when a coordinate is safe to cite — line numbers for findings, names for living documents |
 | [`placement-questions-state-the-knock-on.md`](placement-questions-state-the-knock-on.md) | a question that places a task or re-points a dependency says, in each option, which open tasks would then wait on which sprint |
 | [`asking-the-owner.md`](asking-the-owner.md) | how a question is put to the owner — explain first, the standing "Explain more, then ask again" option, and a reply that is not a choice answered in chat with no new dialog that turn |
+| [`code-comments.md`](code-comments.md) | code comments say why, never what — at most 1–2 lines, no history, fixed or deleted when a change makes them wrong |
 
 ## Naming
 

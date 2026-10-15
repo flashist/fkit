@@ -16,6 +16,10 @@
   2** (*"The plan gate stays — the one guaranteed upfront human checkpoint"*). Marker legend: **⚠️ = a
   fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow
   it). No existing line of this ADR was edited; the note is an append, and the Status stays `accepted`.
+  ⚠️ 2026-10-14 (`0496`) — this ADR now carries **two** dated notes: the `0473` pointer note above,
+  plus a cite correction inside **§Decision item 4** (after its last line). The text above is left
+  byte-identical and its count (**one**) is superseded by this line; the same append-only rule and the
+  same legend apply.
 
 ## Context
 
@@ -114,6 +118,14 @@ owner-only done-gate. It never moves a task file.**
    option, or anything outside the plan (a new architecture/scope decision → owner,
    `fkit-coder.md:109-113`). **When in doubt about the shape, it stops.** Every autonomous choice — every
    obvious winner — is recorded in the task's worklog decision-log (ADR-020) so it is auditable.
+
+   > ⚠️ **Dated note 2026-10-14 (`0496`) — the `fkit-coder.md:109-113` cite above no longer points at
+   > the rule; item 4 is unchanged.** The architecture half is the paragraph that opens *"But: a
+   > genuinely NEW architecture decision goes to the OWNER."* in `claude/agents/fkit-coder.md`, under
+   > **§Consulting a teammate**; the scope half is under **§What you must not do**: *"Make product or
+   > scope decisions that belong to the producer / owner — surface them instead."* Find both by quote;
+   > line numbers in that file move with every edit.
+
 5. **The done-gate is unchanged and owner-only.** The loop's terminal act is a finalized ready-for-done
    **evidence packet** (evidence to judge, not a done-verdict) plus the explicit ask. **It does not move
    the brief and does not spawn a producer to move it.** The owner closes via the normal owner-invoked

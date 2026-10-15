@@ -36,13 +36,14 @@ The three are easy to confuse and the distinction is the whole point of this fol
 | [`durable-citation-anchors.md`](durable-citation-anchors.md) | when a coordinate is safe to cite — line numbers for findings, names for living documents |
 | [`placement-questions-state-the-knock-on.md`](placement-questions-state-the-knock-on.md) | a question that places a task or re-points a dependency says, in each option, which open tasks would then wait on which sprint |
 | [`asking-the-owner.md`](asking-the-owner.md) | how a question is put to the owner — explain first, the standing "Explain more, then ask again" option, and a reply that is not a choice answered in chat with no new dialog that turn |
+| [`code-comments.md`](code-comments.md) | code comments say why, never what — at most 1–2 lines, no history, fixed or deleted when a change makes them wrong |
 | [`dual-home-parity.md`](dual-home-parity.md) † | fkit-authored files living in both `ai-agents/` and `claude/scaffold/ai-agents/` must be edited in both |
 
 † **fkit-repo-only** — governs development of the framework itself, not how the agents work. It is
 deliberately **not** shipped in `claude/scaffold/`, since a consuming project has no `claude/scaffold/`
-tree. Every other convention here is **dual-homed**. Five of them — `task-owner-vocabulary.md`,
+tree. Every other convention here is **dual-homed**. Six of them — `task-owner-vocabulary.md`,
 `priority-is-rank-not-identity.md`, `durable-citation-anchors.md`,
-`placement-questions-state-the-knock-on.md` and `asking-the-owner.md` — must stay **byte-identical**
+`placement-questions-state-the-knock-on.md`, `asking-the-owner.md` and `code-comments.md` — must stay **byte-identical**
 across both copies; the rest ship a
 deliberately de-fkit-ified **audience-adapted** copy in the scaffold and must stay in step in
 **substance**, not byte for byte. Which is which, and why, is recorded per path in

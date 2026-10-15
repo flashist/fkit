@@ -285,8 +285,9 @@ describe('G. the list is data, and the code does not trust it', () => {
   //      the original macOS hazard stays covered on macOS;
   //   2. list the REAL `.fkit/settings` alongside it. ⚠️ NOT — as this comment first claimed — "so the
   //      survival assertion bites everywhere". That was measured FALSE. The second line does make
-  //      `.fkit/settings` a deletion CANDIDATE on either filesystem, but `claude/fkit-claude.sh:311-312`
-  //      writes `.fkit/settings/<role>.json` on every launch, so `orphan_refs` always finds the path
+  //      `.fkit/settings` a deletion CANDIDATE on either filesystem, but `build_settings()` in
+  //      `claude/fkit-claude.sh` writes `.fkit/settings/<role>.json` on every launch, so `orphan_refs`
+  //      always finds the path
   //      referenced in fkit's own sources and refuses it there too. Remove the whole `*settings*` guard
   //      and `coder.json` STILL survives (measured); the survival assertion fires only when BOTH gates
   //      are down. ⚠️ And be exact about what the second line buys, because the obvious answer is also
