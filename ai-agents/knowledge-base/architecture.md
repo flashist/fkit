@@ -57,7 +57,7 @@ over **files in git** rather than shared runtime state.
 | **Claude Code CLI (`claude`)** | **The runtime.** Every role session is `claude --agent fkit-<role> --settings <role>.json`. Hard requirement — the launcher exits **127** without it. | `claude/fkit-claude.sh`, the `command -v claude` preflight that ends `exit 127` |
 | **Codex CLI (`codex`)** | The adversarial second opinion, for genuine **model diversity**: `codex exec --sandbox read-only --cd "$PWD" -`. **Optional but recommended — warned, never walled** (owner rulings 2026-07-11, Sprint 2 task 3, and 2026-10-02, [ADR-054](decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md)): a Codex outage must not lock the owner out of their own team; without Codex the second opinion falls back to Claude only, loudly flagged NOT model-diverse. | `claude/fkit-claude.sh:585-606` (*"Codex preflight: optional but recommended — a WARNING, never a wall"*; `codex_preflight()`); `claude/skills/fkit-review/SKILL.md:57` |
 | **git** | The substrate every agent reads. Agents are barred from committing/pushing unprompted — a **prompt rule, not a sandbox** (`CLAUDE.md` §"Universal hard rules", *"Never commit or push unless the owner explicitly asks."*). | — |
-| **GitHub, over the network** | (a) install: tarball from `codeload.github.com`; (b) self-update **check**: throttled `git ls-remote` or the commits API; (c) the version string: raw `VERSION`. All silent on failure. **Only the curl paths are time-boxed** (`--max-time 5`); the `git ls-remote` path sets only `GIT_HTTP_LOW_SPEED_*`, which bounds a stalled transfer, **not** DNS/connect — so it has no deadline and can outlive 5 s (measured: 12 s). | `install.sh:32,55-62`; `claude/fkit-claude.sh`, `FKIT_NET_TIMEOUT` + `_fkit_remote_sha()` |
+| **GitHub, over the network** | (a) install: tarball from `codeload.github.com`; (b) self-update **check**: throttled `git ls-remote` or the commits API; (c) the version string: raw `VERSION`. All silent on failure. **Each check call is time-boxed at `FKIT_NET_TIMEOUT` (5 s)**: curl by `--max-time`, `git ls-remote` by the `_fkit_deadline` watchdog (+1 s for a git that ignores TERM), so a whole check takes about 10 s at worst. `fkit update`'s `install.sh` download gets `--max-time 60`; `install.sh`'s own downloads are unbounded. | `install.sh:32,55-62`; `claude/fkit-claude.sh`, `FKIT_NET_TIMEOUT` + `_fkit_deadline()` + `_fkit_remote_sha()` |
 | **Node (ESM)** | Only to cut a release (`npm run release`). **Zero npm dependencies.** | `package.json:3-9`, `bin/release.mjs` |
 
 **fkit opens no ports, exposes no API, and stores no data outside the project's own files.**
@@ -393,9 +393,14 @@ Two paths, and the split is the design:
   recorded source and paths (`claude/fkit-claude.sh:100-170` `_fkit_reinstall()` and the `update|--update|upgrade` case). Refuses to run in a source checkout ("update it with `git
   pull`"), and, with no `FKIT_SHARE` given, when the launcher's own root is not an install (reached through a
   symlink or a copy). An explicit `FKIT_SHARE` that already holds an install supplies that install's
-  recorded repo/ref/bin; env values still win.
-- **the automatic check** — throttled (60 min default), **only partly time-boxed** (the curl paths
-  get `--max-time 5`; the preferred `git ls-remote` path gets no deadline at all — see `FKIT_NET_TIMEOUT` in `claude/fkit-claude.sh`), silent
+  recorded repo/ref/bin; env values still win. **Downloading** `install.sh` is bounded (`--max-time`
+  `FKIT_INSTALLER_FETCH_TIMEOUT` = 60 s; a timeout prints the download-failure line, exits 1, and the
+  partial script never runs). **Running** it is not: `install.sh`'s own tarball download and
+  `resolve_sha()` have no deadline, so `fkit update` as a whole has none.
+- **the automatic check** — throttled (60 min default), **time-boxed per network call** (each gets
+  `FKIT_NET_TIMEOUT` = 5 s: curl by `--max-time`, the preferred `git ls-remote` by the `_fkit_deadline`
+  watchdog, +1 s for a git that ignores TERM; at most two calls, so about 10 s at worst — see
+  `FKIT_NET_TIMEOUT` in `claude/fkit-claude.sh`), silent
   when current and silent when offline, and it **only ever prints** (`:172-212`, *"Automatic: a throttled check that only ever PRINTS"*). It **triggers on shas**
   (`[ "$remote" != "$installed" ]`) but has **two** renderings, because a remote *version* is not
   always knowable — task 0257:
@@ -604,9 +609,10 @@ is the test.
 - **Secrets.** No credential is read, written, or stored by any part of fkit. No agent may put a
   secret in any artifact. `GIT_TERMINAL_PROMPT=0` on the update check
   (`claude/fkit-claude.sh`, the `GIT_TERMINAL_PROMPT=0` line in `_fkit_remote_sha()`) exists so a credential-prompting remote can never hang the launcher.
-- **Network.** Every network call is optional and silent on failure. Time-boxing is **not** uniform:
-  curl calls carry `--max-time 5`, but `_fkit_remote_sha`'s `git ls-remote` has no outer deadline
-  (`GIT_HTTP_LOW_SPEED_*` bounds a stalled transfer, not DNS/connect) — an unbounded hang. Offline
+- **Network.** Every network call is optional and silent on failure. Every update-check call is
+  time-boxed at 5 s — curl by `--max-time`; `git ls-remote` by `_fkit_deadline`, a watchdog that kills
+  git and its direct children (+1 s if git ignores TERM). `fkit update`'s `install.sh` download is
+  bounded at 60 s; `install.sh`'s own downloads are not. Offline
   `fkit` must cost nothing and print nothing (`claude/fkit-claude.sh`, *"offline / proxied / captive-portal must cost nothing and print nothing"*).
 - **Idempotence.** Both the installer and the per-project init are safe to re-run; init never
   clobbers an existing `ai-agents/`, `CLAUDE.md`, or `AGENTS.md`.

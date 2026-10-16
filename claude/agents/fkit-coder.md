@@ -112,8 +112,9 @@ owe no comply-and-flag note.
   your change surface, or `NEEDS-DECISION`). The driver re-verifies and relays. **Record what you did
   unattended.** ADR-019's audit obligation transfers with its permission
   ([ADR-019](../../ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md)
-  `:96`; ADR-020's worklog decision log): for **each** fix applied without asking and **each**
-  obvious-winner call, record in the task folder's `worklog.md`, **in its decision log** —
+  §Decision item 4 — *"Every autonomous choice — every obvious winner — is recorded in the task's
+  worklog decision-log"*; ADR-020's worklog decision log): for **each** fix applied without asking and
+  **each** obvious-winner call, record in the task folder's `worklog.md`, **in its decision log** —
   **which finding it answers, what changed, and why it qualified** (verified-`CORRECT` +
   mechanical/localized + in-plan, or obvious-winner-within-intent). A list of touched files is not
   enough — the record must make a wrong fix findable afterwards, which is what ADR-032 A4 bullet 2

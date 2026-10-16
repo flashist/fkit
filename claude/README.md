@@ -122,8 +122,12 @@ Model diversity is the whole point of the second reviewer. The reviewer (and the
 adversarial agent) assemble a findings-only prompt + inline diff into `.fkit/tmp/`, then run:
 
 ```sh
-codex exec --sandbox read-only --cd "$PWD" - < .fkit/tmp/adversarial-prompt.md
+codex exec --sandbox read-only --cd "$PWD" - < ".fkit/tmp/<task-id>-r<N>-<run-id>-adversarial-prompt.md"
 ```
+
+Each run writes its own prompt file — task and round plus a run id (UTC time and process number) for
+a stateful review, a label plus a run id otherwise — because two reviews sharing one file would hand
+Codex the other review's diff, and Codex reviews it without any error.
 
 **Codex is optional but recommended** — it is the reviewer's model-diverse second opinion. `fkit`
 preflights it at launch (installed? logged in?) and warns loudly — but does not wall you out. Without

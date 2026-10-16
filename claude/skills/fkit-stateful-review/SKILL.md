@@ -106,11 +106,31 @@ Coverage: <state> — <evidence clause>
 ## Step 1 — Run two independent reviewers
 
 Exactly as in **fkit-review Step 1** — your own pass, plus the Codex adversarial pass via
-`codex exec --sandbox read-only --cd "$PWD" - < .fkit/tmp/adversarial-prompt.md`, with the same
-findings-only contract, the same untracked-files handling, and the same **mandatory graceful
-degradation** (record "Codex reviewer unavailable: `<reason>`", continue, flag partial coverage loudly
-in the verdict), and **the same three coverage states — [`fkit-review/SKILL.md` §Coverage
-states](../fkit-review/SKILL.md). Do not restate them here; that file is the single source.**
+`codex exec --sandbox read-only --cd "$PWD" - < ".fkit/tmp/<key>-r<N>-<run-id>-adversarial-prompt.md"`,
+with the same findings-only contract, the same untracked-files handling, and the same **mandatory
+graceful degradation** (record "Codex reviewer unavailable: `<reason>`", continue, flag partial
+coverage loudly in the verdict), and **the same three coverage states — [`fkit-review/SKILL.md`
+§Coverage states](../fkit-review/SKILL.md). Do not restate them here; that file is the single source.**
+
+**The prompt path differs, in both places** — where fkit-review item 2 assembles the prompt, and in the
+run line above: `.fkit/tmp/<key>-r<N>-<run-id>-adversarial-prompt.md`.
+⚠️ **One prompt file per run — never a shared name.** Codex does not fail on a prompt another review
+overwrote: it returns a confident, well-formed review of the wrong diff, and no degradation branch
+fires.
+- `<key>` comes from the ledger key already resolved in Step 0 — never re-resolved from `$ARGUMENTS`:
+  rules 1–2 → the matched task folder's ID prefix `<NNNN>` (for rule 1, the folder's prefix, not the
+  raw argument); rule 3 → the branch name with every character outside `A–Z a–z 0–9 . _ -` replaced by
+  `-`; rule 4 has already stopped.
+- `<N>` is this pass's Round from Step 0 — always present, `-r1` included, so the file traces to the
+  ledger's Round column.
+- `<run-id>` keeps the file unique: two reviewers can compute the same Round, and a clean round's
+  number repeats. Resolve the whole path once with fkit-review's command, writing `<key>-r<N>` where it
+  says `<key>` (e.g. `0337-r2`):
+  ```bash
+  mkdir -p .fkit/tmp && echo ".fkit/tmp/<key>-$(date -u +%Y%m%dT%H%M%SZ)-$$-adversarial-prompt.md"
+  ```
+  Then use the printed path **verbatim** for the prompt file and in the run line — shell variables do
+  not carry between Bash calls, so never rebuild it.
 
 **Priming (best-effort):** include the *Accepted residuals* + relevant ADR re-raise conditions in the
 codex prompt ("these tradeoffs are already settled — don't re-raise unless `<condition>`"). Reviewers

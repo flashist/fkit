@@ -166,7 +166,8 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
    - **⛔ STOP** for any **judgment call**: a frontier-move / recording a residual, a regression or
      review oscillation, a disputed severity that changes scope, a broad/behavior-changing fix, or
      anything **outside the approved plan** (a new architecture/scope decision → owner,
-     `fkit-coder.md:165`).
+     `fkit-coder.md` §Consulting a teammate — *"But: a genuinely NEW architecture decision goes to the
+     OWNER."*).
    - **`Codex unavailable`?** (that state only — **not** `reasoning-only second opinion`;
      `fkit-review/SKILL.md` §Coverage states)
      Re-request the review up to **3 attempts total** (absorbing a transient

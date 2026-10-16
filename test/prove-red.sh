@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# FORTY-THREE mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# FORTY-EIGHT mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -67,6 +67,11 @@
 #  41. Strip the installer variables before `sh`       → "0481/version-only"                    (task 0481)
 #  42. Disarm the empty-## Unreleased refusal          → "0479/empty-unreleased-refused"        (task 0479)
 #  43. Drop the CHANGELOG.md write                     → "0479/filled-unreleased-stamped"       (task 0479)
+#  44. Strip the git probe's _fkit_deadline wrapper    → "0284/git-deadline"                    (task 0284)
+#  45. Drop the watchdog's child walk                  → "0284/no-stray"                        (task 0284)
+#  46. Strip the install.sh download's --max-time      → "0284/reinstall-deadline"              (task 0284)
+#  47. Drop the watchdog's KILL escalation             → "0284/term-ignored"                    (task 0284)
+#  48. Leave the watchdog armed after git answers      → "0284/no-stray"                        (task 0284)
 #
 # ⚠️ MUTATIONS 18-22, 25, 26, 42 AND 43 TARGET `bin/`, NOT A COPIED LAUNCHER TREE (18-22 were the first, task 0288). Their seam
 # is FKIT_RELEASE_MJS — a SINGLE-FILE redirect (the FKIT_LAUNCHER pattern, not the whole-tree
@@ -92,7 +97,7 @@
 # $work.
 #
 # HOW TO READ A RED (task 0477). Every step block starts with `step <label>` (its printed number: 0a…0p,
-# 1…43), which points $out at that step's OWN output file. When a step fails, the next `step` call
+# 1…48), which points $out at that step's OWN output file. When a step fails, the next `step` call
 # copies its output to a `fkit-prove-red-kept.XXXXXX` dir under $TMPDIR (outside $work and outside the
 # repo — the trap deletes $work, and evidence must survive it) and prints `↳ kept this step's output:
 # <path>`. The final ✗ line names every failed step and the kept dir. An abnormal exit keeps the
@@ -504,7 +509,7 @@ dc="$(run_dashboard_suite "$clean_repo")"; echo "$dc"
 step 0j
 printf '0j. unmutated copy update-banner suite should be green ... '
 bc="$(run_banner_suite "$clean_tree")"; echo "$bc"
-[ "$bc" = green ] || { echo "   ✗ an UNMUTATED copy's banner suite is red — mutations 16/17 below would be false."; fail=1; }
+[ "$bc" = green ] || { echo "   ✗ an UNMUTATED copy's banner suite is red — mutations 16/17, 44, 45, 47 and 48 below would be false."; fail=1; }
 
 # --- 0k. An UNMUTATED copy of bin/release.mjs must ALSO be green (task 0288; same reasoning as 0b and
 #     0h — without this, a red below could be red-because-the-copy-is-broken and would prove nothing).
@@ -579,7 +584,7 @@ mx_="$(run_mover_step_suite "$clean_tree")"; echo "$mx_"
 step 0p
 printf '0p. unmutated copy update-reinstall suite should be green ... '
 ri_="$(run_reinstall_suite "$clean_tree")"; echo "$ri_"
-[ "$ri_" = green ] || { echo "   ✗ an UNMUTATED copy's reinstall suite is red — mutation 41 below would be false."; fail=1; }
+[ "$ri_" = green ] || { echo "   ✗ an UNMUTATED copy's reinstall suite is red — mutations 41 and 46 below would be false."; fail=1; }
 
 # --- Mutation 1: break the reviewer's skill ownership → the reviewer × fkit-review matrix test red -
 # skills_for_role() moved to skills-for-role.sh (task 43) — the mutation targets THAT file now, not
@@ -2143,7 +2148,153 @@ elif ! grep -Eq '(✖|not ok|fail).*0479/filled-unreleased-stamped' "$out"; then
   echo "   ✗ suite went red but NOT at 0479/filled-unreleased-stamped — red for the wrong reason."; fail=1
 fi
 
-step end   # finishes step 43: keeps its output if it failed; `end` itself runs nothing
+# --- Mutation 44: strip the `_fkit_deadline "$FKIT_NET_TIMEOUT"` wrapper from the update check's git
+#     probe → the 0284/git-deadline assertion in update-banner.test.js must go red (task 0284). ⭐ THIS IS
+#     THE PRE-0284 DEFECT: `env … git ls-remote` runs unbounded again, and a stalled git holds every
+#     launch open. Same guards as 41: no-op, single-line diff, landed. ---------------------------------
+step 44
+m44="$(make_claude_copy claude-mutant-git-deadline)"
+cp "$m44" "$m44.orig"
+sed -i.bak 's/_fkit_deadline "\$FKIT_NET_TIMEOUT" env /env /' "$m44"
+rm -f "$m44.bak"
+if cmp -s "$m44" "$m44.orig"; then
+  echo "44. stripped the git deadline ... ✗ MUTATION WAS A NO-OP — the sed no longer matches (has the"
+  echo "   \`_fkit_deadline \"\$FKIT_NET_TIMEOUT\" env\` call in _fkit_remote_sha been reworded?). This gate is"
+  echo "   disarmed: it would report success while proving nothing. Fix the mutation in test/prove-red.sh."
+  fail=1
+elif [ "$(diff "$m44.orig" "$m44" | grep -c '^>')" != 1 ]; then
+  echo "44. stripped the git deadline ... ✗ WRONG TARGET — the sed changed more than one line."; fail=1
+elif grep -q '_fkit_deadline "\$FKIT_NET_TIMEOUT"' "$m44"; then
+  echo "44. stripped the git deadline ... ✗ MUTATION DID NOT LAND — the wrapper is still in the mutant."; fail=1
+fi
+printf '44. git deadline stripped — "0284/git-deadline" should go RED ... '
+r44="$(run_banner_suite "$(dirname "$m44")")"; echo "$r44"
+if [ "$r44" != red ]; then
+  echo "   ✗ the suite did NOT catch an unbounded git ls-remote — a stalled network would again hold every"
+  echo "     launch open."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0284/git-deadline' "$out"; then
+  echo "   ✗ suite went red but NOT at 0284/git-deadline — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 45: drop the watchdog's child walk → 0284/no-stray must go red while 0284/git-deadline
+#     stays GREEN (task 0284). The deadline still holds — the launcher waits only on git, never on the
+#     child — so this mutant is invisible to the timing test; only the stray-process check can see the
+#     orphaned child. Anchor: the one `_fkit_dl_kids="$(ps …` line in _fkit_deadline. ------------------
+step 45
+m45="$(make_claude_copy claude-mutant-no-child-walk)"
+cp "$m45" "$m45.orig"
+sed -i.bak 's/^    _fkit_dl_kids="\$(ps .*$/    _fkit_dl_kids="" # mutation: child walk dropped/' "$m45"
+rm -f "$m45.bak"
+if cmp -s "$m45" "$m45.orig"; then
+  echo "45. dropped the child walk ... ✗ MUTATION WAS A NO-OP — the sed no longer matches (has the"
+  echo "   \`_fkit_dl_kids=\"\$(ps …\` line in _fkit_deadline been reworded or re-indented?). This gate is"
+  echo "   disarmed: it would report success while proving nothing. Fix the mutation in test/prove-red.sh."
+  fail=1
+elif [ "$(diff "$m45.orig" "$m45" | grep -c '^>')" != 1 ]; then
+  echo "45. dropped the child walk ... ✗ WRONG TARGET — the sed changed more than one line."; fail=1
+elif grep -q 'ps -A -o pid=' "$m45"; then
+  echo "45. dropped the child walk ... ✗ MUTATION DID NOT LAND — the ps walk is still in the mutant."; fail=1
+fi
+printf '45. child walk dropped — "0284/no-stray" should go RED, "0284/git-deadline" stay green ... '
+r45="$(run_banner_suite "$(dirname "$m45")")"; echo "$r45"
+if [ "$r45" != red ]; then
+  echo "   ✗ the suite did NOT catch a deadline that leaves git's child running — the no-stray check is not"
+  echo "     load-bearing."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0284/no-stray' "$out"; then
+  echo "   ✗ suite went red but NOT at 0284/no-stray — red for the wrong reason."; fail=1
+elif grep -Eq '(✖|not ok).*0284/git-deadline' "$out"; then
+  echo "   ✗ 0284/git-deadline went red too — this mutant should leave the bound intact, so the two"
+  echo "     assertions are not testing separate things."; fail=1
+fi
+
+# --- Mutation 46: strip the install.sh download's `--max-time` → 0284/reinstall-deadline in
+#     update-reinstall.test.js must go red (task 0284). With it gone, `fkit update` hangs forever on a
+#     black-holed download again. Anchor: the one `curl -fsSL --max-time "$FKIT_INSTALLER_FETCH_TIMEOUT"`
+#     in _fkit_reinstall. Same guards as 41. -----------------------------------------------------------
+step 46
+m46="$(make_claude_copy claude-mutant-installer-fetch-deadline)"
+cp "$m46" "$m46.orig"
+sed -i.bak 's/curl -fsSL --max-time "\$FKIT_INSTALLER_FETCH_TIMEOUT" /curl -fsSL /' "$m46"
+rm -f "$m46.bak"
+if cmp -s "$m46" "$m46.orig"; then
+  echo "46. stripped the install.sh deadline ... ✗ MUTATION WAS A NO-OP — the sed no longer matches (has"
+  echo "   the install.sh download in _fkit_reinstall been reworded?). This gate is disarmed: it would"
+  echo "   report success while proving nothing. Fix the mutation in test/prove-red.sh."
+  fail=1
+elif [ "$(diff "$m46.orig" "$m46" | grep -c '^>')" != 1 ]; then
+  echo "46. stripped the install.sh deadline ... ✗ WRONG TARGET — the sed changed more than one line."; fail=1
+elif grep -q -- '--max-time "\$FKIT_INSTALLER_FETCH_TIMEOUT"' "$m46"; then
+  echo "46. stripped the install.sh deadline ... ✗ MUTATION DID NOT LAND — the --max-time is still in the"
+  echo "   mutant."; fail=1
+fi
+printf '46. install.sh deadline stripped — "0284/reinstall-deadline" should go RED ... '
+r46="$(run_reinstall_suite "$(dirname "$m46")")"; echo "$r46"
+if [ "$r46" != red ]; then
+  echo "   ✗ the suite did NOT catch an unbounded install.sh download — \`fkit update\` could hang forever"
+  echo "     again."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0284/reinstall-deadline' "$out"; then
+  echo "   ✗ suite went red but NOT at 0284/reinstall-deadline — red for the wrong reason."; fail=1
+fi
+
+# --- Mutation 47: drop the watchdog's `kill -9` → 0284/term-ignored must go red while 0284/git-deadline
+#     stays GREEN (task 0284). A git that ignores TERM then runs its whole stall, so the bound silently
+#     assumes a well-behaved git. Anchor: the one `kill -9 $_fkit_dl_kids` line in _fkit_deadline. ------
+step 47
+m47="$(make_claude_copy claude-mutant-no-kill-escalation)"
+cp "$m47" "$m47.orig"
+sed -i.bak 's/^    kill -9 \$_fkit_dl_kids .*$/    : # mutation: KILL escalation dropped/' "$m47"
+rm -f "$m47.bak"
+if cmp -s "$m47" "$m47.orig"; then
+  echo "47. dropped the KILL escalation ... ✗ MUTATION WAS A NO-OP — the sed no longer matches (has the"
+  echo "   \`kill -9 \$_fkit_dl_kids …\` line in _fkit_deadline been reworded or re-indented?). This gate is"
+  echo "   disarmed: it would report success while proving nothing. Fix the mutation in test/prove-red.sh."
+  fail=1
+elif [ "$(diff "$m47.orig" "$m47" | grep -c '^>')" != 1 ]; then
+  echo "47. dropped the KILL escalation ... ✗ WRONG TARGET — the sed changed more than one line."; fail=1
+elif grep -q 'kill -9 ' "$m47"; then
+  echo "47. dropped the KILL escalation ... ✗ MUTATION DID NOT LAND — a kill -9 is still in the mutant."; fail=1
+fi
+printf '47. KILL escalation dropped — "0284/term-ignored" should go RED, "0284/git-deadline" stay green ... '
+r47="$(run_banner_suite "$(dirname "$m47")")"; echo "$r47"
+if [ "$r47" != red ]; then
+  echo "   ✗ the suite did NOT catch a deadline that a TERM-ignoring git can outlive."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0284/term-ignored' "$out"; then
+  echo "   ✗ suite went red but NOT at 0284/term-ignored — red for the wrong reason."; fail=1
+elif grep -Eq '(✖|not ok).*0284/git-deadline' "$out"; then
+  echo "   ✗ 0284/git-deadline went red too — this mutant should only matter to a TERM-ignoring git."; fail=1
+fi
+
+# --- Mutation 48: drop the `kill "$_fkit_dl_dog"` that disarms the watchdog once git has answered →
+#     0284/no-stray must go red while 0284/git-deadline stays GREEN (task 0284 review R1). Every bound
+#     still holds, but on EVERY successful check the dog wakes at the deadline and signals git's
+#     already-reaped pid — the PID-reuse residual moved off the expiry path. Only no-stray's normal-path
+#     re-read of the sleep log, which sees the dog's KILL-step `sleep 1`, can catch it. --------------------
+step 48
+m48="$(make_claude_copy claude-mutant-armed-watchdog)"
+cp "$m48" "$m48.orig"
+sed -i.bak 's/^  kill "\$_fkit_dl_dog" .*$/  : # mutation: watchdog left armed/' "$m48"
+rm -f "$m48.bak"
+if cmp -s "$m48" "$m48.orig"; then
+  echo "48. left the watchdog armed ... ✗ MUTATION WAS A NO-OP — the sed no longer matches (has the"
+  echo "   \`kill \"\$_fkit_dl_dog\"\` line in _fkit_deadline been reworded or re-indented?). This gate is"
+  echo "   disarmed: it would report success while proving nothing. Fix the mutation in test/prove-red.sh."
+  fail=1
+elif [ "$(diff "$m48.orig" "$m48" | grep -c '^>')" != 1 ]; then
+  echo "48. left the watchdog armed ... ✗ WRONG TARGET — the sed changed more than one line."; fail=1
+elif grep -q 'kill "\$_fkit_dl_dog"' "$m48"; then
+  echo "48. left the watchdog armed ... ✗ MUTATION DID NOT LAND — the disarming kill is still in the mutant."; fail=1
+fi
+printf '48. watchdog left armed — "0284/no-stray" should go RED, "0284/git-deadline" stay green ... '
+r48="$(run_banner_suite "$(dirname "$m48")")"; echo "$r48"
+if [ "$r48" != red ]; then
+  echo "   ✗ the suite did NOT catch a watchdog that stays armed after git answers."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0284/no-stray' "$out"; then
+  echo "   ✗ suite went red but NOT at 0284/no-stray — red for the wrong reason."; fail=1
+elif grep -Eq '(✖|not ok).*0284/git-deadline' "$out"; then
+  echo "   ✗ 0284/git-deadline went red too — this mutant should leave the bound intact."; fail=1
+fi
+
+step end   # finishes step 48: keeps its output if it failed; `end` itself runs nothing
 
 echo
 if [ "$any_fail" = 0 ]; then

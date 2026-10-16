@@ -58,16 +58,19 @@ ROLES="lead producer coder architect reviewer adversarial-reviewer wiki"
 #   - it NOTIFIES; it never auto-updates and never re-execs itself. Silently swapping the code out
 #     from under a running invocation is exactly the behavior we don't want back.
 #   - `fkit update` stays an explicit verb the user chooses to run.
-#   - the check is throttled, PARTLY time-boxed, and silent on failure. This sits in the startup path
+#   - the check is throttled, time-boxed per network call, and silent on failure. This sits in the startup path
 #     of every single `fkit`, so offline / proxied / captive-portal must cost nothing and print nothing.
-#     (Omnigent's check had no timeout and no GIT_TERMINAL_PROMPT guard. The prompt guard is fixed
-#     here; the timeout only partly — see FKIT_NET_TIMEOUT below, the git path is NOT deadlined.)
+#     (Omnigent's check had no timeout and no GIT_TERMINAL_PROMPT guard; see FKIT_NET_TIMEOUT below.)
 #
 # Env: FKIT_NO_UPDATE_CHECK=1     never touch the network.
 #      FKIT_UPDATE_INTERVAL_MIN   throttle window, minutes (default 60; 0 = check every launch).
 #      FKIT_REPO / FKIT_REF       update source (default flashist/fkit@main).
 share="$(cd "$here/.." && pwd)"        # install root (~/.local/share/fkit), or the repo root in a checkout
-FKIT_NET_TIMEOUT=5                     # seconds — a real deadline for curl (--max-time), but for git only a low-speed STALL bound, so ls-remote can outlive it
+# Timeout contract. Each startup-check call gets FKIT_NET_TIMEOUT s and fails silently: curl by --max-time,
+# git ls-remote by _fkit_deadline (+1 s if git ignores TERM). `fkit update`'s install.sh download gets
+# FKIT_INSTALLER_FETCH_TIMEOUT and fails loudly.
+FKIT_NET_TIMEOUT=5
+FKIT_INSTALLER_FETCH_TIMEOUT=60        # the user is watching and a slow link is not a failure; install.sh's own downloads stay unbounded
 
 _fkit_verfield() {   # <key> [<root>] → its value from <root>/.version (default: this install's; empty if absent)
   [ -f "${2:-$share}/.version" ] || return 0
@@ -77,10 +80,33 @@ _fkit_verfield() {   # <key> [<root>] → its value from <root>/.version (defaul
 # install (.git, the repo-root package.json) — never on anything inside claude/, which IS copied.
 _fkit_is_source_checkout() { [ -d "$share/.git" ] || [ -f "$share/package.json" ]; }
 
+_fkit_deadline() (   # <secs> <cmd> [args…] → the command's stdout if it exits 0 within <secs>; else nothing. Always exits 0.
+  exec 2>/dev/null
+  _fkit_dl_secs="$1"; shift
+  # A file, not the caller's pipe: anything left holding that pipe would hold the launcher open too.
+  _fkit_dl_out="$(mktemp)" || exit 0
+  "$@" >"$_fkit_dl_out" &
+  _fkit_dl_pid=$!
+  ( trap 'kill "${_fkit_dl_nap:-}" || :; exit 0' TERM
+    sleep "$_fkit_dl_secs" & _fkit_dl_nap=$!
+    wait "$_fkit_dl_nap" || :
+    # git does its network work in child processes, so its direct children die too; KILL in case TERM is ignored.
+    _fkit_dl_kids="$(ps -A -o pid= -o ppid= | awk -v p="$_fkit_dl_pid" '$2 == p { print $1 }')" || :
+    kill $_fkit_dl_kids "$_fkit_dl_pid" || :
+    sleep 1 || :
+    kill -9 $_fkit_dl_kids "$_fkit_dl_pid" || :
+  ) >/dev/null &
+  _fkit_dl_dog=$!
+  if wait "$_fkit_dl_pid"; then cat "$_fkit_dl_out" || :; fi
+  kill "$_fkit_dl_dog" || :
+  rm -f "$_fkit_dl_out" || :
+  exit 0
+)
 _fkit_remote_sha() {   # → head sha of $repo@$ref, or empty. Never hangs, never fails loudly.
   if command -v git >/dev/null 2>&1; then
-    GIT_TERMINAL_PROMPT=0 \
-    GIT_HTTP_LOW_SPEED_LIMIT=1000 GIT_HTTP_LOW_SPEED_TIME="$FKIT_NET_TIMEOUT" \
+    # env(1), not a prefix: a prefix on a function call is not guaranteed to reach the command inside.
+    _fkit_deadline "$FKIT_NET_TIMEOUT" env GIT_TERMINAL_PROMPT=0 \
+      GIT_HTTP_LOW_SPEED_LIMIT=1000 GIT_HTTP_LOW_SPEED_TIME="$FKIT_NET_TIMEOUT" \
       git ls-remote "https://github.com/$fkit_repo.git" "$fkit_ref" 2>/dev/null \
       | awk 'NR==1{print $1}' || true
   elif command -v curl >/dev/null 2>&1; then
@@ -102,7 +128,7 @@ _fkit_reinstall() {   # run the canonical installer for $repo@$ref into $fkit_sh
   # Download FIRST, then run (task 0481). Piped straight into sh, a failed download handed sh an empty
   # script; sh exited 0, the pipe reported sh's status, and `fkit update` printed "now at v<old>"
   # after fetching nothing. A download cut off mid-way is never half-run this way either.
-  _fkit_script="$(curl -fsSL "https://raw.githubusercontent.com/$fkit_repo/$fkit_ref/install.sh")" \
+  _fkit_script="$(curl -fsSL --max-time "$FKIT_INSTALLER_FETCH_TIMEOUT" "https://raw.githubusercontent.com/$fkit_repo/$fkit_ref/install.sh")" \
     && [ -n "$_fkit_script" ] \
     || { echo "fkit: could not download install.sh from $fkit_repo@$fkit_ref" >&2; return 1; }
   # The installer's variables go AFTER the pipe, on the `sh` that runs it (task 0481). A variable set

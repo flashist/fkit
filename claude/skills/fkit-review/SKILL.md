@@ -39,8 +39,28 @@ severity.
 the independent signal comes from.
 
 1. **Probe:** `command -v codex`. If missing → degrade (see below).
-2. **Assemble the prompt** into `.fkit/tmp/adversarial-prompt.md` (gitignored; create the dir if
-   needed) containing:
+2. **Assemble the prompt** into a per-run file, `.fkit/tmp/<key>-<run-id>-adversarial-prompt.md`
+   (gitignored).
+   ⚠️ **One prompt file per run — never a shared name.** Codex does not fail on a prompt another
+   review overwrote: it returns a confident, well-formed review of the wrong diff, and no degradation
+   branch fires.
+   - `<key>` is a readable label, first match wins: the task ID `<NNNN>` if the caller named a task;
+     else the current branch name (`git branch --show-current`) with every character outside
+     `A–Z a–z 0–9 . _ -` replaced by `-`; else `review` (detached HEAD).
+   - `<run-id>` is the UTC time to the second plus the shell's process number. It is what makes the
+     name unique: a task label alone repeats when two passes on one task overlap, and a branch label
+     alone puts every review on `main` in one file. Resolve the whole path once, with this command:
+     ```bash
+     mkdir -p .fkit/tmp && echo ".fkit/tmp/<key>-$(date -u +%Y%m%dT%H%M%SZ)-$$-adversarial-prompt.md"
+     ```
+     Then use the printed path **verbatim** for the prompt file and in the run line (item 3) — shell
+     variables do not carry between Bash calls, so never rebuild it. Write the prompt with the Write
+     tool, or through a Bash heredoc closed by the same per-run marker as fkit-adversarial-review
+     (`<<'FKIT_PROMPT_<run-id>'` … `FKIT_PROMPT_<run-id>`) — never a fixed marker such as `EOF`: an
+     inlined untracked file's own `EOF` line would cut the prompt short and run the rest as commands.
+   - `fkit-stateful-review` uses its own ledger-keyed shape instead (its Step 1).
+
+   The prompt contains:
    - The findings-only output contract, verbatim: *"Return a compact findings list and nothing else
      (no preamble, no plan, no fix diffs). For each: **id** (X1, X2, …), **file:line**, **severity**
      (low / medium / high / critical — from the blast radius you traced), **category** (correctness /
@@ -57,9 +77,10 @@ the independent signal comes from.
      marked as new files. Never `git add` anything to make a diff appear.
    - Any settled tradeoffs to prime against: the ledger's *Accepted residuals* if one exists, plus
      relevant ADR **"Re-raise only if"** entries from `ai-agents/knowledge-base/decisions/`.
-3. **Run it** (expect several minutes on a non-trivial diff — use a generous Bash timeout, ~600000 ms):
+3. **Run it** with the exact path printed in item 2, quoted (expect several minutes on a non-trivial
+   diff — use a generous Bash timeout, ~600000 ms):
    ```bash
-   codex exec --sandbox read-only --cd "$PWD" - < .fkit/tmp/adversarial-prompt.md
+   codex exec --sandbox read-only --cd "$PWD" - < ".fkit/tmp/<key>-<run-id>-adversarial-prompt.md"
    ```
 4. Capture stdout as the Codex findings; label each `[codex]`.
 

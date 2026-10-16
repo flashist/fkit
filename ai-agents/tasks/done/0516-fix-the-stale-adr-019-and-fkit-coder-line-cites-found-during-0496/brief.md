@@ -10,7 +10,7 @@ Sprint 12
 P1
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -132,7 +132,7 @@ are `fkit-wiki`'s only).
 
 - **Depends on:** nothing
 - **Blocks:** nothing
-- **Related, not a dependency: [`0394`](../0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md)**
+- **Related, not a dependency: [`0394`](../../backlog/0394-build-a-guard-for-the-adr-nnn-line-citation-class-so-the-sweep-is-not-repeated/brief.md)**
   (a guard for the `ADR-NNN:LINE` citation class). This task is one more hand sweep of the kind 0394
   wants to make unnecessary. Neither waits for the other.
 - **Coordinates with 0496, not a dependency** (owner ruling 2026-10-14: depends on nothing). 0496 adds

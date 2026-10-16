@@ -11,6 +11,13 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes �
 
 ## Unreleased
 
+- The launch-time update check can no longer hang on a stalled network: its `git ls-remote` probe now
+  gives up after about 5 s, like the curl calls, so a whole check takes about 10 s at worst and stays
+  silent. `fkit update`'s download of the installer script now gives up after 60 s with its usual
+  failure message; the installer's own downloads still have no time limit.
+- Reviews no longer share one Codex prompt file. Each run writes its own under `.fkit/tmp/` (task or
+  branch label, the round for a stateful review, and a run id), so two reviews running at once can no
+  longer hand Codex the wrong diff. Existing installs get it on next launch.
 - Every question an fkit session puts to the owner now explains first, in chat, and ends with the
   option `Explain more, then ask again`. A reply that is not a choice — that option, or a question typed
   into the dialog — gets a full answer in chat and no new dialog that turn; the same question comes

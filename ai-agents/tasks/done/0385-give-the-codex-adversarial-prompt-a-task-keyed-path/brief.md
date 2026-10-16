@@ -10,7 +10,7 @@ Sprint 12
 P2
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -187,7 +187,7 @@ the next caller, and fkit's whole direction is more parallel workers, not fewer.
 row touches them.
 
 ⚠️ **Adjacent, not a dependency:**
-[`0378`](../0378-decide-how-a-worker-tells-a-concurrent-close-s-transient-link-red-from-its-own/brief.md)
+[`0378`](../../backlog/0378-decide-how-a-worker-tells-a-concurrent-close-s-transient-link-red-from-its-own/brief.md)
 — *"decide how a worker tells a concurrent close's transient link red from its own"*. Same shape of
 problem (two workers colliding on shared state), different mechanism and different file. ⛔ **Do not
 fold them together** without a ruling.

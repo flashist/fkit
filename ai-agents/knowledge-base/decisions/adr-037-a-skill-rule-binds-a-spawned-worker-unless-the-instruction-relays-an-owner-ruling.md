@@ -28,6 +28,11 @@
   covers the same *"one skill and one role"* phrase in §Decision 1). The site list in the first line of
   this item is left byte-identical and is superseded by this line; the same append-only rule and the
   same legend apply.
+  ⚠️ 2026-10-15 (`0516`) — this ADR now carries **three** dated notes: the two the `0475` line above
+  lists, plus one cite correction at the end of **§Decision → 2. What the worker does on collision**,
+  below the paragraph *"The audit obligation, which is what makes the flag real."*; it also covers the
+  same ADR-019 line number in §Related. The count in the `0475` line is left byte-identical and is
+  superseded by this line; the same append-only rule and the same legend apply.
 
 > **Citation form (task `0160`'s ruling, applied as ADR-035 applies it).** Every rule inside a mutable
 > skill or agent file is anchored by its **step heading plus its quoted text**; line numbers appear only
@@ -213,6 +218,12 @@ collision goes in that folder's `worklog.md` **decision log** (ADR-020; the same
 `:96` attaches to unattended fixes): the rule, the instruction, which was followed, and on what
 authority. Where there is no task folder, it goes in the worker's return. **No collision, nothing to
 record** — but a collision that happened and was not recorded is a defect in the worker's output.
+
+> ⚠️ **Dated note 2026-10-15 (`0516`) — the ADR-019 line number in the paragraph above (`:96`), and
+> the same one in §Related, no longer point at their text; §2 is unchanged.** Both mean ADR-019
+> **§Decision item 4**'s closing sentence, *"Every autonomous choice — every obvious winner — is
+> recorded in the task's worklog decision-log"*. Find it by quote; ADR-019 carries appended dated
+> notes, so its line numbers move.
 
 ### 3. What the driver may not instruct
 

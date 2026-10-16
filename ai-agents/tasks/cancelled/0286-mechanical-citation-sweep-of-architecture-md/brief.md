@@ -26,7 +26,7 @@ The driver folded `0257`'s own line-shift residual into this task **rather than 
 
 ⚠️ **No verbatim owner-ruling label attaches to this row.** The two owner rulings quoted on its
 sibling rows —
-[`0284`](../../backlog/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)
+[`0284`](../../done/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)
 (*"New task + correct the false claims now (Recommended)"*) and
 [`0285`](../../done/0285-wiki-resync-of-the-install-and-self-update-page-after-0257/brief.md) (*"File a new
 resync task (Recommended)"*) — **do not cover this one.** It is a driver-filed row. **Say so if
@@ -281,7 +281,7 @@ task** — spot-checking is exactly what produced nine misses.
 - **⚠️ ORDERING — recorded as dated notes, deliberately NOT `Depends on:` edges** (the convention this
   board uses for soft ordering). **Measured 2026-08-13, four open rows touch this file or its
   citations:**
-  - **[`0284`](../../backlog/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)** —
+  - **[`0284`](../../done/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)** —
     its step 3 edits `architecture.md` prose, **shifting these line numbers again**. ✅ **Run this row
     AFTER `0284`, or accept a second pass.** ⛔ **Never concurrently.**
   - **[`0275`](../../done/0275-correct-the-stale-adversarial-review-citations-in-architecture-mds-review-walkthrough/brief.md)**

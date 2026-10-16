@@ -8,6 +8,15 @@
   `claude/scaffold/universal-rules.md:6`, `AGENTS.md:41`) and **amends
   [ADR-019](adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md) §Decision 5**
   (`adr-019:97` — *"the done-gate is unchanged and owner-only"*).
+- **Corrections:** 2026-10-15 (`0516`) — this ADR carries **one** dated note, and this bullet is it.
+  ⚠️ Three ADR-019 line numbers in this ADR no longer point at their text; the amendment is
+  unchanged. The `:97` in the **Reverses** bullet above and the `:97` in §Related's ADR-019 entry
+  mean ADR-019 **§Decision item 5**, which opens *"The done-gate is unchanged and owner-only."*;
+  §Related's `:143` means the ADR-019 **§Consequences → Residual risks** bullet *"The owner later
+  wants relayed-consent close-out"*. Find both by quote; ADR-019 carries appended dated notes, so
+  its line numbers move. Marker legend: **⚠️ = a fact that drifted** (the decision is untouched);
+  **⛔ = a decision that was overturned** (do not follow it). No existing line of this ADR was
+  edited; the note is an append, and the Status stays `accepted`.
 - **Pre-registered:** ADR-019's own "re-raise only if" named this exact decision — *"The owner later
   wants relayed-consent close-out (loop-triggered task-done) — that is a **new** consent-model decision
   needing its **own** ADR; do not settle it implicitly here."* **This is that ADR.**

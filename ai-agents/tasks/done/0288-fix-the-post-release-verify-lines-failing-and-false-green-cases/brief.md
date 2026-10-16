@@ -334,7 +334,7 @@ integrity afterwards and record it** — `HEAD`, the local tag count, `VERSION`,
   only **append** below the board's largest rank (ADR-035, `/fkit-task-brief` step 5), which is a
   position no one believes reflects its merit. **A rank nobody meant is worse than no rank.**
 - **Precedent, same day, same loop:**
-  [`0284`](../../backlog/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md) — also a
+  [`0284`](../../done/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md) — also a
   deferred review finding from a Sprint 5 task, also filed by a spawned producer on an owner ruling —
   went to the **Backlog** board on the same reasoning.
 - **⚠️ On merit, flagged for the owner — there is a real argument for pulling this into Sprint 5.**

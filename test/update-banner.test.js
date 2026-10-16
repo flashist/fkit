@@ -41,20 +41,23 @@
 // braces: the fixture's repo is a name that does not exist on GitHub, so even a leak fetches nothing.
 //
 // ⚠️ DRIVEN THROUGH `--help`, NOT `FKIT_SETUP_ONLY=1` (a deliberate deviation from the plan's §5).
-// The update check sits at :172-211 and the `--help` arm exits 0 at :214-242, so `--help` reaches
-// past the banner and stops — no project setup, no init, nothing written outside the fixture. That
-// is what makes a sealed PATH tractable at all: FKIT_SETUP_ONLY still runs the full init at :419-423,
-// which needs a working toolchain the seal deliberately withholds (the plan's own §8 anticipated
-// this: the fixture only needs enough tools to reach the end of the banner block). It is argv-blind, so
-// nothing is lost — and the last test in this file pins that by driving a REAL `fkit coder`
-// setup-only launch and requiring the same banner.
+// The update check (the block under `# Automatic: a throttled check that only ever PRINTS.`) runs
+// before the `-h|--help)` arm, which exits 0, so `--help` reaches past the banner and stops — no
+// project setup, no init, nothing written outside the fixture. That is what makes a sealed PATH
+// tractable at all: FKIT_SETUP_ONLY still runs the full `fkit-claude-init.sh` setup, which needs a
+// working toolchain the seal deliberately withholds (the plan's own §8 anticipated this: the fixture
+// only needs enough tools to reach the end of the banner block). It is argv-blind, so nothing is
+// lost — and the last test in this file pins that by driving a REAL `fkit coder` setup-only launch
+// and requiring the same banner.
 //
 // ⚠️ FIXTURE VERSIONS ARE SYNTHETIC (9.9.x), NEVER the repo's VERSION. A release is imminent; a
 // fixture that read the real VERSION would either go red on the bump or silently stop exercising the
 // equal-version case, which is the whole defect.
 //
 // ⚠️ PROVE-RED: mutations 16 and 17 in test/prove-red.sh neuter the fix in a COPIED launcher and
-// require the '0257/equal-versions' and '0257/no-curl' assertions below to go red BY NAME.
+// require the '0257/equal-versions' and '0257/no-curl' assertions below to go red BY NAME. Mutations
+// 44, 45, 47 and 48 do the same for task 0284's git deadline: '0284/git-deadline', '0284/no-stray',
+// '0284/term-ignored' and '0284/no-stray' (its armed-watchdog check).
 
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -81,10 +84,11 @@ const INSTALLED_VERSION = '9.9.9';
 // leaked into a run, this is what it would ask for, and it resolves to nothing.
 const FAKE_REPO = 'fkit-test/no-such-repo-0257';
 
-// Every external command the launcher can reach before it exits at :242. Resolved with `command -v`
-// rather than hard-coded under /usr/bin, so the sealed PATH is built correctly on CI's ubuntu image
-// as well as on macOS.
-const NEEDED_TOOLS = ['dirname', 'sed', 'head', 'cut', 'tr', 'find', 'awk', 'cat', 'printf', 'test', 'expr'];
+// Every external command the launcher can reach before its `--help` arm exits. Resolved with
+// `command -v` rather than hard-coded under /usr/bin, so the sealed PATH is built correctly on CI's
+// ubuntu image as well as on macOS. sleep/ps/mktemp/rm/env are _fkit_deadline's (task 0284).
+const NEEDED_TOOLS = ['dirname', 'sed', 'head', 'cut', 'tr', 'find', 'awk', 'cat', 'printf', 'test', 'expr',
+  'sleep', 'ps', 'mktemp', 'rm', 'env'];
 
 const MADE = [];
 after(() => MADE.forEach((d) => { try { rmSync(d, { recursive: true, force: true }); } catch { /* best effort */ } }));
@@ -108,7 +112,8 @@ function sealedBin({ git = null, curl = null } = {}) {
   const dir = temp('fkit-banner-bin-');
   for (const t of NEEDED_TOOLS) {
     const p = which(t);
-    if (p) { try { symlinkSync(p, join(dir, t)); } catch { /* shell builtin, or already linked */ } }
+    if (p && t === 'sleep') sleepWrapper(dir, p);
+    else if (p) { try { symlinkSync(p, join(dir, t)); } catch { /* shell builtin, or already linked */ } }
   }
   if (git) stub(dir, 'git', git);
   if (curl) stub(dir, 'curl', curl);
@@ -123,9 +128,30 @@ function stub(dir, name, body) {
   chmodSync(p, 0o755);
 }
 
+// Logs its own pid, then BECOMES the real sleep — so every logged pid is a sleep process that
+// 0284/no-stray can probe for afterwards.
+function sleepWrapper(dir, real) {
+  const p = join(dir, 'sleep');
+  writeFileSync(p, `#!/bin/sh\nprintf '%s\\n' "$$" >> "\${FKIT_TEST_SLEEP_LOG:-/dev/null}"\nexec '${real}' "$@"\n`);
+  chmodSync(p, 0o755);
+}
+
 const GIT_OK = `case "$1" in\n  ls-remote) printf '%s\\tHEAD\\n' '${REMOTE_SHA}'; exit 0 ;;\nesac\nexit 1`;
 const GIT_SAME = `case "$1" in\n  ls-remote) printf '%s\\tHEAD\\n' '${INSTALLED_SHA}'; exit 0 ;;\nesac\nexit 1`;
 const GIT_FAIL = 'exit 128';                                   // offline: ls-remote cannot resolve
+// A black-holed ls-remote. The sleep is BACKGROUNDED so the stall lives in a child process, as real
+// git's network work does; `trapTerm` makes the stub (and so its sleep) ignore SIGTERM.
+const GIT_STALL = ({ trapTerm = false } = {}) => [
+  trapTerm ? "trap '' TERM" : '',
+  'command -v sleep >/dev/null 2>&1 || { echo NO-SLEEP >> "$FKIT_TEST_GIT_LOG"; exit 99; }',
+  'echo stalling >> "$FKIT_TEST_GIT_LOG"',
+  'sleep 20 &',
+  'echo "pids $$ $!" >> "$FKIT_TEST_GIT_LOG"',
+  'wait',
+  'echo woke >> "$FKIT_TEST_GIT_LOG"',
+  `printf '%s\\tHEAD\\n' '${REMOTE_SHA}'`,
+].join('\n');
+const GIT_ENV = `echo "GTP=\${GIT_TERMINAL_PROMPT-<unset>}" >> "$FKIT_TEST_GIT_LOG"\n${GIT_OK}`;
 const CURL_VERSION = (v) => `printf '%s\\n' '${v}'; exit 0`;    // serves VERSION at raw.githubusercontent
 const CURL_FAIL = 'exit 6';                                     // offline curl: "couldn't resolve host"
 
@@ -163,7 +189,7 @@ function install({ version = INSTALLED_VERSION, sha = INSTALLED_SHA, ref = 'main
 // FKIT_NO_UPDATE_CHECK (the shared harness sets it) can never reach in and silence the feature.
 function launch(root, bin, { args = ['--help'], env = {}, cwd = null, path = null, inheritEnv = false } = {}) {
   const logs = temp('fkit-banner-log-');
-  const gitLog = join(logs, 'git'), curlLog = join(logs, 'curl');
+  const gitLog = join(logs, 'git'), curlLog = join(logs, 'curl'), sleepLog = join(logs, 'sleep');
   const PATH = path || bin;
   const base = inheritEnv ? { ...process.env } : {};
   delete base.FKIT_NO_UPDATE_CHECK;
@@ -176,6 +202,7 @@ function launch(root, bin, { args = ['--help'], env = {}, cwd = null, path = nul
       FKIT_NO_SELF_HOST: '1',
       FKIT_TEST_GIT_LOG: gitLog,
       FKIT_TEST_CURL_LOG: curlLog,
+      FKIT_TEST_SLEEP_LOG: sleepLog,
       ...env,
     },
     encoding: 'utf8',
@@ -183,7 +210,8 @@ function launch(root, bin, { args = ['--help'], env = {}, cwd = null, path = nul
   const read = (f) => (existsSync(f) ? readFileSync(f, 'utf8').trim().split('\n').filter(Boolean) : []);
   return {
     code: r.status, stdout: r.stdout || '', stderr: r.stderr || '', PATH,
-    gitCalls: read(gitLog), curlCalls: read(curlLog),
+    gitCalls: read(gitLog), curlCalls: read(curlLog), sleepPids: read(sleepLog).map(Number),
+    readSleepPids: () => read(sleepLog).map(Number),
   };
 }
 
@@ -314,7 +342,7 @@ test('installed sha == remote sha: complete silence', () => {
 
   // Silence must come from a probe that RAN and matched — not from a probe that never happened.
   // Without this, a fixture whose git went missing would pass here for the wrong reason (an empty
-  // $remote fails the `[ -n "$remote" ]` guard at :185, which is also silent).
+  // $remote fails the launcher's `[ -n "$remote" ]` guard, which is also silent).
   // ⚠️ WHAT THIS DOES NOT CATCH, measured: swapping GIT_SAME→GIT_FAIL still passes. The stub logs
   // its argv BEFORE running its body, so gitCalls is non-empty even when git exits 128 — and a
   // failed probe is genuinely indistinguishable from a match here, since `.latest` is written only
@@ -410,4 +438,134 @@ test('a real role launch banners too: --help is only this suite\'s driver, not t
   assertNoPlaceholder(line);
   assert.ok(NEW_FORM.test(line), `expected the newer-content form: ${line}`);
   assert.ok(r.gitCalls.some((c) => c.startsWith('ls-remote')), 'the stub git was never called — the shadow did not hold');
+});
+
+// ── 14-17. task 0284: the git probe has a deadline ─────────────────────────────────────────────
+// FKIT_NET_TIMEOUT is 5 s. The 10 s / 10.5 s ceilings leave 5 s of slack (4.5 s once the 1 s TERM→KILL step
+// is spent), so a loaded machine stays green; a removed deadline is still caught by the 20 s stall's "woke" check.
+
+function alive(pid) {
+  try { process.kill(pid, 0); return true; } catch (e) { return e.code !== 'ESRCH'; }
+}
+
+// The pids still alive after <ms>, polled. Async so the wait never blocks the process it probes.
+async function survivors(pids, ms) {
+  const end = Date.now() + ms;
+  let left = pids.filter(alive);
+  while (left.length && Date.now() < end) {
+    await new Promise((res) => setTimeout(res, 100));
+    left = left.filter(alive);
+  }
+  return left;
+}
+
+// The stub's own pid and its backgrounded sleep's, from its `pids <self> <child>` log line.
+function stubPids(r) {
+  const line = r.gitCalls.find((c) => c.startsWith('pids '));
+  return line ? line.split(' ').slice(1).map(Number) : [];
+}
+
+// A failing run must not leave a 20 s sleep behind for the rest of the suite. Called only on failure: a
+// pid is not an identity, and one already dead may since belong to an unrelated process.
+function reap(pids) {
+  for (const p of pids) { try { process.kill(p, 'SIGKILL'); } catch { /* already gone */ } }
+}
+
+function timedStall(git) {
+  const bin = sealedBin({ git });
+  const root = install();
+  const t0 = Date.now();
+  const r = launch(root, bin);
+  r.secs = (Date.now() - t0) / 1000;
+  r.bin = bin;
+  return r;
+}
+
+function assertStallCut(r, maxSecs) {
+  // THE SEAL FIRST: our git stalled, using a sleep that is reachable, and no curl could answer instead.
+  assertReachable(r.PATH, 'git', r.bin);
+  assertReachable(r.PATH, 'sleep', r.bin);
+  assertUnreachable(r.PATH, 'curl');
+  assert.ok(!r.gitCalls.includes('NO-SLEEP'), 'the stub git could not find sleep — it never stalled');
+  assert.ok(r.gitCalls.includes('stalling'), `the stub git never stalled: ${JSON.stringify(r.gitCalls)}`);
+  assert.ok(!r.gitCalls.includes('woke'), `the stall ran to completion — nothing cut it (${r.secs}s)`);
+
+  assert.ok(r.secs >= 4.5, `cut too early (${r.secs}s) — not the FKIT_NET_TIMEOUT deadline`);
+  assert.ok(r.secs < maxSecs, `the launcher was held ${r.secs}s by a stalled git (ceiling ${maxSecs}s)`);
+  assert.equal(r.code, 0, `a timed-out check must not fail the launch:\n${r.stderr}`);
+  assert.equal(banner(r.stdout), null, `a timed-out check printed a banner:\n${r.stdout}`);
+  assert.equal(r.stderr, '', `a timed-out check leaked to stderr:\n${r.stderr}`);
+}
+
+test('0284/git-deadline: a git ls-remote that never returns is cut at FKIT_NET_TIMEOUT, silently', () => {
+  const r = timedStall(GIT_STALL());
+  try {
+    assertStallCut(r, 10);
+  } catch (e) {
+    reap([...stubPids(r), ...r.sleepPids]);
+    throw e;
+  }
+});
+
+test('0284/term-ignored: a git that ignores SIGTERM is KILLed 1 s later', () => {
+  const r = timedStall(GIT_STALL({ trapTerm: true }));
+  try {
+    assertStallCut(r, 10.5);
+  } catch (e) {
+    reap([...stubPids(r), ...r.sleepPids]);
+    throw e;
+  }
+});
+
+test('0284/no-stray: nothing the deadline started or cut outlives the launch', async () => {
+  // Stall path: git, its stalled child, and the watchdog's own sleeps must all be gone within 2 s.
+  const stall = timedStall(GIT_STALL());
+  const stallPids = [...new Set([...stubPids(stall), ...stall.sleepPids])];   // the stub's $! is a logged sleep too
+  let left = stallPids;
+  try {
+    assert.equal(stubPids(stall).length, 2, `the stub never logged its pids: ${JSON.stringify(stall.gitCalls)}`);
+    assert.ok(stall.sleepPids.length >= 2, `expected the stub's and the watchdog's sleeps: ${stall.sleepPids}`);
+    left = await survivors(stallPids, 2000);
+    assert.deepEqual(left, [], `still running 2 s after a timed-out launch: ${left}`);
+  } catch (e) {
+    reap(left);
+    throw e;
+  }
+
+  // Normal path: the watchdog's nap is killed when git answers. 6 s, not 2: a TERM that lands before
+  // the nap's pid is recorded leaves it to finish its <=5 s on its own (the documented residual).
+  // A git that answers at once can get the watchdog TERMed before its sleep logs a pid, which leaves
+  // nothing to check — so relaunch (throttle off) until one launch logs a sleep.
+  // A launch under 4 s cannot have let the 5 s nap run out, so a later watchdog sleep can only be an armed
+  // watchdog's TERM→KILL `sleep 1`: the dog was never disarmed when git answered.
+  const okRoot = install(), okBin = sealedBin({ git: GIT_OK });
+  let ok, okDone, found = false;
+  for (let i = 0; i < 20 && !found; i++) {
+    const t0 = Date.now();
+    ok = launch(okRoot, okBin, { env: { FKIT_UPDATE_INTERVAL_MIN: '0' } });
+    okDone = Date.now();
+    assert.equal(ok.code, 0, `launch failed:\n${ok.stderr}`);
+    found = ok.sleepPids.length > 0 && okDone - t0 < 4000;
+  }
+  let okLeft = ok.sleepPids;
+  try {
+    assert.ok(found, 'no fast launch logged a watchdog sleep in 20 tries — is the deadline wired in?');
+    okLeft = await survivors(ok.sleepPids, 6000);
+    assert.deepEqual(okLeft, [], `the watchdog's sleep outlived a launch whose git answered at once: ${okLeft}`);
+    await new Promise((res) => setTimeout(res, Math.max(0, okDone + 7000 - Date.now())));
+    const later = ok.readSleepPids().filter((p) => !ok.sleepPids.includes(p));
+    assert.deepEqual(later, [], `the watchdog stayed armed after git answered: it woke and ran its KILL step (${later})`);
+  } catch (e) {
+    reap(okLeft);
+    throw e;
+  }
+});
+
+test('0284/git-env: GIT_TERMINAL_PROMPT=0 still reaches git through the deadline wrapper', () => {
+  const bin = sealedBin({ git: GIT_ENV });
+  const r = launch(install(), bin);
+  assert.equal(r.code, 0, `launch failed:\n${r.stderr}`);
+  assertReachable(r.PATH, 'git', bin);
+  assert.ok(r.gitCalls.some((c) => c.startsWith('ls-remote')), 'the stub git was never called');
+  assert.ok(r.gitCalls.includes('GTP=0'), `git did not see GIT_TERMINAL_PROMPT=0: ${JSON.stringify(r.gitCalls)}`);
 });

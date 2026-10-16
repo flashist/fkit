@@ -35,8 +35,28 @@ plan hunt list below.
 ## Primary mode — run the pass on Codex
 
 1. **Probe:** `command -v codex`. If missing, use the fallback below.
-2. **Assemble the prompt** into `.fkit/tmp/adversarial-prompt.md` (gitignored — the only file you ever
-   write; create the dir if needed):
+2. **Assemble the prompt** into a per-run file, `.fkit/tmp/<key>-<run-id>-adversarial-prompt.md`
+   (gitignored — the only file you ever write).
+   ⚠️ **One prompt file per run — never a shared name.** Codex does not fail on a prompt another
+   review overwrote: it returns a confident, well-formed review of the wrong diff, and no degradation
+   branch fires.
+   - `<key>` is a readable label, first match wins: the task ID `<NNNN>` if you were given a task
+     (for a plan, from the brief path's task folder → `<NNNN>-plan`); else the current branch name
+     (`git branch --show-current`) with every character outside `A–Z a–z 0–9 . _ -` replaced by `-`;
+     else `review` (detached HEAD).
+   - `<run-id>` is the UTC time to the second plus the shell's process number. It is what makes the
+     name unique: your pass and the lead reviewer's can run on one task at once. Resolve the whole
+     path once, with this command:
+     ```bash
+     mkdir -p .fkit/tmp && echo ".fkit/tmp/<key>-$(date -u +%Y%m%dT%H%M%SZ)-$$-adversarial-prompt.md"
+     ```
+     Then use the printed path **verbatim** — shell variables do not carry between Bash calls, so
+     never rebuild it. Write the prompt through a Bash heredoc to that path, quoted, with an end marker
+     carrying the same run id — an inlined file's own `EOF` line would end a fixed marker early and run
+     the rest as commands: `cat > ".fkit/tmp/<key>-<run-id>-adversarial-prompt.md" <<'FKIT_PROMPT_<run-id>'`,
+     closed by the line `FKIT_PROMPT_<run-id>`.
+
+   The prompt contains:
    - The **output contract** below, verbatim.
    - The scope/focus statement.
    - **The diff, inline:** `git diff <base>...HEAD` for a branch scope; `git diff` + `git diff
@@ -45,9 +65,10 @@ plan hunt list below.
    - Any settled-tradeoffs priming you were handed (accepted residuals / ADR "re-raise only if").
    - **For a plan instead of a diff:** inline the plan text, marked plainly as **a plan, not a diff**,
      plus the brief's path, the plan hunt list below and its location rule.
-3. **Run it** (expect several minutes; generous Bash timeout, ~600000 ms):
+3. **Run it** with the exact path printed in item 2, quoted (expect several minutes; generous Bash
+   timeout, ~600000 ms):
    ```bash
-   codex exec --sandbox read-only --cd "$PWD" - < .fkit/tmp/adversarial-prompt.md
+   codex exec --sandbox read-only --cd "$PWD" - < ".fkit/tmp/<key>-<run-id>-adversarial-prompt.md"
    ```
 4. **Relay Codex's findings verbatim**, labeled `[codex]`. Do not soften, reinterpret, or filter them —
    deduping and verification are the lead reviewer's job.

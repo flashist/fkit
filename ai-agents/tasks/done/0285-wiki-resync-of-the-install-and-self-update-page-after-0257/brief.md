@@ -256,7 +256,7 @@ librarian's call which fits**).
     page, currently ranked **Sprint 5 P10**. ✅ **Run `0258` first.** It is scheduled, it is scoped to
     a different section (§Release + the `**Key files**` line), and running this row first would leave
     it editing a page that moved under it. ⛔ **Never concurrently.**
-  - **[`0284`](../../backlog/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)** —
+  - **[`0284`](../../done/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md)** —
     fixes the unbounded git path — **and, since the owner's 2026-08-13 "Fold into 0284 (Recommended)"
     ruling, `_fkit_reinstall`'s missing `--max-time` as well.** ⚠️ **If `0284` lands first, the correct
     page text is "bounded", not "unbounded", and writing the gap here would be stale on arrival.**

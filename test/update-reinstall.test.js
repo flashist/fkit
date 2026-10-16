@@ -27,7 +27,8 @@
 //
 // ⚠️ PROVE-RED: mutation 41 in test/prove-red.sh strips the assignments in front of the installer's
 // `sh` in a COPIED launcher and requires '0481/version-only' below to go red BY NAME. FKIT_REINSTALL_ROOT
-// is the seam (the FKIT_BANNER_ROOT pattern).
+// is the seam (the FKIT_BANNER_ROOT pattern). Mutation 46 strips the install.sh download's
+// `--max-time` (task 0284) and requires '0284/reinstall-deadline' to go red.
 
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -141,6 +142,15 @@ const CURL_SERVE = [
   'exit 22',
 ].join('\n');
 const CURL_FAIL = 'exit 22';             // every download fails (HTTP error under -f)
+// The install.sh download times out part-way: curl has written the first line of a script that would
+// leave a capture file if it ever ran, then exits 28 (CURLE_OPERATION_TIMEDOUT), as --max-time does.
+const CURL_PARTIAL_TIMEOUT = [
+  'for a in "$@"; do url="$a"; done',
+  'case "${url:-}" in',
+  '  https://raw.githubusercontent.com/*/install.sh) printf \'%s\\n\' \': > "$FKIT_TEST_CAPTURE"\'; exit 28 ;;',
+  'esac',
+  'exit 22',
+].join('\n');
 
 // ── fixtures ───────────────────────────────────────────────────────────────────────────────────
 
@@ -570,5 +580,35 @@ test('0481/env-share-record-precedence: env beats the named install\'s record, f
   r = run(bin, { cmd: t.cmd, home, env: { FKIT_SHARE: t.root } });
   assert.equal(r.code, 0, `update failed:\n${r.stdout}\n${r.stderr}`);
   assert.equal(r.captured?.BIN, join(home, '.local', 'bin'), 'the proven default bin was not used');
+  assertSealed(r, bin);
+});
+
+// ── 17-18. task 0284: the install.sh download has a deadline, and a cut-off one never runs ──────
+
+test('0284/reinstall-deadline: the install.sh download is bounded by curl --max-time 60', () => {
+  const home = temp('fkit-reinstall-home-');
+  const root = install(temp('fkit-reinstall-root-'),
+    { repo: FAKE_REPO, ref: 'main', bin: temp('fkit-reinstall-userbin-') });
+  const bin = sealedBin({ curl: CURL_SERVE });
+  const r = update(root, bin, { home });
+  assert.equal(r.code, 0, `update failed:\n${r.stdout}\n${r.stderr}`);
+  const fetch = r.curlCalls.find((c) => c.includes(`raw.githubusercontent.com/${FAKE_REPO}/main/install.sh`));
+  assert.ok(fetch, `curl was never asked for install.sh: ${JSON.stringify(r.curlCalls)}`);
+  assert.match(fetch, /(^| )--max-time 60( |$)/, `the install.sh download carries no 60 s deadline: ${fetch}`);
+  assertSealed(r, bin);
+});
+
+test('0284/reinstall-timeout-not-run: a timed-out install.sh download fails the update and is never run', () => {
+  const home = temp('fkit-reinstall-home-');
+  const root = install(temp('fkit-reinstall-root-'),
+    { repo: FAKE_REPO, ref: 'main', bin: temp('fkit-reinstall-userbin-') });
+  const bin = sealedBin({ curl: CURL_PARTIAL_TIMEOUT });
+  const r = update(root, bin, { home });
+  assert.equal(r.code, 1, `expected exit 1:\n${r.stdout}\n${r.stderr}`);
+  assert.match(r.stderr, new RegExp(`fkit: could not download install\\.sh from ${FAKE_REPO}@main`));
+  assert.match(r.stderr, /fkit: update failed\./);
+  assert.ok(!r.stdout.includes('now at'), `printed "now at" after a timed-out download:\n${r.stdout}`);
+  assert.equal(r.captured, null, 'the partial install.sh was run');
+  assertAsked(r, FAKE_REPO, 'main');
   assertSealed(r, bin);
 });

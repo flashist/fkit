@@ -1,6 +1,6 @@
-# Sprint 12 — in planning (goal not yet set)
+# Sprint 12 — goal not yet set
 
-> ## 🔲 Backlog — 2026-10-15.
+> ## 🔄 In progress — 2026-10-15.
 >
 > **Authority.** This board exists by **owner instructions and a ruling given 2026-10-15 in a
 > `fkit lead` session**, relayed into a spawned `fkit-producer` that has **no owner channel**
@@ -12,6 +12,7 @@
 > | R2 | Via `AskUserQuestion`, 2026-10-15, `fkit lead` session — selected option text, verbatim: *"Sprint 12 (Recommended)"* (description he saw: *"Next free number. Producer creates sprint-12.md (not started), closes Sprint 10, and 0474 moves to Sprint 12. Knock-on: none."*) | The number `12`. `Sprint 11` was already taken — the aiboard-convergence sprint, closed 2026-09-30, archived at [`done/sprint-11.md`](done/sprint-11.md) — so the owner's *"Sprint 11"* in R1 reads as *"the next sprint"*, and this is it |
 > | R3 | Via `AskUserQuestion`, 2026-10-15, `fkit lead` session — selected option text, verbatim: *"Set A, 9 tasks (Recommended)"* (description he saw: *"0516, 0385, 0284, 0334, 0507, 0510, 0508, 0503, 0500. Knock-on: 0509, 0511–0515 (Backlog) wait on 0507."*) | The nine tasks pulled from the [Backlog board](backlog.md), ranked `P1`–`P9` in the run order the lead relayed with the set. All stay `🔲 Backlog` — placing a task is not the owner's word to start it |
 > | R4 | Via `AskUserQuestion`, 2026-10-15, `fkit lead` session — selected option text, verbatim: *"Fix it (Recommended)"* (description he saw: *"A producer changes that one line to \"➡️ Moved to Sprint 12, priority P10\". The Sprint 10 history stays on the closed board. Knock-on: none."*) | `0474`'s row on the [Backlog board](backlog.md) now points here, `— priority P10` |
+> | R5 | Via `AskUserQuestion`, 2026-10-15, `fkit lead` session running `/fkit-sprint-ship-loop --plan-review`, relayed verbatim to a spawned `fkit-producer` — question: *"No sprint is marked started. How should this --plan-review run proceed?"*; selected option text, verbatim: *"Start Sprint 12 and drive it (Recommended)"* (description he saw: *"A producer marks Sprint 12 🔄 In progress (goal still unset), then I drive 0516 first with plan review on."*) | The sprint is **started** — line 3 now reads `🔄 In progress` (R1's `🔲 Backlog` reading is superseded). The goal stays **not set**. It is also the owner's word to start `0516` (its brief's *"do not start without the owner's specific word"*), now `🔄 In progress`. Every other row stays as it was — starting the sprint is not his word to start `0474` |
 >
 > ⚠️ **What this producer chose that nobody ruled** — the title (a placeholder until the owner sets a
 > goal) and `0474`'s rank `P1` (it is the only row; it arrived by append when `/fkit-sprint-done`
@@ -40,10 +41,10 @@ not set.*
 
 | Status | Priority | Task | Brief |
 |---|---|---|---|
-| 🔲 Backlog | P1 | **Fix the stale ADR-019 and `fkit-coder.md` line cites found during `0496`** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Owner `fkit-coder`)* | [`0516-fix-the-stale-adr-019-and-fkit-coder-line-cites-found-during-0496`](../tasks/backlog/0516-fix-the-stale-adr-019-and-fkit-coder-line-cites-found-during-0496/brief.md) |
-| 🔲 Backlog | P2 | **Give the Codex adversarial prompt a task-keyed path — two concurrent reviews silently share one file today** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Owner `fkit-coder`)* | [`0385-give-the-codex-adversarial-prompt-a-task-keyed-path`](../tasks/backlog/0385-give-the-codex-adversarial-prompt-a-task-keyed-path/brief.md) |
-| 🔲 Backlog | P3 | **Bound the update check's git path — `_fkit_remote_sha` has no deadline and hangs** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Edits `claude/fkit-claude.sh` — run before `0508`. Owner `fkit-coder`)* | [`0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs`](../tasks/backlog/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md) |
-| 🔲 Backlog | P4 | **Fix the launcher's symlink-blind agents fail-safe** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Edits `claude/fkit-claude.sh` — run before `0508`. Owner `fkit-coder`)* | [`0334-fix-the-launchers-symlink-blind-agents-fail-safe`](../tasks/backlog/0334-fix-the-launchers-symlink-blind-agents-fail-safe/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P1 | **Fix the stale ADR-019 and `fkit-coder.md` line cites found during `0496`** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Owner `fkit-coder`)* | [`0516-fix-the-stale-adr-019-and-fkit-coder-line-cites-found-during-0496`](../tasks/done/0516-fix-the-stale-adr-019-and-fkit-coder-line-cites-found-during-0496/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P2 | **Give the Codex adversarial prompt a task-keyed path — two concurrent reviews silently share one file today** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Owner `fkit-coder`)* | [`0385-give-the-codex-adversarial-prompt-a-task-keyed-path`](../tasks/done/0385-give-the-codex-adversarial-prompt-a-task-keyed-path/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P3 | **Bound the update check's git path — `_fkit_remote_sha` has no deadline and hangs** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Edits `claude/fkit-claude.sh` — run before `0508`. Owner `fkit-coder`)* | [`0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs`](../tasks/done/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md) |
+| 🔄 In progress | P4 | **Fix the launcher's symlink-blind agents fail-safe** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Edits `claude/fkit-claude.sh` — run before `0508`. Owner `fkit-coder`)* | [`0334-fix-the-launchers-symlink-blind-agents-fail-safe`](../tasks/backlog/0334-fix-the-launchers-symlink-blind-agents-fail-safe/brief.md) |
 | 🔲 Backlog | P5 | **Pilot: clean up code comments in the hook scripts and `skills-for-role.sh`, and set the method for the series** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Its `0506` dependency is done. `0510`, `0508` here and `0509`, `0511`–`0515` on the Backlog board wait on it. Owner `fkit-coder`)* | [`0507-pilot-clean-up-code-comments-in-the-hook-scripts-and-skills-for-role`](../tasks/backlog/0507-pilot-clean-up-code-comments-in-the-hook-scripts-and-skills-for-role/brief.md) |
 | 🔲 Backlog | P6 | **Clean up code comments in the `/fkit-heal` scripts and the throughput counter** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Waits on `0507` (this sprint, `P5`). Owner `fkit-coder`)* | [`0510-clean-up-code-comments-in-the-heal-scripts-and-the-throughput-counter`](../tasks/backlog/0510-clean-up-code-comments-in-the-heal-scripts-and-the-throughput-counter/brief.md) |
 | 🔲 Backlog | P7 | **Clean up code comments in the launcher and init scripts** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Waits on `0507` (this sprint, `P5`). Run after `0284` and `0334` — all three edit `claude/fkit-claude.sh`. Owner `fkit-coder`)* | [`0508-clean-up-code-comments-in-the-launcher-and-init-scripts`](../tasks/backlog/0508-clean-up-code-comments-in-the-launcher-and-init-scripts/brief.md) |
@@ -67,8 +68,8 @@ not set.*
 - **`0474` is owner-paced, not loop-shippable in the usual sense.** The owner runs the trial through
   his own `/fkit-sprint-ship-loop` runs, *"as often as he needs, with no task count"*; it ends when he
   says he has seen enough. Expect it to stay open while other rows close.
-- **This board is `🔲 Backlog`, so `/fkit-status` and `select-active` will not report it as active.**
-  The producer sets `🔄 In progress` by hand once the owner says to start the sprint.
+- **This board is `🔄 In progress` since 2026-10-15 (R5)**, so `/fkit-status` and `select-active`
+  report it as active. Before R5 it was `🔲 Backlog` and was not.
 
 ## Notes
 
@@ -78,3 +79,8 @@ not set.*
   edits each: row here, `➡️ Moved to [Sprint 12](sprint-12.md) — priority P<n>` there, the brief's
   `## Sprint` and `## Priority`); `0474` re-ranked `P1` → `P10` (unruled, see the banner); `0474`'s
   Backlog-board marker repointed here on R4. By a spawned `fkit-producer` with no owner channel.
+- **2026-10-15 — sprint started** on R5: line 3 `🔲 Backlog` → `🔄 In progress`, goal still not set;
+  H1 placeholder `in planning (goal not yet set)` → `goal not yet set` (unruled wording, so the title
+  stops saying *"in planning"*). `0516` marked `🔄 In progress` here and in its brief — the sprint
+  loop's *mark in progress before driving* step. No other row touched. By a spawned `fkit-producer`
+  with no owner channel.

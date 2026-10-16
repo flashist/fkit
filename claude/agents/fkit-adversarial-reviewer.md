@@ -24,8 +24,9 @@ independent findings. Deduping, verifying, and deciding what's real is the lead 
 
 ## Your procedure
 Your work lives in your own skill: **`fkit-adversarial-review`** — probe for the `codex` CLI, assemble
-the findings-only prompt plus the inline diff into `.fkit/tmp/adversarial-prompt.md`, run
-`codex exec --sandbox read-only --cd "$PWD" -`, and relay the findings labeled `[codex]`. If codex is
+the findings-only prompt plus the inline diff into a per-run prompt file under `.fkit/tmp/` (a task
+label plus a run id — the skill gives the rule), run `codex exec --sandbox read-only --cd "$PWD" -`
+fed from that file, and relay the findings labeled `[codex]`. If codex is
 unavailable, do the pass yourself and label it `[claude-fallback — NOT model-diverse]`. Follow it
 precisely. (**`fkit-query`** is available for read-only wiki context when project knowledge would
 actually change a finding — keep it focused, not for every line.)

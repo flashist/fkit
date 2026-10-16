@@ -33,6 +33,10 @@
   [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md) below **§Decision item 3**
   (*"Per-task drive sequence"*). The site list in the `0475` line is left byte-identical and is
   superseded by this line; the same append-only rule and the same legend apply.
+  ⚠️ 2026-10-15 (`0516`) — this ADR now carries **five** dated notes: the four the `0473` line above
+  lists, plus one cite correction below **§Amendment → A2**'s paragraph *"ADR-019's audit obligation
+  transfers with its permission"*. The count in the `0473` line is left byte-identical and is
+  superseded by this line; the same append-only rule and the same legend apply.
 - **Evidence:** [`reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md`](../reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md)
   §5 (the contract), §5.3 (the live-relay gate), §5.4 (stop conditions).
 
@@ -220,6 +224,13 @@ without asking and each obvious-winner call it made**, so what the loop did unat
 afterwards. This is not decoration — **A4 bullet 2's reopening condition is unsatisfiable without it**,
 because nothing else on this path records what was applied autonomously. ADR-019 `:148-150` also names
 the obvious-winner self-classification *"the sharpest edge"*; that accepted cost transfers unchanged.
+
+> ⚠️ **Dated note 2026-10-15 (`0516`) — the two ADR-019 line numbers in the paragraph above (`:96`,
+> `:148-150`) no longer point at their text; A2 is unchanged.** The first means ADR-019 **§Decision
+> item 4**'s closing sentence, *"Every autonomous choice — every obvious winner — is recorded in the
+> task's worklog decision-log"*; the second means ADR-019 **§Consequences → Negative / costs**, the
+> bullet *"A soft self-classification boundary"* (*"This is the sharpest edge"*). Find both by quote;
+> ADR-019 carries appended dated notes, so its line numbers move.
 
 > **Stated as a requirement, not yet true of the implementation.**
 > `claude/skills/fkit-sprint-ship-loop/SKILL.md:105` currently asks the Process-review worker only for
