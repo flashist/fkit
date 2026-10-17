@@ -10,7 +10,7 @@ Sprint 12
 P4
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -121,7 +121,7 @@ expression was exercised in isolation, exactly as cases A–E were. **Control re
 same pass:** a real, genuinely-empty `.claude/agents/` gives **rc≠0** and the guard fires correctly, so
 F is not an artefact of the harness.
 
-⚠️ **Case F is the shape that arrives via [`0336`](../0336-guard-inits-claude-refresh-against-a-wrong-type-squatter-and-name-every-symlinked-entry/brief.md)'s
+⚠️ **Case F is the shape that arrives via [`0336`](../../backlog/0336-guard-inits-claude-refresh-against-a-wrong-type-squatter-and-name-every-symlinked-entry/brief.md)'s
 R6 shape A**, where init's `rm -f` deletes every real `fkit-*.md`, fails on the squatting directory, and
 leaves that directory as the **only** thing the glob can still match. ⛔ **So F is not a curiosity — it
 is the end state of a defect that already has an owning task**, and this guard waves it through.
@@ -183,7 +183,7 @@ here any more":**
 - ⛔ **And cases E and F are not historical at all** — a dangling agent symlink needs no buggy init to
   arise (a moved or deleted target is enough), and **case F needs no symlink and no buggy init either**:
   a real directory at an `fkit-*.md` name is reachable on a fully current install, and
-  [`0336`](../0336-guard-inits-claude-refresh-against-a-wrong-type-squatter-and-name-every-symlinked-entry/brief.md)'s
+  [`0336`](../../backlog/0336-guard-inits-claude-refresh-against-a-wrong-type-squatter-and-name-every-symlinked-entry/brief.md)'s
   R6 shape A **produces exactly that state today**. ⭐ **So two of the three triggers survive every init
   fix that has landed, and the third survives on every machine that ran a buggy init.**
 
@@ -300,7 +300,7 @@ exactly as `0327` shipped it; this task changes only the launcher's own read.
 - ⛔⛔ **NOT COVERED BY `0330`, AND NEITHER CLOSES THE OTHER — MEASURED, NOT ASSERTED.** The overlap was
   determined by reading `0330`'s brief and the launcher itself, 2026-08-24:
 
-  | | This task (`0334`) | [`0330`](../0330-gate-the-launchers-fkit-lockdown-writes-against-a-symlinked-fkit/brief.md) |
+  | | This task (`0334`) | [`0330`](../../backlog/0330-gate-the-launchers-fkit-lockdown-writes-against-a-symlinked-fkit/brief.md) |
   |---|---|---|
   | **Direction** | **READ** — a `ls`/glob test that decides whether to launch | **WRITE** — `mkdir -p` and `printf >` that create and overwrite |
   | **Path** | `$proj/.claude/agents/` | `$proj/.fkit/` |
@@ -331,7 +331,7 @@ exactly as `0327` shipped it; this task changes only the launcher's own read.
   - **`0045`** — the **read**-side symlink hazard under **`ai-agents/`**, in **init**. ⚠️ **Closest
     relative of the six — same direction (read), same hazard class — but a different script and a
     different tree.** ⛔ **Neither closes the other.**
-  - 🆕 **[`0336`](../0336-guard-inits-claude-refresh-against-a-wrong-type-squatter-and-name-every-symlinked-entry/brief.md)**
+  - 🆕 **[`0336`](../../backlog/0336-guard-inits-claude-refresh-against-a-wrong-type-squatter-and-name-every-symlinked-entry/brief.md)**
     — init's wrong-type squatter (R6) and its skills-refusal message (R7). ⭐ **The CAUSE-AND-EFFECT
     pair for case F, and the relationship must be stated correctly or one will be closed on the other:**
     `0336`'s R6 shape A is how a project **arrives** at case F (init's `rm -f` wipes the real agents and

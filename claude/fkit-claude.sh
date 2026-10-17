@@ -465,15 +465,50 @@ if [ "$setup_ok" = 0 ]; then
 fi
 
 # The promise is "a setup failure never costs you a project that ALREADY has its agents" — not "fkit
-# can start a session out of nothing". If setup failed AND no fkit agent was ever written to disk,
+# can start a session out of nothing". If setup failed AND no usable fkit agent is on disk,
 # there is nothing to launch into: `claude --agent fkit-<role>` cannot resolve an agent file that does
 # not exist, and it would die on its own confusing "agent not found". Say so plainly instead.
 #
 # We deliberately do NOT drop --agent to force *some* session: an unroled session carries no ADR-010
 # lockdown, so it would fail OPEN — every role's skills live at once. Refusing is the safe answer.
-if [ "$setup_ok" = 0 ] && ! ls "$proj"/.claude/agents/fkit-*.md >/dev/null 2>&1; then
-  echo "⚠ fkit has no agents installed here, so there is no session to start." >&2
-  echo "  Setup could not write to the project — check that $proj is writable, then: fkit" >&2
+# Name existence proves nothing: the glob walks through a symlinked .claude or agents/, and a dangling
+# link or a directory named fkit-*.md still matches (task 0334).
+agents_usable() {   # → 0 if a readable regular .claude/agents/fkit-*.md exists with no symlink on the way; else one "    <path> — <why>" line per blocker
+  for _p in "$proj/.claude" "$proj/.claude/agents"; do
+    if [ -L "$_p" ]; then
+      printf '    %s — a symlink; fkit will not read agents through one\n' "$_p"; return 1
+    elif [ -e "$_p" ] && [ ! -d "$_p" ]; then
+      printf '    %s — not a directory\n' "$_p"; return 1
+    fi
+  done
+  _why=""
+  for _a in "$proj"/.claude/agents/fkit-*.md; do
+    if [ -L "$_a" ]; then
+      if [ -e "$_a" ]; then _r="a symlink; fkit will not read an agent through one"
+      else _r="a symlink to something that does not exist"; fi
+    elif [ -d "$_a" ]; then _r="a directory, not an agent file"
+    elif [ -f "$_a" ]; then
+      [ -r "$_a" ] && return 0
+      _r="not readable; check its permissions"
+    elif [ -e "$_a" ]; then _r="not a regular file"
+    else continue
+    fi
+    _why="$_why    $_a — $_r
+"
+  done
+  printf '%s' "$_why"
+  return 1
+}
+if [ "$setup_ok" = 0 ] && ! agents_why="$(agents_usable)"; then
+  if [ -z "$agents_why" ]; then
+    echo "⚠ fkit has no agents installed here, so there is no session to start." >&2
+    echo "  Setup could not write to the project — check that $proj is writable, then: fkit" >&2
+  else
+    echo "⚠ fkit found nothing here it can launch as an agent, so there is no session to start:" >&2
+    printf '%s\n' "$agents_why" >&2
+    echo "  An agent must be a readable, regular .claude/agents/fkit-<role>.md, with no symlink on the way." >&2
+    echo "  Fix or move what is named above, then: fkit" >&2
+  fi
   exit 1
 fi
 

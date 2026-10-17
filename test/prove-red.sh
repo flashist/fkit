@@ -17,7 +17,7 @@
 #     reach the real `curl | sh` network installer. We drop a package.json marker in $work so the
 #     copies read as source checkouts (belt-and-braces; the harness also stubs curl to a no-op).
 #
-# FORTY-EIGHT mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
+# FIFTY-FIVE mutations, each caught by a NAMED assertion. ⚠️ KEEP THIS LIST IN STEP WHEN YOU ADD ONE — it
 # read "Two mutations" while seven more sat below it (task 0136 round-1 review R5), in the one file
 # whose entire thesis is that an unexercised gate hides drift. Each mutation's own `--- Mutation N:`
 # block below is the authority on what it does and why; this is the index.
@@ -72,6 +72,13 @@
 #  46. Strip the install.sh download's --max-time      → "0284/reinstall-deadline"              (task 0284)
 #  47. Drop the watchdog's KILL escalation             → "0284/term-ignored"                    (task 0284)
 #  48. Leave the watchdog armed after git answers      → "0284/no-stray"                        (task 0284)
+#  49. Agents check → bare name existence (`ls`)       → "0334/F+D"                             (task 0334)
+#  50. Agents check → name existence through links    → "0334/A", "0334/F+D"                   (task 0334)
+#  51. Drop the ancestor symlink test                 → "0334/A"                               (task 0334)
+#  52. Drop the agent file's readability test         → "0334/unreadable"                      (task 0334)
+#  53. Drop the agents check's setup_ok gate          → "0334/gate"                            (task 0334)
+#  54. Drop the agent file's own symlink test         → "0334/C", "0334/E"                     (task 0334)
+#  55. Drop the ancestor not-a-directory test         → "0334/not-a-dir"                       (task 0334)
 #
 # ⚠️ MUTATIONS 18-22, 25, 26, 42 AND 43 TARGET `bin/`, NOT A COPIED LAUNCHER TREE (18-22 were the first, task 0288). Their seam
 # is FKIT_RELEASE_MJS — a SINGLE-FILE redirect (the FKIT_LAUNCHER pattern, not the whole-tree
@@ -97,7 +104,7 @@
 # $work.
 #
 # HOW TO READ A RED (task 0477). Every step block starts with `step <label>` (its printed number: 0a…0p,
-# 1…48), which points $out at that step's OWN output file. When a step fails, the next `step` call
+# 1…55), which points $out at that step's OWN output file. When a step fails, the next `step` call
 # copies its output to a `fkit-prove-red-kept.XXXXXX` dir under $TMPDIR (outside $work and outside the
 # repo — the trap deletes $work, and evidence must survive it) and prints `↳ kept this step's output:
 # <path>`. The final ✗ line names every failed step and the kept dir. An abnormal exit keeps the
@@ -349,6 +356,17 @@ run_banner_suite() {   # <claude-tree-root>
 run_reinstall_suite() {   # <claude-tree-root>
   [ ! -e "$out" ] || { echo reused; return 0; }
   if FKIT_REINSTALL_ROOT="$1" node --test "$repo/test/update-reinstall.test.js" >"$out" 2>&1; then
+    echo green
+  else
+    echo red
+  fi
+}
+
+# Run ONLY the launcher agents-guard suite against a launcher path (task 0334). The suite copies the
+# launcher's whole directory and stubs its init, so a mutant must sit in a make_claude_copy tree.
+run_agents_guard_suite() {   # <launcher-path>
+  [ ! -e "$out" ] || { echo reused; return 0; }
+  if FKIT_LAUNCHER="$1" node --test "$repo/test/launcher-agents-guard.test.js" >"$out" 2>&1; then
     echo green
   else
     echo red
@@ -2294,7 +2312,214 @@ elif grep -Eq '(✖|not ok).*0284/git-deadline' "$out"; then
   echo "   ✗ 0284/git-deadline went red too — this mutant should leave the bound intact."; fail=1
 fi
 
-step end   # finishes step 48: keeps its output if it failed; `end` itself runs nothing
+# --- Mutations 49–55 (task 0334): the launcher's agents fail-safe. Each mutant line comes from a file
+#     via getline and replaces the ONE line holding a literal anchor, found with index() — never a sed
+#     regex, whose `[`, `]` and `&` misfire on these shell lines. Every step also requires
+#     0334/healthy to stay GREEN: a mutant that breaks the launcher's syntax would red everything,
+#     named test included, and pass as a catch.
+swap_literal_line() {   # <file> <anchor-file> <replacement-file>
+  cp "$1" "$1.orig"
+  awk -v anchorf="$2" -v repl="$3" '
+    BEGIN { getline anchor < anchorf; close(anchorf); swapped = 0 }
+    index($0, anchor) > 0 && swapped == 0 {
+      while ((getline line < repl) > 0) print line
+      close(repl)
+      swapped = 1
+      next
+    }
+    { print }
+  ' "$1.orig" > "$1"
+}
+
+# The no-op / single-line / landed guards, for a swap_literal_line mutant. <N> <what> <file> <anchor-file> <marker>
+check_literal_swap() {
+  if [ "$(grep -cFf "$4" "$3.orig")" != 1 ]; then
+    echo "$1. $2 ... ✗ WRONG TARGET — the anchor no longer matches exactly ONE launcher line (reworded or"
+    echo "   duplicated?). This gate is disarmed. Fix the mutation in test/prove-red.sh."; fail=1
+  elif cmp -s "$3" "$3.orig"; then
+    echo "$1. $2 ... ✗ MUTATION WAS A NO-OP — the awk no longer matches. This gate is disarmed: it would"
+    echo "   report success while proving nothing. Fix the mutation in test/prove-red.sh."; fail=1
+  elif [ "$(diff "$3.orig" "$3" | grep -c '^[<>]')" != 2 ]; then
+    echo "$1. $2 ... ✗ WRONG TARGET — the swap changed more than one line."; fail=1
+  elif [ "$(grep -cF "$5" "$3")" != 1 ]; then
+    echo "$1. $2 ... ✗ MUTATION DID NOT LAND — the marker is absent or repeated in the mutant."; fail=1
+  fi
+}
+
+# A red only counts if the launcher still runs: 0334/healthy must have passed. <N>
+check_healthy_green() {
+  if grep -Eq '(✖|not ok).*0334/healthy' "$out" || ! grep -Eq '(✔|^ok [0-9]+ - ).*0334/healthy' "$out"; then
+    echo "   ✗ $1: 0334/healthy did not pass — the mutant broke the launcher outright, so this red proves"
+    echo "     nothing about the check."; fail=1
+  fi
+}
+
+# --- Mutation 49: the agents check back to bare NAME EXISTENCE (`ls`, the pre-0334 guard) → 0334/F+D
+#     must go red (a directory named fkit-x.md satisfies `ls`), while its D half — plain absence, which
+#     `ls` still catches — stays green. ------------------------------------------------------------------
+step 49
+m49="$(make_claude_copy claude-mutant-agents-ls)"
+cat > "$work/m49-anchor.txt" <<'ANCHOR_LINE'
+agents_usable() {
+ANCHOR_LINE
+cat > "$work/m49-line.txt" <<'MUTANT_LINE'
+agents_usable() { ls "$proj"/.claude/agents/fkit-*.md >/dev/null 2>&1 && return 0 # mutation: bare name existence
+MUTANT_LINE
+swap_literal_line "$m49" "$work/m49-anchor.txt" "$work/m49-line.txt"
+check_literal_swap 49 "agents check → ls" "$m49" "$work/m49-anchor.txt" 'mutation: bare name existence'
+printf '49. agents check → bare name existence — "0334/F+D" should go RED, its D half stay green ... '
+r49="$(run_agents_guard_suite "$m49")"; echo "$r49"
+if [ "$r49" != red ]; then
+  echo "   ✗ the suite did NOT catch a name-existence guard — a directory named fkit-x.md would start a"
+  echo "     session again."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0334/F\+D:' "$out"; then
+  echo "   ✗ suite went red but NOT at 0334/F+D — red for the wrong reason."; fail=1
+elif grep -q 'AssertionError.*: D: ' "$out"; then
+  echo "   ✗ the D half went red too — plain absence is still caught by \`ls\`, so it must stay green."; fail=1
+fi
+check_healthy_green 49
+
+# --- Mutation 50: the same, with `ls -L` — name existence THROUGH links → 0334/A and 0334/F+D must go
+#     red, while 0334/E stays green (`ls -L` fails on a dangling link, so E falls through to the real
+#     check). Proves A is caught by the chain check, not by link-following. ----------------------------
+step 50
+m50="$(make_claude_copy claude-mutant-agents-ls-L)"
+cat > "$work/m50-anchor.txt" <<'ANCHOR_LINE'
+agents_usable() {
+ANCHOR_LINE
+cat > "$work/m50-line.txt" <<'MUTANT_LINE'
+agents_usable() { ls -L "$proj"/.claude/agents/fkit-*.md >/dev/null 2>&1 && return 0 # mutation: name existence through links
+MUTANT_LINE
+swap_literal_line "$m50" "$work/m50-anchor.txt" "$work/m50-line.txt"
+check_literal_swap 50 "agents check → ls -L" "$m50" "$work/m50-anchor.txt" 'mutation: name existence through links'
+printf '50. agents check → ls -L — "0334/A" and "0334/F+D" should go RED, "0334/E" stay green ... '
+r50="$(run_agents_guard_suite "$m50")"; echo "$r50"
+if [ "$r50" != red ]; then
+  echo "   ✗ the suite did NOT catch a link-following name check."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0334/A:' "$out"; then
+  echo "   ✗ suite went red but NOT at 0334/A — red for the wrong reason."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0334/F\+D:' "$out"; then
+  echo "   ✗ suite went red but NOT at 0334/F+D — red for the wrong reason."; fail=1
+elif grep -Eq '(✖|not ok).*0334/E:' "$out"; then
+  echo "   ✗ 0334/E went red too — \`ls -L\` fails on a dangling link, so E must stay green here."; fail=1
+fi
+check_healthy_green 50
+
+# --- Mutation 51: drop the ancestor symlink test → 0334/A must go red (a symlinked .claude is a
+#     directory to every other test), while 0334/F+D stays green. -----------------------------------------
+step 51
+m51="$(make_claude_copy claude-mutant-agents-no-ancestor-link)"
+cat > "$work/m51-anchor.txt" <<'ANCHOR_LINE'
+if [ -L "$_p" ]; then
+ANCHOR_LINE
+cat > "$work/m51-line.txt" <<'MUTANT_LINE'
+    if false; then # mutation: ancestor symlink test dropped
+MUTANT_LINE
+swap_literal_line "$m51" "$work/m51-anchor.txt" "$work/m51-line.txt"
+check_literal_swap 51 "ancestor symlink test dropped" "$m51" "$work/m51-anchor.txt" 'mutation: ancestor symlink test dropped'
+printf '51. ancestor symlink test dropped — "0334/A" should go RED, "0334/F+D" stay green ... '
+r51="$(run_agents_guard_suite "$m51")"; echo "$r51"
+if [ "$r51" != red ]; then
+  echo "   ✗ the suite did NOT catch a check that reads agents through a symlinked .claude."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0334/A:' "$out"; then
+  echo "   ✗ suite went red but NOT at 0334/A — red for the wrong reason."; fail=1
+elif grep -Eq '(✖|not ok).*0334/F\+D:' "$out"; then
+  echo "   ✗ 0334/F+D went red too — this mutant leaves the leaf checks intact."; fail=1
+fi
+check_healthy_green 51
+
+# --- Mutation 52: drop the agent file's readability test → 0334/unreadable must go red. As root every
+#     file reads as readable and that test skips, so the step says so instead of failing. ----------------
+step 52
+if [ "$(id -u)" = 0 ]; then
+  echo "52. readability test dropped — skipped as root (0334/unreadable skips; permission bits do not apply)."
+else
+  m52="$(make_claude_copy claude-mutant-agents-no-readable)"
+  cat > "$work/m52-anchor.txt" <<'ANCHOR_LINE'
+[ -r "$_a" ] && return 0
+ANCHOR_LINE
+  cat > "$work/m52-line.txt" <<'MUTANT_LINE'
+      return 0 # mutation: readability test dropped
+MUTANT_LINE
+  swap_literal_line "$m52" "$work/m52-anchor.txt" "$work/m52-line.txt"
+  check_literal_swap 52 "readability test dropped" "$m52" "$work/m52-anchor.txt" 'mutation: readability test dropped'
+  printf '52. readability test dropped — "0334/unreadable" should go RED ... '
+  r52="$(run_agents_guard_suite "$m52")"; echo "$r52"
+  if [ "$r52" != red ]; then
+    echo "   ✗ the suite did NOT catch a check that accepts an unreadable agent file."; fail=1
+  elif ! grep -Eq '(✖|not ok|fail).*0334/unreadable:' "$out"; then
+    echo "   ✗ suite went red but NOT at 0334/unreadable — red for the wrong reason."; fail=1
+  fi
+  check_healthy_green 52
+fi
+
+# --- Mutation 53: drop the `setup_ok = 0` gate → 0334/gate must go red: after a SUCCESSFUL setup the
+#     check would run on every launch, refusing a project whose agents dir is merely empty. ------------
+step 53
+m53="$(make_claude_copy claude-mutant-agents-no-gate)"
+cat > "$work/m53-anchor.txt" <<'ANCHOR_LINE'
+if [ "$setup_ok" = 0 ] && ! agents_why=
+ANCHOR_LINE
+cat > "$work/m53-line.txt" <<'MUTANT_LINE'
+if ! agents_why="$(agents_usable)"; then # mutation: setup_ok gate dropped
+MUTANT_LINE
+swap_literal_line "$m53" "$work/m53-anchor.txt" "$work/m53-line.txt"
+check_literal_swap 53 "setup_ok gate dropped" "$m53" "$work/m53-anchor.txt" 'mutation: setup_ok gate dropped'
+printf '53. setup_ok gate dropped — "0334/gate" should go RED ... '
+r53="$(run_agents_guard_suite "$m53")"; echo "$r53"
+if [ "$r53" != red ]; then
+  echo "   ✗ the suite did NOT catch an agents check that runs after a successful setup."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0334/gate:' "$out"; then
+  echo "   ✗ suite went red but NOT at 0334/gate — red for the wrong reason."; fail=1
+fi
+check_healthy_green 53
+
+# --- Mutation 54: drop the agent file's own symlink test → 0334/C must go red (a live link to an
+#     outside file reads as a readable regular file) and 0334/E too (a dangling link falls through to
+#     "nothing here", today's message). ---------------------------------------------------------------
+step 54
+m54="$(make_claude_copy claude-mutant-agents-no-leaf-link)"
+cat > "$work/m54-anchor.txt" <<'ANCHOR_LINE'
+if [ -L "$_a" ]; then
+ANCHOR_LINE
+cat > "$work/m54-line.txt" <<'MUTANT_LINE'
+    if false; then # mutation: leaf symlink test dropped
+MUTANT_LINE
+swap_literal_line "$m54" "$work/m54-anchor.txt" "$work/m54-line.txt"
+check_literal_swap 54 "leaf symlink test dropped" "$m54" "$work/m54-anchor.txt" 'mutation: leaf symlink test dropped'
+printf '54. leaf symlink test dropped — "0334/C" and "0334/E" should go RED ... '
+r54="$(run_agents_guard_suite "$m54")"; echo "$r54"
+if [ "$r54" != red ]; then
+  echo "   ✗ the suite did NOT catch a check that reads an agent file through a symlink."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0334/C:' "$out"; then
+  echo "   ✗ suite went red but NOT at 0334/C — red for the wrong reason."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0334/E:' "$out"; then
+  echo "   ✗ suite went red but NOT at 0334/E — red for the wrong reason."; fail=1
+fi
+check_healthy_green 54
+
+# --- Mutation 55: drop the ancestor not-a-directory test → 0334/not-a-dir must go red (a regular file
+#     at .claude/agents then matches no glob and gets today's "nothing installed" message). -----------
+step 55
+m55="$(make_claude_copy claude-mutant-agents-no-ancestor-type)"
+cat > "$work/m55-anchor.txt" <<'ANCHOR_LINE'
+elif [ -e "$_p" ] && [ ! -d "$_p" ]; then
+ANCHOR_LINE
+cat > "$work/m55-line.txt" <<'MUTANT_LINE'
+    elif false; then # mutation: ancestor not-a-directory test dropped
+MUTANT_LINE
+swap_literal_line "$m55" "$work/m55-anchor.txt" "$work/m55-line.txt"
+check_literal_swap 55 "ancestor not-a-directory test dropped" "$m55" "$work/m55-anchor.txt" 'mutation: ancestor not-a-directory test dropped'
+printf '55. ancestor not-a-directory test dropped — "0334/not-a-dir" should go RED ... '
+r55="$(run_agents_guard_suite "$m55")"; echo "$r55"
+if [ "$r55" != red ]; then
+  echo "   ✗ the suite did NOT catch a check that treats a file at .claude/agents as an empty agents dir."; fail=1
+elif ! grep -Eq '(✖|not ok|fail).*0334/not-a-dir:' "$out"; then
+  echo "   ✗ suite went red but NOT at 0334/not-a-dir — red for the wrong reason."; fail=1
+fi
+check_healthy_green 55
+
+step end   # finishes step 55: keeps its output if it failed; `end` itself runs nothing
 
 echo
 if [ "$any_fail" = 0 ]; then

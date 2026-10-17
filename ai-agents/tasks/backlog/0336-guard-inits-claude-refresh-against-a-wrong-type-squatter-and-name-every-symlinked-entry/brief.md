@@ -132,7 +132,7 @@ fires). ⭐ **So in shape A the guard does NOT refuse**, and the launcher starts
 *"confusing 'agent not found'"* the guard's own comment says it prevents.
 
 ⛔ **This is the launcher, not init, and it is NOT in this task's scope.** Its relationship to
-[`0334`](../0334-fix-the-launchers-symlink-blind-agents-fail-safe/brief.md) is stated honestly:
+[`0334`](../../done/0334-fix-the-launchers-symlink-blind-agents-fail-safe/brief.md) is stated honestly:
 **same root cause** — the guard tests **name existence**, not that a readable regular agent file exists
 — but a **different trigger**, and `0334`'s stated scope is **symlink-shaped**, so a fix scoped to
 symlinks would miss this. ⚠️ **Flagged for the owner as an open question, unowned today.** Whoever
@@ -253,7 +253,7 @@ is destroyed, the only loss is fkit's own gitignored payload, and `rc=1` still r
 `setup_ok` warning rather than a silent success. ⛔ **Only the "hard fail-safe / exit 1" sentence is
 false; the verdict stands at `low`.**
 
-⚠️ **The launcher half of this is [`0334`](../0334-fix-the-launchers-symlink-blind-agents-fail-safe/brief.md)'s,
+⚠️ **The launcher half of this is [`0334`](../../done/0334-fix-the-launchers-symlink-blind-agents-fail-safe/brief.md)'s,
 not this task's** — `0334` was **widened on 2026-08-24 by owner ruling** (verbatim label
 **"Fold into 0334, widen its scope (Recommended)"**) to cover exactly this wrong-type trigger, so the
 open question this brief flagged under *"A SECOND, ADJACENT MEASUREMENT"* now **has an owner**. ⛔ **Do

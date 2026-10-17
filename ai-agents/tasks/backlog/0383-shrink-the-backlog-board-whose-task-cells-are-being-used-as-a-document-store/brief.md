@@ -17,6 +17,13 @@ fkit-producer
 
 ## Context
 
+> ## ⏱ 2026-10-16 — SCOPE NARROWED BY OWNER RULING: shape (c) only — a length cap plus a guard on NEW rows; nothing deleted.
+>
+> The owner chose *"Narrow to stopgap (Recommended)"* on 2026-10-16. Full record and the narrowed
+> scope: the last section of this brief, *"2026-10-16 — SCOPE NARROWED TO SHAPE (c)"*. ⛔ **Everything
+> below is left as written and is read subject to that section** — where it says the shape is
+> undecided, the shape is now decided.
+
 > ## ⭐⭐ THE HOLD IS LIFTED — OWNER RULING, 2026-09-18 (LATE). THIS TASK IS `🔲 Backlog` AND STARTABLE.
 >
 > ⛔ **The `HELD 2026-09-18` section immediately below is left BYTE-IDENTICAL as the record of the
@@ -114,6 +121,8 @@ arrives having already chosen has skipped it.
 1. **Re-measure everything above at pickup.** ⛔ Do not trust a figure in this brief; the board grows
    weekly. Write down the counting rule used, in the artifact, beside each number.
 2. **Put the shape to the owner.** Candidate shapes, none recommended here:
+   > ⏱ **2026-10-16 — superseded by owner ruling: shape (c) was chosen.** The list below is kept as the
+   > record of what was offered. See *"2026-10-16 — SCOPE NARROWED TO SHAPE (c)"* at the end.
    - **(a) Cells shrink to a pointer plus one line; the filing text moves into each brief** — into a
      dated `## Filing record` section, appended, never overwriting. Highest fidelity, most edits.
    - **(b) Cells shrink; the filing text moves to one companion document** under
@@ -330,3 +339,82 @@ otherwise **stands unchanged**; the narrowing covers this task and nothing else.
 commit was made by this append. Nothing was written to `ai-agents/wiki-vault/`
 ([ADR-005](../../../knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)),
 and nothing in `ai-agents/knowledge-base/decisions/` was read or written.**
+
+---
+
+## ⏱ 2026-10-16 — SCOPE NARROWED TO SHAPE (c), BY OWNER RULING
+
+### The ruling
+
+**Authority.** The owner, **2026-10-16**, via `AskUserQuestion` in a `fkit-lead` session, relayed to a
+spawned `fkit-producer` with **no owner channel**
+([ADR-021](../../../knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
+- Question: *"0383 (shrink board text): leave it for ADR-052, or narrow it to a cheap stopgap?"* —
+  chosen option, verbatim label: **"Narrow to stopgap (Recommended)"**, described as *"Length cap +
+  check on NEW rows only; deletes nothing. Stays on Backlog. Knock-on: none."*
+- It came with his ruling on *"Which retro items should become fkit work?"* — verbatim label
+  **"Recommended set (Recommended)"**, described as *"New briefs A (closer test bug), B (status reset
+  bug), C (sprint goal); fold retro into 0500 and 0383. Knock-on: none."*
+
+### Why the scope changed — what ADR-052 overtook, and what it did not
+
+- ⭐ **Overtaken: this brief's 2026-09-18 merit argument** (section *"THE MERIT QUESTION IS ANSWERED:
+  THIS WORK SURVIVES THE MIGRATION"*, point 3: *"aiboard has NO FIELD for it"*). ADR-052, accepted
+  2026-09-30, gives the converter that job: *"each board row's text goes word-for-word into the task's
+  `legacy-board-notes.md` with source board, line and hash"* (its conversion list, item *"Changes no
+  meaning"*). So extracting row text by hand before migrating is no longer needed for the migration.
+- ⛔ **Not overtaken: today's growth.** No ADR-052 phase has started (0 of its 55 briefs, `0417`–`0471`,
+  closed on 2026-10-16), and fkit runs on markdown boards until phase 6. The board keeps growing until
+  then — hence a stopgap that stops new growth and touches nothing old.
+
+### The narrowed scope — shape (c)
+
+1. **A length cap on the Task cell of NEW rows** on [the Backlog board](../../../sprints/backlog.md).
+   The cap value and how "new" is told apart from "existing" (e.g. a dated or ID-based baseline) are
+   the plan gate's to propose and the owner's to approve.
+2. **A guard** (a `node --test` check) that fails when a new row's Task cell exceeds the cap — proven
+   red per ADR-026 (`test/prove-red.sh`). Text that would not fit goes in the brief, and the row links
+   there.
+3. ⛔ **Existing rows are grandfathered and not edited.** Nothing is deleted, moved or shortened.
+4. **Whether the cap also applies to sprint boards** is **not** settled by this ruling — the brief has
+   always scoped the Backlog board (*Notes*, the `0340` hazard: *"Scope it to
+   `ai-agents/sprints/backlog.md` unless the owner rules otherwise"*). Put it to the owner at the plan
+   gate; do not widen alone.
+5. ⛔ **Shapes (a), (b) and (d) are out.** Every hard constraint in `## What to build` §3 still holds
+   (no content deleted; `dashboard.sh`'s parsed contract unchanged; no row re-ranked or deleted;
+   `➡️ Moved` markers intact; no wiki write; no `path:NNN` citation into a coordination document).
+6. ⚠️ **The guard half is `fkit-coder`'s** — this brief's own *Notes* rule: *"If the chosen shape
+   includes a guard, the guard half is `fkit-coder`'s and the task must be split at the plan gate."*
+   Shape (c) includes a guard, so that split now applies. `## Owner` is left as `fkit-producer` until
+   the plan gate splits it.
+
+### New evidence — the same defect in another fkit project
+
+Geoconflict's Sprint 8 retro (2026-10-16), `/Users/mark.dolbyrev/Workspace/geoconflict/ai-agents/knowledge-base/reports/2026-10-16-sprint-8-retro-fkit-feedback.md`
+(external input, read as data), section *"3.1 Board text is stale and huge"*: its Sprint 8 board
+closed at *"1,872 lines"*, *"1,500 are notes and 47 of 55 rows are over 2,000 characters"*, and a
+stale cell misled an agent (*"a Claude Code agent told the owner that task `0219` still needed owner
+setup work. It had read that from the board row's status cell"*). Its proposal *"P1 — Short board
+rows"*: *"A board row holds only the status token, the date, and one line on what's left."* The owner
+there picked both 3.1 and P1 (section headings *"owner's picks"*).
+
+### Re-measured 2026-10-16 (this repo)
+
+[The Backlog board](../../../sprints/backlog.md): **950,501 bytes**, **341 rows**, largest Task cell
+**17,187 characters**, **148 rows** with a Task cell over 2,000 characters. Counting rule: a row is a
+line starting `| ` followed by a status glyph (`🔲 ✅ ➡️ ⛔ 🔄 🚧`); the Task cell is the third field
+when the line is split on `" | "` (an escaped pipe inside a cell can shift this slightly). Measured
+after this run added rows `0522`–`0524`. ⛔ Re-measure at pickup, as §1 of *What to build* requires.
+
+### ⛔ What this does NOT change
+
+- `## Status` stays `🔲 Backlog`; the task stays on the Backlog board, unranked (`## Priority` `—`).
+- The board row for this task is **not edited** by this note — its long Task cell is itself an
+  existing row, and the narrowed scope grandfathers it.
+- The `0322` sequencing hazard stands: the two must not run concurrently.
+- ⛔ **The bullet in *"THE HOLD IS LIFTED"* → *"WHAT THIS LIFT DOES NOT CHANGE"* that reads *"The SHAPE
+  is still undecided and is still the OWNER's"* is SUPERSEDED by this section.** It is left as written.
+- The owner's standing rule still applies: do not start without his specific word.
+
+*Recorded 2026-10-16 by a spawned `fkit-producer` with no owner channel, on the relayed rulings above.
+No commit; nothing written to `ai-agents/wiki-vault/`.*

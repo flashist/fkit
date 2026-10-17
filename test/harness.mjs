@@ -117,7 +117,9 @@ function spawnLauncherSetup(project) {
 //           LAND in and says nothing about what ran before it. Assert on argvs when the count matters.
 // detached:true puts the child in a new session with NO controlling terminal, so the launcher's
 // menu / fresh-tty branches are deterministic regardless of how `npm test` itself was started.
-export function runFkit(args, { project, extraEnv = {} } = {}) {
+// `launcher` runs another launcher file for this call — e.g. a copy whose init is stubbed, the only
+// way to reach the launcher's setup-failed paths.
+export function runFkit(args, { project, extraEnv = {}, launcher = LAUNCHER } = {}) {
   return new Promise((resolve, reject) => {
     const argvDir = mkdtempSync(join(tmpdir(), 'fkit-argv-'));
     const argvFile = join(argvDir, 'argv');
@@ -131,7 +133,7 @@ export function runFkit(args, { project, extraEnv = {} } = {}) {
       FKIT_STUB_CURL_MARKER: curlMarker,
       ...extraEnv,
     };
-    const child = spawn('/bin/sh', [LAUNCHER, ...args], {
+    const child = spawn('/bin/sh', [launcher, ...args], {
       cwd: project,
       env,
       detached: true,

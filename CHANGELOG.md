@@ -11,6 +11,10 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- When setup fails, the launcher no longer starts a session on agents it cannot use â€” any symlink on
+  the way (a symlinked `.claude`, `.claude/agents` or agent file, working or dangling), a directory, or
+  an unreadable file named `fkit-*.md`. It refuses and names each offending path and why. A project
+  with no agents at all gets the same message as before.
 - The launch-time update check can no longer hang on a stalled network: its `git ls-remote` probe now
   gives up after about 5 s, like the curl calls, so a whole check takes about 10 s at worst and stays
   silent. `fkit update`'s download of the installer script now gives up after 60 s with its usual
