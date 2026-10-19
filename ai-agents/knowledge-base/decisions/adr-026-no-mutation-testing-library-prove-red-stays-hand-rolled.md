@@ -11,6 +11,15 @@
   **§Context → "The real defect R2 exposed was not hand-rolling"**. Marker legend: **⚠️ = a fact that
   drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow it). No
   existing line of this ADR was edited; the note is an append, and the Status stays `accepted`.
+  **Extended 2026-10-19 by a second append (`0527`):** a dated ⚠️ note now also sits below
+  **§Decision 4** — [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D3 moves the
+  gate out of the default `npm test` into a nightly CI lane with four cases; Decision 4 itself stands.
+  The site list in the first line of this item is left byte-identical and is superseded by this line;
+  the same append-only rule and the same legend apply.
+  **Extended 2026-10-19 by a third append (`0527` review R2/R4):** a second dated ⚠️ note now sits
+  directly below the first one under **§Decision 4**, pointing at ADR-057's corrections of two points
+  in it. The site lists above are left byte-identical and are superseded by this line; the same
+  append-only rule and the same legend apply.
 
 > **What this ADR decides, in one line:** the mutation-testing library question was investigated and
 > **closed** — no candidate fits a shell SUT tested as a black-box subprocess, so there is nothing to
@@ -81,6 +90,27 @@ not a **tooling-sophistication** problem, and no library would have fixed it.
    and runs the suite several times, so it plausibly belongs in a `test:full` / CI lane rather than the
    inner-loop `npm test`. *(Producer to scope the brief; owner: fkit-coder. Not authorized by the
    investigation brief and not authorized here.)*
+
+   > ⚠️ **Dated note 2026-10-19 (`0527`) — where and how often this gate runs is changing; Decision 4
+   > is untouched.** [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D3 (accepted
+   > 2026-10-19, owner sign-off) keeps `prove-red.sh` an **automated gate**, but moves it **out of the
+   > default `npm test`** into a **nightly CI lane** — the lane this decision itself foresaw (*"plausibly
+   > belongs in a `test:full` / CI lane"*) — and cuts it to **four cases** (today's M1, M2, M30, M31,
+   > each running only the test file it needs); the other 51 are deleted, and a fifth needs the owner's
+   > OK. So *"caught on every run"* above becomes *"caught the next morning"* — a delay the owner
+   > accepted *"for now"*. Decisions 1–3 and 5 are not affected. The item above is **left
+   > byte-identical**. Verified against live files 2026-10-19: `package.json`'s `"test"` script still
+   > runs `bash test/prove-red.sh` (55 cases) after the unit pass, and `.github/workflows/` has no
+   > schedule yet — the cut is task `0529`'s, and the nightly schedule waits on a producer re-brief of
+   > task `0530`.
+
+   > ⚠️ **Dated note 2026-10-19 (`0527` review R2/R4) — two points in the note above.** *"each running
+   > only the test file it needs"* is the target task `0529` builds, not today's behaviour: today only
+   > M1 runs one file; M2, M30 and M31 run every test file. And
+   > [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) says it "amends" Decision 4
+   > where this ADR says Decision 4 is untouched — this ADR's reading is the right one. Both facts are
+   > carried in ADR-057's dated notes below its §D3 — deliberately not restated here, so there is one
+   > place to keep true rather than two. The note above is left byte-identical.
 5. **The second proposed hardening — assert each mutation actually changed the file — was NOT
    selected.** It is a ~3-line, zero-dep guard that closes R2's **second** failure mode (the silent
    no-op mutation) **structurally**. Recorded as **offered and not taken**, not as rejected on merit:

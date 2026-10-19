@@ -8,6 +8,11 @@
   Marker legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
   overturned** (do not follow it). No existing line of this ADR was edited; the note is an append, and
   the Status stays `accepted`.
+  **Extended 2026-10-19 by a second append (`0527`):** a dated ⚠️ note now also sits below **§Related**'s
+  ADR-014 bullet (*"§2's fence is widened by rule 4"*) — ADR-014 §2's fence is replaced by
+  [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D1, which takes rule 4 in
+  unchanged. The site list in the first line of this item is left byte-identical and is superseded by
+  this line; the same append-only rule and the same legend apply.
 
 ## Context
 
@@ -148,6 +153,15 @@ Four forces make this a real decision rather than a file drop:
   — the design this generalizes; §4.4 (invocation), §4.6 (the scope widening).
 - [ADR-014](adr-014-how-fkit-tests-itself.md) — §1, §4 still bind; **§2's fence is widened by rule 4**;
   its `install.sh:43` fact is the foundation both rest on.
+
+  > ⚠️ **Dated note 2026-10-19 (`0527`) — the fence this bullet says rule 4 widens no longer exists;
+  > ADR-017's decision is untouched.** ADR-014 §2's fence is **replaced** by
+  > [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D1 (accepted 2026-10-19, owner
+  > sign-off), and ADR-014 §2 now carries a ⛔ notice saying so. ADR-057 §D1 takes **rule 4 in
+  > unchanged** as its category 2 (shipped skill executables), so shipped executables stay in scope for
+  > the test suite — on ADR-057's fence, not as a widening of ADR-014's. The bullet above is **left
+  > byte-identical**. Verified against live files 2026-10-19.
+
 - [ADR-011](adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md) — `package.json` scope,
   no `bin` field.
 - `install.sh:43` (copies only `claude/`), `install.sh:44-46` (**the hardcoded chmod list — the whole

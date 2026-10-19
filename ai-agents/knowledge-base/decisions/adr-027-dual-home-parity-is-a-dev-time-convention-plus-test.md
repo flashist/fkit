@@ -6,6 +6,11 @@
 - **Evidence:** [`reports/2026-07-18-dual-home-parity-live-vs-scaffold.md`](../reports/2026-07-18-dual-home-parity-live-vs-scaffold.md)
   (task 49), plus a `diff -rq` re-run on 2026-07-19 recorded in
   [`conventions/dual-home-parity.md`](../conventions/dual-home-parity.md).
+- **Corrections:** 2026-10-19 (`0527`) — this ADR carries **one** dated note, below **§Decision 2**:
+  the parity test's licence now rests on [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md)
+  §D7. Marker legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that
+  was overturned** (do not follow it). No existing line of this ADR was edited; the note is an append,
+  and the Status stays `accepted`.
 
 > **What this ADR decides, in one line:** the two `ai-agents/` trees inside **this repo** are kept in
 > step by a **convention plus a mechanical test**, and the **separate, deferred** question of pushing
@@ -60,6 +65,18 @@ fixing it needs no consuming-project mechanism at all.
    dual-homed file is byte-identical, with an explicit exception list. **Preceded by a reconciliation
    change** that byte-aligns the **six** drifted files — without it the test fails on day one.
    *(Two producer-scoped briefs, owner: fkit-coder.)*
+
+   > ⚠️ **Dated note 2026-10-19 (`0527`) — what licenses this test has changed; Decision 2 is
+   > untouched.** [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) (accepted
+   > 2026-10-19, owner sign-off) replaces ADR-014 §2's fence with a narrower one: fkit's tests cover
+   > shipped-script behaviour only (§D1), and it retires the undocumented "fourth category" (repo-content
+   > invariants) this test's header cites as its scope (§D7). `test/dual-home-parity.test.js` **stays, in
+   > the default `npm test`**, as one of ADR-057 §D7's three **named exceptions** (owner answer Q4b,
+   > *"Keep (Recommended)"*). ADR-014's `node --test` and zero-devDeps constraints still bind it. The
+   > item above is **left byte-identical**. Verified against live files 2026-10-19: the test file is on
+   > disk and its header still cites the fourth category — rewording that header to cite ADR-057 §D7 is
+   > task `0529`'s edit.
+
 3. **Order matters and is part of the decision:** convention first, then reconciliation, then the test.
    The test is the enforcement; the convention is what it enforces. Building the test first just
    produces a red suite nobody can act on.

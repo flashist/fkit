@@ -6,6 +6,11 @@
 - **Date:** 2026-07-13
 - **Deciders:** owner (Mark Dolbyrev), relayed via fkit-producer; analysis and recording by
   fkit-architect (two consults, 2026-07-13 — the second overturning the first on the owner's challenge)
+- **Corrections:** 2026-10-19 (`0527`) — this ADR carries **one** dated note, a ⛔ reversal notice at
+  the end of **§2** (the scope fence), pointing at [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md).
+  Marker legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
+  overturned** (do not follow it). No existing line of this ADR was edited; the note is an append, and
+  the Status stays as written — §1, §3, §4 and §5 still bind.
 
 > **Why this ADR exists.** Not to pre-empt the runner conversation — to make it **short**. Two
 > independent consults on the same day re-derived the same arguments from scratch, one of them from a
@@ -78,6 +83,21 @@ In scope, exactly two things:
 Out of scope, deliberately: **shell internals** (no sourcing/mocking individual functions) and **LLM
 behavior** (no model, no auth, no network — seconds, not minutes). `exec claude …` is the boundary and
 the suite asserts up to it, never past it.
+
+> ⛔ **Dated reversal notice 2026-10-19 (`0527`) — §2's fence is REPLACED: do not follow its in-scope
+> list or its *"it stays this size"*.** Replaced by [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md)
+> §D1, accepted on the owner's sign-off of 2026-10-19: a test in fkit's suite covers **only the
+> behaviour of a shipped script, seen from outside** — category 1 (the launcher, init, the hooks, and
+> `claude/skills-for-role.sh`, which they source) and category 2 (shipped skill executables, ADR-017
+> rule 4, taken in unchanged) — plus the three tests ADR-057 §D7 names as exceptions, and no others.
+> The two things listed above stay in scope, inside category 1. Growth needs the owner's OK for each new
+> test file or prove-red case (ADR-057 §D2), and the default `npm test` has a 2-minute budget (§D10).
+> **Still binding from §2:** the *"Out of scope, deliberately"* paragraph — no sourcing or mocking of
+> shell internals, no LLM behaviour, `exec claude …` as the boundary; ADR-057 §D1 takes it in. The
+> section above is **left byte-identical** as the record of what was decided on 2026-07-13 (already
+> widened to three things by ADR-017 rule 4 on 2026-07-16, with no note here). Verified against live
+> files 2026-10-19: `test/` still holds 42 `*.test.js` files, many outside the new fence — the cut
+> itself is task `0529`'s.
 
 ### 3. bats-core and shellspec are rejected
 

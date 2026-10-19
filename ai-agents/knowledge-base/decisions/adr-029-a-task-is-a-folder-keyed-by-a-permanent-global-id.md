@@ -15,6 +15,11 @@
 - **Task:** [`design-task-folder-structure-and-id-scheme.md`](../../tasks/done/0030-design-task-folder-structure-and-id-scheme/brief.md) (Sprint 2, priority 74)
 - **Implements:** [ADR-020](adr-020-per-task-plan-and-worklog-artifacts.md) §Decision 6 — the per-task
   folder it recorded as the intended future direction.
+- **Corrections:** 2026-10-19 (`0527`) — this ADR carries **one** dated note, at the end of
+  **§Decision 3**'s cross-branch-race paragraph: the duplicate-ID test's licence now rests on
+  [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D7. Marker legend: **⚠️ = a
+  fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow
+  it). No existing line of this ADR was edited; the note is an append, and the Status stays `accepted`.
 
 > **What this ADR decides, in one line:** a task stops being a file and becomes a **folder**
 > `ai-agents/tasks/<board>/<NNNN>-<slug>/` holding the brief and every artifact, keyed by a **permanent
@@ -95,6 +100,19 @@ cleanly — different folder names, no textual conflict, and git will not catch 
 real machinery for a single-owner prototype and a stale lock is the worse failure. Mitigation is
 **detection**: a duplicate-ID assertion in the `node --test` suite (ADR-014). IDs are cheap to renumber
 *before* anything links to them, which is exactly the window a merge exposes.
+
+> ⚠️ **Dated note 2026-10-19 (`0527`) — the mitigation stands; what licenses its test has changed.**
+> [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) (accepted 2026-10-19, owner
+> sign-off) replaces ADR-014 §2's fence with a narrower one — fkit's tests cover shipped-script
+> behaviour only (§D1) — and retires the undocumented "fourth category" (repo-content invariants) that
+> `test/task-id-uniqueness.test.js`'s header cites as its scope (§D7). The duplicate-ID assertion named
+> above **stays, in the default `npm test`**, as one of ADR-057 §D7's three **named exceptions** (owner
+> answer Q5, *"Keep the test (Recommended)"*; ADR-057 §D5). So the race is still accepted and detection
+> is still its sole mitigation — **in fkit's own repo only**: the test is repo-root infrastructure that
+> never ships (ADR-014 §1), so consuming projects get no duplicate-ID check; ADR-057 §D5 names a shipped
+> check as the upgrade path. The paragraph above is **left byte-identical**. Verified against live files
+> 2026-10-19: the test file is on disk and its header still cites the fourth category — rewording that
+> header to cite ADR-057 §D7 is task `0529`'s edit.
 
 ### 4. Existing tasks are numbered by slug, `LC_ALL=C`-sorted, board-blind
 
