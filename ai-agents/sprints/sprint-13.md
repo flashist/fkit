@@ -41,9 +41,9 @@ budget met.
 |---|---|---|---|
 | ✅ Done (agent-closed — not owner-verified) | P1 | **Check prove-red mutation 48 on one isolated Linux run before deciding the banner tests** *(Pulled from the Backlog board 2026-10-19 by owner ruling S2. Investigation only. Depends on nothing. Blocks `0529` (banner-test part only). ⚠️ A CI branch needs a push — ask the owner first. Owner `fkit-coder`)* | [`0526-check-prove-red-mutation-48-on-one-isolated-linux-run-before-deciding-the-banner-tests`](../tasks/done/0526-check-prove-red-mutation-48-on-one-isolated-linux-run-before-deciding-the-banner-tests/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P2 | **Record the ADR that resets fkit's test scope to shipped-script behaviour** *(Pulled from the Backlog board 2026-10-19 by owner ruling S2. Depends on nothing. ⛔ The gate: the owner signs the ADR off before `0528` / `0529` start. Prove-red delete-vs-keep-≤5 and the must-keep list are owner questions inside it. Owner `fkit-architect`)* | [`0527-record-the-adr-that-resets-fkits-test-scope-to-shipped-script-behaviour`](../tasks/done/0527-record-the-adr-that-resets-fkits-test-scope-to-shipped-script-behaviour/brief.md) |
-| 🔲 Backlog | P3 | **Change the rules that make the test suite grow** *(Pulled from the Backlog board 2026-10-19 by owner ruling S2. Depends on `0527` (P2, this sprint) — its owner sign-off, not only its file. Owner `fkit-coder`)* | [`0528-change-the-rules-that-make-the-test-suite-grow`](../tasks/backlog/0528-change-the-rules-that-make-the-test-suite-grow/brief.md) |
-| 🔲 Backlog | P4 | **Cut the test suite down to shipped-script behaviour tests** *(Pulled from the Backlog board 2026-10-19 by owner ruling S2. Depends on `0527` (P2, its sign-off) and `0526` (P1, banner-test part only) — both this sprint. Carries the knock-on table for old test tasks, decided after the ADR per S4. Owner `fkit-coder`)* | [`0529-cut-the-test-suite-down-to-shipped-script-behaviour-tests`](../tasks/backlog/0529-cut-the-test-suite-down-to-shipped-script-behaviour-tests/brief.md) |
-| 🔲 Backlog | P5 | **Enforce the two-minute test budget in CI and settle the release gate** *(Pulled from the Backlog board 2026-10-19 by owner ruling S2. Depends on `0529` (P4, this sprint). Release-gate question (a) / (b) open for the owner before build. Owner `fkit-coder`)* | [`0530-enforce-the-two-minute-test-budget-in-ci-and-settle-the-release-gate`](../tasks/backlog/0530-enforce-the-two-minute-test-budget-in-ci-and-settle-the-release-gate/brief.md) |
+| 🔲 Backlog | P3 | **Change the rules that make the test suite grow** *(Pulled from the Backlog board 2026-10-19 by owner ruling S2. Depends on `0527` (P2, this sprint) — its owner sign-off, not only its file. Re-scoped 2026-10-19 to [ADR-057](../knowledge-base/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md): no numeric cap, project-neutral shipped wording. Owner `fkit-coder`)* | [`0528-change-the-rules-that-make-the-test-suite-grow`](../tasks/backlog/0528-change-the-rules-that-make-the-test-suite-grow/brief.md) |
+| 🔲 Backlog | P4 | **Cut the test suite down to shipped-script behaviour tests** *(Pulled from the Backlog board 2026-10-19 by owner ruling S2. Depends on `0527` (P2, its sign-off) and `0526` (P1, banner-test part only) — both this sprint. Carries the knock-on table for old test tasks, decided after the ADR per S4. Re-scoped 2026-10-19 to ADR-057: four named exceptions kept, release-summary moved to its own script, prove-red cut to four cases. Owner `fkit-coder`)* | [`0529-cut-the-test-suite-down-to-shipped-script-behaviour-tests`](../tasks/backlog/0529-cut-the-test-suite-down-to-shipped-script-behaviour-tests/brief.md) |
+| 🔲 Backlog | P5 | **Enforce the two-minute test budget in CI and settle the release gate** *(Pulled from the Backlog board 2026-10-19 by owner ruling S2. Depends on `0529` (P4, this sprint). Release-gate question (a) / (b) open for the owner before build. Re-scoped 2026-10-19 to ADR-057: adds the nightly prove-red schedule, and whether `npm run release` runs the moved release-summary test. Owner `fkit-coder`)* | [`0530-enforce-the-two-minute-test-budget-in-ci-and-settle-the-release-gate`](../tasks/backlog/0530-enforce-the-two-minute-test-budget-in-ci-and-settle-the-release-gate/brief.md) |
 
 ## ⚠️ Notes for the driver
 
@@ -51,6 +51,9 @@ budget met.
   do not start until `0527`'s ADR carries the owner's recorded sign-off (its status is *Proposed*
   until then). `0526` decides the banner tests only; the rest of `0529` may proceed once the ADR is
   signed. Being started is not a waiver of either gate.
+  - **2026-10-19 — the ADR gate is satisfied:** [ADR-057](../knowledge-base/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) is `accepted` (owner sign-off Q7).
+    `0526` and `0527` are closed. `0528`–`0530` were re-scoped to the ADR before any build (see the
+    dated note in each brief).
 - **Every dependency is inside this sprint** — no row waits on a later sprint.
 - **`CONTRIBUTING.md` is touched by `0528`, `0529` and `0530`** — sequence the edits if two are in
   flight.
@@ -59,6 +62,9 @@ budget met.
 - **Old test tasks are not touched now (S4).** `0503` stays `🚧 Blocked` on [Sprint 12](sprint-12.md);
   `0512`–`0515`, `0522` and the backlog briefs in `0529`'s knock-on table stay where they are until
   the ADR is signed and the owner rules the list.
+  - **2026-10-19:** the ADR is signed, so the list is ready for the owner to rule — still nothing
+    cancelled or rescoped until he does. `0522` is superseded by ADR-057 D6 (a); cancelling it needs
+    his explicit word.
 - **Two sprints are `🔄 In progress`** — this one and the paused Sprint 12. That is legal (ADR-047);
   `select-active` reports both.
 
@@ -69,3 +75,8 @@ budget met.
   here, `➡️ Moved to [Sprint 13](sprint-13.md) — priority P<n>` there, the brief's `## Sprint` and
   `## Priority`), plus a dated *owner's word to start* note in each brief and S4's note in `0529`'s
   knock-on section; S1's confirmation noted in `0527`'s *Owner rulings*. Sprint 12 not touched.
+- **2026-10-19 — `0528`, `0529`, `0530` re-scoped to ADR-057** by a spawned `fkit-producer` (no owner
+  channel), on the owner's instruction in the `fkit lead` session (`AskUserQuestion`, *"Stop; re-brief
+  first (Recommended)"*; then typed, *"Commit and then rewrite"* — quoted in full in each brief). Each
+  brief's *What to build* and *Verification steps* rewritten; owner-ruling quotes kept; rows here
+  updated. All three stay `🔲 Backlog` in this sprint; no dependency changed.

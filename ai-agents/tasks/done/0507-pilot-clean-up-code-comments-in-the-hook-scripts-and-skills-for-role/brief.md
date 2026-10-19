@@ -1,23 +1,24 @@
-# Clean up code comments in the launcher and init scripts
+# Pilot: clean up code comments in the hook scripts and `skills-for-role.sh`, and set the method for the series
 
 ## ID
-0508
+0507
 
 ## Sprint
 Sprint 12
 
 ## Priority
-P7
+P5
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
 
 ## Context
 
-**This unit: the launcher and init scripts** — the code every `fkit` launch runs.
+**This is the pilot of the series.** It cleans the smallest code group and, before the other eight
+units start, settles the method they all reuse — so nine coders do not make nine different calls.
 
 **Where this comes from.** Task `0506` (Sprint 10) adds the rule *"comment WHY, not WHAT"* to fkit:
 convention `ai-agents/knowledge-base/conventions/code-comments.md` (being built by `0506` now; written
@@ -55,14 +56,23 @@ scripts inside skill folders (dashboard.sh, heal scripts, .mjs)?" Selected: "All
 
 ## What to build
 
-**Scope — 2 files, ~868 comment lines:** `claude/fkit-claude.sh`, `claude/fkit-claude-init.sh`.
+**Scope — 7 files, ~403 comment lines:** `claude/skill-ownership-hook.sh`, `claude/turn-completion-hook.sh`,
+`claude/shiploop-marker-hook.sh`, `claude/askuserquestion-marker-hook.sh`, `claude/carry-check-hook.sh`,
+`claude/carry-check-hook.mjs`, `claude/skills-for-role.sh`.
 
-Watch in this group:
-- `fkit-claude-init.sh` writes Markdown (the rules block, scaffold content) through heredocs. Their
-  `#` lines are **output, not comments** — rule 1. The rules-block budget (`RULES_MAX`,
-  `test/rules-block-budget.test.js`) must be unaffected: comments in the script are not the block.
-- `test/prove-red.sh` mutates the launcher. A mutation whose pattern matches comment text breaks when
-  that comment changes — V2's full `npm test` catches it; fix the comment change, not the mutation.
+**Settle the method, at plan approval, and write it into this task's worklog** under a heading
+*"Method for the series"* — the eight later units (`0508`–`0515`) follow it:
+- **M1 — Where a moved reason goes** when nothing in the knowledge base holds it yet (which kind of
+  page for which kind of reason; ADR addendum vs convention vs report).
+- **M2 — Task and ADR tags** like *"(task 0176)"* or *"ADR-018 §2"*: a pointer by ID (kept) or history
+  (dropped)? Producer's lean, not ruled: keep one where a reader needs it to find the reason; drop it
+  where it only records which task wrote the line.
+- **M3 — The comments-only proof command** used for V1, per language (shell, JS).
+- **M4 — Any refinement of the *"Rules for every unit"* list below** that the pilot shows is needed.
+
+Watch in this group: `skill-ownership-hook.sh` is the role-lock wall (ADR-018) and
+`skills-for-role.sh` is the one place role→skill ownership is declared (root `CLAUDE.md` says so) —
+their must-not-break comments stay, shortened.
 
 **Rules for every unit of this series** (the pilot `0507` may refine them; its worklog's *"Method for
 the series"* section is then the source, and this list is the fallback):
@@ -110,13 +120,13 @@ the series"* section is then the source, and this list is the fallback):
   comments and line numbers, each hit, and the action taken (fixed, or left as frozen history).
 - **V6 — Rule followed.** Every comment left in the unit's files is at most 2 lines, or the worklog
   names it as a must-not-break block the plan chose to keep longer, with the reason.
+- **V7 — Method recorded.** The worklog's *"Method for the series"* section answers M1–M4, and says
+  which answers the owner gave at plan approval and which the plan chose.
 
 ## Notes
 
-- **Depends on:** 0506, 0507
-- **Blocks:** nothing
-- **Related, not a dependency:** `0514` cleans the launcher's tests and `test/prove-red.sh`. Whichever
-  lands second re-checks the other's line cites (rule 5).
+- **Depends on:** 0506
+- **Blocks:** 0508, 0509, 0510, 0511, 0512, 0513, 0514, 0515
 - **Related, not a dependency:** Backlog task `0373` (does `durable-citation-anchors.md` need an
   addendum for in-code comments citing their own file) — its answer may change how pointers are worded.
 - **Placement:** Backlog board, per the owner's 2026-10-14 ruling. Knock-on: none — no task outside this
