@@ -139,8 +139,8 @@ a verdict** — it never replaces, forces, or softens the decision verdict.
    reporting a **denied** write, or emulating a run in its head, is **reasoning-only**.
    ⚠️ If **Codex** executed and **you** did not, that is not a third answer — **run the relevant check
    yourself** — the checks the change needs (map the diff's changed paths to the project's checks — its
-   own table if it has one; the full suite when unsure), named in your evidence clause, skipped ones
-   included — then re-answer. **Never claim both measured when only one did.**
+   own table if it has one; the project's default test command when unsure), named in your evidence
+   clause, skipped ones included — then re-answer. **Never claim both measured when only one did.**
 3. **Cite the evidence for whichever you picked, in one clause** — the codex-cli version (read it from
    the run, e.g. `codex --version`) and the exit status, plus either the command Codex ran, or the
    reason it measured nothing.
@@ -194,6 +194,14 @@ Assign each a **verified verdict**: `CORRECT`, `PARTIALLY CORRECT`, `INCORRECT (
 reviewer's label. Classify each as a **Defect** (wrong behavior / real regression) or a
 **Frontier-move** (a deliberate point on an unavoidable tradeoff — a decision, not a defect). If a
 recommended fix would cause a regression or just relocate a settled cost, **say so loudly.**
+
+**A missing test is a suggestion, not a defect.** When the code behaves correctly and the only
+finding is that no test covers it, list it under **Suggestions (not defects)** in your report — not
+as a finding row and not counted in the verdict — unless the project's own key list (in its written
+test rules, often `CONTRIBUTING.md`) names that behaviour; then it is a **Defect**. No written key list
+found → a suggestion; say once in the report: *no written key list found — missing tests graded as
+suggestions*. A test that cannot fail is a wrong test, not a missing one — judge it like any other
+finding.
 
 When a finding turns on **design intent** ("is this consistent with the intended architecture / a
 recorded ADR?"), you may consult `@fkit-architect` — the verdict stays yours.
@@ -260,6 +268,7 @@ Then present:
 - **Findings table**: **#** · **Reviewer** (`Claude` / `Codex` / `both`) · **Reviewer severity** (raw —
   for a "both" finding show each label) · **Verified verdict** (severity change noted inline, e.g.
   `CORRECT → medium`) · **Defect / frontier-move** · **One-liner**.
+- **Suggestions (not defects)** — missing tests on correct code (Step 3), one line each; omit when none.
 - **Suppressed-as-settled** list, with ADR pointers.
 - **Convergence call** — new defects, or re-litigation of settled tradeoffs? Recommend act vs closeout,
   with the reason.

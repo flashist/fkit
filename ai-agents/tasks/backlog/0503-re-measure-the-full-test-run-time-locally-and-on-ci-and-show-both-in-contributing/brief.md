@@ -10,7 +10,7 @@ Sprint 12
 P8
 
 ## Status
-🔲 Backlog
+🚧 Blocked — paused by the owner 2026-10-19: reduce the test suite first. Phase 1 (CI reading) done; phase 2 (local timed runs) not started.
 
 ## Owner
 fkit-coder

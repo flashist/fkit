@@ -1,44 +1,18 @@
 #!/bin/sh
-# fkit — set up the current project for the fkit agent team (idempotent) and launch a ROLE-LOCKED
-# Claude Code session. This is the front door: `fkit` with no role shows a deterministic terminal
-# menu (no LLM involved — picking a role is an if/else, not a judgment call), then execs the chosen
-# role IN THIS SAME TAB.
-#
-#   fkit                    # menu → pick a role
-#   fkit coder              # skip the menu, straight to the coder
-#   fkit lead|producer|architect|reviewer|wiki|adv
-#   fkit update             # update fkit itself
-#
-# A first argument that is not a role and not a known verb is a USAGE ERROR, not a session. It used
-# to fall through to `claude` unrecognized, which meant `fkit --resume` resumed ANY session under the
-# LEAD's lockdown — the role lock bypassed by accident. Args after a named role still pass through.
-#
-# Every session is locked two ways:
-#   * `--agent fkit-<role>`  — the role's system prompt (harness-enforced; plus a `tools:` allowlist for the adversarial reviewer alone, ADR-022)
-#   * `--settings` wiring a `PreToolUse` hook (skill-ownership-hook.sh,
-#     `0052` (`implement-pretooluse-skill-ownership-hook`) / ADR-018) that denies
-#     any `Skill` call whose REAL invoking agent's role doesn't own it, per skills_for_role() — at any
-#     spawn depth, not just this session. That is what makes "the coder cannot run the reviewer's
-#     procedure" a fact rather than a request, and it now holds for a spawned consult too, not only a
-#     plain session. (Cost: a foreign skill stays visible in the `/` menu — just not runnable.)
-#
-# Want two roles at once? Open a terminal tab yourself and run `fkit` again. (We deliberately do not
-# automate that: spawning terminals needs AppleScript/Accessibility permissions that fail in ways
-# that are worse than pressing Cmd-T.)
-#
-# Env: FKIT_SETUP_ONLY=1 — set up but don't launch claude.
-#      FKIT_NO_SELF_HOST=1 — never re-exec into a checkout's own claude/ (see below).
+# fkit launcher: set the project up (idempotent), then exec a ROLE-LOCKED Claude Code session in this tab.
+# The menu is deterministic: picking a role is an if/else, not a judgment call.
+
+# Locked twice: --agent fkit-<role> (ADR-010) and a PreToolUse hook that denies any `Skill` call whose REAL
+# invoking agent's role doesn't own it, at any spawn depth (ADR-018).
+
+# Want two roles at once? Open a terminal tab yourself: automating it needs AppleScript/Accessibility
+# permissions that fail in worse ways than pressing Cmd-T.
 set -eu
 here="$(cd "$(dirname "$0")" && pwd)"                  # .../claude
 proj="$PWD"
 
-# --- Self-hosting: dogfood the working tree, not the installed snapshot ------------------------
-# `fkit` on PATH execs the INSTALLED copy under ~/.local/share/fkit/, so `here` points there — and
-# setup copies agents/skills from `here` into the project's .claude/. Launched inside an fkit
-# checkout, that silently overwrites the project with a snapshot of an older fkit: edits to
-# claude/ never reach the agents, and no number of relaunches helps (the snapshot only moves on
-# `fkit update`). Re-exec into the checkout's own script so the working tree is the source.
-# The env guard makes the re-exec run exactly once; the path check is what identifies a checkout.
+# In an fkit checkout, re-exec its own claude/fkit-claude.sh: setup copies agents/skills from $here, and the
+# installed snapshot would overwrite the project with an older fkit. FKIT_NO_SELF_HOST=1 makes it run once.
 if [ "${FKIT_NO_SELF_HOST:-0}" != 1 ] \
    && [ -x "$proj/claude/fkit-claude.sh" ] \
    && [ "$proj/claude" != "$here" ]; then
@@ -50,25 +24,11 @@ fi
 
 ROLES="lead producer coder architect reviewer adversarial-reviewer wiki"
 
-# --- Self-update ------------------------------------------------------------------------------
-# `fkit` (bare) runs THIS script, which until now had no update logic at all — so everyone on the
-# default path sat on whatever version they installed, forever, with nothing telling them otherwise.
-#
-# Shaped per ADR-009 §Decision 3, and deliberately UNLIKE the Omnigent launcher it replaces:
-#   - it NOTIFIES; it never auto-updates and never re-execs itself. Silently swapping the code out
-#     from under a running invocation is exactly the behavior we don't want back.
-#   - `fkit update` stays an explicit verb the user chooses to run.
-#   - the check is throttled, time-boxed per network call, and silent on failure. This sits in the startup path
-#     of every single `fkit`, so offline / proxied / captive-portal must cost nothing and print nothing.
-#     (Omnigent's check had no timeout and no GIT_TERMINAL_PROMPT guard; see FKIT_NET_TIMEOUT below.)
-#
-# Env: FKIT_NO_UPDATE_CHECK=1     never touch the network.
-#      FKIT_UPDATE_INTERVAL_MIN   throttle window, minutes (default 60; 0 = check every launch).
-#      FKIT_REPO / FKIT_REF       update source (default flashist/fkit@main).
+# Self-update NOTIFIES only (ADR-009 Decision 3). Unless FKIT_NO_UPDATE_CHECK=1 or in a checkout, every launch
+# runs the check, so offline / proxied / captive-portal must cost nothing and print nothing.
 share="$(cd "$here/.." && pwd)"        # install root (~/.local/share/fkit), or the repo root in a checkout
-# Timeout contract. Each startup-check call gets FKIT_NET_TIMEOUT s and fails silently: curl by --max-time,
-# git ls-remote by _fkit_deadline (+1 s if git ignores TERM). `fkit update`'s install.sh download gets
-# FKIT_INSTALLER_FETCH_TIMEOUT and fails loudly.
+# Each startup-check call gets FKIT_NET_TIMEOUT s and fails silently (git via the watchdog, +1 s if git
+# ignores TERM); fkit update's install.sh download gets FKIT_INSTALLER_FETCH_TIMEOUT and fails loudly (0284).
 FKIT_NET_TIMEOUT=5
 FKIT_INSTALLER_FETCH_TIMEOUT=60        # the user is watching and a slow link is not a failure; install.sh's own downloads stay unbounded
 
@@ -90,7 +50,7 @@ _fkit_deadline() (   # <secs> <cmd> [args…] → the command's stdout if it exi
   ( trap 'kill "${_fkit_dl_nap:-}" || :; exit 0' TERM
     sleep "$_fkit_dl_secs" & _fkit_dl_nap=$!
     wait "$_fkit_dl_nap" || :
-    # git does its network work in child processes, so its direct children die too; KILL in case TERM is ignored.
+    # git works in child processes: kill its direct children too, and KILL in case TERM is ignored.
     _fkit_dl_kids="$(ps -A -o pid= -o ppid= | awk -v p="$_fkit_dl_pid" '$2 == p { print $1 }')" || :
     kill $_fkit_dl_kids "$_fkit_dl_pid" || :
     sleep 1 || :
@@ -125,16 +85,12 @@ _fkit_remote_version() {   # → the human version string at $repo@$ref, or empt
 }
 _fkit_reinstall() {   # run the canonical installer for $repo@$ref into $fkit_share/$fkit_bin (refreshes resources + .version)
   command -v curl >/dev/null 2>&1 || { echo "fkit: curl is required to update" >&2; return 1; }
-  # Download FIRST, then run (task 0481). Piped straight into sh, a failed download handed sh an empty
-  # script; sh exited 0, the pipe reported sh's status, and `fkit update` printed "now at v<old>"
-  # after fetching nothing. A download cut off mid-way is never half-run this way either.
+  # Download first, then run: piped into sh, a failed download ran an empty script and printed success (0481).
   _fkit_script="$(curl -fsSL --max-time "$FKIT_INSTALLER_FETCH_TIMEOUT" "https://raw.githubusercontent.com/$fkit_repo/$fkit_ref/install.sh")" \
     && [ -n "$_fkit_script" ] \
     || { echo "fkit: could not download install.sh from $fkit_repo@$fkit_ref" >&2; return 1; }
-  # The installer's variables go AFTER the pipe, on the `sh` that runs it (task 0481). A variable set
-  # in front of a command reaches only that command — `A=1 true | sh -c 'echo ${A:-unset}'` prints
-  # `unset` — so the old `FKIT_REPO=… curl … | sh` gave them to curl, and the installer ran on its
-  # defaults (flashist/fkit@main, ~/.local/share/fkit, ~/.local/bin) whatever "updating from" said.
+  # The installer's variables go on the sh after the pipe: a prefix reaches only its own command, so the old
+  # form gave them to curl and the installer ran on its defaults (0481).
   printf '%s\n' "$_fkit_script" \
     | FKIT_REPO="$fkit_repo" FKIT_REF="$fkit_ref" FKIT_SHARE="$fkit_share" FKIT_BIN="$fkit_bin" sh
 }
@@ -149,25 +105,20 @@ _fkit_same_dir() {   # <a> <b> → true if both are directories with the same ph
 fkit_repo="${FKIT_REPO:-$(_fkit_verfield repo)}"; fkit_repo="${fkit_repo:-flashist/fkit}"
 fkit_ref="${FKIT_REF:-$(_fkit_verfield ref)}";    fkit_ref="${fkit_ref:-main}"
 
-# Explicit: `fkit update`. A real verb the user invokes deliberately.
 case "${1:-}" in
   update|--update|upgrade|--upgrade|self-update)
     if _fkit_is_source_checkout; then
       echo "fkit: this is a source checkout ($share) — update it with 'git pull'." >&2
       exit 1
     fi
-    # Reinstall into the SAME place this install lives (task 0481). Share: env for this run → this
-    # install's own root, but only if it IS one: reached through a symlink or a copy, `$here/..` is the
-    # link's parent, and install.sh would `rm -rf` under it. An explicit FKIT_SHARE is taken as given,
-    # as install.sh takes it. Bin: env → `bin=` in .version → the default, but ONLY when the default
-    # wrapper provably runs this install → refuse. An older .version has no `bin=`, and a guess here
-    # installs a second copy somewhere else while the one the user runs stays old.
+    # Reinstall into the SAME install (0481): unless FKIT_SHARE names it, refuse a symlinked or copied fkit
+    # (install.sh would rm -rf under a wrong root); refuse an unknown bin dir rather than install a 2nd copy.
     if [ -z "${FKIT_SHARE:-}" ] && ! { [ -f "$share/.version" ] && _fkit_same_dir "$here" "$share/claude"; }; then
       echo "fkit: $share is not an fkit install (is this fkit a symlink or a copy?); run the fkit the installer made, or:  FKIT_SHARE=<its install dir> FKIT_BIN=<its bin dir> fkit update" >&2
       exit 1
     fi
-    # An explicit FKIT_SHARE that already holds an install IS the install being updated: its own .version
-    # supplies repo/ref/bin (env still wins), or a symlinked fork/pinned install reverts to flashist/fkit@main.
+    # An explicit FKIT_SHARE holding an install supplies its own repo/ref/bin (env still wins); otherwise
+    # a fork or pinned install reached through it would revert to flashist/fkit@main.
     src="$share"
     if [ -n "${FKIT_SHARE:-}" ] && [ -f "$FKIT_SHARE/.version" ]; then
       src="$FKIT_SHARE"
@@ -212,20 +163,11 @@ if [ "${FKIT_NO_UPDATE_CHECK:-0}" != 1 ] && ! _fkit_is_source_checkout; then
       rver="$(_fkit_remote_version)"; curver="$(_fkit_verfield version)"
       { printf 'version=%s\n' "${rver:-unknown}"; printf 'sha=%s\n' "$remote"; } \
         > "$share/.latest" 2>/dev/null || true
-      # LABEL WHAT ACTUALLY TRIGGERED (task 0257). The trigger above is a SHA comparison, but this
-      # line used to be worded as a version upgrade — so whenever content moved without a version
-      # bump (the normal case: 33 of 241 commits have ever touched VERSION) it read
-      # "v0.2.1 → v0.2.1 is available", and with no curl, "v0.2.1 → v? is available". Both are
-      # nonsense to a reader, and both told them to run an update they could not evaluate.
-      # A remote version is not always knowable — `git ls-remote` returns refs, not file content, and
-      # GitHub refuses `git archive --remote` (HTTP 422) — so there is no git fallback to add here.
-      # Only say "vA → vB" when there really are two DISTINCT known versions; otherwise say the thing
-      # that is actually true, with the shas as the evidence (the `fkit update` success line above
-      # already prints an abbreviated sha, so the idiom is this file's own).
-      # SCOPE, precisely: this removes the "v?" the EMPTY-version paths produced (absent curl, failed
-      # fetch, no version= line). It is NOT validation — both sides are only tested for non-emptiness,
-      # so a garbage remote VERSION still renders verbatim ("?" → "v?"; an intercepted HTML error page
-      # → "v<!DOCTYPEhtml>"). Deliberate: validating version strings is a separate call, not 0257's.
+      # Label what triggered: it is a sha compare, so say "vA → vB" only for two DISTINCT known versions,
+      # else name the shas (0257). A remote version is not always knowable (no curl; ls-remote returns refs).
+
+      # Scope (0257): only the empty-version "v?" is gone; nothing is validated, so a garbage VERSION still
+      # renders verbatim.
       if [ -n "$rver" ] && [ -n "$curver" ] && [ "$rver" != "$curver" ]; then
         printf '\n  ↑ fkit v%s → v%s is available. Run:  fkit update\n\n' "$curver" "$rver"
       else
@@ -269,23 +211,9 @@ EOF
     exit 0 ;;
 esac
 
-# An explicit role as the first bare word skips the menu.
 role=""
-# ⚠️ `team` / `team room` are NOT accepted — not here, and not at the menu either. They were lead's
-# old display label; task 0140 retired it from the launcher and the live docs, so `lead` is the only
-# word this program accepts on any path. (Accepted ADRs and dated reports keep the old label on
-# purpose — they record what was true when written.)
-# Task 0139 had briefly accepted them here and REVERTED it, owner-ruled 2026-07-25. Why that
-# revert matters if you are tempted to bring the words back: the menu reads a whole LINE, so
-# `"team room"` matches there; this path reads ARGV, already whitespace-split, so `fkit team room`
-# fell into a `team` arm and left `room` behind as a positional — Claude Code's initial prompt —
-# where it had been a loud `exit 2`.
-#
-# The leftover word is NOT the alias's bug: `fkit lead room` and `fkit coder room` do the same thing
-# and always have — args after a named role pass through by design (see the guard below). A `team` arm
-# that consumed a following `room` was weighed and REJECTED for exactly that reason: it would make one
-# spelling stricter than all seven real role words. Re-adding the alias means answering that first;
-# do not re-add it casually.
+# team / team room are deliberately NOT accepted, here or at the menu; lead is the only word (0140).
+# Read 0139 review R1, R3 before re-adding: argv is split, so fkit team room passes room on as a prompt.
 case "${1:-}" in
   producer|coder|architect|reviewer|wiki|adversarial-reviewer|lead)
     role="$1"; shift ;;
@@ -293,19 +221,8 @@ case "${1:-}" in
     role="adversarial-reviewer"; shift ;;
 esac
 
-# No role named, but args remain → a USAGE ERROR, not a session.
-#
-# This is where the old blanket passthrough was. Any unrecognized first arg used to fall through to
-# `claude` with role still empty — so `fkit --resume` hit the "no role → lead" default below and
-# silently resumed ANY session (a coder session included) under the LEAD's skill lockdown: no Write,
-# no Edit, no warning. A session pinned to exactly one role is the invariant the whole product rests
-# on (ADR-010), and a stray argv word was quietly bypassing it. Now it stops here.
-#
-# Deliberately placed AFTER role parsing (we must know whether a role was named) but BEFORE setup,
-# preflight, the fresh-project branch, the menu, and the lead default — all four of which exec
-# `claude` with "$@" and would otherwise re-open the same hole one level down. `update` and `--help`
-# exit above this, so they can never be swallowed by it. Args after a NAMED role still pass through
-# (`fkit coder --debug`): that path is intentional and is not what this guards.
+# No role named but args remain → usage error, before setup and every claude exec: a stray word once let
+# fkit --resume resume ANY session under the lead's lockdown (ADR-010; 0073). Args after a role pass through.
 if [ -z "$role" ] && [ "$#" -gt 0 ]; then
   printf 'fkit: "%s" is not a role.\n' "$1" >&2
   printf '      Roles: %s (or: adv)\n' "$ROLES" >&2
@@ -313,21 +230,9 @@ if [ -z "$role" ] && [ "$#" -gt 0 ]; then
   exit 2
 fi
 
-# ---------------------------------------------------------------------------
-# Skill ownership — THE single source of truth (ADR-012 §1). A role session may RUN only these — every
-# other fkit-* skill stays enabled (visible in the menu) but is denied on invocation (ADR-018). Non-fkit
-# skills (the project's own, the user's own) are never touched.
-#
-# This is now the ONLY place role→skill ownership is expressed. The `skills:` frontmatter that used
-# to sit in claude/agents/*.md was DROPPED, not generated: Claude Code treats it as a PRELOAD hint,
-# not an allowlist, so it enforced nothing. Keeping it (even generated + drift-checked) would have
-# preserved a field that LOOKS like the invariant and isn't — worse than no field at all. Don't
-# re-add it.
-#
-# Scope of the lock, precisely (`0052` / ADR-018, superseding ADR-012 §2's "advisory in a consult"
-# half): a PreToolUse hook (skill-ownership-hook.sh) now enforces this against the REAL invoking
-# agent's identity, at any spawn depth — structural in a role SESSION *and* in a spawned CONSULT.
-#
+# skills_for_role() is the one source of role→skill ownership (ADR-012 §1; no skills: frontmatter — it is
+# only a preload hint). A PreToolUse hook enforces it at any spawn depth (ADR-018).
+
 # ⚠️ CHANGING A ROLE'S SKILLS? SIX hand-maintained places MIRROR this list (or a role fact it carries)
 # for humans and MUST be updated in the same commit, or the docs lie about what a role can do:
 #   * claude/skills/fkit-team/SKILL.md  — the roster the /fkit-team skill prints
@@ -348,73 +253,24 @@ fi
 # primary procedure for two days. These are copies FOR READERS, not sources of truth; skills_for_role() is the source of
 # truth (moved to skills-for-role.sh, `0052`, so the PreToolUse hook can source it without pulling
 # in this script's top-level side effects).
-# ---------------------------------------------------------------------------
 . "$here/skills-for-role.sh"
 
-# Writes the role's settings to a file and echoes its (relative) path. It goes in a FILE rather than
-# inline on argv because a terminal with no title yet labels the tab with the command line — and a
-# ~400-byte JSON blob makes every tab look identical. `--settings` takes a file or JSON; we take file.
-#
-# Retired here (`0052` / ADR-018, replacing ADR-012 §3): the old `skillOverrides` "off" list and the
-# `CONSULT_SKILLS` always-on exception list it required. Both were a SESSION-scoped mechanism — they
-# governed what the launching process could see, not who was actually calling — so a spawned consult
-# inherited the *launcher's* list, never its own (the bug class `0052` fixes). The PreToolUse hook
-# below enforces against the REAL invoking agent's identity instead, at any spawn depth, so the
-# per-role off-list is no longer doing any work an unowned-skill call couldn't already be denied by
-# the hook — removing it retires the accepted `fkit-survey-project`-reachable-everywhere leak
-# (ADR-012 §3) as a side effect, not a separately engineered fix. Do not re-add either mechanism —
-# see ADR-018 for the record.
+# Settings go in a FILE, not argv: a tab with no title shows the command line, and the JSON makes every tab
+# look alike. The retired skillOverrides off-list and CONSULT_SKILLS stay retired (ADR-018).
 build_settings() {   # → .fkit/settings/<role>.json containing {"hooks":{…}}
-  # PreToolUse skill-ownership hook (`0052` / ADR-018): denies a Skill call whenever the REAL
-  # invoking agent's role doesn't own it, at any spawn depth — this is what makes the lockdown hold
-  # in a spawned CONSULT, not just a plain session (unlike the retired off-list, which only ever did
-  # the latter). `bash "<path>"` — never a bare `"<path>"` — because the shipped file's exec bit is
-  # not guaranteed to survive the install/copy chain (ADR-017 rule 2; same reasoning as dashboard.sh).
-  # `$here` is absolute and this file is regenerated fresh on every launch, so an absolute path here
-  # is safe (unlike a COMMITTED settings.json, where it would break for every other machine).
-  #
-  # Stop turn-completion hook (task 0127 / ADR-030): a SECOND key in the same object, enforcing the
-  # end-of-turn contract (ask interactively; close with "What's next?"). No `matcher` — Stop is not
-  # tool-scoped. Registered on Stop ONLY (never SubagentStop) so it never fires in a spawned consult,
-  # which is the safety-critical skip (ADR-030 Decision 7). Same `bash "<path>"` form and absolute
-  # `$here` as the PreToolUse entry, for the same reasons.
-  #
-  # AskUserQuestion marker hook (task 0127 / ADR-030 path 2): a SECOND PreToolUse entry, matched on the
-  # AskUserQuestion tool, records a turn-scoped marker so the Stop hook can reliably tell whether the
-  # owner was asked via the tool this turn (a Stop payload has no tool-call list; the transcript is
-  # unreliable). The state dir it writes to is created at launch below so the Stop hook can trust a
-  # missing marker as "tool not used" rather than "infra not ready".
-  # Ship-loop marker hook (task 0129 / ADR-030): a UserPromptExpansion entry — the ONE event that fires
-  # on a direct `/command` invocation with an authoritative `command_name` — records a session marker so
-  # the Stop hook knows a ship-loop is driving WITHOUT scanning the transcript (the transcript scan
-  # over-skipped on marker-as-content — 0127 R8). No matcher; the hook self-filters on command_name.
-  #
-  # Carry-check hook (task 0204 / `0162` §10 row 3): a THIRD PreToolUse entry, matched on the
-  # subagent-spawning tool ("Agent" since Claude Code 2.1.63; "Task" is the legacy alias, so the
-  # matcher is the regex "Agent|Task"). When a spawn prompt carries a `plan: <path>/plan.md  blob <hash>`
-  # pointer line, it denies the spawn unless the file exists, its git blob id starts with the named
-  # hash, and (unless the prompt declares the pointer-only degraded form) the prompt contains the file's
-  # exact bytes. Three limits, each stated in full in carry-check-hook.mjs — never oversell it:
-  #   • PROXY, never condition (b): green = "the prompt contains the bytes of the file it names", NOT
-  #     "the owner approved that file" (approval leaves no artifact — ADR-021).
-  #   • TOCTOU: time-of-check only; plan.md may change after the read.
-  #   • LAUNCHER SESSIONS ONLY: it lives in .fkit/settings/<role>.json, so only `fkit <role>` sessions
-  #     have it — and a running session gets it at its NEXT launch, never mid-session.
+  # bash "<path>", never the bare path: the exec bit may not survive install (ADR-017 rule 2). An absolute
+  # $here is safe only because this file is regenerated every launch, never committed.
+
+  # Hooks, each documented in its own script: Skill ownership (ADR-018); AskUserQuestion marker + Stop
+  # (ADR-030; never SubagentStop, so a consult is never blocked); ship-loop marker (0129); carry-check (0204).
+
+  # Launcher sessions only: a running session gets it at its NEXT launch, never mid-session.
   hooks="\"hooks\":{\"PreToolUse\":[{\"matcher\":\"Skill\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/skill-ownership-hook.sh\\\"\"}]},{\"matcher\":\"AskUserQuestion\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/askuserquestion-marker-hook.sh\\\"\"}]},{\"matcher\":\"Agent|Task\",\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/carry-check-hook.sh\\\"\"}]}],\"Stop\":[{\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/turn-completion-hook.sh\\\"\"}]}],\"UserPromptExpansion\":[{\"hooks\":[{\"type\":\"command\",\"command\":\"bash \\\"$here/shiploop-marker-hook.sh\\\"\"}]}]}"
   # Best-effort: ensure the marker state dir exists so the Stop hook's "infra ready" proxy holds from
   # turn 1 (a read-only project simply leaves it absent → Stop fails open, suppressing check A).
   mkdir -p "$proj/.fkit/state" 2>/dev/null || :
-  # The lockdown is NOT optional: a session launched without --settings is a session with no role
-  # isolation at all (ADR-010), and it would fail *open* — every fkit skill live in every role. So when
-  # the project is not writable (read-only checkout, permissions) we neither skip the lockdown nor die
-  # on a raw `mkdir: Permission denied`; we hand the SAME JSON to --settings inline instead, which it
-  # also accepts. Inline costs us only the ugly tab title the file exists to avoid — a fair price on a
-  # path that is both rare and already degraded, and it beats a temp file: nothing to leak on every
-  # launch, and no world-writable /tmp surface to defend.
-  #
-  # Note the subshell around the write: a redirection that fails to OPEN is reported by the shell, not
-  # by printf, so `printf … > f 2>/dev/null` would still leak "Permission denied" to the terminal. The
-  # subshell puts the redirection *inside* the scope stderr is silenced for.
+  # The lockdown is NOT optional (ADR-010): if .fkit/ is unwritable, pass the same JSON inline (ugly tab
+  # title, no temp file). The subshell keeps a failed redirect's "Permission denied" inside the 2>/dev/null.
   if mkdir -p "$proj/.fkit/settings" 2>/dev/null &&
      ( printf '{%s}\n' "$hooks" > "$proj/.fkit/settings/$1.json" ) 2>/dev/null; then
     printf '.fkit/settings/%s.json' "$1"        # relative: we always exec from $proj (proj = $PWD)
@@ -424,21 +280,14 @@ build_settings() {   # → .fkit/settings/<role>.json containing {"hooks":{…}}
   printf '{%s}' "$hooks"
 }
 
-# Name the tab for the role, so a wall of fkit tabs is readable. Claude Code overwrites this once the
-# conversation has a topic (its own auto-title); until then this is what you see.
+# Name the tab until Claude Code auto-titles it, so a wall of fkit tabs is readable.
 set_tab_title() {
   [ -t 1 ] || return 0
   printf '\033]0;fkit · %s — %s\007' "$1" "$(basename "$proj")"
 }
 
-# Setup runs every launch (idempotent), but stays QUIET on an already-set-up project — nobody wants
-# a wall of "already present" on every single launch. A first-time setup prints its summary in full.
-#
-# Setup is BEST-EFFORT; the session is not. init runs under `set -euo pipefail`, and this launcher
-# under `set -eu` — so an unguarded call meant any init failure (bad permissions, read-only checkout,
-# ENOSPC, a weird ai-agents/) killed the launcher before `claude` was ever exec'd, and the user lost
-# their whole team over a `cp`. Guard the call, warn loudly, and start the session anyway. A user must
-# always be able to reach their agents, even when fkit cannot finish setting the project up.
+# Setup runs every launch, quiet on a set-up project, and is best-effort (0088):
+# A user must always be able to reach their agents, even when fkit cannot finish setting the project up.
 setup_ok=1
 aa_refused=0
 setup_rc=0
@@ -447,9 +296,8 @@ if [ -e "$proj/ai-agents" ] && [ -d "$proj/.claude/agents" ]; then
 else
   "$here/fkit-claude-init.sh" "$proj" || setup_rc=$?
 fi
-# 3 is init's "I set everything up, but I refused to touch ai-agents/" — a success, not a failure.
-# Anything else non-zero is a real setup failure. We take this as a STATUS from init rather than
-# re-testing the condition here: the two copies drifted the first time we tried that.
+# init's exit 3 = set up, but ai-agents/ refused: a success. Taken as a STATUS, never re-tested here —
+# the two copies drifted the first time we tried that.
 case "$setup_rc" in
   0) ;;
   3) aa_refused=1 ;;
@@ -464,15 +312,8 @@ if [ "$setup_ok" = 0 ]; then
   echo >&2
 fi
 
-# The promise is "a setup failure never costs you a project that ALREADY has its agents" — not "fkit
-# can start a session out of nothing". If setup failed AND no usable fkit agent is on disk,
-# there is nothing to launch into: `claude --agent fkit-<role>` cannot resolve an agent file that does
-# not exist, and it would die on its own confusing "agent not found". Say so plainly instead.
-#
-# We deliberately do NOT drop --agent to force *some* session: an unroled session carries no ADR-010
-# lockdown, so it would fail OPEN — every role's skills live at once. Refusing is the safe answer.
-# Name existence proves nothing: the glob walks through a symlinked .claude or agents/, and a dangling
-# link or a directory named fkit-*.md still matches (task 0334).
+# Setup failed and no usable agent: claude --agent would die on its own confusing "agent not found", so
+# refuse. Never drop --agent — an unroled session fails OPEN (ADR-010). Names alone prove nothing (0334).
 agents_usable() {   # → 0 if a readable regular .claude/agents/fkit-*.md exists with no symlink on the way; else one "    <path> — <why>" line per blocker
   for _p in "$proj/.claude" "$proj/.claude/agents"; do
     if [ -L "$_p" ]; then
@@ -512,67 +353,14 @@ if [ "$setup_ok" = 0 ] && ! agents_why="$(agents_usable)"; then
   exit 1
 fi
 
-# --- Launch-time structure notice (task 0247, unit 6 of the 0241 design; ADR-039 / Q3 "Yes + yes") --
-# ONE stderr line when the project's fkit-managed structure diverges from what the installed version
-# ships — awareness only: nobody runs what nobody is told to run. The repair's only entry point stays
-# the on-demand /fkit-heal check (0245/0246). Runs on every path to a session (fresh-project, menu,
-# named role), including under FKIT_SETUP_ONLY — deliberate: a structure notice at setup time is
-# coherent, and it is what makes this pass testable through the existing harness.
-#
-# READ-ONLY, NO MEMORY, NON-FATAL — each a contract, not a preference:
-#   * It REUSES the shipped checker (skills/fkit-heal/check.sh) and parses its pinned stdout row
-#     contract (`<outcome>\t<path>\t<detail>`; ADR-017 rule 4, pinned by test/structure-check.test.js).
-#     A second, lighter classification pass would be a hand-maintained mirror of check.sh's semantics
-#     (hashing pipeline, marker elision, precedence, keep-out fail-closed) — and a notice that
-#     disagrees with the on-demand check is worse than no notice. The SHARE's copy, always
-#     ($here/skills/…): the project's .claude/skills/ copy can be stale.
-#   * A row is notice-relevant iff its outcome is in check.sh's exit-1 set (missing, untouched-stale,
-#     owner-edited, wrong-type, wiki-routed, refused: symlink, refused: malformed-markers,
-#     unreadable). `conforming` and `kept-out` never are. Keyed off ROWS, not the exit code — so the
-#     fail-closed keep-out path (exit 1, loud init warning already given, no ai-agents rows printed)
-#     comes out silent here unless a root file also diverges, with no special-casing.
-#   * Zero relevant rows → COMPLETE silence (init's output-trap rule, carried verbatim: the happy
-#     path runs on every launch of every project forever).
-#   * No stamp, no throttle, no cursor, no .fkit/ state — the notice prints while the mismatch exists
-#     and stops when it is fixed (ADR-015 Context §3's rejected cursor stays rejected). And NO env
-#     kill-switch: that would be the global mute Q3 explicitly forbade, one layer down.
-#   * Never a repair, never a prompt, never stdout. check.sh's own stderr is discarded — its warnings
-#     would duplicate init's, which already announced symlinks etc. on this same launch.
-#   * Every failure is non-fatal, and picks its direction by what it gates. check.sh absent from
-#     the share (older install), bash absent, the check exiting with anything but 0/1 → a silent
-#     `return 0` (no rows, nothing to report). A failure of the awk FILTER itself instead drops
-#     SUPPRESSION, never the notice — it is re-run with the intent file disabled — because silence
-#     there would hide drift (the inverted failure direction below). The filter runs under LC_ALL=C
-#     (byte semantics: non-UTF-8 bytes in an intent file or a path must not crash a multibyte-aware
-#     awk) with awk's stderr discarded (its noise never leaks around the launcher's one line). This
-#     launcher runs `set -eu`; a notice failure must never cost the session (`0088` bar).
-#
-# Suppression — ai-agents/.fkit-accepted-drift, the intent file. A SIBLING of .fkit-keep-out, not
-# entries in it: keep-out means "never create this path"; drift-acceptance means "divergence at this
-# path is deliberate". Two intents, two files.
-#   * TRACKED (lives in ai-agents/, never .fkit/) — survives a clone, shared with teammates; records
-#     INTENT, not progress. One PROJECT-ROOT-relative path per line (`CLAUDE.md`,
-#     `ai-agents/README.md`) — root-relative, unlike keep-out's ai-agents-relative form, because the
-#     notice's scope includes CLAUDE.md/AGENTS.md, which sit outside ai-agents/. An entry covers the
-#     path AND everything beneath it (keep-out's subtree rule). Parser semantics carried from the
-#     keep-out parser: `#` comments, blank lines, ALL CRs stripped (keep-out's `tr -d '\r'`,
-#     wherever they sit — not just one trailing), strip leading `./`/`/` and trailing `/`,
-#     LITERAL matching only — never globbed (init's R3 lesson; the matching runs in awk, no shell
-#     expansion touches an entry).
-#   * No global switch; no per-mismatch keying (path + content identity would record a POSITION — the
-#     rejected cursor by the back door). An entry suppresses the path whatever the outcome and
-#     whatever the content. OWNED CONSEQUENCE: a suppressed path stays silent even when a future fkit
-#     version changes what ships there — consistent with the recorded intent ("this path is mine
-#     now"); reversible by deleting the entry.
-#   * ⚠️ FAILURE DIRECTION — INVERTED FROM KEEP-OUT, DELIBERATELY. An intent file that is a symlink /
-#     directory / unreadable (or sits under a symlinked ai-agents/, which fkit never probes through)
-#     is IGNORED: nothing suppressed, the notice prints. Keep-out gates a WRITE, so failing closed
-#     means don't write; this gates SILENCE, so failing closed means don't silence — the worst case
-#     is one extra stderr line, never hidden drift and never a write. Do not "fix" this into
-#     keep-out's direction.
-#   * Suppression applies to THIS notice only. The on-demand /fkit-heal check still reports
-#     suppressed paths in full — it is the diagnostic, and hiding rows from an explicit request would
-#     be suppressing evidence.
+# Launch-time structure notice (0247; ADR-039 Decision 3): ONE stderr line when the project diverges from
+# what the installed fkit ships. Awareness only; /fkit-heal repairs. Contract: 0247 plan §2–§3, review R1, R2.
+
+# Reuses the SHARE's check.sh rows (a second classifier would drift). Read-only, no state, no kill-switch;
+# every failure is silent and non-fatal; a filter failure retries without suppression before giving up.
+
+# ⚠️ A bad intent file suppresses NOTHING — inverted from keep-out on purpose: keep-out gates a write, this
+# gates silence. Do not "fix" it into keep-out's direction.
 structure_notice() {
   sn_ck="$here/skills/fkit-heal/check.sh"
   [ -f "$sn_ck" ] || return 0
@@ -629,8 +417,7 @@ structure_notice() {
 }
 structure_notice || :
 
-# FKIT_SETUP_ONLY is a setup CHECK. A check that reports success on a failed setup is worse than no
-# check at all — so it exits non-zero when setup failed, rather than the blanket `exit 0` it used to.
+# FKIT_SETUP_ONLY is a setup CHECK: non-zero when setup failed.
 if [ "${FKIT_SETUP_ONLY:-0}" = 1 ]; then
   [ "$setup_ok" = 1 ] || exit 1
   exit 0
@@ -643,16 +430,8 @@ command -v claude >/dev/null 2>&1 || {
   exit 127
 }
 
-# --- Codex preflight: optional but recommended — a WARNING, never a wall ----------------------
-# fkit is Claude Code + (recommended) Codex. The adversarial reviewer's whole reason to exist is
-# genuine model diversity — a second opinion from a DIFFERENT model. A "Codex" review that silently
-# ran on Claude is a second opinion from the model that wrote the code: not a second opinion, the
-# illusion of one, which is worse than none. So Codex absence has to be loud HERE, where the user can
-# still fix it, rather than only in a flag on the review output.
-#
-# Per the owner's 2026-07-11 ruling and ADR-054 this warns and continues — Codex is optional, and an
-# outage mid-session must not wall the user out of their own team. `codex login status` is the check
-# because a binary that cannot authenticate is the same failure to the user (~70ms; no model call).
+# Codex preflight: optional but recommended — a WARNING, never a wall (ADR-054). Loud here, where the user
+# can still fix it: a "second opinion" silently run on Claude is not model-diverse.
 codex_preflight() {
   if ! command -v codex >/dev/null 2>&1; then
     printf '\n  ⚠ Codex ('\''codex'\'') is not installed / not on PATH.\n' >&2
@@ -666,45 +445,21 @@ codex_preflight() {
 }
 codex_preflight
 
-# --- Fresh project: run the producer's cold start, THEN open the lead -------------------------
-# The producer is where the cold start lives (`fkit-initiate-project` is producer-only, and the
-# ADR-018 hook denies it to every other role), so it still goes first — with the live owner channel
-# the initiation is written for. But the producer is not where you want to LAND: once the project is
-# initiated, the lead is the front door (ADR-031). So the cold start is no longer an `exec`: it RUNS,
-# and if it succeeded the launcher falls through to its own tail and opens the lead in this tab.
-#
-# ⛔ The fall-through is GATED on the initiation actually landing — exit 0 AND a tree that is no longer
-# fresh. A Ctrl-C, a "skip setup", or a half-finished initiation exits exactly as it did before. Being
-# force-dropped into a session you did not ask for is worse than being dropped back to the shell.
-#
-# "Fresh" is only a meaningful question when init actually manages ai-agents/. When it REFUSED the tree
-# (symlink, a file where the dir belongs, a directory it cannot read), PROJECT.md is missing for a
-# reason that has nothing to do with being new — and force-starting the producer's cold start would
-# strand the owner in an initiation that can never complete, on every launch, with no way to the menu.
-# So: a refused ai-agents/ is NOT fresh. Fall through to the menu and let them work.
-#
-# `aa_refused` comes from init's exit status (3). Do NOT re-derive it here — an earlier version tested
-# `[ -d ] && [ ! -L ]` and silently disagreed with init about a chmod-000 directory.
+# Fresh project: run the producer's cold start (it owns fkit-initiate-project), then open the lead (ADR-031;
+# 0379) — only if the initiation landed; otherwise back to the shell, never a forced session.
+
+# A refused ai-agents/ is NOT fresh: PROJECT.md is missing for another reason, so the cold start could never
+# complete. aa_refused comes from init's exit 3; never re-derive it here.
 pm="$proj/ai-agents/knowledge-base/PROJECT.md"
-# The freshness question, asked in exactly one place. It is asked TWICE now — once to decide whether
-# to cold-start, and again afterwards to decide whether the cold start actually landed — and the whole
-# value of the second ask is that it is the SAME question. Two hand-copied greps would drift, and the
-# drift would be silent in the direction that hurts: a stricter second test never opens the lead, a
-# looser one opens it on a half-written PROJECT.md.
+# One freshness test, asked before and after the cold start: two hand-copied greps would drift silently.
 pm_is_fresh() {
   [ ! -f "$pm" ] \
     || grep -q 'fkit:uninitialized' "$pm" 2>/dev/null \
     || grep -qF '# <Project name>' "$pm" 2>/dev/null
 }
 fresh=0
-# `setup_ok` is checked as well as `aa_refused`, and not only as a belt-and-braces: one exit status
-# cannot carry two facts. If init refuses ai-agents/ AND then fails a later step, `set -e` exits with
-# THAT failure (1) and the refusal is never signalled — so `aa_refused` alone would read 0 and the cold
-# start would come straight back. That state is not exotic; it is a read-only checkout (`0088`) that
-# also has a weird ai-agents/ (`0069`), i.e. the intersection of this work's own two briefs.
-#
-# It is independently right, too: the producer's initiation exists to WRITE ai-agents/, and a failed
-# setup is direct evidence fkit cannot write this project. Cold-starting into it could only fail.
+# setup_ok too: one exit status cannot carry two facts (a refusal then a failure exits 1, not 3), and a
+# setup that cannot write the project cannot be initiated into.
 if [ "$aa_refused" = 0 ] && [ "$setup_ok" = 1 ]; then
   if pm_is_fresh; then
     fresh=1
@@ -722,39 +477,23 @@ if [ "$fresh" = 1 ] && [ -z "$role" ]; then
   fi
   settings="$(build_settings producer)"
   set_tab_title producer
-  # ⛔ NOT `exec` any more, and the `|| cold_rc=$?` is not optional politeness: under `set -e` a
-  # non-zero exit from a bare `claude` would kill the launcher HERE, before the transition below ever
-  # runs — i.e. exactly on the Ctrl-C path the gate exists to handle, and silently.
+  # Not exec, and the || is load-bearing:
+  # under set -e a non-zero claude (Ctrl-C) would kill the launcher here.
   cold_rc=0
   claude --agent fkit-producer --settings "$settings" "$@" "$seed" || cold_rc=$?
-  # Did the initiation actually land? Both halves are load-bearing. The exit code alone would open the
-  # lead after a Ctrl-C that happened to leave a PROJECT.md behind; the tree state alone would open it
-  # after a producer that crashed at the last step. Only "exited clean AND no longer fresh" is proof.
+  # Landed only if it exited 0 AND the tree is no longer fresh; either half alone opens the lead wrongly.
   if [ "$cold_rc" = 0 ] && ! pm_is_fresh; then
-    # Fall through to the tail with role=lead. Deliberately NO new `exec` and NO seed: the tail below
-    # already prints the lead line, builds the lead's settings, retitles the tab and execs it.
+    # Fall through to the tail with role=lead: no new exec, no seed.
     role="lead"
   else
-    # The owner was PROMISED the lead two screens ago ("this tab opens the lead"), and the gate above
-    # has just decided not to keep that promise. Exiting silently here leaves them staring at a shell
-    # prompt with no idea whether fkit broke or simply declined — so say which. ⛔ This is a message
-    # ONLY: the exit code is still the cold start's own and no session is opened, because being
-    # force-dropped into a session you did not ask for is the thing the gate exists to prevent.
+    # The owner was promised the lead: say why not, but open nothing; the exit code stays the cold start's.
     printf '\n  Setup did not complete — run `fkit` again when you are ready.\n'
     exit "$cold_rc"
   fi
 fi
 
-# --- The menu (deterministic; no LLM) ----------------------------------------------------------
-# Only when no role was named AND no other args were passed AND we have a terminal to ask on.
-#
-# The "terminal to ask on" test must be whether /dev/tty can actually be OPENED, not `[ -r /dev/tty ]`.
-# `-r` checks the device node's permission bits (access()), and /dev/tty is world-rw on macOS/Linux, so
-# it reads TRUE even with no controlling terminal — the branch would then be entered and die at the
-# `exec 3</dev/tty` below (ENXIO "Device not configured") under `set -e`, never reaching the lead
-# default at the bottom. The subshell `( exec 3</dev/tty )` returns 0 only if open() genuinely succeeds
-# (non-fatal on failure inside this `||` test; 2>/dev/null swallows the ENXIO noise), so a headless run
-# correctly falls through to the lead default instead of crashing.
+# The menu (deterministic; no LLM), only with no role, no args and a terminal. Probe /dev/tty by OPENING it:
+# [ -r /dev/tty ] is true with no tty, and exec 3</dev/tty would die under set -e (0042).
 if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || ( exec 3</dev/tty ) 2>/dev/null; }; then
   if [ -t 0 ]; then exec 3<&0; else exec 3</dev/tty; fi
   proj_name="$(basename "$proj")"
@@ -784,12 +523,8 @@ if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || ( exec 3</dev/tty ) 2>/dev/
       6|adv|adversarial)     role="adversarial-reviewer" ;;
       7|wiki)                role="wiki" ;;
       q|Q|quit|exit)         echo; exit 0 ;;
-      # Enter with no input → lead. This does NOT invent a default: for an already-initiated
-      # project the headless fall-through below (`[ -n "$role" ] || role="lead"`) has always opened
-      # the lead for a no-arg, no-tty run — this makes the interactive path agree with it. (An
-      # UNinitiated project is intercepted above and opens the producer on both paths alike.)
-      # ⛔ EMPTY ONLY: the `*)` arm still rejects and re-prompts, because "empty means lead" must
-      # not widen into "anything unmatched means lead" (the header's `fkit --resume` bug).
+      # Enter → lead, matching the headless default below (0302). EMPTY only: *) still re-prompts, so
+      # "anything unmatched means lead" can never return.
       "")                    role="lead" ;;
       *)                     printf '  ? "%s" is not one of 1-7.\n' "$pick" ;;
     esac
@@ -797,15 +532,14 @@ if [ -z "$role" ] && [ "$#" -eq 0 ] && { [ -t 0 ] || ( exec 3</dev/tty ) 2>/dev/
   exec 3<&-
 fi
 
-# No role and no tty (piped / CI) → lead is the safe default. Reaching here with no role now
-# implies no args too — the guard above rejected those — so this is the no-args, no-tty case only.
+# No role and no tty (piped / CI) → lead is the safe default (args were rejected above).
 [ -n "$role" ] || role="lead"
 
 if [ "$role" = lead ]; then
   printf '\n  → lead. It routes and answers wiki questions, and can drive the team (spawn and sequence roles) when you hand it a goal.\n\n'
 else
-  # "...are runnable here", not "...exist here": a foreign skill still shows up in the / menu
-  # (ADR-018 Decision 5) — the hook denies invoking it, it doesn't hide it. Round-1 review R5.
+  # "runnable", not "exist": a foreign skill still shows in the / menu;
+  # the hook denies it (ADR-018 Decision 5).
   printf '\n  → %s session (locked: only the %s'"'"'s skills are runnable here).\n\n' "$role" "$role"
 fi
 settings="$(build_settings "$role")"

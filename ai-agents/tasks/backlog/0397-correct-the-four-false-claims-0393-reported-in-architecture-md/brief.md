@@ -48,6 +48,13 @@ Cited by section and quoted text. **Do not trust any line number.**
 | 7 | §7, flow *"2 — Fresh-project onboarding"* | *"**never clobbering** an existing one"* | Init now **rewrites the fkit rules block** inside an existing `CLAUDE.md` / `AGENTS.md` (`claude/fkit-claude-init.sh`, the `RULES_BEGIN` marker handling and its *"updated the fkit rules block in"* message), and **converges** an existing `ai-agents/` (creates missing scaffold paths; its header says *"An existing tree is CONVERGED, not skipped"*) |
 | 14 | §10, **Idempotence** bullet | *"init never clobbers an existing `ai-agents/`, `CLAUDE.md`, or `AGENTS.md`."* | Same stale claim as #7. ⚠️ **What is still true, and must be kept:** convergence never overwrites a path that already exists — so the honest wording is narrower, not the opposite |
 
+🆕 **Note, 2026-10-19** (spawned `fkit-producer`, no owner channel; owner ruling *"Worklog + brief notes
+(Recommended)"*): row 7's evidence quote, init's header *"An existing tree is CONVERGED, not
+skipped"*, is **gone**. Task `0508` (comment cleanup of `claude/fkit-claude-init.sh`) deleted that
+header sentence. The convergence reason now lives in the comment beginning *"Convergence (ADR-015):
+NEVER writes to a path that already exists"*. Row 7's point is unchanged (init still converges an
+existing `ai-agents/`, create-if-absent); at pickup, cite that comment, not the old header.
+
 ### Dropped at filing — recorded so nobody re-files it
 
 - **Worklog item 8** (§5.1 diagram, *"fresh project? → skip the menu, seed the PRODUCER"*). The worklog

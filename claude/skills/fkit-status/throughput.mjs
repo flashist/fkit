@@ -1,60 +1,22 @@
 #!/usr/bin/env node
-// throughput.mjs — count task CREATIONS vs CLOSES per ISO week from git history, and report the
-// record-repair share of currently-open work.
-//
-//   ⚠️  INVOKE AS:  node .claude/skills/fkit-status/throughput.mjs [flags]
-//   ⚠️  NEVER AS:   ./throughput.mjs
-//   ⚠️  NEVER AS:   bash .claude/skills/fkit-status/throughput.mjs   ← bash cannot run JavaScript
-//
-// The shebang above is DECORATIVE, for the same reason `dashboard.sh`'s header gives: the installer
-// chmod +x's a HARDCODED LIST OF TWO FILENAMES ("fkit-claude.sh fkit-claude-init.sh"), this file is
-// not on that list, and it rides a GitHub tarball + `cp -R` chain that does not guarantee the exec
-// bit. Invoking through the interpreter sidesteps the bit entirely and needs no installer change.
-// `dashboard.sh` reaches that outcome with `bash`; this file is JavaScript, so the interpreter is
-// `node`. Substituting `bash` here does not merely style-clash — it exits 2 with "command not found".
-//
-// WHY THIS EXISTS: `/fkit-status` renders ONE snapshot of a board, and its Backlog beat therefore
-// forbade any growth/shrink claim on the stated ground that "the source set has no history to ground
-// a trend in". Git IS that history. This script supplies it, so the ban could narrow from "no trend
-// claims" to "no UNMEASURED trend claims". The skill's amended line names this file as the source.
-//
-// CONTRACT: pure function of (a git repository, a revision) -> (stdout, exit code).
-//   - Reads git history and one tree listing. Writes nothing. No network. No dependency (ADR-014).
-//   - `--at <rev>` reads that revision's tree via `git ls-tree`; it NEVER reads the worktree, so the
-//     figure is honest with a dirty tree by construction. The default reads HEAD — also not the
-//     worktree. The output always states which revision it read.
-//   - ⛔ There is deliberately NO `--worktree` mode. An uncommitted close is not in the history the
-//     per-week counts come from, so a worktree headline would mix two different corpora in one
-//     report. Uncommitted closes are counted once they are committed.
-//   - Emits its OWN markers (⟦fkit-throughput v1⟧ / ⟦WEEKS⟧ / ⟦REPAIR⟧ / ⟦END⟧). Nothing that parses
-//     `dashboard.sh`'s ⟦fkit-dashboard v2⟧ / ⟦BOARD⟧ / ⟦FACTS⟧ sees a new token. `dashboard.sh` is
-//     not touched by this file's existence; it remains the sole producer of the board.
-//   - This script COUNTS. It never closes a task, never moves a folder, never edits a `## Status`.
-//
-// PORTABILITY: node >= 18, no dependency, no `package.json` change. The ISO-week number is computed
-// here in JS rather than taken from `git log --date=format:%G-W%V`, because that path goes through
-// the platform's strftime and %G/%V are not portable across the libc implementations this ships to.
+// Run as: node .claude/skills/fkit-status/throughput.mjs [flags]. Never ./ (exec bit, ADR-017 rule 2); never
+// bash, which cannot run JavaScript (0359 worklog D2). The shebang is decorative.
+
+// Gives /fkit-status a measured trend from git history in place of a snapshot (0359 plan §7, ruling W6).
+
+// Pure function of (repo, revision) -> (stdout, exit code): reads git, never the worktree; writes nothing;
+// node >= 18, no dependency (ADR-014). No --worktree mode on purpose (0359 plan, ruling W5).
+
+// Emits its own ⟦fkit-throughput v1⟧ markers: no dashboard.sh parser sees a new token (0359 plan §6).
 
 import { execFileSync } from 'node:child_process';
 import { realpathSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-// --- the record-repair rule -------------------------------------------------------------------
-//
-// A task folder is a RECORD REPAIR when the leading token of its slug (the word after the `NNNN-`
-// prefix) is one of the verbs below — work whose subject is THE PROJECT'S OWN WRITTEN RECORD rather
-// than its behaviour.
-//
-// ⚠️ THE RULE IS A PROXY, PERMANENTLY. A leading verb is not a category. It is cheap, stable, and
-// auditable, and those are the only claims made for it. `--list` prints the verdict for every open
-// row precisely so a disputed row can be checked by hand rather than argued about in the abstract.
-//
-// The set below was pinned by READING ALL 129 OPEN ROWS at the 2026-08-29 baseline revision and
-// recording a judgement per row — NOT by adjusting the list until it reproduced a target count.
-// Curve-fitting was a live hazard here: at that revision the seven-verb core scores 44, and BOTH
-// `gloss` and `reconcile` add exactly one row, so two different eight-verb sets each reproduce the
-// baseline's 45 while disagreeing about which row is in it. Reading the two rows settles it — both
-// are record repairs, so both verbs are in, and the honest count is 46, not 45.
+// A RECORD REPAIR: the slug's leading verb is one of these, i.e. work on the project's own written record.
+// ⚠️ The rule is A PROXY, PERMANENTLY: --list prints each open row's verdict for a check by hand.
+
+// The verbs were pinned by reading every open row, never by fitting a target count (0359 worklog D1).
 const REPAIR_VERBS = new Map([
   ['amend',    'amends a written record to say something different'],
   ['append',   'appends a dated note to an existing record; the record is the subject'],
@@ -67,21 +29,15 @@ const REPAIR_VERBS = new Map([
   ['repair',   'repairs a record gone stale or self-contradictory (see the exceptions)'],
 ]);
 
-// Rows carrying a repair-class leading verb whose subject is a GENUINE SOURCE DEFECT, not a record.
-// ⚠️ NOT DERIVABLE FROM THE SLUG — each is a human judgement, so each is named with its reason and
-// printed under `exception` in the output. A disputed row is then visible rather than silently
-// reclassified. This is the ONLY hand-maintained list in the file.
+// Repair-verb rows whose subject is a source defect, not a record: a human judgement the slug cannot give,
+// so each is named and printed as `exception`. The only hand-maintained list in this file.
 const SOURCE_DEFECT_EXCEPTIONS = new Map([
   ['0215', 'repairs a work-dir landmine in the prove-red harness — test infrastructure, not a record'],
   ['0234', "fixes dashboard.sh's drift rule for a task that moves twice — rendering logic, not a record"],
   ['0334', "fixes the launcher's name-existence agents fail-safe — a launcher defect, not a record"],
 ]);
 
-/**
- * Classify one task-folder slug.
- * @param {string} slug e.g. "0234-fix-dashboard-drift-rule-2"
- * @returns {{id: string|null, verb: string|null, recordRepair: boolean, exception: string|null}}
- */
+// Takes a folder slug, e.g. "0234-fix-dashboard-drift-rule-2".
 export function classify(slug) {
   const m = /^(\d{4})-(.+)$/.exec(slug);
   const id = m ? m[1] : null;
@@ -95,16 +51,8 @@ export function classify(slug) {
   return { id, verb, recordRepair, exception };
 }
 
-// --- ISO week ----------------------------------------------------------------------------------
-
-/**
- * ISO-8601 week label for a date, by the Thursday-of-week rule.
- * Reads only the calendar date written in the string — the commit's own local date, as git recorded
- * it. Deliberately NOT re-projected into UTC: a commit made at 01:00 +03:00 belongs to the week its
- * author was in, and shifting it would silently move a Monday commit into the previous week.
- * @param {string} isoDate e.g. "2026-07-21T17:10:29+03:00" (a bare "YYYY-MM-DD" is also accepted)
- * @returns {string} e.g. "2026-W30"
- */
+// ISO-8601 week by the Thursday rule, in JS because git's %G/%V go through a non-portable strftime (0359
+// plan §3). Reads the date as written, never re-projected to UTC: a commit belongs to its author's week.
 export function isoWeek(isoDate) {
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(isoDate));
   if (!m) throw new Error(`isoWeek: unparseable date ${JSON.stringify(isoDate)}`);
@@ -119,19 +67,11 @@ export function isoWeek(isoDate) {
   return `${year}-W${String(week).padStart(2, '0')}`;
 }
 
-// --- transition folding ------------------------------------------------------------------------
-
 const BRIEF_FOLDER = /^ai-agents\/tasks\/(backlog|done|cancelled)\/([^/]+)\/brief\.md$/;
 const BRIEF_FLAT   = /^ai-agents\/tasks\/(backlog|done|cancelled)\/([^/]+)\.md$/;
 
-/**
- * Resolve a path to { segment, identity } or null if it is not a task brief.
- *
- * IDENTITY, as pinned by this script:
- *   - Post-migration (a task IS a folder, ADR-029): the folder's `NNNN` prefix.
- *   - Pre-migration (flat `*.md`): the filename stem. No ID existed then — IDs were assigned BY the
- *     migration — so per-week counts are exact before it but per-ID drill-down is not available.
- */
+// Identity: a folder's NNNN (ADR-029); before the migration, the flat filename stem, so per-week counts are
+// exact there but per-ID drill-down is not (0359 plan, ruling W2).
 export function briefIdentity(path) {
   let m = BRIEF_FOLDER.exec(path);
   if (m) {
@@ -147,46 +87,7 @@ export function briefIdentity(path) {
 
 const CLOSED_SEGMENTS = new Set(['done', 'cancelled']);
 
-/**
- * Fold a chronological list of name-status records into per-week creation and close counts.
- *
- * @param {Array<{commit: string, date: string, status: string, from: string|null, to: string}>} records
- *        Oldest commit first. `from` is set only for renames/copies.
- * @returns {{weeks: Map<string,{created:number,closed:number}>, created:number, closed:number,
- *            reopens:Array, shapeChanges:number, tasks:Map}}
- *
- * ⭐ THE THREE CASES THAT MAKE THIS MORE THAN A RENAME COUNT:
- *
- * 1. BORN-CLOSED tasks. This repo commits in batches. A task created and closed between two pushes
- *    never exists under `backlog/` in ANY committed tree — its brief is ADDED straight under `done/`.
- *    Counting only renames undercounts closes and reports zero creations for those tasks. Both
- *    events land in the same ISO week, correctly: from git's point of view that is when both became
- *    true.
- *
- * 2. THE MIGRATION IS NOT A CLOSE. The commit that turned every flat `done/<slug>.md` into
- *    `done/<NNNN-slug>/brief.md` is a rename whose BOARD SEGMENT DID NOT CHANGE — only the shape
- *    did. The rule is general, not a hardcoded commit: a rename inside the SAME segment is never a
- *    transition. That also covers a `done`→`done` slug rename.
- *
- *    ⚠️ MEASURED, because the obvious claim about this guard is WRONG and worth not repeating: with
- *    case 3 below in place, DELETING this segment check does NOT put a false ~79-close spike into
- *    the migration week. It was checked by execution against this repo's own history — the per-week
- *    counts came back BYTE-IDENTICAL. Identity-carrying already defeats the double count, because
- *    every reshaped task was ALREADY closed under its flat name, so a second close is refused by
- *    first-close-wins. What deleting the check actually breaks is the report's narrative: 90
- *    spurious `re-closed` records appear and the shape-change count reads 0. (90, not 100: the
- *    100 same-segment renames split 79 `done` + 11 `cancelled` + 10 `backlog`, and only the 90
- *    landing in a CLOSED segment reach the re-close branch.)
- *
- *    ⭐ THE CHECK STILL EARNS ITS PLACE, as defence in depth for the case where the carry CANNOT
- *    fire — a shallow clone or any grafted history where the rename's source side was never walked,
- *    so the reshaped task has no prior state to carry. Then the segment check is the only thing
- *    standing between the report and a fabricated close. That is the case the unit fixture pins.
- *
- * 3. RENAME CARRIES IDENTITY. Whatever the segments, a rename means the OLD identity and the NEW one
- *    are the same task, so state moves with it. That is what links a pre-migration flat stem to the
- *    `NNNN` it was given, without the two being counted as two tasks.
- */
+// records must be oldest first, as readHistory returns them.
 export function foldTransitions(records) {
   const weeks = new Map();
   const tasks = new Map();          // identity -> { created: week|null, closed: week|null, folder }
@@ -218,7 +119,7 @@ export function foldTransitions(records) {
     const from = isRename && rec.from ? briefIdentity(rec.from) : null;
 
     if (isRename && from) {
-      // Carry state across the rename: same task, new name.
+      // A rename carries identity, so a flat stem and the NNNN it was given count as one task.
       const prior = tasks.get(from.identity);
       if (prior && from.identity !== to.identity) {
         tasks.delete(from.identity);
@@ -228,7 +129,8 @@ export function foldTransitions(records) {
       st.folder = to.folder;
 
       if (from.segment === to.segment) {
-        // ⛔ Shape change only (the migration, or a slug rename). NOT a transition.
+        // A same-segment rename (the migration, a slug rename) is a shape change, not a transition. The guard
+        // matters where the carry cannot fire, e.g. a shallow history (0359 worklog D4; 0359 review R5).
         shapeChanges += 1;
         commitTally(rec.commit).sameSegment += 1;
         continue;
@@ -247,24 +149,22 @@ export function foldTransitions(records) {
       continue;
     }
 
+    // A brief can be born closed: created and closed between two pushes, it first appears under done/.
     if (rec.status === 'A') {
       const st = state(to.identity);
       st.folder = to.folder;
       if (st.created === null) { st.created = week; created += 1; bump(week, 'created', rec.commit); }
       if (CLOSED_SEGMENTS.has(to.segment) && st.closed === null) {
-        st.closed = week; closed += 1; bump(week, 'closed', rec.commit);   // born closed — case 1
+        st.closed = week; closed += 1; bump(week, 'closed', rec.commit);
       }
       continue;
     }
-    // 'M' (edited in place) and 'D' (deleted) are not transitions. A deletion is not a close: the
-    // movers never delete a brief, so a `D` here means the file left the tree by some other route
-    // and inventing a close for it would be a guess.
+    // 'M' and 'D' are not transitions. The movers never delete a brief, so a D means the file left by another
+    // route, and inventing a close for it would be a guess.
   }
 
   return { weeks, tasks, byCommit, reopens, shapeChanges, created, closed };
 }
-
-// --- git plumbing --------------------------------------------------------------------------------
 
 function git(repo, args) {
   return execFileSync('git', ['-C', repo, ...args], {
@@ -276,35 +176,14 @@ function git(repo, args) {
 
 const COMMIT_HEADER = /^C([0-9a-f]{40}) (.+)$/;
 
-/**
- * The repository root for `repo`, which may be any directory INSIDE the repository.
- *
- * ⛔ LOAD-BEARING, AND ITS ABSENCE FAILED SILENTLY. A git pathspec is resolved relative to the
- * CALLER'S CWD, not the repository root. Without this, running the counter from any subdirectory —
- * or pointing `--repo` at one — matched nothing, and the script printed a complete, well-formed,
- * machine-readable report of ALL ZEROS and exited 0. The amended `/fkit-status` cell names this
- * script as the source of a quoted figure and states no cwd precondition, so that report would have
- * been quoted as measured fact. Every git call below goes through the resolved root.
- */
+// ⛔ Resolve the repo root: a pathspec is relative to the caller's cwd, so a subdirectory run printed a
+// well-formed report of all zeros at exit 0 (0359 review R1).
 function repoRoot(repo) {
   return git(repo, ['rev-parse', '--show-toplevel']).trim();
 }
 
-/**
- * Read the whole `ai-agents/tasks/` history as name-status records, oldest first.
- *
- * ⛔ THE PATHSPEC IS THE WHOLE `ai-agents/tasks/` TREE, AND NARROWING IT IS A BUG, NOT A SPEEDUP.
- * Git cannot see the source side of a rename when the pathspec excludes it: with a pathspec of
- * `ai-agents/tasks/done/*` every single close reports as an `A` and the rename count is ZERO.
- * Filtering happens in `foldTransitions`, after git has had the whole tree to match renames across.
- * For the same reason there is no `--no-renames` and no narrow `--diff-filter` here.
- *
- * ⛔ `--find-renames` IS FORCED, NOT INHERITED. `diff.renames` is reader configuration, and this
- * script's whole purpose is a figure that does not depend on who runs it. Measured at the pinned
- * baseline: with the git default the totals are `created 351 closed 222`; under `diff.renames=false`
- * the SAME revision reports `created 452 closed 312`, silently, at exit 0 — every close re-reported
- * as an unrelated add-plus-delete. A banner is a permanent sourced claim, so the flag is explicit.
- */
+// ⛔ The pathspec stays the whole ai-agents/tasks/ tree: narrowed, git cannot see a rename's source side and
+// every close reads as an add (0359 plan §0.3). --find-renames is forced, not config (0359 review R2).
 export function readHistory(repo, rev) {
   const raw = git(repoRoot(repo), [
     'log', rev, '--no-merges', '--reverse', '-z', '--name-status', '--find-renames',
@@ -333,19 +212,8 @@ export function readHistory(repo, rev) {
   return records;
 }
 
-/**
- * The open (backlog) task rows in `rev`'s TREE — never the worktree.
- *
- * ⛔ BOTH ERAS, because ruling W2 put the pre-migration era in scope. Listing directories only
- * (`ls-tree -d`) was wrong for any revision before the task-folder migration: that tree holds flat
- * `<slug>.md` briefs and NO directories, so the counter reported `open 0` / `repair-pct 0.0` at
- * exit 0 for a board that actually held 11 briefs — a FABRICATED share, not an unavailable one.
- * A folder row keys on its `NNNN`; a flat row keys on its filename stem, exactly as `briefIdentity`
- * does, so the classification rule reads the same token in both eras.
- *
- * ⛔ `--full-tree` makes the path root-relative. Without it `ls-tree` resolves it against the
- * caller's cwd — the same silent-zero hazard `repoRoot` exists to close.
- */
+// The open rows in rev's TREE, both eras: folders and flat <slug>.md briefs (0359 review R4, ruling W2).
+// --full-tree makes the path root-relative, the same silent-zero hazard as repoRoot (0359 review R1).
 export function readOpenRows(repo, rev) {
   let out = '';
   try {
@@ -380,8 +248,6 @@ function findMigration(records) {
   return null;
 }
 
-// --- reporting ------------------------------------------------------------------------------------
-
 function pct(n, d) { return d === 0 ? '0.0' : (Math.round((n / d) * 1000) / 10).toFixed(1); }
 
 function classifyRows(rows) {
@@ -404,23 +270,15 @@ function renderReport(repo, rev) {
   out.push('⟦WEEKS⟧');
   out.push(`at ${rev} ${revSha}`);
   out.push(`totals created ${fold.created} closed ${fold.closed}`);
-  // ⭐ THE SELF-CHECK, EVALUATED RATHER THAN MERELY DOCUMENTED. Every task is created once and
-  // closed at most once, so `created - closed` MUST equal the number of rows still open. It is the
-  // one cheap invariant that catches a whole class of silent corruption from OUTSIDE this file —
-  // notably a reader whose git is configured not to detect renames, which re-reports every close as
-  // an unrelated add and yields 140 against an open count of 129. `renderReport` refuses to print a
-  // report that fails it: a wrong number quoted as measured is worse than no number at all.
+  // Self-check: every task is created once and closed at most once, so created - closed must equal open;
+  // the report refuses to print when it does not, e.g. with rename detection off (0359 review R2).
   out.push(`reconciliation created-minus-closed ${fold.created - fold.closed} open ${rows.length}`);
   if (migration) {
     out.push(`horizon task-folder-migration ${migration.commit} ${migration.week}`);
     out.push('note the pre-migration era IS counted, by flat-filename identity — no history is discarded');
     out.push('note before that commit a task had no ID, so per-week counts are exact but per-ID drill-down is unavailable');
-    // ⛔ THIS NOTE IS COMPUTED, NEVER ASSERTED. It previously read "that commit is a shape change
-    // inside one board segment, so it contributes zero closes and zero creations", which is FALSE:
-    // the migration commit carries one rename that DOES cross a board segment
-    // (`backlog/migrate-tasks-…md` → `done/0062-…/brief.md`), and the counter correctly counts it as
-    // one close. Printing a false measured claim in machine-readable output is the exact failure
-    // this task exists to prevent, so the numbers now come from the fold rather than from prose.
+    // ⛔ Computed from the fold, never asserted: the migration commit also carries one real close
+    // (0359 review R3).
     const mt = fold.byCommit.get(migration.commit) || { created: 0, closed: 0, sameSegment: 0 };
     const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
     out.push(`note that commit is overwhelmingly a reshape: ${plural(mt.sameSegment,
@@ -486,11 +344,7 @@ const USAGE = `throughput.mjs — created vs closed per ISO week, plus the recor
 
 export function parseArgs(argv) {
   const opts = { repo: process.cwd(), rev: 'HEAD', list: false, help: false };
-  // ⚠️ A FLAG IS NEVER A VALUE. The old guard only caught a MISSING final argument, so
-  // `--at --list` silently bound the revision to the string "--list" and dropped the flag — the user
-  // then got a `git rev-parse` failure about an unknown revision instead of the usage error this
-  // code intends. Refusing a `--`-prefixed value turns a confusing downstream error into the right
-  // one at the point of the mistake.
+  // ⚠️ A flag is never a value: `--at --list` must be a usage error, not a bad revision (0359 review R9).
   const value = (flag, next) => {
     if (next === undefined) throw new Error(`${flag} needs a value\n\n${USAGE}`);
     if (/^--/.test(next)) {
@@ -515,13 +369,8 @@ export function run(argv) {
   return opts.list ? renderList(opts.repo, opts.rev) : renderReport(opts.repo, opts.rev);
 }
 
-// ⚠️ BOTH `realpathSync` AND `pathToFileURL` ARE LOAD-BEARING, and the naive
-// `import.meta.url === \`file://${process.argv[1]}\`` fails on two ordinary paths:
-//   - a SYMLINKED path. Node's ESM loader resolves symlinks, so `import.meta.url` is the realpath
-//     while argv[1] is what the caller typed. On macOS `/tmp` IS a symlink to `/private/tmp`, so
-//     running a copy from `/tmp` matched nothing and the script exited 0 having printed NOTHING —
-//     a silent no-output success, the worst possible failure for something a status run quotes.
-//   - a path containing a SPACE or `#`. Only `pathToFileURL` percent-encodes it correctly.
+// ⚠️ realpathSync and pathToFileURL are both load-bearing: a symlinked argv[1] (macOS /tmp) or a path with a
+// space or # never matches import.meta.url, and the script exits 0 printing nothing (0359 worklog D3).
 function isDirectInvocation() {
   if (!process.argv[1]) return false;
   try {

@@ -152,3 +152,4 @@ the series"* section is then the source, and this list is the fallback):
   ignore this note. Soft scope note only — it adds no dependency link; `0484` sits in Sprint 10, ahead
   of this Backlog unit. Source: `0484`'s worklog, *"For the producer (not acted on)"*. Added by a
   spawned `fkit-producer` for `fkit-lead` (`/fkit-sprint-ship-loop`) — no owner channel (ADR-021).
+- **Note, 2026-10-17 — method amendment M4k "text fences" (owner ruling at `0510`'s plan gate, relayed by `fkit-lead`).** Unit `0510` adds M4k: before editing a file, find any test or script that reads it as text, and keep its fenced words. See `0510`'s worklog, *"Method for the series"* (alongside `0507`'s M1–M4). Added by a spawned `fkit-producer` — no owner channel (ADR-021).

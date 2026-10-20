@@ -233,6 +233,18 @@ The shape:
   contradicts. **A dated correction that misstates what it corrected is the defect class `0306` exists
   to remove.** A pointer to this note was also placed **beside the repaired sentence in `## Context`**
   (review round 1, R5), so a reader there is not 170 lines from the disclosure.
+- **📌 DATED NOTE 2026-10-18 — scope widened: the launcher's copy of the checklist is in scope too.**
+  `claude/fkit-claude.sh` (the launcher) carries a copy of the mirror-checklist block that heads
+  `claude/skills-for-role.sh`. The copy runs 20 lines, from *"⚠️ CHANGING A ROLE'S SKILLS?"* through
+  *"…without pulling in this script's top-level side effects)."*; the last 5 of them (after *"add it
+  HERE FIRST"*) are launcher-only. `0508` (comment cleanup of the launcher and init scripts) keeps that
+  copy byte-identical on purpose, per series ruling PC-2 from `0507`. This brief scoped only
+  `skills-for-role.sh` and lists the launcher under "Sites deliberately EXCLUDED" — that exclusion is
+  about the launcher *sourcing* `skills_for_role()`, not about this copied comment. Once this task
+  lands, the launcher's copy is stale. **So this task also covers it: remove the copy or replace it
+  with a pointer to `skills-for-role.sh` — this task's plan decides which.** Verification step 8
+  (*"one file changed"*) widens to these two files accordingly. Source: owner ruling 2026-10-18 at
+  `0508`'s plan gate (Q-A), verbatim option label *"Yes, note it in 0226 (Recommended)"*.
 - **Depends on:** nothing. ⚠️ **Explicitly NOT dependent on `0222`/ADR-038** — see the independence
   banner above.
 - **Blocks:** nothing. **Overlaps `0189`** (the ADR-036 registry) — see the conflict banner; `0189`

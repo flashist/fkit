@@ -270,6 +270,17 @@ than re-deriving them (they bound the fix's target precisely):
   `*.md` **file** is expected in the agents half, or a **file** where a **directory** is expected in the
   skills half. ⚠️ **This narrows the claim-correction bullet in *What to build*: the sentence is not
   simply false, it is false for one shape and true for the other.**
+  - 🆕 **Correction, 2026-10-19** (spawned `fkit-producer`, no owner channel; owner ruling *"Add a note
+    (Recommended)"*; source: task `0508`'s review, finding R2): the "ONLY on a … payload-name
+    collision" wording above is **too narrow for the agents half**. There, **any** directory whose name
+    matches `fkit-*.md` makes `rm -f "$dest/.claude/agents/fkit-"*.md` fail (*"is a directory"*, exit 1,
+    and `set -e` stops init) — a real fkit agent name or not. Shape A's own measured case above is a
+    directory named `fkit-x.md`, which is not a payload name. And the real fkit agent files in that same
+    glob are deleted before init stops (a `0508` coder re-ran the line in a scratch folder:
+    `fkit-coder.md` deleted, then exit 1). **The skills half is as stated:** a plain file aborts init only
+    at a real payload skill name; anywhere else it is harmless. At the time of this note, init's §3
+    label (opening *"3. refresh the fkit-managed agents"*, rewritten by `0508`) says *"some wrong-type
+    ones abort init today (shapes: open 0336)"*.
 
 ⛔ **Nothing in `0327`'s folder was written by this pointer** — it was **read only**, and the
 disproof above is recorded **here**, not there.
@@ -317,6 +328,15 @@ survivor the deletion loop could not see. **Argue the choice in the plan.**
 - **Correct §3's now-narrowed claim** that a squatter *"IS deleted, and is NOT put back"* — true for a
   same-type squatter, **false for a wrong-type one**. Either fix the behaviour so the sentence becomes
   true again, or amend the sentence. **Say which you did and why.**
+  - 🆕 **Note, 2026-10-19** (spawned `fkit-producer`, no owner channel; owner ruling *"Worklog + brief
+    notes (Recommended)"*): the quoted *"IS deleted, and is NOT put back"* (here and in `## Context`) is
+    **gone** from `claude/fkit-claude-init.sh`. Task `0508` (comment cleanup) rewrote the §3 label, found
+    by its opening phrase *"3. refresh the fkit-managed agents"*. At the time of this note it says a
+    same-type squatter *"is deleted and NOT put back"* and a wrong-type one *"aborts init today (open
+    0336)"*; the wording may still change while `0508` is in review. **Already covered:** the "amend
+    the sentence" half, for today's behaviour; the comment no longer overclaims. **Still this task's:**
+    the behaviour fix itself (R6, R7), and re-editing that §3 label when the fix lands so it stops
+    saying init aborts.
 - **R7 — name every symlinked entry, and print a path the user can act on.** The refusal must list
   **all** offending entries in one run, and the path it shows must be the **offending entry**, not its
   parent. ⛔ **Do not convert the whole-half refusal into a per-entry refusal** — the owner ruled

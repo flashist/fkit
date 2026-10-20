@@ -1,14 +1,6 @@
-# skills-for-role.sh — the single source of truth for fkit role → skill ownership.
-#
-# Extracted from fkit-claude.sh (`0052` (`implement-pretooluse-skill-ownership-hook`) / ADR-018) so it can be `source`d from the PreToolUse
-# skill-ownership hook (claude/skill-ownership-hook.sh) WITHOUT pulling in fkit-claude.sh's top-level
-# side effects — the self-hosting re-exec, the network update check, and its `$0`/`$PWD`-dependent
-# logic must never fire just because a hook sourced this file. This file has none: it only defines
-# the function below.
-#
-# This is the ONLY place role→skill ownership is expressed. Do not duplicate this mapping anywhere
-# else (not in the hook script, not in a settings-generation helper) — source this file instead.
-#
+# The single source of truth for fkit role → skill ownership (ADR-018): source this file, never copy the map.
+# The PreToolUse hook sources it, so it must stay free of top-level side effects.
+
 # ⚠️ CHANGING A ROLE'S SKILLS? SIX hand-maintained places MIRROR this list (or a role fact it carries)
 # for humans and MUST be updated in the same commit, or the docs lie about what a role can do:
 #   * claude/skills/fkit-team/SKILL.md  — the roster the /fkit-team skill prints
@@ -26,31 +18,11 @@
 # If you add another mirror, add it HERE FIRST. (It said "FOUR" until 2026-08-27 — incomplete a second time; 0142 D4.)
 # (Same caution as before this file existed — see git history on fkit-claude.sh for the original.)
 
-# ⚠️ ALL FOUR MOVERS ARE PRODUCER-ONLY (ADR-033, 2026-07-23 — REVERSING ADR-025; extended to the
-# SPRINT movers by ADR-047 §4, which applies ADR-033's reasoning verbatim).
-# `fkit-task-done` / `fkit-task-cancelled` / `fkit-sprint-done` / `fkit-sprint-cancelled` belong to
-# `producer` and to NO other role. The two sprint movers were added by task 0341 and were
-# producer-only from their first line — they were never granted to anyone else. ADR-025
-# (2026-07-19) had granted them to every role but the adversarial reviewer; ADR-033 reverses that
-# knowingly, re-consolidating close authority in the one role whose job is the task lifecycle. This
-# list is what makes it STRUCTURAL: the ADR-018 PreToolUse hook denies a mover call from any
-# non-producer identity at any spawn depth, so it is no longer the prose ADR-025 relied on.
-#
-# Every other role ROUTES ITS CLOSES THROUGH THE PRODUCER and closes nothing itself — the coder
-# ship-loop and the lead's sprint ship-loop each spawn `@fkit-producer` to close (ADR-033 §3/§4).
-# A producer SPAWNED to close still writes `(agent-closed — not owner-verified)` (ADR-033 §5).
-#
-# ⚠️ What this does and does NOT buy (ADR-033 §The limit — do not "harden" past it): it restores
-# separation of the closing IDENTITY, not full prevention. A determined doer can still spawn a
-# producer to close. That residual is accepted and named; it is not a defect to file.
-#
-# `adversarial-reviewer` never had the movers and still does not — its contract is findings-only and
-# it runs on Codex under a restricted tool allowlist (ADR-022). It is now one of six roles without
-# them rather than the lone exclusion, but the ruling behind it (owner, 2026-07-19) stands: do NOT
-# "fix" it by adding the movers here.
-#
-# The movers' own prose cannot grant a permission this mapping denies — that contradiction (Codex
-# found it as X1 before `0054` shipped) is why the SKILLs, the mirrors and this file move together.
+# ⚠️ The four movers are producer-only (ADR-033; sprint movers ADR-047 §4); the hook makes that structural.
+# It separates the closing identity only — ADR-033 "The limit"; do not harden past it.
+
+# Never give adversarial-reviewer the movers (ADR-025 amendment A2, kept by ADR-033).
+# A mover's SKILL.md cannot grant what this map denies: change the skills, the mirrors and this file together.
 skills_for_role() {
   case "$1" in
     lead)      echo "fkit-team fkit-query fkit-open-questions-interview fkit-dumb-down fkit-sprint-ship-loop" ;;

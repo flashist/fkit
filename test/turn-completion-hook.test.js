@@ -216,7 +216,7 @@ test('SKIP: adversarial reviewer -> allow (findings-only contract)', () => {
   assertAllow(run(payload({ agentType: 'fkit-adversarial-reviewer', lastMessage: 'FINDINGS: none.', cwd })), 'adversarial skip');
 });
 
-// SKIP 3 is now the transcript-INDEPENDENT ship-loop marker (task 0129): the shiploop-<session> marker,
+// The ship-loop skip is the transcript-INDEPENDENT marker (task 0129): the shiploop-<session> marker,
 // written by shiploop-marker-hook.sh on a real slash-command invocation, covers BOTH loops (the marker
 // hook filters on command_name; the Stop hook just checks the marker exists). No transcript is read.
 test('SKIP: a ship-loop session marker present -> allow (both loops, one signal)', () => {

@@ -125,3 +125,4 @@ the series"* section is then the source, and this list is the fallback):
 - **Placement:** Backlog board, per the owner's 2026-10-14 ruling. Knock-on: none — no task outside this
   series waits on any unit of it; inside it, every unit sits on the Backlog board (checked 2026-10-14).
 - ⛔ **Do not start without the owner's specific word.** Being pullable is not his word.
+- **Note, 2026-10-17 — method amendment M4k "text fences" (owner ruling at `0510`'s plan gate, relayed by `fkit-lead`).** Unit `0510` adds M4k: before editing a file, find any test or script that reads it as text, and keep its fenced words. See `0510`'s worklog, *"Method for the series"* (alongside `0507`'s M1–M4). Added by a spawned `fkit-producer` — no owner channel (ADR-021).

@@ -36,7 +36,7 @@
 //      shipped artifact.
 //   3. sha256, hex, over the resulting bytes.
 //
-// Marker recognition carries marker_lines' contract (claude/fkit-claude-init.sh:374) VERBATIM in
+// Marker recognition carries marker_lines' contract (claude/fkit-claude-init.sh) VERBATIM in
 // JS, by owner ruling (0244 plan, open question 1: "Faithful JS impl"): a marker matches only when
 // the WHOLE line, after trimming [ \t\r] at both ends, equals the marker string. Never substring
 // match (init's quoted-in-prose defect); \r in the trim set (init's CRLF defect). Test E in
@@ -59,7 +59,7 @@ import { fileURLToPath } from 'node:url';
 const REPO_ROOT = dirname(dirname(fileURLToPath(import.meta.url)));   // .../fkit
 const MANIFEST_REL = join('claude', 'structure-manifest.tsv');
 
-// Same values as claude/fkit-claude-init.sh:316-317 — the recognition CONTRACT is shared; the
+// Same values as RULES_BEGIN / RULES_END in claude/fkit-claude-init.sh — the recognition CONTRACT is shared; the
 // constants are restated because an inline shell function cannot be imported without executing init.
 export const RULES_BEGIN = '<!-- fkit:begin-rules -->';
 export const RULES_END = '<!-- fkit:end-rules -->';
@@ -105,7 +105,7 @@ function toProjectPath(repoPath) {
   return null;
 }
 
-// ── The marker-recognition contract, carried verbatim (marker_lines, fkit-claude-init.sh:374) ────
+// ── The marker-recognition contract, carried verbatim (marker_lines, fkit-claude-init.sh) ────────
 // awk: { l = $0; gsub(/^[ \t\r]+|[ \t\r]+$/, "", l); if (l == m) print NR }
 
 /**

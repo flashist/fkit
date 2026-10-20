@@ -168,6 +168,15 @@ inherit the reviewer's "no-ship / high / medium" label.
   This is a *decision made once*, not a re-fix. If confirmed as an intended tradeoff, it's a candidate
   to record as an **accepted residual** (Step 6), not a code change.
 
+**A missing test is a suggestion, not a defect.** A finding that is only "no test covers this", on
+code that behaves correctly, is not a defect unless the project's own key list (in its written test
+rules, often `CONTRIBUTING.md`) names that behaviour. No written key list → a suggestion. Write it in
+Step 2's closeout form: Verdict `closeout`, Status `closeout (re-litigation)`, Action `none`, pointing
+at the project's written test rules — or, where none are written, at this rule ("re-litigation" here
+means: it re-raises what the project's test rules settle). No code change, no residual. This is not
+the Step 2 loop-check firing and does not count as non-convergence. A test that cannot fail is a wrong
+test, not a missing one — judge it like any other finding.
+
 **Regression / oscillation check** — using the *Coder response* history already in the file: would the
 recommended fix cause a regression, or recreate a condition a **prior** finding flagged? If yes, **point
 to it clearly and loudly BEFORE applying anything** — name the tradeoff and let me decide.
@@ -209,8 +218,9 @@ Then **wait for my explicit approval** before changing any code.
 
 Once I explicitly approve specific findings:
 - **Apply** the minimal, idiomatic fix for each approved finding (smallest correct change; match
-  surrounding style; no unrelated refactors). Add/update tests and run the relevant tests / linter /
-  build; if you can't run them, say so.
+  surrounding style; no unrelated refactors). Update any test the fix makes wrong, add one only where
+  the project's own test rules call for it, and run the relevant checks (when unsure, the project's
+  default test command) / linter / build; if you can't run them, say so.
 - **Update the *Coder response* row**: set Action to what you actually did and Status to **`✅ done`**
   (or `blocked` with the reason if you couldn't complete it).
 - For any finding I confirmed as an **intended tradeoff**, add an entry to **Accepted residuals** with

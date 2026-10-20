@@ -108,12 +108,17 @@ from names or the diff hunk alone. Hunt specifically for:
 - **Concurrency** — races, deadlocks, non-atomic read-modify-write, shared mutable state.
 - **Security** — injection, authz/authn gaps, unsafe deserialization, secret leakage, SSRF.
 - **Regressions & compatibility** — breaking an existing caller, API/schema/behavior changes.
-- **Missing tests** — behavior changed with no test covering it; the untested edge.
+- **Missing tests** — behavior changed with no test covering it; the untested edge. On code that
+  behaves correctly, label it a **suggestion**, separate from real defects, unless
+  the project's own key list (its written test rules) names that behaviour. No written key list → a
+  suggestion.
 
 **When the input is a plan**, hunt instead for:
 - **Claims that contradict the code** — cite the code `file:line` that disproves the claim.
 - **Missed edge cases and failure paths** the plan never handles.
-- **Missing or wrong tests** — a changed behavior no planned check covers, or a check that cannot fail.
+- **Missing or wrong tests** — a changed behavior no planned check covers (a **suggestion** unless the
+  project's own key list names it — label it so; no written key list → a suggestion), or a check that
+  cannot fail.
 - **Sequencing errors** — a step that depends on one scheduled after it.
 - **Security** and **regressions** the planned change would introduce.
 - **Gaps or creep against the brief** — something the brief asks for that the plan drops, or work it

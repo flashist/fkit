@@ -155,9 +155,10 @@ Include when relevant:
 - dependencies or blockers
 - testing and validation steps — the checks this change needs, by name: map the changed paths to the
   project's checks (its own "what changed → what to run" table if it has one, e.g. in
-  `CONTRIBUTING.md`), and plan the full suite at release, when the tests or test tooling change, or
-  when unsure; the plan names which checks it will run and which it will skip, and why —
-  a skipped check is not a passed one
+  `CONTRIBUTING.md`), following the project's own test rules; when unsure, plan the project's default
+  test command — nothing beyond it. Name each new test file the plan adds, so the owner's approval
+  covers it where the project's rules require one. The plan names which checks it will run and which
+  it will skip, and why — a skipped check is not a passed one
 - open questions or assumptions that could affect the implementation
 - realistic edge cases and non-obvious but plausible failure modes that may affect implementation,
   correctness, or testing

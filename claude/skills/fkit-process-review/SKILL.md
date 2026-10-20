@@ -84,6 +84,12 @@ For each finding, decide which kind it is:
   has a real cost) and the finding just names the cost of the current choice. This is a *decision*, not
   a defect to re-fix.
 
+**A missing test is a suggestion, not a defect.** A finding that is only "no test covers this", on
+code that behaves correctly, is not a defect unless the project's own key list (in its written test
+rules, often `CONTRIBUTING.md`) names that behaviour. No written key list → a suggestion. Mark it
+`Suggestion` in the *Defect / Frontier-move* column and change no code unless I ask. A test that
+cannot fail is a wrong test, not a missing one — judge it like any other finding.
+
 Then run the regression check: **would the recommended fix cause a regression, or trade the reviewer's
 objection for a different one** (oscillation)? If yes, **say so clearly and loudly BEFORE applying
 anything** — name the tradeoff and let me decide; do not silently apply.
@@ -110,7 +116,7 @@ explicit approval before touching code.
 disprove it. Do not implement anything. Do not offer a "just in case" change.
 
 **INCOMPLETE** — The finding is correct but misses something: a related bug, an uncovered edge, a
-missing test, a broader pattern.
+broader pattern (a missing test on correct code is a suggestion — Step 2.5).
 → Confirm what's right, describe what's missed and why it matters, propose a full fix covering both.
 Ask for explicit approval before touching code.
 
@@ -138,8 +144,9 @@ notice.
 Once — and only once — I have **explicitly approved** a specific finding's change in this conversation:
 - Implement the minimal, idiomatic fix for that finding. Make the smallest change that correctly solves
   it; match the surrounding code's style; don't refactor unrelated code.
-- Add or update tests for the changed behavior and run the relevant tests / linter / build. If you
-  can't run them, say so.
+- Update any test the fix makes wrong, add one only where the project's own test rules call for it,
+  and run the relevant checks (when unsure, the project's default test command) / linter / build. If
+  you can't run them, say so.
 - Report per finding: what changed, which files, how it was tested, and the result. Flag anything
   unverified.
 - **Do not commit** — staging the edits is as far as you go; commits happen only when I explicitly ask.

@@ -155,6 +155,14 @@ Read the actual code with enough context to trace the full flow. Assign a **veri
 **Regression check:** using the *Coder response* history, would a finding's recommended fix cause a
 regression or recreate a condition a prior finding flagged? If so, flag it **loudly, up front**.
 
+**A missing test is a suggestion, not a defect.** When the code behaves correctly and the only
+finding is that no test covers it, list it under **Suggestions (not defects)** in your report — not
+as a finding row and not counted in the verdict — unless the project's own key list (in its written
+test rules, often `CONTRIBUTING.md`) names that behaviour; then it is a **Defect**. No written key list
+found → a suggestion; say once in the report: *no written key list found — missing tests graded as
+suggestions*. A test that cannot fail is a wrong test, not a missing one — judge it like any other
+finding.
+
 When a finding turns on **design intent**, you may consult `@fkit-architect` — the verdict stays yours.
 
 ## Step 4 — Write the Reviewer findings rows
@@ -162,8 +170,9 @@ When a finding turns on **design intent**, you may consult `@fkit-architect` —
 Append one row per **novel** finding to *Reviewer findings*: id (`R<next>`), the current **Round**,
 **Sev** (your assigned severity), the **`Location`** (in the form the rule above sets for that target),
 and a one-line **Claim**. Disproven findings need not be recorded as rows — but note them in the report
-so the coder isn't asked to chase them. This is a **docs-only** write: it changes no code, and it never
-touches *Coder response*.
+so the coder isn't asked to chase them. A missing-test suggestion (Step 3) is not a row either — list it
+in the report. This is a **docs-only** write: it changes no code, and it never touches *Coder
+response*.
 
 These rows are exactly what the coder's `fkit-process-stateful-review` consumes as its input.
 
@@ -187,9 +196,10 @@ State it in **exactly these two places, both of them**: that slot in the report,
 and never the header alone with no line in the report.
 
 Then: **reviewers run**, and any skipped, loudly; the **findings table** (# · Reviewer · Reviewer
-severity · Verified verdict · Defect/frontier · one-liner); the **suppressed-as-settled** list with
-ledger/ADR pointers; and a **convergence call** (new defects vs re-litigation → recommend act vs
-closeout, with the reason). The verdict is a **recommendation, not an authorization**.
+severity · Verified verdict · Defect/frontier · one-liner); the **Suggestions (not defects)** —
+missing tests on correct code (Step 3), one line each, omitted when none; the
+**suppressed-as-settled** list with ledger/ADR pointers; and a **convergence call** (new defects vs
+re-litigation → recommend act vs closeout, with the reason). The verdict is a **recommendation, not an authorization**.
 
 ## Step 6 — Dispositions (the owner's call)
 

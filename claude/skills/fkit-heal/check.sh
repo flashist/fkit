@@ -1,71 +1,23 @@
 #!/usr/bin/env bash
-# check.sh — the deterministic conformance checker behind /fkit-heal (task 0245, unit 4 of the
-# 0241 design; capability licensed by ADR-039). READ-ONLY IN EVERY BRANCH: this script contains no
-# write operation on any checked path — no redirect into the project, no mkdir, no cp, no touch.
-# The consent-gated repair phase is repair.sh beside this file (task 0246) — a SEPARATE script;
-# this one still never writes, but its `untouched-stale` verdict is now repair.sh's write gate,
-# which is why the 0245 residuals R1/R3/R5/R6/R8 are fixed here (their re-raise clauses fired).
-#
-# Usage:  bash check.sh [--share <dir>] [project-root]
-#   project-root defaults to the current directory. Share resolution: --share wins; else a
-#   project-root that holds claude/structure-spec.md is a source-checkout self-host and IS the share
-#   (mirrors fkit-claude.sh's share="$(cd "$here/.." && pwd)" self-host property); else
-#   ${XDG_DATA_HOME:-$HOME/.local/share}/fkit.
-#
-# Why a script and not prose (ADR-017, all four rules): the classification is byte-mechanics —
-# hashing, marker counting, manifest lookup — exactly the silent-wrong LLM arithmetic ADR-017 exists
-# to eliminate. It lives inside the skill dir (the only ship path), is invoked `bash …/check.sh`
-# never `./` (the exec bit is not guaranteed to survive the install/copy chain), assumes bash and
-# the POSIX toolbox and NOTHING more — no Node (ADR-017 rule 3), so it REPRODUCES 0244's hashing
-# contract rather than importing it; test/structure-check.test.js pins bash↔JS parity.
-#
-# The report (stdout is the test contract, ADR-017 rule 4):
-#   one line per spec-inventory row, in table order:  <outcome>\t<path>\t<detail>
-#   then `#`-prefixed note lines and one `# summary:` line with per-outcome counts.
-# Outcomes: conforming / missing / untouched-stale / owner-edited / wrong-type / wiki-routed,
-# plus the safety-bar refusals/annotations: `refused: symlink`, `refused: malformed-markers`,
-# `unreadable`, `kept-out`.
-#   * A row inside a subtree already refused (symlinked or wrong-typed ancestor) carries the
-#     ancestor's outcome with a detail naming the ancestor — we refuse once at the root and never
-#     probe through it (init's own subtree rule).
-#   * THE ONE EXCEPTION to one-line-per-row: an unreadable/symlinked/directory .fkit-keep-out fails
-#     CLOSED (init's R1 lesson, carried verbatim): the whole ai-agents/ subtree check is refused
-#     with a loud stderr message and NO per-row lines, the root context files are still checked, and
-#     the run exits 1. Intent was recorded and cannot be read — guessing is worst exactly then.
-#
-# The hashing pipeline (the manifest header's contract — consumers MUST apply the same transforms):
-#   1. CRLF -> LF, exactly that transform (a lone \r is content — including a final \r on a file
-#      with no trailing newline, which is why the transform is ending-aware below);
-#   2. root context files only: elide the lines strictly BETWEEN the fkit rules markers, KEEPING
-#      the marker lines. Marker recognition is marker_lines' contract (fkit-claude-init.sh:374)
-#      carried verbatim: a marker matches only when the WHOLE line, trimmed of [ \t\r], equals the
-#      marker string — never a substring match;
-#   3. sha256 hex — sha256sum, falling back to `shasum -a 256`; NEITHER present -> every
-#      content-checked file reports `unreadable` (refuse to classify, non-fatal, flagged loudly).
-#
-# Classification precedence (the 0243-R3 residual, resolved by the 0245 plan §3):
-#   1. symlink / wrong-type -> refuse before any content read;
-#   2. unreadable -> refuse to classify, continue;
-#   3. root files: malformed marker set (counts != 1/1, or end before begin) -> refuse-to-classify,
-#      report the malformation — the manifest is NEVER consulted (mirrors merge_rules' refusal);
-#   4. otherwise hash — elided when exactly one well-formed pair exists, WHOLE-FILE when markers
-#      are absent (markers-absent is an input-shaping fact, not a classification) — and the
-#      manifest verdict decides:
-#        hash == the installed version's (the share scaffold copy, same pipeline) -> conforming
-#        hash matches any structure-manifest.tsv row for the path            -> untouched-stale
-#        matches nothing                                                     -> owner-edited
-#      So a markerless root file byte-equal to a shipped whole-file row (the omnigent-era case)
-#      is `untouched-stale`, NOT owner-edited; markerless + unmatched IS owner-edited (deleting
-#      the markers is an owner edit).
-#
-# Exit codes (plan §2, owner-accepted): 0 = ran, fully conforming; 1 = ran, nonconformities or
-# refusals found; 2 = could not run (cannot-run is NOT nonconforming). `kept-out` is deliberate
-# recorded intent, not a nonconformity — it never turns exit 0 into exit 1.
-#
-# set -f: keep-out entries and spec paths are matched literally, never globbed (init's R3 lesson —
-# a keep-out line of `wiki-*` must not expand against whatever the cwd happens to hold).
-# No set -e: a conformance checker must never die mid-report; every failure is a classified outcome
-# or a loud exit-2 refusal.
+# Run as bash <path>, never ./: the exec bit may not survive install (ADR-017 rule 2).
+
+# /fkit-heal's conformance check (ADR-039; 0245 plan §2). READ-ONLY IN EVERY BRANCH: its untouched-stale
+# verdict is repair.sh's write gate. A script, not prose (ADR-017).
+
+# stdout is the test contract (ADR-017 rule 4): one line per spec-inventory row, in table order, then
+# `#` notes and a `# summary:` line. Exit 0 conforming, 1 nonconforming or refused, 2 could not run.
+
+# Outcomes: conforming / missing / untouched-stale / owner-edited / wrong-type / wiki-routed, plus the
+# refusals `refused: symlink`, `refused: malformed-markers`, `unreadable`, and `kept-out` (0245 plan §2).
+
+# Reproduces the hashing contract in structure-manifest.tsv's header in bash, not node (ADR-017 rule 3);
+# test/structure-check.test.js pins the bash-to-JS parity.
+
+# Verdict once no refusal applies (0245 plan §3): hash == the installed copy's -> conforming;
+# hash matches any structure-manifest.tsv row for the path -> untouched-stale; matches nothing -> owner-edited
+
+# set -f: keep-out entries and spec paths match literally, never as globs. No set -e: a checker must never
+# die mid-report; every failure is a classified outcome or a loud exit 2.
 set -u
 set -f
 
@@ -77,7 +29,6 @@ NL='
 die2() { printf '%s\n' "fkit-heal check: $*" >&2; exit 2; }
 warn() { printf '%s\n' "⚠ $*" >&2; }
 
-# ── arguments ────────────────────────────────────────────────────────────────────────────────────
 share=""
 root=""
 while [ $# -gt 0 ]; do
@@ -111,7 +62,6 @@ scaffold="$share/claude/scaffold"
 [ -f "$manifest" ] || die2 "cannot run — manifest not found: $manifest"
 [ -d "$scaffold" ] || die2 "cannot run — scaffold not found: $scaffold"
 
-# ── sha256 tool (plan §3: fallback chain, loud refusal if neither) ───────────────────────────────
 if command -v sha256sum >/dev/null 2>&1; then
   SHA_TOOL="sha256sum"
 elif command -v shasum >/dev/null 2>&1; then
@@ -123,19 +73,15 @@ fi
 do_sha() {
   if [ "$SHA_TOOL" = "sha256sum" ]; then sha256sum; else shasum -a 256; fi
 }
-# 0245-R6: a PRESENT-but-broken sha tool yields garbage with exit 0 — and garbage on both sides of
-# the installed-version compare reads as `conforming`, silently hiding every drift. Every hash
-# result must look like a sha256 or the caller refuses to classify.
+# A present-but-broken sha tool prints garbage at exit 0, and garbage on both sides reads as conforming:
+# every hash must look like a sha256 (0245 review R6).
 valid_sha() { case "$1" in *[!0-9a-f]*|'') return 1 ;; esac; [ "${#1}" -eq 64 ]; }
-# 0245-R1: awk truncates a record at a NUL byte, so an edit hidden after a NUL hashes as if absent
-# and can classify untouched-stale — exactly what repair.sh treats as safe-to-replace. wc/tr are
-# byte-exact where awk is not: any NUL present -> refuse to classify.
+# awk truncates a record at a NUL, so an edit hidden after one could classify untouched-stale, the write
+# gate. wc and tr are byte-exact: any NUL refuses to classify (0245 review R1).
 has_nul() { [ "$(wc -c < "$1")" -ne "$(tr -d '\0' < "$1" | wc -c)" ]; }
 
-# ── spec inventory (the 0243 pinned machine-read contract) ───────────────────────────────────────
-# Rows come out as "path<TAB>class", Table A first then Table B, in table order. An unrecognized
-# class name or a missing pinned heading refuses LOUDLY (exit 2): a stale skill copy must not guess
-# against a newer spec.
+# An unknown class or a missing pinned heading refuses (exit 2): a stale skill copy must not guess against a
+# newer spec. The table format is structure-spec.md's "Machine-read contract — pinned".
 parse_tables() {   # <spec-file> → rows on stdout, or non-zero
   awk '
     /^## /  { insec = 0 }
@@ -163,9 +109,8 @@ for r in $rows; do
     'structural directory'|'fkit-authored reference file'|'owner-authored seed'|'wiki-authored living file'|'placeholder'|'root context file') ;;
     *) IFS="$oldifs"; die2 "cannot run — unrecognized class '$c' in the spec inventory (row '$p'). This skill copy may be older than the spec; refusing to guess." ;;
   esac
-  # 0245-R5: spec paths must be project-relative — a `/`-rooted or `..`-bearing row would probe
-  # (and, in repair.sh, WRITE) outside $root. The spec is trusted fkit-authored input, so this can
-  # only be corruption: refuse the whole run loudly rather than guess.
+  # Spec paths must be project-relative: an absolute or `..` row would read, and in repair.sh write, outside
+  # $root. The spec is trusted input, so such a row is corruption: refuse the run (0245 review R5).
   case "$p" in
     /*) IFS="$oldifs"; die2 "cannot run — spec inventory path '$p' is absolute; spec paths must be project-relative" ;;
   esac
@@ -175,11 +120,11 @@ for r in $rows; do
 done
 IFS="$oldifs"
 
-# ── keep-out (init's parser semantics, carried verbatim; fail CLOSED when unreadable — R1) ───────
-# 0245-R3: [-L] FIRST, ALWAYS — the ai-agents/ symlink test precedes ANY keep-out probe, so a
-# symlinked ai-agents/ never has its keep-out reached (or a foreign one diagnosed) through the
-# link. The row loop below then refuses the whole subtree with `refused: symlink`, which is the
-# true cause; init's own top-level preflight does the same.
+# Keep-out uses init's parser semantics. An unreadable keep-out fails CLOSED: no ai-agents/ rows, root
+# files still checked, exit 1. Intent was recorded and cannot be read (0245 plan §2, "Keep-out").
+
+# [-L] on ai-agents/ comes first, so a symlinked ai-agents/ never has its keep-out read through the link
+# (0245 review R3); the row loop then refuses the subtree as `refused: symlink`.
 agents_symlink=0
 [ -L "$root/ai-agents" ] && agents_symlink=1
 keep_out=""
@@ -203,16 +148,12 @@ if [ "$agents_symlink" = 0 ] && { [ -e "$ko" ] || [ -L "$ko" ]; }; then
   fi
 fi
 
-# ── the hashing pipeline ─────────────────────────────────────────────────────────────────────────
 marker_lines() {   # <file> <marker> → matching line numbers, one per line (init's awk, verbatim)
   awk -v m="$2" '{ l = $0; gsub(/^[ \t\r]+|[ \t\r]+$/, "", l); if (l == m) print NR }' "$1"
 }
 
-# hash_content <file> <elide:0|1> <lb> <le> → sha256 hex of the transformed bytes.
-# Ending-aware CRLF normalization: a record's trailing \r is stripped only when the record was
-# actually terminated by \n — the final line of a newline-less file keeps its \r (lone \r = content,
-# exactly normalizeEndings' \r\n-only replacement). Line numbers are stable across the transform
-# (\r\n -> \n never changes where \n falls), so lb/le computed on the raw file are valid here.
+# hash_content <file> <elide:0|1> <lb> <le>. A record's \r is dropped only when a \n ended it: a final \r
+# with no newline is content, as in the generator's \r\n-only replace. lb/le from the raw file stay valid.
 hash_content() {
   ends_nl=0
   if [ -s "$1" ]; then
@@ -267,8 +208,7 @@ installed_hash() {
   sf="$scaffold/$1"
   [ -f "$sf" ] || { warn "share scaffold has no copy of $1 — current-version match unavailable for it"; return 0; }
   if ih="$(file_hash "$sf" "$2")"; then
-    # 0245-R6 belt-and-braces: never emit a non-sha "hash" — garbage here would compare equal to
-    # the garbage the caller got for the project file and read as `conforming`.
+    # Never emit a non-sha "hash": garbage here equals the project side's garbage and reads as conforming.
     if valid_sha "$ih"; then
       printf '%s\n' "$ih"
     else
@@ -280,7 +220,6 @@ installed_hash() {
   return 0
 }
 
-# ── classification ───────────────────────────────────────────────────────────────────────────────
 report=""
 n_conforming=0; n_missing=0; n_stale=0; n_edited=0; n_wrongtype=0; n_wikirouted=0
 n_refsym=0; n_refmark=0; n_unreadable=0; n_keptout=0
@@ -468,7 +407,6 @@ for row in $rows; do
 done
 IFS="$oldifs"
 
-# ── the report ───────────────────────────────────────────────────────────────────────────────────
 printf '%s' "$report"
 printf '# note: a renamed directory reports its spec path as missing — this check cannot see the renamed twin (ADR-015'\''s rename consequence).\n'
 n_refused=$((n_refsym + n_refmark))

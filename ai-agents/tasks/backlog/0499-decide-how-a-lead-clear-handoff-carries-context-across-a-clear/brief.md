@@ -188,5 +188,44 @@ lead** — the area the 2026-09-28 ruling closed and the 2026-10-09 ruling kept 
 
   These rulings narrow the research scope (see Context, step 2 and Out of scope). They are **not**
   the owner's word to start — the ⛔ line in Context still holds.
+- **Owner rule 2026-10-19 — WHEN the lead offers a clear** (typed reply in the `fkit lead` session,
+  relayed to a spawned producer; the owner chose to record it here via `AskUserQuestion`, same
+  session and day: *"Yes, dated note in 0499 (Recommended)"*). What started it, verbatim:
+
+  > *"I still face the problem of not being able to clear the context of the main lead agent when it
+  > asks me something: e.g. it asks me something about what should be done next, but I can't answer
+  > and pause, if I answer - the work continues, but the context is already pretty full. How to fix
+  > it? I believe we already discussed it, but I am not sure if we come up to a solution for this?"*
+
+  His rule, verbatim (typo kept as typed):
+
+  > *"I don''t [sic] want to have "pause in the middle of a task" option. What I want is to be able to
+  > clear context when there is no active work on a task: e.g. when one task is done, but the next
+  > one is not started yet. Ideally, the lead should stop and ask the question about clearing the
+  > context (or using the new "handoff>clear>continue" option) when the context is 50% or more and an
+  > active task is completed."*
+
+  **What this adds to the scope:** the research must also cover the **trigger** — not only how the
+  handoff works, but when the lead offers it. At a **task boundary** (one task closed, the next not
+  yet started), if the lead's context is **50% or more**, the lead stops and asks the owner whether
+  to (a) do a plain `/clear`, or (b) use the handoff → clear → continue helper this task designs.
+  **No mid-task pause** — the owner rejected it; a "pause" option raised in a same-day
+  producer + architect consult is out. This stays inside the 2026-09-28 and 2026-10-09 rulings: the
+  lead only asks; the owner still decides and types `/clear` himself.
+
+  **Open check — UNVERIFIED, for the architect before any design:** can the lead (or a hook the
+  launcher installs) actually read how full its context is, as a number it can compare with 50%? If
+  it cannot, the fallback is to offer the choice at **every** task boundary instead. Record the
+  answer as verified / refuted / partly true, with evidence, alongside feasibility items (a)–(c).
+
+  **Where it applies:** mainly `/fkit-sprint-ship-loop`. Its natural boundary is after a task's close
+  and before it picks the next task. Known cost, from the same-day consult (a reading, not yet
+  checked): between tasks a `/clear` loses nothing on disk — closed tasks are closed, and a fresh
+  loop rebuilds from the boards — **except the run's skip list** (tasks rejected earlier in that
+  run), which lives only in the session. The research should say whether the handoff carries it,
+  or whether losing it is accepted.
+
+  This note widens the research scope only. It is **not** the owner's word to start — the ⛔ line in
+  Context still holds.
 - Filed 2026-10-08 by a spawned `fkit-producer` (no owner channel, ADR-021) from the lead-relayed
   request above; it decides nothing beyond that request.

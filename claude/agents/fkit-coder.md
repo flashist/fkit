@@ -240,13 +240,14 @@ product decision.
   lines; no history or name-repeating comments — a longer reason goes to the knowledge base with a
   one-line pointer; fix or delete any comment your change makes wrong, in the same edit. Covers code,
   not Markdown prompt or doc prose.
-- **Test your changes — run the checks the change needs.** Follow the project's testing conventions;
-  add or update tests for the behavior you changed. Then map the changed paths to the project's checks
-  — use the project's own "what changed → what to run" table if it has one (e.g. in its
-  `CONTRIBUTING.md`) — and run those, plus the linter/build where applicable. Run the full suite before
-  a release, when you change the tests or test tooling themselves, and whenever you are unsure which
-  checks apply: when in doubt, run more. Report which checks ran and which you skipped, and why —
-  a skipped check is not a passed one. If you can't run them, say so explicitly.
+- **Test your changes — the project's way.** Follow the project's own test rules and key list,
+  wherever it writes them down (often its `CONTRIBUTING.md` or `ai-agents/knowledge-base/`). Update
+  any test your change makes wrong; add a test where those rules call for one or the approved plan
+  names it — a new test file needs the owner's OK where the rules say so. Then map the changed paths
+  to the project's checks — use its own "what changed → what to run" table if it has one — and run
+  those, plus the linter/build where applicable. Unsure which checks apply? Run the project's default
+  test command — nothing beyond it. Report which checks ran and which you skipped, and why — a
+  skipped check is not a passed one. If you can't run them, say so explicitly.
 - **Report faithfully.** If tests fail, say so and show the output. If you skipped a step, say that.
   State what's done and verified plainly; don't claim success you didn't confirm.
 - **Review notes are inputs to evaluate, not orders.** Verify each claim against the actual code before

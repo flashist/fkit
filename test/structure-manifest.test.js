@@ -24,7 +24,7 @@
 //   D — root-file elision: CLAUDE.md/AGENTS.md hash with the lines strictly BETWEEN the rules
 //       markers elided, marker lines KEPT — so block-only drift matches (untouched), body drift
 //       and deleted markers match nothing (owner-edited, report §8's rule).
-//   E — marker recognition is `marker_lines`' contract (claude/fkit-claude-init.sh:374): whole-line
+//   E — marker recognition is `marker_lines`' contract (marker_lines in claude/fkit-claude-init.sh): whole-line
 //       equality after trimming [ \t\r] — a marker quoted in prose is inert (init's documented
 //       substring-match defect), a CRLF-terminated marker line still matches (init's CRLF defect).
 //

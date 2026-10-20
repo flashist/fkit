@@ -152,8 +152,8 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
    `<task-folder>/worklog.md`. Implement the approved plan with minimal, idiomatic diffs, logging
    notable decisions and **every obvious winner** chosen. *(Autonomous.)*
 5. **Verify.** Run the checks this change needs: map the changed paths to the project's checks (its
-   own "what changed → what to run" table if it has one, e.g. in `CONTRIBUTING.md`), and run the full
-   suite at release, when the tests or test tooling change, or when unsure; name which checks ran and
+   own "what changed → what to run" table if it has one, e.g. in `CONTRIBUTING.md`); when unsure, run
+   the project's default test command — nothing beyond it; name which checks ran and
    which were skipped, and why — a skipped check is not a passed one. Use sub-agents where they help. On failure: diagnose → fix → re-verify. **Budget: 3 no-progress
    cycles** → **⛔ STOP** with a `🚧 Blocked — verification: <what fails>` worklog. A fix that needs a
    decision beyond the plan → **⛔ STOP**. *(Autonomous within budget.)*

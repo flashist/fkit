@@ -723,7 +723,7 @@ elif ! grep -Eq '(✖|not ok|fail).*a non-AskUserQuestion tool' "$out"; then
   echo "   ✗ suite went red but NOT at the tool-gate assertion — red for the wrong reason."; fail=1
 fi
 
-# --- Mutation 6: disable the transcript-independent ship-loop marker read (SKIP 3) → the
+# --- Mutation 6: disable the transcript-independent ship-loop marker read (`shiploop-$session_id`) → the
 #     "SKIP: a ship-loop session marker present" test must go red (task 0129). Proves the marker-based
 #     skip is actually enforced by the suite, not merely present. ---------------------------------------
 step 6

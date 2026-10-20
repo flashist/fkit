@@ -6,7 +6,7 @@
 // FKIT_SETUP_ONLY exit — deliberately, which is what lets every case here drive it with
 // FKIT_SETUP_ONLY=1 and never exec a session.
 //
-// THE CONTRACT UNDER TEST (the launcher's structure_notice comment block is the authority):
+// THE CONTRACT UNDER TEST (the arms below are the contract; its record is 0247 plan §2–§3 + review R1–R2, ADR-039 Decision 3):
 //   * conforming project → COMPLETE silence (init's output-trap rule: the happy path runs on every
 //     launch of every project forever);
 //   * any check.sh exit-1-set row → exactly ONE stderr line, never stdout, never a write, never a
