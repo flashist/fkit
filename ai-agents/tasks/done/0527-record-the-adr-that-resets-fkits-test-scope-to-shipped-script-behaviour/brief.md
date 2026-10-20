@@ -37,7 +37,7 @@ harness for LLMs, not anything super computational)"*.
    at brief review.
    **2026-10-19 — reading confirmed by the owner.** Via `AskUserQuestion`, `fkit lead` session,
    selected option text, verbatim: *"Yes, option D (Recommended)"* — description he saw: *"All five
-   briefs stand as written."* (Recorded on [Sprint 13](../../../sprints/sprint-13.md) as S1.)
+   briefs stand as written."* (Recorded on [Sprint 13](../../../sprints/done/sprint-13.md) as S1.)
 2. **Time limit** — *"≤ 2 min, CI-enforced (Recommended)"*: the default `npm test` takes ≤ 2 min
    locally on an idle Mac; CI fails the job if it goes over.
 3. **Growth stop** — *"Owner-approved only (Recommended)"*: *"New prove-red case only with your OK,

@@ -4,10 +4,10 @@
 0423
 
 ## Sprint
-Backlog
+Sprint 14
 
 ## Priority
-Unscheduled
+P7
 
 ## Status
 🔲 Backlog
@@ -53,3 +53,7 @@ Phase 2's gate (ADR-052 D9): *"All ported tests green; output **identical to the
 - Gate reached = phase 3 may be **put to** the owner. It does not start phase 3.
 - **Board and priority:** Backlog board, Priority cell `—`, `## Priority: Unscheduled` — unranked. Sprint planning is the owner's later call.
 - **Filed 2026-09-30** by a spawned `fkit-producer` on the owner's approval of ADR-052 (A1, selected option text: *"Approve — Authorises the new ADR, the phase briefs (1–9) and task re-scopes. No phase or code starts without your word."*), relayed by `fkit-lead` — no owner channel (ADR-021). Decides nothing beyond the scoping; ⛔ no commit.
+- ⚠️ **Dated note 2026-10-20 — pulled into [Sprint 14](../../../sprints/sprint-14.md) as `P7`, and checked against [ADR-057](../../../knowledge-base/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md).** By a spawned `fkit-producer` (no owner channel), on owner rulings of 2026-10-20 via `AskUserQuestion` in a `fkit lead` session — selected option text, verbatim: *"New sprint after 13 (Recommended)"*, then *"Close it, then plan AI-Board sprint (Recommended)"* (quoted in full on the Sprint 14 board). `## Sprint` and `## Priority` above are updated; the *Board and priority* bullet above is now stale and left byte-identical. The sprint is **not started**; the ⛔ *do not start without the owner's specific word* stands. Scope is **not** changed by this note.
+  - **ADR-057 D2.1 — growth stop.** This brief plans a Python-vs-Node diff harness (*What to build* 1). If the harness is kept as a test file, or as a kept file the suite runs, it needs the owner's OK the same way; if it is a one-off check whose output the worklog pastes, say so in the plan. Each new test file needs the **owner's OK**, file by file, in any lane; a plan he approves counts as that OK **only for the files it names**, and an agent's plan-review APPROVE is not his OK. So this task's plan must list every test file it adds, by path, for the owner to approve.
+  - ⚠️ **ADR-057 D1 — the fence: an open owner question, not ruled.** D1 lets a test cover only a **shipped** script seen from outside (the launcher / init / hooks, or a shipped skill executable), plus four named exceptions, *"no others"*. `board/` does not ship in this phase and is in neither list, so tests under `test/board/` sit **outside the fence as written**. The default `npm test` glob (`test/*.test.js`) also does not reach `test/board/`, so where they run and the 2-min budget (D10) follow from the same ruling. ⛔ Do not build tests here until the owner rules; the question is on the Sprint 14 board's *Notes for the driver*.
+  - **Factual update, not a scope change:** the *Test-count discrepancy* paragraph above says the 52-now / 10-with-MCP reading was *"not ruled"*. It **was** ruled — owner ruling 2026-09-30, recorded in ADR-052 (*"52 now, 10 with MCP …"*). *Verification* 2's *"all 62"* means 52 ported here plus 10 mapped to `0468`. The paragraph above is left byte-identical.
