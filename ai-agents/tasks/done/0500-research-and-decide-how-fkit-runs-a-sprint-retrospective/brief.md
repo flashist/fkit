@@ -10,7 +10,7 @@ Sprint 12
 P9
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-producer
@@ -237,3 +237,69 @@ repo reads, or nothing — the owner relays it by hand), and who files it on the
 
 *Recorded 2026-10-16 by a spawned `fkit-producer` on the relayed ruling above; it decides nothing
 beyond adding this note. No commit.*
+
+## ⏱ 2026-10-20 — the owner's ruling on the research, and the build and trial briefs filed
+
+**Authority.** Owner rulings, 2026-10-20, each given via `AskUserQuestion` in the `fkit lead` session
+that drove this task, relayed by `fkit-lead` to a spawned `fkit-producer` with no owner channel
+(ADR-021). The question texts, selected option labels and option descriptions below are quoted
+verbatim **as relayed by the lead** from its own question calls; the descriptions are what the owner
+saw. The ruling was made from the recommendation report
+[`2026-10-20-recommendation-sprint-retro.md`](../../../knowledge-base/reports/2026-10-20-recommendation-sprint-retro.md)
+§10, which combines the producer, architect and coder angles (architect's own report:
+[`2026-10-20-eval-sprint-retro-evidence-home-and-role-fit.md`](../../../knowledge-base/reports/2026-10-20-eval-sprint-retro-evidence-home-and-role-fit.md)).
+
+| # | Question, verbatim | Selected label, verbatim | Description he saw, verbatim |
+|---|---|---|---|
+| 0 | *"Both remaining Sprint 12 tasks need your specific go-ahead. What should this run do?"* | **"Start 0500 as research (Recommended)"** | *"Your go-ahead for 0500. I drive producer-led research (architect + coder views) to a report and your ruling, outside the loop. 0474 untouched. Knock-on: none."* |
+| 1 | *"Who should run the sprint retro?"* | **"Lead runs it (Recommended)"** | *"You stay in the lead session; producers read evidence and file briefs behind the scenes. Deeper 'why?' answers take an extra step."* |
+| 2 | *"Should the retro have one form, or a short and a full form?"* | **"One form, ~10 min (Recommended)"** | *"Covers the sprint just closed, or all sprints since the last retro. Follows the one-output rule."* |
+| 3 | *"For the first version, drop the skill-text tests and the helper script?"* | **"Drop both for v1 (Recommended)"** | *"Smallest build, follows ADR-057; your trial checks the wording. Only the role→skill list test is updated. Revisit a helper after the trial."* |
+| 4 | *"When a retro in another project finds fkit problems, how should that reach fkit?"* | **"Separate fkit file (Recommended)"** | *"Retro tags findings; only the fkit part goes in its own public-safe file you carry over. fkit files briefs from it as usual."* |
+| 5 | *"Where should the retro build and trial briefs be filed?"* | **"Backlog board (Recommended)"** | *"Pull into a sprint later. Knock-on: trial waits on build, both on Backlog; nothing in Sprint 12 waits on them, so Sprint 12 can close once 0474 is settled."* |
+
+**What ruling 3 changes in this brief.** §4 above promised *"tests that pin the skill text"*. Ruling 3
+drops them (and any helper script) for v1, in line with
+[ADR-057](../../../knowledge-base/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md).
+The text above is left as written; this note is the correction.
+
+**Settled without a separate question — agreed by the research, not separately asked.** All research
+angles agreed on these, and the report's recommendation stands on them; the owner did not challenge
+them. They are recorded here as *agreed by the research*, **not** as owner rulings:
+- **"Explain more, then ask again"** was not asked: it is already fkit-wide (`0504`, owner ruling
+  2026-10-10, `conventions/asking-the-owner.md`). The §3 decision point above is settled by that ruling.
+- **Output home:** `ai-agents/knowledge-base/reports/YYYY-MM-DD-retro-sprint-<N>.md`, linking one way to
+  the closed board; **nothing written beside the board** and no edit to the closed board.
+- **Action items:** owner-picked candidate briefs, **at most 3**, filed by a spawned producer with
+  `/fkit-task-brief`, and recorded in the retro report **by task ID**.
+- **Follow-up:** the previous retro's actions are followed up **first**, read from disk by those IDs.
+- **Trigger:** offered **once** after a **verified** `/fkit-sprint-done` or `/fkit-sprint-cancelled`
+  close; declinable; **never** offered at the ship-loop's *"Sprint shipped"* state; never run
+  automatically; a decline writes nothing.
+- **One ADR** records it all.
+
+**Not filed by this task — left for the owner to raise later.** The architect's Q4 candidate, *save
+the ship-loop's sprint roll-up to disk* (architect report §2 and §9; recommendation §3.1 and §8 item 4),
+which would make the `NEEDS-DECISION` and blocked-run signals measured instead of partial. It was not
+put to the owner and is **not** filed. It is his to raise.
+
+**Briefs filed 2026-10-20** (all on the Backlog board, ruling 5; each links back here and carries the
+standing *"Do not start without the owner's specific word"* rule):
+
+| ID | Title | Owner | Depends on |
+|---|---|---|---|
+| [`0531`](../../backlog/0531-record-the-adr-for-how-fkit-runs-a-sprint-retro/brief.md) | Record the ADR for how fkit runs a sprint retro | `fkit-architect` | 0500 |
+| [`0532`](../../backlog/0532-build-the-lead-owned-fkit-retro-skill/brief.md) | Build the lead-owned `/fkit-retro` skill | `fkit-coder` | 0531 |
+| [`0533`](../../backlog/0533-have-the-lead-offer-a-retro-once-after-a-verified-sprint-close/brief.md) | Have the lead offer a retro once, after a verified sprint close | `fkit-coder` | 0532 |
+| [`0534`](../../backlog/0534-write-a-separate-public-safe-fkit-feedback-file-from-a-consuming-projects-retro/brief.md) | Write a separate, public-safe fkit-feedback file from a consuming project's retro | `fkit-coder` | 0532 |
+| [`0535`](../../backlog/0535-trial-fkit-retro-on-real-sprint-closes-then-put-keep-change-drop-to-the-owner/brief.md) | Trial `/fkit-retro` on real sprint closes, then put keep / change / drop to the owner | `fkit-producer` | 0532, 0533, 0534 |
+
+So this task now **blocks `0531`** (the Notes bullet above, *"Blocks: nothing"*, predates the filing
+and is left as written). Knock-on, checked: all five wait only on each other and on this task; nothing
+in Sprint 12 or Sprint 14 waits on any of them.
+
+⛔ **This note changes nothing else.** This task's status, sprint and priority, and its Sprint 12 row,
+are unchanged; the close is a separate act.
+
+*Recorded 2026-10-20 by a spawned `fkit-producer` on the rulings relayed by `fkit-lead`; it decides
+nothing beyond recording them and filing the briefs. No commit.*
