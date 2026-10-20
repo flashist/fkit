@@ -24,8 +24,8 @@ the moment it is pushed. There is no staging channel and no promotion step betwe
 
 ### The tag is a marker, not an install target
 
-`npm run release` creates an annotated `v<x.y.z>` tag (`bin/release.mjs:458-459` — the `// 3. tag`
-step's `create annotated tag`; the name is built at `:409`, `` const tag = `v${version}` ``), and that
+`npm run release` creates an annotated `v<x.y.z>` tag (`bin/release.mjs:469-470` — the `// 3. tag`
+step's `create annotated tag`; the name is built at `:420`, `` const tag = `v${version}` ``), and that
 tag is how a release is *identified* — in `git log`, in an issue, in a [changelog](CHANGELOG.md)
 entry. Nothing in the release flow, the README, or `fkit update` puts an install onto a tag on its
 own; an install lands on one only when someone explicitly sets `FKIT_REF`.
@@ -131,25 +131,27 @@ minutes. The release then turns `## Unreleased` into `## v<x.y.z> — <date>` (�
 nothing written there anyway, pass `--allow-empty-changelog`; it is loud, and the version section
 then says *"No changes were recorded for this release."*
 
-**3. Run the suite yourself first.**
+**3. Run the tests yourself first.**
 
 ```sh
 npm test
+npm run test:release
 ```
 
-Not as the last line of defence — `npm run release` runs it for you (§4). Run it first because a
+Not as the last line of defence — `npm run release` runs both for you (§4). Run them first because a
 red found before the release run costs nothing. `npm test` is `node --test test/*.test.js`
-(`package.json:5`); for its time, see `CONTRIBUTING.md`'s Tests block.
+(`package.json:5`) and `npm run test:release` is the release tool's own test (`package.json:9`); for
+their times, see `CONTRIBUTING.md`'s Tests block.
 
-⚠️ **Until task `0530` settles the release gate, also run these two by hand before `npm run
-release`:**
+The release does **not** run prove-red (the four mutation cases); CI runs it nightly
+(`.github/workflows/prove-red.yml`). Check that the last nightly `prove-red` run is green on the
+repo's Actions tab. If you changed `claude/fkit-claude.sh`, `claude/skills-for-role.sh`,
+`claude/skill-ownership-hook.sh`, `test/launcher-contract.test.js`, `test/skill-ownership-hook.test.js`
+or `test/prove-red.sh` since that run, run it yourself:
 
 ```sh
-npm run test:release     # the release tool's own test
-npm run test:prove-red   # the four mutation cases
+npm run test:prove-red
 ```
-
-The release gate runs only `npm test`, and since task `0529` neither of these is in it.
 
 **4. Decide the bump.**
 
@@ -162,7 +164,7 @@ npm run release -- --version 1.2.3
 
 `VERSION` is the source of truth and `package.json` is kept in sync with it. When deriving a bump the
 two must already agree, or the script aborts and asks you to reconcile them
-(`bin/release.mjs:208-213` — `version mismatch: VERSION=…`).
+(`bin/release.mjs:210-215` — `version mismatch: VERSION=…`).
 
 **5. If unsure, dry-run it.**
 
@@ -170,32 +172,33 @@ two must already agree, or the script aborts and asks you to reconcile them
 npm run release:dry
 ```
 
-It prints the whole plan and touches nothing — but note it **still runs the full suite**, so a dry
-run is not a cheap run.
+It prints the whole plan and touches nothing — but note it **still runs the test gate** (about 2
+min), so a dry run is not a cheap run.
 
 ---
 
 ## 4. What `npm run release` does for you
 
-**The test gate cannot be forgotten.** A release run executes `npm test` before its first mutating
-line and refuses to release on red (`bin/release.mjs:317-359`, the `// --- test gate` block) —
-skipping it is possible, but only by asking for it explicitly with `--no-test` (`bin/release.mjs:96`,
-`const doTest`; `:355-358`, the `⚠ --no-test` banner), which §5 costs out. The position of the gate
+**The test gate cannot be forgotten.** A release run executes `npm test`, then `npm run
+test:release`, before its first mutating line and refuses to release on the first red
+(`bin/release.mjs:319-367`, the `// --- test gate` block) —
+skipping it is possible, but only by asking for it explicitly with `--no-test` (`bin/release.mjs:98`,
+`const doTest`; `:363-366`, the `⚠ --no-test` banner), which §5 costs out. The position of the gate
 is deliberate: at that point nothing has been written, staged, committed, or tagged, so a red suite is a clean abort leaving the tree exactly as you left it. Gating any later
 would leave `VERSION` and `package.json` bumped and dirty, and the next default run would bump again
-(`bin/release.mjs:321-326`, *"POSITION IS LOAD-BEARING"*).
+(`bin/release.mjs:323-328`, *"POSITION IS LOAD-BEARING"*).
 
-**The changelog check runs before the gate, and again after it.** Before `npm test` starts, the run
+**The changelog check runs before the gate, and again after it.** Before the test gate starts, the run
 refuses a `CHANGELOG.md` whose `## Unreleased` section is missing, duplicated, or empty
-(`bin/release.mjs:220-315`, `checkChangelog()`), so a forgotten changelog costs seconds. After the
-gate it reads the file **again** and repeats the check (`:385-388`, *"CHANGELOG.md, read AGAIN"*):
+(`bin/release.mjs:222-317`, `checkChangelog()`), so a forgotten changelog costs seconds. After the
+gate it reads the file **again** and repeats the check (`:396-399`, *"CHANGELOG.md, read AGAIN"*):
 an entry you add during the gate is kept, and a section emptied during it is still refused before
 the first write. On a run that does not bump (`--no-bump`, or `--version` set to the current
 version), a `## v<x.y.z>` section for that version means a partly-failed release already stamped it,
 and the run leaves the file as it is — so finishing that release with `--no-bump` works. A bumping
 run that finds a heading for the version it is about to release refuses instead: no release wrote it.
 
-Then, in order (`bin/release.mjs:390-468`, from the bump to the `// 3. tag` step):
+Then, in order (`bin/release.mjs:401-479`, from the bump to the `// 3. tag` step):
 
 1. bump `VERSION` + `package.json`, and turn `## Unreleased` into `## v<version> — <date>` in
    `CHANGELOG.md`, with a new empty `## Unreleased` above it
@@ -211,23 +214,27 @@ full at `.github/workflows/test.yml:3-11`. In short: the **gate** sees the worki
 cannot; **CI** covers `main`'s HEAD, which is what `install.sh` actually installs, and its verdict
 arrives after the push rather than before it.
 
-CI runs on every push to `main`, on every pull request, and on demand via `workflow_dispatch`
-(`.github/workflows/test.yml:16-20`). It has been exercised on real pushes and has already caught a
-failure that a local run had not. Two of its settings are load-bearing rather than cosmetic:
-`fetch-depth: 0` (`.github/workflows/test.yml:49-53`), without which the manifest test refuses a
-shallow clone and the suite dies at module load; and `timeout-minutes: 33`
-(`.github/workflows/test.yml:44`), which stops a hung run from burning a runner.
+CI runs `npm test` on every push to `main`, on every pull request, and on demand via
+`workflow_dispatch` (`.github/workflows/test.yml:16-20`), and fails the job when `npm test` takes
+over its 120 s budget (`.github/workflows/test.yml:53-69`, the `npm test (budget, ADR-057 §D10)`
+step). It has been exercised on real pushes and has already caught a failure that a local run had
+not. Two of its settings are load-bearing rather than cosmetic: `fetch-depth: 0`
+(`.github/workflows/test.yml:41-45`), without which the manifest test refuses a shallow clone and the
+suite dies at module load; and `timeout-minutes: 10` (`.github/workflows/test.yml:36`), which stops a
+hung run from burning a runner. Prove-red runs in its own workflow, nightly at 03:17 UTC and on
+demand (`.github/workflows/prove-red.yml`), on `main`'s latest commit only — `CONTRIBUTING.md`'s
+Tests block lists its limits.
 
 ---
 
 ## 5. What is still not covered
 
 - **`--no-test` can still ship an unverified tree.** It is loud — an unconditional stderr banner
-  fires (`bin/release.mjs:355-358`, *"⚠ --no-test: releasing WITHOUT running the suite"*) — and it is
+  fires (`bin/release.mjs:363-366`, *"⚠ --no-test: releasing WITHOUT running the suite"*) — and it is
   never a default, but nothing blocks it.
 - **The changelog check proves the `## Unreleased` section is not empty — not that it is complete or
   accurate.** One line of anything passes. And `--allow-empty-changelog` is loud (a stderr banner,
-  `bin/release.mjs:298-304`, plus a *"No changes were recorded"* line in the file), but nothing
+  `bin/release.mjs:300-306`, plus a *"No changes were recorded"* line in the file), but nothing
   blocks it.
 - **`install.sh`'s real network fetch is untested.** `test/update-reinstall.test.js` (case
   `0481/install-sh-records`) runs it on a sealed PATH against a stub `curl` and a local tarball, which
@@ -235,7 +242,7 @@ shallow clone and the suite dies at module load; and `timeout-minutes: 33`
   the step every install actually depends on — is covered by neither the gate nor CI.
 - **The gate tests the tree as it stood when the suite started, not the exact committed bytes.** The
   version bump is written after the suite runs, and minutes separate the gate from `git add -A`. This
-  is deliberate and documented in place (`bin/release.mjs:328-335`, *"IT DOES NOT REQUIRE A CLEAN
+  is deliberate and documented in place (`bin/release.mjs:330-337`, *"IT DOES NOT REQUIRE A CLEAN
   TREE"*).
-- **There is no npm-registry publish** (`bin/release.mjs:89`, *"Makes no npm-registry publish."*).
+- **There is no npm-registry publish** (`bin/release.mjs:91`, *"Makes no npm-registry publish."*).
   The tag and `main` are the whole distribution.

@@ -25,6 +25,11 @@
   below the two notes under **§Decision 4** — `prove-red.sh` is out of `npm test`, cut to four cases,
   and runs in no automated gate until task `0530` lands. The site lists above are left byte-identical
   and are superseded by this line; the same append-only rule and the same legend apply.
+  **Extended 2026-10-20 by a fifth append (`0530`):** a dated ⚠️ note now also sits below the
+  `0529` note under **§Decision 4** — `0530` has added ADR-057 §D3's nightly CI lane
+  (`.github/workflows/prove-red.yml`), so the *"until task `0530` lands"* window above ends once that
+  file is on `main`. The site lists above are left byte-identical and are superseded by this line; the
+  same append-only rule and the same legend apply.
 
 > **What this ADR decides, in one line:** the mutation-testing library question was investigated and
 > **closed** — no candidate fits a shell SUT tested as a black-box subprocess, so there is nothing to
@@ -134,6 +139,16 @@ not a **tooling-sophistication** problem, and no library would have fixed it.
    > window, not an end state. `0529`'s owner-approved plan (2026-10-20) names that window, and
    > `RELEASING.md` tells whoever releases to run it by hand first. The two notes above are left
    > byte-identical.
+
+   > ⚠️ **Dated note 2026-10-20 (`0530`) — the nightly CI lane now exists; Decision 4 is untouched.**
+   > Verified against live files 2026-10-20: `.github/workflows/prove-red.yml` runs
+   > `npm run test:prove-red` nightly and on demand, outside `npm test`, so the note above's *"until
+   > task `0530` adds ADR-057 §D3's nightly CI lane, `prove-red.sh` runs in no automated gate"* window
+   > ends once that file is on `main` (GitHub runs a schedule only from the default branch). The
+   > details — schedule, when it takes effect, its limits, and the runner time still pending — are
+   > carried in [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md)'s `0530` note
+   > below its §D3 *"When it runs"* bullet — deliberately not restated here, so there is one place to
+   > keep true rather than two. The three notes above are left byte-identical.
 
 5. **The second proposed hardening — assert each mutation actually changed the file — was NOT
    selected.** It is a ~3-line, zero-dep guard that closes R2's **second** failure mode (the silent

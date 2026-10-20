@@ -1,0 +1,28 @@
+# fkit — nightly prove-red (ADR-057 §D3, task 0530): the four mutation cases, outside `npm test` and
+# outside its 2-minute budget (§D10). A red run is seen next morning, not at push time ("fine for now").
+# Scheduled runs use main's latest commit only; GitHub may delay or drop them at busy times, and
+# disables the schedule after 60 days with no repository activity. A red run notifies the user who
+# last changed the cron line, if their GitHub Actions notifications are on.
+name: prove-red
+
+on:
+  schedule:
+    - cron: '17 3 * * *'   # 03:17 UTC daily; off the hour, which GitHub names as its busiest time
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prove-red:
+    runs-on: ubuntu-latest
+    # ~6x the local 151.6 s (busy Mac, 2026-10-20); runner time PENDING — task 0530 step 7.
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # same checkout prove-red last ran green in (inside test.yml's job)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm run test:prove-red

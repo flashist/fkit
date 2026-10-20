@@ -25,23 +25,15 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    # Basis: measured on THIS runner (ubuntu-latest), never locally — task 0395. Source: the 20
-    # green `test` push runs from 81f1429 (2026-09-15, where 0388's mutations landed) to 4a21997
-    # (2026-10-02); whole job 344-652 s. Slowest whole job: 652 s (10m52s), run 36984588959,
-    # 2026-10-02 — its `npm test` step took 610 s, i.e. 66 s unit + 544 s prove-red.sh (split read
-    # from the log timestamps). Slowest `npm test` step: 624 s, run 37051231177. Same-day runs of a
-    # near-identical suite spread 7.4-10.9 min, so the basis is the slowest run, not the average.
-    # All 20 carried prove-red.sh baselines 0a-0o and mutations 1-40 (incl. the basis run), except
-    # the 6 before 3027cc7 (2026-09-21), which had 1-39. As of task 0395 the file has 43 mutations
-    # and 16 clean baselines (0a against the real tree, 0b-0p against unmutated copies). Sprint 10's
-    # additions (baseline 0p, mutations 41-43, a larger release suite, a new update-reinstall suite)
-    # were NOT in the measured runs (estimated ~+1 min, unverified until a run carries them).
-    # All of the above was measured while `npm test` still ran prove-red.sh; task 0529 (ADR-057) took
-    # it out, and task 0530 re-sets this basis and the timeout.
-    # 33 min = ~3.0x the slowest measured job (33 / 10.87), and still stops a hung run from burning a
-    # runner for six hours. Re-measure when the suite grows: `gh run list --workflow
+    # Basis (task 0530, ADR-057): `npm test` no longer runs prove-red.sh (task 0529); prove-red runs
+    # nightly in prove-red.yml. Old-suite runner figure: the unit pass took 76.4 s (1156 tests, run
+    # 39388117472, 2026-10-20). Post-cut runner times of `npm test`: 72 s (run 39406193972,
+    # 2026-10-20, the step time, before the budget step existed); two more PENDING — task 0530 step 7
+    # (the push run + `workflow_dispatch` runs).
+    # 10 min kills a hung run, which the budget step cannot judge because it only times a run that
+    # finishes; ~5x the budget, far below GitHub's 6 h default. Re-measure: `gh run list --workflow
     # test.yml`, then `gh run view <id> --json jobs` for the job and step times.
-    timeout-minutes: 33
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -58,4 +50,20 @@ jobs:
           # No `cache: npm` and no `npm ci` on purpose: fkit has zero dependencies and no lockfile
           # (ADR-014 §4). There is nothing to install and nothing to cache.
 
-      - run: npm test
+      # ADR-057 §D10: the job fails when the default suite goes over its budget. Timed here rather than
+      # by a step timeout, so the failure names the budget and the time taken. Milliseconds, so a run
+      # even slightly over fails; a red `npm test` fails the step first (bash -e), so only a green run
+      # is judged.
+      - name: npm test (budget, ADR-057 §D10)
+        env:
+          BUDGET_S: 120
+        run: |
+          start_ms=$(node -p 'Date.now()')
+          npm test
+          took_ms=$(( $(node -p 'Date.now()') - start_ms ))
+          took=$(printf '%d.%03d' $((took_ms / 1000)) $((took_ms % 1000)))
+          echo "npm test took ${took} s (budget ${BUDGET_S} s)"
+          if [ "$took_ms" -gt $((BUDGET_S * 1000)) ]; then
+            echo "::error title=Test budget exceeded::npm test took ${took} s, over the ${BUDGET_S} s budget (ADR-057 §D10)."
+            exit 1
+          fi

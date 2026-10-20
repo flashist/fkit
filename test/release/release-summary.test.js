@@ -43,7 +43,7 @@
 // what the summary says on any accepted path.
 // Round-2 review R8 added a SECOND check, after the test gate: HEAD must still be on the branch the
 // preflight saw, or the run is refused before the first write — otherwise a `git switch` during the
-// ~6-minute gate commits and tags one branch and pushes another, the same defect through a race.
+// test gate commits and tags one branch and pushes another, the same defect through a race.
 //
 // ⚠️ TASK 0479 — CHANGELOG.md, tested in the 0479/* section at the end of this file. release.mjs
 // refuses a missing, duplicated or empty `## Unreleased` before the test gate and again after it, and on
@@ -122,7 +122,9 @@ function makeFixture() {
   assert.ok(!url.startsWith(REPO), `fixture origin points into the real repo — refusing to run: ${url}`);
 
   writeFileSync(join(repo, 'VERSION'), '0.1.0\n');
-  writeFileSync(join(repo, 'package.json'), '{\n  "version": "0.1.0"\n}\n');
+  // The `test:release` stub is for the gate-ON runs (release.mjs runs it after `npm test`); written in
+  // the initial commit so the `other` branch, cut from it, has it too — 0300 switches HEAD there mid-gate.
+  writeFileSync(join(repo, 'package.json'), '{\n  "version": "0.1.0",\n  "scripts": {\n    "test:release": "true"\n  }\n}\n');
   writeFileSync(join(repo, 'file.txt'), 'content\n');
   // Task 0479: release.mjs refuses a missing or empty `## Unreleased`, so every fixture carries one,
   // filled. The 0479/* tests replace it where the content is the fact under test.
@@ -160,13 +162,16 @@ function release(repo, args = []) {
 // changelog check sits around `npm test`, or what happens AFTER it has run, so the gate must run.
 // None of them opens the hole SEAL 2 is for — that
 // hole is a fixture test script that re-enters this suite (`npm test` → this file → `npm test`). So
-// the seal moves, it does not drop: the fixture's test script is asserted to be present and to name
-// no `npm`, `node` or `release` — a git one-liner can move HEAD but cannot recurse.
+// the seal moves, it does not drop: the fixture's `test` and `test:release` scripts are asserted to be
+// present and to name no `npm`, `node` or `release` — a git one-liner can move HEAD but cannot recurse.
 function releaseWithGateOn(repo, args = []) {
   assert.ok(!args.includes('--no-test'), 'releaseWithGateOn() is for the gate-ON case — use release() otherwise');
-  const script = JSON.parse(readFileSync(join(repo, 'package.json'), 'utf8')).scripts?.test;
-  assert.ok(typeof script === 'string' && script.length > 0, 'gate-ON fixture has no test script — npm test would abort, proving nothing');
-  assert.ok(!/npm|node|release/.test(script), `gate-ON fixture test script could recurse into this suite: ${script}`);
+  const scripts = JSON.parse(readFileSync(join(repo, 'package.json'), 'utf8')).scripts ?? {};
+  for (const name of ['test', 'test:release']) {
+    const script = scripts[name];
+    assert.ok(typeof script === 'string' && script.length > 0, `gate-ON fixture has no ${name} script — the gate would abort, proving nothing`);
+    assert.ok(!/npm|node|release/.test(script), `gate-ON fixture ${name} script could recurse into this suite: ${script}`);
+  }
   const r = spawnSync('node', [join(repo, 'bin', 'release.mjs'), ...args], { cwd: repo, encoding: 'utf8' });
   return { code: r.status, stdout: r.stdout || '', stderr: r.stderr || '' };
 }
@@ -495,17 +500,18 @@ test('0300/detached-head-with-branch-head-refused: on a detached HEAD, --branch 
     assert.equal(git(repo, ['tag', '--list']).out, '', 'a refused run created a tag');
   });
 
-// Round-2 review R8 (Codex, measured): the preflight read HEAD BEFORE the ~6-minute test gate; commit
+// Round-2 review R8 (Codex, measured): the preflight read HEAD BEFORE the test gate; commit
 // and tag act on HEAD AFTER it, and the push used the name read before. A `git switch` in another
 // terminal during the gate therefore committed and tagged `other`, pushed `main` (a no-op), put a tag
 // on origin that no origin branch reaches, and printed ✓ Released — the task's own defect through a
-// race, on the BARE run. The script now re-reads HEAD after the gate and COMPARES it to the preflight
-// value (never just re-resolves — that would push wherever HEAD landed and break `--branch main`).
+// race, on the BARE run. The script now re-reads HEAD after each gate script and COMPARES it to the
+// preflight value (never just re-resolves — that would push wherever HEAD landed and break
+// `--branch main`).
 // The fixture's test script IS the race: `git switch -q other`. Gate ON on purpose — see releaseWithGateOn().
-test('0300/head-moved-during-test-gate-refused: HEAD switched to another branch during npm test → refused after the gate, before any write',
+test('0300/head-moved-during-test-gate-refused: HEAD switched to another branch during npm test → refused straight after npm test, before test:release and any write',
   () => {
     const { repo } = fixtureWithOther();
-    writeFileSync(join(repo, 'package.json'), '{\n  "version": "0.1.0",\n  "scripts": {\n    "test": "git switch -q other"\n  }\n}\n');
+    writeFileSync(join(repo, 'package.json'), '{\n  "version": "0.1.0",\n  "scripts": {\n    "test": "git switch -q other",\n    "test:release": "true"\n  }\n}\n');
     commitWork(repo);
     const mainHead = git(repo, ['rev-parse', 'HEAD']).out;
     const otherHead = git(repo, ['rev-parse', 'other']).out;
@@ -587,7 +593,7 @@ function today() {
 // releaseWithGateOn()). Commits it, so the tree is clean when the release starts.
 function setTestScript(repo, script) {
   writeFileSync(join(repo, 'package.json'),
-    `${JSON.stringify({ version: '0.1.0', scripts: { test: script } }, null, 2)}\n`);
+    `${JSON.stringify({ version: '0.1.0', scripts: { test: script, 'test:release': 'true' } }, null, 2)}\n`);
   git(repo, ['add', '-A']);
   git(repo, ['commit', '-q', '-m', 'test script']);
 }

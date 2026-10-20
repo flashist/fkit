@@ -16,6 +16,10 @@
   **§Decision 7** (sequencing) — on the two pieces of fkit's own regression gate it names. The site
   list in the first line of this item is left byte-identical and is superseded by this line; the same
   append-only rule and the same legend apply.
+  **Extended 2026-10-20 by a third append (`0530`):** a second dated ⚠️ note now sits below the
+  `0529` note under **§Decision 7** — `0530` has added the nightly prove-red CI lane that note was
+  waiting for. The site lists above are left byte-identical and are superseded by this line; the same
+  append-only rule and the same legend apply.
 
 > **What this ADR decides, in one line:** fkit adds an **eighth role, a tester**, whose unique authority
 > is a **sandbox** authority — a permission envelope no other role gets — and the owner **knowingly
@@ -107,6 +111,15 @@ criterion.**
    > below its Decision 4 — deliberately not restated here, so there is one place to keep true rather
    > than two. Whether this changes what the tester waits behind is not decided here. The item above,
    > and the ADR-026 / ADR-003 bullet in §Related, are left byte-identical.
+
+   > ⚠️ **Dated note 2026-10-20 (`0530`) — the nightly lane the note above waits for now exists; the
+   > decision is untouched.** Verified against live files 2026-10-20: `.github/workflows/prove-red.yml`
+   > runs `npm run test:prove-red` nightly and on demand, so the note above's *"until task `0530` adds
+   > §D3's nightly CI lane it runs only by hand"* window ends once that file is on `main`. The details
+   > are carried in [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md)'s `0530`
+   > note below its §D3 *"When it runs"* bullet — deliberately not restated here, so there is one place
+   > to keep true rather than two. Whether this changes what the tester waits behind is still not
+   > decided here. The item and the note above are left byte-identical.
 
 ## Options considered
 

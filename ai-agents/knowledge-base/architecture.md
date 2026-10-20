@@ -520,8 +520,9 @@ suites, and the three named exceptions in the default suite (`dual-home-parity`,
 `task-id-uniqueness`, `structure-manifest`). The fourth, the release tool's own test, sits in
 `test/release/` and runs via `npm run test:release`. **`prove-red.sh`, a hand-rolled mutation gate**,
 proves four cases (M1, M2, M30, M31) each go red at a named assertion against a deliberately-broken
-copy; it is outside `npm test` and runs via `npm run test:prove-red` (its nightly CI lane is task
-0530's). The mutation gate is **hand-rolled by decision, not by omission** — 
+copy; it is outside `npm test` and runs via `npm run test:prove-red`, nightly in CI
+(`.github/workflows/prove-red.yml`, 03:17 UTC on `main`'s latest commit, plus `workflow_dispatch`;
+task 0530). The mutation gate is **hand-rolled by decision, not by omission** — 
 [ADR-026](decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled.md) weighed a
 mutation-testing library and declined it; do not read `prove-red.sh` as a stopgap awaiting one. **Zero
 npm dependencies.**
@@ -530,13 +531,14 @@ npm dependencies.**
 
 - **CI — landed (task 0256).** `.github/workflows/test.yml` runs `npm test` on every push to `main`
   and every pull request, plus a manual `workflow_dispatch` trigger, on `ubuntu-latest`, Node 24,
-  with `fetch-depth: 0` (the manifest suite hard-refuses a shallow clone). This replaces
+  with `fetch-depth: 0` (the manifest suite hard-refuses a shallow clone). Since task 0530 the step
+  is timed and fails the job when `npm test` takes over its 120 s budget (ADR-057 §D10). This replaces
   [ADR-003](decisions/adr-003-ci-runs-validate-bundles.md)'s CI, which never landed — the
   `omnigent/validate-bundles.sh` it mandated died with the Omnigent removal.
   **CI is what covers `main` HEAD**, which is what `install.sh:19` (`REF="${FKIT_REF:-main}"`)
   actually installs by default — not the tag.
-- **In-release gate — landed (task 0256).** `bin/release.mjs` runs `npm test` before its first write
-  and aborts on red; there is no warn-and-continue path, only an explicit, loudly-announced
+- **In-release gate — landed (task 0256).** `bin/release.mjs` runs `npm test`, then
+  `npm run test:release` (task 0530), before its first write and aborts on the first red; there is no warn-and-continue path, only an explicit, loudly-announced
   `--no-test`. **The gate is what covers the working tree** — it tests the tree as it stood when the
   suite started, uncommitted and untracked work included. Not the exact committed bytes: the version
   bump writes `VERSION` and `package.json` after the suite, and minutes separate the gate from

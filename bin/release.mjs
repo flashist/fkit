@@ -13,9 +13,10 @@
 // committed tree is skipped). A default (bumping) run always cuts a NEW version,
 // so after a partial failure re-run with --no-bump to finish the same one.
 //
-// Test gate: every run executes `npm test` first and ABORTS on red — an untested
-// tree cannot be released (task 0256). It runs before the first write, and under
-// --dry-run too. --no-test skips it and is never a default.
+// Test gate: every run executes `npm test`, then `npm run test:release`, first and
+// ABORTS on the first red — an untested tree cannot be released (tasks 0256, 0530).
+// It runs before the first write, and under --dry-run too. --no-test skips it and
+// is never a default.
 //
 // Release notes (task 0479): CHANGELOG.md must have a non-empty `## Unreleased`
 // section, checked BEFORE the test gate (a refusal costs seconds, not the gate's
@@ -76,10 +77,11 @@ Options:
   --allow-empty-changelog  Release with an empty \`## Unreleased\` in CHANGELOG.md
   -h, --help          Show this help
 
-Every run runs \`npm test\` first (10+ min) and refuses to release if it fails —
-including under --dry-run. The suite reads the working tree, so it checks the tree
-as it stood when the suite started — uncommitted and untracked work included, but
-not the version bump written after it. --no-test skips that; it is never a default.
+Every run runs \`npm test\`, then \`npm run test:release\`, first (about 2 min) and
+refuses to release if either fails — including under --dry-run. Both read the working
+tree, so they check the tree as it stood when they started — uncommitted and untracked
+work included, but not the version bump written after them. --no-test skips that; it
+is never a default.
 
 CHANGELOG.md must have a non-empty \`## Unreleased\` section — checked before the
 test gate, so a refusal is fast. The release turns it into \`## v<version> — <date>\`
@@ -331,26 +333,32 @@ checkChangelog("before");
 // `git add -A` below. Both read the working tree — so gating here tests the
 // tree as it stood when the suite started, uncommitted and untracked work
 // included. NOT the exact committed bytes: the bump below writes VERSION and
-// package.json after the suite, and 10+ min separate this gate from
+// package.json after the suite, and about 2 min separate this gate from
 // `git add -A`. That is the point: CI cannot cover this, it never sees the tree.
 function runTests() {
   const npmBin = process.platform === "win32" ? "npm.cmd" : "npm";
-  const r = spawnSync(npmBin, ["test"], { cwd: KIT, stdio: "inherit" });
-  if (r.error) fail(`could not run \`npm test\`: ${r.error.message}`);
-  if (r.status !== 0) {
-    fail(
-      `npm test failed (exit ${r.status}) — refusing to release an untested tree.\n` +
-        `  Nothing was changed: no bump, no commit, no tag.\n` +
-        `  Fix the suite and re-run. To release anyway: --no-test (ships unverified).`,
-    );
+  for (const args of [["test"], ["run", "test:release"]]) {
+    const name = `npm ${args.join(" ")}`;
+    const r = spawnSync(npmBin, args, { cwd: KIT, stdio: "inherit" });
+    if (r.error) fail(`could not run \`${name}\`: ${r.error.message}`);
+    if (r.status !== 0) {
+      fail(
+        `${name} failed (exit ${r.status}) — refusing to release an untested tree.\n` +
+          `  Nothing was changed: no bump, no commit, no tag.\n` +
+          `  Fix it and re-run. To release anyway: --no-test (ships unverified).`,
+      );
+    }
+    // After each script, so the refusal names the one that moved HEAD and the next never runs on
+    // another branch's tree.
+    refuseIfHeadMoved(name);
   }
 }
 
 if (doTest) {
-  // stdio: "inherit" so the suite streams live — 5+ minutes of silence reads as a hang.
-  console.log(`\n• running \`npm test\` before release v${target} (10+ min; includes prove-red.sh)`);
+  // stdio: "inherit" so the suite streams live — two minutes of silence reads as a hang.
+  console.log(`\n• running \`npm test\` and \`npm run test:release\` before release v${target} (about 2 min)`);
   runTests();
-  console.log(`✓ npm test green\n`);
+  console.log(`✓ npm test and npm run test:release green\n`);
 } else {
   console.error(
     `\n⚠ --no-test: releasing WITHOUT running the suite.\n` +
@@ -359,7 +367,7 @@ if (doTest) {
 }
 
 // --- HEAD must not have moved since the preflight (task 0300, round-2 review R8) ------------------
-// The guard above read HEAD BEFORE the ~6-minute gate; the commit and the tag act on HEAD AFTER it,
+// The guard above read HEAD BEFORE the test gate (about 2 min); the commit and the tag act on HEAD AFTER it,
 // and the push uses the name read before. A `git switch` in another terminal meanwhile puts the
 // commit and tag on one branch and the push on another — the 0300 defect back through a race.
 // MEASURED: a fixture whose test script runs `git switch -q other` → commit + tag on `other`,
@@ -368,19 +376,22 @@ if (doTest) {
 // ⚠️ COMPARE against the preflight read — never just re-resolve. A bare re-read would push wherever
 // HEAD landed, which under `--branch main` breaks the guard's own promise. Runs on every path (the
 // window is zero under --no-test, and the compare is then a no-op), and sits before the first
-// writeFileSync, so a refused run is still a clean abort.
-const nowRef = git(["symbolic-ref", "-q", "HEAD"], { check: false, quiet: true });
-const nowOn = nowRef.status === 0 ? nowRef.out.replace(/^refs\/heads\//, "") : null;
-if (nowOn !== onBranch) {
+// writeFileSync, so a refused run is still a clean abort. runTests() also calls it after each gate
+// script, naming the script (`during`).
+function refuseIfHeadMoved(during) {
+  const nowRef = git(["symbolic-ref", "-q", "HEAD"], { check: false, quiet: true });
+  const nowOn = nowRef.status === 0 ? nowRef.out.replace(/^refs\/heads\//, "") : null;
+  if (nowOn === onBranch) return;
   const was = onBranch === null ? "detached" : `on ${onBranch}`;
   const is = nowOn === null ? "detached" : `on ${nowOn}`;
   fail(
-    `HEAD moved after the preflight check${doTest ? " (during npm test)" : ""}: it was ${was}, it is ${is} now.\n` +
+    `HEAD moved after the preflight check${during ? ` (during ${during})` : ""}: it was ${was}, it is ${is} now.\n` +
       `  The commit and the tag would land on the new HEAD while the push went to the branch checked\n` +
       `  out when the run started. Nothing was changed: no bump, no commit, no tag.\n` +
       `  Switch back and re-run, or release from where HEAD is now.`,
   );
 }
+refuseIfHeadMoved(null);
 
 // --- CHANGELOG.md, read AGAIN (task 0479) -----------------------------------------------------------
 // A fresh read, not the pre-gate one: an edit made during the gate is kept. A refusal here is still a

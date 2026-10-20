@@ -58,6 +58,13 @@
   path and script), as a pointer below **§D7**'s ⛔ note, and below **§D11**'s closing paragraph (the
   notes written in the older ADRs). The site lists above are left byte-identical and are superseded by
   this line; the same append-only rule and the same legend apply.
+  **Extended 2026-10-20 by a fourth append (`0530`):** dated ⚠️ notes now also sit below the `0529`
+  note under **§D3**'s *"When it runs"* bullet (the nightly lane, `.github/workflows/prove-red.yml`,
+  now exists), below §D3's *"The schedule is not in `0530`'s brief today"* bullet (a pointer), and
+  below the `0529` note under **§D4**'s *"The release tool's test"* bullet (`npm run release` now runs
+  `npm run test:release` too). §D10 carries no note: the CI threshold is 120 s, the same budget §D10
+  states. The site lists above are left byte-identical and are superseded by this line; the same
+  append-only rule and the same legend apply.
 
 > **What this ADR decides, in one line:** fkit's test suite tests only how fkit's **shipped scripts**
 > behave, seen from outside — nothing about prompt wording, repo-only tools or the repo's own
@@ -293,6 +300,20 @@ case count and the lane change (owner, Q1 (c), *"fine for now"*).
   > `0529`'s owner-approved plan (2026-10-20) names that window, and `RELEASING.md` tells whoever
   > releases to run it by hand first. §D3's decision is unchanged. The bullet above is left
   > byte-identical.
+
+  > ⚠️ **Dated note 2026-10-20 (`0530`) — the nightly lane now exists, so the window in the note above
+  > closes once it is on `main`.** Verified against live files 2026-10-20:
+  > `.github/workflows/prove-red.yml` runs `npm run test:prove-red` on a schedule
+  > (`cron: '17 3 * * *'`, 03:17 UTC daily) and on demand (`workflow_dispatch`), with a 15-minute job
+  > timeout; it is not on push and not in `npm test`, so it stays outside the 2-minute budget (D10).
+  > `.github/workflows/test.yml` still runs only `npm test`. GitHub runs a schedule only from the
+  > default branch's latest commit, so the lane takes effect when this file is committed and pushed to
+  > `main` — at this writing it is not yet pushed (the owner's call), it has no runner run, and its
+  > runner time is pending (task `0530` plan step 7). Its known limits (may be delayed or dropped at
+  > busy times; disabled after 60 days with no repository activity; a red run notifies the user who
+  > last changed the cron line, if their Actions notifications are on) are in the file's header
+  > comment and `CONTRIBUTING.md`. §D3's decision is unchanged. The bullet and the note above are left
+  > byte-identical.
 - **Cost, as told to the owner:** about 97 s per nightly run (driver estimate from two one-run file
   timings — see *§Owner answers*); standard-runner minutes are free for this public repo.
 
@@ -303,6 +324,12 @@ case count and the lane change (owner, Q1 (c), *"fine for now"*).
   > night. Arithmetic, not measured. This lane is outside the 2-minute budget (D10). The bullet above,
   > and the figure the owner was told in *§Owner answers*, are left byte-identical.
 - **The schedule is not in `0530`'s brief today**: `0530` waits on a producer re-brief that adds it.
+
+  > ⚠️ **Dated note 2026-10-20 (`0530`) — `0530` was re-briefed with the schedule, and has built it.**
+  > Verified against live files 2026-10-20: `0530`'s brief now asks for the nightly prove-red lane
+  > (its *"Nightly prove-red lane (ADR-057 §D3, owner Q1 (c)"* item). What was built is carried in the
+  > `0530` note below *"When it runs"* above — deliberately not restated here, so there is one place to
+  > keep true rather than two. The bullet above is left byte-identical.
 
 Not chosen: (a) delete prove-red entirely (no check at all that the role-lock tests can go red);
 (b) the same four cases, run by hand only (the architect's proposal — catches "a test that cannot
@@ -337,6 +364,17 @@ The four category-1 items are kept by D1 itself; the owner confirms them with th
   > `bin/release.mjs` still runs only `npm test`, so until task `0530` settles the release gate the
   > release tool's own test runs only by hand (`RELEASING.md` says so). The bullet above is left
   > byte-identical.
+
+  > ⚠️ **Dated note 2026-10-20 (`0530`) — `npm run release` now runs the release tool's test; the
+  > by-hand window in the note above has ended.** Verified against live files 2026-10-20:
+  > `bin/release.mjs`'s `runTests()` runs `npm test`, then `npm run test:release`, before the release's
+  > first write, and refuses on the first red (*"refusing to release an untested tree"*); `--no-test`
+  > skips both. That settles this bullet's *"Whether `npm run release` runs it is `0530`'s call"*: the
+  > owner chose *"Release test too (Recommended)"* via `AskUserQuestion`, 2026-10-20, in the live
+  > `fkit lead` session, approving `0530`'s plan (its Q2; Q1 *"Release runs tests itself
+  > (Recommended)"* keeps the in-release gate). The release does not run prove-red, which stays in
+  > the nightly lane (§D3). The note's *"still runs only `npm test`"* and *"runs only by hand"* no
+  > longer hold; the bullet and the note above are left byte-identical.
 - **Scaffold-vs-dogfood byte parity** (owner, Q4b): `test/dual-home-parity.test.js` stays in the
   default suite. Why: 0.07 s here, and it guards what every consuming project receives at init (the
   scaffold must match the live copy fkit runs on itself — ADR-027). Cost accepted: small upkeep and a
