@@ -11,6 +11,10 @@
   Marker legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
   overturned** (do not follow it). No existing line of this ADR was edited; the note is an append, and
   the Status stays as written — §1, §3, §4 and §5 still bind.
+  **Extended 2026-10-20 by a second append (`0529`):** a dated ⚠️ note now also sits directly below
+  the ⛔ notice at the end of **§2** — two facts in that notice have drifted (four named exceptions,
+  not three; the cut has happened). The site list in the first line of this item is left
+  byte-identical and is superseded by this line; the same append-only rule and the same legend apply.
 
 > **Why this ADR exists.** Not to pre-empt the runner conversation — to make it **short**. Two
 > independent consults on the same day re-derived the same arguments from scratch, one of them from a
@@ -98,6 +102,19 @@ the suite asserts up to it, never past it.
 > widened to three things by ADR-017 rule 4 on 2026-07-16, with no note here). Verified against live
 > files 2026-10-19: `test/` still holds 42 `*.test.js` files, many outside the new fence — the cut
 > itself is task `0529`'s.
+
+> ⚠️ **Dated note 2026-10-20 (`0529`) — two facts in the ⛔ notice above have drifted; its decision
+> stands.** Verified against live files 2026-10-20:
+>
+> - *"plus the three tests ADR-057 §D7 names as exceptions"* — **four**, not three.
+>   [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md)'s ⛔ note below its §D7 table
+>   (2026-10-19, `0527` review R1, owner ruling) adds `test/structure-manifest.test.js` as a fourth.
+> - *"`test/` still holds 42 `*.test.js` files … the cut itself is task `0529`'s"* — the cut has
+>   happened. Task `0529` deleted 19 test files and moved `test/release-summary.test.js` to
+>   `test/release/release-summary.test.js`, run by `npm run test:release`, outside the default
+>   `npm test`. `test/` now holds 22 `*.test.js` files at its top level.
+>
+> The ⛔ notice above is left byte-identical.
 
 ### 3. bats-core and shellspec are rejected
 

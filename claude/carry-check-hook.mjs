@@ -34,10 +34,8 @@ function gitBlobId(bytes) {
   return createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
 }
 // Prefix match, ≥7 hex (0204 plan, ruling Q4; POINTER enforces the length).
-// A separate function so prove-red can neuter it.
 function hashMatches(named, computed) { return computed.startsWith(named); }
 // Strict: a driver that trims the file's final newline is denied unless the prompt re-supplies it.
-// A separate function so prove-red can neuter it.
 function containsExactBytes(prompt, bytes) { return prompt.includes(bytes.toString('utf8')); }
 
 let raw;

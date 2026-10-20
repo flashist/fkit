@@ -24,11 +24,6 @@
 // not exist on GitHub, so even a leak would fetch nothing.
 //
 // ⚠️ FIXTURE VERSIONS ARE SYNTHETIC (9.9.x), NEVER the repo's VERSION.
-//
-// ⚠️ PROVE-RED: mutation 41 in test/prove-red.sh strips the assignments in front of the installer's
-// `sh` in a COPIED launcher and requires '0481/version-only' below to go red BY NAME. FKIT_REINSTALL_ROOT
-// is the seam (the FKIT_BANNER_ROOT pattern). Mutation 46 strips the install.sh download's
-// `--max-time` (task 0284) and requires '0284/reinstall-deadline' to go red.
 
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -42,7 +37,7 @@ import { join } from 'node:path';
 import { REPO } from './harness.mjs';
 
 // The claude/ tree the fixture copies its launcher from — and, in the install.sh cases, the tree the
-// stub tarball carries. A whole-tree redirect so mutation 41 can point it at a broken copy.
+// stub tarball carries. A whole-tree redirect (FKIT_REINSTALL_ROOT) so a run can point it at a broken copy.
 const DEFAULT_TREE = join(REPO, 'claude');
 const CLAUDE_TREE = process.env.FKIT_REINSTALL_ROOT || DEFAULT_TREE;
 if (CLAUDE_TREE !== DEFAULT_TREE) {

@@ -41,6 +41,11 @@
   for which target"* table rules `path:NNN` **wrong** for *"a coordination document others append
   to"*. Source files (`claude/…`, `test/…`) carry `path:NNN` freely — with one named exception
   in **§2**.
+- **Corrections:** 2026-10-20 (`0529`) — this ADR carries dated notes below **§3.1 FOLLOW-UP 1** (the
+  `cancelled/` guard exemption), below **§Authoring constraints** item 1, and below **§Related**'s
+  *"Guards this ADR was written against"* bullet. Marker legend: **⚠️ = a fact that drifted** (the
+  decision is untouched); **⛔ = a decision that was overturned** (do not follow it). No existing line
+  of this ADR was edited; the notes are appends, and the Status stays `accepted`.
 
 ## Context
 
@@ -502,6 +507,16 @@ unlike every other frozen board, and its frozen `path:NNN` claims would **red `n
 commit, add that prefix to that exemption list.** ⛔ **Not deferred to "when a sprint is actually
 cancelled"** — deferring guarantees the red lands on whoever cancels a sprint, at the worst possible
 moment. This is recorded as a **required follow-up on the mover-building task** (`0341`).
+
+> ⚠️ **Dated note 2026-10-20 (`0529`) — FOLLOW-UP 1 was carried out, and its guard is now deleted.**
+> Verified against the last commit and live files 2026-10-20: `ai-agents/sprints/cancelled/` exists,
+> and `test/coordination-citation-policy.test.js` as last committed lists it in that exemption list
+> beside `sprints/done/` and `sprints/reviews/`, citing ruling V4. Task `0529` deleted that test on
+> 2026-10-20 under [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D1 / §D6
+> (category 5). With no guard, a frozen `path:NNN` claim on a cancelled board reds nothing, so ruling
+> V4 has nothing left to act on — fulfilled, not overturned. The citation rule itself stands as a
+> written rule ([`durable-citation-anchors.md`](../conventions/durable-citation-anchors.md); ADR-057
+> §D6 (b)). The text above is left byte-identical.
 
 **⭐ FOLLOW-UP 2 — §3.0.2's successor ORDERING has no surface a prose mover can call. `0341` picks the
 surface; ADR-041 §5 already forbids the one route it must not take. (Y1, recorded 2026-09-11, review
@@ -1279,6 +1294,15 @@ the model the owner's OQ-2 answer replaced, by name.
    forward link reds `npm test`. `conventions/sprint-status-vocabulary.md`, `ai-agents/sprints/cancelled/`
    and the two mover skill directories are therefore named **in backticks as prose**, deliberately.
    ⭐ Convert them to links only once the files exist.
+
+   > ⚠️ **Dated note 2026-10-20 (`0529`) — the guard named in this item is deleted.** Task `0529`
+   > deleted `test/reference-integrity.test.js` on 2026-10-20 under
+   > [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D6 (category 5). Verified
+   > against live files 2026-10-20: the file is gone, so a forward link in `ai-agents/knowledge-base/`
+   > no longer reds `npm test`. The pointer rule behind this item survives as a written rule with no
+   > test (ADR-057 §D6 (b)); on a close, the movers' resolve-every-link hand check is now the only link
+   > check. The item above is left byte-identical.
+
 2. **Coordination documents are cited by heading + quoted fragment, never `path:NNN`** — including
    ADR-041, whose line numbers shift the moment its superseded-in-part note is appended.
    `test/dashboard-contract.test.js` is cited the same way for the reason given in §2.4.
@@ -1300,6 +1324,10 @@ the model the owner's OQ-2 answer replaced, by name.
 - Skill-ownership declaration site: `claude/skills-for-role.sh`, `skills_for_role()`
 - Guards this ADR was written against: `test/reference-integrity.test.js:181` (⚠️ **`:180` in the first
   two drafts — corrected under X1, review R25**), `test/coordination-citation-policy.test.js:447-448`
+
+  > ⚠️ **Dated note 2026-10-20 (`0529`) — both guards named above are deleted.** See the notes below
+  > §3.1 FOLLOW-UP 1 and below §Authoring constraints item 1 — deliberately not restated here, so there
+  > is one place to keep true rather than two. The bullet above is left byte-identical.
 
 ## Number allocation — the four-way sweep, evidenced
 

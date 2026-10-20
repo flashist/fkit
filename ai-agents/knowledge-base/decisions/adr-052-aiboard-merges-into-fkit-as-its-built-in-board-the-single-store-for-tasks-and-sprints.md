@@ -28,6 +28,11 @@
   (only `fkit-wiki` writes the wiki), [ADR-022](adr-022-tools-unrestricted-except-adversarial-reviewer.md)
   (tool access), [ADR-018](adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md)
   (the skill lock), and the never-commit-unprompted rule.
+- **Corrections:** 2026-10-20 (`0529`) — this ADR carries dated notes below **§D8**'s item 7 (the
+  converter's acceptance bar) and below **§D9**'s phase table and its test-count note. Marker legend:
+  **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do
+  not follow it). No existing line of this ADR was edited; the notes are appends, and the Status stays
+  `accepted`.
 
 > **What this ADR decides, in one line:** aiboard stops being a separate project — it is rewritten in
 > Node and merged into fkit as `board/`, with one command (`fkit board`) and a web page, and becomes the
@@ -279,6 +284,15 @@ It reads old projects with fkit's **current** tools, so it copes with `sprint-N.
    sections; every other file hash-identical; every task's status, sprint, order, owner and close equal
    to what fkit's current tools read before; `fkit board check` clean; the `reference-integrity` test
    green; a write round-trip proving ids like `0013` survive.
+
+   > ⚠️ **Dated note 2026-10-20 (`0529`) — *"the `reference-integrity` test green"* can no longer be
+   > met as written; the rest of the bar stands.** Task `0529` deleted
+   > `test/reference-integrity.test.js` on 2026-10-20 under
+   > [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D6 (category 5). Verified
+   > against live files 2026-10-20: the file is gone, and no test reads the links under `ai-agents/`
+   > any more. **Which check takes that bar item's place is not decided here** — an open question for
+   > the converter's phase, for the owner. The item above is left byte-identical.
+
 8. **The owner commits.** Undo = revert that commit — **clean only until the first change made after the
    conversion**; after that, only fixing forward.
 9. **Re-running** on a converted project does nothing and says so; a trial run on an unchanged tree gives
@@ -306,6 +320,14 @@ A **gate** is what must be true before the next phase may be **put to him** — 
 ✅ **Test count corrected — owner ruling 2026-09-30** (**[SELECTED]** *"52 now, 10 with MCP — Matches your 'MCP after v1' ruling; the architect corrects ADR-052's '62 tests' wording."*). aiboard has **62** tests =
 46 board + 6 server + 10 MCP (the producer's count). **Phase 2 ports the 52 non-MCP tests; the 10 MCP
 tests go with the MCP port in phase 9** (task `0468`). This ADR first said phase 2 ports 62.
+
+> ⚠️ **Dated note 2026-10-20 (`0529`) — phase 8's *"and their tests"*: the reader's tests are already
+> gone.** Task `0529` deleted `test/board-archived-id.test.js`, `test/board-narrow.test.js`,
+> `test/board-reader.test.js` and `test/board-root.test.js` on 2026-10-20 under
+> [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D1 (category 3 — repo-only
+> `bin/` tooling). Verified against live files 2026-10-20: the four files are gone, while
+> `bin/fkit-board.mjs` and `bin/board-narrow.mjs` are still on disk, now with no test. Phase 8 still
+> retires the two scripts; it has no tests left to retire. The table above is left byte-identical.
 
 **Order:** 0 → 1 → 2 → 3 → (4 alongside 3 and 5) → 5 → 6 → then 7, 8, 9. The three big changes — port
 (2), fkit-ify (3), convert (6–7) — **stay apart, each gated**. The previous fkit is removed when the last

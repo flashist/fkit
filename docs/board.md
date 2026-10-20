@@ -57,8 +57,7 @@ JSON error.** It holds no credentials and reads no environment beyond `FKIT_AIBO
 **It writes nothing, anywhere, in any mode, behind any flag.** It opens no file outside `ai-agents/`
 except the single aiboard `index.html` it was pointed at, and it runs one fkit-local subprocess:
 `claude/skills/fkit-status/dashboard.sh select-active`, which is the project's **one** implementation
-of the sprint-status grammar. `test/board-reader.test.js` pins all of this, including a check that
-`git status --porcelain ai-agents/` is unchanged by a full crawl plus every route.
+of the sprint-status grammar.
 
 ## Not shipped
 

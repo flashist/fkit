@@ -93,12 +93,9 @@ after the move and the same miss reads as a link to a file that exists at neithe
 indistinguishable from a stale mention.
 ⛔ Do not "restore consistency" with the task movers by swapping these back.
 
-⛔ **What the inversion does NOT buy you: a guard over the widened half.**
-`test/reference-integrity.test.js` builds its scanned set from `collectFiles()`, which walks
-`ai-agents/` **and nothing else** — so inside `ai-agents/` a missed reference really is a dangling link
-the guard catches, and in `claude/`, `test/`, `CLAUDE.md`, `README.md` or `AGENTS.md` — exactly the half
-step 6's sweep was widened to — **nothing catches it.** Your own sweep is the only check there is out
-there. Do not carry the task movers' "the guard catches it" reassurance across; it does not travel.
+⛔ **What the inversion does NOT buy you: a guard.** No automated check catches a missed reference
+anywhere — inside `ai-agents/` or out of it, in `claude/`, `test/`, `CLAUDE.md`, `README.md` or
+`AGENTS.md`, the half step 6's sweep was widened to. Your own sweep is the only check there is.
 
 ### 1. Resolve and validate the input
 - Take the **first token** of `$ARGUMENTS` as the plan path and resolve it to a real sprint plan under
@@ -280,9 +277,8 @@ grep -rn --exclude-dir=wiki-vault "<basename>" ai-agents/ claude/ test/ CLAUDE.m
   output, a dated measurement, a quoted specimen, or a findings row. Editing a transcript forges it.
   Report each one you met and left frozen. ⛔ **This wins over the link test above**, and the case is
   real, not hypothetical: `ai-agents/tasks/done/0268-…/worklog.md` carries `[Sprint 4c](../sprint-4c.md)`
-  twice, once in a quoted plan row and once in captured drift output, and both are exempted **by name**
-  in `test/reference-integrity.test.js`. Repointing them would forge the transcript **and** orphan a
-  key you are forbidden to edit.
+  twice, once in a quoted plan row and once in captured drift output. Repointing them would forge
+  the transcript.
 
 ### 7. Move the board FILE to `sprints/cancelled/`
 Create `ai-agents/sprints/cancelled/` if it does not exist — ADR-047 §3 has it **created on first use**,
@@ -299,62 +295,9 @@ git mv ai-agents/sprints/<basename> ai-agents/sprints/cancelled/<basename>
 plan. A move is not finished while a link it broke is still broken. The board's own outbound links are
 the ones most easily left one level short — test them from the plan's **new** location, not its old one.
 
-**Then check the exemption keys this move may have invalidated.** They live in
-`test/reference-integrity.test.js`, which holds a set of named
-`(citing file, target)` keys exempting links that are broken on purpose. Moving a board file into
-`cancelled/` can orphan one of those keys, heal one, or break a fresh link that needs repairing. The guard
-already computes all three directions, and its own failure messages name the repair each one needs —
-but never who lands it, which is what the two rules below settle. Run it, then read its red against
-them.
-
-⛔ **Two rules bind every repair below — read them before acting on one.** **Attribute the red first:**
-the guard is repo-global, so it may not be this move's at all. And **you may run this guard, you may
-not edit it** — wherever the repair a red requires is an edit to `test/reference-integrity.test.js`
-(repointing a key, deleting one, or adding one), that repair is what you put in the `NEEDS-DECISION`,
-not what you do, and a coder lands it. **Exactly one repair below is yours:** `L2`'s leading branch,
-repairing a markdown link **this move broke**. Attribution binds here too: an `L2` red this move did
-not cause is pre-existing — report it, leave it alone. And *"the edit is under `ai-agents/`"* is no
-test at all: the guard scans nothing else, so it holds for every `L2` red. What makes this one yours
-is *"Then prove it."* above — a move is not finished while a link **it** broke is still broken — so
-you land it and the close is not unfinished for it. The last two bullets state both rules in full.
-
-- **Run it unconditionally**, even when the sweep above found nothing to update:
-  `node --test test/reference-integrity.test.js`
-- **Green** → record the guard's measured named-exempt figure in the report and stop. `L8` prints it
-  as the tail of its disclosure line — e.g. `0 broken, 7 named-exempt` — with the **number before the
-  words**, so there is no `named-exempt: N` line to copy. This is the common case, and the step is a
-  no-op.
-- **Red at `L4`** — *"whose CITING FILE no longer exists"* → the citing file moved with this close, so
-  the key names a path that no longer exists. Name repointing the citer half to the new board — and
-  name the tail with it: the coder **re-runs the guard** after that edit, and if it then reds at
-  *"whose TARGET now resolves"*, deletes the key instead of keeping the repointed one.
-- **Red at `L4`** — *"whose TARGET now resolves"* → the link healed. **Delete the key — do not repoint it.**
-  A sibling-relative link *heals* when its citer moves into `cancelled/` alongside a target already there:
-  *"`../../cancelled/X` survives, `../X` does not" is right about a POINTER and INVERTS for an exemption
-  KEY.*
-- **Red at `L2`** — *"unresolved markdown link(s)"* → this move *broke* a link, and that arm's own
-  message names the fork: **repair the link** when it is a pointer offered to a reader, or — *"if it
-  is quoted or illustrative text rather than a pointer"* — add a NEW key carrying its reason. Neither
-  branch is a deletion, and **repair is the default**: a new key on a link that should resolve
-  converts a loud deterministic red into a silent permanent exemption.
-- **The exempt count falls by suppressed INSTANCES, not by keys** — one key can match more than once,
-  so deleting a single key can lower the count by more than one. The new number is therefore **read
-  from a re-run of the guard once the edit lands, never decremented by hand** — again the coder's
-  step, not yours.
-- **You may run this guard. You may not edit it.** `test/reference-integrity.test.js` is a coder
-  surface: stop and return a `NEEDS-DECISION` naming what the red points at verbatim — each offending
-  key and its direction, or, for an `L2` red taking the add-a-key branch, where there is no key yet,
-  the broken link's citing file, its line text, and its unresolved target — and treat the close as
-  unfinished until a coder lands that edit. **An `L2` red you answer by repairing the link is not this
-  case:** where **this move** broke the link, that repair is yours to land — *"Then prove it."* above
-  already requires it of you — and it does not leave the close unfinished. Not because the edit is
-  under `ai-agents/`: the guard scans nothing else, so that holds for every `L2` red, this move's or
-  not. A red this move did not cause is still pre-existing, and still left alone.
-- **Attribute before touching anything.** The guard is repo-global, so a red may belong to another
-  change in flight. It is this move's only where the board file just moved is spelled by the named key —
-  or, for an `L2` red, where there is no key yet, by the broken link's own citing file or target;
-  anything else is reported as pre-existing and left alone. Re-running the guard is harmless and must
-  not produce a second `NEEDS-DECISION` for the same key.
+**That hand check is the only link check on a close.** No automated link check runs when a
+sprint board moves (ADR-057 §D6 (a)): no test reads the links under `ai-agents/` any more, so a link you
+miss stays broken until someone reads it. Say so in the report (**Link check** below).
 
 ### 8. Flag downstream dependents — a cancelled sprint can orphan work
 Unlike completion, cancelling a sprint can **break things that depended on it**. Surface (do **not**
@@ -416,6 +359,7 @@ Give a concise summary:
 - **Re-pointed links:** every href repaired and where, with the counts you re-derived this run —
   **including hits outside `ai-agents/`** (`claude/`, `test/`, the root docs), which the task movers
   never touch and a reader will not expect. If none were re-pointed, say so.
+- **Link check:** by hand only — no automated link check ran.
 - **Left frozen:** every occurrence of the old path you met and deliberately did not rewrite, with the
   reason in a phrase (**non-link occurrence** / captured output / dated measurement / quoted specimen /
   findings row). These are judgment calls and this list is the only place they can be checked.

@@ -369,7 +369,7 @@ survivor the deletion loop could not see. **Argue the choice in the plan.**
 10. ⚠️ **Check whether `test/prove-red.sh` reaches `claude/fkit-claude-init.sh` before claiming mutation
     coverage.** `0046`'s plan records that its only reference to this file is a **comment**, so a new
     guard here is plausibly **unmutated**. ⛔ **If it is, say so plainly** —
-    [`0037`](../0037-extend-prove-red-to-reach-init/brief.md) is the open task for that seam.
+    [`0037`](../../cancelled/0037-extend-prove-red-to-reach-init/brief.md) is the open task for that seam.
 
 ## Notes
 

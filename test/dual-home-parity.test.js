@@ -1,11 +1,8 @@
 // The dual-home parity guard — task 0133, ADR-027 §Decision 2's mechanical half.
 //
-// SCOPE: the same FOURTH test-scope category as test/task-id-uniqueness.test.js and
-// test/adr-number-uniqueness.test.js — an invariant over the repo's own `ai-agents/` CONTENT rather
-// than over product behavior. ADR-014 §2 fenced the scope at two things; ADR-017 rule 4 widened it to
-// a third (a shipped skill executable's stdout contract); task-id-uniqueness.test.js:3-11 records the
-// fourth. This suite is a third instance of the fourth, not a fifth category, so the widening is cited
-// rather than re-argued.
+// SCOPE: an invariant over the repo's own `ai-agents/` CONTENT rather than over shipped-script
+// behaviour — outside ADR-057 §D1's fence, kept as one of ADR-057 §D7's named exceptions (owner answer
+// Q4b).
 //
 // WHAT IT ASSERTS. `ai-agents/` (fkit's own working tree) and `claude/scaffold/ai-agents/` (the
 // template a consuming project receives at init) hold some of the same documents.
@@ -97,12 +94,12 @@
 //    co-present class under a prune point is empty, measured 2026-08-01.
 //
 // ── THE SEAM ────────────────────────────────────────────────────────────────────────────────────
-// FKIT_PARITY_SCAFFOLD_ROOT redirects the SCAFFOLD home only, so test/prove-red.sh can point this
-// suite at a deliberately-broken copy of `claude/scaffold/ai-agents/` without touching the real tree.
-// One seam, scaffold-side, is enough for all four mutations: a file can be deleted from the mutant
-// scaffold (missing-from-scaffold), added to it (missing-from-live), altered in it (byte drift), or
-// copied into it under a prune point (tripwire). A live-side seam would buy nothing and would let a
-// stale env var silently redirect the repo's own tree.
+// FKIT_PARITY_SCAFFOLD_ROOT redirects the SCAFFOLD home only, so a run can point this suite at a
+// deliberately-broken copy of `claude/scaffold/ai-agents/` without touching the real tree. One seam,
+// scaffold-side, reaches every failure class: a file can be deleted from the broken scaffold
+// (missing-from-scaffold), added to it (missing-from-live), altered in it (byte drift), or copied into
+// it under a prune point (tripwire). A live-side seam would buy nothing and would let a stale env var
+// silently redirect the repo's own tree.
 // ⚠️ A non-default root is announced on stderr, exactly as harness.mjs does for FKIT_LAUNCHER: a STALE
 // inherited value would otherwise make `npm test` report green about some other directory.
 //
@@ -310,9 +307,9 @@ export function compareHomes(liveRoot, scaffoldRoot) {
 
   // A tripwire hit JOINS the enforced set. ⚠️ It must also count as PRESENT in both homes: the walk
   // sets do not contain it (that is the whole point — it was pruned away), so testing membership in
-  // them alone reports a file sitting in BOTH homes as "MISSING from ai-agents/". Caught by running
-  // mutation 13 against this change, not by reading it. Co-presence is not an assumption here — it is
-  // the condition `hidden` is built on, checked against the two homes on disk just above.
+  // them alone reports a file sitting in BOTH homes as "MISSING from ai-agents/". Caught by running a
+  // co-present-under-a-prune-point mutant against this change, not by reading it. Co-presence is not
+  // an assumption here — it is the condition `hidden` is built on, checked against the two homes on disk just above.
   const promoted = new Set(hidden.map((h) => h.path));
   const enforced = [...new Set([...live.files, ...scaffold.files, ...promoted])].sort();
 

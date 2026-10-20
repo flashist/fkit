@@ -2,8 +2,8 @@
 # PreToolUse Agent|Task carry-check (0204). The check lives in carry-check-hook.mjs: a spawn prompt needs
 # real JSON parsing (0204 brief, caveat 4). What a green check means: the .mjs header.
 
-# Run as bash "<path>" (ADR-017 rule 2). The .mjs is found beside this file, so prove-red's copies run
-# their own .mjs.
+# Run as bash "<path>" (ADR-017 rule 2). The .mjs is found beside this file, so a copied tree runs its
+# own .mjs.
 
 # Fail OPEN when node is missing (0204 plan, ruling Q3). stdin is not read here: exec passes it on.
 set -u

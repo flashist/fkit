@@ -20,6 +20,11 @@
 - **Touches:** ADR-033 (producer-only movers + its 2026-09-18 addendum), ADR-029 (task-is-a-folder),
   ADR-047 §4 (mover order, atomic-by-invocation), ADR-018/ADR-036 (the skill-ownership hook and its
   declared sites), ADR-048 (the unbuilt reconcile mode, task `0135`), ADR-014 (test mechanics).
+- **Corrections:** 2026-10-20 (`0529`) — this ADR carries dated notes at the end of **§Context 6**
+  (*"The test surface"*) and below **§Blast radius 5**'s `NAMED_EXEMPT` bullet. Marker legend: **⚠️ =
+  a fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not
+  follow it). No existing line of this ADR was edited; the notes are appends, and the Status stays
+  `accepted`. The ⛔ *Partly overtaken* notice below (2026-09-30, ADR-052) is unchanged.
 
 > ⛔ **Partly overtaken — 2026-09-30, by [ADR-052](adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md).** The deterministic command is **`fkit board`**, part of
 > fkit's built-in board, so the build this ADR authorised (verifier `0407`, then command `0408`) is
@@ -267,6 +272,17 @@ real on `0358`, orphaning three keys in one close."*
 
 **So: 1,814 lines of transaction logic, and not one test that executes it.** Not through neglect —
 there is no way to execute it.
+
+> ⚠️ **Dated note 2026-10-20 (`0529`) — the file quoted in this section is deleted; the finding
+> stands.** Task `0529` deleted `test/mover-exemption-step.test.js` on 2026-10-20 under
+> [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D1 (category 4 — wording of
+> shipped prompt files), and with it `test/reference-integrity.test.js`, whose `NAMED_EXEMPT` keys
+> the movers' exemption step maintained (§D6). Verified against live files 2026-10-20: both files are
+> gone, and none of the four movers names `reference-integrity` or `NAMED_EXEMPT` any more — their
+> resolve-every-link hand check is now the only link check on a close (ADR-057 §D6 (a)). So the
+> movers now have **no** test at all, of prose or of behaviour; *"not one test that executes it"*
+> still holds. The header quoted above, the quote in §Context 1's counting rule and §Related's
+> *"Code read for this ADR"* list are dated records and are left byte-identical.
 
 ### 7. What the movers actually do today, in order
 
@@ -539,6 +555,10 @@ close. Minimum, consistent with ADR-014's mechanics (`node --test`, zero devDepe
   class that cannot exist at all today.**
 - The `NAMED_EXEMPT` interaction `test/mover-exemption-step.test.js` currently guards *as prose* becomes
   assertable *as behaviour*, closing the hole that file names in its own header.
+
+  > ⚠️ **Dated note 2026-10-20 (`0529`) — there is no `NAMED_EXEMPT` interaction left to assert.**
+  > See the note at the end of §Context 6 — deliberately not restated here, so there is one place to
+  > keep true rather than two. The bullet above is left byte-identical.
 
 ### 6. ADR-048's unbuilt reconcile mode (`0135`) — **a deterministic mover changes what it means**
 

@@ -132,16 +132,16 @@ For each **regular file** in **`ai-agents/wiki-vault/wiki/decisions/`** matching
 
 ⚠️ **Regular files only — a directory whose name matches is not an ADR page.** A directory called
 `adr-999-placeholder.md` would otherwise be read as one, inventing a page that does not exist and, in
-the sibling scan in `/fkit-record-decision`, permanently poisoning number allocation. The same rule
-holds in `test/adr-number-uniqueness.test.js`; **all three implementations of this scan must agree.**
+the sibling scan in `/fkit-record-decision`, permanently poisoning number allocation. **Both
+implementations of this scan must agree.**
 
 ⚠️ **Case-insensitive, and this is the single most persistently-lost rule in this file's history.**
 `ADR-031-x.md` is the same ADR to every human who reads it, and both of `/fkit-record-decision`'s steps
-(`-iname`, `grep -oiE`) and `parseAdrFilename` (`/…/i`) treat it as such. This site did not — so an
+(`-iname`, `grep -oiE`) treat it as such. This site did not — so an
 uppercase name was **valid and counted by the allocator, and invisible to this cross-check**, while the
 blockquote above asserted the three agreed. Across three review rounds this rule was fixed, silently
-reverted by a rewrite, re-fixed, and then omitted from a fourth site. **If you touch any of the four,
-re-run the uppercase case against all of them.**
+reverted by a rewrite, re-fixed, and then omitted from a fourth site. **If you touch any of the three
+that remain (those two steps and this one), re-run the uppercase case against all of them.**
 
 > ⚠️ **THIS SECTION CONTAINS THREE SEPARATE ENUMERATIONS, AND THE RULE APPLIES TO ALL THREE** — this
 > loop over `wiki/decisions/`, the knowledge-base counterpart lookup in step 1, and the separate
@@ -157,9 +157,9 @@ re-run the uppercase case against all of them.**
    ADR** — a human reads them that way and allocation treats them that way. A textual
    `^adr-<same NNN>-` match treats them as different and waves the collision straight through, which is
    the one thing this check exists to catch. **Strip leading zeros before comparing.** The same rule
-   holds in `/fkit-record-decision`'s numbering step and in `test/adr-number-uniqueness.test.js`; all
-   three must agree, or a collision one catches another lets past. *(They did not agree until
-   2026-07-20 — the divergence between the three was itself the finding.)*
+   holds in `/fkit-record-decision`'s numbering step; the two must agree, or a collision one catches
+   the other lets past. *(They did not agree until 2026-07-20 — the divergence was itself the
+   finding.)*
 2. **No match** → flag **missing counterpart**.
 3. **Match with a different slug** → flag **slug divergence**, naming both filenames in full.
 4. Check each page's `# ADR-NNN:` heading agrees with the number in its own filename. This catches the
@@ -180,14 +180,10 @@ re-run the uppercase case against all of them.**
    unreachable exactly when the collision is freshest and cheapest to fix. It iterates the
    knowledge-base directory directly, whether or not any vault page exists.
 
-   *(`test/adr-number-uniqueness.test.js` also asserts this invariant, so `npm test` catches it too —
-   but that test lives in fkit's own repo and ships nowhere else, so in a consuming project nothing
-   runs it, whatever CI that project has, and this lint step may be the only thing that looks. In
-   fkit's own repo it does run — GitHub Actions runs the suite on every push to `main` and every pull
-   request — so there this step is genuine belt-and-braces.
-   ⛔ **Do not skip it in either case.** The check is cheap; the lint cannot know which kind of repo
-   it is running in; and even a green CI gate only ever sees what was already pushed, while a
-   collision sitting uncommitted in the working tree is exactly what this pass exists to catch.)*
+   *(This lint step and `/fkit-record-decision`'s allocation step are the only checks on this
+   invariant — no test asserts it, in fkit's own repo or anywhere else.
+   ⛔ **Do not skip it.** The check is cheap, and a collision sitting uncommitted in the working
+   tree is exactly what this pass exists to catch.)*
 
 **Compare slugs exactly — case-sensitive, no normalization.**
 

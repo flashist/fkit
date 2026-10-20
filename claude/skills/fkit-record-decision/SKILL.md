@@ -72,9 +72,8 @@ reviewers' reviewers) start from the decision instead of re-litigating it.
   is not tidiness; a malformed name silently breaks the number extraction below. Verified: with
   `adr-031.md` present (no slug), the extraction reported the highest as **30**, so **031 would be
   allocated a second time**. The canonical shape is `adr-<NNN>-<slug>.md`, three or more digits, a
-  **non-empty** slug. The same shape is enforced by `parseAdrFilename()` in
-  `test/adr-number-uniqueness.test.js` and assumed by `/fkit-wiki-lint`'s cross-check — **all three
-  must agree, or allocation can create a series neither detector can see.**
+  **non-empty** slug. The same shape is assumed by `/fkit-wiki-lint`'s cross-check — **the two must
+  agree, or allocation can create a series the detector cannot see.**
 
 - **Step B — the highest number in use:**
 
@@ -93,8 +92,8 @@ reviewers' reviewers) start from the decision instead of re-litigating it.
     round. If you rewrite this pipeline, re-run the uppercase case.
   - **`sed 's/^0*//'` then `sort -n`** — identity is **numeric**. Lexicographically `adr-999` sorts
     above `adr-1029`, and `029`/`0029` are the *same* ADR. The same numeric rule holds in
-    `test/adr-number-uniqueness.test.js` and in `/fkit-wiki-lint`'s cross-check; **all three must
-    agree**, or a collision one catches another waves through.
+    `/fkit-wiki-lint`'s cross-check; **the two must agree**, or a collision one catches the other
+    waves through.
   - **No `2>/dev/null`.** An unreadable directory is not an empty one. If `find` reports an error, stop
     and resolve it — do not allocate from a partial scan.
 
@@ -111,8 +110,8 @@ reviewers' reviewers) start from the decision instead of re-litigating it.
 > what no version of the automated sweep could do.
 >
 > **Detection on the other side:** `/fkit-wiki-lint`'s ADR number/slug cross-check finds a collision
-> once it exists in the vault, and `test/adr-number-uniqueness.test.js` finds two ADR files sharing a
-> number. Neither prevents the allocation; both catch it afterwards.
+> once it exists in the vault, and its knowledge-base pass finds two ADR files sharing a number. It
+> does not prevent the allocation; it catches it afterwards.
 
 > ### ⛔ This step does NOT read `ai-agents/wiki-vault/` — and that is a deliberate limitation
 >

@@ -99,7 +99,7 @@ where two carriers disagree, and **nothing today notices.**
 exact condition [ADR-048](../../../knowledge-base/decisions/adr-048-a-half-landed-close-gets-a-producer-only-reconcile-mode-that-never-upgrades-the-marker.md)
 had to invent a whole producer-only repair mode for
 ([`0135`](../../cancelled/0135-add-producer-only-reconcile-mode-to-task-done/brief.md), unbuilt), and
-[`0296`](../0296-decide-what-catches-a-task-brief-that-has-no-board-row/brief.md) found two task
+[`0296`](../../done/0296-decide-what-catches-a-task-brief-that-has-no-board-row/brief.md) found two task
 folders whose board rows were never written at all.
 
 ## What to build

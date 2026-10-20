@@ -2,10 +2,9 @@
 // (report 2026-08-06-design-post-update-structure-check.md §7; mechanism recorded in ADR-015
 // §Rejected alternatives — "deferred, not rejected", un-deferred by the owner via Q6 / ADR-039 §6).
 //
-// SCOPE: the same FOURTH test-scope category as test/dual-home-parity.test.js — an invariant over
-// the repo's own content (here: git history + the committed manifest artifact) rather than over
-// product behavior. See dual-home-parity.test.js:1-8 for the category's provenance; this is a
-// further instance, cited rather than re-argued.
+// SCOPE: the shipped `claude/structure-manifest.tsv` checked against its generator, from the repo's
+// git history — outside ADR-057 §D1's fence, kept as one of ADR-057 §D7's named exceptions (the ⛔ R1
+// note below §D7; owner R1 ruling, 2026-10-19).
 //
 // WHAT IT ASSERTS. `claude/structure-manifest.tsv` — the shipped table of every content hash fkit
 // has ever shipped, per project path — is exactly what `bin/generate-structure-manifest.mjs`
@@ -28,13 +27,11 @@
 //       equality after trimming [ \t\r] — a marker quoted in prose is inert (init's documented
 //       substring-match defect), a CRLF-terminated marker line still matches (init's CRLF defect).
 //
-// ⚠️ NO PROVE-RED MUTATION IS ADDED FOR THIS SUITE, deliberately: prove-red's mutations run suites
-// against COPIES of launcher/hook files, and this suite's subject is the real repo's git history
-// and committed artifact — the copy-tree mechanism cannot meaningfully mutate either. Red-first was
-// demonstrated by build order instead (test written and run red before the generator existed; the
-// red output is captured in the task worklog). This suite must therefore be INDIFFERENT to
-// FKIT_LAUNCHER and every other prove-red seam: prove-red's run_suite() executes the whole real
-// suite per mutation, and a seam-sensitive test here would misreport those runs.
+// ⚠️ NO PROVE-RED MUTATION COVERS THIS SUITE, deliberately: prove-red mutates COPIES of launcher/hook
+// files, and this suite's subject is the real repo's git history and committed artifact — the
+// copy-tree mechanism cannot meaningfully mutate either. Red-first was demonstrated by build order
+// instead (test written and run red before the generator existed; the red output is captured in the
+// task worklog).
 //
 // THIS TEST READS THE REPO AND ITS HISTORY, read-only. Fixtures are built IN MEMORY from real
 // shipped bytes — no test/fixtures/ additions, so they cannot rot. harness.mjs:9's standing rule

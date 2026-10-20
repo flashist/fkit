@@ -56,7 +56,51 @@ scripts inside skill folders (dashboard.sh, heal scripts, .mjs)?" Selected: "All
 
 ## What to build
 
-**Scope — 15 files, ~1,730 comment lines:** `test/prove-red.sh`, `test/harness.mjs`,
+> **⚠️ Re-scoped 2026-10-20 — owner Q4 ruling at `0529`'s plan gate.** Via `AskUserQuestion`, live
+> `fkit lead` session, question as shown: *"Q4 — The old test-related tasks (16 rows)?"* Selected
+> option text, verbatim: *"Producer's proposals (Recommended)"* — description he saw: *"After 0529:
+> cancel 0503, 0522, 0037, 0214, 0152, 0219; rescope 0513–0515; 0512/0156/0406 back to you. Knock-on:
+> nothing waits on the 6 (checked); 0513–0515 depend on 0512."* Relayed to a spawned `fkit-producer`
+> (no owner channel, ADR-021), who wrote this note. `0529` (✅ Done) cut the suite to shipped-script
+> behaviour tests under ADR-057. This note narrows the unit to the files that survived; **where it
+> differs from the *Scope* line, the *Watch* items, V2 or V4 below, this note wins.** The owner
+> quotes above and the series rules are unchanged.
+>
+> - **Scope now — 14 files, ~1,060 comment lines** (same rough grep, 2026-10-20; recount at plan
+>   time, V3): `test/prove-red.sh` (~119, rewritten by `0529` to four cases), `test/harness.mjs`,
+>   `test/launcher-contract.test.js`, `test/skill-ownership-hook.test.js`,
+>   `test/carry-check-hook.test.js`, `test/turn-completion-hook.test.js`,
+>   `test/askuserquestion-marker-hook.test.js`, `test/shiploop-marker-hook.test.js`,
+>   `test/init-claude-refresh-guard.test.js`, `test/init-intake-guard.test.js`,
+>   `test/update-banner.test.js`, `test/update-reinstall.test.js`, `test/converge-contract.test.js`,
+>   **plus `test/launcher-agents-guard.test.js`** (~13) — a launcher test no unit listed; added here
+>   by the producer as the nearest group (drop it if the owner prefers). Deleted by `0529`, so out of
+>   scope: `spawned-write-marker`, `plan-review-switch`.
+> - **Watch, prove-red now:** its header is a four-case index (mutations 1, 2, 30, 31; baselines 0b,
+>   0c). The numbers are kept from before the cut because ADR-057 and `CONTRIBUTING.md` cite them —
+>   must-not-break. The two setup subtleties (full `claude/` copy; source-checkout marker) are still
+>   there — shorten, do not drop. The old *"KEEP THIS LIST IN STEP"* line is gone.
+> - **V2 now:** run what `CONTRIBUTING.md`'s *"What to run for a change"* table names for the touched
+>   paths — `npm test` for every file here, **plus `npm run test:prove-red`** if the edit touches
+>   `test/prove-red.sh`, `test/launcher-contract.test.js` or `test/skill-ownership-hook.test.js`.
+>   `npm test` no longer runs prove-red (ADR-057 §D3).
+> - **V4 now:** every new pointer resolves, **checked by hand** — `test/reference-integrity.test.js`
+>   is deleted and no automated link check runs any more (ADR-057 §D6 (a)). The five-comment
+>   spot-check stays.
+> - **The fourth category is gone.** ADR-057 §D7 retired it; `0529` already reworded the kept files'
+>   headers to cite §D7. The *Watch* item about "the knowledge-base home `0512` created for the fourth
+>   category" no longer applies — there is no such home to point at.
+> - **`Depends on: 0512` is unchanged** — `0512`'s own fate (rescope or cancel) is pending the owner.
+>   *Update 2026-10-20: the owner ruled — `0512` is re-scoped to 4 files, not cancelled (verbatim *"Rescope to 4 files (Recommended)"*). This line stands; the re-point below does not apply.*
+>   ⚠️ Its reason (`0512` step 1, the fourth-category home) is gone under §D7. If `0512` is cancelled,
+>   this line needs re-pointing to `0506`, `0507` (both ✅ Done), or this unit waits on a cancelled task.
+> - **Not added to scope:** the dead test seams `0529` left in code (its plan step 5) —
+>   `FKIT_BANNER_ROOT`, `FKIT_REINSTALL_ROOT`, `FKIT_CARRY_CHECK_HOOK`, `FKIT_TURN_COMPLETION_HOOK`,
+>   the marker-hook seams. Removing them changes code, which rule 1 forbids; the owner's call.
+> - **Related, not a dependency:** `0530` (CI budget, release gate, nightly lane) may wire prove-red
+>   into CI; whichever lands second re-checks the other's cites into `prove-red.sh` (rule 5).
+
+**[Superseded 2026-10-20 — see the re-scope note above.]** **Scope — 15 files, ~1,730 comment lines:** `test/prove-red.sh`, `test/harness.mjs`,
 `test/launcher-contract.test.js`, `test/skill-ownership-hook.test.js`, `test/carry-check-hook.test.js`,
 `test/turn-completion-hook.test.js`, `test/askuserquestion-marker-hook.test.js`,
 `test/shiploop-marker-hook.test.js`, `test/spawned-write-marker.test.js`, `test/plan-review-switch.test.js`,
@@ -102,13 +146,13 @@ the series"* section is then the source, and this list is the fallback):
   line or blank. The worklog names the command used to check it, so a reviewer can re-run it. Any
   exception (for example a code line carrying a trailing comment) is listed by file and function or
   test name, with the code part shown unchanged.
-- **V2 — Tests pass.** The checks `CONTRIBUTING.md`'s *"What to run for a change"* table names for the
+- **V2 — Tests pass.** *(⚠️ 2026-10-20: superseded — see the re-scope note under What to build.)* The checks `CONTRIBUTING.md`'s *"What to run for a change"* table names for the
   touched paths pass — for any non-`.md` file under `claude/`, anything under `test/`, or
   `bin/release.mjs`, that is the full `npm test` (it includes `test/prove-red.sh`, which mutates these
   files and can break if a mutation's pattern relied on a comment).
 - **V3 — Count.** The worklog records the comment-line count of this unit's files before and after,
   measured with the same command both times.
-- **V4 — Nothing lost.** The worklog has a table of every reason **moved**: file + function/test name →
+- **V4 — Nothing lost.** *(⚠️ 2026-10-20: superseded — see the re-scope note under What to build.)* The worklog has a table of every reason **moved**: file + function/test name →
   knowledge-base destination. Every new pointer resolves (`test/reference-integrity.test.js` passes),
   and a reviewer spot-checks at least five deleted comments and agrees each was WHAT, name-repeating,
   history, or already recorded where its pointer says.

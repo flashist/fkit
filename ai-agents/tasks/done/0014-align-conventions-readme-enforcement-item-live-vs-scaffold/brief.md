@@ -115,6 +115,6 @@ should not be trimmed to match.
     folder, unchanged (R100). The wrong status came before the migration; the migration did not
     cause it.
 - **The missing board row stays missing, by ruling.** It is the live specimen for
-  [`0296`](../../backlog/0296-decide-what-catches-a-task-brief-that-has-no-board-row/brief.md) and
-  [`0406`](../../backlog/0406-build-the-no-board-row-check-in-the-test-suite-with-a-dated-two-task-allowlist/brief.md).
+  [`0296`](../../done/0296-decide-what-catches-a-task-brief-that-has-no-board-row/brief.md) and
+  [`0406`](../../cancelled/0406-build-the-no-board-row-check-in-the-test-suite-with-a-dated-two-task-allowlist/brief.md).
   ⛔ Do not add one.

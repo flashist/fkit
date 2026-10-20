@@ -63,13 +63,42 @@ scripts inside skill folders (dashboard.sh, heal scripts, .mjs)?" Selected: "All
 
 ## What to build
 
-**Scope — 10 files, ~2,041 comment lines:** `test/reference-integrity.test.js`,
+> **⚠️ Re-scoped 2026-10-20 — owner ruling 1 on the leftover test tasks.** Via `AskUserQuestion`, live
+> `fkit lead` session, question as shown: *"0512 (comment cleanup of kept tests): rescope or cancel?"*
+> Selected option text, verbatim: *"Rescope to 4 files (Recommended)"* — description he saw:
+> *"task-id-uniqueness, dual-home-parity (+ helper), rules-block-budget. Knock-on: 0513–0515 keep
+> waiting on 0512 (Backlog)."* Relayed to a spawned `fkit-producer` (no owner channel, ADR-021), who
+> wrote this note. `0529` cut the suite to shipped-script behaviour tests under ADR-057. **Where this
+> note differs from anything below — the H1's old second half, the *Context* paragraphs about the
+> fourth category, the *Scope* line, step 1, the *Watch* item, V2, V4, V7 or the 2026-10-14 `0484`
+> note — this note wins.** The owner quotes above and the series rules are unchanged.
+>
+> - **Scope now — 4 files, ~700 comment lines** (rough grep of lines starting with `#`, `//`, `*` or
+>   `/*`, 2026-10-20; recount at plan time, V3): `test/task-id-uniqueness.test.js` (~265),
+>   `test/dual-home-parity.test.js` (~265), its helper `test/dual-home-parity-exceptions.mjs` (~102),
+>   `test/rules-block-budget.test.js` (~70). Deleted by `0529`, so out of scope:
+>   `reference-integrity`, `coordination-citation-policy`, `adr-number-uniqueness`,
+>   `wiki-flag-convention`, `skill-frontmatter`, `asking-the-owner-rule` — and with them the *Watch*
+>   item about the transcribed report.
+> - **Step 1 is dropped, and V7 with it.** ADR-057 §D7 retired the fourth category; `0529` reworded
+>   the `task-id-uniqueness` and `dual-home-parity` headers to cite §D7 (checked 2026-10-20). There is no fourth-category home to record or point at.
+> - **The 2026-10-14 `0484` note is dropped.** `test/link-condition.mjs` and
+>   `test/top-level-doc-links.test.js` were deleted by `0529`.
+> - **V2 now:** run what `CONTRIBUTING.md`'s *"What to run for a change"* table names for the touched
+>   paths — for files under `test/` that is `npm test`. `npm test` no longer runs `test/prove-red.sh`
+>   (ADR-057 §D3).
+> - **V4 now:** every new pointer resolves, **checked by hand** — `test/reference-integrity.test.js` is
+>   deleted and no automated link check runs (ADR-057 §D6 (a)). The five-comment spot-check stays.
+> - **Order unchanged:** `0513`–`0515` keep `Depends on: 0512` (ruling 1's knock-on), so this unit still
+>   goes first among the test units.
+
+**[Superseded 2026-10-20 — see the re-scope note above.]** **Scope — 10 files, ~2,041 comment lines:** `test/reference-integrity.test.js`,
 `test/coordination-citation-policy.test.js`, `test/task-id-uniqueness.test.js`,
 `test/adr-number-uniqueness.test.js`, `test/dual-home-parity.test.js`,
 `test/dual-home-parity-exceptions.mjs`, `test/wiki-flag-convention.test.js`,
 `test/skill-frontmatter.test.js`, `test/rules-block-budget.test.js`, `test/asking-the-owner-rule.test.js`.
 
-1. **First, record the fourth test-scope category in the knowledge base** (destination per `0507`'s
+1. **[Dropped 2026-10-20 — see the re-scope note above.]** **First, record the fourth test-scope category in the knowledge base** (destination per `0507`'s
    M1 — e.g. an addendum to ADR-014 or ADR-017; the plan proposes, the owner approves). Then every test
    header in this unit points there by name, not at `task-id-uniqueness.test.js`'s lines.
 2. Then clean the comments, per the rules.
@@ -125,7 +154,7 @@ the series"* section is then the source, and this list is the fallback):
   comments and line numbers, each hit, and the action taken (fixed, or left as frozen history).
 - **V6 — Rule followed.** Every comment left in the unit's files is at most 2 lines, or the worklog
   names it as a must-not-break block the plan chose to keep longer, with the reason.
-- **V7 — The fourth category has a home.** A knowledge-base page records it; no comment in this unit
+- **[Dropped 2026-10-20 — see the re-scope note above.]** **V7 — The fourth category has a home.** A knowledge-base page records it; no comment in this unit
   points at another test file's lines for it.
 
 ## Notes
@@ -139,7 +168,7 @@ the series"* section is then the source, and this list is the fallback):
 - **Placement:** Backlog board, per the owner's 2026-10-14 ruling. Knock-on: none — no task outside this
   series waits on any unit of it; inside it, every unit sits on the Backlog board (checked 2026-10-14).
 - ⛔ **Do not start without the owner's specific word.** Being pullable is not his word.
-- **Note, 2026-10-14 — two more files, once Sprint 10 task `0484` is closed.** `0484` (link check for
+- **[Dropped 2026-10-20 — see the re-scope note above.]** **Note, 2026-10-14 — two more files, once Sprint 10 task `0484` is closed.** `0484` (link check for
   fkit's top-level docs) moved the link rule's shared functions, **with their comments**, out of
   `test/reference-integrity.test.js` into a new module, `test/link-condition.mjs`. It also added
   `test/top-level-doc-links.test.js`, whose header calls itself *"A repo-content guard: the fourth

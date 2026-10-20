@@ -573,8 +573,7 @@ if (dryRun) {
   console.log(`  ⚠ An existence check would pass here whether or not the tag names this release.`);
   // ⚠️ THE PEEL GETS THE SAME SPEAKING TAIL AS THE DEFAULT PATH (review R3): a foreign LIGHTWEIGHT
   // tag has no peeled ref, so this exits 2 with EMPTY stdout AND stderr — measured, and R5's exact
-  // defect signature in code 0288 itself added. ⛔ Keep this ONE source line: prove-red mutation 20
-  // replaces the whole line, and a `+` continuation would be orphaned into a syntax error.
+  // defect signature in code 0288 itself added.
   console.log(`  Which commit the tag names:   git ls-remote --exit-code origin 'refs/tags/${tag}^{}' || { echo "✗ could not resolve what ${tag} names on origin (git exit $?)"; false; }`);
   // ⚠️ `${branch}`, NOT HEAD (review R5): the `// 2. push branch` step pushed it. ⛔ Do not simplify to HEAD.
   console.log(`  Which commit this run pushed: git rev-parse ${branch}`);

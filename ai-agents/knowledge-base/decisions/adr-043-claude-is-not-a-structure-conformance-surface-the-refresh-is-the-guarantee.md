@@ -5,6 +5,11 @@
 - **Deciders:** fkit-architect (recommendation); **owner (Mark Dolbyrev) — signed off 2026-08-13 (see
   §Owner sign-off)**
 - **Task:** `0255` — *Decide whether `.claude/` enters the structure-conformance surface*
+- **Corrections:** 2026-10-20 (`0529`) — this ADR carries dated notes below **§Option 1**'s cost 4
+  (*"The build test blocks it concretely"*) and below **§C1**'s table. Marker legend: **⚠️ = a fact
+  that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow
+  it). No existing line of this ADR was edited; the notes are appends, and the Status stays
+  `accepted`.
 
 ## Context
 
@@ -131,6 +136,16 @@ reads the spec at runtime from the share (`:107`, `:139-155`), and the launch no
    (`:192`), assertions A and B (`:195-208`). `.claude/` rows fail in **both** directions until the
    test grows a second ground-truth root.
 
+   > ⚠️ **Dated note 2026-10-20 (`0529`) — cost 4 no longer exists; the rejection stands on the
+   > others.** Task `0529` deleted `test/structure-spec.test.js` on 2026-10-20 under
+   > [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D1 (category 4 — the shape
+   > of shipped document files; ADR-057 §D11 lists it). Verified against live files 2026-10-20: the
+   > file is gone, and `claude/structure-spec.md`'s pinned machine-read contract now names heal's
+   > `check.sh` and `repair.sh` as the tables' readers and says no test checks the tables against
+   > `claude/scaffold/` any more. A `.claude/` row would no longer fail a build test; costs 1–3 and
+   > *"it reports nothing"* are untouched, so Option 1 stays rejected. The item above is left
+   > byte-identical.
+
 **And after all four costs are paid, it reports nothing:** the refresh precedes the notice, so every
 `.claude/` row reads `conforming` on every launch.
 
@@ -225,6 +240,10 @@ go looking for edits this decision did not make:
 | `claude/structure-manifest.tsv` and `bin/generate-structure-manifest.mjs` | **unaffected** — the scaffold-rooted walk stays scaffold-rooted |
 | `claude/skills/fkit-heal/*` (`check.sh`, `repair.sh`) | **unaffected** |
 | `claude/fkit-claude-init.sh`, `claude/fkit-claude.sh` | **unaffected** |
+
+> ⚠️ **Dated note 2026-10-20 (`0529`) — the `test/structure-spec.test.js` row above: that test is
+> deleted.** See the note below §Option 1's cost 4 — deliberately not restated here, so there is one
+> place to keep true rather than two. The table above is left byte-identical.
 
 ### C2 — ADR-015's invariant is **not touched and not amended**
 

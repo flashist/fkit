@@ -52,6 +52,12 @@
   fourth named exception, `test/structure-manifest.test.js`), and a ⚠️ pointer below §Consequences'
   *"guards that stay as named exceptions"* bullet. The site list above is left byte-identical and is
   superseded by this line; the same append-only rule and the same legend apply.
+  **Extended 2026-10-20 by a third append (`0529`, after the cut):** dated ⚠️ notes now also sit below
+  **§D3**'s *"Four cases"* bullet (numbers kept, not renumbered) and its *"When it runs"* bullet (no
+  automated gate until `0530`), below **§D4**'s *"The release tool's test"* bullet (the test's new
+  path and script), as a pointer below **§D7**'s ⛔ note, and below **§D11**'s closing paragraph (the
+  notes written in the older ADRs). The site lists above are left byte-identical and are superseded by
+  this line; the same append-only rule and the same legend apply.
 
 > **What this ADR decides, in one line:** fkit's test suite tests only how fkit's **shipped scripts**
 > behave, seen from outside — nothing about prompt wording, repo-only tools or the repo's own
@@ -263,9 +269,30 @@ case count and the lane change (owner, Q1 (c), *"fine for now"*).
   > green baselines (today steps 0a and 0b for `run_suite`, 0c for the hook suite); the baselines the
   > kept cases need stay with them, narrowed the same way — which ones, `0529`'s call. The bullet above
   > is left byte-identical.
+
+  > ⚠️ **Dated note 2026-10-20 (`0529`) — the file was rewritten, and the numbers were kept.**
+  > *"`0529` renumbers if it rewrites the file"* above did not happen, by owner ruling: 2026-10-20, via
+  > `AskUserQuestion`, `fkit lead` session (the `/fkit-sprint-ship-loop` run, Sprint 13), relayed by the
+  > driver. Question as shown: *"Q1 — Prove-red case numbers?"* Selected option text, verbatim: *"Keep
+  > M1/M2/M30/M31 (Recommended)"* — description he saw: *"Fewest edits; ADR-057 gets a dated note. Knock-on: none
+  > (checked)."*
+  > Verified against live files 2026-10-20: `test/prove-red.sh` holds exactly these four cases, numbered
+  > M1, M2, M30 and M31, plus two green baselines on unmutated copies — 0b
+  > (`test/launcher-contract.test.js`) and 0c (`test/skill-ownership-hook.test.js`). M1 runs only
+  > `test/skill-ownership-hook.test.js`; M2, M30 and M31 run only `test/launcher-contract.test.js`. The
+  > R2 note's target is today's behaviour. The bullet and the note above are left byte-identical.
 - **When it runs:** nightly, on a CI schedule — **not** on every push, and not in the 2-minute budget
   (D10). Still runnable by hand with `npm run test:prove-red`. A nightly failure is seen the next
   morning, not at push time; the owner accepted that delay *"for now"*.
+
+  > ⚠️ **Dated note 2026-10-20 (`0529`) — the nightly lane does not exist yet, so for now prove-red
+  > runs in no automated gate.** Verified against live files 2026-10-20: `package.json`'s `"test"`
+  > script is `node --test test/*.test.js` (no prove-red), and `.github/workflows/test.yml` runs only
+  > `npm test`, with no schedule. Until task `0530` adds the nightly lane, `npm run test:prove-red`
+  > runs only by hand — the state option (b) below describes, here as a window, not an end state.
+  > `0529`'s owner-approved plan (2026-10-20) names that window, and `RELEASING.md` tells whoever
+  > releases to run it by hand first. §D3's decision is unchanged. The bullet above is left
+  > byte-identical.
 - **Cost, as told to the owner:** about 97 s per nightly run (driver estimate from two one-run file
   timings — see *§Owner answers*); standard-runner minutes are free for this public repo.
 
@@ -301,6 +328,15 @@ The four category-1 items are kept by D1 itself; the owner confirms them with th
   `test/*.test.js`, so keeping it out means moving it out of that glob (or narrowing the glob).
   **Whether `npm run release` runs it is `0530`'s call** (its release-gate question). Not chosen: keep
   it in the default suite; drop it.
+
+  > ⚠️ **Dated note 2026-10-20 (`0529`) — the test has moved.** Verified against live files
+  > 2026-10-20: it is now `test/release/release-summary.test.js`, run by `npm run test:release`
+  > (`node --test test/release/*.test.js`), so the default `npm test` glob, `test/*.test.js`, no longer
+  > picks it up. `test/release-summary.test.js` — the path in §D4's table, in this bullet, in §D7's
+  > table and in §Context's 2026-10-19 re-count — no longer exists; those are left byte-identical.
+  > `bin/release.mjs` still runs only `npm test`, so until task `0530` settles the release gate the
+  > release tool's own test runs only by hand (`RELEASING.md` says so). The bullet above is left
+  > byte-identical.
 - **Scaffold-vs-dogfood byte parity** (owner, Q4b): `test/dual-home-parity.test.js` stays in the
   default suite. Why: 0.07 s here, and it guards what every consuming project receives at init (the
   scaffold must match the live copy fkit runs on itself — ADR-027). Cost accepted: small upkeep and a
@@ -376,6 +412,11 @@ this ADR's D7 (`0529`'s edit — this task touches no test file).
 > test may cite "the fourth category" as its licence, and no exception beyond these four. With this
 > test kept, the `claude/structure-manifest.tsv` line in the dated note below §D9 needs no change.
 > The text above is left byte-identical.
+
+> ⚠️ **Dated note 2026-10-20 (`0529`) — the `test/release-summary.test.js` row in §D7's table: that
+> path has moved.** See the note below §D4's *"The release tool's test"* bullet — deliberately not
+> restated here, so there is one place to keep true rather than two. The table and the ⛔ note above
+> are left byte-identical.
 
 ### D8 — Banner tests
 
@@ -472,6 +513,18 @@ them (an architect spawn inside `0529`, or a follow-up) is the producer's routin
 
 A looser sweep (the test's name without `test/`) hits more ADRs, mostly because a hook script and its
 test share a name; `0529` re-runs that sweep for each file it deletes.
+
+> ⚠️ **Dated note 2026-10-20 (`0529`) — the notes this section calls for are written.** Task `0529`
+> deleted 19 test files, `test/link-condition.mjs` and the two `test/fixtures/closed-rank-0174-*`
+> fixtures, and cut prove-red to M1, M2, M30, M31. After re-running the strict and loose sweeps over
+> `decisions/` on 2026-10-20 for each deleted file, dated ⚠️ notes now sit in ADR-014, ADR-026,
+> ADR-028, ADR-035, ADR-036, ADR-042, ADR-043, ADR-046, ADR-047, ADR-048, ADR-050 and ADR-052, and in
+> this ADR. No note was needed in ADR-027 (it names no prove-red case, and its parity test stays,
+> §D7) or in ADR-051 (its only hit is a task-folder name containing `board-reader`, not the test).
+> None of the five ADRs in the table's `test/prove-red.sh` row cites one of the 51 deleted cases by
+> number; ADR-026 and ADR-028 got notes for the lane change, and ADR-042's `mktemp -d` citation and
+> ADR-046's *"`prove-red.sh` gains no mutation"* stay true. No ⛔ was needed: every decision stands.
+> The table and the paragraph above are left byte-identical.
 
 ## Options considered
 

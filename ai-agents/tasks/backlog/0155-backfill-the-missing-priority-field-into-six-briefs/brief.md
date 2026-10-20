@@ -52,8 +52,8 @@ and do not let its cheapness disguise it as archival tidying either.
 Verified 2026-07-27 (see 0156 for the full finding): `dashboard.sh` has no
 `brief-missing-priority` drift kind, no test asserts the field's presence, and
 `/fkit-task-brief`'s mandatory-field callouts name only `## Status` and `## Owner`. Running
-`dashboard.sh` against `sprint-2.md` today emits **zero** drift for 0126 and 0136. The guard is
-task **0156**, which **hard-depends on this task** — see *Notes*.
+`dashboard.sh` against `sprint-2.md` today emits **zero** drift for 0126 and 0136. The guard was
+task **0156**, which **hard-depended on this task** until its 2026-10-20 re-scope to a reminder only — see *Notes*.
 
 ### Four of the six are `✅ Done`
 
@@ -126,7 +126,7 @@ number.
 ## Notes
 
 - **Depends on: nothing.**
-- **Blocks: 0156 — hard.** 0156 adds a `brief-missing-priority` drift kind; four of the six briefs
+- **Blocks: nothing** (edited 2026-10-20). **Dated note 2026-10-20:** `0156` was re-scoped by owner ruling 2 on the leftover test tasks — via `AskUserQuestion`, live `fkit lead` session, question *"0156 (brief priority guard): rescope or cancel?"*, selected option text verbatim *"Keep only the reminder (Recommended)"*, description he saw *"Just the '## Priority is required' callout in /fkit-task-brief; no new test. Knock-on: nothing waits on 0156 (checked); 0155's 'Blocks 0156' line edited."* With no guard, `0156` no longer depends on this task. Written by a spawned `fkit-producer` (no owner channel, ADR-021). The original line, kept as the record: ~~**Blocks: 0156 — hard.**~~ 0156 adds a `brief-missing-priority` drift kind; four of the six briefs
   above are live `✅ Done` rows in `sprint-2.md` at P105–P108, so shipping the guard first makes it
   red on day one against real repo state. Land this first and the guard is green immediately, with
   nothing grandfathered — the same standard 0152's brief sets for its own guard.

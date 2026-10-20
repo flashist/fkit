@@ -2321,7 +2321,7 @@ test('task 68 / R1: rule 1 still skips normally on a numbered sprint board', () 
 // TASK 76 — the two new drift kinds the folder migration introduces (design spec §3.5, §4; ADR-029
 // Decisions 5 and 1). Both are §10 "assertions to add" and both are RED-PROVED: the negative case
 // confirms the check bites, so a check that reported regardless of input cannot pass here
-// (test/prove-red.sh:4-8 is the same discipline applied to the launcher guards).
+// (test/prove-red.sh's header is the same discipline applied to the launcher guards).
 
 // Build a single-task tree at tasks/done/<folderName>/ with a caller-controlled brief body (no `## ID`
 // auto-injection — these tests deliberately control the ID carrier), plus optional companion files.
@@ -3504,12 +3504,10 @@ test('ADR-047 P16: a malformed banner is `unresolved` + `sprint-status-malformed
   // files rather than a fixture imitating them. ⚠️ `>= 7` not `=== 7`: boards keep being archived, and
   // the property under test is "every one of them", not "there are exactly seven".
   //
-  // ⚠️ THE GUARD IS STRUCTURAL, NOT A CONVENIENCE, AND IT IS DELIBERATELY NARROW. `test/prove-red.sh`
-  // runs this whole suite from a COPIED repo root whose `make_repo_copy` copies `claude/`, `test/` and
-  // `package.json` and NOTHING ELSE — there is no `ai-agents/` there by design. Reading the live
-  // archive unguarded throws in that copy, which reds the UNMUTATED copy at gate 0i and disarms
-  // mutations 14 and 32: they would go red for the wrong reason while still reporting success.
-  // ⛔ So the skip is keyed on `ai-agents/` being absent ENTIRELY — the prove-red copy's exact shape.
+  // ⚠️ THE GUARD IS STRUCTURAL, NOT A CONVENIENCE, AND IT IS DELIBERATELY NARROW. A copied repo root
+  // holding only `claude/`, `test/` and `package.json` has no `ai-agents/`; reading the live archive
+  // unguarded throws there, so an unmutated copy would go red for the wrong reason.
+  // ⛔ So the skip is keyed on `ai-agents/` being absent ENTIRELY — that copy's exact shape.
   // If `ai-agents/` exists but the archive under it does not, that is a REAL failure and it still reds.
   const agentsDir = join(REPO, 'ai-agents');
   if (existsSync(agentsDir)) {
@@ -3859,7 +3857,7 @@ test('ADR-047 successor S10: three-argument dispatch, and the one-argument board
 //
 // ⭐ ONE TEST PER CLAIM, AND EACH HAS TWO HALVES:
 //   (i)  PROSE — the claim's sentence, whitespace-normalized, occurs EXACTLY ONCE in each SKILL.md that
-//        makes it. Read from REPO, so a copied tree (prove-red.sh's `make_repo_copy`) reads its own copy.
+//        makes it. Read from REPO, so a copied tree reads its own copy.
 //   (ii) BEHAVIOUR — `dashboard.sh` really does what the sentence says.
 // A red names which half broke. ⛔ If BEHAVIOUR broke, the script changed: update the prose in every
 // named site in the same change. ⛔ If PROSE broke, re-read the behaviour first — do NOT edit the
@@ -4230,7 +4228,7 @@ test('0409/escaped-pipe: a GFM-escaped pipe in the title survives the trim, stil
 // directly. Every fixture renders `sprint-<n>.md` from a `sprints/` dir that also holds the OTHER boards,
 // because the blocker's sprint status is read from its own board's line-3 banner.
 //
-// ⚠️ PROVE-RED: only the POSITIVE cases (P1–P7, and the SKILL.md wording pin) fail on the old script.
+// ⚠️ RED-FIRST: only the POSITIVE cases (P1–P7, and the SKILL.md wording pin) fail on the old script.
 // The negative cases pass on it by definition — no record was ever emitted — so they prove nothing about
 // the change on their own; they pin that the new check stays quiet where the §2 table says it must.
 

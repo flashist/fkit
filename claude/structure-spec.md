@@ -25,12 +25,14 @@ would be insufficient — and the wholesale share refresh makes it unnecessary. 
 IS the co-location. Do not add one.
 
 > **Machine-read contract — pinned.** The two inventory tables below (§"Inventory Table A —
-> directories" and §"Inventory Table B — files") are parsed by `test/structure-spec.test.js` in the
-> fkit repo, which fails the build when the tables and `claude/scaffold/` disagree. Load-bearing
-> and not changeable without changing that test in the same commit: the two section heading texts;
-> the three-column row shape ``| `path` | class | notes |``; paths backticked, project-relative,
-> directories with a trailing `/`; the class cell exactly one of the six class names below; and the
-> rule that every row whose path is under `ai-agents/wiki-vault/` names ADR-005 in its notes.
+> directories" and §"Inventory Table B — files") are parsed by heal's `check.sh` and `repair.sh`
+> (`claude/skills/fkit-heal/`), which both match the two heading lines exactly. Load-bearing and not
+> changeable without changing both scripts in the same commit: the two section heading texts; the
+> three-column row shape ``| `path` | class | notes |``; paths backticked, project-relative,
+> directories with a trailing `/`; and the class cell exactly one of the six class names below. A
+> written rule, too: every row whose path is under `ai-agents/wiki-vault/` names ADR-005 in its notes.
+> No test checks these tables against `claude/scaffold/` any more (ADR-057), so a scaffold change
+> updates them by hand, in the same commit.
 
 ---
 

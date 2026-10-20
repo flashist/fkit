@@ -114,7 +114,7 @@ npm run generate:manifest
 ```
 
 Commit the regenerated `claude/structure-manifest.tsv` **in the same change** as the edit that caused
-it (`test/structure-manifest.test.js:115`, `claude/structure-manifest.tsv:3`). Adding a *new*
+it (`test/structure-manifest.test.js:112`, `claude/structure-manifest.tsv:3`). Adding a *new*
 top-level entry to `claude/scaffold/` is **more** than a regen, not less: the generator refuses
 loudly and tells you which two halves of the walk to teach
 (`bin/generate-structure-manifest.mjs:268-277`), because whether a new file ships to a project is a
@@ -137,12 +137,19 @@ then says *"No changes were recorded for this release."*
 npm test
 ```
 
-Not as the last line of defence — `npm run release` runs it for you (§4). Run it first because of
-cost. A green run takes **over ten minutes, machine-dependent** (see `CONTRIBUTING.md`'s Tests
-table); a red one usually comes back in
-about a minute, because `npm test` is `node --test test/*.test.js && bash test/prove-red.sh`
-(`package.json:5`) and a failing unit suite short-circuits at the `&&` before the slow mutation gate
-ever starts. Failing early is cheap. Failing ten minutes into a release run is not.
+Not as the last line of defence — `npm run release` runs it for you (§4). Run it first because a
+red found before the release run costs nothing. `npm test` is `node --test test/*.test.js`
+(`package.json:5`); for its time, see `CONTRIBUTING.md`'s Tests block.
+
+⚠️ **Until task `0530` settles the release gate, also run these two by hand before `npm run
+release`:**
+
+```sh
+npm run test:release     # the release tool's own test
+npm run test:prove-red   # the four mutation cases
+```
+
+The release gate runs only `npm test`, and since task `0529` neither of these is in it.
 
 **4. Decide the bump.**
 
@@ -207,9 +214,9 @@ arrives after the push rather than before it.
 CI runs on every push to `main`, on every pull request, and on demand via `workflow_dispatch`
 (`.github/workflows/test.yml:16-20`). It has been exercised on real pushes and has already caught a
 failure that a local run had not. Two of its settings are load-bearing rather than cosmetic:
-`fetch-depth: 0` (`.github/workflows/test.yml:47-51`), without which the manifest test refuses a
+`fetch-depth: 0` (`.github/workflows/test.yml:49-53`), without which the manifest test refuses a
 shallow clone and the suite dies at module load; and `timeout-minutes: 33`
-(`.github/workflows/test.yml:42`), which stops a hung mutation gate from burning a runner.
+(`.github/workflows/test.yml:44`), which stops a hung run from burning a runner.
 
 ---
 

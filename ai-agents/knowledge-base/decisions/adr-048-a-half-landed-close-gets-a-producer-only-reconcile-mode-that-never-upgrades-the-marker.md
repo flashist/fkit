@@ -28,6 +28,11 @@
   other ADRs are cited by heading plus a quoted fragment, never by line
   ([`durable-citation-anchors.md`](../conventions/durable-citation-anchors.md)).
 - **Amends nothing.** ADR-033 is cited, not changed, and gets no dated note (§Consequences).
+- **Corrections:** 2026-10-20 (`0529`) — this ADR carries **one** dated note, below §Q3's *"Still
+  run"* bullet; it also covers must-never item 9 and call C8. Marker legend: **⚠️ = a fact that
+  drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow it). No
+  existing line of this ADR was edited; the note is an append, and the Status stays `accepted`. The ⛔
+  *Obsolete* notice below (2026-09-30, ADR-052) is unchanged and still binding.
 
 > ⛔ **Obsolete — 2026-09-30, by [ADR-052](adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints.md).** With one place for status, a close cannot half-land, so the
 > reconcile mode (task `0135`) is **not to be built**; `0135`'s disposition is the producer's act.
@@ -150,6 +155,17 @@ whole write set. In particular:
   (`:343-344`), with step 5's rules for reading a red. Its one repair that belongs to the mover — a
   link the move broke — covers links broken by the move being reconciled. Must-never 9 still bars
   editing the guard.
+
+  > ⚠️ **Dated note 2026-10-20 (`0529`) — the guard named here is deleted.** Task `0529` deleted
+  > `test/reference-integrity.test.js` on 2026-10-20 under
+  > [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D6 (category 5). Verified
+  > against live files 2026-10-20: the file is gone, and `fkit-task-done`'s step 5 now makes its
+  > resolve-every-link hand check *"the only link check on a close"* (ADR-057 §D6 (a)). So the check
+  > step 5 requires is now that hand check; must-never item 9's second half (*"never edit
+  > `test/reference-integrity.test.js`"*) has nothing left to act on, while its wiki half stands; and
+  > call C8's *"the reference-integrity guard still runs"* names a check that no longer exists. This
+  > ADR is obsolete in any case (the ⛔ notice at its top, ADR-052: reconcile mode is not to be built).
+  > The bullet above is left byte-identical.
 - **Reported:** step 7's `Moved:` line (`:393-394`) gains a third value,
   `Moved: none — reconcile mode; folder already in done/`.
 

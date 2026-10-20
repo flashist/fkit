@@ -8,6 +8,10 @@
 - **Scope:** `/fkit-task-brief` **step 5** — *"Determine priority"*. It narrows the **one exception** to
   the append rule. It does not change what a brief contains, how tasks are decomposed, or how ranks are
   read.
+- **Corrections:** 2026-10-20 (`0529`) — this ADR carries **one** dated note, below §*"Binds — and
+  what is deliberately left undone"*'s *"No guard is built here"* bullet. Marker legend: **⚠️ = a fact
+  that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow
+  it). No existing line of this ADR was edited; the note is an append, and the Status stays `accepted`.
 
 > **Citation form.** This ADR anchors every reference by **heading and quoted phrase**, and names every
 > task by its **folder ID**, never by board rank. That is task `0160`'s ruling, applied here
@@ -161,6 +165,17 @@ practice `fkit-producer`, including a spawned producer acting on a relayed owner
   check across a commit range, since no property of a single board file reveals that a closed row was
   renumbered. It is ranked LOW and it needs a baseline decision first, because **it would be red on the
   commit that filed task `0174`**.
+
+  > ⚠️ **Dated note 2026-10-20 (`0529`) — the guard was built later, and is now deleted; the decision
+  > is untouched.** `test/closed-rank-immutability.test.js` was added on 2026-08-06 (commit `e945769`)
+  > and later widened under
+  > [ADR-046](adr-046-a-sprint-board-may-be-committed-unranked-and-an-erased-rank-flags.md). Task `0529`
+  > deleted it on 2026-10-20, with its two `closed-rank-0174` fixtures, under
+  > [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D1 (category 5 — this repo's
+  > own `ai-agents/` content; ADR-057 §D11 lists it). Verified against live files 2026-10-20: the test
+  > and `test/fixtures/` are gone, and nothing left under `test/`, `bin/` or `claude/` checks a closed
+  > row's rank. So a renumbered closed row is again caught only by review. The closed-row rule and this
+  > ADR's narrowing stand as written rules. The bullet above is left byte-identical.
 - **Nothing is re-ranked and nothing is reverted** by this ADR.
 
 ### Residual risks / "re-raise only if"

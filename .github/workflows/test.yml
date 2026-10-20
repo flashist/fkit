@@ -36,8 +36,10 @@ jobs:
     # and 16 clean baselines (0a against the real tree, 0b-0p against unmutated copies). Sprint 10's
     # additions (baseline 0p, mutations 41-43, a larger release suite, a new update-reinstall suite)
     # were NOT in the measured runs (estimated ~+1 min, unverified until a run carries them).
-    # 33 min = ~3.0x the slowest measured job (33 / 10.87), and still stops a hung prove-red.sh from
-    # burning a runner for six hours. Re-measure when the suite grows: `gh run list --workflow
+    # All of the above was measured while `npm test` still ran prove-red.sh; task 0529 (ADR-057) took
+    # it out, and task 0530 re-sets this basis and the timeout.
+    # 33 min = ~3.0x the slowest measured job (33 / 10.87), and still stops a hung run from burning a
+    # runner for six hours. Re-measure when the suite grows: `gh run list --workflow
     # test.yml`, then `gh run view <id> --json jobs` for the job and step times.
     timeout-minutes: 33
 

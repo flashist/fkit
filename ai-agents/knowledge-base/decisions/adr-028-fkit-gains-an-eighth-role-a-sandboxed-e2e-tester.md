@@ -12,6 +12,10 @@
   legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
   overturned** (do not follow it). No existing line of this ADR was edited; the note is an append, and
   the Status stays `accepted`.
+  **Extended 2026-10-20 by a second append (`0529`):** a dated ⚠️ note now also sits below
+  **§Decision 7** (sequencing) — on the two pieces of fkit's own regression gate it names. The site
+  list in the first line of this item is left byte-identical and is superseded by this line; the same
+  append-only rule and the same legend apply.
 
 > **What this ADR decides, in one line:** fkit adds an **eighth role, a tester**, whose unique authority
 > is a **sandbox** authority — a permission envelope no other role gets — and the owner **knowingly
@@ -91,6 +95,18 @@ criterion.**
    a producer-scoped brief), and the absence of any `.github/workflows/` in the tree
    ([ADR-003](adr-003-ci-runs-validate-bundles.md)'s posture is unrealized). **Those two are the actual
    gate the tester waits behind**, not a cancelled task.
+
+   > ⚠️ **Dated note 2026-10-20 (`0529`) — of the two pieces named above, one has landed and one has
+   > landed and been taken out again; the decision is untouched.** Verified against live files
+   > 2026-10-20: `.github/workflows/test.yml` exists and runs `npm test` on every push to `main` and
+   > every pull request, so the CI piece is in place. `prove-red.sh` was wired into an automated gate
+   > (inside `npm test`) and, on 2026-10-20, taken out of it by task `0529` under
+   > [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D3; until task `0530` adds
+   > §D3's nightly CI lane it runs only by hand. The details are carried in
+   > [ADR-026](adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled.md)'s 2026-10-20 note
+   > below its Decision 4 — deliberately not restated here, so there is one place to keep true rather
+   > than two. Whether this changes what the tester waits behind is not decided here. The item above,
+   > and the ADR-026 / ADR-003 bullet in §Related, are left byte-identical.
 
 ## Options considered
 

@@ -17,13 +17,15 @@ the checkout's own `claude/`, so your edits are what the agents use.
 ## Tests
 
 ```sh
-npm test                 # everything: unit suites + test/prove-red.sh (~12 min)
-npm run test:unit        # the node:test suites only (~1 min)
-npm run test:prove-red   # re-runs the suites against deliberate mutants (~11 min)
-npm run test:docs        # only the tests that read the live ai-agents/ tree (~30 s)
+npm test                 # the default suite (~1.5 min)
+npm run test:release     # the release tool's own test — run it before a release (~45 s)
+npm run test:prove-red   # the four deliberate mutants (~2.5 min)
+npm run test:docs        # fast path: the two named-exception tests that read ai-agents/ (under 1 s)
 ```
 
-Times are from a busy Apple M4 Pro (2026-10), to be re-measured by `0530`; yours will differ.
+`npm run test:unit` is an alias of `npm test`. Times are from a busy Apple M4 Pro, 2026-10-20, load
+average 10–20 on 14 cores (`npm test`: six runs, 77–89 s; the others one run each), to be re-measured
+by `0530`; yours will differ.
 
 On a red, `test/prove-red.sh` prints where it kept each failing step's own output (a `fkit-prove-red-kept.*` folder under `$TMPDIR`).
 
@@ -41,9 +43,9 @@ fkit's own rules for its test suite, set by
 which holds the reasons. The shipped prompts tell agents to follow "the project's own test rules and
 key list"; in this repo, these are they.
 
-⚠️ Not all of this is true yet. `0529` cuts the suite and prove-red down to what is below; `0530`
-makes CI enforce the budget and adds the nightly prove-red lane. Until each lands, `npm test` still
-runs everything listed above, prove-red included.
+⚠️ Not all of this is true yet. `0530` makes CI enforce the budget and adds the nightly prove-red
+lane. Until it lands, prove-red and the release test run only by hand — no automated gate runs them
+(`RELEASING.md` §3 says when).
 
 - **What a test may cover.** Only how a shipped script behaves, seen from outside — inputs in; exit
   code, output and files written out; no sourcing or mocking of its internals:
@@ -55,7 +57,8 @@ runs everything listed above, prove-red included.
   not the content of `ai-agents/`. LLM behaviour stays out.
 - **Named exceptions — these four, no others:** `test/dual-home-parity.test.js`,
   `test/task-id-uniqueness.test.js` and `test/structure-manifest.test.js` (in `npm test`), and
-  `test/release-summary.test.js` (its own script, run before a release). No test may cite "the fourth
+  `test/release/release-summary.test.js` (its own script, `npm run test:release`, run before a
+  release). No test may cite "the fourth
   category" as its licence.
 - **Growth stop.** No new test file and no new prove-red case without the owner's OK — each one, every
   time, in any lane (the default suite, nightly prove-red, the release-test script). A plan the owner
@@ -69,7 +72,7 @@ runs everything listed above, prove-red included.
   3. the skill-ownership hook's allow / deny decision;
   4. any code path that writes or deletes a file in a user's project (init's convergence and
      never-overwrite rule, orphan cleanup, heal `repair.sh`).
-- **Prove-red's lane.** Four cases only (today's numbering): M1 (a `skills_for_role()` entry), M2 (the
+- **Prove-red's lane.** Four cases only (numbers kept from before the cut): M1 (a `skills_for_role()` entry), M2 (the
   `--resume` passthrough), M30 (`exec` on the cold start) and M31 (the same, intake path only). Each
   runs only the test file it needs, nightly in CI, outside `npm test`; still runnable by hand with
   `npm run test:prove-red`. A fifth case needs the owner's OK.
@@ -82,23 +85,23 @@ runs everything listed above, prove-red included.
 
 | What changed | Run | Why |
 |---|---|---|
-| Only `LICENSE`, `ai-agents/wiki-vault/` (except `schema.md`) | **nothing** — report "no automated check covers these files"; check any links you touched by eye | No test reads their contents. `reference-integrity` scans `ai-agents/` minus the wiki vault; in the vault, `dual-home-parity` only checks which files sit outside `wiki/`. |
-| `README.md`, `CONTRIBUTING.md`, `RELEASING.md`, `CHANGELOG.md`, `docs/`, `claude/README.md` | `npm run test:docs` (~30 s); fast path `node --test test/top-level-doc-links.test.js` (under 1 s) | `top-level-doc-links` checks their relative links with `reference-integrity`'s rule; `reference-integrity` scans `ai-agents/` only. The rule skips image links and nested-bracket badge links, so README's teaser gif and its `VERSION` and `LICENSE` badge targets stay unchecked — check those by eye. `CHANGELOG.md` is scanned whole, released entries too, so deleting a file an old entry links to means fixing that entry's link. |
-| `ai-agents/wiki-vault/schema.md`; anything else under `ai-agents/` (briefs, plans, worklogs, review ledgers, sprint boards, knowledge-base, ADRs, conventions) | `npm run test:docs` (~30 s) | Only these tests read the live `ai-agents/` tree: links, citations, task/ADR ids, closed ranks, dual-home parity (`schema.md` is dual-homed and must match its scaffold copy byte for byte), the board readers |
-| `.md` files under `claude/` (skills, agents, specs) **not named in `test/prove-red.sh`**; `bin/` tools other than `release.mjs`; `CLAUDE.md`, `AGENTS.md` | `npm run test:unit` (~1 min) | Frontmatter, ownership, contract and parity checks read these; `rules-block-budget` reads `CLAUDE.md` and `AGENTS.md`, and `top-level-doc-links` checks their relative links. No mutation edits them. |
-| Any **non-`.md`** file under `claude/` (launcher, init, hooks, `skills-for-role.sh`, `dashboard.sh`, `throughput.mjs`, `structure-manifest.tsv`, `orphan-targets`); anything under `claude/scaffold/`; `bin/release.mjs`; anything under `test/`; `package.json`; `.github/`; **any file `test/prove-red.sh` names** | `npm test` (~12 min) | prove-red mutates these, or they are the test machinery itself |
-| A release, or **unsure** which row applies | `npm test` | The default command. When unsure, nothing beyond it. Before a release, also the release tool's own test once it leaves `npm test` (see *Test rules*). |
+| Only `LICENSE`, `ai-agents/wiki-vault/` (except `schema.md`), `README.md`, `CONTRIBUTING.md`, `RELEASING.md`, `CHANGELOG.md`, `docs/`, `claude/README.md` | **nothing** — report "no automated check covers these files"; check any links you touched by eye | No test reads their contents. In the vault, `dual-home-parity` only checks which files sit outside `wiki/`. |
+| `bin/release.mjs` | `npm test` + `npm run test:release` | The release tool's own test is outside `npm test`. |
+| `claude/fkit-claude.sh`, `claude/skills-for-role.sh`, `claude/skill-ownership-hook.sh`, `test/launcher-contract.test.js`, `test/skill-ownership-hook.test.js`, `test/prove-red.sh` | `npm test` + `npm run test:prove-red` | Prove-red mutates these files or runs these tests. |
+| Anything else — `ai-agents/` (`wiki-vault/schema.md` included), other `claude/` files, `claude/scaffold/`, other `bin/` tools, `test/`, `package.json`, `.github/` — or **unsure** which row applies | `npm test` | The default command. When unsure, nothing beyond it. Before a release, also `npm run test:release` (and, until `0530` lands, `npm run test:prove-red` — `RELEASING.md` §3). |
 
-- **A change that spans rows: run the heaviest row it touches (the lowest in the table).**
+- **A change that spans rows: run what every row it touches asks for.**
 - **Always report which checks ran and which were skipped, and why — a skipped check is not a passed one.**
-- Does prove-red name a file? Run `grep -F '<path below claude/>' test/prove-red.sh`. Today that
-  includes `skills/fkit-team/SKILL.md`, `skills/fkit-sprint-ship-loop/SKILL.md`,
-  `skills/fkit-wiki-sync/SKILL.md`, `skills/fkit-wiki-lint/SKILL.md`, `skills/fkit-task-done/SKILL.md`,
-  `skills/fkit-task-cancelled/SKILL.md`, `skills/fkit-sprint-done/SKILL.md`,
-  `skills/fkit-sprint-cancelled/SKILL.md`, `structure-spec.md` and the `claude/scaffold` tree. The grep
-  is the rule; this list is only an example and will drift.
-- A new test that reads the live `ai-agents/` tree or the top-level docs must also be added to
-  `test:docs` in `package.json`.
+- Does prove-red mutate a file or run a test file? Read its `--- Mutation` blocks and `run_*_suite`
+  helpers. Today: the launcher, `skills-for-role.sh`, `skill-ownership-hook.sh` and the two test files
+  it runs — the table's prove-red row; this list will drift. A plain `grep -F '<path>'
+  test/prove-red.sh` also hits files named only in its comments (`fkit-claude-init.sh`,
+  `structure-spec.md`, `check.sh`): every copy runs those, but so does `npm test` through the real
+  launcher, so they stay in the "Anything else" row. Prove-red copies `claude/` alone, so a change
+  that makes `claude/` read a file outside it can red baseline 0b — run prove-red then too.
+- `npm run test:docs` runs only `dual-home-parity` and `task-id-uniqueness` — a fast check while you edit
+  `ai-agents/`, not a replacement for `npm test`, which also reads the live tree (`dashboard-contract`
+  reads the archived sprint boards).
 
 ## Releases
 
@@ -138,7 +141,9 @@ bin/                             repo-local tools — none of these ship to proj
 docs/
   board.md                       the repo-local web board, in detail
   media/                         README images
-test/                            `npm test` — node:test suites plus test/prove-red.sh
+test/                            `npm test` — the default suite (node:test)
+  release/                       the release tool's own test (`npm run test:release`)
+  prove-red.sh                   the mutation lane (`npm run test:prove-red`)
 .github/workflows/test.yml       CI: `npm test` on every push to main and every PR
 ai-agents/                       fkit's own working structure (it is run on itself)
 ```

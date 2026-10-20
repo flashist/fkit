@@ -20,6 +20,11 @@
   directly below the first one under **§Decision 4**, pointing at ADR-057's corrections of two points
   in it. The site lists above are left byte-identical and are superseded by this line; the same
   append-only rule and the same legend apply.
+  **Extended 2026-10-20 by a fourth append (`0529`):** dated ⚠️ notes now also sit below the
+  2026-10-14 note at the end of §Context's *"The real defect R2 exposed was not hand-rolling"*, and
+  below the two notes under **§Decision 4** — `prove-red.sh` is out of `npm test`, cut to four cases,
+  and runs in no automated gate until task `0530` lands. The site lists above are left byte-identical
+  and are superseded by this line; the same append-only rule and the same legend apply.
 
 > **What this ADR decides, in one line:** the mutation-testing library question was investigated and
 > **closed** — no candidate fits a shell SUT tested as a black-box subprocess, so there is nothing to
@@ -76,6 +81,11 @@ not a **tooling-sophistication** problem, and no library would have fixed it.
 > and awaiting its brief"*; §Related *"No `.github/workflows/` exists today"* and *"does **not** include
 > `prove-red.sh`"*.
 
+> ⚠️ **Dated note 2026-10-20 (`0529`) — two statements in the note above no longer hold either:**
+> *"`npm test` runs it"* and *"Decision 4's automated gate is therefore in place"*. The facts are
+> carried in the 2026-10-20 note below **§Decision 4** — deliberately not restated here, so there is
+> one place to keep true rather than two. The note above is left byte-identical.
+
 ## Decision
 
 1. **No mutation-testing library is adopted.** `prove-red.sh` stays hand-rolled. No dependency, no
@@ -111,6 +121,20 @@ not a **tooling-sophistication** problem, and no library would have fixed it.
    > where this ADR says Decision 4 is untouched — this ADR's reading is the right one. Both facts are
    > carried in ADR-057's dated notes below its §D3 — deliberately not restated here, so there is one
    > place to keep true rather than two. The note above is left byte-identical.
+
+   > ⚠️ **Dated note 2026-10-20 (`0529`) — the cut has happened, and for now no automated gate runs
+   > `prove-red.sh`; Decision 4 is untouched.** Verified against live files 2026-10-20: `package.json`'s
+   > `"test"` script is `node --test test/*.test.js`, so `prove-red.sh` is no longer in `npm test`;
+   > `npm run test:prove-red` still runs it by hand. The file now holds four cases — M1, M2, M30, M31,
+   > numbers kept rather than renumbered (owner ruling 2026-10-20, recorded in ADR-057's note below its
+   > *"Four cases"* bullet) — plus two green baselines, 0b and 0c, and each case runs only the one test
+   > file it needs. `.github/workflows/test.yml` still runs only `npm test` and has no schedule, so
+   > **until task `0530` adds ADR-057 §D3's nightly CI lane, `prove-red.sh` runs in no automated
+   > gate** — the *"caught only by manual audit"* state this decision was written to end, here as a
+   > window, not an end state. `0529`'s owner-approved plan (2026-10-20) names that window, and
+   > `RELEASING.md` tells whoever releases to run it by hand first. The two notes above are left
+   > byte-identical.
+
 5. **The second proposed hardening — assert each mutation actually changed the file — was NOT
    selected.** It is a ~3-line, zero-dep guard that closes R2's **second** failure mode (the silent
    no-op mutation) **structurally**. Recorded as **offered and not taken**, not as rejected on merit:

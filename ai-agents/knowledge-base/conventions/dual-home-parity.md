@@ -133,7 +133,8 @@ Task 0133 mechanized this as `test/dual-home-parity.test.js`, which reads the sa
   > plays the **opposite** role in this mechanism: it is the entry strictly **beneath** a prune point
   > that **excuses** a hit, which is the remedy the sentence above prescribes.
   Its four mutations
-  (10–13) are proved red in `test/prove-red.sh`. The reconciliation it depended on (ADR-027 §Decision
+  (10–13) are no longer proved red in `test/prove-red.sh` — cut by
+  [ADR-057](../decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D3. The reconciliation it depended on (ADR-027 §Decision
   3's binding order) was **task 0132**, which landed the exceptions module and shipped
   `dependency-declaration-form.md` to the scaffold. *(Both were producer-scoped briefs, owner:
   fkit-coder.)*

@@ -11,7 +11,7 @@
 // is time-of-check only (TOCTOU), and it exists only in launcher sessions (.fkit/settings/<role>.json).
 //
 // ⚠️ Invoked as `bash <path>`, never `./<path>` (ADR-017 rule 2). The .sh execs the .mjs beside itself,
-// so FKIT_CARRY_CHECK_HOOK pointed at a copied claude/ tree exercises the COPY's .mjs (prove-red).
+// so FKIT_CARRY_CHECK_HOOK pointed at a copied claude/ tree exercises the COPY's .mjs.
 
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';

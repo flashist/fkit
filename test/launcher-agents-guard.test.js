@@ -4,11 +4,8 @@
 // SCOPE: the `agents_usable` check and the guard that calls it in claude/fkit-claude.sh. The guard
 // runs only when setup FAILED, and real init succeeds (rc 0) for a symlinked .claude or agents dir —
 // so every case here runs a COPY of the launcher's tree whose init is a stub that exits
-// $FKIT_STUB_INIT_RC (default 1). The copy is taken from dirname(LAUNCHER), so prove-red's
-// FKIT_LAUNCHER mutants are what gets tested.
-//
-// ⚠️ PROVE-RED: mutations 49–55 in test/prove-red.sh each require one named test below to go red,
-// and 0334/healthy to stay green.
+// $FKIT_STUB_INIT_RC (default 1). The copy is taken from dirname(LAUNCHER), so an FKIT_LAUNCHER
+// redirect is honoured.
 //
 // ⚠️ PATHS ARE CANONICAL: every fixture dir is realpathSync'd at creation, because the launcher's
 // `proj` is $PWD — physical here (macOS: /var → /private/var). Assertions use that form exactly.

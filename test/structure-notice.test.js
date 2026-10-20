@@ -21,11 +21,6 @@
 // ⚠️ ZERO-MUTATION SWEEPS ARE LOAD-BEARING (brief verification 2): the launch path is read-only
 // toward the project (ADR-015 unchanged, task 0242). The before/after tree snapshot is what turns
 // "read-only" from prose into a red bar.
-//
-// ⚠️ PROVE-RED: mutation 15 in test/prove-red.sh removes the structure_notice call from a COPIED
-// launcher and requires the '0247/drifted' test below to go red by name. This change is launcher
-// code — squarely ADR-026 prove-red scope (unlike check.sh itself, whose 0245 suite recorded the
-// opposite as a stated assumption).
 
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -104,7 +99,7 @@ test('conforming fixture: complete silence — no notice on stderr, nothing on s
   assert.ok(!r.stdout.includes('diverge'), `stdout mentions divergence:\n${r.stdout}`);
 });
 
-// ── 2. drifted → one stderr line, zero writes (prove-red mutation 15's NAMED target) ───────────
+// ── 2. drifted → one stderr line, zero writes ──────────────────────────────────────────────────
 
 test('0247/drifted: one notice line on stderr, nothing on stdout, zero writes', async () => {
   const dir = project();

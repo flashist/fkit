@@ -40,8 +40,8 @@ D8 items 1 and 3. **Refuses to start** unless the git tree is clean, no ship loo
 >   corrected."*) its `## Status` now reads plain `✅ Done` — see the `## Status correction — 2026-10-02`
 >   section of [`0014`'s brief](../../done/0014-align-conventions-readme-enforcement-item-live-vs-scaffold/brief.md).
 > - **Its missing board row still exists, and stays on purpose** — it is the specimen for
->   [`0296`](../0296-decide-what-catches-a-task-brief-that-has-no-board-row/brief.md) and
->   [`0406`](../0406-build-the-no-board-row-check-in-the-test-suite-with-a-dated-two-task-allowlist/brief.md).
+>   [`0296`](../../done/0296-decide-what-catches-a-task-brief-that-has-no-board-row/brief.md) and
+>   [`0406`](../../cancelled/0406-build-the-no-board-row-check-in-the-test-suite-with-a-dated-two-task-allowlist/brief.md).
 >   So on fkit's tree `0014` now falls under the **no board row** class (like `0004`), not the
 >   brief-vs-folder status class.
 

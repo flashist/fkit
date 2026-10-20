@@ -56,7 +56,45 @@ scripts inside skill folders (dashboard.sh, heal scripts, .mjs)?" Selected: "All
 
 ## What to build
 
-**Scope — 7 files, ~763 comment lines:** `test/structure-spec.test.js`, `test/structure-manifest.test.js`,
+> **⚠️ Re-scoped 2026-10-20 — owner Q4 ruling at `0529`'s plan gate.** Via `AskUserQuestion`, live
+> `fkit lead` session, question as shown: *"Q4 — The old test-related tasks (16 rows)?"* Selected
+> option text, verbatim: *"Producer's proposals (Recommended)"* — description he saw: *"After 0529:
+> cancel 0503, 0522, 0037, 0214, 0152, 0219; rescope 0513–0515; 0512/0156/0406 back to you. Knock-on:
+> nothing waits on the 6 (checked); 0513–0515 depend on 0512."* Relayed to a spawned `fkit-producer`
+> (no owner channel, ADR-021), who wrote this note. `0529` (✅ Done) cut the suite to shipped-script
+> behaviour tests under ADR-057. This note narrows the unit to the files that survived; **where it
+> differs from the *Scope* line, the *Watch* items, V2 or V4 below, this note wins.** The owner
+> quotes above and the series rules are unchanged.
+>
+> - **Scope now — 6 files, ~640 comment lines** (same rough grep, 2026-10-20; recount at plan
+>   time, V3): `test/structure-manifest.test.js`, `test/structure-check.test.js`,
+>   `test/structure-notice.test.js`, `test/structure-repair.test.js`, `test/orphan-cleanup.test.js`,
+>   and **`test/release/release-summary.test.js`** — moved there by `0529` from
+>   `test/release-summary.test.js`. Deleted by `0529`, so out of scope: `structure-spec`.
+>   `structure-manifest` is a named exception (ADR-057 §D7 ⛔ R1 note); its header cites §D7 —
+>   keep that pointer.
+> - **V2 now:** run what `CONTRIBUTING.md`'s *"What to run for a change"* table names for the touched
+>   paths — `npm test`, **plus `npm run test:release`** if the edit touches
+>   `test/release/release-summary.test.js` (it is outside `npm test`). `npm test` no longer runs
+>   prove-red (ADR-057 §D3).
+> - **V4 now:** every new pointer resolves, **checked by hand** — `test/reference-integrity.test.js`
+>   is deleted and no automated link check runs any more (ADR-057 §D6 (a)). The five-comment
+>   spot-check stays.
+> - **The fourth category is gone.** ADR-057 §D7 retired it; `0529` already reworded the kept files'
+>   headers to cite §D7. The *Watch* item about "the knowledge-base home `0512` created for the fourth
+>   category" no longer applies — there is no such home to point at.
+> - **`Depends on: 0512` is unchanged** — `0512`'s own fate (rescope or cancel) is pending the owner.
+>   *Update 2026-10-20: the owner ruled — `0512` is re-scoped to 4 files, not cancelled (verbatim *"Rescope to 4 files (Recommended)"*). This line stands; the re-point below does not apply.*
+>   ⚠️ Its reason (`0512` step 1, the fourth-category home) is gone under §D7. If `0512` is cancelled,
+>   this line needs re-pointing to `0506`, `0507` (both ✅ Done), or this unit waits on a cancelled task.
+> - **Not added to scope:** the dead `FKIT_RELEASE_MJS` test seam `0529` left in
+>   `release-summary` (its plan step 5). Removing it changes code, which rule 1 forbids; the owner's
+>   call.
+> - **Related, not a dependency:** `0530` owns `release-summary`'s *"~6-minute gate"* comment and the
+>   release gate (`0529`'s hand-off). If `0530` has not landed, leave that comment to it; whichever
+>   lands second re-checks the other's cites (rule 5).
+
+**[Superseded 2026-10-20 — see the re-scope note above.]** **Scope — 7 files, ~763 comment lines:** `test/structure-spec.test.js`, `test/structure-manifest.test.js`,
 `test/structure-check.test.js`, `test/structure-notice.test.js`, `test/structure-repair.test.js`,
 `test/orphan-cleanup.test.js`, `test/release-summary.test.js`.
 
@@ -95,13 +133,13 @@ the series"* section is then the source, and this list is the fallback):
   line or blank. The worklog names the command used to check it, so a reviewer can re-run it. Any
   exception (for example a code line carrying a trailing comment) is listed by file and function or
   test name, with the code part shown unchanged.
-- **V2 — Tests pass.** The checks `CONTRIBUTING.md`'s *"What to run for a change"* table names for the
+- **V2 — Tests pass.** *(⚠️ 2026-10-20: superseded — see the re-scope note under What to build.)* The checks `CONTRIBUTING.md`'s *"What to run for a change"* table names for the
   touched paths pass — for any non-`.md` file under `claude/`, anything under `test/`, or
   `bin/release.mjs`, that is the full `npm test` (it includes `test/prove-red.sh`, which mutates these
   files and can break if a mutation's pattern relied on a comment).
 - **V3 — Count.** The worklog records the comment-line count of this unit's files before and after,
   measured with the same command both times.
-- **V4 — Nothing lost.** The worklog has a table of every reason **moved**: file + function/test name →
+- **V4 — Nothing lost.** *(⚠️ 2026-10-20: superseded — see the re-scope note under What to build.)* The worklog has a table of every reason **moved**: file + function/test name →
   knowledge-base destination. Every new pointer resolves (`test/reference-integrity.test.js` passes),
   and a reviewer spot-checks at least five deleted comments and agrees each was WHAT, name-repeating,
   history, or already recorded where its pointer says.

@@ -415,3 +415,19 @@ same four.
 > sites are **outside `0273`'s scope** is itself dated — `0273` was widened to cover them by owner ruling
 > the same day — and is reported, not corrected, here. **Why ⚠️ and not ⛔.** Drifted coordinates, not an
 > overturned decision. **Status stays `accepted`.**
+
+> ⚠️ **Dated correction 2026-10-20 (`0529`) — the two fixtures named first in §"Sites deliberately NOT
+> to be changed" are deleted; the decision is untouched.** That bullet, *"`test/fixtures/closed-rank-0174-before.md:1981`
+> and `…-after.md:1987` — frozen test fixtures"*, is **left byte-identical**. Verified against live
+> files 2026-10-20: task `0529` deleted both fixtures, with the test that read them
+> (`test/closed-rank-immutability.test.js`), under
+> [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D1 (category 5; ADR-057
+> §D11), so the bullet's instruction has nothing left to act on. Still true: `test/prove-red.sh` opens
+> its work dir with `work="$(mktemp -d)"` (§Context, Finding 1; §Related). ⛔ No decision is reopened.
+>
+> **Why this note sits here, at the end of the file, with no header bullet** — the reason the
+> 2026-09-15 note above gives, deliberately not restated here: open task briefs still cite lines of
+> this ADR above this point, and both still land (measured 2026-10-20: `0278`'s brief cites the
+> 2026-08-11 correction-note heading, `0394`'s the *"Historical ADRs"* bullet). A note beside the
+> bullet, or a header bullet, would move them. A recorded departure from the form. **Status stays
+> `accepted`.**

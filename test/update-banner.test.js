@@ -53,11 +53,6 @@
 // ⚠️ FIXTURE VERSIONS ARE SYNTHETIC (9.9.x), NEVER the repo's VERSION. A release is imminent; a
 // fixture that read the real VERSION would either go red on the bump or silently stop exercising the
 // equal-version case, which is the whole defect.
-//
-// ⚠️ PROVE-RED: mutations 16 and 17 in test/prove-red.sh neuter the fix in a COPIED launcher and
-// require the '0257/equal-versions' and '0257/no-curl' assertions below to go red BY NAME. Mutations
-// 44, 45, 47 and 48 do the same for task 0284's git deadline: '0284/git-deadline', '0284/no-stray',
-// '0284/term-ignored' and '0284/no-stray' (its armed-watchdog check).
 
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -67,9 +62,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { REPO } from './harness.mjs';
 
-// The claude/ tree the fixture copies its launcher from. FKIT_BANNER_ROOT is this file's prove-red
-// seam — a whole-tree redirect, the FKIT_FRONTMATTER_ROOT pattern — so mutations 16/17 can point it
-// at a deliberately-broken copy without touching the real launcher.
+// The claude/ tree the fixture copies its launcher from. FKIT_BANNER_ROOT is a whole-tree redirect, so
+// a run can point it at a deliberately-broken copy without touching the real launcher.
 const DEFAULT_TREE = join(REPO, 'claude');
 const CLAUDE_TREE = process.env.FKIT_BANNER_ROOT || DEFAULT_TREE;
 if (CLAUDE_TREE !== DEFAULT_TREE) {

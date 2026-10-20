@@ -154,7 +154,7 @@ a verdict** — it never replaces, forces, or softens the decision verdict.
 > fkit invokes Codex with `--sandbox read-only`. That blocks **writes** — `mkdtemp`, fixtures, anything
 > that touches the tree — **but not execution**: Codex can and does run shell commands under it
 > (measured 2026-08-28). So a **write-free behavioural check** can run today, while anything needing a
-> temp dir or a fixture cannot — `test/prove-red.sh:82` opens with `mktemp -d`, so fkit's own
+> temp dir or a fixture cannot — `test/prove-red.sh` opens with `mktemp -d`, so fkit's own
 > red-proof harness is out of reach.
 > ⚠️ **This note pre-decides nothing — walk steps 1–3 every time.** In particular: a run that came
 > back unusable is still **`Codex unavailable`** (step 1); a Codex pass that executed only source-*text*

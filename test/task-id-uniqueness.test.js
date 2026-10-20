@@ -1,14 +1,9 @@
 // The task-ID uniqueness guard — ADR-029 Decision 3's named mitigation.
 //
-// SCOPE: this is a FOURTH test-scope category, and it is stated here rather than smuggled in.
-// ADR-014 §2 fenced fkit's test scope at "exactly two things" (the argv handed to `claude`, and the
-// skillOverrides map). ADR-017 rule 4 WIDENED that fence to a third: the stdout contract of a shipped
-// skill executable (test/dashboard-contract.test.js:3-7 records its own widening; this header follows
-// that precedent exactly). This suite is a fourth: an invariant over the repo's own `ai-agents/`
-// CONTENT rather than over product behavior. It is pre-authorized — ADR-029 Decision 3 names this
-// assertion by name as the sole mitigation for the race it accepts — but the widening is recorded here
-// so no future reader has to infer it. (Owner ruled 2026-07-20: a header note, not an ADR amendment;
-// ADR-029 already made the decision.)
+// SCOPE: an invariant over the repo's own `ai-agents/` CONTENT rather than over shipped-script
+// behaviour — outside ADR-057 §D1's fence, kept as one of ADR-057 §D7's named exceptions (owner answer
+// Q5 (b); ADR-057 §D5). ADR-029 Decision 3 names this assertion as the sole mitigation for the race it
+// accepts.
 //
 // WHY IT EXISTS. ADR-029 Decision 3 rules the cross-branch ID allocation race is *detected, not
 // prevented*: two branches each read `max=0100`, each allocate `0101`, and merge CLEANLY — different

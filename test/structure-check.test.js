@@ -49,7 +49,7 @@ const BEGIN = '<!-- fkit:begin-rules -->';
 const END = '<!-- fkit:end-rules -->';
 
 // 19 Table A dirs + 34 Table B files, as claude/structure-spec.md ships today. Exact on purpose
-// (the non-vacuity discipline of skill-frontmatter.test.js): a report quietly covering fewer rows
+// (non-vacuity): a report quietly covering fewer rows
 // than the spec's inventory is a checker bug, not a smaller project. If the spec inventory
 // legitimately grows or shrinks, update this count as a DELIBERATE part of that same change.
 const EXPECTED_ROWS = 53;

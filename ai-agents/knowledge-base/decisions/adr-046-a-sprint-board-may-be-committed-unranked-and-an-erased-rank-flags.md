@@ -26,6 +26,12 @@
   (3) §Decision part 1, **inside the first 2026-09-05 note itself** — ⚠️ its claim that `'P1 (a) (b)'`
   was asserted was **false when written**. ⚠️ **A correction may itself be corrected; site 3 is that
   case, and it is listed as its own site rather than folded into site 1.**
+  ⭐ **Fourth correction pass, 2026-10-20 (`0529`).** The **site list** in the third correction pass
+  above is left byte-identical and is **superseded by this line**; the same append-only rule and the
+  same legend apply, and every other part of the earlier passes remains **binding**. Annotated sites:
+  (1)–(3) as listed in the third pass; (4) §Consequences, the *"three places"* cost — ⚠️ the test that
+  executed this rule is deleted; (5) below §Decision part 2's transition table and (6) below §Related's
+  **Site A** bullet — ⚠️ pointers to site 4. ⛔ **Still no decision in this ADR has been overturned.**
 
 ## Context
 
@@ -200,6 +206,10 @@ failing, which is why the accepted form is a literal alternative and not a loose
 | `P<n>` → `P<m>`, n≠m | ⛔ **FLAG** — unchanged, today's behaviour |
 | any transition on an **open** row | no flag — unchanged; open rows may move |
 
+> ⚠️ **Dated note 2026-10-20 (`0529`) — "FLAG" in the table above is now a rule, not a check that
+> fires.** See the note below §Consequences' *"three places"* bullet — deliberately not restated here,
+> so there is one place to keep true rather than two. The table above is left byte-identical.
+
 ⭐ **Two points of the owner's reasoning, without which the table looks arbitrary:**
 
 1. **The two-commit launder is still caught.** The obvious objection to allowing `—`→`P<n>` is that a
@@ -274,6 +284,19 @@ it does not block the release, and the owner ruled it onto the **Backlog** board
 - **Negative / cost, named rather than hidden.** The rule about the unranked cell now lives in **three
   places** — this ADR, `backlog.md`'s clause, and the test — and the test is the only executable one.
   A future drift between the prose and the code is caught by nothing automatic.
+
+  > ⚠️ **Dated note 2026-10-20 (`0529`) — the test is deleted; the rule stands, and nothing executes
+  > it.** Task `0529` deleted `test/closed-rank-immutability.test.js`, with its two `closed-rank-0174`
+  > fixtures, on 2026-10-20 under
+  > [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D1 (category 5 — this repo's
+  > own `ai-agents/` content). ADR-057 §D11: *"Their **decisions stand**; only the enforcing test may
+  > go."* Verified against live files 2026-10-20: the file is gone, and nothing left under `test/`,
+  > `bin/` or `claude/` names `parseBoard` or checks a closed row's rank. So the rule now lives in
+  > **two** places — this ADR and `backlog.md`'s clause — and neither is executable: a `P<n>`→`—` erase
+  > or a `P<n>`→`P<m>` renumber on a closed row is caught only by review. Part 1's accepted set and
+  > must-throw list, and part 2's table, stay the record of what is allowed. `prove-red.sh` still has
+  > no mutation for this rule (§Related's ADR-026 bullet); the in-suite red proof that bullet names went
+  > with the test. The bullet above is left byte-identical.
 - **Residual risk.** The wrong-codepoint dash. `–` (U+2013) and `-` (U+002D) render almost identically
   to `—` (U+2014) and must keep throwing. A regex written as a character class rather than the literal
   alternative would silently accept all three, and the failure would be invisible in review.
@@ -297,6 +320,10 @@ it does not block the release, and the owner ruled it onto the **Backlog** board
   *"`—` / empty / prose still throw."*, and the unit test `parseBoard: an unranked (—) or garbage
   Priority cell throws`. ⛔ **Both** statements of the refusal must be amended in phase 2; leaving
   either stale is a defect in a suite whose method is that its comments are the record.
+
+  > ⚠️ **Dated note 2026-10-20 (`0529`) — Site A is deleted.** See the note below §Consequences'
+  > *"three places"* bullet — deliberately not restated here, so there is one place to keep true rather
+  > than two. The bullet above is left byte-identical.
 - **Site B** — `ai-agents/sprints/backlog.md`, the **"Off:"** rule's unranked-forward clause.
   ⭐ Not edited by this decision: under (b) the clause was right all along.
 - **Site C** — `ai-agents/sprints/sprint-7.md`, §*"⛔ This board is UNRANKED — and one row is not a

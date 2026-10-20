@@ -225,7 +225,7 @@ function historicalBlobs() {
 
 /**
  * Read every blob in one `git cat-file --batch` process (speed is load-bearing: the repo test
- * re-runs this generator, and prove-red re-runs the whole suite per mutation).
+ * re-runs this generator on every `npm test` run).
  * @param {string[]} shas
  * @returns {Map<string, string>} sha → content, latin1-decoded
  */

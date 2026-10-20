@@ -13,10 +13,9 @@
 // the regex anywhere else." So this file contains NO banner regex and none of the banner's markers.
 // Open boards get identity AND status from ONE `dashboard.sh select-active` call; archived boards take
 // their status from LOCATION, which the same convention names as the second carrier under "Location —
-// the second carrier". test/board-reader.test.js greps this WHOLE file — comments included — and goes
-// red if a banner marker, the banner's blockquoted-heading prefix, or the in-progress status literal
-// ever appears in it. Comments included ON PURPOSE: a guard that must first parse comments out can be
-// fooled into a false pass, and nothing here needs to quote those tokens to explain itself.
+// the second carrier". So no banner marker, the banner's blockquoted-heading prefix, or the in-progress
+// status literal may appear anywhere in this file — comments included; nothing here needs to quote
+// those tokens to explain itself.
 //
 // ⚠️ TASK status is a DIFFERENT vocabulary and IS read here, deliberately. The convention's "Tell a
 // task status from a sprint status by POSITION" rule is what makes that legitimate: a task status is

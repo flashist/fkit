@@ -61,9 +61,30 @@ the defect is dangerous.
 
 ## What to build
 
-Three changes, mirroring the `## Owner` precedent exactly.
+> **⚠️ Re-scoped 2026-10-20 — owner ruling 2 on the leftover test tasks.** Via `AskUserQuestion`, live
+> `fkit lead` session, question as shown: *"0156 (brief priority guard): rescope or cancel?"* Selected
+> option text, verbatim: *"Keep only the reminder (Recommended)"* — description he saw: *"Just the
+> '## Priority is required' callout in /fkit-task-brief; no new test. Knock-on: nothing waits on 0156
+> (checked); 0155's 'Blocks 0156' line edited."* Relayed to a spawned `fkit-producer` (no owner
+> channel, ADR-021), who wrote this note. Context: ADR-057 limits fkit's tests to shipped-script
+> behaviour, and `0529` cut the suite to that. **Where this note differs from anything below — the
+> H1's *"with a guard"*, the *Context*'s three-site plan, changes 1–3, the prove-red clause,
+> verification steps 1–6 and 8, or the `Depends on: 0155 — hard` note — this note wins.**
+>
+> - **Scope now — change 4 only:** the `## Priority` mandatory-field callout in
+>   `claude/skills/fkit-task-brief/SKILL.md` step 4, as change 4 below describes it.
+> - **Dropped:** change 1 (`dashboard.sh` `brief-missing-priority` kind), change 2 (its narration in
+>   `fkit-status/SKILL.md`), change 3 (the `dashboard-contract` test, including the prove-red mutation
+>   clause). No new test.
+> - **Verification now:** step 7 only. Also run what `CONTRIBUTING.md`'s *"What to run for a change"*
+>   table names for the touched path.
+> - **`Depends on: 0155` is dropped.** It existed only because the guard would fire on the six
+>   briefs `0155` backfills; a reminder in the skill fires on nothing. `0155`'s *"Blocks: 0156 —
+>   hard"* line is edited to match.
 
-**1. `claude/skills/fkit-status/dashboard.sh` — add a `brief-missing-priority` nonconformance kind.**
+**[Superseded 2026-10-20 — see the re-scope note above.]** Three changes, mirroring the `## Owner` precedent exactly.
+
+**[Dropped 2026-10-20.]** **1. `claude/skills/fkit-status/dashboard.sh` — add a `brief-missing-priority` nonconformance kind.**
 - Model it on `brief-missing-owner` at :724-726, the closest sibling (both are absent-field checks on
   a brief that was otherwise resolved). Emit via `add_fact` and call `mark_drift` — **never append to
   `DRIFT_TASKS` directly**; the comment at :516-526 explains why the two effects are fused, and a
@@ -77,12 +98,12 @@ Three changes, mirroring the `## Owner` precedent exactly.
   brief-vs-board comparison is a different, larger question and is explicitly **out of scope** — see
   *Notes*.
 
-**2. `claude/skills/fkit-status/SKILL.md` — narrate the new kind.** Lines 278-280 enumerate the
+**[Dropped 2026-10-20.]** **2. `claude/skills/fkit-status/SKILL.md` — narrate the new kind.** Lines 278-280 enumerate the
 `kind=` values and say which carry an extra field. Add `brief-missing-priority` to the list and to the
 "carries none" clause beside `brief-missing-owner`. **An unnarrated kind is a FACTS record the skill
 cannot explain.**
 
-**3. `test/dashboard-contract.test.js` — pin it.** Mirror the `brief-missing-owner` test at :1086-1120,
+**[Dropped 2026-10-20.]** **3. `test/dashboard-contract.test.js` — pin it.** Mirror the `brief-missing-owner` test at :1086-1120,
 which is the model to copy and which asserts four things: the fact is emitted with the right id, the
 drift reaches the roll-up clause, the row force-renders because of it, and adding the field clears it
 to exactly zero such facts.
@@ -105,6 +126,8 @@ step 8); and **never a `P<n>` token** — that form is the board cell's. Keep it
 neighbouring callouts; the rules-block budget is under pressure (task 0130).
 
 ## Verification steps
+
+**[Steps 1–6 and 8 dropped 2026-10-20 — see the re-scope note in *What to build*. Step 7 stands.]**
 
 1. **Red first.** Delete the `## Priority` block from one brief in a scratch fixture, run
    `dashboard.sh` against the plan, and show the record
@@ -132,7 +155,7 @@ neighbouring callouts; the rules-block budget is under pressure (task 0130).
 
 ## Notes
 
-- **Depends on: 0155 — hard.** Four of the six briefs 0155 fixes are live `✅ Done` rows in
+- **Depends on: nothing** (re-scoped 2026-10-20 — owner ruling 2, verbatim *"Keep only the reminder (Recommended)"*; see the re-scope note in *What to build*). **[Dropped 2026-10-20:]** ~~**Depends on: 0155 — hard.**~~ Four of the six briefs 0155 fixes are live `✅ Done` rows in
   `sprint-2.md` at P105–P108, so this guard fires on them the moment it ships. Landing it first means
   shipping a guard that is red on day one against real repo state and inviting a skip list — the exact
   outcome 0152's brief refuses for its own guard.

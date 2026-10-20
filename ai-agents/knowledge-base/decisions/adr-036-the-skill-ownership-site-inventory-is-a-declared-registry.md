@@ -44,6 +44,11 @@
   **fkit-architect** from task `0142`'s decision report.
 - **Scope:** the **inventory of places a role↔skill ownership fact is stated**. It does **not** touch
   where the fact itself lives — see the Decision's first clause.
+- **Corrections:** 2026-10-20 (`0529`) — this ADR carries **one** dated note, at the end of
+  **§Decision clause 4**, below its *"(b) binds to the directory listing"* blockquote. Marker legend:
+  **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do
+  not follow it). No existing line of this ADR was edited; the note is an append, and the Status stays
+  `accepted`.
 
 ---
 
@@ -338,6 +343,17 @@ repo-wide (101 measured 2026-08-02, only 10 of them live surface), which is why 
 > is missing and the file says so about itself. Binding (b) to it would have let a site naming only
 > that skill escape all four triggers as they then stood. **A trigger set for a control against hand-maintained lists must
 > not itself be sourced from a hand-maintained list.**
+
+> ⚠️ **Dated note 2026-10-20 (`0529`) — `test/skill-frontmatter.test.js`, named twice in the
+> matching-rules blockquote above, is deleted; the decision is untouched.** Task `0529` deleted it on
+> 2026-10-20 under [ADR-057](adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) §D1
+> (category 4 — the shape of shipped prompt files; ADR-057 §D11 lists it). Verified against live
+> files 2026-10-20: the file is gone; `test/harness.mjs`, named beside it both times, is still on
+> disk. The two passages that name it — (c)'s margin (*"The nearest file that would become a false
+> positive"*) and the six files read by hand under *"WHAT THE SET STILL DOES NOT CATCH"* — are dated
+> measurements of the 2026-08-02 tree and stay true as records; nothing was re-measured. This note
+> sits below that blockquote, not inside it, because the blockquote is stated to be byte-identical
+> with the report's §4.1. The text above is left byte-identical.
 
 **5. The live surface versus dated records is declared, not inferred.**
 
