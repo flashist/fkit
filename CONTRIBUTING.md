@@ -38,8 +38,9 @@ On a red, `test/prove-red.sh` prints where it kept each failing step's own outpu
 No dependencies and no `npm install`. CI (`.github/workflows/test.yml`) runs `npm test` on Node 24
 for every push to `main` and every pull request, in one timed step that fails the job when
 `npm test` takes over 120 s, naming the budget and the time taken. On the
-runner (`ubuntu-latest`): `npm test` 72 s (one run, 2026-10-20, run 39406193972); two more runs and
-nightly prove-red's runner time are PENDING (task 0530 step 7). Use a full clone:
+runner (`ubuntu-latest`), 2026-10-20: `npm test` 72 / 65.8 / 81.6 / 85.2 / 60.7 s (five runs —
+runner times vary ~60–85 s; the slowest is 71% of the budget); prove-red 118 s (one run; job 123 s).
+Use a full clone:
 `test/structure-manifest.test.js` refuses a shallow one.
 
 Prove-red runs in CI nightly at 03:17 UTC (`.github/workflows/prove-red.yml`; also runnable from the

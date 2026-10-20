@@ -86,7 +86,7 @@ C1, C3, C4 (X3 not added). Steps 1–6 built. Nothing staged, committed or pushe
 
 ## Hand-off
 
-- **Step 7 — PENDING, the driver's** (owner commits + pushes 0530; 0529 is already on `origin/main`):
+- **Step 7 — done 2026-10-20 (see *Step 7 — runner measurements* below); the commands used:** (owner commits + pushes 0530; 0529 is already on `origin/main`):
   - after the push: `gh run list --workflow test.yml --limit 1 --json databaseId,headSha,conclusion`
   - `gh workflow run test.yml --ref main` (×2), `gh workflow run prove-red.yml --ref main` (×1)
   - each: `gh run watch <id>`, then `gh run view <id> --json jobs --jq '.jobs[].steps[] | {name,startedAt,completedAt,conclusion}'`
@@ -100,3 +100,34 @@ C1, C3, C4 (X3 not added). Steps 1–6 built. Nothing staged, committed or pushe
 - **Wiki sync → fkit-wiki:** `wiki/systems/testing-and-verification` and task pages still carry old times
   (`~12 min`, `33 min`, `~6-minute gate`).
 - **Producer FYI:** `0515`'s brief line 93 says 0530 owns release-summary's `~6-minute gate` comment — done here.
+
+## Step 7 — runner measurements (2026-10-20)
+
+The owner committed and pushed 0530 himself as `b9caf35` ("Sprint push", on `origin/main`). Runs on sha
+`b9caf352235647b5843f4bb4583872f7f55dbc2b`, all `success`, read by a driver worker with `gh` (read-only):
+
+| Workflow | Run id | Trigger | Result |
+|---|---|---|---|
+| `test` | 39416131917 | push | budget step: `npm test took 65.849 s` |
+| `test` | 39416137864 | push (a second push run for the same commit) | 81.634 s |
+| `test` | 39416258502 | `workflow_dispatch` | 85.166 s |
+| `test` | 39416268459 | `workflow_dispatch` | 60.687 s |
+| `prove-red` | 39416272645 | `workflow_dispatch` | success, "hard gate PASSED"; job wall 123 s, step 118 s |
+| `test` (earlier, sha `f92ddff`) | 39406193972 | push, before the budget step | `npm test` step 72 s (already recorded, Step 0) |
+
+- **Stop-rule check (plan step 7):** slowest = 85.166 s = 71% of `BUDGET_S` 120 → under the 80% line (96 s). No
+  owner stop needed; budget not changed. Runner spread ~60–85 s.
+- **prove-red's `timeout-minutes: 15`** ≈ 7× the measured ~2 min — kept.
+- **Observation, not investigated:** GitHub started two `push` runs of `test` for the one commit (39416131917,
+  39416137864). Cause unknown; both green.
+- **Filled in:** `.github/workflows/test.yml` basis comment (same 5 lines, 28–32, so RELEASING's `test.yml:N`
+  citations do not move — re-checked: 3-11, 16-20, 36, 41-45, 53-69); `.github/workflows/prove-red.yml`
+  timeout comment (same line 19); `CONTRIBUTING.md` CI sentence (+1 line; no live file cites a
+  `CONTRIBUTING.md:N` line).
+- **Decision log (step 7 fill-in):** fixes applied without asking — none (no review finding). Obvious-winner
+  calls: (1) kept `CONTRIBUTING.md`'s commands-block `test:prove-red … (~2.5 min)` unchanged — it matches the
+  local 151.6 s figure beside it, and the runner's ~2 min now sits in the CI paragraph; (2) kept the
+  `test.yml` comment at its five lines so no RELEASING citation needs re-pointing.
+- **Checks:** `ruby -ryaml` parse of both workflows; `npm run test:docs`; `grep PENDING` over the three files
+  (results in the build report). `npm test` not run — no file it runs changed.
+

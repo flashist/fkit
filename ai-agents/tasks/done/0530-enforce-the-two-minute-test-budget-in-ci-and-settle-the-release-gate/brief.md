@@ -10,7 +10,7 @@ Sprint 13
 P5
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder

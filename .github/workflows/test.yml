@@ -26,10 +26,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     # Basis (task 0530, ADR-057): `npm test` no longer runs prove-red.sh (task 0529); prove-red runs
-    # nightly in prove-red.yml. Old-suite runner figure: the unit pass took 76.4 s (1156 tests, run
-    # 39388117472, 2026-10-20). Post-cut runner times of `npm test`: 72 s (run 39406193972,
-    # 2026-10-20, the step time, before the budget step existed); two more PENDING — task 0530 step 7
-    # (the push run + `workflow_dispatch` runs).
+    # nightly in prove-red.yml. Old-suite unit pass on the runner: 76.4 s (run 39388117472). Post-cut
+    # `npm test` on the runner, 2026-10-20: 72 s (run 39406193972, step time), then from the budget
+    # step 65.8 / 81.6 / 85.2 / 60.7 s (runs 39416131917, 39416137864, 39416258502, 39416268459).
+    # Runner times vary ~60-85 s; the slowest, 85.2 s, is 71% of the 120 s budget.
     # 10 min kills a hung run, which the budget step cannot judge because it only times a run that
     # finishes; ~5x the budget, far below GitHub's 6 h default. Re-measure: `gh run list --workflow
     # test.yml`, then `gh run view <id> --json jobs` for the job and step times.

@@ -16,7 +16,7 @@ permissions:
 jobs:
   prove-red:
     runs-on: ubuntu-latest
-    # ~6x the local 151.6 s (busy Mac, 2026-10-20); runner time PENDING — task 0530 step 7.
+    # ~7x the ~2 min measured on the runner (job 123 s, step 118 s; run 39416272645, 2026-10-20).
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4

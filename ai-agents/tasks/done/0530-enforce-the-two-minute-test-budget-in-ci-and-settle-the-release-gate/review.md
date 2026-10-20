@@ -1,6 +1,6 @@
 # Review — 0530
 
-Task: ai-agents/tasks/backlog/0530-enforce-the-two-minute-test-budget-in-ci-and-settle-the-release-gate/brief.md
+Task: ai-agents/tasks/done/0530-enforce-the-two-minute-test-budget-in-ci-and-settle-the-release-gate/brief.md
 File(s) under review: .github/workflows/test.yml, .github/workflows/prove-red.yml (new), bin/release.mjs, test/release/release-summary.test.js, RELEASING.md, CONTRIBUTING.md, ai-agents/knowledge-base/architecture.md, ai-agents/knowledge-base/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md, ai-agents/knowledge-base/decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled.md, ai-agents/knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md, worklog.md
 Status: closed-out
 Coverage: reasoning-only second opinion — codex-cli 0.157.1, exit 0, usable findings list; Codex executed only `git diff --check` (source-text inspection, not a behavioural run) and ran no test or release command. Claude leg measured: `npm run test:release` 30/30, `npm run test:docs` 51/51, `npm test` 845/845 in 81.5 s (load ~10), the test.yml budget block run under `bash -e` with a shim `npm` (over / under / red / red+slow), and four scratch release.mjs fixtures (first red stops, HEAD moved during `test:release`, both green).
