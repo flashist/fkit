@@ -10,7 +10,7 @@ Sprint 12
 P10
 
 ## Status
-🔲 Backlog
+🔄 In progress
 
 ## Owner
 fkit-producer
@@ -85,6 +85,10 @@ folder name still carries the old wording; the ID and folder were kept so the li
 5. If the ruling is **default** or **drop**, a follow-up brief is filed for it. This task changes no skill
    or prompt itself.
 6. `node --test test/reference-integrity.test.js` green.
+   - *Correction, 2026-10-20 (spawned `fkit-producer`):* `test/reference-integrity.test.js` no longer
+     exists in `test/`, so this step cannot run as written. Until a replacement is named, the links this
+     task adds (the Trial log index, and the reports' own links) are checked by hand: each link
+     target is opened from the brief's folder. Scope unchanged.
 
 ## Notes
 
@@ -110,6 +114,56 @@ folder name still carries the old wording; the ID and folder were kept so the li
   work. The per-task measurements come from the run itself (the lead's driver, and the coder's worklog);
   the producer compiles them. The owner's "did it help?" answer needs him present.
 - **Board and priority:** Backlog board, Priority cell `—`, `## Priority: Unscheduled`.
+  - *Correction, 2026-10-20 (spawned `fkit-producer`):* out of date. The task now sits on
+    [Sprint 12](../../../sprints/sprint-12.md) at `P10`, as this brief's `## Sprint` and `## Priority` say
+    (carried over from Sprint 10 on 2026-10-15). Scope unchanged.
 - **Filed 2026-10-01** by a spawned `fkit-producer` at `fkit-lead`'s direction, on owner rulings relayed
   from the lead session (no owner channel, ADR-021). **Re-scoped 2026-10-02** on the owner's answer
   quoted in *Context*, relayed by `fkit-lead`. ⛔ No commit.
+- ⏱ **Started 2026-10-20 — the owner's go-ahead.** Via `AskUserQuestion`, 2026-10-20, `fkit lead`
+  session, during a `/fkit-sprint-ship-loop --plan-review` run on Sprint 12 (started ~13:56 UTC);
+  relayed verbatim to a spawned `fkit-producer`. Question: *"Sprint 12 has no coder tasks left for plan
+  review to run on. What should this run do?"* Selected option text, verbatim: *"Start 0474 log, stop
+  run (Recommended)"*. Description he saw: *"Your go-ahead for 0474: a producer sets up the trial log;
+  data comes from your next --plan-review run on a sprint with coder tasks. Knock-on: none — Sprint 12
+  already waits on 0474."* **This run produced no trial data:** `0474` was Sprint 12's only open row, so
+  there was no coder task to plan-review. Status set `🔄 In progress` by `fkit-lead`. The relaunch note
+  above still applies to every trial run: start each from a fresh `fkit lead` launch. Recorded by a
+  spawned `fkit-producer` (no owner channel). ⛔ No commit.
+- ⏱ **2026-10-20 — owner ruling: the 13 earlier plan-review runs count.** Via `AskUserQuestion`,
+  2026-10-20, `fkit lead` session; relayed verbatim to a spawned `fkit-producer`. Question: *"Should the
+  13 plan-review runs already done (2026-10-15 to 10-20) count as 0474 trial data?"* Selected option
+  text, verbatim: *"Count all 13, log each (Recommended)"*. Description he saw: *"Producer back-fills
+  one log per task from existing files; 'did it help?' and 'fresh launch?' marked not asked/unknown.
+  Matches your 0504 precedent."* Done the same day: one back-filled log per task, listed under
+  *Trial log* below. In each, "did it help?" reads "not asked (back-filled 2026-10-20)" and the fresh
+  `fkit lead` launch reads "unknown". The trial continues. ⛔ No commit.
+
+### Trial log
+
+One report per task planned with plan review on, written after that task's code review (*What to
+build* §1), grouped by sprint-loop run. The producer adds each one here.
+
+- **Sprint 10 run, `--plan-review`, started 2026-10-10T16:23:38Z** — `0504`:
+  [`2026-10-11-plan-review-trial-0504.md`](../../../knowledge-base/reports/2026-10-11-plan-review-trial-0504.md).
+  Logged as a trial run on the owner's ruling (`AskUserQuestion`, `fkit lead` session, 2026-10-10:
+  *"Yes, log it as a trial run (Recommended)"*), before this task's start on 2026-10-20.
+- **Sprint 12 run, `--plan-review`, started 2026-10-15T16:38:40Z** — back-filled 2026-10-20 on the
+  owner's ruling (see the ⏱ 2026-10-20 note above):
+  - `0284` — [`2026-10-20-plan-review-trial-0284.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0284.md)
+  - `0385` — [`2026-10-20-plan-review-trial-0385.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0385.md)
+  - `0516` — [`2026-10-20-plan-review-trial-0516.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0516.md)
+  - `0334` — [`2026-10-20-plan-review-trial-0334.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0334.md)
+  - `0507` — [`2026-10-20-plan-review-trial-0507.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0507.md)
+  - `0510` — [`2026-10-20-plan-review-trial-0510.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0510.md)
+  - `0508` — [`2026-10-20-plan-review-trial-0508.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0508.md)
+  - `0503` — [`2026-10-20-plan-review-trial-0503.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0503.md) (cancelled before
+    code review; its code-review fields read "not measured")
+- **sprint-13 run, `--plan-review`, started 2026-10-19T11:18Z** — back-filled 2026-10-20, same ruling:
+  - `0526` — [`2026-10-20-plan-review-trial-0526.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0526.md)
+  - `0527` — [`2026-10-20-plan-review-trial-0527.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0527.md)
+- **sprint-13 run, `--plan-review`, started 2026-10-19T18:11Z** — back-filled 2026-10-20, same ruling:
+  - `0528` — [`2026-10-20-plan-review-trial-0528.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0528.md)
+  - `0529` — [`2026-10-20-plan-review-trial-0529.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0529.md)
+  - `0530` — [`2026-10-20-plan-review-trial-0530.md`](../../../knowledge-base/reports/2026-10-20-plan-review-trial-0530.md)
+- **Sprint 12 run, `--plan-review`, started 2026-10-20 ~13:56 UTC** — no tasks planned; no data.
