@@ -46,6 +46,8 @@ and tasks in** — the code half `0404` never authorised.
 
 > ⭐ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — this reader now ships to every fkit user as `fkit board`.** By [[decisions/adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge]] (owner ruling A3, 2026-10-20), task `0536` installs `bin/fkit-board.mjs` with a vendored copy of aiboard's page (aiboard `a1592dc`) and routes `fkit board` to it — read-only, Node for that command only. ⚠️ Its tests (`board-reader`, `board-root`, `board-narrow`, `board-archived-id`) were deleted by `0529` (ADR-057 category 3), so it ships untested. Interim until `0444` / `0467`.
 
+> ⚠️ **Dated note 2026-10-23 (sync `5ccf2c2`→`185ac5e`) — the 2026-09-21 *no `Host` check* residual is SUPERSEDED.** Owner rulings of 2026-10-22 (`fkit-lead` session): file the check, and *"Yes, replace it (Recommended)"* — two of the residual's own re-raise conditions were met (hardening asked for; the reader ships to every user). `0538` built it: foreign host names now get 403, and the reader has a test file again. This task's `review.md` ledger is closed history and **was not edited**. → [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]]
+
 ## Related
 - [[tasks/sprint-11-fkit-aiboard-convergence]] — the board it shipped on
 - [[tasks/evaluate-aiboard-as-fkits-human-readable-board-and-design-the-integration-seam]] — `0404`, whose spike it replaced
@@ -57,3 +59,4 @@ and tasks in** — the code half `0404` never authorised.
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/overhaul-the-readme-for-first-time-visitors]] — `0478` moved the README's board section to `docs/board.md`
 - *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — `0483`: the reader no longer throws when a task folder or board file moves between its check and its read
 - *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge]] · [[tasks/ship-the-read-only-board-reader-to-every-fkit-user-via-fkit-board]] — shipped as `fkit board`
+- *Added 2026-10-23 (sync `5ccf2c2`→`185ac5e`):* [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]] — `0538` supersedes this task's 2026-09-21 accepted residual (no `Host` check) by owner ruling 2026-10-22; the closed ledger is not edited

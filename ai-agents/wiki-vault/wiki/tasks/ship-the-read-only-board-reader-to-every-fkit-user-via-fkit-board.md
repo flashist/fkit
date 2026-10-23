@@ -24,6 +24,7 @@ Deliver the owner's stated goal — typed 2026-10-20: *"I just want this AI boar
 - **Not done:** a browser check (HTTP evidence only, which the brief allows) and a real network install from `main` (needs a push).
 - **Follow-ups filed** (open, not ingested): `0538` (refuse reads from a foreign host name in the shipped reader) and `0539` (the same in the Node board server), from `0422`'s plan Q2, owner ruling 2026-10-22.
 - ⚠️ The reader ships **with no automated test** (ADR-058 *Consequences*); its earlier tests were deleted by `0529`.
+  > ✅ *Dated note 2026-10-23 (sync `5ccf2c2`→`185ac5e`; the two lines above left byte-identical):* `0538` is **done** (agent-closed) — the reader now refuses (403) a `Host` that is not `localhost`, an IP literal or its own host, and on the owner's OK it has a test file again, `test/board-reader-host.test.js` (4 tests). `0539` (the `board/` server) is still open. → [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]]
 
 ## Related
 - [[decisions/adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge]] — the decision this implements
@@ -34,3 +35,4 @@ Deliver the owner's stated goal — typed 2026-10-20: *"I just want this AI boar
 - [[tasks/port-aiboard-to-node-in-board-the-adr-052-phase-2-tasks-0417-0423]] — the Node port that carries a second copy of the same page
 - [[systems/install-and-self-update]]
 - *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`, closing one-way links):* [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]]
+- *Added 2026-10-23 (sync `5ccf2c2`→`185ac5e`):* [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]] — follow-up `0538` **done** (agent-closed): Host check on reads, plus a test file — the *"no automated test"* line above is no longer true

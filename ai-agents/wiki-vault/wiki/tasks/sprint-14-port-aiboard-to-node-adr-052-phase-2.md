@@ -31,6 +31,7 @@
 - **Knock-on checked at placement:** `0424` (phase 3) and `0435` (phase 4) depend on `0423` and stay on the Backlog board — each still needs the owner's own word. `0405` is not a dependent.
 - **Two sprints were open throughout** — this one and the paused Sprint 12 — legal under ADR-047; neither banner carries `⭐ ACTIVE BOARD`.
 - **Follow-ups filed during the sprint** (open, not ingested): `0537` (the `0284/term-ignored` stall test under load), `0538` / `0539` (refuse foreign-Host reads in the shipped reader / the Node server).
+  > ✅ *Dated note 2026-10-23 (sync `5ccf2c2`→`185ac5e`; line above left byte-identical):* `0538` closed 2026-10-23 on the **Backlog board**, not this one (agent-closed) → [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]]. `0537` and `0539` still open.
 
 ## Related
 - [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — the phases and gates
@@ -40,3 +41,4 @@
 - [[tasks/sprint-12-set-a-nine-backlog-tasks-goal-not-set]] — paused alongside
 - [[tasks/sprint-11-fkit-aiboard-convergence]] — the convergence sprint behind ADR-052
 - *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`, closing one-way links):* [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]
+- *Added 2026-10-23 (sync `5ccf2c2`→`185ac5e`):* [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]] — follow-up `0538` **done** 2026-10-23 on the Backlog board (agent-closed)

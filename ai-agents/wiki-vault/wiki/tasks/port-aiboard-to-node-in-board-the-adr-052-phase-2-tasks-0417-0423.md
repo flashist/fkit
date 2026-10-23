@@ -27,6 +27,7 @@
 - ⛔ **A met gate means phase 3 may be *put to* the owner — it starts nothing** (ADR-052 D9). `0424` and `0435` (phases 3 / 4) wait on `0423` and need their own word.
 - **Inherited, not fixed:** a `None` / empty-string block-list item is dropped on read in `a1592dc`; the port matches it, so "0 differences" includes that gap. Ranks past 2^53 lose precision (accepted residual). Declared CLI/server differences (crash stderr, EPIPE, float text, some malformed-request answers) are listed in `0421`/`0422`'s worklogs.
 - **Follow-ups:** `0539` — refuse foreign-Host GETs in the Node board server (today 200 on both sides); `0538` — the same for the shipped reader. `0423`'s scripts were throwaway, so `0539` must rebuild its comparison from the plan and worklog.
+  > ✅ *Dated note 2026-10-23 (sync `5ccf2c2`→`185ac5e`; line above left byte-identical):* `0538` is **done** (agent-closed) — the shipped reader now uses the same `Host` rule as `refuseCrossSite`. `0539` stays open. → [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]]
 - **Two copies of aiboard's page now exist** (`board/web/` and `vendor/aiboard/`) — the cost [[decisions/adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge]] names.
 
 ## Related
@@ -38,3 +39,4 @@
 - [[tasks/sprint-11-fkit-aiboard-convergence]] — the convergence sprint that led to ADR-052
 - [[systems/testing-and-verification]]
 - *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`, closing one-way links):* [[systems/fkit]]
+- *Added 2026-10-23 (sync `5ccf2c2`→`185ac5e`):* [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]] — `0538` **done**: `0422`'s Host rule copied to the shipped reader; `0539` (the `board/` server's reads) still open

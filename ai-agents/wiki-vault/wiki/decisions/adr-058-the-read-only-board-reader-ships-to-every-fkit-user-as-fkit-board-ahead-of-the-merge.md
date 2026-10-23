@@ -26,6 +26,7 @@ Options rejected: **B** wait for the full merge (users get nothing for ~44 tasks
 ## Consequences
 - **Positive:** every fkit user gets a clickable view of their tasks and sprints now; nothing new is stored.
 - **Costs:** **two copies of aiboard's page** for a while (the copy, and the one `0422` ports into `board/`) — a fix to one does not reach the other until `0444`/`0467`; ⚠️ **the reader ships with no automated test** — its four tests were deleted by `0529` as category 3, and a new test file needs the owner's OK; one more launcher route to keep and swap; users may expect to edit from the page — they cannot.
+  > ✅ *Dated note 2026-10-23 (sync `5ccf2c2`→`185ac5e`; the ADR source is unchanged and the line above left byte-identical):* the *"no automated test"* cost is **now discharged for the reader** — `0538` added `test/board-reader-host.test.js` on the owner's D2.1 OK, with a `Host` check on every read (foreign host names → 403). The launcher's `board` route still has no test. → [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]]
 - **⚠️ Not ruled (open):** whether an agent may run `fkit board`. It is a blocking server, so an agent running it would hang its own turn.
 - **Re-raise only if:** the reader fails on a real consuming project's tree; the two pages drift and it hurts a user; users without Node are blocked from anything but `fkit board`. ⛔ **Do not re-raise** making the reader writable, or "a separate project must not be copied into fkit".
 
@@ -39,3 +40,4 @@ Options rejected: **B** wait for the full merge (users get nothing for ~44 tasks
 - [[tasks/make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads]] — `0411`, the reader it ships
 - [[systems/install-and-self-update]]
 - *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`, closing one-way links):* [[systems/fkit]] · [[systems/knowledge-base-structure]] · [[tasks/port-aiboard-to-node-in-board-the-adr-052-phase-2-tasks-0417-0423]] · [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]]
+- *Added 2026-10-23 (sync `5ccf2c2`→`185ac5e`):* [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]] — `0538`: the shipped reader now refuses (403) any `Host` that is not `localhost`, an IP literal or its own host, and has its first test file since `0529` (owner's OK)
