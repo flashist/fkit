@@ -68,7 +68,9 @@ key list"; in this repo, these are they.
      scripts under `claude/`, and `claude/skills-for-role.sh`, which they source;
   2. shipped skill executables — `dashboard.sh`, `throughput.mjs`, the heal `check.sh` / `repair.sh`;
   3. the board module `board/`, tested under `test/board/` (it will ship — ADR-057 §D1's dated note);
-     its tests import the module, so "from outside" there means through its exported API only.
+     its tests import the module, so "from outside" there means through its exported API only;
+  4. the board reader `bin/fkit-board.mjs`, which ships as `fkit board` (ADR-057 §D1 category 3's
+     dated note, ADR-058) — run as a process, through its HTTP answers.
 
   Not repo-only tools under `bin/`, not the wording or shape of prompts and documents under `claude/`,
   not the content of `ai-agents/`. LLM behaviour stays out.

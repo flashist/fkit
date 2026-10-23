@@ -23,7 +23,7 @@ fkit-coder
 > word.
 
 **Where this comes from.** The same owner ruling as
-[`0538`](../0538-refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader/brief.md):
+[`0538`](../../done/0538-refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader/brief.md):
 2026-10-22, `AskUserQuestion` in the `fkit-lead` session (Sprint 14), relayed to a spawned
 `fkit-producer`. Question: *"A hostile site could READ a running board (incl. today's `fkit board`).
 What to do?"* Selected, verbatim: *"File a follow-up task (Recommended)"* — description he saw:

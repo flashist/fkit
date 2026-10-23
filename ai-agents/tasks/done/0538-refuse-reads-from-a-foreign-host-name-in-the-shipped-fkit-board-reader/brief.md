@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -30,7 +30,7 @@ none — nothing waits on it."* It answers Q2 of `0422`'s approved
 [plan](../../done/0422-port-aiboards-web-server-and-page-to-node-with-t-022-closed-and-concurrent-writes-kept-in-order/plan.md)
 (§2.3 and *Q2*). The ruling covers two servers; the producer split it into two briefs because each
 ships on its own: **this one** (the shipped reader, fixable now) and
-[`0539`](../0539-refuse-reads-from-a-foreign-host-name-in-the-node-board-server/brief.md) (the Node
+[`0539`](../../backlog/0539-refuse-reads-from-a-foreign-host-name-in-the-node-board-server/brief.md) (the Node
 board server, which does not exist until `0422` lands).
 
 **The exposure, in plain words.** `fkit board` runs `bin/fkit-board.mjs`, a small web server on
@@ -61,10 +61,10 @@ superseded (fkit now owns the board). `0411`'s ledger is closed history and is *
 task.
 
 **Neighbours.**
-- [`0539`](../0539-refuse-reads-from-a-foreign-host-name-in-the-node-board-server/brief.md) — the same
+- [`0539`](../../backlog/0539-refuse-reads-from-a-foreign-host-name-in-the-node-board-server/brief.md) — the same
   check on the Node board server. Use the same allow rule in both, so `fkit board` behaves the same
   before and after `0444` routes it to `board/`.
-- [`0467`](../0467-retire-the-read-only-board-reader/brief.md) (Backlog, phase 8) retires this reader.
+- [`0467`](../../backlog/0467-retire-the-read-only-board-reader/brief.md) (Backlog, phase 8) retires this reader.
   Until then it is what every user runs, so this fix is worth having even though the reader is
   temporary.
 
@@ -132,3 +132,12 @@ task.
   section's *"The 2026-10-22 ruling is the newer one and governs"* reading is now the owner's own ruling,
   not the producer's inference. `0411`'s ledger is closed history and is **not** edited. No status,
   sprint, rank or `Depends on:` line changed. **Knock-on: none.**
+- **Dated note 2026-10-23 — closed by a spawned `fkit-producer` (agent-closed, ADR-033 §5).** Closed at
+  `fkit-lead`'s request; no owner channel in this run, so the marker stands. Evidence relayed by
+  `fkit-lead`: Build done (red/green of the new test), Verify pass (`npm test` 936 pass / 1 skip,
+  78 s), stateful review "✅ Ready to merge" with no findings, `review.md` Status `closed-out`.
+  **Dated fact, 2026-10-23:** the owner checked the browser step of *Verification steps* himself —
+  after running `bash claude/fkit-claude.sh board` from this checkout he typed, verbatim, in the
+  `fkit-lead` session: *"The page looks good"*. Relayed by `fkit-lead`; this producer did not see it
+  first-hand. It does **not** turn this into an owner-verified close (ADR-049: no channel supplies a
+  verified human principal); only the owner running `/fkit-task-done` himself can clear the marker.

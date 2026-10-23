@@ -36,6 +36,7 @@
 // `dashboard.sh` is never run.
 
 import { createServer } from 'node:http';
+import { isIPv4, isIPv6 } from 'node:net';
 import { accessSync, constants, existsSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -577,6 +578,16 @@ export function makeReader({ root, dashboard }) {
 
 // ── The server ───────────────────────────────────────────────────────────────────────────────────
 
+// A site whose DNS name is re-pointed at 127.0.0.1 is same-origin to the browser; only the Host header
+// names it, and an IP literal cannot be rebound. Same rule as board/server's refuseCrossSite.
+function hostNamesThisServer(hostHeader, ownHost) {
+  const m = /^(\[[^\]]*\]|[^:[\]]+)(?::\d*)?$/.exec(hostHeader ?? '');
+  const name = m ? m[1].toLowerCase() : null;
+  const bare = name?.startsWith('[') ? name.slice(1, -1) : name;
+  const own = ownHost == null ? null : String(ownHost).toLowerCase().replace(/^\[(.*)\]$/, '$1');
+  return name === 'localhost' || (bare !== null && (isIPv4(bare) || (name !== bare && isIPv6(bare)) || bare === own));
+}
+
 export function startServer({ root, dashboard, aiboardPath, port = DEFAULT_PORT, host = '127.0.0.1' }) {
   const reader = makeReader({ root, dashboard });
 
@@ -598,6 +609,9 @@ export function startServer({ root, dashboard, aiboardPath, port = DEFAULT_PORT,
     // DELETE the plan names, so no method can slip through by not having been listed.
     if (req.method !== 'GET') {
       return json(405, { error: 'fkit-board is read-only: it serves GET and nothing else. Nothing is ever written.' });
+    }
+    if (!hostNamesThisServer(req.headers.host, host)) {
+      return json(403, { error: 'read refused: the Host header does not name this board server' });
     }
 
     const path = (req.url || '/').split('?')[0];
@@ -650,7 +664,8 @@ const USAGE = 'usage: fkit board [--root <path>] [--port <n>] [--aiboard <path>]
   + `  --port <n>        listen on 127.0.0.1:<n> (default ${DEFAULT_PORT}; 0 picks a free port)\n`
   + '  --aiboard <path>  serve this aiboard index.html instead of fkit\'s copy (or FKIT_AIBOARD)\n'
   + '  --bench           print the snapshot cost and exit; starts no server\n'
-  + '  -h, --help        print this and exit\n';
+  + '  -h, --help        print this and exit\n'
+  + '  Requests are answered only under localhost or an IP address; any other host name gets 403.\n';
 
 function main(argv) {
   if (argv.includes('--help') || argv.includes('-h')) {

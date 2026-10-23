@@ -69,7 +69,9 @@ It binds **`127.0.0.1` only** — never `0.0.0.0` — on port `8585` by default.
 and nothing else: `/` and its alias `/index.html` (both aiboard's `index.html`, byte-for-byte as
 found), `/api/board`, `/api/tasks/<id>`, `/api/sprints/<id>` and `/api/check`.
 **Every other method — POST, PUT, PATCH, DELETE, and anything else that is not GET — is refused with a
-JSON error.** It holds no credentials and reads no environment beyond `FKIT_AIBOARD`.
+JSON error.** It answers only requests whose `Host` names `localhost`, an IP address, or the address it
+listens on (case and port ignored). Any other host name gets `403` and a JSON error with no board data;
+a request with no `Host` gets `400` (HTTP/1.1, from Node itself) or `403` (HTTP/1.0). It holds no credentials and reads no environment beyond `FKIT_AIBOARD`.
 
 ## What it writes: nothing
 

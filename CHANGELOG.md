@@ -11,6 +11,9 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- `fkit board` now refuses (403) a request addressed under any host name other than `localhost` or an
+  IP address, so a web page you have open cannot read your board through another domain name.
+  `http://127.0.0.1:8585/` and `http://localhost:8585/` work as before.
 - New: `fkit board` â€” a read-only web view of the project's tasks and sprints, at
   `http://127.0.0.1:8585/`. Run it in the project's folder. It needs Node.js; no other fkit command
   does. Existing installs get it with `fkit update`.
