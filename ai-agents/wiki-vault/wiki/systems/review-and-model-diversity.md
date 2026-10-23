@@ -17,6 +17,10 @@ The reviewer assembles a **findings-only prompt plus an inline diff** into `.fki
 codex exec --sandbox read-only --cd "$PWD" -
 ```
 
+> ⚠️ **Dated correction 2026-10-23 (sync `96c7263`→`5ccf2c2`; the sentence above is left byte-identical) — the prompt file is no longer one fixed path.** Task `0385` (2026-10-15) gave every run its own prompt file under `.fkit/tmp/` — a task label plus a run id (the stateful review's shape is `<key>-r<N>-<run-id>`) — because two concurrent reviews silently shared `adversarial-prompt.md`. → [[tasks/give-the-codex-adversarial-prompt-a-task-keyed-path]]
+>
+> ⚠️ **And a missing test is now a suggestion, not a defect** (task `0528`, under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]]): the review skills grade a missing test on correct code as a suggestion — listed once in a *Suggestions (not defects)* item — unless **the project's own key list** names it; with no written key list, it is a suggestion. The adversarial skill's *Missing tests* hunt item carries the same grading. → [[tasks/the-test-scope-reset-tasks-0526-0530]]
+
 `fkit-adversarial-reviewer` has **no Write or Edit tools at all** — it is structurally write-free, a leaf that returns findings and nothing else. That is enforced by its tool allowlist, not by instruction — and since [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] (2026-07-18) it is **the only structural tool wall left in fkit**: every other role's allowlist was relaxed, deliberately, because this is the one wall protecting a checkable invariant (the second opinion never had write authority over the code it judges). Its `tools:` line holds at any spawn depth and is not to be "tidied up" to match the others.
 
 ### ⚠️ What the second opinion actually guarantees — reasoning, not measurement (ADR-042, 2026-08-11)
@@ -154,3 +158,4 @@ The coder's `/fkit-process-stateful-review` encodes this: verify each finding, c
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]] — Codex optional but recommended; the flagged Claude-only fallback is a supported mode
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — the Codex plan pass in opt-in plan review
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-every-document-say-codex-is-optional-but-recommended]] · [[tasks/build-the-opt-in-plan-review-step-off-by-default]] — the Sprint 10 tasks behind them
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/give-the-codex-adversarial-prompt-a-task-keyed-path]] — `0385`, per-run prompt paths · [[tasks/the-test-scope-reset-tasks-0526-0530]] — `0528`, missing test = suggestion · [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]]

@@ -27,6 +27,8 @@ The read-side half — making `/fkit-status` report this board **only on request
 >
 > **Fourteen rows were added in that run alone**, including both halves of the unfiled `0210` follow-ups (`0214`, `0215`), the `/fkit-wiki-update` sequencer pair (`0216`, `0217`), and **seven of the eight follow-ups [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] named** — deliberately **held for the owner and NOT filed** except the one he authorized. The rows arrive **unranked**, exactly as the board's design requires.
 
+> ⚠️ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the board's moves in this window.** Pulled out: nine rows to Sprint 12 (owner R3, `➡️ Moved to Sprint 12`), five to Sprint 13 (`0526`–`0530`) and seven to Sprint 14 (`0417`–`0423`). Cancelled in place 2026-10-20 under ADR-057: `0037`, `0152`, `0214`, `0215`, `0219`, `0406`, `0522` — see [[tasks/the-2026-10-20-adr-057-test-task-cancellations]]; `0296` closed done on its finding. New open rows: `0517`, `0518` (stale cites / the old Codex prompt path after `0385`), `0519`–`0521`, `0523`–`0525` (from `0284`, `0334`, `0510` and a consuming project's retro — its third brief, `0522`, was filed and then cancelled), `0531`–`0535` (the sprint-retro build, from `0500`) and `0537`–`0540`. Fresh `throughput.mjs` at `5ccf2c2` (reads git, writes nothing): **open 187 · repair 23 (12.3%) · excl. source defects 22 (11.8%)**.
+
 ## Related
 - [[tasks/report-backlog-board-in-fkit-status-on-request-only]] — task 68, the status read-side; depends on this board's format
 - [[tasks/filter-fkit-status-board-to-open-tasks]] — task 65; its open-work filter applies to the backlog board too, with no special-casing
@@ -120,3 +122,5 @@ The read-side half — making `/fkit-status` report this board **only on request
   > ⭐ **Measured fresh at `96c7263` by `node claude/skills/fkit-status/throughput.mjs` this run** (reads git, writes
   > nothing): **open 193** · **repair 25 (13.0%)** · **repair-excluding-source-defects 22 (11.4%)**. W41 24 created / 17
   > closed; W42 (partial) 10 / 6. Open rose 188 → 193: five closed, ten created.
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/sprint-12-set-a-nine-backlog-tasks-goal-not-set]] · [[tasks/sprint-13-reset-fkits-tests-to-shipped-script-behaviour]] · [[tasks/sprint-14-port-aiboard-to-node-adr-052-phase-2]] — the three boards its rows moved to · [[tasks/the-2026-10-20-adr-057-test-task-cancellations]] — seven rows cancelled in place
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`, closing one-way links):* [[tasks/decide-what-catches-a-task-brief-that-has-no-board-row]]

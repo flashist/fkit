@@ -47,6 +47,8 @@ is forbidden by the spec (*"Do not paraphrase these into a fresh regex"*).
   `test/link-condition.mjs` too. ✅ Both landed at `96c7263`: `0467`'s brief carries a 2026-10-14 note listing the
   three `docs/board.md` links (incl. the released `CHANGELOG.md` one), and `0512`'s brief names `test/link-condition.mjs`.
 
+> ⚠️ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — `test/top-level-doc-links.test.js` is deleted.** Task `0529` deleted it on 2026-10-20 under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (repo documents — not a shipped script and not a named exception). The record above is left as written; what it describes no longer runs. `test/link-condition.mjs`, its shared helper, went too. `0536`'s brief notes the link check *"is no longer in `test/` as of 2026-10-20"* — so that brief told its coder to grep the links by hand instead.
+
 ## Related
 - [[tasks/build-the-link-resolution-guard]] — `0354`, the guard whose functions moved into the shared module
 - [[tasks/settle-the-reference-integrity-condition-once-for-both-halves]] — `0353`, the settled §4.1 condition both tests apply
@@ -55,3 +57,4 @@ is forbidden by the spec (*"Do not paraphrase these into a fresh regex"*).
 - [[tasks/overhaul-the-readme-for-first-time-visitors]] — `0478`, which moved the web-board details into `docs/board.md`, the target R1's live case links
 - [[systems/testing-and-verification]] · [[tasks/sprint-10-the-0472-0482-batch]] · [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]
 - [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]] — `0506`, whose comment-cleanup series (`0512`) inherits this task's R2 note
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-test-scope-reset-tasks-0526-0530]] — the cut that deleted this test

@@ -17,6 +17,8 @@ Build the **one mitigation** [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-p
 ## Outcome
 Done, agent-closed. **Owner-ruled to land BEFORE task 76** despite its append-rank priority of 85 — its value is entirely **pre-merge**: task 76 is exactly the long-lived branch the accepted race needs, and a collision caught before the merge costs a rename while one caught after means renumbering an ID things already link to (the permanent unrecoverable failure).
 
+> ✅ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — this test stays.** [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] keeps `test/task-id-uniqueness.test.js` in the default `npm test` as a **named exception** (§D5/§D7, owner Q5); its header's "fourth category" licence was reworded to cite ADR-057 §D7 by `0529`. It protects fkit's own repo only — consuming projects get no duplicate-ID check.
+
 ## Related
 - [[decisions/adr-029-a-task-is-a-folder-keyed-by-a-permanent-global-id]] — Decision 3's accepted race and its named mitigation, built here
 - [[decisions/adr-014-how-fkit-tests-itself]] — the suite this assertion joins
@@ -25,3 +27,4 @@ Done, agent-closed. **Owner-ruled to land BEFORE task 76** despite its append-ra
 - [[systems/testing-and-verification]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/decide-whether-to-drop-the-numeric-prefix-from-task-folder-names]] — task 0102: had the folder prefix been dropped, this guard would have become the **only** duplicate-ID detector, invisible to a human reading the tree
 - [[tasks/build-the-closed-rank-immutability-guard]] — task `0182` (2026-08-06), which reuses this test's vacuous-pass-assertion precedent
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] — kept as a named exception · [[tasks/the-test-scope-reset-tasks-0526-0530]]

@@ -36,6 +36,8 @@ Ledger **CLOSED 2026-08-02**, final verdict **✅ approved**, with accepted resi
 
 **Scope honesty:** this test catches drift **at test time, after the edit**. Task `0131`'s scoping check is the earlier, cheaper catch, and ADR-027 wanted both.
 
+> ✅ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — this test stays.** [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] keeps `test/dual-home-parity.test.js` in the default `npm test` as a **named exception** (§D7, owner Q4b); `0529` reworded its header. ⚠️ Its prove-red cases (10–13) were cut by ADR-057 §D3, so it is no longer proved red.
+
 ## Related
 - [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132`, the hard dependency that had to land first, and the source of finding R1
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the ADR whose §Decision 2 this builds
@@ -46,3 +48,4 @@ Ledger **CLOSED 2026-08-02**, final verdict **✅ approved**, with accepted resi
 - [[systems/testing-and-verification]] · [[systems/knowledge-base-structure]] · [[systems/fkit]] · [[tasks/sprint-2-remove-omnigent]]
 - [[tasks/gloss-the-moved-to-sprint-n-row]] — task `0268`: a live case where this test **cannot help** — the edited file is a declared `audience-adapted` exception, subtracted from the check, so its twin edit is **unenforced by anything**
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/add-dual-home-paritys-missing-accepted-drift-row-and-correct-its-count]] — task `0389`: ⚠️ **this suite reads the module and asserts parity BEHAVIOUR — it never asserts the convention page's prose**, which is why a mirror wrong by two stayed green
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] — kept as a named exception · [[tasks/the-test-scope-reset-tasks-0526-0530]]

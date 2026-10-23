@@ -28,6 +28,8 @@ Done, agent-closed. The change is one heading in one file.
 
 > ⚠️ **Board-rank citations dropped from both bullets above, 2026-07-30.** They read **`0152`** *(priority 129)* and **`0151`** *(priority 121)* — the ranks those tasks held on this page's ship date. **Both have since moved**, which is precisely why `ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md` (owner-approved 2026-07-27) rules a stale **prose** rank citation is repaired by **naming the folder ID and dropping the rank**: refreshing it to today's number *"only reproduces the defect with a fresher date."* The folder IDs `0152` and `0151` were already present and are the permanent carrier, so **nothing identifying was lost**. **Both bullets were treated identically inside one diff, deliberately** — the routing that raised this named only `0151`, and repairing one of two byte-identical shapes is a defect this vault has already had to correct twice. *(Scope note: the convention's frozen-history carve-out covers the **board-cell** form `124 (0150)` only, not this prose form — owner ruling 2026-07-27.)*
 
+> ⛔ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — follow-up `0152` (the `SKILL.md` H1 guard test) is cancelled** (2026-10-20): a test on `SKILL.md` wording is out of scope under ADR-057 §D1 (category 4).
+
 ## Related
 - [[tasks/build-fkit-sprint-ship-loop-skill]] — task 0111, which built the file carrying the drift
 - [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — the ADR the skill implements
@@ -37,3 +39,4 @@ Done, agent-closed. The change is one heading in one file.
 - [[tasks/sprint-2-remove-omnigent]] — the sprint carrying this task
 - [[tasks/correct-claude-mds-stale-skills-for-role-location]] — `0151`, one of the two follow-ups this task correctly refused to fold in
 - [[tasks/convert-skill-descriptions-to-block-scalars-and-guard]] — task `0136` — every skill `description:` to a `>-` block scalar, plus the repo's first `SKILL.md` frontmatter guard
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-2026-10-20-adr-057-test-task-cancellations]] — `0152` cancelled

@@ -50,6 +50,8 @@ was still under review (round 2).**
 - **Depends on:** `0353` — hard.
 - **Blocks:** `0356`, `0357`, `0358` — ⛔ **hard, and Sprint 7's loudest sequencing rule.**
 
+> ⚠️ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — `test/reference-integrity.test.js` is deleted.** Task `0529` deleted it on 2026-10-20 under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (category 5; §D6). The record above is left as written; what it describes no longer runs. The four movers no longer name it; their resolve-every-link hand check is now the only link check on a close.
+
 ## Related
 - [[tasks/sprint-7-stop-manufacturing-record-repair-rows]] — the board this row sits on
 - [[tasks/settle-the-reference-integrity-condition-once-for-both-halves]] — `0353`, whose §4.1 this
@@ -64,3 +66,4 @@ was still under review (round 2).**
 - [[systems/testing-and-verification]] — the suite this joined
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-task-movers-a-step-for-the-named-exempt-keys]] — task `0381`: ⭐ **the movers had no step for the `NAMED_EXEMPT` keys a move invalidates** — this guard's `L3`/`L4` are what go red when one heals or orphans
 - *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484`: the guard's §4.1 functions moved **unchanged** into the non-test module `test/link-condition.mjs`, shared with a new top-level-docs check; the guard's own scanned set, `L7` and live figures are unchanged
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-test-scope-reset-tasks-0526-0530]] — the cut that deleted this guard

@@ -56,3 +56,4 @@ The two copies of the conventions-index README diverge on item 3 of **"The bar f
 - [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — task `0132` — the dual-home reconciliation, and the sweep that **disproved ADR-027's premise**
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`, which recorded the R7 status correction in ADR-033
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — its addendum now notes R7 for this task's `## Status` field only
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/decide-what-catches-a-task-brief-that-has-no-board-row]] — `0296`, closed 2026-10-20 accepting that nothing catches a row-less brief; this task's missing row stays unrepaired

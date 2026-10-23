@@ -133,6 +133,8 @@ The ADR states: ***"Prose is proportionate. There is no mechanical enforcement, 
 > named owner ruling on that exact point** — so a correctly marked spawn departs from no rule and owes **no**
 > per-spawn named-ruling argument here. Tier 1 untouched. Nothing this ADR decided is overturned.
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the ADR-019 `:96` cite in §Decision → 2 and in §Related was corrected by an appended note (task `0516`); §2 is unchanged.** Both mean ADR-019 **§Decision item 4**'s closing sentence, *"Every autonomous choice — every obvious winner — is recorded in the task's worklog decision-log"*. The source ADR now carries **three** dated notes.
+
 ## Related
 - [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158`, the investigation that produced this ADR
 - [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry-requirement]] — task `0162`, which **narrows §5** and owes it a correction note (`0205`)
@@ -163,3 +165,4 @@ The ADR states: ***"Prose is proportionate. There is no mechanical enforcement, 
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/repair-0194s-false-0190-clause-does-not-exist-premise]] — task `0221`: ⭐ **both clause sites are now confirmed SHIPPED and quoted verbatim in `0194`'s brief** — the worker-side clause in `universal-rules.md` and the driver-side clause in the ship-loop
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — the standing named ruling that makes this ADR's per-spawn argument unnecessary for a marked coder spawn
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — ADR-056: Opt-in plan review — agents approve the plan and Codex attacks it before the owner does, switched per sprint… · [[tasks/let-a-spawned-coder-write-under-a-lead-relayed-owner-approval]] — Let a spawned coder write under a lead-relayed owner approval (one approval marker for both drivers)
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/fix-the-stale-adr-019-and-fkit-coder-line-cites-found-during-0496]] — `0516`, the cite correction

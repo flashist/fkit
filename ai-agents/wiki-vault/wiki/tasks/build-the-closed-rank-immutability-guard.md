@@ -58,6 +58,8 @@ nothing runs it automatically**. ⛔ **Never present this guard as continuous pr
 and prove-red must never edit the real boards — the pure-function fixture shape supplies the mutation
 seam; tasks `0214`/`0215` sit on that ground.
 
+> ⚠️ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — `test/closed-rank-immutability.test.js` is deleted.** Task `0529` deleted it on 2026-10-20 under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (category 5 — this repo's own `ai-agents/` content). The record above is left as written; what it describes no longer runs. Nothing left under `test/`, `bin/` or `claude/` checks a closed row's rank, so a renumbered closed row is caught only by review (ADR-035 / ADR-046 dated notes).
+
 ## Related
 - [[tasks/narrow-the-re-rank-exception-an-insertion-is-not-a-re-rank]] — task `0181`, the hard gate: the rule this guard enforces
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — the decision behind the invariant
@@ -70,3 +72,4 @@ seam; tasks `0214`/`0215` sit on that ground.
 - [[tasks/repair-the-three-decay-shapes-across-the-open-backlog-briefs]] — ⚠️ *Added 2026-08-22:* task `0306` — ⛔ **this task's two frozen replay fixtures hold 16 stale `task 43` numerals that must NEVER be swept.** The binding reason is a contract, not a test outcome: the suite declares them byte-exact copies of two named commits, so editing a numeral **falsifies that declaration even where no assertion trips**
 - [[decisions/adr-046-a-sprint-board-may-be-committed-unranked-and-an-erased-rank-flags]] — ⭐ *Added 2026-09-05 (`0358`, sweep C):* widens this guard's `parseBoard` to accept the unranked marker `—`, and makes `P<n>`→`—` on a closed row a **flagged** violation. ⛔ **Decided, not yet implemented** — phase 2 is a coder's act
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/settle-whether-a-sprint-board-may-be-committed-unranked]] — task `0361`, which produced ADR-046
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-test-scope-reset-tasks-0526-0530]] — the cut that deleted this guard

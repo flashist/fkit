@@ -37,6 +37,8 @@ tree. The lead had already proven the library worked on a sibling project by han
 - Evidence-log entry **E3** (ADR-051): the owner found the reader *"very useful"* on the sibling project.
 - ⚠️ Retires with the reader at ADR-052 phase 8.
 
+> ⚠️ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — `test/board-root.test.js` is deleted.** Task `0529` deleted it on 2026-10-20 under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (category 3). The record above is left as written; what it describes no longer runs. Task `0536` kept this task's rule — *tools from fkit, data from the project* — when it shipped the reader; with no `--root`, the installed reader now serves the **current folder's** `ai-agents/` (no walk-up).
+
 ## Related
 - [[tasks/make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads]] — `0411`, the reader this extends
 - [[tasks/keep-a-closed-sprints-tasks-attached-when-its-board-is-named-plan-sprint-n]] — `0415`, the next fix found through `--root`
@@ -45,3 +47,4 @@ tree. The lead had already proven the library worked on a sibling project by han
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board it was filed on
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/make-board-root-test-reliable-under-machine-load]] — `0502`: this task's `test/board-root.test.js` 20 s limit (no recorded reason) turned full runs red under load; now 120 s
 - *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — `0483`, a fix to the same reader; its tests run alongside `board-root`
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/ship-the-read-only-board-reader-to-every-fkit-user-via-fkit-board]] — the reader shipped, this rule kept · [[tasks/the-test-scope-reset-tasks-0526-0530]]

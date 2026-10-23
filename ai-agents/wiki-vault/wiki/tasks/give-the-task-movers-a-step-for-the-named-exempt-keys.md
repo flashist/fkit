@@ -90,6 +90,8 @@ and ⭐ **assert the suite reds AT THE NAMED ASSERTION**, failing on *"red for t
 precisely because this task had not shipped. ⛔ **Re-titling after it shipped is cheap — and was
 explicitly not authorised by that note.**
 
+> ⚠️ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the step this task added is removed, and its test is deleted.** Under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D6 (a), task `0529` removed the movers' instruction to run `test/reference-integrity.test.js` and act on its `NAMED_EXEMPT` keys, and deleted `test/mover-exemption-step.test.js` (category 4) and the reference-integrity test itself. None of the four movers names `NAMED_EXEMPT` any more (ADR-050's dated note). The record above is left as written.
+
 ## Related
 - [[tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]]
 - [[tasks/give-the-sprint-mover-pins-and-successor-mode-durable-prove-red-mutations]]
@@ -100,3 +102,4 @@ explicitly not authorised by that note.**
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]]
 - [[decisions/adr-026-no-mutation-testing-library-prove-red-stays-hand-rolled]]
 - [[systems/testing-and-verification]]
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-test-scope-reset-tasks-0526-0530]] — `0529`, which removed the step

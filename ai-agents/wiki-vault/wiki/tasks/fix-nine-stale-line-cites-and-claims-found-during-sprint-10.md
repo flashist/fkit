@@ -67,3 +67,4 @@ differently:**
 - [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484`, sequenced after this task because it reads `RELEASING.md`
 - [[tasks/sprint-10-the-0472-0482-batch]] · [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]
 - [[systems/knowledge-base-structure]] — the append-only, dated-note pattern this task followed in three ADRs
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/fix-the-stale-adr-019-and-fkit-coder-line-cites-found-during-0496]] — `0516`, the follow-up that re-pointed the ADR-019 cites this task's inserts pushed further off

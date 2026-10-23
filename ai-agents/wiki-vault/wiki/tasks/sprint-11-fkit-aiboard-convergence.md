@@ -82,3 +82,4 @@ The board is a **1,413-line** record of one very long day (2026-09-18) plus foll
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/fkit]] — the team page's note on the decided replacement of the markdown store
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/sprint-10-the-0472-0482-batch]] — the Sprint 10 that was left empty here, opened 2026-10-04 by owner ruling
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`, which replaced the machine path in row D3
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/port-aiboard-to-node-in-board-the-adr-052-phase-2-tasks-0417-0423]] · [[tasks/sprint-14-port-aiboard-to-node-adr-052-phase-2]] — ADR-052 phase 2, built and gated in Sprint 14

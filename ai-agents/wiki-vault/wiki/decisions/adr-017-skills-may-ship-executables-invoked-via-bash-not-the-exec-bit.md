@@ -43,6 +43,8 @@
   - **fkit now has consumer-side code that is not markdown.** The review surface grows.
 - **Re-raise only if:** a shipped executable needs **something beyond `bash`** (rule 3 sends it back to the owner — *not the implementer's call*); `install.sh` ever grows a general chmod pass (**not before**); test infra ever becomes something consumers install; or **a shipped executable ever needs to write** — everything here assumes read-only, and a writing executable on an unattended path is **the class that produced ADR-015's invariant**.
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the fence rule 4 widened no longer exists; ADR-017's decision is untouched.** ADR-014 §2's fence is replaced by [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1, which takes **rule 4 in unchanged** as its category 2 (shipped skill executables) — so they stay in scope on ADR-057's fence, not as a widening of ADR-014's. ⚠️ Separately, task `0510`'s plan surfaced that `throughput.mjs` needs `node` while rule 3 allows shipped scripts `bash` only; that question is open backlog `0525`.
+
 ## Related
 - [[decisions/adr-014-how-fkit-tests-itself]] — §1 and §4 still bind; **§2's fence is widened by rule 4**; its `install.sh:43` fact is the foundation both rest on
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — the invariant a *writing* shipped executable would answer to
@@ -55,3 +57,4 @@
 - [[tasks/add-launcher-contract-smoke-script]]
 - [[tasks/sprint-2-remove-omnigent]]
 - [[systems/fkit]]
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] — category 2 is this ADR's rule 4 · [[tasks/clean-up-existing-code-comments-pilot-launcher-init-heal-0507-0508-0510]] — where the `0525` question surfaced

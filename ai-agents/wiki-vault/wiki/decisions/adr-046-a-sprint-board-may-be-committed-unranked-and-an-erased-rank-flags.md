@@ -93,6 +93,8 @@ and surfaced it instead of papering over it.
 whether `—`→`P<n>` should flag — the stricter reading was considered and **refused by name**, because
 it would flag a lawful act both boards instruct.
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the test that executed this rule is deleted; the rule stands, and nothing executes it.** `0529` deleted `test/closed-rank-immutability.test.js` and its fixtures under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (category 5). The rule now lives in **two** places — this ADR and `backlog.md`'s clause — and neither is executable: a `P<n>`→`—` erase or `P<n>`→`P<m>` renumber on a closed row is caught **only by review**. "FLAG" in the transition table is now a rule, not a check that fires. ⛔ Still no decision overturned.
+
 ## Related
 - [[tasks/build-the-closed-rank-immutability-guard]] — the guard this ADR widens; ⛔ **phase 2, the implementation, is a coder's act gated on this ADR** and is not the architect's
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — the adjacent rank-integrity ruling
@@ -100,3 +102,4 @@ it would flag a lawful act both boards instruct.
 - [[decisions/adr-045-an-in-flight-review-finding-terminates-in-the-ledger-not-a-new-task]] — the other Sprint 7 decision ingested in the same 2026-09-05 pass
 - [[tasks/sprint-3-close-the-rank-integrity-loop]] — the rank-integrity lineage this closes a gap in
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/settle-whether-a-sprint-board-may-be-committed-unranked]] — task `0361`, which produced ADR-046 · [[tasks/sprint-7-stop-manufacturing-record-repair-rows]] — Sprint 7, the board that attacked the record-repair rate (archived 2026-09-08) · [[tasks/sweep-c-the-wiki-vault-resyncs-as-one-pass]] — task `0358`, Sweep C — the wiki-vault pass that advanced the watermark over a bounded-out backlog
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] · [[tasks/build-the-closed-rank-immutability-guard]] — the deleted guard

@@ -48,3 +48,4 @@ going to implement it at all."* Safe by construction, or dropped.
 - [[decisions/adr-049-owner-verified-close-requires-a-verified-human-principal-no-channel-supplies-one]] — what capture is not
 - [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — why only the lead's session can ask, so relayed questions need a task tag
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — where `0485`–`0491` were filed
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/research-and-decide-how-fkit-runs-a-sprint-retrospective]] — `0500`, which names the owner-involvement capture as future retro evidence

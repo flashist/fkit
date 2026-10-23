@@ -73,6 +73,8 @@ prose (`SKILL.md`, `claude/agents/*.md`) is not held to it.
   mandated header comment, and `fkit-heal/check.sh`'s `# Outcomes:` header (cited by `architecture.md`) — routed to the
   producer, and — checked on disk at `96c7263` — named as must-keep in the `0509` and `0510` briefs.
 
+> ✅ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the cleanup of existing comments has begun.** Three of the nine units shipped in Sprint 12 — the `0507` pilot (which set the method), `0510` and `0508`: **1,721 → 500** comment lines in 12 files. Six units (`0509`, `0511`–`0515`) are open. ⚠️ `test/code-comment-rule.test.js`, this task's wording pin, was deleted by `0529` (ADR-057 category 4).
+
 ## Related
 - [[systems/knowledge-base-structure]] — the thirteenth convention, `code-comments.md`
 - [[tasks/write-the-durable-citation-anchors-convention-page]] — rule 2's "point by name, never by line number"
@@ -85,3 +87,4 @@ prose (`SKILL.md`, `claude/agents/*.md`) is not held to it.
 - [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484`, whose comment drift went to cleanup task `0512`
 - [[systems/testing-and-verification]] · [[tasks/sprint-10-the-0472-0482-batch]] · [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — why the convention ships byte-identical in both homes · [[tasks/document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page]] — `0501`, built right after it on the same manifest
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/clean-up-existing-code-comments-pilot-launcher-init-heal-0507-0508-0510]] — the cleanup series · [[tasks/the-test-scope-reset-tasks-0526-0530]] — the pin's deletion

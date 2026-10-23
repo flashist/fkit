@@ -113,6 +113,8 @@ R4 offered a **narrower alternative** — the driver relays every accepted fix f
 >   driver's `AskUserQuestion`; **the owner still approves last**; the driver also writes `plan-review.md`. Decision
 >   7's split and A3's cost unchanged.
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — two ADR-019 line cites in §Amendment → A2 were corrected by an appended note (task `0516`); A2 is unchanged.** `:96` means ADR-019 **§Decision item 4**'s closing sentence, *"Every autonomous choice — every obvious winner — is recorded in the task's worklog decision-log"*; `:148-150` means ADR-019 **§Consequences → Negative / costs**, *"A soft self-classification boundary"*. The source ADR now carries **five** dated notes.
+
 ## Related
 - [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — the conductor this applies
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — **amends** Decisions 3 & 5's close step
@@ -150,3 +152,4 @@ R4 offered a **narrower alternative** — the driver relays every accepted fix f
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/let-a-spawned-coder-write-under-a-lead-relayed-owner-approval]] · [[tasks/build-the-opt-in-plan-review-step-off-by-default]] — the two Sprint 10 tasks that extended it
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/sprint-10-the-0472-0482-batch]] — Sprint 10 — the `0472`–`0482` batch: steadier and faster checks, a correct `fkit update`, honest docs, opt-in plan re…
 - *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`: the relay path — standing option added by the relayer, merge fallback keeping both knock-ons, a non-choice reply is never approval
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/fix-the-stale-adr-019-and-fkit-coder-line-cites-found-during-0496]] — `0516`, the cite correction

@@ -114,3 +114,4 @@ owner rejected *"no storage convergence, ever"*. The verdict's file is **not edi
 - [[tasks/keep-a-closed-sprints-tasks-attached-when-its-board-is-named-plan-sprint-n]] — task `0415`
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/fkit]] — the team page's data-model note
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[tasks/tidy-fkits-documents-after-adr-052-machine-paths-stale-pointers-adr-049-oqs]] — `0472`, which closed the evidence log and removed the machine path
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge]] — the interim reader (D2) now ships to every user; D1 (one store) unchanged

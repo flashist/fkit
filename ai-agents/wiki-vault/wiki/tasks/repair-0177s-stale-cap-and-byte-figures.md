@@ -33,9 +33,12 @@ Four `Edit` calls on **one file** — `0177`'s brief. Nothing else was opened fo
 
 ⛔ **No test was run and none was claimed** — the change is one brief's prose.
 
+> ⛔ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — `0219` (assert the ≥ 400 B target in a test) is cancelled** (2026-10-20) under ADR-057: the target stays a prose rule; `rules-block-budget` keeps only init's `RULES_MAX` guard.
+
 ## Related
 - [[tasks/verify-the-codex-half-of-the-comment-stripping-canary]] — `0177`, the brief this repaired and the row it unblocked
 - [[tasks/reclaim-rules-block-budget-headroom]] — `0130`, which set the ≥400 B standing target and the superseded figures
 - [[tasks/add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block]] — `0190`, the owner-signed 4096 → 4352 bump
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — `P3`, ranked ahead of `0177` for exactly this reason
 - [[systems/testing-and-verification]] — the rules-block budget test and its cap gate
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-2026-10-20-adr-057-test-task-cancellations]] — `0219` cancelled

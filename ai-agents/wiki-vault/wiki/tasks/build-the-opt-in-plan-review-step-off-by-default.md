@@ -43,6 +43,8 @@ ADR-032); nothing about it may be removed or weakened.
   > ⭐ *Dated note 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* the **first trial log** is
   > `reports/2026-10-11-plan-review-trial-0504.md` (task `0504`) — summarized on the ADR-056 page. `0474` is still open.
 
+> ⚠️ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — 13 more trial logs; the trial is still open.** On 2026-10-20 a spawned producer back-filled one log per task from existing files (owner, *"Count all 13, log each (Recommended)"*): `reports/2026-10-20-plan-review-trial-<NNNN>.md` for `0284`, `0334`, `0385`, `0503`, `0507`, `0508`, `0510`, `0516` (Sprint 12) and `0526`–`0530` (Sprint 13). Time added before the owner saw a plan: about 9½–31 min per task, mostly estimates; *"did it help?"* not asked. `0474` moved to Sprint 12 at Sprint 10's close and stays open; no default change is ruled.
+
 ## Related
 - [[decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] — the decision
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] · [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — the plan gate, unchanged
@@ -51,3 +53,4 @@ ADR-032); nothing about it may be removed or weakened.
 - [[tasks/sprint-10-the-0472-0482-batch]] — `P9`; `0474` is `P10`
 - [[systems/review-and-model-diversity]]
 - *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`, the first real run of plan review
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/sprint-12-set-a-nine-backlog-tasks-goal-not-set]] — the `--plan-review` runs · [[tasks/sprint-13-reset-fkits-tests-to-shipped-script-behaviour]] — five more trial tasks

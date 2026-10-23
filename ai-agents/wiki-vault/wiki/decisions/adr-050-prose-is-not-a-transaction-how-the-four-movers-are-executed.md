@@ -65,6 +65,8 @@ judgement half); D alone (a verifier detects but cannot execute).
   mover could not see — **were one bug**: the state transition was prose with no call site, no exit code
   and no test. ADR-052 resolves it by moving the transition into the board itself.
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the file quoted in §Context 6 is deleted; the finding stands.** `0529` deleted `test/mover-exemption-step.test.js` (category 4) and `test/reference-integrity.test.js`, whose `NAMED_EXEMPT` keys the movers' exemption step maintained, under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]]. None of the four movers names `reference-integrity` or `NAMED_EXEMPT` any more. So **the movers now have no test at all**, of prose or of behaviour — *"not one test that executes it"* still holds.
+
 ## Related
 - [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — `fkit board` is the command; the build is discharged
 - [[decisions/adr-049-owner-verified-close-requires-a-verified-human-principal-no-channel-supplies-one]] — the sibling ADR whose D8 this discharges
@@ -76,3 +78,4 @@ judgement half); D alone (a verifier detects but cannot execute).
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/sprint-11-fkit-aiboard-convergence]] — the board it was signed on
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[systems/fkit]] — the team page's note that no hook can see a file write
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[decisions/adr-053-owner-involvement-capture-closed-format-launcher-only-hook-log]] — ADR-053: Owner-involvement capture — closed-format, launcher-only hook log; a deterministic per-task line; "autonomou…
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] — §D6 (a), the movers' link-test instruction removed

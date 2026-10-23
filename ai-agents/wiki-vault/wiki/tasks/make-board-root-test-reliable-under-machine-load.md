@@ -34,6 +34,8 @@ out** — any fix must keep a CLI that wrongly starts a server turning R3 red. �
 - The full-run times measured around it (23.1 min at `0502` V6, and more under load) fed task `0503` (open:
   re-measure locally and on CI).
 
+> ⚠️ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — `test/board-root.test.js` is deleted.** Task `0529` deleted it on 2026-10-20 under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (category 3 — repo-only `bin/` tooling). The record above is left as written; what it describes no longer runs. Its `CLI_TIMEOUT_MS` fix went with it.
+
 ## Related
 - [[tasks/find-why-prove-red-step-0a-sometimes-goes-red-and-make-it-deterministic]] — `0477`, the same class of fix; its edit lives in the same file
 - [[tasks/let-the-read-only-board-reader-serve-another-projects-ai-agents-tree-root-flag]] — `0412`, which introduced the file and the 20 s value
@@ -42,3 +44,4 @@ out** — any fix must keep a CLI that wrongly starts a server turning R3 red. �
 - [[tasks/make-a-later-sprint-blocker-visible-0492-0495]] — the runs it kept turning red
 - [[systems/testing-and-verification]] · [[tasks/sprint-10-the-0472-0482-batch]]
 - *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — `0483`, the other Sprint 10 change to the board reader's tests
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-test-scope-reset-tasks-0526-0530]] — the cut that deleted this test

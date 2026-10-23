@@ -85,3 +85,4 @@ Both owner-ruled out of `0327` and filed as **`0336`**.
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — the board this ran on
 - [[systems/review-and-model-diversity]] — *added 2026-08-29:* the two-reviewer contract, and the page recording that ⭐ **this task disproved a Codex clearance by measurement**
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — *added 2026-08-29:* the board where this task's four unfixed audit findings (`0328`–`0330`, plus `0336`) sit open
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/fix-the-launchers-symlink-blind-agents-fail-safe]] — `0334`, the launcher-side symlink refusal

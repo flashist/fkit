@@ -55,6 +55,8 @@ The closed-row rule is **absolute and outranks the exception**, exactly as it al
 - **Not covered:** whether the open rows should be rolled onto a fresh board to restore reachability wholesale — **deferred by the owner** 2026-08-01 (task `0185`).
   - *✅ Dated correction 2026-08-06:* the owner signed — **Sprint 2 rolled to Sprint 3** ([[tasks/decide-whether-sprint-2-rolls-over-to-a-fresh-board]]); ranks restart at `P1`, no closed row renumbered on any board, this ADR's wall re-applying the moment the first Sprint 3 row closed.
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the guard was built later, and is now deleted; the decision is untouched.** `test/closed-rank-immutability.test.js` (added 2026-08-06, later widened under ADR-046) was deleted by `0529` on 2026-10-20 with its two fixtures, under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (category 5). Nothing left under `test/`, `bin/` or `claude/` checks a closed row's rank, so **a renumbered closed row is again caught only by review**. The closed-row rule and this ADR's narrowing stand as written rules.
+
 ## Related
 - [[tasks/decide-how-an-owner-records-a-merit-ordering]] — task `0174`, the investigation and decision report this ADR records (§4.2)
 - [[tasks/decide-the-durable-citation-form-for-mutable-coordinates]] — task `0160`, which ruled this question **out of class** and handed it back as its own task; it also supplies the citation form used here — **and this ADR extends it: a bullet ordinal is a line number wearing different clothes**
@@ -85,3 +87,4 @@ The closed-row rule is **absolute and outranks the exception**, exactly as it al
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/backfill-a-sprint-status-onto-every-existing-sprint-plan]] — task `0340`, the row that moved `P6`→`P3`
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — a board that records its rank/merit disagreement rather than renumbering
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/sprint-10-the-0472-0482-batch]] — Sprint 10 — the `0472`–`0482` batch: steadier and faster checks, a correct `fkit update`, honest docs, opt-in plan re…
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] · [[tasks/build-the-closed-rank-immutability-guard]] — the deleted guard

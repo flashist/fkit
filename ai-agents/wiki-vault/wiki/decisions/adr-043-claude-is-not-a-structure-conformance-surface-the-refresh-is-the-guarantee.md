@@ -159,6 +159,8 @@ and is cheaper as **provenance than as conformance**.
 or the observation that the launch notice never reports `.claude/`. **All three are this decision,
 working as ruled.**
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — Option 1's cost 4 (*"The build test blocks it concretely"*) no longer exists; the rejection stands on the others.** `0529` deleted `test/structure-spec.test.js` under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (category 4). `claude/structure-spec.md` now names heal's `check.sh` and `repair.sh` as the tables' readers and says no test checks the tables against `claude/scaffold/` any more. `test/structure-manifest.test.js` **stays** — ADR-057's fourth named exception.
+
 ## Related
 - [[decisions/adr-015-additive-launch-convergence-no-migration-mechanism]] — the `ai-agents/`
   create-if-absent invariant. **Not touched, not amended** (C2); this ADR records where its scope ends
@@ -183,3 +185,4 @@ working as ruled.**
 - [[tasks/sprint-5-fix-what-a-real-project-found]] — the board `0255` closed on
 - [[tasks/wiki-ingest-of-adr-043-claude-is-not-a-structure-conformance-surface]] — ⚠️ *Added 2026-08-14:* task `0293`, the row that carried this ADR into the vault. Filed rather than run on an owner ruling (**"Batch it — file it, run later"**) to avoid a fourth same-day write to one page; ⛔ **its own "do not touch" constraint was then breached and reverted** by the sync that discharged it
 - [[tasks/scope-readme-54s-fkit-managed-structure-sentence-to-what-the-check-covers]] — ⚠️ *Added 2026-08-14:* task `0292`, the follow-on brief §C6 ruled for — landed, closed, and carrying two owner-ruled residuals, one of which (silent staleness) is now task `0298`, open
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] — the structure-spec test's deletion; the manifest test kept

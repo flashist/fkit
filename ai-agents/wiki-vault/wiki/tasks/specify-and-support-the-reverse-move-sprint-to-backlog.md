@@ -60,6 +60,8 @@ Done, **agent-closed — not owner-verified**. Review verdict: **⚠️ Changes 
 
 **Named, not filed:** the brief deliberately refused to build a `dashboard.sh` path override into `prove-red.sh` as part of this task, on the grounds that it is *"a change to the test architecture, not a test addition"* — and required the finding be handed back even if the answer was "it would be easy", because *a silent omission here is the exact class of gap this whole task exists to close.*
 
+> ⛔ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — both follow-ups are cancelled** (2026-10-20): `0214` (wire the repaired R3/R4 guards as prove-red mutations) and `0215` (the work-dir `package.json` landmine — its target machinery was deleted by `0529`). ⚠️ Residual: the empty `package.json` marker lines in `test/prove-red.sh` remain.
+
 ## Related
 
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board this move targets, and its unranked-by-design rule
@@ -71,3 +73,4 @@ Done, **agent-closed — not owner-verified**. Review verdict: **⚠️ Changes 
 - [[decisions/adr-014-how-fkit-tests-itself]] — `node --test`, zero devDeps, the suite this extends
 - [[tasks/tighten-the-wiki-completion-flag-block]] — `0173`, closed the same day; this move surrendered the two ranks its ordering note cites
 - [[systems/testing-and-verification]] — the contract suite and `prove-red.sh`
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-2026-10-20-adr-057-test-task-cancellations]] — `0214` and `0215` cancelled

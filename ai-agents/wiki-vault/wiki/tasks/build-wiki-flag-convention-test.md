@@ -58,6 +58,8 @@ The test asserts five subjects and that the three copies are **uniform**; `extra
 - **R10** — CRLF checkouts unsupported, matcher deliberately unchanged, the header's claim corrected.
 - ⛔ **Two owner-ruled follow-ups remain the PRODUCER's to file** — the `0125` R3 discharge note (its gate now satisfied) and a pre-existing prove-red wording fix.
 
+> ⚠️ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — `test/wiki-flag-convention.test.js` is deleted.** Task `0529` deleted it on 2026-10-20 under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (category 4 — prompt wording). The record above is left as written; what it describes no longer runs.
+
 ## Related
 - [[tasks/wiki-skills-flag-ready-to-close]] — `0125`, whose prose-only convention this finally enforces and whose R3 it discharges
 - [[tasks/wiki-flag-carries-folder-id-and-brief-path]] — `0153`, and the later `0173` rewrite the constants had to be re-derived past
@@ -67,3 +69,4 @@ The test asserts five subjects and that the three copies are **uniform**; `extra
 - [[systems/knowledge-base-structure]] — the wiki completion-flag convention itself
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — the board this ran on
 - [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — *added 2026-08-29 (lint):* `0191`, whose *"no test reads a `SKILL.md` body"* line this task made false **as an unqualified claim** — ⛔ **and no truer for that file**: this test's three-file list is hard-coded on purpose, with no `SKILL.md` walk
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-test-scope-reset-tasks-0526-0530]] — the cut that deleted this test

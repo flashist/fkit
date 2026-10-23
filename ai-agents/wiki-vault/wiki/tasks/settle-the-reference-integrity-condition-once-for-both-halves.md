@@ -48,6 +48,8 @@ you transcribe it" warning as a result.
 - **Depends on:** nothing.
 - **Blocks:** `0354`, `0237` — both hard.
 
+> ⛔ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the condition is no longer enforced by tests.** The source report now carries a ⛔ reversal notice (2026-10-19, `0527`): overturned by [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D6 — do not implement against §4's matcher and do not add a test for this condition. **Survives:** §1's principle (*"A markdown link is a pointer. A `path` + line-number citation is a claim."*) as a written rule with no test. **Retires:** §4's matcher (incl. `NAMED_EXEMPT`) and the measured red sets. Both tests were deleted by `0529`; the movers' hand check replaces them.
+
 ## Related
 - [[tasks/sprint-7-stop-manufacturing-record-repair-rows]] — the board this row sits on
 - [[tasks/build-the-link-resolution-guard]] — `0354`, which transcribes §4.1
@@ -61,3 +63,4 @@ you transcribe it" warning as a result.
 - [[systems/testing-and-verification]] — where both guards landed
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sweep-a-the-citation-rot-class-one-verified-pass]] — task `0356`, Sweep A — the citation-rot class in one pass
 - *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484`, which applies the §4.1 link condition to the top-level docs without widening the guard's scanned set
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] — §D6 retires the tests · [[tasks/the-test-scope-reset-tasks-0526-0530]]

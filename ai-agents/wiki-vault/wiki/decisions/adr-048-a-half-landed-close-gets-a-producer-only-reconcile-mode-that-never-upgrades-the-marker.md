@@ -147,6 +147,8 @@ changes is **where their agent stop leads**.
 `/fkit-task-cancelled` needs the mirror — each was considered and refused by name. The one left-open
 re-raise path is the owner-present sub-path that would close the first residual.
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the guard §Q3's *"Still run"* bullet names is deleted.** `0529` deleted `test/reference-integrity.test.js` under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D6; `fkit-task-done`'s step 5 now makes its resolve-every-link hand check *"the only link check on a close"*. Must-never item 9's test half and call C8's *"the reference-integrity guard still runs"* have nothing left to act on. This ADR is obsolete in any case (its ⛔ notice, ADR-052: reconcile mode is not to be built).
+
 ## Related
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — ⛔ **makes this ADR obsolete** · [[tasks/the-2026-09-30-adr-052-task-dispositions]] — `0135` cancelled · [[decisions/adr-050-prose-is-not-a-transaction-how-the-four-movers-are-executed]] — would have re-homed this mode inside a deterministic command · [[decisions/adr-049-owner-verified-close-requires-a-verified-human-principal-no-channel-supplies-one]] — cites this ADR as the nearest precedent for *never upgrade the marker*
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — the producer-only rule this inherits, and the limit this ADR **widens by name**
@@ -158,3 +160,4 @@ re-raise path is the owner-present sub-path that would close the first residual.
 - [[decisions/adr-047-a-sprint-has-an-explicit-status-and-current-means-every-in-progress-sprint]] — the other Sprint 9 decision ingested in this pass
 - [[tasks/decide-the-sanctioned-repair-path-for-a-half-landed-close]] — task `0134`, the row that produced this ADR
 - [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — the board that shipped it; its success criterion **9** scores this ADR's three conjuncts
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] — §D6, the link check's removal

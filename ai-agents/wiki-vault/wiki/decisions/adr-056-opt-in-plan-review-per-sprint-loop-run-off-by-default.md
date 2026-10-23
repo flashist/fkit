@@ -112,6 +112,8 @@ convert the task store.
 >   explanation, I think it's worth it, but I would like to do a couple of other tasks with it too."* ⛔ **Not a
 >   ruling to make it the default** — Decision 9 still needs a new owner ruling; `0474` stays open.
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — 13 more trial logs.** On 2026-10-20 a spawned producer back-filled one trial log per task for `0474` from existing files (owner, *"Count all 13, log each (Recommended)"*): `ai-agents/knowledge-base/reports/2026-10-20-plan-review-trial-<NNNN>.md` for `0284`, `0334`, `0385`, `0503`, `0507`, `0508`, `0510`, `0516` (Sprint 12) and `0526`–`0530` (Sprint 13). Time added, "plan ready" → "presented to the owner": **about 9½ to 31 minutes per task, mostly estimates**. "Did it help?" and "fresh launch?" are marked *not asked / unknown* — written from the files only. ⛔ **No default change is ruled**; `0474` stays open (`🔄 In progress` on Sprint 12).
+
 ## Related
 - [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] · [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] · [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] — each carries a pointer note here
 - [[decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door]] — the honesty clause restated in Decision 8
@@ -125,3 +127,4 @@ convert the task store.
 - [[tasks/sprint-10-the-0472-0482-batch]] — where `0474`, the trial, stays open
 - [[systems/review-and-model-diversity]] · [[systems/fkit]] — the task-folder data model `plan-review.md` joins
 - *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`, the first task planned with plan review on (trial log above)
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/sprint-12-set-a-nine-backlog-tasks-goal-not-set]] — the `--plan-review` runs the new logs come from

@@ -85,3 +85,4 @@ Task 53 applies the single contract edit this requires: a scoped note in `fkit-c
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — this ADR's fix discipline transfers to the lead-driven Process-review path
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[tasks/build-the-opt-in-plan-review-step-off-by-default]] — Build the opt-in plan-review step (off by default)
 - *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496`, which added the item-4 cite note and filed `0516`
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/fix-the-stale-adr-019-and-fkit-coder-line-cites-found-during-0496]] — `0516`: cites into this ADR re-pointed by heading and quote

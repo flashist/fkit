@@ -39,6 +39,8 @@ authority for a task's state (ADR-029).
   test G pins `null` → 404).
 - ⚠️ ADR-052 retires this read-only reader at its phase 8 (Backlog task `0467`); this fix lives until then.
 
+> ⚠️ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — `test/board-reader.test.js` is deleted.** Task `0529` deleted it on 2026-10-20 under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (category 3 — repo-only `bin/` tooling). The record above is left as written; what it describes no longer runs. The fix itself stays in `bin/fkit-board.mjs`, which now **ships** to every user as `fkit board` ([[decisions/adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge]]) — with no automated test.
+
 ## Related
 - [[tasks/find-why-prove-red-step-0a-sometimes-goes-red-and-make-it-deterministic]] — `0477`, source of residual R-c
 - [[tasks/make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads]] — `0411`, the reader this hardens
@@ -47,3 +49,4 @@ authority for a task's state (ADR-029).
 - [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — the board that replaces this reader
 - [[tasks/sprint-10-the-0472-0482-batch]] · [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]
 - [[systems/testing-and-verification]] — the reader's tests and the `fs`-fake pattern
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-test-scope-reset-tasks-0526-0530]] — the cut · [[tasks/ship-the-read-only-board-reader-to-every-fkit-user-via-fkit-board]] — the reader now ships

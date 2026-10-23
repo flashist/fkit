@@ -68,6 +68,8 @@ The owner's scope ruling (Q3) triggers precisely that condition. **The seat is e
 4. **The bare-subagent investigation** — worth running **before** building the seat, to learn whether a plain subagent with these tools can actually drive and judge an app.
 5. **fkit-wiki ingests this ADR.** *(Done — this page, 2026-07-19. The vault's own seven-role claims were corrected in the same sync.)*
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — of the two regression-gate pieces §Decision 7 names, the CI piece is in place and prove-red moved; the decision is untouched.** `.github/workflows/test.yml` runs `npm test` on every push to `main` and every PR; `prove-red.sh` was taken out of `npm test` by `0529` under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D3 and runs nightly via `.github/workflows/prove-red.yml` since `0530` (once that file is on `main`). **Whether this changes what the tester waits behind is not decided** in the source ADR.
+
 ## Related
 - [[decisions/adr-023-fkit-git-agent-is-not-built]] — its Decision 3 (*"the team stays seven roles"*) is a **consequence of that ruling, not an independent constraint**; ADR-023 is **not superseded**, but its count claim is no longer current
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — the tool-restriction posture this seat's unhardened envelope sits in tension with
@@ -90,3 +92,4 @@ The owner's scope ruling (Q3) triggers precisely that condition. **The seat is e
 - [[tasks/amend-project-brief-for-lead-conductor]] — Amend PROJECT.md for the evolved `fkit-lead` conductor
 - [[tasks/design-fkit-lead-as-orchestrating-front-door-and-sprint-ship-loop]] — Design fkit-lead as the orchestrating front door, and the `fkit-sprint-ship-loop` skill
 - [[tasks/wiki-resync-eighth-role-after-source-docs-land]] — Wiki resync for the eighth role — after the source docs land
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] — the prove-red lane change

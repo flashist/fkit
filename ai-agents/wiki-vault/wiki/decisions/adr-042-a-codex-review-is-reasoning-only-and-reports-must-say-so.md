@@ -180,6 +180,8 @@ fkit no longer uses, in three places.** Routing that is the producer's call and 
 not retro-edited; **this note is itself the pattern***); dated reports and closed ledgers; and
 `ai-agents/wiki-vault/` (ADR-005 — the vault follows when the ADR is ingested, which is this page).
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — the two `closed-rank-0174` fixtures named first in §"Sites deliberately NOT to be changed" are deleted; the decision is untouched.** `0529` deleted them with `test/closed-rank-immutability.test.js` under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1. Still true: `test/prove-red.sh` opens its work dir with `mktemp -d`. ⛔ No decision reopened. ⚠️ Also stale in the source ADR, by task `0385`'s own flag: the old fixed Codex prompt path — reviews now write a **per-run** prompt file (open backlog `0518` updates it) — see [[tasks/give-the-codex-adversarial-prompt-a-task-keyed-path]].
+
 ## Related
 - [[decisions/adr-009-claude-code-native-is-the-only-runtime]] — Codex required, not optional; the source of the model-diversity guarantee this ADR **bounds**
 - [[decisions/adr-022-tools-unrestricted-except-adversarial-reviewer]] — the one deliberately restricted role; the basis of the option-3 objection, and the invariant D2 gives up
@@ -197,3 +199,4 @@ not retro-edited; **this note is itself the pattern***); dated reports and close
 - [[decisions/adr-045-an-in-flight-review-finding-terminates-in-the-ledger-not-a-new-task]] — ⭐ *Added 2026-09-05 (`0358`, sweep C):* the other live constraint on where a review's finding may terminate
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/sweep-a-the-citation-rot-class-one-verified-pass]] — task `0356`, Sweep A — the citation-rot class in one pass · [[tasks/sweep-c-the-wiki-vault-resyncs-as-one-pass]] — task `0358`, Sweep C — the wiki-vault pass that advanced the watermark over a bounded-out backlog
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode]] — ⚠️ this ADR's *"ADR-009 makes Codex required, not optional"* is history as of its date. ADR-054 (2026-10-05) makes Codex optional but recommended and turns this ADR's **"Codex unavailable"** coverage state into a **supported setup**, not only a mid-session outage; the flag must stay loud. The sandbox flag (D2) is untouched by ADR-054.
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] · [[tasks/give-the-codex-adversarial-prompt-a-task-keyed-path]] — `0385`, the per-run prompt path

@@ -46,6 +46,8 @@ Two constraints bound the options: **ADR-014** keeps devDependencies at zero, so
 - **Sequencing: repair the live defects FIRST, then build the guard** — task `0188` before task `0189`. ⚠️ **On the owner's ruling alone, verbatim — *"do not let the build quietly repair its own corpus"*.** **TWO false mechanisms were attached to this sequencing note in two consecutive revisions; both were asserted rather than measured, both were plausible, both shipped, and both are withdrawn. No mechanism replaces them.**
 - **The other half of the problem belongs to task `0137`** (the *"verify against the claim"* convention). The two **compose rather than substitute**: *`0137` teaches the reader to ask the right question of a citation; this hands them the complete list of citations to ask it about.*
 
+> ⚠️ **Dated pointer 2026-10-23 (sync `96c7263`→`5ccf2c2`) — `test/skill-frontmatter.test.js`, named twice in this ADR's matching-rules passage, is deleted; the decision is untouched.** `0529` deleted it on 2026-10-20 under [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] §D1 (category 4); `test/harness.mjs`, named beside it, stays. The passages naming it are dated measurements of the 2026-08-02 tree and stay true as records.
+
 ## Related
 - [[tasks/investigate-the-skill-ownership-fact-inventory-gap]] — task `0142`, the investigation, the five live defects, and the report that shipped an incomplete inventory **twice**
 - [[decisions/adr-027-dual-home-parity-is-a-dev-time-convention-plus-test]] — the precedent this copies almost exactly: convention + hand-rolled test + machine-readable exception list with mandatory reasons
@@ -66,3 +68,4 @@ Two constraints bound the options: **ADR-014** keeps devDependencies at zero, so
 - [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200`, which hit the same gap from the other side: **every "which files would change" count in its report is a hand grep**, and the four-mirror checklist was **incomplete again, in both directions**
 - [[tasks/repair-the-five-live-ownership-fact-defects]] — *added 2026-08-29:* `0188`, which ships **before** the registry build on the owner's ruling ⛔ *"do not let the build quietly repair its own corpus"* — and whose five defects the registry tripwire ⛔ **would never have surfaced**
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/repair-0194s-false-0190-clause-does-not-exist-premise]] — task `0221`: ⭐ **`0194` (the assessment against this registry) remains blocked on `0189` alone** — its other two premises were repaired, not its blocker
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] — the frontmatter test's deletion

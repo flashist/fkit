@@ -1,10 +1,14 @@
 # Sprint 10 — the `0472`–`0482` batch: steadier and faster checks, a correct `fkit update`, honest docs, opt-in plan review, and the owner-involvement record (Phase A only)
 
-**Source**: `ai-agents/sprints/sprint-10.md`
+**Source**: `ai-agents/sprints/done/sprint-10.md` *(archived 2026-10-15; was `ai-agents/sprints/sprint-10.md`)*
 **Status**: in-progress — line-3 banner `🔄 In progress — 2026-10-04` (read at `79a7dbf`, 2026-10-10)
 **Sprint/Tag**: Sprint 10 · opened 2026-10-04 · driven by `/fkit-sprint-ship-loop` from `fkit-lead` sessions
 > ✅ *Dated update 2026-10-14 (sync `79a7dbf`→`baf6a4e`), lines above left as written:* banner unchanged —
 > still `🔄 In progress — 2026-10-04` at `baf6a4e`; the board now has **24 rows** (owner ruling R11, below).
+> ✅ *Dated update 2026-10-23 (sync `96c7263`→`5ccf2c2`), lines above left as written:* **closed** — line 3 now reads
+> `✅ Done — 2026-10-15. Closed by /fkit-sprint-done (agent-closed — not owner-verified). Superseded by Sprint 12`.
+> 23 rows closed (22 ✅, 1 ⛔); the one open row, `0474`, was relocated to Sprint 12. The `**Source**` path above was
+> updated in place to the archive (the board moved); the old path is kept beside it.
 
 ## Goal
 Ship the user-facing tasks filed 2026-09-30 → 2026-10-02 (`0472`–`0482`, minus `0478`, already closed):
@@ -133,3 +137,4 @@ text verified as the owner's verbatim words.**
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`, closing a one-way link):* [[systems/fkit]] — fkit · [[systems/testing-and-verification]] — Testing & Verification
 - *Added 2026-10-14 (sync `79a7dbf`→`baf6a4e`):* [[tasks/answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn]] — `0504`, `P18`
 - *Added 2026-10-15 (sync `baf6a4e`→`96c7263`):* [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]] — `0506`, `P20` · [[tasks/document-how-depends-on-lines-are-read-in-the-dependency-declaration-form-page]] — `0501`, `P21` · [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496`, `P22` · [[tasks/check-the-links-in-fkits-top-level-docs-not-only-under-ai-agents]] — `0484`, `P23` · [[tasks/stop-the-board-reader-failing-when-a-task-folder-moves-between-its-check-and-its-read]] — `0483`, `P24`
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/sprint-12-set-a-nine-backlog-tasks-goal-not-set]] — the board `0474` was relocated to when this sprint closed

@@ -58,6 +58,8 @@ Three files. `claude/fkit-claude-init.sh` +68 / −44 · `test/init-intake-guard
 - ⭐ **The brief's own claims were re-measured and eight of them found stale or wrong** — including *"Risk: low. Non-destructive (creates, never deletes)"*, which is **partly false**: §4 could overwrite a file outside the project through a symlinked leaf. Recorded in the worklog; ⛔ **the brief was left alone** (planner's recommendation taken by the driver — *not* an owner ruling).
 - ⚠️ **Every line-number claim in the brief and the plan is now stale by construction**, because the hoist moved 35 lines. The corrections are recorded as *"was X, now Y"* rather than as a fresh set of coordinates to go stale in turn.
 
+> ⛔ **Dated note 2026-10-23 (sync `96c7263`→`5ccf2c2`) — `0037` (extend prove-red to reach init) is cancelled** (2026-10-20): prove-red was cut to four launcher/hook cases (ADR-057 §D3), so the init guards' red-first proofs stay manual.
+
 ## Related
 - [[tasks/refuse-the-destructive-claude-refresh-through-a-symlink-and-correct-the-only-destructive-claim]] — `0327`, audit finding **F1**, the destructive sibling of this defect
 - [[tasks/remove-fkit-omnigent-orphan-residue]] — `0072`, which supplied `orphan_contained()` and correctly kept this out of its own scope (*"cheapness isn't scope"*)
@@ -66,3 +68,4 @@ Three files. `claude/fkit-claude-init.sh` +68 / −44 · `test/init-intake-guard
 - [[decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so]] — the coverage state this review declared
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — the board this ran on
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — *added 2026-08-29:* the board where its four report-only audit findings were filed as `0327`–`0330`, plus the hard-link residual
+- *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-2026-10-20-adr-057-test-task-cancellations]] — `0037` cancelled
