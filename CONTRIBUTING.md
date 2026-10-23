@@ -66,7 +66,9 @@ key list"; in this repo, these are they.
   code, output and files written out; no sourcing or mocking of its internals:
   1. the launcher, init and hooks — `claude/fkit-claude.sh`, `claude/fkit-claude-init.sh`, the hook
      scripts under `claude/`, and `claude/skills-for-role.sh`, which they source;
-  2. shipped skill executables — `dashboard.sh`, `throughput.mjs`, the heal `check.sh` / `repair.sh`.
+  2. shipped skill executables — `dashboard.sh`, `throughput.mjs`, the heal `check.sh` / `repair.sh`;
+  3. the board module `board/`, tested under `test/board/` (it will ship — ADR-057 §D1's dated note);
+     its tests import the module, so "from outside" there means through its exported API only.
 
   Not repo-only tools under `bin/`, not the wording or shape of prompts and documents under `claude/`,
   not the content of `ai-agents/`. LLM behaviour stays out.
@@ -130,7 +132,7 @@ empty, so this keeps the release notes written as you go.
 
 ## The web board
 
-`npm run board` — see [`docs/board.md`](docs/board.md).
+`fkit board` in a project, or `npm run board` in this checkout — see [`docs/board.md`](docs/board.md).
 
 ## Layout
 
@@ -149,15 +151,18 @@ claude/
   agents/                        the seven roles as Claude Code subagent definitions (an 8th, a tester, is authorized — ADR-028 — but not yet built)
   skills/                        the /fkit-* procedures
   scaffold/                      starter ai-agents/ tree + CLAUDE.md / AGENTS.md
-bin/                             repo-local tools — none of these ship to projects
-  fkit-board.mjs                 read-only web board over ai-agents/ (`npm run board`)
+board/                           the built-in board, being ported from aiboard to Node (ADR-052); not shipped yet
+bin/                             tools — only fkit-board.mjs ships with the install; the rest are repo-local
+  fkit-board.mjs                 read-only web board over ai-agents/ (`fkit board`, `npm run board`)
   board-narrow.mjs               narrow, fixed-width render of a sprint board for the terminal
   release.mjs                    cuts a release (`npm run release`)
   generate-structure-manifest.mjs  rebuilds claude/structure-manifest.tsv
 docs/
-  board.md                       the repo-local web board, in detail
+  board.md                       the web board, in detail
   media/                         README images
+vendor/aiboard/                  aiboard's web page, copied unmodified for `fkit board` (provenance in its README)
 test/                            `npm test` — the default suite (node:test)
+  board/                         the board module's tests (in `npm test`)
   release/                       the release tool's own test (`npm run test:release`)
   prove-red.sh                   the mutation lane (`npm run test:prove-red`)
 .github/workflows/test.yml       CI: `npm test`, timed against its budget, on every push to main and every PR

@@ -30,13 +30,13 @@
 // file itself does not. Its hard-coded absolute paths, its second copy of the banner grammar and its
 // `priority: "medium"` flattening are all gone. See this task's plan.md §2.
 //
-// ANOTHER PROJECT'S TREE (task 0412). `--root <path>` points the reader at another fkit-using
-// project's ai-agents/. The rule: TOOLS come from fkit's own checkout, DATA comes from `--root`. So
-// `dashboard.sh` and aiboard's sibling default are always found next to THIS file, and only the
-// ai-agents/ being read moves. The target's own copy of `dashboard.sh` is never run.
+// WHOSE TREE. TOOLS come from fkit itself — the checkout or the install folder
+// this file sits in — so `dashboard.sh` and the copied aiboard page are always found next to THIS
+// file. DATA comes from `--root <path>`, or else the folder this runs in. The target's own copy of
+// `dashboard.sh` is never run.
 
 import { createServer } from 'node:http';
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { accessSync, constants, existsSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -103,28 +103,34 @@ export function findDashboard(root) {
     + 'guess at it.');
 }
 
-// aiboard's web UI. ⛔ NOT vendored into fkit — a copy would fork aiboard's UI, drift the moment the
-// Node port lands, and invert the one-way dependency the owner set (fkit adapts to aiboard).
+// aiboard's web UI: by default the page copied into fkit at vendor/aiboard/ (ADR-058; provenance in
+// its README), so `fkit board` works with no aiboard checkout anywhere.
 //
 // ⚠️ An EXPLICIT path that does not exist is an ERROR, never a fall-through to the default. Serving
 // some other file because the one the owner named was missing is exactly the silent wrong answer the
-// plan forbids. Only the sibling default is soft.
-export function resolveAiboard({ flag, env, root }) {
+// plan forbids.
+export function resolveAiboard({ flag, env, home }) {
   // ⚠️ isFile, not exists. `existsSync` is TRUE for a DIRECTORY, so `--aiboard /some/dir` resolved,
   // the server started, and `/` then died with an EISDIR 500 — instead of the non-zero exit naming
   // all three ways that this function promises. What is being resolved is a FILE to serve.
-  const isFile = (p) => { try { return statSync(p).isFile(); } catch { return false; } };
+  // R_OK too: a chmod-000 file is still a file, and would pass startup only to 500 on every GET /.
+  const isFile = (p) => {
+    try { accessSync(p, constants.R_OK); return statSync(p).isFile(); } catch { return false; }
+  };
+  const vendored = resolve(join(home, 'vendor', 'aiboard', 'index.html'));
   const fail = (why) => {
     const e = new Error(
       `fkit-board: ${why}\n`
-      + 'Point it at aiboard\'s web/index.html in one of these three ways:\n'
+      + 'It serves aiboard\'s web/index.html, chosen in this order:\n'
       + '  1. --aiboard <path>            (highest precedence)\n'
       + '  2. FKIT_AIBOARD=<path>         (environment)\n'
-      + `  3. the sibling default          ${join(root, '..', 'aiboard', 'aiboard', 'web', 'index.html')}`);
+      + `  3. fkit's own copy             ${vendored}`);
     e.code = 'AIBOARD_UNRESOLVED';
     return e;
   };
-  if (flag) {
+  // `--aiboard "$UNSET"` is an explicit, empty path — refused like `--root ""`, not read as "not given".
+  if (flag === '') throw fail('--aiboard was given an empty path.');
+  if (flag !== undefined) {
     if (!isFile(flag)) throw fail(`--aiboard ${flag} is not a readable file.`);
     return { path: resolve(flag), how: '--aiboard' };
   }
@@ -132,32 +138,33 @@ export function resolveAiboard({ flag, env, root }) {
     if (!isFile(env)) throw fail(`FKIT_AIBOARD=${env} is not a readable file.`);
     return { path: resolve(env), how: 'FKIT_AIBOARD' };
   }
-  const fallback = resolve(join(root, '..', 'aiboard', 'aiboard', 'web', 'index.html'));
-  if (isFile(fallback)) return { path: fallback, how: 'sibling default' };
-  throw fail('aiboard\'s web UI was not found.');
+  if (isFile(vendored)) return { path: vendored, how: 'vendored' };
+  throw fail('fkit\'s own copy of aiboard\'s page is missing, so this fkit install looks broken; '
+    + '`fkit update` restores it.');
 }
 
-// The tree to READ. No flag → `home`, fkit's own root, exactly as before `--root` existed.
+// The tree to READ. No flag → `cwd`, the folder this runs in, with no walk up: like every other fkit
+// command, and a walk up could quietly serve some parent's tree (one in `~`, say).
 //
-// ⚠️ The same rule as resolveAiboard: an EXPLICIT path that does not resolve is an ERROR, never a
+// ⚠️ The same rule as resolveAiboard: a path that does not resolve is an ERROR, never a
 // fall-through to fkit's own tree — serving one project's board under another's name is the silent
 // wrong answer. isDirectory, not exists: a FILE named like the project must not pass. Every missing
 // piece is named in one message, so a half-built tree is not fixed one error at a time.
-export function resolveRoot({ flag, home }) {
-  if (flag === undefined) return { path: home, how: 'default' };
+export function resolveRoot({ flag, cwd = process.cwd() }) {
+  const dir = flag === undefined ? cwd : flag;
   const kind = (p) => {
     try { return statSync(p).isDirectory() ? 'dir' : 'other'; } catch { return 'missing'; }
   };
   const missing = [];
   if (flag === '') {
     missing.push('a path (it was given an empty string)');
-  } else if (kind(flag) === 'missing') {
+  } else if (kind(dir) === 'missing') {
     missing.push('the directory itself (no such path)');
-  } else if (kind(flag) === 'other') {
+  } else if (kind(dir) === 'other') {
     missing.push('the directory itself (the path is not a directory)');
   } else {
     for (const sub of ['tasks', 'sprints']) {
-      if (kind(join(flag, 'ai-agents', sub)) !== 'dir') missing.push(`ai-agents/${sub}/`);
+      if (kind(join(dir, 'ai-agents', sub)) !== 'dir') missing.push(`ai-agents/${sub}/`);
     }
   }
   // ⚠️ A directory that stats as one but cannot be LISTED is not a tree to read either: further down,
@@ -167,7 +174,7 @@ export function resolveRoot({ flag, home }) {
   if (!missing.length) {
     const probe = (rel, children) => {
       let names;
-      try { names = readdirSync(join(flag, rel)); } catch (err) {
+      try { names = readdirSync(join(dir, rel)); } catch (err) {
         unreadable.push(`${rel}/ (${err.code})`);
         return;
       }
@@ -177,16 +184,20 @@ export function resolveRoot({ flag, home }) {
     probe('ai-agents/sprints', ['done', 'cancelled']);
   }
   if (missing.length || unreadable.length) {
+    const label = flag === undefined ? `the current directory (${cwd})` : `--root ${JSON.stringify(flag)}`;
     const e = new Error(
-      `fkit-board: --root ${JSON.stringify(flag)} is not a readable fkit project tree.\n`
+      `fkit-board: ${label} is not a readable fkit project tree.\n`
       + (missing.length ? `  missing: ${missing.join(', ')}\n` : '')
       + (unreadable.length ? `  unreadable: ${unreadable.join(', ')}\n` : '')
       + 'It must be a directory holding both ai-agents/tasks/ and ai-agents/sprints/. '
-      + 'fkit-board does not fall back to its own tree.');
+      + 'fkit-board does not fall back to its own tree.'
+      + (flag === undefined
+        ? '\nRun `fkit board` in your project\'s folder (the one holding `ai-agents/`), or pass --root <path>.'
+        : ''));
     e.code = 'ROOT_UNRESOLVED';
     throw e;
   }
-  return { path: resolve(flag), how: '--root' };
+  return { path: resolve(dir), how: flag === undefined ? 'cwd' : '--root' };
 }
 
 // ── Reading fkit's tree ──────────────────────────────────────────────────────────────────────────
@@ -632,38 +643,71 @@ function arg(argv, name) {
   return i >= 0 && i + 1 < argv.length ? argv[i + 1] : undefined;
 }
 
+const VALUE_FLAGS = ['--root', '--port', '--aiboard'];
+const USAGE = 'usage: fkit board [--root <path>] [--port <n>] [--aiboard <path>] [--bench]\n'
+  + '       (in a checkout: npm run board -- [options])\n'
+  + '  --root <path>     read that project\'s ai-agents/ instead of the current folder\'s\n'
+  + `  --port <n>        listen on 127.0.0.1:<n> (default ${DEFAULT_PORT}; 0 picks a free port)\n`
+  + '  --aiboard <path>  serve this aiboard index.html instead of fkit\'s copy (or FKIT_AIBOARD)\n'
+  + '  --bench           print the snapshot cost and exit; starts no server\n'
+  + '  -h, --help        print this and exit\n';
+
 function main(argv) {
-  // ⚠️ `arg()` reads neither `--root=<path>` nor a trailing `--root` with no value — both would come
-  // back `undefined` and silently serve fkit's OWN tree. Each is refused here instead. So is a SECOND
-  // `--root`: `arg()` takes the first, so the other would be silently ignored — never validated, and
-  // a trailing bare one would slip past the "needs a path" check below.
-  if (argv.filter((a) => a === '--root').length > 1) {
-    process.stderr.write('fkit-board: --root given more than once; give exactly one --root <path>. '
-      + 'fkit-board does not fall back to its own tree.\n');
+  if (argv.includes('--help') || argv.includes('-h')) {
+    process.stdout.write(USAGE);
+    return 0;
+  }
+  // ⚠️ `arg()` reads neither `--<flag>=<value>` nor a trailing `--<flag>` with no value — both would
+  // come back `undefined` and silently fall back (to the current folder, fkit's own page, or the default
+  // port). Each is refused here instead. So is a SECOND one: `arg()` takes the first, so the other would
+  // be silently ignored — never validated, and a trailing bare one would slip past the "needs a" check.
+  for (const [flag, meta, noun, fallback] of [
+    ['--root', '<path>', 'a path', 'its own tree'],
+    ['--aiboard', '<path>', 'a path', 'its own copy of the page'],
+    ['--port', '<n>', 'a number', 'its default port'],
+  ]) {
+    const tail = `fkit-board does not fall back to ${fallback}.\n`;
+    if (argv.filter((a) => a === flag).length > 1) {
+      process.stderr.write(`fkit-board: ${flag} given more than once; give exactly one ${flag} ${meta}. ${tail}`);
+      return 2;
+    }
+    if (argv.some((a) => a.startsWith(`${flag}=`))) {
+      process.stderr.write(`fkit-board: write ${flag} ${meta} (a space, not "="). ${tail}`);
+      return 2;
+    }
+    if (argv.includes(flag) && arg(argv, flag) === undefined) {
+      process.stderr.write(`fkit-board: ${flag} needs ${noun}: ${flag} ${meta}. ${tail}`);
+      return 2;
+    }
+  }
+  // A typo would otherwise be ignored and a blocking server started in its place.
+  for (let i = 0; i < argv.length; i++) {
+    if (VALUE_FLAGS.includes(argv[i])) { i++; continue; }
+    if (argv[i] === '--bench') continue;
+    process.stderr.write(`fkit-board: unknown argument ${JSON.stringify(argv[i])}.\n${USAGE}`);
     return 2;
   }
-  if (argv.some((a) => a.startsWith('--root='))) {
-    process.stderr.write('fkit-board: write --root <path> (a space, not "="). '
-      + 'fkit-board does not fall back to its own tree.\n');
-    return 2;
-  }
-  if (argv.includes('--root') && arg(argv, '--root') === undefined) {
-    process.stderr.write('fkit-board: --root needs a path: --root <path>. '
-      + 'fkit-board does not fall back to its own tree.\n');
+  // Digits only: Number() would read "" and " " as 0 (a random port) and also take "0x10" or "1e3".
+  const portArg = arg(argv, '--port');
+  const port = portArg === undefined ? DEFAULT_PORT : (/^\d+$/.test(portArg) ? Number(portArg) : NaN);
+  if (!Number.isInteger(port) || port > 65535) {
+    process.stderr.write(`fkit-board: --port must be an integer 0-65535, got ${JSON.stringify(portArg)}.\n`);
     return 2;
   }
 
-  // `home` is fkit's own checkout — where the TOOLS live. `root` is the tree being READ.
-  const home = findRoot();
+  // `home` is fkit itself, the checkout or install folder above bin/ — where the TOOLS live. `root` is
+  // the tree being READ.
+  const home = resolve(dirname(fileURLToPath(import.meta.url)), '..');
   let rootInfo;
   try {
-    rootInfo = resolveRoot({ flag: arg(argv, '--root'), home });
+    rootInfo = resolveRoot({ flag: arg(argv, '--root') });
   } catch (err) {
     process.stderr.write(`${err.message}\n`);
     return 2;
   }
   const root = rootInfo.path;
-  const foreign = rootInfo.how === '--root';
+  // realpath: macOS /tmp is really /private/tmp, so plain paths can differ for one folder.
+  const foreign = realpathSync(root) !== realpathSync(home);
 
   // ⚠️ ALWAYS fkit's own copy, and ALWAYS absolute. `dashboard.sh` is spawned with `cwd: root`, so a
   // RELATIVE path would resolve inside the TARGET project — and on a target that carries its own
@@ -681,7 +725,7 @@ function main(argv) {
     try { targetCopy = resolve(findDashboard(root)); } catch { targetCopy = null; }
     if (targetCopy === dashboard) targetCopy = null;
   }
-  const treeLine = `  tree     ${join(root, 'ai-agents')}${foreign ? '  (--root)' : ''}\n`;
+  const treeLine = `  tree     ${join(root, 'ai-agents')}${rootInfo.how === '--root' ? '  (--root)' : ''}\n`;
   const statusLine = `  status   ${dashboard}`
     + `${foreign ? '  (fkit\'s own — the target\'s copy is not used)' : ''}\n`;
   const noteLine = targetCopy
@@ -728,16 +772,10 @@ function main(argv) {
 
   let aiboard;
   try {
-    // aiboard is fkit's tool, not the target's data: its sibling default sits next to `home`.
-    aiboard = resolveAiboard({ flag: arg(argv, '--aiboard'), env: process.env.FKIT_AIBOARD, root: home });
+    // aiboard is fkit's tool, not the target's data: its copied page sits in `home`.
+    aiboard = resolveAiboard({ flag: arg(argv, '--aiboard'), env: process.env.FKIT_AIBOARD, home });
   } catch (err) {
     process.stderr.write(`${err.message}\n`);
-    return 2;
-  }
-
-  const port = Number(arg(argv, '--port') ?? DEFAULT_PORT);
-  if (!Number.isInteger(port) || port < 0 || port > 65535) {
-    process.stderr.write(`fkit-board: --port must be an integer 0-65535, got ${arg(argv, '--port')}\n`);
     return 2;
   }
 
@@ -758,7 +796,12 @@ function main(argv) {
   return 0;
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+// realpath both sides: the launcher passes a path that may run through a symlink, and Node's
+// import.meta.url is always the real one — a plain compare silently skipped main() with exit 0.
+const isMain = () => {
+  try { return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); } catch { return false; }
+};
+if (process.argv[1] && isMain()) {
   const code = main(process.argv.slice(2));
   if (code !== 0) process.exit(code);
 }

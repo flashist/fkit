@@ -512,8 +512,11 @@ called for once the code was actually removed (tracked by task `0059`). See §9.
 established how fkit tests itself, and
 [ADR-057](decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md) narrowed it: tests
 cover only how shipped scripts behave (the launcher, init, the hooks, shipped skill executables),
-plus four named exceptions. `npm test` is `node --test test/*.test.js` — **22 suites after task
-0529** — re-count with `ls test/*.test.js | wc -l` rather than trust the figure. Named here by group,
+plus four named exceptions. `npm test` is `node --test test/*.test.js test/board/*.test.js` (the
+second glob since task 0417: the board's own tests, counted inside the fence by ADR-057's dated note
+below §D1; `board/` itself is ADR-052 phase 2, not yet shipped) — **22 top-level suites after task
+0529, plus 1 under `test/board/` after 0417** — re-count with
+`ls test/*.test.js test/board/*.test.js | wc -l` rather than trust the figure. Named here by group,
 **not as a complete list**: the `*-contract` suites (`launcher-contract`, `converge-contract`,
 `dashboard-contract`), the `*-hook` suites (`skill-ownership-hook` among them), the `structure-*`
 suites, and the three named exceptions in the default suite (`dual-home-parity`,

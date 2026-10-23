@@ -27,12 +27,14 @@ curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh 
 cd /path/to/your/project
 fkit            # pick a role from the menu (Enter = lead)
 fkit coder      # …or go straight to one
+fkit board      # view this project's tasks and sprints in your browser, read-only (needs Node)
 ```
 
 **Requires:** [Claude Code](https://claude.com/claude-code), `curl`, `tar`, `bash`. **Optional but
 recommended:** [Codex](https://github.com/openai/codex) (`npm install -g @openai/codex && codex
 login`) — without it, reviews run on Claude only and are **loudly flagged as not model-diverse**.
-`fkit` stops if Claude Code is missing; it only warns about Codex. **Platforms:** macOS and Linux;
+`fkit` stops if Claude Code is missing; it only warns about Codex. `fkit board` alone also needs
+[Node.js](https://nodejs.org). **Platforms:** macOS and Linux;
 Windows via WSL, untested.
 
 The [installer](install.sh) (read it first if you like) copies fkit to `~/.local/share/fkit` and the
@@ -126,7 +128,7 @@ repairs only what you approve, diffs in view, deleting nothing. Changed one on p
 | `FKIT_SETUP_ONLY=1` | off | Set the project up, then exit (non-zero if setup failed) |
 | `FKIT_NO_SELF_HOST=1` | off | In a checkout of this repo, use the installed fkit, not the checkout's `claude/` |
 | `FKIT_CLEANUP_DRY_RUN=1` | off | List the old-runtime files fkit would delete from a project; delete nothing |
-| `FKIT_AIBOARD` | — | Repo-local web board only: path to aiboard's `index.html` |
+| `FKIT_AIBOARD` | — | `fkit board`: serve this aiboard `index.html` instead of fkit's copy |
 
 Installer variables go **after** the pipe (`curl … | FKIT_SHARE=… sh`). `fkit update` reuses the
 source and paths you installed with; set a variable on `fkit update` only to change one.
@@ -153,10 +155,13 @@ like; fkit never removes it. Drop the `~/.local/bin` `PATH` line if you added it
 already has them needs nothing). The role lock comes from the `fkit` launcher — a session opened with
 plain `claude` is not role-locked.
 
-## Web board (repo-local)
+## Web board
 
-In a checkout of this repo, `npm run board` serves a **read-only** web view of an `ai-agents/` tree at
-`http://127.0.0.1:8585/`. It is not installed with fkit. Details: [`docs/board.md`](docs/board.md).
+Run `fkit board` in your project's folder: it serves a **read-only** web view of the project's
+`ai-agents/` tasks and sprints at `http://127.0.0.1:8585/`, using a copy of
+[aiboard](https://github.com/flashist/aiboard)'s page that ships with fkit. It writes nothing and needs
+Node.js. An older install needs `fkit update` first. In a checkout of this repo, `npm run board` does
+the same over fkit's own tree. Details: [`docs/board.md`](docs/board.md).
 
 ## Contributing
 

@@ -47,6 +47,15 @@ done
 # Remove the retired Omnigent flavor from any pre-existing install (ADR-009). This is what makes an
 # upgrade from an older fkit clean rather than leaving a dead runtime behind on disk.
 rm -rf "$SHARE/omnigent"
+# The read-only board (ADR-058) sits beside claude/, where the reader finds dashboard.sh.
+# A ref without it leaves no stale copy behind.
+rm -f "$SHARE/bin/fkit-board.mjs"
+rm -rf "$SHARE/vendor/aiboard"
+if [ -f "$TMP/src/bin/fkit-board.mjs" ] && [ -f "$TMP/src/vendor/aiboard/index.html" ]; then
+  mkdir -p "$SHARE/bin" "$SHARE/vendor"
+  cp "$TMP/src/bin/fkit-board.mjs" "$SHARE/bin/fkit-board.mjs"
+  cp -R "$TMP/src/vendor/aiboard" "$SHARE/vendor/aiboard"
+fi
 
 # 1b. record the installed version so `fkit` can show it at startup and tell when a newer one is
 #     published (self-update compares this sha against $REPO@$REF's head). Prefer git; fall back to the
@@ -127,7 +136,8 @@ esac
 
 # 4. Prerequisites. Claude Code is the runtime (required); Codex is optional but recommended — it makes
 #    the reviewer's second opinion an actually-independent one. Both are checked again (more precisely)
-#    at every `fkit` launch — this is the first-run heads-up. Neither blocks the install.
+#    at every `fkit` launch — this is the first-run heads-up. Node.js is needed by `fkit board` alone.
+#    None of these blocks the install.
 if ! command -v claude >/dev/null 2>&1; then
   echo
   echo "⚠ Required: Claude Code — install from https://claude.com/claude-code"
@@ -137,4 +147,8 @@ if ! command -v codex >/dev/null 2>&1; then
   echo "⚠ Recommended (optional): Codex — it gives the reviewer an independent second opinion from a"
   echo "  different model. Without it, reviews fall back to Claude only, flagged NOT model-diverse."
   echo "    npm install -g @openai/codex   &&   codex login"
+fi
+if ! command -v node >/dev/null 2>&1; then
+  echo
+  echo "Optional: Node.js — only \`fkit board\` needs it (https://nodejs.org)."
 fi

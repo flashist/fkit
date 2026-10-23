@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>aiboard</title>
+<style>
+  :root {
+    --bg: #f4f5f7; --panel: #fff; --ink: #172b4d; --muted: #6b778c; --line: #dfe1e6;
+    --accent: #0052cc; --backlog: #8993a4; --inprog: #0065ff; --done: #36b37e; --cancel: #de350b;
+    --critical: #bf2600; --high: #de350b; --medium: #ff991f; --low: #6b778c;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); }
+  header { display: flex; align-items: center; gap: 12px; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; flex-wrap: wrap; }
+  header h1 { font-size: 18px; margin: 0; letter-spacing: .3px; white-space: nowrap; }
+  header h1 span { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 8px; }
+  header .spacer { flex: 1; }
+  select, button, input, textarea { font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); }
+  textarea { width: 100%; min-height: 80px; resize: vertical; }
+  button { cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  button.primary, button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.small { padding: 3px 8px; font-size: 12px; }
+  .status { font-size: 12px; color: var(--muted); }
+  .status.err { color: var(--cancel); }
+  .who { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .who input { width: 110px; padding: 4px 8px; font-size: 12px; }
+  main { padding: 16px 20px; }
+  .board { display: grid; grid-template-columns: repeat(4, minmax(220px, 1fr)); gap: 14px; }
+  .col { background: #ebecf0; border-radius: 10px; padding: 10px; min-height: 200px; transition: background .1s; }
+  .col.over { background: #dfe6f5; outline: 2px dashed var(--accent); }
+  .col h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin: 2px 6px 10px; display: flex; justify-content: space-between; }
+  .col h2::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; background: var(--dot); vertical-align: middle; }
+  .col[data-status="backlog"] { --dot: var(--backlog); }
+  .col[data-status="in-progress"] { --dot: var(--inprog); }
+  .col[data-status="done"] { --dot: var(--done); }
+  .col[data-status="cancelled"] { --dot: var(--cancel); }
+  .card { background: var(--panel); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 1px 1px rgba(9,30,66,.15); cursor: pointer; border-left: 3px solid transparent; }
+  .card:hover { background: #f7f8fa; }
+  .card.dragging { opacity: .4; }
+  .card { position: relative; }
+  .card.drop-before::before, .card.drop-after::after { content: ""; position: absolute; left: 0; right: 0; height: 3px; border-radius: 2px; background: var(--accent); pointer-events: none; }
+  .card.drop-before::before { top: -6px; }
+  .card.drop-after::after { bottom: -6px; }
+  .card.high { border-left-color: var(--high); }
+  .card.medium { border-left-color: var(--medium); }
+  .card.low { border-left-color: var(--low); }
+  .card.critical { border-left: 5px solid var(--critical); padding-left: 10px; background: #fff4f2; box-shadow: 0 0 0 1px #ffbdad, 0 1px 1px rgba(9,30,66,.15); }
+  .card.critical:hover { background: #ffebe6; }
+  .card .id { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: var(--muted); }
+  .card .title { font-weight: 500; margin: 2px 0 6px; }
+  .card .meta { display: flex; gap: 6px; flex-wrap: wrap; font-size: 11px; color: var(--muted); }
+  .chip { background: #f0f1f3; border-radius: 4px; padding: 1px 6px; }
+  .chip.sprint { background: #e9f0fb; color: var(--accent); }
+  .chip.blocked { background: #ffebe6; color: var(--cancel); font-weight: 600; }
+  .chip.blocker { background: #fff7e6; color: #974f0c; }
+  .chip.stale { background: #fff7e6; color: #974f0c; font-weight: 600; }
+  .chip.comments { background: #eae6ff; color: #403294; }
+  .chip.prio.critical { background: var(--critical); color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+  .comments .entry::before { background: #6554c0; }
+  .col.dimmed .card { opacity: .55; }
+  .sprints { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .sprint-card { background: var(--panel); border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 1px rgba(9,30,66,.15); cursor: pointer; }
+  .sprint-card:hover { background: #f7f8fa; }
+  .sprint-card .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .sprint-card h3 { margin: 0; font-size: 15px; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; color: #fff; text-transform: uppercase; letter-spacing: .4px; white-space: nowrap; }
+  .badge.backlog { background: var(--backlog); } .badge.in-progress { background: var(--inprog); }
+  .badge.done { background: var(--done); } .badge.cancelled { background: var(--cancel); }
+  .sprint-card .goal { color: var(--muted); margin: 6px 0; }
+  .bar { height: 8px; background: #ebecf0; border-radius: 4px; overflow: hidden; display: flex; margin: 10px 0 6px; }
+  .bar i { display: block; height: 100%; }
+  .bar .d { background: var(--done); } .bar .p { background: var(--inprog); } .bar .c { background: var(--cancel); opacity: .5; }
+  .sprint-card .nums { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; }
+  .empty { color: var(--muted); padding: 30px; text-align: center; }
+  .overlay { position: fixed; inset: 0; background: rgba(9,30,66,.45); display: none; z-index: 10; }
+  .overlay.open { display: block; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(720px, 100%); background: var(--panel); z-index: 11; transform: translateX(100%); transition: transform .18s ease; overflow-y: auto; box-shadow: -6px 0 24px rgba(9,30,66,.2); }
+  .drawer.open { transform: none; }
+  .drawer .head { padding: 16px 22px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; position: sticky; top: 0; background: var(--panel); z-index: 1; }
+  .drawer .head h2 { margin: 4px 0 0; font-size: 18px; }
+  .drawer .body { padding: 18px 22px 40px; }
+  .kv { display: grid; grid-template-columns: 90px 1fr; gap: 6px 12px; font-size: 13px; margin-bottom: 18px; align-items: center; }
+  .kv dt { color: var(--muted); } .kv dd { margin: 0; }
+  .kv select, .kv input { padding: 3px 8px; font-size: 13px; }
+  .md h1 { font-size: 20px; } .md h2 { font-size: 16px; margin-top: 22px; } .md h3 { font-size: 14px; }
+  .md pre { background: #f4f5f7; padding: 10px 12px; border-radius: 6px; overflow-x: auto; }
+  .md code { background: #f4f5f7; padding: 1px 4px; border-radius: 3px; font-size: 12.5px; }
+  .md pre code { background: none; padding: 0; }
+  .md blockquote { border-left: 3px solid var(--line); margin: 0; padding-left: 12px; color: var(--muted); }
+  .md table { border-collapse: collapse; } .md td, .md th { border: 1px solid var(--line); padding: 4px 8px; }
+  .log { border-left: 2px solid var(--line); margin-left: 6px; padding-left: 14px; }
+  .log .entry { margin-bottom: 14px; position: relative; }
+  .log .entry::before { content: ""; position: absolute; left: -19px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .log .when { font-size: 12px; color: var(--muted); font-family: ui-monospace, Menlo, monospace; }
+  .log .who { font-weight: 600; margin-left: 6px; }
+  .path { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: var(--muted); word-break: break-all; }
+  .task-row { display: flex; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .task-row:hover { background: #f7f8fa; }
+  .task-row .id { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); width: 52px; }
+  .task-row .t { flex: 1; }
+  .form { display: grid; gap: 10px; margin-top: 8px; }
+  .form label { display: grid; gap: 4px; font-size: 12px; color: var(--muted); }
+  .form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form .actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .modal { position: fixed; inset: 0; z-index: 20; display: none; align-items: center; justify-content: center; background: rgba(9,30,66,.45); }
+  .modal.open { display: flex; }
+  .modal .box { background: var(--panel); border-radius: 10px; padding: 20px 22px; width: min(560px, 94vw); max-height: 90vh; overflow-y: auto; }
+  .modal h2 { margin: 0 0 8px; font-size: 17px; }
+  .logform { margin-top: 10px; display: grid; gap: 8px; }
+  .logform .actions { display: flex; justify-content: flex-end; }
+  .ro { background: #fff7e6; color: #974f0c; font-size: 12px; padding: 3px 8px; border-radius: 6px; }
+  @media (max-width: 900px) { .board { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .board { grid-template-columns: 1fr; } .form .row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="boardName">aiboard</h1>
+  <button id="newTask" class="primary small">+ Task</button>
+  <button id="newSprint" class="small">+ Sprint</button>
+  <span id="roBadge" class="ro" hidden>read-only</span>
+  <div class="spacer"></div>
+  <button id="tabBoard" class="active">Board</button>
+  <button id="tabSprints">Sprints</button>
+  <select id="sprintFilter" title="Filter board by sprint"></select>
+  <label class="who">you: <input id="author" placeholder="your name"></label>
+  <label class="status"><input type="checkbox" id="auto" checked style="padding:0;vertical-align:middle"> auto-refresh</label>
+  <span class="status" id="status"></span>
+</header>
+<main>
+  <section id="boardView" class="board"></section>
+  <section id="sprintsView" class="sprints" hidden></section>
+</main>
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="head"><div id="drawerTitle"></div><button id="closeDrawer">✕</button></div>
+  <div class="body" id="drawerBody"></div>
+</aside>
+<div class="modal" id="modal"><div class="box" id="modalBox"></div></div>
+
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const state = { data: null, tab: 'board', sprint: 'all', open: null, hovering: false, pending: false };
+  const STATUSES = ['backlog', 'in-progress', 'done', 'cancelled'];
+  const PRIORITIES = ['low', 'medium', 'high', 'critical'];
+
+  // ---- per-viewer conveniences (name, tab, filter)
+  const store = { get(k) { try { return localStorage.getItem('aiboard.' + k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem('aiboard.' + k, v); } catch (e) {} } };
+  $('#author').value = store.get('author') || '';
+  $('#author').addEventListener('change', (e) => store.set('author', e.target.value.trim()));
+  state.tab = store.get('tab') || 'board';
+  state.sprint = store.get('sprint') || 'all';
+  const author = () => $('#author').value.trim() || 'web';
+
+  // ---- minimal markdown renderer
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function inline(s) {
+    return esc(s)
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')
+      .replace(/(^|[^_])_([^_]+)_/g, '$1<em>$2</em>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+      .replace(/\b(T-\d{3,}|S-\d{3,})\b/g, '<a href="#" data-ref="$1">$1</a>');
+  }
+  function md(src) {
+    const lines = (src || '').split('\n'); let out = []; let i = 0;
+    while (i < lines.length) {
+      let l = lines[i];
+      if (/^```/.test(l)) { let buf = []; i++; while (i < lines.length && !/^```/.test(lines[i])) buf.push(lines[i++]); i++; out.push('<pre><code>' + esc(buf.join('\n')) + '</code></pre>'); continue; }
+      let h = /^(#{1,6})\s+(.*)$/.exec(l);
+      if (h) { out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); i++; continue; }
+      if (/^\s*([-*]|\d+\.)\s+/.test(l)) {
+        const ordered = /^\s*\d+\./.test(l); let items = [];
+        while (i < lines.length && /^\s*([-*]|\d+\.)\s+/.test(lines[i])) {
+          let t = lines[i].replace(/^\s*([-*]|\d+\.)\s+/, '');
+          t = t.replace(/^\[( |x|-)\]\s*/i, (m, c) => `<input type="checkbox" disabled ${c.toLowerCase() === 'x' ? 'checked' : ''}> `);
+          items.push('<li>' + inline(t) + '</li>'); i++;
+        }
+        out.push((ordered ? '<ol>' : '<ul>') + items.join('') + (ordered ? '</ol>' : '</ul>')); continue;
+      }
+      if (/^\s*>/.test(l)) { let buf = []; while (i < lines.length && /^\s*>/.test(lines[i])) buf.push(lines[i++].replace(/^\s*>\s?/, '')); out.push('<blockquote>' + inline(buf.join(' ')) + '</blockquote>'); continue; }
+      if (/^\|/.test(l)) { let rows = []; while (i < lines.length && /^\|/.test(lines[i])) rows.push(lines[i++]); const cells = r => r.replace(/^\||\|$/g, '').split('|').map(c => inline(c.trim())); const body = rows.filter(r => !/^\|\s*:?-+/.test(r)); out.push('<table>' + body.map((r, k) => '<tr>' + cells(r).map(c => k === 0 ? `<th>${c}</th>` : `<td>${c}</td>`).join('') + '</tr>').join('') + '</table>'); continue; }
+      if (/^\s*$/.test(l)) { i++; continue; }
+      if (/^---+\s*$/.test(l)) { out.push('<hr>'); i++; continue; }
+      let buf = []; while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#{1,6}\s|```|\s*[-*]\s|\s*\d+\.\s|\s*>|\|)/.test(lines[i])) buf.push(lines[i++]);
+      out.push('<p>' + inline(buf.join(' ')) + '</p>');
+    }
+    return out.join('\n');
+  }
+
+  // ---- data
+  async function api(path, body) {
+    const r = await fetch(path, body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ author: author() }, body)) } : undefined);
+    const data = await r.json().catch(() => ({ error: 'bad response' }));
+    if (!r.ok) throw new Error(data.error || r.statusText);
+    return data;
+  }
+  function flash(msg, isError) { const el = $('#status'); el.className = 'status' + (isError ? ' err' : ''); el.textContent = msg; }
+  async function load(force) {
+    try {
+      const fresh = await api('/api/board');
+      if (!force && (state.hovering || dragId) && state.data && JSON.stringify(fresh.tasks) !== JSON.stringify(state.data.tasks)) {
+        // cards would move under the cursor: hold the update until the pointer leaves the board
+        state.pending = true; flash('changes waiting (move the mouse off the board)'); return;
+      }
+      state.pending = false;
+      state.data = fresh;
+      document.title = state.data.name + ' · aiboard';
+      $('#boardName').innerHTML = esc(state.data.name) + '<span>aiboard</span>';
+      $('#roBadge').hidden = !state.data.read_only;
+      $('#newTask').disabled = $('#newSprint').disabled = !!state.data.read_only;
+      flash('updated ' + new Date().toLocaleTimeString());
+      render();
+    } catch (e) { flash('cannot reach server', true); }
+  }
+  async function mutate(path, body, okMsg) {
+    try { const r = await api(path, body); await load(true); flash(okMsg || 'saved'); return r; }
+    catch (e) { flash(e.message, true); throw e; }
+  }
+
+  // ---- rendering
+  function render() {
+    const d = state.data; if (!d) return;
+    const sel = $('#sprintFilter');
+    sel.innerHTML = '<option value="all">All tasks</option><option value="none">No sprint</option>' +
+      d.sprints.map(s => `<option value="${s.id}">${s.id} · ${esc(s.title)} (${s.status})</option>`).join('');
+    sel.value = [...sel.options].some(o => o.value === state.sprint) ? state.sprint : 'all'; state.sprint = sel.value;
+    renderBoard(); renderSprints();
+    $('#boardView').hidden = state.tab !== 'board'; $('#sprintsView').hidden = state.tab !== 'sprints';
+    $('#tabBoard').classList.toggle('active', state.tab === 'board'); $('#tabSprints').classList.toggle('active', state.tab === 'sprints');
+    $('#sprintFilter').style.visibility = state.tab === 'board' ? '' : 'hidden';
+  }
+  function card(t) {
+    const labels = (t.labels || []).map(l => `<span class="chip">${esc(l)}</span>`).join('');
+    const drag = state.data.read_only ? '' : 'draggable="true"';
+    return `<div class="card ${t.priority}" data-task="${t.id}" ${drag}>
+      <div class="id">${t.id}</div><div class="title">${esc(t.title)}</div>
+      <div class="meta">${t.blocked ? `<span class="chip blocked" title="blocked by ${t.blockers.filter(b => b.status !== 'done' && b.status !== 'cancelled').map(b => b.id).join(', ')}">blocked</span>` : ''}${t.stale ? `<span class="chip stale" title="no activity since ${esc(t.last_activity || '?')}">stale</span>` : ''}${t.comments_count ? `<span class="chip comments" title="${t.comments_count} comments${t.needs_reply ? ', waiting on ' + esc(t.assignee) : ''}">💬 ${t.comments_count}${t.needs_reply ? ' · reply?' : ''}</span>` : ''}${t.sprint ? `<span class="chip sprint">${t.sprint}</span>` : ''}${t.assignee ? `<span class="chip">@${esc(t.assignee)}</span>` : ''}<span class="chip prio ${t.priority}">${t.priority}</span>${labels}</div></div>`;
+  }
+  function renderBoard() {
+    const d = state.data;
+    const tasks = d.tasks.filter(t => state.sprint === 'all' || (state.sprint === 'none' ? !t.sprint : t.sprint === state.sprint));
+    $('#boardView').innerHTML = d.statuses.map(s => {
+      const col = tasks.filter(t => t.status === s);
+      return `<div class="col ${s === 'cancelled' || s === 'done' ? 'dimmed' : ''}" data-status="${s}"><h2><span>${s}</span><span>${col.length}</span></h2>${col.map(card).join('')}</div>`;
+    }).join('');
+  }
+  function renderSprints() {
+    const d = state.data;
+    if (!d.sprints.length) { $('#sprintsView').innerHTML = '<div class="empty">No sprints yet. Use “+ Sprint” or <code>aiboard sprint new "Name"</code>.</div>'; return; }
+    const order = { 'in-progress': 0, backlog: 1, done: 2, cancelled: 3 };
+    $('#sprintsView').innerHTML = [...d.sprints].sort((a, b) => order[a.status] - order[b.status] || a.id.localeCompare(b.id)).map(s => {
+      const p = s.progress, c = p.counts, n = p.total || 1;
+      return `<div class="sprint-card" data-sprint="${s.id}">
+        <div class="top"><h3>${s.id} · ${esc(s.title)}</h3><span class="badge ${s.status}">${s.status}</span></div>
+        ${s.goal ? `<div class="goal">${esc(s.goal)}</div>` : ''}
+        <div class="bar"><i class="d" style="width:${100 * c.done / n}%"></i><i class="p" style="width:${100 * c['in-progress'] / n}%"></i><i class="c" style="width:${100 * c.cancelled / n}%"></i></div>
+        <div class="nums"><span>${c.done}/${p.total} done · ${c['in-progress']} in progress · ${c.backlog} backlog${c.cancelled ? ' · ' + c.cancelled + ' cancelled' : ''}</span><span>${s.start || '?'} → ${s.end || '?'}</span></div></div>`;
+    }).join('');
+  }
+  const options = (list, current) => list.map(v => `<option value="${v}" ${v === current ? 'selected' : ''}>${v}</option>`).join('');
+  const sprintOptions = (current) => `<option value="">— none —</option>` + state.data.sprints.map(s => `<option value="${s.id}" ${s.id === current ? 'selected' : ''}>${s.id} · ${esc(s.title)}</option>`).join('');
+
+  // ---- drawer
+  function openDrawer(titleHtml, bodyHtml) {
+    $('#drawerTitle').innerHTML = titleHtml; $('#drawerBody').innerHTML = bodyHtml;
+    $('#overlay').classList.add('open'); $('#drawer').classList.add('open');
+  }
+  function closeDrawer() { state.open = null; $('#overlay').classList.remove('open'); $('#drawer').classList.remove('open'); }
+
+  function queuePosition(t) {
+    const col = (state.data ? state.data.tasks : []).filter(x => x.status === t.status);
+    const n = col.findIndex(x => x.id === t.id) + 1;
+    return n ? `#${n} of ${col.length} in ${t.status}` : '—';
+  }
+  async function showTask(id) {
+    let t; try { t = await api('/api/tasks/' + id); } catch (e) { flash(e.message, true); return; }
+    state.open = { kind: 'task', id: t.id };
+    const ro = state.data.read_only;
+    const entry = e => `<div class="entry"><span class="when">${esc(e.timestamp)}</span><span class="who">${esc(e.author)}</span><div class="md">${md(e.text)}</div></div>`;
+    const log = t.worklog.slice().reverse().map(entry).join('');
+    const comments = (t.comments || []).slice().reverse().map(entry).join('');
+    openDrawer(`<span class="badge ${t.status}">${t.status}</span><h2>${t.id} · ${esc(t.title)}</h2>`,
+      `<dl class="kv">
+        <dt>Status</dt><dd>${ro ? t.status : `<select data-act="status">${options(STATUSES, t.status)}</select>`}</dd>
+        <dt>Sprint</dt><dd>${ro ? (t.sprint ? `<a href="#" data-ref="${t.sprint}">${t.sprint}</a>` : '—') : `<select data-act="sprint">${sprintOptions(t.sprint)}</select>`}</dd>
+        <dt>Priority</dt><dd>${ro ? t.priority : `<select data-act="priority">${options(PRIORITIES, t.priority)}</select>`}</dd>
+        <dt>Order</dt><dd>${queuePosition(t)}${ro ? '' : ` <button class="small" data-act="rank-top">Move to top</button> <button class="small" data-act="rank-bottom">Move to bottom</button>`}</dd>
+        <dt>Assignee</dt><dd>${ro ? (t.assignee ? esc(t.assignee) : '—') : `<input data-act="assignee" value="${esc(t.assignee || '')}" placeholder="nobody"> <button class="small" data-act="assign-me">me</button>`}</dd>
+        <dt>Labels</dt><dd>${(t.labels || []).map(l => `<span class="chip">${esc(l)}</span>`).join(' ') || '—'}</dd>
+        <dt>Blocked by</dt><dd>${(t.blockers || []).map(b => `<a href="#" class="chip ${b.status === 'done' || b.status === 'cancelled' ? '' : 'blocker'}" data-ref="${b.id}" title="${esc(b.title || '')}">${b.id} · ${b.status}</a>`).join(' ')}${ro ? ((t.blockers || []).length ? '' : '—') : ` <input data-act="blocked_by" value="${esc((t.blocked_by || []).join(', '))}" placeholder="T-001, T-002" style="width:160px">`}${t.blocked ? ' <span class="chip blocked">blocked</span>' : ''}</dd>
+        <dt>Activity</dt><dd>${t.last_activity || '—'}${t.stale ? ' <span class="chip stale">stale</span>' : ''}</dd>
+        <dt>Folder</dt><dd class="path">${esc(t.path)}</dd></dl>
+       <div class="md">${md(t.brief)}</div>
+       <h2 style="margin-top:28px">Comments <span class="status">(${(t.comments || []).length})</span></h2>
+       ${ro ? '' : `<div class="logform"><textarea id="commentText" placeholder="Ask a question, leave a review note, or answer one. Agents read this."></textarea><div class="actions"><button class="primary small" data-act="comment">Comment</button></div></div>`}
+       <div class="log comments" style="margin-top:14px">${comments || '<div class="empty">no comments</div>'}</div>
+       <h2 style="margin-top:28px">Worklog <span class="status">(${t.worklog.length})</span></h2>
+       ${ro ? '' : `<div class="logform"><textarea id="logText" placeholder="What did you do or decide? Markdown is fine."></textarea><div class="actions"><button class="primary small" data-act="log">Add entry</button></div></div>`}
+       <div class="log" style="margin-top:14px">${log || '<div class="empty">empty</div>'}</div>`);
+  }
+
+  async function showSprint(id) {
+    let s; try { s = await api('/api/sprints/' + id); } catch (e) { flash(e.message, true); return; }
+    state.open = { kind: 'sprint', id: s.id };
+    const ro = state.data.read_only;
+    const rows = s.tasks_detail.map(t => `<div class="task-row" data-task="${t.id}"><span class="id">${t.id}</span><span class="t">${esc(t.title)}</span><span class="badge ${t.status}">${t.status}</span></div>`).join('');
+    const body = (s.description || '').replace(/^## Tasks[\s\S]*$/m, '');
+    openDrawer(`<span class="badge ${s.status}">${s.status}</span><h2>${s.id} · ${esc(s.title)}</h2>`,
+      `<dl class="kv">
+        <dt>Status</dt><dd>${ro ? s.status : `<select data-act="sprint-status">${options(STATUSES, s.status)}</select>`}</dd>
+        <dt>Goal</dt><dd>${s.goal ? esc(s.goal) : '—'}</dd><dt>Dates</dt><dd>${s.start || '?'} → ${s.end || '?'}</dd>
+        <dt>Progress</dt><dd>${s.progress.percent}% (${s.progress.counts.done}/${s.progress.total} done)</dd><dt>Folder</dt><dd class="path">${esc(s.path)}</dd></dl>
+       <div class="md">${md(body)}</div><h2>Tasks (${s.tasks_detail.length})</h2>${rows || '<div class="empty">no tasks attached</div>'}
+       ${ro ? '' : `<p><button class="small" data-act="new-task-in-sprint" data-sprint="${s.id}">+ Task in this sprint</button></p>`}`);
+  }
+
+  // ---- modal forms
+  function openModal(html) { $('#modalBox').innerHTML = html; $('#modal').classList.add('open'); const f = $('#modalBox input, #modalBox textarea'); if (f) f.focus(); }
+  function closeModal() { $('#modal').classList.remove('open'); }
+  function newTaskForm(sprint) {
+    openModal(`<h2>New task</h2><form class="form" id="taskForm">
+      <label>Title <input name="title" required></label>
+      <div class="row"><label>Sprint <select name="sprint">${sprintOptions(sprint || (state.sprint.startsWith('S-') ? state.sprint : ''))}</select></label>
+      <label>Priority <select name="priority">${options(PRIORITIES, 'medium')}</select></label></div>
+      <div class="row"><label>Assignee <input name="assignee" placeholder="nobody"></label><label>Labels <input name="labels" placeholder="a, b"></label></div>
+      <label>Description (Markdown) <textarea name="body" placeholder="Context, acceptance criteria, links"></textarea></label>
+      <div class="actions"><button type="button" data-act="cancel-modal">Cancel</button><button class="primary" type="submit">Create</button></div></form>`);
+    $('#taskForm').onsubmit = async (e) => {
+      e.preventDefault(); const f = new FormData(e.target); const body = Object.fromEntries(f.entries());
+      try { const t = await mutate('/api/tasks', body, 'created ' + '…'); closeModal(); flash('created ' + t.id); showTask(t.id); } catch (err) {}
+    };
+  }
+  function newSprintForm() {
+    openModal(`<h2>New sprint</h2><form class="form" id="sprintForm">
+      <label>Name <input name="title" required></label>
+      <label>Goal <input name="goal"></label>
+      <div class="row"><label>Start <input name="start" type="date"></label><label>End <input name="end" type="date"></label></div>
+      <label>Status <select name="status">${options(STATUSES, 'backlog')}</select></label>
+      <label>Description (Markdown) <textarea name="body"></textarea></label>
+      <div class="actions"><button type="button" data-act="cancel-modal">Cancel</button><button class="primary" type="submit">Create</button></div></form>`);
+    $('#sprintForm').onsubmit = async (e) => {
+      e.preventDefault(); const body = Object.fromEntries(new FormData(e.target).entries());
+      try { const s = await mutate('/api/sprints', body); closeModal(); flash('created ' + s.id); state.tab = 'sprints'; render(); showSprint(s.id); } catch (err) {}
+    };
+  }
+
+  // ---- drag and drop
+  // Dropping between two cards ranks the task between them; dropping in another column also
+  // changes its status. The line shows where it will land.
+  let dragId = null, dropAt = null;
+  function clearDropLine() { document.querySelectorAll('.drop-before, .drop-after').forEach(x => x.classList.remove('drop-before', 'drop-after')); }
+  function dropTarget(col, y) {
+    const cards = [...col.querySelectorAll('.card')].filter(c => c.dataset.task !== dragId);
+    const below = cards.find(c => { const r = c.getBoundingClientRect(); return y < r.top + r.height / 2; });
+    if (below) return { card: below, where: 'before' };
+    return cards.length ? { card: cards[cards.length - 1], where: 'after' } : null;
+  }
+  document.addEventListener('dragstart', (e) => { const c = e.target.closest && e.target.closest('.card'); if (!c) return; dragId = c.dataset.task; c.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', dragId); });
+  document.addEventListener('dragend', (e) => { const c = e.target.closest && e.target.closest('.card'); if (c) c.classList.remove('dragging'); document.querySelectorAll('.col.over').forEach(x => x.classList.remove('over')); clearDropLine(); dragId = null; dropAt = null; });
+  document.addEventListener('dragover', (e) => {
+    const col = e.target.closest && e.target.closest('.col'); if (!col || !dragId) return;
+    e.preventDefault(); e.dataTransfer.dropEffect = 'move'; col.classList.add('over');
+    const t = dropTarget(col, e.clientY);
+    const key = t ? t.card.dataset.task + ':' + t.where : col.dataset.status;
+    if (dropAt && dropAt.key === key) return;
+    clearDropLine(); dropAt = { key, target: t };
+    if (t) t.card.classList.add('drop-' + t.where);
+  });
+  document.addEventListener('dragleave', (e) => { const col = e.target.closest && e.target.closest('.col'); if (col && !col.contains(e.relatedTarget)) { col.classList.remove('over'); clearDropLine(); dropAt = null; } });
+  document.addEventListener('drop', async (e) => {
+    const col = e.target.closest && e.target.closest('.col'); if (!col || !dragId) return; e.preventDefault();
+    const id = dragId, target = dropTarget(col, e.clientY); dragId = null; dropAt = null;
+    col.classList.remove('over'); clearDropLine();
+    const task = state.data.tasks.find(t => t.id === id); if (!task) return;
+    const status = col.dataset.status, moving = task.status !== status;
+    const steps = [];
+    try {
+      if (moving) { await api(`/api/tasks/${id}/status`, { status }); steps.push(status); }
+      if (target) {
+        const ranked = await api(`/api/tasks/${id}/rank`, { [target.where]: target.card.dataset.task });
+        if (ranked.rank !== task.rank) steps.push(`${target.where} ${target.card.dataset.task}`);
+      }
+      await load(true);
+      flash(steps.length ? `${id} → ${steps.join(', ')}` : 'no change');
+    } catch (err) { flash(err.message, true); load(true); }
+  });
+
+  // ---- events
+  document.addEventListener('click', async (e) => {
+    const act = e.target.closest('[data-act]');
+    if (act) {
+      const a = act.dataset.act; const id = state.open && state.open.id;
+      if (a === 'cancel-modal') return closeModal();
+      if (a === 'comment') { const text = $('#commentText').value.trim(); if (!text) return; await mutate(`/api/tasks/${id}/comment`, { message: text }, 'commented').then(() => showTask(id)).catch(() => {}); return; }
+      if (a === 'log') { const text = $('#logText').value.trim(); if (!text) return; await mutate(`/api/tasks/${id}/log`, { message: text }, 'logged').then(() => showTask(id)).catch(() => {}); return; }
+      if (a === 'assign-me') { const me = author(); if (me === 'web') { flash('type your name in the header first', true); return; } await mutate(`/api/tasks/${id}/assign`, { assignee: me, force: true }).then(() => showTask(id)).catch(() => {}); return; }
+      if (a === 'new-task-in-sprint') { newTaskForm(act.dataset.sprint); return; }
+      if (a === 'rank-top' || a === 'rank-bottom') {
+        const top = a === 'rank-top';
+        await mutate(`/api/tasks/${id}/rank`, top ? { top: true } : { bottom: true }, `${id} → ${top ? 'top' : 'bottom'} of the queue`).then(() => showTask(id)).catch(() => {});
+        return;
+      }
+      return;
+    }
+    const ref = e.target.closest('[data-ref]'); if (ref) { e.preventDefault(); const id = ref.dataset.ref; id.startsWith('T-') ? showTask(id) : showSprint(id); return; }
+    const c = e.target.closest('[data-task]'); if (c) { showTask(c.dataset.task); return; }
+    const s = e.target.closest('[data-sprint]'); if (s) { showSprint(s.dataset.sprint); return; }
+  });
+  document.addEventListener('change', async (e) => {
+    const el = e.target.closest('[data-act]'); if (!el || !state.open) return;
+    const id = state.open.id; const a = el.dataset.act; const v = el.value;
+    try {
+      if (a === 'status') { await mutate(`/api/tasks/${id}/status`, { status: v }, `${id} → ${v}`); showTask(id); }
+      else if (a === 'priority') { await mutate(`/api/tasks/${id}/edit`, { priority: v }); showTask(id); }
+      else if (a === 'sprint') { await mutate(`/api/tasks/${id}/edit`, { sprint: v }); showTask(id); }
+      else if (a === 'blocked_by') { await mutate(`/api/tasks/${id}/edit`, { blocked_by: v }); showTask(id); }
+      else if (a === 'assignee') { await mutate(`/api/tasks/${id}/assign`, { assignee: v, force: true }); showTask(id); }
+      else if (a === 'sprint-status') { await mutate(`/api/sprints/${id}/status`, { status: v }, `${id} → ${v}`); showSprint(id); }
+    } catch (err) {}
+  });
+  $('#overlay').onclick = closeDrawer; $('#closeDrawer').onclick = closeDrawer;
+  $('#modal').addEventListener('click', (e) => { if (e.target === $('#modal')) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if ($('#modal').classList.contains('open')) closeModal(); else closeDrawer(); } });
+  $('#tabBoard').onclick = () => { state.tab = 'board'; store.set('tab', 'board'); render(); };
+  $('#tabSprints').onclick = () => { state.tab = 'sprints'; store.set('tab', 'sprints'); render(); };
+  $('#sprintFilter').onchange = (e) => { state.sprint = e.target.value; store.set('sprint', state.sprint); render(); };
+  const main = document.querySelector('main');
+  main.addEventListener('mouseenter', () => { state.hovering = true; });
+  main.addEventListener('mouseleave', () => { state.hovering = false; if (state.pending) load(); });
+  $('#newTask').onclick = () => newTaskForm();
+  $('#newSprint').onclick = () => newSprintForm();
+  setInterval(() => { if ($('#auto').checked && !$('#modal').classList.contains('open')) load(); }, 3000);
+  load();
+})();
+</script>
+</body>
+</html>

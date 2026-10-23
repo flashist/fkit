@@ -33,6 +33,10 @@
   **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do
   not follow it). No existing line of this ADR was edited; the notes are appends, and the Status stays
   `accepted`.
+  **Extended 2026-10-20 by a second append ([ADR-058](adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge.md)):**
+  a dated ⚠️ note now also sits below the `0529` note under **§D9** (the read-only reader now ships to
+  users before phase 8 retires it). The site list above is left byte-identical and is superseded by
+  this line; the same append-only rule and the same legend apply.
 
 > **What this ADR decides, in one line:** aiboard stops being a separate project — it is rewritten in
 > Node and merged into fkit as `board/`, with one command (`fkit board`) and a web page, and becomes the
@@ -328,6 +332,16 @@ tests go with the MCP port in phase 9** (task `0468`). This ADR first said phase
 > `bin/` tooling). Verified against live files 2026-10-20: the four files are gone, while
 > `bin/fkit-board.mjs` and `bin/board-narrow.mjs` are still on disk, now with no test. Phase 8 still
 > retires the two scripts; it has no tests left to retire. The table above is left byte-identical.
+
+> ⚠️ **Dated note 2026-10-20 ([ADR-058](adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge.md))
+> — the read-only reader ships to users before phase 8 retires it.** By owner ruling of 2026-10-20
+> (quoted in ADR-058), task `0536` ships `bin/fkit-board.mjs`, with a copy of aiboard's page, to every
+> fkit user as `fkit board` — read-only, Node needed for that command only. Until now this ADR
+> assumed the reader stayed in fkit's own checkout (`docs/board.md`, *"Not shipped"*); that no longer
+> holds. What follows: `0444` (phase 5) re-points `fkit board` from the reader to `board/`, and phase 8
+> (`0467`) retiring the reader now also means removing it and the copied page from the install and the
+> launcher. The phases, their gates and Q16 / D6 (no writable board on real data until the pilot) are
+> unchanged; this note starts no phase. The table and the note above are left byte-identical.
 
 **Order:** 0 → 1 → 2 → 3 → (4 alongside 3 and 5) → 5 → 6 → then 7, 8, 9. The three big changes — port
 (2), fkit-ify (3), convert (6–7) — **stay apart, each gated**. The previous fkit is removed when the last

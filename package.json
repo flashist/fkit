@@ -2,8 +2,8 @@
   "name": "fkit",
   "version": "0.3.2",
   "scripts": {
-    "test": "node --test test/*.test.js",
-    "test:unit": "node --test test/*.test.js",
+    "test": "node --test test/*.test.js test/board/*.test.js",
+    "test:unit": "node --test test/*.test.js test/board/*.test.js",
     "test:prove-red": "bash test/prove-red.sh",
     "test:docs": "node --test test/dual-home-parity.test.js test/task-id-uniqueness.test.js",
     "test:release": "node --test test/release/*.test.js",

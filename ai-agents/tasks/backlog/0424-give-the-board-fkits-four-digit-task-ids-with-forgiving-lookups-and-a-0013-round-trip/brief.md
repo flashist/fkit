@@ -46,7 +46,7 @@ Priorities (all four levels, Q7) and rank already came across in phase 2; this u
 
 ## Notes
 
-- **Depends on:** [`0423`](../0423-prove-the-node-port-matches-the-python-reference-on-fkits-corpus-the-phase-2-gate/brief.md) (phase 2's gate). Hard.
+- **Depends on:** [`0423`](../../done/0423-prove-the-node-port-matches-the-python-reference-on-fkits-corpus-the-phase-2-gate/brief.md) (phase 2's gate). Hard.
 - **Blocks:** [`0425`](../0425-give-the-board-fkits-status-folders-and-a-free-text-blocked-reason/brief.md), [`0431`](../0431-add-ai-agents-board-json-settings-and-the-data-format-number-the-board-refuses-to-write-past/brief.md)
 - ⛔ **Do not start without the owner's specific word (ADR-052 — each phase starts only on his word).** Being pullable on the board is not his word, and approval of another phase or of ADR-052 itself is not either.
 - **Phase gate (Phase 3):** Tests green; a copy of fkit's corpus runs clean. A gate met means the next phase may be **put to** the owner — ⛔ not that it starts (D9).

@@ -26,7 +26,7 @@ fkit-architect
 >
 > **What changes.**
 > 1. **What is compared.** The web side is the board's own page — the owner door ([`0433`](../0433-build-the-owner-door-the-page-with-a-one-time-key-stamping-every-write-as-the-page-door/brief.md)). The
->    terminal side is the board's ported terminal kanban view ([`0421`](../0421-port-aiboards-command-line-to-node-including-the-terminal-kanban-view-and-json/brief.md), named `fkit board` by
+>    terminal side is the board's ported terminal kanban view ([`0421`](../../done/0421-port-aiboards-command-line-to-node-including-the-terminal-kanban-view-and-json/brief.md), named `fkit board` by
 >    [`0434`](../0434-name-the-boards-command-fkit-board-throughout-its-own-surface/brief.md)). ⛔ **Any terminal prototype is a thin consumer of `fkit board … --json`** — never a
 >    second reader of the markdown tree, and never `dashboard.sh` output.
 > 2. **Stage 0 is finished and frozen.** Its artifact, `bin/board-narrow.mjs`, filters `dashboard.sh`

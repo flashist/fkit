@@ -105,6 +105,17 @@ _fkit_same_dir() {   # <a> <b> → true if both are directories with the same ph
 fkit_repo="${FKIT_REPO:-$(_fkit_verfield repo)}"; fkit_repo="${fkit_repo:-flashist/fkit}"
 fkit_ref="${FKIT_REF:-$(_fkit_verfield ref)}";    fkit_ref="${fkit_ref:-main}"
 
+# `fkit board` (ADR-058): the project's board, read-only, served from $PWD. It runs before the update
+# check, setup and the menu, so it writes nothing. Only this command needs Node.
+if [ "${1:-}" = board ]; then
+  shift
+  command -v node >/dev/null 2>&1 || {
+    echo "fkit: 'fkit board' needs Node.js, and 'node' is not on your PATH. Install it from https://nodejs.org, then run it again. Every other fkit command works without it." >&2
+    exit 1; }
+  [ -f "$share/bin/fkit-board.mjs" ] || { echo "fkit: install looks broken — $share/bin/fkit-board.mjs is missing. Run:  fkit update" >&2; exit 1; }
+  exec node "$share/bin/fkit-board.mjs" "$@"
+fi
+
 case "${1:-}" in
   update|--update|upgrade|--upgrade|self-update)
     if _fkit_is_source_checkout; then
@@ -201,12 +212,13 @@ Roles:
 Within a session, `@fkit-<role> <question>` asks another role and brings the answer back.
 
 Other:
+  fkit board            view this project's tasks and sprints in your browser, read-only (needs Node)
   fkit update           update fkit itself
   FKIT_SETUP_ONLY=1     set the project up, then exit without launching
   FKIT_NO_UPDATE_CHECK=1  never check for updates
   FKIT_CLEANUP_DRY_RUN=1  report the dead Omnigent paths fkit would delete, and delete nothing
 
-A first argument that is not a role is an error. Args AFTER a role pass through to `claude`.
+A first argument that is not a role (or `board` / `update`) is an error. Args AFTER a role pass through to `claude`.
 EOF
     exit 0 ;;
 esac

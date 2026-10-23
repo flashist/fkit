@@ -139,9 +139,9 @@ npm run test:release
 ```
 
 Not as the last line of defence — `npm run release` runs both for you (§4). Run them first because a
-red found before the release run costs nothing. `npm test` is `node --test test/*.test.js`
-(`package.json:5`) and `npm run test:release` is the release tool's own test (`package.json:9`); for
-their times, see `CONTRIBUTING.md`'s Tests block.
+red found before the release run costs nothing. `npm test` is
+`node --test test/*.test.js test/board/*.test.js` (`package.json:5`) and `npm run test:release` is the
+release tool's own test (`package.json:9`); for their times, see `CONTRIBUTING.md`'s Tests block.
 
 The release does **not** run prove-red (the four mutation cases); CI runs it nightly
 (`.github/workflows/prove-red.yml`). Check that the last nightly `prove-red` run is green on the

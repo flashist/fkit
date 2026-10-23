@@ -65,6 +65,12 @@
   `npm run test:release` too). §D10 carries no note: the CI threshold is 120 s, the same budget §D10
   states. The site lists above are left byte-identical and are superseded by this line; the same
   append-only rule and the same legend apply.
+  **Extended 2026-10-20 by a fifth append (owner ruling of 2026-10-20, Sprint 14 A3; recorded with
+  [ADR-058](adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge.md)):**
+  a dated ⛔ note now also sits below **§D1**'s closing paragraph (the board's own tests are inside the
+  fence), a ⚠️ note below §D1's *"Category 3"* item (`bin/fkit-board.mjs` now ships), and a ⚠️ note
+  below **§D2**'s item 1 (up to six `test/board/` files pre-approved). The site lists above are left
+  byte-identical and are superseded by this line; the same append-only rule and the same legend apply.
 
 > **What this ADR decides, in one line:** fkit's test suite tests only how fkit's **shipped scripts**
 > behave, seen from outside — nothing about prompt wording, repo-only tools or the repo's own
@@ -208,6 +214,14 @@ in, exit code / output / files written out — no sourcing or mocking of interna
 It may **not** cover:
 
 3. **Category 3** — repo-only tooling under `bin/` (it never ships);
+
+   > ⚠️ **Dated note 2026-10-20 (ADR-058) — one `bin/` script now ships.** By owner ruling of
+   > 2026-10-20 (quoted in
+   > [ADR-058](adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge.md)),
+   > `install.sh` will ship `bin/fkit-board.mjs` (task `0536`), so once that lands it is a shipped
+   > script inside D1's fence, not category 3. No test file for it is pre-approved — a new one needs
+   > the owner's OK (D2.1; ADR-058 *§Consequences*). Its earlier tests were deleted by `0529` as
+   > category 3. The item above is left byte-identical.
 4. **Category 4** — the wording or shape of shipped prompt and document files under `claude/` (skills,
    agents, specs, scaffold documents);
 5. **Category 5** — the content of this repo's own `ai-agents/` tree;
@@ -216,10 +230,44 @@ It may **not** cover:
 (ADR-014 §2). Which of today's 42 files falls in which category, and is kept or deleted, is `0529`'s
 per-file table, not this ADR's.
 
+> ⛔ **Dated note 2026-10-20 (owner ruling, Sprint 14 A3, item D2) — *"and no others"* above is
+> overturned in one respect: the board's own code is inside the fence.** Do not read categories 1–2
+> as excluding the board module `board/` (ADR-052 D1). Tests of it, under `test/board/`, **count as
+> covered by D1, because the board will ship** (ADR-052 D7, task `0443`) — before it ships as well as
+> after. How they run:
+>
+> - **Inside the default `npm test`.** Task `0417` adds `test/board/*.test.js` to `package.json`'s
+>   `"test"` script; verified against live files 2026-10-20, that script is
+>   `node --test test/*.test.js`, which does not reach `test/board/`.
+> - **Inside the 2-minute budget** (D10, unchanged). The coder names any slow board test in the task's
+>   plan, before building it.
+> - This is **not** a fifth D7 exception and does not bring back the fourth category; D7 stands.
+>
+> **Owner ruling**, 2026-10-20, via `AskUserQuestion`, `fkit lead` session, relayed verbatim by
+> `fkit-lead`. Question as shown: *"Go ahead with this plan?"* Selected option text, verbatim: *"Yes,
+> all of it (Recommended)"* — description he saw: *"Ship the view-only board to every fkit user now,
+> and start the Node rebuild (Sprint 14)."* The plan he saw just before said, in the relevant part
+> (quoted): *"Saying yes also allows two things behind the scenes: - The board's code gets automated
+> tests. One test file per task, up to 6, pre-approved now, so you won't be asked about each file."*
+> The full plan is quoted in ADR-058 and on the Sprint 14 board's A3 row. ⚠️ He saw that plain
+> wording, not the details in the bullets above: those are the architect's consult terms (option A,
+> D2) that the plan summarised and his *"Yes"* approved. The text above is left byte-identical.
+
 ### D2 — Growth stop (ruling 3)
 
 1. **No new test file and no new prove-red case without the owner's OK** — each one, every time, in
    any lane (the default suite, the nightly prove-red lane, the release-test lane).
+
+   > ⚠️ **Dated note 2026-10-20 (owner ruling, Sprint 14 A3, item D3) — the owner has given his OK in
+   > advance for up to six board test files.** The rule above stands; this is that OK, given ahead of
+   > time. Pre-approved: **at most 6 new test files, all under `test/board/`, one per task, for tasks
+   > `0417`, `0418`, `0419`, `0420`, `0421` and `0422`.** Each task's plan still names its file by path.
+   > Not covered: **`0423`'s Python-vs-Node check is a one-off script whose output the worklog pastes,
+   > not a kept test**; a second file in any one task, a file for any other task, a test for
+   > `bin/fkit-board.mjs` or its launcher route (ADR-058), and any new prove-red case — each goes back
+   > to the owner. D2.3 (the key list) is untouched. The ruling is quoted in the ⛔ note below §D1 —
+   > deliberately not restated here, so there is one place to keep true rather than two. The item
+   > above is left byte-identical.
 2. **No numeric cap** (owner, Q3). Growth is held back by two things only: the owner's OK above, and
    the 2-minute budget on the default `npm test` (D10). **This owner answer replaces ruling 3's "under
    a cap" wording** — an owner ruling, not the architect's call. The owner's stated aim, verbatim:

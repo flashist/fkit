@@ -46,7 +46,7 @@ D8: the converter reads old projects with fkit's **current** tools (tools from f
 
 ## Notes
 
-- **Depends on:** [`0423`](../0423-prove-the-node-port-matches-the-python-reference-on-fkits-corpus-the-phase-2-gate/brief.md) (phase 4 runs alongside phase 3, which follows phase 2's gate). Hard.
+- **Depends on:** [`0423`](../../done/0423-prove-the-node-port-matches-the-python-reference-on-fkits-corpus-the-phase-2-gate/brief.md) (phase 4 runs alongside phase 3, which follows phase 2's gate). Hard.
 - **Blocks:** [`0436`](../0436-make-the-converter-refuse-to-start-or-to-guess-preconditions-and-ambiguity-refusals/brief.md)
 - ⛔ **Do not start without the owner's specific word (ADR-052 — each phase starts only on his word).** Being pullable on the board is not his word, and approval of another phase or of ADR-052 itself is not either.
 - **Phase gate (Phase 4):** The owner reads fkit's trial-run report; every refusal explained; the default-priority rule confirmed. A gate met means the next phase may be **put to** the owner — ⛔ not that it starts (D9).

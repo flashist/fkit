@@ -11,6 +11,9 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes �
 
 ## Unreleased
 
+- New: `fkit board` — a read-only web view of the project's tasks and sprints, at
+  `http://127.0.0.1:8585/`. Run it in the project's folder. It needs Node.js; no other fkit command
+  does. Existing installs get it with `fkit update`.
 - When setup fails, the launcher no longer starts a session on agents it cannot use — any symlink on
   the way (a symlinked `.claude`, `.claude/agents` or agent file, working or dangling), a directory, or
   an unreadable file named `fkit-*.md`. It refuses and names each offending path and why. A project
