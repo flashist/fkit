@@ -134,3 +134,4 @@ reported-only. Recorded so the next reader knows they were seen, not missed.
 - [[systems/testing-and-verification]] — the CI and suite claims this row corrected
 - [[decisions/adr-003-ci-runs-validate-bundles]] — the ADR `0281` corrected in the same cluster, and which `0312`'s brief flagged was about to receive a fresh false claim
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] — why the row's own vault grep could report but never write
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — the seventeen rows that closed beside this one in Sweep B · [[tasks/the-five-architecture-md-rows-cancelled-into-0392]] — `0376`, the occurrence-B row filed when this task closed, later consolidated into `0392`

@@ -72,3 +72,4 @@ Two rounds. `node --test test/*.test.js` → **774/774, 24 suites**. An independ
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — the board this ran on
 - [[systems/knowledge-base-structure]] — *added 2026-08-29:* the record structure whose header locators this swept
 - [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — *added 2026-08-29:* the board carrying its unfixed residuals (`0343`, and the below-line-3 class)
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-a-members-the-ten-citation-rot-rows-and-0349]] — `0343`, the two locators just outside this task's `review.md` scope

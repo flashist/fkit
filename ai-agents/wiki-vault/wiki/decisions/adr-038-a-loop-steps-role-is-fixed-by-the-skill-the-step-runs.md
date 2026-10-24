@@ -92,3 +92,4 @@ row's "apply … method" construction stays.
 - [[tasks/enumerate-the-process-review-rows-method-steps-and-give-the-row-its-reason]] — *added 2026-08-29:* `0223`, which put this ADR into the loop's Process-review row as its reason clause
 - [[tasks/decide-how-the-ship-loop-handles-a-non-coder-owned-task-row]] — *added 2026-08-29:* `0270`, which ⭐ **discharged this ADR's closeout clause explicitly before weighing any option** — barred for Process-review on the hook mechanism, and a misnomer for Build
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/note-adr-044s-oracle-rule-onto-0224-and-0225]] — task `0347`, ADR-044's oracle rule noted onto `0224`/`0225` · [[tasks/sweep-b-the-single-site-correction-notes]] — task `0357`, Sweep B — the single-site correction notes
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0346`, the Build-only note on the *"enumerated step table"* claim

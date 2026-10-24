@@ -10,7 +10,7 @@ Backlog
 Unscheduled
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-wiki
@@ -63,7 +63,7 @@ slug match.
 uningested count could be lower. It could also be higher: **Sweep C's reviewer independently counted
 64 folders / 48 without a slug-matched page**, a difference in the safe direction. ⛔ **Neither pair
 of numbers is this row's input.** They establish the order of magnitude and nothing more
-([`0301`](../0301-record-that-a-dated-claim-is-correct-as-of-its-date-and-does-not-become-a-defect-by-ageing/brief.md)
+([`0301`](../../backlog/0301-record-that-a-dated-claim-is-correct-as-of-its-date-and-does-not-become-a-defect-by-ageing/brief.md)
 — a dated claim is correct as of its date).
 
 ### ⭐ WHY THIS IS A SEPARATE ROW AND WAS NOT FOLDED INTO SWEEP C
@@ -160,3 +160,29 @@ procedures — [`/fkit-wiki-ingest`](../../../../claude/skills/fkit-wiki-ingest/
 - **Source:** owner ruling T2, 2026-09-05, `AskUserQuestion`, live `fkit lead` session, option label
   verbatim *"Bound out + filing request (Rec)"*; measurement from `ai-agents/wiki-vault/log.md`
   § *"⛔ THE BOUND — 45 uningested closed tasks are DELIBERATELY NOT IN THIS PASS"*.
+- **Close-out record, 2026-10-24 — dated fact, as reported by `fkit-wiki` and relayed by `fkit-lead`;
+  the scope text above is unchanged.** Owner's go-ahead for the work: typed *"Ask librarian"*,
+  `fkit lead` session, 2026-10-24. Closed by a spawned `fkit-producer` (agent-closed — not
+  owner-verified; ADR-033 §5) — the producer did not re-run the counts or the lint.
+  - **Result, per the librarian:** recount from the disk inventory (not the watermark) — **354**
+    closed task folders; **40** lacked a vault page (vs the dated **45** of 2026-09-05 — that 45-list
+    was never saved, so the two cannot be reconciled task by task); all 40 now covered; **0 of 354**
+    lack a page after the pass. **6** pages created (grouped: Sweep A members, Sweep B members, Sweep C
+    members, the five `architecture.md` rows cancelled into `0392`, `0369`, `0372`); **48** pages got
+    back-links; `index.md` updated. Whole-vault lint: **370** pages, **0** broken links / **0** missing
+    from index / **0** one-way links.
+  - **Departure 1 — Verification step 2 ("the derived set exists in the worklog before any write").**
+    The wiki role writes only the vault, so the derived set is recorded in `ai-agents/wiki-vault/log.md`,
+    entry *"2026-10-24 — ingest (task 0380) — STEP 1–2: the derived set and this pass's bound, recorded
+    BEFORE any page write"* — the first of two 2026-10-24 entries, written before any page. This
+    folder has no `worklog.md`; the producer did not create one (a copy would be the producer's text,
+    not the doer's record).
+  - **Departure 2 — What-to-build step 3 ("one page per task").** Grouped pages instead, at the lead's
+    instruction, matching earlier syncs; every task appears by folder path on its page's `Source` line.
+  - **Departure 3 — Verification step 1 ("only under `ai-agents/wiki-vault/`").** `git status` also
+    showed `ai-agents/sprints/backlog.md` and this brief modified — the lead's `🔄 In progress` edits,
+    not the librarian's.
+  - **Departure 4 — What-to-build step 5 (watermark).** Watermark left untouched (`185ac5e`, no longer
+    the `cf289c2` this brief names); `log.md` records the 2026-09-05 bound as discharged.
+  - ⭐ **Still open, not settled by this close:** the owner question above — whether a watermark
+    advance that knowingly leaves work uningested should be mechanically blocked.

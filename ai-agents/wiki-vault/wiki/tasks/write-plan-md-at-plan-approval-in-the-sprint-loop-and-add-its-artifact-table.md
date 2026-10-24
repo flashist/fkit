@@ -42,3 +42,4 @@ Follow-up 1 of [[tasks/decide-the-construction-that-satisfies-the-verbatim-carry
 - [[tasks/add-an-exit-table-row-for-a-failed-build-verify-review-spawn-in-the-sprint-loop]] — task `0208`, from **this task's review row `R5`**: writing `plan.md` before the Build spawn **opened an orphaned-artifact window** that the exit table had no row for, and the guidance for it sat only in this task's `worklog.md`
 - [[tasks/decide-what-the-sprint-driver-does-when-a-spawned-worker-dies]] — task `0167`, the ruling behind that row
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/fkit]]
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0207`, the ADR-020 note this task's review finding R1 asked for

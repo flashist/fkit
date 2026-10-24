@@ -89,3 +89,4 @@ quotations the href repair would have rewritten.
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/the-two-citation-sweeps-architecture-md-and-the-repo-wide-adr-line-class]] — task `0393`, the repo-wide sweep of the class this guard polices
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-sprint-mover-pins-and-successor-mode-durable-prove-red-mutations]] — task `0388` item B: ⛔ **blind spot 11's prospective cost stopped being 0** — an open `review.md` under `tasks/backlog/` **is** scanned and **is not** exempt, and option B stays refused
 - *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-test-scope-reset-tasks-0526-0530]] — the cut that deleted this guard
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/amend-the-review-ledger-location-column-to-heading-plus-fragment]] — `0369`, owner ruling G1's follow-up D — the ledger column this guard's rule needed

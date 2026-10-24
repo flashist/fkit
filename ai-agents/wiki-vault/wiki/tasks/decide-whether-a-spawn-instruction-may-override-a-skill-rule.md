@@ -45,3 +45,4 @@ Task **`0201`** owns the repair and is **gated on explicit owner authorization**
 - [[tasks/add-adr-037s-worker-side-precedence-clause-to-the-universal-rules-block]] — task `0190`, ADR-037's **worker-side** clause, shipped 2026-08-04 on an owner-signed budget bump
 - [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — task `0191`, ADR-037's **driver-side** clause — the one that would have stopped **instance A** at the driver rather than at the worker. ⚠️ **It reaches no driver yet**
 - [[tasks/decide-whether-process-review-is-always-the-coder-or-the-architect-gains-the-skill]] — task `0200`, which decides the **invocation** axis ADR-037 §Context explicitly disclaims — and one of the two closed ledgers this task left audited-but-unrepaired
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-a-members-the-ten-citation-rot-rows-and-0349]] — `0193`, the six stale facts repaired in this task's closed brief

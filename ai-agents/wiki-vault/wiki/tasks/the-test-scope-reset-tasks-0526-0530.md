@@ -34,3 +34,4 @@ Carry out the owner's 2026-10-19 decision to *"RADICALLY reduce the tests"* (opt
 - Tests kept as named exceptions: [[tasks/assert-task-ids-are-unique-in-the-test-suite]] · [[tasks/build-dual-home-parity-test]]
 - [[tasks/settle-the-reference-integrity-condition-once-for-both-halves]] — the condition whose tests went
 - *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`, closing one-way links):* [[decisions/adr-014-how-fkit-tests-itself]] · [[systems/install-and-self-update]] · [[tasks/add-a-why-not-what-code-comment-rule-and-remove-the-rules-that-contradict-it]]
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0351`, whose corrected `prove-red.sh` comments `0529`'s cut later removed

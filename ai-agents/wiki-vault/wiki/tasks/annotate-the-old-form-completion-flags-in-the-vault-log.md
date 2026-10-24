@@ -66,3 +66,4 @@ Done, **agent-closed — not owner-verified**. Append-only preserved: the file's
 - [[systems/knowledge-base-structure]] — the vault and its append-only log
 - [[tasks/wiki-ingest-of-the-structure-check-design-report-and-companion-adr]] — task `0249` (2026-08-07): the append-only ruling this task settled, **obeyed under pressure** — the ingest's own three false status claims were corrected by a **new dated entry**, never an in-place edit, leaving the entry above byte-identical
 - [[tasks/the-2026-08-13-vault-resync-chain]] — the chain that re-applied this task's ruling: `log.md` is append-only with **no exceptions**, so every correction is a new dated entry
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-c-members-the-five-vault-resync-rows]] — `0212`, the sibling `log.md` correction ruled together with this one, one defect class each

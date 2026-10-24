@@ -70,3 +70,4 @@ The test asserts five subjects and that the three copies are **uniform**; `extra
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — the board this ran on
 - [[tasks/add-adr-037s-driver-side-clause-to-the-sprint-ship-loops-hard-rules]] — *added 2026-08-29 (lint):* `0191`, whose *"no test reads a `SKILL.md` body"* line this task made false **as an unqualified claim** — ⛔ **and no truer for that file**: this test's three-file list is hard-coded on purpose, with no `SKILL.md` walk
 - *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/the-test-scope-reset-tasks-0526-0530]] — the cut that deleted this test
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0350`, the discharge note this task's close made possible on `0125`'s R3

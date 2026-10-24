@@ -68,3 +68,4 @@ Two rounds, five findings. Reviewers: own pass + Codex (`codex exec --sandbox re
 - [[systems/role-locked-sessions]] — the ownership mechanism these five facts describe
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — the board this ran on
 - [[systems/fkit]] — *added 2026-08-29:* the page whose §The 25 skills paragraph this task's **R4** and **D2** falsified; the correction is carried there as a ⚠️ SYNC block
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0348`, the dated coverage correction on this task's closed ledger

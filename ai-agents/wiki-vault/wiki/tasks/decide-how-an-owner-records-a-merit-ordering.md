@@ -56,3 +56,4 @@ A second, quieter finding: the filing note called P119 the head of the earliest 
 - [[tasks/decide-whether-a-spawn-instruction-may-override-a-skill-rule]] — task `0158` — the precedence axis: the instruction relayed no named owner ruling on placement
 - [[tasks/record-the-canonical-merit-statement-form-in-the-convention-page]] — ✅ *Added 2026-08-22:* task `0178`, **follow-up 1 of this report, shipped 2026-08-21** — the two canonical shapes, the four rules, and the three-carrier table, dual-homed byte-identically. ⚠️ Its `brief-missing-merit` guard is **"Specified, not built yet."**
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/settle-whether-a-sprint-board-may-be-committed-unranked]] — task `0361`, which produced ADR-046
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0183`, this task's follow-up 6 — the *"no closed row was renumbered"* correction

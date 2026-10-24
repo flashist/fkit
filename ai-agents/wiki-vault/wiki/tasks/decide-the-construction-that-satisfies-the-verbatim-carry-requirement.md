@@ -102,3 +102,4 @@ The brief's `SKILL.md` line citations are **off by one** in two places (`0206`-a
 - [[systems/testing-and-verification]] — the frontmatter-vs-body test-surface split
 - [[tasks/sprint-2-remove-omnigent]] · [[systems/fkit]]
 - [[tasks/the-2026-08-15-done-in-fact-wiki-closes]] — ⚠️ *Added 2026-08-22:* task `0206`, the row that owed this page's ingest. It closed 2026-08-15 on a `DONE-IN-FACT` triage verdict — ✅ **the deliverable was already here**, carrying the checkable-vs-testimony split and the open `carried-not-approved` residual
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-a-members-the-ten-citation-rot-rows-and-0349]] — `0193` defect 7, this task's `## Priority` corrected 127 → 128 · [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0205`, this report's follow-up 4 on ADR-037 §5

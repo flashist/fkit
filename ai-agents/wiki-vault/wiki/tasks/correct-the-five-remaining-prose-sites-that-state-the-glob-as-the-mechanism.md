@@ -73,3 +73,4 @@ this task.
 - [[tasks/build-fkit-sprint-ship-loop-skill]] — two of the corrected sites live in this skill
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]] — the rule the re-rank that reordered this row was checked against
 - [[systems/launch-convergence-and-init]] — why the generated copies are unreachable
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0276` (this task's AR4 follow-up) and `0299` (the five sites it missed)

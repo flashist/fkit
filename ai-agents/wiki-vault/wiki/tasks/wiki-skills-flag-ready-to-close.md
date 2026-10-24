@@ -41,3 +41,4 @@ Done, **agent-closed — not owner-verified**. Landed alongside `0124`, which re
 - [[systems/role-locked-sessions]]
 - [[tasks/the-2026-08-15-done-in-fact-wiki-closes]] — ⚠️ *Added 2026-08-22:* two rows whose flags read `partial — not ready to close` and were closed anyway. **The flag works; nothing re-reads it**
 - [[tasks/build-wiki-flag-convention-test]] — *added 2026-08-29:* `0154`, which finally enforces this task's prose-only convention and discharges its finding **R3**
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0350`, the dated discharge note on this task's R3 residual

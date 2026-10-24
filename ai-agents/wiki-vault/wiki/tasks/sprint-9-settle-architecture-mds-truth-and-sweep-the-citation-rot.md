@@ -178,3 +178,4 @@ sprint.**
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`):* [[systems/backlog-convergence-and-the-k-measurement]] — the convergence measurement filed three days before this board opened
 - *Added 2026-09-16 (sync `b4a1a52`→`a351cb6`, closing a one-way link):* [[systems/fkit]] — the team page, which now also carries a count defect in **this board's own subject file** that no row on it was scoped to reach
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]] — the board Sprint 9 drew rows off
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/the-five-architecture-md-rows-cancelled-into-0392]] — the five rows `0392` and `0393` were consolidated from

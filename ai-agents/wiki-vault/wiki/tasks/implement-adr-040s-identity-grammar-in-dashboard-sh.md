@@ -64,3 +64,4 @@ column is the live rank.**
 - [[systems/testing-and-verification]]
 - [[systems/review-and-model-diversity]] — where its self-contradictory coverage claim is recorded as ADR-042 evidence
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/pin-the-five-unpinned-behaviors-in-the-sprint-identity-grammar]] — task `0271`, the follow-up carrying this task's review residual `A2` and the two behaviours measured to survive deletion with the suite green
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0274`, the dated coverage correction appended to this task's closed ledger

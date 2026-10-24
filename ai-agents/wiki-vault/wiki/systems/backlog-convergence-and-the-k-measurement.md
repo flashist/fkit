@@ -178,6 +178,7 @@ find one, and that is the report's choice, not an omission.**
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] — why the report's author could not file it here, and routed the call to `fkit-wiki` instead
 - [[decisions/adr-021-askuserquestion-is-session-only-absent-in-consults]] — the spawned-producer marker all 30 briefs carry
 - [[systems/knowledge-base-structure]] — where a `reports/` record sits, and why it is never promoted into `conventions/`
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/apply-0307s-ruling-to-0172s-stale-hard-dependency-declaration]] — `0372`, one of the window's two cancellations, now with a page
 
 ---
 

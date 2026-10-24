@@ -50,3 +50,4 @@ excludes precisely the files most likely to be edited on one side only.*
 - [[tasks/reconcile-dual-homed-file-drift-live-vs-scaffold]] — where the `audience-adapted` exception list came from
 - [[tasks/build-dual-home-parity-test]] — the test that subtracts this file from its own check
 - [[decisions/adr-035-a-mid-board-insertion-is-not-the-owner-ruled-re-rank-exception]]
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0279`, the same gloss carried into `status-report-format.md`'s two homes

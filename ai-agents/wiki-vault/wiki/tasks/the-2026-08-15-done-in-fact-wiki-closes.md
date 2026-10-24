@@ -37,3 +37,4 @@ Recorded together **because the reason they closed is the finding.** Both were `
 - [[tasks/sprint-2-remove-omnigent]] — the board whose archival `0238` was filed against
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] — why both rows had to be `fkit-wiki`'s and nobody else's
 - [[decisions/adr-033-task-movers-are-producer-only-reversing-adr-025]] — why a producer, not the wiki, did the closing
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0318`, the dated note on `0238`'s closed brief · [[tasks/sweep-c-members-the-five-vault-resync-rows]] — `0317` and `0319`, the verdicts on `0238`'s and `0206`'s standing flags

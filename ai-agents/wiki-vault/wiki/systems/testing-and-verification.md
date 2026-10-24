@@ -310,3 +310,4 @@ closing.**
 - *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]] — the reset · [[tasks/the-test-scope-reset-tasks-0526-0530]] · [[tasks/sprint-13-reset-fkits-tests-to-shipped-script-behaviour]] · [[tasks/the-2026-10-20-adr-057-test-task-cancellations]]
 - *Added 2026-10-23 (sync `96c7263`→`5ccf2c2`):* [[tasks/port-aiboard-to-node-in-board-the-adr-052-phase-2-tasks-0417-0423]] — the `test/board/` suites, tests first, and `0423`'s throwaway parity harness
 - *Added 2026-10-23 (sync `5ccf2c2`→`185ac5e`):* [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]] — `0538`: `test/board-reader-host.test.js`, the reader's test file
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/the-five-architecture-md-rows-cancelled-into-0392]] — `0251`, the §9.1 test-inventory row consolidated into `0392`

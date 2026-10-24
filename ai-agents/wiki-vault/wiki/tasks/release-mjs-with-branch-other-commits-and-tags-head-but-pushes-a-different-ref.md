@@ -67,3 +67,4 @@ A **preflight guard** placed with the other preflight checks — **before the te
 - [[decisions/adr-014-how-fkit-tests-itself]] — the zero-devDeps rule the regression test respects
 - [[decisions/adr-042-a-codex-review-is-reasoning-only-and-reports-must-say-so]] — the coverage state declared each round
 - [[tasks/sprint-6-repair-the-record-the-board-rests-on]] — the board this ran on
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-a-members-the-ten-citation-rot-rows-and-0349]] — `0344`, the summary-block line numbers re-anchored with durable anchors

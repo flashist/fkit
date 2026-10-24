@@ -123,8 +123,14 @@ synthesized knowledge and needs its source read in full.
 sync sees a **clean watermark**. ⛔ **It must not conclude the closed-task backlog was ingested. It was
 not.** ⭐ **The bound was written into `log.md` itself, in two entries, precisely because a future sync
 run reads `log.md` and has no reason to read a task's worklog.** The follow-up is task **`0380`**, filed onto the Backlog board and **still open** —
-`ai-agents/tasks/backlog/0380-delta-ingest-the-closed-task-backlog-bounded-out-of-sweep-c/brief.md`.
+`ai-agents/tasks/done/0380-delta-ingest-the-closed-task-backlog-bounded-out-of-sweep-c/brief.md`.
 ⚠️ **It has no wiki page: an open backlog row is not ingested.**
+
+> *Updated 2026-10-24:* task `0380` is now **✅ Done (agent-closed — not owner-verified, 2026-10-24)**;
+> its folder moved from `tasks/backlog/` to `tasks/done/`, and the path above was repointed to match.
+> Its ingest created pages for all 40 closed tasks it re-derived (see `log.md`, 2026-10-24 `0380`
+> entries) — the bound above is discharged. ⛔ The hazard it names still holds for future syncs: a
+> clean watermark says nothing about inventory coverage.
 
 - **Depends on:** `0354`, `0176`, `0237` — ⛔ all hard, as the gate.
 - **Blocks:** nothing.
@@ -134,7 +140,7 @@ run reads `log.md` and has no reason to read a task's worklog.** The follow-up i
 - [[tasks/sweep-a-the-citation-rot-class-one-verified-pass]] · [[tasks/sweep-b-the-single-site-correction-notes]]
   — the other two sweeps; ⛔ **three sweeps, disjoint membership**
 - Task `0380` — this row's bounded-out remainder, open on the Backlog board (no page; open rows are not
-  ingested)
+  ingested) — *updated 2026-10-24: now ✅ Done (agent-closed — not owner-verified), folder in `tasks/done/`*
 - [[decisions/adr-005-vendor-wiki-query-skill-reads-decentralized]] — why this row is `fkit-wiki`'s and
   nobody else's
 - [[decisions/adr-045-an-in-flight-review-finding-terminates-in-the-ledger-not-a-new-task]] ·
@@ -147,3 +153,4 @@ run reads `log.md` and has no reason to read a task's worklog.** The follow-up i
 - [[tasks/append-a-dated-correction-note-to-adr-010]] — the ADR-010 correction chain `0199` resynced
 - *Added 2026-09-10 (sync `cf289c2`→`b4a1a52`):* [[tasks/adr-the-narrow-in-flight-review-fix-lane]] — task `0352`, which produced ADR-045 · [[tasks/build-the-coordination-citation-policy-guard]] — task `0176`, the coordination-citation policy guard · [[tasks/build-the-link-resolution-guard]] — task `0354`, the link-resolution guard
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-task-movers-a-step-for-the-named-exempt-keys]] — task `0381`: ⭐ **closing this sweep's five members, then this row itself, is the evidence that the gap fires** — three keys healed, `namedExemptCount` fell 9 → 6, and `L3` went red **on the FALL**
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-c-members-the-five-vault-resync-rows]] — this pass's members, one row each — and the ingest of the backlog this pass bounded out (task `0380`)

@@ -208,3 +208,4 @@ the one-grammar constraint honored at the site it was written for.
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-selector-a-status-rung-and-a-lowest-first-choice]] — task `0338`, which flipped the ordering from highest to lowest and added the status rung
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/pin-the-five-unpinned-behaviors-in-the-sprint-identity-grammar]] — task `0271`, pinning `select-active` **before** `0338` rewrote it
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-8-give-sprints-the-lifecycle-tasks-already-have]] — the board that shipped §1.4's supersession
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0276` (the drift-mechanism note) and `0299` (the glob claims in the archived plans)

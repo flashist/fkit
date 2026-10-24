@@ -84,3 +84,4 @@ Owner ruling, verbatim label: **"A: Build role follows the deliverable's skill +
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/sprint-9-settle-architecture-mds-truth-and-sweep-the-citation-rot]] — the board that left that role question to each row's plan gate
 - *Added 2026-09-16 (sync `b4a1a52`→`c59f4d7`):* [[tasks/give-the-sprint-mover-pins-and-successor-mode-durable-prove-red-mutations]] — task `0388`: ⭐ **`## Owner: fkit-coder` fixed BY THE DELIVERABLE** — `test/prove-red.sh` is a coder surface, and Decision 1 says so
 - *Added 2026-10-10 (sync `3915417`→`79a7dbf`):* [[decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver]] — widens the coder's marker only; these carve-outs stay sprint-loop-only
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/sweep-b-members-the-seventeen-correction-note-rows]] — `0346`, the ADR-038 note this ADR's §C2 (ii) asked for

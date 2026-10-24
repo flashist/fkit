@@ -146,3 +146,4 @@ worse than none.**
 - [[systems/knowledge-base-structure]]
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`, closing a one-way link):* [[tasks/add-backlog-board-default-for-unsprinted-task-briefs]]
 - *Added 2026-10-15 (sync `baf6a4e`→`96c7263`, closing a one-way link):* [[tasks/fix-nine-stale-line-cites-and-claims-found-during-sprint-10]] — `0496`, one more hand sweep under *"correct the citation, never the prose"*
+- *Added 2026-10-24 (task `0380`, closed-task backlog ingest):* [[tasks/the-five-architecture-md-rows-cancelled-into-0392]] — `0286` and `0323`, the cancelled originals of Groups D and E
