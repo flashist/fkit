@@ -10,7 +10,7 @@ Sprint 12
 P10
 
 ## Status
-🔄 In progress
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-producer
@@ -138,6 +138,41 @@ folder name still carries the old wording; the ID and folder were kept so the li
   Matches your 0504 precedent."* Done the same day: one back-filled log per task, listed under
   *Trial log* below. In each, "did it help?" reads "not asked (back-filled 2026-10-20)" and the fresh
   `fkit lead` launch reads "unknown". The trial continues. ⛔ No commit.
+- ⏱ **2026-10-24 — owner ruling: the trial ends; summary written.** Via `AskUserQuestion`, 2026-10-24,
+  `fkit lead` session; relayed verbatim to a spawned `fkit-producer`. Question: *"Have you seen enough
+  plan review to end the 0474 trial?"* Selected option text, verbatim: *"Seen enough — summarise"*.
+  Description he saw: *"Spawn a producer to write the summary over the 14 logs, then put Default /
+  Optional / Drop to you. Knock-on: none — no open task waits on 0474."* Done the same day: the 14 logs
+  were re-counted (14 logs, matching 14 `plan-review.md` records) and the summary was written,
+  [`2026-10-24-plan-review-trial-summary.md`](../../../knowledge-base/reports/2026-10-24-plan-review-trial-summary.md).
+  Its *Owner ruling* section reads "pending": the Default / Optional / Drop choice goes back to the lead
+  to put to the owner (*What to build* §4). Status stays `🔄 In progress`; no follow-up brief filed yet.
+  ⛔ No commit.
+- ⏱ **2026-10-24 — owner ruling: Default, provisional (the lead's reading); follow-up `0541` filed.**
+  Via `AskUserQuestion`, 2026-10-24, `fkit lead` session; relayed verbatim to a spawned `fkit-producer`.
+  - Q1, *"Across the 14 tasks, did plan review help you?"* — typed by him (not an option); **also his
+    "did it help?" answer** (*What to build* §1):
+    *"I feel like it helped me, but it's really hard to tell, because all the things were happening
+    "behind the scene" without my involvement. Overall, I feel good about it, but I would like still have
+    a chance to switch it off, if needed. So my idea is to make this new process default, but not to
+    delete the old one, and to keep the old one available via a parameter, until I test the new version
+    of fkit in real projects for some time and make the final decision."*
+  - Q2, *"Trial over — what should happen to plan review: Default, Optional, or Drop?"* (options he saw:
+    *Optional (Recommended)* / *Default* / *Drop*) — typed by him: *"I think I answered the question in
+    the 1st answer"*.
+  - **The lead's reading** (fkit-lead's, not his words): **Default, provisional** — plan review on by
+    default in every sprint-loop run; the no-plan-review path kept, selectable by a parameter (opt-out);
+    the final decision deferred until he has used the new fkit on real projects for some time.
+  - Q3, placement of the follow-up — selected option text, verbatim: *"Sprint 12 (Recommended)"*
+    (description he saw: *"The only open sprint, so your next /fkit-sprint-ship-loop picks it up. No open
+    task waits on it."*).
+
+  Done the same day: the ruling recorded in the summary's §9
+  ([`2026-10-24-plan-review-trial-summary.md`](../../../knowledge-base/reports/2026-10-24-plan-review-trial-summary.md));
+  follow-up brief filed on Sprint 12,
+  [`0541`](../../backlog/0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter/brief.md)
+  (*What to build* §4, *Verification* step 5). This task changed no skill or prompt. Closed next by
+  `/fkit-task-done`, agent-closed. ⛔ No commit.
 
 ### Trial log
 

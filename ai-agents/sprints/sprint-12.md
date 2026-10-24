@@ -50,7 +50,8 @@ not set.*
 | ✅ Done (agent-closed — not owner-verified) | P7 | **Clean up code comments in the launcher and init scripts** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Run after `0284` and `0334` — all three edit `claude/fkit-claude.sh`. Owner `fkit-coder`)* | [`0508-clean-up-code-comments-in-the-launcher-and-init-scripts`](../tasks/done/0508-clean-up-code-comments-in-the-launcher-and-init-scripts/brief.md) |
 | ⛔ Cancelled (agent-closed — not owner-verified) (2026-10-20) — superseded by ADR-057 (test-scope reset): `0530` re-measures the suite after `0529`'s cut. Owner Q4 ruling 2026-10-20 at `0529`'s plan gate, verbatim *"Producer's proposals (Recommended)"* | P8 | **Re-measure the full test run time, locally and on CI, and show both in CONTRIBUTING** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Near the end so it measures the grown suite. Owner `fkit-coder`)* | [`0503-re-measure-the-full-test-run-time-locally-and-on-ci-and-show-both-in-contributing`](../tasks/cancelled/0503-re-measure-the-full-test-run-time-locally-and-on-ci-and-show-both-in-contributing/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P9 | **Research and decide how fkit runs a sprint retrospective, and how the lead suggests one** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Research-and-decide; ends in an owner decision. Owner `fkit-producer`)* | [`0500-research-and-decide-how-fkit-runs-a-sprint-retrospective`](../tasks/done/0500-research-and-decide-how-fkit-runs-a-sprint-retrospective/brief.md) |
-| 🔄 In progress | P10 | **Trial plan review through the owner's own sprint-loop runs, then put default / optional / drop to him** *(Carried over 2026-10-15 from [Sprint 10](done/sprint-10.md), where it was `P10`, by `/fkit-sprint-done` on owner ruling R1; arrived as `P1`, re-ranked `P10` the same day — unruled, see the banner. Its dependency `0473` is done. ⚠️ Owner-paced and open-ended — see the note below. Owner `fkit-producer`)* | [`0474-trial-plan-review-on-3-to-5-real-tasks-and-put-default-optional-or-drop-to-the-owner`](../tasks/backlog/0474-trial-plan-review-on-3-to-5-real-tasks-and-put-default-optional-or-drop-to-the-owner/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P10 | **Trial plan review through the owner's own sprint-loop runs, then put default / optional / drop to him** *(Carried over 2026-10-15 from [Sprint 10](done/sprint-10.md), where it was `P10`, by `/fkit-sprint-done` on owner ruling R1; arrived as `P1`, re-ranked `P10` the same day — unruled, see the banner. Its dependency `0473` is done. ⚠️ Owner-paced and open-ended — see the note below. Owner `fkit-producer`)* | [`0474-trial-plan-review-on-3-to-5-real-tasks-and-put-default-optional-or-drop-to-the-owner`](../tasks/done/0474-trial-plan-review-on-3-to-5-real-tasks-and-put-default-optional-or-drop-to-the-owner/brief.md) |
+| 🔲 Backlog | P11 | **Make plan review the default for the sprint loop, with an opt-out parameter (provisional owner ruling)** *(Added out of band 2026-10-24 on the owner's `0474` ruling and placement Q3, "Sprint 12 (Recommended)". Depends on nothing. ⚠️ P11 is append rank — see the note below. Owner `fkit-coder`)* | [`0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter`](../tasks/backlog/0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter/brief.md) |
 
 ## ⚠️ Notes for the driver
 
@@ -84,3 +85,13 @@ not set.*
   stops saying *"in planning"*). `0516` marked `🔄 In progress` here and in its brief — the sprint
   loop's *mark in progress before driving* step. No other row touched. By a spawned `fkit-producer`
   with no owner channel.
+- **Addendum — task 0541 added out of band (2026-10-24).** Filed by `/fkit-task-brief` from a spawned
+  `fkit-producer` (no owner channel) at `fkit-lead`'s direction, on the owner's ruling at the end of the
+  `0474` trial (via `AskUserQuestion`, 2026-10-24, `fkit lead` session; quoted verbatim in the brief and in
+  the trial summary's §9) and his placement answer, selected option text verbatim *"Sprint 12
+  (Recommended)"* (description he saw: *"The only open sprint, so your next /fkit-sprint-ship-loop picks it
+  up. No open task waits on it."*). `🔲 Backlog` — placing it is not his word to start it.
+  ⚠️ Priority P11 is append rank, NOT a merit ranking — flagged for owner confirmation.
+  **On merit this belongs directly below 0474**, because it is the follow-up that `0474`'s ruling asks
+  for, and no other open row on this board competes with it. Knock-on: none — no open task waits on
+  `0541`, and `0541` waits on nothing. No other row touched.
