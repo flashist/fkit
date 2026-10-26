@@ -1,6 +1,20 @@
 # ADR-056: Opt-in plan review — agents approve the plan and Codex attacks it before the owner does, switched per sprint-loop run, off by default
 
 - **Status:** accepted
+- **Amended by:** [ADR-059](adr-059-plan-review-on-by-default-with-a-no-plan-review-opt-out-sprint-loop-runs-first-provisional.md)
+  (2026-10-24, provisional) — plan review is now **on by default in `/fkit-sprint-ship-loop` runs**,
+  off for one run with `--no-plan-review`; the owner also wants it on the session paths, which stay as
+  Decision 3 says until a separate design task lands. The overturned passages (Decision 2's default
+  off, its lead rule and its reporting rule; parts of Decisions 8, 9 and 10; one rejected option; two
+  Consequences; three re-raise items) are listed in the ⛔ note at the end of this file; read it there.
+  The **Corrections:** bullet below (*"⛔ = a decision overturned (none here)"*) describes the
+  2026-10-06 note only and is left byte-identical.
+- **Also amended by:** [ADR-060](adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md)
+  (2026-10-24, provisional; owner probe pending) — **Decision 3** (session paths unchanged) is
+  amended: plan review becomes the default in `fkit coder` sessions, `/fkit-task-ship-loop` and a plain
+  `/fkit-plan-task`, switched on by a launcher session line, off with `--no-plan-review`. Not delivered
+  until its builds land. The passages it changes are listed in the second ⛔ note at the end of this
+  file. The **Amended by:** bullet above and the **Corrections:** bullet below are left byte-identical.
 - **Date:** 2026-10-06
 - **Deciders:** owner (Mark Dolbyrev), with fkit-architect. The **request and its shape** were ruled on
   **2026-10-01** and **2026-10-02** (`fkit-lead` session; relayed to a spawned producer, who filed task
@@ -351,3 +365,70 @@ that relay is trust, not proof — recorded here as relayed.*
   answers. Task `0474` — the trial.
 - **Wiki:** **fkit-wiki** should ingest this ADR, and re-ingest ADR-019, ADR-020 and ADR-032 for their
   new pointer notes — an architect never writes the vault.
+
+> ⛔ **Dated amendment 2026-10-24 (`0541`) — the default is amended by
+> [ADR-059](adr-059-plan-review-on-by-default-with-a-no-plan-review-opt-out-sprint-loop-runs-first-provisional.md),
+> provisional; read it there.** Owner ruling 2026-10-24 (`fkit lead` session, `AskUserQuestion`,
+> relayed verbatim; quoted in full in ADR-059): plan review becomes the default, the old path stays
+> available by a parameter, until he has used the new fkit on real projects and makes the final
+> decision. At the `0541` plan gate he chose *"All paths"* — *"Needs a separate design task first;
+> this task ships only the sprint-loop part."* — so what ships now is: plan review **on by default in
+> every `/fkit-sprint-ship-loop` run**, `--no-plan-review` to switch it off for one run.
+>
+> **Overturned here — do not follow these; read ADR-059 instead:**
+> - the **title and filename**'s *"off by default"* (kept as history);
+> - the *"What this ADR decides, in one line"* block, where it says a run without the flag behaves as
+>   today (now true of a `--no-plan-review` run and of the session paths);
+> - **Decision 2:** *"default off"*, *"Absent means off"*, *"passes it **only when the owner asks**,
+>   **never adds it unasked**"* (now: the lead uses `--no-plan-review` only when the owner asks, never
+>   unasked, never carried), and its Q3 reporting rule (now: *"Plan review: ON (default)"* /
+>   *"Plan review: off (--no-plan-review)"*, owner Q2 2026-10-24);
+> - **Decision 8:** *"could add the switch line unasked"* — the exposure turns round: a driver could
+>   now drop the line in a default run, or add it in an opted-out run. Same accepted cost;
+> - **Decision 9:** *"Nothing in this ADR turns it on by default."*;
+> - **Decision 10:** *"making it the default (Decision 9)"* as out of scope;
+> - the rejected option *"Plan review on by default, with an opt-out"* (now chosen);
+> - **Consequences → Positive:** *"with zero risk to the default"* and *"Off really means off: no flag,
+>   no new behaviour, no new report line"*;
+> - **re-raise items:** *"Re-raise on `0474`'s verdict"* (used up); the leak trigger (now: plan review
+>   running in a `--no-plan-review` run, or missing from a default run); and *"Do **not** re-raise "plan
+>   review should be the default""* (dropped).
+>
+> ⛔ **Not overturned:** Decisions 1, 4, 5, 6 and 7; Decision 2's run-level, read-once, never-carried
+> switch, the litmus and the switch-line mechanism; Decision 8's *"trust, not proof"*; the plan gate
+> (ADR-019 Decision 2; ADR-032 Decisions 3 and 7). **Decision 3 (session paths unchanged) stays in
+> force** until the design task ADR-059 Decision 3 names lands and a new ADR amends it — the owner's
+> all-paths intent is recorded in ADR-059, not delivered by it. The *"… or "should cover sessions""*
+> half of the last re-raise item stands, now routed to that design task. Everything else in this ADR
+> stands. The text above is **left byte-identical** as the record of 2026-10-06; this note sits at the
+> end, and the only other change is the **Amended by:** header bullet under Status. **Status stays
+> `accepted`.**
+
+> ⛔ **Dated amendment 2026-10-24 (`0542`) — Decision 3 is amended by
+> [ADR-060](adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md),
+> provisional, and conditional on an owner-run probe that has not run yet; read it there.** Owner
+> answers 2026-10-24 (~15:30 UTC, `fkit lead` session, `AskUserQuestion`, relayed verbatim; quoted in
+> full in ADR-060): plan review becomes the default on the session paths — a `fkit coder` session,
+> `/fkit-task-ship-loop` and a plain `/fkit-plan-task` — switched on by a line the `fkit` launcher
+> writes (missing means off), off with `fkit coder --no-plan-review` or `--no-plan-review` on either
+> skill. **Until ADR-060's builds land and `.claude/` is refreshed, the session paths still behave as
+> Decision 3 says.**
+>
+> **Overturned here, for the session paths only — do not follow these there; read ADR-060 instead:**
+> - **Decision 3:** *"Session paths are unchanged"* and *"behave exactly as today"* (its *"There is
+>   **no per-task brief field**"* stands);
+> - **Decision 4.4:** the return-`NEEDS-DECISION`-and-driver-asks step — a session coder asks the owner
+>   directly;
+> - **Decision 4**'s *"Workers write nothing"* and **Decision 6**'s *"Written by the driver … on
+>   approve and on reject"* — on session paths the session coder writes `plan-review.md` after approval
+>   only; a rejected session plan's record is not persisted;
+> - **Decision 7**'s chain and *"approvers at hop 2 cannot consult anyone"* — in a session the chain is
+>   coder (hop 0) → approvers (hop 1), kept as leaves by instruction;
+> - **Decision 10**'s *"session-path plan review (Decision 3)"* as out of scope;
+> - the re-raise half *"… or "should cover sessions""* — used up.
+>
+> ⛔ **Not overturned:** everything above for the sprint loop and for spawned coders, and Decisions 1,
+> 5 and 8 everywhere. The rejected option *"A per-task brief field"* stays rejected; its plan-mode
+> unknown is now answered headless only (ADR-060 *Context*) — a fact, not a reversal. The first ⛔
+> note above (`0541`) stands. The text above is **left byte-identical**; this note sits at the end, and
+> the only other change is the **Also amended by:** header bullet. **Status stays `accepted`.**

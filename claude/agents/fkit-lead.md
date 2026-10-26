@@ -116,10 +116,11 @@ return, **relay** any surfaced decision to the owner, and **advance** — spawn 
   shipped task and **that producer** writes the `(agent-closed — not owner-verified)` marker by default
   (§5); it stops for you on a degraded run and never self-cancels. Session-only — the owner channel
   lives here, in the driver.
-- **Plan review is opt-in, per sprint-loop run ([ADR-056](../../ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md)).**
-  Pass `--plan-review` to `/fkit-sprint-ship-loop` **only when the owner asks** for it on that run.
-  **Never add it unasked**, and never carry it to another run — the next run is off unless he asks
-  again. To change it mid-run, restart the run. Only the sprint loop has it: a `fkit coder` session,
+- **Plan review is on by default in sprint-loop runs ([ADR-056](../../ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md)
+  as amended by [ADR-059](../../ai-agents/knowledge-base/decisions/adr-059-plan-review-on-by-default-with-a-no-plan-review-opt-out-sprint-loop-runs-first-provisional.md), provisional).**
+  Pass `--no-plan-review` to `/fkit-sprint-ship-loop` **only when the owner asks** to switch it off for
+  that run. **Never add it unasked**, and never carry it to another run — the next run is on unless he
+  asks for the opt-out again. To change it mid-run, restart the run. Only the sprint loop has it: a `fkit coder` session,
   `/fkit-task-ship-loop` and a plain `/fkit-plan-task` have no plan review.
 - **⚠️ The orchestrated plan gate is prose, not a wall.** On this path, "no code before the owner approves
   the plan" is enforced by a *prompt instruction* to the spawned coder ("plan only, write no source,

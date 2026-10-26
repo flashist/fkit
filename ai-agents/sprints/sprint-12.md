@@ -51,7 +51,11 @@ not set.*
 | ⛔ Cancelled (agent-closed — not owner-verified) (2026-10-20) — superseded by ADR-057 (test-scope reset): `0530` re-measures the suite after `0529`'s cut. Owner Q4 ruling 2026-10-20 at `0529`'s plan gate, verbatim *"Producer's proposals (Recommended)"* | P8 | **Re-measure the full test run time, locally and on CI, and show both in CONTRIBUTING** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Near the end so it measures the grown suite. Owner `fkit-coder`)* | [`0503-re-measure-the-full-test-run-time-locally-and-on-ci-and-show-both-in-contributing`](../tasks/cancelled/0503-re-measure-the-full-test-run-time-locally-and-on-ci-and-show-both-in-contributing/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P9 | **Research and decide how fkit runs a sprint retrospective, and how the lead suggests one** *(Pulled from the Backlog board 2026-10-15 by owner ruling R3. Depends on nothing. Research-and-decide; ends in an owner decision. Owner `fkit-producer`)* | [`0500-research-and-decide-how-fkit-runs-a-sprint-retrospective`](../tasks/done/0500-research-and-decide-how-fkit-runs-a-sprint-retrospective/brief.md) |
 | ✅ Done (agent-closed — not owner-verified) | P10 | **Trial plan review through the owner's own sprint-loop runs, then put default / optional / drop to him** *(Carried over 2026-10-15 from [Sprint 10](done/sprint-10.md), where it was `P10`, by `/fkit-sprint-done` on owner ruling R1; arrived as `P1`, re-ranked `P10` the same day — unruled, see the banner. Its dependency `0473` is done. ⚠️ Owner-paced and open-ended — see the note below. Owner `fkit-producer`)* | [`0474-trial-plan-review-on-3-to-5-real-tasks-and-put-default-optional-or-drop-to-the-owner`](../tasks/done/0474-trial-plan-review-on-3-to-5-real-tasks-and-put-default-optional-or-drop-to-the-owner/brief.md) |
-| 🔲 Backlog | P11 | **Make plan review the default for the sprint loop, with an opt-out parameter (provisional owner ruling)** *(Added out of band 2026-10-24 on the owner's `0474` ruling and placement Q3, "Sprint 12 (Recommended)". Depends on nothing. ⚠️ P11 is append rank — see the note below. Owner `fkit-coder`)* | [`0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter`](../tasks/backlog/0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P11 | **Make plan review the default for the sprint loop, with an opt-out parameter (provisional owner ruling)** *(Added out of band 2026-10-24 on the owner's `0474` ruling and placement Q3, "Sprint 12 (Recommended)". Depends on nothing. ⚠️ P11 is append rank — see the note below. Owner `fkit-coder`)* | [`0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter`](../tasks/done/0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P12 | **Design plan review on by default for the `fkit coder` session, `/fkit-task-ship-loop` and plain `/fkit-plan-task`, with an opt-out (provisional owner ruling)** *(Added out of band 2026-10-24 on the owner's "All paths" ruling at `0541`'s plan gate and his placement answer "Sprint 12 (Recommended)". Depends on `0541`, same sprint. Design and owner decision only; build briefs filed after. ⚠️ P12 is append rank — see the note below. Owner `fkit-architect`)* | [`0542-design-plan-review-on-by-default-for-the-coder-session-task-ship-loop-and-plain-plan-task`](../tasks/done/0542-design-plan-review-on-by-default-for-the-coder-session-task-ship-loop-and-plain-plan-task/brief.md) |
+| 🔲 Backlog | P13 | **Turn plan review on by default in `fkit coder` sessions and plain `/fkit-plan-task`: launcher session line, `fkit coder --no-plan-review`, and `--no-plan-review` per command (provisional owner ruling)** *(Added out of band 2026-10-24 on the owner's placement answer "Sprint 12" for `0542`'s build briefs. Depends on `0542`, same sprint. ⛔ Do not plan until the owner's Tier-2 probe is recorded as report §8a. ⚠️ P13 is append rank — see the note below. Owner `fkit-coder`)* | [`0543-turn-plan-review-on-by-default-in-fkit-coder-sessions-and-plain-fkit-plan-task`](../tasks/backlog/0543-turn-plan-review-on-by-default-in-fkit-coder-sessions-and-plain-fkit-plan-task/brief.md) |
+| 🔲 Backlog | P14 | **Turn plan review on by default in `/fkit-task-ship-loop`: forward `--no-plan-review`, show the review record at the plan gate, write `plan-review.md` at approval (provisional owner ruling)** *(Added out of band 2026-10-24, same ruling. Depends on `0543`, same sprint. ⛔ Do not plan until the owner's Tier-2 probe is recorded as report §8a. ⚠️ P14 is append rank — see the note below. Owner `fkit-coder`)* | [`0544-turn-plan-review-on-by-default-in-fkit-task-ship-loop`](../tasks/backlog/0544-turn-plan-review-on-by-default-in-fkit-task-ship-loop/brief.md) |
+| 🔲 Backlog | P15 | **Correct fkit's "plan mode is a structural write-wall" wording: plan mode blocks `Write`/`Edit`, not shell commands (no behaviour change)** *(Added out of band 2026-10-24 on the owner's Q7 "Wording fix after probe (Recommended)" and placement "Sprint 12". Depends on nothing; advised to land after `0543` and `0544` (shared files — ordering, not a link). ⛔ Do not plan until the owner's Tier-2 probe is recorded as report §8a. ⚠️ P15 is append rank — see the note below. Owner `fkit-coder`, ADR notes by a `fkit-architect` consult)* | [`0545-correct-the-plan-mode-is-a-structural-write-wall-wording`](../tasks/backlog/0545-correct-the-plan-mode-is-a-structural-write-wall-wording/brief.md) |
 
 ## ⚠️ Notes for the driver
 
@@ -95,3 +99,38 @@ not set.*
   **On merit this belongs directly below 0474**, because it is the follow-up that `0474`'s ruling asks
   for, and no other open row on this board competes with it. Knock-on: none — no open task waits on
   `0541`, and `0541` waits on nothing. No other row touched.
+- **Addendum — task 0542 added out of band (2026-10-24).** Filed by `/fkit-task-brief` from a spawned
+  `fkit-producer` (no owner channel) at `fkit-lead`'s direction, on two owner rulings via
+  `AskUserQuestion`, 2026-10-24, `fkit lead` session (quoted verbatim in the brief): at `0541`'s plan gate,
+  *"Q1 — Where should plan review be on by default?"* → *"All paths"* (description he saw: *"Needs a
+  separate design task first; this task ships only the sprint-loop part."*); and placement → *"Sprint 12
+  (Recommended)"* (description he saw: *"Waits on 0541 in the same sprint, so this run can pick it up
+  after 0541 ships. Nothing else waits on it."*). `🔲 Backlog`. Scoped as design and owner decision only;
+  the build is filed as separate brief(s) after the owner reviews the findings.
+  ⚠️ Priority P12 is append rank, NOT a merit ranking — flagged for owner confirmation.
+  **On merit this belongs directly below 0541**, because it depends on `0541` and is the second half of
+  the same ruling — the same place as its append rank. Knock-on: `0542` waits on `0541` in this sprint;
+  no open task waits on `0542`. No other row touched.
+- **Addendum — tasks 0543, 0544 and 0545 added out of band (2026-10-24).** Filed by `/fkit-task-brief`
+  from a spawned `fkit-producer` (no owner channel) at the direction of `fkit-sprint-ship-loop` (driven by
+  `fkit-lead`), after closing `0542`: the three build briefs from `0542`'s design (report
+  [`2026-10-24-design-plan-review-on-by-default-session-paths.md`](../knowledge-base/reports/2026-10-24-design-plan-review-on-by-default-session-paths.md)
+  §7; [ADR-060](../knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md)
+  Decision 11). Placed here on the owner's ruling via `AskUserQuestion`, 2026-10-24 ~14:57 UTC, `fkit lead`
+  session, relayed verbatim — *"Q2 — Where do the build briefs go once the design is approved?"* →
+  *"Sprint 12"* (description he saw: *"This run could pick them up; wait on 0542 in Sprint 12. Risk: old
+  prompt text loaded here."*). `0545` also rests on his Q7, *"Wording fix after probe (Recommended)"*.
+  All `🔲 Backlog` — placing them is not his word to start them.
+  ⛔ **All three are gated by the owner's Tier-2 probe** (ADR-060 Decision 9): none is planned until its
+  results are in the report as *"§8a Tier-2 results"*. That is a precondition in each brief, not a
+  `Depends on:` link, so the board shows them as pullable once their dependencies close — **the driver
+  must check §8a, not the board.** A skipped probe addition is named at each build's plan gate.
+  ⚠️ **Old prompt text:** this Sprint 12 run has the pre-build skill text loaded (the risk the owner's
+  option named). Each brief says to start from a fresh `fkit lead` / `fkit coder` after refreshing `.claude/`.
+  ⚠️ Priorities P13, P14 and P15 are append rank, NOT a merit ranking — flagged for owner confirmation.
+  **On merit `0543` belongs directly below 0542** (first build of its design), **`0544` directly below
+  0543** (it builds on `0543`), and **`0545` directly below 0544** (ordering advice: land after both
+  builds, shared files) — the same places as their append ranks.
+  Knock-on: `0543` waits on `0542` (this sprint, done); `0544` waits on `0543` (this sprint); `0545`
+  waits on no task. None waits on a later sprint. No open task waits on any of the three (checked). No
+  other row touched.

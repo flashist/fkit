@@ -50,12 +50,16 @@ rewritten its close step, for reasons unrelated to this loop.
 selector's `board` line — the single chosen board**. **More than one sprint may be `In progress` at once;
 this loop drives exactly one of them.** **Do not re-derive that rule here** (ADR-041 §5: one grammar,
 one implementation) — see `fkit-status/SKILL.md`'s empty-argument rule and
-`conventions/sprint-status-vocabulary.md`. One operand, plus one optional flag — no output-variant flags
-(`conventions/one-skill-one-output.md`). **`--plan-review`** is optional and **default off — absent =
-off**; it turns on the opt-in plan review for every task planned in this run (see *Plan review — only
-in a `--plan-review` run*, under §2; [ADR-056](../../../ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md)).
-It passes that convention's litmus test: it changes *what the plan step does*, not *how the same output
-looks* — a parameter of the work, not an output variant.
+`conventions/sprint-status-vocabulary.md`. One operand, plus one optional opt-out flag — no
+output-variant flags (`conventions/one-skill-one-output.md`). **`--no-plan-review`** is optional; **absent
+= plan review on** for every task planned in this run (see *Plan review — on unless the run was started
+with `--no-plan-review`*, under §2; [ADR-059](../../../ai-agents/knowledge-base/decisions/adr-059-plan-review-on-by-default-with-a-no-plan-review-opt-out-sprint-loop-runs-first-provisional.md), provisional, amending
+[ADR-056](../../../ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md)).
+With it, the run skips plan review. The old **`--plan-review`** is still accepted, as a harmless no-op
+(on). **Both flags together, or any unrecognised `--` token, stop the run before its first spawn**:
+report it and ask the owner — never guess (a typo like `--no-plan-reveiw` would otherwise run *with* plan
+review). It passes that convention's litmus test: it changes *what the plan step does*, not *how the
+same output looks* — a parameter of the work, not an output variant.
 
 ---
 
@@ -277,26 +281,28 @@ at, and a `PreToolUse` carry-check needs one at spawn time.
   channel**, not because it does the closing.
 
 <!-- plan-review:begin -->
-#### Plan review — only in a `--plan-review` run
+#### Plan review — on unless the run was started with `--no-plan-review`
 
-**A run started without `--plan-review` skips this block entirely** — the Plan row above runs exactly as
-written. With it on ([ADR-056](../../../ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md)),
+**A run started with `--no-plan-review` skips this block entirely** — the Plan row above runs exactly as
+written. Otherwise it is on ([ADR-059](../../../ai-agents/knowledge-base/decisions/adr-059-plan-review-on-by-default-with-a-no-plan-review-opt-out-sprint-loop-runs-first-provisional.md), provisional;
+the flow is [ADR-056](../../../ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md)'s):
 agents approve each plan and Codex attacks it **before** the owner's plan gate. The gate itself is
 unchanged: it is still the one human checkpoint, and **the owner approves last**.
 
 - **Run start.** Read the flag once. It holds for **every task planned in this run** and cannot change
-  mid-run — to change it, the owner restarts the run. The opening report says *"Plan review: ON for
-  this run"*.
-- **Plan step.** Add this switch line to the plan-only spawn prompt — it names the owner's run-start
-  ruling (ADR-037, driver side):
-  `Plan review: on — set by the owner for this fkit-sprint-ship-loop run (--plan-review, <date>), run <board> started <UTC>`.
+  mid-run — to change it, the owner restarts the run. The opening report says *"Plan review: ON
+  (default)"*.
+- **Plan step.** Add this switch line to the plan-only spawn prompt — it names the owner's standing
+  default ruling (ADR-037, driver side):
+  `Plan review: on — the default for fkit-sprint-ship-loop runs (owner ruling 2026-10-24, ADR-059), run <board> started <UTC>`.
+  The text is the same whether or not `--plan-review` was also passed.
   The rest of the Plan row is unchanged. The coder runs `fkit-plan-task`'s *Plan review* section inside
   that one spawn — approver consults, at most 2 revision rounds, then Codex — and returns the plan plus
   a `===PLAN-REVIEW RECORD BEGIN===` … `===PLAN-REVIEW RECORD END===` block.
 - **Not a new plan step → no plan review.** The rejected-plan path (the task goes back to `🔲 Backlog`
   and is skipped for the rest of the run — the *Plan rejected* stop row) and the re-presentation of an
   orphaned, already-approved `plan.md` run no plan review. A task planned afresh in a later
-  `--plan-review` run is a new plan step, and is reviewed.
+  run with plan review on is a new plan step, and is reviewed.
 - **`NEEDS-DECISION` after round 2** (an approver disagreement still open): relay it via
   `AskUserQuestion` (§3), then re-spawn a plan-only coder with the switch line, the owner's ruling
   quoted verbatim with its date and channel, and the draft plan and record pasted, labelled *"draft as
@@ -315,8 +321,8 @@ unchanged: it is still the one human checkpoint, and **the owner approves last**
   its date and channel. Keep it on reject — rejected attempts are trial evidence. It is **never**
   carried to Build or Process-review and never part of the plan pointer: the carry stays the approved
   plan only.
-- **Roll-up.** *"Plan review: on"* for the run, plus each task's Codex plan-pass mode. Flag a plan pass
-  in `claude-fallback — NOT model-diverse` mode **loudly**.
+- **Roll-up.** *"Plan review: ON (default)"* for the run, plus each task's Codex plan-pass mode. Flag a
+  plan pass in `claude-fallback — NOT model-diverse` mode **loudly**.
 - **Stop table: no new rows.** A failed plan-step spawn is *Worker spawn didn't land*; an incomplete
   review goes to the owner at the gate, flagged.
 - **Trust, not proof.** The switch line, the 2-round cap and "write nothing" are prose in spawn prompts,
@@ -472,9 +478,11 @@ told of, say so the same way (step 1) before the next spawn.
   vs owner-verified), and the coverage state per task. Loudly flag any task shipped **`Codex
   unavailable`** — that is the one state without a model-diverse review. ⚠️ A **reasoning-only second
   opinion** IS model-diverse (a different model reasoned over the diff); it is reported, not flagged.
-- **Plan review — only when the run has it on:** the opening says *"Plan review: ON for this run"* and
-  the roll-up says *"Plan review: on"* with each task's Codex plan-pass mode (see the gated block under
-  §2). A run without `--plan-review` reports exactly as before — no plan-review line at all.
+- **Plan review — every run says which path it took** (ADR-059): a default run's opening and roll-up
+  say *"Plan review: ON (default)"*, the roll-up with each task's Codex plan-pass mode (see the gated
+  block under §2); a run started with `--no-plan-review` says *"Plan review: off (--no-plan-review)"* in
+  its opening and roll-up, and reports nothing else about plan review. A report with neither line is a
+  defect, not a quiet "off".
 
 ---
 

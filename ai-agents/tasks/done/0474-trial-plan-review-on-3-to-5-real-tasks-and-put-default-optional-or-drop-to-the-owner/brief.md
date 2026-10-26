@@ -170,7 +170,7 @@ folder name still carries the old wording; the ID and folder were kept so the li
   Done the same day: the ruling recorded in the summary's §9
   ([`2026-10-24-plan-review-trial-summary.md`](../../../knowledge-base/reports/2026-10-24-plan-review-trial-summary.md));
   follow-up brief filed on Sprint 12,
-  [`0541`](../../backlog/0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter/brief.md)
+  [`0541`](../0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter/brief.md)
   (*What to build* §4, *Verification* step 5). This task changed no skill or prompt. Closed next by
   `/fkit-task-done`, agent-closed. ⛔ No commit.
 

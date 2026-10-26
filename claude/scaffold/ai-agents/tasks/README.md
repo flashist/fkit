@@ -6,7 +6,7 @@ Every task is a **folder** under one of three boards — `backlog/`, `done/`, `c
 ai-agents/tasks/<board>/<NNNN>-<slug>/
 ├── brief.md      REQUIRED — the task brief. Always present.
 ├── plan.md       optional — the approved implementation plan   (ADR-020)
-├── plan-review.md  optional — the opt-in plan-review record    (ADR-056)
+├── plan-review.md  optional — the plan-review record           (ADR-056)
 ├── worklog.md    optional — the ship-loop worklog               (ADR-020)
 ├── review.md     optional — the two-party review ledger
 └── assets/       optional — reference material, fixtures, screenshots

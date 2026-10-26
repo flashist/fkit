@@ -11,6 +11,12 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- `/fkit-sprint-ship-loop` runs now do plan review by default: agents approve each plan and Codex
+  attacks it before the owner sees it. Start a run with `--no-plan-review` to turn it off for that run;
+  the old `--plan-review` is still accepted and changes nothing. Each run's report says which path it
+  took. Without Codex the plan pass is Claude-only and flagged as not model-diverse â€” use
+  `--no-plan-review` if you do not want that. Provisional: the owner decides after real-project use.
+  `fkit coder` sessions, `/fkit-task-ship-loop` and a plain `/fkit-plan-task` are unchanged.
 - `fkit board` now refuses (403) a request addressed under any host name other than `localhost` or an
   IP address, so a web page you have open cannot read your board through another domain name.
   `http://127.0.0.1:8585/` and `http://localhost:8585/` work as before.
