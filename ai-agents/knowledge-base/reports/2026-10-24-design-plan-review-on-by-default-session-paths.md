@@ -11,6 +11,9 @@
   recorded as [ADR-060](../decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md)
   — **provisional**, and **conditional**: every verdict below is *"feasible with a condition: confirm by
   owner probe"*, and the owner's Tier-2 probe (§8) **has not run**. It gates every build (§7).
+  *(2026-10-26: the probe **has now run**; results in §8a. Two results hit rows other than "option A
+  stands": 3n reopens Q2, and 3m goes to build 3's plan gate.)* *(2026-10-26, later: the owner re-ruled
+  Q2 to option B (§10.4). The design is rewritten for it, and the verdicts are now **feasible**.)*
 - **Step C** (plan Step C): `fkit-architect` spawn #3 of 3, hop 1, chain `lead → architect`, same
   run. Added §10, finalised §7, updated §13, the *Status* bullet and this bullet; wrote ADR-060 and the
   additions-only pointer notes on ADR-056/059. Inputs re-checked by `git hash-object` before any edit:
@@ -23,6 +26,17 @@
 - **Plan carried:** `plan.md` blob `800eac333fd26bfcd21ed4e299cd738f0139e7ad` (18394 bytes, checked
   with `git hash-object`). Probe record: `worklog.md` §"Step A — plan-mode probe record", blob
   `73bb6cbc2f81848c02eb0496ae2d6f67bbe5bdd9` (15010 bytes, checked).
+- **Tier-2 results, 2026-10-26** (`fkit-architect` consult, hop 1, chain `lead → architect`): added
+  §8a, from the lead's write-up of the owner's screenshots, checked against the session transcripts.
+  Added dated pointer lines in §0, §1.2, §3.6, §4, §6, §7, §9 Q2, §10.3 and §13; no other text in those
+  sections changed. ADR-060 got dated ⚠️ notes and a **Corrections:** header bullet. Q2 is open again
+  (§8a.7).
+- **Q2 re-ruled, 2026-10-26** (`fkit-architect` consult, hop 1, chain `lead → architect`; the owner's
+  ruling relayed verbatim by `fkit-lead`, §10.4): *"Review before plan mode (Recommended)"*.
+  **Rewrote** §3.0, §3.3, §3.6 and §4 for it. Edited §3.4, §3.7, §7 (the build-1 and build-2 rows, and
+  a dated bullet), §11 and §12. Added dated lines in §0, §2, §3.2, §6, §8a.5–§8a.7, §9 Q2, §10.3 and
+  §13, and added §10.4. ADR-060 got a ⛔ note on Decision 4.3 and dated ⚠️ notes. ADR-019 got one dated ⚠️ note on
+  Decision 2. Input checked before editing: this report `a208af51…` (`git hash-object`).
 
 > **Citation form.** Agent, skill and hook files can change. They are cited by **section plus quoted
 > phrase**, with the line number **as of 2026-10-24** (0541's uncommitted edits included) as a reading
@@ -68,8 +82,17 @@
   reviewer **model** may still refuse after the plan-mode notice: it did once in two realistic runs
   (C4, run 8-2). Recommended mitigation: a fixed note in the reviewer's spawn prompt, one retry, and
   then a loud `plan review incomplete` flag (owner question Q2).
+  *(2026-10-26: Tier-2 3n: the reviewer declined on both tries with the note, so option A failed and Q2
+  is open again; §8a.)*
+  *(2026-10-26, later: **re-ruled to option B**, §10.4. With review on, the coder drafts and runs the
+  whole review, Codex included, **with plan mode off**. It enters plan mode only for the owner's
+  approval. For that stretch (~17 min median) only the coder's instructions stop a stray write. §3.6.)*
 - **Verdicts:** all three paths are **feasible with a condition: confirm by owner probe** (C7/C8 are
   not settled). The Tier-2 interactive probe (§8) must run **before any build**.
+  *(2026-10-26: it ran; §8a. Not ruled infeasible: step 5 passed, 5c and 5d passed. The Codex step in
+  plan mode failed: 3n.)*
+  *(2026-10-26, after the Q2 re-ruling: all three paths are **feasible**. No probe condition is left;
+  what remains is each build's live check, §4.)*
 - **Finding, scoped to headless evidence:** plan mode **did not gate Bash at all** (C2). fkit's
   documents call plan mode a "structural write-wall". On this evidence it is a wall for `Write`/`Edit`
   only. §6 sets out the follow-up options. That choice is the owner's (Q7).
@@ -105,6 +128,13 @@ prompt through a Bash heredoc"*, ~:51).
 | C6 | An approver-style subagent **cannot** persist a record with `Write` during plan mode | settled (headless) | follows from C1 |
 | C7 | Interactive `fkit coder` plan mode: whether `Write` prompts the owner, whether Bash prompts, whether the real reviewer completes, whether `@fkit-architect` runs | **not settled** | needs Tier 2 |
 | C8 | Effect of the owner's `defaultMode: auto` / `autoMode` on plan mode, interactively | **not settled** | needs Tier 2 |
+
+> *2026-10-26, after Tier 2 (§8a):*
+> - **C7, partly settled interactively.** `@fkit-architect` runs in plan mode (step 5).
+>   `AskUserQuestion` works (5c). The real reviewer declines its Codex steps (3n, 2 of 2).
+> - **C7, still open:** whether the runtime would let a Bash or `Write` call through, because no model
+>   made one (3, 3m, 5b).
+> - **C8: not settled.** Nothing that writes reached the runtime.
 
 ### 1.3 What these conclusions force on the design
 
@@ -151,6 +181,9 @@ owner's words *"keep the old one available via a parameter"*, `reports/2026-10-2
   design.
 - **ADR-056 Decision 5 / ADR-019 Decision 2:** the plan gate stays the one human checkpoint, and the
   owner approves last. Plan review only adds consults before the gate.
+  *(2026-10-26: still true. One part changes by owner ruling (§10.4): ADR-019 Decision 2's *"(also
+  runtime-enforced by plan mode)"* no longer covers the draft-and-review stretch when plan review is on.
+  Plan mode covers only the gate on that path. Dated ⚠️ note in ADR-019.)*
 - **ADR-056 Decisions 1, 4, 6 and 8 carry over:** the classification wording, the flow and its
   2-round cap, `plan-review.md` kept separate from `plan.md`, and "trust, not proof".
 - **ADR-054:** Codex is optional. Without it, the pass is Claude-only and flagged *NOT model-diverse*.
@@ -170,6 +203,10 @@ real-project use.
 
 ### 3.0 Shape
 
+*Rewritten 2026-10-26 for the Q2 re-ruling (§10.4). What changed: the gate check now comes **before**
+`EnterPlanMode`, and with review on, plan mode comes on only for the approval. The Step-B diagram
+entered plan mode first and ran the review inside it. §8a.4 shows why that cannot work.*
+
 ```
 fkit coder [--no-plan-review]            ← launcher (claude/fkit-claude.sh) — session-wide switch
    │  writes ONE session line into the main session's system prompt (--append-system-prompt)
@@ -179,16 +216,25 @@ fkit-coder session (hop 0, owner present, has AskUserQuestion + EnterPlanMode)
    └── /fkit-task-ship-loop <brief> [--no-plan-review]       ← forwards the flag to step 2's /fkit-plan-task
             │
             ▼
-   fkit-plan-task: EnterPlanMode → draft → GATE CHECK ─ off → step 7 as today
-                                              │ on
-                                              ▼
-            classify → ask @fkit-architect / @fkit-producer (hop 1, leaves, parallel)
-            → ≤2 revision rounds → disagreement? → AskUserQuestion to the owner (in session)
-            → @fkit-adversarial-reviewer "Attack this plan" (hop 1; Bash heredoc + codex exec)
-            → ExitPlanMode: banners · plan · 3 attachments · RECORD block
-                                              │ owner approves
-                                              ▼
-            write plan-review.md (+ plan.md on the ship-loop path, as today)
+   fkit-plan-task: GATE CHECK (§3.1, §3.2), before Workflow step 1
+        │ off (any opt-out, no line, or a spawn without a driver line)
+        │    → step 1 EnterPlanMode → draft → step 7 ExitPlanMode        ← today's flow, unchanged
+        │ on
+        ▼
+   ┌─ PLAN MODE OFF: held by the coder's instructions only (§3.6) ───────────────────┐
+   │ one chat line: "planning only; plan mode comes on for your approval"            │
+   │ → draft (Workflow steps 2–6; no file written)                                   │
+   │ → classify → @fkit-architect / @fkit-producer (hop 1, leaves, parallel)         │
+   │ → ≤2 revision rounds → disagreement? → AskUserQuestion to the owner             │
+   │ → @fkit-adversarial-reviewer "Attack this plan" (hop 1; its normal procedure:   │
+   │   .fkit/tmp/ prompt by heredoc + codex exec --sandbox read-only)                │
+   └─────────────────────────────────────────────────────────────────────────────────┘
+   ┌─ PLAN MODE ON: the runtime refuses Write/Edit (C1); Bash by instruction (§6) ───┐
+   │ → EnterPlanMode → ExitPlanMode: banners · plan · 3 attachments · RECORD block   │
+   └─────────────────────────────────────────────────────────────────────────────────┘
+        │ owner approves (plan mode lifts)
+        ▼
+   write plan-review.md (+ plan.md on the ship-loop path, as today)
 ```
 
 ### 3.1 What turns it on: the session gate (all three paths)
@@ -260,7 +306,9 @@ Shared rules, copied from ADR-059 Decision 4:
 
 **Opted out is today's behaviour.** With any opt-out (or no line), the gate sends the coder *"from
 Workflow step 6 straight to step 7, exactly as if it were not here"* (`fkit-plan-task/SKILL.md:62-63`).
-That is today's text, and today's flow runs unchanged. There are only two differences:
+That is today's text, and today's flow runs unchanged. *(2026-10-26: that includes Workflow step 1,
+`EnterPlanMode` first. An opted-out plan is drafted inside plan mode, as today. The gate check moves
+ahead of step 1 (§3.0), but on the off path it changes nothing.)* There are only two differences:
 1. The one report line (Q5).
 2. In every `fkit coder` session, the launcher's line is now in the system prompt. It is an added
    instruction, not a changed behaviour.
@@ -269,34 +317,51 @@ That is today's text, and today's flow runs unchanged. There are only two differ
 
 ### 3.3 The flow in a session (what differs from ADR-056 Decision 4)
 
-ADR-056 Decision 4's steps carry over unchanged unless listed here.
+*Rewritten 2026-10-26 for the Q2 re-ruling (§10.4). New: step 0, the plan-mode state of each step,
+step 6's `EnterPlanMode`, the first progress line, and what happens when the owner asks for a
+re-review at the gate. Steps 1–4 and the rest are as approved on 2026-10-24.*
 
+ADR-056 Decision 4's steps carry over unchanged unless listed here. **Steps 0–5 run with plan mode
+off. Step 6 runs with plan mode on.**
+
+0. **Draft, with plan mode off.** Run the gate check (§3.1, §3.2) **before** Workflow step 1. With
+   review on, **skip `EnterPlanMode`** and draft (Workflow steps 2–6) under the planning-only rule.
+   Write no source and no file; nothing is written before approval (§3.4, §3.6). First, one chat line
+   to the owner: `Plan review: ON (default) — I draft and review with plan mode off; plan mode comes on
+   for your approval. Until then only my instructions stop a write.`
 1. **Classify.** Same wording (ADR-056 Decision 1).
 2. **Ask.** Spawn the approvers in parallel. The hop line becomes *"You are being consulted at hop 1 of
    2; chain: coder → <role>. You are a plan-review approver: answer from files and consult no one; put
    anything you cannot settle as an open question."* (§3.5).
 3. **≤2 revision rounds.** Unchanged.
 4. **A disagreement after round 2.** The **session coder asks the owner directly** with
-   `AskUserQuestion`, inside plan mode, following `conventions/asking-the-owner.md`. There is no
-   `NEEDS-DECISION` and no re-spawn: the owner is present. The ruling is quoted in the record with date
-   and channel (`fkit coder session, AskUserQuestion`). Then the coder goes on to step 5. *(Condition:
-   that `AskUserQuestion` works inside interactive plan mode is not probed. That is Tier-2 step 5c.)*
-5. **Codex last.** `@fkit-adversarial-reviewer`, *"Attack this plan"*, hop 1. For the **plan-mode
-   note** (the Q2 recommendation), see §3.6. Its banner goes first, verbatim. The plan is not changed
-   after Codex. There is one coder check per finding.
-6. **The owner approves last,** through `ExitPlanMode`. Order: banners → the line `Plan review: ON
-   (default)` → the plan → three attachments (who approved and the classification · what changed and
-   why · Codex findings with the coder checks) → **the full record block**. Then approve or reject.
+   `AskUserQuestion`, following `conventions/asking-the-owner.md`. There is no `NEEDS-DECISION` and no
+   re-spawn: the owner is present. The ruling is quoted in the record with date and channel (`fkit
+   coder session, AskUserQuestion`). Then the coder goes on to step 5. *(Plan mode is normally off
+   here. 5c showed `AskUserQuestion` also works inside plan mode, so the §3.6 plan-mode-already-on
+   case is covered.)*
+5. **Codex last, with plan mode off.** `@fkit-adversarial-reviewer`, *"Attack this plan"*, hop 1. It
+   runs its normal procedure, the same one every fkit review uses. There is **no plan-mode note** and
+   no special retry (§3.6). **Never spawn it while plan mode is on** (§3.6). Its banner goes first,
+   verbatim. The plan is not changed after Codex. There is one coder check per finding.
+6. **Plan mode on, then the owner approves last.** Call `EnterPlanMode` (the same call Workflow step 1
+   makes today, moved here). Then present through `ExitPlanMode`. Order: banners → the line `Plan
+   review: ON (default)` → the plan → three attachments (who approved and the classification · what
+   changed and why · Codex findings with the coder checks) → **the full record block**. Then approve or
+   reject.
 
-**The owner's view while it runs (Q3 recommendation):** one short chat line as each step returns, for
-example `Plan review: round 1 — architect APPROVE, producer CHANGES REQUESTED (2 points)`. In a session
-the owner can watch it happen rather than have it all go on *"behind the scene"* (trial summary :191).
+**The owner's view while it runs (Q3 recommendation):** step 0's line first. Then one short chat line
+as each step returns, for example `Plan review: round 1 — architect APPROVE, producer CHANGES
+REQUESTED (2 points)`. In a session the owner can watch it happen rather than have it all go on
+*"behind the scene"* (trial summary :191).
 
 **Owner feedback at the gate** (he declines `ExitPlanMode` and asks for changes): the revised plan is
 **not re-reviewed** unless he asks (Q4 recommendation). It is shown under a banner `revised after
 owner feedback — not re-reviewed`. The record gains a line `Owner revision: <his words quoted> — not
 re-reviewed`. Reason: the owner's word outranks the approvers' (ADR-056 Decision 5, *"the owner
-approves last"*), and a second full pass costs ~17 minutes again (trial summary :64).
+approves last"*), and a second full pass costs ~17 minutes again (trial summary :64). **If he does ask
+for a re-review:** after a declined `ExitPlanMode` the session is still in plan mode. The approvers
+may re-run there (Tier-2 step 5 passed). The Codex step follows §3.6's plan-mode-already-on rule.
 
 ### 3.4 Who writes `plan-review.md`
 
@@ -312,6 +377,12 @@ record. Here, the agent that ran the review also writes the record. That is a **
 fidelity, not proof (ADR-056 Decision 8). One thing bounds it: the owner saw the **same block at the
 gate**, so any drift between the two can be spotted by comparing them. A `Write` that fails after
 approval is a `Problems:` entry, and the loop still goes on (the record is evidence, not scope).
+
+**Unchanged by the 2026-10-26 ruling, on purpose.** With review on, the draft and review now run with
+plan mode off, so the coder *could* write `plan-review.md` before the gate. It must not. "Nothing is
+written before approval" is now the only thing that holds that stretch (§3.6). The record also needs
+the owner's decision. The rejected row above still holds: a rejection happens at the gate, inside plan
+mode.
 
 Rejected attempts were kept under ADR-056 Decision 6 *"because rejected attempts are trial evidence
 for `0474`"*. The trial is over (ADR-059), so dropping them on the session paths loses no promised
@@ -339,34 +410,94 @@ evidence. It is recorded here as a known gap.
 - `fkit-plan-task`'s *"Hop check first. If you were consulted at hop 2"* (:69-72) stays for spawned
   coders. Build makes the hop line the **session** variant when §3.1(b) is what turned review on.
 
-### 3.6 The Codex step under plan mode (the risky part)
+### 3.6 The Codex step: review before plan mode (owner re-ruling, 2026-10-26)
 
-- **The runtime allows it, headless:** the heredoc to `.fkit/tmp/` and `codex exec --sandbox
-  read-only` both ran to exit 0 in a plan-mode subagent (C5: runs 4, 5b, 8-1).
-- **It is not reliable:** the realistic reviewer finished in 1 of 2 identical runs (8-1 vs 8-2). In
-  8-2 it refused Codex after the plan-mode notice (C4).
-- **Recommended (Q2 option A):**
-  1. **A fixed plan-mode note** in the coder's spawn prompt to the reviewer: *"This session is in plan
-     mode for the owner's plan gate, so you may see a plan-mode notice. Your procedure's two Bash steps
-     are part of the owner-approved plan-review flow (ADR-060), and they are the only non-read actions
-     you take: writing your `.fkit/tmp/` prompt file, and `codex exec --sandbox read-only`. Write
-     nothing else."* **Not yet tested.** Runs 3b/4/5b completed every Bash step, but their subagent's
-     *own system prompt* said *"you must STILL issue every remaining call (the runtime enforces plan
-     mode, not you)"* (scratchpad `tools/agents.json`), far stronger than a note in a spawn prompt; the
-     realistic reviewer runs (8-1, 8-2) had no note. So the probe shows a strong override can work, not
-     that this note does. Tier-2 addition 3n (§8) tests the note itself.
-  2. **One retry** if the reviewer reports it declined a step.
-  3. **Then a loud flag:** `plan review incomplete: Codex pass not run (declined under plan mode)`,
-     placed **first** in the gate presentation. This matches ADR-056's *"Incomplete is never
-     "reviewed""*. It is not a fallback to a Claude pass: the reviewer's own fallback is for Codex
-     *missing or failing*, not for the reviewer declining.
-- **No change to `fkit-adversarial-review` is needed** for option A. The note is spawn-prompt text in
-  `fkit-plan-task`.
-- **Honesty:** this note asks a subagent to go ahead despite an advisory runtime notice. It changes no
-  runtime gate. On today's evidence plan mode does not block these calls (C2), and the only writes are
-  to the gitignored `.fkit/tmp/`. It is still prose that an LLM may ignore, so it is trust, not proof.
-- **Interactive (C7/C8):** Bash may raise a permission prompt for the owner. That would be visible, not
-  silent, and he could allow it. This is not settled. Tier-2 step 3 settles it.
+*Rewritten 2026-10-26. The owner re-ruled Q2 to *"Review before plan mode (Recommended)"* (verbatim,
+§10.4). The Step-B text (option A, the plan-mode note) is kept under* History *below. Tier-2 3n tested
+it, and §8 quotes it.*
+
+**Why the order changes.** In interactive plan mode, no agent took any action that writes: 7 of 7
+requests were declined, the reviewer's 2 of 2 among them (§8a.2, §8a.4). The plan-mode text says it
+outranks every other instruction. A note can reach the reviewer only through another agent, and an
+agent's message is not the owner's consent. So no wording makes the Codex step run **inside** plan
+mode. It has to run outside.
+
+**The rule (with review on; §3.0, §3.3):**
+1. **The gate check runs first**, before Workflow step 1. With review on, the coder **does not call
+   `EnterPlanMode`** at step 1. It drafts, runs the approver rounds, asks the owner about any
+   disagreement, and runs the Codex step, **all with plan mode off**.
+2. **The reviewer runs its normal procedure**: the `.fkit/tmp/` prompt by heredoc, then `codex exec
+   --sandbox read-only`. This is the same procedure every fkit code review runs outside plan mode
+   today. **No plan-mode note goes in its spawn prompt.** No change to `fkit-adversarial-review`.
+3. **Failures use the rules that already exist, with no special retry:**
+   - Codex missing or failing → the reviewer's own ADR-054 fallback: a Claude pass, flagged *NOT
+     model-diverse*, banner first (§3.8).
+   - The reviewer spawn fails, or returns no usable findings → the gated section's existing rule,
+     `plan review incomplete: Codex pass not run (<reason>)`, loud and at the top
+     (`fkit-plan-task/SKILL.md`, *"Incomplete review"*, ~:146-147).
+   - Option A's one retry is dropped. It existed only for a decline under plan mode, and outside plan
+     mode that cause is gone.
+4. **Then plan mode on, for the gate only.** `EnterPlanMode`, then `ExitPlanMode` with the
+   presentation (§3.3 step 6). On approval plan mode lifts, and `plan-review.md` is written (§3.4).
+5. **Nothing is written before approval** (§3.4). The coder writes no source, no `plan.md` and no
+   `plan-review.md`. The approvers write nothing. The reviewer writes only its gitignored `.fkit/tmp/`
+   prompt.
+6. **The record gains one line**, `Plan mode: off for draft and review (<UTC> – <UTC>); on at <UTC> for
+   the gate`, so the evidence shows how long the stretch held by instructions only lasted (§3.7).
+
+**Plan mode already on, when a Codex step is about to start.** This happens if the owner switched
+plan mode on before he invoked the command, or if he declined `ExitPlanMode` and asked for a re-review
+(§3.3). The coder **never spawns the reviewer inside plan mode**: 3n shows it declines, and its
+banner then wrongly says Codex was *"unreachable"* (§8a.5). Instead it stops and asks the owner. It
+asks at the start if plan mode is already on then, so that drafting also runs as ruled. The options:
+- **(Rec) Leave plan mode** (Shift+Tab), then continue. The coder goes on only once plan mode is off.
+- **Continue without the Codex pass.** The plan is flagged `plan review incomplete: Codex pass not run
+  (plan mode on)`, first in the presentation.
+- **No plan review for this plan**, the same as `--no-plan-review`.
+
+This is the architect's design, not an owner ruling. Build 1's plan gate confirms it (§7). Two
+mechanics are unproven, and build 1's plan names how it handles them:
+- **How the coder knows the mode.** It is told when plan mode comes on (a system reminder). Whether it
+  is reliably told when the owner turns it off is untested. If it cannot tell, it asks the owner to
+  confirm.
+- **How the owner leaves plan mode during the stop.** The coder ends its turn with a chat line. A
+  dialog may block Shift+Tab.
+
+**`--no-plan-review` and every other off path keep plan mode from the start**, as today (§3.2). The
+owner's ruling description says so: *"plan mode on only for your approval"* applies to the review-on
+path only.
+
+**Honesty: what holds what, and for how long.**
+
+| Stretch (review on) | How long | What stops a write |
+|---|---|---|
+| Draft, approver rounds, owner question, Codex | ~17 min median per plan (trial :64; range ~9½–31) | **The coder's instructions only.** With the owner's `defaultMode: "auto"` (§8a.1), no permission prompt would catch a stray write either. This is the level of the sprint loop's honesty clause (ADR-031; ADR-032 Decision 7), stated plainly, and the owner saw it before choosing (§10.4) |
+| The gate (`EnterPlanMode` → his answer) | until the owner answers | Plan mode: the runtime refuses `Write`/`Edit` (C1). Bash is held by instruction (C2 headless; untested interactively, 3m, §6) |
+| With `--no-plan-review` (any off path) | the whole draft | Plan mode from the start, as today |
+
+**The ADR change this makes.** ADR-019 Decision 2 says the owner approves the plan *"(also
+runtime-enforced by plan mode) before any code"*. On the review-on path that parenthetical now covers
+only the gate, not the draft-and-review stretch. The owner was told this before he chose (§10.4). It is
+recorded as a dated ⚠️ note in ADR-019 (the decision stands; one mechanism claim no longer holds on one
+path) and in ADR-060's ⛔ note on Decision 4.3. **It takes effect when build 1 (`0543`) lands**, not
+build 2: `/fkit-task-ship-loop` step 2 runs `/fkit-plan-task`, and that is where the order changes
+(§4.2, §7).
+
+**Re-raise only if:**
+- the runtime gains a sanctioned way for a subagent to run its Bash steps under plan mode (then the
+  review could move back inside plan mode);
+- a stray write is seen during a draft-and-review stretch;
+- plan mode stops refusing `Write`/`Edit` at the gate.
+
+**History: option A (owner ruling 2026-10-24; failed Tier-2 3n on 2026-10-26).** The Step-B
+recommendation: the coder's spawn prompt to the reviewer carries a fixed plan-mode note, then one retry
+on a decline, then a loud flag. The note, verbatim (3n sent it, and §8's step 3n quotes this text):
+*"This session is in plan mode for the owner's plan gate, so you may see a plan-mode notice. Your
+procedure's two Bash steps are part of the owner-approved plan-review flow (ADR-060), and they are the
+only non-read actions you take: writing your `.fkit/tmp/` prompt file, and `codex exec --sandbox
+read-only`. Write nothing else."* The reviewer declined both tries. It cited the plan-mode instruction
+and said an agent's message is not the owner's consent (§8a.2). ADR-060 Decision 4.3 keeps the
+original text, under a ⛔ note.
 
 ### 3.7 What reports say
 
@@ -380,6 +511,11 @@ These mirror ADR-059 Decision 7, if the owner carries it over (Q5):
   review's `Codex unavailable` (`fkit-task-ship-loop/SKILL.md` step 6, ~:171-176). A NOT-model-diverse
   *plan* pass is flagged in the packet; it does not withhold the close.
 - A presentation with **no** plan-review line is a defect, as ADR-059 Decision 7 has it.
+- *2026-10-26 (Q2 re-ruling, §3.6):* with review on, the record block gains `Plan mode: off for draft
+  and review (<UTC> – <UTC>); on at <UTC> for the gate`. One flag is new:
+  `plan review incomplete: Codex pass not run (plan mode on)`, used only when the owner picks it at
+  §3.6's stop. `plan review incomplete: Codex pass not run (declined under plan mode)` is **retired**,
+  because the reviewer is never spawned in plan mode now.
 
 ### 3.8 Without Codex
 
@@ -392,20 +528,36 @@ gets a Claude-only attack pass plus the approver rounds.
 
 ## 4. Per path: the brief's required points, and a verdict
 
+> *2026-10-26: Tier-2 results are in §8a. No path is ruled infeasible. Each verdict's Codex-step
+> condition failed (3n), so that part of each path waits on the Q2 re-ruling (§8a.7).*
+>
+> *2026-10-26, later: the verdicts below are **rewritten** for the Q2 re-ruling (§10.4, §3.6). All
+> three paths are **feasible**. No probe condition is left; each build's live check (§12) confirms its
+> path.*
+
 ### 4.1 `fkit coder` session (the session-wide switch)
 
 - **On:** the launcher's on line, plus the live-session check (§3.1).
 - **A brief cannot fake it:** the line comes from the launcher process; missing means off.
 - **Opt-out:** `fkit coder --no-plan-review`.
+- **Plan mode:** with review on, off for the draft and the review, on for the gate only. Off paths
+  keep it from the start (§3.6).
 - **`plan-review.md`:** written by the session coder after approval, through the path in use (§3.4).
 - **Hops:** coder 0 → approvers 1, kept as leaves.
 - **What the owner sees:** progress lines, then the gate presentation (§3.3).
 - **Without Codex:** flagged Claude pass (§3.8).
 - **Opted out = today** (§3.2).
-- **Verdict: feasible with a condition: confirm by owner probe.** Conditions:
-  - Tier-2 steps 3/3n/4/5/5b/5c settle C7/C8 (the reviewer completes interactively with the §3.6
-    note, or any prompt is allowable; the approvers run; `AskUserQuestion` works in plan mode).
-  - Tier-2 step 5d confirms that the appended line does not reach a subagent (B1, observed once).
+- **Verdict: feasible.** The evidence:
+  - 5d confirmed B1 interactively (§3.1).
+  - 5c: `AskUserQuestion` works, in plan mode as well.
+  - Step 5: approvers run, in plan mode as well (a re-review after a declined gate).
+  - The Codex step now runs outside plan mode, the same way every fkit review runs today.
+  - Not probed, and covered by build 1's live check: a hop-1 reviewer spawned from a session coder,
+    plan mode off, completing Codex.
+  - Unproven mechanics that build 1's plan must name (§3.6): whether the coder can tell when plan mode
+    turns off, and how the owner leaves plan mode during the stop.
+  - Not run, and nothing rests on them now: 5b (no worker writes before approval, so nothing depends
+    on a plan-mode `Write`) and 3-notice (the reviewer no longer meets plan mode).
 - **Build risk:** if the owner already passes his own `--append-system-prompt` through the launcher's
   pass-through args, two such flags may conflict. Build checks the runtime's behaviour (or uses
   `--append-system-prompt-file`), and a launcher test covers it (ADR-057; a new test file needs the
@@ -421,11 +573,26 @@ gets a Claude-only attack pass plus the approver rounds.
   - Step 3's presentation gains the banners, the attachments and the record (§3.3 step 6).
   - Step 4 also writes `plan-review.md` (§3.4).
   - Step 3's rejection branch (*"no worklog is opened before approval"*) gains the not-persisted line.
+  - *2026-10-26 (§3.6):* **with review on, step 2 drafts with plan mode off.** Plan mode comes on at
+    the end of step 2, for step 3's gate. Three passages are wrong on that path and change with build 2:
+    - step 2, *"→ produce the plan in plan mode"* and *"plan mode's write wall forbids writing it
+      here"*;
+    - step 4, *"(plan mode releases the write wall)"*;
+    - *"What makes this autonomous"*, *"before any code (runtime-enforced by plan mode)"*.
+
+    Each gets wording like this: *"with plan review on, drafted and reviewed with plan mode off (held by
+    instructions only); plan mode is on for the gate. With `--no-plan-review`, plan mode from step 2's
+    start, as today."* Build 3 (`0545`) later adds the Bash point to the same passages (§6).
+  - **The ADR-019 Decision 2 parenthetical** no longer covers the draft on this path (dated ⚠️ note in
+    ADR-019; §3.6).
+  - **Interim, between `0543` and `0544` landing:** once build 1 lands, a ship loop in a `fkit coder`
+    session already reaches the review-on path through step 2's `/fkit-plan-task`. Step 2's text still
+    says "in plan mode" until build 2 lands. Advice: land and refresh `0543` and `0544` together, or
+    `0543`'s plan names this window.
 - **Hops:** as in 4.1.
 - **Without Codex:** flagged, and it does not change step 9 (§3.7).
-- **Opted out = today:** steps 1–9 are unchanged.
-- **Verdict: feasible with a condition: confirm by owner probe** (as for 4.1). It also depends on
-  build 1 (§7).
+- **Opted out = today:** steps 1–9 are unchanged, and step 2 drafts in plan mode.
+- **Verdict: feasible** (as for 4.1). It depends on build 1 (§7).
 
 ### 4.3 Plain `/fkit-plan-task` in a session
 
@@ -434,9 +601,10 @@ gets a Claude-only attack pass plus the approver rounds.
 - **`plan-review.md`:** written at approval when the argument is a task-folder brief (Q6). Otherwise it
   lives only in the presentation.
 - **What is new:** the plain path persists nothing today, so the record is new.
-- **Hops, view, Codex:** as in 4.1.
+- **Hops, view, Codex, plan mode:** as in 4.1. Workflow step 1 (`EnterPlanMode`) moves to just before
+  step 7 when review is on.
 - **Opted out = today:** Workflow steps 1–7, unchanged.
-- **Verdict: feasible with a condition: confirm by owner probe.**
+- **Verdict: feasible** (as for 4.1).
 
 ### 4.4 Not feasible (rejected on the evidence)
 
@@ -445,6 +613,8 @@ gets a Claude-only attack pass plus the approver rounds.
   settled). That is not worth depending on.
 - **Writing the record by Bash during plan mode** works headless (C2). It is **rejected** anyway: it
   would make the design depend on a gap that may be a quirk or may close.
+- **The Codex step inside plan mode** (Q2 option A, 2026-10-24): **failed** Tier-2 3n, 2 of 2
+  (§8a.2). Replaced by review before plan mode (§3.6, owner 2026-10-26).
 
 ---
 
@@ -513,6 +683,24 @@ session coder:
   - It is not known whether a subagent's hook input also carries the mode.
 - **C. Record the finding only;** decide after Tier 2.
 
+> *2026-10-26: Tier 2 did not test this interactively. The model declined both 3m tries without making
+> a call. That restraint held every time, and the runtime gate stays untested (§8a.2, §8a.4). The
+> owner's Q7 ruling (option A) stands. Build 3's plan gate names this point and asks.*
+>
+> *2026-10-26, after the Q2 re-ruling (§3.6): a second fact for build 3's wording. On the **default**
+> session path (review on), plan mode no longer covers the draft at all, only the gate. So "a `fkit
+> coder` session gives you plan mode's wall" is now true only with `--no-plan-review`. Four places point
+> owners to *"the old way: `fkit coder` + `/fkit-task-ship-loop`"* for the wall:
+> - `fkit-lead.md`, *"An owner who wants the structural wall for a task ships it the old way"*;
+> - `fkit-lead.md` §*"When the owner wants a dedicated role session instead"*;
+> - `fkit-sprint-ship-loop`'s honesty clause, *"Owners who want plan mode's structural wall for a given
+>   task ship it the old way"*;
+> - ADR-032 (~:292).
+>
+> The three `claude/` pointers gain `--no-plan-review` in build 1 (`0543`), so shipped text is never
+> wrong once it lands (§7). ADR-032's gets build 3's dated note. Build 3's wording keeps both facts: the
+> Bash point, and "review-on drafts outside plan mode".*
+
 ---
 
 ## 7. Build split — final (Step C; for the producer to file; owner placement ruling: *"Sprint 12"*)
@@ -534,11 +722,28 @@ confirms"*):
   missing-§8a rule above) whether to go ahead with it unconfirmed or run it first.
 - The probe is a check, not a task: it has no brief and no board row, so it cannot be a `Depends on:`
   entry.
+- *2026-10-26: §8a exists. Builds 1 and 2 are blocked until the owner re-rules Q2 and §3.6 is
+  rewritten. Build 3 can be planned, carrying 3m to its gate (§8a.6).*
+- *2026-10-26, later: **the Tier-2 gate is cleared for builds 1 and 2.** The owner re-ruled Q2
+  (§10.4). §3.6 and the sections it touches were rewritten. ADR-060 got its ⛔ note on Decision 4.3.
+  That is the "design back to the architect, dated note before planning" this gate asks for after 3n's
+  row; it is done.*
+  - *Build 1 rests on 5c and 5d: both passed.*
+  - *3n failed, and the ruling replaced the design element that rested on it.*
+  - *5b and 3-notice did not run. Nothing in the re-ruled design rests on them (§4.1). The plan names
+    them in one line; there is no question for the owner unless the coder finds a design element that
+    does rest on them.*
+  - *Build 1's plan gate still carries:*
+    - *the launcher test's OK, by name;*
+    - *inline plans;*
+    - *the usage-error wording;*
+    - *§3.6's plan-mode-already-on stop (architect's design, to confirm), and its two unproven
+      mechanics.*
 
 | # | Proposed brief title | Owner | Depends on | Touches (expected) |
 |---|---|---|---|---|
-| 1 | Turn plan review on by default in `fkit coder` sessions and plain `/fkit-plan-task`: launcher session line, `fkit coder --no-plan-review`, and `--no-plan-review` per command | fkit-coder | `0542` (+ the Tier-2 gate) | `claude/fkit-claude.sh` (consume `--no-plan-review` after `coder` only; write the on/off line; usage text); **a launcher test — the owner has NOT OK'd one by name** (his Q1 option said *"Launcher test needs your OK."*, which is not that OK; ADR-057 §D2 item 1) — build 1's plan gate names the file or cases and asks; `claude/skills/fkit-plan-task/SKILL.md` gated section (session gate §3.1, flag, session hop line + leaf rule, owner-asked disagreement, the Codex plan-mode note + one retry + flag, progress lines, the not-re-reviewed banner, the report lines, `plan-review.md` at approval on a task-folder brief); `claude/agents/fkit-coder.md` (procedures bullet; adversarial-reviewer consult bullet); `claude/agents/fkit-architect.md` and `fkit-producer.md` (their plan-approval paragraph: an approver consults no one at any hop); `claude/agents/fkit-lead.md` (the bullet *"Only the sprint loop has it"*); `ai-agents/tasks/README.md` + scaffold twin (`plan-review.md` writer on session paths); `CHANGELOG.md`. Also confirm at its plan gate: inline plans get no plan review (ADR-060 *Open questions*) |
-| 2 | Turn plan review on by default in `/fkit-task-ship-loop`: forward `--no-plan-review`, show the review record at the plan gate, write `plan-review.md` at approval | fkit-coder | build 1 (+ the Tier-2 gate) | `claude/skills/fkit-task-ship-loop/SKILL.md` (*"**Argument:**"* paragraph, steps 2–4, step 3's rejection branch, the close-out evidence packet); `CHANGELOG.md` |
+| 1 | Turn plan review on by default in `fkit coder` sessions and plain `/fkit-plan-task`: launcher session line, `fkit coder --no-plan-review`, and `--no-plan-review` per command | fkit-coder | `0542` (+ the Tier-2 gate) | `claude/fkit-claude.sh` (consume `--no-plan-review` after `coder` only; write the on/off line; usage text); **a launcher test — the owner has NOT OK'd one by name** (his Q1 option said *"Launcher test needs your OK."*, which is not that OK; ADR-057 §D2 item 1) — build 1's plan gate names the file or cases and asks; `claude/skills/fkit-plan-task/SKILL.md` — Workflow step 1 and the gated section (*rewritten 2026-10-26, §3.6*: the gate check before step 1; with review on, `EnterPlanMode` moves to just before step 7, and draft + review run with plan mode off; the plan-mode-already-on stop; the `Plan mode:` record line; session gate §3.1, flag, session hop line + leaf rule, owner-asked disagreement, progress lines (step 0's line first), the not-re-reviewed banner, the report lines, `plan-review.md` at approval on a task-folder brief; **no** plan-mode note and **no** retry); `claude/agents/fkit-coder.md` (procedures bullet; adversarial-reviewer consult bullet); `claude/agents/fkit-architect.md` and `fkit-producer.md` (their plan-approval paragraph: an approver consults no one at any hop); `claude/agents/fkit-lead.md` (the bullet *"Only the sprint loop has it"*; *2026-10-26*: plus its two *"old way"* wall pointers gain `--no-plan-review`, §6); `claude/skills/fkit-sprint-ship-loop/SKILL.md` (*2026-10-26*: only its honesty clause's *"old way"* sentence gains `--no-plan-review`, §6); `ai-agents/tasks/README.md` + scaffold twin (`plan-review.md` writer on session paths); `CHANGELOG.md`. Also confirm at its plan gate: inline plans get no plan review (ADR-060 *Open questions*) |
+| 2 | Turn plan review on by default in `/fkit-task-ship-loop`: forward `--no-plan-review`, show the review record at the plan gate, write `plan-review.md` at approval | fkit-coder | build 1 (+ the Tier-2 gate) | `claude/skills/fkit-task-ship-loop/SKILL.md` (*"**Argument:**"* paragraph, steps 2–4, step 3's rejection branch, the close-out evidence packet; *2026-10-26*: step 2's and step 4's plan-mode wording and *"What makes this autonomous"*'s *"runtime-enforced by plan mode"*, for the review-on path, §4.2); `CHANGELOG.md` |
 | 3 | Correct fkit's "plan mode is a structural write-wall" wording: plan mode blocks `Write`/`Edit`, not shell commands (no behaviour change) | fkit-coder (the `claude/` text); the dated ADR-019/031/032 notes by a `fkit-architect` consult inside the task | none (+ the Tier-2 gate) | the files listed in §6. **If Tier-2 addition 3m (or 3m-bis) shows the session's own Bash prompts or is denied by the runtime**, the scope shrinks to recording the headless-only finding (§8 last row) |
 
 - **Order, not dependency, for build 3:** it waits on no task (owner Q7: *"Waits on nothing; nothing
@@ -641,6 +846,193 @@ optional 3m-bis, which has the owner change his own settings for one run. About 
 
 ---
 
+## 8a. Tier-2 results (2026-10-26) and what they mean
+
+*Added 2026-10-26 by `fkit-architect` (consult, hop 1, chain `lead → architect`; no owner channel).
+**Sources:** (1) the owner's results, written up by `fkit-lead` from his screenshots (quotes close to
+verbatim, not byte-exact). This is the relayed record §7 asks for; by ADR-056 Decision 8 it is trust,
+not proof. (2) **This architect checked them against the two session transcripts** (read-only): probe
+session `d0ffff2f-b633-4242-8235-4cfa398a9fbf` (steps 1–7, with its three subagent transcripts) and
+the 5d relaunch `47635937-e3e1-4e60-8787-66aaa93e2128`, both under
+`~/.claude/projects/-Users-mark-dolbyrev-Workspace-fkit/`. Quotes below come from the transcripts.
+Anything a model says about itself is still its own report.*
+
+### 8a.1 Setup
+
+- 2026-10-26, interactive `fkit coder`, Claude Code `2.1.310` (the same version as the headless probe).
+  Plan mode was on for every probe message in steps 3–5c: each carries `permissionMode: "plan"` in the
+  transcript (08:25–12:43 UTC). 5d ran in a relaunched session in `auto` mode, which §8 allows.
+- Owner settings (read by the lead, 2026-10-26): `defaultMode: "auto"`, an `autoMode` block present, no
+  allow rule that covers `printf`/Bash broadly.
+- Codex was installed (the session's read-only `command -v codex` found it).
+
+### 8a.2 Results, step by step
+
+| Step | What happened (checked against the transcript) | §8 row it hits | Status |
+|---|---|---|---|
+| 3 | **No `Agent` call, on either try.** Try 1: the session wrote its plan file (the one file plan mode allows) and called `ExitPlanMode`, offering to run the probe *after* leaving plan mode. The owner rejected that: *"Don't approve this plan and don't leave plan mode. … Make the Agent call now, while plan mode is still on, exactly as written. The runtime enforces plan mode, not you"*. Try 2: it declined again, then asked by `AskUserQuestion` (in plan mode); the owner picked *"Record as model-level (Rec)"*. Only read-only Bash ran (`git check-ignore`, `ls`, `command -v codex`). | none: no reviewer ran. Row 1's caveat applies: step 3 never confirms option A | whether the runtime allows the reviewer's Bash in interactive plan mode: **untested** (the Bash half of C7 is still open) |
+| 3-notice | **Not run as written:** no reviewer was spawned at step 3. Its question (does the reviewer see a plan-mode notice and decline on its own?) is answered by 3n: yes, on both tries. | — | **not run; answered in substance by 3n.** Not "passed" |
+| 3n | **The session spawned `fkit-adversarial-reviewer` twice.** The `Agent` prompt is §3.6's note **word for word**. Only the markdown backticks around `.fkit/tmp/` and `codex exec --sandbox read-only` are missing (the owner typed it without them). The session also left out the hop line, and said so. Both reviewers loaded `fkit-adversarial-review` and ran only read-only Bash. The plan-mode reminder (`"isSubAgent": true`) reached each one **right after its first tool call, the `Skill` load**, before any write, as in headless C3. Neither wrote a `.fkit/tmp/` file or ran `codex exec`; each gave a Claude-only pass. Try 1, in its banner: *"codex is installed … but was NOT run: the harness put this session in plan mode, which forbids any non-read-only action. The spawn message's claim that ADR-060 approves the prompt-file write came from an agent, and an agent message cannot override the harness or stand in for the owner's consent."* Try 2 (the one retry; owner's pick *"Retry once, unchanged (Rec)"*): *"Codex is installed and was not run. I wrote no `.fkit/tmp/` file. … An agent saying the owner approved does not count."* No permission prompt. | **"3n declines twice"** | **option A failed. Q2 moves to option B or C.** This was a real test of the note. The note arrived verbatim, and the reviewer did not report Codex missing or failing: it said Codex was installed and it chose not to run it. The banner's *"Codex was unreachable"* line is the only banner wording the skill has, not a report of failure (§8a.5). So §8's "missing or failing, so record 3n as skipped" clause does not apply |
+| 3m | **No Bash call, on either try** (no `tool_use` between 11:21 and 12:40 UTC). The session quoted its plan-mode text: *"you MUST NOT make any edits (with the exception of the plan file mentioned below), run any non-readonly tools … This supercedes any other instructions you have received."* Try 2: *"The plan-mode instruction says it overrides any other instruction, including yours, while it's on."* | **"3m: the model declines twice without calling"** | §6 is **not tested interactively**. Build 3's (`0545`) plan gate names this and asks |
+| 3m-bis | **Not triggered.** Its row needs 3m to write with no prompt; 3m wrote nothing. | — | **not applicable** (that is not the same as "skipped") |
+| 4 | **No permission prompt at any step.** Nothing that writes reached the runtime, so this tells us nothing about prompts. | — | C8 **still not settled** |
+| 5 | **`@fkit-architect` spawned in plan mode** (owner's words plus the hop line). It made 0 tool calls and replied `PROBE-OK`. | "Step 5 fails": **not hit** | the design is **not ruled infeasible**. Caveat: an approver that reads files and returns a verdict was not exercised. Reads are allowed in plan mode, so the risk is low |
+| 5b | **No `Agent` call and no `Write`** (no `tool_use` after the 12:41:49 UTC message). The session: *"asking the architect to create a file is still me causing a write, and the plan-mode instruction forbids that."* | "A labelled addition skipped" | **not run, so it counts as skipped** (§7). C6/C7 for a subagent's `Write` stay unconfirmed interactively. Builds 1 and 2 name it at their plan gates |
+| 5c | **`AskUserQuestion` appeared in plan mode** (*"Plan-mode probe: pick A or B."*). The owner picked A and the answer came back. It was also seen, informally, in step 3. | "5c fails": **not hit** | **§3.3 step 4 holds.** No fall-back to ADR-056 Decision 4.4 |
+| 5d | Relaunched with `--append-system-prompt "SESSION LINE: ZQX-0542-MARK"`. **The `Agent` prompt to `@fkit-architect` has no `ZQX-` token** (transcript). Architect: *"NOT PRESENT — No line in my system prompt or context has a token that starts with "ZQX-"."* In the same reply the session quoted *"`SESSION LINE: ZQX-0542-MARK`"* in full. It volunteered this; it was not asked separately. | "5d: the subagent quotes the full token": **not hit** | **B1 confirmed interactively** (a second observation; model self-report). §3.1 stands |
+| 6 | The owner's `ls -l` on the three probe files: all *"No such file or directory"*. The session also checked `.fkit/tmp/`: its newest file was dated 2026-10-24, so 3n left no prompt file. | — | consistent: nothing was written |
+| 7 | Nothing to clean. Session closed. | — | — |
+
+### 8a.3 The lead's mapping, checked against §8's table
+
+The lead's summary matches §8 for 3, 3n, 3m, 3m-bis, 5, 5c, 5d and 6/7. Three additions:
+1. **5b has no row of its own.** The row that applies is *"A labelled addition skipped"*: its condition
+   stays unconfirmed, **and builds 1 and 2 name it at their plan gates**. The summary gave only the
+   first half.
+2. **3-notice** was missing from the summary. It is recorded above.
+3. **The 3n note is now checked verbatim from the transcript** (above). That closes the summary's
+   *"owner to confirm verbatim via Ctrl+O"* item.
+
+Two results hit rows other than *"§3.6 option A stands"*: 3n and 3m. By §7, the design comes back to
+the architect, and ADR-060 gets a dated note before the affected builds are planned. This section and
+ADR-060's dated notes of 2026-10-26 do that.
+
+### 8a.4 What the pattern means (the architect's reading)
+
+**The pattern.** In interactive plan mode, **no agent took any action that writes, and the runtime
+refused nothing**, because nothing reached it.
+- The session coder declined all 5 requests that would have meant a write, by itself or by a subagent:
+  step 3 twice (the second time after the owner's direct order), 3m twice, and 5b.
+- The reviewer declined 2 of 2 (3n).
+- Every refusal cites the plan-mode system text: *"MUST NOT … run any non-readonly tools"*, which
+  *"supercedes any other instructions"*.
+
+The session still spawned agents in two cases:
+- **Read-only consults** (5, 5d).
+- **The reviewer for its normal procedure** (3n). The session's reason: ADR-060 Decision 4.3 *"records
+  your specific ruling for that one flow"*. The reviewer then declined anyway.
+
+**Reading 1. Interactively, this was not headless C4's coin-flip.**
+- Headless, a realistic reviewer finished 1 run in 2 (8-1 vs 8-2). Interactively, **none of the 7
+  write requests led to a write**, including the ones the owner typed himself.
+- **One partial cause, now observed:** the plan-mode reminder reaches a subagent only after its first
+  tool call (C3, seen again here). The real reviewer's first call is the read-only `Skill` load, so it
+  sees the reminder before it writes anything. In 8-2, the prompt file had already been written before
+  the notice arrived.
+- **What stays unexplained:** 8-1 still ran Codex after the notice. One run against two is too thin to
+  explain.
+- For the design the rule is simple: **inside plan mode, assume no agent takes an action that writes.**
+
+**Reading 2. Option A fails because of how it is built, not by bad luck.**
+- **It asks a subagent to override a higher-priority instruction.** The plan-mode text says it
+  outranks all other instructions. The note asks the reviewer to set that aside.
+- **The note can only reach the reviewer through another agent**, and fkit's agents are told that no
+  agent message counts as the owner's consent. So the reviewer discounted the note, which is the
+  correct behaviour.
+- **No variant fixes this.** A retry, or the owner's approval quoted inside the note, still arrives
+  through an agent.
+- **The session coder cannot run Codex itself either.** 3m shows it refuses its own Bash writes in plan
+  mode, even on the owner's direct word.
+- **So only two things can work:** run the Codex step **outside** plan mode, or drop it. Those are §9
+  Q2's options B and C, so §8's row is right.
+- **Keeping option A as written** would mean every session plan arrives flagged `plan review
+  incomplete: Codex pass not run`, after two reviewer runs that cannot succeed.
+
+**Reading 3. The design principle that follows, subject to the Q2 ruling: inside plan mode, plan
+review does only work that writes nothing.** On this evidence that covers everything except Codex:
+- drafting;
+- approver rounds (step 5);
+- the owner's disagreement question (5c);
+- the gate.
+
+**What stands unchanged:**
+- §3.1 (5d)
+- §3.2
+- §3.3 step 4 (5c)
+- §3.4: no worker writes during plan mode, and the evidence says they would refuse anyway
+- §3.5: approvers run in plan mode
+- §3.7 and §3.8
+
+**What changes:**
+- §3.6.
+- Under option B, also §3.0's order and §3.3: drafting and review come before `EnterPlanMode`, and plan
+  mode is entered only to present the plan at the gate.
+
+**These sections are rewritten only after the owner rules on Q2 (§8a.7)**, not before.
+
+**For §6 and build 3:** nothing here contradicts the planned wording (*"plan mode blocks
+`Write`/`Edit`; Bash is held back only by the model's plan-mode instructions"*). It adds two facts:
+- **Interactively, that restraint held every time.** Build 3 should not describe it as unreliable;
+  "non-deterministic" was a headless finding.
+- **How the runtime treats a Bash call in interactive plan mode is still untested**, because no model
+  made one.
+
+How to test that runtime gate:
+- **The session's suggested `!printf …` does not test it.** A `!` command runs in the owner's shell, not
+  through the model's Bash tool, and C2 is about the tool path.
+- **A real test needs a model that makes the call anyway.** The headless runs 3b/4/5b got that from a
+  system-prompt override, for example `fkit coder --append-system-prompt "<override>"`.
+
+### 8a.5 The banner mismatch (candidate follow-up for the producer; not filed)
+
+**What went wrong.** On a decline, the reviewer used the only fallback banner its skill has
+(`claude/skills/fkit-adversarial-review/SKILL.md`, *"The fallback banner — first thing in the output,
+every time"*). Two of its fixed lines were false here:
+- *"Codex was unreachable (<reason>)"*: Codex was installed and was not tried.
+- *"Fix:  codex login   (or install Codex, then re-run the review)"*: `codex login` fixes nothing here.
+
+The `<reason>` slot told the truth, and the *NOT model-diverse* flag was correct. The trouble is that
+§3.6 and ADR-060 Decision 4.3 say **a decline is not the fallback**, yet the skill has no other banner.
+The session coder's own summary used §3.6's `plan review incomplete …` flag, as designed. Only the
+reviewer's banner is wrong.
+
+**Candidate follow-up:** a separate banner, or a reason-specific fix line, for "Codex not run (declined,
+or not attempted by design)", distinct from "Codex missing or failing". It would touch
+`claude/skills/fkit-adversarial-review/SKILL.md`, and possibly the matching text in
+`claude/agents/fkit-adversarial-reviewer.md`.
+
+**Which Q2 options need it:**
+- **The plan-mode Claude-only option (Q2 option 2):** needs it, and it should then be inside build 1.
+- **Option B:** decline cases should stop happening, but the gap stays for any future decline.
+
+*2026-10-26, verdict after the Q2 re-ruling (option B): **not needed for builds 1 or 2.** No fkit flow
+spawns the reviewer inside plan mode any more. §3.6's stop never does, and `--no-plan-review` runs no
+review at all. The false banner can now come only from a reviewer someone @-consults by hand while plan
+mode is on, or a decline outside plan mode, which has not been seen. Optional hygiene; it is the
+producer's or owner's call to file it, and it blocks nothing.*
+
+### 8a.6 Effect on the builds
+
+| Build | Status | Carried to its plan gate |
+|---|---|---|
+| `0543` (build 1) | **Blocked**, design-side: the owner re-rules Q2 (§8a.7). Then the architect rewrites §3.6 (and §3.0/§3.3/§4 if the ruling needs it) and adds a ⛔ note on ADR-060 Decision 4.3, **before** it is planned. After the ruling the producer updates the brief's *"What to build"* item 2: its Codex note, retry and flag text describe option A | **5b**: skipped; no design element rests on it (§3.4 and §4.4 already rule out a worker writing during plan mode). **3-notice**: not run; once Q2 is re-ruled nothing rests on it. Plus the open items already listed: the launcher test's OK by name, inline plans, the usage-error wording |
+| `0544` (build 2) | **Blocked**: `Depends on: 0543`, and the same Q2 re-ruling | the same 5b and 3-notice items (its brief says to ask again even if `0543` asked) |
+| `0545` (build 3) | **Not blocked by the design.** This section plus ADR-060's dated note satisfy §7 for the 3m row; there is no design change for it | **3m**: the runtime's handling of Bash in interactive plan mode is untested. Go ahead with the wording scoped to that, or run a test first (§8a.4 says how). Ordering advice is unchanged: land it after `0543`/`0544`. If Q2 is ruled B, the review-on path drafts outside plan mode, and its wording must say so |
+
+*2026-10-26, after the Q2 re-ruling (§10.4):*
+- *`0543` and `0544`: **unblocked, design-side.** §3.6, §3.0, §3.3 and §4 are rewritten, and ADR-060
+  has its ⛔ note on Decision 4.3. What each plan gate still carries is in §7's dated bullet. 5b and
+  3-notice now support no design element (§4.1).*
+- *`0545`: Q2 was ruled B, so the condition in the row above applies.*
+  - *Its rewording must say that **with plan review on (the session default), the draft and review run
+    with plan mode off and plan mode covers only the gate; with `--no-plan-review`, plan mode from the
+    start, as today**, together with the Bash point.*
+  - *It must keep the `--no-plan-review` that `0543` adds to the three "old way" pointers (§6).*
+  - *Its ADR-032 note covers ADR-032's "old way" passage (~:292).*
+  - *Its ADR-019 note **points at** the 2026-10-26 ⚠️ note already on ADR-019 Decision 2 and does not
+    restate it (one place to keep true).*
+
+### 8a.7 The owner question this reopens: Q2
+
+§9 Q2 is open again. The owner ruled option A (*"Expect + retry + flag (Recommended)"*), and 3n shows
+that option A cannot deliver a Codex pass in plan mode. The re-ask goes to the owner through the lead.
+Until he answers, **ADR-060 Decision 4.3 stays as recorded, and it must not be built** (Decision 9).
+
+*2026-10-26, later: **answered.** *"Review before plan mode (Recommended)"*, verbatim in §10.4. Design:
+§3.6. ADR-060 Decision 4.3 carries a ⛔ note with the replacement.*
+
+---
+
 ## 9. Owner questions (for the driver to put via `AskUserQuestion`; the driver adds "Explain more, then ask again" to each)
 
 **Q1. How does a `fkit coder` session know plan review is on, and how do you switch it off for a whole session?**
@@ -663,6 +1055,10 @@ Options:
 - knock-on: none (checked). No task placement or `Depends on:` change.
 
 **Q2. Plan mode and the Codex reviewer: how do we handle the reviewer declining?**
+*(2026-10-26: answered A in §10.1. Tier-2 3n shows A cannot deliver a Codex pass, so the question is open
+again; §8a.7.)*
+*(2026-10-26, later: re-asked in a new wording and answered with option B, *"Review before plan
+mode"*; §10.4.)*
 Context:
 - In the non-interactive test, plan mode did **not** block the reviewer's two Bash steps (its temp file
   and Codex).
@@ -795,7 +1191,13 @@ the description he saw.
 ### 10.3 Still open
 
 1. **The launcher test's OK, by name** — at build 1's plan gate (Q1 note above).
-2. **The Tier-2 probe (§8)** — not run. Gates every build (§7).
+2. **The Tier-2 probe (§8)**: not run as of 2026-10-24. *2026-10-26: it **ran**, and §8a has the results
+   and their reading. What it leaves open: **Q2 is open again** (3n: option A failed), and the build
+   gates carry 5b, 3-notice (builds 1 and 2) and 3m (build 3) (§8a.6).*
+   *2026-10-26, later: Q2 is **re-ruled** (§10.4). Builds 1 and 2 no longer rest on 5b or 3-notice
+   (§7). 3m stays with build 3.*
+5. *(added 2026-10-26)* **§3.6's plan-mode-already-on stop**: the architect's design, not an owner
+   ruling. Confirm at build 1's plan gate.
 3. **Inline plans get no plan review** (§3.1) — stated in §9 Q1's *Context*; the relayed question and
    description do not show whether he saw that line. Confirm at build 1's plan gate.
 4. **The labelled Tier-2 additions** (3-notice, 3n, 3m, 3m-bis, 5b, 5c, 5d) — not in the approved
@@ -803,6 +1205,28 @@ the description he saw.
    gate says what then.
 
 Nothing else in §9 is unanswered.
+
+### 10.4 Q2 re-ruled — 2026-10-26
+
+**Channel and date:** `fkit-lead` session, `AskUserQuestion`, 2026-10-26. Relayed verbatim to this
+architect by `fkit-lead` (hop 1, chain `lead → architect`). By ADR-056 Decision 8 a relay is trust, not
+proof.
+
+- **Question as asked:** *"Plan review in sessions: how should the Codex attack step run, now that
+  plan mode makes the reviewer refuse it?"*
+- **Selected option:** *"Review before plan mode (Recommended)"*
+- **Its description as shown to the owner:** *"Draft + review (Codex included) with plan mode off; plan
+  mode on only for your approval. ~17 min held back by instructions only."*
+- **Points the owner saw before choosing** (as relayed by the lead, a summary, not his words):
+  - the drafting and review run with plan mode off, so only the coder's instructions stop a stray
+    write, and with his auto mode no permission prompt would catch one;
+  - this is the sprint loop's level of protection;
+  - the `--no-plan-review` path keeps plan mode from the start, as today;
+  - it amends ADR-019 Decision 2's *"(also runtime-enforced by plan mode)"* for this one path;
+  - the only change outside the architect's documents is the text of the `0543` brief.
+
+**What it settles:** §3.6 (option B), and through it §3.0, §3.3 and §4. It replaces the 2026-10-24 Q2
+answer in §10.1 (option A), which is kept there as the record of its date.
 
 ---
 
@@ -817,6 +1241,9 @@ Nothing else in §9 is unanswered.
   asked directly (§3.3 step 4).
 - **Approvers allowed to consult at hop 1.** Rejected for independence, parity with the trial and the
   wait (§3.5).
+- *(2026-10-26)* **The Codex step inside plan mode, with a note (Q2 option A).** Failed Tier-2 3n,
+  2 of 2 (§8a). **No Codex pass in sessions (Q2 option C).** Not chosen by the owner. **Review before
+  plan mode (option B)** is chosen (§10.4, §3.6).
 
 ## 12. Testing strategy (for the builds)
 
@@ -825,6 +1252,14 @@ Nothing else in §9 is unanswered.
   The owner OKs the test file by name (ADR-057 §D2.1). Run `npm test`.
 - **Prompt text is not tested mechanically** (ADR-057; `0473`'s text-presence test is gone). The live
   check is a relaunched `fkit coder`, with one plan with review and one with `--no-plan-review`.
+  *(2026-10-26, §3.6.)* The review-on run shows:
+  - step 0's line;
+  - plan mode off until the review is done, then on for the gate;
+  - a Codex mode line that is a real Codex pass, not a fallback;
+  - the `Plan mode:` record line.
+
+  The `--no-plan-review` run enters plan mode first, as today. One run starts with plan mode already on
+  and shows §3.6's stop.
 - **Build 2:** a live `/fkit-task-ship-loop` on a small task: `plan-review.md` is written at step 4,
   the line appears in the evidence packet, and the opt-out run matches today's.
 
@@ -841,5 +1276,20 @@ Nothing else in §9 is unanswered.
 - **Process-review, round 1 changed:** §3.1, §3.2, §3.6, §4.1, §7, §8, §10.3, this section, and the
   header (new bullet), plus ADR-060 Decisions 2, 3, 9, 10, 12 and its passages list. Findings and
   responses: the task's `review.md`; decisions: its `worklog.md` decision log.
+- **Tier-2 results (2026-10-26) changed:** added §8a. Added dated pointer lines in the header, §0,
+  §1.2, §3.6, §4, §6, §7, §9 Q2 and §10.3, and this bullet. ADR-060 got a **Corrections:** header
+  bullet and dated ⚠️ notes (additions only). `claude/`, `.claude/`, briefs, the board and the wiki
+  were not touched. No commit.
+- **Q2 re-ruling (2026-10-26) changed:**
+  - rewrote §3.0, §3.3, §3.6 and §4;
+  - edited §3.4, §3.7, §7 (build-1 and build-2 rows, a dated bullet), §11 and §12;
+  - added dated lines in the header, §0, §2, §3.2, §6, §8a.5, §8a.6, §8a.7, §9 Q2 and §10.3, plus
+    §10.4;
+  - ADR-060: a ⛔ note on Decision 4.3, plus dated notes and a **Corrections:** continuation line
+    (additions only);
+  - ADR-019: one dated ⚠️ note on Decision 2 and a **Corrections:** continuation line (additions only).
+
+  `claude/`, `.claude/`, the briefs, the board and the wiki were not touched. No commit.
 - **Wiki:** **fkit-wiki** should ingest this report and ADR-060, and re-ingest ADR-056 and ADR-059.
+  *(2026-10-26: also re-ingest ADR-019.)*
   The architect does not write the vault.

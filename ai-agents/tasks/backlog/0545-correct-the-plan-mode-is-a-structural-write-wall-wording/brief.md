@@ -26,6 +26,10 @@ fkit-coder
 > `fkit-architect` spawn and read against §8's mapping table.
 > - **§8a missing** → stop: in a session ask the owner (`AskUserQuestion`); spawned, return
 >   `NEEDS-DECISION`. Do not plan around a missing probe.
+>   **Done 2026-10-26:** §8a exists. 3m hit the row *"the model declines twice without calling"*: §6 is
+>   not tested interactively. 3m-bis was not triggered (not applicable, which is not "skipped").
+>   **3m is this task's gate item**: name it and ask the owner whether to go ahead with the wording
+>   scoped to that, or run a test first (report §8a.4, §8a.6).
 > - **Read the 3m / 3m-bis rows of §8's mapping table first — they set this task's scope:**
 >   a permission prompt or a runtime denial → the scope **shrinks** to recording the headless-only
 >   finding; a no-prompt write that auto mode or an allow rule could explain → 3m-bis decides; 3m-bis
@@ -58,14 +62,22 @@ plan-mode Bash hook).
 
 1. **Reword the claims** listed in report §6 (*"What fkit says"*) so they say, in substance: *plan
    mode blocks `Write`/`Edit`; Bash is held back only by the model's plan-mode instructions* — or the
-   narrower wording §8a calls for (see the precondition). The sites, cited by section and phrase in
+   narrower wording §8a calls for (see the precondition). Second fact: in a `fkit coder` session with
+   plan review on (the default), the draft and review run with plan mode off, and plan mode covers only
+   the gate; with `--no-plan-review`, plan mode runs from the start, as today (report §8a.6, §6). The
+   sites, cited by section and phrase in
    §6: `claude/agents/fkit-lead.md` (*"The orchestrated plan gate is prose, not a wall"*; *"When the
    owner wants a dedicated role session instead"*); `claude/skills/fkit-sprint-ship-loop/SKILL.md`
    (*"The plan-gate honesty clause"* and the hard rules); `claude/skills/fkit-task-ship-loop/SKILL.md`
    (*"What makes this autonomous"*, steps 2 and 4); `claude/skills/fkit-plan-task/SKILL.md` step 1
    (accurate on `Write`/`Edit`, silent on Bash). Re-locate each by phrase — builds `0543`/`0544` may
-   have moved them.
-2. **Dated additions-only notes** on ADR-019, ADR-031 and ADR-032, by a `fkit-architect` consult.
+   have moved them. **Keep the `--no-plan-review`** that `0543` adds to the three "old way" pointers
+   (report §6, §8a.6).
+2. **Dated additions-only notes** on ADR-019, ADR-031 and ADR-032, by a `fkit-architect` consult
+   (report §8a.6):
+   - the ADR-032 note covers ADR-032's "old way" passage (~:292);
+   - the ADR-019 note **points at** the 2026-10-26 ⚠️ note already on ADR-019 Decision 2 and does not
+     restate it (one place to keep true).
 3. `CHANGELOG.md`.
 4. **No behaviour change**: no hook, no permission rule, no tool list changes.
 

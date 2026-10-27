@@ -20,6 +20,10 @@
   plus a cite correction inside **§Decision item 4** (after its last line). The text above is left
   byte-identical and its count (**one**) is superseded by this line; the same append-only rule and the
   same legend apply.
+  ⚠️ 2026-10-26 (`0542` design, Q2 re-ruling, recorded in ADR-060): this ADR now carries **three**
+  dated notes. The third is a second note below **§Decision item 2**, after the `0473` note. The text
+  above is left byte-identical, and its count (**two**) is superseded by this line; the same
+  append-only rule and the same legend apply.
 
 ## Context
 
@@ -82,6 +86,29 @@ owner-only done-gate. It never moves a task file.**
    > 2026-10-06, *"Sprint-loop runs only (Recommended)"*). **Why ⚠️ and not ⛔:** nothing here is
    > overturned; a neighbouring path gained an optional step ahead of the same kind of gate. **Status
    > stays `accepted`.**
+
+   > ⚠️ **Dated note 2026-10-26: when plan review is on, *"(also runtime-enforced by plan mode)"* covers
+   > only the gate, not the drafting. Read
+   > [ADR-060](adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md),
+   > the ⛔ note below its Decision 4.3.** This item is **left byte-identical**, and its decision **still
+   > holds**: the plan gate is the one guaranteed upfront human checkpoint, the owner approves last, and
+   > no code is written before approval.
+   > - **What changes.** ADR-060 turns plan review on by default in `fkit coder` sessions, which
+   >   includes this loop's step 2. The owner re-ruled on 2026-10-26 (*"Review before plan mode
+   >   (Recommended)"*, `fkit-lead` session, `AskUserQuestion`, relayed verbatim) that with review on,
+   >   the plan is drafted and reviewed **with plan mode off**. Plan mode comes on only for the approval.
+   > - **For that stretch** (~17 min median), "no code before approval" is held by the coder's
+   >   instructions only. That is the sprint loop's level (ADR-031; ADR-032 Decision 7). The owner was
+   >   told before he chose that this amends this item's parenthetical for that path.
+   > - **With `--no-plan-review`**, plan mode runs from the start of the plan, as this item describes.
+   > - **When it takes effect:** when ADR-060's build 1 (`0543`) lands and `.claude/` is refreshed. That
+   >   build is not yet built (as of 2026-10-26).
+   > - **Why ⚠️ and not ⛔:** the decision (the gate, approval before code) is not overturned. One
+   >   mechanism claim no longer holds on one path.
+   > - A later wording task (`0545`) also covers the Bash half of *"runtime-enforced"*. Its note should
+   >   point here, not restate this.
+   >
+   > **Status stays `accepted`.**
 
 3. **"Walk away" is ordinary in-session turn-taking, not background delegation.** The loop stays a
    `fkit coder` **session** with the owner reachable; between gates it proceeds without waiting, and at

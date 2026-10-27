@@ -28,10 +28,12 @@ fkit-coder
 >   `NEEDS-DECISION`. Do not plan around a missing probe.
 > - **Any §8a result hits a §8 row other than *"§3.6 option A stands"*** → the design goes back to the
 >   architect and ADR-060 gets a dated note **before** this task is planned.
+>   **Done 2026-10-26:** 3n's row was hit. The owner re-ruled Q2 (report §10.4). §3.0/§3.3/§3.6/§4
+>   were rewritten, and ADR-060 Decision 4.3 has a ⛔ note. Plan from the rewritten design.
 > - **A skipped labelled addition is skipped, never passed.** This build rests on build 1's additions —
->   **3-notice, 3n, 5b, 5c and 5d**. Any of them recorded as skipped must be **named at this task's
->   plan gate and put to the owner** — go ahead with that condition unconfirmed, or run it first —
->   even if `0543`'s gate already asked (the owner may answer differently for this path).
+>   **5c and 5d**, both passed (§8a.2). 3n failed, and the Q2 re-ruling replaced what rested on it. 5b
+>   and 3-notice did not run, and nothing in the re-ruled design rests on them. Name them in the plan
+>   in one line; no owner question (report §7, dated bullet).
 >
 > The probe is a check, not a task, so it is not a `Depends on:` link. It is the owner's alone to run.
 
@@ -40,15 +42,20 @@ ADR-060 records it (provisional and conditional — see above and `0543`'s *Cont
 2** of report §7 / ADR-060 Decision 11: `/fkit-task-ship-loop`. It reaches the review through its step
 2's `/fkit-plan-task`, so it needs build 1's gated section first (`0543`).
 
-**Owner rulings:** the same as `0543` (report §10.1, Q1–Q6). Placement: *"Q2 — Where do the build
-briefs go once the design is approved?"* → *"Sprint 12"* (description he saw: *"This run could pick
+**Owner rulings:** the same as `0543` (report §10.1, Q1 and Q3–Q6). Q2 re-ruled 2026-10-26
+(`fkit-lead` session, `AskUserQuestion`): *"Review before plan mode (Recommended)"*. Description he
+saw: *"Draft + review (Codex included) with plan mode off; plan mode on only for your approval. ~17 min
+held back by instructions only."* Report §10.4; it replaces the 2026-10-24 option A. Placement:
+*"Q2 — Where do the build briefs go once the design is approved?"* → *"Sprint 12"* (description he saw: *"This run could pick
 them up; wait on 0542 in Sprint 12. Risk: old prompt text loaded here."*), 2026-10-24 ~14:57 UTC,
 `fkit lead` session, `AskUserQuestion`.
 
 **Locked decisions this touches.** ADR-019 Decision 2 / ADR-056 Decision 5: step 3's `⛔ STOP — plan
 approval` stays the one guaranteed stop, and the owner approves last. ADR-060 Decision 7: a
 NOT-model-diverse *plan* pass does **not** change step 9's close posture (that keys on the *code*
-review's Codex mode).
+review's Codex mode). ADR-019 Decision 2: on the review-on path, its *"(also runtime-enforced by plan
+mode)"* covers only the gate (owner, 2026-10-26; dated ⚠️ note in ADR-019). The gate and "owner
+approves last" are unchanged.
 
 ## What to build
 
@@ -59,7 +66,11 @@ Per ADR-060 Decisions 3, 5 and 7 and report §3.2, §3.4, §3.7, §4.2 (the desi
    stops before planning and asks), read once at loop start; the one-skill-one-output litmus still
    holds and the paragraph says why.
 2. **Step 2** forwards the flag to its `/fkit-plan-task`; the review runs **inside** step 2, before
-   step 3's stop.
+   step 3's stop. With review on, step 2 drafts with plan mode off, and plan mode comes on for step 3's
+   gate. Reword step 2 (*"produce the plan in plan mode"*, *"plan mode's write wall forbids writing it
+   here"*), step 4 (*"(plan mode releases the write wall)"*) and *"What makes this autonomous"*
+   (*"runtime-enforced by plan mode"*) for that path. Keep the `--no-plan-review` path's wording
+   (report §4.2).
 3. **Step 3's presentation** gains the banners, `Plan review: ON (default)`, the three attachments and
    the full record block; **step 3's rejection branch** gains `plan-review record not persisted (plan
    rejected while in plan mode)`.
@@ -72,7 +83,7 @@ Per ADR-060 Decisions 3, 5 and 7 and report §3.2, §3.4, §3.7, §4.2 (the desi
 ## Verification steps
 
 1. §8a exists in the report before the plan was written; any skipped addition this build rests on is
-   named in the plan and the owner's answer recorded.
+   named in the plan (no owner question unless a design element rests on it, report §7).
 2. `0543` is `✅ Done` before this task is planned.
 3. Live check, from a **fresh** `fkit coder` launch after refreshing `.claude/`
    (`claude/fkit-claude-init.sh .`), on a small real task: `/fkit-task-ship-loop <brief>` runs plan
