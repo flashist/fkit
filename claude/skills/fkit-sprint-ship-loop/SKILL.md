@@ -79,7 +79,7 @@ The "write nothing yet" in step 1 is a **prompt instruction, not a wall** — a 
 could write before approval and nothing structural stops it. **This is stated plainly and accepted by the
 owner (2026-07-22, ADR-031 honesty clause / ADR-032 Decision 7).** A later reader — human or coder —
 **must not** rewrite this into a false structural guarantee. Owners who want plan mode's structural wall
-for a given task ship it the old way: `fkit coder` + `/fkit-task-ship-loop`.
+for a given task ship it the old way: `fkit coder --no-plan-review` + `/fkit-task-ship-loop`.
 
 ---
 

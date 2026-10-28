@@ -40,6 +40,8 @@
   - **⚠️** below Decision 4.2; below Decision 5; below Decision 9; below Decision 10; below Decision
     12; below the passages list; below *Consequences*' Codex bullet; below *Open questions*' Tier-2
     bullet; below *Related*'s ADR-019 bullet.
+  - **2026-10-27** (owner ruling at task `0543`'s plan gate, brief open question 3), **⚠️**: below
+    Decision 3.
 
 
 > **Citation form** (same as ADR-056/059). Agent, skill and hook files are mutable: cited by **section
@@ -141,6 +143,44 @@
    - **Opted out is today's behaviour:** the gate sends the coder from Workflow step 6 straight to step
      7, as today; `/fkit-task-ship-loop` steps 1–9 are unchanged. The only differences: the report line
      (Decision 7), and the launcher line itself in every `fkit coder` session's system prompt.
+
+   > ⚠️ **Dated note 2026-10-27: owner ruling — after a non-`coder` role, both flags are a usage error.**
+   > Task `0543` (build 1) found that this decision and report §3.2 disagree. The text above names only
+   > `--no-plan-review` as a usage error after any other role; report §3.2 says *"After any other role,
+   > either token is a usage error with fkit's own message."* The owner ruled for the report's wider
+   > rule. Channel: `fkit coder` session, `AskUserQuestion`, 2026-10-27, at `0543`'s plan gate, relayed
+   > verbatim by the session coder (trust, not proof; ADR-056 Decision 8).
+   > - Question as asked: *"After a non-coder role (e.g. fkit lead), which flags are an fkit usage
+   >   error?"*
+   > - Selected: *"Both flags (Rec)"* — *"fkit's own message for --no-plan-review and --plan-review;
+   >   architect adds a dated ADR-060 note."*
+   > - The other option he saw: *"Only --no-plan-review"* — *"Matches ADR-060 as written; --plan-review
+   >   reaches claude, which refuses it as unknown."*
+   >
+   > **Read this decision's launcher rule with these build-1 facts** (`claude/fkit-claude.sh`, the block
+   > *"Plan review's session switch (ADR-060) is fkit's own"*; `0543`'s `plan.md` §1, which the owner
+   > approved via ExitPlanMode on 2026-10-27):
+   > - **After any role other than `coder`**, either exact token, `--no-plan-review` or `--plan-review`,
+   >   is a usage error: exit 2, fkit's own message, and `claude` is never started.
+   > - **The `--` edge case:** the tokens are taken out only before a `--`. The `--` and everything after
+   >   it pass through untouched, so `fkit coder -- --no-plan-review` hands the literal text to `claude`.
+   > - **The option-value edge case:** before a `--`, the exact token is always taken out, even as
+   >   another option's value (`--append-system-prompt --no-plan-review`), because the launcher cannot
+   >   know `claude`'s option arity; `claude` then refuses to start for the missing value. To pass that
+   >   text literally, put it after `--`.
+   > - **One exception to *"every other arg passes through unchanged"*:** after `coder`, the owner's own
+   >   `--append-system-prompt-file` (or `--append-system-prompt-file=…`) before a `--` is a usage error.
+   >   The launcher passes its session line with that flag, and `claude` keeps only the last of two
+   >   same flags, so his would silently drop the line (or let an on text beat `--no-plan-review`).
+   >   Measured by the `0543` coder, not re-measured here: headless, Claude Code `2.1.311`, haiku, model
+   >   self-report, once — two `--append-system-prompt` → only the last seen; `--append-system-prompt`
+   >   plus `--append-system-prompt-file` → both seen. So his plain `--append-system-prompt` still passes
+   >   through and works, and Decision 2's *"the owner's own pass-through `--append-system-prompt`"*
+   >   stays true.
+   >
+   > ⚠️, not ⛔: nothing in this decision is reversed; its launcher rule is widened by one owner ruling
+   > and gains one owner-approved exception. Every other part is unchanged, and the text above is left
+   > byte-identical.
 
 4. **The flow in a session — ADR-056 Decision 4, with these session differences only:**
    1. **Hops.** The session coder is hop 0; the approvers and the adversarial reviewer are at hop 1.

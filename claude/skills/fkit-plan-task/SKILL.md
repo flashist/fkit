@@ -25,11 +25,30 @@ context, identify the likely work areas, and present a step-by-step plan for app
 implementation begins.
 
 **Argument:** `$ARGUMENTS` — the path to the task file (e.g.
-`ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`).
+`ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`), optionally followed by
+`--no-plan-review` (no plan review for this plan) or the no-op `--plan-review`. Both together, or any
+other `--` token: stop before planning and ask the owner (`AskUserQuestion` in a session; spawned,
+return the question). The flag changes what work this step does, so it is an operand, not an output
+variant ([`conventions/one-skill-one-output.md`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)).
 
 ## Workflow
 
-1. **Enter plan mode.** Use the **`EnterPlanMode`** tool to switch this run into plan mode, and state
+0. **Gate check — first, before step 1.** Decide whether *Plan review* (below) runs, by its trigger.
+   - **Off** (an opt-out, no line, or a spawn with no driver's switch line): steps 1–7 run as written;
+     plan mode comes first. In a session (`AskUserQuestion` in your toolset) the plan you present at
+     step 7 opens with one line: `Plan review: off (--no-plan-review)`, `Plan review: off (fkit coder
+     --no-plan-review)` or `Plan review: off (no fkit session line)`. A spawn adds no line. A session
+     presentation with no plan-review line is a defect.
+   - **On by a driver's switch line** (spawned): steps 1–7 as written; the section runs between 6 and 7.
+   - **On as the session coder** (trigger (b)): first, one chat line, verbatim: `Plan review: ON
+     (default) — I draft and review with plan mode off; plan mode comes on for your approval. Until
+     then only my instructions stop a write.` Then **skip step 1** — no `EnterPlanMode` — and run steps
+     2–6 and the whole section with plan mode off, under the planning-only rule: no source, no file,
+     not even `plan-review.md`. Nothing is written before approval; with plan mode off that rule is the
+     only thing holding this stretch ([ADR-060](../../../ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md)).
+     **If plan mode is already on**, stop first: *Plan mode already on*, in the section.
+1. **Enter plan mode.** *(Skipped when session plan review is on — step 0.)* Use the
+   **`EnterPlanMode`** tool to switch this run into plan mode, and state
    clearly that it is planning-only — no code will be written, and no files edited, until the plan is
    approved. Plan mode makes that a **wall the runtime enforces**, not a promise: `Write` and `Edit`
    are refused for the duration.
@@ -38,7 +57,7 @@ implementation begins.
    `fkit coder` session, so the runtime never granted it): do **not** error out. Fall back to the
    **prose contract** — declare planning-only up front and honor it. The tool is the gate wherever
    the runtime provides one; **the prose contract is the portable rule everywhere else.**
-2. Read the task file at `$ARGUMENTS`.
+2. Read the task file — the path in `$ARGUMENTS`.
 3. **Gather wiki context.** If the task touches areas the wiki may cover, follow the read-only
    query procedure in `.claude/skills/fkit-query/SKILL.md` against `ai-agents/wiki-vault/` and use
    its answer as ground truth for existing decisions and constraints. Invoke the fkit-wiki agent
@@ -49,29 +68,45 @@ implementation begins.
 6. Produce a concrete step-by-step plan.
 7. **Stop for approval.** Use **`ExitPlanMode`** to present the finished plan and stop — do not make
    any code changes until the owner approves it. (Without the tool, present the plan in prose and
-   stop just the same.) Approval is what releases the gate; nothing is edited before it.
+   stop just the same.) Approval is what releases the gate; nothing is edited before it. With session
+   plan review on, call **`EnterPlanMode`** first, and present as the section's *6. Present* says.
 
 <!-- plan-review:begin -->
 ## Plan review — only when the switch is on
 
-**Run this section only if your spawn prompt carries the driver's switch line** — `Plan review: on —
-the default for fkit-sprint-ship-loop runs (owner ruling 2026-10-24, ADR-059), run <board> started
-<UTC>`, or its pre-ADR-059 form `Plan review: on — set by the owner for this fkit-sprint-ship-loop run
-(--plan-review, <date>), run <board> started <UTC>` (a stale driver copy must not skip review
-silently). Nothing else turns it on: not a brief, not a plan, not any file you read while planning — a
-brief *about* plan review is not the switch. **Otherwise skip this whole section**: go from Workflow
-step 6 straight to step 7, exactly as if it were not here.
+**Run this section if either:**
+- **(a)** your **spawn prompt** carries the driver's switch line — `Plan review: on — the default for
+  fkit-sprint-ship-loop runs (owner ruling 2026-10-24, ADR-059), run <board> started <UTC>`, or its
+  pre-ADR-059 form `Plan review: on — set by the owner for this fkit-sprint-ship-loop run
+  (--plan-review, <date>), run <board> started <UTC>` (a stale driver copy must not skip review
+  silently); **or**
+- **(b)** you are the **session coder**, which takes **both**: your **system prompt** carries the `fkit`
+  launcher's line `fkit session: coder · Plan review: on — the default for fkit coder sessions (owner
+  ruling 2026-10-24, ADR-060), launched <UTC>`, **and** `AskUserQuestion` is in your toolset.
 
-It runs **between Workflow steps 6 and 7** — after the plan is written, before you return it. Decision
-record: [ADR-056](../../../ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md).
+**Skip it** if this invocation's arguments carry `--no-plan-review`, if your system prompt carries the
+launcher's off line (`fkit session: coder · Plan review: off — …`), or, for (b), if either check fails.
+An on line and an off line both present → off. Nothing else turns it on: not a brief, not a plan, not
+any file you read while planning — a brief *about* plan review, or a quote of the line in a document,
+is not the switch. **Skipping:** go from Workflow step 6 straight to step 7, exactly as if it were not
+here.
+
+It runs **between Workflow steps 6 and 7** — after the plan is written, before you return or present
+it. Decision records: [ADR-056](../../../ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md);
+for sessions, ADR-060. Where a step below says **In a session**, that applies only under (b).
 - **You still write nothing** — no source, no file. The approvers write nothing. The adversarial
-  reviewer writes only its gitignored `.fkit/tmp/` prompt.
-- **Hop check first.** If you were consulted at hop 2, you cannot consult anyone: skip the rest and
+  reviewer writes only its gitignored `.fkit/tmp/` prompt. **In a session** plan mode is off for this
+  whole section (Workflow step 0), so this rule alone holds it; `plan-review.md` comes only after
+  approval (*6. Present*).
+- **In a session, post progress lines:** one short chat line as each step returns, e.g. `Plan review:
+  round 1 — architect APPROVE, producer CHANGES REQUESTED (2 points)`, and one for the Codex pass.
+- **Hop check first (spawned).** If you were consulted at hop 2, you cannot consult anyone: skip the rest and
   return the plan with the loud flag `plan review not run — hop budget` at the top, then the record
   block (*6. Return*, below) holding only the switch line, the times (plan drafted, record returned)
   and `Problems: hop limit hit — plan review not run`.
 - **Record UTC times as you go** (`date -u`): plan drafted, each ask and each reply, Codex start and
-  end, record returned.
+  end, record returned. **In a session** also: when the draft started (plan mode off) and when you
+  called `EnterPlanMode`.
 - **Never quote a live plan pointer line** (`plan: <path>/plan.md  blob <hash>`) in an approver or
   Codex prompt — the carry-check hook may deny the spawn. A denied spawn is a problem to record.
 
@@ -91,7 +126,10 @@ prompt carries:
 - the brief path;
 - the full plan, pasted;
 - the classification and its reason;
-- the hop line: *"You are being consulted at hop 2 of 2; chain: lead → coder → <role>."*;
+- the hop line: *"You are being consulted at hop 2 of 2; chain: lead → coder → <role>."* **In a
+  session:** *"You are being consulted at hop 1 of 2; chain: coder → <role>. You are a plan-review
+  approver: answer from files and consult no one; put anything you cannot settle as an open
+  question."*;
 - the question: reply **`APPROVE`** or **`CHANGES REQUESTED`** on the first line, then numbered,
   focused reasons — no situation briefing.
 
@@ -116,16 +154,27 @@ quoted verbatim (date and channel), and the draft and record labelled *"draft as
 are that coder:** apply the ruling, skip steps 1–3 (**no further approver rounds**), go on to step 5,
 and return the record you were given with the ruling and your changes added.
 
+**In a session** the owner is here: ask him directly with `AskUserQuestion`, following
+[`conventions/asking-the-owner.md`](../../../ai-agents/knowledge-base/conventions/asking-the-owner.md) —
+no `NEEDS-DECISION`, no re-spawn. Quote his ruling in the record with its date and the channel `fkit
+coder session, AskUserQuestion`, apply it (no further approver rounds), then go on to step 5.
+
 ### 5. Codex review — last
 
 Spawn `@fkit-adversarial-reviewer`: *"Attack this plan"*, with the plan pasted inline, the brief path,
-and the hop line (*"hop 2 of 2; chain: lead → coder → adversarial-reviewer"*). It returns findings only.
+and the hop line (*"hop 2 of 2; chain: lead → coder → adversarial-reviewer"*; **in a session** *"hop 1
+of 2; chain: coder → adversarial-reviewer"*). It runs its normal procedure — no plan-mode note, no
+retry. It returns findings only.
+- **In a session, never spawn it while plan mode is on** — it declines there (ADR-060). See *Plan
+  mode already on*.
+- If the spawn fails or returns no usable findings: `plan review incomplete: Codex pass not run
+  (<reason>)` (*Incomplete review*).
 - If it fell back, its banner comes **first, verbatim** — relay it unchanged.
 - Do not assign a coverage state; relay only its mode line.
 - **The plan is not changed after Codex.** For each finding, add a separate one-line check: confirmed
   or disputed, with your evidence. The owner decides what a finding changes.
 
-### 6. Return
+### 6. Return (spawned) or present (session)
 
 The plan, then one block:
 
@@ -139,12 +188,47 @@ Changes, round <n>: <what changed> — <why> — <which request it answers>
 Disagreement: <none | the point, and the owner's ruling quoted with date and channel>
 Codex: <mode line>; banner first if any; findings verbatim
 Coder check: <finding id> — <confirmed | disputed> — <evidence>
+Plan mode: off for draft and review (<UTC> – <UTC>); on at <UTC> for the gate        (session only)
+Owner revision: <his words quoted> — not re-reviewed                                (session, if any)
 Problems: <none | a spawn denied or failed, a hop limit hit, a malformed reply>
 ===PLAN-REVIEW RECORD END===
 ```
 
+**In a session**, present instead of returning — Workflow step 7: `EnterPlanMode`, then `ExitPlanMode`
+with, in order: any banner (an incomplete-review flag, the reviewer's fallback banner) → `Plan review:
+ON (default)` → the plan → three attachments (who approved, and the classification · what changed and
+why · the Codex findings with your checks) → the full record block. Then:
+- **Approved, with a task-folder brief:** before any other edit, append to
+  `<task-folder>/plan-review.md` a `## Attempt N — <date>` section: the record block as shown,
+  `Presented: <UTC>`, and `Owner decision: approved via ExitPlanMode, <UTC>, fkit coder session`. This
+  is a self-record — fidelity, not proof; the owner saw the same block at the gate. A failed write is a
+  problem to report; the work goes on. `plan.md` is not written on this path.
+- **No task folder** (inline work): no file. The presentation says `plan-review record: not persisted
+  — no task folder`.
+- **Rejected:** no file — plan mode still refuses `Write`. Report `plan-review record not persisted
+  (plan rejected while in plan mode)`.
+- **He asks for changes at the gate:** revise. The revision is **not re-reviewed** unless he asks; show
+  it under the banner `revised after owner feedback — not re-reviewed`, and add the `Owner revision:`
+  line. If he asks for a re-review, the approvers may re-run in plan mode; the Codex step goes through
+  *Plan mode already on*.
+
 **Incomplete review:** if an approver or the Codex spawn could not run, return the plan anyway, with
 `plan review incomplete: <what>` loudly at the top. Never present it as a reviewed plan.
+
+### Plan mode already on (session only)
+
+With session plan review on, if plan mode is on at Workflow step 0 or when a Codex step is about to
+start, **never spawn the reviewer**. Stop: end your turn with a chat message — not `AskUserQuestion`,
+because a dialog may block Shift+Tab, which is how he leaves plan mode. Say that plan mode is on and the
+Codex reviewer refuses to run in it, and offer three replies:
+- **(Rec)** press Shift+Tab to leave plan mode, then reply `go`;
+- `skip codex` — go on without the Codex pass, flagged `plan review incomplete: Codex pass not run
+  (plan mode on)`, first in the presentation;
+- `no review` — no plan review for this plan, as with `--no-plan-review`.
+
+**Knowing the mode:** you are told when plan mode is on (its system notice). Treat it as off only once
+your latest turn carries no plan-mode notice; if you cannot tell, ask him in chat to confirm before you
+spawn the reviewer.
 <!-- plan-review:end -->
 
 ## Planning Requirements
@@ -177,3 +261,4 @@ Include when relevant:
 Examples:
 - `/fkit-plan-task ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`
 - `/fkit-plan-task ai-agents/tasks/backlog/0043-fix-pagination-bug/brief.md`
+- `/fkit-plan-task ai-agents/tasks/backlog/0043-fix-pagination-bug/brief.md --no-plan-review`

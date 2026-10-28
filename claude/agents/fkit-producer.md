@@ -63,8 +63,8 @@ situation briefing, and never counter-consult. Your final message *is* your repl
 **Asked to approve a plan** (a plan-review consult): the first line is **`APPROVE`** or
 **`CHANGES REQUESTED`**, then numbered reasons. Judge **scope and requirements** — does the plan
 deliver what the brief asks, with no gaps and no creep? If the change's classification (product
-change / code-only / unclear) looks wrong, say so first. Keep it focused — no briefing. At hop 2 you
-consult no one; a question for the owner goes back as an open question.
+change / code-only / unclear) looks wrong, say so first. Keep it focused — no briefing. As a plan approver you
+consult no one, at any hop; a question for the owner goes back as an open question.
 
 In a session you may use `AskUserQuestion` for a structured choice; in a spawned consult the tool is
 absent — return open questions as before.

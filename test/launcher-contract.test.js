@@ -22,11 +22,16 @@
 
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { chmodSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { makeProject, runFkit, readSettings, cleanup, cleanupStub, LAUNCHER } from './harness.mjs';
 
 const ROLES = ['lead', 'producer', 'coder', 'architect', 'reviewer', 'adversarial-reviewer', 'wiki'];
+
+// fkit coder's plan-review session line (ADR-060): the only role whose argv carries it.
+const LINE_FLAG = '--append-system-prompt-file';
+const lineFile = (state) => `.fkit/settings/coder-plan-review-${state}.txt`;
+const sessionArgs = (role) => (role === 'coder' ? [LINE_FLAG, lineFile('on')] : []);
 
 // The one hook command every role's settings must carry — role-independent by design (the hook reads
 // the REAL caller's identity out of its own payload; it does not need a different command per role).
@@ -79,7 +84,9 @@ describe('Group A — argv contract', () => {
     test(`1. role "${role}" → --agent fkit-${role} --settings .fkit/settings/${role}.json`, async () => {
       const r = await runFkit([role], { project: PROJECT });
       assert.equal(r.exec, true, `expected claude to be exec'd\nstderr: ${r.stderr}`);
-      assert.deepEqual(r.argv, ['--agent', `fkit-${role}`, '--settings', `.fkit/settings/${role}.json`]);
+      assert.deepEqual(r.argv, [
+        '--agent', `fkit-${role}`, '--settings', `.fkit/settings/${role}.json`, ...sessionArgs(role),
+      ]);
     });
   }
 
@@ -138,7 +145,7 @@ describe('Group A — argv contract', () => {
     const r = await runFkit(['coder', '--debug'], { project: PROJECT });
     assert.equal(r.exec, true, `stderr: ${r.stderr}`);
     assert.deepEqual(r.argv, [
-      '--agent', 'fkit-coder', '--settings', '.fkit/settings/coder.json', '--debug',
+      '--agent', 'fkit-coder', '--settings', '.fkit/settings/coder.json', LINE_FLAG, lineFile('on'), '--debug',
     ]);
   });
 
@@ -290,6 +297,8 @@ describe('Group C — degradation & fresh-project routing', () => {
         'inline fallback must also carry the Stop turn-completion hook wiring');
       assert.equal(inline.hooks?.UserPromptExpansion?.[0]?.hooks?.[0]?.command, SHIPLOOP_HOOK_COMMAND,
         'inline fallback must also carry the ship-loop marker hook wiring');
+      // No writable .fkit/ → no session line: plan review fails toward off (ADR-060), never a dangling flag.
+      assert.equal(r.argv.length, 4, `expected no session-line flag, got: ${r.argv.slice(4)}`);
     } finally {
       chmodSync(join(proj, '.fkit'), 0o700);          // restore so cleanup can remove it
       cleanup(proj);
@@ -410,5 +419,101 @@ describe('Group C — degradation & fresh-project routing', () => {
     } finally {
       cleanup(proj);
     }
+  });
+});
+
+// =================================================================================================
+// Group D — fkit coder's plan-review session line (ADR-060; task 0543, cases OK'd by the owner by
+// name). The launcher consumes --no-plan-review / --plan-review after `coder` only, and writes the
+// on or off line into a file it hands claude with --append-system-prompt-file.
+// =================================================================================================
+describe('Group D — plan-review session line', () => {
+  const ON_LINE = /^fkit session: coder · Plan review: on — the default for fkit coder sessions \(owner ruling 2026-10-24, ADR-060\), launched \d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z$/;
+  const OFF_LINE = /^fkit session: coder · Plan review: off — fkit coder --no-plan-review \(owner, at launch \d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z\)$/;
+  const BASE = ['--agent', 'fkit-coder', '--settings', '.fkit/settings/coder.json'];
+  const lineIn = (state) => readFileSync(join(PROJECT, lineFile(state)), 'utf8').trimEnd();
+
+  test('D1. `fkit coder` → the on line, passed by file', async () => {
+    const r = await runFkit(['coder'], { project: PROJECT });
+    assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+    assert.deepEqual(r.argv, [...BASE, LINE_FLAG, lineFile('on')]);
+    assert.match(lineIn('on'), ON_LINE);
+  });
+
+  test('D2. `fkit coder --no-plan-review` → consumed; the off line', async () => {
+    const r = await runFkit(['coder', '--no-plan-review'], { project: PROJECT });
+    assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+    assert.deepEqual(r.argv, [...BASE, LINE_FLAG, lineFile('off')]);
+    assert.match(lineIn('off'), OFF_LINE);
+  });
+
+  test('D3. `fkit coder --plan-review` → a consumed no-op; the on line', async () => {
+    const r = await runFkit(['coder', '--plan-review'], { project: PROJECT });
+    assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+    assert.deepEqual(r.argv, [...BASE, LINE_FLAG, lineFile('on')]);
+  });
+
+  test("D4. both flags together → usage error, claude NEVER exec'd", async () => {
+    const r = await runFkit(['coder', '--no-plan-review', '--plan-review'], { project: PROJECT });
+    assert.notEqual(r.code, 0);
+    assert.equal(r.exec, false);
+    assert.match(r.stderr, /together/);
+  });
+
+  for (const [role, flag] of [['lead', '--no-plan-review'], ['architect', '--plan-review']]) {
+    test(`D5. \`fkit ${role} ${flag}\` → usage error, claude NEVER exec'd`, async () => {
+      const r = await runFkit([role, flag], { project: PROJECT });
+      assert.notEqual(r.code, 0);
+      assert.equal(r.exec, false);
+      assert.match(r.stderr, /only after coder/);
+    });
+  }
+
+  test("D6. the owner's own --append-system-prompt passes through unchanged", async () => {
+    const r = await runFkit(['coder', '--append-system-prompt', 'X'], { project: PROJECT });
+    assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+    assert.deepEqual(r.argv, [...BASE, LINE_FLAG, lineFile('on'), '--append-system-prompt', 'X']);
+  });
+
+  test('D7. `fkit coder --resume` still passes through', async () => {
+    const r = await runFkit(['coder', '--resume'], { project: PROJECT });
+    assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+    assert.deepEqual(r.argv, [...BASE, LINE_FLAG, lineFile('on'), '--resume']);
+  });
+
+  test('D8. after a `--` separator the token is the owner\'s literal text', async () => {
+    const r = await runFkit(['coder', '--', '--no-plan-review'], { project: PROJECT });
+    assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+    assert.deepEqual(r.argv, [...BASE, LINE_FLAG, lineFile('on'), '--', '--no-plan-review']);
+  });
+
+  for (const args of [['--append-system-prompt-file', 'f'], ['--append-system-prompt-file=f']]) {
+    test(`D9. \`fkit coder ${args.join(' ')}\` → usage error, claude NEVER exec'd`, async () => {
+      const r = await runFkit(['coder', ...args], { project: PROJECT });
+      assert.notEqual(r.code, 0);
+      assert.equal(r.exec, false);
+      assert.match(r.stderr, /--append-system-prompt instead/);
+    });
+  }
+
+  // D10 — no other role carries the line: test 1 / 1b pin every other role's argv exactly.
+
+  // D11–D13: review R1, OK'd by the owner by name (2026-10-27).
+  test("D11. the token is taken out even as another option's value", async () => {
+    const r = await runFkit(['coder', '--append-system-prompt', '--no-plan-review'], { project: PROJECT });
+    assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+    assert.deepEqual(r.argv, [...BASE, LINE_FLAG, lineFile('off'), '--append-system-prompt']);
+  });
+
+  test('D12. `fkit lead -- --no-plan-review` passes through: no usage error after `--`', async () => {
+    const r = await runFkit(['lead', '--', '--no-plan-review'], { project: PROJECT });
+    assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+    assert.deepEqual(r.argv, ['--agent', 'fkit-lead', '--settings', '.fkit/settings/lead.json', '--', '--no-plan-review']);
+  });
+
+  test('D13. the token is taken out wherever it sits; the other args keep their order', async () => {
+    const r = await runFkit(['coder', '--resume', '--no-plan-review', '--debug'], { project: PROJECT });
+    assert.equal(r.exec, true, `stderr: ${r.stderr}`);
+    assert.deepEqual(r.argv, [...BASE, LINE_FLAG, lineFile('off'), '--resume', '--debug']);
   });
 });

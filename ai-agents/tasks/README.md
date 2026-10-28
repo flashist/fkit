@@ -6,7 +6,7 @@ Every task is a **folder** under one of three boards — `backlog/`, `done/`, `c
 ai-agents/tasks/<board>/<NNNN>-<slug>/
 ├── brief.md      REQUIRED — the task brief. Always present.
 ├── plan.md       optional — the approved implementation plan   (ADR-020)
-├── plan-review.md  optional — the plan-review record           (ADR-056)
+├── plan-review.md  optional — the plan-review record           (ADR-056, ADR-060)
 ├── worklog.md    optional — the ship-loop worklog               (ADR-020)
 ├── review.md     optional — the two-party review ledger
 └── assets/       optional — reference material, fixtures, screenshots
@@ -14,7 +14,8 @@ ai-agents/tasks/<board>/<NNNN>-<slug>/
 
 `brief.md`, `plan.md`, `plan-review.md`, `worklog.md`, `review.md`, `assets/` are **reserved names**. A
 folder holding only `brief.md` is the normal case; a folder **without** `brief.md` is malformed and
-reported as drift (ADR-029 Decision 1). The four-digit **ID** is permanent and global — the folder name
+reported as drift (ADR-029 Decision 1). `plan-review.md` is written after the owner's decision on a
+reviewed plan — by the sprint-loop driver, or, in a `fkit coder` session, by the coder on approval. The four-digit **ID** is permanent and global — the folder name
 carries it, and the brief's `## ID` field is the redundant second carrier, reconciled by the
 `id-mismatch` drift check (ADR-029 Decision 5). Task folders move between boards only via
 `/fkit-task-done` and `/fkit-task-cancelled`, never by hand — and only the **producer** may invoke them.

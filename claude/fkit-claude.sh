@@ -211,6 +211,12 @@ Roles:
 
 Within a session, `@fkit-<role> <question>` asks another role and brings the answer back.
 
+Plan review (fkit coder only): on by default — agents and Codex check each /fkit-plan-task plan first.
+  fkit coder --no-plan-review   off for the whole session (only after coder; --plan-review is a no-op)
+  A resumed conversation keeps the setting it started with, until it is compacted.
+  fkit coder passes its own --append-system-prompt-file, so it refuses yours: use --append-system-prompt.
+  To hand claude the literal text --no-plan-review, put it after `--`.
+
 Other:
   fkit board            view this project's tasks and sprints in your browser, read-only (needs Node)
   fkit update           update fkit itself
@@ -240,6 +246,37 @@ if [ -z "$role" ] && [ "$#" -gt 0 ]; then
   printf '      Roles: %s (or: adv)\n' "$ROLES" >&2
   printf '      Try:  fkit          (the menu)   ·   fkit <role>   ·   fkit --help\n' >&2
   exit 2
+fi
+
+# Plan review's session switch (ADR-060) is fkit's own: take it out before argv reaches claude. Exact tokens,
+# before any `--` only — claude's option arity is unknown here, so a value spelled like the flag is taken too.
+pr_off=0; pr_noop=0; pr_own_file=0; pr_dd=0; pr_n=$#
+while [ "$pr_n" -gt 0 ]; do
+  pr_a=$1; shift; pr_n=$((pr_n - 1))
+  if [ "$pr_dd" = 0 ]; then
+    case "$pr_a" in
+      --) pr_dd=1 ;;
+      --no-plan-review) pr_off=1; continue ;;
+      --plan-review) pr_noop=1; continue ;;
+      --append-system-prompt-file|--append-system-prompt-file=*) pr_own_file=1 ;;
+    esac
+  fi
+  set -- "$@" "$pr_a"
+done
+if [ "$pr_off" = 1 ] || [ "$pr_noop" = 1 ]; then
+  if [ "$role" != coder ]; then
+    printf 'fkit: --no-plan-review / --plan-review go only after coder:  fkit coder --no-plan-review\n' >&2
+    printf '      (a sprint-loop run takes its own:  /fkit-sprint-ship-loop <sprint-plan> --no-plan-review)\n' >&2
+    exit 2
+  elif [ "$pr_off" = 1 ] && [ "$pr_noop" = 1 ]; then
+    printf 'fkit: --no-plan-review and --plan-review together — pick one (on is the default).\n' >&2
+    exit 2
+  fi
+fi
+# Two of the same flag: claude keeps only the last, so the owner's would silently drop the session line.
+if [ "$role" = coder ] && [ "$pr_own_file" = 1 ]; then
+  printf 'fkit: fkit coder passes its plan-review session line with --append-system-prompt-file, so it\n' >&2
+  printf '      cannot take yours. Pass your text with --append-system-prompt instead.\n' >&2; exit 2
 fi
 
 # skills_for_role() is the one source of role→skill ownership (ADR-012 §1; no skills: frontmatter — it is
@@ -290,6 +327,21 @@ build_settings() {   # → .fkit/settings/<role>.json containing {"hooks":{…}}
   fi
   echo "⚠ $proj is not writable — passing the role lockdown inline instead of via .fkit/." >&2
   printf '{%s}' "$hooks"
+}
+
+# → the relative path of fkit coder's session line (ADR-060), or nothing if .fkit/ is unwritable: missing
+# means off. One file per state, so two tabs launched with different flags never swap each other's line.
+coder_session_line() {
+  pr_now="$(date -u +%Y-%m-%dT%H:%MZ)"
+  if [ "$1" = off ]; then
+    pr_line="fkit session: coder · Plan review: off — fkit coder --no-plan-review (owner, at launch $pr_now)"
+  else
+    pr_line="fkit session: coder · Plan review: on — the default for fkit coder sessions (owner ruling 2026-10-24, ADR-060), launched $pr_now"
+  fi
+  if mkdir -p "$proj/.fkit/settings" 2>/dev/null &&
+     ( printf '%s\n' "$pr_line" > "$proj/.fkit/settings/coder-plan-review-$1.txt" ) 2>/dev/null; then
+    printf '.fkit/settings/coder-plan-review-%s.txt' "$1"
+  fi
 }
 
 # Name the tab until Claude Code auto-titles it, so a wall of fkit tabs is readable.
@@ -556,4 +608,14 @@ else
 fi
 settings="$(build_settings "$role")"
 set_tab_title "$role"
+if [ "$role" = coder ]; then
+  pr_state=on
+  if [ "$pr_off" = 1 ]; then pr_state=off; fi
+  pr_file="$(coder_session_line "$pr_state")"
+  if [ -n "$pr_file" ]; then
+    set -- --append-system-prompt-file "$pr_file" "$@"
+  else
+    echo "⚠ $proj is not writable — no plan-review session line, so plan review is off in this session." >&2
+  fi
+fi
 exec claude --agent "fkit-$role" --settings "$settings" "$@"

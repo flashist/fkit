@@ -11,12 +11,20 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- `fkit coder` sessions now do plan review by default too: `/fkit-plan-task` drafts the plan, has
+  agents approve it and Codex attack it, then shows it to you with the review record. The draft and
+  review run with plan mode off (only the coder's instructions stop a write in that stretch, ~17 min);
+  plan mode comes on for your approval. Start with `fkit coder --no-plan-review` to turn it off for the
+  session, or add `--no-plan-review` to one `/fkit-plan-task`; either gives the old flow, plan mode from
+  the start. On a task-folder brief the record is saved as `plan-review.md` when you approve. `fkit
+  coder` now refuses your own `--append-system-prompt-file` (use `--append-system-prompt`), and the
+  plan-review flags after any other role. Provisional, like the sprint-loop default. `/fkit-task-ship-loop`
+  gets its own flag and record in a follow-up.
 - `/fkit-sprint-ship-loop` runs now do plan review by default: agents approve each plan and Codex
   attacks it before the owner sees it. Start a run with `--no-plan-review` to turn it off for that run;
   the old `--plan-review` is still accepted and changes nothing. Each run's report says which path it
   took. Without Codex the plan pass is Claude-only and flagged as not model-diverse â€” use
   `--no-plan-review` if you do not want that. Provisional: the owner decides after real-project use.
-  `fkit coder` sessions, `/fkit-task-ship-loop` and a plain `/fkit-plan-task` are unchanged.
 - `fkit board` now refuses (403) a request addressed under any host name other than `localhost` or an
   IP address, so a web page you have open cannot read your board through another domain name.
   `http://127.0.0.1:8585/` and `http://localhost:8585/` work as before.

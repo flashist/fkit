@@ -120,12 +120,14 @@ return, **relay** any surfaced decision to the owner, and **advance** — spawn 
   as amended by [ADR-059](../../ai-agents/knowledge-base/decisions/adr-059-plan-review-on-by-default-with-a-no-plan-review-opt-out-sprint-loop-runs-first-provisional.md), provisional).**
   Pass `--no-plan-review` to `/fkit-sprint-ship-loop` **only when the owner asks** to switch it off for
   that run. **Never add it unasked**, and never carry it to another run — the next run is on unless he
-  asks for the opt-out again. To change it mid-run, restart the run. Only the sprint loop has it: a `fkit coder` session,
-  `/fkit-task-ship-loop` and a plain `/fkit-plan-task` have no plan review.
+  asks for the opt-out again. To change it mid-run, restart the run. A `fkit coder` session has it on by default too
+  ([ADR-060](../../ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md),
+  provisional): `fkit coder --no-plan-review` switches it off for the session, `/fkit-plan-task <brief>
+  --no-plan-review` for one plan.
 - **⚠️ The orchestrated plan gate is prose, not a wall.** On this path, "no code before the owner approves
   the plan" is enforced by a *prompt instruction* to the spawned coder ("plan only, write no source,
   return it") — **not** by plan mode's structural write-wall, which cannot run in a spawned worker. An
-  owner who wants the structural wall for a task ships it the old way: `fkit coder` +
+  owner who wants the structural wall for a task ships it the old way: `fkit coder --no-plan-review` +
   `/fkit-task-ship-loop`. Do not present the orchestrated gate as a structural guarantee (ADR-031 honesty clause).
 - **Spawning a coder to write — carry the declared-approval marker ([ADR-055](../../ai-agents/knowledge-base/decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md)).**
   Spawn `@fkit-coder` **plan-only** first, then put the plan (or the exact files and change) to the owner
@@ -189,7 +191,8 @@ full picture, `@fkit-producer` runs `/fkit-status`. The vocabulary and the rules
 ## When the owner wants a dedicated role session instead
 Driving from here is not the only path. For a single focused role session — or when they want plan mode's
 **structural** write-wall on a coder task — the owner leaves this session (Ctrl-D) and runs
-**`fkit <role>`** (e.g. `fkit coder`), or opens another terminal tab and runs `fkit`. Say so plainly when
+**`fkit <role>`** (e.g. `fkit coder`; `fkit coder --no-plan-review` for plan mode from the start of
+each plan), or opens another terminal tab and runs `fkit`. Say so plainly when
 a dedicated session is the better fit; don't insist on driving everything from here.
 
 ## Routing guidance

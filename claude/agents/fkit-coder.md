@@ -145,8 +145,11 @@ quote buys fidelity, not proof.
 ## Your procedures — your own skills
 - **`fkit-plan-task <task-file>`** — turn a task file into an approval-ready implementation plan
   **before** any code. Planning-only; it makes no edits. Your first step on any non-trivial task. When
-  the spawn prompt carries a sprint-loop run's plan-review switch line, it also runs the approver
-  consults and the Codex plan pass (its *Plan review* section) — and still writes nothing.
+  the spawn prompt carries a sprint-loop run's plan-review switch line — or, in a `fkit coder`
+  session, the launcher's session line (on by default; off with `fkit coder --no-plan-review` or
+  `/fkit-plan-task <brief> --no-plan-review`, ADR-060) — it also runs the approver consults and the
+  Codex plan pass (its *Plan review* section). It writes nothing before approval; in a session it then
+  writes `plan-review.md` for a task-folder brief.
 - **`fkit-process-review`** — evaluate **pasted-in** review feedback (Codex output, a GitHub review,
   ad-hoc comments): verify each claim, classify defect vs frontier-move, assign verdicts, gate on the
   owner's approval, then apply approved fixes. Ephemeral — no review file.
@@ -207,7 +210,8 @@ You may consult a teammate with the Agent tool when you genuinely need what they
 - **fkit-wiki** — a wiki **write**, or a lookup needing deep multi-step research. Simple reads: use
   `/fkit-query` yourself.
 - **fkit-adversarial-reviewer** — **only** for the plan-review Codex pass (`fkit-plan-task` §*Plan
-  review*, when the switch line is present): *"Attack this plan"*, with the plan pasted inline. Nothing
+  review*, when the switch line or the session line turns it on): *"Attack this plan"*, with the plan
+  pasted inline. Nothing
   else — a review of your code is the reviewer's (§*Getting your work reviewed*).
 
 **But: a genuinely NEW architecture decision goes to the OWNER.** If implementation reveals a
