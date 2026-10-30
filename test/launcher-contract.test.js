@@ -22,9 +22,15 @@
 
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { spawn, spawnSync } from 'node:child_process';
+import { createInterface } from 'node:readline';
+import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
-import { makeProject, runFkit, readSettings, cleanup, cleanupStub, LAUNCHER } from './harness.mjs';
+import { makeProject, runFkit, readSettings, cleanup, cleanupStub, LAUNCHER, REPO } from './harness.mjs';
+import { interviewSettings, launchArgs } from '../codex/fkit.mjs';
+import { OwnerQuestions } from '../codex/owner-question.mjs';
+import { parseCatalog } from '../codex/models.mjs';
 
 const ROLES = ['lead', 'producer', 'coder', 'architect', 'reviewer', 'adversarial-reviewer', 'wiki'];
 
@@ -516,4 +522,328 @@ describe('Group D — plan-review session line', () => {
     assert.equal(r.exec, true, `stderr: ${r.stderr}`);
     assert.deepEqual(r.argv, [...BASE, LINE_FLAG, lineFile('off'), '--resume', '--debug']);
   });
+});
+
+function configuredFixture() {
+  const root = mkdtempSync(join(tmpdir(), 'fkit-runtime-contract-'));
+  const bin = join(root, 'bin');
+  mkdirSync(bin);
+  for (const runtime of ['codex', 'claude']) {
+    const script = `#!${process.execPath}
+const fs=require('node:fs');
+const args=process.argv.slice(2);
+if(args.includes('--version')){console.log('${runtime === 'codex' ? 'codex-cli 0.165.0' : '2.1.312 (Claude Code)'}');process.exit(0)}
+if(args[0]==='login')process.exit(0);
+if(args[0]==='debug' && args[1]==='models'){console.log(JSON.stringify({models:[{slug:'chosen-codex',supported_reasoning_levels:[{effort:'low'},{effort:'high'}]}]}));process.exit(0)}
+fs.writeFileSync('${runtime}-call.json',JSON.stringify(args));
+const input=fs.readFileSync(0,'utf8');
+console.log(${runtime === 'claude' ? "JSON.stringify({is_error:false,result:'fixture-claude:'+input,modelUsage:{'observed-claude':{}}})" : "'fixture-codex:'+input"});
+`;
+    writeFileSync(join(bin, runtime), script, { mode: 0o755 });
+  }
+  const env = { ...process.env, PATH: `${bin}:${process.env.PATH}`, FKIT_NO_UPDATE_CHECK: '1', FKIT_NO_SELF_HOST: '1' };
+  const run = args => spawnSync('sh', [join(REPO, 'bin/fkit'), ...args], { cwd: root, env, encoding: 'utf8', timeout: 20000 });
+  return { root, run, env, close: () => rmSync(root, { recursive: true, force: true }) };
+}
+
+test('configured runtimes: direct roles select their own CLI/model and preserve saved settings', () => {
+  const f = configuredFixture();
+  try {
+    let r = f.run(['configure', '--runtime', 'codex', '--model', 'chosen-codex', '--effort', 'high', '--role-effort', 'adversarial-reviewer=low', '--role-runtime', 'wiki=claude', '--role-model', 'wiki=chosen-claude']);
+    assert.equal(r.status, 0, r.stderr);
+    const file = join(f.root, '.fkit/model-settings.json');
+    const saved = readFileSync(file, 'utf8');
+    r = f.run(['wiki', '--exec', 'bounded wiki scope']);
+    assert.equal(r.status, 0, r.stderr);
+    assert.match(r.stdout, /fixture-claude:bounded wiki scope/);
+    const claude = JSON.parse(readFileSync(join(f.root, 'claude-call.json')));
+    assert.equal(claude[claude.indexOf('--model') + 1], 'chosen-claude');
+    assert.ok(!claude.includes('chosen-codex'));
+    assert.ok(!claude.some(arg => arg.includes('model_reasoning_effort')));
+    r = f.run(['coder', '--exec', 'bounded coder scope']);
+    assert.equal(r.status, 0, r.stderr);
+    assert.match(r.stdout, /fixture-codex:bounded coder scope/);
+    const codex = JSON.parse(readFileSync(join(f.root, 'codex-call.json')));
+    assert.equal(codex[codex.indexOf('--model') + 1], 'chosen-codex');
+    assert.ok(codex.includes('model_reasoning_effort="high"'));
+    assert.ok(!codex.some(arg => arg.startsWith('hooks.') || arg.includes('/codex/hook.mjs')));
+    const codexSettings = { schemaVersion: 1, default: { runtime: 'codex', model: 'chosen-codex', reasoningEffort: 'high' }, roles: {} };
+    for (const role of ROLES) for (const headless of [false, true]) {
+      const args = launchArgs(f.root, role, codexSettings, 'bounded hook-free scope', headless);
+      assert.ok(!args.some(arg => arg.startsWith('hooks.') || arg.includes('/codex/hook.mjs')), `${role}/${headless}: hooks must remain disabled`);
+      assert.ok(args.includes('features.multi_agent=false'));
+      assert.ok(args.includes('model_reasoning_effort="high"'));
+      const binding = args.find(arg => arg.startsWith('developer_instructions='));
+      assert.match(binding, /disabled fkit's Codex PreToolUse and Stop hooks/);
+      assert.match(binding, /End owner replies with What's next/);
+      if (headless) assert.equal(args.at(-1), '-');
+      else assert.deepEqual(args.slice(-2), ['--', 'bounded hook-free scope']);
+      const defaultArgs = launchArgs(f.root, role, codexSettings, undefined, headless);
+      if (headless) assert.equal(defaultArgs.at(-1), '-');
+      else {
+        assert.equal(defaultArgs.at(-2), '--');
+        assert.match(defaultArgs.at(-1), new RegExp(`Begin this interactive fkit-${role} session`));
+        assert.match(defaultArgs.at(-1), /role name, not a skill to request/);
+        assert.ok(!defaultArgs.at(-1).includes('.claude/skills/'));
+        if (role === 'lead') assert.match(defaultArgs.at(-1), /Greet the owner as the fkit lead and conductor/);
+      }
+    }
+    for (const alias of ['adv', 'adversarial']) {
+      r = f.run([alias, '--exec', 'bounded hostile scope']);
+      assert.equal(r.status, 0, r.stderr);
+      const args = JSON.parse(readFileSync(join(f.root, 'codex-call.json')));
+      assert.equal(args[args.indexOf('--sandbox') + 1], 'read-only');
+      assert.ok(args.includes('model_reasoning_effort="low"'));
+    }
+    r = f.run(['--runtime', 'claude', 'lead', '--preview']);
+    assert.equal(r.status, 0, r.stderr);
+    const preview = JSON.parse(r.stdout);
+    assert.equal(preview.settings.runtime, 'claude');
+    assert.equal(preview.settings.model, null);
+    assert.equal(readFileSync(file, 'utf8'), saved);
+  } finally { f.close(); }
+});
+
+test('configured owner questions: single-field choices and explicit custom answers preserve consent', async () => {
+  const fixture = () => {
+    const forms = [];
+    const owner = new OwnerQuestions(message => forms.push(message));
+    owner.initialize({ elicitation: { form: {} } });
+    const ask = () => owner.ask({ question: 'Synthetic choice only', options: ['Propose checks', 'Explain more, then ask again'] }, 42);
+    const accept = (index, answer) => owner.respond({ id: forms[index].id, result: { action: 'accept', content: { answer } } });
+    return { owner, forms, ask, accept };
+  };
+  const f = fixture();
+  const pending = f.ask();
+  assert.deepEqual(Object.keys(f.forms[0].params.requestedSchema.properties), ['answer']);
+  assert.deepEqual(f.forms[0].params.requestedSchema.required, ['answer']);
+  f.accept(0, 'Propose checks');
+  assert.deepEqual(await pending, { action: 'accept', answered: true, answer: 'Propose checks', comment: '', instruction: 'Relay exactly. A question, request for explanation, or alternative is not approval of a plan.' });
+  assert.equal(f.forms.length, 1);
+  for (const response of ['text', 'cancel', 'empty', 'interrupt']) {
+    const c = fixture();
+    let settled = false;
+    const result = c.ask().finally(() => { settled = true; });
+    c.accept(0, 'Write another answer');
+    await Promise.resolve();
+    assert.equal(settled, false);
+    assert.equal(c.forms.length, 2);
+    assert.deepEqual(Object.keys(c.forms[1].params.requestedSchema.properties), ['answer']);
+    assert.equal(c.forms[1].params.requestedSchema.properties.answer.minLength, 1);
+    if (response === 'text') {
+      c.accept(1, 'Explain this; no changes yet.');
+      const reply = await result;
+      assert.equal(reply.answer, 'Write another answer');
+      assert.equal(reply.comment, 'Explain this; no changes yet.');
+    } else if (response === 'cancel') {
+      c.owner.respond({ id: c.forms[1].id, result: { action: 'cancel' } });
+      assert.equal((await result).answered, false);
+    } else if (response === 'empty') {
+      c.accept(1, '   ');
+      assert.equal((await result).answered, false);
+    } else {
+      c.owner.cancel(42);
+      await assert.rejects(result, /no answer or approval/);
+      assert.equal(c.accept(1, 'Late response'), false);
+    }
+    assert.equal(c.owner.pending.size, 0);
+  }
+  const free = fixture();
+  const freeResult = free.owner.ask({ question: 'Describe your goal' }, 43);
+  assert.equal(free.forms[0].params.requestedSchema.properties.answer.enum, undefined);
+  free.accept(0, 'Write another answer');
+  assert.equal((await freeResult).answer, 'Write another answer');
+  assert.equal(free.forms.length, 1);
+  const invalid = fixture();
+  const invalidResult = invalid.ask();
+  invalid.accept(0, 'Unknown choice');
+  await assert.rejects(invalidResult, /Invalid owner response/);
+});
+
+test('configured effort: reset/inherit are distinct and invalid choices preserve saved files', () => {
+  const f = configuredFixture();
+  try {
+    let r = f.run(['configure', '--model', 'chosen-codex', '--effort', 'high', '--role-effort', 'wiki=low']);
+    assert.equal(r.status, 0, r.stderr);
+    const file = join(f.root, '.fkit/model-settings.json');
+    r = f.run(['settings']);
+    assert.match(r.stdout, /lead: codex \/ chosen-codex \/ effort: high/);
+    assert.match(r.stdout, /wiki: codex \/ chosen-codex \/ effort: low/);
+    r = f.run(['configure', '--role-effort', 'wiki=default']);
+    assert.equal(r.status, 0, r.stderr);
+    r = f.run(['wiki', '--preview']);
+    assert.equal(JSON.parse(r.stdout).settings.reasoningEffort, null);
+    r = f.run(['configure', '--role-effort', 'wiki=inherit']);
+    assert.equal(r.status, 0, r.stderr);
+    r = f.run(['wiki', '--preview']);
+    assert.equal(JSON.parse(r.stdout).settings.reasoningEffort, 'high');
+    const saved = readFileSync(file, 'utf8');
+    for (const flags of [['--effort', 'ultra'], ['--effort', 'bogus'], ['--role-effort', 'wiki=ultra'], ['--role-runtime', 'wiki=claude', '--role-effort', 'wiki=high']]) {
+      r = f.run(['configure', ...flags]);
+      assert.equal(r.status, 1, r.stdout);
+      assert.equal(readFileSync(file, 'utf8'), saved);
+    }
+    assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
+    assert.equal(existsSync(join(f.root, 'claude-call.json')), false);
+    r = f.run(['configure', '--effort', 'default']);
+    assert.equal(r.status, 0, r.stderr);
+    assert.equal(JSON.parse(readFileSync(file, 'utf8')).default.reasoningEffort, undefined);
+    r = f.run(['wiki', '--exec', 'bounded default-effort scope']);
+    assert.equal(r.status, 0, r.stderr);
+    assert.ok(!JSON.parse(readFileSync(join(f.root, 'codex-call.json'))).some(arg => arg.includes('model_reasoning_effort')));
+  } finally { f.close(); }
+});
+
+test('configured interview: model-specific effort, role customization, blanks and unknown catalogs', async t => {
+  const output = [];
+  t.mock.method(console, 'log', line => output.push(line));
+  const models = parseCatalog({ models: [
+    { slug: 'chosen-codex', supported_reasoning_levels: [{ effort: 'low' }, { effort: 'high' }] },
+    { slug: 'small-codex', supported_reasoning_levels: [{ effort: 'low' }] },
+  ] });
+  const value = { schemaVersion: 1, default: { runtime: 'codex', model: null }, roles: {} };
+  const answers = ['1', '2', 'y', '7, wiki', '2', '1', 'done'];
+  const questions = [];
+  const visibleMenus = [];
+  await interviewSettings(value, { models, available: true }, async prompt => { questions.push(prompt); visibleMenus.push(output.join('\n')); return answers.shift(); });
+  assert.equal(answers.length, 0);
+  assert.equal(value.default.model, 'chosen-codex');
+  assert.equal(value.default.reasoningEffort, 'high');
+  assert.deepEqual(value.roles.wiki, { model: 'small-codex', reasoningEffort: 'low' });
+  assert.match(questions[1], /Default effort/);
+  assert.match(questions[5], /wiki effort/);
+  assert.match(questions[4], /number or exact ID/);
+  assert.match(visibleMenus[4], /wiki model choices:\nLocal Codex model catalog[^\n]*\n1\. chosen-codex — chosen-codex\n2\. small-codex — small-codex/);
+  assert.match(visibleMenus[5], /wiki reasoning effort:\n1\. low$/);
+  assert.match(questions[5], /number or name/);
+  const saved = structuredClone(value);
+  const multiple = ['', '', 'y', '1,5', '', '', '', '', '0'];
+  await interviewSettings(value, { models, available: true }, async () => multiple.shift());
+  assert.equal(multiple.length, 0);
+  assert.deepEqual(value, saved);
+  const skip = ['', '', 'y', ''];
+  await interviewSettings(value, { models, available: true }, async () => skip.shift());
+  assert.deepEqual(value, saved);
+  for (const selection of ['8', '-1', 'unknown-role', '1 nope', '0,7']) {
+    const invalid = ['', '', 'y', selection];
+    await assert.rejects(interviewSettings(value, { models, available: true }, async () => invalid.shift()), /Invalid role selection/);
+    assert.deepEqual(value, saved);
+  }
+  const blanks = ['', '', 'y', 'wiki', '', '', ''];
+  await interviewSettings(value, { models, available: true }, async () => blanks.shift());
+  assert.deepEqual(value, saved);
+  const rounds = ['', '', 'y', '3', '1', 'low', '7', '2', 'low', '3', '', 'high', '0'];
+  const roundPrompts = [];
+  await interviewSettings(value, { models, available: true }, async prompt => { roundPrompts.push(prompt); return rounds.shift(); });
+  assert.equal(rounds.length, 0);
+  assert.equal(roundPrompts.filter(prompt => prompt.startsWith('Roles to customize')).length, 4);
+  assert.deepEqual(value.roles.coder, { model: 'chosen-codex', reasoningEffort: 'high' });
+  assert.deepEqual(value.roles.wiki, { model: 'small-codex', reasoningEffort: 'low' });
+  const unknown = { schemaVersion: 1, default: { runtime: 'codex', model: null }, roles: {} };
+  const exact = ['exact-unknown-model', 'high', 'n'];
+  await interviewSettings(unknown, { models: [], available: false }, async () => exact.shift());
+  assert.equal(unknown.default.reasoningEffort, 'high');
+  await assert.rejects(interviewSettings(saved, { models, available: true }, async prompt => prompt.startsWith('Default codex') ? '' : 'ultra'), /Invalid reasoning effort/);
+  const claude = { schemaVersion: 1, default: { runtime: 'claude', model: null }, roles: {} };
+  const claudePrompts = [];
+  await interviewSettings(claude, { models, available: true }, async prompt => { claudePrompts.push(prompt); return ''; });
+  assert.equal(claudePrompts.some(prompt => /effort \[/.test(prompt)), false);
+});
+
+test('configured runtimes: changing default retains existing role choices and invalid choices never launch', () => {
+  const f = configuredFixture();
+  try {
+    let r = f.run(['configure', '--runtime-default', '--role-model', 'wiki=small-codex']);
+    assert.equal(r.status, 0, r.stderr);
+    r = f.run(['configure', '--runtime', 'claude', '--model', 'chosen-claude']);
+    assert.equal(r.status, 0, r.stderr);
+    const file = join(f.root, '.fkit/model-settings.json');
+    const saved = readFileSync(file, 'utf8');
+    const config = JSON.parse(saved);
+    assert.deepEqual(config.default, { runtime: 'claude', model: 'chosen-claude' });
+    assert.deepEqual(config.roles.wiki, { runtime: 'codex', model: 'small-codex' });
+    r = f.run(['configure', '--role-runtime', 'wiki=unknown']);
+    assert.equal(r.status, 1);
+    assert.equal(readFileSync(file, 'utf8'), saved);
+    assert.equal(existsSync(join(f.root, 'claude-call.json')), false);
+    assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
+    writeFileSync(file, JSON.stringify({ ...config, roles: { wiki: { runtime: 'codex' } } }));
+    r = f.run(['wiki', '--exec', 'must not launch']);
+    assert.equal(r.status, 1);
+    assert.match(r.stderr, /runtime change requires an explicit model/);
+    assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
+  } finally { f.close(); }
+});
+
+test('public dispatcher: an unconfigured project retains the existing Claude launcher contract', async () => {
+  const project = makeProject();
+  try {
+    const r = await runFkit(['wiki', '-p', 'bounded legacy scope'], { project, launcher: join(REPO, 'bin/fkit') });
+    assert.equal(r.code, 0, r.stderr);
+    assert.equal(r.argv[r.argv.indexOf('--agent') + 1], 'fkit-wiki');
+    assert.ok(r.argv.includes('bounded legacy scope'));
+    assert.equal(existsSync(join(project, '.fkit/model-settings.json')), false);
+  } finally { cleanup(project); }
+});
+
+test('configured delegation: fresh peers use their runtime, model and effort and report observed identity separately', async () => {
+  const f = configuredFixture();
+  let child;
+  try {
+    const setup = f.run(['configure', '--runtime-default', '--effort', 'high', '--role-effort', 'coder=low', '--role-runtime', 'wiki=claude', '--role-model', 'wiki=chosen-claude']);
+    assert.equal(setup.status, 0, setup.stderr);
+    child = spawn(process.execPath, [join(REPO, 'codex/server.mjs'), f.root, 'lead', '["lead"]'], { cwd: f.root, env: f.env, stdio: ['pipe', 'pipe', 'pipe'] });
+    child.stderr.resume();
+    const lines = createInterface({ input: child.stdout });
+    const result = await new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(Error('delegation timed out')), 10000);
+      child.on('error', error => { clearTimeout(timer); reject(error); });
+      lines.on('line', line => { const message = JSON.parse(line); if (message.id === 1) { clearTimeout(timer); resolve(message.result); } });
+      child.stdin.write(JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'fkit_consult', arguments: { role: 'wiki', prompt: 'bounded delegated wiki scope' } } }) + '\n');
+    });
+    assert.equal(result.isError, false);
+    const text = result.content[0].text;
+    assert.match(text, /Runtime: claude/);
+    assert.match(text, /Model: observed-claude/);
+    assert.match(text, /Model requested: chosen-claude/);
+    assert.match(text, /fixture-claude:bounded delegated wiki scope/);
+    assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
+    const codexResult = await new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(Error('Codex delegation timed out')), 10000);
+      lines.on('line', line => { const message = JSON.parse(line); if (message.id === 2) { clearTimeout(timer); resolve(message.result); } });
+      child.stdin.write(JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'fkit_consult', arguments: { role: 'coder', prompt: 'bounded delegated coder scope' } } }) + '\n');
+    });
+    assert.equal(codexResult.isError, false);
+    assert.match(codexResult.content[0].text, /fixture-codex:bounded delegated coder scope/);
+    assert.ok(JSON.parse(readFileSync(join(f.root, 'codex-call.json'))).includes('model_reasoning_effort="low"'));
+    assert.ok(!JSON.parse(readFileSync(join(f.root, 'codex-call.json'))).some(arg => arg.startsWith('hooks.') || arg.includes('/codex/hook.mjs')));
+    child.stdin.end();
+    await new Promise(resolve => child.once('close', resolve));
+  } finally { child?.kill('SIGTERM'); f.close(); }
+});
+
+test('public dispatcher: legacy path does not invoke Node from PATH; source checkout self-hosts', () => {
+  const f = configuredFixture();
+  const installRoot = mkdtempSync(join(tmpdir(), 'fkit-dispatch-install-'));
+  const checkout = mkdtempSync(join(tmpdir(), 'fkit-dispatch-checkout-'));
+  try {
+    mkdirSync(join(f.root, 'ai-agents/knowledge-base'), { recursive: true });
+    writeFileSync(join(f.root, 'ai-agents/knowledge-base/PROJECT.md'), '# Initiated fixture\n');
+    writeFileSync(join(f.root, 'bin/node'), '#!/bin/sh\necho forbidden > node-called\nexit 98\n', { mode: 0o755 });
+    const legacy = f.run(['wiki', '-p', 'bounded legacy']);
+    assert.equal(legacy.status, 0, legacy.stderr);
+    assert.equal(existsSync(join(f.root, 'node-called')), false);
+    assert.equal(existsSync(join(f.root, '.fkit/model-settings.json')), false);
+    for (const root of [installRoot, checkout]) {
+      mkdirSync(join(root, 'bin')); mkdirSync(join(root, 'claude')); mkdirSync(join(root, 'codex'));
+      writeFileSync(join(root, 'bin/fkit'), readFileSync(join(REPO, 'bin/fkit')), { mode: 0o755 });
+    }
+    writeFileSync(join(installRoot, 'claude/fkit-claude.sh'), '#!/bin/sh\necho wrong-installed-tree\n');
+    writeFileSync(join(checkout, 'claude/fkit-claude.sh'), '#!/bin/sh\necho checkout-resource-used\n');
+    writeFileSync(join(checkout, 'codex/fkit.mjs'), '// checkout marker\n');
+    const r = spawnSync('sh', [join(installRoot, 'bin/fkit'), 'wiki'], { cwd: checkout, env: { ...process.env, FKIT_NO_SELF_HOST: '0' }, encoding: 'utf8' });
+    assert.equal(r.status, 0, r.stderr);
+    assert.match(r.stdout, /checkout-resource-used/);
+    assert.ok(!r.stdout.includes('wrong-installed-tree'));
+  } finally { f.close(); rmSync(installRoot, { recursive: true, force: true }); rmSync(checkout, { recursive: true, force: true }); }
 });

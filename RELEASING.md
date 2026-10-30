@@ -57,6 +57,28 @@ subscribe — and it is not even a reliable way to go quiet.
 
 ---
 
+### Opt-in previews without shipping to `main`
+
+Use a separate checked-out branch, such as `codex/codex-preview`, and an explicit prerelease version:
+
+```sh
+npm run release -- --version 0.4.0-codex.1 --branch codex/codex-preview
+```
+
+The existing tool accepts that explicit version, runs its normal gates, commits all nonignored
+working-tree changes, and pushes only the checked-out preview branch and version tag. Do not run
+this on `main`: the `--branch` argument is a guard, not a branch switch. Verify remote `main` is
+unchanged afterward. Choose each later preview version explicitly; a default patch bump does not
+increment a prerelease counter. The script creates a Git tag, not a GitHub Release or npm publish.
+
+Default installs keep `FKIT_REF=main`, so they do not receive the preview. An opt-in install can
+track `FKIT_REF=codex/codex-preview`; its saved `.version` makes subsequent `fkit update` follow the
+same branch. Fetch the preview's own installer, as the older `main` installer may not package new
+runtime resources. An exact version tag selects a frozen snapshot, with the tag update-notice
+limitations above. A public preview remains discoverable; opt-in distribution is not privacy.
+
+---
+
 ## 2. What `VERSION` does, and what it does not do
 
 **What it does.** It names the release in the update notice. When an install and the remote report

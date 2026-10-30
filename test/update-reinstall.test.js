@@ -344,18 +344,24 @@ test('0481/old-version-foreign-wrapper: no bin=, default wrapper runs ANOTHER in
 // A tar.gz of CLAUDE_TREE plus a synthetic VERSION, laid out like a codeload tarball (one top dir,
 // which install.sh strips). Built once, with the test process's own tar — not the sealed one.
 let TARBALL = null;
-function tarball() {
-  if (TARBALL) return TARBALL;
+function tarball({ runtime = false, omit = null } = {}) {
+  if (!runtime && TARBALL) return TARBALL;
   const stage = temp('fkit-reinstall-stage-');
   const top = join(stage, 'fkit-test-src');
   mkdirSync(top);
   cpSync(CLAUDE_TREE, join(top, 'claude'), { recursive: true });
+  if (runtime) {
+    cpSync(join(REPO, 'codex'), join(top, 'codex'), { recursive: true });
+    mkdirSync(join(top, 'bin'));
+    cpSync(join(REPO, 'bin/fkit'), join(top, 'bin/fkit'));
+    if (omit) rmSync(join(top, 'codex', omit));
+  }
   writeFileSync(join(top, 'VERSION'), '9.9.8\n');
   const out = join(temp('fkit-reinstall-tgz-'), 'src.tar.gz');
   const r = spawnSync('tar', ['-czf', out, '-C', stage, 'fkit-test-src'],
     { env: { ...process.env, COPYFILE_DISABLE: '1' }, encoding: 'utf8' });
   assert.equal(r.status, 0, `could not build the stub tarball: ${r.stderr}`);
-  TARBALL = out;
+  if (!runtime) TARBALL = out;
   return out;
 }
 
@@ -606,4 +612,46 @@ test('0284/reinstall-timeout-not-run: a timed-out install.sh download fails the 
   assert.equal(r.captured, null, 'the partial install.sh was run');
   assertAsked(r, FAKE_REPO, 'main');
   assertSealed(r, bin);
+});
+
+test('runtime install: packaged dispatcher works with quoted paths and update retains source/paths', () => {
+  const home = temp('fkit-runtime-home-');
+  const share = join(temp('fkit-runtime-share-'), 'share $(echo injected > BAD) "quoted"');
+  const userBin = join(temp('fkit-runtime-bin-'), 'bin "quoted"');
+  const cwd = temp('fkit-runtime-project-');
+  const bin = sealedBin({ curl: CURL_SERVE, installer: true });
+  let r = run(bin, { cmd: ['/bin/sh', INSTALL_SH], home, cwd, env: {
+    FKIT_REPO: FAKE_REPO, FKIT_REF: 'dev', FKIT_SHARE: share, FKIT_BIN: userBin, FKIT_TEST_TARBALL: tarball({ runtime: true }),
+  } });
+  assert.equal(r.code, 0, r.stderr);
+  for (const file of ['codex/server.mjs', 'codex/claude.mjs', 'codex/.fkit-runtime', 'bin/fkit']) assert.ok(existsSync(join(share, file)), file);
+  r = run(bin, { cmd: [join(userBin, 'fkit'), '--help'], home, cwd });
+  assert.equal(r.code, 0, r.stderr);
+  assert.match(r.stdout, /--runtime codex\|claude/);
+  assert.equal(existsSync(join(cwd, 'BAD')), false);
+  r = run(bin, { cmd: [join(userBin, 'fkit'), 'update'], home, cwd });
+  assert.equal(r.code, 0, r.stderr);
+  assert.deepEqual(r.captured, { REPO: FAKE_REPO, REF: 'dev', SHARE: share, BIN: userBin });
+  assertSealed(r, bin);
+});
+
+test('runtime install: incomplete package and unowned runtime refuse before installed files change', () => {
+  for (const unowned of [false, true]) {
+    const home = temp('fkit-runtime-refuse-home-');
+    const share = temp('fkit-runtime-refuse-share-');
+    mkdirSync(join(share, 'claude'));
+    writeFileSync(join(share, 'claude/owner.txt'), 'preserve legacy tree');
+    if (unowned) { mkdirSync(join(share, 'codex')); writeFileSync(join(share, 'codex/owner.txt'), 'preserve unowned runtime'); }
+    const bin = sealedBin({ curl: CURL_SERVE, installer: true });
+    const r = run(bin, { cmd: ['/bin/sh', INSTALL_SH], home, env: {
+      FKIT_REPO: FAKE_REPO, FKIT_REF: 'dev', FKIT_SHARE: share, FKIT_BIN: temp('fkit-runtime-refuse-bin-'),
+      FKIT_TEST_TARBALL: tarball({ runtime: true, omit: unowned ? null : 'server.mjs' }),
+    } });
+    assert.equal(r.code, 1);
+    assert.match(r.stderr, unowned ? /refusing to replace unowned runtime/ : /runtime package is incomplete/);
+    assert.equal(readFileSync(join(share, 'claude/owner.txt'), 'utf8'), 'preserve legacy tree');
+    if (unowned) assert.equal(readFileSync(join(share, 'codex/owner.txt'), 'utf8'), 'preserve unowned runtime');
+    assert.equal(existsSync(join(share, '.version')), false);
+    assertSealed(r, bin);
+  }
 });

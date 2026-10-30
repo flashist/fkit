@@ -37,6 +37,9 @@
   lists, plus one cite correction below **§Amendment → A2**'s paragraph *"ADR-019's audit obligation
   transfers with its permission"*. The count in the `0473` line is left byte-identical and is
   superseded by this line; the same append-only rule and the same legend apply.
+  ⚠️ 2026-10-30 (`0545`) — this ADR now carries **six** dated notes; the sixth follows Decision 7
+  and also covers §Amendment A3. Earlier counts remain byte-identical; the same append-only rule and
+  marker legend apply.
 - **Evidence:** [`reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md`](../reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md)
   §5 (the contract), §5.3 (the live-relay gate), §5.4 (stop conditions).
 
@@ -153,6 +156,19 @@ its first named application: a loop that ships a whole sprint. Two constraints s
 7. **The plan/build split is mandatory** — it is the only thing standing in for plan mode's write-wall
    on this path (ADR-031's honesty clause). The "plan only, write nothing yet" worker prompt is
    **prose-enforced**, and that limit is accepted, not hidden.
+
+   > ⚠️ **Dated wording note 2026-10-30 (`0545`) — this also qualifies §Amendment A3's “real session
+   > write-wall” and “old way” claims.** Historical Claude headless tests refused `Write` outside
+   > the plan file but allowed Bash writes; `Edit` was not directly tested. Interactive models
+   > declined writes before runtime handling could be tested: 3m declined twice; 3m-bis was not
+   > triggered/not applicable. Neither is a pass. With plan review on (the `fkit coder` default),
+   > drafting and review precede native Claude plan mode, which covers only approval; `fkit coder
+   > --no-plan-review` + `/fkit-task-ship-loop` keeps native plan mode from the start. This evidence
+   > establishes no structural Bash guard for either path. Codex planning/write limits remain
+   > instruction-enforced, both fkit hooks disabled. The mandatory split, A3's trust-not-proof cost
+   > and A4's re-raise rules remain unchanged. Status stays `accepted`. Existing ADR text remains
+   > byte-identical. Wording checked against current canonical procedures and retained evidence on
+   > 2026-10-30; no new plan-mode runtime test ran.
 
 8. **Stop-hook interaction.** When [ADR-030](adr-030-stop-hook-enforces-turn-completion-contract.md)'s
    `Stop` hook is built, `fkit-sprint-ship-loop` **joins `/fkit-task-ship-loop` in its Decision-7 skip

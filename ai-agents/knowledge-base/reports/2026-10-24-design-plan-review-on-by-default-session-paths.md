@@ -1293,3 +1293,29 @@ answer in §10.1 (option A), which is kept there as the record of its date.
 - **Wiki:** **fkit-wiki** should ingest this report and ADR-060, and re-ingest ADR-056 and ADR-059.
   *(2026-10-26: also re-ingest ADR-019.)*
   The architect does not write the vault.
+
+
+## 2026-10-30: 0543 Codex-only acceptance
+
+> ⛔ **Dated acceptance-scope amendment, 2026-10-30.** Read this report's build-1
+> live-check requirements (§4.1, §4.3, §7 and §12) through the owner's later
+> **Codex-only** acceptance. All preceding bytes, including headings, status,
+> historical probe results and owner answers, are left byte-identical.
+
+The authoritative addition is
+[ADR-060, “2026-10-30: 0543 Codex-only acceptance”](../decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md#2026-10-30-0543-codex-only-acceptance).
+It records the actual human owner's exact question and selected answer, desktop
+chat `request_user_input_async` channel, date `2026-10-30` and recorded timestamp;
+the exact accepted proposal C1–C5; the October 27 personal-live-check hold replaced
+for Codex completion only; retained synthetic-test/same-model/instruction-only
+limits and disabled Codex hooks; the separate unverified Claude/native human UI
+checklist and its tracking; and producer-only closure followed by `0544` planning,
+with implementation still requiring its own plan approval. These are deliberately
+not restated here, so there is one place to keep true rather than two.
+
+Verified against the accepted proposal, acceptance-review and verification summary
+on 2026-10-30; this is documentary verification, not a new runtime test or review.
+This does not certify the original Claude live checks or complete Codex native
+human UI approval/rejection. `0543` producer closure remains pending: no task or
+sprint status is changed by this report addition. This run changes only this
+report and ADR-060 by EOF appends; it performs no closure or `0544` planning.

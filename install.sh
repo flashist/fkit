@@ -11,7 +11,7 @@
 # script with the source and paths recorded in .version, and a normal `fkit` does a throttled check and
 # tells you when a newer version is published. It never updates itself behind your back.
 #
-# fkit runs on Claude Code (required) + Codex (optional but recommended: the reviewer's 2nd opinion).
+# Unconfigured projects retain Claude; configured projects select Claude or Codex.
 # Overrides: FKIT_REPO (default flashist/fkit), FKIT_REF (default main), FKIT_SHARE, FKIT_BIN.
 set -eu
 
@@ -19,6 +19,8 @@ REPO="${FKIT_REPO:-flashist/fkit}"
 REF="${FKIT_REF:-main}"
 SHARE="${FKIT_SHARE:-$HOME/.local/share/fkit}"
 BIN="${FKIT_BIN:-$HOME/.local/bin}"
+case "$SHARE$BIN$REPO$REF" in *'
+'*) echo 'error: install paths and source names must not contain newlines' >&2; exit 1 ;; esac
 
 for b in curl tar; do
   command -v "$b" >/dev/null 2>&1 || { echo "error: '$b' is required but not found on PATH" >&2; exit 1; }
@@ -35,15 +37,37 @@ if [ ! -f "$TMP/src/claude/fkit-claude.sh" ]; then
   echo "error: fetched $REPO@$REF but it has no claude/fkit-claude.sh — wrong ref, or not pushed yet." >&2
   exit 1
 fi
+if [ -f "$TMP/src/codex/fkit.mjs" ]; then
+  [ -f "$TMP/src/bin/fkit" ] || { echo 'error: fetched runtime package is incomplete' >&2; exit 1; }
+  for module in fkit settings materialize models server consult owner-question hook diagnostics claude; do
+    [ -f "$TMP/src/codex/$module.mjs" ] || { echo "error: fetched runtime package is incomplete: $module" >&2; exit 1; }
+  done
+  if { [ -e "$SHARE/codex" ] || [ -L "$SHARE/codex" ]; } && [ ! -f "$SHARE/codex/.fkit-runtime" ]; then
+    echo "error: refusing to replace unowned runtime directory: $SHARE/codex" >&2; exit 1
+  fi
+  if { [ -e "$SHARE/bin/fkit" ] || [ -L "$SHARE/bin/fkit" ]; } && [ "$(sed -n '2p' "$SHARE/bin/fkit")" != '# fkit-runtime-dispatch' ]; then
+    echo "error: refusing to replace unowned dispatcher: $SHARE/bin/fkit" >&2; exit 1
+  fi
+fi
 
 # 1. install the resources (agents, skills, scaffold, launcher, init) into the share dir
 echo "Installing fkit resources → $SHARE/claude"
 mkdir -p "$SHARE"
+SHARE="$(CDPATH= cd -- "$SHARE" && pwd)"
 rm -rf "$SHARE/claude"
 cp -R "$TMP/src/claude" "$SHARE/claude"
 for s in fkit-claude.sh fkit-claude-init.sh; do
   [ -f "$SHARE/claude/$s" ] && chmod +x "$SHARE/claude/$s"
 done
+if [ -f "$SHARE/codex/.fkit-runtime" ]; then rm -rf "$SHARE/codex"; fi
+if [ -f "$SHARE/bin/fkit" ] && [ "$(sed -n '2p' "$SHARE/bin/fkit")" = '# fkit-runtime-dispatch' ]; then rm -f "$SHARE/bin/fkit"; fi
+if [ -f "$TMP/src/codex/fkit.mjs" ]; then
+  cp -R "$TMP/src/codex" "$SHARE/codex"
+  printf '%s\n' 'fkit managed runtime resources' > "$SHARE/codex/.fkit-runtime"
+  mkdir -p "$SHARE/bin"
+  cp "$TMP/src/bin/fkit" "$SHARE/bin/fkit"
+  chmod +x "$SHARE/bin/fkit"
+fi
 # Remove the retired Omnigent flavor from any pre-existing install (ADR-009). This is what makes an
 # upgrade from an older fkit clean rather than leaving a dead runtime behind on disk.
 rm -rf "$SHARE/omnigent"
@@ -85,13 +109,15 @@ BIN="$(CDPATH= cd -- "$BIN" && pwd)"
 rm -f "$SHARE/.update-check" "$SHARE/.latest" 2>/dev/null || true   # fresh throttle + clear stale "newer" cache
 echo "✓ Installed fkit v${ver:-?} ($(printf %s "${sha:-unknown}" | cut -c1-7))"
 
-# 2. install the global `fkit` launcher (a thin wrapper that execs the installed launcher)
-#    One runtime, so this is a direct exec — no flavor dispatch. `update` is NOT intercepted here:
-#    it falls through to fkit-claude.sh, which owns self-update (ADR-009 §3).
+# Keep the legacy exec fallback so older refs and update provenance remain readable.
 #    The "Reinstall:" hint puts the variables AFTER the pipe, on the `sh` that runs the installer, so a
 #    reinstall keeps this install's source and paths (task 0481). Known limit: a path containing `'`
 #    breaks the printed command (and one with `"` or `$` already breaks the `exec` line below).
 mkdir -p "$BIN"
+SHARE_Q="$(printf %s "$SHARE" | sed 's/[\\$`"\\]/\\&/g')"
+BIN_Q="$(printf %s "$BIN" | sed 's/[\\$`"\\]/\\&/g')"
+REPO_Q="$(printf %s "$REPO" | sed 's/[\\$`"\\]/\\&/g')"
+REF_Q="$(printf %s "$REF" | sed 's/[\\$`"\\]/\\&/g')"
 cat > "$BIN/fkit" <<EOF
 #!/bin/sh
 # fkit — run the fkit agent team in the current project. Resources: $SHARE
@@ -102,20 +128,20 @@ cat > "$BIN/fkit" <<EOF
 # silently passing them through to claude as a stray argument, which is a confusing no-op.
 case "\${1:-}" in
   omnigent|claude)
-    echo "fkit: '\$1' is gone — fkit now has a single runtime (Claude Code + Codex)." >&2
-    echo "      Just run:  fkit           …or:  fkit <role>" >&2
+    echo "fkit: '\$1' is gone as a subcommand. Use --runtime codex or --runtime claude." >&2
     exit 1 ;;
   reconnect|restart-team)
     echo "fkit: '\$1' is gone — it only ever worked around Omnigent orchestration failures." >&2
     echo "      A role session is just:  fkit <role>" >&2
     exit 1 ;;
 esac
-[ -x "$SHARE/claude/fkit-claude.sh" ] || {
-  echo "fkit: install looks broken — $SHARE/claude/fkit-claude.sh is missing." >&2
-  echo "      Reinstall:  curl -fsSL https://raw.githubusercontent.com/$REPO/$REF/install.sh | FKIT_REPO=$REPO FKIT_REF=$REF FKIT_SHARE='$SHARE' FKIT_BIN='$BIN' sh" >&2
+if [ -x "$SHARE_Q/bin/fkit" ]; then exec "$SHARE_Q/bin/fkit" "\$@"; fi
+[ -x "$SHARE_Q/claude/fkit-claude.sh" ] || {
+  echo "fkit: install looks broken — $SHARE_Q/claude/fkit-claude.sh is missing." >&2
+  echo "      Reinstall:  curl -fsSL https://raw.githubusercontent.com/$REPO_Q/$REF_Q/install.sh | FKIT_REPO=$REPO_Q FKIT_REF=$REF_Q FKIT_SHARE='$SHARE_Q' FKIT_BIN='$BIN_Q' sh" >&2
   exit 1
 }
-exec "$SHARE/claude/fkit-claude.sh" "\$@"
+exec "$SHARE_Q/claude/fkit-claude.sh" "\$@"
 EOF
 chmod +x "$BIN/fkit"
 echo "✓ Installed  $BIN/fkit"
@@ -134,21 +160,19 @@ case ":$PATH:" in
     ;;
 esac
 
-# 4. Prerequisites. Claude Code is the runtime (required); Codex is optional but recommended — it makes
-#    the reviewer's second opinion an actually-independent one. Both are checked again (more precisely)
-#    at every `fkit` launch — this is the first-run heads-up. Node.js is needed by `fkit board` alone.
-#    None of these blocks the install.
+# Installation never chooses a runtime or changes CLI authentication.
 if ! command -v claude >/dev/null 2>&1; then
   echo
-  echo "⚠ Required: Claude Code — install from https://claude.com/claude-code"
+  echo "Claude Code is unavailable. Legacy sessions need it: https://claude.com/claude-code"
+  echo "For Codex instead, install Node.js/Codex and run: fkit configure --runtime codex --runtime-default"
 fi
 if ! command -v codex >/dev/null 2>&1; then
   echo
-  echo "⚠ Recommended (optional): Codex — it gives the reviewer an independent second opinion from a"
-  echo "  different model. Without it, reviews fall back to Claude only, flagged NOT model-diverse."
+  echo "Codex is needed for Codex-selected roles; optional but recommended for legacy Claude review."
   echo "    npm install -g @openai/codex   &&   codex login"
 fi
 if ! command -v node >/dev/null 2>&1; then
   echo
-  echo "Optional: Node.js — only \`fkit board\` needs it (https://nodejs.org)."
+  echo "Node.js is needed for configuration, configured runtimes and fkit board: https://nodejs.org"
+  echo "Unconfigured legacy Claude sessions still work without it."
 fi

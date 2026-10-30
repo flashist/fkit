@@ -158,3 +158,5 @@ only a mid-session outage.
   requirement).
 - Code (behaviour unchanged by this ADR): `codex_preflight` in `claude/fkit-claude.sh`;
   `claude/skills/fkit-adversarial-review/SKILL.md`; `claude/skills/fkit-review/SKILL.md`; `install.sh`.
+
+> ⛔ **Dated amendment 2026-10-29 — [ADR-061](adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) adds Codex as a full seven-role runtime.** The Claude-only fallback semantics recorded here remain applicable to legacy Claude operation. For Codex operation, a separate same-model adversarial pass is usable when it actually completes, with visible diversity disclosure; missing or unusable passes remain partial. Follow ADR-061 for those runtime-specific rules and its open public integration details. The text above is **left byte-identical**. **Status stays `accepted`.**

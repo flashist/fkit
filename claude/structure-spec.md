@@ -38,6 +38,13 @@ IS the co-location. Do not add one.
 
 ## The six classes
 
+Configured runtimes also generate owned `.agents/skills/fkit-*/` procedures and keep local choices
+in ignored `.fkit/model-settings.json`. These are runtime resources outside the scaffold inventory
+below: the launcher refreshes only positively owned fkit skills, and heal never replaces model
+settings. Shared policy, scaffold, spec and manifest remain under `claude/`, shipped beside the
+configured runtime modules. Codex setup retains `.claude/` payloads so existing board/heal discovery
+continues to resolve the same canonical helpers without requiring a Claude executable.
+
 Check and repair semantics differ **by class**, so every path in the inventory declares one. The
 table is the design's own (report §4), carried faithfully:
 

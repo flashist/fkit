@@ -1,7 +1,9 @@
 {
   "name": "fkit",
-  "version": "0.3.2",
+  "version": "0.4.0-codex.1",
   "scripts": {
+    "start": "sh bin/fkit",
+    "codex": "node codex/fkit.mjs",
     "test": "node --test test/*.test.js test/board/*.test.js",
     "test:unit": "node --test test/*.test.js test/board/*.test.js",
     "test:prove-red": "bash test/prove-red.sh",
@@ -14,7 +16,7 @@
     "release:major": "node bin/release.mjs --major",
     "release:dry": "node bin/release.mjs --dry-run"
   },
-  "description": "A Claude Code agent team for software projects: seven roles — lead, producer, coder, reviewer, adversarial-reviewer, architect, and wiki — in role-locked sessions with scoped skills, plus a project scaffold. Reviews get an independent second opinion from Codex.",
+  "description": "Seven role-scoped software agents on Claude Code or Codex, with project/per-role runtime and model settings, independent review, and a shared project scaffold.",
   "license": "MIT",
   "author": "flashist",
   "repository": {

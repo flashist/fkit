@@ -11,6 +11,13 @@ The full project brief — domain, architecture, conventions — lives in
 
 ## The fkit agent team
 
+**Configured sessions:** fkit also supports project/per-role Codex or Claude choices. Follow the
+launcher-provided runtime binding for owned procedure loading, fresh peer contexts and owner
+questions. It states the actual controls: Codex planning/general role writes remain instructional,
+optional hooks require trust, and same-model review is supported with visible diversity disclosure.
+The native-tool examples below describe the legacy unconfigured Claude path; do not treat them as
+controls active in every configured runtime. No unavailable model/runtime selection permits fallback.
+
 This project uses **fkit**, a team of role-scoped AI dev agents coordinating over the `ai-agents/`
 file tree. **Every fkit session is locked to exactly one role** (`claude --agent fkit-<role>`, with
 every other role's skills denied on invocation by a `PreToolUse` hook — see below). Running

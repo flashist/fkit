@@ -11,6 +11,42 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes �
 
 ## Unreleased
 
+## v0.4.0-codex.1 — 2026-10-30
+
+- Opt-in Codex preview `v0.4.0-codex.1`: install with `FKIT_REF=codex/codex-preview` to follow the
+  preview branch, or explicitly select the version tag to stay on this snapshot. Default installs
+  and updates continue to track `main`; this preview does not certify live Claude/mixed workflows.
+
+- Clarify planning limits without changing behavior: historical Claude headless Write refusal does
+  not establish Edit or interactive runtime handling or a Bash write-wall. Native plan-mode timing
+  still follows plan-review opt-outs; Codex planning/write limits remain instruction-enforced.
+
+- `/fkit-task-ship-loop` now forwards plan-review opt-outs, shows the full default-ON review at its
+  single plan gate, and saves `plan-review.md` only after approval. Use `--no-plan-review` for one
+  loop or `fkit coder --no-plan-review` for the session.
+
+- Codex owner questions no longer include an optional comment field that can prevent submission
+  when blank. Listed choices submit directly; “Write another answer” opens a separate text form.
+  Cancelling or leaving a custom answer empty grants no approval.
+
+- Interactive Codex role sessions now start with their existing role greeting/orientation instead
+  of opening on an empty input. Startup uses the canonical role prompt; supplied tasks and fresh
+  project onboarding keep their own prompts. Both Codex hooks remain disabled.
+
+- First Codex version leaves fkit PreToolUse and Stop hooks disabled. Their code is retained for
+  later evaluation; role/model/effort routing and written agent rules remain in place. Restart an
+  existing session to drop the old session hooks. Legacy Claude hooks are unchanged.
+
+- Configured CLI runtimes: opt in to a full seven-role Codex team, save project/per-role models,
+  and select Claude/Codex per role through the shared dispatcher. Unconfigured projects keep the
+  legacy Claude path. New configuration and configured sessions require Node.js; existing legacy
+  Claude sessions do not. Codex planning/general role-write limits are explicit in ADR-061.
+  **Live Claude compatibility remains unverified; this is a Codex-only local preview.**
+  Installer/update/self-host resources and behavior checks are included.
+- Codex configuration now asks for reasoning effort after model selection, with model-specific
+  choices and per-role overrides. `configure --effort` / `--role-effort` change saved choices;
+  `settings` shows effective effort. Existing profiles keep their current behavior.
+
 - `fkit coder` sessions now do plan review by default too: `/fkit-plan-task` drafts the plan, has
   agents approve it and Codex attack it, then shows it to you with the review record. The draft and
   review run with plan mode off (only the coder's instructions stop a write in that stretch, ~17 min);

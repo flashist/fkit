@@ -50,8 +50,15 @@ variant ([`conventions/one-skill-one-output.md`](../../../ai-agents/knowledge-ba
 1. **Enter plan mode.** *(Skipped when session plan review is on — step 0.)* Use the
    **`EnterPlanMode`** tool to switch this run into plan mode, and state
    clearly that it is planning-only — no code will be written, and no files edited, until the plan is
-   approved. Plan mode makes that a **wall the runtime enforces**, not a promise: `Write` and `Edit`
-   are refused for the duration.
+   approved. Historical Claude headless tests refused `Write` outside the plan file in native plan mode but
+   allowed Bash writes; `Edit` was not directly tested. Interactive models declined writes before
+   runtime handling could be tested. Bash restraint therefore depends on the model following its
+   planning instructions in the demonstrated headless path; make no Bash call that writes. With
+   session plan review on, step 0 skips this step: drafting and review precede native plan mode,
+   which covers only approval. With `--no-plan-review`, native plan mode starts before drafting. On
+   Codex follow the runtime binding's instruction-enforced planning/approval gate; do not claim a
+   Write/Edit tool wall, structural Bash guard, Enter/ExitPlanMode transition or Shift+Tab
+   requirement.
 
    **If the tool is unavailable** (you are a *spawned* `fkit-coder` consult rather than a
    `fkit coder` session, so the runtime never granted it): do **not** error out. Fall back to the

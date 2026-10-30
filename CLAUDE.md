@@ -10,7 +10,13 @@ operating on a shared `ai-agents/` working structure inside a consuming project.
 sandboxed e2e tester, is authorized ([ADR-028](ai-agents/knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
 but **not yet built** — the team is seven today.
 
-**One runtime: Claude Code native + Codex**
+**Runtime update — 2026-10-29:** [ADR-061](ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md)
+accepts Codex for all seven roles with explicit local limits. `bin/fkit` adds saved runtime/model
+selection and mixed-role routing; unconfigured projects retain the legacy Claude launcher.
+Codex task/sprint checks passed; configured Claude compatibility remains unverified. Read
+[`codex/README.md`](codex/README.md) and the current migration handoff for this path.
+
+**Legacy runtime: Claude Code native + Codex**
 ([`ADR-009`](ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)).
 The agents are Claude Code subagents (`claude/agents/fkit-*.md`) and `/fkit-*` skills
 (`claude/skills/`); the `fkit` launcher (`claude/fkit-claude.sh`) opens a **role-locked session**.

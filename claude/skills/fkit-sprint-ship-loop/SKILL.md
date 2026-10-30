@@ -65,10 +65,15 @@ same output looks* — a parameter of the work, not an output variant.
 
 ## ⚠️ The plan-gate honesty clause — read before the loop, do not "fix" it away
 
-On this orchestrated path, **"no code before the owner approves the plan" is prose-enforced in the worker
-prompt, NOT a runtime write-wall.** Plan mode — the coder session's structural write-wall and ADR-019's
-one unremovable checkpoint — **cannot run in a spawned worker** (no owner channel there, ADR-021). So the
-driver enforces the ordering by **splitting** it:
+On this orchestrated path, **“no code before the owner approves the plan” is prose-enforced in the
+worker prompt, NOT a runtime write-wall.** Native Claude plan mode cannot supply the interactive
+owner gate in a spawned worker (no owner channel there, ADR-021). Historical Claude headless tests
+refused `Write` outside the plan file but allowed Bash writes; `Edit` was not directly tested;
+interactive models declined writes before runtime handling could be tested. With plan review on (the
+`fkit coder` default), drafting and review precede native plan mode, which covers only approval;
+`--no-plan-review` keeps native plan mode from the start. Codex planning/write limits remain
+instruction-enforced on both paths. ADR-019's plan approval remains the one unremovable checkpoint.
+The driver enforces the ordering by **splitting** it:
 
 1. spawn `@fkit-coder` **for the plan only** — prompt: *"produce a plan with `/fkit-plan-task`, write no
    source, return the plan and any open questions"*;
@@ -78,8 +83,9 @@ driver enforces the ordering by **splitting** it:
 The "write nothing yet" in step 1 is a **prompt instruction, not a wall** — a confused or injected worker
 could write before approval and nothing structural stops it. **This is stated plainly and accepted by the
 owner (2026-07-22, ADR-031 honesty clause / ADR-032 Decision 7).** A later reader — human or coder —
-**must not** rewrite this into a false structural guarantee. Owners who want plan mode's structural wall
-for a given task ship it the old way: `fkit coder --no-plan-review` + `/fkit-task-ship-loop`.
+**must not** rewrite this into a false structural guarantee. Owners who want native Claude plan mode from the start of planning use `fkit coder --no-plan-review` +
+`/fkit-task-ship-loop`; its demonstrated limits above still apply, and this provides no structural
+planning/write wall on Codex.
 
 ---
 
@@ -267,8 +273,9 @@ at, and a `PreToolUse` carry-check needs one at spawn time.
   **This construction
   narrows the hazard; it does not remove it** (ADR-031 honesty clause; `0162` §9).
 
-- **The plan/build split (honesty clause) is mandatory** — it is the only thing standing in for plan
-  mode's write-wall on this path.
+- **The plan/build split (honesty clause) is mandatory** — on this orchestrated path, instructions
+  enforce approval before source writes; the honesty clause states the historical native-Claude
+  limits and Codex's instruction-enforced planning gate.
 - **The Process-review worker applies fixes on ADR-019's discipline under the declared-approval marker,
   bounded by the approved plan** — verified-`CORRECT`, mechanical/localized, in-plan fixes proceed without
   per-fix owner approval (a second exception to the per-round gate, `fkit-coder.md`); every judgment call
@@ -497,7 +504,7 @@ told of, say so the same way (step 1) before the next spawn.
   breaks the separation-of-authority thesis (ADR-031 Decision 2).
 - **Spawn typed `fkit-<role>` subagents only** — never a generic helper for a step that runs an fkit skill.
 - **The plan/build split is mandatory** and its gate is **prose-enforced, not structural** (honesty
-  clause) — do not present it as plan mode's write-wall.
+  clause) — do not present it as a runtime write-wall.
 - **Never instruct into the territory of a rule in the skill a worker will run without naming the owner
   ruling you relay** (ADR-037 §3 — the driver-side half of the owner's Q2 ruling; this ADR binds the
   driver, not only the worker). Exactly one of three is permitted:

@@ -9,10 +9,12 @@ fkit is a **team of seven role-scoped AI agents for software development** — a
 reviewer (with an adversarial second opinion), an architect, a wiki librarian, and an orchestrating lead —
 operating on a shared `ai-agents/` working structure inside a consuming project. An **eighth** role, a
 sandboxed e2e tester, is authorized ([ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
-but **not yet built** — the team is seven today. It runs on **one
-runtime: Claude Code native + Codex** (see
-[`ADR-009`](decisions/adr-009-claude-code-native-is-the-only-runtime.md)), as custom subagents and
-`/fkit-*` skills under `claude/`. This repository *is* the framework: it dogfoods itself (its own
+but **not yet built** — the team is seven today. The legacy path runs on Claude Code native + Codex;
+[ADR-061](decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) adds
+Codex as a full seven-role runtime with explicit local limits. `bin/fkit` selects saved runtime/model
+choices for configured projects and preserves legacy behavior otherwise. Shared policy remains
+under `claude/`; configured runtime adapters live under `codex/`. Live Codex task/sprint checks passed;
+real Claude compatibility and release certification remain pending. This repository *is* the framework: it dogfoods itself (its own
 `ai-agents/` tree is the one you're reading right now). It's built for software developers, vibe
 coders, and anyone using AI to build software, who want a structured multi-agent workflow instead of
 one undifferentiated coding assistant.
@@ -85,13 +87,14 @@ concerns, and identified risks — is in
   longer breadth-constrained** — it grows when a capability gap justifies a new role, and the eighth (a
   sandboxed e2e tester) is authorized in
   [`ADR-028`](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md) but not yet built.
-- **Single runtime: Claude Code native + Codex** (per
+- **Legacy runtime: Claude Code native + Codex** (per
   [`ADR-009`](decisions/adr-009-claude-code-native-is-the-only-runtime.md), which **removed** the
-  Omnigent flavor and supersedes ADR-008's dual-runtime decision). No second runtime is maintained and
-  no third is targeted. **Codex is optional but recommended** — it is what makes the reviewer's second
+  Omnigent flavor and supersedes ADR-008's dual-runtime decision; amended by ADR-061 for the configured
+  Codex path). Direct provider APIs and further runtimes remain outside this migration. On legacy
+  Claude, **Codex is optional but recommended** — it is what makes the reviewer's second
   opinion genuinely model-diverse; without it, that opinion falls back to Claude only, loudly flagged as
   not model-diverse ([`ADR-054`](decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md), amending ADR-009 §2).
-- **Role boundaries: structural in a session and in a consult; the rest is prompt-enforced.** Per
+- **Legacy Claude role boundaries: structural in a session and in a consult; the rest is prompt-enforced.** Per
   [`ADR-010`](decisions/adr-010-role-locked-sessions-and-skill-lockdown.md), a `fkit <role>` session
   is locked by the harness — a `PreToolUse` skill-ownership hook that denies every non-owned `/fkit-*`
   skill on invocation, visible in the menu but unrunnable (plus, for the adversarial reviewer alone, a `tools:` wall — the per-role tool allowlist

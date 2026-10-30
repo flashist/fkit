@@ -431,3 +431,5 @@ same four.
 > 2026-08-11 correction-note heading, `0394`'s the *"Historical ADRs"* bullet). A note beside the
 > bullet, or a header bullet, would move them. A recorded departure from the form. **Status stays
 > `accepted`.**
+
+> ⛔ **Dated amendment 2026-10-29 — [ADR-061](adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) extends D1's reporting contract for the full Codex runtime.** Report second-pass availability, observed model identity/diversity, and actual execution evidence as separate facts; a usable same-model pass is supported with a visible recommendation for a different model, while an unusable/missing pass remains partial. Do not describe a same-model pass as model-diverse. **D2 is not overturned:** the live adversarial role remains read-only while task `0273` is unresolved; this ADR-061 decision does not discharge that task. The text above is **left byte-identical**. **Status stays `accepted`.**

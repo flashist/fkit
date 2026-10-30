@@ -423,3 +423,5 @@ the drift class this project keeps paying for.
 > left byte-identical. Its other bullets are not affected by that ruling, and were not re-verified by
 > `0393`.
 </content>
+
+> ⛔ **Dated amendment 2026-10-29 — [ADR-061](adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) adds Codex role sessions.** The Claude launcher/tool-allowlist mechanisms described in this ADR do not describe Codex enforcement. Codex uses a fresh CLI process per role and the session-scoped dispatcher; its general write/planning limits remain instruction-enforced, and procedure ownership is checked at dispatcher invocation. Manual shell reads/execution remain outside that boundary. Follow ADR-061 for the Codex runtime. This does not reverse this ADR's Claude role-lock decision. The text above is **left byte-identical**. **Status stays `accepted`.**

@@ -24,6 +24,9 @@
   dated notes. The third is a second note below **§Decision item 2**, after the `0473` note. The text
   above is left byte-identical, and its count (**two**) is superseded by this line; the same
   append-only rule and the same legend apply.
+  ⚠️ 2026-10-30 (`0545`) — this ADR now carries **four** dated notes; the fourth follows Decision
+  2's 2026-10-26 note and qualifies the write-wall evidence. The earlier count is left
+  byte-identical and superseded by this line; the same append-only rule and marker legend apply.
 
 ## Context
 
@@ -109,6 +112,17 @@ owner-only done-gate. It never moves a task file.**
    >   point here, not restate this.
    >
    > **Status stays `accepted`.**
+
+   > ⚠️ **Dated wording note 2026-10-30 (`0545`) — the runtime claim is narrower than a full
+   > write-wall.** Historical Claude headless tests refused `Write` outside the plan file but
+   > allowed Bash writes; `Edit` was not directly tested. Interactive models declined writes before
+   > runtime handling could be tested: 3m declined twice; 3m-bis was not triggered/not applicable.
+   > Neither is a pass. For native plan-mode timing, read the 2026-10-26 note immediately above; it
+   > is not restated here. On Codex planning/write limits are instruction-enforced, with both fkit
+   > hooks disabled; no native transition or structural Bash guard is promised. This corrects the
+   > mechanism wording only; the approval-before-code decision and accepted status remain unchanged.
+   > Existing ADR text remains byte-identical. Wording checked against current canonical procedures
+   > and retained evidence on 2026-10-30; no new plan-mode runtime test ran.
 
 3. **"Walk away" is ordinary in-session turn-taking, not background delegation.** The loop stays a
    `fkit coder` **session** with the owner reachable; between gates it proceeds without waiting, and at

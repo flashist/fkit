@@ -11,14 +11,20 @@ project. An **eighth** role, a sandboxed e2e tester, is authorized ([ADR-028](ai
 but **not yet built** — the team is seven today. It's built for software developers, vibe coders, and anyone using AI to build software who
 wants a structured multi-agent workflow instead of one undifferentiated coding assistant.
 
-**One runtime: Claude Code native + Codex** ([`ADR-009`](ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)).
+**Runtime update — 2026-10-29:** [ADR-061](ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md)
+accepts Codex for all seven roles with explicit local limits. `bin/fkit` adds saved runtime/model
+selection and mixed-role routing; unconfigured projects retain the legacy Claude launcher.
+Codex task/sprint checks passed; configured Claude compatibility remains unverified. Read
+[`codex/README.md`](codex/README.md) and the current migration handoff before reasoning about this path.
+
+**Legacy runtime: Claude Code native + Codex** ([`ADR-009`](ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md), amended by ADR-061).
 Agents are Claude Code subagents (`claude/agents/fkit-*.md`) and `/fkit-*` skills
 (`claude/skills/`); the `fkit` launcher opens a **role-locked session** per
 [`ADR-010`](ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md).
 fkit previously ran on Omnigent; that runtime was removed in Sprint 2 — see ADR-009. Don't reason
 from it.
 
-**You (Codex) are the adversarial second opinion.** The reviewer runs its own Claude pass and then
+**On the legacy path, Codex is the adversarial second opinion.** The reviewer runs its own Claude pass and then
 shells out to `codex exec` for an independent hostile pass. That independence is the entire point: a
 "second opinion" from the same model that wrote the code is not a second opinion, it is the illusion
 of one. If Codex is unreachable the review is emitted as a **loudly-flagged partial**, never as a

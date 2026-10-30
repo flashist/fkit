@@ -96,7 +96,7 @@ _fkit_reinstall() {   # run the canonical installer for $repo@$ref into $fkit_sh
 }
 _fkit_wrapper_share() {   # <bin-dir> → the install root its `fkit` wrapper execs, or empty
   [ -f "$1/fkit" ] || return 0
-  sed -n 's|^exec "\(.*\)/claude/fkit-claude\.sh" "\$@"$|\1|p' "$1/fkit" | head -1
+  sed -n 's|^exec "\(.*\)/claude/fkit-claude\.sh" "\$@"$|\1|p' "$1/fkit" | sed 's/\\\([$`"\\]\)/\1/g' | head -1
 }
 _fkit_same_dir() {   # <a> <b> → true if both are directories with the same physical path
   [ -d "$1" ] && [ -d "$2" ] && [ "$(cd "$1" && pwd -P)" = "$(cd "$2" && pwd -P)" ]
@@ -189,6 +189,9 @@ if [ "${FKIT_NO_UPDATE_CHECK:-0}" != 1 ] && ! _fkit_is_source_checkout; then
     fi
   fi
 fi
+
+# Configured runtimes share update notifications without requiring a Claude session.
+[ "${FKIT_MANAGEMENT_ONLY:-0}" != 1 ] || exit 0
 
 case "${1:-}" in
   -h|--help)

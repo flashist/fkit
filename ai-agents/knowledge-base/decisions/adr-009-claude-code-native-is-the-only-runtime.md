@@ -181,3 +181,5 @@ not merely moved — which makes it a design decision inside this one (see ADR �
 > **Status stays `accepted`.**
 
 </content>
+
+> ⛔ **Dated amendment 2026-10-29 — [ADR-061](adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) reverses the single-runtime constraint.** Codex CLI is now an accepted full runtime for all seven roles alongside Claude, subject to ADR-061's explicit local limits and unresolved public compatibility details. Do not follow this ADR's title or Decision 1 claim that Claude is fkit's only runtime. **Not overturned:** Omnigent remains retired; Decisions 3–5 and the remaining historical rationale stand. The text above is **left byte-identical** as the 2026-07-11 record. **Status stays `accepted`.**

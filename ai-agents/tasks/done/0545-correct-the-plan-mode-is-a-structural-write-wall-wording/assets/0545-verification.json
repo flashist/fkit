@@ -1,0 +1,162 @@
+{
+  "recordedUTC": "2026-10-30T11:08:59.781388+00:00",
+  "baseline": {
+    "capturedUTC": "2026-10-30T10:24:55.746457+00:00",
+    "head": "76c8507ff9aaee91f8296bef97ca7439b83dfd1e",
+    "files": [
+      {
+        "path": "claude/agents/fkit-lead.md",
+        "sha256": "f894c6a41c3698d63ab52cc3342f753301adc7262a323645cb48822feb49b873",
+        "unstagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+        "sha256": "4ee1b525780f59529b030d159d56a1c3843a5c8e1329277795881d59ea9b5585",
+        "unstagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "claude/skills/fkit-plan-task/SKILL.md",
+        "sha256": "79094f840954bb9b490be9ea6d10bc969d9141fcbd723267b5d681cefc162b7a",
+        "unstagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "claude/skills/fkit-task-ship-loop/SKILL.md",
+        "sha256": "ca10c0cd0cf7483fd74c73b523fa3c8a42452f48b4ed10471fe15be8bfd321b1",
+        "unstagedDiffSha256": "b08ee3cd8cbfa8eb11cd03180da77d085b50f73973238097ec9b8f088d7f21cd",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md",
+        "sha256": "8f3fa4a8f5db72c96d6eef15078497e88a784c2a74f8f5e6e23b143ea490de38",
+        "unstagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md",
+        "sha256": "99e6bb88b4e92996f1193659a8ec7137a09cf10fe8cd138f49f3ed6d52e84cea",
+        "unstagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md",
+        "sha256": "c06cd2fce48bb897ee48f9231c2ab2fe8ac794f5d52a1fe21ed35ce582ef693e",
+        "unstagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "ai-agents/knowledge-base/decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md",
+        "sha256": "dff684a59e005c5dc7418fda13a63b3ff7b41b0fdac30f5d10baee46ae05c3b6",
+        "unstagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "CHANGELOG.md",
+        "sha256": "2e582dd5a01512188c6b37566c315520af98e09b2bfe6ce4e7da8ca1f857e22a",
+        "unstagedDiffSha256": "93d2d37439a7a64a1619626d22b838283f51a01ae17dc39f01e69a89539fadac",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0545-correct-the-plan-mode-is-a-structural-write-wall-wording/plan-review.md",
+        "sha256": "2654e77a0b74a68ec01c413faf6d082f1c9b7b5e4ddfacf489bc70729807d11c",
+        "unstagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0545-correct-the-plan-mode-is-a-structural-write-wall-wording/plan.md",
+        "sha256": "2348c07e1146738dcad420eb1c1aabbf3752b7e5917849dee58924e53a4706cc",
+        "unstagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0545-correct-the-plan-mode-is-a-structural-write-wall-wording/brief.md",
+        "sha256": "1ec60743a2f8e1472ca9a381d02ef9c773a59c5e1d305dd65e3073003fb37482",
+        "unstagedDiffSha256": "02315031493ef0f6669f056eaf25676c63a997a3affb4533d80d313e09aa74e4",
+        "stagedDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "indexSha256": "c973b5329de5b36bcd91e6b1dc68fa4eb2c72c2aac22a20306a2876f9ba401f7"
+  },
+  "sourceAudit": {
+    "checkedUTC": "2026-10-30T11:06:58.874025+00:00",
+    "ADR": [
+      {
+        "path": "ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md",
+        "additions": 14,
+        "deletions": 0,
+        "exactBaselineReconstructed": true
+      },
+      {
+        "path": "ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md",
+        "additions": 16,
+        "deletions": 0,
+        "exactBaselineReconstructed": true
+      },
+      {
+        "path": "ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md",
+        "additions": 16,
+        "deletions": 0,
+        "exactBaselineReconstructed": true
+      },
+      {
+        "path": "ai-agents/knowledge-base/decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md",
+        "additions": 16,
+        "deletions": 0,
+        "exactBaselineReconstructed": true
+      }
+    ],
+    "projections": "seven approved deltas; canonical/native copies and generated transforms exact",
+    "historicalPrefixes": "exact",
+    "indexUnchanged": true,
+    "unexpectedProtectedChanges": [],
+    "unexpectedNewPaths": []
+  },
+  "refresh": {
+    "command": "node '/Users/mark.dolbyrev/Workspace/fkit/codex/fkit.mjs' setup --root '/Users/mark.dolbyrev/Workspace/fkit'",
+    "initialExit": 1,
+    "initialReason": "EPERM opening protected .agents/skills/fkit-team temporary file",
+    "scopedRerunExit": 0,
+    "filesBefore": 1993,
+    "filesAfter": 1993,
+    "changed": [
+      ".agents/skills/fkit-plan-task/SKILL.md",
+      ".agents/skills/fkit-sprint-ship-loop/SKILL.md",
+      ".agents/skills/fkit-task-ship-loop/SKILL.md",
+      ".claude/agents/fkit-lead.md",
+      ".claude/skills/fkit-plan-task/SKILL.md",
+      ".claude/skills/fkit-sprint-ship-loop/SKILL.md",
+      ".claude/skills/fkit-task-ship-loop/SKILL.md"
+    ],
+    "indexAndCachedDiffUnchanged": true,
+    "allOtherProtectedBytesUnchanged": true,
+    "actualPlanAndTaskProceduresReloaded": true
+  },
+  "suite": {
+    "command": "npm test",
+    "startUTC": "2026-10-30T11:06:02.235518+00:00",
+    "endUTC": "2026-10-30T11:07:50.617297+00:00",
+    "exit": 0,
+    "elapsedSeconds": 108.38142875,
+    "log": ".fkit/tmp/0545-update-20261030/npm-test.log",
+    "permission": "scoped escalation for known localhost/child-process suite requirements"
+  },
+  "counts": {
+    "total": 961,
+    "suites": 40,
+    "pass": 960,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 1,
+    "todo": 0,
+    "runnerDurationMs": 108155.948375,
+    "budgetSeconds": 120,
+    "withinBudget": true
+  },
+  "skip": "Opt-in board snapshot benchmark; FKIT_BOARD_BENCH=1 not enabled",
+  "suiteLogSha256": "ba21071c73086fabb551e7ca297adcce220dd179eb285f3e1d6e2d8c2fe4c0c6",
+  "oldPhraseScan": "rg structural write-wall|runtime-enforced by plan mode|wall the runtime enforces under claude/: exit1, no matches (expected)",
+  "nativeDeferrals": "Edit direct historical measurement and native/Claude interactive runtime handling remain unverified;3m declined twice;3m-bis not triggered/not applicable",
+  "limits": "Codex planning/general writes instructional; both fkit hooks disabled; no probe/runtime modification/new permanent test. Prior0544 sandbox failures historical only; new0545 suite run used scoped permission upfront."
+}

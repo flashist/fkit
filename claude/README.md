@@ -1,5 +1,11 @@
 # fkit on Claude Code — the runtime, in detail
 
+This page describes the **legacy unconfigured Claude path**. `claude/` also remains the canonical
+role/skill policy and scaffold source for configured Codex/Claude sessions. The new dispatcher and
+adapters, their measured limits and pending Claude live certification are documented in
+[`codex/README.md`](../codex/README.md) and
+[ADR-061](../ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md).
+
 This directory **is** fkit's runtime: the seven roles as Claude Code subagents (`agents/`), their
 procedures as skills (`skills/`), the project scaffold (`scaffold/`), and the launcher
 (`fkit-claude.sh`). (An **eighth** role, a sandboxed e2e tester, is authorized in

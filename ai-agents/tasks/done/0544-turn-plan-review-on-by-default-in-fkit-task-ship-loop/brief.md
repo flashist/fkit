@@ -10,7 +10,7 @@ Sprint 12
 P14
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -118,3 +118,11 @@ Per ADR-060 Decisions 3, 5 and 7 and report §3.2, §3.4, §3.7, §4.2 (the desi
 - **Filed 2026-10-24** by a spawned `fkit-producer` (no owner channel, ADR-021) at the direction of
   `fkit-sprint-ship-loop` (driven by `fkit-lead`), on the owner's placement ruling quoted in *Context*,
   from report §7 and ADR-060 Decision 11. ⛔ No commit.
+
+## Approved runtime-specific scope — 2026-10-30
+
+The human owner approved [the complete reviewed plan](plan.md), including C544-1–5 Codex-only completion criteria and bounded build → verify → independent/stateful review → producer closure as agent-closed—not owner-verified. Actual answer recorded 2026-10-30T09:34:54.001813+00:00, desktop request_user_input_async, relayed into this same fkit-coder session:
+
+> Approve plan and authorize build → verify → review → producer closure for the stated Codex scope (Recommended)
+
+[Plan-review Attempt 1](plan-review.md) retains the presented record and precise approval provenance. The original checklist above remains historical and unchanged apart from this task's status. C544-1–5 provide this run's approved Codex completion basis; original Claude/native human UI checks stay explicitly unverified, tracked in the worklog and migration validation handoff. Synthetic fixture replies do not establish human UI acceptance.

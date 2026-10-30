@@ -1,0 +1,22 @@
+{
+  "recordedUTC": "2026-10-30T11:10:16.679787+00:00",
+  "files": {
+    "claude/agents/fkit-lead.md": "541a0c193ad734e4d3578eae9e0207c0024750027ab8168e3d82d77956fd1966",
+    "claude/skills/fkit-sprint-ship-loop/SKILL.md": "471e60ff762558964cb4cb56bd8114680e1d38d0d155bcfb313940d6591c46ec",
+    "claude/skills/fkit-plan-task/SKILL.md": "98e0f42ca6c9b952d8f6ba459fcc6ddad616f5533d425f53818899dd0e2fedee",
+    "claude/skills/fkit-task-ship-loop/SKILL.md": "692f42cb3d6a55535f458211313457a2ae503c27cf2e27c4eea90c8cc627a934",
+    "ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md": "66cd412699426c35507a5ea7d0233ad804a11a645098f631d41cf5f6e18db87d",
+    "ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md": "298d08d3a229c57275d1ff83a5e3a1b80e3ebe2560d08cad527d16516cf8eee4",
+    "ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md": "d4c39eec81a20270837a2fccc7db8308b2cb6a0c620a98ebebaff761fa4b1f30",
+    "ai-agents/knowledge-base/decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md": "28cc10c434d68b58ecf9680d3d154049ddeb8a0b863060ba219c1f3f858fe090",
+    "CHANGELOG.md": "c014968781c0c9da48c4d7279d2a883c5cea957719fee42566c9e9de395489bb",
+    "ai-agents/tasks/backlog/0545-correct-the-plan-mode-is-a-structural-write-wall-wording/plan.md": "796234c20807d6e03d453f1333d81fd52a2146d88517c327781c777f824d6b0b",
+    "ai-agents/tasks/backlog/0545-correct-the-plan-mode-is-a-structural-write-wall-wording/plan-review.md": "298c993107330471e674a59f101d44e6579d0bf5092871cc31e585caaa8796da"
+  },
+  "sourceSuite": "npm test exit0,960pass/1optional skip,108.38142875s; product source frozen after this actual run",
+  "historicalPrefixes": {
+    "plan.md": "2348c07e1146738dcad420eb1c1aabbf3752b7e5917849dee58924e53a4706cc",
+    "plan-review.md": "2654e77a0b74a68ec01c413faf6d082f1c9b7b5e4ddfacf489bc70729807d11c"
+  },
+  "indexSha256": "c973b5329de5b36bcd91e6b1dc68fa4eb2c72c2aac22a20306a2876f9ba401f7"
+}

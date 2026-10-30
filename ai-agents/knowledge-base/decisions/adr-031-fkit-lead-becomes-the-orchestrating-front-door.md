@@ -22,6 +22,9 @@
   ⚠️ 2026-10-09 (`0498`) — this ADR now carries **four** dated notes: the three listed in the line
   above, plus one below §Decision 2 (the conductor also never diagnoses). The line above is left
   byte-identical and is superseded by this line; the same append-only rule and the same legend apply.
+  ⚠️ 2026-10-30 (`0545`) — this ADR now carries **five** dated notes; the fifth follows the
+  honesty-clause ADR-055 pointer and also covers Options considered. Earlier counts remain
+  byte-identical; the same append-only rule and marker legend apply.
 
 > **What this ADR decides, in one line:** `fkit-lead` grows from a router into a **single-point-of-
 > interaction conductor** that spawns and drives any role — feasible because the ADR-018 hook already
@@ -155,6 +158,19 @@ way: `fkit coder` + `/fkit-task-ship-loop`.
 > the **same accepted cost with wider exposure**, because more spawns now rely on prose. A quote is
 > fidelity, not proof. **Why ⚠️ and not ⛔:** nothing here is overturned; the path this ADR decided gained
 > a written rule. **Status stays `accepted`.**
+
+> ⚠️ **Dated wording note 2026-10-30 (`0545`) — this note also qualifies the “structural write-wall”
+> wording in Options considered.** Historical Claude headless tests refused `Write` outside the plan
+> file but allowed Bash writes; `Edit` was not directly tested. Interactive models declined writes
+> before runtime handling could be tested: 3m declined twice; 3m-bis was not triggered/not
+> applicable. Neither is a pass. With plan review on (the `fkit coder` default), drafting and review
+> precede native Claude plan mode, which covers only approval. The historical “old way” pointer
+> means `fkit coder --no-plan-review` + `/fkit-task-ship-loop` for native plan mode from the start;
+> the historical headless evidence does not establish a full write-wall. Codex planning/write limits
+> remain instruction-enforced, both fkit hooks disabled. The plan-only → owner approval → implement
+> split and its accepted prose-enforced cost remain unchanged. Status stays `accepted`. Existing ADR
+> text remains byte-identical. Wording checked against current canonical procedures and retained
+> evidence on 2026-10-30; no new plan-mode runtime test ran.
 
 ## Options considered
 

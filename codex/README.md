@@ -1,0 +1,55 @@
+# Configured CLI runtimes
+
+The opt-in `v0.4.0-codex.1` preview adds a public dispatcher at `bin/fkit`; default installs and updates still track `main`. Install the preview explicitly using the [preview instructions](../README.md#install--run), or use `./bin/fkit`, `npm start -- ...`, or the existing `bin/fkit-codex` checkout alias. Publishing a preview does not replace the owner's installed global command. Runtime modules remain in `codex/`; canonical roles, procedures and ownership stay in `claude/`.
+
+```sh
+./bin/fkit configure --root /path/to/project --runtime codex --runtime-default
+./bin/fkit lead --root /path/to/project
+./bin/fkit configure --root /path/to/project --role-model wiki=MODEL_ID
+./bin/fkit configure --root /path/to/project --effort high --role-effort wiki=low
+./bin/fkit settings --root /path/to/project
+```
+
+**Local Codex use does not require a working Claude executable or API.** The owner confirmed that
+Claude is unavailable on this Mac. Keep all seven effective roles on `codex`; first configuration
+with the Codex default does this automatically. Existing explicit role overrides are preserved, so
+inspect `settings` and change any Claude-selected role with `configure --role-runtime ROLE=codex`
+before running a Codex-only workflow. Model/runtime failures never trigger silent fallback.
+
+Unconfigured projects keep the existing Claude launcher, native role behavior and hooks. Configured projects use their saved default plus role overrides, resolved on every direct and delegated launch. `--runtime codex|claude` selects only the root session; when switching runtime, that session uses the target CLI default, never an inherited incompatible model. Child selections remain saved. Use `configure --runtime ...` to change the project default; existing explicit role choices are pinned to their previous runtime/model. No silent fallback after unavailable runtimes/models.
+
+Settings use ignored `.fkit/model-settings.json`, schema 1. Existing Codex-only settings remain valid. Runtime changes require an explicit target model or null in hand-edited role overrides; the configure command resets incompatible model choices automatically. Null follows the target CLI's default. `--role-model ROLE=default` selects that default; `ROLE=inherit` removes the entire role override. Reasoning effort is currently supported only for Codex and never carried into Claude.
+
+Interactive configuration offers the Codex catalog where available, followed by reasoning effort for the selected model; each customized Codex role gets its own effort prompt. Catalog membership does not prove account access. Supported efforts come from local model metadata; unknown models or unavailable metadata accept named effort levels with support checked on invocation. Blank keeps the existing choice. `--effort default` removes the project effort; `--role-effort ROLE=default` follows the CLI effort even when the project specifies one, while `ROLE=inherit` removes only the effort override. An explicit null `reasoningEffort` in schema 1 also follows the CLI. `settings` shows effective effort, and both direct and delegated launches pass it through Codex's [`model_reasoning_effort`](https://developers.openai.com/codex/config-reference) setting. Claude uses exact IDs/aliases accepted by its CLI or its CLI default; no guessed model catalog or price claims. Select only the roles you want to customize. Blank role selection changes none; cancellation and invalid selections preserve saved files. No model ID is bundled. CLI credentials and user configuration remain with the CLIs.
+
+Role customization shows all seven roles as a numbered list. Enter one number (such as `3` for coder), several numbers (`3,7`), or role names; repeated selections in one batch are customized once. Each selected Codex role shows the numbered model catalog again, then a separate numbered effort list for the chosen model. Both accept numbers or exact names/IDs. After each batch, the role list returns so you can edit more roles or revisit a previous choice. Choose `0`, `done`, or blank to finish, review all settings, and confirm one save for the whole session. Nothing is saved between role edits. Restart an already-running setup to load the current prompts.
+
+Codex requires stable CLI >=0.165.0. Live checks used Node 24.13.0 and Codex 0.165.0 on macOS. Claude adapter argument checks used CLI 2.1.312; **live Claude compatibility is not certified**. Other versions/platforms are unverified. See [acceptance evidence](../model-agnostic-sprint/local-acceptance.md).
+
+All seven roles run in fresh contexts. With no role, an initiated project gets the role menu; a fresh project enters producer onboarding, then lead after successful initiation. Interactive Codex sessions automatically send the role's canonical `initialPrompt` as the first message, so the role greets/orients the owner without waiting at a blank input. Role instructions alone do not start a turn. Explicit onboarding prompts are preserved; headless/delegated tasks receive only their supplied task prompt. Startup skill paths are adapted to `.agents/skills/`, and a role name is not treated as a skill. Headless work uses `--exec PROMPT` or `--prompt-file PATH`; large peer prompts use stdin. Direct interactive coder sessions receive the default plan-review signal; `--no-plan-review` opts out, `--plan-review` keeps it. Workers use their driver's standing approval and switch line. The owner gate remains required.
+
+Every configured role loads procedures through `fkit_roles.fkit_skill`, checked against `claude/skills-for-role.sh`. Native catalog scoping is additional discovery control. `fkit_consult` launches the selected CLI/model with fixed caller lineage, enforcing ordinary two-hop/cycle/leaf rules and the existing carry checker. That checker retains its source fail-open infrastructure policy and establishes fidelity, not proof of owner approval. Native subagents are disabled on this configured path. The helper is a session-scoped stdio process, not a persistent service. Manual file reads/CLI launches remain outside the invocation boundary.
+
+A reviewer uses `fkit_adversarial` for the separate fresh leaf pass outside the ordinary hop budget. A usable same-model pass is supported with a visible recommendation for another model. Missing/unusable passes remain partial. Report pass availability, actual model identity/diversity and per-pass command evidence separately. Child results distinguish observed serving models from requested IDs; missing identities stay unknown. Private raw startup diagnostics are withheld; fixed safe failure categories are returned instead.
+
+Codex adversarial uses the read-only sandbox; ordinary Codex roles use workspace-write. A headless Codex producer uses `--approve-for-me`, which itself selects workspace-write and permits scoped requests through automatic approval review. It must not be combined with `--sandbox`. A denial leaves closure pending; no manual mover substitute, commit or push is authorized.
+
+Configured Claude uses the shared dispatcher, disables native Agent/Task/Skill calls, and uses only its supplied fkit MCP server. User MCP configuration is not modified. Root interactive owner questions use native AskUserQuestion; native Claude plan mode follows the canonical procedure. Headless workers return NEEDS-DECISION and use native automatic permission review. Claude adversarial has only Read/Glob/Grep built-ins plus the owned read-only skill loader: no command/write/consultation tools, so its coverage is reasoning-only. This is a tool restriction, not a claimed OS sandbox. These configured-Claude controls still require live certification; legacy unconfigured Claude behavior is preserved separately.
+
+Only in a Claude-capable environment, an optional mixed role can be selected with
+`configure --role-runtime wiki=claude --role-model wiki=MODEL_ID`. Live certification of that path
+is deferred to the [verifier handoff](../model-agnostic-sprint/validation.md); it is not a prerequisite
+for local Codex-only use. No external verifier is currently assigned and no Claude success is claimed.
+
+Codex root owner questions use actual MCP form elicitation and wait. Cancellation, decline, interruption, invalid replies and explanation requests grant no approval. Headless workers return NEEDS-DECISION. Unsupported clients ask explicitly and wait. Actual CLI form rendering/submission/cancellation and worker relay passed. **The first Codex version registers neither fkit PreToolUse nor Stop hooks**, by the owner's 2026-10-29 follow-up ruling. Their implementation and registration code are retained, disabled behind `CODEX_HOOKS_ENABLED = false`, for possible later reactivation after usage feedback. The packaged `hook.mjs` file is dormant. Role/model/effort routing, dispatcher skill ownership, interactive owner forms and the written “What's next?” requirement remain in place; footer/question-tool reminders rely on instructions. Restart an existing session to drop its earlier session-scoped hooks. User-configured Codex hooks and legacy Claude hooks are not modified. Earlier successful hook probes are historical evidence, not active controls. No universal role-file write wall or Codex planning write wall is claimed. [ADR-061](../ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) records the accepted local limits; ADR-042 D2/task 0273 remains outstanding.
+
+Owner forms have one answer field. Selecting a listed option submits without a separate comment.
+“Write another answer” opens a second form containing only a required text answer; choosing that
+option alone supplies no answer or approval. Cancelling or leaving its text empty keeps dependent
+work stopped. This avoids the tested CLI's inability to submit an empty optional comment field.
+Return custom text verbatim in the tool response's `comment`, with `answer` identifying the custom
+choice; ordinary options have an empty `comment`. Questions with no options use a single text field.
+
+Setup reuses existing convergence rules, preserving root owner bodies and existing project/wiki/task content. It refreshes owned `.claude/` resources and generated `.agents/skills/fkit-*`, without requiring the Claude executable. Unowned skills and symlink escapes are refused. Installed status helpers use `.agents/skills/fkit-status/`; heal receives an explicit matching `--share` root. The shared scaffold inventory/manifest remains canonical; model settings are never healed.
+
+The installer ships both runtime modules and the public dispatcher when present, retains old-ref legacy installs, refuses incomplete/unowned new runtime targets before changing installed files, and records the same update source/paths. Configured launches share existing update notifications without a Claude preflight. `fkit board` and update remain common commands. Self-hosting selects the checkout's dispatcher/resources. No global installation, commit, push or publication occurs merely by editing this working tree.

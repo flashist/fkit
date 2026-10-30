@@ -1,0 +1,34 @@
+Role: fkit-architect
+Runtime: codex
+Model: gpt-6.1-sol
+Model requested: gpt-6.1-sol
+Exit: 0
+Timed out: false
+Truncated: false
+Prompt: /Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/consult-architect-12f233ec-4aff-474f-8df7-ef3683f72dae.md
+
+Applied only the approved ADR additions through the dispatcher-loaded `fkit-record-decision` correction branch.
+
+| File / note anchor | Metadata line | Delta | Notes now |
+|---|---:|---:|---:|
+| [ADR-019 — after Decision 2’s October 26 note](/Users/mark.dolbyrev/Workspace/fkit/ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md:116) | 27 | +14/−0 | 4 |
+| [ADR-031 — after honesty-clause ADR-055 pointer](/Users/mark.dolbyrev/Workspace/fkit/ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md:162) | 25 | +16/−0 | 5 |
+| [ADR-032 — after Decision 7; covers A3](/Users/mark.dolbyrev/Workspace/fkit/ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md:160) | 40 | +16/−0 | 6 |
+| [ADR-055 — after Decision 7](/Users/mark.dolbyrev/Workspace/fkit/ai-agents/knowledge-base/decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md:134) | 16 | +16/−0 | 1 |
+
+Checks performed:
+
+- Four pre-edit files matched baseline bytes and manifest SHA-256.
+- Approved notes/metadata match exactly after Markdown wrapping.
+- Git and snapshot diffs: **+62/−0**; prescribed deletion filters empty.
+- Removing inserted ranges reconstructs every exact baseline.
+- All statuses remain `accepted`; continuations belong to Corrections items.
+- Scoped `git diff --check` passed. No links added.
+- Checked canonical prompt passages, changelog, retained 0542 evidence and disabled-hook flag. Saved approval matches the relayed answer/date/channel; original MCP submission was not independently observed.
+
+One initial read referenced nonexistent `codex/launch.mjs` (exit 2); corrected search found the flag in `codex/fkit.mjs`. Broad truncated reads received targeted rereads. Corrected my initial ADR-032 metadata placement before final verification; no original bytes changed.
+
+No substantive conflict or `NEEDS-DECISION`. No tests/probes, other writes, lifecycle changes, commits or pushes. Native/Claude handling and Edit remain unverified; 3m/3m-bis remain non-passes.
+
+What’s next? Parent resumes required verification/review. Recommend later fkit-wiki re-ingestion; no wiki work performed or required for 0545 closure.
+

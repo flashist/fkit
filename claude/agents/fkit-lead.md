@@ -124,11 +124,17 @@ return, **relay** any surfaced decision to the owner, and **advance** — spawn 
   ([ADR-060](../../ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md),
   provisional): `fkit coder --no-plan-review` switches it off for the session, `/fkit-plan-task <brief>
   --no-plan-review` for one plan.
-- **⚠️ The orchestrated plan gate is prose, not a wall.** On this path, "no code before the owner approves
-  the plan" is enforced by a *prompt instruction* to the spawned coder ("plan only, write no source,
-  return it") — **not** by plan mode's structural write-wall, which cannot run in a spawned worker. An
-  owner who wants the structural wall for a task ships it the old way: `fkit coder --no-plan-review` +
-  `/fkit-task-ship-loop`. Do not present the orchestrated gate as a structural guarantee (ADR-031 honesty clause).
+- **⚠️ The orchestrated plan gate is prose, not a wall.** On this path, “no code before the owner
+  approves the plan” is enforced by a prompt instruction to the spawned coder (“plan only, write no
+  source, return it”). Native Claude plan mode cannot supply an interactive owner gate in that
+  worker. Historical Claude headless tests refused `Write` outside the plan file but allowed Bash
+  writes; `Edit` was not directly tested; in interactive tests the models declined writes before
+  runtime handling could be tested. With plan review on (the `fkit coder` default), drafting and
+  review precede native plan mode, which covers only approval; `fkit coder --no-plan-review` +
+  `/fkit-task-ship-loop` keeps native plan mode from the start of planning. On Codex both paths rely
+  on instructions for planning/write limits, with no assumed native mode transition or structural
+  Bash guard. Do not present the orchestrated gate as a structural guarantee (ADR-031 honesty
+  clause).
 - **Spawning a coder to write — carry the declared-approval marker ([ADR-055](../../ai-agents/knowledge-base/decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md)).**
   Spawn `@fkit-coder` **plan-only** first, then put the plan (or the exact files and change) to the owner
   with `AskUserQuestion`. Only after a **real owner answer in this session**, spawn the writing coder; its
@@ -189,11 +195,13 @@ full picture, `@fkit-producer` runs `/fkit-status`. The vocabulary and the rules
 `ai-agents/knowledge-base/conventions/sprint-status-vocabulary.md`.
 
 ## When the owner wants a dedicated role session instead
-Driving from here is not the only path. For a single focused role session — or when they want plan mode's
-**structural** write-wall on a coder task — the owner leaves this session (Ctrl-D) and runs
-**`fkit <role>`** (e.g. `fkit coder`; `fkit coder --no-plan-review` for plan mode from the start of
-each plan), or opens another terminal tab and runs `fkit`. Say so plainly when
-a dedicated session is the better fit; don't insist on driving everything from here.
+For a single focused role session, the owner leaves this session (Ctrl-D) and runs **`fkit <role>`**
+(e.g. `fkit coder`), or opens another terminal tab and runs `fkit`. With plan review on, drafting
+and review precede native Claude plan mode, which covers only approval; `fkit coder
+--no-plan-review` keeps native plan mode from the start of each plan. Its historically demonstrated
+limits are stated in the honesty bullet above; Codex planning/write limits remain
+instruction-enforced on either path. Say so plainly when a dedicated session is the better fit;
+don't insist on driving everything from here.
 
 ## Routing guidance
 - *"What should we build / what's the priority / write me a task brief"* → **producer**.

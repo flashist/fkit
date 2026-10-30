@@ -1,6 +1,6 @@
 # Review — 0543
 
-Task: ai-agents/tasks/backlog/0543-turn-plan-review-on-by-default-in-fkit-coder-sessions-and-plain-fkit-plan-task/brief.md
+Task: ai-agents/tasks/done/0543-turn-plan-review-on-by-default-in-fkit-coder-sessions-and-plain-fkit-plan-task/brief.md
 File(s) under review: claude/fkit-claude.sh, test/launcher-contract.test.js, claude/skills/fkit-plan-task/SKILL.md, claude/agents/fkit-{coder,architect,producer,lead}.md, claude/skills/fkit-sprint-ship-loop/SKILL.md, ai-agents/tasks/README.md, claude/scaffold/ai-agents/tasks/README.md, claude/structure-manifest.tsv, CHANGELOG.md, ADR-060 (dated note), the 0543 folder (brief status, plan.md, worklog.md), ai-agents/sprints/sprint-12.md (0543 row) — uncommitted working tree, 2026-10-27
 Status: closed-out — round 2 (2026-10-27): R1 fixed (D11–D13) and reviewer-verified; no new findings
 Coverage: reasoning-only second opinion — round 2: Codex ran (`codex-cli 0.157.1`, exit 0, "No findings") and reasoned over the launcher, the harness and the D11–D13 diff; its `npm test -- --test-name-pattern='D1[123]'` attempt exited 1 in the read-only sandbox (mkdtemp EPERM; D11–D13 reported "cancelled", not a behaviour failure), so it measured nothing. Execution evidence is the Claude reviewer's: `node --test test/launcher-contract.test.js` 57/57 pass, 0 fail (40.5 s), D11/D12/D13 green.

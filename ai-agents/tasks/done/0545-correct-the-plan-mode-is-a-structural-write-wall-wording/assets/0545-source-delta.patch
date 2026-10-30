@@ -1,0 +1,319 @@
+--- a/claude/agents/fkit-lead.md
++++ b/claude/agents/fkit-lead.md
+@@ -124,11 +124,17 @@
+   ([ADR-060](../../ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md),
+   provisional): `fkit coder --no-plan-review` switches it off for the session, `/fkit-plan-task <brief>
+   --no-plan-review` for one plan.
+-- **⚠️ The orchestrated plan gate is prose, not a wall.** On this path, "no code before the owner approves
+-  the plan" is enforced by a *prompt instruction* to the spawned coder ("plan only, write no source,
+-  return it") — **not** by plan mode's structural write-wall, which cannot run in a spawned worker. An
+-  owner who wants the structural wall for a task ships it the old way: `fkit coder --no-plan-review` +
+-  `/fkit-task-ship-loop`. Do not present the orchestrated gate as a structural guarantee (ADR-031 honesty clause).
++- **⚠️ The orchestrated plan gate is prose, not a wall.** On this path, “no code before the owner
++  approves the plan” is enforced by a prompt instruction to the spawned coder (“plan only, write no
++  source, return it”). Native Claude plan mode cannot supply an interactive owner gate in that
++  worker. Historical Claude headless tests refused `Write` outside the plan file but allowed Bash
++  writes; `Edit` was not directly tested; in interactive tests the models declined writes before
++  runtime handling could be tested. With plan review on (the `fkit coder` default), drafting and
++  review precede native plan mode, which covers only approval; `fkit coder --no-plan-review` +
++  `/fkit-task-ship-loop` keeps native plan mode from the start of planning. On Codex both paths rely
++  on instructions for planning/write limits, with no assumed native mode transition or structural
++  Bash guard. Do not present the orchestrated gate as a structural guarantee (ADR-031 honesty
++  clause).
+ - **Spawning a coder to write — carry the declared-approval marker ([ADR-055](../../ai-agents/knowledge-base/decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md)).**
+   Spawn `@fkit-coder` **plan-only** first, then put the plan (or the exact files and change) to the owner
+   with `AskUserQuestion`. Only after a **real owner answer in this session**, spawn the writing coder; its
+@@ -189,11 +195,13 @@
+ `ai-agents/knowledge-base/conventions/sprint-status-vocabulary.md`.
+ 
+ ## When the owner wants a dedicated role session instead
+-Driving from here is not the only path. For a single focused role session — or when they want plan mode's
+-**structural** write-wall on a coder task — the owner leaves this session (Ctrl-D) and runs
+-**`fkit <role>`** (e.g. `fkit coder`; `fkit coder --no-plan-review` for plan mode from the start of
+-each plan), or opens another terminal tab and runs `fkit`. Say so plainly when
+-a dedicated session is the better fit; don't insist on driving everything from here.
++For a single focused role session, the owner leaves this session (Ctrl-D) and runs **`fkit <role>`**
++(e.g. `fkit coder`), or opens another terminal tab and runs `fkit`. With plan review on, drafting
++and review precede native Claude plan mode, which covers only approval; `fkit coder
++--no-plan-review` keeps native plan mode from the start of each plan. Its historically demonstrated
++limits are stated in the honesty bullet above; Codex planning/write limits remain
++instruction-enforced on either path. Say so plainly when a dedicated session is the better fit;
++don't insist on driving everything from here.
+ 
+ ## Routing guidance
+ - *"What should we build / what's the priority / write me a task brief"* → **producer**.
+--- a/claude/skills/fkit-sprint-ship-loop/SKILL.md
++++ b/claude/skills/fkit-sprint-ship-loop/SKILL.md
+@@ -65,10 +65,15 @@
+ 
+ ## ⚠️ The plan-gate honesty clause — read before the loop, do not "fix" it away
+ 
+-On this orchestrated path, **"no code before the owner approves the plan" is prose-enforced in the worker
+-prompt, NOT a runtime write-wall.** Plan mode — the coder session's structural write-wall and ADR-019's
+-one unremovable checkpoint — **cannot run in a spawned worker** (no owner channel there, ADR-021). So the
+-driver enforces the ordering by **splitting** it:
++On this orchestrated path, **“no code before the owner approves the plan” is prose-enforced in the
++worker prompt, NOT a runtime write-wall.** Native Claude plan mode cannot supply the interactive
++owner gate in a spawned worker (no owner channel there, ADR-021). Historical Claude headless tests
++refused `Write` outside the plan file but allowed Bash writes; `Edit` was not directly tested;
++interactive models declined writes before runtime handling could be tested. With plan review on (the
++`fkit coder` default), drafting and review precede native plan mode, which covers only approval;
++`--no-plan-review` keeps native plan mode from the start. Codex planning/write limits remain
++instruction-enforced on both paths. ADR-019's plan approval remains the one unremovable checkpoint.
++The driver enforces the ordering by **splitting** it:
+ 
+ 1. spawn `@fkit-coder` **for the plan only** — prompt: *"produce a plan with `/fkit-plan-task`, write no
+    source, return the plan and any open questions"*;
+@@ -78,8 +83,9 @@
+ The "write nothing yet" in step 1 is a **prompt instruction, not a wall** — a confused or injected worker
+ could write before approval and nothing structural stops it. **This is stated plainly and accepted by the
+ owner (2026-07-22, ADR-031 honesty clause / ADR-032 Decision 7).** A later reader — human or coder —
+-**must not** rewrite this into a false structural guarantee. Owners who want plan mode's structural wall
+-for a given task ship it the old way: `fkit coder --no-plan-review` + `/fkit-task-ship-loop`.
++**must not** rewrite this into a false structural guarantee. Owners who want native Claude plan mode from the start of planning use `fkit coder --no-plan-review` +
++`/fkit-task-ship-loop`; its demonstrated limits above still apply, and this provides no structural
++planning/write wall on Codex.
+ 
+ ---
+ 
+@@ -267,8 +273,9 @@
+   **This construction
+   narrows the hazard; it does not remove it** (ADR-031 honesty clause; `0162` §9).
+ 
+-- **The plan/build split (honesty clause) is mandatory** — it is the only thing standing in for plan
+-  mode's write-wall on this path.
++- **The plan/build split (honesty clause) is mandatory** — on this orchestrated path, instructions
++  enforce approval before source writes; the honesty clause states the historical native-Claude
++  limits and Codex's instruction-enforced planning gate.
+ - **The Process-review worker applies fixes on ADR-019's discipline under the declared-approval marker,
+   bounded by the approved plan** — verified-`CORRECT`, mechanical/localized, in-plan fixes proceed without
+   per-fix owner approval (a second exception to the per-round gate, `fkit-coder.md`); every judgment call
+@@ -497,7 +504,7 @@
+   breaks the separation-of-authority thesis (ADR-031 Decision 2).
+ - **Spawn typed `fkit-<role>` subagents only** — never a generic helper for a step that runs an fkit skill.
+ - **The plan/build split is mandatory** and its gate is **prose-enforced, not structural** (honesty
+-  clause) — do not present it as plan mode's write-wall.
++  clause) — do not present it as a runtime write-wall.
+ - **Never instruct into the territory of a rule in the skill a worker will run without naming the owner
+   ruling you relay** (ADR-037 §3 — the driver-side half of the owner's Q2 ruling; this ADR binds the
+   driver, not only the worker). Exactly one of three is permitted:
+--- a/claude/skills/fkit-plan-task/SKILL.md
++++ b/claude/skills/fkit-plan-task/SKILL.md
+@@ -50,8 +50,15 @@
+ 1. **Enter plan mode.** *(Skipped when session plan review is on — step 0.)* Use the
+    **`EnterPlanMode`** tool to switch this run into plan mode, and state
+    clearly that it is planning-only — no code will be written, and no files edited, until the plan is
+-   approved. Plan mode makes that a **wall the runtime enforces**, not a promise: `Write` and `Edit`
+-   are refused for the duration.
++   approved. Historical Claude headless tests refused `Write` outside the plan file in native plan mode but
++   allowed Bash writes; `Edit` was not directly tested. Interactive models declined writes before
++   runtime handling could be tested. Bash restraint therefore depends on the model following its
++   planning instructions in the demonstrated headless path; make no Bash call that writes. With
++   session plan review on, step 0 skips this step: drafting and review precede native plan mode,
++   which covers only approval. With `--no-plan-review`, native plan mode starts before drafting. On
++   Codex follow the runtime binding's instruction-enforced planning/approval gate; do not claim a
++   Write/Edit tool wall, structural Bash guard, Enter/ExitPlanMode transition or Shift+Tab
++   requirement.
+ 
+    **If the tool is unavailable** (you are a *spawned* `fkit-coder` consult rather than a
+    `fkit coder` session, so the runtime never granted it): do **not** error out. Fall back to the
+--- a/claude/skills/fkit-task-ship-loop/SKILL.md
++++ b/claude/skills/fkit-task-ship-loop/SKILL.md
+@@ -88,9 +88,11 @@
+ - **One guaranteed upfront human checkpoint: the plan gate.** The owner approves *what gets built*
+   before any code. With plan review on, draft and review run before native plan mode, held by
+   instructions only; native plan mode comes on for the gate. Off paths keep native plan mode from
+-  the start. Follow the active runtime binding: Codex's planning gate is instruction-enforced,
+-  with no assumed native mode transition or universal write wall. Only after approval may the owner
+-  walk away.
++  the start. Historical Claude headless tests refused `Write` outside the plan file but allowed Bash
++  writes; `Edit` was not directly tested; interactive models declined writes before runtime handling
++  could be tested. Follow the active runtime binding: Codex's planning gate is instruction-enforced,
++  with no assumed native mode transition, Write/Edit tool wall or structural Bash guard. Only after
++  approval may the owner walk away.
+ - **Between gates the loop proceeds without waiting.** "Walk away" is ordinary in-session turn-taking:
+   at an important question the loop **ends its turn and idles** until the owner returns to the terminal.
+ - **Autonomy is bounded by fix *shape*, not verdict.** The loop applies a change without asking **only
+@@ -154,11 +156,15 @@
+    unchanged; this loop remains session-only.
+ 
+    With review on, draft and run the full review with native plan mode off, writing nothing; enter
+-   native plan mode only for step 3's gate. Off paths enter native plan mode first, as today. Where
+-   native mode is unavailable, follow the runtime binding's instruction-enforced gate instead; do not
+-   claim EnterPlanMode/ExitPlanMode or require Shift+Tab on Codex. No source, plan, worklog, status or
+-   plan-review record is written before approval; only the reviewer's framework-owned ignored scratch
+-   prompt is permitted. ADR-020 keys `plan.md` to approval. *(Autonomous up to the gate.)*
++   native plan mode only for step 3's gate. Off paths enter native plan mode first, as today. Native
++   Claude's historical headless Write refusal outside the plan file and successful Bash writes do
++   not establish Edit or interactive runtime handling; see “What makes this autonomous” above. Where
++   native mode is unavailable, follow the runtime binding's instruction-enforced gate instead; do
++   not claim EnterPlanMode/ExitPlanMode or require Shift+Tab on Codex. No source, plan, worklog,
++   status or plan-review record is written before approval; only the reviewer's framework-owned
++   ignored scratch prompt is permitted. ADR-020 keys `plan.md` to approval. *(Autonomous up to the
++   gate.)*
++
+ 3. **⛔ STOP — plan approval.** First render the sprint plan that holds this task's row (the board its
+    `## Sprint` names) with `bash .claude/skills/fkit-status/dashboard.sh <plan>`; if it carries a
+    `drift depends-on-later-sprint` record for this task, present it with the plan — its blocker, that
+@@ -187,12 +193,16 @@
+    *After approval, the owner may walk away.*
+ 4. **Persist the plan, mark In progress & build.** Only after actual approval (following the active
+    runtime's gate), first append the reviewed plan's record **once** to
+-   `<task-folder>/plan-review.md`, under `## Attempt N — <date>`: the full shown record block verbatim,
+-   `Presented: <UTC>`, and the owner's exact decision with UTC and actual channel. On native Claude
+-   record approval via ExitPlanMode; on Codex record the actual owner answer/channel, never an assumed
+-   native transition. This is a self-record — fidelity, not proof. Report a failed record write in
+-   `Problems:`; the work goes on. Off paths create no review file/attempt and preserve historical
+-   records. Never reuse an old record as approval for a changed plan.
++   `<task-folder>/plan-review.md`, under `## Attempt N — <date>`: the full shown record block
++   verbatim, `Presented: <UTC>`, and the owner's exact decision with UTC and actual channel. With
++   review on, native plan mode covers approval only; off paths keep it from the start. Native
++   Claude's historical headless Write refusal outside the plan file and successful Bash writes do
++   not establish Edit or interactive runtime handling; see “What makes this autonomous” above. On
++   native Claude record approval via ExitPlanMode; on Codex record the actual owner answer/channel,
++   never an assumed native transition or runtime write-wall. This is a self-record — fidelity, not
++   proof. Report a failed record write in `Problems:`; the work goes on. Off paths create no review
++   file/attempt and preserve historical records. Never reuse an old record as approval for a changed
++   plan.
+ 
+    Write the approved plan to `<task-folder>/plan.md` — the durable autonomy boundary. Set
+    `🔄 In progress` in **both** the brief `## Status` **and** the sprint row. Open
+--- a/ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md
++++ b/ai-agents/knowledge-base/decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates.md
+@@ -24,6 +24,9 @@
+   dated notes. The third is a second note below **§Decision item 2**, after the `0473` note. The text
+   above is left byte-identical, and its count (**two**) is superseded by this line; the same
+   append-only rule and the same legend apply.
++  ⚠️ 2026-10-30 (`0545`) — this ADR now carries **four** dated notes; the fourth follows Decision
++  2's 2026-10-26 note and qualifies the write-wall evidence. The earlier count is left
++  byte-identical and superseded by this line; the same append-only rule and marker legend apply.
+ 
+ ## Context
+ 
+@@ -109,6 +112,17 @@
+    >   point here, not restate this.
+    >
+    > **Status stays `accepted`.**
++
++   > ⚠️ **Dated wording note 2026-10-30 (`0545`) — the runtime claim is narrower than a full
++   > write-wall.** Historical Claude headless tests refused `Write` outside the plan file but
++   > allowed Bash writes; `Edit` was not directly tested. Interactive models declined writes before
++   > runtime handling could be tested: 3m declined twice; 3m-bis was not triggered/not applicable.
++   > Neither is a pass. For native plan-mode timing, read the 2026-10-26 note immediately above; it
++   > is not restated here. On Codex planning/write limits are instruction-enforced, with both fkit
++   > hooks disabled; no native transition or structural Bash guard is promised. This corrects the
++   > mechanism wording only; the approval-before-code decision and accepted status remain unchanged.
++   > Existing ADR text remains byte-identical. Wording checked against current canonical procedures
++   > and retained evidence on 2026-10-30; no new plan-mode runtime test ran.
+ 
+ 3. **"Walk away" is ordinary in-session turn-taking, not background delegation.** The loop stays a
+    `fkit coder` **session** with the owner reachable; between gates it proceeds without waiting, and at
+--- a/ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md
++++ b/ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md
+@@ -22,6 +22,9 @@
+   ⚠️ 2026-10-09 (`0498`) — this ADR now carries **four** dated notes: the three listed in the line
+   above, plus one below §Decision 2 (the conductor also never diagnoses). The line above is left
+   byte-identical and is superseded by this line; the same append-only rule and the same legend apply.
++  ⚠️ 2026-10-30 (`0545`) — this ADR now carries **five** dated notes; the fifth follows the
++  honesty-clause ADR-055 pointer and also covers Options considered. Earlier counts remain
++  byte-identical; the same append-only rule and marker legend apply.
+ 
+ > **What this ADR decides, in one line:** `fkit-lead` grows from a router into a **single-point-of-
+ > interaction conductor** that spawns and drives any role — feasible because the ADR-018 hook already
+@@ -156,6 +159,19 @@
+ > fidelity, not proof. **Why ⚠️ and not ⛔:** nothing here is overturned; the path this ADR decided gained
+ > a written rule. **Status stays `accepted`.**
+ 
++> ⚠️ **Dated wording note 2026-10-30 (`0545`) — this note also qualifies the “structural write-wall”
++> wording in Options considered.** Historical Claude headless tests refused `Write` outside the plan
++> file but allowed Bash writes; `Edit` was not directly tested. Interactive models declined writes
++> before runtime handling could be tested: 3m declined twice; 3m-bis was not triggered/not
++> applicable. Neither is a pass. With plan review on (the `fkit coder` default), drafting and review
++> precede native Claude plan mode, which covers only approval. The historical “old way” pointer
++> means `fkit coder --no-plan-review` + `/fkit-task-ship-loop` for native plan mode from the start;
++> the historical headless evidence does not establish a full write-wall. Codex planning/write limits
++> remain instruction-enforced, both fkit hooks disabled. The plan-only → owner approval → implement
++> split and its accepted prose-enforced cost remain unchanged. Status stays `accepted`. Existing ADR
++> text remains byte-identical. Wording checked against current canonical procedures and retained
++> evidence on 2026-10-30; no new plan-mode runtime test ran.
++
+ ## Options considered
+ 
+ - **Evolve `fkit-lead` into the conductor (chosen).** Delivers the single-point-of-interaction the owner
+--- a/ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md
++++ b/ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md
+@@ -37,6 +37,9 @@
+   lists, plus one cite correction below **§Amendment → A2**'s paragraph *"ADR-019's audit obligation
+   transfers with its permission"*. The count in the `0473` line is left byte-identical and is
+   superseded by this line; the same append-only rule and the same legend apply.
++  ⚠️ 2026-10-30 (`0545`) — this ADR now carries **six** dated notes; the sixth follows Decision 7
++  and also covers §Amendment A3. Earlier counts remain byte-identical; the same append-only rule and
++  marker legend apply.
+ - **Evidence:** [`reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md`](../reports/2026-07-22-design-fkit-lead-orchestrator-and-sprint-ship-loop.md)
+   §5 (the contract), §5.3 (the live-relay gate), §5.4 (stop conditions).
+ 
+@@ -153,6 +156,19 @@
+ 7. **The plan/build split is mandatory** — it is the only thing standing in for plan mode's write-wall
+    on this path (ADR-031's honesty clause). The "plan only, write nothing yet" worker prompt is
+    **prose-enforced**, and that limit is accepted, not hidden.
++
++   > ⚠️ **Dated wording note 2026-10-30 (`0545`) — this also qualifies §Amendment A3's “real session
++   > write-wall” and “old way” claims.** Historical Claude headless tests refused `Write` outside
++   > the plan file but allowed Bash writes; `Edit` was not directly tested. Interactive models
++   > declined writes before runtime handling could be tested: 3m declined twice; 3m-bis was not
++   > triggered/not applicable. Neither is a pass. With plan review on (the `fkit coder` default),
++   > drafting and review precede native Claude plan mode, which covers only approval; `fkit coder
++   > --no-plan-review` + `/fkit-task-ship-loop` keeps native plan mode from the start. This evidence
++   > establishes no structural Bash guard for either path. Codex planning/write limits remain
++   > instruction-enforced, both fkit hooks disabled. The mandatory split, A3's trust-not-proof cost
++   > and A4's re-raise rules remain unchanged. Status stays `accepted`. Existing ADR text remains
++   > byte-identical. Wording checked against current canonical procedures and retained evidence on
++   > 2026-10-30; no new plan-mode runtime test ran.
+ 
+ 8. **Stop-hook interaction.** When [ADR-030](adr-030-stop-hook-enforces-turn-completion-contract.md)'s
+    `Stop` hook is built, `fkit-sprint-ship-loop` **joins `/fkit-task-ship-loop` in its Decision-7 skip
+--- a/ai-agents/knowledge-base/decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md
++++ b/ai-agents/knowledge-base/decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md
+@@ -13,6 +13,9 @@
+   §Amendment A1–A4 (the marker). Both stay `accepted`; each carries a dated ⚠️ pointer note to this ADR,
+   as do [ADR-037](adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling.md)
+   and [ADR-044](adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md).
++- **Corrections:** 2026-10-30 (`0545`) — one dated ⚠️ wording note follows Decision 7. ⚠️ marks a
++  drifted fact, not an overturned decision; all existing text remains byte-identical and Status
++  stays `accepted`.
+ 
+ > **Citation form.** Agent, skill and hook files are mutable: they are cited by **section plus quoted
+ > phrase**, never by line number. Task briefs and plans are coordination documents: cited by **heading
+@@ -127,6 +130,19 @@
+    reader can compare the quote with the session); **it is not proof, and no document may call it
+    "verification".** Owners who want a structural write-wall for a task still ship it the old way:
+    `fkit coder` + `/fkit-task-ship-loop` (plan mode).
++
++   > ⚠️ **Dated wording note 2026-10-30 (`0545`) — Decision 7's “structural write-wall” pointer is
++   > narrower than stated.** Historical Claude headless tests refused `Write` outside the plan file
++   > but allowed Bash writes; `Edit` was not directly tested. Interactive models declined writes
++   > before runtime handling could be tested: 3m declined twice; 3m-bis was not triggered/not
++   > applicable. Neither is a pass. With plan review on (the `fkit coder` default), drafting and
++   > review precede native Claude plan mode, which covers only approval; the “old way” pointer means
++   > `fkit coder --no-plan-review` + `/fkit-task-ship-loop` for native plan mode from the start.
++   > This evidence establishes no structural Bash guard for either path. Codex planning/write limits
++   > remain instruction-enforced, both fkit hooks disabled. The marker's four fields and
++   > trust-not-proof cost remain unchanged. Status stays `accepted`. Existing ADR text remains
++   > byte-identical. Wording checked against current canonical procedures and retained evidence on
++   > 2026-10-30; no new plan-mode runtime test ran.
+ 
+ 8. **The carry-check hook is unchanged.** It keys on the `plan:` pointer line, not on the caller
+    (§Context). **A lead spawn MUST carry the `plan: <path>/plan.md  blob <hash>` pointer whenever a
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -10,6 +10,10 @@
+ `git log <old-tag>..<new-tag>`.
+ 
+ ## Unreleased
++
++- Clarify planning limits without changing behavior: historical Claude headless Write refusal does
++  not establish Edit or interactive runtime handling or a Bash write-wall. Native plan-mode timing
++  still follows plan-review opt-outs; Codex planning/write limits remain instruction-enforced.
+ 
+ - `/fkit-task-ship-loop` now forwards plan-review opt-outs, shows the full default-ON review at its
+   single plan gate, and saves `plan-review.md` only after approval. Use `--no-plan-review` for one

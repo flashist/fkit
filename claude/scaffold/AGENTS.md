@@ -12,6 +12,16 @@ The full project brief — domain, architecture, conventions — lives in
 <!-- fkit:begin-rules -->
 <!-- fkit:end-rules -->
 
+## Configured fkit sessions
+
+fkit can launch all seven roles through Codex or Claude, with project/per-role runtime and model
+choices. A launcher-provided runtime binding fixes the current role; the model or executable name
+does not make every Codex session an adversarial reviewer. Follow that binding for procedure loads,
+fresh peer contexts and owner questions. Owned procedure invocation is checked by the dispatcher;
+general role-write boundaries remain instructions. Do not assume a Codex planning write wall or
+active optional hooks. A usable same-model review needs visible diversity disclosure; a missing
+second pass remains partial. Legacy unconfigured Claude sessions retain their native procedure path.
+
 ## Knowledge Base & Wiki
 
 A structured wiki lives in `ai-agents/wiki-vault/` (Karpathy LLM-wiki pattern). Before

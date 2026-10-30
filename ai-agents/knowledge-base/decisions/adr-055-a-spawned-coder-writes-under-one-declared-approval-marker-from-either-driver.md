@@ -13,6 +13,9 @@
   §Amendment A1–A4 (the marker). Both stay `accepted`; each carries a dated ⚠️ pointer note to this ADR,
   as do [ADR-037](adr-037-a-skill-rule-binds-a-spawned-worker-unless-the-instruction-relays-an-owner-ruling.md)
   and [ADR-044](adr-044-build-role-follows-the-deliverables-skill-vault-rows-skip-at-step-1.md).
+- **Corrections:** 2026-10-30 (`0545`) — one dated ⚠️ wording note follows Decision 7. ⚠️ marks a
+  drifted fact, not an overturned decision; all existing text remains byte-identical and Status
+  stays `accepted`.
 
 > **Citation form.** Agent, skill and hook files are mutable: they are cited by **section plus quoted
 > phrase**, never by line number. Task briefs and plans are coordination documents: cited by **heading
@@ -127,6 +130,19 @@ prompt happened to be worded.** That is the defect: an outcome set by wording, n
    reader can compare the quote with the session); **it is not proof, and no document may call it
    "verification".** Owners who want a structural write-wall for a task still ship it the old way:
    `fkit coder` + `/fkit-task-ship-loop` (plan mode).
+
+   > ⚠️ **Dated wording note 2026-10-30 (`0545`) — Decision 7's “structural write-wall” pointer is
+   > narrower than stated.** Historical Claude headless tests refused `Write` outside the plan file
+   > but allowed Bash writes; `Edit` was not directly tested. Interactive models declined writes
+   > before runtime handling could be tested: 3m declined twice; 3m-bis was not triggered/not
+   > applicable. Neither is a pass. With plan review on (the `fkit coder` default), drafting and
+   > review precede native Claude plan mode, which covers only approval; the “old way” pointer means
+   > `fkit coder --no-plan-review` + `/fkit-task-ship-loop` for native plan mode from the start.
+   > This evidence establishes no structural Bash guard for either path. Codex planning/write limits
+   > remain instruction-enforced, both fkit hooks disabled. The marker's four fields and
+   > trust-not-proof cost remain unchanged. Status stays `accepted`. Existing ADR text remains
+   > byte-identical. Wording checked against current canonical procedures and retained evidence on
+   > 2026-10-30; no new plan-mode runtime test ran.
 
 8. **The carry-check hook is unchanged.** It keys on the `plan:` pointer line, not on the caller
    (§Context). **A lead spawn MUST carry the `plan: <path>/plan.md  blob <hash>` pointer whenever a

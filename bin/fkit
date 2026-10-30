@@ -1,0 +1,43 @@
+#!/bin/sh
+# fkit-runtime-dispatch
+set -eu
+here="$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)"
+if [ "${FKIT_NO_SELF_HOST:-0}" != 1 ] && [ -f "$PWD/codex/fkit.mjs" ] && [ -x "$PWD/bin/fkit" ] && [ "$PWD" != "$here" ]; then
+  export FKIT_NO_SELF_HOST=1
+  exec "$PWD/bin/fkit" "$@"
+fi
+case "${1:-}" in
+  board|update|--update|upgrade|--upgrade|self-update) exec sh "$here/claude/fkit-claude.sh" "$@" ;;
+  --help|-h)
+    cat <<'EOF'
+Usage: fkit [role] [runtime options]
+       fkit --runtime codex|claude [role]
+       fkit configure --runtime codex|claude --runtime-default [--role-model wiki=MODEL]
+       fkit configure --role-runtime ROLE=codex|claude [--role-model ROLE=MODEL]
+       fkit configure --effort LEVEL|default [--role-effort ROLE=LEVEL|default|inherit]
+       fkit settings | models | setup | board | update
+
+Unconfigured projects keep the legacy Claude launcher. Configured projects use their
+saved runtime and per-role models. --runtime selects only this root session, using
+the chosen CLI default if it differs from the saved runtime; child settings stay saved.
+New configuration and configured sessions require Node.js. No login is changed.
+EOF
+    exit 0 ;;
+esac
+configured=0
+case "${1:-}" in configure|settings|setup|models|consult) configured=1 ;; esac
+if [ -e "$PWD/.fkit/model-settings.json" ] || [ -L "$PWD/.fkit/model-settings.json" ] || [ -L "$PWD/.fkit" ]; then configured=1; fi
+for argument do case "$argument" in --runtime|--root) configured=1 ;; esac; done
+if [ "$configured" = 0 ]; then exec sh "$here/claude/fkit-claude.sh" "$@"; fi
+command -v node >/dev/null 2>&1 || { echo 'fkit: configured runtimes need Node.js. Install Node.js, then retry.' >&2; exit 1; }
+FKIT_MANAGEMENT_ONLY=1 sh "$here/claude/fkit-claude.sh"
+if [ "${1:-}" = --runtime ]; then
+  [ "$#" -ge 2 ] || { echo 'fkit: --runtime needs codex or claude' >&2; exit 1; }
+  runtime="$2"; shift 2
+  case "${1:-}" in
+    configure) shift; exec node "$here/codex/fkit.mjs" configure --runtime "$runtime" "$@" ;;
+    '') exec node "$here/codex/fkit.mjs" --runtime "$runtime" ;;
+    *) exec node "$here/codex/fkit.mjs" "$@" --runtime "$runtime" ;;
+  esac
+fi
+exec node "$here/codex/fkit.mjs" "$@"

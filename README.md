@@ -15,7 +15,8 @@ an **adversarial reviewer**, an **architect**, a **wiki librarian**, and the **l
 When one AI session plans, writes **and** reviews its own code, the review isn't independent — the
 blind spot that wrote a bug is the one that approves it. fkit splits the work into roles that
 **cannot** run each other's procedures: the coder can't review, only the producer can close a task,
-and the reviewer gets a second opinion from a *different* model (Codex). Review stops being a promise
+and the reviewer gets a second opinion in a fresh role context. A different model is recommended;
+configured Codex sessions support a visibly disclosed same-model pass. Review stops being a promise
 and becomes a rule — with a review ledger per task, a knowledge base (decisions, design specs, reports)
 and a wiki, all in an `ai-agents/` folder inside your project.
 
@@ -30,19 +31,55 @@ fkit coder      # …or go straight to one
 fkit board      # view this project's tasks and sprints in your browser, read-only (needs Node)
 ```
 
-**Requires:** [Claude Code](https://claude.com/claude-code), `curl`, `tar`, `bash`. **Optional but
-recommended:** [Codex](https://github.com/openai/codex) (`npm install -g @openai/codex && codex
-login`) — without it, reviews run on Claude only and are **loudly flagged as not model-diverse**.
-`fkit` stops if Claude Code is missing; it only warns about Codex. `fkit board` alone also needs
-[Node.js](https://nodejs.org). **Platforms:** macOS and Linux;
-Windows via WSL, untested.
+Unconfigured projects retain the legacy [Claude Code](https://claude.com/claude-code) launcher;
+[Codex](https://github.com/openai/codex) is optional but recommended for its independent review.
+Without it, legacy reviews keep their explicit NOT model-diverse fallback label. Installation needs
+`curl`, `tar` and `bash`; legacy Claude sessions work without Node. Configuration, configured runtime
+sessions and `fkit board` need [Node.js](https://nodejs.org).
+
+**Opt-in Codex preview: `v0.4.0-codex.1`.** The preview lives on `codex/codex-preview`, separate from
+the default `main` install/update channel. To install the preview and follow its updates:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/flashist/fkit/codex/codex-preview/install.sh | FKIT_REF=codex/codex-preview sh
+```
+
+For exactly this preview, use `v0.4.0-codex.1` instead of `codex/codex-preview` in both places.
+A tag stays on that version; it does not subscribe to later previews. Tag update-notice limitations
+are documented in [RELEASING.md](RELEASING.md). This installs the shared command once; in each existing
+project directory, run `fkit configure --runtime codex`, `fkit setup`, then `fkit settings`. Confirm
+all seven roles select Codex before `fkit lead`; explicit Claude role overrides are preserved until
+changed with `fkit configure --role-runtime ROLE=codex`. Keep existing project records and do not
+repeat project initiation. Setup refreshes fkit-managed resources and instruction blocks; edits
+inside those managed areas are replaced. Exit older sessions before refreshing.
+
+Codex checks used CLI 0.165.0 and Node 24.13.0 on macOS; other versions/platforms are not certified.
+Real Claude compatibility remains pending; see [runtime evidence](model-agnostic-sprint/local-acceptance.md).
+Checkout users can still use `./bin/fkit` or `npm start -- ...` without changing their global install.
+
+```sh
+./bin/fkit configure --root /path/to/project --runtime codex --runtime-default
+./bin/fkit lead --root /path/to/project
+./bin/fkit configure --root /path/to/project --role-model wiki=MODEL_ID
+# Only in a Claude-capable environment; live mixed-runtime certification is deferred here.
+./bin/fkit configure --root /path/to/project --role-runtime wiki=claude --role-model wiki=MODEL_ID
+```
+
+An explicit model is passed to that CLI; unavailable choices fail without switching runtimes or
+models. Credentials stay with the CLIs. A default model is not bundled. Configure once in an existing
+project without repeating product intake. [Runtime details and limits](codex/README.md).
+
+The local Codex path does not require Claude. On this Mac the owner confirmed Claude's API is
+unavailable; run all effective roles on Codex. Claude compatibility remains explicitly unverified
+and deferred to a capable environment, rather than blocking local Codex use.
 
 The [installer](install.sh) (read it first if you like) copies fkit to `~/.local/share/fkit` and the
 `fkit` command to `~/.local/bin`, which must be on your `PATH` — it tells you if it isn't. It installs
 from `main`; re-running it is safe. Each launch then sets the project up if needed (`ai-agents/`,
 `CLAUDE.md` / `AGENTS.md`, the agents and skills under `.claude/`) and opens the role **in the same
-tab** — for two roles at once, open another tab. fkit runs several Claude Code sessions and subagents,
-plus Codex, so expect noticeably more model usage than a single session.
+tab** — for two roles at once, open another tab. Configured sessions also install owned generated
+procedures under `.agents/skills/`; canonical policy remains under `claude/`. Multiple fresh role
+processes consume more model usage than a single session.
 
 ## A first session
 
@@ -81,11 +118,16 @@ https://github.com/user-attachments/assets/9e0a753b-dc74-447c-8089-34f7bf22900b
 
 An eighth role, a sandboxed e2e tester, is authorized but not built yet. `/fkit-team` shows who does what.
 
-**The role lock is enforced, not advisory.** A session can run only its own role's `/fkit-*`
+**On the legacy Claude path, the role lock is enforced by a hook.** A session can run only its own role's `/fkit-*`
 commands; the rest still show in the `/` menu but are refused, by a hook that checks every call —
 in a role you consult, too. `@fkit-<role> <question>` consults another role and brings the answer
 back (up to two hops). **Only the producer closes work**; a close made by an agent rather than by you
 is marked `(agent-closed — not owner-verified)`. Details: [`claude/README.md`](claude/README.md).
+
+Configured Codex sessions check owned skill invocation and delegation through fkit's dispatcher.
+The first Codex version registers no fkit PreToolUse or Stop hooks; their code is retained for
+later evaluation. Agent instructions still require role boundaries, interactive owner questions
+and “What's next?”. General file-write ownership and plan approval remain instruction-enforced.
 
 ## Key terms
 
@@ -117,6 +159,16 @@ repairs only what you approve, diffs in view, deleting nothing. Changed one on p
 `ai-agents/.fkit-accepted-drift`. Upgrade notes: [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Configuration
+
+Configured projects use ignored `.fkit/model-settings.json`: one default runtime/model and optional
+role overrides. `fkit settings` shows effective choices. `fkit --runtime codex|claude ROLE` selects
+only that root session; switching runtimes uses its CLI default, while saved child settings remain
+unchanged. `fkit configure --runtime ...` changes the saved default and preserves existing explicit
+role choices. No login or user CLI configuration is replaced.
+
+Codex setup asks for reasoning effort after model selection, including individual role choices.
+Change it later with `fkit configure --effort high` or `--role-effort wiki=low`;
+`default` follows the CLI effort, and role effort `inherit` uses the project setting.
 
 | Variable | Default | What it does |
 |---|---|---|

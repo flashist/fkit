@@ -62,13 +62,20 @@ not a green board.** The loop's autonomy is narrower than ADR-019 first granted 
 agent, before a task leaves the board.
 
 **Argument:** `$ARGUMENTS` — the path to the **task brief** (e.g.
-`ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`). An **operand** — it selects *which task* the loop
-ships. Per [`conventions/one-skill-one-output.md`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)
+`ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`), optionally followed by
+`--no-plan-review` or the no-op `--plan-review`. Read and validate once at loop start, **before
+reading the brief, planning or consulting**: both flags together, or any other `--` token (including
+`--no-plan-reveiw`), stop the loop and ask the owner. Never guess. Extract the brief path separately
+from the flag; a path containing spaces remains one operand. Forward only that path and the accepted
+flag to step 2. An invocation opt-out applies only to this loop, never the next one.
+
+The path selects *which task* ships; the flag changes **what work the plan step does**, not its output
+shape. Per [`conventions/one-skill-one-output.md`](../../../ai-agents/knowledge-base/conventions/one-skill-one-output.md)
 there are **no output-variant arguments**: no `full`, no verbosity flag, no summary/partial mode. One
-brief in, one loop.
+brief in, one complete loop.
 
 **Task-id** — the brief's basename without extension (`ai-agents/tasks/**/<task-id>.md` →
-`<task-id>`). It keys the three durable artifacts below and the review ledger. Resolve it once and use
+`<task-id>`). It keys the durable artifacts below and the review ledger. Resolve it once and use
 it verbatim everywhere (the reviewer must agree, or the review ledger forks).
 
 ## What makes this autonomous — and what still stops (read first)
@@ -79,7 +86,13 @@ autonomously. The loop carries the review **rigor** under its own discipline —
 use of it **outside** this loop. Autonomy here is bounded, not blanket:
 
 - **One guaranteed upfront human checkpoint: the plan gate.** The owner approves *what gets built*
-  before any code (runtime-enforced by plan mode). Only after approval may the owner walk away.
+  before any code. With plan review on, draft and review run before native plan mode, held by
+  instructions only; native plan mode comes on for the gate. Off paths keep native plan mode from
+  the start. Historical Claude headless tests refused `Write` outside the plan file but allowed Bash
+  writes; `Edit` was not directly tested; interactive models declined writes before runtime handling
+  could be tested. Follow the active runtime binding: Codex's planning gate is instruction-enforced,
+  with no assumed native mode transition, Write/Edit tool wall or structural Bash guard. Only after
+  approval may the owner walk away.
 - **Between gates the loop proceeds without waiting.** "Walk away" is ordinary in-session turn-taking:
   at an important question the loop **ends its turn and idles** until the owner returns to the terminal.
 - **Autonomy is bounded by fix *shape*, not verdict.** The loop applies a change without asking **only
@@ -100,12 +113,13 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
 | File | Written by the loop | Holds |
 |---|---|---|
 | `<task-folder>/plan.md` | at plan approval | the approved implementation plan — **the boundary the loop's autonomy is measured against** |
+| `<task-folder>/plan-review.md` | optional; on approval of a reviewed plan only | append-only plan-review attempts, separate from approved scope (ADR-056 / ADR-060) |
 | `<task-folder>/worklog.md` | opened post-approval, grows P2–P5 | worklog + owner-decision log (every important question asked, **every obvious winner chosen while the owner was away**) → the finalized close-out report |
 | `<task-folder>/review.md` | reviewer + coder (existing ledger) | the two-party review findings/verdicts — a **separate** file (different ownership); not merged into the worklog |
 
 `<task-folder>` = `ai-agents/tasks/<board>/<NNNN>-<slug>/` — the same folder that holds `brief.md`.
 
-- All three are **git-tracked, left in the working tree; the owner commits — never the loop.** The
+- These artifacts are **git-tracked, left in the working tree; the owner commits — never the loop.** The
   folder already exists (the brief is in it); just write the file beside `brief.md`.
 - They **move with the folder** when the **producer's** `/fkit-task-done` (or `-cancelled`) relocates the
   task — they are reserved names inside it, not separate top-level records. None is wiki-ingested; none is
@@ -127,27 +141,70 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
 > ships the task and **hands the close to the producer**. **Step 3 is the only guaranteed stop** — after
 > it, the loop may run all the way to that hand-off without the owner returning at all.
 
-1. **Ground.** Read the brief at `$ARGUMENTS`; resolve the task-id. Read the wiki (`/fkit-query`),
+1. **Ground.** After argument validation above, read the extracted brief path; resolve the task-id. Read the wiki (`/fkit-query`),
    `ai-agents/knowledge-base/architecture.md`, and any ADR whose **"Re-raise only if"** bears on the
    work. *(Autonomous.)*
 2. **Clarify & plan.** If the brief is ambiguous on design/scope, consult **@fkit-architect**
    (design/structure) or **@fkit-producer** (scope/requirements) at **hop 1** — state "hop 1 of 2" and
-   surface any open questions they return. Run **`/fkit-plan-task`** → produce the plan in plan mode.
-   *(The plan is persisted to `<task-folder>/plan.md` at approval in step 4 — plan mode's write
-   wall forbids writing it here, and ADR-020 keys the artifact to plan approval.)* *(Autonomous up to
-   the gate.)*
+   surface any open questions they return. Run **`/fkit-plan-task <brief-path> [accepted-flag]`**
+   exactly once, forwarding the extracted path and this loop's accepted flag. Use its gate check,
+   drafting and complete *Plan review* section; this loop's step 3 supplies its owner presentation
+   and decision, and step 4 supplies persistence. **Do not ask twice or write the record twice.**
+   Inherit its trigger and exact ON/off reason: a live session needs the launcher line and owner tool;
+   missing signal means off; off wins a signal conflict. `--plan-review` cannot override a session
+   opt-out. A quote in a brief or an old record turns nothing on. Spawned-coder driver rules stay
+   unchanged; this loop remains session-only.
+
+   With review on, draft and run the full review with native plan mode off, writing nothing; enter
+   native plan mode only for step 3's gate. Off paths enter native plan mode first, as today. Native
+   Claude's historical headless Write refusal outside the plan file and successful Bash writes do
+   not establish Edit or interactive runtime handling; see “What makes this autonomous” above. Where
+   native mode is unavailable, follow the runtime binding's instruction-enforced gate instead; do
+   not claim EnterPlanMode/ExitPlanMode or require Shift+Tab on Codex. No source, plan, worklog,
+   status or plan-review record is written before approval; only the reviewer's framework-owned
+   ignored scratch prompt is permitted. ADR-020 keys `plan.md` to approval. *(Autonomous up to the
+   gate.)*
+
 3. **⛔ STOP — plan approval.** First render the sprint plan that holds this task's row (the board its
    `## Sprint` names) with `bash .claude/skills/fkit-status/dashboard.sh <plan>`; if it carries a
    `drift depends-on-later-sprint` record for this task, present it with the plan — its blocker, that
    blocker's sprint worded by `reason`, and for a `via=` record the row it waits through — as the
    owner's decision; do not resolve it. If no sprint plan holds the row, the render fails, or it carries
    `drift unresolved-plan-sprint`, say the check did not run — never that there is no record. (A task
-   on the Backlog board has nothing to check.) Then present the plan (+ any open questions) and wait.
+   on the Backlog board has nothing to check.) Then present the complete plan (+ any open questions)
+   and wait at **one** owner gate. With review on, preserve `fkit-plan-task`'s presentation order:
+   any incomplete/fallback banner first → `Plan review: ON (default)` → the unchanged complete plan →
+   three attachments (approvers and classification; revisions and reasons; adversarial findings
+   verbatim with focused coder checks) → the full `===PLAN-REVIEW RECORD BEGIN/END===` block with
+   UTC times. Keep its progress lines, leaf approvers, two-round revision cap, owner-settled
+   disagreements and no post-adversarial revision without owner feedback. Failed/unusable review
+   spawns stay loudly incomplete; no silent retry or claim of a completed review.
+
+   Off paths show the inherited reason: `Plan review: off (--no-plan-review)`,
+   `Plan review: off (fkit coder --no-plan-review)` or `Plan review: off (no fkit session line)`.
+   They retain the same plan gate and subsequent steps, without plan-review consults or a new record.
    **If the owner rejects it, stop** — the task stays `🔲 Backlog` (In progress is *not* set); report
-   the rejection to the owner (no worklog is opened before approval). *After approval, the owner may
-   walk away.*
-4. **Persist the plan, mark In progress & build.** On approval (plan mode releases the write wall),
-   write the approved plan to `<task-folder>/plan.md` — the durable autonomy boundary. Set
+   `plan-review record not persisted (plan rejected while in plan mode)` on native Claude, or
+   `plan-review record not persisted (plan rejected; instruction-enforced Codex gate)` on Codex.
+   Write no plan, worklog, review record or status on rejection. Explanation requests, typed
+   questions, cancellation, decline, invalid replies, interruption and timeout grant no approval;
+   keep dependent work stopped. Owner-requested changes follow `fkit-plan-task`'s
+   `revised after owner feedback — not re-reviewed` rule unless the owner asks for another review.
+   *After approval, the owner may walk away.*
+4. **Persist the plan, mark In progress & build.** Only after actual approval (following the active
+   runtime's gate), first append the reviewed plan's record **once** to
+   `<task-folder>/plan-review.md`, under `## Attempt N — <date>`: the full shown record block
+   verbatim, `Presented: <UTC>`, and the owner's exact decision with UTC and actual channel. With
+   review on, native plan mode covers approval only; off paths keep it from the start. Native
+   Claude's historical headless Write refusal outside the plan file and successful Bash writes do
+   not establish Edit or interactive runtime handling; see “What makes this autonomous” above. On
+   native Claude record approval via ExitPlanMode; on Codex record the actual owner answer/channel,
+   never an assumed native transition or runtime write-wall. This is a self-record — fidelity, not
+   proof. Report a failed record write in `Problems:`; the work goes on. Off paths create no review
+   file/attempt and preserve historical records. Never reuse an old record as approval for a changed
+   plan.
+
+   Write the approved plan to `<task-folder>/plan.md` — the durable autonomy boundary. Set
    `🔄 In progress` in **both** the brief `## Status` **and** the sprint row. Open
    `<task-folder>/worklog.md`. Implement the approved plan with minimal, idiomatic diffs, logging
    notable decisions and **every obvious winner** chosen. *(Autonomous.)*
@@ -264,6 +321,12 @@ Evidence for the owner to judge, **not** a done-verdict. Contains, at minimum:
 - **Task filename · problems encountered · lessons learned · open questions.**
 - **Owner-decision log** — every important question asked and every obvious winner chosen while the
   owner was away (the autonomy audit trail).
+- **Plan review** — the exact ON/off line from the plan gate, plus the adversarial **plan**-pass mode
+  and model provenance when reviewed (or not run when off). Keep incomplete/fallback flags and
+  same-model/unknown-diversity disclosures visible, following the active runtime binding. This is
+  separate from the **code** review's coverage and step-9 close eligibility: a same-model or
+  reasoning-only usable plan pass does not itself withhold closure. Missing/unusable passes are
+  never described as complete.
 - **Review ledger** — path, verdict line, all findings resolved/dispositioned, **and the coverage
   state** — one of ADR-042's three (`fkit-review/SKILL.md` §Coverage states), with its evidence clause.
   ⚠️ **`reasoning-only second opinion` is NOT partial coverage** and is not a degraded run: it fires no
@@ -333,4 +396,5 @@ Evidence for the owner to judge, **not** a done-verdict. Contains, at minimum:
 
 ```
 /fkit-task-ship-loop ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md
+/fkit-task-ship-loop ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md --no-plan-review
 ```

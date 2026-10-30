@@ -1,5 +1,50 @@
 # fkit — Architecture
 
+## Configured runtime addition — 2026-10-29
+
+[ADR-061](decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md)
+accepts Codex as a full seven-role runtime with measured local limits. The legacy sections below
+retain their original dated evidence; their single-runtime descriptions do not describe the new
+configured path. Current implementation and validation are in `codex/README.md` and
+`model-agnostic-sprint/local-acceptance.md` at the repository root.
+
+| Component | Current responsibility |
+| --- | --- |
+| `bin/fkit` | Public shell dispatcher; legacy behavior without model settings, configured CLI path otherwise; common board/update and checkout self-hosting |
+| `codex/fkit.mjs`, `settings.mjs`, `models.mjs` | Configuration, direct role launch, runtime/model inheritance and explicit root-session selection; credentials stay with CLIs |
+| `codex/materialize.mjs` | Generated owned procedures and runtime bindings from canonical `claude/` policy; shared initializer preserves project context |
+| `codex/server.mjs`, `consult.mjs` | Session-scoped stdio dispatcher, fixed caller/ownership, fresh CLI peers, ordinary two-hop/cycle/leaf checks, separate reviewer second pass and carried-plan fidelity |
+| `codex/claude.mjs` | Configured Claude argv/result adapter; native root questions/planning, dispatcher peers, restricted reasoning-only adversarial tools |
+| `codex/owner-question.mjs`, `hook.mjs`, `diagnostics.mjs` | Actual Codex owner forms, dormant hook implementation retained for later evaluation, and safe startup categories/model provenance |
+| `install.sh` | Ships both adapters with their shared canonical resources; preserves update provenance and refuses incomplete/unowned new targets |
+
+Local settings are ignored `.fkit/model-settings.json` schema 1. Runtime changes resolve a target
+model explicitly and do not carry incompatible model/reasoning choices. No unavailable selection
+permits silent fallback. `--runtime` on launch affects only that root session; peers resolve saved
+choices independently. Generated `.agents/skills/fkit-*` are managed resources, never a second
+ownership registry. The scaffold spec/manifest remains canonical under `claude/`.
+
+Interactive Codex launches send the canonical role file's folded `initialPrompt` as their first
+message, so loading role instructions also leads to an actual startup turn. Supplied onboarding
+prompts take precedence; headless/delegated tasks keep their task text without a greeting.
+
+Enforcement is scoped: dispatcher invocation ownership/topology is mechanical; general role writes
+and Codex planning gates are instructional. The owner disabled Codex PreToolUse and Stop hook
+registration for the first version on 2026-10-29; the implementation is retained for later feedback.
+The written footer/question-tool rules remain in force. Carry checking retains
+its source fail-open policy and is not proof of owner approval. Codex adversarial remains read-only
+pending ADR-042 D2/task 0273; configured Claude adversarial has read tools only, with no claimed OS
+sandbox. Same-model fresh review is supported with visible diversity disclosure; unavailable passes
+remain partial and execution evidence is per pass.
+
+Seven direct no-Claude roles, task/sprint lifecycle and public Codex launch passed bounded live
+checks. Configured Claude routing and install/update behavior passed deterministic contracts, but
+real legacy/configured/plain Claude calls fail with an API error despite a valid outside-sandbox
+login. **Live Claude compatibility and release readiness remain unverified.** The source worktree
+has not replaced the owner's installed global command or published a release.
+
+## Legacy architecture record
+
 **The architecture of the system as it exists today** (last refreshed 2026-07-23; originally
 2026-07-11, post-Omnigent-removal). One runtime, **seven built roles** (an eighth, a sandboxed e2e
 tester, is authorized in [ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)

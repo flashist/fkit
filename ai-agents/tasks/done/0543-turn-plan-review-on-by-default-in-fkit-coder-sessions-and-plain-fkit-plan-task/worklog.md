@@ -213,3 +213,128 @@ the brief and the Sprint 12 row, as the option he picked said; the loop's defaul
 was not applied, because his ruling named the status. **Not routed to the producer.** Next: the owner
 runs the live check above. On a pass, route the close (a coder session spawns `@fkit-producer` to
 close). On a fail, fix → re-verify → review.
+
+## Codex evidence and acceptance proposal — 2026-10-30
+
+The owner selected, verbatim in the desktop conversation: "Codex acceptance proposal (Recommended)
+— propose accepting the Codex results, with Claude verification tracked separately." The question
+explicitly selected a drafting direction, not approval to close. The October 27 hold is not silently
+discharged. Status remains In progress; 0544's dependency remains.
+
+The completed hook-free Codex automation is now retained in
+[verification/2026-10-30-codex-automation.md](verification/2026-10-30-codex-automation.md) and its
+[machine evidence](verification/2026-10-30-codex-automation.json). Default review, synthetic form
+approval/rejection and persistence, both opt-outs/reset, and bounded no-switch worker behavior were
+measured. A separately authorized example build/review passed 27 assertions; these are example-task
+assertions, not 27 launcher contracts. Neither original Claude mechanics nor complete native human UI
+acceptance is claimed. Same-model, generic-question-tool visibility and instruction-only limits remain
+explicit. Original steps 4–5 above retain their historical NOT RUN state for the original live check.
+
+[acceptance-proposal.md](acceptance-proposal.md) maps all six original verification steps to current
+evidence, defines proposed Codex-only criteria C1–C5, and retains a separate unverified checklist.
+It requires a scope check and the owner's actual acceptance ruling before any producer mover. No
+source implementation, test rerun, ADR amendment, lifecycle move, commit or push occurred while filing
+these records. The owner asked the coordinator to perform the work/testing and bring back only genuine
+unresolved decisions or tests the coordinator cannot perform; no manual terminal relay is requested.
+
+The actual fixed architect completed the read-only scope check: **APPROVE FOR OWNER DECISION**, no
+verified defect or prior prerequisite. The [verbatim response](acceptance-review.md) confirms that
+an additions-only ADR/design note is sufficient after actual acceptance. Requested and CLI-reported
+model gpt-6.1-sol; exit 0; no tests or peer calls. Owner acceptance is still pending. Documentation
+filing checks: JSON evidence parsed with synthetic/human/Claude flags preserved, all new document
+file links resolved, git diff --check passed, and actual dashboard selection/render emitted no drift.
+The Sprint 12 roll-up remains 11 done, 1 in progress, 2 backlog, 1 cancelled out of 15.
+
+## Owner acceptance — 2026-10-30
+
+Actual desktop chat request_user_input_async question, verbatim:
+
+> Accept the reviewed Codex-only criteria for 0543, leave the listed Claude/native human UI checks explicitly unverified and tracked separately, and replace your earlier personal-live-check hold so the producer can close 0543 as agent-closed—not owner-verified, then begin 0544 planning?
+
+Actual selected answer, verbatim:
+
+> Accept Codex criteria; close 0543 and plan 0544 (Recommended)
+
+Recorded at 2026-10-30T08:58:46.877838+00:00; this is the human owner's response, not a synthetic fixture reply. It accepts the proposed Codex criteria C1–C5, retains the separate unverified native UI/Claude checklist, replaces the earlier personal-live-check hold for Codex completion only, and authorizes producer closure with the (agent-closed — not owner-verified) marker followed by 0544 planning. It does not verify deferred behavior, approve 0544 implementation, authorize a commit/push/release, reactivate hooks or grant wiki write ownership. Architect note and producer closure are the remaining execution steps; closure has not yet landed when this entry is filed.
+
+
+## Producer closure execution — 2026-10-30
+
+Actual fixed `fkit-producer`, spawned (not owner-present), invoked the actual `fkit_skill`
+`fkit-task-done` procedure. This entry records closure execution, not new runtime evidence.
+
+Actual human owner question, desktop chat `request_user_input_async`, 2026-10-30,
+recorded at `2026-10-30T08:58:46.877838+00:00`, verbatim:
+
+> Accept the reviewed Codex-only criteria for 0543, leave the listed Claude/native human UI checks explicitly unverified and tracked separately, and replace your earlier personal-live-check hold so the producer can close 0543 as agent-closed—not owner-verified, then begin 0544 planning?
+
+Actual selected answer, verbatim:
+
+> Accept Codex criteria; close 0543 and plan 0544 (Recommended)
+
+Verified the proposal's acceptance end section, acceptance-review, original plan/worklog/review,
+retained verification records, and the actual architect's dated 2026-10-30 EOF additions to ADR-060
+and `2026-10-24-design-plan-review-on-by-default-session-paths.md` before moving. C1–C5 are accepted
+for Codex only, replacing the October 27 personal-live-check hold only for this runtime. Original
+proposal, owner decisions, historical tests and review claims remain historical; synthetic decisions
+remain synthetic. No full native UI/Claude/full-lifecycle pass is inferred.
+
+Moved the entire 0543 folder from `tasks/backlog/` to `tasks/done/` with `git mv`. The initial
+sandboxed command could not create `.git/index.lock`; the same scoped command succeeded after
+existing automatic approval review. No manual move substituted. All nine tracked/untracked files
+were retained. Brief and Sprint 12 P13 now read **✅ Done (agent-closed — not owner-verified)**;
+only P13's fulfilled Tier-2 pre-plan warning was trimmed. No parent epic is declared.
+
+Repaired the review ledger's `Task:` header locator, two acceptance-review hrefs, the Sprint 12
+brief href, three ADR-060 hrefs and four existing migration hrefs. ADR prose is untouched.
+Same-depth outbound links remain correct; no moved-folder sibling link needed repair. The live
+acceptance-proposal headline was updated only after the closure markers/location landed. Updated
+only the four authorized migration top checkpoints and added the separate unverified-checklist
+pointer to validation.md; prior entries and Claude-capable verifier handoff remain retained.
+
+Frozen evidence: review.md's `File(s) under review:` header is a dated review-scope claim, not a
+forwarding address; every other byte there except `Task:` is retained. plan.md has no self-locator
+and is wholly retained. verification/ is wholly retained, including historical pending-acceptance,
+`task0543Closed:false` and synthetic/human/Claude flags: these describe the earlier testing phase.
+The historical worklog prefix, acceptance-review prose and original proposal/owner decisions remain
+unchanged except legitimate hrefs and the expressly authorized live proposal headline. Architect
+notes that said closure was pending remain frozen records of their execution time. Wiki-vault was
+excluded from mover reference sweeps and writes; any vault link repair/sync belongs to fkit-wiki.
+
+0544 planning is permitted later but was not started here; no 0544/0545 plan, other terminal status,
+rank, dependency or owner goal changed. No executable/settings/hook changes, model workflow or
+suite rerun, Claude/account probe, new task, commit or push. Complete native human UI approval/
+rejection and original Claude checks remain explicitly unverified in the retained checklist and
+migration verifier handoff. Planning/general writes remain instruction-only; hooks remain disabled.
+Both passes used the same model. A different model is recommended for a broader second opinion.
+Independent serving identity/diversity remains unverified.
+
+
+### Final closure consistency checks — 2026-10-30
+
+- Actual dashboard `select-active ai-agents/sprints`: Sprint 12 is the only active board;
+  actual Sprint 12 render: **12 done · 2 backlog · 1 cancelled — of 15**, no drift facts.
+  0544 and 0545 remain Backlog; the dashboard collapses the agent-closed qualifier, so direct
+  brief/board inspection confirms the full **✅ Done (agent-closed — not owner-verified)** marker.
+- Hand-checked every relative Markdown href in all touched files and the moved brief/records,
+  plus the acceptance-review absolute file/line targets; inspected the checklist heading/anchor
+  and verified the repaired review `Task:` locator exists. All resolve. **Link check: by hand
+  only — no automated link check ran.** No closed-sprint or sibling-task pointer repair needed.
+- The post-move whole-folder-name sweep (ai-agents excluding wiki-vault, plus migration Markdown)
+  has no unresolved old locator. All ten pre-existing repaired hrefs now target the done folder.
+  KB repairs separately: ADR-060 lines 663, 687, 691, links to proposal, acceptance-review and
+  verification summary only; ADR prose remains byte-identical to the pre-closure architect record.
+- Snapshot audit retained the identical nine-file task inventory and entire tracked/untracked
+  project inventory (after accounting for this move). plan.md and all three verification files
+  are byte-identical. The original worklog is a byte-identical prefix. Review and acceptance-review
+  differ only by the one header locator and two hrefs; brief differs only by its Status line;
+  proposal differs only by the authorized live headline. All unrelated file bytes match baseline,
+  including the architect design report, source/settings, 0544/0545 and existing migration work.
+- Git index inspection shows only the four tracked 0543 renames staged by git mv; no broad add or
+  unrelated staging. Existing untracked evidence remains untracked in the moved folder. Both
+  `git diff --check` and `git diff --cached --check` passed. No commit or push was made.
+
+No unresolved closure gate or owner question. Wiki current-0543 coverage is a gap: no relevant
+0543 entry was found in its index. Five commits touched ai-agents since wiki watermark
+`185ac5e07e918c089ed3afd23496587315342000`; later dirty migration records are also retained in the
+sources inspected above. Possible vault pointer repair/ingest remains fkit-wiki's work, not this close.

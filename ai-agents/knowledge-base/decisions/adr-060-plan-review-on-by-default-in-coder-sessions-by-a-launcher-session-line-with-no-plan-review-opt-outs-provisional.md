@@ -647,3 +647,82 @@ Decision 7, that relay is trust, not proof — recorded here as relayed.*
 - Task `0542`'s brief, plan and worklog (probe record); the design report above.
 - **Wiki:** **fkit-wiki** should ingest this ADR and the design report, and re-ingest ADR-056 and
   ADR-059 (new header bullet and ⛔ note each) — an architect never writes the vault.
+
+
+## 2026-10-30: 0543 Codex-only acceptance
+
+> ⛔ **Dated acceptance-scope amendment, 2026-10-30.** The owner's October 27
+> personal owner-run-live-check hold is replaced **for Codex completion only** by the
+> actual human ruling below. It is not a reversal of this ADR's plan-review policy.
+> All preceding bytes, including headings, status and historical conditions, are
+> left byte-identical. No earlier Claude result is changed or promoted to passed.
+
+**Provenance, verified against the accepted documentary record 2026-10-30:**
+real human owner, desktop chat, `request_user_input_async`, 2026-10-30; recorded
+at `2026-10-30T08:58:46.877838+00:00` in task `0543`'s
+[acceptance-proposal.md](../../tasks/done/0543-turn-plan-review-on-by-default-in-fkit-coder-sessions-and-plain-fkit-plan-task/acceptance-proposal.md),
+section **“Owner acceptance — 2026-10-30”**. The owner also supplies this exact
+question and answer in the current architect request. This is an actual owner
+response, not one of the synthetic test replies; the timestamp comes from that
+record, not a new observation of the original UI in this run.
+
+**Actual question, verbatim:**
+
+> Accept the reviewed Codex-only criteria for 0543, leave the listed Claude/native human UI checks explicitly unverified and tracked separately, and replace your earlier personal-live-check hold so the producer can close 0543 as agent-closed—not owner-verified, then begin 0544 planning?
+
+**Actual selected answer, verbatim:**
+
+> Accept Codex criteria; close 0543 and plan 0544 (Recommended)
+
+**Accepted scope:** the exact C1–C5 in the proposal's **“Proposed Codex completion
+criteria”**, including every stated limit:
+
+- **C1 — Startup and default review:** retain owner-observed native direct/menu startup plus fresh API-owned coder default-ON runs; both assigned approvers and a usable fresh adversarial pass complete before the full plan/review record and decision gate. Report same-model provenance separately from availability.
+- **C2 — Opt-outs:** launchArgs off and invocation off yield matching reasons, no review-role calls, and retain the decision gate. A following unflagged invocation in the same session returns to default ON. Existing CLI parser contracts supply parser evidence separately; this does not claim full native TTY execution of every flag path.
+- **C3 — Approval/rejection persistence:** actual synthetic MCP form replies demonstrate that plan-only approval writes only plan-review.md with the presented record, while rejection writes no planning/source artifacts. Accept this automation evidence without calling it human UI acceptance.
+- **C4 — Honest Codex planning:** pre-decision inventory unchanged, instruction-only restriction disclosed, neither native plan-mode transition nor Shift+Tab is required/claimed, both Codex hooks disabled. No universal write-wall guarantee.
+- **C5 — Worker behavior:** no instantiated session/driver switch, no fkit_ask_owner, no approver/adversarial calls or writes in the bounded no-switch consult. Generic async-question metadata visibility remains a documented limit.
+
+**Evidence and limits:** the prior actual fixed architect's
+[acceptance-review.md](../../tasks/done/0543-turn-plan-review-on-by-default-in-fkit-coder-sessions-and-plain-fkit-plan-task/acceptance-review.md)
+(**“Architect response verbatim”**) found no verified defect or prior prerequisite
+and judged an additions-only note sufficient after actual acceptance. Its earlier
+“APPROVE FOR OWNER DECISION” was a scope check, not owner acceptance. The
+[verification summary](../../tasks/done/0543-turn-plan-review-on-by-default-in-fkit-coder-sessions-and-plain-fkit-plan-task/verification/2026-10-30-codex-automation.md)
+(**“Method and provenance”**, **“Measured behavior”**, **“Failures and coverage
+boundaries retained”**) supplies bounded historical execution evidence; this
+amendment runs no tests or review/model calls. Its earlier “acceptance proposal
+pending” status is a historical checkpoint, not a replacement for the later actual
+owner acceptance above.
+
+Both passes used the same model. A different model is recommended for a broader
+second opinion. The evidence records the same configured/reported `gpt-6.1-sol`;
+independent serving-identity/diversity attestation remains unverified. Synthetic
+form approval/rejection proves only the recorded automation behavior. The 27
+assertions belong to a disposable example build, not original launcher tests or
+fresh complete task/sprint coverage. General planning/write limits remain
+instruction-only under [ADR-061](adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md),
+Decisions 2–4; neither native plan-mode control nor a universal write wall is
+claimed. Codex PreToolUse and Stop hooks remain disabled.
+
+**Still unverified and tracked separately:** the proposal's **“Separate unverified
+checklist, retained after any Codex acceptance”** and the
+[migration verifier handoff](../../../model-agnostic-sprint/validation.md) retain
+fresh original Claude default review and real decision/record flow with
+EnterPlanMode/ExitPlanMode ordering; both Claude opt-outs entering plan mode first;
+the already-in-plan-mode stop/exit including applicable Shift+Tab; Claude menu-to-coder
+complete flow and no-driver worker behavior; and complete native human UI plan
+approval/rejection for Codex. Earlier historical results stand as recorded; none
+of these deferred checks is certified by Codex acceptance. They do not block
+Codex-only 0544 planning under this ruling.
+
+**Execution boundary:** this note records acceptance, not task closure. Producer
+closure remains pending. Only the producer may invoke `fkit-task-done` for `0543`,
+after normal consistency checks, retaining **`(agent-closed — not owner-verified)`**
+and verifying landed location/status/href/marker consistency. Then `0544` planning
+may begin in the confirmed order; implementation still requires its own plan
+approval. This architect amendment performs no task/sprint move, source/test/
+settings/wiki edit or other ADR change. Owner acceptance grants no commit, push,
+release, global installation or hook reactivation permission. The remaining action
+is the producer's mover and consistency check;
+this architect run performs neither closure nor 0544 planning.

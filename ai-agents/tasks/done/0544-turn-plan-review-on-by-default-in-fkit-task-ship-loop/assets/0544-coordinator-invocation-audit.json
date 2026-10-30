@@ -1,0 +1,143 @@
+{
+  "recordDate": "2026-10-30",
+  "method": "Independent minimal-invocation checks; no expected flag behavior supplied. Only the additional entry check explicitly loaded the actual procedure first. All responses synthetic.",
+  "rawInvocationCases": [
+    {
+      "case": "L4-typo",
+      "threadId": "01a18c33-87d3-74f0-af45-1222f23c7994",
+      "question": "SYNTHETIC fixture decision: how should the invalid --no-plan-reveiw flag be handled?",
+      "syntheticResponse": {
+        "action": "cancel",
+        "synthetic": true
+      },
+      "unchanged": true,
+      "peerCalls": 0,
+      "commands": [
+        {
+          "turn": 0,
+          "type": "commandExecution",
+          "id": "exec-25715459-1c90-4bbe-8156-61262201a67e",
+          "pluginId": null,
+          "scriptPath": null,
+          "command": "/bin/zsh -lc \"cat 'ai-agents/tasks/backlog/0001-clamp-fixture/brief.md'\"",
+          "cwd": "/private/tmp/fkit 0544 L4-typo D17rDq",
+          "processId": "3764",
+          "source": "unifiedExecStartup",
+          "status": "completed",
+          "commandActions": [
+            {
+              "type": "read",
+              "command": "cat ai-agents/tasks/backlog/0001-clamp-fixture/brief.md",
+              "name": "brief.md",
+              "path": "/private/tmp/fkit 0544 L4-typo D17rDq/ai-agents/tasks/backlog/0001-clamp-fixture/brief.md"
+            }
+          ],
+          "aggregatedOutput": "# Add clamp\n\n## ID\n0001\n\n## Sprint\nBacklog\n\n## Priority\nP1\n\n## Status\n🔲 Backlog\n\n## Owner\nfkit-coder\n\n## Requirements\nAdd a named clamp(value,lower,upper) export for finite numbers with lower <= upper. Return lower below the range, upper above it, and the original value inside inclusive bounds. Preserve add/subtract. Equal bounds, negatives, fractions and signed zero inside the inclusive range must work. Invalid/nonfinite inputs and reversed bounds are outside scope.\n\n## Verification steps\n1. Extend existing check.mjs, preserving six arithmetic checks and updating export expectations; cover below/inside/above, both endpoints, equal bounds, negatives, fractions and signed zero. Run node check.mjs. No new test files/dependencies.\n2. Approved plan persisted separately from one approval-time plan-review attempt; unchanged project inventory before approval. All form decisions labeled SYNTHETIC.\n3. Actual independent/stateful review with usable fresh adversarial; ledger closed; plan-review mode carried into evidence.\n4. Actual producer alone invokes fkit-task-done, retaining artifacts and matching agent-closed—not-owner-verified status/hrefs.\n\n## Scope\nUse actual fkit-task-ship-loop: plan first, wait at the actual form. A SYNTHETIC operator approval authorizes the bounded fixture build→verify→review→producer closure, not human UI acceptance. Only sample.mjs/check.mjs, authorized task records and this fixture board lifecycle may change. No real-checkout edits, commits/pushes/releases, wiki writes or sprint closure.\n\n## Notes\n- **Depends on:** nothing\n",
+          "exitCode": 0,
+          "durationMs": 0
+        }
+      ],
+      "messages": [
+        {
+          "turn": 0,
+          "text": "- I’ll load the active `fkit-task-ship-loop` procedure and inspect the brief. Form replies will be treated as synthetic fixture input.\n\nWhat’s next? Check invocation rules before proceeding.\n"
+        },
+        {
+          "turn": 0,
+          "text": "- `--no-plan-reveiw` is invalid. The active [SKILL.md](</private/tmp/fkit 0544 L4-typo D17rDq/.agents/skills/fkit-task-ship-loop/SKILL.md>) explicitly says this spelling must “stop the loop and ask the owner. Never guess.”\n- Removing it keeps plan review ON; correcting it to `--no-plan-review` disables plan review. Both retain the plan approval gate.\n- I read the brief before loading that validation rule. No files changed.\n\nWhat’s next? The SYNTHETIC operator must choose how to handle the invalid flag.\n"
+        },
+        {
+          "turn": 0,
+          "text": "- Invalid `--no-plan-reveiw`: loop stopped as required.\n- SYNTHETIC form cancelled; no answer or approval received.\n- No files changed; no planning, build, review, or closure performed.\n\nWhat’s next? Reinvoke with no flag, or with the valid `--no-plan-review`."
+        }
+      ]
+    },
+    {
+      "case": "L4-unknown",
+      "threadId": "01a18c33-88f0-7db0-a127-145129d6c5a0",
+      "question": "SYNTHETIC operator: how should the unrecognized flag be handled? This resolves arguments only; it grants no human plan approval.",
+      "syntheticResponse": {
+        "action": "cancel",
+        "synthetic": true
+      },
+      "unchanged": true,
+      "peerCalls": 0,
+      "commands": [],
+      "messages": [
+        {
+          "turn": 0,
+          "text": "- I’ll invoke the canonical ship-loop procedure with the supplied arguments and check how it handles the unknown flag.\n\nWhat's next? Validate the invocation before any task work.\n"
+        },
+        {
+          "turn": 0,
+          "text": "- Unknown flag: `--unrecognized-0544`. Stopped before reading the brief, planning, consulting, or writing files.\n- The active [SKILL.md](</private/tmp/fkit 0544 L4-unknown FILVQ3/.agents/skills/fkit-task-ship-loop/SKILL.md>) requires: “any other `--` token … stop the loop and ask the owner. Never guess.”\n\nRemoving it would retain default plan review; leaving the invocation stopped would do no task work. Any form response remains explicitly SYNTHETIC, not human acceptance.\n\nWhat's next? Resolve the invalid argument.\n"
+        },
+        {
+          "turn": 0,
+          "text": "- Invocation stopped: unknown `--unrecognized-0544`.\n- Form cancelled; no answer or approval received.\n- Brief unread; no planning, consults, or file changes.\n\nWhat's next? Supply a corrected invocation to proceed."
+        }
+      ]
+    },
+    {
+      "case": "L4-conflict",
+      "threadId": "01a18c33-86b4-74d2-a603-c65e7e88397f",
+      "question": "Conflicting flags: which plan-review setting should this fixture use? This resolves arguments only, not plan approval; replies are SYNTHETIC operator input.",
+      "syntheticResponse": {
+        "action": "cancel",
+        "synthetic": true
+      },
+      "unchanged": true,
+      "peerCalls": 0,
+      "commands": [],
+      "messages": [
+        {
+          "turn": 0,
+          "text": "- I’ll load the canonical `fkit-task-ship-loop` procedure and check the conflicting review flags. Form responses will remain labeled synthetic.\n\nWhat’s next? Validate invocation before proceeding.\n"
+        },
+        {
+          "turn": 0,
+          "text": "- Both flags conflict. The [canonical procedure](</private/tmp/fkit 0544 L4-conflict yIhQba/.agents/skills/fkit-task-ship-loop/SKILL.md>) says: “both flags together … stop the loop and ask the owner.” I have not read the brief or changed files.\n- Review on runs plan reviews; review off skips them. Both retain the plan approval gate. This choice resolves flags only.\n\nWhat’s next? Select one review setting in the form.\n"
+        },
+        {
+          "turn": 0,
+          "text": "- Canonical procedure invoked; conflicting flags require clarification.\n- Form cancelled; no answer or approval received.\n- Brief unread; no files changed. Loop stopped.\n\nWhat’s next? Reinvoke with only one review flag."
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Raw typo caller read the brief before loading the procedure. The strict before-any-brief-read audit assertion failed for that raw invocation; it is not counted as proof of a universal pre-load read barrier.",
+    "After procedure loading all invalid-input cases asked a real question, performed no peer consults and left protected inventory unchanged.",
+    "The procedure-first minimal typo check asked without reading the brief, making consults or modifying files; this is scoped invocation behavior, not structural enforcement."
+  ],
+  "canonicalSha256AtAudit": "ca10c0cd0cf7483fd74c73b523fa3c8a42452f48b4ed10471fe15be8bfd321b1",
+  "procedureFirstTypoCase": {
+    "threadId": "01a18c37-9129-79d2-a234-9269299b656b",
+    "question": "SYNTHETIC fixture: which invocation should replace the invalid --no-plan-reveiw flag?",
+    "syntheticResponse": {
+      "action": "cancel",
+      "synthetic": true
+    },
+    "commands": [],
+    "tools": [
+      "fkit_skill",
+      "fkit_ask_owner"
+    ],
+    "unchanged": true,
+    "result": "passed at the explicit procedure entry boundary",
+    "messages": [
+      {
+        "turn": 0,
+        "text": "- I’ll load `fkit-task-ship-loop` first, then check the invocation and fixture scope. Form responses will be treated as synthetic.\n\nWhat’s next? Read the procedure and brief.\n"
+      },
+      {
+        "turn": 0,
+        "text": "- `--no-plan-reveiw` is unrecognized. The loaded [procedure](</private/tmp/fkit 0544 L4-typo iPh8Jw/.agents/skills/fkit-task-ship-loop/SKILL.md>) explicitly requires stopping and asking before reading the brief.\n- `--no-plan-review` disables plan review for this invocation; omitting it keeps the session default on. Both retain the plan approval gate.\n\nWhat’s next? Select the intended flag in the form; its response remains synthetic.\n"
+      },
+      {
+        "turn": 0,
+        "text": "- Stopped: invalid flag `--no-plan-reveiw`. Procedure forbids guessing its correction.\n- Form cancelled; no answer or approval received.\n- Brief unread; no files changed or consults run. All form interaction treated as synthetic.\n\nWhat’s next? Provide a valid invocation when ready."
+      }
+    ]
+  }
+}

@@ -10,7 +10,7 @@ Sprint 12
 P15
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -114,3 +114,14 @@ plan-mode Bash hook).
 - **Filed 2026-10-24** by a spawned `fkit-producer` (no owner channel, ADR-021) at the direction of
   `fkit-sprint-ship-loop` (driven by `fkit-lead`), on the owner's Q7 and placement rulings quoted in
   *Context*, from report §6–§7 and ADR-060 Decisions 10–11. ⛔ No commit.
+
+## Owner clarification — 2026-10-30
+
+Desktop open-questions interview, selected response verbatim: "Use confirmed evidence (Recommended)
+— limit the wording to behavior already demonstrated." This resolves the wording/probe direction:
+use confirmed evidence and preserve the untested interactive Bash qualification; neither 3m nor
+3m-bis becomes a pass. It is not approval of an implementation plan or a new probe requirement.
+
+The owner also selected: "Keep the reported order (Recommended) — resolve 0543, then advance 0544
+and 0545." Existing dependency declarations and Backlog status remain unchanged. Read actual durable
+plan/review artifacts before resuming; do not duplicate earlier planning merely to restart.
