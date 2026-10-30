@@ -1,6 +1,6 @@
 {
   "name": "fkit",
-  "version": "0.4.0-codex.2",
+  "version": "0.4.0-codex.3",
   "scripts": {
     "start": "sh bin/fkit",
     "codex": "node codex/fkit.mjs",
