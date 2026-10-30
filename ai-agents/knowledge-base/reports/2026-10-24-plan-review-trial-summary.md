@@ -206,7 +206,7 @@ verbatim by `fkit-lead`. His words are quoted as typed; nothing here is paraphra
   task waits on it."*
 - **Follow-up brief (Default):** filed 2026-10-24 —
   [`0541`](../../tasks/done/0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter/brief.md),
-  on [Sprint 12](../../sprints/sprint-12.md). Plan review on by default for `/fkit-sprint-ship-loop`;
+  on [Sprint 12](../../sprints/done/sprint-12.md). Plan review on by default for `/fkit-sprint-ship-loop`;
   the no-plan-review path kept, selectable by a parameter; ADR-056 amended by its own Decision 9. The
   parameter's name and design are left to the architect and coder. The opt-out stays until the owner's
   final decision after real-project use.

@@ -28,7 +28,7 @@ by hand. It is a planning act"*). No skill, convention or check mentions a goal 
 `/fkit-sprint-done` does not look for one at close. With no goal there is no finish line: *"can we
 close?"* becomes a sweep of every open row.
 
-**fkit hit it itself.** [Sprint 12](../../../sprints/sprint-12.md) was started 2026-10-15 under owner
+**fkit hit it itself.** [Sprint 12](../../../sprints/done/sprint-12.md) was started 2026-10-15 under owner
 ruling R5 *"goal still unset"*; its H1 reads *"Sprint 12 — goal not yet set"*, and its section
 *"🎯 The goal"* still says *"Not set yet"*.
 

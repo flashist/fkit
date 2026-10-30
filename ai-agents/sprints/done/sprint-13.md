@@ -2,7 +2,7 @@
 
 > ## ✅ Done — 2026-10-20. Closed by /fkit-sprint-done (agent-closed — not owner-verified).
 >
-> **Closed 2026-10-20 by a spawned `fkit-producer` on the fkit lead's instruction (end of a `fkit-sprint-ship-loop` run), under an OWNER RULING given 2026-10-20 via `AskUserQuestion` in a live `fkit lead` session — question as shown: *"Sprint 13 is all done. Close it now?"* — selected option text, verbatim:** *"Close it, then plan AI-Board sprint (Recommended)"*. All 5 rows (`0526`–`0530`) were already `✅ Done (agent-closed — not owner-verified)`; no open row to relocate. No successor board existed at close time (`successor` exit 3). [Sprint 12](../sprint-12.md) stays `🔄 In progress` (paused by the owner), untouched.
+> **Closed 2026-10-20 by a spawned `fkit-producer` on the fkit lead's instruction (end of a `fkit-sprint-ship-loop` run), under an OWNER RULING given 2026-10-20 via `AskUserQuestion` in a live `fkit lead` session — question as shown: *"Sprint 13 is all done. Close it now?"* — selected option text, verbatim:** *"Close it, then plan AI-Board sprint (Recommended)"*. All 5 rows (`0526`–`0530`) were already `✅ Done (agent-closed — not owner-verified)`; no open row to relocate. No successor board existed at close time (`successor` exit 3). [Sprint 12](sprint-12.md) stays `🔄 In progress` (paused by the owner), untouched.
 >
 > **The line-3 banner as it stood before this close — preserved verbatim below, with only its leading `## ` removed so that it is no longer read as a status (the Done banner above replaced it, per `/fkit-sprint-done` step 3):**
 >
@@ -17,7 +17,7 @@
 > | # | Owner's words | What it settled |
 > |---|---|---|
 > | S1 | Via `AskUserQuestion`, 2026-10-19, `fkit lead` session — question: did *"the option that is reducing the time most radically"* mean option D (keep only shipped-script tests; prove-red off or ≤ 5 key cases outside `npm test`; delete tooling / doc / wording tests)? Selected option text, verbatim: *"Yes, option D (Recommended)"* (description he saw: *"All five briefs stand as written."*) | The lead's reading of ruling 1 is **confirmed** — option D. `0526`–`0530` stand as written |
-> | S2 | Via `AskUserQuestion`, 2026-10-19, `fkit lead` session — selected option text, verbatim: *"New Sprint 13, start now (Recommended)"* (description he saw: *"Sprint 13 holds only 0526–0530; starting it is your word for all five. Sprint 12 stays paused. Knock-on: none."*) | This board: number `13`, **only** `0526`–`0530`, started now. **Starting it is the owner's specific word for all five tasks** (each brief's ⛔ *"Do not start without the owner's specific word"* is satisfied). [Sprint 12](../sprint-12.md) stays `🔄 In progress`, paused by the owner, rows untouched |
+> | S2 | Via `AskUserQuestion`, 2026-10-19, `fkit lead` session — selected option text, verbatim: *"New Sprint 13, start now (Recommended)"* (description he saw: *"Sprint 13 holds only 0526–0530; starting it is your word for all five. Sprint 12 stays paused. Knock-on: none."*) | This board: number `13`, **only** `0526`–`0530`, started now. **Starting it is the owner's specific word for all five tasks** (each brief's ⛔ *"Do not start without the owner's specific word"* is satisfied). [Sprint 12](sprint-12.md) stays `🔄 In progress`, paused by the owner, rows untouched |
 > | S3 | Via `AskUserQuestion`, 2026-10-19, `fkit lead` session — selected option text, verbatim: *"Keep five (Recommended)"* (description he saw: *"Your ADR sign-off and the Linux check stay separate, unskippable steps."*) | The five-brief split stands — no merge |
 > | S4 | Via `AskUserQuestion`, 2026-10-19, `fkit lead` session — question about cancelling / rescoping the old test tasks (`0503`, `0512`–`0515`, `0522` and the backlog test briefs in `0529`'s knock-on table). Selected option text, verbatim: *"After the ADR is signed (Recommended)"* (description he saw: *"The ADR (0527) fixes what stays, so the list is decided on facts. Nothing cancelled now."*) | **Nothing is cancelled or rescoped now.** The knock-on list in `0529`'s brief is decided after `0527`'s ADR is signed |
 >
@@ -65,7 +65,7 @@ budget met.
   flight.
 - **`0526` and `0530` may each want a pushed CI branch** — the hard rule needs the owner's explicit OK
   for any push; both briefs offer a local alternative.
-- **Old test tasks are not touched now (S4).** `0503` stays `🚧 Blocked` on [Sprint 12](../sprint-12.md);
+- **Old test tasks are not touched now (S4).** `0503` stays `🚧 Blocked` on [Sprint 12](sprint-12.md);
   `0512`–`0515`, `0522` and the backlog briefs in `0529`'s knock-on table stay where they are until
   the ADR is signed and the owner rules the list.
   - **2026-10-19:** the ADR is signed, so the list is ready for the owner to rule — still nothing
