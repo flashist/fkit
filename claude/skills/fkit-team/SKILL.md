@@ -49,9 +49,13 @@ Report the roster and how to reach it. Keep it short and scannable — this is a
    (this one and `/fkit-query` carry none — they are universal) is now a courtesy for a well-behaved
    agent to notice before trying, not the only thing stopping it.
 
+   The three lead forwarding entries share their owner's skill body. Load permission is checked
+   by real caller identity; the early lead STOP and exclusive execution duty are instructions.
+   Lead relays complete reports and questions, preserves wiki flags last, and closes nothing.
+
    | Role | Its procedures |
    |---|---|
-   | lead (the conductor) | `/fkit-sprint-ship-loop` — drives a whole sprint; plus `/fkit-team`, `/fkit-query` — it routes, and conducts when asked |
+   | lead (the conductor) | `/fkit-sprint-ship-loop`; `/fkit-status` delegates to producer; `/fkit-wiki-sync` and `/fkit-wiki-lint` delegate to wiki; plus the shared skills |
    | producer | `/fkit-initiate-project`, `/fkit-status`, `/fkit-task-brief`, `/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-sprint-done`, `/fkit-sprint-cancelled`, `/fkit-heal` |
    | coder | `/fkit-plan-task`, `/fkit-process-review`, `/fkit-process-stateful-review`, `/fkit-task-ship-loop` |
    | architect | `/fkit-survey-project`, `/fkit-inspect`, `/fkit-design-spec`, `/fkit-evaluate-approach`, `/fkit-record-decision` |

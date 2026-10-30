@@ -62,7 +62,14 @@ below. That function is the single source of truth.
 | reviewer | `review` · `stateful-review` |
 | adversarial-reviewer | `adversarial-review` |
 | wiki | `wiki-ingest` · `wiki-lint` · `wiki-sync` |
-| lead | `/fkit-sprint-ship-loop` (drives a sprint) — plus the shared skills; it routes and conducts |
+| lead | `/fkit-sprint-ship-loop`; `status` → producer; `wiki-sync`, `wiki-lint` → wiki (delegated entries); plus shared skills |
+
+
+The same three skill names are loadable by lead as forwarding entries: `fkit-status` delegates to
+producer, `fkit-wiki-sync` and `fkit-wiki-lint` to wiki. Their shared bodies branch on the fixed role
+before the owner-only procedure. Loader/hook permission is mechanical; the lead STOP and exclusive
+execution duties remain instructions. Direct producer/wiki calls still execute their full procedures.
+Lead relays complete reports/questions and wiki terminal flags without automatic closure.
 
 A close made by a spawned agent rather than by the owner in a `fkit producer` session carries an
 `(agent-closed — not owner-verified)` marker.

@@ -8,7 +8,7 @@ import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';
 import { EFFORTS, ROLES, RUNTIMES, atomicWrite, contained, effectiveSettings, hasSettings, loadSettings, saveSettings, validateSettings } from './settings.mjs';
 import { claudeArgs, claudeResult } from './claude.mjs';
-import { KIT, initialPrompt, instructions, ownership, setup, shellQuote } from './materialize.mjs';
+import { KIT, delegatedEntries, initialPrompt, instructions, ownership, setup, shellQuote } from './materialize.mjs';
 import { checkCarry, consultChain } from './consult.mjs';
 import { effortAnswer, effortChoices, modelAnswer, modelCatalog, printCatalog, validateEfforts } from './models.mjs';
 
@@ -329,7 +329,7 @@ async function main() {
   const scoped = selected => !options.runtime || effectiveSettings(value, selected).runtime === options.runtime ? value : { ...value, roles: { ...value.roles, [selected]: { runtime: options.runtime, model: null } } };
   if (options.preview) {
     const selected = effectiveSettings(scoped(role), role);
-    console.log(JSON.stringify({ root: options.root, role, settings: selected, sandbox: selected.runtime === 'codex' ? role === 'adversarial-reviewer' ? 'read-only' : 'workspace-write' : role === 'adversarial-reviewer' ? 'read tools only; reasoning-only' : 'Claude CLI permissions; no OS sandbox claim', skills: ownership()[role], nativeSubagents: false, reviewDiversity: 'determined from actual passes', limits: ['role write boundaries remain instructions', 'Codex planning gate remains instructional', 'configured Claude controls require live certification'] }, null, 2));
+    console.log(JSON.stringify({ root: options.root, role, settings: selected, sandbox: selected.runtime === 'codex' ? role === 'adversarial-reviewer' ? 'read-only' : 'workspace-write' : role === 'adversarial-reviewer' ? 'read tools only; reasoning-only' : 'Claude CLI permissions; no OS sandbox claim', skills: ownership()[role], delegatedEntries: delegatedEntries(role), nativeSubagents: false, reviewDiversity: 'determined from actual passes', limits: ['role write boundaries remain instructions', 'Codex planning gate remains instructional', 'configured Claude controls require live certification'] }, null, 2));
     return;
   }
   let prompt = options.exec;

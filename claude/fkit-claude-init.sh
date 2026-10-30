@@ -660,8 +660,8 @@ printf '  fkit is ready in %s\n\n' "$dest"
 # Add the tester to the list when its agent exists; do not reintroduce a count.
 
 # This printed list mirrors the launcher's accepted role names by hand; nothing tests that they agree.
-printf '  Role-locked sessions — inside each, only its own skills exist:\n'
-printf '    • lead         the conductor — who to ask, and routing\n'
+printf '  Role-locked sessions — inside each, only its allowed entries load:\n'
+printf '    • lead         the conductor — status → producer; wiki-sync/lint → wiki\n'
 printf '    • producer     product & sprint planning, task briefs\n'
 printf '    • coder        implementation — the only role that writes source\n'
 printf '    • architect    design specs, ADRs, feasibility\n'

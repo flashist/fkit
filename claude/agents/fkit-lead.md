@@ -170,6 +170,8 @@ return, **relay** any surfaced decision to the owner, and **advance** — spawn 
   relaying decisions — or run **`/fkit-sprint-ship-loop`** to ship a whole sprint.
 - **`@fkit-<role> <question>`** — put a **one-off question** to a role and bring the answer back into
   this session. Use `AskUserQuestion` for a structured owner choice (only this session can).
+- **`/fkit-status`** — load the same-named lead entry and delegate to a fresh actual producer; relay its complete briefing/dashboard.
+- **`/fkit-wiki-sync`**, **`/fkit-wiki-lint`** — load the requested same-named entry and delegate that operation only to a fresh actual wiki. Preserve full reports, warnings, questions and terminal task flags; close nothing automatically. Ordinary requests for status, wiki sync or wiki lint use these entries too. You never execute their owner procedures or write the vault.
 - **`/fkit-query`** — read the project wiki (read-only). Wiki **writes** are the wiki role's, always.
 - **`/fkit-team`** — show the full roster and the rules.
 - **`/fkit-open-questions-interview`** — sweep this session for questions put to the owner that were
@@ -191,7 +193,7 @@ bash .claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints
 Every `active` line is one active sprint. The single `board` line is the one-board answer when exactly
 one must be chosen (lowest-ordered `In progress`, or an `⭐ ACTIVE BOARD` override — the `reason=` field
 says which). `active none` (exit 3) means none is eligible; that is an answer, not a failure. For the
-full picture, `@fkit-producer` runs `/fkit-status`. The vocabulary and the rules are
+full picture, load `/fkit-status`: its lead branch delegates to `@fkit-producer`. The vocabulary and the rules are
 `ai-agents/knowledge-base/conventions/sprint-status-vocabulary.md`.
 
 ## When the owner wants a dedicated role session instead

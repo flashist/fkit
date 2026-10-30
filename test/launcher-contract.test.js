@@ -22,7 +22,7 @@
 
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync, mkdtempSync, rmSync, symlinkSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync, mkdtempSync, rmSync, symlinkSync, realpathSync } from 'node:fs';
 import { spawn, spawnSync } from 'node:child_process';
 import { createInterface } from 'node:readline';
 import { tmpdir } from 'node:os';
@@ -547,6 +547,39 @@ console.log(${runtime === 'claude' ? "JSON.stringify({is_error:false,result:'fix
   const env = { ...process.env, PATH: `${bin}:/usr/bin:/bin`, FKIT_NO_UPDATE_CHECK: '1', FKIT_NO_SELF_HOST: '1' };
   const run = args => spawnSync('sh', [join(REPO, 'bin/fkit'), ...args], { cwd: root, env, encoding: 'utf8', timeout: 20000 });
   return { root, run, env, close: () => rmSync(root, { recursive: true, force: true }) };
+}
+
+function fixtureRoleServer(f, caller, chain = [caller], mode = 'headless') {
+  const child = spawn(process.execPath, [join(REPO, 'codex/server.mjs'), f.root, caller, JSON.stringify(chain), mode], { cwd: f.root, env: f.env });
+  child.stderr.resume();
+  const pending = new Map(), forms = [];
+  let next = 0;
+  const lines = createInterface({ input: child.stdout });
+  lines.on('line', line => {
+    const message = JSON.parse(line);
+    if (message.method === 'elicitation/create') forms.push(message);
+    else if (pending.has(message.id)) { pending.get(message.id)(message.result); pending.delete(message.id); }
+  });
+  const send = message => child.stdin.write(JSON.stringify({ jsonrpc: '2.0', ...message }) + '\n');
+  return {
+    child, forms, send,
+    get lastId() { return next; },
+    request(method, params) {
+      const id = ++next;
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => { pending.delete(id); reject(Error('fixture server timed out')); }, 10000);
+        pending.set(id, value => { clearTimeout(timer); resolve(value); });
+        send({ id, method, params });
+      });
+    },
+    async close() {
+      if (child.exitCode !== null || child.signalCode !== null) return;
+      lines.close();
+      const done = new Promise(resolve => child.once('close', resolve));
+      child.stdin.end();
+      await done;
+    },
+  };
 }
 
 const runtimePrompt = 'Runtime [1/codex, 2/claude, 0/cancel]: ';
@@ -1117,4 +1150,147 @@ test('public dispatcher: legacy path does not invoke Node from PATH; source chec
     assert.match(r.stdout, /checkout-resource-used/);
     assert.ok(!r.stdout.includes('wrong-installed-tree'));
   } finally { f.close(); rmSync(installRoot, { recursive: true, force: true }); rmSync(checkout, { recursive: true, force: true }); }
+});
+
+test('lead forwarding entries: native catalog, fixed-caller MCP and repeat setup share role-invariant artifacts', async () => {
+  const f = configuredFixture();
+  const entries = ['fkit-status', 'fkit-wiki-sync', 'fkit-wiki-lint'];
+  const permitted = { lead: entries, producer: [entries[0]], wiki: entries.slice(1) };
+  try {
+    assert.equal(f.run(['configure', '--runtime-default']).status, 0);
+    assert.equal(f.run(['setup']).status, 0);
+    const artifacts = Object.fromEntries(entries.map(name => [name, readFileSync(join(f.root, '.agents/skills', name, 'SKILL.md'), 'utf8')]));
+    for (const role of ROLES) {
+      const launched = f.run([role, '--exec', 'fixture catalog selection only']);
+      assert.equal(launched.status, 0, launched.stderr);
+      const argv = JSON.parse(readFileSync(join(f.root, 'codex-call.json')));
+      const config = argv.find(arg => arg.startsWith('skills.config='));
+      const catalog = new Map([...config.matchAll(/\{path=("(?:[^"\\]|\\.)*"),enabled=(true|false)\}/g)]
+        .map(match => [JSON.parse(match[1]), match[2] === 'true']));
+      const server = fixtureRoleServer(f, role);
+      try {
+        for (const name of [...entries, 'fkit-task-done', 'fkit-review']) {
+          const allowed = (permitted[role] ?? []).includes(name) || (name === 'fkit-task-done' && role === 'producer') || (name === 'fkit-review' && role === 'reviewer');
+          assert.equal(catalog.get(join(realpathSync(f.root), '.agents/skills', name, 'SKILL.md')), allowed, role + ':' + name);
+          const loaded = await server.request('tools/call', { name: 'fkit_skill', arguments: { name, role: 'producer' } });
+          assert.equal(!!loaded.isError, !allowed, role + ':' + name);
+          if (allowed) assert.equal(loaded.content[0].text, readFileSync(join(f.root, '.agents/skills', name, 'SKILL.md'), 'utf8'));
+        }
+      } finally { await server.close(); }
+      for (const name of entries) assert.equal(readFileSync(join(f.root, '.agents/skills', name, 'SKILL.md'), 'utf8'), artifacts[name]);
+      const preview = JSON.parse(f.run([role, '--preview']).stdout);
+      assert.deepEqual(preview.delegatedEntries, role === 'lead' ? { 'fkit-status': 'producer', 'fkit-wiki-sync': 'wiki', 'fkit-wiki-lint': 'wiki' } : {});
+    }
+  } finally { f.close(); }
+});
+
+test('lead worker transport: exact data, full reports, errors, saved peer settings and topology', async () => {
+  const f = configuredFixture();
+  let server;
+  try {
+    const configured = f.run(['configure', '--model', 'chosen-codex', '--effort', 'high',
+      '--role-model', 'producer=producer-model', '--role-effort', 'producer=low',
+      '--role-model', 'wiki=wiki-model', '--role-effort', 'wiki=low']);
+    assert.equal(configured.status, 0, configured.stderr);
+    assert.equal(f.run(['setup']).status, 0);
+    writeFileSync(join(f.root, 'bin/codex'), '#!' + process.execPath + '\n' + String.raw`
+const fs = require('node:fs');
+const argv = process.argv.slice(2), input = fs.readFileSync(0, 'utf8');
+fs.appendFileSync('delegate-calls.jsonl', JSON.stringify({argv, input, chain: process.env.FKIT_CODEX_CHAIN}) + '\n');
+const reply = JSON.parse(fs.readFileSync('delegate-response.json'));
+console.error('model: observed-fixture');
+process.stdout.write(reply.output);
+if (reply.hang) { setInterval(() => {}, 1000); fs.writeFileSync('worker-ready', 'ready'); }
+else process.exitCode = reply.code;
+`, { mode: 0o755 });
+    server = fixtureRoleServer(f, 'lead');
+    const reports = [
+      '1. Headline\n2. Where we are\n3. Moving\n4. Next\n5. Blockers\n6. Owner questions\n7. Dashboard\n| Status | Task |\n| 🚧 | blocked fixture |\n',
+      "⚠️ judgment needed\nTask 0001's vault work is complete — ready to close",
+      'partial result\nTask 0001: partial — not ready to close',
+      'Wiki is up to date — no ingest-worthy changes\nNo tracked task completed by this run.',
+      'NEEDS-DECISION {question:"Choose", options:["Proceed","Stop"], context:"Partial work retained"}',
+    ];
+    const variants = [
+      ['producer', 'fkit-status', ['', 'bAcKlOg', 'Sprint 1', 'Sprint 2 archived', 'Sprint 3 cancelled', 'missing', 'full', 'all', 'board']],
+      ['wiki', 'fkit-wiki-sync', ['', '2026-10-30', 'force']],
+      ['wiki', 'fkit-wiki-lint', ['']],
+    ];
+    let count = 0;
+    for (const [role, operation, args] of variants) for (const argument of args) {
+      const report = reports[count++ % reports.length];
+      writeFileSync(join(f.root, 'delegate-response.json'), JSON.stringify({ output: report, code: 0 }));
+      const prompt = JSON.stringify({ operation, arguments: argument, taskIds: ['0001'], context: ' exact quotes " \' and whitespace\ncontext\n' });
+      const result = await server.request('tools/call', { name: 'fkit_consult', arguments: { role, prompt } });
+      assert.equal(result.isError, false);
+      assert.ok(result.content[0].text.endsWith('\n\n' + report));
+      const calls = readFileSync(join(f.root, 'delegate-calls.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
+      const call = calls.at(-1);
+      assert.equal(call.input, prompt);
+      assert.equal(call.chain, JSON.stringify(['lead', role]));
+      assert.equal(call.argv[call.argv.indexOf('--model') + 1], role + '-model');
+      assert.ok(call.argv.includes('model_reasoning_effort="low"'));
+      assert.ok(call.argv.some(arg => arg.startsWith('mcp_servers.fkit_roles.args=') && arg.includes('"' + role + '"')));
+      assert.ok(!call.argv.some(arg => arg.startsWith('hooks.')));
+    }
+    for (const [output, code] of [['partial worker output', 7], ['', 0]]) {
+      writeFileSync(join(f.root, 'delegate-response.json'), JSON.stringify({ output, code }));
+      const result = await server.request('tools/call', { name: 'fkit_consult', arguments: { role: 'wiki', prompt: 'failure fixture' } });
+      assert.equal(result.isError, code !== 0);
+      assert.ok(result.content[0].text.endsWith('\n\n' + (output || '(No usable role response.)')));
+    }
+    writeFileSync(join(f.root, 'delegate-response.json'), JSON.stringify({ output: 'interrupted partial', hang: true }));
+    const interrupted = server.request('tools/call', { name: 'fkit_consult', arguments: { role: 'wiki', prompt: 'cancel fixture' } });
+    while (!existsSync(join(f.root, 'worker-ready'))) await new Promise(resolve => setTimeout(resolve, 5));
+    server.send({ method: 'notifications/cancelled', params: { requestId: server.lastId } });
+    const cancelled = await interrupted;
+    assert.equal(cancelled.isError, true);
+    assert.ok(cancelled.content[0].text.endsWith('interrupted partial'));
+    const before = readFileSync(join(f.root, 'delegate-calls.jsonl'), 'utf8');
+    assert.equal((await server.request('tools/call', { name: 'fkit_consult', arguments: { role: 'lead', prompt: 'cycle denied' } })).isError, true);
+    assert.equal((await server.request('tools/call', { name: 'fkit_ask_owner', arguments: { question: 'headless denied' } })).isError, true);
+    assert.equal(readFileSync(join(f.root, 'delegate-calls.jsonl'), 'utf8'), before);
+    await server.close();
+    server = fixtureRoleServer(f, 'lead', ['coder', 'producer', 'lead']);
+    assert.equal((await server.request('tools/call', { name: 'fkit_consult', arguments: { role: 'wiki', prompt: 'depth denied' } })).isError, true);
+    assert.equal(readFileSync(join(f.root, 'delegate-calls.jsonl'), 'utf8'), before);
+  } finally { if (server) await server.close(); f.close(); }
+});
+
+test('lead owner channel: synthetic decisions wait and preserve cancel, decline and explanation without launching workers', async () => {
+  const f = configuredFixture();
+  const server = fixtureRoleServer(f, 'lead', ['lead'], 'interactive');
+  try {
+    assert.equal(f.run(['configure', '--runtime-default']).status, 0);
+    assert.equal(f.run(['setup']).status, 0);
+    await server.request('initialize', { capabilities: { elicitation: { form: {} } } });
+    for (const action of ['cancel', 'decline', 'accept', 'interrupt']) {
+      let settled = false;
+      const pending = server.request('tools/call', { name: 'fkit_ask_owner', arguments: { question: 'Synthetic worker question', options: ['Proceed fixture', 'Explain more, then ask again'] } }).then(result => { settled = true; return result; });
+      while (!server.forms.length) await new Promise(resolve => setTimeout(resolve, 5));
+      const form = server.forms.shift();
+      assert.equal(settled, false);
+      assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
+      if (action === 'interrupt') server.send({ method: 'notifications/cancelled', params: { requestId: server.lastId } });
+      else server.send({ id: form.id, result: { action, content: { answer: 'Explain more, then ask again' } } });
+      const result = await pending;
+      if (!result.isError) {
+        const answer = JSON.parse(result.content[0].text);
+        assert.equal(answer.answered, action === 'accept');
+        if (action === 'accept') assert.equal(answer.answer, 'Explain more, then ask again');
+      } else assert.equal(action, 'interrupt');
+      assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
+    }
+    const question = server.request('tools/call', { name: 'fkit_ask_owner', arguments: { question: 'Synthetic worker continuation?', options: ['Proceed fixture', 'Stop fixture'] } });
+    while (!server.forms.length) await new Promise(resolve => setTimeout(resolve, 5));
+    const form = server.forms.shift();
+    assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
+    server.send({ id: form.id, result: { action: 'accept', content: { answer: 'Proceed fixture' } } });
+    const answer = JSON.parse((await question).content[0].text);
+    assert.equal(answer.answer, 'Proceed fixture');
+    const prompt = JSON.stringify({ operation: 'fkit-wiki-lint', arguments: '', ownerAnswer: answer.answer, completed: 'fixture preparation', remaining: 'fixture lint' });
+    const continued = await server.request('tools/call', { name: 'fkit_consult', arguments: { role: 'wiki', prompt } });
+    assert.equal(continued.isError, false, JSON.stringify(continued));
+    assert.ok(continued.content[0].text.endsWith('fixture-codex:' + prompt + '\n'));
+  } finally { await server.close(); f.close(); }
 });

@@ -327,7 +327,7 @@ const OWNED = {
   // No movers: the sprint ship-loop's driver spawns @fkit-producer per shipped task (ADR-033 §4).
   // (`fkit-sprint-ship-loop` itself is absent from UNIVERSE below, so it is not mirrored here either
   // — pre-existing gap, not this task's to close; the two spot tests above cover that pair.)
-  lead: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down'],
+  lead: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-status', 'fkit-wiki-sync', 'fkit-wiki-lint'],
   // fkit-heal: the read-only structure check (task 0245) — producer-owned per the owner's 2026-08-06
   // Q4 ruling ("Yes, producer"); the same custodianship as the task lifecycle and board hygiene.
   producer: ['fkit-team', 'fkit-query', 'fkit-open-questions-interview', 'fkit-dumb-down', 'fkit-initiate-project', 'fkit-task-brief', ...MOVERS, 'fkit-status', 'fkit-heal'],

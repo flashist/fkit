@@ -11,6 +11,10 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- Lead can use the existing `fkit-status`, `fkit-wiki-sync` and `fkit-wiki-lint` names.
+  It delegates status to a fresh producer and each wiki operation to a fresh wiki, preserving
+  full reports and owner questions; producer/wiki retain execution duties.
+
 ## v0.4.0-codex.2 â€” 2026-10-30
 
 - Bare interactive `fkit` now offers project-local runtime/model setup once, including existing

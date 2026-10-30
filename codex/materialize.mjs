@@ -16,6 +16,13 @@ export function ownership() {
 
 function body(text) { return text.replace(/^---\n[\s\S]*?\n---\n/, ''); }
 
+export function delegatedEntries(role, map = ownership()) {
+  if (role !== 'lead') return {};
+  return Object.fromEntries(['fkit-status', 'fkit-wiki-sync', 'fkit-wiki-lint']
+    .filter(name => map.lead.includes(name))
+    .map(name => [name, Object.keys(map).filter(peer => peer !== 'lead' && map[peer].includes(name)).join(', ')]));
+}
+
 export function initialPrompt(role) {
   if (!ROLES.includes(role)) throw Error(`Unknown role: ${role}`);
   const source = readFileSync(join(KIT, 'claude/agents', `fkit-${role}.md`), 'utf8').replaceAll('\r\n', '\n');
@@ -43,7 +50,7 @@ export function bindings(root, role, runtime = 'codex') {
 
 This is the fixed fkit-${role} role. Canonical role duties and owner gates remain in force. These bindings replace runtime-specific invocation statements in the source procedures. This configured path uses the shared dispatcher; legacy unconfigured Claude sessions retain their original launcher.
 
-- Load every fkit procedure through fkit_roles.fkit_skill {name:"fkit-name"}. The fixed-caller dispatcher checks the canonical ownership registry. Native Skill, Agent and Task tools are disabled on this path. Manual file reads remain outside the invocation boundary, not a grant to execute foreign procedures.
+- Load every fkit procedure through fkit_roles.fkit_skill {name:"fkit-name"}. The fixed-caller dispatcher checks the canonical load-permission map. Shared lead entries forward to their execution owner; follow their early STOP. Native Skill, Agent and Task tools are disabled on this path. Manual file reads remain outside the invocation boundary, not a grant to execute foreign procedures.
 - Map source Agent/Task/@fkit-role calls to fkit_roles.fkit_consult {role,prompt}, a fresh CLI context with its saved runtime/model. Never fork/resume a coder into review. The dispatcher enforces ordinary two-hop/cycle/leaf checks and the existing plan-fidelity check; that check is not proof of approval. A reviewer uses fkit_adversarial for the fresh leaf second opinion outside the ordinary hop budget. A directly launched adversarial performs its own pass and never wraps another CLI.
 - In an interactive root Claude session, ask the owner with native AskUserQuestion and wait for the actual answer. Native EnterPlanMode/ExitPlanMode follow the canonical Claude planning procedure; do not replace them with an assumed Codex equivalent. In headless/consult mode return NEEDS-DECISION to the caller. Cancellation, missing responses and explanation requests never grant approval. Preserve standing approval, exact plan carry, ledger sections and producer-only movers from the source procedures.
 - Settings in .fkit/model-settings.json resolve at each child launch. Report observed serving models separately from requested IDs. A usable same-model second opinion is supported: visibly say 'Both passes used the same model. A different model is recommended for a broader second opinion.' Unknown identities mean diversity unknown. A missing/unusable pass remains partial. Report actual command/results per pass; reading is reasoning-only.
@@ -55,7 +62,7 @@ This is the fixed fkit-${role} role. Canonical role duties and owner gates remai
   return `# fkit Codex runtime binding\n
 This session is fkit-${role}. The owner authorized local Codex operation and same-model adversarial review on 2026-10-29. These integration bindings replace Claude-specific runtime statements in the source procedures below; all substantive role rules still apply.
 
-- Your role is fixed. For every fkit procedure invoke fkit_roles.fkit_skill {name:"fkit-name"} and follow the returned instructions; the dispatcher checks its configured caller identity against the canonical ownership registry. Foreign procedures are denied. Native catalog enablement is an additional discoverability control, not authorization to read and execute disabled procedures by hand. Manual shell reads remain outside this invocation boundary, as they were outside Claude's Skill hook boundary.
+- Your role is fixed. For every fkit procedure invoke fkit_roles.fkit_skill {name:"fkit-name"} and follow the returned instructions; the dispatcher checks its configured caller identity against the canonical load-permission map. Disallowed entries are denied. Lead may load status/wiki-sync/wiki-lint only to follow their forwarding branch; producer/wiki alone execute the owner procedures. The shared body includes owner text; branch compliance is instructional. Native catalog enablement is an additional discoverability control, not authorization to read and execute disabled procedures by hand. Manual shell reads remain outside this invocation boundary, as they were outside Claude's Skill hook boundary.
 - Preferred delegation: call the fkit_roles MCP tool fkit_consult with {role, prompt}. It runs a fresh role CLI process outside your shell sandbox, selects its configured model, checks the consult chain and approved-plan fidelity, and returns model provenance with the result. This is a session-scoped stdio helper, not a background daemon. The shell consult command below is the fallback when that tool is unavailable; it may require a runtime execution approval to initialize the child CLI.
 - Delegate a bounded task to a fresh role process using the shell command ${command} consult <role> --root ${shellQuote(root)} --prompt-file <path>. Write the task to a unique .fkit/tmp/ prompt file first. Use a quoted path, never interpolate task text into shell syntax. Returned stdout is the peer's response. Keep consults within two hops and never call an ancestor. Adversarial reviewer is a leaf. Native subagents are disabled to keep model selection and session controls on this launch path.
 - 'Agent'/'Task'/'@fkit-role' in source instructions map to that consult command. '$ARGUMENTS' means the owner's skill arguments. '/fkit-name' means load the procedure through fkit_skill and follow it. Do not execute source-code-style slash commands in the shell.
@@ -79,7 +86,11 @@ function skillText(name, source) {
     const start = source.indexOf('   | Role | Does | Must not |'), end = source.indexOf('3. **Explain how to reach');
     if (start < 0 || end < start) throw Error('Team roster source changed; adapt before generating');
     const roster = source.slice(start, end).replaceAll('hostile second opinion on Codex', 'hostile second opinion in a fresh role session');
-    const procedures = Object.entries(ownership()).map(([role, skills]) => `- ${role}: ${skills.join(', ')}`).join('\n');
+    const map = ownership();
+    const procedures = Object.entries(map).map(([role, skills]) => {
+      const delegates = delegatedEntries(role, map);
+      return `- ${role}: ${skills.map(name => delegates[name] ? `${name} (delegates to ${delegates[name]})` : name).join(', ')}`;
+    }).join('\n');
     return `---\nname: fkit-team\ndescription: Show the seven fkit roles and their configured runtime collaboration.\n---\n# Team\nState the current role, then show this canonical roster:\n\n${roster}\nUse fkit <role> for direct sessions and the runtime consult tool for fresh peer contexts. State the current enforcement limits from the runtime binding; never infer active hooks from the runtime name. Reviewer plus adversarial-reviewer run distinct passes even when they share a model. Coordination uses ai-agents/ files; wiki writes remain wiki-only and movers producer-only.\n\nRole procedures from the canonical ownership registry:\n${procedures}\n`;
   }
   if (name === 'fkit-review') {

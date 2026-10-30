@@ -29,7 +29,13 @@ Local settings are ignored `.fkit/model-settings.json` schema 1. Runtime changes
 model explicitly and do not carry incompatible model/reasoning choices. No unavailable selection
 permits silent fallback. `--runtime` on launch affects only that root session; peers resolve saved
 choices independently. Generated `.agents/skills/fkit-*` are managed resources, never a second
-ownership registry. The scaffold spec/manifest remains canonical under `claude/`.
+ownership registry.
+The same three skill names are loadable by lead as forwarding entries: `fkit-status` delegates to
+producer, `fkit-wiki-sync` and `fkit-wiki-lint` to wiki. Their shared bodies branch on the fixed role
+before the owner-only procedure. Loader/hook permission is mechanical; the lead STOP and exclusive
+execution duties remain instructions. Direct producer/wiki calls still execute their full procedures.
+Lead relays complete reports/questions and wiki terminal flags without automatic closure.
+ The scaffold spec/manifest remains canonical under `claude/`.
 
 Interactive Codex launches send the canonical role file's folded `initialPrompt` as their first
 message, so loading role instructions also leads to an actual startup turn. Supplied onboarding
@@ -197,16 +203,23 @@ role still cannot run another role's *procedure*.
 > until then, "seven roles" is the fact and "eight" would be a claim about code that is not there.
 
 ### 4.2 The 28 skills — where the procedures live
+The same three skill names are loadable by lead as forwarding entries: `fkit-status` delegates to
+producer, `fkit-wiki-sync` and `fkit-wiki-lint` to wiki. Their shared bodies branch on the fixed role
+before the owner-only procedure. Loader/hook permission is mechanical; the lead STOP and exclusive
+execution duties remain instructions. Direct producer/wiki calls still execute their full procedures.
+Lead relays complete reports/questions and wiki terminal flags without automatic closure.
+
+There are still 28 unique names; lead has 8 loadable entries, including these 3 delegates.
 
 Skills (`claude/skills/fkit-*/SKILL.md`) are the durable, role-owned **procedures**; the agent
-prompts are the role's *character*. Every role-specific skill opens with a `⛔ Owner:` banner naming
+prompts are the role's *character*. Every role-specific skill retains a `⛔ Owner:` execution banner naming
 the role (or roles) allowed to execute it (e.g. `claude/skills/fkit-review/SKILL.md:12`). Only the two
 universal skills — `fkit-query` and `fkit-team` — carry no banner; both are universal by design (the
 `everyone` row below).
 
 | Owner | Skills |
 |---|---|
-| lead | `sprint-ship-loop` (the conductor loop — ADR-031/032) |
+| lead | `sprint-ship-loop` (the conductor loop — ADR-031/032); `status` → producer, `wiki-sync` and `wiki-lint` → wiki (forwarding only) |
 | producer | `initiate-project`, `task-brief`, `task-done`, `task-cancelled`, `sprint-done`, `sprint-cancelled` (the sprint-board movers — task 0341, ADR-047 §4), `status`, `heal` (structure check + consent-gated repair — tasks 0245/0246, ADR-039) |
 | coder | `plan-task`, `process-review`, `process-stateful-review`, `task-ship-loop` |
 | architect | `survey-project`, `inspect`, `design-spec`, `evaluate-approach`, `record-decision` |

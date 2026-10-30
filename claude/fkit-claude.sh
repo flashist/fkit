@@ -285,7 +285,7 @@ fi
 # skills_for_role() is the one source of role→skill ownership (ADR-012 §1; no skills: frontmatter — it is
 # only a preload hint). A PreToolUse hook enforces it at any spawn depth (ADR-018).
 
-# ⚠️ CHANGING A ROLE'S SKILLS? SIX hand-maintained places MIRROR this list (or a role fact it carries)
+# ⚠️ CHANGING A ROLE'S SKILLS? These hand-maintained places MIRROR this list (or a role fact it carries)
 # for humans and MUST be updated in the same commit, or the docs lie about what a role can do:
 #   * claude/skills/fkit-team/SKILL.md  — the roster the /fkit-team skill prints
 #   * claude/README.md                  — the skill-ownership table
@@ -294,6 +294,9 @@ fi
 #   * test/skill-ownership-hook.test.js — OWNED, the hard-coded mirror the hook test asserts against
 #   * claude/fkit-claude-init.sh        — the printed role roster (mirrors the role list and the lock
 #                                         invariant, not the per-role skill lists; nothing tests it)
+#   * claude/agents/fkit-lead.md      — direct and delegated lead capabilities
+#   * codex/materialize.mjs            — generated roster/runtime entry explanations
+#   * codex/fkit.mjs, codex/README.md   — preview labels and configured-runtime docs
 #
 # ⚠️ THIS LIST SAID "TWO" UNTIL 2026-07-18, AND THE OMISSION COST EXACTLY WHAT IT LOOKS LIKE IT WOULD.
 # Task 70 followed the two-item list precisely and still shipped a false statement into every consuming
@@ -607,7 +610,7 @@ if [ "$role" = lead ]; then
 else
   # "runnable", not "exist": a foreign skill still shows in the / menu;
   # the hook denies it (ADR-018 Decision 5).
-  printf '\n  → %s session (locked: only the %s'"'"'s skills are runnable here).\n\n' "$role" "$role"
+  printf '\n  → %s session (locked: only the %s'"'"'s allowed skill entries load here).\n\n' "$role" "$role"
 fi
 settings="$(build_settings "$role")"
 set_tab_title "$role"

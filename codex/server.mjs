@@ -82,7 +82,7 @@ input.on('line', async line => {
     else if (request.method === 'ping') result = {};
     else if (request.method === 'tools/list') {
       const promptSchema = { type: 'object', properties: { prompt: { type: 'string', description: 'Scope, context and required output. Include approved plan faithfully where required.' } }, required: ['prompt'], additionalProperties: false };
-      const tools = [{ name: 'fkit_skill', description: 'Load one owned fkit procedure. Role ownership is checked by the dispatcher; foreign procedures are denied.', annotations: { readOnlyHint: true }, inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Exact fkit skill name' } }, required: ['name'], additionalProperties: false } }];
+      const tools = [{ name: 'fkit_skill', description: 'Load one allowed fkit entry using fixed caller identity. Shared lead entries forward; producer/wiki retain execution duties.', annotations: { readOnlyHint: true }, inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Exact fkit skill name' } }, required: ['name'], additionalProperties: false } }];
       if (caller !== 'adversarial-reviewer') tools.push({ name: 'fkit_consult', description: 'Consult a fresh fkit role with its configured model. Workers return decisions to caller. Two hops maximum; no cycles; adversarial is a leaf.', inputSchema: { ...promptSchema, properties: { ...promptSchema.properties, role: { type: 'string', enum: ROLES } }, required: ['role', 'prompt'] } });
       if (caller === 'reviewer') tools.push({ name: 'fkit_adversarial', description: 'Run the reviewer independent read-only second opinion in a fresh context. Does not consume an ordinary consult hop; the adversarial role remains a leaf.', inputSchema: promptSchema });
       if (caller !== 'adversarial-reviewer' && mode === 'interactive' && chain.length === 1) tools.push({ name: 'fkit_ask_owner', description: 'Ask the owner a structured question and wait for the actual response. Choices submit without a comment field; Write another answer opens a separate text question. No inferred approval. Never request credentials.', inputSchema: { type: 'object', properties: { question: { type: 'string' }, options: { type: 'array', items: { type: 'string' }, maxItems: 4 } }, required: ['question'], additionalProperties: false } });
@@ -90,7 +90,7 @@ input.on('line', async line => {
     }
     else if (request.method === 'tools/call' && request.params?.name === 'fkit_skill') {
       const name = request.params.arguments?.name;
-      if (typeof name !== 'string' || !ownership()[caller].includes(name)) throw Error(`fkit-${caller} does not own that skill`);
+      if (typeof name !== 'string' || !ownership()[caller].includes(name)) throw Error(`fkit-${caller} cannot load that skill entry`);
       const skill = contained(root, join(root, '.agents/skills', name, 'SKILL.md'));
       result = { content: [{ type: 'text', text: readFileSync(skill, 'utf8') }] };
     }

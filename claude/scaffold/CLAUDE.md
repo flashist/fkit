@@ -45,7 +45,14 @@ but `adversarial-reviewer`, which reviews on Codex under a restricted allowlist 
 `/fkit-dumb-down` (re-explain the last answer in simple terms). The **lead & conductor**
 (`fkit-lead`) owns **`/fkit-sprint-ship-loop`** (drive a whole sprint's eligible tasks brief→closed by
 spawning role workers and relaying decisions) beyond the shared skills — it routes, and drives the team
-when you hand it a goal.
+when you hand it a goal. Its same-named status/wiki entries delegate as described below.
+
+
+The same three skill names are loadable by lead as forwarding entries: `fkit-status` delegates to
+producer, `fkit-wiki-sync` and `fkit-wiki-lint` to wiki. Their shared bodies branch on the fixed role
+before the owner-only procedure. Loader/hook permission is mechanical; the lead STOP and exclusive
+execution duties remain instructions. Direct producer/wiki calls still execute their full procedures.
+Lead relays complete reports/questions and wiki terminal flags without automatic closure.
 
 **Skills belong to roles.** This is structural — **in a role session and in a spawned consult
 alike**: a `PreToolUse` hook checks the REAL invoking agent's identity (a session's own role, or a
