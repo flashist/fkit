@@ -11,6 +11,14 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes �
 
 ## Unreleased
 
+## v0.4.0-codex.2 — 2026-10-30
+
+- Bare interactive `fkit` now offers project-local runtime/model setup once, including existing
+  Claude-era projects without saved settings, then continues onboarding or the role menu.
+  Saved settings are reused. Node is required for this first-use path; explicit/noninteractive
+  legacy entry remains available. This opt-in preview keeps default installs/updates on `main`;
+  live Claude/mixed compatibility remains unverified. The flow is not included in `v0.4.0-codex.1`.
+
 ## v0.4.0-codex.1 — 2026-10-30
 
 - Opt-in Codex preview `v0.4.0-codex.1`: install with `FKIT_REF=codex/codex-preview` to follow the

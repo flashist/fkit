@@ -12,7 +12,7 @@ sandboxed e2e tester, is authorized ([ADR-028](decisions/adr-028-fkit-gains-an-e
 but **not yet built** — the team is seven today. The legacy path runs on Claude Code native + Codex;
 [ADR-061](decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) adds
 Codex as a full seven-role runtime with explicit local limits. `bin/fkit` selects saved runtime/model
-choices for configured projects and preserves legacy behavior otherwise. Shared policy remains
+choices for configured projects; public bare terminal first use now offers explicit project configuration. Noninteractive/explicit unconfigured legacy entry retains its previous behavior (task 0546, ADR-061 correction). Shared policy remains
 under `claude/`; configured runtime adapters live under `codex/`. Live Codex task/sprint checks passed;
 real Claude compatibility and release certification remain pending. This repository *is* the framework: it dogfoods itself (its own
 `ai-agents/` tree is the one you're reading right now). It's built for software developers, vibe

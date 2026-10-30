@@ -1,5 +1,30 @@
 # Local Codex acceptance record
 
+**Preview `v0.4.0-codex.2` publication scope — 2026-10-30:** the owner explicitly approved
+"Publish v0.4.0-codex.2 (Recommended)" in the desktop publication form after task 0546 completed.
+Use the regular release gate/commit/push on `codex/codex-preview` and its new tag only; `main`
+stays unchanged. This permission does not install globally or migrate consuming projects.
+
+Task 0546 is now in `tasks/done/`, agent-closed — not owner-verified, with its Backlog row and
+review ledger closed out. Plain interactive `fkit` now chooses runtime/model settings once,
+then performs setup and startup in the same command; later launches reuse saved settings.
+Noninteractive/explicit legacy entry is preserved. First-use Node absence fails with instructions;
+no runtime/auth fallback. The flow first ships in this preview, not frozen `v0.4.0-codex.1` or
+default `main`. Earlier below-checkpoints describing it as unreleased are historical.
+
+Task verification: 967 passed, zero failed, one optional benchmark skip; 70.814633792 seconds.
+Focused 11/11, launcher 72/72; four existing prove-red mutations caught. Independent review
+found no confirmed defects, with reasoning-only second-opinion coverage and unknown serving-model
+diversity. A test fixture overwrote the local Node executable; the cached v24.13.0 executable was
+restored and independently byte/version verified, and the unsafe fixture symlink was replaced
+with a regular wrapper. Failed runs remain failures. Linux terminal execution and live
+Claude/mixed/account/native workflow coverage remain unverified. Both fkit hooks remain disabled.
+
+Release-command results and remote tag/main checks must still be verified independently; this
+scoping note alone does not establish publication. Task evidence and coordinator audits are in
+`ai-agents/tasks/done/0546-configure-first-use-from-bare-fkit-and-reuse-saved-project-settings/`.
+
+
 **Current opt-in preview scope — 2026-10-30:** the owner requested a named preview through the regular
 release procedure, without shipping to default users. Target: `v0.4.0-codex.1` on
 `codex/codex-preview`; default install/update channel `main` must remain unchanged. The shared
@@ -119,3 +144,50 @@ The owner already authorized Codex-first local operation, per-role models, fresh
 Owner accepted the documented local limits through the interactive question in this chat: “Accept limits; continue migration (Recommended)”, 2026-10-29. Exact scope and actual response are in `decisions.md`; the sprint condition then passed. Public selector/mixed routing and packaging are implemented and reviewed. The owner subsequently confirmed API failure in normal Terminal and local Claude unavailability. MA-15 live Claude/mixed compatibility and broader MA-16 certification are deferred, explicitly unverified, with a handoff for a Claude-capable environment. Codex-only local use needs no Claude repair or further Claude probes. This does not turn the stubbed Claude contracts into live evidence or declare the full cross-runtime plan certified.
 
 Rollback of the local experiment: keep owner task/source/wiki content and saved model settings; stop using `bin/fkit-codex`. Only positively identified generated `.agents/skills/fkit-*` artifacts may be removed. Never delete unrelated skills or owner `.codex/` configuration. The installed global command remains outside this local experiment.
+
+## Task 0546 — unreleased first-use entry, 2026-10-30
+
+Owner approved the concrete changed bare-first-use contract via the actual interactive
+fkit_roles.fkit_ask_owner form: “Approve full plan + step 3b architect exception (Recommended)”,
+2026-10-30 13:20:24 UTC. See task 0546 [plan](../ai-agents/tasks/done/0546-configure-first-use-from-bare-fkit-and-reuse-saved-project-settings/plan.md) and
+[approval record](../ai-agents/tasks/done/0546-configure-first-use-from-bare-fkit-and-reuse-saved-project-settings/plan-review.md). This checkout adds zero-argument stdin-and-stdout-TTY runtime choice,
+confirmed project-local configuration, managed setup and same-command continuation, including
+existing Claude-era projects without settings. Existing saved overrides are preserved; explicit
+and noninteractive legacy routes retain their contracts. Missing Node on the new entry exits1,
+never silently falls back. Actual architect recorded an additions-only ADR061 reversal notice.
+
+This is not a new preview publication, global install or consuming-project migration.
+Published v0.4.0-codex.1 and default main retain their prior contracts. Live Claude/mixed accounts,
+API access, CI-Linux terminal execution and complete native model workflows remain unverified.
+Both fkit hooks stay disabled; general planning/writes remain instructional. No earlier test or
+workflow result is promoted. Implementation verification and independent stateful review are
+pending; current exact results/recovery history belong to task 0546 worklog.md. No release lane,
+new permanent test file, prove-red mutation, wiki write, Sprint12 change or sprint closure.
+
+### 0546 verification/review checkpoint — 2026-10-30
+
+Final source checks passed: focused11/11; launcher72/72; npm968 total/967 pass/0 fail/1 existing
+optional skip, 70.814633792s (<120s). Both prove-red baselines green and all FOUR existing
+M1/M2/M30/M31 red at named assertions; hard gate exit0. Prove-red process stopwatch was not
+instrumented; 260.953380s is a log span only. Supplemental public PTY unavailable-catalog exact
+model/save/continuation check passed with fake CLI. Initial harness failures, accidental host Node
+overwrite and exact v24.13.0 recovery remain disclosed in task0546 worklog; both independent passes
+verified current isolation/recovered bytes. No failed run counted green.
+
+Independent stateful review: no open confirmed defect; both passes usable; reasoning-only second
+opinion (primary two targeted behavioral tests; adversarial syntax/recovery only). Actual model
+identity/diversity unknown; broader different-model opinion recommended. Coder clean disposition
+closed review.md under standing approval. Producer-only Backlog closure pending at this checkpoint;
+no sprint closure/publication/install implied. Retained live Claude/mixed/API/Linux/native-workflow
+limits above remain unverified. No source change after final green checks.
+
+### 0546 producer closure verified — 2026-10-30
+
+Task0546 is now under tasks/done, closed by actual producer fkit-task-done with
+✅ Done (agent-closed — not owner-verified). Coder cross-checked its complete eleven-file report,
+Backlog accounting, moved folder/status/links and unchanged protected source/Sprint12 hashes.
+Ledger closed-out; all C546 criteria met within approved Codex-only launcher scope. Both working
+and cached whitespace checks pass after two artifact EOF-only corrections. No behavioral source
+changed after green checks. No commit/push/new preview/global install/migration/wiki write or
+sprint change. Earlier pending checkpoints remain historical; all stated live compatibility,
+Linux/native-workflow and model-diversity limits remain unchanged.

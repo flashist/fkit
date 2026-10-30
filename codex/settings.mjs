@@ -59,9 +59,15 @@ export function validateSettings(value) {
 }
 
 export function settingsPath(root) { return contained(root, join(root, '.fkit/model-settings.json')); }
+export function hasSettings(root) {
+  const path = settingsPath(root);
+  if (!existsSync(path)) return false;
+  if (!lstatSync(path).isFile()) throw Error(`Expected regular file: ${path}`);
+  return true;
+}
 export function loadSettings(root) {
   const path = settingsPath(root);
-  if (!existsSync(path)) throw Error('Model settings missing. Run: fkit-codex configure');
+  if (!hasSettings(root)) throw Error('Model settings missing. Run: fkit-codex configure');
   try { return validateSettings(JSON.parse(readFileSync(path, 'utf8'))); }
   catch (error) { throw Error(`Invalid model settings at ${path}: ${error.message}. Correct this file, then rerun configure.`); }
 }

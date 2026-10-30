@@ -14,6 +14,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { stripVTControlCharacters } from 'node:util';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const REPO = dirname(HERE);                              // .../fkit
@@ -264,4 +265,84 @@ export function cleanup(dir) {
 export function cleanupStub() {
   cleanup(STUB_DIR);
   STUB_DIR = undefined;
+}
+
+export function runTerminal(args, { project, env, steps = [], entry = join(REPO, 'bin/fkit'), stdinTty = true, stdoutTty = true } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), 'fkit-terminal-'));
+  const wrapper = join(dir, 'run.sh'), marker = '__FKIT_TERMINAL_EXIT__';
+  const quote = value => "'" + String(value).replaceAll("'", "'\\''") + "'";
+  const command = ['/bin/sh', entry, ...args].map(quote).join(' ');
+  writeFileSync(wrapper, `#!/bin/sh
+trap ':' INT
+{
+${command}${stdinTty ? '' : ' </dev/null'}
+result=$?
+printf '\\n${marker}%s\\n' "$result" >&2
+}${stdoutTty ? '' : ' | cat'}
+`);
+  const scriptArgs = process.platform === 'darwin'
+    ? ['-q', '/dev/null', '/bin/sh', wrapper]
+    : ['-q', '-e', '-c', '/bin/sh ' + quote(wrapper), '/dev/null'];
+  return new Promise((resolve, reject) => {
+    // BSD script requires terminal stdin; Node's child pipes are sockets on macOS.
+    const ptyBridge = String.raw`
+import errno, os, pty, select, signal, sys
+pid, master = pty.fork()
+if pid == 0:
+    os.execv('/bin/sh', ['/bin/sh', sys.argv[1]])
+def stop(signum, frame):
+    try: os.killpg(pid, signal.SIGKILL)
+    except ProcessLookupError: pass
+    os.waitpid(pid, 0)
+    sys.exit(1)
+signal.signal(signal.SIGTERM, stop)
+while True:
+    ready, _, _ = select.select([master, 0], [], [])
+    if master in ready:
+        try: data = os.read(master, 65536)
+        except OSError as error:
+            if error.errno == errno.EIO: break
+            raise
+        if not data: break
+        os.write(1, data)
+    if 0 in ready:
+        data = os.read(0, 65536)
+        if data: os.write(master, data)
+        else: os.write(master, b'\x04')
+_, status = os.waitpid(pid, 0)
+sys.exit(os.waitstatus_to_exitcode(status))
+`;
+    const child = process.platform === 'darwin'
+      ? spawn('/usr/bin/python3', ['-u', '-c', ptyBridge, wrapper], { cwd: project, env, detached: true, stdio: ['pipe', 'pipe', 'pipe'] })
+      : spawn('/usr/bin/script', scriptArgs, { cwd: project, env, detached: true, stdio: ['pipe', 'pipe', 'pipe'] });
+    let output = '', stderr = '', next = 0, cursor = 0, timedOut = false;
+    const timer = setTimeout(() => {
+      timedOut = true;
+      child.kill('SIGTERM');
+    }, 5000);
+    child.stdin.on('error', () => {});
+    child.stdout.on('data', data => {
+      output += data;
+      const plain = stripVTControlCharacters(output);
+      if (next < steps.length) {
+        const [prompt, answer] = steps[next];
+        const at = plain.indexOf(prompt, cursor);
+        if (at !== -1) {
+          cursor = at + prompt.length;
+          next++;
+          child.stdin.write(answer);
+        }
+      }
+    });
+    child.stderr.on('data', data => { stderr += data; });
+    child.on('error', error => { clearTimeout(timer); cleanup(dir); reject(error); });
+    child.on('close', (code, signal) => {
+      clearTimeout(timer);
+      const plain = stripVTControlCharacters(output);
+      const status = plain.match(/__FKIT_TERMINAL_EXIT__(\d+)/);
+      cleanup(dir);
+      if (timedOut) { reject(Error(`terminal timeout (step ${next}/${steps.length}):\n${plain}\n${stderr}`)); return; }
+      resolve({ code: status ? Number(status[1]) : code, signal, output: plain, stderr, answered: next });
+    });
+  });
 }

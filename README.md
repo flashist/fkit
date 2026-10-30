@@ -31,25 +31,46 @@ fkit coder      # …or go straight to one
 fkit board      # view this project's tasks and sprints in your browser, read-only (needs Node)
 ```
 
-Unconfigured projects retain the legacy [Claude Code](https://claude.com/claude-code) launcher;
+Published `v0.4.0-codex.1` and the default `main` installation retain the legacy [Claude Code](https://claude.com/claude-code) launcher for unconfigured projects;
 [Codex](https://github.com/openai/codex) is optional but recommended for its independent review.
 Without it, legacy reviews keep their explicit NOT model-diverse fallback label. Installation needs
 `curl`, `tar` and `bash`; legacy Claude sessions work without Node. Configuration, configured runtime
 sessions and `fkit board` need [Node.js](https://nodejs.org).
 
-**Opt-in Codex preview: `v0.4.0-codex.1`.** The preview lives on `codex/codex-preview`, separate from
+**Starting with preview `v0.4.0-codex.2`, run only `fkit` inside your project.** Checkout users can
+run the checkout's `bin/fkit` directly. With no arguments and both stdin
+and stdout attached to terminals, missing project settings trigger one explicit Codex/Claude
+choice, the existing model/effort and optional role interview, review, and one save confirmation.
+This includes existing Claude-era projects without settings: their old bare-interactive default
+is replaced by this one-time interview. Confirming saves ignored `.fkit/model-settings.json`,
+refreshes managed resources, and continues fresh onboarding or the existing project's role menu
+in the same command. Repeat launches reuse all saved overrides without rewriting settings.
+No separate configure/setup command is needed for this flow.
+
+Node is required for that new bare first use, even when selecting Claude. Missing Node exits 1
+with an install-and-retry message; no runtime is chosen or installed automatically. Install and
+authenticate your chosen CLI yourself (Codex stable >=0.165.0). Blank/invalid runtime input,
+invalid settings, EOF, Ctrl-C or declined save starts no role and saves no first-use choice.
+Blank model/effort answers still keep their current values. A confirmed save survives a later
+setup/session failure for retry. Corrupt settings are errors, never permission to reconfigure.
+Noninteractive bare entry, explicit unconfigured legacy roles/arguments, explicit runtime/root
+paths and management commands retain their contracts. Direct `bin/fkit-codex` stays Codex-first.
+Installing this preview is opt-in; publishing it does not change an existing global installation.
+
+**Opt-in Codex preview: `v0.4.0-codex.2`.** The preview lives on `codex/codex-preview`, separate from
 the default `main` install/update channel. To install the preview and follow its updates:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/flashist/fkit/codex/codex-preview/install.sh | FKIT_REF=codex/codex-preview sh
 ```
 
-For exactly this preview, use `v0.4.0-codex.1` instead of `codex/codex-preview` in both places.
+For exactly this preview, use `v0.4.0-codex.2` instead of `codex/codex-preview` in both places.
 A tag stays on that version; it does not subscribe to later previews. Tag update-notice limitations
-are documented in [RELEASING.md](RELEASING.md). This installs the shared command once; in each existing
-project directory, run `fkit configure --runtime codex`, `fkit setup`, then `fkit settings`. Confirm
-all seven roles select Codex before `fkit lead`; explicit Claude role overrides are preserved until
-changed with `fkit configure --role-runtime ROLE=codex`. Keep existing project records and do not
+are documented in [RELEASING.md](RELEASING.md). Install the shared command once, then run only `fkit`
+inside each existing project and choose Codex at first use for a Codex-only team. If settings already
+exist, they are reused without an interview; `fkit configure` changes preferences and `fkit settings`
+optionally inspects them. Explicit Claude role overrides are preserved until changed with
+`fkit configure --role-runtime ROLE=codex`. Keep existing project records and do not
 repeat project initiation. Setup refreshes fkit-managed resources and instruction blocks; edits
 inside those managed areas are replaced. Exit older sessions before refreshing.
 
@@ -82,6 +103,9 @@ procedures under `.agents/skills/`; canonical policy remains under `claude/`. Mu
 processes consume more model usage than a single session.
 
 ## A first session
+
+On the current unreleased checkout, the first-use runtime/settings interview above precedes
+these steps. Published versions retain their documented setup requirements.
 
 In a brand-new project, `fkit`:
 

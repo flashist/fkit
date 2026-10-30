@@ -17,10 +17,14 @@ Usage: fkit [role] [runtime options]
        fkit configure --effort LEVEL|default [--role-effort ROLE=LEVEL|default|inherit]
        fkit settings | models | setup | board | update
 
-Unconfigured projects keep the legacy Claude launcher. Configured projects use their
-saved runtime and per-role models. --runtime selects only this root session, using
+Bare fkit with terminal stdin and stdout asks unconfigured projects to choose Codex
+or Claude, review model/effort choices and save once, then continues setup/onboarding
+or the role menu. This includes existing Claude-era projects without settings.
+Saved settings skip that interview. Noninteractive/explicit unconfigured entry
+keeps the legacy Claude launcher. --runtime selects only this root session, using
 the chosen CLI default if it differs from the saved runtime; child settings stay saved.
-New configuration and configured sessions require Node.js. No login is changed.
+First-use configuration and configured sessions require Node.js. Without Node,
+bare interactive first use exits 1; install Node and retry. No fallback or login change.
 EOF
     exit 0 ;;
 esac
@@ -28,6 +32,11 @@ configured=0
 case "${1:-}" in configure|settings|setup|models|consult) configured=1 ;; esac
 if [ -e "$PWD/.fkit/model-settings.json" ] || [ -L "$PWD/.fkit/model-settings.json" ] || [ -L "$PWD/.fkit" ]; then configured=1; fi
 for argument do case "$argument" in --runtime|--root) configured=1 ;; esac; done
+if [ "$configured" = 0 ] && [ "$#" -eq 0 ] && [ -t 0 ] && [ -t 1 ]; then
+  command -v node >/dev/null 2>&1 || { echo 'fkit: first-use configuration needs Node.js. Install Node.js, then run fkit again.' >&2; exit 1; }
+  export FKIT_BARE_FIRST_USE=1
+  configured=1
+fi
 if [ "$configured" = 0 ]; then exec sh "$here/claude/fkit-claude.sh" "$@"; fi
 command -v node >/dev/null 2>&1 || { echo 'fkit: configured runtimes need Node.js. Install Node.js, then retry.' >&2; exit 1; }
 FKIT_MANAGEMENT_ONLY=1 sh "$here/claude/fkit-claude.sh"

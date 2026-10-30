@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';
-import { EFFORTS, ROLES, RUNTIMES, atomicWrite, contained, effectiveSettings, loadSettings, saveSettings, validateSettings } from './settings.mjs';
+import { EFFORTS, ROLES, RUNTIMES, atomicWrite, contained, effectiveSettings, hasSettings, loadSettings, saveSettings, validateSettings } from './settings.mjs';
 import { claudeArgs, claudeResult } from './claude.mjs';
 import { KIT, initialPrompt, instructions, ownership, setup, shellQuote } from './materialize.mjs';
 import { checkCarry, consultChain } from './consult.mjs';
@@ -26,6 +26,10 @@ const HELP = `Usage: fkit [role] [--root PATH] [--exec PROMPT | --prompt-file PA
 Roles: ${ROLES.join(', ')}
 Aliases: adv, adversarial → adversarial-reviewer.
 Runs each role's saved CLI/model using its existing login. Configure once per project.
+Public bare fkit with terminal stdin and stdout offers Codex/Claude once when settings
+are missing, including existing Claude-era projects, then saves and continues setup.
+Saved settings skip the interview. Direct fkit-codex keeps its Codex-first behavior.
+First use needs Node; cancellation saves nothing and starts no role.
 --exec runs headlessly; --prompt-file reads a task from a file (headless).
 --preview prints resolved settings and controls without running Codex or setup.
 Coder sessions review plans by default; --no-plan-review opts out for that session.
@@ -76,13 +80,9 @@ function parse(argv) {
 }
 
 async function configure(options) {
-  const hadSettings = existsSync(join(options.root, '.fkit/model-settings.json'));
+  const hadSettings = hasSettings(options.root);
   if (!hadSettings && (options.overrides.length || options.runtimeOverrides?.length || options.effort !== undefined || options.effortOverrides?.length) && options.model === undefined && !options['runtime-default']) throw Error('First configuration needs --model ID or --runtime-default alongside effort/role overrides');
-  let value;
-  try { value = loadSettings(options.root); } catch (e) {
-    if (!existsSync(join(options.root, '.fkit/model-settings.json'))) value = { schemaVersion: 1, default: { runtime: options.runtime ?? 'codex', model: null }, roles: {} };
-    else throw e;
-  }
+  let value = hadSettings ? loadSettings(options.root) : { schemaVersion: 1, default: { runtime: options.runtime ?? 'codex', model: null }, roles: {} };
   value = structuredClone(value);
   if (options.runtime && options.runtime !== value.default.runtime) {
     const previousRoles = Object.fromEntries(Object.keys(value.roles).map(role => [role, effectiveSettings(value, role)]));
@@ -124,12 +124,14 @@ async function configure(options) {
   const needsCatalog = interactive || ROLES.some(role => effectiveSettings(value, role).runtime === 'codex' && effectiveSettings(value, role).reasoningEffort != null);
   const catalog = needsCatalog && ROLES.some(role => effectiveSettings(value, role).runtime === 'codex') ? modelCatalog() : { models: [], available: false };
   if (interactive) {
-    const rl = createInterface({ input: stdin, output: stdout });
-    try {
-      await interviewSettings(value, catalog, text => rl.question(text));
+    const confirmed = await configurationQuestions(async question => {
+      await interviewSettings(value, catalog, question);
+      validateSettings(value);
+      validateEfforts(value, catalog.models);
       printSettings(value);
-      if ((await rl.question('Save these settings? [y/N] ')).trim().toLowerCase() !== 'y') { console.log('Settings unchanged.'); return false; }
-    } finally { rl.close(); }
+      return (await question('Save these settings? [y/N] ')).trim().toLowerCase() === 'y';
+    });
+    if (!confirmed) { console.log('Settings unchanged.'); return false; }
   }
   // CLI-managed local state must remain private even when configure precedes scaffold setup.
   const gi = contained(options.root, join(options.root, '.gitignore'));
@@ -141,6 +143,45 @@ async function configure(options) {
   printSettings(value);
   console.log('Saved. Model IDs go to their selected CLI; account availability is checked when invoked.');
   return true;
+}
+
+async function configurationQuestions(body) {
+  const rl = createInterface({ input: stdin, output: stdout });
+  let failure, rejectPending;
+  const interrupt = () => {
+    failure = Object.assign(Error('Configuration interrupted; settings unchanged.'), { exitCode: 130 });
+    rejectPending?.(failure);
+    rl.close();
+  };
+  rl.on('SIGINT', interrupt);
+  process.on('SIGINT', interrupt);
+  rl.on('close', () => {
+    failure ??= Error('Configuration cancelled at end of input; settings unchanged.');
+    rejectPending?.(failure);
+  });
+  try {
+    return await body(text => new Promise((resolve, reject) => {
+      if (failure) { reject(failure); return; }
+      rejectPending = reject;
+      rl.question(text).then(answer => { rejectPending = undefined; resolve(answer); }, reject);
+    }));
+  } finally {
+    rejectPending = undefined;
+    rl.close();
+    process.removeListener('SIGINT', interrupt);
+  }
+}
+
+async function firstUseRuntime() {
+  return configurationQuestions(async question => {
+    console.log('Choose a project runtime:\n1. Codex\n2. Claude\n0. Cancel');
+    const answer = (await question('Runtime [1/codex, 2/claude, 0/cancel]: ')).trim().toLowerCase();
+    if (['0', 'cancel'].includes(answer)) return null;
+    const runtime = ['1', 'codex'].includes(answer) ? 'codex' : ['2', 'claude'].includes(answer) ? 'claude' : null;
+    if (!runtime) throw Error('Choose codex or claude explicitly; no settings saved.');
+    cliPreflight(runtime);
+    return runtime;
+  });
 }
 
 export async function interviewSettings(value, catalog, question) {
@@ -245,10 +286,8 @@ export function launchArgs(root, role, value, prompt, headless, chain = [role], 
 
 function run(root, role, value, prompt, headless, chain, controls) {
   const command = effectiveSettings(value, role).runtime;
-  const probe = spawnSync(command, ['--version'], { encoding: 'utf8', timeout: 10000 });
-  if (probe.error || probe.status !== 0) throw Error(`${command} CLI is unavailable. Install and authenticate that CLI, then retry.`);
+  cliPreflight(command);
   if (command === 'codex') {
-    requireCliVersion(probe.stdout);
     const auth = spawnSync('codex', ['login', 'status'], { stdio: 'ignore', timeout: 10000 });
     if (auth.status !== 0) throw Error('Codex is not authenticated. Run codex login, then retry.');
   }
@@ -261,13 +300,27 @@ function run(root, role, value, prompt, headless, chain, controls) {
   return result.signal === 'SIGINT' ? 130 : result.status ?? 1;
 }
 
+function cliPreflight(command) {
+  const probe = spawnSync(command, ['--version'], { encoding: 'utf8', timeout: 10000 });
+  if (probe.error || probe.status !== 0) throw Error(`${command} CLI is unavailable. Install and authenticate that CLI, then retry.`);
+  if (command === 'codex') {
+    requireCliVersion(probe.stdout);
+  }
+}
+
 async function main() {
+  const bareFirstUse = process.env.FKIT_BARE_FIRST_USE === '1' && process.argv.length === 2 && stdin.isTTY && stdout.isTTY;
+  delete process.env.FKIT_BARE_FIRST_USE;
   const options = parse(process.argv.slice(2));
   if (options.help) { console.log(HELP); return; }
   if (options.command === 'models') { const catalog = modelCatalog(); printCatalog(catalog); if (!catalog.available) process.exitCode = 1; return; }
   if (options.command === 'configure') { await configure(options); return; }
   if (options.command === 'setup') { setup(options.root); console.log('Managed skills and shared project scaffold ready.'); return; }
-  if (!existsSync(join(options.root, '.fkit/model-settings.json')) && options.command === 'launch' && !options.preview && options.exec === undefined && !options['prompt-file'] && stdin.isTTY && stdout.isTTY) {
+  if (options.command === 'launch' && !options.preview && options.exec === undefined && !options['prompt-file'] && stdin.isTTY && stdout.isTTY && !hasSettings(options.root)) {
+    if (bareFirstUse) {
+      options.runtime = await firstUseRuntime();
+      if (!options.runtime) return;
+    }
     if (!await configure({ ...options, model: undefined, overrides: [] })) return;
   }
   const value = loadSettings(options.root);
@@ -322,4 +375,4 @@ function fresh(root) {
   return !existsSync(path) || /fkit:uninitialized|# <Project name>/.test(readFileSync(path, 'utf8'));
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch(e => { console.error(`fkit-codex: ${e.message}`); process.exitCode = 1; });
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch(e => { console.error(`fkit-codex: ${e.message}`); process.exitCode = e.exitCode ?? 1; });

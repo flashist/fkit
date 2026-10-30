@@ -1,0 +1,10 @@
+{
+  "checkedUTC": "2026-10-30T13:34:25.709869+00:00",
+  "executable": "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node",
+  "recoverySource": "/Users/mark.dolbyrev/.nvm/.cache/bin/node-v24.13.0-darwin-arm64/node-v24.13.0-darwin-arm64.tar.xz",
+  "executableSha256": "6f2e835e57feb7a29ffcd53a4d4eb60224ec264a1e002c3ba6d99999ea29807d",
+  "cacheExecutableSha256": "6f2e835e57feb7a29ffcd53a4d4eb60224ec264a1e002c3ba6d99999ea29807d",
+  "matchesCachedBinary": true,
+  "version": "v24.13.0",
+  "method": "Independent read-only comparison to cached distribution; executable version command exit0; no additional global mutation."
+}

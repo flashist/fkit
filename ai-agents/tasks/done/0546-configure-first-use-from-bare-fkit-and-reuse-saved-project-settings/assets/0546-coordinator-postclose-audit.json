@@ -1,0 +1,52 @@
+{
+  "checkedUTC": "2026-10-30T14:01:44.837932+00:00",
+  "task": "0546",
+  "state": "Done (agent-closed \u2014 not owner-verified)",
+  "movedFilesVerified": [
+    "brief.md",
+    "plan-review.md",
+    "plan.md",
+    "review.md",
+    "worklog.md"
+  ],
+  "ownerApprovalAttempts": 1,
+  "shownReviewRecordPreservedVerbatim": true,
+  "closedLedger": true,
+  "backlogMarkerLinkCorrect": true,
+  "projectBaselineEntries": 1934,
+  "approvedChangedEntries": [
+    "CHANGELOG.md",
+    "README.md",
+    "ai-agents/knowledge-base/PROJECT.md",
+    "ai-agents/knowledge-base/architecture.md",
+    "ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md",
+    "ai-agents/sprints/backlog.md",
+    "ai-agents/tasks/done/0546-configure-first-use-from-bare-fkit-and-reuse-saved-project-settings/brief.md",
+    "bin/fkit",
+    "codex/README.md",
+    "codex/fkit.mjs",
+    "codex/settings.mjs",
+    "model-agnostic-sprint/HANDOFF.md",
+    "model-agnostic-sprint/local-acceptance.md",
+    "model-agnostic-sprint/progress.md",
+    "model-agnostic-sprint/validation.md",
+    "test/harness.mjs",
+    "test/launcher-contract.test.js"
+  ],
+  "settingsPreserved": true,
+  "stagedOnlyFiveTaskRecords": [
+    "ai-agents/tasks/done/0546-configure-first-use-from-bare-fkit-and-reuse-saved-project-settings/brief.md",
+    "ai-agents/tasks/done/0546-configure-first-use-from-bare-fkit-and-reuse-saved-project-settings/plan-review.md",
+    "ai-agents/tasks/done/0546-configure-first-use-from-bare-fkit-and-reuse-saved-project-settings/plan.md",
+    "ai-agents/tasks/done/0546-configure-first-use-from-bare-fkit-and-reuse-saved-project-settings/review.md",
+    "ai-agents/tasks/done/0546-configure-first-use-from-bare-fkit-and-reuse-saved-project-settings/worklog.md"
+  ],
+  "headUnchanged": "d6c7a768b463659a4f970e3d1767dcb41d493b95",
+  "mainUnchanged": true,
+  "adrAdditionsOnly": true,
+  "adrAddedLines": 42,
+  "nodeVersion": "v24.13.0",
+  "nodeSha256": "6f2e835e57feb7a29ffcd53a4d4eb60224ec264a1e002c3ba6d99999ea29807d",
+  "nodeRecoverySeparateAndDisclosed": true,
+  "noNewBehavioralTestsRerun": true
+}

@@ -3,6 +3,11 @@
 - **Status:** accepted
 - **Date:** 2026-10-29
 - **Deciders:** owner (Mark Dolbyrev), by interactive ruling in the desktop migration chat; fkit-architect records the decision
+- **Corrections:** 2026-10-30 — dated ⛔ notice below **§Decision 6** reverses only its
+  unconditional legacy-entry preservation and open bare-first-use choice, under task 0546's owner ruling.
+  Marker legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
+  overturned** (do not follow it). Every pre-existing line is left byte-identical; the Status stays
+  `accepted`. The approved entry contract is recorded in the notice, not claimed as implemented here.
 
 ## Context
 
@@ -22,6 +27,43 @@ Local acceptance establishes seven direct no-Claude role launches and the local 
 4. **Keep the adversarial role separate, fresh and read-only.** A usable same-model second pass is supported and must disclose the observed identity/diversity, recommend a different model visibly, and report execution evidence separately. A missing or unusable pass remains partial. Never infer measurement from the sandbox setting.
 5. **Keep ADR-042 D2 and task 0273 unresolved.** This decision accepts the current read-only adversarial behavior; it neither reverses nor discharges the accepted workspace-write decision or its outstanding implementation task.
 6. **Public Claude/Codex integration may proceed after the local sprint passed, but is not decided or complete here.** Preserve legacy Claude entry behavior as the proposal requires. Exact public runtime selector/default, mixed-runtime routing, migration/upgrade contract, and certified support range remain open implementation and compatibility work. The failed real Claude smoke means compatibility remains unverified. MA-01–16 remains the migration scope; this ADR does not certify MA-14–16 or authorize publication.
+
+   > ⛔ **Dated reversal 2026-10-30 (task 0546) — Decision 6's unconditional legacy-entry preservation
+   > and open bare-first-use choice no longer govern the following bounded entry.** Decision 6 and
+   > every other pre-existing line are **left byte-identical**; Status stays `accepted`.
+   >
+   > **Owner ruling, verified against the recorded approval 2026-10-30:** the actual answer is
+   > **"Approve full plan + step 3b architect exception (Recommended)"**, dated **2026-10-30 13:20:24 UTC**,
+   > through the live **`fkit_roles.fkit_ask_owner` MCP form in the interactive coder session**
+   > (`action=accept`, `answered=true`, empty comment). The owner expressly approves both this changed
+   > entry contract and one headless architect invocation of owned `fkit-record-decision` for this
+   > settled amendment, waiving only its owner-present interview. This is a fidelity record, not
+   > cryptographic proof; generic implementation approval is not the basis for the exception.
+   > See `ai-agents/tasks/done/0546-configure-first-use-from-bare-fkit-and-reuse-saved-project-settings/plan.md`,
+   > *"Owner decision: approved"* and *"b. This SINGLE owner gate"*; its sibling `plan-review.md`,
+   > *"Owner decision: approved"*, records the same answer and the revision-1 architect approval.
+   >
+   > **Approved replacement:** public bare `fkit` means zero arguments with **both stdin and stdout
+   > attached to actual terminals**, in the current directory. Without `.fkit/model-settings.json`,
+   > it asks once for an explicit **Codex or Claude** choice, with no default or inference from CLI
+   > presence. This also affects **existing Claude-era projects without saved settings**, not just
+   > fresh projects. Reuse model/effort and optional role configuration, one effective-settings review
+   > and one explicit save confirmation. After confirmed project-local save, run setup and continue
+   > in the same invocation into fresh producer onboarding/lead handoff or the initiated role menu.
+   > Valid saved settings bypass first-use configuration, retaining their bytes, defaults, overrides,
+   > null/inherit meanings and normal managed refresh.
+   >
+   > **Preserved boundary:** unconfigured noninteractive and explicit legacy entry retain legacy
+   > behavior; explicit runtime/command/flag/role entry and direct Codex shortcuts retain their
+   > existing contracts. Missing Node on this new bare entry is an error, never a Claude fallback.
+   > Selected-CLI version preflight precedes persistence; invalid/nonregular/symlinked settings are
+   > errors, never permission to reconfigure. Cancellation, invalid input, EOF/SIGINT and pre-save
+   > failures save nothing and start no setup or role. A later setup/account/session failure may
+   > leave the confirmed settings for retry; no cross-file rollback is promised. Account access,
+   > live Claude/mixed compatibility, Linux terminal coverage and task 0546 execution remain
+   > unverified here. All other accepted limits, unresolved ADR-042 D2/task 0273, no silent fallback,
+   > role ownership and approval rules remain. This amendment grants no commit, push, release or
+   > publication authority; it records approved behavior, not implementation or certification.
 
 ## Options considered
 

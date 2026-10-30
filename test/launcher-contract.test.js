@@ -22,12 +22,12 @@
 
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync, mkdtempSync, rmSync, symlinkSync } from 'node:fs';
 import { spawn, spawnSync } from 'node:child_process';
 import { createInterface } from 'node:readline';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
-import { makeProject, runFkit, readSettings, cleanup, cleanupStub, LAUNCHER, REPO } from './harness.mjs';
+import { makeProject, runFkit, runTerminal, readSettings, cleanup, cleanupStub, LAUNCHER, REPO } from './harness.mjs';
 import { interviewSettings, launchArgs } from '../codex/fkit.mjs';
 import { OwnerQuestions } from '../codex/owner-question.mjs';
 import { parseCatalog } from '../codex/models.mjs';
@@ -528,23 +528,294 @@ function configuredFixture() {
   const root = mkdtempSync(join(tmpdir(), 'fkit-runtime-contract-'));
   const bin = join(root, 'bin');
   mkdirSync(bin);
+  writeFileSync(join(bin, 'node'), '#!/bin/sh\nexec "' + process.execPath + '" "$@"\n', { mode: 0o755 });
   for (const runtime of ['codex', 'claude']) {
     const script = `#!${process.execPath}
 const fs=require('node:fs');
 const args=process.argv.slice(2);
+fs.appendFileSync('cli-requests.jsonl',JSON.stringify(['${runtime}',args])+'\\n');
 if(args.includes('--version')){console.log('${runtime === 'codex' ? 'codex-cli 0.165.0' : '2.1.312 (Claude Code)'}');process.exit(0)}
 if(args[0]==='login')process.exit(0);
 if(args[0]==='debug' && args[1]==='models'){console.log(JSON.stringify({models:[{slug:'chosen-codex',supported_reasoning_levels:[{effort:'low'},{effort:'high'}]}]}));process.exit(0)}
 fs.writeFileSync('${runtime}-call.json',JSON.stringify(args));
-const input=fs.readFileSync(0,'utf8');
+if(process.env.FKIT_STUB_INITIATE && args.some(a=>a.includes('This is a fresh fkit project')))fs.writeFileSync(process.env.FKIT_STUB_INITIATE,'# Fixture initiated\\n');
+const input=args[0]==='exec'||args.includes('--print')||args.includes('-p')?fs.readFileSync(0,'utf8'):'';
 console.log(${runtime === 'claude' ? "JSON.stringify({is_error:false,result:'fixture-claude:'+input,modelUsage:{'observed-claude':{}}})" : "'fixture-codex:'+input"});
 `;
     writeFileSync(join(bin, runtime), script, { mode: 0o755 });
   }
-  const env = { ...process.env, PATH: `${bin}:${process.env.PATH}`, FKIT_NO_UPDATE_CHECK: '1', FKIT_NO_SELF_HOST: '1' };
+  const env = { ...process.env, PATH: `${bin}:/usr/bin:/bin`, FKIT_NO_UPDATE_CHECK: '1', FKIT_NO_SELF_HOST: '1' };
   const run = args => spawnSync('sh', [join(REPO, 'bin/fkit'), ...args], { cwd: root, env, encoding: 'utf8', timeout: 20000 });
   return { root, run, env, close: () => rmSync(root, { recursive: true, force: true }) };
 }
+
+const runtimePrompt = 'Runtime [1/codex, 2/claude, 0/cancel]: ';
+const modelPrompt = runtime => `Default ${runtime} model ID [`;
+const effortPrompt = 'Default effort [';
+const customPrompt = 'Customize models or effort for individual roles?';
+const savePrompt = 'Save these settings? [y/N] ';
+const rolePrompt = 'Choose a role [1]: ';
+const modelFile = root => join(root, '.fkit/model-settings.json');
+const roleCalls = root => ['codex', 'claude'].filter(runtime => existsSync(join(root, runtime + '-call.json')));
+const terminal = (f, steps, args = [], options = {}) => runTerminal(args, { project: f.root, env: f.env, steps, ...options });
+function configurationSteps(runtime, save = 'y\n') {
+  return [
+    [runtimePrompt, runtime + '\n'], [modelPrompt(runtime), 'chosen-' + runtime + '\n'],
+    ...(runtime === 'codex' ? [[effortPrompt, 'high\n']] : []),
+    [customPrompt, 'n\n'], [savePrompt, save],
+  ];
+}
+
+test('bare first use: real terminal rejects runtime blanks, invalid input, EOF and SIGINT without persistence', async () => {
+  const f = configuredFixture();
+  try {
+    for (const [answer, code] of [['\n', 1], ['wrong\n', 1], ['constructor\n', 1], ['0\n', 0], ['cancel\n', 0], ['\x04', 1], ['\x03', 130]]) {
+      const r = await terminal(f, [[runtimePrompt, answer]]);
+      assert.equal(r.code, code, r.output + r.stderr);
+      assert.equal(r.answered, 1, r.output + r.stderr);
+      assert.equal(existsSync(join(f.root, '.fkit')), false);
+      assert.deepEqual(roleCalls(f.root), []);
+    }
+    const retry = await terminal(f, [[runtimePrompt, '0\n']]);
+    assert.equal(retry.code, 0, retry.output);
+    assert.match(retry.output, /Choose a project runtime/);
+  } finally { f.close(); }
+});
+
+test('bare first use: invalid configuration, later EOF/SIGINT and declined save never set up or launch', async () => {
+  const f = configuredFixture();
+  try {
+    const base = [[runtimePrompt, 'codex\n'], [modelPrompt('codex'), '1\n']];
+    const cases = [
+      [[runtimePrompt, 'codex\n'], [modelPrompt('codex'), '99\n']],
+      [...base, [effortPrompt, 'bogus\n']],
+      [...base, [effortPrompt, 'high\n'], [customPrompt, 'y\n'], ['Roles to customize [', 'unknown\n']],
+      [[runtimePrompt, 'codex\n'], [modelPrompt('codex'), '\x04']],
+      [[runtimePrompt, 'claude\n'], [modelPrompt('claude'), '\x03']],
+      configurationSteps('codex', '\x04'),
+      configurationSteps('claude', '\x03'),
+      configurationSteps('codex', 'n\n'),
+      configurationSteps('claude', '\n'),
+    ];
+    for (const steps of cases) {
+      const last = steps.at(-1)[1];
+      const expected = last === '\x03' ? 130 : ['n\n', '\n'].includes(last) ? 0 : 1;
+      const r = await terminal(f, steps);
+      assert.equal(r.code, expected, r.output + r.stderr);
+      assert.equal(r.answered, steps.length, r.output);
+      assert.equal(existsSync(join(f.root, '.fkit')), false);
+      assert.equal(existsSync(join(f.root, '.gitignore')), false);
+      assert.deepEqual(roleCalls(f.root), []);
+    }
+    assert.equal((await terminal(f, [[runtimePrompt, '0\n']])).code, 0);
+  } finally { f.close(); }
+});
+
+test('bare first use: each runtime saves once and continues fresh onboarding or existing-project menu', async () => {
+  for (const runtime of ['codex', 'claude']) for (const fresh of [true, false]) {
+    const f = configuredFixture();
+    try {
+      const pm = join(f.root, 'ai-agents/knowledge-base/PROJECT.md');
+      if (!fresh) {
+        mkdirSync(dirname(pm), { recursive: true });
+        writeFileSync(pm, '# Owner project\n');
+      } else f.env.FKIT_STUB_INITIATE = pm;
+      writeFileSync(join(f.root, 'AGENTS.md'), '# Owner instructions\n');
+      writeFileSync(join(f.root, 'source.txt'), 'source unchanged\n');
+      const steps = configurationSteps(runtime);
+      if (runtime === 'codex') {
+        steps[3][1] = 'y\n';
+        steps.splice(4, 0, ['Roles to customize [', 'wiki\n'], ['wiki model [', '\n'], ['wiki effort [', 'low\n'], ['Roles to customize [', 'done\n']);
+        rmSync(join(f.root, 'bin/claude'));
+      }
+      if (fresh) {
+        for (const prompt of ['1. Project name?', '2. What is it,', '3. Who is it for,', '4. What stage is it?', '5. Near-term goal', '6. Key constraints,']) steps.push([prompt, '\n']);
+      } else steps.push([rolePrompt, 'wiki\n']);
+      const r = await terminal(f, steps);
+      assert.equal(r.code, 0, r.output + r.stderr);
+      assert.equal(r.answered, steps.length, r.output);
+      assert.equal(r.output.split(savePrompt).length - 1, 1, r.output);
+      const saved = readFileSync(modelFile(f.root), 'utf8'), value = JSON.parse(saved);
+      assert.equal(value.default.runtime, runtime);
+      assert.equal(value.default.model, 'chosen-' + runtime);
+      assert.equal(value.default.reasoningEffort, runtime === 'codex' ? 'high' : undefined);
+      if (runtime === 'codex') assert.deepEqual(value.roles.wiki, { reasoningEffort: 'low' });
+      const args = JSON.parse(readFileSync(join(f.root, runtime + '-call.json')));
+      assert.equal(args[args.indexOf('--model') + 1], 'chosen-' + runtime);
+      if (runtime === 'codex') assert.ok(args.includes(`model_reasoning_effort="${fresh ? 'high' : 'low'}"`));
+      if (fresh) {
+        assert.match(readFileSync(pm, 'utf8'), /Fixture initiated/);
+        assert.ok(existsSync(join(f.root, '.fkit/intake.md')));
+        const calls = readFileSync(join(f.root, 'cli-requests.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
+        assert.equal(calls.filter(([, argv]) => argv.some(a => a.includes('This is a fresh fkit project'))).length, 1);
+        if (runtime === 'codex') assert.ok(args.some(a => a.includes('Begin this interactive fkit-lead session')), JSON.stringify(args));
+        else assert.ok(args.includes('fkit-lead'), JSON.stringify(args));
+      } else assert.equal(readFileSync(pm, 'utf8'), '# Owner project\n');
+      assert.ok(existsSync(join(f.root, '.agents/skills/fkit-query/SKILL.md')));
+      assert.ok(readFileSync(join(f.root, 'AGENTS.md'), 'utf8').startsWith('# Owner instructions\n'));
+      assert.equal(readFileSync(join(f.root, 'source.txt'), 'utf8'), 'source unchanged\n');
+      const repeat = await terminal(f, [[rolePrompt, 'wiki\n']]);
+      assert.equal(repeat.code, 0, repeat.output);
+      assert.doesNotMatch(repeat.output, /Choose a project runtime|Save these settings/);
+      assert.equal(readFileSync(modelFile(f.root), 'utf8'), saved);
+    } finally { f.close(); }
+  }
+});
+
+test('bare first use: saved mixed overrides skip configuration, refresh managed files and preserve owner bytes', async () => {
+  const f = configuredFixture();
+  try {
+    mkdirSync(join(f.root, '.fkit'));
+    const saved = JSON.stringify({ schemaVersion: 1, default: { runtime: 'codex', model: 'chosen-codex', reasoningEffort: 'high' }, roles: { wiki: { runtime: 'claude', model: null }, coder: { model: null, reasoningEffort: null } } });
+    writeFileSync(modelFile(f.root), saved);
+    const paths = {
+      'ai-agents/knowledge-base/PROJECT.md': '# Owner project\n',
+      'ai-agents/wiki-vault/owner.md': 'wiki bytes\n',
+      '.codex/config.toml': '# owner config\n',
+      '.agents/skills/owner/SKILL.md': '# unowned\n',
+      'source.txt': 'source bytes\n',
+    };
+    for (const [path, text] of Object.entries(paths)) {
+      mkdirSync(dirname(join(f.root, path)), { recursive: true });
+      writeFileSync(join(f.root, path), text);
+    }
+    for (const role of ['wiki', 'coder']) {
+      if (role === 'coder') {
+        const resource = join(f.root, '.agents/skills/fkit-query/SKILL.md');
+        writeFileSync(resource, readFileSync(resource, 'utf8') + '\nSTALE RESOURCE\n');
+      }
+      const r = await terminal(f, [[rolePrompt, role + '\n']]);
+      assert.equal(r.code, 0, r.output);
+      assert.doesNotMatch(r.output, /Choose a project runtime|Save these settings/);
+      assert.equal(readFileSync(modelFile(f.root), 'utf8'), saved);
+      const args = JSON.parse(readFileSync(join(f.root, role === 'wiki' ? 'claude-call.json' : 'codex-call.json')));
+      assert.ok(!args.includes('--model'));
+      assert.ok(!args.some(a => a.includes('model_reasoning_effort')));
+      for (const [path, text] of Object.entries(paths)) assert.equal(readFileSync(join(f.root, path), 'utf8'), text);
+    }
+    assert.doesNotMatch(readFileSync(join(f.root, '.agents/skills/fkit-query/SKILL.md'), 'utf8'), /STALE RESOURCE/);
+    for (const steps of [
+      [[modelPrompt('codex'), '\x04']],
+      [[modelPrompt('codex'), '\x03']],
+      [[modelPrompt('codex'), '\n'], [effortPrompt, '\n'], [customPrompt, 'n\n'], [savePrompt, 'n\n']],
+      [[modelPrompt('codex'), '\n'], [effortPrompt, 'bogus\n']],
+    ]) {
+      const r = await terminal(f, steps, ['configure']);
+      assert.equal(r.code, steps[0][1] === '\x03' ? 130 : steps.at(-1)[1] === 'n\n' ? 0 : 1, r.output);
+      assert.equal(readFileSync(modelFile(f.root), 'utf8'), saved);
+    }
+  } finally { f.close(); }
+});
+
+test('bare first use: invalid existing files and unavailable runtimes never reconfigure or launch', async () => {
+  const f = configuredFixture();
+  try {
+    mkdirSync(join(f.root, '.fkit'));
+    const file = modelFile(f.root);
+    for (const text of ['{corrupt', '{"schemaVersion":99}', JSON.stringify({schemaVersion:1,default:{runtime:'claude',model:null,reasoningEffort:'high'},roles:{}})]) {
+      writeFileSync(file, text);
+      const r = await terminal(f, []);
+      assert.equal(r.code, 1, r.output);
+      assert.doesNotMatch(r.output, /Choose a project runtime|Save these settings/);
+      assert.equal(readFileSync(file, 'utf8'), text);
+    }
+    rmSync(file);
+    mkdirSync(file);
+    assert.equal((await terminal(f, [])).code, 1);
+    rmSync(file, { recursive: true });
+    assert.equal(spawnSync('mkfifo', [file]).status, 0);
+    assert.equal((await terminal(f, [])).code, 1);
+    rmSync(file);
+    const target = join(f.root, 'owner-settings');
+    writeFileSync(target, 'owner bytes');
+    symlinkSync(target, file);
+    assert.equal((await terminal(f, [])).code, 1);
+    assert.equal(readFileSync(target, 'utf8'), 'owner bytes');
+    rmSync(file);
+    symlinkSync(join(f.root, 'missing-target'), file);
+    assert.equal((await terminal(f, [])).code, 1);
+    rmSync(file);
+    rmSync(join(f.root, '.fkit'), { recursive: true });
+    for (const runtime of ['codex', 'claude']) writeFileSync(join(f.root, 'bin', runtime), '#!/bin/sh\nexit 127\n');
+    for (const runtime of ['codex', 'claude']) {
+      const r = await terminal(f, [[runtimePrompt, runtime + '\n']]);
+      assert.equal(r.code, 1, r.output);
+      assert.match(r.output, /CLI is unavailable/);
+      assert.equal(existsSync(modelFile(f.root)), false);
+    }
+    assert.deepEqual(roleCalls(f.root), []);
+  } finally { f.close(); }
+});
+
+test('bare first use: management, explicit routes and partial terminal fds preserve their contracts', async () => {
+  const f = configuredFixture();
+  try {
+    mkdirSync(join(f.root, 'ai-agents/knowledge-base'), { recursive: true });
+    writeFileSync(join(f.root, 'ai-agents/knowledge-base/PROJECT.md'), '# Existing project\n');
+    for (const args of [['--help'], ['board', '--help'], ['update'], ['--update'], ['upgrade'], ['--upgrade'], ['self-update'], ['settings'], ['models'], ['--preview'], ['unknown-role']]) {
+      const r = f.run(args);
+      assert.doesNotMatch(r.stdout + r.stderr, /Choose a project runtime|Save these settings/);
+      assert.equal(existsSync(modelFile(f.root)), false);
+      assert.deepEqual(roleCalls(f.root), []);
+    }
+    for (const [stdinTty, stdoutTty] of [[false, true], [true, false], [false, false]]) {
+      const r = await terminal(f, [['role [1-7, Enter=lead, q to quit]: ', 'q\n']], [], { stdinTty, stdoutTty });
+      assert.equal(r.code, 0, r.output + r.stderr);
+      assert.equal(r.answered, 1, r.output);
+      assert.doesNotMatch(r.output, /Choose a project runtime/);
+      assert.equal(existsSync(modelFile(f.root)), false);
+    }
+    for (const [args, entry] of [
+      [['--runtime', 'codex'], join(REPO, 'bin/fkit')],
+      [[], join(REPO, 'bin/fkit-codex')],
+      [['--root', f.root], join(REPO, 'bin/fkit')],
+    ]) {
+      const r = await terminal(f, [[modelPrompt('codex'), '\x04']], args, { entry });
+      assert.equal(r.code, 1, r.output);
+      assert.doesNotMatch(r.output, /Choose a project runtime/);
+    }
+    const target = mkdtempSync(join(tmpdir(), 'fkit-target-root-'));
+    try {
+      const configure = f.run(['configure', '--root', target, '--runtime', 'claude', '--runtime-default']);
+      assert.equal(configure.status, 0, configure.stderr);
+      assert.equal(JSON.parse(readFileSync(modelFile(target), 'utf8')).default.runtime, 'claude');
+      const preview = f.run(['--runtime', 'codex', 'lead', '--root', target, '--preview']);
+      assert.equal(preview.status, 0, preview.stderr);
+      const resolved = JSON.parse(preview.stdout);
+      assert.equal(resolved.root, target);
+      assert.deepEqual(resolved.settings, { runtime: 'codex', model: null });
+      assert.equal(existsSync(modelFile(f.root)), false);
+    } finally { rmSync(target, { recursive: true, force: true }); }
+    let r = f.run(['coder', '--debug']);
+    assert.equal(r.status, 0, r.stderr);
+    let args = JSON.parse(readFileSync(join(f.root, 'claude-call.json')));
+    assert.ok(args.includes('fkit-coder') && args.includes('--debug'));
+    r = f.run([]);
+    assert.equal(r.status, 0, r.stderr);
+    args = JSON.parse(readFileSync(join(f.root, 'claude-call.json')));
+    assert.ok(args.includes('fkit-lead'));
+    assert.equal(existsSync(modelFile(f.root)), false);
+  } finally { f.close(); }
+});
+
+test('bare first use: missing Node stops only the new entry, and old Codex stops before save', async () => {
+  const f = configuredFixture();
+  try {
+    const noNode = join(f.root, 'no-node');
+    mkdirSync(noNode);
+    for (const tool of ['dirname']) symlinkSync('/usr/bin/' + tool, join(noNode, tool));
+    const r = await terminal(f, [], [], { env: { ...f.env, PATH: noNode } });
+    assert.equal(r.code, 1, r.output);
+    assert.match(r.output, /fkit: first-use configuration needs Node.js\. Install Node.js, then run fkit again\./);
+    assert.equal(existsSync(join(f.root, '.fkit')), false);
+    assert.deepEqual(roleCalls(f.root), []);
+    writeFileSync(join(f.root, 'bin/codex'), '#!/bin/sh\necho codex-cli 0.164.0\n');
+    const old = await terminal(f, [[runtimePrompt, 'codex\n']]);
+    assert.equal(old.code, 1, old.output);
+    assert.match(old.output, /0.165.0 or newer stable/);
+    assert.equal(existsSync(modelFile(f.root)), false);
+  } finally { f.close(); }
+});
 
 test('configured runtimes: direct roles select their own CLI/model and preserve saved settings', () => {
   const f = configuredFixture();

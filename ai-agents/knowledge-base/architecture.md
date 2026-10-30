@@ -10,13 +10,20 @@ configured path. Current implementation and validation are in `codex/README.md` 
 
 | Component | Current responsibility |
 | --- | --- |
-| `bin/fkit` | Public shell dispatcher; legacy behavior without model settings, configured CLI path otherwise; common board/update and checkout self-hosting |
+| `bin/fkit` | Public shell dispatcher; unconfigured bare zero-argument entry with both stdin and stdout on actual terminals starts project configuration; saved settings use the configured CLI path; unconfigured noninteractive/explicit legacy entry retains legacy behavior; common board/update and checkout self-hosting |
 | `codex/fkit.mjs`, `settings.mjs`, `models.mjs` | Configuration, direct role launch, runtime/model inheritance and explicit root-session selection; credentials stay with CLIs |
 | `codex/materialize.mjs` | Generated owned procedures and runtime bindings from canonical `claude/` policy; shared initializer preserves project context |
 | `codex/server.mjs`, `consult.mjs` | Session-scoped stdio dispatcher, fixed caller/ownership, fresh CLI peers, ordinary two-hop/cycle/leaf checks, separate reviewer second pass and carried-plan fidelity |
 | `codex/claude.mjs` | Configured Claude argv/result adapter; native root questions/planning, dispatcher peers, restricted reasoning-only adversarial tools |
 | `codex/owner-question.mjs`, `hook.mjs`, `diagnostics.mjs` | Actual Codex owner forms, dormant hook implementation retained for later evaluation, and safe startup categories/model provenance |
 | `install.sh` | Ships both adapters with their shared canonical resources; preserves update provenance and refuses incomplete/unowned new targets |
+
+Under ADR-061's 2026-10-30 correction (task 0546), that bare first-use entry asks explicitly for
+Codex or Claude, including in existing Claude-era projects without saved settings. After one
+confirmed project-local save, setup and onboarding or the initiated role menu continue in the same
+invocation. Valid saved settings bypass the interview, retaining their bytes and overrides.
+Explicit runtime/command/flag/role entry and direct Codex shortcuts retain their existing contracts
+(`bin/fkit:30–44`; ADR-061, Decision 6's dated reversal). Task 0546 execution remains unverified here.
 
 Local settings are ignored `.fkit/model-settings.json` schema 1. Runtime changes resolve a target
 model explicitly and do not carry incompatible model/reasoning choices. No unavailable selection
