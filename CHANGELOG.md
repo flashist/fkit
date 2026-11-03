@@ -11,6 +11,12 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- `fkit board` retries once with an OS-assigned free port when default port 8585 is busy; explicit
+  ports remain strict. It requests browser opening on macOS/Linux when both stdin and stdout are
+  terminals, with `--open` / `--no-open` overrides. The printed URL shows the actual port; opener
+  failures leave the reader running. The reader does not modify project files; browser-managed
+  state may be created. See [the board guide](docs/board.md).
+
 ## v0.4.0-codex.3 â€” 2026-10-30
 
 - Lead can use the existing `fkit-status`, `fkit-wiki-sync` and `fkit-wiki-lint` names.

@@ -40,7 +40,7 @@ import { isIPv4, isIPv6 } from 'node:net';
 import { accessSync, constants, existsSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 
 const DEFAULT_PORT = 8585;
 
@@ -658,16 +658,42 @@ function arg(argv, name) {
 }
 
 const VALUE_FLAGS = ['--root', '--port', '--aiboard'];
-const USAGE = 'usage: fkit board [--root <path>] [--port <n>] [--aiboard <path>] [--bench]\n'
+const USAGE = 'usage: fkit board [--root <path>] [--port <n>] [--aiboard <path>] [--open | --no-open] [--bench]\n'
   + '       (in a checkout: npm run board -- [options])\n'
   + '  --root <path>     read that project\'s ai-agents/ instead of the current folder\'s\n'
-  + `  --port <n>        listen on 127.0.0.1:<n> (default ${DEFAULT_PORT}; 0 picks a free port)\n`
+  + `  --port <n>        strict port (0 picks a free port); omitted: ${DEFAULT_PORT}, then a free port if busy\n`
   + '  --aiboard <path>  serve this aiboard index.html instead of fkit\'s copy (or FKIT_AIBOARD)\n'
+  + '  --open           request browser opening even with redirected streams\n'
+  + '  --no-open        suppress browser opening\n'
   + '  --bench           print the snapshot cost and exit; starts no server\n'
   + '  -h, --help        print this and exit\n'
+  + '  By default, open the browser only when both stdin and stdout are terminals.\n'
   + '  Requests are answered only under localhost or an IP address; any other host name gets 403.\n';
 
+function openBrowser(url) {
+  const command = process.platform === 'darwin' ? 'open' : process.platform === 'linux' ? 'xdg-open' : null;
+  const warn = (reason) => process.stderr.write(`fkit-board: browser opening ${reason}; open the printed URL manually.\n`);
+  if (!command) {
+    warn('is unsupported on this platform');
+    return;
+  }
+  try {
+    const child = spawn(command, [url], { stdio: 'ignore', detached: true });
+    child.once('error', (err) => warn(`failed (${err.code || 'spawn error'})`));
+    child.once('exit', (code, signal) => {
+      if (code !== 0) warn(signal ? `ended with ${signal}` : `exited ${code}`);
+    });
+    child.unref();
+  } catch (err) {
+    warn(`failed (${err.code || 'spawn error'})`);
+  }
+}
+
 function main(argv) {
+  if (argv.includes('--open') && argv.includes('--no-open')) {
+    process.stderr.write('fkit-board: --open and --no-open cannot be used together.\n');
+    return 2;
+  }
   if (argv.includes('--help') || argv.includes('-h')) {
     process.stdout.write(USAGE);
     return 0;
@@ -698,7 +724,7 @@ function main(argv) {
   // A typo would otherwise be ignored and a blocking server started in its place.
   for (let i = 0; i < argv.length; i++) {
     if (VALUE_FLAGS.includes(argv[i])) { i++; continue; }
-    if (argv[i] === '--bench') continue;
+    if (['--bench', '--open', '--no-open'].includes(argv[i])) continue;
     process.stderr.write(`fkit-board: unknown argument ${JSON.stringify(argv[i])}.\n${USAGE}`);
     return 2;
   }
@@ -794,20 +820,43 @@ function main(argv) {
     return 2;
   }
 
-  const server = startServer({ root, dashboard, aiboardPath: aiboard.path, port });
-  server.on('listening', () => {
-    const a = server.address();
-    process.stdout.write(
-      `fkit-board  http://127.0.0.1:${a.port}/   (read-only — Ctrl+C to stop)\n`
-      + treeLine
-      + `  aiboard  ${aiboard.path}  (${aiboard.how})\n`
-      + statusLine
-      + noteLine);
-  });
-  server.on('error', (err) => {
-    process.stderr.write(`fkit-board: ${err.message}\n`);
-    process.exitCode = 2;
-  });
+  const shouldOpen = !argv.includes('--no-open')
+    && (argv.includes('--open') || (process.stdin.isTTY && process.stdout.isTTY));
+  const listen = (attemptPort, mayRetry) => {
+    let server;
+    let listening = false;
+    const onListening = () => {
+      listening = true;
+      const url = `http://127.0.0.1:${server.address().port}/`;
+      process.stdout.write(
+        `fkit-board  ${url}   (read-only — Ctrl+C to stop)\n`
+        + treeLine
+        + `  aiboard  ${aiboard.path}  (${aiboard.how})\n`
+        + statusLine
+        + noteLine);
+      if (shouldOpen) openBrowser(url);
+    };
+    const onError = (err) => {
+      server?.removeListener('listening', onListening);
+      if (!listening && mayRetry && err.code === 'EADDRINUSE') {
+        process.stderr.write(`fkit-board: default port ${DEFAULT_PORT} is busy; retrying once with a free port.\n`);
+        listen(0, false);
+        return;
+      }
+      process.stderr.write(`fkit-board: ${err.message}`
+        + (err.code === 'EADDRINUSE' && portArg !== undefined ? '; try --port 0 for a free port.' : '')
+        + '\n');
+      process.exitCode = 2;
+    };
+    try {
+      server = startServer({ root, dashboard, aiboardPath: aiboard.path, port: attemptPort });
+      server.once('listening', onListening);
+      server.once('error', onError);
+    } catch (err) {
+      onError(err);
+    }
+  };
+  listen(port, portArg === undefined);
   return 0;
 }
 

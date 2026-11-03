@@ -28,7 +28,7 @@ curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh 
 cd /path/to/your/project
 fkit            # pick a role from the menu (Enter = lead)
 fkit coder      # …or go straight to one
-fkit board      # view this project's tasks and sprints in your browser, read-only (needs Node)
+fkit board      # open this project's read-only board from a terminal (needs Node)
 ```
 
 Published `v0.4.0-codex.1` and the default `main` installation retain the legacy [Claude Code](https://claude.com/claude-code) launcher for unconfigured projects;
@@ -234,10 +234,16 @@ plain `claude` is not role-locked.
 ## Web board
 
 Run `fkit board` in your project's folder: it serves a **read-only** web view of the project's
-`ai-agents/` tasks and sprints at `http://127.0.0.1:8585/`, using a copy of
-[aiboard](https://github.com/flashist/aiboard)'s page that ships with fkit. It writes nothing and needs
-Node.js. An older install needs `fkit update` first. In a checkout of this repo, `npm run board` does
-the same over fkit's own tree. Details: [`docs/board.md`](docs/board.md).
+`ai-agents/` tasks and sprints using [aiboard](https://github.com/flashist/aiboard)'s page, shipped
+with fkit. It tries `http://127.0.0.1:8585/`, then one OS-assigned free port if the default is busy.
+Use the printed URL. An explicit `--port` stays strict; `--port 0` asks for a free port immediately.
+
+It opens the browser automatically only when both stdin and stdout are terminals. Use
+`fkit board --no-open` to suppress opening, or `--open` to request it with redirected streams.
+The reader stays in the foreground until Ctrl+C and does not modify project files; browser opening
+can create browser-managed state. Node.js is required. An older install needs `fkit update` first.
+In a checkout, `npm run board` does the same over fkit's own tree. Details and platform support:
+[`docs/board.md`](docs/board.md).
 
 ## Contributing
 

@@ -4,10 +4,10 @@
 0537
 
 ## Sprint
-Backlog
+Sprint 15
 
 ## Priority
-Unscheduled
+P2
 
 ## Status
 🔲 Backlog
@@ -106,3 +106,5 @@ change to `claude/fkit-claude.sh` without the owner's OK at plan time; any new t
   [brief](../../done/0536-ship-the-read-only-board-reader-to-every-fkit-user-via-fkit-board/brief.md).
 - Filed 2026-10-20 by a spawned `fkit-producer` (no owner channel), on the owner ruling quoted in
   *Context*.
+
+- **Placement update 2026-10-30:** pulled into [Sprint 15](../../../sprints/sprint-15.md), P2, on the owner scheduling approval quoted on that board (interactive `fkit_roles.fkit_ask_owner`, relayed by `fkit-lead`). Scheduling only; this task remains `🔲 Backlog` and has no start approval. No dependency links changed; no other open task gains a wait on Sprint 15 (checked). This dated note supersedes earlier Backlog-placement notes.

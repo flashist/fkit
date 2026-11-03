@@ -4871,3 +4871,17 @@ Task 0380: partial — not ready to close
 - Re-grep after: **0** `backlog/0380-` hits. Other vault mentions of `0380` are task IDs or historical log text, not paths — left unchanged. No links added or removed, so no back-link or `index.md` change.
 - Scope: 1 page updated, plus this entry. Nothing committed or staged. No secrets.
 - No tracked task completed by this run.
+
+## 2026-10-30 — ingest (partial sync)
+- Sync window: `185ac5e07e918c089ed3afd23496587315342000` → HEAD (`728c7c5488b5af546f8a83bc9795101c36216fe2`).
+- Changed source files detected: at least 29 eligible current paths; the remaining sources have not been fully ingested. The watermark remains unchanged so a later sync can resume this window.
+- Ingested: `ai-agents/sprints/done/sprint-12.md` → updated [[wiki/tasks/sprint-12-set-a-nine-backlog-tasks-goal-not-set]].
+- Ingested: `ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md` → created [[wiki/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits]].
+- Skipped (already covered): none. The remaining eligible changes require ingestion; `0544` and `0545` briefs were read for the sprint's verification caveats, not fully ingested.
+
+## 2026-11-03 — ingest (partial sync)
+- Sync window: `185ac5e07e918c089ed3afd23496587315342000` → HEAD (`728c7c5488b5af546f8a83bc9795101c36216fe2`).
+- Changed source files detected: 88 candidate paths; 30 match eligible path patterns, including the former `ai-agents/sprints/sprint-12.md` path that has since moved. Remaining sources are not fully ingested; the watermark is unchanged.
+- Ingested: `ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md` → updated [[wiki/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] and its index entry with the provisional ADR-059/060 amendments.
+- Targeted lint: the updated page's 17 wiki links resolve, are indexed, and have backlinks.
+- Skipped (already covered): none claimed. This partial pass does not certify the prior partial sync or the rest of the window.

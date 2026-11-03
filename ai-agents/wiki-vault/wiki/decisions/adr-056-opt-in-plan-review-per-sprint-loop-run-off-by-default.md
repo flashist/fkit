@@ -3,6 +3,8 @@
 **Date**: 2026-10-06
 **Status**: accepted *(one ⚠️ dated correction below Decision 5, 2026-10-06; no decision overturned)*
 
+> ⛔ **2026-10-24 amendments:** The original default-off and unchanged-session decisions below are historical. `ai-agents/knowledge-base/decisions/adr-059-plan-review-on-by-default-with-a-no-plan-review-opt-out-sprint-loop-runs-first-provisional.md` makes sprint-loop plan review default on, with `--no-plan-review` for one run. `ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md` amends the session paths: a launcher line enables the default, with opt-outs; its design was conditional on the builds and probe. Both rulings are provisional. The original text below remains as the historical decision; consult the amended sources for the current scope and later acceptance limits.
+
 **Extends, does not supersede**: [[decisions/adr-020-per-task-plan-and-worklog-artifacts]] (a new per-task file, `plan-review.md`); sits beside [[decisions/adr-019-autonomous-coder-ship-loop-default-autonomy-owner-gates]] Decision 2 and [[decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model]] Decisions 3 / 7 (the plan gate). All three stay `accepted`, each with a dated ⚠️ pointer note here.
 
 ## Context

@@ -16,8 +16,11 @@ and ships to every fkit user per
 In your project's folder — the one holding `ai-agents/`:
 
 ```
-fkit board                                      # then open http://127.0.0.1:8585/
-fkit board --port 9000                          # a different port
+fkit board                                      # opens the printed URL in a terminal
+fkit board --port 0                              # let the OS choose a free port
+fkit board --port 9000                           # require this exact port
+fkit board --no-open                             # print the URL without opening a browser
+fkit board --open                                # request opening even with redirected streams
 fkit board --aiboard /path/to/aiboard/web/index.html
 fkit board --root <other-project>               # another fkit-using project's ai-agents/
 fkit board --bench                              # snapshot cost on this project's tree
@@ -32,11 +35,33 @@ In a checkout of this repo, the same reader runs over fkit's own tree:
 
 ```
 npm run board                                   # fkit's own ai-agents/
-npm run board -- --port 9000
+npm run board -- --port 0
 FKIT_AIBOARD=/path/to/aiboard/web/index.html npm run board
 node bin/fkit-board.mjs --bench                 # snapshot cost at this repo's real corpus
 npm run board -- --root <other-project> --port 9001
 ```
+
+The reader stays in the foreground; **Ctrl+C stops it and releases its port**. Use the actual URL
+printed after startup, which may differ from `http://127.0.0.1:8585/`.
+
+With `--port` omitted, it tries `8585`. Only if that port is already in use does it print a collision
+notice and retry once with port `0`, letting the OS choose a free port. It leaves the existing
+occupant alone. An explicit port is strict, including `--port 8585`: a collision exits `2` and
+suggests `--port 0`. Other listen failures, or a failed fallback, also exit `2` without another retry.
+
+Browser opening defaults to **both stdin and stdout being terminals**. Redirect either stream and
+the default is to print the URL without opening. `--open` forces an opening request; `--no-open`
+suppresses it. Giving both flags exits `2` before starting a server. Help, invalid input, benchmark
+mode and failed startup never request opening.
+
+After printing its actual listening URL, the reader requests opening once with macOS `open` or
+Linux `xdg-open`. The opener is detached with all three streams ignored, so a missing, failed or
+stalled opener does not block the reader or take terminal input. Failures warn; a stalled opener
+may remain detached. Other platforms warn when opening is requested; open the printed URL manually.
+No `BROWSER` environment-variable override is used.
+
+Repeated launches can start duplicate readers. A fallback port also changes the browser origin,
+so the UI's saved `localStorage` preferences may differ between ports.
 
 ## Which page it serves
 
@@ -65,21 +90,23 @@ checkout. The startup banner prints the tree it is serving, marked `(--root)` wh
 
 ## What it listens on, and what it accepts
 
-It binds **`127.0.0.1` only** — never `0.0.0.0` — on port `8585` by default. It serves six GET paths
+It binds **`127.0.0.1` only** — never `0.0.0.0` — starting with port `8585` by default, with the
+collision fallback described above. It serves six GET paths
 and nothing else: `/` and its alias `/index.html` (both aiboard's `index.html`, byte-for-byte as
 found), `/api/board`, `/api/tasks/<id>`, `/api/sprints/<id>` and `/api/check`.
 **Every other method — POST, PUT, PATCH, DELETE, and anything else that is not GET — is refused with a
 JSON error.** It answers only requests whose `Host` names `localhost`, an IP address, or the address it
 listens on (case and port ignored). Any other host name gets `403` and a JSON error with no board data;
-a request with no `Host` gets `400` (HTTP/1.1, from Node itself) or `403` (HTTP/1.0). It holds no credentials and reads no environment beyond `FKIT_AIBOARD`.
+a request with no `Host` gets `400` (HTTP/1.1, from Node itself) or `403` (HTTP/1.0). It holds no
+credentials. `FKIT_AIBOARD` controls page selection; opener lookup uses the normal `PATH`.
 
-## What it writes: nothing
+## What the reader writes
 
-**It writes nothing, anywhere, in any mode, behind any flag.** It opens no file outside `ai-agents/`
-except the one page it serves, and it runs one fkit-local subprocess: fkit's own
-`claude/skills/fkit-status/dashboard.sh select-active`, which is the project's **one** implementation
-of the sprint-status grammar. `fkit board` runs before fkit's update check and project setup, so it
-does not touch `.claude/` or `.fkit/` either.
+**The reader does not modify project files.** It reads the project's `ai-agents/` tree and the UI
+page, and invokes fkit's own `claude/skills/fkit-status/dashboard.sh select-active` for the project's
+**one** implementation of the sprint-status grammar. It can also launch the browser opener described
+above. Opening the page can create browser-managed history, storage or other state. `fkit board`
+runs before fkit's update check and project setup, so it does not touch `.claude/` or `.fkit/` either.
 
 ## How it ships
 
@@ -87,3 +114,6 @@ does not touch `.claude/` or `.fkit/` either.
 install folder (`~/.local/share/fkit` by default), beside `claude/`. Node is needed for this command
 only. It is interim: task `0444` moves `fkit board` to fkit's built-in board, and task `0467` retires
 this reader (ADR-058 §6).
+
+Editing a checkout does not update an installed CLI; run this checkout's `./bin/fkit board` or the
+checkout commands above to use its version.

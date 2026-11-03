@@ -4,10 +4,10 @@
 0540
 
 ## Sprint
-Backlog
+Sprint 15
 
 ## Priority
-Unscheduled
+P1
 
 ## Status
 🔲 Backlog
@@ -84,3 +84,5 @@ the 2-minute budget (§D10).
 - Filed 2026-10-23 by a spawned `fkit-producer` (no owner channel), on the owner ruling quoted in
   *Context*. Backlog board, unranked; placement knock-on: none.
 - The 1,071 figure is the owner-machine count reported on 2026-10-23; it is not re-measured here.
+
+- **Placement update 2026-10-30:** pulled into [Sprint 15](../../../sprints/sprint-15.md), P1, on the owner scheduling approval quoted on that board (interactive `fkit_roles.fkit_ask_owner`, relayed by `fkit-lead`). Scheduling only; this task remains `🔲 Backlog` and has no start approval. No dependency links changed; no other open task gains a wait on Sprint 15 (checked). This dated note supersedes earlier Backlog-placement notes.

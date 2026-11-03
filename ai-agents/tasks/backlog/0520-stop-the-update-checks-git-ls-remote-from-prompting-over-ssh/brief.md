@@ -4,10 +4,10 @@
 0520
 
 ## Sprint
-Backlog
+Sprint 15
 
 ## Priority
-Unscheduled
+P3
 
 ## Status
 🔲 Backlog
@@ -98,3 +98,5 @@ fails the launch.
 - Filed 2026-10-16 by a spawned `fkit-producer` with **no owner channel** (ADR-021), on the owner's
   ruling relayed by the `fkit-lead` driver. It edited no existing brief, changed no other task's
   status, priority or location, wrote nothing under `ai-agents/wiki-vault/`, and committed nothing.
+
+- **Placement update 2026-10-30:** pulled into [Sprint 15](../../../sprints/sprint-15.md), P3, on the owner scheduling approval quoted on that board (interactive `fkit_roles.fkit_ask_owner`, relayed by `fkit-lead`). Scheduling only; this task remains `🔲 Backlog` and has no start approval. No dependency links changed; no other open task gains a wait on Sprint 15 (checked). This dated note supersedes earlier Backlog-placement notes.

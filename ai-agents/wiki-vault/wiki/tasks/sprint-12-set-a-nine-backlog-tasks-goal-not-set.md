@@ -1,10 +1,10 @@
 # Sprint 12 — goal not yet set: the nine "Set A" Backlog tasks plus the plan-review trial
 
-**Source**: `ai-agents/sprints/sprint-12.md`
-**Status**: in-progress — line-3 banner `🔄 In progress — 2026-10-15` (read at `5ccf2c2`, 2026-10-23); paused by the owner from 2026-10-19 while Sprints 13 and 14 ran
+**Source**: `ai-agents/sprints/done/sprint-12.md`
+**Status**: done — 2026-10-30 (agent-closed — not owner-verified)
 **Sprint/Tag**: Sprint 12 · opened 2026-10-15 · driven by `/fkit-sprint-ship-loop --plan-review` from `fkit lead` sessions
 
-> ⭐ **Ingested 2026-10-23** (sync `96c7263`→`5ccf2c2`). The board is still open, so this page describes it as read at `5ccf2c2`.
+> **Update 2026-10-30:** The owner selected the goal “Finish the plan-review rollout and clarify planning limits.” The producer closed and archived the sprint on 2026-10-30: 14 done, one cancelled; all closure markers are agent-closed, not owner-verified. Tasks `0474` and `0541`–`0545` are done. The driver's notes still describe `0474` as backlog and the board as in progress; those notes are historical and conflict with the current banner and rows. For `0544`, the original Claude/native human UI checks remain unverified; its approved completion scope was Codex-specific. For `0545`, interactive Bash qualification remains untested: neither 3m nor 3m-bis is a pass. Sources: `ai-agents/tasks/done/0544-turn-plan-review-on-by-default-in-fkit-task-ship-loop/brief.md`, `ai-agents/tasks/done/0545-correct-the-plan-mode-is-a-structural-write-wall-wording/brief.md`. The snapshot below describes the board as read at `5ccf2c2` on 2026-10-23.
 
 ## Goal
 **Not set** — the H1 is a producer placeholder. The board exists by owner rulings of 2026-10-15, relayed by `fkit-lead` to a spawned producer with no owner channel:
