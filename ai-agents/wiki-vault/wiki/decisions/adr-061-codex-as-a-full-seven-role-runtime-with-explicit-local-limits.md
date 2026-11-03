@@ -1,4 +1,4 @@
-# Codex is a full seven-role runtime with explicit local limits
+# ADR-061: Codex is a full seven-role runtime with explicit local limits
 
 **Date**: 2026-10-29
 **Status**: accepted
@@ -20,3 +20,4 @@ The 2026-10-30 amendment reverses the unconditional legacy-entry preservation fo
 All seven direct no-Claude role smoke checks and local task/sprint workflows passed per the decision record. The record does not certify public distribution or Claude compatibility; real Claude smoke checks failed with a network/service-related error of unknown precise cause. General write and planning controls are not a universal filesystem wall; optional hooks require trust. A sandbox setting alone does not prove test execution.
 
 ## Related
+- [[systems/fkit]] — the runtime and role system this decision extends.

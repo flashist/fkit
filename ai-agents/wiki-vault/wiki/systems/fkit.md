@@ -187,6 +187,7 @@ This is recorded because it explains things that would otherwise look arbitrary:
 4. ~~**What is the consent model for the one destructive act still on the table** — clearing the `.fkit/` Omnigent orphans?~~ **Answered: announce-only** (owner, 2026-07-17), and the cleanup is now **Done** ([[tasks/remove-fkit-omnigent-orphan-residue]]). `.fkit/settings` is live lockdown state and must never be touched.
 
 ## Related
+- [[decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits]] — Codex runtime for all seven roles, with explicit local limits.
 - *Added 2026-09-30 (sync `a351cb6`→`3915417`):* [[decisions/adr-052-aiboard-merges-into-fkit-as-its-built-in-board-the-single-store-for-tasks-and-sprints]] — the decided replacement for the markdown store (not built) · [[decisions/adr-049-owner-verified-close-requires-a-verified-human-principal-no-channel-supplies-one]] · [[decisions/adr-050-prose-is-not-a-transaction-how-the-four-movers-are-executed]] · [[decisions/adr-051-one-store-for-tasks-aiboard-is-the-gated-destination-the-reader-is-the-interim]] · [[tasks/sprint-11-fkit-aiboard-convergence]] · [[tasks/make-the-read-only-aiboard-reader-the-board-the-owner-actually-reads]]
 - [[systems/role-locked-sessions]]
 - [[systems/install-and-self-update]]

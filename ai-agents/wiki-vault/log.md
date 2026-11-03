@@ -4885,3 +4885,9 @@ Task 0380: partial — not ready to close
 - Ingested: `ai-agents/knowledge-base/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md` → updated [[wiki/decisions/adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default]] and its index entry with the provisional ADR-059/060 amendments.
 - Targeted lint: the updated page's 17 wiki links resolve, are indexed, and have backlinks.
 - Skipped (already covered): none claimed. This partial pass does not certify the prior partial sync or the rest of the window.
+
+## 2026-11-03 — lint
+- Issues found: 2
+- Issues fixed: 2
+- Issues flagged for human review: 0
+- Corrected ADR-061 heading and linked its orphaned page to the fkit system. Partial lint: source-reference candidates and whole-vault semantic contradictions remain unverified; counts cover confirmed issues only.
