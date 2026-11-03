@@ -10,7 +10,7 @@ Sprint 16
 P1
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-architect
@@ -42,7 +42,7 @@ Read their dated amendments: a channel name does not establish a human principal
 closure marker. Codex general write/planning limits are instructional; both fkit hooks are disabled.
 Claude/mixed-runtime live compatibility remains unverified. This task must not strengthen those claims.
 
-Related work: [0548](../0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md)
+Related work: [0548](../../backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md)
 owns retirement of model/effort selectors in Sprint 15. Respect the runtime/settings contract
 actually present at execution and its approved direction; do not recreate selectors or implement
 0548 here. The board/store identity and owner-door work is separate; BUZZ does not replace it.
@@ -133,7 +133,7 @@ fresh inspection, live execution and untested requirements.
 ## Notes
 - **Depends on:** nothing
 - **Blocks:** [0550](../0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project/brief.md)
-- **Owner-approved placement — 2026-11-03:** [Sprint 16](../../../sprints/sprint-16.md),
+- **Owner-approved placement — 2026-11-03:** [Sprint 16](../../../sprints/done/sprint-16.md),
   P1, `🔲 Backlog`; scheduling only. Actual owner selection via interactive
   `fkit_roles.fkit_ask_owner` in `fkit-lead`, relayed to this fresh producer; exact quote,
   date and channel are recorded on the sprint board. 0550 waits on 0549; 0551 waits on 0550

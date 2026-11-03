@@ -1,6 +1,6 @@
 # Sprint 16 — Prove the optional BUZZ interface
 
-> ## 🔲 Backlog — 2026-11-03.
+> ## ✅ Done — 2026-11-03. Closed by /fkit-sprint-done (agent-closed — not owner-verified).
 >
 > **Scheduling only.** No sprint/task start, implementation, installation, external messages, closure,
 > commit or push is authorized by this placement.
@@ -28,9 +28,9 @@ research. Sprint success does not require a shipped adapter or a claim of succes
 
 | Status | Priority | Task | Brief |
 |---|---|---|---|
-| 🔲 Backlog | P1 | **Pin the optional BUZZ target and design the fkit control boundary** *(Investigation/design only; pin one target, define optional activation, exact owner-question bridge and recovery gates. Depends on nothing; blocks 0550. Owner `fkit-architect`)* | [`0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary`](../tasks/backlog/0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary/brief.md) |
-| 🔲 Backlog | P2 | **Prove the optional BUZZ owner-question and recovery flow in a disposable project** *(Disposable feasibility experiment; real pending owner-question round trip first or stop, then identity/revision, replay, local/remote serialization, fallback and recovery checks. Depends on 0549; blocks 0551. Proposed 8 active hours; later execution/setup/message approval required. Owner `fkit-coder`)* | [`0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project`](../tasks/backlog/0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project/brief.md) |
-| 🔲 Backlog | P3 | **Review BUZZ feasibility with the owner and scope only the proven delivery** *(Review evidence with the owner; proceed with proven scope, limit, or stop. Delivery briefs only after findings and actual owner ruling. Depends on 0550. Owner `fkit-producer`)* | [`0551-review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery`](../tasks/backlog/0551-review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P1 | **Pin the optional BUZZ target and design the fkit control boundary** *(Investigation/design only; pin one target, define optional activation, exact owner-question bridge and recovery gates. Depends on nothing; blocks 0550. Owner `fkit-architect`)* | [`0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary`](../../tasks/done/0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P2 | **Prove the optional BUZZ owner-question and recovery flow in a disposable project** *(Disposable feasibility experiment; real pending owner-question round trip first or stop, then identity/revision, replay, local/remote serialization, fallback and recovery checks. Depends on 0549; blocks 0551. Proposed 8 active hours; later execution/setup/message approval required. Owner `fkit-coder`)* | [`0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project`](../../tasks/done/0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project/brief.md) |
+| ✅ Done (agent-closed — not owner-verified) | P3 | **Review BUZZ feasibility with the owner and scope only the proven delivery** *(Review evidence with the owner; proceed with proven scope, limit, or stop. Delivery briefs only after findings and actual owner ruling. Depends on 0550. Owner `fkit-producer`)* | [`0551-review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery`](../../tasks/done/0551-review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery/brief.md) |
 
 ## ⚠️ Notes for the driver
 
@@ -62,8 +62,8 @@ research. Sprint success does not require a shipped adapter or a claim of succes
   private conversation and one controlling lead. 0550's proposed cap is 8 active hours, excluding
   owner waits, subject to its later start-plan approval; no calendar deadline is inferred. Stop
   sooner on a failed gate. No automatic extension or replacement target.
-- **Separate work:** [0548](../tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md)
-  owns runtime model/effort selector retirement in [Sprint 15](sprint-15.md). Respect the effective
+- **Separate work:** [0548](../../tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md)
+  owns runtime model/effort selector retirement in [Sprint 15](../sprint-15.md). Respect the effective
   contract at execution without duplicating that task or adding a hard dependency. Board/store and
   owner-door work remain separate. Sprint 15's tasks, ordering and status are unchanged.
 - **Deferred:** shipped adapter, real-project source/task/board/wiki writes, remote implementation
@@ -95,3 +95,19 @@ research. Sprint success does not require a shipped adapter or a claim of succes
   as required by its brief; no findings exist from this scheduling act.
 - 0551: owner decision packet and, only after the actual proceed ruling, decomposed delivery briefs.
   No delivery approval or new implementation task is recorded here.
+
+## Lifecycle closure — 2026-11-03
+
+- Closed by the producer-owned `/fkit-sprint-done` under the actual owner's conditional closure
+  instruction, relayed by `fkit-lead` from user chat at **2026-11-03 16:07:04 UTC**:
+  > Got you: we need to "finish" all the buzz-related tasks  (if they are still not "finished"), I guess some of them might need to be cancelled. If there are no more tasks in the buzz-related sprint, we need to close it
+- Live brief/board reconciliation and the deterministic dashboard confirmed **3 done of 3**, no
+  open row or identity drift; the owner condition was met. All three tasks retain
+  `✅ Done (agent-closed — not owner-verified)`. No task was cancelled, reopened or relocated.
+- Completed outcomes: [0549 negative design investigation](../../knowledge-base/reports/2026-11-03-design-optional-buzz-control-boundary.md),
+  [0550 documented gate stop](../../tasks/done/0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project/findings.md),
+  and [0551 actual PARK decision](../../tasks/done/0551-review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery/decision-packet.md).
+  BUZZ delivery and experiments remain parked; 110 cases remain 55 blocked/55 untested, none executed.
+- This closure supersedes scheduling-only status statements above; their dated placement history,
+  frozen row claims, research/review evidence and coverage limits remain unchanged. No shipped
+  integration or owner verification is implied. No successor was found; no Backlog relocation needed.

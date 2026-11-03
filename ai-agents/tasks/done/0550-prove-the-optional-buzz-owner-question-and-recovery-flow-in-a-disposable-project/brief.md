@@ -10,7 +10,7 @@ Sprint 16
 P2
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-coder
@@ -20,7 +20,7 @@ fkit-coder
 **Owner request — 2026-11-03, user chat, relayed by `fkit-lead`:** "Plan a sprint for this" —
 optional BUZZ interface and remote control. This is a **feasibility investigation**, not a shipped
 adapter implementation brief. The prior architect source inspection is not a live compatibility
-test. [0549](../0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary/brief.md)
+test. [0549](../../done/0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary/brief.md)
 must supply the pinned experiment contract first. If it finds no viable seam, do not build around
 that result; return the evidence to the owner through 0551.
 
@@ -34,7 +34,7 @@ recorded below.
 
 Read [Codex runtime](../../../../codex/README.md) and
 [current migration handoff](../../../../model-agnostic-sprint/HANDOFF.md) again at execution.
-Use fkit's actual dispatcher/runtime resolution; [0548](../0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md)
+Use fkit's actual dispatcher/runtime resolution; [0548](../../backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md)
 owns selector retirement. Both Codex hooks remain disabled; general planning/write boundaries are
 instructional. Do not substitute BUZZ's native Codex/ACP permission defaults for fkit consent.
 
@@ -134,9 +134,9 @@ versions, commands, results, failure/recovery history and source-inspected versu
    claim rests on a separate process; command viability is reported separately from skill availability.
 
 ## Notes
-- **Depends on:** [0549](../0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary/brief.md)
-- **Blocks:** [0551](../0551-review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery/brief.md)
-- **Owner-approved placement — 2026-11-03:** [Sprint 16](../../../sprints/sprint-16.md),
+- **Depends on:** [0549](../../done/0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary/brief.md)
+- **Blocks:** [0551](../../done/0551-review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery/brief.md)
+- **Owner-approved placement — 2026-11-03:** [Sprint 16](../../../sprints/done/sprint-16.md),
   P2, `🔲 Backlog`; scheduling only. Actual owner selection via interactive
   `fkit_roles.fkit_ask_owner` in `fkit-lead`, relayed to this fresh producer; exact quote,
   date and channel are recorded on the sprint board. 0550 waits on 0549; 0551 waits on 0550

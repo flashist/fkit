@@ -10,7 +10,7 @@ Sprint 16
 P3
 
 ## Status
-🔲 Backlog
+✅ Done (agent-closed — not owner-verified)
 
 ## Owner
 fkit-producer
@@ -26,8 +26,8 @@ session is desirable, not mandatory; terminal/native Codex app work must remain 
 Prefer a command plus optional skill wrapper subject to findings. Capture this requirement now;
 do not treat it as proof of existing-session/native-app attachment or as sprint placement approval.
 
-[0549](../0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary/brief.md) specifies a
-pinned target and boundary; [0550](../0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project/brief.md)
+[0549](../../done/0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary/brief.md) specifies a
+pinned target and boundary; [0550](../../done/0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project/brief.md)
 tests the seam or stops with evidence. This task reviews those results with the owner before any
 shipped adapter implementation is scoped. A documented negative/blocked investigation can reach
 this decision gate; it must not be labelled successful integration to make dependencies appear done.
@@ -83,7 +83,7 @@ Do not infer an answer from silence, a recommendation, a source report or a comp
    choice before execution depends on it; do not silently accept it between agents. BUZZ-managed
    subprocesses end on app exit/reload; no always-on lifetime is promised.
 
-**Owner-approved sprint placement — 2026-11-03:** [Sprint 16 — Prove the optional BUZZ interface](../../../sprints/sprint-16.md).
+**Owner-approved sprint placement — 2026-11-03:** [Sprint 16 — Prove the optional BUZZ interface](../../../sprints/done/sprint-16.md).
 Goal: determine whether one pinned BUZZ target can safely carry fkit status/reports and plan
 conversations, then obtain an evidence-based owner decision on delivery scope. Approved order:
 0549 → 0550 → 0551. Budget: 0550 capped at a proposed 8 active hours, subject to its later start
@@ -112,9 +112,9 @@ Existing-root attachment and native-app handoff remain feasibility questions, no
    execution; no current steering capture is misreported as acceptance of that trade-off.
 
 ## Notes
-- **Depends on:** [0550](../0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project/brief.md)
+- **Depends on:** [0550](../../done/0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project/brief.md)
 - **Blocks:** nothing
-- **Owner-approved placement — 2026-11-03:** [Sprint 16](../../../sprints/sprint-16.md),
+- **Owner-approved placement — 2026-11-03:** [Sprint 16](../../../sprints/done/sprint-16.md),
   P3, `🔲 Backlog`; scheduling only. Actual owner selection via interactive
   `fkit_roles.fkit_ask_owner` in `fkit-lead`, relayed to this fresh producer; exact quote,
   date and channel are recorded on the sprint board. 0550 waits on 0549; 0551 waits on 0550
