@@ -1,0 +1,301 @@
+{
+  "recordedUTC": "2026-11-04T08:24:31.990Z",
+  "boundedUnit": "Build temporary failure probes only",
+  "planGitBlob": "a7245d31f2c7c91d6efd1b6642a08c08db2e04f3",
+  "runs": [
+    {
+      "label": "failure-probe-structure",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "startedUTC": "2026-11-04T08:21:11.503Z",
+      "finishedUTC": "2026-11-04T08:22:37.608Z",
+      "exit": 1,
+      "totals": {
+        "tests": 971,
+        "suites": 40,
+        "pass": 968,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 1,
+        "todo": 0,
+        "duration_ms": 85802.188167
+      },
+      "wallSeconds": 85.946295208,
+      "failedAssertions": [
+        "live corpus: the enforced dual-homed set is non-empty and every file is present in BOTH homes",
+        "conforming fixture: complete silence — no notice on stderr, nothing on stdout"
+      ],
+      "markerObserved": true,
+      "normalizedSkips": [
+        "benchmark: snapshot against the per-member path on corpus-sized boards (FKIT_BOARD_BENCH=1)"
+      ],
+      "parityPaths": [
+        ".DS_Store",
+        "knowledge-base/.DS_Store",
+        "tasks/.DS_Store",
+        "wiki-vault/.DS_Store"
+      ],
+      "delta": {
+        "fkit-proj-": {
+          "before": 34,
+          "after": 34,
+          "added": [],
+          "removed": []
+        },
+        "fkit-stub-": {
+          "before": 1,
+          "after": 1,
+          "added": [],
+          "removed": []
+        },
+        "fkit-argv-": {
+          "before": 1,
+          "after": 1,
+          "added": [],
+          "removed": []
+        },
+        "fkit-conv-": {
+          "before": 0,
+          "after": 0,
+          "added": [],
+          "removed": []
+        }
+      },
+      "loadBefore": [
+        11.6064453125,
+        13.845703125,
+        11.8369140625
+      ],
+      "loadAfter": [
+        19.15771484375,
+        16.234375,
+        12.98583984375
+      ],
+      "processObservations": [
+        {
+          "candidateCount": 1,
+          "outside": []
+        },
+        {
+          "candidateCount": 12,
+          "outside": []
+        },
+        {
+          "candidateCount": 10,
+          "outside": []
+        },
+        {
+          "candidateCount": 6,
+          "outside": []
+        },
+        {
+          "candidateCount": 6,
+          "outside": []
+        },
+        {
+          "candidateCount": 5,
+          "outside": []
+        },
+        {
+          "candidateCount": 5,
+          "outside": []
+        },
+        {
+          "candidateCount": 5,
+          "outside": []
+        },
+        {
+          "candidateCount": 4,
+          "outside": []
+        },
+        {
+          "candidateCount": 1,
+          "outside": []
+        }
+      ],
+      "restorationFile": "failure-probe-structure-restoration.json",
+      "restoredExactly": true,
+      "originalSha256": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+      "restoredSha256": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee"
+    },
+    {
+      "label": "failure-probe-orphan",
+      "command": [
+        "node",
+        "--test",
+        "test/orphan-cleanup.test.js"
+      ],
+      "startedUTC": "2026-11-04T08:22:48.785Z",
+      "finishedUTC": "2026-11-04T08:22:59.430Z",
+      "exit": 1,
+      "totals": {
+        "tests": 23,
+        "suites": 7,
+        "pass": 22,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 10476.651834
+      },
+      "wallSeconds": 10.500472875,
+      "failedAssertions": [
+        ".fkit/settings survives, and a launch still builds the role lockdown on top of it"
+      ],
+      "markerObserved": true,
+      "normalizedSkips": [],
+      "parityPaths": [],
+      "delta": {
+        "fkit-proj-": {
+          "before": 34,
+          "after": 34,
+          "added": [],
+          "removed": []
+        },
+        "fkit-stub-": {
+          "before": 1,
+          "after": 1,
+          "added": [],
+          "removed": []
+        },
+        "fkit-argv-": {
+          "before": 1,
+          "after": 1,
+          "added": [],
+          "removed": []
+        },
+        "fkit-conv-": {
+          "before": 0,
+          "after": 0,
+          "added": [],
+          "removed": []
+        }
+      },
+      "loadBefore": [
+        16.8330078125,
+        15.86328125,
+        12.90966796875
+      ],
+      "loadAfter": [
+        16.62451171875,
+        15.8505859375,
+        12.939453125
+      ],
+      "processObservations": [
+        {
+          "candidateCount": 1,
+          "outside": []
+        },
+        {
+          "candidateCount": 3,
+          "outside": []
+        },
+        {
+          "candidateCount": 1,
+          "outside": []
+        }
+      ],
+      "restorationFile": "failure-probe-orphan-restoration.json",
+      "restoredExactly": true,
+      "originalSha256": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+      "restoredSha256": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f"
+    }
+  ],
+  "preservedInitial": {
+    "fkit-proj-": {
+      "count": 28,
+      "missing": []
+    },
+    "fkit-stub-": {
+      "count": 1,
+      "missing": []
+    },
+    "fkit-argv-": {
+      "count": 1,
+      "missing": []
+    },
+    "fkit-conv-": {
+      "count": 0,
+      "missing": []
+    }
+  },
+  "preservedSixDiagnosticSurvivors": [
+    "fkit-proj-JN925z",
+    "fkit-proj-SbcTIk",
+    "fkit-proj-Vt9BBK",
+    "fkit-proj-iG1010",
+    "fkit-proj-jUSbu6",
+    "fkit-proj-nat4FV"
+  ],
+  "finalSets": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "finalCounts": {
+    "fkit-proj-": 34,
+    "fkit-stub-": 1,
+    "fkit-argv-": 1,
+    "fkit-conv-": 0
+  },
+  "permanentOrphanDiffMatchesApprovedPatch": true,
+  "orphanFixedSha256": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "structureSha256": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+  "structureDiffEmpty": true,
+  "diffCheckPassed": true,
+  "sandbox": {
+    "deniedAction": "ps -axo pid,ppid,pcpu,comm",
+    "denialExit": 127,
+    "inspectionEscalationSucceeded": true,
+    "testAttemptDenied": false
+  },
+  "limitations": [
+    "No final normal full suite in this bounded unit; fresh Verify follows.",
+    "Existing four-path parity failure blocks passing-run acceptance.",
+    "Elevated load; idle-Mac timing unproven.",
+    "Sampled process observations do not rule out arbitrary activity between samples.",
+    "Teardown after ordinary thrown failures demonstrated; crash/SIGKILL recovery not claimed."
+  ]
+}

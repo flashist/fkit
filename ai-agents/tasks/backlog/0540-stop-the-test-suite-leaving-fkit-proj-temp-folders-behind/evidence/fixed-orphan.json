@@ -1,0 +1,212 @@
+{
+  "label": "fixed-orphan",
+  "command": [
+    "node",
+    "--test",
+    "test/orphan-cleanup.test.js"
+  ],
+  "runnerPid": 92719,
+  "node": "v24.13.0",
+  "platform": "darwin",
+  "release": "25.2.0",
+  "cpuCount": 14,
+  "tmpdir": "/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "canonicalTmpdir": "/private/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "startedUTC": "2026-11-04T08:15:07.533Z",
+  "head": "20813ecb23974af0f6feac7404b0b5a8a1f4608a",
+  "statusBefore": " M ai-agents/sprints/sprint-15.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md\n M ai-agents/wiki-vault/index.md\n M ai-agents/wiki-vault/log.md\n M test/orphan-cleanup.test.js\n?? ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md\n?? ai-agents/wiki-vault/wiki/tasks/pin-the-optional-buzz-target-and-design-the-fkit-control-boundary.md\n?? ai-agents/wiki-vault/wiki/tasks/prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project.md\n?? ai-agents/wiki-vault/wiki/tasks/review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery.md\n?? ai-agents/wiki-vault/wiki/tasks/sprint-16-optional-buzz-feasibility.md\n",
+  "orphanHashBefore": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "before": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "activityBefore": {
+    "available": true,
+    "candidates": [
+      {
+        "pid": 92719,
+        "ppid": 10689,
+        "cpu": 8.3
+      }
+    ]
+  },
+  "loadBefore": [
+    18.17724609375,
+    12.75537109375,
+    10.126953125
+  ],
+  "samples": [
+    {
+      "utc": "2026-11-04T08:15:17.705Z",
+      "load": [
+        16.60546875,
+        12.59814453125,
+        10.1015625
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 92719,
+            "ppid": 10689,
+            "cpu": 0
+          },
+          {
+            "pid": 92745,
+            "ppid": 92719,
+            "cpu": 0
+          },
+          {
+            "pid": 92746,
+            "ppid": 92745,
+            "cpu": 9.1
+          }
+        ]
+      }
+    }
+  ],
+  "exit": 0,
+  "signal": null,
+  "wallSeconds": 10.368036374999999,
+  "finishedUTC": "2026-11-04T08:15:18.071Z",
+  "after": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "activityAfter": {
+    "available": true,
+    "candidates": [
+      {
+        "pid": 92719,
+        "ppid": 10689,
+        "cpu": 0.2
+      }
+    ]
+  },
+  "loadAfter": [
+    17.197265625,
+    12.787109375,
+    10.1826171875
+  ],
+  "orphanHashAfter": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "summary": [
+    "ℹ tests 23",
+    "ℹ suites 7",
+    "ℹ pass 23",
+    "ℹ fail 0",
+    "ℹ cancelled 0",
+    "ℹ skipped 0",
+    "ℹ todo 0",
+    "ℹ duration_ms 10346.555041"
+  ],
+  "failedTests": [],
+  "skips": [],
+  "delta": {
+    "fkit-proj-": {
+      "before": 34,
+      "after": 34,
+      "added": [],
+      "removed": []
+    },
+    "fkit-stub-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-argv-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-conv-": {
+      "before": 0,
+      "after": 0,
+      "added": [],
+      "removed": []
+    }
+  }
+}

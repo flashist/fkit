@@ -1,0 +1,560 @@
+{
+  "label": "failure-probe-structure",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "runnerPid": 3162,
+  "node": "v24.13.0",
+  "platform": "darwin",
+  "release": "25.2.0",
+  "cpuCount": 14,
+  "tmpdir": "/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "canonicalTmpdir": "/private/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "startedUTC": "2026-11-04T08:21:11.503Z",
+  "head": "20813ecb23974af0f6feac7404b0b5a8a1f4608a",
+  "statusBefore": " M ai-agents/sprints/sprint-15.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md\n M ai-agents/wiki-vault/index.md\n M ai-agents/wiki-vault/log.md\n M test/orphan-cleanup.test.js\n M test/structure-notice.test.js\n?? ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md\n?? ai-agents/wiki-vault/wiki/tasks/pin-the-optional-buzz-target-and-design-the-fkit-control-boundary.md\n?? ai-agents/wiki-vault/wiki/tasks/prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project.md\n?? ai-agents/wiki-vault/wiki/tasks/review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery.md\n?? ai-agents/wiki-vault/wiki/tasks/sprint-16-optional-buzz-feasibility.md\n",
+  "orphanHashBefore": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "before": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "activityBefore": {
+    "available": true,
+    "candidates": [
+      {
+        "pid": 3162,
+        "ppid": 3136,
+        "cpu": 7.5
+      }
+    ]
+  },
+  "loadBefore": [
+    11.6064453125,
+    13.845703125,
+    11.8369140625
+  ],
+  "samples": [
+    {
+      "utc": "2026-11-04T08:21:21.666Z",
+      "load": [
+        21.3876953125,
+        15.87353515625,
+        12.580078125
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 3162,
+            "ppid": 3136,
+            "cpu": 0
+          },
+          {
+            "pid": 3189,
+            "ppid": 3162,
+            "cpu": 0
+          },
+          {
+            "pid": 3206,
+            "ppid": 3189,
+            "cpu": 0.4
+          },
+          {
+            "pid": 3217,
+            "ppid": 3206,
+            "cpu": 4.6
+          },
+          {
+            "pid": 3218,
+            "ppid": 3206,
+            "cpu": 2.6
+          },
+          {
+            "pid": 3670,
+            "ppid": 3206,
+            "cpu": 0.1
+          },
+          {
+            "pid": 3765,
+            "ppid": 3206,
+            "cpu": 3.4
+          },
+          {
+            "pid": 4811,
+            "ppid": 3206,
+            "cpu": 3.3
+          },
+          {
+            "pid": 7948,
+            "ppid": 3206,
+            "cpu": 0.1
+          },
+          {
+            "pid": 7996,
+            "ppid": 3206,
+            "cpu": 1.4
+          },
+          {
+            "pid": 20872,
+            "ppid": 3206,
+            "cpu": 6.9
+          },
+          {
+            "pid": 21699,
+            "ppid": 3206,
+            "cpu": 0
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:21:31.666Z",
+      "load": [
+        21.904296875,
+        16.171875,
+        12.724609375
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 3162,
+            "ppid": 3136,
+            "cpu": 0
+          },
+          {
+            "pid": 3189,
+            "ppid": 3162,
+            "cpu": 0
+          },
+          {
+            "pid": 3206,
+            "ppid": 3189,
+            "cpu": 0
+          },
+          {
+            "pid": 3218,
+            "ppid": 3206,
+            "cpu": 2.8
+          },
+          {
+            "pid": 3670,
+            "ppid": 3206,
+            "cpu": 0
+          },
+          {
+            "pid": 3765,
+            "ppid": 3206,
+            "cpu": 0.4
+          },
+          {
+            "pid": 7948,
+            "ppid": 3206,
+            "cpu": 0.1
+          },
+          {
+            "pid": 7996,
+            "ppid": 3206,
+            "cpu": 0.3
+          },
+          {
+            "pid": 20872,
+            "ppid": 3206,
+            "cpu": 0
+          },
+          {
+            "pid": 21699,
+            "ppid": 3206,
+            "cpu": 0
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:21:41.667Z",
+      "load": [
+        21.3515625,
+        16.2470703125,
+        12.79150390625
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 3162,
+            "ppid": 3136,
+            "cpu": 0
+          },
+          {
+            "pid": 3189,
+            "ppid": 3162,
+            "cpu": 0
+          },
+          {
+            "pid": 3206,
+            "ppid": 3189,
+            "cpu": 0
+          },
+          {
+            "pid": 3670,
+            "ppid": 3206,
+            "cpu": 0.3
+          },
+          {
+            "pid": 7996,
+            "ppid": 3206,
+            "cpu": 0
+          },
+          {
+            "pid": 20872,
+            "ppid": 3206,
+            "cpu": 0
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:21:51.668Z",
+      "load": [
+        19.5322265625,
+        16.0244140625,
+        12.75244140625
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 3162,
+            "ppid": 3136,
+            "cpu": 0
+          },
+          {
+            "pid": 3189,
+            "ppid": 3162,
+            "cpu": 0
+          },
+          {
+            "pid": 3206,
+            "ppid": 3189,
+            "cpu": 0
+          },
+          {
+            "pid": 3670,
+            "ppid": 3206,
+            "cpu": 0.1
+          },
+          {
+            "pid": 7996,
+            "ppid": 3206,
+            "cpu": 0
+          },
+          {
+            "pid": 20872,
+            "ppid": 3206,
+            "cpu": 4.5
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:22:01.669Z",
+      "load": [
+        18.126953125,
+        15.84130859375,
+        12.72509765625
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 3162,
+            "ppid": 3136,
+            "cpu": 0
+          },
+          {
+            "pid": 3189,
+            "ppid": 3162,
+            "cpu": 0
+          },
+          {
+            "pid": 3206,
+            "ppid": 3189,
+            "cpu": 0
+          },
+          {
+            "pid": 3670,
+            "ppid": 3206,
+            "cpu": 2.6
+          },
+          {
+            "pid": 7996,
+            "ppid": 3206,
+            "cpu": 0
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:22:11.669Z",
+      "load": [
+        17.45068359375,
+        15.76513671875,
+        12.73388671875
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 3162,
+            "ppid": 3136,
+            "cpu": 0
+          },
+          {
+            "pid": 3189,
+            "ppid": 3162,
+            "cpu": 0
+          },
+          {
+            "pid": 3206,
+            "ppid": 3189,
+            "cpu": 0
+          },
+          {
+            "pid": 3670,
+            "ppid": 3206,
+            "cpu": 0.6
+          },
+          {
+            "pid": 7996,
+            "ppid": 3206,
+            "cpu": 0
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:22:21.671Z",
+      "load": [
+        16.0966796875,
+        15.5263671875,
+        12.68408203125
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 3162,
+            "ppid": 3136,
+            "cpu": 0
+          },
+          {
+            "pid": 3189,
+            "ppid": 3162,
+            "cpu": 0
+          },
+          {
+            "pid": 3206,
+            "ppid": 3189,
+            "cpu": 0
+          },
+          {
+            "pid": 3670,
+            "ppid": 3206,
+            "cpu": 0
+          },
+          {
+            "pid": 7996,
+            "ppid": 3206,
+            "cpu": 0
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:22:31.672Z",
+      "load": [
+        20.30322265625,
+        16.4072265625,
+        13.02734375
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 3162,
+            "ppid": 3136,
+            "cpu": 0
+          },
+          {
+            "pid": 3189,
+            "ppid": 3162,
+            "cpu": 0
+          },
+          {
+            "pid": 3206,
+            "ppid": 3189,
+            "cpu": 0
+          },
+          {
+            "pid": 7996,
+            "ppid": 3206,
+            "cpu": 0
+          }
+        ]
+      }
+    }
+  ],
+  "exit": 1,
+  "signal": null,
+  "wallSeconds": 85.946295208,
+  "finishedUTC": "2026-11-04T08:22:37.608Z",
+  "after": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "activityAfter": {
+    "available": true,
+    "candidates": [
+      {
+        "pid": 3162,
+        "ppid": 3136,
+        "cpu": 0
+      }
+    ]
+  },
+  "loadAfter": [
+    19.15771484375,
+    16.234375,
+    12.98583984375
+  ],
+  "orphanHashAfter": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "summary": [
+    "ℹ tests 971",
+    "ℹ suites 40",
+    "ℹ pass 968",
+    "ℹ fail 2",
+    "ℹ cancelled 0",
+    "ℹ skipped 1",
+    "ℹ todo 0",
+    "ℹ duration_ms 85802.188167"
+  ],
+  "failedTests": [
+    "✖ live corpus: the enforced dual-homed set is non-empty and every file is present in BOTH homes (0.333333ms)",
+    "✖ conforming fixture: complete silence — no notice on stderr, nothing on stdout (1159.854625ms)",
+    "✖ failing tests:",
+    "✖ live corpus: the enforced dual-homed set is non-empty and every file is present in BOTH homes (0.333333ms)",
+    "✖ conforming fixture: complete silence — no notice on stderr, nothing on stdout (1159.854625ms)"
+  ],
+  "skips": [
+    "﹣ benchmark: snapshot against the per-member path on corpus-sized boards (FKIT_BOARD_BENCH=1) (0.053ms) # SKIP"
+  ],
+  "delta": {
+    "fkit-proj-": {
+      "before": 34,
+      "after": 34,
+      "added": [],
+      "removed": []
+    },
+    "fkit-stub-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-argv-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-conv-": {
+      "before": 0,
+      "after": 0,
+      "added": [],
+      "removed": []
+    }
+  }
+}

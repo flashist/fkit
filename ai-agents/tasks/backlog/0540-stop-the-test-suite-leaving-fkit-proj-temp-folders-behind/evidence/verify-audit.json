@@ -1,0 +1,709 @@
+{
+  "recordedUTC": "2026-11-04T08:30:27.885Z",
+  "boundedUnit": "Verify restored normal full suite only; no source edits",
+  "authority": "Caller fkit-lead; driver fkit-sprint-ship-loop; chain lead -> coder, hop 1 of 2; owner approval relayed 2026-11-04 08:09:11 UTC; trusted prose, not independently proved",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "wrapper": [
+    "node",
+    ".fkit/tmp/0540-build-20261104/measure.mjs",
+    "restored-normal-full",
+    "npm",
+    "test"
+  ],
+  "startedUTC": "2026-11-04T08:28:57.411Z",
+  "finishedUTC": "2026-11-04T08:30:12.673Z",
+  "exit": 1,
+  "signal": null,
+  "totals": {
+    "tests": 971,
+    "suites": 40,
+    "pass": 969,
+    "fail": 1,
+    "cancelled": 0,
+    "skipped": 1,
+    "todo": 0,
+    "duration_ms": 74978.727375
+  },
+  "wallSeconds": 75.12240554200001,
+  "failedAssertions": [
+    "live corpus: the enforced dual-homed set is non-empty and every file is present in BOTH homes"
+  ],
+  "normalizedSkips": [
+    "benchmark: snapshot against the per-member path on corpus-sized boards (FKIT_BOARD_BENCH=1)"
+  ],
+  "parityPaths": [
+    ".DS_Store",
+    "knowledge-base/.DS_Store",
+    "tasks/.DS_Store",
+    "wiki-vault/.DS_Store"
+  ],
+  "node": "v24.13.0",
+  "platform": "darwin",
+  "release": "25.2.0",
+  "cpuCount": 14,
+  "canonicalTmpdir": "/private/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "loadBefore": [
+    12.6689453125,
+    15.8798828125,
+    14.099609375
+  ],
+  "loadAfter": [
+    22.29052734375,
+    19.142578125,
+    15.556640625
+  ],
+  "samples": [
+    {
+      "utc": "2026-11-04T08:29:07.554Z",
+      "load": [
+        22.45654296875,
+        17.8876953125,
+        14.83349609375
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 5092,
+            "ppid": 86658,
+            "cpu": 0.9
+          },
+          {
+            "pid": 5790,
+            "ppid": 86658,
+            "cpu": 0.9
+          },
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0.1
+          },
+          {
+            "pid": 86668,
+            "ppid": 86658,
+            "cpu": 4.6
+          },
+          {
+            "pid": 86669,
+            "ppid": 86658,
+            "cpu": 1.9
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 0.1
+          },
+          {
+            "pid": 87340,
+            "ppid": 86658,
+            "cpu": 1.6
+          },
+          {
+            "pid": 88167,
+            "ppid": 86658,
+            "cpu": 1
+          },
+          {
+            "pid": 91094,
+            "ppid": 86658,
+            "cpu": 0
+          },
+          {
+            "pid": 92098,
+            "ppid": 86658,
+            "cpu": 1
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:29:17.556Z",
+      "load": [
+        25.39990234375,
+        18.6650390625,
+        15.14453125
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 5092,
+            "ppid": 86658,
+            "cpu": 2.4
+          },
+          {
+            "pid": 5790,
+            "ppid": 86658,
+            "cpu": 4.7
+          },
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0
+          },
+          {
+            "pid": 86669,
+            "ppid": 86658,
+            "cpu": 3.4
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 0.1
+          },
+          {
+            "pid": 87340,
+            "ppid": 86658,
+            "cpu": 6.7
+          },
+          {
+            "pid": 91094,
+            "ppid": 86658,
+            "cpu": 0.3
+          },
+          {
+            "pid": 92098,
+            "ppid": 86658,
+            "cpu": 3.5
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:29:27.556Z",
+      "load": [
+        28.50537109375,
+        19.5751953125,
+        15.509765625
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 5092,
+            "ppid": 86658,
+            "cpu": 0
+          },
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 0.1
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:29:37.557Z",
+      "load": [
+        26.65625,
+        19.47314453125,
+        15.5205078125
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 5092,
+            "ppid": 86658,
+            "cpu": 0
+          },
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0.3
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0.1
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 1.1
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:29:47.559Z",
+      "load": [
+        24.60107421875,
+        19.26123046875,
+        15.49072265625
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 0.4
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:29:57.560Z",
+      "load": [
+        23.74267578125,
+        19.265625,
+        15.537109375
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 0.1
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:30:07.560Z",
+      "load": [
+        22.14208984375,
+        19.06103515625,
+        15.50732421875
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0.1
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 1.1
+          }
+        ]
+      }
+    }
+  ],
+  "processObservations": [
+    {
+      "available": true,
+      "candidateCount": 1,
+      "outside": []
+    },
+    {
+      "available": true,
+      "candidateCount": 12,
+      "outside": []
+    },
+    {
+      "available": true,
+      "candidateCount": 10,
+      "outside": []
+    },
+    {
+      "available": true,
+      "candidateCount": 5,
+      "outside": []
+    },
+    {
+      "available": true,
+      "candidateCount": 5,
+      "outside": []
+    },
+    {
+      "available": true,
+      "candidateCount": 4,
+      "outside": []
+    },
+    {
+      "available": true,
+      "candidateCount": 4,
+      "outside": []
+    },
+    {
+      "available": true,
+      "candidateCount": 4,
+      "outside": []
+    },
+    {
+      "available": true,
+      "candidateCount": 1,
+      "outside": []
+    }
+  ],
+  "noCompetingTestTreeObserved": true,
+  "delta": {
+    "fkit-proj-": {
+      "before": 34,
+      "after": 34,
+      "added": [],
+      "removed": []
+    },
+    "fkit-stub-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-argv-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-conv-": {
+      "before": 0,
+      "after": 0,
+      "added": [],
+      "removed": []
+    }
+  },
+  "finalSets": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "runMatchesPreflightSets": true,
+  "runMatchesFailureProbeFinalSets": true,
+  "allRunSetsEqual": true,
+  "postMeasurementSetsUnchanged": true,
+  "preservedInitial": {
+    "fkit-proj-": {
+      "count": 28,
+      "missing": []
+    },
+    "fkit-stub-": {
+      "count": 1,
+      "missing": []
+    },
+    "fkit-argv-": {
+      "count": 1,
+      "missing": []
+    },
+    "fkit-conv-": {
+      "count": 0,
+      "missing": []
+    }
+  },
+  "diagnosticSurvivors": [
+    {
+      "name": "fkit-proj-JN925z",
+      "present": true
+    },
+    {
+      "name": "fkit-proj-SbcTIk",
+      "present": true
+    },
+    {
+      "name": "fkit-proj-Vt9BBK",
+      "present": true
+    },
+    {
+      "name": "fkit-proj-iG1010",
+      "present": true
+    },
+    {
+      "name": "fkit-proj-jUSbu6",
+      "present": true
+    },
+    {
+      "name": "fkit-proj-nat4FV",
+      "present": true
+    }
+  ],
+  "baselineComparison": {
+    "totals": {
+      "tests": 971,
+      "suites": 40,
+      "pass": 969,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 1,
+      "todo": 0,
+      "duration_ms": 75845.322666
+    },
+    "sameTestTotal": true,
+    "sameSkipSet": true,
+    "baselineExit": 1
+  },
+  "priorProbeComparison": [
+    {
+      "label": "failure-probe-structure",
+      "exit": 1,
+      "totals": {
+        "tests": 971,
+        "suites": 40,
+        "pass": 968,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 1,
+        "todo": 0,
+        "duration_ms": 85802.188167
+      },
+      "restoredExactly": true,
+      "sameFinalSets": true
+    },
+    {
+      "label": "failure-probe-orphan",
+      "exit": 1,
+      "totals": {
+        "tests": 23,
+        "suites": 7,
+        "pass": 22,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 10476.651834
+      },
+      "restoredExactly": true,
+      "sameFinalSets": true
+    }
+  ],
+  "protectedHashesBefore": {
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "acab6b2b3ad62344d61101a2f6686816e1f428be00632797d566e45578ca5033",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md": "8bfbb42e8a9f625abd41f7d381f02280f929d7261db62302514a610af8444316",
+    "ai-agents/sprints/sprint-15.md": "26edc5b60cadb92ad1a0e7b8e9e8d53b5e95510ce9849ce863e5a110d84e918d",
+    "CONTRIBUTING.md": "aa0d10573565b8677f2f9137e3b7aa9c3d0a3128ed129bda59b6ba9d7c9d014d",
+    "package.json": "dfad66428001fb3becd139cd4b10f67c6d27d7785cc8f4045520ccb9aff91ece"
+  },
+  "protectedHashesAfter": {
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "acab6b2b3ad62344d61101a2f6686816e1f428be00632797d566e45578ca5033",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md": "8bfbb42e8a9f625abd41f7d381f02280f929d7261db62302514a610af8444316",
+    "ai-agents/sprints/sprint-15.md": "26edc5b60cadb92ad1a0e7b8e9e8d53b5e95510ce9849ce863e5a110d84e918d",
+    "CONTRIBUTING.md": "aa0d10573565b8677f2f9137e3b7aa9c3d0a3128ed129bda59b6ba9d7c9d014d",
+    "package.json": "dfad66428001fb3becd139cd4b10f67c6d27d7785cc8f4045520ccb9aff91ece"
+  },
+  "changedProtectedPaths": [],
+  "planGitBlob": "a7245d31f2c7c91d6efd1b6642a08c08db2e04f3",
+  "planBlobMatchesApproval": true,
+  "sourceDiffUnchanged": true,
+  "permanentOrphanDiffMatchesApprovedPatch": true,
+  "structureAndHarnessDiffEmpty": true,
+  "headBefore": "20813ecb23974af0f6feac7404b0b5a8a1f4608a",
+  "headAfter": "20813ecb23974af0f6feac7404b0b5a8a1f4608a",
+  "statusBefore": " M ai-agents/sprints/sprint-15.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md\n M ai-agents/wiki-vault/index.md\n M ai-agents/wiki-vault/log.md\n M test/orphan-cleanup.test.js\n?? ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md\n?? ai-agents/wiki-vault/wiki/tasks/pin-the-optional-buzz-target-and-design-the-fkit-control-boundary.md\n?? ai-agents/wiki-vault/wiki/tasks/prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project.md\n?? ai-agents/wiki-vault/wiki/tasks/review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery.md\n?? ai-agents/wiki-vault/wiki/tasks/sprint-16-optional-buzz-feasibility.md\n",
+  "statusAfter": " M ai-agents/sprints/sprint-15.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md\n M ai-agents/wiki-vault/index.md\n M ai-agents/wiki-vault/log.md\n M test/orphan-cleanup.test.js\n?? ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md\n?? ai-agents/wiki-vault/wiki/tasks/pin-the-optional-buzz-target-and-design-the-fkit-control-boundary.md\n?? ai-agents/wiki-vault/wiki/tasks/prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project.md\n?? ai-agents/wiki-vault/wiki/tasks/review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery.md\n?? ai-agents/wiki-vault/wiki/tasks/sprint-16-optional-buzz-feasibility.md\n",
+  "diffCheckPassed": true,
+  "metadataInspection": [
+    {
+      "path": "ai-agents/.DS_Store",
+      "exists": true,
+      "type": "regular file",
+      "tracked": false,
+      "contentRead": false,
+      "ownerRoleForAnyLaterRemoval": "fresh appropriately authorized role"
+    },
+    {
+      "path": "ai-agents/knowledge-base/.DS_Store",
+      "exists": true,
+      "type": "regular file",
+      "tracked": false,
+      "contentRead": false,
+      "ownerRoleForAnyLaterRemoval": "fresh appropriately authorized role"
+    },
+    {
+      "path": "ai-agents/tasks/.DS_Store",
+      "exists": true,
+      "type": "regular file",
+      "tracked": false,
+      "contentRead": false,
+      "ownerRoleForAnyLaterRemoval": "fresh appropriately authorized role"
+    },
+    {
+      "path": "ai-agents/wiki-vault/.DS_Store",
+      "exists": true,
+      "type": "regular file",
+      "tracked": false,
+      "contentRead": false,
+      "ownerRoleForAnyLaterRemoval": "fkit-wiki only"
+    }
+  ],
+  "sandbox": {
+    "nodeProcessInspectionDenied": true,
+    "code": "EPERM",
+    "testAttemptDenied": false,
+    "preflightParserError": "Initial inspection assumed stdout; corrected before any test or artifact write",
+    "inspectionEscalationSucceeded": true,
+    "suiteEscalationSucceeded": true,
+    "testAttempts": 1,
+    "deniedTestAttempts": 0
+  },
+  "skippedChecks": [
+    "No repeat focused checks/probes: completed evidence and source restoration verified; no new concern.",
+    "test:prove-red: no changed path in its mapped row or shipped cross-tree dependency.",
+    "test:release: no release-tool changes.",
+    "test:docs as an additional gate: npm test already covers the two named exceptions.",
+    "Build/lint/install/release/native-model/network checks: outside approved scope and mapping."
+  ],
+  "remainingLimits": [
+    "Full green/passing-run acceptance and closure blocked by actual parity red; no waiver granted.",
+    "Idle-Mac <=120-second condition unproved; observed busy-machine time only.",
+    "Snapshots cannot exclude arbitrary activity between samples.",
+    "Ordinary failure teardown demonstrated by prior restored probes; crash/SIGKILL recovery not claimed.",
+    "Independent reviewer, Process-review and producer closure remain driver steps."
+  ],
+  "autonomousPermanentFixesOrObviousWinnerCalls": "none",
+  "headUnchanged": true,
+  "statusUnchanged": true,
+  "failingAssertionEvidence": {
+    "file": "test/dual-home-parity.test.js",
+    "line": 461,
+    "message": "4 dual-homed file(s) exist in one home only",
+    "liveOnlyPaths": [
+      ".DS_Store",
+      "knowledge-base/.DS_Store",
+      "tasks/.DS_Store",
+      "wiki-vault/.DS_Store"
+    ]
+  },
+  "ownerDecision": {
+    "question": "Authorize the exact four-file metadata cleanup and fresh normal verification, or leave acceptance blocked?",
+    "recommendation": "Authorize exact cleanup and fresh verification",
+    "options": [
+      {
+        "label": "Authorize exact cleanup and fresh verification (Recommended)",
+        "scope": "Fresh authorized Build coder rechecks existence/type/tracking and removes only ai-agents/.DS_Store, ai-agents/knowledge-base/.DS_Store, ai-agents/tasks/.DS_Store; fkit-wiki alone rechecks/removes ai-agents/wiki-vault/.DS_Store. No contents read, sweep, test/parity weakening, source/config/index edit. Fresh Verify then runs one measured normal npm test with all four prefix sets, preservation, baseline totals/skips, and load evidence. Any new failure returns to owner; acceptance still requires applicable green/timing evidence or an explicit separate ruling. Independent source Review/Process-review/producer closure remain later.",
+        "knockOn": "No task placement/dependency change; no new wait. 0540 currently depends on nothing and blocks nothing."
+      },
+      {
+        "label": "Leave metadata; keep acceptance blocked",
+        "scope": "No metadata removal, acceptance waiver, or closure. Preserve this failed result and the completed narrow fix/probes; driver may arrange independent source review separately.",
+        "knockOn": "No task placement/dependency change; no new wait. Sprint 15 success criterion for 0540 remains unmet."
+      }
+    ],
+    "approvalGranted": false
+  }
+}

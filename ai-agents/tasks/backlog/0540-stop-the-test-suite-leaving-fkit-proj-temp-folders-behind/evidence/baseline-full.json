@@ -1,0 +1,496 @@
+{
+  "label": "baseline-full",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "node": "v24.13.0",
+  "platform": "darwin",
+  "release": "25.2.0",
+  "cpuCount": 14,
+  "tmpdir": "/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "canonicalTmpdir": "/private/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "startedUTC": "2026-11-04T08:12:53.113Z",
+  "head": "20813ecb23974af0f6feac7404b0b5a8a1f4608a",
+  "statusBefore": " M ai-agents/sprints/sprint-15.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md\n M ai-agents/wiki-vault/index.md\n M ai-agents/wiki-vault/log.md\n?? ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md\n?? ai-agents/wiki-vault/wiki/tasks/pin-the-optional-buzz-target-and-design-the-fkit-control-boundary.md\n?? ai-agents/wiki-vault/wiki/tasks/prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project.md\n?? ai-agents/wiki-vault/wiki/tasks/review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery.md\n?? ai-agents/wiki-vault/wiki/tasks/sprint-16-optional-buzz-feasibility.md\n",
+  "orphanHashBefore": "2c716d37505b171bcbea7799e0fd72f4da8b16df5a7f2e581a41e0b29ecd9079",
+  "before": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-UFw58P",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "activityBefore": {
+    "available": true,
+    "candidates": [
+      {
+        "pid": 11392,
+        "ppid": 10689,
+        "cpu": 9.4
+      }
+    ]
+  },
+  "loadBefore": [
+    8.28515625,
+    8.51611328125,
+    8.36279296875
+  ],
+  "samples": [
+    {
+      "utc": "2026-11-04T08:13:03.283Z",
+      "load": [
+        14.21435546875,
+        9.794921875,
+        8.81884765625
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 11392,
+            "ppid": 10689,
+            "cpu": 0
+          },
+          {
+            "pid": 11418,
+            "ppid": 11392,
+            "cpu": 0
+          },
+          {
+            "pid": 11432,
+            "ppid": 11418,
+            "cpu": 0
+          },
+          {
+            "pid": 11442,
+            "ppid": 11432,
+            "cpu": 2.8
+          },
+          {
+            "pid": 11443,
+            "ppid": 11432,
+            "cpu": 2.1
+          },
+          {
+            "pid": 12000,
+            "ppid": 11432,
+            "cpu": 0
+          },
+          {
+            "pid": 12071,
+            "ppid": 11432,
+            "cpu": 0.9
+          },
+          {
+            "pid": 12900,
+            "ppid": 11432,
+            "cpu": 1.3
+          },
+          {
+            "pid": 15944,
+            "ppid": 11432,
+            "cpu": 0
+          },
+          {
+            "pid": 16522,
+            "ppid": 11432,
+            "cpu": 0.7
+          },
+          {
+            "pid": 29303,
+            "ppid": 11432,
+            "cpu": 2.5
+          },
+          {
+            "pid": 29682,
+            "ppid": 11432,
+            "cpu": 0
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:13:13.283Z",
+      "load": [
+        16.92236328125,
+        10.5244140625,
+        9.08935546875
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 11392,
+            "ppid": 10689,
+            "cpu": 0
+          },
+          {
+            "pid": 11418,
+            "ppid": 11392,
+            "cpu": 0
+          },
+          {
+            "pid": 11432,
+            "ppid": 11418,
+            "cpu": 0
+          },
+          {
+            "pid": 11443,
+            "ppid": 11432,
+            "cpu": 2.2
+          },
+          {
+            "pid": 12000,
+            "ppid": 11432,
+            "cpu": 0
+          },
+          {
+            "pid": 12071,
+            "ppid": 11432,
+            "cpu": 5
+          },
+          {
+            "pid": 15944,
+            "ppid": 11432,
+            "cpu": 0
+          },
+          {
+            "pid": 16522,
+            "ppid": 11432,
+            "cpu": 0.1
+          },
+          {
+            "pid": 29303,
+            "ppid": 11432,
+            "cpu": 0
+          },
+          {
+            "pid": 29682,
+            "ppid": 11432,
+            "cpu": 1.3
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:13:23.285Z",
+      "load": [
+        16.28662109375,
+        10.60400390625,
+        9.13427734375
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 11392,
+            "ppid": 10689,
+            "cpu": 0
+          },
+          {
+            "pid": 11418,
+            "ppid": 11392,
+            "cpu": 0
+          },
+          {
+            "pid": 11432,
+            "ppid": 11418,
+            "cpu": 0
+          },
+          {
+            "pid": 12000,
+            "ppid": 11432,
+            "cpu": 0.3
+          },
+          {
+            "pid": 29303,
+            "ppid": 11432,
+            "cpu": 0
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:13:33.285Z",
+      "load": [
+        16.978515625,
+        10.9443359375,
+        9.2724609375
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 11392,
+            "ppid": 10689,
+            "cpu": 0
+          },
+          {
+            "pid": 11418,
+            "ppid": 11392,
+            "cpu": 0
+          },
+          {
+            "pid": 11432,
+            "ppid": 11418,
+            "cpu": 0
+          },
+          {
+            "pid": 12000,
+            "ppid": 11432,
+            "cpu": 0
+          },
+          {
+            "pid": 29303,
+            "ppid": 11432,
+            "cpu": 1
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:13:43.286Z",
+      "load": [
+        17.21533203125,
+        11.1923828125,
+        9.3798828125
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 11392,
+            "ppid": 10689,
+            "cpu": 0
+          },
+          {
+            "pid": 11418,
+            "ppid": 11392,
+            "cpu": 0
+          },
+          {
+            "pid": 11432,
+            "ppid": 11418,
+            "cpu": 0
+          },
+          {
+            "pid": 12000,
+            "ppid": 11432,
+            "cpu": 0.4
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:13:53.288Z",
+      "load": [
+        17.12060546875,
+        11.3671875,
+        9.462890625
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 11392,
+            "ppid": 10689,
+            "cpu": 0
+          },
+          {
+            "pid": 11418,
+            "ppid": 11392,
+            "cpu": 0
+          },
+          {
+            "pid": 11432,
+            "ppid": 11418,
+            "cpu": 0
+          },
+          {
+            "pid": 12000,
+            "ppid": 11432,
+            "cpu": 0
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:14:03.289Z",
+      "load": [
+        16.93212890625,
+        11.50537109375,
+        9.533203125
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 11392,
+            "ppid": 10689,
+            "cpu": 0
+          },
+          {
+            "pid": 11418,
+            "ppid": 11392,
+            "cpu": 0
+          },
+          {
+            "pid": 11432,
+            "ppid": 11418,
+            "cpu": 0
+          },
+          {
+            "pid": 12000,
+            "ppid": 11432,
+            "cpu": 2.6
+          }
+        ]
+      }
+    }
+  ],
+  "exit": 1,
+  "signal": null,
+  "wallSeconds": 75.98764824999999,
+  "finishedUTC": "2026-11-04T08:14:09.267Z",
+  "after": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "activityAfter": {
+    "available": true,
+    "candidates": [
+      {
+        "pid": 11392,
+        "ppid": 10689,
+        "cpu": 0
+      }
+    ]
+  },
+  "loadAfter": [
+    16.13671875,
+    11.43017578125,
+    9.51806640625
+  ],
+  "orphanHashAfter": "2c716d37505b171bcbea7799e0fd72f4da8b16df5a7f2e581a41e0b29ecd9079",
+  "summary": [
+    "ℹ tests 971",
+    "ℹ suites 40",
+    "ℹ pass 969",
+    "ℹ fail 1",
+    "ℹ cancelled 0",
+    "ℹ skipped 1",
+    "ℹ todo 0",
+    "ℹ duration_ms 75845.322666"
+  ],
+  "failedTests": [
+    "✖ live corpus: the enforced dual-homed set is non-empty and every file is present in BOTH homes (0.294333ms)",
+    "✖ failing tests:",
+    "✖ live corpus: the enforced dual-homed set is non-empty and every file is present in BOTH homes (0.294333ms)"
+  ],
+  "skips": [
+    "﹣ benchmark: snapshot against the per-member path on corpus-sized boards (FKIT_BOARD_BENCH=1) (0.053125ms) # SKIP"
+  ],
+  "delta": {
+    "fkit-proj-": {
+      "before": 28,
+      "after": 31,
+      "added": [
+        "fkit-proj-JN925z",
+        "fkit-proj-SbcTIk",
+        "fkit-proj-nat4FV"
+      ],
+      "removed": []
+    },
+    "fkit-stub-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-argv-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-conv-": {
+      "before": 0,
+      "after": 0,
+      "added": [],
+      "removed": []
+    }
+  },
+  "runnerPid": 11392,
+  "reporter": "spec (npm inherited default); summary extracted from spec glyph lines"
+}

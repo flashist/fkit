@@ -4891,3 +4891,13 @@ Task 0380: partial — not ready to close
 - Issues fixed: 2
 - Issues flagged for human review: 0
 - Corrected ADR-061 heading and linked its orphaned page to the fkit system. Partial lint: source-reference candidates and whole-vault semantic contradictions remain unverified; counts cover confirmed issues only.
+
+## 2026-11-03 — ingest (partial sync)
+- Sync window: 185ac5e07e918c089ed3afd23496587315342000 → HEAD (20813ecb23974af0f6feac7404b0b5a8a1f4608a); watermark retained pending remaining candidates.
+- Changed source paths detected: 36 eligible historical paths, including paths subsequently moved.
+- Ingested: `ai-agents/sprints/done/sprint-16.md` → created [[wiki/tasks/sprint-16-optional-buzz-feasibility]]
+- Ingested: `ai-agents/tasks/done/0549-pin-the-optional-buzz-target-and-design-the-fkit-control-boundary/brief.md` → created [[wiki/tasks/pin-the-optional-buzz-target-and-design-the-fkit-control-boundary]]
+- Ingested: `ai-agents/tasks/done/0550-prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project/brief.md` → created [[wiki/tasks/prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project]]
+- Ingested: `ai-agents/tasks/done/0551-review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery/brief.md` → created [[wiki/tasks/review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery]]
+- Targeted lint: all four pages indexed; their six directed related links resolve and are reciprocal.
+- Remaining: 32 eligible historical paths require assessment, including paths subsequently moved; no claim of full coverage. Skipped (already covered): none assessed.

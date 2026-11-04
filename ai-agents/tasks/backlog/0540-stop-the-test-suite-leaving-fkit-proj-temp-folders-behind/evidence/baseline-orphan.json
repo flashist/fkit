@@ -1,0 +1,213 @@
+{
+  "label": "baseline-orphan",
+  "command": [
+    "node",
+    "--test",
+    "test/orphan-cleanup.test.js"
+  ],
+  "runnerPid": 85350,
+  "node": "v24.13.0",
+  "platform": "darwin",
+  "release": "25.2.0",
+  "cpuCount": 14,
+  "tmpdir": "/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "canonicalTmpdir": "/private/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "startedUTC": "2026-11-04T08:14:26.766Z",
+  "head": "20813ecb23974af0f6feac7404b0b5a8a1f4608a",
+  "statusBefore": " M ai-agents/sprints/sprint-15.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md\n M ai-agents/wiki-vault/index.md\n M ai-agents/wiki-vault/log.md\n?? ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md\n?? ai-agents/wiki-vault/wiki/tasks/pin-the-optional-buzz-target-and-design-the-fkit-control-boundary.md\n?? ai-agents/wiki-vault/wiki/tasks/prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project.md\n?? ai-agents/wiki-vault/wiki/tasks/review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery.md\n?? ai-agents/wiki-vault/wiki/tasks/sprint-16-optional-buzz-feasibility.md\n",
+  "orphanHashBefore": "2c716d37505b171bcbea7799e0fd72f4da8b16df5a7f2e581a41e0b29ecd9079",
+  "before": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "activityBefore": {
+    "available": true,
+    "candidates": [
+      {
+        "pid": 85350,
+        "ppid": 10689,
+        "cpu": 8.2
+      }
+    ]
+  },
+  "loadBefore": [
+    17.37158203125,
+    11.931640625,
+    9.7294921875
+  ],
+  "samples": [
+    {
+      "utc": "2026-11-04T08:14:36.950Z",
+      "load": [
+        16.64794921875,
+        11.96435546875,
+        9.76708984375
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 85350,
+            "ppid": 10689,
+            "cpu": 0
+          },
+          {
+            "pid": 85376,
+            "ppid": 85350,
+            "cpu": 0.1
+          },
+          {
+            "pid": 85377,
+            "ppid": 85376,
+            "cpu": 0.8
+          }
+        ]
+      }
+    }
+  ],
+  "exit": 0,
+  "signal": null,
+  "wallSeconds": 11.177228833000001,
+  "finishedUTC": "2026-11-04T08:14:38.125Z",
+  "after": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "activityAfter": {
+    "available": true,
+    "candidates": [
+      {
+        "pid": 85350,
+        "ppid": 10689,
+        "cpu": 0
+      }
+    ]
+  },
+  "loadAfter": [
+    15.955078125,
+    11.8984375,
+    9.75634765625
+  ],
+  "orphanHashAfter": "2c716d37505b171bcbea7799e0fd72f4da8b16df5a7f2e581a41e0b29ecd9079",
+  "summary": [
+    "ℹ tests 23",
+    "ℹ suites 7",
+    "ℹ pass 23",
+    "ℹ fail 0",
+    "ℹ cancelled 0",
+    "ℹ skipped 0",
+    "ℹ todo 0",
+    "ℹ duration_ms 11153.737666"
+  ],
+  "failedTests": [],
+  "skips": [],
+  "delta": {
+    "fkit-proj-": {
+      "before": 31,
+      "after": 34,
+      "added": [
+        "fkit-proj-Vt9BBK",
+        "fkit-proj-iG1010",
+        "fkit-proj-jUSbu6"
+      ],
+      "removed": []
+    },
+    "fkit-stub-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-argv-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-conv-": {
+      "before": 0,
+      "after": 0,
+      "added": [],
+      "removed": []
+    }
+  }
+}

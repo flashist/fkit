@@ -10,7 +10,7 @@ Sprint 15
 P1
 
 ## Status
-🔲 Backlog
+🔄 In progress
 
 ## Owner
 fkit-coder

@@ -1,0 +1,227 @@
+{
+  "recordedUTC": "2026-11-04T08:15:49.090Z",
+  "sourceOriginalSha256": "2c716d37505b171bcbea7799e0fd72f4da8b16df5a7f2e581a41e0b29ecd9079",
+  "sourceFixedSha256": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "exactApprovedDiff": true,
+  "originalDirectCalls": 3,
+  "preservedInitial": {
+    "fkit-proj-": {
+      "count": 28,
+      "missing": []
+    },
+    "fkit-stub-": {
+      "count": 1,
+      "missing": []
+    },
+    "fkit-argv-": {
+      "count": 1,
+      "missing": []
+    },
+    "fkit-conv-": {
+      "count": 0,
+      "missing": []
+    }
+  },
+  "continuity": [
+    {
+      "from": "baseline-full",
+      "to": "baseline-orphan",
+      "equalSets": true
+    },
+    {
+      "from": "baseline-orphan",
+      "to": "fixed-orphan",
+      "equalSets": true
+    }
+  ],
+  "protectedTestDiffEmpty": true,
+  "measuredRuns": [
+    {
+      "label": "baseline-full",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "startUTC": "2026-11-04T08:12:53.113Z",
+      "endUTC": "2026-11-04T08:14:09.267Z",
+      "exit": 1,
+      "summary": [
+        "ℹ tests 971",
+        "ℹ suites 40",
+        "ℹ pass 969",
+        "ℹ fail 1",
+        "ℹ cancelled 0",
+        "ℹ skipped 1",
+        "ℹ todo 0",
+        "ℹ duration_ms 75845.322666"
+      ],
+      "wallSeconds": 75.98764824999999,
+      "loadBefore": [
+        8.28515625,
+        8.51611328125,
+        8.36279296875
+      ],
+      "loadAfter": [
+        16.13671875,
+        11.43017578125,
+        9.51806640625
+      ],
+      "delta": {
+        "fkit-proj-": {
+          "before": 28,
+          "after": 31,
+          "added": [
+            "fkit-proj-JN925z",
+            "fkit-proj-SbcTIk",
+            "fkit-proj-nat4FV"
+          ],
+          "removed": []
+        },
+        "fkit-stub-": {
+          "before": 1,
+          "after": 1,
+          "added": [],
+          "removed": []
+        },
+        "fkit-argv-": {
+          "before": 1,
+          "after": 1,
+          "added": [],
+          "removed": []
+        },
+        "fkit-conv-": {
+          "before": 0,
+          "after": 0,
+          "added": [],
+          "removed": []
+        }
+      }
+    },
+    {
+      "label": "baseline-orphan",
+      "command": [
+        "node",
+        "--test",
+        "test/orphan-cleanup.test.js"
+      ],
+      "startUTC": "2026-11-04T08:14:26.766Z",
+      "endUTC": "2026-11-04T08:14:38.125Z",
+      "exit": 0,
+      "summary": [
+        "ℹ tests 23",
+        "ℹ suites 7",
+        "ℹ pass 23",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 11153.737666"
+      ],
+      "wallSeconds": 11.177228833000001,
+      "loadBefore": [
+        17.37158203125,
+        11.931640625,
+        9.7294921875
+      ],
+      "loadAfter": [
+        15.955078125,
+        11.8984375,
+        9.75634765625
+      ],
+      "delta": {
+        "fkit-proj-": {
+          "before": 31,
+          "after": 34,
+          "added": [
+            "fkit-proj-Vt9BBK",
+            "fkit-proj-iG1010",
+            "fkit-proj-jUSbu6"
+          ],
+          "removed": []
+        },
+        "fkit-stub-": {
+          "before": 1,
+          "after": 1,
+          "added": [],
+          "removed": []
+        },
+        "fkit-argv-": {
+          "before": 1,
+          "after": 1,
+          "added": [],
+          "removed": []
+        },
+        "fkit-conv-": {
+          "before": 0,
+          "after": 0,
+          "added": [],
+          "removed": []
+        }
+      }
+    },
+    {
+      "label": "fixed-orphan",
+      "command": [
+        "node",
+        "--test",
+        "test/orphan-cleanup.test.js"
+      ],
+      "startUTC": "2026-11-04T08:15:07.533Z",
+      "endUTC": "2026-11-04T08:15:18.071Z",
+      "exit": 0,
+      "summary": [
+        "ℹ tests 23",
+        "ℹ suites 7",
+        "ℹ pass 23",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 10346.555041"
+      ],
+      "wallSeconds": 10.368036374999999,
+      "loadBefore": [
+        18.17724609375,
+        12.75537109375,
+        10.126953125
+      ],
+      "loadAfter": [
+        17.197265625,
+        12.787109375,
+        10.1826171875
+      ],
+      "delta": {
+        "fkit-proj-": {
+          "before": 34,
+          "after": 34,
+          "added": [],
+          "removed": []
+        },
+        "fkit-stub-": {
+          "before": 1,
+          "after": 1,
+          "added": [],
+          "removed": []
+        },
+        "fkit-argv-": {
+          "before": 1,
+          "after": 1,
+          "added": [],
+          "removed": []
+        },
+        "fkit-conv-": {
+          "before": 0,
+          "after": 0,
+          "added": [],
+          "removed": []
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Full-suite baseline failed unrelated parity assertion with four live-only .DS_Store paths.",
+    "No idle-Mac timing established.",
+    "Post-fix full-suite and deliberate-failure probes deferred to fresh Verify worker.",
+    "Process snapshots exclude proof of arbitrary between-sample external file activity."
+  ]
+}

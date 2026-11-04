@@ -1,0 +1,131 @@
+{
+  "label": "failure-probe-structure",
+  "file": "test/structure-notice.test.js",
+  "targetName": "conforming fixture: complete silence — no notice on stderr, nothing on stdout",
+  "marker": "0540 deliberate structure failure after tracked project allocation",
+  "startedUTC": "2026-11-04T08:21:11.468Z",
+  "originalSha256": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+  "mutatedSha256": "2d55abe535ffdb5f8f503f89d7602c76407114462509654fbffae476577ca56a",
+  "diffBefore": "",
+  "checkpointBefore": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "loadBefore": [
+    11.6064453125,
+    13.845703125,
+    11.8369140625
+  ],
+  "competingTestProcessesBefore": 0,
+  "authority": "Relayed owner approval 2026-11-04 08:09:11 UTC; Build temporary failure-probe unit only",
+  "sandbox": {
+    "processInspectionDenied": true,
+    "inspectionRetrySucceeded": true,
+    "testAttemptDenied": false
+  },
+  "mutationAppliedUTC": "2026-11-04T08:21:11.482Z",
+  "measurementCommand": [
+    "node",
+    ".fkit/tmp/0540-build-20261104/measure.mjs",
+    "failure-probe-structure",
+    "npm",
+    "test"
+  ],
+  "measurementWrapperSignal": null,
+  "measurementWrapperExit": 0,
+  "interruption": null,
+  "restored": true,
+  "finishedUTC": "2026-11-04T08:22:37.677Z",
+  "restoredSha256": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+  "diffAfter": "",
+  "diffRestoredExactly": true,
+  "checkpointAfterRestoration": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "approvedOrphanDiffPreserved": true,
+  "orphanFixedSha256": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "structureDiffEmpty": true
+}

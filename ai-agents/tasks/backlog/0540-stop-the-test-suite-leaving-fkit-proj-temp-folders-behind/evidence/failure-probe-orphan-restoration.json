@@ -1,0 +1,132 @@
+{
+  "label": "failure-probe-orphan",
+  "file": "test/orphan-cleanup.test.js",
+  "targetName": ".fkit/settings survives, and a launch still builds the role lockdown on top of it",
+  "marker": "0540 deliberate orphan failure after tracked project allocation",
+  "startedUTC": "2026-11-04T08:22:48.747Z",
+  "originalSha256": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "mutatedSha256": "6372432bf4665b5f8ce580a89b967e1d28473304ca109a54d8124e02f55b67bb",
+  "diffBefore": "diff --git a/test/orphan-cleanup.test.js b/test/orphan-cleanup.test.js\nindex 52f57c7..03f3dd2 100644\n--- a/test/orphan-cleanup.test.js\n+++ b/test/orphan-cleanup.test.js\n@@ -28,6 +28,12 @@ function tmp(prefix) {\n   return d;\n }\n \n+function project(options) {\n+  const dir = makeProject(options);\n+  trash.push(dir);\n+  return dir;\n+}\n+\n // A project carrying the full Omnigent residue AND the live .fkit/ state that must survive it.\n // The decoys are the point: .fkit/settings is live ADR-010 lockdown state that revision 1 of the\n // migration report wrongly listed for deletion.\n@@ -120,7 +126,7 @@ describe('B. the cleanup removes those, and only those', () => {\n   });\n \n   test('.fkit/settings survives, and a launch still builds the role lockdown on top of it', async () => {\n-    const p = makeProject();\n+    const p = project();\n     seedResidue(p);\n     await runFkit(['coder'], { project: p });\n     for (const t of TARGETS) assert.ok(!existsSync(join(p, t)), `${t} should be gone`);\n@@ -154,7 +160,7 @@ describe('C. announce-only (the owner\\'s consent model)', () => {\n   test('THE TRAP — the announcement survives the launcher\\'s >/dev/null', async () => {\n     // The launcher silences init on exactly the already-set-up projects that carry this residue. An\n     // announcement on stdout would be discarded 100% of the time: implemented, invisible, review-green.\n-    const p = makeProject();\n+    const p = project();\n     seedResidue(p);\n     const r = await runFkit(['coder'], { project: p });\n     assert.match(r.stderr, /removed these dead Omnigent paths/, 'the announcement must reach the user');\n@@ -436,7 +442,7 @@ describe('F. weird state and failure', () => {\n   });\n \n   test('non-fatal — a failed removal never bricks the launcher, and the loop carries on', async () => {\n-    const p = makeProject();\n+    const p = project();\n     seedResidue(p);\n     // A read-only .fkit makes the unlink fail for everything under it — but .omnigent is elsewhere and\n     // must still be cleaned. Without that assertion this test passes even if the loop aborts on the\n",
+  "checkpointBefore": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "loadBefore": [
+    16.8330078125,
+    15.86328125,
+    12.90966796875
+  ],
+  "competingTestProcessesBefore": 0,
+  "authority": "Relayed owner approval 2026-11-04 08:09:11 UTC; Build temporary failure-probe unit only",
+  "sandbox": {
+    "processInspectionDenied": true,
+    "inspectionRetrySucceeded": true,
+    "testAttemptDenied": false
+  },
+  "mutationAppliedUTC": "2026-11-04T08:22:48.764Z",
+  "measurementCommand": [
+    "node",
+    ".fkit/tmp/0540-build-20261104/measure.mjs",
+    "failure-probe-orphan",
+    "node",
+    "--test",
+    "test/orphan-cleanup.test.js"
+  ],
+  "measurementWrapperSignal": null,
+  "measurementWrapperExit": 0,
+  "interruption": null,
+  "restored": true,
+  "finishedUTC": "2026-11-04T08:22:59.502Z",
+  "restoredSha256": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "diffAfter": "diff --git a/test/orphan-cleanup.test.js b/test/orphan-cleanup.test.js\nindex 52f57c7..03f3dd2 100644\n--- a/test/orphan-cleanup.test.js\n+++ b/test/orphan-cleanup.test.js\n@@ -28,6 +28,12 @@ function tmp(prefix) {\n   return d;\n }\n \n+function project(options) {\n+  const dir = makeProject(options);\n+  trash.push(dir);\n+  return dir;\n+}\n+\n // A project carrying the full Omnigent residue AND the live .fkit/ state that must survive it.\n // The decoys are the point: .fkit/settings is live ADR-010 lockdown state that revision 1 of the\n // migration report wrongly listed for deletion.\n@@ -120,7 +126,7 @@ describe('B. the cleanup removes those, and only those', () => {\n   });\n \n   test('.fkit/settings survives, and a launch still builds the role lockdown on top of it', async () => {\n-    const p = makeProject();\n+    const p = project();\n     seedResidue(p);\n     await runFkit(['coder'], { project: p });\n     for (const t of TARGETS) assert.ok(!existsSync(join(p, t)), `${t} should be gone`);\n@@ -154,7 +160,7 @@ describe('C. announce-only (the owner\\'s consent model)', () => {\n   test('THE TRAP — the announcement survives the launcher\\'s >/dev/null', async () => {\n     // The launcher silences init on exactly the already-set-up projects that carry this residue. An\n     // announcement on stdout would be discarded 100% of the time: implemented, invisible, review-green.\n-    const p = makeProject();\n+    const p = project();\n     seedResidue(p);\n     const r = await runFkit(['coder'], { project: p });\n     assert.match(r.stderr, /removed these dead Omnigent paths/, 'the announcement must reach the user');\n@@ -436,7 +442,7 @@ describe('F. weird state and failure', () => {\n   });\n \n   test('non-fatal — a failed removal never bricks the launcher, and the loop carries on', async () => {\n-    const p = makeProject();\n+    const p = project();\n     seedResidue(p);\n     // A read-only .fkit makes the unlink fail for everything under it — but .omnigent is elsewhere and\n     // must still be cleaned. Without that assertion this test passes even if the loop aborts on the\n",
+  "diffRestoredExactly": true,
+  "checkpointAfterRestoration": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "approvedOrphanDiffPreserved": true,
+  "orphanFixedSha256": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "structureDiffEmpty": true
+}

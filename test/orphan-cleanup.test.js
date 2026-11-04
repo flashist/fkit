@@ -28,6 +28,12 @@ function tmp(prefix) {
   return d;
 }
 
+function project(options) {
+  const dir = makeProject(options);
+  trash.push(dir);
+  return dir;
+}
+
 // A project carrying the full Omnigent residue AND the live .fkit/ state that must survive it.
 // The decoys are the point: .fkit/settings is live ADR-010 lockdown state that revision 1 of the
 // migration report wrongly listed for deletion.
@@ -120,7 +126,7 @@ describe('B. the cleanup removes those, and only those', () => {
   });
 
   test('.fkit/settings survives, and a launch still builds the role lockdown on top of it', async () => {
-    const p = makeProject();
+    const p = project();
     seedResidue(p);
     await runFkit(['coder'], { project: p });
     for (const t of TARGETS) assert.ok(!existsSync(join(p, t)), `${t} should be gone`);
@@ -154,7 +160,7 @@ describe('C. announce-only (the owner\'s consent model)', () => {
   test('THE TRAP — the announcement survives the launcher\'s >/dev/null', async () => {
     // The launcher silences init on exactly the already-set-up projects that carry this residue. An
     // announcement on stdout would be discarded 100% of the time: implemented, invisible, review-green.
-    const p = makeProject();
+    const p = project();
     seedResidue(p);
     const r = await runFkit(['coder'], { project: p });
     assert.match(r.stderr, /removed these dead Omnigent paths/, 'the announcement must reach the user');
@@ -436,7 +442,7 @@ describe('F. weird state and failure', () => {
   });
 
   test('non-fatal — a failed removal never bricks the launcher, and the loop carries on', async () => {
-    const p = makeProject();
+    const p = project();
     seedResidue(p);
     // A read-only .fkit makes the unlink fail for everything under it — but .omnigent is elsewhere and
     // must still be cleaned. Without that assertion this test passes even if the loop aborts on the

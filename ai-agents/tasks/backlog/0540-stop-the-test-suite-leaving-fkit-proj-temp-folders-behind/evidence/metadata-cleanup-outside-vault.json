@@ -1,0 +1,114 @@
+{
+  "task": "0540",
+  "unit": "bounded metadata cleanup; three outside-vault paths only",
+  "startedAtUTC": "2026-11-04T08:39:33.570620+00:00",
+  "finishedAtUTC": "2026-11-04T08:39:33.722129+00:00",
+  "authority": {
+    "caller": "fkit-lead",
+    "driver": "fkit-sprint-ship-loop",
+    "role": "Build",
+    "chain": "lead -> coder",
+    "hop": "1 of 2",
+    "channel": "interactive fkit_roles.fkit_ask_owner in root lead session (trusted relay, not independently verified)",
+    "approvedAtUTC": "2026-11-04 08:36:36 UTC",
+    "answer": "Authorize exact cleanup + verification (Recommended) — Remove only the four listed .DS_Store files: fresh Build coder handles the three outside the vault; fkit-wiki alone handles the vault file. Recheck type/tracking, then rerun one measured normal suite. No sweep, parity-test change or acceptance waiver."
+  },
+  "paths": [
+    {
+      "path": "ai-agents/.DS_Store",
+      "regularFile": true,
+      "symlink": false,
+      "gitTracked": false,
+      "gitStatus": "!! ai-agents/.DS_Store",
+      "contentsRead": false,
+      "removed": true,
+      "removedAtUTC": "2026-11-04T08:39:33.674525+00:00"
+    },
+    {
+      "path": "ai-agents/knowledge-base/.DS_Store",
+      "regularFile": true,
+      "symlink": false,
+      "gitTracked": false,
+      "gitStatus": "!! ai-agents/knowledge-base/.DS_Store",
+      "contentsRead": false,
+      "removed": true,
+      "removedAtUTC": "2026-11-04T08:39:33.694030+00:00"
+    },
+    {
+      "path": "ai-agents/tasks/.DS_Store",
+      "regularFile": true,
+      "symlink": false,
+      "gitTracked": false,
+      "gitStatus": "!! ai-agents/tasks/.DS_Store",
+      "contentsRead": false,
+      "removed": true,
+      "removedAtUTC": "2026-11-04T08:39:33.712150+00:00"
+    }
+  ],
+  "protectedHashesBefore": {
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    "test/dual-home-parity.test.js": "82bbdb7b31d58eb45bea1ec3a57a8f4fa2225a97df9feae0b3b47a11cf8355f7",
+    "test/dual-home-parity-exceptions.mjs": "8e45b9776776d2bf6cebb699a1bbf3fba5cecde404b53faa7d4352e61c59e4c4",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "70940cb164b1186e08391d95a6b699a0bafda191726bda5e8f2d778cb1a4d673",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md": "8bfbb42e8a9f625abd41f7d381f02280f929d7261db62302514a610af8444316",
+    "ai-agents/sprints/sprint-15.md": "26edc5b60cadb92ad1a0e7b8e9e8d53b5e95510ce9849ce863e5a110d84e918d",
+    "CONTRIBUTING.md": "aa0d10573565b8677f2f9137e3b7aa9c3d0a3128ed129bda59b6ba9d7c9d014d",
+    "package.json": "dfad66428001fb3becd139cd4b10f67c6d27d7785cc8f4045520ccb9aff91ece"
+  },
+  "protectedHashesAfter": {
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    "test/dual-home-parity.test.js": "82bbdb7b31d58eb45bea1ec3a57a8f4fa2225a97df9feae0b3b47a11cf8355f7",
+    "test/dual-home-parity-exceptions.mjs": "8e45b9776776d2bf6cebb699a1bbf3fba5cecde404b53faa7d4352e61c59e4c4",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "70940cb164b1186e08391d95a6b699a0bafda191726bda5e8f2d778cb1a4d673",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md": "8bfbb42e8a9f625abd41f7d381f02280f929d7261db62302514a610af8444316",
+    "ai-agents/sprints/sprint-15.md": "26edc5b60cadb92ad1a0e7b8e9e8d53b5e95510ce9849ce863e5a110d84e918d",
+    "CONTRIBUTING.md": "aa0d10573565b8677f2f9137e3b7aa9c3d0a3128ed129bda59b6ba9d7c9d014d",
+    "package.json": "dfad66428001fb3becd139cd4b10f67c6d27d7785cc8f4045520ccb9aff91ece"
+  },
+  "protectedSourceUnchanged": true,
+  "testDiffSHA256Before": "967a5f290d5c3e8d47cd032c215f98cbcda3765205eca17cf098fcd5894452d4",
+  "testDiffSHA256After": "967a5f290d5c3e8d47cd032c215f98cbcda3765205eca17cf098fcd5894452d4",
+  "gitIndexSHA256Before": "e39c430b9ee287e8f50f48c7643b13a8bb49df1b779d673392fce531e886f6cb",
+  "gitIndexSHA256After": "e39c430b9ee287e8f50f48c7643b13a8bb49df1b779d673392fce531e886f6cb",
+  "testsRun": [],
+  "vaultCleanup": "separate fkit-wiki worker; not inspected or claimed complete",
+  "remainingVerification": "Driver disposition required for reappeared ai-agents/tasks/.DS_Store; vault cleanup not checked. Fresh measured normal npm test remains pending until cleanup prerequisites hold; no acceptance waiver/closure.",
+  "wikiGrounding": "Read-only fkit-query; testing-and-verification / ADR-057 / mapped-checks context. Exact cleanup authority comes from relayed owner ruling. Wiki has no current task cleanup evidence.",
+  "wikiStaleness": {
+    "watermark": "185ac5e07e918c089ed3afd23496587315342000",
+    "laterAiAgentsCommits": 11
+  },
+  "autonomousPermanentFixes": "none; executed exact separately approved environmental cleanup only",
+  "readBack": {
+    "checkedAtUTC": "2026-11-04T08:40:13.638354+00:00",
+    "result": "NEEDS-DECISION",
+    "observations": [
+      {
+        "path": "ai-agents/.DS_Store",
+        "existsAtReadBack": false
+      },
+      {
+        "path": "ai-agents/knowledge-base/.DS_Store",
+        "existsAtReadBack": false
+      },
+      {
+        "path": "ai-agents/tasks/.DS_Store",
+        "existsAtReadBack": true,
+        "regularFile": true,
+        "symlink": false,
+        "gitTracked": false,
+        "gitStatus": "!! ai-agents/tasks/.DS_Store",
+        "contentsRead": false
+      }
+    ],
+    "protectedHashesUnchangedOnReadBack": true,
+    "worklogAppendVerified": true,
+    "reason": "ai-agents/tasks/.DS_Store reappeared after successful unlink; actor/cause unestablished. Stopped on drift; no repeat removal or tests."
+  }
+}

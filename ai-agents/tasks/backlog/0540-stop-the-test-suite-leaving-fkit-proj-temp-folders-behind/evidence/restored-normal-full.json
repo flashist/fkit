@@ -1,0 +1,500 @@
+{
+  "label": "restored-normal-full",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "runnerPid": 86618,
+  "node": "v24.13.0",
+  "platform": "darwin",
+  "release": "25.2.0",
+  "cpuCount": 14,
+  "tmpdir": "/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "canonicalTmpdir": "/private/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "startedUTC": "2026-11-04T08:28:57.411Z",
+  "head": "20813ecb23974af0f6feac7404b0b5a8a1f4608a",
+  "statusBefore": " M ai-agents/sprints/sprint-15.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md\n M ai-agents/wiki-vault/index.md\n M ai-agents/wiki-vault/log.md\n M test/orphan-cleanup.test.js\n?? ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md\n?? ai-agents/wiki-vault/wiki/tasks/pin-the-optional-buzz-target-and-design-the-fkit-control-boundary.md\n?? ai-agents/wiki-vault/wiki/tasks/prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project.md\n?? ai-agents/wiki-vault/wiki/tasks/review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery.md\n?? ai-agents/wiki-vault/wiki/tasks/sprint-16-optional-buzz-feasibility.md\n",
+  "orphanHashBefore": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "before": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "activityBefore": {
+    "available": true,
+    "candidates": [
+      {
+        "pid": 86618,
+        "ppid": 85167,
+        "cpu": 8.6
+      }
+    ]
+  },
+  "loadBefore": [
+    12.6689453125,
+    15.8798828125,
+    14.099609375
+  ],
+  "samples": [
+    {
+      "utc": "2026-11-04T08:29:07.554Z",
+      "load": [
+        22.45654296875,
+        17.8876953125,
+        14.83349609375
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 5092,
+            "ppid": 86658,
+            "cpu": 0.9
+          },
+          {
+            "pid": 5790,
+            "ppid": 86658,
+            "cpu": 0.9
+          },
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0.1
+          },
+          {
+            "pid": 86668,
+            "ppid": 86658,
+            "cpu": 4.6
+          },
+          {
+            "pid": 86669,
+            "ppid": 86658,
+            "cpu": 1.9
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 0.1
+          },
+          {
+            "pid": 87340,
+            "ppid": 86658,
+            "cpu": 1.6
+          },
+          {
+            "pid": 88167,
+            "ppid": 86658,
+            "cpu": 1
+          },
+          {
+            "pid": 91094,
+            "ppid": 86658,
+            "cpu": 0
+          },
+          {
+            "pid": 92098,
+            "ppid": 86658,
+            "cpu": 1
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:29:17.556Z",
+      "load": [
+        25.39990234375,
+        18.6650390625,
+        15.14453125
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 5092,
+            "ppid": 86658,
+            "cpu": 2.4
+          },
+          {
+            "pid": 5790,
+            "ppid": 86658,
+            "cpu": 4.7
+          },
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0
+          },
+          {
+            "pid": 86669,
+            "ppid": 86658,
+            "cpu": 3.4
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 0.1
+          },
+          {
+            "pid": 87340,
+            "ppid": 86658,
+            "cpu": 6.7
+          },
+          {
+            "pid": 91094,
+            "ppid": 86658,
+            "cpu": 0.3
+          },
+          {
+            "pid": 92098,
+            "ppid": 86658,
+            "cpu": 3.5
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:29:27.556Z",
+      "load": [
+        28.50537109375,
+        19.5751953125,
+        15.509765625
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 5092,
+            "ppid": 86658,
+            "cpu": 0
+          },
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 0.1
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:29:37.557Z",
+      "load": [
+        26.65625,
+        19.47314453125,
+        15.5205078125
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 5092,
+            "ppid": 86658,
+            "cpu": 0
+          },
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0.3
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0.1
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 1.1
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:29:47.559Z",
+      "load": [
+        24.60107421875,
+        19.26123046875,
+        15.49072265625
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 0.4
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:29:57.560Z",
+      "load": [
+        23.74267578125,
+        19.265625,
+        15.537109375
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 0.1
+          }
+        ]
+      }
+    },
+    {
+      "utc": "2026-11-04T08:30:07.560Z",
+      "load": [
+        22.14208984375,
+        19.06103515625,
+        15.50732421875
+      ],
+      "activity": {
+        "available": true,
+        "candidates": [
+          {
+            "pid": 86618,
+            "ppid": 85167,
+            "cpu": 0.1
+          },
+          {
+            "pid": 86644,
+            "ppid": 86618,
+            "cpu": 0
+          },
+          {
+            "pid": 86658,
+            "ppid": 86644,
+            "cpu": 0
+          },
+          {
+            "pid": 87225,
+            "ppid": 86658,
+            "cpu": 1.1
+          }
+        ]
+      }
+    }
+  ],
+  "exit": 1,
+  "signal": null,
+  "wallSeconds": 75.12240554200001,
+  "finishedUTC": "2026-11-04T08:30:12.673Z",
+  "after": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "activityAfter": {
+    "available": true,
+    "candidates": [
+      {
+        "pid": 86618,
+        "ppid": 85167,
+        "cpu": 0
+      }
+    ]
+  },
+  "loadAfter": [
+    22.29052734375,
+    19.142578125,
+    15.556640625
+  ],
+  "orphanHashAfter": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+  "summary": [
+    "ℹ tests 971",
+    "ℹ suites 40",
+    "ℹ pass 969",
+    "ℹ fail 1",
+    "ℹ cancelled 0",
+    "ℹ skipped 1",
+    "ℹ todo 0",
+    "ℹ duration_ms 74978.727375"
+  ],
+  "failedTests": [
+    "✖ live corpus: the enforced dual-homed set is non-empty and every file is present in BOTH homes (0.288833ms)",
+    "✖ failing tests:",
+    "✖ live corpus: the enforced dual-homed set is non-empty and every file is present in BOTH homes (0.288833ms)"
+  ],
+  "skips": [
+    "﹣ benchmark: snapshot against the per-member path on corpus-sized boards (FKIT_BOARD_BENCH=1) (0.04975ms) # SKIP"
+  ],
+  "delta": {
+    "fkit-proj-": {
+      "before": 34,
+      "after": 34,
+      "added": [],
+      "removed": []
+    },
+    "fkit-stub-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-argv-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": []
+    },
+    "fkit-conv-": {
+      "before": 0,
+      "after": 0,
+      "added": [],
+      "removed": []
+    }
+  }
+}

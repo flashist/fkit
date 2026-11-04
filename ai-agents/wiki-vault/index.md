@@ -82,6 +82,10 @@ _(none yet — fkit's user-facing surface is documented as systems)_
 - [[decisions/adr-058-the-read-only-board-reader-ships-to-every-fkit-user-as-fkit-board-ahead-of-the-merge]] — **`fkit board` now, view only** (2026-10-20, owner ruling A3): the read-only reader + a vendored copy of aiboard's page ship to every user; Node for that command only; ⛔ no editing; interim until ADR-052 phase 5 (`0444`) / phase 8 (`0467`); ⚠️ ships with no automated test
 
 ## Tasks
+- [[tasks/sprint-16-optional-buzz-feasibility]] — Sprint 16 agent-closed 2026-11-03; BUZZ delivery and experiments parked, 55 blocked and 55 untested of 110 cases, none executed.
+- [[tasks/pin-the-optional-buzz-target-and-design-the-fkit-control-boundary]] — 0549: negative optional BUZZ design investigation; agent-closed, not owner-verified.
+- [[tasks/prove-the-optional-buzz-owner-question-and-recovery-flow-in-a-disposable-project]] — 0550: feasibility gate stopped; agent-closed, not owner-verified.
+- [[tasks/review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery]] — 0551: owner parked BUZZ delivery and experiments; agent-closed, not owner-verified.
 
 ### Sprints
 - [[tasks/sprint-10-the-0472-0482-batch]] — 🔄 **In progress since 2026-10-04** (read at `79a7dbf`): the `0472`–`0482` batch, then six owner-ruled additions — 20 rows, **16 ✅ (agent-closed), 3 open (`0474`, `0504`, `0506`), 1 ⛔ (`0505`)**. ⭐ The number `10`, left empty by Sprint 11, **taken knowingly by owner ruling R4**. Produced ADR-053 (proposed), ADR-054, ADR-055, ADR-056 — ✅ *2026-10-14 (`baf6a4e`):* **24 rows — 17 ✅, 6 open (`0474`, `0506`, and R11's pulls `0501`/`0496`/`0484`/`0483` at `P21`–`P24`), 1 ⛔**; `0504` closed; still `🔄 In progress` — ✅ *2026-10-15 (`96c7263`):* **24 rows — 22 ✅, 1 open (`0474`), 1 ⛔**; `0506`, `0501`, `0496`, `0484`, `0483` closed 2026-10-14 (agent-closed); still `🔄 In progress` — ✅ *2026-10-23:* **closed 2026-10-15** by `/fkit-sprint-done` (agent-closed), archived at `sprints/done/sprint-10.md`; `0474` relocated to Sprint 12
