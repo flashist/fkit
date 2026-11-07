@@ -4904,3 +4904,9 @@ Task 0380: partial — not ready to close
 ## 2026-11-04 — ingest
 - Ingested current working-tree `CONTRIBUTING.md`, `.github/workflows/test.yml`, `.github/workflows/prove-red.yml`, `RELEASING.md`, `ai-agents/knowledge-base/architecture.md` §9.1 and `CHANGELOG.md` Unreleased → updated [[wiki/systems/testing-and-verification]] and [[wiki/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]]; updated their catalog entries. The owner's ruling supersedes D10's timing/idle requirements; prior measurements remain historical. Hosted Ubuntu execution remains unverified.
 - Bounded policy update only, not a full sync; watermark unchanged.
+## 2026-11-07 — ingest (partial sync)
+- Sync window: `185ac5e07e918c089ed3afd23496587315342000` → HEAD (`b3dcfa58116e01841f3a5c810fa8e1e9207479ff`).
+- Changed source paths detected: 40 candidate paths before resolving historical moves and rename-only exclusions.
+- Ingested: `ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md` → created [[wiki/tasks/give-each-independent-owner-decision-its-own-selectable-options]].
+- Targeted lint: page indexed; it contains no wiki-links requiring reciprocal checks.
+- Partial: remaining candidates require assessment; watermark unchanged so the window is not lost.
