@@ -105,6 +105,15 @@ _fkit_same_dir() {   # <a> <b> → true if both are directories with the same ph
 fkit_repo="${FKIT_REPO:-$(_fkit_verfield repo)}"; fkit_repo="${fkit_repo:-flashist/fkit}"
 fkit_ref="${FKIT_REF:-$(_fkit_verfield ref)}";    fkit_ref="${fkit_ref:-main}"
 
+case "${1:-}" in
+  berd|buzz)
+    command -v node >/dev/null 2>&1 || {
+      echo "fkit: native Berd/Buzz setup needs Node.js on PATH." >&2; exit 127; }
+    [ -f "$share/bin/fkit-native.mjs" ] || {
+      echo "fkit: native setup is missing; update or reinstall fkit." >&2; exit 1; }
+    exec node "$share/bin/fkit-native.mjs" "$@" ;;
+esac
+
 # `fkit board` (ADR-058): the project's board, read-only, served from $PWD. It runs before the update
 # check, setup and the menu, so it writes nothing. Only this command needs Node.
 if [ "${1:-}" = board ]; then
@@ -219,12 +228,14 @@ Plan review (fkit coder only): on by default — agents and Codex check each /fk
 
 Other:
   fkit board            view this project's tasks and sprints in your browser, read-only (needs Node)
+  fkit berd [project]   prepare native Berd personas and skills (needs Node)
+  fkit buzz [project]   prepare native Buzz skills and desktop team snapshot (needs Node)
   fkit update           update fkit itself
   FKIT_SETUP_ONLY=1     set the project up, then exit without launching
   FKIT_NO_UPDATE_CHECK=1  never check for updates
   FKIT_CLEANUP_DRY_RUN=1  report the dead Omnigent paths fkit would delete, and delete nothing
 
-A first argument that is not a role (or `board` / `update`) is an error. Args AFTER a role pass through to `claude`.
+A first argument that is not a role (or `board` / `berd` / `buzz` / `update`) is an error. Args AFTER a role pass through to `claude`.
 EOF
     exit 0 ;;
 esac

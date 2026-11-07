@@ -19,6 +19,13 @@ model-diverse; without it, that opinion falls back to Claude only, loudly flagge
 ([ADR-054](ai-agents/knowledge-base/decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md)). fkit formerly shipped a second flavor on [Omnigent](https://omnigent.ai); that runtime
 was **removed in Sprint 2** (ADR-009). There is nothing to mirror by hand any more.
 
+**Native port:** `fkit berd` and `fkit buzz` prepare native personas on the apps' selected models.
+See [`docs/native-runtimes.md`](docs/native-runtimes.md). Claude's structural lock applies to the
+Claude path; native boundaries are advisory.
+
+**Owner test ruling (2026-11-07):** tests may run manually while working. Add no new permanent
+tests. Automatic push/PR/nightly and release-triggered test runs stay disabled; see CONTRIBUTING.md.
+
 The full project brief — domain, architecture, conventions — lives in
 [`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).
 

@@ -21,6 +21,10 @@ and a wiki, all in an `ai-agents/` folder inside your project.
 
 ## Install & run
 
+For native agents on **Berd** and **Buzz**, see [native setup](docs/native-runtimes.md).
+They use the app-selected models and do not require Claude Code or Codex. The role boundaries
+are advisory in these runtimes; the enforced role lock described below belongs to the Claude path.
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh   # once
 
@@ -28,12 +32,14 @@ cd /path/to/your/project
 fkit            # pick a role from the menu (Enter = lead)
 fkit coder      # …or go straight to one
 fkit board      # view this project's tasks and sprints in your browser, read-only (needs Node)
+fkit berd       # prepare native Berd personas and skills in this project (needs Node)
+fkit buzz       # prepare native skills and a Buzz team snapshot (needs Node)
 ```
 
-**Requires:** [Claude Code](https://claude.com/claude-code), `curl`, `tar`, `bash`. **Optional but
+**Claude sessions require:** [Claude Code](https://claude.com/claude-code), `curl`, `tar`, `bash`. **Optional but
 recommended:** [Codex](https://github.com/openai/codex) (`npm install -g @openai/codex && codex
 login`) — without it, reviews run on Claude only and are **loudly flagged as not model-diverse**.
-`fkit` stops if Claude Code is missing; it only warns about Codex. `fkit board` alone also needs
+Claude role sessions stop if Claude Code is missing; they only warn about Codex. `fkit board`, `fkit berd`, and `fkit buzz` need
 [Node.js](https://nodejs.org). **Platforms:** macOS and Linux;
 Windows via WSL, untested.
 

@@ -1,5 +1,20 @@
 # fkit — Architecture
 
+**Native port addendum (2026-11-07):** `bin/fkit-native.mjs` prepares seven native personas,
+portable skills and additive project scaffolding for Berd, then a desktop team snapshot for Buzz.
+`native/runtime.md` binds the existing procedures to native tools and records enforcement limits;
+`native/roles/` holds native persona instructions. Ownership still comes from
+`claude/skills-for-role.sh`. The installer ships both resource trees and the existing launcher
+dispatches `fkit berd|buzz` before Claude setup/preflight. See
+[native runtime setup](../../docs/native-runtimes.md) for formats and upstream evidence.
+The snapshot below describes the Claude implementation; its single-runtime and structural-lock
+claims do not describe the native paths.
+
+**Test-policy addendum (2026-11-07):** the owner disabled automatic tests and prohibited new
+permanent tests for this work. Existing suites are manual-only; both GitHub workflows were
+verified `disabled_manually`. Release no longer invokes test suites. CONTRIBUTING.md and
+RELEASING.md describe the current policy; older CI and release-gate sections below are historical.
+
 **The architecture of the system as it exists today** (last refreshed 2026-07-23; originally
 2026-07-11, post-Omnigent-removal). One runtime, **seven built roles** (an eighth, a sandboxed e2e
 tester, is authorized in [ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)

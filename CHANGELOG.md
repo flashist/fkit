@@ -11,6 +11,17 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- Native startup can now configure and remember the main/adversarial runtimes and models,
+  interactively or with flags. Berd handoffs select the harness explicitly and carry callback IDs.
+  Document the supported Codex executable override for older Berd bundles.
+
+- Disable automatic push/PR/nightly test runs and the release tool's automatic test gate.
+  Existing suites remain available for manual use; no new permanent tests are added.
+
+- Add native Berd/Buzz setup with seven app-model personas, portable skills, additive project
+  scaffolding, Berd persona imports, and a Buzz desktop team snapshot. Native boundaries are
+  advisory; independent review requires a verified second-model pass.
+
 - `fkit coder` sessions now do plan review by default too: `/fkit-plan-task` drafts the plan, has
   agents approve it and Codex attack it, then shows it to you with the review record. The draft and
   review run with plan mode off (only the coder's instructions stop a write in that stretch, ~17 min);

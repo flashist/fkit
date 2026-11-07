@@ -13,14 +13,10 @@
 // committed tree is skipped). A default (bumping) run always cuts a NEW version,
 // so after a partial failure re-run with --no-bump to finish the same one.
 //
-// Test gate: every run executes `npm test`, then `npm run test:release`, first and
-// ABORTS on the first red — an untested tree cannot be released (tasks 0256, 0530).
-// It runs before the first write, and under --dry-run too. --no-test skips it and
-// is never a default.
+// Tests are manual so release and dry-run never start a test suite implicitly.
 //
 // Release notes (task 0479): CHANGELOG.md must have a non-empty `## Unreleased`
-// section, checked BEFORE the test gate (a refusal costs seconds, not the gate's
-// minutes) and again after it. On a release that heading becomes
+// section, checked before any writes and again immediately before stamping. On a release it becomes
 // `## v<version> — <date>`, a new empty `## Unreleased` opens above it, and the
 // change lands in the release commit. --allow-empty-changelog releases anyway, loudly.
 //
@@ -38,7 +34,7 @@
 //   --dry-run           Print the plan; touch nothing
 //   --no-tag            Commit + push, but don't create/push a tag
 //   --no-push           Commit + tag locally, but don't push anything
-//   --no-test           Skip the test gate — SHIPS AN UNVERIFIED TREE
+//   --no-test           Compatibility no-op; tests are manual
 //   --allow-empty-changelog  Release with an empty `## Unreleased` in CHANGELOG.md
 //   -h, --help          Show this help
 
@@ -73,18 +69,15 @@ Options:
   --dry-run           Print the plan; touch nothing
   --no-tag            Commit + push, but don't create/push a tag
   --no-push           Commit + tag locally, but don't push anything
-  --no-test           Skip the test gate — SHIPS AN UNVERIFIED TREE
+  --no-test           Compatibility no-op; tests are manual
   --allow-empty-changelog  Release with an empty \`## Unreleased\` in CHANGELOG.md
   -h, --help          Show this help
 
-Every run runs \`npm test\`, then \`npm run test:release\`, first (about 2 min) and
-refuses to release if either fails — including under --dry-run. Both read the working
-tree, so they check the tree as it stood when they started — uncommitted and untracked
-work included, but not the version bump written after them. --no-test skips that; it
-is never a default.
+Tests run only when requested separately: \`npm test\` and \`npm run test:release\`.
+Release and --dry-run do not start them. --no-test remains an accepted no-op.
 
 CHANGELOG.md must have a non-empty \`## Unreleased\` section — checked before the
-test gate, so a refusal is fast. The release turns it into \`## v<version> — <date>\`
+first write, so a refusal leaves the tree untouched. The release turns it into \`## v<version> — <date>\`
 and opens a new empty \`## Unreleased\` above it, in the release commit.
 
 VERSION is the single source of truth (package.json kept in sync); the tag is v<VERSION>.
@@ -95,7 +88,6 @@ Makes no npm-registry publish.`);
 const dryRun = has("--dry-run");
 const doTag = !has("--no-tag");
 const doPush = !has("--no-push");
-const doTest = !has("--no-test");
 const allowEmptyChangelog = has("--allow-empty-changelog");
 const bumpTo = getArg("--version", null);
 const branchArg = getArg("--branch", null);
@@ -133,9 +125,7 @@ if (!git(["remote"], { quiet: true }).out.split("\n").includes("origin")) {
 // ref and publishes another — MEASURED 2026-08-14: the tag lands on origin naming a
 // commit no origin branch reaches, and the summary still prints ✓ Released.
 //
-// ⚠️ POSITION IS LOAD-BEARING, for the test gate's own reason (see below): this runs
-// before the gate and before the first writeFileSync, so a refused run leaves the tree
-// exactly as the user left it — no bump, no `git add`, no commit, no tag.
+// Refuse before any write so the owner can correct the branch without undoing a bump.
 // `!= null` on purpose: a bare trailing `--branch` parses as undefined and keeps today's
 // fall-back to the current branch.
 //
@@ -223,11 +213,8 @@ if (bumpTo !== null) {
 // A release must say what it ships. `## Unreleased` must exist exactly once and hold something; the
 // release turns that heading into `## v<version> — <date>` and opens a new empty `## Unreleased` above it.
 //
-// ⚠️ CHECKED TWICE, AND POSITION IS LOAD-BEARING for the test gate's own reason (see below). The first
-// check runs HERE, before the gate, on every path (--dry-run and --no-test included), so a forgotten
-// changelog costs seconds, not the gate's minutes, and leaves the tree exactly as the user left it.
-// The second runs on a FRESH READ after the gate and the HEAD compare, before the first write — the
-// maintainer may edit the file during the gate, and that edit is kept, never overwritten.
+// Re-read before stamping so an intervening owner edit is not overwritten.
+// Both checks precede the first write.
 //
 // On a run that does NOT bump (--no-bump, or --version <current>), a `## v<target>` section means a
 // partly-failed release already stamped it (bump committed, push failed, the header above says --no-bump):
@@ -241,7 +228,7 @@ let warnedEmptyChangelog = false;
 
 function checkChangelog(when) {
   const nothing = `  Nothing was changed: no bump, no commit, no tag.`;
-  const where = when === "after" ? " (read again after the test gate)" : "";
+  const where = when === "after" ? " (read again before release writes)" : "";
   let text;
   try {
     text = readFileSync(changelogPath, "utf8");
@@ -316,68 +303,7 @@ function checkChangelog(when) {
 
 checkChangelog("before");
 
-// --- test gate --------------------------------------------------------------
-// Refuse to release an untested tree (task 0256). There is deliberately no
-// warn-and-continue path: a red suite exits 1.
-//
-// ⚠️ POSITION IS LOAD-BEARING. This sits immediately before the first mutating
-// line (the writeFileSync bump below). At this point nothing has been written,
-// staged, committed or tagged, so a red suite is a clean abort with the tree
-// exactly as the user left it. Gating any LATER would leave VERSION and
-// package.json bumped and dirty, and the next default run would bump AGAIN —
-// silently skipping a version, recoverable only via --no-bump.
-//
-// ⚠️ IT DOES NOT REQUIRE A CLEAN TREE, and must not. `npm test` reads the
-// WORKING TREE (harness.mjs derives REPO from its own location; the structure
-// manifest walks git history ∪ the on-disk claude/scaffold/), and so does
-// `git add -A` below. Both read the working tree — so gating here tests the
-// tree as it stood when the suite started, uncommitted and untracked work
-// included. NOT the exact committed bytes: the bump below writes VERSION and
-// package.json after the suite, and about 2 min separate this gate from
-// `git add -A`. That is the point: CI cannot cover this, it never sees the tree.
-function runTests() {
-  const npmBin = process.platform === "win32" ? "npm.cmd" : "npm";
-  for (const args of [["test"], ["run", "test:release"]]) {
-    const name = `npm ${args.join(" ")}`;
-    const r = spawnSync(npmBin, args, { cwd: KIT, stdio: "inherit" });
-    if (r.error) fail(`could not run \`${name}\`: ${r.error.message}`);
-    if (r.status !== 0) {
-      fail(
-        `${name} failed (exit ${r.status}) — refusing to release an untested tree.\n` +
-          `  Nothing was changed: no bump, no commit, no tag.\n` +
-          `  Fix it and re-run. To release anyway: --no-test (ships unverified).`,
-      );
-    }
-    // After each script, so the refusal names the one that moved HEAD and the next never runs on
-    // another branch's tree.
-    refuseIfHeadMoved(name);
-  }
-}
-
-if (doTest) {
-  // stdio: "inherit" so the suite streams live — two minutes of silence reads as a hang.
-  console.log(`\n• running \`npm test\` and \`npm run test:release\` before release v${target} (about 2 min)`);
-  runTests();
-  console.log(`✓ npm test and npm run test:release green\n`);
-} else {
-  console.error(
-    `\n⚠ --no-test: releasing WITHOUT running the suite.\n` +
-      `⚠ The tree about to ship is UNVERIFIED — nothing has checked it.\n`,
-  );
-}
-
-// --- HEAD must not have moved since the preflight (task 0300, round-2 review R8) ------------------
-// The guard above read HEAD BEFORE the test gate (about 2 min); the commit and the tag act on HEAD AFTER it,
-// and the push uses the name read before. A `git switch` in another terminal meanwhile puts the
-// commit and tag on one branch and the push on another — the 0300 defect back through a race.
-// MEASURED: a fixture whose test script runs `git switch -q other` → commit + tag on `other`,
-// `push origin main` a no-op, tag on origin naming a commit no origin branch reaches, ✓ Released.
-//
-// ⚠️ COMPARE against the preflight read — never just re-resolve. A bare re-read would push wherever
-// HEAD landed, which under `--branch main` breaks the guard's own promise. Runs on every path (the
-// window is zero under --no-test, and the compare is then a no-op), and sits before the first
-// writeFileSync, so a refused run is still a clean abort. runTests() also calls it after each gate
-// script, naming the script (`during`).
+// The preflight branch must still own the release when mutation begins.
 function refuseIfHeadMoved(during) {
   const nowRef = git(["symbolic-ref", "-q", "HEAD"], { check: false, quiet: true });
   const nowOn = nowRef.status === 0 ? nowRef.out.replace(/^refs\/heads\//, "") : null;
@@ -394,8 +320,7 @@ function refuseIfHeadMoved(during) {
 refuseIfHeadMoved(null);
 
 // --- CHANGELOG.md, read AGAIN (task 0479) -----------------------------------------------------------
-// A fresh read, not the pre-gate one: an edit made during the gate is kept. A refusal here is still a
-// clean abort — nothing below has run yet. `null`: a non-bumping run found its v<target> section.
+// A fresh read preserves intervening edits; refusal still leaves the tree untouched.
 const stamp = checkChangelog("after");
 
 if (target !== version) {

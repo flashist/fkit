@@ -19,6 +19,12 @@ one undifferentiated coding assistant.
 
 ## Domain & context
 
+**Native runtime port (2026-11-07):** the owner requested Berd first, then Buzz, and chose native
+roles on platform-selected models. `fkit berd` and `fkit buzz` now prepare those integrations;
+see [native runtime setup and limits](../../docs/native-runtimes.md). Claude Code/Codex is still
+available. The single-runtime statements below describe the prior Claude implementation;
+native role/skill boundaries are prompt rules, not the Claude hook's structural lock.
+
 **Problem:** AI coding assistants tend to conflate product decisions, implementation, and review into
 one undifferentiated chat loop, with no durable memory of prior decisions and no separation of
 authority (the same agent proposes a design, writes the code, and approves it). fkit's answer is a

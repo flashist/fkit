@@ -18,6 +18,13 @@ Agents are Claude Code subagents (`claude/agents/fkit-*.md`) and `/fkit-*` skill
 fkit previously ran on Omnigent; that runtime was removed in Sprint 2 — see ADR-009. Don't reason
 from it.
 
+**Native port:** `fkit berd` and `fkit buzz` prepare native personas on the apps' selected models.
+See [`docs/native-runtimes.md`](docs/native-runtimes.md). The Claude runtime description above and
+its structural skill lock apply to the Claude path; native boundaries are advisory.
+
+**Owner test ruling (2026-11-07):** tests may run manually while working. Add no new permanent
+tests. Automatic push/PR/nightly and release-triggered test runs stay disabled; see CONTRIBUTING.md.
+
 **You (Codex) are the adversarial second opinion.** The reviewer runs its own Claude pass and then
 shells out to `codex exec` for an independent hostile pass. That independence is the entire point: a
 "second opinion" from the same model that wrote the code is not a second opinion, it is the illusion

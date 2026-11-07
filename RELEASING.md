@@ -81,168 +81,51 @@ delivery mechanism: a version number is a *label on* a release, never the thing 
 
 ---
 
-## 3. Before you release
+## 3. Prepare a release
 
-**1. Regenerate the structure manifest whenever you change what it hashes.**
+1. Check the intended changes and update `CHANGELOG.md` under `## Unreleased`. The release tool
+   refuses a missing, duplicated, or empty section unless `--allow-empty-changelog` is explicit.
+2. If shipped scaffold files changed, run `npm run generate:manifest` and include the regenerated
+   `claude/structure-manifest.tsv`. Changes only to skills, agents, native bindings or launchers
+   do not require scaffold regeneration.
+3. Run whatever manual checks the work needs. Existing commands are `npm test`,
+   `npm run test:release`, and `npm run test:prove-red`. **Nothing runs automatically** on a push,
+   pull request, schedule, release, or release dry-run (owner ruling, 2026-11-07).
+   No new permanent tests are authorized for the native port. Report skipped and failing checks.
+4. Choose the bump: `npm run release` (patch), `release:minor`, `release:major`, or
+   `npm run release -- --version X.Y.Z`. `VERSION` and `package.json` must agree first.
+5. Inspect `npm run release:dry`. It prints the plan without running suites or mutating files.
 
-Usually that is a scaffold edit, but the trigger is neither "any scaffold edit" nor "only a scaffold
-edit". The two real triggers are: you changed a scaffold file the manifest actually covers (listed
-below), **or** you changed the generator's own path map or hash contract
-(`bin/generate-structure-manifest.mjs`), which can move hashes with no scaffold edit at all.
+Never commit or push a release unless the owner explicitly requests it.
 
-What the manifest covers **in the working tree** — the half your edit lands in — is everything under
-`claude/scaffold/ai-agents/` (recursively, `.gitkeep` excluded —
-`bin/generate-structure-manifest.mjs:288`), plus `claude/scaffold/CLAUDE.md` and
-`claude/scaffold/AGENTS.md`. `claude/scaffold/universal-rules.md` sits inside `claude/scaffold/` and
-is deliberately skipped — it is an install-side input, never copied into a project — so editing it
-is a scaffold edit that owes no regen. The map is at `bin/generate-structure-manifest.mjs:261-264`,
-applied by `workingTreeFiles()` (`bin/generate-structure-manifest.mjs:259-296`).
+## 4. Release behavior
 
-The manifest **as a file is wider than that snapshot**: it records every content hash fkit has ever
-shipped, so it also carries paths from two retired scaffold homes and paths no current scaffold file
-occupies at all — `ai-agents/reviews/README.md` is one such entry today. Those come from the
-git-history half of the walk (`bin/generate-structure-manifest.mjs:13-18`, `:67-81`), and no
-working-tree edit adds or removes them. Do not read the covered set above as an inventory of the
-`.tsv`.
+The tool validates the repository, branch, versions, and changelog before writes. It rechecks
+HEAD and re-reads the changelog immediately before mutation. It does not run test commands.
+`--no-test` is retained as an accepted no-op for existing callers.
 
-Stated as a negative, because it is the half people get wrong: editing `claude/skills/`,
-`claude/agents/`, or `claude/fkit-claude.sh` **does not require a regen** — none of them ship through
-the scaffold.
+A real release then:
 
-```sh
-npm run generate:manifest
-```
+1. bumps VERSION and package.json, stamps `## Unreleased` as `## v<version> — <date>`, and opens
+   a new empty Unreleased section;
+2. stages and commits the tree;
+3. pushes the branch unless `--no-push`;
+4. creates an annotated tag unless `--no-tag`;
+5. pushes the tag unless disabled.
 
-Commit the regenerated `claude/structure-manifest.tsv` **in the same change** as the edit that caused
-it (`test/structure-manifest.test.js:112`, `claude/structure-manifest.tsv:3`). Adding a *new*
-top-level entry to `claude/scaffold/` is **more** than a regen, not less: the generator refuses
-loudly and tells you which two halves of the walk to teach
-(`bin/generate-structure-manifest.mjs:268-277`), because whether a new file ships to a project is a
-decision, not a derivation. Teaching the generator is step one — you still have to run
-`npm run generate:manifest` afterwards and commit the result, or the tree is stale exactly as if you
-had skipped the regen entirely.
+`--no-bump` can finish a partially completed release without creating another version. Existing
+summary/recovery limitations still apply: a pre-existing local-only tag is reported unfinished
+and is not silently pushed. No npm-registry publication is performed.
 
-**2. Write the release notes.**
+The GitHub test workflows are manual-only (`workflow_dispatch`). Their disabled/enabled state
+is a separate repository setting; enabling a manual-only workflow does not add a push or cron
+trigger. The release tool does not check whether manual tests ran and never claims they passed.
 
-Every change the release ships goes under `## Unreleased` in [`CHANGELOG.md`](CHANGELOG.md), written
-for people who *use* fkit. `npm run release` refuses to run while that section is empty (or missing,
-or there twice), and it checks this **before** the test gate, so the refusal takes seconds, not
-minutes. The release then turns `## Unreleased` into `## v<x.y.z> — <date>` (§4). To release with
-nothing written there anyway, pass `--allow-empty-changelog`; it is loud, and the version section
-then says *"No changes were recorded for this release."*
+## 5. Verification limits
 
-**3. Run the tests yourself first.**
-
-```sh
-npm test
-npm run test:release
-```
-
-Not as the last line of defence — `npm run release` runs both for you (§4). Run them first because a
-red found before the release run costs nothing. `npm test` is
-`node --test test/*.test.js test/board/*.test.js` (`package.json:5`) and `npm run test:release` is the
-release tool's own test (`package.json:9`); for their times, see `CONTRIBUTING.md`'s Tests block.
-
-The release does **not** run prove-red (the four mutation cases); CI runs it nightly
-(`.github/workflows/prove-red.yml`). Check that the last nightly `prove-red` run is green on the
-repo's Actions tab. If you changed `claude/fkit-claude.sh`, `claude/skills-for-role.sh`,
-`claude/skill-ownership-hook.sh`, `test/launcher-contract.test.js`, `test/skill-ownership-hook.test.js`
-or `test/prove-red.sh` since that run, run it yourself:
-
-```sh
-npm run test:prove-red
-```
-
-**4. Decide the bump.**
-
-```sh
-npm run release          # patch
-npm run release:minor
-npm run release:major
-npm run release -- --version 1.2.3
-```
-
-`VERSION` is the source of truth and `package.json` is kept in sync with it. When deriving a bump the
-two must already agree, or the script aborts and asks you to reconcile them
-(`bin/release.mjs:210-215` — `version mismatch: VERSION=…`).
-
-**5. If unsure, dry-run it.**
-
-```sh
-npm run release:dry
-```
-
-It prints the whole plan and touches nothing — but note it **still runs the test gate** (about 2
-min), so a dry run is not a cheap run.
-
----
-
-## 4. What `npm run release` does for you
-
-**The test gate cannot be forgotten.** A release run executes `npm test`, then `npm run
-test:release`, before its first mutating line and refuses to release on the first red
-(`bin/release.mjs:319-367`, the `// --- test gate` block) —
-skipping it is possible, but only by asking for it explicitly with `--no-test` (`bin/release.mjs:98`,
-`const doTest`; `:363-366`, the `⚠ --no-test` banner), which §5 costs out. The position of the gate
-is deliberate: at that point nothing has been written, staged, committed, or tagged, so a red suite is a clean abort leaving the tree exactly as you left it. Gating any later
-would leave `VERSION` and `package.json` bumped and dirty, and the next default run would bump again
-(`bin/release.mjs:323-328`, *"POSITION IS LOAD-BEARING"*).
-
-**The changelog check runs before the gate, and again after it.** Before the test gate starts, the run
-refuses a `CHANGELOG.md` whose `## Unreleased` section is missing, duplicated, or empty
-(`bin/release.mjs:222-317`, `checkChangelog()`), so a forgotten changelog costs seconds. After the
-gate it reads the file **again** and repeats the check (`:396-399`, *"CHANGELOG.md, read AGAIN"*):
-an entry you add during the gate is kept, and a section emptied during it is still refused before
-the first write. On a run that does not bump (`--no-bump`, or `--version` set to the current
-version), a `## v<x.y.z>` section for that version means a partly-failed release already stamped it,
-and the run leaves the file as it is — so finishing that release with `--no-bump` works. A bumping
-run that finds a heading for the version it is about to release refuses instead: no release wrote it.
-
-Then, in order (`bin/release.mjs:401-479`, from the bump to the `// 3. tag` step):
-
-1. bump `VERSION` + `package.json`, and turn `## Unreleased` into `## v<version> — <date>` in
-   `CHANGELOG.md`, with a new empty `## Unreleased` above it
-2. `git add -A`
-3. commit
-4. push the branch
-5. create the annotated `v<version>` tag
-6. push the tag
-
-**The gate and CI cover different things, and neither replaces the other** — the argument is made in
-full at `.github/workflows/test.yml:3-11`. In short: the **gate** sees the working tree that
-`git add -A` is about to ship, including uncommitted and untracked work, which CI structurally
-cannot; **CI** covers `main`'s HEAD, which is what `install.sh` actually installs, and its verdict
-arrives after the push rather than before it.
-
-CI runs `npm test` on every push to `main`, on every pull request, and on demand via
-`workflow_dispatch` (`.github/workflows/test.yml:16-20`), and fails the job when `npm test` takes
-over its 120 s budget (`.github/workflows/test.yml:53-69`, the `npm test (budget, ADR-057 §D10)`
-step). It has been exercised on real pushes and has already caught a failure that a local run had
-not. Two of its settings are load-bearing rather than cosmetic: `fetch-depth: 0`
-(`.github/workflows/test.yml:41-45`), without which the manifest test refuses a shallow clone and the
-suite dies at module load; and `timeout-minutes: 10` (`.github/workflows/test.yml:36`), which stops a
-hung run from burning a runner. Prove-red runs in its own workflow, nightly at 03:17 UTC and on
-demand (`.github/workflows/prove-red.yml`), on `main`'s latest commit only — `CONTRIBUTING.md`'s
-Tests block lists its limits.
-
----
-
-## 5. What is still not covered
-
-- **`--no-test` can still ship an unverified tree.** It is loud — an unconditional stderr banner
-  fires (`bin/release.mjs:363-366`, *"⚠ --no-test: releasing WITHOUT running the suite"*) — and it is
-  never a default, but nothing blocks it.
-- **The changelog check proves the `## Unreleased` section is not empty — not that it is complete or
-  accurate.** One line of anything passes. And `--allow-empty-changelog` is loud (a stderr banner,
-  `bin/release.mjs:300-306`, plus a *"No changes were recorded"* line in the file), but nothing
-  blocks it.
-- **`install.sh`'s real network fetch is untested.** `test/update-reinstall.test.js` (case
-  `0481/install-sh-records`) runs it on a sealed PATH against a stub `curl` and a local tarball, which
-  covers its `.version` recording and the `fkit` wrapper it writes. The real download from GitHub —
-  the step every install actually depends on — is covered by neither the gate nor CI.
-- **The gate tests the tree as it stood when the suite started, not the exact committed bytes.** The
-  version bump is written after the suite runs, and minutes separate the gate from `git add -A`. This
-  is deliberate and documented in place (`bin/release.mjs:330-337`, *"IT DOES NOT REQUIRE A CLEAN
-  TREE"*).
-- **There is no npm-registry publish** (`bin/release.mjs:91`, *"Makes no npm-registry publish."*).
-  The tag and `main` are the whole distribution.
+- Manual tests can be skipped; a release may therefore ship unverified behavior.
+- The changelog guard proves a section has content, not that the notes are complete or accurate.
+- The installer's real network fetch is not covered by the existing sealed local fixtures.
+- Version stamping occurs after manual checks, so those checks do not verify the final version bytes.
+- Native Berd/Buzz import and model-backed workflows require app-level smoke testing; generated
+  files passing a local check do not prove those flows. See [native setup](docs/native-runtimes.md).

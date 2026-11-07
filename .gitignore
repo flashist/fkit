@@ -15,3 +15,8 @@
 
 # fkit-managed skills (refreshed by fkit-claude-init.sh)
 .claude/skills/fkit-*/
+
+# Canonical native resources live in native/ and claude/; these are generated project copies.
+.agents/agents/fkit-*.md
+.agents/skills/fkit-*/
+.agents/fkit-runtime/

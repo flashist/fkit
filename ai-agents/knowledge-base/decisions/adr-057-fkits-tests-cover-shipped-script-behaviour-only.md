@@ -1,5 +1,14 @@
 # ADR-057: fkit's tests cover shipped-script behaviour only — the test-scope reset (option D)
 
+> **Owner amendment — 2026-11-07, native-port session (typed response):**
+> "You can use tests while working on the task, but don't add more tests to it. Also, make sure
+> all previous automatic tests are disabled. If needed - you can test anything while working on the task."
+>
+> Automatic push/PR/nightly testing and release-triggered suites are disabled. Existing commands
+> remain available manually; no new permanent tests are authorized for this work. This supersedes
+> the automatic lanes and new-test approval workflow below. See CONTRIBUTING.md and RELEASING.md.
+> The historical decision text is preserved.
+
 - **Status:** **accepted** — owner sign-off 2026-10-19, via `AskUserQuestion`, `fkit lead` session
   (the `/fkit-sprint-ship-loop` run, Sprint 13). Question as shown: *"Q7 — Sign off ADR-057 (fkit's
   test-scope reset) as now written?"* Selected option text, verbatim: *"Sign off as written

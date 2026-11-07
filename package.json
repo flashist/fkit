@@ -8,13 +8,15 @@
     "test:docs": "node --test test/dual-home-parity.test.js test/task-id-uniqueness.test.js",
     "test:release": "node --test test/release/*.test.js",
     "board": "node bin/fkit-board.mjs",
+    "setup:berd": "node bin/fkit-native.mjs berd",
+    "setup:buzz": "node bin/fkit-native.mjs buzz",
     "generate:manifest": "node bin/generate-structure-manifest.mjs",
     "release": "node bin/release.mjs",
     "release:minor": "node bin/release.mjs --minor",
     "release:major": "node bin/release.mjs --major",
     "release:dry": "node bin/release.mjs --dry-run"
   },
-  "description": "A Claude Code agent team for software projects: seven roles — lead, producer, coder, reviewer, adversarial-reviewer, architect, and wiki — in role-locked sessions with scoped skills, plus a project scaffold. Reviews get an independent second opinion from Codex.",
+  "description": "A seven-role agent team for software projects, with Claude Code sessions and native Berd/Buzz setup, scoped procedures, independent review, and a shared project scaffold.",
   "license": "MIT",
   "author": "flashist",
   "repository": {

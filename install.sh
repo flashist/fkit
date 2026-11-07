@@ -11,7 +11,7 @@
 # script with the source and paths recorded in .version, and a normal `fkit` does a throttled check and
 # tells you when a newer version is published. It never updates itself behind your back.
 #
-# fkit runs on Claude Code (required) + Codex (optional but recommended: the reviewer's 2nd opinion).
+# Native setup must remain usable without the Claude executables.
 # Overrides: FKIT_REPO (default flashist/fkit), FKIT_REF (default main), FKIT_SHARE, FKIT_BIN.
 set -eu
 
@@ -41,6 +41,12 @@ echo "Installing fkit resources → $SHARE/claude"
 mkdir -p "$SHARE"
 rm -rf "$SHARE/claude"
 cp -R "$TMP/src/claude" "$SHARE/claude"
+if [ -f "$TMP/src/bin/fkit-native.mjs" ] && [ -d "$TMP/src/native" ]; then
+  mkdir -p "$SHARE/bin"
+  cp "$TMP/src/bin/fkit-native.mjs" "$SHARE/bin/fkit-native.mjs"
+  rm -rf "$SHARE/native"
+  cp -R "$TMP/src/native" "$SHARE/native"
+fi
 for s in fkit-claude.sh fkit-claude-init.sh; do
   [ -f "$SHARE/claude/$s" ] && chmod +x "$SHARE/claude/$s"
 done
@@ -85,9 +91,7 @@ BIN="$(CDPATH= cd -- "$BIN" && pwd)"
 rm -f "$SHARE/.update-check" "$SHARE/.latest" 2>/dev/null || true   # fresh throttle + clear stale "newer" cache
 echo "✓ Installed fkit v${ver:-?} ($(printf %s "${sha:-unknown}" | cut -c1-7))"
 
-# 2. install the global `fkit` launcher (a thin wrapper that execs the installed launcher)
-#    One runtime, so this is a direct exec — no flavor dispatch. `update` is NOT intercepted here:
-#    it falls through to fkit-claude.sh, which owns self-update (ADR-009 §3).
+# Central dispatch keeps installed and source-checkout behavior aligned.
 #    The "Reinstall:" hint puts the variables AFTER the pipe, on the `sh` that runs the installer, so a
 #    reinstall keeps this install's source and paths (task 0481). Known limit: a path containing `'`
 #    breaks the printed command (and one with `"` or `$` already breaks the `exec` line below).
@@ -102,7 +106,7 @@ cat > "$BIN/fkit" <<EOF
 # silently passing them through to claude as a stray argument, which is a confusing no-op.
 case "\${1:-}" in
   omnigent|claude)
-    echo "fkit: '\$1' is gone — fkit now has a single runtime (Claude Code + Codex)." >&2
+    echo "fkit: '\$1' is gone — use 'fkit <role>' for Claude sessions, or 'fkit berd|buzz' for native setup." >&2
     echo "      Just run:  fkit           …or:  fkit <role>" >&2
     exit 1 ;;
   reconnect|restart-team)
@@ -134,21 +138,18 @@ case ":$PATH:" in
     ;;
 esac
 
-# 4. Prerequisites. Claude Code is the runtime (required); Codex is optional but recommended — it makes
-#    the reviewer's second opinion an actually-independent one. Both are checked again (more precisely)
-#    at every `fkit` launch — this is the first-run heads-up. Node.js is needed by `fkit board` alone.
-#    None of these blocks the install.
+# Prerequisites depend on the chosen runtime; native setup must not require Claude.
 if ! command -v claude >/dev/null 2>&1; then
   echo
-  echo "⚠ Required: Claude Code — install from https://claude.com/claude-code"
+  echo "Claude sessions need Claude Code (https://claude.com/claude-code); native Berd/Buzz setup does not."
 fi
 if ! command -v codex >/dev/null 2>&1; then
   echo
-  echo "⚠ Recommended (optional): Codex — it gives the reviewer an independent second opinion from a"
+  echo "Optional for Claude sessions: Codex — it gives the reviewer an independent second opinion from a"
   echo "  different model. Without it, reviews fall back to Claude only, flagged NOT model-diverse."
   echo "    npm install -g @openai/codex   &&   codex login"
 fi
 if ! command -v node >/dev/null 2>&1; then
   echo
-  echo "Optional: Node.js — only \`fkit board\` needs it (https://nodejs.org)."
+  echo "Node.js is needed by \`fkit board\`, \`fkit berd\`, and \`fkit buzz\` (https://nodejs.org)."
 fi
