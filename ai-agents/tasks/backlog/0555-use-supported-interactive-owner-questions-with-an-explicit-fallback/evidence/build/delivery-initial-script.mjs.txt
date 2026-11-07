@@ -1,0 +1,62 @@
+
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { tmpdir } from 'node:os';
+import { pathToFileURL } from 'node:url';
+import { createHash } from 'node:crypto';
+import assert from 'node:assert/strict';
+const repo = process.cwd();
+const evidence = join(repo, 'ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery');
+const { setup } = await import(pathToFileURL(join(repo, 'codex/materialize.mjs')));
+const { launchArgs } = await import(pathToFileURL(join(repo, 'codex/fkit.mjs')));
+const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+const save = (name, bytes) => { const path = join(evidence, name); mkdirSync(dirname(path), {recursive:true}); writeFileSync(path, bytes); };
+const skills = ['fkit-plan-task','fkit-task-ship-loop','fkit-sprint-ship-loop','fkit-open-questions-interview'];
+const records = [];
+for (const additive of [false, true]) {
+  const root = mkdtempSync(join(tmpdir(), 'fkit-0555-delivery-'));
+  try {
+    const owner = Buffer.from('Owner body: preserve these exact bytes.\n');
+    for (const name of ['CLAUDE.md','AGENTS.md']) writeFileSync(join(root,name),owner);
+    const convention = 'ai-agents/knowledge-base/conventions/asking-the-owner.md';
+    if (additive) { mkdirSync(dirname(join(root,convention)),{recursive:true});writeFileSync(join(root,convention),owner); }
+    setup(root);
+    const copies = {};
+    for (const path of ['agents/fkit-lead.md', ...skills.map(name=>`skills/${name}/SKILL.md`)]) {
+      const delivered = readFileSync(join(root,'.claude',path));
+      assert.deepEqual(delivered,readFileSync(join(repo,'claude',path)));
+      copies['.claude/'+path] = sha(delivered);
+      if (!additive) save('.claude/'+path+'.txt',delivered);
+    }
+    for (const name of skills) {
+      const path = `.agents/skills/${name}/SKILL.md`, delivered = readFileSync(join(root,path));
+      copies[path] = sha(delivered);
+      if (!additive) save(path+'.txt',delivered);
+    }
+    const deliveredConvention = readFileSync(join(root,convention));
+    assert.deepEqual(deliveredConvention, additive ? owner : readFileSync(join(repo,'claude/scaffold',convention)));
+    for (const name of ['CLAUDE.md','AGENTS.md']) assert.ok(readFileSync(join(root,name)).subarray(0,owner.length).equals(owner));
+    if (!additive) {
+      for (const runtime of ['codex','claude']) {
+        const settings = {schemaVersion:1,default:{runtime,model:null},roles:{}};
+        for (const [label,role,headless,chain,controls] of [
+          ['coder-on','coder',false,['coder'],{}], ['coder-off','coder',false,['coder'],{planReview:false}],
+          ['coder-worker','coder',true,['lead','coder'],{}], ['coder-delegated-interactive','coder',false,['lead','coder'],{}],
+          ['lead-root','lead',false,['lead'],{}],
+        ]) {
+          const args = launchArgs(root,role,settings,'fixture prompt',headless,chain,'fixture-run',controls);
+          const instructions = runtime === 'codex' ? JSON.parse(args.find(arg=>arg.startsWith('developer_instructions=')).slice('developer_instructions='.length)) : args[args.indexOf('--append-system-prompt')+1];
+          save(`${runtime}-${label}-instructions.txt`,instructions);
+          const emitted = instructions.split('\n').filter(line=>line.startsWith('fkit session: coder · Plan review:'));
+          assert.equal(emitted.length,label === 'coder-on' || label === 'coder-off' ? 1 : 0);
+          if (label === 'coder-off') assert.ok(emitted[0].startsWith('fkit session: coder · Plan review: off'));
+          const serverArg = runtime === 'codex' ? JSON.parse(args.find(arg=>arg.startsWith('mcp_servers.fkit_roles.args=')).slice('mcp_servers.fkit_roles.args='.length)) : JSON.parse(args[args.indexOf('--mcp-config')+1]).mcpServers.fkit_roles.args;
+          assert.equal(serverArg[4], headless ? 'headless' : runtime === 'claude' ? 'native-owner' : 'interactive');
+          records.push({runtime,label,emittedSwitch:emitted,serverMode:serverArg[4],instructionsSha256:sha(instructions),kind:'argument delivery and static instruction capture; no CLI/model invocation'});
+        }
+      }
+    }
+    records.push({additive,canonicalClaudeCopies:copies,conventionPreservedOrDelivered:true,ownerBodiesPreserved:true});
+  } finally { rmSync(root,{recursive:true,force:true}); }
+}
+console.log(JSON.stringify({records,livePresentation:'unrun; unmet',modelCompliance:'unrun',claudeMixedLiveCompatibility:'unverified'},null,2));

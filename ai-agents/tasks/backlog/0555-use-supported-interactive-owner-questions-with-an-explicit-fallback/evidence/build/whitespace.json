@@ -1,0 +1,27 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "codex/server.mjs",
+    "codex/owner-question.mjs",
+    "codex/materialize.mjs",
+    "codex/README.md",
+    "claude/agents/fkit-lead.md",
+    "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+    "claude/skills/fkit-open-questions-interview/SKILL.md",
+    "claude/skills/fkit-plan-task/SKILL.md",
+    "claude/skills/fkit-task-ship-loop/SKILL.md",
+    "claude/scaffold/universal-rules.md",
+    "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+    "ai-agents/knowledge-base/conventions/asking-the-owner.md",
+    "claude/structure-manifest.tsv",
+    "CLAUDE.md",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "test/launcher-contract.test.js",
+    "ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md"
+  ],
+  "exit": 0
+}

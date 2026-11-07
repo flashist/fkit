@@ -1,0 +1,8 @@
+{
+  "command": "git diff --check -- claude/agents/fkit-lead.md claude/skills/fkit-sprint-ship-loop/SKILL.md codex/server.mjs codex/materialize.mjs codex/README.md CHANGELOG.md test/launcher-contract.test.js",
+  "childExit": 0,
+  "wrapperResult": "completed child and saved evidence",
+  "counts": {},
+  "failedNames": [],
+  "keptArtifacts": []
+}

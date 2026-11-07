@@ -8,6 +8,7 @@
 //
 // Nothing here writes into the repo: every project lives under os.tmpdir(). `git status` stays clean.
 
+import './execution-disabled.mjs';
 import { spawn } from 'node:child_process';
 import { mkdtempSync, writeFileSync, mkdirSync, chmodSync, readFileSync, readdirSync, existsSync, rmSync, cpSync, readlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';

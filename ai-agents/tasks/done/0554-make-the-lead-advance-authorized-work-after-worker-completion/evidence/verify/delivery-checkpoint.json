@@ -1,0 +1,7 @@
+{
+  "lane": "delivery",
+  "state": "started",
+  "dateUTC": "2026-11-06T08:53:50.731703+00:00",
+  "command": "node --input-type=module, inline disposable normal setup + launchArgs for both configured runtimes",
+  "scope": "No permanent tests; normal materialization only in fresh temporary root; no native config/install"
+}

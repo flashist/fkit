@@ -1,0 +1,252 @@
+(node:81683) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ Group A — argv contract
+  ✔ 1. role "lead" → --agent fkit-lead --settings .fkit/settings/lead.json (4696.288792ms)
+  ✔ 1. role "producer" → --agent fkit-producer --settings .fkit/settings/producer.json (3843.466583ms)
+  ✔ 1. role "coder" → --agent fkit-coder --settings .fkit/settings/coder.json (3934.190791ms)
+  ✔ 1. role "architect" → --agent fkit-architect --settings .fkit/settings/architect.json (3828.978292ms)
+  ✔ 1. role "reviewer" → --agent fkit-reviewer --settings .fkit/settings/reviewer.json (3752.913084ms)
+  ✔ 1. role "adversarial-reviewer" → --agent fkit-adversarial-reviewer --settings .fkit/settings/adversarial-reviewer.json (3647.734375ms)
+  ✔ 1. role "wiki" → --agent fkit-wiki --settings .fkit/settings/wiki.json (3714.675625ms)
+  ✔ 1b. alias "adv" → fkit-adversarial-reviewer (3987.26575ms)
+  ✔ 1b. alias "adversarial" → fkit-adversarial-reviewer (3523.34075ms)
+  ✔ 2. `fkit --resume` → non-zero, and claude was NEVER exec'd (36.923167ms)
+  ✔ 3. unknown first arg → non-zero, and claude was NEVER exec'd (37.129083ms)
+  ✔ 4. `fkit --help` → exit 0, no exec (38.214625ms)
+  ✔ 5. `fkit update` is not swallowed by the usage-error guard (40.451459ms)
+  ✔ 6. `fkit coder --debug` → passthrough after a named role (4048.566916ms)
+  ✔ 7. no args, no tty, initiated → --agent fkit-lead (4199.116958ms)
+✔ Group A — argv contract (43340.309834ms)
+▶ Group B — hook wiring
+  ✔ 8. lead: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (4549.649042ms)
+  ✔ 8. producer: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (3756.334042ms)
+  ✔ 8. coder: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (3250.751667ms)
+  ✔ 8. architect: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (2961.118834ms)
+  ✔ 8. reviewer: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (3302.424834ms)
+  ✔ 8. adversarial-reviewer: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (3756.119625ms)
+  ✔ 8. wiki: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (3785.527708ms)
+  ✔ 8b. lead: settings wire the Stop turn-completion hook (3725.248834ms)
+  ✔ 8b. producer: settings wire the Stop turn-completion hook (4496.224583ms)
+  ✔ 8b. coder: settings wire the Stop turn-completion hook (3904.052417ms)
+  ✔ 8b. architect: settings wire the Stop turn-completion hook (2532.650166ms)
+  ✔ 8b. reviewer: settings wire the Stop turn-completion hook (2647.371042ms)
+  ✔ 8b. adversarial-reviewer: settings wire the Stop turn-completion hook (2801.977875ms)
+  ✔ 8b. wiki: settings wire the Stop turn-completion hook (2782.570208ms)
+  ✔ 8c. lead: settings wire the UserPromptExpansion ship-loop marker hook (2715.412167ms)
+  ✔ 8c. producer: settings wire the UserPromptExpansion ship-loop marker hook (2670.460917ms)
+  ✔ 8c. coder: settings wire the UserPromptExpansion ship-loop marker hook (2741.723833ms)
+  ✔ 8c. architect: settings wire the UserPromptExpansion ship-loop marker hook (2636.078042ms)
+  ✔ 8c. reviewer: settings wire the UserPromptExpansion ship-loop marker hook (2687.182458ms)
+  ✔ 8c. adversarial-reviewer: settings wire the UserPromptExpansion ship-loop marker hook (2695.750625ms)
+  ✔ 8c. wiki: settings wire the UserPromptExpansion ship-loop marker hook (2671.281583ms)
+  ✔ 9. no role's settings carry a skillOverrides key any more (retired, task 43) (18348.248042ms)
+  ✔ 10. the hook script the settings point at exists on disk (0.453416ms)
+✔ Group B — hook wiring (85421.213959ms)
+▶ Group C — degradation & fresh-project routing
+  ✔ 11. read-only project → inline --settings carries the hook wiring (5062.338083ms)
+  ✔ 12. fresh project, no role → producer cold-start, then the lead (6048.930791ms)
+  ✔ 12b. fresh project with a completed intake → the intake-aware seed (5258.0475ms)
+  ✔ 12c. cold start that does not initiate → no lead hand-off (5339.276875ms)
+  ✔ 12d. initiated tree but a non-zero cold start → no lead hand-off, code propagated (5355.215667ms)
+✔ Group C — degradation & fresh-project routing (27064.515375ms)
+▶ Group D — plan-review session line
+  ✔ D1. `fkit coder` → the on line, passed by file (2767.603917ms)
+  ✔ D2. `fkit coder --no-plan-review` → consumed; the off line (2644.9475ms)
+  ✔ D3. `fkit coder --plan-review` → a consumed no-op; the on line (2571.518875ms)
+  ✔ D4. both flags together → usage error, claude NEVER exec'd (30.731042ms)
+  ✔ D5. `fkit lead --no-plan-review` → usage error, claude NEVER exec'd (24.15725ms)
+  ✔ D5. `fkit architect --plan-review` → usage error, claude NEVER exec'd (30.155334ms)
+  ✔ D6. the owner's own --append-system-prompt passes through unchanged (2731.966917ms)
+  ✔ D7. `fkit coder --resume` still passes through (2608.569542ms)
+  ✔ D8. after a `--` separator the token is the owner's literal text (2903.333458ms)
+  ✔ D9. `fkit coder --append-system-prompt-file f` → usage error, claude NEVER exec'd (30.693334ms)
+  ✔ D9. `fkit coder --append-system-prompt-file=f` → usage error, claude NEVER exec'd (32.578916ms)
+  ✔ D11. the token is taken out even as another option's value (2755.066ms)
+  ✔ D12. `fkit lead -- --no-plan-review` passes through: no usage error after `--` (2759.001167ms)
+  ✔ D13. the token is taken out wherever it sits; the other args keep their order (2603.070917ms)
+✔ Group D — plan-review session line (24494.776833ms)
+✔ bare first use: real terminal rejects runtime blanks, invalid input, EOF and SIGINT without persistence (2780.701875ms)
+✔ bare first use: invalid configuration, later EOF/SIGINT and declined save never set up or launch (5329.613541ms)
+✖ bare first use: each runtime saves once and continues fresh onboarding or existing-project menu (2318.580959ms)
+✔ bare first use: saved mixed overrides skip configuration, refresh managed files and preserve owner bytes (7764.456291ms)
+✔ bare first use: invalid existing files and unavailable runtimes never reconfigure or launch (24916.53675ms)
+✖ bare first use: management, explicit routes and partial terminal fds preserve their contracts (16995.963917ms)
+✔ bare first use: missing Node stops only the new entry, and old Codex stops before save (6313.874334ms)
+✔ configured runtimes: direct roles select their own CLI/model and preserve saved settings (51189.542333ms)
+✔ configured owner questions: single-field choices and explicit custom answers preserve consent (6.13775ms)
+✔ configured effort: reset/inherit are distinct and invalid choices preserve saved files (22784.777959ms)
+✔ configured interview: model-specific effort, role customization, blanks and unknown catalogs (15.304333ms)
+✔ configured runtimes: changing default retains existing role choices and invalid choices never launch (4531.539833ms)
+✔ public dispatcher: an unconfigured project retains the existing Claude launcher contract (17540.8635ms)
+✔ configured delegation: fresh peers use their runtime, model and effort and report observed identity separately (4054.183709ms)
+✔ public dispatcher: legacy path does not invoke Node from PATH; source checkout self-hosts (15131.838125ms)
+✔ lead forwarding entries: native catalog, fixed-caller MCP and repeat setup share role-invariant artifacts (34729.16025ms)
+✔ lead worker transport: exact data, full reports, errors, saved peer settings and topology (12927.236333ms)
+✔ lead owner channel: synthetic decisions wait and preserve cancel, decline and explanation without launching workers (7035.883583ms)
+ℹ tests 75
+ℹ suites 4
+ℹ pass 73
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 420426.374625
+
+✖ failing tests:
+
+test at test/launcher-contract.test.js:647:1
+✖ bare first use: each runtime saves once and continues fresh onboarding or existing-project menu (2318.580959ms)
+  AssertionError [ERR_ASSERTION]: Choose a project runtime:
+  1. Codex
+  2. Claude
+  0. Cancel
+  Runtime [1/codex, 2/claude, 0/cancel]: codex
+  Local Codex model catalog (account access is verified when invoked):
+  1. chosen-codex — chosen-codex
+  Choose a number or exact ID; default follows the Codex model default.
+  Default codex model ID [runtime default; blank keeps it]: chosen-codex
+  
+  Default reasoning effort:
+  1. low
+  2. high
+  Default effort [number or name; runtime default; blank keeps it; default follows CLI]: high
+  Customize models or effort for individual roles? [y/N] y
+  
+  Roles available to customize:
+  1. lead
+  2. producer
+  3. coder
+  4. reviewer
+  5. adversarial-reviewer
+  6. architect
+  7. wiki
+  0. Done — review and save
+  Roles to customize [numbers or names, separated by spaces or commas; 0/done or blank finishes]: wiki
+  
+  wiki model choices:
+  Local Codex model catalog (account access is verified when invoked):
+  1. chosen-codex — chosen-codex
+  Choose a number or exact ID; default follows the Codex model default.
+  wiki model [number or exact ID; blank keeps inherited; default follows CLI; inherit removes override]: 
+  
+  wiki reasoning effort:
+  1. low
+  2. high
+  wiki effort [number or name; inherited: high; blank keeps it; default follows CLI; inherit uses project effort]: low
+  
+  Roles available to customize:
+  1. lead
+  2. producer
+  3. coder
+  4. reviewer
+  5. adversarial-reviewer
+  6. architect
+  7. wiki
+  0. Done — review and save
+  Roles to customize [numbers or names, separated by spaces or commas; 0/done or blank finishes]: done
+  lead: codex / chosen-codex / effort: high [default]
+  producer: codex / chosen-codex / effort: high [default]
+  coder: codex / chosen-codex / effort: high [default]
+  reviewer: codex / chosen-codex / effort: high [default]
+  adversarial-reviewer: codex / chosen-codex / effort: high [default]
+  architect: codex / chosen-codex / effort: high [default]
+  wiki: codex / chosen-codex / effort: low [role override]
+  A distinct adversarial role runs even with one model; a different model is recommended.
+  Save these settings? [y/N] y
+  lead: codex / chosen-codex / effort: high [default]
+  producer: codex / chosen-codex / effort: high [default]
+  coder: codex / chosen-codex / effort: high [default]
+  reviewer: codex / chosen-codex / effort: high [default]
+  adversarial-reviewer: codex / chosen-codex / effort: high [default]
+  architect: codex / chosen-codex / effort: high [default]
+  wiki: codex / chosen-codex / effort: low [role override]
+  A distinct adversarial role runs even with one model; a different model is recommended.
+  Saved. Model IDs go to their selected CLI; account availability is checked when invoked.
+  fixture-codex:
+  fixture-codex:
+  
+  __FKIT_TERMINAL_EXIT__0
+  
+  
+  9 !== 15
+  
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js:669:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 9,
+    expected: 15,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/launcher-contract.test.js:783:1
+✖ bare first use: management, explicit routes and partial terminal fds preserve their contracts (16995.963917ms)
+  Error: terminal timeout (step 0/1):
+  ⚙ fkit added new paths to ai-agents/ (create-if-absent; nothing existing was changed):
+      README.md
+      knowledge-base/conventions/
+      knowledge-base/conventions/README.md
+      knowledge-base/conventions/asking-the-owner.md
+      knowledge-base/conventions/code-comments.md
+      knowledge-base/conventions/dependency-declaration-form.md
+      knowledge-base/conventions/durable-citation-anchors.md
+      knowledge-base/conventions/evidence-before-assertion.md
+      knowledge-base/conventions/one-skill-one-output.md
+      knowledge-base/conventions/placement-questions-state-the-knock-on.md
+      knowledge-base/conventions/priority-is-rank-not-identity.md
+      knowledge-base/conventions/sprint-status-vocabulary.md
+      knowledge-base/conventions/status-report-format.md
+      knowledge-base/conventions/task-owner-vocabulary.md
+      knowledge-base/conventions/task-status-vocabulary.md
+      knowledge-base/decisions/
+      knowledge-base/decisions/.gitkeep
+      knowledge-base/history/
+      knowledge-base/history/.gitkeep
+      knowledge-base/incidents/
+      knowledge-base/incidents/.gitkeep
+      knowledge-base/reports/
+      knowledge-base/reports/.gitkeep
+      sprints/
+      sprints/.gitkeep
+      sprints/done/
+      sprints/done/.gitkeep
+      tasks/
+      tasks/README.md
+      tasks/backlog/
+      tasks/backlog/.gitkeep
+      tasks/cancelled/
+      tasks/cancelled/.gitkeep
+      tasks/done/
+      tasks/done/.gitkeep
+      wiki-vault/
+      wiki-vault/index.md
+      wiki-vault/log.md
+      wiki-vault/schema.md
+      wiki-vault/wiki/
+      wiki-vault/wiki/decisions/
+      wiki-vault/wiki/decisions/.gitkeep
+      wiki-vault/wiki/features/
+      wiki-vault/wiki/features/.gitkeep
+      wiki-vault/wiki/systems/
+      wiki-vault/wiki/systems/.gitkeep
+      wiki-vault/wiki/tasks/
+      wiki-vault/wiki/tasks/.gitkeep
+    Renamed one of these? fkit cannot tell a rename from a deletion, so you now have both —
+    delete the new one and list it in ai-agents/.fkit-keep-out to stop it coming back.
+  • created CLAUDE.md
+  • updated the fkit rules block in CLAUDE.md
+  • created AGENTS.md
+  • updated the fkit rules block in AGENTS.md
+  
+  
+      at ChildProcess.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/harness.mjs:344:30)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at Socket.<anonymous> (node:internal/child_process:457:11)
+      at Socket.emit (node:events:508:28)
+      at Pipe.<anonymous> (node:net:346:12)

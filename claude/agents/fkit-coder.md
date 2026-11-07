@@ -40,10 +40,21 @@ interview runs on — see [Output format](#output-format).**
 - **Explain first, in chat:** what the choice is, why it matters, what each option changes — short
   enough to stay visible above the dialog; if it needs more, explain, end the turn (no question line
   other than the **What's next?** heading), ask next turn. Keep the question and option descriptions
-  short; batch related questions; recommended option first, marked.
+  short; one independent decision per question; recommended option first, marked.
 - **Last option, every question, once:** label `Explain more, then ask again`,
   description `Give me more context in simple terms, then re-ask the question.`
-  With 4 real options, merge or drop the weakest so it fits.
+  Respect the actual option limit; never silently drop alternatives or merge unrelated effects.
+  Narrow faithfully or stage selection transparently per the shared convention; staging grants no action.
+- **Separate decisions and answers:** use separate question objects only if the interface supports
+  that shape/count and trustworthy identity; otherwise ask sequentially (current Codex: one
+  `fkit_ask_owner` call at a time, no `questions` array). Keep a stable key, unchanged scope/options
+  and each actual answer's quote, date and channel; never bind by list order or repeated labels.
+  Retain valid partial answers and pending items. Plan approval and retry allowance are separate;
+  neither grants the other. Any explanation request stops all new dialogs that turn.
+  Workers return one `NEEDS-DECISION { decisions: [{ id, question, options, recommendation, context },
+  ...] }` for multiple decisions, at most 3 real options and plain context per item; the legacy
+  single-question envelope remains valid. Workers never ask forms. Pair owner-visible task IDs
+  with canonical titles; preserve each option's placement/dependency knock-on.
 - **A reply that is not a choice** — typed text that asks something, or that last option — is not an
   answer and not consent: answer it in full, in chat (plain words, a concrete example, what each option
   means in practice); open no new question that turn; end it with no question line other than the
@@ -314,9 +325,9 @@ or something you did not do stays in the report — said in fewer words, never d
 ### 3. End by interviewing the owner on any open questions
 **If open questions for the owner remain, ask them — do not merely list them and stop.**
 
-- **In a session:** use `AskUserQuestion`, per *Asking the owner* above. Batch related questions into
-  one call rather than interrogating one at a time; give each option a real consequence, and mark your
-  recommendation `(Rec)` where you have one. A question with no recommendation is fine; a question you
+- **In a session:** use `AskUserQuestion`, per *Asking the owner* above. Group separate decision
+  objects only when supported; otherwise ask sequentially. Give each option a real consequence and
+  mark your recommendation `(Rec)` where you have one. A question with no recommendation is fine; a question you
   could have answered yourself is not.
 - **In a spawned consult:** `AskUserQuestion` is **absent** ([ADR-021](../../ai-agents/knowledge-base/decisions/adr-021-askuserquestion-is-session-only-absent-in-consults.md)).
   **Do not attempt it; return the open questions in your reply instead** — the two-hop consult contract
@@ -324,10 +335,9 @@ or something you did not do stays in the report — said in fewer words, never d
   error** — the tool is simply not in your toolset and is not discoverable via `ToolSearch`. That is
   the *safest* mode, and it is also why this fallback is **mandatory rather than a courtesy**: nothing
   will fail loudly to remind you, so silently dropping the questions strands a decision nobody knows
-  was needed. **Returning a question when spawned:** a `NEEDS-DECISION` carries at most 3 options —
-  the relayer adds the standing option as the 4th, and if you send 4 it merges the two
-  least-recommended into one — plus a plain-language `context` with enough for the relayer to explain
-  the choice without asking you back.
+  was needed. **Returning decisions when spawned:** use the separate items in *Asking the owner*,
+  at most 3 real options and plain context per item. The relayer adds the standing option and uses
+  transparent narrowing/staging for an overfull set; no valid alternative is silently lost.
 - **A placement or dependency question names its knock-on — in both cases above.** Every option that
   puts a task in a sprint (or on the Backlog board) or re-points a `Depends on:` link says which open
   tasks would then wait on which sprint — the recommended option too, and a `NEEDS-DECISION` as much as

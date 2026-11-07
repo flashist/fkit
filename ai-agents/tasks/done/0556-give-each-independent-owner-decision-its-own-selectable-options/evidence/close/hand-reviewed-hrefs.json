@@ -1,0 +1,296 @@
+[
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 20,
+    "href": "../knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md",
+    "target": "ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 128,
+    "href": "../tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "target": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 129,
+    "href": "../tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "target": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 130,
+    "href": "../tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md",
+    "target": "ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 131,
+    "href": "../tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md",
+    "target": "ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 132,
+    "href": "../tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md",
+    "target": "ai-agents/tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 154,
+    "href": "../tasks/backlog/0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md",
+    "target": "ai-agents/tasks/backlog/0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 185,
+    "href": "../tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md",
+    "target": "ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 186,
+    "href": "../tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md",
+    "target": "ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 187,
+    "href": "../tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md",
+    "target": "ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 188,
+    "href": "../tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md",
+    "target": "ai-agents/tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 198,
+    "href": "../tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md",
+    "target": "ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 199,
+    "href": "../tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "target": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 200,
+    "href": "../tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "target": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 201,
+    "href": "../tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "target": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 202,
+    "href": "../tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md",
+    "target": "ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 203,
+    "href": "../tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md",
+    "target": "ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 204,
+    "href": "../tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md",
+    "target": "ai-agents/tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 209,
+    "href": "../tasks/done/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md",
+    "target": "ai-agents/tasks/done/0284-bound-the-update-checks-git-path-which-has-no-deadline-and-hangs/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 212,
+    "href": "../knowledge-base/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md",
+    "target": "ai-agents/knowledge-base/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 24,
+    "href": "../../done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "target": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 25,
+    "href": "../../../sprints/sprint-15.md",
+    "target": "ai-agents/sprints/sprint-15.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 138,
+    "href": "../../done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "target": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 146,
+    "href": "../../done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "target": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 149,
+    "href": "../../done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "target": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 153,
+    "href": "../../done/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/brief.md",
+    "target": "ai-agents/tasks/done/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 155,
+    "href": "../0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md",
+    "target": "ai-agents/tasks/backlog/0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 172,
+    "href": "../../done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "target": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 175,
+    "href": "../../done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "target": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "line": 28,
+    "href": "../../done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "target": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "line": 29,
+    "href": "../../../sprints/sprint-15.md",
+    "target": "ai-agents/sprints/sprint-15.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "line": 82,
+    "href": "../../backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "target": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "line": 98,
+    "href": "../../backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "target": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "line": 101,
+    "href": "../../backlog/0487-add-the-task-id-spawn-line-and-the-task-relay-tag-to-both-ship-loop-skills/brief.md",
+    "target": "ai-agents/tasks/backlog/0487-add-the-task-id-spawn-line-and-the-task-relay-tag-to-both-ship-loop-skills/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "line": 104,
+    "href": "../../backlog/0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md",
+    "target": "ai-agents/tasks/backlog/0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "line": 106,
+    "href": "../../backlog/0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md",
+    "target": "ai-agents/tasks/backlog/0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "line": 109,
+    "href": "../../done/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/brief.md",
+    "target": "ai-agents/tasks/done/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "line": 66,
+    "href": "../../backlog/0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md",
+    "target": "ai-agents/tasks/backlog/0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "line": 99,
+    "href": "../../backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "target": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "line": 101,
+    "href": "../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "target": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "line": 104,
+    "href": "../../backlog/0499-decide-how-a-lead-clear-handoff-carries-context-across-a-clear/brief.md",
+    "target": "ai-agents/tasks/backlog/0499-decide-how-a-lead-clear-handoff-carries-context-across-a-clear/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  },
+  {
+    "file": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "line": 106,
+    "href": "../../backlog/0490-report-the-autonomous-after-plan-approval-count/brief.md",
+    "target": "ai-agents/tasks/backlog/0490-report-the-autonomous-after-plan-approval-count/brief.md",
+    "check": "manually reviewed relative depth and explicit ls -l target listing; no automated link checker"
+  }
+]

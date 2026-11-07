@@ -1,0 +1,21 @@
+{
+  "step": "31",
+  "childExit": 1,
+  "counts": {
+    "tests": 75,
+    "suites": 4,
+    "pass": 72,
+    "fail": 3,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "failedNames": [
+    "12b. fresh project with a completed intake \u2192 the intake-aware seed",
+    "Group C \u2014 degradation & fresh-project routing",
+    "bare first use: management, explicit routes and partial terminal fds preserve their contracts",
+    "bare first use: saved mixed overrides skip configuration, refresh managed files and preserve owner bytes"
+  ],
+  "output": "continuation-01-step-31.log",
+  "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+}

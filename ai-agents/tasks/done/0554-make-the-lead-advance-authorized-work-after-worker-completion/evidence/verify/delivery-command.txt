@@ -1,0 +1,39 @@
+Executed command: node --input-type=module <<'JS'
+import {mkdtempSync,readFileSync,rmSync,writeFileSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+import {setup,KIT} from './codex/materialize.mjs';
+import {launchArgs} from './codex/fkit.mjs';
+const E='ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify';
+writeFileSync(join(E,'delivery-attempt2-checkpoint.json'),JSON.stringify({state:'started',scope:'Correct evidence comparison for existing normal sprint adapter; no source edits'})+'\n');
+const root=mkdtempSync(join(tmpdir(),'fkit-0554-delivery-')); const checks=[];
+const hash=s=>createHash('sha256').update(s).digest('hex');
+try {
+ setup(root);
+ for(const suffix of ['agents/fkit-lead.md','skills/fkit-sprint-ship-loop/SKILL.md']) {
+  const canonical=readFileSync(join(KIT,'claude',suffix),'utf8'), delivered=readFileSync(join(root,'.claude',suffix),'utf8');
+  assert.equal(delivered,canonical);checks.push({path:'.claude/'+suffix,via:'setup → canonical initializer',result:'PASS byte-identical',sha256:hash(delivered)});
+ }
+ const skill=readFileSync(join(KIT,'claude/skills/fkit-sprint-ship-loop/SKILL.md'),'utf8');
+ const generated=readFileSync(join(root,'.agents/skills/fkit-sprint-ship-loop/SKILL.md'),'utf8');
+ const old='— that is the one state without a model-diverse review. ⚠️ A **reasoning-only second\n  opinion** IS model-diverse (a different model reasoned over the diff); it is reported, not flagged.';
+ const expected=skill.replace(old,'— the second pass was unavailable. Report actual model diversity separately; a usable same-model or reasoning-only pass does not itself make a run degraded.').replaceAll('six Claude-side roles','six ordinary roles').replaceAll('Codex unavailable','adversarial unavailable').replaceAll('No Codex pass after retries','No usable adversarial pass after retries').replaceAll('.claude/skills/','.agents/skills/')+'\n<!-- fkit-codex-generated -->\n';
+ assert.equal(generated,expected);
+ checks.push({path:'.agents/skills/fkit-sprint-ship-loop/SKILL.md',via:'setup → normal skillText materialization',result:'PASS complete adapted canonical body',sha256:hash(generated)});
+ for(const runtime of ['codex','claude']) {
+  const args=launchArgs(root,'lead',{schemaVersion:1,default:{runtime,model:null},roles:{}},'',false);
+  const instruction=runtime==='codex'?JSON.parse(args.find(a=>a.startsWith('developer_instructions=')).slice('developer_instructions='.length)):args[args.indexOf('--append-system-prompt')+1];
+  assert.ok(instruction.includes('Completion returns to the awaiting live turn'));
+  assert.ok(instruction.includes('Shell fallback callers must inspect exit status and returned text themselves.'));
+  const leadBody=readFileSync(join(KIT,'claude/agents/fkit-lead.md'),'utf8').replace(/^---\n[\s\S]*?\n---\n/,'');
+  assert.ok(instruction.includes(leadBody));
+  checks.push({path:runtime==='codex'?'configured Codex developer_instructions argv':'configured Claude --append-system-prompt argv',via:'launchArgs → instructions → runtime binding + full canonical lead body',result:'PASS',instructionSha256:hash(instruction),liveProviderExecuted:false});
+ }
+ const before=hash(generated);setup(root);assert.equal(hash(readFileSync(join(root,'.agents/skills/fkit-sprint-ship-loop/SKILL.md'),'utf8')),before);
+ checks.push({path:'repeat normal setup',result:'PASS same generated driver bytes'});
+ writeFileSync(join(E,'delivery.json'),JSON.stringify({command:'inline node --input-type=module; normal setup and launchArgs API, no CLI provider calls',childExit:0,checks,limits:['Models not invoked; behavior obedience and host resumption unverified.','Claude binding argv assembled; live Claude compatibility unverified.']},null,2)+'\n');
+ console.log(JSON.stringify({childExit:0,checks}));
+} catch(error) {writeFileSync(join(E,'delivery-attempt2-failure.json'),JSON.stringify({childExit:1,message:error.message.slice(0,1000),checks},null,2)+'\n');throw error;} finally {rmSync(root,{recursive:true,force:true});}
+JS

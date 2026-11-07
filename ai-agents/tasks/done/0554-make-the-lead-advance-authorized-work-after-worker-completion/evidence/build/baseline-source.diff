@@ -1,0 +1,15 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index fa1d0c4..9ce12f8 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -11,6 +11,10 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes 
+ 
+ ## Unreleased
+ 
++- Automatic update checks silently skip Git URLs rewritten to SSH or other non-HTTPS transports.
++
++- Remove test runtime budgets, idle-machine gates and repository CI job time caps.
++
+ - `fkit board` retries once with an OS-assigned free port when default port 8585 is busy; explicit
+   ports remain strict. It requests browser opening on macOS/Linux when both stdin and stdout are
+   terminals, with `--open` / `--no-open` overrides. The printed URL shows the actual port; opener

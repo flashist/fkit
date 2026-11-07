@@ -8,8 +8,8 @@
 // template a consuming project receives at init) hold some of the same documents.
 // `knowledge-base/conventions/dual-home-parity.md` requires an fkit-authored file living in both homes
 // to be byte-identical in both. This test walks BOTH trees, subtracts
-// `test/dual-home-parity-exceptions.mjs` (task 0132's authoritative exception list), and asserts what
-// is left is present in both homes and byte-identical.
+// `test/dual-home-parity-exceptions.mjs` (authored path exceptions) and untracked regular
+// `.DS_Store` metadata, so incidental OS files cannot hide authored parity failures.
 //
 // ⚠️ READ THIS BEFORE READING ADR-027 — THE ADR IS STALE ON THIS POINT (owner ruling, 2026-08-01).
 // ADR-027 §Decision 2 still mandates byte-aligning every dual-homed file on disk. The owner OVERRULED
@@ -108,9 +108,10 @@
 
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync, mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
+import { readdirSync, readFileSync, mkdtempSync, mkdirSync, writeFileSync, lstatSync, symlinkSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { join, dirname, basename } from 'node:path';
+import { join, dirname, basename, resolve, relative } from 'node:path';
 import { REPO, cleanup } from './harness.mjs';
 import { exceptions, findException } from './dual-home-parity-exceptions.mjs';
 
@@ -144,6 +145,43 @@ const REASON_FLOOR = 30;
 
 // ── The pure functions under test ────────────────────────────────────────────────────────────────
 
+export function acquireTrackedPaths(repositoryRoot = REPO, runner = execFileSync) {
+  let output;
+  try {
+    output = runner('git', ['ls-files', '-z', '--'], { cwd: repositoryRoot });
+  } catch (err) {
+    throw new Error('dual-home parity: cannot acquire Git tracked paths', { cause: err });
+  }
+  const paths = output.toString().split('\0');
+  if (paths.at(-1) === '') paths.pop();
+  return new Set(paths.map((p) => resolve(repositoryRoot, p)));
+}
+
+const TRACKED_PATHS = acquireTrackedPaths();
+
+function classificationContext(liveRoot, scaffoldRoot, trackedPaths, inspect) {
+  return {
+    exclude(p) {
+      if (basename(p) !== '.DS_Store') return false;
+      const pair = [resolve(liveRoot, p), resolve(scaffoldRoot, p)];
+      for (const candidate of pair) {
+        let entry;
+        try {
+          entry = inspect(candidate);
+        } catch (err) {
+          if (err.code === 'ENOENT') continue;
+          throw new Error(`dual-home parity: cannot inspect metadata ${candidate}`, { cause: err });
+        }
+        if (!entry.isFile()) {
+          throw new Error(`dual-home parity: metadata must be a regular file: ${candidate}`);
+        }
+      }
+      // Tracking on either side retains both copies so a prune point cannot conceal drift.
+      return !pair.some((candidate) => trackedPaths.has(candidate));
+    },
+  };
+}
+
 /**
  * Walk one home, applying the exception list as it goes.
  * Returns the home-relative POSIX paths that remain ENFORCED, plus every DIRECTORY the walk stopped
@@ -153,7 +191,7 @@ const REASON_FLOOR = 30;
  * @param {string} root
  * @returns {{ files: Set<string>, prunePoints: Set<string> }}
  */
-export function walkHome(root) {
+export function walkHome(root, context) {
   const files = new Set();
   const prunePoints = new Set();
   const descend = (rel) => {
@@ -165,6 +203,7 @@ export function walkHome(root) {
     }
     for (const e of entries) {
       const p = rel ? `${rel}/${e.name}` : e.name;
+      if (context.exclude(p)) continue;
       if (findException(p)) {
         // RULE 1: prune. A directory entry means "outside the surface entirely" — do not descend.
         if (e.isDirectory()) prunePoints.add(p);
@@ -185,7 +224,7 @@ export function walkHome(root) {
  * @param {string} rel
  * @returns {Set<string>}
  */
-function collectAll(root, rel) {
+function collectAll(root, rel, context) {
   const out = new Set();
   const descend = (r) => {
     let entries;
@@ -196,6 +235,7 @@ function collectAll(root, rel) {
     }
     for (const e of entries) {
       const p = `${r}/${e.name}`;
+      if (context.exclude(p)) continue;
       if (e.isDirectory()) descend(p);
       else out.add(p);
     }
@@ -285,9 +325,14 @@ export function checkExceptionList(list) {
  * @param {string} liveRoot
  * @param {string} scaffoldRoot
  */
-export function compareHomes(liveRoot, scaffoldRoot) {
-  const live = walkHome(liveRoot);
-  const scaffold = walkHome(scaffoldRoot);
+export function compareHomes(liveRoot, scaffoldRoot, {
+  trackedPaths = TRACKED_PATHS, inspect = lstatSync,
+} = {}) {
+  liveRoot = resolve(liveRoot);
+  scaffoldRoot = resolve(scaffoldRoot);
+  const context = classificationContext(liveRoot, scaffoldRoot, trackedPaths, inspect);
+  const live = walkHome(liveRoot, context);
+  const scaffold = walkHome(scaffoldRoot, context);
 
   // RULE 2: the tripwire, over the prune points of BOTH homes (a prune point can exist on one side
   // only — `.fkit/` is live-only — and the file it hides still has to be co-present to count).
@@ -295,8 +340,8 @@ export function compareHomes(liveRoot, scaffoldRoot) {
   const prunePoints = [...new Set([...live.prunePoints, ...scaffold.prunePoints])].sort();
   const hidden = [];
   for (const dir of prunePoints) {
-    const inLive = collectAll(liveRoot, dir);
-    const inScaffold = collectAll(scaffoldRoot, dir);
+    const inLive = collectAll(liveRoot, dir, context);
+    const inScaffold = collectAll(scaffoldRoot, dir, context);
     for (const p of [...inLive].sort()) {
       if (!inScaffold.has(p)) continue;
       if (basename(p) === '.gitkeep') continue;
@@ -547,6 +592,67 @@ test('synthetic: a file present in one home only fails, in BOTH directions', () 
   const msg = describeMissing('knowledge-base/conventions/live-only.md', 'live');
   assert.match(msg, /MISSING from claude\/scaffold\/ai-agents\//);
   assert.match(msg, /knowledge-base\/conventions\/live-only\.md/);
+
+
+  for (const path of ['.DS_Store', 'knowledge-base/conventions/.DS_Store']) {
+    for (const contents of [['live', null], [null, 'scaffold'], ['live', 'scaffold']]) {
+      const homes = fixtureHomes({ 'kept.md': ['same', 'same'], [path]: contents });
+      const clean = compareHomes(homes.liveRoot, homes.scaffoldRoot);
+      assert.deepEqual(clean.enforced, ['kept.md']);
+      assert.deepEqual([clean.onlyInLive, clean.onlyInScaffold, clean.differing,
+        clean.unreadable, clean.hidden], [[], [], [], [], []]);
+      for (const trackedRoot of [homes.liveRoot, homes.scaffoldRoot]) {
+        const retained = compareHomes(homes.liveRoot, homes.scaffoldRoot, {
+          trackedPaths: new Set([resolve(trackedRoot, path)]),
+        });
+        assert.ok(retained.enforced.includes(path));
+        assert.deepEqual(retained.onlyInLive, contents[1] === null ? [path] : []);
+        assert.deepEqual(retained.onlyInScaffold, contents[0] === null ? [path] : []);
+        assert.deepEqual(retained.differing.map((d) => d.path),
+          contents.every((c) => c !== null) ? [path] : []);
+      }
+    }
+  }
+
+  const authored = fixtureHomes({
+    'kept.md': ['same', 'same'],
+    '.DS_Store.md': ['live', null],
+    '.authored': [null, 'scaffold'],
+    'knowledge-base/conventions/.authored': ['live', 'scaffold'],
+  });
+  const guarded = compareHomes(authored.liveRoot, authored.scaffoldRoot);
+  assert.deepEqual(guarded.onlyInLive, ['.DS_Store.md']);
+  assert.deepEqual(guarded.onlyInScaffold, ['.authored']);
+  assert.deepEqual(guarded.differing.map((d) => d.path), ['knowledge-base/conventions/.authored']);
+
+  for (const path of ['.DS_Store', 'knowledge-base/conventions/.DS_Store',
+    'knowledge-base/reports/nested/.DS_Store']) {
+    for (const side of ['liveRoot', 'scaffoldRoot']) {
+      for (const type of ['symlink', 'directory']) {
+        const contents = side === 'liveRoot' ? [null, 'regular'] : ['regular', null];
+        const homes = fixtureHomes({ 'kept.md': ['same', 'same'], [path]: contents });
+        const candidate = resolve(homes[side], path);
+        mkdirSync(dirname(candidate), { recursive: true });
+        if (type === 'symlink') symlinkSync(resolve(homes[side], 'kept.md'), candidate);
+        else mkdirSync(candidate);
+        for (const trackedPaths of [new Set(), new Set([candidate])]) {
+          assert.throws(() => compareHomes(homes.liveRoot, homes.scaffoldRoot, { trackedPaths }),
+            /metadata must be a regular file/);
+        }
+      }
+    }
+  }
+
+  const inspection = fixtureHomes({ 'kept.md': ['same', 'same'], '.DS_Store': ['regular', null] });
+  for (const code of ['EACCES', 'ENOTDIR']) {
+    const blockedPath = resolve(inspection.scaffoldRoot, '.DS_Store');
+    assert.throws(() => compareHomes(inspection.liveRoot, inspection.scaffoldRoot, {
+      inspect(candidate) {
+        if (candidate === blockedPath) throw Object.assign(new Error('fixture inspection'), { code });
+        return lstatSync(candidate);
+      },
+    }), (err) => /cannot inspect metadata/.test(err.message) && err.cause.code === code);
+  }
 });
 
 // 6 ────────────────────────────────────────────────────────────────────────────────────────────────
@@ -615,6 +721,61 @@ test('synthetic: a prune point hides a co-present file, but never a bare .gitkee
   // in both trees as "MISSING from ai-agents/". A first cut of the promotion did exactly that.
   assert.deepEqual([r.onlyInLive, r.onlyInScaffold, r.differing], [[], [], []],
     'a promoted file that is co-present and identical must produce NO presence or drift report');
+
+
+  const metadataPath = 'knowledge-base/reports/nested/.DS_Store';
+  for (const trackedSides of [[], ['liveRoot'], ['scaffoldRoot'], ['liveRoot', 'scaffoldRoot']]) {
+    const homes = fixtureHomes({
+      'kept.md': ['same', 'same'],
+      [metadataPath]: ['live', 'scaffold'],
+    });
+    const result = compareHomes(homes.liveRoot, homes.scaffoldRoot, {
+      trackedPaths: new Set(trackedSides.map((side) => resolve(homes[side], metadataPath))),
+    });
+    const retained = trackedSides.length > 0;
+    assert.deepEqual(result.hidden.map((h) => h.path), retained ? [metadataPath] : []);
+    assert.deepEqual(result.enforced, retained ? ['kept.md', metadataPath] : ['kept.md']);
+    assert.deepEqual(result.differing.map((d) => d.path), retained ? [metadataPath] : []);
+    assert.deepEqual([result.onlyInLive, result.onlyInScaffold, result.unreadable], [[], [], []]);
+  }
+
+  for (const trackedSide of ['liveRoot', 'scaffoldRoot']) {
+    const onlyPath = '.DS_Store';
+    const unusualPath = 'space dir/new\nline/.DS_Store';
+    const homes = fixtureHomes({
+      'kept.md': ['same', 'same'],
+      [onlyPath]: [null, 'scaffold'],
+      [metadataPath]: ['live', 'scaffold'],
+      [unusualPath]: ['live', 'scaffold'],
+    });
+    const repositoryRoot = dirname(homes.liveRoot);
+    const rawPaths = [relative(repositoryRoot, resolve(homes.scaffoldRoot, onlyPath)),
+      relative(repositoryRoot, resolve(homes[trackedSide], metadataPath)),
+      relative(repositoryRoot, resolve(homes[trackedSide], unusualPath))];
+    let calls = 0;
+    const trackedPaths = acquireTrackedPaths(repositoryRoot, (executable, args, options) => {
+      calls++;
+      assert.equal(executable, 'git');
+      assert.deepEqual(args, ['ls-files', '-z', '--']);
+      assert.deepEqual(options, { cwd: repositoryRoot });
+      return Buffer.from(rawPaths.join('\0') + '\0');
+    });
+    assert.equal(calls, 1);
+    assert.equal(trackedPaths.size, 3);
+    for (const path of rawPaths) assert.ok(trackedPaths.has(resolve(repositoryRoot, path)));
+    const result = compareHomes(relative(process.cwd(), homes.liveRoot),
+      resolve(homes.scaffoldRoot, '..', 'scaffold'), { trackedPaths });
+    assert.deepEqual(result.onlyInScaffold, [onlyPath]);
+    assert.deepEqual(result.onlyInLive, []);
+    assert.deepEqual(result.hidden.map((h) => h.path), [metadataPath]);
+    assert.deepEqual(result.enforced, [onlyPath, 'kept.md', metadataPath, unusualPath].sort());
+    assert.deepEqual(result.differing.map((d) => d.path), [metadataPath, unusualPath].sort());
+    assert.deepEqual(result.unreadable, []);
+  }
+  assert.deepEqual(acquireTrackedPaths(REPO, () => Buffer.alloc(0)), new Set());
+  const gitError = new Error('fixture Git unavailable');
+  assert.throws(() => acquireTrackedPaths(REPO, () => { throw gitError; }),
+    (err) => /cannot acquire Git tracked paths/.test(err.message) && err.cause === gitError);
 });
 
 // R1's other half, pinned on the REAL entry that disproved the old message: `tasks/backlog/.fkit` has

@@ -113,8 +113,12 @@ moves, no commits, no re-ranks.
    consent on this path — the proposal is the thing the owner approves, so they must see all of it.
 
 4. **One `AskUserQuestion` — plan-level approval of that exact enumerated list** (ADR-039
-   Decision 2), asked with the diffs in view. Offer: approve the full list / approve a named subset
-   / not now. A picked "Explain more, then ask again", or a typed question, is not consent — answer it
+   Decision 2), asked with the diffs in view. Under `conventions/asking-the-owner.md`, this exact
+   repair list is **one decision**, not separate approvals per file. Unrelated choices each need
+   their own question/options; do not compound them with repair approval. The named-subset custom
+   route and apply-time freshness checks below remain unchanged. Offer: approve the full list /
+   approve a named subset / not now. A picked "Explain more, then ask again", or a typed question,
+   is not consent — answer it
    in chat and re-ask on the owner's next message. No destructive item can exist in v1 — nothing here
    moves, renames, or deletes; if one somehow appeared it would be a bug to report, not something to
    confirm individually.

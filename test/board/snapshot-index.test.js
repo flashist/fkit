@@ -2,6 +2,7 @@
 // member"), built into board/core/store.mjs per ADR-052 D9. T-021 was filed but never fixed in
 // aiboard, so its reproduction is ported from its brief: it counted _scan calls and task loads.
 // The default lane counts calls and never reads a clock; FKIT_BOARD_BENCH=1 adds the timing run.
+import '../execution-disabled.mjs';
 import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { cpus, loadavg, tmpdir } from 'node:os';

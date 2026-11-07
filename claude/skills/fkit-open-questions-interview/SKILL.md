@@ -45,8 +45,9 @@ Something asked **of the owner**, in this session, that they have not answered:
 
 **What does NOT count:**
 - Anything you can answer yourself by reading the code or the files. **Go and answer it instead.**
-- A question already answered, even implicitly — if they said "ship it", the approval questions under
-  it are closed. Re-asking an answered question is worse than not asking.
+- A question actually answered for its unchanged scope — an applicable explicit "ship it" can settle
+  approval. Request acceptance, queueing or presentation alone cannot. Re-asking a settled question
+  is worse than not asking; take an applicable prose answer without a confirmation form.
 - A question whose answer stopped mattering because the work changed direction.
 - A rhetorical question, or a decision you *documented* rather than *asked*.
 - **A question you never actually put to them.** A doubt you had privately is not an open question; it
@@ -57,16 +58,19 @@ Something asked **of the owner**, in this session, that they have not answered:
 1. **Sweep** the session from the start for the shapes above. Include questions asked through
    `AskUserQuestion` **and** in prose — prose questions are the easier ones to lose.
 
-   > **⚠️ An `AskUserQuestion` that returned a result is ANSWERED.** The owner made a selection; that
-   > is the answer. It does not become open again because you failed to act on it — that is *your*
-   > unfinished work, and the fix is to go and do it, not to ask them the same thing twice. **Only a
-   > question that never reached them, or whose answer never came back, is open.**
+   > **⚠️ Only an actual applicable owner answer settles a decision.** A tool result alone is not
+   > enough: cancellation, decline, interruption, invalid/empty results, accepted/queued requests,
+   > and displayed but unanswered forms keep it open. Unknown delivery remains unverified; do not
+   > repeatedly resubmit asynchronous requests. Once answered for unchanged scope, unfinished agent
+   > work does not reopen it — go and do that work instead of asking the owner twice.
    > **Except a reply that is not a choice:** a picked "Explain more, then ask again", or a typed
    > question or request for more information, is not an answer — the question stays open.
 2. **Check each against later turns.** Was it answered, made moot, or overtaken? Drop those, and drop
    anything you could resolve yourself.
-3. **Dedup.** The same question re-asked three times is **one** question. Merge near-duplicates and ask
-   the merged form.
+3. **Dedup only the same decision and unchanged scope/options.** Repeated asks are one pending
+   decision; shared context or similar labels do not merge independently approvable actions. Retain
+   each stable decision key, scope/revision, options and known answer provenance in the conversation.
+   A changed scope supersedes the old version and needs a fresh applicable answer.
 4. **If nothing is open: say so and stop.** *"Nothing outstanding."* **Do not pad the list to justify
    the invocation** — a clean sweep is a real and useful result.
 5. **Otherwise, interview.** Order by what blocks the most work, and for each say **why it matters** —
@@ -75,17 +79,38 @@ Something asked **of the owner**, in this session, that they have not answered:
 
 ## How to ask
 
-- **In a session:** use `AskUserQuestion`. **Batch** — up to 4 per call, related ones together, rather
-  than interrogating one at a time. Give options real consequences, and mark a recommendation `(Rec)`
-  where you have one and can defend it.
-- **More than 4 open?** Ask the **most blocking 4 first**, then **repeat until the list is empty** — a
-  second call, a third, as many as it takes. **This is a loop, not one extra round.**
-  - **State the remaining count in your prose, outside the tool call** — *"4 of 9 below; 5 to follow."*
-    A count that lives only inside a dialog vanishes the moment it closes.
-  - **The loop is not cancelled by a change of subject.** If the owner answers 4 and then redirects you
-    elsewhere, the remaining questions are still open: raise them when that work settles, or say
-    plainly that you are dropping them and why. **Silently abandoning questions 5+ is the exact failure
-    this skill exists to fix** — reproducing it inside the fix is the worst possible outcome.
+- **In an interactive root:** select the supported interface under `conventions/asking-the-owner.md`:
+  exposed negotiated Codex `fkit_roles.fkit_ask_owner`, or supported Claude native `AskUserQuestion`.
+  If missing/unsupported or delivery fails, state the limitation, exact decision and named choices
+  with recommendation and standing option, then wait. Report uncertain delivery as unverified.
+  Give each independent decision its own concise question and selectable options, recommendation
+  first and the standing `Explain more, then ask again` last, once, described as
+  `Give me more context in simple terms, then re-ask the question.` In string-only Codex, put the
+  description in visible preceding chat. Respect actual option limits and the separate custom-text
+  route. Never silently drop valid alternatives or combine unrelated effects; use the convention's
+  faithful narrowing or transparent non-authorizing stages when needed.
+- **Adapt group size to the exposed interface.** Current Codex asks one `fkit_ask_owner` call at a
+  time, never a `questions` array or concatenated decisions. Batch related decisions as separate
+  objects only when that shape/count and trustworthy identity are supported; otherwise ask
+  sequentially. Bind answers by stable decision identity and unchanged scope, not list order or
+  duplicate labels. Preserve custom text exactly against its original decision; custom routing
+  alone grants nothing. Plan approval and retry permission stay separate.
+- **Retain the unresolved remainder until settled.** Accept valid partial answers only for their own
+  unchanged scopes. Cancellation, decline, interruption, invalid/empty/duplicate-ambiguous results,
+  silence and preselection settle nothing. A late reply never approves another decision. Keep each
+  actual approval's key/scope, quoted answer, date and actual channel in the conversation for the
+  normal caller to use; this interview writes no artifacts. Unknown provenance stays unknown.
+  - State the remaining count in prose outside the call; on current Codex, for example: "1 of 9
+    now; 8 remain." Never abandon items beyond an assumed four-question group.
+  - Any typed question, explanation request or standing-option pick stops **all new dialogs for
+    any decision that turn**. Answer in full in chat, keep other valid answers, and on the owner's
+    next message take an applicable answer or explain another question; otherwise re-ask only
+    unresolved decisions. Do not loop into another item or immediately re-ask after explaining.
+  - A change of subject leaves unresolved decisions open: raise them when that work settles, or
+    say explicitly which ceased to matter and why. Do not silently discard them.
+  - Missing/failed dialogue uses a separate fallback per decision, preserving identity, scope,
+    context and choices; uncertain delivery stays unverified, with no repeated asynchronous asks.
+    Pair owner-visible task IDs with canonical titles and retain each option's dependency knock-on.
 
 > **⚠️ In a spawned consult, do not attempt to interview.** `AskUserQuestion` is **absent** there —
 > measured `TOOL_ABSENT`, 3/3

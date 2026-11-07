@@ -1,0 +1,3 @@
+ls-remote https://github.com/fkit-test/no-such-repo-0257.git main
+stalling
+pids 82697 82704

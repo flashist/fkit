@@ -1,0 +1,98 @@
+{
+  "utc": "2026-11-04T09:58:02.229394+00:00",
+  "role": "PROCESS-REVIEW",
+  "task": "0540",
+  "stepsCompleted": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "3.5",
+    "4",
+    "5",
+    "6",
+    "7"
+  ],
+  "novelIds": [],
+  "suppressedAsSettled": [],
+  "coderRowsAdded": 0,
+  "fixes": [],
+  "obviousWinnerCalls": [],
+  "newResiduals": [],
+  "status": "in-review",
+  "acceptancePending": "idle-Mac condition unproved; no owner waiver",
+  "protectedHashes": {
+    "test/dual-home-parity.test.js": "947e531c591310a14466a96434ea0c0b585716b4dc252eb52034c6fd1a73d22e",
+    "test/dual-home-parity-exceptions.mjs": "25c7161777c0d5cefac7312f9a59686e112c6d8e5a1ee76ddb17f3ebaaaf9f08",
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": "cb17f0a5561c448f28e1bc2b27e5fac9a64e25dd68aff1d3da273fd2f3da135a",
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    ".git/index": "a8f5e7698a080f20496ff18af077f2a40daa4ac3b762354b1240d7f0a8c714a3",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": "e51d2a1e07187b2a056bb28af81563762e73af5fce772e6a76f5e464138d8627",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "89b9593934ce2dde47bc849180dd75714cfe474f4cb64f363519c44f4925cc92"
+  },
+  "protectedHashesUnchanged": true,
+  "reviewerPrefixBeforeSha256": "39ce6085860f849bfcdec35bdafabdc4efab289852bd3b6e55074267bc316b1d",
+  "reviewerPrefixAfterSha256": "39ce6085860f849bfcdec35bdafabdc4efab289852bd3b6e55074267bc316b1d",
+  "acceptedResidualsUnchanged": true,
+  "restorationChecks": {
+    "orphan": {
+      "restored": true,
+      "currentHashMatchesRestoration": true,
+      "actualChildExit": 1,
+      "summary": [
+        "\u2139 tests 23",
+        "\u2139 suites 7",
+        "\u2139 pass 22",
+        "\u2139 fail 1",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 10476.651834"
+      ]
+    },
+    "structure": {
+      "restored": true,
+      "currentHashMatchesRestoration": true,
+      "actualChildExit": 1,
+      "summary": [
+        "\u2139 tests 971",
+        "\u2139 suites 40",
+        "\u2139 pass 968",
+        "\u2139 fail 2",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 1",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 85802.188167"
+      ]
+    }
+  },
+  "exactPrefixSetsEqual": true,
+  "initialAndDiagnosticSetsPreserved": true,
+  "sourcePatchesEqualApprovedEvidence": true,
+  "diffCheckExit": 0,
+  "testsExecutedThisWorker": [],
+  "inheritedFullSuite": {
+    "exit": 0,
+    "summary": [
+      "\u2139 tests 971",
+      "\u2139 suites 40",
+      "\u2139 pass 970",
+      "\u2139 fail 0",
+      "\u2139 cancelled 0",
+      "\u2139 skipped 1",
+      "\u2139 todo 0",
+      "\u2139 duration_ms 76271.373959"
+    ],
+    "wallSeconds": 76.43248979200001
+  },
+  "decision": "NEEDS-DECISION",
+  "recommendation": "One bounded evidenced-idle default-temp normal suite; otherwise pending",
+  "workerChangedPaths": [
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-audit.json"
+  ]
+}

@@ -1,0 +1,63 @@
+ M .github/workflows/prove-red.yml
+ M .github/workflows/test.yml
+ M CHANGELOG.md
+ M CONTRIBUTING.md
+ M RELEASING.md
+ M ai-agents/knowledge-base/architecture.md
+ M ai-agents/knowledge-base/conventions/dual-home-parity.md
+ M ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md
+ M ai-agents/sprints/backlog.md
+ M ai-agents/sprints/sprint-15.md
+ M ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md
+RM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json
+RM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md
+RM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/brief.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-baseline.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-source.diff
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-static-checks.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-audit-20261104.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-checkpoint-20261104.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-final-20261104.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-final-audit.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-npm-test.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-preflight.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-static-readback.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/plan-review.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/plan.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/review.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/worklog.md
+ M ai-agents/wiki-vault/index.md
+ M ai-agents/wiki-vault/log.md
+ M ai-agents/wiki-vault/wiki/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md
+ M ai-agents/wiki-vault/wiki/systems/testing-and-verification.md
+ M test/dual-home-parity-exceptions.mjs
+ M test/dual-home-parity.test.js
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan-review.md
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan.md
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/worklog.md
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-audit.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-preflight.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-audit.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-final-disposition-20261104.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/quiet-window-precheck-20261104.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md

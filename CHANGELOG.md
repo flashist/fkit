@@ -11,6 +11,31 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- Give each independent owner decision its own selectable options and scoped answer. Current Codex
+  asks sequentially; separate-object batches require actual interface support and trustworthy
+  identity. Preserve partial answers and per-decision provenance; plan approval never grants more
+  retries. Behavioral and live-host acceptance remain unverified under this checkout's test pause.
+
+- Pause all test execution in this project indefinitely by owner ruling. Preserve test sources,
+  block npm and direct test entry points, disable CI jobs and hosted workflows, and refuse default
+  release commands (including dry-run). Explicit `--no-test` releases remain unverified and require
+  separate authorization. Verification is static only; consuming-project instructions are unchanged.
+
+- Owner questions use the supported root interface, advertise Codex forms only with negotiated form
+  support, and retain explicit fallback and real-answer waiting when unavailable. Request acceptance
+  or queueing proves neither display nor approval. Direct interactive Codex coder review stays ON
+  with its actual launcher signal even without an owner tool; approval then uses fallback. Automatic
+  live-display acceptance and Claude/mixed live compatibility remain unverified; earlier local form
+  checks cover only their recorded path.
+
+- Lead consumes worker returns and advances authorized work in the live turn, with explicit recovery
+  and host-pause checkpoints. Blank worker responses now return transport errors; nonblank
+  post-adapter output remains intact within existing bounds. Approval and retry limits remain.
+
+- Automatic update checks silently skip Git URLs rewritten to SSH or other non-HTTPS transports.
+
+- Remove test runtime budgets, idle-machine gates and repository CI job time caps.
+
 - `fkit board` retries once with an OS-assigned free port when default port 8585 is busy; explicit
   ports remain strict. It requests browser opening on macOS/Linux when both stdin and stdout are
   terminals, with `--open` / `--no-open` overrides. The printed URL shows the actual port; opener

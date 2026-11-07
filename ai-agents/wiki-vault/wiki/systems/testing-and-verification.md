@@ -18,6 +18,10 @@
 
 ## Summary
 
+**Current policy, 2026-11-04:** Run the checks mapped in `CONTRIBUTING.md` without waiting for an idle machine or quiet window. Accept completed checks on their required assertions, not aggregate elapsed time or machine load; these alone do not require a rerun. An interrupted check is unverified. This owner ruling supersedes ADR-057 D10's timing and idle requirements, including inherited aggregate suite-duration, idle-only and no-suite-slowdown acceptance clauses in task briefs, sprint instructions and historical migration inventories. Historical decisions, approvals and measurements remain records of their time.
+
+Functional performance and termination assertions, harness timeouts, worker/consult limits and external service limits still apply. Neither `.github/workflows/test.yml` nor `.github/workflows/prove-red.yml` sets a repository job time cap; the former runs `npm test` directly. Hosted Ubuntu execution of this working-tree change is **unverified**. See `CONTRIBUTING.md`, `RELEASING.md`, `ai-agents/knowledge-base/architecture.md` §9.1 and `CHANGELOG.md` Unreleased; these current working-tree sources take precedence over the historical D10 text below. This is a bounded ingest, not a complete sync.
+
 How fkit checks itself. For most of its life the answer was **nothing** — no CI, no test suite, no `.github/`. The only automated check was `omnigent/validate-bundles.sh`, which validated *Omnigent bundle structure* and correctly died with the runtime it checked ([[decisions/adr-003-ci-runs-validate-bundles]]).
 
 Sprint 2 closed the largest part of that gap with a **launcher-contract suite** ([[tasks/add-launcher-contract-smoke-script]]), governed by [[decisions/adr-014-how-fkit-tests-itself]]. It is deliberately small, deliberately black-box, and deliberately incapable of reaching a consuming project.
@@ -134,7 +138,7 @@ owner accepted, stated rather than implied.**
 >   +40%"*). ⛔ **No measured absolute figure is written here:** three wall-clock figures exist for the
 >   same code and **every worker that reported one said it was moving with MACHINE LOAD** (last
 >   recorded load average **8.72** on 14 cores); ⛔ **no new range was derived by applying the
->   percentage to the ruled figure.** **A clean idle-machine measurement is still owed**, and ⚠️ **the
+>   percentage to the ruled figure.** **A clean idle-machine measurement was then considered owed** (the 2026-11-04 policy above supersedes that timing/idle requirement), and ⚠️ **the
 >   ruled range predates `0288`, so it may now understate** — ⛔ **reported, not fixed**, because
 >   `RELEASING.md` is outside this vault and re-ruling it is the owner's act.
 
@@ -186,7 +190,7 @@ closing.**
 - **Four named exceptions (D7):** `dual-home-parity`, `task-id-uniqueness`, `structure-manifest` (default suite) and the release tool's test (`npm run test:release`). The "fourth category" licence in old test headers is retired.
 - **Growth stop (D2):** no new test file or prove-red case **without the owner's OK**, each one; **no numeric cap**. A missing test on correct code is a **suggestion**, except the key list (launcher argv / `exec`; the role-lock matrix; the skill-ownership hook's allow/deny; code that writes or deletes a user's file). Shipped prompts say this **project-neutrally** (`0528`).
 - **prove-red (D3):** 55 → **4 cases** (M1, M2, M30, M31), out of `npm test`, nightly in `.github/workflows/prove-red.yml` (03:17 UTC on `main`, plus on demand). ⚠️ A role-lock regression is now caught **the next morning**, not at push — the owner's accepted cost *"for now"*.
-- **Budget (D10):** default `npm test` ≤ 2 min locally on an idle Mac; CI's budget step fails the job over **120 s**; CI `timeout-minutes` 33 → 10. `bin/release.mjs` runs `npm test` then `npm run test:release` before its first write.
+- **Historical budget (D10, superseded 2026-11-04):** default `npm test` ≤ 2 min locally on an idle Mac; CI's budget step failed the job over **120 s**; CI `timeout-minutes` 33 → 10. `bin/release.mjs` runs `npm test` then `npm run test:release` before its first write.
 - **Measured:** 19 files deleted, 22 kept, 1 moved (`0529`); local `npm test` 845/845 in ~76–89 s **on a busy machine, not idle**; CI budget step 60.7–85.2 s. Then Sprint 14 added 6 `test/board/` files (88 tests): `0423`'s verify saw **933 tests, 97 s** wall at load 4–7.
   > ✅ *Dated note 2026-10-23 (sync `5ccf2c2`→`185ac5e`):* `0538` added `test/board-reader-host.test.js` (4 tests) on the owner's D2.1 OK — **23 top-level files now** (counted on disk this run), plus 6 under `test/board/`. `CONTRIBUTING.md` *What a test may cover* gains item 4: the board reader, run as a process. `0538`'s verify: **937 tests, 936 pass, 1 skipped**, 78 s. So *"`bin/fkit-board.mjs` ships with no test"* below is no longer true. → [[tasks/refuse-reads-from-a-foreign-host-name-in-the-shipped-fkit-board-reader]]
 - **What went with the cut:** the link and citation guards (`reference-integrity`, `coordination-citation-policy`, `top-level-doc-links`), `closed-rank-immutability`, `mover-exemption-step`, `skill-frontmatter`, `structure-spec`, `wiki-flag-convention`, `adr-number-uniqueness`, the wording pins (`code-comment-rule`, `spawned-write-marker`, `plan-review-switch`, `adversarial-prompt-path`, `asking-the-owner-rule`, `sprint-loop-later-sprint-record`) and the four board-reader tests. ⚠️ So: the movers have no test at all; nothing checks a closed board row's rank; nothing checks `SKILL.md` wording; `bin/fkit-board.mjs` ships with no test.

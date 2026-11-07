@@ -65,7 +65,7 @@ _fkit_deadline() (   # <secs> <cmd> [args…] → the command's stdout if it exi
 _fkit_remote_sha() {   # → head sha of $repo@$ref, or empty. Never hangs, never fails loudly.
   if command -v git >/dev/null 2>&1; then
     # env(1), not a prefix: a prefix on a function call is not guaranteed to reach the command inside.
-    _fkit_deadline "$FKIT_NET_TIMEOUT" env GIT_TERMINAL_PROMPT=0 \
+    _fkit_deadline "$FKIT_NET_TIMEOUT" env GIT_TERMINAL_PROMPT=0 GIT_ALLOW_PROTOCOL=https \
       GIT_HTTP_LOW_SPEED_LIMIT=1000 GIT_HTTP_LOW_SPEED_TIME="$FKIT_NET_TIMEOUT" \
       git ls-remote "https://github.com/$fkit_repo.git" "$fkit_ref" 2>/dev/null \
       | awk 'NR==1{print $1}' || true

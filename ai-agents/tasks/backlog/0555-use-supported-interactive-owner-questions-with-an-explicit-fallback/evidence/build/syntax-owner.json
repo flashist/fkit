@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "--check",
+    "codex/owner-question.mjs"
+  ],
+  "exit": 0
+}

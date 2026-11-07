@@ -1,0 +1,288 @@
+{
+  "task": "0554 \u2014 Make the lead advance authorized work after worker completion",
+  "executedByThisContinuation": [],
+  "retainedCompletedLanes": {
+    "launcher": {
+      "command": "node --test test/launcher-contract.test.js",
+      "childExit": 1,
+      "wrapperResult": "completed child and saved evidence",
+      "counts": {
+        "tests": 75,
+        "suites": 4,
+        "pass": 74,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedNames": [
+        "bare first use: each runtime saves once and continues fresh onboarding or existing-project menu"
+      ],
+      "keptArtifacts": [],
+      "logSHA256": "72a14fd7cbf7438670862fb7ef5a359b9ac35a7f7212d97123035617cfef20fc"
+    },
+    "functional-sandbox": {
+      "command": "node --test --test-skip-pattern='^0284/(git-deadline|term-ignored|no-stray|reinstall-deadline|reinstall-timeout-not-run):|^fkit additions a break file left by a dead breaker is removed, and waiters back off meanwhile$|^benchmark:' test/*.test.js test/board/*.test.js",
+      "childExit": 1,
+      "wrapperResult": "completed child and saved evidence",
+      "counts": {
+        "tests": 967,
+        "suites": 40,
+        "pass": 944,
+        "fail": 23,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedNames": [
+        "GET responses: sprint detail, check, not found, headers",
+        "ServerTests",
+        "T-022 reproduction: a page on another site closing a task is refused",
+        "a non-GET is still 405, whatever its Host",
+        "a preflight and every other method get Python's 501, with no CORS header",
+        "a write must come from the board page itself (aiboard T-022)",
+        "an id field holding a list: Python's 500, and the board untouched",
+        "any other host name is refused with 403 and no board data or path",
+        "bare first use: each runtime saves once and continues fresh onboarding or existing-project menu",
+        "bodies: dicts keep their key order, NaN, bad UTF-8, a non-object",
+        "every write endpoint refuses a cross-site write and leaves the board untouched",
+        "fields of the wrong JSON type: Python's status and body",
+        "is aiboard a1592dc's page, served byte for byte",
+        "local host names and IP literals get the board",
+        "no Host: 403 from the reader on HTTP/1.0, 400 from Node on HTTP/1.1",
+        "none is lost or reordered, from the web and the command line at once",
+        "paths: query, params, repeated slashes and the absolute form",
+        "prints aiboard's banner, serves the board, and stops cleanly on Ctrl+C",
+        "requests are read as Python reads them",
+        "serve from the command line",
+        "simultaneous writes",
+        "test_critical_priority",
+        "test_errors",
+        "test_index_and_board",
+        "test_rank_endpoint",
+        "test_read_only",
+        "test_write_flow",
+        "the page",
+        "writes from the page, from agents and from IP-literal hosts still work"
+      ],
+      "keptArtifacts": [],
+      "loopbackListenEpermOccurrences": 22,
+      "logSHA256": "e7dc69fa7f14e1e5bce7f6f9ca0101425ae0032adc30c0ab8da4d09c336a9eb5"
+    },
+    "functional-scoped": {
+      "command": "node --test --test-skip-pattern='^0284/(git-deadline|term-ignored|no-stray|reinstall-deadline|reinstall-timeout-not-run):|^fkit additions a break file left by a dead breaker is removed, and waiters back off meanwhile$|^benchmark:' test/*.test.js test/board/*.test.js",
+      "childExit": 0,
+      "wrapperResult": "completed child and saved evidence",
+      "counts": {
+        "tests": 967,
+        "suites": 40,
+        "pass": 967,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedNames": [],
+      "keptArtifacts": [],
+      "logSHA256": "f8e54a96ffb09681b3e7e7410930e8966bb1053732ddc83d104094be9eafaf80"
+    },
+    "delivery": {
+      "command": "inline node --input-type=module; normal setup and launchArgs API, no CLI provider calls",
+      "childExit": 0,
+      "checks": [
+        {
+          "path": ".claude/agents/fkit-lead.md",
+          "via": "setup \u2192 canonical initializer",
+          "result": "PASS byte-identical",
+          "sha256": "ac3416079899e31fd1b99ad01243f96ff4f421060997322b0980d513485b4607"
+        },
+        {
+          "path": ".claude/skills/fkit-sprint-ship-loop/SKILL.md",
+          "via": "setup \u2192 canonical initializer",
+          "result": "PASS byte-identical",
+          "sha256": "85af2b5dc21c7f8d99ca7c584d7770faea9eef86b3d46d80b3304b6e10bf619c"
+        },
+        {
+          "path": ".agents/skills/fkit-sprint-ship-loop/SKILL.md",
+          "via": "setup \u2192 normal skillText materialization",
+          "result": "PASS complete adapted canonical body",
+          "sha256": "ffd736484d6a8f4ebd9d8666f1a18af756c22670a175c6ef0c7a0cfb6ebe2b20"
+        },
+        {
+          "path": "configured Codex developer_instructions argv",
+          "via": "launchArgs \u2192 instructions \u2192 runtime binding + full canonical lead body",
+          "result": "PASS",
+          "instructionSha256": "bd25653a694d97f67c9be79178d4f7f6e23e5515167dab5c43d8dc024300072a",
+          "liveProviderExecuted": false
+        },
+        {
+          "path": "configured Claude --append-system-prompt argv",
+          "via": "launchArgs \u2192 instructions \u2192 runtime binding + full canonical lead body",
+          "result": "PASS",
+          "instructionSha256": "785ddfdd4aa98f7d0a16ebea7f5067f1c7987d4de8090ff9c942f9224de40266",
+          "liveProviderExecuted": false
+        },
+        {
+          "path": "repeat normal setup",
+          "result": "PASS same generated driver bytes"
+        }
+      ],
+      "limits": [
+        "Models not invoked; behavior obedience and host resumption unverified.",
+        "Claude binding argv assembled; live Claude compatibility unverified."
+      ]
+    },
+    "whitespace": {
+      "command": "git diff --check -- claude/agents/fkit-lead.md claude/skills/fkit-sprint-ship-loop/SKILL.md codex/server.mjs codex/materialize.mjs codex/README.md CHANGELOG.md test/launcher-contract.test.js",
+      "childExit": 0,
+      "wrapperResult": "completed child and saved evidence",
+      "counts": {},
+      "failedNames": [],
+      "keptArtifacts": [],
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prove-red": {
+      "command": "npm run test:prove-red",
+      "childExit": 1,
+      "wrapperResult": "completed child and saved evidence",
+      "counts": {},
+      "failedNames": [],
+      "keptArtifacts": [
+        "evidence/verify/prove-red-step-0b.txt"
+      ],
+      "logSHA256": "8effc4f3683b1356f990574736570bc029d6dff0d40e65aa7632a3a065d5007d"
+    },
+    "build-target-red.json": {
+      "command": "node --test --test-name-pattern=^lead worker transport: test/launcher-contract.test.js",
+      "exit": 1,
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "skip": 0,
+      "assertion": "exit 0, payload empty: isError false !== true",
+      "serverBeforeSHA256": "c345d68c8ca569dc36a9c3ba3f066177bdd94d7b51594411e20ed7f9f22e68f1"
+    },
+    "build-target-green.json": {
+      "command": "node --test --test-name-pattern=^lead worker transport: test/launcher-contract.test.js",
+      "exit": 0,
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "fixtureChildLaunches": 17,
+      "normalRequests": 13,
+      "errorPayloadRequests": 3,
+      "interruptedPartialRequests": 1
+    },
+    "build-scoped-checks.json": [
+      {
+        "argv": [
+          "node",
+          "--check",
+          "codex/server.mjs"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "node",
+          "--check",
+          "codex/materialize.mjs"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "node",
+          "--check",
+          "test/launcher-contract.test.js"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--check",
+          "--",
+          "claude/agents/fkit-lead.md",
+          "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+          "codex/server.mjs",
+          "codex/materialize.mjs",
+          "codex/README.md",
+          "CHANGELOG.md",
+          "test/launcher-contract.test.js"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "finalSourceReadback": true
+      },
+      {
+        "check": "top-level case declarations unchanged",
+        "before": 18,
+        "after": 18,
+        "new": 0
+      }
+    ]
+  },
+  "limits": {
+    "task": "0554 \u2014 Make the lead advance authorized work after worker completion",
+    "actualHandoff": "Caller reports Build return consumed and fresh independent Verify launched; this worker confirms it started verification. Not a post-implementation universal continuation proof.",
+    "unverifiedWorkflowScenarios": [
+      "verified producer close \u2192 next eligible task",
+      "plan/scope approval waiting",
+      "rejected approval and user stop",
+      "partial/empty worker artifact recovery",
+      "exhausted explicit allowance",
+      "blocked parking and eligible independent advance",
+      "torn state",
+      "unavailable host later-turn restoration",
+      "live current 0555 owner question delivery",
+      "0556 independent question assembly"
+    ],
+    "filteredCoverage": "Exact approved skip pattern; omitted tests need not be counted as skipped by Node. No full-default-suite pass claimed.",
+    "omittedFunctionalCoverage": [
+      "three banner cases, including stalled-check termination/escalation and watchdog cleanup",
+      "two reinstall cases, including download-failure and partial-script protection",
+      "mixed board stale-break cleanup/lock recovery case",
+      "optional benchmark snapshot equivalence/access-count checks"
+    ],
+    "adapters": {
+      "Codex": "Existing named transport case executed with current changes.",
+      "Claude": "Existing configured-delegation success decoding and observed model metadata executed. Blank/failure adapter variants unexecuted; unchanged source retains decoded-blank rejection and sanitized failures. No raw failure forwarding promise."
+    },
+    "noLiveProbes": true,
+    "noPerformanceAcceptance": true,
+    "independentReview": "Not this worker; root later fresh reviewer + leaf, full coder processing; producer-only closure if acceptable."
+  },
+  "originalProveRedInterpretation": {
+    "gateExit": 1,
+    "baseline0b": "red; 75 total/74 pass/1 fail; first-use 9 != 15",
+    "baseline0c": "green",
+    "mutants": [
+      "M1 expected named red",
+      "M2 expected named red",
+      "M30 expected named red",
+      "M31 expected named red"
+    ],
+    "individualNumericChildExits": "Not exposed by original wrapper; not guessed. New run records them."
+  },
+  "deliveryAttempt1Retained": {
+    "command": "inline node --input-type=module; normal setup + launchArgs",
+    "childExit": 1,
+    "completedChecks": [
+      ".claude/agents/fkit-lead.md byte-identical",
+      ".claude/skills/fkit-sprint-ship-loop/SKILL.md byte-identical"
+    ],
+    "failure": "Evidence comparison omitted existing skillText sprint review-reporting replacement; assert.equal generated vs incomplete expected adaptation failed. No product defect established. Temporary fixture removed by finally.",
+    "next": "Correct evidence comparison to include existing sprint adaptation; normal materialization only."
+  },
+  "preservationNote": "Build manifest hashes matched except expected append-only worklog evolution; 24 immutable artifacts and 7 source afterimages matched. Final audit follows proof."
+}

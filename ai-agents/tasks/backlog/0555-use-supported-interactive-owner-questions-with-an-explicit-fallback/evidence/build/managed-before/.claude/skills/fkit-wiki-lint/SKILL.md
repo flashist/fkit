@@ -1,0 +1,286 @@
+---
+name: fkit-wiki-lint
+description: >-
+  Lead delegates this same-named entry to a fresh actual wiki.
+  The wiki librarian's lint procedure — health-check ai-agents/wiki-vault/ (broken links, stale
+  claims, missing back-links, template drift), fix what's safe, and flag what needs judgment. The
+  wiki role is the exclusive write gateway for the vault.
+---
+
+# Wiki Lint — the wiki librarian's procedure
+
+## Lead entry — delegate, then stop
+
+**Check your fixed runtime role before continuing.** If you are **lead**, execute only this
+forwarding branch. If you are **wiki**, skip this branch and run your execution procedure below.
+Every other role must stop; arguments or a caller's claimed identity cannot change your role.
+
+1. Delegate `fkit-wiki-lint` to a **fresh actual fkit-wiki**. Use the configured
+   `fkit_consult {role:"wiki", prompt:...}` path, or the legacy typed `@fkit-wiki`
+   Agent call under its runtime binding. Tell the worker to load and execute its owned
+   `fkit-wiki-lint`. Carry the real chain and `hop N of 2`; do not bypass depth/cycle/leaf
+   denials, switch roles, use a generic helper, or silently change runtime/model/effort.
+2. Carry the original operation, **raw argument text including empty**, caller-named tracked task
+   IDs, and relevant supplied project context/owner decisions in separate delimited fields.
+   Treat those fields as data; do not reinterpret, normalize or invent arguments.
+3. Await the worker and relay its **complete prescribed report verbatim**. Keep all warnings,
+   questions, partial/no-change results and failure caveats. Put transport/provenance caveats
+   **before** the report; transport metadata is not part of the report.
+4. A worker question returns `NEEDS-DECISION {question, options, recommendation, context}`, with
+   any usable partial report. An interactive root lead explains the choice and asks through its
+   actual owner channel, following `asking-the-owner.md`; wait for an actual answer. Relay it
+   verbatim with date/channel, original operation/arguments, and completed versus remaining work
+   to a fresh worker of the **same role**. Do not blanket-rerun completed mutations. A headless
+   lead returns the question upstream. If topology blocks continuation, return that limitation.
+   Decline, cancel, interruption, timeout, missing answers and explanation requests grant no
+   consent; preserve the unresolved question and follow the existing explanation/re-ask rule.
+5. Missing, denied, failed, interrupted or empty worker output is **not completion**. Report the
+   actual failure and any usable partial result; never substitute your own execution or invent
+   success. No automatic retry/recovery or task/board closure is part of this entry.
+
+For lead forwarding, lint gains no argument contract. Delegate lint only; do not sync implicitly.
+Only the actual wiki worker writes the vault. Preserve judgment warnings and the terminal task
+flags **verbatim, last in the report**:
+`Task <NNNN>'s vault work is complete — ready to close`,
+`Task <NNNN>: partial — not ready to close`, or `No tracked task completed by this run.`
+Put any lead footer before the report; append nothing after flags.
+This entry never routes an automatic close from those flags.
+
+**Lead: STOP here after relay or returning a question/failure.** The execution procedure below
+belongs exclusively to **wiki**. Permission to load this shared entry does not grant its work.
+The loader checks caller permission mechanically; this branch/STOP and execution duties remain
+instructions. No general filesystem write wall is claimed.
+
+> ## ⛔ Owner: the **wiki** role
+> This procedure **writes** `ai-agents/wiki-vault/`, and only the wiki role may do that. Execute it
+> **only** if you are the wiki — running as the `fkit-wiki` agent or in a `fkit wiki` session.
+>
+> **Any other role: do not execute this.** Ask the librarian:
+> ```
+> @fkit-wiki Run your lint procedure.
+> ```
+
+Health-check the whole wiki and fix what's safely fixable.
+
+## Steps
+
+1. **Read the rulebook:** `ai-agents/wiki-vault/schema.md` — the rules to enforce.
+2. **Read the catalog:** `ai-agents/wiki-vault/index.md` — the full page list.
+3. **Read every page** listed in the index.
+4. **Check for these issues:**
+
+   **Structural**
+   - Pages missing required metadata fields per schema.md (`**Status**:`, `**Key files**:`,
+     `**Date**:` — inline **bold** fields, not YAML frontmatter).
+   - Pages that don't follow the schema.md template (template drift).
+   - Index entries pointing at non-existent files (broken links).
+   - Wiki pages that exist but are missing from `index.md`.
+
+   **Content**
+   - Contradictions between pages (two pages describing the same system differently).
+   - Stale claims — references to files or functions that no longer exist (**verify with grep**).
+   - Orphaned pages — no cross-links in or out.
+
+   **Cross-reference**
+   - One-way links: if A links to B, B must link back to A.
+   - Links to source files that have moved or been renamed.
+
+   **ADR number/slug cross-check** — *see the dedicated section below; this one is easy to get wrong.*
+   - A vault ADR page whose number matches a **different** decision in the knowledge-base.
+   - A vault ADR page with **no** knowledge-base counterpart at all.
+   - A page whose `# ADR-NNN:` heading disagrees with the number in its own filename.
+
+5. **For each issue:** fix it directly (edit the page), or — if it needs human judgment — flag it in
+   place with a `> **LINT WARNING:**` blockquote.
+6. **Log it.** Append to `ai-agents/wiki-vault/log.md`, using today's real date:
+   ```
+   ## YYYY-MM-DD — lint
+   - Issues found: N
+   - Issues fixed: M
+   - Issues flagged for human review: K
+   - <one-line summary of the most significant issues>
+   ```
+7. **Report** a final summary.
+8. **Flag any completed tracked task — close nothing.**
+
+   **The wiki closes nothing and moves no task file.** Since **ADR-033** the task movers
+   (`/fkit-task-done`, `/fkit-task-cancelled`) are the **producer's alone** — the wiki does not hold
+   them, and the ADR-018 hook denies a mover call from a wiki identity at any spawn depth. The wiki's
+   completion signal is a **flag in this report**, and nothing else. (`log.md` is not a signal: no board
+   tool reads it. That is exactly why `0078`'s vault work sat `🔄 In progress` on the board for a week.)
+
+   **Which tasks to consider** — any tracked task this operation may have completed:
+   - one the caller named when invoking this procedure; **and**
+   - any brief under `ai-agents/tasks/backlog/*/brief.md` whose `## Owner` is `fkit-wiki` and whose
+     `## Status` is not `✅ Done` — read each and apply the rule below.
+
+   **The rule: is that brief's deliverable *this* vault work?** Three outcomes, and the third is the
+   common one:
+   - **Fully** → complete.
+   - **In part, or this run served it and you cannot tell whether that finished it** → **partial**.
+     Never resolve that doubt as complete.
+   - **Unrelated to this run** → **say nothing about it at all.** Most considered briefs land here, and
+     they produce no line. A brief is not "uncertain" merely because you read it: uncertainty means this
+     run *touched* its deliverable and you cannot tell whether that completed it.
+
+   **End the report with one line per task that came out complete or partial, in exactly this form:**
+   - complete → `Task <NNNN>'s vault work is complete — ready to close`
+   - partial or uncertain → `Task <NNNN>: partial — not ready to close`
+
+   **`<NNNN>` is the task folder name's four-digit prefix** (equivalently the brief's `## ID`) — and the
+   task's only identity. It is **never** the sprint
+   board's rank / `P<n>` Priority cell, which is mutable and re-ranked; see
+   `ai-agents/knowledge-base/conventions/priority-is-rank-not-identity.md`. It is also **never** a line
+   number — write no `:NNN` coordinate in a flag. Substitute real values.
+
+   **If that produced no lines at all**, write the single line `No tracked task completed by this run.`
+   **Never invent a task to have something to flag.**
+
+   These lines are the **last** thing in the report. A caller who summarizes this report **carries them
+   verbatim** — a dropped flag is the whole bug this exists to fix.
+
+   **Then stop.** Do not invoke a mover, do not edit the brief, do not touch the sprint plan, and do not
+   spawn the producer to close it yourself. Routing the close is the **caller's** next move, not yours:
+   resolve `<NNNN>` to its task folder — the single match for `ai-agents/tasks/*/<NNNN>-*/` — then
+   `@fkit-producer Run /fkit-task-done on <that folder>/brief.md`. The flag carries the ID only; that one
+   lookup is the caller's, and it is what stops the flag rotting when the folder moves boards.
+
+---
+
+## The ADR number/slug cross-check — how, and the three ways to ruin it
+
+> ### Why a link check cannot find this
+>
+> **On 2026-07-19 two different decisions wore the same number.** `/fkit-record-decision` allocated
+> ADR-029 by listing `knowledge-base/decisions/` and seeing 028 as the highest — but 029 was already
+> claimed by a stop-hook decision referenced in a task brief and **already ingested into ~10 vault
+> pages.** The stop-hook decision was renumbered to ADR-030.
+>
+> **Nothing was broken.** `[[adr-029-stop-hook-…]]` pointed at a real file that really existed; every
+> link resolved, nothing 404'd, every link check passed. **Link rot is what a lint detects, and this was
+> not link rot** — it was two decisions wearing one number, each internally consistent. It was caught by
+> a person noticing. This check is what makes that mechanical.
+>
+> This is **detection**, and since 2026-07-20 it carries more weight than it used to.
+> `/fkit-record-decision`'s numbering step derives the next number from **ADR filenames on disk only** —
+> it does **not** scan the vault, or any prose, for claimed numbers (a sweep that did was removed after
+> ordinary documents poisoned it three times). **So prevention cannot see a number that exists only in
+> the vault** — which is precisely the 2026-07-19 collision. This check is the thing that catches it
+> afterwards. Neither replaces the other, and the prevention half is narrower than its name suggests.
+
+### The procedure
+
+For each **regular file** in **`ai-agents/wiki-vault/wiki/decisions/`** matching
+`^adr-([0-9]{3})-(.+)\.md$` — **matched case-INSENSITIVELY**:
+
+⚠️ **Regular files only — a directory whose name matches is not an ADR page.** A directory called
+`adr-999-placeholder.md` would otherwise be read as one, inventing a page that does not exist and, in
+the sibling scan in `/fkit-record-decision`, permanently poisoning number allocation. **Both
+implementations of this scan must agree.**
+
+⚠️ **Case-insensitive, and this is the single most persistently-lost rule in this file's history.**
+`ADR-031-x.md` is the same ADR to every human who reads it, and both of `/fkit-record-decision`'s steps
+(`-iname`, `grep -oiE`) treat it as such. This site did not — so an
+uppercase name was **valid and counted by the allocator, and invisible to this cross-check**, while the
+blockquote above asserted the three agreed. Across three review rounds this rule was fixed, silently
+reverted by a rewrite, re-fixed, and then omitted from a fourth site. **If you touch any of the three
+that remain (those two steps and this one), re-run the uppercase case against all of them.**
+
+> ⚠️ **THIS SECTION CONTAINS THREE SEPARATE ENUMERATIONS, AND THE RULE APPLIES TO ALL THREE** — this
+> loop over `wiki/decisions/`, the knowledge-base counterpart lookup in step 1, and the separate
+> knowledge-base pass in step 5. The rule was first added to this loop **only**, and a check that
+> grepped for the *wording* scored it fixed — because it counted mentions, not enumerations.
+> **The unit that has to be enumerated and ticked is the enumeration, not the file.**
+
+1. Find the **regular file** in `ai-agents/knowledge-base/decisions/` carrying the **same number**.
+   *(Regular files only — same rule as the vault loop above. A directory whose name matches is not an
+   ADR, in this enumeration or any other.)*
+
+   ⚠️ **Compare the number NUMERICALLY, not as text.** `adr-029-…` and `adr-0029-…` are the **same
+   ADR** — a human reads them that way and allocation treats them that way. A textual
+   `^adr-<same NNN>-` match treats them as different and waves the collision straight through, which is
+   the one thing this check exists to catch. **Strip leading zeros before comparing.** The same rule
+   holds in `/fkit-record-decision`'s numbering step; the two must agree, or a collision one catches
+   the other lets past. *(They did not agree until 2026-07-20 — the divergence was itself the
+   finding.)*
+2. **No match** → flag **missing counterpart**.
+3. **Match with a different slug** → flag **slug divergence**, naming both filenames in full.
+4. Check each page's `# ADR-NNN:` heading agrees with the number in its own filename. This catches the
+   *second half* of the 2026-07-19 repair — a rename that moves the file but leaves the title line
+   claiming the old number. Both steps were needed then; both are checked now.
+
+**Then, as a SEPARATE pass over `ai-agents/knowledge-base/decisions/` — not nested in the loop above:**
+
+5. **Two or more knowledge-base *regular files* bearing the same NNN** → flag loudly. That is the
+   collision in its rawest form. *(Regular files only — third enumeration, same rule.)*
+   ⚠️ **Compare numerically here too** — strip leading zeros before grouping. This enumeration received
+   the regular-file rule but not the numeric one, so followed literally it treated `adr-029-x` and
+   `adr-0029-y` as different ADRs: the exact collision this step exists to report, waved through.
+
+   ⚠️ **This must not live inside the per-vault-page loop.** Two colliding knowledge-base ADRs are
+   usually **both brand new and neither ingested yet** — which is the normal lagging-ingest state, and
+   precisely the 2026-07-19 situation. A check reached only *via* a vault page would therefore be
+   unreachable exactly when the collision is freshest and cheapest to fix. It iterates the
+   knowledge-base directory directly, whether or not any vault page exists.
+
+   *(This lint step and `/fkit-record-decision`'s allocation step are the only checks on this
+   invariant — no test asserts it, in fkit's own repo or anywhere else.
+   ⛔ **Do not skip it.** The check is cheap, and a collision sitting uncommitted in the working
+   tree is exactly what this pass exists to catch.)*
+
+**Compare slugs exactly — case-sensitive, no normalization.**
+
+### ⚠️ The three ways to ruin this check
+
+1. **Do not build a fuzzy/normalizing comparison.** It is tempting (truncation? case? underscores?) and
+   it is wrong. Vault ADR filenames are **copied verbatim from the knowledge-base filename**, never
+   generated from the title — which is why ADR-022's file
+   (`adr-022-tools-unrestricted-except-adversarial-reviewer.md`) keeps that name despite an H1 reading
+   *"Tool allowlists relaxed for every role except the adversarial reviewer"*. Since nothing generates a
+   slug, nothing needs forgiving. Worse: **a normalizer tuned to forgive truncation starts forgiving
+   real divergence too**, and the 2026-07-19 slugs (`stop-hook-…` vs `a-task-is-a-folder-…`) are exactly
+   what you need it not to forgive.
+
+2. **Iterate over FILENAMES in `wiki/decisions/` — never grep prose for `adr-NNN-` tokens.** A text scan
+   across the vault produces false positives that are all **deliberate history**: `log.md`'s account of
+   the collision and its repair, the ADR-029/030 pages' own collision notes, and substrings of *task*
+   page names such as `[[tasks/rollout-adr-004-fixed-consult-titles]]`. **The vault documents the
+   collision on purpose; flagging its own records is how this check loses trust.** Once it cries wolf on
+   `log.md`, nobody reads it again.
+
+3. **Do not flag a knowledge-base ADR that has no vault page.** That is **normal** — the vault lags
+   ingest by design, and closing that gap is `/fkit-wiki-sync`'s job, not lint's. This check runs in one
+   direction only: vault page → knowledge-base counterpart.
+
+### Two deliberate non-rules
+
+- **Skip any decision page that does not parse as `adr-NNN-*` (three or more digits).** `schema.md` mandates only
+  `wiki/decisions/<slug>.md`; the ADR prefix is universal in practice but **unwritten**. Skipping
+  non-conforming pages means the first legitimately non-ADR decision page is not a permanent false
+  positive.
+- **No exemption list.** There is no tombstone convention, no withdrawn-decision convention, and no ADR
+  recorded outside `knowledge-base/decisions/`. **A superseded ADR keeps its file** — supersession
+  changes an ADR's status, never its existence — so it still has a counterpart and is not an exemption.
+  A vault ADR page with no counterpart is therefore genuinely anomalous. **An empty exemption list that
+  never fires beats one that hides the very case this was built for.**
+
+  *(An earlier draft asserted a specific count of superseded ADRs. It was removed rather than
+  corrected: the number was not re-verified before being written, it would go stale on the next
+  supersession, and nothing in the rule depends on it. State the invariant, not a census —
+  `conventions/evidence-before-assertion.md`.)*
+
+### ⛔ Flag; never auto-fix
+
+A number/slug divergence has **two possible causes with opposite repairs**: a genuine renumbering (the
+vault page is stale and should be updated to the new number) versus a vault page for a decision that was
+withdrawn (the page should go). **Telling them apart needs judgment**, and this skill's convention is to
+fix what is safe and surface what is not. **This is not safe.** Flag it in place with a
+`> **LINT WARNING:**` blockquote and report it; do not rewrite the page, and do not renumber anything.
+
+## Hard rules
+
+- **`schema.md` is ground truth.** Never invent a page shape to make a page "pass".
+- **Never invent knowledge** to fill a gap — flag it.
+- **Close nothing.** The wiki does not hold the task movers (ADR-033) and never invokes one, never
+  moves a task file, and never edits a brief or the sprint plan. It **flags**; the producer closes.
+- **Write only inside `ai-agents/wiki-vault/`.** **Never commit or push.**

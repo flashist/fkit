@@ -1,0 +1,4 @@
+
+> fkit@0.4.0-codex.3 generate:manifest
+> node bin/generate-structure-manifest.mjs
+

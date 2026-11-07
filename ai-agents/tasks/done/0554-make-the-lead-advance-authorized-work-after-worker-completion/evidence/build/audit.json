@@ -1,0 +1,73 @@
+{
+  "task": "0554 \u2014 Make the lead advance authorized work after worker completion",
+  "stage": "Build complete; fresh Verify and Review pending",
+  "source": [
+    {
+      "path": "claude/agents/fkit-lead.md",
+      "beforeSHA256": "afb8c4e64f1bb18bae3a0f702830c41c7f1af4bbba1f9b3ba77abe24e706a247",
+      "afterSHA256": "ac3416079899e31fd1b99ad01243f96ff4f421060997322b0980d513485b4607",
+      "afterSnapshot": "after/claude/agents/fkit-lead.md.txt"
+    },
+    {
+      "path": "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+      "beforeSHA256": "471e60ff762558964cb4cb56bd8114680e1d38d0d155bcfb313940d6591c46ec",
+      "afterSHA256": "85af2b5dc21c7f8d99ca7c584d7770faea9eef86b3d46d80b3304b6e10bf619c",
+      "afterSnapshot": "after/claude/skills/fkit-sprint-ship-loop/SKILL.md.txt"
+    },
+    {
+      "path": "codex/server.mjs",
+      "beforeSHA256": "c345d68c8ca569dc36a9c3ba3f066177bdd94d7b51594411e20ed7f9f22e68f1",
+      "afterSHA256": "3c8e53c0aee8d3c8d756a1f2546706bae59c0dc021f45686328ba288138a5003",
+      "afterSnapshot": "after/codex/server.mjs.txt"
+    },
+    {
+      "path": "codex/materialize.mjs",
+      "beforeSHA256": "5225138d3d3b73b77841630112d0f8fbea8c42f65bce72ede6166a8540295f48",
+      "afterSHA256": "f5632ef0fc4011bd1b5d83b1f71db45c43202e373c137571c09d70801d23bd2e",
+      "afterSnapshot": "after/codex/materialize.mjs.txt"
+    },
+    {
+      "path": "codex/README.md",
+      "beforeSHA256": "3d7b18b6a75fc0979971965a28a9e032f5626bbe3efc0e12ffbceafbb2d13527",
+      "afterSHA256": "32c9affe9ca0ca3f68db3b0a051f6401bd51031a3949f7aa46e0b9ae184dfeff",
+      "afterSnapshot": "after/codex/README.md.txt"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "beforeSHA256": "d84428baa4b2b54dbe8c8985c253056ea5d6b5fe8b69f5fc941166047004c3bc",
+      "afterSHA256": "89987d37545499cfe036e5c9df8c5613a50c6aa38bc6f4d701b582c4d3ebfd54",
+      "afterSnapshot": "after/CHANGELOG.md.txt"
+    },
+    {
+      "path": "test/launcher-contract.test.js",
+      "beforeSHA256": "95353e66b065d2f46da31eb8483d368eef22925dcd5e69fad027f7ddc8422ab9",
+      "afterSHA256": "18df6b82b49a18f23e41ba295df9f3bb315aa9d05bce1e46e8cdda12190fddfe",
+      "afterSnapshot": "after/test/launcher-contract.test.js.txt"
+    }
+  ],
+  "baselineFileCount": 2103,
+  "changedExistingPaths": [
+    "CHANGELOG.md",
+    "claude/agents/fkit-lead.md",
+    "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+    "codex/README.md",
+    "codex/materialize.mjs",
+    "codex/server.mjs",
+    "test/launcher-contract.test.js"
+  ],
+  "missingExistingPaths": [],
+  "unexpectedChangedPaths": [],
+  "unexpectedNewPaths": [],
+  "indexSHA256Before": "e2c76065cf42ccad24522b9fd4a541d11de56887381437310e6f7763ebb26b90",
+  "indexSHA256After": "e2c76065cf42ccad24522b9fd4a541d11de56887381437310e6f7763ebb26b90",
+  "indexEntriesPreserved": true,
+  "planPreserved": true,
+  "planReviewPreserved": true,
+  "otherBaselineFilesPreserved": true,
+  "existingChangelogDeltaPreserved": true,
+  "ignoredLocalSettingsAndGeneratedTrees": "No writes issued; excluded from baseline hash coverage. Fixture setup was disposable only.",
+  "finalScopedDiffCheckExit": 0,
+  "newTopLevelTestCases": 0,
+  "newPermanentTestFiles": 0,
+  "newProveRedCases": 0
+}

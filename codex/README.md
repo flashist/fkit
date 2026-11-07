@@ -28,7 +28,7 @@ Role customization shows all seven roles as a numbered list. Enter one number (s
 
 Codex requires stable CLI >=0.165.0. Live checks used Node 24.13.0 and Codex 0.165.0 on macOS. Claude adapter argument checks used CLI 2.1.312; **live Claude compatibility is not certified**. Other versions/platforms are unverified. See [acceptance evidence](../model-agnostic-sprint/local-acceptance.md).
 
-All seven roles run in fresh contexts. With no role, an initiated project gets the role menu; a fresh project enters producer onboarding, then lead after successful initiation. Interactive Codex sessions automatically send the role's canonical `initialPrompt` as the first message, so the role greets/orients the owner without waiting at a blank input. Role instructions alone do not start a turn. Explicit onboarding prompts are preserved; headless/delegated tasks receive only their supplied task prompt. Startup skill paths are adapted to `.agents/skills/`, and a role name is not treated as a skill. Headless work uses `--exec PROMPT` or `--prompt-file PATH`; large peer prompts use stdin. Direct interactive coder sessions receive the default plan-review signal; `--no-plan-review` opts out, `--plan-review` keeps it. Workers use their driver's standing approval and switch line. The owner gate remains required.
+All seven roles run in fresh contexts. With no role, an initiated project gets the role menu; a fresh project enters producer onboarding, then lead after successful initiation. Interactive Codex sessions automatically send the role's canonical `initialPrompt` as the first message, so the role greets/orients the owner without waiting at a blank input. Role instructions alone do not start a turn. Explicit onboarding prompts are preserved; headless/delegated tasks receive only their supplied task prompt. Startup skill paths are adapted to `.agents/skills/`, and a role name is not treated as a skill. Headless work uses `--exec PROMPT` or `--prompt-file PATH`; large peer prompts use stdin. Direct interactive Codex coder sessions receive the default plan-review signal; their actual launcher ON line enables review independently of owner-tool availability (ADR-060, 2026-11-06). Missing usable dialogue changes only approval to explicit fallback and waiting. Missing line stays OFF, `--no-plan-review` opts out, OFF wins conflicting lines, and quoted/file signals are ineffective; `--plan-review` cannot override an opt-out. Regular Claude still requires its actual launcher line and native owner tool. Workers retain their driver's standing approval and switch rules, with no direct-session switch or owner asking. The owner gate remains required.
 
 Every configured role loads procedures through `fkit_roles.fkit_skill`, checked against `claude/skills-for-role.sh`. Native catalog scoping is additional discovery control.
 The same three skill names are loadable by lead as forwarding entries: `fkit-status` delegates to
@@ -37,6 +37,32 @@ before the owner-only procedure. Loader/hook permission is mechanical; the lead 
 execution duties remain instructions. Direct producer/wiki calls still execute their full procedures.
 Lead relays complete reports/questions and wiki terminal flags without automatic closure.
  `fkit_consult` launches the selected CLI/model with fixed caller lineage, enforcing ordinary two-hop/cycle/leaf rules and the existing carry checker. That checker retains its source fail-open infrastructure policy and establishes fidelity, not proof of owner approval. Native subagents are disabled on this configured path. The helper is a session-scoped stdio process, not a persistent service. Manual file reads/CLI launches remain outside the invocation boundary.
+
+Worker completion returns to an **awaiting live turn**; the helper cannot start a later turn. The
+lead consumes each bounded return and required artifacts, reconciles completed/outstanding work,
+checks and decisions, then takes the next authorized action without an owner "continue" ping.
+Progress messages and "What's next?" footers create no approval gate. Producer closure requires the
+driver's full report/artifact cross-check before counting a task shipped or selecting newly eligible
+work. Real owner gates, recovery/status branches, task/session allowances and spend remain in force;
+exhaustion permits no further launch and there is no general retry allowance.
+
+The MCP transport marks empty/whitespace-only **post-adapter** responses as errors with
+`(No usable role response.)`, preserving exit/runtime/model/error metadata. Nonblank post-adapter
+responses, including available partial failure output, retain their text within the existing output
+bounds. Claude decoding, blank-decoded-result rejection and sanitized failures remain intact; this
+does not promise raw Claude failure forwarding. Shell fallback callers inspect exit status and
+returned text themselves. No prose-envelope parser or automatic relaunch is added.
+
+Before a foreseeable pause, save existing task evidence and a moment-specific
+`ai-agents/knowledge-base/reports/<YYYY-MM-DD>-lead-continuation-checkpoint-<run-id>.md` with board/goal,
+task ID plus canonical title, stage, approval provenance, artifact paths, outstanding decisions,
+allowances/spend, skip set, statuses and next authorized action. Later checkpoints use another
+filename. Preserve worklog/review ownership. Checkpoints are evidence, never renewed approval or a
+runtime cursor. Same-run restoration preserves spend and skip state; later invocations retain
+orphaned-plan reapproval and surviving owner limits. If the host cannot resume, report **paused**;
+the real action is an owner message in the existing session or an owner-started session supplied
+with the checkpoint. Abrupt loss can prevent saving; disclose missing state rather than reconstruct
+approval. Fixtures establish transport/delivery, not live model obedience or host resumption.
 
 A reviewer uses `fkit_adversarial` for the separate fresh leaf pass outside the ordinary hop budget. A usable same-model pass is supported with a visible recommendation for another model. Missing/unusable passes remain partial. Report pass availability, actual model identity/diversity and per-pass command evidence separately. Child results distinguish observed serving models from requested IDs; missing identities stay unknown. Private raw startup diagnostics are withheld; fixed safe failure categories are returned instead.
 
@@ -49,7 +75,79 @@ Only in a Claude-capable environment, an optional mixed role can be selected wit
 is deferred to the [verifier handoff](../model-agnostic-sprint/validation.md); it is not a prerequisite
 for local Codex-only use. No external verifier is currently assigned and no Claude success is claimed.
 
-Codex root owner questions use actual MCP form elicitation and wait. Cancellation, decline, interruption, invalid replies and explanation requests grant no approval. Headless workers return NEEDS-DECISION. Unsupported clients ask explicitly and wait. Actual CLI form rendering/submission/cancellation and worker relay passed. **The first Codex version registers neither fkit PreToolUse nor Stop hooks**, by the owner's 2026-10-29 follow-up ruling. Their implementation and registration code are retained, disabled behind `CODEX_HOOKS_ENABLED = false`, for possible later reactivation after usage feedback. The packaged `hook.mjs` file is dormant. Role/model/effort routing, dispatcher skill ownership, interactive owner forms and the written “What's next?” requirement remain in place; footer/question-tool reminders rely on instructions. Restart an existing session to drop its earlier session-scoped hooks. User-configured Codex hooks and legacy Claude hooks are not modified. Earlier successful hook probes are historical evidence, not active controls. No universal role-file write wall or Codex planning write wall is claimed. [ADR-061](../ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) records the accepted local limits; ADR-042 D2/task 0273 remains outstanding.
+Owner questions select the supported interface:
+
+| Session/path | Interface and gate |
+| --- | --- |
+| Eligible interactive Codex root, exposed tool and negotiated form support | `fkit_roles.fkit_ask_owner`; request a form and await the actual answer |
+| Supported interactive Claude root | Native `AskUserQuestion`; await the actual answer |
+| Missing/unsupported interface or failed delivery | State the concrete limitation; explicit fallback and waiting |
+| Headless/delegated worker or adversarial leaf | Return `NEEDS-DECISION`; never open owner forms |
+
+Advertisement requires root eligibility **and** negotiated form support; direct calls retain both
+guards. Valid explicit-form (`elicitation: {form: {}}`) and legacy empty-object (`elicitation: {}`)
+capabilities support requests. Absent, malformed and URL-only declarations do not. No capability API
+or host configuration is added. Capability proves request support, not automatic display.
+
+Separate capability, tool exposure, eligibility, request issuance/acceptance, queueing, observed
+presentation, actual answer and applicable approval. Invocation markers, `{"accepted":true}`, queued
+notifications and displayed but unanswered forms grant nothing. Claim display only with actual
+observation; there is no presentation acknowledgment. Unknown delivery remains unverified and the
+decision pending; do not repeatedly resubmit asynchronous requests or automate activation shortcuts.
+
+Fallback: “This session exposes no usable automatic owner dialogue. Decision: [exact scope]. Choices:
+[named alternatives and recommendation; standing explanation option]. Dependent work remains stopped
+until your answer.” State delivery uncertainty as uncertainty. Include `Explain more, then ask again`,
+described as `Give me more context in simple terms, then re-ask the question.` Answer explanation
+requests in chat, open no new question that turn, and re-ask on the owner's next message unless it
+answers the decision or asks another question. Take an applicable explicit prose answer without a
+confirmation form. Bind approval to the unchanged decision/plan, quoted answer, date and actual
+channel. Interface approval never approves implementation. Cancellation, decline, interruption,
+invalid/empty replies and silence grant no approval; no preselection auto-submits.
+
+Historical local CLI rendering/submission/cancellation and worker-relay checks are bounded evidence
+for the tested path, not certification of every host. **0555 — Use supported interactive owner questions with an explicit fallback: automatic live-display
+acceptance remains unmet:** root-owned observation must show selectable choices open before any owner activation, then
+ordinary submission and cancellation. Static inspection and protocol fixtures cannot establish it;
+fallback alone cannot pass it or permit quiet closure without an actual owner acceptance change.
+Claude/mixed live compatibility remains unverified. Independent-decision assembly is described below.
+
+**The first Codex version registers neither fkit PreToolUse nor Stop hooks**, by the owner's 2026-10-29 follow-up ruling. Their implementation and registration code are retained, disabled behind `CODEX_HOOKS_ENABLED = false`, for possible later reactivation after usage feedback. The packaged `hook.mjs` file is dormant. Role/model/effort routing, dispatcher skill ownership, interactive owner forms and the written “What's next?” requirement remain in place; footer/question-tool reminders rely on instructions. Restart an existing session to drop its earlier session-scoped hooks. User-configured Codex hooks and legacy Claude hooks are not modified. Earlier successful hook probes are historical evidence, not active controls. No universal role-file write wall or Codex planning write wall is claimed. [ADR-061](../ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) records the accepted local limits; ADR-042 D2/task 0273 remains outstanding.
+
+Each independently approvable action gets its own concise question and selectable alternatives.
+Current `fkit_ask_owner` accepts one `question` and at most four supplied option strings: up to three
+real choices plus `Explain more, then ask again`, last, once. Put its description,
+`Give me more context in simple terms, then re-ask the question.`, in visible preceding chat;
+recommendation first, marked. Ask sequentially, not with a `questions` array or concatenated choices.
+Other interfaces may batch separate question objects only when their actual shape/count limits and
+trustworthy identity support it; otherwise use the same sequential path. No batch API is added.
+Never silently drop valid alternatives or combine unrelated effects to fit: narrow faithfully or
+transparently stage a category/subset selection that grants no dependent action before the final
+exact-scope question, preserving each option's placement/dependency knock-on.
+
+Workers return one prose `NEEDS-DECISION { decisions: [{ id, question, options, recommendation,
+context }, ...] }`, at most three real options and plain context per item; the legacy single-question
+envelope remains valid. The root retains every item with a stable key, task ID plus canonical title,
+unchanged scope/revision, exact question/options, recommendation, state and answer provenance in the
+conversation and existing gated checkpoints. Keys are correlation aids, not runtime approval tokens
+or a new registry. Bind replies, custom follow-ups and re-asks by identity and unchanged scope, not
+list order or repeated labels; transport IDs alone establish no semantic consent. Accept valid
+partial answers only for their scopes; keep pending items. Changed scope/option meaning supersedes
+the old version and needs a fresh answer. Cancellation, ambiguous/empty results and late replies
+never authorize another decision. Any explanation request stops all new dialogs that turn; explain
+in chat, then on the next owner message take an applicable answer or answer another question;
+otherwise re-ask only unresolved items. Use fallback separately per decision when needed.
+
+Plan approval and retry allowance have separate keys and questions: neither grants the other.
+Record each actual approval's key/scope, quoted selection or exact custom/prose answer, date and
+actual channel in the existing authorized log/checkpoint; unknown provenance stays unknown. Carry
+the applicable approval and full scope faithfully to the next worker. Start dependent work only
+when every needed approval and allowance holds; unrelated authorized work follows existing rules.
+
+**0556 — Give each independent owner decision its own selectable options: behavioral and live-host
+acceptance remain UNVERIFIED.** Static source inspection does not establish two rendered decisions,
+ordinary submission/cancellation, partial/custom answer handling or worker-relay behavior. Execution
+checks are skipped under this checkout's owner test pause; no acceptance waiver or automatic closure.
 
 Owner forms have one answer field. Selecting a listed option submits without a separate comment.
 “Write another answer” opens a second form containing only a required text answer; choosing that

@@ -1,0 +1,77 @@
+{
+  "mode": "static closure data/document readback; not tests",
+  "all_original_files_accounted_for": true,
+  "old_folder_absent": true,
+  "original_files_moved": 47,
+  "original_files_unchanged": 2504,
+  "changed_existing_documents": [
+    {
+      "path": "ai-agents/sprints/sprint-15.md",
+      "matches_authorized_close_edit": true,
+      "sha256": "e562fee6e0aab963fb6e69d3a50ee625bde9fe53bb285d8757d3c393123839fd"
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+      "matches_authorized_close_edit": true,
+      "sha256": "a1decdd3da9810eee2dd4ecbfb040a2e440e723dc9d3548b320ff1a2dad7d280"
+    },
+    {
+      "path": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+      "matches_authorized_close_edit": true,
+      "sha256": "5167e3b97d0804affd0c6049384d06a0d39ea4a70b7956e31beb179196098adc"
+    },
+    {
+      "path": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md",
+      "matches_authorized_close_edit": true,
+      "sha256": "a29060a6e3f202d1ecc82ec0790a6c2ba5fbb8d4e0558f824f3c07944550100d"
+    },
+    {
+      "path": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+      "matches_authorized_close_edit": true,
+      "sha256": "2dabf317cb9c7f6406005663a33e0c8b870b2f359480d72af0d1862d5a3dba1f"
+    }
+  ],
+  "unexpected_existing_edits": false,
+  "missing": [],
+  "source16_unchanged": true,
+  "frozen_returns": 82,
+  "all_frozen_return_lines_unchanged": true,
+  "all_42_preexisting_evidence_files_unchanged": true,
+  "all_prior_index_records_preserved": true,
+  "index_added": 47,
+  "index_only_task_done_additions": true,
+  "brief_status": "\u2705 Done (agent-closed \u2014 not owner-verified)",
+  "board_line201": "| \u2705 Done (agent-closed \u2014 not owner-verified) | P4 | **0556 \u2014 Give each independent owner decision its own selectable options** *(Depends on nothing; blocks nothing. Owner `fkit-coder`)* | [0556 \u2014 Give each independent owner decision its own selectable options](../tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) |",
+  "board_line129": "| P4 | [0556 \u2014 Give each independent owner decision its own selectable options](../tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) | Each independent decision has its own concise question, selectable options and stable approval binding. |",
+  "sprint_banner_line3": "> ## \ud83d\udd04 In progress \u2014 2026-11-03.",
+  "review_status": "Status: closed-out",
+  "review_only_header_edit": true,
+  "plan_sha256": "48e1e2ece66d62038bf7eeb538ea5fc91fa2e55feff5a156505e733bc2fe9ed2",
+  "plan_review_sha256": "859ff2be66d508c49a541fdc44d798c5756b574c49484eabc828bb589e5652d2",
+  "whitespace": {
+    "exit": 2,
+    "finding": "pre-existing review.md:179 blank line at EOF; retained; not pass"
+  },
+  "relative_hrefs_hand_reviewed": 42,
+  "moved_worklog_hrefs_hand_reviewed": 3,
+  "inspection_issue": "Initial final-data readback raised Path+str TypeError before final artifact write; corrected path expression, rerun completed; no project code invoked.",
+  "no_commit_or_push_by_this_skill": true,
+  "execution_checks": "skipped \u2014 owner disabled test execution",
+  "new_artifacts_excluding_self": {
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/baseline.json": "47e33e2a58a2e204f03eccd0ef07ebaa33b7253950c3db8e095c0b4748dcf018",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/before/ai-agents/sprints/sprint-15.md": "d4b8a6f159332cc39fce0f27c97bde1c75ff8b05632b5df0cb795b237c4db16c",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/before/ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md": "d07b995be1fd18158dfb2dc14c289b22aeb6c8efd50bd2768619228afc23c4bf",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/before/ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md": "b50c1b26760be9d4755fb9b5e185cddbd7ef831df2d056801530e3ea9b2f571c",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/before/ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md": "46f03536de927ad6ddd8c1fc7f2dc18da3c9620460555a0a46c21266aba479ee",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/before/ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md": "0c94c7e37111e87cd6ffbb3d40f9f6fdab623af6e5e77a1f245cd98acc3df326",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/diff-check.txt": "259cd20ed916c6487e9fa2a4c36e15e15c6df4dde89607663c580b5355b69720",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/hand-reviewed-hrefs.json": "500cfedef320c8d4e461f08d13399031112331ff70e4ba2f04ab46c823025a11",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/incremental-close.diff": "bdb9a3228f6b1dc1b0047f4bea2361894813b9136306c8ae41f40bbba61d885e",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/index-before.bin": "9a40bbed514e2a7f66c53890d59e7970b6bda29f47201fca5d65be8f5a67c251",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/producer-close-report.md": "29d3d7bf276e91cf66d4d22992f37af68035431c1dff4baadfbd911796170662",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/readback.json": "f94ae663968760bf9dea783e996462e7ac7b79f68cbde9f9e5a215590d53653c",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/reference-inventory.json": "97f121fa389aada81a5531a998bb1cca7f2cb58e5deb0e9c923c6e26c1149242",
+    "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/close/status-before.txt": "9ae91b67e04ce1ac87835da4c95b769bcb151908cd5117b77983494befffb52d"
+  },
+  "new_artifact_count_including_self": 15
+}

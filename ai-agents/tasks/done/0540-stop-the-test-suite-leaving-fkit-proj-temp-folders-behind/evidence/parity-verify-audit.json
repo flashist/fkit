@@ -1,0 +1,247 @@
+{
+  "utc": "2026-11-04T09:41:45.535211+00:00",
+  "measurement": "parity-normal-full-20261104-verify.json",
+  "actualChildExit": 0,
+  "summary": {
+    "tests": 971,
+    "suites": 40,
+    "pass": 970,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 1,
+    "todo": 0,
+    "duration_ms": 76271.373959
+  },
+  "failedTests": [],
+  "skips": [
+    "benchmark: snapshot against the per-member path on corpus-sized boards (FKIT_BOARD_BENCH=1)"
+  ],
+  "sameTotalAsBaseline": true,
+  "sameSkipSetAsBaselineAndRestored": true,
+  "preservation": {
+    "fkit-proj-": {
+      "beforeCount": 34,
+      "afterCount": 34,
+      "setsIdentical": true,
+      "newSurvivors": [],
+      "removedInitial": [],
+      "originalCount": 28,
+      "diagnosticCount": 6,
+      "originalMissingBefore": [],
+      "originalMissingAfter": [],
+      "diagnosticMissingBefore": [],
+      "diagnosticMissingAfter": [],
+      "beforeEqualsPriorRestoredAfter": true,
+      "auditCensusEqualsAfter": true,
+      "auditNames": [
+        "fkit-proj-1xE5Pd",
+        "fkit-proj-4LWlXB",
+        "fkit-proj-7QYMYI",
+        "fkit-proj-8wya5w",
+        "fkit-proj-A35jMl",
+        "fkit-proj-BziL5b",
+        "fkit-proj-Dt1Ohy",
+        "fkit-proj-FbCixx",
+        "fkit-proj-Fo0L3E",
+        "fkit-proj-GRNL0u",
+        "fkit-proj-GpTkrX",
+        "fkit-proj-IlZfpx",
+        "fkit-proj-JN925z",
+        "fkit-proj-KuchsL",
+        "fkit-proj-Psaj4v",
+        "fkit-proj-S68VOx",
+        "fkit-proj-SLP7vR",
+        "fkit-proj-SbcTIk",
+        "fkit-proj-UFw58P",
+        "fkit-proj-Vt9BBK",
+        "fkit-proj-W9MmlD",
+        "fkit-proj-WB1jbd",
+        "fkit-proj-XEBuc8",
+        "fkit-proj-cYt2FF",
+        "fkit-proj-csjJSe",
+        "fkit-proj-e1rKnp",
+        "fkit-proj-iE0E4E",
+        "fkit-proj-iG1010",
+        "fkit-proj-jUSbu6",
+        "fkit-proj-nat4FV",
+        "fkit-proj-p9gsxt",
+        "fkit-proj-qwsUG1",
+        "fkit-proj-uPaF40",
+        "fkit-proj-yiO7KO"
+      ]
+    },
+    "fkit-stub-": {
+      "beforeCount": 1,
+      "afterCount": 1,
+      "setsIdentical": true,
+      "newSurvivors": [],
+      "removedInitial": [],
+      "originalCount": 1,
+      "diagnosticCount": 0,
+      "originalMissingBefore": [],
+      "originalMissingAfter": [],
+      "diagnosticMissingBefore": [],
+      "diagnosticMissingAfter": [],
+      "beforeEqualsPriorRestoredAfter": true,
+      "auditCensusEqualsAfter": true,
+      "auditNames": [
+        "fkit-stub-N1NUMD"
+      ]
+    },
+    "fkit-argv-": {
+      "beforeCount": 1,
+      "afterCount": 1,
+      "setsIdentical": true,
+      "newSurvivors": [],
+      "removedInitial": [],
+      "originalCount": 1,
+      "diagnosticCount": 0,
+      "originalMissingBefore": [],
+      "originalMissingAfter": [],
+      "diagnosticMissingBefore": [],
+      "diagnosticMissingAfter": [],
+      "beforeEqualsPriorRestoredAfter": true,
+      "auditCensusEqualsAfter": true,
+      "auditNames": [
+        "fkit-argv-hAiBaO"
+      ]
+    },
+    "fkit-conv-": {
+      "beforeCount": 0,
+      "afterCount": 0,
+      "setsIdentical": true,
+      "newSurvivors": [],
+      "removedInitial": [],
+      "originalCount": 0,
+      "diagnosticCount": 0,
+      "originalMissingBefore": [],
+      "originalMissingAfter": [],
+      "diagnosticMissingBefore": [],
+      "diagnosticMissingAfter": [],
+      "beforeEqualsPriorRestoredAfter": true,
+      "auditCensusEqualsAfter": true,
+      "auditNames": []
+    }
+  },
+  "processAudit": [
+    {
+      "when": "before",
+      "available": true,
+      "outsideRunnerTree": [],
+      "candidateCount": 1
+    },
+    {
+      "when": "2026-11-04T09:39:48.565Z",
+      "available": true,
+      "outsideRunnerTree": [],
+      "candidateCount": 12
+    },
+    {
+      "when": "2026-11-04T09:39:58.566Z",
+      "available": true,
+      "outsideRunnerTree": [],
+      "candidateCount": 10
+    },
+    {
+      "when": "2026-11-04T09:40:08.568Z",
+      "available": true,
+      "outsideRunnerTree": [],
+      "candidateCount": 5
+    },
+    {
+      "when": "2026-11-04T09:40:18.569Z",
+      "available": true,
+      "outsideRunnerTree": [],
+      "candidateCount": 5
+    },
+    {
+      "when": "2026-11-04T09:40:28.569Z",
+      "available": true,
+      "outsideRunnerTree": [],
+      "candidateCount": 4
+    },
+    {
+      "when": "2026-11-04T09:40:38.570Z",
+      "available": true,
+      "outsideRunnerTree": [],
+      "candidateCount": 4
+    },
+    {
+      "when": "2026-11-04T09:40:48.571Z",
+      "available": true,
+      "outsideRunnerTree": [],
+      "candidateCount": 4
+    },
+    {
+      "when": "after",
+      "available": true,
+      "outsideRunnerTree": [],
+      "candidateCount": 1
+    }
+  ],
+  "allSamplesOwned": true,
+  "hashesAfter": {
+    "test/dual-home-parity.test.js": "947e531c591310a14466a96434ea0c0b585716b4dc252eb52034c6fd1a73d22e",
+    "test/dual-home-parity-exceptions.mjs": "25c7161777c0d5cefac7312f9a59686e112c6d8e5a1ee76ddb17f3ebaaaf9f08",
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": "cb17f0a5561c448f28e1bc2b27e5fac9a64e25dd68aff1d3da273fd2f3da135a",
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    ".git/index": "a8f5e7698a080f20496ff18af077f2a40daa4ac3b762354b1240d7f0a8c714a3",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": "e51d2a1e07187b2a056bb28af81563762e73af5fce772e6a76f5e464138d8627",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "89b9593934ce2dde47bc849180dd75714cfe474f4cb64f363519c44f4925cc92"
+  },
+  "protectedHashesUnchanged": {
+    "test/dual-home-parity.test.js": true,
+    "test/dual-home-parity-exceptions.mjs": true,
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": true,
+    "test/orphan-cleanup.test.js": true,
+    "test/structure-notice.test.js": true,
+    "test/harness.mjs": true,
+    ".git/index": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": true
+  },
+  "head": "1767a47b9db50f3949789636c3e0b513950e7368",
+  "headUnchanged": true,
+  "statusAfter": " M ai-agents/knowledge-base/conventions/dual-home-parity.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md\n M test/dual-home-parity-exceptions.mjs\n M test/dual-home-parity.test.js\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-preflight.json\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md\n",
+  "stagedDiffEmpty": true,
+  "parityPatchEqualsBuild": true,
+  "orphanPatchEqualsApprovedOriginal": true,
+  "exceptionFromTypedefUnchanged": true,
+  "noticeHarnessWorkingDiffEmpty": true,
+  "planBlob": "a7245d31f2c7c91d6efd1b6642a08c08db2e04f3",
+  "amendmentBlob": "5eaedf1d2c2f1eca1149fc9682190ccb3effbe6c",
+  "diffCheckExit": 0,
+  "sourcePathsAgainstBaseline": [
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md",
+    "test/dual-home-parity-exceptions.mjs",
+    "test/dual-home-parity.test.js",
+    "test/orphan-cleanup.test.js"
+  ],
+  "loadBefore": [
+    17.20068359375,
+    17.46630859375,
+    14.19140625
+  ],
+  "loadAfter": [
+    24.99169921875,
+    20.6396484375,
+    15.7529296875
+  ],
+  "peakSampledOneMinuteLoad": 29.8544921875,
+  "idleMacEstablished": false,
+  "timingLimit": "Busy-machine measured duration only; no idle-Mac acceptance or waiver.",
+  "priorFailureProbes": "Not re-executed. Prior restoration records plus current exact orphan/notice hashes preserve completed hand-probe evidence.",
+  "limits": [
+    "No continuous observation between ten-second process samples; no outside test tree observed in snapshots.",
+    "After hooks do not prove SIGKILL/crash/abrupt-exit recovery or allocation errors before makeProject returns.",
+    "Independent whole-task source review and Process-review remain driver gates; no acceptance waiver or closure."
+  ],
+  "workerChanges": "Task worklog, sanitized task evidence and ignored scratch only; no source/metadata/approved-artifact/status/wiki/index edits, commit/push or lifecycle action.",
+  "decisionLog": "No permanent fix or obvious-winner call. Reused existing runner once under scoped elevation after child-ps denial. No automatic-approval rejection or denied test attempt.",
+  "scopeAndPreservationPass": true,
+  "suitePass": true
+}

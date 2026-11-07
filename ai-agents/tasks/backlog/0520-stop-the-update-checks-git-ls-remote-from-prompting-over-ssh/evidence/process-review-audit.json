@@ -1,0 +1,156 @@
+{
+  "task": "0520 — Stop the update check's git ls-remote from prompting over ssh when git rewrites GitHub URLs",
+  "worker": "Process-review",
+  "date": "2026-11-05",
+  "method": "fkit-process-stateful-review steps 0–7, including 3.5",
+  "unitStatus": "COMPLETE; verification still blocked",
+  "ledgerStatus": "in-review",
+  "novelFindings": 0,
+  "dispositions": 0,
+  "sourceChanges": "NONE",
+  "autonomousFixesAndObviousWinnerChoices": "NONE",
+  "newAcceptedResiduals": "NONE",
+  "existingFilesFingerprinted": 3133,
+  "workerExistingFileChanges": {
+    "ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/review.md": {
+      "before": {
+        "sha256": "f569213625c54358179b61fae3ce8fc79171eab1d56bde3f225929eab1f551d4"
+      },
+      "after": {
+        "sha256": "9bb95bf80dc587a8f4b92241c8f82c0613bb182ddb1024b34cacaf02b708dd47"
+      }
+    },
+    "ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/worklog.md": {
+      "before": {
+        "sha256": "490f4cfb77cd014844eb6f2045343e29bcbf33fb3189749c49cc28eb5f6536fa"
+      },
+      "after": {
+        "sha256": "00a78c715d234ae6d842e797a6b5769e723086c02fc5d6d99baaa50a4c727ee9"
+      }
+    }
+  },
+  "concurrentObservedExistingChangesNotWrittenByWorker": {
+    "ai-agents/sprints/sprint-15.md": {
+      "before": {
+        "sha256": "469d86e1facbfc273485e79ac0fab59665ed2b62a75bfc5c012de3e480774db2"
+      },
+      "after": {
+        "sha256": "fab0f40f10eef6f098f1e8aad35a5883c0c7e36867bb809c8954cdc07aae8f15"
+      }
+    },
+    "ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md": {
+      "before": {
+        "sha256": "ca67ecb3581cd8aa2020dea7bb55123dc45f9f7e5665e9c4206a2fdfd4159884"
+      },
+      "after": {
+        "sha256": "969045f96a5d8e92ad0166898507092c5018aa0f88ca963c45c740cb531a4ec8"
+      }
+    },
+    "ai-agents/tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md": {
+      "before": {
+        "sha256": "6a2138ea7598c0cb7e645c667062dc7ba8c61ea484444f950a0dd99f33f6d495"
+      },
+      "after": {
+        "sha256": "9999fc2030569f02af4a81321d4e82f7ca0b57f6dcb4132415beeca06b964421"
+      }
+    }
+  },
+  "concurrentActorAttribution": "unverified",
+  "newPathsObservedBeforeAudit": [],
+  "initialWholeWorkspacePreservationAssertion": "FAILED: additional concurrent brief/board changes detected; not reverted",
+  "wholeWorkspaceBytePreservationClaimed": false,
+  "reviewerPrefixUnchanged": true,
+  "acceptedResidualSuffixUnchanged": true,
+  "originalWorklogPrefixUnchanged": true,
+  "allOtherCapturedExistingFilesUnchanged": false,
+  "sourceSha256": {
+    "claude/fkit-claude.sh": "00c4a94e7cfa689e6a5454070d370dea434cfc6d23da25e612567c105b2862b7",
+    "test/update-banner.test.js": "c091f779baab9c8d4f7857a3a2495226f0c5b6f1b3c37d1dbcb427d1c28d90c6",
+    "CHANGELOG.md": "d84428baa4b2b54dbe8c8985c253056ea5d6b5fe8b69f5fc941166047004c3bc"
+  },
+  "protectedPlans": {
+    "plan.md": {
+      "sha256": "f826017d32f25b215af4aa3487a3df608dcb5edf181bb83e4f6b218d23c89cca",
+      "gitBlob": "1297f0a70508f6687c0e699b5af50de010f3ff44"
+    },
+    "verification-amendment.md": {
+      "sha256": "8f87c26bc0f1387580ffe5e0e97bf2f6892800b20ec444fd9befe19f68148e15",
+      "gitBlob": "baf36f4909f30b4c5bb75fbebef7796b64e1bbe7"
+    },
+    "plan-review.md": {
+      "sha256": "5f6ee3d2da8bd83de64ff13271fb10759d7b8e332afde6495e35ec59d77aa9ab",
+      "gitBlob": "c6a27377848b0963358b641bdc5f664ce84dae57"
+    }
+  },
+  "buildPatchSha256": "019673d62862ede2e7653de2f7d2eed43d601fef56cd270bcb5092376f802b94",
+  "indexSha256": "464773f2e72a7be7284f8b9f62be585d6aa87f5d758efc5e515c40a61b078799",
+  "indexUnchanged": true,
+  "actualExecution": [
+    "Read-only source/document inspection",
+    "SHA-256, snapshot and git hash-object comparisons: PASS for scoped source/patch/approved artifacts/index",
+    "Document shape/ownership and original worklog prefix assertions: PASS",
+    "Whole-workspace scan: concurrent changes disclosed separately"
+  ],
+  "behavioralChecksRerun": [],
+  "inheritedPrimaryReviewer": {
+    "threeApprovedCases": "3/3 pass, exit 0",
+    "shellSyntax": 0,
+    "nodeSyntax": 0,
+    "scopedWhitespace": 0
+  },
+  "inheritedIndependentLeaf": {
+    "usable": true,
+    "execution": "static inspection and hash comparison only",
+    "behavioralExecution": false,
+    "configuredRequestedModel": "gpt-6.1-sol",
+    "servingIdentityAndDiversity": "unknown"
+  },
+  "inheritedBuild": {
+    "expectedRed": "3 failures at required product assertions",
+    "targetedGreen": "3/3 pass",
+    "focusedBanner": "18/18 pass",
+    "globalWhitespace": "exit 2 on unchanged archived 0552 artifacts; not repeated"
+  },
+  "inheritedVerify": {
+    "filtered": {
+      "tests": 970,
+      "suites": 40,
+      "pass": 946,
+      "fail": 23,
+      "cancelled": 0,
+      "skipped": 1,
+      "todo": 0
+    },
+    "filteredExit": 1,
+    "loopbackEpermFailures": 22,
+    "unresolvedFirstUseFailure": "9 versus 15; cause/patch attribution unestablished",
+    "proveRedExit": 1,
+    "proveRedGate": "FAILED",
+    "baseline0b": {
+      "tests": 75,
+      "suites": 4,
+      "pass": 74,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "baseline0c": "green",
+    "mutants": "M1/M2/M30/M31 red; launcher proofs invalidated by 0b"
+  },
+  "ownerDisposition": {
+    "date": "2026-11-05",
+    "channel": "interactive fkit_roles.fkit_ask_owner in root lead",
+    "rootRecorded": "10:00:21 UTC",
+    "verbatim": "Keep blocked; continue implementation (Recommended) — Leave this task open with failed verification recorded, then continue the next eligible sprint task. No closure exception."
+  },
+  "rootReverifyTriggeredBySourceChange": false,
+  "remainingBlocker": "Required functional verification failed; no waiver or closure exception",
+  "commitPushStagingMover": "NONE",
+  "limitations": [
+    "No unfiltered default suite or expressly excluded bodies executed",
+    "Native HTTPS/TLS/proxy, live authentication and Linux unverified",
+    "Synthetic helper evidence establishes isolated transport/configuration/environment behavior only",
+    "Both passes used the same configured/requested model; exact serving identity/diversity unknown"
+  ]
+}

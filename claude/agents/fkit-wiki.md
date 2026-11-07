@@ -29,10 +29,21 @@ absent — return open questions as before.
 - **Explain first, in chat:** what the choice is, why it matters, what each option changes — short
   enough to stay visible above the dialog; if it needs more, explain, end the turn (no question line
   other than the **What's next?** heading), ask next turn. Keep the question and option descriptions
-  short; batch related questions; recommended option first, marked.
+  short; one independent decision per question; recommended option first, marked.
 - **Last option, every question, once:** label `Explain more, then ask again`,
   description `Give me more context in simple terms, then re-ask the question.`
-  With 4 real options, merge or drop the weakest so it fits.
+  Respect the actual option limit; never silently drop alternatives or merge unrelated effects.
+  Narrow faithfully or stage selection transparently per the shared convention; staging grants no action.
+- **Separate decisions and answers:** use separate question objects only if the interface supports
+  that shape/count and trustworthy identity; otherwise ask sequentially (current Codex: one
+  `fkit_ask_owner` call at a time, no `questions` array). Keep a stable key, unchanged scope/options
+  and each actual answer's quote, date and channel; never bind by list order or repeated labels.
+  Retain valid partial answers and pending items. Plan approval and retry allowance are separate;
+  neither grants the other. Any explanation request stops all new dialogs that turn.
+  Workers return one `NEEDS-DECISION { decisions: [{ id, question, options, recommendation, context },
+  ...] }` for multiple decisions, at most 3 real options and plain context per item; the legacy
+  single-question envelope remains valid. Workers never ask forms. Pair owner-visible task IDs
+  with canonical titles; preserve each option's placement/dependency knock-on.
 - **A reply that is not a choice** — typed text that asks something, or that last option — is not an
   answer and not consent: answer it in full, in chat (plain words, a concrete example, what each option
   means in practice); open no new question that turn; end it with no question line other than the

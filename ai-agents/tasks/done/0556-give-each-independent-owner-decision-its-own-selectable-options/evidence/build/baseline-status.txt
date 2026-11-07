@@ -1,0 +1,186 @@
+ M .github/workflows/prove-red.yml
+ M .github/workflows/test.yml
+ M AGENTS.md
+ M CHANGELOG.md
+ M CLAUDE.md
+ M CONTRIBUTING.md
+ M README.md
+ M RELEASING.md
+ M ai-agents/knowledge-base/architecture.md
+ M ai-agents/knowledge-base/conventions/asking-the-owner.md
+ M ai-agents/knowledge-base/conventions/dual-home-parity.md
+ M ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md
+ M ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md
+ M ai-agents/sprints/backlog.md
+ M ai-agents/sprints/sprint-15.md
+ M ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md
+ M ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md
+ M ai-agents/tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md
+RM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json
+RM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md
+RM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/brief.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-baseline.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-source.diff
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-static-checks.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-audit-20261104.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-checkpoint-20261104.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-final-20261104.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-final-audit.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-npm-test.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-preflight.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-static-readback.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/plan-review.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/plan.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/review.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/worklog.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/CHANGELOG.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/claude/agents/fkit-lead.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/claude/skills/fkit-sprint-ship-loop/SKILL.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/codex/README.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/codex/materialize.mjs.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/codex/server.mjs.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/test/launcher-contract.test.js.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/artifact-manifest.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/audit.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/baseline-source.diff
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/baseline.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/CHANGELOG.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/claude/agents/fkit-lead.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/claude/skills/fkit-sprint-ship-loop/SKILL.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/codex/README.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/codex/materialize.mjs.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/codex/server.mjs.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/test/launcher-contract.test.js.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/delivery-seam.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/scoped-checks.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-green.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-green.tap
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-red.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-red.tap
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/task-source.diff
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/process-review-r1-preflight.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/process-review-r1-result.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-audit.py
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-bash-env.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-collect-step.py
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-consumed-evidence.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-preflight.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-progress-01.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-prove-red-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-prove-red-result.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-prove-red.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-0b.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-0b.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-0c.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-0c.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-1.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-1.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-2.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-2.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-30.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-30.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-31.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-31.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/coverage-limits.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/delivery-attempt1.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/delivery-attempt2-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/delivery-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/delivery-command.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/delivery.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/existing-fixture-results.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-sandbox-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-sandbox.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-sandbox.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-scoped-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-scoped.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-scoped.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/intermediate-preservation.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/launcher-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/launcher.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/launcher.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/preflight.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/prove-red-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/prove-red-step-0b.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/prove-red.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/prove-red.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/run-lane.py
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/whitespace-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/whitespace.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/whitespace.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/plan-review.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/plan.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/review.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/worklog.md
+ M ai-agents/wiki-vault/index.md
+ M ai-agents/wiki-vault/log.md
+ M ai-agents/wiki-vault/wiki/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md
+ M ai-agents/wiki-vault/wiki/systems/testing-and-verification.md
+ M bin/release.mjs
+ M claude/agents/fkit-lead.md
+ M claude/fkit-claude.sh
+ M claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+ M claude/scaffold/universal-rules.md
+ M claude/skills/fkit-open-questions-interview/SKILL.md
+ M claude/skills/fkit-plan-task/SKILL.md
+ M claude/skills/fkit-sprint-ship-loop/SKILL.md
+ M claude/skills/fkit-task-ship-loop/SKILL.md
+ M claude/structure-manifest.tsv
+ M codex/README.md
+ M codex/materialize.mjs
+ M codex/owner-question.mjs
+ M codex/server.mjs
+ M package.json
+ M test/board-reader-host.test.js
+ M test/board/cli.test.js
+ M test/board/model.test.js
+ M test/board/server.test.js
+ M test/board/snapshot-index.test.js
+ M test/board/sprints.test.js
+ M test/board/store.test.js
+ M test/dual-home-parity-exceptions.mjs
+ M test/dual-home-parity.test.js
+ M test/harness.mjs
+ M test/launcher-contract.test.js
+ M test/prove-red.sh
+ M test/update-banner.test.js
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/plan-review.md
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/plan.md
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/review.md
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/verification-amendment.md
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/worklog.md
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan-review.md
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan.md
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/worklog.md
+?? ai-agents/tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/plan-review.md
+?? ai-agents/tasks/backlog/0553-include-task-titles-alongside-ids-in-owner-facing-communication/
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-audit.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-preflight.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-audit.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-final-disposition-20261104.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/quiet-window-precheck-20261104.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md
+?? test/execution-disabled.mjs

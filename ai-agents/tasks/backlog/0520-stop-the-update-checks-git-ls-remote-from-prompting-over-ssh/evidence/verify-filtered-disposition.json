@@ -1,0 +1,44 @@
+{
+  "task": "Task0520 \u2014 Stop the update check's git ls-remote from prompting over ssh",
+  "childExit": 1,
+  "counts": {
+    "tests": 970,
+    "suites": 40,
+    "pass": 946,
+    "fail": 23,
+    "cancelled": 0,
+    "skipped": 1,
+    "todo": 0
+  },
+  "excludedNamesPresentInRunnerOutput": {
+    "0284/git-deadline:": false,
+    "0284/term-ignored:": false,
+    "0284/no-stray:": false,
+    "a break file left by a dead breaker is removed, and waiters back off meanwhile": false
+  },
+  "newProcessCases": [
+    "\u2714 0520/scp-rewrite",
+    "\u2714 0520/ssh-url-rewrite",
+    "\u2714 0520/https-preserved-and-scoped"
+  ],
+  "failures": {
+    "boardListenerBoundary": {
+      "tests": 22,
+      "diagnostic": "listen EPERM: operation not permitted on loopback"
+    },
+    "launcherContract": {
+      "tests": 1,
+      "testName": "bare first use: each runtime saves once and continues fresh onboarding or existing-project menu",
+      "location": "test/launcher-contract.test.js:669",
+      "actualAnsweredPrompts": 9,
+      "expectedSteps": 15,
+      "fixtureLauncherExitMarker": 0,
+      "cause": "Unresolved; no startup/native configuration investigation or repair authorized."
+    }
+  },
+  "reportedSkip": "Existing opt-in board benchmark; not enabled.",
+  "reruns": 0,
+  "sourceChanges": "NONE",
+  "automaticApprovalRejection": "None; no escalation requested or denied.",
+  "interpretation": "Single sandboxed filtered run FAILED; this is not an unfiltered pass or proof of an approved-source defect."
+}

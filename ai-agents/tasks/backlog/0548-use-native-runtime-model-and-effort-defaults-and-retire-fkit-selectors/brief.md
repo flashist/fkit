@@ -7,7 +7,7 @@
 Sprint 15
 
 ## Priority
-P4
+7
 
 ## Status
 🔲 Backlog
@@ -16,6 +16,42 @@ P4
 fkit-coder
 
 ## Context
+
+**Current priority — owner ruling, 2026-11-06, user chat in root `fkit-lead`, relayed to
+`fkit-producer`; not producer precedent for re-ranking.** Now Sprint 15/P7
+(previously P4). The exact owner request is recorded on
+[Sprint 15](../../../sprints/sprint-15.md) under the dated owner-priority addendum.
+The new lead-continuation/question tasks come first among open work; the prior open tasks keep
+their relative order. This supersedes earlier priority and next-task/order statements only;
+quoted decisions remain historical. Status, disposition, placement, dependencies, existing
+approval gates and retry caps are unchanged. No implementation-plan approval or extra launch.
+
+## Current continuation — planning stage parked, 2026-11-06
+
+**0548 — Use native runtime model and effort defaults and retire fkit selectors** is reset to
+`🔲 Backlog`: both owner-permitted launches for the final draft revision returned no usable draft.
+The driver read both empty role returns and the absent optional checkpoint. The existing R1 draft
+is intact and unapproved; no approved `plan.md` exists. Retain the incomplete review record below.
+No further launch is authorized by the two-launch stage allowance. Skip this task for this run;
+any additional attempt is an owner decision. This parking changes no priority, placement,
+dependency, accepted product choice or source-write gate. Earlier In-progress claim text is
+historical and superseded by this exit.
+
+**Current planning claim — 2026-11-05, root `fkit-lead` ship-loop.** Claimed for root-owned
+plan-only work under the 2026-11-03 sprint-start approval and the owner's 2026-11-05 continuation
+ruling recorded on [Sprint 15](../../../sprints/sprint-15.md). Eligibility checked against the
+actual briefs and deterministic dashboard: P1/0540 is agent-closed Done, P2/0537 is owner-deferred,
+and P3/0520 is blocked by failed verification and skipped this run. This task is P4, depends on
+nothing and has no current session claim in its retained records. `fkit-coder` remains the
+accountable role; `fkit-lead` owns this planning claim.
+
+No approved `plan.md` exists. The two failed attempts in [plan-review.md](plan-review.md) remain
+historical, not current approval; this claim neither spends another worker retry nor authorizes
+extra launches under their exhausted retry allowance. Plan review remains ON (default); actual
+owner approval of the reviewed implementation plan is required before source writes. The owner's
+latest user-chat ruling defers timing, delay, benchmark and test-duration work for now, including
+the inherited gates below. No startup/configuration investigation is reopened. Scope, placement,
+priority, dependencies and all other approval gates remain unchanged.
 
 **Owner request — 2026-10-30, user chat, relayed verbatim by `fkit-lead`:**
 

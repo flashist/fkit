@@ -4,8 +4,8 @@
 // WHAT THIS IS. `ai-agents/` (fkit's own working tree) and `claude/scaffold/ai-agents/` (the template a
 // consuming project receives at init) hold some of the same documents. `conventions/dual-home-parity.md`
 // says an fkit-authored file living in both homes must be byte-identical in both. This module is the
-// machine-readable list of every path where that rule does NOT apply, WITH the reason it does not —
-// because an exception with no stated reason is an unfalsifiable permanent hole in 0133's test.
+// machine-readable authored-path exception list, WITH each reason the rule does not apply —
+// because an unexplained authored-path exemption would leave a permanent hole in parity.
 //
 // THIS MODULE IS AUTHORITATIVE. `conventions/dual-home-parity.md` carries a human-readable mirror of
 // the table below; where the two disagree, this file wins and the convention is stale. Task 0133's
@@ -29,11 +29,13 @@
 //   - `kind` is one of: 'audience-adapted' | 'placeholder' | 'index' | 'fkit-repo-only' | 'live-only'
 //     | 'project-content-dir' | 'runtime-state'.
 //
-// HOW A CONSUMER USES IT. Run `diff -rq ai-agents/ claude/scaffold/ai-agents/` and require that EVERY
-// reported line — `Files … differ` AND `Only in …` alike — maps to an entry here (exact `path` match,
+// HOW A CONSUMER USES IT. Run `diff -rq ai-agents/ claude/scaffold/ai-agents/`; every authored-path
+// line — `Files … differ` AND `Only in …` alike — must map here (exact `path` match,
 // or falls under a directory entry). Anything left over is drift. Do NOT filter `Only in ai-agents`
 // lines away first: `dependency-declaration-form.md`'s absence from the scaffold was a genuine
 // violation of the repo's own rule and it showed up as exactly such a line.
+// The separate metadata rule prevents incidental OS files from obscuring authored drift;
+// see the convention for the paired exact-name, regular-type and neither-tracked safeguards.
 
 /** @typedef {{ path: string, kind: string, reason: string }} ParityException */
 

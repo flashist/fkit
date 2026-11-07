@@ -1,0 +1,10 @@
+{
+  "command": "npm run test:prove-red",
+  "childExit": 1,
+  "wrapperResult": "completed child and saved evidence",
+  "counts": {},
+  "failedNames": [],
+  "keptArtifacts": [
+    "evidence/verify/prove-red-step-0b.txt"
+  ]
+}

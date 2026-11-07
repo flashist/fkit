@@ -1,0 +1,31 @@
+{
+  "utc": "2026-11-04T09:39:28.058537+00:00",
+  "label": "parity-normal-full-20261104-verify",
+  "hashes": {
+    "test/dual-home-parity.test.js": "947e531c591310a14466a96434ea0c0b585716b4dc252eb52034c6fd1a73d22e",
+    "test/dual-home-parity-exceptions.mjs": "25c7161777c0d5cefac7312f9a59686e112c6d8e5a1ee76ddb17f3ebaaaf9f08",
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": "cb17f0a5561c448f28e1bc2b27e5fac9a64e25dd68aff1d3da273fd2f3da135a",
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    ".git/index": "a8f5e7698a080f20496ff18af077f2a40daa4ac3b762354b1240d7f0a8c714a3",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": "e51d2a1e07187b2a056bb28af81563762e73af5fce772e6a76f5e464138d8627",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "89b9593934ce2dde47bc849180dd75714cfe474f4cb64f363519c44f4925cc92"
+  },
+  "head": "1767a47b9db50f3949789636c3e0b513950e7368",
+  "sourcePatchEqualsBuild": true,
+  "stagedDiffEmpty": true,
+  "activity": [],
+  "processInspectionExit": 0,
+  "localBind": "permitted",
+  "status": " M ai-agents/knowledge-base/conventions/dual-home-parity.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\n M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md\n M test/dual-home-parity-exceptions.mjs\n M test/dual-home-parity.test.js\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md\n",
+  "baseline": "20813ecb23974af0f6feac7404b0b5a8a1f4608a",
+  "sourcePathsAgainstBaseline": [
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md",
+    "test/dual-home-parity-exceptions.mjs",
+    "test/dual-home-parity.test.js",
+    "test/orphan-cleanup.test.js"
+  ],
+  "deniedPreflight": "Default sandbox Python child ps launch raised PermissionError errno 1; no tests launched and no durable evidence written in that attempt."
+}

@@ -1,0 +1,208 @@
+{
+  "iteration": 1,
+  "status": "NEEDS-DECISION",
+  "N": 16,
+  "invocations": [
+    {
+      "index": 1,
+      "variant": "safe-reference",
+      "path": "/Users/mark.dolbyrev/Workspace/fkit/ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1/1-safe-reference-focused/result.json",
+      "assertionResult": "NODE_TEST_PASS",
+      "cleanup": "UNKNOWN_OR_PENDING; FIXTURES_RETAINED"
+    }
+  ],
+  "authority": "Relayed diagnosis-only approval; no source repair",
+  "startedUTC": "2026-11-04T17:48:52.776Z",
+  "burners": {
+    "requestedN": 16,
+    "spawned": 16,
+    "entries": [
+      {
+        "index": 0,
+        "pid": 82643,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 1,
+        "pid": 82644,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 2,
+        "pid": 82645,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 3,
+        "pid": 82646,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 4,
+        "pid": 82647,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 5,
+        "pid": 82648,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 6,
+        "pid": 82649,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 7,
+        "pid": 82650,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 8,
+        "pid": 82651,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 9,
+        "pid": 82652,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 10,
+        "pid": 82653,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 11,
+        "pid": 82654,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 12,
+        "pid": 82655,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 13,
+        "pid": 82656,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 14,
+        "pid": 82657,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      },
+      {
+        "index": 15,
+        "pid": 82658,
+        "ready": true,
+        "exited": true,
+        "closed": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    ],
+    "issues": [],
+    "status": "IPC_STOPPED_AND_EXITED"
+  },
+  "interrupted": true,
+  "stopReason": "Passive provenance or settlement UNKNOWN/PENDING; stop new runs",
+  "finishedUTC": "2026-11-04T17:49:00.149Z",
+  "loadAfterIPCStop": [
+    7.470703125,
+    7.51318359375,
+    6.72509765625
+  ]
+}

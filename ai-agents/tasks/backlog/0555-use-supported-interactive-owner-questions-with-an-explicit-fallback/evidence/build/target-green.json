@@ -1,0 +1,9 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-name-pattern=^lead owner channel:|^configured owner questions:",
+    "test/launcher-contract.test.js"
+  ],
+  "exit": 0
+}

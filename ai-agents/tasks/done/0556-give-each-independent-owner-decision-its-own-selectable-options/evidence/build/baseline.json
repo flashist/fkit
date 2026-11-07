@@ -1,0 +1,69 @@
+{
+  "files": {
+    "ai-agents/knowledge-base/conventions/asking-the-owner.md": {
+      "sha256": "6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92",
+      "bytes": 9762
+    },
+    "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md": {
+      "sha256": "6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92",
+      "bytes": 9762
+    },
+    "claude/agents/fkit-lead.md": {
+      "sha256": "b5331eec699683519ecff77567628ae8c0bc88fea0dd9efc6ad1b151d8b06d3c",
+      "bytes": 22430
+    },
+    "claude/agents/fkit-coder.md": {
+      "sha256": "ad6919452b9bdf032e38d746d7a3539942cbb817df70c760ba11d9deb97d8fc8",
+      "bytes": 27079
+    },
+    "claude/agents/fkit-producer.md": {
+      "sha256": "0519cda4c221b915710f04f15ad3b8d74c988a1ad2db11f4b1954d7855107837",
+      "bytes": 13831
+    },
+    "claude/agents/fkit-reviewer.md": {
+      "sha256": "e8461b8a9f9c4f72e4618812e0a19b6c12daebf12d745d88d6857fded4e17c0b",
+      "bytes": 8646
+    },
+    "claude/agents/fkit-architect.md": {
+      "sha256": "fca99ec3f7574298d6e8c0a702a3cf01d98a696716275f25d5f5cfbdb42ad80d",
+      "bytes": 10463
+    },
+    "claude/agents/fkit-wiki.md": {
+      "sha256": "57bef8ec2154febc017bf493cdfa02f8623783c9a88304bef9a4b344d8b8fc13",
+      "bytes": 7405
+    },
+    "claude/skills/fkit-sprint-ship-loop/SKILL.md": {
+      "sha256": "e338e2a7f166554edddfb17fc9520c948cd080a709163a272ea5e53ad76893c5",
+      "bytes": 58283
+    },
+    "claude/skills/fkit-task-ship-loop/SKILL.md": {
+      "sha256": "4b89044e9cb73d7d2e331ff6fdece0696f38f248dcdb723568fc16b033602192",
+      "bytes": 31548
+    },
+    "claude/skills/fkit-open-questions-interview/SKILL.md": {
+      "sha256": "1d63192de846a718cf3f121bed8b43ae0078fb37ddcc7fecb6eb5283a0be22a1",
+      "bytes": 7310
+    },
+    "claude/skills/fkit-heal/SKILL.md": {
+      "sha256": "dff929f3d7657b9534ff66320ab0e60b4f7bc0de71e9234daef5c07bf5b9d16f",
+      "bytes": 10208
+    },
+    "codex/materialize.mjs": {
+      "sha256": "d56fae7c31e96c1521fe679a974f3d883f2b3364c9da9004d52439fc827b4756",
+      "bytes": 29363
+    },
+    "codex/README.md": {
+      "sha256": "d4d98b626b991445c04371ce3f6015cd25579af78b7daa81962c8c9198ca6daf",
+      "bytes": 18202
+    },
+    "CHANGELOG.md": {
+      "sha256": "f27d29ec806181145140eaa01e1496bf5ec1a9ef8caedd1a36c25610d017506d",
+      "bytes": 18584
+    },
+    "claude/structure-manifest.tsv": {
+      "sha256": "56c3f45ea2a4a8b5fe7f22b963a31c2bf7b725ef18ffdcbab42799b855ee60a8",
+      "bytes": 11287
+    }
+  },
+  "basis": "starting working-tree bytes, including all prior changes"
+}

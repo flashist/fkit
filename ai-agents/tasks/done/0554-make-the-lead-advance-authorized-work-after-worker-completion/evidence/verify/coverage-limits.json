@@ -1,0 +1,30 @@
+{
+  "task": "0554 \u2014 Make the lead advance authorized work after worker completion",
+  "actualHandoff": "Caller reports Build return consumed and fresh independent Verify launched; this worker confirms it started verification. Not a post-implementation universal continuation proof.",
+  "unverifiedWorkflowScenarios": [
+    "verified producer close \u2192 next eligible task",
+    "plan/scope approval waiting",
+    "rejected approval and user stop",
+    "partial/empty worker artifact recovery",
+    "exhausted explicit allowance",
+    "blocked parking and eligible independent advance",
+    "torn state",
+    "unavailable host later-turn restoration",
+    "live current 0555 owner question delivery",
+    "0556 independent question assembly"
+  ],
+  "filteredCoverage": "Exact approved skip pattern; omitted tests need not be counted as skipped by Node. No full-default-suite pass claimed.",
+  "omittedFunctionalCoverage": [
+    "three banner cases, including stalled-check termination/escalation and watchdog cleanup",
+    "two reinstall cases, including download-failure and partial-script protection",
+    "mixed board stale-break cleanup/lock recovery case",
+    "optional benchmark snapshot equivalence/access-count checks"
+  ],
+  "adapters": {
+    "Codex": "Existing named transport case executed with current changes.",
+    "Claude": "Existing configured-delegation success decoding and observed model metadata executed. Blank/failure adapter variants unexecuted; unchanged source retains decoded-blank rejection and sanitized failures. No raw failure forwarding promise."
+  },
+  "noLiveProbes": true,
+  "noPerformanceAcceptance": true,
+  "independentReview": "Not this worker; root later fresh reviewer + leaf, full coder processing; producer-only closure if acceptable."
+}

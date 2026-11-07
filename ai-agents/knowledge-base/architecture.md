@@ -86,14 +86,16 @@ This repository **is the framework**. Its "source" is:
 - **a scaffold** — `claude/scaffold/`, the `ai-agents/` tree a consuming project receives
 
 There is no build step, no server, no database, and no runtime state outside files. There **is** a
-zero-dependency test suite (`node --test` + a hand-rolled mutation gate), and since task 0256 it runs
-**automatically** — GitHub Actions on every push to `main` and every pull request, plus a gate inside
-`npm run release` that refuses to release a red tree — see §9.1. **Both halves have now been exercised.**
+retained zero-dependency test suite (`node --test` + a hand-rolled mutation gate), but **all test
+execution is disabled indefinitely by owner ruling, 2026-11-06** — see §9.1 and
+[CONTRIBUTING.md](../../CONTRIBUTING.md#tests). Npm and direct entry points refuse, both CI jobs are
+guarded off, and default releases (including dry-run) refuse. Only an explicitly authorized
+`--no-test` release proceeds unverified. The following measurements are historical, before the pause.
 Measured **2026-09-04** over the workflow's full run history: **33 runs on `ubuntu-latest`, 29 green and
 4 red**, the first on 2026-08-12 and the most recent on 2026-09-04; every one of them a **push to
 `main`** — the workflow also declares `pull_request` and `workflow_dispatch` triggers, but no run has
-been raised through either. ⚠️ **Those are counts on a date, not a standing guarantee** — CI is wired
-and exercised, not proven. The first red run was a **filesystem case-sensitivity** divergence in
+been raised through either. ⚠️ **Those are counts on a date, not a standing guarantee** — CI was wired
+and exercised at that time, not proven; it is now disabled. The first red run was a **filesystem case-sensitivity** divergence in
 `test/orphan-cleanup.test.js` (macOS is case-insensitive, the runner is not), repaired by task `0283`;
 ⛔ **it was not the dash divergence §9.1 predicted.** The release gate *has* been watched refusing
 a red tree.
@@ -490,14 +492,14 @@ hang the launcher indefinitely). Source checkouts are excluded entirely
 repo-root `package.json`).
 
 **6 — Release** ([ADR-011](decisions/adr-011-package-json-stays-with-scripts-npm-under-scoped-name.md)).
-`npm run release` → `bin/release.mjs`: refuse an empty or missing `## Unreleased` in `CHANGELOG.md`
-(checked before the test gate and again after it; task 0479), bump `VERSION` + `package.json` (patch
-by default) and turn `## Unreleased` into `## v<version> — <date>`, `git add
--A`, commit, push, annotated tag `v<version>`, push the tag. **No npm-registry publish**
-(`bin/release.mjs`, *"Makes no npm-registry publish."*). **Version bumping is load-bearing** — self-update compares the installed sha
+`npm run release` → `bin/release.mjs`: default commands, including dry-run, refuse while tests
+are owner-disabled. An explicitly authorized `--no-test` release warns that the tree is unverified,
+checks `CHANGELOG.md` before writes and re-reads it, bumps `VERSION` + `package.json`, stamps the
+version heading, stages, commits, pushes, and tags. It launches no tests and makes no npm-registry
+publish. No release is authorized by the pause. **Version bumping is load-bearing** — self-update compares the installed sha
 against the remote head and reports the version from `VERSION`.
 The maintainer-facing procedure for cutting a release — the channel, the pre-release checklist, and
-what the test gate does and does not cover — is [`RELEASING.md`](../../RELEASING.md) at the repo root.
+the paused test policy and unverified `--no-test` route — is [`RELEASING.md`](../../RELEASING.md) at the repo root.
 
 **7 — Structure conformance**
 ([ADR-039](decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged.md);
@@ -570,7 +572,34 @@ called for once the code was actually removed (tracked by task `0059`). See §9.
 
 ## 9. Risks and technical debt — the live ones
 
-### 9.1 The suite now runs automatically — CI plus an in-release gate; `install.sh` is still uncovered
+### 9.1 Test execution disabled indefinitely — behavioral acceptance unverified
+
+**Current policy, owner ruling 2026-11-06:** all test execution is disabled in this project,
+including individual tests, mutation tests, discovery, fixtures, smoke tests, benchmarks, behavioral
+probes, saved verification scripts and delegated runs. Use static inspection only; required tests
+are **"skipped — owner disabled test execution"**, never passed. This supersedes generic execution
+requirements and the earlier timing-policy amendment. Preserve sources and historical records;
+shipped instructions for consuming projects are unchanged. Relay the ruling verbatim to workers,
+source-only reviews and adversarial passes; file edits cannot update already-loaded sessions.
+
+All five npm test scripts point to `test/execution-disabled.mjs` (message, exit 1). Direct suites
+reach that guard through the harness or a first import in standalone host/board suites; prove-red
+exits immediately after its shebang. Both workflow jobs retain triggers and steps behind
+`if: ${{ false }}`. Hosted `test` and `prove-red` were observed as `disabled_manually` on 2026-11-06;
+shutdown inspection found no unfinished runs to cancel. Default release commands, including dry-run,
+refuse before Git operations or writes. The explicit `--no-test` route retains its unverified-tree
+warning and no longer launches tests.
+
+Re-enabling needs an explicit owner decision and a separate change; there is no automatic expiry
+or environment-variable bypass. See [the original commands and reversal steps](../../CONTRIBUTING.md#tests).
+Old commits, other clones, saved copies and already-running local processes are outside the guards.
+Hosted branch-protection requirements may need a separate decision. Static checks establish no
+behavioral acceptance.
+
+#### Historical design and measurements — inactive during the pause
+
+The remainder of this subsection records the earlier design and dated results. Its commands,
+coverage claims and execution recommendations are historical, not permission to run checks now.
 
 **There is a test suite, and since task 0256 two mechanisms run it without anyone remembering to.**
 [ADR-014](decisions/adr-014-how-fkit-tests-itself.md)
@@ -599,8 +628,9 @@ npm dependencies.**
 
 - **CI — landed (task 0256).** `.github/workflows/test.yml` runs `npm test` on every push to `main`
   and every pull request, plus a manual `workflow_dispatch` trigger, on `ubuntu-latest`, Node 24,
-  with `fetch-depth: 0` (the manifest suite hard-refuses a shallow clone). Since task 0530 the step
-  is timed and fails the job when `npm test` takes over its 120 s budget (ADR-057 §D10). This replaces
+  with `fetch-depth: 0` (the manifest suite hard-refuses a shallow clone). The direct `npm test` step
+  gates on the test result, without an elapsed-time acceptance gate, under the current
+  [CONTRIBUTING test rules](../../CONTRIBUTING.md#test-rules). This replaces
   [ADR-003](decisions/adr-003-ci-runs-validate-bundles.md)'s CI, which never landed — the
   `omnigent/validate-bundles.sh` it mandated died with the Omnigent removal.
   **CI is what covers `main` HEAD**, which is what `install.sh:19` (`REF="${FKIT_REF:-main}"`)
@@ -708,10 +738,10 @@ is the test.
    It does, at any spawn depth; the skill-ownership hook is built on it and the consult-path boundary is
    now structural (§5.2, §9.3). Kept as a closed pointer so the once-open question is not re-opened.
 2. **~~Is the test suite going to CI?~~ — RESOLVED (owner ruling, 2026-08-08; landed in task 0256).**
-   Yes, and **both** halves: a `.github/workflows/test.yml` running `npm test` on every push to `main`
+   Historically, **both** halves landed: a `.github/workflows/test.yml` running `npm test` on every push to `main`
    and every pull request, **and** a test gate inside `npm run release` that refuses a red tree. Each
    closes a hole the other structurally cannot — CI covers `main` HEAD (what `install.sh` installs by
    default), the gate covers the working tree (which CI never sees). Run-it-yourself is **not** the
    accepted posture. The `shellcheck` pass and the `install.sh` smoke install were **not** taken and
    remain open coverage gaps (§9.1). Kept as a closed pointer so the once-open question is not
-   re-opened.
+   re-opened. **Superseded for current execution by the owner pause, 2026-11-06 (§9.1).**

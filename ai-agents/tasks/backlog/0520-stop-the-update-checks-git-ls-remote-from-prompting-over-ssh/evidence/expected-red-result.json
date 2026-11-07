@@ -1,0 +1,16 @@
+{
+  "command": "node --test '--test-name-pattern=^0520/' test/update-banner.test.js",
+  "childExit": 1,
+  "tests": 3,
+  "pass": 0,
+  "fail": 3,
+  "cancelled": 0,
+  "reportedSkipped": 0,
+  "perTest": {
+    "0520/scp-rewrite": "positive HTTPS=0, SSH=128; help/launcher=0; one sentinel call; red at SSH non-invocation assertion",
+    "0520/ssh-url-rewrite": "positive HTTPS=0, SSH=128; help/launcher=0; one sentinel call; red at SSH non-invocation assertion",
+    "0520/https-preserved-and-scoped": "positive HTTPS=0; launcher=0; zero helper calls; red at expected banner (baseline inherited SSH-only policy rejects HTTPS)"
+  },
+  "launcherSha256": "91fefe7a6c138b1e390f5986c3c6c62ba85272d09614edad409cfc88d1d4383a",
+  "testSha256": "c091f779baab9c8d4f7857a3a2495226f0c5b6f1b3c37d1dbcb427d1c28d90c6"
+}

@@ -1,0 +1,88 @@
+{
+  "task": "0520 \u2014 Stop the update check\u2019s git ls-remote from prompting over SSH when Git rewrites GitHub URLs",
+  "worker": "Build",
+  "status": "DONE (Build only)",
+  "beforeSha256": {
+    "claude/fkit-claude.sh": "91fefe7a6c138b1e390f5986c3c6c62ba85272d09614edad409cfc88d1d4383a",
+    "test/update-banner.test.js": "687c1cdbe2b6852bf950e1e19fe547229a3d837f7bf511f96972d89884b3d2fe",
+    "CHANGELOG.md": "63ef423f4733aef51030bf2d7b2313cfaa21b9484c319fb0680cf51ef4208f18"
+  },
+  "afterSha256": {
+    "claude/fkit-claude.sh": "00c4a94e7cfa689e6a5454070d370dea434cfc6d23da25e612567c105b2862b7",
+    "test/update-banner.test.js": "c091f779baab9c8d4f7857a3a2495226f0c5b6f1b3c37d1dbcb427d1c28d90c6",
+    "CHANGELOG.md": "d84428baa4b2b54dbe8c8985c253056ea5d6b5fe8b69f5fc941166047004c3bc"
+  },
+  "sourceDiffSha256": "019673d62862ede2e7653de2f7d2eed43d601fef56cd270bcb5092376f802b94",
+  "protectedPlans": {
+    "plan.md": {
+      "sha256": "f826017d32f25b215af4aa3487a3df608dcb5edf181bb83e4f6b218d23c89cca",
+      "gitBlob": "1297f0a70508f6687c0e699b5af50de010f3ff44"
+    },
+    "verification-amendment.md": {
+      "sha256": "8f87c26bc0f1387580ffe5e0e97bf2f6892800b20ec444fd9befe19f68148e15",
+      "gitBlob": "baf36f4909f30b4c5bb75fbebef7796b64e1bbe7"
+    },
+    "plan-review.md": {
+      "sha256": "5f6ee3d2da8bd83de64ff13271fb10759d7b8e332afde6495e35ec59d77aa9ab",
+      "gitBlob": "c6a27377848b0963358b641bdc5f664ce84dae57"
+    }
+  },
+  "protectedAndUnrelatedFilesChecked": 67,
+  "protectedAndUnrelatedChanges": {},
+  "indexUnchanged": true,
+  "indexSha256": "464773f2e72a7be7284f8b9f62be585d6aa87f5d758efc5e515c40a61b078799",
+  "checks": {
+    "expected-red": {
+      "command": "node --test '--test-name-pattern=^0520/' test/update-banner.test.js",
+      "childExit": 1
+    },
+    "targeted-green": {
+      "command": "node --test '--test-name-pattern=^0520/' test/update-banner.test.js",
+      "childExit": 0
+    },
+    "focused-banner": {
+      "command": "node --test '--test-skip-pattern=^0284/(?:git-deadline|term-ignored|no-stray):' test/update-banner.test.js",
+      "childExit": 0
+    },
+    "shell-syntax": {
+      "command": "sh -n claude/fkit-claude.sh",
+      "childExit": 0
+    },
+    "node-syntax": {
+      "command": "node --check test/update-banner.test.js",
+      "childExit": 0
+    },
+    "whitespace": {
+      "command": "git diff --check",
+      "childExit": 2
+    },
+    "scoped-whitespace": {
+      "command": "git diff --check -- claude/fkit-claude.sh test/update-banner.test.js CHANGELOG.md",
+      "childExit": 0
+    }
+  },
+  "focusedCounts": {
+    "tests": 18,
+    "pass": 18,
+    "fail": 0,
+    "cancelled": 0,
+    "reportedSkipped": 0,
+    "selectedExisting": 15,
+    "selectedNew": 3,
+    "excludedAndOmitted": 3
+  },
+  "excludedBannerCases": [
+    "0284/git-deadline",
+    "0284/term-ignored",
+    "0284/no-stray"
+  ],
+  "globalWhitespaceFailure": "Preexisting unchanged 0552 evidence/build-source.diff and plan.md; approved source scoped check passes",
+  "nativeTlsProxyExecuted": false,
+  "freshVerifyPending": [
+    "filtered default-equivalent suite",
+    "four existing prove-red cases"
+  ],
+  "reviewAndClosurePending": true,
+  "sourceWorkOutstanding": false,
+  "measurements": "Runner duration fields omitted; no custom timing measurements, excluded bodies or benchmarks executed."
+}

@@ -1,0 +1,10 @@
+{
+  "command": "inline node --input-type=module; normal setup + launchArgs",
+  "childExit": 1,
+  "completedChecks": [
+    ".claude/agents/fkit-lead.md byte-identical",
+    ".claude/skills/fkit-sprint-ship-loop/SKILL.md byte-identical"
+  ],
+  "failure": "Evidence comparison omitted existing skillText sprint review-reporting replacement; assert.equal generated vs incomplete expected adaptation failed. No product defect established. Temporary fixture removed by finally.",
+  "next": "Correct evidence comparison to include existing sprint adaptation; normal materialization only."
+}

@@ -1,0 +1,28 @@
+node:internal/test_runner/harness:121
+      throw err;
+      ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ "git: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead\n" +
++   '2026-11-05 12:30:57.247 xcodebuild[28517:9689737]  DVTFilePathFSEvents: Failed to start fs event stream.\n' +
++   '2026-11-05 12:30:57.401 xcodebuild[28517:9689736] [MT] DVTDeveloperPaths: Failed to get length of DARWIN_USER_CACHE_DIR from confstr(3), error = Error Domain=NSPOSIXErrorDomain Code=5 "Input/output error". Using NSCachesDirectory instead.\n' +
++   "git: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead\n" +
++   "git: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead\n"
+- ''
+
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: "git: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead\n" +
+    '2026-11-05 12:30:57.247 xcodebuild[28517:9689737]  DVTFilePathFSEvents: Failed to start fs event stream.\n' +
+    '2026-11-05 12:30:57.401 xcodebuild[28517:9689736] [MT] DVTDeveloperPaths: Failed to get length of DARWIN_USER_CACHE_DIR from confstr(3), error = Error Domain=NSPOSIXErrorDomain Code=5 "Input/output error". Using NSCachesDirectory instead.\n' +
+    "git: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead\n" +
+    "git: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead\n",
+  expected: '',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.13.0
+Shell wrapper also exited 1: zsh read-only variable status; no source fix applied.

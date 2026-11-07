@@ -1,0 +1,24 @@
+{
+  "task": "Task0520 \u2014 Stop the update check's git ls-remote from prompting over ssh",
+  "command": [
+    "npm",
+    "run",
+    "test:prove-red"
+  ],
+  "childExit": 1,
+  "counts": {},
+  "selectedCaseLines": [],
+  "stdout": "\n> fkit@0.4.0-codex.3 test:prove-red\n> bash test/prove-red.sh\n\n0b. unmutated full copy \u2014 launcher-contract should be green (rules out red-via-setup-failure) ... red\n   \u2717 an UNMUTATED copy is red \u2014 mutations 2, 30 and 31 below would be false (setup, not the assertion).\n   \u21b3 kept this step's output: /var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T/fkit-prove-red-kept.5Ab2fx/0b.txt\n0c. unmutated copy hook-matrix suite should be green ... green\n1. broke skills_for_role(reviewer) \u2014 matrix \"reviewer \u00d7 fkit-review\" should go RED ... red\n2. restored --resume passthrough \u2014 assertion 2 (--resume) should go RED ... red\n30. cold start execs the producer \u2014 \"12. fresh project ... then the lead\" should go RED ... red\n31. exec on the intake path only \u2014 \"12b. fresh project with a completed intake\" should go RED ... red\n\n\u2717 hard gate FAILED \u2014 see above. Failed step(s): 0b\n   each failed step's own suite output is kept in: /var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T/fkit-prove-red-kept.5Ab2fx\n",
+  "stderr": "\n",
+  "stepResults": [
+    "0b. unmutated full copy \u2014 launcher-contract should be green (rules out red-via-setup-failure) ... red",
+    "0c. unmutated copy hook-matrix suite should be green ... green",
+    "1. broke skills_for_role(reviewer) \u2014 matrix \"reviewer \u00d7 fkit-review\" should go RED ... red",
+    "2. restored --resume passthrough \u2014 assertion 2 (--resume) should go RED ... red",
+    "30. cold start execs the producer \u2014 \"12. fresh project ... then the lead\" should go RED ... red",
+    "31. exec on the intake path only \u2014 \"12b. fresh project with a completed intake\" should go RED ... red"
+  ],
+  "gateLines": [
+    "\u2717 hard gate FAILED \u2014 see above. Failed step(s): 0b"
+  ]
+}

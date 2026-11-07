@@ -7,6 +7,8 @@
 
 > ⭐ **Ingested 2026-10-23** (sync `96c7263`→`5ccf2c2`) from `ai-agents/knowledge-base/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md`, read whole with its dated notes. Built by task `0527`; carried out by `0528`–`0530` — see [[tasks/the-test-scope-reset-tasks-0526-0530]].
 
+> **Current policy, 2026-11-04:** The owner's ruling supersedes D10's timing and idle requirements only. `CONTRIBUTING.md` governs current check execution and acceptance; no idle wait, aggregate runtime budget or inherited no-suite-slowdown gate applies. The scope, key list, new-test approval and prove-red rules remain. Functional performance/termination assertions, harness timeouts, worker/consult limits and external service limits remain. `.github/workflows/test.yml` and `.github/workflows/prove-red.yml` set no repository job time caps; an interrupted check is unverified. Historical text and measurements below remain the decision record. See also `RELEASING.md`, `ai-agents/knowledge-base/architecture.md` §9.1, `CHANGELOG.md` Unreleased and [[systems/testing-and-verification]]. These are current working-tree sources; hosted Ubuntu workflow execution is unverified.
+
 ## Context
 **The owner's decision, typed 2026-10-19** in a `fkit lead` session: *"I am making a decision that we need to RADICALLY reduce the tests in fkit: I belive we're in the "self-enforced-loop" when tests and further development creates more tests and more re-runs of the same tests. … We no longer are ok with such insane amount of time needed for tests."*
 
@@ -33,10 +35,11 @@ The owner's rulings: (1) *"the option that is reducing the time most radically"*
 - **D7 — the fourth category is retired.** Named exceptions only: `test/dual-home-parity.test.js`, `test/task-id-uniqueness.test.js` (default suite), the release tool's test (own script) — ⛔ **plus a fourth, by owner ruling R1 2026-10-19:** `test/structure-manifest.test.js`, the only check that the shipped manifest matches its generator.
 - **D8 — banner tests:** their fate is `0526`'s finding. Rule for new tests only: *a new timing test must not sleep for real.*
 - **D9 — prompts that must change** are listed by file and quoted phrase. Shipped prompts get **project-neutral** wording (Q6): *follow the project's own test rules and key list; a missing test on correct code is a suggestion unless the project's key list names it; run the project's default test command.* fkit's own rules live in `CONTRIBUTING.md` and the knowledge base.
-- **D10 — the budget:** default `npm test` ≤ 2 min locally on an idle Mac; CI fails the job if it goes over. Non-default lanes are outside it.
+- **D10 — the historical budget (superseded 2026-11-04):** default `npm test` ≤ 2 min locally on an idle Mac; CI failed the job if it went over. Non-default lanes were outside it.
 - **D11 — other ADRs that name a test:** their decisions stand; only the enforcing test may go. Drift notes were written when `0529` actually deleted each test (12 ADRs, per the 2026-10-20 note).
 
 ## Consequences
+The following records the 2026-10-19 decision and its historical measurements; budget-related expectations no longer govern after the 2026-11-04 ruling above.
 - **Positive:** default `npm test` targets ≤ 2 min instead of ~12 min locally / ~13 min median in CI; the suite stops growing by default; upkeep and false reds from content and wording tests go.
 - **Costs accepted with the sign-off:** *"risk of silent role-lock bugs"* — reduced, not removed, by the four nightly cases and the key list; a broken role-lock test found **next morning**; the link / citation guards, ADR-number uniqueness in the suite, prompt-frontmatter and wording guards, and 51 of 55 prove-red cases go; consuming projects with no written test rules get "missing test = suggestion" everywhere.
 - **Re-raise only if:** a role-lock or `--resume` regression ships; the nightly lane fails unnoticed (then run it on every push); the budget is breached and the fix proposed is "raise the budget"; the suite grows back **inside** the budget (then a numeric cap); a duplicate ID costs real work in a consuming project; a deleted guard's failure class recurs twice. **Do not re-raise** "add a test for X" on correct code outside the key list as a defect.

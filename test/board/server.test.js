@@ -3,6 +3,7 @@
 // other tests are new for 0422: aiboard T-022's fix, simultaneous writes, and requests read as Python
 // reads them. Every expected string below was printed by aiboard a1592dc under Python 3.9.6.
 // Every board here is a fixture under the OS temp folder (ADR-052 Q16): see assertFixture.
+import '../execution-disabled.mjs';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';

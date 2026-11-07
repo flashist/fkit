@@ -1,0 +1,15 @@
+{
+  "command": "git diff --check -- claude/fkit-claude.sh test/update-banner.test.js CHANGELOG.md",
+  "argv": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "claude/fkit-claude.sh",
+    "test/update-banner.test.js",
+    "CHANGELOG.md"
+  ],
+  "childExit": 0,
+  "stdout": "\n",
+  "stderr": "\n"
+}

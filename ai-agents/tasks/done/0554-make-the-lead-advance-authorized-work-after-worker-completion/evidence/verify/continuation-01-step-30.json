@@ -1,0 +1,20 @@
+{
+  "step": "30",
+  "childExit": 1,
+  "counts": {
+    "tests": 75,
+    "suites": 4,
+    "pass": 73,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "failedNames": [
+    "12. fresh project, no role \u2192 producer cold-start, then the lead",
+    "12b. fresh project with a completed intake \u2192 the intake-aware seed",
+    "Group C \u2014 degradation & fresh-project routing"
+  ],
+  "output": "continuation-01-step-30.log",
+  "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+}

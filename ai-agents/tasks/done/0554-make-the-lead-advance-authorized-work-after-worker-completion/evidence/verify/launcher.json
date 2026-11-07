@@ -1,0 +1,18 @@
+{
+  "command": "node --test test/launcher-contract.test.js",
+  "childExit": 1,
+  "wrapperResult": "completed child and saved evidence",
+  "counts": {
+    "tests": 75,
+    "suites": 4,
+    "pass": 74,
+    "fail": 1,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "failedNames": [
+    "bare first use: each runtime saves once and continues fresh onboarding or existing-project menu"
+  ],
+  "keptArtifacts": []
+}

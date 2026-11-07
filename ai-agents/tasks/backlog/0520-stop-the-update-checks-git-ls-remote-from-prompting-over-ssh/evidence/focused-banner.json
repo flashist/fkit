@@ -1,0 +1,12 @@
+{
+  "command": "node --test '--test-skip-pattern=^0284/(?:git-deadline|term-ignored|no-stray):' test/update-banner.test.js",
+  "argv": [
+    "node",
+    "--test",
+    "--test-skip-pattern=^0284/(?:git-deadline|term-ignored|no-stray):",
+    "test/update-banner.test.js"
+  ],
+  "childExit": 0,
+  "stdout": "(node:30011) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/update-banner.test.js is not specified and it doesn't parse as CommonJS.\nReparsing as ES module because module syntax was detected. This incurs a performance overhead.\nTo eliminate this warning, add \"type\": \"module\" to /Users/mark.dolbyrev/Workspace/fkit/package.json.\n(Use `node --trace-warnings ...` to show where the warning was created)\n\u2714 0257/equal-versions: same version on both sides renders the newer-content form, never vX \u2192 vX\n\u2714 differing versions: the original vA \u2192 vB sentence is preserved verbatim\n\u2714 curl fails: no remote version, and no \"v?\" \u2014 the newer-content form carries it\n\u2714 0257/no-curl: curl unreachable \u2014 no \"v?\", and the seal is proven, not assumed\n\u2714 installed .version has no version= line: renders without a stray v, and without \"v?\"\n\u2714 a non-default ref: the banner names the tracked ref, not a hard-coded main\n\u2714 installed sha == remote sha: complete silence\n\u2714 offline (git fails, curl unreachable): complete silence, exit 0\n\u2714 a source checkout: the whole check is skipped \u2014 silence, and no network call at all\n\u2714 FKIT_NO_UPDATE_CHECK=1: silence, and no network call at all\n\u2714 throttle: the first launch banners, a second inside the window is silent\n\u2714 .latest still records the remote version and sha\n\u2714 .latest keeps its own unknown fallback when the remote version is unavailable\n\u2714 a real role launch banners too: --help is only this suite's driver, not the trigger\n\u2714 0284/git-env: GIT_TERMINAL_PROMPT=0 still reaches git through the deadline wrapper\n\u2714 0520/scp-rewrite\n\u2139 {\"controls\":{\"https\":0,\"ssh\":128},\"helpExit\":0,\"launcherExit\":0,\"sshSentinelCalls\":0}\n\u2714 0520/ssh-url-rewrite\n\u2139 {\"controls\":{\"https\":0,\"ssh\":128},\"helpExit\":0,\"launcherExit\":0,\"sshSentinelCalls\":0}\n\u2714 0520/https-preserved-and-scoped\n\u2139 {\"controls\":{\"https\":0,\"ssh\":null},\"launcherExit\":0,\"helperInvocations\":1}\n\u2139 tests 18\n\u2139 suites 0\n\u2139 pass 18\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n",
+  "stderr": "\n"
+}

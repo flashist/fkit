@@ -1,0 +1,167 @@
+{
+  "recorded_utc": "2026-11-04T12:04:04.241138+00:00",
+  "result": "PASS",
+  "checks": [
+    ".github/workflows/test.yml: parsed structure differs only by approved runner/cap removal",
+    ".github/workflows/test.yml: direct command and no error suppression",
+    ".github/workflows/test.yml: permissions, Ubuntu, Node 24 and full clone retained",
+    ".github/workflows/test.yml: no remaining timing wrapper or repository timeout",
+    ".github/workflows/prove-red.yml: parsed structure differs only by approved runner/cap removal",
+    ".github/workflows/prove-red.yml: direct command and no error suppression",
+    ".github/workflows/prove-red.yml: permissions, Ubuntu, Node 24 and full clone retained",
+    ".github/workflows/prove-red.yml: no remaining timing wrapper or repository timeout",
+    "mapped-check table unchanged",
+    "approved policy wording exact except Markdown wrapping",
+    "**What a test may cover.** retained",
+    "**A missing test is a suggestion, not a defect** retained",
+    "per-new-test and per-case owner approval retained",
+    "historical local and runner measurements retained",
+    "RELEASING.md: added local link resolves .github/workflows/prove-red.yml",
+    "RELEASING.md: added local link resolves .github/workflows/test.yml",
+    "ai-agents/knowledge-base/architecture.md: added local link resolves ../../CONTRIBUTING.md#test-rules",
+    "ai-agents/knowledge-base/architecture.md: anchor resolves test-rules",
+    "direct command propagates stub exit 0",
+    "direct command propagates stub exit 17",
+    "scoped git diff --check",
+    "approved plan blob retained"
+  ],
+  "workflow_parser": "Ruby Psych local YAML parser (YAML 1.1 on key maps to true); baseline/final structure compared like-for-like. Not GitHub runner validation.",
+  "parsed_workflows": {
+    ".github/workflows/test.yml": {
+      "name": "test",
+      "true": {
+        "push": {
+          "branches": [
+            "main"
+          ]
+        },
+        "pull_request": null,
+        "workflow_dispatch": null
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "jobs": {
+        "test": {
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@v4",
+              "with": {
+                "fetch-depth": 0
+              }
+            },
+            {
+              "uses": "actions/setup-node@v4",
+              "with": {
+                "node-version": "24"
+              }
+            },
+            {
+              "run": "npm test"
+            }
+          ]
+        }
+      }
+    },
+    ".github/workflows/prove-red.yml": {
+      "name": "prove-red",
+      "true": {
+        "schedule": [
+          {
+            "cron": "17 3 * * *"
+          }
+        ],
+        "workflow_dispatch": null
+      },
+      "permissions": {
+        "contents": "read"
+      },
+      "jobs": {
+        "prove-red": {
+          "runs-on": "ubuntu-latest",
+          "steps": [
+            {
+              "uses": "actions/checkout@v4",
+              "with": {
+                "fetch-depth": 0
+              }
+            },
+            {
+              "uses": "actions/setup-node@v4",
+              "with": {
+                "node-version": "24"
+              }
+            },
+            {
+              "run": "npm run test:prove-red"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "added_links": [
+    {
+      "source": "RELEASING.md",
+      "target": ".github/workflows/prove-red.yml"
+    },
+    {
+      "source": "RELEASING.md",
+      "target": ".github/workflows/test.yml"
+    },
+    {
+      "source": "ai-agents/knowledge-base/architecture.md",
+      "target": "../../CONTRIBUTING.md#test-rules"
+    }
+  ],
+  "stub_exit_propagation": [
+    0,
+    17
+  ],
+  "source_final": {
+    "CONTRIBUTING.md": {
+      "sha256": "322fd3ce17716e100a04666c132a0403b0a480bc61fb4133fac2dac34eb3a87c",
+      "git_blob": "91b4310424d33d7bf81f71068ea50e48ca78135e"
+    },
+    ".github/workflows/test.yml": {
+      "sha256": "d410c975569798b6a6b68f6f60863c4af26f3d4f3675721a586e950e087b9e69",
+      "git_blob": "ec27ddd64fb4720324ab93981836c4da47457f2d"
+    },
+    ".github/workflows/prove-red.yml": {
+      "sha256": "569d3145e788d801861d35352113af79adbaf15f43e9e4f567a8b8ee8407d541",
+      "git_blob": "2f3ec9effddb4189b44f02ea56e4c03299396614"
+    },
+    "RELEASING.md": {
+      "sha256": "40abb72e3e9de5ed9381ea1c4850daad7e1a1118c96d8b717db2294ac15e4e3e",
+      "git_blob": "bf95fe03b458128080f728f52ce567110e1f497f"
+    },
+    "ai-agents/knowledge-base/architecture.md": {
+      "sha256": "df8ce64c6a8b06670972f605351c8e7a4eb29c70eac64f19affc10c9246e274a",
+      "git_blob": "698fb73f829e8ab0aec5b6d608dfc3a9e1633c8c"
+    },
+    "CHANGELOG.md": {
+      "sha256": "63ef423f4733aef51030bf2d7b2313cfaa21b9484c319fb0680cf51ef4208f18",
+      "git_blob": "415d153c2a5ebef40267a50f3c270ce430707cec"
+    }
+  },
+  "protected_changes_observed": [],
+  "head_final": "1767a47b9db50f3949789636c3e0b513950e7368",
+  "npm_test": "NOT RUN by Build; single real suite delegated to fresh Verify",
+  "hosted_ubuntu_execution": "UNVERIFIED; no network/publication/hosted run",
+  "skipped": {
+    "test:docs": "not a substitute for mapped npm test",
+    "test:release": "bin/release.mjs unchanged; no release",
+    "test:prove-red": "no mutated source or executed test changed",
+    "generate:manifest": "scaffold unchanged",
+    "install/parity expansion": "canonical/scaffold prompts unchanged"
+  },
+  "residual_classification": {
+    "CONTRIBUTING.md historical idle measurements": "retained dated observations, not gates",
+    "CONTRIBUTING.md policy terms": "explicit current supersession, not restrictions",
+    "architecture.md hop/owner/installer timeout references": "unrelated functional or consultation limits, unchanged",
+    "RELEASING.md quiet references": "unrelated frozen-tag update behavior, unchanged",
+    "CHANGELOG.md new entry": "describes removed gates"
+  },
+  "additional_autonomous_fixes_or_obvious_winner_calls": "none"
+}

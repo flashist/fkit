@@ -1,0 +1,143 @@
+{
+  "records": [
+    {
+      "runtime": "codex",
+      "label": "coder-on",
+      "emittedSwitch": [
+        "fkit session: coder · Plan review: on — the default for fkit coder sessions (owner ruling 2026-10-24, ADR-060), launched 2026-11-06T10:44:27.496Z"
+      ],
+      "serverMode": "interactive",
+      "instructionsSha256": "29f7acac81235c68cdb878304ac8a5b434d709f15d75bbc086dbcb2b325883e0",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "codex",
+      "label": "coder-off",
+      "emittedSwitch": [
+        "fkit session: coder · Plan review: off — fkit coder --no-plan-review (owner, at launch 2026-11-06T10:44:27.509Z)"
+      ],
+      "serverMode": "interactive",
+      "instructionsSha256": "b0976197c6fd922d10af09ae2183ac9b4553a80d3b8de181afe9525a49d35e6c",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "codex",
+      "label": "coder-worker",
+      "emittedSwitch": [],
+      "serverMode": "headless",
+      "instructionsSha256": "737ba62fdfa9b17a30cb2d38d82ff669b2326e72a894485bdd39f24dd1dfbd8a",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "codex",
+      "label": "coder-delegated-interactive",
+      "emittedSwitch": [],
+      "serverMode": "interactive",
+      "instructionsSha256": "737ba62fdfa9b17a30cb2d38d82ff669b2326e72a894485bdd39f24dd1dfbd8a",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "codex",
+      "label": "lead-root",
+      "emittedSwitch": [],
+      "serverMode": "interactive",
+      "instructionsSha256": "03ba782810af1647bb1c811a65cae0b6c3232d766a4e2c7e0a1d704377dc97d4",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "codex",
+      "label": "adversarial-root",
+      "emittedSwitch": [],
+      "serverMode": "interactive",
+      "instructionsSha256": "08f1b4526c0fcd6ce8adde3379f70fc02e6378492dbbc1b05b0ed600d48b38c5",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "claude",
+      "label": "coder-on",
+      "emittedSwitch": [
+        "fkit session: coder · Plan review: on — the default for fkit coder sessions (owner ruling 2026-10-24, ADR-060), launched 2026-11-06T10:44:27.568Z"
+      ],
+      "serverMode": "native-owner",
+      "instructionsSha256": "321dde3ebdd01ebd8a885d2e52970ebbd9ecb83dd29cf3fb562a627d8e553591",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "claude",
+      "label": "coder-off",
+      "emittedSwitch": [
+        "fkit session: coder · Plan review: off — fkit coder --no-plan-review (owner, at launch 2026-11-06T10:44:27.584Z)"
+      ],
+      "serverMode": "native-owner",
+      "instructionsSha256": "764c9c706a01045376315a072e8cab8602998654db038b189de649d47c273aea",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "claude",
+      "label": "coder-worker",
+      "emittedSwitch": [],
+      "serverMode": "headless",
+      "instructionsSha256": "0b4853394350c27fa933a2a5bb19bf19a88c16e143b97a1e0e9948f15cf21ff2",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "claude",
+      "label": "coder-delegated-interactive",
+      "emittedSwitch": [],
+      "serverMode": "native-owner",
+      "instructionsSha256": "0b4853394350c27fa933a2a5bb19bf19a88c16e143b97a1e0e9948f15cf21ff2",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "claude",
+      "label": "lead-root",
+      "emittedSwitch": [],
+      "serverMode": "native-owner",
+      "instructionsSha256": "f068cb97c767d4ad80c08c7400b332d1b3c844e3d250dde875b43fed942dad24",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "runtime": "claude",
+      "label": "adversarial-root",
+      "emittedSwitch": [],
+      "serverMode": "native-owner",
+      "instructionsSha256": "e0fdb43b6a18d6584f18ff129f99b35d3da0de21a80382cbe37fffad24a0358e",
+      "kind": "argument delivery and static instruction capture; no CLI/model invocation"
+    },
+    {
+      "additive": false,
+      "canonicalClaudeCopies": {
+        ".claude/agents/fkit-lead.md": "b5331eec699683519ecff77567628ae8c0bc88fea0dd9efc6ad1b151d8b06d3c",
+        ".claude/skills/fkit-plan-task/SKILL.md": "5a33bb835696d3238ba6cd9874fdba75053080287716bcfc498a3b418bbcf6ea",
+        ".claude/skills/fkit-task-ship-loop/SKILL.md": "4b89044e9cb73d7d2e331ff6fdece0696f38f248dcdb723568fc16b033602192",
+        ".claude/skills/fkit-sprint-ship-loop/SKILL.md": "e338e2a7f166554edddfb17fc9520c948cd080a709163a272ea5e53ad76893c5",
+        ".claude/skills/fkit-open-questions-interview/SKILL.md": "1d63192de846a718cf3f121bed8b43ae0078fb37ddcc7fecb6eb5283a0be22a1",
+        ".agents/skills/fkit-plan-task/SKILL.md": "c1d1b147e8e20cdade8c5e24b878fe449c263787ecabbcf18e458d7dbb881d3f",
+        ".agents/skills/fkit-task-ship-loop/SKILL.md": "6c3652f280ed53682a87c5e9e471e91c8da67d40e7c08f13a8d7a900fac38b64",
+        ".agents/skills/fkit-sprint-ship-loop/SKILL.md": "69c332fb71e986728bd89f9f0fc4e1bd29ec20398ff9e15fe8d9a42edc025228",
+        ".agents/skills/fkit-open-questions-interview/SKILL.md": "a355fc4d5420f146921eeddabbb931d27b2b46252a3f076bc12fd72a6c69fa24"
+      },
+      "conventionPreservedOrDelivered": true,
+      "ownerBodiesPreserved": true
+    },
+    {
+      "additive": true,
+      "canonicalClaudeCopies": {
+        ".claude/agents/fkit-lead.md": "b5331eec699683519ecff77567628ae8c0bc88fea0dd9efc6ad1b151d8b06d3c",
+        ".claude/skills/fkit-plan-task/SKILL.md": "5a33bb835696d3238ba6cd9874fdba75053080287716bcfc498a3b418bbcf6ea",
+        ".claude/skills/fkit-task-ship-loop/SKILL.md": "4b89044e9cb73d7d2e331ff6fdece0696f38f248dcdb723568fc16b033602192",
+        ".claude/skills/fkit-sprint-ship-loop/SKILL.md": "e338e2a7f166554edddfb17fc9520c948cd080a709163a272ea5e53ad76893c5",
+        ".claude/skills/fkit-open-questions-interview/SKILL.md": "1d63192de846a718cf3f121bed8b43ae0078fb37ddcc7fecb6eb5283a0be22a1",
+        ".agents/skills/fkit-plan-task/SKILL.md": "c1d1b147e8e20cdade8c5e24b878fe449c263787ecabbcf18e458d7dbb881d3f",
+        ".agents/skills/fkit-task-ship-loop/SKILL.md": "6c3652f280ed53682a87c5e9e471e91c8da67d40e7c08f13a8d7a900fac38b64",
+        ".agents/skills/fkit-sprint-ship-loop/SKILL.md": "69c332fb71e986728bd89f9f0fc4e1bd29ec20398ff9e15fe8d9a42edc025228",
+        ".agents/skills/fkit-open-questions-interview/SKILL.md": "a355fc4d5420f146921eeddabbb931d27b2b46252a3f076bc12fd72a6c69fa24"
+      },
+      "conventionPreservedOrDelivered": true,
+      "ownerBodiesPreserved": true
+    }
+  ],
+  "livePresentation": "unrun; unmet",
+  "modelCompliance": "unrun",
+  "claudeMixedLiveCompatibility": "unverified"
+}

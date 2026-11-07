@@ -1,5 +1,6 @@
 // The board's task store (board/core/store.mjs), ported from aiboard a1592dc's tests/test_board.py.
 // BoardTests keeps aiboard's test names verbatim, in aiboard's order, so 0423 can match each one.
+import '../execution-disabled.mjs';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import {

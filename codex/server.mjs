@@ -58,7 +58,8 @@ async function consult(args, secondOpinion = false, requestId) {
     child.stdin.on('error', () => {});
     child.stdin.end(args.prompt);
   });
-  return { content: [{ type: 'text', text: `Role: fkit-${args.role}\nRuntime: ${command}\nModel: ${result.model}\nModel requested: ${effectiveSettings(settings, args.role).model ?? '(runtime default)'}\nExit: ${result.code ?? result.signal}\nTimed out: ${result.timedOut}\nTruncated: ${result.tooLarge}\nPrompt: ${path}${result.diagnostic ? `\nStartup: ${result.diagnostic}` : ''}\n\n${result.output || '(No usable role response.)'}` }], isError: result.code !== 0 || result.timedOut || result.tooLarge };
+  const missingResponse = !result.output.trim();
+  return { content: [{ type: 'text', text: `Role: fkit-${args.role}\nRuntime: ${command}\nModel: ${result.model}\nModel requested: ${effectiveSettings(settings, args.role).model ?? '(runtime default)'}\nExit: ${result.code ?? result.signal}\nTimed out: ${result.timedOut}\nTruncated: ${result.tooLarge}\nPrompt: ${path}${result.diagnostic ? `\nStartup: ${result.diagnostic}` : ''}\n\n${missingResponse ? '(No usable role response.)' : result.output}` }], isError: result.code !== 0 || result.timedOut || result.tooLarge || missingResponse };
 }
 
 input.on('line', async line => {
@@ -85,7 +86,7 @@ input.on('line', async line => {
       const tools = [{ name: 'fkit_skill', description: 'Load one allowed fkit entry using fixed caller identity. Shared lead entries forward; producer/wiki retain execution duties.', annotations: { readOnlyHint: true }, inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Exact fkit skill name' } }, required: ['name'], additionalProperties: false } }];
       if (caller !== 'adversarial-reviewer') tools.push({ name: 'fkit_consult', description: 'Consult a fresh fkit role with its configured model. Workers return decisions to caller. Two hops maximum; no cycles; adversarial is a leaf.', inputSchema: { ...promptSchema, properties: { ...promptSchema.properties, role: { type: 'string', enum: ROLES } }, required: ['role', 'prompt'] } });
       if (caller === 'reviewer') tools.push({ name: 'fkit_adversarial', description: 'Run the reviewer independent read-only second opinion in a fresh context. Does not consume an ordinary consult hop; the adversarial role remains a leaf.', inputSchema: promptSchema });
-      if (caller !== 'adversarial-reviewer' && mode === 'interactive' && chain.length === 1) tools.push({ name: 'fkit_ask_owner', description: 'Ask the owner a structured question and wait for the actual response. Choices submit without a comment field; Write another answer opens a separate text question. No inferred approval. Never request credentials.', inputSchema: { type: 'object', properties: { question: { type: 'string' }, options: { type: 'array', items: { type: 'string' }, maxItems: 4 } }, required: ['question'], additionalProperties: false } });
+      if (caller !== 'adversarial-reviewer' && mode === 'interactive' && chain.length === 1 && questions.supported) tools.push({ name: 'fkit_ask_owner', description: 'Request an owner form and wait for the actual response. Capability and request acceptance do not prove display or approval. Choices submit without a comment field; Write another answer opens a separate text question. Never request credentials.', inputSchema: { type: 'object', properties: { question: { type: 'string' }, options: { type: 'array', items: { type: 'string' }, maxItems: 4 } }, required: ['question'], additionalProperties: false } });
       result = { tools };
     }
     else if (request.method === 'tools/call' && request.params?.name === 'fkit_skill') {

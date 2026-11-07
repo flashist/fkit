@@ -31,24 +31,11 @@
 //     prove-red.sh's make_claude_copy() deliberately writes `: > "$dst/package.json"` to make its
 //     copies read as checkouts, so its helpers are unusable here for the opposite reason.
 //
-// ⚠️ THE SEAL IS THE WHOLE TEST. Two of the planning runs for this task silently used the real
-// /usr/bin/git and /usr/bin/curl and hit the network — a test written that way passes for the wrong
-// reason and proves nothing. So: every case runs on a SEALED PATH containing nothing but symlinks to
-// the handful of coreutils the launcher needs, plus whichever of git/curl the case wants stubbed.
-// The real git and curl are not reachable from any test in this file. And the seal is PROVEN, never
-// assumed — assertUnreachable() re-derives it from the same PATH string the launcher got, and the
-// stubs log every invocation so a test can assert that OUR binary is the one that ran. Belt and
-// braces: the fixture's repo is a name that does not exist on GitHub, so even a leak fetches nothing.
+// A sealed PATH prevents accidental network access; real-Git cases also seal GIT_EXEC_PATH
+// because Git prepends it when selecting transport helpers.
 //
-// ⚠️ DRIVEN THROUGH `--help`, NOT `FKIT_SETUP_ONLY=1` (a deliberate deviation from the plan's §5).
-// The update check (the block under `# Automatic: a throttled check that only ever PRINTS.`) runs
-// before the `-h|--help)` arm, which exits 0, so `--help` reaches past the banner and stops — no
-// project setup, no init, nothing written outside the fixture. That is what makes a sealed PATH
-// tractable at all: FKIT_SETUP_ONLY still runs the full `fkit-claude-init.sh` setup, which needs a
-// working toolchain the seal deliberately withholds (the plan's own §8 anticipated this: the fixture
-// only needs enough tools to reach the end of the banner block). It is argv-blind, so nothing is
-// lost — and the last test in this file pins that by driving a REAL `fkit coder` setup-only launch
-// and requiring the same banner.
+// --help reaches the automatic check without project setup, so fixtures need only a sealed toolchain.
+// The real-role case also guards against treating --help as the trigger.
 //
 // ⚠️ FIXTURE VERSIONS ARE SYNTHETIC (9.9.x), NEVER the repo's VERSION. A release is imminent; a
 // fixture that read the real VERSION would either go red on the bump or silently stop exercising the
@@ -57,7 +44,7 @@
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, readFileSync, existsSync, chmodSync, symlinkSync, cpSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, readFileSync, existsSync, chmodSync, realpathSync, symlinkSync, cpSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { REPO } from './harness.mjs';
@@ -160,7 +147,7 @@ function assertUnreachable(path, tool) {
 function assertReachable(path, tool, expectedDir) {
   const r = spawnSync('/bin/sh', ['-c', `command -v ${tool}`], { env: { PATH: path }, encoding: 'utf8' });
   assert.equal(r.status, 0, `${tool} is not reachable on the test PATH at all`);
-  assert.equal(r.stdout.trim(), join(expectedDir, tool), `${tool} resolves to a binary that is not our stub`);
+  assert.equal(r.stdout.trim(), join(expectedDir, tool), `${tool} resolves to a binary outside our fixture`);
 }
 
 // ── the fake install root ──────────────────────────────────────────────────────────────────────
@@ -562,4 +549,144 @@ test('0284/git-env: GIT_TERMINAL_PROMPT=0 still reaches git through the deadline
   assertReachable(r.PATH, 'git', bin);
   assert.ok(r.gitCalls.some((c) => c.startsWith('ls-remote')), 'the stub git was never called');
   assert.ok(r.gitCalls.includes('GTP=0'), `git did not see GIT_TERMINAL_PROMPT=0: ${JSON.stringify(r.gitCalls)}`);
+});
+
+const REAL_REMOTE_SHA = 'deadbee' + '1'.repeat(33);
+const HELPER_ID = '0520-synthetic-https';
+const PROXY_SETTING = 'fixture-proxy-0520';
+const shQuote = (s) => `'${s.replaceAll("'", "'\\''")}'`;
+const jsonLines = (p) => existsSync(p) ? readFileSync(p, 'utf8').trim().split('\n').filter(Boolean).map(JSON.parse) : [];
+
+function realGitFixture(kind) {
+  // Apple's discovery shim can emit sandbox diagnostics before Git runs.
+  const selected = process.platform === 'darwin'
+    ? spawnSync('/usr/bin/xcrun', ['--find', 'git'], { encoding: 'utf8' }) : null;
+  if (selected) assert.equal(selected.status, 0, 'Git executable discovery failed');
+  const realGit = selected ? selected.stdout.trim() : which('git');
+  assert.ok(realGit && realGit.startsWith('/'), 'real Git must be explicitly selected');
+  const root = install();
+  const bin = sealedBin();
+  const execPath = temp('fkit-banner-git-exec-');
+  const home = temp('fkit-banner-git-home-');
+  const xdg = temp('fkit-banner-git-xdg-');
+  const cwd = temp('fkit-banner-git-cwd-');
+  const helperLog = join(home, 'helper-log');
+  const sshLog = join(home, 'ssh-log');
+  const curlEnvLog = join(home, 'curl-env-log');
+  const config = join(home, 'gitconfig');
+  const helper = join(execPath, 'git-remote-https');
+  const sentinel = join(bin, 'ssh-sentinel');
+  symlinkSync(realGit, join(bin, 'git'));
+  writeFileSync(sentinel, '#!/bin/sh\nprintf \'0520-ssh-sentinel\\n\' >> "$FKIT_TEST_SSH_LOG"\nexit 1\n');
+  chmodSync(sentinel, 0o755);
+  writeFileSync(helper, `#!${process.execPath}
+import { appendFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { createInterface } from 'node:readline';
+const log = (entry) => appendFileSync(process.env.FKIT_TEST_HELPER_LOG, JSON.stringify(entry) + '\\n');
+const proxy = spawnSync(process.env.FKIT_TEST_REAL_GIT, ['config', '--get', 'http.proxy'], { encoding: 'utf8' });
+if (proxy.status !== 0) process.exit(3);
+log({ identity: '${HELPER_ID}', executable: process.argv[1], protocol: process.env.GIT_ALLOW_PROTOCOL, proxy: proxy.stdout.trim() });
+const lines = createInterface({ input: process.stdin });
+for await (const command of lines) {
+  log({ command });
+  if (command === 'capabilities') process.stdout.write('fetch\\n\\n');
+  else if (command === 'list') process.stdout.write('${REAL_REMOTE_SHA} refs/heads/main\\n\\n');
+  else if (command === '') break;
+  else process.exit(4);
+}
+`);
+  chmodSync(helper, 0o755);
+  let configText = `[http]\n\tproxy = ${PROXY_SETTING}\n[protocol "ssh"]\n\tallow = always\n`;
+  if (kind === 'scp') configText += '[url "fixture@fixture.invalid:"]\n\tinsteadOf = https://github.com/\n';
+  if (kind === 'ssh-url') configText += `[url "ssh://fixture@fixture.invalid/"]\n\tinsteadOf = https://github.com/\n[core]\n\tsshCommand = ${JSON.stringify(shQuote(sentinel))}\n`;
+  if (kind === 'https') configText += '[protocol "https"]\n\tallow = never\n';
+  writeFileSync(config, configText);
+  const env = {
+    PATH: bin, HOME: home, XDG_CONFIG_HOME: xdg,
+    GIT_CONFIG_NOSYSTEM: '1', GIT_CONFIG_SYSTEM: '/dev/null', GIT_CONFIG_GLOBAL: config,
+    GIT_EXEC_PATH: execPath, GIT_TERMINAL_PROMPT: '0', GIT_SSH_VARIANT: 'ssh',
+    FKIT_TEST_REAL_GIT: realGit, FKIT_TEST_HELPER_LOG: helperLog, FKIT_TEST_SSH_LOG: sshLog,
+    FKIT_TEST_CURL_ENV_LOG: curlEnvLog,
+    ...(kind === 'scp' ? { GIT_SSH_COMMAND: shQuote(sentinel) } : { GIT_ALLOW_PROTOCOL: 'ssh' }),
+  };
+  if (kind === 'https') stub(bin, 'curl', `printf '%s\\n' "$GIT_ALLOW_PROTOCOL" >> "$FKIT_TEST_CURL_ENV_LOG"\n${CURL_VERSION('9.9.10')}`);
+  assertReachable(bin, 'git', bin);
+  assert.equal(realpathSync(join(bin, 'git')), realpathSync(realGit));
+  assertReachable(execPath, 'git-remote-https', execPath);
+  assertUnreachable(bin, 'ssh');
+  assertUnreachable(execPath, 'ssh');
+  assertUnreachable(execPath, 'curl');
+  if (kind === 'https') assertReachable(bin, 'curl', bin);
+  else assertUnreachable(bin, 'curl');
+  const git = (url, protocol) => spawnSync(realGit, ['ls-remote', url, 'main'], {
+    cwd, env: { ...env, GIT_ALLOW_PROTOCOL: protocol }, encoding: 'utf8',
+  });
+  const helperEntries = () => jsonLines(helperLog);
+  const assertHelper = () => {
+    const entries = helperEntries();
+    assert.deepEqual(entries[0], { identity: HELPER_ID, executable: helper, protocol: 'https', proxy: PROXY_SETTING });
+    assert.deepEqual(entries.filter((e) => e.command).map((e) => e.command), ['capabilities', 'list']);
+    assert.ok(entries.every((e) => e.identity === HELPER_ID || ['capabilities', 'list', ''].includes(e.command)));
+  };
+  const httpsControl = git('https://fixture.invalid/control', 'https');
+  assert.equal(httpsControl.status, 0, 'isolated HTTPS control failed');
+  assert.equal(httpsControl.stderr, '');
+  assert.equal(httpsControl.stdout, `${REAL_REMOTE_SHA}\trefs/heads/main\n`);
+  assertHelper();
+  let sshControl = null;
+  if (kind !== 'https') {
+    sshControl = git(`https://github.com/${FAKE_REPO}.git`, 'ssh');
+    assert.equal(sshControl.status, 128, 'SSH control must fail at the harmless sentinel');
+    assert.deepEqual(readFileSync(sshLog, 'utf8').trim().split('\n'), ['0520-ssh-sentinel']);
+  }
+  writeFileSync(helperLog, '');
+  writeFileSync(sshLog, '');
+  return {
+    root, bin, cwd, env, config, configText, helperEntries, assertHelper, sshLog, curlEnvLog,
+    controls: { https: httpsControl.status, ssh: sshControl?.status ?? null },
+  };
+}
+
+function silentRewriteLaunch(f, t) {
+  const help = launch(f.root, f.bin, { cwd: f.cwd, env: { ...f.env, FKIT_NO_UPDATE_CHECK: '1' } });
+  assert.equal(help.code, 0);
+  assert.equal(help.stderr, '');
+  const r = launch(f.root, f.bin, { cwd: f.cwd, env: f.env });
+  const sshCalls = readFileSync(f.sshLog, 'utf8').trim().split('\n').filter(Boolean);
+  t.diagnostic(JSON.stringify({ controls: f.controls, helpExit: help.code, launcherExit: r.code, sshSentinelCalls: sshCalls.length }));
+  assert.equal(r.code, 0);
+  assert.equal(r.stdout, help.stdout, 'rejected SSH must preserve help output');
+  assert.equal(r.stderr, '');
+  assert.equal(banner(r.stdout), null);
+  assert.equal(existsSync(join(f.root, '.latest')), false);
+  assert.equal(readFileSync(join(f.root, '.update-check'), 'utf8'), '');
+  assert.deepEqual(f.helperEntries(), []);
+  assert.equal(readFileSync(f.config, 'utf8'), f.configText);
+  assert.deepEqual(sshCalls, [], 'automatic update check must not invoke SSH');
+}
+
+
+test('0520/scp-rewrite', (t) => {
+  silentRewriteLaunch(realGitFixture('scp'), t);
+});
+
+test('0520/ssh-url-rewrite', (t) => {
+  silentRewriteLaunch(realGitFixture('ssh-url'), t);
+});
+
+test('0520/https-preserved-and-scoped', (t) => {
+  const f = realGitFixture('https');
+  const r = launch(f.root, f.bin, { cwd: f.cwd, env: f.env });
+  t.diagnostic(JSON.stringify({ controls: f.controls, launcherExit: r.code, helperInvocations: f.helperEntries().filter((e) => e.identity).length }));
+  assert.equal(r.code, 0);
+  assert.equal(r.stderr, '');
+  assert.equal(banner(r.stdout), '  ↑ fkit v9.9.9 → v9.9.10 is available. Run:  fkit update');
+  f.assertHelper();
+  assert.equal(readFileSync(join(f.root, '.latest'), 'utf8'), `version=9.9.10\nsha=${REAL_REMOTE_SHA}\n`);
+  assert.equal(readFileSync(join(f.root, '.update-check'), 'utf8'), '');
+  assert.equal(readFileSync(f.curlEnvLog, 'utf8'), 'ssh\n');
+  assert.ok(r.curlCalls.some((c) => c.includes(`${FAKE_REPO}/main/VERSION`)));
+  assert.equal(readFileSync(f.sshLog, 'utf8'), '');
+  assert.equal(readFileSync(f.config, 'utf8'), f.configText);
 });

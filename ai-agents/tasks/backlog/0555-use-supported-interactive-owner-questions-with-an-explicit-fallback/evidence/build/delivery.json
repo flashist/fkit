@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "--input-type=module"
+  ],
+  "stdin": "delivery-initial-script.mjs.txt",
+  "exit": 0
+}

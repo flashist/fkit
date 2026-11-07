@@ -1,0 +1,410 @@
+---
+name: fkit-task-done
+description: >-
+  Mark a task complete — move its brief file into ai-agents/tasks/done/ and update the sprint plan
+  (and parent epic, if any) so the task's status reads Done. Takes the path to the task file as its
+  argument. Use when a task has been reviewed/verified and is finished.
+---
+
+# Task Done
+
+> ## ⛔ Owner: the **producer**
+> This is the fkit-producer's own procedure. Execute it **only** if you are the producer — running as
+> the `fkit-producer` agent or in a `fkit producer` session. Since
+> [ADR-033](../../../ai-agents/knowledge-base/decisions/adr-033-task-movers-are-producer-only-reversing-adr-025.md)
+> this is **structural, not a request**: the ADR-018 `PreToolUse` hook denies a mover call from any
+> non-producer identity at any spawn depth. (ADR-033 reverses
+> [ADR-025](../../../ai-agents/knowledge-base/decisions/adr-025-spawned-agents-may-invoke-the-task-movers.md),
+> which had granted this skill to every role but the adversarial reviewer.)
+>
+> **Any other role: do not execute this.** Route the close to the producer instead:
+> ```
+> @fkit-producer Close this task: <path>
+> ```
+>
+> **⚠️ If you are an agent and not the owner, you MUST write the agent-closed marker** — see
+> *The status vocabulary* below. **A producer that was SPAWNED to close is an agent** (ADR-033 §5): it
+> has no owner channel (ADR-021), so its close is agent-closed. Only an owner-present producer session
+> yields a plain owner-verified close. That marker is the only trace that no human checked this work.
+
+
+Mark a finished task complete: move its brief into `ai-agents/tasks/done/` and update the sprint
+documentation so its status reads **✅ Done**, everywhere the task is tracked.
+
+**Argument:** `$ARGUMENTS` — the path to the task brief file (e.g.
+`ai-agents/tasks/backlog/0042-add-export-endpoint/brief.md`). A bare filename
+(`add-export-endpoint.md`) is also acceptable — resolve it under
+`ai-agents/tasks/backlog/`.
+
+> **Why this skill exists.** Task files are moved between `backlog/`, `done/`, and `cancelled/`
+> **deliberately, after review** — never as a side effect of normal work. This skill is the *sanctioned*
+> way to perform that move: it updates every place the task is tracked, so the board and the brief never
+> drift apart. Invoking it is the signal that the task is genuinely complete.
+>
+> **What kind of gate it is — stated exactly, because the answer changed twice.** It once ran only when
+> the owner invoked it; ADR-025 removed that **knowingly**, leaving nothing structural at all. ADR-033
+> restores a gate, but a **narrower** one than the original: the hook enforces **who** may close — the
+> producer, and no other role — at any spawn depth. That is real, and it is not prose.
+>
+> **What it still is NOT: prevention** (ADR-033 §The limit, and do not "harden" past it). A determined
+> doer can still spawn a producer to close, which is *"the coder marks its own work done with an extra
+> hop"*. Producer-only separates the closing **identity**; it does not make the close a second judgment.
+> The `(agent-closed — not owner-verified)` marker still carries the only signal there, and **the marker
+> is prose — nothing enforces it.** If you are an agent — **including a spawned producer** — applying it
+> honestly is the entire safeguard, and it rests on you.
+
+## Resolve the status value FIRST
+
+Before any edit, decide which marker this run writes — **every `✅ Done` in the steps below means this
+resolved value, not the literal string**:
+
+| You are | Marker to write |
+|---|---|
+| The **owner**, invoking this in an owner-present `fkit producer` session | `✅ Done` |
+| A **producer spawned** to close — by a ship-loop, an orchestrator, or any other agent | `✅ Done (agent-closed — not owner-verified)` |
+
+**If you are unsure which you are, you are an agent.** The owner does not need to wonder. Being the
+producer is what let you run this skill at all (ADR-033 §1); it is **not** what makes a close
+owner-verified — the owner being present is (ADR-033 §5).
+
+---
+
+## Steps — do these in order
+
+### 1. Resolve and validate the input
+- Resolve `$ARGUMENTS` to a real task **folder** — the brief path
+  `ai-agents/tasks/<board>/<NNNN>-<slug>/brief.md`, or a bare folder name / slug, resolves to the
+  folder (a bare name is looked up under `ai-agents/tasks/backlog/`, then the other boards).
+- **Stop with a clear message if:**
+  - the file does not exist, or
+  - it is not under `ai-agents/tasks/`, or
+  - it is already in `ai-agents/tasks/done/` (nothing to do — say so). **First exception: the
+    owner-verification upgrade.** If you are the **owner** and the brief's `## Status` reads
+    `✅ Done (agent-closed — not owner-verified)`, do **not** stop — continue, skipping the move (the
+    file is already in place) and performing the status updates only, so the qualifier is cleared
+    everywhere it appears. An agent hitting this case still stops: only the owner can upgrade.
+    **Second exception: the contradicted-close repair.** If you are the **owner** and the brief's
+    `## Status` reads an *open-work* value — `🔲 Backlog`, `🔄 In progress`, or `🚧 Blocked — …` —
+    while the folder already sits in `done/`, look for a landed close **before deciding**: run step 4's
+    grep now, restricted to `ai-agents/sprints/` (closed plans under `sprints/done/` included), and
+    find a status-table row for this task whose leading cell reads plain `✅ Done`. **"For this task"
+    means the row's Brief cell links this task's folder** — a prose mention, a quoted specimen row, or
+    another task's row that merely cites this folder in its description is not a landed close. If
+    such a row exists, do **not** stop — continue, skipping the move (the folder is already in place)
+    and performing the status updates only. The brief's own `## Status` resolves to plain `✅ Done`:
+    you are present and verifying, which is what the plain value means, and it is what the board
+    already says — brief and board converge. Say which exception fired in the report (step 7). Four
+    things this branch must never do:
+    - **never fire when no board row reads plain `✅ Done`** — with no row at all there is no landed
+      close: this is a *close*, not a repair, and a close starts from `backlog/` through the ordinary
+      path; stop and say so. A row reading `✅ Done (agent-closed — not owner-verified)` beside an
+      open-work brief is also not this branch's case: stop, and report what the row reads;
+    - **never fire for a non-owner identity** — a producer **spawned** to close is an agent
+      (ADR-033 §5) and stops here exactly as it does on the first exception;
+    - **never upgrade an existing `✅ Done (agent-closed — not owner-verified)`** — a brief reading
+      that value is the *first* exception's case and routes there; that exception stays exactly as
+      written;
+    - **never move a folder** in this branch.
+    Any other `## Status` value on a folder already in `done/` — a `⛔ Cancelled …` or `➡️ Moved …`
+    marker, an unrecognised string, a value that already begins `✅ Done` — is not this branch's case:
+    the plain stop above applies, and the report says what was read. Or
+  - it is in `ai-agents/tasks/cancelled/` (this skill is for completion, not cancellation — flag it).
+- If `$ARGUMENTS` is empty, ask which task file to mark done. Do not guess.
+
+### 2. Read the task file to learn its context
+Capture, for use in later steps and the final report:
+- The **H1 title**.
+- The **`## Sprint`** field (e.g. `Sprint 4`, or `Backlog` for a task on the unranked `backlog.md` board).
+- Whether it declares a **`## Parent / Epic`** (a path to an epic file) — if so, this is a child slice
+  and the epic's own status table is one of the places to update.
+- The **task-folder name** `<NNNN>-<slug>` (the brief is `<folder>/brief.md`). The folder name — not
+  `brief.md`, which is the same for every task — is the token used to find references.
+
+### 3. Move the task FOLDER to `done/`
+Since ADR-029 a task is a **folder**, not a lone file. Move the whole folder (brief + any `plan.md` /
+`worklog.md` / `review.md` / `assets/` inside it) with `git mv` so history is preserved:
+
+```
+git mv ai-agents/tasks/backlog/<NNNN>-<slug> ai-agents/tasks/done/<NNNN>-<slug>
+```
+
+(If the folder lives somewhere else under `ai-agents/tasks/`, move it from there.) **Do not commit** —
+staging the move is enough; commits happen only when the owner explicitly asks.
+
+### 4. Find every place the task is referenced
+Search for the task's **folder name** `<NNNN>-<slug>` across everything under `ai-agents/` — status
+boards *and* prose. Inbound links now point at `tasks/<board>/<NNNN>-<slug>/brief.md`, so the folder
+name is the stable token (never grep `brief.md` — every task shares it):
+- `ai-agents/sprints/*.md` (the sprint plans, and the unranked `backlog.md` board)
+- **`ai-agents/sprints/done/*.md`** — **closed** sprint plans still *link* to tasks they carried over
+- **`ai-agents/knowledge-base/`** — ADRs and reports routinely back-link the brief that spawned them
+- **`ai-agents/tasks/`** itself — since ADR-029 the plans, worklogs and review ledgers live **inside**
+  the task folders (`plan.md` / `worklog.md` / `review.md`) — **including the moved folder's own
+  record files**, which point at themselves; step 5 rules that self case — and briefs cross-link
+  each other; the top-level `plans/` `worklogs/` `reviews/` directories no longer exist
+- **`ai-agents/sprints/reviews/`** — sprint-keyed review ledgers may reference the task
+- the parent epic file, if step 2 found a `## Parent / Epic`
+
+```
+grep -rn --exclude-dir=wiki-vault "<NNNN>-<slug>" ai-agents/
+```
+
+This grep is **recursive on purpose** — it reaches `sprints/done/`. Every hit it returns is handled in
+step 5; **none is discarded.** A reference you found and did nothing about is a link you broke (a
+self-hit you classified as evidence and *reported* frozen in step 7 is handled, not "nothing").
+
+> **⚠️ Why the whole of `ai-agents/` and not a list of directories.** This sweep used to name
+> `ai-agents/sprints/ ai-agents/tasks/` explicitly. That list was correct when written and **went
+> stale**: `knowledge-base/` was never in it, and `plans/` + `worklogs/` did not yet exist (ADR-020
+> added them). The movers therefore rotted links on every close, **by design**. Sweeping the parent
+> directory with one named exclusion is self-maintaining — a new sibling directory is covered the day
+> it appears, with nobody having to remember this file.
+>
+> ### ⛔ `wiki-vault/` is excluded deliberately — do NOT "fix" this
+>
+> **Only `fkit-wiki` writes `ai-agents/wiki-vault/`** ([ADR-005](../../../ai-agents/knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md)).
+> A mover that re-pointed a vault link would breach that boundary — so this sweep must not surface
+> vault hits it has no authority to repair. **If a vault link rots when a task moves, that is the wiki
+> role's repair to make**, via `/fkit-wiki-lint` or a sync. Say so in the report if it seems likely;
+> never reach in and fix it.
+
+### 5. Update each tracked location to "Done"
+For every reference found in step 4:
+
+- **Status-table row** (a `| … | <task> | <brief> |` line with a leading status cell): change the
+  leading status marker to **`✅ Done`**. Use the same emoji/wording the table already uses for other
+  done rows. If the row's description carries a now-stale note like `*(blocked: …)*` or
+  `*(… next)*`, trim just that stale fragment — keep the rest of the description intact.
+- **Epic slice table** (parent epic, child slices): set this slice's **Status** cell to `✅ Done`
+  (mirror the existing done-row format, e.g. `✅ Done (PR #NN)` if a PR number is known; otherwise
+  plain `✅ Done`). Update any prose "next slice" / ordering line in the epic that still points at the
+  just-completed slice so it points at the genuinely-next one.
+- **A `**Status:**` line** inside a task's own body section in the sprint plan: set it to `✅ Done`.
+- **A *link* to the brief whose status must NOT change** — most often a `➡️ Moved to Sprint N` row in a
+  **closed** plan under `ai-agents/sprints/done/`, or a prose link anywhere: **re-point the href to the
+  task's new path in `done/`, and change nothing else on the line.**
+
+  **A link is not a claim; it is a pointer.** `➡️ Moved to Sprint 2 — priority 7` is *historically
+  true and stays exactly as written* — the status cell, the priority, the prose, all byte-identical.
+  Only the href moves, because a pointer to a file that is no longer there is not history, it is rot.
+  **This is a pointer repair, not a status update — never flip a `➡️ Moved` row to `✅ Done`.**
+
+- **A hit in `ai-agents/knowledge-base/`** — an ADR or a report back-linking the brief that spawned it.
+  **Re-point the href to the new path in `done/`, and change nothing else on the line.** Identical
+  treatment to a closed sprint plan, and for the identical reason: **a historical record's *claims* are
+  frozen; its *links* are not.** An ADR that says "this was decided while task 42 was open" stays
+  exactly as written — only the href moves. **Never** edit an ADR's prose, status, date, or decision
+  text from this skill; if the surrounding sentence has become factually wrong, that is an ADR
+  amendment and belongs to the architect, so **flag it in the report** instead.
+
+- **A hit in a sibling task folder's `plan.md`, `worklog.md` or `review.md`, or in
+  `ai-agents/sprints/reviews/`** — same rule: re-point the href, change nothing else. Since ADR-029
+  these task-keyed records live inside the task folders (the old top-level `reviews/` `plans/`
+  `worklogs/` directories are gone); a sprint-keyed ledger lives in `sprints/reviews/`. They record
+  what happened, not where a file lives.
+
+- **The moved folder's OWN outbound links** — the reciprocal case, and the one most easily missed. The
+  brief you just moved has left `backlog/`, so any link *it* (or its `plan.md`/`worklog.md`/`review.md`)
+  makes to a **sibling** task no longer resolves from `done/`. A sibling link now targets another
+  folder's brief — `](../<other-NNNN-slug>/brief.md)` from a peer on the same board, or
+  `](../../backlog/<other-NNNN-slug>/brief.md)` across boards. Re-point to where the sibling actually
+  is, minding the extra folder level the new layout adds to every relative depth.
+
+  Briefs cross-link each other, so **one move breaks links in both directions**: inbound (handled
+  above) *and* outbound (here). Fixing only the inbound half leaves the move half-done.
+
+- **The moved folder's OWN self-locators** — the folder pointing at *itself*, the case the bullet
+  above does not reach (a self-locator is not a sibling link). Its `plan.md`, `review.md` and
+  `worklog.md` open with header lines whose only job is to say where this task's own files are —
+  `Task: ai-agents/tasks/backlog/<NNNN>-<slug>/brief.md` (the review ledger's schema line),
+  `Brief: …/brief.md`, `**Task:** …`, `**Plan:** …/<NNNN>-<slug>/plan.md`, `- **Task file:** …`, and
+  the like. Every one of them went stale the moment step 3 ran. **Re-point the board segment of the
+  path to the folder's new home (`tasks/backlog/` → `tasks/done/`, or from whichever board it left),
+  and change nothing else on the line** — same key, same wrapping (backticks, bold, list marker),
+  same absolute-or-relative form, same file named, line count unchanged. A locator that already
+  names `done/` is left byte-identical (the re-run and owner-upgrade paths must be no-ops here). A
+  locator written as a relative href (`[…](./brief.md)`) needs nothing — the target moved with the
+  folder; its label is not this skill's to rewrite.
+
+  **What a self-locator IS — decide by role, never by string.** It is a *pointer*: a named field in
+  the file's **header block** — above the first heading of level 2 or lower (`## `, `### `, …), or,
+  when the file has no such heading, the leading field block it opens with (the run of `Key:` lines
+  under the `# ` title) — whose value names a path to a file inside this same folder, and whose job
+  is to say where that file is, asserting nothing. That is the whole test: position, then role. The
+  path need not be the whole value — `Task: 0160 — …/brief.md` carries an ID before it and
+  `**Plan:** …/plan.md, approved by …` a clause after it; both are locators: re-point the path, keep
+  the ID and the clause byte-identical. The same old path also appears inside this folder as
+  *evidence*, and evidence is a claim: **a historical record's *claims* are frozen; its *links* are
+  not.**
+
+  ⛔ **Never rewrite the old path where it is evidence.** Not in a fenced block or captured command
+  output — a `git status` that printed `backlog/` that day really printed it, and editing it forges
+  a transcript. Not in a dated measurement or a quoted specimen. Not in a plan step, a findings row,
+  a change-surface table, or body prose recording what was done or seen at the time. Not in any
+  mention of **another** task's path, which may name `backlog/` correctly today. Not in a ledger's
+  `File(s) under review:` line — it sits in the header block, but its job is to record *what was
+  reviewed*, not where the brief is, so it fails the role prong — and not in a forwarding pointer
+  that sits **below** the header block, which fails the position prong: both stay frozen, and each
+  one you *meet* — as a step 4 grep return, or while reading the header block for locators — goes in
+  the step 7 freeze list.
+  ⛔ **This is not "replace `backlog/` with `done/` inside the folder."** No search-and-replace, no
+  added `backlog/`-string sweep. Step 4's folder-name grep already surfaces every self-hit that spells
+  the full folder name — classify each as *locator → repaired* or *evidence → left frozen*, and report
+  both lists (step 7); those two lists are the grep's own returns, plus any `File(s) under review:`
+  self-entry the header block showed you while you read it for locators (an elided `0250-.../plan.md`
+  there is not a grep return, but you met it) — nothing hunted for beyond the grep and the header
+  block. An elided self-path (`0250-.../worklog.md`) or a bare `tasks/backlog/` is not returned by
+  that grep and is not a locator; it stays frozen because of what it is, not because a search missed
+  it.
+
+  **The worked example — the folder of `0250` (`fix-the-scaffold-producer-row-fkit-task-brief-omission`)
+  as it stood at close, seven occurrences, 2 repair / 5 freeze:**
+
+  | Site | Reads (fragment) | Treatment |
+  |---|---|---|
+  | `plan.md` `Brief:` line (`:5`) | `Brief: /…/ai-agents/tasks/backlog/0250-…/brief.md` | **repair** — a header pointer to its own brief |
+  | `review.md` `Task:` line (`:3`) | `Task: ai-agents/tasks/backlog/0250-…/brief.md` | **repair** — the ledger's forwarding address |
+  | `plan.md` fenced block (`:117`) | ` M ai-agents/tasks/backlog/0250-.../brief.md` | **freeze** — captured `git status --porcelain` output |
+  | `plan.md` step 7 (`:188`) | *"Write the task worklog (`…/backlog/0250-.../worklog.md`)"* | **freeze** — the plan's instruction, as written at plan time |
+  | `review.md` (`:86`) | *"`0324`: still under `ai-agents/tasks/backlog/`, holding only `brief.md`"* | **freeze** — a dated measurement, about another task |
+  | `review.md` (`:98`) | *"`0324`'s own folder was still under `ai-agents/tasks/backlog/` at measurement 2"* | **freeze** — same |
+  | `review.md` findings row R1 (`:26`) | *"`ai-agents/tasks/backlog/0188-…/brief.md:54`"* | **freeze** — a findings row, citing another task's path |
+
+  Rows 3–4 name the moved folder in elided form; rows 5–7 name `backlog/` *correctly*, about `0324`
+  (`record-that-0250-discharged-0188s-d1-and-warn-off-the-reordering`) and `0188`
+  (`repair-the-five-live-ownership-fact-defects`). A string rule corrupts rows 5–7 and misses rows 3–4
+  only by luck. The role rule gets all seven. Only rows 1–2 are step 4 hits — they spell the full
+  folder name; rows 3–7 show what the rule says if you meet them, not a list step 7 asks you to
+  compile.
+
+Make the **minimal** edit that flips the status accurately. Do not restructure tables or rewrite
+descriptions beyond removing a fragment that is now false.
+
+> **Yes, this writes into `ai-agents/sprints/done/`.** That is deliberate and owner-ruled: a closed
+> sprint plan's *claims* are frozen, but its *links* stay live. Repair the href; touch nothing else.
+
+**Now do this regardless of how many references step 4 found — even zero.** Since `0001` every brief
+should have a row *somewhere* — a sprint plan, or the unranked `backlog.md` board — so **zero
+references is now itself worth reporting**, not the expected case for unsprinted work. A hand-filed
+brief may still have none. Either way, this step applies:
+
+- **The moved brief's OWN `## Status` field** — the single line immediately below the `## Status`
+  heading in the file you just moved into `done/`. Set that line to `✅ Done`, the same canonical
+  marker the vocabulary defines (see below). Touch only that one line — nothing else under the heading.
+  If the value legitimately spans more than one line, that is outside this skill's authority to guess
+  at — flag it in the report instead of partially rewriting it.
+
+  - **Already reads the marker you would write?** Leave it byte-identical — no second marker, no
+    appended line. Re-running this skill on an already-done brief must be a no-op here.
+  - **Already `✅ Done` and you are an agent?** No-op. **Never downgrade an owner-closed task to
+    agent-closed** — the owner's verification is not yours to erase.
+  - **Already `✅ Done (agent-closed — not owner-verified)` and you are the OWNER?** Replace it with
+    plain `✅ Done` and say so in the report. A human has now checked the work, which is exactly what
+    the qualifier said had not happened — this is the one legitimate upgrade path.
+  - **Reads anything else** (`🔲 Backlog`, `🔄 In progress`, `🚧 Blocked — …`, etc.)? Replace it with
+    `✅ Done`.
+  - **No `## Status` heading at all?** Do not invent one. Leave the heading absent and flag it in the
+    report (step 7). If a board row was updated, use the exact wording `no ## Status field found in
+    <brief> — board updated, brief header unchanged`. If step 4 found **no** board row either (the
+    unsprinted case), do not claim "board updated" — say instead `no ## Status field found in <brief>
+    — brief header unchanged (no sprint board reference existed to update)`. This is scoped to the
+    `## Status` field alone — it does **not** exempt the brief from the outbound-link repair above; a
+    status-less brief whose sibling links need re-pointing still gets that fix.
+
+  This is the brief's *own* copy of its status, separate from whatever board update may have happened
+  above. Where a board exists, a brief that still reads `🔲 Backlog` internally while the board reads
+  `✅ Done` is exactly the drift this skill exists to prevent. Only the brief just moved is touched
+  here — never a sweep repairing other briefs already sitting in `done/`.
+
+**Then prove it.** Resolve every relative markdown link in the files you touched **and** in the moved
+brief. A move is not finished while a link it broke is still broken. Every self-locator you re-pointed
+must name a file that now exists — most are code spans, not markdown links, so the link check above
+does not reach them; test the path.
+
+**That hand check is the only link check on a close.** No automated link check runs when a
+task folder moves (ADR-057 §D6 (a)): no test reads the links under `ai-agents/` any more, so a link you
+miss stays broken until someone reads it. Say so in the report (**Link check** below).
+
+### 6. Handle ambiguity — never paper over it
+- **No reference found** in any sprint doc: the task may be unsprinted / backlog-only. Complete the
+  move, then **report that no sprint status row was found** so the owner knows nothing else changed.
+- **Multiple references** (e.g. sprint plan + epic + `backlog.md`): update **all** of them and
+  list each in the report.
+- **`## Sprint` says a sprint, but that sprint plan has no matching row:** report the mismatch rather
+  than inventing a row.
+- If anything is genuinely unclear (e.g. two different tasks share a near-identical name), stop and
+  ask rather than editing the wrong row.
+
+### 7. Report
+Give a concise summary:
+- **Moved:** `<old folder>` → `ai-agents/tasks/done/<NNNN>-<slug>/` — or, when a step-1 exception
+  fired, `Moved: none — <first | second> exception; folder already in done/`.
+- **Updated:** each doc touched and how (e.g. "`sprint-4.md` — status row → ✅ Done";
+  "`refactor-auth-flow.md` — T4f slice → ✅ Done").
+- **Brief's own status header:** state what happened to the moved brief's `## Status` field — set to
+  `✅ Done`, already read `✅ Done` (no change needed), repaired from `<value read>` to `✅ Done` under
+  the second exception, or the missing-heading flag from step 5, using whichever of its two wordings
+  applies (board updated, or no board reference existed). This runs even
+  when step 4 found zero references — say so if it did. The owner should see this happened, not just
+  infer it.
+- **Re-pointed links:** every href repaired, and where — **including any closed plan under
+  `sprints/done/`** (e.g. "`sprints/done/sprint-1.md:37` — href → `tasks/done/`; status cell
+  untouched"). A move that rewrote a closed sprint plan must be **visible in this report**, never a
+  surprise found later by a link sweep. If none were re-pointed, say so.
+- **Link check:** by hand only — no automated link check ran.
+- **Self-locators repaired, and self-hits left frozen:** every header locator in the moved folder's
+  own `plan.md` / `review.md` / `worklog.md` you re-pointed (e.g. "`done/<NNNN>-<slug>/review.md:3` —
+  `Task:` path → `tasks/done/`; rest of line untouched"), and, separately, every other self-hit —
+  a step 4 return, or one met in the header block — you classified as evidence and left
+  byte-identical, with the reason in a phrase (captured output / dated measurement / plan text /
+  findings row / another task's path / `File(s) under review:` line / pointer below the header
+  block). If there were none of either, say so. The freeze calls are judgments, and this list is the
+  only place they can be checked.
+- **Knowledge-base hits, called out separately** — list every href repaired under
+  `ai-agents/knowledge-base/` on its own (e.g. "`knowledge-base/decisions/adr-029-….md:88` — href →
+  `tasks/done/`; ADR prose untouched"). These are edits to *historical records*, so they get the same
+  distinct visibility as `sprints/done/` rather than being folded into a general count. Same for
+  `reviews/`, `plans/`, and `worklogs/` hits. If there were none, say so.
+- **Vault links NOT touched:** if the task seems likely to be referenced from `ai-agents/wiki-vault/`,
+  say so and name it as **fkit-wiki's** repair — this skill deliberately does not sweep or edit the
+  vault (ADR-005). Do not assert whether vault links actually rotted; this skill did not look.
+- **Flagged:** anything not auto-resolved (no sprint row found, mismatch, multiple matches).
+- Remind that **this skill** made no commit — it leaves the move + edits in the working tree. Do not claim
+  the repository has uncommitted work, or that anything is or isn't committed — this skill has not
+  checked, and the owner may have committed between turns. If commit state matters to the report, run
+  `git status` first. (See
+  [`conventions/evidence-before-assertion.md`](../../../ai-agents/knowledge-base/conventions/evidence-before-assertion.md).)
+
+---
+
+## Rules
+- **Do not commit** anything (the project rule: commit only when the owner explicitly asks).
+- Only ever move the task **into `done/`** — this skill does not handle cancellation (`cancelled/`).
+- Keep edits minimal and accurate; surface anything uncertain instead of guessing.
+
+## The status vocabulary
+
+The canonical status set is documented in **`ai-agents/knowledge-base/conventions/task-status-vocabulary.md`**
+— it is the source of truth, and this skill writes exactly one value from it:
+
+> **`✅ Done`** — or, when an agent performs the close,
+> **`✅ Done (agent-closed — not owner-verified)`**. Nothing else. Not "Complete", not "Finished",
+> not "✔️".
+
+**`Done` is skill-gated AND role-gated — not owner-gated.** It may be set **only** by this skill —
+never by hand-editing a file — and **only the producer may run this skill** (ADR-033, hook-enforced
+per ADR-018). Every other role routes its close through a spawned producer. The old **owner**-only
+gate is still gone: role-gating is not owner-gating.
+
+⚠️ **The agent-closed marker is the entire residual mechanism, and it is unenforced.** No code path
+checks it. The same agent that would wrongly close a task can spawn the producer that labels the
+close — so the label is worth exactly what your honesty is worth. **Apply it whenever the owner is not
+present**, spawned producers included.
+
+⚠️ **The marker does not show up in `/fkit-status`.** The dashboard matches the `✅` prefix and
+collapses every variant to plain `done`, then filters the row off the open board. Distinguishing
+agent-closed from owner-closed means opening the sprint plan or the brief. Known, accepted, recorded in
+ADR-025's honesty clause and **unchanged by ADR-033** (§Consequences names it explicitly) — **not** a
+defect to file.
+
+<!-- fkit-codex-generated -->

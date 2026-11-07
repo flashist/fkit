@@ -1,0 +1,108 @@
+--- before/ai-agents/sprints/sprint-15.md
++++ after/ai-agents/sprints/sprint-15.md
+@@ -126,7 +126,7 @@
+ | Priority | Task | Independently shippable outcome |
+ |---|---|---|
+ | P3 | [0555 — Use supported interactive owner questions with an explicit fallback](../tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md) | Automatically open actual selectable choices on supported hosts without extra activation; separate queued acceptance from display/consent, with explicit unavailable-interface fallback and actual-answer waiting. |
+-| P4 | [0556 — Give each independent owner decision its own selectable options](../tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) | Each independent decision has its own concise question, selectable options and stable approval binding. |
++| P4 | [0556 — Give each independent owner decision its own selectable options](../tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) | Each independent decision has its own concise question, selectable options and stable approval binding. |
+ | P5 (was P2) | [0537 — Make the launcher update-check stall test reliable when `npm test` runs on a loaded machine](../tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md) | Still owner-deferred, Backlog; no timing work resumes. |
+ | P6 (was P3) | [0520 — Stop the update check's `git ls-remote` from prompting over ssh when git rewrites GitHub URLs](../tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md) | Still Blocked — verification failed; skip this run, no closure exception. |
+ | P7 (was P4) | [0548 — Use native runtime model and effort defaults and retire fkit selectors](../tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md) | Still Backlog/parked; R1 unapproved, final-draft launch allowance exhausted. Additional launch needs an actual owner answer. |
+@@ -198,7 +198,7 @@
+ | ✅ Done (agent-closed — not owner-verified) | P1 | **Stop the test suite leaving `fkit-proj-*` temp folders behind** *(Owner-approved order, 2026-10-30. Depends on nothing; blocks nothing. No automatic deletion of old folders. Owner `fkit-coder`)* | [`0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind`](../tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md) |
+ | ✅ Done (agent-closed — not owner-verified) | P2 | **0554 — Make the lead advance authorized work after worker completion** *(Owner-priority ruling, 2026-11-06. Depends on nothing; blocks nothing. Filing is not plan/source approval. Owner `fkit-coder`)* | [0554 — Make the lead advance authorized work after worker completion](../tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md) |
+ | 🔄 In progress | P3 | **0555 — Use supported interactive owner questions with an explicit fallback** *(Owner-priority ruling, 2026-11-06. Depends on nothing; blocks nothing. Filing is not plan/source approval. Owner `fkit-coder`)* | [0555 — Use supported interactive owner questions with an explicit fallback](../tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md) |
+-| 🔄 In progress | P4 | **0556 — Give each independent owner decision its own selectable options** *(Claimed for plan-only work by the new root ship-loop run, 2026-11-06; plan review ON (default), tests disabled. Depends on nothing; blocks nothing. No plan/source approval. Owner `fkit-coder`)* | [0556 — Give each independent owner decision its own selectable options](../tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) |
++| ✅ Done (agent-closed — not owner-verified) | P4 | **0556 — Give each independent owner decision its own selectable options** *(Depends on nothing; blocks nothing. Owner `fkit-coder`)* | [0556 — Give each independent owner decision its own selectable options](../tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) |
+ | 🔲 Backlog | P5 | **Make the launcher update-check stall test reliable when `npm test` runs on a loaded machine** *(Deferred for now by owner user-chat ruling, 2026-11-05; see current driver ruling above. Owner-approved order, 2026-10-30. Depends on nothing; blocks nothing. Owner `fkit-coder`)* | [`0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine`](../tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md) |
+ | 🚧 Blocked — verification failed | P6 | **Stop the update check's `git ls-remote` from prompting over ssh when git rewrites GitHub URLs** *(Owner ruling 2026-11-05, 10:00:21 UTC: keep open; skip this run; no closure exception. Build complete; source review converged; Verify and prove-red failed. See current continuation above. Depends on 0284, recorded `✅ Done (agent-closed — not owner-verified)` in Sprint 12. Blocks nothing. Owner `fkit-coder`)* | [`0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh`](../tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md) |
+ | 🔲 Backlog | P7 | **Use native runtime model and effort defaults and retire fkit selectors** *(Parked 2026-11-06: both permitted final-draft launches returned no draft; R1 preserved unapproved. Extra attempt requires owner decision. Depends on nothing; blocks nothing. Owner `fkit-coder`)* | [`0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors`](../tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md) |
+--- before/ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md
++++ after/ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md
+@@ -135,7 +135,7 @@
+ 7. Only the actual owner supplies an applicable approval during live verification; never simulate
+    it or have an agent choose/submit it. Confirm queued acceptance and displayed-but-unanswered
+    forms grant nothing. Keep root-only asking and the independent decision-assembly boundary with
+-   [0556 — Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md).
++   [0556 — Give each independent owner decision its own selectable options](../../done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md).
+    This refinement approves no permanent test file, prove-red case, source implementation or retry.
+ 
+ ## Notes
+@@ -146,7 +146,7 @@
+   [0554 — Make the lead advance authorized work after worker completion](../../done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md)
+   by owner priority; delivery works independently with today's single-question caller.
+ - **Independent seam:** this task owns interface availability, choice delivery and degraded
+-  handling; [0556 — Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)
++  handling; [0556 — Give each independent owner decision its own selectable options](../../done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)
+   owns splitting/assembly and multi-decision binding. Preserve the existing interface unless an
+   approved change needs it; batching is optional, sequential questions are a complete outcome.
+ - **Duplicate boundaries:** shipped
+@@ -172,5 +172,5 @@
+   [0554 — Make the lead advance authorized work after worker completion](../../done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md)
+   has architect/producer APPROVE and usable clean leaf review plus coder check, per root's relay;
+   actual owner implementation approval is still pending. Those records/statuses are not amended.
+-  [0556 — Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)
++  [0556 — Give each independent owner decision its own selectable options](../../done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)
+   remains independent at priority 4/`🔲 Backlog`; all older deferrals, blocks and retry limits stand.
+--- before/ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md
++++ after/ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md
+@@ -98,7 +98,7 @@
+ - **Related, no wait:**
+   [0555 — Use supported interactive owner questions with an explicit fallback](../../backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md)
+   owns capability/delivery;
+-  [0556 — Give each independent owner decision its own selectable options](../../backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)
++  [0556 — Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)
+   owns decision assembly. They ship independently; shared-file edits require coordination only.
+ - **Duplicate boundaries:**
+   [0499 — Decide how a lead "clear handoff" carries the important context across a `/clear`](../../backlog/0499-decide-how-a-lead-clear-handoff-carries-context-across-a-clear/brief.md)
+--- before/ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md
++++ after/ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md
+@@ -10,7 +10,7 @@
+ 4
+ 
+ ## Status
+-🔄 In progress
++✅ Done (agent-closed — not owner-verified)
+ 
+ ## Owner
+ fkit-coder
+@@ -79,7 +79,7 @@
+    Check exact approval provenance and faithful propagation to the correct worker.
+ 4. Check missing-interface fallback retains separate questions and named alternatives with explicit
+    real-answer waiting. Interface capability itself is owned by
+-   [0555 — Use supported interactive owner questions with an explicit fallback](../0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md);
++   [0555 — Use supported interactive owner questions with an explicit fallback](../../backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md);
+    current single-question delivery suffices to verify this task independently.
+ 5. Use meaningful existing-file coverage (`test/launcher-contract.test.js` for actual adapter/relay
+    contracts) and focused source/template review under `CONTRIBUTING.md`. Do not restore broad
+@@ -95,15 +95,15 @@
+ - **Depends on:** nothing
+ - **Blocks:** nothing
+ - **On merit:** as ranked. Immediately after
+-  [0555 — Use supported interactive owner questions with an explicit fallback](../0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md)
++  [0555 — Use supported interactive owner questions with an explicit fallback](../../backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md)
+   in the requested top-priority group; this is scheduling, not a hard dependency.
+ - **Duplicate boundaries:**
+-  [0487 — Add the `task: <id>` spawn line and the `[task NNNN]` relay tag to both ship-loop skills](../0487-add-the-task-id-spawn-line-and-the-task-relay-tag-to-both-ship-loop-skills/brief.md)
++  [0487 — Add the `task: <id>` spawn line and the `[task NNNN]` relay tag to both ship-loop skills](../../backlog/0487-add-the-task-id-spawn-line-and-the-task-relay-tag-to-both-ship-loop-skills/brief.md)
+   is gated owner-involvement capture instrumentation, excluded here; stable decision binding is
+   not authorization to build its hooks/logs/tags.
+-  [0410 — Investigate how agents report status to the owner in prose, and put a hierarchical shape to him](../0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md)
++  [0410 — Investigate how agents report status to the owner in prose, and put a hierarchical shape to him](../../backlog/0410-investigate-how-agents-report-status-to-the-owner-in-prose-and-put-a-shape-to-him/brief.md)
+   concerns reporting hierarchy, not question assembly.
+-  [0553 — Include task titles alongside IDs in owner-facing communication](../0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md)
++  [0553 — Include task titles alongside IDs in owner-facing communication](../../backlog/0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md)
+   remains unranked Backlog; follow its naming outcome here without pulling in its team-wide rollout.
+ - Preserve the shipped explanation semantics from
+   [0504 — Answer a question typed into a question dialog in full, in chat, and do not re-ask in the same turn](../../done/0504-answer-a-question-typed-into-a-question-dialog-in-full-and-do-not-re-ask-in-the-same-turn/brief.md).
+--- before/ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md
++++ after/ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md
+@@ -1,6 +1,6 @@
+ # Review — 0556
+ 
+-Task: ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md
++Task: ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md
+ File(s) under review: the following exact 16 paths, against Build's captured starting working-tree bytes; not the dirty HEAD diff.
+ - `ai-agents/knowledge-base/conventions/asking-the-owner.md`
+ - `claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md`

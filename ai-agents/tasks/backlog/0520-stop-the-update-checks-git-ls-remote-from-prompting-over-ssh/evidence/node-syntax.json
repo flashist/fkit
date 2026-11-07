@@ -1,0 +1,11 @@
+{
+  "command": "node --check test/update-banner.test.js",
+  "argv": [
+    "node",
+    "--check",
+    "test/update-banner.test.js"
+  ],
+  "childExit": 0,
+  "stdout": "\n",
+  "stderr": "\n"
+}

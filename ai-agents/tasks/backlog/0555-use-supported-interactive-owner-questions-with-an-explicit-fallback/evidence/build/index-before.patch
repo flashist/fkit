@@ -1,0 +1,68 @@
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md
+diff --git a/ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md b/ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md
+similarity index 100%
+rename from ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md
+rename to ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md

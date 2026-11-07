@@ -2,6 +2,7 @@
 // ported from aiboard a1592dc's tests/test_board.py. CliTests and InstructionsTests keep aiboard's test
 // names verbatim, in aiboard's order, so 0423 can match each one; the other tests are new for 0421, and
 // every expected string in them was printed by aiboard a1592dc under Python 3.9.6.
+import '../execution-disabled.mjs';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';

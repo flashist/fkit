@@ -150,7 +150,10 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
    exactly once, forwarding the extracted path and this loop's accepted flag. Use its gate check,
    drafting and complete *Plan review* section; this loop's step 3 supplies its owner presentation
    and decision, and step 4 supplies persistence. **Do not ask twice or write the record twice.**
-   Inherit its trigger and exact ON/off reason: a live session needs the launcher line and owner tool;
+   Inherit its trigger and exact ON/off reason: regular Claude needs the launcher line and native
+   owner tool. A direct interactive Codex coder's actual launcher ON line enables review even without
+   a usable owner tool; only approval changes to the explicit fallback and waiting under
+   `conventions/asking-the-owner.md` (ADR-060, 2026-11-06). Codex planning remains instruction-enforced;
    missing signal means off; off wins a signal conflict. `--plan-review` cannot override a session
    opt-out. A quote in a brief or an old record turns nothing on. Spawned-coder driver rules stay
    unchanged; this loop remains session-only.
@@ -172,7 +175,11 @@ Since ADR-029 these artifacts live **inside the task folder** alongside `brief.m
    owner's decision; do not resolve it. If no sprint plan holds the row, the render fails, or it carries
    `drift unresolved-plan-sprint`, say the check did not run — never that there is no record. (A task
    on the Backlog board has nothing to check.) Then present the complete plan (+ any open questions)
-   and wait at **one** owner gate. With review on, preserve `fkit-plan-task`'s presentation order:
+   and wait at the plan-approval gate. Each independent open decision has its own question and
+   selectable options under `conventions/asking-the-owner.md`; never combine plan approval with
+   a retry allowance or another action. Ask sequentially on current Codex (one `fkit_ask_owner` call
+   at a time, no `questions` array). Batch separate objects only with actual interface support and
+   trustworthy identity. With review on, preserve `fkit-plan-task`'s presentation order:
    any incomplete/fallback banner first → `Plan review: ON (default)` → the unchanged complete plan →
    three attachments (approvers and classification; revisions and reasons; adversarial findings
    verbatim with focused coder checks) → the full `===PLAN-REVIEW RECORD BEGIN/END===` block with
@@ -303,6 +310,27 @@ in silence.
 sprint (or on the Backlog board) — a follow-up, a re-scope — or re-point a `Depends on:`
 link, each option says which open tasks would then wait on which sprint, the recommended option too:
 [`conventions/placement-questions-state-the-knock-on.md`](../../../ai-agents/knowledge-base/conventions/placement-questions-state-the-knock-on.md).
+
+For every independent stop decision, retain a stable key, task ID and canonical title, unchanged
+scope/revision, question, exact options, recommendation and pending/answered/superseded state in the
+conversation and existing worklog after its normal gate. Respect the real option limit, recommendation
+first and standing option last, once; show its exact description in preceding chat on string-only
+Codex. Never silently drop alternatives or combine unrelated effects; use faithful narrowing or
+transparent non-authorizing selection stages per the shared convention. Bind each actual answer to
+its key and scope, including custom follow-ups, partial answers and late replies; never by order or
+repeated labels. Record each approval's exact quote/custom text, date and actual channel. Changed
+scope/option meaning supersedes the old version and needs a fresh applicable answer; unknown provenance stays
+unknown. Carry the full approved scope and applicable answer faithfully when delegating.
+
+Keep valid answers for their unchanged scopes and every unanswered item pending. Any explanation
+request stops **all new dialogs that turn**: explain in chat, then on the next owner message take an
+applicable answer or answer another question; otherwise re-ask only unresolved items. Cancellation,
+invalid/empty/ambiguous results, silence, request acceptance, presentation or preselection grant
+nothing. Custom routing alone is not an answer; preserve actual custom text exactly. Use explicit
+fallback separately per decision if dialogue is missing/failed; uncertain delivery stays unverified.
+Plan approval does not renew retry allowances, and retry permission does not approve source. Begin
+dependent work only when all its required answers and allowances apply; unrelated authorized work
+continues under existing loop rules. Producer-only closure and the autonomy boundary are unchanged.
 
 ### The "obvious winner" override
 Do **not** manufacture an important question out of a no-brainer. Where one option **clearly dominates

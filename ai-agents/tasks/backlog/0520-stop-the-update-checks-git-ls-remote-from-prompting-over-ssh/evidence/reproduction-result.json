@@ -1,0 +1,13 @@
+{
+  "command": "node ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/reproduce.mjs",
+  "childExit": 0,
+  "launcherSha256": "91fefe7a6c138b1e390f5986c3c6c62ba85272d09614edad409cfc88d1d4383a",
+  "positiveHttpsExit": 0,
+  "positiveSshExit": 128,
+  "launcherExit": 0,
+  "sshSentinelCalls": 1,
+  "stderrEmpty": true,
+  "banner": null,
+  "latestCreated": false,
+  "attemptStampRetained": true
+}

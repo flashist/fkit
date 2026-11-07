@@ -1,0 +1,1737 @@
+(node:26623) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/askuserquestion-marker-hook.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ AskUserQuestion call → writes the turn-scoped marker (180.250792ms)
+✔ a non-AskUserQuestion tool → writes NO marker (75.98975ms)
+✔ unsafe session_id → writes nothing, no crash (path-safety) (105.547ms)
+✔ missing session_id → writes nothing, exit 0 (113.804125ms)
+✔ cwd that does not exist → writes nothing, exit 0 (138.550375ms)
+✔ missing cwd → writes nothing, exit 0 (110.944791ms)
+✔ empty / malformed payload → exit 0, no marker, no crash (95.055625ms)
+(node:26626) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/board-reader-host.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ local host names and IP literals get the board (1529.717875ms)
+✖ any other host name is refused with 403 and no board data or path (1.997542ms)
+✖ no Host: 403 from the reader on HTTP/1.0, 400 from Node on HTTP/1.1 (0.155708ms)
+✖ a non-GET is still 405, whatever its Host (0.113416ms)
+(node:26627) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/board/cli.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ InstructionsTests
+  ✔ test_install_block_is_idempotent (31.996834ms)
+  ✔ test_block_tells_agents_to_take_work_from_the_top (49.533666ms)
+✔ InstructionsTests (83.528042ms)
+▶ CliTests
+  ✔ test_full_flow (2247.505333ms)
+  ✔ test_argparse_errors_are_json (12.925041ms)
+  ✔ test_critical_priority_via_cli (48.258083ms)
+  ✔ test_task_rank_via_cli (50.846167ms)
+  ✔ test_board_truncates_with_ellipsis (26.91125ms)
+✔ CliTests (2387.298667ms)
+▶ the board command line (new for 0421)
+  ✔ every command's --json output parses (70.000042ms)
+  ✔ the kanban view counts characters as Python does (16.857083ms)
+  ✔ argument errors, help and version match aiboard a1592dc (7.4165ms)
+  ✔ read commands print what aiboard a1592dc prints (62.309459ms)
+  ✔ init and agents-md write into the project as aiboard a1592dc does (14.190583ms)
+  ✔ installBlock appends after existing content as aiboard a1592dc does (2.720208ms)
+  ✔ the command-line entry reads stdin as Python does and sets exit codes (173.664584ms)
+✔ the board command line (new for 0421) (347.723292ms)
+(node:26628) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/board/model.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ ModelTests
+  ✔ test_front_matter_roundtrip (30.88225ms)
+  ✔ test_front_matter_inline_list_and_missing (1.2225ms)
+  ✔ test_zero_padded_digits_roundtrip_byte_identical (11.246208ms)
+  ✔ test_hostile_scalars_roundtrip (15.682209ms)
+  ✔ test_quotes_and_backslashes_roundtrip (2.563333ms)
+  ✔ test_ids_and_statuses (3.587916ms)
+  ✔ test_priorities (0.842958ms)
+  ✔ test_rank_defaults_to_id_order (1.357667ms)
+  ✔ test_worklog_parse (0.785375ms)
+✔ ModelTests (71.692ms)
+▶ fkit additions
+  ✔ emoji, quotes, backslashes and 0013 survive a write byte-for-byte (0.545292ms)
+  ✔ keeps Python's string behaviour (port guard) (6.741834ms)
+✔ fkit additions (7.578208ms)
+(node:26630) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/board/server.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ ServerTests
+  ✖ test_critical_priority (391.17ms)
+  ✖ test_rank_endpoint (114.664333ms)
+  ✖ test_index_and_board (10.878042ms)
+  ✖ test_write_flow (17.078292ms)
+  ✖ test_errors (260.072042ms)
+  ✖ test_read_only (139.057333ms)
+✖ ServerTests (947.086917ms)
+▶ a write must come from the board page itself (aiboard T-022)
+  ✖ T-022 reproduction: a page on another site closing a task is refused (50.804875ms)
+  ✖ every write endpoint refuses a cross-site write and leaves the board untouched (164.816833ms)
+  ✖ writes from the page, from agents and from IP-literal hosts still work (116.587125ms)
+  ✖ a preflight and every other method get Python's 501, with no CORS header (136.044ms)
+✖ a write must come from the board page itself (aiboard T-022) (480.750208ms)
+▶ simultaneous writes
+  ✖ none is lost or reordered, from the web and the command line at once (9.14825ms)
+✖ simultaneous writes (9.302875ms)
+▶ requests are read as Python reads them
+  ✖ bodies: dicts keep their key order, NaN, bad UTF-8, a non-object (8.586708ms)
+  ✖ paths: query, params, repeated slashes and the absolute form (6.307584ms)
+  ✖ GET responses: sprint detail, check, not found, headers (219.835084ms)
+  ✖ fields of the wrong JSON type: Python's status and body (129.379542ms)
+  ✖ an id field holding a list: Python's 500, and the board untouched (88.866875ms)
+✖ requests are read as Python reads them (453.695917ms)
+▶ the page
+  ✖ is aiboard a1592dc's page, served byte for byte (7.632792ms)
+✖ the page (7.770667ms)
+▶ serve from the command line
+  ✖ prints aiboard's banner, serves the board, and stops cleanly on Ctrl+C (180.689583ms)
+✖ serve from the command line (180.818542ms)
+(node:26633) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/board/snapshot-index.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ snapshot scans the tree a fixed number of times and loads each task once, however many tasks the sprints hold (aiboard T-021) (2883.1535ms)
+✔ snapshot sprint progress is unchanged by the index: first copy of a duplicate id, odd refs, missing tasks, errors (97.838459ms)
+(node:26634) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/board/sprints.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ BoardTests
+  ✔ test_sprint_membership_stays_in_sync (1376.591083ms)
+  ✔ test_move_sprint (187.184875ms)
+  ✔ test_check_detects_and_fixes_stale_sprint_list (507.468167ms)
+✔ BoardTests (2183.87475ms)
+▶ fkit additions
+  ✔ move_sprint keeps the sprint's tasks, writes nothing for the same status, and refuses a same-name destination (506.811792ms)
+  ✔ sprint_add moves a task out of its old sprint (40.421292ms)
+  ✔ sprint_remove drops a stale listing without touching the task (34.419167ms)
+  ✔ sprint_remove of a member then a stale listing in one call keeps the member removed (55.510042ms)
+✔ fkit additions (637.436ms)
+(node:26635) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/board/store.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ BoardTests
+  ✔ test_requires_init (154.262875ms)
+  ✔ test_critical_priority_and_urgent_alias (564.952167ms)
+  ✔ test_hand_edited_urgent_reads_as_critical (264.875542ms)
+  ✔ test_new_tasks_join_the_bottom_and_critical_ones_the_top (806.95575ms)
+  ✔ test_rank_top_bottom_before_after (896.330917ms)
+  ✔ test_a_move_rewrites_only_the_moved_task (53.372916ms)
+  ✔ test_rank_respaces_when_a_gap_runs_out (132.383916ms)
+  ✔ test_rank_validation (10.387625ms)
+  ✔ test_rank_survives_status_changes_and_orders_every_view (25.425083ms)
+  ✔ test_raising_to_critical_moves_to_the_top_once (19.097833ms)
+  ✔ test_ranking_does_not_touch_updated (10.291584ms)
+  ✔ test_boards_without_ranks_keep_id_order (20.170209ms)
+  ✔ test_check_reports_a_malformed_rank (10.506875ms)
+  ✔ test_create_and_move_task (11.879584ms)
+  ✔ test_log_appends (8.1325ms)
+  ✔ test_check_detects_inconsistency (11.441333ms)
+  ✔ test_quoted_title_survives_store (24.72425ms)
+  ✔ test_hand_made_task_is_readable (8.114292ms)
+  ✔ test_assign_logs (7.85925ms)
+  ✔ test_parallel_writers_get_unique_ids (875.263209ms)
+  ✔ test_init_writes_config_and_discovery_walks_up (5.014125ms)
+  ✔ test_pointer_file_discovery (7.229709ms)
+  ✔ test_dependencies (28.847542ms)
+  ✔ test_start_is_an_atomic_claim (18.717083ms)
+  ✔ test_assign_refuses_to_steal_without_force (21.296416ms)
+  ✔ test_parallel_start_has_exactly_one_winner (130.154875ms)
+  ✔ test_comments_and_stale_detection (14.716542ms)
+  ✔ test_not_found (3.23ms)
+  ✔ test_snapshot_shape (5.971792ms)
+✔ BoardTests (4156.487041ms)
+▶ fkit additions
+  ✔ reads and writes files the way Python does (port guard) (56.390708ms)
+  ✔ a move into a status folder deleted by hand copies the task, then deletes the original (9.350709ms)
+  ✔ check reports a rank too big to store exactly (11.822917ms)
+  ✔ worker threads in one process take turns on the lock (1319.147875ms)
+  ✔ a lock left by a killed process is broken (2838.531041ms)
+✔ fkit additions (4235.985ms)
+(node:26636) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/carry-check-hook.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ fixture blob id agrees with `git hash-object --stdin` (skipped if git is not on PATH) (253.15875ms)
+✔ exact paste + matching hash -> allow (728.950958ms)
+✔ truncated paste -> deny (840.546417ms)
+✔ re-rendered paste (one word changed) -> deny (1014.655042ms)
+✔ named hash does not match the file -> deny (56.29575ms)
+✔ pointer-only, declared degraded form, hash matches -> allow (58.698583ms)
+✔ pointer-only, declared, hash mismatch -> deny (42.990375ms)
+✔ pointer-only, NOT declared -> deny (40.89375ms)
+✔ no pointer line -> allow (ungated) (124.635833ms)
+✔ a non-Task tool -> allow; tool_name "Agent" is gated like "Task" (241.728333ms)
+✔ dangling pointer (file missing) -> deny (130.722833ms)
+✔ gated spawn with no cwd in the payload -> deny (must be checkable) (53.893625ms)
+✔ absolute or ../ plan path -> deny (192.848416ms)
+✔ escape-bearing multi-line prompt round-trips (caveat 4) (89.887792ms)
+✔ two pointers, one bad -> deny (82.638292ms)
+✔ malformed JSON payload -> allow + stderr (fail-open, owner ruling Q3) (231.192417ms)
+✔ hash prefix (>=7 hex) accepted (184.404084ms)
+✔ the plan's own words cannot declare the degraded form: truncated paste of a plan that says "pointer-only" -> deny (1760.013625ms)
+✔ trailing newline is part of the bytes: a trimmed paste -> deny (3991.429875ms)
+✔ a paste cut mid-line right after "pointer-only" cannot self-declare (review R1): -> deny (8913.889375ms)
+✔ a near-miss pointer line is not gated but is loud on stderr (review R3) (9599.885333ms)
+✔ a pointer-form line inside the pasted plan is content, not a second gate (review R7) (12032.075042ms)
+✔ a plan dropped as content still has its lines subtracted from the declaration scan (review R8): -> deny (8107.503084ms)
+✔ the target is un-gated when a pasted sibling plan on disk quotes its pointer line (review R9, documented residual) (5631.866209ms)
+✔ a near-miss line that is itself plan content does not warn (review R11) (5632.943417ms)
+✔ a driver near-miss line byte-identical to, or a >=12-char prefix of, a content line is silent too (review R14, documented residual) (10740.009583ms)
+✔ a plan that quotes its OWN pointer stays gated — the mutual-quote guard is load-bearing (review R12) (5284.902875ms)
+(node:26638) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/converge-contract.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ Group A — the invariant: convergence never writes to a path that already exists
+  ✔ 1. every pre-existing file is byte-for-byte identical after a converging run (2794.758583ms)
+  ✔ 2. content drift is NOT fixed — an edited scaffold file is stepped over, deliberately (573.974667ms)
+  ✔ 3. the only delta is newly-created paths (487.577333ms)
+✔ Group A — the invariant: convergence never writes to a path that already exists (3859.635417ms)
+▶ Group B — convergence
+  ✔ 1. a pre-task-25 knowledge-base gains decisions/, incidents/, reports/, history/ (455.643542ms)
+  ✔ 2. a missing nested file is restored (2093.004917ms)
+  ✔ 3. idempotent — a second run creates nothing further (9103.8615ms)
+✔ Group B — convergence (11652.924166ms)
+▶ Group C — .gitkeep
+  ✔ 1. NOT resurrected in a directory that already existed (5019.333333ms)
+  ✔ 2. still NOT resurrected after repeat runs (15520.353958ms)
+  ✔ 3. IS created when this pass created the directory (4790.254791ms)
+  ✔ 4. the rule covers every .gitkeep the scaffold ships (count is derived, not trusted) (4672.931708ms)
+✔ Group C — .gitkeep (30003.5715ms)
+▶ Group D — announcement
+  ✔ 1. a converging run says what it created (3890.588834ms)
+  ✔ 2. a converged project is COMPLETELY silent on stderr (8686.045833ms)
+  ✔ 3. ⚠️ THE TRAP — the announcement survives the launcher's `>/dev/null` (13277.723542ms)
+✔ Group D — announcement (25854.834875ms)
+▶ Group E — ai-agents/.fkit-keep-out
+  ✔ 1. a listed whole tree is not recreated (4371.80575ms)
+  ✔ 2. it holds across repeat launches, and stays silent about it (8053.396417ms)
+  ✔ 3. a single file can be opted out (3293.995542ms)
+  ✔ 4. it opts out only what it names (3770.469167ms)
+  ✔ 6. R1 — an UNREADABLE keep-out fails CLOSED: refuse loudly, converge nothing (3263.905625ms)
+  ✔ 7. R1 — a keep-out that is a DIRECTORY also fails closed (3368.969041ms)
+  ✔ 8. R3 — entries are matched literally, never glob-expanded against the CWD (3643.65325ms)
+  ✔ 9. R3 — the same keep-out gives the same result from ANY working directory (7290.122625ms)
+  ✔ 5. ⚠️ it lives in ai-agents/ (tracked) — NOT .fkit/ (gitignored), so it survives a clone (7192.576459ms)
+✔ Group E — ai-agents/.fkit-keep-out (44249.700833ms)
+▶ Group F — weird state and failure
+  ✔ 1. a symlinked SUBDIR is not written through — the seam per-path writes created (2700.912917ms)
+  ✔ 2. a file where a directory belongs → refuse the subtree, do not clobber the file (3226.043292ms)
+  ✔ 4. R4 — an unreadable existing dir is refused ONCE, not warned about per child forever (3572.134291ms)
+  ✔ 3. non-fatal — a failed convergence write never costs the user the rest of setup (2885.889791ms)
+✔ Group F — weird state and failure (12385.359792ms)
+▶ Group G — fresh project
+  ✔ 1. an empty dir still gets the full scaffold, byte-for-byte (3256.653084ms)
+  ✔ 2. a fresh project says nothing about convergence — it did not converge (2733.0635ms)
+✔ Group G — fresh project (5990.43725ms)
+(node:26641) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/dashboard-contract.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ clean sprint: board renders; roll-up prints only non-zero terms (1300.2035ms)
+✔ counts sum to M, and M is the row count — not the prose (1732.947291ms)
+✔ disagreement drift: waiting on owner override, fact, and roll-up clause (195.244708ms)
+✔ nonconformance (⛔ without a reason): fact emitted, next step STAYS dead (250.257208ms)
+✔ ➡️ Moved with a matching brief ## Sprint: NOT drift; next step is in Sprint N (156.775167ms)
+✔ ➡️ Moved whose target disagrees with the brief ## Sprint: IS drift (193.577ms)
+✔ rule 1: a brief claiming another sprint skips the status cross-check, even on a non-moved row (226.012209ms)
+✔ link rot: brief resolved by filename, relocated fact, corrected link rendered (332.572917ms)
+✔ missing brief: fact emitted, row still renders (1277.031833ms)
+✔ 🔲 with a Depends on: line → ⟨derive: …⟩ carrying the raw text, never a guess (1632.946333ms)
+✔ no Depends on: line → ⟨derive: none recorded⟩ — still not a guess (1438.9505ms)
+✔ decorated Depends-on (⚠️ before the label) → LOUD ⟨UNPARSEABLE⟩ + drift, never a false ready (1180.809875ms)
+✔ prose mention of Depends on (letters before the label) → still ⟨none recorded⟩, no drift (1246.499417ms)
+✔ brief ## Status wrapping across lines: matched by marker prefix (1139.687708ms)
+✔ malformed plan (no ## Status table): non-zero exit, message on stderr (303.730125ms)
+✔ missing plan file: non-zero exit, message on stderr (62.608792ms)
+✔ paragraph reason in a cell: trimmed at the first clause boundary (1296.476125ms)
+✔ the clause trim is not a byte count: long single clause survives whole (1093.983167ms)
+✔ the clause trim never severs a markdown link in a moved cell (1092.514083ms)
+✔ two ## Status sections: the first is parsed, and the ambiguity is reported (1134.5185ms)
+✔ a marker outside the six: reported as nonconformance and still counted (1599.962791ms)
+✔ R10: exact stdout — the full contract, pinned byte for byte (2604.79925ms)
+✔ R1: a brief that discusses `Depends on:` in prose does not poison the sentinel (1582.906833ms)
+✔ R1: a mid-line bold declaration is still found (1329.784ms)
+✔ R2: an unparseable row hard-fails rather than silently vanishing from the board (405.521125ms)
+✔ R3: an out-of-vocabulary marker does NOT take the waiting-on-owner override (1245.564917ms)
+✔ R4: a long dependency list is not truncated — no task number is lost (1511.741875ms)
+✔ R5: a brief with no ## Status is nonconformance, not a false disagreement (1535.879542ms)
+✔ R6: a ➡️ Moved brief with no ## Sprint is reported, not rendered clean (1437.55775ms)
+✔ R7: an empty Task cell holds its position — no field shifting, no phantom drift (1398.482708ms)
+✔ R8: a prose H1 falls back to the filename, keeping rule 1 alive (1443.026375ms)
+✔ R8: an entirely unresolvable plan sprint is REPORTED, not silently ignored (1710.759958ms)
+✔ R8: a product-prefixed H1 on a `plan-sprint-N.md` filename must keep rule 1 alive (1239.889167ms)
+✔ ADR-040 T2: a letter-suffixed H1 segment resolves as `Sprint 4c`, never as `Sprint 4` (2850.276083ms)
+✔ ADR-040 T3: `Post-Sprint 2` is prose containment, not the Sprint 2 identity (1354.6055ms)
+✔ ADR-040 T4: `plan-index.md` with a prose H1 resolves EMPTY and is reported (1226.602416ms)
+✔ ADR-040 T5: a genuinely unidentifiable plan is still REPORTED, not silently ignored (2847.406041ms)
+✔ ADR-040 T6: an H1 naming two different sprints refuses at rung 1 (2319.089667ms)
+✔ ADR-040 0271/1: an H1 naming the SAME sprint twice resolves — the count is DISTINCT, not total (1158.617875ms)
+✔ ADR-040 0271/2: the H1 is read from LINE 1 ONLY — a token on line 2 does not resolve (1091.566166ms)
+✔ ADR-040 T7: the suffix is one LOWERCASE letter — `Sprint 4th` and `Sprint 4C` are refused (2131.265917ms)
+✔ ADR-040 T9: a `➡️ Moved to [Sprint 4c]` target keeps its suffix (1144.281167ms)
+✔ ADR-040 T10: rung 2 resolves `plan-sprint-7.md` to `Sprint 7` through the `plan-` prefix (2532.567667ms)
+✔ ADR-040 T11: the `plan-` allowlist is closed — `hotfix-post-sprint-2.md` resolves EMPTY (1106.9375ms)
+✔ ADR-040 §2.2: a colon bounds a segment — `# Geoconflict: Sprint 4: Monetization` resolves as `Sprint 4` (1404.32275ms)
+✔ ADR-040 §2.2: an en dash bounds a segment — `# Geoconflict – Sprint 4 – Monetization` resolves as `Sprint 4` (1255.8535ms)
+✔ ADR-040 §2.2: a spaced hyphen bounds a segment — `# Geoconflict - Sprint 4 - Monetization` resolves as `Sprint 4` (1588.451291ms)
+✔ R14: STATUS_SECTIONS is a clean integer on a single-table plan (1113.7885ms)
+✔ R17: an empty Status cell still produces a row — M is the table, not the survivors (1970.1185ms)
+✔ R17: a GFM row without leading/trailing pipes is still admitted (1734.240666ms)
+✔ R18: a nonconforming marker does not suppress genuine drift detection (1905.6115ms)
+✔ R18/R3: an unparseable marker is reported without a phantom disagreement (1818.028167ms)
+✔ R19: the unbolded form fkit-task-brief prescribes is parsed (1466.64325ms)
+✔ R19: a `## Depends on` section is parsed (1238.158667ms)
+✔ R19: a declaration that yields nothing fails loud, never as `none recorded` (1461.182625ms)
+✔ R20: a wrapped declaration keeps every dependency across the line break (1381.790375ms)
+✔ R20: `**Depends on:** <content>` (bold closed early) keeps its content (1237.5555ms)
+✔ R20: `**Depends on: x.** trailing prose` stops at the bold close (1289.413875ms)
+✔ R21: the clause trim is presentation-only and never manufactures drift (1425.69025ms)
+✔ R22: plan-level drift reaches the roll-up clause (1129.157583ms)
+✔ R24: a literal MALFORMED status is data, not a control record (1060.201667ms)
+✔ R25: a cancelled cell missing its DATE says so, not "without-reason" (1127.589041ms)
+✔ R27: an agent-closed cancellation with NO reason is caught, not passed as clean (1439.393292ms)
+✔ R27b: an agent-closed cancellation WITH a reason is clean, and its date still parses (1060.100209ms)
+✔ R27c: the plain OWNER cancelled form is unaffected by the qualifier strip (1047.46725ms)
+✔ R26: a literal US byte in a cell cannot corrupt field alignment (1057.53675ms)
+✔ grammar: S  section — locates the dependency (1096.925416ms)
+✔ grammar: BL bold-label — locates the dependency (1326.522417ms)
+✔ grammar: BI bold-inline — locates the dependency (1171.78075ms)
+✔ grammar: P  plain — locates the dependency (1158.611042ms)
+✔ grammar: BI colonless — locates the dependency (1327.676292ms)
+✔ grammar hazard: BL wrapped (live task 41 shape) — loses nothing (1081.939584ms)
+✔ grammar hazard: BI wrapped fan-in — loses nothing (1183.28975ms)
+✔ grammar hazard: S fan-in — loses nothing (1118.850416ms)
+✔ grammar hazard: P wrapped — loses nothing (1419.674958ms)
+✔ grammar hazard: a second declaration in continuation prose does not hijack the first (1176.092166ms)
+✔ R34: a GFM-escaped pipe in the Status cell is content, not a delimiter (1061.415708ms)
+✔ grammar hazard: a pipe in any form cannot break the table (2165.179375ms)
+✔ task 0106: the Owner column renders the brief owner; a missing owner is `—` + drift (1763.888209ms)
+✔ negative: English prose is not a declaration — silent, not loud (1122.198209ms)
+✔ negative: prose with a colon is not a declaration — silent, not loud (1126.35675ms)
+✔ negative: code-span prose is not a declaration — silent, not loud (1076.571333ms)
+✔ negative: near-miss heading is not a declaration — silent, not loud (1061.878375ms)
+✔ negative: prose-with-colon BEFORE bold — the DECLARATION wins, not the first line (1053.121ms)
+✔ negative: prose-with-colon BEFORE section — the DECLARATION wins, not the first line (1217.03725ms)
+✔ negative: code-span BEFORE plain — the DECLARATION wins, not the first line (1310.612416ms)
+✔ negative: a declaration with no content is LOUD, never `none recorded` (2401.271833ms)
+✔ negative: a label whose dependencies are sub-bullets keeps them (1294.948208ms)
+✔ R41: pipe-prose BEFORE the table is not admitted (1346.284833ms)
+✔ R41: a pipe block with NO separator row is not a table — hard-fail, not a plausible board (272.092791ms)
+✔ R46: a span mention does not veto a real declaration on the same line (1099.399916ms)
+✔ R47: a bold declaration inside a code span does not parse (1121.298125ms)
+✔ R48: a declaration inside a fence does not parse, and no fence marker leaks (1088.615709ms)
+✔ R48: a fenced example does not shadow a real declaration after it (1444.296084ms)
+✔ R46/R47: a dependency that IS a code span survives masking (1336.696916ms)
+✔ R51: a `## Status report` section is not a second Status table (1039.512792ms)
+✔ R56: a `## Status` heading with a trailing tab parses — guard and parser agree (1507.3635ms)
+✔ R50/R53: exact stdout on the LOUD path — the fact is pinned in full (1204.136458ms)
+✔ R31: `**Depends on nothing.**` declares no dependency — it is not drift (1096.452916ms)
+✔ R31: prose saying "depends on" does not manufacture drift (1075.055291ms)
+✔ R29: prose after the table is not a phantom task (1220.5495ms)
+✔ a quote inside a Depends on: line cannot break the key="value" grammar (1211.286375ms)
+✔ task 65: done, cancelled and moved rows are all omitted from the board (2578.644833ms)
+✔ task 65: the roll-up still counts every hidden row, and M is the whole table (2347.82825ms)
+✔ task 65: a drift fact on a closed-marked row survives into ⟦FACTS⟧ and the roll-up clause (1846.137584ms)
+✔ task 65: a done-marked row WITH drift still renders, and says waiting on owner (1304.556833ms)
+✔ task 65: nonconformance renders the row but leaves its next step inert (1630.654083ms)
+✔ task 65: an all-closed sprint renders an empty board, exit 0, roll-up intact (930.604375ms)
+✔ task 68: the backlog board resolves to the `Backlog` identity — no phantom unresolved-plan-sprint (887.9065ms)
+✔ task 68: rule 1 does NOT skip on the backlog board — real status drift is still found (1145.394292ms)
+✔ task 0103: FACTS records key by the FOLDER ID even when the priority cell is `—` (1303.25025ms)
+✔ task 0103: a numbered sprint plan keys FACTS by the FOLDER ID, not by the priority (1161.409ms)
+✔ task 68: `—` priority cells render verbatim and the roll-up is still correct (1548.523042ms)
+✔ task 68: a free-text ## Priority qualifier does not leak into the board or the FACTS id (1022.430334ms)
+✔ task 68: the backlog identity also silences the plan-level drift clause, not just the fact (971.961708ms)
+✔ task 68: a genuinely unidentifiable plan still reports unresolved-plan-sprint (1134.669ms)
+✔ task 0103: a folder with spaces or glob metacharacters cannot break the FACTS grammar (1989.4105ms)
+✔ task 68 / R1: a backlog row whose brief names a real sprint is DRIFT, never a rule-1 skip (1092.060792ms)
+✔ task 68 / R1: rule 1 still skips normally on a numbered sprint board (1055.682083ms)
+✔ task 76: id-mismatch — brief ## ID disagrees with folder prefix → drift naming BOTH; correcting it clears the record (2206.426584ms)
+✔ task 76: malformed-folder — a folder without brief.md is drift; adding brief.md clears it; reserved companions are never drift (3177.866917ms)
+✔ task 76: brief-missing-id — a brief with no ## ID is nonconformance; adding ## ID clears it (2322.220417ms)
+✔ task 0103: the FACTS id follows the FOLDER ID, and does not follow the priority (3002.843458ms)
+✔ task 0103: a `P<n>` priority cell parses cleanly and still does not become the id (775.412ms)
+✔ 0210/A: ➡️ Moved to [Backlog] with a matching brief ## Sprint: parsed, no drift, off the board (882.263667ms)
+✔ 0210/B: ➡️ Moved to [Backlog] whose brief still names a sprint: IS drift (897.221084ms)
+✔ 0210/C: ➡️ Moved to [Backlog] with a brief that has no ## Sprint is reported (834.326459ms)
+✔ 0210/D: a bare ➡️ Moved AND a ➡️ Moved to a non-target are both still moved-without-target (1182.747917ms)
+✔ 0210/E: the forward form still parses, multi-digit and all (BSD \| regression guard) (907.0955ms)
+✔ 0210/F: the archived `../backlog.md` href parses identically — the label is what is read (859.401708ms)
+✔ 0210/G: the legacy UNLINKED prose form still parses — `\[*` is zero-or-more by design (746.661334ms)
+✔ ADR-041 S1: `Sprint 10` outranks `Sprint 9` — the ordering is a pinned contract, not prose (943.132333ms)
+✔ ADR-041 S1b: a leading zero does not outrank — `sprint-9` beats `sprint-08` (1272.135667ms)
+✔ ADR-041 S2: `Sprint 4c` > `Sprint 4b` > `Sprint 4` — the suffix orders after the number (2207.49275ms)
+✔ ADR-041 S3: `sprint-backlog.md` resolves `Backlog` and is never the active sprint (827.6375ms)
+✔ ADR-041 S4: a `sprint-backlog.md` row whose brief names a real sprint is drift — the regained check (1555.982208ms)
+✔ ADR-041 S5: an all-ineligible candidate set reports and stops — no fallback to the backlog board (301.208584ms)
+✔ ADR-041 S6: same identity → byte-order pick, AND both claimants named, AND the roll-up says so (2271.742ms)
+✔ ADR-041 S7: the selection is byte-identical under a non-C locale (2156.592708ms)
+✔ ADR-041 R1: dashboard.sh pins and exports `LC_ALL=C` — locale independence is structural (1.491583ms)
+✔ ADR-041 S8: `sprint-backlog.md` with neither token resolves EMPTY, is ineligible, and stays loud (1216.627083ms)
+✔ ADR-041 §2: both `Backlog` and `Sprint Backlog` resolve to the value `Backlog` (271.880417ms)
+✔ ADR-041 §2: `# Sprint 5 — Backlog` refuses at the H1 rung and the filename rung decides (154.014375ms)
+✔ ADR-041: the historic one-argument board render is unchanged; a bad subcommand is a usage error (967.24275ms)
+✔ ADR-041 R5: an unreadable candidate resolves to `unresolved`, never to a wrong identity (833.454417ms)
+✔ ADR-041 0271/4: an empty sprints/ lists NO candidate — the glob no-match guard (34.750959ms)
+✔ ADR-041 0271/5a: a plan under sprints/done/ is never a candidate (407.568375ms)
+✔ ADR-041 0271/5b: a plan file named identity.md still renders as a board, not a mode word (782.431125ms)
+✔ ADR-047 P1: two `In progress` sprints are both active, ascending, with ONE board line and NO drift (1209.763625ms)
+✔ ADR-047 P2: a legacy `🔒 CLOSED` board reads as `Done`, and is never active and never the board (892.628583ms)
+✔ ADR-047 P3: an eligible board with NO banner is never active, and `sprint-status-missing` reaches beat 6 by BOTH routes (1329.106625ms)
+✔ ADR-047 P4: a lone `backlog.md` emits ZERO drift — carve-out 1, in identity-space (302.893125ms)
+✔ ADR-047 P5: the `board` is the LOWEST-ordered `In progress` sprint, and 10 does not sort below 9 (1985.547958ms)
+✔ ADR-047 P6: `⭐ ACTIVE BOARD` overrides the lowest-ordered default, and every active line still prints (1938.954333ms)
+✔ ADR-047 P7: two `⭐ ACTIVE BOARD` claimants → drift naming every claimant, AND a lowest-ordered fallback (2068.405625ms)
+✔ ADR-047 P8: no `In progress` board anywhere → `active none`, exit 3, every candidate with its status (890.703291ms)
+✔ ADR-047 P9: `status <plan>` prints one token per banner form; `🔒 CLOSED` → `Done`; no banner → exit 3 (638.571583ms)
+✔ ADR-047 P10: only LINE 3 is read — a second banner further down the file is not a status (472.289916ms)
+✔ ADR-047 P11: a `Done` board still at the top of sprints/ is `sprint-terminal-not-archived` — render path only (1278.724333ms)
+✔ ADR-047 P12: mixed-status same-identity → filter first, so the `In progress` board wins even against byte order (3149.577333ms)
+✔ ADR-047 P13: `sprint-archived-not-terminal` and `sprint-status-location-mismatch` are render-path facts (2622.117ms)
+✔ ADR-047 P14: one identity, two files, both `In progress` → the FIRST in byte order wins the tie (1093.355166ms)
+✔ ADR-047 P15: `⭐ ACTIVE BOARD` on a non-`In progress` banner is drift, by both routes, and wins nothing (2804.699875ms)
+✔ ADR-047 P16: a malformed banner is `unresolved` + `sprint-status-malformed` — never `missing`, and never carved out (5036.871875ms)
+✔ ADR-047 P17: the two `⟦SELECT⟧` blocks of §2.3 are pinned byte for byte (2342.656041ms)
+✔ ADR-047 P18: `⭐ ACTIVE BOARD` on a same-identity collision — the recorded under-count, both directions (3717.036208ms)
+✔ ADR-047 successor S1: prints the BASENAME of the lowest-ordered non-terminal successor (664.587292ms)
+✔ ADR-047 successor S2: `Done` and `Cancelled` boards are skipped, however low they order (810.441042ms)
+✔ ADR-047 successor S3: a `🔲 Backlog` board IS a successor — the case `select-active` silently drops (1245.83475ms)
+✔ ADR-047 successor S4: the closing identity and everything below it are excluded (strictly above) (513.448375ms)
+✔ ADR-047 successor S5: `Sprint 9` beats `Sprint 10` as the LOWEST successor (length-then-bytes) (449.7945ms)
+✔ ADR-047 successor S6: same-identity claimants tie-break by byte order, FIRST wins (704.399459ms)
+✔ ADR-047 successor S7: exit 3 and no output when nothing orders above the closing sprint (347.342167ms)
+✔ ADR-047 successor S8: `Backlog`, unresolved and banner-less boards are never successors (424.431459ms)
+✔ ADR-047 successor S9: a non-sprint closing identity is a usage error, not a silent comparison (642.422458ms)
+✔ ADR-047 successor S10: three-argument dispatch, and the one-argument board render is untouched (830.784833ms)
+✔ emitter map E1: `select-active` stays SILENT on two `🔲 Backlog` boards claiming one identity (479.865125ms)
+✔ emitter map E2: the board render reports the collision as `drift ambiguous-plan-identity`, whatever the status (1532.072417ms)
+✔ emitter map E3: `identity` and `successor` answer a colliding identity with one value and no drift (539.012375ms)
+✔ emitter map E4: `fkit-status` lists `ambiguous-active-sprint` under select-active and `ambiguous-plan-identity` under the render (1798.592875ms)
+✔ 0409/elided: the Task cell is cut at the annotation opener, with a visible ellipsis (827.704792ms)
+✔ 0409/no-annotation: a Task cell with no annotation opener is byte-identical (655.224292ms)
+✔ 0409/facts-identical: annotations change the board and NOTHING in ⟦FACTS⟧ (2933.327583ms)
+✔ 0409/drift-survives: a drifted row wearing a 10 KB annotation keeps every exception surface (816.446542ms)
+✔ 0409/vocabulary: all six status values render verbatim beside a trimmed Task cell (2137.315416ms)
+✔ 0409/opener-at-start: an all-annotation cell falls back to raw — never an empty Task cell (699.031292ms)
+✔ 0409/emphasis-head: a `*(` that is markdown, not an annotation, falls back to raw (1490.57975ms)
+✔ 0409/emphasis-head: balanced emphasis before a real annotation is still cut (811.977208ms)
+✔ 0409/escaped-pipe: a GFM-escaped pipe in the title survives the trim, still escaped (815.960167ms)
+✔ 0492/P1: an open row waiting on an open task of a not-started sprint — one record, row renders, roll-up names it (1101.191375ms)
+✔ 0492/P2: the blocker sits on the Backlog board → `backlog-board` (928.112333ms)
+✔ 0492/P3: `later-sprint` — both sprints in progress and the blocker higher; both not started and the blocker higher (2564.714083ms)
+✔ 0492/P4: `sprint-closed` and the loud `sprint-unresolved` fallback (5634.525916ms)
+✔ 0492/P5: the geoconflict shape — the direct dependent, the 5 behind it (via=), and a deeper chain (3121.46425ms)
+✔ 0492/P6: soft vs hard — a soft-marked ID is skipped, a hard one is flagged, a mixed line flags only the hard ID (1930.515541ms)
+✔ 0492/P8: the canonical BI soft form is soft, its hard twin is flagged, and the tail adds no IDs (1737.20925ms)
+✔ 0492/P7: a link naming the ID twice is ONE record; dates, ADR numbers and T-ids are not IDs (752.348667ms)
+✔ 0492/P9: soft and hard count only as whole words — `software`, `Microsoft`, `harden` decide nothing (2132.851625ms)
+✔ 0492/unresolved-board: an unresolved board status takes the §2 table arms rows 6 and 7 name (1783.829875ms)
+✔ 0492/no-brief: a blocker folder with no brief.md → `sprint-unresolved`, empty blocker_sprint (674.636625ms)
+✔ 0492/negatives: no record where the §2 table says none (7215.960709ms)
+✔ 0492/cycle: a dependency cycle on the board still ends, with no duplicate records (1151.8455ms)
+✔ 0492/cycle-self: propagation never produces a record whose blocker is the dependent itself (1183.219ms)
+✔ 0492/unparseable: a U-form line still emits `depends-unparseable` and no new record (645.409875ms)
+✔ 0492/skill-grammar: fkit-status lists `depends-on-later-sprint` once, with its beat-6 instruction (659.746708ms)
+(node:26642) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/dual-home-parity.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ exception list: every entry states a path, a kind, and a reason that says WHY (9.961084ms)
+✔ live corpus: the enforced dual-homed set is non-empty and every file is present in BOTH homes (0.349916ms)
+✔ live corpus: every enforced dual-homed file is byte-identical (0.187458ms)
+✔ live corpus: no prune point hides a file that is dual-homed in fact (1.043ms)
+✔ synthetic: a file present in one home only fails, in BOTH directions (864.770167ms)
+✔ synthetic: a one-byte difference fails with a message naming the path, line and column (194.77875ms)
+✔ synthetic: a prune point hides a co-present file, but never a bare .gitkeep (90.72ms)
+✔ synthetic: an own exception BENEATH a prune point excuses a co-present file; the blanket does not (3.057041ms)
+✔ synthetic: an exact exception naming a DIRECTORY is a prune point, and is tripwired too (2.771333ms)
+(node:26643) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/init-claude-refresh-guard.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ A. a symlink anywhere in the .claude chain is refused — the refresh never lands outside
+  ✔ A1 — .claude symlinked outside → both halves refused, nothing outside is touched (1997.300208ms)
+  ✔ A2 — .claude/skills symlinked outside → skills refused, AGENTS STILL INSTALL (1153.154209ms)
+  ✔ A3 — .claude/agents symlinked outside → agents refused, SKILLS STILL INSTALL (429.754417ms)
+  ✔ A4 — .claude a DANGLING symlink → refuse, init COMPLETES (407.67525ms)
+  ✔ A5 — .claude symlinked INSIDE the project is refused too (427.374042ms)
+  ✔ A6 — a fkit-* ENTRY under .claude/skills symlinked outside → refused, the target survives (2234.643958ms)
+  ✔ A7 — a DANGLING fkit-* entry under .claude/skills → refuse, init COMPLETES (3124.2095ms)
+✔ A. a symlink anywhere in the .claude chain is refused — the refresh never lands outside (9782.674792ms)
+▶ B. the shared helper says what the caller is actually doing
+  ✔ B1 — §3 says "refresh", §4 still says "write", §6 still says "delete" (2872.861375ms)
+✔ B. the shared helper says what the caller is actually doing (2873.300208ms)
+▶ C. the ordinary case is untouched (the control)
+  ✔ C1 — ordinary project → both halves install, summary byte-identical, idempotent (9338.655ms)
+✔ C. the ordinary case is untouched (the control) (9338.950042ms)
+▶ D. what the corrected "only unrecoverable delete" wording rests on
+  ✔ D1 — a REAL user path squatting the fkit-* namespace is deleted and NOT put back (4167.213458ms)
+✔ D. what the corrected "only unrecoverable delete" wording rests on (4167.450209ms)
+(node:26831) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/init-intake-guard.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ A. a symlinked .fkit is refused — the intake never lands outside the project
+  ✔ .fkit symlinked outside → refuse, nothing lands outside (1703.193916ms)
+  ✔ the refusal is non-fatal — §5 and the summary still run (437.405625ms)
+  ✔ .fkit a DANGLING symlink → refuse, init completes (447.125709ms)
+  ✔ a symlinked LEAF is not written through (501.328791ms)
+  ✔ .fkit symlinked INSIDE the project is refused too (3271.364125ms)
+✔ A. a symlinked .fkit is refused — the intake never lands outside the project (6435.696125ms)
+▶ B. the shared helper says what the caller is actually doing
+  ✔ §6 says "delete", §4 says "write" (3856.143625ms)
+✔ B. the shared helper says what the caller is actually doing (3856.451917ms)
+▶ C. the ordinary case is untouched (the control)
+  ✔ ordinary .fkit → executable intake, idempotent (8817.16475ms)
+✔ C. the ordinary case is untouched (the control) (8817.91775ms)
+(node:27030) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-agents-guard.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 0334/A: a symlinked .claude refuses, naming it (384.667584ms)
+✔ 0334/B: a symlinked .claude/agents refuses, naming it (59.176125ms)
+✔ 0334/C: an agent file that is a symlink to an outside file refuses, naming it (32.255334ms)
+✔ 0334/E: a dangling agent symlink refuses, naming it (22.998292ms)
+✔ 0334/F+D: a directory named fkit-x.md refuses with the new message; an empty agents dir keeps today's (58.386833ms)
+✔ 0334/unreadable: an agent file with mode 000 refuses, naming it (29.371875ms)
+✔ 0334/not-a-dir: a regular file at .claude/agents refuses, naming it (26.091083ms)
+✔ 0334/healthy: a readable regular agent file launches even though setup failed (983.338667ms)
+✔ 0334/mixed: one good agent file beside a dangling link and a directory launches (1116.462541ms)
+✔ 0334/gate: a successful setup never runs the check, even with an empty agents dir (2604.573125ms)
+(node:27212) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ Group A — argv contract
+  ✔ 1. role "lead" → --agent fkit-lead --settings .fkit/settings/lead.json (11323.92975ms)
+  ✔ 1. role "producer" → --agent fkit-producer --settings .fkit/settings/producer.json (12126.134916ms)
+  ✔ 1. role "coder" → --agent fkit-coder --settings .fkit/settings/coder.json (13132.379167ms)
+  ✔ 1. role "architect" → --agent fkit-architect --settings .fkit/settings/architect.json (10352.542792ms)
+  ✔ 1. role "reviewer" → --agent fkit-reviewer --settings .fkit/settings/reviewer.json (11589.21325ms)
+  ✔ 1. role "adversarial-reviewer" → --agent fkit-adversarial-reviewer --settings .fkit/settings/adversarial-reviewer.json (12381.107916ms)
+  ✔ 1. role "wiki" → --agent fkit-wiki --settings .fkit/settings/wiki.json (9895.665709ms)
+  ✔ 1b. alias "adv" → fkit-adversarial-reviewer (10115.100959ms)
+  ✔ 1b. alias "adversarial" → fkit-adversarial-reviewer (9992.538833ms)
+  ✔ 2. `fkit --resume` → non-zero, and claude was NEVER exec'd (91.255417ms)
+  ✔ 3. unknown first arg → non-zero, and claude was NEVER exec'd (105.477291ms)
+  ✔ 4. `fkit --help` → exit 0, no exec (172.77825ms)
+  ✔ 5. `fkit update` is not swallowed by the usage-error guard (73.9445ms)
+  ✔ 6. `fkit coder --debug` → passthrough after a named role (9767.543667ms)
+  ✔ 7. no args, no tty, initiated → --agent fkit-lead (9884.069167ms)
+✔ Group A — argv contract (121007.627167ms)
+▶ Group B — hook wiring
+  ✔ 8. lead: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (9798.500375ms)
+  ✔ 8. producer: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (9453.415667ms)
+  ✔ 8. coder: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (9320.098959ms)
+  ✔ 8. architect: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (9032.789708ms)
+  ✔ 8. reviewer: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (7330.730333ms)
+  ✔ 8. adversarial-reviewer: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (7085.447ms)
+  ✔ 8. wiki: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check) (7208.31225ms)
+  ✔ 8b. lead: settings wire the Stop turn-completion hook (7186.896ms)
+  ✔ 8b. producer: settings wire the Stop turn-completion hook (6990.099833ms)
+  ✔ 8b. coder: settings wire the Stop turn-completion hook (7474.026083ms)
+  ✔ 8b. architect: settings wire the Stop turn-completion hook (7286.568542ms)
+  ✔ 8b. reviewer: settings wire the Stop turn-completion hook (7589.68175ms)
+  ✔ 8b. adversarial-reviewer: settings wire the Stop turn-completion hook (6090.638833ms)
+  ✔ 8b. wiki: settings wire the Stop turn-completion hook (5755.961833ms)
+  ✔ 8c. lead: settings wire the UserPromptExpansion ship-loop marker hook (5871.247583ms)
+  ✔ 8c. producer: settings wire the UserPromptExpansion ship-loop marker hook (5970.879375ms)
+  ✔ 8c. coder: settings wire the UserPromptExpansion ship-loop marker hook (6326.391416ms)
+  ✔ 8c. architect: settings wire the UserPromptExpansion ship-loop marker hook (4764.761583ms)
+  ✔ 8c. reviewer: settings wire the UserPromptExpansion ship-loop marker hook (4725.096167ms)
+  ✔ 8c. adversarial-reviewer: settings wire the UserPromptExpansion ship-loop marker hook (4326.894417ms)
+  ✔ 8c. wiki: settings wire the UserPromptExpansion ship-loop marker hook (4302.831458ms)
+  ✔ 9. no role's settings carry a skillOverrides key any more (retired, task 43) (25915.235708ms)
+  ✔ 10. the hook script the settings point at exists on disk (0.633208ms)
+✔ Group B — hook wiring (169809.874166ms)
+▶ Group C — degradation & fresh-project routing
+  ✔ 11. read-only project → inline --settings carries the hook wiring (6411.924708ms)
+  ✔ 12. fresh project, no role → producer cold-start, then the lead (6663.87675ms)
+  ✔ 12b. fresh project with a completed intake → the intake-aware seed (6434.356584ms)
+  ✔ 12c. cold start that does not initiate → no lead hand-off (6231.266167ms)
+  ✔ 12d. initiated tree but a non-zero cold start → no lead hand-off, code propagated (6391.711958ms)
+✔ Group C — degradation & fresh-project routing (32134.197958ms)
+▶ Group D — plan-review session line
+  ✔ D1. `fkit coder` → the on line, passed by file (3094.181625ms)
+  ✔ D2. `fkit coder --no-plan-review` → consumed; the off line (3199.31725ms)
+  ✔ D3. `fkit coder --plan-review` → a consumed no-op; the on line (3189.734167ms)
+  ✔ D4. both flags together → usage error, claude NEVER exec'd (40.826791ms)
+  ✔ D5. `fkit lead --no-plan-review` → usage error, claude NEVER exec'd (41.803083ms)
+  ✔ D5. `fkit architect --plan-review` → usage error, claude NEVER exec'd (32.788167ms)
+  ✔ D6. the owner's own --append-system-prompt passes through unchanged (3121.127958ms)
+  ✔ D7. `fkit coder --resume` still passes through (3195.35675ms)
+  ✔ D8. after a `--` separator the token is the owner's literal text (3324.556042ms)
+  ✔ D9. `fkit coder --append-system-prompt-file f` → usage error, claude NEVER exec'd (44.564042ms)
+  ✔ D9. `fkit coder --append-system-prompt-file=f` → usage error, claude NEVER exec'd (38.383625ms)
+  ✔ D11. the token is taken out even as another option's value (3271.381042ms)
+  ✔ D12. `fkit lead -- --no-plan-review` passes through: no usage error after `--` (3211.241333ms)
+  ✔ D13. the token is taken out wherever it sits; the other args keep their order (3221.34125ms)
+✔ Group D — plan-review session line (29028.44225ms)
+✔ bare first use: real terminal rejects runtime blanks, invalid input, EOF and SIGINT without persistence (3131.146042ms)
+✔ bare first use: invalid configuration, later EOF/SIGINT and declined save never set up or launch (5575.940416ms)
+✖ bare first use: each runtime saves once and continues fresh onboarding or existing-project menu (2387.81575ms)
+✔ bare first use: saved mixed overrides skip configuration, refresh managed files and preserve owner bytes (6028.941917ms)
+✔ bare first use: invalid existing files and unavailable runtimes never reconfigure or launch (9396.456917ms)
+✖ bare first use: management, explicit routes and partial terminal fds preserve their contracts (13010.978916ms)
+✔ bare first use: missing Node stops only the new entry, and old Codex stops before save (1936.11425ms)
+✔ configured runtimes: direct roles select their own CLI/model and preserve saved settings (15291.691792ms)
+✔ configured owner questions: single-field choices and explicit custom answers preserve consent (7.619125ms)
+✔ configured effort: reset/inherit are distinct and invalid choices preserve saved files (9044.946917ms)
+✔ configured interview: model-specific effort, role customization, blanks and unknown catalogs (25.037291ms)
+✔ configured runtimes: changing default retains existing role choices and invalid choices never launch (1699.6345ms)
+✔ public dispatcher: an unconfigured project retains the existing Claude launcher contract (25765.427208ms)
+✖ configured delegation: fresh peers use their runtime, model and effort and report observed identity separately (18288.348291ms)
+✖ public dispatcher: legacy path does not invoke Node from PATH; source checkout self-hosts (21136.104125ms)
+✖ lead forwarding entries: native catalog, fixed-caller MCP and repeat setup share role-invariant artifacts (43985.598875ms)
+✖ lead worker transport: exact data, full reports, errors, saved peer settings and topology (36323.114583ms)
+✔ lead owner channel: synthetic decisions wait and preserve cancel, decline and explanation without launching workers (69570.305083ms)
+(node:27658) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/orphan-cleanup.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ A. the target list
+  ✔ is exactly the four Omnigent orphans — and never .fkit/settings (0.647709ms)
+  ✔ every target is genuinely dead — zero references in the shipped sources (116.73975ms)
+✔ A. the target list (117.773292ms)
+▶ B. the cleanup removes those, and only those
+  ✔ the four orphans go; every other path survives byte-identical (609.068959ms)
+  ✔ .fkit/settings survives, and a launch still builds the role lockdown on top of it (21185.956042ms)
+  ✔ a project with no residue is silent and unchanged (the every-launch case, forever) (13480.021542ms)
+✔ B. the cleanup removes those, and only those (35280.939375ms)
+▶ C. announce-only (the owner's consent model)
+  ✔ every removed path is named, on the run it happens (7856.470792ms)
+  ✔ THE TRAP — the announcement survives the launcher's >/dev/null (25482.40375ms)
+  ✔ no prompt, and no stored consent state anywhere (6805.974ms)
+✔ C. announce-only (the owner's consent model) (40145.431042ms)
+▶ D. dry run
+  ✔ reports the deletion set and removes nothing (6994.114667ms)
+✔ D. dry run (6994.287417ms)
+▶ E. the reference-check gate
+  ✔ a target that has gained a reference is REFUSED, not deleted (7855.051875ms)
+  ✔ the list file itself does not count as a reference (6690.487583ms)
+  ✔ a reference check that CANNOT RUN refuses the target — it never reads as "dead" (5480.318958ms)
+  ✔ the gate matches whole path segments, not byte substrings (6425.675625ms)
+  ✔ a reference to a path INSIDE a target still counts as a reference (5880.190542ms)
+✔ E. the reference-check gate (32332.297292ms)
+▶ G. the list is data, and the code does not trust it
+  ✔ the never-delete-lockdown-state guard is case-insensitive (3359.719ms)
+  ✔ an absolute list line is REFUSED, not silently rewritten into a project-relative one (3673.331166ms)
+  ✔ an indented comment is a comment to the runtime, not a target (3133.568625ms)
+✔ G. the list is data, and the code does not trust it (10166.9635ms)
+▶ F. weird state and failure
+  ✔ a symlink AT a target path is refused, never followed (4144.591ms)
+  ✔ a symlink in the PARENT chain is refused — the delete never escapes the project (3915.924833ms)
+  ✔ a list line containing .. is refused and escapes nothing (3485.745166ms)
+  ✔ non-fatal — a failed removal never bricks the launcher, and the loop carries on (18192.518042ms)
+  ✔ an unreadable target list fails CLOSED — nothing is deleted, init survives (2165.656ms)
+  ✔ a missing target list skips the cleanup, non-fatally (1846.067625ms)
+✔ F. weird state and failure (33751.253458ms)
+(node:27889) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/rules-block-budget.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ the emitted rules block stays under RULES_MAX (31.625125ms)
+✔ the rules block has not quietly consumed its headroom (34.432833ms)
+✔ the live CLAUDE.md carries exactly one well-formed rules block (0.4325ms)
+(node:27928) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/shiploop-marker-hook.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ a /fkit-task-ship-loop invocation → writes the session marker (51.450541ms)
+✔ a /fkit-sprint-ship-loop invocation → writes the marker too (both loops, one signal) (55.52075ms)
+✔ a leading-slash command_name is handled (60.612708ms)
+✔ a NON-ship-loop command → writes nothing (35.743834ms)
+✔ expansion_type != slash_command (e.g. mcp_prompt) → writes nothing (authoritative gate) (44.86625ms)
+✔ unsafe session_id → writes nothing, no crash (path-safety) (58.554542ms)
+✔ missing session_id / missing cwd / non-existent cwd → writes nothing, exit 0 (134.155209ms)
+✔ empty / malformed payload → exit 0, no crash (32.743708ms)
+(node:27953) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/skill-ownership-hook.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ reviewer owns fkit-stateful-review -> allow (47.552208ms)
+✔ reviewer owns fkit-review -> allow (48.312042ms)
+✔ coder owns fkit-plan-task -> allow (61.526833ms)
+✔ coder owns fkit-task-ship-loop -> allow (task 53 / ADR-019) (86.448833ms)
+✔ a non-coder role does NOT own fkit-task-ship-loop -> deny (ADR-019: coder-only is what authorizes autonomy) (72.742791ms)
+✔ lead owns fkit-sprint-ship-loop -> allow (task 0112 / ADR-032: lead is the sprint conductor) (62.47225ms)
+✔ a non-lead role does NOT own fkit-sprint-ship-loop -> deny (ADR-032: lead-only is what authorizes the conductor) (48.155875ms)
+✔ a spawned subagent identity (agent_id present) is honored the same as a session (47.695375ms)
+✔ universal skill fkit-team is allowed for lead (36.01125ms)
+✔ universal skill fkit-query is allowed for lead (38.767167ms)
+✔ universal skill fkit-team is allowed for producer (93.672542ms)
+✔ universal skill fkit-query is allowed for producer (65.750375ms)
+✔ universal skill fkit-team is allowed for coder (45.560375ms)
+✔ universal skill fkit-query is allowed for coder (52.004458ms)
+✔ universal skill fkit-team is allowed for architect (56.9985ms)
+✔ universal skill fkit-query is allowed for architect (49.846291ms)
+✔ universal skill fkit-team is allowed for reviewer (41.489167ms)
+✔ universal skill fkit-query is allowed for reviewer (42.018833ms)
+✔ universal skill fkit-team is allowed for adversarial-reviewer (42.464167ms)
+✔ universal skill fkit-query is allowed for adversarial-reviewer (56.900292ms)
+✔ universal skill fkit-team is allowed for wiki (78.56325ms)
+✔ universal skill fkit-query is allowed for wiki (74.002333ms)
+✔ architect owns fkit-survey-project (the old CONSULT_SKILLS case) -> allow (59.824166ms)
+✔ a non-fkit-* skill is allowed regardless of role (45.315875ms)
+✔ coder does NOT own fkit-review -> deny, the original bug this task fixes (84.564625ms)
+✔ coder does NOT own fkit-stateful-review -> deny (51.7025ms)
+✔ producer does NOT own fkit-review -> deny (59.511208ms)
+✔ missing agent_type entirely -> deny (an unrolled plain `claude` session) (275.433833ms)
+✔ agent_type present but not an fkit-* agent -> deny for an fkit-* skill (377.2135ms)
+✔ producer owns fkit-task-done -> allow (ADR-033: the producer is the ONLY role that may close) (440.190292ms)
+✔ lead does NOT own fkit-task-done -> deny (ADR-033 reverses ADR-025: closes route through the producer) (414.106791ms)
+✔ coder does NOT own fkit-task-done -> deny (ADR-033 reverses ADR-025: closes route through the producer) (459.475ms)
+✔ architect does NOT own fkit-task-done -> deny (ADR-033 reverses ADR-025: closes route through the producer) (336.812709ms)
+✔ reviewer does NOT own fkit-task-done -> deny (ADR-033 reverses ADR-025: closes route through the producer) (421.28ms)
+✔ wiki does NOT own fkit-task-done -> deny (ADR-033 reverses ADR-025: closes route through the producer) (365.486667ms)
+✔ adversarial-reviewer does NOT own fkit-task-done -> deny (owner ruling: findings-only) (358.88225ms)
+✔ fkit-task-done with NO agent_type -> deny (unrolled session must not move task files) (381.523584ms)
+✔ fkit-task-done from a non-fkit agent_type -> deny (361.914791ms)
+✔ producer owns fkit-task-cancelled -> allow (ADR-033: the producer is the ONLY role that may close) (299.141125ms)
+✔ lead does NOT own fkit-task-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer) (257.974584ms)
+✔ coder does NOT own fkit-task-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer) (234.137792ms)
+✔ architect does NOT own fkit-task-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer) (256.098125ms)
+✔ reviewer does NOT own fkit-task-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer) (170.868917ms)
+✔ wiki does NOT own fkit-task-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer) (216.544875ms)
+✔ adversarial-reviewer does NOT own fkit-task-cancelled -> deny (owner ruling: findings-only) (254.101958ms)
+✔ fkit-task-cancelled with NO agent_type -> deny (unrolled session must not move task files) (232.261375ms)
+✔ fkit-task-cancelled from a non-fkit agent_type -> deny (337.394625ms)
+✔ producer owns fkit-sprint-done -> allow (ADR-033: the producer is the ONLY role that may close) (295.140542ms)
+✔ lead does NOT own fkit-sprint-done -> deny (ADR-033 reverses ADR-025: closes route through the producer) (293.616709ms)
+✔ coder does NOT own fkit-sprint-done -> deny (ADR-033 reverses ADR-025: closes route through the producer) (265.475875ms)
+✔ architect does NOT own fkit-sprint-done -> deny (ADR-033 reverses ADR-025: closes route through the producer) (250.688125ms)
+✔ reviewer does NOT own fkit-sprint-done -> deny (ADR-033 reverses ADR-025: closes route through the producer) (292.267917ms)
+✔ wiki does NOT own fkit-sprint-done -> deny (ADR-033 reverses ADR-025: closes route through the producer) (321.634541ms)
+✔ adversarial-reviewer does NOT own fkit-sprint-done -> deny (owner ruling: findings-only) (327.836625ms)
+✔ fkit-sprint-done with NO agent_type -> deny (unrolled session must not move task files) (307.732417ms)
+✔ fkit-sprint-done from a non-fkit agent_type -> deny (385.7915ms)
+✔ producer owns fkit-sprint-cancelled -> allow (ADR-033: the producer is the ONLY role that may close) (335.8155ms)
+✔ lead does NOT own fkit-sprint-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer) (272.228833ms)
+✔ coder does NOT own fkit-sprint-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer) (308.294917ms)
+✔ architect does NOT own fkit-sprint-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer) (261.78675ms)
+✔ reviewer does NOT own fkit-sprint-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer) (303.230125ms)
+✔ wiki does NOT own fkit-sprint-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer) (272.046542ms)
+✔ adversarial-reviewer does NOT own fkit-sprint-cancelled -> deny (owner ruling: findings-only) (295.9535ms)
+✔ fkit-sprint-cancelled with NO agent_type -> deny (unrolled session must not move task files) (265.993958ms)
+✔ fkit-sprint-cancelled from a non-fkit agent_type -> deny (206.474917ms)
+✔ malformed / non-JSON payload -> deny, not a crash (115.369ms)
+✔ empty payload -> deny (119.78375ms)
+✔ missing tool_input.skill -> deny (246.351ms)
+✔ a tool_name other than Skill reaching this hook -> deny, defensively (matcher misconfiguration) (107.598166ms)
+✔ matrix: lead × fkit-adversarial-review -> deny (255.400375ms)
+✔ matrix: lead × fkit-design-spec -> deny (237.453917ms)
+✔ matrix: lead × fkit-evaluate-approach -> deny (251.603708ms)
+✔ matrix: lead × fkit-heal -> deny (226.50125ms)
+✔ matrix: lead × fkit-initiate-project -> deny (278.634459ms)
+✔ matrix: lead × fkit-inspect -> deny (225.975333ms)
+✔ matrix: lead × fkit-plan-task -> deny (310.925083ms)
+✔ matrix: lead × fkit-process-review -> deny (365.1475ms)
+✔ matrix: lead × fkit-process-stateful-review -> deny (351.105458ms)
+✔ matrix: lead × fkit-dumb-down -> allow (329.063708ms)
+✔ matrix: lead × fkit-open-questions-interview -> allow (330.37825ms)
+✔ matrix: lead × fkit-query -> allow (407.4865ms)
+✔ matrix: lead × fkit-record-decision -> deny (438.22875ms)
+✔ matrix: lead × fkit-review -> deny (320.577ms)
+✔ matrix: lead × fkit-stateful-review -> deny (369.157041ms)
+✔ matrix: lead × fkit-status -> allow (360.098917ms)
+✔ matrix: lead × fkit-sprint-cancelled -> deny (391.642833ms)
+✔ matrix: lead × fkit-sprint-done -> deny (304.876208ms)
+✔ matrix: lead × fkit-survey-project -> deny (317.855583ms)
+✔ matrix: lead × fkit-task-cancelled -> deny (369.294917ms)
+✔ matrix: lead × fkit-task-done -> deny (347.139ms)
+✔ matrix: lead × fkit-task-brief -> deny (339.520208ms)
+✔ matrix: lead × fkit-task-ship-loop -> deny (323.837625ms)
+✔ matrix: lead × fkit-team -> allow (304.949042ms)
+✔ matrix: lead × fkit-wiki-ingest -> deny (310.673958ms)
+✔ matrix: lead × fkit-wiki-lint -> allow (334.906459ms)
+✔ matrix: lead × fkit-wiki-sync -> allow (282.114ms)
+✔ matrix: producer × fkit-adversarial-review -> deny (287.587334ms)
+✔ matrix: producer × fkit-design-spec -> deny (334.016667ms)
+✔ matrix: producer × fkit-evaluate-approach -> deny (341.659583ms)
+✔ matrix: producer × fkit-heal -> allow (438.798167ms)
+✔ matrix: producer × fkit-initiate-project -> allow (366.561125ms)
+✔ matrix: producer × fkit-inspect -> deny (434.020666ms)
+✔ matrix: producer × fkit-plan-task -> deny (342.425417ms)
+✔ matrix: producer × fkit-process-review -> deny (377.387583ms)
+✔ matrix: producer × fkit-process-stateful-review -> deny (368.146125ms)
+✔ matrix: producer × fkit-dumb-down -> allow (341.44175ms)
+✔ matrix: producer × fkit-open-questions-interview -> allow (353.068833ms)
+✔ matrix: producer × fkit-query -> allow (338.219458ms)
+✔ matrix: producer × fkit-record-decision -> deny (384.596125ms)
+✔ matrix: producer × fkit-review -> deny (302.375708ms)
+✔ matrix: producer × fkit-stateful-review -> deny (272.541959ms)
+✔ matrix: producer × fkit-status -> allow (341.967333ms)
+✔ matrix: producer × fkit-sprint-cancelled -> allow (263.863666ms)
+✔ matrix: producer × fkit-sprint-done -> allow (371.127792ms)
+✔ matrix: producer × fkit-survey-project -> deny (386.897208ms)
+✔ matrix: producer × fkit-task-cancelled -> allow (353.03575ms)
+✔ matrix: producer × fkit-task-done -> allow (418.848375ms)
+✔ matrix: producer × fkit-task-brief -> allow (419.916916ms)
+✔ matrix: producer × fkit-task-ship-loop -> deny (388.119084ms)
+✔ matrix: producer × fkit-team -> allow (280.101833ms)
+✔ matrix: producer × fkit-wiki-ingest -> deny (322.535833ms)
+✔ matrix: producer × fkit-wiki-lint -> deny (401.537292ms)
+✔ matrix: producer × fkit-wiki-sync -> deny (365.164541ms)
+✔ matrix: coder × fkit-adversarial-review -> deny (432.127583ms)
+✔ matrix: coder × fkit-design-spec -> deny (360.369083ms)
+✔ matrix: coder × fkit-evaluate-approach -> deny (286.260208ms)
+✔ matrix: coder × fkit-heal -> deny (357.533292ms)
+✔ matrix: coder × fkit-initiate-project -> deny (408.433042ms)
+✔ matrix: coder × fkit-inspect -> deny (303.032916ms)
+✔ matrix: coder × fkit-plan-task -> allow (397.935542ms)
+✔ matrix: coder × fkit-process-review -> allow (412.37725ms)
+✔ matrix: coder × fkit-process-stateful-review -> allow (336.446875ms)
+✔ matrix: coder × fkit-dumb-down -> allow (316.222375ms)
+✔ matrix: coder × fkit-open-questions-interview -> allow (285.780583ms)
+✔ matrix: coder × fkit-query -> allow (346.677042ms)
+✔ matrix: coder × fkit-record-decision -> deny (383.208ms)
+✔ matrix: coder × fkit-review -> deny (306.36975ms)
+✔ matrix: coder × fkit-stateful-review -> deny (327.662583ms)
+✔ matrix: coder × fkit-status -> deny (362.54875ms)
+✔ matrix: coder × fkit-sprint-cancelled -> deny (320.017875ms)
+✔ matrix: coder × fkit-sprint-done -> deny (277.133291ms)
+✔ matrix: coder × fkit-survey-project -> deny (301.043833ms)
+✔ matrix: coder × fkit-task-cancelled -> deny (381.8325ms)
+✔ matrix: coder × fkit-task-done -> deny (396.501041ms)
+✔ matrix: coder × fkit-task-brief -> deny (424.083209ms)
+✔ matrix: coder × fkit-task-ship-loop -> allow (344.950541ms)
+✔ matrix: coder × fkit-team -> allow (343.4965ms)
+✔ matrix: coder × fkit-wiki-ingest -> deny (434.230708ms)
+✔ matrix: coder × fkit-wiki-lint -> deny (365.201625ms)
+✔ matrix: coder × fkit-wiki-sync -> deny (368.877084ms)
+✔ matrix: architect × fkit-adversarial-review -> deny (302.158125ms)
+✔ matrix: architect × fkit-design-spec -> allow (253.464125ms)
+✔ matrix: architect × fkit-evaluate-approach -> allow (274.251125ms)
+✔ matrix: architect × fkit-heal -> deny (243.90825ms)
+✔ matrix: architect × fkit-initiate-project -> deny (285.18325ms)
+✔ matrix: architect × fkit-inspect -> allow (250.364917ms)
+✔ matrix: architect × fkit-plan-task -> deny (212.398875ms)
+✔ matrix: architect × fkit-process-review -> deny (179.189709ms)
+✔ matrix: architect × fkit-process-stateful-review -> deny (166.295875ms)
+✔ matrix: architect × fkit-dumb-down -> allow (226.383417ms)
+✔ matrix: architect × fkit-open-questions-interview -> allow (293.647375ms)
+✔ matrix: architect × fkit-query -> allow (251.255708ms)
+✔ matrix: architect × fkit-record-decision -> allow (186.252958ms)
+✔ matrix: architect × fkit-review -> deny (293.3725ms)
+✔ matrix: architect × fkit-stateful-review -> deny (234.938083ms)
+✔ matrix: architect × fkit-status -> deny (256.442542ms)
+✔ matrix: architect × fkit-sprint-cancelled -> deny (284.41525ms)
+✔ matrix: architect × fkit-sprint-done -> deny (264.1615ms)
+✔ matrix: architect × fkit-survey-project -> allow (240.40875ms)
+✔ matrix: architect × fkit-task-cancelled -> deny (172.276417ms)
+✔ matrix: architect × fkit-task-done -> deny (191.4105ms)
+✔ matrix: architect × fkit-task-brief -> deny (197.489875ms)
+✔ matrix: architect × fkit-task-ship-loop -> deny (238.157584ms)
+✔ matrix: architect × fkit-team -> allow (361.007292ms)
+✔ matrix: architect × fkit-wiki-ingest -> deny (293.236125ms)
+✔ matrix: architect × fkit-wiki-lint -> deny (283.78525ms)
+✔ matrix: architect × fkit-wiki-sync -> deny (272.585625ms)
+✔ matrix: reviewer × fkit-adversarial-review -> deny (260.842042ms)
+✔ matrix: reviewer × fkit-design-spec -> deny (219.487292ms)
+✔ matrix: reviewer × fkit-evaluate-approach -> deny (305.447875ms)
+✔ matrix: reviewer × fkit-heal -> deny (341.103917ms)
+✔ matrix: reviewer × fkit-initiate-project -> deny (290.618625ms)
+✔ matrix: reviewer × fkit-inspect -> deny (376.223ms)
+✔ matrix: reviewer × fkit-plan-task -> deny (406.668792ms)
+✔ matrix: reviewer × fkit-process-review -> deny (353.026208ms)
+✔ matrix: reviewer × fkit-process-stateful-review -> deny (207.864584ms)
+✔ matrix: reviewer × fkit-dumb-down -> allow (300.907792ms)
+✔ matrix: reviewer × fkit-open-questions-interview -> allow (332.124125ms)
+✔ matrix: reviewer × fkit-query -> allow (251.758167ms)
+✔ matrix: reviewer × fkit-record-decision -> deny (311.787125ms)
+✔ matrix: reviewer × fkit-review -> allow (373.961292ms)
+✔ matrix: reviewer × fkit-stateful-review -> allow (299.072417ms)
+✔ matrix: reviewer × fkit-status -> deny (201.544459ms)
+✔ matrix: reviewer × fkit-sprint-cancelled -> deny (278.768875ms)
+✔ matrix: reviewer × fkit-sprint-done -> deny (262.8935ms)
+✔ matrix: reviewer × fkit-survey-project -> deny (333.136167ms)
+✔ matrix: reviewer × fkit-task-cancelled -> deny (358.949875ms)
+✔ matrix: reviewer × fkit-task-done -> deny (284.44925ms)
+✔ matrix: reviewer × fkit-task-brief -> deny (316.627208ms)
+✔ matrix: reviewer × fkit-task-ship-loop -> deny (288.712875ms)
+✔ matrix: reviewer × fkit-team -> allow (241.41375ms)
+✔ matrix: reviewer × fkit-wiki-ingest -> deny (325.630625ms)
+✔ matrix: reviewer × fkit-wiki-lint -> deny (370.71375ms)
+✔ matrix: reviewer × fkit-wiki-sync -> deny (428.912834ms)
+✔ matrix: adversarial-reviewer × fkit-adversarial-review -> allow (405.998458ms)
+✔ matrix: adversarial-reviewer × fkit-design-spec -> deny (403.063917ms)
+✔ matrix: adversarial-reviewer × fkit-evaluate-approach -> deny (316.717542ms)
+✔ matrix: adversarial-reviewer × fkit-heal -> deny (263.70725ms)
+✔ matrix: adversarial-reviewer × fkit-initiate-project -> deny (304.908375ms)
+✔ matrix: adversarial-reviewer × fkit-inspect -> deny (319.197625ms)
+✔ matrix: adversarial-reviewer × fkit-plan-task -> deny (380.325791ms)
+✔ matrix: adversarial-reviewer × fkit-process-review -> deny (375.682375ms)
+✔ matrix: adversarial-reviewer × fkit-process-stateful-review -> deny (338.565833ms)
+✔ matrix: adversarial-reviewer × fkit-dumb-down -> deny (261.966375ms)
+✔ matrix: adversarial-reviewer × fkit-open-questions-interview -> deny (212.954083ms)
+✔ matrix: adversarial-reviewer × fkit-query -> allow (187.034625ms)
+✔ matrix: adversarial-reviewer × fkit-record-decision -> deny (164.688292ms)
+✔ matrix: adversarial-reviewer × fkit-review -> deny (189.302542ms)
+✔ matrix: adversarial-reviewer × fkit-stateful-review -> deny (265.565ms)
+✔ matrix: adversarial-reviewer × fkit-status -> deny (294.319167ms)
+✔ matrix: adversarial-reviewer × fkit-sprint-cancelled -> deny (343.892833ms)
+✔ matrix: adversarial-reviewer × fkit-sprint-done -> deny (338.173083ms)
+✔ matrix: adversarial-reviewer × fkit-survey-project -> deny (350.859583ms)
+✔ matrix: adversarial-reviewer × fkit-task-cancelled -> deny (337.661ms)
+✔ matrix: adversarial-reviewer × fkit-task-done -> deny (373.524834ms)
+✔ matrix: adversarial-reviewer × fkit-task-brief -> deny (333.894958ms)
+✔ matrix: adversarial-reviewer × fkit-task-ship-loop -> deny (393.860583ms)
+✔ matrix: adversarial-reviewer × fkit-team -> allow (391.382042ms)
+✔ matrix: adversarial-reviewer × fkit-wiki-ingest -> deny (414.272708ms)
+✔ matrix: adversarial-reviewer × fkit-wiki-lint -> deny (416.138625ms)
+✔ matrix: adversarial-reviewer × fkit-wiki-sync -> deny (448.572375ms)
+✔ matrix: wiki × fkit-adversarial-review -> deny (369.288791ms)
+✔ matrix: wiki × fkit-design-spec -> deny (385.053334ms)
+✔ matrix: wiki × fkit-evaluate-approach -> deny (361.768166ms)
+✔ matrix: wiki × fkit-heal -> deny (389.55275ms)
+✔ matrix: wiki × fkit-initiate-project -> deny (367.913083ms)
+✔ matrix: wiki × fkit-inspect -> deny (234.459291ms)
+✔ matrix: wiki × fkit-plan-task -> deny (279.054875ms)
+✔ matrix: wiki × fkit-process-review -> deny (316.956958ms)
+✔ matrix: wiki × fkit-process-stateful-review -> deny (278.859667ms)
+✔ matrix: wiki × fkit-dumb-down -> allow (248.437959ms)
+✔ matrix: wiki × fkit-open-questions-interview -> allow (355.084666ms)
+✔ matrix: wiki × fkit-query -> allow (293.972208ms)
+✔ matrix: wiki × fkit-record-decision -> deny (327.022625ms)
+✔ matrix: wiki × fkit-review -> deny (294.61725ms)
+✔ matrix: wiki × fkit-stateful-review -> deny (301.337208ms)
+✔ matrix: wiki × fkit-status -> deny (255.734125ms)
+✔ matrix: wiki × fkit-sprint-cancelled -> deny (356.109625ms)
+✔ matrix: wiki × fkit-sprint-done -> deny (378.230125ms)
+✔ matrix: wiki × fkit-survey-project -> deny (393.845334ms)
+✔ matrix: wiki × fkit-task-cancelled -> deny (296.381083ms)
+✔ matrix: wiki × fkit-task-done -> deny (268.673ms)
+✔ matrix: wiki × fkit-task-brief -> deny (314.74225ms)
+✔ matrix: wiki × fkit-task-ship-loop -> deny (252.23875ms)
+✔ matrix: wiki × fkit-team -> allow (276.179417ms)
+✔ matrix: wiki × fkit-wiki-ingest -> allow (318.188958ms)
+✔ matrix: wiki × fkit-wiki-lint -> allow (338.1625ms)
+✔ matrix: wiki × fkit-wiki-sync -> allow (285.857334ms)
+✔ every deny path resolves via the full JSON deny shape, never a bare/partial one (842.344084ms)
+✔ a deny is never signalled by a malformed/partial JSON shape that a real Claude Code would ignore (329.239584ms)
+(node:28318) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/structure-check.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ scaffold-verbatim project: every row conforming, exit 0, zero mutation (1111.3635ms)
+✔ report is in spec table order: directories first, ai-agents/ the first row (5349.605708ms)
+✔ stuffed rules block (a launched project) is still conforming — elision correctness (6561.639916ms)
+✔ an OLD shipped version classifies untouched-stale; a hand-edit classifies owner-edited (8233.334792ms)
+✔ malformed markers refuse to classify: duplicate begin (7169.787833ms)
+✔ malformed markers refuse to classify: end before begin — and the ORDER is named (R8) (7321.484292ms)
+✔ markers ABSENT + hash matches a shipped whole-file row -> untouched-stale (omnigent-era case) (8188.852791ms)
+✔ an OLD marker-BEARING root file classifies untouched-stale — the ELISION-path parity pin (8828.698833ms)
+✔ markers ABSENT + hash matches nothing -> owner-edited (deleting the markers IS an edit) (7041.000292ms)
+✔ body drift with an intact block is classified by the body: owner-edited (7492.956083ms)
+✔ symlinked subdir: refused at its root, never probed below, run continues (3862.974125ms)
+✔ dangling symlink where a file belongs: refused (never resolved, never "missing") (6229.0455ms)
+✔ file where a directory belongs: wrong-type, children unreachable, run continues (5962.209ms)
+✔ chmod-000 file: unreadable, refuse to classify, run completes (5929.095334ms)
+✔ CRLF variants: current -> conforming, older shipped -> untouched-stale, never owner-edited (6625.068417ms)
+✔ R1: a NUL byte refuses classification (unreadable) — never untouched-stale (6218.151125ms)
+✔ R3: a symlinked ai-agents/ is refused BEFORE its keep-out is probed through the link (1599.740583ms)
+✔ R5: a spec row escaping the project root refuses loudly — exit 2, nothing read outside (830.549167ms)
+✔ R6: a present-but-broken sha tool refuses to classify (unreadable), never owner-edited (5229.696959ms)
+✔ a keep-out entry covers a deleted path AND its subtree: kept-out, not missing — and not exit 1 (5520.823291ms)
+✔ an unreadable keep-out FAILS CLOSED: ai-agents/ check refused loudly, root files still checked (1213.525208ms)
+✔ an edited schema.md reports wiki-routed naming fkit-wiki, and the vault is never written (6008.603958ms)
+✔ index.md and log.md are existence-only: any content is conforming (5299.311042ms)
+✔ a renamed directory reports the spec path missing, and the report carries the limit note (5720.508833ms)
+✔ .gitkeep deleted from an existing directory: conforming (init's rule, deferred to) (5685.291917ms)
+✔ a missing reference file reports missing — and is NOT created (5208.199916ms)
+✔ a missing owner-authored seed reports missing; an edited one is conforming (never content-checked) (10791.016ms)
+✔ a share without spec/manifest: loud error, exit 2, no report (138.735709ms)
+(node:29078) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/structure-manifest.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ A — the committed manifest is byte-exactly what the generator produces today (131.315834ms)
+✔ B — multi-era coverage: ai-agents/README.md carries a shipped hash from every home (33.2185ms)
+✔ C — CRLF contract: an ending-only variant of a shipped file matches; a content edit does not (0.20325ms)
+✔ D — elision contract: block-only drift in a root file matches; body drift or deleted markers do not (17.864709ms)
+✔ E — marker recognition carries marker_lines' contract: whole-line equality, [ \t\r] trimmed (0.449625ms)
+(node:30035) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/structure-notice.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ test/structure-notice.test.js (1007934.351584ms)
+(node:30435) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/structure-repair.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ propose is read-only; apply applies EXACTLY the proposal; everything re-checks conforming (30456.625708ms)
+✔ prehash in the item line is the RAW on-disk sha256; posthash is the raw replacement sha256 (29339.729792ms)
+✔ an empty proposal (fully conforming project): exit 0, no items, no manufactured question (7840.625083ms)
+✔ a file changed between propose and apply is refused: changed-since-propose; others still apply (22103.715167ms)
+✔ an owner-edited file is never proposed, and a FORGED item line for it is refused at apply (11917.842875ms)
+✔ neither script contains a move/remove/delete token (the no-destructive-path grep fixture) (2.594375ms)
+✔ repair.sh has exactly one write-redirect into the project, and no other file write (0.736292ms)
+✔ a nonconforming wiki-vault yields no vault proposal; a forged vault item is hard-refused (10510.25075ms)
+✔ SKILL.md pins the consent model: AskUserQuestion, enumerated list with diffs, never stored (3.138291ms)
+✔ untouched-stale CLAUDE.md body: scaffold body applied, marker region preserved BYTE-FOR-BYTE (28462.766958ms)
+✔ block-only drift is conforming — never proposed; malformed markers are never proposed and a forged item is refused (16519.481208ms)
+✔ apply announces exactly one line per submitted item — applied, refused, and garbage alike (12210.074334ms)
+✔ a symlink swapped in after propose is refused — the target and every ancestor are [-L]-tested (11415.881292ms)
+✔ R1 seam: a NUL-bearing drifted file is unreadable to the check and NEVER proposed (4499.849167ms)
+✔ R6 seam: a broken sha tool means apply refuses everything and writes nothing (9959.892958ms)
+✔ R2: a multi-hard-linked target is refused — never written through to the co-linked path (12308.077875ms)
+✔ R1: the bytes written are the bytes verified — injected synthesis drift never reaches the disk (19676.827167ms)
+✔ R5: an item whose diff cannot render is RETRACTED from the proposal, not left approveable (5149.66325ms)
+✔ R7: an interrupt mid-apply announces the in-flight path on stderr and exits nonzero (9932.914042ms)
+✔ an item whose scaffold source is missing is excluded from the proposal with a stated reason (5314.603542ms)
+(node:37614) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/task-id-uniqueness.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ findDuplicates: a clean corpus reports nothing (123.953125ms)
+✔ findDuplicates: a two-way duplicate is reported, with both paths (6.323709ms)
+✔ findDuplicates: a three-way duplicate names all three (0.346541ms)
+✔ findDuplicates: an empty corpus reports nothing (0.2675ms)
+✔ findDuplicates: two collisions are both reported (0.383583ms)
+✔ discoverBriefs: finds briefs in the pre-76 flat layout, across all three boards (239.722834ms)
+✔ discoverBriefs: finds briefs in the post-76 folder layout (118.306625ms)
+✔ discoverBriefs: catches a collision that spans the two layouts mid-migration (140.739291ms)
+✔ discoverBriefs: a folder without brief.md is not a brief (117.908792ms)
+✔ discoverBriefs: an empty tree discovers nothing (the vacuous-scan case) (5.151083ms)
+✔ readId: reads the field, and reports its absence rather than guessing (112.9585ms)
+✔ readId: a fenced `## ID` example does not shadow the real field (R3) (0.474916ms)
+✔ readId: a tilde-fenced example is ignored too (R3) (0.386458ms)
+✔ readId: a 4-backtick fence wrapping a 3-backtick example does not leak (R7) (0.795375ms)
+✔ readId: a ~~~ line inside a ``` fence does not close it (R7) (0.0965ms)
+✔ readId: a shorter closing run does not close a longer fence (R7) (0.085708ms)
+✔ readId: an indented fence opener still opens a fence (R7/R17) (0.067375ms)
+✔ readId: a ```-with-info-string is an opener, never a closer (R11-E1) (0.067292ms)
+✔ readId: a closing marker with trailing content does not close the fence (R11-E2) (0.710666ms)
+✔ readId: a backtick in the info string means it was never a fence opener (R11) (0.064542ms)
+✔ readId: an unterminated fence does not swallow the real field below it (R9) (0.046542ms)
+✔ countIdBearingFiles: a symlink cycle terminates and counts correctly (R8) (21.473292ms)
+✔ readId: two `## ID` fields outside any fence is a loud failure, not a silent first-match (R14) (0.39775ms)
+✔ readId: the multi-ID failure names every value found (R14) (3.517458ms)
+✔ discoverBriefs: a multi-ID brief fails with its PATH named (R14) (6.221667ms)
+✔ the R14 defect in full — a genuine collision that first-match silently missed (R14) (213.47ms)
+✔ countIdBearingFiles: one brief reachable by two names counts once (R18) (246.525041ms)
+✔ countIdBearingFiles: does not count .md files outside the corpus root (R16) (123.209625ms)
+✔ countIdBearingFiles: a symlink to a sibling dir is not double-counted (R8/R13) (247.680792ms)
+✔ readId: a whitespace-only separator line still yields the ID (R4) (0.19375ms)
+✔ readId: trailing content on the value line is returned, not silently dropped (R4) (0.098875ms)
+✔ readId: a heading with no value at all reports null, not a crash (R4) (0.074667ms)
+✔ discoverBriefs: a symlink to an already-discovered brief is not a second brief (R5/R12) (128.03575ms)
+✔ discoverBriefs: a brief reachable only by an OFF-TREE symlink is not in the corpus (R19) (123.079583ms)
+✔ discoverBriefs: an in-tree symlink to an otherwise-unreached brief is discovered (R5) (6.118917ms)
+✔ discoverBriefs: a symlinked post-76 task folder is not double-counted (R5/R12) (246.862166ms)
+✔ discoverBriefs: a dangling symlink is skipped without throwing (R5) (13.375458ms)
+✔ kindOf / realpathOrNull: unreadable is not the same as absent (R15) (110.4785ms)
+✔ readdirOrEmpty: a missing board is empty, an unreadable one THROWS (R2) (21.952ms)
+✔ countIdBearingFiles: diverges from discovery when a brief is nested out of reach (R1) (354.181709ms)
+✔ countIdBearingFiles: ignores .md files carrying no ID field (R1) (12.954792ms)
+✖ the live ai-agents/tasks/ corpus has no duplicate IDs (21621.970625ms)
+(node:37996) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/throughput-counter.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ isoWeek/basic — a mid-year date lands in its ISO week (114.6945ms)
+✔ isoWeek/week-boundary — Monday starts the week, Sunday ends the previous one (0.43925ms)
+✔ isoWeek/year-boundary — the ISO year is the Thursday's year, not the date's (0.444375ms)
+✔ isoWeek/unparseable — refuses rather than guessing (4.759125ms)
+✔ classify/verbs — every pinned verb marks a record repair (0.636917ms)
+✔ classify/other — a behaviour verb is not a record repair (0.183917ms)
+✔ classify/exceptions — the three named source-defect rows carry a reason (0.31275ms)
+✔ classify/no-id — a slug with no NNNN prefix still classifies by its verb (109.397ms)
+✔ briefIdentity/eras — a folder brief keys on NNNN, a flat brief on its stem (5.897167ms)
+✔ briefIdentity/non-briefs — plan/worklog/review and .gitkeep are not briefs (0.397667ms)
+✔ foldTransitions/ordinary — created in backlog, closed by a rename into done (1.482458ms)
+✔ foldTransitions/born-closed — a brief ADDED under done counts as both, in one week (0.758542ms)
+✔ foldTransitions/migration-is-not-a-close — a same-segment reshape counts as nothing (0.732708ms)
+✔ foldTransitions/flat-to-folder-across-segments IS a close (0.149959ms)
+✔ foldTransitions/rename-carries-identity — a reshaped task is one task, not two (6.912292ms)
+✔ foldTransitions/reopen — the first close stands, and the reopen is reported (0.392041ms)
+✔ foldTransitions/cancelled counts as closed (0.238708ms)
+✔ foldTransitions/deletion is not a close, and non-briefs are ignored (0.240708ms)
+✔ parseArgs — flags, defaults, and a refusal on an unknown flag (1.714375ms)
+✔ git seam/fixture — created and closed per week, migration reshape excluded (6548.2015ms)
+✔ git seam/fixture — the record-repair share of the open rows (7119.872375ms)
+✔ git seam/fixture — --list names the verdict, verb and reason for every open row (5997.209375ms)
+✔ git seam/fixture — --at reads a REVISION, never the worktree (7185.346167ms)
+✔ R1 cwd-independence — a subdirectory must not turn the report into silent zeros (11940.703084ms)
+✔ R2 rename detection is FORCED — the figures cannot depend on the reader's gitconfig (10007.147833ms)
+✔ R2 reconciliation — the invariant is EVALUATED, and a violation refuses to print (10666.410542ms)
+✔ R3 the migration note is COMPUTED, never asserted (0.721625ms)
+✔ R4 pre-migration revisions report a REAL share, not a fabricated zero (4348.025375ms)
+✔ R9 parseArgs refuses a flag where a value belongs (0.865625ms)
+✔ pinned baseline a9c2709 — 129 open rows, and the figures the rule yields (5230.702208ms)
+ℹ baseline a9c2709: 46/129 = 35.7% record repair; brief records 45/129 = 34.9%
+✔ live corpus — reported, never asserted (10647.707667ms)
+ℹ HEAD: open 185, repair 23 (12.4%), excluding source defects 22 (11.9%)
+ℹ HEAD totals: created 551 closed 366
+(node:46236) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/turn-completion-hook.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ B: message with no "What's next?" -> block (812.708875ms)
+✔ B: message that closes with "What's next?" -> allow (504.628125ms)
+✔ A/R1 regression: marker present (tool WAS used) + prose question -> allow (587.806959ms)
+✔ A: marker absent + infra present + prose question -> block (491.351834ms)
+✔ A: reason carries the answer/explain guidance (open no dialog, no question line but the heading) (489.709042ms)
+✔ A: marker consumed after the run (turn-scoped, no leak to next turn) (517.02925ms)
+✔ A FAIL-OPEN: infra absent (no state dir) + prose question -> allow (481.687417ms)
+✔ A FAIL-OPEN: no cwd in payload -> allow (cannot locate/trust the marker) (428.713291ms)
+✔ A/R4 FAIL-OPEN: state dir present but not writable -> allow (marker not recordable) (460.965291ms)
+✔ A/R3: a question ONLY inside a code fence -> allow (434.133125ms)
+✔ A/R3: a question ONLY in a ">" blockquote -> allow (533.985625ms)
+✔ A/R3: a "## What's next?" heading (ends in ?) must not fire A -> allow (543.158667ms)
+✔ A/R3: an owner-directed line ending in ? (outside fences/quotes) -> block (540.962125ms)
+✔ A+B both fire -> single block whose reason mentions both (562.925583ms)
+✔ SKIP: stop_hook_active=true -> allow (block-once) (345.266125ms)
+✔ SKIP: adversarial reviewer -> allow (findings-only contract) (387.618833ms)
+✔ SKIP: a ship-loop session marker present -> allow (both loops, one signal) (342.144916ms)
+✔ R8 FIXED: the marker text as transcript CONTENT (no real invocation) -> block, not skipped (527.035542ms)
+✔ R6 FIXED: ship-loop marker present + NO transcript -> allow (skip is transcript-independent) (462.361708ms)
+✔ NO-SKIP: no ship-loop marker -> block (a normal session enforces) (500.095667ms)
+✔ FAIL-OPEN: empty payload -> allow (79.331916ms)
+✔ FAIL-OPEN: malformed / non-JSON payload -> allow (298.742541ms)
+✔ FAIL-OPEN: last_assistant_message absent -> allow (403.067292ms)
+✔ FAIL-OPEN/R2: empty-string message -> allow (381.96425ms)
+✔ FAIL-OPEN/R2: JSON null message -> allow (478.687583ms)
+✔ FAIL-OPEN/R2: whitespace after the colon (null/empty) -> allow (921.523917ms)
+✔ FAIL-OPEN/R2: whitespace-ONLY message value -> allow (nothing to enforce against) (375.759417ms)
+✔ FAIL-OPEN: an explicitly non-Stop event -> allow (113.370667ms)
+✔ FAIL-OPEN: unreadable transcript does not affect check B -> block on a real missing footer (552.528292ms)
+(node:49881) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/update-banner.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 0257/equal-versions: same version on both sides renders the newer-content form, never vX → vX (4662.269625ms)
+✔ differing versions: the original vA → vB sentence is preserved verbatim (3414.721084ms)
+✔ curl fails: no remote version, and no "v?" — the newer-content form carries it (3992.041917ms)
+✔ 0257/no-curl: curl unreachable — no "v?", and the seal is proven, not assumed (3049.217958ms)
+✔ installed .version has no version= line: renders without a stray v, and without "v?" (2577.606ms)
+✔ a non-default ref: the banner names the tracked ref, not a hard-coded main (3272.331625ms)
+✔ installed sha == remote sha: complete silence (3247.220583ms)
+✔ offline (git fails, curl unreachable): complete silence, exit 0 (3224.009875ms)
+✔ a source checkout: the whole check is skipped — silence, and no network call at all (2177.124458ms)
+✔ FKIT_NO_UPDATE_CHECK=1: silence, and no network call at all (1805.1965ms)
+✔ throttle: the first launch banners, a second inside the window is silent (4796.707958ms)
+✔ .latest still records the remote version and sha (3790.184583ms)
+✔ .latest keeps its own unknown fallback when the remote version is unavailable (3456.861708ms)
+✔ a real role launch banners too: --help is only this suite's driver, not the trigger (12203.249084ms)
+✔ 0284/git-env: GIT_TERMINAL_PROMPT=0 still reaches git through the deadline wrapper (2922.038208ms)
+✔ 0520/scp-rewrite (5421.181167ms)
+ℹ {"controls":{"https":0,"ssh":128},"helpExit":0,"launcherExit":0,"sshSentinelCalls":0}
+✔ 0520/ssh-url-rewrite (4303.51275ms)
+ℹ {"controls":{"https":0,"ssh":128},"helpExit":0,"launcherExit":0,"sshSentinelCalls":0}
+✔ 0520/https-preserved-and-scoped (4780.685542ms)
+ℹ {"controls":{"https":0,"ssh":null},"launcherExit":0,"helperInvocations":1}
+(node:54052) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/update-reinstall.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 0481/version-only: repo/ref from .version reach the installer, not the defaults (3144.590959ms)
+✔ 0481/custom-paths: the installer gets this install's own share and recorded bin (2700.030125ms)
+✔ 0481/env-wins: FKIT_* given on the run override .version, and "now at" reads the new share (2119.911084ms)
+✔ 0481/default: a default install reinstalls flashist/fkit@main into the default paths (2462.747958ms)
+✔ 0481/old-version-proven-default: no bin=, but the default wrapper runs this install → default bin (3275.3875ms)
+✔ 0481/old-version-unknown-bin: no bin= and no default wrapper → one-line refusal, no download (2115.628667ms)
+✔ 0481/old-version-foreign-wrapper: no bin=, default wrapper runs ANOTHER install → refusal (3982.533709ms)
+✔ 0481/install-sh-records: install.sh records bin=, and a bare `fkit update` reuses all four (13801.038625ms)
+✔ 0481/reinstall-hint: the broken-install hint passes the source and paths after the pipe (6395.692667ms)
+✔ 0481/download-fails: a failed download fails the update — no "now at", installer never run (2367.42425ms)
+✔ 0481/relative-bin-cdpath: a relative FKIT_BIN resolves from the cwd, never through CDPATH (4947.490625ms)
+✔ 0481/symlinked-launcher: a symlinked launcher refuses — its derived root is not an install (1936.222917ms)
+✔ 0481/copied-launcher: a copied launcher refuses even with a stray .version at its derived root (2241.767833ms)
+✔ 0481/symlinked-launcher-env-share: an explicit FKIT_SHARE is honoured — the stated target (2098.55075ms)
+✔ 0481/symlinked-launcher-hint-keeps-source: following the hint keeps a fork's repo and pinned ref (2592.876125ms)
+✔ 0481/env-share-record-precedence: env beats the named install's record, field by field (5393.966458ms)
+✔ runtime install: packaged dispatcher works with quoted paths and update retains source/paths (8835.995958ms)
+✔ runtime install: incomplete package and unowned runtime refuse before installed files change (8462.841041ms)
+ℹ tests 954
+ℹ suites 40
+ℹ pass 924
+ℹ fail 29
+ℹ cancelled 1
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1012403.918125
+
+✖ failing tests:
+
+test at test/board-reader-host.test.js:73:1
+✖ local host names and IP literals get the board (1529.717875ms)
+  Error: reader exited 2: fkit-board: listen EPERM: operation not permitted 127.0.0.1
+  
+      at ChildProcess.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/board-reader-host.test.js:45:64)
+      at Object.onceWrapper (node:events:623:26)
+      at ChildProcess.emit (node:events:520:35)
+      at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+
+test at test/board-reader-host.test.js:84:1
+✖ any other host name is refused with 403 and no board data or path (1.997542ms)
+  Error: reader exited 2: fkit-board: listen EPERM: operation not permitted 127.0.0.1
+  
+      at ChildProcess.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/board-reader-host.test.js:45:64)
+      at Object.onceWrapper (node:events:623:26)
+      at ChildProcess.emit (node:events:520:35)
+      at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+
+test at test/board-reader-host.test.js:95:1
+✖ no Host: 403 from the reader on HTTP/1.0, 400 from Node on HTTP/1.1 (0.155708ms)
+  Error: reader exited 2: fkit-board: listen EPERM: operation not permitted 127.0.0.1
+  
+      at ChildProcess.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/board-reader-host.test.js:45:64)
+      at Object.onceWrapper (node:events:623:26)
+      at ChildProcess.emit (node:events:520:35)
+      at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+
+test at test/board-reader-host.test.js:104:1
+✖ a non-GET is still 405, whatever its Host (0.113416ms)
+  Error: reader exited 2: fkit-board: listen EPERM: operation not permitted 127.0.0.1
+  
+      at ChildProcess.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/board-reader-host.test.js:45:64)
+      at Object.onceWrapper (node:events:623:26)
+      at ChildProcess.emit (node:events:520:35)
+      at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+
+test at test/board/server.test.js:134:3
+✖ test_critical_priority (391.17ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:146:3
+✖ test_rank_endpoint (114.664333ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:159:3
+✖ test_index_and_board (10.878042ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:166:3
+✖ test_write_flow (17.078292ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:211:3
+✖ test_errors (260.072042ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:222:3
+✖ test_read_only (139.057333ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:258:3
+✖ T-022 reproduction: a page on another site closing a task is refused (50.804875ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:271:3
+✖ every write endpoint refuses a cross-site write and leaves the board untouched (164.816833ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:303:3
+✖ writes from the page, from agents and from IP-literal hosts still work (116.587125ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:351:3
+✖ a preflight and every other method get Python's 501, with no CORS header (136.044ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:374:3
+✖ none is lost or reordered, from the web and the command line at once (9.14825ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:423:3
+✖ bodies: dicts keep their key order, NaN, bad UTF-8, a non-object (8.586708ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:438:3
+✖ paths: query, params, repeated slashes and the absolute form (6.307584ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:452:3
+✖ GET responses: sprint detail, check, not found, headers (219.835084ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:475:3
+✖ fields of the wrong JSON type: Python's status and body (129.379542ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:513:3
+✖ an id field holding a list: Python's 500, and the board untouched (88.866875ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:534:3
+✖ is aiboard a1592dc's page, served byte for byte (7.632792ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/board/server.test.js:595:3
+✖ prints aiboard's banner, serves the board, and stops cleanly on Ctrl+C (180.689583ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:1918:21)
+      at listenInCluster (node:net:1997:12)
+      at node:net:2206:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at test/launcher-contract.test.js:647:1
+✖ bare first use: each runtime saves once and continues fresh onboarding or existing-project menu (2387.81575ms)
+  AssertionError [ERR_ASSERTION]: Choose a project runtime:
+  1. Codex
+  2. Claude
+  0. Cancel
+  Runtime [1/codex, 2/claude, 0/cancel]: codex
+  Local Codex model catalog (account access is verified when invoked):
+  1. chosen-codex — chosen-codex
+  Choose a number or exact ID; default follows the Codex model default.
+  Default codex model ID [runtime default; blank keeps it]: chosen-codex
+  
+  Default reasoning effort:
+  1. low
+  2. high
+  Default effort [number or name; runtime default; blank keeps it; default follows CLI]: high
+  Customize models or effort for individual roles? [y/N] y
+  
+  Roles available to customize:
+  1. lead
+  2. producer
+  3. coder
+  4. reviewer
+  5. adversarial-reviewer
+  6. architect
+  7. wiki
+  0. Done — review and save
+  Roles to customize [numbers or names, separated by spaces or commas; 0/done or blank finishes]: wiki
+  
+  wiki model choices:
+  Local Codex model catalog (account access is verified when invoked):
+  1. chosen-codex — chosen-codex
+  Choose a number or exact ID; default follows the Codex model default.
+  wiki model [number or exact ID; blank keeps inherited; default follows CLI; inherit removes override]: 
+  
+  wiki reasoning effort:
+  1. low
+  2. high
+  wiki effort [number or name; inherited: high; blank keeps it; default follows CLI; inherit uses project effort]: low
+  
+  Roles available to customize:
+  1. lead
+  2. producer
+  3. coder
+  4. reviewer
+  5. adversarial-reviewer
+  6. architect
+  7. wiki
+  0. Done — review and save
+  Roles to customize [numbers or names, separated by spaces or commas; 0/done or blank finishes]: done
+  lead: codex / chosen-codex / effort: high [default]
+  producer: codex / chosen-codex / effort: high [default]
+  coder: codex / chosen-codex / effort: high [default]
+  reviewer: codex / chosen-codex / effort: high [default]
+  adversarial-reviewer: codex / chosen-codex / effort: high [default]
+  architect: codex / chosen-codex / effort: high [default]
+  wiki: codex / chosen-codex / effort: low [role override]
+  A distinct adversarial role runs even with one model; a different model is recommended.
+  Save these settings? [y/N] y
+  lead: codex / chosen-codex / effort: high [default]
+  producer: codex / chosen-codex / effort: high [default]
+  coder: codex / chosen-codex / effort: high [default]
+  reviewer: codex / chosen-codex / effort: high [default]
+  adversarial-reviewer: codex / chosen-codex / effort: high [default]
+  architect: codex / chosen-codex / effort: high [default]
+  wiki: codex / chosen-codex / effort: low [role override]
+  A distinct adversarial role runs even with one model; a different model is recommended.
+  Saved. Model IDs go to their selected CLI; account availability is checked when invoked.
+  fixture-codex:
+  fixture-codex:
+  
+  __FKIT_TERMINAL_EXIT__0
+  
+  
+  9 !== 15
+  
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js:669:14)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 9,
+    expected: 15,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/launcher-contract.test.js:783:1
+✖ bare first use: management, explicit routes and partial terminal fds preserve their contracts (13010.978916ms)
+  Error: terminal timeout (step 0/1):
+  ⚙ fkit added new paths to ai-agents/ (create-if-absent; nothing existing was changed):
+      README.md
+      knowledge-base/conventions/
+      knowledge-base/conventions/README.md
+      knowledge-base/conventions/asking-the-owner.md
+      knowledge-base/conventions/code-comments.md
+      knowledge-base/conventions/dependency-declaration-form.md
+      knowledge-base/conventions/durable-citation-anchors.md
+      knowledge-base/conventions/evidence-before-assertion.md
+      knowledge-base/conventions/one-skill-one-output.md
+      knowledge-base/conventions/placement-questions-state-the-knock-on.md
+      knowledge-base/conventions/priority-is-rank-not-identity.md
+      knowledge-base/conventions/sprint-status-vocabulary.md
+      knowledge-base/conventions/status-report-format.md
+      knowledge-base/conventions/task-owner-vocabulary.md
+      knowledge-base/conventions/task-status-vocabulary.md
+      knowledge-base/decisions/
+      knowledge-base/decisions/.gitkeep
+      knowledge-base/history/
+      knowledge-base/history/.gitkeep
+      knowledge-base/incidents/
+      knowledge-base/incidents/.gitkeep
+      knowledge-base/reports/
+      knowledge-base/reports/.gitkeep
+      sprints/
+      sprints/.gitkeep
+      sprints/done/
+      sprints/done/.gitkeep
+      tasks/
+      tasks/README.md
+      tasks/backlog/
+      tasks/backlog/.gitkeep
+      tasks/cancelled/
+      tasks/cancelled/.gitkeep
+      tasks/done/
+      tasks/done/.gitkeep
+      wiki-vault/
+      wiki-vault/index.md
+      wiki-vault/log.md
+      wiki-vault/schema.md
+      wiki-vault/wiki/
+      wiki-vault/wiki/decisions/
+      wiki-vault/wiki/decisions/.gitkeep
+      wiki-vault/wiki/features/
+      wiki-vault/wiki/features/.gitkeep
+      wiki-vault/wiki/systems/
+      wiki-vault/wiki/systems/.gitkeep
+      wiki-vault/wiki/tasks/
+      wiki-vault/wiki/tasks/.gitkeep
+    Renamed one of these? fkit cannot tell a rename from a deletion, so you now have both —
+    delete the new one and list it in ai-agents/.fkit-keep-out to stop it coming back.
+  • created CLAUDE.md
+  • updated the fkit rules block in CLAUDE.md
+  • created AGENTS.md
+  • updated the fkit rules block in AGENTS.md
+  • refreshed 7 agents → .claude/agents/, 28 skills → .claude/skills/
+  • created intake .fkit/interview
+  • added .fkit/ to .gitignore
+  • added .claude/agents/fkit-*.md to .gitignore
+  • added .claude/skills/fkit-*/ to .gitignore
+  
+    fkit is ready in /private/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T/fkit-runtime-contract-d50rz7
+  
+    Role-locked sessions — inside each, only its allowed entries load:
+      • lead         the conductor — status → producer; wiki-sync/lint → wiki
+      • producer     product & sprint planning, task briefs
+      • coder        implementation — the only role that writes source
+      • architect    design specs, ADRs, feasibility
+      • reviewer     code review (own pass + Codex second opinion)
+      • adversarial  hostile pass, findings only
+      • wiki         the wiki — ingest / lint / sync
+  
+    Start:   fkit            (pick a role from the menu)
+             fkit coder      (skip the menu)
+    Inside a session, @fkit-<role> asks another role and brings the answer back.
+  
+  
+      at ChildProcess.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/harness.mjs:344:30)
+      at ChildProcess.emit (node:events:508:28)
+      at maybeClose (node:internal/child_process:1101:16)
+      at Socket.<anonymous> (node:internal/child_process:457:11)
+      at Socket.emit (node:events:508:28)
+      at Pipe.<anonymous> (node:net:346:12)
+
+test at test/launcher-contract.test.js:1093:1
+✖ configured delegation: fresh peers use their runtime, model and effort and report observed identity separately (18288.348291ms)
+  Error: delegation timed out
+      at Timeout._onTimeout (file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js:1103:45)
+      at listOnTimeout (node:internal/timers:605:17)
+      at process.processTimers (node:internal/timers:541:7)
+
+test at test/launcher-contract.test.js:1129:1
+✖ public dispatcher: legacy path does not invoke Node from PATH; source checkout self-hosts (21136.104125ms)
+  AssertionError [ERR_ASSERTION]: ⚙ fkit added new paths to ai-agents/ (create-if-absent; nothing existing was changed):
+      README.md
+      knowledge-base/conventions/
+      knowledge-base/conventions/README.md
+      knowledge-base/conventions/asking-the-owner.md
+      knowledge-base/conventions/code-comments.md
+      knowledge-base/conventions/dependency-declaration-form.md
+      knowledge-base/conventions/durable-citation-anchors.md
+      knowledge-base/conventions/evidence-before-assertion.md
+      knowledge-base/conventions/one-skill-one-output.md
+      knowledge-base/conventions/placement-questions-state-the-knock-on.md
+      knowledge-base/conventions/priority-is-rank-not-identity.md
+      knowledge-base/conventions/sprint-status-vocabulary.md
+      knowledge-base/conventions/status-report-format.md
+      knowledge-base/conventions/task-owner-vocabulary.md
+      knowledge-base/conventions/task-status-vocabulary.md
+      knowledge-base/decisions/
+      knowledge-base/decisions/.gitkeep
+      knowledge-base/history/
+      knowledge-base/history/.gitkeep
+      knowledge-base/incidents/
+      knowledge-base/incidents/.gitkeep
+      knowledge-base/reports/
+      knowledge-base/reports/.gitkeep
+      sprints/
+      sprints/.gitkeep
+      sprints/done/
+      sprints/done/.gitkeep
+      tasks/
+      tasks/README.md
+      tasks/backlog/
+      tasks/backlog/.gitkeep
+      tasks/cancelled/
+      tasks/cancelled/.gitkeep
+      tasks/done/
+      tasks/done/.gitkeep
+      wiki-vault/
+      wiki-vault/index.md
+      wiki-vault/log.md
+      wiki-vault/schema.md
+      wiki-vault/wiki/
+      wiki-vault/wiki/decisions/
+      wiki-vault/wiki/decisions/.gitkeep
+      wiki-vault/wiki/features/
+      wiki-vault/wiki/features/.gitkeep
+      wiki-vault/wiki/systems/
+      wiki-vault/wiki/systems/.gitkeep
+      wiki-vault/wiki/tasks/
+      wiki-vault/wiki/tasks/.gitkeep
+    Renamed one of these? fkit cannot tell a rename from a deletion, so you now have both —
+    delete the new one and list it in ai-agents/.fkit-keep-out to stop it coming back.
+  
+  
+  null !== 0
+  
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js:1138:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/launcher-contract.test.js:1155:1
+✖ lead forwarding entries: native catalog, fixed-caller MCP and repeat setup share role-invariant artifacts (43985.598875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  null !== 0
+  
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js:1165:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/launcher-contract.test.js:1187:1
+✖ lead worker transport: exact data, full reports, errors, saved peer settings and topology (36323.114583ms)
+  Error: fixture server timed out
+      at Timeout._onTimeout (file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js:570:69)
+      at listOnTimeout (node:internal/timers:605:17)
+      at process.processTimers (node:internal/timers:541:7)
+
+test at test/structure-notice.test.js:1:1
+✖ test/structure-notice.test.js (1007934.351584ms)
+  'Promise resolution is still pending but the event loop has already resolved'
+
+test at test/task-id-uniqueness.test.js:814:1
+✖ the live ai-agents/tasks/ corpus has no duplicate IDs (21621.970625ms)
+  AssertionError [ERR_ASSERTION]: discovery found 556 ID-bearing briefs, but a recursive layout-agnostic walk found 557. The two disagree, so discoverBriefs() is missing briefs the corpus actually contains — teach it the shape it is not matching. (If the extra files are legitimately not briefs, exclude them from the recursive walk deliberately, not by leaving discovery broken.)
+  
+  556 !== 557
+  
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/task-id-uniqueness.test.js:830:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 556,
+    expected: 557,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

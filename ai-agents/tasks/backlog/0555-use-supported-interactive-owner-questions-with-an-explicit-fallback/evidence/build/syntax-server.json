@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "--check",
+    "codex/server.mjs"
+  ],
+  "exit": 0
+}

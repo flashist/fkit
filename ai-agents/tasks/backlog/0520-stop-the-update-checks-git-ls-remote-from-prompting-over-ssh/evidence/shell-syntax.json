@@ -1,0 +1,11 @@
+{
+  "command": "sh -n claude/fkit-claude.sh",
+  "argv": [
+    "sh",
+    "-n",
+    "claude/fkit-claude.sh"
+  ],
+  "childExit": 0,
+  "stdout": "\n",
+  "stderr": "\n"
+}

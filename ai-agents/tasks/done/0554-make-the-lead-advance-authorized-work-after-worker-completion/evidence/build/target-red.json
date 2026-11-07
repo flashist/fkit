@@ -1,0 +1,10 @@
+{
+  "command": "node --test --test-name-pattern=^lead worker transport: test/launcher-contract.test.js",
+  "exit": 1,
+  "tests": 1,
+  "pass": 0,
+  "fail": 1,
+  "skip": 0,
+  "assertion": "exit 0, payload empty: isError false !== true",
+  "serverBeforeSHA256": "c345d68c8ca569dc36a9c3ba3f066177bdd94d7b51594411e20ed7f9f22e68f1"
+}

@@ -2,6 +2,7 @@
 // It is run as the shipped process on a throwaway tree and probed over raw sockets, so the Host header
 // (and its absence) is exactly what the test wrote, not what an HTTP client fills in.
 
+import './execution-disabled.mjs';
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';

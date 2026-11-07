@@ -1,0 +1,47 @@
+{
+  "recorded_utc": "2026-11-04T12:11:18.353963+00:00",
+  "phase": "before npm test",
+  "source_hash_match": {
+    "CONTRIBUTING.md": true,
+    ".github/workflows/test.yml": true,
+    ".github/workflows/prove-red.yml": true,
+    "RELEASING.md": true,
+    "ai-agents/knowledge-base/architecture.md": true,
+    "CHANGELOG.md": true
+  },
+  "protected_hash_match": {
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/brief.md": true,
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/plan.md": true,
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/plan-review.md": true,
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": true,
+    "ai-agents/sprints/backlog.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md": true,
+    "test/dual-home-parity-exceptions.mjs": true,
+    "test/dual-home-parity.test.js": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-audit.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-preflight.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-audit.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-final-disposition-20261104.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/quiet-window-precheck-20261104.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md": true,
+    "ai-agents/sprints/sprint-15.md": true
+  },
+  "build_patch_exact_match": true,
+  "plan_blob": "23c45abbc10f435d1990ccd5943480d422b21d49",
+  "static_checks_reused": 22,
+  "static_result": "PASS",
+  "build_evidence_sha256": {
+    "build-baseline.json": "8edd63399a3af4dad40d9276d85829dbbb174f7c3e981a150bae11158cdab6b9",
+    "build-static-checks.json": "7b568815c2be47b562a74f8778d506c4c4965a0dfa772dde3dc2a0afbc554045",
+    "build-source.diff": "db04ce20bfe5c717c631ee46d9f717d2e74d68264b1c781fac5fd887fabb51ee"
+  },
+  "git_diff_check_exit": 0,
+  "git_diff_check_output": "",
+  "head": "1767a47b9db50f3949789636c3e0b513950e7368",
+  "authority": "Trusted relayed owner approval 2026-11-04 interactive fkit_roles.fkit_ask_owner; no source writes. No idle/load or elapsed-time gate."
+}

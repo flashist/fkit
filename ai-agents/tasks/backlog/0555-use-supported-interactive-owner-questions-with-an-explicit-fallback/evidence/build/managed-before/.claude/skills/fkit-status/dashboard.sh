@@ -1,0 +1,2090 @@
+#!/usr/bin/env bash
+# dashboard.sh — render the /fkit-status step-4 board deterministically.
+#
+#   ⚠️  INVOKE AS:  bash .claude/skills/fkit-status/dashboard.sh <path-to-sprint-plan>
+#   ⚠️  NEVER AS:   ./dashboard.sh
+#
+# The shebang above is DECORATIVE. Do not rely on it, and do not "simplify" the call site to
+# ./dashboard.sh because it works on your machine — it works on yours and fails on some consumers'.
+# install.sh:44-46 chmod +x's a HARDCODED LIST OF TWO FILENAMES:
+#
+#     for s in fkit-claude.sh fkit-claude-init.sh; do
+#       [ -f "$SHARE/claude/$s" ] && chmod +x "$SHARE/claude/$s"
+#     done
+#
+# This file is not on that list, and it rides a GitHub tarball + `cp -R` chain that does not guarantee
+# the exec bit (cp applies the source mode modified by umask). Invoking through `bash` sidesteps the
+# bit entirely and needs no installer change. See ADR-017 rule 2.
+#
+# WHY THIS EXISTS: SKILL.md:198-201 used to *instruct* that "the counts must sum to M". Here that is an
+# invariant of construction rather than a request to an LLM. See
+# knowledge-base/reports/2026-07-16-design-deterministic-dashboard-for-fkit-status.md — this script is
+# built to that contract; §9 lists what it must not reopen.
+#
+# CONTRACT: pure function of (sprint-plan path, the briefs it links, the FIRST LINE of the sibling
+# `.md` files in the plan's own directory) -> (stdout, exit code).
+#   - The SKILL resolves the argument to a sprint plan. This script never does; it takes a path.
+#   - Reads the plan and the briefs it links — AND the first line of each `*.md` sitting beside the
+#     plan. ⚠️ THAT THIRD READ IS NEW (ADR-041 §1.5, owner-ruled 2026-08-11 "Accept the widening").
+#     It exists ONLY to detect two plans claiming ONE sprint identity, which §1.5 requires to reach
+#     the roll-up's drift clause — and the roll-up exists only in this board render, so the check has
+#     to live here. It reads first lines, never whole sibling files. Nothing else. Not the code, not git.
+#   - ⚠️ A SECOND WIDENING (`0492`, the `depends-on-later-sprint` check). In BOARD MODE ON A `Sprint N`
+#     BOARD ONLY — never on the Backlog board, never on an unresolved identity — it also reads:
+#       (a) the briefs named by an open row's HARD dependency IDs, located by globbing
+#           `tasks/{backlog,done,cancelled}/<ID>-*` (their `## Status` and `## Sprint` only), and
+#       (b) the FIRST LINE and LINE 3 of each `ai-agents/sprints/*.md` (one level deep: the live boards),
+#           to learn each sprint's identity and status banner.
+#     Owner-ruled 2026-10-08 (the plan approval was 2026-10-07; the session date rolled over around this
+#     answer), via AskUserQuestion, selected option verbatim: "Allow it (Recommended)" — the widened reads,
+#     sprint boards only. Still: writes nothing, no network, not git.
+#   - Writes nothing. No network.
+#   - Non-zero exit + stderr on an unparseable plan; the skill then hand-builds a flagged fallback.
+#   - ⚠️ THE `⟦BOARD⟧` TASK CELL IS TITLE-ONLY (`0409`, owner-ruled 2026-09-20). It is cut at the first
+#     `*(` — the annotation opener the board writers use — and the cut is marked with ` …`. A cell with
+#     no opener passes through BYTE-IDENTICAL, and a cell the cut would damage — nothing but an
+#     annotation, a head of bare emphasis/code punctuation, or a head left with an ODD asterisk count —
+#     falls back to raw rather than rendering empty or unbalanced markdown. See `title_cell()`, whose
+#     comment records the one residual this does not cover. This CHANGED the board's bytes for 113 of
+#     116 live rows when it shipped; it did NOT change the envelope's shape, which is why the version
+#     marker stayed at `v2` (an agent's call, not an owner ruling — see the `0409` plan's Q4).
+#     ⛔ `⟦FACTS⟧` IS UNAFFECTED, and that is a property of the code rather than a promise: `$task` is
+#     read at exactly one site, the row assembly. No drift check, counter or fact emitter reads it.
+#     The filing prose is not lost — it stays in the board file and in the brief, which the row's own
+#     Filename column links.
+#   - Four further MODES sit in front of this render (ADR-041 §5, ADR-047 §2.3a, §3.0.2):
+#     `identity <plan>` prints one plan's identity, `status <plan>` prints one plan's SPRINT STATUS,
+#     `select-active <sprints-dir>` runs the whole selection rule, and
+#     `successor <sprints-dir> <closing-identity>` prints the basename of the lowest-ordered
+#     non-terminal board above a closing sprint (the ordering surface `/fkit-sprint-done` needs).
+#     All are additive; the one-argument invocation renders the same board it always did — only the
+#     version marker on it moved to `v2`.
+#
+# PORTABILITY: bash 3.2 (macOS ships 3.2.57). No `declare -A`, no ${v^^}, no mapfile/readarray.
+
+set -u
+
+# ⚠️ `set -f` (no pathname expansion) is a CORRECTNESS guard, not tidiness. `$DRIFT_TASKS` is
+# deliberately word-split UNQUOTED to iterate task ids; without `-f`, any id containing a glob
+# metacharacter is expanded against the CURRENT WORKING DIRECTORY — so the legacy `tid="?"` sentinel
+# silently becomes the name of any one-character file that happens to sit next to the caller. The
+# script would then report drift on a task that does not exist, with the name of an unrelated file.
+# Nothing here globs on purpose.
+set -f
+
+LC_ALL=C
+export LC_ALL
+
+# ⚠️ BUMPED TO v2 BY ADR-047 §9 (owner ruling W2). The marker's declared purpose is that a consumer
+# reading an unknown shape REFUSES rather than guesses (`fkit-status/SKILL.md`: "If the version marker
+# is not `⟦fkit-dashboard v2⟧`, say so rather than guessing at the shape"), so keeping `v1` across the
+# `select-active` shape change would have defeated the one mitigation the design named.
+#
+# ⛔ ONE definition, TWO emit sites — the `⟦SELECT⟧` envelope and the `⟦BOARD⟧` envelope. A bump scoped
+# to `select-active` alone is NOT IMPLEMENTABLE: the board render's output changes too, even though its
+# shape does not (ADR-047 §9.2 item 1).
+# ⛔ `identity <plan>` and `status <plan>` emit NO marker, by design — see mode_identity's contract note.
+# ⛔ There is no `v1`-compat reader anywhere and none is being written: the contract is REFUSE, not
+# translate. Do not invent a dual-version parser (§9.2 item 2).
+VERSION_MARKER='⟦fkit-dashboard v2⟧'
+
+die() { printf '%s\n' "dashboard.sh: $*" >&2; exit 1; }
+
+# A value safe to place inside a `key="value"` FACTS field. `"` in the source (a quoted phrase in a
+# Depends on: line — live in sprint-2 `0072`) would otherwise close the field early and hand the
+# skill an unparseable record. Newlines likewise: FACTS is one record per line.
+fact_value() {
+  printf '%s' "$1" | tr '\n"' " '"
+}
+
+# ADR-040 §1 — THE identity token grammar. ONE definition; every rung and the ➡️ Moved target
+# parser below compose from it. ERE dialect (already this file's established dialect — see the
+# `-E` note on the move-target extractor). ⚠️ NO BACKSLASHES may enter these values: they are
+# passed to awk via -v, which processes escape sequences.
+SPRINT_NUM_RE='[0-9]+[a-z]?'             # DIGITS SUFFIX? — exactly ONE optional lowercase letter
+SPRINT_ID_RE="Sprint ${SPRINT_NUM_RE}"   # the identity token itself: `Sprint 4`, `Sprint 4c`
+
+plan_sprint_from_h1() {   # <plan-file> -> the H1 segment identity, or nothing.  ADR-040 §2.
+  # The identity is a WHOLE, delimiter-bounded segment of the H1 — never a substring. Prose
+  # containment is not identity: `# … — Post-Sprint 2 Hotfix Tasks` is a real plan that is
+  # deliberately NOT Sprint 2, and any "find `Sprint N` anywhere" rule claims it and hands rule 1
+  # a WRONG identity — which is strictly worse than none (ADR-040 §Context).
+  #
+  # ⚠️ awk, NOT sed. BSD sed does not expand `\n` in a replacement (it yields a literal `n`), so a
+  # sed split silently produces one un-split segment on a consumer's Mac and works on Linux CI —
+  # the exact dialect trap `STATUS_HEADING_RE` below already documents. awk also keeps `&` in the
+  # title (`… Monetization & Citizenship`) inert, which a sed replacement would not.
+  # ⚠️ A bare hyphen is NOT a delimiter — only ` - ` with spaces. That is what keeps `Post-Sprint`
+  # one word.
+  # ⚠️ FIRST LINE ONLY (ADR-040 §2.1). The former rule scanned the whole file for `^# Sprint N`;
+  # this is a deliberate narrowing, not a no-op.
+  head -1 "$1" | awk -v tok="$SPRINT_ID_RE" '
+    substr($0, 1, 2) == "# " {
+      t = substr($0, 3)
+      gsub(/ - /, "\n", t); gsub(/—/, "\n", t); gsub(/–/, "\n", t); gsub(/:/, "\n", t)
+      n = split(t, seg, "\n")
+      cnt = 0
+      for (i = 1; i <= n; i++) {
+        s = seg[i]
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", s)
+        # ADR-041 §2 — the SECOND token on this SAME rung. Normalize to `Backlog` BEFORE the distinct
+        # count: `# X — Backlog — Sprint Backlog` names ONE identity twice and must resolve, not refuse.
+        # ⚠️ The value is `Backlog`, never `Sprint Backlog` — that exact string is what briefs carry
+        # (`## Sprint: Backlog`) and what the rule-1 arm compares against; see the divergence warning
+        # on the basename rung in resolve_identity().
+        if (s == "Sprint Backlog") s = "Backlog"
+        if ((s ~ ("^" tok "$") || s == "Backlog") && !(s in seen)) { seen[s] = 1; cnt++; last = s }
+      }
+      # DISTINCT count. Exactly one -> that identity. Zero -> fall through. TWO OR MORE -> refuse
+      # and fall through; do NOT guess (ADR-040 §2.5).
+      if (cnt == 1) print last
+    }
+  '
+}
+
+plan_sprint_from_stem() { # <plan-file> -> the filename identity, or nothing.  ADR-040 §3.
+  # sprint-2.md -> "Sprint 2", plan-sprint-4c.md -> "Sprint 4c". A plan whose H1 is prose
+  # ("# Hardening — the launcher sprint") is otherwise indistinguishable from one with no sprint
+  # identity at all.
+  #
+  # The prefix allowlist is CLOSED and has exactly one entry, `plan-`. An open `.*sprint-<N>` rule
+  # would claim `hotfix-post-sprint-2.md`; the reporter's real file lacks that hyphen, so an open
+  # rule would have been safe only by luck. Owner-ruled 2026-08-10 ("Include `plan-`"), accepted as
+  # forward cover with no observed file behind it — tests T10/T11 are its only coverage.
+  basename "$1" .md | sed -nE "s/^(plan-)?sprint-(${SPRINT_NUM_RE})\$/Sprint \2/p"
+}
+
+resolve_identity() {   # <plan-file> -> the identity, or nothing.  ADR-040 ladder + ADR-041 §2.
+  # THE ONE implementation of the grammar, for every mode (ADR-041 §5: re-stating it anywhere
+  # else — in SKILL.md prose or in a second mode — is the two-grammars defect this file already
+  # documents at STATUS_HEADING_RE). The three rungs below are ADR-040's, moved here UNCHANGED.
+  #
+  # ⚠️ READABILITY IS A PRECONDITION OF THE WHOLE LADDER, not a detail of rung 1. When `head -1` fails
+  # (mode 000, a dangling symlink, an unreadable mount) awk sees EMPTY INPUT and exits 0 — which is
+  # INDISTINGUISHABLE from "an H1 carrying no identity token". The ladder then falls through and the
+  # FILENAME rung answers confidently about a file whose contents were never read.
+  #
+  # Measured before this guard (review R5): `sprint-1.md` at mode 000, whose real H1 said
+  # `# X — Sprint 99`, resolved to `Sprint 1` with exit 0. That is a WRONG identity — which ADR-040
+  # §Context ranks as STRICTLY WORSE than none, and is the entire reason both rungs REFUSE rather than
+  # guess. Unresolved is loud (`unresolved-plan-sprint`); wrong is silent.
+  #
+  # ⚠️ 0265 WIDENED THE BLAST RADIUS, which is why this is fixed here rather than left to 0264's
+  # ladder: `select-active` and `sibling_claimants` now run this ladder over files THE CALLER NEVER
+  # NAMED, so one unreadable file in `sprints/` could mis-select the active sprint for the whole board.
+  [ -r "$1" ] || return 0
+  _id=$(plan_sprint_from_h1 "$1")
+  if [ -z "$_id" ]; then
+    _id=$(plan_sprint_from_stem "$1")
+  fi
+  # ⚠️ BASENAME, NOT A FULL PATH — deliberate (owner-ruled 2026-07-18, review R4). Any `backlog.md`
+  # resolves to the `Backlog` identity, including an archived `sprints/done/backlog.md`. An archived
+  # backlog board is still a backlog board; tightening this to the canonical path would make the archived
+  # copy report false `unresolved-plan-sprint` drift instead.
+  if [ -z "$_id" ] && [ "$(basename "$1" .md)" = "backlog" ]; then
+    # THE BACKLOG BOARD (`0001`) has a real identity — it just isn't a numbered sprint. Its H1 is prose
+    # and its filename is deliberately not a `sprint-<N>` stem, so neither rung above resolves it and it
+    # would report `unresolved-plan-sprint` on EVERY run: a permanent false drift record on a board that
+    # is perfectly well-formed.
+    #
+    # ⚠️ THIS IS NOT COSMETIC — it is what makes drift rule 1 work on this board. Rule 1 skips the status
+    # cross-check when a brief's `## Sprint` names a DIFFERENT sprint than the plan. With _id
+    # empty, the rule is inert and every row falls through to the full cross-check; with it set to
+    # `Backlog`, a backlog brief (which reads `## Sprint: Backlog` since `0001`) matches, the rule
+    # correctly does NOT skip, and real status drift on backlog rows is still found.
+    #
+    # ⚠️ The value must match what the briefs actually write. `0001` normalized all of them from
+    # `Backlog (unsprinted)` to `Backlog` for exactly this reason — if they ever diverge again, every
+    # backlog row silently takes rule 1's skip and status drift on this board stops being reported.
+    _id="Backlog"
+  fi
+  printf '%s\n' "$_id"
+}
+
+# --- ADR-047 §2: THE sprint-status banner grammar --------------------------------------------------
+#
+# One grammar, one implementation, sitting beside the identity ladder for exactly the reason ADR-041 §5
+# gives: a second reading of the same line, anywhere, is the two-grammars defect this file already
+# documents at STATUS_HEADING_RE.
+#
+# ⚠️ THE DATE IS PART OF THE RECOGNIZER, not just of the prose grammar above it (ADR-047 §2, corrected
+# under owner ruling W1). §1 has the producer writing `🔲 Backlog` and `🔄 In progress` BY HAND — the
+# exact path that drops a date — so a loose recognizer silently accepts a banner the grammar forbids.
+# Measured against the loose form, bare `> ## 🔄 In progress`, `> ## 🔄 In progress arbitrary trailing
+# garbage` and `> ## ✅ Done — not-a-date.` ALL matched. A recognizer that does not enforce the grammar
+# it sits under is not a recognizer.
+#
+# ⚠️ ERE, and the alternation is of LITERAL multi-byte tokens — no backslash classes, no `\|`. See the
+# `-E` warning on the move-target extractor for why BRE alternation is not available here.
+SPRINT_STATUS_RE='^> ## (🔲 Backlog|🔄 In progress|✅ Done|⛔ Cancelled|🔒 CLOSED) — [0-9]{4}-[0-9]{2}-[0-9]{2}\.( |$)'
+
+# <plan-file> -> "<status-token><TAB><kind>".  kind ∈ ok | malformed | missing.
+#
+# ⭐ ONE function returning TWO fields, deliberately. The status token and the REASON it is unresolved
+# are two different facts, and ADR-047 §2 requires them distinguishable — `sprint-status-missing`
+# ("nobody typed it") must never read as `sprint-status-malformed` ("the producer typed it wrong").
+# Two separate parses would be two readings of one line, which is the defect above.
+#
+# ⛔ LINE 3 ONLY (`sed -n '3p'`). Never "find the banner anywhere": strict position is the whole reason
+# a `> ## ` deeper in a board is harmless rather than a second status (ADR-047 §2, and P10 pins it).
+#
+# ⛔ READABILITY FIRST, exactly as the identity ladder does it: an unreadable file yields `missing`,
+# never a guessed status. ADR-040 §Context — a wrong answer is strictly worse than none.
+plan_status_raw() {
+  _l3=""
+  [ -r "$1" ] && _l3=$(sed -n '3p' "$1" 2>/dev/null)
+  if printf '%s' "$_l3" | grep -qE "$SPRINT_STATUS_RE"; then
+    case "$_l3" in
+      '> ## 🔲 Backlog'*)     printf 'Backlog\tok' ;;
+      '> ## 🔄 In progress'*) printf 'In progress\tok' ;;
+      '> ## ✅ Done'*)        printf 'Done\tok' ;;
+      '> ## ⛔ Cancelled'*)   printf 'Cancelled\tok' ;;
+      # Legacy `🔒 CLOSED` reads as `Done` — owner ruling V3, a PERMANENT compat rung: read forever,
+      # written never. It is not a migration window and must not be "cleaned up" later.
+      '> ## 🔒 CLOSED'*)      printf 'Done\tok' ;;
+    esac
+    return 0
+  fi
+  case "$_l3" in
+    '> ## 🔲 Backlog'*|'> ## 🔄 In progress'*|'> ## ✅ Done'*|'> ## ⛔ Cancelled'*|'> ## 🔒 CLOSED'*)
+      printf 'unresolved\tmalformed' ;;
+    *)
+      printf 'unresolved\tmissing' ;;
+  esac
+}
+
+# 0 (true) iff line 3 is a WELL-FORMED banner carrying the literal `⭐ ACTIVE BOARD` token (ADR-047 §2.1).
+#
+# ⚠️ A DECISION THE ADR LEAVES TO THE CODE, so it is named rather than left implicit: the marker is read
+# ONLY from a line 3 the recognizer accepts. §2.1 defines the carrier as "an `In progress` banner's
+# TRAILING PROSE", and a line the recognizer rejects has no trailing prose in the grammar's sense — its
+# whole tail is unparsed. So a marker sitting on a MALFORMED banner is not a marker, and that line emits
+# `sprint-status-malformed` alone rather than two records about one defect. Nothing goes quiet either
+# way: the malformed record is already loud.
+plan_has_active_marker() {
+  _l3=""
+  [ -r "$1" ] && _l3=$(sed -n '3p' "$1" 2>/dev/null)
+  printf '%s' "$_l3" | grep -qE "$SPRINT_STATUS_RE" || return 1
+  case "$_l3" in *'⭐ ACTIVE BOARD'*) return 0 ;; esac
+  return 1
+}
+
+# --- ADR-041 §1: eligibility and ordering ---------------------------------------------------------
+
+# Eligible = the identity is a `Sprint <N><suffix>` token. `Backlog` is NEVER eligible; neither is an
+# unresolved (empty) identity. ADR-041 §1.3 — and there is deliberately NO fallback: option (a′), the
+# glob kept as a safety net, was put to the owner on 2026-08-10 and REJECTED BY NAME.
+#
+# ⛔ THIS IS THE IDENTITY RUNG ONLY, AND ADR-047 DELIBERATELY DID NOT WIDEN IT. §5 adds a STATUS rung
+# ("…AND status is `In progress`"), but that rung is applied as a SEPARATE filter at `select-active`'s
+# selection site — never folded in here. The board render calls this function for its ADR-041 §1.5
+# ambiguity check, where identity eligibility is the whole question; widening it would silently stop
+# `ambiguous-plan-identity` firing on a board that is not `In progress`.
+is_eligible() { printf '%s' "$1" | grep -qE "^${SPRINT_ID_RE}\$"; }
+
+id_digits() { printf '%s' "${1#Sprint }" | sed -e 's/[a-z]$//' -e 's/^0*\([0-9]\)/\1/'; }
+id_suffix() { printf '%s' "${1#Sprint }" | sed -n 's/.*[0-9]\([a-z]\)$/\1/p'; }
+
+# 0 (true) iff identity $1 orders strictly ABOVE identity $2.  ADR-041 §1.4.
+#
+# ⚠️ DO NOT "SIMPLIFY" THIS TO `[ "$a" -gt "$b" ]`. Two inputs break that: a leading zero (`sprint-08`
+# is not octal to `test`, but it is one more character of nothing) and a very long `<N>`, where a
+# 30-digit sprint number overflows the shell's integer and compares as garbage. Length-then-bytes has
+# neither failure mode and needs no arithmetic at all.
+#
+# Suffix: absent < `a` < `b` < … falls straight out of `strcmp`, because the empty string sorts before
+# any letter. That is only true under `LC_ALL=C`, which this file sets and exports at the top.
+identity_gt() {
+  _an=$(id_digits "$1"); _bn=$(id_digits "$2")
+  if [ ${#_an} -ne ${#_bn} ]; then [ ${#_an} -gt ${#_bn} ]; return $?; fi          # longer N wins
+  if [ "$_an" != "$_bn" ]; then [ "$_an" \> "$_bn" ]; return $?; fi                # same length: bytes
+  [ "$(id_suffix "$1")" \> "$(id_suffix "$2")" ]                                    # same N: suffix
+}
+
+# Every OTHER `.md` in <plan-file>'s own directory whose identity equals <identity>, comma-space
+# separated, in byte (glob) order. Empty when the plan's identity is unshared. ADR-041 §1.5.
+#
+# ⚠️ `set +f` … `set -f`. Pathname expansion is DISABLED FILE-WIDE at the top as a correctness guard
+# (see the `set -f` comment there), so an unwrapped glob here does not expand — it stays literal, the
+# `[ -f ]` guard rejects it, and the collision check silently finds NOTHING. That failure is invisible:
+# it looks exactly like "no collision". The same `[ -f ]` guard is what handles the genuine no-match
+# case, and it also skips a DIRECTORY named `*.md`.
+sibling_claimants() {
+  _self=$(basename "$1"); _want="$2"; _dir=$(dirname "$1"); _out=""
+  set +f
+  for _f in "$_dir"/*.md; do
+    [ -f "$_f" ] || continue
+    _b=$(basename "$_f")
+    [ "$_b" = "$_self" ] && continue
+    [ "$(resolve_identity "$_f")" = "$_want" ] || continue
+    if [ -z "$_out" ]; then _out="$_b"; else _out="$_out, $_b"; fi
+  done
+  set -f
+  printf '%s' "$_out"
+}
+
+# --- the non-board modes (ADR-041 §5) --------------------------------------------------------------
+
+# ⚠️ `status <plan>` IS APPENDED, AND THE POSITION IS LOAD-BEARING, NOT AESTHETIC. The test
+# 'ADR-041: the historic one-argument board render is unchanged; a bad subcommand is a usage error'
+# asserts this string with an UNANCHORED `assert.match`, whose pattern ends at `select-active
+# <sprints-dir>`. Appending keeps it green; INSERTING the new mode before `select-active` reds it.
+# Measured, not assumed. ⛔ `successor` is APPENDED FOR THE SAME REASON — after `status <plan>`.
+USAGE="usage: bash dashboard.sh <plan> | identity <plan> | select-active <sprints-dir> | status <plan> | successor <sprints-dir> <closing-identity>"
+
+# `identity <plan>` — the resolve-identity primitive. Prints the identity on ONE line, or nothing.
+# Exit 0 resolved · 3 readable but unresolved · 1 usage / no such file.
+#
+# ⚠️ NO `⟦…⟧` MARKERS, deliberately. This emits a VALUE, not a rendering, so a caller reads it with a
+# single command substitution. It is not a second briefing and does not reopen
+# conventions/one-skill-one-output.md — ADR-041 §5 says so explicitly.
+mode_identity() {
+  [ -f "$1" ] || die "no such sprint plan: $1"
+  _v=$(resolve_identity "$1")
+  [ -n "$_v" ] || exit 3
+  printf '%s\n' "$_v"
+  exit 0
+}
+
+# `status <plan>` — the resolve-status primitive (ADR-047 §2.3a). Prints one status token, or nothing.
+# Exit 0 resolved · 3 readable but unresolved (no banner, or a malformed one) · 1 usage / no such file.
+#
+# ⚠️ NO `⟦…⟧` MARKERS, exactly as `identity` above, and for the same reason: this emits a VALUE, not a
+# rendering, so a caller reads it with a single command substitution. ADR-047 §9.2 item 1 flags the
+# trap explicitly — a builder obeying "the marker is emitted by EVERY mode" would make every
+# `$(dashboard.sh status …)` return TWO lines instead of a value.
+#
+# ⛔ DELIBERATELY NOT FOLDED INTO `identity` (§2.3a). Two questions, two modes.
+mode_status() {
+  [ -f "$1" ] || die "no such sprint plan: $1"
+  _sr=$(plan_status_raw "$1")
+  _v=${_sr%%	*}
+  [ "$_v" != "unresolved" ] || exit 3
+  printf '%s\n' "$_v"
+  exit 0
+}
+
+# `successor <sprints-dir> <closing-identity>` — the ordering surface `/fkit-sprint-done` needs
+# (ADR-047 §3.0.2, FOLLOW-UP 2). Prints the BASENAME of the lowest-ordered non-terminal successor
+# board, or nothing.
+# Exit 0 found · 3 no successor exists (the mover then falls to the Backlog board) · 1 usage / bad args.
+#
+# ⛔ WHY IT IS A MODE AND NOT PROSE. §3.0.2 tells the mover to "order by §6.1's comparator", and
+# `/fkit-sprint-done` is a SKILL — markdown an LLM executes. ADR-041 §5 forbids the skill's prose from
+# comparing `Sprint 9` against `Sprint 10` itself ("two grammars for one question"), and that route
+# walks straight into the two hazards `identity_gt`'s own comment names. ADR-047 FOLLOW-UP 2 leaves
+# the CHOICE of surface to the implementing task and this is it — owner ruling D1, 2026-09-12,
+# option label verbatim "New `successor` mode (Rec)".
+#
+# ⛔ NO NEW TRAVERSAL, NO NEW DEPTH (§3.0.2 item 1). The candidate set is depth 1 of `<sprints-dir>` —
+# the SAME `"$1"/*.md` glob `select-active` uses — so `done/` and `cancelled/` are excluded by
+# construction and an archived board can never be a successor.
+#
+# ⛔ `select-active` CANNOT STAND IN FOR THIS. It filters to `In progress` alone (its own
+# `[ "$_st" = "In progress" ] || continue`), so it silently drops every `🔲 Backlog` successor — and
+# §3.0.2's successor set is `Backlog` ∪ `In progress`. Reaching for it is the plausible wrong turn.
+#
+# ⛔ NO `⟦…⟧` MARKERS, exactly as `identity` and `status`: a VALUE, not a rendering.
+#
+# ⭐ BASENAME ONLY, DELIBERATELY. §3.0.1 requires the label and the href to be "two separate lookups,
+# neither derived from the other" — a mover that derived one from the other reintroduces the
+# filename-as-identity bug. So this answers WHICH FILE, and the mover asks `identity <that file>` for
+# the label.
+mode_successor() {
+  [ -d "$1" ] || die "no such sprints directory: $1"
+  # The closing identity must be a real `Sprint <N><suffix>` token. `identity_gt` on anything else
+  # compares garbage silently — `id_digits Backlog` yields `Backlo` — so refuse rather than answer.
+  #
+  # ⛔ THE ONE-LINE CHECK COMES FIRST, AND IT IS NOT REDUNDANT — round-1 R13/R12. `is_eligible` is
+  # `grep -qE "^…\$"`, which anchors to a LINE, so a MULTI-LINE argument whose first line is a valid
+  # identity sails through it. Measured before the fix: `successor <dir> $'Sprint 7\njunk'` returned
+  # exit 3 while the single-line control `'Sprint 7 junk'` correctly returned exit 1. Exit 3 is not a
+  # refusal — the mover reads it as "no successor exists" and falls to the Backlog board, which is
+  # the silent wrong answer this guard exists to prevent. Fail closed on anything but one line.
+  [ "$2" = "$(printf '%s' "$2" | head -1)" ] ||
+    die "not a sprint identity: multi-line value (expected one line, e.g. \`Sprint 8\`)"
+  is_eligible "$2" || die "not a sprint identity: $2 (expected e.g. \`Sprint 8\`)"
+
+  # §3.0's successor filter, replacing §6.4 step 2 (which is `In progress`-only). Steps 3 and 4 of
+  # §6.4 are reused UNCHANGED below.
+  _cands=""
+  set +f
+  for _f in "$1"/*.md; do        # DEPTH 1 ONLY — the same construction `select-active` relies on
+    [ -f "$_f" ] || continue
+    _i=$(resolve_identity "$_f")
+    is_eligible "$_i" || continue
+    identity_gt "$_i" "$2" || continue         # orders strictly ABOVE the closing sprint
+    _sr=$(plan_status_raw "$_f")
+    _st=${_sr%%	*}
+    case "$_st" in
+      'Backlog'|'In progress') ;;
+      *) continue ;;
+    esac
+    _cands="${_cands}$(basename "$_f")	${_i}
+"
+  done
+  set -f
+
+  # §6.4 steps 3 and 4, verbatim: order by §6.1's comparator lowest-first, ties keep the FIRST in glob
+  # (byte, `LC_ALL=C`) order — ADR-041 §1.5.
+  #
+  # ⛔ THE SWAP IS NOT A NEGATION, and this is the same trap `mode_select_active` documents at length.
+  # `! identity_gt "$_i" "$_best_id"` yields `<=`, so a tie REPLACES the incumbent and first-wins
+  # silently becomes last-wins. Copy the swapped-argument form; do not "simplify" it to a negation.
+  _best_b=""; _best_id=""
+  OLD_IFS=$IFS; IFS='
+'
+  for _r in $_cands; do
+    _b=${_r%%	*}; _i=${_r#*	}
+    if [ -z "$_best_id" ] || identity_gt "$_best_id" "$_i"; then
+      _best_id="$_i"; _best_b="$_b"
+    fi
+  done
+  IFS=$OLD_IFS
+
+  [ -n "$_best_b" ] || exit 3
+  printf '%s\n' "$_best_b"
+  exit 0
+}
+
+# `select-active <sprints-dir>` — ADR-041 §1 in full, executed in shell rather than described in
+# prose. The candidate list is printed ALWAYS, not only in the empty case: one code path, and §1.6's
+# report then needs no second mode.
+mode_select_active() {
+  [ -d "$1" ] || die "no such sprints directory: $1"
+  # ONE RECORD PER CANDIDATE, five TAB-separated fields:
+  #   basename <TAB> identity <TAB> status <TAB> status-kind <TAB> marker-flag
+  # ⚠️ Fields are read with `%%`/`#` prefix-suffix stripping, NEVER with `read`/`set --` under an IFS of
+  # tab — tab is IFS *whitespace*, which COLLAPSES runs, so an empty identity would shift every later
+  # field left. That is the same trap the row extractor documents at its `US, NOT tab` warning.
+  _recs=""
+  set +f
+  for _f in "$1"/*.md; do          # DEPTH 1 ONLY — `done/` and `cancelled/` are excluded by construction
+    [ -f "$_f" ] || continue
+    _sr=$(plan_status_raw "$_f")
+    _mk="-"; plan_has_active_marker "$_f" && _mk="marker"
+    _recs="${_recs}$(basename "$_f")	$(resolve_identity "$_f")	${_sr%%	*}	${_sr#*	}	${_mk}
+"
+  done
+  set -f
+
+  # --- §6.4's rule, IN THIS ORDER AND THERE IS NO OTHER: resolve identity + status (above) → FILTER
+  # to the eligible set → order lowest-first → tie-break by byte order, first wins.
+  #
+  # ⛔ THE STATUS RUNG IS A SEPARATE FILTER HERE, AND `is_eligible` IS DELIBERATELY NOT WIDENED. The
+  # board render also calls `is_eligible "$PLAN_SPRINT"` for its ADR-041 §1.5 ambiguity check, where
+  # "eligible" means IDENTITY eligibility BY DESIGN (see its own "ELIGIBLE IDENTITIES ONLY,
+  # deliberately" comment). Folding status into `is_eligible` would silently stop
+  # `ambiguous-plan-identity` firing on a board that is not `In progress`.
+  #
+  # ⛔ FILTER FIRST, tie-break second (§6.4). Tie-break-first would let a TERMINAL board win selection —
+  # the Sprint 5 failure reintroduced through the side door, in the one ADR that exists to close it.
+  _elig=""
+  OLD_IFS=$IFS; IFS='
+'
+  for _r in $_recs; do
+    _b=${_r%%	*}; _rest=${_r#*	}
+    _i=${_rest%%	*}; _rest=${_rest#*	}
+    _st=${_rest%%	*}; _rest=${_rest#*	}
+    _mk=${_rest#*	}
+    is_eligible "$_i" || continue
+    [ "$_st" = "In progress" ] || continue
+    _elig="${_elig}${_b}	${_i}	${_mk}
+"
+  done
+  IFS=$OLD_IFS
+
+  # ORDER ascending by a stable MIN-SCAN whose ONLY comparator is `identity_gt` with its two arguments
+  # SWAPPED (ADR-047 §6.1). No second sort key, no `sort` call, no arithmetic.
+  #
+  # ⛔ THE SWAP IS NOT A NEGATION. `! identity_gt "$_i" "$_best_id"` yields `<=`, because negating `>`
+  # yields `≤` — so a tie REPLACES the incumbent and ADR-041 §1.5's FIRST-wins silently becomes
+  # LAST-wins. Measured against a transcript of `identity_gt`: the negation picks `sprint-6.md` where
+  # §1.5 requires `plan-sprint-6.md`. The failure is SILENT, because `also=` still names every claimant
+  # either way. ⛔ FOUR tests discriminate the two — `ADR-041 S6`, `ADR-041 S7`, `ADR-047 P14` and
+  # `ADR-047 P18`, measured by applying the trap to a scratch copy. ⚠️ AN EARLIER VERSION OF THIS
+  # COMMENT CLAIMED P14 WAS THE ONLY ONE; that is withdrawn (review R8). The direction fixture (P5)
+  # agrees under both. `identity_gt` itself stays BYTE-UNCHANGED: its length-then-bytes comparison
+  # exists for the leading-zero and 30-digit-overflow hazards its own comment names, and direction has
+  # nothing to do with either.
+  #
+  # ⭐ ONE `active` LINE PER SPRINT, NOT PER FILE (§2.3a) — hence the inner "drop every record sharing
+  # this identity" pass. A losing same-identity claimant appears only as a `candidate`, and in the
+  # `ambiguous-active-sprint` record's `also=`.
+  #
+  # ⚠️ AN EARLIER VERSION OF THIS COMMENT CLAIMED the glob loop "merely carries" a filename containing
+  # a newline, where a `sort` would mangle it. THAT WAS FALSE and is withdrawn (review R2). `_recs` is
+  # NEWLINE-delimited, so an embedded newline splits one candidate into two records: measured,
+  # `sprint-9<LF>x.md` yields `active file="x.md"` — A FILE THAT DOES NOT EXIST — plus a phantom
+  # `candidate file="sprint-9"` and a bogus `also="sprint-9 x.md"`. A TAB is the same class (`_recs` is
+  # TAB-separated): `a<TAB>b.md` silently drops a valid plan out of eligibility. Both are accepted
+  # limits, consistent with every other line-based parser in this file — but they are limits, not
+  # safety, and the record here says so rather than claiming the opposite.
+  _ordered=""; _lowest_b=""; _lowest_id=""
+  _pending="$_elig"
+  while [ -n "$_pending" ]; do
+    _best_b=""; _best_id=""; _best_mk="-"
+    OLD_IFS=$IFS; IFS='
+'
+    for _r in $_pending; do
+      _b=${_r%%	*}; _rest=${_r#*	}; _i=${_rest%%	*}; _mk=${_rest#*	}
+      if [ -z "$_best_id" ] || identity_gt "$_best_id" "$_i"; then
+        _best_id="$_i"; _best_b="$_b"; _best_mk="$_mk"
+      fi
+    done
+    IFS=$OLD_IFS
+    [ -n "$_lowest_b" ] || { _lowest_b="$_best_b"; _lowest_id="$_best_id"; }
+    _ordered="${_ordered}${_best_b}	${_best_id}	${_best_mk}
+"
+    # Drop EVERY record sharing the winner's identity — one `active` line per SPRINT, not per file.
+    # The winner is always among them, so the set strictly shrinks and this terminates.
+    _rem=""
+    OLD_IFS=$IFS; IFS='
+'
+    for _r in $_pending; do
+      _rest=${_r#*	}; _i=${_rest%%	*}
+      [ "$_i" = "$_best_id" ] && continue
+      _rem="${_rem}${_r}
+"
+    done
+    IFS=$OLD_IFS
+    _pending="$_rem"
+  done
+
+  # --- the single `board` line (§2.3a, §6, OQ-1): lowest-ordered, overridden by `⭐ ACTIVE BOARD`.
+  #
+  # ⚠️ CLAIMANTS ARE DRAWN FROM THE PRINTED `active` SET, not from every marker-bearing file — a named
+  # decision, because the ADR does not reach it. A marker on a file that LOST a same-identity tie is
+  # ignored: naming it as the board would contradict "the board is one of the active sprints", and that
+  # collision is already reported loudly as `ambiguous-active-sprint`.
+  _board_b="$_lowest_b"; _board_id="$_lowest_id"; _board_reason="lowest-ordered"
+  _n_claim=0; _mk_b=""; _mk_id=""
+  OLD_IFS=$IFS; IFS='
+'
+  for _r in $_ordered; do
+    _b=${_r%%	*}; _rest=${_r#*	}; _i=${_rest%%	*}; _mk=${_rest#*	}
+    [ "$_mk" = "marker" ] || continue
+    _n_claim=$((_n_claim + 1))
+    _mk_b="$_b"; _mk_id="$_i"
+  done
+  IFS=$OLD_IFS
+  if [ "$_n_claim" -eq 1 ]; then
+    _board_b="$_mk_b"; _board_id="$_mk_id"; _board_reason="active-marker"
+  fi
+
+  printf '%s\n' "$VERSION_MARKER"
+  printf '%s\n' '⟦SELECT⟧'
+  if [ -n "$_ordered" ]; then
+    # `status` is the literal `In progress` — PRINTED, NEVER IMPLIED (§2.3a). Every member of this set
+    # is `In progress` by construction, which is exactly why the field must still be on the wire: the
+    # consumer must not have to know that.
+    OLD_IFS=$IFS; IFS='
+'
+    for _r in $_ordered; do
+      _b=${_r%%	*}; _rest=${_r#*	}; _i=${_rest%%	*}
+      printf 'active file="%s" identity="%s" status="In progress"\n' \
+        "$(fact_value "$_b")" "$(fact_value "$_i")"
+    done
+    IFS=$OLD_IFS
+    # ⛔ EXACTLY ONE `board` line, and ONLY when at least one sprint is active. It is the single-board
+    # answer the ship-loop needs; `reason` is `board`-only and no other line carries it.
+    printf 'board file="%s" identity="%s" status="In progress" reason="%s"\n' \
+      "$(fact_value "$_board_b")" "$(fact_value "$_board_id")" "$_board_reason"
+  else
+    # §1.6 — say so, list the candidates, and STOP. Never fall back to a `Backlog`-identity board.
+    # ⛔ `active none` is a SENTINEL, not a record: NO fields at all, and no `board` line follows it.
+    printf 'active none\n'
+  fi
+  OLD_IFS=$IFS; IFS='
+'
+  for _r in $_recs; do
+    _b=${_r%%	*}; _rest=${_r#*	}
+    _i=${_rest%%	*}; _rest=${_rest#*	}
+    _st=${_rest%%	*}
+    # ⚠️ `unresolved` here is the IDENTITY reading; `status="unresolved"` is the STATUS reading. ADR-047
+    # §1.2 — the two are independent and are told apart BY POSITION, never by the word. Never infer one
+    # from the other.
+    [ -n "$_i" ] || _i="unresolved"
+    printf 'candidate file="%s" identity="%s" status="%s"\n' \
+      "$(fact_value "$_b")" "$(fact_value "$_i")" "$(fact_value "$_st")"
+  done
+  IFS=$OLD_IFS
+
+  # --- ⟦FACTS⟧ (§7). ⛔ This mode emits FOUR new kinds plus the inherited `ambiguous-active-sprint`,
+  # and gains NO ROLL-UP (§7.2): a roll-up is a narrative summary of a board's ROWS, and this mode has
+  # no rows. Its reach obligation is `⟦FACTS⟧`-only, and that block IS its complete output.
+  #
+  # ⛔ THE THREE ARCHIVAL DRIFTS ARE NOT ITS TO EMIT (§7.1 carve-out 2) — `sprint-terminal-not-archived`,
+  # `sprint-archived-not-terminal` and `sprint-status-location-mismatch` all need to read inside
+  # `done/`/`cancelled/`, which a depth-1 glob structurally cannot. They live in the render path.
+  printf '%s\n' '⟦FACTS⟧'
+  OLD_IFS=$IFS; IFS='
+'
+  for _r in $_recs; do
+    _b=${_r%%	*}; _rest=${_r#*	}
+    _i=${_rest%%	*}; _rest=${_rest#*	}
+    _st=${_rest%%	*}; _rest=${_rest#*	}
+    _kind=${_rest%%	*}; _mk=${_rest#*	}
+    case "$_kind" in
+      missing)
+        # ⛔ CARVE-OUT 1, AND IT IS READ IN IDENTITY-SPACE (§1.2, §7.1). `is_eligible` is exactly the
+        # test: the three possible identities are an eligible `Sprint <N><suffix>` token, `Backlog`, or
+        # empty/unresolved — so carving out the latter two leaves precisely the eligible ones.
+        # ⚠️ READ IN STATUS-SPACE THIS WOULD SWALLOW THE DRIFT ENTIRELY, since every banner-less board
+        # has `unresolved` STATUS. `ai-agents/sprints/backlog.md` is why the carve-out exists: plain
+        # prose at line 3, forever, so without it this fires falsely on EVERY RUN on a well-formed board.
+        is_eligible "$_i" && printf 'drift sprint-status-missing plan="%s"\n' "$(fact_value "$_b")" ;;
+      malformed)
+        # ⛔ NOT CARVED OUT FOR ANYONE (§2, §7.1; X1/R24). A carve-out's whole justification is a
+        # permanent false drift on a WELL-FORMED board — and a malformed banner is not one: someone
+        # typed a status onto the line, the record fires once, and fixing the line silences it.
+        # ⭐ `line3=` carries the offending text so the reader does not have to go and find it.
+        printf 'drift sprint-status-malformed plan="%s" line3="%s"\n' \
+          "$(fact_value "$_b")" "$(fact_value "$(sed -n '3p' "$1/$_b" 2>/dev/null)")" ;;
+    esac
+    # The marker is only ever set on a WELL-FORMED banner, so `$_st` here is a resolved status.
+    if [ "$_mk" = "marker" ] && [ "$_st" != "In progress" ]; then
+      printf 'drift active-marker-on-non-active plan="%s" status="%s"\n' \
+        "$(fact_value "$_b")" "$(fact_value "$_st")"
+    fi
+  done
+  IFS=$OLD_IFS
+  # ⚠️ `ambiguous-active-marker` is §7.2's ONE fact with no render-path route at all: it requires
+  # reading LINE 3 of every sibling board, and the render path reads sibling FIRST LINES only. Widening
+  # that contract a second time is a bigger decision than this task. ⛔ Its reach is `⟦FACTS⟧`-only, and
+  # the cost is stated rather than hidden: it never lands in a per-board roll-up.
+  # ⭐ `chosen=` is the board actually named above (the lowest-ordered FALLBACK — the marker does not
+  # win when it is ambiguous), and `also=` names every claimant other than that one.
+  if [ "$_n_claim" -gt 1 ]; then
+    _mk_also=""
+    OLD_IFS=$IFS; IFS='
+'
+    for _r in $_ordered; do
+      _b=${_r%%	*}; _rest=${_r#*	}; _mk=${_rest#*	}
+      [ "$_mk" = "marker" ] || continue
+      [ "$_b" = "$_board_b" ] && continue
+      if [ -z "$_mk_also" ]; then _mk_also="$_b"; else _mk_also="$_mk_also, $_b"; fi
+    done
+    IFS=$OLD_IFS
+    printf 'drift ambiguous-active-marker chosen="%s" also="%s"\n' \
+      "$(fact_value "$_board_b")" "$(fact_value "$_mk_also")"
+  fi
+  # ADR-041 §1.5, UNCHANGED — one record per chosen board that shares its identity with a sibling.
+  # ⚠️ `also=` names EVERY other claimant, not just that there was one. A record that says only
+  # "ambiguous" tells the reader to go and find the other file themselves — §1.5 requires the choice
+  # AND every other claimant to be stated. Status decides WHICH board is chosen; it does NOT decide
+  # whether the collision is reported (§6.4), which is why this reads the identity, not the status.
+  OLD_IFS=$IFS; IFS='
+'
+  for _r in $_ordered; do
+    _b=${_r%%	*}; _rest=${_r#*	}; _i=${_rest%%	*}
+    _also=$(sibling_claimants "$1/$_b" "$_i")
+    [ -n "$_also" ] && printf 'drift ambiguous-active-sprint identity="%s" chosen="%s" also="%s"\n' \
+      "$(fact_value "$_i")" "$(fact_value "$_b")" "$(fact_value "$_also")"
+  done
+  IFS=$OLD_IFS
+  printf '%s\n' '⟦END⟧'
+  [ -n "$_ordered" ] && exit 0
+  exit 3
+}
+
+# ⚠️ ONE argument = the historic board render. Its SHAPE is byte-identical; only the version marker on
+# it moved to `v2` (ADR-047 §9.2 item 1 — one definition, two emit sites, so a `select-active`-only bump
+# is not implementable). Every existing call site passes exactly one path — `fkit-status/SKILL.md`
+# under *"### 4. The dashboard — run the script, don't hand-build it"*, and
+# `fkit-sprint-ship-loop/SKILL.md` under *"### 1. Select & order the sprint's tasks"*, which reads
+# *"Get the board via the deterministic reader"*. ⚠️ Cited by HEADING + QUOTED FRAGMENT, not `path:NNN`:
+# this file's prior `SKILL.md:182` coordinate was already stale before `0338` touched it, and `0338`'s
+# own SKILL.md edit moved every line again. Headings are the durable anchor.
+# ⛔ Neither call site parses the `⟦SELECT⟧` stream or checks the marker, so the bump breaks neither —
+# verified by grep over `claude/`, `bin/` and `test/` on 2026-09-11.
+# A subcommand is recognised ONLY in the two-argument form, so a plan file literally named `identity`
+# (or `status`) still renders as a board.
+if [ $# -eq 2 ]; then
+  case "$1" in
+    identity)      mode_identity "$2" ;;
+    status)        mode_status "$2" ;;
+    select-active) mode_select_active "$2" ;;
+    *)             die "$USAGE" ;;
+  esac
+fi
+
+# `successor` is the only THREE-argument form — it takes a directory AND the closing identity, because
+# "which board is next" is not a property of any one file. Same rule as above: recognised only in its
+# own arity, so nothing here can shadow a one-argument board render.
+if [ $# -eq 3 ]; then
+  case "$1" in
+    successor) mode_successor "$2" "$3" ;;
+    *)         die "$USAGE" ;;
+  esac
+fi
+
+[ $# -eq 1 ] || die "$USAGE"
+PLAN="$1"
+[ -f "$PLAN" ] || die "no such sprint plan: $PLAN"
+
+PLAN_DIR=$(cd "$(dirname "$PLAN")" 2>/dev/null && pwd) || die "cannot resolve plan directory"
+PLAN_FILE="$PLAN_DIR/$(basename "$PLAN")"
+
+# --- locate ai-agents/ (the dir holding tasks/) by walking up from the plan -----------------------
+AGENTS=""
+d="$PLAN_DIR"
+while [ "$d" != "/" ]; do
+  if [ -d "$d/tasks/backlog" ] || [ -d "$d/tasks/done" ] || [ -d "$d/tasks/cancelled" ]; then
+    AGENTS="$d"; break
+  fi
+  d=$(dirname "$d")
+done
+[ -n "$AGENTS" ] || die "cannot find a tasks/ tree above $PLAN_DIR"
+
+# Relative prefix from the plan's dir back up to AGENTS, so rendered links match the plan's own style
+# (../tasks/... from sprints/, ../../tasks/... from sprints/done/).
+REL_SUB=${PLAN_DIR#"$AGENTS"}
+REL_SUB=${REL_SUB#/}
+REL_PREFIX=""
+if [ -n "$REL_SUB" ]; then
+  OLD_IFS=$IFS; IFS=/
+  for _p in $REL_SUB; do REL_PREFIX="../$REL_PREFIX"; done
+  IFS=$OLD_IFS
+fi
+
+# --- the plan's own sprint name (drift rule 1 compares the brief's ## Sprint against it) -----------
+# ⚠️ Rule 1 depends on this. If it resolves empty, the rule-1 skip silently STOPS APPLYING and every
+# row falls through to the rule-3 cross-check — failing toward MORE drift, which is exactly the
+# "phantom decisions" §5.2 rule 1 exists to prevent. So: try the H1, then fall back to the filename,
+# and if it is still unresolved REPORT it rather than quietly disabling the rule.
+#
+# ⚠️ And the converse failure is WORSE: a WRONG identity makes rule 1 live and wrong — a SILENT
+# failure — where no identity at all is reported as `unresolved-plan-sprint`, a LOUD one. That is
+# ADR-040's hard constraint, and it is why both rungs below REFUSE rather than guess.
+#
+# ⚠️ THE RUNGS THEMSELVES NOW SIT ABOVE `die()`, not here — they were relocated so the ADR-041 modes
+# can resolve an identity WITHOUT a `tasks/` tree above the plan (the `AGENTS` walk-up above would
+# otherwise `die` first). See `plan_sprint_from_h1` / `plan_sprint_from_stem` / `resolve_identity`.
+
+PLAN_SPRINT=$(resolve_identity "$PLAN_FILE")
+
+# --- "is this the ## Status heading?" — ONE definition, used everywhere ----------------------------
+# ⚠️ There were THREE grammars for this: `grep -c '^## Status'` (prefix), the awk rule (exact), and the
+# existence check (prefix). A plan with a `## Status report` section therefore counted as a second
+# Status table, emitted a false `multiple-status-tables`, and could die with a misleading message —
+# while the parser itself correctly ignored it. Two grammars for one question is the defect class this
+# script's own comments forbid; a third is not better. `[ \t]*$` anchors all three to the same answer.
+# ⚠️ REAL TAB, NOT `\t`. The escape is not portable across grep dialects: BSD grep (what a consumer
+# actually has) reads `[ \t]` as the literal set {backslash, space, t} and does NOT match a tab, while
+# awk expands `\t` and does. Same regex text, two answers — so `## Status<TAB>` made the guard `die`
+# while the parser accepted the section. ANSI-C quoting expands the tab HERE, in bash, so both engines
+# receive a literal tab and cannot disagree.
+#
+# ⚠️ This was invisible on the dev machine: `grep` on PATH is ugrep, which matches GNU behaviour and
+# agrees with awk. The divergence only appears against /usr/bin/grep. Two reviewers were fooled by the
+# same shadowed binary. Do not "simplify" this back to a '\t' literal.
+STATUS_HEADING_RE=$'^## Status[ \t]*$'
+
+# `grep -c` prints 0 AND exits 1 on no match, so a `|| echo 0` here would emit BOTH and yield "0\n0",
+# which breaks the -gt integer test below. Let it print its own 0.
+STATUS_SECTIONS=$(grep -cE "$STATUS_HEADING_RE" "$PLAN_FILE" 2>/dev/null)
+[ -n "$STATUS_SECTIONS" ] || STATUS_SECTIONS=0
+
+# --- pull the first ## Status section's table rows -------------------------------------------------
+# Emits: status<US>priority<US>task<US>brief-cell, one record per table row.
+# Splits on "|" and takes status=$2, priority=$3, brief=$(NF-1), task=join($4..$(NF-2)) — so a pipe
+# inside the task wording does not shift the brief column.
+#
+# ⚠️ The field separator is US (\x1f, `\037`), NOT tab. Tab is IFS *whitespace*, which bash's `read`
+# COLLAPSES — so an empty Task cell would silently shift the brief link left into the Task column,
+# empty the Filename, and emit a phantom `missing-brief`. US is not IFS whitespace, so empty fields
+# hold their position.
+#
+# ⚠️ A row that does not parse is NOT skipped. Silently dropping it would redefine `M` as "rows that
+# survived parsing" and let a task vanish from the board with no row, no fact and no warning — the
+# very failure this script exists to prevent, through a different door. It emits a MALFORMED marker
+# and the caller hard-fails (owner ruling, 2026-07-16: hard-fail -> SKILL.md's flagged fallback).
+# ⚠️ ROW ADMISSION IS A CLASS, NOT A LIST OF CASES. Every candidate data row in the section MUST leave
+# this function as exactly one record. `NF < 5` was once the only door that dropped a row; an empty
+# Status cell and a pipe-less row were two more. The question to ask of any edit here is not "is this
+# row valid?" but **"can any line in the table fail to produce a record?"** — if yes, `M` silently
+# becomes "rows that survived parsing" and a task vanishes from the board.
+#
+# ⚠️ The record TYPE is out-of-band (leading `D`/`M` field), not an in-band `MALFORMED` string: a row
+# whose Status cell is literally the word MALFORMED must be data, not a control record.
+extract_rows() {
+  awk -F'|' -v US=$'\037' -v HRE="$STATUS_HEADING_RE" '
+    # GFM escapes a literal pipe in a cell as `\|`. It is CONTENT, not a delimiter — splitting on it
+    # shifted every later field and rendered a six-column board with the priority set to cell debris.
+    # Park it, split, then restore it still-escaped so the emitted table stays valid markdown.
+    # (Index-based, not gsub: gsub replacement escaping for a backslash is ambiguous across awks.)
+    function unesc(s,   out, i) {
+      out = ""
+      while ((i = index(s, "\002")) > 0) { out = out substr(s, 1, i-1) "\\|"; s = substr(s, i+1) }
+      return out s
+    }
+    $0 ~ HRE { if (seen) exit; seen=1; inSec=1; inTbl=0; next }   # HRE: the ONE heading grammar
+    inSec && /^## / { exit }
+    !inSec { next }
+    # ⚠️ THE TWIN CLASS QUESTION, ANSWERED PROPERLY THIS TIME. "Can any line fail to produce a
+    # record?" has a mirror: "can any line produce a record that is NOT a row?" Closing it only for
+    # prose AFTER the table left two doors open — pipe-bearing prose BEFORE the table, and a block
+    # with no separator at all — because `inTbl` was set by the separator but nothing was excluded
+    # while waiting for it.
+    #
+    # GFM: the delimiter row is MANDATORY. A pipe block without one is not a table, so it has no rows.
+    # The admission window is therefore exactly: opens AT the separator, closes at the first blank or
+    # pipe-less line. Everything before the separator (heading, caption, prose, the header row itself)
+    # is outside it. A separator-less `## Status` block yields zero rows and hard-fails to the
+    # flagged fallback in SKILL.md — consistent with the R2 owner ruling, and it is not "destroying a
+    # usable board": markdown renders that block as prose too, so there was no board to destroy.
+    # (NB: no apostrophes in this comment — it lives inside a single-quoted awk program.)
+    { line=$0; gsub(/\037/, " ", line); gsub(/\\\|/, "\002", line) }          # US cannot shift fields; \| is content
+    !inTbl && line ~ /^[ \t]*\|?[-: \t|]+\|[-: \t|]*$/ { inTbl=1; next }      # |---|---| separator: window OPENS
+    !inTbl { next }                                                           # header/caption/prose: not rows
+    /^[ \t]*$/ { inSec=0; next }                                              # window CLOSES
+    $0 !~ /\|/ { inSec=0; next }                                              # window CLOSES
+    {
+      n = split(line, cell, "|")
+      # GFM allows the leading/trailing pipes to be omitted; normalise both away.
+      lo = (line ~ /^[ \t]*\|/) ? 2 : 1
+      hi = (line ~ /\|[ \t]*$/) ? n - 1 : n
+      ncell = hi - lo + 1
+      if (ncell < 4) { printf "M%s%s\n", US, line; next }
+      st = cell[lo]; pr = cell[lo+1]; br = cell[hi]
+      task = ""
+      for (i = lo+2; i <= hi-1; i++) task = (task=="" ? cell[i] : task "|" cell[i])
+      gsub(/^[ \t]+|[ \t]+$/, "", st)
+      gsub(/^[ \t]+|[ \t]+$/, "", pr)
+      gsub(/^[ \t]+|[ \t]+$/, "", task)
+      gsub(/^[ \t]+|[ \t]+$/, "", br)
+      printf "D%s%s%s%s%s%s%s%s\n", US, unesc(st), US, unesc(pr), US, unesc(task), US, unesc(br)
+    }
+  ' "$PLAN_FILE"
+}
+
+grep -qE "$STATUS_HEADING_RE" "$PLAN_FILE" || die "no '## Status' section in $PLAN"
+
+ROWS=$(extract_rows)
+[ -n "$ROWS" ] || die "no parseable rows in the '## Status' table of $PLAN"
+
+# Hard-fail on an unparseable row rather than rendering a board that is quietly missing a task.
+# (Owner ruling 2026-07-16: hard-fail -> SKILL.md's flagged hand-built fallback.)
+if printf '%s\n' "$ROWS" | grep -q "^M$(printf '\037')"; then
+  bad=$(printf '%s\n' "$ROWS" | grep "^M$(printf '\037')" | head -1 | cut -d"$(printf '\037')" -f2-)
+  die "unparseable row in the '## Status' table of $PLAN (need 4 cells): $bad"
+fi
+
+# --- helpers ---------------------------------------------------------------------------------------
+
+# Canonical key for a status cell, by marker PREFIX. `➡️` is U+27A1 + U+FE0F (VS16); matching the base
+# codepoint alone accepts both the VS16 form (what every live plan writes) and a bare hand-edited `➡`.
+#
+# ⚠️ ABSENT and UNRECOGNIZED are different answers and must not share a sentinel. An empty cell means
+# "the source says nothing"; `WIP` means "the source says something outside the vocabulary". Collapsing
+# both to `unknown` and then comparing for equality produced a false `waiting on owner` on a brief that
+# merely lacks a `## Status` heading — SKILL.md:88 defines disagreement as "the sources say different
+# things", and an absent source says nothing.
+marker_key() {
+  case "$1" in
+    '')     printf '' ;;
+    '✅'*)  printf 'done' ;;
+    '🔄'*)  printf 'inprogress' ;;
+    '🚧'*)  printf 'blocked' ;;
+    '🔲'*)  printf 'backlog' ;;
+    '⛔'*)  printf 'cancelled' ;;
+    '➡'*)   printf 'moved' ;;
+    *)      printf 'unknown' ;;
+  esac
+}
+
+# Directory a brief with this marker is expected to live in. `moved` may live anywhere.
+expected_dir() {
+  case "$1" in
+    done)                      printf 'done' ;;
+    cancelled)                 printf 'cancelled' ;;
+    backlog|inprogress|blocked) printf 'backlog' ;;
+    *)                         printf '' ;;
+  esac
+}
+
+# First non-empty value under a `## <field>` heading, marker and all. The value is free text that MAY
+# WRAP ACROSS LINES (SKILL.md:56-57) — we take the first line, and callers match a marker prefix
+# rather than the whole line.
+field_value() {
+  awk -v want="## $2" '
+    $0 == want { inF=1; next }
+    inF && /^## / { exit }
+    inF && /^[ \t]*$/ { next }
+    inF { gsub(/^[ \t]+|[ \t]+$/, ""); print; exit }
+  ' "$1"
+}
+
+# Raw `Depends on:` text, single-line, for the sentinel. NEVER interpreted (spec §4.2).
+#
+# ⚠️ ANCHORED TO THE BOLD DECLARATION `**Depends on:` — not a bare `Depends on:` anywhere in the file.
+# A brief may *discuss* the field in prose or a code span (`` `Depends on:` ``), and an unanchored
+# `grep -m1` matched that prose instead of the declaration. Live proof at the time of writing: this
+# script's own task brief made the sentinel render `⟨derive: ` line is⟩` — the LLM is forbidden to
+# re-open the brief (SKILL.md), so it would derive the dependency from garbage. Verified across the
+# task tree: 32 of 32 briefs declare with the bold form, and every non-bold hit is prose.
+# ⚠️ Do NOT "simplify" this to `^\*\*Depends on:` — real declarations appear mid-line, e.g.
+# `date+reason. **Depends on: nothing. Relates to: task 34.**`. Bold is the discriminator, not column 1.
+#
+# ⚠️ NO LENGTH CAP. An earlier 72-byte trim silently deleted dependencies — `…, and also task 99.`
+# lost task 99 and the board read `after 11`, while SKILL.md orders the LLM to name EVERY task and
+# forbids re-opening the brief. §4.2 says the sentinel carries the RAW text; a wide cell is a cosmetic
+# cost, a dropped dependency is a fabrication.
+# ── THE DEPENDENCY GRAMMAR ────────────────────────────────────────────────────────────────────────
+# This function has been wrong three times. It is now written as a CLOSED GRAMMAR with ONE code path,
+# because every previous bug came from the same two habits: a branch that returned early (skipping the
+# join and the sanitiser), and a completion test that its own label satisfied.
+#
+#   FORM              EXAMPLE                                   TERMINATOR
+#   ────────────────  ────────────────────────────────────────  ──────────────────────────────────
+#   S  section        `## Depends on` / `- task 12` / `- task 99`  next `##` or blank line
+#   BL bold-label     `**Depends on:** [link] **(hard).**`      end of block
+#   BI bold-inline    `**Depends on: task 18** trailing prose`  the `**` CLOSING the label's bold
+#   P  plain          `Depends on: task 12.`  (fkit-task-brief:70) end of block
+#
+# ⚠️ RULES, each paid for by a defect:
+#  1. ONE exit. Locate → join → extract → sanitise → emit. No branch may `print` and `exit` on its own
+#     (that dropped a fan-in's second item and skipped `|` sanitising, rendering a 6-column board).
+#  2. NO completion test a LABEL can satisfy. `buf ~ /\*\*Depends on:.*\*\*/` matched `**Depends on:**`
+#     itself, so the wrap-join never fired and live `0020` lost its `(hard)` qualifier.
+#  3. BI is the ONLY form with an unambiguous in-band terminator. For BL/P/S, OVER-INCLUDE trailing
+#     prose rather than guess where the dependency ends: verbose is a cosmetic cost, a dropped
+#     dependency is a fabrication, and §4.2 asks for the RAW text anyway.
+#  4. The colon is OPTIONAL when bold (`**Depends on nothing.**` — 4 live briefs), REQUIRED when
+#     plain: unbolded prose says "this depends on the owner" and must not be mistaken for a
+#     declaration.
+#  5. A CODE SPAN is prose ABOUT the field, never a declaration (the original R1).
+# Emits `<form>␟<content>` when a declaration EXISTS, and nothing at all when none does. That
+# distinction is the whole contract:
+#   no output        → the brief records no dependency → `none recorded` → the LLM may say `ready`
+#   output, content  → the dependency, raw
+#   output, EMPTY    → a declaration we could not read → the LOUD path, never `ready`
+#
+# ⚠️ THERE IS ONE GRAMMAR. There used to be two: this function, plus a `depends_mentioned` guard with
+# its own narrower pattern. The loud path was then gated on *this* returning empty while *that* decided
+# whether to fire — so a form the guard didn't know silently became `none recorded` → `ready`
+# (3 of the 4 live `Depends on nothing` briefs are PLAIN COLONLESS, which the guard missed), and a
+# non-empty-but-wrong parse never consulted the guard at all. The caller now branches on this
+# function's own answer. Do not reintroduce a second pattern anywhere.
+#
+# ⚠️ OPT-IN `tail` MODE (`0492`, owner-ruled 2026-10-08 via AskUserQuestion, selected option verbatim
+# "Fix it now (Recommended)"). `depends_raw <brief> tail` emits `<form>␟<content>␟<tail>`. <tail> is
+# the text AFTER the closing bold of a BI declaration (empty for every other form). It exists ONLY so
+# the soft/hard check (dep_hard_ids) can see the convention's own canonical soft form,
+# `**Depends on: task 0072** — soft, not hard.`, whose mark the BI cut otherwise drops. ⛔ It never
+# feeds the `⟨derive: …⟩` cell or the `derive` record: the default call (no second argument) is
+# BYTE-IDENTICAL to what it was, and the locate rules above are shared by both modes — one grammar.
+depends_raw() {
+  awk -v tailmode="${2:-}" '
+    function emit(form, c, t) {
+      if (tailmode == "tail") print form "\037" c "\037" t
+      else                    print form "\037" c
+    }
+    function sanitise(s) {
+      gsub(/\*\*/, "", s); gsub(/\|/, " ", s); gsub(/\037/, " ", s); gsub(/\t/, " ", s)
+      while (s ~ /  /) gsub(/  /, " ", s)
+      sub(/^ +/, "", s); sub(/ +$/, "", s)
+      return s
+    }
+    function indent(s,   t) { t = s; sub(/[^ \t].*$/, "", t); gsub(/\t/, "    ", t); return length(t) }
+    function blank(s)    { return s ~ /^[ \t]*$/ }
+    function heading(s)  { return s ~ /^#/ }
+    function listItem(s) { return s ~ /^[ \t]*[-*+][ \t]/ }
+
+    # ⚠️ MASK CODE SPANS, DO NOT VETO THE LINE. Rule 5 says a code span is prose about the field, never
+    # a declaration — but it was implemented as `line does not contain a span mention`, which is a
+    # LINE-scoped veto, and rule 3 explicitly ORDERS over-including trailing prose. So a real
+    # declaration that happened to share a line with a span mention was discarded whole → no
+    # declaration found → `none recorded` → the LLM prints `ready`. That is a FABRICATED ABSENCE: the
+    # worst direction, and the one this function has now been wrong about twice.
+    #
+    # ⚠️ LENGTH IS PRESERVED (spans become \001 filler, not deleted) so an index into the masked text
+    # is a valid index into the RAW text. That is what lets us LOCATE on the masked copy while
+    # EXTRACTING from the raw one — necessary because a real dependency may legitimately BE a code
+    # span (`**Depends on:** \`design-…\``), which deleting spans would destroy.
+    function maskspans(s,   out, i, j, k) {
+      out = ""
+      while ((i = index(s, "`")) > 0) {
+        out = out substr(s, 1, i - 1)
+        s = substr(s, i)
+        j = index(substr(s, 2), "`")
+        if (j == 0) { for (k = 1; k <= length(s); k++) out = out "\001"; return out }
+        for (k = 1; k <= j + 1; k++) out = out "\001"
+        s = substr(s, j + 2)
+      }
+      return out s
+    }
+
+    # Join the declaration across wraps. ⚠️ A MORE-INDENTED list item is a SUB-BULLET of the
+    # declaration, not the end of it: `**Depends on:** hard prerequisites:` followed by `- task 12`
+    # / `- task 13` yielded `hard prerequisites:` — non-empty, so the loud path never fired, and both
+    # tasks vanished. Only a sibling-or-shallower item ends it.
+    function joinFrom(i, base,   j, out) {
+      out = L[i]
+      for (j = i + 1; j <= N; j++) {
+        if (blank(L[j]) || heading(L[j]) || F[j]) break
+        if (listItem(L[j]) && indent(L[j]) <= base) break
+        out = out " " L[j]
+      }
+      return out
+    }
+    function sectionFrom(i,   j, out, t) {
+      out = ""
+      for (j = i + 1; j <= N; j++) {
+        if (heading(L[j])) break
+        if (blank(L[j])) { if (out != "") break; continue }
+        if (F[j]) break
+        t = L[j]; sub(/^[ \t]*[-*+][ \t]*/, "", t)
+        out = (out == "" ? t : out "; " t)
+      }
+      return out
+    }
+    # F[n] marks a line that is inside (or is) a fenced code block. ⚠️ Fences were not excluded at all:
+    # a declaration written as an EXAMPLE inside ``` parsed as real, and a fence marker leaked into the
+    # sentinel (`derive 1 depends="task 99; ```"`). 4 of the 41 live briefs already carry both a fence
+    # and a declaration.
+    { L[NR] = $0
+      if ($0 ~ /^[ \t]*(```|~~~)/) { F[NR] = 1; fence = !fence } else { F[NR] = fence }
+      M[NR] = maskspans($0)
+    }
+    END {
+      N = NR
+      # ⚠️ CHOOSE BY FORM PRIORITY, NEVER BY LINE ORDER. These rules used to gate on `!form` inside
+      # awk s per-LINE loop, so the FIRST LINE won rather than the first FORM — and a prose sentence
+      # mentioning the field beat the real bold declaration further down the brief.
+      #
+      #   S  `## Depends on[.:]`            — trailing punctuation tolerated
+      #   B  `**Depends on[: ]…`            — bold; colon OPTIONAL (`**Depends on nothing.**`)
+      #   P  `- Depends on[: ]…`            — plain; anchored to line start or a list marker, so
+      #                                       ordinary prose ("whether it ships depends on the owner")
+      #                                       is not a declaration. Colon optional: 3 of the 4 live
+      #                                       `Depends on nothing` briefs omit it.
+      # ⚠️ LOCATE on M[] (spans masked, length preserved), EXTRACT from L[] (raw). Never locate on the
+      # raw text — a mention inside a span becomes a declaration. Never extract from the masked text —
+      # a dependency that IS a span gets destroyed. F[] excludes fenced blocks entirely.
+      for (i = 1; i <= N; i++)
+        if (!F[i] && M[i] ~ /^##[ \t]+Depends on[.:]?[ \t]*$/) { emit("S", sanitise(sectionFrom(i)), ""); exit }
+      for (i = 1; i <= N; i++)
+        if (!F[i] && M[i] ~ /\*\*Depends on[.: ]/) {
+          b = joinFrom(i, indent(L[i]))
+          s = substr(b, index(maskspans(b), "**Depends on") + 12)
+          sub(/^[.:]?[ \t]*/, "", s)
+          if (s ~ /^\*\*/) { sub(/^\*\*[ \t]*/, "", s); emit("BL", sanitise(s), "") }
+          else {
+            # tail: the same cut point, kept instead of dropped (the opt-in mode above).
+            t = ""; j = index(s, "**"); if (j > 0) t = substr(s, j + 2)
+            sub(/\*\*.*$/, "", s)
+            emit("BI", sanitise(s), sanitise(t))
+          }
+          exit
+        }
+      for (i = 1; i <= N; i++)
+        if (!F[i] && M[i] ~ /^[ \t]*([-*+][ \t]*)?Depends on[.: ]/) {
+          b = joinFrom(i, indent(L[i]))
+          s = substr(b, index(maskspans(b), "Depends on") + 10)
+          sub(/^[.:]?[ \t]*/, "", s)
+          emit("P", sanitise(s), "")
+          exit
+        }
+      # ── U: THE LOUD GUARD (task 0107) ────────────────────────────────────────────────────────────
+      # NB: no apostrophes in this comment — it lives inside a single-quoted awk program (see line 181).
+      # Reached ONLY when the four canonical arms above all failed to locate a declaration — each of
+      # them exits on a catch. A line whose `Depends on` label is preceded SOLELY by non-letter
+      # markup/decoration is declaration-SHAPED but non-canonical: e.g. `- **⚠️ Depends on tasks 82…**`
+      # (the live task-84 misreport, named for specimen brief `0092` — the `⚠️ ` between `**` and the label defeats the BL/BI anchor).
+      # ⚠️ HAZARD — AND IT COVERS THE GLOSS ON THE LINE ABOVE, not only the NB two lines up:
+      # every byte of this comment block is STRING DATA inside the single-quoted awk program,
+      # never a shell comment. A single apostrophe anywhere in here closes the quote and breaks
+      # the script. ⛔ Explanatory prose added beside the code carries exactly the same hazard as
+      # the code it explains — check any edit to these lines for apostrophes before saving.
+      # Emitting EMPTY content routes the caller to its EXISTING loud path (`⟨UNPARSEABLE — see brief⟩`
+      # + `drift depends-unparseable`), NOT the silent `none recorded` that renders a fabricated `ready`
+      # — the worst direction, per this function header.
+      #
+      # ⚠️ THIS IS THE ONE-GRAMMAR LAST LOCATE ARM, NOT A SECOND PATTERN. The invariant this file
+      # forbids (see the header: THERE IS ONE GRAMMAR … do not reintroduce a second pattern anywhere)
+      # is a SEPARATE guard function whose pattern DISAGREES with extraction and gates the loud path
+      # independently. This is inside depends_raw, part of its single locate sequence; the caller still
+      # branches only on the answer THIS function returns.
+      #
+      # ⚠️ THE ANCHOR IS LETTER-BLOCKED ON PURPOSE. `^[^A-Za-z]*Depends on[.: ]` matches only when
+      # EVERYTHING before the label is non-letter (markup/emoji/space) AND the label is closed by a
+      # declaration punctuation (`.`, `:`, or space). Any ASCII letter before it — ordinary prose that
+      # merely MENTIONS the field, e.g. a quoted `Depends on tasks 82, 83` or
+      # `Option A — teach dashboard to read a Depends on: line` — blocks the match, and the `[.: ]`
+      # terminator drops the substring case (`Depends online`). Matching on M[] (spans masked to \001,
+      # fences excluded via F[]) means a code-span or fenced mention never trips it either.
+      # ⚠️ IT DOES NOT FIRE ON ORDINARY ASCII PROSE — but it is NOT prose-proof in general: a
+      # declaration-SHAPED line whose prefix is non-Latin-script (Cyrillic `Примечание: Depends on:`), a
+      # blockquote (`> Depends on:`) or a table cell (`| Depends on:`) still trips it. That is the SAFE
+      # direction (a LOUD flag the owner checks, never a fabricated `ready`) and is an accepted residual
+      # (task 0107 review R1) — not a defect to "fix" by narrowing further.
+      for (i = 1; i <= N; i++)
+        if (!F[i] && M[i] ~ /^[^A-Za-z]*Depends on[.: ]/) { emit("U", "", ""); exit }
+    }
+  ' "$1" 2>/dev/null | head -1
+}
+
+# Trim a cell to its first clause so the table never wraps (SKILL.md:163-165). Markers carry mandatory
+# reasons, which belong in the cell — but a recorded reason that is a paragraph does not.
+# The marker and its mandatory reason belong in the cell verbatim — but a reason recorded as a
+# PARAGRAPH is trimmed to its FIRST CLAUSE rather than wrapping the table (SKILL.md:163-165).
+#
+# ⚠️ "First clause" means a clause boundary — `. ` — NOT a byte count. An earlier 120-byte word-cut
+# let a 3-clause 100-char cell through untrimmed and sliced a 130-char single clause mid-sentence:
+# the opposite of the contract on both sides.
+# ⚠️ The boundary is period-SPACE, never a bare period: a live moved cell carries a markdown link
+# (`➡️ Moved to [Sprint 2](../sprint-2.md) — priority 12`), and cutting at the first `.` would sever
+# it inside `sprint-2.md`. Splitting on `. ` leaves links intact.
+one_line_cell() {
+  printf '%s' "$1" | tr '\n' ' ' | sed -e 's/[[:space:]][[:space:]]*/ /g' -e 's/^ //' -e 's/ $//' \
+    | awk '{
+        i = index($0, ". ")
+        if (i > 0) { print substr($0, 1, i - 1) "…"; exit }
+        print
+      }'
+}
+
+# Trim a TASK cell to its title (`0409`). `status-report-format.md` says the Task column is a
+# *"Short title — the same wording the sprint plan uses"* and *"Keep it to one row per task, no wrapped
+# prose in cells"*. Board writers have been using the cell as a document store instead: measured on the
+# live Backlog board 2026-09-20, 113 of 116 Task cells carried a multi-sentence `*( … )*` annotation,
+# 395,533 of the render's 458,446 bytes sat inside Task cells, and the largest ONE cell was 15,375 bytes.
+# The filing prose is not deleted — it stays in the board file and in the brief, which the adjacent
+# Filename column links.
+#
+# ⚠️ A CUT POINT, NOT A BYTE COUNT — the same principle as one_line_cell's clause trim above, and for
+# the same reason. A long single-clause title survives WHOLE; a short annotation is still cut. Do not
+# "improve" this into a length cap: that was tried on the Status cell and sliced sentences in half.
+#
+# ⚠️ NO OPENER → BYTE-IDENTICAL PASSTHROUGH, and that is load-bearing, not an optimisation. The cell is
+# the board's own wording; a trim that tidied an un-annotated title would be rewriting the plan.
+#
+# ⛔ THE EMPTY GUARD IS NOT COSMETIC. A cell that is NOTHING BUT an annotation would cut to nothing, and
+# an empty Task column loses the row its only identifying text — the failure "R7: an empty Task cell
+# holds its position" exists to prevent. No live cell is in this class today; the guard is for the board
+# writer who eventually writes one.
+#
+# ⚠️ `\|` IS CONTENT. The cell arrives already re-escaped by the awk `unesc` above, and nothing here
+# unescapes it — a bare `|` in the cell would shift every later field of the emitted row.
+#
+# ⛔ AND A BARE `|` IS NOT HYPOTHETICAL — do not read the cut as a fix for it. Two live Backlog rows
+# carried a STRAY UNESCAPED pipe inside their annotation on 2026-09-20 and were rendering a 7-cell row
+# into a 6-column table (GFM silently drops the surplus cell). Cutting at the opener means those stray
+# pipes no longer reach the row, so the SYMPTOM stops — but the board file is untouched and still holds
+# them. That is `0383`'s territory, not this trim's, and the owner's Q3 ruling kept `0383` open for
+# exactly this reason: a renderer fix hides the symptom without slowing the cause.
+# ⛔ AND THE EMPTY GUARD IS NOT ENOUGH ON ITS OWN — `*(` IS MATCHED AS TWO LITERAL BYTES, and those two
+# bytes occur in ordinary markdown that is NOT an annotation opener. Measured on this function
+# (`0409` round-1 review R1): `**Title**(note)` cut to `**Title* …`, and `**(P0)** Ship the thing` cut
+# to `* …` — the whole title gone, and an ODD asterisk count left behind. The `-n` guard does not fire,
+# because a surviving `*` is not empty. A row that keeps a cell but loses its only identifying text is
+# the SAME failure R7 exists to prevent; so the head must carry real words AND balanced emphasis, or
+# the cut is refused and the raw cell ships. Latent, not live: 0 of 116 live Backlog cells and 0 of 4
+# Sprint 11 cells were in this class when it shipped. Owner-ruled 2026-09-20: harden it now.
+#
+# ⚠️ THE THREE GUARDS ARE ORDERED AND EACH OWNS ITS OWN CASE — do not merge them. The `?*` / `*)` split
+# below is DELIBERATE: the punctuation-only arm fires only on a NON-EMPTY head, so the empty case still
+# belongs to the `-n` guard above and only to it. Merge them and the `-n` line becomes dead code that
+# no test can red — `0409/opener-at-start` pins that exact line, and a guard nothing exercises is the
+# drift this repo's prove-red thesis is about.
+#
+# ⚠️ KNOWN RESIDUAL, NOT AN OVERSIGHT: an ODD BACKTICK count in a head that DOES carry words is not
+# caught — `` Document Bash `*(pattern)` extglob `` still cuts to `` Document Bash ` …``. The title
+# survives and the row stays identifiable, so this is cosmetic, not the R7 failure. The owner's ruling
+# named backticks only in the punctuation-only arm and specified odd-count balancing for ASTERISKS
+# alone; widening it to backticks would change the ruled shape. Flagged, not fixed.
+title_cell() {
+  case "$1" in
+    *'*('*) : ;;                          # an annotation opener is present — cut
+    *)      printf '%s' "$1"; return 0 ;;  # no opener → byte-identical passthrough
+  esac
+  _title_head=$(printf '%s' "${1%%'*('*}" | sed -e 's/[[:space:]][[:space:]]*$//')
+  [ -n "$_title_head" ] || { printf '%s' "$1"; return 0; }
+  case "$_title_head" in
+    *[!*\`[:space:]]*) : ;;                          # carries real words — safe to cut
+    ?*)                printf '%s' "$1"; return 0 ;;  # emphasis/code punctuation only → raw
+    *)                 : ;;                           # empty — the `-n` guard above owns this case
+  esac
+  _title_stars=$(printf '%s' "$_title_head" | tr -dc '*' | wc -c | tr -d '[:space:]')
+  [ "$(( _title_stars % 2 ))" -eq 0 ] || { printf '%s' "$1"; return 0; }
+  printf '%s …' "$_title_head"
+}
+
+
+# The numeric task id for a FACTS record. The plan's Priority cell is not always a bare number —
+# sprint-1 writes `8 (optional)` — and FACTS records the id POSITIONALLY, so an unstripped cell puts a
+# space in the middle of the grammar. The board still renders the cell as the plan wrote it.
+task_id() {
+  printf '%s' "$1" | sed -n 's/^[^0-9]*\([0-9][0-9]*\).*/\1/p' | head -1
+}
+
+# The task-folder ID PREFIX — `0102` from `0102-decide-…`. This is the task's PERMANENT identity
+# (ADR-029 Decision 3); the Priority cell is mutable board rank and never was identity.
+#
+# ⚠️ NUMERIC-ONLY, AND THE GUARD IS NOT COSMETIC. `${f%%-*}` returns the WHOLE string when the name
+# contains no hyphen, so a folder called `0042 alpha` yields `0042 alpha` — a SPACE in a POSITIONAL
+# FACTS field, which is exactly the `drift on tasks my, re[a]d, task` phantom-task failure the
+# sanitiser below exists to prevent. The same guard rejects two other fabricated identities: a stale
+# flat href (`tasks/backlog/x.md` → folder `backlog` → `backlog`) and a legacy unprefixed folder
+# (`extract-scaffold-into-claude` → `extract`). Both must fall through to the ladder, not become an id.
+#
+# ⚠️ THIS IS NOT THE SAME PARSE AS the `id-mismatch` check's `folder_id=${folder%%-*}` below, AND THE
+# DIFFERENCE IS DELIBERATE — do not "unify" them. That check must compare the RAW prefix even when it
+# is non-numeric, so an unprefixed folder still reports a mismatch naming the real folder.
+folder_id_prefix() {
+  case "${1%%-*}" in
+    ''|*[!0-9]*) printf '' ;;
+    *)           printf '%s' "${1%%-*}" ;;
+  esac
+}
+
+# --- 0492: `drift depends-on-later-sprint` -----------------------------------------------------------
+#
+# An open row on a REAL sprint board (`Sprint N`) that hard-depends on an open task sprint N cannot
+# count on: one on the Backlog board, on a sprint not started yet, on a later sprint, on a closed
+# sprint, or on a sprint that cannot be worked out. The record makes the problem VISIBLE; it blocks
+# nothing, and it does NOT change the row's Next step — the record is consistent, the schedule is not,
+# so it is neither disagreement nor nonconformance. `0493` (the ship-loop) and `0494` (filing) read it.
+#
+# ⚠️ 0451 OVERLAP (ADR-052 phase 5): whichever of 0451 and this lands second carries the kind name, its
+# fields, the reason table in `later_sprint_reason` and the `0492/…` tests (they are the spec to port).
+
+# <depends_raw content> [<tail>] -> the HARD 4-digit task IDs the CONTENT names, space-separated,
+# first-appearance order. <tail> is depends_raw's opt-in `tail` field (the text after a BI declaration's
+# closing bold): it is read ONLY to decide soft or hard, so `**Depends on: task 0072** — soft, not
+# hard.` reads soft. ⛔ An ID that appears only in the tail is NEVER returned — it is not part of the
+# declaration — but it still ends the segment of the ID before it, exactly as it would in the content.
+#
+# ⚠️ AN INTERPRETATION STEP ON TOP OF depends_raw, NOT A SECOND GRAMMAR. Where the `Depends on` line is
+# stays depends_raw's one question; this reads only the text it returned. The `⟨derive: …⟩` placeholder
+# still carries that text raw.
+#
+# ID token: exactly 4 digits; the byte before is not a letter, a digit or `-`; the byte after is not a
+# digit, and not `-<digit>`. That drops dates (`2026-09-13`), `ADR-0047`, `T-023` and longer numbers,
+# while `../0331-slug/` and a code-spanned `0331` still count. An ID with no task folder (a year, a stray
+# number) is dropped later, when its folder lookup fails.
+#
+# Soft or hard: an occurrence's SEGMENT runs from that ID up to the next DIFFERENT ID. In it, the first
+# WHOLE-WORD `soft` or `hard` (any case) decides; neither means hard. An ID is soft only if EVERY
+# occurrence is. Whole word = the bytes either side are not a letter, a digit or `_`, so `software`,
+# `Microsoft` and `harden` decide nothing, while `soft-follow` and `(hard)` do (wpos, below).
+#
+# ⚠️ KNOWN MISSES, ACCEPTED IN THE 0492 PLAN (all flag MORE, except the two marked quiet):
+#   - the word written BEFORE the ID (`soft: 0110`) reads as hard;
+#   - a negated `(not soft)` reads as soft (QUIET);
+#   - ranges like `0485–0491` are not expanded;
+#   - prose IDs depends_raw over-includes are counted;
+#   - a mistyped ID with no folder is skipped (QUIET).
+#   - a task-folder SLUG in a link is part of the segment, so a slug carrying `soft` or `hard` can
+#     decide it.
+dep_hard_ids() {
+  printf '%s\n%s\n' "$1" "${2:-}" | awk '
+    # The first position of w in str as a WHOLE word, or 0. Portable: no \< \> or \b in BSD awk.
+    function wpos(str, w,    off, i, L) {
+      L = length(w); off = 0
+      while ((i = index(substr(str, off + 1), w)) > 0) {
+        i += off
+        if ((i == 1 || substr(str, i - 1, 1) !~ /[a-z0-9_]/) && substr(str, i + L, 1) !~ /[a-z0-9_]/) return i
+        off = i
+      }
+      return 0
+    }
+    NR == 1 { c = $0 }
+    NR == 2 { t = $0 }
+    END {
+      lim = length(c); s = c " " t; n = length(s); k = 0
+      for (p = 1; p + 3 <= n; p++) {
+        if (substr(s, p, 4) !~ /^[0-9][0-9][0-9][0-9]$/) continue
+        if (p > 1 && substr(s, p - 1, 1) ~ /[A-Za-z0-9-]/) continue
+        a = substr(s, p + 4, 1)
+        if (a ~ /[0-9]/) continue
+        if (a == "-" && substr(s, p + 5, 1) ~ /[0-9]/) continue
+        k++; pos[k] = p; id[k] = substr(s, p, 4)
+        p += 3
+      }
+      for (i = 1; i <= k; i++) {
+        if (pos[i] + 3 > lim) continue
+        e = n + 1
+        for (j = i + 1; j <= k; j++) if (id[j] != id[i]) { e = pos[j]; break }
+        seg = tolower(substr(s, pos[i], e - pos[i]))
+        si = wpos(seg, "soft"); hi = wpos(seg, "hard")
+        soft = (si > 0 && (hi == 0 || si < hi))
+        if (!(id[i] in seen)) { seen[id[i]] = 1; order[++m] = id[i]; allsoft[id[i]] = 1 }
+        if (!soft) allsoft[id[i]] = 0
+      }
+      out = ""
+      for (i = 1; i <= m; i++) if (!allsoft[order[i]]) out = (out == "" ? order[i] : out " " order[i])
+      print out
+    }
+  '
+}
+
+# <id> -> `closed` | `none` | `open<TAB><the brief's ## Sprint value, as written>`.
+#
+# Closed = the folder is in `tasks/done/` or `tasks/cancelled/`, or the brief's `## Status` is ✅, ⛔ or
+# ➡️ (read with marker_key). `none` = no task folder at all. A folder with no readable brief is OPEN
+# with an empty sprint, which lands on the LOUD `sprint-unresolved` reason, never on silence.
+# ⚠️ `set +f` … `set -f` around the globs — see sibling_claimants for why an unwrapped glob is a silent
+# "found nothing" here.
+blocker_lookup() {
+  _bl_closed=""; _bl_dir=""
+  set +f
+  for _bl_d in "$AGENTS/tasks/done/$1"-* "$AGENTS/tasks/cancelled/$1"-*; do
+    [ -d "$_bl_d" ] && { _bl_closed=1; break; }
+  done
+  if [ -z "$_bl_closed" ]; then
+    for _bl_d in "$AGENTS/tasks/backlog/$1"-*; do
+      [ -d "$_bl_d" ] && { _bl_dir="$_bl_d"; break; }
+    done
+  fi
+  set -f
+  [ -n "$_bl_closed" ] && { printf 'closed'; return 0; }
+  [ -n "$_bl_dir" ] || { printf 'none'; return 0; }
+  _bl_st=""; _bl_sp=""
+  if [ -f "$_bl_dir/brief.md" ]; then
+    _bl_st=$(field_value "$_bl_dir/brief.md" "Status")
+    _bl_sp=$(field_value "$_bl_dir/brief.md" "Sprint")
+  fi
+  case "$(marker_key "$_bl_st")" in
+    done|cancelled|moved) printf 'closed'; return 0 ;;
+  esac
+  printf 'open\t%s' "$_bl_sp"
+}
+
+# The live-board table: `identity<TAB>status`, one line per `$AGENTS/sprints/*.md` (ONE level deep, so
+# an archived render still finds the live boards), in byte order. Built ONCE, and only when some row
+# needs it. ⛔ Called directly, NEVER inside `$( … )` — a subshell would build the table and throw it
+# away, every time. The answer comes back in `LS_BOARD_STATUS`: the status of the FIRST board in byte
+# order whose identity equals $1 (the same first-match tie-break ADR-041 §1.5 uses), or EMPTY when no
+# live board has that identity. A missing or malformed banner reads `unresolved` (plan_status_raw).
+LS_BOARDS=""; LS_BOARDS_BUILT=""
+later_board_status() {
+  if [ -z "$LS_BOARDS_BUILT" ]; then
+    LS_BOARDS_BUILT=1
+    set +f
+    for _lb_f in "$AGENTS/sprints"/*.md; do
+      [ -f "$_lb_f" ] || continue
+      _lb_sr=$(plan_status_raw "$_lb_f")
+      LS_BOARDS="${LS_BOARDS}$(resolve_identity "$_lb_f")	${_lb_sr%%	*}
+"
+    done
+    set -f
+  fi
+  LS_BOARD_STATUS=""
+  _lb_ifs=$IFS; IFS='
+'
+  for _lb_r in $LS_BOARDS; do
+    [ "${_lb_r%%	*}" = "$1" ] || continue
+    LS_BOARD_STATUS=${_lb_r#*	}
+    break
+  done
+  IFS=$_lb_ifs
+}
+
+# <Nst> <M> <Mst> -> the reason, or nothing.  THE 0492 §2 TABLE, in its order — the one place it lives.
+# N is this board's identity ($PLAN_SPRINT); Nst its status; M the blocker's `## Sprint` as written; Mst
+# M's board status (empty = no live board with that identity).
+#   1  M == N                                  → none
+#   2  M == Backlog                            → backlog-board
+#   3  M not an exact `Sprint N` token         → sprint-unresolved
+#   4  no live board, or banner unresolved     → sprint-unresolved
+#   5  Mst Done or Cancelled                   → sprint-closed
+#   6  Mst Backlog: Nst Backlog → later-sprint only if M > N, else none; any other Nst → not-started
+#   7  Mst In progress: later-sprint only if Nst is In progress or unresolved AND M > N; else none
+# ⚠️ Row 6, both 🔲: a not-started Sprint 12 waiting on a not-started Sprint 11 is ordinary forward
+# planning and is NOT flagged (owner Q1, "Planner's rule (Recommended)"). Row 7: an unresolved Nst
+# counts as In progress — the louder direction.
+later_sprint_reason() {
+  [ "$2" = "$PLAN_SPRINT" ] && return 0
+  [ "$2" = "Backlog" ] && { printf 'backlog-board'; return 0; }
+  is_eligible "$2" || { printf 'sprint-unresolved'; return 0; }
+  case "$3" in
+    ''|unresolved)  printf 'sprint-unresolved' ;;
+    Done|Cancelled) printf 'sprint-closed' ;;
+    Backlog)
+      if [ "$1" = "Backlog" ]; then
+        identity_gt "$2" "$PLAN_SPRINT" && printf 'later-sprint'
+      else
+        printf 'not-started'
+      fi ;;
+    'In progress')
+      case "$1" in
+        'In progress'|unresolved) identity_gt "$2" "$PLAN_SPRINT" && printf 'later-sprint' ;;
+      esac ;;
+  esac
+  return 0
+}
+
+# --- pass 1: parse rows, resolve briefs, compute drift + next step ---------------------------------
+
+c_done=0; c_inprogress=0; c_blocked=0; c_backlog=0; c_cancelled=0; c_moved=0; c_unknown=0
+total=0
+BOARD_ROWS=""
+FACTS=""
+DRIFT_TASKS=""
+
+add_fact() { FACTS="${FACTS}$1
+"; }
+
+# Record drift against the current row. TWO effects, deliberately fused into one call: the plan-level
+# `DRIFT_TASKS` list (which feeds the roll-up's drift clause) and the per-row `row_drift` flag (which
+# forces the row to RENDER even when its marker is inert).
+#
+# ⚠️ THE FUSION IS THE POINT. The board now hides done/cancelled/moved rows, and the ONE exception is
+# "this row has drift on it". If a future drift fact appends to DRIFT_TASKS without setting row_drift,
+# that finding gets reported in ⟦FACTS⟧ while its row silently vanishes from the board — the owner is
+# told task 47 is drifted and then cannot find task 47. Hiding a drift buries a finding, which is the
+# exact failure the always-render rule exists to prevent. Every drift site calls THIS, never the
+# assignment directly.
+mark_drift() { DRIFT_TASKS="$DRIFT_TASKS $tid"; row_drift=1; }
+
+# 0492 — the `depends-on-later-sprint` check runs ONLY on an eligible `Sprint N` identity: never on the
+# Backlog board, never on an unresolved one (that already reports `unresolved-plan-sprint`). The row
+# loop collects `tid<TAB>hard-ids` per open row into LS_COLLECT; the records are worked out after it.
+LS_CHECK=""
+[ -n "$PLAN_SPRINT" ] && is_eligible "$PLAN_SPRINT" && LS_CHECK=1
+LS_COLLECT=""
+
+while IFS=$'\037' read -r rtype st pr task br; do
+  [ "$rtype" = "D" ] || continue
+  total=$((total + 1))
+  row_drift=""   # per-row; set ONLY via mark_drift(). Forces an inert-marker row to render anyway.
+
+  # ⚠️ SEMANTICS READ `st`; ONLY THE BOARD CELL READS `st_cell`. The clause trim is a PRESENTATION
+  # concern, and running it first rewrote the input every downstream check reads: a conforming
+  # `⛔ Cancelled (2026-07-16). Superseded — see task 9` was trimmed to `⛔ Cancelled (2026-07-16)…`
+  # and then reported as `cancelled-without-reason` — drift manufactured out of formatting.
+  st_cell=$(one_line_cell "$st")
+  key=$(marker_key "$st")
+
+  case "$key" in
+    done)       c_done=$((c_done + 1)) ;;
+    inprogress) c_inprogress=$((c_inprogress + 1)) ;;
+    blocked)    c_blocked=$((c_blocked + 1)) ;;
+    backlog)    c_backlog=$((c_backlog + 1)) ;;
+    cancelled)  c_cancelled=$((c_cancelled + 1)) ;;
+    moved)      c_moved=$((c_moved + 1)) ;;
+    *)          c_unknown=$((c_unknown + 1)) ;;
+  esac
+
+  # -- resolve the brief -----------------------------------------------------------------------
+  # Post-migration (`0062`): the href points at `brief.md` INSIDE a task folder
+  # `tasks/<board>/<NNNN>-<slug>/brief.md`. The FOLDER NAME is the recovery key AND the identity; the
+  # board is the folder's PARENT (brief.md's grandparent). `brief.md` is the same basename for every
+  # task, so it carries no identity — never key a task on it.
+  linked=$(printf '%s' "$br" | sed -n 's/.*](\([^)]*\)).*/\1/p' | head -1)
+  folder=$(basename "$(dirname "$linked")" 2>/dev/null)
+  [ -n "$folder" ] && [ "$folder" != "/" ] && [ "$folder" != "." ] || folder=""
+
+  # -- the FACTS id (ADR-029 Decision 6, COMPLETED by task 0103) -------------------------------------
+  # THE FOLDER-NAME ID PREFIX IS PRIMARY. The Priority cell is MUTABLE BOARD RANK — re-ranked twice in
+  # a single day — and only became the id because site 5 of the `0062` migration was dropped between
+  # design and plan (decision report 2026-07-26-decide-task-folder-name-numeric-prefix.md §3.1, §6
+  # step 1). This completes ADR-029 Decision 6, which already authorised it. Spec: report §8 item 1.
+  #
+  # ⚠️ ORDER MATTERS, AND IT IS NOW THE OPPOSITE OF WHAT IT WAS. The comment this replaces warned that
+  # "a numbered plan keeps numbering" because `drift on tasks 59, 60` is what SKILL.md narrates. That
+  # hazard was about substituting a non-numeric FILENAME STEM. The folder ID is numeric, a single
+  # token and already sanitised, so the `key="value"` grammar, the positional FACTS emission and the
+  # `sort -n | uniq` roll-up are all unaffected — but the NARRATION genuinely changes
+  # (`59, 60` → `0044, 0051`), which is why SKILL.md:299-304 is rewritten in the same change and the
+  # guard test at dashboard-contract.test.js is deliberately re-pointed rather than reverted.
+  #
+  # THE LADDER: folder ID prefix → Priority number → sanitised folder name → `?`.
+  # Arm 3 is a LIVE FALLBACK, not dead code: it catches a folder whose name carries no numeric prefix
+  # (a stale flat href, a legacy unprefixed folder). Its sanitising is NOT optional — `tid` is emitted
+  # POSITIONALLY into FACTS and later word-split UNQUOTED out of `$DRIFT_TASKS`, so a space or a glob
+  # metacharacter invents a task that does not exist (reproduced live before the guard: two rows
+  # yielded `drift on tasks my, re[a]d, task`). The `?` sentinel and the `set -f` glob guard
+  # (:34-40) both STAY, per report §8 item 1.
+  tid=$(folder_id_prefix "$folder")
+  [ -n "$tid" ] || tid=$(task_id "$pr")
+  if [ -z "$tid" ] && [ -n "$folder" ]; then
+    tid=$(printf '%s' "$folder" | sed -e 's/[^A-Za-z0-9._-]/-/g')
+  fi
+  [ -n "$tid" ] || tid="?"
+
+  # ⚠️ `found_dir` is the BOARD (backlog|done|cancelled) — the folder's PARENT, i.e. brief.md's
+  # GRANDPARENT. Pre-migration it was brief.md's parent; the extra level is the whole point of the new
+  # layout and the single easiest thing to get wrong. `expected_dir` cross-checks below depend on it.
+  brief_path=""
+  found_dir=""
+  folder_dir=""     # the resolved task-folder path
+  malformed=""      # folder exists but has no brief.md (ADR-029 Decision 1) — reported, never repaired
+  if [ -n "$linked" ] && [ -f "$PLAN_DIR/$linked" ]; then
+    brief_path="$PLAN_DIR/$linked"
+    folder_dir=$(dirname "$brief_path")
+    found_dir=$(basename "$(dirname "$folder_dir")")
+  elif [ -n "$linked" ] && [ -d "$PLAN_DIR/$(dirname "$linked")" ]; then
+    # The folder is where the link says, but brief.md is missing → malformed, NOT missing/relocated.
+    # ⚠️ GUARD: a malformed folder is a BOARD-CHILD without brief.md. If the link's parent dir is a
+    # board itself (a stale flat `tasks/<board>/x.md` href), its grandparent is `tasks/`, not a board —
+    # that is a missing brief, not a malformed folder. Only fire malformed when the grandparent IS a board.
+    folder_dir="$PLAN_DIR/$(dirname "$linked")"
+    found_dir=$(basename "$(dirname "$folder_dir")")
+    case "$found_dir" in
+      # ⚠️ R6 GUARD: a malformed folder is one whose `brief.md` is ACTUALLY absent. Check it directly
+      # rather than inferring it from the earlier `-f` branch having failed — the href could point at
+      # some OTHER missing file (`…/<folder>/typo.md`) inside a well-formed folder, which is a broken
+      # link (→ missing-brief), not a malformed folder.
+      backlog|done|cancelled)
+        if [ ! -f "$folder_dir/brief.md" ]; then
+          malformed=1
+        else
+          found_dir=""; folder_dir=""   # folder is well-formed; the linked file is just missing
+        fi ;;
+      *) found_dir=""; folder_dir="" ;;   # not a task folder → fall through to missing-brief
+    esac
+  elif [ -n "$folder" ]; then
+    # Link rot (tasks 21/22): the FOLDER moved between boards. Recover by FOLDER NAME (brief.md is a
+    # shared basename and cannot identify a task). Report, and render the CORRECTED link.
+    for cand in backlog done cancelled; do
+      if [ -f "$AGENTS/tasks/$cand/$folder/brief.md" ]; then
+        brief_path="$AGENTS/tasks/$cand/$folder/brief.md"
+        folder_dir="$AGENTS/tasks/$cand/$folder"
+        found_dir="$cand"
+        break
+      elif [ -d "$AGENTS/tasks/$cand/$folder" ] && [ ! -f "$AGENTS/tasks/$cand/$folder/brief.md" ]; then
+        # Folder exists on this board but has no brief.md → malformed (R6: check brief.md directly).
+        folder_dir="$AGENTS/tasks/$cand/$folder"
+        found_dir="$cand"
+        malformed=1
+        break
+      fi
+    done
+  fi
+
+  br_cell="$br"
+  if [ -n "$malformed" ]; then
+    add_fact "drift malformed-folder $tid folder=\"$(fact_value "$folder")\" location=\"$(fact_value "$found_dir")/\""
+    mark_drift
+  elif [ -n "$brief_path" ] && [ -n "$linked" ] && [ ! -f "$PLAN_DIR/$linked" ]; then
+    corrected="${REL_PREFIX}tasks/${found_dir}/${folder}/brief.md"
+    br_cell="[\`${folder}\`](${corrected})"
+    add_fact "drift relocated $tid linked=\"$(fact_value "$linked")\" found=\"$(fact_value "$corrected")\""
+    mark_drift
+  elif [ -z "$brief_path" ]; then
+    add_fact "drift missing-brief $tid linked=\"$(fact_value "$linked")\""
+    mark_drift
+  fi
+
+  # -- id carriers (ADR-029 Decision 5): brief `## ID` vs folder-name prefix ----------------------
+  # Two carriers; the FOLDER NAME is authoritative. REPORT disagreement naming both values; never
+  # auto-correct either carrier. Sibling of the status cross-check (drift rule 3) below.
+  # A brief with NO `## ID` is `brief-missing-id` — the same shape as `brief-missing-status`: an absent
+  # second carrier the `id-mismatch` reconciliation cannot see (owner-ruled, review R#4). Post-ADR-029
+  # every brief carries `## ID`, so its absence is a real defect, not a legitimate quiet case.
+  if [ -n "$brief_path" ] && [ -n "$folder" ]; then
+    b_id=$(field_value "$brief_path" "ID")
+    folder_id=${folder%%-*}
+    if [ -z "$b_id" ]; then
+      add_fact "drift nonconformance $tid kind=\"brief-missing-id\" folder=\"$(fact_value "$folder")\""
+      mark_drift
+    elif [ "$b_id" != "$folder_id" ]; then
+      add_fact "drift id-mismatch $tid brief_id=\"$(fact_value "$b_id")\" folder=\"$(fact_value "$folder")\""
+      mark_drift
+    fi
+  fi
+
+  # -- brief fields ----------------------------------------------------------------------------
+  b_status=""; b_sprint=""; b_key=""; b_owner=""
+  if [ -n "$brief_path" ]; then
+    b_status=$(field_value "$brief_path" "Status")
+    b_sprint=$(field_value "$brief_path" "Sprint")
+    b_owner=$(field_value "$brief_path" "Owner")
+    b_key=$(marker_key "$b_status")
+  fi
+
+  # -- the ➡️ Moved target: a sprint, or the Backlog board (the reverse move) --------------------
+  # ⚠️ `-E` IS REQUIRED. Do not "simplify" this to a BRE with `\|`. BSD sed (what a consumer actually
+  # has, and what this repo's own machine runs) reads `\|` in a BRE as the LITERAL pipe character, not
+  # alternation — proven: `Moved to [Sprint 2|Backlog](x)` captures `Sprint 2|Backlog`. The damage is
+  # not merely that `Backlog` fails to match: with `\|` in the pattern NEITHER branch matches, so the
+  # existing FORWARD form breaks too and every live `➡️ Moved to [Sprint N]` row becomes
+  # `moved-without-target` drift. GNU sed and ugrep-style dialects accept `\|`, so this regresses only
+  # on the consumer's Mac — invisible to a Linux CI run. ERE is already this file's established
+  # dialect (`grep -qE` in the status-heading guard and the cancelled-date check), so `-nE` adds none.
+  # `\[*` is zero-or-more by design: historic unlinked prose (`➡️ Moved to Sprint 2 — priority 7`)
+  # must keep parsing. The href is deliberately unmatched — `.*` swallows it — so `backlog.md` and the
+  # archived `../backlog.md` parse identically.
+  # ⚠️ The sprint token here is `$SPRINT_ID_RE` — THE one grammar defined at the identity ladder above
+  # (ADR-040 §6, binding). `moved_target` is NOT one of the three PLAN_SPRINT consumers; it is an
+  # independent parser of the same vocabulary, and drift rule 2 compares it to the brief's `## Sprint`.
+  # Give `Sprint 4c` a first-class identity WITHOUT giving it a first-class move target and every
+  # `➡️ Moved to [Sprint 4c]` row parses as `Sprint 4`, disagrees with its brief, and fires a phantom
+  # `drift disagreement`. Same vocabulary, same fix, one definition.
+  moved_target=""
+  if [ "$key" = "moved" ]; then
+    moved_target=$(printf '%s' "$st" | sed -nE "s/.*Moved to \[*(${SPRINT_ID_RE}|Backlog).*/\1/p" | head -1)
+  fi
+
+  # -- nonconformance: sources agree, the marker is written wrong (SKILL.md:90-99) ---------------
+  nonconf=""
+  case "$key" in
+    blocked)
+      printf '%s' "$st" | grep -q '—' || nonconf="blocked-without-reason" ;;
+    cancelled)
+      # ⚠️ The date and the reason are SEPARATE requirements and must be named separately: an
+      # `A && B || C` chain reported a missing DATE as `cancelled-without-reason`, telling the owner
+      # to supply a reason that was already in the cell while never naming the real defect.
+      #
+      # ⚠️ STRIP THE AGENT-CLOSED QUALIFIER BEFORE THE REASON TEST (`0054`, review R3). The ADR-025
+      # marker `⛔ Cancelled (agent-closed — not owner-verified) (YYYY-MM-DD)` carries an em-dash of
+      # its OWN, so testing the raw cell for `—` passes a cancellation that has no reason at all — the
+      # qualifier satisfies the check meant for the reason. That is worse than a missed lint: it
+      # reports CLEAN on the one closure path nobody audits. The date test is unaffected (it matches a
+      # parenthesised bare date, which the qualifier is not), but it is run against the stripped value
+      # too so both checks see the same string.
+      st_reason="$(printf '%s' "$st" | sed 's/(agent-closed[^)]*)//')"
+      if ! printf '%s' "$st_reason" | grep -qE '\([0-9]{4}-[0-9]{2}-[0-9]{2}\)'; then
+        nonconf="cancelled-without-date"
+      elif ! printf '%s' "$st_reason" | grep -q '—'; then
+        nonconf="cancelled-without-reason"
+      fi ;;
+    moved)
+      [ -n "$moved_target" ] || nonconf="moved-without-target" ;;
+    unknown)
+      nonconf="unknown-marker" ;;
+    '')
+      # The plan recorded no status at all. Previously this row was dropped outright (R17).
+      nonconf="missing-status-cell" ;;
+  esac
+  # A brief with no `## Status` heading is a defect in the BRIEF. It is reported, and it does not by
+  # itself make a disagreement — an absent source says nothing (SKILL.md:88). The empty `b_key` now
+  # correctly skips the marker comparison below, while the LOCATION cross-check still runs, so real
+  # drift on such a row is still found.
+  if [ -n "$brief_path" ] && [ -z "$b_key" ]; then
+    add_fact "drift nonconformance $tid kind=\"brief-missing-status\" cell=\"$(fact_value "$st")\""
+    mark_drift
+  fi
+  # A brief with no `## Owner` value is the same shape of defect: `## Owner` is mandatory (0104), so its
+  # absence is drift, mirroring `brief-missing-status`. Reported here; the row still renders `—` below.
+  if [ -n "$brief_path" ] && [ -z "$b_owner" ]; then
+    add_fact "drift nonconformance $tid kind=\"brief-missing-owner\""
+    mark_drift
+  fi
+  if [ -n "$nonconf" ]; then
+    add_fact "drift nonconformance $tid kind=\"$nonconf\" cell=\"$(fact_value "$st")\""
+    mark_drift
+  fi
+
+  # -- disagreement drift ------------------------------------------------------------------------
+  # Rule 1: read the brief's ## Sprint FIRST. If it names a different sprint, SKIP the status
+  # cross-check — a ➡️ Moved row's brief reads `🔲 Backlog` in its new sprint CORRECTLY, and flagging
+  # it would flag every moved row of every closed sprint forever (SKILL.md:83-88).
+  #
+  # ⚠️ THE SPLIT IS ABOUT THE OVERRIDE, NOT ABOUT DETECTION (§9: "the override applies to one and not
+  # the other"). Gating the whole block on `nonconf` over-corrected and HID REAL DRIFT: a plan cell
+  # reading `🚧 Blocked` (no reason) whose brief says `✅ Done` in `done/` reported only the missing
+  # em-dash, and the done task rendered as actionable.
+  #
+  # The true constraint is narrower: a plan marker we could not PARSE (`unknown`/absent) cannot be
+  # meaningfully compared to the brief's key — it can never equal it, so rule 3 would fire every time
+  # on a purely cosmetic defect. That, and only that, is what must skip the comparison. Every
+  # parseable marker gets the full cross-check, and nonconformance is reported alongside it.
+  disagree=""
+  if [ -n "$brief_path" ] && [ -n "$key" ] && [ "$key" != "unknown" ]; then
+    if [ "$key" = "moved" ]; then
+      # Rule 2: but DO check the Moved target against the brief's ## Sprint. Disagreement is real drift.
+      if [ -z "$b_sprint" ]; then
+        # An unresolvable state must not render as a clean `in Sprint N`. Report it; don't guess.
+        add_fact "drift missing-sprint $tid plan=\"$(fact_value "$st")\" moved_target=\"$moved_target\""
+        mark_drift
+      elif [ -n "$moved_target" ] && [ "$b_sprint" != "$moved_target" ]; then
+        disagree=1
+        add_fact "drift disagreement $tid plan=\"$(fact_value "$st")\" brief_sprint=\"$(fact_value "$b_sprint")\" moved_target=\"$moved_target\""
+        mark_drift
+      fi
+    elif [ "$PLAN_SPRINT" = "Backlog" ]; then
+      # ⚠️ RULE 1 DOES NOT APPLY TO THE BACKLOG BOARD, and this arm must come FIRST.
+      #
+      # Rule 1's premise is that a brief naming a different sprint is LEGITIMATE — on a sprint board it
+      # means the task was carried elsewhere, and flagging it would flag every moved row forever. On the
+      # BACKLOG board that same condition is inverted: a brief naming a real sprint means the task has
+      # been SCHEDULED but its row was never moved off the unscheduled board. That is not noise to
+      # skip, it is the single highest-value drift this board can surface.
+      #
+      # ⚠️ THIS IS A FIX FOR A REGRESSION THIS FILE CAUSED. Before `backlog.md` was given an identity,
+      # PLAN_SPRINT was empty here, rule 1's `[ -n "$PLAN_SPRINT" ]` guard was false, and such rows fell
+      # through to the rule-3 cross-check and WERE reported. Adding the identity silently activated the
+      # skip and lost that reporting. Verified by A/B on a fixture (board `🔲 Backlog`, brief
+      # `## Sprint: Sprint 2` + `## Status: 🔄 In progress`): reported before, silent after, reported
+      # again with this arm. It also contradicted SKILL.md's own instruction that an in-progress
+      # backlog row is "a finding, not a status" — the script was guaranteeing the skill never saw one.
+      #
+      # A genuinely relocated backlog row is the `➡️ Moved` case, which rule 2 handles above and which
+      # never reaches here. So there is nothing left for rule 1 to legitimately excuse on this board.
+      :  # fall through to rule 3 — deliberately no skip
+      exp=$(expected_dir "$key")
+      bad=""
+      [ -n "$b_key" ] && [ "$b_key" != "$key" ] && bad=1
+      [ -n "$exp" ] && [ -n "$found_dir" ] && [ "$found_dir" != "$exp" ] && bad=1
+      [ -n "$b_sprint" ] && [ "$b_sprint" != "Backlog" ] && bad=1   # scheduled, but still on this board
+      if [ -n "$bad" ]; then
+        disagree=1
+        add_fact "drift disagreement $tid plan=\"$(fact_value "$st")\" brief=\"$(fact_value "$b_status")\" brief_sprint=\"$(fact_value "$b_sprint")\" location=\"$found_dir/\""
+        mark_drift
+      fi
+    elif [ -n "$PLAN_SPRINT" ] && [ -n "$b_sprint" ] && [ "$b_sprint" != "$PLAN_SPRINT" ]; then
+      : # brief belongs to another sprint — status cross-check skipped, per rule 1
+    else
+      # Rule 3: cross-check plan cell · brief ## Status · location.
+      exp=$(expected_dir "$key")
+      bad=""
+      [ -n "$b_key" ] && [ "$b_key" != "$key" ] && bad=1
+      [ -n "$exp" ] && [ -n "$found_dir" ] && [ "$found_dir" != "$exp" ] && bad=1
+      if [ -n "$bad" ]; then
+        disagree=1
+        add_fact "drift disagreement $tid plan=\"$(fact_value "$st")\" brief=\"$(fact_value "$b_status")\" location=\"$found_dir/\""
+        mark_drift
+      fi
+    fi
+  fi
+
+  # -- next step (spec §4.2), in order -----------------------------------------------------------
+  # Disagreement takes the `waiting on owner` override. Nonconformance does NOT — a cancelled row
+  # stays `dead`; printing `waiting on owner` on five dead rows makes a graveyard look like a
+  # to-do list (SKILL.md:96-99).
+  if [ -n "$disagree" ]; then
+    next="waiting on owner"
+  else
+    case "$key" in
+      done)      next="closed" ;;
+      cancelled) next="dead" ;;
+      moved)     next="in ${moved_target:-Sprint ?}" ;;
+      *)
+        # ⚠️ Branch on WHETHER A DECLARATION EXISTS, not on whether we got text out of it. Those are
+        # different questions, and conflating them is what let a declaration the parser could not read
+        # become `none recorded` — which the LLM renders `ready`, inventing the ABSENCE of a
+        # dependency. That is the original R1 with the sign flipped, and it is the worse direction:
+        # a wrong dependency is visible, a fabricated `ready` is not.
+        draw=""
+        [ -n "$brief_path" ] && draw=$(depends_raw "$brief_path" 2>/dev/null)
+        if [ -z "$draw" ]; then
+          next="⟨derive: none recorded⟩"
+          add_fact "derive $tid depends=\"none recorded\""
+        else
+          dep=${draw#*$'\037'}
+          if [ -n "$dep" ]; then
+            next="⟨derive: ${dep}⟩"
+            add_fact "derive $tid depends=\"$(fact_value "$dep")\""
+          else
+            next="⟨derive: UNPARSEABLE — see brief⟩"
+            add_fact "drift depends-unparseable $tid brief=\"$(fact_value "$linked")\" form=\"${draw%%$'\037'*}\""
+            mark_drift
+          fi
+        fi
+        ;;
+    esac
+  fi
+
+  # -- 0492: collect this row's HARD dependency IDs for the `depends-on-later-sprint` check ----------
+  # Open = the PLAN CELL is 🔲/🔄/🚧. depends_raw is called again here, deliberately: the Next-step block
+  # above skips it on a `waiting on owner` row, and this must not. Cheap — sprint boards only.
+  if [ -n "$LS_CHECK" ] && [ -n "$brief_path" ]; then
+    case "$key" in
+      backlog|inprogress|blocked)
+        ls_draw=$(depends_raw "$brief_path" tail 2>/dev/null)    # opt-in tail mode: soft/hard only
+        if [ -n "$ls_draw" ]; then
+          ls_x=${ls_draw#*$'\037'}                                  # <content>␟<tail>
+          ls_ids=$(dep_hard_ids "${ls_x%%$'\037'*}" "${ls_x#*$'\037'}")
+          [ -n "$ls_ids" ] && LS_COLLECT="${LS_COLLECT}${tid}	${ls_ids}
+"
+        fi ;;
+    esac
+  fi
+
+  # --- THE OPEN-WORK FILTER (`0039`) ------------------------------------------------------------
+  # The board renders OPEN work only: rows whose reconciled state is `done`, `cancelled` or `moved` are
+  # omitted. This is a CONSCIOUS REVERSAL of this script's original "show the dead rows" principle
+  # (owner ruling, 2026-07-18) — not drift, and not to be "restored" by a later reader who finds the
+  # old principle quoted in an ADR or an older SKILL.md revision.
+  #
+  # ⚠️ THE THREE THINGS THAT MAKE THE REVERSAL SAFE, none of which may be dropped:
+  #  1. The ROLL-UP still counts every row and still ends `— of M`. `total` and the c_* counters are
+  #     incremented ABOVE this guard, so scope stays visible even though the rows do not. Hiding rows
+  #     without keeping the roll-up would make the board lie about scope — the original objection, and
+  #     the mitigation the owner ruled in.
+  #  2. ⟦FACTS⟧ is UNTOUCHED. Facts are emitted above this guard, so drift on a hidden row is still
+  #     reported to the skill and still reaches beat 6.
+  #  3. A row carrying ANY drift RENDERS REGARDLESS of its marker (`row_drift`). We filter on the
+  #     RECONCILED state, never the raw cell: a row stamped `✅ Done` whose brief disagrees is not
+  #     actually known to be done, and hiding it would bury the finding. `cancelled-without-date`
+  #     counts — which is why live tasks 59/60 still appear.
+  #
+  # Deliberately NOT a toggle. One skill, one output (conventions/one-skill-one-output.md, `0074`);
+  # a `full`/`all` switch would reverse that ruling and needs its own ADR first.
+  case "$key" in
+    done|cancelled|moved) [ -n "$row_drift" ] || continue ;;
+  esac
+
+  # ⚠️ SEMANTICS READ `task`; ONLY THE BOARD CELL READS `task_cell` — the same split, and the same
+  # reason, as `st`/`st_cell` above. `$task` is referenced at exactly this one site in the whole script:
+  # no drift check, no counter and no fact emitter reads it, which is WHY trimming it cannot hide an
+  # exception. Pinned by "0409/facts-identical", which renders the same plan with and without
+  # annotations and requires a byte-identical `⟦FACTS⟧`. Do not move the trim upstream of the drift
+  # checks — that is the mistake the `st_cell` comment above records someone already making once.
+  task_cell=$(title_cell "$task")
+
+  BOARD_ROWS="${BOARD_ROWS}| ${st_cell} | ${pr} | ${task_cell} | ${br_cell} | ${b_owner:-—} | ${next} |
+"
+done <<EOF
+$ROWS
+EOF
+
+# --- roll-up (spec §5.3) ---------------------------------------------------------------------------
+# Non-zero terms only, in vocabulary order, then ALWAYS `— of M`. Sums to M BY CONSTRUCTION: every row
+# lands in exactly one bucket, and `unrecognized` exists so a marker outside the six cannot silently
+# vanish from the sum (it is reported as nonconformance too).
+rollup=""
+add_term() { [ "$1" -gt 0 ] && rollup="${rollup}${rollup:+ · }$1 $2"; return 0; }
+add_term "$c_done"       "done"
+add_term "$c_inprogress" "in progress"
+add_term "$c_blocked"    "blocked"
+add_term "$c_backlog"    "backlog"
+add_term "$c_cancelled"  "cancelled"
+add_term "$c_moved"      "moved"
+add_term "$c_unknown"    "unrecognized"
+
+if [ "$STATUS_SECTIONS" -gt 1 ]; then
+  add_fact "drift multiple-status-tables count=$STATUS_SECTIONS"
+fi
+
+# Rule 1 needs the plan's sprint identity. If neither the H1 nor the filename yielded one, the rule is
+# inert — say so, rather than letting the board fail silently toward phantom drift.
+if [ -z "$PLAN_SPRINT" ]; then
+  add_fact "drift unresolved-plan-sprint h1=\"$(fact_value "$(head -1 "$PLAN_FILE")")\""
+fi
+
+# ADR-041 §1.5 — two plans claiming ONE identity. Detected HERE, in board mode, rather than passed in
+# by the caller: the only caller is SKILL.md, which is prose an LLM executes, and a flag it can forget
+# to pass is exactly the "prose discipline" §1.5 refuses. Self-contained, so one invocation surfaces it.
+#
+# ⚠️ THIS IS THE READ THAT WIDENED THE CONTRACT AT THE TOP OF THIS FILE — see it, it was amended in the
+# same change. Owner-ruled 2026-08-11 ("Accept the widening").
+#
+# ⚠️ ELIGIBLE IDENTITIES ONLY, deliberately. Two files both resolving `Backlog` cannot mis-select
+# anything (Backlog is never eligible), so that collision is out of ADR-041's scope, not overlooked.
+ambiguous_plan=""
+if [ -n "$PLAN_SPRINT" ] && is_eligible "$PLAN_SPRINT"; then
+  plan_also=$(sibling_claimants "$PLAN_FILE" "$PLAN_SPRINT")
+  if [ -n "$plan_also" ]; then
+    # `plan=`, NOT `chosen=` — board mode renders whatever path it was handed and must not imply it did
+    # the choosing. `select-active` is what chooses, and its record says `chosen=`.
+    add_fact "drift ambiguous-plan-identity identity=\"$(fact_value "$PLAN_SPRINT")\" plan=\"$(fact_value "$(basename "$PLAN_FILE")")\" also=\"$(fact_value "$plan_also")\""
+    ambiguous_plan=1
+  fi
+fi
+
+# --- ADR-047 §7 — the SPRINT-level drift rules the RENDER PATH owns --------------------------------
+#
+# ⭐ THE PER-BOARD DRIFTS ARE EMITTED FROM BOTH MODES, AND THAT IS THE REPO'S OWN WORKED PRECEDENT, NOT
+# DUPLICATION TO BE FACTORED OUT — the ambiguity check directly above already lives in both paths for
+# exactly this reason, and its comment says so. ⛔ Duplicate detection is the design.
+#
+# ⛔ THREE OF THESE ARE RENDER-PATH-ONLY (§7.1 carve-out 2), because each needs the board's OWN
+# containing directory: `sprint-terminal-not-archived`, `sprint-archived-not-terminal` and
+# `sprint-status-location-mismatch`. `select-active` is depth-1 and structurally cannot see inside
+# `done/`/`cancelled/`. ⛔ No sweep mode exists and none is created here (§7, corrected under X1/R19).
+#
+# Every record below also sets `plan_level_drift`, so it reaches the roll-up's drift clause by the same
+# route `unresolved-plan-sprint` takes — §7.2's obligation for THIS mode, where a roll-up exists and a
+# reader may read it instead of the table.
+PLAN_STATUS_RAW=$(plan_status_raw "$PLAN_FILE")
+PLAN_STATUS=${PLAN_STATUS_RAW%%	*}
+PLAN_STATUS_KIND=${PLAN_STATUS_RAW#*	}
+
+# THE ARCHIVE LOCATION, BY `PLAN_DIR`'S TAIL. ⭐ A plan rendered from a path NOT under a `sprints/`
+# directory emits NONE of the three location drifts, rather than guessing at where it ought to live.
+# Named here because it is a decision the ADR leaves to the code, and the safe direction is silence.
+case "$PLAN_DIR" in
+  */sprints/done)      PLAN_LOC="done" ;;
+  */sprints/cancelled) PLAN_LOC="cancelled" ;;
+  */sprints)           PLAN_LOC="sprints" ;;
+  *)                   PLAN_LOC="" ;;
+esac
+
+sprint_drift=""
+PLAN_BASE=$(basename "$PLAN_FILE")
+
+case "$PLAN_STATUS_KIND" in
+  missing)
+    # ⛔ Carve-out 1, in IDENTITY-space — see the same test in `mode_select_active`. `backlog.md` would
+    # otherwise emit a false record on every run, forever.
+    if is_eligible "$PLAN_SPRINT"; then
+      add_fact "drift sprint-status-missing plan=\"$(fact_value "$PLAN_BASE")\""
+      sprint_drift=1
+    fi ;;
+  malformed)
+    # ⛔ NOT carved out for any identity (§2, §7.1; X1/R24) — a malformed banner is not a well-formed
+    # board, the record fires once, and fixing the line silences it.
+    add_fact "drift sprint-status-malformed plan=\"$(fact_value "$PLAN_BASE")\" line3=\"$(fact_value "$(sed -n '3p' "$PLAN_FILE" 2>/dev/null)")\""
+    sprint_drift=1 ;;
+esac
+
+if plan_has_active_marker "$PLAN_FILE" && [ "$PLAN_STATUS" != "In progress" ]; then
+  add_fact "drift active-marker-on-non-active plan=\"$(fact_value "$PLAN_BASE")\" status=\"$(fact_value "$PLAN_STATUS")\""
+  sprint_drift=1
+fi
+
+case "$PLAN_STATUS" in
+  Done|Cancelled)
+    if [ "$PLAN_LOC" = "sprints" ]; then
+      # ⭐ This is what makes a FINISHED-BUT-UNARCHIVED board harmless AND loud: the banner alone
+      # already disqualified it from being active (§5), and this says the move was never made.
+      add_fact "drift sprint-terminal-not-archived plan=\"$(fact_value "$PLAN_BASE")\" status=\"$(fact_value "$PLAN_STATUS")\""
+      sprint_drift=1
+    elif { [ "$PLAN_STATUS" = "Done" ] && [ "$PLAN_LOC" = "cancelled" ]; } \
+      || { [ "$PLAN_STATUS" = "Cancelled" ] && [ "$PLAN_LOC" = "done" ]; }; then
+      add_fact "drift sprint-status-location-mismatch plan=\"$(fact_value "$PLAN_BASE")\" status=\"$(fact_value "$PLAN_STATUS")\" location=\"$(fact_value "$PLAN_LOC")/\""
+      sprint_drift=1
+    fi ;;
+  *)
+    # Archived but not terminal. ⚠️ The "no legacy banner" half of §7's condition is a SEPARATE test,
+    # not a consequence of the status: a well-formed `🔒 CLOSED` already reads as `Done` and never
+    # reaches here, but a MALFORMED one resolves `unresolved` while still plainly being a legacy
+    # banner. Suppressing on the raw line is what keeps §7's wording true; the malformed record above
+    # is what keeps it loud.
+    if [ "$PLAN_LOC" = "done" ] || [ "$PLAN_LOC" = "cancelled" ]; then
+      case "$(sed -n '3p' "$PLAN_FILE" 2>/dev/null)" in
+        '> ## 🔒 CLOSED'*) : ;;
+        *)
+          add_fact "drift sprint-archived-not-terminal plan=\"$(fact_value "$PLAN_BASE")\" location=\"$(fact_value "$PLAN_LOC")/\""
+          sprint_drift=1 ;;
+      esac
+    fi ;;
+esac
+
+# --- 0492: `drift depends-on-later-sprint` — work out the records from LS_COLLECT ------------------
+# Placed HERE because the reason table needs this board's own status ($PLAN_STATUS, above).
+#
+# LS_RECS holds one record per line: dependent<TAB>blocker<TAB>reason<TAB>via<TAB>blocker_sprint.
+# `via` is empty on a direct record. ⚠️ blocker_sprint is LAST on purpose: it is the brief's text as
+# written and may itself hold a tab, so it takes "everything after the 4th tab". Fields are split with
+# `%%`/`#`, never `read` under a tab IFS (tab is IFS whitespace and collapses an empty `via`).
+# ⚠️ Its own IFS save variable (`ls_ifs`), and later_board_status has its own (`_lb_ifs`): it is called
+# from INSIDE these loops, so a shared OLD_IFS would be overwritten mid-loop and the wrong IFS restored.
+LS_RECS=""
+ls_has() {   # <dependent> <blocker> -> 0 iff that pair already has a record. One record per pair.
+  case "
+$LS_RECS" in *"
+$1	$2	"*) return 0 ;; esac
+  return 1
+}
+if [ -n "$LS_COLLECT" ]; then
+  ls_ifs=$IFS
+  # 1. Direct records, in row order, then ID order.
+  IFS='
+'
+  for ls_r in $LS_COLLECT; do
+    ls_t=${ls_r%%	*}; ls_ids=${ls_r#*	}
+    IFS=' '
+    for ls_d in $ls_ids; do
+      [ "$ls_d" = "$ls_t" ] && continue                 # its own ID
+      ls_l=$(blocker_lookup "$ls_d")
+      case "$ls_l" in open*) ;; *) continue ;; esac     # closed, or no task folder
+      ls_m=${ls_l#open	}
+      ls_mst=""
+      if [ "$ls_m" != "$PLAN_SPRINT" ] && [ "$ls_m" != "Backlog" ] && is_eligible "$ls_m"; then
+        later_board_status "$ls_m"; ls_mst=$LS_BOARD_STATUS   # direct call — see its comment
+      fi
+      ls_why=$(later_sprint_reason "$PLAN_STATUS" "$ls_m" "$ls_mst")
+      [ -n "$ls_why" ] || continue
+      ls_has "$ls_t" "$ls_d" && continue
+      LS_RECS="${LS_RECS}${ls_t}	${ls_d}	${ls_why}		${ls_m}
+"
+    done
+    IFS='
+'
+  done
+  # 2. Indirect records (owner Q2, "Flag them all (Recommended)"), WITHIN THIS BOARD ONLY: open row B
+  #    hard-depends on row A of this board, A has a record for blocker V, B has none for V yet → add
+  #    (B, V, A's reason, via=A, A's blocker_sprint). Repeat until nothing changes. It always ends: the
+  #    set only grows and is bounded by rows × blockers, so a dependency cycle is safe.
+  # ⚠️ RESIDUAL, NAMED: chains ACROSS boards are not followed — e.g. a row waiting on a task of an
+  #    earlier, in-progress Sprint 9 board that itself waits on a later sprint gets no record here.
+  ls_changed=1
+  while [ -n "$ls_changed" ]; do
+    ls_changed=""
+    for ls_r in $LS_COLLECT; do
+      ls_b=${ls_r%%	*}; ls_ids=${ls_r#*	}
+      IFS=' '
+      for ls_a in $ls_ids; do
+        [ "$ls_a" = "$ls_b" ] && continue
+        IFS='
+'
+        for ls_rec in $LS_RECS; do
+          [ "${ls_rec%%	*}" = "$ls_a" ] || continue
+          ls_x=${ls_rec#*	};  ls_v=${ls_x%%	*}
+          ls_x=${ls_x#*	};    ls_why=${ls_x%%	*}
+          ls_x=${ls_x#*	};    ls_m=${ls_x#*	}
+          [ "$ls_v" = "$ls_b" ] && continue             # never "B waits on B"
+          ls_has "$ls_b" "$ls_v" && continue
+          LS_RECS="${LS_RECS}${ls_b}	${ls_v}	${ls_why}	${ls_a}	${ls_m}
+"
+          ls_changed=1
+        done
+        IFS=' '
+      done
+      IFS='
+'
+    done
+  done
+  # 3. Emit. Direct records first (row, then ID order), then indirect ones in the order found.
+  #    Each one calls mark_drift, so the dependent joins DRIFT_TASKS and the roll-up's drift clause; the
+  #    row is open, so it already renders.
+  for ls_rec in $LS_RECS; do
+    ls_t=${ls_rec%%	*};  ls_x=${ls_rec#*	}
+    ls_v=${ls_x%%	*};    ls_x=${ls_x#*	}
+    ls_why=${ls_x%%	*};  ls_x=${ls_x#*	}
+    ls_via=${ls_x%%	*};  ls_m=${ls_x#*	}
+    ls_via_f=""
+    [ -n "$ls_via" ] && ls_via_f=" via=\"$(fact_value "$ls_via")\""
+    add_fact "drift depends-on-later-sprint $ls_t blocker=\"$ls_v\" blocker_sprint=\"$(fact_value "$ls_m")\" reason=\"$ls_why\"$ls_via_f"
+    tid="$ls_t"; mark_drift
+  done
+  IFS=$ls_ifs
+fi
+
+# Drift clause — templated, deterministic, deliberately generic. It points at beat 6; it does not try
+# to be beat 6. Templating each drift kind into English is prose-generation, not this script's job.
+# ⚠️ EVERY drift record must reach this clause, or SKILL.md's "every drift record is an owner
+# decision" is false for the ones that don't. Plan-level drift (multiple status tables, an
+# unresolved sprint identity) has no task id, so it cannot ride DRIFT_TASKS — it needs its own arm.
+drift_clause=""
+plan_level_drift=""
+[ "$STATUS_SECTIONS" -gt 1 ] && plan_level_drift=1
+[ -z "$PLAN_SPRINT" ] && plan_level_drift=1
+[ -n "$ambiguous_plan" ] && plan_level_drift=1
+# ADR-047 §7.2 — every sprint-level drift this mode emits reaches the roll-up's drift clause too.
+[ -n "$sprint_drift" ] && plan_level_drift=1
+if [ -n "$DRIFT_TASKS" ]; then
+  uniq_tasks=$(printf '%s\n' $DRIFT_TASKS | sort -n | uniq | tr '\n' ',' | sed -e 's/,$//' -e 's/,/, /g')
+  drift_clause="  — as recorded; drift on tasks ${uniq_tasks} — see above."
+  [ -n "$plan_level_drift" ] && drift_clause="  — as recorded; drift on tasks ${uniq_tasks}, and on the plan itself — see above."
+elif [ -n "$plan_level_drift" ]; then
+  drift_clause="  — as recorded; drift on the plan itself — see above."
+fi
+
+# --- emit ------------------------------------------------------------------------------------------
+printf '%s\n' "$VERSION_MARKER"
+printf '%s\n' '⟦BOARD⟧'
+printf '%s\n' '| Status | # | Task | Filename | Owner | Next step |'
+printf '%s\n' '|---|---|---|---|---|---|'
+printf '%s' "$BOARD_ROWS"
+printf '\n'
+printf '%s  —  of %s%s\n' "$rollup" "$total" "$drift_clause"
+printf '%s\n' '⟦FACTS⟧'
+printf 'total %s\n' "$total"
+[ "$c_done" -gt 0 ]       && printf 'count done %s\n' "$c_done"
+[ "$c_inprogress" -gt 0 ] && printf 'count in-progress %s\n' "$c_inprogress"
+[ "$c_blocked" -gt 0 ]    && printf 'count blocked %s\n' "$c_blocked"
+[ "$c_backlog" -gt 0 ]    && printf 'count backlog %s\n' "$c_backlog"
+[ "$c_cancelled" -gt 0 ]  && printf 'count cancelled %s\n' "$c_cancelled"
+[ "$c_moved" -gt 0 ]      && printf 'count moved %s\n' "$c_moved"
+[ "$c_unknown" -gt 0 ]    && printf 'count unrecognized %s\n' "$c_unknown"
+printf '%s' "$FACTS"
+printf '%s\n' '⟦END⟧'
+exit 0

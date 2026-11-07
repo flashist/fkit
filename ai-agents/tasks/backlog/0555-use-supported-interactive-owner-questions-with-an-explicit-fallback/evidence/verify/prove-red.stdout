@@ -1,0 +1,10 @@
+
+> fkit@0.4.0-codex.3 test:prove-red
+> bash test/prove-red.sh
+
+0b. unmutated full copy — launcher-contract should be green (rules out red-via-setup-failure) ... red
+   ✗ an UNMUTATED copy is red — mutations 2, 30 and 31 below would be false (setup, not the assertion).
+   ↳ kept this step's output: /var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T/fkit-prove-red-kept.ulK0Xg/0b.txt
+0c. unmutated copy hook-matrix suite should be green ... green
+1. broke skills_for_role(reviewer) — matrix "reviewer × fkit-review" should go RED ... red
+2. restored --resume passthrough — assertion 2 (--resume) should go RED ... 

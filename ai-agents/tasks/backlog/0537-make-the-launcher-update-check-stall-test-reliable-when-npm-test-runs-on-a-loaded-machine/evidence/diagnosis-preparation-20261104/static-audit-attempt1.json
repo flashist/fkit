@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-04T17:43:25.792175+00:00",
+  "exit": 1,
+  "check": "observed result log object unchanged",
+  "reason": "Audit checker sliced differing trailing newline lengths; corrected comparison to shared closing-object delimiter. No variant change required.",
+  "runtimeExecution": false
+}

@@ -1,0 +1,16 @@
+{
+  "step": "0c",
+  "childExit": 0,
+  "counts": {
+    "tests": 260,
+    "suites": 0,
+    "pass": 260,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "failedNames": [],
+  "output": "continuation-01-step-0c.log",
+  "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+}

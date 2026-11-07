@@ -82,16 +82,40 @@ exact text on day one?* Yes → fkit-authored, dual-home it. **Mostly, but the t
 tasks, ADRs or incidents** → audience-adapted: ship a generalized copy and add an entry to the
 exceptions module saying what differs. No → project-specific, scaffold gets a placeholder or nothing.
 
+## Non-authored OS metadata boundary
+
+Only an exact basename `.DS_Store` is eligible for exclusion as incidental OS metadata. The test
+classifies the same relative path across **both** homes before exceptions or descent. Every existing
+entry must be a regular file; a genuinely absent counterpart (`ENOENT`) is allowed. A symlink,
+directory or any other nonregular entry in either home fails clearly without being followed or
+opened. Other inspection errors fail rather than being treated as absence.
+
+One read-only, repository-wide `git ls-files -z --` snapshot supplies tracked paths. If **either**
+absolute candidate is tracked, both existing entries remain subject to the normal parity, authored
+exception and prune-point tripwire rules, including byte comparison. An untracked counterpart cannot
+hide drift beneath a prune point. Missing entries are not created; existing reasoned exceptions keep
+their meaning. Only when **neither** candidate is tracked are regular metadata entries excluded from
+both walkers, without reading their contents. `.DS_Store.md` and other authored dotfiles are unaffected.
+
+Paths use lexical absolute resolution, including alternative scaffold roots; symlinks are not resolved.
+A root outside this checkout has no tracked entries in this checkout's snapshot. Git acquisition
+failure fails the check. The tracking/type observations are not atomic against concurrent changes and
+are not a security guarantee. This classification does not prove who created a file or what it contains.
+It does not delete metadata or prevent its recreation.
+
 ## Checking parity
 
 ```sh
 diff -rq ai-agents claude/scaffold/ai-agents
 ```
 
-**Every reported line must map to an entry in
+**Every authored-path line must map to an entry in
 [`test/dual-home-parity-exceptions.mjs`](../../../test/dual-home-parity-exceptions.mjs)** — an exact
 `path` match, or a descendant of one of that module's directory entries. Anything left over is drift.
 This holds for **both** line shapes `diff -rq` emits: `Files … differ` **and** `Only in …`.
+Raw diff may also report OS metadata: exclude such a line only after the same exact-name,
+regular-type, neither-tracked classification across both homes described above. A raw diff alone
+cannot establish that boundary. The exception module remains authoritative for authored paths.
 
 > ⚠️ **Do NOT filter the `Only in ai-agents` lines away.** This document used to prescribe
 > `… | grep -v '^Only in ai-agents'`, and stated that such lines *"are expected and not drift"*. That
@@ -112,12 +136,12 @@ Task 0133 mechanized this as `test/dual-home-parity.test.js`, which reads the sa
   **both** copies. *(Skill edit pending — the producer scopes it, owner: fkit-coder.)*
 - **Mechanically — a parity test.** `test/dual-home-parity.test.js` under
   [ADR-014](../decisions/adr-014-how-fkit-tests-itself.md) (`node --test`, zero devDeps): asserts every
-  dual-homed file not covered by the exceptions module is byte-identical. **Built — task 0133,
+  dual-homed file remaining after the metadata classification and authored exceptions is byte-identical. **Built — task 0133,
   2026-08-01.** It walks the **union** of both homes (so a file missing from either side fails), derives
   the enforced set rather than hard-coding it, and carries a **tripwire** keyed on **prune points** —
   every directory the walk stopped at, whether the exception spelled it with a trailing slash
   (`knowledge-base/reports/`) or named it exactly (`wiki-vault/.fkit`) — under
-  which no non-`.gitkeep` file that is in fact present in both homes may hide: such a file is **put on
+  which no retained non-`.gitkeep` file that is in fact present in both homes may hide: such a file is **put on
   the enforced set**, and is excused only by an exception entry of its own, with a reason, at a path
   strictly beneath the prune point. *(The narrower "blanket **directory** exception" wording this
   paragraph first carried is the reading the test deliberately generalized away from — an exact entry

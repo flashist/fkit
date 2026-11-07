@@ -1,0 +1,326 @@
+(node:35797) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/skill-ownership-hook.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[skill-ownership-hook.test.js] ⚠ testing NON-default script via FKIT_SKILL_OWNERSHIP_HOOK: /var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T/tmp.jH3rLFsjKZ/claude-mutant-skills/claude/skill-ownership-hook.sh
+✔ reviewer owns fkit-stateful-review -> allow
+✖ reviewer owns fkit-review -> allow
+✔ coder owns fkit-plan-task -> allow
+✔ coder owns fkit-task-ship-loop -> allow (task 53 / ADR-019)
+✔ a non-coder role does NOT own fkit-task-ship-loop -> deny (ADR-019: coder-only is what authorizes autonomy)
+✔ lead owns fkit-sprint-ship-loop -> allow (task 0112 / ADR-032: lead is the sprint conductor)
+✔ a non-lead role does NOT own fkit-sprint-ship-loop -> deny (ADR-032: lead-only is what authorizes the conductor)
+✔ a spawned subagent identity (agent_id present) is honored the same as a session
+✔ universal skill fkit-team is allowed for lead
+✔ universal skill fkit-query is allowed for lead
+✔ universal skill fkit-team is allowed for producer
+✔ universal skill fkit-query is allowed for producer
+✔ universal skill fkit-team is allowed for coder
+✔ universal skill fkit-query is allowed for coder
+✔ universal skill fkit-team is allowed for architect
+✔ universal skill fkit-query is allowed for architect
+✔ universal skill fkit-team is allowed for reviewer
+✔ universal skill fkit-query is allowed for reviewer
+✔ universal skill fkit-team is allowed for adversarial-reviewer
+✔ universal skill fkit-query is allowed for adversarial-reviewer
+✔ universal skill fkit-team is allowed for wiki
+✔ universal skill fkit-query is allowed for wiki
+✔ architect owns fkit-survey-project (the old CONSULT_SKILLS case) -> allow
+✔ a non-fkit-* skill is allowed regardless of role
+✔ coder does NOT own fkit-review -> deny, the original bug this task fixes
+✔ coder does NOT own fkit-stateful-review -> deny
+✔ producer does NOT own fkit-review -> deny
+✔ missing agent_type entirely -> deny (an unrolled plain `claude` session)
+✔ agent_type present but not an fkit-* agent -> deny for an fkit-* skill
+✔ producer owns fkit-task-done -> allow (ADR-033: the producer is the ONLY role that may close)
+✔ lead does NOT own fkit-task-done -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ coder does NOT own fkit-task-done -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ architect does NOT own fkit-task-done -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ reviewer does NOT own fkit-task-done -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ wiki does NOT own fkit-task-done -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ adversarial-reviewer does NOT own fkit-task-done -> deny (owner ruling: findings-only)
+✔ fkit-task-done with NO agent_type -> deny (unrolled session must not move task files)
+✔ fkit-task-done from a non-fkit agent_type -> deny
+✔ producer owns fkit-task-cancelled -> allow (ADR-033: the producer is the ONLY role that may close)
+✔ lead does NOT own fkit-task-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ coder does NOT own fkit-task-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ architect does NOT own fkit-task-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ reviewer does NOT own fkit-task-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ wiki does NOT own fkit-task-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ adversarial-reviewer does NOT own fkit-task-cancelled -> deny (owner ruling: findings-only)
+✔ fkit-task-cancelled with NO agent_type -> deny (unrolled session must not move task files)
+✔ fkit-task-cancelled from a non-fkit agent_type -> deny
+✔ producer owns fkit-sprint-done -> allow (ADR-033: the producer is the ONLY role that may close)
+✔ lead does NOT own fkit-sprint-done -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ coder does NOT own fkit-sprint-done -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ architect does NOT own fkit-sprint-done -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ reviewer does NOT own fkit-sprint-done -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ wiki does NOT own fkit-sprint-done -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ adversarial-reviewer does NOT own fkit-sprint-done -> deny (owner ruling: findings-only)
+✔ fkit-sprint-done with NO agent_type -> deny (unrolled session must not move task files)
+✔ fkit-sprint-done from a non-fkit agent_type -> deny
+✔ producer owns fkit-sprint-cancelled -> allow (ADR-033: the producer is the ONLY role that may close)
+✔ lead does NOT own fkit-sprint-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ coder does NOT own fkit-sprint-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ architect does NOT own fkit-sprint-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ reviewer does NOT own fkit-sprint-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ wiki does NOT own fkit-sprint-cancelled -> deny (ADR-033 reverses ADR-025: closes route through the producer)
+✔ adversarial-reviewer does NOT own fkit-sprint-cancelled -> deny (owner ruling: findings-only)
+✔ fkit-sprint-cancelled with NO agent_type -> deny (unrolled session must not move task files)
+✔ fkit-sprint-cancelled from a non-fkit agent_type -> deny
+✔ malformed / non-JSON payload -> deny, not a crash
+✔ empty payload -> deny
+✔ missing tool_input.skill -> deny
+✔ a tool_name other than Skill reaching this hook -> deny, defensively (matcher misconfiguration)
+✔ matrix: lead × fkit-adversarial-review -> deny
+✔ matrix: lead × fkit-design-spec -> deny
+✔ matrix: lead × fkit-evaluate-approach -> deny
+✔ matrix: lead × fkit-heal -> deny
+✔ matrix: lead × fkit-initiate-project -> deny
+✔ matrix: lead × fkit-inspect -> deny
+✔ matrix: lead × fkit-plan-task -> deny
+✔ matrix: lead × fkit-process-review -> deny
+✔ matrix: lead × fkit-process-stateful-review -> deny
+✔ matrix: lead × fkit-dumb-down -> allow
+✔ matrix: lead × fkit-open-questions-interview -> allow
+✔ matrix: lead × fkit-query -> allow
+✔ matrix: lead × fkit-record-decision -> deny
+✔ matrix: lead × fkit-review -> deny
+✔ matrix: lead × fkit-stateful-review -> deny
+✔ matrix: lead × fkit-status -> allow
+✔ matrix: lead × fkit-sprint-cancelled -> deny
+✔ matrix: lead × fkit-sprint-done -> deny
+✔ matrix: lead × fkit-survey-project -> deny
+✔ matrix: lead × fkit-task-cancelled -> deny
+✔ matrix: lead × fkit-task-done -> deny
+✔ matrix: lead × fkit-task-brief -> deny
+✔ matrix: lead × fkit-task-ship-loop -> deny
+✔ matrix: lead × fkit-team -> allow
+✔ matrix: lead × fkit-wiki-ingest -> deny
+✔ matrix: lead × fkit-wiki-lint -> allow
+✔ matrix: lead × fkit-wiki-sync -> allow
+✔ matrix: producer × fkit-adversarial-review -> deny
+✔ matrix: producer × fkit-design-spec -> deny
+✔ matrix: producer × fkit-evaluate-approach -> deny
+✔ matrix: producer × fkit-heal -> allow
+✔ matrix: producer × fkit-initiate-project -> allow
+✔ matrix: producer × fkit-inspect -> deny
+✔ matrix: producer × fkit-plan-task -> deny
+✔ matrix: producer × fkit-process-review -> deny
+✔ matrix: producer × fkit-process-stateful-review -> deny
+✔ matrix: producer × fkit-dumb-down -> allow
+✔ matrix: producer × fkit-open-questions-interview -> allow
+✔ matrix: producer × fkit-query -> allow
+✔ matrix: producer × fkit-record-decision -> deny
+✔ matrix: producer × fkit-review -> deny
+✔ matrix: producer × fkit-stateful-review -> deny
+✔ matrix: producer × fkit-status -> allow
+✔ matrix: producer × fkit-sprint-cancelled -> allow
+✔ matrix: producer × fkit-sprint-done -> allow
+✔ matrix: producer × fkit-survey-project -> deny
+✔ matrix: producer × fkit-task-cancelled -> allow
+✔ matrix: producer × fkit-task-done -> allow
+✔ matrix: producer × fkit-task-brief -> allow
+✔ matrix: producer × fkit-task-ship-loop -> deny
+✔ matrix: producer × fkit-team -> allow
+✔ matrix: producer × fkit-wiki-ingest -> deny
+✔ matrix: producer × fkit-wiki-lint -> deny
+✔ matrix: producer × fkit-wiki-sync -> deny
+✔ matrix: coder × fkit-adversarial-review -> deny
+✔ matrix: coder × fkit-design-spec -> deny
+✔ matrix: coder × fkit-evaluate-approach -> deny
+✔ matrix: coder × fkit-heal -> deny
+✔ matrix: coder × fkit-initiate-project -> deny
+✔ matrix: coder × fkit-inspect -> deny
+✔ matrix: coder × fkit-plan-task -> allow
+✔ matrix: coder × fkit-process-review -> allow
+✔ matrix: coder × fkit-process-stateful-review -> allow
+✔ matrix: coder × fkit-dumb-down -> allow
+✔ matrix: coder × fkit-open-questions-interview -> allow
+✔ matrix: coder × fkit-query -> allow
+✔ matrix: coder × fkit-record-decision -> deny
+✔ matrix: coder × fkit-review -> deny
+✔ matrix: coder × fkit-stateful-review -> deny
+✔ matrix: coder × fkit-status -> deny
+✔ matrix: coder × fkit-sprint-cancelled -> deny
+✔ matrix: coder × fkit-sprint-done -> deny
+✔ matrix: coder × fkit-survey-project -> deny
+✔ matrix: coder × fkit-task-cancelled -> deny
+✔ matrix: coder × fkit-task-done -> deny
+✔ matrix: coder × fkit-task-brief -> deny
+✔ matrix: coder × fkit-task-ship-loop -> allow
+✔ matrix: coder × fkit-team -> allow
+✔ matrix: coder × fkit-wiki-ingest -> deny
+✔ matrix: coder × fkit-wiki-lint -> deny
+✔ matrix: coder × fkit-wiki-sync -> deny
+✔ matrix: architect × fkit-adversarial-review -> deny
+✔ matrix: architect × fkit-design-spec -> allow
+✔ matrix: architect × fkit-evaluate-approach -> allow
+✔ matrix: architect × fkit-heal -> deny
+✔ matrix: architect × fkit-initiate-project -> deny
+✔ matrix: architect × fkit-inspect -> allow
+✔ matrix: architect × fkit-plan-task -> deny
+✔ matrix: architect × fkit-process-review -> deny
+✔ matrix: architect × fkit-process-stateful-review -> deny
+✔ matrix: architect × fkit-dumb-down -> allow
+✔ matrix: architect × fkit-open-questions-interview -> allow
+✔ matrix: architect × fkit-query -> allow
+✔ matrix: architect × fkit-record-decision -> allow
+✔ matrix: architect × fkit-review -> deny
+✔ matrix: architect × fkit-stateful-review -> deny
+✔ matrix: architect × fkit-status -> deny
+✔ matrix: architect × fkit-sprint-cancelled -> deny
+✔ matrix: architect × fkit-sprint-done -> deny
+✔ matrix: architect × fkit-survey-project -> allow
+✔ matrix: architect × fkit-task-cancelled -> deny
+✔ matrix: architect × fkit-task-done -> deny
+✔ matrix: architect × fkit-task-brief -> deny
+✔ matrix: architect × fkit-task-ship-loop -> deny
+✔ matrix: architect × fkit-team -> allow
+✔ matrix: architect × fkit-wiki-ingest -> deny
+✔ matrix: architect × fkit-wiki-lint -> deny
+✔ matrix: architect × fkit-wiki-sync -> deny
+✔ matrix: reviewer × fkit-adversarial-review -> deny
+✔ matrix: reviewer × fkit-design-spec -> deny
+✔ matrix: reviewer × fkit-evaluate-approach -> deny
+✔ matrix: reviewer × fkit-heal -> deny
+✔ matrix: reviewer × fkit-initiate-project -> deny
+✔ matrix: reviewer × fkit-inspect -> deny
+✔ matrix: reviewer × fkit-plan-task -> deny
+✔ matrix: reviewer × fkit-process-review -> deny
+✔ matrix: reviewer × fkit-process-stateful-review -> deny
+✔ matrix: reviewer × fkit-dumb-down -> allow
+✔ matrix: reviewer × fkit-open-questions-interview -> allow
+✔ matrix: reviewer × fkit-query -> allow
+✔ matrix: reviewer × fkit-record-decision -> deny
+✖ matrix: reviewer × fkit-review -> allow
+✔ matrix: reviewer × fkit-stateful-review -> allow
+✔ matrix: reviewer × fkit-status -> deny
+✔ matrix: reviewer × fkit-sprint-cancelled -> deny
+✔ matrix: reviewer × fkit-sprint-done -> deny
+✔ matrix: reviewer × fkit-survey-project -> deny
+✔ matrix: reviewer × fkit-task-cancelled -> deny
+✔ matrix: reviewer × fkit-task-done -> deny
+✔ matrix: reviewer × fkit-task-brief -> deny
+✔ matrix: reviewer × fkit-task-ship-loop -> deny
+✔ matrix: reviewer × fkit-team -> allow
+✔ matrix: reviewer × fkit-wiki-ingest -> deny
+✔ matrix: reviewer × fkit-wiki-lint -> deny
+✔ matrix: reviewer × fkit-wiki-sync -> deny
+✔ matrix: adversarial-reviewer × fkit-adversarial-review -> allow
+✔ matrix: adversarial-reviewer × fkit-design-spec -> deny
+✔ matrix: adversarial-reviewer × fkit-evaluate-approach -> deny
+✔ matrix: adversarial-reviewer × fkit-heal -> deny
+✔ matrix: adversarial-reviewer × fkit-initiate-project -> deny
+✔ matrix: adversarial-reviewer × fkit-inspect -> deny
+✔ matrix: adversarial-reviewer × fkit-plan-task -> deny
+✔ matrix: adversarial-reviewer × fkit-process-review -> deny
+✔ matrix: adversarial-reviewer × fkit-process-stateful-review -> deny
+✔ matrix: adversarial-reviewer × fkit-dumb-down -> deny
+✔ matrix: adversarial-reviewer × fkit-open-questions-interview -> deny
+✔ matrix: adversarial-reviewer × fkit-query -> allow
+✔ matrix: adversarial-reviewer × fkit-record-decision -> deny
+✔ matrix: adversarial-reviewer × fkit-review -> deny
+✔ matrix: adversarial-reviewer × fkit-stateful-review -> deny
+✔ matrix: adversarial-reviewer × fkit-status -> deny
+✔ matrix: adversarial-reviewer × fkit-sprint-cancelled -> deny
+✔ matrix: adversarial-reviewer × fkit-sprint-done -> deny
+✔ matrix: adversarial-reviewer × fkit-survey-project -> deny
+✔ matrix: adversarial-reviewer × fkit-task-cancelled -> deny
+✔ matrix: adversarial-reviewer × fkit-task-done -> deny
+✔ matrix: adversarial-reviewer × fkit-task-brief -> deny
+✔ matrix: adversarial-reviewer × fkit-task-ship-loop -> deny
+✔ matrix: adversarial-reviewer × fkit-team -> allow
+✔ matrix: adversarial-reviewer × fkit-wiki-ingest -> deny
+✔ matrix: adversarial-reviewer × fkit-wiki-lint -> deny
+✔ matrix: adversarial-reviewer × fkit-wiki-sync -> deny
+✔ matrix: wiki × fkit-adversarial-review -> deny
+✔ matrix: wiki × fkit-design-spec -> deny
+✔ matrix: wiki × fkit-evaluate-approach -> deny
+✔ matrix: wiki × fkit-heal -> deny
+✔ matrix: wiki × fkit-initiate-project -> deny
+✔ matrix: wiki × fkit-inspect -> deny
+✔ matrix: wiki × fkit-plan-task -> deny
+✔ matrix: wiki × fkit-process-review -> deny
+✔ matrix: wiki × fkit-process-stateful-review -> deny
+✔ matrix: wiki × fkit-dumb-down -> allow
+✔ matrix: wiki × fkit-open-questions-interview -> allow
+✔ matrix: wiki × fkit-query -> allow
+✔ matrix: wiki × fkit-record-decision -> deny
+✔ matrix: wiki × fkit-review -> deny
+✔ matrix: wiki × fkit-stateful-review -> deny
+✔ matrix: wiki × fkit-status -> deny
+✔ matrix: wiki × fkit-sprint-cancelled -> deny
+✔ matrix: wiki × fkit-sprint-done -> deny
+✔ matrix: wiki × fkit-survey-project -> deny
+✔ matrix: wiki × fkit-task-cancelled -> deny
+✔ matrix: wiki × fkit-task-done -> deny
+✔ matrix: wiki × fkit-task-brief -> deny
+✔ matrix: wiki × fkit-task-ship-loop -> deny
+✔ matrix: wiki × fkit-team -> allow
+✔ matrix: wiki × fkit-wiki-ingest -> allow
+✔ matrix: wiki × fkit-wiki-lint -> allow
+✔ matrix: wiki × fkit-wiki-sync -> allow
+✔ every deny path resolves via the full JSON deny shape, never a bare/partial one
+✔ a deny is never signalled by a malformed/partial JSON shape that a real Claude Code would ignore
+ℹ tests 260
+ℹ suites 0
+ℹ pass 258
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+
+✖ failing tests:
+
+test at test/skill-ownership-hook.test.js:100:1
+✖ reviewer owns fkit-review -> allow
+  AssertionError [ERR_ASSERTION]: reviewer x fkit-review: expected allow (empty stdout), but got a decision on stdout: {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"role 'reviewer' does not own skill 'fkit-review'"}}
+  
+  + actual - expected
+  
+  + `{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"role 'reviewer' does not own skill 'fkit-review'"}}`
+  - ''
+  
+      at assertAllow (file:///Users/mark.dolbyrev/Workspace/fkit/test/skill-ownership-hook.test.js:71:10)
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/skill-ownership-hook.test.js:102:3)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: `{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"role 'reviewer' does not own skill 'fkit-review'"}}`,
+    expected: '',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/skill-ownership-hook.test.js:350:5
+✖ matrix: reviewer × fkit-review -> allow
+  AssertionError [ERR_ASSERTION]: reviewer × fkit-review: expected allow (empty stdout), but got a decision on stdout: {"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"role 'reviewer' does not own skill 'fkit-review'"}}
+  
+  + actual - expected
+  
+  + `{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"role 'reviewer' does not own skill 'fkit-review'"}}`
+  - ''
+  
+      at assertAllow (file:///Users/mark.dolbyrev/Workspace/fkit/test/skill-ownership-hook.test.js:71:10)
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/skill-ownership-hook.test.js:353:9)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: `{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"role 'reviewer' does not own skill 'fkit-review'"}}`,
+    expected: '',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,17 @@
+{
+  "command": [
+    "python3",
+    "-"
+  ],
+  "exit": 1,
+  "failedAssertion": "all(4352 - size >= 400 for size in blocks.values())",
+  "observedManagedBlockBytes": {
+    "CLAUDE.md": 3956,
+    "AGENTS.md": 3956
+  },
+  "freeBytes": 396,
+  "requiredFreeBytes": 400,
+  "sourceImages": "intermediate-after/",
+  "taskDiff": "task-source-intermediate.diff",
+  "limitation": "Full stdin script not retained at invocation; failing stage and exact tool traceback preserved. No functional check failed."
+}

@@ -1,0 +1,139 @@
+{
+  "sourceTouchedPaths": [
+    "claude/agents/fkit-lead.md",
+    "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+    "codex/server.mjs",
+    "codex/materialize.mjs",
+    "codex/README.md",
+    "CHANGELOG.md",
+    "test/launcher-contract.test.js"
+  ],
+  "artifactPaths": [
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/CHANGELOG.md.txt",
+      "sha256": "89987d37545499cfe036e5c9df8c5613a50c6aa38bc6f4d701b582c4d3ebfd54",
+      "bytes": 17645
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/claude/agents/fkit-lead.md.txt",
+      "sha256": "ac3416079899e31fd1b99ad01243f96ff4f421060997322b0980d513485b4607",
+      "bytes": 21356
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/claude/skills/fkit-sprint-ship-loop/SKILL.md.txt",
+      "sha256": "85af2b5dc21c7f8d99ca7c584d7770faea9eef86b3d46d80b3304b6e10bf619c",
+      "bytes": 56762
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/codex/README.md.txt",
+      "sha256": "32c9affe9ca0ca3f68db3b0a051f6401bd51031a3949f7aa46e0b9ae184dfeff",
+      "bytes": 15172
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/codex/materialize.mjs.txt",
+      "sha256": "f5632ef0fc4011bd1b5d83b1f71db45c43202e373c137571c09d70801d23bd2e",
+      "bytes": 26369
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/codex/server.mjs.txt",
+      "sha256": "3c8e53c0aee8d3c8d756a1f2546706bae59c0dc021f45686328ba288138a5003",
+      "bytes": 10079
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/test/launcher-contract.test.js.txt",
+      "sha256": "18df6b82b49a18f23e41ba295df9f3bb315aa9d05bce1e46e8cdda12190fddfe",
+      "bytes": 80013
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/audit.json",
+      "sha256": "ab514fba5101481ed83ef4721c0c9cebacfcaa113ee5c55801eff760a29dad62",
+      "bytes": 3197
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/baseline-source.diff",
+      "sha256": "7373db61502c85d950a290876b6aef77a02bc2aba74ec091d853296bea33388d",
+      "bytes": 710
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/baseline.json",
+      "sha256": "4f6a66f84c8a01c7cdcf6f785994a046b300e1789c5aadb69581d87d28a0d2a7",
+      "bytes": 350776
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/CHANGELOG.md.txt",
+      "sha256": "d84428baa4b2b54dbe8c8985c253056ea5d6b5fe8b69f5fc941166047004c3bc",
+      "bytes": 17357
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/claude/agents/fkit-lead.md.txt",
+      "sha256": "afb8c4e64f1bb18bae3a0f702830c41c7f1af4bbba1f9b3ba77abe24e706a247",
+      "bytes": 18960
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/claude/skills/fkit-sprint-ship-loop/SKILL.md.txt",
+      "sha256": "471e60ff762558964cb4cb56bd8114680e1d38d0d155bcfb313940d6591c46ec",
+      "bytes": 52760
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/codex/README.md.txt",
+      "sha256": "3d7b18b6a75fc0979971965a28a9e032f5626bbe3efc0e12ffbceafbb2d13527",
+      "bytes": 12978
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/codex/materialize.mjs.txt",
+      "sha256": "5225138d3d3b73b77841630112d0f8fbea8c42f65bce72ede6166a8540295f48",
+      "bytes": 24671
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/codex/server.mjs.txt",
+      "sha256": "c345d68c8ca569dc36a9c3ba3f066177bdd94d7b51594411e20ed7f9f22e68f1",
+      "bytes": 9994
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/test/launcher-contract.test.js.txt",
+      "sha256": "95353e66b065d2f46da31eb8483d368eef22925dcd5e69fad027f7ddc8422ab9",
+      "bytes": 79468
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/delivery-seam.md",
+      "sha256": "fbed9df0d07a9d34e6ca2add7c6a0104774e796606efc287a428f41ab1022687",
+      "bytes": 1486
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/scoped-checks.json",
+      "sha256": "67c71da4ed6917864b683046b9497f456624c9371af5d049a7ed115a988e4007",
+      "bytes": 943
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-green.json",
+      "sha256": "9728659b801ef3bc3e214759ddebbac673ca410be47c11555dc2bf45cbf0018d",
+      "bytes": 290
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-green.tap",
+      "sha256": "84c0494d63df9c26442fa6d333020455adc63d37ee4dc951da7b95f5fd8d3041",
+      "bytes": 687
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-red.json",
+      "sha256": "dd494ea828c0bad6eb3945ce578cf26710c04f7b4d0cf5338717e7aa0dd2fefc",
+      "bytes": 328
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-red.tap",
+      "sha256": "3fb7de063afdf4d4225c2ddc81c8ce73e0842ffdcc3b360a9290e36588c6f695",
+      "bytes": 1436
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/task-source.diff",
+      "sha256": "c8b9f1b27114d200d863509f0e46c872e5d21251030776937b5d9db74316657f",
+      "bytes": 39075
+    },
+    {
+      "path": "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/worklog.md",
+      "sha256": "8b1bde963e3eebd9c0998cadde5b35b7d9954a701f51ea2721c3fe33fcb6642f",
+      "bytes": 8954
+    }
+  ],
+  "note": "Manifest excludes itself. Before/after snapshots are .txt data, not new tests."
+}

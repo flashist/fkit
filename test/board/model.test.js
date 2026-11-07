@@ -1,5 +1,6 @@
 // The board's model and front-matter layer (board/core/model.mjs), ported from aiboard a1592dc.
 // ModelTests keeps aiboard's test names verbatim so 0423 can match every ported test by name.
+import '../execution-disabled.mjs';
 import assert from 'node:assert/strict';
 import { test, describe } from 'node:test';
 import {

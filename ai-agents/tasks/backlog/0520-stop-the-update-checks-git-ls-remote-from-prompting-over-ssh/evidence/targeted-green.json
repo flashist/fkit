@@ -1,0 +1,12 @@
+{
+  "command": "node --test '--test-name-pattern=^0520/' test/update-banner.test.js",
+  "argv": [
+    "node",
+    "--test",
+    "--test-name-pattern=^0520/",
+    "test/update-banner.test.js"
+  ],
+  "childExit": 0,
+  "stdout": "(node:29765) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/update-banner.test.js is not specified and it doesn't parse as CommonJS.\nReparsing as ES module because module syntax was detected. This incurs a performance overhead.\nTo eliminate this warning, add \"type\": \"module\" to /Users/mark.dolbyrev/Workspace/fkit/package.json.\n(Use `node --trace-warnings ...` to show where the warning was created)\n\u2714 0520/scp-rewrite\n\u2139 {\"controls\":{\"https\":0,\"ssh\":128},\"helpExit\":0,\"launcherExit\":0,\"sshSentinelCalls\":0}\n\u2714 0520/ssh-url-rewrite\n\u2139 {\"controls\":{\"https\":0,\"ssh\":128},\"helpExit\":0,\"launcherExit\":0,\"sshSentinelCalls\":0}\n\u2714 0520/https-preserved-and-scoped\n\u2139 {\"controls\":{\"https\":0,\"ssh\":null},\"launcherExit\":0,\"helperInvocations\":1}\n\u2139 tests 3\n\u2139 suites 0\n\u2139 pass 3\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n",
+  "stderr": "\n"
+}

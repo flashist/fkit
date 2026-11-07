@@ -1,5 +1,6 @@
 // Sprint move / add / remove in board/core/store.mjs, ported from aiboard a1592dc's tests/test_board.py.
 // BoardTests keeps aiboard's sprint test names verbatim, in aiboard's order, so 0423 can match each one.
+import '../execution-disabled.mjs';
 import assert from 'node:assert/strict';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';

@@ -1,0 +1,46 @@
+{
+  "command": "inline node --input-type=module; normal setup and launchArgs API, no CLI provider calls",
+  "childExit": 0,
+  "checks": [
+    {
+      "path": ".claude/agents/fkit-lead.md",
+      "via": "setup → canonical initializer",
+      "result": "PASS byte-identical",
+      "sha256": "ac3416079899e31fd1b99ad01243f96ff4f421060997322b0980d513485b4607"
+    },
+    {
+      "path": ".claude/skills/fkit-sprint-ship-loop/SKILL.md",
+      "via": "setup → canonical initializer",
+      "result": "PASS byte-identical",
+      "sha256": "85af2b5dc21c7f8d99ca7c584d7770faea9eef86b3d46d80b3304b6e10bf619c"
+    },
+    {
+      "path": ".agents/skills/fkit-sprint-ship-loop/SKILL.md",
+      "via": "setup → normal skillText materialization",
+      "result": "PASS complete adapted canonical body",
+      "sha256": "ffd736484d6a8f4ebd9d8666f1a18af756c22670a175c6ef0c7a0cfb6ebe2b20"
+    },
+    {
+      "path": "configured Codex developer_instructions argv",
+      "via": "launchArgs → instructions → runtime binding + full canonical lead body",
+      "result": "PASS",
+      "instructionSha256": "bd25653a694d97f67c9be79178d4f7f6e23e5515167dab5c43d8dc024300072a",
+      "liveProviderExecuted": false
+    },
+    {
+      "path": "configured Claude --append-system-prompt argv",
+      "via": "launchArgs → instructions → runtime binding + full canonical lead body",
+      "result": "PASS",
+      "instructionSha256": "785ddfdd4aa98f7d0a16ebea7f5067f1c7987d4de8090ff9c942f9224de40266",
+      "liveProviderExecuted": false
+    },
+    {
+      "path": "repeat normal setup",
+      "result": "PASS same generated driver bytes"
+    }
+  ],
+  "limits": [
+    "Models not invoked; behavior obedience and host resumption unverified.",
+    "Claude binding argv assembled; live Claude compatibility unverified."
+  ]
+}

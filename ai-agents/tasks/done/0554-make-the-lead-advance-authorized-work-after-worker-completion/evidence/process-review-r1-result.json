@@ -1,0 +1,103 @@
+{
+  "scope": "Process-review R1: captured source/task/evidence/index only; no whole-workspace-clean claim or substitute Verify final report.",
+  "result": "PASS",
+  "executed": "Python saved-log/JSON count agreement, source/evidence hashes, exact document-change reconstruction, protected reviewer ownership and index comparisons; no behavioral tests.",
+  "changedCapturedPaths": [
+    "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/review.md",
+    "ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/worklog.md"
+  ],
+  "unchangedCapturedPathsCount": 83,
+  "sevenSourceAfterimagesUnchanged": true,
+  "immutableBuildArtifactsUnchanged": 24,
+  "originalVerifyEvidenceUnchanged": 26,
+  "allPreexistingCapturedEvidenceUnchanged": true,
+  "approvedPlanAndReviewRecordUnchanged": true,
+  "reviewProtectedPrefixUnchangedExceptStatus": true,
+  "reviewOnlyEdits": "Status in-review to closed-out; one R1 Coder response row.",
+  "worklogOnlyEdits": "One M31 summary fragment corrected; Process-review section/decision log appended.",
+  "acceptedResidualsUnchanged": true,
+  "indexStageAndBytesUnchanged": true,
+  "unchangedProveRedScriptMatchesBuildBaseline": true,
+  "savedStepSummariesMatchAllSixJSONs": {
+    "0b": {
+      "counts": {
+        "tests": 75,
+        "suites": 4,
+        "pass": 75,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "childExit": 0
+    },
+    "0c": {
+      "counts": {
+        "tests": 260,
+        "suites": 0,
+        "pass": 260,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "childExit": 0
+    },
+    "1": {
+      "counts": {
+        "tests": 260,
+        "suites": 0,
+        "pass": 258,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "childExit": 1
+    },
+    "2": {
+      "counts": {
+        "tests": 75,
+        "suites": 4,
+        "pass": 73,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "childExit": 1
+    },
+    "30": {
+      "counts": {
+        "tests": 75,
+        "suites": 4,
+        "pass": 73,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "childExit": 1
+    },
+    "31": {
+      "counts": {
+        "tests": 75,
+        "suites": 4,
+        "pass": 72,
+        "fail": 3,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "childExit": 1
+    }
+  },
+  "savedScriptExit": 0,
+  "reviewStatus": "closed-out",
+  "taskClosurePerformed": false,
+  "behavioralReruns": 0,
+  "newPermanentTests": 0,
+  "newProveRedCases": 0,
+  "reviewCoverage": "reasoning-only second opinion; usable passes; actual diversity unknown; different model recommended",
+  "knownBroadAuditException": "Reviewer-recorded root scratch checkpoint mismatch remains outside this scoped audit; no previous bytes or attribution available."
+}

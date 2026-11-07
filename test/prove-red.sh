@@ -1,4 +1,6 @@
 #!/bin/sh
+printf '%s\n' 'Test execution is disabled by the project owner. See CONTRIBUTING.md#tests. Re-enabling requires an explicit owner decision and a separate change.' >&2
+exit 1
 # prove-red.sh — the mutation lane for the launcher and the skill-ownership hook (ADR-014; cut to four
 # cases by ADR-057 §D3).
 #

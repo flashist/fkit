@@ -1,0 +1,413 @@
+{
+  "utc": "2026-11-04T11:33:54.793742+00:00",
+  "role": "Process-review",
+  "task": "0540",
+  "caller": "fkit-lead",
+  "driver": "fkit-sprint-ship-loop",
+  "consultHop": "1 of 2",
+  "authority": {
+    "scope": "Final acceptance disposition only; no source writes",
+    "approvalRelay": "Trusted driver prose, not independently verified owner-channel proof",
+    "originalApproval": {
+      "utc": "2026-11-04T08:09:11Z",
+      "channel": "root interactive fkit_roles.fkit_ask_owner",
+      "quote": "Approve plan (Recommended) — Reproduce first, then apply only the three-call cleanup fix and specified verification. An unrelated red may persist, but full acceptance and closure remain blocked until resolved or separately ruled."
+    },
+    "parityApproval": {
+      "utc": "2026-11-04T09:28:16Z",
+      "channel": "root interactive fkit_roles.fkit_ask_owner",
+      "quote": "Approve exact parity amendment (Recommended) — Extend 0540 with the full revision-3 test/convention/header plan just presented, explicitly overriding prior NoParity prohibitions for that exact scope. Preserve original plan bytes, metadata and old folders; run specified checks. No acceptance waiver or closure is granted."
+    },
+    "newOwnerRuling": {
+      "date": "2026-11-04",
+      "recordedUTC": "11:19:31",
+      "channel": "root interactive fkit_roles.fkit_ask_owner typed comment",
+      "quote": "Remove any time-restrictions or idle-only restrictions for running tests. We spend more time on those things than on work itself.",
+      "effect": "Remove timing and idle-only gating for remaining 0540 acceptance; supersedes previous conditions, including 09:59:34 conditional quiet-window ruling.",
+      "idleClaimed": false,
+      "globalSourcePolicyEdited": false
+    }
+  },
+  "stepsCompleted": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "3.5",
+    "4",
+    "5",
+    "6",
+    "7"
+  ],
+  "stepOutcomes": {
+    "0": "Existing task ledger opened; empty accepted residuals and relevant ADRs loaded",
+    "1": "Zero reviewer/prior/novel finding IDs",
+    "2": "No re-litigation or suppressed settled finding",
+    "3": "Protected hashes, approved patches, raw full-run sets/counts, skip/total and exact probe restoration verified; no claim/severity to assign",
+    "3.5": "Zero defect/frontier/suggestion/regression IDs; owner policy change is not a source finding",
+    "4": "Zero verdict rows; existing empty table preserved",
+    "5": "Zero findings summary; no code change required; converge and recommend closeout under explicit new ruling",
+    "6": "No fix/residual; header Status closed-out; only Coder response appended",
+    "7": "Ledger/worklog/audit recorded; return DONE with limits and producer-only recommendation"
+  },
+  "novelIds": [],
+  "suppressedAsSettled": [],
+  "coderRowsAdded": 0,
+  "fixes": [],
+  "obviousWinnerCalls": [],
+  "newResiduals": [],
+  "statusBefore": "in-review",
+  "statusAfter": "closed-out",
+  "acceptanceBlockers": [],
+  "decision": "DONE",
+  "recommendation": "Driver may hand off to producer-only closure procedure; task/sprint not closed by this worker",
+  "planBlob": "a7245d31f2c7c91d6efd1b6642a08c08db2e04f3",
+  "amendmentBlob": "5eaedf1d2c2f1eca1149fc9682190ccb3effbe6c",
+  "head": "1767a47b9db50f3949789636c3e0b513950e7368",
+  "headMatchesVerify": true,
+  "protectedHashesBefore": {
+    "test/dual-home-parity.test.js": "947e531c591310a14466a96434ea0c0b585716b4dc252eb52034c6fd1a73d22e",
+    "test/dual-home-parity-exceptions.mjs": "25c7161777c0d5cefac7312f9a59686e112c6d8e5a1ee76ddb17f3ebaaaf9f08",
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": "cb17f0a5561c448f28e1bc2b27e5fac9a64e25dd68aff1d3da273fd2f3da135a",
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    ".git/index": "a8f5e7698a080f20496ff18af077f2a40daa4ac3b762354b1240d7f0a8c714a3",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": "e51d2a1e07187b2a056bb28af81563762e73af5fce772e6a76f5e464138d8627",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "89b9593934ce2dde47bc849180dd75714cfe474f4cb64f363519c44f4925cc92",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md": "8bfbb42e8a9f625abd41f7d381f02280f929d7261db62302514a610af8444316",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md": "71eae3c9e2e29608fbff6aa7b5870f687f9f27f4e75c7e33d83612d41f77c4ed",
+    "ai-agents/sprints/sprint-15.md": "26edc5b60cadb92ad1a0e7b8e9e8d53b5e95510ce9849ce863e5a110d84e918d",
+    "CONTRIBUTING.md": "aa0d10573565b8677f2f9137e3b7aa9c3d0a3128ed129bda59b6ba9d7c9d014d",
+    "package.json": "dfad66428001fb3becd139cd4b10f67c6d27d7785cc8f4045520ccb9aff91ece",
+    ".fkit/tmp/0540-build-20261104/measure.mjs": "02229413c483d8d4e7a263b301cdd3139a19d0d26beb7949d0dd93e7fe6a1718"
+  },
+  "protectedHashesAfterExcludingAuthorizedReviewEdit": {
+    "test/dual-home-parity.test.js": "947e531c591310a14466a96434ea0c0b585716b4dc252eb52034c6fd1a73d22e",
+    "test/dual-home-parity-exceptions.mjs": "25c7161777c0d5cefac7312f9a59686e112c6d8e5a1ee76ddb17f3ebaaaf9f08",
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": "cb17f0a5561c448f28e1bc2b27e5fac9a64e25dd68aff1d3da273fd2f3da135a",
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    ".git/index": "a8f5e7698a080f20496ff18af077f2a40daa4ac3b762354b1240d7f0a8c714a3",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": "e51d2a1e07187b2a056bb28af81563762e73af5fce772e6a76f5e464138d8627",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "89b9593934ce2dde47bc849180dd75714cfe474f4cb64f363519c44f4925cc92",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md": "8bfbb42e8a9f625abd41f7d381f02280f929d7261db62302514a610af8444316",
+    "ai-agents/sprints/sprint-15.md": "26edc5b60cadb92ad1a0e7b8e9e8d53b5e95510ce9849ce863e5a110d84e918d",
+    "CONTRIBUTING.md": "aa0d10573565b8677f2f9137e3b7aa9c3d0a3128ed129bda59b6ba9d7c9d014d",
+    "package.json": "dfad66428001fb3becd139cd4b10f67c6d27d7785cc8f4045520ccb9aff91ece",
+    ".fkit/tmp/0540-build-20261104/measure.mjs": "02229413c483d8d4e7a263b301cdd3139a19d0d26beb7949d0dd93e7fe6a1718"
+  },
+  "allProtectedBytesUnchangedExceptAuthorizedReviewEdit": true,
+  "reviewerHeaderExceptStatusSha256Before": "7b74e03cc517ce36b8396667fa2f22c89ac209a6d2eb0f4df4750aee06d96884",
+  "reviewerHeaderExceptStatusSha256After": "7b74e03cc517ce36b8396667fa2f22c89ac209a6d2eb0f4df4750aee06d96884",
+  "reviewerFindingsSha256": "82503868aa7e78f72419a81a5024bd8694db1ec10bdd591dda78f12846679211",
+  "coverageExact": "Coverage: both reviewers measured — primary node --test test/dual-home-parity.test.js exit 0 (9/9); fresh leaf node --input-type=module -e mechanism probes exit 0 (leaf-reported); full-suite evidence remains inherited.",
+  "reviewerFindingsAndCoveragePreservedExactly": true,
+  "acceptedResidualsSha256": "543fef387b47b3696b87b9925059e2c76632e1dddb769241182f7aed84cc61d7",
+  "acceptedResidualsUnchanged": true,
+  "reviewBeforeSha256": "71eae3c9e2e29608fbff6aa7b5870f687f9f27f4e75c7e33d83612d41f77c4ed",
+  "reviewAfterSha256": "80490f1a2c5f63afa8f07a152b464cb850e6188fcff3559009ba945c6c248d22",
+  "worklogBeforeSha256": "840d4f7e9b75e13de09fd0e748c905f6dcbdbce17c0de33d8aff795aefa3d7f4",
+  "worklogAfterSha256": "989bc9932c5889d6f4c654ff5d9723e878849d3555c7c675fce42baee644ad43",
+  "worklogOriginalPrefixUnchanged": true,
+  "oldEvidenceHashes": {
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch": "967a5f290d5c3e8d47cd032c215f98cbcda3765205eca17cf098fcd5894452d4",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json": "a1a6c06973dea459af84ea16384ca866cb5e5c0b06bbc45a30d87d5c3f666a4f",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json": "1503746a360a927665a12ef965a3f90ef91332d1411c94148330095e3a5fb6e2",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json": "685ca98cbf0f0fbd41cb347b75194a25f3e12b3269c0e9e6df4efd793228fb0f",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json": "5b5e07a067b1d1b056ef69b1105ff7507251f13e2d34c9bfc8ded295878c6197",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json": "b90a2571f05621d54f7f90134f56a68694c39e4bc66424c03e38438c8f9c84b7",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json": "18410feae71d7bddb77b514c3ced7d21c0faa96c8c11d82f9e03d4fdb76e91a7",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json": "e4bd21b43b0dcb6f882f8ab398f6cdfcea1ccfd79fc2c3a8a3d5dc16bb6cf2f9",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json": "a6566ee8114be74c0309446fee8c3dc73e03c719fdf04931f9e697a16a954236",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json": "c993e2f6b8907446a5b7573e42f0ab4d57f00e76beef1ed02edd1f22b138fe4e",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json": "cad8dfe3c7ac361d0f501fc04b6c850c9e3c32a9c00a10bec84feb3dd5ad10c7",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff": "10272c723cc41e1a4902023a4d91ad1fa851762ee61cea9ea89429199b888516",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json": "0b14105b3eb70e559d35e92a0b53738af32cdeb44a3900bfd088f754f26040df",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json": "ca360e05c0097f49e297d2ea516d231424f63adb4ddbb1fc34c05a5e18567c5c",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-audit.json": "bc6e289dd0b9742d65367449383c5c671bc084b145dc66d580efd68dbe2614e2",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-preflight.json": "635341ed9bb2fd1a829eab210463d18519e515133b1ea4473ffbb262f58762b6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-audit.json": "5ac9d586050eca23a0f2b4ffed49543a3bf48a1d89a86c4d4125af11035f7339",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/quiet-window-precheck-20261104.json": "bc35f89f69d8f9385a27459e0c4a74e1d77c3ce9cd32361d6955ab85b6882bbc",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json": "bf1411e41187d900f10732a4eb056d0bedb0840bfe86a57721359936a9f5f124",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json": "25a170e042f19cde94f8d30c00f54f09666213dd8d0b2fdacef0bed99987b7da"
+  },
+  "oldEvidenceUnchanged": true,
+  "inheritedFullSuite": {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "startedUTC": "2026-11-04T09:39:38.404Z",
+    "finishedUTC": "2026-11-04T09:40:54.995Z",
+    "exit": 0,
+    "summary": {
+      "tests": 971,
+      "suites": 40,
+      "pass": 970,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 1,
+      "todo": 0,
+      "duration_ms": 76271.373959
+    },
+    "skips": [
+      "benchmark: snapshot against the per-member path on corpus-sized boards (FKIT_BOARD_BENCH=1)"
+    ],
+    "failedTests": [],
+    "wallSeconds": 76.43248979200001,
+    "canonicalTmpdir": "/private/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+    "node": "v24.13.0",
+    "platform": "darwin",
+    "release": "25.2.0",
+    "cpuCount": 14,
+    "baselineTestTotalEqual": true,
+    "baselineSkipSetEqual": true
+  },
+  "preservationRecomputedFromRawEvidence": {
+    "fkit-proj-": {
+      "beforeCount": 34,
+      "afterCount": 34,
+      "setsIdentical": true,
+      "added": [],
+      "removed": [],
+      "originalCount": 28,
+      "diagnosticCount": 6,
+      "originalMissingBefore": [],
+      "originalMissingAfter": [],
+      "diagnosticMissingBefore": [],
+      "diagnosticMissingAfter": [],
+      "quietBeforeEqualsFullAfter": true,
+      "quietAfterEqualsFullAfter": true
+    },
+    "fkit-stub-": {
+      "beforeCount": 1,
+      "afterCount": 1,
+      "setsIdentical": true,
+      "added": [],
+      "removed": [],
+      "originalCount": 1,
+      "diagnosticCount": 0,
+      "originalMissingBefore": [],
+      "originalMissingAfter": [],
+      "diagnosticMissingBefore": [],
+      "diagnosticMissingAfter": [],
+      "quietBeforeEqualsFullAfter": true,
+      "quietAfterEqualsFullAfter": true
+    },
+    "fkit-argv-": {
+      "beforeCount": 1,
+      "afterCount": 1,
+      "setsIdentical": true,
+      "added": [],
+      "removed": [],
+      "originalCount": 1,
+      "diagnosticCount": 0,
+      "originalMissingBefore": [],
+      "originalMissingAfter": [],
+      "diagnosticMissingBefore": [],
+      "diagnosticMissingAfter": [],
+      "quietBeforeEqualsFullAfter": true,
+      "quietAfterEqualsFullAfter": true
+    },
+    "fkit-conv-": {
+      "beforeCount": 0,
+      "afterCount": 0,
+      "setsIdentical": true,
+      "added": [],
+      "removed": [],
+      "originalCount": 0,
+      "diagnosticCount": 0,
+      "originalMissingBefore": [],
+      "originalMissingAfter": [],
+      "diagnosticMissingBefore": [],
+      "diagnosticMissingAfter": [],
+      "quietBeforeEqualsFullAfter": true,
+      "quietAfterEqualsFullAfter": true
+    }
+  },
+  "restorationsRechecked": {
+    "orphan": {
+      "restored": true,
+      "diffRestoredExactly": true,
+      "originalEqualsRestored": true,
+      "currentMatchesRestored": true,
+      "actualChildExit": 1,
+      "summary": [
+        "ℹ tests 23",
+        "ℹ suites 7",
+        "ℹ pass 22",
+        "ℹ fail 1",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 10476.651834"
+      ],
+      "noGrowth": true
+    },
+    "structure": {
+      "restored": true,
+      "diffRestoredExactly": true,
+      "originalEqualsRestored": true,
+      "currentMatchesRestored": true,
+      "actualChildExit": 1,
+      "summary": [
+        "ℹ tests 971",
+        "ℹ suites 40",
+        "ℹ pass 968",
+        "ℹ fail 2",
+        "ℹ cancelled 0",
+        "ℹ skipped 1",
+        "ℹ todo 0",
+        "ℹ duration_ms 85802.188167"
+      ],
+      "noGrowth": true
+    }
+  },
+  "historicalRunsPreserved": {
+    "baseline-full.json": {
+      "exit": 1,
+      "summary": {
+        "tests": 971,
+        "suites": 40,
+        "pass": 969,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 1,
+        "todo": 0,
+        "duration_ms": 75845.322666
+      }
+    },
+    "baseline-orphan.json": {
+      "exit": 0,
+      "summary": {
+        "tests": 23,
+        "suites": 7,
+        "pass": 23,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 11153.737666
+      }
+    },
+    "fixed-orphan.json": {
+      "exit": 0,
+      "summary": {
+        "tests": 23,
+        "suites": 7,
+        "pass": 23,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 10346.555041
+      }
+    },
+    "failure-probe-structure.json": {
+      "exit": 1,
+      "summary": {
+        "tests": 971,
+        "suites": 40,
+        "pass": 968,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 1,
+        "todo": 0,
+        "duration_ms": 85802.188167
+      }
+    },
+    "failure-probe-orphan.json": {
+      "exit": 1,
+      "summary": {
+        "tests": 23,
+        "suites": 7,
+        "pass": 22,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 10476.651834
+      }
+    },
+    "restored-normal-full.json": {
+      "exit": 1,
+      "summary": {
+        "tests": 971,
+        "suites": 40,
+        "pass": 969,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 1,
+        "todo": 0,
+        "duration_ms": 74978.727375
+      }
+    }
+  },
+  "priorQuietPrecheck": {
+    "testsExecuted": [],
+    "suiteLaunched": false,
+    "idleMacEstablished": false,
+    "historicalDecision": "NEEDS-DECISION"
+  },
+  "testsExecutedThisWorker": [],
+  "quietWindowPrecheckExecutedThisWorker": false,
+  "freshChecks": [
+    "Read source/task/records",
+    "Protected SHA-256 equality with latest precheck and full-green Verify",
+    "Approved baseline orphan patch and parity Build patch exact equality",
+    "Raw exact prefix sets and original/diagnostic preservation",
+    "Full-suite baseline test total/skip set equality",
+    "Current source hashes match exact intentional-probe restorations",
+    "git diff --check exit 0"
+  ],
+  "parityPatchEqualsBuild": true,
+  "orphanPatchEqualsApproved": true,
+  "diffCheckExit": 0,
+  "reviewCoverage": {
+    "primary": "Fresh reviewer executed node --test test/dual-home-parity.test.js exit 0, 9/9, 165.197792 ms; existing MODULE_TYPELESS_PACKAGE_JSON warning",
+    "leaf": "Usable independent fresh leaf exit 0, no timeout/truncation; leaf-reported write-free Node mechanism probes exit 0, no suite; initial registration-count error corrected, sandbox-denied heredoc recovered read-only",
+    "fullSuite": "Inherited fresh Verify execution; no full-suite execution by reviewers or this worker",
+    "modelDisclosure": "Both passes used the same model. A different model is recommended for a broader second opinion.",
+    "configuredRequestedPrimary": "gpt-6.1-sol",
+    "configuredRequestedLeaf": "gpt-6.1-sol",
+    "observedServingIdentities": "unknown",
+    "servingModelDiversity": "unknown",
+    "missingOrUnusablePass": false
+  },
+  "limits": [
+    "Idle remains historically unproved; no current test timing/idle acceptance gate after explicit owner ruling",
+    "Normal-completion/best-effort cleanup does not prove SIGKILL/crash/abrupt-exit or pre-return allocation safety",
+    "Non-atomic Git/type and sampled-process observations, no continuous-activity or security guarantee",
+    "Historical parity reds, deliberate failures, prior partial/sandbox/probe errors preserved",
+    "No global source-policy edit; separate inventory outside unit",
+    "Only producer may close/move task/sprint and apply agent-closed marker; no commit/push authorized"
+  ],
+  "skippedChecks": {
+    "fullFocusedFailureSuites": "Completed hash-matched evidence; unchanged source and no new concern",
+    "quietWindowPrecheck": "Owner removed the gate",
+    "proveRed": "No mapped changed path/new case",
+    "release": "No release tooling",
+    "extraDocs": "Duplicate",
+    "buildLintInstallNativeAccountModelNetwork": "Unmapped/out of scope"
+  },
+  "wikiGrounding": {
+    "postWatermarkCommits": 12,
+    "watermark": "185ac5e07e918c089ed3afd23496587315342000",
+    "limit": "Wiki lacks current 0540 measurements; current source/runtime and new owner ruling govern changed facts; no wiki write"
+  },
+  "workerChangedPaths": [
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-final-disposition-20261104.json"
+  ],
+  "sourceWrites": [],
+  "committed": false,
+  "pushed": false,
+  "staged": false,
+  "taskSprintMovedOrClosed": false,
+  "wikiWrites": []
+}

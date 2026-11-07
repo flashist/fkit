@@ -33,6 +33,24 @@ complete review.
 The full project brief — domain, architecture, conventions — lives in
 [`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).
 
+## Project-only test execution pause — owner ruling, 2026-11-06
+
+> "Disable ALL tests not only in this session, but in general in this project. No need to remove them completely, but they should not be run"
+
+This standing instruction applies indefinitely to this fkit checkout, overriding generic test and
+verification requirements, including those in inherited briefs, plans, skills and reviews. Do not
+execute any tests: individual tests, mutation tests, discovery, fixtures, smoke tests, benchmarks,
+behavioral probes, saved verification scripts, or delegated runs. Preserve test sources. Use static
+inspection only; record required tests as **"skipped — owner disabled test execution"**, never passed.
+Behavioral acceptance remains unverified. Do not execute disabled commands to prove they refuse,
+and do not run release dry-runs as verification.
+
+Carry this ruling verbatim into every subsequent worker, source-only review and adversarial pass.
+Existing sessions need the ruling explicitly; these file edits do not update instructions they
+already loaded. Re-enabling requires an explicit owner decision and a separate change; there is
+no automatic expiry or environment-variable bypass. This is project-only: do not propagate the pause
+into shipped instructions for consuming projects. See [CONTRIBUTING.md](CONTRIBUTING.md#tests).
+
 <!-- fkit:begin-rules -->
 <!-- fkit-managed: this block is REPLACED on every `fkit` launch. Edits inside the markers
      are overwritten. Put your own standing instructions OUTSIDE them — everything outside
@@ -83,9 +101,9 @@ overrides a hard rule above.**
   two things they should do next, and why. After any prescribed shape, never instead of one. If nothing
   is pending, say so briefly. **Never invent a next step to fill it, and never assert repo state you did
   not check this turn** (see `ai-agents/knowledge-base/conventions/evidence-before-assertion.md`).
-- **Ask interactively.** In a session, ask the owner with `AskUserQuestion`, not prose, per
-  `ai-agents/knowledge-base/conventions/asking-the-owner.md`. In a spawned consult the tool is absent —
-  return open questions in your reply instead.
+- **Ask interactively.** Use the supported owner interface; if unavailable, state why, list choices
+  and wait, per `ai-agents/knowledge-base/conventions/asking-the-owner.md`. Workers return questions.
+  Requests prove neither display nor approval.
 <!-- fkit:end-rules -->
 
 ## Knowledge Base & Wiki

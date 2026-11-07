@@ -1,0 +1,86 @@
+--- STATIC/test/update-banner.test.js
++++ observed.mjs
+@@ -58,9 +58,8 @@
+ import assert from 'node:assert/strict';
+ import { spawnSync } from 'node:child_process';
+ import { mkdtempSync, writeFileSync, readFileSync, existsSync, chmodSync, symlinkSync, cpSync, rmSync } from 'node:fs';
+-import { tmpdir } from 'node:os';
+ import { join } from 'node:path';
+-import { REPO } from './harness.mjs';
++import { REPO } from 'file:///Users/mark.dolbyrev/Workspace/fkit/test/harness.mjs';
+ 
+ // The claude/ tree the fixture copies its launcher from. FKIT_BANNER_ROOT is a whole-tree redirect, so
+ // a run can point it at a deliberately-broken copy without touching the real launcher.
+@@ -85,10 +84,16 @@
+   'sleep', 'ps', 'mktemp', 'rm', 'env'];
+ 
+ const MADE = [];
+-after(() => MADE.forEach((d) => { try { rmSync(d, { recursive: true, force: true }); } catch { /* best effort */ } }));
++// Fixtures must outlive assertion failures so passive settlement can inspect them.
++const OBSERVATIONS = [];
++after(() => {
++  writeFileSync(process.env.FKIT_DIAG_TRACE, JSON.stringify(OBSERVATIONS.map(({ result, ...entry }) => ({
++    ...entry, result: { ...result, secs: result.secs ?? 'UNKNOWN', readSleepPids: undefined },
++  })), null, 2) + '\n');
++});
+ 
+ function temp(prefix) {
+-  const d = mkdtempSync(join(tmpdir(), prefix));
++  const d = mkdtempSync(join(process.env.FKIT_DIAG_FIXTURES, prefix));
+   MADE.push(d);
+   return d;
+ }
+@@ -182,12 +187,13 @@
+ // One launch. env is built from NOTHING — process.env is deliberately not spread, so an inherited
+ // FKIT_NO_UPDATE_CHECK (the shared harness sets it) can never reach in and silence the feature.
+ function launch(root, bin, { args = ['--help'], env = {}, cwd = null, path = null, inheritEnv = false } = {}) {
++  const preparationStartNs = process.hrtime.bigint().toString();
+   const logs = temp('fkit-banner-log-');
+   const gitLog = join(logs, 'git'), curlLog = join(logs, 'curl'), sleepLog = join(logs, 'sleep');
+   const PATH = path || bin;
+   const base = inheritEnv ? { ...process.env } : {};
+   delete base.FKIT_NO_UPDATE_CHECK;
+-  const r = spawnSync('/bin/sh', [join(root, 'claude', 'fkit-claude.sh'), ...args], {
++  const spawnOptions = {
+     cwd: cwd || temp('fkit-banner-cwd-'),
+     env: {
+       ...base,
+@@ -200,13 +206,24 @@
+       ...env,
+     },
+     encoding: 'utf8',
+-  });
++  };
++  const beforeSpawnNs = process.hrtime.bigint().toString();
++  const r = spawnSync('/bin/sh', [join(root, 'claude', 'fkit-claude.sh'), ...args], spawnOptions);
++  const syncReturnNs = process.hrtime.bigint().toString();
+   const read = (f) => (existsSync(f) ? readFileSync(f, 'utf8').trim().split('\n').filter(Boolean) : []);
+-  return {
++  const result = {
+     code: r.status, stdout: r.stdout || '', stderr: r.stderr || '', PATH,
+     gitCalls: read(gitLog), curlCalls: read(curlLog), sleepPids: read(sleepLog).map(Number),
+     readSleepPids: () => read(sleepLog).map(Number),
+   };
++  const postLogReadNs = process.hrtime.bigint().toString();
++  OBSERVATIONS.push({
++    preparationStartNs, beforeSpawnNs, syncReturnNs, postLogReadNs,
++    fixtures: { root, bin, logs, cwd: spawnOptions.cwd, home: spawnOptions.env.HOME },
++    spawn: { pid: r.pid, status: r.status, signal: r.signal, error: r.error?.message ?? null },
++    result,
++  });
++  return result;
+ }
+ 
+ // The banner is the only line starting with the ↑ marker; everything else on stdout is help text.
+@@ -459,10 +476,8 @@
+   return line ? line.split(' ').slice(1).map(Number) : [];
+ }
+ 
+-// A failing run must not leave a 20 s sleep behind for the rest of the suite. Called only on failure: a
+-// pid is not an identity, and one already dead may since belong to an unrelated process.
+ function reap(pids) {
+-  for (const p of pids) { try { process.kill(p, 'SIGKILL'); } catch { /* already gone */ } }
++  return;
+ }
+ 
+ function timedStall(git) {

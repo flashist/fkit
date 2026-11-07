@@ -1,0 +1,190 @@
+{
+  "mode": "static document/data closure inspection only; no tests or project-code behavioral verification",
+  "old_folder_absent": true,
+  "moved_original_file_count": 47,
+  "preservation_compared": 2509,
+  "unchanged_after_path_mapping": 2504,
+  "changed_existing_documents": [
+    {
+      "before": "ai-agents/sprints/sprint-15.md",
+      "after": "ai-agents/sprints/sprint-15.md",
+      "before_sha256": "d4b8a6f159332cc39fce0f27c97bde1c75ff8b05632b5df0cb795b237c4db16c",
+      "after_sha256": "e562fee6e0aab963fb6e69d3a50ee625bde9fe53bb285d8757d3c393123839fd"
+    },
+    {
+      "before": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+      "after": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+      "before_sha256": "d07b995be1fd18158dfb2dc14c289b22aeb6c8efd50bd2768619228afc23c4bf",
+      "after_sha256": "a1decdd3da9810eee2dd4ecbfb040a2e440e723dc9d3548b320ff1a2dad7d280"
+    },
+    {
+      "before": "ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+      "after": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+      "before_sha256": "46f03536de927ad6ddd8c1fc7f2dc18da3c9620460555a0a46c21266aba479ee",
+      "after_sha256": "5167e3b97d0804affd0c6049384d06a0d39ea4a70b7956e31beb179196098adc"
+    },
+    {
+      "before": "ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md",
+      "after": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md",
+      "before_sha256": "0c94c7e37111e87cd6ffbb3d40f9f6fdab623af6e5e77a1f245cd98acc3df326",
+      "after_sha256": "a29060a6e3f202d1ecc82ec0790a6c2ba5fbb8d4e0558f824f3c07944550100d"
+    },
+    {
+      "before": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+      "after": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+      "before_sha256": "b50c1b26760be9d4755fb9b5e185cddbd7ef831df2d056801530e3ea9b2f571c",
+      "after_sha256": "2dabf317cb9c7f6406005663a33e0c8b870b2f359480d72af0d1862d5a3dba1f"
+    }
+  ],
+  "missing": [],
+  "source_files": {
+    "ai-agents/knowledge-base/conventions/asking-the-owner.md": {
+      "close_entry_sha256": "f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38",
+      "current_sha256": "f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38",
+      "build_after_sha256": "f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38"
+    },
+    "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md": {
+      "close_entry_sha256": "f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38",
+      "current_sha256": "f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38",
+      "build_after_sha256": "f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38"
+    },
+    "claude/agents/fkit-lead.md": {
+      "close_entry_sha256": "72143f28caab3cd3cb0e258f587ef12112308e6dcb44ab90c6c4587e2952dec0",
+      "current_sha256": "72143f28caab3cd3cb0e258f587ef12112308e6dcb44ab90c6c4587e2952dec0",
+      "build_after_sha256": "72143f28caab3cd3cb0e258f587ef12112308e6dcb44ab90c6c4587e2952dec0"
+    },
+    "claude/agents/fkit-coder.md": {
+      "close_entry_sha256": "373530d29c42344da14691d90afb2268e5b468f4500190d225072f86da55bf12",
+      "current_sha256": "373530d29c42344da14691d90afb2268e5b468f4500190d225072f86da55bf12",
+      "build_after_sha256": "373530d29c42344da14691d90afb2268e5b468f4500190d225072f86da55bf12"
+    },
+    "claude/agents/fkit-producer.md": {
+      "close_entry_sha256": "1212c0246e1d927f1631497e087ae22637f229e764187d1670e872b077b05c2f",
+      "current_sha256": "1212c0246e1d927f1631497e087ae22637f229e764187d1670e872b077b05c2f",
+      "build_after_sha256": "1212c0246e1d927f1631497e087ae22637f229e764187d1670e872b077b05c2f"
+    },
+    "claude/agents/fkit-reviewer.md": {
+      "close_entry_sha256": "785af00f3bf22026e792271f2facfd1d0f39e04ea4ec57e7345f1472d1e277f6",
+      "current_sha256": "785af00f3bf22026e792271f2facfd1d0f39e04ea4ec57e7345f1472d1e277f6",
+      "build_after_sha256": "785af00f3bf22026e792271f2facfd1d0f39e04ea4ec57e7345f1472d1e277f6"
+    },
+    "claude/agents/fkit-architect.md": {
+      "close_entry_sha256": "fda5f7708683fec30c1c0b6bed87245ebd7ac003ca03dd37d5e9511e42203571",
+      "current_sha256": "fda5f7708683fec30c1c0b6bed87245ebd7ac003ca03dd37d5e9511e42203571",
+      "build_after_sha256": "fda5f7708683fec30c1c0b6bed87245ebd7ac003ca03dd37d5e9511e42203571"
+    },
+    "claude/agents/fkit-wiki.md": {
+      "close_entry_sha256": "75ddb4072e068b12af19356030108daaaaf1aa3b4f11ee31052258df72816937",
+      "current_sha256": "75ddb4072e068b12af19356030108daaaaf1aa3b4f11ee31052258df72816937",
+      "build_after_sha256": "75ddb4072e068b12af19356030108daaaaf1aa3b4f11ee31052258df72816937"
+    },
+    "claude/skills/fkit-sprint-ship-loop/SKILL.md": {
+      "close_entry_sha256": "22e5e8c1e6241a4746f329b2f4a6d346923dcaf576aec9034c10d62efae0d34a",
+      "current_sha256": "22e5e8c1e6241a4746f329b2f4a6d346923dcaf576aec9034c10d62efae0d34a",
+      "build_after_sha256": "22e5e8c1e6241a4746f329b2f4a6d346923dcaf576aec9034c10d62efae0d34a"
+    },
+    "claude/skills/fkit-task-ship-loop/SKILL.md": {
+      "close_entry_sha256": "423145e3ac90a99e8456072d92bfd1c75e2dcd7a134c17733a13d2fd2532f716",
+      "current_sha256": "423145e3ac90a99e8456072d92bfd1c75e2dcd7a134c17733a13d2fd2532f716",
+      "build_after_sha256": "423145e3ac90a99e8456072d92bfd1c75e2dcd7a134c17733a13d2fd2532f716"
+    },
+    "claude/skills/fkit-open-questions-interview/SKILL.md": {
+      "close_entry_sha256": "1580a219b84a092c7770bf3a338eb4dcf001516c1826a2e5bc4485fc0311bbe4",
+      "current_sha256": "1580a219b84a092c7770bf3a338eb4dcf001516c1826a2e5bc4485fc0311bbe4",
+      "build_after_sha256": "1580a219b84a092c7770bf3a338eb4dcf001516c1826a2e5bc4485fc0311bbe4"
+    },
+    "claude/skills/fkit-heal/SKILL.md": {
+      "close_entry_sha256": "d9cd407f140e8d0e4694e9d78052a14c858249e2e58d98cb1b20c5b01049e0e6",
+      "current_sha256": "d9cd407f140e8d0e4694e9d78052a14c858249e2e58d98cb1b20c5b01049e0e6",
+      "build_after_sha256": "d9cd407f140e8d0e4694e9d78052a14c858249e2e58d98cb1b20c5b01049e0e6"
+    },
+    "codex/materialize.mjs": {
+      "close_entry_sha256": "9ce2b246d2a9da9cd4bb45fde4e88a6851549cdd728a22c2a2f12dabb3412c3d",
+      "current_sha256": "9ce2b246d2a9da9cd4bb45fde4e88a6851549cdd728a22c2a2f12dabb3412c3d",
+      "build_after_sha256": "9ce2b246d2a9da9cd4bb45fde4e88a6851549cdd728a22c2a2f12dabb3412c3d"
+    },
+    "codex/README.md": {
+      "close_entry_sha256": "69e0436f6380a305fee7afc207226b8cb5604ea695267acd0a738f7529b3f63b",
+      "current_sha256": "69e0436f6380a305fee7afc207226b8cb5604ea695267acd0a738f7529b3f63b",
+      "build_after_sha256": "69e0436f6380a305fee7afc207226b8cb5604ea695267acd0a738f7529b3f63b"
+    },
+    "CHANGELOG.md": {
+      "close_entry_sha256": "9df55800fe0c0815b3eb71a9efe229ffb75a5ad1990b789f227849207de96bac",
+      "current_sha256": "9df55800fe0c0815b3eb71a9efe229ffb75a5ad1990b789f227849207de96bac",
+      "build_after_sha256": "9df55800fe0c0815b3eb71a9efe229ffb75a5ad1990b789f227849207de96bac"
+    },
+    "claude/structure-manifest.tsv": {
+      "close_entry_sha256": "6ce40371d1a620a10b10cd47e1d3febc3c32e926e3092a26a1f76c9e80c4a0d3",
+      "current_sha256": "6ce40371d1a620a10b10cd47e1d3febc3c32e926e3092a26a1f76c9e80c4a0d3",
+      "build_after_sha256": "6ce40371d1a620a10b10cd47e1d3febc3c32e926e3092a26a1f76c9e80c4a0d3"
+    }
+  },
+  "index": {
+    "before_entries": 2076,
+    "after_entries": 2123,
+    "removed_entries": [],
+    "added_entries": [
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/CHANGELOG.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-architect.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-coder.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-lead.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-producer.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-reviewer.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-wiki.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-heal/SKILL.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-open-questions-interview/SKILL.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-sprint-ship-loop/SKILL.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-task-ship-loop/SKILL.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/structure-manifest.tsv",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/codex/README.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/codex/materialize.mjs",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline-source.diff",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline-status.txt",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline.json",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/CHANGELOG.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-architect.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-coder.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-lead.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-producer.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-reviewer.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-wiki.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-heal/SKILL.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-open-questions-interview/SKILL.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-sprint-ship-loop/SKILL.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-task-ship-loop/SKILL.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/structure-manifest.tsv",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/codex/README.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/codex/materialize.mjs",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/diff-check.txt",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/protected-baseline.json",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/report.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/plan-review.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md",
+      "100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0\tai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md"
+    ],
+    "only_scoped_additions": true,
+    "current_index_sha256": "79eee3005c1a1b829d5ef46ed8ce3b5fe22d19009f1b96a59ee5d79f4062e1cb",
+    "scope": "logical mode/blob/stage/path records; physical index changed intentionally; pre-existing flag bytes not independently compared"
+  },
+  "approved_plan_git_blob": "e4320af4bc02ebd6a7717e66b3d8aaeb7b79884f",
+  "brief_status": "\u2705 Done (agent-closed \u2014 not owner-verified)",
+  "board_rows": [
+    "| P4 | [0556 \u2014 Give each independent owner decision its own selectable options](../tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) | Each independent decision has its own concise question, selectable options and stable approval binding. |",
+    "| \u2705 Done (agent-closed \u2014 not owner-verified) | P4 | **0556 \u2014 Give each independent owner decision its own selectable options** *(Depends on nothing; blocks nothing. Owner `fkit-coder`)* | [0556 \u2014 Give each independent owner decision its own selectable options](../tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) |"
+  ],
+  "reference_counts": {
+    "all": 89,
+    "repaired": 7,
+    "frozen": 82
+  }
+}

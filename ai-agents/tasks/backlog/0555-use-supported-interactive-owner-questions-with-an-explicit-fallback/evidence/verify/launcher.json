@@ -1,0 +1,20 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "test/launcher-contract.test.js"
+  ],
+  "exit": 1,
+  "counts": {
+    "tests": 75,
+    "suites": 4,
+    "pass": 73,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "provenance": "Fresh Verify execution",
+  "permissionContext": "restricted workspace-write",
+  "childCapture": null
+}

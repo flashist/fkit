@@ -1,0 +1,11 @@
+{
+  "task": "Task0520 \u2014 Stop the update check's git ls-remote from prompting over ssh",
+  "state": "starting",
+  "command": [
+    "npm",
+    "run",
+    "test:prove-red"
+  ],
+  "sourceChanges": "NONE",
+  "decisionLog": "none"
+}

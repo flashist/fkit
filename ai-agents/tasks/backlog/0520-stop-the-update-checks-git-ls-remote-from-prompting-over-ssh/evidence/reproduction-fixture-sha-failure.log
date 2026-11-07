@@ -1,0 +1,8 @@
+{"message":"Expected values to be strictly equal:\n+ actual - expected\n\n+ 'deadbee111111111111111111111111111111111\\trefs/heads/main\\n'\n- 'deadbee1111111111111111111111111111111111\\trefs/heads/main\\n'\n","actual":"deadbee111111111111111111111111111111111\trefs/heads/main\n","expected":"deadbee1111111111111111111111111111111111\trefs/heads/main\n","code":"ERR_ASSERTION"}
+ℹ tests 0
+ℹ suites 0
+ℹ pass 0
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0

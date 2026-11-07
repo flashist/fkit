@@ -1,0 +1,27 @@
+{
+  "utc": "2026-11-04T17:45:02.726848+00:00",
+  "sha256": {
+    "HANDOFF.md": "b7a05ad6733f65f9a0649d4c85ee64a6a2427179175fd110cad92a8bcf0a995e",
+    "audit-static.py": "ee2af4117d72fba223e6476b62caf3158fbc9e507036723ca0e78ee56b2ee8fe",
+    "baseline.json": "00d12a2beab636badcbd760648cc87fc2cc5d93f727c255aea003c81a26106a6",
+    "burner.mjs": "f59abb85b5127ee46d3ac253d6965cfc09011c29dcb69e83c666fed04aee6c49",
+    "commands.json": "be19cd271d70757429f2ce70abe71b001e2286c557c1f528008bee48a59cfa95",
+    "config.json": "fa69d277b6fe31a7429e808e8b526167e646fa6162fcb6674f7d6cb6e1d2efda",
+    "observed-v-reference.diff": "9ae912b5fbf0ceab110e0083df5a7a03f814f5f46346b7a8fd029701d42f93ec",
+    "observed.mjs": "d631b3d0eb4b7ec21f2b7e6e8214a4d7e25808f63c4ce45a57ebf8e030e30f03",
+    "observed.mjs.diff": "0e5e602711f3682454cb294e9343bb35dd8d7fa11a75c1ab4845b76d68112778",
+    "original-static.js": "687c1cdbe2b6852bf950e1e19fe547229a3d837f7bf511f96972d89884b3d2fe",
+    "passive-observer.mjs": "14e3f021e864e8ac8dc2a3affb70f62f793b3679ee445c0821a1667481f967fe",
+    "prepare-variants.py": "8e50c201c123321e9e2ac32a108801d93d6c18fc8b1d502d5840956df9419367",
+    "safe-reference.mjs": "31df3a729412c4e4f2d870a4900dcb24d01d1a27bed3654c3fd60ca0977edc60",
+    "safe-reference.mjs.diff": "6f2fbdbd26ba2e04c718d94d6823898787134e4108fd44ce25c36bacf4402945",
+    "static-audit-attempt1.json": "335781bd102a45acd4bfca7613dd308a4bcf75952bcef154ef1dd599bc6fe3bc",
+    "static-audit.json": "482b4adeba22ad63acca92509c9c38e0a6eab176367d5c5262ac76450e8a35f6",
+    "supervisor.mjs": "f48dfce399335742519fb37f6a6482b44d25d5007128ce78b7541d9ed2c893a7"
+  },
+  "originalHarnessSha256": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+  "N": 16,
+  "sourceScope": "NONE",
+  "batchInvocationsExecuted": 0,
+  "runtimeValidated": false
+}

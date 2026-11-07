@@ -1,0 +1,20 @@
+{
+  "step": "2",
+  "childExit": 1,
+  "counts": {
+    "tests": 75,
+    "suites": 4,
+    "pass": 73,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "failedNames": [
+    "2. `fkit --resume` \u2192 non-zero, and claude was NEVER exec'd",
+    "3. unknown first arg \u2192 non-zero, and claude was NEVER exec'd",
+    "Group A \u2014 argv contract"
+  ],
+  "output": "continuation-01-step-2.log",
+  "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+}

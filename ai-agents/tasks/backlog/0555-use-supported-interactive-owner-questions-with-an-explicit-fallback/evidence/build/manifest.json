@@ -1,0 +1,8 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "generate:manifest"
+  ],
+  "exit": 0
+}

@@ -1,0 +1,33 @@
+(node:30011) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/update-banner.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 0257/equal-versions: same version on both sides renders the newer-content form, never vX → vX
+✔ differing versions: the original vA → vB sentence is preserved verbatim
+✔ curl fails: no remote version, and no "v?" — the newer-content form carries it
+✔ 0257/no-curl: curl unreachable — no "v?", and the seal is proven, not assumed
+✔ installed .version has no version= line: renders without a stray v, and without "v?"
+✔ a non-default ref: the banner names the tracked ref, not a hard-coded main
+✔ installed sha == remote sha: complete silence
+✔ offline (git fails, curl unreachable): complete silence, exit 0
+✔ a source checkout: the whole check is skipped — silence, and no network call at all
+✔ FKIT_NO_UPDATE_CHECK=1: silence, and no network call at all
+✔ throttle: the first launch banners, a second inside the window is silent
+✔ .latest still records the remote version and sha
+✔ .latest keeps its own unknown fallback when the remote version is unavailable
+✔ a real role launch banners too: --help is only this suite's driver, not the trigger
+✔ 0284/git-env: GIT_TERMINAL_PROMPT=0 still reaches git through the deadline wrapper
+✔ 0520/scp-rewrite
+ℹ {"controls":{"https":0,"ssh":128},"helpExit":0,"launcherExit":0,"sshSentinelCalls":0}
+✔ 0520/ssh-url-rewrite
+ℹ {"controls":{"https":0,"ssh":128},"helpExit":0,"launcherExit":0,"sshSentinelCalls":0}
+✔ 0520/https-preserved-and-scoped
+ℹ {"controls":{"https":0,"ssh":null},"launcherExit":0,"helperInvocations":1}
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+

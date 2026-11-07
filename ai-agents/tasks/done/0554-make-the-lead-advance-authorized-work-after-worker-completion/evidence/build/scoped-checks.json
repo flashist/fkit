@@ -1,0 +1,57 @@
+[
+  {
+    "argv": [
+      "node",
+      "--check",
+      "codex/server.mjs"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "codex/materialize.mjs"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "node",
+      "--check",
+      "test/launcher-contract.test.js"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "git",
+      "diff",
+      "--check",
+      "--",
+      "claude/agents/fkit-lead.md",
+      "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+      "codex/server.mjs",
+      "codex/materialize.mjs",
+      "codex/README.md",
+      "CHANGELOG.md",
+      "test/launcher-contract.test.js"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "finalSourceReadback": true
+  },
+  {
+    "check": "top-level case declarations unchanged",
+    "before": 18,
+    "after": 18,
+    "new": 0
+  }
+]

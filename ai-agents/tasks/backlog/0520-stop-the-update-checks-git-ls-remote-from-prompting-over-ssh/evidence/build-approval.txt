@@ -1,0 +1,2 @@
+2026-11-05; interactive fkit_roles.fkit_ask_owner in root lead; observed 09:28:33 UTC. Relayed declared approval, trusted prose, not independent proof.
+Approve plan + correction (Recommended) — Accept HTTPS-only automatic Git checks, skipped non-HTTPS notices and the one-call protocol-policy override. Approve the three named cases and exact positive skip filters. Proceed through implementation, verification, review and producer closure; no commit or push.

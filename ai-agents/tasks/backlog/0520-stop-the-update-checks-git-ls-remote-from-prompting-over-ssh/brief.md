@@ -7,15 +7,65 @@
 Sprint 15
 
 ## Priority
-P3
+6
 
 ## Status
-🔲 Backlog
+🚧 Blocked — verification failed
 
 ## Owner
 fkit-coder
 
 ## Context
+
+**Current priority — owner ruling, 2026-11-06, user chat in root `fkit-lead`, relayed to
+`fkit-producer`; not producer precedent for re-ranking.** Now Sprint 15/P6
+(previously P3). The exact owner request is recorded on
+[Sprint 15](../../../sprints/sprint-15.md) under the dated owner-priority addendum.
+The new lead-continuation/question tasks come first among open work; the prior open tasks keep
+their relative order. This supersedes earlier priority and next-task/order statements only;
+quoted decisions remain historical. Status, disposition, placement, dependencies, existing
+approval gates and retry caps are unchanged. No implementation-plan approval or extra launch.
+
+**Current disposition — 2026-11-05.** The owner chose the following in interactive
+`fkit_roles.fkit_ask_owner` in the root `fkit-lead` session, recorded at 10:00:21 UTC and relayed
+verbatim to `fkit-producer`:
+
+> Keep blocked; continue implementation (Recommended) — Leave this task open with failed verification recorded, then continue the next eligible sprint task. No closure exception.
+
+Approved Build is complete; source review converged on zero confirmed defects with both passes
+usable. Required Verify **FAILED**: the filtered run had 970 total, 946 pass, 23 fail and 1 skip;
+22 failures were loopback-listen `EPERM`, and one was the existing first-use assertion `9 !== 15`.
+Prove-red also **FAILED**, because the unmutated launcher baseline 0b was red (74 pass, 1 fail).
+These failures do not establish a defect in the scoped source change. See the retained
+[verification audit](evidence/verify-final-audit.json) and [source review](review.md) for coverage
+and limitations. This task stays open at Sprint 15/P3; no closure exception, source repair or
+startup/configuration investigation is authorized. Skip it in this run and continue to the next
+eligible implementation task. This disposition supersedes the planning-only state below;
+placement, priority and dependencies are unchanged.
+
+**Historical planning claim — 2026-11-05, owner instructions relayed by `fkit-lead` to `fkit-producer`.**
+The root interactive `fkit_roles.fkit_ask_owner` start approval of 2026-11-03 was, verbatim:
+
+> Start Sprint 15 and drive it (Recommended) — Mark the sprint In progress, then plan 0540 first; continue 0537, 0520, 0548 through their approval gates. No task placements or dependencies change.
+
+The latest owner ruling, 2026-11-05, user chat in the root `fkit-lead` session, was, verbatim:
+
+> I'm repeating again. If we have any mentions of delays, of timeouts, or of benchmark, durations of tests, or whatever, we should ignore them for now. Let's just continue working on the implementation tasks.
+
+0537 is now deferred. This task is the next eligible implementation task in Sprint 15's existing
+order: P1/0540 is agent-closed Done; P2/0537 is deferred; 0284, this task's only dependency, is
+agent-closed Done in its brief and Sprint 12. Claim `🔄 In progress` in this brief and Sprint 15 for
+fresh planning only. Plan review remains ON (default), with actual owner plan approval required
+before source writes. Scheduling/start approval and 0537's retained plan are not source approval
+for 0520. No placement, priority or dependency changes; no new wait on any sprint.
+
+The latest ruling supersedes timing-related acceptance/discussion gates below and on the board
+for now: no duration measurements/comparisons, benchmarks, load runs or timeout diagnosis/repros.
+The isolated functional SSH-prompt reproduction, no-prompt/no-output/launch-continuation behavior,
+existing-file functional regression checks and owner ruling on custom SSH consequences remain
+part of planning. Preserve existing watchdog/product behavior; no timeout/watchdog redesign or
+removal is authorized. The coder's plan must state the custom SSH/proxy/key/wrapper consequences
+for the owner to decide. Historical start/placement notes below are superseded by this dated claim.
 
 > ⛔ **Do not start without the owner's specific word.** His standing rule, own words (2026-09-27):
 > *"if we already have a brief for that task, the task shouldn't start, until I specifically approve it

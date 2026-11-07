@@ -1,0 +1,16 @@
+{
+  "command": "node --test --test-skip-pattern='^0284/(git-deadline|term-ignored|no-stray|reinstall-deadline|reinstall-timeout-not-run):|^fkit additions a break file left by a dead breaker is removed, and waiters back off meanwhile$|^benchmark:' test/*.test.js test/board/*.test.js",
+  "childExit": 0,
+  "wrapperResult": "completed child and saved evidence",
+  "counts": {
+    "tests": 967,
+    "suites": 40,
+    "pass": 967,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "failedNames": [],
+  "keptArtifacts": []
+}

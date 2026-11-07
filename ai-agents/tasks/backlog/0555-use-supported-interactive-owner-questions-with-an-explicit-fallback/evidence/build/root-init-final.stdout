@@ -1,0 +1,20 @@
+• refreshed 7 agents → .claude/agents/, 28 skills → .claude/skills/
+• created intake .fkit/interview
+• .gitignore already ignores .fkit/
+• .gitignore already ignores .claude/agents/fkit-*.md
+• .gitignore already ignores .claude/skills/fkit-*/
+
+  fkit is ready in /Users/mark.dolbyrev/Workspace/fkit
+
+  Role-locked sessions — inside each, only its allowed entries load:
+    • lead         the conductor — status → producer; wiki-sync/lint → wiki
+    • producer     product & sprint planning, task briefs
+    • coder        implementation — the only role that writes source
+    • architect    design specs, ADRs, feasibility
+    • reviewer     code review (own pass + Codex second opinion)
+    • adversarial  hostile pass, findings only
+    • wiki         the wiki — ingest / lint / sync
+
+  Start:   fkit            (pick a role from the menu)
+           fkit coder      (skip the menu)
+  Inside a session, @fkit-<role> asks another role and brings the answer back.

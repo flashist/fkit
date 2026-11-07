@@ -1,0 +1,5 @@
+Static documentation check, not test execution.
+Command: git diff --check -- ai-agents/sprints/sprint-15.md ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md
+Exit: 2
+Output: ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md:179: new blank line at EOF.
+Disposition: pre-existing blank EOF line retained; close-only review change is line-3 locator. Not a pass.

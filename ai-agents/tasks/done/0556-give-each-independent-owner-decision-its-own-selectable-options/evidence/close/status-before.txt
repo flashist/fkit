@@ -1,0 +1,600 @@
+ M .github/workflows/prove-red.yml
+ M .github/workflows/test.yml
+ M AGENTS.md
+ M CHANGELOG.md
+ M CLAUDE.md
+ M CONTRIBUTING.md
+ M README.md
+ M RELEASING.md
+ M ai-agents/knowledge-base/architecture.md
+ M ai-agents/knowledge-base/conventions/asking-the-owner.md
+ M ai-agents/knowledge-base/conventions/dual-home-parity.md
+ M ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md
+ M ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md
+ M ai-agents/sprints/backlog.md
+ M ai-agents/sprints/sprint-15.md
+ M ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/brief.md
+ M ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md
+ M ai-agents/tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/brief.md
+RM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json
+RM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md
+R  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md
+RM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/brief.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-baseline.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-source.diff
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-static-checks.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-audit-20261104.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-checkpoint-20261104.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-final-20261104.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-final-audit.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-npm-test.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-preflight.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-static-readback.json
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/plan-review.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/plan.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/review.md
+ A ai-agents/tasks/done/0552-remove-test-timing-restrictions/worklog.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/CHANGELOG.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/claude/agents/fkit-lead.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/claude/skills/fkit-sprint-ship-loop/SKILL.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/codex/README.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/codex/materialize.mjs.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/codex/server.mjs.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/after/test/launcher-contract.test.js.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/artifact-manifest.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/audit.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/baseline-source.diff
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/baseline.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/CHANGELOG.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/claude/agents/fkit-lead.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/claude/skills/fkit-sprint-ship-loop/SKILL.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/codex/README.md.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/codex/materialize.mjs.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/codex/server.mjs.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/before/test/launcher-contract.test.js.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/delivery-seam.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/scoped-checks.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-green.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-green.tap
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-red.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/target-red.tap
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/task-source.diff
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/process-review-r1-preflight.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/process-review-r1-result.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-audit.py
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-bash-env.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-collect-step.py
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-consumed-evidence.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-preflight.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-progress-01.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-prove-red-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-prove-red-result.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-prove-red.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-0b.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-0b.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-0c.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-0c.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-1.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-1.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-2.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-2.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-30.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-30.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-31.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-step-31.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/coverage-limits.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/delivery-attempt1.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/delivery-attempt2-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/delivery-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/delivery-command.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/delivery.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/existing-fixture-results.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-sandbox-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-sandbox.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-sandbox.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-scoped-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-scoped.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/functional-scoped.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/intermediate-preservation.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/launcher-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/launcher.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/launcher.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/preflight.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/prove-red-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/prove-red-step-0b.txt
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/prove-red.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/prove-red.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/run-lane.py
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/whitespace-checkpoint.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/whitespace.json
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/whitespace.log
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/plan-review.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/plan.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/review.md
+ A ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/worklog.md
+ M ai-agents/wiki-vault/index.md
+ M ai-agents/wiki-vault/log.md
+ M ai-agents/wiki-vault/wiki/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md
+ M ai-agents/wiki-vault/wiki/systems/testing-and-verification.md
+ M bin/release.mjs
+ M claude/agents/fkit-architect.md
+ M claude/agents/fkit-coder.md
+ M claude/agents/fkit-lead.md
+ M claude/agents/fkit-producer.md
+ M claude/agents/fkit-reviewer.md
+ M claude/agents/fkit-wiki.md
+ M claude/fkit-claude.sh
+ M claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+ M claude/scaffold/universal-rules.md
+ M claude/skills/fkit-heal/SKILL.md
+ M claude/skills/fkit-open-questions-interview/SKILL.md
+ M claude/skills/fkit-plan-task/SKILL.md
+ M claude/skills/fkit-sprint-ship-loop/SKILL.md
+ M claude/skills/fkit-task-ship-loop/SKILL.md
+ M claude/structure-manifest.tsv
+ M codex/README.md
+ M codex/materialize.mjs
+ M codex/owner-question.mjs
+ M codex/server.mjs
+ M package.json
+ M test/board-reader-host.test.js
+ M test/board/cli.test.js
+ M test/board/model.test.js
+ M test/board/server.test.js
+ M test/board/snapshot-index.test.js
+ M test/board/sprints.test.js
+ M test/board/store.test.js
+ M test/dual-home-parity-exceptions.mjs
+ M test/dual-home-parity.test.js
+ M test/harness.mjs
+ M test/launcher-contract.test.js
+ M test/prove-red.sh
+ M test/update-banner.test.js
+?? ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/after-CHANGELOG.md.snapshot
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/after-fkit-claude.sh.snapshot
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/after-update-banner.test.js.snapshot
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/before-CHANGELOG.md.snapshot
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/before-fkit-claude.sh.snapshot
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/before-update-banner.test.js.snapshot
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/build-approval.txt
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/build-audit.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/build-baseline.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/build-evidence-manifest.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/build-source.diff
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/expected-red-result.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/expected-red.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/expected-red.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/fixture-fragment.txt
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/focused-banner.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/focused-banner.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/node-syntax.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/node-syntax.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/preexisting-source.diff
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/process-review-audit.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/reproduce.mjs
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/reproduction-fixture-failure.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/reproduction-fixture-sha-failure.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/reproduction-result.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/reproduction.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/run-build-check.py
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/run-verify.py
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/scoped-whitespace.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/scoped-whitespace.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/shell-syntax.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/shell-syntax.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/targeted-green.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/targeted-green.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-filtered-checkpoint.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-filtered-disposition.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-filtered.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-filtered.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-final-audit.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-final-protected.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-preflight.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-prove-red-0b.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-prove-red-0b.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-prove-red-checkpoint.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-prove-red.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/verify-prove-red.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/whitespace.json
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/evidence/whitespace.log
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/plan-review.md
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/plan.md
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/review.md
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/verification-amendment.md
+?? ai-agents/tasks/backlog/0520-stop-the-update-checks-git-ls-remote-from-prompting-over-ssh/worklog.md
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/HANDOFF.md
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/audit-static.py
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/baseline.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/burner.mjs
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/commands.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/config.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/final-audit.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/final-status.txt
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1-supervisor-execution.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1-supervisor-stderr.txt
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1-supervisor-stdout.txt
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1-worker-final-audit.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1-worker-preflight.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1/1-safe-reference-focused/checkpoint.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1/1-safe-reference-focused/passive.jsonl
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1/1-safe-reference-focused/result.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1/1-safe-reference-focused/retained-logs/fkit-banner-log-KvyS64/git
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1/1-safe-reference-focused/retained-logs/fkit-banner-log-KvyS64/sleep
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1/1-safe-reference-focused/stdout.tap
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1/audit.jsonl
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/iteration-1/result.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/observed-v-reference.diff
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/observed.mjs
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/observed.mjs.diff
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/original-static.js
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/passive-observer.mjs
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/prepare-variants.py
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/safe-reference.mjs
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/safe-reference.mjs.diff
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/sealed-manifest.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/static-audit-attempt1.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/static-audit.json
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104/supervisor.mjs
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan-review.md
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan.md
+?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/worklog.md
+?? ai-agents/tasks/backlog/0548-use-native-runtime-model-and-effort-defaults-and-retire-fkit-selectors/plan-review.md
+?? ai-agents/tasks/backlog/0553-include-task-titles-alongside-ids-in-owner-facing-communication/brief.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/baseline-source.diff
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/baseline.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/AGENTS.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/CHANGELOG.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/CLAUDE.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/ai-agents/knowledge-base/conventions/asking-the-owner.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/plan-review.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/plan.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/claude/agents/fkit-lead.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/claude/scaffold/universal-rules.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/claude/skills/fkit-open-questions-interview/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/claude/skills/fkit-plan-task/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/claude/skills/fkit-sprint-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/claude/skills/fkit-task-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/claude/structure-manifest.tsv
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/codex/README.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/codex/materialize.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/codex/owner-question.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/codex/server.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/test/launcher-contract.test.js
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/complete-checks.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-budget-corrected.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-budget-corrected.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-budget-corrected.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-complete.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-complete.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-complete.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-final.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-final.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-final.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-initial-script.mjs.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-script.mjs.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/.agents/skills/fkit-open-questions-interview/SKILL.md.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/.agents/skills/fkit-plan-task/SKILL.md.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/.agents/skills/fkit-sprint-ship-loop/SKILL.md.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/.agents/skills/fkit-task-ship-loop/SKILL.md.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/.claude/agents/fkit-lead.md.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/.claude/skills/fkit-open-questions-interview/SKILL.md.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/.claude/skills/fkit-plan-task/SKILL.md.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/.claude/skills/fkit-sprint-ship-loop/SKILL.md.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/.claude/skills/fkit-task-ship-loop/SKILL.md.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/claude-adversarial-root-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/claude-coder-delegated-interactive-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/claude-coder-off-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/claude-coder-on-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/claude-coder-worker-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/claude-lead-root-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-adversarial-root-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-adversarial-root-startup.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-coder-delegated-interactive-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-coder-delegated-interactive-startup.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-coder-off-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-coder-off-startup.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-coder-on-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-coder-on-startup.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-coder-worker-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-lead-root-instructions.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery/codex-lead-root-startup.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/index-before.patch
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/AGENTS.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/CHANGELOG.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/CLAUDE.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/ai-agents/knowledge-base/conventions/asking-the-owner.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/claude/agents/fkit-lead.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/claude/scaffold/universal-rules.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/claude/skills/fkit-open-questions-interview/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/claude/skills/fkit-plan-task/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/claude/skills/fkit-sprint-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/claude/skills/fkit-task-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/claude/structure-manifest.tsv
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/codex/README.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/codex/materialize.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/codex/owner-question.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/codex/server.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/intermediate-after/test/launcher-contract.test.js
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-after/.claude/agents/fkit-lead.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-after/.claude/skills/fkit-open-questions-interview/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-after/.claude/skills/fkit-plan-task/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-after/.claude/skills/fkit-sprint-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-after/.claude/skills/fkit-task-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-adversarial-review/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-design-spec/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-dumb-down/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-evaluate-approach/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-heal/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-heal/check.sh
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-heal/repair.sh
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-initiate-project/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-inspect/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-open-questions-interview/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-plan-task/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-process-review/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-process-stateful-review/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-query/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-record-decision/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-review/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-sprint-cancelled/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-sprint-done/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-sprint-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-stateful-review/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-status/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-status/dashboard.sh
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-status/throughput.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-survey-project/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-task-brief/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-task-cancelled/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-task-done/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-task-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-team/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-wiki-ingest/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-wiki-lint/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.agents/skills/fkit-wiki-sync/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/agents/fkit-adversarial-reviewer.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/agents/fkit-architect.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/agents/fkit-coder.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/agents/fkit-lead.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/agents/fkit-producer.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/agents/fkit-reviewer.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/agents/fkit-wiki.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-adversarial-review/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-design-spec/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-dumb-down/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-evaluate-approach/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-heal/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-heal/check.sh
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-heal/repair.sh
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-initiate-project/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-inspect/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-open-questions-interview/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-plan-task/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-process-review/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-process-stateful-review/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-query/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-record-decision/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-review/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-sprint-cancelled/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-sprint-done/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-sprint-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-stateful-review/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-status/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-status/dashboard.sh
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-status/throughput.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-survey-project/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-task-brief/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-task-cancelled/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-task-done/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-task-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-team/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-wiki-ingest/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-wiki-lint/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/managed-before/.claude/skills/fkit-wiki-sync/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/manifest.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/manifest.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/manifest.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/preservation-attempt1.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/preservation-attempt1.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/preservation-attempt1.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-budget-corrected.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-budget-corrected.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-budget-corrected.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-complete.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-complete.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-complete.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-final.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-final.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-final.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/scoped-checks.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/status-before.txt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize-final.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize-final.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize-final.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-owner.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-owner.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-owner.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-server.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-server.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-server.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-test.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-test.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-test.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-complete.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-complete.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-complete.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green-final.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green-final.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green-final.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-red.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-red.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-red.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/task-source-intermediate.diff
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace-complete.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace-complete.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace-complete.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/audit-before.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/audit.py
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/build-evidence-hashes.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-01/authority-and-scope.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-01/filtered.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-01/filtered.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-01/finalize-audit.py
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-01/inherited-build-checks-read.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-01/old-verify-hashes-before.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-01/render-report.py
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-01/run-check.py
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-01/source-check-before.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-01/summarize-results.py
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/completion-state.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/AGENTS.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/CHANGELOG.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/CLAUDE.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/ai-agents/knowledge-base/conventions/asking-the-owner.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/claude/agents/fkit-lead.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/claude/scaffold/universal-rules.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/claude/skills/fkit-open-questions-interview/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/claude/skills/fkit-plan-task/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/claude/skills/fkit-sprint-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/claude/skills/fkit-task-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/claude/structure-manifest.tsv
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/codex/README.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/codex/materialize.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/codex/owner-question.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/codex/server.mjs
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/current-source/test/launcher-contract.test.js
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/filtered.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/filtered.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/inherited-checks.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/launcher.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/launcher.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/launcher.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.Jmz4Ib
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.Jmz4Ib.argv
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.Jmz4Ib.exit
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.Jmz4Ib.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.Jmz4Ib.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.Jmz4Ib.target
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.ZYreqX
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.ZYreqX.argv
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.ZYreqX.exit
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.ZYreqX.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.ZYreqX.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.ZYreqX.target
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.cMrxwJ
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.cMrxwJ.argv
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.cMrxwJ.exit
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.cMrxwJ.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.cMrxwJ.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.cMrxwJ.target
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.u3Y4Bt
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.u3Y4Bt.argv
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.u3Y4Bt.exit
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.u3Y4Bt.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.u3Y4Bt.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red-children/child.u3Y4Bt.target
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red.stderr
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/prove-red.stdout
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/run-check.py
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/source-hashes.json
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/summarize.py
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/verify/task-source.diff
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/plan-review.md
+?? ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/plan.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/CHANGELOG.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/ai-agents/knowledge-base/conventions/asking-the-owner.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-architect.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-coder.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-lead.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-producer.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-reviewer.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-wiki.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-heal/SKILL.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-open-questions-interview/SKILL.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-sprint-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-task-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/structure-manifest.tsv
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/codex/README.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/codex/materialize.mjs
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline-source.diff
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline-status.txt
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline.json
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/CHANGELOG.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/ai-agents/knowledge-base/conventions/asking-the-owner.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-architect.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-coder.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-lead.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-producer.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-reviewer.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-wiki.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-heal/SKILL.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-open-questions-interview/SKILL.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-sprint-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-task-ship-loop/SKILL.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/structure-manifest.tsv
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/codex/README.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/codex/materialize.mjs
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/diff-check.txt
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/protected-baseline.json
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/report.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan-review.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md
+?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-audit.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-preflight.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-audit.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-final-disposition-20261104.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/quiet-window-precheck-20261104.json
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md
+?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md
+?? test/execution-disabled.mjs

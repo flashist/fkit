@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "root": "/Users/mark.dolbyrev/Workspace/fkit",
+  "scratch": "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104",
+  "task": "/Users/mark.dolbyrev/Workspace/fkit/ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine",
+  "evidence": "/Users/mark.dolbyrev/Workspace/fkit/ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/evidence/diagnosis-preparation-20261104",
+  "N": 16,
+  "availableParallelism": 14,
+  "node": "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node",
+  "sourceAnchors": {
+    "test/update-banner.test.js": "61667865fd6b1219723da60539c319c6c089cfbc",
+    "claude/fkit-claude.sh": "8991bf2560717c20bee13f9008214ada22ae7ef6",
+    "CONTRIBUTING.md": "91b4310424d33d7bf81f71068ea50e48ca78135e",
+    "ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan.md": "e8fb308b1a8e4333171039a653c8a4d688ea7201"
+  },
+  "sampleIntervalMs": 50,
+  "burnerChunkOperations": 100000,
+  "iterations": 5,
+  "invocationsPerIteration": 4,
+  "totalInvocations": 20,
+  "executionValidated": false
+}

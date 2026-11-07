@@ -1,14 +1,4 @@
-# fkit — run the test suite on every push to main and every pull request (task 0256).
-#
-# Why this exists alongside the in-release test gate in bin/release.mjs: the gate protects the
-# TAGGED release, but install.sh defaults to `main`'s HEAD (install.sh:19, REF="${FKIT_REF:-main}"),
-# so the default `curl | sh` install and the self-update path track main, not a tag. Every commit on
-# main is live to every new install the moment it is pushed. The gate alone would protect the
-# artifact almost nobody installs by default.
-#
-# The reverse is also true — CI cannot replace the gate. CI's verdict is asynchronous (release.mjs
-# pushes the branch and the tag in one uninterrupted run), and CI never sees the working tree that
-# `git add -A` actually ships.
+# Owner-disabled; preserve triggers and steps for an explicitly approved reversal (CONTRIBUTING.md).
 
 name: test
 
@@ -24,16 +14,8 @@ permissions:
 
 jobs:
   test:
+    if: ${{ false }}
     runs-on: ubuntu-latest
-    # Basis (task 0530, ADR-057): `npm test` no longer runs prove-red.sh (task 0529); prove-red runs
-    # nightly in prove-red.yml. Old-suite unit pass on the runner: 76.4 s (run 39388117472). Post-cut
-    # `npm test` on the runner, 2026-10-20: 72 s (run 39406193972, step time), then from the budget
-    # step 65.8 / 81.6 / 85.2 / 60.7 s (runs 39416131917, 39416137864, 39416258502, 39416268459).
-    # Runner times vary ~60-85 s; the slowest, 85.2 s, is 71% of the 120 s budget.
-    # 10 min kills a hung run, which the budget step cannot judge because it only times a run that
-    # finishes; ~5x the budget, far below GitHub's 6 h default. Re-measure: `gh run list --workflow
-    # test.yml`, then `gh run view <id> --json jobs` for the job and step times.
-    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -50,20 +32,4 @@ jobs:
           # No `cache: npm` and no `npm ci` on purpose: fkit has zero dependencies and no lockfile
           # (ADR-014 §4). There is nothing to install and nothing to cache.
 
-      # ADR-057 §D10: the job fails when the default suite goes over its budget. Timed here rather than
-      # by a step timeout, so the failure names the budget and the time taken. Milliseconds, so a run
-      # even slightly over fails; a red `npm test` fails the step first (bash -e), so only a green run
-      # is judged.
-      - name: npm test (budget, ADR-057 §D10)
-        env:
-          BUDGET_S: 120
-        run: |
-          start_ms=$(node -p 'Date.now()')
-          npm test
-          took_ms=$(( $(node -p 'Date.now()') - start_ms ))
-          took=$(printf '%d.%03d' $((took_ms / 1000)) $((took_ms % 1000)))
-          echo "npm test took ${took} s (budget ${BUDGET_S} s)"
-          if [ "$took_ms" -gt $((BUDGET_S * 1000)) ]; then
-            echo "::error title=Test budget exceeded::npm test took ${took} s, over the ${BUDGET_S} s budget (ADR-057 §D10)."
-            exit 1
-          fi
+      - run: npm test

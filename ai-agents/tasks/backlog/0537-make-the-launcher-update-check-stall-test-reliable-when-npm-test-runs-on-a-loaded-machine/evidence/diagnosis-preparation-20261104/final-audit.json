@@ -1,0 +1,29 @@
+{
+  "utc": "2026-11-04T17:45:02.810297+00:00",
+  "sourceScope": "NONE",
+  "outsideAuthorizedArtifactsStatusUnchanged": true,
+  "sourceAndPlanAnchors": "MATCH",
+  "preexistingScopedDiffs": "UNCHANGED",
+  "sealedArtifactHashes": "MATCH",
+  "manifestSha256": "f4e52529700e57499d12068132fa6feaeaaf6c0b42e1936a388d03139119a1c8",
+  "harnessOriginalSha256": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+  "staticChecks": 55,
+  "syntaxOnlyParses": 5,
+  "staticAuditFirstAttempt": "FAILED checker newline slicing; corrected; retained in static-audit-attempt1.json",
+  "diagnosticInvocationsExecuted": 0,
+  "iterationsExecuted": 0,
+  "burnersOrObserverStarted": false,
+  "runtimeValidated": false,
+  "noPreparationBackgroundProcesses": "No helper module evaluated or started; only metadata subprocesses, file generation, static reads and node --check completed",
+  "skipped": {
+    "focused/group/fullfile/npmTest": "PREP scope explicitly prohibits execution; normal-tree reaper hazard remains",
+    "proveRed/mutant/release/docs/install/modelTests": "Outside preparation scope"
+  },
+  "limits": [
+    "No runtime safety or cleanup guarantee",
+    "No synthetic load, first IPC startup or ps observation validation",
+    "Historical cause UNKNOWN; no incident reproduced",
+    "Launcher stored-PID TERM/KILL logic unchanged and uncertified",
+    "Plan-review passes inherited source-reasoning only; serving diversity unknown; no implementation review invoked"
+  ]
+}

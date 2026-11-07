@@ -1,0 +1,111 @@
+{
+  "status": "NEEDS-DECISION",
+  "iteration": 1,
+  "supervisorChildExit": 2,
+  "wrapperExit": 0,
+  "testInvocationsStarted": 1,
+  "testInvocationsCompleted": 1,
+  "remainingThisIteration": 3,
+  "remainingLaterIterations": 16,
+  "remainingTotalUnexecuted": 19,
+  "validLoadedSamples": 0,
+  "assertionReds": 0,
+  "infrastructureFailure": {
+    "action": [
+      "/bin/ps",
+      "-axo",
+      "pid=,ppid=,lstart=,state=,command="
+    ],
+    "observedError": "spawn EPERM",
+    "samples": 0,
+    "automaticApprovalRequestMade": false,
+    "automaticApprovalRejection": false,
+    "sandboxRelaxed": false,
+    "exactUnderlyingDenialReason": "UNKNOWN; observer reports spawn EPERM only"
+  },
+  "load": {
+    "NRequested": 16,
+    "ready": 16,
+    "sustainedThroughoutInvocation": false,
+    "stopReason": "Observer spawn failure triggered private IPC stop immediately after invocation start",
+    "before": [
+      7.51171875,
+      7.52197265625,
+      6.7236328125
+    ],
+    "after": [
+      7.470703125,
+      7.51318359375,
+      6.72509765625
+    ]
+  },
+  "burnerStatus": "IPC_STOPPED_AND_EXITED",
+  "burnerAccounting": {
+    "burner-spawn": 16,
+    "burner-ready": 16,
+    "burner-stop-request": 16,
+    "burner-disconnect": 16,
+    "burner-exit": 16,
+    "burner-close": 16
+  },
+  "perRun": [
+    {
+      "index": 1,
+      "variant": "safe-reference focused term-ignored",
+      "nodeTestExit": 0,
+      "assertionsPass": 1,
+      "assertionsFail": 0,
+      "nodeTestReportedTestDurationMs": 6983.179833,
+      "nodeTestReportedTotalDurationMs": 7018.69275,
+      "rSecs": "UNKNOWN",
+      "observedHoldSeconds": "UNKNOWN",
+      "preparationSeconds": "UNKNOWN",
+      "logReadSeconds": "UNKNOWN",
+      "atAssertionStalling": "UNKNOWN; original assertion passed, no emitted snapshot",
+      "atAssertionWoke": "UNKNOWN; original assertion passed, no emitted snapshot",
+      "observedSurvivors": "UNKNOWN; no start identities captured",
+      "observedLauncherExit": "UNKNOWN",
+      "passiveSettlement": "UNKNOWN",
+      "cleanup": "RETAINED; no fixture deletion",
+      "scope": "Safety-modified reference harness; unchanged launcher; NOT unchanged baseline; NOT valid sustained-load sample"
+    }
+  ],
+  "postSupervisorLogSnapshots": [
+    {
+      "fixtureDirectory": "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-log-KvyS64",
+      "snapshotUTC": "2026-11-04T17:49:48.213066+00:00",
+      "label": "read-only post-supervisor retained fixture snapshot; not at-assertion or timed passive observation",
+      "logs": {
+        "git": "ls-remote [synthetic fixture URL redacted] main\nstalling\npids 82697 82704\n",
+        "curl": "",
+        "sleep": "82699\n82704\n82735\n"
+      },
+      "woke": false
+    }
+  ],
+  "fixtureDirectoriesRetained": [
+    "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-bin-qpLPOZ",
+    "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-cwd-lt2Ygh",
+    "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-home-0jZzP9",
+    "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-log-KvyS64",
+    "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-root-2G1vJq"
+  ],
+  "fixtureDirectoryExistenceAtAudit": {
+    "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-bin-qpLPOZ": true,
+    "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-cwd-lt2Ygh": true,
+    "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-home-0jZzP9": true,
+    "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-log-KvyS64": true,
+    "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/iteration-1/1-safe-reference-focused/fixtures/fkit-banner-root-2G1vJq": true
+  },
+  "noDeletionEvents": true,
+  "protectedFileDrift": [],
+  "sealedArtifactDrift": [],
+  "gitIndexUnchanged": true,
+  "sourceCodeChanges": "NONE",
+  "autonomousFixesOrObviousWinnerCalls": "none",
+  "cause": "not proved",
+  "cleanupCoverage": "Burner IPC stop/exit/close confirmed 16/16; fixture descendants unobserved, current live/exited state UNKNOWN; no complete-cleanup claim",
+  "executed": "Independent static fidelity/hash inspection; one exact sealed supervisor launch and its first safe-reference invocation; read-only artifact/retained-log audit",
+  "skipped": "Other three iteration-1 invocations and all sixteen later invocations blocked by unknown provenance/settlement. No retry, extra helper/probe, original normal-tree test, full suite, mutant, repair, review/model call, install, commit or push.",
+  "postSupervisorLogSnapshotsSanitized": true
+}

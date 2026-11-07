@@ -1,0 +1,11 @@
+{
+  "N": 16,
+  "iterations": {
+    "1": "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node /Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/supervisor.mjs --iteration 1",
+    "2": "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node /Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/supervisor.mjs --iteration 2",
+    "3": "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node /Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/supervisor.mjs --iteration 3",
+    "4": "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node /Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/supervisor.mjs --iteration 4",
+    "5": "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node /Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/supervisor.mjs --iteration 5"
+  },
+  "executeDuringPreparation": false
+}

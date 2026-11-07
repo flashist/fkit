@@ -1,0 +1,6 @@
+{
+  "state": "prepared, scoped execution requested next",
+  "command": "npm run test:prove-red",
+  "reason": "Original 0b failed under restricted context; original 0c and named mutant reds retained. No duplicate green suite run.",
+  "collection": "BASH_ENV function forwards exact Node arguments/status and copies sanitized outputs/numeric exits for the existing six steps. No source/config modification."
+}

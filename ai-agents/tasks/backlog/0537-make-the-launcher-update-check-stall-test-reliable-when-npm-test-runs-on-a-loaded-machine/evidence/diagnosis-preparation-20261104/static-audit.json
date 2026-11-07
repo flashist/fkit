@@ -1,0 +1,286 @@
+{
+  "utc": "2026-11-04T17:43:25.949675+00:00",
+  "kind": "STATIC ONLY \u2014 no module evaluation, tests, IPC startup, ps sampling, load or diagnostic invocation",
+  "checks": [
+    {
+      "check": "original static bytes still match current target",
+      "passed": true
+    },
+    {
+      "check": "safe-reference shared reap entirely inert",
+      "passed": true
+    },
+    {
+      "check": "safe-reference all four reap callers preserved",
+      "passed": true
+    },
+    {
+      "check": "safe-reference only original signal-0 probe",
+      "passed": true
+    },
+    {
+      "check": "safe-reference assertions/rethrows/selection/real sleeps unchanged",
+      "passed": true
+    },
+    {
+      "check": "safe-reference git-env tail unchanged",
+      "passed": true
+    },
+    {
+      "check": "safe-reference timedStall/r.secs/assertStallCut unchanged",
+      "passed": true
+    },
+    {
+      "check": "safe-reference sealed PATH and sleep wrapper and stub bodies unchanged",
+      "passed": true
+    },
+    {
+      "check": "safe-reference install unchanged",
+      "passed": true
+    },
+    {
+      "check": "safe-reference fixture allocation only own root",
+      "passed": true
+    },
+    {
+      "check": "safe-reference absolute original harness import",
+      "passed": true
+    },
+    {
+      "check": "safe-reference after cleanup deletion removed",
+      "passed": true
+    },
+    {
+      "check": "safe-reference exact unified diff",
+      "passed": true
+    },
+    {
+      "check": "observed shared reap entirely inert",
+      "passed": true
+    },
+    {
+      "check": "observed all four reap callers preserved",
+      "passed": true
+    },
+    {
+      "check": "observed only original signal-0 probe",
+      "passed": true
+    },
+    {
+      "check": "observed assertions/rethrows/selection/real sleeps unchanged",
+      "passed": true
+    },
+    {
+      "check": "observed git-env tail unchanged",
+      "passed": true
+    },
+    {
+      "check": "observed timedStall/r.secs/assertStallCut unchanged",
+      "passed": true
+    },
+    {
+      "check": "observed sealed PATH and sleep wrapper and stub bodies unchanged",
+      "passed": true
+    },
+    {
+      "check": "observed install unchanged",
+      "passed": true
+    },
+    {
+      "check": "observed fixture allocation only own root",
+      "passed": true
+    },
+    {
+      "check": "observed absolute original harness import",
+      "passed": true
+    },
+    {
+      "check": "observed after cleanup deletion removed",
+      "passed": true
+    },
+    {
+      "check": "observed exact unified diff",
+      "passed": true
+    },
+    {
+      "check": "reference launch including synchronous pipes unchanged",
+      "passed": true
+    },
+    {
+      "check": "reference emits no extra per-launch measurements",
+      "passed": true
+    },
+    {
+      "check": "observed has four monotonic boundaries",
+      "passed": true
+    },
+    {
+      "check": "observed retains original spawnSync API",
+      "passed": true
+    },
+    {
+      "check": "observed result log object unchanged",
+      "passed": true
+    },
+    {
+      "check": "burner.mjs no process/child signal send",
+      "passed": true
+    },
+    {
+      "check": "burner.mjs no shell subprocess",
+      "passed": true
+    },
+    {
+      "check": "passive-observer.mjs no process/child signal send",
+      "passed": true
+    },
+    {
+      "check": "passive-observer.mjs no shell subprocess",
+      "passed": true
+    },
+    {
+      "check": "supervisor.mjs no process/child signal send",
+      "passed": true
+    },
+    {
+      "check": "supervisor.mjs no shell subprocess",
+      "passed": true
+    },
+    {
+      "check": "burner arithmetic chunks and yield and private stop/disconnect",
+      "passed": true
+    },
+    {
+      "check": "burner no subprocess or file API",
+      "passed": true
+    },
+    {
+      "check": "observer process read only",
+      "passed": true
+    },
+    {
+      "check": "observer sequential samples single call site",
+      "passed": true
+    },
+    {
+      "check": "observer PID+start/ancestry/path and unknown retention evidence",
+      "passed": true
+    },
+    {
+      "check": "supervisor only one directory deletion site exact path after settlement",
+      "passed": true
+    },
+    {
+      "check": "supervisor no automatic retries or aggregate timeout",
+      "passed": true
+    },
+    {
+      "check": "supervisor four ordered invocations and five-slot bounds",
+      "passed": true
+    },
+    {
+      "check": "fixed recipe N = availableParallelism + 2",
+      "passed": true
+    },
+    {
+      "check": "safe-reference.mjs syntax only",
+      "passed": true
+    },
+    {
+      "check": "observed.mjs syntax only",
+      "passed": true
+    },
+    {
+      "check": "burner.mjs syntax only",
+      "passed": true
+    },
+    {
+      "check": "passive-observer.mjs syntax only",
+      "passed": true
+    },
+    {
+      "check": "supervisor.mjs syntax only",
+      "passed": true
+    },
+    {
+      "check": "source anchor test/update-banner.test.js",
+      "passed": true
+    },
+    {
+      "check": "source anchor claude/fkit-claude.sh",
+      "passed": true
+    },
+    {
+      "check": "source anchor CONTRIBUTING.md",
+      "passed": true
+    },
+    {
+      "check": "source anchor ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan.md",
+      "passed": true
+    },
+    {
+      "check": "no diagnostic iteration directory created",
+      "passed": true
+    }
+  ],
+  "nodeSyntaxChecks": [
+    {
+      "argv": [
+        "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node",
+        "--check",
+        "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/safe-reference.mjs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node",
+        "--check",
+        "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/observed.mjs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node",
+        "--check",
+        "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/burner.mjs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node",
+        "--check",
+        "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/passive-observer.mjs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node",
+        "--check",
+        "/Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/supervisor.mjs"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "scope": "Source NONE; own 0537 worklog/evidence and ignored scratch only",
+  "runtimeValidated": false,
+  "rootCause": "UNKNOWN",
+  "batchInvocationsExecuted": 0,
+  "limits": [
+    "Static checks do not establish runtime safety, fidelity, IPC delivery, observer coverage, ps parsing or cleanup success",
+    "No preparation-created background process; helpers only parsed, never evaluated"
+  ]
+}

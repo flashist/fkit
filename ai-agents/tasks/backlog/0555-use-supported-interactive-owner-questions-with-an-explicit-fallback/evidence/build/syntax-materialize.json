@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "--check",
+    "codex/materialize.mjs"
+  ],
+  "exit": 0
+}

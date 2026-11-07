@@ -7,7 +7,7 @@
 Sprint 15
 
 ## Priority
-P2
+5
 
 ## Status
 🔲 Backlog
@@ -16,6 +16,33 @@ P2
 fkit-coder
 
 ## Context
+
+**Current priority — owner ruling, 2026-11-06, user chat in root `fkit-lead`, relayed to
+`fkit-producer`; not producer precedent for re-ranking.** Now Sprint 15/P5
+(previously P2). The exact owner request is recorded on
+[Sprint 15](../../../sprints/sprint-15.md) under the dated owner-priority addendum.
+The new lead-continuation/question tasks come first among open work; the prior open tasks keep
+their relative order. This supersedes earlier priority and next-task/order statements only;
+quoted decisions remain historical. Status, disposition, placement, dependencies, existing
+approval gates and retry caps are unchanged. No implementation-plan approval or extra launch.
+
+**Current owner deferral — 2026-11-05, user chat in the root `fkit-lead` session, relayed verbatim to `fkit-producer`:**
+
+> I'm repeating again. If we have any mentions of delays, of timeouts, or of benchmark, durations of tests, or whatever, we should ignore them for now. Let's just continue working on the implementation tasks.
+
+This task is deferred for now, retaining Sprint 15/P2 and its existing `tasks/backlog/` folder.
+This ruling supersedes the earlier diagnostic approval and all timing-related acceptance and
+discussion gates for now. Stop this investigation: no further observations, process/permission
+investigation, load workers, benchmarks, duration comparisons or timeout diagnosis. No source fix
+is authorized. Retain `plan.md`, `plan-review.md`, `worklog.md`, all historical evidence and scratch
+fixtures unchanged; the retained plan does not authorize resumed work under this deferral. The
+recorded five-fixture process settlement remains unknown; no process inspection was performed to
+park the task, and retained folders are untouched.
+
+Dependency check, 2026-11-05: all 184 open briefs checked; no other open task depends on 0537.
+0548's mention expressly records no wait. No placement, priority or dependency changes; no open
+task gains a wait on another sprint. Continue with 0520, then 0548, through their owner plan gates.
+The historical requirements below remain evidence, not instructions to resume timing work.
 
 > ⛔ **Do not start without the owner's specific word.** His standing rule, own words (2026-09-27):
 > *"if we already have a brief for that task, the task shouldn't start, until I specifically approve it

@@ -1,0 +1,137 @@
+{
+  "recorded_utc": "2026-11-04T12:01:56.047502+00:00",
+  "head": "1767a47b9db50f3949789636c3e0b513950e7368",
+  "source_baseline": {
+    "CONTRIBUTING.md": {
+      "sha256": "aa0d10573565b8677f2f9137e3b7aa9c3d0a3128ed129bda59b6ba9d7c9d014d",
+      "git_blob": "7002792be804bfa463ebb2e9616da7a754fbc7b2"
+    },
+    ".github/workflows/test.yml": {
+      "sha256": "5687798a351a7ffb0fbca1c10f0431554cb064c9727a51f377995d17ff242a54",
+      "git_blob": "adc892b5d9539e40efbbaad9435fe547b61e31ac"
+    },
+    ".github/workflows/prove-red.yml": {
+      "sha256": "abf556a9f0a88f235f7410dea5939fa1c417fc9226e9fb35008750fd7358db93",
+      "git_blob": "28e23ee6970833ce0f4d488ec7354d3aa0f86001"
+    },
+    "RELEASING.md": {
+      "sha256": "3f6a89c5a1d3bff0bc45e7318b7c6370fd056254ddeaf43e9befb73471ad5514",
+      "git_blob": "3d3122ca51037a417c512c348d080d8c837cc303"
+    },
+    "ai-agents/knowledge-base/architecture.md": {
+      "sha256": "2ad821eef34128c5a8faf52e16b0c4defdcd00d9ebbc71c8edee32ce7362021f",
+      "git_blob": "9fe57e78e71b7b31a518972518d7a718336b72af"
+    },
+    "CHANGELOG.md": {
+      "sha256": "862487854f86078544e6dca69a09ddf064411be1c0d8dd2b3884ac3e1d580a07",
+      "git_blob": "fa1d0c4034f44a7df53281a695771aa0a686ec97"
+    }
+  },
+  "protected_baseline": {
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/brief.md": {
+      "sha256": "20e557237dfe16d8ce16b793596122f498c58932bdfdf5aa1bdcc23e5f10c49d",
+      "git_blob": "379a9c8a211343708688d3a3dc7bd056e7a5cac1"
+    },
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/plan.md": {
+      "sha256": "b00c93e2cbdbc37082b0671a6a00d97da0f8de76be19a9c6e55604b03cd21d64",
+      "git_blob": "23c45abbc10f435d1990ccd5943480d422b21d49"
+    },
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/plan-review.md": {
+      "sha256": "d8d7059af8b1b8d371832f17c3bb4ece999dafcf31f0f420cc5718c98453f9c9",
+      "git_blob": "d70de4c0f0056c336f7058d59de8ad54812d1f10"
+    },
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": {
+      "sha256": "cb17f0a5561c448f28e1bc2b27e5fac9a64e25dd68aff1d3da273fd2f3da135a",
+      "git_blob": "b894ae56b2c9b66280425fc9ffe090f3a2fff40f"
+    },
+    "ai-agents/sprints/backlog.md": {
+      "sha256": "f3879e77ad4a3f2ff69de40de04448127dbbb4a276507ff907ee0b4b896613b0",
+      "git_blob": "b6a6769d198cd3002f098f6dd6ad5c203acfd015"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": {
+      "sha256": "89b9593934ce2dde47bc849180dd75714cfe474f4cb64f363519c44f4925cc92",
+      "git_blob": "b58f1b2a19e2c27919f2b4a3e1e9e4176c6f7d35"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md": {
+      "sha256": "989bc9932c5889d6f4c654ff5d9723e878849d3555c7c675fce42baee644ad43",
+      "git_blob": "4276e1af0a5f956c87329d8cdf8dd5b1d1c0b4b7"
+    },
+    "test/dual-home-parity-exceptions.mjs": {
+      "sha256": "25c7161777c0d5cefac7312f9a59686e112c6d8e5a1ee76ddb17f3ebaaaf9f08",
+      "git_blob": "6f7d963a8ee87b08c0c510acdc2af02377172fcb"
+    },
+    "test/dual-home-parity.test.js": {
+      "sha256": "947e531c591310a14466a96434ea0c0b585716b4dc252eb52034c6fd1a73d22e",
+      "git_blob": "67d62fe90026f29e0faf8a871ae99c25a9285bcd"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff": {
+      "sha256": "10272c723cc41e1a4902023a4d91ad1fa851762ee61cea9ea89429199b888516",
+      "git_blob": "a2caac1127f8a50695732b4c044a481ab532087c"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json": {
+      "sha256": "0b14105b3eb70e559d35e92a0b53738af32cdeb44a3900bfd088f754f26040df",
+      "git_blob": "58e22b63ed9d391c95a0083ca1da02126e3e6dda"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json": {
+      "sha256": "ca360e05c0097f49e297d2ea516d231424f63adb4ddbb1fc34c05a5e18567c5c",
+      "git_blob": "16fd1aa6328d53e7c3063c48810a8337fbdbe95f"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-audit.json": {
+      "sha256": "bc6e289dd0b9742d65367449383c5c671bc084b145dc66d580efd68dbe2614e2",
+      "git_blob": "a56bb3a9135dbd90b9a67c351d336abe9c50d261"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-preflight.json": {
+      "sha256": "635341ed9bb2fd1a829eab210463d18519e515133b1ea4473ffbb262f58762b6",
+      "git_blob": "2856563f11073c57294dff5dd5def97bffb83485"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-audit.json": {
+      "sha256": "5ac9d586050eca23a0f2b4ffed49543a3bf48a1d89a86c4d4125af11035f7339",
+      "git_blob": "8a4e1c099e1a5ea201fcc870376e5547d28c6151"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-final-disposition-20261104.json": {
+      "sha256": "e7a0bf44b0c57de05a38cb37afbb8f8bf52124b1f62605217028ff644cc5405f",
+      "git_blob": "dd7821addb04e92e50401f877f0423226ebc5c76"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/quiet-window-precheck-20261104.json": {
+      "sha256": "bc35f89f69d8f9385a27459e0c4a74e1d77c3ce9cd32361d6955ab85b6882bbc",
+      "git_blob": "54a182241118cfd19b1ffe98909fb5a772a4689d"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": {
+      "sha256": "e51d2a1e07187b2a056bb28af81563762e73af5fce772e6a76f5e464138d8627",
+      "git_blob": "5eaedf1d2c2f1eca1149fc9682190ccb3effbe6c"
+    },
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md": {
+      "sha256": "80490f1a2c5f63afa8f07a152b464cb850e6188fcff3559009ba945c6c248d22",
+      "git_blob": "7e177ef8cfc762460d66480670ee26e7c5480e76"
+    },
+    "ai-agents/sprints/sprint-15.md": {
+      "sha256": "26edc5b60cadb92ad1a0e7b8e9e8d53b5e95510ce9849ce863e5a110d84e918d",
+      "git_blob": "13515684abfb4390905aeb4dce4341d012f98da1"
+    }
+  },
+  "initial_status": [
+    " M ai-agents/knowledge-base/conventions/dual-home-parity.md",
+    " M ai-agents/sprints/backlog.md",
+    " M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md",
+    " M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md",
+    " M test/dual-home-parity-exceptions.mjs",
+    " M test/dual-home-parity.test.js",
+    "?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff",
+    "?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json",
+    "?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json",
+    "?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-audit.json",
+    "?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-preflight.json",
+    "?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-audit.json",
+    "?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-final-disposition-20261104.json",
+    "?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/quiet-window-precheck-20261104.json",
+    "?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md",
+    "?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md",
+    "?? ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/",
+    ""
+  ],
+  "plan_blob_expected": "23c45abbc10f435d1990ccd5943480d422b21d49",
+  "approval": "Approve exact plan (Recommended) \u2014 Implement the six files just presented, run npm test once without timing/idle gates, then independent review and wiki followup. No commit or push.",
+  "approval_date": "2026-11-04",
+  "approval_channel": "interactive fkit_roles.fkit_ask_owner in root lead",
+  "approval_limit": "Trusted caller prose; not independently proven owner consent."
+}

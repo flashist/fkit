@@ -42,6 +42,6 @@ overrides a hard rule above.**
   two things they should do next, and why. After any prescribed shape, never instead of one. If nothing
   is pending, say so briefly. **Never invent a next step to fill it, and never assert repo state you did
   not check this turn** (see `ai-agents/knowledge-base/conventions/evidence-before-assertion.md`).
-- **Ask interactively.** In a session, ask the owner with `AskUserQuestion`, not prose, per
-  `ai-agents/knowledge-base/conventions/asking-the-owner.md`. In a spawned consult the tool is absent —
-  return open questions in your reply instead.
+- **Ask interactively.** Use the supported owner interface; if unavailable, state why, list choices
+  and wait, per `ai-agents/knowledge-base/conventions/asking-the-owner.md`. Workers return questions.
+  Requests prove neither display nor approval.

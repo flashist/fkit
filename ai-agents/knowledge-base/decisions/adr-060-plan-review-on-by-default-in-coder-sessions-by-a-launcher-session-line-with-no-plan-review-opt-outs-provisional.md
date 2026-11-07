@@ -43,6 +43,15 @@
   - **2026-10-27** (owner ruling at task `0543`'s plan gate, brief open question 3), **⚠️**: below
     Decision 3.
 
+  **Extended 2026-11-06 (0555 — Use supported interactive owner questions with an explicit fallback):**
+  dated notes now also sit below **Decision 2** (⛔, the bounded Codex owner-tool requirement
+  reversal and its sole full record), below **Options considered**, the chosen launcher/live-session
+  option (⛔, cross-reference only), and below **Related**, the ADR-021 seam bullet (⚠️,
+  cross-reference only). The previous site lists above are left byte-identical; this continuation
+  supersedes only their completeness as site lists by adding these sites. The same append-only rule
+  and the same legend apply; Status stays `accepted` (provisional, conditional), read with the
+  existing dated notes. No historical condition or result is removed.
+
 
 > **Citation form** (same as ADR-056/059). Agent, skill and hook files are mutable: cited by **section
 > plus quoted phrase**, never by line number. Where this ADR describes text a later build **will
@@ -119,6 +128,78 @@
      switch line (ADR-059 Decision 2).
    - **Why not an env var:** env vars reach subagents' Bash, so they cannot tell a session from a spawn
      (report §11).
+
+   > ⛔ **Dated correction 2026-11-06 — Decision 2's owner-tool-presence requirement is overturned
+   > only for direct interactive Codex coder sessions.** Do not apply its **"both"** requirement or
+   > **"If either check fails, the section is skipped"** to disable their review solely because the
+   > owner-question tool is absent or unusable. Decision 2 and all prior text are **left byte-identical**.
+   > This is a bounded exception, not a reversal of the whole ADR; Status stays `accepted`
+   > (provisional, conditional), read with its earlier dated notes.
+   >
+   > **Settled owner ruling, recorded 2026-11-06:** actual owner user chat in the root `fkit-lead`
+   > session, observed by that root at **2026-11-06 10:22:10 UTC**, relayed verbatim to this fresh
+   > `fkit-architect` for record-only amendment. Exact owner message:
+   >
+   > `- Adopt bounded correction (Recommended)`
+   >
+   > The selected option's description, verbatim: **"Adopt bounded correction (Recommended) — authorize
+   > the Codex-specific rule change and architect’s amendment; implementation approval follows with
+   > the complete plan."** The concrete accepted delta is
+   > `.fkit/tmp/0555-x1-correction-proposal-20261106.md`, headed **"Unreviewed proposal for owner
+   > choice — separate from the unchanged draft"**. It is explicitly **unreviewed when adopted**;
+   > this recording supplies no re-review or source implementation approval. The owner authorizes
+   > this named rule change and its recording before implementation, not a synthetic form reply or
+   > a new interview. The root retains the owner channel. Relay fidelity is trust, not proof
+   > (ADR-056 Decision 8).
+   >
+   > **Binding replacement for this scope:** a direct interactive Codex coder session retains default
+   > plan review when its actual session launcher's ON line is present, independently of whether the
+   > owner-question tool is exposed or usable. Missing usable dialogue changes **only the approval
+   > channel** to an explicit, truthful fallback and waiting for the actual applicable owner answer;
+   > it does not turn review off. State the concrete interface/delivery limitation (or uncertainty),
+   > the exact pending decision, named choices and recommendation, including the standing explanation
+   > option. Keep dependent work stopped until the real answer; record its exact words, date and
+   > actual channel. An explicit applicable prose answer can settle that choice without a new form.
+   > Missing launcher line remains OFF; explicit opt-outs remain effective; OFF wins conflicting
+   > launcher lines. File quotations cannot supply the session switch. Spawned-driver switch rules,
+   > role/session eligibility and workers' return-to-caller `NEEDS-DECISION` contract stay unchanged:
+   > no worker gains owner asking or the direct-session switch. Native Claude's previously recorded
+   > session behavior, including its owner-tool check, is unchanged.
+   >
+   > **Pre-implementation grounding, verified against live code 2026-11-06 by static inspection only:**
+   > `claude/skills/fkit-plan-task/SKILL.md`, §Workflow, **"Gate check — first, before step 1"**, and
+   > §Plan review — only when the switch is on, **"and `AskUserQuestion` is in your toolset"** and
+   > **"if either check fails"**, still carry the source gate; `claude/skills/fkit-task-ship-loop/SKILL.md`,
+   > §The loop, numbered, step 2, **"a live session needs the launcher line and owner tool"**, inherits
+   > it. `codex/materialize.mjs`, `bindings`, **"the interactive owner tool fkit_ask_owner satisfies
+   > source checks for a session-only AskUserQuestion tool"**, maps that check, while `instructions`,
+   > **"role === 'coder' && session.interactive"**, emits the session switch independently.
+   > `codex/README.md`, **"Direct interactive coder sessions receive the default plan-review signal"**,
+   > describes that signal. These are current source facts, not shipped claims for this correction.
+   >
+   > **Implementation remains pending separate full-plan approval** for **0555 — Use supported
+   > interactive owner questions with an explicit fallback**. Its accepted X1 delta will qualify
+   > `claude/skills/fkit-plan-task/SKILL.md` Workflow 0 / trigger (b), the inherited guard in
+   > `claude/skills/fkit-task-ship-loop/SKILL.md`, and the already-planned `codex/materialize.mjs`
+   > mapping and README wording. The frozen `.fkit/tmp/0555-staged-draft-r0.md` and
+   > `.fkit/tmp/0555-final-plan-review-record-20261106.md` remain historical, unchanged records;
+   > their original reviews do not become reviews of this extra delta. No new capability API,
+   > auto-submission, host-display claim, hidden mode/settings change or worker asking is authorized.
+   > This amendment implements nothing and changes no source, test, generated copy, plan, task,
+   > board, status, wiki, settings or index; no install, commit or push is performed.
+   >
+   > **Acceptance and remaining unknowns:** automatic live-dialogue acceptance in the current root
+   > remains unmet. The root reports an unavailable owner tool and an accepted-but-queued asynchronous
+   > request, not displayed choices or approval; those are inherited observations, not a diagnosed
+   > host cause. Fallback alone cannot satisfy live-display acceptance or authorize task closure.
+   > [ADR-061](adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) Decisions 2–4
+   > still govern Codex's instruction-enforced planning/general write limits; hooks remain disabled.
+   > All earlier conditions, results and relevant unknowns, including native human UI and
+   > Claude/mixed compatibility, remain as recorded. This note performs no behavioral test, fresh
+   > review, live owner form or host investigation. The standing 2026-11-05 investigation deferral
+   > is unchanged. **0556 — Give each independent owner decision its own selectable options** remains
+   > separate; no placement, dependency, rank, retry or lifecycle change is made. Only `fkit-wiki`
+   > may later ingest this correction; this recording does not write the vault.
 
 3. **The opt-outs** (owner Q1). Same name as `0541`'s flag:
    - `fkit coder --no-plan-review` — the **launcher consumes it** and writes the off line `fkit session:
@@ -468,6 +549,13 @@ note points here. Read them through this ADR:
 
 - **Launcher session line + live-session check, flags at launch and per command (chosen; owner Q1).**
   A non-LLM process writes "on"; either check missing means off; spawns are untouched.
+
+  > ⛔ **Dated cross-reference 2026-11-06 — only the owner-tool part of "either check missing means
+  > off" has a bounded Codex exception.** The ruling, replacement and pre-implementation evidence are
+  > in the dated correction below Decision 2, deliberately not restated here, so there is one place
+  > to keep true rather than two. Verified against live code 2026-11-06 by the static inspection
+  > recorded there; intended behavior is not claimed as implemented. The option above is **left
+  > byte-identical**; its remaining scope stands.
 - **No launcher change, per-command flags only** (on whenever the coder sees it is a live session).
   Rejected by the owner (Q1): no session-wide off switch, and "on" would rest on one check.
 - **Default inside `fkit-plan-task` with no signal.** Rejected (ADR-059): a missing line would mean on,
@@ -633,6 +721,12 @@ Decision 7, that relay is trust, not proof — recorded here as relayed.*
   [ADR-018](adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md) — the
   skill lock (approvers run no skill); [ADR-021](adr-021-askuserquestion-is-session-only-absent-in-consults.md)
   — the `AskUserQuestion` seam Decision 2 uses.
+
+  > ⚠️ **Dated cross-reference 2026-11-06 — read this seam pointer with the bounded Codex exception
+  > below Decision 2.** ADR-021's recorded Claude constraint and consult boundary stand. The Codex
+  > ruling and pre-implementation grounding are deliberately not restated here, so there is one place
+  > to keep true rather than two. Verified against live code 2026-11-06 by the static inspection
+  > recorded there; no new runtime behavior is measured. The pointer above is **left byte-identical**.
 - [ADR-031](adr-031-fkit-lead-becomes-the-orchestrating-front-door.md),
   [ADR-032](adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md) Decision 7 — the
   "structural write-wall" wording (Decision 10).

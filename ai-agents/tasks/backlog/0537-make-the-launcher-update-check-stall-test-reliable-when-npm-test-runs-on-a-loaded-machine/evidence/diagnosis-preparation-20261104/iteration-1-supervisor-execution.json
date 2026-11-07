@@ -1,0 +1,10 @@
+{
+  "status": "RETURNED",
+  "command": "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node /Users/mark.dolbyrev/Workspace/fkit/.fkit/tmp/0537-diagnosis-20261104/supervisor.mjs --iteration 1",
+  "startedUTC": "2026-11-04T17:48:52.749863+00:00",
+  "finishedUTC": "2026-11-04T17:49:00.152114+00:00",
+  "supervisorChildExit": 2,
+  "supervisorChildSignal": null,
+  "wrapperExit": 0,
+  "retry": false
+}

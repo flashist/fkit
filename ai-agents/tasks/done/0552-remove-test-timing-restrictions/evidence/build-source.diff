@@ -1,0 +1,202 @@
+diff --git a/.github/workflows/prove-red.yml b/.github/workflows/prove-red.yml
+index 28e23ee..2f3ec9e 100644
+--- a/.github/workflows/prove-red.yml
++++ b/.github/workflows/prove-red.yml
+@@ -1,5 +1,5 @@
+-# fkit — nightly prove-red (ADR-057 §D3, task 0530): the four mutation cases, outside `npm test` and
+-# outside its 2-minute budget (§D10). A red run is seen next morning, not at push time ("fine for now").
++# fkit — nightly prove-red (ADR-057 §D3, task 0530): the four mutation cases, outside `npm test`.
++# A red run is seen next morning, not at push time ("fine for now").
+ # Scheduled runs use main's latest commit only; GitHub may delay or drop them at busy times, and
+ # disables the schedule after 60 days with no repository activity. A red run notifies the user who
+ # last changed the cron line, if their GitHub Actions notifications are on.
+@@ -16,8 +16,6 @@ permissions:
+ jobs:
+   prove-red:
+     runs-on: ubuntu-latest
+-    # ~7x the ~2 min measured on the runner (job 123 s, step 118 s; run 39416272645, 2026-10-20).
+-    timeout-minutes: 15
+     steps:
+       - uses: actions/checkout@v4
+         with:
+diff --git a/.github/workflows/test.yml b/.github/workflows/test.yml
+index adc892b..ec27ddd 100644
+--- a/.github/workflows/test.yml
++++ b/.github/workflows/test.yml
+@@ -25,15 +25,6 @@ permissions:
+ jobs:
+   test:
+     runs-on: ubuntu-latest
+-    # Basis (task 0530, ADR-057): `npm test` no longer runs prove-red.sh (task 0529); prove-red runs
+-    # nightly in prove-red.yml. Old-suite unit pass on the runner: 76.4 s (run 39388117472). Post-cut
+-    # `npm test` on the runner, 2026-10-20: 72 s (run 39406193972, step time), then from the budget
+-    # step 65.8 / 81.6 / 85.2 / 60.7 s (runs 39416131917, 39416137864, 39416258502, 39416268459).
+-    # Runner times vary ~60-85 s; the slowest, 85.2 s, is 71% of the 120 s budget.
+-    # 10 min kills a hung run, which the budget step cannot judge because it only times a run that
+-    # finishes; ~5x the budget, far below GitHub's 6 h default. Re-measure: `gh run list --workflow
+-    # test.yml`, then `gh run view <id> --json jobs` for the job and step times.
+-    timeout-minutes: 10
+ 
+     steps:
+       - uses: actions/checkout@v4
+@@ -50,20 +41,4 @@ jobs:
+           # No `cache: npm` and no `npm ci` on purpose: fkit has zero dependencies and no lockfile
+           # (ADR-014 §4). There is nothing to install and nothing to cache.
+ 
+-      # ADR-057 §D10: the job fails when the default suite goes over its budget. Timed here rather than
+-      # by a step timeout, so the failure names the budget and the time taken. Milliseconds, so a run
+-      # even slightly over fails; a red `npm test` fails the step first (bash -e), so only a green run
+-      # is judged.
+-      - name: npm test (budget, ADR-057 §D10)
+-        env:
+-          BUDGET_S: 120
+-        run: |
+-          start_ms=$(node -p 'Date.now()')
+-          npm test
+-          took_ms=$(( $(node -p 'Date.now()') - start_ms ))
+-          took=$(printf '%d.%03d' $((took_ms / 1000)) $((took_ms % 1000)))
+-          echo "npm test took ${took} s (budget ${BUDGET_S} s)"
+-          if [ "$took_ms" -gt $((BUDGET_S * 1000)) ]; then
+-            echo "::error title=Test budget exceeded::npm test took ${took} s, over the ${BUDGET_S} s budget (ADR-057 §D10)."
+-            exit 1
+-          fi
++      - run: npm test
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index fa1d0c4..415d153 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -11,6 +11,8 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes 
+ 
+ ## Unreleased
+ 
++- Remove test runtime budgets, idle-machine gates and repository CI job time caps.
++
+ - `fkit board` retries once with an OS-assigned free port when default port 8585 is busy; explicit
+   ports remain strict. It requests browser opening on macOS/Linux when both stdin and stdout are
+   terminals, with `--open` / `--no-open` overrides. The printed URL shows the actual port; opener
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+index 7002792..91b4310 100644
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -17,7 +17,7 @@ the checkout's own `claude/`, so your edits are what the agents use.
+ ## Tests
+ 
+ ```sh
+-npm test                 # the default suite (~1.5 min; budget 2 min)
++npm test                 # the default suite (~1.5 min)
+ npm run test:release     # the release tool's own test — `npm run release` runs it (~45 s)
+ npm run test:prove-red   # the four deliberate mutants — nightly in CI (~2.5 min)
+ npm run test:docs        # fast path: the two named-exception tests that read ai-agents/ (under 1 s)
+@@ -28,7 +28,7 @@ npm run test:docs        # fast path: the two named-exception tests that read ai
+ start — no idle window came, so these are not idle-Mac figures); `test:release` 46 s (one run, load
+ 12.4); `test:prove-red` 151.6 s (one run, task 0529). Yours will differ.
+ 
+-When each runs — only `npm test` counts against the 2-minute budget (ADR-057 §D10):
++When each runs:
+ - `npm test` — CI, on every push to `main` and every pull request; and every `npm run release`.
+ - `npm run test:release` — every `npm run release` (after `npm test`), or by hand.
+ - `npm run test:prove-red` — nightly in CI, or by hand. The release does not run it.
+@@ -36,10 +36,9 @@ When each runs — only `npm test` counts against the 2-minute budget (ADR-057 
+ On a red, `test/prove-red.sh` prints where it kept each failing step's own output (a `fkit-prove-red-kept.*` folder under `$TMPDIR`).
+ 
+ No dependencies and no `npm install`. CI (`.github/workflows/test.yml`) runs `npm test` on Node 24
+-for every push to `main` and every pull request, in one timed step that fails the job when
+-`npm test` takes over 120 s, naming the budget and the time taken. On the
++for every push to `main` and every pull request. On the
+ runner (`ubuntu-latest`), 2026-10-20: `npm test` 72 / 65.8 / 81.6 / 85.2 / 60.7 s (five runs —
+-runner times vary ~60–85 s; the slowest is 71% of the budget); prove-red 118 s (one run; job 123 s).
++runner times varied ~60–85 s); prove-red 118 s (one run; job 123 s).
+ Use a full clone:
+ `test/structure-manifest.test.js` refuses a shallow one.
+ 
+@@ -82,7 +81,7 @@ key list"; in this repo, these are they.
+ - **Growth stop.** No new test file and no new prove-red case without the owner's OK — each one, every
+   time, in any lane (the default suite, nightly prove-red, the release-test script). A plan the owner
+   approves counts as that OK only for the files or cases it names; an agent's plan-review APPROVE is
+-  not the owner's OK. There is no numeric cap: growth is held back by that OK and the 2-minute budget.
++  not the owner's OK. There is no numeric cap: growth is held back by that OK.
+ - **A missing test is a suggestion, not a defect** — on code that behaves correctly — **except on the
+   key list**, where it is still a defect:
+   1. the argv the launcher hands to `claude`, including whether it `exec`s at all (`--resume`, cold
+@@ -95,8 +94,15 @@ key list"; in this repo, these are they.
+   `--resume` passthrough), M30 (`exec` on the cold start) and M31 (the same, intake path only). Each
+   runs only the test file it needs, nightly in CI, outside `npm test`; still runnable by hand with
+   `npm run test:prove-red`. A fifth case needs the owner's OK.
+-- **The budget.** The default `npm test` takes ≤ 2 min locally on an idle Mac; CI fails the job if it
+-  goes over. Nightly prove-red and the release-test script are outside it.
++- **Running and accepting tests.** Run the checks mapped below without waiting for an idle machine
++  or a quiet window. No elapsed-time limit or runtime budget governs starting, rerunning, or accepting
++  tests; elapsed time and machine load alone are not reasons to block, rerun, or reject a completed
++  passing check. Required checks and their assertions still determine the result. This is the current
++  rule under the owner's 2026-11-04 ruling and supersedes ADR-057 D10's timing/idle requirement;
++  historical measurements and approvals remain historical. This supersession also applies to inherited
++  aggregate suite-duration, idle-only, and no-suite-slowdown acceptance clauses in existing briefs and
++  sprint instructions, and to historical migration inventories. Functional performance/termination
++  assertions and all remaining task requirements still apply.
+ 
+ ### What to run for a change
+ 
+@@ -167,7 +173,7 @@ test/                            `npm test` — the default suite (node:test)
+   board/                         the board module's tests (in `npm test`)
+   release/                       the release tool's own test (`npm run test:release`)
+   prove-red.sh                   the mutation lane (`npm run test:prove-red`)
+-.github/workflows/test.yml       CI: `npm test`, timed against its budget, on every push to main and every PR
++.github/workflows/test.yml       CI: `npm test`, on every push to main and every PR
+ .github/workflows/prove-red.yml  CI: `npm run test:prove-red`, nightly
+ ai-agents/                       fkit's own working structure (it is run on itself)
+ ```
+diff --git a/RELEASING.md b/RELEASING.md
+index 3d3122c..bf95fe0 100644
+--- a/RELEASING.md
++++ b/RELEASING.md
+@@ -231,21 +231,23 @@ Then, in order (`bin/release.mjs:401-479`, from the bump to the `// 3. tag` step
+ 6. push the tag
+ 
+ **The gate and CI cover different things, and neither replaces the other** — the argument is made in
+-full at `.github/workflows/test.yml:3-11`. In short: the **gate** sees the working tree that
+-`git add -A` is about to ship, including uncommitted and untracked work, which CI structurally
++full in [`.github/workflows/test.yml`](.github/workflows/test.yml)'s opening comments. In short:
++the **gate** sees the working tree that `git add -A` is about to ship, including uncommitted and
++untracked work, which CI structurally
+ cannot; **CI** covers `main`'s HEAD, which is what `install.sh` actually installs, and its verdict
+ arrives after the push rather than before it.
+ 
+ CI runs `npm test` on every push to `main`, on every pull request, and on demand via
+-`workflow_dispatch` (`.github/workflows/test.yml:16-20`), and fails the job when `npm test` takes
+-over its 120 s budget (`.github/workflows/test.yml:53-69`, the `npm test (budget, ADR-057 §D10)`
+-step). It has been exercised on real pushes and has already caught a failure that a local run had
+-not. Two of its settings are load-bearing rather than cosmetic: `fetch-depth: 0`
+-(`.github/workflows/test.yml:41-45`), without which the manifest test refuses a shallow clone and the
+-suite dies at module load; and `timeout-minutes: 10` (`.github/workflows/test.yml:36`), which stops a
+-hung run from burning a runner. Prove-red runs in its own workflow, nightly at 03:17 UTC and on
+-demand (`.github/workflows/prove-red.yml`), on `main`'s latest commit only — `CONTRIBUTING.md`'s
+-Tests block lists its limits.
++`workflow_dispatch`, through the direct `npm test` step in
++[`.github/workflows/test.yml`](.github/workflows/test.yml). A nonzero test exit fails the job;
++elapsed time alone does not reject a completed passing check. CI has been exercised on real pushes
++and has already caught a failure that a local run had not. The checkout step's `fetch-depth: 0`
++is load-bearing: without it the manifest test refuses a shallow clone and the suite dies at module
++load. Prove-red runs in its own [workflow](.github/workflows/prove-red.yml), nightly at 03:17 UTC
++and on demand, on `main`'s latest commit only — `CONTRIBUTING.md`'s Tests block lists its limits.
++Neither workflow sets a repository job time cap. Workflow execution remains subject to service
++limits; removing repository caps does not promise unlimited GitHub execution. A killed or incomplete
++check remains unverified.
+ 
+ ---
+ 
+diff --git a/ai-agents/knowledge-base/architecture.md b/ai-agents/knowledge-base/architecture.md
+index 9fe57e7..698fb73 100644
+--- a/ai-agents/knowledge-base/architecture.md
++++ b/ai-agents/knowledge-base/architecture.md
+@@ -599,8 +599,9 @@ npm dependencies.**
+ 
+ - **CI — landed (task 0256).** `.github/workflows/test.yml` runs `npm test` on every push to `main`
+   and every pull request, plus a manual `workflow_dispatch` trigger, on `ubuntu-latest`, Node 24,
+-  with `fetch-depth: 0` (the manifest suite hard-refuses a shallow clone). Since task 0530 the step
+-  is timed and fails the job when `npm test` takes over its 120 s budget (ADR-057 §D10). This replaces
++  with `fetch-depth: 0` (the manifest suite hard-refuses a shallow clone). The direct `npm test` step
++  gates on the test result, without an elapsed-time acceptance gate, under the current
++  [CONTRIBUTING test rules](../../CONTRIBUTING.md#test-rules). This replaces
+   [ADR-003](decisions/adr-003-ci-runs-validate-bundles.md)'s CI, which never landed — the
+   `omnigent/validate-bundles.sh` it mandated died with the Omnigent removal.
+   **CI is what covers `main` HEAD**, which is what `install.sh:19` (`REF="${FKIT_REF:-main}"`)

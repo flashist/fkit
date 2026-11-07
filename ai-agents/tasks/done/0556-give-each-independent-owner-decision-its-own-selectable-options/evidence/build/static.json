@@ -1,0 +1,363 @@
+{
+  "task": "0556 — Give each independent owner decision its own selectable options",
+  "mode": "static data inspection only; no project-code execution, tests or behavioral verification",
+  "authority": {
+    "decision_key": "0556-plan-r1",
+    "answer": "Approve unchanged implementation plan (Recommended)",
+    "date": "2026-11-06",
+    "channel": "relayed live interactive owner response via fkit_roles.fkit_ask_owner; action accept, answered true, comment empty",
+    "trust": "declared relay, not independently proven"
+  },
+  "files": {
+    "ai-agents/knowledge-base/conventions/asking-the-owner.md": {
+      "starting_sha256": "6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92",
+      "final_sha256": "f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38",
+      "changed": true,
+      "starting_bytes": 9762,
+      "final_bytes": 14111
+    },
+    "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md": {
+      "starting_sha256": "6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92",
+      "final_sha256": "f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38",
+      "changed": true,
+      "starting_bytes": 9762,
+      "final_bytes": 14111
+    },
+    "claude/agents/fkit-lead.md": {
+      "starting_sha256": "b5331eec699683519ecff77567628ae8c0bc88fea0dd9efc6ad1b151d8b06d3c",
+      "final_sha256": "72143f28caab3cd3cb0e258f587ef12112308e6dcb44ab90c6c4587e2952dec0",
+      "changed": true,
+      "starting_bytes": 22430,
+      "final_bytes": 24571
+    },
+    "claude/agents/fkit-coder.md": {
+      "starting_sha256": "ad6919452b9bdf032e38d746d7a3539942cbb817df70c760ba11d9deb97d8fc8",
+      "final_sha256": "373530d29c42344da14691d90afb2268e5b468f4500190d225072f86da55bf12",
+      "changed": true,
+      "starting_bytes": 27079,
+      "final_bytes": 28138
+    },
+    "claude/agents/fkit-producer.md": {
+      "starting_sha256": "0519cda4c221b915710f04f15ad3b8d74c988a1ad2db11f4b1954d7855107837",
+      "final_sha256": "1212c0246e1d927f1631497e087ae22637f229e764187d1670e872b077b05c2f",
+      "changed": true,
+      "starting_bytes": 13831,
+      "final_bytes": 14881
+    },
+    "claude/agents/fkit-reviewer.md": {
+      "starting_sha256": "e8461b8a9f9c4f72e4618812e0a19b6c12daebf12d745d88d6857fded4e17c0b",
+      "final_sha256": "785af00f3bf22026e792271f2facfd1d0f39e04ea4ec57e7345f1472d1e277f6",
+      "changed": true,
+      "starting_bytes": 8646,
+      "final_bytes": 9746
+    },
+    "claude/agents/fkit-architect.md": {
+      "starting_sha256": "fca99ec3f7574298d6e8c0a702a3cf01d98a696716275f25d5f5cfbdb42ad80d",
+      "final_sha256": "fda5f7708683fec30c1c0b6bed87245ebd7ac003ca03dd37d5e9511e42203571",
+      "changed": true,
+      "starting_bytes": 10463,
+      "final_bytes": 11716
+    },
+    "claude/agents/fkit-wiki.md": {
+      "starting_sha256": "57bef8ec2154febc017bf493cdfa02f8623783c9a88304bef9a4b344d8b8fc13",
+      "final_sha256": "75ddb4072e068b12af19356030108daaaaf1aa3b4f11ee31052258df72816937",
+      "changed": true,
+      "starting_bytes": 7405,
+      "final_bytes": 8505
+    },
+    "claude/skills/fkit-sprint-ship-loop/SKILL.md": {
+      "starting_sha256": "e338e2a7f166554edddfb17fc9520c948cd080a709163a272ea5e53ad76893c5",
+      "final_sha256": "22e5e8c1e6241a4746f329b2f4a6d346923dcaf576aec9034c10d62efae0d34a",
+      "changed": true,
+      "starting_bytes": 58283,
+      "final_bytes": 61384
+    },
+    "claude/skills/fkit-task-ship-loop/SKILL.md": {
+      "starting_sha256": "4b89044e9cb73d7d2e331ff6fdece0696f38f248dcdb723568fc16b033602192",
+      "final_sha256": "423145e3ac90a99e8456072d92bfd1c75e2dcd7a134c17733a13d2fd2532f716",
+      "changed": true,
+      "starting_bytes": 31548,
+      "final_bytes": 33813
+    },
+    "claude/skills/fkit-open-questions-interview/SKILL.md": {
+      "starting_sha256": "1d63192de846a718cf3f121bed8b43ae0078fb37ddcc7fecb6eb5283a0be22a1",
+      "final_sha256": "1580a219b84a092c7770bf3a338eb4dcf001516c1826a2e5bc4485fc0311bbe4",
+      "changed": true,
+      "starting_bytes": 7310,
+      "final_bytes": 9197
+    },
+    "claude/skills/fkit-heal/SKILL.md": {
+      "starting_sha256": "dff929f3d7657b9534ff66320ab0e60b4f7bc0de71e9234daef5c07bf5b9d16f",
+      "final_sha256": "d9cd407f140e8d0e4694e9d78052a14c858249e2e58d98cb1b20c5b01049e0e6",
+      "changed": true,
+      "starting_bytes": 10208,
+      "final_bytes": 10523
+    },
+    "codex/materialize.mjs": {
+      "starting_sha256": "d56fae7c31e96c1521fe679a974f3d883f2b3364c9da9004d52439fc827b4756",
+      "final_sha256": "9ce2b246d2a9da9cd4bb45fde4e88a6851549cdd728a22c2a2f12dabb3412c3d",
+      "changed": true,
+      "starting_bytes": 29363,
+      "final_bytes": 33177
+    },
+    "codex/README.md": {
+      "starting_sha256": "d4d98b626b991445c04371ce3f6015cd25579af78b7daa81962c8c9198ca6daf",
+      "final_sha256": "69e0436f6380a305fee7afc207226b8cb5604ea695267acd0a738f7529b3f63b",
+      "changed": true,
+      "starting_bytes": 18202,
+      "final_bytes": 21289
+    },
+    "CHANGELOG.md": {
+      "starting_sha256": "f27d29ec806181145140eaa01e1496bf5ec1a9ef8caedd1a36c25610d017506d",
+      "final_sha256": "9df55800fe0c0815b3eb71a9efe229ffb75a5ad1990b789f227849207de96bac",
+      "changed": true,
+      "starting_bytes": 18584,
+      "final_bytes": 18975
+    },
+    "claude/structure-manifest.tsv": {
+      "starting_sha256": "56c3f45ea2a4a8b5fe7f22b963a31c2bf7b725ef18ffdcbab42799b855ee60a8",
+      "final_sha256": "6ce40371d1a620a10b10cd47e1d3febc3c32e926e3092a26a1f76c9e80c4a0d3",
+      "changed": true,
+      "starting_bytes": 11287,
+      "final_bytes": 11409
+    }
+  },
+  "static_observations": {
+    "git_diff_check": {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "ai-agents/knowledge-base/conventions/asking-the-owner.md",
+        "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+        "claude/agents/fkit-lead.md",
+        "claude/agents/fkit-coder.md",
+        "claude/agents/fkit-producer.md",
+        "claude/agents/fkit-reviewer.md",
+        "claude/agents/fkit-architect.md",
+        "claude/agents/fkit-wiki.md",
+        "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+        "claude/skills/fkit-task-ship-loop/SKILL.md",
+        "claude/skills/fkit-open-questions-interview/SKILL.md",
+        "claude/skills/fkit-heal/SKILL.md",
+        "codex/materialize.mjs",
+        "codex/README.md",
+        "CHANGELOG.md",
+        "claude/structure-manifest.tsv"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "conventions_byte_equal": true,
+    "manifest": {
+      "normalized_sha256": "f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38",
+      "current_row_present": true,
+      "baseline_rows_preserved": true,
+      "added_rows": [
+        "f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38\tai-agents/knowledge-base/conventions/asking-the-owner.md"
+      ],
+      "removed_rows": [],
+      "rows_sorted_by_path_then_hash": true,
+      "generator": "not invoked; full generator equivalence unverified"
+    },
+    "protected_fingerprints": {
+      "checked_files": 2063,
+      "changed_paths": []
+    },
+    "contradiction_search": {
+      "patterns": [
+        "Batch related questions",
+        "batch related questions",
+        "merge or drop the weakest",
+        "merges the two least-recommended",
+        "merge the two least-recommended",
+        "most blocking 4 first",
+        "up to 4 per supported call"
+      ],
+      "hits": [],
+      "scope": [
+        "ai-agents/knowledge-base/conventions/asking-the-owner.md",
+        "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+        "claude/agents/fkit-lead.md",
+        "claude/agents/fkit-coder.md",
+        "claude/agents/fkit-producer.md",
+        "claude/agents/fkit-reviewer.md",
+        "claude/agents/fkit-architect.md",
+        "claude/agents/fkit-wiki.md",
+        "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+        "claude/skills/fkit-task-ship-loop/SKILL.md",
+        "claude/skills/fkit-open-questions-interview/SKILL.md",
+        "claude/skills/fkit-heal/SKILL.md",
+        "codex/materialize.mjs",
+        "codex/README.md",
+        "CHANGELOG.md",
+        "claude/structure-manifest.tsv"
+      ],
+      "limit": "static phrase search, not proof of model compliance"
+    },
+    "adapter_source_read": "codex/server.mjs: one question, maxItems 4; owner-question.mjs: unique pending IDs, original-question custom closure, actual custom text in comment, cancel/decline/interruption do not answer",
+    "existing_coverage_source_read": "test/launcher-contract.test.js: single-field choice/custom consent and supported-root/cancel/decline/late/custom relay cases; read only, never executed",
+    "scope": "16 source files plus authorized worklog/build evidence only; no task/board metadata or status edits",
+    "wiki": "12 ai-agents commits since 185ac5e07e918c089ed3afd23496587315342000; current source and owner rulings take precedence for current gaps",
+    "approved_plan_blob": "e4320af4bc02ebd6a7717e66b3d8aaeb7b79884f",
+    "line_references": {
+      "ai-agents/knowledge-base/conventions/asking-the-owner.md": {
+        "## Independent decisions": 49,
+        "## The standing option": 110,
+        "## Spawned workers": 157
+      },
+      "claude/agents/fkit-lead.md": {
+        "**Relaying each worker": 88,
+        "Keep a conversation/checkpoint": 122
+      },
+      "claude/skills/fkit-sprint-ship-loop/SKILL.md": {
+        "### 3. Relay": 384,
+        "On `NEEDS-DECISION`": 416
+      },
+      "claude/skills/fkit-task-ship-loop/SKILL.md": {
+        "3. **⛔ STOP": 171,
+        "For every independent stop": 314
+      },
+      "claude/skills/fkit-open-questions-interview/SKILL.md": {
+        "3. **Dedup": 70,
+        "**Adapt group size": 92,
+        "**Retain the unresolved": 98
+      },
+      "claude/skills/fkit-heal/SKILL.md": {
+        "4. **One `AskUserQuestion`": 115
+      },
+      "codex/materialize.mjs": {
+        "export function initialPrompt": 26,
+        "const ownerDelivery =": 48
+      }
+    }
+  },
+  "manual_source_checklist": [
+    {
+      "case": "Two independent worker decisions and separate sequential Codex calls",
+      "observation": "Shared convention contains two-item decisions envelope; sprint relay step 3 requires separate single-question calls, no new API. Static design only."
+    },
+    {
+      "case": "Partial/reordered answers and duplicate labels",
+      "observation": "Identity plus unchanged scope, no list-order/label binding; preserve valid partial answers; ambiguous items pending; unsupported identity => sequential."
+    },
+    {
+      "case": "Custom interruption, cancellation, scoped late replies and re-asks",
+      "observation": "Original decision binding, exact custom text, no approval from route alone; superseded scope needs fresh answer; no automatic submission."
+    },
+    {
+      "case": "Explanation in any item",
+      "observation": "Every new dialog stops that turn, other valid answers retained; next owner message accepts applicable answer/explains another question or re-asks unresolved only."
+    },
+    {
+      "case": "Plan approval versus retry allowance",
+      "observation": "Separate keys/questions; all applicable answers and allowances required; no renewal by approving a plan."
+    },
+    {
+      "case": "Option capacity and fallback",
+      "observation": "Three real worker options plus standing; string-only description in preceding chat; no silently lost alternatives; staging grants no action; per-decision fallback waits."
+    },
+    {
+      "case": "Heal exact repair list",
+      "observation": "One plan-level decision retained; named subset/custom and apply freshness unchanged."
+    },
+    {
+      "case": "Provenance, titles and knock-ons",
+      "observation": "Actual quote/date/channel and exact scope carry; unknown stays unknown; canonical titles and per-option dependency effects preserved."
+    }
+  ],
+  "execution_checks": [
+    {
+      "check": "test/launcher-contract.test.js (including focused adapter/relay cases)",
+      "result": "skipped — owner disabled test execution"
+    },
+    {
+      "check": "npm test",
+      "result": "skipped — owner disabled test execution"
+    },
+    {
+      "check": "npm run test:docs",
+      "result": "skipped — owner disabled test execution"
+    },
+    {
+      "check": "npm run test:prove-red if applicable",
+      "result": "skipped — owner disabled test execution"
+    },
+    {
+      "check": "suite/build execution for verification",
+      "result": "skipped — owner disabled test execution"
+    },
+    {
+      "check": "test discovery/collection, fixtures, smoke tests, mutation tests, benchmarks, behavioral probes and saved verification scripts",
+      "result": "skipped — owner disabled test execution"
+    },
+    {
+      "check": "live host rendering/submission/cancellation and two-decision worker-relay exercise",
+      "result": "skipped — owner disabled test execution"
+    },
+    {
+      "check": "Claude/mixed live checks",
+      "result": "skipped — owner disabled test execution"
+    }
+  ],
+  "acceptance": {
+    "behavioral": "UNVERIFIED",
+    "live_host": "UNVERIFIED",
+    "manifest_generator_equivalence": "UNVERIFIED",
+    "independent_code_review": "outstanding; live driver owns fresh source-only review",
+    "closure": "not authorized; no automatic closure"
+  },
+  "decision_log": {
+    "autonomous_choices": "none",
+    "review_fixes": "none; no review performed in Build"
+  },
+  "spend": {
+    "direct_consult_ordinal": 2,
+    "direct_steps": [
+      "Plan completed",
+      "Build current"
+    ],
+    "prior_children": {
+      "architect": 1,
+      "producer": 1,
+      "adversarial": 1
+    },
+    "worker_child_launches": 0,
+    "revision_rounds": 0,
+    "revision_cap": 2,
+    "retries": 0,
+    "verification_launches": 0,
+    "no_progress": 0,
+    "no_progress_cap": 3,
+    "additional_general_retry_allowance": false,
+    "task_session_cap": "none additionally specified",
+    "excluded_0548": "exhausted 2/2, no launch",
+    "0556_run_skip_set": "includes 0556 once attempted",
+    "other_exclusions": [
+      "0555 existing claim",
+      "0537 owner-deferred",
+      "0520 blocked"
+    ]
+  },
+  "final_artifact_readback": {
+    "mandatory_artifacts": {
+      "ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md": {
+        "bytes": 5764,
+        "sha256": "31912b60b0b1fe812a3321a69c8687c82f14b416068c8cc3fe2293ea1655bc8a"
+      },
+      "ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md": {
+        "bytes": 9608,
+        "sha256": "a3c8ac2df3cdfe3025763ebcdd69d864203f29d7fb7f0729930de3120c44ba05"
+      },
+      "ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff": {
+        "bytes": 91377,
+        "sha256": "5120935fb2bea8ea37a2d0383cdab54e9f7e3a23b8fb8062b9e80866be1bdce6"
+      }
+    },
+    "source_drift": [],
+    "protected_drift": [],
+    "diff_note": "Unified diff contains required single-space empty context lines; retain them as patch syntax, not source whitespace defects."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "matched": 17,
+  "mismatches": [],
+  "sources": {
+    "codex/server.mjs": "a84e44fcb4fc98513f9b66cb8def0abf5112af6b3c2a1f481c69e715ff81ce2c",
+    "codex/owner-question.mjs": "5f9e5d7225da3768c7a01a3d2ab5396f2814e15db25f004911c6b5633d14b261",
+    "codex/materialize.mjs": "d56fae7c31e96c1521fe679a974f3d883f2b3364c9da9004d52439fc827b4756",
+    "codex/README.md": "d4d98b626b991445c04371ce3f6015cd25579af78b7daa81962c8c9198ca6daf",
+    "claude/agents/fkit-lead.md": "b5331eec699683519ecff77567628ae8c0bc88fea0dd9efc6ad1b151d8b06d3c",
+    "claude/skills/fkit-sprint-ship-loop/SKILL.md": "e338e2a7f166554edddfb17fc9520c948cd080a709163a272ea5e53ad76893c5",
+    "claude/skills/fkit-open-questions-interview/SKILL.md": "1d63192de846a718cf3f121bed8b43ae0078fb37ddcc7fecb6eb5283a0be22a1",
+    "claude/skills/fkit-plan-task/SKILL.md": "5a33bb835696d3238ba6cd9874fdba75053080287716bcfc498a3b418bbcf6ea",
+    "claude/skills/fkit-task-ship-loop/SKILL.md": "4b89044e9cb73d7d2e331ff6fdece0696f38f248dcdb723568fc16b033602192",
+    "claude/scaffold/universal-rules.md": "039eea00f6dbb317d47676fa20fd93969b425623de27c9204201d74c5a04b7d6",
+    "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md": "6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92",
+    "ai-agents/knowledge-base/conventions/asking-the-owner.md": "6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92",
+    "claude/structure-manifest.tsv": "56c3f45ea2a4a8b5fe7f22b963a31c2bf7b725ef18ffdcbab42799b855ee60a8",
+    "CLAUDE.md": "e05692377ad06cdf5dea78f5cc1211a9cde128a7be74c26b70ed8cbfc92734c6",
+    "AGENTS.md": "b07b8175c32c99c8aff3ff2f498946447203ffd700ec18dd6da63d105a75a0a1",
+    "CHANGELOG.md": "1b05dac576422bfeffa60e9da2089d6506f1a35a9782b23cd27610a95e6b9709",
+    "test/launcher-contract.test.js": "fae460f9c139522ebe306007c0efbc507a2148a27d6460b4c8afbf1adf794b3f"
+  }
+}

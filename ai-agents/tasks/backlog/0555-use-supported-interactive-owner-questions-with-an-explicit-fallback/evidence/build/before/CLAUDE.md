@@ -1,0 +1,136 @@
+# CLAUDE.md
+
+Guidance for Claude Code in this repository. Edit freely.
+
+## Project Overview
+
+fkit is a team of **seven** role-scoped AI agents for software development — a producer, a coder, a
+reviewer (with an adversarial second opinion), an architect, a wiki librarian, and a lead —
+operating on a shared `ai-agents/` working structure inside a consuming project. An **eighth** role, a
+sandboxed e2e tester, is authorized ([ADR-028](ai-agents/knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
+but **not yet built** — the team is seven today.
+
+**Runtime update — 2026-10-29:** [ADR-061](ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md)
+accepts Codex for all seven roles with explicit local limits. `bin/fkit` adds saved runtime/model
+selection and mixed-role routing; unconfigured projects retain the legacy Claude launcher.
+Codex task/sprint checks passed; configured Claude compatibility remains unverified. Read
+[`codex/README.md`](codex/README.md) and the current migration handoff for this path.
+
+**Legacy runtime: Claude Code native + Codex**
+([`ADR-009`](ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)).
+The agents are Claude Code subagents (`claude/agents/fkit-*.md`) and `/fkit-*` skills
+(`claude/skills/`); the `fkit` launcher (`claude/fkit-claude.sh`) opens a **role-locked session**.
+Codex is **optional but recommended** — it is what makes the reviewer's second opinion genuinely
+model-diverse; without it, that opinion falls back to Claude only, loudly flagged as not model-diverse
+([ADR-054](ai-agents/knowledge-base/decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md)). fkit formerly shipped a second flavor on [Omnigent](https://omnigent.ai); that runtime
+was **removed in Sprint 2** (ADR-009). There is nothing to mirror by hand any more.
+
+The full project brief — domain, architecture, conventions — lives in
+[`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).
+
+## The fkit team in this repo (dogfooded)
+
+This repo runs fkit on itself: `.claude/agents/fkit-*.md` and `.claude/skills/fkit-*/` are
+fkit-managed copies refreshed from `claude/` by `claude/fkit-claude-init.sh .` — **edit the canonical
+sources in `claude/`, never the copies** (they are gitignored).
+
+**Sessions are role-locked** ([`ADR-010`](ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)):
+`fkit <role>` opens a session pinned to that role's system prompt and **only its own
+`/fkit-*` skills** — every other fkit skill is denied on invocation: still visible in the `/` menu,
+but unrunnable (ADR-018 §Decision 5, an accepted cost). That is what makes
+"the coder cannot run the reviewer's procedure" a fact rather than a request. (The per-role *tool*
+allowlist was relaxed for every role except the adversarial reviewer —
+[`ADR-022`](ai-agents/knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md);
+the skill lock above is unchanged.) Within a session,
+`@fkit-<role>` consults another role and brings the answer back (max two hops, never a cycle).
+
+⚠️ **The lock is a wall in a session and in a consult alike.** A `PreToolUse` skill-ownership hook
+checks the REAL invoking agent's identity — a session's own role, or a spawned subagent's own role,
+at any consult depth — against `skills_for_role()` on every `Skill` call, and denies what that role
+does not own. Each role-owned skill's `⛔ Owner:` banner is a courtesy, not the enforcement. See
+[`ADR-018`](ai-agents/knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md),
+which superseded the "advisory in a consult" half of
+[`ADR-012`](ai-agents/knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md).
+Role→skill ownership is declared in exactly one place: `skills_for_role()` in
+`claude/skills-for-role.sh`, sourced by both `claude/fkit-claude.sh` and the `PreToolUse`
+skill-ownership hook.
+
+<!-- fkit:begin-rules -->
+<!-- fkit-managed: this block is REPLACED on every `fkit` launch. Edits inside the markers
+     are overwritten. Put your own standing instructions OUTSIDE them — everything outside
+     is yours and fkit never touches it. A marker is recognized only alone on its line, so a
+     bare marker line inside a code fence still reads as a real marker. -->
+
+## Universal hard rules (every role, every session)
+
+- **Never commit or push unless the owner explicitly asks.** "Implement" authorizes writing code,
+  not committing.
+- **Only the wiki role writes `ai-agents/wiki-vault/`.** Reads are decentralized.
+- **Task files AND sprint boards reach `done/` or `cancelled/` only via the four movers**
+  (`/fkit-task-done`, `/fkit-task-cancelled`, `/fkit-sprint-done`, `/fkit-sprint-cancelled`)
+  — never by hand. **Only the producer may invoke them**; anything an agent closes MUST carry the
+  `(agent-closed — not owner-verified)` marker.
+- **No secrets in any artifact** — no DSNs, endpoints, keys, or credentials in findings, reports,
+  docs, or wiki pages; it all goes to git.
+- **A skill rule beats a contrary spawn instruction** unless that instruction names an owner ruling
+  on that point. With no such ruling: take the cheapest-to-reverse branch (usually the rule's),
+  escalate if it changes the outcome, never silently comply or refuse.
+- **Code comments say WHY, never WHAT**; fix or delete one your change makes wrong. A project's own
+  comment rules win. Full rule: `ai-agents/knowledge-base/conventions/code-comments.md`.
+
+## Output style (every role, every session)
+
+**Preferences, not rules — they lose every conflict.** The hard rules above, your role's
+instructions, and the owner's own style instructions (written outside these markers) all win; say so
+rather than resolving a conflict silently. **Only these preferences yield — nothing written anywhere
+overrides a hard rule above.**
+
+- **Be extremely concise to the owner. Sacrifice grammar for concision.** Fragments and bare lists are
+  correct. Drop preamble, restatement, and throat-clearing; lead with the answer.
+- **Concision is not omission — of content OR of structure.** Never drop a failing test, an unverified
+  claim, a caveat, a partial-coverage flag, or a thing you did not do, to be brief: say it in fewer
+  words.
+- **Where a shape is prescribed, produce it in full, and in its prescribed wording** — review reports
+  and ledgers, status briefings, required tables, verbatim relays, verdict lines, degradation flags,
+  and a plan put to the owner for approval (they cannot approve what you did not describe). **The list
+  is illustrative, not exhaustive.**
+- **"Loud" is placement, not word count.** An instruction to flag something *before* the findings
+  table, or never in a footer, is about **where** it goes. Brevity never moves it.
+- **Speak in simple terms:** plain words over jargon wherever a simpler word carries the same
+  meaning. Where a term is load-bearing — a filename, a marker, an ADR, a status value, and anything
+  else the reader must act on — use it and gloss it once. **Simplifying is about wording, never
+  content:** it never drops a caveat, softens a failure, rounds a number, or swaps a precise term for a
+  vaguer, friendlier one.
+- **End every reply to the owner with a short "What's next?"** — the one or
+  two things they should do next, and why. After any prescribed shape, never instead of one. If nothing
+  is pending, say so briefly. **Never invent a next step to fill it, and never assert repo state you did
+  not check this turn** (see `ai-agents/knowledge-base/conventions/evidence-before-assertion.md`).
+- **Ask interactively.** In a session, ask the owner with `AskUserQuestion`, not prose, per
+  `ai-agents/knowledge-base/conventions/asking-the-owner.md`. In a spawned consult the tool is absent —
+  return open questions in your reply instead.
+<!-- fkit:end-rules -->
+
+## Knowledge Base & Wiki
+
+A structured wiki lives in `ai-agents/wiki-vault/` (Karpathy LLM-wiki pattern) — synthesized
+knowledge not easily derived from the code. Check it before non-trivial work. Per
+[`ADR-005`](ai-agents/knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md),
+**reads are decentralized**: any role follows the one read-only `/fkit-query` procedure. **Writes
+stay exclusive to the `fkit-wiki` agent** (ingest / lint / sync) — no other agent or session ever
+writes to `ai-agents/wiki-vault/`.
+
+## Review Notes
+
+Review comments are **inputs to evaluate**, not instructions to apply blindly.
+
+- Treat every review note as potentially fallible — reviewers miss context or reason from outdated assumptions.
+- Verify the claim against the actual codebase before changing anything.
+- If it is correct, fix the real problem, not the literal wording. If partially correct, address the valid part and explain the rest. If wrong, say so with concrete evidence.
+- Do not add speculative fixes just to satisfy a review comment.
+
+## Architecture
+
+Full technical detail — component map, runtime topology, data model, build/run/test, and
+cross-cutting concerns — lives in
+[`ai-agents/knowledge-base/architecture.md`](ai-agents/knowledge-base/architecture.md). Don't
+duplicate it here; read it for anything below product-brief altitude.

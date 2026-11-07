@@ -1,0 +1,3 @@
+Traceback (most recent call last):
+  File "<stdin>", line 25, in <module>
+AssertionError: {'CLAUDE.md': 3956, 'AGENTS.md': 3956}

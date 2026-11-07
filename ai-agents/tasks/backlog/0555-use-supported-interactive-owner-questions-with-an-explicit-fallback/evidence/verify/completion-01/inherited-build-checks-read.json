@@ -1,0 +1,780 @@
+[
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/complete-checks.json",
+    "record": [
+      {
+        "name": "root-init-complete",
+        "command": [
+          "bash",
+          "claude/fkit-claude-init.sh",
+          "."
+        ],
+        "stdin": null,
+        "exit": 0
+      },
+      {
+        "name": "delivery-complete",
+        "command": [
+          "node",
+          "--input-type=module"
+        ],
+        "stdin": "delivery-script.mjs.txt",
+        "exit": 0
+      },
+      {
+        "name": "target-complete",
+        "command": [
+          "node",
+          "--test",
+          "--test-name-pattern=^lead owner channel:|^configured owner questions:",
+          "test/launcher-contract.test.js"
+        ],
+        "stdin": null,
+        "exit": 0
+      },
+      {
+        "name": "whitespace-complete",
+        "command": [
+          "git",
+          "diff",
+          "--check",
+          "--",
+          "codex/server.mjs",
+          "codex/owner-question.mjs",
+          "codex/materialize.mjs",
+          "codex/README.md",
+          "claude/agents/fkit-lead.md",
+          "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+          "claude/skills/fkit-open-questions-interview/SKILL.md",
+          "claude/skills/fkit-plan-task/SKILL.md",
+          "claude/skills/fkit-task-ship-loop/SKILL.md",
+          "claude/scaffold/universal-rules.md",
+          "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+          "ai-agents/knowledge-base/conventions/asking-the-owner.md",
+          "claude/structure-manifest.tsv",
+          "CLAUDE.md",
+          "AGENTS.md",
+          "CHANGELOG.md",
+          "test/launcher-contract.test.js",
+          "ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md"
+        ],
+        "stdin": null,
+        "exit": 0
+      }
+    ],
+    "logs": []
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-budget-corrected.json",
+    "record": {
+      "command": [
+        "node",
+        "--input-type=module"
+      ],
+      "stdin": "delivery-script.mjs.txt",
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-budget-corrected.stdout",
+        "sha256": "342a0b0e2384550cc36b1dc5d54d61309a93d668cf1e0cc60fedcc4e7f6db178",
+        "bytes": 7104,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-budget-corrected.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-complete.json",
+    "record": {
+      "command": [
+        "node",
+        "--input-type=module"
+      ],
+      "stdin": "delivery-script.mjs.txt",
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-complete.stdout",
+        "sha256": "671f1efbf1ff3d67d0b17a72c7cec63ae2ad7a2d3329cdf60ab6c1065f3c6d3f",
+        "bytes": 7104,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-complete.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-final.json",
+    "record": {
+      "command": [
+        "node",
+        "--input-type=module"
+      ],
+      "stdin": "delivery-script.mjs.txt",
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-final.stdout",
+        "sha256": "c32e0d98b3c9c599a66697c38db7eb85c4e76070e0609685f7434d0146e4aae2",
+        "bytes": 7104,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery-final.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery.json",
+    "record": {
+      "command": [
+        "node",
+        "--input-type=module"
+      ],
+      "stdin": "delivery-initial-script.mjs.txt",
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery.stdout",
+        "sha256": "6f02a4853f4220c0d698b600bdfd26cd22520e02c7fdd7f831a96b1521d5a5ce",
+        "bytes": 6458,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/delivery.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/manifest.json",
+    "record": {
+      "command": [
+        "npm",
+        "run",
+        "generate:manifest"
+      ],
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/manifest.stdout",
+        "sha256": "e94c2aa5edf7652ab344bc909d6255491f606ab4c897436f9367802783d8ba27",
+        "bytes": 84,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/manifest.stderr",
+        "sha256": "61b01b51939277abe12d7000f7e4916561fa0b2ea1cc47f490b2d7d947709e84",
+        "bytes": 51,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/preservation-attempt1.json",
+    "record": {
+      "command": [
+        "python3",
+        "-"
+      ],
+      "exit": 1,
+      "failedAssertion": "all(4352 - size >= 400 for size in blocks.values())",
+      "observedManagedBlockBytes": {
+        "CLAUDE.md": 3956,
+        "AGENTS.md": 3956
+      },
+      "freeBytes": 396,
+      "requiredFreeBytes": 400,
+      "sourceImages": "intermediate-after/",
+      "taskDiff": "task-source-intermediate.diff",
+      "limitation": "Full stdin script not retained at invocation; failing stage and exact tool traceback preserved. No functional check failed."
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/preservation-attempt1.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/preservation-attempt1.stderr",
+        "sha256": "80c9ee441506605f5a9fe56f0385e21dd53bb08021016b0319494cf6c3ba2e5e",
+        "bytes": 129,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-budget-corrected.json",
+    "record": {
+      "command": [
+        "bash",
+        "claude/fkit-claude-init.sh",
+        "."
+      ],
+      "stdin": null,
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-budget-corrected.stdout",
+        "sha256": "074d954ee9085e50a10c741f927db8e711fd7b5db690e0b5692b708927a5e6bc",
+        "bytes": 1096,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-budget-corrected.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-complete.json",
+    "record": {
+      "command": [
+        "bash",
+        "claude/fkit-claude-init.sh",
+        "."
+      ],
+      "stdin": null,
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-complete.stdout",
+        "sha256": "074d954ee9085e50a10c741f927db8e711fd7b5db690e0b5692b708927a5e6bc",
+        "bytes": 1096,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-complete.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-final.json",
+    "record": {
+      "command": [
+        "bash",
+        "claude/fkit-claude-init.sh",
+        "."
+      ],
+      "stdin": null,
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-final.stdout",
+        "sha256": "db6c9d8e8902bc89fa73da0641a2fe09e3991b5c2e03520591e4d2d9295019e5",
+        "bytes": 1004,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init-final.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init.json",
+    "record": {
+      "command": [
+        "bash",
+        "claude/fkit-claude-init.sh",
+        "."
+      ],
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init.stdout",
+        "sha256": "074d954ee9085e50a10c741f927db8e711fd7b5db690e0b5692b708927a5e6bc",
+        "bytes": 1096,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/root-init.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/scoped-checks.json",
+    "record": [
+      {
+        "name": "syntax-server",
+        "command": [
+          "node",
+          "--check",
+          "codex/server.mjs"
+        ],
+        "exit": 0
+      },
+      {
+        "name": "syntax-owner",
+        "command": [
+          "node",
+          "--check",
+          "codex/owner-question.mjs"
+        ],
+        "exit": 0
+      },
+      {
+        "name": "syntax-materialize",
+        "command": [
+          "node",
+          "--check",
+          "codex/materialize.mjs"
+        ],
+        "exit": 0
+      },
+      {
+        "name": "syntax-test",
+        "command": [
+          "node",
+          "--check",
+          "test/launcher-contract.test.js"
+        ],
+        "exit": 0
+      },
+      {
+        "name": "manifest",
+        "command": [
+          "npm",
+          "run",
+          "generate:manifest"
+        ],
+        "exit": 0
+      },
+      {
+        "name": "root-init",
+        "command": [
+          "bash",
+          "claude/fkit-claude-init.sh",
+          "."
+        ],
+        "exit": 0
+      },
+      {
+        "name": "whitespace",
+        "command": [
+          "git",
+          "diff",
+          "--check",
+          "--",
+          "codex/server.mjs",
+          "codex/owner-question.mjs",
+          "codex/materialize.mjs",
+          "codex/README.md",
+          "claude/agents/fkit-lead.md",
+          "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+          "claude/skills/fkit-open-questions-interview/SKILL.md",
+          "claude/skills/fkit-plan-task/SKILL.md",
+          "claude/skills/fkit-task-ship-loop/SKILL.md",
+          "claude/scaffold/universal-rules.md",
+          "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+          "ai-agents/knowledge-base/conventions/asking-the-owner.md",
+          "claude/structure-manifest.tsv",
+          "CLAUDE.md",
+          "AGENTS.md",
+          "CHANGELOG.md",
+          "test/launcher-contract.test.js",
+          "ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md"
+        ],
+        "exit": 0
+      },
+      {
+        "name": "target-green-final",
+        "command": [
+          "node",
+          "--test",
+          "--test-name-pattern=^lead owner channel:|^configured owner questions:",
+          "test/launcher-contract.test.js"
+        ],
+        "exit": 0
+      }
+    ],
+    "logs": []
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize-final.json",
+    "record": {
+      "command": [
+        "node",
+        "--check",
+        "codex/materialize.mjs"
+      ],
+      "stdin": null,
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize-final.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize-final.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize.json",
+    "record": {
+      "command": [
+        "node",
+        "--check",
+        "codex/materialize.mjs"
+      ],
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-materialize.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-owner.json",
+    "record": {
+      "command": [
+        "node",
+        "--check",
+        "codex/owner-question.mjs"
+      ],
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-owner.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-owner.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-server.json",
+    "record": {
+      "command": [
+        "node",
+        "--check",
+        "codex/server.mjs"
+      ],
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-server.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-server.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-test.json",
+    "record": {
+      "command": [
+        "node",
+        "--check",
+        "test/launcher-contract.test.js"
+      ],
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-test.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/syntax-test.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-complete.json",
+    "record": {
+      "command": [
+        "node",
+        "--test",
+        "--test-name-pattern=^lead owner channel:|^configured owner questions:",
+        "test/launcher-contract.test.js"
+      ],
+      "stdin": null,
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-complete.stdout",
+        "sha256": "4ba9de172b1319299da7ded102e5fa06a6cec9a65c3e877d6b7e577c49eaed6b",
+        "bytes": 824,
+        "counts": {
+          "tests": 2,
+          "suites": 0,
+          "pass": 2,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-complete.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green-final.json",
+    "record": {
+      "command": [
+        "node",
+        "--test",
+        "--test-name-pattern=^lead owner channel:|^configured owner questions:",
+        "test/launcher-contract.test.js"
+      ],
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green-final.stdout",
+        "sha256": "e57463bba1c687d5b9db4574beea591b970e513b3b6717dfc54d26e033d17f9d",
+        "bytes": 823,
+        "counts": {
+          "tests": 2,
+          "suites": 0,
+          "pass": 2,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green-final.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green.json",
+    "record": {
+      "command": [
+        "node",
+        "--test",
+        "--test-name-pattern=^lead owner channel:|^configured owner questions:",
+        "test/launcher-contract.test.js"
+      ],
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green.stdout",
+        "sha256": "18734fbb1554ba99ad438251f1b74dfc44c753c90825453441e10e4b2d7539d8",
+        "bytes": 824,
+        "counts": {
+          "tests": 2,
+          "suites": 0,
+          "pass": 2,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-green.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-red.json",
+    "record": {
+      "command": [
+        "node",
+        "--test",
+        "--test-name-pattern=^lead owner channel:",
+        "test/launcher-contract.test.js"
+      ],
+      "exit": 1,
+      "expected": "failure: unsupported roots currently advertise the owner tool"
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-red.stdout",
+        "sha256": "92b21cf3d007b1c7664011346f7c3d6a7f0203791558c571c788a3e355833682",
+        "bytes": 1475,
+        "counts": {
+          "tests": 1,
+          "suites": 0,
+          "pass": 0,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/target-red.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace-complete.json",
+    "record": {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "codex/server.mjs",
+        "codex/owner-question.mjs",
+        "codex/materialize.mjs",
+        "codex/README.md",
+        "claude/agents/fkit-lead.md",
+        "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+        "claude/skills/fkit-open-questions-interview/SKILL.md",
+        "claude/skills/fkit-plan-task/SKILL.md",
+        "claude/skills/fkit-task-ship-loop/SKILL.md",
+        "claude/scaffold/universal-rules.md",
+        "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+        "ai-agents/knowledge-base/conventions/asking-the-owner.md",
+        "claude/structure-manifest.tsv",
+        "CLAUDE.md",
+        "AGENTS.md",
+        "CHANGELOG.md",
+        "test/launcher-contract.test.js",
+        "ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md"
+      ],
+      "stdin": null,
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace-complete.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace-complete.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  },
+  {
+    "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace.json",
+    "record": {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "codex/server.mjs",
+        "codex/owner-question.mjs",
+        "codex/materialize.mjs",
+        "codex/README.md",
+        "claude/agents/fkit-lead.md",
+        "claude/skills/fkit-sprint-ship-loop/SKILL.md",
+        "claude/skills/fkit-open-questions-interview/SKILL.md",
+        "claude/skills/fkit-plan-task/SKILL.md",
+        "claude/skills/fkit-task-ship-loop/SKILL.md",
+        "claude/scaffold/universal-rules.md",
+        "claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md",
+        "ai-agents/knowledge-base/conventions/asking-the-owner.md",
+        "claude/structure-manifest.tsv",
+        "CLAUDE.md",
+        "AGENTS.md",
+        "CHANGELOG.md",
+        "test/launcher-contract.test.js",
+        "ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md"
+      ],
+      "exit": 0
+    },
+    "logs": [
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      },
+      {
+        "path": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/whitespace.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "counts": {}
+      }
+    ]
+  }
+]

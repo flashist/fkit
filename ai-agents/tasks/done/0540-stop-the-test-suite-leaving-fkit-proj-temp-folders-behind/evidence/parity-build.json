@@ -1,0 +1,109 @@
+{
+  "startedUTC": "2026-11-04T09:31:52.363996+00:00",
+  "head": "1767a47b9db50f3949789636c3e0b513950e7368",
+  "statusBefore": " M ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\n?? ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md\n",
+  "hashesBefore": {
+    "test/dual-home-parity.test.js": "82bbdb7b31d58eb45bea1ec3a57a8f4fa2225a97df9feae0b3b47a11cf8355f7",
+    "test/dual-home-parity-exceptions.mjs": "8e45b9776776d2bf6cebb699a1bbf3fba5cecde404b53faa7d4352e61c59e4c4",
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": "9391ccc19e466d6af691d887e4ca8ce3f3c46169c648afcfe76fd5e59734c6ce",
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    ".git/index": "a8f5e7698a080f20496ff18af077f2a40daa4ac3b762354b1240d7f0a8c714a3",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": "e51d2a1e07187b2a056bb28af81563762e73af5fce772e6a76f5e464138d8627",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "89b9593934ce2dde47bc849180dd75714cfe474f4cb64f363519c44f4925cc92"
+  },
+  "testRegistrationsBefore": 9,
+  "state": "DONE bounded Build; full Verify/review/closure pending",
+  "approvalProvenance": "Driver relayed actual interactive fkit_roles.fkit_ask_owner approval; trusted prose, not independently verified.",
+  "finishedUTC": "2026-11-04T09:34:08.355408+00:00",
+  "node": "v24.13.0",
+  "platform": "Darwin/arm64",
+  "hashesAfter": {
+    "test/dual-home-parity.test.js": "947e531c591310a14466a96434ea0c0b585716b4dc252eb52034c6fd1a73d22e",
+    "test/dual-home-parity-exceptions.mjs": "25c7161777c0d5cefac7312f9a59686e112c6d8e5a1ee76ddb17f3ebaaaf9f08",
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": "cb17f0a5561c448f28e1bc2b27e5fac9a64e25dd68aff1d3da273fd2f3da135a",
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    ".git/index": "a8f5e7698a080f20496ff18af077f2a40daa4ac3b762354b1240d7f0a8c714a3",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": "e51d2a1e07187b2a056bb28af81563762e73af5fce772e6a76f5e464138d8627",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "89b9593934ce2dde47bc849180dd75714cfe474f4cb64f363519c44f4925cc92"
+  },
+  "protectedBytesUnchanged": {
+    "test/orphan-cleanup.test.js": true,
+    "test/structure-notice.test.js": true,
+    "test/harness.mjs": true,
+    ".git/index": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": true
+  },
+  "exceptionModuleAfterHeaderByteIdentical": true,
+  "testRegistrationsUnchanged": [
+    "exception list: every entry states a path, a kind, and a reason that says WHY",
+    "live corpus: the enforced dual-homed set is non-empty and every file is present in BOTH homes",
+    "live corpus: every enforced dual-homed file is byte-identical",
+    "live corpus: no prune point hides a file that is dual-homed in fact",
+    "synthetic: a file present in one home only fails, in BOTH directions",
+    "synthetic: a one-byte difference fails with a message naming the path, line and column",
+    "synthetic: a prune point hides a co-present file, but never a bare .gitkeep",
+    "synthetic: an own exception BENEATH a prune point excuses a co-present file; the blanket does not",
+    "synthetic: an exact exception naming a DIRECTORY is a prune point, and is tripwired too"
+  ],
+  "priorAssertionLinesPreserved": true,
+  "staticAssertCallsBefore": 48,
+  "staticAssertCallsAfter": 77,
+  "fixtureOwnership": "Existing fixtureHomes/MADE after(cleanup) unchanged; 26 added fixture allocations per successful run; all under os.tmpdir. No new fixture helper/test registration/file.",
+  "focusedAttempts": [
+    {
+      "command": "node --test test/dual-home-parity.test.js",
+      "summary": [
+        "ℹ tests 9",
+        "ℹ suites 0",
+        "ℹ pass 9",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 199.489375"
+      ],
+      "childExit": "not separately retained by first shell log relay; complete green summary, shell final cat exit 0"
+    },
+    {
+      "command": "node --test test/dual-home-parity.test.js",
+      "startedUTC": "2026-11-04T09:34:08.044564+00:00",
+      "childExit": 0,
+      "summary": [
+        "ℹ tests 9",
+        "ℹ suites 0",
+        "ℹ pass 9",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 0",
+        "ℹ todo 0",
+        "ℹ duration_ms 190.609666"
+      ],
+      "reason": "Capture exact child exit not separately retained by first shell log relay; focused only, no failing attempt or source repair."
+    }
+  ],
+  "diffCheck": {
+    "command": "git diff --check",
+    "exit": 0
+  },
+  "sourceDiff": "parity-build.diff",
+  "metadataPolicyCoverage": [
+    "untracked live-only/scaffold-only/different regular exact names, root/unpruned/nested pruned",
+    "tracked either side even when tracked counterpart absent; presence/drift retained",
+    "both mixed-tracking directions, both-tracked and neither-tracked below reports",
+    "symlink/directory in either home at root/unpruned/pruned paths with regular counterpart, tracked/untracked",
+    "EACCES/ENOTDIR injected inspection error; ENOENT allowed",
+    "repository-wide raw NUL acquisition -> actual alternative-root compare; exact argv/cwd/one call; both directions",
+    "space/newline names, lexical relative comparison roots, empty Git output, thrown Git error",
+    "authored near misses, previous missing/drift/exception/gitkeep/tripwire assertions preserved"
+  ],
+  "unattendedChoices": "Exact approved localized implementation only. No extra permanent fix, scope expansion or obvious-winner call. Second focused run captures previously missing child exit.",
+  "remainingVerify": "Fresh Verify owns one measured default-temp npm test with original/diagnostic preserved sets, 971 tests/one skip unless explained drift, load/idle and <=120s evidence. Independent whole-task review against 20813ecb23974af0f6feac7404b0b5a8a1f4608a includes committed orphan fix; Process-review and producer closure later."
+}

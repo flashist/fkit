@@ -1,0 +1,11 @@
+{
+  "source": "functional-scoped.log",
+  "functionalChildExit": 0,
+  "passedNames": {
+    "lead worker transport: exact data, full reports, errors, saved peer settings and topology": true,
+    "configured delegation: fresh peers use their runtime, model and effort and report observed identity separately": true,
+    "configured runtimes: direct roles select their own CLI/model and preserve saved settings": true,
+    "lead owner channel: synthetic decisions wait and preserve cancel, decline and explanation without launching workers": true
+  },
+  "claim": "Fixture execution only; no live provider or model-obedience inference."
+}

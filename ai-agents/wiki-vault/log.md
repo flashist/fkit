@@ -4901,3 +4901,6 @@ Task 0380: partial — not ready to close
 - Ingested: `ai-agents/tasks/done/0551-review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery/brief.md` → created [[wiki/tasks/review-buzz-feasibility-with-the-owner-and-scope-only-the-proven-delivery]]
 - Targeted lint: all four pages indexed; their six directed related links resolve and are reciprocal.
 - Remaining: 32 eligible historical paths require assessment, including paths subsequently moved; no claim of full coverage. Skipped (already covered): none assessed.
+## 2026-11-04 — ingest
+- Ingested current working-tree `CONTRIBUTING.md`, `.github/workflows/test.yml`, `.github/workflows/prove-red.yml`, `RELEASING.md`, `ai-agents/knowledge-base/architecture.md` §9.1 and `CHANGELOG.md` Unreleased → updated [[wiki/systems/testing-and-verification]] and [[wiki/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only]]; updated their catalog entries. The owner's ruling supersedes D10's timing/idle requirements; prior measurements remain historical. Hosted Ubuntu execution remains unverified.
+- Bounded policy update only, not a full sync; watermark unchanged.

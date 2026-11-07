@@ -20,6 +20,18 @@ description: >-
 
 ## Overview
 
+**Owner gates use the supported interface.** In an eligible interactive Codex root, use exposed
+`fkit_roles.fkit_ask_owner` with negotiated form support; in supported Claude, native
+`AskUserQuestion`. Every reference to `AskUserQuestion` below follows
+`conventions/asking-the-owner.md`, including its explicit fallback for missing/unsupported interface
+or failed delivery: state the concrete limitation, exact decision, named choices/recommendation and
+standing explanation option, then wait. Report uncertain delivery as unverified; do not repeatedly
+resubmit asynchronous requests. Capability, exposure, eligibility, issuance/acceptance, queueing,
+observed presentation, actual answer and applicable approval are distinct. No invocation marker,
+accepted/queued request or unanswered form releases a gate. Workers and adversarial leaves return
+`NEEDS-DECISION`; this grants them no owner channel. Claim automatic presentation only with actual
+observation, never a synthetic acknowledgment.
+
 `fkit-sprint-ship-loop` ships a **whole sprint's eligible tasks** from brief to closed. It is the
 flagship application of the conductor remit ([ADR-031](../../../ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)),
 specified by [ADR-032](../../../ai-agents/knowledge-base/decisions/adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md)
@@ -105,6 +117,17 @@ Task **statuses** are deliberately **not** in this table: they live in the brief
 sprint row, and are governed by §2 (mark `🔄 In progress`) and §4 (close posture), not by an artifact
 write.
 
+**Continuation checkpoint.** Before a foreseeable pause, use existing task evidence and write
+`ai-agents/knowledge-base/reports/<YYYY-MM-DD>-lead-continuation-checkpoint-<run-id>.md`.
+Each report captures one moment; use another filename for later checkpoints. Record board/goal, task
+ID plus canonical title, stage, approval provenance, artifact paths, outstanding decisions,
+task/session allowances and spend, run skip set, paired statuses and next authorized action. Preserve
+worklog/review section ownership. This is evidence, never renewed approval or a runtime cursor.
+Same-run restoration preserves spend and skip state. A later invocation retains the orphaned-plan
+reapproval rule and surviving owner limits. If the host cannot resume, report **paused**, naming the
+real action: an owner message in the existing session or an owner-started session supplied with the
+checkpoint. Abrupt loss may prevent saving; disclose missing state, never reconstruct approval.
+
 ---
 
 ## The loop, numbered
@@ -161,15 +184,30 @@ owner rejects the plan** (§5.4), so a rejected task is never stranded `🔄 In 
 
 | Step | Driver spawns | Worker does (bounded, then returns) | Owner gate (driver-held) |
 |---|---|---|---|
-| **Plan** | `@fkit-coder` | run `/fkit-plan-task`; **write no source**; return the plan + open questions | **⛔ present plan → `AskUserQuestion` approve/reject** — the unremovable checkpoint (prose-enforced here, see honesty clause); a picked "Explain more, then ask again", or a typed question or request for more information, is not an answer and not approval — answer it in chat and re-put the plan (§3 step 2); **on approval the DRIVER writes the approved text to `<task-folder>/plan.md` verbatim — copied, not re-rendered — BEFORE spawning Build** (ADR-020; mirrors `fkit-task-ship-loop` step 4) |
+| **Plan** | `@fkit-coder` | run `/fkit-plan-task`; **write no source**; return the plan + open questions | **⛔ present plan → `AskUserQuestion` approve/reject** — the unremovable checkpoint (prose-enforced here, see honesty clause); a picked "Explain more, then ask again", or a typed question or request for more information, is not an answer and not approval — answer it in chat and re-put the plan (§3 step 4); keep plan approval separate from every independent open question or retry allowance (§3); **on approval the DRIVER writes the approved text to `<task-folder>/plan.md` verbatim — copied, not re-rendered — BEFORE spawning Build** (ADR-020; mirrors `fkit-task-ship-loop` step 4) |
 | **Build** | `@fkit-coder` | implement the **approved** plan; write source + `worklog.md` (**`plan.md` already exists — the driver wrote it at approval; never re-author it**); return change surface + any decision surfaced | stop only if the worker returns `NEEDS-DECISION` |
 | **Verify** | `@fkit-coder` | run the checks this change needs: map the changed paths to the project's checks (its own "what changed → what to run" table if it has one, e.g. in `CONTRIBUTING.md`); when unsure, run the project's default test command — nothing beyond it; name which checks ran and which were skipped, and why — a skipped check is not a passed one; return pass/fail + which checks ran and which were skipped (why) + diagnosis | **budget: 3 no-progress cycles** → `🚧 Blocked — verification` |
 | **Review** | `@fkit-reviewer` → `/fkit-stateful-review` | own pass + Codex second opinion; write the *Reviewer findings* ledger section; return the verdict | — |
 | **Process review** | `@fkit-coder` — **always, whoever authored the deliverable under review** ([ADR-038](../../../ai-agents/knowledge-base/decisions/adr-038-a-loop-steps-role-is-fixed-by-the-skill-the-step-runs.md)): a loop step's role is fixed by **the skill the step runs**, and this one writes the ledger's **coder-owned *Coder response*** section and **applies code fixes at its Step 6** (`fkit-process-stateful-review/SKILL.md:217` — *"Step 6 — Apply approved fixes + update the shared file"*). Neither changes when the deliverable is a document rather than code. | apply `fkit-process-stateful-review` **method** — **all of its steps, none of its per-round owner gate** (this loop's single up-front approval replaces that gate; ADR-019 / ADR-032, and the skill itself stays byte-unchanged). ⚠️ **A subset is not the method:** on `0195` a hand-application **missed Step 0 entirely, ran Steps 2 and 3.5 only partially, inherited the reviewer's severity labels instead of deriving them (Step 3), and used none of Step 4's prescribed Status values** — and looked complete to the worker doing it. Run **every** step: **0** — open or create `<task-folder>/review.md`, load *Accepted residuals* **and skim `ai-agents/knowledge-base/decisions/` for ADRs in scope** (an ADR's *"Re-raise only if"* binds exactly like a residual); **1** — identify the **novel** findings (those with no *Coder response* row yet); **2** — loop-check each against those residuals **and** ADRs, and say **loudly** when an unmet *"Re-raise only if"* makes one `closeout`; **3** — verify each against the actual code at `file:line`, reading **enough surrounding context to understand the full flow, not just the cited line**, and **deriving severity yourself from the blast radius you traced, never inheriting the reviewer's label**; **3.5** — classify **defect vs frontier-move**, and run the **regression / oscillation check** against the prior rounds already in the file — a round budget is a proxy, not the rule, so **a genuine new defect in round 3+ MUST still be acted on: stop on the *nature* of the finding, not the count**; **4** — assign **CORRECT / PARTIALLY CORRECT / INCORRECT / INCOMPLETE** and write **one *Coder response* row per finding id** (verdict, defect/frontier, action, status). The Status cell takes **one of exactly these six prescribed values** (`fkit-process-stateful-review/SKILL.md:96-97` — *"Status vocabulary"*) and never an ad-hoc label — `pending approval` ⛔ *(the one value this loop never uses: the standing approval above has already replaced the per-round gate that produces it)* · `✅ done` · `won't fix (frontier)` · `disproven` · `closeout (re-litigation)` · `blocked` — so **five of the six apply here**. Map them: **INCORRECT** → `disproven` with Action `none`; a **frontier-move you recommend keeping** → `won't fix (frontier)`; a **Step-2 re-litigation**, or a **Step-3.5 missing-test closeout**, → `closeout (re-litigation)`, **naming the residual, ADR or project test rule that settles it**, and **do not re-fix it**; **5** — report the summary table, the **suppressed-as-settled** list, and the **convergence call**; **6** — apply the **minimal, idiomatic fix** for each (smallest correct change; match surrounding style; no unrelated refactors), **update any test the fix makes wrong, add one only where the project's own test rules call for it, and run the relevant checks / linter / build — or say plainly you could not**; then set each row's Action to what you actually did, and its Status **by outcome, not uniformly**: `✅ done` for a fix you applied, `blocked` **plus the reason** for one you could not complete, and `won't fix (frontier)` for a confirmed intended tradeoff — which also earns an ***Accepted residuals*** entry in full **What / Why (structural) / Re-raise only if** shape. **Leave the `disproven` and `closeout (re-litigation)` rows exactly as Step 4 set them** — this step revisits only the rows you acted on. Set the document header **Status: closed-out** once every novel finding is closeout / disproven / accepted and nothing blocking remains; **7** — final report: findings dispositioned this round, code changed (files, how tested, result), the *Coder response* rows written, any newly-recorded residual, the document's new Status, and anything flagged — noting that the method itself makes no commit, and **asserting no commit state you did not check this turn**. **Never edit the *Reviewer findings* section** — the sole exception is the skill's own seeding path (`fkit-process-stateful-review/SKILL.md:114-118` — Step 0's *"create it"* — and `:132-133` — Step 1's *"If findings arrived as pasted text"*): creating the ledger, or appending findings handed to you as pasted text, each noted as done on the reviewer's behalf. In this loop the **Review** step has already written that section, so in practice you never touch it. Then: **apply verified-`CORRECT`, in-approved-plan fixes autonomously (task-loop discipline, ADR-019)** — **under that standing approval an authorized fix lands at Status `✅ done` in the same round**; **record each autonomously-applied fix and each obvious-winner call in the task folder's `worklog.md` decision log — per entry: which finding it answers, what changed, and why it qualified; record `none` if none** (ADR-032 A2 / ADR-019 §Decision item 4 — *"Every autonomous choice — every obvious winner — is recorded in the task's worklog decision-log"*); return change surface + residuals, and **return `NEEDS-DECISION` for any judgment call** | **⛔ stop for judgment calls** — frontier-move, regression, disputed severity, broad/behavior-changing, or out-of-plan fix |
 | **Close** | `@fkit-producer` | run `/fkit-task-done` on the brief; write `✅ Done (agent-closed — not owner-verified)` in the brief and every board row (ADR-033 §5 — a **spawned** producer has no owner channel, so its close is never owner-verified); return the step-7 close-out report | **the driver confirms the close landed** against that report (§4) before counting the task shipped; **stop for the owner on a degraded run** |
 
+**Put the return checklist in every worker prompt.** Alongside the §3 envelope, request completed work,
+outstanding work, artifact paths, checks/results (including skipped checks and why), and decisions.
+Carry explicit task/session allowances and spend between workers; exhaustion permits no further launch
+and this checklist adds no retry allowance. Require prescribed reviewer/producer reports whole,
+including their questions, coverage flags and residuals — the checklist wraps them, never replaces them.
+
+**After every bounded return, consume it before advancing.** Inspect the result and required artifacts,
+reconcile that checklist, then perform the next authorized action **in the live turn**. An exit status,
+completion label or file's existence alone proves nothing. On empty, failed or partial returns, inspect
+**every path named in the spawn**, wherever located, comparing content with the required outcomes. If
+every required outcome landed and is verified, continue without duplicating the launch; missing
+verification stays outstanding. Otherwise use the stop table's nothing-landed / self-contained-partial /
+torn-state branches. Producer returns always require §4's full close cross-check. Preserve the three
+no-progress verification cycles and review rules; do not turn a progress message into another gate.
+
 **Why the driver writes `plan.md`, and what that does and does not fix.** The approved plan exists only
-in **this session's** `AskUserQuestion` exchange, so the driver is the only actor holding the approved
+in **this session's** actual owner exchange (supported interface or explicit fallback), so the driver is the only actor holding the approved
 bytes at the moment of approval. It writes `<task-folder>/plan.md` itself, in the same turn as the
 approval and **before** the Build spawn — **copying the approved text, never re-rendering or summarising
 it.** This is not a breach of *"the driver delegates, never substitutes"*: that rule forbids the driver
@@ -192,7 +230,7 @@ at, and a `PreToolUse` carry-check needs one at spawn time.
 
 **Rules that make this honor the ADRs:**
 - **The Build AND Process-review spawn prompts MUST each carry the approved plan verbatim, state the owner
-  approved it via `AskUserQuestion`, and identify the caller as `fkit-sprint-ship-loop`.** These three
+  approved it through the actual supported interface or explicit fallback, and identify the caller as `fkit-sprint-ship-loop`.** These three
   signals are the **declared-approval marker** that `fkit-coder.md`'s sprint-loop carve-out keys on for
   **both** worker roles; without them a spawned coder **refuses to write source** and returns the plan.
   This is the sprint-loop form of the one marker shared with the lead's conductor path (ADR-055;
@@ -201,6 +239,12 @@ at, and a `PreToolUse` carry-check needs one at spawn time.
   is **trust, not proof** — a prose
   mirror of the plan-step's "write nothing yet", carrying the same accepted prose-enforced cost (ADR-031
   honesty clause / ADR-032 D3/D7), not a verifiable token.
+
+  Bind approval to the unchanged decision/plan and record the exact answer, date and actual channel;
+  never label fallback prose as a form response. An applicable explicit prose answer settles the gate
+  without reopening it. Interface approval never authorizes implementation. Cancellation, decline,
+  interruption and invalid/empty replies grant nothing; explanation requests retain §3's no-same-turn
+  re-ask rule.
 
   **How to carry it — the construction, not an exhortation** (ADR-032 D3; `0162`'s decision report
   §2/§4, owner-ruled 2026-08-02). **A faithful carry is a copy over a durable artifact, executed in the
@@ -342,13 +386,21 @@ A spawned worker **never asks the owner** — it **returns** its final message a
 
 ```
 DONE           { result, changeSurface?, evidence? }              → driver advances
-NEEDS-DECISION { question, options[], recommendation, context }   → driver relays via AskUserQuestion
+NEEDS-DECISION { decisions: [{ id, question, options, recommendation, context }, ...] }
+                                                               → driver relays each decision separately
 BLOCKED        { reason, whatFails }                              → driver records status, skips/stops
 ```
+
+Legacy `NEEDS-DECISION { question, options, recommendation, context }` remains valid for one decision;
+the root assigns its stable key before asking. Multiple independent decisions stay separate inside
+one envelope; never silently omit an item.
 
 This envelope is **prose in the worker's spawn prompt**, not a runtime schema — ADR-021 gives workers no
 structured owner channel and there is no cross-context type system; the driver parses the worker's final
 message.
+
+Include the §2 return checklist with each envelope; its extra evidence does not replace `DONE`,
+`NEEDS-DECISION` or `BLOCKED`, and no runtime prose-envelope parser is implied.
 
 **A placement or dependency question names its knock-on.** Every option that puts a task in a sprint
 (or on the Backlog board) or re-points a `Depends on:` link says which open tasks would then wait on
@@ -357,38 +409,71 @@ which sprint — the recommended option too, and a `NEEDS-DECISION` as much as a
 Say so in each worker's spawn prompt, beside the envelope: the worker writes it into each placement
 option of its `NEEDS-DECISION`, or `knock-on: none (checked)` when no open task would wait.
 
-**A `NEEDS-DECISION` carries at most 3 options**, plus a plain-language `context` with enough for the
-driver to explain the choice without asking the worker back — the driver adds the standing option as
-the 4th ([`conventions/asking-the-owner.md`](../../../ai-agents/knowledge-base/conventions/asking-the-owner.md)).
+**Each decision item carries at most 3 real options**, its own recommendation and plain-language
+`context` sufficient to explain it — the driver adds the standing option once, last ([`conventions/asking-the-owner.md`](../../../ai-agents/knowledge-base/conventions/asking-the-owner.md)).
 Say so in each worker's spawn prompt too, beside the envelope, the same way as the knock-on rule.
 
 On `NEEDS-DECISION` the driver:
 
-1. calls **`AskUserQuestion`** with the returned options (recommendation pre-marked) — relaying a
-   worker's options, it drops each `knock-on: none (checked)` note, and a placement option with neither
-   that note nor a knock-on is missing one: it adds it from the briefs, checked this turn, before it asks, saying so — and
-   adds the standing option `Explain more, then ask again` **last**. A worker that returned 4 options
-   anyway: the driver merges the two least-recommended into one, naming both and keeping both knock-ons
-   in its description, and says so in chat — never silently drops an option — and
-2. **blocks on a real owner answer** — **no timer, no guess**. A reply that is not a choice — a picked
-   "Explain more, then ask again", or a typed question or request for more information — is not an
-   answer and not approval: the driver answers it in full, in chat, from the worker's context, the brief
-   or the plan; if it cannot, it asks a read-only consult of the same role carrying the worker's
-   `NEEDS-DECISION` verbatim and the owner's question (no declared-approval marker, never a live plan
-   pointer line). It opens no new question that turn and ends it. Put the same question back on the
-   owner's next message — unless that message is the answer (take it) or another question (answer it
-   the same way). Then
-3. spawns the next worker with the decision folded into its prompt.
+1. retains every item in a small conversation/checkpoint list: stable key (for example
+   `0556-plan-r1`), task ID and canonical title, unchanged scope/revision, question, exact options,
+   recommendation, pending/answered/superseded state and answer provenance. Persist only through
+   existing driver artifacts after their normal gates. These are correlation aids, not runtime
+   tags, an approval token or a new registry.
+2. explains each decision in chat and uses the **supported owner interface or explicit fallback**.
+   Each question names one independently approvable action with its own selectable options and
+   recommendation first. Preserve placement/dependency knock-ons; remove `knock-on: none (checked)`
+   from owner-visible options and fill missing knock-ons from briefs checked this turn, saying so.
+   Add `Explain more, then ask again` last, once, with description
+   `Give me more context in simple terms, then re-ask the question.` Current Codex takes strings:
+   show that description in preceding chat. Structured interfaces use the description field.
+   Never drop valid alternatives or merge unrelated effects for the option limit: return an overfull
+   set for faithful narrowing or transparently stage it under the shared convention. A preliminary
+   category/subset choice authorizes no dependent action; the final question names the exact scope.
+3. groups related items as separate question objects **only if the exposed interface supports that
+   shape/count and trustworthy identity**; otherwise asks sequentially. Current Codex means one
+   `fkit_ask_owner {question, options}` call at a time: no `questions` array, concatenated decisions
+   or compound options. Bind actual replies to stable decision identity and unchanged scope, never
+   list order or repeated labels. Request IDs correlate transport, not semantic consent. Custom
+   follow-ups stay bound to their original decision; preserve the text exactly. Changed scope or
+   changed option meaning supersedes the old version and needs a fresh applicable answer.
+4. **blocks dependent work on real applicable answers** — **no timer, no guess**. Retain valid partial
+   answers for their own scopes and leave every unanswered item pending. Cancellation, decline,
+   interruption, silence, invalid/empty/duplicate-ambiguous results, request acceptance, queueing,
+   presentation and preselection grant nothing; never auto-submit. A late answer never approves a
+   different or changed decision. A custom route alone is not a substantive answer.
+   A typed question, explanation request or standing-option pick gets a full chat answer and stops
+   **all new dialogs for any decision that turn**, retaining other valid answers. Use the worker's
+   context, brief or plan; if insufficient, consult the same role read-only with its envelope and
+   the owner's question verbatim (no write marker or live plan pointer line). On the owner's next
+   message, take an applicable answer or answer another question; otherwise re-ask only unresolved
+   items. For a mixed pick-plus-question, act on the pick only if the answer does not bear on it.
+   Missing/failed dialogue uses a separate explicit fallback for each decision, with key/scope,
+   context, choices and standing option; uncertain delivery stays unverified. Do not repeatedly
+   submit uncertain asynchronous requests or claim fallback meets live-display acceptance.
+5. records each actual approval in the existing authorized decision log/checkpoint: key and exact
+   scope/plan version, quoted selected answer or exact custom/prose text, date and actual channel.
+   Unknown provenance stays unknown; prose is never labelled a form answer, and "Write another
+   answer" is never the substantive custom answer. Carries applicable approval and full approved
+   scope faithfully to the next authorized worker, along with surviving allowances and spend.
+   **Plan approval and retry allowance are independent decisions**, with separate keys/options:
+   approving source never revives exhausted launches; allowing a retry never approves source.
+   Launch only when all required approvals and allowances hold. Unrelated authorized work may
+   continue under the existing driver rules. A quoted relay is trust, not proof.
 
 **This is the opposite of the declined ADR-024 auto-proceed.** It does not remove the owner via a
 silence-timeout; it **keeps** the owner and merely **consolidates the channel** into this one session.
 ADR-024 is **not** reopened.
 
-**Idle behavior:** between relays the driver **ends its turn and idles** — ordinary in-session
-turn-taking. The owner returns to the terminal to answer. (When [ADR-030](../../../ai-agents/knowledge-base/decisions/adr-030-stop-hook-enforces-turn-completion-contract.md)'s
-`Stop` hook ships, `fkit-sprint-ship-loop` joins `/fkit-task-ship-loop` in its skip set so these
-mechanical idle turns are not forced to carry a "What's next?" footer; relay turns use `AskUserQuestion`
-and satisfy the hook regardless — task 0116.)
+**Idle behavior:** end the turn and wait when an actual owner answer is outstanding (including an
+explanation request awaiting the owner's next message), the owner stopped work, or the host cannot
+resume. A worker return is a reason to consume the result and advance, **not** to idle between steps.
+Progress messages and "What's next?" footers create no approval gate and require no "continue" ping.
+Helpers return to an awaiting live turn; they cannot start a later turn. At a foreseeable host pause,
+save the continuation checkpoint, including each decision's key, unchanged scope/options, state
+and exact answer provenance (pending items included), and report **paused** with the actual resume
+action, never a claim that background work continues. Runtime hook behavior remains as configured;
+no hook is enabled here.
 
 ### 4. Close posture (§5.2 Close row, ADR-032 D5/D6 **as amended by ADR-033 §4/§5**, ADR-025)
 - **The driver invokes no mover.** It spawns `@fkit-producer` per shipped task; **that producer** runs
@@ -408,8 +493,10 @@ and satisfy the hook regardless — task 0116.)
 - **If a close half-landed, first work out WHICH half — the two cases have different remedies, and only
   one of them an agent can perform.**
   - **The folder never moved** (the producer failed before relocating it): **re-spawn `@fkit-producer`
-    once**, naming exactly what is missing. The mover runs normally from a `backlog/` folder, so this is
-    performable. If the re-spawn also fails, nothing was closed and no `✅ Done` exists — so the ordinary
+    once**, only within surviving explicit task/session allowances, naming exactly what is missing.
+    Carry the allowance and spend; exhaustion permits no further launch. The mover runs normally from a
+    `backlog/` folder, so this is performable. If the allowance is exhausted or the re-spawn also fails,
+    nothing was closed and no `✅ Done` exists — so the ordinary
     rule applies: write `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations.
   - **The folder moved but a status or href is stale:** **no agent can repair this — it is the owner's.**
     `/fkit-task-done` **stops** on a folder already under `ai-agents/tasks/done/`, and its one exception —
@@ -430,11 +517,16 @@ and satisfy the hook regardless — task 0116.)
   to a producer either.
 
 ### 5. Advance
-After a task closes (or is skipped/blocked), return to step 1's eligible set — re-derive it (a just-closed
-task may unblock a dependent), **minus the per-run skip set** (attempted / plan-rejected this run, §1) so a
+After a task's close passes §4's **complete report/artifact cross-check** (or it is safely
+skipped/blocked), perform the next authorized action in the live turn. Return to step 1's eligible set —
+re-derive it (a just-closed task may unblock a dependent), **minus the per-run skip set** (attempted /
+plan-rejected this run, §1) so a
 just-rejected task is not re-selected — and drive the next task, until the eligible set is empty.
 If the re-derived board carries a `drift depends-on-later-sprint` record the owner has not yet been
 told of, say so the same way (step 1) before the next spawn.
+Carry allowances/spend and the run skip set forward; exhaustion authorizes no launch. A progress
+update does not end the drive. Actual approval/judgment gates, torn state, degraded closure,
+cancellation and user stops still pause dependent work under their existing rules.
 
 ---
 
@@ -450,7 +542,7 @@ told of, say so the same way (step 1) before the next spawn.
 | **Owner decision pending** | any judgment call / degraded close / cancel question | **pause**, relay via `AskUserQuestion`, resume on the answer |
 | **Dependency deadlock** | eligible set empty, backlog remains | stop; report the blocking chain — plus, per blocker a `drift depends-on-later-sprint` record names, its sprint and how many of this sprint's open rows wait on it (step 1) |
 | **Worker spawn didn't land** | a task's **Plan, Build, Verify, Review or Process-review** spawn failed, was denied, or returned nothing — **not** the producer spawn, which is the row below — **and the driver is not continuing this task in this run**: if **every** path the spawn instruction named was discharged, the drive continues and **this row does not fire** | **Read disk before deciding, and read the paths the spawn instruction named** — wherever they live, never the task folder as a proxy, and never `git status` for an untracked path (it reads `??` before the write and after it): compare **content**. Then: **nothing landed** → reset `🔄 In progress` → `🔲 Backlog` in **both** locations, add it to the per-run skip set (§1), **and put the choice to the owner** — do not decide alone; the reset parks the task accurately, but **how many re-spawns are allowed is unruled and the driver must not settle it**; **something landed and everything that landed stands on its own with the missing paths never arriving — nothing is half-written, and nothing on disk depends on a path that is missing** → `🚧 Blocked — <step> spawn didn't land: <what landed, what is outstanding>` in **both** locations; **something landed but a file is half-written, or the unit is torn across paths** → **stop and put it to the owner** (`Owner decision pending`) — no agent may guess whether torn state is safe to build on; **the task stays `🔄 In progress` while the owner is asked — a pause is not an exit, so no terminal status is written**. **`plan.md` is left in place — see the note below the invariant.** **On the first two branches:** **report** it — do not pause the sprint; **do not count the task shipped**; next eligible task. **On the third the sprint pauses** until the owner answers. Branch 1 both asks and moves on: `🔲 Backlog` is an accurate **terminal** status for it, so the task is safely parked and the drive can exit with the question outstanding — §1's skip memory is **this-run only**, so the answer lands on a later run. Branch 3 has no **terminal** status to write — a pause is not an exit — so it waits |
-| **Blocked — hand-off didn't land** | a task's producer spawn failed, was denied, or left the close partial (§4) — **close-step only; its single re-spawn is not a general worker-retry rule** | **folder never moved** → re-spawn `@fkit-producer` once, then if still unresolved `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations; **folder moved, a status/href stale** → owner-only, do not re-spawn, mark **only the stale location** (never over a landed `✅ Done`). Either way: **report** it — do not pause the sprint; **do not count the task shipped**; next eligible task |
+| **Blocked — hand-off didn't land** | a task's producer spawn failed, was denied, or left the close partial (§4) — **close-step only; its single re-spawn is not a general worker-retry rule** | **folder never moved** → re-spawn `@fkit-producer` once **only within surviving explicit allowances**; exhaustion permits no further launch. If unresolved, `🚧 Blocked — hand-off incomplete: <what disagrees>` in **both** locations; **folder moved, a status/href stale** → owner-only, do not re-spawn, mark **only the stale location** (never over a landed `✅ Done`). Either way: **report** it — do not pause the sprint; **do not count the task shipped**; next eligible task |
 | **No Codex, degraded** | Codex absent after retries on a task | proceed-and-flag that task **loudly**; **do not route its close** — put its close to the owner |
 
 **Invariant — no path ends in silence.** Every exit writes accurate status in **both** the brief's
@@ -473,6 +565,11 @@ told of, say so the same way (step 1) before the next spawn.
 > **past Build, treat the run as degraded and put the close to the owner.**
 
 ## Progress reporting (§5.5)
+- **After each worker:** report verified completed work, outstanding work/decisions, artifact paths,
+  checks/results, allowances/spend and the next authorized action; then take that action in the live
+  turn. Preserve whole prescribed reports. A footer is no gate. Record actual return→next-step and
+  verified-close→next-task actions separately from illustrative walkthroughs. Fixtures prove
+  transport/delivery, not model obedience or host resumption; name unexercised scenarios as unverified.
 - **Opening the run:** name the board you are driving and the selector's `reason=` for it. **If more
   than one sprint is `🔄 In progress`, say so in the same breath** — name the others and state plainly
   that they exist and are **not** being driven by this run. Plural-active is legal; a silent single-board

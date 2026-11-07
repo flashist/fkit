@@ -1,0 +1,58 @@
+--- safe-reference.mjs
++++ observed.mjs
+@@ -85,7 +85,12 @@
+ 
+ const MADE = [];
+ // Fixtures must outlive assertion failures so passive settlement can inspect them.
+-after(() => {});
++const OBSERVATIONS = [];
++after(() => {
++  writeFileSync(process.env.FKIT_DIAG_TRACE, JSON.stringify(OBSERVATIONS.map(({ result, ...entry }) => ({
++    ...entry, result: { ...result, secs: result.secs ?? 'UNKNOWN', readSleepPids: undefined },
++  })), null, 2) + '\n');
++});
+ 
+ function temp(prefix) {
+   const d = mkdtempSync(join(process.env.FKIT_DIAG_FIXTURES, prefix));
+@@ -182,12 +187,13 @@
+ // One launch. env is built from NOTHING — process.env is deliberately not spread, so an inherited
+ // FKIT_NO_UPDATE_CHECK (the shared harness sets it) can never reach in and silence the feature.
+ function launch(root, bin, { args = ['--help'], env = {}, cwd = null, path = null, inheritEnv = false } = {}) {
++  const preparationStartNs = process.hrtime.bigint().toString();
+   const logs = temp('fkit-banner-log-');
+   const gitLog = join(logs, 'git'), curlLog = join(logs, 'curl'), sleepLog = join(logs, 'sleep');
+   const PATH = path || bin;
+   const base = inheritEnv ? { ...process.env } : {};
+   delete base.FKIT_NO_UPDATE_CHECK;
+-  const r = spawnSync('/bin/sh', [join(root, 'claude', 'fkit-claude.sh'), ...args], {
++  const spawnOptions = {
+     cwd: cwd || temp('fkit-banner-cwd-'),
+     env: {
+       ...base,
+@@ -200,13 +206,24 @@
+       ...env,
+     },
+     encoding: 'utf8',
+-  });
++  };
++  const beforeSpawnNs = process.hrtime.bigint().toString();
++  const r = spawnSync('/bin/sh', [join(root, 'claude', 'fkit-claude.sh'), ...args], spawnOptions);
++  const syncReturnNs = process.hrtime.bigint().toString();
+   const read = (f) => (existsSync(f) ? readFileSync(f, 'utf8').trim().split('\n').filter(Boolean) : []);
+-  return {
++  const result = {
+     code: r.status, stdout: r.stdout || '', stderr: r.stderr || '', PATH,
+     gitCalls: read(gitLog), curlCalls: read(curlLog), sleepPids: read(sleepLog).map(Number),
+     readSleepPids: () => read(sleepLog).map(Number),
+   };
++  const postLogReadNs = process.hrtime.bigint().toString();
++  OBSERVATIONS.push({
++    preparationStartNs, beforeSpawnNs, syncReturnNs, postLogReadNs,
++    fixtures: { root, bin, logs, cwd: spawnOptions.cwd, home: spawnOptions.env.HOME },
++    spawn: { pid: r.pid, status: r.status, signal: r.signal, error: r.error?.message ?? null },
++    result,
++  });
++  return result;
+ }
+ 
+ // The banner is the only line starting with the ↑ marker; everything else on stdout is help text.

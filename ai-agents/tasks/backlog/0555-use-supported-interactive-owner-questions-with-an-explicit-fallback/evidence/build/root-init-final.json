@@ -1,0 +1,9 @@
+{
+  "command": [
+    "bash",
+    "claude/fkit-claude-init.sh",
+    "."
+  ],
+  "stdin": null,
+  "exit": 0
+}

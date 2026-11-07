@@ -16,46 +16,73 @@ the checkout's own `claude/`, so your edits are what the agents use.
 
 ## Tests
 
-```sh
-npm test                 # the default suite (~1.5 min; budget 2 min)
-npm run test:release     # the release tool's own test — `npm run release` runs it (~45 s)
-npm run test:prove-red   # the four deliberate mutants — nightly in CI (~2.5 min)
-npm run test:docs        # fast path: the two named-exception tests that read ai-agents/ (under 1 s)
-```
+**All test execution is disabled indefinitely by the owner, effective 2026-11-06.**
 
-`npm run test:unit` is an alias of `npm test`. Local times, a busy Apple M4 Pro (14 cores),
+> "Disable ALL tests not only in this session, but in general in this project. No need to remove them completely, but they should not be run"
+
+Do not run individual tests, mutation tests, test discovery, fixtures, smoke tests, benchmarks,
+behavioral probes, saved verification scripts or delegated tests. This supersedes the execution
+requirements below and in existing briefs, plans, skills and reviews for this project only. Preserve
+sources and use static inspection. Report mandatory checks as **"skipped — owner disabled test
+execution"**, never passed; behavioral acceptance remains unverified. Do not run the blocked commands
+to prove refusal. Carry the ruling verbatim into workers and source-only reviews, including
+adversarial passes; already-running sessions must receive it explicitly.
+
+Every npm test command below now invokes `node test/execution-disabled.mjs`, which prints an
+explanation and exits nonzero. Direct suites are guarded through their first dependency on
+`test/harness.mjs`, or through a first guard import in the standalone host and board suites.
+`test/prove-red.sh` exits before its original body. Assertions and fixtures remain in place.
+
+Original commands, retained only for an owner-approved reversal — **do not execute**:
+
+| Inactive npm script | Original command |
+|---|---|
+| `test` | `node --test test/*.test.js test/board/*.test.js` |
+| `test:unit` | `node --test test/*.test.js test/board/*.test.js` |
+| `test:prove-red` | `bash test/prove-red.sh` |
+| `test:docs` | `node --test test/dual-home-parity.test.js test/task-id-uniqueness.test.js` |
+| `test:release` | `node --test test/release/*.test.js` |
+
+Both workflow jobs have unconditional `if: ${{ false }}` guards; triggers and steps are preserved.
+Hosted `test` and `prove-red` workflows were also observed as `disabled_manually` on 2026-11-06;
+no unfinished runs remained in the shutdown inspection. Local edits alone cannot stop hosted jobs
+using older revisions. Hosted branch-protection requirements may need a separate owner decision.
+
+Default release commands, including `release:dry`, refuse before Git operations or writes.
+The explicit `--no-test` route remains available for a separately authorized unverified release and
+retains its warning; no release is authorized by this pause. See [RELEASING.md](RELEASING.md).
+
+### Static verification and reversal
+
+Inspect the complete diff and relevant source, run `git diff --check`, and parse `package.json` as
+data without importing project code. Inspect guard order, release paths, preserved test bodies and
+instruction placement. Do not execute tests, fixtures, probes or release dry-runs for verification.
+
+Re-enabling requires the owner's explicit decision and a separate change: restore the npm commands
+above; remove the guard imports and shell early exit; remove the CI job guards; explicitly re-enable
+the hosted workflows; restore the release test gate; update these docs and the project instructions.
+There is no automatic expiry or environment-variable bypass. Other clones, old commits, saved test
+copies and already-running local processes remain outside these guards. Shipped instructions for
+other projects are unchanged.
+
+### Historical measurements — execution remains disabled
+
+Before the pause, `npm run test:unit` was an alias of `npm test`. Local times, a busy Apple M4 Pro (14 cores),
 2026-10-20: `npm test` 76.2 / 82.2 / 76.2 s (three runs, task 0530; load average 7.0 / 11.5 / 11.2 at
 start — no idle window came, so these are not idle-Mac figures); `test:release` 46 s (one run, load
 12.4); `test:prove-red` 151.6 s (one run, task 0529). Yours will differ.
 
-When each runs — only `npm test` counts against the 2-minute budget (ADR-057 §D10):
-- `npm test` — CI, on every push to `main` and every pull request; and every `npm run release`.
-- `npm run test:release` — every `npm run release` (after `npm test`), or by hand.
-- `npm run test:prove-red` — nightly in CI, or by hand. The release does not run it.
+Runner measurements (`ubuntu-latest`), 2026-10-20: `npm test` 72 / 65.8 / 81.6 / 85.2 / 60.7 s
+(five runs — runner times varied ~60–85 s); prove-red 118 s (one run; job 123 s).
 
-On a red, `test/prove-red.sh` prints where it kept each failing step's own output (a `fkit-prove-red-kept.*` folder under `$TMPDIR`).
-
-No dependencies and no `npm install`. CI (`.github/workflows/test.yml`) runs `npm test` on Node 24
-for every push to `main` and every pull request, in one timed step that fails the job when
-`npm test` takes over 120 s, naming the budget and the time taken. On the
-runner (`ubuntu-latest`), 2026-10-20: `npm test` 72 / 65.8 / 81.6 / 85.2 / 60.7 s (five runs —
-runner times vary ~60–85 s; the slowest is 71% of the budget); prove-red 118 s (one run; job 123 s).
-Use a full clone:
-`test/structure-manifest.test.js` refuses a shallow one.
-
-Prove-red runs in CI nightly at 03:17 UTC (`.github/workflows/prove-red.yml`; also runnable from the
-Actions tab, `workflow_dispatch`). Its limits, from GitHub's docs (2026-10-20): it runs on `main`'s
-latest commit only — branches, pull requests and a release's working tree are not covered; GitHub
-may delay a scheduled run at busy times or drop it, and a dropped night sends no message; the
-schedule is disabled after 60 days with no repository activity. A red run notifies, by email or on
-the web, whoever last changed the workflow's cron line — **only if that person has Actions
-notifications on** (github.com/settings/notifications → Actions; check it once). A red run also
-shows on the Actions tab.
+These measurements describe earlier runs only, not current acceptance. Neither workflow is active.
 
 Changed anything under `claude/scaffold/`? Run `npm run generate:manifest` and commit the regenerated
 `claude/structure-manifest.tsv` with it — its test goes red when the manifest is stale.
 
 ### Test rules
+
+**Retained test-design policy; all execution requirements below are suspended by the pause above.**
 
 fkit's own rules for its test suite, set by
 [ADR-057](ai-agents/knowledge-base/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md),
@@ -82,7 +109,7 @@ key list"; in this repo, these are they.
 - **Growth stop.** No new test file and no new prove-red case without the owner's OK — each one, every
   time, in any lane (the default suite, nightly prove-red, the release-test script). A plan the owner
   approves counts as that OK only for the files or cases it names; an agent's plan-review APPROVE is
-  not the owner's OK. There is no numeric cap: growth is held back by that OK and the 2-minute budget.
+  not the owner's OK. There is no numeric cap: growth is held back by that OK.
 - **A missing test is a suggestion, not a defect** — on code that behaves correctly — **except on the
   key list**, where it is still a defect:
   1. the argv the launcher hands to `claude`, including whether it `exec`s at all (`--resume`, cold
@@ -95,13 +122,22 @@ key list"; in this repo, these are they.
   `--resume` passthrough), M30 (`exec` on the cold start) and M31 (the same, intake path only). Each
   runs only the test file it needs, nightly in CI, outside `npm test`; still runnable by hand with
   `npm run test:prove-red`. A fifth case needs the owner's OK.
-- **The budget.** The default `npm test` takes ≤ 2 min locally on an idle Mac; CI fails the job if it
-  goes over. Nightly prove-red and the release-test script are outside it.
+- **Running and accepting tests.** Run the checks mapped below without waiting for an idle machine
+  or a quiet window. No elapsed-time limit or runtime budget governs starting, rerunning, or accepting
+  tests; elapsed time and machine load alone are not reasons to block, rerun, or reject a completed
+  passing check. Required checks and their assertions still determine the result. This was the
+  rule under the owner's 2026-11-04 ruling before the 2026-11-06 execution pause; it superseded
+  ADR-057 D10's timing/idle requirement;
+  historical measurements and approvals remain historical. This supersession also applies to inherited
+  aggregate suite-duration, idle-only, and no-suite-slowdown acceptance clauses in existing briefs and
+  sprint instructions, and to historical migration inventories. Functional performance/termination
+  assertions and all remaining task requirements still apply.
 
-### What to run for a change
+### What to run for a change — inactive mapping
 
-`npm test` is what CI runs on every push; `npm run release` runs it and then `npm run test:release`.
-While you work, run what the change needs:
+**Historical mapping only. Skip every test listed below under the owner ruling; use static inspection.**
+
+Before the pause, CI and releases used this mapping. It is retained for a future owner-approved reversal:
 
 | What changed | Run | Why |
 |---|---|---|
@@ -125,7 +161,8 @@ While you work, run what the change needs:
 
 ## Releases
 
-`main` is the release channel: every commit there is live to the next install. Cutting a release:
+`main` is the release channel: every commit there is live to the next install. Default commands refuse
+during the test pause; an explicit `--no-test` release needs separate authorization. Details:
 [`RELEASING.md`](RELEASING.md) (`npm run release`, `release:minor`, `release:major`, `release:dry`).
 
 Landed a change people who use fkit would notice? Add a line for it under `## Unreleased` in
@@ -167,8 +204,8 @@ test/                            `npm test` — the default suite (node:test)
   board/                         the board module's tests (in `npm test`)
   release/                       the release tool's own test (`npm run test:release`)
   prove-red.sh                   the mutation lane (`npm run test:prove-red`)
-.github/workflows/test.yml       CI: `npm test`, timed against its budget, on every push to main and every PR
-.github/workflows/prove-red.yml  CI: `npm run test:prove-red`, nightly
+.github/workflows/test.yml       inactive CI: preserved push/PR triggers; job disabled
+.github/workflows/prove-red.yml  inactive CI: preserved nightly trigger; job disabled
 ai-agents/                       fkit's own working structure (it is run on itself)
 ```
 

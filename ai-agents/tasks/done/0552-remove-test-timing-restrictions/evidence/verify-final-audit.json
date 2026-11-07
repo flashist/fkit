@@ -1,0 +1,94 @@
+{
+  "recorded_utc": "2026-11-04T12:13:49.684914+00:00",
+  "result": "PASS",
+  "code_changed": "NONE",
+  "source_hash_match": {
+    "CONTRIBUTING.md": true,
+    ".github/workflows/test.yml": true,
+    ".github/workflows/prove-red.yml": true,
+    "RELEASING.md": true,
+    "ai-agents/knowledge-base/architecture.md": true,
+    "CHANGELOG.md": true
+  },
+  "protected_hash_match": {
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/brief.md": true,
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/plan.md": true,
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/plan-review.md": true,
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": true,
+    "ai-agents/sprints/backlog.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md": true,
+    "test/dual-home-parity-exceptions.mjs": true,
+    "test/dual-home-parity.test.js": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-audit.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-preflight.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-audit.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-final-disposition-20261104.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/quiet-window-precheck-20261104.json": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md": true,
+    "ai-agents/sprints/sprint-15.md": true
+  },
+  "build_patch_exact_match": true,
+  "repository_nonignored_files_before": 2000,
+  "repository_nonignored_files_after": 2002,
+  "changed_existing_files": [],
+  "new_files": [
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/evidence/verify-npm-test.json",
+    "ai-agents/tasks/backlog/0552-remove-test-timing-restrictions/evidence/verify-static-readback.json"
+  ],
+  "unexpected_changes": [],
+  "git_diff_check_exit": 0,
+  "git_diff_check_output": "",
+  "head_after": "1767a47b9db50f3949789636c3e0b513950e7368",
+  "test_evidence": "evidence/verify-npm-test.json",
+  "static_evidence": "evidence/verify-static-readback.json; hash-matched Build static 22 PASS",
+  "temp_no_growth_reused": {
+    "source": "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json",
+    "source_sha256": "ca360e05c0097f49e297d2ea516d231424f63adb4ddbb1fc34c05a5e18567c5c",
+    "original_finished_utc": "2026-11-04T09:40:54.995Z",
+    "original_exit": 0,
+    "original_delta": {
+      "fkit-proj-": {
+        "before": 34,
+        "after": 34,
+        "added": [],
+        "removed": []
+      },
+      "fkit-stub-": {
+        "before": 1,
+        "after": 1,
+        "added": [],
+        "removed": []
+      },
+      "fkit-argv-": {
+        "before": 1,
+        "after": 1,
+        "added": [],
+        "removed": []
+      },
+      "fkit-conv-": {
+        "before": 0,
+        "after": 0,
+        "added": [],
+        "removed": []
+      }
+    },
+    "scope": "Historical 0540 evidence reused per caller. No fresh temp-growth, idle, load, intentional-failure or cleanup checks; no fresh no-growth claim for this run."
+  },
+  "skipped": {
+    "optional_benchmark": "default suite skips benchmark unless FKIT_BOARD_BENCH=1; not enabled",
+    "test:docs": "not a substitute for mapped full suite; its files already run in npm test",
+    "test:release": "bin/release.mjs unchanged; no release",
+    "test:prove-red": "no source it mutates or test files it executes changed by 0552",
+    "generate:manifest": "scaffold unchanged",
+    "release/install/network/account/native/model checks": "outside Verify scope"
+  },
+  "hosted_ubuntu_workflow_execution": "UNVERIFIED; local readback/parser evidence only",
+  "remaining": "Independent implementation reviewer; wiki-role followup; producer close through authorized driver. 0540 producer closure remains pending actual owner Git-move authorization. No moves authorized by this Verify.",
+  "additional_autonomous_fixes_or_obvious_winner_calls": "none",
+  "mutations_performed": "Only 0552 worklog/evidence plus ignored scratch; no source, plan, plan-review, review, status, board, wiki or index writes; no moves, cleanup, commit or push."
+}

@@ -1,0 +1,96 @@
+(node:29503) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/update-banner.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ 0520/scp-rewrite
+ℹ {"controls":{"https":0,"ssh":128},"helpExit":0,"launcherExit":0,"sshSentinelCalls":1}
+✖ 0520/ssh-url-rewrite
+ℹ {"controls":{"https":0,"ssh":128},"helpExit":0,"launcherExit":0,"sshSentinelCalls":1}
+✖ 0520/https-preserved-and-scoped
+ℹ {"controls":{"https":0,"ssh":null},"launcherExit":0,"helperInvocations":0}
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+
+✖ failing tests:
+
+test at test/update-banner.test.js:670:1
+✖ 0520/scp-rewrite
+  AssertionError [ERR_ASSERTION]: automatic update check must not invoke SSH
+  + actual - expected
+  
+  + [
+  +   '0520-ssh-sentinel'
+  + ]
+  - []
+  
+      at silentRewriteLaunch (file:///Users/mark.dolbyrev/Workspace/fkit/test/update-banner.test.js:666:10)
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/update-banner.test.js:671:3)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.start (node:internal/test_runner/test:1003:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:358:17)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ '0520-ssh-sentinel' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/update-banner.test.js:674:1
+✖ 0520/ssh-url-rewrite
+  AssertionError [ERR_ASSERTION]: automatic update check must not invoke SSH
+  + actual - expected
+  
+  + [
+  +   '0520-ssh-sentinel'
+  + ]
+  - []
+  
+      at silentRewriteLaunch (file:///Users/mark.dolbyrev/Workspace/fkit/test/update-banner.test.js:666:10)
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/update-banner.test.js:675:3)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ '0520-ssh-sentinel' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/update-banner.test.js:678:1
+✖ 0520/https-preserved-and-scoped
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + null
+  - '  ↑ fkit v9.9.9 → v9.9.10 is available. Run:  fkit update'
+  
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/update-banner.test.js:684:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: '  ↑ fkit v9.9.9 → v9.9.10 is available. Run:  fkit update',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+

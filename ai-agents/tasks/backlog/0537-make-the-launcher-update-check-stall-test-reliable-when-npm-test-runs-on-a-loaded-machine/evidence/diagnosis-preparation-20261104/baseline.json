@@ -1,0 +1,152 @@
+{
+  "utc": "2026-11-04T17:38:54.076434+00:00",
+  "scope": "PREPARATION ONLY; no tests/load/diagnostic runs",
+  "authority": "Relayed owner approval 2026-11-04 17:37:44 UTC; trust, not independent proof",
+  "sourceAnchors": {
+    "test/update-banner.test.js": "61667865fd6b1219723da60539c319c6c089cfbc",
+    "claude/fkit-claude.sh": "8991bf2560717c20bee13f9008214ada22ae7ef6",
+    "CONTRIBUTING.md": "91b4310424d33d7bf81f71068ea50e48ca78135e",
+    "ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan.md": "e8fb308b1a8e4333171039a653c8a4d688ea7201"
+  },
+  "metadata": {
+    "node": "v24.13.0",
+    "versions": {
+      "node": "24.13.0",
+      "acorn": "8.15.0",
+      "ada": "3.3.0",
+      "amaro": "1.1.5",
+      "ares": "1.34.6",
+      "brotli": "1.1.0",
+      "cjs_module_lexer": "2.1.0",
+      "cldr": "47.0",
+      "icu": "77.1",
+      "llhttp": "9.3.0",
+      "modules": "137",
+      "napi": "10",
+      "nbytes": "0.1.1",
+      "ncrypto": "0.0.1",
+      "nghttp2": "1.67.1",
+      "openssl": "3.5.4",
+      "simdjson": "4.1.0",
+      "simdutf": "6.4.0",
+      "sqlite": "3.50.4",
+      "tz": "2025b",
+      "undici": "7.18.2",
+      "unicode": "16.0",
+      "uv": "1.51.0",
+      "uvwasi": "0.0.23",
+      "v8": "13.6.233.17-node.37",
+      "zlib": "1.3.1-470d3a2",
+      "zstd": "1.5.7"
+    },
+    "execPath": "/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node",
+    "platform": "darwin",
+    "arch": "arm64",
+    "availableParallelism": 14,
+    "cpuCount": 14,
+    "cpuModels": [
+      "Apple M4 Pro"
+    ],
+    "load": [
+      7.81201171875,
+      6.39404296875,
+      5.5673828125
+    ],
+    "osRelease": "25.2.0"
+  },
+  "N": 16,
+  "commands": [
+    {
+      "argv": [
+        "node",
+        "-p",
+        "JSON.stringify({node:process.version,versions:process.versions,execPath:process.execPath,platform:process.platform,arch:process.arch,availableParallelism:require(\"node:os\").availableParallelism(),cpuCount:require(\"node:os\").cpus().length,cpuModels:[...new Set(require(\"node:os\").cpus().map(c=>c.model))],load:require(\"node:os\").loadavg(),osRelease:require(\"node:os\").release()})"
+      ],
+      "exit": 0,
+      "stdout": "{\"node\":\"v24.13.0\",\"versions\":{\"node\":\"24.13.0\",\"acorn\":\"8.15.0\",\"ada\":\"3.3.0\",\"amaro\":\"1.1.5\",\"ares\":\"1.34.6\",\"brotli\":\"1.1.0\",\"cjs_module_lexer\":\"2.1.0\",\"cldr\":\"47.0\",\"icu\":\"77.1\",\"llhttp\":\"9.3.0\",\"modules\":\"137\",\"napi\":\"10\",\"nbytes\":\"0.1.1\",\"ncrypto\":\"0.0.1\",\"nghttp2\":\"1.67.1\",\"openssl\":\"3.5.4\",\"simdjson\":\"4.1.0\",\"simdutf\":\"6.4.0\",\"sqlite\":\"3.50.4\",\"tz\":\"2025b\",\"undici\":\"7.18.2\",\"unicode\":\"16.0\",\"uv\":\"1.51.0\",\"uvwasi\":\"0.0.23\",\"v8\":\"13.6.233.17-node.37\",\"zlib\":\"1.3.1-470d3a2\",\"zstd\":\"1.5.7\"},\"execPath\":\"/Users/mark.dolbyrev/.nvm/versions/node/v24.13.0/bin/node\",\"platform\":\"darwin\",\"arch\":\"arm64\",\"availableParallelism\":14,\"cpuCount\":14,\"cpuModels\":[\"Apple M4 Pro\"],\"load\":[7.81201171875,6.39404296875,5.5673828125],\"osRelease\":\"25.2.0\"}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "uname",
+        "-a"
+      ],
+      "exit": 0,
+      "stdout": "Darwin Marks-MacBook-Pro.local 25.2.0 Darwin Kernel Version 25.2.0: Tue Nov 18 21:09:56 PST 2025; root:xnu-12377.61.12~1/RELEASE_ARM64_T6041 arm64\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "sw_vers"
+      ],
+      "exit": 0,
+      "stdout": "ProductName:\t\tmacOS\nProductVersion:\t\t26.2\nBuildVersion:\t\t25C56\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/bin/sh",
+        "-c",
+        "printf \"BASH_VERSION=%s\\n\" \"${BASH_VERSION-unset}\""
+      ],
+      "exit": 0,
+      "stdout": "BASH_VERSION=3.2.57(1)-release\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit": 0,
+      "stdout": " M .github/workflows/prove-red.yml\n M .github/workflows/test.yml\n M CHANGELOG.md\n M CONTRIBUTING.md\n M RELEASING.md\n M ai-agents/knowledge-base/architecture.md\n M ai-agents/knowledge-base/conventions/dual-home-parity.md\n M ai-agents/knowledge-base/reports/2026-11-03-current-state-and-next-sprint-proposal.md\n M ai-agents/sprints/backlog.md\n M ai-agents/sprints/sprint-15.md\n M ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/brief.md\nRM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/approved-source-diff.patch\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-full.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/baseline-orphan.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/build-audit.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan-restoration.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-orphan.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure-restoration.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probe-structure.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/failure-probes-audit.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/fixed-orphan.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/metadata-cleanup-outside-vault.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/restored-normal-full.json\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/verify-audit.json\nRM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md\nR  ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md\nRM ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md -> ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/worklog.md\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/brief.md\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-baseline.json\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-source.diff\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/build-static-checks.json\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-audit-20261104.json\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-checkpoint-20261104.json\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/process-review-final-20261104.json\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-final-audit.json\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-npm-test.json\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-preflight.json\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/evidence/verify-static-readback.json\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/plan-review.md\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/plan.md\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/review.md\n A ai-agents/tasks/done/0552-remove-test-timing-restrictions/worklog.md\n M ai-agents/wiki-vault/index.md\n M ai-agents/wiki-vault/log.md\n M ai-agents/wiki-vault/wiki/decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only.md\n M ai-agents/wiki-vault/wiki/systems/testing-and-verification.md\n M test/dual-home-parity-exceptions.mjs\n M test/dual-home-parity.test.js\n?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan-review.md\n?? ai-agents/tasks/backlog/0537-make-the-launcher-update-check-stall-test-reliable-when-npm-test-runs-on-a-loaded-machine/plan.md\n?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.diff\n?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-build.json\n?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-normal-full-20261104-verify.json\n?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-audit.json\n?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/parity-verify-preflight.json\n?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-audit.json\n?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/process-review-final-disposition-20261104.json\n?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/evidence/quiet-window-precheck-20261104.json\n?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md\n?? ai-agents/tasks/done/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--",
+        "test/update-banner.test.js",
+        "claude/fkit-claude.sh",
+        "CONTRIBUTING.md"
+      ],
+      "exit": 0,
+      "stdout": "diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md\nindex 7002792..91b4310 100644\n--- a/CONTRIBUTING.md\n+++ b/CONTRIBUTING.md\n@@ -17,7 +17,7 @@ the checkout's own `claude/`, so your edits are what the agents use.\n ## Tests\n \n ```sh\n-npm test                 # the default suite (~1.5 min; budget 2 min)\n+npm test                 # the default suite (~1.5 min)\n npm run test:release     # the release tool's own test \u2014 `npm run release` runs it (~45 s)\n npm run test:prove-red   # the four deliberate mutants \u2014 nightly in CI (~2.5 min)\n npm run test:docs        # fast path: the two named-exception tests that read ai-agents/ (under 1 s)\n@@ -28,7 +28,7 @@ npm run test:docs        # fast path: the two named-exception tests that read ai\n start \u2014 no idle window came, so these are not idle-Mac figures); `test:release` 46 s (one run, load\n 12.4); `test:prove-red` 151.6 s (one run, task 0529). Yours will differ.\n \n-When each runs \u2014 only `npm test` counts against the 2-minute budget (ADR-057 \u00a7D10):\n+When each runs:\n - `npm test` \u2014 CI, on every push to `main` and every pull request; and every `npm run release`.\n - `npm run test:release` \u2014 every `npm run release` (after `npm test`), or by hand.\n - `npm run test:prove-red` \u2014 nightly in CI, or by hand. The release does not run it.\n@@ -36,10 +36,9 @@ When each runs \u2014 only `npm test` counts against the 2-minute budget (ADR-057 \n On a red, `test/prove-red.sh` prints where it kept each failing step's own output (a `fkit-prove-red-kept.*` folder under `$TMPDIR`).\n \n No dependencies and no `npm install`. CI (`.github/workflows/test.yml`) runs `npm test` on Node 24\n-for every push to `main` and every pull request, in one timed step that fails the job when\n-`npm test` takes over 120 s, naming the budget and the time taken. On the\n+for every push to `main` and every pull request. On the\n runner (`ubuntu-latest`), 2026-10-20: `npm test` 72 / 65.8 / 81.6 / 85.2 / 60.7 s (five runs \u2014\n-runner times vary ~60\u201385 s; the slowest is 71% of the budget); prove-red 118 s (one run; job 123 s).\n+runner times varied ~60\u201385 s); prove-red 118 s (one run; job 123 s).\n Use a full clone:\n `test/structure-manifest.test.js` refuses a shallow one.\n \n@@ -82,7 +81,7 @@ key list\"; in this repo, these are they.\n - **Growth stop.** No new test file and no new prove-red case without the owner's OK \u2014 each one, every\n   time, in any lane (the default suite, nightly prove-red, the release-test script). A plan the owner\n   approves counts as that OK only for the files or cases it names; an agent's plan-review APPROVE is\n-  not the owner's OK. There is no numeric cap: growth is held back by that OK and the 2-minute budget.\n+  not the owner's OK. There is no numeric cap: growth is held back by that OK.\n - **A missing test is a suggestion, not a defect** \u2014 on code that behaves correctly \u2014 **except on the\n   key list**, where it is still a defect:\n   1. the argv the launcher hands to `claude`, including whether it `exec`s at all (`--resume`, cold\n@@ -95,8 +94,15 @@ key list\"; in this repo, these are they.\n   `--resume` passthrough), M30 (`exec` on the cold start) and M31 (the same, intake path only). Each\n   runs only the test file it needs, nightly in CI, outside `npm test`; still runnable by hand with\n   `npm run test:prove-red`. A fifth case needs the owner's OK.\n-- **The budget.** The default `npm test` takes \u2264 2 min locally on an idle Mac; CI fails the job if it\n-  goes over. Nightly prove-red and the release-test script are outside it.\n+- **Running and accepting tests.** Run the checks mapped below without waiting for an idle machine\n+  or a quiet window. No elapsed-time limit or runtime budget governs starting, rerunning, or accepting\n+  tests; elapsed time and machine load alone are not reasons to block, rerun, or reject a completed\n+  passing check. Required checks and their assertions still determine the result. This is the current\n+  rule under the owner's 2026-11-04 ruling and supersedes ADR-057 D10's timing/idle requirement;\n+  historical measurements and approvals remain historical. This supersession also applies to inherited\n+  aggregate suite-duration, idle-only, and no-suite-slowdown acceptance clauses in existing briefs and\n+  sprint instructions, and to historical migration inventories. Functional performance/termination\n+  assertions and all remaining task requirements still apply.\n \n ### What to run for a change\n \n@@ -167,7 +173,7 @@ test/                            `npm test` \u2014 the default suite (node:test)\n   board/                         the board module's tests (in `npm test`)\n   release/                       the release tool's own test (`npm run test:release`)\n   prove-red.sh                   the mutation lane (`npm run test:prove-red`)\n-.github/workflows/test.yml       CI: `npm test`, timed against its budget, on every push to main and every PR\n+.github/workflows/test.yml       CI: `npm test`, on every push to main and every PR\n .github/workflows/prove-red.yml  CI: `npm run test:prove-red`, nightly\n ai-agents/                       fkit's own working structure (it is run on itself)\n ```\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--",
+        "test/update-banner.test.js",
+        "claude/fkit-claude.sh",
+        "CONTRIBUTING.md"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "baselineExecution": "STATIC UNEXECUTED original test",
+  "historicalFailure": {
+    "source": "brief.md 2026-10-20 account",
+    "heldSeconds": 33.3,
+    "ceilingSeconds": 10.5,
+    "woke": "absent per historical account",
+    "rootCause": "UNKNOWN; not reproduced"
+  },
+  "wikiStaleness": {
+    "watermark": "185ac5e07e918c089ed3afd23496587315342000",
+    "aiAgentsCommitsSince": 12
+  },
+  "shell": {
+    "path": "/bin/sh",
+    "realPath": "/bin/sh",
+    "sha256": "e4d71aa95be0725c351e9d1d273d35ccdb0a8bdb31a57927c8738431b89788f5"
+  },
+  "preparationExecutionValidation": "NOT RUN"
+}

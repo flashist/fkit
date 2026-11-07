@@ -1,0 +1,625 @@
+[
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 23,
+    "text": "Plan: ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "Plan: ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md"
+  },
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 42,
+    "text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md"
+  },
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 43,
+    "text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md"
+  },
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 44,
+    "text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan-review.md \u2014 append-only Attempt1, complete review record and actual approval.",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan-review.md \u2014 append-only Attempt1, complete review record and actual approval."
+  },
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 45,
+    "text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md \u2014 Build plus Process-review, decision log none.",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md \u2014 Build plus Process-review, decision log none."
+  },
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 46,
+    "text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md \u2014 full Reviewer findings/independent return plus coder response; Status closed-out.",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md \u2014 full Reviewer findings/independent return plus coder response; Status closed-out."
+  },
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 47,
+    "text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md"
+  },
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 48,
+    "text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff \u2014 91377 bytes/911lines, exact16-file Build delta.",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff \u2014 91377 bytes/911lines, exact16-file Build delta."
+  },
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 49,
+    "text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json; baseline.json; before/; after/; protected-baseline.json.",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json; baseline.json; before/; after/; protected-baseline.json."
+  },
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 50,
+    "text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/report.md",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/report.md"
+  },
+  {
+    "file": "ai-agents/knowledge-base/reports/2026-11-06-lead-continuation-checkpoint-sprint15-0556-acceptance-20261106183610.md",
+    "line": 51,
+    "text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json \u2014 385398 bytes, parsed fully as data.",
+    "treatment": "frozen dated checkpoint evidence; body locator below header, not markdown href",
+    "final_text": "- ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json \u2014 385398 bytes, parsed fully as data."
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 138,
+    "text": "   [0556 \u2014 Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md).",
+    "treatment": "repaired live href",
+    "final_text": "   [0556 \u2014 Give each independent owner decision its own selectable options](../../done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)."
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 149,
+    "text": "  handling; [0556 \u2014 Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)",
+    "treatment": "repaired live href",
+    "final_text": "  handling; [0556 \u2014 Give each independent owner decision its own selectable options](../../done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 175,
+    "text": "  [0556 \u2014 Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)",
+    "treatment": "repaired live href",
+    "final_text": "  [0556 \u2014 Give each independent owner decision its own selectable options](../../done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 129,
+    "text": "| P4 | [0556 \u2014 Give each independent owner decision its own selectable options](../tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) | Each independent decision has its own concise question, selectable options and stable approval binding. |",
+    "treatment": "repaired live href",
+    "final_text": "| P4 | [0556 \u2014 Give each independent owner decision its own selectable options](../tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) | Each independent decision has its own concise question, selectable options and stable approval binding. |"
+  },
+  {
+    "file": "ai-agents/sprints/sprint-15.md",
+    "line": 201,
+    "text": "| \ud83d\udd04 In progress | P4 | **0556 \u2014 Give each independent owner decision its own selectable options** *(Claimed for plan-only work by the new root ship-loop run, 2026-11-06; plan review ON (default), tests disabled. Depends on nothing; blocks nothing. No plan/source approval. Owner `fkit-coder`)* | [0556 \u2014 Give each independent owner decision its own selectable options](../tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) |",
+    "treatment": "repaired live href and status row",
+    "final_text": "| \u2705 Done (agent-closed \u2014 not owner-verified) | P4 | **0556 \u2014 Give each independent owner decision its own selectable options** *(Depends on nothing; blocks nothing. Owner `fkit-coder`)* | [0556 \u2014 Give each independent owner decision its own selectable options](../tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md) |"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/status-before.txt",
+    "line": 153,
+    "text": "?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/baseline.json",
+    "line": 522,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"102e42004c80d05af415268414ccc8e8d4564a7c406476d8636788e876ccf12c\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"102e42004c80d05af415268414ccc8e8d4564a7c406476d8636788e876ccf12c\","
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 138,
+    "text": "   [0556 \u2014 Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md).",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "   [0556 \u2014 Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)."
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 149,
+    "text": "  handling; [0556 \u2014 Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "  handling; [0556 \u2014 Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)"
+  },
+  {
+    "file": "ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/evidence/build/before/ai-agents/tasks/backlog/0555-use-supported-interactive-owner-questions-with-an-explicit-fallback/brief.md",
+    "line": 175,
+    "text": "  [0556 \u2014 Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "  [0556 \u2014 Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)"
+  },
+  {
+    "file": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/brief.md",
+    "line": 101,
+    "text": "  [0556 \u2014 Give each independent owner decision its own selectable options](../../backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)",
+    "treatment": "repaired live href",
+    "final_text": "  [0556 \u2014 Give each independent owner decision its own selectable options](../0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md)"
+  },
+  {
+    "file": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/build/baseline.json",
+    "line": 107,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"b7adc2bf6848c945baa28dace25fd12938e57b10ecbfd2b668a4e92d3379a215\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"b7adc2bf6848c945baa28dace25fd12938e57b10ecbfd2b668a4e92d3379a215\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/review.md",
+    "line": 3,
+    "text": "Task: ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md",
+    "treatment": "repaired header self-locator",
+    "final_text": "Task: ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/plan-review.md",
+    "line": 51,
+    "text": "1. **Classification is correct:** owner-visible questions and alternatives change. The plan matches the brief\u2019s separate-decision, selectable-choice and scoped-consent requirements ([brief.md](/Users/mark.dolbyrev/Workspace/fkit/ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md:40)).",
+    "treatment": "frozen verbatim approved plan-review report and approval bytes",
+    "final_text": "1. **Classification is correct:** owner-visible questions and alternatives change. The plan matches the brief\u2019s separate-decision, selectable-choice and scoped-consent requirements ([brief.md](/Users/mark.dolbyrev/Workspace/fkit/ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md:40))."
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/protected-baseline.json",
+    "line": 387,
+    "text": "  \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"46f03536de927ad6ddd8c1fc7f2dc18da3c9620460555a0a46c21266aba479ee\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "  \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"46f03536de927ad6ddd8c1fc7f2dc18da3c9620460555a0a46c21266aba479ee\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/protected-baseline.json",
+    "line": 388,
+    "text": "  \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan-review.md\": \"859ff2be66d508c49a541fdc44d798c5756b574c49484eabc828bb589e5652d2\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "  \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan-review.md\": \"859ff2be66d508c49a541fdc44d798c5756b574c49484eabc828bb589e5652d2\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/protected-baseline.json",
+    "line": 389,
+    "text": "  \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md\": \"48e1e2ece66d62038bf7eeb538ea5fc91fa2e55feff5a156505e733bc2fe9ed2\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "  \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md\": \"48e1e2ece66d62038bf7eeb538ea5fc91fa2e55feff5a156505e733bc2fe9ed2\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-preflight.json",
+    "line": 1614,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"b7adc2bf6848c945baa28dace25fd12938e57b10ecbfd2b668a4e92d3379a215\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"b7adc2bf6848c945baa28dace25fd12938e57b10ecbfd2b668a4e92d3379a215\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/preflight.json",
+    "line": 1587,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"b7adc2bf6848c945baa28dace25fd12938e57b10ecbfd2b668a4e92d3379a215\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"b7adc2bf6848c945baa28dace25fd12938e57b10ecbfd2b668a4e92d3379a215\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline-status.txt",
+    "line": 175,
+    "text": "?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "?? ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json",
+    "line": 346,
+    "text": "      \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "      \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json",
+    "line": 350,
+    "text": "      \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "      \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json",
+    "line": 354,
+    "text": "      \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "      \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 389,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 393,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 397,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 401,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 405,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 409,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 413,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline.json\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline.json\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 417,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/protected-baseline.json\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/protected-baseline.json\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 421,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/diff-check.txt\": {",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/diff-check.txt\": {"
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 812,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"46f03536de927ad6ddd8c1fc7f2dc18da3c9620460555a0a46c21266aba479ee\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/brief.md\": \"46f03536de927ad6ddd8c1fc7f2dc18da3c9620460555a0a46c21266aba479ee\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 813,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan-review.md\": \"859ff2be66d508c49a541fdc44d798c5756b574c49484eabc828bb589e5652d2\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan-review.md\": \"859ff2be66d508c49a541fdc44d798c5756b574c49484eabc828bb589e5652d2\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 814,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md\": \"48e1e2ece66d62038bf7eeb538ea5fc91fa2e55feff5a156505e733bc2fe9ed2\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/plan.md\": \"48e1e2ece66d62038bf7eeb538ea5fc91fa2e55feff5a156505e733bc2fe9ed2\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2506,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json\": \"6b382ab5076a49dd3bbd51b576a6de1152535e48188f56142a36ea9e72bace03\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/static.json\": \"6b382ab5076a49dd3bbd51b576a6de1152535e48188f56142a36ea9e72bace03\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2507,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md\": \"a3c8ac2df3cdfe3025763ebcdd69d864203f29d7fb7f0729930de3120c44ba05\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/report.md\": \"a3c8ac2df3cdfe3025763ebcdd69d864203f29d7fb7f0729930de3120c44ba05\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2508,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline-status.txt\": \"56657d650f1747d4937e03b6bc690621a1e99afe8614e8bb6580e7c41eda9fa3\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline-status.txt\": \"56657d650f1747d4937e03b6bc690621a1e99afe8614e8bb6580e7c41eda9fa3\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2509,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline-source.diff\": \"8789149760c99911e53a6c18fdba0ad3b0d82a26255d97dc5a3e38945c391fa7\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline-source.diff\": \"8789149760c99911e53a6c18fdba0ad3b0d82a26255d97dc5a3e38945c391fa7\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2510,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff\": \"5120935fb2bea8ea37a2d0383cdab54e9f7e3a23b8fb8062b9e80866be1bdce6\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/incremental.diff\": \"5120935fb2bea8ea37a2d0383cdab54e9f7e3a23b8fb8062b9e80866be1bdce6\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2511,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline.json\": \"edccdccad0fc07259a04940a21d7ee1db1ea3b0dd53a78bbc61414a6c4be165d\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/baseline.json\": \"edccdccad0fc07259a04940a21d7ee1db1ea3b0dd53a78bbc61414a6c4be165d\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2512,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/protected-baseline.json\": \"09f3fe55107742ecff5e468c6449afb6cfa840d89bdf29bcf1e1875047e6e247\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/protected-baseline.json\": \"09f3fe55107742ecff5e468c6449afb6cfa840d89bdf29bcf1e1875047e6e247\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2513,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/diff-check.txt\": \"849b5308ba7bcccd173022e0041ad23d29f0c18d9443404c8beff30520eed937\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/diff-check.txt\": \"849b5308ba7bcccd173022e0041ad23d29f0c18d9443404c8beff30520eed937\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2514,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/CHANGELOG.md\": \"f27d29ec806181145140eaa01e1496bf5ec1a9ef8caedd1a36c25610d017506d\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/CHANGELOG.md\": \"f27d29ec806181145140eaa01e1496bf5ec1a9ef8caedd1a36c25610d017506d\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2515,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/structure-manifest.tsv\": \"56c3f45ea2a4a8b5fe7f22b963a31c2bf7b725ef18ffdcbab42799b855ee60a8\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/structure-manifest.tsv\": \"56c3f45ea2a4a8b5fe7f22b963a31c2bf7b725ef18ffdcbab42799b855ee60a8\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2516,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-producer.md\": \"0519cda4c221b915710f04f15ad3b8d74c988a1ad2db11f4b1954d7855107837\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-producer.md\": \"0519cda4c221b915710f04f15ad3b8d74c988a1ad2db11f4b1954d7855107837\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2517,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-coder.md\": \"ad6919452b9bdf032e38d746d7a3539942cbb817df70c760ba11d9deb97d8fc8\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-coder.md\": \"ad6919452b9bdf032e38d746d7a3539942cbb817df70c760ba11d9deb97d8fc8\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2518,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-wiki.md\": \"57bef8ec2154febc017bf493cdfa02f8623783c9a88304bef9a4b344d8b8fc13\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-wiki.md\": \"57bef8ec2154febc017bf493cdfa02f8623783c9a88304bef9a4b344d8b8fc13\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2519,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-architect.md\": \"fca99ec3f7574298d6e8c0a702a3cf01d98a696716275f25d5f5cfbdb42ad80d\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-architect.md\": \"fca99ec3f7574298d6e8c0a702a3cf01d98a696716275f25d5f5cfbdb42ad80d\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2520,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-lead.md\": \"b5331eec699683519ecff77567628ae8c0bc88fea0dd9efc6ad1b151d8b06d3c\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-lead.md\": \"b5331eec699683519ecff77567628ae8c0bc88fea0dd9efc6ad1b151d8b06d3c\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2521,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-reviewer.md\": \"e8461b8a9f9c4f72e4618812e0a19b6c12daebf12d745d88d6857fded4e17c0b\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/agents/fkit-reviewer.md\": \"e8461b8a9f9c4f72e4618812e0a19b6c12daebf12d745d88d6857fded4e17c0b\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2522,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-sprint-ship-loop/SKILL.md\": \"e338e2a7f166554edddfb17fc9520c948cd080a709163a272ea5e53ad76893c5\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-sprint-ship-loop/SKILL.md\": \"e338e2a7f166554edddfb17fc9520c948cd080a709163a272ea5e53ad76893c5\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2523,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-open-questions-interview/SKILL.md\": \"1d63192de846a718cf3f121bed8b43ae0078fb37ddcc7fecb6eb5283a0be22a1\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-open-questions-interview/SKILL.md\": \"1d63192de846a718cf3f121bed8b43ae0078fb37ddcc7fecb6eb5283a0be22a1\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2524,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-heal/SKILL.md\": \"dff929f3d7657b9534ff66320ab0e60b4f7bc0de71e9234daef5c07bf5b9d16f\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-heal/SKILL.md\": \"dff929f3d7657b9534ff66320ab0e60b4f7bc0de71e9234daef5c07bf5b9d16f\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2525,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-task-ship-loop/SKILL.md\": \"4b89044e9cb73d7d2e331ff6fdece0696f38f248dcdb723568fc16b033602192\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/skills/fkit-task-ship-loop/SKILL.md\": \"4b89044e9cb73d7d2e331ff6fdece0696f38f248dcdb723568fc16b033602192\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2526,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md\": \"6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md\": \"6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2527,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/ai-agents/knowledge-base/conventions/asking-the-owner.md\": \"6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/ai-agents/knowledge-base/conventions/asking-the-owner.md\": \"6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2528,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/codex/README.md\": \"d4d98b626b991445c04371ce3f6015cd25579af78b7daa81962c8c9198ca6daf\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/codex/README.md\": \"d4d98b626b991445c04371ce3f6015cd25579af78b7daa81962c8c9198ca6daf\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2529,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/codex/materialize.mjs\": \"d56fae7c31e96c1521fe679a974f3d883f2b3364c9da9004d52439fc827b4756\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/before/codex/materialize.mjs\": \"d56fae7c31e96c1521fe679a974f3d883f2b3364c9da9004d52439fc827b4756\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2530,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/CHANGELOG.md\": \"9df55800fe0c0815b3eb71a9efe229ffb75a5ad1990b789f227849207de96bac\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/CHANGELOG.md\": \"9df55800fe0c0815b3eb71a9efe229ffb75a5ad1990b789f227849207de96bac\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2531,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/structure-manifest.tsv\": \"6ce40371d1a620a10b10cd47e1d3febc3c32e926e3092a26a1f76c9e80c4a0d3\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/structure-manifest.tsv\": \"6ce40371d1a620a10b10cd47e1d3febc3c32e926e3092a26a1f76c9e80c4a0d3\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2532,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-producer.md\": \"1212c0246e1d927f1631497e087ae22637f229e764187d1670e872b077b05c2f\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-producer.md\": \"1212c0246e1d927f1631497e087ae22637f229e764187d1670e872b077b05c2f\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2533,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-coder.md\": \"373530d29c42344da14691d90afb2268e5b468f4500190d225072f86da55bf12\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-coder.md\": \"373530d29c42344da14691d90afb2268e5b468f4500190d225072f86da55bf12\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2534,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-wiki.md\": \"75ddb4072e068b12af19356030108daaaaf1aa3b4f11ee31052258df72816937\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-wiki.md\": \"75ddb4072e068b12af19356030108daaaaf1aa3b4f11ee31052258df72816937\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2535,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-architect.md\": \"fda5f7708683fec30c1c0b6bed87245ebd7ac003ca03dd37d5e9511e42203571\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-architect.md\": \"fda5f7708683fec30c1c0b6bed87245ebd7ac003ca03dd37d5e9511e42203571\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2536,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-lead.md\": \"72143f28caab3cd3cb0e258f587ef12112308e6dcb44ab90c6c4587e2952dec0\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-lead.md\": \"72143f28caab3cd3cb0e258f587ef12112308e6dcb44ab90c6c4587e2952dec0\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2537,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-reviewer.md\": \"785af00f3bf22026e792271f2facfd1d0f39e04ea4ec57e7345f1472d1e277f6\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/agents/fkit-reviewer.md\": \"785af00f3bf22026e792271f2facfd1d0f39e04ea4ec57e7345f1472d1e277f6\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2538,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-sprint-ship-loop/SKILL.md\": \"22e5e8c1e6241a4746f329b2f4a6d346923dcaf576aec9034c10d62efae0d34a\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-sprint-ship-loop/SKILL.md\": \"22e5e8c1e6241a4746f329b2f4a6d346923dcaf576aec9034c10d62efae0d34a\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2539,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-open-questions-interview/SKILL.md\": \"1580a219b84a092c7770bf3a338eb4dcf001516c1826a2e5bc4485fc0311bbe4\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-open-questions-interview/SKILL.md\": \"1580a219b84a092c7770bf3a338eb4dcf001516c1826a2e5bc4485fc0311bbe4\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2540,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-heal/SKILL.md\": \"d9cd407f140e8d0e4694e9d78052a14c858249e2e58d98cb1b20c5b01049e0e6\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-heal/SKILL.md\": \"d9cd407f140e8d0e4694e9d78052a14c858249e2e58d98cb1b20c5b01049e0e6\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2541,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-task-ship-loop/SKILL.md\": \"423145e3ac90a99e8456072d92bfd1c75e2dcd7a134c17733a13d2fd2532f716\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/skills/fkit-task-ship-loop/SKILL.md\": \"423145e3ac90a99e8456072d92bfd1c75e2dcd7a134c17733a13d2fd2532f716\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2542,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md\": \"f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md\": \"f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2543,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/ai-agents/knowledge-base/conventions/asking-the-owner.md\": \"f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/ai-agents/knowledge-base/conventions/asking-the-owner.md\": \"f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2544,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/codex/README.md\": \"69e0436f6380a305fee7afc207226b8cb5604ea695267acd0a738f7529b3f63b\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/codex/README.md\": \"69e0436f6380a305fee7afc207226b8cb5604ea695267acd0a738f7529b3f63b\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2545,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/codex/materialize.mjs\": \"9ce2b246d2a9da9cd4bb45fde4e88a6851549cdd728a22c2a2f12dabb3412c3d\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/build/after/codex/materialize.mjs\": \"9ce2b246d2a9da9cd4bb45fde4e88a6851549cdd728a22c2a2f12dabb3412c3d\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2546,
+    "text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md\": \"31912b60b0b1fe812a3321a69c8687c82f14b416068c8cc3fe2293ea1655bc8a\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "    \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/worklog.md\": \"31912b60b0b1fe812a3321a69c8687c82f14b416068c8cc3fe2293ea1655bc8a\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2942,
+    "text": "      \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/report.md\",",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "      \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/report.md\","
+  },
+  {
+    "file": "ai-agents/tasks/done/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json",
+    "line": 2943,
+    "text": "      \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json\"",
+    "treatment": "frozen captured evidence / snapshot / fingerprint",
+    "final_text": "      \"ai-agents/tasks/backlog/0556-give-each-independent-owner-decision-its-own-selectable-options/evidence/verify/static.json\""
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "lane": "prove-red",
+  "command": "npm run test:prove-red",
+  "state": "started",
+  "dateUTC": "2026-11-06T08:57:48.144592+00:00",
+  "authority": "Verify-only, full approved R1 plan, relayed owner 2026-11-06 user chat: I approve it",
+  "outstanding": "Complete this lane, inspect actual exit/results, then remaining approved lanes. No source fixes or extra old-task retries."
+}

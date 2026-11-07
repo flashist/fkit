@@ -1,0 +1,19 @@
+{
+  "step": "1",
+  "childExit": 1,
+  "counts": {
+    "tests": 260,
+    "suites": 0,
+    "pass": 258,
+    "fail": 2,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "failedNames": [
+    "matrix: reviewer \u00d7 fkit-review -> allow",
+    "reviewer owns fkit-review -> allow"
+  ],
+  "output": "continuation-01-step-1.log",
+  "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+}

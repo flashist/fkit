@@ -1,0 +1,10 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-name-pattern=^lead owner channel:",
+    "test/launcher-contract.test.js"
+  ],
+  "exit": 1,
+  "expected": "failure: unsupported roots currently advertise the owner tool"
+}

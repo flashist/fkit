@@ -1,0 +1,45 @@
+{
+  "command": [
+    "npm",
+    "test"
+  ],
+  "launch_count": 1,
+  "started_utc": "2026-11-04T12:11:47.212132+00:00",
+  "phase": "finished",
+  "execution": "scoped sandbox escalation after loopback bind EPERM; no install/network/account/model checks requested",
+  "idle_or_load_precheck": false,
+  "elapsed_time_acceptance_cap": null,
+  "code_changed": "NONE",
+  "raw_log": ".fkit/tmp/0552-verify-20261104/npm-test.log",
+  "child_pid": 6994,
+  "finished_utc": "2026-11-04T12:13:02.820390+00:00",
+  "child_exit_code": 0,
+  "signal": null,
+  "wall_seconds_observation_only": 75.60755341699999,
+  "summary": [
+    "\u2139 tests 971",
+    "\u2139 suites 40",
+    "\u2139 pass 970",
+    "\u2139 fail 0",
+    "\u2139 cancelled 0",
+    "\u2139 skipped 1",
+    "\u2139 todo 0",
+    "\u2139 duration_ms 75456.761333"
+  ],
+  "counts": {
+    "tests": 971,
+    "suites": 40,
+    "pass": 970,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 1,
+    "todo": 0,
+    "duration_ms": 75456.761333
+  },
+  "skips": [
+    "\ufe63 benchmark: snapshot against the per-member path on corpus-sized boards (FKIT_BOARD_BENCH=1) (0.05425ms) # SKIP"
+  ],
+  "failure_summary": [],
+  "raw_log_sha256": "6bc953d8390a5693f2448e1a48061630d6ba049bcd8754a4b7f6d8ea4ba8d2da",
+  "result": "PASS"
+}

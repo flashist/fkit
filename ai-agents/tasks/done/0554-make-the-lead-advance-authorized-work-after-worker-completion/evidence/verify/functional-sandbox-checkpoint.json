@@ -1,0 +1,8 @@
+{
+  "lane": "functional",
+  "command": "node --test --test-skip-pattern='^0284/(git-deadline|term-ignored|no-stray|reinstall-deadline|reinstall-timeout-not-run):|^fkit additions a break file left by a dead breaker is removed, and waiters back off meanwhile$|^benchmark:' test/*.test.js test/board/*.test.js",
+  "state": "started",
+  "dateUTC": "2026-11-06T08:54:29.214341+00:00",
+  "authority": "Verify-only, full approved R1 plan, relayed owner 2026-11-06 user chat: I approve it",
+  "outstanding": "Complete this lane, inspect actual exit/results, then remaining approved lanes. No source fixes or extra old-task retries."
+}

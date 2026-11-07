@@ -1,0 +1,909 @@
+{
+  "task": "0540",
+  "role": "VERIFY",
+  "label": "quiet-window-precheck-20261104",
+  "startedUTC": "2026-11-04T10:02:00.681Z",
+  "node": "v24.13.0",
+  "platform": "darwin",
+  "release": "25.2.0",
+  "cpuCount": 14,
+  "tmpdir": "/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "canonicalTmpdir": "/private/var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T",
+  "privateTmpdirOverride": false,
+  "headBefore": "1767a47b9db50f3949789636c3e0b513950e7368",
+  "hashesBefore": {
+    "test/dual-home-parity.test.js": "947e531c591310a14466a96434ea0c0b585716b4dc252eb52034c6fd1a73d22e",
+    "test/dual-home-parity-exceptions.mjs": "25c7161777c0d5cefac7312f9a59686e112c6d8e5a1ee76ddb17f3ebaaaf9f08",
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": "cb17f0a5561c448f28e1bc2b27e5fac9a64e25dd68aff1d3da273fd2f3da135a",
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    ".git/index": "a8f5e7698a080f20496ff18af077f2a40daa4ac3b762354b1240d7f0a8c714a3",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": "e51d2a1e07187b2a056bb28af81563762e73af5fce772e6a76f5e464138d8627",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "89b9593934ce2dde47bc849180dd75714cfe474f4cb64f363519c44f4925cc92",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md": "8bfbb42e8a9f625abd41f7d381f02280f929d7261db62302514a610af8444316",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md": "71eae3c9e2e29608fbff6aa7b5870f687f9f27f4e75c7e33d83612d41f77c4ed",
+    "ai-agents/sprints/sprint-15.md": "26edc5b60cadb92ad1a0e7b8e9e8d53b5e95510ce9849ce863e5a110d84e918d",
+    "CONTRIBUTING.md": "aa0d10573565b8677f2f9137e3b7aa9c3d0a3128ed129bda59b6ba9d7c9d014d",
+    "package.json": "dfad66428001fb3becd139cd4b10f67c6d27d7785cc8f4045520ccb9aff91ece",
+    ".fkit/tmp/0540-build-20261104/measure.mjs": "02229413c483d8d4e7a263b301cdd3139a19d0d26beb7949d0dd93e7fe6a1718"
+  },
+  "priorProtectedHashMatches": {
+    "test/dual-home-parity.test.js": true,
+    "test/dual-home-parity-exceptions.mjs": true,
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": true,
+    "test/orphan-cleanup.test.js": true,
+    "test/structure-notice.test.js": true,
+    "test/harness.mjs": true,
+    ".git/index": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": true,
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": true
+  },
+  "before": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "samples": [
+    {
+      "utc": "2026-11-04T10:02:00.755Z",
+      "load": [
+        9.7216796875,
+        11.48046875,
+        12.4677734375
+      ],
+      "processInspectionExit": 0,
+      "processInspectionAvailable": true,
+      "processCount": 1109,
+      "competingTestCandidates": [],
+      "highestCpuProcesses": [
+        {
+          "pid": 35431,
+          "ppid": 1,
+          "cpu": 78,
+          "state": "R",
+          "testCandidate": false
+        },
+        {
+          "pid": 164,
+          "ppid": 1,
+          "cpu": 42.5,
+          "state": "Rs",
+          "testCandidate": false
+        },
+        {
+          "pid": 35437,
+          "ppid": 1,
+          "cpu": 29.1,
+          "state": "Us",
+          "testCandidate": false
+        },
+        {
+          "pid": 35430,
+          "ppid": 1,
+          "cpu": 13.4,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 40592,
+          "ppid": 1,
+          "cpu": 12,
+          "state": "Rs",
+          "testCandidate": false
+        },
+        {
+          "pid": 73790,
+          "ppid": 73446,
+          "cpu": 11.2,
+          "state": "S",
+          "testCandidate": false
+        },
+        {
+          "pid": 82197,
+          "ppid": 1,
+          "cpu": 10.5,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 2502,
+          "ppid": 1,
+          "cpu": 9.7,
+          "state": "Rs",
+          "testCandidate": false
+        },
+        {
+          "pid": 70099,
+          "ppid": 69243,
+          "cpu": 9.1,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 179,
+          "ppid": 1,
+          "cpu": 8.7,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 3200,
+          "ppid": 1,
+          "cpu": 7.4,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 2217,
+          "ppid": 1,
+          "cpu": 7,
+          "state": "Ss",
+          "testCandidate": false
+        }
+      ],
+      "rawCpuCounters": [
+        {
+          "user": 49604360,
+          "nice": 0,
+          "sys": 36712340,
+          "idle": 97913630,
+          "irq": 0
+        },
+        {
+          "user": 47843680,
+          "nice": 0,
+          "sys": 32039560,
+          "idle": 104565330,
+          "irq": 0
+        },
+        {
+          "user": 43134460,
+          "nice": 0,
+          "sys": 26333730,
+          "idle": 115293150,
+          "irq": 0
+        },
+        {
+          "user": 39280470,
+          "nice": 0,
+          "sys": 23137140,
+          "idle": 122610190,
+          "irq": 0
+        },
+        {
+          "user": 1698730,
+          "nice": 0,
+          "sys": 780960,
+          "idle": 183134970,
+          "irq": 0
+        },
+        {
+          "user": 1487980,
+          "nice": 0,
+          "sys": 697380,
+          "idle": 183440430,
+          "irq": 0
+        },
+        {
+          "user": 1352080,
+          "nice": 0,
+          "sys": 652960,
+          "idle": 183626700,
+          "irq": 0
+        },
+        {
+          "user": 1273390,
+          "nice": 0,
+          "sys": 625930,
+          "idle": 183736540,
+          "irq": 0
+        },
+        {
+          "user": 1227060,
+          "nice": 0,
+          "sys": 614400,
+          "idle": 183796210,
+          "irq": 0
+        },
+        {
+          "user": 11914500,
+          "nice": 0,
+          "sys": 5753800,
+          "idle": 167566910,
+          "irq": 0
+        },
+        {
+          "user": 8460290,
+          "nice": 0,
+          "sys": 4244740,
+          "idle": 172573460,
+          "irq": 0
+        },
+        {
+          "user": 5954230,
+          "nice": 0,
+          "sys": 2674450,
+          "idle": 176782860,
+          "irq": 0
+        },
+        {
+          "user": 4465980,
+          "nice": 0,
+          "sys": 1973890,
+          "idle": 179049440,
+          "irq": 0
+        },
+        {
+          "user": 3578610,
+          "nice": 0,
+          "sys": 1598480,
+          "idle": 180359310,
+          "irq": 0
+        }
+      ]
+    },
+    {
+      "utc": "2026-11-04T10:02:10.830Z",
+      "load": [
+        9.91748046875,
+        11.4638671875,
+        12.4501953125
+      ],
+      "processInspectionExit": 0,
+      "processInspectionAvailable": true,
+      "processCount": 1105,
+      "competingTestCandidates": [],
+      "highestCpuProcesses": [
+        {
+          "pid": 35431,
+          "ppid": 1,
+          "cpu": 72.6,
+          "state": "U",
+          "testCandidate": false
+        },
+        {
+          "pid": 35437,
+          "ppid": 1,
+          "cpu": 66.8,
+          "state": "Us",
+          "testCandidate": false
+        },
+        {
+          "pid": 164,
+          "ppid": 1,
+          "cpu": 42.8,
+          "state": "Rs",
+          "testCandidate": false
+        },
+        {
+          "pid": 35430,
+          "ppid": 1,
+          "cpu": 27.5,
+          "state": "Rs",
+          "testCandidate": false
+        },
+        {
+          "pid": 73790,
+          "ppid": 73446,
+          "cpu": 17,
+          "state": "S",
+          "testCandidate": false
+        },
+        {
+          "pid": 356,
+          "ppid": 1,
+          "cpu": 16,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 40592,
+          "ppid": 1,
+          "cpu": 13.1,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 82197,
+          "ppid": 1,
+          "cpu": 11.8,
+          "state": "Rs",
+          "testCandidate": false
+        },
+        {
+          "pid": 2502,
+          "ppid": 1,
+          "cpu": 10.8,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 483,
+          "ppid": 1,
+          "cpu": 10.2,
+          "state": "S",
+          "testCandidate": false
+        },
+        {
+          "pid": 3200,
+          "ppid": 1,
+          "cpu": 8.3,
+          "state": "Rs",
+          "testCandidate": false
+        },
+        {
+          "pid": 2217,
+          "ppid": 1,
+          "cpu": 8.2,
+          "state": "Ss",
+          "testCandidate": false
+        }
+      ],
+      "rawCpuCounters": [
+        {
+          "user": 49609070,
+          "nice": 0,
+          "sys": 36717090,
+          "idle": 97914220,
+          "irq": 0
+        },
+        {
+          "user": 47848560,
+          "nice": 0,
+          "sys": 32043960,
+          "idle": 104566100,
+          "irq": 0
+        },
+        {
+          "user": 43139190,
+          "nice": 0,
+          "sys": 26337850,
+          "idle": 115294350,
+          "irq": 0
+        },
+        {
+          "user": 39285290,
+          "nice": 0,
+          "sys": 23140940,
+          "idle": 122611620,
+          "irq": 0
+        },
+        {
+          "user": 1698730,
+          "nice": 0,
+          "sys": 780960,
+          "idle": 183145040,
+          "irq": 0
+        },
+        {
+          "user": 1487980,
+          "nice": 0,
+          "sys": 697380,
+          "idle": 183450500,
+          "irq": 0
+        },
+        {
+          "user": 1352080,
+          "nice": 0,
+          "sys": 652970,
+          "idle": 183636780,
+          "irq": 0
+        },
+        {
+          "user": 1273390,
+          "nice": 0,
+          "sys": 625930,
+          "idle": 183746620,
+          "irq": 0
+        },
+        {
+          "user": 1227060,
+          "nice": 0,
+          "sys": 614400,
+          "idle": 183806280,
+          "irq": 0
+        },
+        {
+          "user": 11915940,
+          "nice": 0,
+          "sys": 5754620,
+          "idle": 167574670,
+          "irq": 0
+        },
+        {
+          "user": 8461070,
+          "nice": 0,
+          "sys": 4245270,
+          "idle": 172582180,
+          "irq": 0
+        },
+        {
+          "user": 5954530,
+          "nice": 0,
+          "sys": 2674650,
+          "idle": 176792400,
+          "irq": 0
+        },
+        {
+          "user": 4466110,
+          "nice": 0,
+          "sys": 1973970,
+          "idle": 179059290,
+          "irq": 0
+        },
+        {
+          "user": 3578660,
+          "nice": 0,
+          "sys": 1598510,
+          "idle": 180369290,
+          "irq": 0
+        }
+      ],
+      "intervalCpuDelta": {
+        "user": 21840,
+        "nice": 0,
+        "sys": 18740,
+        "idle": 100210,
+        "irq": 0
+      },
+      "intervalIdlePercent": 71.17693017970026
+    },
+    {
+      "utc": "2026-11-04T10:02:20.903Z",
+      "load": [
+        8.92724609375,
+        11.201171875,
+        12.34521484375
+      ],
+      "processInspectionExit": 0,
+      "processInspectionAvailable": true,
+      "processCount": 1106,
+      "competingTestCandidates": [],
+      "highestCpuProcesses": [
+        {
+          "pid": 35431,
+          "ppid": 1,
+          "cpu": 82.6,
+          "state": "R",
+          "testCandidate": false
+        },
+        {
+          "pid": 164,
+          "ppid": 1,
+          "cpu": 42.5,
+          "state": "Rs",
+          "testCandidate": false
+        },
+        {
+          "pid": 35430,
+          "ppid": 1,
+          "cpu": 21.4,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 40592,
+          "ppid": 1,
+          "cpu": 14.6,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 73790,
+          "ppid": 73446,
+          "cpu": 12.7,
+          "state": "R",
+          "testCandidate": false
+        },
+        {
+          "pid": 82197,
+          "ppid": 1,
+          "cpu": 11.9,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 2502,
+          "ppid": 1,
+          "cpu": 10.4,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 73457,
+          "ppid": 73446,
+          "cpu": 8.8,
+          "state": "S",
+          "testCandidate": false
+        },
+        {
+          "pid": 3200,
+          "ppid": 1,
+          "cpu": 8,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 2217,
+          "ppid": 1,
+          "cpu": 7.6,
+          "state": "Ss",
+          "testCandidate": false
+        },
+        {
+          "pid": 474,
+          "ppid": 1,
+          "cpu": 6.5,
+          "state": "S",
+          "testCandidate": false
+        },
+        {
+          "pid": 56279,
+          "ppid": 1,
+          "cpu": 5.8,
+          "state": "Ss",
+          "testCandidate": false
+        }
+      ],
+      "rawCpuCounters": [
+        {
+          "user": 49613640,
+          "nice": 0,
+          "sys": 36721280,
+          "idle": 97915490,
+          "irq": 0
+        },
+        {
+          "user": 47853070,
+          "nice": 0,
+          "sys": 32047690,
+          "idle": 104567900,
+          "irq": 0
+        },
+        {
+          "user": 43143740,
+          "nice": 0,
+          "sys": 26341080,
+          "idle": 115296620,
+          "irq": 0
+        },
+        {
+          "user": 39289660,
+          "nice": 0,
+          "sys": 23144010,
+          "idle": 122614230,
+          "irq": 0
+        },
+        {
+          "user": 1698740,
+          "nice": 0,
+          "sys": 780970,
+          "idle": 183155090,
+          "irq": 0
+        },
+        {
+          "user": 1487980,
+          "nice": 0,
+          "sys": 697390,
+          "idle": 183460550,
+          "irq": 0
+        },
+        {
+          "user": 1352080,
+          "nice": 0,
+          "sys": 652970,
+          "idle": 183646840,
+          "irq": 0
+        },
+        {
+          "user": 1273390,
+          "nice": 0,
+          "sys": 625940,
+          "idle": 183756680,
+          "irq": 0
+        },
+        {
+          "user": 1227060,
+          "nice": 0,
+          "sys": 614400,
+          "idle": 183816350,
+          "irq": 0
+        },
+        {
+          "user": 11917140,
+          "nice": 0,
+          "sys": 5755350,
+          "idle": 167582760,
+          "irq": 0
+        },
+        {
+          "user": 8461860,
+          "nice": 0,
+          "sys": 4245890,
+          "idle": 172590790,
+          "irq": 0
+        },
+        {
+          "user": 5954830,
+          "nice": 0,
+          "sys": 2674850,
+          "idle": 176801950,
+          "irq": 0
+        },
+        {
+          "user": 4466210,
+          "nice": 0,
+          "sys": 1974050,
+          "idle": 179069170,
+          "irq": 0
+        },
+        {
+          "user": 3578720,
+          "nice": 0,
+          "sys": 1598580,
+          "idle": 180379240,
+          "irq": 0
+        }
+      ],
+      "intervalCpuDelta": {
+        "user": 20460,
+        "nice": 0,
+        "sys": 15950,
+        "idle": 104320,
+        "irq": 0
+      },
+      "intervalIdlePercent": 74.12776238186598
+    }
+  ],
+  "testsExecuted": [],
+  "suiteLaunched": false,
+  "ownerRuling": {
+    "date": "2026-11-04",
+    "utc": "09:59:34",
+    "channel": "interactive fkit_roles.fkit_ask_owner root lead (trusted relayed prose)",
+    "quote": "Bounded quiet-window verification (Recommended) \u2014 Run one measured normal suite only once idle conditions can be evidenced; otherwise leave acceptance pending. No repeated failure probes or repair authority."
+  },
+  "standard": "CONTRIBUTING Test rules budget and ADR-057 D10 require an idle Mac; approved plan and owner ruling require affirmative idle evidence before one suite. No numeric idle threshold is specified. Assess repeated load, interval CPU counters and competing-test/process activity together; elapsed time or one low-CPU moment is insufficient.",
+  "sandboxAttempt": {
+    "processInspection": "ps denied operation not permitted",
+    "scopedRetry": "ps read-only succeeded; no automatic-approval rejection"
+  },
+  "inheritedFullSuite": {
+    "exit": 0,
+    "summary": [
+      "\u2139 tests 971",
+      "\u2139 suites 40",
+      "\u2139 pass 970",
+      "\u2139 fail 0",
+      "\u2139 cancelled 0",
+      "\u2139 skipped 1",
+      "\u2139 todo 0",
+      "\u2139 duration_ms 76271.373959"
+    ],
+    "wallSeconds": 76.43248979200001,
+    "loadBefore": [
+      17.20068359375,
+      17.46630859375,
+      14.19140625
+    ],
+    "loadAfter": [
+      24.99169921875,
+      20.6396484375,
+      15.7529296875
+    ]
+  },
+  "after": {
+    "fkit-proj-": [
+      "fkit-proj-1xE5Pd",
+      "fkit-proj-4LWlXB",
+      "fkit-proj-7QYMYI",
+      "fkit-proj-8wya5w",
+      "fkit-proj-A35jMl",
+      "fkit-proj-BziL5b",
+      "fkit-proj-Dt1Ohy",
+      "fkit-proj-FbCixx",
+      "fkit-proj-Fo0L3E",
+      "fkit-proj-GRNL0u",
+      "fkit-proj-GpTkrX",
+      "fkit-proj-IlZfpx",
+      "fkit-proj-JN925z",
+      "fkit-proj-KuchsL",
+      "fkit-proj-Psaj4v",
+      "fkit-proj-S68VOx",
+      "fkit-proj-SLP7vR",
+      "fkit-proj-SbcTIk",
+      "fkit-proj-UFw58P",
+      "fkit-proj-Vt9BBK",
+      "fkit-proj-W9MmlD",
+      "fkit-proj-WB1jbd",
+      "fkit-proj-XEBuc8",
+      "fkit-proj-cYt2FF",
+      "fkit-proj-csjJSe",
+      "fkit-proj-e1rKnp",
+      "fkit-proj-iE0E4E",
+      "fkit-proj-iG1010",
+      "fkit-proj-jUSbu6",
+      "fkit-proj-nat4FV",
+      "fkit-proj-p9gsxt",
+      "fkit-proj-qwsUG1",
+      "fkit-proj-uPaF40",
+      "fkit-proj-yiO7KO"
+    ],
+    "fkit-stub-": [
+      "fkit-stub-N1NUMD"
+    ],
+    "fkit-argv-": [
+      "fkit-argv-hAiBaO"
+    ],
+    "fkit-conv-": []
+  },
+  "hashesAfter": {
+    "test/dual-home-parity.test.js": "947e531c591310a14466a96434ea0c0b585716b4dc252eb52034c6fd1a73d22e",
+    "test/dual-home-parity-exceptions.mjs": "25c7161777c0d5cefac7312f9a59686e112c6d8e5a1ee76ddb17f3ebaaaf9f08",
+    "ai-agents/knowledge-base/conventions/dual-home-parity.md": "cb17f0a5561c448f28e1bc2b27e5fac9a64e25dd68aff1d3da273fd2f3da135a",
+    "test/orphan-cleanup.test.js": "b2d4fe7d4ef42b7899fa92c11903393c23ec5a89ad808933d3fd7ffee65a987f",
+    "test/structure-notice.test.js": "3498e40c37895bc1cbaff62895f259910d13e4bc260e5ef8105f70bb59eda6ee",
+    "test/harness.mjs": "bbbd16e5a1f41aa673a8c26ba39e86c1fb8c34d6a40773696cc0010c71148a94",
+    ".git/index": "a8f5e7698a080f20496ff18af077f2a40daa4ac3b762354b1240d7f0a8c714a3",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan.md": "4bdb9a9a0320adcb2fc98b37bff7136598acacaca39bc35f2acea8a478c632c6",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/parity-amendment.md": "e51d2a1e07187b2a056bb28af81563762e73af5fce772e6a76f5e464138d8627",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/plan-review.md": "89b9593934ce2dde47bc849180dd75714cfe474f4cb64f363519c44f4925cc92",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/brief.md": "8bfbb42e8a9f625abd41f7d381f02280f929d7261db62302514a610af8444316",
+    "ai-agents/tasks/backlog/0540-stop-the-test-suite-leaving-fkit-proj-temp-folders-behind/review.md": "71eae3c9e2e29608fbff6aa7b5870f687f9f27f4e75c7e33d83612d41f77c4ed",
+    "ai-agents/sprints/sprint-15.md": "26edc5b60cadb92ad1a0e7b8e9e8d53b5e95510ce9849ce863e5a110d84e918d",
+    "CONTRIBUTING.md": "aa0d10573565b8677f2f9137e3b7aa9c3d0a3128ed129bda59b6ba9d7c9d014d",
+    "package.json": "dfad66428001fb3becd139cd4b10f67c6d27d7785cc8f4045520ccb9aff91ece",
+    ".fkit/tmp/0540-build-20261104/measure.mjs": "02229413c483d8d4e7a263b301cdd3139a19d0d26beb7949d0dd93e7fe6a1718"
+  },
+  "headAfter": "1767a47b9db50f3949789636c3e0b513950e7368",
+  "protectedHashesUnchanged": true,
+  "prefixComparison": {
+    "fkit-proj-": {
+      "before": 34,
+      "after": 34,
+      "added": [],
+      "removed": [],
+      "equalsLastVerifiedBefore": true,
+      "originalPreserved": true,
+      "diagnosticPreserved": true
+    },
+    "fkit-stub-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": [],
+      "equalsLastVerifiedBefore": true,
+      "originalPreserved": true,
+      "diagnosticPreserved": true
+    },
+    "fkit-argv-": {
+      "before": 1,
+      "after": 1,
+      "added": [],
+      "removed": [],
+      "equalsLastVerifiedBefore": true,
+      "originalPreserved": true,
+      "diagnosticPreserved": true
+    },
+    "fkit-conv-": {
+      "before": 0,
+      "after": 0,
+      "added": [],
+      "removed": [],
+      "equalsLastVerifiedBefore": true,
+      "originalPreserved": true,
+      "diagnosticPreserved": true
+    }
+  },
+  "planBlob": "a7245d31f2c7c91d6efd1b6642a08c08db2e04f3",
+  "amendmentBlob": "5eaedf1d2c2f1eca1149fc9682190ccb3effbe6c",
+  "finishedUTC": "2026-11-04T10:02:20.942Z",
+  "decision": "NEEDS-DECISION",
+  "sourcePatchEqualsApprovedParity": true,
+  "sourcePatchEqualsApprovedOrphan": true,
+  "stagedDiffEmpty": true,
+  "noticeHarnessWorkingDiffEmpty": true,
+  "diffCheckExit": 0,
+  "baselineGuard": {
+    "expectedTotal": 971,
+    "expectedSkipped": 1,
+    "benchmarkSkip": "benchmark: snapshot against the per-member path on corpus-sized boards (FKIT_BOARD_BENCH=1)",
+    "inheritedActualChildExit": 0,
+    "inheritedTotal971": true,
+    "sameNormalizedSkipAsBaseline": true,
+    "freshSuiteResult": null
+  },
+  "idleMacEstablished": false,
+  "acceptanceConditionResult": "NOT SATISFIED: idle Mac not evidenced; conditional suite not launched; acceptance pending",
+  "reason": "Repeated samples show ongoing substantial machine work: load 9.72/9.92/8.93 on 14 logical CPUs, interval CPU busy 28.82% and 25.87% (about 4.04 and 3.62 logical cores). Several processes repeatedly consume CPU. No competing test candidate observed, but that alone does not establish idle. No numerical pass threshold or process-cause attribution is invented.",
+  "limits": [
+    "One bounded 20-second sample window; not continuous process surveillance or proof of an idle interval elsewhere.",
+    "ps CPU percentages are sampled process observations, not precise causal attribution; aggregate interval CPU deltas provide independent activity evidence.",
+    "No fresh suite: child exit, during-suite load, fresh totals/skips/duration and suite prefix deltas are not applicable. Existing green is inherited busy-machine evidence only.",
+    "Normal-completion cleanup only; no crash/SIGKILL/abrupt-exit guarantee; non-atomic directory/index observations."
+  ],
+  "options": [
+    {
+      "label": "Leave acceptance pending (Recommended)",
+      "context": "Run nothing further under this bounded unit; idle condition remains unmet. No placement/dependency changes; knock-on none, checked brief and Sprint 15."
+    },
+    {
+      "label": "Authorize a later bounded quiet-window attempt",
+      "context": "A separate owner instruction permits another precheck and at most one normal suite only if idle is evidenced then. No timer/retry permission inferred here. No placement/dependency changes; knock-on none, checked."
+    },
+    {
+      "label": "Explicitly accept existing busy timing for 0540 only",
+      "context": "Owner judgment would accept inherited 76.271373959 s timing for this task while recording idle unproved; changes no global budget or source policy and grants no closure. No placement/dependency changes; knock-on none, checked."
+    }
+  ],
+  "skippedChecks": {
+    "npm test": "Idle prerequisite not evidenced; zero launches.",
+    "focused and intentional failure probes": "Already completed and restored; no new concern; prohibited repetition in this unit.",
+    "test:prove-red": "No mapped change or new case.",
+    "test:release": "No release tooling change.",
+    "test:docs": "Duplicate focused/full coverage, no new source concern.",
+    "build/lint/install/native/account/model/network": "Unmapped/out of scope."
+  },
+  "decisionLog": [
+    "No unattended source fix or obvious-winner call: none.",
+    "Use three samples over 20 seconds for one bounded precheck; stop without a suite because idle evidence is insufficient. No waiver, indefinite wait or automatic restart.",
+    "Reuse read-only measurement method/census prefixes and preserve inherited results; no measure.mjs suite invocation because its prerequisite failed."
+  ],
+  "wikiGrounding": {
+    "pages": [
+      "systems/testing-and-verification",
+      "decisions/adr-057-fkits-tests-cover-shipped-script-behaviour-only",
+      "tasks/run-only-the-checks-a-change-needs-not-the-full-suite-every-time"
+    ],
+    "watermark": "185ac5e07e918c089ed3afd23496587315342000",
+    "laterAiAgentsCommits": 12,
+    "gap": "No precise numeric idle definition or current 0540 idle evidence in wiki; current CONTRIBUTING, approved plan and owner ruling govern. Wiki writes librarian-only."
+  },
+  "worklogPrefixSha256": "0ebc54d0fae99d42127c5cd47bb18c8dbe859bcc7be5a4dadebc94212d82360a",
+  "oldEvidenceHashesUnchanged": true,
+  "finalProtectedHashMatches": true,
+  "finalRecordUTC": "2026-11-04T10:03:56.677096+00:00"
+}

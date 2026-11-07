@@ -1,6 +1,6 @@
 # fkit
 
-[![test](https://github.com/flashist/fkit/actions/workflows/test.yml/badge.svg)](https://github.com/flashist/fkit/actions/workflows/test.yml) [![version](https://img.shields.io/github/package-json/v/flashist/fkit?label=version)](VERSION) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![version](https://img.shields.io/github/package-json/v/flashist/fkit?label=version)](VERSION) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ![fkit teaser: in a coder session, /fkit-review is denied, because your coder can't review its own code](docs/media/fkit-teaser.gif)
 
@@ -249,7 +249,7 @@ In a checkout, `npm run board` does the same over fkit's own tree. Details and p
 
 Issues and PRs welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md). fkit is developed with fkit, so
 this repo's own `ai-agents/`, `CLAUDE.md` and `AGENTS.md` are its working files, not part of the
-product. Tests: `npm test`. Releases: [`RELEASING.md`](RELEASING.md). Design decisions are ADRs in
+product. Test execution is [paused indefinitely by the owner](CONTRIBUTING.md#tests). Releases: [`RELEASING.md`](RELEASING.md). Design decisions are ADRs in
 [`ai-agents/knowledge-base/decisions/`](ai-agents/knowledge-base/decisions/).
 
 ## Roadmap

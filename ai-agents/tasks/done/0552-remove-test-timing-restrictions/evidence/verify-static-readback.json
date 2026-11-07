@@ -1,0 +1,35 @@
+{
+  "recorded_utc": "2026-11-04T12:12:13.217881+00:00",
+  "readback": "all six source passages and both workflow commands read fresh",
+  "static_evidence": "22 Build checks reused after exact source, protected-file, evidence and patch hash matches; no duplicate stubs/parser runs",
+  "local_links": [
+    {
+      "source": "RELEASING.md",
+      "target": ".github/workflows/prove-red.yml",
+      "exists": true,
+      "anchor_valid": true
+    },
+    {
+      "source": "RELEASING.md",
+      "target": ".github/workflows/test.yml",
+      "exists": true,
+      "anchor_valid": true
+    },
+    {
+      "source": "ai-agents/knowledge-base/architecture.md",
+      "target": "../../CONTRIBUTING.md#test-rules",
+      "exists": true,
+      "anchor_valid": true
+    }
+  ],
+  "residual_classification": {
+    "CONTRIBUTING.md historical idle measurements": "retained dated observations, not gates",
+    "CONTRIBUTING.md policy terms": "explicit current supersession, not restrictions",
+    "architecture.md hop/owner/installer timeout references": "unrelated functional or consultation limits, unchanged",
+    "RELEASING.md quiet references": "unrelated frozen-tag update behavior, unchanged",
+    "CHANGELOG.md new entry": "describes removed gates"
+  },
+  "residual_notes": "Scoped fresh search: retained observations and explicit supersession in CONTRIBUTING; release completed-check/service-limit language and unrelated frozen-tag quiet mode; architecture consultation/hop/no-timeout functional contracts unchanged. Neither workflow retains a timing wrapper or timeout-minutes. CHANGELOG Unreleased readback confirms removal entry.",
+  "wiki_grounding": "systems/testing-and-verification and ADR-057 still describe historical D10; current source/owner ruling supersedes; 12 commits since watermark 185ac5e07e918c089ed3afd23496587315342000; wiki followup needed",
+  "additional_autonomous_fixes_or_obvious_winner_calls": "none"
+}

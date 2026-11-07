@@ -1,0 +1,132 @@
+(node:5981) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/mark.dolbyrev/Workspace/fkit/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[harness] ⚠ testing NON-default launcher via FKIT_LAUNCHER: /var/folders/j8/6zcjvzwx1t5csm7rynmsjlr80000gn/T/tmp.jH3rLFsjKZ/claude-mutant-coldstart-exec/claude/fkit-claude.sh
+▶ Group A — argv contract
+  ✔ 1. role "lead" → --agent fkit-lead --settings .fkit/settings/lead.json
+  ✔ 1. role "producer" → --agent fkit-producer --settings .fkit/settings/producer.json
+  ✔ 1. role "coder" → --agent fkit-coder --settings .fkit/settings/coder.json
+  ✔ 1. role "architect" → --agent fkit-architect --settings .fkit/settings/architect.json
+  ✔ 1. role "reviewer" → --agent fkit-reviewer --settings .fkit/settings/reviewer.json
+  ✔ 1. role "adversarial-reviewer" → --agent fkit-adversarial-reviewer --settings .fkit/settings/adversarial-reviewer.json
+  ✔ 1. role "wiki" → --agent fkit-wiki --settings .fkit/settings/wiki.json
+  ✔ 1b. alias "adv" → fkit-adversarial-reviewer
+  ✔ 1b. alias "adversarial" → fkit-adversarial-reviewer
+  ✔ 2. `fkit --resume` → non-zero, and claude was NEVER exec'd
+  ✔ 3. unknown first arg → non-zero, and claude was NEVER exec'd
+  ✔ 4. `fkit --help` → exit 0, no exec
+  ✔ 5. `fkit update` is not swallowed by the usage-error guard
+  ✔ 6. `fkit coder --debug` → passthrough after a named role
+  ✔ 7. no args, no tty, initiated → --agent fkit-lead
+✔ Group A — argv contract
+▶ Group B — hook wiring
+  ✔ 8. lead: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check)
+  ✔ 8. producer: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check)
+  ✔ 8. coder: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check)
+  ✔ 8. architect: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check)
+  ✔ 8. reviewer: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check)
+  ✔ 8. adversarial-reviewer: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check)
+  ✔ 8. wiki: settings wire all three PreToolUse hooks (Skill lockdown + AskUserQuestion marker + carry check)
+  ✔ 8b. lead: settings wire the Stop turn-completion hook
+  ✔ 8b. producer: settings wire the Stop turn-completion hook
+  ✔ 8b. coder: settings wire the Stop turn-completion hook
+  ✔ 8b. architect: settings wire the Stop turn-completion hook
+  ✔ 8b. reviewer: settings wire the Stop turn-completion hook
+  ✔ 8b. adversarial-reviewer: settings wire the Stop turn-completion hook
+  ✔ 8b. wiki: settings wire the Stop turn-completion hook
+  ✔ 8c. lead: settings wire the UserPromptExpansion ship-loop marker hook
+  ✔ 8c. producer: settings wire the UserPromptExpansion ship-loop marker hook
+  ✔ 8c. coder: settings wire the UserPromptExpansion ship-loop marker hook
+  ✔ 8c. architect: settings wire the UserPromptExpansion ship-loop marker hook
+  ✔ 8c. reviewer: settings wire the UserPromptExpansion ship-loop marker hook
+  ✔ 8c. adversarial-reviewer: settings wire the UserPromptExpansion ship-loop marker hook
+  ✔ 8c. wiki: settings wire the UserPromptExpansion ship-loop marker hook
+  ✔ 9. no role's settings carry a skillOverrides key any more (retired, task 43)
+  ✔ 10. the hook script the settings point at exists on disk
+✔ Group B — hook wiring
+▶ Group C — degradation & fresh-project routing
+  ✔ 11. read-only project → inline --settings carries the hook wiring
+  ✖ 12. fresh project, no role → producer cold-start, then the lead
+  ✖ 12b. fresh project with a completed intake → the intake-aware seed
+  ✔ 12c. cold start that does not initiate → no lead hand-off
+  ✔ 12d. initiated tree but a non-zero cold start → no lead hand-off, code propagated
+✖ Group C — degradation & fresh-project routing
+▶ Group D — plan-review session line
+  ✔ D1. `fkit coder` → the on line, passed by file
+  ✔ D2. `fkit coder --no-plan-review` → consumed; the off line
+  ✔ D3. `fkit coder --plan-review` → a consumed no-op; the on line
+  ✔ D4. both flags together → usage error, claude NEVER exec'd
+  ✔ D5. `fkit lead --no-plan-review` → usage error, claude NEVER exec'd
+  ✔ D5. `fkit architect --plan-review` → usage error, claude NEVER exec'd
+  ✔ D6. the owner's own --append-system-prompt passes through unchanged
+  ✔ D7. `fkit coder --resume` still passes through
+  ✔ D8. after a `--` separator the token is the owner's literal text
+  ✔ D9. `fkit coder --append-system-prompt-file f` → usage error, claude NEVER exec'd
+  ✔ D9. `fkit coder --append-system-prompt-file=f` → usage error, claude NEVER exec'd
+  ✔ D11. the token is taken out even as another option's value
+  ✔ D12. `fkit lead -- --no-plan-review` passes through: no usage error after `--`
+  ✔ D13. the token is taken out wherever it sits; the other args keep their order
+✔ Group D — plan-review session line
+✔ bare first use: real terminal rejects runtime blanks, invalid input, EOF and SIGINT without persistence
+✔ bare first use: invalid configuration, later EOF/SIGINT and declined save never set up or launch
+✔ bare first use: each runtime saves once and continues fresh onboarding or existing-project menu
+✔ bare first use: saved mixed overrides skip configuration, refresh managed files and preserve owner bytes
+✔ bare first use: invalid existing files and unavailable runtimes never reconfigure or launch
+✔ bare first use: management, explicit routes and partial terminal fds preserve their contracts
+✔ bare first use: missing Node stops only the new entry, and old Codex stops before save
+✔ configured runtimes: direct roles select their own CLI/model and preserve saved settings
+✔ configured owner questions: single-field choices and explicit custom answers preserve consent
+✔ configured effort: reset/inherit are distinct and invalid choices preserve saved files
+✔ configured interview: model-specific effort, role customization, blanks and unknown catalogs
+✔ configured runtimes: changing default retains existing role choices and invalid choices never launch
+✔ public dispatcher: an unconfigured project retains the existing Claude launcher contract
+✔ configured delegation: fresh peers use their runtime, model and effort and report observed identity separately
+✔ public dispatcher: legacy path does not invoke Node from PATH; source checkout self-hosts
+✔ lead forwarding entries: native catalog, fixed-caller MCP and repeat setup share role-invariant artifacts
+✔ lead worker transport: exact data, full reports, errors, saved peer settings and topology
+✔ lead owner channel: synthetic decisions wait and preserve cancel, decline and explanation without launching workers
+ℹ tests 75
+ℹ suites 4
+ℹ pass 73
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+
+✖ failing tests:
+
+test at test/launcher-contract.test.js:325:3
+✖ 12. fresh project, no role → producer cold-start, then the lead
+  AssertionError [ERR_ASSERTION]: expected the producer cold start THEN the lead, got 1 claude invocation(s)
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js:330:14)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/launcher-contract.test.js:352:3
+✖ 12b. fresh project with a completed intake → the intake-aware seed
+  AssertionError [ERR_ASSERTION]: expected the intake cold start THEN the lead, got 1 claude invocation(s)
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (file:///Users/mark.dolbyrev/Workspace/fkit/test/launcher-contract.test.js:367:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

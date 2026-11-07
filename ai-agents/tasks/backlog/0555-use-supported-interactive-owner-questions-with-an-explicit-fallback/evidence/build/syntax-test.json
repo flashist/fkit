@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "--check",
+    "test/launcher-contract.test.js"
+  ],
+  "exit": 0
+}

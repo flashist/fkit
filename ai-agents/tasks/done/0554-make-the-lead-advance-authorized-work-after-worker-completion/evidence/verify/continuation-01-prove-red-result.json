@@ -1,0 +1,137 @@
+{
+  "command": "npm run test:prove-red",
+  "scriptChildExit": 0,
+  "executionContext": "Scoped require_escalated accepted; no rejection received. Command used BASH_ENV only for numeric child-exit and sanitized output capture. No source/config/test/mutation changes.",
+  "steps": {
+    "0b": {
+      "step": "0b",
+      "childExit": 0,
+      "counts": {
+        "tests": 75,
+        "suites": 4,
+        "pass": 75,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedNames": [],
+      "output": "continuation-01-step-0b.log",
+      "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+    },
+    "0c": {
+      "step": "0c",
+      "childExit": 0,
+      "counts": {
+        "tests": 260,
+        "suites": 0,
+        "pass": 260,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedNames": [],
+      "output": "continuation-01-step-0c.log",
+      "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+    },
+    "1": {
+      "step": "1",
+      "childExit": 1,
+      "counts": {
+        "tests": 260,
+        "suites": 0,
+        "pass": 258,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedNames": [
+        "matrix: reviewer \u00d7 fkit-review -> allow",
+        "reviewer owns fkit-review -> allow"
+      ],
+      "output": "continuation-01-step-1.log",
+      "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+    },
+    "2": {
+      "step": "2",
+      "childExit": 1,
+      "counts": {
+        "tests": 75,
+        "suites": 4,
+        "pass": 73,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedNames": [
+        "2. `fkit --resume` \u2192 non-zero, and claude was NEVER exec'd",
+        "3. unknown first arg \u2192 non-zero, and claude was NEVER exec'd",
+        "Group A \u2014 argv contract"
+      ],
+      "output": "continuation-01-step-2.log",
+      "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+    },
+    "30": {
+      "step": "30",
+      "childExit": 1,
+      "counts": {
+        "tests": 75,
+        "suites": 4,
+        "pass": 73,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedNames": [
+        "12. fresh project, no role \u2192 producer cold-start, then the lead",
+        "12b. fresh project with a completed intake \u2192 the intake-aware seed",
+        "Group C \u2014 degradation & fresh-project routing"
+      ],
+      "output": "continuation-01-step-30.log",
+      "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+    },
+    "31": {
+      "step": "31",
+      "childExit": 1,
+      "counts": {
+        "tests": 75,
+        "suites": 4,
+        "pass": 72,
+        "fail": 3,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedNames": [
+        "12b. fresh project with a completed intake \u2192 the intake-aware seed",
+        "Group C \u2014 degradation & fresh-project routing",
+        "bare first use: management, explicit routes and partial terminal fds preserve their contracts",
+        "bare first use: saved mixed overrides skip configuration, refresh managed files and preserve owner bytes"
+      ],
+      "output": "continuation-01-step-31.log",
+      "source": "Unchanged test/prove-red.sh invokes unchanged Node suites; Bash evidence function forwards arguments and actual child exit."
+    }
+  },
+  "independentlyReadNamedAssertions": {
+    "M1ReviewerMatrix": true,
+    "M2Resume": true,
+    "M30FreshLead": true,
+    "M30GateNarrowness": true,
+    "M31Intake": true,
+    "M31Narrowness": true
+  },
+  "scriptGate": "PASSED \u2014 both unmutated baselines green; all four existing mutants red at named assertions; script narrowness checks passed.",
+  "originalRestrictedResultRetained": {
+    "scriptChildExit": 1,
+    "failedStep": "0b",
+    "baseline0b": "75 total/74 pass/1 fail; first-use 9 != 15",
+    "cause": "Not established. Scoped pass does not explain restricted failure."
+  },
+  "newPermanentTestFiles": 0,
+  "newTopLevelTestCases": 0,
+  "newProveRedCases": 0
+}

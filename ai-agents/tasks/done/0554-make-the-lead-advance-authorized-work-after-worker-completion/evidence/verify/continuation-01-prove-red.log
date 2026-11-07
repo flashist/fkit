@@ -1,0 +1,12 @@
+
+> fkit@0.4.0-codex.3 test:prove-red
+> bash test/prove-red.sh
+
+0b. unmutated full copy — launcher-contract should be green (rules out red-via-setup-failure) ... green
+0c. unmutated copy hook-matrix suite should be green ... green
+1. broke skills_for_role(reviewer) — matrix "reviewer × fkit-review" should go RED ... red
+2. restored --resume passthrough — assertion 2 (--resume) should go RED ... red
+30. cold start execs the producer — "12. fresh project ... then the lead" should go RED ... red
+31. exec on the intake path only — "12b. fresh project with a completed intake" should go RED ... red
+
+✓ hard gate PASSED — unmutated copies green; each mutation reds its NAMED assertion.

@@ -1,0 +1,12 @@
+node() {
+  local fkit_0554_child_rc=0
+  command node "$@" || fkit_0554_child_rc=$?
+  if [ "${1:-}" = "--test" ] && [ -n "${cur_step:-}" ] && [ -f "${out:-}" ]; then
+    case "$cur_step" in
+      0b|0c|1|2|30|31)
+        command python3 '/Users/mark.dolbyrev/Workspace/fkit/ai-agents/tasks/backlog/0554-make-the-lead-advance-authorized-work-after-worker-completion/evidence/verify/continuation-01-collect-step.py' "$cur_step" "$out" "$fkit_0554_child_rc"
+        ;;
+    esac
+  fi
+  return "$fkit_0554_child_rc"
+}
