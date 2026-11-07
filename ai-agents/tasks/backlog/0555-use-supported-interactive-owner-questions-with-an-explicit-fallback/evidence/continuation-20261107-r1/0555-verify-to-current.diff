@@ -1,0 +1,786 @@
+# Later overlays: all old Verify snapshots -> current recovery-start source captures; not all attributed to 0555.
+# Recovered on 2026-11-07T08:54:24.966330+00:00; complete 17-path snapshot comparison, not original Build output.
+# Endpoints and per-path hashes/attribution are in artifact-manifest.json; unchanged paths have no hunks.
+diff --git a/codex/materialize.mjs b/codex/materialize.mjs
+--- a/codex/materialize.mjs
++++ b/codex/materialize.mjs
+@@ -30,7 +30,7 @@
+   const lines = /^initialPrompt: >-\n((?:  .*\n?)+)/m.exec(header ?? '')?.[1];
+   if (!lines?.trim()) throw Error(`Missing folded initialPrompt for fkit-${role}; restore its startup instructions`);
+   const prompt = lines.trim().split('\n').map(line => line.trim()).join(' ');
+-  return `Begin this interactive fkit-${role} session using the configured runtime binding. The role instructions are already loaded; fkit-${role} is a role name, not a skill to request. Follow the startup instructions below directly. Present the greeting in chat before asking anything. For owner questions, an eligible interactive Codex root uses exposed fkit_roles.fkit_ask_owner with negotiated form support, requests the form and awaits the actual answer. Headless/delegated workers and adversarial leaves return NEEDS-DECISION to the caller; never open owner forms. Capability or request acceptance does not prove display. If missing/unsupported or delivery fails, state the limitation, exact decision and named choices (including the standing explanation option), then wait. If delivery is uncertain, report it as unverified; do not repeatedly resubmit asynchronous requests.\n\n${prompt.replaceAll('.claude/skills/', '.agents/skills/')}`;
++  return `Begin this interactive fkit-${role} session using the configured runtime binding. The role instructions are already loaded; fkit-${role} is a role name, not a skill to request. Follow the startup instructions below directly. Present the greeting in chat before asking anything. For owner questions, an eligible interactive Codex root uses exposed fkit_roles.fkit_ask_owner with negotiated form support, requests one decision per form and awaits the actual answer. Current Codex fkit_ask_owner is single-question: ask sequentially, never a questions array or concatenated decisions. Other supported interfaces may batch separate question objects only with trustworthy identity and within their actual limits. Keep each answer bound to its stable decision key and unchanged scope; plan approval and retry allowance are separate. Headless/delegated workers and adversarial leaves return NEEDS-DECISION to the caller; never open owner forms. Capability or request acceptance does not prove display. If missing/unsupported or delivery fails, state the limitation, exact decision and named choices (including the standing explanation option), then wait. If delivery is uncertain, report it as unverified; do not repeatedly resubmit asynchronous requests.\n\n${prompt.replaceAll('.claude/skills/', '.agents/skills/')}`;
+ }
+ 
+ const reviewPass = `## Step 1 — Run two independent reviewers\n
+@@ -45,9 +45,13 @@
+ Immediately under the verdict, above findings, state **Coverage: <state>** exactly once with per-pass command/results or reason no measurement occurred. Then state pass availability and model identity/diversity separately. Always recommend a different model for a broader second opinion when the two models are the same or diversity is unknown. If the second pass is unusable, place **[PARTIAL — adversarial pass unavailable]** and the reason above findings, with recovery appropriate to the actual failure (not a guessed login error).\n
+ Present: reviewers run/skipped; findings table (# · Reviewer: primary/adversarial/both · each reviewer's raw severity · Verified verdict including any changed severity · Defect/frontier-move · one-liner); Suggestions (not defects) when present; Suppressed-as-settled with ADR pointers; and the convergence recommendation (act or closeout, and why). Preserve the finding-verification rules above. This stateless review writes no ledger; stateful-review owns the ledger workflow.\n\n`;
+ 
+-const ownerDelivery = `- Separate capability, tool exposure, eligibility, request issuance/acceptance, queueing, observed presentation, actual answer and applicable approval. Capability proves request support, not automatic display. Invocation markers, {"accepted":true}, queued notifications and displayed but unanswered forms grant nothing. Claim display only with actual observation; invent no presentation acknowledgment. Unknown delivery remains unverified and the decision pending; do not repeatedly resubmit asynchronous requests or automate activation shortcuts.
+-- Missing/unsupported interface or failed delivery: state the concrete limitation, then use this fallback: "This session exposes no usable automatic owner dialogue. Decision: [exact scope]. Choices: [named alternatives and recommendation; standing explanation option]. Dependent work remains stopped until your answer." Report uncertain delivery as uncertainty. Include Explain more, then ask again, described as Give me more context in simple terms, then re-ask the question. An applicable explicit prose answer settles the unchanged decision without a confirmation form. Bind approval to that unchanged decision/plan, the exact quoted answer, date and actual channel; interface approval never approves implementation.
+-- Preserve ordinary choice submission without text and the separate custom-text form. Return custom text exactly; a custom route alone grants nothing. Never auto-submit a preselected choice. Cancellation, decline, interruption, invalid/empty replies, silence and explanation requests grant no approval. Answer explanation requests in full in chat, open no new question that turn, and re-ask on the owner's next message unless it answers the decision or asks another question. Headless/delegated workers and adversarial leaves return NEEDS-DECISION to their caller, never open owner forms.`;
++const ownerDelivery = `- One independently approvable scope/action per question, each with directly selectable alternatives; never compound plan approval with retry allowance or require free text for listed choices. Group related decisions as separate objects only when the exposed interface supports that shape/count and trustworthy identity; otherwise ask sequentially. Current Codex fkit_ask_owner accepts one {question, options}, no questions array or concatenated questions. Plan approval does not renew exhausted launches; retry permission never approves source. Dependent work requires every applicable approval and allowance; unrelated authorized work follows existing driver rules.
++- Keep a small conversation/checkpoint list: stable decision key, task ID and canonical title where applicable, unchanged scope/revision, question, exact options, recommendation, pending/answered/superseded state and provenance. Persist only through existing driver artifacts after their normal gates; keys are correlation aids, not approval tokens, hooks or a new registry. Bind calls, actual replies, custom follow-ups and re-asks by identity and scope, never list order or repeated labels. Transport request IDs are not semantic consent. Changed scope/option meaning supersedes that version and requires a fresh applicable answer. Retain valid partial answers and every pending item; duplicate-ambiguous or late replies never approve another decision.
++- Recommendation first, marked; append exactly once the standing label Explain more, then ask again, described as Give me more context in simple terms, then re-ask the question. Respect the actual option limit and separate custom-text affordance. Codex takes strings and up to four supplied options (three real plus standing): show the description in preceding visible chat. Structured interfaces use their description field. Never silently drop valid alternatives or merge unrelated effects; return overfull worker sets for faithful narrowing or transparently stage category/subset selection, which authorizes no dependent action before a final exact-scope question. Disclose semantically equivalent consolidation and preserve every placement/dependency knock-on.
++- Headless/delegated workers and adversarial leaves return one prose NEEDS-DECISION {decisions:[{id, question, options, recommendation, context}, ...]} for multiple independent decisions, at most three real options and plain context per item. Legacy NEEDS-DECISION {question, options, recommendation, context} stays valid for one; root assigns its key before asking. This is no new parser or tool API. Omit no item; workers never ask forms. Carry each applicable approval and full approved scope faithfully to its worker; unknown provenance stays unknown, a quote buys fidelity rather than proof.
++- Separate capability, tool exposure, eligibility, request issuance/acceptance, queueing, observed presentation, actual answer and applicable approval. Capability proves request support, not automatic display. Invocation markers, {"accepted":true}, queued notifications and displayed but unanswered forms grant nothing. Claim display only with actual observation; invent no presentation acknowledgment. Unknown delivery remains unverified and the decision pending; do not repeatedly resubmit asynchronous requests or automate activation shortcuts.
++- Missing/unsupported interface or failed delivery: state the concrete limitation, then use this fallback: "This session exposes no usable automatic owner dialogue. Decision: [exact scope]. Choices: [named alternatives and recommendation; standing explanation option]. Dependent work remains stopped until your answer." Report uncertain delivery as uncertainty. Include Explain more, then ask again, described as Give me more context in simple terms, then re-ask the question. An applicable explicit prose answer settles the unchanged decision without a confirmation form. Record each actual approval's key and unchanged scope/plan version, exact quoted selection or actual custom/prose text, date and actual channel in the existing authorized log/checkpoint. Never label prose as a form answer or Write another answer as the substantive custom answer; interface approval never approves implementation. Apply fallback separately per decision, preserving identity/context and pending state.
++- Preserve ordinary choice submission without text and the separate custom-text form. Return custom text exactly; a custom route alone grants nothing. Never auto-submit a preselected choice. Cancellation, decline, interruption, invalid/empty/duplicate-ambiguous replies, silence and explanation requests grant no approval. Answer explanation requests in full in chat, stop all new dialogs for every decision that turn while keeping other valid answers, and on the owner's next message take an applicable answer or answer another question; otherwise re-ask only unresolved decisions. Mixed pick-plus-question: act on the pick only if the answer does not bear on it. Headless/delegated workers and adversarial leaves return NEEDS-DECISION to their caller, never open owner forms.`;
+ 
+ export function bindings(root, role, runtime = 'codex') {
+   if (runtime === 'claude') return `# fkit configured Claude runtime binding
+@@ -57,7 +61,7 @@
+ - Load every fkit procedure through fkit_roles.fkit_skill {name:"fkit-name"}. The fixed-caller dispatcher checks the canonical load-permission map. Shared lead entries forward to their execution owner; follow their early STOP. Native Skill, Agent and Task tools are disabled on this path. Manual file reads remain outside the invocation boundary, not a grant to execute foreign procedures.
+ - Map source Agent/Task/@fkit-role calls to fkit_roles.fkit_consult {role,prompt}, a fresh CLI context with its saved runtime/model. Never fork/resume a coder into review. The dispatcher enforces ordinary two-hop/cycle/leaf checks and the existing plan-fidelity check; that check is not proof of approval. A reviewer uses fkit_adversarial for the fresh leaf second opinion outside the ordinary hop budget. A directly launched adversarial performs its own pass and never wraps another CLI.
+ - Completion returns to the awaiting live turn; this session-scoped helper cannot start a later turn. Consume each bounded return and required artifacts, reconcile completed/outstanding work and checks, then take the next authorized action without an owner continue ping. Empty/whitespace post-adapter responses are errors; nonblank responses, including available partial failures, retain their text within existing output bounds. Claude adapter decoding, blank-result rejection and sanitized failures still apply; raw Claude failure forwarding is not promised. Shell fallback callers must inspect exit status and returned text themselves. Preserve actual owner gates, task/session allowances and spend; exhaustion permits no further launch. At host limits checkpoint honestly and report paused with the real owner resume action, never background progress.
+-- In a supported interactive root Claude session, use native AskUserQuestion and wait for the actual answer. Missing/unusable native dialogue uses the explicit fallback below, never a Codex form substitute. Native EnterPlanMode/ExitPlanMode follow the canonical Claude planning procedure; do not replace them with an assumed Codex equivalent. In headless/consult mode return NEEDS-DECISION to the caller. Cancellation, missing responses and explanation requests never grant approval. Preserve standing approval, exact plan carry, ledger sections and producer-only movers from the source procedures.
++- In a supported interactive root Claude session, use native AskUserQuestion and wait for the actual answer. Missing/unusable native dialogue uses the explicit fallback below, never a Codex form substitute. Native EnterPlanMode/ExitPlanMode follow the canonical Claude planning procedure; do not replace them with an assumed Codex equivalent. In headless/consult mode return each independent decision in the NEEDS-DECISION envelope described below; never ask owner forms. Cancellation, missing responses and explanation requests never grant approval. Preserve standing approval, exact plan carry, ledger sections and producer-only movers from the source procedures.
+ ${ownerDelivery}
+ - Settings in .fkit/model-settings.json resolve at each child launch. Report observed serving models separately from requested IDs. A usable same-model second opinion is supported: visibly say 'Both passes used the same model. A different model is recommended for a broader second opinion.' Unknown identities mean diversity unknown. A missing/unusable pass remains partial. Report actual command/results per pass; reading is reasoning-only.
+ - Claude adversarial sessions have only Read/Glob/Grep built-ins and the owned read-only skill loader; no command, write or consultation tools. Their coverage is reasoning-only. This is a tool restriction, not a claimed Codex OS sandbox. Other configured Claude workers use native automatic permission review headlessly and normal manual permission requests interactively. General role-write ownership remains instructions. Do not bypass a permission denial; return the action and reason. No commit or push authorized.
+@@ -73,7 +77,7 @@
+ - Delegate a bounded task to a fresh role process using the shell command ${command} consult <role> --root ${shellQuote(root)} --prompt-file <path>. Write the task to a unique .fkit/tmp/ prompt file first. Use a quoted path, never interpolate task text into shell syntax. Returned stdout is the peer's response. Keep consults within two hops and never call an ancestor. Adversarial reviewer is a leaf. Native subagents are disabled to keep model selection and session controls on this launch path.
+ - Completion returns to the awaiting live turn; the helper cannot start a later turn. Consume each bounded return and required artifacts, reconcile completed/outstanding work and checks, then take the next authorized action without an owner continue ping. Empty/whitespace post-adapter responses are errors; nonblank responses, including available partial failures, retain their text within existing output bounds. Claude adapter decoding, blank-result rejection and sanitized failures still apply; raw Claude failure forwarding is not promised. Shell fallback callers must inspect exit status and returned text themselves. Preserve actual owner gates, task/session allowances and spend; exhaustion permits no further launch. At host limits checkpoint honestly and report paused with the real owner resume action, never background progress.
+ - 'Agent'/'Task'/'@fkit-role' in source instructions map to that consult command. '$ARGUMENTS' means the owner's skill arguments. '/fkit-name' means load the procedure through fkit_skill and follow it. Do not execute source-code-style slash commands in the shell.
+-- 'Read/Grep/Glob/Write/Edit/Bash' map to available Codex file and shell tools. Only in an eligible interactive root, AskUserQuestion maps to exposed fkit_roles.fkit_ask_owner {question, options} with negotiated form support. Request a form and await the actual response; this is not a presentation guarantee. Valid explicit-form and legacy empty-object capabilities support requests; malformed/absent/URL-only declarations do not. If no usable interface exists, use the explicit fallback below and wait. In a consult/headless run return NEEDS-DECISION {question, options, recommendation, context}; never infer an answer. EnterPlanMode/ExitPlanMode have no assumed equivalent: obey the no-source-write planning gate and state when it is instruction-enforced.
++- 'Read/Grep/Glob/Write/Edit/Bash' map to available Codex file and shell tools. Only in an eligible interactive root, AskUserQuestion maps to exposed fkit_roles.fkit_ask_owner {question, options} with negotiated form support. Request one decision per form and await the actual response; current Codex is single-question and sequential, never a questions array. This is not a presentation guarantee. Valid explicit-form and legacy empty-object capabilities support requests; malformed/absent/URL-only declarations do not. If no usable interface exists, use the explicit fallback below and wait. In a consult/headless run return the separate-decision NEEDS-DECISION envelope below (legacy single-question return remains valid); never infer an answer. EnterPlanMode/ExitPlanMode have no assumed equivalent: obey the no-source-write planning gate and state when it is instruction-enforced.
+ ${ownerDelivery}
+ - The owner disabled fkit's Codex PreToolUse and Stop hooks for the first version; their implementation is retained but not registered. Follow the role, question-tool and next-step instructions without relying on hook reminders. Skill enablement is scoped to this launched session. Wiki-only writes, general role write boundaries and planning gates remain instructions. Normal dispatcher skill ownership, consult topology and plan-fidelity checks are mechanical, but alternate manual paths are not a security boundary. Adversarial review launches read-only. Unsupported elicitation clients retain explicit prose questions that must wait for a real answer. This does not claim complete Claude hook equivalence.
+ - A headless producer uses Codex automatic approval review for sandbox exceptions because terminal movers need protected Git index writes. This keeps workspace-write and submits each requested exception to the approval reviewer; it is not blanket approval. When a required Git command fails on a sandbox boundary, request scoped escalation with a justification. If denied, return the action and stated reason, keep closure pending, and never substitute a manual terminal move. No commit or push is authorized. Other headless roles retain their existing approval policy; adversarial stays read-only.
+diff --git a/codex/README.md b/codex/README.md
+--- a/codex/README.md
++++ b/codex/README.md
+@@ -106,13 +106,48 @@
+ invalid/empty replies and silence grant no approval; no preselection auto-submits.
+ 
+ Historical local CLI rendering/submission/cancellation and worker-relay checks are bounded evidence
+-for the tested path, not certification of every host. **0555 automatic live-display acceptance remains
+-unmet:** root-owned observation must show selectable choices open before any owner activation, then
++for the tested path, not certification of every host. **0555 — Use supported interactive owner questions with an explicit fallback: automatic live-display
++acceptance remains unmet:** root-owned observation must show selectable choices open before any owner activation, then
+ ordinary submission and cancellation. Static inspection and protocol fixtures cannot establish it;
+ fallback alone cannot pass it or permit quiet closure without an actual owner acceptance change.
+-Claude/mixed live compatibility remains unverified. Decision splitting/assembly stays with 0556.
++Claude/mixed live compatibility remains unverified. Independent-decision assembly is described below.
+ 
+ **The first Codex version registers neither fkit PreToolUse nor Stop hooks**, by the owner's 2026-10-29 follow-up ruling. Their implementation and registration code are retained, disabled behind `CODEX_HOOKS_ENABLED = false`, for possible later reactivation after usage feedback. The packaged `hook.mjs` file is dormant. Role/model/effort routing, dispatcher skill ownership, interactive owner forms and the written “What's next?” requirement remain in place; footer/question-tool reminders rely on instructions. Restart an existing session to drop its earlier session-scoped hooks. User-configured Codex hooks and legacy Claude hooks are not modified. Earlier successful hook probes are historical evidence, not active controls. No universal role-file write wall or Codex planning write wall is claimed. [ADR-061](../ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) records the accepted local limits; ADR-042 D2/task 0273 remains outstanding.
++
++Each independently approvable action gets its own concise question and selectable alternatives.
++Current `fkit_ask_owner` accepts one `question` and at most four supplied option strings: up to three
++real choices plus `Explain more, then ask again`, last, once. Put its description,
++`Give me more context in simple terms, then re-ask the question.`, in visible preceding chat;
++recommendation first, marked. Ask sequentially, not with a `questions` array or concatenated choices.
++Other interfaces may batch separate question objects only when their actual shape/count limits and
++trustworthy identity support it; otherwise use the same sequential path. No batch API is added.
++Never silently drop valid alternatives or combine unrelated effects to fit: narrow faithfully or
++transparently stage a category/subset selection that grants no dependent action before the final
++exact-scope question, preserving each option's placement/dependency knock-on.
++
++Workers return one prose `NEEDS-DECISION { decisions: [{ id, question, options, recommendation,
++context }, ...] }`, at most three real options and plain context per item; the legacy single-question
++envelope remains valid. The root retains every item with a stable key, task ID plus canonical title,
++unchanged scope/revision, exact question/options, recommendation, state and answer provenance in the
++conversation and existing gated checkpoints. Keys are correlation aids, not runtime approval tokens
++or a new registry. Bind replies, custom follow-ups and re-asks by identity and unchanged scope, not
++list order or repeated labels; transport IDs alone establish no semantic consent. Accept valid
++partial answers only for their scopes; keep pending items. Changed scope/option meaning supersedes
++the old version and needs a fresh answer. Cancellation, ambiguous/empty results and late replies
++never authorize another decision. Any explanation request stops all new dialogs that turn; explain
++in chat, then on the next owner message take an applicable answer or answer another question;
++otherwise re-ask only unresolved items. Use fallback separately per decision when needed.
++
++Plan approval and retry allowance have separate keys and questions: neither grants the other.
++Record each actual approval's key/scope, quoted selection or exact custom/prose answer, date and
++actual channel in the existing authorized log/checkpoint; unknown provenance stays unknown. Carry
++the applicable approval and full scope faithfully to the next worker. Start dependent work only
++when every needed approval and allowance holds; unrelated authorized work follows existing rules.
++
++**0556 — Give each independent owner decision its own selectable options: behavioral and live-host
++acceptance remain UNVERIFIED.** Static source inspection does not establish two rendered decisions,
++ordinary submission/cancellation, partial/custom answer handling or worker-relay behavior. Execution
++checks are skipped under this checkout's owner test pause; no acceptance waiver or automatic closure.
+ 
+ Owner forms have one answer field. Selecting a listed option submits without a separate comment.
+ “Write another answer” opens a second form containing only a required text answer; choosing that
+diff --git a/claude/agents/fkit-lead.md b/claude/agents/fkit-lead.md
+--- a/claude/agents/fkit-lead.md
++++ b/claude/agents/fkit-lead.md
+@@ -75,18 +75,20 @@
+   unverified; do not repeatedly resubmit asynchronous requests. Capability/exposure, invocation,
+   acceptance, queueing, observed presentation, answer and applicable approval are separate. No marker,
+   accepted/queued request or unanswered form permits dependent work. A spawned worker that hits a decision **returns** it to you as structured text
+-  (`NEEDS-DECISION { question, options, recommendation, context }` — at most 3 options, so you can add
+-  the standing option as the 4th, and a plain-language `context`); **you** do the asking, block on a
+-  real answer, then spawn the next unit with the decision folded in. Workers return questions; they never ask them.
++  (`NEEDS-DECISION { decisions: [{ id, question, options, recommendation, context }, ...] }`
++  for multiple decisions; the legacy single-question envelope stays valid). Each item has at most
++  3 real options and plain context. **You** ask each decision separately, retain unanswered items,
++  and block dependent work until its required answers and allowances apply. Workers never ask forms.
+   **A placement or dependency question names its knock-on.** Every option that puts a task in a sprint
+   (or on the Backlog board) or re-points a `Depends on:` link says which open tasks would then wait on
+   which sprint — the recommended option too, and a `NEEDS-DECISION` as much as an `AskUserQuestion`:
+   [`conventions/placement-questions-state-the-knock-on.md`](../../ai-agents/knowledge-base/conventions/placement-questions-state-the-knock-on.md).
+   Relaying a worker's options: each placement option needs its knock-on or `knock-on: none (checked)`
+   (drop that note when you ask); add any missing one from the briefs, checked this turn, before you ask, and say you added it.
+-  **Relaying a worker's question:** add the standing option last. A worker that returned 4 options
+-  anyway: merge the two least-recommended into one, naming both and keeping both knock-ons in its
+-  description, and say so in chat. If the owner replies with a question, answer it in chat from the
++  **Relaying each worker decision:** add the standing option last, once. An overfull set returns
++  for faithful narrowing or uses transparent non-authorizing stages per the shared convention;
++  never merge unrelated effects or silently drop a valid alternative. If the owner replies with a
++  question, stop all new dialogs that turn and answer it in chat from the
+   worker's context, the brief or the plan; if you cannot, ask a read-only consult of the same role,
+   carrying its `NEEDS-DECISION` verbatim and the owner's question (no write marker, never a live plan
+   pointer line). End the turn, and re-put the same decision as the paragraph below says.
+@@ -96,16 +98,36 @@
+   - **Explain first, in chat:** what the choice is, why it matters, what each option changes — short
+     enough to stay visible above the dialog; if it needs more, explain, end the turn (no question line
+     other than the **What's next?** heading), ask next turn. Keep the question and option descriptions
+-    short; batch related questions; recommended option first, marked.
++    short; one independent decision per question; recommended option first, marked.
+   - **Last option, every question, once:** label `Explain more, then ask again`,
+     description `Give me more context in simple terms, then re-ask the question.`
+-    With 4 real options, merge or drop the weakest so it fits.
++    Respect the actual option limit; never silently drop alternatives or merge unrelated effects.
++    Narrow faithfully or stage selection transparently per the shared convention; staging grants no action.
++  - **Separate decisions and answers:** use separate question objects only if the interface supports
++    that shape/count and trustworthy identity; otherwise ask sequentially (current Codex: one
++    `fkit_ask_owner` call at a time, no `questions` array). Keep a stable key, unchanged scope/options
++    and each actual answer's quote, date and channel; never bind by list order or repeated labels.
++    Retain valid partial answers and pending items. Plan approval and retry allowance are separate;
++    neither grants the other. Any explanation request stops all new dialogs that turn.
++    Workers return one `NEEDS-DECISION { decisions: [{ id, question, options, recommendation, context },
++    ...] }` for multiple decisions, at most 3 real options and plain context per item; the legacy
++    single-question envelope remains valid. Workers never ask forms. Pair owner-visible task IDs
++    with canonical titles; preserve each option's placement/dependency knock-on.
+   - **A reply that is not a choice** — typed text that asks something, or that last option — is not an
+     answer and not consent: answer it in full, in chat (plain words, a concrete example, what each option
+     means in practice); open no new question that turn; end it with no question line other than the
+     **What's next?** heading. Put the same question back on the owner's next message — unless that
+     message is the answer (take it) or another question (answer it the same way). Never write "as
+     explained above".
++  Keep a conversation/checkpoint list of each decision's stable key, task ID and canonical title,
++  scope/revision, question, exact options, recommendation, pending/answered/superseded state and
++  provenance. Persist only in existing driver artifacts after their normal gates. Record actual
++  approvals with the key/scope, quoted selection or exact custom/prose answer, date and actual
++  channel. Carry each applicable approval plus full approved scope to its worker; unknown provenance
++  stays unknown. A changed scope supersedes the old pending version and needs a fresh answer.
++  Request IDs are transport correlation, not semantic consent. Custom follow-ups keep the original
++  decision binding. Plan and retry keys are separate: never offer a compound approval or revive an
++  exhausted allowance through plan approval. Unrelated authorized work may continue under driver rules.
+ - **Spawn typed `fkit-<role>` subagents, never generic helpers.** A non-fkit subagent
+   (`general-purpose`, `Explore`) carries no fkit identity and is denied every `fkit-*` skill by the
+   ADR-018 hook. To run a role's procedures, the worker must **be** that typed role.
+diff --git a/claude/skills/fkit-sprint-ship-loop/SKILL.md b/claude/skills/fkit-sprint-ship-loop/SKILL.md
+--- a/claude/skills/fkit-sprint-ship-loop/SKILL.md
++++ b/claude/skills/fkit-sprint-ship-loop/SKILL.md
+@@ -184,7 +184,7 @@
+ 
+ | Step | Driver spawns | Worker does (bounded, then returns) | Owner gate (driver-held) |
+ |---|---|---|---|
+-| **Plan** | `@fkit-coder` | run `/fkit-plan-task`; **write no source**; return the plan + open questions | **⛔ present plan → `AskUserQuestion` approve/reject** — the unremovable checkpoint (prose-enforced here, see honesty clause); a picked "Explain more, then ask again", or a typed question or request for more information, is not an answer and not approval — answer it in chat and re-put the plan (§3 step 2); **on approval the DRIVER writes the approved text to `<task-folder>/plan.md` verbatim — copied, not re-rendered — BEFORE spawning Build** (ADR-020; mirrors `fkit-task-ship-loop` step 4) |
++| **Plan** | `@fkit-coder` | run `/fkit-plan-task`; **write no source**; return the plan + open questions | **⛔ present plan → `AskUserQuestion` approve/reject** — the unremovable checkpoint (prose-enforced here, see honesty clause); a picked "Explain more, then ask again", or a typed question or request for more information, is not an answer and not approval — answer it in chat and re-put the plan (§3 step 4); keep plan approval separate from every independent open question or retry allowance (§3); **on approval the DRIVER writes the approved text to `<task-folder>/plan.md` verbatim — copied, not re-rendered — BEFORE spawning Build** (ADR-020; mirrors `fkit-task-ship-loop` step 4) |
+ | **Build** | `@fkit-coder` | implement the **approved** plan; write source + `worklog.md` (**`plan.md` already exists — the driver wrote it at approval; never re-author it**); return change surface + any decision surfaced | stop only if the worker returns `NEEDS-DECISION` |
+ | **Verify** | `@fkit-coder` | run the checks this change needs: map the changed paths to the project's checks (its own "what changed → what to run" table if it has one, e.g. in `CONTRIBUTING.md`); when unsure, run the project's default test command — nothing beyond it; name which checks ran and which were skipped, and why — a skipped check is not a passed one; return pass/fail + which checks ran and which were skipped (why) + diagnosis | **budget: 3 no-progress cycles** → `🚧 Blocked — verification` |
+ | **Review** | `@fkit-reviewer` → `/fkit-stateful-review` | own pass + Codex second opinion; write the *Reviewer findings* ledger section; return the verdict | — |
+@@ -386,9 +386,14 @@
+ 
+ ```
+ DONE           { result, changeSurface?, evidence? }              → driver advances
+-NEEDS-DECISION { question, options[], recommendation, context }   → driver relays via AskUserQuestion
++NEEDS-DECISION { decisions: [{ id, question, options, recommendation, context }, ...] }
++                                                               → driver relays each decision separately
+ BLOCKED        { reason, whatFails }                              → driver records status, skips/stops
+ ```
++
++Legacy `NEEDS-DECISION { question, options, recommendation, context }` remains valid for one decision;
++the root assigns its stable key before asking. Multiple independent decisions stay separate inside
++one envelope; never silently omit an item.
+ 
+ This envelope is **prose in the worker's spawn prompt**, not a runtime schema — ADR-021 gives workers no
+ structured owner channel and there is no cross-context type system; the driver parses the worker's final
+@@ -404,30 +409,57 @@
+ Say so in each worker's spawn prompt, beside the envelope: the worker writes it into each placement
+ option of its `NEEDS-DECISION`, or `knock-on: none (checked)` when no open task would wait.
+ 
+-**A `NEEDS-DECISION` carries at most 3 options**, plus a plain-language `context` with enough for the
+-driver to explain the choice without asking the worker back — the driver adds the standing option as
+-the 4th ([`conventions/asking-the-owner.md`](../../../ai-agents/knowledge-base/conventions/asking-the-owner.md)).
++**Each decision item carries at most 3 real options**, its own recommendation and plain-language
++`context` sufficient to explain it — the driver adds the standing option once, last ([`conventions/asking-the-owner.md`](../../../ai-agents/knowledge-base/conventions/asking-the-owner.md)).
+ Say so in each worker's spawn prompt too, beside the envelope, the same way as the knock-on rule.
+ 
+ On `NEEDS-DECISION` the driver:
+ 
+-1. uses the **supported owner interface or explicit fallback** with the returned options (recommendation pre-marked) — relaying a
+-   worker's options, it drops each `knock-on: none (checked)` note, and a placement option with neither
+-   that note nor a knock-on is missing one: it adds it from the briefs, checked this turn, before it asks, saying so — and
+-   adds the standing option `Explain more, then ask again` **last**. A worker that returned 4 options
+-   anyway: the driver merges the two least-recommended into one, naming both and keeping both knock-ons
+-   in its description, and says so in chat — never silently drops an option — and
+-2. **blocks on a real owner answer** — **no timer, no guess**. A reply that is not a choice — a picked
+-   "Explain more, then ask again", or a typed question or request for more information — is not an
+-   answer and not approval: the driver answers it in full, in chat, from the worker's context, the brief
+-   or the plan; if it cannot, it asks a read-only consult of the same role carrying the worker's
+-   `NEEDS-DECISION` verbatim and the owner's question (no declared-approval marker, never a live plan
+-   pointer line). It opens no new question that turn and ends it. Put the same question back on the
+-   owner's next message — unless that message is the answer (take it) or another question (answer it
+-   the same way). Then
+-3. spawns the next authorized worker with the decision folded into its prompt, carrying surviving
+-   task/session allowances and spend. Missing owner-form capability retains explicit-question-and-wait
+-   fallback. Explanation requests, cancellation and silence grant no approval.
++1. retains every item in a small conversation/checkpoint list: stable key (for example
++   `0556-plan-r1`), task ID and canonical title, unchanged scope/revision, question, exact options,
++   recommendation, pending/answered/superseded state and answer provenance. Persist only through
++   existing driver artifacts after their normal gates. These are correlation aids, not runtime
++   tags, an approval token or a new registry.
++2. explains each decision in chat and uses the **supported owner interface or explicit fallback**.
++   Each question names one independently approvable action with its own selectable options and
++   recommendation first. Preserve placement/dependency knock-ons; remove `knock-on: none (checked)`
++   from owner-visible options and fill missing knock-ons from briefs checked this turn, saying so.
++   Add `Explain more, then ask again` last, once, with description
++   `Give me more context in simple terms, then re-ask the question.` Current Codex takes strings:
++   show that description in preceding chat. Structured interfaces use the description field.
++   Never drop valid alternatives or merge unrelated effects for the option limit: return an overfull
++   set for faithful narrowing or transparently stage it under the shared convention. A preliminary
++   category/subset choice authorizes no dependent action; the final question names the exact scope.
++3. groups related items as separate question objects **only if the exposed interface supports that
++   shape/count and trustworthy identity**; otherwise asks sequentially. Current Codex means one
++   `fkit_ask_owner {question, options}` call at a time: no `questions` array, concatenated decisions
++   or compound options. Bind actual replies to stable decision identity and unchanged scope, never
++   list order or repeated labels. Request IDs correlate transport, not semantic consent. Custom
++   follow-ups stay bound to their original decision; preserve the text exactly. Changed scope or
++   changed option meaning supersedes the old version and needs a fresh applicable answer.
++4. **blocks dependent work on real applicable answers** — **no timer, no guess**. Retain valid partial
++   answers for their own scopes and leave every unanswered item pending. Cancellation, decline,
++   interruption, silence, invalid/empty/duplicate-ambiguous results, request acceptance, queueing,
++   presentation and preselection grant nothing; never auto-submit. A late answer never approves a
++   different or changed decision. A custom route alone is not a substantive answer.
++   A typed question, explanation request or standing-option pick gets a full chat answer and stops
++   **all new dialogs for any decision that turn**, retaining other valid answers. Use the worker's
++   context, brief or plan; if insufficient, consult the same role read-only with its envelope and
++   the owner's question verbatim (no write marker or live plan pointer line). On the owner's next
++   message, take an applicable answer or answer another question; otherwise re-ask only unresolved
++   items. For a mixed pick-plus-question, act on the pick only if the answer does not bear on it.
++   Missing/failed dialogue uses a separate explicit fallback for each decision, with key/scope,
++   context, choices and standing option; uncertain delivery stays unverified. Do not repeatedly
++   submit uncertain asynchronous requests or claim fallback meets live-display acceptance.
++5. records each actual approval in the existing authorized decision log/checkpoint: key and exact
++   scope/plan version, quoted selected answer or exact custom/prose text, date and actual channel.
++   Unknown provenance stays unknown; prose is never labelled a form answer, and "Write another
++   answer" is never the substantive custom answer. Carries applicable approval and full approved
++   scope faithfully to the next authorized worker, along with surviving allowances and spend.
++   **Plan approval and retry allowance are independent decisions**, with separate keys/options:
++   approving source never revives exhausted launches; allowing a retry never approves source.
++   Launch only when all required approvals and allowances hold. Unrelated authorized work may
++   continue under the existing driver rules. A quoted relay is trust, not proof.
+ 
+ **This is the opposite of the declined ADR-024 auto-proceed.** It does not remove the owner via a
+ silence-timeout; it **keeps** the owner and merely **consolidates the channel** into this one session.
+@@ -438,8 +470,10 @@
+ resume. A worker return is a reason to consume the result and advance, **not** to idle between steps.
+ Progress messages and "What's next?" footers create no approval gate and require no "continue" ping.
+ Helpers return to an awaiting live turn; they cannot start a later turn. At a foreseeable host pause,
+-save the continuation checkpoint and report **paused** with the actual resume action, never a claim
+-that background work continues. Runtime hook behavior remains as configured; no hook is enabled here.
++save the continuation checkpoint, including each decision's key, unchanged scope/options, state
++and exact answer provenance (pending items included), and report **paused** with the actual resume
++action, never a claim that background work continues. Runtime hook behavior remains as configured;
++no hook is enabled here.
+ 
+ ### 4. Close posture (§5.2 Close row, ADR-032 D5/D6 **as amended by ADR-033 §4/§5**, ADR-025)
+ - **The driver invokes no mover.** It spawns `@fkit-producer` per shipped task; **that producer** runs
+diff --git a/claude/skills/fkit-open-questions-interview/SKILL.md b/claude/skills/fkit-open-questions-interview/SKILL.md
+--- a/claude/skills/fkit-open-questions-interview/SKILL.md
++++ b/claude/skills/fkit-open-questions-interview/SKILL.md
+@@ -67,8 +67,10 @@
+    > question or request for more information, is not an answer — the question stays open.
+ 2. **Check each against later turns.** Was it answered, made moot, or overtaken? Drop those, and drop
+    anything you could resolve yourself.
+-3. **Dedup.** The same question re-asked three times is **one** question. Merge near-duplicates and ask
+-   the merged form.
++3. **Dedup only the same decision and unchanged scope/options.** Repeated asks are one pending
++   decision; shared context or similar labels do not merge independently approvable actions. Retain
++   each stable decision key, scope/revision, options and known answer provenance in the conversation.
++   A changed scope supersedes the old version and needs a fresh applicable answer.
+ 4. **If nothing is open: say so and stop.** *"Nothing outstanding."* **Do not pad the list to justify
+    the invocation** — a clean sweep is a real and useful result.
+ 5. **Otherwise, interview.** Order by what blocks the most work, and for each say **why it matters** —
+@@ -81,17 +83,34 @@
+   exposed negotiated Codex `fkit_roles.fkit_ask_owner`, or supported Claude native `AskUserQuestion`.
+   If missing/unsupported or delivery fails, state the limitation, exact decision and named choices
+   with recommendation and standing option, then wait. Report uncertain delivery as unverified.
+-  **Batch** — up to 4 per supported call, related ones together, rather
+-  than interrogating one at a time. Give options real consequences, and mark a recommendation `(Rec)`
+-  where you have one and can defend it.
+-- **More than 4 open?** Ask the **most blocking 4 first**, then **repeat until the list is empty** — a
+-  second call, a third, as many as it takes. **This is a loop, not one extra round.**
+-  - **State the remaining count in your prose, outside the tool call** — *"4 of 9 below; 5 to follow."*
+-    A count that lives only inside a dialog vanishes the moment it closes.
+-  - **The loop is not cancelled by a change of subject.** If the owner answers 4 and then redirects you
+-    elsewhere, the remaining questions are still open: raise them when that work settles, or say
+-    plainly that you are dropping them and why. **Silently abandoning questions 5+ is the exact failure
+-    this skill exists to fix** — reproducing it inside the fix is the worst possible outcome.
++  Give each independent decision its own concise question and selectable options, recommendation
++  first and the standing `Explain more, then ask again` last, once, described as
++  `Give me more context in simple terms, then re-ask the question.` In string-only Codex, put the
++  description in visible preceding chat. Respect actual option limits and the separate custom-text
++  route. Never silently drop valid alternatives or combine unrelated effects; use the convention's
++  faithful narrowing or transparent non-authorizing stages when needed.
++- **Adapt group size to the exposed interface.** Current Codex asks one `fkit_ask_owner` call at a
++  time, never a `questions` array or concatenated decisions. Batch related decisions as separate
++  objects only when that shape/count and trustworthy identity are supported; otherwise ask
++  sequentially. Bind answers by stable decision identity and unchanged scope, not list order or
++  duplicate labels. Preserve custom text exactly against its original decision; custom routing
++  alone grants nothing. Plan approval and retry permission stay separate.
++- **Retain the unresolved remainder until settled.** Accept valid partial answers only for their own
++  unchanged scopes. Cancellation, decline, interruption, invalid/empty/duplicate-ambiguous results,
++  silence and preselection settle nothing. A late reply never approves another decision. Keep each
++  actual approval's key/scope, quoted answer, date and actual channel in the conversation for the
++  normal caller to use; this interview writes no artifacts. Unknown provenance stays unknown.
++  - State the remaining count in prose outside the call; on current Codex, for example: "1 of 9
++    now; 8 remain." Never abandon items beyond an assumed four-question group.
++  - Any typed question, explanation request or standing-option pick stops **all new dialogs for
++    any decision that turn**. Answer in full in chat, keep other valid answers, and on the owner's
++    next message take an applicable answer or explain another question; otherwise re-ask only
++    unresolved decisions. Do not loop into another item or immediately re-ask after explaining.
++  - A change of subject leaves unresolved decisions open: raise them when that work settles, or
++    say explicitly which ceased to matter and why. Do not silently discard them.
++  - Missing/failed dialogue uses a separate fallback per decision, preserving identity, scope,
++    context and choices; uncertain delivery stays unverified, with no repeated asynchronous asks.
++    Pair owner-visible task IDs with canonical titles and retain each option's dependency knock-on.
+ 
+ > **⚠️ In a spawned consult, do not attempt to interview.** `AskUserQuestion` is **absent** there —
+ > measured `TOOL_ABSENT`, 3/3
+diff --git a/claude/skills/fkit-task-ship-loop/SKILL.md b/claude/skills/fkit-task-ship-loop/SKILL.md
+--- a/claude/skills/fkit-task-ship-loop/SKILL.md
++++ b/claude/skills/fkit-task-ship-loop/SKILL.md
+@@ -175,7 +175,11 @@
+    owner's decision; do not resolve it. If no sprint plan holds the row, the render fails, or it carries
+    `drift unresolved-plan-sprint`, say the check did not run — never that there is no record. (A task
+    on the Backlog board has nothing to check.) Then present the complete plan (+ any open questions)
+-   and wait at **one** owner gate. With review on, preserve `fkit-plan-task`'s presentation order:
++   and wait at the plan-approval gate. Each independent open decision has its own question and
++   selectable options under `conventions/asking-the-owner.md`; never combine plan approval with
++   a retry allowance or another action. Ask sequentially on current Codex (one `fkit_ask_owner` call
++   at a time, no `questions` array). Batch separate objects only with actual interface support and
++   trustworthy identity. With review on, preserve `fkit-plan-task`'s presentation order:
+    any incomplete/fallback banner first → `Plan review: ON (default)` → the unchanged complete plan →
+    three attachments (approvers and classification; revisions and reasons; adversarial findings
+    verbatim with focused coder checks) → the full `===PLAN-REVIEW RECORD BEGIN/END===` block with
+@@ -307,6 +311,27 @@
+ link, each option says which open tasks would then wait on which sprint, the recommended option too:
+ [`conventions/placement-questions-state-the-knock-on.md`](../../../ai-agents/knowledge-base/conventions/placement-questions-state-the-knock-on.md).
+ 
++For every independent stop decision, retain a stable key, task ID and canonical title, unchanged
++scope/revision, question, exact options, recommendation and pending/answered/superseded state in the
++conversation and existing worklog after its normal gate. Respect the real option limit, recommendation
++first and standing option last, once; show its exact description in preceding chat on string-only
++Codex. Never silently drop alternatives or combine unrelated effects; use faithful narrowing or
++transparent non-authorizing selection stages per the shared convention. Bind each actual answer to
++its key and scope, including custom follow-ups, partial answers and late replies; never by order or
++repeated labels. Record each approval's exact quote/custom text, date and actual channel. Changed
++scope/option meaning supersedes the old version and needs a fresh applicable answer; unknown provenance stays
++unknown. Carry the full approved scope and applicable answer faithfully when delegating.
++
++Keep valid answers for their unchanged scopes and every unanswered item pending. Any explanation
++request stops **all new dialogs that turn**: explain in chat, then on the next owner message take an
++applicable answer or answer another question; otherwise re-ask only unresolved items. Cancellation,
++invalid/empty/ambiguous results, silence, request acceptance, presentation or preselection grant
++nothing. Custom routing alone is not an answer; preserve actual custom text exactly. Use explicit
++fallback separately per decision if dialogue is missing/failed; uncertain delivery stays unverified.
++Plan approval does not renew retry allowances, and retry permission does not approve source. Begin
++dependent work only when all its required answers and allowances apply; unrelated authorized work
++continues under existing loop rules. Producer-only closure and the autonomy boundary are unchanged.
++
+ ### The "obvious winner" override
+ Do **not** manufacture an important question out of a no-brainer. Where one option **clearly dominates
+ on the merits** *and* stays **within the approved plan's intent**, **pick it and proceed** — and
+diff --git a/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md b/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+--- a/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
++++ b/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+@@ -28,7 +28,9 @@
+ - **Keep the question and each option description short.** Explanations go in chat, not in dialog
+   fields — except a short required fact, such as a placement option's knock-on, which stays in its
+   description ([`placement-questions-state-the-knock-on.md`](placement-questions-state-the-knock-on.md)).
+-- **Batch related questions** into one call. The **recommended option comes first**, marked.
++- **One question per independent decision**, each with its own selectable alternatives. Group related
++  decisions only as separate question objects when the actual interface supports that shape and
++  count; otherwise ask sequentially. The **recommended option comes first**, marked.
+ 
+ ## Select the supported interface
+ 
+@@ -44,6 +46,39 @@
+ with this fallback when unavailable. Do not silently choose prose while a usable interface exists.
+ No new API, native configuration change, installation or activation shortcut is authorized.
+ 
++## Independent decisions and answer binding
++
++A decision is one independently approvable scope or action. Shared context does not make two decisions
++one: plan approval and permission for more attempts need separate questions and options. Never offer
++"approve the plan and grant two more attempts" or require a combined free-text answer for ordinary
++choices. A retry does not approve source; plan approval does not revive exhausted launches. Start
++dependent work only when every required approval and allowance is satisfied; unrelated authorized
++work may continue under the existing driver rules.
++
++Keep a small conversation/checkpoint list: stable decision key, task ID plus canonical title where
++applicable, unchanged scope/revision, question, exact options, recommendation, pending/answered/
++superseded state and answer provenance. Use existing driver artifacts only after their normal gates.
++Human-readable keys such as `0556-plan-r1` and `0556-retry-r1` are correlation aids, not approval proof,
++new runtime tags, hooks or a persistent registry.
++
++Current Codex `fkit_roles.fkit_ask_owner` accepts **one** `question` and supplied option strings, not a
++`questions` array. Ask one call at a time; never join independent questions or their options in one
++string. Other interfaces may batch separate question objects only within their actual limits and
++with trustworthy question identity. Bind answers by decision identity and unchanged scope, never
++list order or repeated option labels; without trustworthy identity, ask sequentially instead.
++
++Keep that binding through the call, actual response, custom-text follow-up and re-ask. Transport
++request IDs correlate replies to calls; they do not establish semantic approval. Preserve custom
++text exactly against its original decision. A re-ask keeps its key only while scope/options mean
++the same thing; changed scope supersedes that version and requires a fresh applicable answer.
++Duplicate labels, reordered answers and late replies never approve another decision. Accept valid
++partial answers for their unchanged scopes, retain every unanswered item, and leave ambiguous or
++invalid results pending. Record each actual approval's key and scope/plan version, exact quoted
++selected answer or exact prose/custom text, date and actual channel in the existing authorized log
++or checkpoint. Unknown provenance stays unknown. Never relabel prose as a form answer, or record
++"Write another answer" as the substantive custom answer. Carry the applicable answer and full
++approved scope faithfully to the next worker; a quote buys fidelity, not proof.
++
+ ## Delivery and fallback
+ 
+ Capability proves request support, not automatic display. Separate tool exposure and eligibility,
+@@ -53,7 +88,8 @@
+ acknowledgment. Unknown delivery stays unverified and the decision pending. Do not repeatedly
+ resubmit asynchronous requests or use an activation shortcut to pretend an automatic dialogue opened.
+ 
+-If the interface is missing, unsupported or delivery fails, state the concrete limitation and use:
++If the interface is missing, unsupported or delivery fails, state the concrete limitation and use
++this fallback separately for each decision, retaining its key, scope, context and pending state:
+ 
+ > This session exposes no usable automatic owner dialogue. Decision: [exact scope]. Choices:
+ > [named alternatives and recommendation; standing explanation option]. Dependent work remains
+@@ -65,8 +101,9 @@
+ 
+ Ordinary choices submit without mandatory text. A custom-text route alone supplies no answer;
+ wait for the separate text response and preserve it exactly. Never auto-submit a preselected option.
+-Cancellation, decline, interruption, invalid/empty results and silence grant no approval. A late
+-reply counts only if it actually answers the still-current decision; never reuse it for changed scope.
++Cancellation, decline, interruption, invalid/empty/duplicate-ambiguous results and silence grant no
++approval. A late reply counts only if it actually answers the still-current decision; never reuse it
++for changed scope.
+ Record approval against the unchanged decision/plan with the quoted answer, date and actual channel;
+ never label prose as a form response. Approval to use an interface never approves implementation.
+ 
+@@ -78,8 +115,14 @@
+ - description: `Give me more context in simple terms, then re-ask the question.`
+ 
+ - It is the **last** option. The recommended option stays **first**.
+-- The tool allows **at most 4 options**. A question with 4 real options merges or drops the weakest one
+-  so the standing option always fits.
++- Respect the actual interface's option limit and separate custom-text affordance. Current Codex
++  allows **at most 4 supplied options**: up to 3 real alternatives plus the standing one. Its adapter
++  accepts strings, so keep the standing label exact and give its description in visible preceding
++  chat; structured interfaces use their description field. Listed choices need no custom text.
++- Never drop valid alternatives or merge unrelated effects to fit. Return an overfull worker set for
++  a narrower faithful set, or transparently stage selection within the same decision: a preliminary
++  category/subset choice authorizes no dependent action; the final question names the exact scope.
++  Disclose any semantically equivalent consolidation and preserve all placement/dependency knock-ons.
+ - It appears **once**. If your own instructions already add this exact option, add it once.
+ - When the owner picks it, it is *a reply that is not a choice* — below.
+ 
+@@ -90,17 +133,20 @@
+ 
+ 1. **Answer it in full, in chat** — plain words, no new jargon, a concrete example, and what each
+    option means in practice.
+-2. **Open no new question that turn.** End the turn with no question line other than the
++2. **Open no new dialog for any decision that turn.** End the turn with no question line other than the
+    **What's next?** heading; its next step says to reply *"ask again"* when ready.
+-3. **Re-ask:** Put the same question back on the owner's next message — unless that message is the answer (take it) or another question (answer it the same way).
+-   The re-ask carries the same options, plus the standing option again.
++3. **Re-ask:** On the owner's next message, take an applicable answer or answer another question;
++   otherwise re-ask only unresolved decisions, keeping their unchanged scopes and options plus the
++   standing option. Retain the other pending decisions; never restart answered ones.
+ 4. **Never write** *"I've explained X"* or *"as explained above"* — the explanation is the message the
+    owner is reading now.
+ 
+ The mixed cases:
+ 
+-- **A batched call answered in part** — take the answers given, explain the rest, and re-ask only
+-  those.
++- **A supported batch answered in part** — keep valid answers bound to their own unchanged scopes.
++  Retain the unanswered remainder. An explanation request in any item stops all new dialogs that
++  turn, including other decisions; explain in chat and re-ask only unresolved items on the next
++  owner message under the rule above.
+ - **A reply that both picks and asks** — answer the question first. Act on the pick only if the answer
+   does not bear on it; otherwise re-ask.
+ - **The owner answers in prose, outside the dialog** — that is the answer. Take it; do not reopen a
+@@ -113,12 +159,24 @@
+ A spawned worker has no `AskUserQuestion` (it is session-only). It returns its question to whoever
+ spawned it:
+ 
+-- A `NEEDS-DECISION` carries **at most 3 options** — the relayer adds the standing option as the 4th —
+-  and a plain-language `context` with enough for the relayer to explain the choice without asking the
+-  worker back. An open question returned in prose carries the same context.
+-- **A worker returns 4 options anyway:** the relayer merges the two least-recommended into one option,
+-  naming both, and says so in chat. The merged option keeps both options' knock-ons in its
+-  description. Never drop an option silently.
++- Return each independent decision separately, with **at most 3 real options**, its recommendation
++  and plain-language `context` sufficient to explain the choice. Multiple decisions use one prose
++  envelope (not a parser or a tool API):
++
++  ```text
++  NEEDS-DECISION { decisions: [
++    { id, question, options, recommendation, context },
++    { id, question, options, recommendation, context }
++  ] }
++  ```
++
++  Legacy `NEEDS-DECISION { question, options, recommendation, context }` stays valid for one decision;
++  the root assigns a stable key before asking. Do not omit any returned item. An open question in
++  prose carries the same context. Every owner-visible task reference pairs permanent ID with its
++  canonical title; machine paths and dependency grammar stay unchanged.
++- The relayer explains each decision, adds the standing option once and uses interface-aware
++  grouping above. Overfull options follow the transparent narrowing/staging rule, never forced
++  merging or dropping. Each placement/dependency option keeps its own knock-on.
+ - **The owner replies to a relayed question with a question:** the relayer answers in chat from what
+   it holds — the worker's context, the brief, the plan. If it cannot, it asks a read-only consult of
+   the same role, carrying the worker's `NEEDS-DECISION` verbatim and the owner's question (no write
+diff --git a/ai-agents/knowledge-base/conventions/asking-the-owner.md b/ai-agents/knowledge-base/conventions/asking-the-owner.md
+--- a/ai-agents/knowledge-base/conventions/asking-the-owner.md
++++ b/ai-agents/knowledge-base/conventions/asking-the-owner.md
+@@ -28,7 +28,9 @@
+ - **Keep the question and each option description short.** Explanations go in chat, not in dialog
+   fields — except a short required fact, such as a placement option's knock-on, which stays in its
+   description ([`placement-questions-state-the-knock-on.md`](placement-questions-state-the-knock-on.md)).
+-- **Batch related questions** into one call. The **recommended option comes first**, marked.
++- **One question per independent decision**, each with its own selectable alternatives. Group related
++  decisions only as separate question objects when the actual interface supports that shape and
++  count; otherwise ask sequentially. The **recommended option comes first**, marked.
+ 
+ ## Select the supported interface
+ 
+@@ -44,6 +46,39 @@
+ with this fallback when unavailable. Do not silently choose prose while a usable interface exists.
+ No new API, native configuration change, installation or activation shortcut is authorized.
+ 
++## Independent decisions and answer binding
++
++A decision is one independently approvable scope or action. Shared context does not make two decisions
++one: plan approval and permission for more attempts need separate questions and options. Never offer
++"approve the plan and grant two more attempts" or require a combined free-text answer for ordinary
++choices. A retry does not approve source; plan approval does not revive exhausted launches. Start
++dependent work only when every required approval and allowance is satisfied; unrelated authorized
++work may continue under the existing driver rules.
++
++Keep a small conversation/checkpoint list: stable decision key, task ID plus canonical title where
++applicable, unchanged scope/revision, question, exact options, recommendation, pending/answered/
++superseded state and answer provenance. Use existing driver artifacts only after their normal gates.
++Human-readable keys such as `0556-plan-r1` and `0556-retry-r1` are correlation aids, not approval proof,
++new runtime tags, hooks or a persistent registry.
++
++Current Codex `fkit_roles.fkit_ask_owner` accepts **one** `question` and supplied option strings, not a
++`questions` array. Ask one call at a time; never join independent questions or their options in one
++string. Other interfaces may batch separate question objects only within their actual limits and
++with trustworthy question identity. Bind answers by decision identity and unchanged scope, never
++list order or repeated option labels; without trustworthy identity, ask sequentially instead.
++
++Keep that binding through the call, actual response, custom-text follow-up and re-ask. Transport
++request IDs correlate replies to calls; they do not establish semantic approval. Preserve custom
++text exactly against its original decision. A re-ask keeps its key only while scope/options mean
++the same thing; changed scope supersedes that version and requires a fresh applicable answer.
++Duplicate labels, reordered answers and late replies never approve another decision. Accept valid
++partial answers for their unchanged scopes, retain every unanswered item, and leave ambiguous or
++invalid results pending. Record each actual approval's key and scope/plan version, exact quoted
++selected answer or exact prose/custom text, date and actual channel in the existing authorized log
++or checkpoint. Unknown provenance stays unknown. Never relabel prose as a form answer, or record
++"Write another answer" as the substantive custom answer. Carry the applicable answer and full
++approved scope faithfully to the next worker; a quote buys fidelity, not proof.
++
+ ## Delivery and fallback
+ 
+ Capability proves request support, not automatic display. Separate tool exposure and eligibility,
+@@ -53,7 +88,8 @@
+ acknowledgment. Unknown delivery stays unverified and the decision pending. Do not repeatedly
+ resubmit asynchronous requests or use an activation shortcut to pretend an automatic dialogue opened.
+ 
+-If the interface is missing, unsupported or delivery fails, state the concrete limitation and use:
++If the interface is missing, unsupported or delivery fails, state the concrete limitation and use
++this fallback separately for each decision, retaining its key, scope, context and pending state:
+ 
+ > This session exposes no usable automatic owner dialogue. Decision: [exact scope]. Choices:
+ > [named alternatives and recommendation; standing explanation option]. Dependent work remains
+@@ -65,8 +101,9 @@
+ 
+ Ordinary choices submit without mandatory text. A custom-text route alone supplies no answer;
+ wait for the separate text response and preserve it exactly. Never auto-submit a preselected option.
+-Cancellation, decline, interruption, invalid/empty results and silence grant no approval. A late
+-reply counts only if it actually answers the still-current decision; never reuse it for changed scope.
++Cancellation, decline, interruption, invalid/empty/duplicate-ambiguous results and silence grant no
++approval. A late reply counts only if it actually answers the still-current decision; never reuse it
++for changed scope.
+ Record approval against the unchanged decision/plan with the quoted answer, date and actual channel;
+ never label prose as a form response. Approval to use an interface never approves implementation.
+ 
+@@ -78,8 +115,14 @@
+ - description: `Give me more context in simple terms, then re-ask the question.`
+ 
+ - It is the **last** option. The recommended option stays **first**.
+-- The tool allows **at most 4 options**. A question with 4 real options merges or drops the weakest one
+-  so the standing option always fits.
++- Respect the actual interface's option limit and separate custom-text affordance. Current Codex
++  allows **at most 4 supplied options**: up to 3 real alternatives plus the standing one. Its adapter
++  accepts strings, so keep the standing label exact and give its description in visible preceding
++  chat; structured interfaces use their description field. Listed choices need no custom text.
++- Never drop valid alternatives or merge unrelated effects to fit. Return an overfull worker set for
++  a narrower faithful set, or transparently stage selection within the same decision: a preliminary
++  category/subset choice authorizes no dependent action; the final question names the exact scope.
++  Disclose any semantically equivalent consolidation and preserve all placement/dependency knock-ons.
+ - It appears **once**. If your own instructions already add this exact option, add it once.
+ - When the owner picks it, it is *a reply that is not a choice* — below.
+ 
+@@ -90,17 +133,20 @@
+ 
+ 1. **Answer it in full, in chat** — plain words, no new jargon, a concrete example, and what each
+    option means in practice.
+-2. **Open no new question that turn.** End the turn with no question line other than the
++2. **Open no new dialog for any decision that turn.** End the turn with no question line other than the
+    **What's next?** heading; its next step says to reply *"ask again"* when ready.
+-3. **Re-ask:** Put the same question back on the owner's next message — unless that message is the answer (take it) or another question (answer it the same way).
+-   The re-ask carries the same options, plus the standing option again.
++3. **Re-ask:** On the owner's next message, take an applicable answer or answer another question;
++   otherwise re-ask only unresolved decisions, keeping their unchanged scopes and options plus the
++   standing option. Retain the other pending decisions; never restart answered ones.
+ 4. **Never write** *"I've explained X"* or *"as explained above"* — the explanation is the message the
+    owner is reading now.
+ 
+ The mixed cases:
+ 
+-- **A batched call answered in part** — take the answers given, explain the rest, and re-ask only
+-  those.
++- **A supported batch answered in part** — keep valid answers bound to their own unchanged scopes.
++  Retain the unanswered remainder. An explanation request in any item stops all new dialogs that
++  turn, including other decisions; explain in chat and re-ask only unresolved items on the next
++  owner message under the rule above.
+ - **A reply that both picks and asks** — answer the question first. Act on the pick only if the answer
+   does not bear on it; otherwise re-ask.
+ - **The owner answers in prose, outside the dialog** — that is the answer. Take it; do not reopen a
+@@ -113,12 +159,24 @@
+ A spawned worker has no `AskUserQuestion` (it is session-only). It returns its question to whoever
+ spawned it:
+ 
+-- A `NEEDS-DECISION` carries **at most 3 options** — the relayer adds the standing option as the 4th —
+-  and a plain-language `context` with enough for the relayer to explain the choice without asking the
+-  worker back. An open question returned in prose carries the same context.
+-- **A worker returns 4 options anyway:** the relayer merges the two least-recommended into one option,
+-  naming both, and says so in chat. The merged option keeps both options' knock-ons in its
+-  description. Never drop an option silently.
++- Return each independent decision separately, with **at most 3 real options**, its recommendation
++  and plain-language `context` sufficient to explain the choice. Multiple decisions use one prose
++  envelope (not a parser or a tool API):
++
++  ```text
++  NEEDS-DECISION { decisions: [
++    { id, question, options, recommendation, context },
++    { id, question, options, recommendation, context }
++  ] }
++  ```
++
++  Legacy `NEEDS-DECISION { question, options, recommendation, context }` stays valid for one decision;
++  the root assigns a stable key before asking. Do not omit any returned item. An open question in
++  prose carries the same context. Every owner-visible task reference pairs permanent ID with its
++  canonical title; machine paths and dependency grammar stay unchanged.
++- The relayer explains each decision, adds the standing option once and uses interface-aware
++  grouping above. Overfull options follow the transparent narrowing/staging rule, never forced
++  merging or dropping. Each placement/dependency option keeps its own knock-on.
+ - **The owner replies to a relayed question with a question:** the relayer answers in chat from what
+   it holds — the worker's context, the brief, the plan. If it cannot, it asks a read-only consult of
+   the same role, carrying the worker's `NEEDS-DECISION` verbatim and the owner's question (no write
+diff --git a/claude/structure-manifest.tsv b/claude/structure-manifest.tsv
+--- a/claude/structure-manifest.tsv
++++ b/claude/structure-manifest.tsv
+@@ -74,6 +74,7 @@
+ e74c2ed1cf62d33690f55ebedb140d310b65cb341b4a13f8c5a01c5e87024921	ai-agents/knowledge-base/conventions/README.md
+ 6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92	ai-agents/knowledge-base/conventions/asking-the-owner.md
+ 89b96b70b2d61c0bf8085ce3bde862adc58591c34904adbcb5daccb8dd2b9f7c	ai-agents/knowledge-base/conventions/asking-the-owner.md
++f01591d67fe1964309bfd8722c9aa7f51ef644ee17e51385d25f35e71d3a8c38	ai-agents/knowledge-base/conventions/asking-the-owner.md
+ 540b87b7ecab90ee0a15f90a9f9ab0e7f6d6e92d8bda66c6a6a64fa13b343e5d	ai-agents/knowledge-base/conventions/code-comments.md
+ 43cadd2d5451c562c76a8b7d4130a386beb765f4df5b3b47ac25e5460533874e	ai-agents/knowledge-base/conventions/dependency-declaration-form.md
+ 74930dfacfd1844301f112c5a0fd286dc1d86a54b06b34da11061578dbc975ed	ai-agents/knowledge-base/conventions/dependency-declaration-form.md
+diff --git a/CLAUDE.md b/CLAUDE.md
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -54,6 +54,24 @@
+ Role→skill ownership is declared in exactly one place: `skills_for_role()` in
+ `claude/skills-for-role.sh`, sourced by both `claude/fkit-claude.sh` and the `PreToolUse`
+ skill-ownership hook.
++
++## Project-only test execution pause — owner ruling, 2026-11-06
++
++> "Disable ALL tests not only in this session, but in general in this project. No need to remove them completely, but they should not be run"
++
++This standing instruction applies indefinitely to this fkit checkout, overriding generic test and
++verification requirements, including those in inherited briefs, plans, skills and reviews. Do not
++execute any tests: individual tests, mutation tests, discovery, fixtures, smoke tests, benchmarks,
++behavioral probes, saved verification scripts, or delegated runs. Preserve test sources. Use static
++inspection only; record required tests as **"skipped — owner disabled test execution"**, never passed.
++Behavioral acceptance remains unverified. Do not execute disabled commands to prove they refuse,
++and do not run release dry-runs as verification.
++
++Carry this ruling verbatim into every subsequent worker, source-only review and adversarial pass.
++Existing sessions need the ruling explicitly; these file edits do not update instructions they
++already loaded. Re-enabling requires an explicit owner decision and a separate change; there is
++no automatic expiry or environment-variable bypass. This is project-only: do not propagate the pause
++into shipped instructions for consuming projects. See [CONTRIBUTING.md](CONTRIBUTING.md#tests).
+ 
+ <!-- fkit:begin-rules -->
+ <!-- fkit-managed: this block is REPLACED on every `fkit` launch. Edits inside the markers
+diff --git a/AGENTS.md b/AGENTS.md
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -32,6 +32,24 @@
+ 
+ The full project brief — domain, architecture, conventions — lives in
+ [`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).
++
++## Project-only test execution pause — owner ruling, 2026-11-06
++
++> "Disable ALL tests not only in this session, but in general in this project. No need to remove them completely, but they should not be run"
++
++This standing instruction applies indefinitely to this fkit checkout, overriding generic test and
++verification requirements, including those in inherited briefs, plans, skills and reviews. Do not
++execute any tests: individual tests, mutation tests, discovery, fixtures, smoke tests, benchmarks,
++behavioral probes, saved verification scripts, or delegated runs. Preserve test sources. Use static
++inspection only; record required tests as **"skipped — owner disabled test execution"**, never passed.
++Behavioral acceptance remains unverified. Do not execute disabled commands to prove they refuse,
++and do not run release dry-runs as verification.
++
++Carry this ruling verbatim into every subsequent worker, source-only review and adversarial pass.
++Existing sessions need the ruling explicitly; these file edits do not update instructions they
++already loaded. Re-enabling requires an explicit owner decision and a separate change; there is
++no automatic expiry or environment-variable bypass. This is project-only: do not propagate the pause
++into shipped instructions for consuming projects. See [CONTRIBUTING.md](CONTRIBUTING.md#tests).
+ 
+ <!-- fkit:begin-rules -->
+ <!-- fkit-managed: this block is REPLACED on every `fkit` launch. Edits inside the markers
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -10,6 +10,16 @@
+ `git log <old-tag>..<new-tag>`.
+ 
+ ## Unreleased
++
++- Give each independent owner decision its own selectable options and scoped answer. Current Codex
++  asks sequentially; separate-object batches require actual interface support and trustworthy
++  identity. Preserve partial answers and per-decision provenance; plan approval never grants more
++  retries. Behavioral and live-host acceptance remain unverified under this checkout's test pause.
++
++- Pause all test execution in this project indefinitely by owner ruling. Preserve test sources,
++  block npm and direct test entry points, disable CI jobs and hosted workflows, and refuse default
++  release commands (including dry-run). Explicit `--no-test` releases remain unverified and require
++  separate authorization. Verification is static only; consuming-project instructions are unchanged.
+ 
+ - Owner questions use the supported root interface, advertise Codex forms only with negotiated form
+   support, and retain explicit fallback and real-answer waiting when unavailable. Request acceptance

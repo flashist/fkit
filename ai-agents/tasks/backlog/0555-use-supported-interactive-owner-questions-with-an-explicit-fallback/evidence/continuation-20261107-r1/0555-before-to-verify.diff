@@ -1,0 +1,715 @@
+# Recovered historical 0555 delta: all real Build beforeimages -> matching old Verify snapshots.
+# Recovered on 2026-11-07T08:54:24.966330+00:00; complete 17-path snapshot comparison, not original Build output.
+# Endpoints and per-path hashes/attribution are in artifact-manifest.json; unchanged paths have no hunks.
+diff --git a/codex/server.mjs b/codex/server.mjs
+--- a/codex/server.mjs
++++ b/codex/server.mjs
+@@ -86,7 +86,7 @@
+       const tools = [{ name: 'fkit_skill', description: 'Load one allowed fkit entry using fixed caller identity. Shared lead entries forward; producer/wiki retain execution duties.', annotations: { readOnlyHint: true }, inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Exact fkit skill name' } }, required: ['name'], additionalProperties: false } }];
+       if (caller !== 'adversarial-reviewer') tools.push({ name: 'fkit_consult', description: 'Consult a fresh fkit role with its configured model. Workers return decisions to caller. Two hops maximum; no cycles; adversarial is a leaf.', inputSchema: { ...promptSchema, properties: { ...promptSchema.properties, role: { type: 'string', enum: ROLES } }, required: ['role', 'prompt'] } });
+       if (caller === 'reviewer') tools.push({ name: 'fkit_adversarial', description: 'Run the reviewer independent read-only second opinion in a fresh context. Does not consume an ordinary consult hop; the adversarial role remains a leaf.', inputSchema: promptSchema });
+-      if (caller !== 'adversarial-reviewer' && mode === 'interactive' && chain.length === 1) tools.push({ name: 'fkit_ask_owner', description: 'Ask the owner a structured question and wait for the actual response. Choices submit without a comment field; Write another answer opens a separate text question. No inferred approval. Never request credentials.', inputSchema: { type: 'object', properties: { question: { type: 'string' }, options: { type: 'array', items: { type: 'string' }, maxItems: 4 } }, required: ['question'], additionalProperties: false } });
++      if (caller !== 'adversarial-reviewer' && mode === 'interactive' && chain.length === 1 && questions.supported) tools.push({ name: 'fkit_ask_owner', description: 'Request an owner form and wait for the actual response. Capability and request acceptance do not prove display or approval. Choices submit without a comment field; Write another answer opens a separate text question. Never request credentials.', inputSchema: { type: 'object', properties: { question: { type: 'string' }, options: { type: 'array', items: { type: 'string' }, maxItems: 4 } }, required: ['question'], additionalProperties: false } });
+       result = { tools };
+     }
+     else if (request.method === 'tools/call' && request.params?.name === 'fkit_skill') {
+diff --git a/codex/owner-question.mjs b/codex/owner-question.mjs
+--- a/codex/owner-question.mjs
++++ b/codex/owner-question.mjs
+@@ -4,18 +4,19 @@
+   constructor(send) { this.send = send; this.pending = new Map(); this.supported = false; }
+   initialize(capabilities) {
+     const elicitation = capabilities?.elicitation;
+-    this.supported = !!elicitation && typeof elicitation === 'object' && ('form' in elicitation || Object.keys(elicitation).length === 0);
++    const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
++    this.supported = object(elicitation) && (Object.keys(elicitation).length === 0 || object(elicitation.form));
+   }
+   respond(message) {
+     const waiting = this.pending.get(message.id);
+     if (!waiting) return false;
+     this.pending.delete(message.id);
+-    if (message.error) waiting.reject(Error('Owner question could not be presented; no answer or approval was received'));
++    if (message.error) waiting.reject(Error('Owner question delivery failed or is unverified; no answer or approval was received. State the limitation, list the decision and choices explicitly, and wait.'));
+     else waiting.resolve(message.result);
+     return true;
+   }
+   async ask(args, requestId) {
+-    if (!this.supported) throw Error('This Codex client does not advertise MCP elicitation. Ask the owner explicitly and wait; no approval was received.');
++    if (!this.supported) throw Error('This session exposes no usable automatic owner dialogue: the client does not advertise MCP form support. State the decision and choices explicitly and wait; no approval was received.');
+     if (!args || typeof args.question !== 'string' || !args.question.trim() || args.question.length > 8000) throw Error('Expected a concise owner question');
+     const options = args.options ?? [];
+     if (!Array.isArray(options) || options.length > 4 || options.some(x => typeof x !== 'string' || !x.trim() || x.length > 1000) || new Set(options).size !== options.length) throw Error('Expected up to four distinct answer options');
+@@ -27,16 +28,23 @@
+     const request = (field, message) => new Promise((resolve, reject) => {
+       const id = `fkit-owner-${randomUUID()}`;
+       this.pending.set(id, { resolve, reject, requestId });
+-      this.send({ jsonrpc: '2.0', id, method: 'elicitation/create', params: { mode: 'form', message, requestedSchema: { type: 'object', properties: { answer: field }, required: ['answer'] } } });
++      try {
++        this.send({ jsonrpc: '2.0', id, method: 'elicitation/create', params: { mode: 'form', message, requestedSchema: { type: 'object', properties: { answer: field }, required: ['answer'] } } });
++      } catch {
++        this.pending.delete(id);
++        reject(Error('Owner question delivery failed or is unverified; ask explicitly and wait. No answer or approval was received.'));
++      }
+     });
+     const result = await request(answer, args.question);
+-    if (!result || result.action !== 'accept') return { action: result?.action ?? 'cancel', answered: false, instruction: 'No approval or answer received. Keep dependent work stopped.' };
++    if (!['accept', 'cancel', 'decline'].includes(result?.action)) throw Error('Invalid owner response; delivery is unverified and no answer or approval may be inferred. Keep dependent work stopped.');
++    if (result.action !== 'accept') return { action: result.action, answered: false, instruction: 'No approval or answer received. Keep dependent work stopped.' };
+     const content = result.content;
+     if (!content || typeof content.answer !== 'string' || !content.answer.trim() || (answer.enum && !answer.enum.includes(content.answer))) throw Error('Invalid owner response; no approval may be inferred');
+     let comment = '';
+     if (options.length && content.answer === custom) {
+       const text = await request({ type: 'string', title: 'Write your answer', minLength: 1 }, args.question);
+-      if (!text || text.action !== 'accept') return { action: text?.action ?? 'cancel', answered: false, instruction: 'No custom answer or approval received. Keep dependent work stopped.' };
++      if (!['accept', 'cancel', 'decline'].includes(text?.action)) throw Error('Invalid custom owner response; delivery is unverified and no answer or approval may be inferred. Keep dependent work stopped.');
++      if (text.action !== 'accept') return { action: text.action, answered: false, instruction: 'No custom answer or approval received. Keep dependent work stopped.' };
+       if (typeof text.content?.answer !== 'string' || !text.content.answer.trim()) return { action: 'accept', answered: false, instruction: 'No custom answer received. Clarify; keep dependent work stopped.' };
+       comment = text.content.answer;
+     }
+diff --git a/codex/materialize.mjs b/codex/materialize.mjs
+--- a/codex/materialize.mjs
++++ b/codex/materialize.mjs
+@@ -30,7 +30,7 @@
+   const lines = /^initialPrompt: >-\n((?:  .*\n?)+)/m.exec(header ?? '')?.[1];
+   if (!lines?.trim()) throw Error(`Missing folded initialPrompt for fkit-${role}; restore its startup instructions`);
+   const prompt = lines.trim().split('\n').map(line => line.trim()).join(' ');
+-  return `Begin this interactive fkit-${role} session using the configured runtime binding. The role instructions are already loaded; fkit-${role} is a role name, not a skill to request. Follow the startup instructions below directly. Present the greeting in chat before asking anything. For an owner question use fkit_roles.fkit_ask_owner if available, otherwise ask explicitly and wait.\n\n${prompt.replaceAll('.claude/skills/', '.agents/skills/')}`;
++  return `Begin this interactive fkit-${role} session using the configured runtime binding. The role instructions are already loaded; fkit-${role} is a role name, not a skill to request. Follow the startup instructions below directly. Present the greeting in chat before asking anything. For owner questions, an eligible interactive Codex root uses exposed fkit_roles.fkit_ask_owner with negotiated form support, requests the form and awaits the actual answer. Headless/delegated workers and adversarial leaves return NEEDS-DECISION to the caller; never open owner forms. Capability or request acceptance does not prove display. If missing/unsupported or delivery fails, state the limitation, exact decision and named choices (including the standing explanation option), then wait. If delivery is uncertain, report it as unverified; do not repeatedly resubmit asynchronous requests.\n\n${prompt.replaceAll('.claude/skills/', '.agents/skills/')}`;
+ }
+ 
+ const reviewPass = `## Step 1 — Run two independent reviewers\n
+@@ -45,6 +45,10 @@
+ Immediately under the verdict, above findings, state **Coverage: <state>** exactly once with per-pass command/results or reason no measurement occurred. Then state pass availability and model identity/diversity separately. Always recommend a different model for a broader second opinion when the two models are the same or diversity is unknown. If the second pass is unusable, place **[PARTIAL — adversarial pass unavailable]** and the reason above findings, with recovery appropriate to the actual failure (not a guessed login error).\n
+ Present: reviewers run/skipped; findings table (# · Reviewer: primary/adversarial/both · each reviewer's raw severity · Verified verdict including any changed severity · Defect/frontier-move · one-liner); Suggestions (not defects) when present; Suppressed-as-settled with ADR pointers; and the convergence recommendation (act or closeout, and why). Preserve the finding-verification rules above. This stateless review writes no ledger; stateful-review owns the ledger workflow.\n\n`;
+ 
++const ownerDelivery = `- Separate capability, tool exposure, eligibility, request issuance/acceptance, queueing, observed presentation, actual answer and applicable approval. Capability proves request support, not automatic display. Invocation markers, {"accepted":true}, queued notifications and displayed but unanswered forms grant nothing. Claim display only with actual observation; invent no presentation acknowledgment. Unknown delivery remains unverified and the decision pending; do not repeatedly resubmit asynchronous requests or automate activation shortcuts.
++- Missing/unsupported interface or failed delivery: state the concrete limitation, then use this fallback: "This session exposes no usable automatic owner dialogue. Decision: [exact scope]. Choices: [named alternatives and recommendation; standing explanation option]. Dependent work remains stopped until your answer." Report uncertain delivery as uncertainty. Include Explain more, then ask again, described as Give me more context in simple terms, then re-ask the question. An applicable explicit prose answer settles the unchanged decision without a confirmation form. Bind approval to that unchanged decision/plan, the exact quoted answer, date and actual channel; interface approval never approves implementation.
++- Preserve ordinary choice submission without text and the separate custom-text form. Return custom text exactly; a custom route alone grants nothing. Never auto-submit a preselected choice. Cancellation, decline, interruption, invalid/empty replies, silence and explanation requests grant no approval. Answer explanation requests in full in chat, open no new question that turn, and re-ask on the owner's next message unless it answers the decision or asks another question. Headless/delegated workers and adversarial leaves return NEEDS-DECISION to their caller, never open owner forms.`;
++
+ export function bindings(root, role, runtime = 'codex') {
+   if (runtime === 'claude') return `# fkit configured Claude runtime binding
+ 
+@@ -53,7 +57,8 @@
+ - Load every fkit procedure through fkit_roles.fkit_skill {name:"fkit-name"}. The fixed-caller dispatcher checks the canonical load-permission map. Shared lead entries forward to their execution owner; follow their early STOP. Native Skill, Agent and Task tools are disabled on this path. Manual file reads remain outside the invocation boundary, not a grant to execute foreign procedures.
+ - Map source Agent/Task/@fkit-role calls to fkit_roles.fkit_consult {role,prompt}, a fresh CLI context with its saved runtime/model. Never fork/resume a coder into review. The dispatcher enforces ordinary two-hop/cycle/leaf checks and the existing plan-fidelity check; that check is not proof of approval. A reviewer uses fkit_adversarial for the fresh leaf second opinion outside the ordinary hop budget. A directly launched adversarial performs its own pass and never wraps another CLI.
+ - Completion returns to the awaiting live turn; this session-scoped helper cannot start a later turn. Consume each bounded return and required artifacts, reconcile completed/outstanding work and checks, then take the next authorized action without an owner continue ping. Empty/whitespace post-adapter responses are errors; nonblank responses, including available partial failures, retain their text within existing output bounds. Claude adapter decoding, blank-result rejection and sanitized failures still apply; raw Claude failure forwarding is not promised. Shell fallback callers must inspect exit status and returned text themselves. Preserve actual owner gates, task/session allowances and spend; exhaustion permits no further launch. At host limits checkpoint honestly and report paused with the real owner resume action, never background progress.
+-- In an interactive root Claude session, ask the owner with native AskUserQuestion and wait for the actual answer. Native EnterPlanMode/ExitPlanMode follow the canonical Claude planning procedure; do not replace them with an assumed Codex equivalent. In headless/consult mode return NEEDS-DECISION to the caller. Cancellation, missing responses and explanation requests never grant approval. Preserve standing approval, exact plan carry, ledger sections and producer-only movers from the source procedures.
++- In a supported interactive root Claude session, use native AskUserQuestion and wait for the actual answer. Missing/unusable native dialogue uses the explicit fallback below, never a Codex form substitute. Native EnterPlanMode/ExitPlanMode follow the canonical Claude planning procedure; do not replace them with an assumed Codex equivalent. In headless/consult mode return NEEDS-DECISION to the caller. Cancellation, missing responses and explanation requests never grant approval. Preserve standing approval, exact plan carry, ledger sections and producer-only movers from the source procedures.
++${ownerDelivery}
+ - Settings in .fkit/model-settings.json resolve at each child launch. Report observed serving models separately from requested IDs. A usable same-model second opinion is supported: visibly say 'Both passes used the same model. A different model is recommended for a broader second opinion.' Unknown identities mean diversity unknown. A missing/unusable pass remains partial. Report actual command/results per pass; reading is reasoning-only.
+ - Claude adversarial sessions have only Read/Glob/Grep built-ins and the owned read-only skill loader; no command, write or consultation tools. Their coverage is reasoning-only. This is a tool restriction, not a claimed Codex OS sandbox. Other configured Claude workers use native automatic permission review headlessly and normal manual permission requests interactively. General role-write ownership remains instructions. Do not bypass a permission denial; return the action and reason. No commit or push authorized.
+ - This configured Claude path uses only its supplied fkit MCP server; user MCP settings are not modified. No Codex hook trust or full legacy hook-equivalence claim applies here. Owned procedure invocation is checked by the dispatcher independently of native hooks.
+@@ -68,13 +73,14 @@
+ - Delegate a bounded task to a fresh role process using the shell command ${command} consult <role> --root ${shellQuote(root)} --prompt-file <path>. Write the task to a unique .fkit/tmp/ prompt file first. Use a quoted path, never interpolate task text into shell syntax. Returned stdout is the peer's response. Keep consults within two hops and never call an ancestor. Adversarial reviewer is a leaf. Native subagents are disabled to keep model selection and session controls on this launch path.
+ - Completion returns to the awaiting live turn; the helper cannot start a later turn. Consume each bounded return and required artifacts, reconcile completed/outstanding work and checks, then take the next authorized action without an owner continue ping. Empty/whitespace post-adapter responses are errors; nonblank responses, including available partial failures, retain their text within existing output bounds. Claude adapter decoding, blank-result rejection and sanitized failures still apply; raw Claude failure forwarding is not promised. Shell fallback callers must inspect exit status and returned text themselves. Preserve actual owner gates, task/session allowances and spend; exhaustion permits no further launch. At host limits checkpoint honestly and report paused with the real owner resume action, never background progress.
+ - 'Agent'/'Task'/'@fkit-role' in source instructions map to that consult command. '$ARGUMENTS' means the owner's skill arguments. '/fkit-name' means load the procedure through fkit_skill and follow it. Do not execute source-code-style slash commands in the shell.
+-- 'Read/Grep/Glob/Write/Edit/Bash' map to available Codex file and shell tools. In an interactive root session AskUserQuestion maps to fkit_roles.fkit_ask_owner {question, options}; it presents an MCP form and waits for the actual owner response. If the client does not support it, ask explicitly and WAIT for the answer. Decline/cancel/error/timeouts give no approval. In a consult/headless run return NEEDS-DECISION {question, options, recommendation, context}; never infer an answer. EnterPlanMode/ExitPlanMode have no assumed equivalent: obey the no-source-write planning gate and state when it is instruction-enforced.
++- 'Read/Grep/Glob/Write/Edit/Bash' map to available Codex file and shell tools. Only in an eligible interactive root, AskUserQuestion maps to exposed fkit_roles.fkit_ask_owner {question, options} with negotiated form support. Request a form and await the actual response; this is not a presentation guarantee. Valid explicit-form and legacy empty-object capabilities support requests; malformed/absent/URL-only declarations do not. If no usable interface exists, use the explicit fallback below and wait. In a consult/headless run return NEEDS-DECISION {question, options, recommendation, context}; never infer an answer. EnterPlanMode/ExitPlanMode have no assumed equivalent: obey the no-source-write planning gate and state when it is instruction-enforced.
++${ownerDelivery}
+ - The owner disabled fkit's Codex PreToolUse and Stop hooks for the first version; their implementation is retained but not registered. Follow the role, question-tool and next-step instructions without relying on hook reminders. Skill enablement is scoped to this launched session. Wiki-only writes, general role write boundaries and planning gates remain instructions. Normal dispatcher skill ownership, consult topology and plan-fidelity checks are mechanical, but alternate manual paths are not a security boundary. Adversarial review launches read-only. Unsupported elicitation clients retain explicit prose questions that must wait for a real answer. This does not claim complete Claude hook equivalence.
+ - A headless producer uses Codex automatic approval review for sandbox exceptions because terminal movers need protected Git index writes. This keeps workspace-write and submits each requested exception to the approval reviewer; it is not blanket approval. When a required Git command fails on a sandbox boundary, request scoped escalation with a justification. If denied, return the action and stated reason, keep closure pending, and never substitute a manual terminal move. No commit or push is authorized. Other headless roles retain their existing approval policy; adversarial stays read-only.
+ - Runtime/model settings come from .fkit/model-settings.json, resolved separately for every role process. Reviewer's fkit_adversarial tool runs an independent leaf pass outside the ordinary two-hop consultation budget, matching the former external CLI pass. Do not run raw codex/claude wrappers from a review skill. Do not fork or resume coder context into review. A directly launched adversarial-reviewer performs its own pass, never launches itself.
+ - Review reporting: a usable same-model adversarial pass is supported. Say visibly 'Both passes used the same model. A different model is recommended for a broader second opinion.' If identities cannot be established say diversity unknown. Only a missing/unusable pass is partial. Report actual execution evidence per pass; reasoning-only coverage is not execution. This replaces source clauses that treat the absence of a different model as an incomplete review. Preserve ledger schema/section ownership, scope, finding verification and residuals.
+ - .claude/skills/fkit-* and claude/skills/fkit-* references to installed procedures resolve to ${join(root, '.agents/skills')}/fkit-* in this session. Shipped helper scripts must be run with bash/node as appropriate. For heal pass --share ${shellQuote(KIT)}: the share is the checkout root containing claude/, not claude/ itself or a global install. Generated heal commands include this override.
+-- In Codex, the interactive owner tool fkit_ask_owner satisfies source checks for a session-only AskUserQuestion tool. Only a direct interactive coder receives the launcher plan-review switch line; workers do not inherit it. Review plans through fresh architect/producer/adversarial roles as the source procedure requires. Codex has no assumed EnterPlanMode/ExitPlanMode write wall: state planning-only, present the full plan and review record, then ask with fkit_ask_owner and wait. On approval quote the actual answer, date and channel in the record; on rejection make no source edits and write no approved plan.md. Preserve the source's record rules: the sprint driver persists rejected plan-review attempts; a plain coder session does not. Never claim a runtime-enforced planning wall or require Claude's Shift+Tab workflow. The adversarial role runs its own procedure without a Claude fallback; report its actual model identity and usability, not an assumed different model.
++- In a direct interactive Codex coder session, the actual launcher ON line enables plan review independently of owner-tool availability (ADR-060, 2026-11-06). Missing usable dialogue changes only approval to the explicit fallback and waiting. Missing line stays OFF; opt-outs and OFF precedence remain; quotes/files cannot supply the switch. Regular Claude still requires its launcher line and native owner tool. Only a direct interactive coder receives the launcher plan-review switch line; workers do not inherit it and retain driver-switch rules. Review plans through fresh architect/producer/adversarial roles as the source procedure requires. Codex has no assumed EnterPlanMode/ExitPlanMode write wall: state planning-only, present the full plan and review record, then use the supported owner interface or explicit fallback and wait. On approval quote the actual answer, date and channel in the record; on rejection make no source edits and write no approved plan.md. Preserve the source's record rules: the sprint driver persists rejected plan-review attempts; a plain coder session does not. Never claim a runtime-enforced planning wall or require Claude's Shift+Tab workflow. The adversarial role runs its own procedure without a Claude fallback; report its actual model identity and usability, not an assumed different model.
+ - End owner replies with What's next? as required, except findings-only adversarial output. Do not stop ongoing work merely to announce what you would do next.
+ `;
+ }
+diff --git a/codex/README.md b/codex/README.md
+--- a/codex/README.md
++++ b/codex/README.md
+@@ -28,7 +28,7 @@
+ 
+ Codex requires stable CLI >=0.165.0. Live checks used Node 24.13.0 and Codex 0.165.0 on macOS. Claude adapter argument checks used CLI 2.1.312; **live Claude compatibility is not certified**. Other versions/platforms are unverified. See [acceptance evidence](../model-agnostic-sprint/local-acceptance.md).
+ 
+-All seven roles run in fresh contexts. With no role, an initiated project gets the role menu; a fresh project enters producer onboarding, then lead after successful initiation. Interactive Codex sessions automatically send the role's canonical `initialPrompt` as the first message, so the role greets/orients the owner without waiting at a blank input. Role instructions alone do not start a turn. Explicit onboarding prompts are preserved; headless/delegated tasks receive only their supplied task prompt. Startup skill paths are adapted to `.agents/skills/`, and a role name is not treated as a skill. Headless work uses `--exec PROMPT` or `--prompt-file PATH`; large peer prompts use stdin. Direct interactive coder sessions receive the default plan-review signal; `--no-plan-review` opts out, `--plan-review` keeps it. Workers use their driver's standing approval and switch line. The owner gate remains required.
++All seven roles run in fresh contexts. With no role, an initiated project gets the role menu; a fresh project enters producer onboarding, then lead after successful initiation. Interactive Codex sessions automatically send the role's canonical `initialPrompt` as the first message, so the role greets/orients the owner without waiting at a blank input. Role instructions alone do not start a turn. Explicit onboarding prompts are preserved; headless/delegated tasks receive only their supplied task prompt. Startup skill paths are adapted to `.agents/skills/`, and a role name is not treated as a skill. Headless work uses `--exec PROMPT` or `--prompt-file PATH`; large peer prompts use stdin. Direct interactive Codex coder sessions receive the default plan-review signal; their actual launcher ON line enables review independently of owner-tool availability (ADR-060, 2026-11-06). Missing usable dialogue changes only approval to explicit fallback and waiting. Missing line stays OFF, `--no-plan-review` opts out, OFF wins conflicting lines, and quoted/file signals are ineffective; `--plan-review` cannot override an opt-out. Regular Claude still requires its actual launcher line and native owner tool. Workers retain their driver's standing approval and switch rules, with no direct-session switch or owner asking. The owner gate remains required.
+ 
+ Every configured role loads procedures through `fkit_roles.fkit_skill`, checked against `claude/skills-for-role.sh`. Native catalog scoping is additional discovery control.
+ The same three skill names are loadable by lead as forwarding entries: `fkit-status` delegates to
+@@ -75,7 +75,44 @@
+ is deferred to the [verifier handoff](../model-agnostic-sprint/validation.md); it is not a prerequisite
+ for local Codex-only use. No external verifier is currently assigned and no Claude success is claimed.
+ 
+-Codex root owner questions use actual MCP form elicitation and wait. Cancellation, decline, interruption, invalid replies and explanation requests grant no approval. Headless workers return NEEDS-DECISION. Unsupported clients ask explicitly and wait. Actual CLI form rendering/submission/cancellation and worker relay passed. **The first Codex version registers neither fkit PreToolUse nor Stop hooks**, by the owner's 2026-10-29 follow-up ruling. Their implementation and registration code are retained, disabled behind `CODEX_HOOKS_ENABLED = false`, for possible later reactivation after usage feedback. The packaged `hook.mjs` file is dormant. Role/model/effort routing, dispatcher skill ownership, interactive owner forms and the written “What's next?” requirement remain in place; footer/question-tool reminders rely on instructions. Restart an existing session to drop its earlier session-scoped hooks. User-configured Codex hooks and legacy Claude hooks are not modified. Earlier successful hook probes are historical evidence, not active controls. No universal role-file write wall or Codex planning write wall is claimed. [ADR-061](../ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) records the accepted local limits; ADR-042 D2/task 0273 remains outstanding.
++Owner questions select the supported interface:
++
++| Session/path | Interface and gate |
++| --- | --- |
++| Eligible interactive Codex root, exposed tool and negotiated form support | `fkit_roles.fkit_ask_owner`; request a form and await the actual answer |
++| Supported interactive Claude root | Native `AskUserQuestion`; await the actual answer |
++| Missing/unsupported interface or failed delivery | State the concrete limitation; explicit fallback and waiting |
++| Headless/delegated worker or adversarial leaf | Return `NEEDS-DECISION`; never open owner forms |
++
++Advertisement requires root eligibility **and** negotiated form support; direct calls retain both
++guards. Valid explicit-form (`elicitation: {form: {}}`) and legacy empty-object (`elicitation: {}`)
++capabilities support requests. Absent, malformed and URL-only declarations do not. No capability API
++or host configuration is added. Capability proves request support, not automatic display.
++
++Separate capability, tool exposure, eligibility, request issuance/acceptance, queueing, observed
++presentation, actual answer and applicable approval. Invocation markers, `{"accepted":true}`, queued
++notifications and displayed but unanswered forms grant nothing. Claim display only with actual
++observation; there is no presentation acknowledgment. Unknown delivery remains unverified and the
++decision pending; do not repeatedly resubmit asynchronous requests or automate activation shortcuts.
++
++Fallback: “This session exposes no usable automatic owner dialogue. Decision: [exact scope]. Choices:
++[named alternatives and recommendation; standing explanation option]. Dependent work remains stopped
++until your answer.” State delivery uncertainty as uncertainty. Include `Explain more, then ask again`,
++described as `Give me more context in simple terms, then re-ask the question.` Answer explanation
++requests in chat, open no new question that turn, and re-ask on the owner's next message unless it
++answers the decision or asks another question. Take an applicable explicit prose answer without a
++confirmation form. Bind approval to the unchanged decision/plan, quoted answer, date and actual
++channel. Interface approval never approves implementation. Cancellation, decline, interruption,
++invalid/empty replies and silence grant no approval; no preselection auto-submits.
++
++Historical local CLI rendering/submission/cancellation and worker-relay checks are bounded evidence
++for the tested path, not certification of every host. **0555 automatic live-display acceptance remains
++unmet:** root-owned observation must show selectable choices open before any owner activation, then
++ordinary submission and cancellation. Static inspection and protocol fixtures cannot establish it;
++fallback alone cannot pass it or permit quiet closure without an actual owner acceptance change.
++Claude/mixed live compatibility remains unverified. Decision splitting/assembly stays with 0556.
++
++**The first Codex version registers neither fkit PreToolUse nor Stop hooks**, by the owner's 2026-10-29 follow-up ruling. Their implementation and registration code are retained, disabled behind `CODEX_HOOKS_ENABLED = false`, for possible later reactivation after usage feedback. The packaged `hook.mjs` file is dormant. Role/model/effort routing, dispatcher skill ownership, interactive owner forms and the written “What's next?” requirement remain in place; footer/question-tool reminders rely on instructions. Restart an existing session to drop its earlier session-scoped hooks. User-configured Codex hooks and legacy Claude hooks are not modified. Earlier successful hook probes are historical evidence, not active controls. No universal role-file write wall or Codex planning write wall is claimed. [ADR-061](../ai-agents/knowledge-base/decisions/adr-061-codex-as-a-full-seven-role-runtime-with-explicit-local-limits.md) records the accepted local limits; ADR-042 D2/task 0273 remains outstanding.
+ 
+ Owner forms have one answer field. Selecting a listed option submits without a separate comment.
+ “Write another answer” opens a second form containing only a required text answer; choosing that
+diff --git a/claude/agents/fkit-lead.md b/claude/agents/fkit-lead.md
+--- a/claude/agents/fkit-lead.md
++++ b/claude/agents/fkit-lead.md
+@@ -67,8 +67,14 @@
+ 
+   If the owner, told this is a coder's job, still asks you to look yourself, that is his call — label
+   your answer as the lead's own unverified look.
+-- **Hold the owner channel.** Only this live session can ask the owner (`AskUserQuestion` is session-only,
+-  ADR-021). A spawned worker that hits a decision **returns** it to you as structured text
++- **Hold the owner channel.** Only this live interactive root can ask the owner: use exposed
++  Codex `fkit_roles.fkit_ask_owner` with negotiated form support, or supported Claude native
++  `AskUserQuestion`, per `conventions/asking-the-owner.md`. Missing/unsupported dialogue or failed
++  delivery requires the explicit fallback there: concrete limitation, exact decision, named choices
++  and recommendation with the standing explanation option, then wait. Report uncertain delivery as
++  unverified; do not repeatedly resubmit asynchronous requests. Capability/exposure, invocation,
++  acceptance, queueing, observed presentation, answer and applicable approval are separate. No marker,
++  accepted/queued request or unanswered form permits dependent work. A spawned worker that hits a decision **returns** it to you as structured text
+   (`NEEDS-DECISION { question, options, recommendation, context }` — at most 3 options, so you can add
+   the standing option as the 4th, and a plain-language `context`); **you** do the asking, block on a
+   real answer, then spawn the next unit with the decision folded in. Workers return questions; they never ask them.
+@@ -162,7 +168,8 @@
+   clause).
+ - **Spawning a coder to write — carry the declared-approval marker ([ADR-055](../../ai-agents/knowledge-base/decisions/adr-055-a-spawned-coder-writes-under-one-declared-approval-marker-from-either-driver.md)).**
+   Spawn `@fkit-coder` **plan-only** first, then put the plan (or the exact files and change) to the owner
+-  with `AskUserQuestion`. Only after a **real owner answer in this session**, spawn the writing coder; its
++  with the supported owner interface or explicit fallback above. Only after a **real applicable owner
++  answer in this session**, spawn the writing coder; its
+   prompt carries **all four** fields: (a) caller `fkit-lead`; (b) the plan verbatim, or the exact approved
+   scope; (c) the owner's approval **quoted verbatim** (selected option text or the owner's own typed
+   words) with its **date** and **channel**; (d) the worker role — Build or Process-review, never commit or
+@@ -175,6 +182,10 @@
+   `Read` — the `PreToolUse` carry-check checks it. Process-review needs a task folder. A spawned coder
+   refuses a marker that fails any field and returns `NEEDS-DECISION` naming it.
+   Trust, not proof: the same accepted cost as the honesty clause above.
++  Record the unchanged plan/decision and actual approval channel; prose approval is never labelled a
++  form response. Approval to use an interface is not approval to implement. Take an applicable explicit
++  prose answer without asking again; cancellation, decline, interruption and invalid/empty replies
++  grant nothing. Presentation requires observation, not an invented acknowledgment.
+ 
+ ## The team
+ 
+diff --git a/claude/skills/fkit-sprint-ship-loop/SKILL.md b/claude/skills/fkit-sprint-ship-loop/SKILL.md
+--- a/claude/skills/fkit-sprint-ship-loop/SKILL.md
++++ b/claude/skills/fkit-sprint-ship-loop/SKILL.md
+@@ -19,6 +19,18 @@
+ > cannot reach the owner — **refuse it**, and say why.
+ 
+ ## Overview
++
++**Owner gates use the supported interface.** In an eligible interactive Codex root, use exposed
++`fkit_roles.fkit_ask_owner` with negotiated form support; in supported Claude, native
++`AskUserQuestion`. Every reference to `AskUserQuestion` below follows
++`conventions/asking-the-owner.md`, including its explicit fallback for missing/unsupported interface
++or failed delivery: state the concrete limitation, exact decision, named choices/recommendation and
++standing explanation option, then wait. Report uncertain delivery as unverified; do not repeatedly
++resubmit asynchronous requests. Capability, exposure, eligibility, issuance/acceptance, queueing,
++observed presentation, actual answer and applicable approval are distinct. No invocation marker,
++accepted/queued request or unanswered form releases a gate. Workers and adversarial leaves return
++`NEEDS-DECISION`; this grants them no owner channel. Claim automatic presentation only with actual
++observation, never a synthetic acknowledgment.
+ 
+ `fkit-sprint-ship-loop` ships a **whole sprint's eligible tasks** from brief to closed. It is the
+ flagship application of the conductor remit ([ADR-031](../../../ai-agents/knowledge-base/decisions/adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)),
+@@ -195,7 +207,7 @@
+ no-progress verification cycles and review rules; do not turn a progress message into another gate.
+ 
+ **Why the driver writes `plan.md`, and what that does and does not fix.** The approved plan exists only
+-in **this session's** `AskUserQuestion` exchange, so the driver is the only actor holding the approved
++in **this session's** actual owner exchange (supported interface or explicit fallback), so the driver is the only actor holding the approved
+ bytes at the moment of approval. It writes `<task-folder>/plan.md` itself, in the same turn as the
+ approval and **before** the Build spawn — **copying the approved text, never re-rendering or summarising
+ it.** This is not a breach of *"the driver delegates, never substitutes"*: that rule forbids the driver
+@@ -218,7 +230,7 @@
+ 
+ **Rules that make this honor the ADRs:**
+ - **The Build AND Process-review spawn prompts MUST each carry the approved plan verbatim, state the owner
+-  approved it via `AskUserQuestion`, and identify the caller as `fkit-sprint-ship-loop`.** These three
++  approved it through the actual supported interface or explicit fallback, and identify the caller as `fkit-sprint-ship-loop`.** These three
+   signals are the **declared-approval marker** that `fkit-coder.md`'s sprint-loop carve-out keys on for
+   **both** worker roles; without them a spawned coder **refuses to write source** and returns the plan.
+   This is the sprint-loop form of the one marker shared with the lead's conductor path (ADR-055;
+@@ -227,6 +239,12 @@
+   is **trust, not proof** — a prose
+   mirror of the plan-step's "write nothing yet", carrying the same accepted prose-enforced cost (ADR-031
+   honesty clause / ADR-032 D3/D7), not a verifiable token.
++
++  Bind approval to the unchanged decision/plan and record the exact answer, date and actual channel;
++  never label fallback prose as a form response. An applicable explicit prose answer settles the gate
++  without reopening it. Interface approval never authorizes implementation. Cancellation, decline,
++  interruption and invalid/empty replies grant nothing; explanation requests retain §3's no-same-turn
++  re-ask rule.
+ 
+   **How to carry it — the construction, not an exhortation** (ADR-032 D3; `0162`'s decision report
+   §2/§4, owner-ruled 2026-08-02). **A faithful carry is a copy over a durable artifact, executed in the
+@@ -393,7 +411,7 @@
+ 
+ On `NEEDS-DECISION` the driver:
+ 
+-1. calls **`AskUserQuestion`** with the returned options (recommendation pre-marked) — relaying a
++1. uses the **supported owner interface or explicit fallback** with the returned options (recommendation pre-marked) — relaying a
+    worker's options, it drops each `knock-on: none (checked)` note, and a placement option with neither
+    that note nor a knock-on is missing one: it adds it from the briefs, checked this turn, before it asks, saying so — and
+    adds the standing option `Explain more, then ask again` **last**. A worker that returned 4 options
+diff --git a/claude/skills/fkit-open-questions-interview/SKILL.md b/claude/skills/fkit-open-questions-interview/SKILL.md
+--- a/claude/skills/fkit-open-questions-interview/SKILL.md
++++ b/claude/skills/fkit-open-questions-interview/SKILL.md
+@@ -45,8 +45,9 @@
+ 
+ **What does NOT count:**
+ - Anything you can answer yourself by reading the code or the files. **Go and answer it instead.**
+-- A question already answered, even implicitly — if they said "ship it", the approval questions under
+-  it are closed. Re-asking an answered question is worse than not asking.
++- A question actually answered for its unchanged scope — an applicable explicit "ship it" can settle
++  approval. Request acceptance, queueing or presentation alone cannot. Re-asking a settled question
++  is worse than not asking; take an applicable prose answer without a confirmation form.
+ - A question whose answer stopped mattering because the work changed direction.
+ - A rhetorical question, or a decision you *documented* rather than *asked*.
+ - **A question you never actually put to them.** A doubt you had privately is not an open question; it
+@@ -57,10 +58,11 @@
+ 1. **Sweep** the session from the start for the shapes above. Include questions asked through
+    `AskUserQuestion` **and** in prose — prose questions are the easier ones to lose.
+ 
+-   > **⚠️ An `AskUserQuestion` that returned a result is ANSWERED.** The owner made a selection; that
+-   > is the answer. It does not become open again because you failed to act on it — that is *your*
+-   > unfinished work, and the fix is to go and do it, not to ask them the same thing twice. **Only a
+-   > question that never reached them, or whose answer never came back, is open.**
++   > **⚠️ Only an actual applicable owner answer settles a decision.** A tool result alone is not
++   > enough: cancellation, decline, interruption, invalid/empty results, accepted/queued requests,
++   > and displayed but unanswered forms keep it open. Unknown delivery remains unverified; do not
++   > repeatedly resubmit asynchronous requests. Once answered for unchanged scope, unfinished agent
++   > work does not reopen it — go and do that work instead of asking the owner twice.
+    > **Except a reply that is not a choice:** a picked "Explain more, then ask again", or a typed
+    > question or request for more information, is not an answer — the question stays open.
+ 2. **Check each against later turns.** Was it answered, made moot, or overtaken? Drop those, and drop
+@@ -75,7 +77,11 @@
+ 
+ ## How to ask
+ 
+-- **In a session:** use `AskUserQuestion`. **Batch** — up to 4 per call, related ones together, rather
++- **In an interactive root:** select the supported interface under `conventions/asking-the-owner.md`:
++  exposed negotiated Codex `fkit_roles.fkit_ask_owner`, or supported Claude native `AskUserQuestion`.
++  If missing/unsupported or delivery fails, state the limitation, exact decision and named choices
++  with recommendation and standing option, then wait. Report uncertain delivery as unverified.
++  **Batch** — up to 4 per supported call, related ones together, rather
+   than interrogating one at a time. Give options real consequences, and mark a recommendation `(Rec)`
+   where you have one and can defend it.
+ - **More than 4 open?** Ask the **most blocking 4 first**, then **repeat until the list is empty** — a
+diff --git a/claude/skills/fkit-plan-task/SKILL.md b/claude/skills/fkit-plan-task/SKILL.md
+--- a/claude/skills/fkit-plan-task/SKILL.md
++++ b/claude/skills/fkit-plan-task/SKILL.md
+@@ -35,18 +35,25 @@
+ 
+ 0. **Gate check — first, before step 1.** Decide whether *Plan review* (below) runs, by its trigger.
+    - **Off** (an opt-out, no line, or a spawn with no driver's switch line): steps 1–7 run as written;
+-     plan mode comes first. In a session (`AskUserQuestion` in your toolset) the plan you present at
++     plan mode comes first. In a direct interactive session the plan you present at
+      step 7 opens with one line: `Plan review: off (--no-plan-review)`, `Plan review: off (fkit coder
+      --no-plan-review)` or `Plan review: off (no fkit session line)`. A spawn adds no line. A session
+      presentation with no plan-review line is a defect.
+    - **On by a driver's switch line** (spawned): steps 1–7 as written; the section runs between 6 and 7.
+-   - **On as the session coder** (trigger (b)): first, one chat line, verbatim: `Plan review: ON
++   - **On as the session coder** (trigger (b)): on regular Claude, first, one chat line, verbatim: `Plan review: ON
+      (default) — I draft and review with plan mode off; plan mode comes on for your approval. Until
+      then only my instructions stop a write.` Then **skip step 1** — no `EnterPlanMode` — and run steps
+      2–6 and the whole section with plan mode off, under the planning-only rule: no source, no file,
+      not even `plan-review.md`. Nothing is written before approval; with plan mode off that rule is the
+      only thing holding this stretch ([ADR-060](../../../ai-agents/knowledge-base/decisions/adr-060-plan-review-on-by-default-in-coder-sessions-by-a-launcher-session-line-with-no-plan-review-opt-outs-provisional.md)).
+      **If plan mode is already on**, stop first: *Plan mode already on*, in the section.
++   - **Codex session distinction (ADR-060, 2026-11-06):** a direct interactive coder's actual
++     launcher ON line enables review independently of owner-tool availability. Missing usable
++     dialogue changes only the approval channel: use the explicit fallback and wait under
++     `conventions/asking-the-owner.md`. Instead of the native-mode line/sequence above, say
++     `Plan review: ON (default) — planning-only; writes are stopped by instructions until your approval.`
++     Run steps 2–6 and the whole review section, then present for approval. Do not claim a Codex
++     plan-mode transition. Regular Claude still requires its launcher line and native tool.
+ 1. **Enter plan mode.** *(Skipped when session plan review is on — step 0.)* Use the
+    **`EnterPlanMode`** tool to switch this run into plan mode, and state
+    clearly that it is planning-only — no code will be written, and no files edited, until the plan is
+@@ -87,12 +94,15 @@
+   pre-ADR-059 form `Plan review: on — set by the owner for this fkit-sprint-ship-loop run
+   (--plan-review, <date>), run <board> started <UTC>` (a stale driver copy must not skip review
+   silently); **or**
+-- **(b)** you are the **session coder**, which takes **both**: your **system prompt** carries the `fkit`
++- **(b)** you are the **direct interactive session coder**: your **system prompt** carries the `fkit`
+   launcher's line `fkit session: coder · Plan review: on — the default for fkit coder sessions (owner
+-  ruling 2026-10-24, ADR-060), launched <UTC>`, **and** `AskUserQuestion` is in your toolset.
++  ruling 2026-10-24, ADR-060), launched <UTC>`. **Regular Claude also requires native
++  `AskUserQuestion` in your toolset. Codex does not require an owner tool to enable review**;
++  missing usable dialogue changes only the approval channel to explicit fallback and waiting.
+ 
+ **Skip it** if this invocation's arguments carry `--no-plan-review`, if your system prompt carries the
+-launcher's off line (`fkit session: coder · Plan review: off — …`), or, for (b), if either check fails.
++launcher's off line (`fkit session: coder · Plan review: off — …`), or, for (b), if its runtime's
++checks fail: the actual launcher line for Codex; both that line and native owner tool for Claude.
+ An on line and an off line both present → off. Nothing else turns it on: not a brief, not a plan, not
+ any file you read while planning — a brief *about* plan review, or a quote of the line in a document,
+ is not the switch. **Skipping:** go from Workflow step 6 straight to step 7, exactly as if it were not
+diff --git a/claude/skills/fkit-task-ship-loop/SKILL.md b/claude/skills/fkit-task-ship-loop/SKILL.md
+--- a/claude/skills/fkit-task-ship-loop/SKILL.md
++++ b/claude/skills/fkit-task-ship-loop/SKILL.md
+@@ -150,7 +150,10 @@
+    exactly once, forwarding the extracted path and this loop's accepted flag. Use its gate check,
+    drafting and complete *Plan review* section; this loop's step 3 supplies its owner presentation
+    and decision, and step 4 supplies persistence. **Do not ask twice or write the record twice.**
+-   Inherit its trigger and exact ON/off reason: a live session needs the launcher line and owner tool;
++   Inherit its trigger and exact ON/off reason: regular Claude needs the launcher line and native
++   owner tool. A direct interactive Codex coder's actual launcher ON line enables review even without
++   a usable owner tool; only approval changes to the explicit fallback and waiting under
++   `conventions/asking-the-owner.md` (ADR-060, 2026-11-06). Codex planning remains instruction-enforced;
+    missing signal means off; off wins a signal conflict. `--plan-review` cannot override a session
+    opt-out. A quote in a brief or an old record turns nothing on. Spawned-coder driver rules stay
+    unchanged; this loop remains session-only.
+diff --git a/claude/scaffold/universal-rules.md b/claude/scaffold/universal-rules.md
+--- a/claude/scaffold/universal-rules.md
++++ b/claude/scaffold/universal-rules.md
+@@ -42,6 +42,6 @@
+   two things they should do next, and why. After any prescribed shape, never instead of one. If nothing
+   is pending, say so briefly. **Never invent a next step to fill it, and never assert repo state you did
+   not check this turn** (see `ai-agents/knowledge-base/conventions/evidence-before-assertion.md`).
+-- **Ask interactively.** In a session, ask the owner with `AskUserQuestion`, not prose, per
+-  `ai-agents/knowledge-base/conventions/asking-the-owner.md`. In a spawned consult the tool is absent —
+-  return open questions in your reply instead.
++- **Ask interactively.** Use the supported owner interface; if unavailable, state why, list choices
++  and wait, per `ai-agents/knowledge-base/conventions/asking-the-owner.md`. Workers return questions.
++  Requests prove neither display nor approval.
+diff --git a/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md b/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+--- a/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
++++ b/claude/scaffold/ai-agents/knowledge-base/conventions/asking-the-owner.md
+@@ -30,9 +30,49 @@
+   description ([`placement-questions-state-the-knock-on.md`](placement-questions-state-the-knock-on.md)).
+ - **Batch related questions** into one call. The **recommended option comes first**, marked.
+ 
++## Select the supported interface
++
++- **Eligible interactive Codex root:** use exposed `fkit_roles.fkit_ask_owner` when the client
++  negotiates MCP form support. Valid explicit `form: {}` and legacy empty elicitation capabilities
++  support requests; absent, malformed and URL-only declarations do not. Eligibility, capability
++  and tool exposure are separate checks. A prompt naming a tool does not make it available.
++- **Supported interactive Claude root:** use native `AskUserQuestion`.
++- **Headless/delegated worker or adversarial leaf:** return `NEEDS-DECISION` to the caller; never
++  open owner forms. An interactive root with no usable interface uses the fallback below.
++
++Throughout fkit instructions, `AskUserQuestion` means the supported interface for that runtime,
++with this fallback when unavailable. Do not silently choose prose while a usable interface exists.
++No new API, native configuration change, installation or activation shortcut is authorized.
++
++## Delivery and fallback
++
++Capability proves request support, not automatic display. Separate tool exposure and eligibility,
++request issuance/acceptance, queueing, observed presentation, actual answer and applicable approval.
++An invocation marker, `{"accepted":true}`, queued notification or displayed but unanswered form
++grants nothing. Claim presentation only when actually observed; there is no invented presentation
++acknowledgment. Unknown delivery stays unverified and the decision pending. Do not repeatedly
++resubmit asynchronous requests or use an activation shortcut to pretend an automatic dialogue opened.
++
++If the interface is missing, unsupported or delivery fails, state the concrete limitation and use:
++
++> This session exposes no usable automatic owner dialogue. Decision: [exact scope]. Choices:
++> [named alternatives and recommendation; standing explanation option]. Dependent work remains
++> stopped until your answer.
++
++If delivery is uncertain, say so explicitly instead of claiming it failed or displayed. Keep the
++decision pending and list its scope and choices. Wait for an actual applicable answer before
++dependent work. An explicit prose answer counts; do not reopen a form to confirm it.
++
++Ordinary choices submit without mandatory text. A custom-text route alone supplies no answer;
++wait for the separate text response and preserve it exactly. Never auto-submit a preselected option.
++Cancellation, decline, interruption, invalid/empty results and silence grant no approval. A late
++reply counts only if it actually answers the still-current decision; never reuse it for changed scope.
++Record approval against the unchanged decision/plan with the quoted answer, date and actual channel;
++never label prose as a form response. Approval to use an interface never approves implementation.
++
+ ## The standing option
+ 
+-Every question put with `AskUserQuestion` carries this option, worded exactly:
++Every owner question, including fallback, carries this option, worded exactly:
+ 
+ - label: `Explain more, then ask again`
+ - description: `Give me more context in simple terms, then re-ask the question.`
+@@ -106,3 +146,9 @@
+   of one, to open no dialog and end the turn with no question line other than the **What's next?**
+   heading. **Accepted residual:** the hook cannot tell a genuine answer or explanation turn from a
+   prose question relabelled as one. It is a heuristic by design.
++
++These are scoped legacy hook descriptions, not a promise of runtime enforcement or live display.
++Codex fkit hooks remain disabled. Static instructions and protocol fixtures do not establish that
++choices opened automatically before owner interaction; that requires actual live observation,
++ordinary submission and cancellation. Historical CLI form checks do not certify every host or
++Claude/mixed compatibility.
+diff --git a/ai-agents/knowledge-base/conventions/asking-the-owner.md b/ai-agents/knowledge-base/conventions/asking-the-owner.md
+--- a/ai-agents/knowledge-base/conventions/asking-the-owner.md
++++ b/ai-agents/knowledge-base/conventions/asking-the-owner.md
+@@ -30,9 +30,49 @@
+   description ([`placement-questions-state-the-knock-on.md`](placement-questions-state-the-knock-on.md)).
+ - **Batch related questions** into one call. The **recommended option comes first**, marked.
+ 
++## Select the supported interface
++
++- **Eligible interactive Codex root:** use exposed `fkit_roles.fkit_ask_owner` when the client
++  negotiates MCP form support. Valid explicit `form: {}` and legacy empty elicitation capabilities
++  support requests; absent, malformed and URL-only declarations do not. Eligibility, capability
++  and tool exposure are separate checks. A prompt naming a tool does not make it available.
++- **Supported interactive Claude root:** use native `AskUserQuestion`.
++- **Headless/delegated worker or adversarial leaf:** return `NEEDS-DECISION` to the caller; never
++  open owner forms. An interactive root with no usable interface uses the fallback below.
++
++Throughout fkit instructions, `AskUserQuestion` means the supported interface for that runtime,
++with this fallback when unavailable. Do not silently choose prose while a usable interface exists.
++No new API, native configuration change, installation or activation shortcut is authorized.
++
++## Delivery and fallback
++
++Capability proves request support, not automatic display. Separate tool exposure and eligibility,
++request issuance/acceptance, queueing, observed presentation, actual answer and applicable approval.
++An invocation marker, `{"accepted":true}`, queued notification or displayed but unanswered form
++grants nothing. Claim presentation only when actually observed; there is no invented presentation
++acknowledgment. Unknown delivery stays unverified and the decision pending. Do not repeatedly
++resubmit asynchronous requests or use an activation shortcut to pretend an automatic dialogue opened.
++
++If the interface is missing, unsupported or delivery fails, state the concrete limitation and use:
++
++> This session exposes no usable automatic owner dialogue. Decision: [exact scope]. Choices:
++> [named alternatives and recommendation; standing explanation option]. Dependent work remains
++> stopped until your answer.
++
++If delivery is uncertain, say so explicitly instead of claiming it failed or displayed. Keep the
++decision pending and list its scope and choices. Wait for an actual applicable answer before
++dependent work. An explicit prose answer counts; do not reopen a form to confirm it.
++
++Ordinary choices submit without mandatory text. A custom-text route alone supplies no answer;
++wait for the separate text response and preserve it exactly. Never auto-submit a preselected option.
++Cancellation, decline, interruption, invalid/empty results and silence grant no approval. A late
++reply counts only if it actually answers the still-current decision; never reuse it for changed scope.
++Record approval against the unchanged decision/plan with the quoted answer, date and actual channel;
++never label prose as a form response. Approval to use an interface never approves implementation.
++
+ ## The standing option
+ 
+-Every question put with `AskUserQuestion` carries this option, worded exactly:
++Every owner question, including fallback, carries this option, worded exactly:
+ 
+ - label: `Explain more, then ask again`
+ - description: `Give me more context in simple terms, then re-ask the question.`
+@@ -106,3 +146,9 @@
+   of one, to open no dialog and end the turn with no question line other than the **What's next?**
+   heading. **Accepted residual:** the hook cannot tell a genuine answer or explanation turn from a
+   prose question relabelled as one. It is a heuristic by design.
++
++These are scoped legacy hook descriptions, not a promise of runtime enforcement or live display.
++Codex fkit hooks remain disabled. Static instructions and protocol fixtures do not establish that
++choices opened automatically before owner interaction; that requires actual live observation,
++ordinary submission and cancellation. Historical CLI form checks do not certify every host or
++Claude/mixed compatibility.
+diff --git a/claude/structure-manifest.tsv b/claude/structure-manifest.tsv
+--- a/claude/structure-manifest.tsv
++++ b/claude/structure-manifest.tsv
+@@ -72,6 +72,7 @@
+ cfbdcae8e652f7a65719e6ce4feb7e7d769b017d45057da8a363c3d7a18ee5c2	ai-agents/knowledge-base/conventions/README.md
+ e09c11145957bd4c0e7a8f4ca8e1a24bdcf6a4404d873ab03ab0d800f803b5b2	ai-agents/knowledge-base/conventions/README.md
+ e74c2ed1cf62d33690f55ebedb140d310b65cb341b4a13f8c5a01c5e87024921	ai-agents/knowledge-base/conventions/README.md
++6e780fe92e9bc082fc85cdfc7aa82a906940bd4d0280e3469a0a504f827cea92	ai-agents/knowledge-base/conventions/asking-the-owner.md
+ 89b96b70b2d61c0bf8085ce3bde862adc58591c34904adbcb5daccb8dd2b9f7c	ai-agents/knowledge-base/conventions/asking-the-owner.md
+ 540b87b7ecab90ee0a15f90a9f9ab0e7f6d6e92d8bda66c6a6a64fa13b343e5d	ai-agents/knowledge-base/conventions/code-comments.md
+ 43cadd2d5451c562c76a8b7d4130a386beb765f4df5b3b47ac25e5460533874e	ai-agents/knowledge-base/conventions/dependency-declaration-form.md
+diff --git a/CLAUDE.md b/CLAUDE.md
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -105,9 +105,9 @@
+   two things they should do next, and why. After any prescribed shape, never instead of one. If nothing
+   is pending, say so briefly. **Never invent a next step to fill it, and never assert repo state you did
+   not check this turn** (see `ai-agents/knowledge-base/conventions/evidence-before-assertion.md`).
+-- **Ask interactively.** In a session, ask the owner with `AskUserQuestion`, not prose, per
+-  `ai-agents/knowledge-base/conventions/asking-the-owner.md`. In a spawned consult the tool is absent —
+-  return open questions in your reply instead.
++- **Ask interactively.** Use the supported owner interface; if unavailable, state why, list choices
++  and wait, per `ai-agents/knowledge-base/conventions/asking-the-owner.md`. Workers return questions.
++  Requests prove neither display nor approval.
+ <!-- fkit:end-rules -->
+ 
+ ## Knowledge Base & Wiki
+diff --git a/AGENTS.md b/AGENTS.md
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -83,9 +83,9 @@
+   two things they should do next, and why. After any prescribed shape, never instead of one. If nothing
+   is pending, say so briefly. **Never invent a next step to fill it, and never assert repo state you did
+   not check this turn** (see `ai-agents/knowledge-base/conventions/evidence-before-assertion.md`).
+-- **Ask interactively.** In a session, ask the owner with `AskUserQuestion`, not prose, per
+-  `ai-agents/knowledge-base/conventions/asking-the-owner.md`. In a spawned consult the tool is absent —
+-  return open questions in your reply instead.
++- **Ask interactively.** Use the supported owner interface; if unavailable, state why, list choices
++  and wait, per `ai-agents/knowledge-base/conventions/asking-the-owner.md`. Workers return questions.
++  Requests prove neither display nor approval.
+ <!-- fkit:end-rules -->
+ 
+ ## Knowledge Base & Wiki
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -10,6 +10,13 @@
+ `git log <old-tag>..<new-tag>`.
+ 
+ ## Unreleased
++
++- Owner questions use the supported root interface, advertise Codex forms only with negotiated form
++  support, and retain explicit fallback and real-answer waiting when unavailable. Request acceptance
++  or queueing proves neither display nor approval. Direct interactive Codex coder review stays ON
++  with its actual launcher signal even without an owner tool; approval then uses fallback. Automatic
++  live-display acceptance and Claude/mixed live compatibility remain unverified; earlier local form
++  checks cover only their recorded path.
+ 
+ - Lead consumes worker returns and advances authorized work in the live turn, with explicit recovery
+   and host-pause checkpoints. Blank worker responses now return transport errors; nonblank
+diff --git a/test/launcher-contract.test.js b/test/launcher-contract.test.js
+--- a/test/launcher-contract.test.js
++++ b/test/launcher-contract.test.js
+@@ -1267,6 +1267,52 @@
+   try {
+     assert.equal(f.run(['configure', '--runtime-default']).status, 0);
+     assert.equal(f.run(['setup']).status, 0);
++    const settingsBefore = readFileSync(modelFile(f.root));
++    const askArgs = { question: 'Synthetic worker question', options: ['Proceed fixture', 'Explain more, then ask again'] };
++    assert.equal((await server.request('tools/list', {})).tools.some(tool => tool.name === 'fkit_ask_owner'), false);
++    assert.equal((await server.request('tools/call', { name: 'fkit_ask_owner', arguments: askArgs })).isError, true);
++    assert.equal(server.forms.length, 0);
++    for (const [capabilities, supported] of [
++      [{}, false], [{ elicitation: null }, false], [{ elicitation: [] }, false],
++      [{ elicitation: true }, false], [{ elicitation: { url: {} } }, false],
++      [{ elicitation: { form: null } }, false], [{ elicitation: { form: false } }, false],
++      [{ elicitation: { form: [] } }, false], [{ elicitation: { form: 'yes' } }, false],
++      [{ elicitation: {} }, true], [{ elicitation: { form: {} } }, true],
++      [{ elicitation: { form: {}, url: {} } }, true],
++    ]) {
++      await server.request('initialize', { capabilities });
++      const listed = (await server.request('tools/list', {})).tools.map(tool => tool.name);
++      assert.equal(listed.includes('fkit_ask_owner'), supported, JSON.stringify(capabilities));
++      if (!supported) {
++        const denied = await server.request('tools/call', { name: 'fkit_ask_owner', arguments: askArgs });
++        assert.equal(denied.isError, true);
++        assert.equal(server.forms.length, 0);
++      }
++    }
++    for (const [role, chain, mode] of [
++      ['lead', ['lead'], 'headless'], ['coder', ['lead', 'coder'], 'interactive'],
++      ['lead', ['lead'], 'native-owner'], ['coder', ['lead', 'coder'], 'headless'],
++      ['adversarial-reviewer', ['adversarial-reviewer'], 'interactive'],
++      ...['producer', 'coder', 'reviewer', 'architect', 'wiki'].map(role => [role, [role], 'interactive']),
++    ]) {
++      const other = fixtureRoleServer(f, role, chain, mode);
++      try {
++        await other.request('initialize', { capabilities: { elicitation: { form: {} } } });
++        const eligible = mode === 'interactive' && chain.length === 1 && role !== 'adversarial-reviewer';
++        assert.equal((await other.request('tools/list', {})).tools.some(tool => tool.name === 'fkit_ask_owner'), eligible);
++        const question = other.request('tools/call', { name: 'fkit_ask_owner', arguments: askArgs });
++        if (eligible) {
++          while (!other.forms.length) await new Promise(resolve => setTimeout(resolve, 5));
++          other.send({ id: other.forms.shift().id, result: { action: 'cancel' } });
++          assert.equal(JSON.parse((await question).content[0].text).answered, false);
++        } else {
++          assert.equal((await question).isError, true);
++          assert.equal(other.forms.length, 0);
++        }
++      } finally { await other.close(); }
++      assert.equal(other.child.exitCode, 0);
++      assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
++    }
+     await server.request('initialize', { capabilities: { elicitation: { form: {} } } });
+     for (const action of ['cancel', 'decline', 'accept', 'interrupt']) {
+       let settled = false;
+@@ -1283,6 +1329,55 @@
+         assert.equal(answer.answered, action === 'accept');
+         if (action === 'accept') assert.equal(answer.answer, 'Explain more, then ask again');
+       } else assert.equal(action, 'interrupt');
++      server.send({ id: form.id, result: { action: 'accept', content: { answer: 'Proceed fixture' } } });
++      await server.request('ping', {});
++      assert.equal(server.forms.length, 0);
++      assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
++    }
++    for (const reply of [
++      { error: { code: -32603, message: 'fixture delivery failure' } },
++      { result: { accepted: true } }, { result: null },
++      { result: { action: 'accept', content: {} } },
++      { result: { action: 'accept', content: { answer: '' } } },
++      { result: { action: 'accept', content: { answer: 'unlisted' } } },
++    ]) {
++      let settled = false;
++      const pending = server.request('tools/call', { name: 'fkit_ask_owner', arguments: askArgs }).then(result => { settled = true; return result; });
++      while (!server.forms.length) await new Promise(resolve => setTimeout(resolve, 5));
++      const form = server.forms.shift();
++      server.send({ method: 'notifications/fixture-queued', params: { accepted: true } });
++      await server.request('ping', {});
++      assert.equal(settled, false);
++      assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
++      server.send({ id: form.id, ...reply });
++      const result = await pending;
++      assert.equal(result.isError, true);
++      server.send({ id: form.id, result: { action: 'accept', content: { answer: 'Proceed fixture' } } });
++      await server.request('ping', {});
++      assert.equal(server.forms.length, 0);
++      assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
++    }
++    for (const customReply of [
++      { action: 'cancel' }, { action: 'decline' },
++      { action: 'accept', content: { answer: '  ' } },
++      { action: 'accept', content: { answer: '  What changes?\nKeep this exact text.  ' } },
++    ]) {
++      let settled = false;
++      const pending = server.request('tools/call', { name: 'fkit_ask_owner', arguments: askArgs }).then(result => { settled = true; return result; });
++      while (!server.forms.length) await new Promise(resolve => setTimeout(resolve, 5));
++      const first = server.forms.shift();
++      assert.deepEqual(first.params.requestedSchema.required, ['answer']);
++      assert.deepEqual(Object.keys(first.params.requestedSchema.properties), ['answer']);
++      assert.equal('default' in first.params.requestedSchema.properties.answer, false);
++      server.send({ id: first.id, result: { action: 'accept', content: { answer: 'Write another answer' } } });
++      while (!server.forms.length) await new Promise(resolve => setTimeout(resolve, 5));
++      const text = server.forms.shift();
++      assert.equal(settled, false);
++      assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
++      server.send({ id: text.id, result: customReply });
++      const answer = JSON.parse((await pending).content[0].text);
++      assert.equal(answer.answered, !!customReply.content?.answer.trim());
++      if (answer.answered) assert.equal(answer.comment, customReply.content.answer);
+       assert.equal(existsSync(join(f.root, 'codex-call.json')), false);
+     }
+     const question = server.request('tools/call', { name: 'fkit_ask_owner', arguments: { question: 'Synthetic worker continuation?', options: ['Proceed fixture', 'Stop fixture'] } });
+@@ -1292,9 +1387,12 @@
+     server.send({ id: form.id, result: { action: 'accept', content: { answer: 'Proceed fixture' } } });
+     const answer = JSON.parse((await question).content[0].text);
+     assert.equal(answer.answer, 'Proceed fixture');
++    assert.equal(answer.comment, '');
+     const prompt = JSON.stringify({ operation: 'fkit-wiki-lint', arguments: '', ownerAnswer: answer.answer, completed: 'fixture preparation', remaining: 'fixture lint' });
+     const continued = await server.request('tools/call', { name: 'fkit_consult', arguments: { role: 'wiki', prompt } });
+     assert.equal(continued.isError, false, JSON.stringify(continued));
+     assert.ok(continued.content[0].text.endsWith('fixture-codex:' + prompt + '\n'));
++    assert.deepEqual(readFileSync(modelFile(f.root)), settingsBefore);
+   } finally { await server.close(); f.close(); }
+-});
++  assert.equal(server.child.exitCode, 0);
++});
