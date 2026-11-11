@@ -15,11 +15,46 @@ an **adversarial reviewer**, an **architect**, a **wiki librarian**, and the **l
 When one AI session plans, writes **and** reviews its own code, the review isn't independent — the
 blind spot that wrote a bug is the one that approves it. fkit splits the work into roles that
 **cannot** run each other's procedures: the coder can't review, only the producer can close a task,
-and the reviewer gets a second opinion from a *different* model (Codex). Review stops being a promise
+and the reviewer gets a second opinion from a *different* model (Codex on the Claude path; a
+separately configured native model on OpenCode). Review stops being a promise
 and becomes a rule — with a review ledger per task, a knowledge base (decisions, design specs, reports)
 and a wiki, all in an `ai-agents/` folder inside your project.
 
-## Install & run
+## OpenCode native runtime
+
+FKit also runs through OpenCode v2's own agents, child sessions, permissions, skills and commands.
+No Claude Code or Codex CLI is required for this runtime. Requires Node.js and OpenCode v2.
+
+Try the OpenCode preview channel (versions such as `0.3.3-opencode.1`):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/flashist/fkit/fkit-open-code/install.sh | FKIT_REF=fkit-open-code sh
+cd /path/to/your/project
+fkit opencode
+```
+
+`fkit update` stays on the preview branch for that installation. The normal installer continues
+tracking stable `main`. To return to stable, run the normal installer below again.
+
+For development from a local checkout:
+
+```sh
+# From this checkout, in your consuming project:
+sh /path/to/fkit/opencode/fkit-opencode.sh
+# After installing this version:
+fkit opencode
+fkit opencode coder
+fkit opencode init   # setup only; then you can open plain opencode
+```
+
+The launcher opens OpenCode's interactive mini interface with the selected role. After setup,
+plain `opencode` discovers all seven agents and `/fkit-*` commands in `.opencode/`.
+Set `FKIT_RUNTIME=opencode` to make the installed `fkit` command use OpenCode by default.
+Select a distinct hostile-review model with `FKIT_OPENCODE_ADVERSARIAL_MODEL=provider/model`.
+Unknown, inherited or identical review models produce a prominently flagged partial review;
+partial reviews cannot automatically close tasks. See [OpenCode setup and limits](opencode/README.md).
+
+## Install & run (Claude runtime)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh   # once

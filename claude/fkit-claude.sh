@@ -8,6 +8,10 @@
 # Want two roles at once? Open a terminal tab yourself: automating it needs AppleScript/Accessibility
 # permissions that fail in worse ways than pressing Cmd-T.
 set -eu
+if [ "${1:-}" = opencode ]; then
+  shift
+  exec sh "$(dirname "$0")/../opencode/fkit-opencode.sh" "$@"
+fi
 here="$(cd "$(dirname "$0")" && pwd)"                  # .../claude
 proj="$PWD"
 

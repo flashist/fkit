@@ -11,7 +11,7 @@
 # script with the source and paths recorded in .version, and a normal `fkit` does a throttled check and
 # tells you when a newer version is published. It never updates itself behind your back.
 #
-# fkit runs on Claude Code (required) + Codex (optional but recommended: the reviewer's 2nd opinion).
+# fkit supports Claude Code + optional Codex, or native OpenCode v2 + Node.js.
 # Overrides: FKIT_REPO (default flashist/fkit), FKIT_REF (default main), FKIT_SHARE, FKIT_BIN.
 set -eu
 
@@ -57,6 +57,13 @@ if [ -f "$TMP/src/bin/fkit-board.mjs" ] && [ -f "$TMP/src/vendor/aiboard/index.h
   cp -R "$TMP/src/vendor/aiboard" "$SHARE/vendor/aiboard"
 fi
 
+# OpenCode uses its own native setup while sharing the role playbooks and scaffold.
+if [ -d "$TMP/src/opencode" ]; then
+  rm -rf "$SHARE/opencode"
+  cp -R "$TMP/src/opencode" "$SHARE/opencode"
+  chmod +x "$SHARE/opencode/fkit-opencode.sh"
+fi
+
 # 1b. record the installed version so `fkit` can show it at startup and tell when a newer one is
 #     published (self-update compares this sha against $REPO@$REF's head). Prefer git; fall back to the
 #     GitHub API via curl. The human-readable version is the repo-root VERSION file (single source of
@@ -86,7 +93,7 @@ rm -f "$SHARE/.update-check" "$SHARE/.latest" 2>/dev/null || true   # fresh thro
 echo "✓ Installed fkit v${ver:-?} ($(printf %s "${sha:-unknown}" | cut -c1-7))"
 
 # 2. install the global `fkit` launcher (a thin wrapper that execs the installed launcher)
-#    One runtime, so this is a direct exec — no flavor dispatch. `update` is NOT intercepted here:
+#    Runtime selection stays deterministic. `update` is NOT intercepted here:
 #    it falls through to fkit-claude.sh, which owns self-update (ADR-009 §3).
 #    The "Reinstall:" hint puts the variables AFTER the pipe, on the `sh` that runs the installer, so a
 #    reinstall keeps this install's source and paths (task 0481). Known limit: a path containing `'`
@@ -101,8 +108,11 @@ cat > "$BIN/fkit" <<EOF
 # Retired subcommands (they died with the Omnigent runtime — ADR-009). Fail loudly rather than
 # silently passing them through to claude as a stray argument, which is a confusing no-op.
 case "\${1:-}" in
+  opencode)
+    shift
+    exec sh "$SHARE/opencode/fkit-opencode.sh" "\$@" ;;
   omnigent|claude)
-    echo "fkit: '\$1' is gone — fkit now has a single runtime (Claude Code + Codex)." >&2
+    echo "fkit: '\$1' is gone — use fkit <role>, or fkit opencode <role>." >&2
     echo "      Just run:  fkit           …or:  fkit <role>" >&2
     exit 1 ;;
   reconnect|restart-team)
@@ -115,6 +125,9 @@ esac
   echo "      Reinstall:  curl -fsSL https://raw.githubusercontent.com/$REPO/$REF/install.sh | FKIT_REPO=$REPO FKIT_REF=$REF FKIT_SHARE='$SHARE' FKIT_BIN='$BIN' sh" >&2
   exit 1
 }
+if [ "\${FKIT_RUNTIME:-claude}" = opencode ] && [ "\${1:-}" != update ]; then
+  exec sh "$SHARE/opencode/fkit-opencode.sh" "\$@"
+fi
 exec "$SHARE/claude/fkit-claude.sh" "\$@"
 EOF
 chmod +x "$BIN/fkit"
@@ -136,11 +149,11 @@ esac
 
 # 4. Prerequisites. Claude Code is the runtime (required); Codex is optional but recommended — it makes
 #    the reviewer's second opinion an actually-independent one. Both are checked again (more precisely)
-#    at every `fkit` launch — this is the first-run heads-up. Node.js is needed by `fkit board` alone.
+#    at each Claude launch. OpenCode uses native provider models and also requires Node.js.
 #    None of these blocks the install.
 if ! command -v claude >/dev/null 2>&1; then
   echo
-  echo "⚠ Required: Claude Code — install from https://claude.com/claude-code"
+  echo "Claude runtime: install Claude Code from https://claude.com/claude-code"
 fi
 if ! command -v codex >/dev/null 2>&1; then
   echo
@@ -150,5 +163,10 @@ if ! command -v codex >/dev/null 2>&1; then
 fi
 if ! command -v node >/dev/null 2>&1; then
   echo
-  echo "Optional: Node.js — only \`fkit board\` needs it (https://nodejs.org)."
+  echo "Node.js is required for fkit opencode and fkit board (https://nodejs.org)."
 fi
+
+if ! command -v opencode >/dev/null 2>&1; then
+  echo "OpenCode runtime: install OpenCode v2 from https://opencode.ai/docs/"
+fi
+echo "Native OpenCode: fkit opencode (requires OpenCode v2 and Node.js)."

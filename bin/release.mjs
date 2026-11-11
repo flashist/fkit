@@ -6,8 +6,8 @@
 // `npm run release` (see package.json scripts).
 //
 // VERSION is the single source of truth (package.json is kept in sync). By
-// default EVERY run bumps the patch (0.1.0 → 0.1.1 → 0.1.2 …). Override with
-// --minor / --major / --version, or keep the current version with --no-bump.
+// default stable runs bump patch; OpenCode previews keep their own counter so testing does not
+// accidentally produce a stable-looking version. --version selects an explicit target.
 //
 // Re-run safety: a --no-bump run is idempotent (an existing tag or an already-
 // committed tree is skipped). A default (bumping) run always cuts a NEW version,
@@ -29,6 +29,7 @@
 //   (default)           Bump the patch version
 //   --minor / --major   Bump minor / major instead
 //   --version <x.y.z>   Set an explicit version (VERSION + package.json)
+//   --opencode          Start/advance X.Y.Z-opencode.N on a non-stable branch
 //   --no-bump           Release the current version as-is (no bump)
 //   -m, --message <s>   Commit message (default: "Release v<version>")
 //   --branch <name>     Branch to push — must be the checked-out branch (default: current branch)
@@ -60,11 +61,12 @@ if (has("-h") || has("--help")) {
 
 Usage: npm run release -- [options]   (or: node bin/release.mjs [options])
 
-By default every run bumps the PATCH version (0.1.0 → 0.1.1 → …).
+Stable versions bump PATCH by default; OpenCode previews increment their N counter.
 
 Options:
   --minor / --major   Bump minor / major instead of patch
   --version <x.y.z>   Set an explicit version (VERSION + package.json)
+  --opencode          Start/advance X.Y.Z-opencode.N on a non-stable branch
   --no-bump           Release the current version as-is (no bump)
   -m, --message <s>   Commit message (default: "Release v<version>")
   --branch <name>     Branch to push — must be the checked-out branch (default: current branch)
@@ -195,6 +197,11 @@ function bumpPart(v, part) {
 }
 
 const originalVersion = version;
+const openCodeVersion = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-opencode\.(0|[1-9]\d*)$/;
+const currentOpenCode = openCodeVersion.exec(version);
+const openCodeRequested = has("--opencode");
+// Continuing a preview must not silently drop its channel on the next ordinary release command.
+const continueOpenCode = bumpTo === null && currentOpenCode !== null;
 let target;
 if (bumpTo !== null) {
   // Explicit version — sets both files, no need to reconcile first.
@@ -211,9 +218,32 @@ if (bumpTo !== null) {
     );
   }
   if (has("--no-bump")) target = version;
+  else if (openCodeRequested || continueOpenCode) {
+    if (currentOpenCode && !has("--major") && !has("--minor")) {
+      const revision = Number(currentOpenCode[4]);
+      if (!Number.isSafeInteger(revision) || !Number.isSafeInteger(revision + 1)) {
+        fail("OpenCode prerelease counter is too large; pass an explicit --version.");
+      }
+      target = `${currentOpenCode[1]}.${currentOpenCode[2]}.${currentOpenCode[3]}-opencode.${revision + 1}`;
+    } else {
+      const part = has("--major") ? "major" : has("--minor") ? "minor" : "patch";
+      target = `${bumpPart(version, part)}-opencode.1`;
+    }
+  }
   else if (has("--major")) target = bumpPart(version, "major");
   else if (has("--minor")) target = bumpPart(version, "minor");
   else target = bumpPart(version, "patch"); // default: bump patch every run
+}
+
+const isOpenCodeRelease = openCodeVersion.test(target);
+if (openCodeRequested && !isOpenCodeRelease) {
+  fail("--opencode requires X.Y.Z-opencode.N; use an explicit prerelease --version or omit --no-bump for the first preview. Nothing was changed.");
+}
+if (target.includes("-opencode.") && !isOpenCodeRelease) {
+  fail("OpenCode versions must use X.Y.Z-opencode.N with no leading zeros. Nothing was changed.");
+}
+if (isOpenCodeRelease && (onBranch === null || ["main", "master"].includes(onBranch))) {
+  fail("OpenCode prereleases must be cut from a dedicated branch, not main/master or detached HEAD. Switch to fkit-open-code first. Nothing was changed.");
 }
 
 // --- CHANGELOG.md: the release notes (task 0479) ---------------------------------------------------
@@ -419,6 +449,10 @@ const tag = `v${version}`;
 // tag also named `main`, `git push origin main` fails while `heads/main` pushes — measured).
 const branch = headBranch;
 const message = messageArg ?? `Release ${tag}`;
+// Preview pushes must not publish unrelated reachable tags through a global push.followTags setting.
+const pushRef = (ref) => isOpenCodeRelease
+  ? ["-c", "push.followTags=false", "push", "origin", ref]
+  : ["push", "origin", ref];
 
 // --- tag existence checks ---------------------------------------------------
 const localTagExists = git(["tag", "--list", tag], { quiet: true }).out === tag;
@@ -427,6 +461,9 @@ const remoteTagExists =
 
 // --- plan -------------------------------------------------------------------
 console.log(`\nfkit release → ${tag}  (branch: ${branch})`);
+if (isOpenCodeRelease) {
+  console.log(`Channel: OpenCode preview; stable main is not pushed. Mark any GitHub release as prerelease, never latest.`);
+}
 const status = git(["status", "--short"], { quiet: true }).out;
 console.log(status ? `\nworking-tree changes:\n${status}\n` : "\nworking tree clean (no file changes)\n");
 
@@ -455,7 +492,7 @@ if (willCommit) {
 // 2. push branch
 if (doPush) {
   step(`push origin ${branch}`);
-  if (!dryRun) git(["push", "origin", branch]);
+  if (!dryRun) git(pushRef(branch));
 } else {
   step("skip branch push (--no-push)");
 }
@@ -466,7 +503,7 @@ if (doTag && !localTagExists && !remoteTagExists) {
   if (!dryRun) git(["tag", "-a", tag, "-m", `Release ${tag}`]);
   if (doPush) {
     step(`push origin ${tag}`);
-    if (!dryRun) git(["push", "origin", tag]);
+    if (!dryRun) git(pushRef(tag));
   } else {
     step("skip tag push (--no-push)");
   }

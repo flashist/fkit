@@ -1,5 +1,11 @@
 # fkit
 
+> Runtime update (2026-11-11): the owner requested a native OpenCode port. `opencode/` now
+> provides native agents, permissions, commands and adapted workflows alongside the Claude runtime.
+> See `opencode/README.md` for the current OpenCode contract and verification limits. Historical
+> single-runtime and Claude-only enforcement statements below describe the Claude path.
+
+
 > The prose project brief for AI agents. Agents read this to understand what this project
 > is, who it's for, and how it's built. Keep it current.
 
@@ -9,10 +15,10 @@ fkit is a **team of seven role-scoped AI agents for software development** — a
 reviewer (with an adversarial second opinion), an architect, a wiki librarian, and an orchestrating lead —
 operating on a shared `ai-agents/` working structure inside a consuming project. An **eighth** role, a
 sandboxed e2e tester, is authorized ([ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
-but **not yet built** — the team is seven today. It runs on **one
-runtime: Claude Code native + Codex** (see
-[`ADR-009`](decisions/adr-009-claude-code-native-is-the-only-runtime.md)), as custom subagents and
-`/fkit-*` skills under `claude/`. This repository *is* the framework: it dogfoods itself (its own
+but **not yet built** — the team is seven today. It has a Claude Code native runtime under
+`claude/` and a native OpenCode v2 port under `opencode/` (manually verified 2026-11-11), authorized by
+[ADR-061](decisions/adr-061-native-opencode-runtime.md), which amends ADR-009's exclusivity.
+This repository *is* the framework: it dogfoods itself (its own
 `ai-agents/` tree is the one you're reading right now). It's built for software developers, vibe
 coders, and anyone using AI to build software, who want a structured multi-agent workflow instead of
 one undifferentiated coding assistant.
@@ -29,7 +35,7 @@ git rather than a shared runtime state:
 - **fkit-coder** — sole source-write authority; implements from task briefs.
 - **fkit-reviewer** — lead code review (review-only), delegates an adversarial second pass.
 - **fkit-adversarial-reviewer** — independent second opinion, deliberately a *different* model
-  (Codex, not Claude) for genuine perspective diversity.
+  (Codex on the Claude path; a separately configured native model on OpenCode) for perspective diversity.
 - **fkit-architect** — architecture, design specs, ADRs, technical feasibility. No implementation.
 - **fkit-wiki** — maintainer of `ai-agents/wiki-vault/`, the synthesized project-knowledge store
   (Karpathy LLM-wiki pattern), and the **exclusive gateway for wiki writes** (ingest/lint/sync). Per
@@ -73,6 +79,13 @@ the reviewer shells out to `codex exec` for an independent adversarial pass, and
 emitted as a loudly-flagged partial. A consuming project gets fkit via `install.sh` → `fkit` → the
 `initiate-project` onboarding turns the placeholder `PROJECT.md` into a real brief.
 
+The OpenCode path is `install.sh` → `fkit opencode [role]` → `opencode/setup.mjs` → native OpenCode.
+It renders seven agent profiles and the shared skill ownership map into `.opencode/`, adapts the
+planning/review/ship workflows, and uses native child sessions for delegation. Existing task/sprint
+artifacts and review ledgers are shared. OpenCode plan approval remains a prompt rule; Claude hooks
+and plan-mode tools do not run there. Same-role commands stay in the primary role session; cross-role
+commands delegate to the named owner. Current usage and limits: [`opencode/README.md`](../../opencode/README.md).
+
 Full technical detail — component map, runtime topology, data model, build/run/test, cross-cutting
 concerns, and identified risks — is in
 [`ai-agents/knowledge-base/architecture.md`](./architecture.md) (written by fkit-architect's
@@ -85,12 +98,11 @@ concerns, and identified risks — is in
   longer breadth-constrained** — it grows when a capability gap justifies a new role, and the eighth (a
   sandboxed e2e tester) is authorized in
   [`ADR-028`](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md) but not yet built.
-- **Single runtime: Claude Code native + Codex** (per
-  [`ADR-009`](decisions/adr-009-claude-code-native-is-the-only-runtime.md), which **removed** the
-  Omnigent flavor and supersedes ADR-008's dual-runtime decision). No second runtime is maintained and
-  no third is targeted. **Codex is optional but recommended** — it is what makes the reviewer's second
-  opinion genuinely model-diverse; without it, that opinion falls back to Claude only, loudly flagged as
-  not model-diverse ([`ADR-054`](decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md), amending ADR-009 §2).
+- **Runtime choice:** the Claude runtime remains available, with optional Codex for its second
+  opinion. The OpenCode port uses native agents and provider models, with no Claude/Codex shell
+  bridge. It flags incomplete or unverified model diversity rather than silently treating an
+  inherited model as independent. See [ADR-061](decisions/adr-061-native-opencode-runtime.md) and
+  [`opencode/README.md`](../../opencode/README.md) for its current validation limits.
 - **Role boundaries: structural in a session and in a consult; the rest is prompt-enforced.** Per
   [`ADR-010`](decisions/adr-010-role-locked-sessions-and-skill-lockdown.md), a `fkit <role>` session
   is locked by the harness — a `PreToolUse` skill-ownership hook that denies every non-owned `/fkit-*`

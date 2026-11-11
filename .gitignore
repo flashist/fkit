@@ -15,3 +15,12 @@
 
 # fkit-managed skills (refreshed by fkit-claude-init.sh)
 .claude/skills/fkit-*/
+
+# Generated OpenCode profiles and procedures (edit opencode/ sources).
+.opencode/fkit.json
+.opencode/fkit-rules.md
+.opencode/agents/fkit-*.md
+.opencode/commands/fkit-*.md
+.opencode/skills/fkit-*/
+.opencode/fkit-resources/
+.opencode/opencode.json

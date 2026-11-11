@@ -1,7 +1,14 @@
 # fkit — Architecture
 
+> Runtime update (2026-11-11): the owner requested a native OpenCode port. `opencode/` now
+> provides native agents, permissions, commands and adapted workflows alongside the Claude runtime.
+> See `opencode/README.md` for the current OpenCode contract and verification limits. Historical
+> single-runtime and Claude-only enforcement statements below describe the Claude path.
+
+
 **The architecture of the system as it exists today** (last refreshed 2026-07-23; originally
-2026-07-11, post-Omnigent-removal). One runtime, **seven built roles** (an eighth, a sandboxed e2e
+2026-07-11, post-Omnigent-removal). The historical sections below describe the Claude runtime;
+the OpenCode addition is described separately here. **Seven built roles** (an eighth, a sandboxed e2e
 tester, is authorized in [ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
 but **not yet built**), no orchestrator *daemon* (the `fkit-lead` conductor is an in-session driver, not runtime infrastructure — §5.1), everything coordinated through files in git.
 
@@ -9,6 +16,39 @@ Every claim carries a `path:line` reference. Anything the code could not answer 
 (§11), not a guess.
 
 ---
+
+## Native OpenCode addition — 2026-11-11
+
+[ADR-061](decisions/adr-061-native-opencode-runtime.md) authorizes the native OpenCode path alongside
+Claude. `opencode/setup.mjs` renders native profiles from the shared role definitions and
+`claude/skills-for-role.sh`, ports shared skill resources, and applies native playbook overrides in
+`opencode/skills/`. It preserves existing project knowledge and user JSON/JSONC. Generated profiles
+are FKit-managed; the canonical sources remain in this repository.
+
+`opencode/fkit-opencode.sh` selects a primary role through OpenCode mini's `--agent`. Named `subagent`
+calls provide separate contexts with per-agent permissions. Same-role commands load an owned skill
+in the current session; cross-role commands delegate without changing the primary role. Depth 3
+supports lead → coder → reviewer → hostile reviewer. Wiki and hostile reviewer remain leaves.
+The primary asks owner questions; workers return NEEDS-DECISION. Only producer invokes movers.
+
+Native skill/edit/subagent permissions replace Claude hooks. Shell commands require approval;
+source approval and no-cycle discipline remain prompt contracts. No claim of an OS sandbox or
+Claude plan-mode write wall applies to this runtime. Native review uses a model-selected hostile
+child; `opencode/skills/fkit-review/model-evidence.mjs` reads native assistant-message records and
+checks that the hostile child belongs to the invoking reviewer. Unknown/same model evidence or
+unusable reviewer output produces a partial review and withholds automatic closure.
+
+Heal wrappers reuse the shared checker and repair engine against an OpenCode-adapted scaffold
+snapshot and append-preserving native hash manifest. AGENTS.md is checked; CLAUDE.md is not required.
+Owner-edited files remain report-only, stale replacement needs live exact-list approval, and
+apply-time rechecks and wiki routing remain intact.
+
+Local OpenCode v2.2.6 loaded seven profiles, 28 skills and 28 commands. Owner-authorized manual
+verification exercised depth-three native delegation, distinct-model evidence, native skill denial,
+a same-role command and a native question/reply round trip without project writes. Provider quota
+failure produced the expected partial review. Test automation remains paused; the owner's approval
+covered manual checks for this port. Evidence and limits: [`opencode/VERIFICATION.md`](../../opencode/VERIFICATION.md).
+Current commands: [`opencode/README.md`](../../opencode/README.md).
 
 ## 1. What fkit is
 

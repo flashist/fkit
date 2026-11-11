@@ -1,5 +1,11 @@
 # Agent Instructions
 
+> Runtime update (2026-11-11): the owner requested a native OpenCode port. `opencode/` now
+> provides native agents, permissions, commands and adapted workflows alongside the Claude runtime.
+> See `opencode/README.md` for the current OpenCode contract and verification limits. Historical
+> single-runtime and Claude-only enforcement statements below describe the Claude path.
+
+
 Guidance for Codex (the codex fkit agents) in this repository. Edit freely.
 
 ## Project Overview
@@ -11,18 +17,16 @@ project. An **eighth** role, a sandboxed e2e tester, is authorized ([ADR-028](ai
 but **not yet built** — the team is seven today. It's built for software developers, vibe coders, and anyone using AI to build software who
 wants a structured multi-agent workflow instead of one undifferentiated coding assistant.
 
-**One runtime: Claude Code native + Codex** ([`ADR-009`](ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)).
-Agents are Claude Code subagents (`claude/agents/fkit-*.md`) and `/fkit-*` skills
-(`claude/skills/`); the `fkit` launcher opens a **role-locked session** per
-[`ADR-010`](ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md).
-fkit previously ran on Omnigent; that runtime was removed in Sprint 2 — see ADR-009. Don't reason
-from it.
+**Runtimes:** Claude Code native + optional Codex (`claude/`), and a native OpenCode v2 port
+(`opencode/`, manually verified 2026-11-11). [ADR-061](ai-agents/knowledge-base/decisions/adr-061-native-opencode-runtime.md)
+amends ADR-009's exclusivity. The Claude launcher retains its role-locked sessions; OpenCode uses
+native agent profiles, per-agent skill permissions and named child sessions. Omnigent remains retired.
 
-**You (Codex) are the adversarial second opinion.** The reviewer runs its own Claude pass and then
-shells out to `codex exec` for an independent hostile pass. That independence is the entire point: a
-"second opinion" from the same model that wrote the code is not a second opinion, it is the illusion
-of one. If Codex is unreachable the review is emitted as a **loudly-flagged partial**, never as a
-complete review.
+**Review independence:** the Claude path uses Codex as its adversarial second opinion. The OpenCode
+path uses `fkit-adversarial-reviewer` as a native child with a separately configured model. A missing,
+same-model or unverified second opinion is prominently flagged as partial. Fresh context alone is
+not evidence of model diversity. Source implementation still belongs to the coder role; review roles
+read and report.
 
 The full project brief — domain, architecture, conventions — lives in
 [`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).

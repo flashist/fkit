@@ -11,6 +11,15 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+## v0.3.3-opencode.1 â€” 2026-11-11
+
+- OpenCode preview channel: native agent orchestration, seven roles, scoped skills and commands,
+  independent native review, owner decision relay and project setup. Run `fkit opencode`.
+- OpenCode previews use `X.Y.Z-opencode.N` on the separate `fkit-open-code` branch. Stable installs
+  continue tracking `main`; preview users opt in explicitly and update within the preview channel.
+- `npm run release:opencode` starts or advances the preview counter, preserving the base version;
+  OpenCode prereleases are refused on stable branches. Tests remain manual and opt-in.
+
 - `fkit coder` sessions now do plan review by default too: `/fkit-plan-task` drafts the plan, has
   agents approve it and Codex attack it, then shows it to you with the review record. The draft and
   review run with plan mode off (only the coder's instructions stop a write in that stretch, ~17 min);

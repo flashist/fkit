@@ -2,9 +2,9 @@
 //
 // SCOPE: what the summary prints, on each path, and, since task 0300, the `--branch` preflight guard
 // above it plus the post-gate HEAD compare, and, since task 0479, the CHANGELOG.md check and stamp.
-// Nothing else in release.mjs is under test here, and
-// ⛔ nothing in this file may change tag, push or bump BEHAVIOUR — 0288 is fenced to the summary
-// block (owner-ruled 2026-08-13, "Report truthfully only — stay inside the fence").
+// The historical 0288 scope remains fenced to the summary block (owner ruling 2026-08-13).
+// The later OpenCode preview section covers new bump and isolation behavior explicitly requested
+// by the owner on 2026-11-11; that new scope does not change the historical summary contract.
 //
 // The block used to be written as if the default path were the only path: it printed `✓ Released
 // <tag>` plus a tag-verify command on every non-dry run, including runs that created no tag, pushed
@@ -907,3 +907,75 @@ test('0479/no-bump-dry-run-counts-the-stamp: on a clean tree, --no-bump --dry-ru
     assert.ok(git(repo, ['show', '--name-only', '--format=', 'HEAD']).out.split('\n').includes('CHANGELOG.md'),
       'the real run\'s commit does not carry CHANGELOG.md');
   });
+
+// The owner's OpenCode preview channel adds version/branch behavior beyond the historical summary scope.
+test('opencode preview refuses stable branches before any write', () => {
+  const { repo } = makeFixture();
+  const before = readFileSync(join(repo, 'VERSION'), 'utf8');
+  const head = git(repo, ['rev-parse', 'HEAD']).out;
+  for (const args of [['--opencode'], ['--version', '0.2.0-opencode.1', '--dry-run']]) {
+    const r = release(repo, args);
+    assert.notEqual(r.code, 0);
+    assert.match(r.stderr, /dedicated branch/);
+    assert.equal(readFileSync(join(repo, 'VERSION'), 'utf8'), before);
+    assert.equal(git(repo, ['rev-parse', 'HEAD']).out, head);
+    assert.equal(git(repo, ['status', '--porcelain']).out, '');
+  }
+});
+
+test('opencode preview starts at revision 1, then increments the same base by default', () => {
+  const { repo } = makeFixture();
+  git(repo, ['switch', '-q', '-c', 'fkit-open-code']);
+  let r = release(repo, ['--opencode', '--no-push']);
+  assert.equal(r.code, 0, r.stdout + r.stderr);
+  assert.equal(readFileSync(join(repo, 'VERSION'), 'utf8').trim(), '0.1.1-opencode.1');
+  assert.equal(JSON.parse(readFileSync(join(repo, 'package.json'), 'utf8')).version, '0.1.1-opencode.1');
+  assert.equal(git(repo, ['tag', '--list', 'v0.1.1-opencode.1']).out, 'v0.1.1-opencode.1');
+  const notes = readFileSync(join(repo, 'CHANGELOG.md'), 'utf8');
+  writeFileSync(join(repo, 'CHANGELOG.md'), notes.replace('## Unreleased\n', '## Unreleased\n\n- next preview\n'));
+  r = release(repo, ['--no-push']);
+  assert.equal(r.code, 0, r.stdout + r.stderr);
+  assert.equal(readFileSync(join(repo, 'VERSION'), 'utf8').trim(), '0.1.1-opencode.2');
+  assert.match(r.stdout, /stable main is not pushed/);
+  assert.equal(git(repo, ['ls-remote', '--heads', 'origin', 'fkit-open-code']).out, '');
+});
+
+test('opencode preview accepts an explicit base and dry-run leaves it untouched', () => {
+  const { repo } = makeFixture();
+  git(repo, ['switch', '-q', '-c', 'fkit-open-code']);
+  const before = readFileSync(join(repo, 'VERSION'), 'utf8');
+  const r = release(repo, ['--opencode', '--version', '0.4.0-opencode.1', '--dry-run']);
+  assert.equal(r.code, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /v0\.4\.0-opencode\.1/);
+  assert.equal(readFileSync(join(repo, 'VERSION'), 'utf8'), before);
+  assert.equal(git(repo, ['status', '--porcelain']).out, '');
+});
+
+test('opencode preview refuses a stable explicit version and malformed counters', () => {
+  const { repo } = makeFixture();
+  git(repo, ['switch', '-q', '-c', 'fkit-open-code']);
+  for (const args of [
+    ['--opencode', '--version', '0.4.0'],
+    ['--opencode', '--no-bump'],
+    ['--version', '0.4.0-opencode.01'],
+    ['--version', '0.4.0-opencode.bad'],
+  ]) {
+    const r = release(repo, args);
+    assert.notEqual(r.code, 0, r.stdout + r.stderr);
+    assert.equal(git(repo, ['status', '--porcelain']).out, '');
+  }
+});
+
+test('opencode preview pushes only its branch and tag even with push.followTags enabled', () => {
+  const { repo } = makeFixture();
+  const stableBefore = git(repo, ['ls-remote', '--heads', 'origin', 'main']).out;
+  git(repo, ['switch', '-q', '-c', 'fkit-open-code']);
+  git(repo, ['config', 'push.followTags', 'true']);
+  git(repo, ['tag', '-a', 'v99.0.0', '-m', 'unpublished unrelated tag']);
+  const r = release(repo, ['--opencode']);
+  assert.equal(r.code, 0, r.stdout + r.stderr);
+  assert.equal(git(repo, ['ls-remote', '--heads', 'origin', 'main']).out, stableBefore);
+  assert.equal(git(repo, ['ls-remote', '--tags', 'origin', 'v99.0.0']).out, '');
+  assert.match(git(repo, ['ls-remote', '--heads', 'origin', 'fkit-open-code']).out, /refs\/heads\/fkit-open-code/);
+  assert.match(git(repo, ['ls-remote', '--tags', 'origin', 'v0.1.1-opencode.1']).out, /refs\/tags\/v0\.1\.1-opencode\.1/);
+});

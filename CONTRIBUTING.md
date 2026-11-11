@@ -52,6 +52,13 @@ Use a full clone:
 Prove-red has its own manual workflow (`.github/workflows/prove-red.yml`). Run either workflow
 from the Actions tab using **Run workflow**, selecting the desired branch.
 
+### OpenCode port verification
+
+`test/opencode.test.js` was explicitly approved by the owner on 2026-11-11, together with the
+current port's focused checks and read-only live delegation verification. Run the focused contracts
+manually with `npm run test:opencode` when authorized. This approval does not restore automatic
+execution: no launch/setup hook, CI trigger, schedule or release default was enabled.
+
 ### Re-enable automatic testing
 
 1. In `.github/workflows/test.yml`, uncomment `push`, `branches: [main]` and `pull_request`
@@ -69,6 +76,8 @@ already queued or running workflows or change any separately configured branch p
 
 Changed anything under `claude/scaffold/`? Run `npm run generate:manifest` and commit the regenerated
 `claude/structure-manifest.tsv` with it — its test goes red when the manifest is stale.
+Changes to OpenCode scaffold adaptation (`opencode/adapt.mjs`) also regenerate
+`opencode/structure-manifest.tsv` through the same command; retain its historical native hashes.
 
 ### Test rules
 

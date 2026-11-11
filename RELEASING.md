@@ -61,6 +61,45 @@ subscribe — and it is not even a reliable way to go quiet.
 
 ---
 
+## OpenCode preview channel
+
+The OpenCode port is published separately as `X.Y.Z-opencode.N` from `fkit-open-code`. Do not merge
+it into `main` to publish a preview: the default installer and stable update path continue following
+`main`. Mark the corresponding GitHub release **prerelease**, with **latest disabled**. The release
+helper creates/pushes the git branch and tag; the GitHub prerelease metadata is a separate step.
+
+```sh
+# From the checked-out fkit-open-code branch; exact first version is chosen by the maintainer:
+npm run release:opencode -- --version X.Y.Z-opencode.1 --dry-run
+npm run release:opencode -- --version X.Y.Z-opencode.1
+# Later previews keep X.Y.Z and increment N:
+npm run release:opencode
+```
+
+`--opencode` defaults to the next patch base and revision 1 when starting from a stable version.
+`--minor` or `--major` selects a different base. An existing OpenCode preview increments N even if
+plain `npm run release` is used, preventing an accidental stable-looking version. `--no-bump`
+finishes the same preview; an explicit stable `--version` is required for eventual graduation.
+The helper refuses OpenCode prereleases on main/master or detached HEAD, before any write.
+Tests are still opt-in; no automatic test gate or CI trigger was enabled.
+
+After the tag is published, create its GitHub release with `gh release create <tag> --verify-tag
+--prerelease --latest=false --title <title> --notes-file <release-notes-file>`.
+
+Preview installation (switches that FKit installation to the preview branch):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/flashist/fkit/fkit-open-code/install.sh | FKIT_REF=fkit-open-code sh
+cd /path/to/project
+fkit opencode
+```
+
+`fkit update` preserves the recorded `fkit-open-code` ref. Returning to stable uses the normal main
+installer. A version suffix or GitHub prerelease flag alone does not isolate distribution: the
+separate branch and explicit installer ref are what keep preview content away from stable users.
+
+---
+
 ## 2. What `VERSION` does, and what it does not do
 
 **What it does.** It names the release in the update notice. When an install and the remote report
