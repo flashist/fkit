@@ -3,6 +3,10 @@
 Maintainer guidance for cutting a release **of the fkit repo itself**. It is not documentation for
 people who *use* fkit.
 
+**Automatic testing is paused by owner request (2026-11-11).** Releases and dry runs skip tests
+by default. Pass `--test` to opt into the preserved release gate. CI workflows run only on manual
+dispatch. Manual commands and restoration steps: [`CONTRIBUTING.md`](CONTRIBUTING.md#tests).
+
 This file ships to nobody. It sits outside `claude/scaffold/`, so `install.sh` never copies it into a
 consuming project, and it is absent from `claude/structure-spec.md`'s inventory tables, so no
 conformance check knows about it. That is why it lives at the repo root and **not** in
@@ -131,23 +135,22 @@ minutes. The release then turns `## Unreleased` into `## v<x.y.z> — <date>` (�
 nothing written there anyway, pass `--allow-empty-changelog`; it is loud, and the version section
 then says *"No changes were recorded for this release."*
 
-**3. Run the tests yourself first.**
+**3. Run tests only when requested.**
+
+All test commands remain available for an explicitly requested manual check:
 
 ```sh
 npm test
 npm run test:release
 ```
 
-Not as the last line of defence — `npm run release` runs both for you (§4). Run them first because a
-red found before the release run costs nothing. `npm test` is
+`npm run release -- --test` runs both before any release writes (§4). Plain `npm run release`
+skips them. `npm test` is
 `node --test test/*.test.js test/board/*.test.js` (`package.json:5`) and `npm run test:release` is the
 release tool's own test (`package.json:9`); for their times, see `CONTRIBUTING.md`'s Tests block.
 
-The release does **not** run prove-red (the four mutation cases); CI runs it nightly
-(`.github/workflows/prove-red.yml`). Check that the last nightly `prove-red` run is green on the
-repo's Actions tab. If you changed `claude/fkit-claude.sh`, `claude/skills-for-role.sh`,
-`claude/skill-ownership-hook.sh`, `test/launcher-contract.test.js`, `test/skill-ownership-hook.test.js`
-or `test/prove-red.sh` since that run, run it yourself:
+The release does **not** run prove-red (the four mutation cases). Its workflow is manual-only
+(`.github/workflows/prove-red.yml`). When a mutation check is requested, use the Actions tab or:
 
 ```sh
 npm run test:prove-red
@@ -172,21 +175,21 @@ two must already agree, or the script aborts and asks you to reconcile them
 npm run release:dry
 ```
 
-It prints the whole plan and touches nothing — but note it **still runs the test gate** (about 2
-min), so a dry run is not a cheap run.
+It prints the whole plan and touches nothing. It skips tests by default; pass `--test` to opt in:
+
+```sh
+npm run release:dry -- --test
+```
 
 ---
 
 ## 4. What `npm run release` does for you
 
-**The test gate cannot be forgotten.** A release run executes `npm test`, then `npm run
-test:release`, before its first mutating line and refuses to release on the first red
-(`bin/release.mjs:319-367`, the `// --- test gate` block) —
-skipping it is possible, but only by asking for it explicitly with `--no-test` (`bin/release.mjs:98`,
-`const doTest`; `:363-366`, the `⚠ --no-test` banner), which §5 costs out. The position of the gate
-is deliberate: at that point nothing has been written, staged, committed, or tagged, so a red suite is a clean abort leaving the tree exactly as you left it. Gating any later
-would leave `VERSION` and `package.json` bumped and dirty, and the next default run would bump again
-(`bin/release.mjs:323-328`, *"POSITION IS LOAD-BEARING"*).
+**The test gate is opt-in.** By default a release skips tests and prints that this run has not
+verified the tree. With `--test`, it executes `npm test`, then `npm run test:release`, before its
+first write and refuses the release on the first failure (`bin/release.mjs`, `runTests()`).
+`--no-test` overrides `--test`. A failing opted-in gate leaves the tree without a release version
+bump, commit, or tag.
 
 **The changelog check runs before the gate, and again after it.** Before the test gate starts, the run
 refuses a `CHANGELOG.md` whose `## Unreleased` section is missing, duplicated, or empty
@@ -208,30 +211,23 @@ Then, in order (`bin/release.mjs:401-479`, from the bump to the `// 3. tag` step
 5. create the annotated `v<version>` tag
 6. push the tag
 
-**The gate and CI cover different things, and neither replaces the other** — the argument is made in
-full at `.github/workflows/test.yml:3-11`. In short: the **gate** sees the working tree that
+**When requested, the gate and CI cover different things.** The **gate** sees the working tree that
 `git add -A` is about to ship, including uncommitted and untracked work, which CI structurally
 cannot; **CI** covers `main`'s HEAD, which is what `install.sh` actually installs, and its verdict
 arrives after the push rather than before it.
 
-CI runs `npm test` on every push to `main`, on every pull request, and on demand via
-`workflow_dispatch` (`.github/workflows/test.yml:16-20`), and fails the job when `npm test` takes
-over its 120 s budget (`.github/workflows/test.yml:53-69`, the `npm test (budget, ADR-057 §D10)`
-step). It has been exercised on real pushes and has already caught a failure that a local run had
-not. Two of its settings are load-bearing rather than cosmetic: `fetch-depth: 0`
-(`.github/workflows/test.yml:41-45`), without which the manifest test refuses a shallow clone and the
-suite dies at module load; and `timeout-minutes: 10` (`.github/workflows/test.yml:36`), which stops a
-hung run from burning a runner. Prove-red runs in its own workflow, nightly at 03:17 UTC and on
-demand (`.github/workflows/prove-red.yml`), on `main`'s latest commit only — `CONTRIBUTING.md`'s
-Tests block lists its limits.
+CI runs `npm test` only on demand via `workflow_dispatch` (`.github/workflows/test.yml`), and
+fails the job when it takes over 120 s. Its `fetch-depth: 0` is required by the manifest test,
+which refuses a shallow clone; `timeout-minutes: 10` stops a hung run. Prove-red has its own
+manual workflow (`.github/workflows/prove-red.yml`). The disabled automatic triggers remain
+commented in both files for restoration.
 
 ---
 
 ## 5. What is still not covered
 
-- **`--no-test` can still ship an unverified tree.** It is loud — an unconditional stderr banner
-  fires (`bin/release.mjs:363-366`, *"⚠ --no-test: releasing WITHOUT running the suite"*) — and it is
-  never a default, but nothing blocks it.
+- **Releases skip tests by default.** A stderr banner reports that this run has not verified the
+  tree. Use `--test` when verification is wanted; `--no-test` explicitly skips it.
 - **The changelog check proves the `## Unreleased` section is not empty — not that it is complete or
   accurate.** One line of anything passes. And `--allow-empty-changelog` is loud (a stderr banner,
   `bin/release.mjs:300-306`, plus a *"No changes were recorded"* line in the file), but nothing

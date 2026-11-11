@@ -128,3 +128,10 @@ Full technical detail — component map, runtime topology, data model, build/run
 cross-cutting concerns — lives in
 [`ai-agents/knowledge-base/architecture.md`](ai-agents/knowledge-base/architecture.md). Don't
 duplicate it here; read it for anything below product-brief altitude.
+
+## Repository test automation — paused
+
+Owner ruling (2026-11-11): retain all tests, but disable automatic execution. Do not run tests by
+default; run them only on the owner's explicit request. CI is manual-only; releases and dry runs
+skip tests unless passed `--test`. This overrides earlier automatic-run guidance. Manual commands
+and re-enabling steps: [`CONTRIBUTING.md`](CONTRIBUTING.md#tests). Applies to this repo only.

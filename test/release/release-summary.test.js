@@ -143,13 +143,7 @@ function commitWork(repo, text = 'work\n') {
   git(repo, ['commit', '-q', '-m', 'work']);
 }
 
-// One release run. ⛔ SEAL 2: `--no-test` is hard-coded and asserted present. Without it release.mjs
-// runs `npm test` in the fixture. Measured, this turn: the fixture's package.json has no `test`
-// script, so that run ABORTS (exit 1, "npm error Missing script") rather than recursing — i.e. the
-// seal is not today load-bearing against an infinite loop, and this comment says so rather than
-// claiming a recursion that was not observed. It is kept because the cost is one assertion and the
-// failure mode it guards is real for any future fixture that copies a package.json carrying a test
-// script: `npm test` → this file → `npm test`, unbounded.
+// Keep --no-test explicit so restoring the default gate cannot recurse into this suite.
 function release(repo, args = []) {
   const argv = ['--no-test', ...args];
   assert.ok(argv.includes('--no-test'), 'the fixture must never run release.mjs with its test gate ON');
@@ -172,7 +166,7 @@ function releaseWithGateOn(repo, args = []) {
     assert.ok(typeof script === 'string' && script.length > 0, `gate-ON fixture has no ${name} script — the gate would abort, proving nothing`);
     assert.ok(!/npm|node|release/.test(script), `gate-ON fixture ${name} script could recurse into this suite: ${script}`);
   }
-  const r = spawnSync('node', [join(repo, 'bin', 'release.mjs'), ...args], { cwd: repo, encoding: 'utf8' });
+  const r = spawnSync('node', [join(repo, 'bin', 'release.mjs'), '--test', ...args], { cwd: repo, encoding: 'utf8' });
   return { code: r.status, stdout: r.stdout || '', stderr: r.stderr || '' };
 }
 

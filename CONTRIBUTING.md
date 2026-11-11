@@ -16,10 +16,21 @@ the checkout's own `claude/`, so your edits are what the agents use.
 
 ## Tests
 
+**Automatic testing is paused by owner request (2026-11-11).** Tests and npm commands remain
+available, but nothing runs on pushes, pull requests, a nightly schedule, releases, or release dry
+runs. Agents must not run tests by default; run them only when the owner explicitly requests a test
+run. This overrides the earlier automatic-run guidance in ADR-057 and the architecture history.
+
+Both GitHub Actions workflows are manual-only (`workflow_dispatch`). A release skips its test gate
+unless invoked with `npm run release -- --test` (or `npm run release:dry -- --test`).
+`--no-test` still works and overrides `--test`.
+
+### Run manually
+
 ```sh
 npm test                 # the default suite (~1.5 min; budget 2 min)
-npm run test:release     # the release tool's own test — `npm run release` runs it (~45 s)
-npm run test:prove-red   # the four deliberate mutants — nightly in CI (~2.5 min)
+npm run test:release     # the release tool's own test (~45 s)
+npm run test:prove-red   # the four deliberate mutants (~2.5 min)
 npm run test:docs        # fast path: the two named-exception tests that read ai-agents/ (under 1 s)
 ```
 
@@ -28,29 +39,33 @@ npm run test:docs        # fast path: the two named-exception tests that read ai
 start — no idle window came, so these are not idle-Mac figures); `test:release` 46 s (one run, load
 12.4); `test:prove-red` 151.6 s (one run, task 0529). Yours will differ.
 
-When each runs — only `npm test` counts against the 2-minute budget (ADR-057 §D10):
-- `npm test` — CI, on every push to `main` and every pull request; and every `npm run release`.
-- `npm run test:release` — every `npm run release` (after `npm test`), or by hand.
-- `npm run test:prove-red` — nightly in CI, or by hand. The release does not run it.
-
 On a red, `test/prove-red.sh` prints where it kept each failing step's own output (a `fkit-prove-red-kept.*` folder under `$TMPDIR`).
 
-No dependencies and no `npm install`. CI (`.github/workflows/test.yml`) runs `npm test` on Node 24
-for every push to `main` and every pull request, in one timed step that fails the job when
-`npm test` takes over 120 s, naming the budget and the time taken. On the
+No dependencies and no `npm install`. The manual CI workflow (`.github/workflows/test.yml`) runs
+`npm test` on Node 24, in one timed step that fails the job when `npm test` takes over 120 s,
+naming the budget and the time taken. On the
 runner (`ubuntu-latest`), 2026-10-20: `npm test` 72 / 65.8 / 81.6 / 85.2 / 60.7 s (five runs —
 runner times vary ~60–85 s; the slowest is 71% of the budget); prove-red 118 s (one run; job 123 s).
 Use a full clone:
 `test/structure-manifest.test.js` refuses a shallow one.
 
-Prove-red runs in CI nightly at 03:17 UTC (`.github/workflows/prove-red.yml`; also runnable from the
-Actions tab, `workflow_dispatch`). Its limits, from GitHub's docs (2026-10-20): it runs on `main`'s
-latest commit only — branches, pull requests and a release's working tree are not covered; GitHub
-may delay a scheduled run at busy times or drop it, and a dropped night sends no message; the
-schedule is disabled after 60 days with no repository activity. A red run notifies, by email or on
-the web, whoever last changed the workflow's cron line — **only if that person has Actions
-notifications on** (github.com/settings/notifications → Actions; check it once). A red run also
-shows on the Actions tab.
+Prove-red has its own manual workflow (`.github/workflows/prove-red.yml`). Run either workflow
+from the Actions tab using **Run workflow**, selecting the desired branch.
+
+### Re-enable automatic testing
+
+1. In `.github/workflows/test.yml`, uncomment `push`, `branches: [main]` and `pull_request`
+   under `on`. Keep `workflow_dispatch` for manual runs.
+2. In `.github/workflows/prove-red.yml`, uncomment `schedule` and `cron: '17 3 * * *'`
+   under `on` to restore the daily 03:17 UTC run.
+3. In `bin/release.mjs`, change `const doTest = has("--test") && !has("--no-test");`
+   to `const doTest = !has("--no-test");` to restore the release and dry-run gate by default.
+4. Update the paused-testing guidance here, in `AGENTS.md`, `CLAUDE.md`, `RELEASING.md`,
+   the architecture note, workflow comments, and release help/banner to match the restored defaults.
+
+No test files or npm test scripts need restoring. Workflow changes take effect on GitHub once
+pushed; the nightly schedule uses the workflow on the default branch. These edits do not cancel
+already queued or running workflows or change any separately configured branch protection rules.
 
 Changed anything under `claude/scaffold/`? Run `npm run generate:manifest` and commit the regenerated
 `claude/structure-manifest.tsv` with it — its test goes red when the manifest is stale.
@@ -76,8 +91,8 @@ key list"; in this repo, these are they.
   not the content of `ai-agents/`. LLM behaviour stays out.
 - **Named exceptions — these four, no others:** `test/dual-home-parity.test.js`,
   `test/task-id-uniqueness.test.js` and `test/structure-manifest.test.js` (in `npm test`), and
-  `test/release/release-summary.test.js` (its own script, `npm run test:release`, run before a
-  release). No test may cite "the fourth
+  `test/release/release-summary.test.js` (its own script, `npm run test:release`, also run by an
+  opted-in release gate). No test may cite "the fourth
   category" as its licence.
 - **Growth stop.** No new test file and no new prove-red case without the owner's OK — each one, every
   time, in any lane (the default suite, nightly prove-red, the release-test script). A plan the owner
@@ -93,22 +108,23 @@ key list"; in this repo, these are they.
      never-overwrite rule, orphan cleanup, heal `repair.sh`).
 - **Prove-red's lane.** Four cases only (numbers kept from before the cut): M1 (a `skills_for_role()` entry), M2 (the
   `--resume` passthrough), M30 (`exec` on the cold start) and M31 (the same, intake path only). Each
-  runs only the test file it needs, nightly in CI, outside `npm test`; still runnable by hand with
+  runs only the test file it needs, in the manual CI workflow, outside `npm test`; runnable by hand with
   `npm run test:prove-red`. A fifth case needs the owner's OK.
 - **The budget.** The default `npm test` takes ≤ 2 min locally on an idle Mac; CI fails the job if it
-  goes over. Nightly prove-red and the release-test script are outside it.
+  goes over. Prove-red and the release-test script are outside it.
 
 ### What to run for a change
 
-`npm test` is what CI runs on every push; `npm run release` runs it and then `npm run test:release`.
-While you work, run what the change needs:
+The following table selects manual checks **when the owner requests testing**. It does not
+authorize an automatic run while testing is paused. `npm run release -- --test` opts into
+`npm test` followed by `npm run test:release`.
 
 | What changed | Run | Why |
 |---|---|---|
 | Only `LICENSE`, `ai-agents/wiki-vault/` (except `schema.md`), `README.md`, `CONTRIBUTING.md`, `RELEASING.md`, `CHANGELOG.md`, `docs/`, `claude/README.md` | **nothing** — report "no automated check covers these files"; check any links you touched by eye | No test reads their contents. In the vault, `dual-home-parity` only checks which files sit outside `wiki/`. |
 | `bin/release.mjs` | `npm test` + `npm run test:release` | The release tool's own test is outside `npm test`. |
 | `claude/fkit-claude.sh`, `claude/skills-for-role.sh`, `claude/skill-ownership-hook.sh`, `test/launcher-contract.test.js`, `test/skill-ownership-hook.test.js`, `test/prove-red.sh` | `npm test` + `npm run test:prove-red` | Prove-red mutates these files or runs these tests. |
-| Anything else — `ai-agents/` (`wiki-vault/schema.md` included), other `claude/` files, `claude/scaffold/`, other `bin/` tools, `test/`, `package.json`, `.github/` — or **unsure** which row applies | `npm test` | The default command. When unsure, nothing beyond it. Before a release, check the last nightly prove-red run is green (`RELEASING.md` §3). |
+| Anything else — `ai-agents/` (`wiki-vault/schema.md` included), other `claude/` files, `claude/scaffold/`, other `bin/` tools, `test/`, `package.json`, `.github/` — or **unsure** which row applies | `npm test` | The default manual command. When unsure, nothing beyond it. |
 
 - **A change that spans rows: run what every row it touches asks for.**
 - **Always report which checks ran and which were skipped, and why — a skipped check is not a passed one.**
@@ -167,8 +183,8 @@ test/                            `npm test` — the default suite (node:test)
   board/                         the board module's tests (in `npm test`)
   release/                       the release tool's own test (`npm run test:release`)
   prove-red.sh                   the mutation lane (`npm run test:prove-red`)
-.github/workflows/test.yml       CI: `npm test`, timed against its budget, on every push to main and every PR
-.github/workflows/prove-red.yml  CI: `npm run test:prove-red`, nightly
+.github/workflows/test.yml       manual CI: `npm test`, timed against its budget
+.github/workflows/prove-red.yml  manual CI: `npm run test:prove-red`
 ai-agents/                       fkit's own working structure (it is run on itself)
 ```
 

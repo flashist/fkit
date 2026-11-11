@@ -13,10 +13,7 @@
 // committed tree is skipped). A default (bumping) run always cuts a NEW version,
 // so after a partial failure re-run with --no-bump to finish the same one.
 //
-// Test gate: every run executes `npm test`, then `npm run test:release`, first and
-// ABORTS on the first red — an untested tree cannot be released (tasks 0256, 0530).
-// It runs before the first write, and under --dry-run too. --no-test skips it and
-// is never a default.
+// Tests are opt-in while automatic testing is paused; see CONTRIBUTING.md.
 //
 // Release notes (task 0479): CHANGELOG.md must have a non-empty `## Unreleased`
 // section, checked BEFORE the test gate (a refusal costs seconds, not the gate's
@@ -38,7 +35,8 @@
 //   --dry-run           Print the plan; touch nothing
 //   --no-tag            Commit + push, but don't create/push a tag
 //   --no-push           Commit + tag locally, but don't push anything
-//   --no-test           Skip the test gate — SHIPS AN UNVERIFIED TREE
+//   --test              Opt into the test gate before release (also under --dry-run)
+//   --no-test           Skip the test gate (default; overrides --test)
 //   --allow-empty-changelog  Release with an empty `## Unreleased` in CHANGELOG.md
 //   -h, --help          Show this help
 
@@ -73,15 +71,14 @@ Options:
   --dry-run           Print the plan; touch nothing
   --no-tag            Commit + push, but don't create/push a tag
   --no-push           Commit + tag locally, but don't push anything
-  --no-test           Skip the test gate — SHIPS AN UNVERIFIED TREE
+  --test              Opt into the test gate before release (also under --dry-run)
+  --no-test           Skip the test gate (default; overrides --test)
   --allow-empty-changelog  Release with an empty \`## Unreleased\` in CHANGELOG.md
   -h, --help          Show this help
 
-Every run runs \`npm test\`, then \`npm run test:release\`, first (about 2 min) and
-refuses to release if either fails — including under --dry-run. Both read the working
-tree, so they check the tree as it stood when they started — uncommitted and untracked
-work included, but not the version bump written after them. --no-test skips that; it
-is never a default.
+Automatic tests are paused. Releases and dry runs skip tests by default.
+Pass --test to run \`npm test\`, then \`npm run test:release\`, before the first write
+and refuse the release if either fails. --no-test overrides --test.
 
 CHANGELOG.md must have a non-empty \`## Unreleased\` section — checked before the
 test gate, so a refusal is fast. The release turns it into \`## v<version> — <date>\`
@@ -95,7 +92,7 @@ Makes no npm-registry publish.`);
 const dryRun = has("--dry-run");
 const doTag = !has("--no-tag");
 const doPush = !has("--no-push");
-const doTest = !has("--no-test");
+const doTest = has("--test") && !has("--no-test");
 const allowEmptyChangelog = has("--allow-empty-changelog");
 const bumpTo = getArg("--version", null);
 const branchArg = getArg("--branch", null);
@@ -317,8 +314,7 @@ function checkChangelog(when) {
 checkChangelog("before");
 
 // --- test gate --------------------------------------------------------------
-// Refuse to release an untested tree (task 0256). There is deliberately no
-// warn-and-continue path: a red suite exits 1.
+// An explicitly requested gate must still abort before any release writes on failure.
 //
 // ⚠️ POSITION IS LOAD-BEARING. This sits immediately before the first mutating
 // line (the writeFileSync bump below). At this point nothing has been written,
@@ -361,8 +357,8 @@ if (doTest) {
   console.log(`✓ npm test and npm run test:release green\n`);
 } else {
   console.error(
-    `\n⚠ --no-test: releasing WITHOUT running the suite.\n` +
-      `⚠ The tree about to ship is UNVERIFIED — nothing has checked it.\n`,
+    `\n⚠ ${has("--no-test") ? "--no-test" : "Automatic tests paused"}: releasing WITHOUT running the suite.\n` +
+      `⚠ This release run has not verified the tree. Pass --test to run the suite.\n`,
   );
 }
 

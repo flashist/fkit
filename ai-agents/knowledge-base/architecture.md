@@ -433,6 +433,9 @@ by default) and turn `## Unreleased` into `## v<version> — <date>`, `git add
 against the remote head and reports the version from `VERSION`.
 The maintainer-facing procedure for cutting a release — the channel, the pre-release checklist, and
 what the test gate does and does not cover — is [`RELEASING.md`](../../RELEASING.md) at the repo root.
+Automatic tests are paused by owner ruling (2026-11-11): releases and dry runs skip the gate unless
+passed `--test`. CI workflows are manual-only. Tests remain available; restoration steps live in
+[`CONTRIBUTING.md`](../../CONTRIBUTING.md#re-enable-automatic-testing).
 
 **7 — Structure conformance**
 ([ADR-039](decisions/adr-039-consent-gated-structure-repair-licensed-adr-015-invariant-unchanged.md);
@@ -505,7 +508,14 @@ called for once the code was actually removed (tracked by task `0059`). See §9.
 
 ## 9. Risks and technical debt — the live ones
 
-### 9.1 The suite now runs automatically — CI plus an in-release gate; `install.sh` is still uncovered
+### 9.1 Test automation — paused; prior rollout history
+
+**Owner ruling, 2026-11-11: automatic execution is paused.** All tests remain. Push/PR and nightly
+triggers are commented out; both workflows accept manual runs. Releases and dry runs skip the gate
+unless passed `--test`. Agents run tests only when the owner explicitly requests it. See
+[`CONTRIBUTING.md`](../../CONTRIBUTING.md#tests) for manual commands and restoration steps.
+The following account records the earlier rollout; its automatic-run claims are superseded by
+this ruling.
 
 **There is a test suite, and since task 0256 two mechanisms run it without anyone remembering to.**
 [ADR-014](decisions/adr-014-how-fkit-tests-itself.md)
@@ -643,6 +653,7 @@ is the test.
    It does, at any spawn depth; the skill-ownership hook is built on it and the consult-path boundary is
    now structural (§5.2, §9.3). Kept as a closed pointer so the once-open question is not re-opened.
 2. **~~Is the test suite going to CI?~~ — RESOLVED (owner ruling, 2026-08-08; landed in task 0256).**
+   **Superseded for execution defaults by the 2026-11-11 pause (§9.1).** The rest records the earlier ruling.
    Yes, and **both** halves: a `.github/workflows/test.yml` running `npm test` on every push to `main`
    and every pull request, **and** a test gate inside `npm run release` that refuses a red tree. Each
    closes a hole the other structurally cannot — CI covers `main` HEAD (what `install.sh` installs by

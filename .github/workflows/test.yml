@@ -1,22 +1,12 @@
-# fkit — run the test suite on every push to main and every pull request (task 0256).
-#
-# Why this exists alongside the in-release test gate in bin/release.mjs: the gate protects the
-# TAGGED release, but install.sh defaults to `main`'s HEAD (install.sh:19, REF="${FKIT_REF:-main}"),
-# so the default `curl | sh` install and the self-update path track main, not a tag. Every commit on
-# main is live to every new install the moment it is pushed. The gate alone would protect the
-# artifact almost nobody installs by default.
-#
-# The reverse is also true — CI cannot replace the gate. CI's verdict is asynchronous (release.mjs
-# pushes the branch and the tag in one uninterrupted run), and CI never sees the working tree that
-# `git add -A` actually ships.
+# Automatic tests are paused by owner request; see CONTRIBUTING.md to restore them.
 
 name: test
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-  # So the first (possibly dash-red) run can be triggered on demand, without pushing to main.
+  # Uncomment to restore automatic CI.
+  # push:
+  #   branches: [main]
+  # pull_request:
   workflow_dispatch:
 
 permissions:
@@ -26,7 +16,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     # Basis (task 0530, ADR-057): `npm test` no longer runs prove-red.sh (task 0529); prove-red runs
-    # nightly in prove-red.yml. Old-suite unit pass on the runner: 76.4 s (run 39388117472). Post-cut
+    # separately in prove-red.yml. Old-suite unit pass on the runner: 76.4 s (run 39388117472). Post-cut
     # `npm test` on the runner, 2026-10-20: 72 s (run 39406193972, step time), then from the budget
     # step 65.8 / 81.6 / 85.2 / 60.7 s (runs 39416131917, 39416137864, 39416258502, 39416268459).
     # Runner times vary ~60-85 s; the slowest, 85.2 s, is 71% of the 120 s budget.
