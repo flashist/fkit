@@ -2,11 +2,11 @@
   "name": "fkit",
   "version": "0.3.2",
   "scripts": {
-    "test": "node --test test/*.test.js test/board/*.test.js",
-    "test:unit": "node --test test/*.test.js test/board/*.test.js",
-    "test:prove-red": "bash test/prove-red.sh",
-    "test:docs": "node --test test/dual-home-parity.test.js test/task-id-uniqueness.test.js",
-    "test:release": "node --test test/release/*.test.js",
+    "test": "node bin/run-tests.mjs unit",
+    "test:unit": "node bin/run-tests.mjs unit",
+    "test:prove-red": "node bin/run-tests.mjs prove-red",
+    "test:docs": "node bin/run-tests.mjs docs",
+    "test:release": "node bin/run-tests.mjs release",
     "board": "node bin/fkit-board.mjs",
     "setup:berd": "node bin/fkit-native.mjs berd",
     "setup:buzz": "node bin/fkit-native.mjs buzz",
@@ -15,6 +15,9 @@
     "release:minor": "node bin/release.mjs --minor",
     "release:major": "node bin/release.mjs --major",
     "release:dry": "node bin/release.mjs --dry-run"
+  },
+  "fkit": {
+    "testsEnabled": false
   },
   "description": "A seven-role agent team for software projects, with Claude Code sessions and native Berd/Buzz setup, scoped procedures, independent review, and a shared project scaffold.",
   "license": "MIT",

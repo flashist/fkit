@@ -14,31 +14,40 @@ Edit the canonical sources in `claude/`, never the copies in `.claude/` — thos
 refreshed from `claude/` by `claude/fkit-claude-init.sh .`. Launched inside this checkout, `fkit` runs
 the checkout's own `claude/`, so your edits are what the agents use.
 
-## Tests — manual only
+## Tests — temporarily disabled
 
-Owner ruling, 2026-11-07: tests may be used while working, but do not add more permanent tests;
-all previous automatic testing is disabled. This supersedes ADR-057's automatic CI/nightly and
-release gates and its new-test approval workflow for this work.
+Owner ruling, 2026-11-10: pause all project tests, preserving them for later reactivation.
+This supersedes the 2026-11-07 allowance for manual suites. Add no new permanent tests.
 
-Existing suites remain available on explicit request:
+The committed switch is `fkit.testsEnabled: false` in `package.json`. Every npm test command
+(`test`, `test:unit`, `test:release`, `test:prove-red`, `test:docs`) prints **SKIPPED**, exits
+successfully and runs no tests. Direct `bash test/prove-red.sh` honors the same switch before
+creating temporary files. A successful skip is **not a test pass**.
+
+Both GitHub workflows read the same switch and skip their test steps even on manual dispatch.
+Push, pull request and schedule triggers remain absent. Release and release dry-run never
+invoke tests; `--no-test` remains a compatibility no-op. No test files or cases were removed.
+
+To re-enable the existing manual suites when the owner requests it:
 
 ```sh
-npm test                 # existing default suite
-npm run test:release     # existing release-tool suite
-npm run test:prove-red   # four existing mutation checks
-npm run test:docs        # existing documentation checks
+npm pkg set fkit.testsEnabled=true --json
+npm test                 # default suite; test:unit is an alias
+npm run test:release     # release-tool suite
+npm run test:prove-red   # four mutation checks
+npm run test:docs        # documentation checks
 ```
 
-`test:unit` aliases `npm test`. There is no test run on push, pull request, schedule, release,
-or release dry-run. Both GitHub workflows expose only `workflow_dispatch`; they can also remain
-disabled in repository settings. The release tool never invokes npm. `--no-test` remains a
-compatibility no-op. Do not re-enable automatic testing or add test files/cases without a new
-owner instruction. Temporary, task-local checks are allowed and should not be committed.
+Commit the switch change to share it. Use `npm pkg set fkit.testsEnabled=false --json` to
+pause again. Re-enabling this switch restores manual runs only; automatic CI and release
+gates stay disabled. GitHub workflows disabled in repository settings must also be enabled
+there before manual dispatch is available.
 
-Run relevant checks while implementing. Report actual results, failures, skips, and limitations;
-a skipped or disabled check is not a pass. No new regression suite is required for this port.
-The older suite still has its existing scope and named exceptions; read ADR-057 for history.
-Some release tests depended on the removed automatic gate and are skipped for that reason.
+Do not bypass the pause with direct `node --test` or test-file invocations: those low-level
+commands do not read the switch. Do not re-enable tests or add permanent tests without a new
+owner instruction. Report skipped, failing and unverified checks accurately. ADR-057 records
+the older suite's scope and named exceptions; some release tests remain individually skipped
+because they depended on the removed release gate.
 
 No npm dependencies or install step are needed. Use a full clone for the structure-manifest
 check. Local HTTP tests need permission to listen on loopback. Ignored OS files can trip the
@@ -86,12 +95,12 @@ docs/
   board.md                       the web board, in detail
   media/                         README images
 vendor/aiboard/                  aiboard's web page, copied unmodified for `fkit board` (provenance in its README)
-test/                            `npm test` — the default suite (node:test)
+test/                            preserved suites; all paused by package.json's fkit.testsEnabled
   board/                         the board module's tests (in `npm test`)
   release/                       the release tool's own test (`npm run test:release`)
   prove-red.sh                   the mutation lane (`npm run test:prove-red`)
-.github/workflows/test.yml       manual-only default-suite workflow
-.github/workflows/prove-red.yml  manual-only mutation workflow
+.github/workflows/test.yml       manual-only default-suite workflow; honors the pause
+.github/workflows/prove-red.yml  manual-only mutation workflow; honors the pause
 ai-agents/                       fkit's own working structure (it is run on itself)
 ```
 

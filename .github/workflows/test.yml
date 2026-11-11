@@ -1,4 +1,4 @@
-# Tests are opt-in so pushes and pull requests never start suites implicitly.
+# The committed test switch also applies to manual workflow requests.
 
 name: test
 
@@ -24,8 +24,17 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Read test switch
+        id: tests
+        run: echo "enabled=$(node bin/run-tests.mjs --status)" >> "$GITHUB_OUTPUT"
+
+      - name: Report disabled tests
+        if: steps.tests.outputs.enabled == 'false'
+        run: echo '::notice::Tests temporarily disabled. No tests ran; this is not a test pass.'
+
       # Milliseconds keep the manual run's budget precise.
       - name: npm test (budget, ADR-057 §D10)
+        if: steps.tests.outputs.enabled == 'true'
         env:
           BUDGET_S: 120
         run: |

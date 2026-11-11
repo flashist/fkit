@@ -23,8 +23,10 @@ was **removed in Sprint 2** (ADR-009). There is nothing to mirror by hand any mo
 See [`docs/native-runtimes.md`](docs/native-runtimes.md). Claude's structural lock applies to the
 Claude path; native boundaries are advisory.
 
-**Owner test ruling (2026-11-07):** tests may run manually while working. Add no new permanent
-tests. Automatic push/PR/nightly and release-triggered test runs stay disabled; see CONTRIBUTING.md.
+**Owner test ruling (2026-11-10):** all project tests are temporarily disabled by
+`fkit.testsEnabled: false` in `package.json`. Preserve the suites; add no permanent tests.
+Do not bypass the pause or re-enable tests without a new owner instruction. Automatic
+push/PR/nightly and release-triggered test runs stay disabled; see CONTRIBUTING.md.
 
 The full project brief — domain, architecture, conventions — lives in
 [`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).

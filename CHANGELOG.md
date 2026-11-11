@@ -11,12 +11,15 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- Temporarily pause all npm test suites, manual GitHub test steps and direct mutation runs with
+  one committed `fkit.testsEnabled` switch. Preserve existing suites and document reactivation.
+
 - Native startup can now configure and remember the main/adversarial runtimes and models,
   interactively or with flags. Berd handoffs select the harness explicitly and carry callback IDs.
   Document the supported Codex executable override for older Berd bundles.
 
 - Disable automatic push/PR/nightly test runs and the release tool's automatic test gate.
-  Existing suites remain available for manual use; no new permanent tests are added.
+  Existing suites are preserved; no new permanent tests are added.
 
 - Add native Berd/Buzz setup with seven app-model personas, portable skills, additive project
   scaffolding, Berd persona imports, and a Buzz desktop team snapshot. Native boundaries are

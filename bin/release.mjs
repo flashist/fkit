@@ -73,7 +73,7 @@ Options:
   --allow-empty-changelog  Release with an empty \`## Unreleased\` in CHANGELOG.md
   -h, --help          Show this help
 
-Tests run only when requested separately: \`npm test\` and \`npm run test:release\`.
+Test commands honor package.json's fkit.testsEnabled switch; see CONTRIBUTING.md.
 Release and --dry-run do not start them. --no-test remains an accepted no-op.
 
 CHANGELOG.md must have a non-empty \`## Unreleased\` section — checked before the

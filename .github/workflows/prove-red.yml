@@ -1,4 +1,4 @@
-# Mutation checks are opt-in so they never consume a scheduled run.
+# The committed test switch also applies to manual workflow requests.
 name: prove-red
 
 on:
@@ -18,4 +18,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - name: Read test switch
+        id: tests
+        run: echo "enabled=$(node bin/run-tests.mjs --status)" >> "$GITHUB_OUTPUT"
+      - name: Report disabled tests
+        if: steps.tests.outputs.enabled == 'false'
+        run: echo '::notice::Tests temporarily disabled. No tests ran; this is not a test pass.'
       - run: npm run test:prove-red
+        if: steps.tests.outputs.enabled == 'true'

@@ -22,8 +22,10 @@ from it.
 See [`docs/native-runtimes.md`](docs/native-runtimes.md). The Claude runtime description above and
 its structural skill lock apply to the Claude path; native boundaries are advisory.
 
-**Owner test ruling (2026-11-07):** tests may run manually while working. Add no new permanent
-tests. Automatic push/PR/nightly and release-triggered test runs stay disabled; see CONTRIBUTING.md.
+**Owner test ruling (2026-11-10):** all project tests are temporarily disabled by
+`fkit.testsEnabled: false` in `package.json`. Preserve the suites; add no permanent tests.
+Do not bypass the pause or re-enable tests without a new owner instruction. Automatic
+push/PR/nightly and release-triggered test runs stay disabled; see CONTRIBUTING.md.
 
 **You (Codex) are the adversarial second opinion.** The reviewer runs its own Claude pass and then
 shells out to `codex exec` for an independent hostile pass. That independence is the entire point: a

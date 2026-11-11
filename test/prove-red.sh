@@ -37,10 +37,16 @@
 # ⚠️ ADDING A STEP? Give its block its own `step <label>` line FIRST, before any copy or no-op guard
 # (those can set fail=1). Forget it and the run_*() guard echoes "reused", failing the step loudly.
 #
-# Exit 0 only if: both unmutated-copy baselines green, AND each mutation reds its NAMED assertion.
+# When enabled, exit 0 only if both baselines are green and each mutation reds its named assertion.
 set -eu
 here="$(cd "$(dirname "$0")" && pwd)"
 repo="$(cd "$here/.." && pwd)"
+# Direct shell invocations must honor the same committed pause as npm and CI.
+tests_enabled="$(node "$repo/bin/run-tests.mjs" --status)"
+if [ "$tests_enabled" = false ]; then
+  echo 'SKIPPED: prove-red tests are temporarily disabled (package.json: fkit.testsEnabled=false). No tests ran.'
+  exit 0
+fi
 work="$(mktemp -d)"
 # Per-step bookkeeping (task 0477) — see "HOW TO READ A RED" in the header. Set BEFORE the trap so
 # `set -u` can never trip inside it.

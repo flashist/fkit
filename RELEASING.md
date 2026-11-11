@@ -88,10 +88,10 @@ delivery mechanism: a version number is a *label on* a release, never the thing 
 2. If shipped scaffold files changed, run `npm run generate:manifest` and include the regenerated
    `claude/structure-manifest.tsv`. Changes only to skills, agents, native bindings or launchers
    do not require scaffold regeneration.
-3. Run whatever manual checks the work needs. Existing commands are `npm test`,
-   `npm run test:release`, and `npm run test:prove-red`. **Nothing runs automatically** on a push,
-   pull request, schedule, release, or release dry-run (owner ruling, 2026-11-07).
-   No new permanent tests are authorized for the native port. Report skipped and failing checks.
+3. All project tests are temporarily paused (owner ruling, 2026-11-10). The npm test commands
+   report **SKIPPED**. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the single re-enable switch;
+   do not bypass it. No tests run on push, pull request, schedule, release or release dry-run.
+   No new permanent tests are authorized. Report skipped, failing and unverified checks.
 4. Choose the bump: `npm run release` (patch), `release:minor`, `release:major`, or
    `npm run release -- --version X.Y.Z`. `VERSION` and `package.json` must agree first.
 5. Inspect `npm run release:dry`. It prints the plan without running suites or mutating files.
@@ -119,11 +119,12 @@ and is not silently pushed. No npm-registry publication is performed.
 
 The GitHub test workflows are manual-only (`workflow_dispatch`). Their disabled/enabled state
 is a separate repository setting; enabling a manual-only workflow does not add a push or cron
-trigger. The release tool does not check whether manual tests ran and never claims they passed.
+trigger. Both workflows also honor `fkit.testsEnabled` in `package.json`, currently `false`.
+The release tool does not check whether tests ran and never claims they passed.
 
 ## 5. Verification limits
 
-- Manual tests can be skipped; a release may therefore ship unverified behavior.
+- Tests are currently disabled; a release may therefore ship unverified behavior.
 - The changelog guard proves a section has content, not that the notes are complete or accurate.
 - The installer's real network fetch is not covered by the existing sealed local fixtures.
 - Version stamping occurs after manual checks, so those checks do not verify the final version bytes.

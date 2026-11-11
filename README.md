@@ -173,7 +173,8 @@ the same over fkit's own tree. Details: [`docs/board.md`](docs/board.md).
 
 Issues and PRs welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md). fkit is developed with fkit, so
 this repo's own `ai-agents/`, `CLAUDE.md` and `AGENTS.md` are its working files, not part of the
-product. Tests: `npm test`. Releases: [`RELEASING.md`](RELEASING.md). Design decisions are ADRs in
+product. Tests are temporarily disabled; see [`CONTRIBUTING.md`](CONTRIBUTING.md) to re-enable.
+Releases: [`RELEASING.md`](RELEASING.md). Design decisions are ADRs in
 [`ai-agents/knowledge-base/decisions/`](ai-agents/knowledge-base/decisions/).
 
 ## Roadmap
