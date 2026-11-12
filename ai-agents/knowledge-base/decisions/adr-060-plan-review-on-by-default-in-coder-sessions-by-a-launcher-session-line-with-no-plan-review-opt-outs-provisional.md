@@ -42,6 +42,9 @@
     bullet; below *Related*'s ADR-019 bullet.
   - **2026-10-27** (owner ruling at task `0543`'s plan gate, brief open question 3), **⚠️**: below
     Decision 3.
+  **Extended 2026-11-12 (`0546`):** a scoped ⛔ pointer below the one-line decision names
+  [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md)'s native
+  planning/review/record replacement. Prior site lists/text stay byte-identical; the same legend applies.
 
 
 > **Citation form** (same as ADR-056/059). Agent, skill and hook files are mutable: cited by **section
@@ -56,6 +59,15 @@
 > it off for the session and `--no-plan-review` on either skill turns it off for one plan; the session
 > coder shows the review record at the plan gate and writes `plan-review.md` only after approval;
 > spawned coders stay exactly as ADR-059 Decision 2 has them.
+
+> ⛔ **Dated native-only amendment 2026-11-12 (`0546`) — read
+> [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md)'s scoped
+> amendment table for all-path planner ownership, separate Record, inline records and native review
+> source/topology.** Replacements are deliberately not restated here, so there is one place to keep
+> true rather than two. No Claude launcher-line/CLI/plan-mode assumption becomes native enforcement.
+> Default/opt-outs, owner gate and review honesty remain. Design accepted, not implemented/activated;
+> `0543`–`0545` and their evidence/gates remain unchanged. Historical text is left byte-identical;
+> Status stays `accepted` with its existing qualifications.
 
 ## Context
 

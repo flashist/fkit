@@ -10,6 +10,9 @@
   *"Do **not** re-raise "the coder shouldn't be writing new file types""*. Marker legend: **⚠️ = a fact
   that drifted** (the decision is untouched); **⛔ = a decision that was overturned** (do not follow it).
   No existing line of this ADR was edited; the notes are appends, and the Status stays `accepted`.
+  **Extended 2026-11-12 (`0546`):** a scoped ⛔ pointer follows the `0207` note and names
+  [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md). Prior site lists
+  and text are left byte-identical; the same legend and append-only rule apply.
 
 ## Context
 
@@ -77,6 +80,15 @@ top-level directory under `ai-agents/`, mirroring `reviews/`:**
 > That is a **separate** defect from the writer attribution, it is **outside this note's owner-ruled
 > scope**, and it is **reported, not fixed here**. Recorded so the note and the table above cannot be
 > read as contradicting each other by accident.
+
+> ⛔ **Dated native-only amendment 2026-11-12 (`0546`) — the writer attribution AND the `0207`
+> prohibition on delegating the approved-plan copy are replaced for the future native flow by
+> [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md).** Read its scoped
+> amendment table and exact-record validation contract; they are deliberately not restated here, so
+> there is one place to keep true rather than two. The owner accepted that design through the primary
+> OpenCode question channel, relayed to the architect; no implementation/activation or old denied
+> record edit is authorized. Worklogs/implementation ledger boundaries remain. The historical text
+> above is left byte-identical; Status stays `accepted`.
 
 > ⚠️ **Dated pointer note 2026-10-06 (`0473`) — the per-task set gains an optional file,
 > `plan-review.md`, written by the driver; read

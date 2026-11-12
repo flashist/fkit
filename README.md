@@ -50,7 +50,10 @@ fkit opencode init   # setup only; then you can open plain opencode
 The launcher opens OpenCode's interactive mini interface with the selected role. After setup,
 plain `opencode` discovers all seven agents and `/fkit-*` commands in `.opencode/`.
 Set `FKIT_RUNTIME=opencode` to make the installed `fkit` command use OpenCode by default.
-Select a distinct hostile-review model with `FKIT_OPENCODE_ADVERSARIAL_MODEL=provider/model`.
+First launch asks for two provider choices: the team default and the adversarial-review default.
+Choose OpenAI (Codex preferences) or Anthropic (Claude Code preferences) for each. FKit imports
+readable model/effort preferences, asks when an exact match is unavailable, and saves them per
+project. Run `fkit opencode --models` to choose again. Connect each provider through OpenCode.
 Unknown, inherited or identical review models produce a prominently flagged partial review;
 partial reviews cannot automatically close tasks. See [OpenCode setup and limits](opencode/README.md).
 

@@ -17,6 +17,9 @@
   Marker legend: **⚠️ = a fact that drifted** (the decision is untouched); **⛔ = a decision that was
   overturned** (do not follow it). No existing line of this ADR was edited; the notes are appends, and
   the Status stays `accepted`.
+  **Extended 2026-11-12 (`0546`):** a scoped ⛔ pointer below Decision 2 names
+  [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md)'s future native
+  Plan-role replacement. Prior text/site lists remain byte-identical; the same legend applies.
 
 > **Citation form.** Skill and agent files are cited `path:NNN` **paired with a quoted fragment**
 > (row 1 of `conventions/durable-citation-anchors.md`). ADR-038, sprint boards and briefs are
@@ -189,6 +192,14 @@ skill + vault rows skipped (Recommended)".** Candidate 4 plus narrowed candidate
    plan *is* the analysis, which is design judgment the coder should not author. The other reading —
    Plan is always the coder via `/fkit-plan-task`, as the owner ruled per-run on `0167` (*"the coder
    plans and the architect builds"*) — was offered and not chosen as the standing rule.
+
+   > ⛔ **Dated native-only amendment 2026-11-12 (`0546`) — Decision 2's Plan=Build-role/by-hand
+   > exception is replaced for native OpenCode by
+   > [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md).** Its scoped
+   > amendment table is deliberately not restated here, so there is one place to keep true rather
+   > than two. Decisions 1/3/4 and non-source producing-role authority remain; `0345` needs separate
+   > producer scope reconciliation, not an edit/closure here. Design accepted, not implemented or
+   > activated. Historical text is left byte-identical; Status stays `accepted`.
 
    > ⚠️ **This clause is an owner-ruled scoped exception to ADR-038 §Decision, not an application of
    > it.** Unlike Build, the Plan step **runs a skill** — `/fkit-plan-task` (`SKILL.md:122`),

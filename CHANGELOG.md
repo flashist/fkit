@@ -11,6 +11,10 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- OpenCode first-run setup asks separately for the team and adversarial-review providers, imports
+  readable Codex or Claude Code model/effort preferences, and saves the choices per project.
+  Use `fkit opencode --models` to reconfigure; unmatched defaults require an explicit selection.
+
 ## v0.3.3-opencode.1 â€” 2026-11-11
 
 - OpenCode preview channel: native agent orchestration, seven roles, scoped skills and commands,

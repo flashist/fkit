@@ -33,6 +33,9 @@
   [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md) below **§Decision item 3**
   (*"Per-task drive sequence"*). The site list in the `0475` line is left byte-identical and is
   superseded by this line; the same append-only rule and the same legend apply.
+  **Extended 2026-11-12 (`0546`):** a scoped ⛔ pointer below Decision 3 names
+  [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md)'s future native
+  Plan/Record/handoff changes. Earlier text/site lists remain byte-identical; the same legend applies.
   ⚠️ 2026-10-15 (`0516`) — this ADR now carries **five** dated notes: the four the `0473` line above
   lists, plus one cite correction below **§Amendment → A2**'s paragraph *"ADR-019's audit obligation
   transfers with its permission"*. The count in the `0473` line is left byte-identical and is
@@ -119,6 +122,14 @@ its first named application: a loop that ships a whole sprint. Two constraints s
    `@fkit-reviewer` `/fkit-stateful-review` → spawn coder to apply `fkit-process-stateful-review`
    **method** → **driver runs `/fkit-task-done`** to close. Re-verify after any post-review code change
    before closing.
+
+   > ⛔ **Dated native-only amendment 2026-11-12 (`0546`) — read
+   > [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md)'s scoped
+   > amendment table for this drive sequence and the declared source-approval handoff.** The new
+   > Plan/Record responsibilities are deliberately not restated here, so there is one place to keep
+   > true rather than two. Lead owner-relay, independent review, coder fix audit and producer-only
+   > close boundaries remain. Design accepted; implementation/activation not performed or authorized
+   > by this pointer. Historical text stays byte-identical; Status stays `accepted`.
 
    > ⚠️ **Dated pointer note 2026-10-06 (`0473`) — the plan step can now carry an opt-in agent review;
    > read [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md).** This item is

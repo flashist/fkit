@@ -8,6 +8,10 @@
   §*"2. Steps"*, *"Step 0 — ADR, recorded by fkit-architect"*). The architect had no owner channel
   (ADR-021); every owner word below reached it as a verbatim relay from `fkit-lead`.
 - **Task:** `0541` (`0541-make-plan-review-the-default-for-the-sprint-loop-with-an-opt-out-parameter`).
+- **Corrections:** 2026-11-12 (`0546`) — scoped ⛔ pointer below the one-line decision to
+  [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md). Legend:
+  ⚠️ = fact drift; ⛔ = decision replaced in stated scope. Earlier text remains byte-identical;
+  Status stays `accepted — provisional`.
 - **Amends:** [ADR-056](adr-056-opt-in-plan-review-per-sprint-loop-run-off-by-default.md), by that
   ADR's own Decision 9 (*"Making plan review the default … needs a new owner ruling, recorded as a new
   ADR or a dated note here"*). ADR-056 stays `accepted`; it gains one *"Amended by"* header bullet and
@@ -29,6 +33,14 @@
 > this ADR turns it on by default **in `/fkit-sprint-ship-loop` runs only**, with `--no-plan-review` to
 > switch it off for one run; the session paths stay as they are (ADR-056 Decision 3) until a separate
 > design task lands; the whole thing is **provisional**.
+
+> ⛔ **Dated native-only amendment 2026-11-12 (`0546`) — read
+> [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md)'s scoped
+> amendment table for native planning ownership, review dispatch, switch-source and Record changes.**
+> The replacements are deliberately not restated here, so there is one place to keep true rather than
+> two. Default ON, explicit opt-outs and the provisional keep/drop posture remain; this is not the
+> owner's final keep/drop ruling. Design accepted, not implemented/activated; paused tasks/checks
+> remain untouched. Historical text stays byte-identical; Status stays `accepted — provisional`.
 
 ## Context
 

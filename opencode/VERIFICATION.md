@@ -3,6 +3,13 @@
 The owner approved `test/opencode.test.js` and verification for this port, explicitly retaining
 manual execution. No CI trigger, schedule, launch/setup hook or release test default was enabled.
 
+The first-run provider interview was added after the checks below. Its new cases in the existing
+`test/opencode.test.js` have **not run** under the owner's test pause. JavaScript/shell syntax and
+diff-whitespace checks passed. Read-only inspection confirmed Codex `config/read` exposes model
+and effort, and OpenCode's model catalog accepts `location[directory]` for project scoping. No
+provider-authentication flow or model turn was run for this addition. The earlier pass counts below
+describe the published `0.3.3-opencode.1` port, not this new interview.
+
 ## Checks
 
 | Check | Result |

@@ -31,6 +31,9 @@
 - **Corrections:** 2026-10-06 (`0473`, review finding R2) — this ADR carries one dated note inline below
   **Decision 5**. Legend: ⚠️ = a fact or wording that drifted (the decision is untouched); ⛔ = a decision
   overturned (none here). The annotated text is left byte-identical; Status stays `accepted`.
+  **Extended 2026-11-12 (`0546`):** a scoped ⛔ pointer below Decision 6 names
+  [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md)'s native
+  planning/review/record replacement. Earlier site lists/text remain byte-identical; the same legend applies.
 
 > **Citation form.** Agent, skill and hook files are mutable: cited by **section plus quoted phrase**,
 > never by line number. Task briefs and plans are coordination documents: cited by **heading plus quoted
@@ -219,6 +222,14 @@ without a flow does nothing.
    - **Optional and reserved:** it exists only for tasks planned in a plan-review run; Build adds it to
      the task-folder reserved names (`ai-agents/tasks/README.md` and its scaffold twin). Under ADR-052
      D4 it is an ordinary task-folder file, carried hash-identical by D8 item 7.
+
+   > ⛔ **Dated native-only amendment 2026-11-12 (`0546`) — read
+   > [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md)'s scoped
+   > amendment table for the future native planner, Record writer, all-path review and native hostile
+   > topology.** These replacements are deliberately not restated here, so there is one place to keep
+   > true rather than two. Classification approvals, round cap, owner gate, append-only history and
+   > separation of review from approved scope remain. No legacy procedure is implemented/activated by
+   > this accepted design. Historical text is left byte-identical; Status stays `accepted`.
 
 7. **Hop design — the coder runs the approvals and the Codex pass inside the single plan-step spawn**
    (plan D3). Chain: **lead (hop 0) → coder (hop 1) → architect / producer / adversarial-reviewer

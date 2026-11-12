@@ -8,6 +8,10 @@
   `/fkit-sprint-ship-loop` on Sprint 10, `AskUserQuestion`), and relayed to fkit-architect by fkit-lead,
   which recorded this ADR on 2026-10-06 as task `0475`'s Step 1.
 - **Task:** `0475` (`0475-let-a-spawned-coder-write-under-a-lead-relayed-owner-approval`).
+- **Corrections:** 2026-11-12 (`0546`) — scoped ⛔ pointer below Decision 3 to
+  [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md). Legend:
+  ⚠️ = fact drift; ⛔ = decision replaced in the stated scope. Prior text remains byte-identical;
+  Status stays `accepted`.
 - **Extends, does not supersede:** [ADR-031](adr-031-fkit-lead-becomes-the-orchestrating-front-door.md)
   (the conductor path) and [ADR-032](adr-032-fkit-sprint-ship-loop-autonomy-and-consent-model.md)
   §Amendment A1–A4 (the marker). Both stay `accepted`; each carries a dated ⚠️ pointer note to this ADR,
@@ -92,6 +96,15 @@ prompt happened to be worded.** That is the defect: an outcome set by wording, n
    lead path must quote.** *(Owner ruling 2026-10-05, OQ2/3/5/6: "Yes, all four (Recommended)".)*
    **The asymmetry, stated plainly:** a spawn labelled `fkit-sprint-ship-loop` skips the quote. A driver
    that mislabels itself to dodge the quote is ADR-032 §A3's forgery cost again — **not a new cost**.
+
+   > ⛔ **Dated native-only amendment 2026-11-12 (`0546`) — read
+   > [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md), Decision 7
+   > and its scoped amendment table, for the future native full-plan/quoted-approval/pointer handoff.**
+   > The native tightening, including the sprint-path quote requirement, is deliberately not restated
+   > here, so there is one place to keep true rather than two. Original caller/scope/real approval/
+   > worker-role fields and trust-not-proof limit remain; no planner source-driving grant. Design
+   > accepted, not implemented/activated. Historical text is left byte-identical; Status stays
+   > `accepted`.
 
 4. **What still refuses — write no source.**
    - **No marker** — any other spawned "implement this", with no owner approval behind it → return the

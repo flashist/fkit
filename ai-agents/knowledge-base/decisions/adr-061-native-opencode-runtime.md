@@ -7,6 +7,10 @@
 - **Amends:** ADR-009's runtime exclusivity for this new path. Claude runtime behavior remains governed
   by its existing decisions. This record does not authorize test execution, commits or pushes.
 
+- **Corrections:** 2026-11-12 (`0546`) — scoped ⛔ pointers below the runtime and role/source
+  paragraphs name ADR-062 and ADR-063. Legend: ⚠️ = fact drift; ⛔ = decision replaced in stated
+  scope. All earlier text is left byte-identical; Status stays `accepted`.
+
 ## Decision
 
 Ship `opencode/` alongside `claude/`. `fkit opencode [role]` opens a native OpenCode v2 session;
@@ -16,11 +20,27 @@ keep the current role and load owned procedures in-session; cross-role commands 
 agent to delegate to the named owner, preserving primary-session approval gates. Do not run
 Claude or Codex as an orchestration bridge on this path.
 
+> ⛔ **Dated branch-runtime amendment 2026-11-12 (`0546`) — read
+> [ADR-062](adr-062-native-opencode-only-branch-and-native-source-authority.md) for the new native-only
+> support policy and future native-source/default-delivery boundary.** The change is deliberately not
+> restated here, so there is one place to keep true rather than two. Legacy files are not deleted;
+> model/provider choices are not changed. Policy/design accepted; source cutover is not implemented or
+> activated by this note. Historical text remains byte-identical; Status stays `accepted`.
+
 The seven roles and shared file-based task/sprint/ledger/wiki structure remain. Role → skill ownership
 continues to come from `claude/skills-for-role.sh`; native permissions enforce it per child. Wiki and
 hostile reviewer are leaves. Nesting depth 3 supports lead → coder → reviewer → hostile reviewer.
 No cycles or concurrent writers against one task/board/ledger. The primary handles owner questions;
 children return NEEDS-DECISION, and implementation requires the existing declared-approval marker.
+
+> ⛔ **Dated native-role/source amendment 2026-11-12 (`0546`) — native ownership authority is replaced
+> by [ADR-062](adr-062-native-opencode-only-branch-and-native-source-authority.md); planner ownership,
+> roster distinctions, Record and the new depth-three planning chain are in
+> [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md).** These changes are
+> deliberately not restated here, so there is one place to keep true rather than two. Native skill/
+> edit/delegation, leaf/review honesty and primary owner-channel boundaries remain. Design accepted;
+> no eighth profile exists or is activated by these records. Prior text is left byte-identical;
+> Status stays `accepted`.
 
 The hostile pass uses a native model-selected child, with no shell or edit permission. Model
 self-reports are not diversity evidence: the review helper inspects native assistant-message model

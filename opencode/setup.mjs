@@ -4,9 +4,16 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { native, scaffoldContent } from './adapt.mjs';
+import { configureModels, loadModelChoices, modelSelector } from './models.mjs';
 
 const source = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const target = path.resolve(process.argv[2] || '.');
+let modelChoices;
+try {
+  modelChoices = process.env.FKIT_OPENCODE_MODEL_SETUP === '1'
+    ? await configureModels(target, { reset: process.env.FKIT_OPENCODE_RESET_MODELS === '1', server: process.env.FKIT_OPENCODE_SERVER })
+    : loadModelChoices(target);
+} catch (error) { console.error(error.message); process.exit(2); }
 const roles = ['lead', 'producer', 'coder', 'architect', 'reviewer', 'adversarial-reviewer', 'wiki'];
 const rule = (action, resource, effect) => ({ action, resource, effect });
 const body = text => text.replace(/^---\n[\s\S]*?\n---\n/, '');
@@ -75,6 +82,8 @@ for (const role of roles) {
     '## Dedicated role sessions\nThe owner can use `fkit opencode <role>` for a focused session, or select a native primary agent.\nOpenCode plan approval remains a prompt rule in either path.\n\n');
   if (role === 'reviewer') prompt = prompt.replaceAll('`codex` CLI', 'native fkit-adversarial-reviewer child').replaceAll('Codex', 'OpenCode second opinion').replaceAll('Claude', 'primary reviewer').replace('(a genuinely different model with different blind spots)', '(a separate context; model diversity must be evidenced)');
   agents[`fkit-${role}`] = { description: `FKit ${role}: ${skills.filter(s => !['fkit-team', 'fkit-query', 'fkit-dumb-down', 'fkit-open-questions-interview'].includes(s)).join(', ')}`, mode: 'all', system: runtime + '\n' + prompt, permissions };
+  if (modelChoices) agents[`fkit-${role}`].model = modelSelector(role === 'adversarial-reviewer' ? modelChoices.adversarial : modelChoices.default);
+  if (role !== 'adversarial-reviewer' && process.env.FKIT_OPENCODE_DEFAULT_MODEL) agents[`fkit-${role}`].model = process.env.FKIT_OPENCODE_DEFAULT_MODEL;
   if (role === 'adversarial-reviewer' && process.env.FKIT_OPENCODE_ADVERSARIAL_MODEL) agents[`fkit-${role}`].model = process.env.FKIT_OPENCODE_ADVERSARIAL_MODEL;
 }
 copyTree(path.join(source, 'claude/skills'), '.opencode/skills', true);
@@ -113,9 +122,10 @@ for (const [id, agent] of Object.entries(agents)) {
   const header = Object.entries(meta).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join('\n');
   write(`.opencode/agents/${id}.md`, `---\n${header}\n---\n${system}`);
 }
-if (!['opencode.json', 'opencode.jsonc', '.opencode/opencode.json', '.opencode/opencode.jsonc'].some(p => fs.existsSync(path.join(target, p)))) write('.opencode/opencode.json', JSON.stringify({ '$schema': 'https://opencode.ai/config.json', default_agent: 'fkit-lead', instructions: ['.opencode/fkit-rules.md'], experimental: { subagent_depth: 3 } }, null, 2) + '\n', true);
 const config = { '$schema': 'https://opencode.ai/config.json', default_agent: `fkit-${roles.includes(process.env.FKIT_OPENCODE_ROLE) ? process.env.FKIT_OPENCODE_ROLE : 'lead'}`,
   instructions: ['.opencode/fkit-rules.md'], experimental: { subagent_depth: 3 } };
-// A separate config source keeps user JSONC, providers, credentials and model choices untouched.
+if (modelChoices) config.model = (process.env.FKIT_OPENCODE_DEFAULT_MODEL || modelSelector(modelChoices.default)).split('#')[0];
+if (!['opencode.json', 'opencode.jsonc', '.opencode/opencode.json', '.opencode/opencode.jsonc'].some(p => fs.existsSync(path.join(target, p)))) write('.opencode/opencode.json', JSON.stringify({ ...config, default_agent: 'fkit-lead' }, null, 2) + '\n', true);
+// Keep launch defaults separate so existing JSONC and provider credentials need no rewrite.
 write('.opencode/fkit.json', JSON.stringify(config, null, 2) + '\n');
 console.log(`FKit OpenCode ready in ${target}. Config: .opencode/fkit.json`);

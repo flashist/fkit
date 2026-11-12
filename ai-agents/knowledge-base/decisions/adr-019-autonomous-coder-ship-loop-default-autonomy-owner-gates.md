@@ -24,6 +24,9 @@
   dated notes. The third is a second note below **§Decision item 2**, after the `0473` note. The text
   above is left byte-identical, and its count (**two**) is superseded by this line; the same
   append-only rule and the same legend apply.
+  **Extended 2026-11-12 (`0546`):** a scoped ⛔ pointer below Decision 2 names
+  [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md)'s future native
+  planning/record flow. Prior site lists and text are left byte-identical; the same legend applies.
 
 ## Context
 
@@ -72,6 +75,14 @@ owner-only done-gate. It never moves a task file.**
 2. **The plan gate stays — the one guaranteed upfront human checkpoint.** The owner approves the
    implementation plan (also runtime-enforced by plan mode) before any code. Only after approval may the
    owner walk away. Plan **rejection** ends the run with the task left `🔲 Backlog`.
+
+   > ⛔ **Dated native-only amendment 2026-11-12 (`0546`) — read
+   > [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md).** Its scoped
+   > amendment table replaces native coder planning/record ownership while retaining this owner gate
+   > and coder implementation/fix audit. The replacement is deliberately not restated here, so there
+   > is one place to keep true rather than two. Design accepted via relayed primary OpenCode question
+   > answer; implementation/activation remains future work. No stopped checks or task gates are waived.
+   > Historical text is left byte-identical; Status stays `accepted`.
 
    > ⚠️ **Dated pointer note 2026-10-06 (`0473`) — an opt-in agent review can now run *before* the plan
    > gate on the sprint-loop path; read

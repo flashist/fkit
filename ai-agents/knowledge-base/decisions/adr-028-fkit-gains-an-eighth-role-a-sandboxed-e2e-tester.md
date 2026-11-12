@@ -20,10 +20,21 @@
   `0529` note under **§Decision 7** — `0530` has added the nightly prove-red CI lane that note was
   waiting for. The site lists above are left byte-identical and are superseded by this line; the same
   append-only rule and the same legend apply.
+  **Extended 2026-11-12 (`0546`):** a ⚠️ ordinal/roster pointer follows the one-line decision,
+  naming [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md).
+  Prior site lists/text are left byte-identical; tester authorization and the same legend stand.
 
 > **What this ADR decides, in one line:** fkit adds an **eighth role, a tester**, whose unique authority
 > is a **sandbox** authority — a permission envelope no other role gets — and the owner **knowingly
 > reverses** his own "seven roles, not breadth" constraint to allow it.
+
+> ⚠️ **Dated roster pointer 2026-11-12 (`0546`) — the historical "eighth" ordinal is not a current
+> shipping count.** [ADR-063](adr-063-planner-owns-native-task-planning-and-post-decision-records.md),
+> Decision 11, records the newly accepted native planner design and distinguishes shipped from
+> authorized roles. Counts are deliberately not restated here, so there is one place to keep true
+> rather than two. Verified against the decision record 2026-11-12; no new role is implemented by
+> that record. Tester authorization is unchanged. Historical text is left byte-identical; Status
+> stays `accepted`.
 
 ## Context
 
