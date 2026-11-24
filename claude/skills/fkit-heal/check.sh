@@ -304,6 +304,7 @@ for row in $rows; do
   path="${row%%	*}"
   class="${row#*	}"
   bare="${path%/}"                       # spec dirs carry a trailing /; strip for fs tests
+  if [ "${FKIT_RUNTIME:-}" = hermes ] && [ "$bare" = CLAUDE.md ]; then continue; fi
   abs="$root/$bare"
 
   # Keep-out and the fail-closed subtree refusal apply only under ai-agents/ (the file is

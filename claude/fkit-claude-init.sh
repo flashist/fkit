@@ -224,6 +224,7 @@ RULES_MAX=4352
 RULES_TAG='fkit-managed:'   # appears in the block header; how we recognize a region we wrote
 
 rules_src="$scaffold/universal-rules.md"
+if [ "${FKIT_RUNTIME:-}" = hermes ]; then rules_src="$here/../hermes/universal-rules.md"; fi
 [ -f "$rules_src" ] || { echo "error: missing $rules_src" >&2; exit 1; }
 
 emit_block() {   # the fkit-managed block, markers included
@@ -273,7 +274,7 @@ merge_rules() {   # merge_rules <path> <name> — idempotent, in-place, refuses 
   # shellcheck disable=SC2086
   set -- $(marker_lines "$f" "$RULES_END");   ne=$#; le="${1:-0}"
 
-  tmp="$f.fkit-tmp.$$"
+  tmp="$(mktemp "$f.fkit-tmp.XXXXXXXX")"
   # Clean the temp file on any exit: a set -e abort must not strand it in the owner's project.
   trap 'rm -f "$tmp"' EXIT
   if [ "$nb" = 0 ] && [ "$ne" = 0 ]; then
@@ -329,9 +330,10 @@ install_root_file() {   # create from the scaffold when absent, then merge the m
   fi
   merge_rules "$f" "$name"
 }
-install_root_file CLAUDE.md
+if [ "${FKIT_RUNTIME:-}" != hermes ]; then install_root_file CLAUDE.md; fi
 install_root_file AGENTS.md
 
+if [ "${FKIT_RUNTIME:-}" != hermes ]; then
 # 3. refresh the fkit-managed agents + skills (rm + cp of the two fkit-* patterns only). A same-type squatter
 # is deleted and NOT put back; some wrong-type ones abort init today (shapes: open 0336).
 
@@ -397,6 +399,8 @@ elif [ -n "$n_agents" ]; then
   echo "• refreshed $n_agents agents → .claude/agents/"
 elif [ -n "$n_skills" ]; then
   echo "• refreshed $n_skills skills → .claude/skills/"
+fi
+
 fi
 
 # 4. first-run intake: a terminal questionnaire before any LLM starts, written to .fkit/intake.md.
@@ -478,7 +482,12 @@ add_ignore() {  # add_ignore <pattern> <comment>
     echo "• added $1 to .gitignore"
   fi
 }
+[ ! -L "$gi" ] || { echo "refusing symlinked .gitignore" >&2; exit 1; }
 add_ignore '.fkit/' 'fkit-managed local state (intake, tmp; re-created by fkit init)'
+if [ "${FKIT_RUNTIME:-}" = hermes ]; then
+  [ -z "$aa_state" ] || exit 3
+  exit 0
+fi
 add_ignore '.claude/agents/fkit-*.md' 'fkit-managed agents (refreshed by fkit-claude-init.sh)'
 add_ignore '.claude/skills/fkit-*/' 'fkit-managed skills (refreshed by fkit-claude-init.sh)'
 

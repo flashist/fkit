@@ -164,6 +164,8 @@ export function walkHome(root) {
       return;
     }
     for (const e of entries) {
+      // Finder writes directory metadata in a browsed project independently of fkit.
+      if (e.name === '.DS_Store') continue;
       const p = rel ? `${rel}/${e.name}` : e.name;
       if (findException(p)) {
         // RULE 1: prune. A directory entry means "outside the surface entirely" — do not descend.
@@ -195,6 +197,7 @@ function collectAll(root, rel) {
       return;
     }
     for (const e of entries) {
+      if (e.name === '.DS_Store') continue;
       const p = `${r}/${e.name}`;
       if (e.isDirectory()) descend(p);
       else out.add(p);

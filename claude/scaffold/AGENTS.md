@@ -1,6 +1,6 @@
 # Agent Instructions
 
-Guidance for Codex (the codex fkit agents) in this repository. Edit freely.
+Guidance for fkit agents in this repository. Edit freely.
 
 ## Project Overview
 

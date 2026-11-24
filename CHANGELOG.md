@@ -11,6 +11,7 @@ This file starts after v0.3.1. Earlier releases have tags but no written notes â
 
 ## Unreleased
 
+- Hermes port on the `fkit-hermes` branch. Seven native profiles run the complete skill catalog, delegate through Hermes and share the existing project records. Install from the checkout with `FKIT_SOURCE="$PWD" sh install.sh`.
 - `fkit coder` sessions now do plan review by default too: `/fkit-plan-task` drafts the plan, has
   agents approve it and Codex attack it, then shows it to you with the review record. The draft and
   review run with plan mode off (only the coder's instructions stop a write in that stretch, ~17 min);

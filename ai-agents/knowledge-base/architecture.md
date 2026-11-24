@@ -1,6 +1,23 @@
 # fkit — Architecture
 
-**The architecture of the system as it exists today** (last refreshed 2026-07-23; originally
+## Hermes runtime
+
+The owner starts `bin/fkit` in the consuming project. The launcher refreshes seven named Hermes profiles, initializes the shared project structure and opens a native Hermes session with that project's working directory. A fresh project starts with the producer for onboarding. The lead coordinates delivery once the project brief exists. [Installation and commands](../../README.md)
+
+| Component | Responsibility |
+| --- | --- |
+| `hermes/setup.py` | Installs each role's instructions as `SOUL.md`, its owned skills and the delegation plugin into the role's profile. Existing profile settings belong to the operator. |
+| `hermes/plugin/team.json` | Maps each role to the procedures it can load. The catalog and runtime ownership check use the same map. |
+| `hermes/plugin/__init__.py` | Routes a native `delegate_task` request by `fkit_role`, passes the project directory to the child and checks pinned plan handoffs. Hermes returns the child result to its caller. |
+| `hermes/skills/` | Defines the procedures for onboarding, planning, delivery, review, task and sprint closure, and wiki maintenance. |
+| `claude/scaffold/` and `bin/fkit-board.mjs` | Provide the shared project files and the read-only board. Hermes consumes `AGENTS.md` at the project root. |
+
+Task briefs, plans, review ledgers, worklogs, boards and wiki pages stay in the consuming project's `ai-agents/` tree. The reviewer invokes Codex independently and records the model identity and coverage. The coder requests owner approval in Hermes before implementation. Role instructions govern shell access to the shared filesystem.
+
+## Historical Claude Code architecture
+
+
+**Architecture of the preceding runtime** (last refreshed 2026-07-23; originally
 2026-07-11, post-Omnigent-removal). One runtime, **seven built roles** (an eighth, a sandboxed e2e
 tester, is authorized in [ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md)
 but **not yet built**), no orchestrator *daemon* (the `fkit-lead` conductor is an in-session driver, not runtime infrastructure — §5.1), everything coordinated through files in git.

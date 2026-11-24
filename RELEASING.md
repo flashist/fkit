@@ -11,7 +11,9 @@ consuming project has no release to cut. Please do not "tidy" it into `conventio
 
 ---
 
-## 1. `main` is the release channel
+## 1. Release channels
+
+The Hermes installer defaults to the local checkout when invoked from source. Remote installs select `FKIT_REPO` and `FKIT_REF` (default `fkit-hermes`). The following `main` release history concerns the earlier Claude distribution.
 
 A default install reads `main`, not a tag:
 
@@ -143,11 +145,7 @@ red found before the release run costs nothing. `npm test` is
 `node --test test/*.test.js test/board/*.test.js` (`package.json:5`) and `npm run test:release` is the
 release tool's own test (`package.json:9`); for their times, see `CONTRIBUTING.md`'s Tests block.
 
-The release does **not** run prove-red (the four mutation cases); CI runs it nightly
-(`.github/workflows/prove-red.yml`). Check that the last nightly `prove-red` run is green on the
-repo's Actions tab. If you changed `claude/fkit-claude.sh`, `claude/skills-for-role.sh`,
-`claude/skill-ownership-hook.sh`, `test/launcher-contract.test.js`, `test/skill-ownership-hook.test.js`
-or `test/prove-red.sh` since that run, run it yourself:
+Run the existing mutation cases manually when a release changes the legacy launcher or its skill-ownership enforcement.
 
 ```sh
 npm run test:prove-red
@@ -208,22 +206,7 @@ Then, in order (`bin/release.mjs:401-479`, from the bump to the `// 3. tag` step
 5. create the annotated `v<version>` tag
 6. push the tag
 
-**The gate and CI cover different things, and neither replaces the other** — the argument is made in
-full at `.github/workflows/test.yml:3-11`. In short: the **gate** sees the working tree that
-`git add -A` is about to ship, including uncommitted and untracked work, which CI structurally
-cannot; **CI** covers `main`'s HEAD, which is what `install.sh` actually installs, and its verdict
-arrives after the push rather than before it.
-
-CI runs `npm test` on every push to `main`, on every pull request, and on demand via
-`workflow_dispatch` (`.github/workflows/test.yml:16-20`), and fails the job when `npm test` takes
-over its 120 s budget (`.github/workflows/test.yml:53-69`, the `npm test (budget, ADR-057 §D10)`
-step). It has been exercised on real pushes and has already caught a failure that a local run had
-not. Two of its settings are load-bearing rather than cosmetic: `fetch-depth: 0`
-(`.github/workflows/test.yml:41-45`), without which the manifest test refuses a shallow clone and the
-suite dies at module load; and `timeout-minutes: 10` (`.github/workflows/test.yml:36`), which stops a
-hung run from burning a runner. Prove-red runs in its own workflow, nightly at 03:17 UTC and on
-demand (`.github/workflows/prove-red.yml`), on `main`'s latest commit only — `CONTRIBUTING.md`'s
-Tests block lists its limits.
+On the Hermes branch the GitHub Actions test and prove-red workflows both use manual dispatch. The release script retains its local gate.
 
 ---
 

@@ -10,44 +10,7 @@ operating on a shared `ai-agents/` working structure inside a consuming project.
 sandboxed e2e tester, is authorized ([ADR-028](ai-agents/knowledge-base/decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
 but **not yet built** — the team is seven today.
 
-**One runtime: Claude Code native + Codex**
-([`ADR-009`](ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)).
-The agents are Claude Code subagents (`claude/agents/fkit-*.md`) and `/fkit-*` skills
-(`claude/skills/`); the `fkit` launcher (`claude/fkit-claude.sh`) opens a **role-locked session**.
-Codex is **optional but recommended** — it is what makes the reviewer's second opinion genuinely
-model-diverse; without it, that opinion falls back to Claude only, loudly flagged as not model-diverse
-([ADR-054](ai-agents/knowledge-base/decisions/adr-054-codex-is-optional-but-recommended-the-claude-only-second-opinion-is-a-flagged-mode.md)). fkit formerly shipped a second flavor on [Omnigent](https://omnigent.ai); that runtime
-was **removed in Sprint 2** (ADR-009). There is nothing to mirror by hand any more.
-
-The full project brief — domain, architecture, conventions — lives in
-[`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).
-
-## The fkit team in this repo (dogfooded)
-
-This repo runs fkit on itself: `.claude/agents/fkit-*.md` and `.claude/skills/fkit-*/` are
-fkit-managed copies refreshed from `claude/` by `claude/fkit-claude-init.sh .` — **edit the canonical
-sources in `claude/`, never the copies** (they are gitignored).
-
-**Sessions are role-locked** ([`ADR-010`](ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md)):
-`fkit <role>` opens a session pinned to that role's system prompt and **only its own
-`/fkit-*` skills** — every other fkit skill is denied on invocation: still visible in the `/` menu,
-but unrunnable (ADR-018 §Decision 5, an accepted cost). That is what makes
-"the coder cannot run the reviewer's procedure" a fact rather than a request. (The per-role *tool*
-allowlist was relaxed for every role except the adversarial reviewer —
-[`ADR-022`](ai-agents/knowledge-base/decisions/adr-022-tools-unrestricted-except-adversarial-reviewer.md);
-the skill lock above is unchanged.) Within a session,
-`@fkit-<role>` consults another role and brings the answer back (max two hops, never a cycle).
-
-⚠️ **The lock is a wall in a session and in a consult alike.** A `PreToolUse` skill-ownership hook
-checks the REAL invoking agent's identity — a session's own role, or a spawned subagent's own role,
-at any consult depth — against `skills_for_role()` on every `Skill` call, and denies what that role
-does not own. Each role-owned skill's `⛔ Owner:` banner is a courtesy, not the enforcement. See
-[`ADR-018`](ai-agents/knowledge-base/decisions/adr-018-pretooluse-skill-ownership-hook-replaces-consult-skills-exception-list.md),
-which superseded the "advisory in a consult" half of
-[`ADR-012`](ai-agents/knowledge-base/decisions/adr-012-skill-lockdown-is-session-scoped-frontmatter-dropped.md).
-Role→skill ownership is declared in exactly one place: `skills_for_role()` in
-`claude/skills-for-role.sh`, sourced by both `claude/fkit-claude.sh` and the `PreToolUse`
-skill-ownership hook.
+The active runtime on this branch is Hermes Agent. See [AGENTS.md](AGENTS.md) for repository guidance and [README.md](README.md) for the installation, role profiles and workflow.
 
 <!-- fkit:begin-rules -->
 <!-- fkit-managed: this block is REPLACED on every `fkit` launch. Edits inside the markers

@@ -133,7 +133,7 @@ ended, and "highest N" is the heuristic ADR-047 retired.
 ## The one resolution path
 
 ```
-bash .claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints
+fkit helper dashboard select-active ai-agents/sprints
 ```
 
 - Read **every `active` line** for the plural answer — one per `In progress` sprint.

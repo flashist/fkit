@@ -95,7 +95,7 @@ enforcement**; nothing compels it. It exists so the board can at least be *read*
 who looks.
 
 **If your team wants a stronger guarantee than this**, the fix is a further precondition in
-fkit's own `claude/skill-ownership-hook.sh` (in the fkit install, not your project's `.claude/`) —
+the Hermes fkit plugin's skill-ownership check —
 closes only from an owner-present session, say — not stricter prose.
 Prose does not stop an agent that has already decided the work is done.
 
@@ -129,7 +129,7 @@ breaks the moment a plan is renamed or a `9b` follows a `9`.
 ## The one resolution path
 
 ```
-bash .claude/skills/fkit-status/dashboard.sh select-active ai-agents/sprints
+fkit helper dashboard select-active ai-agents/sprints
 ```
 
 - Read **every `active` line** for the plural answer — one per `In progress` sprint.

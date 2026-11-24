@@ -1,154 +1,45 @@
 #!/bin/sh
-# fkit installer — makes `fkit` a global terminal command. Run:
-#
-#   curl -fsSL https://raw.githubusercontent.com/flashist/fkit/main/install.sh | sh
-#
-# It installs fkit's resources (the agents, skills, scaffold, and launcher) to ~/.local/share/fkit and
-# a `fkit` launcher to ~/.local/bin. After that, run `fkit` inside ANY project directory: it sets the
-# project up if needed and opens the team menu. Idempotent — re-run to update.
-#
-# You only need this one-liner ONCE. After that `fkit` keeps itself current: `fkit update` re-runs this
-# script with the source and paths recorded in .version, and a normal `fkit` does a throttled check and
-# tells you when a newer version is published. It never updates itself behind your back.
-#
-# fkit runs on Claude Code (required) + Codex (optional but recommended: the reviewer's 2nd opinion).
-# Overrides: FKIT_REPO (default flashist/fkit), FKIT_REF (default main), FKIT_SHARE, FKIT_BIN.
+# Releases are immutable so a running profile refresh always sees one complete payload.
 set -eu
-
-REPO="${FKIT_REPO:-flashist/fkit}"
-REF="${FKIT_REF:-main}"
-SHARE="${FKIT_SHARE:-$HOME/.local/share/fkit}"
-BIN="${FKIT_BIN:-$HOME/.local/bin}"
-
-for b in curl tar; do
-  command -v "$b" >/dev/null 2>&1 || { echo "error: '$b' is required but not found on PATH" >&2; exit 1; }
-done
-
-TMP="$(mktemp -d)"
-trap 'rm -rf "$TMP"' EXIT
-
-echo "Fetching fkit ($REPO@$REF)…"
-mkdir -p "$TMP/src"
-curl -fsSL "https://codeload.github.com/$REPO/tar.gz/$REF" | tar -xz -C "$TMP/src" --strip-components=1
-# Sanity-gate the fetch on the one thing this installer cannot work without: the launcher it execs.
-if [ ! -f "$TMP/src/claude/fkit-claude.sh" ]; then
-  echo "error: fetched $REPO@$REF but it has no claude/fkit-claude.sh — wrong ref, or not pushed yet." >&2
-  exit 1
+umask 077
+repo=${FKIT_REPO:-flashist/fkit}
+ref=${FKIT_REF:-fkit-hermes}
+share=${FKIT_SHARE:-"$HOME/.local/share/fkit"}
+bin=${FKIT_BIN:-"$HOME/.local/bin"}
+mkdir -p "$share/releases" "$bin"
+share=$(cd "$share" && pwd)
+bin=$(cd "$bin" && pwd)
+release=$(mktemp -d "$share/releases/hermes-XXXXXXXX")
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+if [ -z "${FKIT_SOURCE:-}" ] && [ -f "$0" ] && [ ! -f "$(dirname "$0")/.install.json" ] && [ -f "$(dirname "$0")/hermes/setup.py" ]; then
+  FKIT_SOURCE=$(cd "$(dirname "$0")" && pwd)
 fi
-
-# 1. install the resources (agents, skills, scaffold, launcher, init) into the share dir
-echo "Installing fkit resources → $SHARE/claude"
-mkdir -p "$SHARE"
-rm -rf "$SHARE/claude"
-cp -R "$TMP/src/claude" "$SHARE/claude"
-for s in fkit-claude.sh fkit-claude-init.sh; do
-  [ -f "$SHARE/claude/$s" ] && chmod +x "$SHARE/claude/$s"
-done
-# Remove the retired Omnigent flavor from any pre-existing install (ADR-009). This is what makes an
-# upgrade from an older fkit clean rather than leaving a dead runtime behind on disk.
-rm -rf "$SHARE/omnigent"
-# The read-only board (ADR-058) sits beside claude/, where the reader finds dashboard.sh.
-# A ref without it leaves no stale copy behind.
-rm -f "$SHARE/bin/fkit-board.mjs"
-rm -rf "$SHARE/vendor/aiboard"
-if [ -f "$TMP/src/bin/fkit-board.mjs" ] && [ -f "$TMP/src/vendor/aiboard/index.html" ]; then
-  mkdir -p "$SHARE/bin" "$SHARE/vendor"
-  cp "$TMP/src/bin/fkit-board.mjs" "$SHARE/bin/fkit-board.mjs"
-  cp -R "$TMP/src/vendor/aiboard" "$SHARE/vendor/aiboard"
+if [ -n "${FKIT_SOURCE:-}" ]; then
+  src=$(cd "$FKIT_SOURCE" && pwd)
+else
+  curl -fsSL "https://codeload.github.com/$repo/tar.gz/$ref" -o "$tmp/src.tar.gz"
+  mkdir "$tmp/src"
+  tar -xzf "$tmp/src.tar.gz" -C "$tmp/src" --strip-components=1
+  src="$tmp/src"
 fi
-
-# 1b. record the installed version so `fkit` can show it at startup and tell when a newer one is
-#     published (self-update compares this sha against $REPO@$REF's head). Prefer git; fall back to the
-#     GitHub API via curl. The human-readable version is the repo-root VERSION file (single source of
-#     truth, kept in sync with package.json by bin/release.mjs).
-resolve_sha() {
-  if command -v git >/dev/null 2>&1; then
-    git ls-remote "https://github.com/$REPO.git" "$REF" 2>/dev/null | awk 'NR==1{print $1}'
-  else
-    curl -fsSL "https://api.github.com/repos/$REPO/commits/$REF" 2>/dev/null \
-      | sed -n 's/.*"sha"[[:space:]]*:[[:space:]]*"\([0-9a-f]\{7,40\}\)".*/\1/p' | head -1
-  fi
-}
-sha="$(resolve_sha || true)"
-ver="$(head -1 "$TMP/src/VERSION" 2>/dev/null | tr -d '[:space:]')"
-# BIN is recorded below and `fkit update` reinstalls into its `bin=` (task 0481), so record it ABSOLUTE
-# from the cwd. `CDPATH=`: a CDPATH in the environment can send `cd bin` elsewhere and make it print.
-mkdir -p "$BIN"
-BIN="$(CDPATH= cd -- "$BIN" && pwd)"
-{
-  printf 'version=%s\n' "${ver:-unknown}"
-  printf 'sha=%s\n' "${sha:-unknown}"
-  printf 'repo=%s\n' "$REPO"
-  printf 'ref=%s\n' "$REF"
-  printf 'bin=%s\n' "$BIN"
-} > "$SHARE/.version"
-rm -f "$SHARE/.update-check" "$SHARE/.latest" 2>/dev/null || true   # fresh throttle + clear stale "newer" cache
-echo "✓ Installed fkit v${ver:-?} ($(printf %s "${sha:-unknown}" | cut -c1-7))"
-
-# 2. install the global `fkit` launcher (a thin wrapper that execs the installed launcher)
-#    One runtime, so this is a direct exec — no flavor dispatch. `update` is NOT intercepted here:
-#    it falls through to fkit-claude.sh, which owns self-update (ADR-009 §3).
-#    The "Reinstall:" hint puts the variables AFTER the pipe, on the `sh` that runs the installer, so a
-#    reinstall keeps this install's source and paths (task 0481). Known limit: a path containing `'`
-#    breaks the printed command (and one with `"` or `$` already breaks the `exec` line below).
-mkdir -p "$BIN"
-cat > "$BIN/fkit" <<EOF
-#!/bin/sh
-# fkit — run the fkit agent team in the current project. Resources: $SHARE
-#
-# 'fkit' shows the role menu; 'fkit <role>' goes straight there; 'fkit update' updates fkit itself.
-#
-# Retired subcommands (they died with the Omnigent runtime — ADR-009). Fail loudly rather than
-# silently passing them through to claude as a stray argument, which is a confusing no-op.
-case "\${1:-}" in
-  omnigent|claude)
-    echo "fkit: '\$1' is gone — fkit now has a single runtime (Claude Code + Codex)." >&2
-    echo "      Just run:  fkit           …or:  fkit <role>" >&2
-    exit 1 ;;
-  reconnect|restart-team)
-    echo "fkit: '\$1' is gone — it only ever worked around Omnigent orchestration failures." >&2
-    echo "      A role session is just:  fkit <role>" >&2
-    exit 1 ;;
-esac
-[ -x "$SHARE/claude/fkit-claude.sh" ] || {
-  echo "fkit: install looks broken — $SHARE/claude/fkit-claude.sh is missing." >&2
-  echo "      Reinstall:  curl -fsSL https://raw.githubusercontent.com/$REPO/$REF/install.sh | FKIT_REPO=$REPO FKIT_REF=$REF FKIT_SHARE='$SHARE' FKIT_BIN='$BIN' sh" >&2
-  exit 1
-}
-exec "$SHARE/claude/fkit-claude.sh" "\$@"
-EOF
-chmod +x "$BIN/fkit"
-echo "✓ Installed  $BIN/fkit"
-
-# 3. PATH check + next steps
-echo
-case ":$PATH:" in
-  *":$BIN:"*)
-    echo "Next — cd into any project and run:  fkit"
-    echo "(From now on: 'fkit update' whenever you want; fkit tells you when a new version is out.)"
-    ;;
-  *)
-    echo "⚠ $BIN is not on your PATH. Add it (then restart your shell):"
-    echo "    echo 'export PATH=\"$BIN:\$PATH\"' >> ~/.zshrc"
-    echo "Then, in any project:  fkit"
-    ;;
-esac
-
-# 4. Prerequisites. Claude Code is the runtime (required); Codex is optional but recommended — it makes
-#    the reviewer's second opinion an actually-independent one. Both are checked again (more precisely)
-#    at every `fkit` launch — this is the first-run heads-up. Node.js is needed by `fkit board` alone.
-#    None of these blocks the install.
-if ! command -v claude >/dev/null 2>&1; then
-  echo
-  echo "⚠ Required: Claude Code — install from https://claude.com/claude-code"
-fi
-if ! command -v codex >/dev/null 2>&1; then
-  echo
-  echo "⚠ Recommended (optional): Codex — it gives the reviewer an independent second opinion from a"
-  echo "  different model. Without it, reviews fall back to Claude only, flagged NOT model-diverse."
-  echo "    npm install -g @openai/codex   &&   codex login"
-fi
-if ! command -v node >/dev/null 2>&1; then
-  echo
-  echo "Optional: Node.js — only \`fkit board\` needs it (https://nodejs.org)."
-fi
+test -f "$src/bin/fkit" || { echo 'Selected source is missing the Hermes launcher.' >&2; exit 1; }
+cp -R "$src/hermes" "$src/vendor" "$src/VERSION" "$src/install.sh" "$release/"
+mkdir -p "$release/bin" "$release/claude/skills/fkit-status" "$release/claude/skills/fkit-heal"
+cp "$src/bin/fkit" "$src/bin/fkit-board.mjs" "$src/bin/board-narrow.mjs" "$release/bin/"
+cp -R "$src/claude/scaffold" "$src/claude/structure-spec.md" "$src/claude/structure-manifest.tsv" \
+  "$src/claude/fkit-claude-init.sh" "$src/claude/carry-check-hook.mjs" "$release/claude/"
+cp "$src/claude/skills/fkit-status/dashboard.sh" "$src/claude/skills/fkit-status/throughput.mjs" "$release/claude/skills/fkit-status/"
+cp "$src/claude/skills/fkit-heal/check.sh" "$src/claude/skills/fkit-heal/repair.sh" "$release/claude/skills/fkit-heal/"
+python3 - "$release" "$bin" "$share" "$repo" "$ref" "${FKIT_SOURCE:+$src}" <<'PY'
+import json, os, sys, tempfile
+from pathlib import Path
+release, binary, share, repo, ref, source = sys.argv[1:]
+values = dict(FKIT_BIN=binary, FKIT_SHARE=share, FKIT_REPO=repo, FKIT_REF=ref, FKIT_SOURCE=source)
+Path(release, ".install.json").write_text(json.dumps(values))
+with tempfile.TemporaryDirectory(dir=binary) as tmp:
+    link = Path(tmp, "fkit")
+    link.symlink_to(Path(release, "bin", "fkit"))
+    os.replace(link, Path(binary, "fkit"))
+PY
+echo "Installed $bin/fkit. Run fkit setup, then fkit in your project."

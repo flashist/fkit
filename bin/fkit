@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+"""Launch fkit's Hermes profiles in the current project."""
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.dont_write_bytecode = True
+sys.path.insert(0, str(ROOT / "hermes"))
+from setup import TEAM, setup
+
+HELP = """Usage: fkit [role [prompt]] | init | setup | board [options] | update | --version
+Roles: """ + ", ".join(TEAM) + """
+A fresh project opens with the producer. An initialized project opens the role menu.
+Use fkit coder --no-plan-review to skip independent review of the plan for that session.
+Use hermes -p fkit-ROLE to access native profile settings and session history."""
+
+
+def execute(*command):
+    os.execvp(str(command[0]), [str(item) for item in command])
+
+
+def fresh():
+    brief = Path("ai-agents/knowledge-base/PROJECT.md")
+    return not brief.exists() or any(marker in brief.read_text() for marker in
+                                     ("fkit:uninitialized", "# <Project name>"))
+
+
+def main(args):
+    action = args.pop(0) if args else None
+    if action in ("--help", "-h", "help"):
+        print(HELP)
+        return
+    if action in ("--version", "version"):
+        print((ROOT / "VERSION").read_text().strip())
+        return
+    os.environ["FKIT_RUNTIME"] = "hermes"
+    os.environ["PATH"] = str(ROOT / "bin") + os.pathsep + os.environ.get("PATH", "")
+    if action == "update":
+        meta = ROOT / ".install.json"
+        if not meta.exists():
+            raise SystemExit("Source checkout: update this checkout to change versions.")
+        os.environ.update(json.loads(meta.read_text()))
+        execute("sh", ROOT / "install.sh")
+    if action == "board":
+        execute("node", ROOT / "bin/fkit-board.mjs", *args)
+    if action == "helper":
+        helper = args.pop(0) if args else ""
+        if helper == "share":
+            print(ROOT)
+            return
+        skills = ROOT / "claude/skills"
+        if helper in ("dashboard", "throughput"):
+            runner, name = ("bash", "dashboard.sh") if helper == "dashboard" else ("node", "throughput.mjs")
+            execute(runner, skills / "fkit-status" / name, *args)
+        if helper == "repair" and args:
+            execute("bash", skills / "fkit-heal/repair.sh", args[0], "--share", ROOT, *args[1:])
+        if helper == "check":
+            execute("bash", skills / "fkit-heal/check.sh", "--share", ROOT, *args)
+        raise SystemExit("Expected dashboard, throughput, check, or repair propose|apply.")
+    if action not in (None, "setup", "init", *TEAM):
+        raise SystemExit(HELP)
+    if action in ("setup", "init") and args:
+        raise SystemExit(HELP)
+    hermes = shutil.which(os.getenv("HERMES_BIN", "hermes"))
+    if not hermes and action != "init":
+        raise SystemExit("Install Hermes Agent and run hermes setup first.")
+    if action != "init":
+        profiles = setup(hermes)
+        if action == "setup":
+            print(f"Installed {len(TEAM)} Hermes profiles in {profiles}")
+            return
+    subprocess.run(["bash", ROOT / "claude/fkit-claude-init.sh", Path.cwd()], check=True,
+                   stdout=subprocess.DEVNULL)
+    if action == "init":
+        return
+    interface = ["--tui"] if sys.stdin.isatty() and sys.stdout.isatty() else []
+    if action is None:
+        if fresh():
+            if sys.stdin.isatty() and Path(".fkit/interview").is_file():
+                subprocess.run(["sh", ".fkit/interview"], check=True)
+            subprocess.run([hermes, "-p", "fkit-producer", "chat", "--in", str(Path.cwd()), *interface, "-q",
+                            "Run fkit-initiate-project. Read .fkit/intake.md if present."], check=True)
+            if fresh():
+                return
+            action = "lead"
+        elif sys.stdin.isatty():
+            roles = list(TEAM)
+            print("   ".join(f"{i}. {r}" for i, r in enumerate(roles, 1)))
+            value = input("Role [lead] ").strip() or "lead"
+            action = roles[int(value)-1] if value in map(str, range(1, len(roles)+1)) else value
+            if action not in TEAM:
+                raise SystemExit(HELP)
+        else:
+            action = "lead"
+    prompt = []
+    literal = []
+    if "--" in args:
+        delimiter = args.index("--")
+        args, literal = args[:delimiter], args[delimiter + 1:]
+    flags = [arg for arg in args if arg in ("--plan-review", "--no-plan-review")]
+    if flags:
+        if action != "coder" or len(set(flags)) != 1:
+            raise SystemExit("Choose one plan-review option with the coder role.")
+        if flags[0] == "--no-plan-review":
+            prompt.append("Owner launch setting for this coder session: plan review off. Still obtain approval before implementation.")
+        args = [arg for arg in args if arg not in flags]
+    args.extend(literal)
+    if args:
+        prompt.append(" ".join(args))
+    elif interface:
+        prompt.append(f"Open the {action} session. Orient yourself in the project and ask what the owner needs.")
+    command = [hermes, "-p", "fkit-" + action, "chat", "--in", str(Path.cwd()), *interface]
+    if prompt:
+        command += ["-q", "\n\n".join(prompt)]
+    execute(*command)
+
+
+if __name__ == "__main__":
+    try:
+        main(sys.argv[1:])
+    except (OSError, ValueError, subprocess.CalledProcessError) as error:
+        sys.exit(f"fkit: {error}")

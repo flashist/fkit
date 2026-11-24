@@ -1,0 +1,5 @@
+name: fkit-roles
+version: 1.0.0
+description: Route fkit workers to their Hermes profiles and enforce role skill ownership.
+provides_hooks:
+  - pre_tool_call

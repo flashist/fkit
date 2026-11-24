@@ -1,5 +1,8 @@
 # fkit
 
+> **Hermes branch.** The runtime on this branch is Hermes Agent with seven role profiles and native delegation. See [the current runtime and installation guide](../../README.md). The Claude Code topology and CI details below describe the earlier implementation.
+
+
 > The prose project brief for AI agents. Agents read this to understand what this project
 > is, who it's for, and how it's built. Keep it current.
 
@@ -9,10 +12,9 @@ fkit is a **team of seven role-scoped AI agents for software development** — a
 reviewer (with an adversarial second opinion), an architect, a wiki librarian, and an orchestrating lead —
 operating on a shared `ai-agents/` working structure inside a consuming project. An **eighth** role, a
 sandboxed e2e tester, is authorized ([ADR-028](decisions/adr-028-fkit-gains-an-eighth-role-a-sandboxed-e2e-tester.md))
-but **not yet built** — the team is seven today. It runs on **one
-runtime: Claude Code native + Codex** (see
-[`ADR-009`](decisions/adr-009-claude-code-native-is-the-only-runtime.md)), as custom subagents and
-`/fkit-*` skills under `claude/`. This repository *is* the framework: it dogfoods itself (its own
+but **not yet built** — the team is seven today. On this branch each role has a native Hermes
+profile with its own `/fkit-*` skills. Hermes routes work between roles, and the reviewer calls the
+Codex CLI for an independent pass. This repository *is* the framework: it dogfoods itself (its own
 `ai-agents/` tree is the one you're reading right now). It's built for software developers, vibe
 coders, and anyone using AI to build software, who want a structured multi-agent workflow instead of
 one undifferentiated coding assistant.

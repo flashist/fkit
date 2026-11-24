@@ -68,6 +68,6 @@ and applies for your whole team. A teammate's launch would otherwise resurrect t
 deliberately removed. It records your *intent*, not fkit's progress: there is no version cursor here,
 and no notion of "which fkit release this project is at".
 
-Agents run on Claude Code and inherit the session's model unless their definition
-(`.claude/agents/fkit-<role>.md`) pins one; there is no project-level routing file. The reviewer's
-adversarial second opinion runs on Codex, for genuine model diversity.
+Each fkit role runs in its own Hermes profile. Change a role’s model with
+`hermes -p fkit-<role> model`. The reviewer invokes the Codex CLI for the adversarial
+pass and flags incomplete or unverified model diversity.

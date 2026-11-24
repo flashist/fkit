@@ -11,18 +11,7 @@ project. An **eighth** role, a sandboxed e2e tester, is authorized ([ADR-028](ai
 but **not yet built** — the team is seven today. It's built for software developers, vibe coders, and anyone using AI to build software who
 wants a structured multi-agent workflow instead of one undifferentiated coding assistant.
 
-**One runtime: Claude Code native + Codex** ([`ADR-009`](ai-agents/knowledge-base/decisions/adr-009-claude-code-native-is-the-only-runtime.md)).
-Agents are Claude Code subagents (`claude/agents/fkit-*.md`) and `/fkit-*` skills
-(`claude/skills/`); the `fkit` launcher opens a **role-locked session** per
-[`ADR-010`](ai-agents/knowledge-base/decisions/adr-010-role-locked-sessions-and-skill-lockdown.md).
-fkit previously ran on Omnigent; that runtime was removed in Sprint 2 — see ADR-009. Don't reason
-from it.
-
-**You (Codex) are the adversarial second opinion.** The reviewer runs its own Claude pass and then
-shells out to `codex exec` for an independent hostile pass. That independence is the entire point: a
-"second opinion" from the same model that wrote the code is not a second opinion, it is the illusion
-of one. If Codex is unreachable the review is emitted as a **loudly-flagged partial**, never as a
-complete review.
+**Runtime on this branch: Hermes Agent + Codex.** Role profiles, playbooks and the delegation plugin live under `hermes/`. The launcher is `bin/fkit`. The reviewer runs its Hermes pass and uses `codex exec` for the adversarial pass. Missing or unverified model independence is a partial review. See [README.md](README.md).
 
 The full project brief — domain, architecture, conventions — lives in
 [`ai-agents/knowledge-base/PROJECT.md`](ai-agents/knowledge-base/PROJECT.md).
@@ -88,7 +77,7 @@ A structured wiki lives in `ai-agents/wiki-vault/` (Karpathy LLM-wiki pattern). 
 implementing a task, check it for relevant context. Per
 [`ADR-005`](ai-agents/knowledge-base/decisions/adr-005-vendor-wiki-query-skill-reads-decentralized.md),
 **reads are decentralized** — any role follows the one read-only `/fkit-query` procedure
-(`claude/skills/fkit-query/`) and reads the vault directly. **Writes stay exclusive to the
+(`hermes/skills/fkit-query/`) and reads the vault directly. **Writes stay exclusive to the
 `fkit-wiki` agent** — no other agent or session ever writes to `ai-agents/wiki-vault/`.
 
 ## Review Notes

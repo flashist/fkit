@@ -11,7 +11,7 @@
 
 ## Why
 
-An agent asked the owner a question with `AskUserQuestion`, with little background. The owner typed a
+An agent asked the owner a question with `clarify`, with little background. The owner typed a
 follow-up into the dialog's free-text field — *"what does option B mean in practice?"* That text came
 back to the agent as the **answer**. The agent stayed in "collect a decision" mode: it wrote *"I've
 explained X"* and opened a new dialog at once, or squeezed the explanation into the dialog's short
@@ -32,13 +32,13 @@ left the dialog, and asked again in normal chat. This happened often.
 
 ## The standing option
 
-Every question put with `AskUserQuestion` carries this option, worded exactly:
+Every question put with `clarify` carries this option, worded exactly:
 
 - label: `Explain more, then ask again`
 - description: `Give me more context in simple terms, then re-ask the question.`
 
 - It is the **last** option. The recommended option stays **first**.
-- The tool allows **at most 4 options**. A question with 4 real options merges or drops the weakest one
+- Keep the dialog to **at most 4 options**. A question with 4 real options merges or drops the weakest one
   so the standing option always fits.
 - It appears **once**. If your own instructions already add this exact option, add it once.
 - When the owner picks it, it is *a reply that is not a choice* — below.
@@ -70,7 +70,7 @@ The mixed cases:
 
 ## Spawned workers and relayers
 
-A spawned worker has no `AskUserQuestion` (it is session-only). It returns its question to whoever
+A spawned worker has no `clarify` (it is session-only). It returns its question to whoever
 spawned it:
 
 - A `NEEDS-DECISION` carries **at most 3 options** — the relayer adds the standing option as the 4th —
@@ -92,17 +92,9 @@ spawned it:
 - A placement or dependency option still names its knock-on; the standing option carries none
   ([`placement-questions-state-the-knock-on.md`](placement-questions-state-the-knock-on.md)).
 
-## Where it is enforced
+## Hermes dialog
 
-- **Prose:** the *Ask interactively* line of the shared rules block points here. Each Claude-side
-  agent prompt carries a short *Asking the owner* paragraph with the option's label and description.
-  The sprint ship-loop, the open-questions interview and the heal skill carry the parts that touch
-  them.
-- **A presence test:** the label and description are byte-checked in each agent prompt and in this
-  page's shipped copy, along with the "never consent" sentences. It checks the words are there, not
-  that an agent follows them.
-- **The Stop hook:** when a reply has a line ending in `?` and no `AskUserQuestion` was used, the hook
-  asks for the tool — and tells an agent that was answering the owner's question, or explaining ahead
-  of one, to open no dialog and end the turn with no question line other than the **What's next?**
-  heading. **Accepted residual:** the hook cannot tell a genuine answer or explanation turn from a
-  prose question relabelled as one. It is a heuristic by design.
+Use `clarify` in an interactive role session. Supply each question's choices as strings.
+Put the short explanation and any placement consequence in the preceding chat message.
+Display the standing option’s exact label as the last choice and explain its meaning in chat.
+A delegated worker returns its questions to the parent, which asks the owner.

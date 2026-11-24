@@ -58,7 +58,7 @@ forward, so this is not a hard lock. But the owner could not weigh a cost nobody
 
 ## Every asker, every channel
 
-- **In a session:** in the `AskUserQuestion` option's description.
+- **In a session:** include the consequence with its choice in chat before opening `clarify`.
 - **A spawned worker:** writes it into each placement option of its `NEEDS-DECISION` (and into any
   open question it returns in prose). The worker has the files; the relayer may not. When the search
   finds no open task that would wait, the worker writes `knock-on: none (checked)` in that option, so

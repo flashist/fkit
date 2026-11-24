@@ -1,0 +1,66 @@
+{
+  "lead": [
+    "fkit-team",
+    "fkit-query",
+    "fkit-open-questions-interview",
+    "fkit-dumb-down",
+    "fkit-sprint-ship-loop"
+  ],
+  "producer": [
+    "fkit-team",
+    "fkit-query",
+    "fkit-open-questions-interview",
+    "fkit-dumb-down",
+    "fkit-initiate-project",
+    "fkit-task-brief",
+    "fkit-task-done",
+    "fkit-task-cancelled",
+    "fkit-sprint-done",
+    "fkit-sprint-cancelled",
+    "fkit-status",
+    "fkit-heal"
+  ],
+  "coder": [
+    "fkit-team",
+    "fkit-query",
+    "fkit-open-questions-interview",
+    "fkit-dumb-down",
+    "fkit-plan-task",
+    "fkit-process-review",
+    "fkit-process-stateful-review",
+    "fkit-task-ship-loop"
+  ],
+  "reviewer": [
+    "fkit-team",
+    "fkit-query",
+    "fkit-open-questions-interview",
+    "fkit-dumb-down",
+    "fkit-review",
+    "fkit-stateful-review"
+  ],
+  "adversarial-reviewer": [
+    "fkit-team",
+    "fkit-query",
+    "fkit-adversarial-review"
+  ],
+  "architect": [
+    "fkit-team",
+    "fkit-query",
+    "fkit-open-questions-interview",
+    "fkit-dumb-down",
+    "fkit-survey-project",
+    "fkit-inspect",
+    "fkit-design-spec",
+    "fkit-evaluate-approach",
+    "fkit-record-decision"
+  ],
+  "wiki": [
+    "fkit-team",
+    "fkit-query",
+    "fkit-open-questions-interview",
+    "fkit-dumb-down",
+    "fkit-wiki-ingest",
+    "fkit-wiki-lint",
+    "fkit-wiki-sync"
+  ]
+}
